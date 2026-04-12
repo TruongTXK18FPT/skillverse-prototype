@@ -1,0 +1,510 @@
+/* =============================================
+   NEON TECH — InterviewScheduleModal
+   Interview Scheduling Interface
+   All classes prefixed: am-interview-
+   ============================================= */
+
+/* ---- Design Tokens ---- */
+:root {
+  --am-interview-purple: #aa55ff;
+  --am-interview-purple-dim: rgba(170, 85, 255, 0.1);
+  --am-interview-purple-glow: rgba(170, 85, 255, 0.25);
+}
+
+/* ---- Overlay ---- */
+.am-interview-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(1, 4, 14, 0.92);
+  z-index: 1050;
+  animation: am-interview-fade-in 0.25s ease-out;
+}
+
+@keyframes am-interview-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---- Modal Shell ---- */
+.am-interview-shell {
+  width: min(600px, 100%);
+  max-height: min(90vh, 780px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  background: linear-gradient(160deg, #060d1a 0%, #091525 40%, #040910 100%);
+  border: 1px solid var(--am-border);
+  box-shadow:
+    0 0 60px var(--am-interview-purple-glow),
+    0 0 120px rgba(170, 85, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--am-text);
+  overflow: hidden;
+}
+
+/* ---- Header ---- */
+.am-interview-header {
+  padding: 1.1rem 1.4rem 0;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(170, 85, 255, 0.1) 0%, transparent 100%);
+  border-bottom: 1px solid var(--am-border);
+}
+
+.am-interview-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.am-interview-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.am-interview-title h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--am-text-bright);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.am-interview-title-icon {
+  color: var(--am-interview-purple);
+  display: flex;
+  align-items: center;
+}
+
+.am-interview-subtitle {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  color: var(--am-muted);
+}
+
+.am-interview-close {
+  background: none;
+  border: 1px solid var(--am-border);
+  border-radius: 8px;
+  color: var(--am-muted);
+  font-size: 1.2rem;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.am-interview-close:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--am-text);
+  border-color: var(--am-border-hover);
+}
+
+/* ---- Body ---- */
+.am-interview-body {
+  padding: 1.2rem 1.4rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.am-interview-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.am-interview-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.am-interview-body::-webkit-scrollbar-thumb {
+  background: var(--am-border);
+  border-radius: 4px;
+}
+
+/* ---- Sections ---- */
+.am-interview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.am-interview-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--am-muted);
+}
+
+.am-interview-required {
+  color: var(--am-red);
+  margin-left: 2px;
+}
+
+/* ---- Inputs ---- */
+.am-interview-input {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--am-border);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--am-text);
+  font-size: 0.88rem;
+  font-family: inherit;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.am-interview-input:focus {
+  border-color: var(--am-interview-purple);
+  box-shadow: 0 0 0 2px var(--am-interview-purple-dim),
+              0 0 12px var(--am-interview-purple-glow);
+}
+
+.am-interview-input::placeholder {
+  color: var(--am-muted-dim);
+}
+
+.am-interview-input-row {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.am-interview-input-row .am-interview-section {
+  flex: 1;
+}
+
+/* ---- Date/Time Input ---- */
+.am-interview-datetime {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--am-border);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--am-text);
+  font-size: 0.88rem;
+  font-family: inherit;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  outline: none;
+  color-scheme: dark;
+}
+
+.am-interview-datetime:focus {
+  border-color: var(--am-interview-purple);
+  box-shadow: 0 0 0 2px var(--am-interview-purple-dim),
+              0 0 12px var(--am-interview-purple-glow);
+}
+
+/* ---- Duration Pills ---- */
+.am-interview-duration-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.am-interview-duration-pill {
+  padding: 0.35rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--am-border);
+  background: transparent;
+  color: var(--am-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.am-interview-duration-pill:hover {
+  border-color: var(--am-border-hover);
+  color: var(--am-text);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.am-interview-duration-pill--active {
+  border-color: var(--am-cyan);
+  color: var(--am-cyan);
+  background: var(--am-cyan-dim);
+  box-shadow: 0 0 12px var(--am-cyan-glow);
+}
+
+/* ---- Meeting Type Options ---- */
+.am-interview-meeting-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.am-interview-meeting-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--am-border);
+  background: transparent;
+  color: var(--am-muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  text-align: left;
+}
+
+.am-interview-meeting-option:hover {
+  border-color: var(--am-border-hover);
+  color: var(--am-text);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.am-interview-meeting-option--active {
+  border-color: var(--am-interview-purple);
+  color: var(--am-interview-purple);
+  background: var(--am-interview-purple-dim);
+  box-shadow: 0 0 12px var(--am-interview-purple-glow);
+}
+
+.am-interview-meeting-option input[type="radio"] {
+  display: none;
+}
+
+.am-interview-meeting-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.am-interview-meeting-option--active .am-interview-meeting-dot {
+  background: currentColor;
+}
+
+/* ---- Link Input (Google Meet auto-fill) ---- */
+.am-interview-link-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--am-border);
+  background: rgba(0, 0, 0, 0.3);
+  transition: all 0.2s;
+}
+
+.am-interview-link-input input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--am-text);
+  font-size: 0.88rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.am-interview-link-input input::placeholder {
+  color: var(--am-muted-dim);
+}
+
+.am-interview-link-icon {
+  color: var(--am-interview-purple);
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+/* ---- SkillVerse Room Badge ---- */
+.am-interview-room-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--am-interview-purple);
+  background: var(--am-interview-purple-dim);
+  color: var(--am-interview-purple);
+  font-size: 0.85rem;
+  font-family: monospace;
+  box-shadow: 0 0 12px var(--am-interview-purple-glow);
+}
+
+.am-interview-room-badge code {
+  font-family: monospace;
+  font-weight: 700;
+}
+
+/* ---- Auto-generated Notice ---- */
+.am-interview-auto-notice {
+  font-size: 0.72rem;
+  color: var(--am-muted);
+  margin-top: 0.3rem;
+}
+
+/* ---- Candidate Info Banner ---- */
+.am-interview-candidate-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--am-border);
+}
+
+.am-interview-candidate-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--am-border);
+}
+
+.am-interview-candidate-avatar--fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--am-interview-purple-dim);
+  color: var(--am-interview-purple);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.am-interview-candidate-info h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--am-text-bright);
+}
+
+.am-interview-candidate-info p {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  color: var(--am-muted);
+}
+
+/* ---- Error Message ---- */
+.am-interview-error {
+  padding: 0.6rem 0.85rem;
+  border-radius: 10px;
+  background: rgba(255, 34, 85, 0.1);
+  border: 1px solid rgba(255, 34, 85, 0.3);
+  color: #f87171;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ---- Footer Actions ---- */
+.am-interview-footer {
+  padding: 0.9rem 1.4rem;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid var(--am-border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.am-interview-btn-cancel {
+  padding: 0.55rem 1.2rem;
+  border-radius: 10px;
+  border: 1px solid var(--am-border);
+  background: transparent;
+  color: var(--am-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.am-interview-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--am-text);
+  border-color: var(--am-border-hover);
+}
+
+.am-interview-btn-submit {
+  padding: 0.55rem 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7c3aed, #aa55ff);
+  border: 1px solid var(--am-interview-purple);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  box-shadow: 0 0 16px var(--am-interview-purple-glow);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.am-interview-btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #8b4df5, #bb66ff);
+  box-shadow: 0 0 24px var(--am-interview-purple-glow);
+  transform: translateY(-1px);
+}
+
+.am-interview-btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---- Spinner ---- */
+.am-interview-spin {
+  animation: am-interview-spin 0.8s linear infinite;
+}
+
+@keyframes am-interview-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Textarea ---- */
+.am-interview-textarea {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--am-border);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--am-text);
+  font-size: 0.88rem;
+  font-family: inherit;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  outline: none;
+  resize: vertical;
+  min-height: 72px;
+}
+
+.am-interview-textarea:focus {
+  border-color: var(--am-interview-purple);
+  box-shadow: 0 0 0 2px var(--am-interview-purple-dim),
+              0 0 12px var(--am-interview-purple-glow);
+}
+
+.am-interview-textarea::placeholder {
+  color: var(--am-muted-dim);
+}

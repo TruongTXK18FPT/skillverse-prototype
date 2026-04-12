@@ -357,6 +357,49 @@
   box-shadow: 0 0 10px rgba(248, 113, 113, 0.08);
 }
 
+/* New interview pipeline statuses */
+.am-status-interview-scheduled {
+  background: rgba(0, 245, 212, 0.1);
+  border-color: rgba(0, 245, 212, 0.2);
+  color: #00f5ff;
+  box-shadow: 0 0 10px rgba(0, 245, 212, 0.08);
+}
+
+.am-status-interviewed {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.2);
+  color: #818cf8;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.08);
+}
+
+.am-status-offer-sent {
+  background: rgba(170, 85, 255, 0.1);
+  border-color: rgba(170, 85, 255, 0.2);
+  color: #aa55ff;
+  box-shadow: 0 0 10px rgba(170, 85, 255, 0.08);
+}
+
+.am-status-offer-accepted {
+  background: rgba(52, 211, 153, 0.1);
+  border-color: rgba(52, 211, 153, 0.2);
+  color: #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.08);
+}
+
+.am-status-offer-rejected {
+  background: rgba(248, 113, 113, 0.1);
+  border-color: rgba(248, 113, 113, 0.18);
+  color: #f87171;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.08);
+}
+
+.am-status-contract-signed {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: rgba(0, 255, 136, 0.2);
+  color: #00ff88;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.08);
+}
+
 .am-fleet-card__date {
   display: inline-flex;
   align-items: center;

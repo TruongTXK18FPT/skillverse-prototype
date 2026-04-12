@@ -186,6 +186,10 @@ class ShortTermJobService {
         data.recruiterCompanyName ||
         data.recruiterInfo?.companyName ||
         "Unknown",
+      recruiterCompanyLogoUrl:
+        data.recruiterCompanyLogoUrl ||
+        data.recruiterInfo?.companyLogoUrl ||
+        undefined,
       recruiterRating:
         data.recruiterRating ?? data.recruiterInfo?.rating ?? undefined,
       recruiterId: data.recruiterId ?? data.recruiterInfo?.id ?? 0,

@@ -1,4 +1,4 @@
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from 'dompurify';
 
 /** Layout-breaking CSS properties to strip from inline styles */
 const BLOCKED_CSS_PROPS = [

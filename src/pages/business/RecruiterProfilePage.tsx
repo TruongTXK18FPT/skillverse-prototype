@@ -20,27 +20,18 @@ import {
 } from 'lucide-react';
 import Cropper, { type Area } from 'react-easy-crop';
 import { useAuth } from '../../context/AuthContext';
-import userService from '../../services/userService';
 import businessService from '../../services/businessService';
 import { validateImage } from '../../services/fileUploadService';
 import getCroppedImg from '../../utils/cropImage';
-import { UserProfileResponse, BusinessProfileResponse } from '../../data/userDTOs';
+import { BusinessProfileResponse } from '../../data/userDTOs';
 import '../../components/profile-hud/business/corp-styles.css';
 
-interface RecruiterProfileData extends UserProfileResponse {
-  companyName?: string;
-  companyWebsite?: string;
-  companyAddress?: string;
-  businessAddress?: string;
-  taxId?: string;
-  taxCodeOrBusinessRegistrationNumber?: string;
-  companyDocumentsUrl?: string;
-  documentFileUrls?: string[];
-  applicationStatus?: string;
-  applicationDate?: string;
-  approvalDate?: string;
-  rejectionReason?: string;
-  avatarUrl?: string;
+interface RecruiterProfileEditData {
+  companyName: string;
+  companyWebsite: string;
+  companyAddress: string;
+  taxCodeOrBusinessRegistrationNumber: string;
+  companyDocumentsUrl: string;
 }
 
 type StatusTone = 'approved' | 'pending' | 'review' | 'rejected';
@@ -98,25 +89,21 @@ const formatDateVN = (value?: string) => {
 };
 
 const buildEditData = (
-  profileData: RecruiterProfileData,
-): Partial<BusinessProfileResponse> => ({
+  profileData: BusinessProfileResponse,
+): RecruiterProfileEditData => ({
   companyName: profileData.companyName || '',
   companyWebsite: profileData.companyWebsite || '',
-  businessAddress: profileData.companyAddress || profileData.businessAddress || '',
-  taxId:
-    profileData.taxId ||
-    profileData.taxCodeOrBusinessRegistrationNumber ||
-    '',
-  documentFileUrls: profileData.companyDocumentsUrl
-    ? [profileData.companyDocumentsUrl]
-    : profileData.documentFileUrls || [],
+  companyAddress: profileData.companyAddress || '',
+  taxCodeOrBusinessRegistrationNumber:
+    profileData.taxCodeOrBusinessRegistrationNumber || '',
+  companyDocumentsUrl: profileData.companyDocumentsUrl || '',
 });
 
 const RecruiterProfilePage = () => {
-  const { user, isAuthenticated, loading: authLoading, updateUser } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  const [profile, setProfile] = useState<RecruiterProfileData | null>(null);
+  const [profile, setProfile] = useState<BusinessProfileResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -130,18 +117,18 @@ const RecruiterProfilePage = () => {
     useState<Area | null>(null);
   const [logoUploading, setLogoUploading] = useState(false);
 
-  const [editData, setEditData] = useState<Partial<BusinessProfileResponse>>({
+  const [editData, setEditData] = useState<RecruiterProfileEditData>({
     companyName: '',
     companyWebsite: '',
-    businessAddress: '',
-    taxId: '',
-    documentFileUrls: [],
+    companyAddress: '',
+    taxCodeOrBusinessRegistrationNumber: '',
+    companyDocumentsUrl: '',
   });
 
   const loadProfile = useCallback(async () => {
     try {
       setLoading(true);
-      const profileData = (await userService.getMyProfile()) as RecruiterProfileData;
+      const profileData = await businessService.getMyBusinessProfile();
       setProfile(profileData);
       setEditData(buildEditData(profileData));
       setError('');
@@ -170,9 +157,7 @@ const RecruiterProfilePage = () => {
     try {
       setSaving(true);
       setError('');
-      if (!profile?.id) return;
-
-      await businessService.updateBusinessProfile(profile.id, editData);
+      await businessService.updateMyBusinessProfile(editData);
       setSuccess('Cập nhật hồ sơ doanh nghiệp thành công.');
       setEditing(false);
       await loadProfile();
@@ -196,17 +181,14 @@ const RecruiterProfilePage = () => {
   };
 
   const handleInputChange = (
-    field: 'companyName' | 'companyWebsite' | 'businessAddress' | 'taxId' | 'documentFileUrl',
+    field:
+      | 'companyName'
+      | 'companyWebsite'
+      | 'companyAddress'
+      | 'taxCodeOrBusinessRegistrationNumber'
+      | 'companyDocumentsUrl',
     value: string,
   ) => {
-    if (field === 'documentFileUrl') {
-      setEditData((prev) => ({
-        ...prev,
-        documentFileUrls: value ? [value] : [],
-      }));
-      return;
-    }
-
     setEditData((prev) => ({
       ...prev,
       [field]: value,
@@ -221,10 +203,7 @@ const RecruiterProfilePage = () => {
   const documentLinks = useMemo(() => {
     if (!profile) return [];
 
-    const sources = [
-      profile.companyDocumentsUrl,
-      ...(profile.documentFileUrls || []),
-    ]
+    const sources = [profile.companyDocumentsUrl]
       .map((item) => (item || '').trim())
       .filter((item) => !!item);
 
@@ -237,8 +216,8 @@ const RecruiterProfilePage = () => {
     const checkpoints = [
       profile.companyName,
       profile.companyWebsite,
-      profile.companyAddress || profile.businessAddress,
-      profile.taxId || profile.taxCodeOrBusinessRegistrationNumber,
+      profile.companyAddress,
+      profile.taxCodeOrBusinessRegistrationNumber,
       documentLinks.length > 0 ? 'has-document' : '',
       profile.applicationStatus,
     ];
@@ -248,7 +227,7 @@ const RecruiterProfilePage = () => {
   }, [profile, documentLinks.length]);
 
   const logoUrl =
-    profile?.avatarMediaUrl || profile?.avatarUrl || user?.avatarMediaUrl || user?.avatarUrl || '';
+    profile?.companyLogoUrl || user?.avatarMediaUrl || user?.avatarUrl || '';
 
   const resetLogoEditor = useCallback(() => {
     setLogoEditorOpen(false);
@@ -302,7 +281,7 @@ const RecruiterProfilePage = () => {
   };
 
   const handleLogoCropConfirm = async () => {
-    if (!user?.id || !logoTempUrl || !logoCroppedAreaPixels) {
+    if (!logoTempUrl || !logoCroppedAreaPixels) {
       setError('Không thể xử lý logo doanh nghiệp. Vui lòng thử lại.');
       return;
     }
@@ -316,20 +295,16 @@ const RecruiterProfilePage = () => {
       }
 
       //TODO: Future business logo api, chờ backend làm api, fe làm sườn trước
-      const uploadResult = await userService.uploadUserAvatar(croppedLogo, user.id);
+      const uploadResult = await businessService.uploadCompanyLogo(croppedLogo);
 
       setProfile((prev) =>
         prev
           ? {
               ...prev,
-              avatarMediaUrl: uploadResult.avatarUrl,
+              companyLogoUrl: uploadResult.companyLogoUrl,
             }
           : prev,
       );
-      updateUser({
-        avatarMediaUrl: uploadResult.avatarUrl,
-        avatarUrl: uploadResult.avatarUrl,
-      });
 
       resetLogoEditor();
       setSuccess('Đã cập nhật logo doanh nghiệp thành công.');
@@ -367,9 +342,9 @@ const RecruiterProfilePage = () => {
   }
 
   const StatusIcon = currentStatusMeta.icon;
-  const primaryDocumentUrl = editData.documentFileUrls?.[0] || '';
+  const primaryDocumentUrl = editData.companyDocumentsUrl || '';
 
-  const profileAddress = profile.companyAddress || profile.businessAddress;
+  const profileAddress = profile.companyAddress;
 
   const identityRows = [
     {
@@ -378,10 +353,7 @@ const RecruiterProfilePage = () => {
     },
     {
       label: 'Mã số thuế / ĐKKD',
-      value:
-        profile.taxId ||
-        profile.taxCodeOrBusinessRegistrationNumber ||
-        'Chưa cập nhật',
+      value: profile.taxCodeOrBusinessRegistrationNumber || 'Chưa cập nhật',
     },
     {
       label: 'Website',
@@ -391,9 +363,9 @@ const RecruiterProfilePage = () => {
   ];
 
   const heroCompanyName =
-    profile.companyName || profile.fullName || 'Doanh nghiệp chưa cập nhật tên';
+    profile.companyName || 'Doanh nghiệp chưa cập nhật tên';
 
-  const companyIdDisplay = `BIZ-${String(profile.id || '').padStart(6, '0')}`;
+  const companyIdDisplay = `BIZ-${String(profile.userId || '').padStart(6, '0')}`;
 
   const canOpenWebsite = normalizeWebsiteUrl(profile.companyWebsite);
 
@@ -528,9 +500,9 @@ const RecruiterProfilePage = () => {
                       id="corp-tax-id"
                       type="text"
                       className="corp-form-input"
-                      value={editData.taxId || ''}
+                      value={editData.taxCodeOrBusinessRegistrationNumber || ''}
                       onChange={(event) =>
-                        handleInputChange('taxId', event.target.value)
+                        handleInputChange('taxCodeOrBusinessRegistrationNumber', event.target.value)
                       }
                       placeholder="Ví dụ: 0312345678"
                     />
@@ -562,7 +534,7 @@ const RecruiterProfilePage = () => {
                       className="corp-form-input"
                       value={primaryDocumentUrl}
                       onChange={(event) =>
-                        handleInputChange('documentFileUrl', event.target.value)
+                        handleInputChange('companyDocumentsUrl', event.target.value)
                       }
                       placeholder="https://..."
                     />
@@ -575,9 +547,9 @@ const RecruiterProfilePage = () => {
                     <textarea
                       id="corp-address"
                       className="corp-form-input corp-form-textarea"
-                      value={editData.businessAddress || ''}
+                      value={editData.companyAddress || ''}
                       onChange={(event) =>
-                        handleInputChange('businessAddress', event.target.value)
+                        handleInputChange('companyAddress', event.target.value)
                       }
                       placeholder="Nhập địa chỉ đang sử dụng để vận hành doanh nghiệp"
                     />

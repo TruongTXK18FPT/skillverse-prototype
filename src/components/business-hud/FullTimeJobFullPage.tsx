@@ -10,6 +10,7 @@ import {
   FileSignature,
   FileText,
   Globe,
+  Link2,
   Loader2,
   MapPin,
   MessageSquare,
@@ -21,19 +22,23 @@ import {
   UserCheck,
   Users,
   XCircle,
+  Paperclip,
 } from "lucide-react";
-import {
-  JobApplicationResponse,
-  JobApplicationStatus,
-  JobPostingResponse,
-  JobStatus,
-} from "../../data/jobDTOs";
+import { JobApplicationResponse, JobApplicationStatus, JobPostingResponse, JobStatus } from "../../data/jobDTOs";
+import { RecruitmentJobContextType } from "../../data/portfolioDTOs";
 import jobService from "../../services/jobService";
 import contractService from "../../services/contractService";
+import recruitmentChatService from "../../services/recruitmentChatService";
+import interviewService, { InterviewScheduleResponse, InterviewStatus } from "../../services/interviewService";
 import { ContractListResponse, ContractStatus } from "../../types/contract";
 import { useToast } from "../../hooks/useToast";
 import { JobMarkdownSurface } from "../shared/JobMarkdownSurface";
 import ContractForm from "../contract/ContractForm";
+import GoogleMeetLogo from '../../assets/meeting/ggmeet.png';
+import ZoomLogo from '../../assets/meeting/zoomicon.webp';
+import TeamsLogo from '../../assets/meeting/mslogo.png';
+import SkillVerseLogo from '../../assets/brand/skillverse.png';
+import InterviewScheduleForm from "./InterviewScheduleForm";
 import {
   getApplicantDisplayName,
   getApplicantInitials,
@@ -42,15 +47,16 @@ import {
   resolveRecruitmentAssetUrl,
 } from "../../utils/recruitmentUi";
 import "./FullTimeJobFullPage.css";
+import { MeetingType } from "../../services/interviewService";
 
-type FullPageTab = "overview" | "applicants" | "contracts";
+type FullPageTab = "overview" | "applicants" | "interviews" | "contracts";
 
 interface FullTimeJobFullPageProps {
   jobId: number;
   onBack: () => void;
 }
 
-type DecisionMode = "ACCEPTED" | "REJECTED";
+type DecisionMode = "ACCEPTED" | "REJECTED" | "OFFER_SENT" | "INTERVIEW_APPROVED" | "INTERVIEW_REJECTED";
 
 const STATUS_COLORS: Record<string, string> = {
   IN_PROGRESS: "#94a3b8",
@@ -72,6 +78,11 @@ const APP_STATUS_COLORS: Record<string, string> = {
   PENDING: "#38bdf8",
   REVIEWED: "#fbbf24",
   ACCEPTED: "#34d399",
+  INTERVIEW_SCHEDULED: "#00f5ff",
+  INTERVIEWED: "#818cf8",
+  OFFER_SENT: "#aa55ff",
+  OFFER_ACCEPTED: "#34d399",
+  OFFER_REJECTED: "#fb7185",
   CONTRACT_SIGNED: "#8b5cf6",
   REJECTED: "#fb7185",
 };
@@ -80,6 +91,11 @@ const APP_STATUS_LABELS: Record<string, string> = {
   PENDING: "Mới nộp",
   REVIEWED: "Đã xem",
   ACCEPTED: "Đã duyệt",
+  INTERVIEW_SCHEDULED: "Lịch phỏng vấn",
+  INTERVIEWED: "Đã phỏng vấn",
+  OFFER_SENT: "Đã gửi đề nghị",
+  OFFER_ACCEPTED: "Nhận đề nghị",
+  OFFER_REJECTED: "Từ chối đề nghị",
   CONTRACT_SIGNED: "Đã ký hợp đồng",
   REJECTED: "Từ chối",
 };
@@ -107,11 +123,18 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
   const [decisionModal, setDecisionModal] = useState<{
     application: JobApplicationResponse;
     mode: DecisionMode;
+    interviewId?: number;
   } | null>(null);
   const [decisionNote, setDecisionNote] = useState("");
   const [contractsUnavailable, setContractsUnavailable] = useState(false);
   const [contractApplication, setContractApplication] =
     useState<JobApplicationResponse | null>(null);
+  const [interviewFormApp, setInterviewFormApp] = useState<JobApplicationResponse | null>(null);
+  const [interviews, setInterviews] = useState<InterviewScheduleResponse[]>([]);
+  const [interviewCompleteModal, setInterviewCompleteModal] = useState<{
+    application: JobApplicationResponse;
+    interview: InterviewScheduleResponse;
+  } | null>(null);
   const latestLoadRequestRef = useRef(0);
 
   useEffect(() => {
@@ -124,13 +147,28 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
     };
   }, []);
 
+  // Clear contract selection when interview form opens
+  useEffect(() => {
+    if (interviewFormApp) {
+      setContractApplication(null);
+    }
+  }, [interviewFormApp]);
+
+  // Clear interview form when tab switches away from interviews tab
+  useEffect(() => {
+    if (activeTab !== 'interviews') {
+      setInterviewFormApp(null);
+    }
+  }, [activeTab]);
+
   const loadData = async (targetJobId: number = jobId) => {
     const requestId = ++latestLoadRequestRef.current;
     setIsLoading(true);
     try {
-      const [jobData, applicantPage, contractResult] = await Promise.all([
+      const [jobData, applicantPage, interviewData, contractResult] = await Promise.all([
         jobService.getJobDetails(targetJobId),
         jobService.getJobApplicants(targetJobId, 0, 100),
+        interviewService.getInterviewsByJob(targetJobId),
         contractService
           .getMyContracts("EMPLOYER")
           .then((data) => ({ ok: true as const, data }))
@@ -138,13 +176,16 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       ]);
 
       if (requestId !== latestLoadRequestRef.current) {
-        return;
+        return { applications: [] as JobApplicationResponse[] };
       }
 
+      const loadedApps = applicantPage.content || [];
       setJob(jobData);
-      setApplications(applicantPage.content || []);
+      setApplications(loadedApps);
+      setInterviews(interviewData);
       setContracts(contractResult.data);
       setContractsUnavailable(!contractResult.ok);
+      return { applications: loadedApps };
     } catch (error: unknown) {
       if (requestId !== latestLoadRequestRef.current) {
         return;
@@ -177,6 +218,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Ho_Chi_Minh",
     });
   };
 
@@ -193,6 +235,33 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       return `${formatBudget(targetJob.minBudget)} - ${formatBudget(targetJob.maxBudget)}`;
     }
     return "Chưa thiết lập";
+  };
+
+  const getMeetingTypeLabel = (type: MeetingType): string => {
+    switch (type) {
+      case MeetingType.GOOGLE_MEET: return 'Google Meet';
+      case MeetingType.SKILLVERSE_ROOM: return 'SkillVerse Room';
+      case MeetingType.ZOOM: return 'Zoom';
+      case MeetingType.MICROSOFT_TEAMS: return 'MS Teams';
+      case MeetingType.PHONE_CALL: return 'Điện thoại';
+      case MeetingType.ONSITE: return 'Trực tiếp';
+    }
+  };
+
+  const getMeetingTypeLogo = (type: MeetingType): string => {
+    switch (type) {
+      case MeetingType.GOOGLE_MEET: return GoogleMeetLogo;
+      case MeetingType.SKILLVERSE_ROOM: return SkillVerseLogo;
+      case MeetingType.ZOOM: return ZoomLogo;
+      case MeetingType.MICROSOFT_TEAMS: return TeamsLogo;
+      default: return '';
+    }
+  };
+
+  const MeetingTypeIcon = ({ meetingType }: { meetingType: MeetingType }) => {
+    const logo = getMeetingTypeLogo(meetingType);
+    if (!logo) return null;
+    return <img src={logo} alt={getMeetingTypeLabel(meetingType)} className="ftj-meeting-type-icon" />;
   };
 
   const getContractStatusClass = (status: string) => {
@@ -266,8 +335,11 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
   const handleApplicantDecision = async () => {
     if (!decisionModal) return;
 
+    // INTERVIEW_APPROVED / INTERVIEW_REJECTED don't require a note; OFFER_SENT requires offer details
     const note = decisionNote.trim();
-    if (!note) {
+    const needsNote = !["INTERVIEW_APPROVED", "INTERVIEW_REJECTED"].includes(decisionModal.mode);
+    const requiresOfferDetails = decisionModal.mode === "OFFER_SENT";
+    if (needsNote && (requiresOfferDetails ? !note : !note)) {
       showError(
         "Thiếu nội dung",
         "Hãy nhập nội dung giải thích trước khi xử lý hồ sơ.",
@@ -277,40 +349,140 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
 
     try {
       setIsActionBusy(true);
-      await jobService.updateApplicationStatus(decisionModal.application.id, {
-        status: decisionModal.mode as JobApplicationStatus,
-        acceptanceMessage:
-          decisionModal.mode === "ACCEPTED" ? note : undefined,
-        rejectionReason:
-          decisionModal.mode === "REJECTED" ? note : undefined,
-      });
+      const applicationId = decisionModal.application.id;
 
-      showSuccess(
+      // ── Interview completion modes (remote jobs only) ──────────────
+      if (
+        decisionModal.mode === "INTERVIEW_APPROVED" ||
+        decisionModal.mode === "INTERVIEW_REJECTED"
+      ) {
+        // Step 1: complete interview via backend
+        await interviewService.completeInterview(
+          decisionModal.interviewId!,
+          decisionModal.mode === "INTERVIEW_REJECTED" ? note : "",
+        );
+
+        // INTERVIEW_APPROVED: non-negotiable remote job → set ACCEPTED directly, go to contracts tab
+        if (decisionModal.mode === "INTERVIEW_APPROVED" && !job?.isNegotiable) {
+          await jobService.updateApplicationStatus(applicationId, {
+            status: JobApplicationStatus.ACCEPTED,
+            acceptanceMessage: note || "Ứng viên đã hoàn thành phỏng vấn và được chấp thuận.",
+          });
+          setDecisionModal(null);
+          setDecisionNote("");
+          const { applications: loadedApps } = await loadData();
+          const freshApp = loadedApps.find((a) => a.id === applicationId);
+          if (freshApp) {
+            setContractApplication({ ...freshApp });
+            setActiveTab("contracts");
+          }
+          return;
+        }
+
+        // INTERVIEW_APPROVED: negotiable remote job → send OFFER_SENT
+        if (decisionModal.mode === "INTERVIEW_APPROVED" && job?.isNegotiable) {
+          await jobService.updateApplicationStatus(applicationId, {
+            status: JobApplicationStatus.OFFER_SENT,
+            offerDetails: note || undefined,
+          });
+          setDecisionModal(null);
+          setDecisionNote("");
+          await loadData();
+          showSuccess(
+            "Đã hoàn thành phỏng vấn",
+            `Đã chuyển sang bước gửi đề nghị cho ${getApplicantDisplayName(
+              decisionModal.application.userFullName,
+              decisionModal.application.userEmail,
+            )}.`,
+          );
+          return;
+        }
+
+        // INTERVIEW_REJECTED: direct rejection
+        if (decisionModal.mode === "INTERVIEW_REJECTED") {
+          await jobService.updateApplicationStatus(applicationId, {
+            status: JobApplicationStatus.REJECTED,
+            rejectionReason: note || "Ứng viên không đạt yêu cầu sau phỏng vấn.",
+          });
+          setDecisionModal(null);
+          setDecisionNote("");
+          await loadData();
+          showSuccess(
+            "Đã từ chối",
+            `${getApplicantDisplayName(
+              decisionModal.application.userFullName,
+              decisionModal.application.userEmail,
+            )} đã được từ chối sau phỏng vấn.`,
+          );
+          return;
+        }
+      }
+
+      // ── OFFER_SENT for negotiable jobs (post-interview) ─────────────
+      if (decisionModal.mode === "OFFER_SENT") {
+        await jobService.updateApplicationStatus(applicationId, {
+          status: JobApplicationStatus.OFFER_SENT,
+          offerDetails: note || undefined,
+        });
+        showSuccess(
+          "Đã gửi đề nghị",
+          `Đề nghị đã được gửi tới ${getApplicantDisplayName(
+            decisionModal.application.userFullName,
+            decisionModal.application.userEmail,
+          )}.`,
+        );
+        setDecisionModal(null);
+        setDecisionNote("");
+        await loadData();
+        return;
+      }
+
+      // ── Application decision modes ────────────────────────────────
+      // State machine: PENDING must go through REVIEWED before ACCEPTED
+      if (
+        decisionModal.application.status === JobApplicationStatus.PENDING &&
         decisionModal.mode === "ACCEPTED"
-          ? "Đã duyệt ứng viên"
-          : "Đã từ chối ứng viên",
-        `${getApplicantDisplayName(
-          decisionModal.application.userFullName,
-          decisionModal.application.userEmail,
-        )} đã được cập nhật trạng thái.`,
-      );
+      ) {
+        // Step 1: move PENDING → REVIEWED
+        await jobService.updateApplicationStatus(applicationId, {
+          status: JobApplicationStatus.REVIEWED,
+        });
+        // Step 2: move REVIEWED → ACCEPTED
+        await jobService.updateApplicationStatus(applicationId, {
+          status: JobApplicationStatus.ACCEPTED,
+          acceptanceMessage: note,
+        });
+      } else {
+        // REJECTED (from PENDING or REVIEWED) and direct REVIEWED→ACCEPTED are allowed
+        await jobService.updateApplicationStatus(applicationId, {
+          status: decisionModal.mode as JobApplicationStatus,
+          acceptanceMessage:
+            decisionModal.mode === "ACCEPTED" ? note : undefined,
+          rejectionReason:
+            decisionModal.mode === "REJECTED" ? note : undefined,
+        });
+      }
 
-      const acceptedApplication = decisionModal.application;
+      const wasAccepted = decisionModal.mode === "ACCEPTED";
+      const appIdForContract = applicationId;
       setDecisionModal(null);
       setDecisionNote("");
-      await loadData();
+      const { applications: loadedApps } = await loadData();
 
-      if (decisionModal.mode === "ACCEPTED") {
-        setContractApplication({
-          ...acceptedApplication,
-          status: JobApplicationStatus.ACCEPTED,
-        });
-        setActiveTab("contracts");
+      if (wasAccepted) {
+        const freshApp = loadedApps.find((a) => a.id === appIdForContract);
+        if (freshApp) {
+          setContractApplication({ ...freshApp });
+          setActiveTab("contracts");
+        }
+        showSuccess("Đã duyệt ứng viên", "Chuyển sang bước tạo hợp đồng.");
+      } else {
+        showSuccess("Đã từ chối ứng viên", "Ứng viên đã được cập nhật trạng thái.");
       }
     } catch (error: unknown) {
       showError(
         "Không thể cập nhật hồ sơ",
-        error instanceof Error ? error.message : "Vui lòng thử lại.",
+        error instanceof Error ? error.message : "Vui lòng thử lời.",
       );
     } finally {
       setIsActionBusy(false);
@@ -328,6 +500,31 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
     }
 
     window.open(portfolioPath, "_blank", "noopener,noreferrer");
+  };
+
+  const handleContactApplicant = async (application: JobApplicationResponse) => {
+    try {
+      setIsActionBusy(true);
+      const session = await recruitmentChatService.getOrCreateSession(
+        application.userId,
+        job?.id,
+        "MANUAL",
+        RecruitmentJobContextType.JOB_POSTING,
+      );
+      navigate("/messenger", {
+        state: {
+          openChatWith: session.id.toString(),
+          type: "RECRUITMENT",
+        },
+      });
+    } catch (error: unknown) {
+      showError(
+        "Không thể mở chat",
+        error instanceof Error ? error.message : "Vui lòng thử lại.",
+      );
+    } finally {
+      setIsActionBusy(false);
+    }
   };
 
   const applicationIds = new Set(applications.map((application) => application.id));
@@ -355,7 +552,17 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
     (contract) => contract.status === ContractStatus.SIGNED,
   );
   const completedContractsCount = Math.min(signedContracts.length, hiringTarget);
-  const isHiringCompleted = completedContractsCount >= hiringTarget;
+  const scheduledInterviewCount = applications.filter(
+    (a) => a.status === JobApplicationStatus.INTERVIEW_SCHEDULED,
+  ).length;
+  const completedInterviewCount = applications.filter(
+    (a) => a.status === JobApplicationStatus.INTERVIEWED,
+  ).length;
+  // Hiring is "complete" when: signed contracts >= target, OR enough interviews scheduled/completed
+  const isHiringCompleted =
+    completedContractsCount >= hiringTarget ||
+    scheduledInterviewCount >= hiringTarget ||
+    completedInterviewCount >= hiringTarget;
   const completionReferenceContract = signedContracts[0] || null;
 
   const pendingApplications = applications.filter(
@@ -367,9 +574,22 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
   const acceptedApplications = applications.filter(
     (application) => application.status === JobApplicationStatus.ACCEPTED,
   );
+  // For REMOTE jobs:
+  //   - isNegotiable: must go through OFFER_SENT → OFFER_ACCEPTED before contract
+  //   - NOT negotiable: INTERVIEWED → ACCEPTED (after INTERVIEW_APPROVED) → ready for contract
+  // For ONSITE jobs: INTERVIEWED → ACCEPTED → ready for contract
   const contractReadyApplications = isHiringCompleted
     ? []
-    : acceptedApplications.filter((application) => !application.contractId);
+    : applications.filter((application) =>
+        !application.contractId &&
+        (job?.isRemote
+          ? (job.isNegotiable
+              ? application.status === JobApplicationStatus.OFFER_ACCEPTED
+              : application.status === JobApplicationStatus.ACCEPTED ||
+                application.status === JobApplicationStatus.INTERVIEWED)
+          : application.status === JobApplicationStatus.ACCEPTED ||
+            application.status === JobApplicationStatus.INTERVIEWED),
+      );
 
   useEffect(() => {
     if (isHiringCompleted) {
@@ -379,9 +599,9 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
 
     if (
       contractApplication &&
-      !contractReadyApplications.some(
+      (!contractReadyApplications.some(
         (application) => application.id === contractApplication.id,
-      )
+      ) || contractApplication.status === JobApplicationStatus.INTERVIEW_SCHEDULED)
     ) {
       setContractApplication(null);
     }
@@ -518,7 +738,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
         {job.jobType && (
           <div className="ftj-fullpage__stat-item">
             <Briefcase size={16} />
-            <strong>{job.jobType.replaceAll("_", " ")}</strong>
+            <strong>{job.jobType?.replace(/_/g, " ") || "Full-time"}</strong>
             <span>Loại hình</span>
           </div>
         )}
@@ -540,8 +760,16 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
           Ứng viên ({applications.length})
         </button>
         <button
+          className={`ftj-fullpage__tab ${activeTab === "interviews" ? "is-active" : ""}`}
+          onClick={() => setActiveTab("interviews")}
+        >
+          <Calendar size={14} />
+          Phỏng vấn
+        </button>
+        <button
           className={`ftj-fullpage__tab ${activeTab === "contracts" ? "is-active" : ""}`}
           onClick={() => setActiveTab("contracts")}
+          style={{ display: job?.isRemote ? '' : 'none' }}
         >
           <FileSignature size={14} />
           Hợp đồng ({allRelatedContracts.length})
@@ -583,7 +811,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                   </div>
                   <div className="ftj-fullpage__info-row">
                     <span>Loại hình</span>
-                    <strong>{job.jobType?.replaceAll("_", " ") || "Full-time"}</strong>
+                    <strong>{job.jobType?.replace(/_/g, " ") || "Full-time"}</strong>
                   </div>
                   <div className="ftj-fullpage__info-row">
                     <span>Số lượng tuyển</span>
@@ -613,17 +841,17 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
 
               <article className="ftj-fullpage__signal-card">
                 <span className="ftj-fullpage__signal-label">
-                  {isHiringCompleted ? "Hiring completed" : "Contract readiness"}
+                  {isHiringCompleted ? "Hiring completed" : "Recruitment progress"}
                 </span>
                 <strong>
                   {isHiringCompleted
-                    ? `Đã tuyển đủ ${completedContractsCount}/${hiringTarget} vị trí`
-                    : `${contractReadyApplications.length} ứng viên sẵn sàng tạo hợp đồng`}
+                    ? `Đã tuyển đủ ${hiringTarget} vị trí`
+                    : `${scheduledInterviewCount + completedInterviewCount}/${hiringTarget} lịch phỏng vấn`}
                 </strong>
                 <p>
                   {isHiringCompleted
-                    ? "Job này đã đạt chỉ tiêu tuyển dụng thông qua các hợp đồng đã ký hoàn tất. Luồng tạo mới được khóa ở frontend."
-                    : "Chuyển sang tab hợp đồng để khởi tạo ngay từ các hồ sơ đã được duyệt."}
+                    ? "Job đã đạt chỉ tiêu: đủ hợp đồng hoặc đủ lịch phỏng vấn. Luồng tạo mới đã khóa."
+                    : `${completedContractsCount} hợp đồng ký hoàn tất, ${contractReadyApplications.length} ứng viên sẵn sàng tạo hợp đồng.`}
                 </p>
               </article>
             </div>
@@ -666,10 +894,10 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
             <div className="ftj-applicants__header">
               <div>
                 <span className="ftj-applicants__eyebrow">Candidate queue</span>
-                <h3>Review hồ sơ và chuyển sang hợp đồng</h3>
+                <h3>Review hồ sơ và xếp phỏng vấn</h3>
                 <p>
-                  Duyệt applicant ngay trên trang này, sau đó tạo hợp đồng trực tiếp
-                  từ hồ sơ đã chấp nhận.
+                  Duyệt applicant ngay trên trang này, sau đó xếp phỏng vấn
+                  và chuyển tiếp sang bước tiếp theo.
                 </p>
               </div>
               <div className="ftj-applicants__summary">
@@ -681,10 +909,10 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
               </div>
             </div>
 
-            {isHiringCompleted && (
+            {isHiringCompleted && job?.isRemote && (
               <div className="ftj-contracts__completion-banner">
                 <div>
-                  <span className="ftj-applicants__eyebrow">Job completed</span>
+                  <span className="ftj-applicants__eyebrow ftj-applicants__eyebrow--glow">JOB COMPLETED</span>
                   <h4>Đợt tuyển đã hoàn thành</h4>
                   <p>
                     Đã có đủ hợp đồng ký hoàn tất để đạt chỉ tiêu tuyển dụng. Các thao tác duyệt thêm ứng viên hoặc tạo hợp đồng mới đã được khóa.
@@ -693,7 +921,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                 {completionReferenceContract && (
                   <button
                     type="button"
-                    className="ftj-btn ftj-btn--primary"
+                    className="ftj-btn ftj-btn--primary ftj-btn--cyan"
                     onClick={() =>
                       navigate(`/business/contracts/${completionReferenceContract.id}`)
                     }
@@ -793,7 +1021,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                         <button
                           type="button"
                           className="ftj-btn ftj-btn--ghost"
-                          onClick={() => navigate(`/messenger?userId=${application.userId}`)}
+                          onClick={() => void handleContactApplicant(application)}
                         >
                           <MessageSquare size={13} />
                           Liên hệ
@@ -805,7 +1033,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                           <>
                             <button
                               type="button"
-                              className="ftj-btn ftj-btn--primary"
+                              className="ftj-btn ftj-btn--primary ftj-btn--cyan"
                               onClick={() => {
                                 setDecisionModal({
                                   application,
@@ -839,20 +1067,449 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                           !application.contractId && (
                             <button
                               type="button"
-                              className="ftj-btn ftj-btn--primary"
+                              className="ftj-btn ftj-btn--primary ftj-btn--cyan"
                               onClick={() => {
-                                setContractApplication(application);
-                                setActiveTab("contracts");
+                                setInterviewFormApp(application);
+                                setContractApplication(null);
+                                setActiveTab('interviews');
                               }}
                             >
-                              <Plus size={13} />
-                              Tạo hợp đồng
+                              <Calendar size={13} />
+                              Xếp phỏng vấn
                             </button>
                           )}
+
+                        {/* After INTERVIEWED — Remote jobs only (contract tab hidden for onsite) */}
+                        {!isHiringCompleted &&
+                          application.status === JobApplicationStatus.INTERVIEWED &&
+                          Boolean(job?.isRemote) &&
+                          !application.contractId && (
+                            <>
+                              {/* Negotiable: show "Gửi đề nghị" button */}
+                              {job?.isNegotiable && (
+                                <button
+                                  type="button"
+                                  className="ftj-btn ftj-btn--secondary"
+                                  onClick={() => {
+                                    setDecisionModal({
+                                      application,
+                                      mode: "OFFER_SENT",
+                                    });
+                                    setDecisionNote("");
+                                  }}
+                                >
+                                  <Send size={13} />
+                                  Gửi đề nghị
+                                </button>
+                              )}
+                              {/* Non-negotiable: show Accept & Reject buttons */}
+                              {!job?.isNegotiable && (
+                                <>
+                                  <button
+                                    type="button"
+                                    className="ftj-btn ftj-btn--primary ftj-btn--cyan"
+                                    onClick={() => {
+                                      setDecisionModal({
+                                        application,
+                                        mode: "INTERVIEW_APPROVED",
+                                        interviewId: interviews.find(
+                                          (i) => i.applicationId === application.id,
+                                        )?.id,
+                                      });
+                                      setDecisionNote("");
+                                    }}
+                                  >
+                                    <CheckCircle2 size={13} />
+                                    Chấp thuận
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="ftj-btn ftj-btn--danger"
+                                    onClick={() => {
+                                      setDecisionModal({
+                                        application,
+                                        mode: "INTERVIEW_REJECTED",
+                                        interviewId: interviews.find(
+                                          (i) => i.applicationId === application.id,
+                                        )?.id,
+                                      });
+                                      setDecisionNote("");
+                                    }}
+                                  >
+                                    <XCircle size={13} />
+                                    Từ chối
+                                  </button>
+                                </>
+                              )}
+                            </>
+                          )}
+
+                        {/* After INTERVIEWED — Onsite jobs: mark as hired */}
+                        {!isHiringCompleted &&
+                          application.status === JobApplicationStatus.INTERVIEWED &&
+                          (job?.isRemote === false || job?.isRemote === undefined) &&
+                          !application.contractId && (
+                            <div className="ftj-onsite-hire">
+                              <div className="ftj-onsite-hire__info">
+                                <span>Ứng viên đã hoàn thành phỏng vấn</span>
+                                <p>
+                                  Ứng viên đã phỏng vấn xong. Bạn có thể đánh dấu tuyển đủ để hoàn thành
+                                  đợt tuyển hoặc tiếp tục duyệt thêm ứng viên khác.
+                                </p>
+                              </div>
+                              <div className="ftj-onsite-hire__actions">
+                                <button
+                                  type="button"
+                                  className="ftj-btn ftj-btn--primary ftj-btn--cyan"
+                                  onClick={async () => {
+                                    try {
+                                      setIsActionBusy(true);
+                                      await jobService.updateApplicationStatus(application.id, {
+                                        status: JobApplicationStatus.ACCEPTED,
+                                        acceptanceMessage: "Ứng viên đã phỏng vấn thành công và được tuyển.",
+                                      });
+                                      // Mark job as closed (hiring complete)
+                                      await jobService.changeJobStatus(jobId, JobStatus.CLOSED);
+                                      showSuccess(
+                                        "Đã hoàn thành đợt tuyển",
+                                        `Đợt tuyển đã được đánh dấu tuyển đủ và đóng lại.`,
+                                      );
+                                      await loadData();
+                                    } catch (err: any) {
+                                      showError(
+                                        "Không thể cập nhật",
+                                        err instanceof Error ? err.message : "Vui lòng thử lại.",
+                                      );
+                                    } finally {
+                                      setIsActionBusy(false);
+                                    }
+                                  }}
+                                >
+                                  <CheckCircle2 size={13} />
+                                  Đánh dấu tuyển đủ
+                                </button>
+                              </div>
+                            </div>
+                          )}
+
+                        {/* OFFER_REJECTED panel — recruiter's round 1 counter-received */}
+                        {!isHiringCompleted &&
+                          application.status === JobApplicationStatus.OFFER_REJECTED &&
+                          Boolean(job?.isRemote) &&
+                          Boolean(job?.isNegotiable) &&
+                          !application.contractId && (
+                            <div className="ftj-offer-response ftj-offer-response--rejected">
+                              <div className="ftj-offer-response__header">
+                                <Paperclip size={14} />
+                                <strong>Ứng viên đã phản đề nghị</strong>
+                              </div>
+                              {application.offerDetails && (
+                                <div className="ftj-offer-response__original">
+                                  <span className="ftj-offer-response__label">Đề nghị lần 1</span>
+                                  <p>{application.offerDetails}</p>
+                                </div>
+                              )}
+                              {application.candidateOfferResponse && (
+                                <div className="ftj-offer-response__candidate ftj-offer-response__candidate--counter">
+                                  <span className="ftj-offer-response__label">Phản đề nghị từ ứng viên</span>
+                                  <p>{application.candidateOfferResponse}</p>
+                                </div>
+                              )}
+
+                              {application.offerRound === 1 ? (
+                                <div className="ftj-offer-rejected-actions">
+                                  <p className="ftj-offer-rejected-actions__hint">
+                                    Ứng viên từ chối đề nghị lần 1. Bạn có thể gửi đề nghị mới (lần cuối)
+                                    hoặc kết thúc hồ sơ.
+                                  </p>
+                                  <div className="ftj-offer-rejected-actions__btns">
+                                    <button
+                                      type="button"
+                                      className="ftj-btn ftj-btn--secondary"
+                                      onClick={() => {
+                                        setDecisionModal({
+                                          application,
+                                          mode: "OFFER_SENT",
+                                        });
+                                        setDecisionNote("");
+                                      }}
+                                    >
+                                      <Send size={13} />
+                                      Gửi đề nghị lần 2
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="ftj-btn ftj-btn--danger"
+                                      onClick={() => {
+                                        setDecisionModal({
+                                          application,
+                                          mode: "REJECTED",
+                                        });
+                                        setDecisionNote("");
+                                      }}
+                                    >
+                                      <XCircle size={13} />
+                                      Kết thúc
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="ftj-offer-rejected-actions">
+                                  <p className="ftj-offer-rejected-actions__hint ftj-offer-rejected-actions__hint--final">
+                                    <AlertTriangle size={14} />
+                                    Ứng viên đã từ chối cả 2 lần đề nghị. Không thể gửi thêm.
+                                  </p>
+                                  <button
+                                    type="button"
+                                    className="ftj-btn ftj-btn--danger"
+                                    onClick={() => {
+                                      setDecisionModal({
+                                        application,
+                                        mode: "REJECTED",
+                                      });
+                                      setDecisionNote("");
+                                    }}
+                                  >
+                                    <XCircle size={13} />
+                                    Đánh dấu từ chối
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                        {/* OFFER response panel — shown when candidate has responded to offer */}
+                        {(application.status === JobApplicationStatus.OFFER_ACCEPTED ||
+                          application.status === JobApplicationStatus.OFFER_REJECTED) && (
+                          <div className="ftj-offer-response">
+                            <div className="ftj-offer-response__header">
+                              <Paperclip size={14} />
+                              <strong>
+                                {application.status === JobApplicationStatus.OFFER_ACCEPTED
+                                  ? "Ứng viên đã chấp nhận đề nghị"
+                                  : "Ứng viên đã phản đề nghị"}
+                              </strong>
+                            </div>
+                            {application.offerDetails && (
+                              <div className="ftj-offer-response__original">
+                                <span className="ftj-offer-response__label">Đề nghị ban đầu</span>
+                                <p>{application.offerDetails}</p>
+                              </div>
+                            )}
+                            {application.candidateOfferResponse && (
+                              <div className={`ftj-offer-response__candidate ${
+                                application.status === JobApplicationStatus.OFFER_ACCEPTED
+                                  ? "ftj-offer-response__candidate--accepted"
+                                  : "ftj-offer-response__candidate--counter"
+                              }`}>
+                                <span className="ftj-offer-response__label">
+                                  {application.status === JobApplicationStatus.OFFER_ACCEPTED
+                                    ? "Lời nhắn của ứng viên"
+                                    : "Phản đề nghị từ ứng viên"}
+                                </span>
+                                <p>{application.candidateOfferResponse}</p>
+                              </div>
+                            )}
+                            {application.status === JobApplicationStatus.OFFER_ACCEPTED &&
+                              !application.contractId && (
+                                <button
+                                  type="button"
+                                  className="ftj-btn ftj-btn--primary ftj-btn--cyan"
+                                  onClick={() => {
+                                    setContractApplication(application);
+                                    setActiveTab("contracts");
+                                  }}
+                                >
+                                  <FileSignature size={13} />
+                                  Tạo hợp đồng
+                                </button>
+                              )}
+                          </div>
+                        )}
                       </div>
                     </article>
                   );
                 })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === "interviews" && (
+          <div className="ftj-interviews">
+            <div className="ftj-interviews__hero">
+              <div>
+                <span className="ftj-applicants__eyebrow">Interview desk</span>
+                <h3>Lịch phỏng vấn của job này</h3>
+                <p>
+                  Xếp lịch, theo dõi và quản lý các buổi phỏng vấn ứng viên.
+                  {job?.isRemote
+                    ? ' Job remote hỗ trợ đầy đủ hình thức: Google Meet, Zoom, Teams, SkillVerse Room.'
+                    : ' Job onsite sử dụng hình thức phỏng vấn trực tiếp tại công ty.'}
+                </p>
+              </div>
+            </div>
+
+            {interviewFormApp ? (
+              <InterviewScheduleForm
+                application={interviewFormApp}
+                isRemote={!!job?.isRemote}
+                onClose={() => setInterviewFormApp(null)}
+                onScheduled={() => {
+                  setInterviewFormApp(null);
+                  void loadData();
+                }}
+              />
+            ) : interviews.length === 0 ? (
+              <div className="ftj-interviews__empty">
+                <Calendar size={28} />
+                <div>
+                  <strong>Chưa có lịch phỏng vấn nào</strong>
+                  <p>
+                    Từ tab Ứng viên, chọn ứng viên đã duyệt và nhấn &quot;Xếp phỏng vấn&quot; để tạo lịch.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="ftj-interviews__list">
+                {interviews.map((interview) => (
+                  <article key={interview.id} className="ftj-interview-card">
+                    <div className="ftj-interview-card__header">
+                      <div className="ftj-interview-card__identity">
+                        {interview.candidateAvatarUrl ? (
+                          <img
+                            src={resolveRecruitmentAssetUrl(interview.candidateAvatarUrl)}
+                            alt={interview.candidateName}
+                            className="ftj-interview-card__avatar"
+                          />
+                        ) : (
+                          <div className="ftj-interview-card__avatar ftj-interview-card__avatar--fallback">
+                            {interview.candidateName?.[0]?.toUpperCase() || '?'}
+                          </div>
+                        )}
+                        <div>
+                          <strong>{interview.candidateName}</strong>
+                          <span>{interview.jobTitle}</span>
+                        </div>
+                      </div>
+                      <span
+                        className="ftj-interview-card__status"
+                        data-status={interview.status}
+                      >
+                        {interview.status === InterviewStatus.PENDING ? 'Chờ xác nhận'
+                          : interview.status === InterviewStatus.CONFIRMED ? 'Đã xác nhận'
+                          : interview.status === InterviewStatus.COMPLETED ? 'Hoàn thành'
+                          : interview.status === InterviewStatus.CANCELLED ? 'Đã hủy'
+                          : interview.status === InterviewStatus.NO_SHOW ? 'Không đến'
+                          : interview.status}
+                      </span>
+                    </div>
+                    <div className="ftj-interview-card__meta">
+                      <span>
+                        <Calendar size={13} />
+                        {formatDateTime(interview.scheduledAt)}
+                      </span>
+                      <span>
+                        <Clock3 size={13} />
+                        {interview.durationMinutes} phút
+                      </span>
+                    </div>
+                    {interview.meetingLink && (
+                      <div className="ftj-interview-card__link">
+                        <Link2 size={13} />
+                        <a href={interview.meetingLink} target="_blank" rel="noreferrer">
+                          {interview.meetingLink}
+                        </a>
+                      </div>
+                    )}
+                    <div className="ftj-interview-card__meeting-type">
+                      <MeetingTypeIcon meetingType={interview.meetingType} />
+                      <span>{getMeetingTypeLabel(interview.meetingType)}</span>
+                    </div>
+                    {interview.interviewerName && (
+                      <div className="ftj-interview-card__interviewer">
+                        <UserCheck size={13} />
+                        {interview.interviewerName}
+                      </div>
+                    )}
+                    <div className="ftj-interview-card__actions">
+                      {interview.status === InterviewStatus.PENDING && (
+                        <>
+                          <button
+                            type="button"
+                            className="ftj-btn ftj-btn--primary ftj-btn--cyan"
+                            onClick={() => {
+                              if (job?.isRemote) {
+                                const app = applications.find((a) => a.id === interview.applicationId);
+                                if (app) setInterviewCompleteModal({ application: app, interview });
+                              } else {
+                                void (async () => {
+                                  try {
+                                    await interviewService.completeInterview(interview.id, '');
+                                    // Update application to INTERVIEWED for onsite
+                                    await jobService.updateApplicationStatus(interview.applicationId, {
+                                      status: JobApplicationStatus.INTERVIEWED,
+                                      acceptanceMessage: 'Phỏng vấn onsite hoàn thành.',
+                                    });
+                                    void loadData();
+                                  } catch (e) {
+                                    showError('Lỗi', 'Không thể hoàn thành phỏng vấn');
+                                  }
+                                })();
+                              }
+                            }}
+                          >
+                            <CheckCircle2 size={13} />
+                            Hoàn thành
+                          </button>
+                          <button
+                            type="button"
+                            className="ftj-btn ftj-btn--danger"
+                            onClick={async () => {
+                              try {
+                                await interviewService.cancelInterview(interview.id);
+                                void loadData();
+                              } catch (e) {
+                                showError('Lỗi', 'Không thể hủy phỏng vấn');
+                              }
+                            }}
+                          >
+                            <XCircle size={13} />
+                            Hủy
+                          </button>
+                        </>
+                      )}
+                      {interview.status === InterviewStatus.CONFIRMED && (
+                        <button
+                          type="button"
+                          className="ftj-btn ftj-btn--primary ftj-btn--cyan"
+                          onClick={() => {
+                            if (job?.isRemote) {
+                              const app = applications.find((a) => a.id === interview.applicationId);
+                              if (app) setInterviewCompleteModal({ application: app, interview });
+                            } else {
+                              void (async () => {
+                                try {
+                                  await interviewService.completeInterview(interview.id, '');
+                                  await jobService.updateApplicationStatus(interview.applicationId, {
+                                    status: JobApplicationStatus.INTERVIEWED,
+                                    acceptanceMessage: 'Phỏng vấn onsite hoàn thành.',
+                                  });
+                                  void loadData();
+                                } catch (e) {
+                                  showError('Lỗi', 'Không thể hoàn thành phỏng vấn');
+                                }
+                              })();
+                            }
+                          }}
+                        >
+                          <CheckCircle2 size={13} />
+                          Hoàn thành
+                        </button>
+                      )}
+                    </div>
+                  </article>
+                ))}
               </div>
             )}
           </div>
@@ -885,15 +1542,20 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                   }
                 >
                   <Plus size={14} />
-                  {isHiringCompleted ? "Đã tuyển đủ" : "Tạo hợp đồng mới"}
+                  {isHiringCompleted ? "Đã tuyển đủ" : job?.isRemote ? "Tạo hợp đồng mới" : "Tạo hợp đồng mới"}
                 </button>
+                {job?.isRemote && contractReadyApplications.length === 0 && !isHiringCompleted && (
+                  <p className="ftj-contracts__remote-note">
+                    Ứng viên cần hoàn thành phỏng vấn và nhận đề nghị trước khi tạo hợp đồng.
+                  </p>
+                )}
               </div>
             </div>
 
-            {isHiringCompleted && (
+            {isHiringCompleted && job?.isRemote && (
               <div className="ftj-contracts__completion-banner">
                 <div>
-                  <span className="ftj-applicants__eyebrow">Signed milestone</span>
+                  <span className="ftj-applicants__eyebrow ftj-applicants__eyebrow--glow">SIGNED MILESTONE</span>
                   <h4>Job đã hoàn thành theo hợp đồng đã ký</h4>
                   <p>
                     Hệ thống đã ghi nhận đủ {completedContractsCount}/{hiringTarget} vị trí có hợp đồng được hai bên ký hoàn tất. Không thể tạo thêm hợp đồng mới cho job này ở frontend.
@@ -902,7 +1564,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                 {completionReferenceContract && (
                   <button
                     type="button"
-                    className="ftj-btn ftj-btn--primary"
+                    className="ftj-btn ftj-btn--primary ftj-btn--cyan"
                     onClick={() =>
                       navigate(`/business/contracts/${completionReferenceContract.id}`)
                     }
@@ -1141,14 +1803,87 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
         )}
       </div>
 
+      {/* ── Interview complete modal (remote jobs) ────────────── */}
+      {interviewCompleteModal && (
+        <div
+          className="ftj-modal-backdrop"
+          onClick={() => setInterviewCompleteModal(null)}
+        >
+          <div className="ftj-modal" onClick={(e) => e.stopPropagation()}>
+            <span className="ftj-modal__eyebrow">Kết thúc phỏng vấn</span>
+            <h3>{interviewCompleteModal.application.userFullName}</h3>
+            <p>
+              Sau khi hoàn thành, bạn có thể duyệt để tạo hợp đồng hoặc từ chối ứng viên.
+              {job?.isNegotiable
+                ? ' Job lương thỏa thuận sẽ chuyển sang bước gửi đề nghị.'
+                : ' Job lương cố định sẽ chuyển thẳng sang tạo hợp đồng.'}
+            </p>
+            <textarea
+              className="ftj-modal__textarea"
+              rows={4}
+              value={decisionNote}
+              onChange={(e) => setDecisionNote(e.target.value)}
+              placeholder="Ghi chú sau phỏng vấn (tùy chọn)..."
+            />
+            <div className="ftj-modal__actions">
+              <button
+                className="ftj-btn ftj-btn--secondary"
+                onClick={() => setInterviewCompleteModal(null)}
+              >
+                Đóng
+              </button>
+              <button
+                className="ftj-btn ftj-btn--danger"
+                onClick={() => {
+                  setDecisionModal({
+                    application: interviewCompleteModal.application,
+                    mode: "INTERVIEW_REJECTED",
+                    interviewId: interviewCompleteModal.interview.id,
+                  });
+                  setDecisionNote("");
+                  setInterviewCompleteModal(null);
+                }}
+              >
+                <XCircle size={14} />
+                Từ chối
+              </button>
+              <button
+                className="ftj-btn ftj-btn--primary"
+                onClick={() => {
+                  setDecisionModal({
+                    application: interviewCompleteModal.application,
+                    mode: "INTERVIEW_APPROVED",
+                    interviewId: interviewCompleteModal.interview.id,
+                  });
+                  setDecisionNote("");
+                  setInterviewCompleteModal(null);
+                }}
+              >
+                <CheckCircle2 size={14} />
+                {job?.isNegotiable ? "Gửi đề nghị" : "Duyệt & xếp phỏng vấn"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Decision modal (application approve/reject/offer) ──── */}
       {decisionModal && (
         <div
           className="ftj-modal-backdrop"
           onClick={() => !isActionBusy && setDecisionModal(null)}
         >
-          <div className="ftj-modal" onClick={(event) => event.stopPropagation()}>
+          <div className="ftj-modal" onClick={(e) => e.stopPropagation()}>
             <span className="ftj-modal__eyebrow">
-              {decisionModal.mode === "ACCEPTED" ? "Duyệt hồ sơ" : "Từ chối hồ sơ"}
+              {decisionModal.mode === "ACCEPTED" ? "Duyệt hồ sơ"
+                : decisionModal.mode === "OFFER_SENT" ? (
+                    decisionModal.application.offerRound === 2
+                      ? "Gửi đề nghị lần 2"
+                      : "Gửi đề nghị"
+                  )
+                : decisionModal.mode === "INTERVIEW_APPROVED" ? "Chấp thuận ứng viên"
+                : decisionModal.mode === "INTERVIEW_REJECTED" ? "Từ chối ứng viên"
+                : "Từ chối hồ sơ"}
             </span>
             <h3>
               {getApplicantDisplayName(
@@ -1158,17 +1893,35 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
             </h3>
             <p>
               {decisionModal.mode === "ACCEPTED"
-                ? "Nhập lời nhắn gửi tới ứng viên khi được chấp nhận vào vòng hợp đồng."
+                ? "Nhập lời nhắn gửi tới ứng viên khi được chấp nhận vào vòng phỏng vấn."
+                : decisionModal.mode === "OFFER_SENT" && decisionModal.application.offerRound === 1
+                ? "Gửi đề nghị lần 1 cho ứng viên. Nếu ứng viên từ chối, bạn có thể gửi thêm một đề nghị cuối cùng."
+                : decisionModal.mode === "OFFER_SENT" && decisionModal.application.offerRound === 2
+                ? "Gửi đề nghị lần 2 (cuối cùng) cho ứng viên. Nếu ứng viên từ chối, hồ sơ sẽ bị kết thúc vĩnh viễn."
+                : decisionModal.mode === "OFFER_SENT"
+                ? "Xác nhận gửi đề nghị cho ứng viên này."
+                : decisionModal.mode === "INTERVIEW_APPROVED" && !job?.isNegotiable
+                ? "Ứng viên sẽ được chuyển thẳng sang bước ký hợp đồng. Nhập ghi chú (tùy chọn)."
+                : decisionModal.mode === "INTERVIEW_APPROVED" && job?.isNegotiable
+                ? "Ứng viên sẽ được chuyển sang bước gửi đề nghị. Nhập ghi chú (tùy chọn)."
+                : decisionModal.mode === "REJECTED" && decisionModal.application.status === JobApplicationStatus.OFFER_REJECTED
+                ? "Ứng viên đã từ chối đề nghị lần cuối. Xác nhận kết thúc hồ sơ này."
                 : "Nhập lý do từ chối để hệ thống gửi phản hồi rõ ràng cho ứng viên."}
             </p>
             <textarea
               className="ftj-modal__textarea"
               rows={5}
               value={decisionNote}
-              onChange={(event) => setDecisionNote(event.target.value)}
+              onChange={(e) => setDecisionNote(e.target.value)}
               placeholder={
                 decisionModal.mode === "ACCEPTED"
-                  ? "Ví dụ: Hồ sơ phù hợp với vị trí, mời bạn tiếp tục bước ký hợp đồng."
+                  ? "Ví dụ: Hồ sơ phù hợp với vị trí, mời bạn tiếp tục bước xếp phỏng vấn."
+                  : decisionModal.mode === "OFFER_SENT"
+                  ? "Nhập chi tiết đề nghị: mức lương, thời hạn, điều kiện làm việc..."
+                  : decisionModal.mode === "INTERVIEW_APPROVED"
+                  ? "Ghi chú sau phỏng vấn (tùy chọn)..."
+                  : decisionModal.mode === "REJECTED" && decisionModal.application.status === JobApplicationStatus.OFFER_REJECTED
+                  ? "Ghi chú kết thúc (tùy chọn)..."
                   : "Ví dụ: Kinh nghiệm hiện tại chưa phù hợp với phạm vi công việc này."
               }
             />
@@ -1182,21 +1935,27 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
               </button>
               <button
                 className={
-                  decisionModal.mode === "ACCEPTED"
-                    ? "ftj-btn ftj-btn--primary"
-                    : "ftj-btn ftj-btn--danger"
+                  decisionModal.mode === "INTERVIEW_REJECTED" || decisionModal.mode === "REJECTED"
+                    ? "ftj-btn ftj-btn--danger"
+                    : "ftj-btn ftj-btn--primary"
                 }
                 onClick={handleApplicantDecision}
                 disabled={isActionBusy}
               >
                 {isActionBusy ? (
                   <Loader2 size={14} className="ftj-spin" />
-                ) : decisionModal.mode === "ACCEPTED" ? (
+                ) : decisionModal.mode === "ACCEPTED" || decisionModal.mode === "INTERVIEW_APPROVED" ? (
                   <CheckCircle2 size={14} />
+                ) : decisionModal.mode === "OFFER_SENT" ? (
+                  <Send size={14} />
                 ) : (
                   <XCircle size={14} />
                 )}
-                {decisionModal.mode === "ACCEPTED" ? "Xác nhận duyệt" : "Xác nhận từ chối"}
+                {decisionModal.mode === "ACCEPTED" || decisionModal.mode === "INTERVIEW_APPROVED" ? "Xác nhận duyệt"
+                  : decisionModal.mode === "OFFER_SENT"
+                    ? decisionModal.application.offerRound === 2 ? "Gửi đề nghị lần 2"
+                    : "Gửi đề nghị lần 1"
+                  : "Xác nhận từ chối"}
               </button>
             </div>
           </div>
@@ -1239,6 +1998,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

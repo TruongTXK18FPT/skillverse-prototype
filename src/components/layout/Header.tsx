@@ -39,19 +39,24 @@ import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import walletService from "../../services/walletService";
 import userService from "../../services/userService";
+import businessService from "../../services/businessService";
 import { premiumService } from "../../services/premiumService";
 import { notificationService } from "../../services/notificationService";
 import {
   getMyMentorProfile,
   MentorProfile,
 } from "../../services/mentorProfileService";
-import { UserProfileResponse } from "../../data/userDTOs";
+import {
+  BusinessProfileResponse,
+  UserProfileResponse,
+} from "../../data/userDTOs";
 import { UserSubscriptionResponse } from "../../data/premiumDTOs";
 import NotificationDropdown from "./NotificationDropdown";
 import LoginRequiredModal from "../auth/LoginRequiredModal";
 import Logo from "../../assets/brand/skillverse.png";
 import LogoNoel from "../../assets/brand/logoNoel.png";
 import LogoTet from "../../assets/brand/logo-tet.png";
+import { resolveRecruitmentAssetUrl } from "../../utils/recruitmentUi";
 import "../../styles/Header.css";
 
 const Header: React.FC = () => {
@@ -69,6 +74,8 @@ const Header: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(
     null,
   );
+  const [businessProfile, setBusinessProfile] =
+    useState<BusinessProfileResponse | null>(null);
   const [mentorProfile, setMentorProfile] = useState<MentorProfile | null>(
     null,
   );
@@ -209,6 +216,18 @@ const Header: React.FC = () => {
       const profile = await userService.getMyProfile();
       setUserProfile(profile);
 
+      if (user?.roles.includes("RECRUITER")) {
+        try {
+          const recruiterProfile = await businessService.getMyBusinessProfile();
+          setBusinessProfile(recruiterProfile);
+        } catch (e) {
+          console.error("Failed to load business profile", e);
+          setBusinessProfile(null);
+        }
+      } else {
+        setBusinessProfile(null);
+      }
+
       if (user?.roles.includes("MENTOR")) {
         try {
           const mProfile = await getMyMentorProfile();
@@ -216,6 +235,8 @@ const Header: React.FC = () => {
         } catch (e) {
           console.error("Failed to load mentor profile", e);
         }
+      } else {
+        setMentorProfile(null);
       }
     } catch (error) {
       console.error("Failed to load user profile:", error);
@@ -392,10 +413,13 @@ const Header: React.FC = () => {
   // Priority: ADMIN > RECRUITER > MENTOR > *_ADMIN > USER
   const isRootAdminRole = !!user && user.roles.includes("ADMIN");
   const isSubAdminRole =
-    !!user && !isRootAdminRole && user.roles.some((role) => role.endsWith("_ADMIN"));
+    !!user &&
+    !isRootAdminRole &&
+    user.roles.some((role) => role.endsWith("_ADMIN"));
   const isMentorRole = !!user && user.roles.includes("MENTOR");
   const isRecruiterRole = !!user && user.roles.includes("RECRUITER");
-  const hasLearnerRole = !!user && (user.roles.includes("USER") || user.roles.includes("LEARNER"));
+  const hasLearnerRole =
+    !!user && (user.roles.includes("USER") || user.roles.includes("LEARNER"));
   const canManageBookings = isMentorRole || hasLearnerRole;
   const isStudentRole =
     !!user &&
@@ -405,7 +429,9 @@ const Header: React.FC = () => {
     !isRootAdminRole &&
     !isSubAdminRole;
   const shouldShowManagementNav =
-    isAuthenticated && !!user && (isRootAdminRole || isRecruiterRole || isSubAdminRole);
+    isAuthenticated &&
+    !!user &&
+    (isRootAdminRole || isRecruiterRole || isSubAdminRole);
 
   const profileMenuLabel = isRecruiterRole
     ? "Hồ sơ doanh nghiệp"
@@ -413,11 +439,18 @@ const Header: React.FC = () => {
       ? "Hồ sơ giảng viên"
       : "Hồ sơ cá nhân";
 
+  const recruiterCompanyLogoUrl = isRecruiterRole
+    ? resolveRecruitmentAssetUrl(businessProfile?.companyLogoUrl)
+    : undefined;
+
   const resolvedHeaderAvatar =
-    user?.avatarMediaUrl ||
-    mentorProfile?.avatar ||
-    userProfile?.avatarMediaUrl ||
-    user?.avatarUrl;
+    recruiterCompanyLogoUrl ||
+    resolveRecruitmentAssetUrl(
+      user?.avatarMediaUrl ||
+        mentorProfile?.avatar ||
+        userProfile?.avatarMediaUrl ||
+        user?.avatarUrl,
+    );
 
   const modalProtectedPaths = new Set([
     "/mentorship",
@@ -564,8 +597,8 @@ const Header: React.FC = () => {
                 </div>
               </div>
 
-                  {showQuickNav && (
-                    <div className="sv-mega-menu">
+              {showQuickNav && (
+                <div className="sv-mega-menu">
                   {/* Smart Suggestion Line - Only for STUDENT role */}
                   {!user?.roles.includes("MENTOR") &&
                     !user?.roles.includes("RECRUITER") &&
@@ -652,7 +685,8 @@ const Header: React.FC = () => {
                       },
                       {
                         name: "Kế Hoạch AI",
-                        description: "Quản lý và tiếp tục kế hoạch học tập cá nhân",
+                        description:
+                          "Quản lý và tiếp tục kế hoạch học tập cá nhân",
                         path: "/study-planner",
                         icon: Calendar,
                         requireAuth: true,
@@ -715,58 +749,59 @@ const Header: React.FC = () => {
                     ) : null;
 
                     // Only show USER items if user has USER role AND is not MENTOR
-                    const userSection = user?.roles.includes("USER") && !isMentorRole ? (
-                      <div className="sv-mega-section">
-                        <h4 className="sv-mega-section-title">
-                          <Target size={14} className="sv-section-icon" />
-                          <span>Hành động chính</span>
-                        </h4>
-                        <div className="sv-mega-grid sv-mega-grid--primary">
-                          {userPrimaryItems.map((item) =>
-                            item.requireAuth && !isAuthenticated ? (
-                              <div
-                                key={item.path + item.name}
-                                className="sv-mega-link sv-mega-link--primary"
-                                style={{ cursor: "pointer" }}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setLoginRequiredFeature(item.name);
-                                  setShowLoginModal(true);
-                                  setShowQuickNav(false);
-                                }}
-                              >
-                                <item.icon className="sv-mega-link-icon" />
-                                <div className="sv-mega-link-content">
-                                  <h3 className="sv-mega-link-title">
-                                    {item.name}
-                                  </h3>
-                                  <p className="sv-mega-link-desc">
-                                    {item.description}
-                                  </p>
+                    const userSection =
+                      user?.roles.includes("USER") && !isMentorRole ? (
+                        <div className="sv-mega-section">
+                          <h4 className="sv-mega-section-title">
+                            <Target size={14} className="sv-section-icon" />
+                            <span>Hành động chính</span>
+                          </h4>
+                          <div className="sv-mega-grid sv-mega-grid--primary">
+                            {userPrimaryItems.map((item) =>
+                              item.requireAuth && !isAuthenticated ? (
+                                <div
+                                  key={item.path + item.name}
+                                  className="sv-mega-link sv-mega-link--primary"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setLoginRequiredFeature(item.name);
+                                    setShowLoginModal(true);
+                                    setShowQuickNav(false);
+                                  }}
+                                >
+                                  <item.icon className="sv-mega-link-icon" />
+                                  <div className="sv-mega-link-content">
+                                    <h3 className="sv-mega-link-title">
+                                      {item.name}
+                                    </h3>
+                                    <p className="sv-mega-link-desc">
+                                      {item.description}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            ) : (
-                              <Link
-                                key={item.path + item.name}
-                                to={item.path}
-                                className="sv-mega-link sv-mega-link--primary"
-                                onClick={() => setShowQuickNav(false)}
-                              >
-                                <item.icon className="sv-mega-link-icon" />
-                                <div className="sv-mega-link-content">
-                                  <h3 className="sv-mega-link-title">
-                                    {item.name}
-                                  </h3>
-                                  <p className="sv-mega-link-desc">
-                                    {item.description}
-                                  </p>
-                                </div>
-                              </Link>
-                            ),
-                          )}
+                              ) : (
+                                <Link
+                                  key={item.path + item.name}
+                                  to={item.path}
+                                  className="sv-mega-link sv-mega-link--primary"
+                                  onClick={() => setShowQuickNav(false)}
+                                >
+                                  <item.icon className="sv-mega-link-icon" />
+                                  <div className="sv-mega-link-content">
+                                    <h3 className="sv-mega-link-title">
+                                      {item.name}
+                                    </h3>
+                                    <p className="sv-mega-link-desc">
+                                      {item.description}
+                                    </p>
+                                  </div>
+                                </Link>
+                              ),
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ) : null;
+                      ) : null;
 
                     return (
                       <>
@@ -792,7 +827,9 @@ const Header: React.FC = () => {
                           <Briefcase className="sv-mega-link-icon" />
                           <div className="sv-mega-link-content">
                             <h3 className="sv-mega-link-title">Việc Làm</h3>
-                            <p className="sv-mega-link-desc">Tìm kiếm & quản lý tin tuyển dụng</p>
+                            <p className="sv-mega-link-desc">
+                              Tìm kiếm & quản lý tin tuyển dụng
+                            </p>
                           </div>
                         </Link>
                         <Link
@@ -803,7 +840,9 @@ const Header: React.FC = () => {
                           <MessageSquare className="sv-mega-link-icon" />
                           <div className="sv-mega-link-content">
                             <h3 className="sv-mega-link-title">Cộng Đồng</h3>
-                            <p className="sv-mega-link-desc">Tham gia cộng đồng học tập sôi động</p>
+                            <p className="sv-mega-link-desc">
+                              Tham gia cộng đồng học tập sôi động
+                            </p>
                           </div>
                         </Link>
                       </div>
@@ -811,55 +850,79 @@ const Header: React.FC = () => {
                   )}
 
                   {/* Guest Primary Actions — only for users with no special role */}
-                  {!isMentorRole && !user?.roles.includes("USER") && !isRecruiterRole && (
-                    <div className="sv-mega-section">
-                      <h4 className="sv-mega-section-title">
-                        <Target size={14} className="sv-section-icon" />
-                        <span>Hành động chính</span>
-                      </h4>
-                      <div className="sv-mega-grid sv-mega-grid--primary">
-                        <Link
-                          to="/chatbot"
-                          className="sv-mega-link sv-mega-link--primary"
-                          onClick={(e) =>
-                            handleQuickNavLinkClick(e, "Trợ Lý AI", "/chatbot")
-                          }
-                        >
-                          <Bot className="sv-mega-link-icon" />
-                          <div className="sv-mega-link-content">
-                            <h3 className="sv-mega-link-title">Trợ Lý AI</h3>
-                            <p className="sv-mega-link-desc">Nhận hỗ trợ từ trợ lý AI thông minh</p>
-                          </div>
-                        </Link>
-                        <Link
-                          to="/study-planner"
-                          className="sv-mega-link sv-mega-link--primary"
-                          onClick={(e) =>
-                            handleQuickNavLinkClick(e, "Kế Hoạch AI", "/study-planner")
-                          }
-                        >
-                          <Calendar className="sv-mega-link-icon" />
-                          <div className="sv-mega-link-content">
-                            <h3 className="sv-mega-link-title">Kế Hoạch AI</h3>
-                            <p className="sv-mega-link-desc">Quản lý và tiếp tục kế hoạch học tập cá nhân</p>
-                          </div>
-                        </Link>
-                        <Link
-                          to="/roadmap"
-                          className="sv-mega-link sv-mega-link--primary"
-                          onClick={(e) =>
-                            handleQuickNavLinkClick(e, "Lộ Trình Học Tập", "/roadmap")
-                          }
-                        >
-                          <Map className="sv-mega-link-icon" />
-                          <div className="sv-mega-link-content">
-                            <h3 className="sv-mega-link-title">Lộ Trình Học Tập</h3>
-                            <p className="sv-mega-link-desc">Lộ trình học tập và phát triển kỹ năng</p>
-                          </div>
-                        </Link>
+                  {!isMentorRole &&
+                    !user?.roles.includes("USER") &&
+                    !isRecruiterRole && (
+                      <div className="sv-mega-section">
+                        <h4 className="sv-mega-section-title">
+                          <Target size={14} className="sv-section-icon" />
+                          <span>Hành động chính</span>
+                        </h4>
+                        <div className="sv-mega-grid sv-mega-grid--primary">
+                          <Link
+                            to="/chatbot"
+                            className="sv-mega-link sv-mega-link--primary"
+                            onClick={(e) =>
+                              handleQuickNavLinkClick(
+                                e,
+                                "Trợ Lý AI",
+                                "/chatbot",
+                              )
+                            }
+                          >
+                            <Bot className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">Trợ Lý AI</h3>
+                              <p className="sv-mega-link-desc">
+                                Nhận hỗ trợ từ trợ lý AI thông minh
+                              </p>
+                            </div>
+                          </Link>
+                          <Link
+                            to="/study-planner"
+                            className="sv-mega-link sv-mega-link--primary"
+                            onClick={(e) =>
+                              handleQuickNavLinkClick(
+                                e,
+                                "Kế Hoạch AI",
+                                "/study-planner",
+                              )
+                            }
+                          >
+                            <Calendar className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">
+                                Kế Hoạch AI
+                              </h3>
+                              <p className="sv-mega-link-desc">
+                                Quản lý và tiếp tục kế hoạch học tập cá nhân
+                              </p>
+                            </div>
+                          </Link>
+                          <Link
+                            to="/roadmap"
+                            className="sv-mega-link sv-mega-link--primary"
+                            onClick={(e) =>
+                              handleQuickNavLinkClick(
+                                e,
+                                "Lộ Trình Học Tập",
+                                "/roadmap",
+                              )
+                            }
+                          >
+                            <Map className="sv-mega-link-icon" />
+                            <div className="sv-mega-link-content">
+                              <h3 className="sv-mega-link-title">
+                                Lộ Trình Học Tập
+                              </h3>
+                              <p className="sv-mega-link-desc">
+                                Lộ trình học tập và phát triển kỹ năng
+                              </p>
+                            </div>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
                   {/* Group 2: Explore & Learn — only for non-MENTOR, non-RECRUITER */}
                   {!isMentorRole && !isRecruiterRole && (
@@ -892,7 +955,8 @@ const Header: React.FC = () => {
                             ? [
                                 {
                                   name: "Meowl Shop",
-                                  description: "Cửa hàng Skin Neon Tech độc quyền",
+                                  description:
+                                    "Cửa hàng Skin Neon Tech độc quyền",
                                   path: "/meowl-shop",
                                   icon: ShoppingBag,
                                   className: "sv-mega-link--shop-highlight",
@@ -901,7 +965,8 @@ const Header: React.FC = () => {
                             : [
                                 {
                                   name: "Việc Làm",
-                                  description: "Tìm kiếm cơ hội việc làm phù hợp",
+                                  description:
+                                    "Tìm kiếm cơ hội việc làm phù hợp",
                                   path: "/jobs",
                                   icon: Briefcase,
                                 },
@@ -939,20 +1004,24 @@ const Header: React.FC = () => {
                         ) : (
                           <Trophy size={14} className="sv-section-icon" />
                         )}
-                        <span>{isStudentRole ? "Công việc" : "Giải trí & Cá nhân"}</span>
+                        <span>
+                          {isStudentRole ? "Công việc" : "Giải trí & Cá nhân"}
+                        </span>
                       </h4>
                       <div className="sv-mega-grid sv-mega-grid--tertiary">
                         {(isStudentRole
                           ? [
                               {
                                 name: "Portfolio",
-                                description: "Quản lý và chia sẻ thành tích của bạn",
+                                description:
+                                  "Quản lý và chia sẻ thành tích của bạn",
                                 path: "/portfolio",
                                 icon: User,
                               },
                               {
                                 name: "Trung tâm công việc",
-                                description: "Quản lý toàn bộ đơn ứng tuyển của bạn",
+                                description:
+                                  "Quản lý toàn bộ đơn ứng tuyển của bạn",
                                 path: "/my-applications",
                                 icon: FileText,
                               },
@@ -966,17 +1035,20 @@ const Header: React.FC = () => {
                           : [
                               {
                                 name: "Hồ Sơ",
-                                description: "Quản lý và chia sẻ thành tích của bạn",
+                                description:
+                                  "Quản lý và chia sẻ thành tích của bạn",
                                 path: "/portfolio",
                                 icon: User,
                               },
                               {
                                 name: "Meowl Shop",
-                                description: "Cửa hàng Skin Neon Tech độc quyền",
+                                description:
+                                  "Cửa hàng Skin Neon Tech độc quyền",
                                 path: "/meowl-shop",
                                 icon: ShoppingBag,
                               },
-                            ]).map((item) => (
+                            ]
+                        ).map((item) => (
                           <Link
                             key={item.path}
                             to={item.path}
@@ -999,7 +1071,6 @@ const Header: React.FC = () => {
                       </div>
                     </div>
                   )}
-
                 </div>
               )}
             </div>
@@ -1070,7 +1141,11 @@ const Header: React.FC = () => {
                           <img
                             src={resolvedHeaderAvatar}
                             alt="Avatar"
-                            className="header-avatar-img"
+                            className={`header-avatar-img${
+                              recruiterCompanyLogoUrl
+                                ? " header-avatar-img--company-logo"
+                                : ""
+                            }`}
                           />
                         ) : (
                           <User size={18} />
@@ -1128,7 +1203,9 @@ const Header: React.FC = () => {
                               <button
                                 onClick={() => {
                                   if (isMentorRole) {
-                                    navigate("/mentor", { state: { activeTab: "bookings" } });
+                                    navigate("/mentor", {
+                                      state: { activeTab: "bookings" },
+                                    });
                                   } else {
                                     navigate("/my-bookings?tab=bookings");
                                   }
@@ -1283,7 +1360,11 @@ const Header: React.FC = () => {
                           <img
                             src={resolvedHeaderAvatar}
                             alt="Avatar"
-                            className="header-avatar-img-large"
+                            className={`header-avatar-img-large${
+                              recruiterCompanyLogoUrl
+                                ? " header-avatar-img-large--company-logo"
+                                : ""
+                            }`}
                           />
                         ) : (
                           <User size={32} />
@@ -1408,7 +1489,9 @@ const Header: React.FC = () => {
                     disabled={isLoggingOut}
                   >
                     <User size={18} />
-                    <span>{isLoggingOut ? "Đang đăng xuất..." : "Đăng nhập"}</span>
+                    <span>
+                      {isLoggingOut ? "Đang đăng xuất..." : "Đăng nhập"}
+                    </span>
                   </button>
                 )}
 
@@ -1429,7 +1512,12 @@ const Header: React.FC = () => {
                           to={item.path}
                           className="mobile-category-link"
                           onClick={(e) =>
-                            handleQuickNavLinkClick(e, item.name, item.path, true)
+                            handleQuickNavLinkClick(
+                              e,
+                              item.name,
+                              item.path,
+                              true,
+                            )
                           }
                         >
                           <item.icon className="mobile-category-icon" />

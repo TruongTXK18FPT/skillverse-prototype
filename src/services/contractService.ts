@@ -42,6 +42,12 @@ class ContractService {
     const candidateSignature = (data.candidateSignature as ContractResponse['candidateSignature']) ?? undefined;
     const signedPdfUrl = typeof data.signedPdfUrl === 'string' ? data.signedPdfUrl : undefined;
     const employerAddress = typeof data.employerAddress === 'string' ? data.employerAddress : undefined;
+    const candidateName =
+      typeof data.candidateName === 'string' && data.candidateName.trim()
+        ? data.candidateName
+        : typeof data.userFullName === 'string' && data.userFullName.trim()
+          ? data.userFullName
+          : '';
 
     return {
       ...(data as unknown as ContractResponse),
@@ -74,6 +80,7 @@ class ContractService {
         typeof data.candidateSignedAt === 'string'
           ? data.candidateSignedAt
           : candidateSignature?.signedAt,
+      candidateName,
       signedPdfUrl,
       pdfUrl: typeof data.pdfUrl === 'string' ? data.pdfUrl : signedPdfUrl,
     };

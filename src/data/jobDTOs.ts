@@ -12,6 +12,11 @@ export enum JobApplicationStatus {
   PENDING = 'PENDING',
   REVIEWED = 'REVIEWED',
   ACCEPTED = 'ACCEPTED',
+  INTERVIEW_SCHEDULED = 'INTERVIEW_SCHEDULED',
+  INTERVIEWED = 'INTERVIEWED',
+  OFFER_SENT = 'OFFER_SENT',
+  OFFER_ACCEPTED = 'OFFER_ACCEPTED',
+  OFFER_REJECTED = 'OFFER_REJECTED',
   CONTRACT_SIGNED = 'CONTRACT_SIGNED',
   REJECTED = 'REJECTED',
 }
@@ -108,6 +113,9 @@ export interface UpdateApplicationStatusRequest {
   status: JobApplicationStatus;
   acceptanceMessage?: string; // Required if status = ACCEPTED
   rejectionReason?: string;   // Required if status = REJECTED
+  interviewResult?: string;    // Optional — interview notes when marking INTERVIEWED
+  offerDetails?: string;       // Optional — offer letter content when sending OFFER_SENT
+  candidateOfferResponse?: string; // Optional — candidate's counter-offer/acceptance when responding to OFFER_SENT
 }
 
 // ==================== RESPONSE DTOs ====================
@@ -134,6 +142,7 @@ export interface JobPostingResponse {
 
   // Recruiter information
   recruiterCompanyName: string; // From nested RecruiterProfile
+  recruiterCompanyLogoUrl?: string;
   recruiterEmail: string;       // From nested User
   recruiterUserId: number;      // For checking if current user owns this job
   createdAt: string;            // ISO datetime string
@@ -156,12 +165,18 @@ export interface JobApplicationResponse {
   processedAt: string | null;
   acceptanceMessage: string | null;
   rejectionReason: string | null;
+  interviewResult: string | null; // Interview notes after INTERVIEWED status
+  // Offer letter fields (for negotiable jobs)
+  offerDetails: string | null; // Recruiter's offer details when status = OFFER_SENT
+  candidateOfferResponse: string | null; // Candidate's counter-offer/acceptance when responding to offer
+  offerRound: number | null; // Current offer round: 1 = first offer, 2 = second (final) offer, 0/null = no offer sent yet
   // Job details for user's application view
   recruiterCompanyName: string;
   minBudget: number;
   maxBudget: number;
   isRemote: boolean;
   location: string | null;
+  isNegotiable?: boolean; // Whether the job has negotiable salary
   isHighlighted?: boolean;
   portfolioSlug?: string; // Added for linking to portfolio
   // Contract link

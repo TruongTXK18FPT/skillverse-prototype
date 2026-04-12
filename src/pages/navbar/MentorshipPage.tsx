@@ -14,7 +14,6 @@ import UplinkHeader from "../../components/mentorship-hud/UplinkHeader";
 import UplinkGrid from "../../components/mentorship-hud/UplinkGrid";
 import MasterProfileCard from "../../components/mentorship-hud/MasterProfileCard";
 import Pagination from "../../components/shared/Pagination";
-import MentorChatModal from "../../components/mentorship-hud/MentorChatModal";
 import BookingModal from "../../components/mentorship-hud/BookingModal";
 import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
 import "../../components/mentorship-hud/uplink-styles.css";
@@ -41,18 +40,9 @@ interface Mentor {
 const MentorshipPage = () => {
   const { isAuthenticated, user } = useAuth();
   const { showInfo } = useAppToast();
-  const normalizedRoles = (user?.roles || []).map((role) =>
-    String(role).toUpperCase(),
-  );
-  const hasStudentRole =
-    normalizedRoles.includes("USER") || normalizedRoles.includes("LEARNER");
-  const hasBlockedRole =
-    normalizedRoles.includes("MENTOR") ||
-    normalizedRoles.includes("RECRUITER") ||
-    normalizedRoles.includes("PARENT") ||
-    normalizedRoles.includes("ADMIN") ||
-    normalizedRoles.some((role) => role.endsWith("_ADMIN"));
-  const canUseMentorshipActions = hasStudentRole && !hasBlockedRole;
+  const primaryRole = user?.primaryRole?.toUpperCase() ?? '';
+  const canUseMentorshipActions =
+    primaryRole === 'USER' || primaryRole === 'LEARNER' || primaryRole === '';
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -61,13 +51,9 @@ const MentorshipPage = () => {
   >([{ id: "all", name: "Tất cả", count: 0 }]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [chatModalOpen, setChatModalOpen] = useState(false);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
-  const [selectedMentorForChat, setSelectedMentorForChat] =
-    useState<Partial<Mentor> | null>(null);
   const [selectedMentorForBooking, setSelectedMentorForBooking] =
     useState<Mentor | null>(null);
-  const [isMyRoleMentorForChat, setIsMyRoleMentorForChat] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const navigate = useNavigate();
 
@@ -220,7 +206,7 @@ const MentorshipPage = () => {
   }, [fetchMentors, isAuthenticated]);
 
   useEffect(() => {
-    const shouldLock = bookingModalOpen || chatModalOpen || showLoginModal;
+    const shouldLock = bookingModalOpen || showLoginModal;
 
     if (shouldLock) {
       document.body.classList.add('uplink-scroll-lock');
@@ -234,7 +220,7 @@ const MentorshipPage = () => {
       document.body.classList.remove('uplink-scroll-lock');
       document.documentElement.classList.remove('uplink-scroll-lock');
     };
-  }, [bookingModalOpen, chatModalOpen, showLoginModal]);
+  }, [bookingModalOpen, showLoginModal]);
 
   const handleToggleFavorite = async (mentorId: string) => {
     try {
@@ -256,29 +242,12 @@ const MentorshipPage = () => {
 
   useEffect(() => {
     if (location.state && (location.state as any).openChatWith) {
-      const state = location.state as any;
-      const mentorId = state.openChatWith;
-
-      // Check if we have full details in state (from MessageDropdown)
-      if (state.name && state.avatar) {
-        setSelectedMentorForChat({
-          id: mentorId,
-          name: state.name,
-          avatar: state.avatar,
-        });
-        setIsMyRoleMentorForChat(!!state.isMyRoleMentor);
-        setChatModalOpen(true);
-      } else if (mentors.length > 0) {
-        // Fallback to finding in list
-        const mentor = mentors.find((m) => m.id === mentorId);
-        if (mentor) {
-          setSelectedMentorForChat(mentor);
-          setIsMyRoleMentorForChat(false); // Default to learner if picking from list
-          setChatModalOpen(true);
-        }
-      }
+      showInfo(
+        "Chat chỉ mở sau khi đặt lịch",
+        "Mentor chat không còn mở trực tiếp từ trang mentorship. Hãy vào booking hoặc Messenger sau khi đã đặt lịch.",
+      );
     }
-  }, [location.state, mentors]);
+  }, [location.state, showInfo]);
 
   // Mock data as fallback
   const mockMentors: Mentor[] = [
@@ -407,26 +376,6 @@ const MentorshipPage = () => {
     setBookingModalOpen(true);
   };
 
-  const handleMessage = (mentor: Partial<Mentor>) => {
-    if (!canUseMentorshipActions) {
-      showInfo(
-        "Chỉ học viên được nhắn tin mentorship",
-        "Tính năng nhắn tin mentorship chỉ dành cho tài khoản học viên.",
-      );
-      return;
-    }
-
-    // Check if user is logged in before allowing messaging
-    if (!isAuthenticated) {
-      setSelectedMentorForChat(mentor);
-      setShowLoginModal(true);
-      return;
-    }
-
-    setSelectedMentorForChat(mentor);
-    setChatModalOpen(true);
-  };
-
   const handleToggleFavoriteWrapper = (mentorId: string) => {
     // Check if user is logged in before allowing favorites
     if (!isAuthenticated) {
@@ -509,7 +458,6 @@ const MentorshipPage = () => {
               isFavorite={mentor.isFavorite}
               preChatEnabled={mentor.preChatEnabled}
               onEstablishLink={() => handleBookSession(mentor)}
-              onMessage={() => handleMessage(mentor)}
               onToggleFavorite={() => handleToggleFavoriteWrapper(mentor.id)}
               onViewProfile={() => {
                 if (mentor.slug) {
@@ -538,18 +486,6 @@ const MentorshipPage = () => {
 
       {/* Meowl Guide */}
       <MeowlGuide currentPage="profile" />
-
-      {/* Mentor Chat Modal */}
-      {selectedMentorForChat && selectedMentorForChat.id && (
-        <MentorChatModal
-          isOpen={chatModalOpen}
-          onClose={() => setChatModalOpen(false)}
-          mentorId={selectedMentorForChat.id}
-          mentorName={selectedMentorForChat.name || "User"}
-          mentorAvatar={selectedMentorForChat.avatar || ""}
-          isMyRoleMentor={isMyRoleMentorForChat}
-        />
-      )}
 
       {/* Booking Modal */}
       {selectedMentorForBooking && (

@@ -16,6 +16,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import recruitmentChatService from '../../services/recruitmentChatService';
+import businessService from '../../services/businessService';
 import userService from '../../services/userService';
 import { getPublicProfile } from '../../services/portfolioService';
 import {
@@ -123,6 +124,16 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
       setCounterpartSubtitle(sessionState.recruiterCompany || 'Nhà tuyển dụng');
 
       if (sessionState.recruiterAvatar) return;
+
+      try {
+        const businessProfile = await businessService.getBusinessProfile(sessionState.recruiterId);
+        if (businessProfile.companyLogoUrl) {
+          setCounterpartAvatar(businessProfile.companyLogoUrl);
+          return;
+        }
+      } catch {
+        // Fall through to user profile fallback.
+      }
 
       try {
         const userProfile = await userService.getUserProfile(sessionState.recruiterId);

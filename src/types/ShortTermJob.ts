@@ -140,6 +140,7 @@ export interface ShortTermJobPosting {
   // Recruiter info
   recruiterId: number;
   recruiterCompanyName: string;
+  recruiterCompanyLogoUrl?: string;
   recruiterRating?: number;
 
   // Timestamps
@@ -341,6 +342,7 @@ export interface RequestRevisionRequest {
 export interface ShortTermJobPostingResponse extends ShortTermJobPosting {
   recruiterProfile?: {
     companyName: string;
+    companyLogoUrl?: string;
     rating: number;
     totalJobsPosted: number;
     completionRate: number;
@@ -608,6 +610,7 @@ export interface ShortTermJobResponse extends ShortTermJobPosting {
   recruiterInfo?: {
     id: number;
     companyName: string;
+    companyLogoUrl?: string;
     rating?: number;
     totalJobsPosted?: number;
     completionRate?: number;

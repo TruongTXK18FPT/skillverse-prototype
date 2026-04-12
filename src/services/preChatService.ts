@@ -2,14 +2,19 @@ import axiosInstance from './axiosInstance';
 
 export interface PreChatMessageResponse {
   id: number;
+  bookingId?: number;
   mentorId: number;
   learnerId: number;
   senderId: number;
+  senderName?: string;
+  senderAvatar?: string;
   content: string;
   createdAt: string;
+  chatEnabled: boolean;
 }
 
 export interface PreChatThreadSummary {
+  bookingId: number;
   counterpartId: number;
   counterpartName: string;
   counterpartAvatar?: string;
@@ -17,10 +22,14 @@ export interface PreChatThreadSummary {
   lastTime: string;
   unreadCount: number;
   isMyRoleMentor: boolean;
+  bookingStartTime: string;
+  bookingEndTime: string;
+  bookingStatus: 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED' | 'ONGOING' | 'PENDING_COMPLETION' | 'DISPUTED' | 'REFUNDED';
+  chatEnabled: boolean;
 }
 
 export interface PreChatMessageRequest {
-  mentorId: number;
+  bookingId: number;
   content: string;
 }
 
@@ -29,21 +38,16 @@ export const getThreads = async (page = 0, size = 20): Promise<PreChatThreadSumm
   return response.data;
 };
 
-export const getConversation = async (counterpartId: number, page = 0, size = 50): Promise<{ content: PreChatMessageResponse[], totalPages: number, totalElements: number }> => {
-  const response = await axiosInstance.get(`/api/prechat/conversation?counterpartId=${counterpartId}&page=${page}&size=${size}`);
+export const getConversation = async (bookingId: number, page = 0, size = 50): Promise<{ content: PreChatMessageResponse[], totalPages: number, totalElements: number }> => {
+  const response = await axiosInstance.get(`/api/prechat/conversation?bookingId=${bookingId}&page=${page}&size=${size}`);
   return response.data;
 };
 
-export const sendMessage = async (mentorId: number, content: string): Promise<PreChatMessageResponse> => {
-  const response = await axiosInstance.post('/api/prechat/send', { mentorId, content });
+export const sendMessage = async (bookingId: number, content: string): Promise<PreChatMessageResponse> => {
+  const response = await axiosInstance.post('/api/prechat/send', { bookingId, content });
   return response.data;
 };
 
-export const sendAsMentor = async (learnerId: number, content: string): Promise<PreChatMessageResponse> => {
-  const response = await axiosInstance.post(`/api/prechat/mentor/send?learnerId=${learnerId}`, { content });
-  return response.data;
-};
-
-export const markRead = async (mentorId: number): Promise<void> => {
-  await axiosInstance.put(`/api/prechat/mark-read?mentorId=${mentorId}`);
+export const markRead = async (bookingId: number): Promise<void> => {
+  await axiosInstance.put(`/api/prechat/mark-read?bookingId=${bookingId}`);
 };

@@ -48,6 +48,12 @@ interface ChatContact {
   isMyRoleMentor?: boolean;
   isParent?: boolean;
   recruitmentSession?: RecruitmentSessionResponse;
+  bookingId?: number;
+  counterpartId?: number;
+  bookingStatus?: string;
+  bookingStartTime?: string;
+  bookingEndTime?: string;
+  chatEnabled?: boolean;
 }
 
 const MessengerPage: React.FC = () => {
@@ -66,12 +72,18 @@ const MessengerPage: React.FC = () => {
   const [showWelcome, setShowWelcome] = useState(false);
   const [showCreateNew, setShowCreateNew] = useState(false);
   const [recruitmentSessions, setRecruitmentSessions] = useState<RecruitmentSessionResponse[]>([]);
+  const [currentIdentity, setCurrentIdentity] = useState<{ name: string; avatar: string }>({
+    name: user?.fullName || user?.email || 'User',
+    avatar: '/images/meowl.jpg',
+  });
 
   const hasHandledNav = useRef(false);
   const hasHandledSessionParam = useRef(false);
+  const identityCacheRef = useRef<Map<string, { name: string; avatar: string }>>(new Map());
   const canAccessRecruitmentMessages = Boolean(
     user?.roles.includes('RECRUITER') || user?.roles.includes('USER')
   );
+  const buildMentorThreadKey = (bookingId: number) => `mentor-booking:${bookingId}`;
 
   useEffect(() => {
     const hasSeenWelcome = localStorage.getItem('skillverse_messenger_welcome_seen');
@@ -88,6 +100,133 @@ const MessengerPage: React.FC = () => {
     if (trimmed.startsWith('/')) return `${apiRoot}${trimmed}`;
     return `${apiRoot}/${trimmed}`;
   };
+
+  const buildMentorName = (firstName?: string, lastName?: string, fallback?: string) => {
+    const fullName = [firstName, lastName]
+      .map((part) => part?.trim())
+      .filter(Boolean)
+      .join(' ');
+
+    return fullName || fallback || 'Mentor';
+  };
+
+  const getCachedIdentity = (key: string) => identityCacheRef.current.get(key);
+
+  const setCachedIdentity = (key: string, name: string, avatar?: string) => {
+    const resolved = {
+      name,
+      avatar: resolveAvatarUrl(avatar),
+    };
+    identityCacheRef.current.set(key, resolved);
+    return resolved;
+  };
+
+  const resolveUserIdentity = async (userId: number, fallbackName: string, fallbackAvatar?: string) => {
+    const cacheKey = `user:${userId}`;
+    const cached = getCachedIdentity(cacheKey);
+    if (cached) return cached;
+
+    try {
+      const profile = await userService.getUserProfile(userId);
+      return setCachedIdentity(
+        cacheKey,
+        profile.fullName?.trim() || fallbackName,
+        profile.avatarMediaUrl || profile.avatarUrl || fallbackAvatar,
+      );
+    } catch {
+      return setCachedIdentity(cacheKey, fallbackName, fallbackAvatar);
+    }
+  };
+
+  const resolveMentorIdentity = async (mentorId: number, fallbackName: string, fallbackAvatar?: string) => {
+    const cacheKey = `mentor:${mentorId}`;
+    const cached = getCachedIdentity(cacheKey);
+    if (cached) return cached;
+
+    try {
+      const profile = await getMentorProfile(mentorId);
+      return setCachedIdentity(
+        cacheKey,
+        buildMentorName(profile.firstName, profile.lastName, fallbackName),
+        profile.avatar || fallbackAvatar,
+      );
+    } catch {
+      return setCachedIdentity(cacheKey, fallbackName, fallbackAvatar);
+    }
+  };
+
+  const resolveRecruitmentContact = async (session: RecruitmentSessionResponse): Promise<ChatContact> => {
+    const isRecruiter = user?.roles.includes('RECRUITER') ?? false;
+    const fallbackName = isRecruiter
+      ? session.candidateFullName || 'Ứng viên'
+      : session.recruiterName || session.recruiterCompany || 'Nhà tuyển dụng';
+    const fallbackAvatar = isRecruiter ? session.candidateAvatar : session.recruiterAvatar;
+    const identity = isRecruiter
+      ? await resolveUserIdentity(session.candidateId, fallbackName, fallbackAvatar)
+      : await resolveUserIdentity(session.recruiterId, fallbackName, fallbackAvatar);
+    const lastMessage = session.lastMessagePreview
+      || (session.jobTitle
+        ? `${isRecruiter ? 'Ứng viên chờ' : 'Trao đổi về'} ${session.jobTitle}`
+        : 'Cuộc trò chuyện tuyển dụng');
+
+    return {
+      id: session.id.toString(),
+      name: identity.name,
+      avatar: identity.avatar,
+      lastMessage,
+      timestamp: session.lastMessageAt || session.createdAt,
+      unread: session.unreadCount,
+      type: 'RECRUITMENT',
+      recruitmentSession: session,
+    };
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (!user) {
+      setCurrentIdentity({ name: 'User', avatar: '/images/meowl.jpg' });
+      return;
+    }
+
+    const fallbackName = user.fullName || user.email || 'User';
+    const fallbackAvatar = user.avatarMediaUrl || user.avatarUrl;
+    setCurrentIdentity({
+      name: fallbackName,
+      avatar: resolveAvatarUrl(fallbackAvatar),
+    });
+
+    const loadCurrentIdentity = async () => {
+      try {
+        if (user.roles.includes('MENTOR')) {
+          const profile = await getMentorProfile(user.id);
+          if (!isMounted) return;
+
+          setCurrentIdentity({
+            name: buildMentorName(profile.firstName, profile.lastName, fallbackName),
+            avatar: resolveAvatarUrl(profile.avatar || fallbackAvatar),
+          });
+          return;
+        }
+
+        const profile = await userService.getMyProfile();
+        if (!isMounted) return;
+
+        setCurrentIdentity({
+          name: profile.fullName?.trim() || fallbackName,
+          avatar: resolveAvatarUrl(profile.avatarMediaUrl || profile.avatarUrl || fallbackAvatar),
+        });
+      } catch (error) {
+        console.error('Failed to resolve current messenger identity:', error);
+      }
+    };
+
+    void loadCurrentIdentity();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
 
   const loadRecruitmentSessions = async (): Promise<RecruitmentSessionResponse[]> => {
     if (!user) return [];
@@ -146,7 +285,10 @@ const MessengerPage: React.FC = () => {
   useEffect(() => {
     if (hasHandledNav.current || !location.state?.openChatWith) return;
 
-    const targetId = location.state.openChatWith.toString();
+    const mentorBookingId = Number(location.state.bookingId ?? location.state.openChatWith);
+    const targetId = location.state.type === 'MENTOR' && Number.isFinite(mentorBookingId)
+      ? buildMentorThreadKey(mentorBookingId)
+      : location.state.openChatWith.toString();
     const type = location.state.type || 'GROUP';
 
     if (type === 'GROUP') {
@@ -163,10 +305,10 @@ const MessengerPage: React.FC = () => {
       // When navigating from a booking, create a synthetic contact if no thread exists yet.
       // This allows the user to start chatting with the mentor even if they've never pre-chatted before.
       const existingContact = contacts.find(c => c.id === targetId && c.type === 'MENTOR');
-      if (!existingContact && location.state.name) {
+      if (!existingContact && location.state.name && Number.isFinite(mentorBookingId)) {
         const synthetic: ChatContact = {
           id: targetId,
-          name: location.state.name || `Mentor #${targetId}`,
+          name: location.state.name || `Mentor #${mentorBookingId}`,
           avatar: resolveAvatarUrl(location.state.avatar || ''),
           lastMessage: 'Bắt đầu cuộc trò chuyện',
           timestamp: new Date().toISOString(),
@@ -174,6 +316,12 @@ const MessengerPage: React.FC = () => {
           type: 'MENTOR',
           isOnline: Math.random() > 0.5,
           isMyRoleMentor: location.state.isMyRoleMentor ?? false,
+          bookingId: mentorBookingId,
+          counterpartId: Number(location.state.counterpartId ?? 0),
+          chatEnabled: Boolean(location.state.chatEnabled ?? true),
+          bookingStatus: location.state.bookingStatus,
+          bookingStartTime: location.state.bookingStartTime,
+          bookingEndTime: location.state.bookingEndTime,
         };
         setSyntheticContact(synthetic);
       }
@@ -220,35 +368,23 @@ const MessengerPage: React.FC = () => {
 
       if (activeTab === 'MENTOR' || activeTab === 'ALL') {
         const threads = await getThreads();
-        const mentorContacts: ChatContact[] = await Promise.all(
-          threads.map(async (thread) => {
-            let avatar = resolveAvatarUrl(thread.counterpartAvatar);
-
-            try {
-              if (thread.isMyRoleMentor) {
-                const profile = await userService.getUserProfile(thread.counterpartId);
-                avatar = resolveAvatarUrl(profile.avatarMediaUrl);
-              } else {
-                const profile = await getMentorProfile(thread.counterpartId);
-                avatar = resolveAvatarUrl(profile.avatar);
-              }
-            } catch {
-              // Keep fallback avatar.
-            }
-
-            return {
-              id: thread.counterpartId.toString(),
-              name: thread.counterpartName,
-              avatar,
-              lastMessage: thread.lastContent,
-              timestamp: thread.lastTime,
-              unread: thread.unreadCount,
-              type: 'MENTOR',
-              isOnline: Math.random() > 0.5,
-              isMyRoleMentor: thread.isMyRoleMentor,
-            };
-          })
-        );
+        const mentorContacts: ChatContact[] = threads.map((thread) => ({
+          id: buildMentorThreadKey(thread.bookingId),
+          name: thread.counterpartName || (thread.isMyRoleMentor ? 'Hoc vien' : 'Mentor'),
+          avatar: resolveAvatarUrl(thread.counterpartAvatar),
+          lastMessage: thread.lastContent,
+          timestamp: thread.lastTime,
+          unread: thread.unreadCount,
+          type: 'MENTOR',
+          isOnline: thread.chatEnabled,
+          isMyRoleMentor: thread.isMyRoleMentor,
+          bookingId: thread.bookingId,
+          counterpartId: thread.counterpartId,
+          bookingStatus: thread.bookingStatus,
+          bookingStartTime: thread.bookingStartTime,
+          bookingEndTime: thread.bookingEndTime,
+          chatEnabled: thread.chatEnabled,
+        }));
         allContacts = [...allContacts, ...mentorContacts];
       }
 
@@ -299,7 +435,7 @@ const MessengerPage: React.FC = () => {
 
       if (canAccessRecruitmentMessages && (activeTab === 'RECRUITMENT' || activeTab === 'ALL')) {
         const sessions = await loadRecruitmentSessions();
-        const recruitmentContacts = sessions.map(mapRecruitmentContact);
+        const recruitmentContacts = await Promise.all(sessions.map(resolveRecruitmentContact));
         allContacts = [...allContacts, ...recruitmentContacts];
       }
 
@@ -669,17 +805,22 @@ const MessengerPage: React.FC = () => {
             <GroupChatWindow
               groupId={selectedContact.id}
               currentUserId={user!.id.toString()}
-              currentUserName={user!.fullName || user!.email || 'User'}
-              currentUserAvatar={resolveAvatarUrl(user!.avatarUrl)}
+              currentUserName={currentIdentity.name}
+              currentUserAvatar={currentIdentity.avatar}
               onBack={() => setSelectedContactId(null)}
             />
           ) : selectedContact.type === 'MENTOR' ? (
             <MentorChatWindow
-              counterpartId={parseInt(selectedContact.id, 10)}
+              bookingId={selectedContact.bookingId ?? 0}
+              counterpartId={selectedContact.counterpartId ?? 0}
               counterpartName={selectedContact.name}
               counterpartAvatar={selectedContact.avatar}
               isMyRoleMentor={selectedContact.isMyRoleMentor || false}
               currentUserId={user!.id}
+              chatEnabled={selectedContact.chatEnabled ?? false}
+              bookingStatus={selectedContact.bookingStatus}
+              bookingStartTime={selectedContact.bookingStartTime}
+              bookingEndTime={selectedContact.bookingEndTime}
               onBack={() => setSelectedContactId(null)}
             />
           ) : selectedContact.type === 'FAMILY' ? (
@@ -688,7 +829,7 @@ const MessengerPage: React.FC = () => {
               familyMemberName={selectedContact.name}
               familyMemberAvatar={selectedContact.avatar}
               currentUserId={user!.id}
-              currentUserName={user!.fullName || user!.email || 'User'}
+              currentUserName={currentIdentity.name}
               isParent={selectedContact.isParent || false}
               onBack={() => setSelectedContactId(null)}
             />
@@ -696,7 +837,7 @@ const MessengerPage: React.FC = () => {
             <RecruiterChatWindow
               session={selectedContact.recruitmentSession}
               currentUserId={user!.id}
-              currentUserName={user!.fullName || user!.email || 'User'}
+              currentUserName={currentIdentity.name}
               onBack={() => setSelectedContactId(null)}
               onViewProfile={user?.roles.includes('RECRUITER')
                 ? ((session) => {

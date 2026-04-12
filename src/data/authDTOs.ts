@@ -48,6 +48,7 @@ export interface UserDto {
   avatarMediaId?: number;
   avatarPosition?: string;
   roles: string[];
+  primaryRole?: string; // Primary role: USER, MENTOR, RECRUITER, PARENT, ADMIN
   authProvider: string; // 'LOCAL' or 'GOOGLE'
   googleLinked: boolean; // Whether user has linked Google account
 }

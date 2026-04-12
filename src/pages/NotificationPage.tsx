@@ -315,7 +315,14 @@ const getNotificationTarget = (
     case 'COMMENT':
       return { pathname: `/community/${relatedId}` };
     case 'PRECHAT_MESSAGE':
-      return { pathname: '/mentorship' };
+      return {
+        pathname: '/messages',
+        state: {
+          openChatWith: relatedId,
+          bookingId: relatedId,
+          type: 'MENTOR',
+        },
+      };
     case 'RECRUITMENT_MESSAGE':
       return {
         pathname: '/messages',
@@ -495,7 +502,7 @@ const getTypeLabel = (type: string): string => {
   const labels: Record<string, string> = {
     LIKE: 'Thích',
     COMMENT: 'Bình luận',
-    PRECHAT_MESSAGE: 'Tin nhắn PreChat',
+    PRECHAT_MESSAGE: 'Tin nhắn mentor booking',
     RECRUITMENT_MESSAGE: 'Tin nhắn tuyển dụng',
     PREMIUM_PURCHASE: 'Mua Premium',
     PREMIUM_EXPIRATION: 'Premium hết hạn',
@@ -568,7 +575,7 @@ const getTypeDescription = (type: string, message: string): string => {
   const descriptions: Record<string, string> = {
     LIKE: 'Ai đó đã thích bài viết hoặc nội dung của bạn.',
     COMMENT: 'Ai đó đã bình luận trên bài viết của bạn.',
-    PRECHAT_MESSAGE: 'Bạn có tin nhắn mới từ buổi mentor.',
+    PRECHAT_MESSAGE: 'Bạn có tin nhắn mới từ booking mentor.',
     RECRUITMENT_MESSAGE: 'Bạn có tin nhắn tuyển dụng mới.',
     PREMIUM_PURCHASE: 'Bạn đã mua thành công gói Premium.',
     PREMIUM_EXPIRATION: 'Gói Premium của bạn sắp hết hạn. Hãy gia hạn để tiếp tục sử dụng.',

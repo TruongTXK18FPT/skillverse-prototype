@@ -17,6 +17,7 @@ interface DropdownChat {
   unread: number;
   channel: 'PRECHAT' | 'RECRUITMENT';
   isMyRoleMentor?: boolean;
+  bookingId?: number;
 }
 
 type Props = { inline?: boolean; collapsible?: boolean };
@@ -25,9 +26,9 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
   const { user } = useAuth();
   const [chats, setChats] = useState<DropdownChat[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [inlineOpen, setInlineOpen] = useState<boolean>(!collapsible);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const [inlineOpen, setInlineOpen] = useState<boolean>(!collapsible);
 
   const resolveAvatarUrl = (raw?: string): string => {
     if (!raw) return '/images/meowl.jpg';
@@ -43,10 +44,10 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
     return {
       id: session.id.toString(),
       name: isRecruiter
-        ? session.candidateFullName || 'Ứng viên'
-        : session.recruiterName || session.recruiterCompany || 'Nhà tuyển dụng',
+        ? session.candidateFullName || 'Ung vien'
+        : session.recruiterName || session.recruiterCompany || 'Nha tuyen dung',
       avatar: resolveAvatarUrl(isRecruiter ? session.candidateAvatar : session.recruiterAvatar),
-      lastMessage: session.lastMessagePreview || session.jobTitle || 'Cuộc trò chuyện tuyển dụng',
+      lastMessage: session.lastMessagePreview || session.jobTitle || 'Cuoc tro chuyen tuyen dung',
       timestamp: session.lastMessageAt || session.createdAt,
       unread: session.unreadCount,
       channel: 'RECRUITMENT',
@@ -56,7 +57,7 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
   const fetchChats = async () => {
     try {
       const canAccessRecruitment = Boolean(
-        user?.roles.includes('RECRUITER') || user?.roles.includes('USER')
+        user?.roles.includes('RECRUITER') || user?.roles.includes('USER'),
       );
 
       const [threads, recruitmentResult] = await Promise.all([
@@ -69,8 +70,9 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
       ]);
 
       const mentorChats: DropdownChat[] = threads.map((thread) => ({
-        id: thread.counterpartId.toString(),
-        name: thread.counterpartName,
+        id: `mentor-booking:${thread.bookingId}`,
+        bookingId: thread.bookingId,
+        name: thread.counterpartName || (thread.isMyRoleMentor ? 'Hoc vien' : 'Mentor'),
         avatar: resolveAvatarUrl(thread.counterpartAvatar),
         lastMessage: thread.lastContent,
         timestamp: thread.lastTime,
@@ -81,7 +83,7 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
 
       const recruitmentChats = recruitmentResult.sessions.map(mapRecruitmentChat);
       const mergedChats = [...mentorChats, ...recruitmentChats].sort(
-        (left, right) => new Date(right.timestamp).getTime() - new Date(left.timestamp).getTime()
+        (left, right) => new Date(right.timestamp).getTime() - new Date(left.timestamp).getTime(),
       );
 
       setChats(mergedChats);
@@ -91,10 +93,15 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
   };
 
   useEffect(() => {
-    fetchChats();
-    const interval = setInterval(fetchChats, 5000);
-    return () => clearInterval(interval);
-  }, [user]);
+    const shouldPoll = inline ? inlineOpen : isOpen;
+    if (!shouldPoll) return;
+
+    void fetchChats();
+    const interval = window.setInterval(() => {
+      void fetchChats();
+    }, 15000);
+    return () => window.clearInterval(interval);
+  }, [inline, inlineOpen, isOpen, user]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -109,7 +116,7 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
 
   const handleToggle = () => {
     if (!isOpen) {
-      fetchChats();
+      void fetchChats();
     }
     setIsOpen(!isOpen);
   };
@@ -127,9 +134,11 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
       return;
     }
 
-    navigate('/mentorship', {
+    navigate('/messages', {
       state: {
-        openChatWith: chat.id,
+        openChatWith: chat.bookingId ?? chat.id,
+        bookingId: chat.bookingId,
+        type: 'MENTOR',
         name: chat.name,
         avatar: chat.avatar,
         isMyRoleMentor: chat.isMyRoleMentor,
@@ -143,10 +152,10 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
     const diff = now.getTime() - date.getTime();
 
     const minutes = Math.floor(diff / 60000);
-    if (minutes < 60) return `${minutes} phút trước`;
+    if (minutes < 60) return `${minutes} phut truoc`;
 
     const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours} giờ trước`;
+    if (hours < 24) return `${hours} gio truoc`;
 
     return date.toLocaleDateString('vi-VN');
   };
@@ -160,12 +169,12 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
           className="inline-toggle"
           onClick={() => {
             setInlineOpen((value) => !value);
-            if (!inlineOpen) fetchChats();
+            if (!inlineOpen) void fetchChats();
           }}
         >
           <div className="inline-header-left">
             <MessageSquare size={16} />
-            <span>Tin nhắn</span>
+            <span>Tin nhan</span>
           </div>
           <div className="inline-header-right">
             {totalUnread > 0 && (
@@ -179,7 +188,7 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
 
         <div className="notification-list compact">
           {chats.length === 0 ? (
-            <div className="notification-empty">Không có tin nhắn</div>
+            <div className="notification-empty">Khong co tin nhan</div>
           ) : (
             chats.slice(0, 5).map((chat) => (
               <div
@@ -196,7 +205,9 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
                 </div>
                 <div className="notification-content">
                   <p className="notification-title">
-                    {chat.channel === 'RECRUITMENT' && <Briefcase size={12} style={{ marginRight: '6px', verticalAlign: 'text-bottom' }} />}
+                    {chat.channel === 'RECRUITMENT' && (
+                      <Briefcase size={12} style={{ marginRight: '6px', verticalAlign: 'text-bottom' }} />
+                    )}
                     {chat.name}
                   </p>
                   <p className="notification-message truncate">{chat.lastMessage}</p>
@@ -222,12 +233,12 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
       {isOpen && (
         <div className="notification-dropdown">
           <div className="notification-header">
-            <h3>Tin nhắn</h3>
+            <h3>Tin nhan</h3>
           </div>
 
           <div className="notification-list">
             {chats.length === 0 ? (
-              <div className="notification-empty">Không có tin nhắn nào</div>
+              <div className="notification-empty">Khong co tin nhan nao</div>
             ) : (
               chats.map((chat) => (
                 <div
@@ -244,7 +255,9 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
                   </div>
                   <div className="notification-content">
                     <p className="notification-title">
-                      {chat.channel === 'RECRUITMENT' && <Briefcase size={12} style={{ marginRight: '6px', verticalAlign: 'text-bottom' }} />}
+                      {chat.channel === 'RECRUITMENT' && (
+                        <Briefcase size={12} style={{ marginRight: '6px', verticalAlign: 'text-bottom' }} />
+                      )}
                       {chat.name}
                     </p>
                     <p
@@ -261,7 +274,7 @@ const MessageDropdown: React.FC<Props> = ({ inline, collapsible }) => {
           </div>
 
           <div className="notification-footer">
-            <button onClick={() => navigate('/messages')}>Xem tất cả</button>
+            <button onClick={() => navigate('/messages')}>Xem tat ca</button>
           </div>
         </div>
       )}

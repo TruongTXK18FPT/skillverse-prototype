@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BookOpen, Briefcase, Award, TrendingUp } from "lucide-react";
 import CommanderWelcome from "./CommanderWelcome";
@@ -8,7 +8,6 @@ import ActiveModules from "./ActiveModules";
 import FavoriteMentors from "./FavoriteMentors";
 import AnalystTrack from "./AnalystTrack";
 import SystemLimits from "./SystemLimits";
-import MentorChatModal from "../mentorship-hud/MentorChatModal";
 import { LearningReportHistory } from "../learning-report";
 import { RoadmapSessionSummary } from "../../types/Roadmap";
 import { FeatureLimitInfo } from "../../services/usageLimitService";
@@ -100,12 +99,9 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
   onJoinGroup,
 }) => {
   const navigate = useNavigate();
-  const [chatModalOpen, setChatModalOpen] = useState(false);
-  const [selectedMentorForChat, setSelectedMentorForChat] = useState<any>(null);
 
   const handleOpenChat = (mentor: any) => {
-    setSelectedMentorForChat(mentor);
-    setChatModalOpen(true);
+    navigate(`/mentorship?search=${encodeURIComponent(`${mentor.firstName || ""} ${mentor.lastName || ""}`.trim())}`);
   };
 
   // Data mapping from old structure to new Sci-Fi theme
@@ -373,17 +369,6 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
           />
         </div>
       </div>
-
-      {/* Mentor Chat Modal */}
-      {selectedMentorForChat && (
-        <MentorChatModal
-          isOpen={chatModalOpen}
-          onClose={() => setChatModalOpen(false)}
-          mentorId={selectedMentorForChat.id.toString()}
-          mentorName={`${selectedMentorForChat.firstName} ${selectedMentorForChat.lastName}`}
-          mentorAvatar={selectedMentorForChat.avatar || ""}
-        />
-      )}
     </div>
   );
 };

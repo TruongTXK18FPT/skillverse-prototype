@@ -12,12 +12,17 @@ interface FateCardProps {
 
 const FateCard: React.FC<FateCardProps> = ({ job, onClick, showBoostBadge = true }) => {
   const [boost, setBoost] = useState<JobBoostResponse | null>(null);
+  const [logoFailed, setLogoFailed] = useState(false);
 
   useEffect(() => {
     if (showBoostBadge) {
       loadBoostStatus();
     }
   }, [job.id, showBoostBadge]);
+
+  useEffect(() => {
+    setLogoFailed(false);
+  }, [job.id, job.recruiterCompanyLogoUrl]);
 
   const loadBoostStatus = async () => {
     try {
@@ -35,6 +40,8 @@ const FateCard: React.FC<FateCardProps> = ({ job, onClick, showBoostBadge = true
 
   // Format salary range for display
   const formatSalaryRange = () => {
+    // Negotiable jobs: show "Thỏa thuận" instead of 0
+    if (job.isNegotiable) return "Thỏa thuận";
     const fmt = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 0 });
     if (job.minBudget === job.maxBudget) {
       return fmt.format(job.minBudget);
@@ -75,6 +82,7 @@ const FateCard: React.FC<FateCardProps> = ({ job, onClick, showBoostBadge = true
   };
 
   const boostDaysLeft = getBoostDaysLeft();
+  const companyLogoUrl = !logoFailed ? job.recruiterCompanyLogoUrl : undefined;
 
   // Boost stats
   const impressions = boost?.impressions ?? 0;
@@ -110,7 +118,16 @@ const FateCard: React.FC<FateCardProps> = ({ job, onClick, showBoostBadge = true
       {/* Company section */}
       <div className="fate-card__company">
         <div className={`fate-card__company-avatar ${isPremium ? 'fate-card__company-avatar--premium' : ''}`}>
-          {getCompanyInitials()}
+          {companyLogoUrl ? (
+            <img
+              src={companyLogoUrl}
+              alt={job.recruiterCompanyName}
+              className="fate-card__company-avatar-image"
+              onError={() => setLogoFailed(true)}
+            />
+          ) : (
+            getCompanyInitials()
+          )}
         </div>
         <div className="fate-card__company-name">{job.recruiterCompanyName}</div>
       </div>

@@ -334,6 +334,11 @@ class JobService {
       case 'PENDING': return 'blue';
       case 'REVIEWED': return 'yellow';
       case 'ACCEPTED': return 'green';
+      case 'INTERVIEW_SCHEDULED': return 'cyan';
+      case 'INTERVIEWED': return 'indigo';
+      case 'OFFER_SENT': return 'purple';
+      case 'OFFER_ACCEPTED': return 'green';
+      case 'OFFER_REJECTED': return 'red';
       case 'REJECTED': return 'red';
       case 'CONTRACT_SIGNED': return 'green';
       default: return 'gray';
@@ -352,6 +357,11 @@ class JobService {
       case 'PENDING': return 'Chờ Xét Duyệt';
       case 'REVIEWED': return 'Đã Xem';
       case 'ACCEPTED': return 'Đã Chấp Nhận';
+      case 'INTERVIEW_SCHEDULED': return 'Đã Lên Lịch Phỏng Vấn';
+      case 'INTERVIEWED': return 'Đã Phỏng Vấn';
+      case 'OFFER_SENT': return 'Đã Gửi Đề Nghị';
+      case 'OFFER_ACCEPTED': return 'Đề Nghị Được Chấp Nhận';
+      case 'OFFER_REJECTED': return 'Đề Nghị Bị Từ Chối';
       case 'REJECTED': return 'Đã Từ Chối';
       case 'CONTRACT_SIGNED': return 'Đã ký hợp đồng';
       default: return status;

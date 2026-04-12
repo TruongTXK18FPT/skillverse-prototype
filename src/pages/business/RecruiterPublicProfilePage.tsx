@@ -20,6 +20,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../hooks/useToast";
 import Toast from "../../components/shared/Toast";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
+import { resolveRecruitmentAssetUrl } from "../../utils/recruitmentUi";
 import "./RecruiterPublicProfilePage.css";
 
 interface RawBusinessProfile {
@@ -32,6 +33,7 @@ interface RawBusinessProfile {
   companyAddress?: string;
   businessAddress?: string;
   companyDescription?: string;
+  companyLogoUrl?: string;
   taxId?: string;
   taxCodeOrBusinessRegistrationNumber?: string;
   companyDocumentsUrl?: string;
@@ -179,7 +181,11 @@ const buildPublicCompanyProfile = (
       userProfile?.email,
     ),
     fullName: pickText(userProfile?.fullName),
-    avatarUrl: pickText(userProfile?.avatarMediaUrl, userProfile?.avatarUrl),
+    avatarUrl: pickText(
+      businessProfile?.companyLogoUrl,
+      userProfile?.avatarMediaUrl,
+      userProfile?.avatarUrl,
+    ),
   };
 };
 
@@ -195,6 +201,7 @@ const RecruiterPublicProfilePage: React.FC = () => {
   const [profile, setProfile] = useState<PublicCompanyProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [avatarFailed, setAvatarFailed] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -244,6 +251,10 @@ const RecruiterPublicProfilePage: React.FC = () => {
     fetchProfile();
   }, [recruiterId, showError]);
 
+  useEffect(() => {
+    setAvatarFailed(false);
+  }, [profile?.avatarUrl]);
+
   if (loading) {
     return (
       <div className="ncpub-loading-wrap">
@@ -282,6 +293,9 @@ const RecruiterPublicProfilePage: React.FC = () => {
 
   const normalizedWebsite = normalizeWebsiteUrl(profile.companyWebsite);
   const websiteLabel = normalizedWebsite?.replace(/^https?:\/\//i, "");
+  const resolvedAvatarUrl = !avatarFailed
+    ? resolveRecruitmentAssetUrl(profile.avatarUrl)
+    : undefined;
 
   const statusTone =
     profile.applicationStatus === "APPROVED"
@@ -321,11 +335,12 @@ const RecruiterPublicProfilePage: React.FC = () => {
         <section className="ncpub-hero-panel">
           <div className="ncpub-hero-main">
             <div className="ncpub-avatar-frame">
-              {profile.avatarUrl ? (
+              {resolvedAvatarUrl ? (
                 <img
-                  src={profile.avatarUrl}
+                  src={resolvedAvatarUrl}
                   alt={profile.companyName}
                   className="ncpub-avatar-img"
+                  onError={() => setAvatarFailed(true)}
                 />
               ) : (
                 <span className="ncpub-avatar-fallback">
@@ -433,7 +448,6 @@ const RecruiterPublicProfilePage: React.FC = () => {
                 </p>
               </article>
             </div>
-
           </section>
 
           <aside className="ncpub-side-stack">

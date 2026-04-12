@@ -22,6 +22,7 @@ export interface BookingResponse {
   learnerName?: string;
   learnerAvatar?: string;
   disputeId?: number;
+  chatAllowed?: boolean;
 }
 
 export interface Page<T> {

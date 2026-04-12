@@ -2445,3 +2445,13 @@ button.jlab-workspace-job-item {
     max-width: 100%;
   }
 }
+
+/* Interviews section in JobLab */
+.jlx-interviews-section {
+  animation: jlab-fadeIn 0.3s ease;
+}
+
+@keyframes jlab-fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

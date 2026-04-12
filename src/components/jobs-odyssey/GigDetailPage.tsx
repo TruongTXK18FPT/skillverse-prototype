@@ -22,25 +22,29 @@ import {
   ExternalLink,
   ChevronRight,
 } from "lucide-react";
-import { ShortTermJobResponse, ShortTermJobStatus } from "../../types/ShortTermJob";
+import {
+  ShortTermJobResponse,
+  ShortTermJobStatus,
+} from "../../types/ShortTermJob";
 import { JobMarkdownSurface } from "../shared/JobMarkdownSurface";
 import shortTermJobService from "../../services/shortTermJobService";
 import jobService from "../../services/jobService";
 import { useAuth } from "../../context/AuthContext";
+import authService from "../../services/authService";
 import { useToast } from "../../hooks/useToast";
 import Toast from "../shared/Toast";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import LoginRequiredModal from "../auth/LoginRequiredModal";
 import MeowlGuide from "../meowl/MeowlGuide";
+import { resolveRecruitmentAssetUrl } from "../../utils/recruitmentUi";
 import "./odyssey-styles.css";
 import "./GigDetailPage.css";
 
 const GigDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { jobId } = useParams<{ jobId: string }>();
-  const { user, isAuthenticated } = useAuth();
-  const { toast, isVisible, hideToast, showSuccess, showError, showWarning } =
-    useToast();
+  const { user } = useAuth();
+  const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
 
   const [job, setJob] = useState<ShortTermJobResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -50,6 +54,7 @@ const GigDetailPage: React.FC = () => {
   const [proposedPrice, setProposedPrice] = useState("");
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [cooldownMs, setCooldownMs] = useState(0);
+  const [companyLogoFailed, setCompanyLogoFailed] = useState(false);
   const COOLDOWN_MS_TOTAL = 3_600_000;
   const JLAB_COOLDOWN_KEY = "jlab_cancel_cooldowns";
 
@@ -74,11 +79,7 @@ const GigDetailPage: React.FC = () => {
         : "gdp-hero--emerald";
 
   const markdownTheme =
-    variant === "urgent"
-      ? "crimson"
-      : variant === "high"
-        ? "amber"
-        : "emerald";
+    variant === "urgent" ? "crimson" : variant === "high" ? "amber" : "emerald";
 
   // Cooldown tracking
   useEffect(() => {
@@ -121,8 +122,10 @@ const GigDetailPage: React.FC = () => {
       const jobData = await shortTermJobService.getJobDetails(Number(jobId));
       setJob(jobData);
     } catch (err) {
-      showError("Lỗi", "Không thể tải thông tin công việc");
-      navigate(-1);
+      if (job) {
+        showError("Lỗi", "Không thể tải thông tin công việc");
+        navigate(-1);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -134,13 +137,13 @@ const GigDetailPage: React.FC = () => {
       // Check both APIs for short-term job applications
       const applied = await jobService.hasAppliedToJob(Number(jobId));
       if (applied) {
-        setJob((prev) => prev ? { ...prev, hasApplied: true } : prev);
+        setJob((prev) => (prev ? { ...prev, hasApplied: true } : prev));
         return;
       }
       const apps = await shortTermJobService.getMyApplications();
       const found = apps.find((a) => a.jobId === Number(jobId));
       if (found) {
-        setJob((prev) => prev ? { ...prev, hasApplied: true } : prev);
+        setJob((prev) => (prev ? { ...prev, hasApplied: true } : prev));
       }
     } catch {
       // ignore
@@ -155,18 +158,20 @@ const GigDetailPage: React.FC = () => {
     if (job) checkHasApplied();
   }, [job]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    setCompanyLogoFailed(false);
+  }, [job?.recruiterCompanyLogoUrl, job?.recruiterInfo?.companyLogoUrl]);
+
   const handleApply = async () => {
-    if (!isAuthenticated) {
-      showWarning("Chưa đăng nhập", "Vui lòng đăng nhập để ứng tuyển");
+    if (!authService.isAuthenticated()) {
+      setShowLoginModal(true);
       return;
     }
     setIsApplying(true);
     try {
       await shortTermJobService.applyToJob(Number(jobId), {
         coverLetter: coverLetter || undefined,
-        proposedPrice: proposedPrice
-          ? parseFloat(proposedPrice)
-          : undefined,
+        proposedPrice: proposedPrice ? parseFloat(proposedPrice) : undefined,
       });
       showSuccess(
         "Ứng tuyển thành công!",
@@ -223,9 +228,7 @@ const GigDetailPage: React.FC = () => {
 
   const getCompanyInitials = () => {
     const name =
-      job?.recruiterInfo?.companyName ||
-      job?.recruiterCompanyName ||
-      "SV";
+      job?.recruiterInfo?.companyName || job?.recruiterCompanyName || "SV";
     return name
       .split(" ")
       .map((p) => p[0])
@@ -233,6 +236,12 @@ const GigDetailPage: React.FC = () => {
       .toUpperCase()
       .slice(0, 2);
   };
+
+  const companyLogoUrl = !companyLogoFailed
+    ? resolveRecruitmentAssetUrl(
+        job?.recruiterCompanyLogoUrl || job?.recruiterInfo?.companyLogoUrl,
+      )
+    : undefined;
 
   const getPaymentLabel = () => {
     if (!job) return "";
@@ -328,7 +337,22 @@ const GigDetailPage: React.FC = () => {
                 )
               }
             >
-              <div className="gdp-hero__company-avatar">{getCompanyInitials()}</div>
+              <div className="gdp-hero__company-avatar">
+                {companyLogoUrl ? (
+                  <img
+                    src={companyLogoUrl}
+                    alt={
+                      job.recruiterInfo?.companyName ||
+                      job.recruiterCompanyName ||
+                      "Company logo"
+                    }
+                    className="gdp-hero__company-avatar-img"
+                    onError={() => setCompanyLogoFailed(true)}
+                  />
+                ) : (
+                  getCompanyInitials()
+                )}
+              </div>
               <div className="gdp-hero__company-info">
                 <span className="gdp-hero__company-name">
                   {job.recruiterInfo?.companyName ||
@@ -338,7 +362,10 @@ const GigDetailPage: React.FC = () => {
                 <span className="gdp-hero__company-sub">
                   <Zap size={10} />
                   Gig ngắn hạn · {job.paymentMethod && getPaymentLabel()}
-                  <ExternalLink size={10} style={{ marginLeft: 4, opacity: 0.6 }} />
+                  <ExternalLink
+                    size={10}
+                    style={{ marginLeft: 4, opacity: 0.6 }}
+                  />
                 </span>
               </div>
             </button>
@@ -355,7 +382,10 @@ const GigDetailPage: React.FC = () => {
                 <div className="gdp-hero__stat-label">
                   Ngân sách
                   {job.isNegotiable && (
-                    <span className="gdp-hero__negotiable"> · Thương lượng</span>
+                    <span className="gdp-hero__negotiable">
+                      {" "}
+                      · Thương lượng
+                    </span>
                   )}
                 </div>
               </div>
@@ -363,7 +393,9 @@ const GigDetailPage: React.FC = () => {
             <div className="gdp-hero__stat">
               <Calendar size={16} />
               <div>
-                <div className="gdp-hero__stat-value">{formatDate(job.deadline)}</div>
+                <div className="gdp-hero__stat-value">
+                  {formatDate(job.deadline)}
+                </div>
                 <div className="gdp-hero__stat-label">Hạn nộp</div>
               </div>
             </div>
@@ -416,7 +448,7 @@ const GigDetailPage: React.FC = () => {
                 Đã ứng tuyển
               </div>
             )}
-            {!isAuthenticated && !isRecruiter && (
+            {!authService.isAuthenticated() && !isRecruiter && (
               <button
                 className="gdp-btn gdp-btn--outline"
                 onClick={() => setShowLoginModal(true)}
@@ -489,13 +521,17 @@ const GigDetailPage: React.FC = () => {
                         <div className="gdp-milestone__num">{i + 1}</div>
                         <div className="gdp-milestone__content">
                           <div className="gdp-milestone__header">
-                            <span className="gdp-milestone__title">{m.title}</span>
+                            <span className="gdp-milestone__title">
+                              {m.title}
+                            </span>
                             <span className="gdp-milestone__amount">
                               {formatCurrency(m.amount)}
                             </span>
                           </div>
                           {m.description && (
-                            <p className="gdp-milestone__desc">{m.description}</p>
+                            <p className="gdp-milestone__desc">
+                              {m.description}
+                            </p>
                           )}
                           {m.deadline && (
                             <div className="gdp-milestone__deadline">
@@ -510,7 +546,6 @@ const GigDetailPage: React.FC = () => {
                 </div>
               </section>
             )}
-
           </div>
 
           {/* Sidebar */}
@@ -570,7 +605,9 @@ const GigDetailPage: React.FC = () => {
                   <div className="gdp-sidebar__item">
                     <Star size={14} />
                     <div>
-                      <span className="gdp-sidebar__item-label">Rating tối thiểu</span>
+                      <span className="gdp-sidebar__item-label">
+                        Rating tối thiểu
+                      </span>
                       <span className="gdp-sidebar__item-value">
                         {job.minRating}★ trở lên
                       </span>
@@ -583,7 +620,9 @@ const GigDetailPage: React.FC = () => {
             {/* Apply CTA */}
             {canApply && !showApplyForm && (
               <div className="gdp-sidebar__card gdp-sidebar__card--cta">
-                <div className="gdp-sidebar__cta-label">Sẵn sàng ứng tuyển?</div>
+                <div className="gdp-sidebar__cta-label">
+                  Sẵn sàng ứng tuyển?
+                </div>
                 <button
                   className={`gdp-btn gdp-btn--primary gdp-btn--full gdp-btn--${variant}`}
                   onClick={() => setShowApplyForm(true)}
@@ -619,7 +658,12 @@ const GigDetailPage: React.FC = () => {
                     width="80"
                     height="80"
                   >
-                    <circle className="gdp-cooldown__ring-bg" cx="40" cy="40" r="34" />
+                    <circle
+                      className="gdp-cooldown__ring-bg"
+                      cx="40"
+                      cy="40"
+                      r="34"
+                    />
                     <circle
                       className="gdp-cooldown__ring-progress"
                       cx="40"
@@ -666,7 +710,9 @@ const GigDetailPage: React.FC = () => {
                   <div className="gdp-form-group">
                     <div className="gdp-form-label">
                       Thư giới thiệu
-                      <span className="gdp-form-label__optional">(tùy chọn)</span>
+                      <span className="gdp-form-label__optional">
+                        (tùy chọn)
+                      </span>
                     </div>
                     <textarea
                       className="gdp-textarea"
@@ -683,7 +729,9 @@ const GigDetailPage: React.FC = () => {
                     <div className="gdp-form-group">
                       <div className="gdp-form-label">
                         Giá đề xuất
-                        <span className="gdp-form-label__optional">(VND, tùy chọn)</span>
+                        <span className="gdp-form-label__optional">
+                          (VND, tùy chọn)
+                        </span>
                       </div>
                       <input
                         className="gdp-input"

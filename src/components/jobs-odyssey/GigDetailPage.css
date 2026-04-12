@@ -1,14 +1,27 @@
 /* GigDetailPage - Odyssey Blog Style */
 
-@import './odyssey-styles.css';
+@import "./odyssey-styles.css";
 
 /* ==================== PAGE SHELL ==================== */
 .gdp-page {
   min-height: 100vh;
   background:
-    radial-gradient(ellipse at 20% 0%, rgba(6, 182, 212, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 50%),
-    linear-gradient(180deg, var(--odyssey-void-black) 0%, var(--odyssey-bg) 40%, var(--odyssey-bg) 100%);
+    radial-gradient(
+      ellipse at 20% 0%,
+      rgba(6, 182, 212, 0.06) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 100%,
+      rgba(16, 185, 129, 0.04) 0%,
+      transparent 50%
+    ),
+    linear-gradient(
+      180deg,
+      var(--odyssey-void-black) 0%,
+      var(--odyssey-bg) 40%,
+      var(--odyssey-bg) 100%
+    );
   padding-bottom: 60px;
 }
 
@@ -67,7 +80,11 @@
 }
 
 .gdp-hero__inner {
-  background: linear-gradient(135deg, rgba(15, 7, 32, 0.95) 0%, rgba(20, 15, 40, 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 7, 32, 0.95) 0%,
+    rgba(20, 15, 40, 0.9) 100%
+  );
   border: 2px solid;
   border-radius: 12px;
   padding: 32px 36px;
@@ -77,30 +94,42 @@
 
 .gdp-hero--emerald .gdp-hero__inner {
   border-color: var(--odyssey-cyan);
-  box-shadow: 0 0 30px rgba(6, 182, 212, 0.15), 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 0 30px rgba(6, 182, 212, 0.15),
+    0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 .gdp-hero--amber .gdp-hero__inner {
   border-color: var(--odyssey-gold);
-  box-shadow: 0 0 30px rgba(251, 191, 36, 0.2), 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 0 30px rgba(251, 191, 36, 0.2),
+    0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 .gdp-hero--crimson .gdp-hero__inner {
   border-color: var(--odyssey-crimson);
-  box-shadow: 0 0 30px rgba(190, 18, 60, 0.2), 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 0 30px rgba(190, 18, 60, 0.2),
+    0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 .fdp-hero--crimson .gdp-hero__inner {
   border-color: var(--odyssey-crimson);
-  box-shadow: 0 0 30px rgba(190, 18, 60, 0.2), 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 0 30px rgba(190, 18, 60, 0.2),
+    0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 /* Glow effect on inner */
 .gdp-hero__inner::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(6, 182, 212, 0.08) 0%,
+    transparent 60%
+  );
   pointer-events: none;
 }
 
@@ -175,7 +204,7 @@
   letter-spacing: 0.02em;
   line-height: 1.3;
   margin: 0 0 20px 0;
-  font-family: 'Rajdhani', 'Inter', sans-serif;
+  font-family: "Rajdhani", "Inter", sans-serif;
 }
 
 .gdp-hero--emerald .gdp-hero__title {
@@ -262,7 +291,11 @@
   width: 48px;
   height: 48px;
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.2),
+    rgba(16, 185, 129, 0.15)
+  );
   border: 1px solid rgba(6, 182, 212, 0.4);
   display: flex;
   align-items: center;
@@ -270,9 +303,18 @@
   font-size: 16px;
   font-weight: 800;
   color: var(--odyssey-cyan);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
   letter-spacing: 0.05em;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.gdp-hero__company-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .gdp-hero__company-info {
@@ -324,7 +366,7 @@
   font-size: 15px;
   font-weight: 700;
   color: #fff;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
   letter-spacing: 0.01em;
 }
 
@@ -362,11 +404,15 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border: 2px solid transparent;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .gdp-btn--primary {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.2),
+    rgba(16, 185, 129, 0.15)
+  );
   border-color: var(--odyssey-cyan);
   color: var(--odyssey-cyan);
 }
@@ -379,13 +425,21 @@
 }
 
 .gdp-btn--emerald.gdp-btn--primary {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.2),
+    rgba(16, 185, 129, 0.15)
+  );
   border-color: var(--odyssey-cyan);
   color: var(--odyssey-cyan);
 }
 
 .gdp-btn--amber.gdp-btn--primary {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(234, 88, 12, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.2),
+    rgba(234, 88, 12, 0.15)
+  );
   border-color: var(--odyssey-gold);
   color: var(--odyssey-gold);
 }
@@ -397,7 +451,11 @@
 }
 
 .gdp-btn--crimson.gdp-btn--primary {
-  background: linear-gradient(135deg, rgba(190, 18, 60, 0.2), rgba(220, 38, 38, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(190, 18, 60, 0.2),
+    rgba(220, 38, 38, 0.15)
+  );
   border-color: var(--odyssey-crimson);
   color: #fb7185;
 }
@@ -484,8 +542,12 @@
 }
 
 @keyframes gdp-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ==================== CONTENT LAYOUT ==================== */
@@ -532,7 +594,7 @@
   letter-spacing: 0.08em;
   color: var(--odyssey-cyan);
   margin: 0 0 16px 0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
 }
 
 .gdp-section__title svg {
@@ -561,7 +623,11 @@
 
 .gdp-skill-tag {
   padding: 5px 12px;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(16, 185, 129, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.12),
+    rgba(16, 185, 129, 0.08)
+  );
   border: 1px solid rgba(6, 182, 212, 0.3);
   border-radius: 4px;
   color: var(--odyssey-cyan);
@@ -598,7 +664,11 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.2),
+    rgba(16, 185, 129, 0.15)
+  );
   border: 1px solid rgba(6, 182, 212, 0.4);
   display: flex;
   align-items: center;
@@ -607,7 +677,7 @@
   font-weight: 700;
   color: var(--odyssey-cyan);
   flex-shrink: 0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
 }
 
 .gdp-milestone__content {
@@ -633,7 +703,7 @@
   font-size: 14px;
   font-weight: 700;
   color: #10b981;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
   white-space: nowrap;
 }
 
@@ -666,7 +736,11 @@
   width: 56px;
   height: 56px;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.2),
+    rgba(16, 185, 129, 0.15)
+  );
   border: 1px solid rgba(6, 182, 212, 0.3);
   display: flex;
   align-items: center;
@@ -674,7 +748,7 @@
   font-size: 18px;
   font-weight: 800;
   color: var(--odyssey-cyan);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
   flex-shrink: 0;
 }
 
@@ -723,12 +797,20 @@
 
 .gdp-sidebar__card--cta {
   border-color: rgba(251, 191, 36, 0.3);
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), rgba(15, 7, 32, 0.8));
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.05),
+    rgba(15, 7, 32, 0.8)
+  );
 }
 
 .gdp-sidebar__card--applied {
   border-color: rgba(16, 185, 129, 0.3);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(15, 7, 32, 0.8));
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.05),
+    rgba(15, 7, 32, 0.8)
+  );
   display: flex;
   align-items: center;
   gap: 8px;
@@ -745,7 +827,7 @@
   letter-spacing: 0.1em;
   color: var(--odyssey-gold);
   margin: 0 0 16px 0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(251, 191, 36, 0.15);
 }
@@ -795,7 +877,7 @@
 .gdp-sidebar__item-value--budget {
   color: #10b981;
   font-weight: 700;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
 }
 
 .gdp-sidebar__cta-label {
@@ -822,8 +904,14 @@
 }
 
 @keyframes gdp-slide-up {
-  from { transform: translateY(100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .gdp-apply-panel__inner {
@@ -847,7 +935,7 @@
   font-weight: 700;
   color: var(--odyssey-cyan);
   margin: 0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
 }
 
 .gdp-apply-panel__title svg {
@@ -896,7 +984,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 8px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .gdp-form-label__optional {
@@ -911,7 +999,7 @@
   font-size: 11px;
   font-weight: 400;
   color: rgba(6, 182, 212, 0.5);
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
 }
 
 .gdp-textarea {
@@ -922,7 +1010,7 @@
   border-radius: 6px;
   color: var(--odyssey-cyan-light);
   font-size: 14px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   resize: vertical;
   transition: all 0.3s;
   box-shadow: inset 0 0 10px rgba(6, 182, 212, 0.05);
@@ -936,7 +1024,9 @@
 .gdp-textarea:focus {
   outline: none;
   border-color: var(--odyssey-cyan);
-  box-shadow: inset 0 0 15px rgba(6, 182, 212, 0.15), 0 0 15px rgba(6, 182, 212, 0.2);
+  box-shadow:
+    inset 0 0 15px rgba(6, 182, 212, 0.15),
+    0 0 15px rgba(6, 182, 212, 0.2);
 }
 
 .gdp-input {
@@ -947,7 +1037,7 @@
   border-radius: 6px;
   color: var(--odyssey-cyan-light);
   font-size: 14px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   transition: all 0.3s;
 }
 
@@ -997,7 +1087,7 @@
 .fdp-boost-stat span:not(.fdp-boost-stat__label) {
   font-weight: 700;
   color: rgba(6, 182, 212, 0.9);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
 }
 
 .fdp-boost-stat__label {
@@ -1062,7 +1152,7 @@
 .gdp-cooldown__time {
   font-size: 14px;
   font-weight: 700;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: "Rajdhani", sans-serif;
   letter-spacing: 0.05em;
 }
 

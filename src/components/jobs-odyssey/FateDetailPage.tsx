@@ -28,11 +28,13 @@ import { JobMarkdownSurface } from "../shared/JobMarkdownSurface";
 import jobService from "../../services/jobService";
 import jobBoostService from "../../services/jobBoostService";
 import { useAuth } from "../../context/AuthContext";
+import authService from "../../services/authService";
 import { useToast } from "../../hooks/useToast";
 import Toast from "../shared/Toast";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import LoginRequiredModal from "../auth/LoginRequiredModal";
 import MeowlGuide from "../meowl/MeowlGuide";
+import { resolveRecruitmentAssetUrl } from "../../utils/recruitmentUi";
 import "./odyssey-styles.css";
 import "./GigDetailPage.css";
 
@@ -41,7 +43,7 @@ const COVER_LETTER_MAX = 1000;
 const FateDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { jobId } = useParams<{ jobId: string }>();
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const { toast, isVisible, hideToast, showSuccess, showError } = useToast();
 
   const [job, setJob] = useState<JobPostingResponse | null>(null);
@@ -54,20 +56,20 @@ const FateDetailPage: React.FC = () => {
 
   // Apply state
   const [hasApplied, setHasApplied] = useState(false);
-  const [applicationStatus, setApplicationStatus] = useState<JobApplicationStatus | null>(null);
+  const [applicationStatus, setApplicationStatus] =
+    useState<JobApplicationStatus | null>(null);
   const [isCheckingApplied, setIsCheckingApplied] = useState(false);
   const [showApplyForm, setShowApplyForm] = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [companyLogoFailed, setCompanyLogoFailed] = useState(false);
 
   const userRole = user?.roles?.[0];
   const isRecruiter = userRole === "RECRUITER";
   const isOwner = job?.recruiterUserId === user?.id;
 
-  const avgBudget = job
-    ? Math.round((job.minBudget + job.maxBudget) / 2)
-    : 0;
+  const avgBudget = job ? Math.round((job.minBudget + job.maxBudget) / 2) : 0;
   const isHighValue = avgBudget > 5_000_000;
   const themeClass = isHighValue ? "fdp-hero--crimson" : "fdp-hero--blue";
 
@@ -78,8 +80,12 @@ const FateDetailPage: React.FC = () => {
       const jobData = await jobService.getJobDetails(Number(jobId));
       setJob(jobData);
     } catch (err) {
-      showError("Lỗi", "Không thể tải thông tin công việc");
-      navigate(-1);
+      // Only navigate back if we already have a job loaded (re-fetch on stale data)
+      // For initial load errors (e.g. 401 from interceptor), just show the loading/error state
+      if (job) {
+        showError("Lỗi", "Không thể tải thông tin công việc");
+        navigate(-1);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -160,6 +166,10 @@ const FateDetailPage: React.FC = () => {
     }
   }, [job]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    setCompanyLogoFailed(false);
+  }, [job?.recruiterCompanyLogoUrl]);
+
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     showSuccess("Đã sao chép", "Link công việc đã được sao chép!");
@@ -204,9 +214,11 @@ const FateDetailPage: React.FC = () => {
       .slice(0, 2);
   };
 
-  const isExpired = job
-    ? new Date(job.deadline) < new Date()
-    : false;
+  const companyLogoUrl = !companyLogoFailed
+    ? resolveRecruitmentAssetUrl(job?.recruiterCompanyLogoUrl)
+    : undefined;
+
+  const isExpired = job ? new Date(job.deadline) < new Date() : false;
 
   const getApplicationStatusLabel = (status: JobApplicationStatus) => {
     switch (status) {
@@ -223,14 +235,35 @@ const FateDetailPage: React.FC = () => {
     }
   };
 
+  const handleApplyClick = () => {
+    if (!authService.isAuthenticated()) {
+      setShowLoginModal(true);
+    } else {
+      setShowApplyForm(true);
+    }
+  };
+
   // Determine which apply button to show
   const showApplyBtn = !isExpired && !isRecruiter && !isOwner;
   const canApplyBtn = showApplyBtn && !hasApplied && !isCheckingApplied;
-  const appliedChipColor = applicationStatus === JobApplicationStatus.ACCEPTED
-    ? { color: "#10b981", bg: "rgba(16,185,129,0.15)", border: "rgba(16,185,129,0.4)" }
-    : applicationStatus === JobApplicationStatus.REJECTED
-    ? { color: "#f87171", bg: "rgba(248,113,113,0.1)", border: "rgba(248,113,113,0.3)" }
-    : { color: "#10b981", bg: "rgba(16,185,129,0.15)", border: "rgba(16,185,129,0.4)" };
+  const appliedChipColor =
+    applicationStatus === JobApplicationStatus.ACCEPTED
+      ? {
+          color: "#10b981",
+          bg: "rgba(16,185,129,0.15)",
+          border: "rgba(16,185,129,0.4)",
+        }
+      : applicationStatus === JobApplicationStatus.REJECTED
+        ? {
+            color: "#f87171",
+            bg: "rgba(248,113,113,0.1)",
+            border: "rgba(248,113,113,0.3)",
+          }
+        : {
+            color: "#10b981",
+            bg: "rgba(16,185,129,0.15)",
+            border: "rgba(16,185,129,0.4)",
+          };
 
   if (isLoading) {
     return (
@@ -288,7 +321,9 @@ const FateDetailPage: React.FC = () => {
               {job.isRemote && (
                 <span className="gdp-badge gdp-badge--status">Remote</span>
               )}
-              <span className="gdp-hero__time-ago">{formatRelativeTime(job.createdAt)}</span>
+              <span className="gdp-hero__time-ago">
+                {formatRelativeTime(job.createdAt)}
+              </span>
             </div>
           )}
 
@@ -303,7 +338,18 @@ const FateDetailPage: React.FC = () => {
                 navigate(`/profile/business/${job?.recruiterUserId}`)
               }
             >
-              <div className="gdp-hero__company-avatar">{getCompanyInitials()}</div>
+              <div className="gdp-hero__company-avatar">
+                {companyLogoUrl ? (
+                  <img
+                    src={companyLogoUrl}
+                    alt={job.recruiterCompanyName || "Company logo"}
+                    className="gdp-hero__company-avatar-img"
+                    onError={() => setCompanyLogoFailed(true)}
+                  />
+                ) : (
+                  getCompanyInitials()
+                )}
+              </div>
               <div className="gdp-hero__company-info">
                 <span className="gdp-hero__company-name">
                   {job.recruiterCompanyName || "Công ty SkillVerse"}
@@ -311,7 +357,10 @@ const FateDetailPage: React.FC = () => {
                 <span className="gdp-hero__company-sub">
                   <Briefcase size={10} />
                   Công việc toàn thời gian
-                  <ExternalLink size={10} style={{ marginLeft: 4, opacity: 0.6 }} />
+                  <ExternalLink
+                    size={10}
+                    style={{ marginLeft: 4, opacity: 0.6 }}
+                  />
                 </span>
               </div>
             </button>
@@ -323,11 +372,11 @@ const FateDetailPage: React.FC = () => {
               <DollarSign size={16} />
               <div>
                 <div className="gdp-hero__stat-value">
-                  {formatCurrency(job.minBudget)} — {formatCurrency(job.maxBudget)}
+                  {job.isNegotiable
+                    ? "Thỏa thuận"
+                    : `${formatCurrency(job.minBudget)} — ${formatCurrency(job.maxBudget)}`}
                 </div>
-                <div className="gdp-hero__stat-label">
-                  Lương/tháng
-                </div>
+                <div className="gdp-hero__stat-label">Lương/tháng</div>
               </div>
             </div>
             <div className="gdp-hero__stat">
@@ -367,13 +416,7 @@ const FateDetailPage: React.FC = () => {
             {canApplyBtn && (
               <button
                 className="gdp-btn gdp-btn--primary gdp-btn--emerald"
-                onClick={() => {
-                  if (!isAuthenticated) {
-                    setShowLoginModal(true);
-                  } else {
-                    setShowApplyForm(true);
-                  }
-                }}
+                onClick={handleApplyClick}
               >
                 <Briefcase size={16} />
                 Ứng tuyển ngay
@@ -407,7 +450,11 @@ const FateDetailPage: React.FC = () => {
             {isExpired && (
               <div
                 className="gdp-applied-chip"
-                style={{ color: "#f87171", background: "rgba(248,113,113,0.1)", borderColor: "rgba(248,113,113,0.3)" }}
+                style={{
+                  color: "#f87171",
+                  background: "rgba(248,113,113,0.1)",
+                  borderColor: "rgba(248,113,113,0.3)",
+                }}
               >
                 <Clock size={14} />
                 Đã hết hạn ứng tuyển
@@ -493,7 +540,6 @@ const FateDetailPage: React.FC = () => {
                 </div>
               </section>
             )}
-
           </div>
 
           {/* Sidebar */}
@@ -516,7 +562,9 @@ const FateDetailPage: React.FC = () => {
                   <div>
                     <span className="gdp-sidebar__item-label">Lương</span>
                     <span className="gdp-sidebar__item-value gdp-sidebar__item-value--budget">
-                      {formatCurrency(job.minBudget)} — {formatCurrency(job.maxBudget)}
+                      {job.isNegotiable
+                        ? "Thỏa thuận"
+                        : `${formatCurrency(job.minBudget)} — ${formatCurrency(job.maxBudget)}`}
                     </span>
                   </div>
                 </div>
@@ -536,7 +584,9 @@ const FateDetailPage: React.FC = () => {
                   <div>
                     <span className="gdp-sidebar__item-label">Đăng lúc</span>
                     <span className="gdp-sidebar__item-value">
-                      {job.createdAt ? formatRelativeTime(job.createdAt) : "N/A"}
+                      {job.createdAt
+                        ? formatRelativeTime(job.createdAt)
+                        : "N/A"}
                     </span>
                   </div>
                 </div>
@@ -555,16 +605,12 @@ const FateDetailPage: React.FC = () => {
             {/* Apply CTA Sidebar — chỉ hiện khi chưa ứng tuyển */}
             {canApplyBtn && (
               <div className="gdp-sidebar__card gdp-sidebar__card--cta">
-                <div className="gdp-sidebar__cta-label">Sẵn sàng ứng tuyển?</div>
+                <div className="gdp-sidebar__cta-label">
+                  Sẵn sàng ứng tuyển?
+                </div>
                 <button
                   className="gdp-btn gdp-btn--primary gdp-btn--full gdp-btn--emerald"
-                  onClick={() => {
-                    if (!isAuthenticated) {
-                        setShowLoginModal(true);
-                    } else {
-                      setShowApplyForm(true);
-                    }
-                  }}
+                  onClick={handleApplyClick}
                 >
                   <Briefcase size={16} />
                   Ứng tuyển ngay
@@ -624,7 +670,8 @@ const FateDetailPage: React.FC = () => {
                   onChange={(e) => setCoverLetter(e.target.value)}
                 />
                 <span className="gdp-form-hint">
-                  Viết thư giới thiệu ngắn gọn để gây ấn tượng với nhà tuyển dụng
+                  Viết thư giới thiệu ngắn gọn để gây ấn tượng với nhà tuyển
+                  dụng
                 </span>
               </div>
             </div>

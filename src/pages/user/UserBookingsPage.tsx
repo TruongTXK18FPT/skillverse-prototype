@@ -785,13 +785,21 @@ const UserBookingsPage: React.FC = () => {
                         onClick={() =>
                           navigate("/messages", {
                             state: {
-                              openChatWith: booking.mentorId,
+                              openChatWith: booking.id,
+                              bookingId: booking.id,
+                              counterpartId: booking.mentorId,
                               name: booking.mentorName,
                               avatar: booking.mentorAvatar,
                               type: 'MENTOR',
+                              chatEnabled: booking.chatAllowed,
+                              bookingStatus: booking.status,
+                              bookingStartTime: booking.startTime,
+                              bookingEndTime: booking.endTime,
                             },
                           })
                         }
+                        disabled={!booking.chatAllowed}
+                        title={booking.chatAllowed ? "Mo mentor chat" : "Booking da dong chat"}
                       >
                         <MessageSquare size={14} />
                       </button>

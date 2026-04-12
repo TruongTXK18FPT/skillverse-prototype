@@ -1,4 +1,4 @@
-import type { KeyboardEvent } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import {
   ArrowRight,
   Clock,
@@ -33,6 +33,12 @@ const getDescriptionPlainText = (value?: string | null) => {
 };
 
 const GigCard = ({ job, onClick }: GigCardProps) => {
+  const [logoFailed, setLogoFailed] = useState(false);
+
+  useEffect(() => {
+    setLogoFailed(false);
+  }, [job.id, job.recruiterCompanyLogoUrl, job.recruiterInfo?.companyLogoUrl]);
+
   const getRarity = (): "emerald" | "amber" | "crimson" => {
     if (job.urgency === "VERY_URGENT" || job.urgency === "ASAP") {
       return "crimson";
@@ -149,6 +155,10 @@ const GigCard = ({ job, onClick }: GigCardProps) => {
     rarity === "crimson" ? "fate-card--crimson" : "fate-card--blue";
   const deadline = getDeadlineInfo();
   const postedTime = getPostedTime();
+  const companyLogoUrl =
+    !logoFailed
+      ? job.recruiterCompanyLogoUrl || job.recruiterInfo?.companyLogoUrl
+      : undefined;
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -177,7 +187,20 @@ const GigCard = ({ job, onClick }: GigCardProps) => {
 
       <div className="fate-card__company">
         <div className="fate-card__company-avatar fate-card__company-avatar--gig">
-          {getCompanyInitials()}
+          {companyLogoUrl ? (
+            <img
+              src={companyLogoUrl}
+              alt={
+                job.recruiterInfo?.companyName ||
+                job.recruiterCompanyName ||
+                "Company logo"
+              }
+              className="fate-card__company-avatar-image"
+              onError={() => setLogoFailed(true)}
+            />
+          ) : (
+            getCompanyInitials()
+          )}
         </div>
         <div className="fate-card__company-stack">
           <div className="fate-card__company-name">

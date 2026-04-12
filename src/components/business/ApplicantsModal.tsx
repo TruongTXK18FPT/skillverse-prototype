@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  Calendar,
   CheckCircle2,
   Clock3,
   Eye,
@@ -24,11 +25,13 @@ import {
   getPortfolioPath,
   resolveRecruitmentAssetUrl,
 } from "../../utils/recruitmentUi";
+import InterviewScheduleModal from "./InterviewScheduleModal";
 import "./ApplicantsModal-fleet.css";
 
 interface ApplicantsModalProps {
   jobId: number;
   jobTitle: string;
+  isRemote?: boolean; // Whether this job is remote — affects routing after ACCEPTED
   onClose: () => void;
   onChanged?: () => void;
   refreshTrigger?: number;
@@ -37,22 +40,34 @@ interface ApplicantsModalProps {
 type DecisionStatus = "ACCEPTED" | "REJECTED";
 
 const getStatusBadgeClass = (status: JobApplicationStatus): string => {
-  const statusClasses = {
+  const statusClasses: Record<string, string> = {
     PENDING: "am-status-pending",
     REVIEWED: "am-status-reviewed",
     ACCEPTED: "am-status-accepted",
     REJECTED: "am-status-rejected",
+    INTERVIEW_SCHEDULED: "am-status-interview-scheduled",
+    INTERVIEWED: "am-status-interviewed",
+    OFFER_SENT: "am-status-offer-sent",
+    OFFER_ACCEPTED: "am-status-offer-accepted",
+    OFFER_REJECTED: "am-status-offer-rejected",
+    CONTRACT_SIGNED: "am-status-contract-signed",
   };
 
   return statusClasses[status] || "am-status-pending";
 };
 
 const getStatusText = (status: JobApplicationStatus): string => {
-  const statusTexts = {
+  const statusTexts: Record<string, string> = {
     PENDING: "Mới nộp",
     REVIEWED: "Đã xem",
     ACCEPTED: "Đã duyệt",
+    INTERVIEW_SCHEDULED: "Lịch phỏng vấn",
+    INTERVIEWED: "Đã phỏng vấn",
+    OFFER_SENT: "Đã gửi đề nghị",
+    OFFER_ACCEPTED: "Nhận đề nghị",
+    OFFER_REJECTED: "Từ chối đề nghị",
     REJECTED: "Đã từ chối",
+    CONTRACT_SIGNED: "Đã ký hợp đồng",
   };
 
   return statusTexts[status] || status;
@@ -70,6 +85,7 @@ const formatDate = (dateString: string) =>
 const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
   jobId,
   jobTitle,
+  isRemote = false,
   onClose,
   onChanged,
   refreshTrigger,
@@ -91,6 +107,7 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
   } | null>(null);
   const [decisionNote, setDecisionNote] = useState("");
   const [createContractModal, setCreateContractModal] = useState<JobApplicationResponse | null>(null);
+  const [interviewModalApp, setInterviewModalApp] = useState<JobApplicationResponse | null>(null);
 
   useEffect(() => {
     fetchApplicants(page);
@@ -234,7 +251,15 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
       onChanged?.();
 
       if (acceptedApp) {
-        setTimeout(() => setCreateContractModal(acceptedApp), 300);
+        // For REMOTE jobs: show interview scheduling modal
+        // For ONSITE jobs: show contract creation modal
+        setTimeout(() => {
+          if (isRemote) {
+            setInterviewModalApp(acceptedApp);
+          } else {
+            setCreateContractModal(acceptedApp);
+          }
+        }, 300);
       }
     } catch (error) {
       console.error("Error updating applicant decision:", error);
@@ -645,10 +670,14 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
             className="am-decision-modal"
             onClick={(event) => event.stopPropagation()}
           >
-            <h3>Tạo hợp đồng lao động</h3>
+            <h3>Tiếp theo</h3>
             <p>
               Bạn đã duyệt ứng viên <strong>{getApplicantDisplayName(createContractModal.userFullName, createContractModal.userEmail)}</strong>.
-              Bạn có muốn tạo hợp đồng lao động cho ứng viên này không?
+              {isRemote ? (
+                " Với công việc Remote, bước tiếp theo là xếp lịch phỏng vấn trực tuyến."
+              ) : (
+                " Với công việc Onsite, bạn có thể đóng job sau khi đã duyệt ứng viên."
+              )}
             </p>
             <div className="am-decision-actions">
               <button
@@ -656,21 +685,40 @@ const ApplicantsModal: React.FC<ApplicantsModalProps> = ({
                 className="am-btn-action"
                 onClick={() => setCreateContractModal(null)}
               >
-                Để sau
+                {isRemote ? "Để sau" : "Hoàn thành"}
               </button>
-              <button
-                type="button"
-                className="am-btn-action am-btn-accept"
-                onClick={() => {
-                  setCreateContractModal(null);
-                  navigate(`/business/contracts/create?applicationId=${createContractModal.id}`);
-                }}
-              >
-                Tạo hợp đồng
-              </button>
+              {isRemote && (
+                <button
+                  type="button"
+                  className="am-btn-action am-btn-accept"
+                  onClick={() => {
+                    const app = createContractModal;
+                    setCreateContractModal(null);
+                    setInterviewModalApp(app);
+                  }}
+                >
+                  <Calendar size={14} />
+                  Xếp lịch phỏng vấn
+                </button>
+              )}
             </div>
           </div>
         </div>
+      )}
+
+      {interviewModalApp && (
+        <InterviewScheduleModal
+          application={interviewModalApp}
+          onClose={() => {
+            setInterviewModalApp(null);
+            fetchApplicants(page);
+          }}
+          onScheduled={() => {
+            setInterviewModalApp(null);
+            fetchApplicants(page);
+            onChanged?.();
+          }}
+        />
       )}
 
     </>

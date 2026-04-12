@@ -678,12 +678,18 @@ const BookingDetailPage: React.FC = () => {
         </div>
         <div className="bkd-action-bar__right">
           <button className="bkd-btn bkd-btn-secondary" onClick={() => navigate('/messages', { state: {
-            openChatWith: viewerRole === 'mentor' ? booking.learnerId : booking.mentorId,
+            openChatWith: booking.id,
+            bookingId: booking.id,
+            counterpartId: viewerRole === 'mentor' ? booking.learnerId : booking.mentorId,
             name: viewerRole === 'mentor' ? booking.learnerName : booking.mentorName,
             avatar: viewerRole === 'mentor' ? booking.learnerAvatar : booking.mentorAvatar,
             type: 'MENTOR',
             isMyRoleMentor: viewerRole === 'mentor',
-          } })}>
+            chatEnabled: booking.chatAllowed,
+            bookingStatus: booking.status,
+            bookingStartTime: booking.startTime,
+            bookingEndTime: booking.endTime,
+          } })} disabled={!booking.chatAllowed}>
             <MessageSquare size={16} /> Nhắn tin
           </button>
           {(booking.paymentReference || ['COMPLETED', 'PENDING_COMPLETION'].includes(booking.status)) && (

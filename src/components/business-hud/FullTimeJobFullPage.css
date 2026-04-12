@@ -174,6 +174,20 @@
   transform: translateY(-1px);
 }
 
+/* Cyan variant — for completion banner button */
+.ftj-btn--cyan {
+  background: rgba(34, 211, 238, 0.12);
+  border-color: rgba(34, 211, 238, 0.28);
+  color: #22d3ee;
+}
+
+.ftj-btn--cyan:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.22);
+  border-color: rgba(34, 211, 238, 0.45);
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.2);
+}
+
 .ftj-btn--ghost {
   background: rgba(8, 15, 30, 0.55);
   border-color: rgba(148, 163, 184, 0.12);
@@ -615,6 +629,21 @@
   line-height: 1.6;
 }
 
+.ftj-contracts__hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.ftj-contracts__remote-note {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin: 0;
+  max-width: 32ch;
+  line-height: 1.4;
+}
+
 .ftj-contracts__completion-banner {
   display: flex;
   align-items: flex-start;
@@ -622,25 +651,95 @@
   gap: 1rem;
   padding: 1.1rem 1.25rem;
   border-radius: 18px;
-  border: 1px solid rgba(16, 185, 129, 0.18);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(240, 253, 244, 0.95));
-  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.16);
-  color: #111827;
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  background:
+    radial-gradient(ellipse at top left, rgba(34, 211, 238, 0.12), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(6, 182, 212, 0.08), transparent 50%),
+    linear-gradient(135deg, rgba(6, 20, 38, 0.92), rgba(3, 10, 22, 0.96));
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.08),
+    0 8px 32px rgba(2, 6, 23, 0.4),
+    inset 0 0 20px rgba(34, 211, 238, 0.04);
   flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.ftj-contracts__completion-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.025) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
 }
 
 .ftj-contracts__completion-banner h4 {
   margin: 0.35rem 0 0.3rem;
-  color: #111827;
+  color: #e0f7fa;
   font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
 }
 
 .ftj-contracts__completion-banner p {
   margin: 0;
   max-width: 64ch;
-  color: #4b5563;
+  color: #7dd3fc;
   font-size: 0.84rem;
   line-height: 1.65;
+}
+
+/* === Onsite hire confirmation panel === */
+.ftj-onsite-hire {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+  padding: 0.95rem 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  background: rgba(6, 20, 38, 0.72);
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.06);
+}
+
+.ftj-onsite-hire__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.ftj-onsite-hire__info span {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #e0f7fa;
+}
+
+.ftj-onsite-hire__info p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #7dd3fc;
+  line-height: 1.55;
+}
+
+.ftj-onsite-hire__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.ftj-applicants__eyebrow--glow {
+  color: #22d3ee;
+  letter-spacing: 0.14em;
+  font-weight: 900;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.8), 0 0 24px rgba(34, 211, 238, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .ftj-applicants__summary,
@@ -1167,10 +1266,280 @@
   box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.08);
 }
 
+/* ===== Interviews Tab ===== */
+.ftj-interviews {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ftj-interviews__hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 18px;
+  background: rgba(8, 15, 30, 0.65);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  backdrop-filter: blur(12px);
+  flex-wrap: wrap;
+}
+
+.ftj-interviews__hero h3 {
+  margin: 0.35rem 0 0.25rem;
+  color: #f8fafc;
+  font-size: 1.05rem;
+}
+
+.ftj-interviews__hero p {
+  margin: 0;
+  max-width: 62ch;
+  color: #94a3b8;
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+
+.ftj-interviews__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 2rem;
+  color: #64748b;
+  text-align: center;
+}
+
+.ftj-interviews__empty svg {
+  color: #3b82f6;
+}
+
+.ftj-interviews__empty strong {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.ftj-interviews__empty p {
+  font-size: 0.85rem;
+  color: #64748b;
+  max-width: 360px;
+}
+
+.ftj-interviews__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1rem;
+}
+
+.ftj-interview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  background:
+    radial-gradient(circle at top right, rgba(0, 245, 255, 0.04), transparent 30%),
+    rgba(8, 15, 30, 0.62);
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.ftj-interview-card:hover {
+  border-color: rgba(0, 245, 255, 0.22);
+  transform: translateY(-1px);
+}
+
+.ftj-interview-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.ftj-interview-card__identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ftj-interview-card__avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 14px;
+  object-fit: cover;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  flex-shrink: 0;
+}
+
+.ftj-interview-card__avatar--fallback {
+  display: grid;
+  place-items: center;
+  color: #e0f2fe;
+  font-size: 0.86rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.22), rgba(59, 130, 246, 0.16));
+}
+
+.ftj-interview-card__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.ftj-interview-card__identity strong {
+  display: block;
+  color: #f8fafc;
+  font-size: 0.95rem;
+}
+
+.ftj-interview-card__identity span {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.76rem;
+  margin-top: 2px;
+}
+
+.ftj-interview-card__status {
+  padding: 0.32rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.ftj-interview-card__status[data-status="PENDING"] {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.22);
+}
+
+.ftj-interview-card__status[data-status="CONFIRMED"] {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  border-color: rgba(52, 211, 153, 0.22);
+}
+
+.ftj-interview-card__status[data-status="COMPLETED"] {
+  color: #818cf8;
+  background: rgba(129, 140, 248, 0.1);
+  border-color: rgba(129, 140, 248, 0.22);
+}
+
+.ftj-interview-card__status[data-status="CANCELLED"] {
+  color: #fda4af;
+  background: rgba(251, 113, 133, 0.1);
+  border-color: rgba(251, 113, 133, 0.22);
+}
+
+.ftj-interview-card__status[data-status="NO_SHOW"] {
+  color: #fca5a5;
+  background: rgba(252, 165, 165, 0.1);
+  border-color: rgba(252, 165, 165, 0.22);
+}
+
+.ftj-interview-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.ftj-interview-card__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #94a3b8;
+  font-size: 0.76rem;
+  padding: 0.32rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  text-transform: capitalize;
+}
+
+.ftj-interview-card__meta svg {
+  color: #3b82f6;
+  flex-shrink: 0;
+}
+
+.ftj-interview-card__meeting-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #94a3b8;
+  font-size: 0.76rem;
+  padding: 0.32rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.ftj-meeting-type-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  border-radius: 3px;
+}
+
+.ftj-interview-card__link {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 10px;
+  background: rgba(0, 245, 255, 0.06);
+  border: 1px solid rgba(0, 245, 255, 0.14);
+}
+
+.ftj-interview-card__link svg {
+  color: #00f5ff;
+  flex-shrink: 0;
+}
+
+.ftj-interview-card__link a {
+  color: #00f5ff;
+  font-size: 0.78rem;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ftj-interview-card__link a:hover {
+  text-decoration: underline;
+}
+
+.ftj-interview-card__interviewer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #94a3b8;
+  font-size: 0.78rem;
+}
+
+.ftj-interview-card__interviewer svg {
+  color: #818cf8;
+  flex-shrink: 0;
+}
+
+.ftj-interview-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.06);
+}
+
 @media (max-width: 900px) {
   .ftj-fullpage__signal-grid,
   .ftj-applicants__grid,
-  .ftj-contracts__rail {
+  .ftj-contracts__rail,
+  .ftj-interviews__list {
     grid-template-columns: 1fr;
   }
 
@@ -1179,4 +1548,120 @@
   .ftj-contract-composer__candidate {
     flex-direction: column;
   }
+}
+
+/* === OFFER RESPONSE PANEL (recruiter side) === */
+.ftj-offer-response {
+  margin-top: 0.75rem;
+  padding: 0.85rem;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ftj-offer-response__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+  color: #94a3b8;
+}
+
+.ftj-offer-response__header strong {
+  color: #e2e8f0;
+}
+
+.ftj-offer-response__header svg {
+  color: #06b6d4;
+  flex-shrink: 0;
+}
+
+.ftj-offer-response__label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+  margin-bottom: 0.3rem;
+}
+
+.ftj-offer-response__original {
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.ftj-offer-response__original p {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #64748b;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ftj-offer-response__candidate {
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+}
+
+.ftj-offer-response__candidate--accepted {
+  background: rgba(34, 197, 94, 0.06);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.ftj-offer-response__candidate--counter {
+  background: rgba(251, 113, 133, 0.06);
+  border: 1px solid rgba(251, 113, 133, 0.2);
+}
+
+.ftj-offer-response__candidate p {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #cbd5e1;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Offer rejected (round 1) panel for recruiter */
+.ftj-offer-response--rejected {
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: rgba(251, 191, 36, 0.04);
+  padding: 0.9rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ftj-offer-rejected-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(251, 191, 36, 0.12);
+}
+
+.ftj-offer-rejected-actions__hint {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.ftj-offer-rejected-actions__hint--final {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.ftj-offer-rejected-actions__btns {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }

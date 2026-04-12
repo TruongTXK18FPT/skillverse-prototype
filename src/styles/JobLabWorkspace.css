@@ -3793,3 +3793,166 @@
 .jlx-contracts-section {
   padding: 0 4px;
 }
+
+/* === OFFER PANEL (offer response for negotiable jobs) === */
+.jlx-panel--offer {
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.04);
+}
+
+.jlx-offer-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.jlx-offer-panel__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: #22c55e;
+}
+
+.jlx-offer-panel__header > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.jlx-offer-panel__header div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.jlx-offer-panel__header strong {
+  font-size: 0.9rem;
+  color: #e2e8f0;
+}
+
+.jlx-offer-panel__header span {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.jlx-offer-panel__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Offer details display (recruiter's offer) */
+.jlx-offer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(6, 182, 212, 0.12);
+}
+
+.jlx-offer-details__label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.jlx-offer-details__content {
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: #94a3b8;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* === OFFER MODAL === */
+.jlx-modal--offer {
+  max-width: 580px;
+}
+
+.jlx-modal--counter {
+  max-width: 640px;
+}
+
+.jlx-offer-modal-content {
+  margin-bottom: 1rem;
+}
+
+.jlx-offer-modal-content .jlx-offer-details {
+  padding: 1rem;
+}
+
+.jlx-field__hint {
+  font-size: 0.72rem;
+  color: #475569;
+  margin-top: 0.3rem;
+  display: block;
+}
+
+/* === OFFER ROUND BADGE === */
+.jlx-offer-round-badge {
+  margin-bottom: 0.25rem;
+}
+
+.jlx-offer-round-badge__normal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #06b6d4;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.jlx-offer-round-badge__final {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === OFFER REJECTED PANEL (candidate side waiting for recruiter re-offer) === */
+.jlx-panel--offer-rejected {
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: rgba(251, 191, 36, 0.04);
+}
+
+.jlx-offer-rejected-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.jlx-offer-rejected-notice p {
+  margin: 0;
+  color: #d4a017;
+}
+
+.jlx-feedback-card {
+  margin-top: 0.5rem;
+}

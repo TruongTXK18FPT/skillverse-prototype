@@ -10,14 +10,17 @@ import {
   CheckCircle2,
   ClipboardList,
   Clock,
+  Clock3,
   DollarSign,
   FileCheck,
+  FileSignature,
   FileText,
   FolderOpen,
   Globe,
   Link as LinkIcon,
   MapPin,
   MessageSquare,
+  Paperclip,
   Plus,
   RefreshCw,
   Search,
@@ -37,7 +40,7 @@ import {
 import jobService from "../../services/jobService";
 import shortTermJobService from "../../services/shortTermJobService";
 import { uploadMedia } from "../../services/mediaService";
-import { JobApplicationResponse } from "../../data/jobDTOs";
+import { JobApplicationResponse, JobApplicationStatus } from "../../data/jobDTOs";
 import {
   ShortTermApplicationResponse,
   SubmitDeliverableRequest,
@@ -45,11 +48,11 @@ import {
 } from "../../types/ShortTermJob";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import ContractListPage from "../../components/contract/ContractListPage";
-import FileSignature from "lucide-react/dist/esm/icons/file-signature";
+import InterviewListPanel from "../../components/business-hud/InterviewListPanel";
 import "../../styles/JobLabWorkspace.css";
 
 type JobType = "ALL" | "REGULAR" | "SHORT_TERM";
-type ViewMode = "dashboard" | "applications" | "workspace" | "contracts";
+type ViewMode = "dashboard" | "applications" | "workspace" | "contracts" | "interviews";
 type JobLabLocationState = {
   viewMode?: ViewMode;
   jobType?: JobType;
@@ -82,6 +85,11 @@ type AppItem = {
   // Contract link
   contractId?: number;
   contractStatus?: string;
+  // Offer letter (negotiable jobs)
+  offerDetails?: string;
+  candidateOfferResponse?: string;
+  isNegotiable?: boolean;
+  offerRound?: number;
 };
 
 const STATUS_META: Record<
@@ -267,6 +275,10 @@ const JobLabPage: React.FC = () => {
   const [disputeFiles, setDisputeFiles] = useState<File[]>([]);
   const [disputeFilesPreview, setDisputeFilesPreview] = useState<string[]>([]);
   const [disputeSelectedEvidenceType, setDisputeSelectedEvidenceType] = useState<string>("TEXT");
+  // Offer response modal (negotiable jobs)
+  const [offerModal, setOfferModal] = useState<"view" | "counter" | null>(null);
+  const [offerResponse, setOfferResponse] = useState("");
+  const [offerSubmitting, setOfferSubmitting] = useState(false);
 
   const loadApplications = async () => {
     setLoading(true);
@@ -301,6 +313,11 @@ const JobLabPage: React.FC = () => {
       coverLetter: app.coverLetter || undefined,
       contractId: app.contractId,
       contractStatus: app.contractStatus,
+      // Offer letter (negotiable jobs)
+      offerDetails: (app as any).offerDetails,
+      candidateOfferResponse: (app as any).candidateOfferResponse,
+      isNegotiable: (app as any).isNegotiable,
+      offerRound: (app as any).offerRound ?? 0,
     }));
 
     const shortTerm: AppItem[] = shortTermApps.map((app) => {
@@ -645,6 +662,37 @@ const JobLabPage: React.FC = () => {
     setDisputeFilesPreview((prev) => [...prev, ...previews]);
   };
 
+  // ==================== OFFER LETTER (NEGOTIABLE JOBS) ====================
+  const handleOfferResponse = async (accepted: boolean) => {
+    if (!selectedApp) return;
+    if (!accepted && !offerResponse.trim()) {
+      setMessage("Vui lòng nhập lý do phản đề nghị hoặc mức lương đề xuất của bạn.");
+      return;
+    }
+    try {
+      setOfferSubmitting(true);
+      const status: JobApplicationStatus = accepted
+        ? JobApplicationStatus.OFFER_ACCEPTED
+        : JobApplicationStatus.OFFER_REJECTED;
+      await jobService.updateApplicationStatus(selectedApp.applicationId, {
+        status,
+        candidateOfferResponse: offerResponse.trim() || undefined,
+      });
+      setMessage(
+        accepted
+          ? "Bạn đã chấp nhận đề nghị. Hợp đồng sẽ được tạo sớm."
+          : "Bạn đã phản đề nghị. Nhà tuyển dụng sẽ được thông báo.",
+      );
+      setOfferModal(null);
+      setOfferResponse("");
+      await loadApplications();
+    } catch (error: any) {
+      setMessage(error?.message || "Không thể gửi phản hồi đề nghị.");
+    } finally {
+      setOfferSubmitting(false);
+    }
+  };
+
   const removeDisputeFile = (index: number) => {
     URL.revokeObjectURL(disputeFilesPreview[index]);
     setDisputeFiles((prev) => prev.filter((_, i) => i !== index));
@@ -741,6 +789,16 @@ const JobLabPage: React.FC = () => {
             </span>
             <span>Hợp đồng</span>
           </button>
+          <button
+            type="button"
+            className={`jlx-nav__item${viewMode === "interviews" ? " is-active" : ""}`}
+            onClick={() => setViewMode("interviews")}
+          >
+            <span className="jlx-nav__icon">
+              <Calendar size={16} />
+            </span>
+            <span>Phỏng vấn</span>
+          </button>
         </nav>
 
       </aside>
@@ -753,6 +811,7 @@ const JobLabPage: React.FC = () => {
               {viewMode === "applications" && "Tất cả đơn ứng tuyển"}
               {viewMode === "workspace" && "Workspace"}
               {viewMode === "contracts" && "Hợp đồng của tôi"}
+              {viewMode === "interviews" && "Lịch phỏng vấn"}
             </h1>
             <p>
               {viewMode === "dashboard" &&
@@ -763,6 +822,8 @@ const JobLabPage: React.FC = () => {
                 "Mở workspace để làm việc không bị gián đoạn."}
               {viewMode === "contracts" &&
                 "Xem và quản lý hợp đồng lao động đã ký."}
+              {viewMode === "interviews" &&
+                "Theo dõi các buổi phỏng vấn online và onsite."}
             </p>
           </div>
           <div className="jlx-header__actions">
@@ -1319,6 +1380,24 @@ const JobLabPage: React.FC = () => {
                                 ).label
                               }
                             </span>
+                            {selectedApp.status === "OFFER_SENT" && (
+                              <span className="jlx-status is-emerald">
+                                <Paperclip size={11} />
+                                Đề nghị mới
+                              </span>
+                            )}
+                            {selectedApp.status === "OFFER_ACCEPTED" && (
+                              <span className="jlx-status is-green">
+                                <CheckCircle2 size={11} />
+                                Đã chấp nhận
+                              </span>
+                            )}
+                            {selectedApp.status === "OFFER_REJECTED" && (
+                              <span className="jlx-status is-red">
+                                <XCircle size={11} />
+                                Đã phản đề nghị
+                              </span>
+                            )}
                             <div className="jlx-hero-meta">
                               <div className="jlx-hero-meta-item">
                                 <Calendar size={13} />
@@ -1589,6 +1668,146 @@ const JobLabPage: React.FC = () => {
                                 </div>
                               </article>
                             )}
+
+                            {/* OFFER RESPONSE PANEL — shown when status is OFFER_SENT */}
+                            {selectedApp.type === "REGULAR" &&
+                              selectedApp.status === "OFFER_SENT" &&
+                              selectedApp.isNegotiable && (
+                                <article className="jlx-panel jlx-panel--offer">
+                                  <div className="jlx-offer-panel">
+                                    {/* Round indicator */}
+                                    <div className="jlx-offer-round-badge">
+                                      {selectedApp.offerRound === 2 ? (
+                                        <span className="jlx-offer-round-badge__final">
+                                          <AlertTriangle size={12} />
+                                          Vòng cuối — từ chối sẽ kết thúc
+                                        </span>
+                                      ) : (
+                                        <span className="jlx-offer-round-badge__normal">
+                                          <FileText size={12} />
+                                          Đề nghị lần {(selectedApp.offerRound ?? 1)}
+                                        </span>
+                                      )}
+                                    </div>
+
+                                    <div className="jlx-offer-panel__header">
+                                      <FileText size={16} />
+                                      <div>
+                                        <strong>Đề nghị từ Nhà tuyển dụng</strong>
+                                        <span>Xem chi tiết và phản hồi đề nghị</span>
+                                      </div>
+                                    </div>
+
+                                    {/* Recruiter's offer details */}
+                                    {selectedApp.offerDetails && (
+                                      <div className="jlx-offer-details">
+                                        <div className="jlx-offer-details__label">
+                                          <Building2 size={12} />
+                                          <span>Chi tiết đề nghị</span>
+                                        </div>
+                                        <div className="jlx-offer-details__content">
+                                          {selectedApp.offerDetails}
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    <div className="jlx-offer-panel__actions">
+                                      <button
+                                        type="button"
+                                        className="jlx-btn jlx-btn--primary"
+                                        onClick={() => setOfferModal("view")}
+                                      >
+                                        <CheckCircle2 size={14} />
+                                        Chấp nhận đề nghị
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="jlx-btn jlx-btn--ghost"
+                                        onClick={() => {
+                                          setOfferResponse(
+                                            selectedApp.candidateOfferResponse || "",
+                                          );
+                                          setOfferModal("counter");
+                                        }}
+                                      >
+                                        <MessageSquare size={14} />
+                                        {selectedApp.offerRound === 2
+                                          ? "Từ chối"
+                                          : "Phản đề nghị"}
+                                      </button>
+                                    </div>
+                                  </div>
+                                </article>
+                              )}
+
+                            {/* OFFER REJECTED PANEL — shown after candidate countered/responded,
+                                before recruiter re-sends offer or permanently closes */}
+                            {selectedApp.type === "REGULAR" &&
+                              selectedApp.status === "OFFER_REJECTED" && (
+                                <article className="jlx-panel jlx-panel--offer-rejected">
+                                  <div className="jlx-offer-panel">
+                                    <div className="jlx-offer-panel__header">
+                                      <Clock3 size={16} />
+                                      <div>
+                                        <strong>Chờ phản hồi từ Nhà tuyển dụng</strong>
+                                        <span>Phản đề nghị của bạn đã được gửi</span>
+                                      </div>
+                                    </div>
+
+                                    {selectedApp.offerRound === 2 && (
+                                      <div className="jlx-offer-rejected-notice">
+                                        <AlertTriangle size={14} />
+                                        <p>
+                                          Đây là vòng cuối. Nhà tuyển dụng có thể gửi đề nghị lại
+                                          hoặc kết thúc. Nếu bị từ chối, hồ sơ sẽ bị loại.
+                                        </p>
+                                      </div>
+                                    )}
+
+                                    {/* Show candidate's previous response */}
+                                    {selectedApp.candidateOfferResponse && (
+                                      <div className="jlx-feedback-card is-worker">
+                                        <div className="jlx-feedback-card__author-row">
+                                          <span className="jlx-feedback-card__author">Bạn</span>
+                                          <span className="jlx-feedback-card__badge badge-worker">
+                                            Phản đề nghị
+                                          </span>
+                                        </div>
+                                        <p className="jlx-feedback-card__note">
+                                          {selectedApp.candidateOfferResponse}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                </article>
+                              )}
+
+                            {/* OFFER ACCEPTED feedback — only shown when OFFER_ACCEPTED */}
+                            {selectedApp.status === "OFFER_ACCEPTED" &&
+                              selectedApp.candidateOfferResponse && (
+                                <article className="jlx-panel">
+                                  <div className="jlx-feedback-section">
+                                    <div className="jlx-feedback-section__header">
+                                      <Paperclip size={14} />
+                                      <span>Phản hồi của bạn</span>
+                                    </div>
+                                    <div className="jlx-feedback-card is-worker">
+                                      <div className="jlx-feedback-card__top">
+                                        <div className="jlx-feedback-card__author-row">
+                                          <CheckCircle2 size={13} />
+                                          <span className="jlx-feedback-card__author">Bạn</span>
+                                          <span className="jlx-feedback-card__badge badge-worker">
+                                            Chấp thuận
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <p className="jlx-feedback-card__note">
+                                        {selectedApp.candidateOfferResponse}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </article>
+                              )}
                           </aside>
                         </div>
 
@@ -1771,6 +1990,12 @@ const JobLabPage: React.FC = () => {
         {viewMode === "contracts" && (
           <section className="jlx-contracts-section">
             <ContractListPage role="CANDIDATE" />
+          </section>
+        )}
+
+        {viewMode === "interviews" && (
+          <section className="jlx-interviews-section">
+            <InterviewListPanel />
           </section>
         )}
 
@@ -1964,6 +2189,159 @@ const JobLabPage: React.FC = () => {
                     </>
                   )}
                 </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* OFFER RESPONSE MODAL */}
+        {offerModal && selectedApp && (
+          <div className="jlx-modal-overlay" onClick={() => { setOfferModal(null); setOfferResponse(""); }}>
+            <div
+              className={`jlx-modal jlx-modal--offer${offerModal === "counter" ? " jlx-modal--counter" : ""}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="jlx-modal__header">
+                <div className="jlx-modal__header-left">
+                  {offerModal === "view" ? (
+                    <>
+                      <CheckCircle2 size={18} />
+                      <h3>Chấp Nhận Đề Nghị</h3>
+                    </>
+                  ) : (
+                    <>
+                      <MessageSquare size={18} />
+                      <h3>Phản Đề Nghị</h3>
+                    </>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  className="jlx-modal__close"
+                  onClick={() => { setOfferModal(null); setOfferResponse(""); }}
+                >
+                  <XCircle size={18} />
+                </button>
+              </div>
+
+              <div className="jlx-modal__body">
+                {offerModal === "view" ? (
+                  <>
+                    <p className="jlx-modal__desc">
+                      Bạn có đồng ý với đề nghị từ nhà tuyển dụng không?
+                    </p>
+
+                    {selectedApp.offerDetails && (
+                      <div className="jlx-offer-modal-content">
+                        <div className="jlx-offer-details">
+                          <div className="jlx-offer-details__label">
+                            <Building2 size={12} />
+                            <span>Chi tiết đề nghị từ Nhà tuyển dụng</span>
+                          </div>
+                          <div className="jlx-offer-details__content">
+                            {selectedApp.offerDetails}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="jlx-field">
+                      <label>Lời nhắn (tùy chọn)</label>
+                      <textarea
+                        value={offerResponse}
+                        onChange={(e) => setOfferResponse(e.target.value)}
+                        rows={3}
+                        placeholder="Bạn có thể thêm lời nhắn khi chấp nhận đề nghị..."
+                        className="jlx-textarea"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="jlx-modal__desc">
+                      Nếu bạn không đồng ý với đề nghị, hãy gửi phản đề nghị kèm mức lương hoặc điều kiện mới.
+                      Nhà tuyển dụng sẽ xem xét và phản hồi.
+                    </p>
+
+                    {selectedApp.offerDetails && (
+                      <div className="jlx-offer-modal-content">
+                        <div className="jlx-offer-details">
+                          <div className="jlx-offer-details__label">
+                            <Building2 size={12} />
+                            <span>Đề nghị ban đầu</span>
+                          </div>
+                          <div className="jlx-offer-details__content">
+                            {selectedApp.offerDetails}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="jlx-field">
+                      <label>Phản đề nghị của bạn <span className="jlx-required">*</span></label>
+                      <textarea
+                        value={offerResponse}
+                        onChange={(e) => setOfferResponse(e.target.value)}
+                        rows={5}
+                        placeholder="Ví dụ: Tôi muốn đề xuất mức lương 25.000.000 VND/tháng cho vị trí này, thay vì 20.000.000 VND như đề nghị. Tôi có 3 năm kinh nghiệm phù hợp với yêu cầu công việc..."
+                        className="jlx-textarea"
+                      />
+                      <span className="jlx-field__hint">
+                        Mô tả mức lương và điều kiện bạn mong muốn để nhà tuyển dụng cân nhắc.
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div className="jlx-modal__footer">
+                <button
+                  type="button"
+                  className="jlx-btn jlx-btn--ghost"
+                  onClick={() => { setOfferModal(null); setOfferResponse(""); }}
+                  disabled={offerSubmitting}
+                >
+                  Hủy
+                </button>
+                {offerModal === "view" ? (
+                  <button
+                    type="button"
+                    className="jlx-btn jlx-btn--primary"
+                    onClick={() => handleOfferResponse(true)}
+                    disabled={offerSubmitting}
+                  >
+                    {offerSubmitting ? (
+                      <>
+                        <RefreshCw size={14} className="jlx-spin" />
+                        Đang gửi...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 size={14} />
+                        Chấp nhận đề nghị
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="jlx-btn jlx-btn--danger"
+                    onClick={() => handleOfferResponse(false)}
+                    disabled={offerSubmitting || !offerResponse.trim()}
+                  >
+                    {offerSubmitting ? (
+                      <>
+                        <RefreshCw size={14} className="jlx-spin" />
+                        Đang gửi...
+                      </>
+                    ) : (
+                      <>
+                        <Send size={14} />
+                        Gửi phản đề nghị
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           </div>

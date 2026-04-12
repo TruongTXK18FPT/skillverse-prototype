@@ -13,6 +13,8 @@ import { ShortTermJobResponse, ShortTermApplicationStatus } from "../../types/Sh
 import { useToast } from "../../hooks/useToast";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import { useAuth } from "../../context/AuthContext";
+import authService from "../../services/authService";
+import LoginRequiredModal from "../auth/LoginRequiredModal";
 import "./odyssey-styles.css";
 
 type ViewType = "all" | "fulltime" | "shortterm";
@@ -50,6 +52,11 @@ const JobsOdysseyPage = () => {
   const [userApplications, setUserApplications] = useState<
     Map<number, ShortTermApplicationStatus>
   >(new Map());
+
+  // Login required modal
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [pendingJob, setPendingJob] = useState<JobPostingResponse | null>(null);
+  const [pendingGig, setPendingGig] = useState<ShortTermJobResponse | null>(null);
 
   // Fetch user applications once (on mount)
   useEffect(() => {
@@ -165,10 +172,20 @@ const JobsOdysseyPage = () => {
 
   // ── Handlers ──
   const handleJobClick = (job: JobPostingResponse) => {
+    if (!authService.isAuthenticated()) {
+      setPendingJob(job);
+      setShowLoginModal(true);
+      return;
+    }
     navigate(`/jobs/${job.id}`);
   };
 
   const handleGigClick = (gig: ShortTermJobResponse) => {
+    if (!authService.isAuthenticated()) {
+      setPendingGig(gig);
+      setShowLoginModal(true);
+      return;
+    }
     navigate(`/short-term-jobs/${gig.id}/view`);
   };
 
@@ -345,6 +362,13 @@ const JobsOdysseyPage = () => {
 
   return (
     <OdysseyLayout>
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="Đăng nhập để xem chi tiết"
+        message="Bạn cần đăng nhập để xem chi tiết công việc và ứng tuyển"
+        feature="Xem chi tiết công việc"
+      />
       {/* Category Tabs */}
       <div className="ody-nav">
         <div className="ody-nav__track">

@@ -98,14 +98,27 @@ const formatCurrency = (value: number) =>
   }).format(value);
 
 const compactCurrency = (value: number) => {
-  if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(1)} tỷ`;
-  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)} triệu`;
+  if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(1)} tỷ VNĐ`;
+  if (value >= 100_000_000) return `${(value / 1_000_000).toFixed(0)} triệu VNĐ`;
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)} triệu VNĐ`;
   if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`;
   return value.toLocaleString("vi-VN");
 };
 
+const stripMarkdown = (text: string) =>
+  text
+    .replace(/#{1,6}\s+/g, "")       // headings
+    .replace(/\*\*(.*?)\*\*/g, "$1") // bold
+    .replace(/\*(.*?)\*/g, "$1")     // italic
+    .replace(/`(.*?)`/g, "$1")       // inline code
+    .replace(/\[(.*?)\]\(.*?\)/g, "$1") // links
+    .replace(/^\s*[-*+]\s+/gm, "")   // list items
+    .replace(/\n+/g, " ")            // newlines
+    .replace(/\s+/g, " ")
+    .trim();
+
 const summarizeText = (value: string, maxLength = 156) => {
-  const normalized = value.replace(/\s+/g, " ").trim();
+  const normalized = stripMarkdown(value);
   if (normalized.length <= maxLength) return normalized;
   return `${normalized.slice(0, Math.max(0, maxLength - 3)).trimEnd()}...`;
 };
@@ -430,8 +443,9 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                       style={{ ["--index" as const]: index } as React.CSSProperties}
                     >
                       <div className="oplog__item-top">
-                        <div>
-                          <span className="oplog__item-id">JOB #{job.id} {job.title}</span>
+                        <div className="oplog__item-title">
+                          <span className="oplog__item-id">JOB #{job.id}</span>
+                          <h4>{job.title}</h4>
                         </div>
                         <span className={`oplog__badge oplog__badge--${meta.tone}`}>
                           {meta.label}
@@ -451,7 +465,7 @@ const OperationLog: React.FC<OperationLogProps> = ({ refreshTrigger }) => {
                           <Wallet size={12} />
                           {job.isNegotiable
                             ? "Thỏa thuận"
-                            : `${compactCurrency(job.maxBudget)} VNĐ`}
+                            : <strong>{compactCurrency(job.maxBudget)}</strong>}
                         </span>
                         <span>
                           <Users size={12} />

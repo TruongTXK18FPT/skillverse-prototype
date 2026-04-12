@@ -144,13 +144,15 @@ export const StudentOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ chil
     roles.includes('USER') ||
     roles.includes('LEARNER') ||
     roles.includes('STUDENT') ||
-    roles.includes('CANDIDATE');
+    roles.includes('CANDIDATE') ||
+    // ADMIN (with student subrole) can access job-lab and my-applications
+    // ADMIN can view applications but cannot apply or perform recruiter actions
+    roles.includes('ADMIN');
   const hasBlockedRole =
+    // MENTOR and RECRUITER have their own separate career dashboards
     roles.includes('MENTOR') ||
     roles.includes('RECRUITER') ||
-    roles.includes('PARENT') ||
-    roles.includes('ADMIN') ||
-    roles.some((role) => role.endsWith('_ADMIN'));
+    roles.includes('PARENT');
 
   if (!hasStudentRole || hasBlockedRole) {
     return <Navigate to="/unauthorized" replace />;

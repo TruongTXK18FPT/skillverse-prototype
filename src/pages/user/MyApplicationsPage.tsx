@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import jobService from '../../services/jobService';
 import shortTermJobService from '../../services/shortTermJobService';
+import interviewService, { InterviewScheduleResponse } from '../../services/interviewService';
 import { JobApplicationResponse } from '../../data/jobDTOs';
 import { ShortTermApplicationResponse, ShortTermApplicationStatus } from '../../types/ShortTermJob';
 import { useToast } from '../../hooks/useToast';
-import { Clock, MapPin, DollarSign, Calendar, CheckCircle, XCircle, Eye, Zap, Briefcase } from 'lucide-react';
+import { Clock, MapPin, DollarSign, Calendar, CheckCircle, XCircle, Eye, Zap, Briefcase, Video, ExternalLink, Loader2 } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import OdysseyLayout from '../../components/jobs-odyssey/OdysseyLayout';
 import '../../components/jobs-odyssey/odyssey-styles.css';
@@ -45,6 +46,10 @@ const MyApplicationsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>('ALL');
   const [typeFilter, setTypeFilter] = useState<'ALL' | 'REGULAR' | 'SHORT_TERM'>('ALL');
+  // Interview detail modal (candidate side)
+  const [interviewDetail, setInterviewDetail] = useState<InterviewScheduleResponse | null>(null);
+  const [interviewLoading, setInterviewLoading] = useState(false);
+  const [showInterviewModal, setShowInterviewModal] = useState(false);
 
   const fetchMyApplications = async () => {
     setLoading(true);
@@ -152,14 +157,18 @@ const MyApplicationsPage: React.FC = () => {
   const getStatusInfo = (status: string) => {
     // Handle short-term application statuses
     const statusMap: Record<string, { text: string; color: string; bg: string; icon: React.ReactNode }> = {
-      // Regular job statuses
+      // Regular job statuses — full-time pipeline
       'PENDING': { text: 'Đang Chờ', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', icon: <Clock size={16} /> },
       'REVIEWED': { text: 'Đã Xem', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)', icon: <Eye size={16} /> },
       'ACCEPTED': { text: 'Được Chấp Nhận', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', icon: <CheckCircle size={16} /> },
       'REJECTED': { text: 'Bị Từ Chối', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)', icon: <XCircle size={16} /> },
+      'INTERVIEW_SCHEDULED': { text: 'Lịch Phỏng Vấn', color: '#00f5ff', bg: 'rgba(0, 245, 255, 0.08)', icon: <Eye size={16} /> },
+      'INTERVIEWED': { text: 'Đã Phỏng Vấn', color: '#818cf8', bg: 'rgba(129, 140, 248, 0.1)', icon: <CheckCircle size={16} /> },
+      'OFFER_SENT': { text: 'Đã Gửi Đề Nghị', color: '#aa55ff', bg: 'rgba(170, 85, 255, 0.08)', icon: <CheckCircle size={16} /> },
+      'OFFER_ACCEPTED': { text: 'Nhận Đề Nghị', color: '#34d399', bg: 'rgba(52, 211, 153, 0.08)', icon: <CheckCircle size={16} /> },
+      'OFFER_REJECTED': { text: 'Từ Chối Đề Nghị', color: '#fb7185', bg: 'rgba(251, 113, 133, 0.08)', icon: <XCircle size={16} /> },
+      'CONTRACT_SIGNED': { text: 'Đã Ký HĐ', color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.1)', icon: <CheckCircle size={16} /> },
       // Short-term job statuses
-      'PENDING': { text: 'Chờ Xét Duyệt', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', icon: <Clock size={16} /> },
-      'ACCEPTED': { text: 'Được Chọn', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', icon: <CheckCircle size={16} /> },
       'WORKING': { text: 'Đang Làm Việc', color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.1)', icon: <Briefcase size={16} /> },
       'SUBMITTED': { text: 'Đã Nộp Bài', color: '#06b6d4', bg: 'rgba(6, 182, 212, 0.1)', icon: <CheckCircle size={16} /> },
       'REVISION_REQUIRED': { text: 'Cần Sửa Lại', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', icon: <XCircle size={16} /> },
@@ -355,6 +364,29 @@ const MyApplicationsPage: React.FC = () => {
                       <span style={{ marginLeft: '0.5rem' }}>{getStatusInfo(app.status).text}</span>
                     </div>
 
+                    {app.type === 'REGULAR' && app.status === 'INTERVIEW_SCHEDULED' && (
+                      <button
+                        className="odyssey-card__action-btn"
+                        style={{ marginTop: '0.75rem', width: '100%', background: 'rgba(0, 245, 255, 0.08)', color: '#00f5ff', border: '1px solid rgba(0, 245, 255, 0.25)' }}
+                        onClick={async () => {
+                          setInterviewLoading(true);
+                          setShowInterviewModal(true);
+                          try {
+                            const data = await interviewService.getInterviewByApplication(app.id);
+                            setInterviewDetail(data);
+                          } catch {
+                            showError('Lỗi', 'Không thể tải chi tiết lịch phỏng vấn');
+                            setShowInterviewModal(false);
+                          } finally {
+                            setInterviewLoading(false);
+                          }
+                        }}
+                      >
+                        <Video size={15} />
+                        <span>Xem lịch &amp; Tham gia phỏng vấn</span>
+                      </button>
+                    )}
+
                     {app.acceptanceMessage && (
                       <p className="odyssey-card__description" style={{ color: '#10b981' }}>✅ {app.acceptanceMessage}</p>
                     )}
@@ -377,6 +409,125 @@ const MyApplicationsPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Interview Detail Modal */}
+      {showInterviewModal && interviewDetail && (
+        <div className="interview-detail-overlay" onClick={(e) => { if (e.target === e.currentTarget) setShowInterviewModal(false); }}>
+          <div className="interview-detail-shell">
+            {/* Header */}
+            <div className="interview-detail-header">
+              <div className="interview-detail-header__title">
+                <div className="interview-detail-header__icon">
+                  <Video size={18} />
+                </div>
+                <div>
+                  <h3>Lịch Phỏng Vấn</h3>
+                  <p>{interviewDetail.jobTitle}</p>
+                </div>
+              </div>
+              <button className="interview-detail-close" onClick={() => setShowInterviewModal(false)}>✕</button>
+            </div>
+
+            {/* Body */}
+            <div className="interview-detail-body">
+              {/* Candidate Info */}
+              <div className="interview-detail-card">
+                <div className="interview-detail-card__row">
+                  <span className="interview-detail-card__label">Ứng viên</span>
+                  <span className="interview-detail-card__value">{interviewDetail.candidateName}</span>
+                </div>
+                <div className="interview-detail-card__row">
+                  <span className="interview-detail-card__label">Email</span>
+                  <span className="interview-detail-card__value">{interviewDetail.candidateEmail}</span>
+                </div>
+                {interviewDetail.interviewerName && (
+                  <div className="interview-detail-card__row">
+                    <span className="interview-detail-card__label">Người phỏng vấn</span>
+                    <span className="interview-detail-card__value">{interviewDetail.interviewerName}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Schedule Info */}
+              <div className="interview-detail-card">
+                <div className="interview-detail-card__row">
+                  <span className="interview-detail-card__label">Ngày &amp; Giờ</span>
+                  <span className="interview-detail-card__value">
+                    {new Date(interviewDetail.scheduledAt).toLocaleString('vi-VN', {
+                      weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric',
+                      hour: '2-digit', minute: '2-digit'
+                    })}
+                  </span>
+                </div>
+                <div className="interview-detail-card__row">
+                  <span className="interview-detail-card__label">Thời lượng</span>
+                  <span className="interview-detail-card__value">{interviewDetail.durationMinutes} phút</span>
+                </div>
+                <div className="interview-detail-card__row">
+                  <span className="interview-detail-card__label">Hình thức</span>
+                  <span className="interview-detail-card__value">{interviewDetail.meetingType.replace(/_/g, ' ')}</span>
+                </div>
+                {interviewDetail.location && (
+                  <div className="interview-detail-card__row">
+                    <span className="interview-detail-card__label">Địa điểm</span>
+                    <span className="interview-detail-card__value">{interviewDetail.location}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Meeting Link */}
+              {interviewDetail.meetingLink && (
+                <div className="interview-detail-join">
+                  <button
+                    className="interview-detail-join__btn"
+                    onClick={() => window.open(interviewDetail.meetingLink!, '_blank')}
+                  >
+                    <ExternalLink size={16} />
+                    <span>Tham gia phỏng vấn</span>
+                    <span className="interview-detail-join__url">{interviewDetail.meetingLink}</span>
+                  </button>
+                </div>
+              )}
+
+              {/* SkillVerse Room */}
+              {interviewDetail.skillverseRoomId && (
+                <div className="interview-detail-join">
+                  <button
+                    className="interview-detail-join__btn interview-detail-join__btn--svroom"
+                    onClick={() => window.open(interviewDetail.meetingLink!, '_blank')}
+                  >
+                    <Video size={16} />
+                    <span>Tham gia SkillVerse Room</span>
+                    <span className="interview-detail-join__url">{interviewDetail.skillverseRoomId}</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Notes */}
+              {interviewDetail.interviewNotes && (
+                <div className="interview-detail-card">
+                  <div className="interview-detail-card__label" style={{ marginBottom: '0.5rem' }}>Ghi chú từ nhà tuyển dụng</div>
+                  <p style={{ color: '#cbd5e1', fontSize: '0.84rem', lineHeight: 1.7, margin: 0 }}>{interviewDetail.interviewNotes}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="interview-detail-footer">
+              <button className="interview-detail-footer__cancel" onClick={() => setShowInterviewModal(false)}>Đóng</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showInterviewModal && interviewLoading && (
+        <div className="interview-detail-overlay">
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem', color: '#94a3b8' }}>
+            <Loader2 size={32} style={{ animation: 'spin 0.8s linear infinite' }} />
+            <p>Đang tải chi tiết lịch phỏng vấn...</p>
+          </div>
+        </div>
+      )}
     </OdysseyLayout>
   );
 };

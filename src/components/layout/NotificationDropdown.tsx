@@ -110,8 +110,12 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
       case 'PRECHAT_MESSAGE':
       case 'PRECHAT_NEW_MESSAGE':
         return {
-          pathname: '/mentorship',
-          state: { openChatWith: notification.relatedId },
+          pathname: '/messages',
+          state: {
+            openChatWith: notification.relatedId,
+            bookingId: notification.relatedId,
+            type: 'MENTOR',
+          },
         };
       case 'RECRUITMENT_MESSAGE':
         return {
@@ -451,7 +455,7 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
             <div
               key={`prechat-${chat.mentorId}`}
               className="notification-item unread"
-              onClick={() => navigate('/mentorship', { state: { openChatWith: chat.mentorId } })}
+              onClick={() => navigate('/messages')}
             >
               <div className="notification-icon-wrapper">
                 <img
@@ -539,7 +543,7 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
             <div 
               key={`prechat-${chat.mentorId}`}
               className="notification-item unread"
-              onClick={() => navigate('/mentorship', { state: { openChatWith: chat.mentorId } })}
+              onClick={() => navigate('/messages')}
             >
               <div className="notification-icon-wrapper">
                 <img 

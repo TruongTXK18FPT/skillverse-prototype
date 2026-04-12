@@ -19,7 +19,6 @@ import {
   RecruiterRoute,
   StudentOnlyRoute,
 } from "./components/shared/ProtectedRoute";
-import ParentRoute from "./components/shared/ParentRoute";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import HomePage from "./pages/main/HomePage";
@@ -185,18 +184,6 @@ const AppContents = () => {
             <Route path="/explore" element={<ExploreMapPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/learning-report" element={<LearningReportPage />} />
-            <Route
-              path="/user/parent-requests"
-              element={<StudentParentRequestPage />}
-            />
-            <Route
-              path="/parent-dashboard"
-              element={
-                <ParentRoute>
-                  <ParentDashboardPage />
-                </ParentRoute>
-              }
-            />
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/roadmap" element={<AiRoadmapPage />} />
             <Route path="/journey" element={<GSJJourneyPage />} />

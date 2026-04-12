@@ -156,16 +156,23 @@ export interface MentorProfileResponse {
 
 // Business Profile Response DTO
 export interface BusinessProfileResponse {
-  id: number;
+  userId: number;
+  email: string;
   companyName: string;
-  businessEmail: string;
   companyWebsite: string;
-  businessAddress: string;
-  taxId: string;
+  companyAddress: string;
+  companyPhone?: string;
+  companyLogoUrl?: string;
+  taxCodeOrBusinessRegistrationNumber: string;
+  companyDocumentsUrl?: string;
+  contactPersonPhone?: string;
+  contactPersonPosition?: string;
+  companySize?: string;
+  industry?: string;
   applicationStatus: string;
-  isActive: boolean;
-  emailVerified: boolean;
-  documentFileUrls?: string[];
+  applicationDate?: string;
+  approvalDate?: string;
+  rejectionReason?: string;
   createdAt: string;
   updatedAt: string;
 }

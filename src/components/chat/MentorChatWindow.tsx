@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Send,
   Smile,
@@ -9,8 +9,7 @@ import {
 } from 'lucide-react';
 import {
   getConversation,
-  sendMessage as sendPreChatMessage,
-  sendAsMentor,
+  sendMessage as sendMentorChatMessage,
   markRead,
   type PreChatMessageResponse,
 } from '../../services/preChatService';
@@ -21,11 +20,16 @@ import GifPicker from './GifPicker';
 import './MentorChatWindow.css';
 
 interface MentorChatWindowProps {
+  bookingId: number;
   counterpartId: number;
   counterpartName: string;
   counterpartAvatar?: string;
   isMyRoleMentor: boolean;
   currentUserId: number;
+  chatEnabled: boolean;
+  bookingStatus?: string;
+  bookingStartTime?: string;
+  bookingEndTime?: string;
   onBack: () => void;
 }
 
@@ -37,11 +41,16 @@ interface Message {
 }
 
 const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
+  bookingId,
   counterpartId,
   counterpartName,
   counterpartAvatar,
   isMyRoleMentor,
   currentUserId,
+  chatEnabled,
+  bookingStatus,
+  bookingStartTime,
+  bookingEndTime,
   onBack,
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -49,6 +58,8 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
   const [isSending, setIsSending] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
+  const [resolvedCounterpartName, setResolvedCounterpartName] = useState(counterpartName);
+  const [resolvedCounterpartAvatar, setResolvedCounterpartAvatar] = useState(counterpartAvatar || '');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const sortMessagesByTimeAsc = (items: Message[]): Message[] => {
@@ -65,26 +76,27 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
     return `${apiRoot}/${raw}`;
   };
 
-  // Request notification permission
   useEffect(() => {
     if ('Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission();
     }
   }, []);
 
-  // Load conversation
   useEffect(() => {
-    loadMessages();
-    if (!isMyRoleMentor) {
-      markRead(counterpartId).catch((err) =>
-        console.error('Mark read failed:', err),
-      );
-    }
-  }, [counterpartId]);
+    setResolvedCounterpartName(counterpartName?.trim() || (isMyRoleMentor ? 'Học viên' : 'Mentor'));
+    setResolvedCounterpartAvatar(counterpartAvatar?.trim() || '');
+  }, [counterpartAvatar, counterpartName, isMyRoleMentor]);
+
+  useEffect(() => {
+    void loadMessages();
+    markRead(bookingId).catch((err) =>
+      console.error('Mark read failed:', err),
+    );
+  }, [bookingId]);
 
   const loadMessages = async () => {
     try {
-      const response = await getConversation(counterpartId, 0, 100);
+      const response = await getConversation(bookingId, 0, 100);
       const formattedMessages: Message[] = response.content.map(
         (msg: PreChatMessageResponse) => ({
           id: msg.id,
@@ -99,26 +111,19 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
     }
   };
 
-  // Scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (!inputText.trim() || isSending) return;
+    if (!chatEnabled || !inputText.trim() || isSending) return;
 
     const messageText = inputText.trim();
     setInputText('');
     setIsSending(true);
 
     try {
-      let response: PreChatMessageResponse;
-      if (isMyRoleMentor) {
-        response = await sendAsMentor(counterpartId, messageText);
-      } else {
-        response = await sendPreChatMessage(counterpartId, messageText);
-      }
-
+      const response = await sendMentorChatMessage(bookingId, messageText);
       const newMessage: Message = {
         id: response.id,
         senderId: response.senderId,
@@ -137,7 +142,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      void handleSendMessage();
     }
   };
 
@@ -148,16 +153,11 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
 
   const handleGifSelect = async (gifUrl: string) => {
     setShowGifPicker(false);
+    if (!chatEnabled) return;
+
     setIsSending(true);
-
     try {
-      let response: PreChatMessageResponse;
-      if (isMyRoleMentor) {
-        response = await sendAsMentor(counterpartId, `[GIF]${gifUrl}`);
-      } else {
-        response = await sendPreChatMessage(counterpartId, `[GIF]${gifUrl}`);
-      }
-
+      const response = await sendMentorChatMessage(bookingId, `[GIF]${gifUrl}`);
       const newMessage: Message = {
         id: response.id,
         senderId: response.senderId,
@@ -183,8 +183,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
     if (diffMins < 60) return `${diffMins} phút trước`;
 
     const diffHours = Math.floor(diffMs / 3600000);
-    if (diffHours < 24)
-      return `${diffHours} giờ trước`;
+    if (diffHours < 24) return `${diffHours} giờ trước`;
 
     return date.toLocaleDateString('vi-VN', {
       day: '2-digit',
@@ -195,9 +194,25 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
     });
   };
 
+  const formatBookingTime = (timestamp?: string): string | null => {
+    if (!timestamp) return null;
+    const date = new Date(timestamp);
+    if (Number.isNaN(date.getTime())) return null;
+    return date.toLocaleString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Asia/Ho_Chi_Minh',
+    });
+  };
+
+  const bookingWindowLabel = bookingStartTime && bookingEndTime
+    ? `${formatBookingTime(bookingStartTime)} - ${formatBookingTime(bookingEndTime)}`
+    : null;
+
   return (
     <div className="mcw-window">
-      {/* Header */}
       <div className="mcw-header">
         <button className="mcw-back-btn" onClick={onBack} title="Quay lại">
           <ArrowLeft size={18} />
@@ -205,12 +220,12 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
 
         <div className="mcw-info">
           <img
-            src={resolveAvatarUrl(counterpartAvatar)}
-            alt={counterpartName}
+            src={resolveAvatarUrl(resolvedCounterpartAvatar)}
+            alt={resolvedCounterpartName}
             className="mcw-avatar"
           />
           <div className="mcw-user-info">
-            <h3 className="mcw-user-info__name">{counterpartName}</h3>
+            <h3 className="mcw-user-info__name">{resolvedCounterpartName}</h3>
             <span className="mcw-user-info__role">
               {isMyRoleMentor ? 'Học viên' : 'Mentor'}
             </span>
@@ -221,18 +236,27 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
           <button className="mcw-header-btn" title="Tìm kiếm">
             <Search size={18} />
           </button>
-          <button className="mcw-header-btn" title="Thêm">
+          <button className="mcw-header-btn" title="Them">
             <MoreVertical size={18} />
           </button>
         </div>
       </div>
 
-      {/* Messages */}
+      <div className="mcw-msg__time" style={{ padding: '0 16px 8px', display: 'block' }}>
+        {bookingStatus ? `Booking ${bookingStatus}` : `Mentor booking #${bookingId}`}
+        {bookingWindowLabel ? ` • ${bookingWindowLabel}` : ''}
+        {!chatEnabled ? ' • Chat đã đóng' : ''}
+      </div>
+
       <div className="mcw-messages">
         {messages.length === 0 && (
           <div className="mcw-empty">
             <p className="mcw-empty__title">Chưa có tin nhắn nào</p>
-            <p className="mcw-empty__desc">Hãy bắt đầu cuộc trò chuyện với mentor ngay bên dưới.</p>
+            <p className="mcw-empty__desc">
+              {chatEnabled
+                ? 'Hãy bắt đầu cuộc trò chuyện cho booking này ngay bên dưới.'
+                : 'Booking này đã đóng chat.'}
+            </p>
           </div>
         )}
 
@@ -248,8 +272,8 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
             >
               {!isMine && (
                 <img
-                  src={resolveAvatarUrl(counterpartAvatar)}
-                  alt=""
+                  src={resolveAvatarUrl(resolvedCounterpartAvatar)}
+                  alt={resolvedCounterpartName || `${counterpartId}`}
                   className="mcw-msg__avatar"
                 />
               )}
@@ -276,7 +300,6 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
       <div className="mcw-input">
         <button
           className="mcw-input__action"
@@ -285,6 +308,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
             setShowGifPicker(false);
           }}
           title="Biểu tượng cảm xúc"
+          disabled={!chatEnabled}
         >
           <Smile size={20} />
         </button>
@@ -296,29 +320,30 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
             setShowEmojiPicker(false);
           }}
           title="GIF"
+          disabled={!chatEnabled}
         >
           <ImageIcon size={20} />
         </button>
 
         <textarea
           className="mcw-input__textarea"
-          placeholder="Nhập tin nhắn..."
+          placeholder={chatEnabled ? 'Nhập tin nhắn...' : 'Session chat đã đóng'}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyPress={handleKeyPress}
           rows={1}
+          disabled={!chatEnabled}
         />
 
         <button
           className="mcw-send-btn"
-          onClick={handleSendMessage}
-          disabled={isSending || !inputText.trim()}
+          onClick={() => void handleSendMessage()}
+          disabled={!chatEnabled || isSending || !inputText.trim()}
           title="Gửi"
         >
           <Send size={18} />
         </button>
 
-        {/* Emoji Picker */}
         {showEmojiPicker && (
           <div className="mcw-emoji-wrap">
             <EmojiPicker
@@ -329,7 +354,6 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
           </div>
         )}
 
-        {/* GIF Picker */}
         {showGifPicker && (
           <div className="mcw-gif-wrap">
             <GifPicker
