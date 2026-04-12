@@ -19,6 +19,14 @@ interface SpringPageResponse<T> {
   number: number;
 }
 
+interface PageResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
 export interface MentorSubmissionStatsResponse {
   totalCount: number;
   pendingCount: number;
@@ -124,12 +132,12 @@ export const submitAssignment = async (
  * Get submissions for an assignment (mentor/admin).
  * Identity resolved server-side from JWT.
  * @param assignmentId - The ID of the assignment
- * @returns Promise with array of submissions
+ * @returns Promise with PageResponse containing array of submissions
  */
 export const getAssignmentSubmissions = async (
   assignmentId: number
-): Promise<AssignmentSubmissionDetailDTO[]> => {
-  const response = await axiosInstance.get<AssignmentSubmissionDetailDTO[]>(
+): Promise<PageResponse<AssignmentSubmissionDetailDTO>> => {
+  const response = await axiosInstance.get<PageResponse<AssignmentSubmissionDetailDTO>>(
     `/assignments/${assignmentId}/submissions`
   );
   return response.data;

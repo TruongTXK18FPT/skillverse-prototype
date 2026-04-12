@@ -245,7 +245,6 @@ const buildRevisionContentSnapshot = (modules: ModuleDraft[]) => ({
       ...(lesson.gradingMethod !== undefined
         ? { gradingMethod: normalizeSnapshotText(lesson.gradingMethod) }
         : {}),
-      ...(lesson.isAssessment !== undefined ? { isAssessment: lesson.isAssessment } : {}),
       ...(lesson.cooldownHours !== undefined ? { cooldownHours: lesson.cooldownHours } : {}),
       ...(lesson.assignmentSubmissionType !== undefined
         ? { assignmentSubmissionType: lesson.assignmentSubmissionType }
@@ -290,6 +289,15 @@ const buildRevisionContentSnapshot = (modules: ModuleDraft[]) => ({
             isRequired: criteria.isRequired ?? null
           }))
         }
+        : {}),
+      ...(hasOwnKey(lesson, 'aiGradingEnabled')
+        ? { aiGradingEnabled: lesson.aiGradingEnabled }
+        : {}),
+      ...(hasOwnKey(lesson, 'aiGradingPrompt') && lesson.aiGradingPrompt
+        ? { aiGradingPrompt: normalizeSnapshotText(lesson.aiGradingPrompt) }
+        : {}),
+      ...(hasOwnKey(lesson, 'gradingStyle') && lesson.gradingStyle
+        ? { gradingStyle: lesson.gradingStyle }
         : {}),
       attachments: normalizeLessonAttachments(lesson.attachments).map((attachment, attachmentIndex) => ({
         ...(typeof attachment.serverId === 'number' && attachment.serverId > 0 ? { id: attachment.serverId } : {}),
@@ -597,7 +605,6 @@ const mapCourseModulesToDraftModules = (courseModules: Array<Record<string, unkn
           roundingIncrement: toPositiveNumberOrUndefined(rawLesson.roundingIncrement),
           quizDescription: toStringOrUndefined(rawLesson.quizDescription),
           gradingMethod: toStringOrUndefined(rawLesson.gradingMethod),
-          isAssessment: typeof rawLesson.isAssessment === 'boolean' ? rawLesson.isAssessment : undefined,
           cooldownHours: toPositiveNumberOrUndefined(rawLesson.cooldownHours),
           assignmentSubmissionType: parseSubmissionTypeFromSnapshot(
             rawLesson.assignmentSubmissionType ?? rawLesson.submissionType
@@ -611,7 +618,12 @@ const mapCourseModulesToDraftModules = (courseModules: Array<Record<string, unkn
               : (typeof rawLesson.isRequired === 'boolean' ? rawLesson.isRequired : undefined),
           questions: quizQuestions,
           assignmentCriteria,
-          attachments: normalizeLessonAttachments(rawLesson.attachments as LessonAttachmentDraft[] | undefined)
+          attachments: normalizeLessonAttachments(rawLesson.attachments as LessonAttachmentDraft[] | undefined),
+          aiGradingEnabled: typeof rawLesson.aiGradingEnabled === 'boolean' ? rawLesson.aiGradingEnabled : undefined,
+          aiGradingPrompt: toStringOrUndefined(rawLesson.aiGradingPrompt),
+          gradingStyle: (rawLesson.gradingStyle === 'STANDARD' || rawLesson.gradingStyle === 'STRICT' || rawLesson.gradingStyle === 'LENIENT')
+            ? rawLesson.gradingStyle
+            : undefined
         };
       })
     };
@@ -893,7 +905,6 @@ const parseModulesFromRevisionSnapshot = (contentSnapshotJson?: string): ModuleD
             roundingIncrement: toPositiveNumberOrUndefined(lessonRaw.roundingIncrement),
             quizDescription: typeof lessonRaw.quizDescription === 'string' ? lessonRaw.quizDescription : undefined,
             gradingMethod: typeof lessonRaw.gradingMethod === 'string' ? lessonRaw.gradingMethod : undefined,
-            isAssessment: typeof lessonRaw.isAssessment === 'boolean' ? lessonRaw.isAssessment : undefined,
             cooldownHours: toPositiveNumberOrUndefined(lessonRaw.cooldownHours),
             assignmentSubmissionType: parseSubmissionTypeFromSnapshot(
               lessonRaw.assignmentSubmissionType ?? lessonRaw.submissionType
@@ -913,7 +924,13 @@ const parseModulesFromRevisionSnapshot = (contentSnapshotJson?: string): ModuleD
                 : (typeof lessonRaw.required === 'boolean' ? lessonRaw.required : undefined),
             questions,
             assignmentCriteria,
-            attachments
+            attachments,
+            // AI Grading fields — added to snapshot by BE, map them here for revision editor
+            aiGradingEnabled: typeof lessonRaw.aiGradingEnabled === 'boolean' ? lessonRaw.aiGradingEnabled : false,
+            gradingStyle: (lessonRaw.gradingStyle === 'STANDARD' || lessonRaw.gradingStyle === 'STRICT' || lessonRaw.gradingStyle === 'LENIENT')
+              ? lessonRaw.gradingStyle
+              : 'STANDARD',
+            aiGradingPrompt: typeof lessonRaw.aiGradingPrompt === 'string' ? lessonRaw.aiGradingPrompt : '',
           };
         }))
       };
@@ -1193,6 +1210,39 @@ const formatRevisionDate = (date?: string | null) =>
 // COMPONENT
 // ============================================================================
 
+/** Read-only overlay styles — injected once, referenced by ID */
+const READ_ONLY_STYLE_ID = 'cb-readonly-styles';
+
+const ensureReadOnlyStyles = () => {
+  if (typeof document === 'undefined' || document.getElementById(READ_ONLY_STYLE_ID)) return;
+  const style = document.createElement('style');
+  style.id = READ_ONLY_STYLE_ID;
+  style.textContent = `
+    .cb-readonly .cb-input,
+    .cb-readonly .cb-textarea,
+    .cb-readonly .cb-select,
+    .cb-readonly input[type="text"],
+    .cb-readonly input[type="number"],
+    .cb-readonly input[type="url"],
+    .cb-readonly textarea,
+    .cb-readonly select {
+      pointer-events: none !important;
+      opacity: 0.6 !important;
+      background: var(--cb-bg-secondary, #1a1a2e) !important;
+      cursor: not-allowed !important;
+    }
+    .cb-readonly .cb-input-group button,
+    .cb-readonly .cb-button--ghost,
+    .cb-readonly .cb-add-item-btn,
+    .cb-readonly .cb-icon-btn {
+      pointer-events: none !important;
+      opacity: 0.4 !important;
+      cursor: not-allowed !important;
+    }
+  `;
+  document.head.appendChild(style);
+};
+
 const CourseCreationPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -1225,14 +1275,17 @@ const CourseCreationPage = () => {
   const [isRevisionLoading, setIsRevisionLoading] = useState(false);
   const [isRevisionHistoryModalOpen, setIsRevisionHistoryModalOpen] = useState(false);
   const revisionIsEditable = activeRevision?.status === 'DRAFT' || activeRevision?.status === 'REJECTED';
-  
+
+  /**
+   * View vs Edit policy:
+   * - New course creation (no courseId): always editable
+   * - Revision mode (?revisionId=...): editable only if revision is DRAFT/REJECTED
+   * - Viewing existing course (courseId without revisionId): READ-ONLY
+   *   To edit, mentor must create/update a revision
+   */
   const isEditable = isRevisionMode
     ? revisionIsEditable
-    : (!isEditMode ||
-      !state.currentCourse ||
-      state.currentCourse.status === CourseStatus.DRAFT ||
-      state.currentCourse.status === CourseStatus.REJECTED ||
-      state.currentCourse.status === CourseStatus.SUSPENDED);
+    : (!isEditMode); // Only editable when creating new course, NOT when viewing existing
 
   // Local State
   const [activeView, setActiveView] = useState<ViewState>({ type: 'course_info' });
@@ -1767,7 +1820,6 @@ const CourseCreationPage = () => {
       quizDescription: undefined,
       roundingIncrement: undefined,
       gradingMethod: undefined,
-      isAssessment: undefined,
       cooldownHours: undefined,
       questions: [],
       assignmentSubmissionType: undefined,
@@ -1802,7 +1854,6 @@ const CourseCreationPage = () => {
         quizTimeLimitMinutes: lesson.type === 'quiz' ? lesson.quizTimeLimitMinutes : undefined,
         roundingIncrement: lesson.type === 'quiz' ? lesson.roundingIncrement : undefined,
         gradingMethod: lesson.type === 'quiz' ? lesson.gradingMethod : undefined,
-        isAssessment: lesson.type === 'quiz' ? lesson.isAssessment : undefined,
         cooldownHours: lesson.type === 'quiz' ? lesson.cooldownHours : undefined,
         questions: lesson.type === 'quiz' ? (lesson.questions || []) : []
       };
@@ -1895,7 +1946,15 @@ const CourseCreationPage = () => {
       return;
     }
     if (activeView.type !== 'lesson' || !e.target.files || !e.target.files[0]) return;
-    
+
+    // Single-file guard for reading lessons
+    const currentLesson = modules.find(m => m.id === activeView.moduleId)?.lessons.find(l => l.id === activeView.lessonId);
+    if (currentLesson?.attachments && currentLesson.attachments.length > 0) {
+      if (e.target) e.target.value = '';
+      showToast('warning', 'Chỉ được đính kèm 1 tài liệu cho mỗi bài đọc. Vui lòng xóa file hiện tại trước.');
+      return;
+    }
+
     const file = e.target.files[0];
     const { moduleId, lessonId } = activeView;
 
@@ -2107,7 +2166,6 @@ const CourseCreationPage = () => {
               roundingIncrement: lesson.roundingIncrement,
               quizDescription: lesson.quizDescription,
               gradingMethod: lesson.gradingMethod,
-              isAssessment: lesson.isAssessment,
               cooldownHours: lesson.cooldownHours,
               questions: (lesson.questions || []).map((question: QuizQuestionDraft) => ({
                 ...question,
@@ -2123,7 +2181,13 @@ const CourseCreationPage = () => {
               assignmentPassingScore: lesson.assignmentPassingScore,
               assignmentIsRequired: lesson.assignmentIsRequired,
               assignmentCriteria: lesson.assignmentCriteria,
-              attachments: normalizeLessonAttachments(lesson.attachments)
+              attachments: normalizeLessonAttachments(lesson.attachments),
+              // AI Grading fields — was missing, causing checkbox to reset after save
+              aiGradingEnabled: Boolean(lesson.aiGradingEnabled),
+              gradingStyle: (lesson.gradingStyle === 'STANDARD' || lesson.gradingStyle === 'STRICT' || lesson.gradingStyle === 'LENIENT')
+                ? lesson.gradingStyle
+                : 'STANDARD',
+              aiGradingPrompt: lesson.aiGradingPrompt || '',
             };
           })
         };
@@ -2961,7 +3025,6 @@ const CourseCreationPage = () => {
                        >
                           <option value={SubmissionType.TEXT}>Nộp văn bản</option>
                           <option value={SubmissionType.FILE}>Tải file</option>
-                          <option value={SubmissionType.LINK}>Gửi link</option>
                        </select>
                        {lessonErrors?.submissionType && (
                          <div className="cb-error-text">{lessonErrors.submissionType}</div>
@@ -3095,14 +3158,14 @@ const CourseCreationPage = () => {
                              {lessonErrors?.criteriaTotal && (
                                <div className="cb-error-text">{lessonErrors.criteriaTotal}</div>
                              )}
-                             <button 
+                             <button
                                 className="cb-button cb-button--secondary"
                                 onClick={() => {
-                                   const newCrit: AssignmentCriteriaDraft = { 
-                                      name: '', 
-                                      description: '', 
-                                      maxPoints: 10, 
-                                      orderIndex: (lesson.assignmentCriteria?.length || 0) 
+                                   const newCrit: AssignmentCriteriaDraft = {
+                                      name: '',
+                                      description: '',
+                                      maxPoints: 10,
+                                      orderIndex: (lesson.assignmentCriteria?.length || 0)
                                    };
                                    updateLessonField(module.id, lesson.id, { assignmentCriteria: [...(lesson.assignmentCriteria || []), newCrit] });
                                    clearAssignmentError(lesson.id, 'criteriaRequired');
@@ -3111,6 +3174,73 @@ const CourseCreationPage = () => {
                                 <FiPlus /> Thêm tiêu chí
                              </button>
                           </div>
+                       </div>
+
+                       {/* AI Grading Section */}
+                       <div className="cb-form-group" style={{ marginTop: 24 }}>
+                          <label className="cb-label">
+                             <input
+                                type="checkbox"
+                                checked={Boolean(lesson.aiGradingEnabled)}
+                                onChange={(e) => {
+                                   updateLessonField(module.id, lesson.id, { aiGradingEnabled: e.target.checked });
+                                }}
+                                style={{ marginRight: 8 }}
+                             />
+                             🤖 Bật AI chấm bài
+                          </label>
+
+                          {lesson.aiGradingEnabled && (
+                             <>
+                                <div className="cb-grid cb-grid--2" style={{ marginTop: 12 }}>
+                                   <div className="cb-form-group">
+                                      <label className="cb-label">Phong cách chấm điểm</label>
+                                      <select
+                                         className="cb-input cb-select"
+                                         value={lesson.gradingStyle || 'STANDARD'}
+                                         onChange={(e) => {
+                                            updateLessonField(module.id, lesson.id, { gradingStyle: e.target.value });
+                                         }}
+                                      >
+                                         <option value="STANDARD">Cân bằng</option>
+                                         <option value="STRICT">Nghiêm ngặt</option>
+                                         <option value="LENIENT">Linh hoạt</option>
+                                      </select>
+                                   </div>
+                                </div>
+
+                                <div className="cb-form-group" style={{ marginTop: 12 }}>
+                                   <label className="cb-label">Hướng dẫn thêm cho AI (tùy chọn)</label>
+                                   <textarea
+                                      className="cb-input cb-textarea"
+                                      placeholder="VD: Ưu tiên đánh giá tính sáng tạo hơn kỹ năng trình bày..."
+                                      value={lesson.aiGradingPrompt || ''}
+                                      onChange={(e) => {
+                                         updateLessonField(module.id, lesson.id, { aiGradingPrompt: e.target.value });
+                                      }}
+                                      rows={3}
+                                   />
+                                </div>
+
+                                {(!lesson.assignmentCriteria || lesson.assignmentCriteria.length === 0) && (
+                                   <div className="cb-error-text" style={{ marginTop: 8 }}>
+                                      ⚠️ Bật AI chấm bài cần có rubric (tiêu chí chấm điểm). Vui lòng thêm tiêu chí ở trên.
+                                   </div>
+                                )}
+
+                                <div style={{
+                                   marginTop: 10,
+                                   padding: '10px 14px',
+                                   borderRadius: 8,
+                                   background: 'rgba(34, 211, 238, 0.06)',
+                                   border: '1px solid rgba(34, 211, 238, 0.18)',
+                                   fontSize: '0.88rem',
+                                   color: 'var(--cb-text-muted)'
+                                }}>
+                                   📋 Khi bật AI chấm bài: chỉ chấp nhận file <strong>PDF</strong> và <strong>DOCX</strong>, tối đa 10MB. Mentor luôn xác nhận kết quả trước khi student nhận điểm.
+                                </div>
+                             </>
+                          )}
                        </div>
                     </div>
                  )}
@@ -3189,19 +3319,6 @@ const CourseCreationPage = () => {
                                 </select>
                              </div>
 
-                             <div className="cb-form-group">
-                                <label className="cb-label" style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-                                   <input 
-                                      type="checkbox"
-                                      checked={lesson.isAssessment || false}
-                                      onChange={(e) => updateLessonField(module.id, lesson.id, { isAssessment: e.target.checked })}
-                                   />
-                                   Đây là bài kiểm tra đánh giá (Assessment)
-                                </label>
-                                <p style={{ fontSize: '0.8rem', color: '#888', marginTop: 4 }}>
-                                   Bài kiểm tra đánh giá thường có trọng số cao hơn và yêu cầu nghiêm ngặt hơn.
-                                </p>
-                             </div>
                           </div>
                           </>
                        ) : (
@@ -3247,9 +3364,9 @@ const CourseCreationPage = () => {
                                                updateLessonField(module.id, lesson.id, { questions: newQ });
                                             }}
                                          >
-                                            <option value={QuestionType.MULTIPLE_CHOICE} style={{ backgroundColor: 'var(--cb-bg-secondary)', color: 'var(--cb-text-primary)' }}>Trắc nghiệm</option>
-                                            <option value={QuestionType.TRUE_FALSE} style={{ backgroundColor: 'var(--cb-bg-secondary)', color: 'var(--cb-text-primary)' }}>Đúng/Sai</option>
-                                            <option value={QuestionType.SHORT_ANSWER} style={{ backgroundColor: 'var(--cb-bg-secondary)', color: 'var(--cb-text-primary)' }}>Điền từ</option>
+                                            <option value={QuestionType.MULTIPLE_CHOICE}>Trắc nghiệm</option>
+                                            <option value={QuestionType.TRUE_FALSE}>Đúng/Sai</option>
+                                            <option value={QuestionType.SHORT_ANSWER}>Điền từ</option>
                                          </select>
                                          <button 
                                             className="cb-icon-button cb-icon-button--danger"
@@ -3414,8 +3531,11 @@ const CourseCreationPage = () => {
     return <div className="cb-empty-state">Chọn một mục để chỉnh sửa</div>;
   };
 
+  // Inject read-only CSS once on mount
+  useEffect(() => { ensureReadOnlyStyles(); }, []);
+
   return (
-    <div className="cb-page">
+    <div className={`cb-page${!isEditable ? ' cb-readonly' : ''}`}>
       {!isEditable && (
          <div className="cb-banner-warning">
             <FiAlertTriangle size={20} />

@@ -13,6 +13,7 @@ import {
   Ticket,
   Settings,
   Brain,
+  Bot,
   MessageSquare,
   Briefcase,
   Shirt,
@@ -174,6 +175,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           id: "ai-experts",
           label: "AI Experts",
           icon: Brain,
+          allowedRoles: ["AI_ADMIN", "ADMIN"],
+        },
+        {
+          id: "ai-grading",
+          label: "AI Grading",
+          icon: Bot,
           allowedRoles: ["AI_ADMIN", "ADMIN"],
         },
         {

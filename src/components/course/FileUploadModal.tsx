@@ -122,9 +122,11 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({
   };
   
   const getHint = () => {
-    return type === 'video' 
-      ? 'Tối đa 300MB • MP4, WebM, MOV, AVI'
-      : 'Tối đa 20MB • PDF, DOCX, PPTX';
+    // Cloudinary Free Tier: video max 100MB, raw/doc max 10MB
+    // NOTE: If upgrading to Cloudinary Plus plan, video can be increased to 2GB
+    return type === 'video'
+      ? 'Tối đa 100MB • MP4, WebM, MOV, AVI'
+      : 'Tối đa 10MB • PDF, DOCX, PPTX';
   };
   
   return (

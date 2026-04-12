@@ -1,4 +1,4 @@
-import { CourseDetailDTO, CourseLevel } from "../../data/courseDTOs";
+import { CourseDetailDTO, CourseLevel, ModuleSummaryDTO } from "../../data/courseDTOs";
 import { EnrollmentDetailDTO } from "../../data/enrollmentDTOs";
 import {
   DifficultyLevel,
@@ -38,6 +38,10 @@ export type NodeLearningContext = {
   primaryCourseProgressPercent: number | null;
   primaryCourseCompleted: boolean;
   hasContentGap: boolean;
+  /** Phase 2: Modules suggested for this node, keyed by moduleId string. */
+  suggestedModules: Record<string, ModuleSummaryDTO>;
+  /** Ordered list of suggested modules matching the order in suggestedModuleIds. */
+  suggestedModulesOrdered: ModuleSummaryDTO[];
 };
 
 type BuildNodeLearningContextParams = {
@@ -47,6 +51,8 @@ type BuildNodeLearningContextParams = {
   childNodes?: RoadmapNode[];
   mappedCourses?: CourseDetailDTO[];
   enrollmentByCourseId?: Record<string, EnrollmentDetailDTO | null>;
+  /** Phase 2: Modules mapped for the current node (from useRoadmapMappedModules). */
+  mappedModules?: Record<string, ModuleSummaryDTO>;
 };
 
 const roundToNearestFive = (value: number): number =>
@@ -277,6 +283,7 @@ export const buildNodeLearningContext = ({
   childNodes = [],
   mappedCourses = [],
   enrollmentByCourseId = {},
+  mappedModules = {},
 }: BuildNodeLearningContextParams): NodeLearningContext => {
   const { primaryCourse, supportingCourses } = resolvePrimaryAndSupportingCourses(
     node,
@@ -337,6 +344,12 @@ export const buildNodeLearningContext = ({
       ? "Meowl fallback"
       : "Meowl + nội dung node";
 
+  // Phase 2: Build ordered suggested modules list preserving suggestedModuleIds order
+  const suggestedModulesOrdered =
+    (node.suggestedModuleIds ?? [])
+      .map((id) => mappedModules[String(id)])
+      .filter((m): m is ModuleSummaryDTO => Boolean(m));
+
   return {
     node,
     parentNode,
@@ -356,5 +369,7 @@ export const buildNodeLearningContext = ({
     primaryCourseProgressPercent,
     primaryCourseCompleted,
     hasContentGap: coverageLevel === "none",
+    suggestedModules: mappedModules,
+    suggestedModulesOrdered,
   };
 };

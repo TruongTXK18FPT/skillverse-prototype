@@ -44,6 +44,7 @@ type StatusFilterTab = 'ALL' | 'PENDING' | 'PUBLIC' | 'REJECTED' | 'SUSPENDED';
 type RevisionCourseMeta = {
   title: string;
   authorName: string;
+  thumbnailUrl?: string;
 };
 
 const STATUS_TAB_CONFIG: { key: StatusFilterTab; label: string; icon: React.ReactNode }[] = [
@@ -152,7 +153,8 @@ export const CourseApprovalTabCosmic: React.FC = () => {
               courseId,
               {
                 title: course.title || `Course #${courseId}`,
-                authorName: course.authorName || 'N/A'
+                authorName: course.authorName || 'N/A',
+                thumbnailUrl: course.thumbnailUrl
               }
             ] as const;
           } catch {
@@ -160,7 +162,8 @@ export const CourseApprovalTabCosmic: React.FC = () => {
               courseId,
               {
                 title: `Course #${courseId}`,
-                authorName: 'N/A'
+                authorName: 'N/A',
+                thumbnailUrl: undefined
               }
             ] as const;
           }
@@ -595,25 +598,39 @@ export const CourseApprovalTabCosmic: React.FC = () => {
             <table className="cosmic-table cosmic-revision-table">
               <thead>
                 <tr>
+                  <th>STT</th>
                   <th>Revision</th>
                   <th>Khóa Học</th>
                   <th>Giảng Viên</th>
                   <th>Cấp độ</th>
+                  <th>Trạng thái</th>
+                  <th>Ngày tạo</th>
                   <th>Ngày Submitted</th>
                   <th>Hành Động</th>
                 </tr>
               </thead>
               <tbody>
-                {revisionQueue.map((revision) => {
+                {revisionQueue.map((revision, index) => {
                   const courseMeta = revisionCourseMeta[revision.courseId];
                   const approvedResult = revisionApproveResults[revision.id];
                   return (
                     <tr key={revision.id}>
+                      <td className="cosmic-stt-cell">{index + 1}</td>
                       <td>
-                        <div className="cosmic-revision-cell-main">Rev #{revision.revisionNumber}</div>
-                        <div className="cosmic-revision-cell-sub">ID: {revision.id}</div>
+                        <div className="cosmic-revision-cell-main">Rev #{index + 1}</div>
                       </td>
-                      <td>{courseMeta?.title || revision.title || `Course #${revision.courseId}`}</td>
+                      <td>
+                        <div className="cosmic-course-info">
+                          <div className="cosmic-course-thumbnail">
+                            {courseMeta?.thumbnailUrl ? (
+                              <img src={courseMeta.thumbnailUrl} alt="" />
+                            ) : (
+                              <BookOpen size={20} />
+                            )}
+                          </div>
+                          <span>{courseMeta?.title || revision.title || `Course #${revision.courseId}`}</span>
+                        </div>
+                      </td>
                       <td>
                         <div className="cosmic-instructor-info">
                           <User size={16} />
@@ -622,6 +639,17 @@ export const CourseApprovalTabCosmic: React.FC = () => {
                       </td>
                       <td>
                         <span className="cosmic-category-badge">{revision.level || 'N/A'}</span>
+                      </td>
+                      <td>
+                        <span className={`cosmic-status-badge ${revision.status?.toLowerCase() ?? 'draft'}`}>
+                          {getStatusLabel(revision.status)}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="cosmic-date-info">
+                          <Calendar size={16} />
+                          <span>{revision.createdAt ? formatDate(revision.createdAt) : 'N/A'}</span>
+                        </div>
                       </td>
                       <td>
                         <div className="cosmic-date-info">
@@ -707,6 +735,7 @@ export const CourseApprovalTabCosmic: React.FC = () => {
           <table className="cosmic-table">
             <thead>
               <tr>
+                <th>STT</th>
                 <th>Khóa Học</th>
                 <th>Giảng Viên</th>
                 <th>Cấp độ</th>
@@ -717,8 +746,9 @@ export const CourseApprovalTabCosmic: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {courses.map((course) => (
+              {courses.map((course, index) => (
                 <tr key={course.id}>
+                  <td className="cosmic-stt-cell">{index + 1}</td>
                   <td>
                     <div className="cosmic-course-info">
                       <div className="cosmic-course-thumbnail">

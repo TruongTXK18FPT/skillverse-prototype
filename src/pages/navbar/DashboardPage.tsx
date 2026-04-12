@@ -447,73 +447,99 @@ const DashboardPage = () => {
           // Fetch details for each course to get title, thumbnail, etc.
           const coursesPromises = enrollments.content.map(
             async (enrollment) => {
+              const [progressData, groupData] = await Promise.all([
+                getCourseLearningStatus(enrollment.courseId).catch(() => null),
+                getGroupByCourse(enrollment.courseId, user.id).catch(() => null),
+              ]);
+
+              const fallbackThumbnail =
+                "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=200";
+              const progressPercent =
+                progressData?.percent ?? enrollment.progressPercent ?? 0;
+              const totalLessons = progressData?.totalLessonCount || 0;
+              const completedLessons = progressData?.completedLessonCount || 0;
+
+              let courseData: any = null;
               try {
-                const [courseData, progressData, groupData] = await Promise.all([
-                  getCourse(enrollment.courseId),
-                  getCourseLearningStatus(enrollment.courseId).catch(() => null),
-                  getGroupByCourse(enrollment.courseId, user.id).catch(
-                    () => null,
-                  ),
-                ]);
+                courseData = await getCourse(enrollment.courseId);
+              } catch (error) {
+                console.warn(
+                  `Course detail unavailable for enrolled course ${enrollment.courseId}. Rendering fallback card.`,
+                  error,
+                );
+              }
 
-                // Use actual lesson counts if available from progress service
-                const totalLessons = progressData?.totalLessonCount || 0;
-                const completedLessons = progressData?.completedLessonCount || 0;
-
-                // Determine next lesson or item name
-                let nextLessonLabel = "Continue Learning";
-                if (progressData) {
-                  if (progressData.percent === 100) {
-                    nextLessonLabel = "Course Completed";
-                  } else {
-                    // Try to find the first uncompleted lesson in the module structure
-                    const allItems: any[] = [];
-                    courseData.modules?.forEach((m: any) => {
-                      m.lessons?.forEach((l: any) => allItems.push({ ...l, type: 'lesson' }));
-                    });
-
-                    const firstUncompleted = allItems.find(item => 
-                      !progressData.completedLessonIds.includes(item.id)
-                    );
-                    
-                    if (firstUncompleted) {
-                      nextLessonLabel = firstUncompleted.title;
-                    }
-                  }
-                }
+              if (!courseData) {
+                const fallbackNextLesson =
+                  progressPercent >= 100
+                    ? "Course Completed"
+                    : progressPercent > 0
+                      ? "Continue Learning"
+                      : "Start Learning";
 
                 return {
-                  id: courseData.id,
-                  title: courseData.title,
-                  progress: progressData?.percent ?? enrollment.progressPercent ?? 0,
-                  totalLessons: totalLessons,
-                  completedLessons: completedLessons,
-                  instructor:
-                    courseData.author?.fullName || "Unknown Instructor",
-                  thumbnail:
-                    courseData.thumbnailUrl ||
-                    "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=200", // Fallback image
+                  id: enrollment.courseId,
+                  title:
+                    enrollment.courseTitle?.trim() ||
+                    `Khóa học #${enrollment.courseId}`,
+                  progress: progressPercent,
+                  totalLessons,
+                  completedLessons,
+                  instructor: "Đang cập nhật",
+                  thumbnail: fallbackThumbnail,
                   lastAccessed: enrollment.enrolledAt || "Recently",
-                  nextLesson: nextLessonLabel,
-                  estimatedTime: courseData.estimatedDurationHours
-                    ? `${courseData.estimatedDurationHours} hours`
-                    : "N/A",
-                  rawDuration: courseData.estimatedDurationHours ? courseData.estimatedDurationHours * 60 : 0,
+                  nextLesson: fallbackNextLesson,
+                  estimatedTime: "N/A",
+                  rawDuration: 0,
                   group: groupData,
                 };
-              } catch (e) {
-                console.error(
-                  `Failed to fetch details for course ${enrollment.courseId}`,
-                  e,
-                );
-                return null;
               }
+
+              // Determine next lesson or item name when course detail is available.
+              let nextLessonLabel = "Continue Learning";
+              if (progressData) {
+                if (progressData.percent === 100) {
+                  nextLessonLabel = "Course Completed";
+                } else {
+                  const allItems: any[] = [];
+                  courseData.modules?.forEach((module: any) => {
+                    module.lessons?.forEach((lesson: any) =>
+                      allItems.push({ ...lesson, type: "lesson" }),
+                    );
+                  });
+
+                  const firstUncompleted = allItems.find(
+                    (item) => !progressData.completedLessonIds.includes(item.id),
+                  );
+
+                  if (firstUncompleted?.title) {
+                    nextLessonLabel = firstUncompleted.title;
+                  }
+                }
+              }
+
+              return {
+                id: courseData.id,
+                title: courseData.title,
+                progress: progressPercent,
+                totalLessons,
+                completedLessons,
+                instructor: courseData.author?.fullName || "Unknown Instructor",
+                thumbnail: courseData.thumbnailUrl || fallbackThumbnail,
+                lastAccessed: enrollment.enrolledAt || "Recently",
+                nextLesson: nextLessonLabel,
+                estimatedTime: courseData.estimatedDurationHours
+                  ? `${courseData.estimatedDurationHours} hours`
+                  : "N/A",
+                rawDuration: courseData.estimatedDurationHours
+                  ? courseData.estimatedDurationHours * 60
+                  : 0,
+                group: groupData,
+              };
             },
           );
 
-          const courses = (await Promise.all(coursesPromises)).filter(
-            (c) => c !== null,
-          );
+          const courses = await Promise.all(coursesPromises);
           setEnrolledCourses(courses);
 
           // Calculate stats

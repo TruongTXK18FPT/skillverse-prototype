@@ -58,7 +58,6 @@ export interface LessonDraft {
   cooldownHours?: number;
   quizDescription?: string;
   gradingMethod?: string;
-  isAssessment?: boolean;
   questions?: QuizQuestionDraft[];
   // Assignment fields
   assignmentSubmissionType?: SubmissionType;

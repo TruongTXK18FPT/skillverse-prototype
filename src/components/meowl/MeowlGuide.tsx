@@ -19,6 +19,7 @@ interface GuideStep {
 }
 
 interface RoadmapContextData {
+  roadmapId: number;
   roadmapTitle: string;
   nodeTitle: string;
   nodeDescription?: string;

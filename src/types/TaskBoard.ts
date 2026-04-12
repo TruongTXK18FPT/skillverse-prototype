@@ -19,6 +19,8 @@ export interface TaskResponse {
   userNotes?: string;
   columnId: string;
   linkedSessionIds?: string[];
+  /** Soft-delete flag — true if task was archived (hidden from board). */
+  archived?: boolean;
 }
 
 export interface TaskColumnResponse {

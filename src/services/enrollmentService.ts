@@ -274,3 +274,40 @@ export const getEnrollmentProgress = async (
     };
   }
 };
+
+/**
+ * Get enrollments for a user across multiple courses in one query.
+ * Used by useRoadmapCourseEnrollments to replace pagination-based approach.
+ * GET /api/enrollments/user/{userId}/batch?courseIds=1,2,3
+ */
+export const getEnrollmentsByCourseIds = async (
+  userId: number,
+  courseIds: Array<number | string>,
+): Promise<EnrollmentDetailDTO[]> => {
+  if (!courseIds || courseIds.length === 0) {
+    return [];
+  }
+
+  const normalized = Array.from(
+    new Set(
+      courseIds
+        .map((id) => Number(id))
+        .filter((id) => Number.isFinite(id) && id > 0),
+    ),
+  );
+
+  if (normalized.length === 0) {
+    return [];
+  }
+
+  try {
+    const response = await axiosInstance.get<EnrollmentDetailDTO[]>(
+      `/enrollments/user/${userId}/batch`,
+      { params: { courseIds: normalized.join(",") } },
+    );
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error("Failed to fetch batch enrollments:", error);
+    return [];
+  }
+};

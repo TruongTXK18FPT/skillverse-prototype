@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  FileText, 
-  Clock, 
-  AlertCircle, 
+import {
+  FileText,
+  Clock,
+  AlertCircle,
   CheckCircle,
   CheckSquare,
   Eye,
   Search,
-  User
+  User,
+  ChevronDown,
+  ChevronRight,
+  BookOpen
 } from 'lucide-react';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import { useAuth } from '../../context/AuthContext';
@@ -61,6 +64,71 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ onPendi
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const itemsPerPage = 10;
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
+  const [groupsReady, setGroupsReady] = useState(false);
+
+  const STORAGE_KEY = user ? `mentor-grading-collapsed-${user.id}` : null;
+
+  // Load persisted accordion state from localStorage on mount
+  useEffect(() => {
+    if (!groupsReady && submissions.length > 0) {
+      let initialCollapsed: Set<string>;
+      if (STORAGE_KEY) {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            initialCollapsed = new Set(JSON.parse(stored) as string[]);
+            // Ensure only existing group keys are kept
+            initialCollapsed = new Set(
+              [...initialCollapsed].filter(k => k in groupedSubmissions)
+            );
+          } else {
+            initialCollapsed = new Set(Object.keys(groupedSubmissions));
+          }
+        } catch {
+          initialCollapsed = new Set(Object.keys(groupedSubmissions));
+        }
+      } else {
+        initialCollapsed = new Set(Object.keys(groupedSubmissions));
+      }
+      setCollapsedGroups(initialCollapsed);
+      setGroupsReady(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groupsReady, submissions.length]);
+
+  // Persist accordion state to localStorage whenever it changes
+  useEffect(() => {
+    if (groupsReady && STORAGE_KEY) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...collapsedGroups]));
+      } catch {
+        // localStorage not available or quota exceeded — ignore
+      }
+    }
+  }, [collapsedGroups, groupsReady, STORAGE_KEY]);
+
+  // Auto-collapse groups that have no matching items when filter changes
+  useEffect(() => {
+    if (!groupsReady || submissions.length === 0) return;
+    const groupKeys = Object.keys(groupedSubmissions);
+    if (groupKeys.length === 0) return;
+
+    // Determine which groups have no items matching the current filter
+    const emptyGroups = groupKeys.filter(moduleKey => {
+      const group = groupedSubmissions[moduleKey];
+      return Object.values(group.assignments).every(asg =>
+        asg.items.length === 0
+      );
+    });
+
+    setCollapsedGroups(prev => {
+      const next = new Set(prev);
+      emptyGroups.forEach(k => next.add(k));
+      return next;
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeFilter, debouncedSearch, submissions.length]);
 
   const loadMentorSubmissions = async () => {
     if (!user) return;
@@ -138,6 +206,56 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ onPendi
   const gradedCount = stats.gradedCount;
   const lateCount = stats.lateCount;
   const visibleSubmissions = submissions;
+
+  // Group submissions by module -> assignment for collapsible display
+  const groupedSubmissions = useMemo(() => {
+    const groups: Record<string, {
+      moduleName: string;
+      moduleId: number;
+      courseName: string;
+      courseId: number;
+      assignments: Record<number, {
+        assignmentName: string;
+        assignmentDueAt?: string;
+        items: typeof submissions;
+      }>;
+    }> = {};
+
+    for (const item of visibleSubmissions) {
+      const moduleKey = `${item.courseId}-${item.moduleId}`;
+      if (!groups[moduleKey]) {
+        groups[moduleKey] = {
+          moduleName: item.moduleName,
+          moduleId: item.moduleId,
+          courseName: item.courseName,
+          courseId: item.courseId,
+          assignments: {},
+        };
+      }
+      const asgKey = `${item.submission.assignmentId}`;
+      if (!groups[moduleKey].assignments[asgKey]) {
+        groups[moduleKey].assignments[asgKey] = {
+          assignmentName: item.assignmentName,
+          assignmentDueAt: item.assignmentDueAt,
+          items: [],
+        };
+      }
+      groups[moduleKey].assignments[asgKey].items.push(item);
+    }
+    return groups;
+  }, [visibleSubmissions]);
+
+  const toggleGroup = (key: string) => {
+    setCollapsedGroups(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  };
 
   if (loading) {
     return (
@@ -286,106 +404,164 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ onPendi
 
       <div className="mentor-grading-table">
         {visibleSubmissions.length === 0 ? (
-          <div className="mentor-grading-filter-empty">
-            <CheckCircle className="w-10 h-10" />
-            <h3>{emptyStateByFilter.title}</h3>
-            <p>{emptyStateByFilter.description}</p>
+          <div className="mentor-grading-table">
+            <div className="mentor-grading-filter-empty">
+              <CheckCircle className="w-10 h-10" />
+              <h3>{emptyStateByFilter.title}</h3>
+              <p>{emptyStateByFilter.description}</p>
+            </div>
           </div>
         ) : (
-        <table className="mentor-submissions-table">
-          <thead>
-            <tr>
-              <th>Học viên</th>
-              <th>Khóa học</th>
-              <th>Module</th>
-              <th>Bài tập</th>
-              <th>Ngày nộp</th>
-              <th>Trạng thái</th>
-              <th>Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            {visibleSubmissions.map(({ submission, courseName, courseId, moduleId, moduleName, assignmentName, assignmentDueAt }) => (
-              <tr key={submission.id}>
-                <td>
-                  <div className="student-info">
-                    <span className="student-name">{resolveLearnerName(submission.userName, submission.userId)}</span>
-                  </div>
-                </td>
-                <td>
-                  <span className="course-name">{courseName}</span>
-                </td>
-                <td>
-                  <span className="module-name">{moduleName}</span>
-                </td>
-                <td>
-                  <span className="assignment-name">{assignmentName}</span>
-                </td>
-                <td>
-                  <span className="submission-date">
-                    {new Date(submission.submittedAt).toLocaleDateString('vi-VN', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
-                </td>
-                <td>
-                  <div className="submission-status-stack">
-                    <span className={`submission-status ${submission.status === SubmissionStatus.GRADED ? 'graded' : 'pending'}`}>
-                      {submission.status === SubmissionStatus.GRADED ? (
-                        <>
-                          <CheckSquare className="w-4 h-4" />
-                          {getWorkflowLabel(submission.status)}
-                        </>
-                      ) : (
-                        <>
-                          <AlertCircle className="w-4 h-4" />
-                          {getWorkflowLabel(submission.status)}
-                        </>
-                      )}
-                    </span>
-                    {assignmentDueAt && (
-                      <span className={`submission-timing ${submission.isLate ? 'late' : 'on-time'}`}>
-                        <Clock className="w-4 h-4" />
-                        {submission.isLate ? 'Nộp muộn' : 'Trong hạn'}
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td>
-                  <button
-                    className={`mentor-grade-btn ${submission.status !== SubmissionStatus.GRADED ? 'mentor-grade-btn--primary' : ''}`}
-                    onClick={() => navigate(`/mentor/assignments/${submission.assignmentId}/grade`, {
-                      state: {
-                        courseName,
-                        courseId,
-                        moduleName,
-                        moduleId,
-                        assignmentName,
-                        fromGradingDashboard: true
-                      }
-                    })}
+          <div className="grading-group-list">
+            {Object.entries(groupedSubmissions).map(([moduleKey, group]) => {
+              const modulePending = Object.values(group.assignments).reduce(
+                (sum, a) => sum + a.items.filter(i => i.submission.status !== SubmissionStatus.GRADED).length, 0
+              );
+              const moduleGraded = Object.values(group.assignments).reduce(
+                (sum, a) => sum + a.items.filter(i => i.submission.status === SubmissionStatus.GRADED).length, 0
+              );
+              const totalAssignments = Object.keys(group.assignments).length;
+              const isCollapsed = collapsedGroups.has(moduleKey);
+              const allAssignments = Object.entries(group.assignments);
+
+              return (
+                <div key={moduleKey} className="grading-group">
+                  {/* Module header — collapsible */}
+                  <div
+                    className={`grading-group__header ${isCollapsed ? 'grading-group__header--collapsed' : ''}`}
+                    onClick={() => toggleGroup(moduleKey)}
                   >
-                    {submission.status === SubmissionStatus.GRADED ? (
-                      <>
-                        <Eye className="w-4 h-4" />
-                        Xem / chấm lại
-                      </>
-                    ) : (
-                      <>
-                        <FileText className="w-4 h-4" />
-                        Mở khung chấm
-                      </>
-                    )}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    <div className="grading-group__header-left">
+                      {isCollapsed
+                        ? <ChevronRight size={18} />
+                        : <ChevronDown size={18} />}
+                      <BookOpen size={16} className="grading-group__icon" />
+                      <span className="grading-group__module-name">{group.moduleName}</span>
+                      <span className="grading-group__course-name">{group.courseName}</span>
+                    </div>
+                    <div className="grading-group__header-right">
+                      {modulePending > 0 && (
+                        <span className="grading-group-badge grading-group-badge--pending">
+                          {modulePending} chờ chấm
+                        </span>
+                      )}
+                      {moduleGraded > 0 && (
+                        <span className="grading-group-badge grading-group-badge--graded">
+                          {moduleGraded} đã chấm
+                        </span>
+                      )}
+                      <span className="grading-group-meta">
+                        {totalAssignments} bài tập · {Object.values(group.assignments).reduce((s, a) => s + a.items.length, 0)} bài nộp
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Assignment rows — hidden when collapsed */}
+                  {!isCollapsed && allAssignments.map(([asgKey, asgData]) => {
+                    const asgPending = asgData.items.filter(i => i.submission.status !== SubmissionStatus.GRADED).length;
+                    const asgGraded = asgData.items.filter(i => i.submission.status === SubmissionStatus.GRADED).length;
+                    return (
+                      <div key={asgKey} className="grading-assignment-row">
+                        <div className="grading-assignment-row__header">
+                          <FileText size={14} className="grading-assignment-row__icon" />
+                          <span className="grading-assignment-row__name">{asgData.assignmentName}</span>
+                          {asgPending > 0 && (
+                            <span className="grading-group-badge grading-group-badge--pending">{asgPending} chờ</span>
+                          )}
+                          {asgGraded > 0 && (
+                            <span className="grading-group-badge grading-group-badge--graded">{asgGraded} đã</span>
+                          )}
+                          <span className="grading-assignment-row__count">{asgData.items.length} bài nộp</span>
+                        </div>
+                        <table className="mentor-submissions-table grading-assignment-table">
+                          <thead>
+                            <tr>
+                              <th>Học viên</th>
+                              <th>Ngày nộp</th>
+                              <th>Trạng thái</th>
+                              <th>Thao tác</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {asgData.items.map((item) => (
+                              <tr key={item.submission.id}>
+                                <td>
+                                  <div className="student-info">
+                                    <span className="student-name">{resolveLearnerName(item.submission.userName, item.submission.userId)}</span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <span className="submission-date">
+                                    {new Date(item.submission.submittedAt).toLocaleDateString('vi-VN', {
+                                      day: '2-digit',
+                                      month: '2-digit',
+                                      year: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit'
+                                    })}
+                                  </span>
+                                </td>
+                                <td>
+                                  <div className="submission-status-stack">
+                                    <span className={`submission-status ${item.submission.status === SubmissionStatus.GRADED ? 'graded' : 'pending'}`}>
+                                      {item.submission.status === SubmissionStatus.GRADED ? (
+                                        <>
+                                          <CheckSquare className="w-4 h-4" />
+                                          {getWorkflowLabel(item.submission.status)}
+                                        </>
+                                      ) : (
+                                        <>
+                                          <AlertCircle className="w-4 h-4" />
+                                          {getWorkflowLabel(item.submission.status)}
+                                        </>
+                                      )}
+                                    </span>
+                                    {item.assignmentDueAt && (
+                                      <span className={`submission-timing ${item.submission.isLate ? 'late' : 'on-time'}`}>
+                                        <Clock className="w-4 h-4" />
+                                        {item.submission.isLate ? 'Nộp muộn' : 'Trong hạn'}
+                                      </span>
+                                    )}
+                                  </div>
+                                </td>
+                                <td>
+                                  <button
+                                    className={`mentor-grade-btn ${item.submission.status !== SubmissionStatus.GRADED ? 'mentor-grade-btn--primary' : ''}`}
+                                    onClick={() => navigate(`/mentor/assignments/${item.submission.assignmentId}/grade`, {
+                                      state: {
+                                        courseName: item.courseName,
+                                        courseId: item.courseId,
+                                        moduleName: item.moduleName,
+                                        moduleId: item.moduleId,
+                                        assignmentName: item.assignmentName,
+                                        fromGradingDashboard: true
+                                      }
+                                    })}
+                                  >
+                                    {item.submission.status === SubmissionStatus.GRADED ? (
+                                      <>
+                                        <Eye className="w-4 h-4" />
+                                        Xem / chấm lại
+                                      </>
+                                    ) : (
+                                      <>
+                                        <FileText className="w-4 h-4" />
+                                        Mở khung chấm
+                                      </>
+                                    )}
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
         )}
       </div>
       {totalItems > 0 && (

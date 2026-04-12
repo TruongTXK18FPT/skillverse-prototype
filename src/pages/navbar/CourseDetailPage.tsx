@@ -52,6 +52,8 @@ interface CourseDetailReturnState {
   fromSearch?: string;
   fromHash?: string;
   fromLabel?: string;
+  selectedNodeId?: string;
+  roadmapTitle?: string;
 }
 
 // Local helpers
@@ -92,6 +94,8 @@ const CourseDetailPage = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [groupChat, setGroupChat] = useState<GroupChatResponse | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  // Gap 2 fix: detect if user came from a roadmap node
+  const [comingFromRoadmap, setComingFromRoadmap] = useState<{ title?: string; nodeId?: string } | null>(null);
 
   const isPreviewMode = location.pathname.includes('/preview');
   const isCoursePublic = course?.status === CourseStatus.PUBLIC;
@@ -114,9 +118,21 @@ const CourseDetailPage = () => {
       fromSearch: routeState.fromSearch ?? '',
       fromHash: routeState.fromHash ?? '',
       fromLabel: routeState.fromLabel ?? 'danh sách khóa học',
+      selectedNodeId: routeState.selectedNodeId,
+      roadmapTitle: routeState.roadmapTitle,
     };
     sessionStorage.setItem(detailReturnStorageKey, JSON.stringify(payload));
   }, [courseId, detailReturnStorageKey, id, routeState?.fromHash, routeState?.fromLabel, routeState?.fromPath, routeState?.fromSearch]);
+
+  // Gap 2 fix: detect if user arrived from a roadmap node
+  useEffect(() => {
+    if (routeState?.fromLabel === 'roadmap chi tiet' && routeState.roadmapTitle) {
+      setComingFromRoadmap({
+        title: routeState.roadmapTitle,
+        nodeId: routeState.selectedNodeId,
+      });
+    }
+  }, [routeState]);
 
   const resolveDetailReturnTarget = () => {
     const isValidPath = (value?: string) => typeof value === 'string' && value.startsWith('/') && value !== location.pathname;
@@ -549,6 +565,22 @@ const CourseDetailPage = () => {
             )}
           </div>
         </div>
+
+        {/* Gap 2 fix: show roadmap context banner when user arrived from a roadmap node */}
+        {comingFromRoadmap && (
+          <div className="cockpit-detail-status-banner cockpit-detail-status-banner--roadmap">
+            <div className="cockpit-detail-status-banner-title">Từ lộ trình học tập</div>
+            <p className="cockpit-detail-status-banner-text">
+              {comingFromRoadmap.title}
+              {comingFromRoadmap.nodeId && (
+                <> — Node <code className="cockpit-detail-status-banner-code">{comingFromRoadmap.nodeId}</code></>
+              )}
+              {!isEnrolled && (
+                <> · Enroll khóa học này để học theo lộ trình</>
+              )}
+            </p>
+          </div>
+        )}
 
         {statusNotice && (
           <div className="cockpit-detail-status-banner">

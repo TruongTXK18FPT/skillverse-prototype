@@ -185,6 +185,11 @@
   background: rgba(127, 29, 29, 0.35);
 }
 
+.roadmap-list .roadmap-hud-action-btn--restore {
+  border-color: rgba(74, 222, 128, 0.5);
+  color: #bbf7d0;
+}
+
 .roadmap-list .roadmap-hud-action-btn:hover:not(:disabled) {
   transform: translateY(-1px);
   border-color: rgba(34, 211, 238, 0.7);

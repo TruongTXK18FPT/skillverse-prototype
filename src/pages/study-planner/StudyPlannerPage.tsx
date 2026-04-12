@@ -915,6 +915,7 @@ const StudyPlannerPage: React.FC = () => {
                     filterOptions={filterOptions}
                     selectedFilter={activeRoadmapFilter}
                     onFilterChange={setActiveRoadmapFilter}
+                    roadmapSessionId={roadmapSessionId ? Number(roadmapSessionId) : undefined}
                   />
                 )}
               </>

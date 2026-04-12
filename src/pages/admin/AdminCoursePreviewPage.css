@@ -227,6 +227,18 @@
   margin-top: 2px;
 }
 
+.acp-alert-warning {
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #fde047;
+}
+
+.acp-alert-warning svg {
+  color: #eab308;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 .acp-alert-date {
   font-size: 0.85rem;
   opacity: 0.7;
@@ -422,6 +434,51 @@
   line-height: 1.7;
   color: #cbd5e1;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  /* Ensure child block elements (div from rich HTML) don't overflow */
+  min-width: 0;
+}
+
+/* When .acp-description contains dangerouslySetInnerHTML HTML with divs/spans,
+   force consistent base styles so block elements don't escape container */
+.acp-description > div,
+.acp-description > span,
+.acp-description > p {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+/* Descendant — DOMPurify sanitize có thể tạo nested structure */
+.acp-description div,
+.acp-description span,
+.acp-description p {
+  max-width: 100% !important;
+  overflow-wrap: break-word !important;
+  word-break: break-all !important;
+  white-space: pre-wrap !important;
+}
+
+/* Inherit font for inline-styled elements inside description */
+.acp-description > div[style],
+.acp-description > span[style] {
+  font: inherit;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+/* Descendant inline-styled */
+.acp-description div[style],
+.acp-description span[style] {
+  font: inherit !important;
+  max-width: 100% !important;
+  overflow-wrap: break-word !important;
+  word-break: break-all !important;
+  white-space: pre-wrap !important;
 }
 
 .acp-text-dim {
@@ -467,6 +524,9 @@
   font-size: 0.85rem;
   color: #94a3b8;
   margin: 0.25rem 0 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
 }
 
 .acp-module-toggle {
@@ -581,6 +641,28 @@
   color: #94a3b8;
   margin: 0.5rem 0 0;
   line-height: 1.4;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
+  /* Override any block elements from rich HTML so they don't overflow */
+}
+.acp-content-item-desc > div,
+.acp-content-item-desc > span,
+.acp-content-item-desc > p {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+/* Descendant — DOMPurify sanitize có thể tạo nested structure */
+.acp-content-item-desc div,
+.acp-content-item-desc span,
+.acp-content-item-desc p {
+  max-width: 100% !important;
+  overflow-wrap: break-word !important;
+  word-break: break-all !important;
+  white-space: pre-wrap !important;
 }
 
 .acp-type-badge {
@@ -685,6 +767,73 @@
 .acp-reading-content::-webkit-scrollbar-thumb {
   background: rgba(99, 102, 241, 0.3);
   border-radius: 3px;
+}
+
+.acp-reading-content > *:first-child {
+  margin-top: 0;
+}
+
+.acp-reading-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.acp-reading-content p,
+.acp-reading-content ul,
+.acp-reading-content ol,
+.acp-reading-content pre,
+.acp-reading-content blockquote,
+.acp-reading-content table {
+  margin: 0 0 0.85rem;
+}
+
+.acp-reading-content ul,
+.acp-reading-content ol {
+  padding-left: 1.25rem;
+}
+
+.acp-reading-content li {
+  margin-bottom: 0.35rem;
+}
+
+.acp-reading-content a {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+.acp-reading-content a:hover {
+  color: #bfdbfe;
+}
+
+.acp-reading-content code {
+  font-family: 'Consolas', 'SFMono-Regular', Menlo, Monaco, monospace;
+  font-size: 0.82rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.65);
+  color: #bae6fd;
+}
+
+.acp-reading-content pre {
+  overflow-x: auto;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(2, 6, 23, 0.75);
+}
+
+.acp-reading-content pre code {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+.acp-reading-content blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0.6rem 0.9rem;
+  border-left: 3px solid rgba(103, 232, 249, 0.45);
+  background: rgba(8, 47, 73, 0.2);
+  color: #bae6fd;
 }
 
 .acp-reading-resource,
@@ -994,6 +1143,9 @@
 .acp-criteria-desc {
   color: #94a3b8;
   max-width: 300px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  vertical-align: top;
 }
 
 .acp-criteria-points {
@@ -1017,13 +1169,6 @@
   font-size: 0.82rem;
   color: #64748b;
   margin: 0;
-}
-
-/* Group title icon alignment */
-.acp-group-title {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
 }
 
 /* ==================== Bottom Action Bar ==================== */
@@ -1282,4 +1427,142 @@
   .acp-content-group {
     padding-left: 0.5rem;
   }
+}
+
+
+/* ─── Side-by-Side Compare Layout ──────────────────────────────────── */
+
+.acp-compare__wrapper {
+  margin: 0 2rem 2rem;
+}
+
+.acp-compare__layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.acp-compare__column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.acp-compare__column--left {
+  border-left: 3px solid rgba(6, 182, 212, 0.35);
+  padding-left: 1rem;
+}
+
+.acp-compare__column--right {
+  border-left: 3px solid rgba(99, 102, 241, 0.35);
+  padding-left: 1rem;
+}
+
+.acp-compare__column-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.acp-compare__column-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e0e7ff;
+}
+
+.acp-compare__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.acp-compare__section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.acp-compare__desc .acp-description {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Stats grid (compact, inside compare column) */
+.acp-compare__stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+/* Badge variants */
+.acp-compare__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.acp-compare__badge--live {
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #22d3ee;
+}
+
+.acp-compare__badge--revision {
+  background: rgba(250, 204, 21, 0.15);
+  border: 1px solid rgba(250, 204, 21, 0.3);
+  color: #fbbf24;
+}
+
+/* Module title row */
+.acp-module-title__content {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+/* ==================== Compare Toggle ==================== */
+.acp-compare-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.acp-toggle-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.acp-toggle-btn:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.acp-toggle-btn.active {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  border-color: rgba(99, 102, 241, 0.6);
 }

@@ -69,16 +69,18 @@ export const addAttachment = async (
  * List all attachments for a lesson
  */
 export const listAttachments = async (
-  lessonId: number
+  lessonId: number,
+  actorId: number
 ): Promise<LessonAttachmentDTO[]> => {
-  
-  
+
+
   try {
     const response = await axiosInstance.get<LessonAttachmentDTO[]>(
-      `/lessons/${lessonId}/attachments`
+      `/lessons/${lessonId}/attachments`,
+      { params: { actorId } }
     );
-    
-    
+
+
     return response.data;
   } catch (error: any) {
     console.error('[ATTACHMENT_LIST] Error:', error.response?.data || error.message);

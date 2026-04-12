@@ -26,6 +26,8 @@ import {
 } from '../../services/assignmentService';
 import { uploadMedia } from '../../services/mediaService';
 import { useAuth } from '../../context/AuthContext';
+import { downloadFile } from '../../utils/downloadFile';
+import { sanitizeHtml } from '../../utils/sanitizeHtml';
 import {
   getSubmissionTimingInfo,
   getSubmissionWorkflowLabel,
@@ -195,9 +197,8 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
       </div>
       <div className="learning-hud-submission-content">
         {submission.submissionText && (
-          <div className="learning-hud-submission-text">
-            {submission.submissionText}
-          </div>
+          <div className="learning-hud-submission-text"
+               dangerouslySetInnerHTML={{ __html: sanitizeHtml(submission.submissionText) }} />
         )}
         {submission.linkUrl && (
           <a
@@ -211,15 +212,16 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
           </a>
         )}
         {submission.fileMediaUrl && (
-          <a
-            href={submission.fileMediaUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => downloadFile(
+              `/api/assignments/submissions/${submission.id}/download`,
+              'bai_nop'
+            )}
             className="learning-hud-submission-file"
           >
             <Upload size={16} />
             View Uploaded File
-          </a>
+          </button>
         )}
         <div className="learning-hud-submission-meta">
           <span>Nộp lúc: {formatDate(submission.submittedAt)}</span>
@@ -340,7 +342,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
       {/* Description */}
       <div className="learning-hud-assignment-description">
         <h3>Yêu cầu bài tập</h3>
-        <div dangerouslySetInnerHTML={{ __html: assignment.description }} />
+        <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(assignment.description) }} />
       </div>
 
       {/* Rubric Preview — show grading criteria before submission */}

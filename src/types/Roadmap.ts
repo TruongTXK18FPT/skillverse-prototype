@@ -69,6 +69,8 @@ export interface RoadmapNode {
   isCore?: boolean;
   parentId?: string | null;
   suggestedCourseIds?: string[];
+  /** Phase 2: Module IDs suggested for this node (from MultiLevelCourseMatcher). */
+  suggestedModuleIds?: string[];
   nodeStatus?: RoadmapNodeAvailability | string;
   difficulty?: DifficultyLevel | string;
   

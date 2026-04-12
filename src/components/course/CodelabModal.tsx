@@ -1,3 +1,9 @@
+/**
+ * CODELAB_LEGACY: This component is deprecated.
+ * The underlying /coding-exercises API endpoints do not exist in the backend (which uses /api/codelabs).
+ * No code execution engine is integrated.
+ * @deprecated since 2026-04-08 — will be removed in a future release
+ */
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Code, Eye, EyeOff, GripVertical } from 'lucide-react';
 import {

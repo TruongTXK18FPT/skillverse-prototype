@@ -27,7 +27,6 @@ export interface CurriculumItemUpsertDTO {
   timeLimitMinutes?: number;
   roundingIncrement?: number;
   gradingMethod?: QuizGradingMethod;
-  isAssessment?: boolean;
   cooldownHours?: number;
   questions?: QuizQuestionCreateDTO[];
 

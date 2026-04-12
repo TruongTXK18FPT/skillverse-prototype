@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { BookOpen, Clock, Target, ChevronRight, PlayCircle, PauseCircle, Trash2, Skull } from 'lucide-react';
+import { BookOpen, Clock, Target, ChevronRight, PlayCircle, PauseCircle, Trash2, Skull, RotateCcw } from 'lucide-react';
 import { RoadmapSessionSummary } from '../../types/Roadmap';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import './RoadmapList.css';
@@ -17,11 +17,16 @@ interface RoadmapListProps {
   onPauseRoadmap?: (sessionId: number) => void;
   onDeleteRoadmap?: (sessionId: number) => void;
   onPermanentDeleteRoadmap?: (sessionId: number) => void;
+  onRestoreRoadmap?: (sessionId: number) => void;
   actionLoadingId?: number | null;
   disableCardSelection?: boolean;
   hideEmptyCreateButton?: boolean;
   emptyTitle?: string;
   emptyDescription?: string;
+  /** Total count of non-deleted roadmaps (active + paused) for disable logic */
+  totalRoadmapCount?: number;
+  /** Called before navigation; return false to block navigation (e.g., PAUSED roadmap) */
+  onNavigateRoadmap?: (sessionId: number, status: RoadmapLifecycleStatus) => boolean;
 }
 
 type RoadmapLifecycleStatus = 'ACTIVE' | 'PAUSED' | 'DELETED';
@@ -44,33 +49,45 @@ const ROADMAP_STATUS_LABEL: Record<RoadmapLifecycleStatus, string> = {
  * Optimized roadmap list component with virtualization support
  * Memoized to prevent unnecessary re-renders
  */
-const RoadmapList = memo(({ 
-  roadmaps, 
-  displayMode, 
-  onSelectRoadmap, 
-  isLoading, 
-  isAuthenticated, 
+const RoadmapList = memo(({
+  roadmaps,
+  displayMode,
+  onSelectRoadmap,
+  isLoading,
+  isAuthenticated,
   onLoginRedirect,
   onCreateRoadmap,
   onActivateRoadmap,
   onPauseRoadmap,
   onDeleteRoadmap,
   onPermanentDeleteRoadmap,
+  onRestoreRoadmap,
   actionLoadingId = null,
   disableCardSelection = false,
   hideEmptyCreateButton = false,
   emptyTitle,
   emptyDescription,
+  totalRoadmapCount,
+  onNavigateRoadmap,
 }: RoadmapListProps) => {
-  
+
   // Memoized roadmap card component
   const RoadmapCard = memo(({ roadmap }: { roadmap: RoadmapSessionSummary }) => {
+    const isOnlyRoadmap = (totalRoadmapCount ?? 0) <= 1;
     const status = normalizeRoadmapStatus(roadmap.status);
+
+    // Pause is disabled when: this is the only roadmap (active or paused) AND it's ACTIVE
+    // i.e., pausing would leave 0 active roadmaps
+    const shouldDisablePause = isOnlyRoadmap && status === 'ACTIVE';
+
     const isActionBusy = actionLoadingId === roadmap.sessionId;
     const isSelectable = !disableCardSelection;
 
     const handleSelect = () => {
       if (!isSelectable) {
+        return;
+      }
+      if (onNavigateRoadmap && !onNavigateRoadmap(roadmap.sessionId, status)) {
         return;
       }
       onSelectRoadmap(roadmap.sessionId);
@@ -170,7 +187,8 @@ const RoadmapList = memo(({
                   e.stopPropagation();
                   onPauseRoadmap(roadmap.sessionId);
                 }}
-                disabled={isActionBusy}
+                disabled={isOnlyRoadmap || isActionBusy}
+                title={isOnlyRoadmap ? 'Không thể tạm dừng roadmap cuối cùng' : undefined}
               >
                 <PauseCircle size={14} />
                 Tạm dừng
@@ -189,6 +207,21 @@ const RoadmapList = memo(({
               >
                 <Trash2 size={14} />
                 Xóa
+              </button>
+            )}
+
+            {status === 'DELETED' && onRestoreRoadmap && (
+              <button
+                className="roadmap-hud-action-btn roadmap-hud-action-btn--restore"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRestoreRoadmap(roadmap.sessionId);
+                }}
+                disabled={isActionBusy}
+              >
+                <RotateCcw size={14} />
+                Khôi phục
               </button>
             )}
 

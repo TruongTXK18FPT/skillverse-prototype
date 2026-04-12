@@ -11,6 +11,7 @@ import {
 } from '../../services/attachmentService';
 import { UploadResponse } from '../../services/fileUploadService';
 import { useAuth } from '../../context/AuthContext';
+import { downloadFile } from '../../utils/downloadFile';
 import './AttachmentManager.css';
 
 interface AttachmentManagerProps {
@@ -37,24 +38,55 @@ const AttachmentManager: React.FC<AttachmentManagerProps> = ({
   
   // Load attachments
   useEffect(() => {
+    let isDisposed = false;
+
     const loadData = async () => {
+      if (!lessonId) {
+        if (!isDisposed) {
+          setAttachments([]);
+          setError(null);
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (!user?.id) {
+        if (!isDisposed) {
+          setLoading(false);
+        }
+        return;
+      }
       
       setLoading(true);
+      setError(null);
       
       try {
-        const data = await listAttachments(lessonId);
+        const data = await listAttachments(lessonId, user.id);
+        if (isDisposed) {
+          return;
+        }
         setAttachments(data);
         
       } catch (err: any) {
+        if (isDisposed) {
+          return;
+        }
         console.error('[ATTACHMENT_MANAGER] Load error:', err);
+        setAttachments([]);
         setError('Không thể tải attachments');
       } finally {
-        setLoading(false);
+        if (!isDisposed) {
+          setLoading(false);
+        }
       }
     };
     
     loadData();
-  }, [lessonId]);
+
+    return () => {
+      isDisposed = true;
+    };
+  }, [lessonId, user?.id]);
   
   
   const handleUploadSuccess = async (result: UploadResponse) => {
@@ -71,7 +103,8 @@ const AttachmentManager: React.FC<AttachmentManagerProps> = ({
       };
       
       const newAttachment = await addAttachment(lessonId, request, user.id);
-      setAttachments([...attachments, newAttachment]);
+      setError(null);
+      setAttachments((prev) => [...prev, newAttachment]);
       
     } catch (err: any) {
       console.error('[ATTACHMENT_MANAGER] Add error:', err);
@@ -86,7 +119,8 @@ const AttachmentManager: React.FC<AttachmentManagerProps> = ({
     
     try {
       await deleteAttachment(lessonId, attachmentId, user.id);
-      setAttachments(attachments.filter(a => a.id !== attachmentId));
+      setError(null);
+      setAttachments((prev) => prev.filter((a) => a.id !== attachmentId));
       
     } catch (err: any) {
       console.error('[ATTACHMENT_MANAGER] Delete error:', err);
@@ -165,21 +199,30 @@ const AttachmentManager: React.FC<AttachmentManagerProps> = ({
               </div>
               
               <div className="attachment-buttons">
-                <a
-                  href={attachment.downloadUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-download"
-                  title="Tải về"
-                >
-                  {attachment.type === AttachmentType.EXTERNAL_LINK || 
-                   attachment.type === AttachmentType.GITHUB ||
-                   attachment.type === AttachmentType.GOOGLE_DRIVE ? (
+                {attachment.type === AttachmentType.EXTERNAL_LINK ||
+                 attachment.type === AttachmentType.GITHUB ||
+                 attachment.type === AttachmentType.GOOGLE_DRIVE ? (
+                  <a
+                    href={attachment.downloadUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-download"
+                    title="Mở liên kết"
+                  >
                     <ExternalLink size={16} />
-                  ) : (
+                  </a>
+                ) : (
+                  <button
+                    onClick={() => downloadFile(
+                      `/api/lessons/${lessonId}/attachments/${attachment.id}/download`,
+                      attachment.title
+                    )}
+                    className="btn-download"
+                    title="Tải về"
+                  >
                     <Download size={16} />
-                  )}
-                </a>
+                  </button>
+                )}
                 
                 {editable && (
                   <button

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 export interface ToastData {
   type: 'success' | 'error' | 'warning' | 'info';
@@ -21,15 +21,25 @@ export interface ToastData {
 export const useToast = () => {
   const [toast, setToast] = useState<ToastData | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showToast = useCallback((toastData: ToastData) => {
+    // Cancel any pending hide timer so new toast is never blocked
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
     setToast(toastData);
     setIsVisible(true);
   }, []);
 
   const hideToast = useCallback(() => {
     setIsVisible(false);
-    setTimeout(() => setToast(null), 300); // Wait for animation to complete
+    // Clear toast data after animation (300ms) to prevent blocking next toast
+    hideTimerRef.current = setTimeout(() => {
+      setToast(null);
+      hideTimerRef.current = null;
+    }, 300);
   }, []);
 
   const showSuccess = useCallback((title: string, message: string, autoCloseDelay = 5) => {

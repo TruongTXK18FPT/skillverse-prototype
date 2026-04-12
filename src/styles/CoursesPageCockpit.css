@@ -851,6 +851,26 @@
   opacity: 0.7;
 }
 
+.cockpit-module-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.cockpit-module-enrolled-badge {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 255, 194, 0.7);
+  background: rgba(0, 255, 194, 0.15);
+  color: var(--cockpit-neon-green);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+  text-shadow: 0 0 8px rgba(0, 255, 194, 0.5);
+}
+
 /* Module Image */
 .cockpit-module-image-container {
   position: relative;
@@ -1011,6 +1031,10 @@
   letter-spacing: 1px;
 }
 
+.cockpit-price-enrolled {
+  font-size: 1rem;
+}
+
 .cockpit-engage-btn {
   display: flex;
   align-items: center;
@@ -1033,6 +1057,18 @@
   background: linear-gradient(135deg, var(--cockpit-neon-blue), var(--cockpit-neon-purple));
   transform: translateY(-2px);
   box-shadow: 0 5px 25px rgba(0, 246, 255, 0.6);
+}
+
+.cockpit-engage-btn-enrolled {
+  background: linear-gradient(135deg, #2fe49b, #0ad6c9);
+  border-color: #2fe49b;
+  color: #072b22;
+  box-shadow: 0 0 15px rgba(47, 228, 155, 0.45);
+}
+
+.cockpit-engage-btn-enrolled:hover {
+  background: linear-gradient(135deg, #1de7c8, #54f39f);
+  box-shadow: 0 5px 24px rgba(47, 228, 155, 0.65);
 }
 
 .cockpit-btn-icon {

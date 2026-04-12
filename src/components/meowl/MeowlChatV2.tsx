@@ -44,6 +44,13 @@ import {
 } from "../../services/meowlContextService";
 import aiRoadmapService from "../../services/aiRoadmapService";
 import { type RoadmapSessionSummary, type RoadmapNode } from "../../types/Roadmap";
+import {
+  resolveRoadmapWorkloadMinutes,
+  inferRoadmapStudyPlanDeadline,
+  resolvePreferredStudyDays,
+  STUDY_WINDOW_PRESETS,
+} from "../roadmap/roadmapStudyPlanPolicy";
+import journeyService from "../../services/journeyService";
 
 // Guest message limit
 const GUEST_MESSAGE_LIMIT = 5;
@@ -112,6 +119,7 @@ interface MeowlChatV2Props {
   density?: "default" | "compact";
   /** Roadmap context — selected node info for auto-context in welcome message */
   roadmapContext?: {
+    roadmapId: number;
     roadmapTitle: string;
     nodeTitle: string;
     nodeDescription?: string;
@@ -301,6 +309,18 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Study plan intent state
+  const [studyPlanIntent, setStudyPlanIntent] = useState<{
+    nodeId: string;
+    roadmapSessionId: number;
+    suggestedParams: {
+      deadline: string;
+      intensity: "light" | "balanced" | "intensive";
+      studyWindow: "morning" | "afternoon" | "evening" | "flexible";
+      selectedDays: string[];
+    };
+  } | null>(null);
+
   // UI preferences
   const [theme, setTheme] = useState<"cyan" | "pink">(() => {
     const saved = localStorage.getItem("meowl_theme");
@@ -315,6 +335,137 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
   // Guest session management
   const [guestSession, setGuestSession] = useState<GuestSession | null>(null);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+  // Study plan intent detection helpers
+  const STUDY_PLAN_PATTERNS_VI = [
+    /tạo.*study\s*plan/i,
+    /lập.*kế\s*hoạch.*học/i,
+    /giúp.*tạo.*plan/i,
+    /tạo.*plan.*cho.*node/i,
+    /lên\s*lịch.*học/i,
+    /lịch\s*học.*cho.*node/i,
+    /sắp\s*xếp.*lịch.*học/i,
+    /plan\s*học/i,
+    /kế\s*hoạch\s*học\s*tập/i,
+    /cho\s*mình.*kế\s*hoạch/i,
+    /giúp\s*mình.*tạo\s*plan/i,
+    /tạo\s*lịch/i,
+    /lập\s*kế\s*hoạch/i,
+  ];
+  const STUDY_PLAN_PATTERNS_EN = [
+    /create.*study\s*plan/i,
+    /make.*a\s*plan/i,
+    /make.*plan.*for/i,
+    /schedule.*for.*node/i,
+    /study\s*schedule/i,
+    /help.*create.*plan/i,
+    /build.*plan.*for/i,
+    /plan.*study/i,
+  ];
+
+  const detectStudyPlanIntent = (
+    userMessage: string,
+    nodeDossier: ReturnType<typeof roadmapNodeDossier>,
+    roadmapSessionId: number | null,
+  ): ReturnType<typeof setStudyPlanIntent> extends (v: infer T) => void ? T : never | null => {
+    if (!nodeDossier || !roadmapSessionId) return null;
+
+    const normalized = userMessage.toLowerCase().replace(/\s+/g, " ").trim();
+    const patterns = language === "vi" ? STUDY_PLAN_PATTERNS_VI : STUDY_PLAN_PATTERNS_EN;
+    const matched = patterns.some((p) => p.test(normalized));
+    if (!matched) return null;
+
+    // Rule-based params generation (reuse roadmapStudyPlanPolicy)
+    const node: import("../../types/Roadmap").RoadmapNode = {
+      id: nodeDossier.nodeTitle,
+      title: nodeDossier.nodeTitle,
+      type: "MAIN",
+      nodeStatus: "AVAILABLE",
+      children: [],
+      suggestedCourseIds: [],
+      learningObjectives: nodeDossier.learningObjectives,
+      keyConcepts: nodeDossier.keyConcepts,
+      successCriteria: nodeDossier.successCriteria,
+      description: nodeDossier.whyThisMatters ?? undefined,
+      estimatedTimeMinutes: undefined,
+    };
+    const workloadMinutes = resolveRoadmapWorkloadMinutes(node, null);
+    const intensity: "light" | "balanced" | "intensive" =
+      workloadMinutes <= 180 ? "light" : workloadMinutes <= 600 ? "balanced" : "intensive";
+    const durationMinutes = intensity === "light" ? 60 : intensity === "balanced" ? 90 : 120;
+    const maxSessionsPerDay = intensity === "light" ? 1 : intensity === "balanced" ? 2 : 3;
+    const suggestedDays = resolvePreferredStudyDays([], "flexible");
+    const suggestedDeadline = inferRoadmapStudyPlanDeadline({
+      startDate: new Date().toISOString().slice(0, 10),
+      intensity,
+      preferredDays: suggestedDays,
+      workloadMinutes,
+      durationMinutes,
+      maxSessionsPerDay,
+    });
+
+    return {
+      nodeId: selectedNodeId as string,  // Use actual node ID, not title, to avoid mismatch
+      roadmapSessionId,
+      suggestedParams: {
+        deadline: suggestedDeadline,
+        intensity,
+        studyWindow: "flexible" as const,
+        selectedDays: suggestedDays,
+      },
+    };
+  };
+
+  // Quick-create study plan: call API directly with default params, respond in chat
+  const handleQuickCreateStudyPlan = async (intent: NonNullable<ReturnType<typeof detectStudyPlanIntent>>) => {
+    const calendarUrl = `/study-planner?view=calendar&roadmapSessionId=${intent.roadmapSessionId}`;
+    const nodeTitle = roadmapNodeDossier?.nodeTitle ?? intent.nodeId;
+    const intensityLabel =
+      intent.suggestedParams.intensity === "balanced"
+        ? "Cân bằng (90 phút/phiên)"
+        : intent.suggestedParams.intensity === "light"
+        ? "Nhẹ nhàng (60 phút/phiên)"
+        : "Tăng tốc (120 phút/phiên)";
+
+    try {
+      await journeyService.createStudyPlanForRoadmapNode(
+        intent.roadmapSessionId,
+        intent.nodeId,
+        {
+          intensityLevel: intent.suggestedParams.intensity,
+          studyPreference: intent.suggestedParams.studyWindow,
+          preferredDays: intent.suggestedParams.selectedDays,
+          startDate: new Date().toISOString().slice(0, 10),
+          deadline: intent.suggestedParams.deadline,
+        },
+      );
+      const quickCreateResponse: Message = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content:
+          language === "vi"
+            ? `Đã tạo study plan cho node **"${nodeTitle}"** với cấu hình:\n- Cường độ: ${intensityLabel}\n- Khung giờ: Linh hoạt\n- Phạm vi: Chỉ node này\n\n[Xem lịch học ngay](${calendarUrl})`
+            : `Created study plan for node **"${nodeTitle}"** with:\n- Intensity: ${intensityLabel}\n- Time window: Flexible\n- Scope: This node only\n\n[View study schedule](${calendarUrl})`,
+        timestamp: new Date(),
+        actionType: "NAVIGATE",
+        actionUrl: calendarUrl,
+        actionLabel: language === "vi" ? "Xem lịch học" : "View schedule",
+      };
+      setMessages((prev) => [...prev, quickCreateResponse]);
+    } catch (apiError) {
+      console.warn("Quick-create study plan failed:", apiError);
+      const fallbackResponse: Message = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content:
+          language === "vi"
+            ? `Mình không thể tạo study plan cho node **"${nodeTitle}"** lúc này. Bạn có thể bấm nút "Tạo kế hoạch AI" trên node để thử lại nhé. 🐱`
+            : `I couldn't create a study plan for node **"${nodeTitle}"** right now. You can click "Create AI Plan" on the node to try again. 🐱`,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, fallbackResponse]);
+    }
+  };
 
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -1652,6 +1803,19 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
         })
         : userMessage.content;
 
+      // Quick-create study plan: detect intent BEFORE calling AI.
+      // If detected, skip AI and call API directly for faster response.
+      const quickIntent =
+        (contextMode === "MODE_ROADMAP_OVERVIEW" || contextMode === "MODE_FALLBACK_TEACHER")
+          ? detectStudyPlanIntent(userMessage.content, roadmapNodeDossier, selectedRoadmapId)
+          : null;
+
+      if (quickIntent) {
+        await handleQuickCreateStudyPlan(quickIntent);
+        incrementGuestCount();
+        return;
+      }
+
       const response = await axiosInstance.post("/v1/meowl/chat", {
         message: apiPayload,
         language: lang,
@@ -1693,6 +1857,21 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
 
       setMessages((prev) => [...prev, aiResponse]);
       incrementGuestCount();
+
+      // Still detect study plan intent for action card as secondary option
+      if (
+        (contextMode === "MODE_ROADMAP_OVERVIEW" || contextMode === "MODE_FALLBACK_TEACHER") &&
+        userMessage.content
+      ) {
+        const intent = detectStudyPlanIntent(
+          userMessage.content,
+          roadmapNodeDossier,
+          selectedRoadmapId,
+        );
+        if (intent) {
+          setStudyPlanIntent(intent);
+        }
+      }
     } catch (error) {
       console.error("Error sending message:", error);
       const errorMessage: Message = {
@@ -2338,6 +2517,41 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
             </button>
           </div>
         </div>
+
+        {/* Study Plan Intent Action Card */}
+        {studyPlanIntent && (
+          <div
+            className={
+              panelTheme === "hud"
+                ? "meowl-chat-v2-study-plan-action meowl-panel__study-plan-action"
+                : "meowl-chat-v2-study-plan-action"
+            }
+          >
+            <div className="meowl-study-plan-action__preview">
+              <Sparkles size={14} />
+              <span>
+                {language === "vi"
+                  ? `Mình nhận thấy bạn muốn tạo study plan cho node "${studyPlanIntent.nodeId}". Mình đã gợi ý sẵn deadline, cường độ và lịch học phù hợp dựa trên khối lượng node này.`
+                  : `I noticed you want to create a study plan for node "${studyPlanIntent.nodeId}". I've pre-filled deadline, intensity, and schedule based on this node's workload.`}
+              </span>
+            </div>
+            <button
+              type="button"
+              className="meowl-study-plan-action__btn"
+              onClick={() => {
+                window.dispatchEvent(
+                  new CustomEvent("meowl-study-plan-intent", {
+                    detail: studyPlanIntent,
+                  }),
+                );
+                setStudyPlanIntent(null);
+              }}
+            >
+              <Sparkles size={14} />
+              <span>{language === "vi" ? "Mở tạo Study Plan" : "Open Create Study Plan"}</span>
+            </button>
+          </div>
+        )}
 
         {/* Login Prompt Modal */}
         {showLoginPrompt && (

@@ -1,3 +1,8 @@
+/**
+ * CODELAB_LEGACY: This module is deprecated.
+ * No code execution engine is integrated — submissions are never evaluated.
+ * @deprecated since 2026-04-08 — will be removed in a future release
+ */
 // Codelab (Coding Exercise) DTOs - Matching Backend Structure
 
 export enum ProgrammingLanguage {

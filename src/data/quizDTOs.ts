@@ -23,7 +23,6 @@ export interface QuizDetailDTO {
   timeLimitMinutes?: number;
   roundingIncrement?: number;
   gradingMethod?: QuizGradingMethod;
-  isAssessment?: boolean;
   cooldownHours?: number;
   orderIndex?: number;
   moduleId: number;
@@ -42,7 +41,6 @@ export interface QuizSummaryDTO {
   timeLimitMinutes?: number;
   roundingIncrement?: number;
   gradingMethod?: QuizGradingMethod;
-  isAssessment?: boolean;
   cooldownHours?: number;
   orderIndex?: number;
   questionCount: number;
@@ -58,7 +56,6 @@ export interface QuizCreateDTO {
   timeLimitMinutes?: number;
   roundingIncrement?: number;
   gradingMethod?: QuizGradingMethod;
-  isAssessment?: boolean;
   cooldownHours?: number;
   questions?: QuizQuestionCreateDTO[]; // Optional - can be added later
 }
@@ -72,7 +69,6 @@ export interface QuizUpdateDTO {
   timeLimitMinutes?: number;
   roundingIncrement?: number;
   gradingMethod?: QuizGradingMethod;
-  isAssessment?: boolean;
   cooldownHours?: number;
 }
 

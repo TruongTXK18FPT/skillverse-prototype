@@ -16,6 +16,18 @@ export const taskBoardService = {
     return response.data;
   },
 
+  getArchivedTasks: async (roadmapSessionId?: number, page = 0, size = 20): Promise<{ items: TaskResponse[]; page: number; size: number; total: number }> => {
+    const params: any = { page, size };
+    if (roadmapSessionId !== undefined) params.roadmapSessionId = roadmapSessionId;
+    const response = await axiosInstance.get(`${BASE_URL}/archived`, { params });
+    return response.data;
+  },
+
+  unarchiveTask: async (taskId: string): Promise<TaskResponse> => {
+    const response = await axiosInstance.patch<TaskResponse>(`${BASE_URL}/tasks/${taskId}/unarchive`);
+    return response.data;
+  },
+
   archiveRoadmapTasks: async (roadmapSessionId: number): Promise<{ archivedCount: number; message: string }> => {
     const response = await axiosInstance.post(`${BASE_URL}/archive-roadmap/${roadmapSessionId}`);
     return response.data;

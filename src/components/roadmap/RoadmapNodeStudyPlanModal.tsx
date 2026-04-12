@@ -15,6 +15,35 @@ import {
 } from './roadmapStudyPlanPolicy';
 import './RoadmapNodeStudyPlanModal.css';
 
+/**
+ * When studyWindow is 'flexible', compute earliestStartLocalTime dynamically:
+ * current time + 30 min buffer, rounded up to next 15-min mark.
+ * For fixed windows (morning/afternoon/evening), use the preset default.
+ */
+const resolveEarliestStartTime = (
+  studyWindow: StudyWindowId,
+  presetDefault: string,
+): string => {
+  if (studyWindow !== 'flexible') {
+    return presetDefault;
+  }
+
+  const now = new Date();
+  // Add 30 minutes
+  const withBuffer = new Date(now.getTime() + 30 * 60 * 1000);
+  // Round up to next 15-minute mark
+  const minutes = withBuffer.getMinutes();
+  const roundedMinutes = Math.ceil(minutes / 15) * 15;
+  withBuffer.setMinutes(roundedMinutes);
+  withBuffer.setSeconds(0);
+  withBuffer.setMilliseconds(0);
+
+  // Format as HH:MM
+  const h = String(withBuffer.getHours()).padStart(2, '0');
+  const m = String(withBuffer.getMinutes()).padStart(2, '0');
+  return `${h}:${m}`;
+};
+
 interface RoadmapNodeStudyPlanModalProps {
   isOpen: boolean;
   node: RoadmapNode | null;
@@ -23,6 +52,13 @@ interface RoadmapNodeStudyPlanModalProps {
   isSubmitting: boolean;
   onClose: () => void;
   onSubmit: (request: RoadmapNodeStudyPlanRequest) => Promise<void> | void;
+  /** AI-prefilled params from Meowl study plan intent detection */
+  aiPrefilledParams?: {
+    deadline: string;
+    intensity: StudyPlanIntensityId;
+    studyWindow: StudyWindowId;
+    selectedDays: string[];
+  } | null;
 }
 
 type ScopeMode = 'node_only' | 'node_with_children';
@@ -92,12 +128,13 @@ const RoadmapNodeStudyPlanModal = ({
   childBranchTitles = [],
   isSubmitting,
   onClose,
-  onSubmit
+  onSubmit,
+  aiPrefilledParams,
 }: RoadmapNodeStudyPlanModalProps) => {
   const [startDate, setStartDate] = useState<string>(getTodayDate());
   const [deadline, setDeadline] = useState<string>('');
   const [intensity, setIntensity] = useState<StudyPlanIntensityId>('balanced');
-  const [studyWindow, setStudyWindow] = useState<StudyWindowId>('evening');
+  const [studyWindow, setStudyWindow] = useState<StudyWindowId>('flexible');
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [desiredOutcome, setDesiredOutcome] = useState<string>('');
   const [freeTimeDescription, setFreeTimeDescription] = useState<string>('');
@@ -159,12 +196,21 @@ const RoadmapNodeStudyPlanModal = ({
     setStartDate(getTodayDate());
     setDeadline('');
     setIntensity('balanced');
-    setStudyWindow('evening');
+    setStudyWindow('flexible');
     setSelectedDays([]);
     setDesiredOutcome('');
     setFreeTimeDescription('');
     setScopeMode('node_only');
   }, [isOpen, node?.id]);
+
+  // Apply AI-prefilled params when they change
+  useEffect(() => {
+    if (!aiPrefilledParams) return;
+    if (aiPrefilledParams.deadline) setDeadline(aiPrefilledParams.deadline);
+    if (aiPrefilledParams.intensity) setIntensity(aiPrefilledParams.intensity);
+    if (aiPrefilledParams.studyWindow) setStudyWindow(aiPrefilledParams.studyWindow);
+    if (aiPrefilledParams.selectedDays.length > 0) setSelectedDays(aiPrefilledParams.selectedDays);
+  }, [aiPrefilledParams]);
 
   useEffect(() => {
     if (!isSubmitting) {
@@ -248,7 +294,7 @@ const RoadmapNodeStudyPlanModal = ({
       studyMethod: 'Active Recall + Practical Exercise',
       resourcesPreference: 'mixed resources',
       studyPreference: studyWindow,
-      earliestStartLocalTime: windowPreset.earliestStartLocalTime,
+      earliestStartLocalTime: resolveEarliestStartTime(studyWindow, windowPreset.earliestStartLocalTime),
       latestEndLocalTime: windowPreset.latestEndLocalTime,
       avoidLateNight: studyWindow !== 'evening',
       allowLateNight: studyWindow === 'evening',

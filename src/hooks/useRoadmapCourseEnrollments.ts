@@ -1,19 +1,24 @@
 import { startTransition, useEffect, useMemo, useState } from "react";
 import { EnrollmentDetailDTO } from "../data/enrollmentDTOs";
-import { getUserEnrollments } from "../services/enrollmentService";
+import { getEnrollmentsByCourseIds } from "../services/enrollmentService";
 
 type UseRoadmapCourseEnrollmentsResult = {
   enrollmentByCourseId: Record<string, EnrollmentDetailDTO | null>;
   isLoading: boolean;
 };
 
-const DEFAULT_PAGE_SIZE = 200;
-
+/**
+ * Hook for loading user enrollments mapped to roadmap course IDs.
+ * Uses batch endpoint to avoid pagination page-size issues.
+ * @param userId - The user's ID
+ * @param relevantCourseIds - Course IDs to check enrollment for
+ * @param enabled - Whether to fetch enrollments
+ * @param refreshKey - Optional trigger to force a re-fetch (e.g. when user enrolls somewhere else)
+ */
 export const useRoadmapCourseEnrollments = (
   userId: number | null | undefined,
   relevantCourseIds: Array<string | number>,
   enabled: boolean,
-  /** Optional trigger to force a re-fetch (e.g. when user enrolls somewhere else) */
   refreshKey?: number,
 ): UseRoadmapCourseEnrollmentsResult => {
   const [enrollmentByCourseId, setEnrollmentByCourseId] = useState<
@@ -50,21 +55,23 @@ export const useRoadmapCourseEnrollments = (
 
     const loadEnrollments = async () => {
       try {
-        const response = await getUserEnrollments(userId, 0, DEFAULT_PAGE_SIZE);
+        // MEDIUM-3 fix: Use batch endpoint instead of pagination with hardcoded page 200.
+        // Batch endpoint returns exactly the enrollments for the course IDs we need,
+        // regardless of how many total enrollments the user has.
+        const enrollments = await getEnrollmentsByCourseIds(userId, normalizedCourseIds);
         if (cancelled) {
           return;
         }
 
-        const nextEnrollmentMap = normalizedCourseIds.reduce<
-          Record<string, EnrollmentDetailDTO | null>
-        >((accumulator, courseId) => {
+        const nextEnrollmentMap: Record<string, EnrollmentDetailDTO | null> = {};
+        for (const courseId of normalizedCourseIds) {
+          const courseIdStr = String(courseId);
           const enrollment =
-            response.content.find(
-              (item) => String(item.courseId) === courseId,
+            enrollments.find(
+              (item) => String(item.courseId) === courseIdStr,
             ) ?? null;
-          accumulator[courseId] = enrollment;
-          return accumulator;
-        }, {});
+          nextEnrollmentMap[courseIdStr] = enrollment;
+        }
 
         startTransition(() => {
           setEnrollmentByCourseId(nextEnrollmentMap);

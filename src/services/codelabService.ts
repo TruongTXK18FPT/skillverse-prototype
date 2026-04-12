@@ -1,3 +1,10 @@
+/**
+ * CODELAB_LEGACY: This service is deprecated.
+ * Backend uses /api/codelabs but this service calls /coding-exercises — paths are MISMATCHED.
+ * No code execution engine is integrated — submissions are never evaluated.
+ * @deprecated since 2026-04-08 — will be removed in a future release
+ * @see courseService for active course management APIs
+ */
 import axiosInstance from './axiosInstance';
 import {
   CodingExerciseDetailDTO,

@@ -24,7 +24,9 @@ import {
   ChevronUp,
   ChevronDown,
   Monitor,
-  Check
+  Check,
+  Sparkles,
+  User
 } from 'lucide-react';
 import {
   AssignmentDetailDTO,
@@ -38,6 +40,9 @@ import {
   submitAssignment,
   getMySubmissions
 } from '../../services/assignmentService';
+import { requestMentorReview } from '../../services/aiGradingService';
+import { downloadFile } from '../../utils/downloadFile';
+import { sanitizeHtml } from '../../utils/sanitizeHtml';
 import { uploadMedia } from '../../services/mediaService';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -73,6 +78,9 @@ const AssignmentPage: React.FC = () => {
   const [draftSavedAt, setDraftSavedAt] = useState<string | null>(null);
   const [draftDirty, setDraftDirty] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
+  /** When student fails AI, they choose between AI-resubmit and mentor-resubmit */
+  const [pendingResubmitMode, setPendingResubmitMode] = useState<'AI' | 'MENTOR' | null>(null);
+  const [showResubmitModal, setShowResubmitModal] = useState(false);
 
   // Form state
   const [submissionText, setSubmissionText] = useState('');
@@ -136,13 +144,19 @@ const AssignmentPage: React.FC = () => {
       setError('Bạn đã đạt yêu cầu ở bài tập này. Không cần nộp lại.');
       return;
     }
+    // If AI graded and failed → show resubmit choice modal instead of confirm modal
+    if (newestSubmission?.isAiGraded && newestSubmission.isPassed === false) {
+      setShowResubmitModal(true);
+      return;
+    }
     setShowConfirmModal(true);
   };
 
-  const confirmSubmit = async () => {
+  const confirmSubmit = async (gradingMode?: 'AI' | 'MENTOR') => {
     if (!assignment || !user?.id) return;
 
     setShowConfirmModal(false);
+    setShowResubmitModal(false);
     setSubmitting(true);
     setError(null);
     setSuccess(null);
@@ -181,19 +195,26 @@ const AssignmentPage: React.FC = () => {
         submissionData.fileMediaId = mediaResult.id;
       }
 
+      if (gradingMode) {
+        submissionData.gradingMode = gradingMode;
+      }
+
       await submitAssignment(parseInt(assignmentId!), submissionData);
 
-      setSuccess('Đã nộp bài thành công.');
+      setSuccess(gradingMode === 'MENTOR'
+        ? 'Đã nộp bài — mentor sẽ chấm thủ công.'
+        : 'Đã nộp bài thành công.');
       setSubmissionText('');
       setLinkUrl('');
       setSelectedFile(null);
       setUploadProgress(0);
       setDraftSavedAt(null);
       setDraftDirty(false);
-      
+      setPendingResubmitMode(null);
+
       const draftKey = `assignment_draft_${assignmentId}_${user.id}`;
       localStorage.removeItem(draftKey);
-      
+
       await loadData();
     } catch (err: any) {
       setError(getFriendlyAssignmentError(err?.response?.data?.message || 'Lỗi khi nộp bài'));
@@ -282,7 +303,8 @@ const AssignmentPage: React.FC = () => {
   const supportsDraftSave = assignment?.submissionType === SubmissionType.TEXT || assignment?.submissionType === SubmissionType.LINK;
   const submissionBlockedByPending =
     newestSubmission?.status === SubmissionStatus.PENDING ||
-    newestSubmission?.status === SubmissionStatus.LATE_PENDING;
+    newestSubmission?.status === SubmissionStatus.LATE_PENDING ||
+    newestSubmission?.status === SubmissionStatus.AI_PENDING;
   const submissionBlockedByPass = newestSubmission?.isPassed === true;
   const canSubmitAnotherAttempt = !submissionBlockedByPending && !submissionBlockedByPass;
   const canSaveDraft =
@@ -292,8 +314,15 @@ const AssignmentPage: React.FC = () => {
   
   const getAssignmentStatus = () => {
     if (!newestSubmission) return { text: 'Chưa nộp', icon: <AlertTriangle size={14} />, tone: 'warning' };
-    if (newestSubmission.status === SubmissionStatus.GRADED) {
+    // AI auto-pass: score + isPassed are set by BE auto-confirm
+    if (newestSubmission.isAiGraded && newestSubmission.isPassed === true) {
+      return { text: 'Đã đạt', icon: <CheckCircle size={14} />, tone: 'success' };
+    }
+    if (newestSubmission.status === SubmissionStatus.GRADED || newestSubmission.status === SubmissionStatus.AI_COMPLETED) {
       return { text: 'Đã chấm', icon: <CheckCircle size={14} />, tone: 'success' };
+    }
+    if (newestSubmission.status === SubmissionStatus.AI_PENDING || (newestSubmission.isAiGraded && newestSubmission.mentorConfirmed === null)) {
+      return { text: 'Chờ mentor xác nhận', icon: <Loader2 size={14} className="ap-v2-spin-icon" />, tone: 'ai-pending' };
     }
     return { text: 'Đã nộp', icon: <Clock size={14} />, tone: 'pending' };
   };
@@ -418,7 +447,7 @@ const AssignmentPage: React.FC = () => {
                 <div className="ap-v2-section ap-v2-section--req">
                   <h3><Info size={16} /> Yêu cầu nhiệm vụ</h3>
                   {assignment.description ? (
-                    <div dangerouslySetInnerHTML={{ __html: assignment.description }} />
+                    <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(assignment.description) }} />
                   ) : (
                     <p style={{ fontStyle: 'italic', color: '#64748b' }}>Chưa có mô tả chi tiết.</p>
                   )}
@@ -427,7 +456,7 @@ const AssignmentPage: React.FC = () => {
                 {assignment.gradingCriteria && (
                   <div className="ap-v2-section ap-v2-section--rubric">
                     <h3><CheckSquare size={16} /> Tiêu chí chấm điểm</h3>
-                    <div className="ap-v2-rubric-box" dangerouslySetInnerHTML={{ __html: assignment.gradingCriteria }} />
+                    <div className="ap-v2-rubric-box" dangerouslySetInnerHTML={{ __html: sanitizeHtml(assignment.gradingCriteria) }} />
                   </div>
                 )}
               </div>
@@ -451,17 +480,25 @@ const AssignmentPage: React.FC = () => {
               </div>
             )}
 
-            {!canSubmitAnotherAttempt && newestSubmission && (
+            {!canSubmitAnotherAttempt && newestSubmission && submissionBlockedByPass && (
+              <div className="ap-v2-pass-banner">
+                <div className="ap-v2-pass-banner__icon">🎉</div>
+                <div className="ap-v2-pass-banner__content">
+                  <h3>Chúc mừng bạn đã hoàn thành nhiệm vụ!</h3>
+                  <p>Điểm của bạn: <strong>{newestSubmission.score ?? newestSubmission.aiScore}/{assignment.maxScore}</strong></p>
+                  {newestSubmission.isAiGraded && newestSubmission.mentorConfirmed === true && (
+                    <p className="ap-v2-pass-banner__sub">Điểm này được xác nhận tự động bởi AI. Bạn không cần nộp lại bài.</p>
+                  )}
+                </div>
+              </div>
+            )}
+            {!canSubmitAnotherAttempt && newestSubmission && !submissionBlockedByPass && submissionBlockedByPending && (
               <div className="ap-v2-blocker">
                 <div className="ap-v2-blocker-icon-box">
-                  {submissionBlockedByPass ? <Award size={32} style={{ color: '#fbbf24' }} /> : <Clock size={32} style={{ color: '#06b6d4' }} />}
+                  <Clock size={32} style={{ color: '#06b6d4' }} />
                 </div>
-                <h3>{submissionBlockedByPass ? 'Nhiệm vụ đã hoàn thành xuất sắc!' : 'Bài nộp đang được xử lý'}</h3>
-                <p>
-                  {submissionBlockedByPass 
-                    ? 'Bạn không cần nộp lại bài nữa. Mọi thông tin đánh giá đều đã được lưu trữ an toàn.' 
-                    : 'Hệ thống đã ghi nhận bài nộp và chuyển đến Mentor. Bạn sẽ có thể thao tác lại sau khi có kết quả.'}
-                </p>
+                <h3>Bài nộp đang được xử lý</h3>
+                <p>Hệ thống đã ghi nhận bài nộp và chuyển đến Mentor. Bạn sẽ có thể thao tác lại sau khi có kết quả.</p>
               </div>
             )}
 
@@ -540,6 +577,9 @@ const AssignmentPage: React.FC = () => {
                             <div className="ap-v2-upload-bar" style={{ width: `${uploadProgress}%` }}></div>
                           </div>
                         )}
+                        <div className="ap-v2-dz-hint" style={{ color: 'var(--hud-text-dim)', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                          PDF, DOCX, DOC • Tối đa 10MB
+                        </div>
                       </div>
                     )}
                   </div>
@@ -604,8 +644,14 @@ const AssignmentPage: React.FC = () => {
               <div className="ap-v2-prev-card">
                 <div className="ap-v2-prev-header" onClick={() => setShowPreview(!showPreview)}>
                   <div className="ap-v2-prev-header-left">
-                    <div className={`ap-v2-prev-icon-box ap-v2-prev-icon-box--${newestSubmission.status === SubmissionStatus.GRADED ? 'success' : 'pending'}`}>
-                      {newestSubmission.status === SubmissionStatus.GRADED ? <CheckCircle size={24} /> : <Clock size={24} />}
+                    <div className={`ap-v2-prev-icon-box ap-v2-prev-icon-box--${newestSubmission.status === SubmissionStatus.GRADED || newestSubmission.status === SubmissionStatus.AI_COMPLETED ? 'success' : newestSubmission.status === SubmissionStatus.AI_PENDING ? 'ai-pending' : 'pending'}`}>
+                      {newestSubmission.status === SubmissionStatus.GRADED || newestSubmission.status === SubmissionStatus.AI_COMPLETED ? (
+                        <CheckCircle size={24} />
+                      ) : newestSubmission.status === SubmissionStatus.AI_PENDING ? (
+                        <Sparkles size={24} />
+                      ) : (
+                        <Clock size={24} />
+                      )}
                     </div>
                     <div>
                       <h3 className="ap-v2-prev-title">Bài nộp gần nhất</h3>
@@ -640,7 +686,8 @@ const AssignmentPage: React.FC = () => {
 
                     <div className="ap-v2-prev-content-box">
                       {newestSubmission.submissionText && (
-                        <div style={{ whiteSpace: 'pre-wrap' }}>{newestSubmission.submissionText}</div>
+                        <div style={{ whiteSpace: 'pre-wrap' }}
+                             dangerouslySetInnerHTML={{ __html: sanitizeHtml(newestSubmission.submissionText) }} />
                       )}
                       {newestSubmission.linkUrl && (
                         <a href={newestSubmission.linkUrl} target="_blank" rel="noopener noreferrer" className="ap-v2-prev-link">
@@ -648,9 +695,23 @@ const AssignmentPage: React.FC = () => {
                           {newestSubmission.linkUrl}
                         </a>
                       )}
+                      {newestSubmission.fileMediaUrl && (
+                        <button
+                          onClick={() => downloadFile(
+                            `/api/assignments/submissions/${newestSubmission.id}/download`,
+                            newestSubmission.submissionText || 'file_nop'
+                          )}
+                          className="ap-v2-prev-link"
+                          style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', color: 'inherit' }}
+                        >
+                          <Upload size={16} />
+                          Xem file đã nộp
+                        </button>
+                      )}
                     </div>
 
-                    {newestSubmission.feedback && (
+                    {/* Mentor feedback — NOT shown when AI auto-confirmed (feedback == aiFeedback) */}
+                    {newestSubmission.feedback && newestSubmission.mentorConfirmed !== true && (
                       <div className="ap-v2-feedback-box">
                         <div className="ap-v2-fb-title"><Terminal size={14} /> Nhận xét tổng thể</div>
                         <div className="ap-v2-fb-text">{newestSubmission.feedback}</div>
@@ -660,7 +721,60 @@ const AssignmentPage: React.FC = () => {
                       </div>
                     )}
 
-                    {newestSubmission.criteriaScores && newestSubmission.criteriaScores.length > 0 && newestSubmission.status === SubmissionStatus.GRADED && (
+                    {/* AI Grading Results — shown whenever AI has graded */}
+                    {newestSubmission.isAiGraded && newestSubmission.aiScore != null && (
+                      <div className="ap-v2-feedback-box ap-v2-feedback-box--ai">
+                        <div className="ap-v2-fb-title">
+                          <Sparkles size={14} /> Điểm AI
+                          {newestSubmission.aiConfidence != null && (
+                            <span className={`ap-v2-ai-confidence ${newestSubmission.aiConfidence >= 0.9 ? 'high' : 'medium'}`}>
+                              Tự tin {Math.round(newestSubmission.aiConfidence * 100)}%
+                            </span>
+                          )}
+                        </div>
+                        <div className="ap-v2-fb-text">
+                          Điểm AI: <strong>{newestSubmission.aiScore}/{assignment.maxScore}</strong>
+                        </div>
+                        {newestSubmission.aiFeedback && (
+                          <div className="ap-v2-fb-text" style={{ marginTop: '8px' }}>
+                            {newestSubmission.aiFeedback}
+                          </div>
+                        )}
+                        {newestSubmission.aiGradeAttemptCount != null && newestSubmission.aiGradeAttemptCount > 0 && (
+                          <div className="ap-v2-fb-mentor" style={{ marginTop: '4px' }}>
+                            AI đã chấm {newestSubmission.aiGradeAttemptCount} lần
+                          </div>
+                        )}
+                        {/* Dispute button — shown when AI graded but mentor not confirmed */}
+                        {newestSubmission.mentorConfirmed === null && newestSubmission.disputeFlag !== true && (
+                          <button
+                            className="ap-v2-btn ap-v2-btn--dispute"
+                            style={{ marginTop: '12px' }}
+                            onClick={async () => {
+                              if (!confirm('Bạn có chắc muốn yêu cầu mentor xem xét lại bài này?')) return;
+                              try {
+                                await requestMentorReview(newestSubmission.id, null);
+                                setSuccess('Đã gửi yêu cầu. Mentor sẽ xem xét lại.');
+                                await loadData();
+                              } catch (err: any) {
+                                setError(err?.response?.data?.message || 'Gửi yêu cầu thất bại.');
+                              }
+                            }}
+                          >
+                            🔄 Yêu cầu Mentor xem xét
+                          </button>
+                        )}
+                        {/* Already disputed */}
+                        {newestSubmission.disputeFlag === true && (
+                          <div className="ap-v2-alert ap-v2-alert--warning" style={{ marginTop: '12px', padding: '8px 12px', fontSize: '0.85rem' }}>
+                            ⚠️ Bạn đã yêu cầu mentor xem xét lại bài này.
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* AI Rubric Results — shown whenever AI has graded (auto or manual) */}
+                    {newestSubmission.isAiGraded && newestSubmission.criteriaScores && newestSubmission.criteriaScores.length > 0 && (
                       <div className="ap-v2-rubric-analysis">
                         <h4>Phân tích Rubric</h4>
                         <div className="ap-v2-rubric-list">
@@ -718,7 +832,11 @@ const AssignmentPage: React.FC = () => {
                           
                           <div className="ap-v2-tl-meta">
                             <div className={`ap-v2-tl-tag ${
-                              sub.status === SubmissionStatus.GRADED ? 'ap-v2-tl-tag--graded' : 'ap-v2-tl-tag--pending'
+                              sub.status === SubmissionStatus.GRADED || sub.status === SubmissionStatus.AI_COMPLETED
+                                ? 'ap-v2-tl-tag--graded'
+                                : sub.status === SubmissionStatus.AI_PENDING
+                                ? 'ap-v2-tl-tag--ai-pending'
+                                : 'ap-v2-tl-tag--pending'
                             }`}>
                               {getSubmissionWorkflowLabel(sub.status)}
                             </div>
@@ -737,6 +855,20 @@ const AssignmentPage: React.FC = () => {
                               <div className="ap-v2-tl-score" style={{ marginLeft: 'auto' }}>
                                 {sub.score} <span>/ {assignment.maxScore}</span>
                               </div>
+                            )}
+
+                            {sub.fileMediaUrl && (
+                              <button
+                                onClick={() => downloadFile(
+                                  `/api/assignments/submissions/${sub.id}/download`,
+                                  'file_nop'
+                                )}
+                                className="ap-v2-prev-link"
+                                style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', font: 'inherit', color: 'inherit' }}
+                              >
+                                <Upload size={14} />
+                                Xem file đã nộp
+                              </button>
                             )}
                           </div>
                         </div>
@@ -765,10 +897,52 @@ const AssignmentPage: React.FC = () => {
                  <div className="ap-v2-modal-li"><Check size={14} /> Nội dung đã hoàn tất</div>
                  <div className="ap-v2-modal-li"><Check size={14} /> Đúng định dạng được yêu cầu</div>
               </div>
-              
+
               <div className="ap-v2-modal-actions">
                 <button className="ap-v2-btn-cancel" onClick={() => setShowConfirmModal(false)}>Return</button>
-                <button className="ap-v2-btn-exec" onClick={confirmSubmit}>Execute</button>
+                <button className="ap-v2-btn-exec" onClick={() => confirmSubmit()}>Execute</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Resubmit Choice Modal — shown when AI graded and failed */}
+      {showResubmitModal && (
+        <div className="ap-v2-modal-overlay" onClick={() => setShowResubmitModal(false)}>
+          <div className="ap-v2-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="ap-v2-modal-header">
+              <h3 className="ap-v2-modal-title"><AlertCircle size={20} /> Nộp lại bài</h3>
+              <button className="ap-v2-modal-close" onClick={() => setShowResubmitModal(false)}><X size={20} /></button>
+            </div>
+            <div className="ap-v2-modal-body">
+              <p className="ap-v2-modal-text">
+                Bạn chưa đạt yêu cầu. Hãy chọn cách nộp lại:
+              </p>
+              <div className="ap-v2-modal-resubmit-choices">
+                <button
+                  className="ap-v2-resubmit-choice"
+                  onClick={() => {
+                    setShowResubmitModal(false);
+                    setShowConfirmModal(true);
+                  }}
+                >
+                  <Sparkles size={18} />
+                  <div>
+                    <strong>Nộp lại để AI chấm lại</strong>
+                    <span>AI sẽ chấm bài mới tự động</span>
+                  </div>
+                </button>
+                <button
+                  className="ap-v2-resubmit-choice"
+                  onClick={() => confirmSubmit('MENTOR')}
+                >
+                  <User size={18} />
+                  <div>
+                    <strong>Nộp lại để mentor chấm thủ công</strong>
+                    <span>Mentor sẽ xem và chấm bài cho bạn</span>
+                  </div>
+                </button>
               </div>
             </div>
           </div>

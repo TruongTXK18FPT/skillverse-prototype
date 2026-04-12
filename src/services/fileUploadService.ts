@@ -26,7 +26,8 @@ export interface UploadResponse {
 
 /**
  * Upload video with progress tracking
- * Max size: 300MB (Cloudinary Plus plan)
+ * Max size: 100MB (Cloudinary Free Tier limit)
+ * NOTE: If upgrading to Cloudinary Plus plan, increase to 2GB
  */
 export const uploadVideo = async (
   file: File,
@@ -71,7 +72,7 @@ export const uploadVideo = async (
 
 /**
  * Upload document (PDF, DOCX, PPTX)
- * Max size: 20MB
+ * Max size: 10MB
  */
 export const uploadDocument = async (
   file: File,
@@ -126,13 +127,15 @@ export const formatFileSize = (bytes: number): string => {
  * Validate video file
  */
 export const validateVideo = (file: File): { valid: boolean; error?: string } => {
-  const MAX_SIZE = 300 * 1024 * 1024; // 300MB (Cloudinary Plus)
+  // Cloudinary Free Tier: video max 100MB
+  // NOTE: If upgrading to Cloudinary Plus plan, increase to 2GB
+  const MAX_SIZE = 100 * 1024 * 1024; // 100MB (Cloudinary Free Tier)
   const ALLOWED_TYPES = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo'];
-  
+
   if (file.size > MAX_SIZE) {
     return {
       valid: false,
-      error: `Video quá lớn. Tối đa 300MB. Hiện tại: ${formatFileSize(file.size)}`
+      error: `Video quá lớn. Tối đa 100MB. Hiện tại: ${formatFileSize(file.size)}`
     };
   }
   
@@ -151,7 +154,7 @@ export const validateVideo = (file: File): { valid: boolean; error?: string } =>
  * Validate document file
  */
 export const validateDocument = (file: File): { valid: boolean; error?: string } => {
-  const MAX_SIZE = 20 * 1024 * 1024; // 20MB
+  const MAX_SIZE = 10 * 1024 * 1024; // 10MB
   const ALLOWED_TYPES = [
     'application/pdf',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -161,7 +164,7 @@ export const validateDocument = (file: File): { valid: boolean; error?: string }
   if (file.size > MAX_SIZE) {
     return {
       valid: false,
-      error: `File quá lớn. Tối đa 20MB. Hiện tại: ${formatFileSize(file.size)}`
+      error: `File quá lớn. Tối đa 10MB. Hiện tại: ${formatFileSize(file.size)}`
     };
   }
   

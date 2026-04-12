@@ -234,6 +234,19 @@ const aiRoadmapService = {
   },
 
   /**
+   * Restore a soft-deleted roadmap back to PAUSED status.
+   */
+  restoreRoadmap: async (sessionId: number): Promise<void> => {
+    try {
+      await axiosInstance.post(`/api/v1/ai/roadmap/${sessionId}/restore`);
+    } catch (error) {
+      console.error('Failed to restore roadmap:', error);
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      throw new Error(message || 'Failed to restore roadmap.');
+    }
+  },
+
+  /**
    * Update quest progress - mark as completed or not completed
    */
   updateQuestProgress: async (

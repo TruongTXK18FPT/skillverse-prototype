@@ -1,5 +1,9 @@
 // Lesson DTOs - Matching Backend Structure
 
+import { AttachmentType } from '../services/attachmentService';
+
+export type { AttachmentType };
+
 export enum LessonType {
   VIDEO = 'VIDEO',
   READING = 'READING',
@@ -22,6 +26,20 @@ export interface LessonDetailDTO {
   moduleId: number;
   createdAt: string;
   updatedAt: string;
+  attachments?: LessonAttachmentDTO[];
+}
+
+// Inline type to avoid circular import issues
+export interface LessonAttachmentDTO {
+  id: number;
+  title: string;
+  description?: string;
+  downloadUrl: string;
+  type: AttachmentType;
+  fileSize?: number;
+  fileSizeFormatted?: string;
+  orderIndex?: number;
+  createdAt: string;
 }
 
 // Lesson Summary DTO

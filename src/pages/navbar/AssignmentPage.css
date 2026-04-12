@@ -367,6 +367,15 @@
   flex-direction: column;
   gap: 2rem;
 }
+.ap-v2-doc-content > div {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.ap-v2-doc-content > div * {
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
 .ap-v2-section > h3 {
   display: flex;
   align-items: center;
@@ -385,6 +394,19 @@
   font-size: 0.875rem;
   line-height: 1.6;
   color: #cbd5e1;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.ap-v2-section > div {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.ap-v2-section > div * {
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .ap-v2-rubric-box {
@@ -395,6 +417,15 @@
 }
 .ap-v2-rubric-box * {
   margin: 0.25rem 0;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.ap-v2-section {
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* ---------- RIGHT COLUMN (Action) ---------- */
@@ -481,6 +512,15 @@
 }
 .ap-v2-prev-icon-box--success { background: rgba(16, 185, 129, 0.1); color: #10b981; }
 .ap-v2-prev-icon-box--pending { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
+.ap-v2-prev-icon-box--ai-pending { background: rgba(139, 92, 246, 0.1); color: #a78bfa; }
+
+.ap-v2-spin-icon {
+  animation: apSpin 1s linear infinite;
+}
+@keyframes apSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
 .ap-v2-prev-title {
   font-weight: 700;
@@ -567,6 +607,49 @@
   color: rgba(165, 180, 252, 0.6);
   text-align: right;
   margin-top: 0.75rem;
+}
+
+/* AI feedback box variant */
+.ap-v2-feedback-box--ai {
+  background: rgba(109, 40, 217, 0.15);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+.ap-v2-feedback-box--ai .ap-v2-fb-title {
+  color: #c4b5fd;
+}
+.ap-v2-feedback-box--ai .ap-v2-fb-text {
+  background: rgba(13, 17, 23, 0.6);
+  border-color: rgba(109, 40, 217, 0.3);
+}
+.ap-v2-ai-confidence {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  margin-left: auto;
+}
+.ap-v2-ai-confidence.high {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.ap-v2-ai-confidence.medium {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+.ap-v2-btn--dispute {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.ap-v2-btn--dispute:hover {
+  background: rgba(251, 191, 36, 0.2);
 }
 
 .ap-v2-rubric-analysis h4 {
@@ -917,6 +1000,7 @@
 .ap-v2-tl-tag--graded { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); color: #34d399; }
 .ap-v2-tl-tag--pending { background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.2); color: #06b6d4; }
 .ap-v2-tl-tag--late { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); color: #f87171; }
+.ap-v2-tl-tag--ai-pending { background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.2); color: #a78bfa; }
 .ap-v2-tl-score { font-size: 0.875rem; font-weight: 700; color: #fff; background: #1e293b; padding: 0.25rem 0.75rem; border-radius: 8px; }
 .ap-v2-tl-score span { color: #64748b; }
 
@@ -1023,4 +1107,97 @@
 .ap-v2-btn-outline:hover {
   border-color: var(--ap-cyan);
   background: rgba(6, 182, 212, 0.1);
+}
+
+/* === PASS Banner — shown when student passed the assignment === */
+.ap-v2-pass-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 14px;
+  margin-bottom: 1rem;
+  color: #ecfdf5;
+}
+
+.ap-v2-pass-banner__icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ap-v2-pass-banner__content h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #86efac;
+}
+
+.ap-v2-pass-banner__content p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #a7f3d0;
+}
+
+.ap-v2-pass-banner__content strong {
+  color: #f0fdf4;
+  font-size: 1.1rem;
+}
+
+.ap-v2-pass-banner__sub {
+  margin-top: 0.25rem !important;
+  font-size: 0.82rem !important;
+  color: #6ee7b7 !important;
+}
+
+/* === Resubmit Choice Modal === */
+.ap-v2-modal-resubmit-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.ap-v2-resubmit-choice {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.ap-v2-resubmit-choice:hover {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.ap-v2-resubmit-choice svg {
+  color: #a78bfa;
+  flex-shrink: 0;
+}
+
+.ap-v2-resubmit-choice div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ap-v2-resubmit-choice strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.ap-v2-resubmit-choice span {
+  font-size: 0.82rem;
+  color: #94a3b8;
 }

@@ -19,6 +19,7 @@ import CommunityManagementTab from "../../components/admin/CommunityManagementTa
 import { JobManagementTab } from "../../components/admin/JobManagementTab";
 import MeowlSkinUploadTab from "../../components/admin/MeowlSkinUploadTab";
 import SliderManagementTab from "../../components/admin/SliderManagementTab";
+import AdminAiGradingDashboard from "../admin/AdminAiGradingDashboard";
 // import AdminSeminarManager from './AdminSeminarManager';
 import adminUserService from "../../services/adminUserService";
 import adminService from "../../services/adminService";
@@ -147,6 +148,8 @@ const AdminPage: React.FC = () => {
         return <SystemSettingsTabCosmic />;
       case "ai-experts":
         return <AIExpertManagementTab />;
+      case "ai-grading":
+        return <AdminAiGradingDashboard />;
       case "question-bank":
         return <QuestionBankTab />;
       case "journey-management":

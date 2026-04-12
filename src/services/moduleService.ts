@@ -1,14 +1,15 @@
 import axiosInstance from './axiosInstance';
-import { 
-  ModuleCreateDTO, 
-  ModuleUpdateDTO, 
-  ModuleSummaryDTO, 
-  ModuleDetailDTO 
+import {
+  ModuleCreateDTO,
+  ModuleUpdateDTO,
+  ModuleSummaryDTO,
+  ModuleDetailDTO
 } from '../data/moduleDTOs';
 import { LessonSummaryDTO } from '../data/lessonDTOs';
 import { QuizSummaryDTO } from '../data/quizDTOs';
 import { AssignmentSummaryDTO } from '../data/assignmentDTOs';
 import { resolveRevisionItemWarning } from '../utils/courseRevisionMessages';
+import { getAccessToken } from '../utils/authStorage';
 
 // Re-export DTOs for backward compatibility (consumers can import from service)
 export type { ModuleCreateDTO, ModuleUpdateDTO, ModuleSummaryDTO, ModuleDetailDTO };
@@ -114,7 +115,13 @@ export const assignLessonToModule = async (moduleId: number, lessonId: number, a
 // Load modules with lessons and quizzes content for admin/course detail views
 // Uses single batch endpoint — eliminates N+1 HTTP requests
 export const listModulesWithContent = async (courseId: number): Promise<ModuleDetailDTO[]> => {
-  const res = await axiosInstance.get<any[]>(`/courses/${courseId}/modules/full`);
+  // Gắn token thủ công — interceptor có thể miss getAccessToken() trong một số context
+  // Pattern giống getCourse() trong courseService.ts
+  const token = getAccessToken();
+  const res = await axiosInstance.get<any[]>(
+    `/courses/${courseId}/modules/full`,
+    token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
+  );
   const raw = res.data || [];
 
   return raw.map((m, index) => {

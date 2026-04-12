@@ -50,12 +50,14 @@ const RoadmapGeneratorForm = ({
   const [formData, setFormData] = useState<GenerateRoadmapRequest>({
     // Common / Legacy
     goal: '',
-    duration: '3 months',
+    duration: '1 tháng',
     experience: 'beginner',
     style: 'project-based',
     roadmapType: 'skill',
     target: '',
     aiAgentMode: 'NORMAL',
+    desiredDuration: '1 tháng',
+    dailyTime: '1_HOUR',
     
     // Skill Mode Defaults
     roadmapMode: 'SKILL_BASED',
@@ -135,6 +137,20 @@ const RoadmapGeneratorForm = ({
     setStep('confirmation');
   };
 
+  const mapCareerTimelineToDurationText = (timeline: string | undefined): string => {
+    if (!timeline) return '6 tháng';
+    switch (timeline) {
+      case '3M':
+        return '3 tháng';
+      case '6M':
+        return '6 tháng';
+      case '12M':
+        return '12 tháng';
+      default:
+        return timeline;
+    }
+  };
+
   const handleConfirm = async () => {
     const isSkill = formData.roadmapType === 'skill';
     
@@ -143,6 +159,14 @@ const RoadmapGeneratorForm = ({
     const constructedGoal = isSkill 
       ? `Học kỹ năng ${formData.skillName}` 
       : `Trở thành ${formData.targetRole}`;
+
+    const resolvedDesiredDuration = isSkill
+      ? (formData.desiredDuration || '1 tháng')
+      : mapCareerTimelineToDurationText(formData.timelineToWork);
+
+    const resolvedDailyTime = isSkill
+      ? (formData.dailyLearningTime || '1_HOUR')
+      : (formData.dailyTime || '1_HOUR');
     
     const finalRequest: GenerateRoadmapRequest = {
       ...formData,
@@ -151,13 +175,13 @@ const RoadmapGeneratorForm = ({
       roadmapMode: isSkill ? 'SKILL_BASED' : 'CAREER_BASED',
 
       // Map specific fields to generic ones if needed by older backend logic
-      duration: isSkill ? '3 months' : (formData.timelineToWork || '6 months'), // Fallback
+      duration: resolvedDesiredDuration,
       experience: isSkill ? (formData.currentSkillLevel || 'beginner') : (formData.workExperience || 'none'),
       style: isSkill ? (formData.learningStyle || 'project-based') : 'project-based',
 
-      // FEATURE FIX: Ensure AI gets desiredDuration and dailyTime for accurate estimates
-      desiredDuration: isSkill ? '1 tháng' : (formData.timelineToWork || '6 months'),
-      dailyTime: formData.dailyLearningTime,
+      // Keep timeline consistent between legacy and V2 fields.
+      desiredDuration: resolvedDesiredDuration,
+      dailyTime: resolvedDailyTime,
     };
 
     await onGenerate(finalRequest);
@@ -169,11 +193,30 @@ const RoadmapGeneratorForm = ({
   };
 
   const handleTypeSelect = (type: 'skill' | 'career') => {
-    setFormData(prev => ({ 
-      ...prev, 
-      roadmapType: type,
-      roadmapMode: type === 'skill' ? 'SKILL_BASED' : 'CAREER_BASED'
-    }));
+    setFormData((prev) => {
+      if (type === 'skill') {
+        const desiredDuration = prev.desiredDuration && ['1 tháng', '2 tháng', '3 tháng'].includes(prev.desiredDuration)
+          ? prev.desiredDuration
+          : '1 tháng';
+        return {
+          ...prev,
+          roadmapType: 'skill',
+          roadmapMode: 'SKILL_BASED',
+          desiredDuration,
+          duration: desiredDuration,
+        };
+      }
+
+      const normalizedCareerDuration = mapCareerTimelineToDurationText(prev.timelineToWork || '6M');
+      return {
+        ...prev,
+        roadmapType: 'career',
+        roadmapMode: 'CAREER_BASED',
+        timelineToWork: prev.timelineToWork || '6M',
+        desiredDuration: normalizedCareerDuration,
+        duration: normalizedCareerDuration,
+      };
+    });
     setStep('input-form');
   };
 
@@ -204,6 +247,11 @@ const RoadmapGeneratorForm = ({
       '3M': '3 Tháng',
       '6M': '6 Tháng',
       '12M': '1 Năm',
+      '1 tháng': '1 Tháng',
+      '2 tháng': '2 Tháng',
+      '3 tháng': '3 Tháng',
+      '6 tháng': '6 Tháng',
+      '12 tháng': '12 Tháng',
 
       // Styles
       'PRACTICE': 'Thực hành (Practice)',
@@ -402,9 +450,9 @@ const RoadmapGeneratorForm = ({
                     </span>
                   </div>
                   <div className="rm-summary-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', borderBottom: '1px dashed rgba(148, 163, 184, 0.2)', paddingBottom: '8px' }}>
-                    <span className="rm-summary-label" style={{ color: '#94a3b8' }}>{isSkill ? 'Thời gian học:' : 'Thời gian tìm việc:'}</span>
+                    <span className="rm-summary-label" style={{ color: '#94a3b8' }}>{isSkill ? 'Mốc thời gian:' : 'Thời gian để đi làm:'}</span>
                     <span className="rm-summary-value" style={{ color: '#e2e8f0' }}>
-                      {getReadableValue('time', isSkill ? formData.dailyLearningTime : formData.timelineToWork)}
+                      {getReadableValue('time', isSkill ? formData.desiredDuration : formData.timelineToWork)}
                     </span>
                   </div>
                   <div className="rm-summary-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', borderBottom: '1px dashed rgba(148, 163, 184, 0.2)', paddingBottom: '8px' }}>
@@ -586,6 +634,24 @@ const RoadmapGeneratorForm = ({
 
               <div className="rm-gen-grid" style={{marginTop: '1rem'}}>
                 <div className="rm-input-group">
+                  <label className="rm-label">MỐC THỜI GIAN (1-3 THÁNG)</label>
+                  <div className="rm-select-wrapper">
+                    <select
+                      className="rm-select-input"
+                      value={formData.desiredDuration || '1 tháng'}
+                      onChange={(e) => {
+                        handleChange('desiredDuration', e.target.value);
+                        handleChange('duration', e.target.value);
+                      }}
+                    >
+                      <option value="1 tháng">1 Tháng</option>
+                      <option value="2 tháng">2 Tháng</option>
+                      <option value="3 tháng">3 Tháng</option>
+                    </select>
+                    <ChevronDown size={16} className="rm-select-arrow" />
+                  </div>
+                </div>
+                <div className="rm-input-group">
                   <label className="rm-label">THỜI GIAN/NGÀY</label>
                   <div className="rm-select-wrapper">
                     <select
@@ -604,25 +670,25 @@ const RoadmapGeneratorForm = ({
                     <ChevronDown size={16} className="rm-select-arrow" />
                   </div>
                 </div>
-                <div className="rm-input-group">
-                  <label className="rm-label">PHONG CÁCH HỌC</label>
-                  <div className="rm-select-wrapper">
-                    <select
-                      className="rm-select-input"
-                      value={formData.learningStyle || 'PRACTICE'}
-                      onChange={(e) => handleChange('learningStyle', e.target.value)}
-                    >
-                      <option value="PRACTICE">Practice (Thực hành)</option>
-                      <option value="VIDEO">Video Interactive</option>
-                      <option value="READING">Reading/Docs</option>
-                      <option value="VISUAL">Visual (Hình ảnh)</option>
-                      <option value="AUDITORY">Auditory (Nghe)</option>
-                      <option value="KINESTHETIC">Kinesthetic (Vận động)</option>
-                      <option value="SOCIAL">Social (Học nhóm)</option>
-                      <option value="SOLITARY">Solitary (Tự học)</option>
-                    </select>
-                    <ChevronDown size={16} className="rm-select-arrow" />
-                  </div>
+              </div>
+              <div className="rm-input-group" style={{marginTop: '1rem'}}>
+                <label className="rm-label">PHONG CÁCH HỌC</label>
+                <div className="rm-select-wrapper">
+                  <select
+                    className="rm-select-input"
+                    value={formData.learningStyle || 'PRACTICE'}
+                    onChange={(e) => handleChange('learningStyle', e.target.value)}
+                  >
+                    <option value="PRACTICE">Practice (Thực hành)</option>
+                    <option value="VIDEO">Video Interactive</option>
+                    <option value="READING">Reading/Docs</option>
+                    <option value="VISUAL">Visual (Hình ảnh)</option>
+                    <option value="AUDITORY">Auditory (Nghe)</option>
+                    <option value="KINESTHETIC">Kinesthetic (Vận động)</option>
+                    <option value="SOCIAL">Social (Học nhóm)</option>
+                    <option value="SOLITARY">Solitary (Tự học)</option>
+                  </select>
+                  <ChevronDown size={16} className="rm-select-arrow" />
                 </div>
               </div>
             </>
@@ -739,7 +805,13 @@ const RoadmapGeneratorForm = ({
                     <select
                       className="rm-select-input"
                       value={formData.timelineToWork || '6M'}
-                      onChange={(e) => handleChange('timelineToWork', e.target.value)}
+                      onChange={(e) => {
+                        const timeline = e.target.value;
+                        const normalized = mapCareerTimelineToDurationText(timeline);
+                        handleChange('timelineToWork', timeline);
+                        handleChange('desiredDuration', normalized);
+                        handleChange('duration', normalized);
+                      }}
                     >
                       <option value="3M">3 Tháng</option>
                       <option value="6M">6 Tháng</option>

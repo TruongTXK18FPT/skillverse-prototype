@@ -29,10 +29,12 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import {
   listCoursesByAuthor,
+  listCoursesByAuthorWithStatus,
   deleteCourse,
   submitCourseForApproval,
   createCourseRevision,
-  listCourseRevisions
+  listCourseRevisions,
+  getMentorCourseStats
 } from '../../services/courseService';
 import type { CourseRevisionDTO } from '../../services/courseService';
 import { CourseStatus } from '../../data/courseDTOs';
@@ -81,6 +83,14 @@ const getStatusLabel = (status: CourseStatus): string => {
   }
 };
 
+const getStatusFilterLabel = (status: 'ALL' | CourseStatus): string => {
+  if (status === 'ALL') {
+    return 'Tất cả';
+  }
+
+  return getStatusLabel(status);
+};
+
 const resolveCourseThumbnail = (course: Course): string | null => {
   const raw = course.thumbnail?.url || course.thumbnailUrl || '';
   if (!raw) return null;
@@ -112,6 +122,8 @@ const CoursesTab: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<'ALL' | CourseStatus>('ALL');
   const [courseGroups, setCourseGroups] = useState<Record<number, GroupChatResponse | null>>({});
   const [selectedCourseForStudents, setSelectedCourseForStudents] = useState<Course | null>(null);
+  const [courseStats, setCourseStats] = useState<Record<string, number> | null>(null);
+  const [courseStatsStatus, setCourseStatsStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [currentPage, setCurrentPage] = useState<number>(() => {
     const saved = typeof window !== 'undefined'
       ? window.sessionStorage.getItem(COURSES_PAGE_STORAGE_KEY)
@@ -161,12 +173,27 @@ const CoursesTab: React.FC = () => {
   const [initialModalData, setInitialModalData] = useState({ name: '', avatar: '' });
   const itemsPerPage = 8;
 
-  // Load courses on mount
+  // Load courses on mount and when filter/page changes
   useEffect(() => {
     if (user?.id) {
       loadCourses(currentPage);
     }
-  }, [user?.id, currentPage]);
+  }, [user?.id, currentPage, statusFilter]);
+
+  // Load course stats for badge counts
+  useEffect(() => {
+    if (!user?.id) return;
+    setCourseStatsStatus('loading');
+    getMentorCourseStats(user.id)
+      .then((stats) => {
+        setCourseStats(stats);
+        setCourseStatsStatus('ready');
+      })
+      .catch(() => {
+        setCourseStats(null);
+        setCourseStatsStatus('error');
+      });
+  }, [user?.id]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -224,7 +251,9 @@ const CoursesTab: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await listCoursesByAuthor(user.id, pageToLoad - 1, itemsPerPage);
+      const response = statusFilter === 'ALL'
+        ? await listCoursesByAuthorWithStatus(user.id, pageToLoad - 1, itemsPerPage, 'updatedAt', 'desc', undefined, false)
+        : await listCoursesByAuthorWithStatus(user.id, pageToLoad - 1, itemsPerPage, 'updatedAt', 'desc', statusFilter as CourseStatus, true);
       const fetchedCourses = response.content || [];
       const fetchedTotal = response.totalElements ?? fetchedCourses.length;
 
@@ -272,6 +301,12 @@ const CoursesTab: React.FC = () => {
         try {
           await deleteCourse(courseId, user.id);
           await loadCourses(currentPage);
+          getMentorCourseStats(user.id)
+            .then((stats) => {
+              setCourseStats(stats);
+              setCourseStatsStatus('ready');
+            })
+            .catch(() => {});
           showNotice('success', 'Khóa học đã được lưu trữ.');
         } catch (err) {
           console.error('Failed to archive course:', err);
@@ -294,6 +329,12 @@ const CoursesTab: React.FC = () => {
         try {
           await submitCourseForApproval(courseId, user.id);
           await loadCourses(currentPage);
+          getMentorCourseStats(user.id)
+            .then((stats) => {
+              setCourseStats(stats);
+              setCourseStatsStatus('ready');
+            })
+            .catch(() => {});
           showNotice('success', 'Khóa học đã được gửi để duyệt thành công!');
         } catch (err: any) {
           const errorMessage = err.response?.data?.message || 'Không thể gửi khóa học để duyệt.';
@@ -649,16 +690,35 @@ const CoursesTab: React.FC = () => {
     });
   }, [courses, searchTerm, statusFilter]);
 
-  // Render
-  if (loading && courses.length === 0) {
-    return (
-      <div className="mentor-hud-loading">
-        <MeowlKuruLoader size="small" />
-        <p>Đang tải khóa học...</p>
-      </div>
-    );
-  }
+  const activeStatusLabel = getStatusFilterLabel(statusFilter);
+  const totalCourseCount = courseStatsStatus === 'ready' ? (courseStats?.ALL ?? 0) : null;
+  const shouldShowGlobalEmpty = !loading && totalCourseCount === 0;
+  const shouldShowCourseShell = !shouldShowGlobalEmpty;
+  const filteredEmpty = shouldShowCourseShell && !loading && visibleCourses.length === 0;
+  const trimmedSearchTerm = searchTerm.trim();
 
+  const filteredEmptyCopy = useMemo(() => {
+    if (trimmedSearchTerm.length > 0) {
+      return {
+        title: 'Không có khóa học phù hợp',
+        description: `Không tìm thấy khóa học nào khớp với "${trimmedSearchTerm}" trong bộ lọc hiện tại.`
+      };
+    }
+
+    if (statusFilter === 'ALL') {
+      return {
+        title: 'Chưa có khóa học hiển thị',
+        description: 'Hiện chưa có khóa học nào trong danh sách này. Bạn có thể tạo khóa học mới để bắt đầu.'
+      };
+    }
+
+    return {
+      title: `Không có khóa học ở trạng thái ${activeStatusLabel.toLowerCase()}`,
+      description: `Hiện chưa có khóa học nào thuộc nhóm ${activeStatusLabel.toLowerCase()}.`
+    };
+  }, [activeStatusLabel, statusFilter, trimmedSearchTerm]);
+
+  // Render
   if (selectedCourseForStudents && user) {
     return (
       <div className="mentor-hud-courses">
@@ -732,8 +792,16 @@ const CoursesTab: React.FC = () => {
         </div>
       )}
 
-      {/* Empty State */}
-      {!loading && courses.length === 0 && (
+      {/* Loading State */}
+      {loading && courses.length === 0 && shouldShowCourseShell && (
+        <div className="mentor-hud-loading">
+          <MeowlKuruLoader size="small" />
+          <p>Đang tải khóa học...</p>
+        </div>
+      )}
+
+      {/* Global Empty State */}
+      {shouldShowGlobalEmpty && (
         <div className="mentor-hud-empty">
           <BookOpen className="w-16 h-16 mentor-hud-empty-icon" />
           <h3>Chưa có khóa học nào</h3>
@@ -748,8 +816,8 @@ const CoursesTab: React.FC = () => {
         </div>
       )}
 
-      {/* Courses Grid */}
-      {courses.length > 0 && (
+      {/* Course Shell */}
+      {shouldShowCourseShell && (
         <>
           <div className="mentor-hud-courses__filters">
             <input
@@ -759,26 +827,40 @@ const CoursesTab: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-
-            <select
-              className="mentor-hud-courses__filter-select"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as 'ALL' | CourseStatus)}
-            >
-              <option value="ALL">Tất cả trạng thái</option>
-              <option value={CourseStatus.DRAFT}>Bản nháp</option>
-              <option value={CourseStatus.PENDING}>Chờ duyệt</option>
-              <option value={CourseStatus.PUBLIC}>Đã xuất bản</option>
-              <option value={CourseStatus.REJECTED}>Bị từ chối</option>
-              <option value={CourseStatus.SUSPENDED}>Tạm khóa</option>
-              <option value={CourseStatus.ARCHIVED}>Đã lưu trữ</option>
-            </select>
           </div>
 
-          {visibleCourses.length === 0 && (
+          <div className="mentor-hud-filter-tabs">
+            {(['ALL', CourseStatus.DRAFT, CourseStatus.PENDING, CourseStatus.PUBLIC, CourseStatus.REJECTED, CourseStatus.SUSPENDED, CourseStatus.ARCHIVED] as const).map((status) => {
+              const label = getStatusFilterLabel(status);
+              const statKey = status === 'ALL' ? 'ALL' : status as string;
+              const count = courseStats?.[statKey] ?? 0;
+
+              return (
+                <button
+                  key={status}
+                  className={`mentor-hud-filter-tab${statusFilter === status ? ' active' : ''}`}
+                  onClick={() => { setStatusFilter(status); setCurrentPage(1); }}
+                >
+                  <span>{label}</span>
+                  {count > 0 && <span className="mentor-hud-tab-badge">{count}</span>}
+                </button>
+              );
+            })}
+          </div>
+
+          {filteredEmpty && (
             <div className="mentor-hud-empty mentor-hud-empty--compact">
-              <h3>Không có khóa học phù hợp</h3>
-              <p>Hãy thử điều chỉnh từ khóa hoặc bộ lọc trạng thái.</p>
+              <div className="mentor-hud-empty--compact-copy">
+                <h3>{filteredEmptyCopy.title}</h3>
+                <p>{filteredEmptyCopy.description}</p>
+              </div>
+              <button
+                className="mentor-hud-create-button mentor-hud-empty--compact-cta"
+                onClick={() => navigate('/mentor/courses/create')}
+              >
+                <Plus className="w-5 h-5" />
+                Tạo Khóa Học Mới
+              </button>
             </div>
           )}
 

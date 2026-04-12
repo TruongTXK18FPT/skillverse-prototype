@@ -332,6 +332,27 @@
   background: rgba(0, 246, 255, 0.08);
 }
 
+/* Roadmap context banner (Gap 2) */
+.cockpit-detail-status-banner--roadmap {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.cockpit-detail-status-banner--roadmap .cockpit-detail-status-banner-title {
+  color: #60a5fa;
+}
+
+.cockpit-detail-status-banner--roadmap .cockpit-detail-status-banner-text {
+  color: #93c5fd;
+}
+
+.cockpit-detail-status-banner-code {
+  background: rgba(59, 130, 246, 0.2);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
 .cockpit-detail-status-banner {
   margin-bottom: 1.5rem;
   padding: 1rem 1.25rem;

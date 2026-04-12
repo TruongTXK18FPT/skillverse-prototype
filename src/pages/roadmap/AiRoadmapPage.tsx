@@ -3,7 +3,7 @@ import { ArrowLeft, Plus, Search, Grid3x3, List, Filter } from 'lucide-react';
 import { RoadmapGeneratorForm } from '../../components/ai-roadmap';
 import { RoadmapList } from '../../components/roadmap';
 import aiRoadmapService from '../../services/aiRoadmapService';
-import { 
+import {
   RoadmapSessionSummary,
   RoadmapStatusCounts,
   GenerateRoadmapRequest
@@ -61,10 +61,15 @@ const AiRoadmapPage = () => {
   const [filterExperience, setFilterExperience] = useState<string>('all');
   const [actionLoadingId, setActionLoadingId] = useState<number | null>(null);
   const learningRoadmapSourceRef = useRef<RoadmapSessionSummary[]>([]);
+  const deletedRoadmapSourceRef = useRef<RoadmapSessionSummary[]>([]);
 
   useEffect(() => {
     learningRoadmapSourceRef.current = learningRoadmapSource;
   }, [learningRoadmapSource]);
+
+  useEffect(() => {
+    deletedRoadmapSourceRef.current = deletedRoadmapSource;
+  }, [deletedRoadmapSource]);
 
   const buildFallbackStatusCounts = useCallback((
     learningList: RoadmapSessionSummary[],
@@ -176,7 +181,6 @@ const AiRoadmapPage = () => {
   }, [loadLearningRoadmaps]);
 
   const handleCreateRoadmap = () => {
-    // Always allow viewing the form, but show login prompt if not authenticated
     setViewMode('generate');
   };
 
@@ -189,7 +193,7 @@ const AiRoadmapPage = () => {
 
     try {
       setIsLoading(true);
-      
+
       const apiRequest: GenerateRoadmapRequest = {
         ...request,
         aiAgentMode: request.aiAgentMode === 'DEEP_RESEARCH'
@@ -199,66 +203,44 @@ const AiRoadmapPage = () => {
 
       const roadmap = await aiRoadmapService.generateRoadmap(apiRequest);
       showSuccess('Thành công', 'Lộ trình đã được tạo!');
-      // Navigate to the new roadmap detail page
       navigate(`/roadmap/${roadmap.sessionId}`);
-      // Reload list to include new roadmap
       await loadLearningRoadmaps();
     } catch (error: any) {
-      // Extract error message from Axios error response
       const errorMessage = error?.response?.data?.message || error?.message || 'Đã xảy ra lỗi không xác định.';
       const status = error?.response?.status;
 
-      // Handle Premium Restriction (403) for Deep Research
       if (status === 403 && request.aiAgentMode === 'DEEP_RESEARCH') {
-        
-        
-        // Show banner/toast
         showError(
           'Yêu cầu Premium Plus',
           'Chế độ Nghiên cứu sâu chỉ dành cho gói Mentor Pro. Hệ thống sẽ tự động chuyển về chế độ Tiêu chuẩn.',
           6
         );
 
-        // Retry with Normal Agent
         try {
           const retryRequest = { ...request, aiAgentMode: 'NORMAL' as const };
           const roadmap = await aiRoadmapService.generateRoadmap(retryRequest);
-          
           showSuccess('Thành công', 'Lộ trình đã được tạo (Chế độ Thường)!');
           navigate(`/roadmap/${roadmap.sessionId}`);
           await loadLearningRoadmaps();
-          return; // Exit after successful retry
+          return;
         } catch (retryError: any) {
-           console.error('Retry failed:', retryError);
-           // Fall through to standard error handling if retry also fails
+          console.error('Retry failed:', retryError);
         }
       }
-      
-      // Debug logging
-      
-      
-      
-      
-      // Check for specific error types and show user-friendly messages
-      if (errorMessage.includes('Mục tiêu không hợp lệ') || 
+
+      if (errorMessage.includes('Mục tiêu không hợp lệ') ||
           errorMessage.includes('không liên quan đến học tập') ||
           errorMessage.includes('không hợp lý')) {
-        // Show detailed validation error with examples
-        
         showError(
-          '❌ Mục tiêu không hợp lệ', 
+          '❌ Mục tiêu không hợp lệ',
           'Mục tiêu của bạn không liên quan đến học tập hoặc phát triển kỹ năng. Vui lòng nhập một mục tiêu học tập cụ thể như "Học Python", "Trở thành Data Scientist", "Học tiếng Anh IELTS 7.0", v.v.',
-          12 // 12 seconds for longer message
+          12
         );
       } else if (errorMessage.includes('quá dài') || errorMessage.includes('quá ngắn')) {
-        
         showError('⚠️ Độ dài không hợp lệ', errorMessage, 8);
       } else if (errorMessage.includes('chứa từ ngữ không phù hợp')) {
-        
         showError('🚫 Nội dung không phù hợp', 'Mục tiêu chứa từ ngữ không phù hợp. Vui lòng nhập lại với nội dung tích cực.', 8);
       } else {
-        // Generic error - show backend message directly
-        
         showError('❌ Lỗi tạo lộ trình', errorMessage, 8);
       }
     } finally {
@@ -272,16 +254,33 @@ const AiRoadmapPage = () => {
       setShowLoginModal(true);
       return;
     }
-
-    // Navigate to dedicated roadmap detail page
     navigate(`/roadmap/${sessionId}`);
   };
 
+  const handleNavigateRoadmap = (sessionId: number, status: RoadmapLifecycleStatus): boolean => {
+    if (status === 'PAUSED') {
+      showError('Roadmap đang tạm dừng', 'Hãy kích hoạt lại roadmap để tiếp tục học.');
+      return false;
+    }
+    return true;
+  };
+
+  /**
+   * Generic roadmap action runner with optimistic update support.
+   * @param sessionId - Roadmap session ID
+   * @param action - Async function to call (API call)
+   * @param successTitle - Toast title on success
+   * @param successMessage - Toast message on success
+   * @param optimisticUpdate - Optional function to apply optimistic state change before API call
+   * @param rollbackUpdate - Optional function to rollback optimistic change on failure
+   */
   const runRoadmapAction = useCallback(async (
     sessionId: number,
     action: () => Promise<void>,
     successTitle: string,
     successMessage: string,
+    optimisticUpdate?: () => void,
+    rollbackUpdate?: () => void,
   ) => {
     if (actionLoadingId !== null) {
       return;
@@ -289,6 +288,9 @@ const AiRoadmapPage = () => {
 
     try {
       setActionLoadingId(sessionId);
+      if (optimisticUpdate) {
+        optimisticUpdate();
+      }
       await action();
       showSuccess(successTitle, successMessage, 4);
       await loadLearningRoadmaps();
@@ -296,6 +298,9 @@ const AiRoadmapPage = () => {
         await loadDeletedRoadmaps(true);
       }
     } catch (error) {
+      if (rollbackUpdate) {
+        rollbackUpdate();
+      }
       showError('Không thể cập nhật trạng thái roadmap', (error as Error).message);
     } finally {
       setActionLoadingId(null);
@@ -303,20 +308,82 @@ const AiRoadmapPage = () => {
   }, [actionLoadingId, hasLoadedDeletedRoadmaps, loadDeletedRoadmaps, loadLearningRoadmaps, showError, showSuccess]);
 
   const handleActivateRoadmap = useCallback(async (sessionId: number) => {
+    const roadmap = learningRoadmapSourceRef.current.find((r) => r.sessionId === sessionId);
+    if (!roadmap) return;
+
     await runRoadmapAction(
       sessionId,
       () => aiRoadmapService.activateRoadmap(sessionId),
       'Đã kích hoạt roadmap',
       'Roadmap này đã chuyển sang ACTIVE. Các roadmap ACTIVE khác sẽ tự động chuyển PAUSED.',
+      // Optimistic: mark this as ACTIVE, others as PAUSED
+      () => {
+        setLearningRoadmapSource((current) =>
+          current.map((r) =>
+            r.sessionId === sessionId
+              ? { ...r, status: 'ACTIVE' }
+              : { ...r, status: 'PAUSED' }
+          )
+        );
+        setStatusCounts((prev) => ({
+          ...prev,
+          active: prev.active + 1,
+          paused: Math.max(0, prev.paused - 1),
+        }));
+      },
+      // Rollback
+      () => {
+        setLearningRoadmapSource((current) =>
+          current.map((r) =>
+            r.sessionId === sessionId ? { ...r, status: roadmap.status } : r
+          )
+        );
+        const oldStatus = normalizeRoadmapStatus(roadmap.status);
+        setStatusCounts((prev) => ({
+          ...prev,
+          active: oldStatus === 'ACTIVE' ? prev.active + 1 : prev.active,
+          paused: oldStatus === 'PAUSED' ? prev.paused + 1 : prev.paused,
+        }));
+      },
     );
   }, [runRoadmapAction]);
 
   const handlePauseRoadmap = useCallback(async (sessionId: number) => {
+    const roadmap = learningRoadmapSourceRef.current.find((r) => r.sessionId === sessionId);
+    if (!roadmap) return;
+
     await runRoadmapAction(
       sessionId,
       () => aiRoadmapService.pauseRoadmap(sessionId),
       'Đã tạm dừng roadmap',
       'Bạn có thể kích hoạt lại roadmap này bất kỳ lúc nào.',
+      // Optimistic: mark as PAUSED
+      () => {
+        setLearningRoadmapSource((current) =>
+          current.map((r) =>
+            r.sessionId === sessionId ? { ...r, status: 'PAUSED' } : r
+          )
+        );
+        setStatusCounts((prev) => ({
+          ...prev,
+          active: Math.max(0, prev.active - 1),
+          paused: prev.paused + 1,
+        }));
+      },
+      // Rollback
+      () => {
+        setLearningRoadmapSource((current) =>
+          current.map((r) =>
+            r.sessionId === sessionId ? { ...r, status: roadmap.status } : r
+          )
+        );
+        const oldStatus = normalizeRoadmapStatus(roadmap.status);
+        setStatusCounts((prev) => ({
+          ...prev,
+          active: oldStatus === 'ACTIVE' ? prev.active + 1 : prev.active,
+          paused: oldStatus === 'PAUSED' ? prev.paused + 1 : prev.paused,
+        }));
+      },
     );
   }, [runRoadmapAction]);
 
@@ -324,6 +391,9 @@ const AiRoadmapPage = () => {
     if (actionLoadingId !== null) {
       return;
     }
+
+    const roadmap = learningRoadmapSourceRef.current.find((r) => r.sessionId === sessionId);
+    if (!roadmap) return;
 
     showToast({
       type: 'warning',
@@ -335,12 +405,43 @@ const AiRoadmapPage = () => {
         text: 'Xóa',
         onClick: async () => {
           hideToast();
-          await runRoadmapAction(
-            sessionId,
-            () => aiRoadmapService.deleteRoadmap(sessionId),
-            'Đã xóa roadmap',
-            'Roadmap đã được chuyển sang danh sách đã xóa.',
-          );
+
+          // Optimistic update: remove from list AFTER user confirms
+          const oldStatus = normalizeRoadmapStatus(roadmap.status);
+          setLearningRoadmapSource((current) => current.filter((r) => r.sessionId !== sessionId));
+          setStatusCounts((prev) => ({
+            ...prev,
+            active: oldStatus === 'ACTIVE' ? Math.max(0, prev.active - 1) : prev.active,
+            paused: oldStatus === 'PAUSED' ? Math.max(0, prev.paused - 1) : prev.paused,
+            deleted: prev.deleted + 1,
+            total: prev.total,
+          }));
+
+          try {
+            setActionLoadingId(sessionId);
+            await aiRoadmapService.deleteRoadmap(sessionId);
+            showSuccess('Đã xóa roadmap', 'Roadmap đã được chuyển sang danh sách đã xóa.', 4);
+            await loadLearningRoadmaps();
+            if (hasLoadedDeletedRoadmaps) {
+              await loadDeletedRoadmaps(true);
+            }
+          } catch (error) {
+            // Rollback on failure
+            setLearningRoadmapSource((current) => {
+              if (current.some((r) => r.sessionId === sessionId)) return current;
+              return [...current, roadmap];
+            });
+            setStatusCounts((prev) => ({
+              ...prev,
+              active: oldStatus === 'ACTIVE' ? prev.active + 1 : prev.active,
+              paused: oldStatus === 'PAUSED' ? prev.paused + 1 : prev.paused,
+              deleted: Math.max(0, prev.deleted - 1),
+              total: prev.total,
+            }));
+            showError('Không thể xóa roadmap', (error as Error).message);
+          } finally {
+            setActionLoadingId(null);
+          }
         },
       },
       secondaryActionButton: {
@@ -348,12 +449,15 @@ const AiRoadmapPage = () => {
         onClick: hideToast,
       },
     });
-  }, [actionLoadingId, hideToast, runRoadmapAction, showToast]);
+  }, [actionLoadingId, hasLoadedDeletedRoadmaps, hideToast, loadDeletedRoadmaps, loadLearningRoadmaps, showError, showSuccess, showToast]);
 
   const handlePermanentDeleteRoadmap = useCallback((sessionId: number) => {
     if (actionLoadingId !== null) {
       return;
     }
+
+    const roadmap = deletedRoadmapSourceRef.current.find((r) => r.sessionId === sessionId);
+    if (!roadmap) return;
 
     showToast({
       type: 'error',
@@ -365,12 +469,38 @@ const AiRoadmapPage = () => {
         text: 'Xóa vĩnh viễn',
         onClick: async () => {
           hideToast();
-          await runRoadmapAction(
-            sessionId,
-            () => aiRoadmapService.permanentDeleteRoadmap(sessionId),
-            'Đã xóa vĩnh viễn roadmap',
-            'Roadmap và dữ liệu liên quan trực tiếp đã được xóa khỏi hệ thống.',
-          );
+
+          // Optimistic update: remove from deleted list AFTER user confirms
+          setDeletedRoadmapSource((current) => current.filter((r) => r.sessionId !== sessionId));
+          setStatusCounts((prev) => ({
+            ...prev,
+            deleted: Math.max(0, prev.deleted - 1),
+            total: prev.total,
+          }));
+
+          try {
+            setActionLoadingId(sessionId);
+            await aiRoadmapService.permanentDeleteRoadmap(sessionId);
+            showSuccess('Đã xóa vĩnh viễn roadmap', 'Roadmap và dữ liệu liên quan đã được xóa khỏi hệ thống.', 4);
+            if (hasLoadedDeletedRoadmaps) {
+              await loadDeletedRoadmaps(true);
+            }
+            await loadLearningRoadmaps();
+          } catch (error) {
+            // Rollback on failure
+            setDeletedRoadmapSource((current) => {
+              if (current.some((r) => r.sessionId === sessionId)) return current;
+              return [...current, roadmap];
+            });
+            setStatusCounts((prev) => ({
+              ...prev,
+              deleted: prev.deleted + 1,
+              total: prev.total,
+            }));
+            showError('Không thể xóa vĩnh viễn roadmap', (error as Error).message);
+          } finally {
+            setActionLoadingId(null);
+          }
         },
       },
       secondaryActionButton: {
@@ -378,7 +508,25 @@ const AiRoadmapPage = () => {
         onClick: hideToast,
       },
     });
-  }, [actionLoadingId, hideToast, runRoadmapAction, showToast]);
+  }, [actionLoadingId, hasLoadedDeletedRoadmaps, hideToast, loadDeletedRoadmaps, loadLearningRoadmaps, showError, showSuccess, showToast]);
+
+  const handleRestoreRoadmap = useCallback(async (sessionId: number) => {
+    if (actionLoadingId !== null) return;
+
+    try {
+      setActionLoadingId(sessionId);
+      await aiRoadmapService.restoreRoadmap(sessionId);
+      showSuccess('Đã khôi phục roadmap', 'Roadmap đã được khôi phục về danh sách còn sử dụng. Bạn có thể kích hoạt lại bất kỳ lúc nào.', 4);
+      await loadLearningRoadmaps();
+      if (hasLoadedDeletedRoadmaps) {
+        await loadDeletedRoadmaps(true);
+      }
+    } catch (error) {
+      showError('Không thể khôi phục roadmap', (error as Error).message);
+    } finally {
+      setActionLoadingId(null);
+    }
+  }, [actionLoadingId, hasLoadedDeletedRoadmaps, loadDeletedRoadmaps, loadLearningRoadmaps, showError, showSuccess]);
 
   const applyFiltersAndSort = useCallback((items: RoadmapSessionSummary[]) => {
     let filtered = [...items];
@@ -440,6 +588,7 @@ const AiRoadmapPage = () => {
       window.history.back();
     }
   };
+
   return (
     <div className="roadmap-hud-container">
       <LoginRequiredModal
@@ -450,11 +599,10 @@ const AiRoadmapPage = () => {
         feature="Roadmap AI"
       />
 
-      {/* Cosmic dust particles - Optimized for performance */}
       <div className="cosmic-dust">
         {[...Array(40)].map((_, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             className="dust-particle"
             style={{
               left: `${Math.random() * 100}%`,
@@ -465,6 +613,7 @@ const AiRoadmapPage = () => {
           />
         ))}
       </div>
+
       <div className="roadmap-page__container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
         {/* Header */}
         <div className="roadmap-page__header" style={{ marginBottom: '30px' }}>
@@ -484,7 +633,6 @@ const AiRoadmapPage = () => {
             </p>
           </div>
 
-          {/* Create Button - Only show in list view */}
           {viewMode === 'list' && (
             <button
               onClick={handleCreateRoadmap}
@@ -499,7 +647,6 @@ const AiRoadmapPage = () => {
 
         {/* Content */}
         <div className="roadmap-page__content">
-          {/* LIST VIEW - Show all roadmaps */}
           {viewMode === 'list' && (
             <div className="roadmap-page__list">
               {/* Search and Filter Controls */}
@@ -621,6 +768,8 @@ const AiRoadmapPage = () => {
                         onPauseRoadmap={handlePauseRoadmap}
                         onDeleteRoadmap={handleDeleteRoadmap}
                         actionLoadingId={actionLoadingId}
+                        totalRoadmapCount={learningRoadmapCount}
+                        onNavigateRoadmap={handleNavigateRoadmap}
                         emptyTitle="Chưa có roadmap còn sử dụng"
                         emptyDescription="Tạo roadmap mới để bắt đầu hành trình học tập cá nhân hóa."
                       />
@@ -642,6 +791,7 @@ const AiRoadmapPage = () => {
                         isAuthenticated={isAuthenticated}
                         onLoginRedirect={() => setShowLoginModal(true)}
                         onPermanentDeleteRoadmap={handlePermanentDeleteRoadmap}
+                        onRestoreRoadmap={handleRestoreRoadmap}
                         actionLoadingId={actionLoadingId}
                         disableCardSelection
                         hideEmptyCreateButton
@@ -655,7 +805,6 @@ const AiRoadmapPage = () => {
             </div>
           )}
 
-          {/* GENERATE VIEW - Show form */}
           {viewMode === 'generate' && (
             <div className="roadmap-hud-console">
                 <RoadmapGeneratorForm
@@ -666,14 +815,11 @@ const AiRoadmapPage = () => {
                 />
             </div>
           )}
-
         </div>
       </div>
 
-      {/* Meowl Guide */}
       <MeowlGuide currentPage="roadmap" autoOpenChat />
 
-      {/* Toast Notification */}
       {toast && (
         <Toast
           type={toast.type}

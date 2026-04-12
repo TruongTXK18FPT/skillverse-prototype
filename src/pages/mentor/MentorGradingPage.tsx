@@ -9,10 +9,13 @@ import {
   Link as LinkIcon,
   Upload,
   User,
-  Search,
   Eye,
   Edit3,
-  X
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Sparkles,
 } from 'lucide-react';
 import {
   AssignmentDetailDTO,
@@ -23,10 +26,15 @@ import {
   SubmissionType
 } from '../../data/assignmentDTOs';
 import { getAssignmentById, getAssignmentSubmissions, gradeSubmission } from '../../services/assignmentService';
+import { downloadFile } from '../../utils/downloadFile';
+import { sanitizeHtml } from '../../utils/sanitizeHtml';
+import { generateAiGrade, toggleTrustAi } from '../../services/aiGradingService';
+import { AiGradingResultDTO } from '../../data/assignmentDTOs';
 import { useAuth } from '../../context/AuthContext';
+import { useAppToast } from '../../context/ToastContext';
 import './assignment-grading.css';
 
-type FilterType = 'all' | 'pending' | 'graded' | 'late';
+type FilterType = 'all' | 'pending' | 'graded' | 'late' | 'aiProcessing';
 
 interface LocationState {
   courseName?: string;
@@ -45,6 +53,8 @@ interface GradingWorkspaceState {
   criteriaFeedback: Record<number, string>;
   expandedCriteriaFeedback: Record<number, boolean>;
   submitting: boolean;
+  /** True when mentor has run AI pre-grade and is confirming the result — triggers isAiGrade=true on BE. */
+  confirmingAiGrade: boolean;
 }
 
 const emptyWorkspaceState = (): GradingWorkspaceState => ({
@@ -54,7 +64,8 @@ const emptyWorkspaceState = (): GradingWorkspaceState => ({
   criteriaScores: {},
   criteriaFeedback: {},
   expandedCriteriaFeedback: {},
-  submitting: false
+  submitting: false,
+  confirmingAiGrade: false,
 });
 
 const resolveLearnerName = (userName?: string | null, userId?: number) => {
@@ -88,6 +99,7 @@ const getCriterionPassingThreshold = (criterion?: Pick<AssignmentCriteriaDTO, 'p
 const MentorGradingPage: React.FC = () => {
   const { assignmentId } = useParams<{ assignmentId: string }>();
   const { user } = useAuth();
+  const toast = useAppToast();
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as LocationState | null;
@@ -98,20 +110,23 @@ const MentorGradingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<FilterType>('pending');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [descriptionCollapsed, setDescriptionCollapsed] = useState(false);
   const [gradingWorkspace, setGradingWorkspace] = useState<GradingWorkspaceState>(emptyWorkspaceState);
+  const [aiGradingResult, setAiGradingResult] = useState<AiGradingResultDTO | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
 
   const loadData = useCallback(async () => {
     if (!assignmentId || !user?.id) return;
     setLoading(true);
     setError(null);
     try {
-      const [assignmentData, submissionsData] = await Promise.all([
+      const [assignmentData, submissionsResponse] = await Promise.all([
         getAssignmentById(Number(assignmentId)),
         getAssignmentSubmissions(Number(assignmentId))
       ]);
       setAssignment(assignmentData);
-      setSubmissions(submissionsData);
+      setSubmissions(submissionsResponse.content);
     } catch (err: any) {
       setError(err?.response?.data?.message || 'Không thể tải dữ liệu.');
     } finally {
@@ -236,6 +251,42 @@ const MentorGradingPage: React.FC = () => {
     });
 
     setError(null);
+    setAiError(null);
+
+    // If submission has existing AI results, pre-populate them
+    if (submission.isAiGraded && submission.aiScore != null) {
+      // Reconstruct AiGradingResultDTO from existing submission data
+      const existingResult: AiGradingResultDTO = {
+        criteriaScores: submission.criteriaScores?.map(cs => ({
+          criteriaId: cs.criteriaId,
+          criteriaName: cs.criteriaName || '',
+          score: cs.score ?? 0,
+          maxPoints: cs.maxPoints ?? 0,
+          passingPoints: cs.passingPoints ?? 0,
+          passed: cs.passed ?? false,
+          feedback: cs.feedback || '',
+          confidence: null
+        })) || [],
+        totalScore: submission.aiScore,
+        overallFeedback: submission.aiFeedback || '',
+        overallConfidence: submission.aiConfidence ?? 0
+      };
+      setAiGradingResult(existingResult);
+
+      // Pre-fill criteria scores from AI results if not already loaded
+      submission.criteriaScores?.forEach((cs) => {
+        if (cs.criteriaId != null && !criteriaScores[String(cs.criteriaId)]) {
+          criteriaScores[cs.criteriaId] = cs.score?.toString() || '';
+        }
+        if (cs.criteriaId != null && !criteriaFeedback[cs.criteriaId] && cs.feedback) {
+          criteriaFeedback[cs.criteriaId] = cs.feedback;
+          expandedCriteriaFeedback[cs.criteriaId] = true;
+        }
+      });
+    } else {
+      setAiGradingResult(null);
+    }
+
     setGradingWorkspace({
       submission,
       score: submission.score?.toString() || '',
@@ -251,9 +302,61 @@ const MentorGradingPage: React.FC = () => {
     });
   };
 
+  const handleAiPreGrade = async () => {
+    if (!activeSubmission || aiLoading) return;
+    if (activeSubmission?.aiGradeAttemptCount && activeSubmission.aiGradeAttemptCount >= 3) {
+      toast.showError('Giới hạn AI', 'Đã đạt giới hạn 3 lần gọi AI cho bài nộp này.');
+      return;
+    }
+    setAiLoading(true);
+    setAiError(null);
+    try {
+      const result = await generateAiGrade(activeSubmission.id);
+      setAiGradingResult(result);
+      const newScores: Record<number, string> = {};
+      const newFeedback: Record<number, string> = {};
+      result.criteriaScores.forEach((cs) => {
+        if (cs.criteriaId) {
+          newScores[cs.criteriaId] = String(cs.score);
+          if (cs.feedback) newFeedback[cs.criteriaId] = cs.feedback;
+        }
+      });
+      setGradingWorkspace((prev) => ({
+        ...prev,
+        criteriaScores: { ...prev.criteriaScores, ...newScores },
+        criteriaFeedback: { ...prev.criteriaFeedback, ...newFeedback },
+        feedback: result.overallFeedback || prev.feedback,
+        // Flag that this grade is confirming an AI pre-grade result
+        confirmingAiGrade: true,
+      }));
+      if (result.overallConfidence >= 0.95 && assignment?.trustAiEnabled) {
+        toast.showSuccess('AI tự tin cao', `Điểm tự tin: ${Math.round(result.overallConfidence * 100)}%. Bạn có thể xác nhận nhanh.`);
+      }
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || err?.message || 'AI chấm bài thất bại.';
+      setAiError(msg);
+      toast.showError('AI chấm thất bại', msg);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const handleToggleTrustAi = async (enabled: boolean) => {
+    if (!assignment?.id) return;
+    try {
+      await toggleTrustAi(assignment.id, enabled);
+      setAssignment((prev) => prev ? { ...prev, trustAiEnabled: enabled } : prev);
+      toast.showSuccess('Trust AI', enabled ? 'Đã bật Trust AI cho assignment này.' : 'Đã tắt Trust AI cho assignment này.');
+    } catch (err: any) {
+      toast.showError('Lỗi', 'Không thể cập nhật Trust AI.');
+    }
+  };
+
   const closeGradingWorkspace = () => {
     if (gradingWorkspace.submitting) return;
     setGradingWorkspace(emptyWorkspaceState());
+    setAiGradingResult(null);
+    setAiError(null);
   };
 
   const toggleCriterionFeedback = (criterionId: number) => {
@@ -305,13 +408,15 @@ const MentorGradingPage: React.FC = () => {
           submissionId: activeSubmission.id,
           score: criteriaValidation.total,
           feedback: gradingWorkspace.feedback || undefined,
-          criteriaScores: criteriaScoresPayload
+          criteriaScores: criteriaScoresPayload,
+          ...(gradingWorkspace.confirmingAiGrade && { isAiGrade: true }),
         });
       } else {
         await gradeSubmission(activeSubmission.id, {
           submissionId: activeSubmission.id,
           score: flatScoreValidation.value ?? 0,
-          feedback: gradingWorkspace.feedback || undefined
+          feedback: gradingWorkspace.feedback || undefined,
+          ...(gradingWorkspace.confirmingAiGrade && { isAiGrade: true }),
         });
       }
 
@@ -324,22 +429,25 @@ const MentorGradingPage: React.FC = () => {
   };
 
   const filteredSubmissions = submissions.filter((submission) => {
-    if (filter === 'pending' && submission.status === SubmissionStatus.GRADED) return false;
-    if (filter === 'graded' && submission.status !== SubmissionStatus.GRADED) return false;
+    if (filter === 'pending' && (submission.status === SubmissionStatus.GRADED || submission.status === SubmissionStatus.AI_COMPLETED)) return false;
+    if (filter === 'graded' && submission.status !== SubmissionStatus.GRADED && submission.status !== SubmissionStatus.AI_COMPLETED) return false;
     if (filter === 'late' && !submission.isLate) return false;
-
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      return resolveLearnerName(submission.userName, submission.userId).toLowerCase().includes(query);
-    }
+    if (filter === 'aiProcessing' && !(submission.isAiGraded && submission.mentorConfirmed === null)) return false;
     return true;
   });
 
   const getStatusIcon = (submission: AssignmentSubmissionDetailDTO) => {
-    if (submission.status === SubmissionStatus.GRADED) {
+    // AI auto-pass: score is set + isPassed=true (Trust AI auto-confirmed)
+    if (submission.isAiGraded && submission.score != null && submission.isPassed === true) {
+      return <CheckCircle className="status-icon passed" size={18} />;
+    }
+    if (submission.status === SubmissionStatus.GRADED || submission.status === SubmissionStatus.AI_COMPLETED) {
       return submission.isPassed === true
         ? <CheckCircle className="status-icon passed" size={18} />
         : <AlertCircle className="status-icon failed" size={18} />;
+    }
+    if (submission.isAiGraded && submission.mentorConfirmed === null) {
+      return <Sparkles className="status-icon ai-processing" size={18} />;
     }
     if (submission.isLate) {
       return <AlertCircle className="status-icon late" size={18} />;
@@ -355,9 +463,24 @@ const MentorGradingPage: React.FC = () => {
     minute: '2-digit'
   });
 
-  const pendingCount = submissions.filter((submission) => submission.status !== SubmissionStatus.GRADED && submission.isNewest).length;
-  const gradedCount = submissions.filter((submission) => submission.status === SubmissionStatus.GRADED).length;
-  const lateCount = submissions.filter((submission) => submission.isLate).length;
+  // Prev/next navigation within filtered list
+  const currentSubmissionIndex = activeSubmission
+    ? filteredSubmissions.findIndex(s => s.id === activeSubmission.id)
+    : -1;
+  const hasPrevSubmission = currentSubmissionIndex > 0;
+  const hasNextSubmission = currentSubmissionIndex < filteredSubmissions.length - 1 && currentSubmissionIndex !== -1;
+
+  const handlePrevSubmission = () => {
+    if (hasPrevSubmission) {
+      openGradingWorkspace(filteredSubmissions[currentSubmissionIndex - 1]);
+    }
+  };
+
+  const handleNextSubmission = () => {
+    if (hasNextSubmission) {
+      openGradingWorkspace(filteredSubmissions[currentSubmissionIndex + 1]);
+    }
+  };
 
   if (loading) {
     return (
@@ -389,6 +512,13 @@ const MentorGradingPage: React.FC = () => {
         <div className="grading-title-section">
           {state?.courseName && (
             <div className="grading-breadcrumb">
+              <button
+                className="breadcrumb-item breadcrumb-item--link"
+                onClick={() => navigate('/mentor', { state: { activeTab: 'grading' } })}
+              >
+                Danh sách chấm bài
+              </button>
+              <span className="breadcrumb-separator">›</span>
               <span className="breadcrumb-item">{state.courseName}</span>
               {state.moduleName && (
                 <>
@@ -423,99 +553,63 @@ const MentorGradingPage: React.FC = () => {
         </div>
       </div>
 
-      {assignment?.description && (
-        <div className="assignment-info-card">
-          <div className="info-card-header">
-            <FileText size={20} />
-            <h3>Yêu cầu bài tập</h3>
-          </div>
-          <div className="info-card-body">
-            <p>{assignment.description}</p>
-          </div>
-        </div>
-      )}
-
-      <div className="grading-guidance-grid">
-        {assignment?.learningOutcome && (
-          <div className="grading-guidance-card">
-            <div className="guidance-card-title">Kết quả cần đạt</div>
-            <p>{assignment.learningOutcome}</p>
-          </div>
-        )}
-        {assignment?.gradingCriteria && (
-          <div className="grading-guidance-card">
-            <div className="guidance-card-title">Lưu ý chấm điểm</div>
-            <p>{assignment.gradingCriteria}</p>
-          </div>
-        )}
-        <div className={`grading-guidance-card ${hasCriteria ? 'rubric-ready' : 'flat-ready'}`}>
-          <div className="guidance-card-title">{hasCriteria ? 'Rubric chấm điểm' : 'Dữ liệu rubric'}</div>
-          {hasCriteria ? (
-            <div className="guidance-rubric-summary">
-              <p>
-                Bài này có <strong>{visibleCriteria.length}</strong> tiêu chí, trong đó có{' '}
-                <strong>{requiredCriteria.length}</strong> tiêu chí bắt buộc.
-              </p>
-              <p>Hệ thống khóa nút lưu nếu có rubric vượt thang điểm, bỏ trống hoặc nhập không hợp lệ.</p>
-            </div>
-          ) : (
-            <div className="guidance-flat-summary">
-              <p>Bài tập này được tạo từ dữ liệu cũ hoặc chưa đồng bộ rubric. Nên bổ sung rubric trước khi tiếp tục sử dụng lâu dài.</p>
-              <p>
-                Thang điểm tối đa: <strong>{assignment?.maxScore ?? 0}</strong>
-                {effectivePassingScore !== undefined && (
-                  <>
-                    {' '}| Mốc đạt: <strong>{effectivePassingScore}</strong>
-                  </>
-                )}
-              </p>
+      {!activeSubmission && (
+        <>
+          {assignment?.description && (
+            <div className="assignment-info-card">
+              <div className="info-card-header" onClick={() => setDescriptionCollapsed(c => !c)} style={{ cursor: 'pointer' }}>
+                <FileText size={20} />
+                <h3>Yêu cầu bài tập</h3>
+                <span className="info-card-toggle">{descriptionCollapsed ? '▶' : '▼'}</span>
+              </div>
+              {!descriptionCollapsed && (
+                <div className="info-card-body">
+                  <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(assignment.description) }} />
+                </div>
+              )}
             </div>
           )}
-        </div>
-      </div>
 
-      <div className="grading-stats">
-        <div className={`stat-card ${filter === 'pending' ? 'active' : ''}`} onClick={() => setFilter('pending')}>
-          <Clock size={24} />
-          <div className="stat-content">
-            <span className="stat-value">{pendingCount}</span>
-            <span className="stat-label">Chờ chấm</span>
+          <div className="grading-guidance-grid">
+            {assignment?.learningOutcome && (
+              <div className="grading-guidance-card">
+                <div className="guidance-card-title">Kết quả cần đạt</div>
+                <p>{assignment.learningOutcome}</p>
+              </div>
+            )}
+            {assignment?.gradingCriteria && (
+              <div className="grading-guidance-card">
+                <div className="guidance-card-title">Lưu ý chấm điểm</div>
+                <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(assignment.gradingCriteria) }} />
+              </div>
+            )}
+            <div className={`grading-guidance-card ${hasCriteria ? 'rubric-ready' : 'flat-ready'}`}>
+              <div className="guidance-card-title">{hasCriteria ? 'Rubric chấm điểm' : 'Dữ liệu rubric'}</div>
+              {hasCriteria ? (
+                <div className="guidance-rubric-summary">
+                  <p>
+                    Bài này có <strong>{visibleCriteria.length}</strong> tiêu chí, trong đó có{' '}
+                    <strong>{requiredCriteria.length}</strong> tiêu chí bắt buộc.
+                  </p>
+                  <p>Hệ thống khóa nút lưu nếu có rubric vượt thang điểm, bỏ trống hoặc nhập không hợp lệ.</p>
+                </div>
+              ) : (
+                <div className="guidance-flat-summary">
+                  <p>Bài tập này được tạo từ dữ liệu cũ hoặc chưa đồng bộ rubric. Nên bổ sung rubric trước khi tiếp tục sử dụng lâu dài.</p>
+                  <p>
+                    Thang điểm tối đa: <strong>{assignment?.maxScore ?? 0}</strong>
+                    {effectivePassingScore !== undefined && (
+                      <>
+                        {' '}| Mốc đạt: <strong>{effectivePassingScore}</strong>
+                      </>
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-        <div className={`stat-card ${filter === 'graded' ? 'active' : ''}`} onClick={() => setFilter('graded')}>
-          <CheckCircle size={24} />
-          <div className="stat-content">
-            <span className="stat-value">{gradedCount}</span>
-            <span className="stat-label">Đã chấm</span>
-          </div>
-        </div>
-        <div className={`stat-card ${filter === 'late' ? 'active' : ''}`} onClick={() => setFilter('late')}>
-          <AlertCircle size={24} />
-          <div className="stat-content">
-            <span className="stat-value">{lateCount}</span>
-            <span className="stat-label">Nộp muộn</span>
-          </div>
-        </div>
-        <div className={`stat-card ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>
-          <User size={24} />
-          <div className="stat-content">
-            <span className="stat-value">{submissions.length}</span>
-            <span className="stat-label">Tổng</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="grading-toolbar">
-        <div className="search-box">
-          <Search size={18} />
-          <input
-            type="text"
-            placeholder="Tìm theo tên học viên..."
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-          />
-        </div>
-      </div>
+        </>
+      )}
 
       {error && (
         <div className="grading-error">
@@ -527,72 +621,153 @@ const MentorGradingPage: React.FC = () => {
         </div>
       )}
 
-      <div className="submissions-table-container">
-        <table className="submissions-table">
-          <thead>
-            <tr>
-              <th>Học viên</th>
-              <th>Ngày nộp</th>
-              <th>Lần nộp</th>
-              <th>Trạng thái</th>
-              <th>Điểm</th>
-              <th>Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredSubmissions.length === 0 ? (
+      {/* Full student table — shown when workspace is closed */}
+      {!activeSubmission && (
+        <div className="submissions-table-container">
+          <table className="submissions-table">
+            <thead>
               <tr>
-                <td colSpan={6} className="no-submissions">
-                  Không có bài nộp phù hợp.
-                </td>
+                <th>Học viên</th>
+                <th>Ngày nộp</th>
+                <th>Lần nộp</th>
+                <th>Trạng thái</th>
+                <th>Điểm</th>
+                <th>Thao tác</th>
               </tr>
-            ) : (
-              filteredSubmissions.map((submission) => (
-                <tr
-                  key={submission.id}
-                  className={[
-                    submission.isLate ? 'late-row' : '',
-                    activeSubmission?.id === submission.id ? 'selected-row' : ''
-                  ].filter(Boolean).join(' ')}
-                >
-                  <td className="student-cell">
-                    <User size={16} />
-                    <span>{resolveLearnerName(submission.userName, submission.userId)}</span>
-                    {submission.isNewest && <span className="newest-badge">Mới nhất</span>}
-                  </td>
-                  <td>{formatDate(submission.submittedAt)}</td>
-                  <td>#{submission.attemptNumber}</td>
-                  <td className="status-cell">
-                    {getStatusIcon(submission)}
-                    <span>
-                      {submission.status === SubmissionStatus.GRADED
-                        ? 'Đã chấm'
-                        : submission.isLate
-                        ? 'Nộp muộn'
-                        : 'Chờ chấm'}
-                    </span>
-                  </td>
-                  <td>
-                    {submission.score !== undefined && submission.score !== null
-                      ? `${submission.score}/${submission.maxScore}`
-                      : '-'}
-                  </td>
-                  <td className="actions-cell">
-                    <button
-                      className={`grading-action-btn ${submission.status !== SubmissionStatus.GRADED ? 'grading-action-btn--primary' : ''}`}
-                      onClick={() => openGradingWorkspace(submission)}
-                      title={submission.status === SubmissionStatus.GRADED ? 'Xem hoặc chấm lại bài đã chấm' : 'Mở khung chấm cho bài nộp'}
-                    >
-                      {submission.status === SubmissionStatus.GRADED ? <Eye size={16} /> : <Edit3 size={16} />}
-                      <span>{submission.status === SubmissionStatus.GRADED ? 'Xem / chấm lại' : 'Mở khung chấm'}</span>
-                    </button>
+            </thead>
+            <tbody>
+              {filteredSubmissions.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="no-submissions">
+                    Không có bài nộp phù hợp.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+              ) : (
+                filteredSubmissions.map((submission) => (
+                  <tr
+                    key={submission.id}
+                    className={[
+                      submission.isLate ? 'late-row' : '',
+                      activeSubmission?.id === submission.id ? 'selected-row' : ''
+                    ].filter(Boolean).join(' ')}
+                  >
+                    <td className="student-cell">
+                      <User size={16} />
+                      <span>{resolveLearnerName(submission.userName, submission.userId)}</span>
+                      {submission.isNewest && <span className="newest-badge">Mới nhất</span>}
+                    </td>
+                    <td>{formatDate(submission.submittedAt)}</td>
+                    <td>#{submission.attemptNumber}</td>
+                    <td className="status-cell">
+                      {getStatusIcon(submission)}
+                      <span>
+                        {submission.isAiGraded && submission.score != null && submission.isPassed === true
+                          ? 'Đã đạt'
+                          : submission.status === SubmissionStatus.GRADED || submission.status === SubmissionStatus.AI_COMPLETED
+                          ? 'Đã chấm'
+                          : submission.isAiGraded && submission.aiScore != null && submission.score == null
+                          ? 'AI đã chấm'
+                          : submission.isAiGraded && submission.mentorConfirmed === null
+                          ? 'AI xử lý'
+                          : submission.isLate
+                          ? 'Nộp muộn'
+                          : 'Chờ chấm'}
+                      </span>
+                      {submission.isAiGraded && submission.score != null && submission.isPassed === true && (
+                        <span className="ai-badge ai-badge--auto-confirmed">✅ Tự động</span>
+                      )}
+                      {submission.isAiGraded && submission.mentorConfirmed === null && submission.score == null && (
+                        <span className="ai-badge">AI</span>
+                      )}
+                    </td>
+                    <td>
+                      {submission.score !== undefined && submission.score !== null
+                        ? `${submission.score}/${submission.maxScore}`
+                        : submission.isAiGraded && submission.aiScore != null
+                        ? `${submission.aiScore}/${submission.maxScore}`
+                        : '-'}
+                    </td>
+                    <td className="actions-cell">
+                      <button
+                        className={`grading-action-btn ${submission.status !== SubmissionStatus.GRADED ? 'grading-action-btn--primary' : ''}`}
+                        onClick={() => openGradingWorkspace(submission)}
+                        title={submission.status === SubmissionStatus.GRADED ? 'Xem hoặc chấm lại bài đã chấm' : 'Mở khung chấm cho bài nộp'}
+                      >
+                        {submission.status === SubmissionStatus.GRADED ? <Eye size={16} /> : <Edit3 size={16} />}
+                        <span>{submission.status === SubmissionStatus.GRADED ? 'Xem / chấm lại' : 'Mở khung chấm'}</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Compact submission bar — shown when workspace is open */}
+      {activeSubmission && (
+        <div className="submissions-compact-bar">
+          <User size={15} className="compact-bar__icon" />
+          <span className="compact-bar__name">
+            {resolveLearnerName(activeSubmission.userName, activeSubmission.userId)}
+          </span>
+          <span className="compact-bar__divider">·</span>
+          <span className="compact-bar__date">{formatDate(activeSubmission.submittedAt)}</span>
+          <span className="compact-bar__divider">·</span>
+          <span className={`compact-bar__status ${
+            (activeSubmission.isAiGraded && activeSubmission.score != null && activeSubmission.isPassed === true)
+              ? 'graded'
+              : (activeSubmission.status === SubmissionStatus.GRADED || activeSubmission.status === SubmissionStatus.AI_COMPLETED)
+              ? 'graded'
+              : 'pending'
+          }`}>
+            {activeSubmission.isAiGraded && activeSubmission.score != null && activeSubmission.isPassed === true
+              ? 'Đã đạt'
+              : activeSubmission.status === SubmissionStatus.GRADED || activeSubmission.status === SubmissionStatus.AI_COMPLETED
+              ? 'Đã chấm'
+              : activeSubmission.isAiGraded && activeSubmission.aiScore != null
+              ? 'AI đã chấm'
+              : activeSubmission.isLate
+              ? 'Nộp muộn'
+              : 'Chờ chấm'}
+            {activeSubmission.score !== null && activeSubmission.score !== undefined
+              ? ` · ${activeSubmission.score}/${activeSubmission.maxScore}`
+              : activeSubmission.isAiGraded && activeSubmission.aiScore != null && activeSubmission.score == null
+              ? ` · ${activeSubmission.aiScore}/${activeSubmission.maxScore}`
+              : ''}
+          </span>
+          <div className="compact-bar__nav">
+            <button
+              className="compact-nav-btn"
+              onClick={handlePrevSubmission}
+              disabled={!hasPrevSubmission}
+              title="Bài trước"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <span className="compact-nav-indicator">
+              {currentSubmissionIndex + 1} / {filteredSubmissions.length}
+            </span>
+            <button
+              className="compact-nav-btn"
+              onClick={handleNextSubmission}
+              disabled={!hasNextSubmission}
+              title="Bài tiếp"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+          <button
+            className="compact-expand-btn"
+            onClick={closeGradingWorkspace}
+            title="Thu gọn bảng"
+          >
+            <ChevronDown size={16} />
+            Thu gọn
+          </button>
+        </div>
+      )}
 
       {activeSubmission && (
         <section className="grading-workspace" ref={gradingWorkspaceRef}>
@@ -610,6 +785,171 @@ const MentorGradingPage: React.FC = () => {
               Đóng
             </button>
           </div>
+
+          {/* Dispute Banner */}
+          {activeSubmission.disputeFlag && (
+            <div className="dispute-banner">
+              <div className="dispute-banner__icon">⚠️</div>
+              <div className="dispute-banner__content">
+                <strong>Học viên đã yêu cầu bạn xem xét lại bài này.</strong>
+                {activeSubmission.disputeReason && (
+                  <p className="dispute-banner__reason">Lý do: {activeSubmission.disputeReason}</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* AI Grading Section */}
+          {assignment?.aiGradingEnabled && (
+            <div className="ai-grading-section">
+              {aiError && (
+                <div className="ai-error-banner">
+                  <AlertCircle size={16} />
+                  {aiError}
+                  <button onClick={() => setAiError(null)}><X size={14} /></button>
+                </div>
+              )}
+
+              {/* CASE A: AI has already graded (auto or manual) — show result panel */}
+              {activeSubmission.isAiGraded && activeSubmission.aiScore != null && (
+                <>
+                  {/* Auto-confirmed by Trust AI: score + isPassed are set on BE */}
+                  {activeSubmission.mentorConfirmed === true && (
+                    <div className="ai-result-card ai-result-card--auto-confirmed">
+                      <div className="ai-result-card__header">
+                        <span>🤖 Kết quả AI — Tự động duyệt</span>
+                        <span className={`ai-confidence-badge ${(activeSubmission.aiConfidence ?? 0) >= 0.9 ? 'high' : 'medium'}`}>
+                          Tự tin {Math.round((activeSubmission.aiConfidence ?? 0) * 100)}%
+                        </span>
+                      </div>
+                      <div className="ai-result-card__score">
+                        Điểm: <strong>{activeSubmission.aiScore}/{activeSubmission.maxScore}</strong>
+                      </div>
+                      {activeSubmission.isPassed === true && (
+                        <div className="ai-result-card__verdict ai-result-card__verdict--pass">
+                          ✅ <strong>Đạt yêu cầu</strong> — Bài đã được duyệt tự động. Học viên đã thấy kết quả.
+                        </div>
+                      )}
+                      {activeSubmission.isPassed === false && (
+                        <div className="ai-result-card__verdict ai-result-card__verdict--fail">
+                          ❌ <strong>Không đạt</strong> — Học viên có thể nộp lại.
+                        </div>
+                      )}
+                      {activeSubmission.aiFeedback && (
+                        <div className="ai-result-card__feedback">
+                          {activeSubmission.aiFeedback}
+                        </div>
+                      )}
+                      {/* Per-rubric scores from BE (auto-confirmed submissions have criteriaScores) */}
+                      {activeSubmission.criteriaScores && activeSubmission.criteriaScores.length > 0 && (
+                        <div className="ai-result-card__rubrics">
+                          <div className="ai-result-card__rubrics-title">Chi tiết theo rubric:</div>
+                          {activeSubmission.criteriaScores.map((cs) => (
+                            <div key={cs.criteriaId} className={`ai-rubric-item ${cs.passed ? 'pass' : 'fail'}`}>
+                              <div className="ai-rubric-item__header">
+                                <span className="ai-rubric-item__name">{cs.criteriaName}</span>
+                                <span className={`ai-rubric-item__score ${cs.passed ? 'pass' : 'fail'}`}>
+                                  {cs.score}/{cs.maxPoints} {cs.passed ? '✓' : '✗'}
+                                </span>
+                              </div>
+                              {cs.feedback && (
+                                <div className="ai-rubric-item__feedback">{cs.feedback}</div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* AI graded but mentor needs to confirm (low confidence) */}
+                  {activeSubmission.mentorConfirmed === null && (
+                    <div className="ai-result-card ai-result-card--pending">
+                      <div className="ai-result-card__header">
+                        <span>🤖 AI đã chấm — Chờ xác nhận</span>
+                        <span className={`ai-confidence-badge ${(activeSubmission.aiConfidence ?? 0) >= 0.9 ? 'high' : 'medium'}`}>
+                          Tự tin {Math.round((activeSubmission.aiConfidence ?? 0) * 100)}%
+                        </span>
+                      </div>
+                      <div className="ai-result-card__score">
+                        Điểm AI: <strong>{activeSubmission.aiScore}/{activeSubmission.maxScore}</strong>
+                      </div>
+                      {activeSubmission.aiFeedback && (
+                        <div className="ai-result-card__feedback">{activeSubmission.aiFeedback}</div>
+                      )}
+                      {/* Per-rubric scores */}
+                      {activeSubmission.criteriaScores && activeSubmission.criteriaScores.length > 0 && (
+                        <div className="ai-result-card__rubrics">
+                          <div className="ai-result-card__rubrics-title">Chi tiết theo rubric:</div>
+                          {activeSubmission.criteriaScores.map((cs) => (
+                            <div key={cs.criteriaId} className={`ai-rubric-item ${cs.passed ? 'pass' : 'fail'}`}>
+                              <div className="ai-rubric-item__header">
+                                <span className="ai-rubric-item__name">{cs.criteriaName}</span>
+                                <span className={`ai-rubric-item__score ${cs.passed ? 'pass' : 'fail'}`}>
+                                  {cs.score}/{cs.maxPoints} {cs.passed ? '✓' : '✗'}
+                                </span>
+                              </div>
+                              {cs.feedback && (
+                                <div className="ai-rubric-item__feedback">{cs.feedback}</div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <div className="ai-result-card__pending-hint">
+                        ⚠️ AI chưa đủ tự tin (confidence &lt; 95%) — vui lòng xác nhận hoặc điều chỉnh điểm trước khi lưu.
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* CASE B: Mentor triggered AI Pre-grade (result from API call) */}
+              {aiGradingResult && (
+                <div className="ai-result-card">
+                  <div className="ai-result-card__header">
+                    <span>🤖 Kết quả AI</span>
+                    <span className={`ai-confidence-badge ${aiGradingResult.overallConfidence >= 0.9 ? 'high' : 'medium'}`}>
+                      Tự tin {Math.round(aiGradingResult.overallConfidence * 100)}%
+                    </span>
+                  </div>
+                  {assignment.trustAiEnabled && aiGradingResult.overallConfidence >= 0.95 && (
+                    <div className="ai-trust-hint">
+                      ✅ AI tự tin cao — Bạn có thể xác nhận nhanh để tiết kiệm thời gian.
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* CASE C: AI has NOT graded yet — show Pre-grade button */}
+              {!(activeSubmission.isAiGraded && activeSubmission.aiScore != null) && (
+                <>
+                  <button
+                    className="ai-pregrade-btn"
+                    onClick={handleAiPreGrade}
+                    disabled={aiLoading || (activeSubmission.aiGradeAttemptCount ?? 0) >= 3}
+                  >
+                    {aiLoading ? (
+                      <>
+                        <div className="grading-spinner small" />
+                        Đang AI chấm...
+                      </>
+                    ) : (
+                      <>🤖 AI Pre-grade{activeSubmission.aiGradeAttemptCount ? ` (${activeSubmission.aiGradeAttemptCount}/3)` : ''}</>
+                    )}
+                  </button>
+                  <label className="trust-ai-toggle">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(assignment.trustAiEnabled)}
+                      onChange={(e) => handleToggleTrustAi(e.target.checked)}
+                    />
+                    <span>Trust AI — tự động xác nhận khi AI tự tin ≥ 95%</span>
+                  </label>
+                </>
+              )}
+            </div>
+          )}
 
           <div className="grading-workspace__meta-grid">
             <div className="workspace-meta-card">
@@ -633,7 +973,7 @@ const MentorGradingPage: React.FC = () => {
           </div>
 
           <div className="grading-workspace__grid">
-            <div className="grading-workspace__panel">
+            <div className="grading-workspace__panel grading-workspace__panel--left">
               <div className="workspace-panel__title">Bài nộp của học viên</div>
               {activeSubmission.isLate && (
                 <div className="late-warning-badge">
@@ -653,9 +993,8 @@ const MentorGradingPage: React.FC = () => {
               {activeSubmission.submissionText && (
                 <div className="workspace-content-block">
                   <div className="workspace-content-block__label">Nội dung nộp</div>
-                  <div className="submission-text-view submission-text-view--tall">
-                    {activeSubmission.submissionText}
-                  </div>
+                  <div className="submission-text-view submission-text-view--tall"
+                       dangerouslySetInnerHTML={{ __html: sanitizeHtml(activeSubmission.submissionText) }} />
                 </div>
               )}
 
@@ -677,15 +1016,16 @@ const MentorGradingPage: React.FC = () => {
               {activeSubmission.fileMediaUrl && (
                 <div className="workspace-content-block">
                   <div className="workspace-content-block__label">Tệp tải lên</div>
-                  <a
-                    href={activeSubmission.fileMediaUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={() => downloadFile(
+                      `/api/assignments/submissions/${activeSubmission.id}/download`,
+                      'bai_nop'
+                    )}
                     className="submission-file-view"
                   >
                     <Upload size={16} />
                     Mở tệp bài nộp
-                  </a>
+                  </button>
                 </div>
               )}
 
@@ -705,43 +1045,59 @@ const MentorGradingPage: React.FC = () => {
                 </div>
               )}
 
-              {hasCriteria && (
-                <div className="submission-rubric-preview">
-                  <div className="submission-rubric-preview__title">Rubric hiện tại</div>
-                  <div className="submission-rubric-preview__list">
-                    {visibleCriteria.map((criterion) => (
-                      <div key={criterion.id ?? criterion.name} className="submission-rubric-item">
-                        <div className="submission-rubric-item__header">
-                          <span className="submission-rubric-item__name">
-                            {criterion.name}
-                            {criterion.isRequired && <span className="submission-rubric-item__required">Bắt buộc</span>}
-                          </span>
-                          <span className="submission-rubric-item__meta">
-                            {criterion.maxPoints} điểm
-                            {getCriterionPassingThreshold(criterion) != null && ` | Đạt từ ${getCriterionPassingThreshold(criterion)}`}
-                          </span>
-                        </div>
-                        {criterion.description && (
-                          <p className="submission-rubric-item__desc">{criterion.description}</p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Actions sticky trong cột trái */}
+              <div className="workspace-left-actions">
+                <button className="workspace-btn workspace-btn-secondary" onClick={closeGradingWorkspace} disabled={gradingWorkspace.submitting}>
+                  Đóng khung chấm
+                </button>
+                <button className="workspace-btn workspace-btn-primary" onClick={handleGrade} disabled={!canSubmitGrade}>
+                  {gradingWorkspace.submitting ? (
+                    <React.Fragment>
+                      <div className="grading-spinner small" />
+                      Đang lưu...
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment>
+                      <CheckCircle size={16} />
+                      Lưu điểm
+                    </React.Fragment>
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="grading-workspace__panel grading-workspace__panel--scoring">
-              <div className="workspace-panel__title">Chấm điểm</div>
               {hasCriteria ? (
                 <>
-                  <div className="workspace-score-summary">
-                    <div>
-                      <strong>Tổng điểm tạm tính</strong>
-                      <p>Nút lưu chỉ mở khi tất cả rubric hợp lệ và tổng điểm không vượt thang điểm.</p>
+                  {/* Pattern D: Sticky score header */}
+                  <div className="workspace-scoring-header">
+                    <div className="workspace-scoring-header__title-row">
+                      <div className="workspace-scoring-header__title">Chấm điểm</div>
+                      {criteriaValidation.criteriaCount >= 5 && (
+                        <div className="workspace-scoring-header__progress">
+                          {(() => {
+                            const criteriaWithIds = visibleCriteria.filter(
+                              (criterion): criterion is AssignmentCriteriaDTO & { id: number } => criterion.id != null
+                            );
+                            const filled = criteriaWithIds.filter(c => {
+                              const v = gradingWorkspace.criteriaScores[c.id];
+                              return v != null && v.trim() !== '' && Number.isFinite(Number(v));
+                            }).length;
+                            return `${filled}/${criteriaWithIds.length} rubric`;
+                          })()}
+                        </div>
+                      )}
                     </div>
-                    <div className={`workspace-score-summary__value ${criteriaValidation.totalExceeds ? 'invalid' : ''}`}>
-                      {criteriaValidation.total} / {assignment?.maxScore}
+                    <div className="workspace-scoring-header__score-row">
+                      <div className="workspace-score-summary">
+                        <div>
+                          <strong>Tổng điểm tạm tính</strong>
+                          <p>Nút lưu chỉ mở khi tất cả rubric hợp lệ.</p>
+                        </div>
+                        <div className={`workspace-score-summary__value ${criteriaValidation.totalExceeds ? 'invalid' : ''}`}>
+                          {criteriaValidation.total} / {assignment?.maxScore}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -751,16 +1107,17 @@ const MentorGradingPage: React.FC = () => {
                     </div>
                   )}
 
-                  <div className={`workspace-inline-note ${!hasRequiredCriterionThresholds || criteriaValidation.requiredPassed ? 'success' : 'warning'}`}>
-                    {!hasRequiredCriterionThresholds
-                      ? 'Rubric này chưa cấu hình ngưỡng đạt riêng cho từng tiêu chí; tổng điểm sẽ quyết định kết quả đạt.'
-                      : criteriaValidation.requiredPassed
-                        ? 'Tất cả tiêu chí bắt buộc hiện đang đạt ngưỡng.'
-                        : 'Còn tiêu chí bắt buộc chưa đạt ngưỡng hoặc chưa nhập điểm.'}
-                  </div>
+                  <div className="workspace-scrollable-criteria">
+                    <div className={`workspace-inline-note ${!hasRequiredCriterionThresholds || criteriaValidation.requiredPassed ? 'success' : 'warning'}`}>
+                      {!hasRequiredCriterionThresholds
+                        ? 'Rubric này chưa cấu hình ngưỡng đạt riêng cho từng tiêu chí; tổng điểm sẽ quyết định kết quả đạt.'
+                        : criteriaValidation.requiredPassed
+                          ? 'Tất cả tiêu chí bắt buộc hiện đang đạt ngưỡng.'
+                          : 'Còn tiêu chí bắt buộc chưa đạt ngưỡng hoặc chưa nhập điểm.'}
+                    </div>
 
-                  <div className="criteria-grading-list">
-                    {visibleCriteria
+                    <div className="criteria-grading-list">
+                      {visibleCriteria
                       .filter((criterion): criterion is AssignmentCriteriaDTO & { id: number } => criterion.id != null)
                       .map((criterion) => {
                         const rawValue = gradingWorkspace.criteriaScores[criterion.id] ?? '';
@@ -857,76 +1214,92 @@ const MentorGradingPage: React.FC = () => {
                           </div>
                         );
                       })}
+                    </div>
+                  </div>
+
+                  <div className="grade-input-group">
+                    <label htmlFor="workspace-feedback">Nhận xét chung</label>
+                    <textarea
+                      id="workspace-feedback"
+                      value={gradingWorkspace.feedback}
+                      disabled={gradingWorkspace.submitting}
+                      onChange={(event) => setGradingWorkspace((prev) => ({ ...prev, feedback: event.target.value }))}
+                      placeholder="Nhận xét tổng quát cho học viên..."
+                      rows={3}
+                    />
                   </div>
                 </>
               ) : (
-                <div className="grading-mode-callout">
-                  <div className="grading-mode-callout__title">Bài tập legacy chưa có rubric</div>
-                  <p>
-                    Dữ liệu này nên được cập nhật rubric ở phiên bản tiếp theo. Trong lúc chờ cập nhật, mentor có thể chấm theo tổng điểm để không chặn luồng vận hành.
-                  </p>
-                  <div className="grade-input-group">
-                    <label htmlFor="legacy-score">Tổng điểm</label>
-                    <input
-                      id="legacy-score"
-                      type="number"
-                      min="0"
-                      max={assignment?.maxScore}
-                      step="0.5"
-                      inputMode="decimal"
-                      value={gradingWorkspace.score}
-                      disabled={gradingWorkspace.submitting}
-                      onWheelCapture={handleNumberInputWheel}
-                      onChange={(event) => {
-                        setError(null);
-                        setGradingWorkspace((prev) => ({ ...prev, score: event.target.value }));
-                      }}
-                      className={flatScoreValidation.error ? 'invalid' : ''}
-                      placeholder="Nhập tổng điểm"
-                    />
-                    {flatScoreValidation.error && (
-                      <div className="criteria-field__error">{flatScoreValidation.error}</div>
-                    )}
+                <React.Fragment>
+                  <div className="workspace-panel__title">Chấm điểm</div>
+                  <div className="grading-mode-callout">
+                    <div className="grading-mode-callout__title">Bài tập legacy chưa có rubric</div>
+                    <p>
+                      Dữ liệu này nên được cập nhật rubric ở phiên bản tiếp theo. Trong lúc chờ cập nhật, mentor có thể chấm theo tổng điểm để không chặn luồng vận hành.
+                    </p>
+                    <div className="grade-input-group">
+                      <label htmlFor="legacy-score">Tổng điểm</label>
+                      <input
+                        id="legacy-score"
+                        type="number"
+                        min="0"
+                        max={assignment?.maxScore}
+                        step="0.5"
+                        inputMode="decimal"
+                        value={gradingWorkspace.score}
+                        disabled={gradingWorkspace.submitting}
+                        onWheelCapture={handleNumberInputWheel}
+                        onChange={(event) => {
+                          setError(null);
+                          setGradingWorkspace((prev) => ({ ...prev, score: event.target.value }));
+                        }}
+                        className={flatScoreValidation.error ? 'invalid' : ''}
+                        placeholder="Nhập tổng điểm"
+                      />
+                      {flatScoreValidation.error && (
+                        <div className="criteria-field__error">{flatScoreValidation.error}</div>
+                      )}
+                    </div>
                   </div>
-                </div>
+
+                  <div className="grade-input-group">
+                    <label htmlFor="workspace-feedback">Nhận xét chung</label>
+                    <textarea
+                      id="workspace-feedback"
+                      value={gradingWorkspace.feedback}
+                      disabled={gradingWorkspace.submitting}
+                      onChange={(event) => setGradingWorkspace((prev) => ({ ...prev, feedback: event.target.value }))}
+                      placeholder="Nhận xét tổng quát cho học viên..."
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="workspace-actions">
+                    <button className="workspace-btn workspace-btn-secondary" onClick={closeGradingWorkspace} disabled={gradingWorkspace.submitting}>
+                      Đóng khung chấm
+                    </button>
+                    <button className="workspace-btn workspace-btn-primary" onClick={handleGrade} disabled={!canSubmitGrade}>
+                      {gradingWorkspace.submitting ? (
+                        <React.Fragment>
+                          <div className="grading-spinner small" />
+                          Đang lưu...
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment>
+                          <CheckCircle size={16} />
+                          Lưu điểm
+                        </React.Fragment>
+                      )}
+                    </button>
+                  </div>
+                </React.Fragment>
               )}
-
-              <div className="grade-input-group">
-                <label htmlFor="workspace-feedback">Nhận xét chung</label>
-                <textarea
-                  id="workspace-feedback"
-                  value={gradingWorkspace.feedback}
-                  disabled={gradingWorkspace.submitting}
-                  onChange={(event) => setGradingWorkspace((prev) => ({ ...prev, feedback: event.target.value }))}
-                  placeholder="Nhận xét tổng quát cho học viên..."
-                  rows={5}
-                />
-              </div>
-
-              <div className="workspace-actions">
-                <button className="workspace-btn workspace-btn-secondary" onClick={closeGradingWorkspace} disabled={gradingWorkspace.submitting}>
-                  Đóng khung chấm
-                </button>
-                <button className="workspace-btn workspace-btn-primary" onClick={handleGrade} disabled={!canSubmitGrade}>
-                  {gradingWorkspace.submitting ? (
-                    <>
-                      <div className="grading-spinner small" />
-                      Đang lưu...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle size={16} />
-                      Lưu điểm
-                    </>
-                  )}
-                </button>
-              </div>
             </div>
-          </div>
-        </section>
-      )}
-    </div>
-  );
-};
+            </div>
+          </section>
+        )}
+      </div>
+    );
+  };
 
-export default MentorGradingPage;
+  export default MentorGradingPage;

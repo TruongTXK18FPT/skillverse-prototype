@@ -39,11 +39,23 @@ const Certificate = () => {
     getMyCertificateById(certificateId)
       .then(setCertificate)
       .catch((requestError) => {
-        const message =
-          requestError instanceof Error
-            ? requestError.message
-            : 'Không thể tải dữ liệu chứng chỉ.';
-        setError(message);
+        // Phân biệt 403 (không có quyền truy cập) vs 404 (không tồn tại)
+        if (
+          typeof requestError === 'object' &&
+          requestError !== null &&
+          'isAxiosError' in requestError
+        ) {
+          const axiosError = requestError as { isAxiosError: true; response?: { status?: number } };
+          if (axiosError.response?.status === 403) {
+            setError('Bạn không có quyền xem chứng chỉ này.');
+            return;
+          }
+          if (axiosError.response?.status === 404) {
+            setError('Chứng chỉ không tồn tại hoặc đã bị xóa.');
+            return;
+          }
+        }
+        setError('Không thể tải dữ liệu chứng chỉ. Vui lòng thử lại sau.');
       })
       .finally(() => setLoading(false));
   }, [id]);

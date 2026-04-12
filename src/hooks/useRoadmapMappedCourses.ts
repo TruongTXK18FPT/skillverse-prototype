@@ -8,9 +8,16 @@ type UseRoadmapMappedCoursesResult = {
   isLoading: boolean;
 };
 
+/**
+ * Hook for loading course data mapped to roadmap nodes.
+ * @param nodes - Array of roadmap nodes with suggestedCourseIds
+ * @param enabled - Whether to fetch courses
+ * @param refreshKey - Optional trigger to force re-fetch (e.g. when course data changes)
+ */
 export const useRoadmapMappedCourses = (
   nodes: RoadmapNode[],
   enabled: boolean,
+  refreshKey?: number,
 ): UseRoadmapMappedCoursesResult => {
   const [courseMap, setCourseMap] = useState<Record<string, CourseDetailDTO | null>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -65,7 +72,7 @@ export const useRoadmapMappedCourses = (
     return () => {
       cancelled = true;
     };
-  }, [allSuggestedCourseIds, courseIdsKey, enabled]);
+  }, [allSuggestedCourseIds, courseIdsKey, enabled, refreshKey]);
 
   return {
     courseMap,

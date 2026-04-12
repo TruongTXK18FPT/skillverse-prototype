@@ -419,6 +419,8 @@
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 40px;
+  color: var(--cb-text-primary);
+  cursor: pointer;
 }
 
 .cb-error-text {

@@ -79,6 +79,7 @@ import { CourseManagementProvider } from "./context/mentor/CourseManagementConte
 import { MentorNoticeProvider } from "./context/mentor/MentorNoticeContext";
 import AdminPage from "./pages/main/AdminPage";
 import AdminSecurityPage from "./pages/admin/AdminSecurityPage";
+import AdminAiGradingDashboard from "./pages/admin/AdminAiGradingDashboard";
 import AdminCoursePreviewPage from "./pages/admin/AdminCoursePreviewPage";
 import AiRoadmapPage from "./pages/roadmap/AiRoadmapPage";
 import RoadmapDetailPage from "./pages/roadmap/RoadmapDetailPage";
@@ -249,6 +250,7 @@ const AppContents = () => {
             <Route path="/cv" element={<DataCompilerPreview />} />{" "}
             {/* ACTIVE - Mothership Theme */}
             <Route path="/certificate/:id" element={<Certificate />} />
+            <Route path="/certificate/verify/:serial" element={<CertificateVerifyPage />} />
             <Route path="/login" element={<ElevatorLoginPage />} />
             <Route
               path="/auth-warning"
@@ -435,6 +437,14 @@ const AppContents = () => {
               element={
                 <AdminRoute>
                   <AdminPage />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/ai-grading"
+              element={
+                <AdminRoute>
+                  <AdminAiGradingDashboard />
                 </AdminRoute>
               }
             />

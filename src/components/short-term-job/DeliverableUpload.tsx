@@ -48,7 +48,7 @@ export interface DeliverableUploadProps {
   existingDeliverables?: Deliverable[];
   allowedTypes?: DeliverableType[];
   maxFiles?: number;
-  maxFileSize?: number; // MB
+  maxFileSize?: number; // MB (deprecated: now uses Cloudinary limits per type instead)
   onSubmit: (request: SubmitDeliverableRequest) => Promise<void>;
   isLoading?: boolean;
   isFinalSubmission?: boolean;
@@ -65,6 +65,26 @@ interface DeliverableFile {
 }
 
 // ==================== CONSTANTS ====================
+
+// Cloudinary Free Tier upload limits (same as backend)
+// Used for client-side validation before upload
+const CLOUDINARY_LIMITS = {
+  image: { maxBytes: 10 * 1024 * 1024, label: '10MB' },    // 10MB
+  video: { maxBytes: 100 * 1024 * 1024, label: '100MB' },  // 100MB
+  raw:   { maxBytes: 10 * 1024 * 1024, label: '10MB' },    // 10MB (PDF, DOC, ZIP, etc.)
+} as const;
+
+function getCloudinaryLimitLabel(mimeType: string): string {
+  if (mimeType.startsWith('image/')) return CLOUDINARY_LIMITS.image.label;
+  if (mimeType.startsWith('video/')) return CLOUDINARY_LIMITS.video.label;
+  return CLOUDINARY_LIMITS.raw.label;
+}
+
+function getCloudinaryLimitBytes(mimeType: string): number {
+  if (mimeType.startsWith('image/')) return CLOUDINARY_LIMITS.image.maxBytes;
+  if (mimeType.startsWith('video/')) return CLOUDINARY_LIMITS.video.maxBytes;
+  return CLOUDINARY_LIMITS.raw.maxBytes;
+}
 
 const DELIVERABLE_TYPE_CONFIG: Record<
   DeliverableType,
@@ -139,7 +159,7 @@ export const DeliverableUpload: React.FC<DeliverableUploadProps> = ({
   existingDeliverables = [],
   allowedTypes = Object.values(DeliverableType),
   maxFiles = 10,
-  maxFileSize = 50,
+  maxFileSize = 50, // Deprecated: kept for backward compatibility but no longer used for validation
   onSubmit,
   isLoading = false,
   isFinalSubmission = false,
@@ -173,8 +193,10 @@ export const DeliverableUpload: React.FC<DeliverableUploadProps> = ({
         return;
       }
 
-      if (file.size > maxFileSize * 1024 * 1024) {
-        errors.push(`${file.name} vượt quá ${maxFileSize}MB`);
+      // Use Cloudinary limits per file type instead of generic maxFileSize prop
+      const cloudinaryLimit = getCloudinaryLimitBytes(file.type);
+      if (file.size > cloudinaryLimit) {
+        errors.push(`${file.name} vượt quá giới hạn (${getCloudinaryLimitLabel(file.type)})`);
         return;
       }
 
@@ -299,8 +321,7 @@ export const DeliverableUpload: React.FC<DeliverableUploadProps> = ({
               Kéo thả hoặc click để tải lên
             </Text>
             <Text fontSize="sm" color="gray.500">
-              Hỗ trợ: Hình ảnh, Video, Tài liệu, Mã nguồn (tối đa {maxFileSize}
-              MB/tệp)
+              Hình ảnh tối đa 10MB • Video tối đa 100MB • Tài liệu/Mã nguồn tối đa 10MB
             </Text>
             <Input
               id="file-upload"

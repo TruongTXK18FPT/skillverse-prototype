@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import RoadmapDetailViewer from '../../components/roadmap/RoadmapDetailViewer';
 import RoadmapNodeStudyPlanModal from '../../components/roadmap/RoadmapNodeStudyPlanModal';
 import type { RoadmapNodeFocusPanelProps } from '../../components/roadmap/RoadmapNodeFocusPanel';
 import aiRoadmapService from '../../services/aiRoadmapService';
-import { enrollUser } from '../../services/enrollmentService';
 import journeyService from '../../services/journeyService';
 import { taskBoardService } from '../../services/taskBoardService';
 import useRoadmapMappedCourses from '../../hooks/useRoadmapMappedCourses';
 import useRoadmapCourseEnrollments from '../../hooks/useRoadmapCourseEnrollments';
+import useRoadmapMappedModules from '../../hooks/useRoadmapMappedModules';
 import { buildNodeLearningContext } from '../../components/roadmap/nodeLearningContext';
-import { buildCourseDetailPath, buildCourseLearningPath } from '../../utils/courseRoute';
+import { buildCourseDetailPath } from '../../utils/courseRoute';
 import {
   extractNodeStudyPlanSummaries,
   NodeStudyPlanSummary,
@@ -39,6 +39,7 @@ import '../../styles/RoadmapHUD.css';
 const RoadmapDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated, user, loading: authLoading } = useAuth();
   const { toast, isVisible, showError, showSuccess, showToast, hideToast } = useToast();
 
@@ -50,13 +51,19 @@ const RoadmapDetailPage = () => {
   const [studyTaskNodeIds, setStudyTaskNodeIds] = useState<Set<string>>(new Set());
   const [nodePlanSummaryMap, setNodePlanSummaryMap] = useState<Record<string, NodeStudyPlanSummary>>({});
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const [enrollmentRefreshKey, setEnrollmentRefreshKey] = useState(0);
+  const enrollmentRefreshKey = 0;
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [aiPrefilledParams, setAiPrefilledParams] = useState<{
+    deadline: string;
+    intensity: "light" | "balanced" | "intensive";
+    studyWindow: "morning" | "afternoon" | "evening" | "flexible";
+    selectedDays: string[];
+  } | null>(null);
 
   const roadmapNodes = roadmap?.roadmap ?? [];
-  const { courseMap } = useRoadmapMappedCourses(roadmapNodes, Boolean(roadmap));
+  const { courseMap } = useRoadmapMappedCourses(roadmapNodes, Boolean(roadmap), enrollmentRefreshKey);
 
   const mappedCourseIds = useMemo(() => (
     Array.from(new Set(roadmapNodes.flatMap((node) => node.suggestedCourseIds ?? [])))
@@ -94,6 +101,9 @@ const RoadmapDetailPage = () => {
 
     return roadmap.roadmap.find((node) => node.id === selectedNodeId) ?? null;
   }, [roadmap, selectedNodeId]);
+
+  // Phase 2: Extract suggested modules from already-loaded courses (no extra API calls)
+  const { mappedModules } = useRoadmapMappedModules(courseMap, selectedNode);
 
   const selectedNodeProgress = useMemo(() => {
     if (!selectedNode) {
@@ -134,8 +144,9 @@ const RoadmapDetailPage = () => {
       childNodes,
       mappedCourses,
       enrollmentByCourseId,
+      mappedModules,
     });
-  }, [selectedNode, roadmapNodes, courseMap, enrollmentByCourseId]);
+  }, [selectedNode, roadmapNodes, courseMap, enrollmentByCourseId, mappedModules]);
 
   const canCreateStudyPlanForSelectedNode = useMemo(() => {
     if (!selectedNode) {
@@ -219,13 +230,19 @@ const RoadmapDetailPage = () => {
       }
     } catch (loadError) {
       console.error('Failed to load roadmap:', loadError);
-      const errorMessage = (loadError as Error).message;
-      if (errorMessage.includes('not found') || errorMessage.includes('Roadmap not found')) {
+      const errorData = (loadError as any);
+      const statusCode = errorData?.response?.status;
+      const errorMessage = errorData?.response?.data?.message || (loadError as Error).message;
+
+      if (statusCode === 403 || errorMessage.includes('tạm dừng') || errorMessage.includes('FORBIDDEN')) {
+        setError('Roadmap đang tạm dừng. Hãy kích hoạt lại roadmap để tiếp tục học.');
+        showError('Roadmap tạm dừng', 'Roadmap này đang tạm dừng. Hãy kích hoạt lại roadmap để tiếp tục học.');
+      } else if (errorMessage.includes('not found') || errorMessage.includes('Roadmap not found')) {
         setError('Không tìm thấy lộ trình hoặc bạn không có quyền truy cập');
       } else {
         setError(errorMessage);
+        showError('Error', errorMessage);
       }
-      showError('Error', errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -242,6 +259,51 @@ const RoadmapDetailPage = () => {
       setShowLoginModal(false);
     }
   }, [isAuthenticated, showLoginModal]);
+
+  // Listen for study plan intent from Meowl chat
+  useEffect(() => {
+    const handleStudyPlanIntent = (event: Event) => {
+      const detail = (event as CustomEvent).detail;
+      if (!detail || !roadmap) return;
+
+      const { nodeId, suggestedParams } = detail;
+
+      // Find the node in roadmap
+      const node = roadmap.roadmap.find((n) => n.id === nodeId || n.title === nodeId);
+      if (!node) {
+        showError('Không tìm thấy node', 'Node này không tồn tại trong roadmap.');
+        return;
+      }
+
+      // If node already has a study plan task, navigate to planner
+      if (studyTaskNodeIds.has(node.id)) {
+        const taskId = nodePlanSummaryMap[node.id]?.linkedTaskIds?.[0];
+        const params = new URLSearchParams({
+          source: 'roadmap-node',
+          roadmapSessionId: String(roadmap.sessionId),
+          nodeId: node.id,
+          view: 'calendar',
+        });
+        if (taskId) params.set('taskId', taskId);
+        navigate(`/study-planner?${params.toString()}`);
+        return;
+      }
+
+      // Check eligible node constraint
+      if (eligibleNodeId && node.id !== eligibleNodeId) {
+        showError('Chưa thể tạo plan', 'Bạn cần hoàn thành node hiện tại trước khi mở plan node tiếp theo.');
+        return;
+      }
+
+      // Open modal with AI-prefilled params
+      setPlanModalNode(node);
+      setAiPrefilledParams(suggestedParams);
+      setIsPlanModalOpen(true);
+    };
+
+    window.addEventListener('meowl-study-plan-intent', handleStudyPlanIntent);
+    return () => window.removeEventListener('meowl-study-plan-intent', handleStudyPlanIntent);
+  }, [roadmap, studyTaskNodeIds, nodePlanSummaryMap, eligibleNodeId, navigate, showError]);
 
   const handleQuestComplete = useCallback(async (questId: string, completed: boolean) => {
     if (!roadmap) return;
@@ -338,33 +400,21 @@ const RoadmapDetailPage = () => {
     setSelectedNodeId(null);
   }, [creatingTaskNodeId]);
 
-  const handleNavigateToCourse = useCallback(async (courseId: number) => {
-    if (!user?.id) return;
+  const handleNavigateToCourse = useCallback((courseId: number) => {
+    const course = courseMap[String(courseId)];
+    const path = course ? buildCourseDetailPath(course) : buildCourseDetailPath({ id: courseId });
 
-    const existingEnrollment = enrollmentByCourseId[String(courseId)];
-    if (existingEnrollment) {
-      // Already enrolled — navigate to learning page
-      const course = courseMap[String(courseId)];
-      const path = course ? buildCourseLearningPath(course) : buildCourseDetailPath({ id: courseId });
-      navigate(path);
-      return;
-    }
-
-    // Not enrolled — enroll first, then navigate
-    try {
-      await enrollUser(courseId, user.id);
-      // Bump refresh key so useRoadmapCourseEnrollments re-fetches enrollments
-      setEnrollmentRefreshKey((k) => k + 1);
-      showSuccess('Đã kích hoạt khóa học', 'Bạn đã được ghi danh vào khóa học. Hãy bắt đầu học ngay!');
-      // After enroll, re-fetch enrollments so isEnrolled updates
-      // Use a quick refetch by toggling the dependency (clear mappedCourseIds briefly then restore)
-      const course = courseMap[String(courseId)];
-      const path = course ? buildCourseLearningPath(course) : buildCourseDetailPath({ id: courseId });
-      navigate(path);
-    } catch (err) {
-      showError('Không thể kích hoạt khóa học', (err as Error).message);
-    }
-  }, [user?.id, enrollmentByCourseId, courseMap, navigate, showSuccess, showError]);
+    navigate(path, {
+      state: {
+        fromPath: location.pathname,
+        fromSearch: location.search,
+        fromHash: location.hash,
+        fromLabel: 'roadmap chi tiet',
+        selectedNodeId,
+        roadmapTitle: roadmap?.metadata?.title || roadmap?.overview?.purpose,
+      },
+    });
+  }, [courseMap, location.hash, location.pathname, location.search, navigate, selectedNodeId]);
 
   const handleOpenStudyPlannerForNode = useCallback((nodeId: string, taskId?: string | null) => {
     if (!roadmap) {
@@ -389,6 +439,7 @@ const RoadmapDetailPage = () => {
     if (creatingTaskNodeId) return;
     setIsPlanModalOpen(false);
     setPlanModalNode(null);
+    setAiPrefilledParams(null);
   }, [creatingTaskNodeId]);
 
   const handleSubmitNodePlan = useCallback(async (request: RoadmapNodeStudyPlanRequest) => {
@@ -487,6 +538,7 @@ const RoadmapDetailPage = () => {
 
       setIsPlanModalOpen(false);
       setPlanModalNode(null);
+      setAiPrefilledParams(null);
     } catch (submitError) {
       showError('Không thể tạo task', (submitError as Error).message);
     } finally {
@@ -651,6 +703,7 @@ const RoadmapDetailPage = () => {
           panelTheme="cyan"
           panelAllowedModes={["MODE_ROADMAP_OVERVIEW", "MODE_COURSE_LEARNING", "MODE_GENERAL_FAQ"]}
           roadmapContext={selectedNode ? {
+            roadmapId: roadmap.sessionId,
             roadmapTitle: roadmap?.metadata?.title || roadmap?.overview?.purpose || 'Lộ trình học tập',
             nodeTitle: selectedNode.title,
             nodeDescription: selectedNode.description || undefined,
@@ -670,6 +723,7 @@ const RoadmapDetailPage = () => {
         isSubmitting={Boolean(creatingTaskNodeId)}
         onClose={handleClosePlanModal}
         onSubmit={handleSubmitNodePlan}
+        aiPrefilledParams={aiPrefilledParams}
       />
 
       {toast && (

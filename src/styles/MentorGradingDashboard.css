@@ -248,10 +248,7 @@
 }
 
 .mentor-grading-table {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.02);
-  overflow: hidden;
+  /* No border/background here — styled by .grading-group / .grading-group-list instead */
 }
 
 .mentor-submissions-table {
@@ -393,6 +390,167 @@
   background: rgba(8, 47, 73, 0.92);
   border-color: rgba(34, 211, 238, 0.3);
   color: #f0f9ff;
+}
+
+/* === Grouped submission display === */
+.grading-group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.5rem;
+}
+
+.grading-group {
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition: border-color 0.18s ease;
+}
+
+.grading-group:hover {
+  border-color: rgba(6, 182, 212, 0.2);
+}
+
+.grading-group__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  background: rgba(6, 182, 212, 0.08);
+  border-bottom: 1px solid rgba(6, 182, 212, 0.15);
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.grading-group__header:hover {
+  background: rgba(6, 182, 212, 0.14);
+}
+
+.grading-group__header--collapsed {
+  background: rgba(15, 23, 42, 0.6);
+  border-bottom-color: transparent;
+}
+
+.grading-group__header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.grading-group__icon {
+  color: #06b6d4;
+  flex-shrink: 0;
+}
+
+.grading-group__module-name {
+  color: #f8fafc;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grading-group__course-name {
+  color: #64748b;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grading-group__header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.grading-group-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.grading-group-badge--pending {
+  background: rgba(249, 115, 22, 0.16);
+  color: #fdba74;
+  border: 1px solid rgba(249, 115, 22, 0.24);
+}
+
+.grading-group-badge--graded {
+  background: rgba(16, 185, 129, 0.14);
+  color: #86efac;
+  border: 1px solid rgba(16, 185, 129, 0.22);
+}
+
+.grading-group-meta {
+  color: #64748b;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.grading-assignment-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.grading-assignment-row:last-child {
+  border-bottom: none;
+}
+
+.grading-assignment-row__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.grading-assignment-row__icon {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.grading-assignment-row__name {
+  color: #cbd5e1;
+  font-size: 0.88rem;
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grading-assignment-row__count {
+  color: #64748b;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.grading-assignment-table {
+  background: transparent;
+  border-radius: 0;
+}
+
+.grading-assignment-table th {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.75rem 1.1rem;
+}
+
+.grading-assignment-table td {
+  padding: 0.85rem 1.1rem;
+}
+
+.grading-assignment-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .mentor-grading-filter-empty {

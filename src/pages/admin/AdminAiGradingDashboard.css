@@ -1,0 +1,608 @@
+.admaigrading-wrapper {
+  width: 100%;
+  color: #e6edf7;
+}
+
+.admaigrading-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(120, 141, 180, 0.16);
+}
+
+.admaigrading-eyebrow {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #76d4ff;
+}
+
+.admaigrading-header h1 {
+  margin: 0 0 0.35rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f4f8ff;
+}
+
+.admaigrading-header p {
+  max-width: 720px;
+  margin: 0;
+  color: rgba(230, 237, 247, 0.7);
+}
+
+.admaigrading-refresh-btn,
+.admaigrading-primary-btn,
+.admaigrading-secondary-btn,
+.admaigrading-action-btn,
+.admaigrading-pagination button,
+.admaigrading-tab,
+.admaigrading-filter-btn,
+.admaigrading-select {
+  transition: 0.18s ease;
+}
+
+.admaigrading-refresh-btn,
+.admaigrading-primary-btn,
+.admaigrading-secondary-btn,
+.admaigrading-action-btn,
+.admaigrading-pagination button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admaigrading-refresh-btn,
+.admaigrading-primary-btn {
+  border: 1px solid rgba(0, 198, 255, 0.28);
+  background: rgba(0, 198, 255, 0.12);
+  color: #61d7ff;
+}
+
+.admaigrading-refresh-btn {
+  min-width: 120px;
+  padding: 0.75rem 1rem;
+}
+
+.admaigrading-primary-btn,
+.admaigrading-secondary-btn {
+  padding: 0.8rem 1rem;
+}
+
+.admaigrading-secondary-btn,
+.admaigrading-pagination button,
+.admaigrading-action-btn {
+  border: 1px solid rgba(140, 161, 196, 0.22);
+  background: rgba(15, 25, 43, 0.85);
+  color: #d7e3f5;
+}
+
+.admaigrading-refresh-btn:hover:not(:disabled),
+.admaigrading-primary-btn:hover:not(:disabled) {
+  background: rgba(0, 198, 255, 0.2);
+}
+
+.admaigrading-secondary-btn:hover:not(:disabled),
+.admaigrading-pagination button:hover:not(:disabled),
+.admaigrading-action-btn:hover:not(:disabled) {
+  background: rgba(29, 41, 67, 0.95);
+}
+
+.admaigrading-refresh-btn:disabled,
+.admaigrading-primary-btn:disabled,
+.admaigrading-secondary-btn:disabled,
+.admaigrading-action-btn:disabled,
+.admaigrading-pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admaigrading-spinning {
+  animation: admaigrading-spin 0.8s linear infinite;
+}
+
+.admaigrading-error,
+.admaigrading-empty-block {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 180, 0, 0.22);
+  background: rgba(24, 19, 8, 0.85);
+  color: #ffd985;
+}
+
+.admaigrading-error {
+  margin-bottom: 1rem;
+}
+
+.admaigrading-tabs,
+.admaigrading-toolbar,
+.admaigrading-filter-group,
+.admaigrading-pagination,
+.admaigrading-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.admaigrading-tabs {
+  margin-bottom: 1.25rem;
+}
+
+.admaigrading-tab,
+.admaigrading-filter-btn,
+.admaigrading-select {
+  border: 1px solid rgba(120, 141, 180, 0.16);
+  background: rgba(11, 20, 37, 0.8);
+  color: rgba(230, 237, 247, 0.68);
+}
+
+.admaigrading-tab,
+.admaigrading-filter-btn {
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admaigrading-tab.active,
+.admaigrading-filter-btn.active {
+  border-color: rgba(118, 212, 255, 0.34);
+  background: rgba(0, 198, 255, 0.12);
+  color: #eef7ff;
+}
+
+.admaigrading-content {
+  min-height: 320px;
+}
+
+.aigrading-stats-grid,
+.aigrading-info-grid,
+.admaigrading-detail-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.aigrading-stats-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.aigrading-info-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.aigrading-governance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.aigrading-stat-card,
+.aigrading-info-card,
+.aigrading-governance-card,
+.admaigrading-table-container,
+.admaigrading-detail-card,
+.admaigrading-detail-section,
+.admaigrading-modal {
+  border: 1px solid rgba(120, 141, 180, 0.16);
+  background: rgba(11, 20, 37, 0.88);
+  box-shadow: 0 18px 45px rgba(4, 10, 22, 0.22);
+}
+
+.aigrading-stat-card,
+.aigrading-info-card,
+.aigrading-governance-card,
+.admaigrading-detail-card,
+.admaigrading-detail-section {
+  border-radius: 18px;
+  padding: 1.2rem;
+}
+
+.aigrading-stat-card {
+  display: flex;
+  gap: 0.9rem;
+}
+
+.aigrading-stat-card svg,
+.aigrading-info-card svg,
+.aigrading-governance-card svg {
+  color: #76d4ff;
+  flex-shrink: 0;
+}
+
+.aigrading-stat-content h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.8rem;
+  color: #f4f8ff;
+}
+
+.aigrading-stat-content p,
+.aigrading-info-card p,
+.admaigrading-cell-sub,
+.admaigrading-empty-cell,
+.admaigrading-loading-cell,
+.admaigrading-pagination span {
+  color: rgba(230, 237, 247, 0.64);
+}
+
+.aigrading-stat-sub {
+  font-size: 0.82rem;
+  color: rgba(230, 237, 247, 0.52);
+}
+
+.aigrading-info-card strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #f4f8ff;
+}
+
+.aigrading-governance-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.aigrading-governance-card strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #f4f8ff;
+}
+
+.aigrading-governance-card p {
+  margin: 0;
+  color: rgba(230, 237, 247, 0.64);
+}
+
+.admaigrading-toolbar {
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.admaigrading-search {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 1;
+  min-width: 280px;
+  padding: 0.8rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid rgba(120, 141, 180, 0.16);
+  background: rgba(11, 20, 37, 0.88);
+}
+
+.admaigrading-search input,
+.admaigrading-select {
+  width: 100%;
+  background: transparent;
+  outline: none;
+}
+
+.admaigrading-search input {
+  border: none;
+  color: #eef7ff;
+}
+
+.admaigrading-select {
+  min-width: 200px;
+  padding: 0.8rem 0.95rem;
+  border-radius: 12px;
+}
+
+.admaigrading-table-container {
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.admaigrading-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admaigrading-config-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.admaigrading-config-card {
+  border: 1px solid rgba(120, 141, 180, 0.16);
+  background: rgba(11, 20, 37, 0.88);
+  box-shadow: 0 18px 45px rgba(4, 10, 22, 0.22);
+  border-radius: 18px;
+  padding: 1.15rem;
+}
+
+.admaigrading-config-head,
+.admaigrading-config-meta,
+.admaigrading-config-metrics {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.admaigrading-config-head {
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.admaigrading-config-head h3 {
+  margin: 0 0 0.25rem;
+  color: #f4f8ff;
+}
+
+.admaigrading-config-head p,
+.admaigrading-config-prompt p,
+.admaigrading-config-prompt small {
+  margin: 0;
+  color: rgba(230, 237, 247, 0.64);
+}
+
+.admaigrading-config-meta {
+  margin-bottom: 0.9rem;
+}
+
+.admaigrading-config-meta div {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(230, 237, 247, 0.76);
+}
+
+.admaigrading-config-prompt {
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(120, 141, 180, 0.12);
+  background: rgba(16, 28, 47, 0.75);
+  margin-bottom: 0.9rem;
+}
+
+.admaigrading-config-prompt strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.admaigrading-config-metrics span {
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(29, 41, 67, 0.95);
+  border: 1px solid rgba(120, 141, 180, 0.12);
+  color: rgba(230, 237, 247, 0.82);
+  font-size: 0.82rem;
+}
+
+.admaigrading-table th,
+.admaigrading-table td {
+  padding: 1rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.admaigrading-table th {
+  background: rgba(17, 29, 48, 0.96);
+  color: rgba(230, 237, 247, 0.58);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admaigrading-table td {
+  border-top: 1px solid rgba(120, 141, 180, 0.12);
+}
+
+.admaigrading-table tbody tr:hover td {
+  background: rgba(18, 31, 51, 0.68);
+}
+
+.aigrading-badge,
+.aigrading-confidence {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.aigrading-badge--confirmed,
+.aigrading-confidence.high {
+  color: #90f5bb;
+  border-color: rgba(74, 222, 128, 0.28);
+  background: rgba(31, 70, 42, 0.7);
+}
+
+.aigrading-badge--pending,
+.aigrading-confidence.medium {
+  color: #ffe28a;
+  border-color: rgba(250, 204, 21, 0.28);
+  background: rgba(72, 56, 15, 0.7);
+}
+
+.aigrading-badge--disputed,
+.aigrading-confidence.low {
+  color: #ffb0b0;
+  border-color: rgba(248, 113, 113, 0.28);
+  background: rgba(78, 28, 34, 0.72);
+}
+
+.admaigrading-loading,
+.admaigrading-loading-cell,
+.admaigrading-empty-cell {
+  text-align: center;
+}
+
+.admaigrading-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 220px;
+}
+
+.admaigrading-spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid rgba(118, 212, 255, 0.2);
+  border-top-color: #76d4ff;
+  animation: admaigrading-spin 0.8s linear infinite;
+}
+
+.admaigrading-spinner.small {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+  margin: 0 auto;
+}
+
+.admaigrading-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(2, 8, 19, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.admaigrading-modal {
+  width: min(980px, 100%);
+  max-height: calc(100vh - 2rem);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.admaigrading-modal-header,
+.admaigrading-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+}
+
+.admaigrading-modal-header {
+  border-bottom: 1px solid rgba(120, 141, 180, 0.12);
+}
+
+.admaigrading-modal-header h2,
+.admaigrading-detail-card h3,
+.admaigrading-detail-section h3 {
+  margin: 0;
+  color: #f4f8ff;
+}
+
+.admaigrading-modal-header button {
+  border: none;
+  background: transparent;
+  color: #d7e3f5;
+  cursor: pointer;
+}
+
+.admaigrading-modal-body {
+  overflow: auto;
+  padding: 1.2rem;
+}
+
+.admaigrading-detail-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.admaigrading-detail-card p {
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-start;
+  margin: 0.45rem 0 0;
+  color: rgba(230, 237, 247, 0.76);
+}
+
+.admaigrading-criteria-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.admaigrading-criteria-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(120, 141, 180, 0.12);
+  background: rgba(16, 28, 47, 0.75);
+}
+
+.admaigrading-criteria-item strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.admaigrading-criteria-item p {
+  margin: 0;
+  color: rgba(230, 237, 247, 0.66);
+}
+
+.admaigrading-criteria-score {
+  text-align: right;
+}
+
+.admaigrading-criteria-score span {
+  display: block;
+  font-weight: 800;
+}
+
+@keyframes admaigrading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1200px) {
+  .aigrading-stats-grid,
+  .aigrading-info-grid,
+  .aigrading-governance-grid,
+  .admaigrading-detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .admaigrading-header,
+  .admaigrading-toolbar,
+  .admaigrading-modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .aigrading-stats-grid,
+  .aigrading-info-grid,
+  .aigrading-governance-grid,
+  .admaigrading-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admaigrading-table-container {
+    overflow-x: auto;
+  }
+
+  .admaigrading-table {
+    min-width: 860px;
+  }
+}

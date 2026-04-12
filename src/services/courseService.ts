@@ -327,6 +327,68 @@ export const listCoursesByAuthor = async (
 };
 
 /**
+ * List mentor courses with server-side status filter.
+ * Uses backend filtering instead of client-side useMemo.
+ * GET /api/courses/by-author/{authorId}?status=...&excludeArchived=...
+ *
+ * @param authorId - The mentor's user ID
+ * @param page - Page number (0-indexed)
+ * @param size - Page size
+ * @param sortBy - Sort field (default: updatedAt)
+ * @param sortOrder - Sort direction (default: desc)
+ * @param status - Filter by specific status (undefined = no filter, use with excludeArchived=false for archived)
+ * @param excludeArchived - Exclude archived courses (default: true). Set to false to include archived.
+ *                          When false and status is undefined, returns only ARCHIVED courses.
+ */
+export const listCoursesByAuthorWithStatus = async (
+  authorId: number,
+  page: number = 0,
+  size: number = 10,
+  sortBy: string = 'updatedAt',
+  sortOrder: 'asc' | 'desc' = 'desc',
+  status?: CourseStatus,
+  excludeArchived: boolean = true
+): Promise<PageResponse<CourseSummaryDTO>> => {
+  try {
+    const params: Record<string, unknown> = { page, size, sort: `${sortBy},${sortOrder}` };
+    if (status) {
+      params.status = status;
+    } else if (excludeArchived) {
+      params.excludeArchived = true;
+    }
+    // If excludeArchived=false and no status, backend defaults to non-archived
+    // To get archived only, frontend should call with status=ARCHIVED
+
+    const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
+      `/courses/by-author/${authorId}`,
+      { params }
+    );
+    return normalizePageResponse<CourseSummaryDTO>(response.data);
+  } catch (error) {
+    console.error('Error listing courses by author with status:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch mentor's course stats (badge counts per status).
+ * GET /api/courses/by-author/{authorId}/stats
+ *
+ * Returns: { DRAFT: 2, PENDING: 1, PUBLIC: 5, REJECTED: 0, SUSPENDED: 0, ARCHIVED: 3, ALL: 8 }
+ */
+export const getMentorCourseStats = async (authorId: number): Promise<Record<string, number>> => {
+  try {
+    const response = await axiosInstance.get<Record<string, number>>(
+      `/courses/by-author/${authorId}/stats`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching mentor course stats:', error);
+    throw error;
+  }
+};
+
+/**
  * List pending courses (for admin approval)
  * GET /api/admin/courses/pending
  */
@@ -704,8 +766,30 @@ export const updateCourseRevision = async (
 export const getCourseRevision = async (
   revisionId: number
 ): Promise<CourseRevisionDTO> => {
-  const response = await axiosInstance.get<CourseRevisionDTO>(`/course-revisions/${revisionId}`);
+  // Gắn token thủ công — interceptor có thể miss getAccessToken() trong một số context
+  // Pattern giống getCourse() trong cùng file
+  const token = getAccessToken();
+  const response = await axiosInstance.get<CourseRevisionDTO>(
+    `/course-revisions/${revisionId}`,
+    token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
+  );
   return response.data;
+};
+
+// Lấy revision APPROVED gần nhất của 1 course — cho admin so sánh khi xem pending revision
+export const getLatestApprovedRevision = async (
+  courseId: number
+): Promise<CourseRevisionDTO | null> => {
+  const token = getAccessToken();
+  try {
+    const response = await axiosInstance.get<CourseRevisionDTO>(
+      `/admin/course-revisions/courses/${courseId}/latest-approved`,
+      token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
+    );
+    return response.data;
+  } catch {
+    return null; // graceful fallback
+  }
 };
 
 export const listCourseRevisions = async (
@@ -772,6 +856,149 @@ export const rejectCourseRevision = async (
     reason ? { params: { reason } } : undefined
   );
   return response.data;
+};
+
+// ==================== REVISION DIFF ====================
+
+export type CourseRevisionDiff = RevisionDiffDTO;
+
+// Diff API response types
+export interface RevisionDiffDTO {
+  revisionId: number;
+  courseId: number;
+  revisionTitle: string | null;
+  liveTitle: string | null;
+  revisionNumber: number;
+  moduleChanges: ModuleChangeDTO[];
+  summary: DiffSummaryDTO;
+}
+
+export interface ModuleChangeDTO {
+  changeKind: 'ADDED' | 'REMOVED' | 'MODIFIED' | 'CONTENT_ONLY';
+  id: number | null;
+  revisionId: number;
+  liveId: number | null;
+  title: string | null;
+  description: string | null;
+  orderIndex: number | null;
+  itemChanges: ItemChangeDTO[];
+  fieldChanges: FieldChangeListDTO | null;
+}
+
+export interface ItemChangeDTO {
+  changeType: 'ADDED' | 'REMOVED' | 'MODIFIED';
+  kind: 'LESSON' | 'QUIZ' | 'ASSIGNMENT';
+  id: number | null;
+  moduleId: number | null;
+  title: string | null;
+  fieldChanges: FieldChangeListDTO | null;
+}
+
+export interface FieldChangeListDTO {
+  title: FieldChangeDTO | null;
+  description: FieldChangeDTO | null;
+  orderIndex: FieldChangeDTO | null;
+  contentText: FieldChangeDTO | null;
+  durationSec: FieldChangeDTO | null;
+  videoUrl: FieldChangeDTO | null;
+  resourceUrl: FieldChangeDTO | null;
+  passScore: FieldChangeDTO | null;
+  maxAttempts: FieldChangeDTO | null;
+  timeLimitMinutes: FieldChangeDTO | null;
+  gradingMethod: FieldChangeDTO | null;
+  submissionType: FieldChangeDTO | null;
+  maxScore: FieldChangeDTO | null;
+  passingScore: FieldChangeDTO | null;
+  isRequired: FieldChangeDTO | null;
+  lessonType: FieldChangeDTO | null;
+}
+
+export interface FieldChangeDTO {
+  fieldName: string;
+  previousValue: string | null;
+  newValue: string | null;
+}
+
+export interface DiffSummaryDTO {
+  modulesAdded: number;
+  modulesRemoved: number;
+  modulesModified: number;
+  modulesContentOnly: number;
+  lessonsAdded: number;
+  lessonsModified: number;
+  lessonsRemoved: number;
+  quizzesAdded: number;
+  quizzesModified: number;
+  quizzesRemoved: number;
+  assignmentsAdded: number;
+  assignmentsModified: number;
+  assignmentsRemoved: number;
+  totalChanges: number;
+  hasChanges: boolean;
+}
+
+export const getRevisionDiff = async (revisionId: number): Promise<RevisionDiffDTO> => {
+  const extractErrorInfo = (error: any) => {
+    const status = error?.response?.status as number | undefined;
+    const code = String(error?.response?.data?.code || '');
+    const responsePayload = error?.response?.data;
+    const responseText = typeof responsePayload === 'string'
+      ? responsePayload
+      : JSON.stringify(responsePayload ?? {});
+    const message = `${String(error?.message || '')} ${responseText}`.toLowerCase();
+    return { status, code, message };
+  };
+
+  const isRouteMissingLikeError = (info: { status?: number; code: string; message: string }) => (
+    info.status === 404 ||
+    info.code === 'NOT_FOUND' ||
+    info.message.includes('no static resource') ||
+    info.message.includes('resource not found')
+  );
+
+  let response;
+  try {
+    response = await axiosInstance.get<RevisionDiffDTO>(
+      `/admin/course-revisions/${revisionId}/diff`
+    );
+  } catch (error: any) {
+    try {
+      // Fall back to non-admin endpoint for all errors (auth, 404, network, etc.)
+      response = await axiosInstance.get<RevisionDiffDTO>(
+        `/course-revisions/${revisionId}/diff`
+      );
+    } catch (fallbackError: any) {
+      const primaryInfo = extractErrorInfo(error);
+      const fallbackInfo = extractErrorInfo(fallbackError);
+      const routeMissingLike = isRouteMissingLikeError(primaryInfo) || isRouteMissingLikeError(fallbackInfo);
+
+      if (routeMissingLike) {
+        (fallbackError as any).__diffEndpointMissing = true;
+      }
+
+      throw fallbackError;
+    }
+  }
+
+  const data = response.data;
+  // Guard against missing summary (backend may return malformed data)
+  const summaryRaw = data.summary;
+  const totalFromFields = summaryRaw
+    ? summaryRaw.modulesAdded + summaryRaw.modulesRemoved +
+      summaryRaw.modulesModified + summaryRaw.modulesContentOnly +
+      summaryRaw.lessonsAdded + summaryRaw.lessonsModified + summaryRaw.lessonsRemoved +
+      summaryRaw.quizzesAdded + summaryRaw.quizzesModified + summaryRaw.quizzesRemoved +
+      summaryRaw.assignmentsAdded + summaryRaw.assignmentsModified + summaryRaw.assignmentsRemoved
+    : 0;
+
+  return {
+    ...data,
+    summary: {
+      ...(summaryRaw ?? {}),
+      totalChanges: (summaryRaw?.totalChanges ?? totalFromFields),
+      hasChanges: (summaryRaw?.hasChanges ?? totalFromFields > 0),
+    }
+  };
 };
 
 // ==================== HELPER FUNCTIONS ====================

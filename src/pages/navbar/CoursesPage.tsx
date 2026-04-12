@@ -11,6 +11,10 @@ import { getUserEnrollments } from '../../services/enrollmentService';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import { CourseSummaryDTO } from '../../data/courseDTOs';
 import { buildCourseDetailPath } from '../../utils/courseRoute';
+import {
+  buildCourseLearningDestination,
+  buildCourseLearningOrigin
+} from '../../utils/courseLearningNavigation';
 
 type SortOption = 'newest' | 'oldest' | 'price-low' | 'price-high' | 'rating' | 'popular';
 type PriceFilter = 'all' | 'free' | 'paid';
@@ -102,9 +106,7 @@ const CoursesPage = () => {
           direction
         );
 
-        // Filter out already-enrolled courses (client-side)
-        const available = result.content.filter(c => !enrolledIds.has(c.id));
-        setCourses(available);
+        setCourses(result.content);
         setTotalItems(result.totalElements);
       } catch (e) {
         setCourses([]);
@@ -114,7 +116,7 @@ const CoursesPage = () => {
       }
     };
     fetchData();
-  }, [currentPage, debouncedSearch, sortBy, enrolledIds, getServerSort]);
+  }, [currentPage, debouncedSearch, sortBy, getServerSort]);
 
   // Client-side post-filters for category, price, level (applied to current page)
   // Note: search and sort are handled server-side
@@ -199,6 +201,34 @@ const CoursesPage = () => {
     { value: 'intermediate', label: 'Trung cấp' },
     { value: 'advanced', label: 'Nâng cao' }
   ];
+
+  const navigateToCourseDetail = useCallback((course: CourseSummaryDTO) => {
+    navigate(buildCourseDetailPath({ id: course.id, title: course.title }), {
+      state: {
+        course,
+        fromPath: location.pathname,
+        fromSearch: location.search,
+        fromHash: location.hash,
+        fromLabel: 'danh sách khóa học'
+      }
+    });
+  }, [navigate, location.pathname, location.search, location.hash]);
+
+  const navigateToCourseLearning = useCallback((course: CourseSummaryDTO) => {
+    const courseLearningState = {
+      courseId: course.id,
+      courseTitle: course.title,
+      origin: buildCourseLearningOrigin(location.pathname, {
+        search: location.search,
+        hash: location.hash,
+        label: 'danh sách khóa học'
+      })
+    };
+
+    navigate(buildCourseLearningDestination(courseLearningState), {
+      state: courseLearningState
+    });
+  }, [navigate, location.pathname, location.search, location.hash]);
 
   if (loading) {
     return (
@@ -446,21 +476,14 @@ const CoursesPage = () => {
                   const authorName = getAuthorName(course);
                   const courseImage = course.thumbnailUrl || course.thumbnail?.url || '/images/default-course.jpg';
                   const price = getCoursePrice(course);
+                  const isEnrolled = enrolledIds.has(course.id);
 
                   return (
                   <div
                     key={course.id}
                     className="cockpit-module-card"
                     style={{ animationDelay: `${index * 0.05}s` }}
-                    onClick={() => navigate(buildCourseDetailPath({ id: course.id, title: course.title }), {
-                      state: {
-                        course: course,
-                        fromPath: location.pathname,
-                        fromSearch: location.search,
-                        fromHash: location.hash,
-                        fromLabel: 'danh sách khóa học'
-                      }
-                    })}
+                    onClick={() => navigateToCourseDetail(course)}
                   >
                     {/* Module Header */}
                     <div className="cockpit-module-header">
@@ -468,7 +491,12 @@ const CoursesPage = () => {
                         <div className="cockpit-level-dot"></div>
                         <span className="cockpit-level-text">LEVEL</span>
                       </div>
-                      <div className="cockpit-module-id">#{course.id}</div>
+                      <div className="cockpit-module-header-meta">
+                        <div className="cockpit-module-id">#{course.id}</div>
+                        {isEnrolled && (
+                          <div className="cockpit-module-enrolled-badge">ĐÃ ĐĂNG KÝ</div>
+                        )}
+                      </div>
                     </div>
 
                     {/* Module Image */}
@@ -504,27 +532,29 @@ const CoursesPage = () => {
                       {/* Module Footer */}
                       <div className="cockpit-module-footer">
                         <div className="cockpit-price-display">
-                          <span className="cockpit-price">
-                            {price === 0 ? 'MIỄN PHÍ' : price.toLocaleString('vi-VN') + ' ' + getCourseCurrency(course)}
+                          <span className={`cockpit-price ${isEnrolled ? 'cockpit-price-enrolled' : ''}`}>
+                            {isEnrolled
+                              ? 'ĐÃ ĐĂNG KÝ'
+                              : (price === 0 ? 'MIỄN PHÍ' : price.toLocaleString('vi-VN') + ' ' + getCourseCurrency(course))}
                           </span>
                         </div>
                         <button
-                          className="cockpit-engage-btn"
+                          className={`cockpit-engage-btn ${isEnrolled ? 'cockpit-engage-btn-enrolled' : ''}`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate(buildCourseDetailPath({ id: course.id, title: course.title }), {
-                              state: {
-                                course: course,
-                                fromPath: location.pathname,
-                                fromSearch: location.search,
-                                fromHash: location.hash,
-                                fromLabel: 'danh sách khóa học'
-                              }
-                            });
+                            if (isEnrolled) {
+                              navigateToCourseLearning(course);
+                              return;
+                            }
+                            navigateToCourseDetail(course);
                           }}
                         >
-                          <Zap className="cockpit-btn-icon" />
-                          XEM CHI TIẾT
+                          {isEnrolled ? (
+                            <Play className="cockpit-btn-icon" />
+                          ) : (
+                            <Zap className="cockpit-btn-icon" />
+                          )}
+                          {isEnrolled ? 'TIẾP TỤC HỌC' : 'XEM CHI TIẾT'}
                         </button>
                       </div>
                     </div>

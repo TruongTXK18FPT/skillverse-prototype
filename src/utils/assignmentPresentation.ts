@@ -13,7 +13,10 @@ export const isAssignmentPastDue = (dueAt?: string | null, now = new Date()): bo
 export const getSubmissionWorkflowLabel = (status?: SubmissionStatus | string | null): string => {
   switch (status) {
     case SubmissionStatus.GRADED:
+    case SubmissionStatus.AI_COMPLETED:
       return 'Đã chấm';
+    case SubmissionStatus.AI_PENDING:
+      return 'Chờ mentor xác nhận';
     case SubmissionStatus.LATE_PENDING:
     case SubmissionStatus.PENDING:
       return 'Chờ chấm';
@@ -22,8 +25,12 @@ export const getSubmissionWorkflowLabel = (status?: SubmissionStatus | string | 
   }
 };
 
-export const getSubmissionWorkflowTone = (status?: SubmissionStatus | string | null): 'graded' | 'pending' =>
-  status === SubmissionStatus.GRADED ? 'graded' : 'pending';
+export const getSubmissionWorkflowTone = (status?: SubmissionStatus | string | null): 'graded' | 'pending' | 'ai-pending' =>
+  status === SubmissionStatus.GRADED || status === SubmissionStatus.AI_COMPLETED
+    ? 'graded'
+    : status === SubmissionStatus.AI_PENDING
+    ? 'ai-pending'
+    : 'pending';
 
 export const getSubmissionTimingInfo = (
   dueAt?: string | null,

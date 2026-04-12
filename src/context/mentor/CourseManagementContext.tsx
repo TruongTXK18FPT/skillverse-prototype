@@ -312,7 +312,7 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
              (lessonSummaries || []).map(async (summary, summaryIndex) => {
                 const detail = await import('../../services/lessonService').then(m => m.getLessonById(summary.id));
                 // Fetch attachments
-                const attachments = await import('../../services/attachmentService').then(m => m.listAttachments(summary.id));
+                const attachments = await import('../../services/attachmentService').then(m => m.listAttachments(summary.id, user?.id || 0));
                 return {
                   ...detail,
                   sourceOrderIndex: resolveOrderIndex((detail as any).orderIndex, (summary as any).orderIndex, undefined, summaryIndex),
@@ -502,7 +502,6 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                           maxAttempts: lesson.quizMaxAttempts,
                           roundingIncrement: lesson.roundingIncrement,
                           gradingMethod: lesson.gradingMethod,
-                          isAssessment: lesson.isAssessment,
                           cooldownHours: lesson.cooldownHours,
                           orderIndex: j
                        };
@@ -575,7 +574,13 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                          passingScore: lesson.assignmentPassingScore || 50,
                          isRequired: lesson.assignmentIsRequired,
                          orderIndex: j,
-                         criteria: lesson.assignmentCriteria || [] // Map criteria
+                         criteria: lesson.assignmentCriteria || [], // Map criteria
+                         // AI Grading fields — was missing, causing aiGradingEnabled=false always
+                         aiGradingEnabled: Boolean(lesson.aiGradingEnabled),
+                         gradingStyle: (lesson.gradingStyle === 'STANDARD' || lesson.gradingStyle === 'STRICT' || lesson.gradingStyle === 'LENIENT')
+                           ? lesson.gradingStyle
+                           : 'STANDARD',
+                         aiGradingPrompt: lesson.aiGradingPrompt || null,
                       };
 
                        let assignmentId = lessonId;
@@ -770,7 +775,6 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                         maxAttempts: lesson.quizMaxAttempts,
                         roundingIncrement: lesson.roundingIncrement,
                         gradingMethod: lesson.gradingMethod,
-                        isAssessment: lesson.isAssessment,
                         cooldownHours: lesson.cooldownHours,
                         orderIndex: j
                      };
@@ -849,7 +853,13 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                         passingScore: lesson.assignmentPassingScore || 50,
                         isRequired: lesson.assignmentIsRequired,
                         orderIndex: j,
-                        criteria: lesson.assignmentCriteria || [] // Map criteria
+                        criteria: lesson.assignmentCriteria || [], // Map criteria
+                        // AI Grading fields — was missing, causing aiGradingEnabled=false always
+                        aiGradingEnabled: Boolean(lesson.aiGradingEnabled),
+                        gradingStyle: (lesson.gradingStyle === 'STANDARD' || lesson.gradingStyle === 'STRICT' || lesson.gradingStyle === 'LENIENT')
+                          ? lesson.gradingStyle
+                          : 'STANDARD',
+                        aiGradingPrompt: lesson.aiGradingPrompt || null,
                      };
 
                      let assignmentId = lessonId;

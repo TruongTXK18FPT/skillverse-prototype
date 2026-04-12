@@ -11,6 +11,7 @@ import {
   Trash2,
   Funnel,
   Check,
+  Archive,
 } from 'lucide-react';
 import { FaYoutube } from 'react-icons/fa';
 import { SiGooglemeet } from 'react-icons/si';
@@ -25,6 +26,7 @@ import {
   parseRoadmapTaskLink,
   resolvePlannerExecutionState,
 } from '../utils/taskSemantics';
+import ArchivedTasksModal from '../components/ArchivedTasksModal';
 import '../styles/StudyPlanner.css';
 
 interface FilterOption {
@@ -52,6 +54,8 @@ interface TaskBoardProps {
   selectedFilter: number | 'current' | 'all';
   /** Filter panel: callback when user changes filter */
   onFilterChange: (filterId: number | 'current' | 'all') => void;
+  /** Current roadmap session ID for filtering archived tasks */
+  roadmapSessionId?: number;
 }
 
 const COLUMN_COLORS = [
@@ -180,11 +184,19 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   filterOptions,
   selectedFilter,
   onFilterChange,
+  roadmapSessionId,
 }) => {
   const [isNewColumnModalOpen, setIsNewColumnModalOpen] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   const [newColumnName, setNewColumnName] = useState('');
   const [editingColumnId, setEditingColumnId] = useState<string | null>(null);
+
+  // Archived tasks — modal state
+  const [showArchivedModal, setShowArchivedModal] = useState(false);
+
+  const toggleArchived = () => {
+    setShowArchivedModal((prev) => !prev);
+  };
 
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
   const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null);
@@ -478,6 +490,14 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                 )}
 
                 <button
+                  className={`study-plan-column-action-btn ${showArchivedModal ? 'study-plan-column-action-btn--active' : ''}`}
+                  onClick={toggleArchived}
+                  title="Xem đã ẩn"
+                >
+                  <Archive size={14} />
+                </button>
+
+                <button
                   className="study-plan-column-action-btn"
                   onClick={() =>
                     setEditingColumnId(editingColumnId === column.id ? null : column.id)
@@ -704,6 +724,16 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           </div>
         );
       })}
+
+      {/* Trello-style archived tasks modal */}
+      {showArchivedModal && (
+        <ArchivedTasksModal
+          isOpen={showArchivedModal}
+          onClose={() => setShowArchivedModal(false)}
+          onRestore={onRefresh}
+          roadmapSessionId={roadmapSessionId}
+        />
+      )}
 
       <div
         className="study-plan-board-column"

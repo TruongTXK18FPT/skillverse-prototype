@@ -96,7 +96,8 @@ const EVIDENCE_TYPES: Array<{ value: EvidenceType; label: string }> = [
 ];
 
 const EVIDENCE_FILE_ACCEPT = 'image/*,.pdf,.doc,.docx,.txt';
-const MAX_EVIDENCE_FILE_SIZE = 20 * 1024 * 1024;
+// Cloudinary Free Tier: raw file max 10MB (image/PDF/DOC/TXT are treated as raw)
+const MAX_EVIDENCE_FILE_SIZE = 10 * 1024 * 1024;
 
 const REVIEW_TAGS = [
   { value: 'CONTENT_QUALITY', label: 'Chất lượng nội dung', icon: BookOpen },
@@ -331,7 +332,7 @@ const BookingDetailPage: React.FC = () => {
 
   const validateEvidenceFile = (file: File) => {
     if (file.size > MAX_EVIDENCE_FILE_SIZE) {
-      showAppError('Tệp quá lớn', 'Vui lòng chọn tệp nhỏ hơn hoặc bằng 20MB.');
+      showAppError('Tệp quá lớn', 'Vui lòng chọn tệp nhỏ hơn hoặc bằng 10MB.');
       return false;
     }
     return true;
@@ -1137,7 +1138,7 @@ const BookingDetailPage: React.FC = () => {
                         <button type="button" className="bkd-upload bkd-upload--full" onClick={() => composerFileInputRef.current?.click()}>
                           <FileText size={15} /> Chọn tệp đính kèm
                         </button>
-                        <p className="bkd-upload-hint">Hỗ trợ ảnh, PDF, DOC, DOCX, TXT. Tối đa 20MB.</p>
+                        <p className="bkd-upload-hint">Hỗ trợ ảnh, PDF, DOC, DOCX, TXT. Tối đa 10MB.</p>
                       </>
                     ) : (
                       <div className="bkd-file-preview">
@@ -1344,7 +1345,7 @@ const BookingDetailPage: React.FC = () => {
                         <button className="bkd-upload bkd-upload--full" onClick={() => evidenceFileInputRef.current?.click()}>
                           <FileText size={15} /> Chọn tệp đính kèm
                         </button>
-                        <p className="bkd-upload-hint">Hỗ trợ ảnh, PDF, DOC, DOCX, TXT. Tối đa 20MB.</p>
+                        <p className="bkd-upload-hint">Hỗ trợ ảnh, PDF, DOC, DOCX, TXT. Tối đa 10MB.</p>
                       </>
                     ) : (
                       <div className="bkd-file-preview">

@@ -44,11 +44,23 @@ const CertificateVerifyPage = () => {
     getPublicCertificateBySerial(serial)
       .then(setCertificate)
       .catch((requestError) => {
-        const message =
-          requestError instanceof Error
-            ? requestError.message
-            : "Không thể xác thực chứng chỉ.";
-        setError(message);
+        // Phân biệt lỗi 404 (certificate không tồn tại) vs lỗi khác
+        if (
+          typeof requestError === "object" &&
+          requestError !== null &&
+          "isAxiosError" in requestError
+        ) {
+          const axiosError = requestError as { isAxiosError: true; response?: { status?: number } };
+          if (axiosError.response?.status === 404) {
+            setError("Chứng chỉ không tồn tại hoặc đã bị xóa.");
+            return;
+          }
+          if (axiosError.response?.status === 403) {
+            setError("Chứng chỉ này không phải dạng công khai.");
+            return;
+          }
+        }
+        setError("Không thể xác thực chứng chỉ. Vui lòng thử lại sau.");
       })
       .finally(() => setLoading(false));
   }, [serial]);
