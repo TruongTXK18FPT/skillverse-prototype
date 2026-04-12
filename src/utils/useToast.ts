@@ -5,6 +5,7 @@ export interface UseToastOptions {
   autoCloseDelay?: number;
   showCountdown?: boolean;
   onClose?: () => void;
+  alwaysBlurBackground?: boolean;
 }
 
 export interface ToastState {
@@ -20,6 +21,7 @@ export interface ToastState {
 }
 
 export const useToast = (options: UseToastOptions = {}) => {
+  const alwaysBlurBackground = options.alwaysBlurBackground ?? true;
   const {
     toast,
     isVisible,
@@ -49,7 +51,7 @@ export const useToast = (options: UseToastOptions = {}) => {
       autoCloseDelay: options.autoCloseDelay,
       showCountdown: options.showCountdown,
       actionButton,
-      useOverlay
+      useOverlay: useOverlay ?? alwaysBlurBackground
     } as any);
   };
 
@@ -59,10 +61,10 @@ export const useToast = (options: UseToastOptions = {}) => {
       type: toast?.type ?? 'success',
       title: toast?.title ?? '',
       message: toast?.message ?? '',
-      useOverlay: (toast as any)?.useOverlay ?? false,
+      useOverlay: (toast as any)?.useOverlay ?? alwaysBlurBackground,
       actionButton: toast?.actionButton,
     }),
-    [isVisible, toast],
+    [alwaysBlurBackground, isVisible, toast],
   );
 
   // Convenience methods for different toast types

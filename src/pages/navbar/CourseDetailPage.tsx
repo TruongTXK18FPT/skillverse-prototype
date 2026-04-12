@@ -312,15 +312,7 @@ const CourseDetailPage = () => {
     if (!course || loadingEnrollment) return;
 
     if (!user) {
-      showInfo(
-        'Yêu cầu đăng nhập', 
-        'Vui lòng đăng nhập để kích hoạt khóa học này.',
-        {
-          text: 'Đăng nhập ngay',
-          onClick: () => setShowLoginModal(true)
-        },
-        true
-      );
+      setShowLoginModal(true);
       return;
     }
 
@@ -411,15 +403,7 @@ const CourseDetailPage = () => {
 
   const handleMentorChat = () => {
     if (!user) {
-      showInfo(
-        'Yêu cầu đăng nhập', 
-        'Vui lòng đăng nhập để nhắn tin với Mentor.',
-        {
-          text: 'Đăng nhập ngay',
-          onClick: () => setShowLoginModal(true)
-        },
-        true
-      );
+      setShowLoginModal(true);
       return;
     }
     navigate('/messages', { state: {
@@ -428,6 +412,15 @@ const CourseDetailPage = () => {
       avatar: course?.author?.avatarUrl || '',
       type: 'MENTOR',
     } });
+  };
+
+  const handleMentorProfile = () => {
+    if (!user) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    navigate(`/mentorship?search=${encodeURIComponent(course?.author?.fullName || '')}`);
   };
 
   const handlePreviewLearning = () => {
@@ -525,7 +518,7 @@ const CourseDetailPage = () => {
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         title="Đăng nhập để tiếp tục"
-        message="Bạn cần đăng nhập để kích hoạt khóa học và nhắn tin với mentor"
+        message="Bạn cần đăng nhập để kích hoạt khóa học, xem hồ sơ và nhắn tin với mentor"
         feature="Khóa học"
       />
 
@@ -660,7 +653,7 @@ const CourseDetailPage = () => {
                   </div>
                   {/* Instructor Actions */}
                   <div className="cockpit-detail-instructor-mini-footer">
-                    <button className="cockpit-detail-instructor-mini-btn" onClick={() => navigate(`/mentorship?search=${encodeURIComponent(course.author?.fullName || '')}`)}>
+                    <button className="cockpit-detail-instructor-mini-btn" onClick={handleMentorProfile}>
                       <ExternalLink className="cockpit-detail-instructor-mini-btn-icon" />
                       HỒ SƠ MENTOR
                     </button>

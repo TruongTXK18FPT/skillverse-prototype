@@ -7,6 +7,7 @@ export interface ToastData {
   autoCloseDelay?: number;
   showCountdown?: boolean;
   countdownText?: string;
+  useOverlay?: boolean;
   actionButton?: {
     text: string;
     onClick: () => void;

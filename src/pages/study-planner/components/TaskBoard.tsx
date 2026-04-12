@@ -199,8 +199,10 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
   const handleDragOver = (e: React.DragEvent, targetColId: string, index: number) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-    setDragOverColumnId(targetColId);
-    setDragOverIndex(index);
+    if (dragOverColumnId !== targetColId || dragOverIndex !== index) {
+      setDragOverColumnId(targetColId);
+      setDragOverIndex(index);
+    }
   };
 
   const handleDragEnd = () => {
@@ -548,6 +550,15 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                 <React.Fragment key={task.id}>
                   {dragOverColumnId === column.id && dragOverIndex === index && (
                     <div
+                      className="study-plan-drop-indicator"
+                      onDragOver={(e) => {
+                        e.stopPropagation();
+                        handleDragOver(e, column.id, index);
+                      }}
+                      onDrop={(e) => {
+                        e.stopPropagation();
+                        handleDrop(e, column.id, index);
+                      }}
                       style={{
                         height: '100px',
                         background: 'rgba(255, 255, 255, 0.05)',
@@ -595,7 +606,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                     </div>
                   )}
 
-                  {task.userNotes && (
+                  {/* {task.userNotes && (
                     <div
                       className="study-plan-task-notes"
                       style={{
@@ -610,7 +621,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                     >
                       {formatRoadmapTaskNote(task.userNotes)}
                     </div>
-                  )}
+                  )} */}
 
                   {isRoadmapLinkedTask && (
                     <div
@@ -654,10 +665,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                         })}
                       </span>
                     )}
-                    <div className="study-plan-task-meta-right">
-                      {getSentimentIcon(task.satisfactionLevel)}
-                      {renderLinkIcon(task.description)}
-                    </div>
                   </div>
                 </div>
                 </React.Fragment>
@@ -666,6 +673,15 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
               
               {dragOverColumnId === column.id && dragOverIndex === column.tasks.length && (
                 <div
+                  className="study-plan-drop-indicator"
+                  onDragOver={(e) => {
+                    e.stopPropagation();
+                    handleDragOver(e, column.id, column.tasks.length);
+                  }}
+                  onDrop={(e) => {
+                    e.stopPropagation();
+                    handleDrop(e, column.id, column.tasks.length);
+                  }}
                   style={{
                     height: '100px',
                     background: 'rgba(255, 255, 255, 0.05)',
@@ -677,12 +693,14 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
               )}
             </div>
 
-            <button
-              className="study-plan-add-task-btn"
-              onClick={() => onAddTask(column.id)}
-            >
-              <Plus size={16} /> Thêm công việc
-            </button>
+            <div className="study-plan-column-footer">
+              <button
+                className="study-plan-add-task-btn"
+                onClick={() => onAddTask(column.id)}
+              >
+                <Plus size={16} /> Thêm công việc
+              </button>
+            </div>
           </div>
         );
       })}

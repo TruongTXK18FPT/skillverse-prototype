@@ -5,9 +5,6 @@ import {
   Flag,
   Save,
   Trash2,
-  Smile,
-  Frown,
-  Meh,
   Activity,
   Eye,
   Edit2,
@@ -178,8 +175,10 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
 }) => {
   const [formData, setFormData] = useState<CreateTaskRequest>(() => buildDefaultForm(columnId || ''));
   const [isPreview, setIsPreview] = useState(true);
+  const [isTitleExpanded, setIsTitleExpanded] = useState(false);
   const isRoadmapLinkedTask = taskKind === 'roadmap-course' || taskKind === 'roadmap-fallback';
   const roadmapExecutionState = resolvePlannerExecutionState(task);
+  const isLongTitle = formData.title.trim().length > 44;
 
   // Validation state
   const deadlineError = useMemo(() => {
@@ -228,11 +227,17 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
   useEffect(() => {
     if (task) {
       setFormData(mapTaskToFormData(task));
+      setIsTitleExpanded(false);
       return;
     }
 
     setFormData(buildDefaultForm(columnId || ''));
+    setIsTitleExpanded(false);
   }, [task, columnId]);
+
+  const handleTitleChange = (title: string) => {
+    setFormData((prev) => ({ ...prev, title }));
+  };
 
   const previewMarkdown = useMemo(
     () => buildPreviewMarkdown(formData.description || ''),
@@ -289,46 +294,71 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
         <form onSubmit={handleSubmit} className="study-plan-modal-form">
           <div className="study-plan-modal-content study-plan-task-detail-grid">
             <aside className="study-plan-task-detail-sidebar">
-              <div className="study-plan-form-group">
-                <input
-                  className="study-plan-input study-plan-task-title-input"
-                  placeholder="Tên công việc"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                  autoFocus
-                />
+              <div className="study-plan-form-group study-plan-task-title-group">
+                <div className="study-plan-task-title-shell">
+                  <textarea
+                    className={`study-plan-input study-plan-task-title-input ${isTitleExpanded ? 'study-plan-task-title-input--expanded' : 'study-plan-task-title-input--collapsed'}`}
+                    placeholder="Tên công việc"
+                    value={formData.title}
+                    onChange={(e) => handleTitleChange(e.target.value)}
+                    onFocus={() => setIsTitleExpanded(true)}
+                    required
+                    autoFocus
+                    rows={isTitleExpanded ? 3 : 1}
+                  />
+                  {isLongTitle && (
+                    <button
+                      type="button"
+                      className="study-plan-task-title-toggle"
+                      onClick={() => setIsTitleExpanded((prev) => !prev)}
+                    >
+                      {isTitleExpanded ? 'Thu gọn' : '...'}
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="study-plan-task-detail-meta-grid">
-                <div className="study-plan-form-group">
-                  <label className="study-plan-label">
-                    <Calendar size={14} /> Bắt đầu
+                <div className="study-plan-form-group study-plan-inline-datetime-row">
+                  <label
+                    className="study-plan-label study-plan-label--inline"
+                    htmlFor="study-plan-start-date"
+                  >
+                    <Calendar size={14} />
+                    <span>Bắt đầu</span>
                   </label>
                   <input
+                    id="study-plan-start-date"
                     type="datetime-local"
-                    className="study-plan-input"
+                    className="study-plan-input study-plan-inline-datetime-input"
                     value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                   />
                 </div>
 
-                <div className="study-plan-form-group">
-                  <label className="study-plan-label">
-                    <Flag size={14} /> Hạn chót
-                  </label>
-                  <input
-                    type="datetime-local"
-                    className={`study-plan-input ${deadlineError ? 'study-plan-input--error' : ''} ${isOverdue ? 'study-plan-input--overdue' : ''}`}
-                    value={formData.deadline}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        deadline: e.target.value,
-                        endDate: e.target.value,
-                      })
-                    }
-                  />
+                <div className="study-plan-form-group study-plan-inline-datetime-group">
+                  <div className="study-plan-inline-datetime-row">
+                    <label
+                      className="study-plan-label study-plan-label--inline"
+                      htmlFor="study-plan-deadline"
+                    >
+                      <Flag size={14} />
+                      <span>Hạn chót</span>
+                    </label>
+                    <input
+                      id="study-plan-deadline"
+                      type="datetime-local"
+                      className={`study-plan-input study-plan-inline-datetime-input ${deadlineError ? 'study-plan-input--error' : ''} ${isOverdue ? 'study-plan-input--overdue' : ''}`}
+                      value={formData.deadline}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          deadline: e.target.value,
+                          endDate: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
                   {deadlineError && (
                     <span className="study-plan-field-error">{deadlineError}</span>
                   )}
@@ -361,8 +391,9 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
 
                 {/* Priority — chips for manual tasks, read-only badge for roadmap tasks */}
                 <div className="study-plan-form-group">
-                  <label className="study-plan-label">
-                    <Flag size={14} /> Ưu tiên
+                  <label className="study-plan-label study-plan-label--inline">
+                    <Flag size={14} />
+                    <span>Ưu tiên</span>
                   </label>
                   {isRoadmapLinkedTask ? (
                     <div className={`study-plan-priority-chip study-plan-priority-chip--${formData.priority.toLowerCase()} study-plan-priority-chip--readonly`}>
@@ -400,8 +431,9 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                     </div>
                   ) : (
                     <div className="study-plan-form-group">
-                      <label className="study-plan-label">
-                        <Activity size={14} /> Tiến độ: {formData.userProgress}%
+                      <label className="study-plan-label study-plan-label--inline">
+                        <Activity size={14} />
+                        <span>Tiến độ: {formData.userProgress}%</span>
                       </label>
                       <input
                         type="range"
@@ -416,24 +448,6 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                     </div>
                   )}
 
-                  <div className="study-plan-form-group">
-                    <label className="study-plan-label">Mức độ hài lòng</label>
-                    <div className="study-plan-satisfaction-options">
-                      {['Satisfied', 'Neutral', 'Unsatisfied'].map((level) => (
-                        <button
-                          key={level}
-                          type="button"
-                          className={`study-plan-satisfaction-btn ${formData.satisfactionLevel === level ? 'active' : ''}`}
-                          onClick={() => setFormData({ ...formData, satisfactionLevel: level })}
-                          title={level}
-                        >
-                          {level === 'Satisfied' && <Smile size={18} />}
-                          {level === 'Neutral' && <Meh size={18} />}
-                          {level === 'Unsatisfied' && <Frown size={18} />}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               )}
             </aside>

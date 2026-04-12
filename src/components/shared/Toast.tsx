@@ -60,7 +60,7 @@ const Toast: React.FC<ToastProps> = ({
 }) => {
   const [countdown, setCountdown] = React.useState(autoCloseDelay);
   const resolvedPosition = position ?? 'center';
-  const resolvedUseOverlay = useOverlay ?? (type !== 'success');
+  const resolvedUseOverlay = useOverlay ?? true;
 
   useEffect(() => {
     if (!isVisible) {

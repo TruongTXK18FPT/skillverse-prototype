@@ -581,6 +581,10 @@ const isCourseLearningRoute = (pathname: string) => {
   );
 };
 
+const isCourseDetailRoute = (pathname: string) => {
+  return /^\/courses\/[^/]+(?:\/[^/]+)?$/.test(pathname) || /^\/course\/[^/]+\/preview$/.test(pathname);
+};
+
 // Check if path is any admin route
 const isAdminRoute = (pathname: string) => {
   return pathname === "/admin" || pathname.startsWith("/admin/");
@@ -629,6 +633,7 @@ const FooterVisibilityWrapper = () => {
     isJobDetailRoute(location.pathname) ||
     isBookingRoute(location.pathname) ||
     isContractRoute(location.pathname)
+    || isCourseDetailRoute(location.pathname)
   ) {
     return null;
   }
