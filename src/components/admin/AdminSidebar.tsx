@@ -82,7 +82,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       items: [
         {
           id: "courses",
-          label: "Khóa Học",
+          label: "Quản Lý Khóa Học",
           icon: BookOpen,
           allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
         },

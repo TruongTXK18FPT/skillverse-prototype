@@ -26,6 +26,7 @@ import MentorSidebar from '../../components/mentor/MentorSidebar';
 // Tab Components
 import MentorOverviewHUD from '../../components/mentor/MentorOverviewHUD';
 import CoursesTab from '../../components/mentor/CoursesTab';
+import MentorCourseAnalyticsTab from '../../components/mentor/MentorCourseAnalyticsTab';
 import MentorScheduleManager from '../../components/portfolio-hud/MentorScheduleManager';
 import MentorBookingManager from '../../components/portfolio-hud/MentorBookingManager';
 import SkillPointsTab from '../../components/mentor/SkillPointsTab';
@@ -128,6 +129,9 @@ const MentorDashboard: React.FC = () => {
 
       case 'courses':
         return <CoursesTab />;
+
+      case 'course-analytics':
+        return <MentorCourseAnalyticsTab />;
 
       case 'schedule':
         return <MentorScheduleManager />;

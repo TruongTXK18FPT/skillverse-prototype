@@ -1,30 +1,59 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import ReactDOM from "react-dom";
 import {
-  Calendar, Clock, Video, CheckCircle, XCircle,
-  User, FileText, DollarSign, TrendingUp, Users,
-  CheckSquare, AlertCircle, RefreshCw, X, Eye,
-  LayoutList, Grid3X3
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+  Calendar,
+  Clock,
+  Video,
+  CheckCircle,
+  XCircle,
+  User,
+  FileText,
+  DollarSign,
+  TrendingUp,
+  Users,
+  CheckSquare,
+  AlertCircle,
+  RefreshCw,
+  X,
+  Eye,
+  LayoutList,
+  Grid3X3,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
-  AreaChart, Area, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
-} from 'recharts';
-import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
-import { motion, AnimatePresence } from 'framer-motion';
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  getMyBookings, approveBooking, rejectBooking,
-  startMeeting, completeBooking, downloadBookingInvoice, BookingResponse
-} from '../../services/bookingService';
-import { confirmAction } from '../../context/ConfirmDialogContext';
-import { onBookingSyncMessage, broadcastBookingChanged } from '../../utils/bookingSync';
-import { showAppError, showAppSuccess } from '../../context/ToastContext';
-import './MentorBookingManager.css';
+  getMyBookings,
+  approveBooking,
+  rejectBooking,
+  startMeeting,
+  completeBooking,
+  downloadBookingInvoice,
+  BookingResponse,
+} from "../../services/bookingService";
+import { confirmAction } from "../../context/ConfirmDialogContext";
+import {
+  onBookingSyncMessage,
+  broadcastBookingChanged,
+} from "../../utils/bookingSync";
+import { showAppError, showAppSuccess } from "../../context/ToastContext";
+import "./MentorBookingManager.css";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type TabId = 'pending' | 'upcoming' | 'history';
+type TabId = "pending" | "upcoming" | "history";
 
 interface Tab {
   id: TabId;
@@ -33,13 +62,14 @@ interface Tab {
   getCount: (b: BookingResponse[]) => number;
 }
 
-type ViewMode = 'grid' | 'list';
+type ViewMode = "grid" | "list";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 const parseBookingDate = (dateStr: string): Date => {
-  if (dateStr.endsWith('Z') || dateStr.includes('+07:00')) return new Date(dateStr);
-  const [datePart, timePart] = dateStr.split('T');
+  if (dateStr.endsWith("Z") || dateStr.includes("+07:00"))
+    return new Date(dateStr);
+  const [datePart, timePart] = dateStr.split("T");
   return new Date(`${datePart}T${timePart}+07:00`);
 };
 
@@ -48,11 +78,15 @@ const getBookingEndTime = (b: BookingResponse): Date => {
   return new Date(start.getTime() + (b.durationMinutes || 60) * 60 * 1000);
 };
 
-const sortBookings = (list: BookingResponse[], now: Date, tab: TabId): BookingResponse[] => {
+const sortBookings = (
+  list: BookingResponse[],
+  now: Date,
+  tab: TabId,
+): BookingResponse[] => {
   const urgency = (b: BookingResponse): number => {
-    if (tab === 'pending') {
+    if (tab === "pending") {
       // PENDING: oldest first (waiting longest = most urgent)
-      return -(parseBookingDate(b.startTime).getTime());
+      return -parseBookingDate(b.startTime).getTime();
     }
     // Upcoming: soonest first
     return parseBookingDate(b.startTime).getTime() - now.getTime();
@@ -60,34 +94,50 @@ const sortBookings = (list: BookingResponse[], now: Date, tab: TabId): BookingRe
   return [...list].sort((a, b) => urgency(a) - urgency(b));
 };
 
-const statusConfig: Record<string, { label: string; cls: string; accent: string }> = {
-  PENDING:             { label: 'Chờ duyệt',      cls: 'pending',          accent: '#f59e0b' },
-  CONFIRMED:           { label: 'Đã xác nhận',     cls: 'confirmed',        accent: '#3b82f6' },
-  ONGOING:             { label: 'Đang học',        cls: 'ongoing',          accent: '#8b5cf6' },
-  PENDING_COMPLETION:  { label: 'Chờ xác nhận',    cls: 'pending-completion', accent: '#a855f7' },
-  COMPLETED:           { label: 'Hoàn thành',      cls: 'completed',        accent: '#22c55e' },
-  REJECTED:            { label: 'Từ chối',          cls: 'rejected',         accent: '#ef4444' },
-  CANCELLED:           { label: 'Đã hủy',          cls: 'cancelled',        accent: '#64748b' },
-  DISPUTED:            { label: 'Khiếu nại',        cls: 'disputed',         accent: '#fb923c' },
-  REFUNDED:            { label: 'Đã hoàn tiền',     cls: 'refunded',         accent: '#475569' },
+const statusConfig: Record<
+  string,
+  { label: string; cls: string; accent: string }
+> = {
+  PENDING: { label: "Chờ duyệt", cls: "pending", accent: "#f59e0b" },
+  CONFIRMED: { label: "Đã xác nhận", cls: "confirmed", accent: "#3b82f6" },
+  ONGOING: { label: "Đang học", cls: "ongoing", accent: "#8b5cf6" },
+  PENDING_COMPLETION: {
+    label: "Chờ xác nhận",
+    cls: "pending-completion",
+    accent: "#a855f7",
+  },
+  COMPLETED: { label: "Hoàn thành", cls: "completed", accent: "#22c55e" },
+  REJECTED: { label: "Từ chối", cls: "rejected", accent: "#ef4444" },
+  CANCELLED: { label: "Đã hủy", cls: "cancelled", accent: "#64748b" },
+  DISPUTED: { label: "Khiếu nại", cls: "disputed", accent: "#fb923c" },
+  REFUNDED: { label: "Đã hoàn tiền", cls: "refunded", accent: "#475569" },
 };
 
 const formatCurrency = (n: number) =>
-  new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(n);
+  new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
+    n,
+  );
 
 const formatDate = (str: string) => {
   const d = parseBookingDate(str);
-  return d.toLocaleString('vi-VN', {
-    weekday: 'short', month: 'short', day: 'numeric',
-    hour: '2-digit', minute: '2-digit'
+  return d.toLocaleString("vi-VN", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 
 const formatDateFull = (str: string) => {
   const d = parseBookingDate(str);
-  return d.toLocaleString('vi-VN', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-    hour: '2-digit', minute: '2-digit'
+  return d.toLocaleString("vi-VN", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 
@@ -99,7 +149,11 @@ const CustomTooltip = ({ active, payload, label }: any) => {
       <p className="mbm-tooltip-label">{label}</p>
       {payload.map((e: any, i: number) => (
         <p key={i} style={{ color: e.color }}>
-          {e.name}: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(e.value)}
+          {e.name}:{" "}
+          {new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          }).format(e.value)}
         </p>
       ))}
     </div>
@@ -113,14 +167,16 @@ const MentorBookingManager: React.FC = () => {
   const [bookings, setBookings] = useState<BookingResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<TabId>('pending');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [activeTab, setActiveTab] = useState<TabId>("pending");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [now, setNow] = useState(new Date());
   const [rejectModal, setRejectModal] = useState<BookingResponse | null>(null);
-  const [rejectReason, setRejectReason] = useState('');
+  const [rejectReason, setRejectReason] = useState("");
   const [rejectSubmitting, setRejectSubmitting] = useState(false);
-  const [localMentorCompleted, setLocalMentorCompleted] = useState<Set<number>>(new Set());
+  const [localMentorCompleted, setLocalMentorCompleted] = useState<Set<number>>(
+    new Set(),
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const PAGE_SIZE = 8;
 
@@ -128,17 +184,25 @@ const MentorBookingManager: React.FC = () => {
   useEffect(() => {
     const tick = setInterval(() => setNow(new Date()), 30000);
     const unsub = onBookingSyncMessage(fetchBookings);
-    return () => { clearInterval(tick); unsub(); };
+    return () => {
+      clearInterval(tick);
+      unsub();
+    };
   }, []);
 
-  useEffect(() => { fetchBookings(); }, []);
+  useEffect(() => {
+    fetchBookings();
+  }, []);
 
-  useEffect(() => { setCurrentPage(1); }, [activeTab, searchTerm]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, searchTerm]);
 
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      let page = 0, total = 1;
+      let page = 0,
+        total = 1;
       const all: BookingResponse[] = [];
       do {
         const r = await getMyBookings(true, page, 100);
@@ -148,7 +212,7 @@ const MentorBookingManager: React.FC = () => {
       } while (page < total);
       setBookings(all);
     } catch {
-      setError('Không thể tải danh sách booking.');
+      setError("Không thể tải danh sách booking.");
     } finally {
       setLoading(false);
     }
@@ -156,129 +220,216 @@ const MentorBookingManager: React.FC = () => {
 
   // ── Effective status (local override for optimistic complete) ─────────────
   const getStatus = useCallback(
-    (b: BookingResponse) => (localMentorCompleted.has(b.id) ? 'PENDING_COMPLETION' : b.status),
-    [localMentorCompleted]
+    (b: BookingResponse) =>
+      localMentorCompleted.has(b.id) ? "PENDING_COMPLETION" : b.status,
+    [localMentorCompleted],
   );
 
   // ── Booking helpers ───────────────────────────────────────────────────────
   const canStart = (b: BookingResponse): boolean => {
-    if (getStatus(b) !== 'CONFIRMED') return false;
-    const diff = (parseBookingDate(b.startTime).getTime() - now.getTime()) / 60000;
+    if (getStatus(b) !== "CONFIRMED") return false;
+    const diff =
+      (parseBookingDate(b.startTime).getTime() - now.getTime()) / 60000;
     return diff <= 30 && now.getTime() <= getBookingEndTime(b).getTime();
   };
 
   const isExpired = (b: BookingResponse): boolean => {
-    if (!['CONFIRMED', 'ONGOING'].includes(getStatus(b))) return false;
+    if (!["CONFIRMED", "ONGOING"].includes(getStatus(b))) return false;
     return now.getTime() > getBookingEndTime(b).getTime();
   };
 
   const canComplete = (b: BookingResponse): boolean =>
-    ['CONFIRMED', 'ONGOING'].includes(getStatus(b)) &&
+    ["CONFIRMED", "ONGOING"].includes(getStatus(b)) &&
     now.getTime() >= getBookingEndTime(b).getTime() &&
     !localMentorCompleted.has(b.id);
 
   const canMentorConfirm = (b: BookingResponse): boolean =>
-    getStatus(b) === 'PENDING_COMPLETION' && !b.mentorCompletedAt;
+    getStatus(b) === "PENDING_COMPLETION" && !b.mentorCompletedAt;
 
   const getDeadlineInfo = (b: BookingResponse) => {
     const start = parseBookingDate(b.startTime);
     const status = getStatus(b);
 
-    if (status === 'ONGOING') return { text: 'Đang diễn ra', level: 'live' };
+    if (status === "ONGOING") return { text: "Đang diễn ra", level: "live" };
 
-    if (status === 'CONFIRMED') {
+    if (status === "CONFIRMED") {
       const diffMs = start.getTime() - now.getTime();
       const diffMin = diffMs / 60000;
       const diffH = diffMin / 60;
       const diffD = diffH / 24;
-      if (diffMin <= 15 && diffMin > 0) return { text: `Bắt đầu sau ${Math.round(diffMin)} phút`, level: 'critical' };
-      if (diffH <= 1)                     return { text: `Bắt đầu sau ${Math.round(diffMin)} phút`, level: 'urgent' };
-      if (diffH <= 24)                   return { text: `Bắt đầu sau ${Math.round(diffH)} giờ`, level: 'warning' };
-      if (diffD > 0)                     return { text: `Còn ${Math.round(diffD)} ngày`, level: 'normal' };
+      if (diffMin <= 15 && diffMin > 0)
+        return {
+          text: `Bắt đầu sau ${Math.round(diffMin)} phút`,
+          level: "critical",
+        };
+      if (diffH <= 1)
+        return {
+          text: `Bắt đầu sau ${Math.round(diffMin)} phút`,
+          level: "urgent",
+        };
+      if (diffH <= 24)
+        return {
+          text: `Bắt đầu sau ${Math.round(diffH)} giờ`,
+          level: "warning",
+        };
+      if (diffD > 0)
+        return { text: `Còn ${Math.round(diffD)} ngày`, level: "normal" };
     }
 
-    if (status === 'PENDING') {
+    if (status === "PENDING") {
       const diffH = (start.getTime() - now.getTime()) / 3600000;
-      if (diffH <= 2) return { text: `Hẹn trong ${Math.round(diffH)} giờ`, level: 'urgent' };
+      if (diffH <= 2)
+        return { text: `Hẹn trong ${Math.round(diffH)} giờ`, level: "urgent" };
     }
 
     return null;
   };
 
   // ── Stats ─────────────────────────────────────────────────────────────────
-  const pending = bookings.filter(b => b.status === 'PENDING');
-  const upcoming = bookings.filter(b => ['CONFIRMED', 'ONGOING', 'PENDING_COMPLETION'].includes(b.status));
-  const thisMonth = bookings.filter(b => {
-    if (b.status !== 'COMPLETED') return false;
+  const pending = bookings.filter((b) => b.status === "PENDING");
+  const upcoming = bookings.filter((b) =>
+    ["CONFIRMED", "ONGOING", "PENDING_COMPLETION"].includes(b.status),
+  );
+  const thisMonth = bookings.filter((b) => {
+    if (b.status !== "COMPLETED") return false;
     const d = parseBookingDate(b.startTime);
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    return (
+      d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+    );
   });
   const earnings = thisMonth.reduce((s, b) => s + (b.priceVnd || 0), 0);
 
   // ── Revenue chart data ────────────────────────────────────────────────────
   const revenueData = useMemo(() => {
     return Array.from({ length: 6 }, (_, i) => {
-      const d = new Date(); d.setMonth(d.getMonth() - (5 - i));
-      const label = d.toLocaleDateString('vi-VN', { month: 'short', year: '2-digit' });
+      const d = new Date();
+      d.setMonth(d.getMonth() - (5 - i));
+      const label = d.toLocaleDateString("vi-VN", {
+        month: "short",
+        year: "2-digit",
+      });
       const val = bookings
-        .filter(b => b.status === 'COMPLETED' && parseBookingDate(b.startTime).getMonth() === d.getMonth())
+        .filter(
+          (b) =>
+            b.status === "COMPLETED" &&
+            parseBookingDate(b.startTime).getMonth() === d.getMonth(),
+        )
         .reduce((s, b) => s + (b.priceVnd || 0) * 0.8, 0);
-      return { month: label, 'Thu nhập': Math.round(val) };
+      return { month: label, "Thu nhập": Math.round(val) };
     });
   }, [bookings]);
 
   // ── Pie data ───────────────────────────────────────────────────────────────
   const pieData = useMemo(() => {
     const rows: { name: string; value: number; color: string }[] = [
-      { name: 'Hoàn thành',         value: bookings.filter(b => b.status === 'COMPLETED').length,          color: '#22c55e' },
-      { name: 'Chờ duyệt',          value: bookings.filter(b => b.status === 'PENDING').length,            color: '#f59e0b' },
-      { name: 'Đã xác nhận',        value: bookings.filter(b => b.status === 'CONFIRMED').length,          color: '#3b82f6' },
-      { name: 'Đang học',           value: bookings.filter(b => b.status === 'ONGOING').length,            color: '#8b5cf6' },
-      { name: 'Chờ xác nhận',      value: bookings.filter(b => b.status === 'PENDING_COMPLETION').length,  color: '#a855f7' },
-      { name: 'Từ chối',            value: bookings.filter(b => b.status === 'REJECTED').length,            color: '#ef4444' },
-      { name: 'Đã hủy',            value: bookings.filter(b => b.status === 'CANCELLED').length,            color: '#64748b' },
-      { name: 'Khiếu nại',          value: bookings.filter(b => b.status === 'DISPUTED').length,            color: '#fb923c' },
-      { name: 'Đã hoàn tiền',       value: bookings.filter(b => b.status === 'REFUNDED').length,             color: '#94a3b8' },
+      {
+        name: "Hoàn thành",
+        value: bookings.filter((b) => b.status === "COMPLETED").length,
+        color: "#22c55e",
+      },
+      {
+        name: "Chờ duyệt",
+        value: bookings.filter((b) => b.status === "PENDING").length,
+        color: "#f59e0b",
+      },
+      {
+        name: "Đã xác nhận",
+        value: bookings.filter((b) => b.status === "CONFIRMED").length,
+        color: "#3b82f6",
+      },
+      {
+        name: "Đang học",
+        value: bookings.filter((b) => b.status === "ONGOING").length,
+        color: "#8b5cf6",
+      },
+      {
+        name: "Chờ xác nhận",
+        value: bookings.filter((b) => b.status === "PENDING_COMPLETION").length,
+        color: "#a855f7",
+      },
+      {
+        name: "Từ chối",
+        value: bookings.filter((b) => b.status === "REJECTED").length,
+        color: "#ef4444",
+      },
+      {
+        name: "Đã hủy",
+        value: bookings.filter((b) => b.status === "CANCELLED").length,
+        color: "#64748b",
+      },
+      {
+        name: "Khiếu nại",
+        value: bookings.filter((b) => b.status === "DISPUTED").length,
+        color: "#fb923c",
+      },
+      {
+        name: "Đã hoàn tiền",
+        value: bookings.filter((b) => b.status === "REFUNDED").length,
+        color: "#94a3b8",
+      },
     ];
-    return rows.filter(d => d.value > 0);
+    return rows.filter((d) => d.value > 0);
   }, [bookings]);
 
   // ── Tabs ──────────────────────────────────────────────────────────────────
-  const tabs: Tab[] = useMemo(() => [
-    {
-      id: 'pending',
-      label: 'Cần duyệt',
-      icon: <AlertCircle size={17} />,
-      getCount: list => list.filter(b => b.status === 'PENDING').length,
-    },
-    {
-      id: 'upcoming',
-      label: 'Sắp diễn ra',
-      icon: <Calendar size={17} />,
-      getCount: list => list.filter(b => ['CONFIRMED','ONGOING','PENDING_COMPLETION'].includes(b.status)).length,
-    },
-    {
-      id: 'history',
-      label: 'Lịch sử',
-      icon: <CheckSquare size={17} />,
-      getCount: list => list.filter(b => ['COMPLETED','CANCELLED','REJECTED','REFUNDED','DISPUTED'].includes(b.status)).length,
-    },
-  ], []);
+  const tabs: Tab[] = useMemo(
+    () => [
+      {
+        id: "pending",
+        label: "Cần duyệt",
+        icon: <AlertCircle size={17} />,
+        getCount: (list) => list.filter((b) => b.status === "PENDING").length,
+      },
+      {
+        id: "upcoming",
+        label: "Sắp diễn ra",
+        icon: <Calendar size={17} />,
+        getCount: (list) =>
+          list.filter((b) =>
+            ["CONFIRMED", "ONGOING", "PENDING_COMPLETION"].includes(b.status),
+          ).length,
+      },
+      {
+        id: "history",
+        label: "Lịch sử",
+        icon: <CheckSquare size={17} />,
+        getCount: (list) =>
+          list.filter((b) =>
+            [
+              "COMPLETED",
+              "CANCELLED",
+              "REJECTED",
+              "REFUNDED",
+              "DISPUTED",
+            ].includes(b.status),
+          ).length,
+      },
+    ],
+    [],
+  );
 
   // ── Filtered bookings ────────────────────────────────────────────────────
   const filteredBookings = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    const base = bookings.filter(b => {
+    const base = bookings.filter((b) => {
       const s = getStatus(b);
       const tabCond =
-        activeTab === 'pending'  ? s === 'PENDING' :
-        activeTab === 'upcoming' ? ['CONFIRMED','ONGOING','PENDING_COMPLETION'].includes(s) :
-                                  ['COMPLETED','CANCELLED','REJECTED','REFUNDED','DISPUTED'].includes(s);
+        activeTab === "pending"
+          ? s === "PENDING"
+          : activeTab === "upcoming"
+            ? ["CONFIRMED", "ONGOING", "PENDING_COMPLETION"].includes(s)
+            : [
+                "COMPLETED",
+                "CANCELLED",
+                "REJECTED",
+                "REFUNDED",
+                "DISPUTED",
+              ].includes(s);
       if (!tabCond) return false;
       if (!term) return true;
       return (
-        (b.learnerName || '').toLowerCase().includes(term) ||
-        (b.paymentReference || '').toLowerCase().includes(term) ||
+        (b.learnerName || "").toLowerCase().includes(term) ||
+        (b.paymentReference || "").toLowerCase().includes(term) ||
         `#${b.id}`.includes(term)
       );
     });
@@ -289,9 +440,11 @@ const MentorBookingManager: React.FC = () => {
   const handleApprove = async (id: number) => {
     try {
       await approveBooking(id);
-      showAppSuccess('Đã duyệt', 'Booking đã được duyệt!');
+      showAppSuccess("Đã duyệt", "Booking đã được duyệt!");
       fetchBookings();
-    } catch { showAppError('Lỗi duyệt', 'Không thể duyệt booking'); }
+    } catch {
+      showAppError("Lỗi duyệt", "Không thể duyệt booking");
+    }
   };
 
   const handleRejectSubmit = async () => {
@@ -299,33 +452,48 @@ const MentorBookingManager: React.FC = () => {
     setRejectSubmitting(true);
     try {
       await rejectBooking(rejectModal.id, rejectReason.trim());
-      showAppSuccess('Đã từ chối', 'Booking đã bị từ chối.');
+      showAppSuccess("Đã từ chối", "Booking đã bị từ chối.");
       setRejectModal(null);
       fetchBookings();
-    } catch { showAppError('Lỗi', 'Không thể từ chối'); }
-    finally { setRejectSubmitting(false); }
+    } catch {
+      showAppError("Lỗi", "Không thể từ chối");
+    } finally {
+      setRejectSubmitting(false);
+    }
   };
 
   const handleStart = async (b: BookingResponse) => {
-    if (b.meetingLink) { window.open(b.meetingLink, '_blank'); return; }
+    if (b.meetingLink) {
+      window.open(b.meetingLink, "_blank");
+      return;
+    }
     try {
       const upd = await startMeeting(b.id);
       const link = upd.meetingLink || `https://meet.jit.si/SkillVerse-${b.id}`;
-      window.open(link, '_blank');
+      window.open(link, "_blank");
       fetchBookings();
-    } catch { showAppError('Lỗi', 'Không thể bắt đầu buổi học'); }
+    } catch {
+      showAppError("Lỗi", "Không thể bắt đầu buổi học");
+    }
   };
 
   const handleComplete = async (id: number) => {
-    if (!await confirmAction('Xác nhận hoàn thành buổi học?')) return;
-    setLocalMentorCompleted(p => new Set([...p, id]));
+    if (!(await confirmAction("Xác nhận hoàn thành buổi học?"))) return;
+    setLocalMentorCompleted((p) => new Set([...p, id]));
     try {
       await completeBooking(id);
-      broadcastBookingChanged(id, 'PENDING_COMPLETION');
-      showAppSuccess('Đã hoàn thành', 'Buổi học đã hoàn thành. Chờ learner xác nhận.');
+      broadcastBookingChanged(id, "PENDING_COMPLETION");
+      showAppSuccess(
+        "Đã hoàn thành",
+        "Buổi học đã hoàn thành. Chờ learner xác nhận.",
+      );
     } catch {
-      setLocalMentorCompleted(p => { const n = new Set(p); n.delete(id); return n; });
-      showAppError('Lỗi', 'Không thể hoàn thành booking');
+      setLocalMentorCompleted((p) => {
+        const n = new Set(p);
+        n.delete(id);
+        return n;
+      });
+      showAppError("Lỗi", "Không thể hoàn thành booking");
     }
   };
 
@@ -333,18 +501,29 @@ const MentorBookingManager: React.FC = () => {
     try {
       const blob = await downloadBookingInvoice(id);
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = `booking-${id}.pdf`;
-      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    } catch { showAppError('Lỗi', 'Không thể tải hóa đơn'); }
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `booking-${id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      showAppError("Lỗi", "Không thể tải hóa đơn");
+    }
   };
 
   // ── Render helpers ────────────────────────────────────────────────────────
   const renderCard = (b: BookingResponse) => {
     const deadline = getDeadlineInfo(b);
     const status = getStatus(b);
-    const sc = statusConfig[status] || { label: status, cls: 'pending', accent: '#64748b' };
+    const sc = statusConfig[status] || {
+      label: status,
+      cls: "pending",
+      accent: "#64748b",
+    };
     const expired = isExpired(b);
-    const live = status === 'ONGOING';
+    const live = status === "ONGOING";
 
     return (
       <motion.div
@@ -354,27 +533,37 @@ const MentorBookingManager: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
         className={[
-          'mbm-card',
-          live ? 'mbm-card--live' : '',
-          expired ? 'mbm-card--expired' : '',
-          status === 'PENDING' ? 'mbm-card--pending' : '',
-          status === 'CONFIRMED' && canStart(b) ? 'mbm-card--ready' : '',
-        ].filter(Boolean).join(' ')}
+          "mbm-card",
+          live ? "mbm-card--live" : "",
+          expired ? "mbm-card--expired" : "",
+          status === "PENDING" ? "mbm-card--pending" : "",
+          status === "CONFIRMED" && canStart(b) ? "mbm-card--ready" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
         {/* Live top bar */}
-        {live && <div className="mbm-card-live-bar"><span className="mbm-live-dot" />Đang diễn ra</div>}
+        {live && (
+          <div className="mbm-card-live-bar">
+            <span className="mbm-live-dot" />
+            Đang diễn ra
+          </div>
+        )}
 
         {/* Header */}
         <div className="mbm-card-hdr">
           <div className="mbm-card-hdr-left">
             <div className="mbm-avatar">
-              {b.learnerAvatar
-                ? <img src={b.learnerAvatar} alt="" />
-                : <User size={20} />
-              }
+              {b.learnerAvatar ? (
+                <img src={b.learnerAvatar} alt="" />
+              ) : (
+                <User size={20} />
+              )}
             </div>
             <div className="mbm-card-hdr-info">
-              <h3 className="mbm-card-name">{b.learnerName || `Learner #${b.learnerId}`}</h3>
+              <h3 className="mbm-card-name">
+                {b.learnerName || `Learner #${b.learnerId}`}
+              </h3>
               <div className="mbm-card-id">#{b.id}</div>
             </div>
           </div>
@@ -421,67 +610,91 @@ const MentorBookingManager: React.FC = () => {
 
         {/* Actions */}
         <div className="mbm-card-actions">
-          {status === 'PENDING' && (
+          {status === "PENDING" && (
             <>
-              <button className="mbm-btn mbm-btn-approve" onClick={() => handleApprove(b.id)}>
+              <button
+                className="mbm-btn mbm-btn-approve"
+                onClick={() => handleApprove(b.id)}
+              >
                 <CheckCircle size={14} /> Duyệt
               </button>
-              <button className="mbm-btn mbm-btn-reject" onClick={() => setRejectModal(b)}>
+              <button
+                className="mbm-btn mbm-btn-reject"
+                onClick={() => setRejectModal(b)}
+              >
                 <XCircle size={14} /> Từ chối
               </button>
             </>
           )}
 
-          {status === 'CONFIRMED' && canStart(b) && (
-            <button className="mbm-btn mbm-btn-join" onClick={() => handleStart(b)}>
+          {status === "CONFIRMED" && canStart(b) && (
+            <button
+              className="mbm-btn mbm-btn-join"
+              onClick={() => handleStart(b)}
+            >
               <Video size={14} />
-              {b.meetingLink ? 'Vào phòng học' : 'Tạo phòng họp'}
+              {b.meetingLink ? "Vào phòng học" : "Tạo phòng họp"}
             </button>
           )}
 
-          {status === 'ONGOING' && b.meetingLink && (
-            <button className="mbm-btn mbm-btn-join" onClick={() => handleStart(b)}>
+          {status === "ONGOING" && b.meetingLink && (
+            <button
+              className="mbm-btn mbm-btn-join"
+              onClick={() => handleStart(b)}
+            >
               <Video size={14} /> Vào phòng học
             </button>
           )}
 
           {canComplete(b) && (
-            <button className="mbm-btn mbm-btn-complete" onClick={() => handleComplete(b.id)}>
+            <button
+              className="mbm-btn mbm-btn-complete"
+              onClick={() => handleComplete(b.id)}
+            >
               <CheckCircle size={14} /> Hoàn thành
             </button>
           )}
 
-          {expired && status === 'CONFIRMED' && (
+          {expired && status === "CONFIRMED" && (
             <span className="mbm-card-expired-hint">
               <AlertCircle size={13} /> Đã quá giờ
             </span>
           )}
 
-          {status === 'PENDING_COMPLETION' && canMentorConfirm(b) && (
-            <button className="mbm-btn mbm-btn-complete" onClick={() => handleComplete(b.id)}>
+          {status === "PENDING_COMPLETION" && canMentorConfirm(b) && (
+            <button
+              className="mbm-btn mbm-btn-complete"
+              onClick={() => handleComplete(b.id)}
+            >
               <CheckCircle size={14} /> Hoàn tất
             </button>
           )}
 
-          {status === 'PENDING_COMPLETION' && !canMentorConfirm(b) && (
+          {status === "PENDING_COMPLETION" && !canMentorConfirm(b) && (
             <span className="mbm-card-waiting-hint">
               <Clock size={13} /> Chờ learner xác nhận
             </span>
           )}
 
-          {status === 'DISPUTED' && (
+          {status === "DISPUTED" && (
             <span className="mbm-card-disputed-hint">
               <AlertCircle size={13} /> Đang có tranh chấp
             </span>
           )}
 
-          {(status === 'COMPLETED' || b.paymentReference) && (
-            <button className="mbm-btn mbm-btn-ghost" onClick={() => handleInvoice(b.id)}>
+          {(status === "COMPLETED" || b.paymentReference) && (
+            <button
+              className="mbm-btn mbm-btn-ghost"
+              onClick={() => handleInvoice(b.id)}
+            >
               <FileText size={14} /> Hóa đơn
             </button>
           )}
 
-          <button className="mbm-btn mbm-btn-ghost" onClick={() => navigate(`/bookings/${b.id}`)}>
+          <button
+            className="mbm-btn mbm-btn-ghost"
+            onClick={() => navigate(`/bookings/${b.id}`)}
+          >
             <Eye size={14} /> Chi tiết
           </button>
         </div>
@@ -492,8 +705,12 @@ const MentorBookingManager: React.FC = () => {
   const renderListRow = (b: BookingResponse) => {
     const deadline = getDeadlineInfo(b);
     const status = getStatus(b);
-    const sc = statusConfig[status] || { label: status, cls: 'pending', accent: '#64748b' };
-    const live = status === 'ONGOING';
+    const sc = statusConfig[status] || {
+      label: status,
+      cls: "pending",
+      accent: "#64748b",
+    };
+    const live = status === "ONGOING";
 
     return (
       <motion.div
@@ -503,22 +720,27 @@ const MentorBookingManager: React.FC = () => {
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0 }}
         className={[
-          'mbm-list-row',
-          live ? 'mbm-list-row--live' : '',
-          status === 'PENDING' ? 'mbm-list-row--pending' : '',
-          status === 'CONFIRMED' && canStart(b) ? 'mbm-list-row--ready' : '',
-        ].filter(Boolean).join(' ')}
+          "mbm-list-row",
+          live ? "mbm-list-row--live" : "",
+          status === "PENDING" ? "mbm-list-row--pending" : "",
+          status === "CONFIRMED" && canStart(b) ? "mbm-list-row--ready" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
         {/* Col 1: Avatar + Name */}
         <div className="mbm-list-col mbm-list-col--learner">
           <div className="mbm-list-avatar">
-            {b.learnerAvatar
-              ? <img src={b.learnerAvatar} alt="" />
-              : <User size={18} />
-            }
+            {b.learnerAvatar ? (
+              <img src={b.learnerAvatar} alt="" />
+            ) : (
+              <User size={18} />
+            )}
           </div>
           <div className="mbm-list-name">
-            <span className="mbm-list-name-text">{b.learnerName || `Learner #${b.learnerId}`}</span>
+            <span className="mbm-list-name-text">
+              {b.learnerName || `Learner #${b.learnerId}`}
+            </span>
             <span className="mbm-list-id">#{b.id}</span>
           </div>
         </div>
@@ -539,7 +761,11 @@ const MentorBookingManager: React.FC = () => {
         <div className="mbm-list-col mbm-list-col--status">
           <span className={`mbm-badge mbm-badge--${sc.cls}`}>{sc.label}</span>
           {deadline && (
-            <span className={`mbm-list-deadline mbm-deadline--${deadline.level}`}>{deadline.text}</span>
+            <span
+              className={`mbm-list-deadline mbm-deadline--${deadline.level}`}
+            >
+              {deadline.text}
+            </span>
           )}
           {live && <span className="mbm-list-live-dot" />}
         </div>
@@ -551,27 +777,47 @@ const MentorBookingManager: React.FC = () => {
 
         {/* Col 5: Actions */}
         <div className="mbm-list-col mbm-list-col--actions">
-          {status === 'PENDING' && (
+          {status === "PENDING" && (
             <>
-              <button className="mbm-btn mbm-btn-approve mbm-btn-sm" onClick={() => handleApprove(b.id)} title="Duyệt">
+              <button
+                className="mbm-btn mbm-btn-approve mbm-btn-sm"
+                onClick={() => handleApprove(b.id)}
+                title="Duyệt"
+              >
                 <CheckCircle size={13} />
               </button>
-              <button className="mbm-btn mbm-btn-reject mbm-btn-sm" onClick={() => setRejectModal(b)} title="Từ chối">
+              <button
+                className="mbm-btn mbm-btn-reject mbm-btn-sm"
+                onClick={() => setRejectModal(b)}
+                title="Từ chối"
+              >
                 <XCircle size={13} />
               </button>
             </>
           )}
-          {(status === 'CONFIRMED' && canStart(b)) && (
-            <button className="mbm-btn mbm-btn-join mbm-btn-sm" onClick={() => handleStart(b)} title="Vào phòng học">
+          {status === "CONFIRMED" && canStart(b) && (
+            <button
+              className="mbm-btn mbm-btn-join mbm-btn-sm"
+              onClick={() => handleStart(b)}
+              title="Vào phòng học"
+            >
               <Video size={13} />
             </button>
           )}
           {canComplete(b) && (
-            <button className="mbm-btn mbm-btn-complete mbm-btn-sm" onClick={() => handleComplete(b.id)} title="Hoàn thành">
+            <button
+              className="mbm-btn mbm-btn-complete mbm-btn-sm"
+              onClick={() => handleComplete(b.id)}
+              title="Hoàn thành"
+            >
               <CheckCircle size={13} />
             </button>
           )}
-          <button className="mbm-btn mbm-btn-ghost mbm-btn-sm" onClick={() => navigate(`/bookings/${b.id}`)} title="Chi tiết">
+          <button
+            className="mbm-btn mbm-btn-ghost mbm-btn-sm"
+            onClick={() => navigate(`/bookings/${b.id}`)}
+            title="Chi tiết"
+          >
             <Eye size={13} />
           </button>
         </div>
@@ -584,7 +830,6 @@ const MentorBookingManager: React.FC = () => {
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="mbm-container">
-
       {/* Header */}
       <div className="mbm-header">
         <div className="mbm-header-title">
@@ -592,15 +837,24 @@ const MentorBookingManager: React.FC = () => {
           <h2>Quản Lý Booking</h2>
           <span className="mbm-header-total">{totalCount} booking</span>
         </div>
-        <button className="mbm-refresh-btn" onClick={fetchBookings} title="Làm mới">
+        <button
+          className="mbm-refresh-btn"
+          onClick={fetchBookings}
+          title="Làm mới"
+        >
           <RefreshCw size={15} />
         </button>
       </div>
 
       {/* Stats row */}
       <div className="mbm-stats-row">
-        <div className="mbm-stat-card mbm-stat-card--pending" onClick={() => setActiveTab('pending')}>
-          <div className="mbm-stat-icon"><AlertCircle size={22} /></div>
+        <div
+          className="mbm-stat-card mbm-stat-card--pending"
+          onClick={() => setActiveTab("pending")}
+        >
+          <div className="mbm-stat-icon">
+            <AlertCircle size={22} />
+          </div>
           <div className="mbm-stat-body">
             <span className="mbm-stat-num">{pending.length}</span>
             <span className="mbm-stat-lbl">Chờ duyệt</span>
@@ -608,16 +862,26 @@ const MentorBookingManager: React.FC = () => {
           {pending.length > 0 && <div className="mbm-stat-pulse" />}
         </div>
 
-        <div className="mbm-stat-card mbm-stat-card--upcoming" onClick={() => setActiveTab('upcoming')}>
-          <div className="mbm-stat-icon"><Calendar size={22} /></div>
+        <div
+          className="mbm-stat-card mbm-stat-card--upcoming"
+          onClick={() => setActiveTab("upcoming")}
+        >
+          <div className="mbm-stat-icon">
+            <Calendar size={22} />
+          </div>
           <div className="mbm-stat-body">
             <span className="mbm-stat-num">{upcoming.length}</span>
             <span className="mbm-stat-lbl">Sắp diễn ra</span>
           </div>
         </div>
 
-        <div className="mbm-stat-card mbm-stat-card--done" onClick={() => setActiveTab('history')}>
-          <div className="mbm-stat-icon"><CheckSquare size={22} /></div>
+        <div
+          className="mbm-stat-card mbm-stat-card--done"
+          onClick={() => setActiveTab("history")}
+        >
+          <div className="mbm-stat-icon">
+            <CheckSquare size={22} />
+          </div>
           <div className="mbm-stat-body">
             <span className="mbm-stat-num">{thisMonth.length}</span>
             <span className="mbm-stat-lbl">Hoàn thành tháng này</span>
@@ -625,9 +889,13 @@ const MentorBookingManager: React.FC = () => {
         </div>
 
         <div className="mbm-stat-card mbm-stat-card--income">
-          <div className="mbm-stat-icon"><TrendingUp size={22} /></div>
+          <div className="mbm-stat-icon">
+            <TrendingUp size={22} />
+          </div>
           <div className="mbm-stat-body">
-            <span className="mbm-stat-num">{formatCurrency(earnings * 0.8)}</span>
+            <span className="mbm-stat-num">
+              {formatCurrency(earnings * 0.8)}
+            </span>
             <span className="mbm-stat-lbl">Thu nhập tháng này</span>
           </div>
         </div>
@@ -649,11 +917,24 @@ const MentorBookingManager: React.FC = () => {
                     <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="2 2" stroke="rgba(255,255,255,0.04)" />
+                <CartesianGrid
+                  strokeDasharray="2 2"
+                  stroke="rgba(255,255,255,0.04)"
+                />
                 <XAxis dataKey="month" stroke="#475569" fontSize={11} />
-                <YAxis stroke="#475569" fontSize={10} tickFormatter={v => `${(v/1000).toFixed(0)}k`} />
+                <YAxis
+                  stroke="#475569"
+                  fontSize={10}
+                  tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+                />
                 <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="Thu nhập" stroke="#06b6d4" fill="url(#mbmIG)" strokeWidth={2} />
+                <Area
+                  type="monotone"
+                  dataKey="Thu nhập"
+                  stroke="#06b6d4"
+                  fill="url(#mbmIG)"
+                  strokeWidth={2}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -667,8 +948,18 @@ const MentorBookingManager: React.FC = () => {
           <div className="mbm-chart-body">
             <ResponsiveContainer width="100%" height={140}>
               <PieChart>
-                <Pie data={pieData} cx="50%" cy="50%" innerRadius={38} outerRadius={60} paddingAngle={3} dataKey="value">
-                  {pieData.map((e, i) => <Cell key={i} fill={e.color} />)}
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={38}
+                  outerRadius={60}
+                  paddingAngle={3}
+                  dataKey="value"
+                >
+                  {pieData.map((e, i) => (
+                    <Cell key={i} fill={e.color} />
+                  ))}
                 </Pie>
                 <Tooltip />
               </PieChart>
@@ -676,7 +967,10 @@ const MentorBookingManager: React.FC = () => {
             <div className="mbm-pie-legend">
               {pieData.map((e, i) => (
                 <div key={i} className="mbm-pie-item">
-                  <span className="mbm-pie-dot" style={{ background: e.color }} />
+                  <span
+                    className="mbm-pie-dot"
+                    style={{ background: e.color }}
+                  />
                   <span className="mbm-pie-lbl">{e.name}</span>
                   <span className="mbm-pie-val">{e.value}</span>
                 </div>
@@ -689,15 +983,17 @@ const MentorBookingManager: React.FC = () => {
       {/* Tabs */}
       <div className="mbm-tabs-wrap">
         <div className="mbm-tabs">
-          {tabs.map(t => (
+          {tabs.map((t) => (
             <button
               key={t.id}
-              className={`mbm-tab ${activeTab === t.id ? 'mbm-tab--active' : ''}`}
+              className={`mbm-tab ${activeTab === t.id ? "mbm-tab--active" : ""}`}
               onClick={() => setActiveTab(t.id)}
             >
               {t.icon}
               <span>{t.label}</span>
-              <span className={`mbm-tab-count ${t.getCount(bookings) > 0 ? 'mbm-tab-count--hot' : ''}`}>
+              <span
+                className={`mbm-tab-count ${t.getCount(bookings) > 0 ? "mbm-tab-count--hot" : ""}`}
+              >
                 {t.getCount(bookings)}
               </span>
             </button>
@@ -709,19 +1005,19 @@ const MentorBookingManager: React.FC = () => {
             className="mbm-search"
             placeholder="Tìm học viên, mã booking..."
             value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <div className="mbm-view-toggle">
             <button
-              className={`mbm-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-              onClick={() => setViewMode('grid')}
+              className={`mbm-view-btn ${viewMode === "grid" ? "active" : ""}`}
+              onClick={() => setViewMode("grid")}
               title="Lưới"
             >
               <Grid3X3 size={15} />
             </button>
             <button
-              className={`mbm-view-btn ${viewMode === 'list' ? 'active' : ''}`}
-              onClick={() => setViewMode('list')}
+              className={`mbm-view-btn ${viewMode === "list" ? "active" : ""}`}
+              onClick={() => setViewMode("list")}
               title="Danh sách"
             >
               <LayoutList size={15} />
@@ -732,156 +1028,212 @@ const MentorBookingManager: React.FC = () => {
 
       {/* Content */}
       <div className="mbm-content">
-        {loading && bookings.length === 0
-          ? <div className="mbm-loading"><MeowlKuruLoader size="medium" text="" /></div>
-          : error
-            ? <div className="mbm-error">{error}</div>
-            : filteredBookings.length === 0
-              ? (
-                <motion.div
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                  className="mbm-empty"
-                >
-                  <Calendar size={52} />
-                  <p>Không có booking nào trong mục này.</p>
-                </motion.div>
-              )
-              : (
-                <AnimatePresence mode="wait">
-                  {(() => {
-                    const totalPages = Math.max(1, Math.ceil(filteredBookings.length / PAGE_SIZE));
-                    const safePage = Math.min(currentPage, totalPages);
-                    const pageSlice = filteredBookings.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
-                    const start = (safePage - 1) * PAGE_SIZE + 1;
-                    const end = Math.min(safePage * PAGE_SIZE, filteredBookings.length);
+        {loading && bookings.length === 0 ? (
+          <div className="mbm-loading">
+            <MeowlKuruLoader size="medium" text="" />
+          </div>
+        ) : error ? (
+          <div className="mbm-error">{error}</div>
+        ) : filteredBookings.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mbm-empty"
+          >
+            <Calendar size={52} />
+            <p>Không có booking nào trong mục này.</p>
+          </motion.div>
+        ) : (
+          <AnimatePresence mode="wait">
+            {(() => {
+              const totalPages = Math.max(
+                1,
+                Math.ceil(filteredBookings.length / PAGE_SIZE),
+              );
+              const safePage = Math.min(currentPage, totalPages);
+              const pageSlice = filteredBookings.slice(
+                (safePage - 1) * PAGE_SIZE,
+                safePage * PAGE_SIZE,
+              );
+              const start = (safePage - 1) * PAGE_SIZE + 1;
+              const end = Math.min(
+                safePage * PAGE_SIZE,
+                filteredBookings.length,
+              );
 
-                    return (
-                      <>
-                        {viewMode === 'grid'
-                          ? (
-                            <div className="mbm-grid">
-                              {pageSlice.map(renderCard)}
-                            </div>
-                          )
-                          : (
-                            <div className="mbm-list">
-                              <div className="mbm-list-head">
-                                <span><User size={12} /> Học viên</span>
-                                <span><Calendar size={12} /> Thời gian</span>
-                                <span><AlertCircle size={12} /> Trạng thái</span>
-                                <span><DollarSign size={12} /> Giá</span>
-                                <span><Eye size={12} /> Thao tác</span>
-                              </div>
-                              {pageSlice.map(renderListRow)}
-                            </div>
-                          )
+              return (
+                <>
+                  {viewMode === "grid" ? (
+                    <div className="mbm-grid">{pageSlice.map(renderCard)}</div>
+                  ) : (
+                    <div className="mbm-list">
+                      <div className="mbm-list-head">
+                        <span>
+                          <User size={12} /> Học viên
+                        </span>
+                        <span>
+                          <Calendar size={12} /> Thời gian
+                        </span>
+                        <span>
+                          <AlertCircle size={12} /> Trạng thái
+                        </span>
+                        <span>
+                          <DollarSign size={12} /> Giá
+                        </span>
+                        <span>
+                          <Eye size={12} /> Thao tác
+                        </span>
+                      </div>
+                      {pageSlice.map(renderListRow)}
+                    </div>
+                  )}
+
+                  {totalPages > 1 && (
+                    <div className="mbm-pagination">
+                      <button
+                        className="mbm-btn mbm-btn-ghost mbm-btn-sm"
+                        onClick={() =>
+                          setCurrentPage((p) => Math.max(1, p - 1))
                         }
-
-                        {totalPages > 1 && (
-                          <div className="mbm-pagination">
-                            <button
-                              className="mbm-btn mbm-btn-ghost mbm-btn-sm"
-                              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                              disabled={safePage === 1}
-                            >
-                              ← Trước
-                            </button>
-                            <div className="mbm-pagination-pages">
-                              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-                                <button
-                                  key={p}
-                                  className={`mbm-pagination-page ${p === safePage ? 'active' : ''}`}
-                                  onClick={() => setCurrentPage(p)}
-                                >
-                                  {p}
-                                </button>
-                              ))}
-                            </div>
-                            <button
-                              className="mbm-btn mbm-btn-ghost mbm-btn-sm"
-                              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                              disabled={safePage >= totalPages}
-                            >
-                              Sau →
-                            </button>
-                            <span className="mbm-pagination-info">
-                              {filteredBookings.length > 0 ? `${start}–${end} / ${filteredBookings.length}` : '0 / 0'}
-                            </span>
-                          </div>
-                        )}
-                      </>
-                    );
-                  })()}
-                </AnimatePresence>
-              )
-        }
+                        disabled={safePage === 1}
+                      >
+                        ← Trước
+                      </button>
+                      <div className="mbm-pagination-pages">
+                        {Array.from(
+                          { length: totalPages },
+                          (_, i) => i + 1,
+                        ).map((p) => (
+                          <button
+                            key={p}
+                            className={`mbm-pagination-page ${p === safePage ? "active" : ""}`}
+                            onClick={() => setCurrentPage(p)}
+                          >
+                            {p}
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        className="mbm-btn mbm-btn-ghost mbm-btn-sm"
+                        onClick={() =>
+                          setCurrentPage((p) => Math.min(totalPages, p + 1))
+                        }
+                        disabled={safePage >= totalPages}
+                      >
+                        Sau →
+                      </button>
+                      <span className="mbm-pagination-info">
+                        {filteredBookings.length > 0
+                          ? `${start}–${end} / ${filteredBookings.length}`
+                          : "0 / 0"}
+                      </span>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+          </AnimatePresence>
+        )}
       </div>
 
       {/* Reject Modal */}
       <AnimatePresence>
-        {rejectModal && ReactDOM.createPortal(
-          <motion.div
-            className="mbm-modal-overlay"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={e => { if (e.target === e.currentTarget) setRejectModal(null); }}
-          >
+        {rejectModal &&
+          ReactDOM.createPortal(
             <motion.div
-              className="mbm-modal"
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="mbm-modal-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) setRejectModal(null);
+              }}
             >
-              <div className="mbm-modal-hdr">
-                <div className="mbm-modal-title">
-                  <XCircle size={20} />
-                  Từ Chối Booking
+              <motion.div
+                className="mbm-modal"
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              >
+                <div className="mbm-modal-hdr">
+                  <div className="mbm-modal-title">
+                    <XCircle size={20} />
+                    Từ Chối Booking
+                  </div>
+                  <button
+                    className="mbm-modal-close"
+                    onClick={() => setRejectModal(null)}
+                  >
+                    <X size={18} />
+                  </button>
                 </div>
-                <button className="mbm-modal-close" onClick={() => setRejectModal(null)}>
-                  <X size={18} />
-                </button>
-              </div>
 
-              <div className="mbm-modal-body">
-                <p className="mbm-modal-desc">
-                  Từ chối booking của <strong>{rejectModal.learnerName || `Learner #${rejectModal.learnerId}`}</strong> —
-                  {formatDateFull(rejectModal.startTime)} — <strong>{formatCurrency(rejectModal.priceVnd)}</strong>.
-                </p>
-                <div className="mbm-form-group">
-                  <label className="mbm-form-label">Lý do từ chối <span className="mbm-req">*</span></label>
-                  <textarea
-                    className="mbm-form-textarea"
-                    placeholder="Nhập lý do từ chối (VD: Lịch không phù hợp, lý do cá nhân, thay đổi đột xuất...)"
-                    value={rejectReason}
-                    onChange={e => setRejectReason(e.target.value)}
-                    rows={4}
-                    maxLength={500}
-                  />
-                  <div className="mbm-form-hint">{rejectReason.length}/500</div>
+                <div className="mbm-modal-body">
+                  <p className="mbm-modal-desc">
+                    Từ chối booking của{" "}
+                    <strong>
+                      {rejectModal.learnerName ||
+                        `Learner #${rejectModal.learnerId}`}
+                    </strong>{" "}
+                    —{formatDateFull(rejectModal.startTime)} —{" "}
+                    <strong>{formatCurrency(rejectModal.priceVnd)}</strong>.
+                  </p>
+                  <div className="mbm-form-group">
+                    <label className="mbm-form-label">
+                      Lý do từ chối <span className="mbm-req">*</span>
+                    </label>
+                    <textarea
+                      className="mbm-form-textarea"
+                      placeholder="Nhập lý do từ chối (VD: Lịch không phù hợp, lý do cá nhân, thay đổi đột xuất...)"
+                      value={rejectReason}
+                      onChange={(e) => setRejectReason(e.target.value)}
+                      rows={4}
+                      maxLength={500}
+                    />
+                    <div className="mbm-form-hint">
+                      {rejectReason.length}/500
+                    </div>
+                  </div>
+                  <div className="mbm-warning">
+                    <AlertCircle size={15} />
+                    <span>
+                      Học viên sẽ được thông báo và hoàn tiền nếu đã thanh toán.
+                    </span>
+                  </div>
                 </div>
-                <div className="mbm-warning">
-                  <AlertCircle size={15} />
-                  <span>Học viên sẽ được thông báo và hoàn tiền nếu đã thanh toán.</span>
-                </div>
-              </div>
 
-              <div className="mbm-modal-footer">
-                <button className="mbm-btn mbm-btn-ghost" onClick={() => setRejectModal(null)} disabled={rejectSubmitting}>Hủy</button>
-                <button
-                  className="mbm-btn mbm-btn-reject"
-                  onClick={handleRejectSubmit}
-                  disabled={rejectSubmitting || rejectReason.trim().length < 5}
-                >
-                  {rejectSubmitting
-                    ? <><RefreshCw size={14} className="mbm-spin" /> Đang xử lý...</>
-                    : <><XCircle size={14} /> Xác nhận từ chối</>
-                  }
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>,
-          document.body
-        )}
+                <div className="mbm-modal-footer">
+                  <button
+                    className="mbm-btn mbm-btn-ghost"
+                    onClick={() => setRejectModal(null)}
+                    disabled={rejectSubmitting}
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    className="mbm-btn mbm-btn-reject"
+                    onClick={handleRejectSubmit}
+                    disabled={
+                      rejectSubmitting || rejectReason.trim().length < 5
+                    }
+                  >
+                    {rejectSubmitting ? (
+                      <>
+                        <RefreshCw size={14} className="mbm-spin" /> Đang xử
+                        lý...
+                      </>
+                    ) : (
+                      <>
+                        <XCircle size={14} /> Xác nhận từ chối
+                      </>
+                    )}
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>,
+            document.body,
+          )}
       </AnimatePresence>
     </div>
   );

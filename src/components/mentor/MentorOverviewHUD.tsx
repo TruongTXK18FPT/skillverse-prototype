@@ -25,12 +25,16 @@ import { listCoursesByAuthor } from "../../services/courseService";
 import { CourseSummaryDTO } from "../../data/courseDTOs";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../hooks/useToast";
+import MentorCourseAnalyticsTab from '../mentor/MentorCourseAnalyticsTab';
 import "./MentorOverviewHUD.css";
 
 interface MentorOverviewHUDProps {
   onNavigate: (tab: string) => void;
   courseCount?: number;
 }
+
+// Inline analytics display mode (shown directly on overview page load)
+type InlineAnalyticsMode = 'overview' | 'analytics';
 
 interface MentorStats {
   totalStudents: number;
@@ -92,6 +96,8 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
     pendingGrading: 0,
     pendingBookings: 0,
   });
+  // Inline analytics mode: show overview stats OR the full MentorCourseAnalyticsTab
+  const [inlineAnalyticsMode, setInlineAnalyticsMode] = useState<InlineAnalyticsMode>('overview');
   useEffect(() => {
     loadMentorOverview();
   }, [user?.id]);
@@ -411,10 +417,27 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
         </div>
       ) : (
         <>
+          {/* Toolbar — always shown */}
           <div className="mentor-overview__toolbar">
-            <div className="mentor-overview__toolbar-title">
-              <Filter size={16} className="icon--cyan" />
-              <span>BỘ LỌC THỜI GIAN TỔNG QUÁT</span>
+            <div className="mentor-overview__toolbar-left">
+              <div className="mentor-overview__toolbar-title">
+                <Filter size={16} className="icon--cyan" />
+                <span>BỘ LỌC THỜI GIAN TỔNG QUÁT</span>
+              </div>
+              <div className="mentor-overview__mode-toggle">
+                <button
+                  className={`mentor-overview__mode-btn ${inlineAnalyticsMode === 'overview' ? 'active' : ''}`}
+                  onClick={() => setInlineAnalyticsMode('overview')}
+                >
+                  Tổng Quan
+                </button>
+                <button
+                  className={`mentor-overview__mode-btn ${inlineAnalyticsMode === 'analytics' ? 'active' : ''}`}
+                  onClick={() => setInlineAnalyticsMode('analytics')}
+                >
+                  <BarChart size={14} /> Phân Tích
+                </button>
+              </div>
             </div>
             <div className="mentor-overview__time-filter-group">
               <select
@@ -427,7 +450,6 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
                 <option value="LAST_7_DAYS">7 ngày qua</option>
                 <option value="CUSTOM">Tùy chỉnh</option>
               </select>
-
               {timePreset === "CUSTOM" && (
                 <div className="mentor-overview__custom-date-wrap">
                   <input
@@ -448,330 +470,209 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
             </div>
           </div>
 
-          <div className="mentor-overview__grid mentor-overview__grid--summary">
-            {/* Stats Summary */}
-            <div className="mentor-overview__card mentor-overview__stats-summary-card">
-              <div className="mentor-overview__card-header">
-                <BarChart size={18} className="icon--yellow" />
-                <span>THỐNG KÊ TỔNG QUAN • {periodLabel.toUpperCase()}</span>
+          {inlineAnalyticsMode === 'analytics' ? (
+            <div className="mentor-overview__inline-analytics">
+              <MentorCourseAnalyticsTab />
+            </div>
+          ) : (
+            <>
+            <div className="mentor-overview__grid mentor-overview__grid--summary">
+              <div className="mentor-overview__card mentor-overview__stats-summary-card">
+                <div className="mentor-overview__card-header">
+                  <BarChart size={18} className="icon--yellow" />
+                  <span>THỐNG KÊ TỔNG QUAN • {periodLabel.toUpperCase()}</span>
+                </div>
+                <div className="mentor-overview__card-body">
+                  <div className="mentor-overview__stat-section">
+                    <div className="mentor-overview__section-headline">
+                      <h4 className="mentor-overview__stat-section-title">Đánh giá</h4>
+                      <button className="mentor-overview__detail-link" onClick={() => onNavigate("reviews")}>Xem chi tiết</button>
+                    </div>
+                    <div className="mentor-overview__rating-overview">
+                      <div className="mentor-overview__rating-score">
+                        <Star size={32} fill="#FFD700" color="#FFD700" />
+                        <div className="mentor-overview__rating-value">
+                          <span className="mentor-overview__rating-number">{stats.rating.toFixed(1)}</span>
+                          <span className="mentor-overview__rating-count">({stats.ratingCount} đánh giá)</span>
+                        </div>
+                      </div>
+                      <div className="mentor-overview__star-distribution">
+                        {[
+                          { label: '5★', count: stats.starDistribution.fiveStar },
+                          { label: '4★', count: stats.starDistribution.fourStar },
+                          { label: '3★', count: stats.starDistribution.threeStar },
+                          { label: '2★', count: stats.starDistribution.twoStar },
+                          { label: '1★', count: stats.starDistribution.oneStar },
+                        ].map(({ label, count }) => (
+                          <div key={label} className="mentor-overview__star-bar">
+                            <span className="mentor-overview__star-label">{label}</span>
+                            <div className="mentor-overview__bar-container">
+                              <div className="mentor-overview__bar-fill"
+                                style={{ width: `${stats.ratingCount > 0 ? (count / stats.ratingCount) * 100 : 0}%` }} />
+                            </div>
+                            <span className="mentor-overview__star-count">{count}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mentor-overview__stat-section">
+                    <div className="mentor-overview__section-headline">
+                      <h4 className="mentor-overview__stat-section-title">Thu nhập</h4>
+                      <button className="mentor-overview__detail-link" onClick={() => onNavigate("earnings")}>Xem chi tiết</button>
+                    </div>
+                    <div className="mentor-overview__stat-grid">
+                      <div className="mentor-overview__stat-item">
+                        <DollarSign size={20} className="mentor-overview__stat-item-icon" />
+                        <div className="mentor-overview__stat-item-info">
+                          <span className="mentor-overview__stat-item-label">Thu nhập trong kỳ</span>
+                          <span className="mentor-overview__stat-item-value">{formatCurrency(stats.rangeEarnings)}</span>
+                        </div>
+                      </div>
+                      <div className="mentor-overview__stat-item">
+                        <DollarSign size={20} className="mentor-overview__stat-item-icon" />
+                        <div className="mentor-overview__stat-item-info">
+                          <span className="mentor-overview__stat-item-label">Giao dịch trong kỳ</span>
+                          <span className="mentor-overview__stat-item-value">{stats.transactionCount}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mentor-overview__stat-section">
+                    <div className="mentor-overview__section-headline">
+                      <h4 className="mentor-overview__stat-section-title">Hoạt động</h4>
+                      <button className="mentor-overview__detail-link" onClick={() => onNavigate("bookings")}>Xem chi tiết</button>
+                    </div>
+                    <div className="mentor-overview__stat-grid">
+                      <button className="mentor-overview__stat-item mentor-overview__stat-item--button" onClick={() => onNavigate("bookings")}>
+                        <Users size={20} className="mentor-overview__stat-item-icon" />
+                        <div className="mentor-overview__stat-item-info">
+                          <span className="mentor-overview__stat-item-label">Học viên</span>
+                          <span className="mentor-overview__stat-item-value">{stats.totalStudents}</span>
+                        </div>
+                      </button>
+                      <button className="mentor-overview__stat-item mentor-overview__stat-item--button" onClick={() => onNavigate("courses")}>
+                        <Video size={20} className="mentor-overview__stat-item-icon" />
+                        <div className="mentor-overview__stat-item-info">
+                          <span className="mentor-overview__stat-item-label">Khóa học</span>
+                          <span className="mentor-overview__stat-item-value">{stats.totalCourses}</span>
+                        </div>
+                      </button>
+                      <button className="mentor-overview__stat-item mentor-overview__stat-item--button" onClick={() => onNavigate("bookings")}>
+                        <Clock size={20} className="mentor-overview__stat-item-icon" />
+                        <div className="mentor-overview__stat-item-info">
+                          <span className="mentor-overview__stat-item-label">Buổi booking</span>
+                          <span className="mentor-overview__stat-item-value">{stats.totalBookings}</span>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="mentor-overview__card-body">
-                {/* Review Stats */}
-                <div className="mentor-overview__stat-section">
-                  <div className="mentor-overview__section-headline">
-                    <h4 className="mentor-overview__stat-section-title">Đánh giá</h4>
-                    <button
-                      className="mentor-overview__detail-link"
-                      onClick={() => onNavigate("reviews")}
-                    >
-                      Xem chi tiết
-                    </button>
-                  </div>
-                  <div className="mentor-overview__rating-overview">
-                    <div className="mentor-overview__rating-score">
-                      <Star size={32} fill="#FFD700" color="#FFD700" />
-                      <div className="mentor-overview__rating-value">
-                        <span className="mentor-overview__rating-number">
-                          {stats.rating.toFixed(1)}
-                        </span>
-                        <span className="mentor-overview__rating-count">
-                          ({stats.ratingCount} đánh giá)
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mentor-overview__star-distribution">
-                      <div className="mentor-overview__star-bar">
-                        <span className="mentor-overview__star-label">5★</span>
-                        <div className="mentor-overview__bar-container">
-                          <div
-                            className="mentor-overview__bar-fill"
-                            style={{
-                              width: `${stats.ratingCount > 0 ? (stats.starDistribution.fiveStar / stats.ratingCount) * 100 : 0}%`,
-                            }}
-                          ></div>
-                        </div>
-                        <span className="mentor-overview__star-count">
-                          {stats.starDistribution.fiveStar}
-                        </span>
-                      </div>
-                      <div className="mentor-overview__star-bar">
-                        <span className="mentor-overview__star-label">4★</span>
-                        <div className="mentor-overview__bar-container">
-                          <div
-                            className="mentor-overview__bar-fill"
-                            style={{
-                              width: `${stats.ratingCount > 0 ? (stats.starDistribution.fourStar / stats.ratingCount) * 100 : 0}%`,
-                            }}
-                          ></div>
-                        </div>
-                        <span className="mentor-overview__star-count">
-                          {stats.starDistribution.fourStar}
-                        </span>
-                      </div>
-                      <div className="mentor-overview__star-bar">
-                        <span className="mentor-overview__star-label">3★</span>
-                        <div className="mentor-overview__bar-container">
-                          <div
-                            className="mentor-overview__bar-fill"
-                            style={{
-                              width: `${stats.ratingCount > 0 ? (stats.starDistribution.threeStar / stats.ratingCount) * 100 : 0}%`,
-                            }}
-                          ></div>
-                        </div>
-                        <span className="mentor-overview__star-count">
-                          {stats.starDistribution.threeStar}
-                        </span>
-                      </div>
-                      <div className="mentor-overview__star-bar">
-                        <span className="mentor-overview__star-label">2★</span>
-                        <div className="mentor-overview__bar-container">
-                          <div
-                            className="mentor-overview__bar-fill"
-                            style={{
-                              width: `${stats.ratingCount > 0 ? (stats.starDistribution.twoStar / stats.ratingCount) * 100 : 0}%`,
-                            }}
-                          ></div>
-                        </div>
-                        <span className="mentor-overview__star-count">
-                          {stats.starDistribution.twoStar}
-                        </span>
-                      </div>
-                      <div className="mentor-overview__star-bar">
-                        <span className="mentor-overview__star-label">1★</span>
-                        <div className="mentor-overview__bar-container">
-                          <div
-                            className="mentor-overview__bar-fill"
-                            style={{
-                              width: `${stats.ratingCount > 0 ? (stats.starDistribution.oneStar / stats.ratingCount) * 100 : 0}%`,
-                            }}
-                          ></div>
-                        </div>
-                        <span className="mentor-overview__star-count">
-                          {stats.starDistribution.oneStar}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+              <div className="mentor-overview__card mentor-overview__next-class-card">
+                <div className="mentor-overview__card-header">
+                  <Video size={18} className="icon--cyan" />
+                  <span>LỚP HỌC TIẾP THEO</span>
+                  {nextBooking && <div className="mentor-overview__header-status-dot pulse" />}
                 </div>
-
-                {/* Financial Stats */}
-                <div className="mentor-overview__stat-section">
-                  <div className="mentor-overview__section-headline">
-                    <h4 className="mentor-overview__stat-section-title">Thu nhập</h4>
-                    <button
-                      className="mentor-overview__detail-link"
-                      onClick={() => onNavigate("earnings")}
-                    >
-                      Xem chi tiết
-                    </button>
-                  </div>
-                  <div className="mentor-overview__stat-grid">
-                    <div className="mentor-overview__stat-item">
-                      <DollarSign size={20} className="mentor-overview__stat-item-icon" />
-                      <div className="mentor-overview__stat-item-info">
-                        <span className="mentor-overview__stat-item-label">Thu nhập trong kỳ</span>
-                        <span className="mentor-overview__stat-item-value">
-                          {formatCurrency(stats.rangeEarnings)}
+                <div className="mentor-overview__card-body">
+                  {nextBooking ? (
+                    <div className="mentor-overview__next-class-content">
+                      <div className="mentor-overview__next-class-learner">
+                        <Users size={16} className="icon--cyan" />
+                        <span>{nextBooking.learnerName || "Học viên"}</span>
+                      </div>
+                      <div className="mentor-overview__next-class-time">
+                        <Clock size={16} className="icon--yellow" />
+                        <span>{formatDateTime(nextBooking.startTime)}</span>
+                      </div>
+                      <div className="mentor-overview__next-class-duration">
+                        <span>{nextBooking.durationMinutes} phút</span>
+                        <span className={`mentor-overview__next-class-status mentor-overview__next-class-status--${nextBooking.status.toLowerCase()}`}>
+                          {nextBooking.status.replace(/_/g, " ")}
                         </span>
                       </div>
+                      {nextBooking.meetingLink && (
+                        <a href={nextBooking.meetingLink} target="_blank" rel="noopener noreferrer" className="join-class-btn">
+                          <Video size={16} /> Tham gia lớp học
+                        </a>
+                      )}
                     </div>
-                    <div className="mentor-overview__stat-item">
-                      <DollarSign size={20} className="mentor-overview__stat-item-icon" />
-                      <div className="mentor-overview__stat-item-info">
-                        <span className="mentor-overview__stat-item-label">Giao dịch trong kỳ</span>
-                        <span className="mentor-overview__stat-item-value">
-                          {stats.transactionCount}
-                        </span>
-                      </div>
+                  ) : (
+                    <div className="mentor-overview__no-class">
+                      <p>Không có lớp học sắp diễn ra</p>
+                      <button className="mentor-overview__view-schedule-btn" onClick={() => onNavigate("schedule")}>
+                        Xem lịch trình
+                      </button>
                     </div>
-                  </div>
+                  )}
                 </div>
-
-                {/* Activity Stats */}
-                <div className="mentor-overview__stat-section">
-                  <div className="mentor-overview__section-headline">
-                    <h4 className="mentor-overview__stat-section-title">Hoạt động</h4>
-                    <button
-                      className="mentor-overview__detail-link"
-                      onClick={() => onNavigate("bookings")}
-                    >
-                      Xem chi tiết
-                    </button>
+              </div>
+              <div className="mentor-overview__card mentor-overview__pending-tasks-card">
+                <div className="mentor-overview__card-header">
+                  <AlertCircle size={18} className="icon--red" />
+                  <span>TÁC VỤ CẦN XỬ LÝ GẤP</span>
+                </div>
+                <div className="mentor-overview__card-body">
+                  <div className="mentor-overview__task-item" onClick={() => onNavigate("grading")}>
+                    <div className="mentor-overview__task-info">
+                      <span className="mentor-overview__task-count">{stats.pendingGrading}</span>
+                      <span className="mentor-overview__task-label">Bài tập cần chấm</span>
+                    </div>
+                    <ChevronRight size={16} />
                   </div>
-                  <div className="mentor-overview__stat-grid">
-                    <button
-                      className="mentor-overview__stat-item mentor-overview__stat-item--button"
-                      onClick={() => onNavigate("bookings")}
-                    >
-                      <Users size={20} className="mentor-overview__stat-item-icon" />
-                      <div className="mentor-overview__stat-item-info">
-                        <span className="mentor-overview__stat-item-label">Học viên</span>
-                        <span className="mentor-overview__stat-item-value">
-                          {stats.totalStudents}
-                        </span>
-                      </div>
-                    </button>
-                    <button
-                      className="mentor-overview__stat-item mentor-overview__stat-item--button"
-                      onClick={() => onNavigate("courses")}
-                    >
-                      <Video size={20} className="mentor-overview__stat-item-icon" />
-                      <div className="mentor-overview__stat-item-info">
-                        <span className="mentor-overview__stat-item-label">Khóa học</span>
-                        <span className="mentor-overview__stat-item-value">
-                          {stats.totalCourses}
-                        </span>
-                      </div>
-                    </button>
-                    <button
-                      className="mentor-overview__stat-item mentor-overview__stat-item--button"
-                      onClick={() => onNavigate("bookings")}
-                    >
-                      <Clock size={20} className="mentor-overview__stat-item-icon" />
-                      <div className="mentor-overview__stat-item-info">
-                        <span className="mentor-overview__stat-item-label">Buổi booking</span>
-                        <span className="mentor-overview__stat-item-value">
-                          {stats.totalBookings}
-                        </span>
-                      </div>
-                    </button>
+                  <div className="mentor-overview__task-item" onClick={() => onNavigate("bookings")}>
+                    <div className="mentor-overview__task-info">
+                      <span className="mentor-overview__task-count">{stats.pendingBookings}</span>
+                      <span className="mentor-overview__task-label">Yêu cầu đặt lịch mới</span>
+                    </div>
+                    <ChevronRight size={16} />
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Next Class Card */}
-            <div className="mentor-overview__card mentor-overview__next-class-card">
-              <div className="mentor-overview__card-header">
-                <Video size={18} className="icon--cyan" />
-                <span>LỚP HỌC TIẾP THEO</span>
-                {nextBooking && <div className="mentor-overview__header-status-dot pulse"></div>}
-              </div>
-              <div className="mentor-overview__card-body">
-                {nextBooking ? (
-                  <div className="mentor-overview__next-class-content">
-                    <div className="mentor-overview__next-class-learner">
-                      <Users size={16} className="icon--cyan" />
-                      <span>{nextBooking.learnerName || "Học viên"}</span>
-                    </div>
-                    <div className="mentor-overview__next-class-time">
-                      <Clock size={16} className="icon--yellow" />
-                      <span>{formatDateTime(nextBooking.startTime)}</span>
-                    </div>
-                    <div className="mentor-overview__next-class-duration">
-                      <span>{nextBooking.durationMinutes} phút</span>
-                      <span className={`mentor-overview__next-class-status mentor-overview__next-class-status--${nextBooking.status.toLowerCase()}`}>
-                        {nextBooking.status.replace(/_/g, " ")}
-                      </span>
-                    </div>
-                    {nextBooking.meetingLink && (
-                      <a
-                        href={nextBooking.meetingLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="join-class-btn"
-                      >
-                        <Video size={16} />
-                        Tham gia lớp học
-                      </a>
-                    )}
-                  </div>
-                ) : (
-                  <div className="mentor-overview__no-class">
-                    <p>Không có lớp học sắp diễn ra</p>
-                    <button
-                      className="mentor-overview__view-schedule-btn"
-                      onClick={() => onNavigate("schedule")}
-                    >
-                      Xem lịch trình
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Pending Tasks */}
-            <div className="mentor-overview__card mentor-overview__pending-tasks-card">
-              <div className="mentor-overview__card-header">
-                <AlertCircle size={18} className="icon--red" />
-                <span>TÁC VỤ CẦN XỬ LÝ GẤP</span>
-              </div>
-              <div className="mentor-overview__card-body">
-                <div
-                  className="mentor-overview__task-item"
-                  onClick={() => onNavigate("grading")}
-                >
-                  <div className="mentor-overview__task-info">
-                    <span className="mentor-overview__task-count">{stats.pendingGrading}</span>
-                    <span className="mentor-overview__task-label">Bài tập cần chấm</span>
-                  </div>
-                  <ChevronRight size={16} />
+            <div className="mentor-overview__bottom">
+              <div className="overview-transactions">
+                <div className="mentor-overview__section-headline">
+                  <h3>LỊCH SỬ GIAO DỊCH MỚI NHẤT</h3>
+                  <button className="mentor-overview__detail-link" onClick={() => onNavigate("earnings")}>Xem thêm</button>
                 </div>
-                <div
-                  className="mentor-overview__task-item"
-                  onClick={() => onNavigate("bookings")}
-                >
-                  <div className="mentor-overview__task-info">
-                    <span className="mentor-overview__task-count">{stats.pendingBookings}</span>
-                    <span className="mentor-overview__task-label">Yêu cầu đặt lịch mới</span>
-                  </div>
-                  <ChevronRight size={16} />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mentor-overview__bottom">
-            <div className="overview-transactions">
-              <div className="mentor-overview__section-headline">
-                <h3>LỊCH SỬ GIAO DỊCH MỚI NHẤT</h3>
-                <button
-                  className="mentor-overview__detail-link"
-                  onClick={() => onNavigate("earnings")}
-                >
-                  Xem thêm
-                </button>
-              </div>
-
-              <div className="overview-transactions__table-wrap">
-                {latestTransactions.length === 0 ? (
-                  <div className="overview-transactions__empty">
-                    Không có giao dịch trong khoảng thời gian đã chọn.
-                  </div>
-                ) : (
-                  <table className="overview-transactions__table">
-                    <thead>
-                      <tr>
-                        <th>Loại</th>
-                        <th>Ngày</th>
-                        <th>Mô tả</th>
-                        <th>Số tiền</th>
-                        <th>Trạng thái</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {latestTransactions.map((tx) => (
-                        <tr key={tx.transactionId}>
-                          <td>{tx.transactionTypeName || tx.transactionType || "--"}</td>
-                          <td>{formatDateTime(tx.createdAt)}</td>
-                          <td>{tx.description || "--"}</td>
-                          <td className={tx.isCredit ? "is-credit" : "is-debit"}>
-                            {tx.isCredit ? "+" : "-"}
-                            {formatCurrency(tx.cashAmount || 0)}
-                          </td>
-                          <td>
-                            <span className={`overview-transactions__status ${getTransactionStatusClass(tx.status)}`}>
-                              {getTransactionStatusLabel(tx.status)}
-                            </span>
-                          </td>
+                <div className="overview-transactions__table-wrap">
+                  {latestTransactions.length === 0 ? (
+                    <div className="overview-transactions__empty">
+                      Không có giao dịch trong khoảng thời gian đã chọn.
+                    </div>
+                  ) : (
+                    <table className="overview-transactions__table">
+                      <thead>
+                        <tr>
+                          <th>Loại</th><th>Ngày</th><th>Mô tả</th><th>Số tiền</th><th>Trạng thái</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
+                      </thead>
+                      <tbody>
+                        {latestTransactions.map((tx) => (
+                          <tr key={tx.transactionId}>
+                            <td>{tx.transactionTypeName || tx.transactionType || "--"}</td>
+                            <td>{formatDateTime(tx.createdAt)}</td>
+                            <td>{tx.description || "--"}</td>
+                            <td className={tx.isCredit ? "is-credit" : "is-debit"}>
+                              {tx.isCredit ? "+" : "-"}{formatCurrency(tx.cashAmount || 0)}
+                            </td>
+                            <td>
+                              <span className={`overview-transactions__status ${getTransactionStatusClass(tx.status)}`}>
+                                {getTransactionStatusLabel(tx.status)}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+            </>
+          )}
         </>
       )}
     </div>

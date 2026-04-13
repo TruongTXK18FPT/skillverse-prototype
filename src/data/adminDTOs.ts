@@ -116,6 +116,28 @@ export interface AdminJobStats {
   activeEscrows: number;
 }
 
+export interface AdminFullTimeJobStats {
+  totalJobs: number;
+  draftCount: number;
+  pendingApprovalCount: number;
+  openCount: number;
+  closedCount: number;
+  rejectedCount: number;
+  remoteCount: number;
+  onsiteCount: number;
+  highlightedCount: number;
+  negotiableCount: number;
+  totalApplicants: number;
+  averageApplicantsPerJob: number;
+  totalBudgetFloor: number;
+  totalBudgetCeiling: number;
+  byStatus: Record<string, number>;
+  byJobType: Record<string, number>;
+  byExperienceLevel: Record<string, number>;
+  byWorkMode: Record<string, number>;
+  applicationByStatus: Record<string, number>;
+}
+
 export interface PageResponse<T> {
   content: T[];
   totalElements: number;

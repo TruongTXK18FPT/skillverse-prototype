@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import UserManagementTabCosmic from "../../components/admin/UserManagementTabCosmic";
 import AccountVerificationTabCosmic from "../../components/admin/AccountVerificationTabCosmic";
-import { CourseApprovalTabCosmic } from "../../components/admin/CourseApprovalTabCosmic";
+import AdminCourseHub from "../../components/admin/AdminCourseHub";
 import AnalyticsTab from "../../components/admin/AnalyticsTab";
 import NotificationsTabCosmic from "../../components/admin/NotificationsTabCosmic";
 import ReportsTabCosmic from "../../components/admin/ReportsTabCosmic";
@@ -119,7 +119,8 @@ const AdminPage: React.FC = () => {
       case "verification":
         return <AccountVerificationTabCosmic />;
       case "courses":
-        return <CourseApprovalTabCosmic />;
+      case "course-analytics":
+        return <AdminCourseHub />;
       case "jobs":
         return <JobManagementTab />;
       // case 'seminars':

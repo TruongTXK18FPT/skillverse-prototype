@@ -4,12 +4,14 @@ import {
   AdminApprovalResponse,
   ApplicationsResponse,
   ApplicationStatusFilter,
+  AdminFullTimeJobStats,
   AdminJobStats,
   PageResponse,
   ResolveDisputeRequest,
   DisputeResponse,
 } from "../data/adminDTOs";
 import { Dispute, JobStatusAuditLog, ShortTermJobStatus } from "../types/ShortTermJob";
+import { JobPostingResponse, JobStatus } from "../data/jobDTOs";
 
 /**
  * AdminService - Service for admin operations to manage mentor/recruiter applications
@@ -265,6 +267,41 @@ class AdminService {
   }
 
   /**
+   * Get paginated list of all full-time jobs
+   */
+  async getAllFullTimeJobs(params?: {
+    status?: JobStatus;
+    page?: number;
+    size?: number;
+  }): Promise<PageResponse<JobPostingResponse>> {
+    const response = await axiosInstance.get<PageResponse<JobPostingResponse>>(
+      `${this.BASE_URL}/jobs`,
+      { params },
+    );
+    return response.data;
+  }
+
+  /**
+   * Get full-time job statistics for admin dashboard
+   */
+  async getFullTimeJobStats(): Promise<AdminFullTimeJobStats> {
+    const response = await axiosInstance.get<AdminFullTimeJobStats>(
+      `${this.BASE_URL}/jobs/stats`,
+    );
+    return response.data;
+  }
+
+  /**
+   * Get full-time job detail by ID
+   */
+  async getFullTimeJobDetail(jobId: number): Promise<JobPostingResponse> {
+    const response = await axiosInstance.get<JobPostingResponse>(
+      `${this.BASE_URL}/jobs/${jobId}`,
+    );
+    return response.data;
+  }
+
+  /**
    * Approve job
    */
   async approveJob(jobId: number): Promise<any> {
@@ -280,6 +317,20 @@ class AdminService {
   async rejectJob(jobId: number, reason: string): Promise<any> {
     const response = await axiosInstance.post(
       `${this.BASE_URL}/jobs/${jobId}/reject`,
+      null,
+      {
+        params: { reason },
+      },
+    );
+    return response.data;
+  }
+
+  /**
+   * Close a full-time job
+   */
+  async closeFullTimeJob(jobId: number, reason?: string): Promise<JobPostingResponse> {
+    const response = await axiosInstance.post<JobPostingResponse>(
+      `${this.BASE_URL}/jobs/${jobId}/close`,
       null,
       {
         params: { reason },

@@ -4,7 +4,6 @@ import {
   BookOpen,
   Calendar,
   CheckSquare,
-  Award,
   DollarSign,
   ChevronLeft,
   ChevronRight,
