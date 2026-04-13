@@ -16,7 +16,11 @@ import {
   getMyMentorProfile,
 } from "../../services/mentorProfileService";
 import { getMyBookings, BookingResponse } from "../../services/bookingService";
-import { getMyMentorReviewsPage, ReviewResponse } from "../../services/reviewService";
+import {
+  getMyMentorReviewsPage,
+  getMyMentorReviewStats,
+  ReviewResponse,
+} from "../../services/reviewService";
 import { listCoursesByAuthor } from "../../services/courseService";
 import { CourseSummaryDTO } from "../../data/courseDTOs";
 import { useAuth } from "../../context/AuthContext";
@@ -69,6 +73,7 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
   const [transactions, setTransactions] = useState<WalletTransactionResponse[]>([]);
   const [latestTransactions, setLatestTransactions] = useState<WalletTransactionResponse[]>([]);
   const [reviews, setReviews] = useState<ReviewResponse[]>([]);
+  const [nextBooking, setNextBooking] = useState<BookingResponse | null>(null);
   const [stats, setStats] = useState<MentorStats>({
     totalStudents: 0,
     rating: 0,
@@ -162,7 +167,6 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
   useEffect(() => {
     const filteredBookings = bookings.filter((booking) => inRange(booking.startTime));
     const filteredCourses = courses.filter((course) => inRange(course.createdAt));
-    const filteredReviews = reviews.filter((review) => inRange(review.createdAt));
     const filteredTransactions = transactions.filter((tx) => inRange(tx.createdAt));
 
     const studentIds = new Set<number>();
@@ -172,24 +176,8 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
       }
     });
 
-    filteredReviews.forEach((review) => {
-      if (typeof review.learnerId === "number") {
-        studentIds.add(review.learnerId);
-      }
-    });
-
-    const ratingCount = filteredReviews.length;
-    const totalRatingPoint = filteredReviews.reduce(
-      (sum, review) => sum + (review.rating || 0),
-      0,
-    );
-    const rating = ratingCount > 0 ? totalRatingPoint / ratingCount : 0;
-
-    const fiveStar = filteredReviews.filter((review) => review.rating === 5).length;
-    const fourStar = filteredReviews.filter((review) => review.rating === 4).length;
-    const threeStar = filteredReviews.filter((review) => review.rating === 3).length;
-    const twoStar = filteredReviews.filter((review) => review.rating === 2).length;
-    const oneStar = filteredReviews.filter((review) => review.rating === 1).length;
+    // Rating stats already come from dedicated /stats endpoint; skip re-computing
+    // from paginated reviews to avoid incorrect all-time overrides.
 
     const EARNING_TYPE_KEYWORDS = [
       "MENTOR_BOOKING",
@@ -238,24 +226,19 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
       })
       .slice(0, 5);
 
-    setStats({
+    // Rating stats come from dedicated /stats endpoint — preserve them here
+    setStats((prev) => ({
       totalStudents: studentIds.size,
-      rating,
-      ratingCount,
-      starDistribution: {
-        fiveStar,
-        fourStar,
-        threeStar,
-        twoStar,
-        oneStar,
-      },
+      rating: prev.rating,
+      ratingCount: prev.ratingCount,
+      starDistribution: prev.starDistribution,
       rangeEarnings,
       transactionCount: filteredTransactions.length,
       totalCourses: filteredCourses.length,
       totalBookings: filteredBookings.length,
       pendingGrading: 0,
       pendingBookings,
-    });
+    }));
 
     setLatestTransactions(latest);
   }, [bookings, courses, reviews, transactions, effectiveDateRange]);
@@ -318,17 +301,51 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
         return merged;
       };
 
-      const [allCourses, allTransactions, allBookings, allReviews] = await Promise.all([
+      const [allCourses, allTransactions, allBookings, allReviews, reviewStats] = await Promise.all([
         fetchAllCourses(),
         fetchAllTransactions(),
         fetchAllBookings().catch(() => []),
         fetchAllReviews().catch(() => []),
+        getMyMentorReviewStats().catch(() => null),
       ]);
 
       setCourses(allCourses);
       setTransactions(allTransactions);
       setBookings(allBookings);
       setReviews(allReviews);
+
+      // Find the nearest upcoming booking (starts from now, not yet completed)
+      const upcomingBookings = allBookings.filter((b) => {
+        const start = parseDate(b.startTime);
+        const now = new Date();
+        return (
+          start !== null &&
+          start > now &&
+          !["COMPLETED", "CANCELLED", "REJECTED", "REFUNDED", "DISPUTED"].includes(b.status)
+        );
+      });
+      const sorted = upcomingBookings.sort(
+        (a, b) =>
+          (parseDate(a.startTime)?.getTime() ?? 0) -
+          (parseDate(b.startTime)?.getTime() ?? 0),
+      );
+      setNextBooking(sorted[0] ?? null);
+
+      // Use dedicated stats endpoint for rating (always all-time, not filtered by date range)
+      if (reviewStats) {
+        setStats((prev) => ({
+          ...prev,
+          rating: reviewStats.averageRating,
+          ratingCount: reviewStats.totalReviews,
+          starDistribution: {
+            fiveStar: reviewStats.fiveStarCount,
+            fourStar: reviewStats.fourStarCount,
+            threeStar: reviewStats.threeStarCount,
+            twoStar: reviewStats.twoStarCount,
+            oneStar: reviewStats.oneStarCount,
+          },
+        }));
+      }
     } catch (error) {
       console.error("Error loading mentor overview:", error);
       showError("Lỗi", "Không thể tải dữ liệu tổng quan");
@@ -628,18 +645,48 @@ const MentorOverviewHUD: React.FC<MentorOverviewHUDProps> = ({
               <div className="mentor-overview__card-header">
                 <Video size={18} className="icon--cyan" />
                 <span>LỚP HỌC TIẾP THEO</span>
-                <div className="mentor-overview__header-status-dot pulse"></div>
+                {nextBooking && <div className="mentor-overview__header-status-dot pulse"></div>}
               </div>
               <div className="mentor-overview__card-body">
-                <div className="mentor-overview__no-class">
-                  <p>Không có lớp học sắp diễn ra</p>
-                  <button
-                    className="mentor-overview__view-schedule-btn"
-                    onClick={() => onNavigate("schedule")}
-                  >
-                    Xem lịch trình
-                  </button>
-                </div>
+                {nextBooking ? (
+                  <div className="mentor-overview__next-class-content">
+                    <div className="mentor-overview__next-class-learner">
+                      <Users size={16} className="icon--cyan" />
+                      <span>{nextBooking.learnerName || "Học viên"}</span>
+                    </div>
+                    <div className="mentor-overview__next-class-time">
+                      <Clock size={16} className="icon--yellow" />
+                      <span>{formatDateTime(nextBooking.startTime)}</span>
+                    </div>
+                    <div className="mentor-overview__next-class-duration">
+                      <span>{nextBooking.durationMinutes} phút</span>
+                      <span className={`mentor-overview__next-class-status mentor-overview__next-class-status--${nextBooking.status.toLowerCase()}`}>
+                        {nextBooking.status.replace(/_/g, " ")}
+                      </span>
+                    </div>
+                    {nextBooking.meetingLink && (
+                      <a
+                        href={nextBooking.meetingLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="join-class-btn"
+                      >
+                        <Video size={16} />
+                        Tham gia lớp học
+                      </a>
+                    )}
+                  </div>
+                ) : (
+                  <div className="mentor-overview__no-class">
+                    <p>Không có lớp học sắp diễn ra</p>
+                    <button
+                      className="mentor-overview__view-schedule-btn"
+                      onClick={() => onNavigate("schedule")}
+                    >
+                      Xem lịch trình
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 

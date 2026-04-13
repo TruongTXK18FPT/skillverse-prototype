@@ -65,7 +65,7 @@ const normalizeReview = (raw: BackendReviewResponse): ReviewResponse => ({
   id: raw.id,
   bookingId: raw.bookingId,
   learnerId: raw.learnerId ?? raw.studentId ?? 0,
-  learnerName: raw.learnerName ?? raw.studentName ?? '',
+  learnerName: (raw.learnerName ?? raw.studentName) || null,
   learnerAvatar: raw.learnerAvatar ?? raw.studentAvatar ?? null,
   isAnonymous: raw.isAnonymous ?? false,
   mentorId: raw.mentorId,

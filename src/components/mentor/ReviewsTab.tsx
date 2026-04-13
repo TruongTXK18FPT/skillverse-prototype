@@ -268,11 +268,12 @@ const ReviewsTab: React.FC = () => {
       <div className="mentor-reviews-list">
         {reviews.length > 0 ? (
           reviews.map(review => {
-            const isAnonymousReviewer =
-              Boolean(review.isAnonymous) ||
-              !review.learnerName ||
-              /anonymous|ẩn danh/i.test(review.learnerName);
+            // isAnonymous=true from backend → definitely hidden; missing name without flag → still show
+            const isAnonymousReviewer = Boolean(review.isAnonymous);
             const parsed = parseReviewPayload(review.comment);
+            const displayName = !isAnonymousReviewer && review.learnerName
+              ? review.learnerName
+              : (isAnonymousReviewer ? 'Học viên ẩn danh' : 'Học viên');
 
             return (
             <div key={review.id} className="mentor-reviews-card">
@@ -288,7 +289,7 @@ const ReviewsTab: React.FC = () => {
                     )}
                   </div>
                   <div className="mentor-reviews-student-details">
-                    <h4>{isAnonymousReviewer ? 'Học viên ẩn danh' : (review.learnerName || 'Học viên')}</h4>
+                    <h4>{displayName}</h4>
                     <p className="mentor-reviews-session-topic">Booking #{review.bookingId}</p>
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Star, ExternalLink, Plus, MessageSquare } from "lucide-react";
+import { User, Star, ExternalLink, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import HUDCard from "./HUDCard";
 import "./ActiveModules.css";
@@ -18,15 +18,13 @@ interface Mentor {
 interface FavoriteMentorsProps {
   mentors: Mentor[];
   title?: string;
-  onOpenChat: (mentor: Mentor) => void;
 }
 
 const MENTORS_PER_PAGE = 3;
 
 const FavoriteMentors: React.FC<FavoriteMentorsProps> = ({
   mentors,
-  title = "Mentor Yêu Thích",
-  onOpenChat
+  title = "Mentor Yêu Thích"
 }) => {
   const navigate = useNavigate();
   const { showInfo } = useAppToast();
@@ -173,16 +171,6 @@ const FavoriteMentors: React.FC<FavoriteMentorsProps> = ({
                         <span>Mentor nổi bật</span>
                       </div>
                       <div className="favorite-mentors__actions">
-                        <button
-                          className="active-modules__button favorite-mentors__chat-button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onOpenChat(mentor);
-                          }}
-                        >
-                          <MessageSquare size={14} />
-                          Nhắn tin
-                        </button>
                         <button
                           className="active-modules__button"
                           onClick={(e) => {

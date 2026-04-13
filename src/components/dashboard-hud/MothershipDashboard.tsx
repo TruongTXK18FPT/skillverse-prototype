@@ -100,10 +100,6 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleOpenChat = (mentor: any) => {
-    navigate(`/mentorship?search=${encodeURIComponent(`${mentor.firstName || ""} ${mentor.lastName || ""}`.trim())}`);
-  };
-
   // Data mapping from old structure to new Sci-Fi theme
   const stats = [
     {
@@ -363,9 +359,8 @@ const MothershipDashboard: React.FC<MothershipDashboardProps> = ({
 
         {/* Favorite Mentors */}
         <div id="mentors-section">
-          <FavoriteMentors 
-            mentors={favoriteMentors} 
-            onOpenChat={handleOpenChat}
+          <FavoriteMentors
+            mentors={favoriteMentors}
           />
         </div>
       </div>
