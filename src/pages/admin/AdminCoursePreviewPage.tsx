@@ -459,6 +459,46 @@ const isSafePreviewUrl = (value?: string | null) => {
   }
 };
 
+const toEmbeddableVideoUrl = (value?: string | null): string => {
+  if (!value) {
+    return '';
+  }
+
+  try {
+    const parsed = new URL(value, window.location.origin);
+    const host = parsed.hostname.toLowerCase();
+    const isYoutubeHost =
+      host === 'youtube.com'
+      || host === 'www.youtube.com'
+      || host === 'm.youtube.com';
+
+    if (isYoutubeHost && parsed.pathname === '/watch') {
+      const videoId = parsed.searchParams.get('v');
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+    }
+
+    if (host === 'youtu.be') {
+      const videoId = parsed.pathname.replace(/^\//, '');
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+    }
+
+    if (isYoutubeHost && parsed.pathname.startsWith('/shorts/')) {
+      const videoId = parsed.pathname.replace('/shorts/', '').split('/')[0];
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+    }
+
+    return parsed.href;
+  } catch {
+    return value;
+  }
+};
+
 const parseModulesFromRevisionSnapshot = (
   contentSnapshotJson: string | undefined,
   courseId: number
@@ -800,6 +840,8 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
     }
   }, [expanded, lessonId, loadedFromSource, preferSnapshot, snapshotLesson, sourceEntityId, viewerId]);
 
+  const lessonVideoUrl = lesson?.videoUrl ? toEmbeddableVideoUrl(lesson.videoUrl) : '';
+
   return (
     <div className="acp-lesson-detail">
       <button className="acp-lesson-expand-btn" onClick={loadLesson} disabled={loading}>
@@ -808,10 +850,10 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
       </button>
       {expanded && lesson && (
         <div className="acp-lesson-content">
-          {lesson.type === LessonType.VIDEO && lesson.videoUrl && (
+          {lesson.type === LessonType.VIDEO && lessonVideoUrl && (
             <div className="acp-video-wrapper">
               <iframe
-                src={lesson.videoUrl}
+                src={lessonVideoUrl}
                 title={lesson.title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -880,7 +922,7 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
               </div>
             </div>
           )}
-          {lesson.type === LessonType.VIDEO && !lesson.videoUrl && (
+          {lesson.type === LessonType.VIDEO && !lessonVideoUrl && (
             <div className="acp-empty-content"><Play size={32} /><p>Chưa có video</p></div>
           )}
           {lesson.type === LessonType.READING && !lesson.contentText?.trim() && (

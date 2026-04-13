@@ -469,6 +469,55 @@ const MentorGradingPage: React.FC = () => {
     : -1;
   const hasPrevSubmission = currentSubmissionIndex > 0;
   const hasNextSubmission = currentSubmissionIndex < filteredSubmissions.length - 1 && currentSubmissionIndex !== -1;
+  const isActiveSubmissionAutoPassed = Boolean(
+    activeSubmission
+      && activeSubmission.isAiGraded
+      && activeSubmission.score != null
+      && activeSubmission.isPassed === true
+  );
+  const isActiveSubmissionAiReviewed = Boolean(
+    activeSubmission
+      && activeSubmission.isAiGraded
+      && activeSubmission.aiScore != null
+      && activeSubmission.score == null
+  );
+  const isActiveSubmissionGraded = Boolean(
+    activeSubmission
+      && (
+        isActiveSubmissionAutoPassed
+        || activeSubmission.status === SubmissionStatus.GRADED
+        || activeSubmission.status === SubmissionStatus.AI_COMPLETED
+      )
+  );
+  const activeSubmissionStatusText = activeSubmission
+    ? isActiveSubmissionAutoPassed
+      ? 'Đã đạt'
+      : isActiveSubmissionGraded
+        ? 'Đã chấm'
+        : isActiveSubmissionAiReviewed
+          ? 'AI đã chấm'
+          : activeSubmission.isLate
+            ? 'Nộp muộn'
+            : 'Chờ chấm'
+    : '';
+  const activeSubmissionStatusTone = isActiveSubmissionGraded
+    ? 'graded'
+    : isActiveSubmissionAiReviewed
+      ? 'ai'
+      : activeSubmission?.isLate
+        ? 'late'
+        : 'pending';
+  const rubricCompletedCount = hasCriteria
+    ? Math.max(criteriaValidation.criteriaCount - criteriaValidation.missingCount, 0)
+    : 0;
+  const rubricRemainingCount = hasCriteria
+    ? Math.max(criteriaValidation.criteriaCount - rubricCompletedCount, 0)
+    : 0;
+  const rubricTrackingText = criteriaValidation.criteriaCount === 0
+    ? 'Rubric chưa sẵn sàng.'
+    : rubricRemainingCount === 0
+      ? `${rubricCompletedCount}/${criteriaValidation.criteriaCount} rubric hợp lệ.`
+      : `${rubricCompletedCount}/${criteriaValidation.criteriaCount} rubric hợp lệ · còn ${rubricRemainingCount}.`;
 
   const handlePrevSubmission = () => {
     if (hasPrevSubmission) {
@@ -951,24 +1000,34 @@ const MentorGradingPage: React.FC = () => {
             </div>
           )}
 
-          <div className="grading-workspace__meta-grid">
-            <div className="workspace-meta-card">
-              <span className="workspace-meta-card__label">Học viên</span>
-              <strong>{resolveLearnerName(activeSubmission.userName, activeSubmission.userId)}</strong>
-            </div>
-            <div className="workspace-meta-card">
-              <span className="workspace-meta-card__label">Thời gian nộp</span>
-              <strong>{formatDate(activeSubmission.submittedAt)}</strong>
-            </div>
-            <div className="workspace-meta-card">
-              <span className="workspace-meta-card__label">Lần nộp</span>
-              <strong>#{activeSubmission.attemptNumber}</strong>
-            </div>
-            <div className="workspace-meta-card">
-              <span className="workspace-meta-card__label">Trạng thái</span>
-              <strong>
-                {activeSubmission.status === SubmissionStatus.GRADED ? 'Đã chấm' : activeSubmission.isLate ? 'Nộp muộn' : 'Chờ chấm'}
+          <div className="grading-workspace__meta-hero">
+            <div className="workspace-meta-hero__identity">
+              <span className="workspace-meta-hero__eyebrow">Học viên đang chấm</span>
+              <strong className="workspace-meta-hero__name">
+                {resolveLearnerName(activeSubmission.userName, activeSubmission.userId)}
               </strong>
+              <div className="workspace-meta-hero__chips">
+                <span className={`workspace-meta-pill ${activeSubmissionStatusTone}`}>
+                  {activeSubmissionStatusText}
+                </span>
+              </div>
+            </div>
+
+            <div className="workspace-meta-hero__stats">
+              <div className="workspace-meta-stat">
+                <span className="workspace-meta-stat__label">Thời gian nộp</span>
+                <strong>{formatDate(activeSubmission.submittedAt)}</strong>
+              </div>
+              <div className="workspace-meta-stat">
+                <span className="workspace-meta-stat__label">Lần nộp</span>
+                <strong>#{activeSubmission.attemptNumber}</strong>
+              </div>
+              <div className="workspace-meta-stat">
+                <span className="workspace-meta-stat__label">Trạng thái</span>
+                <strong className={`workspace-meta-stat__status ${activeSubmissionStatusTone}`}>
+                  {activeSubmissionStatusText}
+                </strong>
+              </div>
             </div>
           </div>
 
@@ -1045,24 +1104,44 @@ const MentorGradingPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Actions sticky trong cột trái */}
-              <div className="workspace-left-actions">
-                <button className="workspace-btn workspace-btn-secondary" onClick={closeGradingWorkspace} disabled={gradingWorkspace.submitting}>
-                  Đóng khung chấm
-                </button>
-                <button className="workspace-btn workspace-btn-primary" onClick={handleGrade} disabled={!canSubmitGrade}>
-                  {gradingWorkspace.submitting ? (
-                    <React.Fragment>
-                      <div className="grading-spinner small" />
-                      Đang lưu...
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <CheckCircle size={16} />
-                      Lưu điểm
-                    </React.Fragment>
-                  )}
-                </button>
+              <div className="workspace-left-action-dock">
+                {hasCriteria && (
+                  <div className="workspace-left-score-tracker">
+                    <div className="workspace-score-summary workspace-score-summary--left workspace-score-summary--compact">
+                      <div className="workspace-score-summary__info">
+                        <strong>Tổng điểm tạm tính</strong>
+                        <span className={`workspace-score-summary__subtext ${criteriaValidation.totalExceeds ? 'error' : ''}`}>
+                          {criteriaValidation.totalExceeds
+                            ? `Đang vượt quá ${assignment?.maxScore ?? 0} điểm.`
+                            : rubricTrackingText}
+                        </span>
+                      </div>
+                      <div className={`workspace-score-summary__value ${criteriaValidation.totalExceeds ? 'invalid' : ''}`}>
+                        {criteriaValidation.total} / {assignment?.maxScore ?? 0}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Actions sticky trong cột trái */}
+                <div className="workspace-left-actions">
+                  <button className="workspace-btn workspace-btn-secondary" onClick={closeGradingWorkspace} disabled={gradingWorkspace.submitting}>
+                    Đóng khung chấm
+                  </button>
+                  <button className="workspace-btn workspace-btn-primary" onClick={handleGrade} disabled={!canSubmitGrade}>
+                    {gradingWorkspace.submitting ? (
+                      <React.Fragment>
+                        <div className="grading-spinner small" />
+                        Đang lưu...
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <CheckCircle size={16} />
+                        Lưu điểm
+                      </React.Fragment>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -1073,39 +1152,8 @@ const MentorGradingPage: React.FC = () => {
                   <div className="workspace-scoring-header">
                     <div className="workspace-scoring-header__title-row">
                       <div className="workspace-scoring-header__title">Chấm điểm</div>
-                      {criteriaValidation.criteriaCount >= 5 && (
-                        <div className="workspace-scoring-header__progress">
-                          {(() => {
-                            const criteriaWithIds = visibleCriteria.filter(
-                              (criterion): criterion is AssignmentCriteriaDTO & { id: number } => criterion.id != null
-                            );
-                            const filled = criteriaWithIds.filter(c => {
-                              const v = gradingWorkspace.criteriaScores[c.id];
-                              return v != null && v.trim() !== '' && Number.isFinite(Number(v));
-                            }).length;
-                            return `${filled}/${criteriaWithIds.length} rubric`;
-                          })()}
-                        </div>
-                      )}
-                    </div>
-                    <div className="workspace-scoring-header__score-row">
-                      <div className="workspace-score-summary">
-                        <div>
-                          <strong>Tổng điểm tạm tính</strong>
-                          <p>Nút lưu chỉ mở khi tất cả rubric hợp lệ.</p>
-                        </div>
-                        <div className={`workspace-score-summary__value ${criteriaValidation.totalExceeds ? 'invalid' : ''}`}>
-                          {criteriaValidation.total} / {assignment?.maxScore}
-                        </div>
-                      </div>
                     </div>
                   </div>
-
-                  {criteriaValidation.totalExceeds && (
-                    <div className="workspace-inline-error">
-                      Tổng điểm rubric đang vượt quá thang điểm bài tập.
-                    </div>
-                  )}
 
                   <div className="workspace-scrollable-criteria">
                     <div className={`workspace-inline-note ${!hasRequiredCriterionThresholds || criteriaValidation.requiredPassed ? 'success' : 'warning'}`}>
