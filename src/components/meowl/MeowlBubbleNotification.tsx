@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { X, Sparkles, Crown, MapPin, BookOpen, Target, Heart, Shirt, Home, User, Briefcase, Users, Trophy, Wallet, GraduationCap, MessageCircle, Compass, Info, CreditCard, Zap, Gift, Star, ShieldAlert } from 'lucide-react';
-import { useMeowlSkin } from '../../context/MeowlSkinContext';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useMeowlState } from '../../context/MeowlStateContext';
@@ -219,6 +218,12 @@ const STORAGE_KEYS = {
   SESSION_BUBBLES: 'meowl-session-bubbles',
   INTRODUCED_PAGES: 'meowl-introduced-pages',
   BUBBLE_DISABLED: 'meowl-bubble-disabled',
+};
+
+const MEOWL_GUIDE_PRESENCE_EVENT = 'meowl-guide-presence-changed';
+const getActiveMeowlGuideCount = () => {
+  const globalWindow = window as Window & { __meowlActiveGuideCount?: number };
+  return globalWindow.__meowlActiveGuideCount ?? 0;
 };
 
 const BUBBLE_MESSAGES: BubbleMessage[] = [
@@ -498,8 +503,7 @@ interface MeowlBubbleNotificationProps {
 const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disabled = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentSkinImage } = useMeowlSkin();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { language } = useLanguage();
   const { meowlState } = useMeowlState();
   
@@ -509,15 +513,27 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
   const [isPremium, setIsPremium] = useState(false);
   const [lastPath, setLastPath] = useState<string>('');
   const [isBubbleDisabled, setIsBubbleDisabled] = useState(() => {
-    return localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) === 'true';
+    return localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) !== 'false';
   });
+  const [hasActiveMeowlGuide, setHasActiveMeowlGuide] = useState(() => getActiveMeowlGuideCount() > 0);
+
+  const isStudentRole = useMemo(() => {
+    if (!user?.roles || user.roles.length === 0) {
+      return false;
+    }
+
+    const normalizedRoles = user.roles.map((role) => role.toUpperCase());
+    return normalizedRoles.includes('USER') || normalizedRoles.includes('LEARNER') || normalizedRoles.includes('STUDENT');
+  }, [user]);
+
+  const canShowBubbleNotification = !disabled && !isBubbleDisabled && isAuthenticated && isStudentRole && hasActiveMeowlGuide;
 
 
 
   // Listen for external toggle events
   useEffect(() => {
     const handleStorageChange = () => {
-      const isDisabled = localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) === 'true';
+      const isDisabled = localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) !== 'false';
       setIsBubbleDisabled(isDisabled);
       if (isDisabled) {
         setIsVisible(false);
@@ -531,10 +547,37 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
     };
   }, []);
 
+  // Track whether current page has any mounted MeowlGuide
+  useEffect(() => {
+    const updateGuidePresence = () => {
+      setHasActiveMeowlGuide(getActiveMeowlGuideCount() > 0);
+    };
+
+    updateGuidePresence();
+    window.addEventListener(MEOWL_GUIDE_PRESENCE_EVENT, updateGuidePresence);
+
+    return () => {
+      window.removeEventListener(MEOWL_GUIDE_PRESENCE_EVENT, updateGuidePresence);
+    };
+  }, [location.pathname]);
+
+  // Hide any active bubble if eligibility changes
+  useEffect(() => {
+    if (!canShowBubbleNotification) {
+      setIsVisible(false);
+      setIsClosing(false);
+      setCurrentBubble(null);
+    }
+  }, [canShowBubbleNotification]);
+
   // Check premium status
   useEffect(() => {
     const checkPremium = async () => {
-      if (!isAuthenticated) return;
+      if (!isAuthenticated || !isStudentRole) {
+        setIsPremium(false);
+        return;
+      }
+
       try {
         const subscription = await premiumService.getCurrentSubscription();
         setIsPremium(Boolean(subscription?.isActive && subscription.plan.planType !== 'FREE_TIER'));
@@ -543,7 +586,7 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
       }
     };
     checkPremium();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isStudentRole]);
 
   // Get page introduction if available and not shown yet
   const getPageIntroduction = useCallback((pathname: string): BubbleMessage | null => {
@@ -608,7 +651,7 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
     }
 
     return null;
-  }, [isPremium]);
+  }, [isPremium, meowlState]);
 
   // Handle close with animation
   const handleClose = useCallback(() => {
@@ -622,8 +665,7 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
 
   // Show bubble helper
   const showBubble = useCallback((bubble: BubbleMessage, autoHideDelay: number = 8000) => {
-    // Don't show if disabled - BYPASS if in lose-streak (mandatory notification)
-    if (isBubbleDisabled && meowlState !== 'lose-streak') return;
+    if (!canShowBubbleNotification) return;
     
     setCurrentBubble(bubble);
     setIsVisible(true);
@@ -635,11 +677,11 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
     }, autoHideDelay);
 
     return () => clearTimeout(hideTimeout);
-  }, [handleClose, isBubbleDisabled]);
+  }, [handleClose, canShowBubbleNotification]);
 
   // Handle page navigation - show page introduction
   useEffect(() => {
-    if (disabled || !isAuthenticated) return;
+    if (!canShowBubbleNotification) return;
     if (location.pathname === lastPath) return;
 
     setLastPath(location.pathname);
@@ -660,11 +702,11 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
 
       return () => clearTimeout(timer);
     }
-  }, [location.pathname, disabled, isAuthenticated, lastPath, isVisible, handleClose, getPageIntroduction, showBubble]);
+  }, [location.pathname, canShowBubbleNotification, lastPath, isVisible, handleClose, getPageIntroduction, showBubble]);
 
   // Show welcome back or random bubble on initial load
   useEffect(() => {
-    if (disabled || !isAuthenticated) return;
+    if (!canShowBubbleNotification) return;
 
     const now = Date.now();
     const lastVisit = parseInt(localStorage.getItem(STORAGE_KEYS.LAST_VISIT) || '0');
@@ -708,11 +750,11 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
     }, 3000 + Math.random() * 2000);
 
     return () => clearTimeout(timer);
-  }, [disabled, isAuthenticated, showBubble, getPageIntroduction, selectRandomBubble, location.pathname]);
+  }, [canShowBubbleNotification, showBubble, getPageIntroduction, selectRandomBubble, location.pathname]);
 
   // Random bubble every 15 seconds (when not showing any bubble)
   useEffect(() => {
-    if (disabled || !isAuthenticated) return;
+    if (!canShowBubbleNotification) return;
 
     const intervalId = setInterval(() => {
       // Only show if no bubble is currently visible
@@ -728,7 +770,7 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
     }, 60000); // Every 60 seconds
 
     return () => clearInterval(intervalId);
-  }, [disabled, isAuthenticated, isVisible]);
+  }, [canShowBubbleNotification, isVisible, selectRandomBubble, showBubble]);
 
   const handleAction = () => {
     if (currentBubble?.actionUrl) {
@@ -737,11 +779,7 @@ const MeowlBubbleNotification: React.FC<MeowlBubbleNotificationProps> = ({ disab
     handleClose();
   };
 
-  // If disabled, do nothing (button is now in MeowlGuide)
-  // BYPASS disabled check if in lose-streak state
-  if (isBubbleDisabled && meowlState !== 'lose-streak') return null;
-
-  if (!isVisible || !currentBubble || !isAuthenticated) return null;
+  if (!canShowBubbleNotification || !isVisible || !currentBubble) return null;
 
   const message = language === 'en' ? currentBubble.messageEn : currentBubble.messageVi;
   const actionLabel = language === 'en' ? currentBubble.actionLabelEn : currentBubble.actionLabelVi;
