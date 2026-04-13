@@ -2567,203 +2567,243 @@ const CourseCreationPage = () => {
             </div>
             <div className="cb-panel__body">
               {isRevisionMode && changedCourseInfoFields.length > 0 && (
-                <div
-                  style={{
-                    marginBottom: 16,
-                    padding: '10px 12px',
-                    border: '1px solid rgba(245, 158, 11, 0.35)',
-                    backgroundColor: 'rgba(245, 158, 11, 0.08)',
-                    borderRadius: 8,
-                    color: '#f5c36a',
-                    fontSize: '0.9rem'
-                  }}
-                >
+                <div className="cb-course-change-banner">
                   <strong>Đang có thay đổi so với phiên bản gốc:</strong> {changedCourseInfoFields.join(', ')}
                 </div>
               )}
-              <div className="cb-grid cb-grid--2">
-                <div>
-                  <div className="cb-form-group">
-                    <label className="cb-label cb-label--required">Tên khóa học</label>
-                    <input
-                      type="text" className="cb-input"
-                      value={courseForm.title || ''}
-                      onChange={(e) => updateCourseForm({ title: e.target.value })}
-                    />
-                  </div>
-                  <div className="cb-form-group">
-                    <label className="cb-label">Mô tả ngắn</label>
-                    <textarea
-                      className="cb-input cb-textarea"
-                      value={courseForm.summary || ''}
-                      onChange={(e) => updateCourseForm({ summary: e.target.value })}
-                      placeholder="Mô tả ngắn gọn về khóa học (hiển thị trên thẻ khóa học)"
-                    />
-                  </div>
-                  <div className="cb-form-group">
-                    <label className="cb-label">Mô tả chi tiết</label>
-                    <textarea
-                      className="cb-input cb-textarea"
-                      style={{ height: 150 }}
-                      value={courseForm.description || ''}
-                      onChange={(e) => updateCourseForm({ description: e.target.value })}
-                    />
-                  </div>
-                  
-                  <div className="cb-grid cb-grid--2">
-                     <div className="cb-form-group">
-                        <label className="cb-label">Danh mục</label>
-                        <select 
-                           className="cb-input cb-select"
-                           value={courseForm.category || ''}
-                           onChange={(e) => updateCourseForm({ category: e.target.value })}
-                        >
-                           <option value="">Chọn danh mục</option>
-                           {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
-                     </div>
-                     <div className="cb-form-group">
-                        <label className="cb-label">Độ khó</label>
-                        <select 
-                           className="cb-input cb-select"
-                           value={courseForm.level || CourseLevel.BEGINNER}
-                           onChange={(e) => updateCourseForm({ level: e.target.value as CourseLevel })}
-                        >
-                           {LEVELS.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
-                        </select>
-                     </div>
+              <div className="cb-course-info-layout">
+                <section className="cb-info-group cb-info-group--hero">
+                  <div className="cb-info-group__header">
+                    <h3 className="cb-info-group__title">Nhận diện khóa học</h3>
+                    <p className="cb-info-group__description">Thiết lập thông tin chính và ảnh bìa hiển thị trên thẻ khóa học.</p>
                   </div>
 
-                  <div className="cb-grid cb-grid--2">
-                     <div className="cb-form-group">
-                        <label className="cb-label">Giá (VND)</label>
-                        <input 
-                           type="number" className="cb-input"
-                           value={courseForm.price ?? 0}
-                           onWheel={blurOnWheel}
-                           onChange={(e) => updateCourseForm({ price: parseInt(e.target.value) || 0 })}
+                  <div className="cb-info-hero-grid">
+                    <div className="cb-info-hero-grid__left">
+                      <div className="cb-form-group">
+                        <label className="cb-label cb-label--required">Tên khóa học</label>
+                        <input
+                          type="text"
+                          className="cb-input"
+                          value={courseForm.title || ''}
+                          onChange={(e) => updateCourseForm({ title: e.target.value })}
                         />
-                     </div>
-                     <div className="cb-form-group">
-                        <label className="cb-label">Thời lượng (giờ)</label>
-                        <input 
-                           type="number" className="cb-input"
-                           value={courseForm.estimatedDuration ?? 0}
-                           onWheel={blurOnWheel}
-                           onChange={(e) => updateCourseForm({ estimatedDuration: parseFloat(e.target.value) || 0 })}
-                        />
-                     </div>
-                  </div>
-                </div>
-                <div>
-                   <div className="cb-form-group">
-                      <label className="cb-label">Ảnh bìa</label>
-                      <div 
-                         className={`cb-course-upload${!isEditable ? ' cb-course-upload--disabled' : ''}`}
-                         onClick={() => {
-                           if (!isEditable) {
-                             showToast('info', 'Chỉ có thể xem trong trạng thái hiện tại. Tạo hoặc mở phiên bản nháp để chỉnh sửa.');
-                             return;
-                           }
-                           document.getElementById('thumbnail-upload')?.click();
-                         }}
-                      >
-                         <input
-                           id="thumbnail-upload"
-                           type="file"
-                           hidden
-                           onChange={handleThumbnailChange}
-                           accept="image/*"
-                           disabled={!isEditable}
-                         />
-                         {courseForm.thumbnailUrl ? (
-                            <img src={courseForm.thumbnailUrl} alt="Thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                         ) : (
-                            <div style={{ textAlign: 'center' }}>
-                               <FiImage size={32} />
-                               <p>Tải ảnh lên</p>
-                            </div>
-                         )}
                       </div>
-                   </div>
 
-                   {/* Learning Objectives */}
-                   <div className="cb-form-group">
-                      <label className="cb-label">Mục tiêu khóa học</label>
-                      {learningObjectives.map((obj, idx) => (
-                         <div key={idx} className="cb-input-group" style={{ marginBottom: 8, display: 'flex', gap: 8 }}>
-                            <input 
-                               className="cb-input"
-                               value={obj}
-                               placeholder={`Mục tiêu ${idx + 1}`}
-                               onChange={(e) => {
-                                  const newObjs = [...learningObjectives];
-                                  newObjs[idx] = e.target.value;
+                      <div className="cb-form-group">
+                        <label className="cb-label">Mô tả ngắn</label>
+                        <textarea
+                          className="cb-input cb-textarea"
+                          value={courseForm.summary || ''}
+                          onChange={(e) => updateCourseForm({ summary: e.target.value })}
+                          placeholder="Mô tả ngắn gọn về khóa học (hiển thị trên thẻ khóa học)"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="cb-info-hero-grid__right">
+                      <label className="cb-label">Ảnh bìa</label>
+                      <div
+                        className={`cb-course-upload${!isEditable ? ' cb-course-upload--disabled' : ''}`}
+                        onClick={() => {
+                          if (!isEditable) {
+                            showToast('info', 'Chỉ có thể xem trong trạng thái hiện tại. Tạo hoặc mở phiên bản nháp để chỉnh sửa.');
+                            return;
+                          }
+                          document.getElementById('thumbnail-upload')?.click();
+                        }}
+                      >
+                        <input
+                          id="thumbnail-upload"
+                          type="file"
+                          hidden
+                          onChange={handleThumbnailChange}
+                          accept="image/*"
+                          disabled={!isEditable}
+                        />
+
+                        {courseForm.thumbnailUrl ? (
+                          <img className="cb-course-upload__preview" src={courseForm.thumbnailUrl} alt="Thumbnail" />
+                        ) : (
+                          <div className="cb-course-upload__placeholder">
+                            <FiImage size={32} />
+                            <p>Tải ảnh lên</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="cb-info-group cb-info-group--details">
+                  <div className="cb-info-group__header">
+                    <h3 className="cb-info-group__title">Nội dung giới thiệu</h3>
+                    <p className="cb-info-group__description">Mô tả chi tiết khóa học và các thông tin định hướng cho học viên.</p>
+                  </div>
+
+                  <div className="cb-info-stack">
+                    <div className="cb-info-subsection">
+                      <div className="cb-form-group">
+                        <label className="cb-label">Mô tả chi tiết</label>
+                        <textarea
+                          className="cb-input cb-textarea cb-textarea--lg"
+                          value={courseForm.description || ''}
+                          onChange={(e) => updateCourseForm({ description: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="cb-info-subsection">
+                      <h4 className="cb-info-subsection__title">Kết quả học tập</h4>
+                      <p className="cb-info-subsection__description">Mô tả những gì học viên đạt được sau khi hoàn thành khóa học.</p>
+
+                      <div className="cb-dynamic-list">
+                        {learningObjectives.map((obj, idx) => (
+                          <div key={idx} className="cb-input-group cb-dynamic-list__row">
+                            <input
+                              className="cb-input"
+                              value={obj}
+                              placeholder={`Mục tiêu ${idx + 1}`}
+                              onChange={(e) => {
+                                const newObjs = [...learningObjectives];
+                                newObjs[idx] = e.target.value;
+                                setLearningObjectives(newObjs);
+                                updateCourseForm({ learningObjectives: newObjs });
+                              }}
+                            />
+
+                            {learningObjectives.length > 1 && (
+                              <button
+                                type="button"
+                                className="cb-icon-button cb-dynamic-list__remove"
+                                onClick={() => {
+                                  const newObjs = learningObjectives.filter((_, i) => i !== idx);
                                   setLearningObjectives(newObjs);
                                   updateCourseForm({ learningObjectives: newObjs });
-                               }}
-                            />
-                            {learningObjectives.length > 1 && (
-                               <button 
-                                  className="cb-icon-button"
-                                  onClick={() => {
-                                     const newObjs = learningObjectives.filter((_, i) => i !== idx);
-                                     setLearningObjectives(newObjs);
-                                     updateCourseForm({ learningObjectives: newObjs });
-                                  }}
-                               >
-                                  <FiX />
-                               </button>
+                                }}
+                                title="Xóa mục tiêu"
+                              >
+                                <FiX />
+                              </button>
                             )}
-                         </div>
-                      ))}
-                      <button 
-                         className="cb-button cb-button--ghost cb-button--sm"
-                         onClick={() => setLearningObjectives([...learningObjectives, ''])}
-                      >
-                         <FiPlus /> Thêm mục tiêu
-                      </button>
-                   </div>
+                          </div>
+                        ))}
+                      </div>
 
-                   {/* Requirements */}
-                   <div className="cb-form-group">
-                      <label className="cb-label">Yêu cầu đầu vào</label>
-                      {requirements.map((req, idx) => (
-                         <div key={idx} className="cb-input-group" style={{ marginBottom: 8, display: 'flex', gap: 8 }}>
-                            <input 
-                               className="cb-input"
-                               value={req}
-                               placeholder={`Yêu cầu ${idx + 1}`}
-                               onChange={(e) => {
-                                  const newReqs = [...requirements];
-                                  newReqs[idx] = e.target.value;
+                      <button
+                        type="button"
+                        className="cb-button cb-button--ghost cb-button--sm cb-dynamic-list__add"
+                        onClick={() => setLearningObjectives([...learningObjectives, ''])}
+                      >
+                        <FiPlus /> Thêm mục tiêu
+                      </button>
+                    </div>
+
+                    <div className="cb-info-subsection">
+                      <h4 className="cb-info-subsection__title">Điều kiện tham gia</h4>
+                      <p className="cb-info-subsection__description">Liệt kê kiến thức nền hoặc công cụ cần có trước khi học.</p>
+
+                      <div className="cb-dynamic-list">
+                        {requirements.map((req, idx) => (
+                          <div key={idx} className="cb-input-group cb-dynamic-list__row">
+                            <input
+                              className="cb-input"
+                              value={req}
+                              placeholder={`Yêu cầu ${idx + 1}`}
+                              onChange={(e) => {
+                                const newReqs = [...requirements];
+                                newReqs[idx] = e.target.value;
+                                setRequirements(newReqs);
+                                updateCourseForm({ requirements: newReqs });
+                              }}
+                            />
+
+                            {requirements.length > 1 && (
+                              <button
+                                type="button"
+                                className="cb-icon-button cb-dynamic-list__remove"
+                                onClick={() => {
+                                  const newReqs = requirements.filter((_, i) => i !== idx);
                                   setRequirements(newReqs);
                                   updateCourseForm({ requirements: newReqs });
-                               }}
-                            />
-                            {requirements.length > 1 && (
-                               <button 
-                                  className="cb-icon-button"
-                                  onClick={() => {
-                                     const newReqs = requirements.filter((_, i) => i !== idx);
-                                     setRequirements(newReqs);
-                                     updateCourseForm({ requirements: newReqs });
-                                  }}
-                               >
-                                  <FiX />
-                               </button>
+                                }}
+                                title="Xóa yêu cầu"
+                              >
+                                <FiX />
+                              </button>
                             )}
-                         </div>
-                      ))}
-                      <button 
-                         className="cb-button cb-button--ghost cb-button--sm"
-                         onClick={() => setRequirements([...requirements, ''])}
-                      >
-                         <FiPlus /> Thêm yêu cầu
-                      </button>
-                   </div>
+                          </div>
+                        ))}
+                      </div>
 
-                </div>
+                      <button
+                        type="button"
+                        className="cb-button cb-button--ghost cb-button--sm cb-dynamic-list__add"
+                        onClick={() => setRequirements([...requirements, ''])}
+                      >
+                        <FiPlus /> Thêm yêu cầu
+                      </button>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="cb-info-group cb-info-group--commercial">
+                  <div className="cb-info-group__header">
+                    <h3 className="cb-info-group__title">Phân loại và thương mại</h3>
+                    <p className="cb-info-group__description">
+                      Thiết lập danh mục, độ khó và thông số kinh doanh của khóa học.
+                    </p>
+                  </div>
+
+                  <div className="cb-grid cb-grid--2">
+                    <div className="cb-form-group">
+                      <label className="cb-label">Danh mục</label>
+                      <select
+                        className="cb-input cb-select"
+                        value={courseForm.category || ''}
+                        onChange={(e) => updateCourseForm({ category: e.target.value })}
+                      >
+                        <option value="">Chọn danh mục</option>
+                        {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                    </div>
+
+                    <div className="cb-form-group">
+                      <label className="cb-label">Độ khó</label>
+                      <select
+                        className="cb-input cb-select"
+                        value={courseForm.level || CourseLevel.BEGINNER}
+                        onChange={(e) => updateCourseForm({ level: e.target.value as CourseLevel })}
+                      >
+                        {LEVELS.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="cb-grid cb-grid--2">
+                    <div className="cb-form-group">
+                      <label className="cb-label">Giá (VND)</label>
+                      <input
+                        type="number"
+                        className="cb-input"
+                        value={courseForm.price ?? 0}
+                        onWheel={blurOnWheel}
+                        onChange={(e) => updateCourseForm({ price: parseInt(e.target.value) || 0 })}
+                      />
+                    </div>
+
+                    <div className="cb-form-group">
+                      <label className="cb-label">Thời lượng (giờ)</label>
+                      <input
+                        type="number"
+                        className="cb-input"
+                        value={courseForm.estimatedDuration ?? 0}
+                        onWheel={blurOnWheel}
+                        onChange={(e) => updateCourseForm({ estimatedDuration: parseFloat(e.target.value) || 0 })}
+                      />
+                    </div>
+                  </div>
+                </section>
               </div>
             </div>
           </div>
@@ -3567,8 +3607,8 @@ const CourseCreationPage = () => {
          </div>
       )}
 
-      <div className="cb-container" style={{ maxWidth: '100%', padding: '0 24px', paddingBottom: 0, flexShrink: 0 }}>
-        <header className="cb-header" style={{ marginBottom: 16 }}>
+      <div className="cb-container cb-container--workspace">
+        <header className="cb-header cb-header--workspace">
           <div className="cb-header__left">
             <button className="cb-back-button" onClick={handleGoBack}>
               <FiArrowLeft /> Quay lại
