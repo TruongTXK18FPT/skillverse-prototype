@@ -13,7 +13,6 @@ import {
   AlertTriangle,
   ArrowUpRight,
   ChevronRight,
-  ChevronLeft,
   PanelLeftClose,
   PanelLeft,
   PieChart,
@@ -22,6 +21,7 @@ import {
   Bell,
   Eye,
   Crown,
+  Shield,
 } from "lucide-react";
 import OperationLog from "./OperationLog";
 import MissionLaunchPad from "./MissionLaunchPad";
@@ -29,6 +29,7 @@ import ShortTermLaunchPad from "./ShortTermLaunchPad";
 import ShortTermJobManager from "./ShortTermJobManager";
 import RecruiterTalentWorkspace from "./RecruiterTalentWorkspace";
 import SubscriptionWidget from "./SubscriptionWidget";
+import RegulationsTab from "./RegulationsTab";
 import portfolioService from "../../services/portfolioService";
 import {
   FreelancerCardDisplay,
@@ -52,6 +53,7 @@ type RecruiterSection =
   | "fulltime"
   | "shortterm"
   | "candidates"
+  | "regulations"
   | "seminar";
 
 interface Stats {
@@ -330,13 +332,13 @@ const CommandDeck: React.FC = () => {
       color: "#a78bfa",
       rgb: "167,139,250",
     },
-    // {
-    //   id: "seminar",
-    //   icon: <Calendar size={18} />,
-    //   label: "Hội Thảo",
-    //   color: "#2dd4bf",
-    //   rgb: "45,212,191",
-    // },
+    {
+      id: "regulations",
+      icon: <Shield size={18} />,
+      label: "Quy Định Nghiệp Vụ",
+      color: "#06b6d4",
+      rgb: "6,182,212",
+    },
   ];
 
   // Premium link - React Router navigation
@@ -1021,6 +1023,16 @@ const CommandDeck: React.FC = () => {
         )}
 
         {/* ---------- SEMINARS (hidden) ---------- */}
+
+        {/* ---------- REGULATIONS ---------- */}
+        {section === "regulations" && (
+          <div
+            className="rh-panel"
+            style={{ "--rh-item-color": "#06b6d4" } as React.CSSProperties}
+          >
+            <RegulationsTab />
+          </div>
+        )}
 
         {/* ========================= FOOTER ========================= */}
         <footer className="rh-main-footer">

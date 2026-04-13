@@ -14,6 +14,7 @@ import {
   ChevronRight,
   PieChart,
   Activity,
+  Shield,
 } from "lucide-react";
 import jobService from "../../services/jobService";
 import shortTermJobService from "../../services/shortTermJobService";
@@ -25,10 +26,11 @@ import {
 import OperationLog from "./OperationLog";
 import MissionLaunchPad from "./MissionLaunchPad";
 import ShortTermJobManager from "./ShortTermJobManager";
+import RegulationsTab from "./RegulationsTab";
 import "./job-hub.css";
 
 // ==================== TYPES ====================
-type HubPanel = "overview" | "fulltime" | "shortterm";
+type HubPanel = "overview" | "fulltime" | "shortterm" | "regulations";
 
 interface OverviewStats {
   // Full-time
@@ -221,6 +223,13 @@ const JobManagementHub: React.FC = () => {
       label: "Ngắn Hạn",
       badge: stats.stTotal,
       color: "#f59e0b",
+    },
+    {
+      id: "regulations" as HubPanel,
+      icon: <Shield size={20} />,
+      label: "Quy Định",
+      badge: 0,
+      color: "#06b6d4",
     },
   ];
 
@@ -676,6 +685,11 @@ const JobManagementHub: React.FC = () => {
               }
             />
           </div>
+        )}
+
+        {/* ==================== REGULATIONS PANEL ==================== */}
+        {activePanel === "regulations" && (
+          <RegulationsTab />
         )}
       </main>
     </div>

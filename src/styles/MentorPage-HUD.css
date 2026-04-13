@@ -35,8 +35,9 @@
   --mentor-hud-border-bright: 1px solid rgba(6, 182, 212, 0.6);
 
   /* Typography */
-  --mentor-hud-font-display: 'Inter', sans-serif;
-  --mentor-hud-font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mentor-hud-font-display: "Inter", sans-serif;
+  --mentor-hud-font-body:
+    "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* ============================================
@@ -54,28 +55,40 @@
 
 /* Background effects - Radial gradients */
 .mentor-hud-dashboard::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(ellipse at top, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+    radial-gradient(
+      ellipse at top,
+      rgba(6, 182, 212, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at bottom right,
+      rgba(168, 85, 247, 0.05) 0%,
+      transparent 50%
+    );
   pointer-events: none;
   z-index: 0;
 }
 
 /* Vignette effect */
 .mentor-hud-dashboard::after {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(ellipse at center, transparent 0%, rgba(5, 11, 20, 0.8) 100%);
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(5, 11, 20, 0.8) 100%
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -104,13 +117,7 @@
   padding: 2rem;
   position: relative;
   overflow: hidden;
-  clip-path: polygon(
-    0 0,
-    calc(100% - 30px) 0,
-    100% 30px,
-    100% 100%,
-    0 100%
-  );
+  clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 0 100%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -121,7 +128,7 @@
 
 /* Scanline overlay */
 .mentor-hud-header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -266,17 +273,11 @@
   min-width: 140px;
   justify-content: center;
   position: relative;
-  clip-path: polygon(
-    0 0,
-    calc(100% - 10px) 0,
-    100% 10px,
-    100% 100%,
-    0 100%
-  );
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
 }
 
 .mentor-hud-tab::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -299,7 +300,11 @@
 }
 
 .mentor-hud-tab.active {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.2) 0%,
+    rgba(168, 85, 247, 0.2) 100%
+  );
   border-color: var(--mentor-hud-accent-cyan);
   color: var(--mentor-hud-text-primary);
   transform: translateY(-2px);
@@ -355,6 +360,63 @@
   margin-bottom: 2rem;
   flex-wrap: wrap;
   gap: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  padding: 1.25rem 1.4rem;
+  border: 1px solid rgba(6, 182, 212, 0.34);
+  background:
+    linear-gradient(
+      140deg,
+      rgba(7, 16, 30, 0.94) 0%,
+      rgba(14, 25, 43, 0.86) 45%,
+      rgba(10, 24, 40, 0.94) 100%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 5px,
+      rgba(6, 182, 212, 0.05) 5px,
+      rgba(6, 182, 212, 0.05) 6px
+    );
+  box-shadow:
+    inset 0 0 0 1px rgba(6, 182, 212, 0.1),
+    0 0 24px rgba(6, 182, 212, 0.16),
+    0 12px 24px rgba(0, 0, 0, 0.35);
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+}
+
+.mentor-hud-courses__header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    95deg,
+    rgba(6, 182, 212, 0.14) 0%,
+    rgba(168, 85, 247, 0.05) 45%,
+    transparent 76%
+  );
+  pointer-events: none;
+}
+
+.mentor-hud-courses__header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 140px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(103, 232, 249, 0),
+    rgba(103, 232, 249, 0.95)
+  );
+  box-shadow: 0 0 12px rgba(103, 232, 249, 0.75);
+}
+
+.mentor-hud-courses__title-section,
+.mentor-hud-courses__header-actions {
+  position: relative;
+  z-index: 1;
 }
 
 .mentor-hud-error,
@@ -403,7 +465,8 @@
   cursor: pointer;
 }
 
-.mentor-hud-courses__title-section h2 {
+.mentor-hud-courses__title-section h2,
+.mentor-hud-courses__title {
   font-family: var(--mentor-hud-font-display);
   font-size: 1.75rem;
   font-weight: 700;
@@ -411,9 +474,14 @@
   letter-spacing: 2px;
   color: var(--mentor-hud-text-primary);
   margin: 0 0 0.5rem 0;
+  text-shadow: 0 0 14px rgba(6, 182, 212, 0.24);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
 }
 
-.mentor-hud-courses__title-section p {
+.mentor-hud-courses__title-section p,
+.mentor-hud-courses__subtitle {
   color: var(--mentor-hud-text-secondary);
   margin: 0;
   font-size: 0.9rem;
@@ -421,11 +489,13 @@
 }
 
 .mentor-hud-courses__helper {
-  margin-top: 0.75rem;
-  color: var(--mentor-hud-accent-cyan);
+  margin-top: 0.85rem;
+  color: #67e8f9;
   font-size: 0.85rem;
-  line-height: 1.5;
+  line-height: 1.55;
   max-width: 620px;
+  border-left: 2px solid rgba(6, 182, 212, 0.55);
+  padding-left: 0.75rem;
 }
 
 .mentor-hud-courses__header-actions {
@@ -433,6 +503,10 @@
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
+  padding: 0.45rem;
+  border-radius: 12px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  background: rgba(4, 12, 22, 0.52);
 }
 
 .mentor-hud-courses__filters {
@@ -458,7 +532,11 @@
   padding: 1.25rem 1.4rem;
   border: 1px solid rgba(6, 182, 212, 0.16);
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(8, 15, 26, 0.92) 0%, rgba(14, 24, 40, 0.82) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(8, 15, 26, 0.92) 0%,
+    rgba(14, 24, 40, 0.82) 100%
+  );
   text-align: left;
 }
 
@@ -481,9 +559,6 @@
 }
 
 @media (max-width: 800px) {
-  .mentor-hud-courses__filters {
-  }
-
   .mentor-hud-empty--compact {
     flex-direction: column;
     align-items: flex-start;
@@ -522,7 +597,11 @@
 }
 
 .mentor-hud-filter-tab.active {
-  background: linear-gradient(135deg, var(--mentor-hud-accent-cyan) 0%, var(--mentor-hud-accent-purple) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-cyan) 0%,
+    var(--mentor-hud-accent-purple) 100%
+  );
   color: #fff;
   border-color: transparent;
   box-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
@@ -588,7 +667,11 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.875rem 1.5rem;
-  background: linear-gradient(135deg, var(--mentor-hud-accent-cyan) 0%, var(--mentor-hud-accent-purple) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-cyan) 0%,
+    var(--mentor-hud-accent-purple) 100%
+  );
   color: white;
   border: none;
   font-family: var(--mentor-hud-font-display);
@@ -601,23 +684,22 @@
   box-shadow: var(--mentor-hud-glow-cyan);
   position: relative;
   overflow: hidden;
-  clip-path: polygon(
-    0 0,
-    calc(100% - 12px) 0,
-    100% 12px,
-    100% 100%,
-    0 100%
-  );
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
 }
 
 .mentor-hud-create-button::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -692,7 +774,7 @@
 
 /* Scanline effect on card */
 .mentor-hud-course-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -713,7 +795,11 @@
 .mentor-hud-course-thumbnail {
   position: relative;
   height: 200px;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.1) 0%,
+    rgba(168, 85, 247, 0.1) 100%
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -734,7 +820,11 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.1) 0%,
+    rgba(168, 85, 247, 0.1) 100%
+  );
   color: var(--mentor-hud-accent-cyan);
 }
 
@@ -799,7 +889,11 @@
 .mentor-hud-level-badge {
   display: inline-block;
   padding: 4px 12px;
-  background: linear-gradient(135deg, var(--mentor-hud-accent-purple) 0%, var(--mentor-hud-accent-orange) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-purple) 0%,
+    var(--mentor-hud-accent-orange) 100%
+  );
   color: white;
   font-size: 0.7rem;
   font-weight: 700;
@@ -1103,7 +1197,11 @@
   transform: translate(-50%, -50%);
   width: min(820px, 92vw);
   max-height: 82vh;
-  background: linear-gradient(180deg, rgba(10, 21, 36, 0.98), rgba(7, 15, 27, 0.98));
+  background: linear-gradient(
+    180deg,
+    rgba(10, 21, 36, 0.98),
+    rgba(7, 15, 27, 0.98)
+  );
   border: 1px solid rgba(6, 182, 212, 0.35);
   border-radius: 12px;
   box-shadow: 0 20px 56px rgba(2, 8, 20, 0.72);
@@ -1248,7 +1346,8 @@
    ============================================ */
 
 @keyframes mentor-hud-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -1259,7 +1358,8 @@
 }
 
 @keyframes mentor-hud-glow-pulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
   }
   50% {
@@ -1367,10 +1467,15 @@
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
+    padding: 1rem;
+    clip-path: none;
   }
 
   .mentor-hud-courses__header-actions {
     width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
   }
 
   .mentor-hud-courses__grid {
@@ -1423,7 +1528,11 @@
 .mentor-hud-default-tab {
   padding: 4rem 2rem;
   text-align: center;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.05) 0%,
+    rgba(168, 85, 247, 0.05) 100%
+  );
 }
 
 .mentor-hud-default-title {
@@ -1432,7 +1541,11 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 3px;
-  background: linear-gradient(135deg, var(--mentor-hud-accent-cyan) 0%, var(--mentor-hud-accent-purple) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-cyan) 0%,
+    var(--mentor-hud-accent-purple) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1486,13 +1599,7 @@ body:has(.mentor-course-detail-modal) {
   max-height: calc(90vh - 100px);
   overflow-y: auto;
   position: relative;
-  clip-path: polygon(
-    0 0,
-    calc(100% - 20px) 0,
-    100% 20px,
-    100% 100%,
-    0 100%
-  );
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
   animation: mentor-hud-slide-up 0.3s ease;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -1504,7 +1611,7 @@ body:has(.mentor-course-detail-modal) {
 
 /* Scanline effect on modal */
 .mentor-modal-content::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -1541,7 +1648,11 @@ body:has(.mentor-course-detail-modal) {
   letter-spacing: 2px;
   color: var(--mentor-hud-text-primary);
   margin: 0;
-  background: linear-gradient(135deg, var(--mentor-hud-accent-cyan) 0%, var(--mentor-hud-accent-purple) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-cyan) 0%,
+    var(--mentor-hud-accent-purple) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1668,29 +1779,32 @@ body:has(.mentor-course-detail-modal) {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  clip-path: polygon(
-    0 0,
-    calc(100% - 10px) 0,
-    100% 10px,
-    100% 100%,
-    0 100%
-  );
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
 }
 
 .mentor-btn-primary {
-  background: linear-gradient(135deg, var(--mentor-hud-accent-cyan) 0%, var(--mentor-hud-accent-purple) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-cyan) 0%,
+    var(--mentor-hud-accent-purple) 100%
+  );
   color: white;
   box-shadow: var(--mentor-hud-glow-cyan);
 }
 
 .mentor-btn-primary::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -1780,7 +1894,7 @@ body:has(.mentor-course-detail-modal) {
 }
 
 .mentor-course-detail-content::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -1917,17 +2031,15 @@ body:has(.mentor-course-detail-modal) {
   cursor: pointer;
   transition: all 0.3s ease;
   color: white;
-  clip-path: polygon(
-    0 0,
-    calc(100% - 8px) 0,
-    100% 8px,
-    100% 100%,
-    0 100%
-  );
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
 }
 
 .mentor-add-lesson-button {
-  background: linear-gradient(135deg, var(--mentor-hud-accent-green) 0%, #059669 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-green) 0%,
+    #059669 100%
+  );
   box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
 }
 
@@ -1937,7 +2049,11 @@ body:has(.mentor-course-detail-modal) {
 }
 
 .mentor-add-quiz-button {
-  background: linear-gradient(135deg, var(--mentor-hud-accent-purple) 0%, #7c3aed 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-purple) 0%,
+    #7c3aed 100%
+  );
   box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
 }
 
@@ -1947,7 +2063,11 @@ body:has(.mentor-course-detail-modal) {
 }
 
 .mentor-add-assignment-button {
-  background: linear-gradient(135deg, var(--mentor-hud-accent-orange) 0%, #d97706 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-orange) 0%,
+    #d97706 100%
+  );
   box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
 }
 
@@ -1957,7 +2077,11 @@ body:has(.mentor-course-detail-modal) {
 }
 
 .mentor-add-codelab-button {
-  background: linear-gradient(135deg, var(--mentor-hud-accent-cyan) 0%, #0891b2 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-cyan) 0%,
+    #0891b2 100%
+  );
   box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
 }
 
@@ -2382,7 +2506,9 @@ body:has(.mentor-course-detail-modal) {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .mentor-lesson-description p {
@@ -2444,18 +2570,12 @@ body:has(.mentor-course-detail-modal) {
   max-width: 480px;
   width: 100%;
   position: relative;
-  clip-path: polygon(
-    0 0,
-    calc(100% - 16px) 0,
-    100% 16px,
-    100% 100%,
-    0 100%
-  );
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
   animation: mentor-hud-slide-up 0.25s ease;
 }
 
 .hud-confirm-delete-content::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -2593,13 +2713,7 @@ body:has(.mentor-course-detail-modal) {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  clip-path: polygon(
-    0 0,
-    calc(100% - 10px) 0,
-    100% 10px,
-    100% 100%,
-    0 100%
-  );
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
 }
 
 .hud-confirm-delete-btn-cancel {
@@ -2616,19 +2730,28 @@ body:has(.mentor-course-detail-modal) {
 }
 
 .hud-confirm-delete-btn-confirm {
-  background: linear-gradient(135deg, var(--mentor-hud-accent-red) 0%, #b91c1c 100%);
+  background: linear-gradient(
+    135deg,
+    var(--mentor-hud-accent-red) 0%,
+    #b91c1c 100%
+  );
   color: white;
   box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
 }
 
 .hud-confirm-delete-btn-confirm::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -2664,8 +2787,17 @@ body:has(.mentor-course-detail-modal) {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(circle at top right, rgba(6, 182, 212, 0.05), transparent 40%),
-              radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.05), transparent 40%);
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(6, 182, 212, 0.05),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(168, 85, 247, 0.05),
+      transparent 40%
+    );
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -2781,7 +2913,12 @@ body:has(.mentor-course-detail-modal) {
 .mentor-schedule-divider .divider-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(6, 182, 212, 0.2),
+    transparent
+  );
 }
 
 .mentor-schedule-divider span {
