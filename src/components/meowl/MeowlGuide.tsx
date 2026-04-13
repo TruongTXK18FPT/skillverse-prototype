@@ -81,6 +81,8 @@ const STORAGE_KEYS = {
   BUBBLE_DISABLED: "meowl-bubble-disabled",
 };
 
+const MEOWL_GUIDE_PRESENCE_EVENT = "meowl-guide-presence-changed";
+
 const MeowlGuide: React.FC<MeowlGuideProps> = ({
   currentPage = "home",
   languageOverride,
@@ -118,7 +120,7 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
 
   // Bubble mute state
   const [isBubbleDisabled, setIsBubbleDisabled] = useState(() => {
-    return localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) === "true";
+    return localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) !== "false";
   });
 
   // Animation control states
@@ -149,13 +151,29 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
   useEffect(() => {
     const handleStorageChange = () => {
       setIsBubbleDisabled(
-        localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) === "true",
+        localStorage.getItem(STORAGE_KEYS.BUBBLE_DISABLED) !== "false",
       );
     };
 
     window.addEventListener("meowl-bubble-toggle", handleStorageChange);
     return () => {
       window.removeEventListener("meowl-bubble-toggle", handleStorageChange);
+    };
+  }, []);
+
+  // Broadcast MeowlGuide mount/unmount so bubble knows when a page has guide support
+  useEffect(() => {
+    const globalWindow = window as Window & { __meowlActiveGuideCount?: number };
+    globalWindow.__meowlActiveGuideCount =
+      (globalWindow.__meowlActiveGuideCount ?? 0) + 1;
+    window.dispatchEvent(new Event(MEOWL_GUIDE_PRESENCE_EVENT));
+
+    return () => {
+      globalWindow.__meowlActiveGuideCount = Math.max(
+        (globalWindow.__meowlActiveGuideCount ?? 1) - 1,
+        0,
+      );
+      window.dispatchEvent(new Event(MEOWL_GUIDE_PRESENCE_EVENT));
     };
   }, []);
 
