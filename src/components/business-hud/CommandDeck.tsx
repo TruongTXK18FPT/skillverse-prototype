@@ -6,7 +6,6 @@ import {
   Zap,
   Users,
   Plus,
-  TrendingUp,
   FileText,
   Clock,
   CheckCircle,
@@ -22,6 +21,8 @@ import {
   Eye,
   Crown,
   Shield,
+  TrendingUp,
+  Wallet,
 } from "lucide-react";
 import OperationLog from "./OperationLog";
 import MissionLaunchPad from "./MissionLaunchPad";
@@ -30,6 +31,11 @@ import ShortTermJobManager from "./ShortTermJobManager";
 import RecruiterTalentWorkspace from "./RecruiterTalentWorkspace";
 import SubscriptionWidget from "./SubscriptionWidget";
 import RegulationsTab from "./RegulationsTab";
+import LineChart from "./stats/LineChart";
+import recruiterStatsService, {
+  SpendingDataPoint,
+  TIME_RANGES,
+} from "../../services/recruiterStatsService";
 import portfolioService from "../../services/portfolioService";
 import {
   FreelancerCardDisplay,
@@ -37,13 +43,15 @@ import {
 } from "../../data/portfolioDTOs";
 import jobService from "../../services/jobService";
 import shortTermJobService from "../../services/shortTermJobService";
-import { JobPostingResponse, JobStatus } from "../../data/jobDTOs";
+import { JobPostingResponse, JobStatus, JobApplicationResponse } from "../../data/jobDTOs";
 import {
   ShortTermJobResponse,
   ShortTermJobStatus,
+  ShortTermApplicationResponse,
 } from "../../types/ShortTermJob";
 import "./fleet-styles.css";
 import "./recruiter-hub.css";
+import "../../styles/recruiter-stats.css";
 
 // ====================================================================
 // TYPES
@@ -69,6 +77,20 @@ interface Stats {
   stApplicants: number;
   totalJobs: number;
   totalApplicants: number;
+  totalHires: number;
+  pendingCount: number;
+  // Extended stats for enhanced dashboard
+  applicationToHireRate: number;
+  monthlySpending: number;
+  lastMonthSpending: number;
+  avgTimeToHire: number;
+  offerAcceptanceRate: number;
+  costPerApplicant: number;
+  costPerHire: number;
+  activePipelineValue: number;
+  expiringJobsCount: number;
+  lowQuotaCount: number;
+  openDisputesCount: number;
 }
 
 // ====================================================================
@@ -157,6 +179,16 @@ const BarChart: React.FC<{
 };
 
 // ====================================================================
+// UTILITIES
+// ====================================================================
+const fmtVND = (n?: number) => {
+  const v = n ?? 0;
+  if (v >= 1000000) return `${(v / 1000000).toFixed(1)}M`;
+  if (v >= 1000) return `${(v / 1000).toFixed(0)}K`;
+  return v > 0 ? v.toLocaleString("vi-VN") : "0";
+};
+
+// ====================================================================
 // MAIN COMPONENT
 // ====================================================================
 const CommandDeck: React.FC = () => {
@@ -167,6 +199,9 @@ const CommandDeck: React.FC = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [timeRange, setTimeRange] = useState<"7d" | "30d" | "90d" | "all">(
+    "all",
+  );
 
   const [ftJobs, setFtJobs] = useState<JobPostingResponse[]>([]);
   const [stJobs, setStJobs] = useState<ShortTermJobResponse[]>([]);
@@ -174,23 +209,108 @@ const CommandDeck: React.FC = () => {
   const [radarPage, setRadarPage] = useState(0);
   const [_radarTotalPages, setRadarTotalPages] = useState(0);
 
+  // Extended recruiter stats (from recruiterStatsService)
+  const [recruiterStats, setRecruiterStats] = useState<{
+    monthlySpending: number;
+    lastMonthSpending: number;
+    totalSpending: number;
+    costPerApplicant: number;
+    costPerHire: number;
+    totalHires: number;
+    avgTimeToHire: number;
+    offerAcceptanceRate: number;
+    applicationToHireRate: number;
+    activePipelineValue: number;
+    expiringJobsCount: number;
+    openDisputesCount: number;
+    escrowDeposited: number;
+    escrowReleased: number;
+    escrowRefunded: number;
+    escrowPending: number;
+    spendingCategories: { category: string; amount: number; color: string; percentage: number }[];
+  }>({
+    monthlySpending: 0, lastMonthSpending: 0, totalSpending: 0,
+    costPerApplicant: 0, costPerHire: 0, totalHires: 0,
+    avgTimeToHire: 0, offerAcceptanceRate: 0, applicationToHireRate: 0,
+    activePipelineValue: 0, expiringJobsCount: 0, openDisputesCount: 0,
+    escrowDeposited: 0, escrowReleased: 0, escrowRefunded: 0, escrowPending: 0,
+    spendingCategories: [],
+  });
+  const [spendingTrend, setSpendingTrend] = useState<SpendingDataPoint[]>([]);
+  const [applicantTrend, setApplicantTrend] = useState<SpendingDataPoint[]>([]);
+
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [ftData, stData] = await Promise.all([
+      const [ftData, stData, ftApps, stApps] = await Promise.all([
         jobService.getMyJobs().catch(() => [] as JobPostingResponse[]),
         shortTermJobService
           .getMyJobs()
           .catch(() => [] as ShortTermJobResponse[]),
+        jobService.getMyApplications().catch(() => [] as JobApplicationResponse[]),
+        shortTermJobService
+          .getMyApplications()
+          .catch(() => [] as ShortTermApplicationResponse[]),
       ]);
       setFtJobs(ftData);
       setStJobs(stData);
+
+      // Compute escrow data from ST jobs
+      const escrows = new Map<number, any>();
+      for (const job of stData) {
+        const escrowBalance = (job as any).escrowBalance;
+        const pendingPayoutBalance = (job as any).pendingPayoutBalance;
+        if (escrowBalance !== undefined || pendingPayoutBalance !== undefined) {
+          escrows.set(job.id, {
+            totalAmount: job.budget,
+            escrowBalance: escrowBalance ?? 0,
+            pendingPayoutBalance: pendingPayoutBalance ?? 0,
+            status: job.status,
+          });
+        }
+      }
+
+      // Load wallet transactions for real spending data
+      await recruiterStatsService.loadWalletTransactions();
+
+      // Compute stats client-side with date filtering
+      const computed = recruiterStatsService.computeStats(
+        timeRange,
+        ftData,
+        stData,
+        ftApps,
+        stApps,
+        escrows,
+      );
+      setRecruiterStats({
+        monthlySpending: computed.monthlySpending,
+        lastMonthSpending: computed.lastMonthSpending,
+        totalSpending: computed.totalSpending,
+        costPerApplicant: computed.costPerApplicant,
+        costPerHire: computed.costPerHire,
+        totalHires: computed.totalHires,
+        avgTimeToHire: computed.avgTimeToHire,
+        offerAcceptanceRate: computed.offerAcceptanceRate,
+        applicationToHireRate: computed.applicationToHireRate,
+        activePipelineValue: computed.activePipelineValue,
+        expiringJobsCount: computed.expiringJobsCount,
+        openDisputesCount: computed.openDisputesCount,
+        escrowDeposited: computed.escrowDeposited,
+        escrowReleased: computed.escrowReleased,
+        escrowRefunded: computed.escrowRefunded,
+        escrowPending: computed.escrowPending,
+        spendingCategories: computed.spendingCategories,
+      });
+
+      // Generate trend charts
+      setSpendingTrend(recruiterStatsService.generateSpendingTrend(timeRange));
+      setApplicantTrend(recruiterStatsService.generateApplicantTrend(timeRange));
     } catch (err) {
       console.error("Failed to fetch recruiter data:", err);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [timeRange]);
 
   useEffect(() => {
     fetchData();
@@ -211,8 +331,9 @@ const CommandDeck: React.FC = () => {
   }, [section, radarPage, fetchCandidates]);
 
   useEffect(() => {
-    const requestedSection = (location.state as { activeSection?: RecruiterSection } | null)
-      ?.activeSection;
+    const requestedSection = (
+      location.state as { activeSection?: RecruiterSection } | null
+    )?.activeSection;
 
     if (
       requestedSection &&
@@ -249,6 +370,14 @@ const CommandDeck: React.FC = () => {
   // ====================================================================
   // COMPUTED STATS
   // ====================================================================
+  const jobsNeedingReview = ftJobs.filter(
+    (j) => j.status === JobStatus.OPEN && (j.applicantCount || 0) > 0,
+  );
+  const pendingCount = jobsNeedingReview.reduce(
+    (s, j) => s + (j.applicantCount || 0),
+    0,
+  );
+
   const stats: Stats = {
     ftTotal: ftJobs.length,
     ftOpen: ftJobs.filter((j) => j.status === JobStatus.OPEN).length,
@@ -277,15 +406,21 @@ const CommandDeck: React.FC = () => {
     totalApplicants:
       ftJobs.reduce((s, j) => s + (j.applicantCount || 0), 0) +
       stJobs.reduce((s, j) => s + (j.applicantCount || 0), 0),
+    totalHires: 0,
+    pendingCount,
+    // Extended — defaults, real data from useRecruiterStats hook later
+    applicationToHireRate: 0,
+    monthlySpending: 0,
+    lastMonthSpending: 0,
+    avgTimeToHire: 0,
+    offerAcceptanceRate: 0,
+    costPerApplicant: 0,
+    costPerHire: 0,
+    activePipelineValue: 0,
+    expiringJobsCount: 0,
+    lowQuotaCount: 0,
+    openDisputesCount: 0,
   };
-
-  const jobsNeedingReview = ftJobs.filter(
-    (j) => j.status === JobStatus.OPEN && (j.applicantCount || 0) > 0,
-  );
-  const pendingCount = jobsNeedingReview.reduce(
-    (s, j) => s + (j.applicantCount || 0),
-    0,
-  );
 
   // ====================================================================
   // NAV CONFIG
@@ -527,10 +662,23 @@ const CommandDeck: React.FC = () => {
                   <LayoutDashboard size={22} /> Tổng Quan Tuyển Dụng
                 </h2>
                 <p className="rh-panel-header__subtitle">
-                  Thống kê toàn bộ hoạt động tuyển dụng dài hạn và ngắn hạn
+                  Dữ liệu {TIME_RANGES.find((t) => t.key === timeRange)?.label === "Tất cả"
+                    ? "toàn bộ"
+                    : TIME_RANGES.find((t) => t.key === timeRange)?.label}
                 </p>
               </div>
               <div className="rh-panel-header__actions">
+                <div className="rsv-time-filter">
+                  {TIME_RANGES.map((tr) => (
+                    <button
+                      key={tr.key}
+                      className={`rsv-time-btn ${timeRange === tr.key ? "rsv-time-btn--active" : ""}`}
+                      onClick={() => setTimeRange(tr.key)}
+                    >
+                      {tr.label}
+                    </button>
+                  ))}
+                </div>
                 <button
                   className="rh-panel-btn rh-panel-btn--secondary"
                   onClick={() => {
@@ -550,95 +698,7 @@ const CommandDeck: React.FC = () => {
               </div>
             ) : (
               <>
-                <div className="rh-stat-grid">
-                  <div className="rh-stat-card rh-stat-card--cyan">
-                    <div className="rh-stat-card__icon">
-                      <FileText size={22} />
-                    </div>
-                    <div className="rh-stat-card__info">
-                      <span className="rh-stat-card__value">
-                        {stats.totalJobs}
-                      </span>
-                      <span className="rh-stat-card__label">
-                        Tổng Công Việc
-                      </span>
-                      <span className="rh-stat-card__delta">
-                        DH: {stats.ftTotal} · NH: {stats.stTotal}
-                      </span>
-                    </div>
-                    <TrendingUp
-                      size={16}
-                      style={{ color: "#06b6d4", opacity: 0.5 }}
-                    />
-                  </div>
-                  <div className="rh-stat-card rh-stat-card--blue">
-                    <div className="rh-stat-card__icon">
-                      <Briefcase size={22} />
-                    </div>
-                    <div className="rh-stat-card__info">
-                      <span className="rh-stat-card__value">
-                        {stats.ftOpen}
-                      </span>
-                      <span className="rh-stat-card__label">
-                        Tin Dài Hạn Đang Mở
-                      </span>
-                      <span className="rh-stat-card__delta">
-                        {stats.ftClosed} đã đóng
-                      </span>
-                    </div>
-                    <Activity
-                      size={16}
-                      style={{ color: "#3b82f6", opacity: 0.5 }}
-                    />
-                  </div>
-                  <div className="rh-stat-card rh-stat-card--amber">
-                    <div className="rh-stat-card__icon">
-                      <Zap size={22} />
-                    </div>
-                    <div className="rh-stat-card__info">
-                      <span className="rh-stat-card__value">
-                        {stats.stPublished}
-                      </span>
-                      <span className="rh-stat-card__label">
-                        Ngắn Hạn Đang Tuyển
-                      </span>
-                      <span className="rh-stat-card__delta">
-                        {stats.stInProgress} đang thực hiện
-                      </span>
-                    </div>
-                    <ArrowUpRight
-                      size={16}
-                      style={{ color: "#f59e0b", opacity: 0.5 }}
-                    />
-                  </div>
-                  <div className="rh-stat-card rh-stat-card--purple">
-                    <div className="rh-stat-card__icon">
-                      <Users size={22} />
-                    </div>
-                    <div className="rh-stat-card__info">
-                      <span className="rh-stat-card__value">
-                        {stats.totalApplicants}
-                      </span>
-                      <span className="rh-stat-card__label">Tổng Ứng Viên</span>
-                      {pendingCount > 0 && (
-                        <span
-                          className="rh-stat-card__delta"
-                          style={{ color: "#fca5a5" }}
-                        >
-                          ⚠ {pendingCount} chờ duyệt
-                        </span>
-                      )}
-                    </div>
-                    <TrendingUp
-                      size={16}
-                      style={{ color: "#a78bfa", opacity: 0.5 }}
-                    />
-                  </div>
-                </div>
-
-                <div className="rh-section-divider">Gói Dịch Vụ & Quota</div>
-                <SubscriptionWidget />
-
+                {/* Charts Row — Donut + Bar */}
                 <div className="rh-charts-row">
                   <div className="rh-chart-box">
                     <h3 className="rh-chart-box__title">
@@ -647,31 +707,11 @@ const CommandDeck: React.FC = () => {
                     <div className="rh-chart-box__body">
                       <DonutChart
                         segments={[
-                          {
-                            value: stats.ftOpen,
-                            color: "#3b82f6",
-                            label: "DH Mở",
-                          },
-                          {
-                            value: stats.ftClosed,
-                            color: "#475569",
-                            label: "DH Đóng",
-                          },
-                          {
-                            value: stats.stPublished,
-                            color: "#f59e0b",
-                            label: "NH Tuyển",
-                          },
-                          {
-                            value: stats.stInProgress,
-                            color: "#06b6d4",
-                            label: "NH Làm",
-                          },
-                          {
-                            value: stats.stCompleted,
-                            color: "#22c55e",
-                            label: "NH Xong",
-                          },
+                          { value: stats.ftOpen, color: "#3b82f6", label: "DH Mở" },
+                          { value: stats.ftClosed, color: "#475569", label: "DH Đóng" },
+                          { value: stats.stPublished, color: "#f59e0b", label: "NH Tuyển" },
+                          { value: stats.stInProgress, color: "#06b6d4", label: "NH Làm" },
+                          { value: stats.stCompleted, color: "#22c55e", label: "NH Xong" },
                         ]}
                         centerLabel="Tổng"
                         centerValue={stats.totalJobs}
@@ -680,24 +720,12 @@ const CommandDeck: React.FC = () => {
                         {[
                           { c: "#3b82f6", l: `DH Đang mở (${stats.ftOpen})` },
                           { c: "#475569", l: `DH Đã đóng (${stats.ftClosed})` },
-                          {
-                            c: "#f59e0b",
-                            l: `NH Đang tuyển (${stats.stPublished})`,
-                          },
-                          {
-                            c: "#06b6d4",
-                            l: `NH Thực hiện (${stats.stInProgress})`,
-                          },
-                          {
-                            c: "#22c55e",
-                            l: `NH Hoàn thành (${stats.stCompleted})`,
-                          },
+                          { c: "#f59e0b", l: `NH Đang tuyển (${stats.stPublished})` },
+                          { c: "#06b6d4", l: `NH Thực hiện (${stats.stInProgress})` },
+                          { c: "#22c55e", l: `NH Hoàn thành (${stats.stCompleted})` },
                         ].map((i, k) => (
                           <div key={k} className="rh-legend-item">
-                            <span
-                              className="rh-legend-dot"
-                              style={{ background: i.c }}
-                            />
+                            <span className="rh-legend-dot" style={{ background: i.c }} />
                             {i.l}
                           </div>
                         ))}
@@ -710,40 +738,107 @@ const CommandDeck: React.FC = () => {
                     </h3>
                     <BarChart
                       bars={[
-                        {
-                          label: "Tin DH tổng",
-                          value: stats.ftTotal,
-                          color: "#3b82f6",
-                        },
-                        {
-                          label: "Tin NH tổng",
-                          value: stats.stTotal,
-                          color: "#f59e0b",
-                        },
-                        {
-                          label: "UV Dài hạn",
-                          value: stats.ftApplicants,
-                          color: "#818cf8",
-                        },
-                        {
-                          label: "UV Ngắn hạn",
-                          value: stats.stApplicants,
-                          color: "#fb923c",
-                        },
-                        {
-                          label: "DH Đang mở",
-                          value: stats.ftOpen,
-                          color: "#22d3ee",
-                        },
-                        {
-                          label: "NH Hoàn thành",
-                          value: stats.stCompleted,
-                          color: "#34d399",
-                        },
+                        { label: "Tin DH tổng", value: stats.ftTotal, color: "#3b82f6" },
+                        { label: "Tin NH tổng", value: stats.stTotal, color: "#f59e0b" },
+                        { label: "UV Dài hạn", value: stats.ftApplicants, color: "#818cf8" },
+                        { label: "UV Ngắn hạn", value: stats.stApplicants, color: "#fb923c" },
+                        { label: "DH Đang mở", value: stats.ftOpen, color: "#22d3ee" },
+                        { label: "NH Hoàn thành", value: stats.stCompleted, color: "#34d399" },
                       ]}
                     />
                   </div>
                 </div>
+
+                {/* Line Charts — Spending + Applicants */}
+                {spendingTrend.length > 0 && (
+                  <div className="rh-line-chart-box">
+                    <h3 className="rh-chart-box__title">
+                      <TrendingUp size={16} /> Xu Hướng Chi Tiêu
+                    </h3>
+                    <LineChart
+                      series={[
+                        { key: "spending", label: "Chi tiêu", color: "#f59e0b" },
+                      ]}
+                      data={spendingTrend}
+                      height={200}
+                      formatValue={(v) => fmtVND(v)}
+                    />
+                  </div>
+                )}
+
+                {applicantTrend.length > 0 && (
+                  <div className="rh-line-chart-box">
+                    <h3 className="rh-chart-box__title">
+                      <Users size={16} /> Lượng Ứng Viên Theo Thời Gian
+                    </h3>
+                    <LineChart
+                      series={[{ key: "applicants", label: "Ứng viên", color: "#a78bfa" }]}
+                      data={applicantTrend}
+                      height={180}
+                      formatValue={(v) => String(Math.round(v))}
+                    />
+                  </div>
+                )}
+
+                {/* Stats row */}
+                <div className="rh-stats-row">
+                  <div className="rh-stat-card">
+                    <div className="rh-stat-card__icon" style={{ background: "rgba(6,182,212,0.15)", color: "#06b6d4" }}>
+                      <Briefcase size={18} />
+                    </div>
+                    <div className="rh-stat-card__body">
+                      <div className="rh-stat-card__value" style={{ color: "#06b6d4" }}>
+                        {stats.totalJobs}
+                      </div>
+                      <div className="rh-stat-card__label">Tổng tin đăng</div>
+                      <div className="rh-stat-card__sub">DH: {stats.ftTotal} · NH: {stats.stTotal}</div>
+                    </div>
+                  </div>
+                  <div className="rh-stat-card">
+                    <div className="rh-stat-card__icon" style={{ background: "rgba(34,211,238,0.15)", color: "#22d3ee" }}>
+                      <Activity size={18} />
+                    </div>
+                    <div className="rh-stat-card__body">
+                      <div className="rh-stat-card__value" style={{ color: "#22d3ee" }}>
+                        {stats.ftOpen + stats.stPublished}
+                      </div>
+                      <div className="rh-stat-card__label">Tin đang mở</div>
+                      <div className="rh-stat-card__sub">DH: {stats.ftOpen} · NH: {stats.stPublished}</div>
+                    </div>
+                  </div>
+                  <div className="rh-stat-card">
+                    <div className="rh-stat-card__icon" style={{ background: "rgba(167,139,250,0.15)", color: "#a78bfa" }}>
+                      <Users size={18} />
+                    </div>
+                    <div className="rh-stat-card__body">
+                      <div className="rh-stat-card__value" style={{ color: "#a78bfa" }}>
+                        {stats.totalApplicants}
+                      </div>
+                      <div className="rh-stat-card__label">Tổng ứng viên</div>
+                      <div className="rh-stat-card__sub">
+                        {stats.pendingCount > 0 ? `${stats.pendingCount} chờ duyệt` : "Không có đơn mới"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="rh-stat-card">
+                    <div className="rh-stat-card__icon" style={{ background: "rgba(245,158,11,0.15)", color: "#f59e0b" }}>
+                      <Wallet size={18} />
+                    </div>
+                    <div className="rh-stat-card__body">
+                      <div className="rh-stat-card__value" style={{ color: "#f59e0b" }}>
+                        {fmtVND(recruiterStats.totalSpending)}
+                      </div>
+                      <div className="rh-stat-card__label">Tổng chi tiêu</div>
+                      <div className="rh-stat-card__sub">
+                        Tháng này: {fmtVND(recruiterStats.monthlySpending)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Subscription & Charts Row */}
+                <div className="rh-section-divider">Gói Dịch Vụ & Quota</div>
+                <SubscriptionWidget />
 
                 <div className="rh-section-divider">Truy cập nhanh</div>
 
@@ -1018,7 +1113,10 @@ const CommandDeck: React.FC = () => {
                 </p>
               </div>
             </div>
-            <RecruiterTalentWorkspace fullTimeJobs={ftJobs} shortTermJobs={stJobs} />
+            <RecruiterTalentWorkspace
+              fullTimeJobs={ftJobs}
+              shortTermJobs={stJobs}
+            />
           </div>
         )}
 
