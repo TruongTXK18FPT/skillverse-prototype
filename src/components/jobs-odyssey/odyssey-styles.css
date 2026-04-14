@@ -38,13 +38,18 @@
   --odyssey-premium-gold-muted: #daa520;
   --odyssey-neon-gold: rgba(255, 215, 0, 0.8);
   --odyssey-neon-gold-soft: rgba(255, 215, 0, 0.3);
+
+  /* Visual focal point (hồng tâm) */
+  --odyssey-focus-x: 50%;
+  --odyssey-focus-y: 15%;
+  --odyssey-focus-glow-opacity: 0.52;
 }
 
 /* ==================== LAYOUT - COCKPIT VIEW ==================== */
 .odyssey-container {
   min-height: 100vh;
   background: radial-gradient(
-    ellipse at 50% 50%,
+    ellipse at var(--odyssey-focus-x) var(--odyssey-focus-y),
     #1a0b2e 0%,
     #0a0412 50%,
     #000000 100%
@@ -56,13 +61,14 @@
 /* ==================== WORMHOLE BACKGROUND ==================== */
 .odyssey-wormhole {
   position: absolute;
-  top: 50%;
+  top: var(--odyssey-focus-y);
   left: 50%;
   transform: translate(-50%, -50%);
   width: 800px;
   height: 800px;
   pointer-events: none;
   z-index: 0;
+  opacity: var(--odyssey-focus-glow-opacity);
 }
 
 .odyssey-wormhole__core {
@@ -74,14 +80,14 @@
   height: 120px;
   background: radial-gradient(
     circle,
-    rgba(6, 182, 212, 0.8) 0%,
-    rgba(59, 130, 246, 0.6) 30%,
-    rgba(20, 184, 166, 0.4) 60%,
+    rgba(6, 182, 212, 0.5) 0%,
+    rgba(59, 130, 246, 0.35) 32%,
+    rgba(20, 184, 166, 0.2) 62%,
     transparent 100%
   );
   border-radius: 50%;
-  animation: odyssey-wormhole-pulse 4s ease-in-out infinite;
-  filter: blur(3px);
+  animation: odyssey-wormhole-pulse 5.5s ease-in-out infinite;
+  filter: blur(2px);
 }
 
 .odyssey-wormhole__ring {
@@ -97,43 +103,43 @@
 .odyssey-wormhole__ring--1 {
   width: 300px;
   height: 300px;
-  border-color: rgba(6, 182, 212, 0.3);
-  animation-duration: 15s;
+  border-color: rgba(6, 182, 212, 0.2);
+  animation-duration: 18s;
   box-shadow:
-    0 0 20px rgba(6, 182, 212, 0.4),
-    inset 0 0 20px rgba(6, 182, 212, 0.2);
+    0 0 14px rgba(6, 182, 212, 0.2),
+    inset 0 0 14px rgba(6, 182, 212, 0.12);
 }
 
 .odyssey-wormhole__ring--2 {
   width: 500px;
   height: 500px;
-  border-color: rgba(59, 130, 246, 0.2);
-  animation-duration: 25s;
+  border-color: rgba(59, 130, 246, 0.14);
+  animation-duration: 30s;
   animation-direction: reverse;
   box-shadow:
-    0 0 30px rgba(59, 130, 246, 0.3),
-    inset 0 0 30px rgba(59, 130, 246, 0.15);
+    0 0 18px rgba(59, 130, 246, 0.18),
+    inset 0 0 18px rgba(59, 130, 246, 0.1);
 }
 
 .odyssey-wormhole__ring--3 {
   width: 700px;
   height: 700px;
-  border-color: rgba(20, 184, 166, 0.15);
-  animation-duration: 35s;
+  border-color: rgba(20, 184, 166, 0.11);
+  animation-duration: 42s;
   box-shadow:
-    0 0 40px rgba(20, 184, 166, 0.2),
-    inset 0 0 40px rgba(20, 184, 166, 0.1);
+    0 0 22px rgba(20, 184, 166, 0.12),
+    inset 0 0 22px rgba(20, 184, 166, 0.08);
 }
 
 @keyframes odyssey-wormhole-pulse {
   0%,
   100% {
     transform: translate(-50%, -50%) scale(1);
-    opacity: 0.8;
+    opacity: 0.55;
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.2);
-    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 0.75;
   }
 }
 
@@ -261,7 +267,11 @@
     linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  mask-image: radial-gradient(
+    ellipse at var(--odyssey-focus-x) var(--odyssey-focus-y),
+    black 30%,
+    transparent 70%
+  );
 }
 
 .odyssey-grid-overlay::before {
@@ -269,9 +279,9 @@
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    circle at 50% 50%,
+    circle at var(--odyssey-focus-x) var(--odyssey-focus-y),
     transparent 0%,
-    rgba(6, 182, 212, 0.02) 40%,
+    rgba(6, 182, 212, 0.012) 40%,
     transparent 100%
   );
   animation: odyssey-grid-pulse 8s ease-in-out infinite;
@@ -280,10 +290,10 @@
 @keyframes odyssey-grid-pulse {
   0%,
   100% {
-    opacity: 0.3;
+    opacity: 0.18;
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.42;
   }
 }
 
@@ -297,8 +307,8 @@
     0deg,
     transparent,
     transparent 2px,
-    rgba(6, 182, 212, 0.03) 2px,
-    rgba(6, 182, 212, 0.03) 4px
+    rgba(6, 182, 212, 0.018) 2px,
+    rgba(6, 182, 212, 0.018) 4px
   );
   animation: odyssey-scan 6s linear infinite;
 }
@@ -511,13 +521,8 @@
   text-align: center;
   margin-bottom: 3rem;
   position: relative;
-  z-index: 1;
+  z-index: 14;
   padding: 2rem 1rem;
-  background: linear-gradient(
-    180deg,
-    rgba(15, 7, 32, 0) 0%,
-    rgba(15, 7, 32, 0.5) 100%
-  );
 }
 
 /* Holographic Scanlines Effect */
@@ -1675,6 +1680,11 @@
 
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
+  :root {
+    --odyssey-focus-y: 42%;
+    --odyssey-focus-glow-opacity: 0.45;
+  }
+
   /* Content Area */
   .odyssey-content {
     padding: 2rem 1rem;
@@ -3476,6 +3486,11 @@
 }
 
 /* ==================== PAGINATION (Odyssey Style) ==================== */
+.odyssey-pagination-host {
+  display: flex;
+  justify-content: center;
+}
+
 .odyssey-pagination {
   display: flex;
   align-items: center;
@@ -3535,5 +3550,587 @@
   }
   .odyssey-pagination__info {
     font-size: 12px;
+  }
+}
+
+/* ==================== JOBS LISTING REFINED LAYOUT ==================== */
+.jobs-tab-nav {
+  margin-bottom: 1.1rem;
+}
+
+.jobs-tab-nav__track {
+  display: inline-flex;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 14px;
+  background:
+    linear-gradient(135deg, rgba(8, 3, 20, 0.85), rgba(15, 23, 42, 0.85)),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 8px,
+      rgba(6, 182, 212, 0.03) 8px,
+      rgba(6, 182, 212, 0.03) 9px
+    );
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.jobs-tab-nav__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 20px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+}
+
+.jobs-tab-nav__button:hover {
+  background: rgba(6, 182, 212, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.jobs-tab-nav__button--active {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--odyssey-cyan-light, #67e8f9);
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow:
+    0 0 14px rgba(6, 182, 212, 0.25),
+    inset 0 0 10px rgba(6, 182, 212, 0.06);
+}
+
+.jobs-tab-nav__button--short-term.jobs-tab-nav__button--active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow:
+    0 0 14px rgba(16, 185, 129, 0.25),
+    inset 0 0 10px rgba(16, 185, 129, 0.06);
+}
+
+.jobs-tab-nav__label {
+  pointer-events: none;
+}
+
+.jobs-tab-nav__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 19px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+}
+
+.jobs-mixed-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.jobs-mixed-feed__summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgba(6, 182, 212, 0.18);
+  border-radius: 14px;
+  background:
+    linear-gradient(145deg, rgba(8, 3, 20, 0.86), rgba(5, 12, 26, 0.78)),
+    radial-gradient(circle at top right, rgba(6, 182, 212, 0.08), transparent 45%);
+  padding: 1rem 1.1rem;
+}
+
+.jobs-mixed-feed__title {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #e2f3ff;
+}
+
+.jobs-mixed-feed__description {
+  margin: 0.3rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(186, 230, 253, 0.76);
+}
+
+.jobs-mixed-feed__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.jobs-mixed-feed__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  background: rgba(6, 182, 212, 0.1);
+  color: #a5f3fc;
+  padding: 0.3rem 0.72rem;
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.jobs-mixed-feed__chip--long-term {
+  border-color: rgba(14, 165, 233, 0.25);
+  background: rgba(14, 165, 233, 0.12);
+  color: #bae6fd;
+}
+
+.jobs-mixed-feed__chip--short-term {
+  border-color: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.12);
+  color: #bbf7d0;
+}
+
+.jobs-mixed-feed__grid {
+  padding-top: 0.4rem;
+}
+
+/* ==================== REFINED FILTER PANEL ==================== */
+.jobs-filter-panel {
+  max-width: 100%;
+  margin: 0 0 1.4rem;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 14px;
+  background:
+    linear-gradient(150deg, rgba(8, 3, 20, 0.88), rgba(5, 12, 26, 0.82)),
+    radial-gradient(circle at 88% 2%, rgba(6, 182, 212, 0.1), transparent 35%);
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.44),
+    inset 0 0 0 1px rgba(6, 182, 212, 0.05);
+  padding: 1rem 1.1rem;
+  position: relative;
+  z-index: 14;
+}
+
+.jobs-filter-panel__row {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.jobs-filter-panel__row--primary {
+  grid-template-columns: 1.6fr auto auto;
+  align-items: end;
+  padding-bottom: 0.95rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.jobs-filter-panel__row--secondary {
+  grid-template-columns: 1fr 1.5fr;
+  align-items: start;
+  padding-top: 0.95rem;
+}
+
+.jobs-filter-panel__group {
+  min-width: 0;
+}
+
+.jobs-filter-panel__group-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.jobs-filter-panel__group--search {
+  width: 100%;
+}
+
+.jobs-filter-panel__label {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(186, 230, 253, 0.8);
+  margin-bottom: 0.5rem;
+}
+
+.jobs-filter-panel__search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.jobs-filter-panel__search-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: rgba(103, 232, 249, 0.72);
+}
+
+.jobs-filter-panel__search-input {
+  width: 100%;
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: 10px;
+  background: rgba(2, 6, 23, 0.58);
+  color: #f0f9ff;
+  padding: 0.68rem 0.86rem 0.68rem 2.5rem;
+  font-size: 0.88rem;
+  transition: all 0.24s ease;
+}
+
+.jobs-filter-panel__search-input::placeholder {
+  color: rgba(186, 230, 253, 0.42);
+}
+
+.jobs-filter-panel__search-input:focus {
+  outline: none;
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow:
+    0 0 0 3px rgba(6, 182, 212, 0.14),
+    0 0 18px rgba(6, 182, 212, 0.18);
+}
+
+.jobs-filter-panel__summary {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.jobs-filter-panel__summary-chip {
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 999px;
+  padding: 0.28rem 0.68rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #bae6fd;
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.jobs-filter-panel__summary-chip--long-term {
+  border-color: rgba(14, 165, 233, 0.24);
+  color: #dbeafe;
+  background: rgba(14, 165, 233, 0.12);
+}
+
+.jobs-filter-panel__summary-chip--short-term {
+  border-color: rgba(16, 185, 129, 0.24);
+  color: #bbf7d0;
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.jobs-filter-panel__reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+  padding: 0.62rem 0.84rem;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  border-radius: 10px;
+  background: rgba(190, 18, 60, 0.14);
+  color: #fecaca;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.24s ease;
+}
+
+.jobs-filter-panel__reset:hover {
+  border-color: rgba(248, 113, 113, 0.6);
+  background: rgba(190, 18, 60, 0.22);
+  transform: translateY(-1px);
+}
+
+.jobs-filter-panel__segmented {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.jobs-filter-panel__segmented-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.5);
+  color: rgba(226, 232, 240, 0.7);
+  padding: 0.56rem 0.8rem;
+  font-size: 0.79rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.jobs-filter-panel__segmented-button:hover {
+  color: #e2f3ff;
+  border-color: rgba(6, 182, 212, 0.4);
+}
+
+.jobs-filter-panel__segmented-button--active {
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(6, 182, 212, 0.18);
+  color: #a5f3fc;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.16);
+}
+
+.jobs-filter-panel__segmented-button--short-term.jobs-filter-panel__segmented-button--active {
+  border-color: rgba(16, 185, 129, 0.38);
+  background: rgba(16, 185, 129, 0.16);
+  color: #86efac;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.16);
+}
+
+.jobs-filter-panel__segmented-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(125, 211, 252, 0.86);
+}
+
+.jobs-filter-panel__segmented-button--short-term.jobs-filter-panel__segmented-button--active .jobs-filter-panel__segmented-icon {
+  color: #86efac;
+}
+
+.jobs-filter-panel__option-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 18px;
+  padding: 0 0.32rem;
+  margin-left: 0.14rem;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.16);
+  color: rgba(226, 232, 240, 0.9);
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.jobs-filter-panel__segmented-button--active .jobs-filter-panel__option-count {
+  background: rgba(34, 211, 238, 0.2);
+  color: #cffafe;
+}
+
+.jobs-filter-panel__segmented-button--short-term.jobs-filter-panel__segmented-button--active .jobs-filter-panel__option-count {
+  background: rgba(16, 185, 129, 0.24);
+  color: #dcfce7;
+}
+
+.jobs-filter-panel__group--budget {
+  width: 100%;
+}
+
+.jobs-filter-panel__budget-inputs {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.6rem;
+  align-items: end;
+}
+
+.jobs-filter-panel__budget-field {
+  min-width: 0;
+}
+
+.jobs-filter-panel__sub-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.68rem;
+  color: rgba(148, 163, 184, 0.86);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.jobs-filter-panel__number-input {
+  width: 100%;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 10px;
+  background: rgba(2, 6, 23, 0.58);
+  color: #cffafe;
+  padding: 0.6rem 0.72rem;
+  font-size: 0.84rem;
+  transition: all 0.22s ease;
+}
+
+.jobs-filter-panel__number-input:focus {
+  outline: none;
+  border-color: rgba(34, 211, 238, 0.55);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.14);
+}
+
+.jobs-filter-panel__budget-arrow {
+  color: rgba(103, 232, 249, 0.75);
+  font-weight: 700;
+  padding-bottom: 0.6rem;
+}
+
+.jobs-filter-panel__budget-presets {
+  margin-top: 0.7rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.jobs-filter-panel__preset-chip {
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 999px;
+  background: rgba(8, 47, 73, 0.35);
+  color: rgba(186, 230, 253, 0.86);
+  padding: 0.28rem 0.64rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.jobs-filter-panel__preset-chip:hover {
+  border-color: rgba(6, 182, 212, 0.42);
+  color: #e0f2fe;
+}
+
+.jobs-filter-panel__preset-chip--active {
+  border-color: rgba(34, 211, 238, 0.55);
+  background: rgba(6, 182, 212, 0.2);
+  color: #a5f3fc;
+}
+
+.jobs-filter-panel__budget-note {
+  margin: 0.65rem 0 0;
+  font-size: 0.74rem;
+  color: rgba(186, 230, 253, 0.72);
+}
+
+/* ==================== CARD BADGES (NEW) ==================== */
+.fate-card__top--space-between {
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.fate-card__top-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.fate-card__category-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.7);
+  color: rgba(226, 232, 240, 0.78);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.26rem 0.58rem;
+}
+
+.fate-card__salary-tier {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.26);
+  background: rgba(14, 116, 144, 0.16);
+  color: #bae6fd;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.34rem 0.72rem;
+}
+
+.fate-card__salary-tier--base {
+  border-color: rgba(56, 189, 248, 0.24);
+  background: rgba(3, 105, 161, 0.16);
+  color: #bae6fd;
+}
+
+.fate-card__salary-tier--mid {
+  border-color: rgba(250, 204, 21, 0.28);
+  background: rgba(161, 98, 7, 0.16);
+  color: #fef08a;
+}
+
+.fate-card__salary-tier--high {
+  border-color: rgba(251, 146, 60, 0.3);
+  background: rgba(154, 52, 18, 0.18);
+  color: #fed7aa;
+}
+
+.fate-card__salary-tier--negotiable {
+  border-color: rgba(167, 139, 250, 0.3);
+  background: rgba(91, 33, 182, 0.18);
+  color: #ddd6fe;
+}
+
+.fate-card__salary-tier--premium {
+  border-color: rgba(255, 215, 0, 0.45);
+  background: rgba(234, 179, 8, 0.18);
+  color: #fde68a;
+}
+
+@media (max-width: 1024px) {
+  .jobs-filter-panel__row--primary,
+  .jobs-filter-panel__row--secondary {
+    grid-template-columns: 1fr;
+  }
+
+  .jobs-filter-panel__summary {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .odyssey-wormhole {
+    top: var(--odyssey-focus-y);
+  }
+
+  .jobs-tab-nav__track {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .jobs-tab-nav__button {
+    flex: 1 1 calc(50% - 6px);
+    justify-content: center;
+  }
+
+  .jobs-mixed-feed__summary {
+    flex-direction: column;
+  }
+
+  .jobs-mixed-feed__chips {
+    justify-content: flex-start;
+  }
+
+  .jobs-filter-panel {
+    padding: 0.9rem;
+  }
+
+  .jobs-filter-panel__budget-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .jobs-filter-panel__budget-arrow {
+    display: none;
   }
 }

@@ -152,7 +152,7 @@
 /* ==================== STATS GRID ==================== */
 .ach-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -562,7 +562,7 @@
 /* ==================== METRICS GRID ==================== */
 .ach-metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.875rem;
   margin-bottom: 1.25rem;
 }

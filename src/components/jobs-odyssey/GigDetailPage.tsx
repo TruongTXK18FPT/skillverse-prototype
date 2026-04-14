@@ -257,6 +257,8 @@ const GigDetailPage: React.FC = () => {
     !isExpired &&
     !isRecruiter &&
     !hasApplied;
+  const hasMinimumRating =
+    typeof job?.minRating === "number" && job.minRating > 0;
 
   const urgencyLabel =
     variant === "urgent"
@@ -601,7 +603,7 @@ const GigDetailPage: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                {job.minRating && (
+                {hasMinimumRating && (
                   <div className="gdp-sidebar__item">
                     <Star size={14} />
                     <div>

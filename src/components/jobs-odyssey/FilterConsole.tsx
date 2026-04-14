@@ -1,171 +1,286 @@
 import { useState } from "react";
-import { RotateCcw, Search, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Briefcase,
+  Building2,
+  Globe,
+  LayoutGrid,
+  RotateCcw,
+  Search,
+  Zap,
+} from "lucide-react";
 
-interface FilterConsoleProps {
-  onFilterChange: (filters: JobFilters) => void;
+export const JOB_BUDGET_CAP = 50_000_000;
+
+interface JobsFilterPanelProps {
+  onFilterChange: (filters: JobFilterState) => void;
   onSearchChange: (search: string) => void;
   searchTerm: string;
+  viewType: JobViewType;
+  onViewTypeChange: (viewType: JobViewType) => void;
+  resultsCount?: number;
+  longTermCount?: number;
+  shortTermCount?: number;
 }
 
-export interface JobFilters {
-  deploymentZone: "all" | "remote" | "onsite";
-  minBounty: number;
-  maxBounty: number;
+export type JobViewType = "all" | "long-term" | "short-term";
+
+export interface JobFilterState {
+  workMode: "all" | "remote" | "onsite";
+  minBudget: number;
+  maxBudget: number;
 }
 
-const FilterConsole = ({
+const QUICK_BUDGET_PRESETS = [
+  { key: "under-10", label: "Dưới 10 triệu", min: 0, max: 10_000_000 },
+  { key: "10-20", label: "10 - 20 triệu", min: 10_000_000, max: 20_000_000 },
+  { key: "20-40", label: "20 - 40 triệu", min: 20_000_000, max: 40_000_000 },
+  {
+    key: "over-40",
+    label: "Trên 40 triệu",
+    min: 40_000_000,
+    max: JOB_BUDGET_CAP,
+  },
+];
+
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 0 }).format(value);
+
+const clampBudget = (value: number) => {
+  if (!Number.isFinite(value) || value < 0) return 0;
+  return Math.min(value, JOB_BUDGET_CAP);
+};
+
+const JobsFilterPanel = ({
   onFilterChange,
   onSearchChange,
   searchTerm,
-}: FilterConsoleProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [deploymentZone, setDeploymentZone] = useState<
-    "all" | "remote" | "onsite"
-  >("all");
-  const [minBounty, setMinBounty] = useState<number>(0);
-  const [maxBounty, setMaxBounty] = useState<number>(500000000); // 50 million VND
+  viewType,
+  onViewTypeChange,
+  resultsCount = 0,
+  longTermCount = 0,
+  shortTermCount = 0,
+}: JobsFilterPanelProps) => {
+  const [workMode, setWorkMode] = useState<JobFilterState["workMode"]>("all");
+  const [minBudget, setMinBudget] = useState<number>(0);
+  const [maxBudget, setMaxBudget] = useState<number>(JOB_BUDGET_CAP);
 
-  const handleDeploymentChange = (zone: "all" | "remote" | "onsite") => {
-    setDeploymentZone(zone);
-    onFilterChange({ deploymentZone: zone, minBounty, maxBounty });
-  };
+  const syncFilter = (
+    nextWorkMode: JobFilterState["workMode"],
+    nextMinBudget: number,
+    nextMaxBudget: number,
+  ) => {
+    let min = clampBudget(nextMinBudget);
+    let max = clampBudget(nextMaxBudget);
 
-  const handleBountyChange = (min: number, max: number) => {
-    setMinBounty(min);
-    setMaxBounty(max);
-    onFilterChange({ deploymentZone, minBounty: min, maxBounty: max });
-  };
+    if (min > max) {
+      const temp = min;
+      min = max;
+      max = temp;
+    }
 
-  const handleReset = () => {
-    setDeploymentZone("all");
-    setMinBounty(0);
-    setMaxBounty(500000000);
-    onSearchChange("");
+    setWorkMode(nextWorkMode);
+    setMinBudget(min);
+    setMaxBudget(max);
+
     onFilterChange({
-      deploymentZone: "all",
-      minBounty: 0,
-      maxBounty: 500000000,
+      workMode: nextWorkMode,
+      minBudget: min,
+      maxBudget: max,
     });
   };
 
-  return (
-    <div className="odyssey-filter-console">
-      {/* Console Header - Always visible */}
-      <div
-        className="odyssey-filter-console__header"
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
-        <div className="odyssey-filter-console__indicator"></div>
-        <h3 className="odyssey-filter-console__title">Bộ lọc</h3>
-        <button className="odyssey-filter-console__toggle">
-          {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-        </button>
-      </div>
+  const resetFilter = () => {
+    onSearchChange("");
+    syncFilter("all", 0, JOB_BUDGET_CAP);
+  };
 
-      {/* Collapsible Content */}
-      <div
-        className={`odyssey-filter-console__content ${isExpanded ? "odyssey-filter-console__content--expanded" : ""}`}
-      >
-        {/* Search Bar */}
-        <div className="odyssey-filter-console__section">
-          <label className="odyssey-filter-console__label">
-            <span className="odyssey-filter-console__label-icon">◆</span>
-            Từ khóa tìm kiếm
-          </label>
-          <div className="odyssey-filter-console__search-wrapper">
-            <Search className="odyssey-filter-console__search-icon" size={18} />
+  const isPresetActive = (min: number, max: number) =>
+    minBudget === min && maxBudget === max;
+
+  const workModeOptions: {
+    key: JobFilterState["workMode"];
+    label: string;
+    icon: JSX.Element;
+  }[] = [
+    { key: "all", label: "Tất cả", icon: <LayoutGrid size={14} /> },
+    { key: "remote", label: "Từ xa", icon: <Globe size={14} /> },
+    { key: "onsite", label: "Tại chỗ", icon: <Building2 size={14} /> },
+  ];
+
+  const jobTypeOptions: {
+    key: JobViewType;
+    label: string;
+    icon: JSX.Element;
+    count: number;
+  }[] = [
+    {
+      key: "all",
+      label: "Tất cả",
+      icon: <LayoutGrid size={14} />,
+      count: resultsCount,
+    },
+    {
+      key: "long-term",
+      label: "Dài hạn",
+      icon: <Briefcase size={14} />,
+      count: longTermCount,
+    },
+    {
+      key: "short-term",
+      label: "Ngắn hạn",
+      icon: <Zap size={14} />,
+      count: shortTermCount,
+    },
+  ];
+
+  return (
+    <section className="jobs-filter-panel">
+      <div className="jobs-filter-panel__row jobs-filter-panel__row--primary">
+        <div className="jobs-filter-panel__group jobs-filter-panel__group--search">
+          <label className="jobs-filter-panel__label">Từ khóa tìm kiếm</label>
+          <div className="jobs-filter-panel__search-box">
+            <Search className="jobs-filter-panel__search-icon" size={18} />
             <input
               type="text"
-              placeholder="Tìm công việc..."
+              placeholder="Ví dụ: React, Java, UX Designer..."
               value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="odyssey-filter-console__search-input"
+              onChange={(event) => onSearchChange(event.target.value)}
+              className="jobs-filter-panel__search-input"
             />
           </div>
         </div>
 
-        {/* Deployment Zone Switches */}
-        <div className="odyssey-filter-console__section">
-          <label className="odyssey-filter-console__label">
-            <span className="odyssey-filter-console__label-icon">◆</span>
-            Khu vực làm việc
-          </label>
-          <div className="odyssey-filter-console__toggle-group">
-            <button
-              className={`odyssey-filter-console__toggle ${deploymentZone === "all" ? "odyssey-filter-console__toggle--active" : ""}`}
-              onClick={() => handleDeploymentChange("all")}
-            >
-              <span className="odyssey-filter-console__toggle-led"></span>
-              Tất cả
-            </button>
-            <button
-              className={`odyssey-filter-console__toggle ${deploymentZone === "remote" ? "odyssey-filter-console__toggle--active" : ""}`}
-              onClick={() => handleDeploymentChange("remote")}
-            >
-              <span className="odyssey-filter-console__toggle-led"></span>
-              Làm việc từ xa
-            </button>
-            <button
-              className={`odyssey-filter-console__toggle ${deploymentZone === "onsite" ? "odyssey-filter-console__toggle--active" : ""}`}
-              onClick={() => handleDeploymentChange("onsite")}
-            >
-              <span className="odyssey-filter-console__toggle-led"></span>
-              Làm việc tại chỗ
-            </button>
-          </div>
+        <div className="jobs-filter-panel__summary">
+          <span className="jobs-filter-panel__summary-chip">
+            {resultsCount} kết quả
+          </span>
+          <span className="jobs-filter-panel__summary-chip jobs-filter-panel__summary-chip--long-term">
+            {longTermCount} dài hạn
+          </span>
+          <span className="jobs-filter-panel__summary-chip jobs-filter-panel__summary-chip--short-term">
+            {shortTermCount} ngắn hạn
+          </span>
         </div>
 
-        {/* Bounty Range */}
-        <div className="odyssey-filter-console__section">
-          <label className="odyssey-filter-console__label">
-            <span className="odyssey-filter-console__label-icon">◆</span>
-            Khoảng ngân sách (VND)
-          </label>
-          <div className="odyssey-filter-console__range-group">
-            <div className="odyssey-filter-console__range-input">
-              <label className="odyssey-filter-console__range-label">
-                Tối thiểu
-              </label>
-              <input
-                type="number"
-                className="odyssey-filter-console__input"
-                value={minBounty}
-                onChange={(e) =>
-                  handleBountyChange(Number(e.target.value), maxBounty)
-                }
-                min={0}
-                step={100000}
-                placeholder="0"
-              />
-            </div>
-            <div className="odyssey-filter-console__range-separator">—</div>
-            <div className="odyssey-filter-console__range-input">
-              <label className="odyssey-filter-console__range-label">
-                Tối đa
-              </label>
-              <input
-                type="number"
-                className="odyssey-filter-console__input"
-                value={maxBounty}
-                onChange={(e) =>
-                  handleBountyChange(minBounty, Number(e.target.value))
-                }
-                min={0}
-                step={100000}
-                placeholder="500000000"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Reset Button */}
-        <button className="odyssey-filter-console__reset" onClick={handleReset}>
-          <RotateCcw className="odyssey-filter-console__reset-icon" />
-          Đặt lại bộ lọc
+        <button
+          className="jobs-filter-panel__reset"
+          onClick={resetFilter}
+          type="button"
+        >
+          <RotateCcw size={16} />
+          Đặt lại
         </button>
       </div>
-    </div>
+
+      <div className="jobs-filter-panel__row jobs-filter-panel__row--secondary">
+        <div className="jobs-filter-panel__group-stack">
+          <div className="jobs-filter-panel__group">
+            <label className="jobs-filter-panel__label">Khu vực làm việc</label>
+            <div className="jobs-filter-panel__segmented">
+              {workModeOptions.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  className={`jobs-filter-panel__segmented-button${workMode === option.key ? " jobs-filter-panel__segmented-button--active" : ""}`}
+                  onClick={() => syncFilter(option.key, minBudget, maxBudget)}
+                >
+                  <span className="jobs-filter-panel__segmented-icon">
+                    {option.icon}
+                  </span>
+                  <span>{option.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="jobs-filter-panel__group">
+            <label className="jobs-filter-panel__label">Loại công việc</label>
+            <div className="jobs-filter-panel__segmented jobs-filter-panel__segmented--job-type">
+              {jobTypeOptions.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  className={`jobs-filter-panel__segmented-button${viewType === option.key ? " jobs-filter-panel__segmented-button--active" : ""}${option.key === "short-term" ? " jobs-filter-panel__segmented-button--short-term" : ""}`}
+                  onClick={() => onViewTypeChange(option.key)}
+                >
+                  <span className="jobs-filter-panel__segmented-icon">
+                    {option.icon}
+                  </span>
+                  <span>{option.label}</span>
+                  <span className="jobs-filter-panel__option-count">
+                    {option.count}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="jobs-filter-panel__group jobs-filter-panel__group--budget">
+          <label className="jobs-filter-panel__label">Khoảng ngân sách (VND)</label>
+
+          <div className="jobs-filter-panel__budget-inputs">
+            <div className="jobs-filter-panel__budget-field">
+              <span className="jobs-filter-panel__sub-label">Tối thiểu</span>
+              <input
+                type="number"
+                value={minBudget}
+                min={0}
+                max={JOB_BUDGET_CAP}
+                step={100_000}
+                className="jobs-filter-panel__number-input"
+                onChange={(event) =>
+                  syncFilter(
+                    workMode,
+                    Number(event.target.value || 0),
+                    maxBudget,
+                  )
+                }
+              />
+            </div>
+
+            <span className="jobs-filter-panel__budget-arrow">→</span>
+
+            <div className="jobs-filter-panel__budget-field">
+              <span className="jobs-filter-panel__sub-label">Tối đa</span>
+              <input
+                type="number"
+                value={maxBudget}
+                min={0}
+                max={JOB_BUDGET_CAP}
+                step={100_000}
+                className="jobs-filter-panel__number-input"
+                onChange={(event) =>
+                  syncFilter(
+                    workMode,
+                    minBudget,
+                    Number(event.target.value || 0),
+                  )
+                }
+              />
+            </div>
+          </div>
+
+          <div className="jobs-filter-panel__budget-presets">
+            {QUICK_BUDGET_PRESETS.map((preset) => (
+              <button
+                key={preset.key}
+                type="button"
+                className={`jobs-filter-panel__preset-chip${isPresetActive(preset.min, preset.max) ? " jobs-filter-panel__preset-chip--active" : ""}`}
+                onClick={() => syncFilter(workMode, preset.min, preset.max)}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
+
+          <p className="jobs-filter-panel__budget-note">
+            Đang lọc từ {formatCurrency(minBudget)} đến {formatCurrency(maxBudget)} VND
+          </p>
+        </div>
+      </div>
+    </section>
   );
 };
 
-export default FilterConsole;
+export default JobsFilterPanel;

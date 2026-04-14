@@ -16,16 +16,6 @@ const OdysseyLayout = ({ children, hideHeader = false }: OdysseyLayoutProps) => 
     animationDuration: 3 + Math.random() * 4
   }));
 
-  // Generate floating cards with suit symbols (reduced for less distraction)
-  const floatingCards = Array.from({ length: 6 }, (_, i) => ({
-    id: i,
-    left: 10 + Math.random() * 80,
-    top: 10 + Math.random() * 80,
-    animationDelay: Math.random() * 15,
-    animationDuration: 15 + Math.random() * 10,
-    symbol: ['♦', '♣', '♥', '♠'][i % 4]
-  }));
-
   return (
     <div className="odyssey-container">
       {/* Wormhole Background */}
@@ -49,23 +39,6 @@ const OdysseyLayout = ({ children, hideHeader = false }: OdysseyLayoutProps) => 
               height: `${particle.size}px`,
               animationDelay: `${particle.animationDelay}s`,
               animationDuration: `${particle.animationDuration}s`
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Floating Cards - Space Pirate Theme */}
-      <div className="odyssey-floating-cards">
-        {floatingCards.map((card) => (
-          <div
-            key={card.id}
-            className="odyssey-floating-cards__card"
-            data-symbol={card.symbol}
-            style={{
-              left: `${card.left}%`,
-              top: `${card.top}%`,
-              animationDelay: `${card.animationDelay}s`,
-              animationDuration: `${card.animationDuration}s`
             }}
           />
         ))}

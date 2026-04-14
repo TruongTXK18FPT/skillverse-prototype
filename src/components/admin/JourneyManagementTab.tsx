@@ -604,9 +604,6 @@ const JourneyManagementTab: React.FC = () => {
 
           <div className="jmt-insight-row">
             <article className="jmt-insight-card">
-              <div className="jmt-insight-card__icon">
-                <Waypoints size={18} />
-              </div>
               <div>
                 <strong>{heroInsight.title}</strong>
                 <span>{heroInsight.description}</span>
@@ -614,9 +611,6 @@ const JourneyManagementTab: React.FC = () => {
             </article>
 
             <article className="jmt-insight-card jmt-insight-card--warning">
-              <div className="jmt-insight-card__icon">
-                <AlertTriangle size={18} />
-              </div>
               <div>
                 <strong>Ưu tiên cho quản trị viên</strong>
                 <span>
