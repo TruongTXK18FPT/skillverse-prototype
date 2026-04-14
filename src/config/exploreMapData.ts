@@ -82,18 +82,6 @@ const WARRIOR_ACADEMY: ZoneConfig = {
       lineLength: 100
     },
     {
-      id: 'roadmap',
-      name: 'Lộ Trình',
-      description: 'Lộ trình học tập và phát triển kỹ năng',
-      path: '/roadmap',
-      requiresAuth: true,
-      icon: Map,
-      zoneX: 60,
-      zoneY: 45,
-      direction: 'top-right' as const,
-      lineLength: 140
-    },
-    {
       id: 'mentorship',
       name: 'Cố Vấn',
       description: 'Kết nối với chuyên gia trong ngành',

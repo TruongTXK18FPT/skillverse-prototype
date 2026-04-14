@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Users, Star, BookOpen, Play, Filter, TrendingUp, Folder, Radar, Zap, Target, Shield } from 'lucide-react';
+import { Users, Star, BookOpen, Play, Filter, TrendingUp, Folder, Radar, Zap, Target, Shield, Plus } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useTheme } from '../../context/ThemeContext';
 import '../../styles/CoursesPageCockpit.css';
@@ -19,6 +19,14 @@ import {
 type SortOption = 'newest' | 'oldest' | 'price-low' | 'price-high' | 'rating' | 'popular';
 type PriceFilter = 'all' | 'free' | 'paid';
 
+const LEVEL_FILTER_ALIASES: Record<string, string[]> = {
+  basic: ['beginner', 'basic'],
+  intermediate: ['intermediate'],
+  advanced: ['advanced']
+};
+
+const GENERAL_CATEGORY_KEYS = new Set(['general', 'other', 'others', 'misc', 'miscellaneous']);
+
 const CoursesPage = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
@@ -37,6 +45,9 @@ const CoursesPage = () => {
   const [enrolledIds, setEnrolledIds] = useState<Set<number>>(new Set());
   const itemsPerPage = 12;
   const { user } = useAuth();
+  const isMentorUser =
+    (user?.roles || []).some((role) => role.toUpperCase() === 'MENTOR') ||
+    user?.primaryRole?.toUpperCase() === 'MENTOR';
 
   // Helper: get effective price from course
   const getCoursePrice = (course: CourseSummaryDTO): number => {
@@ -118,16 +129,52 @@ const CoursesPage = () => {
     fetchData();
   }, [currentPage, debouncedSearch, sortBy, getServerSort]);
 
+  const normalizeFilterKey = (value?: string | null): string => {
+    return String(value ?? '').trim().toLowerCase();
+  };
+
+  const getCourseCategoryKey = (course: CourseSummaryDTO): string => {
+    const key = normalizeFilterKey(course.category);
+    return key || 'general';
+  };
+
+  const getCategoryDisplayName = (categoryKey: string): string => {
+    if (GENERAL_CATEGORY_KEYS.has(categoryKey)) {
+      return 'Khác';
+    }
+
+    return categoryKey
+      .split(/[-_]/g)
+      .filter(Boolean)
+      .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+      .join(' ');
+  };
+
+  const matchesPriceFilter = (course: CourseSummaryDTO): boolean => {
+    if (priceFilter === 'all') {
+      return true;
+    }
+
+    const freeCourse = isCourseFree(course);
+    return (priceFilter === 'free' && freeCourse) || (priceFilter === 'paid' && !freeCourse);
+  };
+
+  const matchesLevelFilter = (course: CourseSummaryDTO): boolean => {
+    if (levelFilter === 'all') {
+      return true;
+    }
+
+    const normalizedLevel = normalizeFilterKey(course.level);
+    const acceptedLevels = LEVEL_FILTER_ALIASES[levelFilter] || [levelFilter];
+    return acceptedLevels.includes(normalizedLevel);
+  };
+
   // Client-side post-filters for category, price, level (applied to current page)
   // Note: search and sort are handled server-side
-  const filteredCourses = courses.filter(course => {
-    const matchCategory = selectedCategory === 'all' || course.category === selectedCategory;
-
-    const matchPrice = priceFilter === 'all' ||
-                      (priceFilter === 'free' && isCourseFree(course)) ||
-                      (priceFilter === 'paid' && !isCourseFree(course));
-
-    const matchLevel = levelFilter === 'all' || course.level?.toLowerCase() === levelFilter;
+  const filteredCourses = courses.filter((course) => {
+    const matchCategory = selectedCategory === 'all' || getCourseCategoryKey(course) === selectedCategory;
+    const matchPrice = matchesPriceFilter(course);
+    const matchLevel = matchesLevelFilter(course);
 
     return matchCategory && matchPrice && matchLevel;
   });
@@ -144,12 +191,15 @@ const CoursesPage = () => {
   // Use server-provided totalItems for pagination
   const displayedCourses = sortedCourses;
 
-  // Extract dynamic category counts for the filtering panel
-  // We use all fetched courses (or a broader course set if available) to build the categories list
-  const categoriesMap: { [key: string]: { name: string; count: number } } = courses.reduce((acc, course) => {
-    const catId = course.category || 'general';
-    const catName = course.categoryName || (catId.charAt(0).toUpperCase() + catId.slice(1));
-    
+  // Build category facets from the active level/price context to avoid mismatch between badge and list.
+  const categoryFacetSource = courses.filter((course) => {
+    return matchesPriceFilter(course) && matchesLevelFilter(course);
+  });
+
+  const categoriesMap: { [key: string]: { name: string; count: number } } = categoryFacetSource.reduce((acc, course) => {
+    const catId = getCourseCategoryKey(course);
+    const catName = getCategoryDisplayName(catId);
+
     if (!acc[catId]) {
       acc[catId] = { name: catName, count: 0 };
     }
@@ -171,7 +221,7 @@ const CoursesPage = () => {
   };
 
   const categories = [
-    { id: 'all', name: 'Tất Cả', count: courses.length, icon: Shield },
+    { id: 'all', name: 'Tất Cả', count: categoryFacetSource.length, icon: Shield },
     ...Object.entries(categoriesMap).map(([id, data]) => ({
       id,
       name: data.name,
@@ -230,6 +280,10 @@ const CoursesPage = () => {
     });
   }, [navigate, location.pathname, location.search, location.hash]);
 
+  const navigateToCreateCourse = useCallback(() => {
+    navigate('/mentor/courses/create');
+  }, [navigate]);
+
   if (loading) {
     return (
       <div className={`cockpit-courses-container ${theme}`} data-theme={theme}>
@@ -273,11 +327,24 @@ const CoursesPage = () => {
           </div>
 
           <div className="cockpit-header-right">
-            <div className="cockpit-stats-mini">
-              <div className="cockpit-stat-mini-item">
-                <span className="cockpit-stat-label">MODULES</span>
-                <span className="cockpit-stat-value">{courses.length}</span>
+            <div className="cockpit-header-actions">
+              <div className="cockpit-stats-mini">
+                <div className="cockpit-stat-mini-item">
+                  <span className="cockpit-stat-label">MODULES</span>
+                  <span className="cockpit-stat-value">{courses.length}</span>
+                </div>
               </div>
+
+              {isMentorUser && (
+                <button
+                  type="button"
+                  className="cockpit-create-course-btn"
+                  onClick={navigateToCreateCourse}
+                >
+                  <Plus className="cockpit-create-course-icon" />
+                  <span>TẠO KHÓA HỌC</span>
+                </button>
+              )}
             </div>
           </div>
         </div>

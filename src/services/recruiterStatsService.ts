@@ -460,7 +460,6 @@ class RecruiterStatsService {
             escrowDeposited: 0,
             escrowReleased: byDay.get(key)!.escrowReleased,
             applicants: 0,
-            escrowReleased: byDay.get(key)!.escrowReleased,
           };
         });
       }

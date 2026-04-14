@@ -140,14 +140,19 @@ export const StudentOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ chil
   }
 
   const roles = (user.roles || []).map((role) => role.toUpperCase());
+  const hasAdminBypass =
+    roles.includes('ADMIN') || roles.some((role) => role.endsWith('_ADMIN'));
+
+  // Admin/sub-admin can enter learner pages for QA and incident verification.
+  if (hasAdminBypass) {
+    return <>{children}</>;
+  }
+
   const hasStudentRole =
     roles.includes('USER') ||
     roles.includes('LEARNER') ||
     roles.includes('STUDENT') ||
-    roles.includes('CANDIDATE') ||
-    // ADMIN (with student subrole) can access job-lab and my-applications
-    // ADMIN can view applications but cannot apply or perform recruiter actions
-    roles.includes('ADMIN');
+    roles.includes('CANDIDATE');
   const hasBlockedRole =
     // MENTOR and RECRUITER have their own separate career dashboards
     roles.includes('MENTOR') ||
@@ -156,6 +161,46 @@ export const StudentOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ chil
 
   if (!hasStudentRole || hasBlockedRole) {
     return <Navigate to="/unauthorized" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+// Premium page access rule:
+// - allow guests
+// - allow learners/recruiters/admins
+// - block mentors (except admin/sub-admin bypass)
+export const PremiumAccessRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="loading-container" style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh'
+      }}>
+        <MeowlKuruLoader size="small" text="Loading..." />
+      </div>
+    );
+  }
+
+  // Guests can browse premium page.
+  if (!user) {
+    return <>{children}</>;
+  }
+
+  const roles = (user.roles || []).map((role) => role.toUpperCase());
+  const hasAdminBypass =
+    roles.includes('ADMIN') || roles.some((role) => role.endsWith('_ADMIN'));
+
+  if (hasAdminBypass) {
+    return <>{children}</>;
+  }
+
+  if (roles.includes('MENTOR')) {
+    return <Navigate to="/mentor" replace />;
   }
 
   return <>{children}</>;

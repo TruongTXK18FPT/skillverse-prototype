@@ -14,6 +14,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoginRequiredModal from '../auth/LoginRequiredModal';
 import MeowlGuide from '../meowl/MeowlGuide';
+import { buildCertificateVerificationPath } from '../certificate/certificatePresentation';
 import portfolioService from '../../services/portfolioService';
 import {
   UserProfileDTO,
@@ -33,6 +34,57 @@ import SystemAlertModal from './SystemAlertModal';
 import DossierInitScreen from './DossierInitScreen';
 import MissionDetailModal from './MissionDetailModal';
 import './dossier-portfolio-styles.css';
+
+const CERTIFICATE_VERIFY_PUBLIC_PATH_REGEX = /^\/certificate\/verify\/([^/?#]+)/i;
+const CERTIFICATE_VERIFY_API_PATH_REGEX = /^\/(?:api\/)?certificates\/verify\/([^/?#]+)/i;
+const CERTIFICATE_VERIFY_LEGACY_PATH_REGEX = /^\/verify\/certificate\/([^/?#]+)/i;
+
+const decodeSerialSegment = (value: string): string => {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+};
+
+const resolveCertificateVerificationLink = (credentialUrl?: string): string | undefined => {
+  if (!credentialUrl) {
+    return undefined;
+  }
+
+  const trimmed = credentialUrl.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+
+  if (typeof window === 'undefined') {
+    return trimmed;
+  }
+
+  try {
+    const parsed = new URL(trimmed, window.location.origin);
+    const pathname = parsed.pathname;
+
+    const publicMatch = pathname.match(CERTIFICATE_VERIFY_PUBLIC_PATH_REGEX);
+    if (publicMatch?.[1]) {
+      return buildCertificateVerificationPath(decodeSerialSegment(publicMatch[1]));
+    }
+
+    const apiMatch = pathname.match(CERTIFICATE_VERIFY_API_PATH_REGEX);
+    if (apiMatch?.[1]) {
+      return buildCertificateVerificationPath(decodeSerialSegment(apiMatch[1]));
+    }
+
+    const legacyMatch = pathname.match(CERTIFICATE_VERIFY_LEGACY_PATH_REGEX);
+    if (legacyMatch?.[1]) {
+      return buildCertificateVerificationPath(decodeSerialSegment(legacyMatch[1]));
+    }
+  } catch {
+    return trimmed;
+  }
+
+  return trimmed;
+};
 
 const TacticalDossierPortfolio = () => {
   const { theme } = useTheme();
@@ -1186,7 +1238,10 @@ const TacticalDossierPortfolio = () => {
                     <p style={{ color: 'var(--dossier-silver-dark)' }}>Chưa có chứng chỉ nào. Hãy thêm chứng chỉ đầu tiên!</p>
                   </div>
                 ) : (
-                  filteredCertificates.map((cert) => (
+                  filteredCertificates.map((cert) => {
+                    const verificationLink = resolveCertificateVerificationLink(cert.credentialUrl);
+
+                    return (
                     <div key={cert.id} className="dossier-panel-simple">
                       {cert.certificateImageUrl && (
                         <img
@@ -1214,9 +1269,9 @@ const TacticalDossierPortfolio = () => {
                         </p>
                       )}
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        {cert.credentialUrl && (
+                        {verificationLink && (
                           <a
-                            href={cert.credentialUrl}
+                            href={verificationLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="dossier-btn-secondary"
@@ -1238,7 +1293,8 @@ const TacticalDossierPortfolio = () => {
                         )}
                       </div>
                     </div>
-                  ))
+                    );
+                  })
                 )}
               </div>
             </motion.div>

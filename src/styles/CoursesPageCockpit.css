@@ -229,6 +229,10 @@
   align-items: center;
 }
 
+.cockpit-header-right {
+  justify-content: flex-end;
+}
+
 .cockpit-header-center {
   text-align: center;
 }
@@ -279,6 +283,13 @@
   gap: 1rem;
 }
 
+.cockpit-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.9rem;
+}
+
 .cockpit-stat-mini-item {
   display: flex;
   flex-direction: column;
@@ -298,6 +309,40 @@
   color: var(--cockpit-neon-cyan);
   font-weight: bold;
   text-shadow: 0 0 10px var(--cockpit-neon-cyan);
+}
+
+.cockpit-create-course-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1rem;
+  background: rgba(0, 246, 255, 0.08);
+  border: 1px solid var(--cockpit-neon-cyan);
+  color: var(--cockpit-neon-cyan);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.cockpit-create-course-btn:hover {
+  background: rgba(0, 246, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 246, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.cockpit-create-course-btn:focus-visible {
+  outline: 2px solid var(--cockpit-neon-cyan);
+  outline-offset: 2px;
+}
+
+.cockpit-create-course-icon {
+  width: 16px;
+  height: 16px;
 }
 
 /* ===========================================
@@ -1299,6 +1344,11 @@
     justify-content: center;
   }
 
+  .cockpit-header-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   .cockpit-main-title {
     font-size: 1.5rem;
   }
@@ -1400,6 +1450,11 @@
   .cockpit-header-left,
   .cockpit-header-right {
     justify-content: center;
+  }
+
+  .cockpit-header-actions {
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .cockpit-main-title {

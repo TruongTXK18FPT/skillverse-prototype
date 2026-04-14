@@ -176,6 +176,7 @@ const Header: React.FC = () => {
       description: "Nhận hỗ trợ từ trợ lý AI thông minh",
       path: "/chatbot",
       icon: Bot,
+      hideForRoles: ["MENTOR"],
     },
     {
       name: "Trò Chơi",
@@ -210,6 +211,21 @@ const Header: React.FC = () => {
     //   icon: BadgeQuestionMark
     // }
   ];
+
+  const studentOnlyQuickNavPaths = new Set([
+    "/dashboard",
+    "/roadmap",
+    "/study-planner",
+    "/chatbot",
+    "/portfolio",
+    "/meowl-shop",
+  ]);
+
+  const guestShowcaseQuickNavPaths = new Set([
+    "/roadmap",
+    "/chatbot",
+    "/meowl-shop",
+  ]);
 
   const loadUserProfile = useCallback(async () => {
     try {
@@ -389,6 +405,15 @@ const Header: React.FC = () => {
   };
 
   const handleUpgrade = () => {
+    const roles = (user?.roles || []).map((role) => role.toUpperCase());
+    const hasAdminBypass =
+      roles.includes("ADMIN") || roles.some((role) => role.endsWith("_ADMIN"));
+
+    if (roles.includes("MENTOR") && !hasAdminBypass) {
+      navigate("/mentor");
+      return;
+    }
+
     navigate("/premium");
   };
 
@@ -458,6 +483,7 @@ const Header: React.FC = () => {
     "/chatbot",
     "/study-planner",
     "/roadmap",
+    "/meowl-shop",
   ]);
 
   const handleQuickNavLinkClick = (
@@ -652,13 +678,6 @@ const Header: React.FC = () => {
                         icon: User,
                         requireAuth: true,
                       },
-                      {
-                        name: "Trợ Lý AI",
-                        description: "Nhận hỗ trợ từ trợ lý AI thông minh",
-                        path: "/chatbot",
-                        icon: Bot,
-                        requireAuth: true,
-                      },
                     ];
 
                     const userPrimaryItems = [
@@ -748,9 +767,8 @@ const Header: React.FC = () => {
                       </div>
                     ) : null;
 
-                    // Only show USER items if user has USER role AND is not MENTOR
-                    const userSection =
-                      user?.roles.includes("USER") && !isMentorRole ? (
+                    // Student-only primary actions.
+                    const userSection = isStudentRole ? (
                         <div className="sv-mega-section">
                           <h4 className="sv-mega-section-title">
                             <Target size={14} className="sv-section-icon" />
@@ -859,67 +877,45 @@ const Header: React.FC = () => {
                           <span>Hành động chính</span>
                         </h4>
                         <div className="sv-mega-grid sv-mega-grid--primary">
-                          <Link
-                            to="/chatbot"
-                            className="sv-mega-link sv-mega-link--primary"
-                            onClick={(e) =>
-                              handleQuickNavLinkClick(
-                                e,
-                                "Trợ Lý AI",
-                                "/chatbot",
-                              )
-                            }
-                          >
-                            <Bot className="sv-mega-link-icon" />
-                            <div className="sv-mega-link-content">
-                              <h3 className="sv-mega-link-title">Trợ Lý AI</h3>
-                              <p className="sv-mega-link-desc">
-                                Nhận hỗ trợ từ trợ lý AI thông minh
-                              </p>
-                            </div>
-                          </Link>
-                          <Link
-                            to="/study-planner"
-                            className="sv-mega-link sv-mega-link--primary"
-                            onClick={(e) =>
-                              handleQuickNavLinkClick(
-                                e,
-                                "Kế Hoạch AI",
-                                "/study-planner",
-                              )
-                            }
-                          >
-                            <Calendar className="sv-mega-link-icon" />
-                            <div className="sv-mega-link-content">
-                              <h3 className="sv-mega-link-title">
-                                Kế Hoạch AI
-                              </h3>
-                              <p className="sv-mega-link-desc">
-                                Quản lý và tiếp tục kế hoạch học tập cá nhân
-                              </p>
-                            </div>
-                          </Link>
-                          <Link
-                            to="/roadmap"
-                            className="sv-mega-link sv-mega-link--primary"
-                            onClick={(e) =>
-                              handleQuickNavLinkClick(
-                                e,
-                                "Lộ Trình Học Tập",
-                                "/roadmap",
-                              )
-                            }
-                          >
-                            <Map className="sv-mega-link-icon" />
-                            <div className="sv-mega-link-content">
-                              <h3 className="sv-mega-link-title">
-                                Lộ Trình Học Tập
-                              </h3>
-                              <p className="sv-mega-link-desc">
-                                Lộ trình học tập và phát triển kỹ năng
-                              </p>
-                            </div>
-                          </Link>
+                          {[
+                            {
+                              name: "Lộ Trình Học Tập",
+                              description: "Khám phá lộ trình học tập và phát triển kỹ năng",
+                              path: "/roadmap",
+                              icon: Map,
+                            },
+                            {
+                              name: "Trợ Lý AI",
+                              description: "Nhận hỗ trợ từ trợ lý AI thông minh",
+                              path: "/chatbot",
+                              icon: Bot,
+                            },
+                            {
+                              name: "Meowl Shop",
+                              description: "Cửa hàng Skin Neon Tech độc quyền",
+                              path: "/meowl-shop",
+                              icon: ShoppingBag,
+                            },
+                          ].map((item) => (
+                            <Link
+                              key={item.path}
+                              to={item.path}
+                              className="sv-mega-link sv-mega-link--primary"
+                              onClick={(event) =>
+                                handleQuickNavLinkClick(
+                                  event,
+                                  item.name,
+                                  item.path,
+                                )
+                              }
+                            >
+                              <item.icon className="sv-mega-link-icon" />
+                              <div className="sv-mega-link-content">
+                                <h3 className="sv-mega-link-title">{item.name}</h3>
+                                <p className="sv-mega-link-desc">{item.description}</p>
+                              </div>
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     )}
@@ -995,60 +991,36 @@ const Header: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Group 3: Entertainment & Profile — only for non-MENTOR, non-RECRUITER */}
-                  {!isMentorRole && !isRecruiterRole && (
+                  {/* Group 3: Student career actions */}
+                  {isStudentRole && (
                     <div className="sv-mega-section">
                       <h4 className="sv-mega-section-title">
-                        {isStudentRole ? (
-                          <Briefcase size={14} className="sv-section-icon" />
-                        ) : (
-                          <Trophy size={14} className="sv-section-icon" />
-                        )}
-                        <span>
-                          {isStudentRole ? "Công việc" : "Giải trí & Cá nhân"}
-                        </span>
+                        <Briefcase size={14} className="sv-section-icon" />
+                        <span>Công việc</span>
                       </h4>
                       <div className="sv-mega-grid sv-mega-grid--tertiary">
-                        {(isStudentRole
-                          ? [
-                              {
-                                name: "Portfolio",
-                                description:
-                                  "Quản lý và chia sẻ thành tích của bạn",
-                                path: "/portfolio",
-                                icon: User,
-                              },
-                              {
-                                name: "Trung tâm công việc",
-                                description:
-                                  "Quản lý toàn bộ đơn ứng tuyển của bạn",
-                                path: "/my-applications",
-                                icon: FileText,
-                              },
-                              {
-                                name: "Việc Làm",
-                                description: "Tìm kiếm cơ hội việc làm phù hợp",
-                                path: "/jobs",
-                                icon: Briefcase,
-                              },
-                            ]
-                          : [
-                              {
-                                name: "Hồ Sơ",
-                                description:
-                                  "Quản lý và chia sẻ thành tích của bạn",
-                                path: "/portfolio",
-                                icon: User,
-                              },
-                              {
-                                name: "Meowl Shop",
-                                description:
-                                  "Cửa hàng Skin Neon Tech độc quyền",
-                                path: "/meowl-shop",
-                                icon: ShoppingBag,
-                              },
-                            ]
-                        ).map((item) => (
+                        {[
+                          {
+                            name: "Portfolio",
+                            description:
+                              "Quản lý và chia sẻ thành tích của bạn",
+                            path: "/portfolio",
+                            icon: User,
+                          },
+                          {
+                            name: "Trung tâm công việc",
+                            description:
+                              "Quản lý toàn bộ đơn ứng tuyển của bạn",
+                            path: "/my-applications",
+                            icon: FileText,
+                          },
+                          {
+                            name: "Việc Làm",
+                            description: "Tìm kiếm cơ hội việc làm phù hợp",
+                            path: "/jobs",
+                            icon: Briefcase,
+                          },
+                        ].map((item) => (
                           <Link
                             key={item.path}
                             to={item.path}
@@ -1079,7 +1051,7 @@ const Header: React.FC = () => {
           {/* Right Section */}
           <div className="header-right">
             {/* Upgrade Button */}
-            {!isLoggingOut && user?.roles.includes("USER") && (
+            {!isLoggingOut && user?.roles.includes("USER") && !isMentorRole && (
               <button
                 onClick={handleUpgrade}
                 className="header-upgrade-btn desktop-only"
@@ -1396,7 +1368,7 @@ const Header: React.FC = () => {
                         <Bell size={20} />
                         <span>Thông báo</span>
                       </button>
-                      {user?.roles.includes("USER") && (
+                      {user?.roles.includes("USER") && !isMentorRole && (
                         <button
                           onClick={() => {
                             handleUpgrade();
@@ -1500,12 +1472,25 @@ const Header: React.FC = () => {
                   <h3 className="mobile-section-title">Dịch Chuyển Nhanh</h3>
                   <div className="mobile-category-grid">
                     {quickNavItems
-                      .filter(
-                        (item) =>
-                          !item.hideForRoles?.some((role) =>
-                            user?.roles.includes(role),
-                          ),
-                      )
+                      .filter((item) => {
+                        const hiddenByRole = item.hideForRoles?.some((role) =>
+                          user?.roles.includes(role),
+                        );
+                        if (hiddenByRole) {
+                          return false;
+                        }
+
+                        if (studentOnlyQuickNavPaths.has(item.path)) {
+                          if (isStudentRole) {
+                            return true;
+                          }
+
+                          const isGuest = !isAuthenticated;
+                          return isGuest && guestShowcaseQuickNavPaths.has(item.path);
+                        }
+
+                        return true;
+                      })
                       .map((item) => (
                         <Link
                           key={item.path}

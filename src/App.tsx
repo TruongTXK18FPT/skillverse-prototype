@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { lazy } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,9 +14,11 @@ import { ConfirmDialogProvider } from "./context/ConfirmDialogContext";
 import { ChatSettingsProvider } from "./context/ChatSettingsContext";
 import { ToastProvider } from "./context/ToastContext";
 import {
+  AuthenticatedRoute,
   MentorRoute,
   AdminRoute,
   RecruiterRoute,
+  PremiumAccessRoute,
   StudentOnlyRoute,
 } from "./components/shared/ProtectedRoute";
 import Header from "./components/layout/Header";
@@ -47,9 +49,7 @@ import ElevatorBusinessRegisterPage from "./pages/auth/ElevatorBusinessRegisterP
 import ElevatorMentorRegisterPage from "./pages/auth/ElevatorMentorRegisterPage";
 import ElevatorParentRegisterPage from "./pages/auth/ElevatorParentRegisterPage";
 import ChooseRolePage from "./pages/auth/ChooseRolePage";
-import StudentParentRequestPage from "./pages/user/StudentParentRequestPage";
 import VerifyPage from "./pages/auth/VerifyPage";
-import ParentDashboardPage from "./pages/navbar/ParentDashboardPage";
 import AlreadyAuthenticatedWarning from "./pages/auth/AlreadyAuthenticatedWarning";
 import ElevatorForgotPasswordPage from "./pages/auth/ElevatorForgotPasswordPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
@@ -123,9 +123,6 @@ import UserGuidePage from "./pages/user-guide/UserGuidePage";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import Certificate from "./components/certificate/Certificate";
 
-const CertificatePage = lazy(
-  () => import("./components/certificate/Certificate"),
-);
 const CertificateVerifyPage = lazy(
   () => import("./components/certificate/CertificateVerifyPage"),
 );
@@ -167,8 +164,22 @@ const AppContents = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/user-guide" element={<UserGuidePage />} />
-            <Route path="/notifications" element={<NotificationPage />} />
-            <Route path="/messages" element={<MessengerPage />} />
+            <Route
+              path="/notifications"
+              element={
+                <AuthenticatedRoute>
+                  <NotificationPage />
+                </AuthenticatedRoute>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <AuthenticatedRoute>
+                  <MessengerPage />
+                </AuthenticatedRoute>
+              }
+            />
             <Route
               path="/my-bookings"
               element={
@@ -182,14 +193,49 @@ const AppContents = () => {
               element={<BookingDetailPage />}
             />
             <Route path="/explore" element={<ExploreMapPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/learning-report" element={<LearningReportPage />} />
+            <Route
+              path="/dashboard"
+              element={
+                <StudentOnlyRoute>
+                  <DashboardPage />
+                </StudentOnlyRoute>
+              }
+            />
+            <Route
+              path="/learning-report"
+              element={
+                <StudentOnlyRoute>
+                  <LearningReportPage />
+                </StudentOnlyRoute>
+              }
+            />
             <Route path="/courses" element={<CoursesPage />} />
-            <Route path="/roadmap" element={<AiRoadmapPage />} />
+            <Route
+              path="/roadmap"
+              element={
+                <StudentOnlyRoute>
+                  <AiRoadmapPage />
+                </StudentOnlyRoute>
+              }
+            />
             <Route path="/journey" element={<GSJJourneyPage />} />
             <Route path="/journey/create" element={<JourneyCreatePage />} />
-            <Route path="/roadmap/:id" element={<RoadmapDetailPage />} />
-            <Route path="/study-planner" element={<StudyPlannerPage />} />
+            <Route
+              path="/roadmap/:id"
+              element={
+                <StudentOnlyRoute>
+                  <RoadmapDetailPage />
+                </StudentOnlyRoute>
+              }
+            />
+            <Route
+              path="/study-planner"
+              element={
+                <StudentOnlyRoute>
+                  <StudyPlannerPage />
+                </StudentOnlyRoute>
+              }
+            />
             <Route path="/mentorship" element={<MentorshipPage />} />
             <Route path="/community" element={<CommunityHUD />} />
             <Route path="/community/:id" element={<PostDetailPage />} />
@@ -204,9 +250,30 @@ const AppContents = () => {
               path="/short-term-jobs/:jobId/view"
               element={<GigDetailPage />}
             />
-            <Route path="/chatbot" element={<CareerChatLanding />} />
-            <Route path="/chatbot/general" element={<CareerChatPage />} />
-            <Route path="/chatbot/expert" element={<ExpertChatPage />} />
+            <Route
+              path="/chatbot"
+              element={
+                <StudentOnlyRoute>
+                  <CareerChatLanding />
+                </StudentOnlyRoute>
+              }
+            />
+            <Route
+              path="/chatbot/general"
+              element={
+                <StudentOnlyRoute>
+                  <CareerChatPage />
+                </StudentOnlyRoute>
+              }
+            />
+            <Route
+              path="/chatbot/expert"
+              element={
+                <StudentOnlyRoute>
+                  <ExpertChatPage />
+                </StudentOnlyRoute>
+              }
+            />
             <Route path="/gamification" element={<Gamification />} />
             <Route
               path="/gamification/tic-tac-toe"
@@ -220,23 +287,56 @@ const AppContents = () => {
             {/* BACKUP - Old Portfolio */}
             <Route
               path="/portfolio"
-              element={<TacticalDossierPortfolio />}
+              element={
+                <StudentOnlyRoute>
+                  <TacticalDossierPortfolio />
+                </StudentOnlyRoute>
+              }
             />{" "}
             {/* ACTIVE - Mothership Theme */}
             <Route
               path="/portfolio/create"
-              element={<DossierCreatePortfolioPage />}
+              element={
+                <StudentOnlyRoute>
+                  <DossierCreatePortfolioPage />
+                </StudentOnlyRoute>
+              }
             />
             <Route
               path="/portfolio/:slug"
-              element={<TacticalDossierPortfolio />}
+              element={
+                <StudentOnlyRoute>
+                  <TacticalDossierPortfolio />
+                </StudentOnlyRoute>
+              }
             />
-            <Route path="/portfolio-debug" element={<PortfolioDebug />} />
+            <Route
+              path="/portfolio-debug"
+              element={
+                <AdminRoute>
+                  <PortfolioDebug />
+                </AdminRoute>
+              }
+            />
             {/* <Route path="/cv" element={<CVPage />} /> */}{" "}
             {/* BACKUP - Old CV Page */}
-            <Route path="/cv" element={<DataCompilerPreview />} />{" "}
+            <Route
+              path="/cv"
+              element={
+                <StudentOnlyRoute>
+                  <DataCompilerPreview />
+                </StudentOnlyRoute>
+              }
+            />{" "}
             {/* ACTIVE - Mothership Theme */}
-            <Route path="/certificate/:id" element={<Certificate />} />
+            <Route
+              path="/certificate/:id"
+              element={
+                <StudentOnlyRoute>
+                  <Certificate />
+                </StudentOnlyRoute>
+              }
+            />
             <Route path="/certificate/verify/:serial" element={<CertificateVerifyPage />} />
             <Route path="/login" element={<ElevatorLoginPage />} />
             <Route
@@ -269,22 +369,68 @@ const AppContents = () => {
             <Route path="/set-password" element={<SetPasswordPage />} />
             <Route path="/change-password" element={<ChangePasswordPage />} />
             {/* Profile Routes by Role */}
-            <Route path="/profile" element={<ProfileRouter />} />
-            <Route path="/profile/user" element={<ProfilePageCosmic />} />
-            <Route path="/profile/mentor" element={<MentorProfilePage />} />
+            <Route
+              path="/profile"
+              element={
+                <AuthenticatedRoute>
+                  <ProfileRouter />
+                </AuthenticatedRoute>
+              }
+            />
+            <Route
+              path="/profile/user"
+              element={
+                <AuthenticatedRoute>
+                  <ProfilePageCosmic />
+                </AuthenticatedRoute>
+              }
+            />
+            <Route
+              path="/profile/mentor"
+              element={
+                <AuthenticatedRoute>
+                  <MentorProfilePage />
+                </AuthenticatedRoute>
+              }
+            />
             <Route
               path="/profile/business"
-              element={<RecruiterProfilePage />}
+              element={
+                <AuthenticatedRoute>
+                  <RecruiterProfilePage />
+                </AuthenticatedRoute>
+              }
             />
             <Route
               path="/profile/business/:id"
               element={<RecruiterPublicProfilePage />}
             />
             <Route path="/payment/transactional" element={<Transactional />} />
-            <Route path="/premium" element={<PremiumPageCosmic />} />
+            <Route
+              path="/premium"
+              element={
+                <PremiumAccessRoute>
+                  <PremiumPageCosmic />
+                </PremiumAccessRoute>
+              }
+            />
             <Route path="/manager" element={<ManagerPage />} />
-            <Route path="/wallet" element={<MyWalletCosmic />} />
-            <Route path="/my-wallet" element={<MyWalletCosmic />} />
+            <Route
+              path="/wallet"
+              element={
+                <AuthenticatedRoute>
+                  <MyWalletCosmic />
+                </AuthenticatedRoute>
+              }
+            />
+            <Route
+              path="/my-wallet"
+              element={
+                <AuthenticatedRoute>
+                  <MyWalletCosmic />
+                </AuthenticatedRoute>
+              }
+            />
             <Route
               path="/courses/:courseSlug/:coursePublicId"
               element={<CourseDetailPage />}
@@ -341,12 +487,26 @@ const AppContents = () => {
               path="/business/contracts"
               element={<ContractManagementPage />}
             />
-            <Route path="/my-contracts" element={<MyContractsPage />} />
+            <Route
+              path="/my-contracts"
+              element={
+                <AuthenticatedRoute>
+                  <MyContractsPage />
+                </AuthenticatedRoute>
+              }
+            />
             <Route path="/contracts/:id/sign" element={<ContractSignPage />} />
             <Route path="/contracts/:id" element={<ContractDetailPage />} />
             {/* Violation Report Routes */}
             <Route path="/report-violation" element={<ReportUserPage />} />
-            <Route path="/my-reports" element={<MyReportsPage />} />
+            <Route
+              path="/my-reports"
+              element={
+                <AuthenticatedRoute>
+                  <MyReportsPage />
+                </AuthenticatedRoute>
+              }
+            />
             {/* Protected Routes */}
             <Route
               path="/business"
@@ -449,9 +609,23 @@ const AppContents = () => {
             {/* Easter Egg Route */}
             <Route path="/pray" element={<ForbiddenTemple />} />
             {/* Certificate Demo Route */}
-            <Route path="/certificate-demo" element={<CertificateDemoPage />} />
+            <Route
+              path="/certificate-demo"
+              element={
+                <AdminRoute>
+                  <CertificateDemoPage />
+                </AdminRoute>
+              }
+            />
             {/* Meowl Skin Shop */}
-            <Route path="/meowl-shop" element={<MeowlSkinShopPage />} />
+            <Route
+              path="/meowl-shop"
+              element={
+                <StudentOnlyRoute>
+                  <MeowlSkinShopPage />
+                </StudentOnlyRoute>
+              }
+            />
             {/* Catch-all route for 404 errors - must be last */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
