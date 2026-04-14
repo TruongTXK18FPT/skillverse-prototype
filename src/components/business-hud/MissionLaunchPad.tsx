@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import jobService from "../../services/jobService";
-import { useToast } from "../../hooks/useToast";
+import { useAppToast } from "../../context/ToastContext";
 import { recruiterSubscriptionService } from "../../services/recruiterSubscriptionService";
 import { premiumService } from "../../services/premiumService";
 import { RichMarkdownEditor } from "../short-term-job/RichMarkdownEditor";
@@ -120,7 +120,7 @@ const appendUniqueLine = (current: string, line: string) => {
 const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
   onMissionLaunched,
 }) => {
-  const { showSuccess, showError } = useToast();
+  const { showSuccess, showError } = useAppToast();
   const [hasSubscription, setHasSubscription] = useState(false);
   const [jobPostingRemaining, setJobPostingRemaining] = useState(0);
   const [jobPostingUnlimited, setJobPostingUnlimited] = useState(false);
@@ -249,32 +249,26 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
   };
 
   const validateForm = () => {
+    const errors: string[] = [];
+
     if (formData.title.trim().length < 8) {
-      showError("Thiếu tiêu đề", "Tiêu đề nên có ít nhất 8 ký tự.");
-      return false;
+      errors.push("Tiêu đề: cần ít nhất 8 ký tự");
     }
 
     if (formData.description.trim().length < 40) {
-      showError(
-        "Thiếu mô tả",
-        "Mô tả nên có ít nhất 40 ký tự để ứng viên hiểu đúng nhu cầu tuyển dụng.",
-      );
-      return false;
+      errors.push("Mô tả: cần ít nhất 40 ký tự để ứng viên hiểu đúng nhu cầu");
     }
 
     if (formData.skills.length === 0) {
-      showError("Thiếu kỹ năng", "Hãy thêm ít nhất 1 kỹ năng quan trọng.");
-      return false;
+      errors.push("Kỹ năng: hãy thêm ít nhất 1 kỹ năng quan trọng");
     }
 
     if (!formData.deadline) {
-      showError("Thiếu hạn nhận hồ sơ", "Vui lòng chọn ngày kết thúc nhận hồ sơ.");
-      return false;
+      errors.push("Hạn nhận hồ sơ: vui lòng chọn ngày kết thúc nhận hồ sơ");
     }
 
     if (!formData.isRemote && !formData.location.trim()) {
-      showError("Thiếu địa điểm", "Hãy nhập nơi làm việc nếu vị trí không remote.");
-      return false;
+      errors.push("Địa điểm: hãy nhập nơi làm việc nếu vị trí không remote");
     }
 
     if (!formData.isNegotiable) {
@@ -282,23 +276,26 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
       const maxBudget = Number(formData.maxBudget);
 
       if (!minBudget || !maxBudget) {
-        showError(
-          "Thiếu mức lương",
-          "Vui lòng nhập khoảng lương hoặc bật chế độ thỏa thuận.",
-        );
-        return false;
-      }
-
-      if (minBudget <= 0 || maxBudget <= 0 || maxBudget < minBudget) {
-        showError(
-          "Khoảng lương chưa hợp lệ",
-          "Mức tối đa cần lớn hơn hoặc bằng mức tối thiểu.",
-        );
-        return false;
+        errors.push("Lương: vui lòng nhập khoảng lương hoặc bật chế độ thỏa thuận");
+      } else if (minBudget <= 0 || maxBudget <= 0 || maxBudget < minBudget) {
+        errors.push("Lương: mức tối đa cần lớn hơn hoặc bằng mức tối thiểu");
       }
     }
 
-    return true;
+    if (errors.length === 0) {
+      return true;
+    }
+
+    const errorsList =
+      errors.length === 1
+        ? errors[0]
+        : errors.map((e, i) => `${i + 1}. ${e}`).join("\n");
+
+    showError(
+      errors.length === 1 ? "Vui lòng kiểm tra lại" : `${errors.length} trường chưa hoàn thiện`,
+      errorsList,
+    );
+    return false;
   };
 
   const submitJob = async (publish: boolean) => {
