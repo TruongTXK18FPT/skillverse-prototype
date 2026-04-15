@@ -54,7 +54,14 @@ const PurchaseCourseModal: React.FC<PurchaseCourseModalProps> = ({ course, onClo
       onClose();
     } catch (err: any) {
       console.error('Purchase failed', err);
-      setError(err.response?.data?.message || 'Purchase failed. Please try again.');
+      const message = err.response?.data?.message;
+      // Already purchased — treat as success: course is already accessible
+      if (message && message.includes('đã mua')) {
+        onSuccess();
+        onClose();
+        return;
+      }
+      setError(message || 'Purchase failed. Please try again.');
     } finally {
       setPurchasing(false);
     }

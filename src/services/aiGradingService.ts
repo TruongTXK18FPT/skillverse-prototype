@@ -1,5 +1,17 @@
 import axiosInstance from './axiosInstance';
-import { AiGradingResultDTO } from '../data/assignmentDTOs';
+import { AiGradingResultDTO, AdminAiAssignmentConfigDTO } from '../data/assignmentDTOs';
+
+export interface PromptAuditLogDTO {
+  id: number;
+  assignmentId: number;
+  assignmentTitle: string;
+  adminId: number;
+  adminName: string;
+  action: string;
+  beforeValue: string | null;
+  afterValue: string | null;
+  createdAt: string;
+}
 
 /**
  * Trigger AI auto-grading for a submission.
@@ -49,4 +61,67 @@ export const requestMentorReview = async (
   reason?: string
 ): Promise<void> => {
   await axiosInstance.put(`/ai-grading/dispute/${submissionId}`, reason ?? null);
+};
+
+// ============================================================
+// ADMIN PROMPT MANAGEMENT
+// ============================================================
+
+/** PUT /api/admin/ai-grading/assignments/{id}/ai-enabled */
+export const updateAiEnabled = async (
+  assignmentId: number,
+  enabled: boolean
+): Promise<AdminAiAssignmentConfigDTO> => {
+  const response = await axiosInstance.put<AdminAiAssignmentConfigDTO>(
+    `/admin/ai-grading/assignments/${assignmentId}/ai-enabled`,
+    { enabled }
+  );
+  return response.data;
+};
+
+/** PUT /api/admin/ai-grading/assignments/{id}/prompt */
+export const overridePrompt = async (
+  assignmentId: number,
+  prompt: string
+): Promise<AdminAiAssignmentConfigDTO> => {
+  const response = await axiosInstance.put<AdminAiAssignmentConfigDTO>(
+    `/admin/ai-grading/assignments/${assignmentId}/prompt`,
+    { prompt }
+  );
+  return response.data;
+};
+
+/** PUT /api/admin/ai-grading/assignments/{id}/grading-style */
+export const updateGradingStyle = async (
+  assignmentId: number,
+  style: string
+): Promise<AdminAiAssignmentConfigDTO> => {
+  const response = await axiosInstance.put<AdminAiAssignmentConfigDTO>(
+    `/admin/ai-grading/assignments/${assignmentId}/grading-style`,
+    { style }
+  );
+  return response.data;
+};
+
+/** PUT /api/admin/ai-grading/assignments/{id}/disable-prompt */
+export const disablePrompt = async (
+  assignmentId: number
+): Promise<AdminAiAssignmentConfigDTO> => {
+  const response = await axiosInstance.put<AdminAiAssignmentConfigDTO>(
+    `/admin/ai-grading/assignments/${assignmentId}/disable-prompt`
+  );
+  return response.data;
+};
+
+/** GET /api/admin/ai-grading/assignments/{id}/audit */
+export const getPromptAuditLog = async (
+  assignmentId: number,
+  page = 0,
+  size = 20
+): Promise<{ content: PromptAuditLogDTO[]; totalElements: number; totalPages: number }> => {
+  const response = await axiosInstance.get(
+    `/admin/ai-grading/assignments/${assignmentId}/audit`,
+    { params: { page, size } }
+  );
+  return response.data;
 };

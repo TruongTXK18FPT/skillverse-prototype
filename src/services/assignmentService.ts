@@ -261,3 +261,20 @@ export const getMentorSubmissionStats = async (): Promise<MentorSubmissionStatsR
   );
   return response.data;
 };
+
+/**
+ * Get the prior submission (attempt N-1) for a given submission.
+ * Used by mentor grading UI to surface AI feedback from the previous attempt
+ * when a student has resubmitted after an AI failure.
+ * @param submissionId - The ID of the current (newest) submission
+ * @returns Promise with the prior submission detail
+ * @throws 404 if no prior submission exists
+ */
+export const getPriorSubmission = async (
+  submissionId: number
+): Promise<AssignmentSubmissionDetailDTO> => {
+  const response = await axiosInstance.get<AssignmentSubmissionDetailDTO>(
+    `/assignments/submissions/${submissionId}/prior`
+  );
+  return response.data;
+};

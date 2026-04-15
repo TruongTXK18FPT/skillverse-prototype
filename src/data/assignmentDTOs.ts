@@ -257,6 +257,19 @@ export interface AdminAiAssignmentConfigDTO {
   averageScoreDelta: number;
 }
 
+// Prompt Audit Log DTO (Admin dashboard)
+export interface PromptAuditLogDTO {
+  id: number;
+  assignmentId: number;
+  assignmentTitle: string;
+  adminId: number;
+  adminName: string;
+  action: string;
+  beforeValue: string | null;
+  afterValue: string | null;
+  createdAt: string;
+}
+
 // AI Submission DTO (Admin dashboard table) — field order matches BE AiSubmissionDTO exactly
 export interface AiSubmissionDTO {
   submissionId: number;

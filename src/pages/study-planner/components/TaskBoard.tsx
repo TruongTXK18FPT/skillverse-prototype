@@ -12,6 +12,8 @@ import {
   Funnel,
   Check,
   Archive,
+  AlertTriangle,
+  Loader2,
 } from 'lucide-react';
 import { FaYoutube } from 'react-icons/fa';
 import { SiGooglemeet } from 'react-icons/si';
@@ -193,6 +195,28 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
 
   // Archived tasks — modal state
   const [showArchivedModal, setShowArchivedModal] = useState(false);
+
+  // Delete column — modal state
+  const [deleteColumnTarget, setDeleteColumnTarget] = useState<{
+    columnId: string;
+    columnName: string;
+    taskCount: number;
+  } | null>(null);
+  const [isDeletingColumn, setIsDeletingColumn] = useState(false);
+
+  // Protected column tokens (must match backend PROTECTED_COLUMN_TOKENS)
+  const PROTECTED_TOKENS = new Set([
+    'overdue',
+    'todo', 'backlog', 'pending',
+    'inprogress', 'doing', 'ongoing',
+    'done', 'completed', 'finished',
+  ]);
+
+  const normalizeToken = (v?: string | null): string =>
+    (v || '').trim().toLowerCase().replace(/[_\s-]+/g, '');
+
+  const isColumnProtected = (name: string): boolean =>
+    PROTECTED_TOKENS.has(normalizeToken(name));
 
   const toggleArchived = () => {
     setShowArchivedModal((prev) => !prev);
@@ -506,6 +530,22 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                 >
                   <Palette size={14} />
                 </button>
+
+                {!isColumnProtected(column.name) && (
+                  <button
+                    className="study-plan-column-action-btn study-plan-column-action-btn--danger"
+                    onClick={() =>
+                      setDeleteColumnTarget({
+                        columnId: column.id,
+                        columnName: displayColumnName,
+                        taskCount: column.tasks.length,
+                      })
+                    }
+                    title="Xóa cột"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -733,6 +773,89 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
           onRestore={onRefresh}
           roadmapSessionId={roadmapSessionId}
         />
+      )}
+
+      {/* Delete column confirmation modal */}
+      {deleteColumnTarget && (
+        <div
+          className="study-plan-clear-overdue-modal-overlay"
+          onClick={() => !isDeletingColumn && setDeleteColumnTarget(null)}
+        >
+          <div
+            className="study-plan-clear-overdue-modal"
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="study-plan-clear-overdue-modal-header">
+              <div className="study-plan-clear-overdue-modal-heading">
+                <AlertTriangle size={18} />
+                <h3>Xác nhận xóa cột</h3>
+              </div>
+              <button
+                className="study-plan-clear-overdue-modal-close-btn"
+                onClick={() => setDeleteColumnTarget(null)}
+                disabled={isDeletingColumn}
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="study-plan-clear-overdue-modal-body">
+              <p>
+                Bạn sắp xóa cột <strong>"{deleteColumnTarget.columnName}"</strong>.
+              </p>
+              {deleteColumnTarget.taskCount > 0 ? (
+                <p>
+                  <strong>{deleteColumnTarget.taskCount}</strong> công việc trong cột này sẽ được
+                  chuyển sang <strong>cột đầu tiên</strong> trước khi xóa.
+                </p>
+              ) : (
+                <p>Cột này hiện không có công việc nào.</p>
+              )}
+              <p>Hành động này không thể hoàn tác.</p>
+            </div>
+
+            <div className="study-plan-clear-overdue-modal-actions">
+              <button
+                className="study-plan-clear-overdue-modal-btn study-plan-clear-overdue-modal-btn--cancel"
+                onClick={() => setDeleteColumnTarget(null)}
+                disabled={isDeletingColumn}
+              >
+                Hủy
+              </button>
+              <button
+                className="study-plan-clear-overdue-modal-btn study-plan-clear-overdue-modal-btn--confirm"
+                onClick={async () => {
+                  setIsDeletingColumn(true);
+                  try {
+                    await taskBoardService.deleteColumn(deleteColumnTarget.columnId);
+                    setDeleteColumnTarget(null);
+                    onRefresh();
+                  } catch (error) {
+                    console.error('Failed to delete column:', error);
+                    setDeleteColumnTarget(null);
+                  } finally {
+                    setIsDeletingColumn(false);
+                  }
+                }}
+                disabled={isDeletingColumn}
+              >
+                {isDeletingColumn ? (
+                  <>
+                    <Loader2 size={14} className="study-plan-clear-overdue-modal-spinner" />
+                    Đang xóa...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={14} />
+                    Xóa cột
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <div

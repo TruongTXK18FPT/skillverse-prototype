@@ -1770,10 +1770,16 @@ const CourseCreationPage = () => {
    * View vs Edit policy:
    * - New course creation (no courseId): always editable
    * - Revision mode (?revisionId=...): editable only if revision is DRAFT/REJECTED
-   * - Viewing existing course (courseId without revisionId): READ-ONLY
-   *   To edit, mentor must create/update a revision
+   * - Existing course (?courseId=...): directly editable only if status is
+   *   DRAFT/REJECTED/SUSPENDED; PENDING/PUBLIC are read-only (must use revision)
    */
-  const isEditable = isRevisionMode ? revisionIsEditable : !isEditMode; // Only editable when creating new course, NOT when viewing existing
+  const canDirectEdit =
+    !isEditMode
+      ? true
+      : (state.currentCourse?.status === CourseStatus.DRAFT ||
+          state.currentCourse?.status === CourseStatus.REJECTED ||
+          state.currentCourse?.status === CourseStatus.SUSPENDED);
+  const isEditable = isRevisionMode ? revisionIsEditable : canDirectEdit;
 
   // Local State
   const [activeView, setActiveView] = useState<ViewState>({
@@ -2528,7 +2534,7 @@ const CourseCreationPage = () => {
         roundingIncrement:
           lesson.type === "quiz" ? lesson.roundingIncrement : undefined,
         gradingMethod:
-          lesson.type === "quiz" ? lesson.gradingMethod : undefined,
+          lesson.type === "quiz" ? 'HIGHEST' : undefined,
         cooldownHours:
           lesson.type === "quiz" ? lesson.cooldownHours : undefined,
         questions: lesson.type === "quiz" ? lesson.questions || [] : [],
@@ -2913,7 +2919,7 @@ const CourseCreationPage = () => {
                   quizMaxAttempts: lesson.quizMaxAttempts,
                   roundingIncrement: lesson.roundingIncrement,
                   quizDescription: lesson.quizDescription,
-                  gradingMethod: lesson.gradingMethod,
+                  gradingMethod: lesson.type === "quiz" ? 'HIGHEST' : lesson.gradingMethod,
                   cooldownHours: lesson.cooldownHours,
                   questions: (lesson.questions || []).map(
                     (question: QuizQuestionDraft) => ({
@@ -4666,20 +4672,9 @@ const CourseCreationPage = () => {
                           <label className="cb-label">
                             Phương pháp tính điểm
                           </label>
-                          <select
-                            className="cb-input cb-select"
-                            value={lesson.gradingMethod || "HIGHEST"}
-                            onChange={(e) =>
-                              updateLessonField(module.id, lesson.id, {
-                                gradingMethod: e.target.value,
-                              })
-                            }
-                          >
-                            <option value="HIGHEST">Điểm cao nhất</option>
-                            <option value="AVERAGE">Điểm trung bình</option>
-                            <option value="FIRST">Lần làm đầu tiên</option>
-                            <option value="LAST">Lần làm cuối cùng</option>
-                          </select>
+                          <div className="cb-input cb-select" style={{ pointerEvents: "none" }}>
+                            Điểm cao nhất
+                          </div>
                         </div>
                       </div>
                     </>

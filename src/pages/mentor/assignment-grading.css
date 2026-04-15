@@ -2134,3 +2134,115 @@
   border-color: rgba(16, 185, 129, 0.3);
   color: #86efac;
 }
+
+.ai-badge--pass {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #86efac;
+}
+
+.ai-badge--fail {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.ai-confidence-chip {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  color: #c4b5fd;
+  margin-left: 4px;
+}
+
+.resubmit-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  color: #fdba74;
+  margin-left: 4px;
+}
+
+/* === Prior Submission Feedback Panel === */
+.prior-submission-loading {
+  display: flex;
+  align-items: center;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  background: rgba(249, 115, 22, 0.08);
+  border: 1px solid rgba(249, 115, 22, 0.18);
+  color: #fdba74;
+  font-size: 0.875rem;
+}
+
+.prior-feedback-panel {
+  margin-bottom: 1.25rem;
+  border-radius: 14px;
+  background: rgba(249, 115, 22, 0.06);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  overflow: hidden;
+}
+
+.prior-feedback-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  background: rgba(249, 115, 22, 0.1);
+  border-bottom: 1px solid rgba(249, 115, 22, 0.15);
+}
+
+.prior-feedback-panel__title {
+  color: #fdba74;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.prior-feedback-panel__body {
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.prior-feedback-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.prior-feedback-item__label {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.prior-feedback-item__text {
+  color: #fde68a;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  padding: 0.5rem 0.75rem;
+  background: rgba(251, 191, 36, 0.06);
+  border-radius: 8px;
+  border-left: 3px solid rgba(251, 191, 36, 0.3);
+}
+
+.prior-feedback-item__confidence {
+  color: #94a3b8;
+  font-size: 0.82rem;
+  padding: 0.35rem 0;
+}
+
+.prior-feedback-item__confidence strong {
+  color: #c4b5fd;
+}
+

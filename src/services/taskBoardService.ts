@@ -47,6 +47,12 @@ export const taskBoardService = {
     return response.data;
   },
 
+  deleteColumn: async (columnId: string, targetColumnId?: string): Promise<void> => {
+    const params: any = {};
+    if (targetColumnId) params.targetColumnId = targetColumnId;
+    await axiosInstance.delete(`${BASE_URL}/columns/${columnId}`, { params });
+  },
+
   createTask: async (request: CreateTaskRequest): Promise<TaskResponse> => {
     const response = await axiosInstance.post<TaskResponse>(`${BASE_URL}/tasks`, request);
     return response.data;

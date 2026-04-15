@@ -58,6 +58,8 @@ export interface LessonDraft {
   cooldownHours?: number;
   quizDescription?: string;
   gradingMethod?: string;
+  aiGradingEnabled?: boolean;
+  gradingStyle?: 'STANDARD' | 'STRICT' | 'LENIENT';
   questions?: QuizQuestionDraft[];
   // Assignment fields
   assignmentSubmissionType?: SubmissionType;

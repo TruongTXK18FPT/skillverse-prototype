@@ -25,7 +25,7 @@ import {
   SubmissionStatus,
   SubmissionType
 } from '../../data/assignmentDTOs';
-import { getAssignmentById, getAssignmentSubmissions, gradeSubmission } from '../../services/assignmentService';
+import { getAssignmentById, getAssignmentSubmissions, gradeSubmission, getPriorSubmission } from '../../services/assignmentService';
 import { downloadFile } from '../../utils/downloadFile';
 import { sanitizeHtml } from '../../utils/sanitizeHtml';
 import { generateAiGrade, toggleTrustAi } from '../../services/aiGradingService';
@@ -115,6 +115,9 @@ const MentorGradingPage: React.FC = () => {
   const [aiGradingResult, setAiGradingResult] = useState<AiGradingResultDTO | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
+  const [priorSubmission, setPriorSubmission] = useState<AssignmentSubmissionDetailDTO | null>(null);
+  const [priorSubmissionLoading, setPriorSubmissionLoading] = useState(false);
+  const [priorFeedbackCollapsed, setPriorFeedbackCollapsed] = useState(true);
 
   const loadData = useCallback(async () => {
     if (!assignmentId || !user?.id) return;
@@ -236,7 +239,7 @@ const MentorGradingPage: React.FC = () => {
         : !flatScoreValidation.error)
   );
 
-  const openGradingWorkspace = (submission: AssignmentSubmissionDetailDTO) => {
+  const openGradingWorkspace = async (submission: AssignmentSubmissionDetailDTO) => {
     const criteriaScores: Record<number, string> = {};
     const criteriaFeedback: Record<number, string> = {};
     const expandedCriteriaFeedback: Record<number, boolean> = {};
@@ -252,6 +255,8 @@ const MentorGradingPage: React.FC = () => {
 
     setError(null);
     setAiError(null);
+    setPriorSubmission(null);
+    setPriorFeedbackCollapsed(true);
 
     // If submission has existing AI results, pre-populate them
     if (submission.isAiGraded && submission.aiScore != null) {
@@ -296,6 +301,22 @@ const MentorGradingPage: React.FC = () => {
       expandedCriteriaFeedback,
       submitting: false
     });
+
+    // Load prior submission AI feedback if this is a resubmit (attempt N >= 2)
+    if (submission.attemptNumber != null && submission.attemptNumber > 1) {
+      setPriorSubmissionLoading(true);
+      try {
+        const prior = await getPriorSubmission(submission.id);
+        setPriorSubmission(prior);
+      } catch (err: any) {
+        // 404 = no prior submission — silently ignore, not all resubmits have prior AI data
+        if (err?.response?.status !== 404) {
+          console.warn('Could not load prior submission:', err?.message);
+        }
+      } finally {
+        setPriorSubmissionLoading(false);
+      }
+    }
 
     window.requestAnimationFrame(() => {
       gradingWorkspaceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -357,6 +378,7 @@ const MentorGradingPage: React.FC = () => {
     setGradingWorkspace(emptyWorkspaceState());
     setAiGradingResult(null);
     setAiError(null);
+    setPriorSubmission(null);
   };
 
   const toggleCriterionFeedback = (criterionId: number) => {
@@ -728,6 +750,24 @@ const MentorGradingPage: React.FC = () => {
                       {submission.isAiGraded && submission.mentorConfirmed === null && submission.score == null && (
                         <span className="ai-badge">AI</span>
                       )}
+                      {/* AI pass badge */}
+                      {submission.isAiGraded && submission.aiScore != null && submission.isPassed === true && submission.score == null && (
+                        <span className="ai-badge ai-badge--pass">✅ Pass</span>
+                      )}
+                      {/* AI fail badge (student resubmitted after fail) */}
+                      {submission.isAiGraded && submission.aiScore != null && submission.isPassed === false && (
+                        <span className="ai-badge ai-badge--fail">❌ Fail</span>
+                      )}
+                      {/* Confidence chip */}
+                      {submission.isAiGraded && submission.aiConfidence != null && submission.aiConfidence > 0 && (
+                        <span className="ai-confidence-chip">
+                          {Math.round(submission.aiConfidence * 100)}%
+                        </span>
+                      )}
+                      {/* Resubmit tag */}
+                      {submission.attemptNumber != null && submission.attemptNumber > 1 && (
+                        <span className="resubmit-tag">↻ Lần #{submission.attemptNumber}</span>
+                      )}
                     </td>
                     <td>
                       {submission.score !== undefined && submission.score !== null
@@ -845,6 +885,73 @@ const MentorGradingPage: React.FC = () => {
                   <p className="dispute-banner__reason">Lý do: {activeSubmission.disputeReason}</p>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* Prior Submission Feedback — shown for resubmits (attempt >= 2) */}
+          {priorSubmissionLoading && (
+            <div className="prior-submission-loading">
+              <div className="grading-spinner small" style={{ display: 'inline-block', marginRight: '0.5rem' }} />
+              Đang tải feedback từ lần nộp trước...
+            </div>
+          )}
+          {!priorSubmissionLoading && priorSubmission && priorSubmission.isAiGraded && priorSubmission.aiScore != null && (
+            <div className="prior-feedback-panel">
+              <div
+                className="prior-feedback-panel__header"
+                onClick={() => setPriorFeedbackCollapsed(c => !c)}
+                style={{ cursor: 'pointer', userSelect: 'none' }}
+              >
+                <span className="prior-feedback-panel__title">
+                  📋 Feedback từ lần nộp trước (#{priorSubmission.attemptNumber})
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto' }}>
+                  <span className="ai-badge ai-badge--fail">
+                    AI: {priorSubmission.aiScore}/{priorSubmission.maxScore}
+                  </span>
+                  <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>
+                    {priorSubmission.isPassed === false ? '❌ Không đạt' : '✅ Đạt'}
+                  </span>
+                  <span style={{ color: '#64748b', fontSize: '0.8rem' }}>
+                    {priorFeedbackCollapsed ? '▶' : '▼'}
+                  </span>
+                </div>
+              </div>
+              {!priorFeedbackCollapsed && (
+                <div className="prior-feedback-panel__body">
+                  {priorSubmission.aiFeedback && (
+                    <div className="prior-feedback-item">
+                      <div className="prior-feedback-item__label">Feedback AI:</div>
+                      <div className="prior-feedback-item__text">{priorSubmission.aiFeedback}</div>
+                    </div>
+                  )}
+                  {priorSubmission.criteriaScores && priorSubmission.criteriaScores.length > 0 && (
+                    <div className="prior-feedback-item">
+                      <div className="prior-feedback-item__label">Chi tiết theo rubric:</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginTop: '0.4rem' }}>
+                        {priorSubmission.criteriaScores.map((cs) => (
+                          <div key={cs.criteriaId} className={`ai-rubric-item ${cs.passed ? 'pass' : 'fail'}`}>
+                            <div className="ai-rubric-item__header">
+                              <span className="ai-rubric-item__name">{cs.criteriaName || `Tiêu chí #${cs.criteriaId}`}</span>
+                              <span className={`ai-rubric-item__score ${cs.passed ? 'pass' : 'fail'}`}>
+                                {cs.score}/{cs.maxPoints} {cs.passed ? '✓' : '✗'}
+                              </span>
+                            </div>
+                            {cs.feedback && (
+                              <div className="ai-rubric-item__feedback">{cs.feedback}</div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {priorSubmission.aiConfidence != null && (
+                    <div className="prior-feedback-item__confidence">
+                      Độ tự tin AI: <strong>{Math.round(priorSubmission.aiConfidence * 100)}%</strong>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
 

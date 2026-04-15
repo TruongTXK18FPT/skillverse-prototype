@@ -162,6 +162,22 @@
   color: #eef7ff;
 }
 
+.admaigrading-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  margin-left: 6px;
+  border-radius: 10px;
+  background: rgba(255, 80, 80, 0.85);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
 .admaigrading-content {
   min-height: 320px;
 }
@@ -299,6 +315,11 @@
   min-width: 200px;
   padding: 0.8rem 0.95rem;
   border-radius: 12px;
+}
+
+.admaigrading-select option {
+  background: rgba(11, 20, 37, 0.95);
+  color: #eef7ff;
 }
 
 .admaigrading-table-container {
@@ -572,6 +593,360 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* =============================================
+   PROMPT MANAGEMENT MODAL
+   ============================================= */
+
+.admaigrading-prompt-modal {
+  max-width: 820px;
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+.admaigrading-prompt-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admaigrading-prompt-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(120, 141, 180, 0.16);
+}
+
+.admaigrading-prompt-meta-row span {
+  color: rgba(230, 237, 247, 0.7);
+  font-size: 0.88rem;
+}
+
+.admaigrading-prompt-badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.admaigrading-prompt-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.admaigrading-prompt-badge--custom {
+  background: rgba(255, 200, 0, 0.15);
+  border: 1px solid rgba(255, 200, 0, 0.3);
+  color: #ffd970;
+}
+
+.admaagrading-prompt-badge--trust {
+  background: rgba(0, 198, 255, 0.15);
+  border: 1px solid rgba(0, 198, 255, 0.3);
+  color: #61d7ff;
+}
+
+.admaigrading-prompt-badge--warn {
+  background: rgba(255, 80, 80, 0.15);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  color: #ff8080;
+}
+
+.admaigrading-prompt-control-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.admaigrading-prompt-control-row strong {
+  min-width: 110px;
+  font-size: 0.88rem;
+}
+
+.admaigrading-prompt-value {
+  font-size: 0.88rem;
+  color: rgba(230, 237, 247, 0.85);
+}
+
+.admaigrading-prompt-value--inactive {
+  color: rgba(230, 237, 247, 0.4);
+}
+
+.admaigrading-prompt-inline-select {
+  min-width: 120px !important;
+  padding: 0.45rem 0.75rem !important;
+}
+
+.admaigrading-prompt-content {
+  margin-top: 0.5rem;
+}
+
+.admaigrading-prompt-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.admaigrading-prompt-header-row strong {
+  font-size: 0.88rem;
+}
+
+.admaigrading-prompt-textarea {
+  width: 100%;
+  min-height: 160px;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(118, 212, 255, 0.3);
+  background: rgba(11, 20, 37, 0.85);
+  color: #eef7ff;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+}
+
+.admaigrading-prompt-textarea:focus {
+  border-color: rgba(0, 198, 255, 0.6);
+}
+
+.admaigrading-prompt-display pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(230, 237, 247, 0.85);
+  background: rgba(11, 20, 37, 0.7);
+  border-radius: 10px;
+  padding: 0.75rem;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.admaigrading-prompt-empty {
+  color: rgba(230, 237, 247, 0.5);
+  font-style: italic;
+  font-size: 0.88rem;
+  margin: 0;
+  background: rgba(11, 20, 37, 0.5);
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.admaigrading-danger-btn {
+  margin-top: 0.75rem;
+  border-color: rgba(255, 80, 80, 0.4) !important;
+  background: rgba(255, 80, 80, 0.08) !important;
+  color: #ff8080 !important;
+  font-size: 0.82rem !important;
+  padding: 0.55rem 0.85rem !important;
+}
+
+.admaigrading-danger-btn:hover {
+  background: rgba(255, 80, 80, 0.18) !important;
+}
+
+.admaigrading-sm-btn {
+  font-size: 0.78rem !important;
+  padding: 0.45rem 0.75rem !important;
+}
+
+/* =============================================
+   AUDIT TRAIL
+   ============================================= */
+
+.admaigrading-audit-section {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(120, 141, 180, 0.16);
+}
+
+.admaigrading-audit-section h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #eef7ff;
+}
+
+.admaigrading-audit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.admaigrading-audit-item {
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 141, 180, 0.14);
+  background: rgba(11, 20, 37, 0.6);
+}
+
+.admaigrading-audit-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.admaigrading-audit-item-header strong {
+  font-size: 0.85rem;
+  color: #eef7ff;
+}
+
+.admaigrading-audit-action {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(0, 198, 255, 0.12);
+  border: 1px solid rgba(0, 198, 255, 0.2);
+  color: #61d7ff;
+}
+
+.admaigrading-audit-time {
+  font-size: 0.75rem;
+  color: rgba(230, 237, 247, 0.45);
+  margin-left: auto;
+}
+
+.admaigrading-audit-diff {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+}
+
+.admaigrading-audit-diff-label {
+  color: rgba(230, 237, 247, 0.45);
+  min-width: 45px;
+  flex-shrink: 0;
+}
+
+.admaigrading-audit-diff pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 0.75rem;
+  color: rgba(230, 237, 247, 0.7);
+}
+
+/* Config card actions */
+.admaigrading-config-card {
+  border: 1px solid rgba(120, 141, 180, 0.16);
+  border-radius: 16px;
+  background: rgba(11, 20, 37, 0.65);
+  padding: 1.25rem;
+  transition: border-color 0.18s ease;
+}
+
+.admaigrading-config-card:hover {
+  border-color: rgba(118, 212, 255, 0.25);
+}
+
+.admaigrading-config-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.admaigrading-config-head h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f4f8ff;
+}
+
+.admaigrading-config-head p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(230, 237, 247, 0.6);
+}
+
+.admaigrading-config-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.admaigrading-config-meta > div {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: rgba(230, 237, 247, 0.7);
+}
+
+.admaigrading-config-meta > div svg {
+  color: rgba(118, 212, 255, 0.6);
+  flex-shrink: 0;
+}
+
+.admaigrading-config-prompt {
+  background: rgba(11, 20, 37, 0.5);
+  border-radius: 10px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.admaigrading-config-prompt strong {
+  display: block;
+  font-size: 0.78rem;
+  color: rgba(118, 212, 255, 0.8);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admaigrading-config-prompt p {
+  margin: 0 0 0.25rem;
+  font-size: 0.82rem;
+  color: rgba(230, 237, 247, 0.75);
+  line-height: 1.45;
+}
+
+.admaigrading-config-prompt small {
+  font-size: 0.72rem;
+  color: rgba(230, 237, 247, 0.4);
+}
+
+.admaigrading-config-metrics {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: rgba(230, 237, 247, 0.6);
+  margin-bottom: 0.75rem;
+}
+
+.admaigrading-config-metrics span {
+  background: rgba(11, 20, 37, 0.5);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.admaigrading-config-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 @media (max-width: 1200px) {

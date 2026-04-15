@@ -16,23 +16,19 @@ export type { EnrollRequestDTO, EnrollmentDetailDTO, EnrollmentStatsDTO };
 // ==================== ENROLLMENT OPERATIONS ====================
 
 /**
- * Enroll a user in a course
+ * Self-enroll in a free course (authenticated user only)
  * POST /api/enrollments
+ *
+ * Backend enforces: course must be free (price == 0). Paid courses must use purchaseCourseWithWallet.
  */
 export const enrollUser = async (
   courseId: number,
-  userId: number
+  _userId: number // userId extracted from JWT server-side; param kept for compatibility
 ): Promise<EnrollmentDetailDTO> => {
   try {
-    // BE expects only { courseId } in request body
-    const enrollRequest: EnrollRequestDTO = { courseId };
-
     const response = await axiosInstance.post<EnrollmentDetailDTO>(
       '/enrollments',
-      enrollRequest,
-      {
-        params: { userId }
-      }
+      { courseId }
     );
     return response.data;
   } catch (error) {
@@ -58,16 +54,16 @@ export const unenrollUser = async (
 };
 
 /**
- * Get enrollment details for a user in a course
- * GET /api/enrollments/course/{courseId}/user/{userId}
+ * Get my enrollment details for a course
+ * GET /api/enrollments/me/course/{courseId}
  */
 export const getEnrollment = async (
   courseId: number,
-  userId: number
+  _userId: number // extracted from JWT server-side
 ): Promise<EnrollmentDetailDTO> => {
   try {
     const response = await axiosInstance.get<EnrollmentDetailDTO>(
-      `/enrollments/course/${courseId}/user/${userId}`
+      `/enrollments/me/course/${courseId}`
     );
     return response.data;
   } catch (error) {
@@ -120,21 +116,21 @@ export const getCourseEnrollments = async (
 };
 
 /**
- * Check if user is enrolled in course
- * GET /api/enrollments/course/{courseId}/user/{userId}/status
+ * Check if I am enrolled in a course
+ * GET /api/enrollments/me/course/{courseId}/status
  */
 export const checkEnrollmentStatus = async (
   courseId: number,
-  userId: number
+  _userId: number // extracted from JWT server-side
 ): Promise<boolean> => {
   try {
     const response = await axiosInstance.get<{ enrolled: boolean }>(
-      `/enrollments/course/${courseId}/user/${userId}/status`
+      `/enrollments/me/course/${courseId}/status`
     );
     return response.data.enrolled;
   } catch (error) {
     console.error('Error checking enrollment status:', error);
-    return false; // Default to not enrolled if error
+    return false;
   }
 };
 
