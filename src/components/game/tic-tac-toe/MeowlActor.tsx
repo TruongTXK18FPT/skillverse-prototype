@@ -23,6 +23,7 @@ export type MeowlAction = 'idle' | 'walk' | 'pickup' | 'place' | 'smug' | 'panic
 interface MeowlActorProps {
   action: MeowlAction;
   style?: React.CSSProperties;
+  size?: number;
 }
 
 interface SpriteConfig {
@@ -47,7 +48,7 @@ const SPRITE_CONFIGS: Record<MeowlAction, SpriteConfig> = {
   think:  { src: thinkImg, cols: 4, rows: 4, speed: 150, loop: true },
 };
 
-const MeowlActor: React.FC<MeowlActorProps> = ({ action, style }) => {
+const MeowlActor: React.FC<MeowlActorProps> = ({ action, style, size = 150 }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [frameIndex, setFrameIndex] = useState(0);
   const config = SPRITE_CONFIGS[action];
@@ -92,9 +93,9 @@ const MeowlActor: React.FC<MeowlActorProps> = ({ action, style }) => {
   const col = frameIndex % config.cols;
   const row = Math.floor(frameIndex / config.cols) % config.rows;
   
-  // Size hiển thị cố định
-  const width = 150; 
-  const height = 150;
+  // Keep sprite square and allow embedded mode to render a smaller actor.
+  const width = size;
+  const height = size;
   
   const bgX = -(col * width);
   const bgY = -(row * height);

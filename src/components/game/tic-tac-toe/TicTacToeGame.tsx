@@ -325,7 +325,11 @@ const TicTacToeGame: React.FC<TicTacToeGameProps> = ({ onClose, mode = 'modal', 
 
             <div className={gameContainerClassName}>
                 <div className="ttt-meowl-section" ref={meowlHomeRef}>
-                    <MeowlActor action={meowlAction} style={meowlStyle} />
+                    <MeowlActor
+                        action={meowlAction}
+                        style={meowlStyle}
+                        size={isEmbedded ? 120 : 150}
+                    />
                 </div>
 
                 <div className="ttt-board-section">

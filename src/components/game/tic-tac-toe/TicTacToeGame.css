@@ -261,8 +261,12 @@
   height: 100%;
   min-height: 470px;
   max-height: none;
-  padding: 16px;
-  gap: 24px;
+  padding: 12px;
+  gap: 12px;
+}
+
+.ttt-game-container--embedded .ttt-meowl-section {
+  width: 120px;
 }
 
 .ttt-game-container--embedded .ttt-status {
@@ -271,14 +275,23 @@
 }
 
 .ttt-game-container--embedded .ttt-cell {
-  width: 72px;
-  height: 72px;
-  font-size: 2.3rem;
+  width: 60px;
+  height: 60px;
+  font-size: 1.9rem;
+}
+
+.ttt-game-container--embedded .ttt-board {
+  gap: 6px;
+  padding: 6px;
 }
 
 .ttt-game-container--embedded .ttt-rules {
   margin-top: 10px;
   font-size: 0.75rem;
+}
+
+.ttt-game-container--embedded .ttt-status {
+  font-size: 0.92rem;
 }
 
 .ttt-game-container--embedded .ttt-btn {
@@ -608,9 +621,14 @@
     padding: 12px;
   }
 
+  .ttt-game-container--embedded .ttt-meowl-section {
+    width: 100%;
+    height: 120px;
+  }
+
   .ttt-game-container--embedded .ttt-cell {
-    width: 64px;
-    height: 64px;
-    font-size: 2rem;
+    width: 58px;
+    height: 58px;
+    font-size: 1.8rem;
   }
 }

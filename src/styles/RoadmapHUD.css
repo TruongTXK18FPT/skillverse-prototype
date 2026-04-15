@@ -30,7 +30,7 @@
 
 /* Creation Console (Form) */
 .roadmap-hud-console {
-  max-width: 800px;
+  max-width: 1600px;
   margin: 40px auto;
   padding: 2px; /* For border gradient */
   background: linear-gradient(45deg, var(--hud-border), transparent 40%, transparent 60%, var(--hud-border));
@@ -576,7 +576,7 @@
 .rm-generator-wrapper {
   position: relative;
   width: 100%;
-  max-width: 900px;
+  max-width: 1600px;
   margin: 0 auto;
   perspective: 1000px; /* Hiệu ứng 3D nhẹ */
 }

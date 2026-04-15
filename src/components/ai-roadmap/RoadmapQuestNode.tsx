@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { FlowNodeData } from '../../types/Roadmap';
 import { CheckCircle, Circle, Clock, PlayCircle, Star, ChevronRight } from 'lucide-react';
+import { toRoadmapPlainTextPreview } from '../../utils/roadmapMarkdown';
 
 /**
  * Custom React Flow node for roadmap quests (V2 Enhanced)
@@ -23,6 +24,7 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
       : node.nodeStatus === 'LOCKED'
         ? 'Bị khóa'
         : 'Sẵn sàng';
+  const descriptionPreview = toRoadmapPlainTextPreview(node.description, 220);
 
   const formatTime = (minutes?: number | null): string => {
     if (!minutes || minutes <= 0) {
@@ -67,9 +69,9 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
       {/* Node Content */}
       <div className="sv-roadmap-node__content">
         <h3 className="sv-roadmap-node__title" title={node.title}>{node.title}</h3>
-        {node.description && (
-          <p className="sv-roadmap-node__description" title={node.description}>
-            {node.description}
+        {descriptionPreview && (
+          <p className="sv-roadmap-node__description" title={descriptionPreview}>
+            {descriptionPreview}
           </p>
         )}
       </div>

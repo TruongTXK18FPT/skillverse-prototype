@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { RotateCcw } from 'lucide-react';
 import ReactFlow, {
   Node,
   Edge,
@@ -79,6 +80,38 @@ const RoadmapFlow = ({
 
   const isFocusModeActive = Boolean(nodeFocusPanel?.isOpen && nodeFocusPanel?.node);
 
+  const buildInitialEdges = useCallback((roadmapItems: RoadmapNodeType[]): Edge[] => {
+    const initialEdges: Edge[] = [];
+    roadmapItems.forEach((node) => {
+      node.children.forEach((childId) => {
+        const childNode = roadmapItems.find((n) => n.id === childId);
+        if (!childNode) {
+          return;
+        }
+
+        const isMainPath = node.type === 'MAIN' && childNode.type === 'MAIN';
+        initialEdges.push({
+          id: `${node.id}-${childId}`,
+          source: node.id,
+          target: childId,
+          type: 'smoothstep',
+          animated: isMainPath,
+          style: {
+            stroke: isMainPath ? '#6366f1' : '#475569',
+            strokeWidth: isMainPath ? 3 : 1.5,
+            opacity: 0.8,
+          },
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: isMainPath ? '#6366f1' : '#475569',
+          },
+        });
+      });
+    });
+
+    return initialEdges;
+  }, []);
+
   // 1. Hàm tính toán Layout bằng ELK (Thay thế cho thuật toán BFS cũ)
   const getLayoutedElements = useCallback(async (rawNodes: Node[], rawEdges: Edge[]) => {
     const graph = {
@@ -136,42 +169,18 @@ const RoadmapFlow = ({
       position: { x: 0, y: 0 }, // Vị trí tạm
       data: {
         node,
-        progress: progressMap?.get(node.id),
-        onComplete: onQuestComplete,
-        onCreateStudyTask,
-        isCreatingStudyTask: creatingTaskNodeId === node.id,
-        isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
-        hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false,
-        isSelected: selectedNodeId === node.id
+        progress: undefined,
+        onComplete: undefined,
+        onCreateStudyTask: undefined,
+        isCreatingStudyTask: false,
+        isEligibleForStudyTask: true,
+        hasStudyTask: false,
+        isSelected: false
       }
     }));
 
     // B. Tạo Edges (Dây nối)
-    const initialEdges: Edge[] = [];
-    roadmap.forEach((node) => {
-      node.children.forEach((childId) => {
-        const childNode = roadmap.find((n) => n.id === childId);
-        if (childNode) {
-          const isMainPath = node.type === 'MAIN' && childNode.type === 'MAIN';
-          initialEdges.push({
-            id: `${node.id}-${childId}`,
-            source: node.id,
-            target: childId,
-            type: 'smoothstep', // Dây cong vuông góc cho gọn
-            animated: isMainPath,
-            style: {
-              stroke: isMainPath ? '#6366f1' : '#475569', // Màu dây: Tím (Main) hoặc Xám (Side)
-              strokeWidth: isMainPath ? 3 : 1.5,
-              opacity: 0.8
-            },
-            markerEnd: {
-              type: MarkerType.ArrowClosed,
-              color: isMainPath ? '#6366f1' : '#475569'
-            }
-          });
-        }
-      });
-    });
+    const initialEdges = buildInitialEdges(roadmap);
 
     // C. Gọi hàm Layout
     getLayoutedElements(initialNodes, initialEdges).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
@@ -179,28 +188,26 @@ const RoadmapFlow = ({
       setEdges(layoutedEdges);
     });
 
-  }, [roadmap, getLayoutedElements, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId, studyTaskNodeIds, selectedNodeId]); // Chỉ chạy lại khi cấu trúc roadmap thay đổi
+  }, [roadmap, getLayoutedElements, buildInitialEdges]); // Chỉ chạy lại khi cấu trúc roadmap thay đổi
 
   // 3. Effect: Cập nhật tiến độ (Không chạy lại Layout -> Fix Lag)
   useEffect(() => {
-    if (progressMap) {
-      setNodes((nds) =>
-        nds.map((node) => ({
-          ...node,
-          data: {
-            ...node.data,
-            progress: progressMap.get(node.id),
-            // Quan trọng: Update lại callback để tránh stale closure
-            onComplete: onQuestComplete,
-            onCreateStudyTask,
-            isCreatingStudyTask: creatingTaskNodeId === node.id,
-            isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
-            hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false,
-            isSelected: selectedNodeId === node.id
-          }
-        }))
-      );
-    }
+    setNodes((nds) =>
+      nds.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          progress: progressMap?.get(node.id),
+          // Quan trọng: Update lại callback để tránh stale closure
+          onComplete: onQuestComplete,
+          onCreateStudyTask,
+          isCreatingStudyTask: creatingTaskNodeId === node.id,
+          isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
+          hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false,
+          isSelected: selectedNodeId === node.id
+        }
+      }))
+    );
   }, [progressMap, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId, setNodes, studyTaskNodeIds, selectedNodeId]);
 
   useEffect(() => {
@@ -275,12 +282,68 @@ const RoadmapFlow = ({
     };
   }, [isFocusModeActive]);
 
+  const handleResetLayout = useCallback(() => {
+    const resetNodes: Node[] = roadmap.map((node) => {
+      const currentNode = nodes.find((flowNode) => flowNode.id === node.id);
+      return {
+        id: node.id,
+        type: 'questNode',
+        position: { x: 0, y: 0 },
+        data: currentNode?.data ?? {
+          node,
+          progress: progressMap?.get(node.id),
+          onComplete: onQuestComplete,
+          onCreateStudyTask,
+          isCreatingStudyTask: creatingTaskNodeId === node.id,
+          isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
+          hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false,
+          isSelected: selectedNodeId === node.id,
+        },
+      };
+    });
+
+    const resetEdges = buildInitialEdges(roadmap);
+
+    getLayoutedElements(resetNodes, resetEdges).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+      setNodes(layoutedNodes);
+      setEdges(layoutedEdges);
+      reactFlowInstance?.fitView({ padding: 0.2, duration: 450 });
+    });
+  }, [
+    roadmap,
+    nodes,
+    progressMap,
+    onQuestComplete,
+    onCreateStudyTask,
+    creatingTaskNodeId,
+    eligibleNodeId,
+    studyTaskNodeIds,
+    selectedNodeId,
+    buildInitialEdges,
+    getLayoutedElements,
+    reactFlowInstance,
+    setNodes,
+    setEdges,
+  ]);
+
   return (
     <div
       ref={flowContainerRef}
       className={`sv-roadmap-flow ${nodeFocusPanel?.isOpen ? 'sv-roadmap-flow--focus-active' : ''}`}
       style={{ width: '100%', height: '100%' }}
     >
+      <button
+        type="button"
+        className="sv-roadmap-flow__reset-layout"
+        onClick={handleResetLayout}
+        title="Reset layout roadmap"
+        aria-label="Reset layout roadmap"
+        disabled={roadmap.length === 0}
+      >
+        <RotateCcw size={14} />
+        <span>Reset layout</span>
+      </button>
+
       <ReactFlow
         nodes={nodes}
         edges={edges}

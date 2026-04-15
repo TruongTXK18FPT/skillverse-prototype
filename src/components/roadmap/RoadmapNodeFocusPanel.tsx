@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { QuestProgress, RoadmapNode } from '../../types/Roadmap';
 import { NodeLearningContext, resolveRoadmapNodeTimeEstimate } from './nodeLearningContext';
+import { normalizeRoadmapMarkdown } from '../../utils/roadmapMarkdown';
 import './RoadmapNodeFocusPanel.css';
 
 export type RoadmapNodeFocusPanelPlacement = 'left' | 'right';
@@ -101,6 +102,10 @@ const RoadmapNodeFocusPanel = ({
   const prerequisiteItems = useMemo(() => pickNonEmptyItems(node?.prerequisites, 99), [node?.prerequisites]);
   const practicalExerciseItems = useMemo(() => pickNonEmptyItems(node?.practicalExercises, 99), [node?.practicalExercises]);
   const successCriteriaItems = useMemo(() => pickNonEmptyItems(node?.successCriteria, 99), [node?.successCriteria]);
+  const normalizedDescription = useMemo(
+    () => normalizeRoadmapMarkdown(node?.description),
+    [node?.description],
+  );
 
 
   if (!isOpen || !node) {
@@ -206,10 +211,10 @@ const RoadmapNodeFocusPanel = ({
             <BookOpen size={15} />
             Tổng quan node
           </h3>
-          {node.description ? (
+          {normalizedDescription ? (
             <div className="node-description-markdown">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {node.description}
+                {normalizedDescription}
               </ReactMarkdown>
             </div>
           ) : (
