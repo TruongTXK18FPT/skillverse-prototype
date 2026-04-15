@@ -1,7 +1,7 @@
 const unescapeMarkdown = (value: string): string =>
   value
     .replace(/\\n/g, "\n")
-    .replace(/\\([`*_{}\[\]()#+\-.!>])/g, "$1");
+    .replace(new RegExp(`\\\\([\`*_{}\\x5B\\x5D()#+\\-.!>])`, 'g'), "$1");
 
 export const normalizeRoadmapMarkdown = (value?: string | null): string =>
   unescapeMarkdown((value ?? "").trim());
