@@ -14,6 +14,7 @@ export interface AssignmentFieldErrors {
   criteriaRequired?: string;
   criteriaTotal?: string;
   criteriaItems?: Record<number, AssignmentCriteriaItemErrors>;
+  aiGradingPrompt?: string;
 }
 
 export interface AssignmentValidationResult {
@@ -113,8 +114,25 @@ export const validateAssignmentsBeforeSave = (modulesToCheck: ModuleDraft[]): As
 
       // Assignment MUST have at least 1 rubric criterion
       if (!lesson.assignmentCriteria || lesson.assignmentCriteria.length === 0) {
-        const msg = `Bài tập "${lessonLabel}" (Module ${mIndex + 1}) cần ít nhất 1 tiêu chí chấm điểm (Rubric).`;
+        const msg = lesson.aiGradingEnabled
+          ? `Bài tập "${lessonLabel}" (Module ${mIndex + 1}) cần ít nhất 1 tiêu chí chấm điểm (Rubric) để AI có thể chấm bài.`
+          : `Bài tập "${lessonLabel}" (Module ${mIndex + 1}) cần ít nhất 1 tiêu chí chấm điểm (Rubric).`;
         lessonError.criteriaRequired = 'Bài tập phải có ít nhất 1 tiêu chí chấm điểm.';
+        setFirst(msg);
+      }
+
+      // AI Grading: if enabled, ensure gradingStyle is valid
+      if (lesson.aiGradingEnabled) {
+        const validStyles = ['STANDARD', 'STRICT', 'LENIENT'];
+        if (!validStyles.includes(lesson.gradingStyle || '')) {
+          lesson.gradingStyle = 'STANDARD';
+        }
+      }
+
+      // AI Grading prompt: warn if too long (>2000 chars)
+      if (lesson.aiGradingPrompt && lesson.aiGradingPrompt.length > 2000) {
+        const msg = `Bài tập "${lessonLabel}" (Module ${mIndex + 1}) có hướng dẫn AI quá dài (>2000 ký tự).`;
+        lessonError.aiGradingPrompt = 'Hướng dẫn cho AI không nên quá 2000 ký tự.';
         setFirst(msg);
       }
 

@@ -28,7 +28,7 @@ import {
 import { getAssignmentById, getAssignmentSubmissions, gradeSubmission, getPriorSubmission } from '../../services/assignmentService';
 import { downloadFile } from '../../utils/downloadFile';
 import { sanitizeHtml } from '../../utils/sanitizeHtml';
-import { generateAiGrade, toggleTrustAi } from '../../services/aiGradingService';
+import { generateAiGrade } from '../../services/aiGradingService';
 import { AiGradingResultDTO } from '../../data/assignmentDTOs';
 import { useAuth } from '../../context/AuthContext';
 import { useAppToast } from '../../context/ToastContext';
@@ -359,17 +359,6 @@ const MentorGradingPage: React.FC = () => {
       toast.showError('AI chấm thất bại', msg);
     } finally {
       setAiLoading(false);
-    }
-  };
-
-  const handleToggleTrustAi = async (enabled: boolean) => {
-    if (!assignment?.id) return;
-    try {
-      await toggleTrustAi(assignment.id, enabled);
-      setAssignment((prev) => prev ? { ...prev, trustAiEnabled: enabled } : prev);
-      toast.showSuccess('Trust AI', enabled ? 'Đã bật Trust AI cho assignment này.' : 'Đã tắt Trust AI cho assignment này.');
-    } catch (err: any) {
-      toast.showError('Lỗi', 'Không thể cập nhật Trust AI.');
     }
   };
 
@@ -1069,11 +1058,6 @@ const MentorGradingPage: React.FC = () => {
                       Tự tin {Math.round(aiGradingResult.overallConfidence * 100)}%
                     </span>
                   </div>
-                  {assignment.trustAiEnabled && aiGradingResult.overallConfidence >= 0.95 && (
-                    <div className="ai-trust-hint">
-                      ✅ AI tự tin cao — Bạn có thể xác nhận nhanh để tiết kiệm thời gian.
-                    </div>
-                  )}
                 </div>
               )}
 
@@ -1094,14 +1078,6 @@ const MentorGradingPage: React.FC = () => {
                       <>🤖 AI Pre-grade{activeSubmission.aiGradeAttemptCount ? ` (${activeSubmission.aiGradeAttemptCount}/3)` : ''}</>
                     )}
                   </button>
-                  <label className="trust-ai-toggle">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(assignment.trustAiEnabled)}
-                      onChange={(e) => handleToggleTrustAi(e.target.checked)}
-                    />
-                    <span>Trust AI — tự động xác nhận khi AI tự tin ≥ 95%</span>
-                  </label>
                 </>
               )}
             </div>

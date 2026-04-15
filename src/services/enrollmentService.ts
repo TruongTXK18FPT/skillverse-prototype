@@ -135,32 +135,31 @@ export const checkEnrollmentStatus = async (
 };
 
 /**
- * Get all enrollments for a user
- * GET /api/enrollments/user/{userId}
+ * Get all my enrollments across all courses.
+ * GET /api/enrollments/me  — user extracted from JWT by BE
  */
-export const getUserEnrollments = async (
-  userId: number,
+export const getMyEnrollments = async (
   page: number = 0,
   size: number = 20
 ): Promise<{ content: EnrollmentDetailDTO[]; totalElements: number; totalPages: number }> => {
   try {
-    // Backend returns PageResponse which has { items, page, size, total }
+    // BE PageResponse: { items, total, page, size }
     const response = await axiosInstance.get<{
       items: EnrollmentDetailDTO[];
       total: number;
       page: number;
       size: number;
-    }>(`/enrollments/user/${userId}`, {
+    }>('/enrollments/me', {
       params: { page, size }
     });
-    
+
     return {
       content: response.data.items || [],
       totalElements: response.data.total,
       totalPages: Math.ceil(response.data.total / (size || 20))
     };
   } catch (error) {
-    console.error('Error fetching user enrollments:', error);
+    console.error('Error fetching my enrollments:', error);
     throw error;
   }
 };

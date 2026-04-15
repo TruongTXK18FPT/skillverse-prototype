@@ -29,10 +29,7 @@ import { useAuth } from '../../context/AuthContext';
 import { downloadFile } from '../../utils/downloadFile';
 import { sanitizeHtml } from '../../utils/sanitizeHtml';
 import {
-  getSubmissionTimingInfo,
   getSubmissionWorkflowLabel,
-  hasAssignmentDueDate,
-  isAssignmentPastDue,
 } from '../../utils/assignmentPresentation';
 import './learning-hud.css';
 
@@ -153,15 +150,6 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
         </span>
       );
     }
-    const timingInfo = getSubmissionTimingInfo(assignment?.dueAt, submission.isLate);
-    if (timingInfo?.tone === 'late') {
-      return (
-        <span className="learning-hud-submission-badge late">
-          <AlertCircle size={14} />
-          {timingInfo.text}
-        </span>
-      );
-    }
     return (
       <span className="learning-hud-submission-badge pending">
         <Clock size={14} />
@@ -180,8 +168,9 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
     });
   };
 
-  const hasDueDate = hasAssignmentDueDate(assignment?.dueAt);
-  const isDueDatePassed = isAssignmentPastDue(assignment?.dueAt);
+  // DEADCODE: deadline/late feature removed 2026-04-15 — no deadline input in mentor form
+  // const hasDueDate = hasAssignmentDueDate(assignment?.dueAt);
+  // const isDueDatePassed = isAssignmentPastDue(assignment?.dueAt);
 
   const newestSubmission = submissions.find(s => s.isNewest);
   const previousSubmissions = submissions.filter(s => !s.isNewest);
@@ -329,13 +318,6 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
           <span className="learning-hud-assignment-score">
             Điểm tối đa: {assignment.maxScore}
           </span>
-          {hasDueDate && assignment.dueAt && (
-            <span className={`learning-hud-assignment-due ${isDueDatePassed ? 'overdue' : ''}`}>
-              <Clock size={16} />
-              Hạn nộp: {formatDate(assignment.dueAt)}
-              {isDueDatePassed && ' (Đã quá hạn)'}
-            </span>
-          )}
         </div>
       </div>
 
@@ -407,17 +389,6 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
                   </div>
                   <div className="learning-hud-history-meta">
                     <span>Nộp lúc: {formatDate(sub.submittedAt)}</span>
-                    {(() => {
-                      const timingInfo = getSubmissionTimingInfo(assignment?.dueAt, sub.isLate);
-                      if (!timingInfo) {
-                        return null;
-                      }
-                      return (
-                        <span className={`learning-hud-timing-badge ${timingInfo.tone}`}>
-                          {timingInfo.text}
-                        </span>
-                      );
-                    })()}
                   </div>
                   <div className="learning-hud-history-actions">
                     <button
@@ -448,7 +419,9 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
         // Gate logic: determine if student can submit
         if (newestSubmission) {
           // PENDING: waiting for grading — block resubmission
-          if (newestSubmission.status === SubmissionStatus.PENDING || newestSubmission.status === SubmissionStatus.LATE_PENDING) {
+          // DEADCODE: LATE_PENDING removed 2026-04-15 — no deadline in mentor form
+          // if (newestSubmission.status === SubmissionStatus.PENDING || newestSubmission.status === SubmissionStatus.LATE_PENDING) {
+          if (newestSubmission.status === SubmissionStatus.PENDING) {
             return (
               <div className="learning-hud-submission-gate">
                 <Clock size={24} />

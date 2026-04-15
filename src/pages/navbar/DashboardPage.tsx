@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
 import MothershipDashboard from "../../components/dashboard-hud/MothershipDashboard";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
-import { getUserEnrollments } from "../../services/enrollmentService";
+import { getMyEnrollments } from "../../services/enrollmentService";
 import { getCourse } from "../../services/courseService";
 import { getCourseLearningStatus } from "../../services/courseLearningService";
 import { getGroupByCourse, joinGroup } from "../../services/groupChatService";
@@ -332,7 +332,7 @@ const DashboardPage = () => {
             taskBoard,
             wallet,
           ] = await Promise.all([
-            getUserEnrollments(user.id),
+            getMyEnrollments(),
             usagePromise,
             getCycleStats().catch((error) => {
               console.error("Error fetching cycle stats", error);

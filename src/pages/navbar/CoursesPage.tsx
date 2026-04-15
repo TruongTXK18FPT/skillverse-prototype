@@ -7,7 +7,7 @@ import Pagination from '../../components/shared/Pagination';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { listCourses } from '../../services/courseService';
 import { useAuth } from '../../context/AuthContext';
-import { getUserEnrollments } from '../../services/enrollmentService';
+import { getMyEnrollments } from '../../services/enrollmentService';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import { CourseSummaryDTO } from '../../data/courseDTOs';
 import { buildCourseDetailPath } from '../../utils/courseRoute';
@@ -95,7 +95,7 @@ const CoursesPage = () => {
   // Fetch enrolled course IDs once
   useEffect(() => {
     if (user?.id) {
-      getUserEnrollments(user.id)
+      getMyEnrollments()
         .then(res => setEnrolledIds(new Set((res.content || []).map((e) => e.courseId))))
         .catch(() => setEnrolledIds(new Set()));
     }

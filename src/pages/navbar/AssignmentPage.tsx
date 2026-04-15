@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   FileText,
@@ -10,7 +10,6 @@ import {
   History,
   ArrowLeft,
   Award,
-  Calendar,
   Info,
   Target,
   CheckSquare,
@@ -40,7 +39,7 @@ import {
   submitAssignment,
   getMySubmissions
 } from '../../services/assignmentService';
-import { requestMentorReview } from '../../services/aiGradingService';
+import { requestMentorReview, getAiGradeResult } from '../../services/aiGradingService';
 import { downloadFile } from '../../utils/downloadFile';
 import { sanitizeHtml } from '../../utils/sanitizeHtml';
 import { uploadMedia } from '../../services/mediaService';
@@ -51,10 +50,7 @@ import {
   readStoredCourseLearningReturnContext,
 } from '../../utils/courseLearningNavigation';
 import {
-  getSubmissionTimingInfo,
   getSubmissionWorkflowLabel,
-  hasAssignmentDueDate,
-  isAssignmentPastDue,
 } from '../../utils/assignmentPresentation';
 import RichTextEditor from '../../components/shared/RichTextEditor';
 
@@ -297,13 +293,13 @@ const AssignmentPage: React.FC = () => {
   const hasMeaningfulCriteriaThreshold = (passingPoints?: number | null) =>
     passingPoints != null && Number(passingPoints) > 0;
 
-  const hasDueDate = hasAssignmentDueDate(assignment?.dueAt);
-  const isDueDatePassed = isAssignmentPastDue(assignment?.dueAt);
+  // DEADCODE: deadline/late feature removed 2026-04-15 — no deadline input in mentor form
+  // const hasDueDate = hasAssignmentDueDate(assignment?.dueAt);
+  // const isDueDatePassed = isAssignmentPastDue(assignment?.dueAt);
   const newestSubmission = submissions.find(s => s.isNewest);
   const supportsDraftSave = assignment?.submissionType === SubmissionType.TEXT || assignment?.submissionType === SubmissionType.LINK;
   const submissionBlockedByPending =
     newestSubmission?.status === SubmissionStatus.PENDING ||
-    newestSubmission?.status === SubmissionStatus.LATE_PENDING ||
     newestSubmission?.status === SubmissionStatus.AI_PENDING;
   const submissionBlockedByPass = newestSubmission?.isPassed === true;
   const canSubmitAnotherAttempt = !submissionBlockedByPending && !submissionBlockedByPass;
@@ -326,6 +322,59 @@ const AssignmentPage: React.FC = () => {
     }
     return { text: 'Đã nộp', icon: <Clock size={14} />, tone: 'pending' };
   };
+
+  // Stable ref for polling state — avoids stale closure from `newestSubmission`
+  const pollingRef = useRef<{ targetId: number | null; intervalId: ReturnType<typeof setInterval> | null }>({
+    targetId: null,
+    intervalId: null,
+  });
+
+  // Poll for AI grading result — runs whenever `submissions` changes
+  useEffect(() => {
+    // Only poll if this assignment has AI grading enabled
+    if (!assignment?.aiGradingEnabled) return;
+
+    const latest = submissions.find(s => s.isNewest);
+    const isAiPending = latest?.status === SubmissionStatus.AI_PENDING && !latest?.isAiGraded;
+
+    if (!isAiPending) {
+      if (pollingRef.current.intervalId) {
+        clearInterval(pollingRef.current.intervalId);
+        pollingRef.current = { targetId: null, intervalId: null };
+      }
+      return;
+    }
+
+    if (pollingRef.current.targetId === latest.id) return;
+
+    if (pollingRef.current.intervalId) {
+      clearInterval(pollingRef.current.intervalId);
+    }
+    const targetId = latest.id;
+    pollingRef.current = { targetId, intervalId: null };
+
+    pollingRef.current.intervalId = setInterval(async () => {
+      if (pollingRef.current.targetId === null) return;
+      try {
+        const result = await getAiGradeResult(pollingRef.current.targetId);
+        if (result.isAiGraded) {
+          clearInterval(pollingRef.current.intervalId!);
+          pollingRef.current = { targetId: null, intervalId: null };
+          const submissionsData = await getMySubmissions(parseInt(assignmentId!));
+          setSubmissions(submissionsData);
+        }
+      } catch {
+        // silently ignore polling errors
+      }
+    }, 10000);
+
+    return () => {
+      if (pollingRef.current.intervalId) {
+        clearInterval(pollingRef.current.intervalId);
+        pollingRef.current = { targetId: null, intervalId: null };
+      }
+    };
+  }, [submissions, assignment?.aiGradingEnabled]);
 
   const handleBackToCourse = useCallback(() => {
     const returnContext = locationState?.courseId
@@ -362,9 +411,6 @@ const AssignmentPage: React.FC = () => {
   }
 
   const status = getAssignmentStatus();
-  const newestSubmissionTiming = newestSubmission
-    ? getSubmissionTimingInfo(assignment?.dueAt, newestSubmission.isLate)
-    : null;
 
   return (
     <div className="assignment-page-v2">
@@ -414,16 +460,6 @@ const AssignmentPage: React.FC = () => {
               <strong className="ap-v2-hero-metric__value">
                 {assignment.maxScore}
                 <span>pt</span>
-              </strong>
-            </article>
-
-            <article
-              className={`ap-v2-hero-metric ${isDueDatePassed ? 'ap-v2-hero-metric--late' : ''}`}
-            >
-              <Calendar size={20} className="ap-v2-hero-metric__icon" />
-              <span className="ap-v2-hero-metric__label">Hạn nộp</span>
-              <strong className="ap-v2-hero-metric__value ap-v2-hero-metric__value--due">
-                {hasDueDate && assignment.dueAt ? formatDate(assignment.dueAt) : 'Không giới hạn'}
               </strong>
             </article>
           </div>
@@ -480,18 +516,6 @@ const AssignmentPage: React.FC = () => {
               </div>
             )}
 
-            {!canSubmitAnotherAttempt && newestSubmission && submissionBlockedByPass && (
-              <div className="ap-v2-pass-banner">
-                <div className="ap-v2-pass-banner__icon">🎉</div>
-                <div className="ap-v2-pass-banner__content">
-                  <h3>Chúc mừng bạn đã hoàn thành nhiệm vụ!</h3>
-                  <p>Điểm của bạn: <strong>{newestSubmission.score ?? newestSubmission.aiScore}/{assignment.maxScore}</strong></p>
-                  {newestSubmission.isAiGraded && newestSubmission.mentorConfirmed === true && (
-                    <p className="ap-v2-pass-banner__sub">Điểm này được xác nhận tự động bởi AI. Bạn không cần nộp lại bài.</p>
-                  )}
-                </div>
-              </div>
-            )}
             {!canSubmitAnotherAttempt && newestSubmission && !submissionBlockedByPass && submissionBlockedByPending && (
               <div className="ap-v2-blocker">
                 <div className="ap-v2-blocker-icon-box">
@@ -625,13 +649,6 @@ const AssignmentPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
-                {hasDueDate && isDueDatePassed && (
-                  <div className="ap-v2-overdue-warn">
-                    <AlertTriangle size={18} style={{ flexShrink: 0 }} />
-                    Hệ thống ghi nhận quá hạn. Bài nộp sẽ được gán nhãn TRỄ và có thể áp dụng chế tài trừ điểm.
-                  </div>
-                )}
               </form>
             )}
             </div>
@@ -672,14 +689,6 @@ const AssignmentPage: React.FC = () => {
                       {newestSubmission.score !== undefined && newestSubmission.score !== null && (
                         <div className="ap-v2-ptag ap-v2-ptag--score">
                           Điểm: {newestSubmission.score}/{assignment.maxScore}
-                        </div>
-                      )}
-                      {newestSubmissionTiming && (
-                        <div className={`ap-v2-ptag`} style={{
-                          borderColor: newestSubmissionTiming.tone === 'on-time' ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)',
-                          color: newestSubmissionTiming.tone === 'on-time' ? '#34d399' : '#f87171'
-                        }}>
-                          {newestSubmissionTiming.text}
                         </div>
                       )}
                     </div>
@@ -726,11 +735,6 @@ const AssignmentPage: React.FC = () => {
                       <div className="ap-v2-feedback-box ap-v2-feedback-box--ai">
                         <div className="ap-v2-fb-title">
                           <Sparkles size={14} /> Điểm AI
-                          {newestSubmission.aiConfidence != null && (
-                            <span className={`ap-v2-ai-confidence ${newestSubmission.aiConfidence >= 0.9 ? 'high' : 'medium'}`}>
-                              Tự tin {Math.round(newestSubmission.aiConfidence * 100)}%
-                            </span>
-                          )}
                         </div>
                         <div className="ap-v2-fb-text">
                           Điểm AI: <strong>{newestSubmission.aiScore}/{assignment.maxScore}</strong>
@@ -819,7 +823,6 @@ const AssignmentPage: React.FC = () => {
                 {showHistory && (
                   <div className="ap-v2-timeline">
                     {submissions.map((sub) => {
-                      const timingInfo = getSubmissionTimingInfo(assignment?.dueAt, sub.isLate);
                       return (
                         <div key={sub.id} className={`ap-v2-timeline-item ${sub.isNewest ? 'ap-v2-timeline-item--latest' : ''}`}>
                           <div className="ap-v2-tl-header">
@@ -829,7 +832,7 @@ const AssignmentPage: React.FC = () => {
                             </div>
                             <span className="ap-v2-tl-date">{formatDate(sub.submittedAt)}</span>
                           </div>
-                          
+
                           <div className="ap-v2-tl-meta">
                             <div className={`ap-v2-tl-tag ${
                               sub.status === SubmissionStatus.GRADED || sub.status === SubmissionStatus.AI_COMPLETED
@@ -840,16 +843,6 @@ const AssignmentPage: React.FC = () => {
                             }`}>
                               {getSubmissionWorkflowLabel(sub.status)}
                             </div>
-                            
-                            {timingInfo && (
-                              <div className={`ap-v2-tl-tag `} style={{
-                                borderColor: timingInfo.tone === 'on-time' ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)',
-                                color: timingInfo.tone === 'on-time' ? '#34d399' : '#f87171',
-                                background: timingInfo.tone === 'on-time' ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)'
-                              }}>
-                                {timingInfo.text}
-                              </div>
-                            )}
 
                             {sub.score !== undefined && sub.score !== null && (
                               <div className="ap-v2-tl-score" style={{ marginLeft: 'auto' }}>

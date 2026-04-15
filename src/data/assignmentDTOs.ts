@@ -6,10 +6,14 @@ export enum SubmissionType {
   LINK = 'LINK'
 }
 
+// DEADCODE: LATE_PENDING never used — no deadline input in mentor form (as of 2026-04-15).
+// mentor form (LessonEditorAssignment.tsx) has no dueAt field → assignment.dueAt always null
+// → isLate is always false → LATE_PENDING never triggered.
+// Left in enum for future use if deadline feature is implemented.
 export enum SubmissionStatus {
   PENDING = 'PENDING',
   GRADED = 'GRADED',
-  LATE_PENDING = 'LATE_PENDING',
+  LATE_PENDING = 'LATE_PENDING', // DEADCODE: no deadline input in mentor form
   AI_PENDING = 'AI_PENDING',      // AI grading in progress, waiting for mentor confirm
   AI_COMPLETED = 'AI_COMPLETED'    // AI graded, mentor confirmed (same as GRADED for display)
 }

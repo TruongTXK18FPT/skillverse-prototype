@@ -256,6 +256,30 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
     return attachmentRequest;
   }, []);
 
+  /**
+   * Maps AssignmentCriteriaDraft[] from frontend to AssignmentCriteriaDTO[] for BE.
+   * - maxPoints: sent as-is (FE number → BE BigDecimal via Jackson)
+   * - passingPoints: if not set, defaults to maxPoints (BE behavior)
+   * - isRequired: primitive boolean (BE AssignmentCriteriaDTO field is boolean, not Boolean)
+   */
+  const buildCriteriaPayload = (criteria: AssignmentCriteriaDraft[]): Array<{
+    name: string;
+    description?: string;
+    maxPoints: number;
+    passingPoints: number;
+    orderIndex: number;
+    isRequired: boolean;
+  }> => {
+    return (criteria || []).map((c, idx) => ({
+      name: c.name || '',
+      description: c.description || '',
+      maxPoints: Number(c.maxPoints) || 0,
+      passingPoints: Number(c.passingPoints ?? c.maxPoints) || 0,
+      orderIndex: c.orderIndex ?? idx,
+      isRequired: c.isRequired ?? true,
+    }));
+  };
+
   // ============================================================================
   // COURSE OPERATIONS
   // ============================================================================
@@ -336,17 +360,37 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
            );
 
            // Fetch full details for each assignment
-            const fullAssignments = await Promise.all(
+            const fullAssignments = await Promise.allSettled(
               (assignmentSummaries || []).map(async (assign, summaryIndex) => {
-                 const details = await import('../../services/assignmentService').then(m => m.getAssignmentById(assign.id));
-                return {
-                 ...details,
-                 type: 'ASSIGNMENT',
-                   sourceOrderIndex: resolveOrderIndex((details as any).orderIndex, (assign as any).orderIndex, undefined, summaryIndex),
-                   preferredOrderIndex: getPreferredOrder('ASSIGNMENT', assign.id)
-                };
+                try {
+                  const details = await import('../../services/assignmentService').then(m => m.getAssignmentById(assign.id));
+                  return {
+                    ...details,
+                    type: 'ASSIGNMENT',
+                    sourceOrderIndex: resolveOrderIndex((details as any).orderIndex, (assign as any).orderIndex, undefined, summaryIndex),
+                    preferredOrderIndex: getPreferredOrder('ASSIGNMENT', assign.id)
+                  };
+                } catch (err) {
+                  // Gracefully handle missing assignments — return placeholder
+                  console.warn(`Failed to load assignment ${assign.id}:`, err);
+                  return {
+                    id: assign.id,
+                    title: assign.title || 'Bài tập',
+                    type: 'ASSIGNMENT' as const,
+                    assignmentCriteria: [],
+                    assignmentMaxScore: (assign as any).maxScore || 100,
+                    assignmentPassingScore: (assign as any).passingScore || 50,
+                    assignmentSubmissionType: ((assign as any).submissionType || 'TEXT') as 'TEXT' | 'FILE' | 'LINK' | 'MULTIPLE_CHOICE',
+                    sourceOrderIndex: summaryIndex,
+                    preferredOrderIndex: getPreferredOrder('ASSIGNMENT', assign.id),
+                  };
+                }
               })
-           );
+            ).then(results =>
+              results
+                .filter(r => r.status === 'fulfilled')
+                .map(r => (r as PromiseFulfilledResult<ReturnType<typeof import('../../services/assignmentService').then>>).value)
+            );
 
            // Merge lessons, quizzes, and assignments
            const mergedItems = [
@@ -391,13 +435,26 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                      type: 'ASSIGNMENT',
                     orderIndex: resolveOrderIndex((a as any).orderIndex, (a as any).sourceOrderIndex, (a as any).preferredOrderIndex, sourceIndex),
                      sourceOrderIndex: resolveOrderIndex((a as any).sourceOrderIndex, (a as any).orderIndex, (a as any).preferredOrderIndex, sourceIndex),
-                     durationSec: 0, // Assignment duration?
+                     durationSec: 0,
                      assignmentDescription: a.description,
                      assignmentSubmissionType: (a as any).submissionType || 'TEXT',
                      assignmentMaxScore: (a as any).maxScore,
                      assignmentPassingScore: (a as any).passingScore,
                      assignmentIsRequired: (a as any).isRequired,
-                     assignmentCriteria: (a as any).criteria || [] // Map criteria back
+                     assignmentCriteria: ((a as any).criteria || []).map((c: any) => ({
+                       id: c.id,
+                       name: c.name || '',
+                       description: c.description || '',
+                       maxPoints: Number(c.maxPoints) || 0,
+                       passingPoints: Number(c.passingPoints ?? c.maxPoints) || 0,
+                       orderIndex: c.orderIndex ?? 0,
+                       isRequired: c.isRequired ?? true,
+                     })),
+                     // AI Grading fields from fetched assignment detail
+                     aiGradingEnabled: (a as any).aiGradingEnabled ?? false,
+                     trustAiEnabled: (a as any).trustAiEnabled ?? false,
+                     gradingStyle: (a as any).gradingStyle || 'STANDARD',
+                     aiGradingPrompt: (a as any).aiGradingPrompt || '',
                   }))
            ].sort((a, b) => {
              const orderDiff = (a.orderIndex ?? 0) - (b.orderIndex ?? 0);
@@ -574,9 +631,10 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                          passingScore: lesson.assignmentPassingScore || 50,
                          isRequired: lesson.assignmentIsRequired,
                          orderIndex: j,
-                         criteria: lesson.assignmentCriteria || [], // Map criteria
-                         // AI Grading fields — was missing, causing aiGradingEnabled=false always
+                         criteria: buildCriteriaPayload(lesson.assignmentCriteria || []),
+                         // AI Grading fields
                          aiGradingEnabled: Boolean(lesson.aiGradingEnabled),
+                         trustAiEnabled: Boolean(lesson.trustAiEnabled ?? lesson.aiGradingEnabled),
                          gradingStyle: (lesson.gradingStyle === 'STANDARD' || lesson.gradingStyle === 'STRICT' || lesson.gradingStyle === 'LENIENT')
                            ? lesson.gradingStyle
                            : 'STANDARD',
@@ -584,7 +642,7 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                       };
 
                        let assignmentId = lessonId;
-                       
+
                        if (assignmentId) {
                           await assignmentService.updateAssignment(assignmentId, assignmentDTO);
                        } else {
@@ -853,9 +911,10 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                         passingScore: lesson.assignmentPassingScore || 50,
                         isRequired: lesson.assignmentIsRequired,
                         orderIndex: j,
-                        criteria: lesson.assignmentCriteria || [], // Map criteria
-                        // AI Grading fields — was missing, causing aiGradingEnabled=false always
+                        criteria: buildCriteriaPayload(lesson.assignmentCriteria || []),
+                        // AI Grading fields
                         aiGradingEnabled: Boolean(lesson.aiGradingEnabled),
+                        trustAiEnabled: Boolean(lesson.trustAiEnabled ?? lesson.aiGradingEnabled),
                         gradingStyle: (lesson.gradingStyle === 'STANDARD' || lesson.gradingStyle === 'STRICT' || lesson.gradingStyle === 'LENIENT')
                           ? lesson.gradingStyle
                           : 'STANDARD',

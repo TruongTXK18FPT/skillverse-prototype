@@ -60,6 +60,7 @@ export interface LessonDraft {
   gradingMethod?: string;
   aiGradingEnabled?: boolean;
   gradingStyle?: 'STANDARD' | 'STRICT' | 'LENIENT';
+  trustAiEnabled?: boolean;
   questions?: QuizQuestionDraft[];
   // Assignment fields
   assignmentSubmissionType?: SubmissionType;
