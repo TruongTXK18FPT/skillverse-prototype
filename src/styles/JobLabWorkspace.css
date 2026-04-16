@@ -1624,7 +1624,9 @@
 
 .jlx-input:focus {
   border-color: rgba(0, 245, 255, 0.5);
-  box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1), 0 0 20px rgba(0, 245, 255, 0.05);
+  box-shadow:
+    0 0 0 3px rgba(0, 245, 255, 0.1),
+    0 0 20px rgba(0, 245, 255, 0.05);
   background: rgba(0, 8, 20, 0.8);
 }
 
@@ -3497,16 +3499,18 @@ body.jlx-modal-open {
   overflow-y: auto;
   overscroll-behavior: contain;
   z-index: 12000;
-  padding:
-    max(5.75rem, calc(env(safe-area-inset-top) + 1.5rem))
-    clamp(1rem, 3vw, 1.75rem)
-    clamp(1.5rem, 4vw, 2.25rem);
+  padding: max(5.75rem, calc(env(safe-area-inset-top) + 1.5rem))
+    clamp(1rem, 3vw, 1.75rem) clamp(1.5rem, 4vw, 2.25rem);
   animation: jlx-modal-fade-in 0.2s ease-out;
 }
 
 @keyframes jlx-modal-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .jlx-modal {
@@ -3518,9 +3522,22 @@ body.jlx-modal-open {
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(circle at top right, rgba(0, 245, 255, 0.14), transparent 28%),
-    radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.12), transparent 32%),
-    linear-gradient(160deg, rgba(5, 12, 28, 0.99) 0%, rgba(8, 18, 38, 0.97) 50%, rgba(6, 14, 30, 0.98) 100%);
+    radial-gradient(
+      circle at top right,
+      rgba(0, 245, 255, 0.14),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(56, 189, 248, 0.12),
+      transparent 32%
+    ),
+    linear-gradient(
+      160deg,
+      rgba(5, 12, 28, 0.99) 0%,
+      rgba(8, 18, 38, 0.97) 50%,
+      rgba(6, 14, 30, 0.98) 100%
+    );
   border: 1px solid rgba(0, 245, 255, 0.18);
   box-shadow:
     0 0 0 1px rgba(0, 245, 255, 0.04),
@@ -3533,28 +3550,47 @@ body.jlx-modal-open {
 }
 
 .jlx-modal::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 245, 255, 0.012) 2px, rgba(0, 245, 255, 0.012) 4px);
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 245, 255, 0.012) 2px,
+    rgba(0, 245, 255, 0.012) 4px
+  );
   pointer-events: none;
   z-index: 1;
 }
 
 .jlx-modal::after {
-  content: '';
+  content: "";
   position: absolute;
   top: -1px;
   left: -1px;
   right: -1px;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.6) 30%, rgba(0, 245, 255, 0.9) 50%, rgba(0, 245, 255, 0.6) 70%, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 245, 255, 0.6) 30%,
+    rgba(0, 245, 255, 0.9) 50%,
+    rgba(0, 245, 255, 0.6) 70%,
+    transparent
+  );
   z-index: 2;
 }
 
 @keyframes jlx-modal-slide-up {
-  from { opacity: 0; transform: translateY(24px) scale(0.96); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .jlx-modal__header {
@@ -3564,19 +3600,28 @@ body.jlx-modal-open {
   gap: 1.25rem;
   padding: 1.35rem 1.5rem 1.15rem;
   border-bottom: 1px solid rgba(0, 245, 255, 0.12);
-  background: linear-gradient(180deg, rgba(0, 245, 255, 0.05) 0%, transparent 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 245, 255, 0.05) 0%,
+    transparent 100%
+  );
   position: relative;
   z-index: 3;
 }
 
 .jlx-modal__header::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 1.5rem;
   right: 1.5rem;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 245, 255, 0.3),
+    transparent
+  );
 }
 
 .jlx-modal__header h3 {
@@ -3654,20 +3699,28 @@ body.jlx-modal-open {
   flex-wrap: wrap;
   padding: 1.05rem 1.5rem 1.35rem;
   border-top: 1px solid rgba(0, 245, 255, 0.08);
-  background:
-    linear-gradient(180deg, rgba(0, 12, 28, 0.2) 0%, rgba(0, 10, 24, 0.72) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 12, 28, 0.2) 0%,
+    rgba(0, 10, 24, 0.72) 100%
+  );
   position: relative;
   z-index: 3;
 }
 
 .jlx-modal__actions::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 1.5rem;
   right: 1.5rem;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.22), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 245, 255, 0.22),
+    transparent
+  );
 }
 
 .jlx-modal__actions .jlx-btn {
@@ -3680,13 +3733,21 @@ body.jlx-modal-open {
 }
 
 .jlx-modal__actions .jlx-btn--primary {
-  background: linear-gradient(135deg, rgba(0, 245, 255, 0.24), rgba(59, 130, 246, 0.28));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 245, 255, 0.24),
+    rgba(59, 130, 246, 0.28)
+  );
   border-color: rgba(34, 211, 238, 0.42);
   box-shadow: 0 12px 30px rgba(0, 245, 255, 0.14);
 }
 
 .jlx-modal__actions .jlx-btn--danger {
-  background: linear-gradient(135deg, rgba(248, 113, 113, 0.16), rgba(249, 115, 22, 0.18));
+  background: linear-gradient(
+    135deg,
+    rgba(248, 113, 113, 0.16),
+    rgba(249, 115, 22, 0.18)
+  );
   border-color: rgba(248, 113, 113, 0.3);
   box-shadow: 0 12px 24px rgba(248, 113, 113, 0.08);
 }
@@ -3710,13 +3771,18 @@ body.jlx-modal-open {
 }
 
 .jlx-modal__footer::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 1.5rem;
   right: 1.5rem;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.15), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 245, 255, 0.15),
+    transparent
+  );
 }
 
 .jlx-modal__footer .jlx-btn {
@@ -3728,7 +3794,9 @@ body.jlx-modal-open {
 }
 
 .jlx-modal__footer .jlx-btn--primary:hover {
-  box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.15), 0 4px 18px rgba(0, 245, 255, 0.22);
+  box-shadow:
+    0 0 0 3px rgba(0, 245, 255, 0.15),
+    0 4px 18px rgba(0, 245, 255, 0.22);
   transform: translateY(-1px);
 }
 
@@ -3788,7 +3856,9 @@ body.jlx-modal-open {
 
 .jlx-textarea:focus {
   border-color: rgba(0, 245, 255, 0.5);
-  box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.12), 0 0 20px rgba(0, 245, 255, 0.06);
+  box-shadow:
+    0 0 0 3px rgba(0, 245, 255, 0.12),
+    0 0 20px rgba(0, 245, 255, 0.06);
   background: rgba(0, 8, 20, 0.6);
 }
 
@@ -3941,8 +4011,11 @@ body.jlx-modal-open {
   padding: 0.95rem 1rem;
   border-radius: 14px;
   border: 1px solid rgba(0, 245, 255, 0.12);
-  background:
-    linear-gradient(180deg, rgba(3, 14, 32, 0.92) 0%, rgba(3, 10, 22, 0.68) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(3, 14, 32, 0.92) 0%,
+    rgba(3, 10, 22, 0.68) 100%
+  );
   box-shadow: inset 0 1px 0 rgba(125, 211, 252, 0.08);
 }
 
@@ -3967,8 +4040,11 @@ body.jlx-modal-open {
   padding: 1rem 1.1rem;
   border-radius: 16px;
   border: 1px solid rgba(34, 197, 94, 0.2);
-  background:
-    linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(0, 245, 255, 0.04));
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.12),
+    rgba(0, 245, 255, 0.04)
+  );
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.04),
     0 12px 28px rgba(16, 185, 129, 0.08);
@@ -4033,7 +4109,11 @@ body.jlx-modal-open {
 
 .jlx-modal__notice--warning {
   border-color: rgba(251, 191, 36, 0.28);
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(120, 53, 15, 0.12));
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.12),
+    rgba(120, 53, 15, 0.12)
+  );
   color: #fde68a;
 }
 
@@ -4695,6 +4775,46 @@ body.jlx-modal-open {
   max-width: 660px;
 }
 
+.jlx-modal--decline {
+  max-width: 560px;
+}
+
+.jlx-modal__desc--danger {
+  border-color: rgba(248, 113, 113, 0.24);
+  background: rgba(248, 113, 113, 0.08);
+  color: #fda4af;
+}
+
+.jlx-modal__interview-brief {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.52);
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+.jlx-modal__interview-brief span:first-child {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.jlx-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.jlx-modal__reason-counter {
+  text-align: right;
+  font-size: 0.74rem;
+  color: #64748b;
+  margin-top: 0.3rem;
+}
+
 .jlx-offer-modal-content {
   margin-bottom: 0.5rem;
 }
@@ -4708,7 +4828,8 @@ body.jlx-modal-open {
 
 /* Override .jlx-field__hint for offer modals — use green for salary hint */
 .jlx-modal--counter .jlx-field__hint,
-.jlx-modal--offer .jlx-field__hint {
+.jlx-modal--offer .jlx-field__hint,
+.jlx-modal--decline .jlx-field__hint {
   font-size: 0.76rem;
   color: #10b981;
   margin-top: 0.3rem;
@@ -4751,6 +4872,12 @@ body.jlx-modal-open {
   padding: 0.25rem 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+@media (max-width: 720px) {
+  .jlx-modal__interview-brief {
+    flex-direction: column;
+  }
 }
 
 /* === OFFER REJECTED PANEL (candidate side waiting for recruiter re-offer) === */
@@ -5015,9 +5142,15 @@ body.jlx-modal-open {
   line-height: 1;
 }
 
-.jlx-offers-stat__val--pending { color: #a78bfa; }
-.jlx-offers-stat__val--accepted { color: #10b981; }
-.jlx-offers-stat__val--rejected { color: #f87171; }
+.jlx-offers-stat__val--pending {
+  color: #a78bfa;
+}
+.jlx-offers-stat__val--accepted {
+  color: #10b981;
+}
+.jlx-offers-stat__val--rejected {
+  color: #f87171;
+}
 
 .jlx-offers-stat__lbl {
   font-size: 0.65rem;
@@ -5600,7 +5733,11 @@ body.jlx-modal-open {
 }
 
 .jlx-ft-step.is-done .jlx-ft-step__connector {
-  background: linear-gradient(to bottom, rgba(0, 245, 255, 0.4), rgba(0, 245, 255, 0.08));
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 245, 255, 0.4),
+    rgba(0, 245, 255, 0.08)
+  );
 }
 
 .jlx-ft-step.is-pending .jlx-ft-step__connector {

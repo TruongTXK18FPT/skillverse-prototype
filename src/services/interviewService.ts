@@ -1,21 +1,26 @@
-import axiosInstance from './axiosInstance';
-import { JobApplicationStatus } from '../data/jobDTOs';
+import axiosInstance from "./axiosInstance";
 
 export enum MeetingType {
-  GOOGLE_MEET = 'GOOGLE_MEET',
-  SKILLVERSE_ROOM = 'SKILLVERSE_ROOM',
-  ZOOM = 'ZOOM',
-  MICROSOFT_TEAMS = 'MICROSOFT_TEAMS',
-  PHONE_CALL = 'PHONE_CALL',
-  ONSITE = 'ONSITE',
+  GOOGLE_MEET = "GOOGLE_MEET",
+  SKILLVERSE_ROOM = "SKILLVERSE_ROOM",
+  ZOOM = "ZOOM",
+  MICROSOFT_TEAMS = "MICROSOFT_TEAMS",
+  PHONE_CALL = "PHONE_CALL",
+  ONSITE = "ONSITE",
 }
 
 export enum InterviewStatus {
-  PENDING = 'PENDING',
-  CONFIRMED = 'CONFIRMED',
-  CANCELLED = 'CANCELLED',
-  COMPLETED = 'COMPLETED',
-  NO_SHOW = 'NO_SHOW',
+  PENDING = "PENDING",
+  CONFIRMED = "CONFIRMED",
+  CANCELLED = "CANCELLED",
+  COMPLETED = "COMPLETED",
+  NO_SHOW = "NO_SHOW",
+}
+
+export enum InterviewCancelledBy {
+  RECRUITER = "RECRUITER",
+  CANDIDATE = "CANDIDATE",
+  AUTO = "AUTO",
 }
 
 export interface CreateInterviewRequest {
@@ -45,37 +50,57 @@ export interface InterviewScheduleResponse {
   location?: string;
   interviewerName?: string;
   interviewNotes?: string;
+  responseDeadlineAt?: string;
+  respondedAt?: string;
+  cancelledBy?: InterviewCancelledBy;
+  cancelReason?: string;
+  completedAt?: string;
   status: InterviewStatus;
   createdAt: string;
   updatedAt: string;
 }
 
 class InterviewService {
-  async scheduleInterview(data: CreateInterviewRequest): Promise<InterviewScheduleResponse> {
+  async scheduleInterview(
+    data: CreateInterviewRequest,
+  ): Promise<InterviewScheduleResponse> {
     try {
-      const response = await axiosInstance.post<InterviewScheduleResponse>('/api/interviews', data);
+      const response = await axiosInstance.post<InterviewScheduleResponse>(
+        "/api/interviews",
+        data,
+      );
       return response.data;
     } catch (error: unknown) {
-      const axiosError = error as { response?: { data?: { message?: string } } };
-      const message = axiosError.response?.data?.message || 'Failed to schedule interview';
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      const message =
+        axiosError.response?.data?.message || "Failed to schedule interview";
       throw new Error(message);
     }
   }
 
-  async getInterviewByApplication(applicationId: number): Promise<InterviewScheduleResponse> {
+  async getInterviewByApplication(
+    applicationId: number,
+  ): Promise<InterviewScheduleResponse> {
     try {
       const response = await axiosInstance.get<InterviewScheduleResponse>(
         `/api/interviews/application/${applicationId}`,
       );
       return response.data;
     } catch (error: unknown) {
-      const axiosError = error as { response?: { data?: { message?: string } } };
-      const message = axiosError.response?.data?.message || 'Failed to get interview details';
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      const message =
+        axiosError.response?.data?.message || "Failed to get interview details";
       throw new Error(message);
     }
   }
 
-  async getInterviewsByJob(jobPostingId: number): Promise<InterviewScheduleResponse[]> {
+  async getInterviewsByJob(
+    jobPostingId: number,
+  ): Promise<InterviewScheduleResponse[]> {
     try {
       const response = await axiosInstance.get<InterviewScheduleResponse[]>(
         `/api/interviews/job/${jobPostingId}`,
@@ -86,7 +111,10 @@ class InterviewService {
     }
   }
 
-  async completeInterview(interviewId: number, notes?: string): Promise<InterviewScheduleResponse> {
+  async completeInterview(
+    interviewId: number,
+    notes?: string,
+  ): Promise<InterviewScheduleResponse> {
     try {
       const response = await axiosInstance.patch<InterviewScheduleResponse>(
         `/api/interviews/${interviewId}/complete`,
@@ -95,30 +123,77 @@ class InterviewService {
       );
       return response.data;
     } catch (error: unknown) {
-      const axiosError = error as { response?: { data?: { message?: string } } };
-      const message = axiosError.response?.data?.message || 'Failed to complete interview';
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      const message =
+        axiosError.response?.data?.message || "Failed to complete interview";
       throw new Error(message);
     }
   }
 
-  async cancelInterview(interviewId: number): Promise<InterviewScheduleResponse> {
+  async confirmInterview(
+    interviewId: number,
+  ): Promise<InterviewScheduleResponse> {
+    try {
+      const response = await axiosInstance.patch<InterviewScheduleResponse>(
+        `/api/interviews/${interviewId}/confirm`,
+      );
+      return response.data;
+    } catch (error: unknown) {
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      const message =
+        axiosError.response?.data?.message || "Failed to confirm interview";
+      throw new Error(message);
+    }
+  }
+
+  async declineInterview(
+    interviewId: number,
+    reason?: string,
+  ): Promise<InterviewScheduleResponse> {
+    try {
+      const response = await axiosInstance.patch<InterviewScheduleResponse>(
+        `/api/interviews/${interviewId}/decline`,
+        { reason: reason?.trim() || undefined },
+      );
+      return response.data;
+    } catch (error: unknown) {
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      const message =
+        axiosError.response?.data?.message || "Failed to decline interview";
+      throw new Error(message);
+    }
+  }
+
+  async cancelInterview(
+    interviewId: number,
+  ): Promise<InterviewScheduleResponse> {
     try {
       const response = await axiosInstance.patch<InterviewScheduleResponse>(
         `/api/interviews/${interviewId}/cancel`,
       );
       return response.data;
     } catch (error: unknown) {
-      const axiosError = error as { response?: { data?: { message?: string } } };
-      const message = axiosError.response?.data?.message || 'Failed to cancel interview';
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      const message =
+        axiosError.response?.data?.message || "Failed to cancel interview";
       throw new Error(message);
     }
   }
 
   async getMyInterviews(): Promise<InterviewScheduleResponse[]> {
     try {
-      const response = await axiosInstance.get<InterviewScheduleResponse[]>(
-        '/api/interviews/me',
-      );
+      const response =
+        await axiosInstance.get<InterviewScheduleResponse[]>(
+          "/api/interviews/me",
+        );
       return response.data;
     } catch {
       return [];
@@ -132,7 +207,7 @@ class InterviewService {
    */
   async updateApplicationStatus(
     applicationId: number,
-    status: 'OFFER_SENT' | 'OFFER_ACCEPTED' | 'OFFER_REJECTED',
+    status: "OFFER_SENT" | "OFFER_ACCEPTED" | "OFFER_REJECTED",
     data?: { offerDetails?: string },
   ): Promise<unknown> {
     try {
@@ -142,8 +217,12 @@ class InterviewService {
       );
       return response.data;
     } catch (error: unknown) {
-      const axiosError = error as { response?: { data?: { message?: string } } };
-      const message = axiosError.response?.data?.message || 'Failed to update application status';
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      const message =
+        axiosError.response?.data?.message ||
+        "Failed to update application status";
       throw new Error(message);
     }
   }

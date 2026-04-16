@@ -1,5 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import {
+  AlertTriangle,
   Link2,
   MapPin,
   Phone,
@@ -8,15 +10,18 @@ import {
   Clock3,
   Building2,
   Search,
+  Send,
   SlidersHorizontal,
   LayoutGrid,
   Table2,
+  X,
 } from "lucide-react";
 import interviewService, {
   InterviewScheduleResponse,
   InterviewStatus,
   MeetingType,
 } from "../../services/interviewService";
+import { useToast } from "../../hooks/useToast";
 import "./InterviewListPanel.css";
 
 type InterviewTimeFilter = "ALL" | "THIS_WEEK" | "THIS_MONTH" | "CUSTOM";
@@ -152,9 +157,13 @@ interface InterviewListPanelProps {
 const InterviewListPanel: React.FC<InterviewListPanelProps> = ({
   applicationId,
 }) => {
+  const { showError, showSuccess } = useToast();
   const [interviews, setInterviews] = useState<InterviewScheduleResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [interviewActionId, setInterviewActionId] = useState<number | null>(
+    null,
+  );
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<InterviewStatus | "ALL">(
     "ALL",
@@ -169,12 +178,12 @@ const InterviewListPanel: React.FC<InterviewListPanelProps> = ({
   const [pastPage, setPastPage] = useState(1);
   const [activeTab, setActiveTab] = useState<InterviewPanelTab>("UPCOMING");
   const [viewMode, setViewMode] = useState<InterviewViewMode>("GRID");
+  const [declineModalInterview, setDeclineModalInterview] =
+    useState<InterviewScheduleResponse | null>(null);
+  const [declineReason, setDeclineReason] = useState("");
+  const modalRoot = typeof document !== "undefined" ? document.body : null;
 
-  useEffect(() => {
-    void loadInterviews();
-  }, [applicationId]);
-
-  const loadInterviews = async () => {
+  const loadInterviews = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -195,6 +204,82 @@ const InterviewListPanel: React.FC<InterviewListPanelProps> = ({
       );
     } finally {
       setLoading(false);
+    }
+  }, [applicationId]);
+
+  useEffect(() => {
+    void loadInterviews();
+  }, [loadInterviews]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return undefined;
+    if (!declineModalInterview) return undefined;
+
+    document.body.classList.add("ilp-modal-open");
+    return () => {
+      document.body.classList.remove("ilp-modal-open");
+    };
+  }, [declineModalInterview]);
+
+  const handleConfirmInterview = async (interviewId: number) => {
+    try {
+      setInterviewActionId(interviewId);
+      await interviewService.confirmInterview(interviewId);
+      await loadInterviews();
+      showSuccess("Đã xác nhận", "Bạn đã xác nhận tham gia phỏng vấn.");
+    } catch (errorValue: unknown) {
+      showError(
+        "Không thể xác nhận",
+        errorValue instanceof Error ? errorValue.message : "Vui lòng thử lại.",
+      );
+    } finally {
+      setInterviewActionId(null);
+    }
+  };
+
+  const handleDeclineInterview = async (interviewId: number) => {
+    const interview = interviews.find((item) => item.id === interviewId);
+    if (!interview) {
+      showError(
+        "Không tìm thấy lịch",
+        "Lịch phỏng vấn không tồn tại hoặc đã được cập nhật.",
+      );
+      return;
+    }
+
+    setDeclineReason("");
+    setDeclineModalInterview(interview);
+  };
+
+  const submitDeclineInterview = async () => {
+    if (!declineModalInterview) return;
+
+    const reason = declineReason.trim();
+    if (reason.length < 10) {
+      showError(
+        "Lý do chưa đủ chi tiết",
+        "Vui lòng nhập lý do từ chối tối thiểu 10 ký tự.",
+      );
+      return;
+    }
+
+    try {
+      setInterviewActionId(declineModalInterview.id);
+      await interviewService.declineInterview(declineModalInterview.id, reason);
+      await loadInterviews();
+      setDeclineModalInterview(null);
+      setDeclineReason("");
+      showSuccess(
+        "Đã từ chối lịch",
+        "Hệ thống đã ghi nhận từ chối và cập nhật hồ sơ của bạn.",
+      );
+    } catch (errorValue: unknown) {
+      showError(
+        "Không thể từ chối",
+        errorValue instanceof Error ? errorValue.message : "Vui lòng thử lại.",
+      );
+    } finally {
+      setInterviewActionId(null);
     }
   };
 
@@ -356,209 +441,320 @@ const InterviewListPanel: React.FC<InterviewListPanelProps> = ({
   };
 
   return (
-    <div className="ilp-root">
-      <section className="ilp-toolbar">
-        <label className="ilp-search">
-          <Search size={14} />
-          <input
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-            placeholder="Tìm theo công việc, người phỏng vấn, địa điểm..."
-          />
-        </label>
-
-        <div className="ilp-filter-row">
-          <label className="ilp-filter">
-            <SlidersHorizontal size={13} />
-            <select
-              value={statusFilter}
-              onChange={(event) =>
-                setStatusFilter(event.target.value as InterviewStatus | "ALL")
-              }
-            >
-              <option value="ALL">Mọi trạng thái</option>
-              {Object.values(InterviewStatus).map((status) => (
-                <option key={status} value={status}>
-                  {STATUS_LABELS[status] || status}
-                </option>
-              ))}
-            </select>
+    <>
+      <div className="ilp-root">
+        <section className="ilp-toolbar">
+          <label className="ilp-search">
+            <Search size={14} />
+            <input
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Tìm theo công việc, người phỏng vấn, địa điểm..."
+            />
           </label>
 
-          <label className="ilp-filter">
-            <Video size={13} />
-            <select
-              value={meetingFilter}
-              onChange={(event) =>
-                setMeetingFilter(event.target.value as MeetingType | "ALL")
-              }
-            >
-              <option value="ALL">Mọi hình thức</option>
-              {Object.values(MeetingType).map((meetingType) => (
-                <option key={meetingType} value={meetingType}>
-                  {MEETING_LABELS[meetingType] || meetingType}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="ilp-filter">
-            <Calendar size={13} />
-            <select
-              value={timeFilter}
-              onChange={(event) => {
-                const nextFilter = event.target.value as InterviewTimeFilter;
-                setTimeFilter(nextFilter);
-                if (nextFilter !== "CUSTOM") {
-                  setFromDate("");
-                  setToDate("");
+          <div className="ilp-filter-row">
+            <label className="ilp-filter">
+              <SlidersHorizontal size={13} />
+              <select
+                value={statusFilter}
+                onChange={(event) =>
+                  setStatusFilter(event.target.value as InterviewStatus | "ALL")
                 }
-              }}
-            >
-              <option value="ALL">Mọi thời gian</option>
-              <option value="THIS_WEEK">Tuần này</option>
-              <option value="THIS_MONTH">Tháng này</option>
-              <option value="CUSTOM">Trong khoảng</option>
-            </select>
-          </label>
+              >
+                <option value="ALL">Mọi trạng thái</option>
+                {Object.values(InterviewStatus).map((status) => (
+                  <option key={status} value={status}>
+                    {STATUS_LABELS[status] || status}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-          {timeFilter === "CUSTOM" && (
-            <div className="ilp-date-range">
-              <label>
-                <span>Từ</span>
-                <input
-                  type="date"
-                  value={fromDate}
-                  onChange={(event) => setFromDate(event.target.value)}
-                />
-              </label>
-              <label>
-                <span>Đến</span>
-                <input
-                  type="date"
-                  value={toDate}
-                  onChange={(event) => setToDate(event.target.value)}
-                  min={fromDate || undefined}
-                />
-              </label>
-            </div>
-          )}
-        </div>
-      </section>
+            <label className="ilp-filter">
+              <Video size={13} />
+              <select
+                value={meetingFilter}
+                onChange={(event) =>
+                  setMeetingFilter(event.target.value as MeetingType | "ALL")
+                }
+              >
+                <option value="ALL">Mọi hình thức</option>
+                {Object.values(MeetingType).map((meetingType) => (
+                  <option key={meetingType} value={meetingType}>
+                    {MEETING_LABELS[meetingType] || meetingType}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-      <section className="ilp-panel-controls">
-        <div
-          className="ilp-tabs"
-          role="tablist"
-          aria-label="Bộ lọc trạng thái lịch phỏng vấn"
-        >
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "UPCOMING"}
-            className={`ilp-tab${activeTab === "UPCOMING" ? " is-active" : ""}`}
-            onClick={() => setActiveTab("UPCOMING")}
-          >
-            <Calendar size={14} />
-            <span>Lịch sắp tới</span>
-            <span className="ilp-tab__count">{upcoming.length}</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "HISTORY"}
-            className={`ilp-tab${activeTab === "HISTORY" ? " is-active" : ""}`}
-            onClick={() => setActiveTab("HISTORY")}
-          >
-            <Clock3 size={14} />
-            <span>Lịch sử</span>
-            <span className="ilp-tab__count">{past.length}</span>
-          </button>
-        </div>
+            <label className="ilp-filter">
+              <Calendar size={13} />
+              <select
+                value={timeFilter}
+                onChange={(event) => {
+                  const nextFilter = event.target.value as InterviewTimeFilter;
+                  setTimeFilter(nextFilter);
+                  if (nextFilter !== "CUSTOM") {
+                    setFromDate("");
+                    setToDate("");
+                  }
+                }}
+              >
+                <option value="ALL">Mọi thời gian</option>
+                <option value="THIS_WEEK">Tuần này</option>
+                <option value="THIS_MONTH">Tháng này</option>
+                <option value="CUSTOM">Trong khoảng</option>
+              </select>
+            </label>
 
-        <div
-          className="ilp-view-switch"
-          aria-label="Chế độ hiển thị lịch phỏng vấn"
-        >
-          <button
-            type="button"
-            className={`ilp-view-switch__btn${viewMode === "GRID" ? " is-active" : ""}`}
-            onClick={() => setViewMode("GRID")}
-            title="Xem dạng lưới"
-          >
-            <LayoutGrid size={14} />
-            <span>Lưới</span>
-          </button>
-          <button
-            type="button"
-            className={`ilp-view-switch__btn${viewMode === "TABLE" ? " is-active" : ""}`}
-            onClick={() => setViewMode("TABLE")}
-            title="Xem dạng bảng"
-          >
-            <Table2 size={14} />
-            <span>Bảng</span>
-          </button>
-        </div>
-      </section>
-
-      <section className="ilp-section">
-        <div className="ilp-section__head">
-          {activeTab === "UPCOMING" ? (
-            <Calendar size={14} />
-          ) : (
-            <Clock3 size={14} />
-          )}
-          <span>{activeTitle}</span>
-          <span className="ilp-section__count">{activeCount}</span>
-          <span className="ilp-section__meta">{PAGE_SIZE} lịch/trang</span>
-        </div>
-
-        {viewMode === "GRID" ? (
-          <div className="ilp-grid-list">
-            {activeInterviews.length ? (
-              activeInterviews.map((interview) => (
-                <InterviewCard key={interview.id} interview={interview} />
-              ))
-            ) : (
-              <div className="ilp-empty-inline">{activeEmptyText}</div>
+            {timeFilter === "CUSTOM" && (
+              <div className="ilp-date-range">
+                <label>
+                  <span>Từ</span>
+                  <input
+                    type="date"
+                    value={fromDate}
+                    onChange={(event) => setFromDate(event.target.value)}
+                  />
+                </label>
+                <label>
+                  <span>Đến</span>
+                  <input
+                    type="date"
+                    value={toDate}
+                    onChange={(event) => setToDate(event.target.value)}
+                    min={fromDate || undefined}
+                  />
+                </label>
+              </div>
             )}
           </div>
-        ) : activeInterviews.length ? (
-          <InterviewTable interviews={activeInterviews} activeTab={activeTab} />
-        ) : (
-          <div className="ilp-empty-inline">{activeEmptyText}</div>
-        )}
+        </section>
 
-        {activeTotalPages > 1 && (
-          <div className="ilp-pagination">
+        <section className="ilp-panel-controls">
+          <div
+            className="ilp-tabs"
+            role="tablist"
+            aria-label="Bộ lọc trạng thái lịch phỏng vấn"
+          >
             <button
               type="button"
-              onClick={onPreviousPage}
-              disabled={activePage === 1}
+              role="tab"
+              aria-selected={activeTab === "UPCOMING"}
+              className={`ilp-tab${activeTab === "UPCOMING" ? " is-active" : ""}`}
+              onClick={() => setActiveTab("UPCOMING")}
             >
-              Trước
+              <Calendar size={14} />
+              <span>Lịch sắp tới</span>
+              <span className="ilp-tab__count">{upcoming.length}</span>
             </button>
-            <span>
-              Trang {activePage}/{activeTotalPages}
-            </span>
             <button
               type="button"
-              onClick={onNextPage}
-              disabled={activePage >= activeTotalPages}
+              role="tab"
+              aria-selected={activeTab === "HISTORY"}
+              className={`ilp-tab${activeTab === "HISTORY" ? " is-active" : ""}`}
+              onClick={() => setActiveTab("HISTORY")}
             >
-              Sau
+              <Clock3 size={14} />
+              <span>Lịch sử</span>
+              <span className="ilp-tab__count">{past.length}</span>
             </button>
           </div>
+
+          <div
+            className="ilp-view-switch"
+            aria-label="Chế độ hiển thị lịch phỏng vấn"
+          >
+            <button
+              type="button"
+              className={`ilp-view-switch__btn${viewMode === "GRID" ? " is-active" : ""}`}
+              onClick={() => setViewMode("GRID")}
+              title="Xem dạng lưới"
+            >
+              <LayoutGrid size={14} />
+              <span>Lưới</span>
+            </button>
+            <button
+              type="button"
+              className={`ilp-view-switch__btn${viewMode === "TABLE" ? " is-active" : ""}`}
+              onClick={() => setViewMode("TABLE")}
+              title="Xem dạng bảng"
+            >
+              <Table2 size={14} />
+              <span>Bảng</span>
+            </button>
+          </div>
+        </section>
+
+        <section className="ilp-section">
+          <div className="ilp-section__head">
+            {activeTab === "UPCOMING" ? (
+              <Calendar size={14} />
+            ) : (
+              <Clock3 size={14} />
+            )}
+            <span>{activeTitle}</span>
+            <span className="ilp-section__count">{activeCount}</span>
+            <span className="ilp-section__meta">{PAGE_SIZE} lịch/trang</span>
+          </div>
+
+          {viewMode === "GRID" ? (
+            <div className="ilp-grid-list">
+              {activeInterviews.length ? (
+                activeInterviews.map((interview) => (
+                  <InterviewCard
+                    key={interview.id}
+                    interview={interview}
+                    interviewActionId={interviewActionId}
+                    onConfirmInterview={handleConfirmInterview}
+                    onDeclineInterview={handleDeclineInterview}
+                  />
+                ))
+              ) : (
+                <div className="ilp-empty-inline">{activeEmptyText}</div>
+              )}
+            </div>
+          ) : activeInterviews.length ? (
+            <InterviewTable
+              interviews={activeInterviews}
+              activeTab={activeTab}
+              interviewActionId={interviewActionId}
+              onConfirmInterview={handleConfirmInterview}
+              onDeclineInterview={handleDeclineInterview}
+            />
+          ) : (
+            <div className="ilp-empty-inline">{activeEmptyText}</div>
+          )}
+
+          {activeTotalPages > 1 && (
+            <div className="ilp-pagination">
+              <button
+                type="button"
+                onClick={onPreviousPage}
+                disabled={activePage === 1}
+              >
+                Trước
+              </button>
+              <span>
+                Trang {activePage}/{activeTotalPages}
+              </span>
+              <button
+                type="button"
+                onClick={onNextPage}
+                disabled={activePage >= activeTotalPages}
+              >
+                Sau
+              </button>
+            </div>
+          )}
+        </section>
+      </div>
+
+      {modalRoot &&
+        declineModalInterview &&
+        createPortal(
+          <div
+            className="ilp-modal-overlay"
+            onClick={() => setDeclineModalInterview(null)}
+          >
+            <div
+              className="ilp-modal"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="ilp-modal__header">
+                <div>
+                  <span className="ilp-modal__eyebrow">Từ chối phỏng vấn</span>
+                  <h3>Từ chối lịch phỏng vấn này?</h3>
+                </div>
+                <button
+                  type="button"
+                  className="ilp-modal__close"
+                  onClick={() => setDeclineModalInterview(null)}
+                >
+                  <X size={14} />
+                </button>
+              </div>
+
+              <div className="ilp-modal__body">
+                <p className="ilp-modal__desc">
+                  <AlertTriangle size={14} />
+                  Lý do sẽ được gửi cho nhà tuyển dụng và dùng để cập nhật trạng
+                  thái hồ sơ.
+                </p>
+
+                <div className="ilp-modal__summary">
+                  <span>{declineModalInterview.jobTitle}</span>
+                  <span>
+                    {formatDateTime(declineModalInterview.scheduledAt)}
+                  </span>
+                </div>
+
+                <label
+                  className="ilp-modal__label"
+                  htmlFor="ilp-decline-reason"
+                >
+                  Lý do từ chối <span>*</span>
+                </label>
+                <textarea
+                  id="ilp-decline-reason"
+                  className={`ilp-modal__textarea${
+                    declineReason.trim().length > 0 &&
+                    declineReason.trim().length < 10
+                      ? " is-error"
+                      : ""
+                  }`}
+                  rows={4}
+                  maxLength={250}
+                  value={declineReason}
+                  onChange={(event) => setDeclineReason(event.target.value)}
+                  placeholder="Ví dụ: Tôi bận lịch học vào khung giờ này, mong muốn đổi sang thời gian khác..."
+                />
+                <div className="ilp-modal__hint">
+                  {declineReason.trim().length}/250 ký tự
+                </div>
+              </div>
+
+              <div className="ilp-modal__actions">
+                <button
+                  type="button"
+                  className="ilp-modal-btn is-ghost"
+                  onClick={() => setDeclineModalInterview(null)}
+                  disabled={interviewActionId === declineModalInterview.id}
+                >
+                  Hủy
+                </button>
+                <button
+                  type="button"
+                  className="ilp-modal-btn is-danger"
+                  onClick={submitDeclineInterview}
+                  disabled={interviewActionId === declineModalInterview.id}
+                >
+                  <Send size={13} />
+                  Xác nhận từ chối
+                </button>
+              </div>
+            </div>
+          </div>,
+          modalRoot,
         )}
-      </section>
-    </div>
+    </>
   );
 };
 
 const InterviewTable: React.FC<{
   interviews: InterviewScheduleResponse[];
   activeTab: InterviewPanelTab;
-}> = ({ interviews, activeTab }) => {
+  interviewActionId: number | null;
+  onConfirmInterview: (interviewId: number) => void;
+  onDeclineInterview: (interviewId: number) => void;
+}> = ({
+  interviews,
+  activeTab,
+  interviewActionId,
+  onConfirmInterview,
+  onDeclineInterview,
+}) => {
   return (
     <div className="ilp-table-wrap">
       <table className="ilp-table">
@@ -571,6 +767,7 @@ const InterviewTable: React.FC<{
             <th>Trạng thái</th>
             <th>Địa điểm / Link</th>
             <th>Người phỏng vấn</th>
+            <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -583,6 +780,7 @@ const InterviewTable: React.FC<{
               <Calendar size={14} />
             );
             const countdown = getCountdown(interview.scheduledAt);
+            const canRespond = interview.status === InterviewStatus.PENDING;
 
             return (
               <tr key={interview.id}>
@@ -630,6 +828,30 @@ const InterviewTable: React.FC<{
                     {interview.interviewerName || "—"}
                   </span>
                 </td>
+                <td>
+                  {canRespond ? (
+                    <div className="ilp-table__actions">
+                      <button
+                        type="button"
+                        className="ilp-action-btn is-confirm"
+                        disabled={interviewActionId === interview.id}
+                        onClick={() => onConfirmInterview(interview.id)}
+                      >
+                        Xác nhận
+                      </button>
+                      <button
+                        type="button"
+                        className="ilp-action-btn is-decline"
+                        disabled={interviewActionId === interview.id}
+                        onClick={() => onDeclineInterview(interview.id)}
+                      >
+                        Từ chối
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="ilp-table__muted">—</span>
+                  )}
+                </td>
               </tr>
             );
           })}
@@ -639,8 +861,16 @@ const InterviewTable: React.FC<{
   );
 };
 
-const InterviewCard: React.FC<{ interview: InterviewScheduleResponse }> = ({
+const InterviewCard: React.FC<{
+  interview: InterviewScheduleResponse;
+  interviewActionId: number | null;
+  onConfirmInterview: (interviewId: number) => void;
+  onDeclineInterview: (interviewId: number) => void;
+}> = ({
   interview,
+  interviewActionId,
+  onConfirmInterview,
+  onDeclineInterview,
 }) => {
   const tone = STATUS_TONE[interview.status] || "slate";
   const label = STATUS_LABELS[interview.status] || interview.status;
@@ -659,6 +889,7 @@ const InterviewCard: React.FC<{ interview: InterviewScheduleResponse }> = ({
     InterviewStatus.CANCELLED,
     InterviewStatus.NO_SHOW,
   ].includes(interview.status as InterviewStatus);
+  const canRespond = interview.status === InterviewStatus.PENDING;
 
   return (
     <article
@@ -692,6 +923,36 @@ const InterviewCard: React.FC<{ interview: InterviewScheduleResponse }> = ({
         <div className="ilp-card__countdown">
           <span className="ilp-countdown-dot" />
           <span>Còn {countdown}</span>
+        </div>
+      )}
+
+      {canRespond && interview.responseDeadlineAt && (
+        <div className="ilp-card__meta-item ilp-card__meta-item--deadline">
+          <Clock3 size={12} />
+          <span>
+            Hạn xác nhận: {formatDateTime(interview.responseDeadlineAt)}
+          </span>
+        </div>
+      )}
+
+      {canRespond && (
+        <div className="ilp-card__actions">
+          <button
+            type="button"
+            className="ilp-action-btn is-confirm"
+            disabled={interviewActionId === interview.id}
+            onClick={() => onConfirmInterview(interview.id)}
+          >
+            Xác nhận tham gia
+          </button>
+          <button
+            type="button"
+            className="ilp-action-btn is-decline"
+            disabled={interviewActionId === interview.id}
+            onClick={() => onDeclineInterview(interview.id)}
+          >
+            Từ chối lịch
+          </button>
         </div>
       )}
 

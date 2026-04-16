@@ -85,6 +85,8 @@ interface DecisionModalState {
   offerAdditionalRequirements?: string;
 }
 
+const MIN_DECISION_MESSAGE_LENGTH = 10;
+
 const STATUS_COLORS: Record<string, string> = {
   IN_PROGRESS: "#94a3b8",
   PENDING_APPROVAL: "#fbbf24",
@@ -386,16 +388,62 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
   const handleApplicantDecision = async () => {
     if (!decisionModal) return;
 
-    // INTERVIEW_APPROVED / INTERVIEW_REJECTED don't require a note; OFFER_SENT requires salary
     const note = decisionNote.trim();
-    const needsNote = !["INTERVIEW_APPROVED", "INTERVIEW_REJECTED"].includes(
-      decisionModal.mode,
-    );
-    const requiresSalary = decisionModal.mode === "OFFER_SENT";
-    if (needsNote && (requiresSalary ? !decisionSalary.trim() : !note)) {
+    const salaryValue = decisionSalary
+      ? parseInt(decisionSalary.replace(/[^0-9]/g, ""), 10)
+      : Number.NaN;
+
+    if (decisionModal.mode === "OFFER_SENT") {
+      if (
+        !decisionSalary.trim() ||
+        Number.isNaN(salaryValue) ||
+        salaryValue <= 0
+      ) {
+        showError(
+          "Thiếu mức lương đề nghị",
+          "Vui lòng nhập mức lương hợp lệ trước khi gửi đề nghị.",
+        );
+        return;
+      }
+
+      if (note.length < MIN_DECISION_MESSAGE_LENGTH) {
+        showError(
+          "Thiếu nội dung đề nghị",
+          `Vui lòng nhập mô tả đề nghị tối thiểu ${MIN_DECISION_MESSAGE_LENGTH} ký tự.`,
+        );
+        return;
+      }
+    }
+
+    if (
+      decisionModal.mode === "ACCEPTED" &&
+      note.length < MIN_DECISION_MESSAGE_LENGTH
+    ) {
       showError(
-        "Thiếu thông tin",
-        "Hãy nhập mức lương đề nghị trước khi gửi đề nghị.",
+        "Thiếu lời nhắn duyệt",
+        `Vui lòng nhập lời nhắn cho ứng viên tối thiểu ${MIN_DECISION_MESSAGE_LENGTH} ký tự.`,
+      );
+      return;
+    }
+
+    if (
+      decisionModal.mode === "REJECTED" &&
+      note.length < MIN_DECISION_MESSAGE_LENGTH
+    ) {
+      showError(
+        "Thiếu lý do từ chối",
+        `Vui lòng nhập lý do từ chối tối thiểu ${MIN_DECISION_MESSAGE_LENGTH} ký tự.`,
+      );
+      return;
+    }
+
+    if (
+      decisionModal.mode === "INTERVIEW_REJECTED" &&
+      note.length < MIN_DECISION_MESSAGE_LENGTH
+    ) {
+      showError(
+        "Thiếu nhận xét sau phỏng vấn",
+        `Vui lòng nhập nhận xét từ chối tối thiểu ${MIN_DECISION_MESSAGE_LENGTH} ký tự.`,
       );
       return;
     }
@@ -473,13 +521,10 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
 
       // ── OFFER_SENT for negotiable jobs (post-interview) ─────────────
       if (decisionModal.mode === "OFFER_SENT") {
-        const salary = decisionSalary
-          ? parseInt(decisionSalary.replace(/[^0-9]/g, ""))
-          : undefined;
         await jobService.updateApplicationStatus(applicationId, {
           status: JobApplicationStatus.OFFER_SENT,
           offerDetails: decisionNote.trim() || undefined,
-          offerSalary: salary,
+          offerSalary: salaryValue,
           offerAdditionalRequirements:
             decisionAdditionalReqs.trim() || undefined,
         });
@@ -630,12 +675,37 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
   const completedInterviewCount = applications.filter(
     (a) => a.status === JobApplicationStatus.INTERVIEWED,
   ).length;
-  // Hiring is "complete" when: signed contracts >= target, OR enough interviews scheduled/completed
-  const isHiringCompleted =
-    completedContractsCount >= hiringTarget ||
-    scheduledInterviewCount >= hiringTarget ||
-    completedInterviewCount >= hiringTarget;
+  // Hiring is complete only when signed contracts reach target.
+  const isHiringCompleted = completedContractsCount >= hiringTarget;
   const completionReferenceContract = signedContracts[0] || null;
+
+  const getInterviewEndTime = (interview: InterviewScheduleResponse) => {
+    const duration = interview.durationMinutes || 60;
+    return new Date(interview.scheduledAt).getTime() + duration * 60 * 1000;
+  };
+
+  const canCompleteInterview = (interview: InterviewScheduleResponse) =>
+    Date.now() >= getInterviewEndTime(interview);
+
+  const getCompleteBlockedReason = (interview: InterviewScheduleResponse) => {
+    const remainingMs = getInterviewEndTime(interview) - Date.now();
+    if (remainingMs <= 0) {
+      return "";
+    }
+
+    const remainingMinutes = Math.ceil(remainingMs / 60000);
+    if (remainingMinutes < 60) {
+      return `Chỉ có thể hoàn thành sau khi buổi phỏng vấn kết thúc. Còn khoảng ${remainingMinutes} phút.`;
+    }
+
+    const hours = Math.floor(remainingMinutes / 60);
+    const minutes = remainingMinutes % 60;
+    if (minutes === 0) {
+      return `Chỉ có thể hoàn thành sau khi buổi phỏng vấn kết thúc. Còn khoảng ${hours} giờ.`;
+    }
+
+    return `Chỉ có thể hoàn thành sau khi buổi phỏng vấn kết thúc. Còn khoảng ${hours} giờ ${minutes} phút.`;
+  };
 
   const pendingApplications = applications.filter(
     (application) => application.status === JobApplicationStatus.PENDING,
@@ -1616,84 +1686,185 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
               </div>
             ) : (
               <div className="ftj-interviews__list">
-                {interviews.map((interview) => (
-                  <article key={interview.id} className="ftj-interview-card">
-                    <div className="ftj-interview-card__header">
-                      <div className="ftj-interview-card__identity">
-                        {interview.candidateAvatarUrl ? (
-                          <img
-                            src={resolveRecruitmentAssetUrl(
-                              interview.candidateAvatarUrl,
-                            )}
-                            alt={interview.candidateName}
-                            className="ftj-interview-card__avatar"
-                          />
-                        ) : (
-                          <div className="ftj-interview-card__avatar ftj-interview-card__avatar--fallback">
-                            {interview.candidateName?.[0]?.toUpperCase() || "?"}
+                {interviews.map((interview) => {
+                  const interviewCanBeCompleted =
+                    canCompleteInterview(interview);
+                  const completeBlockedReason =
+                    getCompleteBlockedReason(interview);
+
+                  return (
+                    <article key={interview.id} className="ftj-interview-card">
+                      <div className="ftj-interview-card__header">
+                        <div className="ftj-interview-card__identity">
+                          {interview.candidateAvatarUrl ? (
+                            <img
+                              src={resolveRecruitmentAssetUrl(
+                                interview.candidateAvatarUrl,
+                              )}
+                              alt={interview.candidateName}
+                              className="ftj-interview-card__avatar"
+                            />
+                          ) : (
+                            <div className="ftj-interview-card__avatar ftj-interview-card__avatar--fallback">
+                              {interview.candidateName?.[0]?.toUpperCase() ||
+                                "?"}
+                            </div>
+                          )}
+                          <div>
+                            <strong>{interview.candidateName}</strong>
+                            <span>{interview.jobTitle}</span>
                           </div>
-                        )}
-                        <div>
-                          <strong>{interview.candidateName}</strong>
-                          <span>{interview.jobTitle}</span>
                         </div>
-                      </div>
-                      <span
-                        className="ftj-interview-card__status"
-                        data-status={interview.status}
-                      >
-                        {interview.status === InterviewStatus.PENDING
-                          ? "Chờ xác nhận"
-                          : interview.status === InterviewStatus.CONFIRMED
-                            ? "Đã xác nhận"
-                            : interview.status === InterviewStatus.COMPLETED
-                              ? "Hoàn thành"
-                              : interview.status === InterviewStatus.CANCELLED
-                                ? "Đã hủy"
-                                : interview.status === InterviewStatus.NO_SHOW
-                                  ? "Không đến"
-                                  : interview.status}
-                      </span>
-                    </div>
-                    <div className="ftj-interview-card__meta">
-                      <span>
-                        <Calendar size={13} />
-                        {formatDateTime(interview.scheduledAt)}
-                      </span>
-                      <span>
-                        <Clock3 size={13} />
-                        {interview.durationMinutes} phút
-                      </span>
-                    </div>
-                    {interview.meetingLink && (
-                      <div className="ftj-interview-card__link">
-                        <Link2 size={13} />
-                        <a
-                          href={interview.meetingLink}
-                          target="_blank"
-                          rel="noreferrer"
+                        <span
+                          className="ftj-interview-card__status"
+                          data-status={interview.status}
                         >
-                          {interview.meetingLink}
-                        </a>
+                          {interview.status === InterviewStatus.PENDING
+                            ? "Chờ xác nhận"
+                            : interview.status === InterviewStatus.CONFIRMED
+                              ? "Đã xác nhận"
+                              : interview.status === InterviewStatus.COMPLETED
+                                ? "Hoàn thành"
+                                : interview.status === InterviewStatus.CANCELLED
+                                  ? "Đã hủy"
+                                  : interview.status === InterviewStatus.NO_SHOW
+                                    ? "Không đến"
+                                    : interview.status}
+                        </span>
                       </div>
-                    )}
-                    <div className="ftj-interview-card__meeting-type">
-                      <MeetingTypeIcon meetingType={interview.meetingType} />
-                      <span>{getMeetingTypeLabel(interview.meetingType)}</span>
-                    </div>
-                    {interview.interviewerName && (
-                      <div className="ftj-interview-card__interviewer">
-                        <UserCheck size={13} />
-                        {interview.interviewerName}
+                      <div className="ftj-interview-card__meta">
+                        <span>
+                          <Calendar size={13} />
+                          {formatDateTime(interview.scheduledAt)}
+                        </span>
+                        <span>
+                          <Clock3 size={13} />
+                          {interview.durationMinutes} phút
+                        </span>
                       </div>
-                    )}
-                    <div className="ftj-interview-card__actions">
-                      {interview.status === InterviewStatus.PENDING && (
-                        <>
+                      {interview.meetingLink && (
+                        <div className="ftj-interview-card__link">
+                          <Link2 size={13} />
+                          <a
+                            href={interview.meetingLink}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {interview.meetingLink}
+                          </a>
+                        </div>
+                      )}
+                      <div className="ftj-interview-card__meeting-type">
+                        <MeetingTypeIcon meetingType={interview.meetingType} />
+                        <span>
+                          {getMeetingTypeLabel(interview.meetingType)}
+                        </span>
+                      </div>
+                      {interview.interviewerName && (
+                        <div className="ftj-interview-card__interviewer">
+                          <UserCheck size={13} />
+                          {interview.interviewerName}
+                        </div>
+                      )}
+                      <div className="ftj-interview-card__actions">
+                        {interview.status === InterviewStatus.PENDING && (
+                          <>
+                            <button
+                              type="button"
+                              className="ftj-btn ftj-btn--primary ftj-btn--cyan"
+                              disabled={!interviewCanBeCompleted}
+                              title={
+                                interviewCanBeCompleted
+                                  ? undefined
+                                  : completeBlockedReason
+                              }
+                              onClick={() => {
+                                if (!interviewCanBeCompleted) {
+                                  showError(
+                                    "Chưa thể hoàn thành",
+                                    completeBlockedReason,
+                                  );
+                                  return;
+                                }
+
+                                if (job?.isRemote) {
+                                  const app = applications.find(
+                                    (a) => a.id === interview.applicationId,
+                                  );
+                                  if (app)
+                                    setInterviewCompleteModal({
+                                      application: app,
+                                      interview,
+                                    });
+                                } else {
+                                  void (async () => {
+                                    try {
+                                      await interviewService.completeInterview(
+                                        interview.id,
+                                        "",
+                                      );
+                                      // Update application to INTERVIEWED for onsite
+                                      await jobService.updateApplicationStatus(
+                                        interview.applicationId,
+                                        {
+                                          status:
+                                            JobApplicationStatus.INTERVIEWED,
+                                          acceptanceMessage:
+                                            "Phỏng vấn onsite hoàn thành.",
+                                        },
+                                      );
+                                      void loadData();
+                                    } catch (e) {
+                                      showError(
+                                        "Lỗi",
+                                        "Không thể hoàn thành phỏng vấn",
+                                      );
+                                    }
+                                  })();
+                                }
+                              }}
+                            >
+                              <CheckCircle2 size={13} />
+                              Hoàn thành
+                            </button>
+                            <button
+                              type="button"
+                              className="ftj-btn ftj-btn--danger"
+                              onClick={async () => {
+                                try {
+                                  await interviewService.cancelInterview(
+                                    interview.id,
+                                  );
+                                  void loadData();
+                                } catch (e) {
+                                  showError("Lỗi", "Không thể hủy phỏng vấn");
+                                }
+                              }}
+                            >
+                              <XCircle size={13} />
+                              Hủy
+                            </button>
+                          </>
+                        )}
+                        {interview.status === InterviewStatus.CONFIRMED && (
                           <button
                             type="button"
                             className="ftj-btn ftj-btn--primary ftj-btn--cyan"
+                            disabled={!interviewCanBeCompleted}
+                            title={
+                              interviewCanBeCompleted
+                                ? undefined
+                                : completeBlockedReason
+                            }
                             onClick={() => {
+                              if (!interviewCanBeCompleted) {
+                                showError(
+                                  "Chưa thể hoàn thành",
+                                  completeBlockedReason,
+                                );
+                                return;
+                              }
+
                               if (job?.isRemote) {
                                 const app = applications.find(
                                   (a) => a.id === interview.applicationId,
@@ -1710,7 +1881,6 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                                       interview.id,
                                       "",
                                     );
-                                    // Update application to INTERVIEWED for onsite
                                     await jobService.updateApplicationStatus(
                                       interview.applicationId,
                                       {
@@ -1734,72 +1904,11 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                             <CheckCircle2 size={13} />
                             Hoàn thành
                           </button>
-                          <button
-                            type="button"
-                            className="ftj-btn ftj-btn--danger"
-                            onClick={async () => {
-                              try {
-                                await interviewService.cancelInterview(
-                                  interview.id,
-                                );
-                                void loadData();
-                              } catch (e) {
-                                showError("Lỗi", "Không thể hủy phỏng vấn");
-                              }
-                            }}
-                          >
-                            <XCircle size={13} />
-                            Hủy
-                          </button>
-                        </>
-                      )}
-                      {interview.status === InterviewStatus.CONFIRMED && (
-                        <button
-                          type="button"
-                          className="ftj-btn ftj-btn--primary ftj-btn--cyan"
-                          onClick={() => {
-                            if (job?.isRemote) {
-                              const app = applications.find(
-                                (a) => a.id === interview.applicationId,
-                              );
-                              if (app)
-                                setInterviewCompleteModal({
-                                  application: app,
-                                  interview,
-                                });
-                            } else {
-                              void (async () => {
-                                try {
-                                  await interviewService.completeInterview(
-                                    interview.id,
-                                    "",
-                                  );
-                                  await jobService.updateApplicationStatus(
-                                    interview.applicationId,
-                                    {
-                                      status: JobApplicationStatus.INTERVIEWED,
-                                      acceptanceMessage:
-                                        "Phỏng vấn onsite hoàn thành.",
-                                    },
-                                  );
-                                  void loadData();
-                                } catch (e) {
-                                  showError(
-                                    "Lỗi",
-                                    "Không thể hoàn thành phỏng vấn",
-                                  );
-                                }
-                              })();
-                            }
-                          }}
-                        >
-                          <CheckCircle2 size={13} />
-                          Hoàn thành
-                        </button>
-                      )}
-                    </div>
-                  </article>
-                ))}
+                        )}
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
             )}
           </div>

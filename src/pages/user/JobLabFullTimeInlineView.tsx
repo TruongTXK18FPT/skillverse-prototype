@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   AlertTriangle,
@@ -13,16 +13,21 @@ import {
   Globe,
   Link2,
   MapPin,
+  MessageSquare,
   Phone,
   Plus,
   Send,
   Video,
   XCircle,
 } from "lucide-react";
-import { InterviewScheduleResponse } from "../../services/interviewService";
+import interviewService, {
+  InterviewScheduleResponse,
+  InterviewStatus,
+} from "../../services/interviewService";
 import { JobApplicationStatus } from "../../data/jobDTOs";
 import type { AppItem } from "./JobLabPage";
 import jobService from "../../services/jobService";
+import { useToast } from "../../hooks/useToast";
 import "../../styles/JobLabWorkspace.css";
 
 interface JobLabFullTimeInlineViewProps {
@@ -69,9 +74,13 @@ export default function JobLabFullTimeInlineView({
   onBack,
   onRefresh,
 }: JobLabFullTimeInlineViewProps) {
+  const { showError, showSuccess } = useToast();
   const [activeTab, setActiveTab] = useState<FullTimeTab>("overview");
   const [interviews, setInterviews] = useState<InterviewScheduleResponse[]>([]);
   const [loadingInterviews, setLoadingInterviews] = useState(false);
+  const [interviewActionId, setInterviewActionId] = useState<number | null>(
+    null,
+  );
   const [contracts, setContracts] = useState<any[]>([]);
   const [loadingContracts, setLoadingContracts] = useState(false);
   const [acceptOfferLoading, setAcceptOfferLoading] = useState(false);
@@ -79,38 +88,39 @@ export default function JobLabFullTimeInlineView({
   const [counterSalary, setCounterSalary] = useState<string>("");
   const [counterAdditionalReqs, setCounterAdditionalReqs] =
     useState<string>("");
+  const [declineModalInterview, setDeclineModalInterview] =
+    useState<InterviewScheduleResponse | null>(null);
+  const [declineReason, setDeclineReason] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const modalRoot = typeof document !== "undefined" ? document.body : null;
 
   useEffect(() => {
     if (typeof document === "undefined") return undefined;
-    if (!counterAppId) return undefined;
+    if (!counterAppId && !declineModalInterview) return undefined;
 
     document.body.classList.add("jlx-modal-open");
     return () => {
       document.body.classList.remove("jlx-modal-open");
     };
-  }, [counterAppId]);
+  }, [counterAppId, declineModalInterview]);
+
+  const loadMyInterviews = useCallback(async () => {
+    setLoadingInterviews(true);
+    try {
+      const data = await interviewService.getMyInterviews();
+      setInterviews(data.filter((i) => i.applicationId === app.applicationId));
+    } catch {
+      setInterviews([]);
+    } finally {
+      setLoadingInterviews(false);
+    }
+  }, [app.applicationId]);
 
   // Load interviews for this application (filter by applicationId)
   useEffect(() => {
     if (activeTab !== "interviews") return;
-    setLoadingInterviews(true);
-    import("../../services/interviewService").then((svc) => {
-      svc.default
-        .getMyInterviews()
-        .then((data: InterviewScheduleResponse[]) => {
-          setInterviews(
-            data.filter((i) => i.applicationId === app.applicationId),
-          );
-          setLoadingInterviews(false);
-        })
-        .catch(() => {
-          setInterviews([]);
-          setLoadingInterviews(false);
-        });
-    });
-  }, [activeTab, app.applicationId]);
+    void loadMyInterviews();
+  }, [activeTab, loadMyInterviews]);
 
   // Load contracts for this application (filter by applicationId)
   useEffect(() => {
@@ -211,6 +221,70 @@ export default function JobLabFullTimeInlineView({
     setCounterAppId(null);
     setCounterSalary("");
     setCounterAdditionalReqs("");
+  };
+
+  const handleConfirmInterview = async (interviewId: number) => {
+    try {
+      setInterviewActionId(interviewId);
+      await interviewService.confirmInterview(interviewId);
+      await loadMyInterviews();
+      onRefresh();
+      showSuccess("Đã xác nhận", "Bạn đã xác nhận tham gia phỏng vấn.");
+    } catch (error) {
+      showError(
+        "Không thể xác nhận",
+        error instanceof Error ? error.message : "Vui lòng thử lại.",
+      );
+    } finally {
+      setInterviewActionId(null);
+    }
+  };
+
+  const handleDeclineInterview = async (interviewId: number) => {
+    const interview = interviews.find((item) => item.id === interviewId);
+    if (!interview) {
+      showError(
+        "Không tìm thấy lịch",
+        "Lịch phỏng vấn không tồn tại hoặc đã được cập nhật.",
+      );
+      return;
+    }
+
+    setDeclineReason("");
+    setDeclineModalInterview(interview);
+  };
+
+  const submitDeclineInterview = async () => {
+    if (!declineModalInterview) return;
+
+    const reason = declineReason.trim();
+    if (reason.length < 10) {
+      showError(
+        "Lý do chưa đủ chi tiết",
+        "Vui lòng nhập lý do từ chối tối thiểu 10 ký tự.",
+      );
+      return;
+    }
+
+    try {
+      setInterviewActionId(declineModalInterview.id);
+      await interviewService.declineInterview(declineModalInterview.id, reason);
+      await loadMyInterviews();
+      onRefresh();
+      setDeclineModalInterview(null);
+      setDeclineReason("");
+      showSuccess(
+        "Đã từ chối lịch",
+        "Hệ thống đã ghi nhận từ chối và cập nhật hồ sơ của bạn.",
+      );
+    } catch (error) {
+      showError(
+        "Không thể từ chối",
+        error instanceof Error ? error.message : "Vui lòng thử lại.",
+      );
+    } finally {
+      setInterviewActionId(null);
+    }
   };
 
   const formatDateTime = (date?: string) => {
@@ -429,6 +503,9 @@ export default function JobLabFullTimeInlineView({
                 getMeetingIcon={getMeetingIcon}
                 getMeetingLabel={getMeetingLabel}
                 getInterviewStatusClass={getInterviewStatusClass}
+                interviewActionId={interviewActionId}
+                onConfirmInterview={handleConfirmInterview}
+                onDeclineInterview={handleDeclineInterview}
               />
             )}
           </div>
@@ -672,6 +749,98 @@ export default function JobLabFullTimeInlineView({
                   disabled={submitting || !counterSalary.trim()}
                 >
                   {submitting ? "Đang gửi..." : "Gửi phản đề nghị"}
+                </button>
+              </div>
+            </div>
+          </div>,
+          modalRoot,
+        )}
+
+      {/* Decline interview modal */}
+      {modalRoot &&
+        declineModalInterview &&
+        createPortal(
+          <div
+            className="jlx-modal-overlay"
+            onClick={() => setDeclineModalInterview(null)}
+          >
+            <div
+              className="jlx-modal jlx-modal--decline"
+              onClick={(event) => event.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="jlx-inline-decline-title"
+            >
+              <div className="jlx-modal__header">
+                <div className="jlx-modal__header-left">
+                  <AlertTriangle size={18} style={{ color: "#f87171" }} />
+                  <div className="jlx-modal__title-group">
+                    <span className="jlx-modal__eyebrow">
+                      Từ chối phỏng vấn
+                    </span>
+                    <h3 id="jlx-inline-decline-title">Nhập lý do từ chối</h3>
+                  </div>
+                </div>
+                <button
+                  className="jlx-modal__close"
+                  onClick={() => setDeclineModalInterview(null)}
+                  aria-label="Đóng"
+                >
+                  <XCircle size={16} />
+                </button>
+              </div>
+
+              <div className="jlx-modal__body">
+                <p className="jlx-modal__desc jlx-modal__desc--danger">
+                  Lý do này sẽ được gửi cho nhà tuyển dụng và dùng để cập nhật
+                  trạng thái hồ sơ.
+                </p>
+
+                <div className="jlx-modal__interview-brief">
+                  <span>{declineModalInterview.jobTitle}</span>
+                  <span>
+                    {formatDateTime(declineModalInterview.scheduledAt)}
+                  </span>
+                </div>
+
+                <div className="jlx-field">
+                  <label className="jlx-field__label">
+                    <MessageSquare size={12} />
+                    Lý do từ chối <span className="jlx-required">*</span>
+                  </label>
+                  <textarea
+                    className={`jlx-textarea${
+                      declineReason.trim().length > 0 &&
+                      declineReason.trim().length < 10
+                        ? " has-error"
+                        : ""
+                    }`}
+                    rows={4}
+                    maxLength={250}
+                    value={declineReason}
+                    onChange={(event) => setDeclineReason(event.target.value)}
+                    placeholder="Ví dụ: Mình bận lịch học trong khung giờ này, mong muốn đổi sang thời gian khác."
+                  />
+                  <div className="jlx-modal__reason-counter">
+                    {declineReason.trim().length}/250 ký tự
+                  </div>
+                </div>
+              </div>
+
+              <div className="jlx-modal__actions">
+                <button
+                  className="jlx-btn jlx-btn--ghost"
+                  onClick={() => setDeclineModalInterview(null)}
+                  disabled={interviewActionId === declineModalInterview.id}
+                >
+                  Hủy
+                </button>
+                <button
+                  className="jlx-btn jlx-btn--danger"
+                  onClick={submitDeclineInterview}
+                  disabled={interviewActionId === declineModalInterview.id}
+                >
+                  Từ chối lịch
                 </button>
               </div>
             </div>
@@ -1048,6 +1217,9 @@ function InterviewsList({
   getMeetingIcon,
   getMeetingLabel,
   getInterviewStatusClass,
+  interviewActionId,
+  onConfirmInterview,
+  onDeclineInterview,
 }: {
   interviews: InterviewScheduleResponse[];
   formatDateTime: (d?: string) => string;
@@ -1058,6 +1230,9 @@ function InterviewsList({
   getMeetingIcon: (t: string) => React.ReactNode;
   getMeetingLabel: (t: string) => string;
   getInterviewStatusClass: (s: string) => string;
+  interviewActionId: number | null;
+  onConfirmInterview: (interviewId: number) => void;
+  onDeclineInterview: (interviewId: number) => void;
 }) {
   const upcoming = interviews.filter((i) =>
     ["PENDING", "CONFIRMED"].includes(i.status),
@@ -1140,6 +1315,46 @@ function InterviewsList({
                 Tham gia
               </a>
             )}
+          </div>
+        )}
+        {!isPast &&
+          interview.status === InterviewStatus.PENDING &&
+          interview.responseDeadlineAt && (
+            <div
+              className="jlx-ft-interview-card__meta-item"
+              style={{ marginTop: "0.4rem" }}
+            >
+              <AlertTriangle size={12} />
+              <span>
+                Hạn xác nhận: {formatDateTime(interview.responseDeadlineAt)}
+              </span>
+            </div>
+          )}
+        {!isPast && interview.status === InterviewStatus.PENDING && (
+          <div
+            style={{
+              display: "flex",
+              gap: "0.6rem",
+              marginTop: "0.75rem",
+              flexWrap: "wrap",
+            }}
+          >
+            <button
+              type="button"
+              className="jlx-btn jlx-btn--primary"
+              disabled={interviewActionId === interview.id}
+              onClick={() => onConfirmInterview(interview.id)}
+            >
+              Xác nhận tham gia
+            </button>
+            <button
+              type="button"
+              className="jlx-btn jlx-btn--ghost"
+              disabled={interviewActionId === interview.id}
+              onClick={() => onDeclineInterview(interview.id)}
+            >
+              Từ chối lịch
+            </button>
           </div>
         )}
         {interview.location && (
