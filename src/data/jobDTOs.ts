@@ -115,7 +115,14 @@ export interface UpdateApplicationStatusRequest {
   rejectionReason?: string;   // Required if status = REJECTED
   interviewResult?: string;    // Optional — interview notes when marking INTERVIEWED
   offerDetails?: string;       // Optional — offer letter content when sending OFFER_SENT
+  // Recruiter's offer: structured salary + additional requirements
+  offerSalary?: number;         // Offered salary amount (VND)
+  offerAdditionalRequirements?: string; // Additional terms/benefits/conditions
+  // Candidate's response
   candidateOfferResponse?: string; // Optional — candidate's counter-offer/acceptance when responding to OFFER_SENT
+  // Candidate's counter-offer: structured salary + additional requirements
+  counterSalaryAmount?: number;    // Counter salary amount requested by candidate
+  counterAdditionalRequirements?: string; // Additional requirements from candidate
 }
 
 // ==================== RESPONSE DTOs ====================
@@ -168,7 +175,11 @@ export interface JobApplicationResponse {
   interviewResult: string | null; // Interview notes after INTERVIEWED status
   // Offer letter fields (for negotiable jobs)
   offerDetails: string | null; // Recruiter's offer details when status = OFFER_SENT
+  offerSalary: number | null; // Recruiter's offered salary amount (VND)
+  offerAdditionalRequirements: string | null; // Recruiter's additional terms/benefits
   candidateOfferResponse: string | null; // Candidate's counter-offer/acceptance when responding to offer
+  counterSalaryAmount: number | null; // Candidate's counter salary amount (VND)
+  counterAdditionalRequirements: string | null; // Candidate's additional requirements
   offerRound: number | null; // Current offer round: 1 = first offer, 2 = second (final) offer, 0/null = no offer sent yet
   // Job details for user's application view
   recruiterCompanyName: string;

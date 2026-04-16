@@ -434,6 +434,20 @@ const TacticalDossierPortfolio = () => {
     }
   };
 
+  const getWorkExperiences = () => profile?.workExperiences || [];
+
+  const getEducationHistory = () => profile?.educationHistory || [];
+
+  const formatTimeline = (start?: string, end?: string, isCurrent?: boolean) => {
+    const from = start?.trim();
+    const to = isCurrent ? 'Hiện tại' : end?.trim();
+
+    if (from && to) return `${from} - ${to}`;
+    if (from) return from;
+    if (to) return to;
+    return '';
+  };
+
   // Filter data
   const filteredCertificates = selectedCategory === 'Tất cả'
     ? certificates
@@ -753,8 +767,13 @@ const TacticalDossierPortfolio = () => {
 
                 <div>
                   {/* Contact & Links */}
-                  {(isOwner || Boolean(profile?.showContactInfo)) && (profile?.phone || profile?.linkedinUrl || profile?.githubUrl) && (
+                  {(isOwner || Boolean(profile?.showContactInfo)) && (profile?.email || profile?.phone || profile?.linkedinUrl || profile?.githubUrl) && (
                     <div style={{ display: 'flex', gap: '1rem', padding: '1rem 0', borderBottom: '1px solid var(--dossier-border-silver)', marginBottom: '1.5rem' }}>
+                      {profile?.email && (
+                        <a href={`mailto:${profile.email}`} style={{ color: 'var(--dossier-cyan)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          Email: {profile.email}
+                        </a>
+                      )}
                       {profile?.phone && (
                         <a href={`tel:${profile.phone}`} style={{ color: 'var(--dossier-cyan)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                           📞 {profile.phone}
@@ -786,6 +805,92 @@ const TacticalDossierPortfolio = () => {
                     <div style={{ marginBottom: '1.5rem' }}>
                       <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>MỤC TIÊU NGHỀ NGHIỆP</h3>
                       <p style={{ color: 'var(--dossier-silver)' }}>{profile.careerGoals}</p>
+                    </div>
+                  )}
+
+                  {/* Work Experience */}
+                  {getWorkExperiences().length > 0 && (
+                    <div style={{ marginBottom: '1.5rem' }}>
+                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>KINH NGHIỆM LÀM VIỆC</h3>
+                      <div style={{ display: 'grid', gap: '0.75rem' }}>
+                        {getWorkExperiences().map((experience, idx) => (
+                          <div
+                            key={experience.id || idx}
+                            style={{
+                              border: '1px solid var(--dossier-border-silver)',
+                              borderRadius: '0.75rem',
+                              padding: '1rem',
+                              background: 'rgba(255,255,255,0.02)',
+                            }}
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+                              <div>
+                                <div style={{ color: 'var(--dossier-silver)', fontWeight: 700 }}>
+                                  {experience.position || 'Vị trí'}
+                                </div>
+                                <div style={{ color: 'var(--dossier-cyan)', marginTop: '0.25rem' }}>
+                                  {experience.companyName || 'Doanh nghiệp'}
+                                </div>
+                              </div>
+                              <div style={{ color: 'var(--dossier-silver-dark)', textAlign: 'right' }}>
+                                {formatTimeline(experience.startDate, experience.endDate, experience.currentJob)}
+                                {experience.location ? <div>{experience.location}</div> : null}
+                              </div>
+                            </div>
+                            {experience.description && (
+                              <p style={{ color: 'var(--dossier-silver)', marginTop: '0.75rem', marginBottom: 0 }}>
+                                {experience.description}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Education */}
+                  {getEducationHistory().length > 0 && (
+                    <div style={{ marginBottom: '1.5rem' }}>
+                      <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1rem', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px' }}>HỌC VẤN</h3>
+                      <div style={{ display: 'grid', gap: '0.75rem' }}>
+                        {getEducationHistory().map((education, idx) => (
+                          <div
+                            key={education.id || idx}
+                            style={{
+                              border: '1px solid var(--dossier-border-silver)',
+                              borderRadius: '0.75rem',
+                              padding: '1rem',
+                              background: 'rgba(255,255,255,0.02)',
+                            }}
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+                              <div>
+                                <div style={{ color: 'var(--dossier-silver)', fontWeight: 700 }}>
+                                  {education.degree || 'Học vấn'}
+                                </div>
+                                <div style={{ color: 'var(--dossier-cyan)', marginTop: '0.25rem' }}>
+                                  {education.institution || 'Cơ sở đào tạo'}
+                                </div>
+                                {education.fieldOfStudy && (
+                                  <div style={{ color: 'var(--dossier-silver-dark)', marginTop: '0.25rem' }}>
+                                    {education.fieldOfStudy}
+                                  </div>
+                                )}
+                              </div>
+                              <div style={{ color: 'var(--dossier-silver-dark)', textAlign: 'right' }}>
+                                {formatTimeline(education.startDate, education.endDate)}
+                                {education.status ? <div>{education.status}</div> : null}
+                                {education.location ? <div>{education.location}</div> : null}
+                              </div>
+                            </div>
+                            {education.description && (
+                              <p style={{ color: 'var(--dossier-silver)', marginTop: '0.75rem', marginBottom: 0 }}>
+                                {education.description}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
 

@@ -17,11 +17,13 @@ export interface AdminShortTermJob {
   title?: string;
   description?: string;
   status?: string;
+  isNegotiable?: boolean;
   budget?: number;
   urgency?: string;
   deadline?: string;
   estimatedDuration?: string;
   recruiterCompanyName?: string;
+  recruiterEmail?: string;
   applicantCount?: number;
   isRemote?: boolean;
   location?: string | null;
@@ -38,7 +40,9 @@ export interface AdminPendingJob {
   title?: string;
   description?: string;
   status?: string;
+  isNegotiable?: boolean;
   recruiterCompanyName?: string;
+  recruiterEmail?: string;
   createdAt?: string;
   deadline?: string;
   budget?: number;
@@ -50,6 +54,105 @@ export interface AdminPendingJob {
   requiredSkills?: string[];
   _jobType: "FULL_TIME" | "SHORT_TERM";
 }
+
+const UNKNOWN_COMPANY_FALLBACK = "Không rõ công ty";
+const NORMALIZED_EMPTY_TEXT = new Set([
+  "n/a",
+  "na",
+  "unknown",
+  "unknown company",
+  "không rõ công ty",
+  "null",
+  "undefined",
+]);
+
+const asRecord = (value: unknown): Record<string, unknown> | null => {
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+  return value as Record<string, unknown>;
+};
+
+const getNestedValue = (
+  source: Record<string, unknown> | null,
+  path: string[],
+): unknown => {
+  let current: unknown = source;
+
+  for (const key of path) {
+    const record = asRecord(current);
+    if (!record || !(key in record)) {
+      return undefined;
+    }
+    current = record[key];
+  }
+
+  return current;
+};
+
+const normalizeText = (value: unknown): string | undefined => {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+
+  const normalized = trimmed.toLowerCase();
+  if (NORMALIZED_EMPTY_TEXT.has(normalized)) {
+    return undefined;
+  }
+
+  return trimmed;
+};
+
+const pickFirstMeaningfulText = (
+  ...candidates: unknown[]
+): string | undefined => {
+  for (const candidate of candidates) {
+    const normalized = normalizeText(candidate);
+    if (normalized) {
+      return normalized;
+    }
+  }
+
+  return undefined;
+};
+
+export const resolveRecruiterCompanyName = (
+  source: unknown,
+  fallback: string = UNKNOWN_COMPANY_FALLBACK,
+): string => {
+  const record = asRecord(source);
+
+  const companyName = pickFirstMeaningfulText(
+    record?.recruiterCompanyName,
+    record?.companyName,
+    getNestedValue(record, ["recruiterInfo", "companyName"]),
+    getNestedValue(record, ["recruiterProfile", "companyName"]),
+    getNestedValue(record, ["recruiter", "companyName"]),
+    getNestedValue(record, ["recruiter", "recruiterProfile", "companyName"]),
+  );
+
+  return companyName ?? fallback;
+};
+
+export const resolveRecruiterEmail = (source: unknown): string | undefined => {
+  const record = asRecord(source);
+
+  return pickFirstMeaningfulText(
+    record?.recruiterEmail,
+    record?.email,
+    getNestedValue(record, ["recruiter", "email"]),
+    getNestedValue(record, ["recruiterInfo", "email"]),
+    getNestedValue(record, ["recruiterProfile", "email"]),
+    getNestedValue(record, ["recruiterProfile", "user", "email"]),
+    getNestedValue(record, ["recruiter", "user", "email"]),
+    getNestedValue(record, ["user", "email"]),
+  );
+};
 
 export const formatCurrency = (amount?: number | null) => {
   if (amount === null || amount === undefined || Number.isNaN(amount)) {
@@ -84,11 +187,19 @@ export const formatDateTime = (value?: string | null) => {
 };
 
 export const formatBudgetRange = (job: {
+  isNegotiable?: boolean;
   budget?: number;
   minBudget?: number;
   maxBudget?: number;
 }) => {
+  if (job.isNegotiable) {
+    return "Thỏa thuận";
+  }
+
   if (job.budget !== undefined && job.budget !== null) {
+    if (job.budget === 0) {
+      return "Thỏa thuận";
+    }
     return formatCurrency(job.budget);
   }
 

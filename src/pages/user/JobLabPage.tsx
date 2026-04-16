@@ -35,12 +35,14 @@ import {
   Layers,
   PieChart,
   Target,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
+import JobLabOffersView from "./JobLabOffersView";
+import JobLabFullTimeInlineView from "./JobLabFullTimeInlineView";
 import jobService from "../../services/jobService";
 import shortTermJobService from "../../services/shortTermJobService";
 import { uploadMedia } from "../../services/mediaService";
-import { JobApplicationResponse, JobApplicationStatus } from "../../data/jobDTOs";
+import { JobApplicationResponse } from "../../data/jobDTOs";
 import {
   ShortTermApplicationResponse,
   SubmitDeliverableRequest,
@@ -52,7 +54,14 @@ import InterviewListPanel from "../../components/business-hud/InterviewListPanel
 import "../../styles/JobLabWorkspace.css";
 
 type JobType = "ALL" | "REGULAR" | "SHORT_TERM";
-type ViewMode = "dashboard" | "applications" | "workspace" | "contracts" | "interviews";
+type ViewMode =
+  | "dashboard"
+  | "applications"
+  | "workspace"
+  | "contracts"
+  | "interviews"
+  | "offers";
+type ApplicationTimeFilter = "ALL" | "THIS_WEEK" | "THIS_MONTH" | "CUSTOM";
 type JobLabLocationState = {
   viewMode?: ViewMode;
   jobType?: JobType;
@@ -60,7 +69,7 @@ type JobLabLocationState = {
   applicationType?: "REGULAR" | "SHORT_TERM";
 };
 
-type AppItem = {
+export type AppItem = {
   id: string;
   type: "REGULAR" | "SHORT_TERM";
   applicationId: number;
@@ -87,7 +96,11 @@ type AppItem = {
   contractStatus?: string;
   // Offer letter (negotiable jobs)
   offerDetails?: string;
+  offerSalary?: number;
+  offerAdditionalRequirements?: string;
   candidateOfferResponse?: string;
+  counterSalaryAmount?: number;
+  counterAdditionalRequirements?: string;
   isNegotiable?: boolean;
   offerRound?: number;
 };
@@ -181,12 +194,88 @@ const WORKSPACE_STEPS: Record<string, string> = {
   COMPLETED: "Hoàn tất",
 };
 
+const APPLICATIONS_PAGE_SIZE = 9;
+const WORKSPACE_PAGE_SIZE = 8;
+
+const startOfDay = (date: Date) =>
+  new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+const endOfDay = (date: Date) =>
+  new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    23,
+    59,
+    59,
+    999,
+  );
+
+const getStartOfWeek = (date: Date) => {
+  const base = startOfDay(date);
+  const day = base.getDay();
+  const delta = day === 0 ? -6 : 1 - day;
+  base.setDate(base.getDate() + delta);
+  return base;
+};
+
+const matchesTimeFilter = (
+  dateValue: string,
+  filter: ApplicationTimeFilter,
+  fromDate?: string,
+  toDate?: string,
+) => {
+  const target = new Date(dateValue);
+  if (Number.isNaN(target.getTime())) return false;
+
+  if (filter === "ALL") return true;
+
+  const now = new Date();
+
+  if (filter === "THIS_WEEK") {
+    const start = getStartOfWeek(now);
+    const end = endOfDay(now);
+    return target >= start && target <= end;
+  }
+
+  if (filter === "THIS_MONTH") {
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = endOfDay(now);
+    return target >= start && target <= end;
+  }
+
+  if (filter === "CUSTOM") {
+    if (fromDate) {
+      const from = new Date(`${fromDate}T00:00:00`);
+      if (target < from) return false;
+    }
+
+    if (toDate) {
+      const to = new Date(`${toDate}T23:59:59.999`);
+      if (target > to) return false;
+    }
+
+    return true;
+  }
+
+  return true;
+};
+
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
     maximumFractionDigits: 0,
   }).format(value || 0);
+const formatApplicationBudget = (
+  app?: Pick<AppItem, "budget" | "isNegotiable" | "type"> | null,
+) => {
+  if (!app) return formatCurrency(0);
+  if (app.isNegotiable || (app.type === "REGULAR" && app.budget <= 0)) {
+    return "Thỏa thuận";
+  }
+  return formatCurrency(app.budget);
+};
 
 const formatDate = (value?: string) =>
   value
@@ -256,8 +345,15 @@ const JobLabPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("dashboard");
   const [jobType, setJobType] = useState<JobType>("ALL");
   const [searchTerm, setSearchTerm] = useState("");
+  const [applicationTimeFilter, setApplicationTimeFilter] =
+    useState<ApplicationTimeFilter>("ALL");
+  const [applicationDateFrom, setApplicationDateFrom] = useState("");
+  const [applicationDateTo, setApplicationDateTo] = useState("");
+  const [applicationsPage, setApplicationsPage] = useState(1);
+  const [workspacePage, setWorkspacePage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [fullTimeAppId, setFullTimeAppId] = useState<string | null>(null);
   const [regularApps, setRegularApps] = useState<JobApplicationResponse[]>([]);
   const [shortTermApps, setShortTermApps] = useState<
     ShortTermApplicationResponse[]
@@ -274,11 +370,8 @@ const JobLabPage: React.FC = () => {
   const [disputeSubmitting, setDisputeSubmitting] = useState(false);
   const [disputeFiles, setDisputeFiles] = useState<File[]>([]);
   const [disputeFilesPreview, setDisputeFilesPreview] = useState<string[]>([]);
-  const [disputeSelectedEvidenceType, setDisputeSelectedEvidenceType] = useState<string>("TEXT");
-  // Offer response modal (negotiable jobs)
-  const [offerModal, setOfferModal] = useState<"view" | "counter" | null>(null);
-  const [offerResponse, setOfferResponse] = useState("");
-  const [offerSubmitting, setOfferSubmitting] = useState(false);
+  const [disputeSelectedEvidenceType, setDisputeSelectedEvidenceType] =
+    useState<string>("TEXT");
 
   const loadApplications = async () => {
     setLoading(true);
@@ -315,7 +408,11 @@ const JobLabPage: React.FC = () => {
       contractStatus: app.contractStatus,
       // Offer letter (negotiable jobs)
       offerDetails: (app as any).offerDetails,
+      offerSalary: (app as any).offerSalary,
+      offerAdditionalRequirements: (app as any).offerAdditionalRequirements,
       candidateOfferResponse: (app as any).candidateOfferResponse,
+      counterSalaryAmount: (app as any).counterSalaryAmount,
+      counterAdditionalRequirements: (app as any).counterAdditionalRequirements,
       isNegotiable: (app as any).isNegotiable,
       offerRound: (app as any).offerRound ?? 0,
     }));
@@ -364,7 +461,7 @@ const JobLabPage: React.FC = () => {
     );
   }, [regularApps, shortTermApps]);
 
-  const filteredApplications = useMemo(() => {
+  const workspaceApplications = useMemo(() => {
     return applications.filter((app) => {
       const matchesType = jobType === "ALL" || app.type === jobType;
       const query = searchTerm.trim().toLowerCase();
@@ -377,23 +474,99 @@ const JobLabPage: React.FC = () => {
     });
   }, [applications, jobType, searchTerm]);
 
+  // Workspace rail: SHORT_TERM only (full-time opens inline view instead)
+  const workspaceRailApplications = useMemo(
+    () => workspaceApplications.filter((app) => app.type === "SHORT_TERM"),
+    [workspaceApplications],
+  );
+
+  const applicationsViewItems = useMemo(
+    () =>
+      workspaceApplications.filter((app) =>
+        matchesTimeFilter(
+          app.appliedAt,
+          applicationTimeFilter,
+          applicationDateFrom,
+          applicationDateTo,
+        ),
+      ),
+    [
+      workspaceApplications,
+      applicationTimeFilter,
+      applicationDateFrom,
+      applicationDateTo,
+    ],
+  );
+
+  const applicationsTotalPages = Math.max(
+    1,
+    Math.ceil(applicationsViewItems.length / APPLICATIONS_PAGE_SIZE),
+  );
+
+  const pagedApplications = useMemo(() => {
+    const start = (applicationsPage - 1) * APPLICATIONS_PAGE_SIZE;
+    return applicationsViewItems.slice(start, start + APPLICATIONS_PAGE_SIZE);
+  }, [applicationsViewItems, applicationsPage]);
+
+  const workspaceTotalPages = Math.max(
+    1,
+    Math.ceil(workspaceRailApplications.length / WORKSPACE_PAGE_SIZE),
+  );
+
+  const pagedWorkspaceApplications = useMemo(() => {
+    const start = (workspacePage - 1) * WORKSPACE_PAGE_SIZE;
+    return workspaceRailApplications.slice(start, start + WORKSPACE_PAGE_SIZE);
+  }, [workspaceRailApplications, workspacePage]);
+
   useEffect(() => {
-    if (!filteredApplications.length) {
+    setApplicationsPage(1);
+  }, [
+    jobType,
+    searchTerm,
+    applicationTimeFilter,
+    applicationDateFrom,
+    applicationDateTo,
+  ]);
+
+  useEffect(() => {
+    setWorkspacePage(1);
+  }, [jobType, searchTerm]);
+
+  useEffect(() => {
+    setApplicationsPage((current) => Math.min(current, applicationsTotalPages));
+  }, [applicationsTotalPages]);
+
+  useEffect(() => {
+    setWorkspacePage((current) => Math.min(current, workspaceTotalPages));
+  }, [workspaceTotalPages]);
+
+  useEffect(() => {
+    if (!workspaceApplications.length) {
       setSelectedId(null);
       return;
     }
     if (
       !selectedId ||
-      !filteredApplications.some((app) => app.id === selectedId)
+      !workspaceApplications.some((app) => app.id === selectedId)
     ) {
-      setSelectedId(filteredApplications[0].id);
+      setSelectedId(workspaceApplications[0].id);
     }
-  }, [filteredApplications, selectedId]);
+  }, [workspaceApplications, selectedId]);
+
+  useEffect(() => {
+    if (!selectedId || !workspaceRailApplications.length) return;
+    const index = workspaceRailApplications.findIndex(
+      (app) => app.id === selectedId,
+    );
+    if (index < 0) return;
+    const page = Math.floor(index / WORKSPACE_PAGE_SIZE) + 1;
+    if (workspacePage !== page) {
+      setWorkspacePage(page);
+    }
+  }, [selectedId, workspaceRailApplications, workspacePage]);
 
   const selectedApp =
-    filteredApplications.find((app) => app.id === selectedId) ||
-    applications.find((app) => app.id === selectedId) ||
-    null;
+    workspaceRailApplications.find((app) => app.id === selectedId) || null;
 
   useEffect(() => {
     const navigationState = location.state as JobLabLocationState | null;
@@ -415,9 +588,7 @@ const JobLabPage: React.FC = () => {
         navigationState.applicationType === "SHORT_TERM"
           ? "shortterm"
           : "regular";
-      setSelectedId(
-        `${prefix}-${navigationState.selectedApplicationId}`,
-      );
+      setSelectedId(`${prefix}-${navigationState.selectedApplicationId}`);
     }
   }, [location.state]);
 
@@ -446,16 +617,41 @@ const JobLabPage: React.FC = () => {
     [applications],
   );
 
+  const offerAppsCount = useMemo(
+    () =>
+      applications.filter(
+        (app) =>
+          app.type === "REGULAR" &&
+          ["OFFER_SENT", "OFFER_ACCEPTED", "OFFER_REJECTED"].includes(
+            app.status,
+          ),
+      ).length,
+    [applications],
+  );
+
   const pipeline = useMemo(() => {
-    const reviewed = applications.filter((app) => app.status === "REVIEWED").length;
-    const accepted = applications.filter((app) => app.status === "ACCEPTED").length;
-    const working = applications.filter((app) =>
-      ["WORKING", "REVISION_REQUIRED", "SUBMITTED", "APPROVED"].includes(app.status),
+    const reviewed = applications.filter(
+      (app) => app.status === "REVIEWED",
     ).length;
-    const paid = applications.filter((app) => ["PAID", "COMPLETED"].includes(app.status)).length;
+    const accepted = applications.filter(
+      (app) => app.status === "ACCEPTED",
+    ).length;
+    const working = applications.filter((app) =>
+      ["WORKING", "REVISION_REQUIRED", "SUBMITTED", "APPROVED"].includes(
+        app.status,
+      ),
+    ).length;
+    const paid = applications.filter((app) =>
+      ["PAID", "COMPLETED"].includes(app.status),
+    ).length;
 
     const stages = [
-      { id: "applied", label: "Applied", count: applications.length, tone: "cyan" },
+      {
+        id: "applied",
+        label: "Applied",
+        count: applications.length,
+        tone: "cyan",
+      },
       { id: "reviewed", label: "Reviewed", count: reviewed, tone: "blue" },
       { id: "accepted", label: "Accepted", count: accepted, tone: "purple" },
       { id: "working", label: "Working", count: working, tone: "violet" },
@@ -464,7 +660,8 @@ const JobLabPage: React.FC = () => {
 
     const progress =
       stages.length > 0
-        ? (stages.filter((stage) => stage.count > 0).length / stages.length) * 100
+        ? (stages.filter((stage) => stage.count > 0).length / stages.length) *
+          100
         : 0;
 
     return { stages, progress };
@@ -493,7 +690,9 @@ const JobLabPage: React.FC = () => {
       {
         key: "closed",
         label: "Đã đóng",
-        count: applications.filter((app) => ["REJECTED", "WITHDRAWN"].includes(app.status)).length,
+        count: applications.filter((app) =>
+          ["REJECTED", "WITHDRAWN"].includes(app.status),
+        ).length,
         color: "#f59e0b",
       },
     ] as const;
@@ -530,6 +729,18 @@ const JobLabPage: React.FC = () => {
   }, [applications, stats.active, stats.completed, stats.waiting]);
 
   const openWorkspace = (app: AppItem) => {
+    // Full-time REGULAR jobs open inline view, not workspace
+    if (app.type === "REGULAR") {
+      setFullTimeAppId(app.id);
+      setViewMode("workspace");
+      return;
+    }
+    const appIndex = workspaceApplications.findIndex(
+      (item) => item.id === app.id,
+    );
+    if (appIndex >= 0) {
+      setWorkspacePage(Math.floor(appIndex / WORKSPACE_PAGE_SIZE) + 1);
+    }
     setSelectedId(app.id);
     setWorkNote("");
     setWorkFiles([]);
@@ -572,7 +783,8 @@ const JobLabPage: React.FC = () => {
       setMessage("Luồng rút đơn full-time chưa được mở ở Job Lab mới.");
       return;
     }
-    if (!(await confirmAction(`Rút đơn khỏi công việc "${app.title}"?`))) return;
+    if (!(await confirmAction(`Rút đơn khỏi công việc "${app.title}"?`)))
+      return;
     await shortTermJobService.withdrawApplication(app.applicationId);
     setMessage("Đã rút đơn thành công.");
     await loadApplications();
@@ -587,7 +799,9 @@ const JobLabPage: React.FC = () => {
       return;
     try {
       await shortTermJobService.acceptCancellation(app.applicationId);
-      setMessage("Bạn đã chấp nhận yêu cầu hủy. Tiền đã được hoàn cho nhà tuyển dụng.");
+      setMessage(
+        "Bạn đã chấp nhận yêu cầu hủy. Tiền đã được hoàn cho nhà tuyển dụng.",
+      );
       setShowDisputeModal(false);
       setViewMode("applications");
       await loadApplications();
@@ -662,37 +876,6 @@ const JobLabPage: React.FC = () => {
     setDisputeFilesPreview((prev) => [...prev, ...previews]);
   };
 
-  // ==================== OFFER LETTER (NEGOTIABLE JOBS) ====================
-  const handleOfferResponse = async (accepted: boolean) => {
-    if (!selectedApp) return;
-    if (!accepted && !offerResponse.trim()) {
-      setMessage("Vui lòng nhập lý do phản đề nghị hoặc mức lương đề xuất của bạn.");
-      return;
-    }
-    try {
-      setOfferSubmitting(true);
-      const status: JobApplicationStatus = accepted
-        ? JobApplicationStatus.OFFER_ACCEPTED
-        : JobApplicationStatus.OFFER_REJECTED;
-      await jobService.updateApplicationStatus(selectedApp.applicationId, {
-        status,
-        candidateOfferResponse: offerResponse.trim() || undefined,
-      });
-      setMessage(
-        accepted
-          ? "Bạn đã chấp nhận đề nghị. Hợp đồng sẽ được tạo sớm."
-          : "Bạn đã phản đề nghị. Nhà tuyển dụng sẽ được thông báo.",
-      );
-      setOfferModal(null);
-      setOfferResponse("");
-      await loadApplications();
-    } catch (error: any) {
-      setMessage(error?.message || "Không thể gửi phản hồi đề nghị.");
-    } finally {
-      setOfferSubmitting(false);
-    }
-  };
-
   const removeDisputeFile = (index: number) => {
     URL.revokeObjectURL(disputeFilesPreview[index]);
     setDisputeFiles((prev) => prev.filter((_, i) => i !== index));
@@ -720,7 +903,7 @@ const JobLabPage: React.FC = () => {
 
   return (
     <div
-      className={`jlx-shell${viewMode === "workspace" && filteredApplications.length > 0 ? " jlx-shell--workspace" : ""}`}
+      className={`jlx-shell${viewMode === "workspace" && workspaceApplications.length > 0 ? " jlx-shell--workspace" : ""}`}
     >
       <aside className="jlx-sidebar">
         <div className="jlx-brand">
@@ -734,73 +917,68 @@ const JobLabPage: React.FC = () => {
         </div>
 
         <nav className="jlx-nav">
-          {[
-            {
-              id: "dashboard" as const,
-              label: "Tổng quan",
-              icon: Activity,
-              count: undefined,
-            },
-            {
-              id: "applications" as const,
-              label: "Đơn",
-              icon: FileText,
-              count: stats.total,
-            },
-            {
-              id: "workspace" as const,
-              label: "Workspace",
-              icon: ClipboardList,
-              count: filteredApplications.length,
-            },
-          ].map((item) => (
+          <div className="jlx-nav__group jlx-nav__group--primary">
+            {[
+              {
+                id: "dashboard" as const,
+                label: "Tổng quan",
+                icon: Activity,
+                count: undefined,
+              },
+              {
+                id: "applications" as const,
+                label: "Đơn",
+                icon: FileText,
+                count: stats.total,
+              },
+              {
+                id: "contracts" as const,
+                label: "Hợp đồng",
+                icon: FileSignature,
+                count: undefined,
+              },
+              {
+                id: "interviews" as const,
+                label: "Phỏng vấn",
+                icon: Calendar,
+                count: undefined,
+              },
+              {
+                id: "offers" as const,
+                label: "Đề nghị",
+                icon: Send,
+                count: offerAppsCount,
+              },
+            ].map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`jlx-nav__item${viewMode === item.id ? " is-active" : ""}`}
+                onClick={() => setViewMode(item.id)}
+              >
+                <span className="jlx-nav__icon">
+                  <item.icon size={16} />
+                </span>
+                <span>{item.label}</span>
+                {item.count !== undefined && (
+                  <span className="jlx-nav__count">{item.count}</span>
+                )}
+              </button>
+            ))}
+          </div>
+          <div className="jlx-nav__group jlx-nav__group--secondary">
             <button
-              key={item.id}
               type="button"
-              className={`jlx-nav__item${viewMode === item.id ? " is-active" : ""}`}
-              onClick={() => setViewMode(item.id)}
+              className="jlx-nav__item"
+              onClick={() => navigate("/jobs")}
             >
               <span className="jlx-nav__icon">
-                <item.icon size={16} />
+                <Plus size={16} />
               </span>
-              <span>{item.label}</span>
-              {item.count !== undefined && (
-                <span className="jlx-nav__count">{item.count}</span>
-              )}
+              <span>Tìm việc</span>
             </button>
-          ))}
-          <button
-            type="button"
-            className="jlx-nav__item"
-            onClick={() => navigate("/jobs")}
-          >
-            <span className="jlx-nav__icon">
-              <Plus size={16} />
-            </span>
-            <span>Tìm việc</span>
-          </button>
-          <button
-            type="button"
-            className={`jlx-nav__item${viewMode === "contracts" ? " is-active" : ""}`}
-            onClick={() => setViewMode("contracts")}
-          >
-            <span className="jlx-nav__icon">
-              <FileSignature size={16} />
-            </span>
-            <span>Hợp đồng</span>
-          </button>
-          <button
-            type="button"
-            className={`jlx-nav__item${viewMode === "interviews" ? " is-active" : ""}`}
-            onClick={() => setViewMode("interviews")}
-          >
-            <span className="jlx-nav__icon">
-              <Calendar size={16} />
-            </span>
-            <span>Phỏng vấn</span>
-          </button>
+          </div>
         </nav>
-
       </aside>
 
       <main className="jlx-main">
@@ -812,6 +990,7 @@ const JobLabPage: React.FC = () => {
               {viewMode === "workspace" && "Workspace"}
               {viewMode === "contracts" && "Hợp đồng của tôi"}
               {viewMode === "interviews" && "Lịch phỏng vấn"}
+              {viewMode === "offers" && "Các đề nghị đã nhận"}
             </h1>
             <p>
               {viewMode === "dashboard" &&
@@ -824,6 +1003,7 @@ const JobLabPage: React.FC = () => {
                 "Xem và quản lý hợp đồng lao động đã ký."}
               {viewMode === "interviews" &&
                 "Theo dõi các buổi phỏng vấn online và onsite."}
+              {viewMode === "offers" && "Xem và phản hồi đề nghị tuyển dụng."}
             </p>
           </div>
           <div className="jlx-header__actions">
@@ -854,22 +1034,31 @@ const JobLabPage: React.FC = () => {
             <section className="jlx-joblab-hero">
               <div className="jlx-joblab-hero-backdrop"></div>
               <div className="jlx-hero-scanline"></div>
-              
+
               <div className="jlx-joblab-hero__content">
                 <div className="jlx-joblab-hero__left">
                   <div className="jlx-hero-badge">
-                    <span className="jlx-badge-icon"><Shield size={14} /></span>
-                    <span className="jlx-badge-text">SYSTEM ACTIVE: CAREER_TRACKER_V4.0</span>
+                    <span className="jlx-badge-icon">
+                      <Shield size={14} />
+                    </span>
+                    <span className="jlx-badge-text">
+                      SYSTEM ACTIVE: CAREER_TRACKER_V4.0
+                    </span>
                   </div>
                   <h1 className="jlx-title">
-                    <span className="jlx-title-primary">TRUNG TÂM CÔNG VIỆC</span>
-                    <span className="jlx-title-operator">THEO DÕI TRẠNG THÁI ỨNG TUYỂN</span>
+                    <span className="jlx-title-primary">
+                      TRUNG TÂM CÔNG VIỆC
+                    </span>
+                    <span className="jlx-title-operator">
+                      THEO DÕI TRẠNG THÁI ỨNG TUYỂN
+                    </span>
                   </h1>
                   <p className="jlx-description">
-                    Hệ thống quản lý lộ trình sự nghiệp và quy trình ứng tuyển thông minh. 
-                    Theo dõi, tối ưu hóa và làm chủ hành trình sự nghiệp của bạn.
+                    Hệ thống quản lý lộ trình sự nghiệp và quy trình ứng tuyển
+                    thông minh. Theo dõi, tối ưu hóa và làm chủ hành trình sự
+                    nghiệp của bạn.
                   </p>
-                  
+
                   <div className="jlx-hero-actions">
                     <button
                       type="button"
@@ -896,8 +1085,12 @@ const JobLabPage: React.FC = () => {
                     <Briefcase size={40} className="jlx-visual-icon" />
                   </div>
                   <div className="jlx-visual-data">
-                    <div className="jlx-data-bit"><Activity size={12} /> SYNC_OK</div>
-                    <div className="jlx-data-bit"><Cpu size={12} /> AUTH_STABLE</div>
+                    <div className="jlx-data-bit">
+                      <Activity size={12} /> SYNC_OK
+                    </div>
+                    <div className="jlx-data-bit">
+                      <Cpu size={12} /> AUTH_STABLE
+                    </div>
                   </div>
                 </div>
               </div>
@@ -910,8 +1103,12 @@ const JobLabPage: React.FC = () => {
                     <Zap className="jlx-job-stat__icon" size={24} />
                   </div>
                   <div className="jlx-job-stat__info">
-                    <div className="jlx-job-stat__value">{applications.length}</div>
-                    <div className="jlx-job-stat__label">Tổng đơn ứng tuyển</div>
+                    <div className="jlx-job-stat__value">
+                      {applications.length}
+                    </div>
+                    <div className="jlx-job-stat__label">
+                      Tổng đơn ứng tuyển
+                    </div>
                   </div>
                 </div>
                 <div className="jlx-job-stat__glow"></div>
@@ -967,28 +1164,43 @@ const JobLabPage: React.FC = () => {
                   </div>
                   <div className="jlx-pipeline-content">
                     {pipeline.stages.map((stage, index) => (
-                      <div key={stage.id} className={`jlx-pipeline-step step-${stage.id}`}>
+                      <div
+                        key={stage.id}
+                        className={`jlx-pipeline-step step-${stage.id}`}
+                      >
                         <div className="jlx-step-header">
                           <span className="jlx-step-index">0{index + 1}</span>
-                          <span className="jlx-step-label">{stage.label.toUpperCase()}</span>
+                          <span className="jlx-step-label">
+                            {stage.label.toUpperCase()}
+                          </span>
                         </div>
                         <div className="jlx-step-bar-container">
-                          <div 
-                            className="jlx-step-bar" 
-                            style={{ 
+                          <div
+                            className="jlx-step-bar"
+                            style={{
                               width: `${(stage.count / (applications.length || 1)) * 100}%`,
-                              backgroundColor: `var(--hud-${stage.tone})` 
+                              backgroundColor: `var(--hud-${stage.tone})`,
                             }}
                           ></div>
                         </div>
                         <div className="jlx-step-footer">
-                          <span className="jlx-step-count">{stage.count} UNITS</span>
-                          <span className="jlx-step-percent">{Math.round((stage.count / (applications.length || 1)) * 100)}%</span>
+                          <span className="jlx-step-count">
+                            {stage.count} UNITS
+                          </span>
+                          <span className="jlx-step-percent">
+                            {Math.round(
+                              (stage.count / (applications.length || 1)) * 100,
+                            )}
+                            %
+                          </span>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <article className="jlx-income-summary" aria-label="Tổng thu nhập">
+                  <article
+                    className="jlx-income-summary"
+                    aria-label="Tổng thu nhập"
+                  >
                     <div className="jlx-income-summary__head">
                       <span className="jlx-income-summary__icon">
                         <DollarSign size={18} />
@@ -1013,20 +1225,30 @@ const JobLabPage: React.FC = () => {
                     <h3 className="jlx-card-title">PHÂN BỔ TRẠNG THÁI</h3>
                   </div>
                   <div className="jlx-donut-container">
-                    <div 
+                    <div
                       className="jlx-donut-chart"
                       style={statusSummary.donutStyle}
                     >
                       <div className="jlx-donut-hole">
-                        <div className="jlx-donut-value">{applications.length}</div>
+                        <div className="jlx-donut-value">
+                          {applications.length}
+                        </div>
                         <div className="jlx-donut-label">TỔNG SỐ</div>
                       </div>
                     </div>
                     <div className="jlx-donut-legend">
-                      {statusSummary.items.map(item => (
+                      {statusSummary.items.map((item) => (
                         <div className="jlx-legend-item" key={item.key}>
-                          <span className="jlx-dot" style={{ backgroundColor: item.color, boxShadow: `0 0 8px ${item.color}` }}></span>
-                          <span className="jlx-legend-text">{item.label.toUpperCase()} ({item.count})</span>
+                          <span
+                            className="jlx-dot"
+                            style={{
+                              backgroundColor: item.color,
+                              boxShadow: `0 0 8px ${item.color}`,
+                            }}
+                          ></span>
+                          <span className="jlx-legend-text">
+                            {item.label.toUpperCase()} ({item.count})
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -1058,121 +1280,223 @@ const JobLabPage: React.FC = () => {
         {viewMode === "applications" && (
           <>
             <section className="jlx-app-toolbar">
-              <div className="jlx-type-tabs">
-                {[
-                  { id: "ALL", label: "Tất cả" },
-                  { id: "REGULAR", label: "Freelance" },
-                  { id: "SHORT_TERM", label: "Gig" },
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className={`jlx-type-tab${jobType === item.id ? " is-active" : ""}`}
-                    onClick={() => setJobType(item.id as JobType)}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+              <div className="jlx-app-toolbar__main">
+                <div className="jlx-type-tabs">
+                  {[
+                    { id: "ALL", label: "Tất cả" },
+                    { id: "REGULAR", label: "Freelance" },
+                    { id: "SHORT_TERM", label: "Gig" },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={`jlx-type-tab${jobType === item.id ? " is-active" : ""}`}
+                      onClick={() => setJobType(item.id as JobType)}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+                <label className="jlx-search">
+                  <Search size={16} />
+                  <input
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                    placeholder="Tìm theo tên, công ty..."
+                  />
+                </label>
               </div>
-              <label className="jlx-search">
-                <Search size={16} />
-                <input
-                  value={searchTerm}
-                  onChange={(event) => setSearchTerm(event.target.value)}
-                  placeholder="Tìm theo tên, công ty..."
-                />
-              </label>
+              <div className="jlx-app-toolbar__filters">
+                <label className="jlx-filter-control">
+                  <Clock3 size={14} />
+                  <select
+                    value={applicationTimeFilter}
+                    onChange={(event) => {
+                      const nextFilter = event.target
+                        .value as ApplicationTimeFilter;
+                      setApplicationTimeFilter(nextFilter);
+                      if (nextFilter !== "CUSTOM") {
+                        setApplicationDateFrom("");
+                        setApplicationDateTo("");
+                      }
+                    }}
+                  >
+                    <option value="ALL">Mọi thời gian</option>
+                    <option value="THIS_WEEK">Tuần này</option>
+                    <option value="THIS_MONTH">Tháng này</option>
+                    <option value="CUSTOM">Trong khoảng thời gian</option>
+                  </select>
+                </label>
+
+                {applicationTimeFilter === "CUSTOM" && (
+                  <div className="jlx-date-range">
+                    <label className="jlx-date-field">
+                      <span>Từ ngày</span>
+                      <input
+                        type="date"
+                        value={applicationDateFrom}
+                        onChange={(event) =>
+                          setApplicationDateFrom(event.target.value)
+                        }
+                      />
+                    </label>
+                    <label className="jlx-date-field">
+                      <span>Đến ngày</span>
+                      <input
+                        type="date"
+                        value={applicationDateTo}
+                        onChange={(event) =>
+                          setApplicationDateTo(event.target.value)
+                        }
+                        min={applicationDateFrom || undefined}
+                      />
+                    </label>
+                  </div>
+                )}
+              </div>
             </section>
 
-            {!filteredApplications.length ? (
+            {!applicationsViewItems.length ? (
               <div className="jlx-empty-state">
                 <FolderOpen size={42} />
                 <h3>Không có đơn phù hợp</h3>
                 <p>Thử đổi bộ lọc hoặc tìm thêm công việc mới.</p>
               </div>
             ) : (
-              <div className="jlx-card-grid">
-                {filteredApplications.map((app) => {
-                  const status = STATUS_META[app.status] || {
-                    label: app.status,
-                    tone: "slate",
-                    hint: "",
-                  };
-                  return (
-                    <article key={app.id} className="jlx-job-card">
-                      <div className="jlx-job-card__top">
-                        <span
-                          className={`jlx-type is-${app.type === "SHORT_TERM" ? "gig" : "regular"}`}
-                        >
-                          {app.type === "SHORT_TERM" ? "Gig" : "Freelance"}
-                        </span>
-                        <span className={`jlx-status is-${status.tone}`}>
-                          {status.label}
-                        </span>
-                        {app.contractId && (
-                          <span className={`jlx-status is-${app.contractStatus === 'SIGNED' ? 'green' : 'amber'}`}>
-                            {app.contractStatus === 'SIGNED' ? 'Đã ký HĐ' : 'HĐ chờ ký'}
+              <>
+                <div className="jlx-card-grid">
+                  {pagedApplications.map((app) => {
+                    const status = STATUS_META[app.status] || {
+                      label: app.status,
+                      tone: "slate",
+                      hint: "",
+                    };
+                    return (
+                      <article key={app.id} className="jlx-job-card">
+                        <div className="jlx-job-card__top">
+                          <span
+                            className={`jlx-type is-${app.type === "SHORT_TERM" ? "gig" : "regular"}`}
+                          >
+                            {app.type === "SHORT_TERM" ? "Gig" : "Freelance"}
                           </span>
-                        )}
-                      </div>
-                      <h4>{app.title}</h4>
-                      <p className="jlx-job-card__company">
-                        <Building2 size={14} />
-                        {app.company || "SkillVerse"}
-                      </p>
-                      <div className="jlx-job-card__meta">
-                        <span>
-                          <DollarSign size={14} />
-                          {formatCurrency(app.budget)}
-                        </span>
-                        <span>
-                          <Calendar size={14} />
-                          {formatDate(app.appliedAt)}
-                        </span>
-                      </div>
-                      <p className="jlx-job-card__hint">{status.hint}</p>
-                      <div className="jlx-job-card__actions">
-                        <button
-                          type="button"
-                          className="jlx-btn jlx-btn--primary"
-                          onClick={() => openWorkspace(app)}
-                        >
-                          <ClipboardList size={14} />
-                          Mở workspace
-                        </button>
-                        {app.type === "SHORT_TERM" &&
-                          ["PENDING", "REVIEWED"].includes(app.status) && (
+                          <span className={`jlx-status is-${status.tone}`}>
+                            {status.label}
+                          </span>
+                          {app.contractId && (
+                            <span
+                              className={`jlx-status is-${app.contractStatus === "SIGNED" ? "green" : "amber"}`}
+                            >
+                              {app.contractStatus === "SIGNED"
+                                ? "Đã ký HĐ"
+                                : "HĐ chờ ký"}
+                            </span>
+                          )}
+                        </div>
+                        <h4>{app.title}</h4>
+                        <p className="jlx-job-card__company">
+                          <Building2 size={14} />
+                          {app.company || "SkillVerse"}
+                        </p>
+                        <div className="jlx-job-card__meta">
+                          <span>
+                            <DollarSign size={14} />
+                            {formatApplicationBudget(app)}
+                          </span>
+                          <span>
+                            <Calendar size={14} />
+                            {formatDate(app.appliedAt)}
+                          </span>
+                        </div>
+                        <p className="jlx-job-card__hint">{status.hint}</p>
+                        <div className="jlx-job-card__actions">
+                          <button
+                            type="button"
+                            className="jlx-btn jlx-btn--primary"
+                            onClick={() => openWorkspace(app)}
+                          >
+                            <ClipboardList size={14} />
+                            Mở workspace
+                          </button>
+                          {app.type === "SHORT_TERM" &&
+                            ["PENDING", "REVIEWED"].includes(app.status) && (
+                              <button
+                                type="button"
+                                className="jlx-btn jlx-btn--ghost"
+                                onClick={() =>
+                                  withdrawShortTermApplication(app)
+                                }
+                              >
+                                <XCircle size={14} />
+                                Rút đơn
+                              </button>
+                            )}
+                          {app.contractId && (
                             <button
                               type="button"
                               className="jlx-btn jlx-btn--ghost"
-                              onClick={() => withdrawShortTermApplication(app)}
+                              onClick={() =>
+                                navigate(`/contracts/${app.contractId}`)
+                              }
                             >
-                              <XCircle size={14} />
-                              Rút đơn
+                              <FileCheck size={14} />
+                              Xem hợp đồng
                             </button>
                           )}
-                        {app.contractId && (
-                          <button
-                            type="button"
-                            className="jlx-btn jlx-btn--ghost"
-                            onClick={() => navigate(`/contracts/${app.contractId}`)}
-                          >
-                            <FileCheck size={14} />
-                            Xem hợp đồng
-                          </button>
-                        )}
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+
+                {applicationsTotalPages > 1 && (
+                  <div className="jlx-pagination">
+                    <div className="jlx-pagination__summary">
+                      {applicationsViewItems.length} đơn •{" "}
+                      {APPLICATIONS_PAGE_SIZE} đơn/trang
+                    </div>
+                    <div className="jlx-pagination__actions">
+                      <button
+                        type="button"
+                        className="jlx-btn jlx-btn--ghost"
+                        onClick={() =>
+                          setApplicationsPage((page) => Math.max(1, page - 1))
+                        }
+                        disabled={applicationsPage === 1}
+                      >
+                        Trước
+                      </button>
+                      <span className="jlx-pagination__page">
+                        Trang {applicationsPage}/{applicationsTotalPages}
+                      </span>
+                      <button
+                        type="button"
+                        className="jlx-btn jlx-btn--ghost"
+                        onClick={() =>
+                          setApplicationsPage((page) =>
+                            Math.min(applicationsTotalPages, page + 1),
+                          )
+                        }
+                        disabled={applicationsPage >= applicationsTotalPages}
+                      >
+                        Sau
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </>
         )}
 
         {viewMode === "workspace" && (
           <section className="jlx-workspace">
-            {!filteredApplications.length ? (
+            {fullTimeAppId ? (
+              <JobLabFullTimeInlineView
+                app={applications.find((a) => a.id === fullTimeAppId)!}
+                onBack={() => setFullTimeAppId(null)}
+                onRefresh={loadApplications}
+              />
+            ) : !workspaceApplications.length ? (
               <div className="jlx-empty-state">
                 <FolderOpen size={42} />
                 <h3>Chưa có workspace nào</h3>
@@ -1192,7 +1516,7 @@ const JobLabPage: React.FC = () => {
                     </button>
                     <div className="jlx-workspace-bar__info">
                       <strong>{selectedApp?.title || "Workspace"}</strong>
-                      <span>{filteredApplications.length} đơn</span>
+                      <span>{workspaceRailApplications.length} đơn Gig</span>
                     </div>
                   </div>
                 </div>
@@ -1206,11 +1530,11 @@ const JobLabPage: React.FC = () => {
                         <h3>Workspace</h3>
                       </div>
                       <span className="jlx-pill-count">
-                        {filteredApplications.length}
+                        {workspaceRailApplications.length}
                       </span>
                     </div>
                     <div className="jlx-workspace-rail__list">
-                      {filteredApplications.map((app) => {
+                      {pagedWorkspaceApplications.map((app) => {
                         const status = STATUS_META[app.status] || {
                           label: app.status,
                           tone: "slate",
@@ -1236,6 +1560,35 @@ const JobLabPage: React.FC = () => {
                         );
                       })}
                     </div>
+                    {workspaceTotalPages > 1 && (
+                      <div className="jlx-workspace-rail__pagination">
+                        <button
+                          type="button"
+                          className="jlx-btn jlx-btn--ghost"
+                          onClick={() =>
+                            setWorkspacePage((page) => Math.max(1, page - 1))
+                          }
+                          disabled={workspacePage === 1}
+                        >
+                          Trước
+                        </button>
+                        <span>
+                          Trang {workspacePage}/{workspaceTotalPages}
+                        </span>
+                        <button
+                          type="button"
+                          className="jlx-btn jlx-btn--ghost"
+                          onClick={() =>
+                            setWorkspacePage((page) =>
+                              Math.min(workspaceTotalPages, page + 1),
+                            )
+                          }
+                          disabled={workspacePage >= workspaceTotalPages}
+                        >
+                          Sau
+                        </button>
+                      </div>
+                    )}
                   </aside>
 
                   <div className="jlx-workspace-detail">
@@ -1264,7 +1617,7 @@ const JobLabPage: React.FC = () => {
                               </span>
                               <span className="jlx-chip">
                                 <DollarSign size={12} />
-                                {formatCurrency(selectedApp.budget)}
+                                {formatApplicationBudget(selectedApp)}
                               </span>
                               {selectedApp.proposedDuration && (
                                 <span className="jlx-chip">
@@ -1292,20 +1645,38 @@ const JobLabPage: React.FC = () => {
 
                             {/* Cancellation requested — warning banner */}
                             {selectedApp.type === "SHORT_TERM" &&
-                              selectedApp.status === "CANCELLATION_REQUESTED" && (
+                              selectedApp.status ===
+                                "CANCELLATION_REQUESTED" && (
                                 <div className="jlx-warning-banner">
                                   <AlertTriangle size={18} />
                                   <div>
-                                    <strong>Nhà tuyển dụng yêu cầu hủy công việc</strong>
+                                    <strong>
+                                      Nhà tuyển dụng yêu cầu hủy công việc
+                                    </strong>
                                     <p>
                                       Công việc đã qua 5 lần yêu cầu sửa đổi.
                                       {selectedApp.responseDeadlineAt && (
-                                        <> Bạn có <strong>{formatCountdown(selectedApp.responseDeadlineAt)}</strong> để phản hồi.</>
+                                        <>
+                                          {" "}
+                                          Bạn có{" "}
+                                          <strong>
+                                            {formatCountdown(
+                                              selectedApp.responseDeadlineAt,
+                                            )}
+                                          </strong>{" "}
+                                          để phản hồi.
+                                        </>
                                       )}
                                     </p>
                                     <p className="jlx-warning-banner__note">
-                                      Sau {selectedApp.responseDeadlineAt ? new Date(selectedApp.responseDeadlineAt).toLocaleString("vi-VN") : ""} nếu không phản hồi,
-                                      hệ thống sẽ tự động hủy và hoàn tiền cho nhà tuyển dụng.
+                                      Sau{" "}
+                                      {selectedApp.responseDeadlineAt
+                                        ? new Date(
+                                            selectedApp.responseDeadlineAt,
+                                          ).toLocaleString("vi-VN")
+                                        : ""}{" "}
+                                      nếu không phản hồi, hệ thống sẽ tự động
+                                      hủy và hoàn tiền cho nhà tuyển dụng.
                                     </p>
                                   </div>
                                 </div>
@@ -1329,17 +1700,24 @@ const JobLabPage: React.FC = () => {
 
                             {/* Dispute opened — show status */}
                             {selectedApp.type === "SHORT_TERM" &&
-                              selectedApp.status === "CANCELLATION_REQUESTED" && (
+                              selectedApp.status ===
+                                "CANCELLATION_REQUESTED" && (
                                 <div className="jlx-warning-banner">
                                   <AlertTriangle size={18} />
                                   <div>
-                                    <strong>Yêu cầu hủy đang chờ admin xem xét</strong>
+                                    <strong>
+                                      Yêu cầu hủy đang chờ admin xem xét
+                                    </strong>
                                     <p>
-                                      Recruiter đã gửi yêu cầu hủy sau nhiều lần sửa đổi.
-                                      Admin sẽ kiểm tra audit log và bằng chứng trước khi quyết định.
+                                      Recruiter đã gửi yêu cầu hủy sau nhiều lần
+                                      sửa đổi. Admin sẽ kiểm tra audit log và
+                                      bằng chứng trước khi quyết định.
                                     </p>
                                     <p className="jlx-warning-banner__note">
-                                      Bạn không cần chấp nhận hủy. Nếu không đồng ý, hãy gửi dispute và đính kèm file hoặc hình ảnh chứng minh công việc đã làm đúng yêu cầu.
+                                      Bạn không cần chấp nhận hủy. Nếu không
+                                      đồng ý, hãy gửi dispute và đính kèm file
+                                      hoặc hình ảnh chứng minh công việc đã làm
+                                      đúng yêu cầu.
                                     </p>
                                   </div>
                                 </div>
@@ -1351,10 +1729,14 @@ const JobLabPage: React.FC = () => {
                                 <div className="jlx-warning-banner">
                                   <AlertTriangle size={18} />
                                   <div>
-                                    <strong>Đã mở quyền dispute sau 5 lần sửa</strong>
+                                    <strong>
+                                      Đã mở quyền dispute sau 5 lần sửa
+                                    </strong>
                                     <p>
-                                      Công việc này đã chạm ngưỡng 5 lần yêu cầu sửa. Nếu recruiter tiếp tục gây bất lợi,
-                                      bạn có thể gửi dispute cho admin cùng bằng chứng để được xem xét bảo vệ.
+                                      Công việc này đã chạm ngưỡng 5 lần yêu cầu
+                                      sửa. Nếu recruiter tiếp tục gây bất lợi,
+                                      bạn có thể gửi dispute cho admin cùng bằng
+                                      chứng để được xem xét bảo vệ.
                                     </p>
                                   </div>
                                 </div>
@@ -1364,7 +1746,10 @@ const JobLabPage: React.FC = () => {
                               selectedApp.status === "DISPUTE_OPENED" && (
                                 <div className="jlx-sla-badge is-warning">
                                   <Shield size={14} />
-                                  <span>Khiếu nại đã gửi lên Admin. Vui lòng chờ xử lý.</span>
+                                  <span>
+                                    Khiếu nại đã gửi lên Admin. Vui lòng chờ xử
+                                    lý.
+                                  </span>
                                 </div>
                               )}
                           </div>
@@ -1380,12 +1765,6 @@ const JobLabPage: React.FC = () => {
                                 ).label
                               }
                             </span>
-                            {selectedApp.status === "OFFER_SENT" && (
-                              <span className="jlx-status is-emerald">
-                                <Paperclip size={11} />
-                                Đề nghị mới
-                              </span>
-                            )}
                             {selectedApp.status === "OFFER_ACCEPTED" && (
                               <span className="jlx-status is-green">
                                 <CheckCircle2 size={11} />
@@ -1446,7 +1825,9 @@ const JobLabPage: React.FC = () => {
                                       </div>
                                       <span>{label}</span>
                                     </div>
-                                    {index < Object.keys(WORKSPACE_STEPS).length - 1 && (
+                                    {index <
+                                      Object.keys(WORKSPACE_STEPS).length -
+                                        1 && (
                                       <div className="jlx-step__connector" />
                                     )}
                                   </React.Fragment>
@@ -1456,7 +1837,14 @@ const JobLabPage: React.FC = () => {
                           </div>
                         )}
 
-                        <div className="jlx-workspace-grid">
+                        <div
+                          className={`jlx-workspace-grid${
+                            selectedApp.type === "REGULAR" &&
+                            selectedApp.status === "OFFER_SENT"
+                              ? " is-expanded"
+                              : ""
+                          }`}
+                        >
                           <article className="jlx-panel">
                             <div className="jlx-info-grid">
                               <div className="jlx-info-card">
@@ -1494,23 +1882,32 @@ const JobLabPage: React.FC = () => {
                               <div className="jlx-feedback-section__header">
                                 <MessageSquare size={14} />
                                 <span>Feedback từ Nhà tuyển dụng</span>
-                                {selectedApp.revisionNotes && selectedApp.revisionNotes.length > 0 && (
-                                  <span className="jlx-feedback-section__count">
-                                    {selectedApp.revisionNotes.length}
-                                  </span>
-                                )}
+                                {selectedApp.revisionNotes &&
+                                  selectedApp.revisionNotes.length > 0 && (
+                                    <span className="jlx-feedback-section__count">
+                                      {selectedApp.revisionNotes.length}
+                                    </span>
+                                  )}
                               </div>
 
                               {/* Recruiter open feedback — most prominent */}
                               {selectedApp.revisionNotes?.some(
-                                (n) => !n.resolvedAt && n.requestedById !== selectedApp.applicationId
+                                (n) =>
+                                  !n.resolvedAt &&
+                                  n.requestedById !== selectedApp.applicationId,
                               ) ? (
                                 <div className="jlx-feedback-list jlx-feedback-list--scrollable">
                                   {selectedApp.revisionNotes
                                     .slice()
-                                    .sort((a, b) => new Date(b.requestedAt).getTime() - new Date(a.requestedAt).getTime())
+                                    .sort(
+                                      (a, b) =>
+                                        new Date(b.requestedAt).getTime() -
+                                        new Date(a.requestedAt).getTime(),
+                                    )
                                     .map((note) => {
-                                      const isRecruiter = note.requestedById !== selectedApp.applicationId;
+                                      const isRecruiter =
+                                        note.requestedById !==
+                                        selectedApp.applicationId;
                                       const isResolved = !!note.resolvedAt;
                                       return (
                                         <div
@@ -1525,18 +1922,25 @@ const JobLabPage: React.FC = () => {
                                                 <CheckCircle2 size={13} />
                                               )}
                                               <span className="jlx-feedback-card__author">
-                                                {note.requestedByName || "Nộp bài"}
+                                                {note.requestedByName ||
+                                                  "Nộp bài"}
                                               </span>
-                                              <span className={`jlx-feedback-card__badge ${isRecruiter ? "badge-recruiter" : "badge-worker"}`}>
-                                                {isRecruiter ? "Nhà tuyển dụng" : "Ứng viên"}
+                                              <span
+                                                className={`jlx-feedback-card__badge ${isRecruiter ? "badge-recruiter" : "badge-worker"}`}
+                                              >
+                                                {isRecruiter
+                                                  ? "Nhà tuyển dụng"
+                                                  : "Ứng viên"}
                                               </span>
                                               {isResolved ? (
                                                 <span className="jlx-feedback-card__status badge-resolved">
-                                                  <CheckCircle2 size={10} /> Đã xử lý
+                                                  <CheckCircle2 size={10} /> Đã
+                                                  xử lý
                                                 </span>
                                               ) : isRecruiter ? (
                                                 <span className="jlx-feedback-card__status badge-open">
-                                                  <AlertTriangle size={10} /> Cần sửa
+                                                  <AlertTriangle size={10} />{" "}
+                                                  Cần sửa
                                                 </span>
                                               ) : null}
                                             </div>
@@ -1547,13 +1951,16 @@ const JobLabPage: React.FC = () => {
                                           <p className="jlx-feedback-card__note">
                                             {note.note}
                                           </p>
-                                          {note.specificIssues && note.specificIssues.length > 0 && (
-                                            <ul className="jlx-feedback-card__issues">
-                                              {note.specificIssues.map((issue, i) => (
-                                                <li key={i}>{issue}</li>
-                                              ))}
-                                            </ul>
-                                          )}
+                                          {note.specificIssues &&
+                                            note.specificIssues.length > 0 && (
+                                              <ul className="jlx-feedback-card__issues">
+                                                {note.specificIssues.map(
+                                                  (issue, i) => (
+                                                    <li key={i}>{issue}</li>
+                                                  ),
+                                                )}
+                                              </ul>
+                                            )}
                                         </div>
                                       );
                                     })}
@@ -1561,7 +1968,9 @@ const JobLabPage: React.FC = () => {
                               ) : (
                                 <div className="jlx-feedback-empty">
                                   <MessageSquare size={18} />
-                                  <span>Chưa có feedback từ Nhà tuyển dụng</span>
+                                  <span>
+                                    Chưa có feedback từ Nhà tuyển dụng
+                                  </span>
                                 </div>
                               )}
                             </div>
@@ -1630,13 +2039,16 @@ const JobLabPage: React.FC = () => {
 
                             {/* Cancellation requested actions */}
                             {selectedApp.type === "SHORT_TERM" &&
-                              selectedApp.status === "CANCELLATION_REQUESTED" && (
+                              selectedApp.status ===
+                                "CANCELLATION_REQUESTED" && (
                                 <article className="jlx-panel">
                                   <div className="jlx-dispute-actions">
                                     <button
                                       type="button"
                                       className="jlx-btn jlx-btn--danger"
-                                      onClick={() => openDisputeForm(selectedApp)}
+                                      onClick={() =>
+                                        openDisputeForm(selectedApp)
+                                      }
                                     >
                                       <Shield size={14} />
                                       Khiếu nại lên Admin
@@ -1644,7 +2056,9 @@ const JobLabPage: React.FC = () => {
                                     <button
                                       type="button"
                                       className="jlx-btn jlx-btn--ghost"
-                                      onClick={() => acceptCancellation(selectedApp)}
+                                      onClick={() =>
+                                        acceptCancellation(selectedApp)
+                                      }
                                     >
                                       <CheckCircle2 size={14} />
                                       Chấp nhận hủy
@@ -1661,84 +2075,14 @@ const JobLabPage: React.FC = () => {
                                     onClick={() => openDisputeForm(selectedApp)}
                                   >
                                     <Shield size={14} />
-                                    {selectedApp.status === "CANCELLATION_REQUESTED"
+                                    {selectedApp.status ===
+                                    "CANCELLATION_REQUESTED"
                                       ? "Gửi bằng chứng cho admin"
                                       : "Mở dispute sau 5 lần sửa"}
                                   </button>
                                 </div>
                               </article>
                             )}
-
-                            {/* OFFER RESPONSE PANEL — shown when status is OFFER_SENT */}
-                            {selectedApp.type === "REGULAR" &&
-                              selectedApp.status === "OFFER_SENT" &&
-                              selectedApp.isNegotiable && (
-                                <article className="jlx-panel jlx-panel--offer">
-                                  <div className="jlx-offer-panel">
-                                    {/* Round indicator */}
-                                    <div className="jlx-offer-round-badge">
-                                      {selectedApp.offerRound === 2 ? (
-                                        <span className="jlx-offer-round-badge__final">
-                                          <AlertTriangle size={12} />
-                                          Vòng cuối — từ chối sẽ kết thúc
-                                        </span>
-                                      ) : (
-                                        <span className="jlx-offer-round-badge__normal">
-                                          <FileText size={12} />
-                                          Đề nghị lần {(selectedApp.offerRound ?? 1)}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <div className="jlx-offer-panel__header">
-                                      <FileText size={16} />
-                                      <div>
-                                        <strong>Đề nghị từ Nhà tuyển dụng</strong>
-                                        <span>Xem chi tiết và phản hồi đề nghị</span>
-                                      </div>
-                                    </div>
-
-                                    {/* Recruiter's offer details */}
-                                    {selectedApp.offerDetails && (
-                                      <div className="jlx-offer-details">
-                                        <div className="jlx-offer-details__label">
-                                          <Building2 size={12} />
-                                          <span>Chi tiết đề nghị</span>
-                                        </div>
-                                        <div className="jlx-offer-details__content">
-                                          {selectedApp.offerDetails}
-                                        </div>
-                                      </div>
-                                    )}
-
-                                    <div className="jlx-offer-panel__actions">
-                                      <button
-                                        type="button"
-                                        className="jlx-btn jlx-btn--primary"
-                                        onClick={() => setOfferModal("view")}
-                                      >
-                                        <CheckCircle2 size={14} />
-                                        Chấp nhận đề nghị
-                                      </button>
-                                      <button
-                                        type="button"
-                                        className="jlx-btn jlx-btn--ghost"
-                                        onClick={() => {
-                                          setOfferResponse(
-                                            selectedApp.candidateOfferResponse || "",
-                                          );
-                                          setOfferModal("counter");
-                                        }}
-                                      >
-                                        <MessageSquare size={14} />
-                                        {selectedApp.offerRound === 2
-                                          ? "Từ chối"
-                                          : "Phản đề nghị"}
-                                      </button>
-                                    </div>
-                                  </div>
-                                </article>
-                              )}
 
                             {/* OFFER REJECTED PANEL — shown after candidate countered/responded,
                                 before recruiter re-sends offer or permanently closes */}
@@ -1749,8 +2093,12 @@ const JobLabPage: React.FC = () => {
                                     <div className="jlx-offer-panel__header">
                                       <Clock3 size={16} />
                                       <div>
-                                        <strong>Chờ phản hồi từ Nhà tuyển dụng</strong>
-                                        <span>Phản đề nghị của bạn đã được gửi</span>
+                                        <strong>
+                                          Chờ phản hồi từ Nhà tuyển dụng
+                                        </strong>
+                                        <span>
+                                          Phản đề nghị của bạn đã được gửi
+                                        </span>
                                       </div>
                                     </div>
 
@@ -1758,8 +2106,9 @@ const JobLabPage: React.FC = () => {
                                       <div className="jlx-offer-rejected-notice">
                                         <AlertTriangle size={14} />
                                         <p>
-                                          Đây là vòng cuối. Nhà tuyển dụng có thể gửi đề nghị lại
-                                          hoặc kết thúc. Nếu bị từ chối, hồ sơ sẽ bị loại.
+                                          Đây là vòng cuối. Nhà tuyển dụng có
+                                          thể gửi đề nghị lại hoặc kết thúc. Nếu
+                                          bị từ chối, hồ sơ sẽ bị loại.
                                         </p>
                                       </div>
                                     )}
@@ -1768,7 +2117,9 @@ const JobLabPage: React.FC = () => {
                                     {selectedApp.candidateOfferResponse && (
                                       <div className="jlx-feedback-card is-worker">
                                         <div className="jlx-feedback-card__author-row">
-                                          <span className="jlx-feedback-card__author">Bạn</span>
+                                          <span className="jlx-feedback-card__author">
+                                            Bạn
+                                          </span>
                                           <span className="jlx-feedback-card__badge badge-worker">
                                             Phản đề nghị
                                           </span>
@@ -1795,7 +2146,9 @@ const JobLabPage: React.FC = () => {
                                       <div className="jlx-feedback-card__top">
                                         <div className="jlx-feedback-card__author-row">
                                           <CheckCircle2 size={13} />
-                                          <span className="jlx-feedback-card__author">Bạn</span>
+                                          <span className="jlx-feedback-card__author">
+                                            Bạn
+                                          </span>
                                           <span className="jlx-feedback-card__badge badge-worker">
                                             Chấp thuận
                                           </span>
@@ -1999,10 +2352,25 @@ const JobLabPage: React.FC = () => {
           </section>
         )}
 
+        {viewMode === "offers" && (
+          <section className="jlx-offers-section">
+            <JobLabOffersView
+              applications={applications}
+              onRefresh={loadApplications}
+            />
+          </section>
+        )}
+
         {/* Dispute modal */}
         {showDisputeModal && selectedApp && (
-          <div className="jlx-modal-overlay" onClick={() => setShowDisputeModal(false)}>
-            <div className="jlx-modal jlx-modal--dispute" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="jlx-modal-overlay"
+            onClick={() => setShowDisputeModal(false)}
+          >
+            <div
+              className="jlx-modal jlx-modal--dispute"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="jlx-modal__header">
                 <div className="jlx-modal__header-left">
                   <Shield size={18} />
@@ -2018,8 +2386,9 @@ const JobLabPage: React.FC = () => {
               </div>
               <div className="jlx-modal__body">
                 <p className="jlx-modal__desc">
-                  Mô tả chi tiết vấn đề của bạn. Admin sẽ xem xét trong 5 ngày làm việc.
-                  Bạn có thể thêm minh chứng để hỗ trợ khiếu nại của mình.
+                  Mô tả chi tiết vấn đề của bạn. Admin sẽ xem xét trong 5 ngày
+                  làm việc. Bạn có thể thêm minh chứng để hỗ trợ khiếu nại của
+                  mình.
                 </p>
 
                 {/* Dispute type */}
@@ -2048,17 +2417,24 @@ const JobLabPage: React.FC = () => {
                   <label>Loại minh chứng chính</label>
                   <select
                     value={disputeSelectedEvidenceType}
-                    onChange={(e) => setDisputeSelectedEvidenceType(e.target.value)}
+                    onChange={(e) =>
+                      setDisputeSelectedEvidenceType(e.target.value)
+                    }
                     className="jlx-select"
                   >
                     <option value="TEXT">Văn bản (Text)</option>
-                    <option value="SCREENSHOT">Ảnh chụp màn hình (Screenshot)</option>
+                    <option value="SCREENSHOT">
+                      Ảnh chụp màn hình (Screenshot)
+                    </option>
                     <option value="CHAT_LOG">Lịch sử chat (Chat Log)</option>
                     <option value="LINK">Liên kết (Link)</option>
-                    <option value="DELIVERABLE_SNAPSHOT">Ảnh bàn giao (Deliverable Snapshot)</option>
+                    <option value="DELIVERABLE_SNAPSHOT">
+                      Ảnh bàn giao (Deliverable Snapshot)
+                    </option>
                   </select>
                   <span className="jlx-field__hint">
-                    Loại minh chứng sẽ được gắn cho nội dung lý do bạn nhập bên dưới.
+                    Loại minh chứng sẽ được gắn cho nội dung lý do bạn nhập bên
+                    dưới.
                   </span>
                 </div>
 
@@ -2105,7 +2481,10 @@ const JobLabPage: React.FC = () => {
                       className="jlx-dispute-upload__input"
                       id="dispute-file-input"
                     />
-                    <label htmlFor="dispute-file-input" className="jlx-dispute-upload__label">
+                    <label
+                      htmlFor="dispute-file-input"
+                      className="jlx-dispute-upload__label"
+                    >
                       <Upload size={22} />
                       <span className="jlx-dispute-upload__text">
                         Kéo thả file vào đây hoặc <strong>nhấn để chọn</strong>
@@ -2123,7 +2502,10 @@ const JobLabPage: React.FC = () => {
                         const file = disputeFiles[index];
                         const isImage = file?.type.startsWith("image/");
                         return (
-                          <div key={`${file?.name}-${index}`} className="jlx-dispute-file-item">
+                          <div
+                            key={`${file?.name}-${index}`}
+                            className="jlx-dispute-file-item"
+                          >
                             {isImage ? (
                               <img
                                 src={preview}
@@ -2136,7 +2518,9 @@ const JobLabPage: React.FC = () => {
                               </div>
                             )}
                             <div className="jlx-dispute-file-item__info">
-                              <span className="jlx-dispute-file-item__name">{file?.name}</span>
+                              <span className="jlx-dispute-file-item__name">
+                                {file?.name}
+                              </span>
                               <span className="jlx-dispute-file-item__size">
                                 {file && file.size > 0
                                   ? `${(file.size / 1024).toFixed(1)} KB`
@@ -2173,8 +2557,7 @@ const JobLabPage: React.FC = () => {
                   className="jlx-btn jlx-btn--danger"
                   onClick={() => submitDispute(selectedApp)}
                   disabled={
-                    disputeSubmitting ||
-                    disputeReason.trim().length < 20
+                    disputeSubmitting || disputeReason.trim().length < 20
                   }
                 >
                   {disputeSubmitting ? (
@@ -2189,159 +2572,6 @@ const JobLabPage: React.FC = () => {
                     </>
                   )}
                 </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* OFFER RESPONSE MODAL */}
-        {offerModal && selectedApp && (
-          <div className="jlx-modal-overlay" onClick={() => { setOfferModal(null); setOfferResponse(""); }}>
-            <div
-              className={`jlx-modal jlx-modal--offer${offerModal === "counter" ? " jlx-modal--counter" : ""}`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="jlx-modal__header">
-                <div className="jlx-modal__header-left">
-                  {offerModal === "view" ? (
-                    <>
-                      <CheckCircle2 size={18} />
-                      <h3>Chấp Nhận Đề Nghị</h3>
-                    </>
-                  ) : (
-                    <>
-                      <MessageSquare size={18} />
-                      <h3>Phản Đề Nghị</h3>
-                    </>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  className="jlx-modal__close"
-                  onClick={() => { setOfferModal(null); setOfferResponse(""); }}
-                >
-                  <XCircle size={18} />
-                </button>
-              </div>
-
-              <div className="jlx-modal__body">
-                {offerModal === "view" ? (
-                  <>
-                    <p className="jlx-modal__desc">
-                      Bạn có đồng ý với đề nghị từ nhà tuyển dụng không?
-                    </p>
-
-                    {selectedApp.offerDetails && (
-                      <div className="jlx-offer-modal-content">
-                        <div className="jlx-offer-details">
-                          <div className="jlx-offer-details__label">
-                            <Building2 size={12} />
-                            <span>Chi tiết đề nghị từ Nhà tuyển dụng</span>
-                          </div>
-                          <div className="jlx-offer-details__content">
-                            {selectedApp.offerDetails}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="jlx-field">
-                      <label>Lời nhắn (tùy chọn)</label>
-                      <textarea
-                        value={offerResponse}
-                        onChange={(e) => setOfferResponse(e.target.value)}
-                        rows={3}
-                        placeholder="Bạn có thể thêm lời nhắn khi chấp nhận đề nghị..."
-                        className="jlx-textarea"
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p className="jlx-modal__desc">
-                      Nếu bạn không đồng ý với đề nghị, hãy gửi phản đề nghị kèm mức lương hoặc điều kiện mới.
-                      Nhà tuyển dụng sẽ xem xét và phản hồi.
-                    </p>
-
-                    {selectedApp.offerDetails && (
-                      <div className="jlx-offer-modal-content">
-                        <div className="jlx-offer-details">
-                          <div className="jlx-offer-details__label">
-                            <Building2 size={12} />
-                            <span>Đề nghị ban đầu</span>
-                          </div>
-                          <div className="jlx-offer-details__content">
-                            {selectedApp.offerDetails}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="jlx-field">
-                      <label>Phản đề nghị của bạn <span className="jlx-required">*</span></label>
-                      <textarea
-                        value={offerResponse}
-                        onChange={(e) => setOfferResponse(e.target.value)}
-                        rows={5}
-                        placeholder="Ví dụ: Tôi muốn đề xuất mức lương 25.000.000 VND/tháng cho vị trí này, thay vì 20.000.000 VND như đề nghị. Tôi có 3 năm kinh nghiệm phù hợp với yêu cầu công việc..."
-                        className="jlx-textarea"
-                      />
-                      <span className="jlx-field__hint">
-                        Mô tả mức lương và điều kiện bạn mong muốn để nhà tuyển dụng cân nhắc.
-                      </span>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className="jlx-modal__footer">
-                <button
-                  type="button"
-                  className="jlx-btn jlx-btn--ghost"
-                  onClick={() => { setOfferModal(null); setOfferResponse(""); }}
-                  disabled={offerSubmitting}
-                >
-                  Hủy
-                </button>
-                {offerModal === "view" ? (
-                  <button
-                    type="button"
-                    className="jlx-btn jlx-btn--primary"
-                    onClick={() => handleOfferResponse(true)}
-                    disabled={offerSubmitting}
-                  >
-                    {offerSubmitting ? (
-                      <>
-                        <RefreshCw size={14} className="jlx-spin" />
-                        Đang gửi...
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle2 size={14} />
-                        Chấp nhận đề nghị
-                      </>
-                    )}
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="jlx-btn jlx-btn--danger"
-                    onClick={() => handleOfferResponse(false)}
-                    disabled={offerSubmitting || !offerResponse.trim()}
-                  >
-                    {offerSubmitting ? (
-                      <>
-                        <RefreshCw size={14} className="jlx-spin" />
-                        Đang gửi...
-                      </>
-                    ) : (
-                      <>
-                        <Send size={14} />
-                        Gửi phản đề nghị
-                      </>
-                    )}
-                  </button>
-                )}
               </div>
             </div>
           </div>

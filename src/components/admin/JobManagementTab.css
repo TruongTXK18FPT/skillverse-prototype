@@ -908,6 +908,11 @@
   line-height: 1.4;
 }
 
+.jmt-modal-panel p strong {
+  color: #e2f5ff;
+  font-weight: 700;
+}
+
 .jmt-audit-list {
   margin: 0;
   padding-left: 16px;

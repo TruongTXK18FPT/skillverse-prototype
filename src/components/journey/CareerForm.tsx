@@ -1,7 +1,20 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Check, Search, X, ArrowLeft, ArrowRight, RefreshCw } from 'lucide-react';
-import { getExpertFields, ExpertFieldResponse } from '../../services/expertPromptService';
-import { ExpertDomainMeta, getExpertDomainMeta } from '../../utils/expertFieldPresentation';
+import { useEffect, useMemo, useState } from "react";
+import {
+  Check,
+  Search,
+  X,
+  ArrowLeft,
+  ArrowRight,
+  RefreshCw,
+} from "lucide-react";
+import {
+  getExpertFields,
+  ExpertFieldResponse,
+} from "../../services/expertPromptService";
+import {
+  ExpertDomainMeta,
+  getExpertDomainMeta,
+} from "../../utils/expertFieldPresentation";
 
 interface RoleItem {
   code: string;
@@ -11,13 +24,18 @@ interface RoleItem {
 }
 
 interface CareerFormProps {
-  onComplete: (data: { domain: string; industry: string; jobRole: string; roleKeywords?: string }) => void;
+  onComplete: (data: {
+    domain: string;
+    industry: string;
+    jobRole: string;
+    roleKeywords?: string;
+  }) => void;
   onBack: () => void;
 }
 
 const parseKeywords = (keywords?: string): string[] =>
-  (keywords || '')
-    .split(',')
+  (keywords || "")
+    .split(",")
     .map((keyword) => keyword.trim())
     .filter(Boolean)
     .filter((keyword, index, array) => array.indexOf(keyword) === index);
@@ -29,9 +47,11 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
   const [expertFields, setExpertFields] = useState<ExpertFieldResponse[]>([]);
 
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(
+    null,
+  );
   const [selectedJob, setSelectedJob] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const loadFields = async () => {
@@ -41,8 +61,8 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
         const data = await getExpertFields();
         setExpertFields(data || []);
       } catch (error) {
-        console.error('Failed to load expert fields:', error);
-        setLoadError('Không tải được danh sách ngành nghề. Vui lòng thử lại.');
+        console.error("Failed to load expert fields:", error);
+        setLoadError("Không tải được danh sách ngành nghề. Vui lòng thử lại.");
       } finally {
         setLoading(false);
       }
@@ -52,15 +72,15 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
   }, []);
 
   const domainOptions: ExpertDomainMeta[] = useMemo(() => {
-    return expertFields.map(field => getExpertDomainMeta(field.domain));
+    return expertFields.map((field) => getExpertDomainMeta(field.domain));
   }, [expertFields]);
 
   const currentDomain = useMemo(() => {
-    return expertFields.find(field => field.domain === selectedDomain);
+    return expertFields.find((field) => field.domain === selectedDomain);
   }, [expertFields, selectedDomain]);
 
   const currentSubCategories = useMemo(() => {
-    return (currentDomain?.industries || []).map(industry => ({
+    return (currentDomain?.industries || []).map((industry) => ({
       value: industry.industry,
       label: industry.industry,
     }));
@@ -68,9 +88,11 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
 
   const currentRoles: RoleItem[] = useMemo(() => {
     if (!currentDomain || !selectedSubCategory) return [];
-    const industry = currentDomain.industries.find(i => i.industry === selectedSubCategory);
+    const industry = currentDomain.industries.find(
+      (i) => i.industry === selectedSubCategory,
+    );
     if (!industry) return [];
-    return industry.roles.map(role => ({
+    return industry.roles.map((role) => ({
       code: role.jobRole,
       label: role.jobRole,
       backendRole: role.jobRole,
@@ -78,17 +100,19 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
     }));
   }, [currentDomain, selectedSubCategory]);
 
-  const filteredRoles = currentRoles.filter(role =>
-    role.label.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredRoles = currentRoles.filter((role) =>
+    role.label.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const selectedRoleEntry = useMemo(() => {
     if (!selectedJob) return undefined;
-    return currentRoles.find(r => r.code === selectedJob);
+    return currentRoles.find((r) => r.code === selectedJob);
   }, [currentRoles, selectedJob]);
 
   const selectedDomainMeta = useMemo(() => {
-    return selectedDomain ? domainOptions.find((domain) => domain.value === selectedDomain) : undefined;
+    return selectedDomain
+      ? domainOptions.find((domain) => domain.value === selectedDomain)
+      : undefined;
   }, [domainOptions, selectedDomain]);
 
   const handleRetry = async () => {
@@ -98,8 +122,8 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
       const data = await getExpertFields();
       setExpertFields(data || []);
     } catch (error) {
-      console.error('Failed to load expert fields:', error);
-      setLoadError('Không tải được danh sách ngành nghề. Vui lòng thử lại.');
+      console.error("Failed to load expert fields:", error);
+      setLoadError("Không tải được danh sách ngành nghề. Vui lòng thử lại.");
     } finally {
       setLoading(false);
     }
@@ -109,13 +133,13 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
     setSelectedDomain(domain);
     setSelectedSubCategory(null);
     setSelectedJob(null);
-    setSearchQuery('');
+    setSearchQuery("");
   };
 
   const handleSubCategorySelect = (subCategory: string) => {
     setSelectedSubCategory(subCategory);
     setSelectedJob(null);
-    setSearchQuery('');
+    setSearchQuery("");
   };
 
   const handleJobSelect = (roleCode: string) => {
@@ -165,7 +189,9 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
     <div className="gsj-wizard-step">
       <div className="gsj-wizard-step__header">
         <h2 className="gsj-wizard-step__title">Chọn lĩnh vực</h2>
-        <p className="gsj-wizard-step__subtitle">Bạn quan tâm đến lĩnh vực nào?</p>
+        <p className="gsj-wizard-step__subtitle">
+          Bạn quan tâm đến lĩnh vực nào?
+        </p>
       </div>
 
       <div className="gsj-domain-grid">
@@ -173,7 +199,7 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
           <button
             key={domain.value}
             type="button"
-            className={`gsj-domain-card ${selectedDomain === domain.value ? 'gsj-domain-card--selected' : ''}`}
+            className={`gsj-domain-card ${selectedDomain === domain.value ? "gsj-domain-card--selected" : ""}`}
             onClick={() => handleDomainSelect(domain.value)}
           >
             {domain.image ? (
@@ -191,7 +217,9 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
             )}
             <div className="gsj-domain-card__content">
               <span className="gsj-domain-card__label">{domain.label}</span>
-              <span className="gsj-domain-card__desc">{domain.description}</span>
+              <span className="gsj-domain-card__desc">
+                {domain.description}
+              </span>
             </div>
             {selectedDomain === domain.value && (
               <span className="gsj-domain-card__check">
@@ -208,11 +236,10 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
   const renderStep2 = () => (
     <div className="gsj-wizard-step">
       <div className="gsj-wizard-step__header">
-        <h2 className="gsj-wizard-step__title">
-          Chọn ngành chi tiết
-        </h2>
+        <h2 className="gsj-wizard-step__title">Chọn ngành chi tiết</h2>
         <p className="gsj-wizard-step__subtitle">
-          {domainOptions.find(d => d.value === selectedDomain)?.label} - Bạn muốn học về ngành nào?
+          {domainOptions.find((d) => d.value === selectedDomain)?.label} - Bạn
+          muốn học về ngành nào?
         </p>
       </div>
 
@@ -221,7 +248,7 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
           <button
             key={sub.value}
             type="button"
-            className={`gsj-subcategory-card ${selectedSubCategory === sub.value ? 'gsj-subcategory-card--selected' : ''}`}
+            className={`gsj-subcategory-card ${selectedSubCategory === sub.value ? "gsj-subcategory-card--selected" : ""}`}
             onClick={() => handleSubCategorySelect(sub.value)}
           >
             <span className="gsj-subcategory-card__label">{sub.label}</span>
@@ -240,68 +267,85 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
   const renderStep3 = () => (
     <div className="gsj-wizard-step">
       <div className="gsj-wizard-step__header">
-        <h2 className="gsj-wizard-step__title">
-          Chọn vị trí công việc
-        </h2>
+        <h2 className="gsj-wizard-step__title">Chọn vị trí công việc</h2>
         <p className="gsj-wizard-step__subtitle">
-          Bạn hướng đến vị trí nào trong ngành {selectedSubCategory || ''}?
+          {selectedDomainMeta?.label} &rsaquo; {selectedSubCategory || ""} — Bạn
+          hướng đến vị trí nào?
         </p>
       </div>
 
       <div className="gsj-selection-banner">
-        <span className="gsj-selection-banner__item">{selectedDomainMeta?.label || 'Chưa chọn lĩnh vực'}</span>
-        <span className="gsj-selection-banner__item">{selectedSubCategory || 'Chưa chọn ngành'}</span>
+        <span className="gsj-selection-banner__item">
+          {selectedDomainMeta?.label || "Chưa chọn lĩnh vực"}
+        </span>
+        <span className="gsj-selection-banner__item">
+          {selectedSubCategory || "Chưa chọn ngành"}
+        </span>
       </div>
 
       <div className="gsj-search-input">
         <Search size={18} />
         <input
           type="text"
-          placeholder="Tìm kiếm vị trí..."
+          placeholder="Tìm kiếm vị trí theo tên..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         {searchQuery && (
-          <button type="button" onClick={() => setSearchQuery('')}>
+          <button type="button" onClick={() => setSearchQuery("")}>
             <X size={16} />
           </button>
         )}
       </div>
 
+      <p className="gsj-hint-text gsj-hint-text--inline gsj-role-meta">
+        Hiển thị {filteredRoles.length} / {currentRoles.length} vị trí
+      </p>
+
       <div className="gsj-job-grid">
         {filteredRoles.length === 0 && (
           <div className="gsj-no-roles">
-            Không có vị trí nào cho ngành này. Vui lòng chọn ngành khác.
+            Không tìm thấy vị trí phù hợp. Thử từ khóa khác hoặc quay lại chọn
+            ngành khác.
           </div>
         )}
-        {filteredRoles.map((role) => (
-          <button
-            key={role.code}
-            type="button"
-            className={`gsj-job-card ${selectedJob === role.code ? 'gsj-job-card--selected' : ''}`}
-            onClick={() => handleJobSelect(role.code)}
-          >
-            <div className="gsj-job-card__content">
-              <span className="gsj-job-card__eyebrow">Vị trí mục tiêu</span>
-              <span className="gsj-job-card__label">{role.label}</span>
-              <span className="gsj-job-card__desc">{selectedSubCategory}</span>
-              {parseKeywords(role.keywords).length > 0 && (
-                <div className="gsj-job-card__keywords">
-                  {parseKeywords(role.keywords).slice(0, 4).map((keyword) => (
-                    <span key={`${role.code}-${keyword}`} className="gsj-job-card__keyword">
-                      {keyword}
-                    </span>
-                  ))}
-                </div>
+        {filteredRoles.map((role) => {
+          const roleKeywords = parseKeywords(role.keywords);
+
+          return (
+            <button
+              key={role.code}
+              type="button"
+              className={`gsj-job-card ${selectedJob === role.code ? "gsj-job-card--selected" : ""}`}
+              onClick={() => handleJobSelect(role.code)}
+            >
+              <div className="gsj-job-card__content">
+                <span className="gsj-job-card__eyebrow">Vị trí mục tiêu</span>
+                <span className="gsj-job-card__label">{role.label}</span>
+                <span className="gsj-job-card__desc">
+                  {selectedSubCategory}
+                </span>
+                {roleKeywords.length > 0 && (
+                  <div className="gsj-job-card__keywords">
+                    {roleKeywords.slice(0, 4).map((keyword) => (
+                      <span
+                        key={`${role.code}-${keyword}`}
+                        className="gsj-job-card__keyword"
+                      >
+                        {keyword}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {selectedJob === role.code && (
+                <span className="gsj-job-card__check">
+                  <Check size={16} />
+                </span>
               )}
-            </div>
-            {selectedJob === role.code && (
-              <span className="gsj-job-card__check">
-                <Check size={16} />
-              </span>
-            )}
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -310,8 +354,12 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
     return (
       <div className="gsj-wizard-step">
         <div className="gsj-wizard-step__header">
-          <h2 className="gsj-wizard-step__title">Đang tải dữ liệu nghề nghiệp...</h2>
-          <p className="gsj-wizard-step__subtitle">Vui lòng chờ trong giây lát.</p>
+          <h2 className="gsj-wizard-step__title">
+            Đang tải dữ liệu nghề nghiệp...
+          </h2>
+          <p className="gsj-wizard-step__subtitle">
+            Vui lòng chờ trong giây lát.
+          </p>
         </div>
       </div>
     );
@@ -321,15 +369,25 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
     return (
       <div className="gsj-wizard-step">
         <div className="gsj-wizard-step__header">
-          <h2 className="gsj-wizard-step__title">Không thể tải danh sách nghề nghiệp</h2>
+          <h2 className="gsj-wizard-step__title">
+            Không thể tải danh sách nghề nghiệp
+          </h2>
           <p className="gsj-wizard-step__subtitle">{loadError}</p>
         </div>
         <div className="gsj-wizard-nav">
-          <button type="button" className="gsj-btn gsj-btn--secondary" onClick={onBack}>
+          <button
+            type="button"
+            className="gsj-btn gsj-btn--secondary"
+            onClick={onBack}
+          >
             <ArrowLeft size={16} />
             Quay lại
           </button>
-          <button type="button" className="gsj-btn gsj-btn--primary" onClick={handleRetry}>
+          <button
+            type="button"
+            className="gsj-btn gsj-btn--primary"
+            onClick={handleRetry}
+          >
             <RefreshCw size={16} />
             Thử lại
           </button>
@@ -346,13 +404,13 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
           {[1, 2, 3].map((s) => (
             <div
               key={s}
-              className={`gsj-career-progress__step ${step >= s ? 'gsj-career-progress__step--active' : ''} ${step > s ? 'gsj-career-progress__step--completed' : ''}`}
+              className={`gsj-career-progress__step ${step >= s ? "gsj-career-progress__step--active" : ""} ${step > s ? "gsj-career-progress__step--completed" : ""}`}
             >
               <div className="gsj-career-progress__step-dot">
                 {step > s ? <Check size={12} /> : s}
               </div>
               <span className="gsj-career-progress__step-label">
-                {s === 1 ? 'Lĩnh vực' : s === 2 ? 'Ngành' : 'Nghề'}
+                {s === 1 ? "Lĩnh vực" : s === 2 ? "Ngành" : "Nghề"}
               </span>
             </div>
           ))}
@@ -378,7 +436,7 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
           onClick={handleBack}
         >
           <ArrowLeft size={16} />
-          {step === 1 ? 'Quay lại' : 'Trước đó'}
+          {step === 1 ? "Quay lại" : "Trước đó"}
         </button>
 
         {step < 3 ? (

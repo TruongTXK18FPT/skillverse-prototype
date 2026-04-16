@@ -9,11 +9,23 @@
   display: grid;
   grid-template-columns: 288px minmax(0, 1fr);
   background:
-    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(8, 145, 178, 0.18), transparent 50%),
-    radial-gradient(ellipse 60% 40% at 90% 5%, rgba(124, 58, 237, 0.14), transparent 50%),
+    radial-gradient(
+      ellipse 80% 50% at 10% -10%,
+      rgba(8, 145, 178, 0.18),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 90% 5%,
+      rgba(124, 58, 237, 0.14),
+      transparent 50%
+    ),
     linear-gradient(160deg, #060e1c 0%, #0b1628 50%, #07111f 100%);
   color: #e2e8f0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 }
 
 /* === LOADING === */
@@ -55,14 +67,22 @@
 }
 
 .jlx-btn--primary {
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.22), rgba(124, 58, 237, 0.18));
+  background: linear-gradient(
+    135deg,
+    rgba(34, 211, 238, 0.22),
+    rgba(124, 58, 237, 0.18)
+  );
   border-color: rgba(34, 211, 238, 0.3);
   color: #67e8f9;
   box-shadow: 0 4px 20px rgba(8, 145, 178, 0.18);
 }
 
 .jlx-btn--primary:hover {
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.32), rgba(124, 58, 237, 0.28));
+  background: linear-gradient(
+    135deg,
+    rgba(34, 211, 238, 0.32),
+    rgba(124, 58, 237, 0.28)
+  );
   border-color: rgba(34, 211, 238, 0.45);
   box-shadow: 0 6px 28px rgba(34, 211, 238, 0.2);
   color: #67e8f9;
@@ -186,10 +206,16 @@
 }
 
 .jlx-nav__item.is-active {
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(124, 58, 237, 0.16));
+  background: linear-gradient(
+    135deg,
+    rgba(34, 211, 238, 0.16),
+    rgba(124, 58, 237, 0.16)
+  );
   border-color: rgba(34, 211, 238, 0.28);
   color: #67e8f9;
-  box-shadow: 0 0 24px rgba(8, 145, 178, 0.12), inset 0 0 12px rgba(34, 211, 238, 0.04);
+  box-shadow:
+    0 0 24px rgba(8, 145, 178, 0.12),
+    inset 0 0 12px rgba(34, 211, 238, 0.04);
 }
 
 .jlx-nav__icon {
@@ -317,7 +343,11 @@
   padding: 1.15rem 1.25rem;
   border-radius: 18px;
   background:
-    radial-gradient(circle at top right, rgba(34, 211, 238, 0.04), transparent 50%),
+    radial-gradient(
+      circle at top right,
+      rgba(34, 211, 238, 0.04),
+      transparent 50%
+    ),
     rgba(8, 15, 30, 0.5);
   border: 1px solid rgba(148, 163, 184, 0.08);
   display: flex;
@@ -332,14 +362,30 @@
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
-.jlx-stat-card.is-cyan { border-color: rgba(34, 211, 238, 0.22); }
-.jlx-stat-card.is-cyan svg { color: #67e8f9; }
-.jlx-stat-card.is-amber { border-color: rgba(245, 158, 11, 0.22); }
-.jlx-stat-card.is-amber svg { color: #fbbf24; }
-.jlx-stat-card.is-violet { border-color: rgba(167, 139, 250, 0.22); }
-.jlx-stat-card.is-violet svg { color: #c4b5fd; }
-.jlx-stat-card.is-green { border-color: rgba(34, 197, 94, 0.22); }
-.jlx-stat-card.is-green svg { color: #86efac; }
+.jlx-stat-card.is-cyan {
+  border-color: rgba(34, 211, 238, 0.22);
+}
+.jlx-stat-card.is-cyan svg {
+  color: #67e8f9;
+}
+.jlx-stat-card.is-amber {
+  border-color: rgba(245, 158, 11, 0.22);
+}
+.jlx-stat-card.is-amber svg {
+  color: #fbbf24;
+}
+.jlx-stat-card.is-violet {
+  border-color: rgba(167, 139, 250, 0.22);
+}
+.jlx-stat-card.is-violet svg {
+  color: #c4b5fd;
+}
+.jlx-stat-card.is-green {
+  border-color: rgba(34, 197, 94, 0.22);
+}
+.jlx-stat-card.is-green svg {
+  color: #86efac;
+}
 
 .jlx-stat-card svg {
   width: 1.5rem;
@@ -480,7 +526,7 @@
   font-size: 0.72rem;
   color: #475569;
   margin: 0.2rem 0 0;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
 }
 
 .jlx-status-block span:last-child {
@@ -507,16 +553,46 @@
   letter-spacing: 0.01em;
 }
 
-.jlx-status.is-amber   { background: rgba(245, 158, 11, 0.14); color: #fbbf24; }
-.jlx-status.is-sky     { background: rgba(56, 189, 248, 0.14); color: #7dd3fc; }
-.jlx-status.is-emerald { background: rgba(34, 197, 94, 0.14); color: #86efac; }
-.jlx-status.is-green   { background: rgba(34, 197, 94, 0.14); color: #86efac; }
-.jlx-status.is-violet  { background: rgba(139, 92, 246, 0.14); color: #c4b5fd; }
-.jlx-status.is-orange  { background: rgba(249, 115, 22, 0.14); color: #fdba74; }
-.jlx-status.is-cyan    { background: rgba(34, 211, 238, 0.14); color: #67e8f9; }
-.jlx-status.is-fuchsia { background: rgba(217, 70, 239, 0.14); color: #f0abfc; }
-.jlx-status.is-red     { background: rgba(248, 113, 113, 0.14); color: #fca5a5; }
-.jlx-status.is-slate   { background: rgba(148, 163, 184, 0.12); color: #cbd5e1; }
+.jlx-status.is-amber {
+  background: rgba(245, 158, 11, 0.14);
+  color: #fbbf24;
+}
+.jlx-status.is-sky {
+  background: rgba(56, 189, 248, 0.14);
+  color: #7dd3fc;
+}
+.jlx-status.is-emerald {
+  background: rgba(34, 197, 94, 0.14);
+  color: #86efac;
+}
+.jlx-status.is-green {
+  background: rgba(34, 197, 94, 0.14);
+  color: #86efac;
+}
+.jlx-status.is-violet {
+  background: rgba(139, 92, 246, 0.14);
+  color: #c4b5fd;
+}
+.jlx-status.is-orange {
+  background: rgba(249, 115, 22, 0.14);
+  color: #fdba74;
+}
+.jlx-status.is-cyan {
+  background: rgba(34, 211, 238, 0.14);
+  color: #67e8f9;
+}
+.jlx-status.is-fuchsia {
+  background: rgba(217, 70, 239, 0.14);
+  color: #f0abfc;
+}
+.jlx-status.is-red {
+  background: rgba(248, 113, 113, 0.14);
+  color: #fca5a5;
+}
+.jlx-status.is-slate {
+  background: rgba(148, 163, 184, 0.12);
+  color: #cbd5e1;
+}
 
 /* === JOB TYPE BADGES === */
 .jlx-type {
@@ -530,9 +606,18 @@
   font-weight: 600;
 }
 
-.jlx-type.is-gig { color: #67e8f9; background: rgba(34, 211, 238, 0.1); }
-.jlx-type.is-regular { color: #c4b5fd; background: rgba(139, 92, 246, 0.1); }
-.jlx-type.is-compact { margin-left: auto; font-size: 0.68rem; }
+.jlx-type.is-gig {
+  color: #67e8f9;
+  background: rgba(34, 211, 238, 0.1);
+}
+.jlx-type.is-regular {
+  color: #c4b5fd;
+  background: rgba(139, 92, 246, 0.1);
+}
+.jlx-type.is-compact {
+  margin-left: auto;
+  font-size: 0.68rem;
+}
 
 /* === TOOLBAR === */
 .jlx-toolbar {
@@ -616,8 +701,16 @@
   border: 1px solid rgba(148, 163, 184, 0.1);
   border-radius: 18px;
   background:
-    radial-gradient(circle at 120% -10%, rgba(34, 211, 238, 0.05), transparent 45%),
-    radial-gradient(circle at -5% 110%, rgba(124, 58, 237, 0.04), transparent 40%),
+    radial-gradient(
+      circle at 120% -10%,
+      rgba(34, 211, 238, 0.05),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at -5% 110%,
+      rgba(124, 58, 237, 0.04),
+      transparent 40%
+    ),
     rgba(8, 15, 30, 0.55);
   padding: 1.2rem;
   display: flex;
@@ -636,7 +729,12 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.4), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(34, 211, 238, 0.4),
+    transparent
+  );
   opacity: 0;
   transition: opacity 0.28s ease;
 }
@@ -644,7 +742,9 @@
 .jlx-job-card:hover {
   transform: translateY(-4px);
   border-color: rgba(34, 211, 238, 0.25);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(34, 211, 238, 0.06);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(34, 211, 238, 0.06);
 }
 
 .jlx-job-card:hover::before {
@@ -709,12 +809,24 @@
 }
 
 /* Status glow on hover */
-.jlx-job-card:hover .jlx-status.is-cyan   { box-shadow: 0 0 14px rgba(34, 211, 238, 0.3); }
-.jlx-job-card:hover .jlx-status.is-amber  { box-shadow: 0 0 14px rgba(251, 191, 36, 0.3); }
-.jlx-job-card:hover .jlx-status.is-violet { box-shadow: 0 0 14px rgba(139, 92, 246, 0.3); }
-.jlx-job-card:hover .jlx-status.is-green  { box-shadow: 0 0 14px rgba(74, 222, 128, 0.3); }
-.jlx-job-card:hover .jlx-status.is-fuchsia{ box-shadow: 0 0 14px rgba(217, 70, 239, 0.3); }
-.jlx-job-card:hover .jlx-status.is-red    { box-shadow: 0 0 14px rgba(239, 68, 68, 0.3); }
+.jlx-job-card:hover .jlx-status.is-cyan {
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.3);
+}
+.jlx-job-card:hover .jlx-status.is-amber {
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.3);
+}
+.jlx-job-card:hover .jlx-status.is-violet {
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.3);
+}
+.jlx-job-card:hover .jlx-status.is-green {
+  box-shadow: 0 0 14px rgba(74, 222, 128, 0.3);
+}
+.jlx-job-card:hover .jlx-status.is-fuchsia {
+  box-shadow: 0 0 14px rgba(217, 70, 239, 0.3);
+}
+.jlx-job-card:hover .jlx-status.is-red {
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.3);
+}
 
 /* === EMPTY STATE === */
 .jlx-empty-state {
@@ -722,7 +834,11 @@
   text-align: center;
   border-radius: 22px;
   background:
-    radial-gradient(circle at center, rgba(34, 211, 238, 0.04), transparent 60%),
+    radial-gradient(
+      circle at center,
+      rgba(34, 211, 238, 0.04),
+      transparent 60%
+    ),
     rgba(8, 15, 30, 0.35);
   border: 1px dashed rgba(148, 163, 184, 0.14);
   display: flex;
@@ -769,8 +885,16 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   background:
-    radial-gradient(ellipse 60% 40% at 5% -5%, rgba(8, 145, 178, 0.2), transparent 50%),
-    radial-gradient(ellipse 50% 35% at 95% 8%, rgba(124, 58, 237, 0.16), transparent 50%),
+    radial-gradient(
+      ellipse 60% 40% at 5% -5%,
+      rgba(8, 145, 178, 0.2),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 50% 35% at 95% 8%,
+      rgba(124, 58, 237, 0.16),
+      transparent 50%
+    ),
     linear-gradient(160deg, #060d1c 0%, #08131f 100%);
 }
 
@@ -785,17 +909,27 @@
   background-image:
     radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.15), transparent),
     radial-gradient(1px 1px at 45% 70%, rgba(255, 255, 255, 0.1), transparent),
-    radial-gradient(1.5px 1.5px at 60% 20%, rgba(34, 211, 238, 0.2), transparent),
+    radial-gradient(
+      1.5px 1.5px at 60% 20%,
+      rgba(34, 211, 238, 0.2),
+      transparent
+    ),
     radial-gradient(1px 1px at 80% 50%, rgba(255, 255, 255, 0.08), transparent),
     radial-gradient(1px 1px at 10% 80%, rgba(34, 211, 238, 0.12), transparent),
     radial-gradient(1px 1px at 70% 90%, rgba(255, 255, 255, 0.06), transparent),
-    radial-gradient(1.5px 1.5px at 35% 55%, rgba(124, 58, 237, 0.15), transparent),
+    radial-gradient(
+      1.5px 1.5px at 35% 55%,
+      rgba(124, 58, 237, 0.15),
+      transparent
+    ),
     radial-gradient(1px 1px at 90% 15%, rgba(255, 255, 255, 0.1), transparent);
   pointer-events: none;
   z-index: 0;
 }
 
-.jlx-shell--workspace .jlx-sidebar { display: none; }
+.jlx-shell--workspace .jlx-sidebar {
+  display: none;
+}
 
 .jlx-shell--workspace .jlx-main {
   width: 100%;
@@ -893,7 +1027,11 @@
   top: 1.5rem;
   border-radius: 20px;
   background:
-    radial-gradient(circle at top right, rgba(124, 58, 237, 0.06), transparent 50%),
+    radial-gradient(
+      circle at top right,
+      rgba(124, 58, 237, 0.06),
+      transparent 50%
+    ),
     rgba(6, 13, 26, 0.7);
   border: 1px solid rgba(148, 163, 184, 0.08);
   backdrop-filter: blur(20px);
@@ -1001,8 +1139,16 @@
   padding: 1.75rem 2rem;
   border-radius: 24px;
   background:
-    radial-gradient(ellipse 80% 60% at 95% -5%, rgba(34, 211, 238, 0.1), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 5% 105%, rgba(124, 58, 237, 0.07), transparent 50%),
+    radial-gradient(
+      ellipse 80% 60% at 95% -5%,
+      rgba(34, 211, 238, 0.1),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 5% 105%,
+      rgba(124, 58, 237, 0.07),
+      transparent 50%
+    ),
     linear-gradient(135deg, rgba(8, 15, 30, 0.92), rgba(12, 20, 38, 0.85));
   border: 1px solid rgba(148, 163, 184, 0.1);
   display: flex;
@@ -1020,7 +1166,11 @@
   right: -5%;
   width: 280px;
   height: 280px;
-  background: radial-gradient(circle, rgba(34, 211, 238, 0.07), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(34, 211, 238, 0.07),
+    transparent 70%
+  );
   border-radius: 50%;
   pointer-events: none;
 }
@@ -1032,7 +1182,11 @@
   left: 8%;
   width: 180px;
   height: 180px;
-  background: radial-gradient(circle, rgba(124, 58, 237, 0.05), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(124, 58, 237, 0.05),
+    transparent 70%
+  );
   border-radius: 50%;
   pointer-events: none;
 }
@@ -1141,7 +1295,11 @@
   padding: 1.1rem 1.25rem;
   border-radius: 16px;
   background:
-    radial-gradient(circle at 50% 0%, rgba(34, 211, 238, 0.04), transparent 60%),
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(34, 211, 238, 0.04),
+      transparent 60%
+    ),
     rgba(8, 15, 30, 0.5);
   border: 1px solid rgba(148, 163, 184, 0.08);
   display: flex;
@@ -1153,7 +1311,9 @@
   position: relative;
 }
 
-.jlx-stepper::-webkit-scrollbar { display: none; }
+.jlx-stepper::-webkit-scrollbar {
+  display: none;
+}
 
 .jlx-step {
   display: flex;
@@ -1168,8 +1328,12 @@
   z-index: 1;
 }
 
-.jlx-step.is-active { color: #22d3ee; }
-.jlx-step.is-done   { color: #4ade80; }
+.jlx-step.is-active {
+  color: #22d3ee;
+}
+.jlx-step.is-done {
+  color: #4ade80;
+}
 
 .jlx-step__dot {
   width: 2rem;
@@ -1188,7 +1352,9 @@
 .jlx-step.is-active .jlx-step__dot {
   background: rgba(34, 211, 238, 0.18);
   border-color: rgba(34, 211, 238, 0.4);
-  box-shadow: 0 0 20px rgba(34, 211, 238, 0.25), 0 0 40px rgba(34, 211, 238, 0.08);
+  box-shadow:
+    0 0 20px rgba(34, 211, 238, 0.25),
+    0 0 40px rgba(34, 211, 238, 0.08);
   color: #22d3ee;
   transform: scale(1.08);
 }
@@ -1216,11 +1382,19 @@
   right: 0;
   height: 1px;
   transform: translateY(-50%);
-  background: linear-gradient(90deg, rgba(148, 163, 184, 0.12), rgba(148, 163, 184, 0.12));
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.12),
+    rgba(148, 163, 184, 0.12)
+  );
 }
 
 .jlx-step.is-done .jlx-step__connector::before {
-  background: linear-gradient(90deg, rgba(74, 222, 128, 0.4), rgba(34, 211, 238, 0.15));
+  background: linear-gradient(
+    90deg,
+    rgba(74, 222, 128, 0.4),
+    rgba(34, 211, 238, 0.15)
+  );
   box-shadow: 0 0 6px rgba(74, 222, 128, 0.2);
 }
 
@@ -1424,12 +1598,42 @@
   color: #67e8f9;
 }
 
-.jlx-upload input { display: none; }
+.jlx-upload input {
+  display: none;
+}
 
 .jlx-upload-list {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+/* === ENHANCED OFFER INPUT (neon tech style) === */
+.jlx-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1.5px solid rgba(0, 245, 255, 0.15);
+  background: rgba(0, 8, 20, 0.6);
+  color: #e2e8f0;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.jlx-input:focus {
+  border-color: rgba(0, 245, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1), 0 0 20px rgba(0, 245, 255, 0.05);
+  background: rgba(0, 8, 20, 0.8);
+}
+
+.jlx-input::placeholder {
+  color: #334155;
+}
+
+.jlx-input:focus::placeholder {
+  color: #475569;
 }
 
 /* === LINK STACK === */
@@ -1538,8 +1742,14 @@
 /* ======================================================================
    SPINNER
    ====================================================================== */
-.jlx-spin { animation: jlx-spin 1s linear infinite; }
-@keyframes jlx-spin { to { transform: rotate(360deg); } }
+.jlx-spin {
+  animation: jlx-spin 1s linear infinite;
+}
+@keyframes jlx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* ======================================================================
    RESPONSIVE
@@ -1549,7 +1759,9 @@
   .jlx-workspace-layout,
   .jlx-dashboard-grid,
   .jlx-workspace-grid,
-  .jlx-stat-grid { grid-template-columns: 1fr; }
+  .jlx-stat-grid {
+    grid-template-columns: 1fr;
+  }
 
   .jlx-workspace-rail {
     position: static;
@@ -1567,7 +1779,9 @@
     align-items: stretch;
   }
 
-  .jlx-search { min-width: 0; }
+  .jlx-search {
+    min-width: 0;
+  }
 
   .jlx-form-grid {
     grid-template-columns: 1fr;
@@ -1580,9 +1794,13 @@
 
 @media (max-width: 720px) {
   .jlx-main,
-  .jlx-sidebar { padding: 1rem; }
+  .jlx-sidebar {
+    padding: 1rem;
+  }
 
-  .jlx-brand { padding: 0.8rem; }
+  .jlx-brand {
+    padding: 0.8rem;
+  }
 
   .jlx-stat-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1599,8 +1817,16 @@
 .jlx-shell {
   --jlx-layout-top-offset: 72px;
   background:
-    radial-gradient(ellipse at top, rgba(6, 182, 212, 0.06) 0%, transparent 54%),
-    radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.06) 0%, transparent 52%),
+    radial-gradient(
+      ellipse at top,
+      rgba(6, 182, 212, 0.06) 0%,
+      transparent 54%
+    ),
+    radial-gradient(
+      ellipse at bottom right,
+      rgba(168, 85, 247, 0.06) 0%,
+      transparent 52%
+    ),
     #050b14;
   min-height: calc(100dvh - var(--jlx-layout-top-offset));
   height: auto;
@@ -1618,7 +1844,11 @@
 .jlx-workspace-hero,
 .jlx-note,
 .jlx-status-explainer {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 }
 
 .jlx-panel,
@@ -1748,7 +1978,11 @@
 }
 
 .jlx-nav__item.is-active {
-  background: linear-gradient(120deg, rgba(6, 182, 212, 0.22), rgba(168, 85, 247, 0.2));
+  background: linear-gradient(
+    120deg,
+    rgba(6, 182, 212, 0.22),
+    rgba(168, 85, 247, 0.2)
+  );
   border-color: rgba(51, 210, 255, 0.62);
   box-shadow: 0 0 18px rgba(6, 182, 212, 0.24);
 }
@@ -1807,9 +2041,17 @@
 .jlx-joblab-hero > .jlx-joblab-hero-backdrop {
   position: absolute;
   inset: 0;
-  background: 
-    radial-gradient(circle at top right, rgba(6, 182, 212, 0.15), transparent 60%),
-    radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.1), transparent 60%),
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(6, 182, 212, 0.15),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(168, 85, 247, 0.1),
+      transparent 60%
+    ),
     linear-gradient(120deg, rgba(8, 33, 58, 0.2), rgba(8, 26, 50, 0.12));
   z-index: 0;
   pointer-events: none;
@@ -1831,7 +2073,10 @@
 
 .jlx-hero-scanline {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 2px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
   background: linear-gradient(90deg, transparent, #06b6d4, transparent);
   opacity: 0.3;
   animation: jlx-scan 8s linear infinite;
@@ -1839,8 +2084,12 @@
 }
 
 @keyframes jlx-scan {
-  0% { transform: translateY(-100px); }
-  100% { transform: translateY(500px); }
+  0% {
+    transform: translateY(-100px);
+  }
+  100% {
+    transform: translateY(500px);
+  }
 }
 
 .jlx-app-toolbar {
@@ -1876,18 +2125,66 @@
   margin-bottom: 1rem;
 }
 
-.jlx-badge-icon { color: #06b6d4; display: flex; align-items: center; }
-.jlx-badge-text { font-family: 'Space Mono', monospace; font-size: 10px; color: #06b6d4; letter-spacing: 1px; }
+.jlx-badge-icon {
+  color: #06b6d4;
+  display: flex;
+  align-items: center;
+}
+.jlx-badge-text {
+  font-family: "Space Mono", monospace;
+  font-size: 10px;
+  color: #06b6d4;
+  letter-spacing: 1px;
+}
 
-.jlx-title { margin: 0; display: flex; flex-direction: column; gap: 4px; }
-.jlx-title-primary { font-size: 3rem; font-weight: 800; background: linear-gradient(to right, #fff, #94a3b8); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
-.jlx-title-operator { font-family: 'Space Mono', monospace; font-size: 12px; color: #06b6d4; opacity: 0.8; letter-spacing: 2px; border-left: 2px solid #06b6d4; padding-left: 10px; }
+.jlx-title {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.jlx-title-primary {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+}
+.jlx-title-operator {
+  font-family: "Space Mono", monospace;
+  font-size: 12px;
+  color: #06b6d4;
+  opacity: 0.8;
+  letter-spacing: 2px;
+  border-left: 2px solid #06b6d4;
+  padding-left: 10px;
+}
 
-.jlx-hero p.jlx-description { max-width: 500px; color: #94a3b8; line-height: 1.6; margin: 1.5rem 0; font-size: 0.95rem; }
-.jlx-joblab-hero p.jlx-description { max-width: 500px; color: #94a3b8; line-height: 1.6; margin: 1.5rem 0; font-size: 0.95rem; }
+.jlx-hero p.jlx-description {
+  max-width: 500px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+.jlx-joblab-hero p.jlx-description {
+  max-width: 500px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
 
-.jlx-hero-actions { display: flex; gap: 1rem; }
-.jlx-joblab-hero .jlx-hero-actions { display: flex; gap: 1rem; }
+.jlx-hero-actions {
+  display: flex;
+  gap: 1rem;
+}
+.jlx-joblab-hero .jlx-hero-actions {
+  display: flex;
+  gap: 1rem;
+}
 
 .jlx-hero-visual {
   position: relative;
@@ -1900,14 +2197,16 @@
 
 .jlx-visual-ring {
   position: absolute;
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   border: 2px dashed rgba(6, 182, 212, 0.3);
   border-radius: 50%;
   animation: jlx-rotate 20s linear infinite;
 }
 
 .jlx-visual-core {
-  width: 100px; height: 100px;
+  width: 100px;
+  height: 100px;
   background: rgba(6, 182, 212, 0.1);
   border: 1px solid #06b6d4;
   border-radius: 50%;
@@ -1929,7 +2228,7 @@
 }
 
 .jlx-data-bit {
-  font-family: 'Space Mono', monospace;
+  font-family: "Space Mono", monospace;
   font-size: 9px;
   color: #06b6d4;
   background: rgba(15, 23, 42, 0.8);
@@ -1942,8 +2241,12 @@
 }
 
 @keyframes jlx-rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* --- STAT UNITS (HUD STYLE) --- */
@@ -1961,7 +2264,13 @@
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 15px),
+    calc(100% - 15px) 100%,
+    0 100%
+  );
 }
 
 .jlx-job-stat:hover {
@@ -1970,10 +2279,17 @@
   background: rgba(15, 23, 42, 0.9);
 }
 
-.jlx-job-stat__header { display: flex; align-items: center; gap: 1rem; position: relative; z-index: 2; }
+.jlx-job-stat__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
 
 .jlx-job-stat__icon-wrap {
-  width: 48px; height: 48px;
+  width: 48px;
+  height: 48px;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -1981,17 +2297,47 @@
   position: relative;
 }
 
-.jlx-job-stat__icon-wrap--cyan { background: rgba(6, 182, 212, 0.1); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.3); }
-.jlx-job-stat__icon-wrap--purple { background: rgba(168, 85, 247, 0.1); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); }
-.jlx-job-stat__icon-wrap--green { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
-.jlx-job-stat__icon-wrap--orange { background: rgba(249, 115, 22, 0.1); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); }
+.jlx-job-stat__icon-wrap--cyan {
+  background: rgba(6, 182, 212, 0.1);
+  color: #06b6d4;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+}
+.jlx-job-stat__icon-wrap--purple {
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+.jlx-job-stat__icon-wrap--green {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+.jlx-job-stat__icon-wrap--orange {
+  background: rgba(249, 115, 22, 0.1);
+  color: #f97316;
+  border: 1px solid rgba(249, 115, 22, 0.3);
+}
 
-.jlx-job-stat__value { font-size: 1.75rem; font-weight: 800; color: #fff; line-height: 1.2; font-family: 'Space Mono', monospace; }
-.jlx-job-stat__label { font-size: 0.8rem; color: #94a3b8; letter-spacing: 0.01em; margin-top: 2px; }
+.jlx-job-stat__value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  font-family: "Space Mono", monospace;
+}
+.jlx-job-stat__label {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  letter-spacing: 0.01em;
+  margin-top: 2px;
+}
 
 .jlx-job-stat__glow {
   position: absolute;
-  top: -50%; left: -50%; width: 200%; height: 200%;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
   background: radial-gradient(circle, rgba(6, 182, 212, 0.05), transparent 70%);
   pointer-events: none;
   z-index: 1;
@@ -2011,15 +2357,17 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 2rem;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   padding-bottom: 1rem;
 }
 
-.jlx-header-icon { color: #06b6d4; }
+.jlx-header-icon {
+  color: #06b6d4;
+}
 .jlx-card-title {
   margin: 0;
   font-size: 11px;
-  font-family: 'Space Mono', monospace;
+  font-family: "Space Mono", monospace;
   color: #e2e8f0;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -2055,7 +2403,11 @@
   margin-top: auto;
   border-radius: 14px;
   border: 1px solid rgba(56, 189, 248, 0.35);
-  background: linear-gradient(135deg, rgba(9, 28, 46, 0.85), rgba(8, 37, 66, 0.74));
+  background: linear-gradient(
+    135deg,
+    rgba(9, 28, 46, 0.85),
+    rgba(8, 37, 66, 0.74)
+  );
   padding: 0.9rem 1rem;
   display: grid;
   gap: 0.55rem;
@@ -2104,40 +2456,91 @@
 .jlx-pipeline-step {
   margin-bottom: 1.25rem;
   padding: 1rem;
-  background: rgba(255,255,255,0.02);
-  border-left: 2px solid rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
   transition: all 0.2s ease;
 }
 
 .jlx-pipeline-step:hover {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.jlx-step-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.jlx-step-index { font-family: 'Space Mono', monospace; font-size: 10px; color: #06b6d4; opacity: 0.6; }
-.jlx-step-label { font-size: 12px; font-weight: 700; color: #fff; }
+.jlx-step-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.jlx-step-index {
+  font-family: "Space Mono", monospace;
+  font-size: 10px;
+  color: #06b6d4;
+  opacity: 0.6;
+}
+.jlx-step-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
 
-.jlx-step-bar-container { height: 4px; background: rgba(0,0,0,0.3); border-radius: 2px; margin: 8px 0; overflow: hidden; }
-.jlx-step-bar { height: 100%; background: #06b6d4; transition: width 1s ease-out; position: relative; }
-.jlx-step-bar::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: jlx-shimmer-bar 2s infinite; }
+.jlx-step-bar-container {
+  height: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  margin: 8px 0;
+  overflow: hidden;
+}
+.jlx-step-bar {
+  height: 100%;
+  background: #06b6d4;
+  transition: width 1s ease-out;
+  position: relative;
+}
+.jlx-step-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: jlx-shimmer-bar 2s infinite;
+}
 
-.jlx-step-footer { display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-size: 9px; color: #94a3b8; }
+.jlx-step-footer {
+  display: flex;
+  justify-content: space-between;
+  font-family: "Space Mono", monospace;
+  font-size: 9px;
+  color: #94a3b8;
+}
 
-.jlx-donut-container { display: flex; align-items: center; justify-content: space-around; padding: 1rem 0; }
-.jlx-status-donut .jlx-donut-container { flex: 1; }
+.jlx-donut-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1rem 0;
+}
+.jlx-status-donut .jlx-donut-container {
+  flex: 1;
+}
 
 .jlx-donut-chart {
-  width: 160px; height: 160px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .jlx-donut-hole {
-  width: 120px; height: 120px;
+  width: 120px;
+  height: 120px;
   background: #0f172a;
   border-radius: 50%;
   display: flex;
@@ -2147,34 +2550,90 @@
   border: 1px solid rgba(6, 182, 212, 0.2);
 }
 
-.jlx-donut-value { font-size: 2rem; font-weight: 800; color: #fff; font-family: 'Space Mono', monospace; }
-.jlx-donut-label { font-size: 8px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+.jlx-donut-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  font-family: "Space Mono", monospace;
+}
+.jlx-donut-label {
+  font-size: 8px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
-.jlx-donut-legend { display: flex; flex-direction: column; gap: 10px; }
-.jlx-legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #94a3b8; }
-.jlx-legend-text { white-space: nowrap; }
-.jlx-dot { width: 10px; height: 10px; border-radius: 2px; }
-.dot-green { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
-.dot-cyan { background: #06b6d4; box-shadow: 0 0 8px #06b6d4; }
-.dot-red { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+.jlx-donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.jlx-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+.jlx-legend-text {
+  white-space: nowrap;
+}
+.jlx-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.dot-green {
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+}
+.dot-cyan {
+  background: #06b6d4;
+  box-shadow: 0 0 8px #06b6d4;
+}
+.dot-red {
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+}
 
 .jlx-card-corner {
   position: absolute;
-  width: 15px; height: 15px;
+  width: 15px;
+  height: 15px;
   border: 2px solid #06b6d4;
 }
-.jlx-card-corner.top-left { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
-.jlx-card-corner.bottom-right { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+.jlx-card-corner.top-left {
+  top: -2px;
+  left: -2px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.jlx-card-corner.bottom-right {
+  bottom: -2px;
+  right: -2px;
+  border-left: 0;
+  border-top: 0;
+}
 
 @keyframes jlx-shimmer-bar {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 @media (max-width: 1200px) {
-  .jlx-hud-stats { grid-template-columns: repeat(2, 1fr); }
-  .jlx-main-visuals { grid-template-columns: 1fr; }
-  .jlx-pipeline-content { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .jlx-hud-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .jlx-main-visuals {
+    grid-template-columns: 1fr;
+  }
+  .jlx-pipeline-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
@@ -2184,9 +2643,15 @@
     gap: 1.25rem;
   }
 
-  .jlx-hero-visual { align-self: center; }
-  .jlx-title-primary { font-size: 2.25rem; }
-  .jlx-pipeline-content { grid-template-columns: 1fr; }
+  .jlx-hero-visual {
+    align-self: center;
+  }
+  .jlx-title-primary {
+    font-size: 2.25rem;
+  }
+  .jlx-pipeline-content {
+    grid-template-columns: 1fr;
+  }
 }
 
 .jlx-hero__bg {
@@ -2194,8 +2659,16 @@
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 15% 0%, rgba(80, 228, 255, 0.12), transparent 45%),
-    radial-gradient(circle at 90% 20%, rgba(168, 85, 247, 0.14), transparent 42%);
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(80, 228, 255, 0.12),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(168, 85, 247, 0.14),
+      transparent 42%
+    );
   animation: jlx-hero-drift 8s ease-in-out infinite alternate;
 }
 
@@ -2252,7 +2725,13 @@
 .jlx-stat-card {
   border-radius: 18px;
   padding: 1.15rem 1.2rem;
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 16px),
+    calc(100% - 16px) 100%,
+    0 100%
+  );
   transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -2296,7 +2775,11 @@
 }
 
 .jlx-stat-card.is-cyan::before {
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.18) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(6, 182, 212, 0.18) 0%,
+    transparent 70%
+  );
 }
 
 .jlx-stat-card.is-amber {
@@ -2304,7 +2787,11 @@
 }
 
 .jlx-stat-card.is-amber::before {
-  background: radial-gradient(circle, rgba(234, 179, 8, 0.16) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(234, 179, 8, 0.16) 0%,
+    transparent 70%
+  );
 }
 
 .jlx-stat-card.is-violet {
@@ -2312,7 +2799,11 @@
 }
 
 .jlx-stat-card.is-violet::before {
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(168, 85, 247, 0.18) 0%,
+    transparent 70%
+  );
 }
 
 .jlx-stat-card.is-green {
@@ -2320,7 +2811,11 @@
 }
 
 .jlx-stat-card.is-green::before {
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(16, 185, 129, 0.18) 0%,
+    transparent 70%
+  );
 }
 
 .jlx-command-grid {
@@ -2423,7 +2918,11 @@
 }
 
 .jlx-pipeline__connector.is-live {
-  background: linear-gradient(90deg, rgba(34, 211, 238, 0.75), rgba(168, 85, 247, 0.58));
+  background: linear-gradient(
+    90deg,
+    rgba(34, 211, 238, 0.75),
+    rgba(168, 85, 247, 0.58)
+  );
   box-shadow: 0 0 10px rgba(6, 182, 212, 0.32);
 }
 
@@ -2491,7 +2990,11 @@
   width: 106px;
   height: 106px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 20%, rgba(31, 60, 92, 0.9), rgba(9, 18, 32, 0.96));
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(31, 60, 92, 0.9),
+    rgba(9, 18, 32, 0.96)
+  );
   border: 1px solid rgba(109, 177, 233, 0.42);
   display: grid;
   place-items: center;
@@ -2555,7 +3058,11 @@
   border-radius: 24px;
   padding: 2.6rem 1.5rem;
   border: 1px dashed rgba(87, 189, 240, 0.36);
-  background: linear-gradient(135deg, rgba(7, 18, 32, 0.92), rgba(8, 26, 49, 0.84));
+  background: linear-gradient(
+    135deg,
+    rgba(7, 18, 32, 0.92),
+    rgba(8, 26, 49, 0.84)
+  );
   display: grid;
   justify-items: center;
   text-align: center;
@@ -2585,7 +3092,11 @@
   border-radius: 24px;
   padding: 2.6rem 1.5rem;
   border: 1px dashed rgba(87, 189, 240, 0.36);
-  background: linear-gradient(135deg, rgba(7, 18, 32, 0.92), rgba(8, 26, 49, 0.84));
+  background: linear-gradient(
+    135deg,
+    rgba(7, 18, 32, 0.92),
+    rgba(8, 26, 49, 0.84)
+  );
   display: grid;
   justify-items: center;
   text-align: center;
@@ -2643,7 +3154,11 @@
   border-radius: 20px;
   border-style: dashed;
   border-color: rgba(87, 189, 240, 0.3);
-  background: linear-gradient(135deg, rgba(8, 20, 36, 0.85), rgba(8, 25, 48, 0.62));
+  background: linear-gradient(
+    135deg,
+    rgba(8, 20, 36, 0.85),
+    rgba(8, 25, 48, 0.62)
+  );
 }
 
 .jlx-empty-state h3 {
@@ -2707,7 +3222,12 @@
   left: -180%;
   width: 120%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(132, 232, 255, 0.35), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(132, 232, 255, 0.35),
+    transparent
+  );
   animation: jlx-shimmer 1.4s linear infinite;
 }
 
@@ -2851,8 +3371,13 @@
 }
 
 @keyframes jlx-sla-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* ======================================================================
@@ -2864,7 +3389,11 @@
   gap: 0.75rem;
   padding: 1rem 1.2rem;
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(251, 191, 36, 0.06));
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.1),
+    rgba(251, 191, 36, 0.06)
+  );
   border: 1px solid rgba(249, 115, 22, 0.28);
   margin-bottom: 0.85rem;
 }
@@ -2952,16 +3481,26 @@
 /* ======================================================================
    MODAL OVERLAY & MODAL
    ====================================================================== */
+body.jlx-modal-open {
+  overflow: hidden;
+}
+
 .jlx-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(2, 6, 23, 0.75);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  display: grid;
-  place-items: center;
-  z-index: 1000;
-  padding: 1.5rem;
+  background: rgba(1, 4, 18, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  z-index: 12000;
+  padding:
+    max(5.75rem, calc(env(safe-area-inset-top) + 1.5rem))
+    clamp(1rem, 3vw, 1.75rem)
+    clamp(1.5rem, 4vw, 2.25rem);
   animation: jlx-modal-fade-in 0.2s ease-out;
 }
 
@@ -2972,47 +3511,91 @@
 
 .jlx-modal {
   width: 100%;
-  max-width: 500px;
-  border-radius: 22px;
-  background: linear-gradient(135deg, rgba(8, 15, 30, 0.97), rgba(12, 20, 38, 0.95));
-  border: 1px solid rgba(6, 182, 212, 0.28);
+  max-width: 560px;
+  max-height: calc(100dvh - 7rem);
+  border-radius: 20px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at top right, rgba(0, 245, 255, 0.14), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.12), transparent 32%),
+    linear-gradient(160deg, rgba(5, 12, 28, 0.99) 0%, rgba(8, 18, 38, 0.97) 50%, rgba(6, 14, 30, 0.98) 100%);
+  border: 1px solid rgba(0, 245, 255, 0.18);
   box-shadow:
-    0 0 0 1px rgba(6, 182, 212, 0.08),
-    0 25px 60px rgba(0, 0, 0, 0.5),
-    0 0 40px rgba(6, 182, 212, 0.1);
+    0 0 0 1px rgba(0, 245, 255, 0.04),
+    0 0 32px rgba(0, 245, 255, 0.08),
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(0, 245, 255, 0.08);
   overflow: hidden;
-  animation: jlx-modal-slide-up 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: jlx-modal-slide-up 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+
+.jlx-modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 245, 255, 0.012) 2px, rgba(0, 245, 255, 0.012) 4px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.jlx-modal::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.6) 30%, rgba(0, 245, 255, 0.9) 50%, rgba(0, 245, 255, 0.6) 70%, transparent);
+  z-index: 2;
 }
 
 @keyframes jlx-modal-slide-up {
-  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .jlx-modal__header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 1.2rem 1.4rem;
-  border-bottom: 1px solid rgba(6, 182, 212, 0.15);
-  background: rgba(6, 182, 212, 0.04);
+  gap: 1.25rem;
+  padding: 1.35rem 1.5rem 1.15rem;
+  border-bottom: 1px solid rgba(0, 245, 255, 0.12);
+  background: linear-gradient(180deg, rgba(0, 245, 255, 0.05) 0%, transparent 100%);
+  position: relative;
+  z-index: 3;
+}
+
+.jlx-modal__header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.3), transparent);
 }
 
 .jlx-modal__header h3 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.08rem;
   font-weight: 700;
-  color: #f4fbff;
+  color: #f0fbff;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
 }
 
 .jlx-modal__header h3 svg {
-  color: #06b6d4;
+  color: #00f5ff;
   width: 18px;
   height: 18px;
+  filter: drop-shadow(0 0 4px rgba(0, 245, 255, 0.5));
 }
 
 .jlx-modal__close {
@@ -3021,18 +3604,21 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  border-radius: 10px;
-  border: 1px solid rgba(148, 163, 184, 0.15);
-  background: rgba(15, 23, 42, 0.5);
-  color: #94a3b8;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.6);
+  color: #64748b;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+  z-index: 4;
 }
 
 .jlx-modal__close:hover {
-  background: rgba(220, 38, 38, 0.12);
-  border-color: rgba(220, 38, 38, 0.28);
-  color: #fca5a5;
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.4);
+  color: #f87171;
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.2);
 }
 
 .jlx-modal__close svg {
@@ -3041,35 +3627,114 @@
 }
 
 .jlx-modal__body {
-  padding: 1.4rem;
+  padding: 1.35rem 1.5rem 1.4rem;
   display: flex;
   flex-direction: column;
-  gap: 1.15rem;
+  gap: 1rem;
+  overflow-y: auto;
+  position: relative;
+  z-index: 3;
 }
 
 .jlx-modal__desc {
   margin: 0;
+  font-size: 0.83rem;
+  color: #7dd3fc;
+  line-height: 1.65;
+  padding: 0.9rem 1.1rem;
+  border-radius: 12px;
+  background: rgba(0, 245, 255, 0.04);
+  border: 1px solid rgba(0, 245, 255, 0.1);
+}
+
+.jlx-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  padding: 1.05rem 1.5rem 1.35rem;
+  border-top: 1px solid rgba(0, 245, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(0, 12, 28, 0.2) 0%, rgba(0, 10, 24, 0.72) 100%);
+  position: relative;
+  z-index: 3;
+}
+
+.jlx-modal__actions::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.22), transparent);
+}
+
+.jlx-modal__actions .jlx-btn {
+  min-height: 44px;
+  min-width: 160px;
+  justify-content: center;
+  padding: 0.78rem 1.3rem;
+  border-radius: 14px;
   font-size: 0.84rem;
-  color: #94a3b8;
-  line-height: 1.6;
-  padding: 0.85rem 1rem;
-  border-radius: 11px;
-  background: rgba(15, 23, 42, 0.4);
-  border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.jlx-modal__actions .jlx-btn--primary {
+  background: linear-gradient(135deg, rgba(0, 245, 255, 0.24), rgba(59, 130, 246, 0.28));
+  border-color: rgba(34, 211, 238, 0.42);
+  box-shadow: 0 12px 30px rgba(0, 245, 255, 0.14);
+}
+
+.jlx-modal__actions .jlx-btn--danger {
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.16), rgba(249, 115, 22, 0.18));
+  border-color: rgba(248, 113, 113, 0.3);
+  box-shadow: 0 12px 24px rgba(248, 113, 113, 0.08);
+}
+
+.jlx-modal__actions .jlx-btn:disabled {
+  opacity: 0.56;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .jlx-modal__footer {
   display: flex;
   justify-content: flex-end;
-  gap: 0.65rem;
-  padding: 1rem 1.4rem;
-  border-top: 1px solid rgba(148, 163, 184, 0.08);
-  background: rgba(8, 15, 30, 0.3);
+  gap: 0.75rem;
+  padding: 1.1rem 1.5rem;
+  border-top: 1px solid rgba(0, 245, 255, 0.08);
+  background: rgba(3, 8, 20, 0.5);
+  position: relative;
+  z-index: 3;
+}
+
+.jlx-modal__footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.15), transparent);
 }
 
 .jlx-modal__footer .jlx-btn {
-  padding: 0.65rem 1.2rem;
+  padding: 0.7rem 1.5rem;
   font-size: 0.84rem;
+  border-radius: 10px;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+}
+
+.jlx-modal__footer .jlx-btn--primary:hover {
+  box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.15), 0 4px 18px rgba(0, 245, 255, 0.22);
+  transform: translateY(-1px);
+}
+
+.jlx-modal__footer .jlx-btn--ghost:hover {
+  border-color: rgba(0, 245, 255, 0.35);
+  box-shadow: 0 0 0 2px rgba(0, 245, 255, 0.08);
 }
 
 /* ======================================================================
@@ -3109,21 +3774,22 @@
   width: 100%;
   padding: 0.85rem 1rem;
   border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  background: rgba(15, 23, 42, 0.5);
-  color: #f8fafc;
+  border: 1.5px solid rgba(0, 245, 255, 0.12);
+  background: rgba(0, 8, 20, 0.5);
+  color: #e2e8f0;
   font: inherit;
-  font-size: 0.84rem;
+  font-size: 0.9rem;
   resize: vertical;
   outline: none;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   min-height: 120px;
   line-height: 1.6;
 }
 
 .jlx-textarea:focus {
-  border-color: rgba(6, 182, 212, 0.4);
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.08);
+  border-color: rgba(0, 245, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.12), 0 0 20px rgba(0, 245, 255, 0.06);
+  background: rgba(0, 8, 20, 0.6);
 }
 
 .jlx-textarea::placeholder {
@@ -3216,14 +3882,159 @@
 
 .jlx-modal__header-left {
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
+  align-items: flex-start;
+  gap: 0.8rem;
   flex: 1;
+  min-width: 0;
 }
 
 .jlx-modal__header-left svg {
   color: #06b6d4;
   flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.jlx-modal__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.jlx-modal__eyebrow {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(125, 211, 252, 0.76);
+}
+
+.jlx-modal__header-left > h3[style] {
+  display: none;
+}
+
+.jlx-modal__header > .jlx-modal__close[style] {
+  display: none;
+}
+
+.jlx-modal--counter .jlx-modal__body > p[style] {
+  display: none;
+}
+
+.jlx-modal--counter .jlx-modal__body > div[style*="rgba(251,191,36,0.08)"] {
+  display: none;
+}
+
+.jlx-modal__stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.jlx-modal__summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.jlx-modal__summary-card {
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 245, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(3, 14, 32, 0.92) 0%, rgba(3, 10, 22, 0.68) 100%);
+  box-shadow: inset 0 1px 0 rgba(125, 211, 252, 0.08);
+}
+
+.jlx-modal__summary-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(148, 163, 184, 0.82);
+}
+
+.jlx-modal__summary-value {
+  display: block;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: #f8fdff;
+}
+
+.jlx-modal__salary-card {
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  background:
+    linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(0, 245, 255, 0.04));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 12px 28px rgba(16, 185, 129, 0.08);
+}
+
+.jlx-modal__salary-label {
+  display: block;
+  margin-bottom: 0.38rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(187, 247, 208, 0.78);
+}
+
+.jlx-modal__salary-value {
+  font-size: 1.08rem;
+  line-height: 1.35;
+  color: #dcfce7;
+}
+
+.jlx-modal__note-card {
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  background: rgba(10, 20, 42, 0.78);
+}
+
+.jlx-modal__note-label {
+  margin-bottom: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(147, 197, 253, 0.8);
+}
+
+.jlx-modal__note-content {
+  font-size: 0.84rem;
+  line-height: 1.65;
+  color: #cbd5f5;
+  white-space: pre-wrap;
+}
+
+.jlx-modal__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  background: rgba(8, 26, 42, 0.72);
+  color: #bae6fd;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.jlx-modal__notice svg {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.jlx-modal__notice--warning {
+  border-color: rgba(251, 191, 36, 0.28);
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(120, 53, 15, 0.12));
+  color: #fde68a;
 }
 
 /* Dispute file upload area */
@@ -3350,7 +4161,7 @@
 .jlx-dispute-file-item__size {
   font-size: 0.72rem;
   color: #475569;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
 }
 
 .jlx-dispute-file-item__remove {
@@ -3472,7 +4283,11 @@
   top: 30px;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(to bottom, rgba(56, 189, 248, 0.3), rgba(56, 189, 248, 0.05));
+  background: linear-gradient(
+    to bottom,
+    rgba(56, 189, 248, 0.3),
+    rgba(56, 189, 248, 0.05)
+  );
 }
 
 /* Card */
@@ -3845,53 +4660,62 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 0.75rem;
-  border-radius: 10px;
-  background: rgba(15, 23, 42, 0.5);
-  border: 1px solid rgba(6, 182, 212, 0.12);
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: rgba(0, 245, 255, 0.03);
+  border: 1px solid rgba(0, 245, 255, 0.1);
 }
 
 .jlx-offer-details__label {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  color: #64748b;
+  color: #00f5ff;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.07em;
+  opacity: 0.7;
 }
 
 .jlx-offer-details__content {
   font-size: 0.84rem;
-  line-height: 1.6;
-  color: #94a3b8;
+  line-height: 1.65;
+  color: #7dd3fc;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
 /* === OFFER MODAL === */
 .jlx-modal--offer {
-  max-width: 580px;
+  max-width: 600px;
 }
 
 .jlx-modal--counter {
-  max-width: 640px;
+  max-width: 660px;
 }
 
 .jlx-offer-modal-content {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .jlx-offer-modal-content .jlx-offer-details {
-  padding: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  background: rgba(0, 245, 255, 0.03);
+  border: 1px solid rgba(0, 245, 255, 0.1);
 }
 
-.jlx-field__hint {
-  font-size: 0.72rem;
-  color: #475569;
+/* Override .jlx-field__hint for offer modals — use green for salary hint */
+.jlx-modal--counter .jlx-field__hint,
+.jlx-modal--offer .jlx-field__hint {
+  font-size: 0.76rem;
+  color: #10b981;
   margin-top: 0.3rem;
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 500;
 }
 
 /* === OFFER ROUND BADGE === */
@@ -3905,8 +4729,8 @@
   gap: 0.35rem;
   font-size: 0.72rem;
   font-weight: 600;
-  color: #06b6d4;
-  background: rgba(6, 182, 212, 0.1);
+  color: #00f5ff;
+  background: rgba(0, 245, 255, 0.08);
   border: 1px solid rgba(6, 182, 212, 0.2);
   border-radius: 6px;
   padding: 0.25rem 0.6rem;
@@ -3955,4 +4779,1167 @@
 
 .jlx-feedback-card {
   margin-top: 0.5rem;
+}
+
+/* ======================================================================
+   JOB LAB UX ENHANCEMENTS (Sidebar balance, filters, pagination)
+   ====================================================================== */
+.jlx-nav {
+  flex: 1;
+  justify-content: space-between;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.jlx-nav__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.jlx-nav__group--primary {
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.jlx-nav__group--secondary {
+  margin-top: 0.4rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.jlx-app-toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.jlx-app-toolbar__main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.jlx-app-toolbar__filters {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.jlx-filter-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.52rem 0.7rem;
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+}
+
+.jlx-filter-control svg {
+  color: #67e8f9;
+  flex-shrink: 0;
+}
+
+.jlx-filter-control select {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.jlx-filter-control option {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.jlx-date-range {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.jlx-date-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.45);
+  color: #94a3b8;
+  font-size: 0.74rem;
+}
+
+.jlx-date-field input {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 0.78rem;
+}
+
+.jlx-pagination {
+  margin-top: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.jlx-pagination__summary {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.jlx-pagination__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.jlx-pagination__actions .jlx-btn {
+  padding: 0.45rem 0.8rem;
+  font-size: 0.76rem;
+}
+
+.jlx-pagination__page {
+  min-width: 110px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+.jlx-workspace-rail__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+  background: rgba(8, 15, 30, 0.35);
+}
+
+.jlx-workspace-rail__pagination .jlx-btn {
+  padding: 0.38rem 0.68rem;
+  font-size: 0.74rem;
+}
+
+.jlx-workspace-rail__pagination span {
+  font-size: 0.76rem;
+  color: #94a3b8;
+}
+
+.jlx-workspace-grid.is-expanded {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.jlx-feedback-card__note,
+.jlx-note p,
+.jlx-status-explainer p {
+  overflow-wrap: anywhere;
+}
+
+/* === OFFERS VIEW (6th viewMode on JobLab) === */
+.jlx-offers-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.jlx-offers-view__hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: rgba(0, 245, 255, 0.04);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  border-radius: 14px;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.jlx-offers-view__hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.jlx-offers-view__hero-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.jlx-offers-view__hero-title svg {
+  color: #00f5ff;
+}
+
+.jlx-offers-view__hero-sub {
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.jlx-offers-stats {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.jlx-offers-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.jlx-offers-stat__val {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #00f5ff;
+  line-height: 1;
+}
+
+.jlx-offers-stat__val--pending { color: #a78bfa; }
+.jlx-offers-stat__val--accepted { color: #10b981; }
+.jlx-offers-stat__val--rejected { color: #f87171; }
+
+.jlx-offers-stat__lbl {
+  font-size: 0.65rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.jlx-offers-tabs {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(0, 245, 255, 0.08);
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.jlx-offers-tab {
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.jlx-offers-tab:hover {
+  color: #e2e8f0;
+  background: rgba(0, 245, 255, 0.06);
+}
+
+.jlx-offers-tab.is-active {
+  background: rgba(0, 245, 255, 0.1);
+  border-color: rgba(0, 245, 255, 0.3);
+  color: #00f5ff;
+}
+
+.jlx-offers-tab__count {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  background: rgba(0, 245, 255, 0.12);
+}
+
+.jlx-offers-tab.is-active .jlx-offers-tab__count {
+  background: rgba(0, 245, 255, 0.2);
+}
+
+.jlx-offers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.jlx-offer-group {
+  background: rgba(10, 18, 38, 0.45);
+  border: 1px solid rgba(0, 245, 255, 0.1);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.jlx-offer-group__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 245, 255, 0.06);
+  background: rgba(0, 245, 255, 0.03);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.jlx-offer-group__job {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.jlx-offer-group__job-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(0, 245, 255, 0.1);
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00f5ff;
+  flex-shrink: 0;
+}
+
+.jlx-offer-group__job-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.jlx-offer-group__job-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.jlx-offer-group__company {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.jlx-offer-group__body {
+  padding: 0.875rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.jlx-offer-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.875rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(34, 197, 94, 0.15);
+  background: rgba(34, 197, 94, 0.03);
+  transition: border-color 0.15s ease;
+}
+
+.jlx-offer-item:hover {
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.jlx-offer-item.is-rejected {
+  border-color: rgba(251, 191, 36, 0.2);
+  background: rgba(251, 191, 36, 0.03);
+}
+
+.jlx-offer-item.is-accepted {
+  border-color: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.jlx-offer-item__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.jlx-offer-item__left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.jlx-offer-item__round {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.jlx-offer-item__round--r1 {
+  background: rgba(0, 245, 255, 0.1);
+  color: #00f5ff;
+  border: 1px solid rgba(0, 245, 255, 0.2);
+}
+
+.jlx-offer-item__round--r2 {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+
+.jlx-offer-item__status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+}
+
+.jlx-offer-item__status--pending {
+  background: rgba(167, 139, 250, 0.12);
+  color: #a78bfa;
+}
+
+.jlx-offer-item__status--accepted {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+
+.jlx-offer-item__status--rejected {
+  background: rgba(248, 113, 113, 0.12);
+  color: #f87171;
+}
+
+.jlx-offer-item__details {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #cbd5e1;
+  padding: 0.65rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(0, 245, 255, 0.08);
+  white-space: pre-wrap;
+}
+
+.jlx-offer-item__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.jlx-offer-item__history {
+  border-top: 1px solid rgba(0, 245, 255, 0.06);
+  padding-top: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.jlx-offer-history-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 0.72rem;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  transition: color 0.15s ease;
+}
+
+.jlx-offer-history-toggle:hover {
+  color: #94a3b8;
+}
+
+.jlx-offer-history {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding: 0.65rem;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(0, 245, 255, 0.06);
+}
+
+.jlx-offer-history__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.jlx-offer-history__item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.jlx-offer-history__item-text {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  padding-left: 0.5rem;
+  border-left: 2px solid rgba(0, 245, 255, 0.15);
+  margin-left: 0.4rem;
+  white-space: pre-wrap;
+}
+
+.jlx-offers-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 2rem;
+  color: #334155;
+  text-align: center;
+}
+
+.jlx-offers-empty svg {
+  opacity: 0.25;
+}
+
+.jlx-offers-empty p {
+  font-size: 0.85rem;
+  color: #475569;
+  margin: 0;
+}
+
+/* === FULL-TIME INLINE VIEW (replaces workspace for REGULAR jobs) === */
+.jlx-fulltime-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  background: rgba(10, 18, 38, 0.5);
+  border-bottom: 1px solid rgba(0, 245, 255, 0.08);
+}
+
+.jlx-fulltime-bar__back {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 7px;
+  transition: all 0.15s ease;
+}
+
+.jlx-fulltime-bar__back:hover {
+  color: #e2e8f0;
+  background: rgba(0, 245, 255, 0.07);
+}
+
+.jlx-fulltime-bar__back svg {
+  flex-shrink: 0;
+}
+
+.jlx-fulltime-bar__job {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.jlx-fulltime-bar__job-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: rgba(0, 245, 255, 0.1);
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00f5ff;
+  flex-shrink: 0;
+}
+
+.jlx-fulltime-bar__job-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jlx-fulltime-bar__status {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.jlx-fulltime-tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.65rem 1.25rem;
+  background: rgba(10, 18, 38, 0.4);
+  border-bottom: 1px solid rgba(0, 245, 255, 0.08);
+  overflow-x: auto;
+}
+
+.jlx-fulltime-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.jlx-fulltime-tab:hover {
+  color: #e2e8f0;
+  background: rgba(0, 245, 255, 0.06);
+}
+
+.jlx-fulltime-tab.is-active {
+  background: rgba(0, 245, 255, 0.1);
+  border-color: rgba(0, 245, 255, 0.3);
+  color: #00f5ff;
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.08);
+}
+
+.jlx-fulltime-tab__icon {
+  flex-shrink: 0;
+}
+
+.jlx-fulltime-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Full-time overview tab */
+.jlx-ft-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.jlx-ft-overview__job-card {
+  padding: 1.25rem;
+  background: rgba(10, 18, 38, 0.45);
+  border: 1px solid rgba(0, 245, 255, 0.1);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.jlx-ft-overview__job-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.jlx-ft-overview__job-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(0, 245, 255, 0.1);
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00f5ff;
+  flex-shrink: 0;
+}
+
+.jlx-ft-overview__job-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.jlx-ft-overview__job-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 0.2rem;
+}
+
+.jlx-ft-overview__company {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.jlx-ft-overview__badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.jlx-ft-overview__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+}
+
+.jlx-ft-overview__badge--remote {
+  background: rgba(0, 245, 255, 0.08);
+  color: #00f5ff;
+  border-color: rgba(0, 245, 255, 0.15);
+}
+
+.jlx-ft-overview__badge--onsite {
+  background: rgba(251, 146, 60, 0.08);
+  color: #fb923c;
+  border-color: rgba(251, 146, 60, 0.15);
+}
+
+.jlx-ft-overview__badge--negotiable {
+  background: rgba(167, 139, 250, 0.08);
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.15);
+}
+
+.jlx-ft-overview__badge--fixed {
+  background: rgba(148, 163, 184, 0.08);
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.15);
+}
+
+/* Timeline stepper */
+.jlx-ft-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0.5rem 0;
+}
+
+.jlx-ft-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.jlx-ft-step:last-child {
+  padding-bottom: 0;
+}
+
+.jlx-ft-step__dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  z-index: 1;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.jlx-ft-step.is-done .jlx-ft-step__dot {
+  background: rgba(0, 245, 255, 0.15);
+  color: #00f5ff;
+  border-color: rgba(0, 245, 255, 0.35);
+}
+
+.jlx-ft-step.is-active .jlx-ft-step__dot {
+  background: rgba(0, 245, 255, 0.2);
+  color: #00f5ff;
+  border-color: #00f5ff;
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
+}
+
+.jlx-ft-step.is-pending .jlx-ft-step__dot {
+  background: rgba(148, 163, 184, 0.08);
+  color: #475569;
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.jlx-ft-step__connector {
+  position: absolute;
+  left: 13px;
+  top: 26px;
+  bottom: 0;
+  width: 2px;
+  background: rgba(0, 245, 255, 0.12);
+}
+
+.jlx-ft-step.is-done .jlx-ft-step__connector {
+  background: linear-gradient(to bottom, rgba(0, 245, 255, 0.4), rgba(0, 245, 255, 0.08));
+}
+
+.jlx-ft-step.is-pending .jlx-ft-step__connector {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.jlx-ft-step__info {
+  flex: 1;
+  padding-top: 0.15rem;
+  min-width: 0;
+}
+
+.jlx-ft-step__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.jlx-ft-step.is-pending .jlx-ft-step__label {
+  color: #475569;
+}
+
+.jlx-ft-step.is-done .jlx-ft-step__label {
+  color: #94a3b8;
+}
+
+.jlx-ft-step__time {
+  font-size: 0.72rem;
+  color: #475569;
+  margin-top: 0.15rem;
+}
+
+.jlx-ft-step.is-active .jlx-ft-step__time {
+  color: #00f5ff;
+}
+
+/* Interview cards in full-time inline view */
+.jlx-ft-interviews {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.jlx-ft-interviews__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.jlx-ft-interviews__section-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0;
+}
+
+.jlx-ft-interviews__section-head svg {
+  color: #00f5ff;
+}
+
+.jlx-ft-interviews__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.jlx-ft-interview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.875rem 1rem;
+  background: rgba(10, 18, 38, 0.45);
+  border: 1px solid rgba(0, 245, 255, 0.1);
+  border-radius: 12px;
+  transition: border-color 0.15s ease;
+}
+
+.jlx-ft-interview-card:hover {
+  border-color: rgba(0, 245, 255, 0.25);
+}
+
+.jlx-ft-interview-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.jlx-ft-interview-card__meeting {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.jlx-ft-interview-card__meeting svg {
+  color: #00f5ff;
+  flex-shrink: 0;
+}
+
+.jlx-ft-interview-card__status {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.18rem 0.55rem;
+  border-radius: 6px;
+}
+
+.jlx-ft-interview-card__status--pending {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+}
+
+.jlx-ft-interview-card__status--confirmed {
+  background: rgba(0, 245, 255, 0.1);
+  color: #00f5ff;
+}
+
+.jlx-ft-interview-card__status--completed {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.jlx-ft-interview-card__status--cancelled {
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+}
+
+.jlx-ft-interview-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.jlx-ft-interview-card__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.jlx-ft-interview-card__meta-item svg {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.jlxinercountdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(0, 245, 255, 0.08);
+  color: #00f5ff;
+  border: 1px solid rgba(0, 245, 255, 0.15);
+}
+
+.jlxinercountdown--urgent {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+.jlxinercountdown--overdue {
+  background: rgba(248, 113, 113, 0.1);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.2);
+}
+
+.jlx-ft-interview-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #00f5ff;
+  text-decoration: none;
+  padding: 0.3rem 0.65rem;
+  border-radius: 7px;
+  background: rgba(0, 245, 255, 0.06);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  transition: all 0.15s ease;
+}
+
+.jlx-ft-interview-card__link:hover {
+  background: rgba(0, 245, 255, 0.12);
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.2);
+}
+
+.jlx-ft-interview-card__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2.5rem;
+  color: #334155;
+  text-align: center;
+}
+
+.jlx-ft-interview-card__empty svg {
+  opacity: 0.3;
+}
+
+.jlx-ft-interview-card__empty p {
+  font-size: 0.82rem;
+  color: #475569;
+  margin: 0;
+}
+
+/* Contracts list in full-time inline view */
+.jlx-ft-contracts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.jlx-ft-contract-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: rgba(10, 18, 38, 0.45);
+  border: 1px solid rgba(0, 245, 255, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.jlx-ft-contract-card:hover {
+  border-color: rgba(0, 245, 255, 0.3);
+  background: rgba(0, 245, 255, 0.05);
+}
+
+.jlx-ft-contract-card__info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.jlx-ft-contract-card__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(0, 245, 255, 0.08);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00f5ff;
+  flex-shrink: 0;
+}
+
+.jlx-ft-contract-card__name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.jlx-ft-contract-card__meta {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.jlx-ft-contract-card__status {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.jlx-ft-contract-card__status--signed {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.jlx-ft-contract-card__status--pending {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+}
+
+.jlx-ft-contract-card__status--draft {
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+}
+
+@media (max-width: 900px) {
+  .jlx-offers-view__hero {
+    flex-direction: column;
+  }
+
+  .jlx-offers-stats {
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .jlx-offers-tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .jlx-fulltime-tabs {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .jlx-app-toolbar__main {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .jlx-app-toolbar__filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .jlx-filter-control,
+  .jlx-date-field {
+    width: 100%;
+  }
+
+  .jlx-date-range {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
 }

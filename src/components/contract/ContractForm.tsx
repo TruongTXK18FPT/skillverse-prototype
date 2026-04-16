@@ -382,8 +382,12 @@ const ContractForm: React.FC<ContractFormProps> = ({
         if (application.isRemote) return "Remote";
         return application.location || defaultWorkingLocation || "";
       });
+      // Prefill salary from accepted offer (only if not already set)
+      if (!salary && application.offerSalary && application.offerSalary > 0) {
+        setSalary(String(application.offerSalary));
+      }
     },
-    [defaultWorkingLocation],
+    [defaultWorkingLocation, salary],
   );
 
   const handleSelectApplication = useCallback(

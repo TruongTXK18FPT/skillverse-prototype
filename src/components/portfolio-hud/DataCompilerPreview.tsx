@@ -24,7 +24,10 @@ import "./data-compiler-preview.css";
 import "../../styles/cv-templates.css";
 import portfolioService from "../../services/portfolioService";
 import {
+  CompletedMissionDTO,
   GeneratedCVDTO,
+  PortfolioEducationDTO,
+  PortfolioWorkExperienceDTO,
   UserProfileDTO,
   CVGenerationRequest,
 } from "../../data/portfolioDTOs";
@@ -42,6 +45,7 @@ import {
   parseCVJson,
   generateItemId,
   CV_TEMPLATES,
+  EMPTY_CV_DATA,
 } from "../../data/cvTemplateTypes";
 
 // ==================== COMPONENT ====================
@@ -55,8 +59,11 @@ const DataCompilerPreview = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeCV, setActiveCV] = useState<GeneratedCVDTO | null>(null);
-  const [, setProfile] = useState<UserProfileDTO | null>(null);
+  const [profile, setProfile] = useState<UserProfileDTO | null>(null);
   const [cvData, setCvData] = useState<CVStructuredData | null>(null);
+  const [completedMissions, setCompletedMissions] = useState<
+    CompletedMissionDTO[]
+  >([]);
   const cvPreviewRef = useRef<HTMLDivElement>(null);
 
   // UI states
@@ -80,12 +87,15 @@ const DataCompilerPreview = () => {
   const [additionalInstructions, setAdditionalInstructions] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [includeCompletedMissions, setIncludeCompletedMissions] =
+    useState(true);
 
   // Collapsible sections in edit form
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
   >({
     personal: true,
+    imports: true,
     summary: true,
     experience: true,
     education: true,
@@ -113,6 +123,259 @@ const DataCompilerPreview = () => {
     if (["PROFESSIONAL", "CREATIVE", "MINIMAL", "MODERN"].includes(name))
       return name;
     return templateName || "PROFESSIONAL";
+  };
+
+  const normalizeValue = (value?: string | null) =>
+    (value || "").trim().toLowerCase();
+
+  const buildPortfolioUrl = (currentProfile?: UserProfileDTO | null) => {
+    if (currentProfile?.portfolioWebsiteUrl) {
+      return currentProfile.portfolioWebsiteUrl;
+    }
+    if (
+      typeof window !== "undefined" &&
+      currentProfile?.customUrlSlug
+    ) {
+      return `${window.location.origin}/portfolio/${currentProfile.customUrlSlug}`;
+    }
+    return "";
+  };
+
+  const createBaseCvData = useCallback((): CVStructuredData => {
+    const parsedLanguages =
+      profile?.languagesSpoken && profile.languagesSpoken.trim()
+        ? (() => {
+            try {
+              return JSON.parse(profile.languagesSpoken) as string[];
+            } catch {
+              return [];
+            }
+          })()
+        : [];
+
+    return {
+      ...EMPTY_CV_DATA,
+      personalInfo: {
+        ...EMPTY_CV_DATA.personalInfo,
+        fullName: profile?.fullName || "",
+        professionalTitle: profile?.professionalTitle || "",
+        email: profile?.email || "",
+        phone: profile?.phone || "",
+        location: profile?.location || "",
+        linkedinUrl: profile?.linkedinUrl || "",
+        githubUrl: profile?.githubUrl || "",
+        portfolioUrl: buildPortfolioUrl(profile),
+        behanceUrl: profile?.behanceUrl || "",
+        dribbbleUrl: profile?.dribbbleUrl || "",
+        avatarUrl: profile?.portfolioAvatarUrl || profile?.basicAvatarUrl || "",
+      },
+      languages: parsedLanguages.map((language) => ({
+        name: language,
+        proficiency: "Intermediate" as const,
+      })),
+    };
+  }, [profile]);
+
+  const withCvData = (
+    updater: (current: CVStructuredData) => CVStructuredData,
+  ) => {
+    setCvData((current) => updater(current || createBaseCvData()));
+  };
+
+  const syncPersonalInfoFromProfile = () => {
+    if (!profile) {
+      showToast("Chưa có dữ liệu profile để đồng bộ");
+      return;
+    }
+
+    setContactEmail(profile.email || "");
+    setContactPhone(profile.phone || "");
+
+    withCvData((current) => ({
+      ...current,
+      personalInfo: {
+        ...current.personalInfo,
+        fullName: profile.fullName || current.personalInfo.fullName,
+        professionalTitle:
+          profile.professionalTitle || current.personalInfo.professionalTitle,
+        email: profile.email || current.personalInfo.email,
+        phone: profile.phone || current.personalInfo.phone,
+        location: profile.location || current.personalInfo.location,
+        linkedinUrl: profile.linkedinUrl || current.personalInfo.linkedinUrl,
+        githubUrl: profile.githubUrl || current.personalInfo.githubUrl,
+        portfolioUrl:
+          buildPortfolioUrl(profile) || current.personalInfo.portfolioUrl,
+        behanceUrl: profile.behanceUrl || current.personalInfo.behanceUrl,
+        dribbbleUrl: profile.dribbbleUrl || current.personalInfo.dribbbleUrl,
+        avatarUrl:
+          profile.portfolioAvatarUrl ||
+          profile.basicAvatarUrl ||
+          current.personalInfo.avatarUrl,
+      },
+    }));
+    showToast("Đã đồng bộ thông tin liên hệ từ profile");
+  };
+
+  const importWorkExperience = (experience: PortfolioWorkExperienceDTO) => {
+    withCvData((current) => {
+      const duplicate = current.experience.some(
+        (item) =>
+          normalizeValue(item.title) === normalizeValue(experience.position) &&
+          normalizeValue(item.company) === normalizeValue(experience.companyName),
+      );
+      if (duplicate) {
+        return current;
+      }
+
+      return {
+        ...current,
+        experience: [
+          ...current.experience,
+          {
+            id: experience.id || generateItemId(),
+            title: experience.position || "Kinh nghiệm làm việc",
+            company: experience.companyName || "Doanh nghiệp",
+            location: experience.location || "",
+            startDate: experience.startDate || "",
+            endDate: experience.currentJob ? undefined : experience.endDate || "",
+            isCurrent: Boolean(experience.currentJob),
+            description: experience.description || "",
+            achievements: [],
+            technologies: [],
+          },
+        ],
+      };
+    });
+  };
+
+  const importEducationItem = (education: PortfolioEducationDTO) => {
+    withCvData((current) => {
+      const duplicate = current.education.some(
+        (item) =>
+          normalizeValue(item.degree) === normalizeValue(education.degree) &&
+          normalizeValue(item.institution) === normalizeValue(education.institution),
+      );
+      if (duplicate) {
+        return current;
+      }
+
+      return {
+        ...current,
+        education: [
+          ...current.education,
+          {
+            id: education.id || generateItemId(),
+            degree: education.degree || "Học vấn",
+            institution: education.institution || "Cơ sở đào tạo",
+            location: education.location || "",
+            startDate: education.startDate || "",
+            endDate: education.endDate || "",
+            relevantCourses: education.fieldOfStudy
+              ? [education.fieldOfStudy]
+              : [],
+          },
+        ],
+      };
+    });
+  };
+
+  const importMissionAsExperience = (mission: CompletedMissionDTO) => {
+    withCvData((current) => {
+      const duplicate = current.experience.some(
+        (item) =>
+          normalizeValue(item.title) === normalizeValue(mission.jobTitle) &&
+          normalizeValue(item.company) ===
+            normalizeValue(mission.recruiterCompanyName || mission.recruiterName),
+      );
+      if (duplicate) {
+        return current;
+      }
+
+      const missionDate = mission.completedAt
+        ? new Date(mission.completedAt).toLocaleDateString("vi-VN", {
+            month: "2-digit",
+            year: "numeric",
+          })
+        : "";
+
+      const achievements = [
+        mission.reviewComment,
+        mission.deliverables?.length
+          ? `Deliverables: ${mission.deliverables
+              .map((item) => item.fileName)
+              .filter(Boolean)
+              .join(", ")}`
+          : "",
+        mission.budget
+          ? `Ngân sách: ${mission.budget.toLocaleString("vi-VN")} ${mission.currency || "VND"}`
+          : "",
+      ].filter(Boolean) as string[];
+
+      return {
+        ...current,
+        experience: [
+          ...current.experience,
+          {
+            id: `mission-exp-${mission.applicationId}`,
+            title: mission.jobTitle,
+            company:
+              mission.recruiterCompanyName ||
+              mission.recruiterName ||
+              "SkillVerse Mission",
+            location:
+              mission.location || (mission.isRemote ? "Remote" : "SkillVerse"),
+            startDate: missionDate,
+            endDate: missionDate,
+            isCurrent: false,
+            description: mission.workNote || mission.jobDescription || "",
+            achievements,
+            technologies: mission.requiredSkills || [],
+          },
+        ],
+      };
+    });
+  };
+
+  const importMissionAsProject = (mission: CompletedMissionDTO) => {
+    withCvData((current) => {
+      const duplicate = current.projects.some(
+        (item) => normalizeValue(item.title) === normalizeValue(mission.jobTitle),
+      );
+      if (duplicate) {
+        return current;
+      }
+
+      const outcomes = [
+        mission.reviewComment,
+        mission.deliverables?.length
+          ? `Deliverables: ${mission.deliverables
+              .map((item) => item.fileName)
+              .filter(Boolean)
+              .join(", ")}`
+          : "",
+        mission.budget
+          ? `Budget: ${mission.budget.toLocaleString("vi-VN")} ${mission.currency || "VND"}`
+          : "",
+      ].filter(Boolean) as string[];
+
+      return {
+        ...current,
+        projects: [
+          ...current.projects,
+          {
+            id: `mission-proj-${mission.applicationId}`,
+            title: mission.jobTitle,
+            description: mission.jobDescription || mission.workNote || "",
+            role: "System Mission",
+            technologies: mission.requiredSkills || [],
+            outcomes,
+            duration: mission.estimatedDuration || "",
+            clientName: mission.recruiterCompanyName || mission.recruiterName,
+            rating: mission.rating,
+          },
+        ],
+      };
+    });
   };
 
   // ==================== CV UPDATE HELPERS ====================
@@ -309,6 +572,7 @@ const DataCompilerPreview = () => {
         includeProjects: true,
         includeCertificates: true,
         includeReviews: true,
+        includeCompletedMissions,
       };
       const newCv = await portfolioService.generateCV(req);
       setActiveCV(newCv);
@@ -385,7 +649,11 @@ const DataCompilerPreview = () => {
 
         const editCvId = searchParams.get("edit");
         if (editCvId) {
-          const allCvs = await portfolioService.getAllCVs();
+          const [allCvs, pf, missions] = await Promise.all([
+            portfolioService.getAllCVs(),
+            portfolioService.getProfile().catch(() => null),
+            portfolioService.getCompletedMissions().catch(() => []),
+          ]);
           const cvToEdit = allCvs.find(
             (cv) => cv.id === Number.parseInt(editCvId, 10),
           );
@@ -393,16 +661,24 @@ const DataCompilerPreview = () => {
             setActiveCV(cvToEdit);
             const parsed = parseCVJson(cvToEdit.cvJson);
             if (parsed) setCvData(parsed);
+            if (pf) {
+              setProfile(pf);
+              setContactEmail(parsed?.personalInfo?.email || pf.email || "");
+              setContactPhone(parsed?.personalInfo?.phone || pf.phone || "");
+            } else if (parsed) {
+              setContactEmail(parsed.personalInfo?.email || "");
+              setContactPhone(parsed.personalInfo?.phone || "");
+            }
+            setCompletedMissions(missions);
             setActiveTab("edit");
-            const pf = await portfolioService.getProfile().catch(() => null);
-            if (pf) setProfile(pf);
           } else {
             setError("Không tìm thấy CV để chỉnh sửa.");
           }
         } else {
-          const [cv, pf] = await Promise.all([
+          const [cv, pf, missions] = await Promise.all([
             portfolioService.getActiveCV().catch(() => null),
             portfolioService.getProfile().catch(() => null),
+            portfolioService.getCompletedMissions().catch(() => []),
           ]);
           if (cv) {
             setActiveCV(cv);
@@ -410,8 +686,14 @@ const DataCompilerPreview = () => {
             if (parsed) setCvData(parsed);
             if (cv.templateName)
               setTemplateName(cv.templateName.toUpperCase() as CVTemplateName);
+            setContactEmail(parsed?.personalInfo?.email || pf?.email || "");
+            setContactPhone(parsed?.personalInfo?.phone || pf?.phone || "");
+          } else if (pf) {
+            setContactEmail(pf.email || "");
+            setContactPhone(pf.phone || "");
           }
           if (pf) setProfile(pf);
+          setCompletedMissions(missions);
           if (!cv) {
             setActiveTab("generate");
           }
@@ -561,6 +843,260 @@ const DataCompilerPreview = () => {
                 />
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ===== IMPORT SOURCES ===== */}
+        {renderSectionHeader("imports", "Nguồn Import CV")}
+        {expandedSections.imports && (
+          <div className="cv-edit-section-body">
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                gap: "0.75rem",
+                marginBottom: "1rem",
+              }}
+            >
+              <button
+                type="button"
+                className="cv-edit-btn-add"
+                onClick={syncPersonalInfoFromProfile}
+                disabled={!profile}
+              >
+                Đồng bộ liên hệ
+              </button>
+              <button
+                type="button"
+                className="cv-edit-btn-add"
+                onClick={() =>
+                  (profile?.workExperiences || []).forEach(importWorkExperience)
+                }
+                disabled={!profile?.workExperiences?.length}
+              >
+                Import kinh nghiệm
+              </button>
+              <button
+                type="button"
+                className="cv-edit-btn-add"
+                onClick={() =>
+                  (profile?.educationHistory || []).forEach(importEducationItem)
+                }
+                disabled={!profile?.educationHistory?.length}
+              >
+                Import học vấn
+              </button>
+              <button
+                type="button"
+                className="cv-edit-btn-add"
+                onClick={() => completedMissions.forEach(importMissionAsExperience)}
+                disabled={!completedMissions.length}
+              >
+                {"Mission -> kinh nghiệm"}
+              </button>
+              <button
+                type="button"
+                className="cv-edit-btn-add"
+                onClick={() => completedMissions.forEach(importMissionAsProject)}
+                disabled={!completedMissions.length}
+              >
+                {"Mission -> dự án"}
+              </button>
+            </div>
+
+            {profile && (
+              <div className="cv-edit-card">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: "1rem",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <div>
+                    <strong>Profile hiện tại</strong>
+                    <div style={{ opacity: 0.8, marginTop: "0.25rem" }}>
+                      {profile.fullName || "Chưa có tên"} |{" "}
+                      {profile.email || "Chưa có email"} |{" "}
+                      {profile.phone || "Chưa có số điện thoại"}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="cv-edit-btn-add"
+                    onClick={syncPersonalInfoFromProfile}
+                  >
+                    Dùng cho CV
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {!!profile?.workExperiences?.length && (
+              <div style={{ marginBottom: "1rem" }}>
+                <div style={{ marginBottom: "0.5rem", fontWeight: 600 }}>
+                  Kinh nghiệm từ portfolio
+                </div>
+                {(profile?.workExperiences || []).map((experience, idx) => (
+                  <div key={experience.id || idx} className="cv-edit-card">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "1rem",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div>
+                        <strong>
+                          {experience.position || "Kinh nghiệm làm việc"}
+                        </strong>
+                        <div style={{ opacity: 0.8, marginTop: "0.25rem" }}>
+                          {experience.companyName || "Chưa có công ty"}
+                          {experience.location ? ` | ${experience.location}` : ""}
+                        </div>
+                        <div style={{ opacity: 0.7, marginTop: "0.25rem" }}>
+                          {experience.startDate || "?"} -{" "}
+                          {experience.currentJob
+                            ? "Hiện tại"
+                            : experience.endDate || "?"}
+                        </div>
+                        {experience.description && (
+                          <div style={{ marginTop: "0.5rem", opacity: 0.85 }}>
+                            {experience.description}
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        className="cv-edit-btn-add"
+                        onClick={() => importWorkExperience(experience)}
+                      >
+                        Import
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!!profile?.educationHistory?.length && (
+              <div style={{ marginBottom: "1rem" }}>
+                <div style={{ marginBottom: "0.5rem", fontWeight: 600 }}>
+                  Học vấn từ portfolio
+                </div>
+                {(profile?.educationHistory || []).map((education, idx) => (
+                  <div key={education.id || idx} className="cv-edit-card">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "1rem",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div>
+                        <strong>{education.degree || "Học vấn"}</strong>
+                        <div style={{ opacity: 0.8, marginTop: "0.25rem" }}>
+                          {education.institution || "Chưa có trường"}
+                          {education.fieldOfStudy
+                            ? ` | ${education.fieldOfStudy}`
+                            : ""}
+                        </div>
+                        <div style={{ opacity: 0.7, marginTop: "0.25rem" }}>
+                          {education.startDate || "?"} - {education.endDate || "?"}
+                          {education.status ? ` | ${education.status}` : ""}
+                        </div>
+                        {education.description && (
+                          <div style={{ marginTop: "0.5rem", opacity: 0.85 }}>
+                            {education.description}
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        className="cv-edit-btn-add"
+                        onClick={() => importEducationItem(education)}
+                      >
+                        Import
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!!completedMissions.length && (
+              <div>
+                <div style={{ marginBottom: "0.5rem", fontWeight: 600 }}>
+                  Mission đã hoàn thành trong hệ thống </div>
+                {completedMissions.map((mission) => (
+                  <div key={mission.applicationId} className="cv-edit-card">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "1rem",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div>
+                        <strong>{mission.jobTitle}</strong>
+                        <div style={{ opacity: 0.8, marginTop: "0.25rem" }}>
+                          {mission.recruiterCompanyName ||
+                            mission.recruiterName ||
+                            "SkillVerse"}
+                        </div>
+                        <div style={{ opacity: 0.7, marginTop: "0.25rem" }}>
+                          {mission.completedAt
+                            ? new Date(mission.completedAt).toLocaleDateString(
+                                "vi-VN",
+                              )
+                            : "Chưa có ngày hoàn thành"}
+                          {mission.rating ? ` | ${mission.rating}/5` : ""}
+                        </div>
+                        {!!mission.requiredSkills?.length && (
+                          <div style={{ marginTop: "0.5rem", opacity: 0.85 }}>
+                            {mission.requiredSkills.join(", ")}
+                          </div>
+                        )}
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "0.5rem",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          className="cv-edit-btn-add"
+                          onClick={() => importMissionAsExperience(mission)}
+                        >
+                          Import kinh nghiệm
+                        </button>
+                        <button
+                          type="button"
+                          className="cv-edit-btn-add"
+                          onClick={() => importMissionAsProject(mission)}
+                        >
+                          Import dự án
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!profile?.workExperiences?.length &&
+              !profile?.educationHistory?.length &&
+              !completedMissions.length && (
+                <div className="cv-edit-empty-hint">
+                  Chưa có nguồn dữ liệu để import vào CV.
+                </div>
+              )}
           </div>
         )}
 
@@ -1216,6 +1752,32 @@ const DataCompilerPreview = () => {
             />
           </div>
         </div>
+      </div>
+
+      <div className="cv-generate-section">
+        <label className="cv-generate-label">Nguồn dữ liệu hệ thống</label>
+        <label
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "0.75rem",
+            cursor: "pointer",
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={includeCompletedMissions}
+            onChange={(e) => setIncludeCompletedMissions(e.target.checked)}
+            style={{ marginTop: "0.2rem" }}
+          />
+          <div>
+            <div>Bao gồm mission đã hoàn thành</div>
+            <small style={{ opacity: 0.75 }}>
+              AI có thể dùng mission đã làm trong SkillVerse để bổ sung
+              kinh nghiệm và dự án.
+            </small>
+          </div>
+        </label>
       </div>
 
       {/* Target Optimization */}

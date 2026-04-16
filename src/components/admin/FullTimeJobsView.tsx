@@ -15,7 +15,7 @@ import adminService from "../../services/adminService";
 import { useToast } from "../../hooks/useToast";
 import Toast from "../shared/Toast";
 import {
-  formatCurrency,
+  formatBudgetRange,
   formatDate,
   getFullTimeStatusLabel,
   getFullTimeStatusTone,
@@ -271,8 +271,7 @@ export const FullTimeJobsView: React.FC<FullTimeJobsViewProps> = ({
                 </div>
 
                 <div className="jmt-job-card__budget">
-                  {formatCurrency(job.minBudget)} -{" "}
-                  {formatCurrency(job.maxBudget)}
+                  {formatBudgetRange(job)}
                 </div>
 
                 <div className="jmt-tag-row">

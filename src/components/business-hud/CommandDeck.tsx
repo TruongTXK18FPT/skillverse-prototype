@@ -242,18 +242,18 @@ const CommandDeck: React.FC = () => {
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [ftData, stData, ftApps, stApps] = await Promise.all([
+      const [ftData, stData] = await Promise.all([
         jobService.getMyJobs().catch(() => [] as JobPostingResponse[]),
         shortTermJobService
           .getMyJobs()
           .catch(() => [] as ShortTermJobResponse[]),
-        jobService.getMyApplications().catch(() => [] as JobApplicationResponse[]),
-        shortTermJobService
-          .getMyApplications()
-          .catch(() => [] as ShortTermApplicationResponse[]),
       ]);
       setFtJobs(ftData);
       setStJobs(stData);
+
+      // Pass empty arrays — recruiter doesn't have an aggregate "my-applications" endpoint
+      const ftApps: JobApplicationResponse[] = [];
+      const stApps: any[] = [];
 
       // Compute escrow data from ST jobs
       const escrows = new Map<number, any>();

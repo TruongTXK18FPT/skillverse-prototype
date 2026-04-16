@@ -36,6 +36,7 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
     includeProjects: true,
     includeCertificates: true,
     includeReviews: true,
+    includeCompletedMissions: true,
   });
 
   const templates = [
@@ -236,6 +237,22 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
                   </small>
                 </div>
               </label>
+
+              <label style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={formData.includeCompletedMissions || false}
+                  onChange={(e) => setFormData({ ...formData, includeCompletedMissions: e.target.checked })}
+                  style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                />
+                <div>
+                  <FileText size={18} style={{ display: 'inline', marginRight: '0.5rem', color: 'var(--dossier-cyan)' }} />
+                  <strong style={{ color: 'var(--dossier-silver)' }}>Bao gồm mission đã làm</strong>
+                  <small style={{ display: 'block', color: 'var(--dossier-silver-dark)', marginTop: '0.25rem' }}>
+                    Dùng nhiệm vụ đã hoàn thành trong hệ thống để bổ sung CV
+                  </small>
+                </div>
+              </label>
             </div>
           </div>
 
@@ -243,7 +260,7 @@ export const DataCompilerModal: React.FC<DataCompilerModalProps> = ({
           <div className="dossier-ai-banner">
             <Sparkles size={20} />
             <div>
-              <strong>Tính năng tối ưu tự động:</strong>
+              <strong>Tính năng tối ưu tự động</strong>
               <ul style={{ marginTop: '0.5rem', lineHeight: '1.8' }}>
                 <li>Tạo tóm tắt chuyên môn từ hồ sơ người dùng</li>
                 <li>Tối ưu cấu trúc dữ liệu để tạo ấn tượng mạnh</li>

@@ -6,6 +6,7 @@ export interface UserProfileDTO {
   
   // ===== BASIC PROFILE INFO (from user_service.UserProfile) =====
   fullName?: string;
+  email?: string;
   basicBio?: string;
   phone?: string;
   address?: string;
@@ -19,6 +20,8 @@ export interface UserProfileDTO {
   professionalTitle?: string;
   careerGoals?: string;
   yearsOfExperience?: number;
+  workExperiences?: PortfolioWorkExperienceDTO[];
+  educationHistory?: PortfolioEducationDTO[];
   
   // Portfolio media (separate from basic profile avatar)
   portfolioAvatarUrl?: string;
@@ -62,6 +65,29 @@ export interface UserProfileDTO {
   // Timestamps
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface PortfolioWorkExperienceDTO {
+  id?: string;
+  companyName?: string;
+  position?: string;
+  location?: string;
+  startDate?: string;
+  endDate?: string;
+  currentJob?: boolean;
+  description?: string;
+}
+
+export interface PortfolioEducationDTO {
+  id?: string;
+  institution?: string;
+  degree?: string;
+  fieldOfStudy?: string;
+  location?: string;
+  startDate?: string;
+  endDate?: string;
+  status?: string;
+  description?: string;
 }
 
 export enum ProjectType {
@@ -167,6 +193,7 @@ export interface CVGenerationRequest {
   includeProjects?: boolean;
   includeCertificates?: boolean;
   includeReviews?: boolean;
+  includeCompletedMissions?: boolean;
 }
 
 // Helper types for form data

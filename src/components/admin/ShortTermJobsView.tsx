@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
   BadgeCheck,
+  Building2,
   Calendar,
   Clock3,
   Loader2,
@@ -21,12 +22,14 @@ import Toast from "../shared/Toast";
 import {
   AdminShortTermJob,
   canModifyShortTermJob,
-  formatCurrency,
+  formatBudgetRange,
   formatDate,
   getShortTermStatusLabel,
   getShortTermStatusTone,
   getUrgencyLabel,
   isJobBanned,
+  resolveRecruiterCompanyName,
+  resolveRecruiterEmail,
   StatusTone,
 } from "./jobManagementCommon";
 
@@ -83,7 +86,18 @@ export const ShortTermJobsView: React.FC<ShortTermJobsViewProps> = ({
           status,
         });
 
-        setJobs((response.content ?? []) as AdminShortTermJob[]);
+        const normalizedJobs: AdminShortTermJob[] = (
+          response.content ?? []
+        ).map((item) => {
+          const source = item as Record<string, unknown>;
+          return {
+            ...(item as AdminShortTermJob),
+            recruiterCompanyName: resolveRecruiterCompanyName(source),
+            recruiterEmail: resolveRecruiterEmail(source),
+          };
+        });
+
+        setJobs(normalizedJobs);
         setPage(response.number ?? 0);
         setTotalPages(response.totalPages ?? 0);
         setTotalItems(response.totalElements ?? 0);
@@ -107,10 +121,14 @@ export const ShortTermJobsView: React.FC<ShortTermJobsViewProps> = ({
     const keyword = searchKeyword.toLowerCase();
     return jobs.filter((job) => {
       const title = String(job.title ?? "").toLowerCase();
-      const company = String(job.recruiterCompanyName ?? "").toLowerCase();
+      const company = resolveRecruiterCompanyName(job).toLowerCase();
+      const recruiterEmail = String(
+        resolveRecruiterEmail(job) ?? "",
+      ).toLowerCase();
       return (
         title.includes(keyword) ||
         company.includes(keyword) ||
+        recruiterEmail.includes(keyword) ||
         String(job.id).includes(keyword)
       );
     });
@@ -173,6 +191,18 @@ export const ShortTermJobsView: React.FC<ShortTermJobsViewProps> = ({
       setActionLoading(false);
     }
   };
+
+  const selectedJobCompanyName = selectedJob
+    ? resolveRecruiterCompanyName(selectedJob)
+    : "Không rõ công ty";
+  const selectedJobRecruiterEmail = selectedJob
+    ? resolveRecruiterEmail(selectedJob)
+    : undefined;
+  const selectedJobLocation = selectedJob
+    ? selectedJob.isRemote
+      ? "Remote"
+      : selectedJob.location || "On-site"
+    : "N/A";
 
   return (
     <div className="jmt-stack">
@@ -277,6 +307,8 @@ export const ShortTermJobsView: React.FC<ShortTermJobsViewProps> = ({
             const skills = Array.isArray(job.requiredSkills)
               ? (job.requiredSkills as string[])
               : [];
+            const companyName = resolveRecruiterCompanyName(job);
+            const recruiterEmail = resolveRecruiterEmail(job);
 
             return (
               <article
@@ -288,7 +320,7 @@ export const ShortTermJobsView: React.FC<ShortTermJobsViewProps> = ({
                     <h4>
                       #{job.id} - {job.title || "Chưa có tiêu đề"}
                     </h4>
-                    <p>{job.recruiterCompanyName || "Không rõ công ty"}</p>
+                    <p>{companyName}</p>
                   </div>
                   <span className={toneClass(tone)}>
                     {getShortTermStatusLabel(job.status)}
@@ -309,10 +341,15 @@ export const ShortTermJobsView: React.FC<ShortTermJobsViewProps> = ({
                   <span>
                     <Clock3 size={14} /> {getUrgencyLabel(job.urgency)}
                   </span>
+                  {recruiterEmail ? (
+                    <span>
+                      <Building2 size={14} /> {recruiterEmail}
+                    </span>
+                  ) : null}
                 </div>
 
                 <div className="jmt-job-card__budget">
-                  {formatCurrency(job.budget)}
+                  {formatBudgetRange(job)}
                 </div>
 
                 <div className="jmt-tag-row">
@@ -409,6 +446,54 @@ export const ShortTermJobsView: React.FC<ShortTermJobsViewProps> = ({
               <button className="jmt-icon-btn" onClick={closeActionModal}>
                 <X size={16} />
               </button>
+            </div>
+
+            <p className="jmt-subtitle">
+              {selectedJob.title || "Chưa có tiêu đề"} ·{" "}
+              {selectedJobCompanyName}
+            </p>
+
+            <div className="jmt-modal-grid">
+              <section className="jmt-modal-panel">
+                <h5>Thông tin tin tuyển dụng</h5>
+                <p>
+                  <strong>Trạng thái hiện tại:</strong>{" "}
+                  {getShortTermStatusLabel(selectedJob.status)}
+                </p>
+                <p>
+                  <strong>Địa điểm:</strong> {selectedJobLocation}
+                </p>
+                <p>
+                  <strong>Ngân sách:</strong> {formatBudgetRange(selectedJob)}
+                </p>
+                <p>
+                  <strong>Hạn nộp:</strong> {formatDate(selectedJob.deadline)}
+                </p>
+                <p>
+                  <strong>Ứng viên:</strong> {selectedJob.applicantCount || 0}
+                </p>
+                {selectedJobRecruiterEmail ? (
+                  <p>
+                    <strong>Email recruiter:</strong>{" "}
+                    {selectedJobRecruiterEmail}
+                  </p>
+                ) : null}
+              </section>
+
+              <section className="jmt-modal-panel">
+                <h5>Ảnh hưởng thao tác</h5>
+                <p>
+                  {actionType === "ban"
+                    ? "Khóa tin sẽ chặn job khỏi luồng hiển thị và ghi lại lý do để audit."
+                    : actionType === "delete"
+                      ? "Xóa tin sẽ chuyển job sang CANCELLED và lưu lịch sử xử lý của admin."
+                      : "Mở khóa sẽ cho phép recruiter chỉnh sửa và gửi duyệt lại khi cần."}
+                </p>
+                <p>
+                  Vui lòng kiểm tra kỹ thông tin công ty, tiêu đề và trạng thái
+                  trước khi xác nhận.
+                </p>
+              </section>
             </div>
 
             {actionType === "ban" || actionType === "delete" ? (

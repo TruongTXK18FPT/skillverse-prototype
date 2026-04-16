@@ -236,6 +236,7 @@ const mapJourneySummary = (payload: unknown): JourneySummaryResponse => {
     id: toNumber(data.id),
     type: toStringValue(data.type, 'SKILL'),
     domain: toStringValue(data.domain),
+    industry: typeof data.industry === 'string' ? data.industry : undefined,
     subCategory: typeof data.subCategory === 'string' ? data.subCategory : undefined,
     jobRole: typeof data.jobRole === 'string' ? data.jobRole : undefined,
     goal: toStringValue(data.goal),

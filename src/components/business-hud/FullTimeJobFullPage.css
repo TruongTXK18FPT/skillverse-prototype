@@ -7,19 +7,35 @@
   gap: 1.25rem;
   padding: 1.5rem;
   background:
-    radial-gradient(circle at top left, rgba(59, 130, 246, 0.06), transparent 26%),
-    radial-gradient(circle at top right, rgba(139, 92, 246, 0.06), transparent 28%),
+    radial-gradient(
+      circle at top left,
+      rgba(59, 130, 246, 0.06),
+      transparent 26%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(139, 92, 246, 0.06),
+      transparent 28%
+    ),
     linear-gradient(180deg, #020617 0%, #0a2440 100%);
   animation: ftj-fadeIn 0.4s ease-out;
 }
 
 @keyframes ftj-fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes ftj-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .ftj-fullpage--loading {
@@ -67,7 +83,9 @@
   background: rgba(15, 23, 42, 0.56);
   color: #93c5fd;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
   flex-shrink: 0;
 }
 
@@ -163,15 +181,28 @@
 }
 
 .ftj-btn--primary {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #93c5fd;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 245, 255, 0.15),
+    rgba(103, 232, 249, 0.1)
+  );
+  border: 1.5px solid rgba(0, 245, 255, 0.3);
+  color: #67e8f9;
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.08);
 }
 
 .ftj-btn--primary:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 0.25);
-  border-color: rgba(59, 130, 246, 0.45);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 245, 255, 0.22),
+    rgba(103, 232, 249, 0.16)
+  );
+  border-color: rgba(0, 245, 255, 0.5);
+  color: #a5f3fc;
   transform: translateY(-1px);
+  box-shadow:
+    0 0 0 3px rgba(0, 245, 255, 0.12),
+    0 4px 16px rgba(0, 245, 255, 0.2);
 }
 
 /* Cyan variant — for completion banner button */
@@ -275,7 +306,10 @@
   font-size: 0.84rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .ftj-fullpage__tab:hover {
@@ -317,7 +351,11 @@
   padding: 1.25rem;
   border-radius: 18px;
   background:
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.05), transparent 28%),
+    radial-gradient(
+      circle at top right,
+      rgba(59, 130, 246, 0.05),
+      transparent 28%
+    ),
     rgba(8, 15, 30, 0.65);
   border: 1px solid rgba(59, 130, 246, 0.1);
   backdrop-filter: blur(12px);
@@ -449,7 +487,9 @@
   text-align: center;
 }
 
-.ftj-empty svg { color: #3b82f6; }
+.ftj-empty svg {
+  color: #3b82f6;
+}
 
 .ftj-empty strong {
   font-size: 1rem;
@@ -478,16 +518,46 @@
 }
 
 .ftj-modal {
-  width: min(520px, 100%);
+  width: min(540px, 100%);
   max-height: 90vh;
   overflow-y: auto;
-  padding: 1.5rem;
+  padding: 1.75rem 1.75rem 1.5rem;
   border-radius: 20px;
   background:
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.06), transparent 28%),
-    linear-gradient(180deg, rgba(12, 26, 47, 0.98), rgba(8, 18, 32, 0.98));
-  border: 1px solid rgba(59, 130, 246, 0.14);
+    linear-gradient(160deg, rgba(7, 30, 58, 0.96), rgba(4, 16, 36, 0.97)),
+    radial-gradient(
+      circle at top right,
+      rgba(0, 245, 255, 0.05),
+      transparent 30%
+    );
+  border: 1px solid rgba(0, 245, 255, 0.18);
   color: #e0f2fe;
+  box-shadow:
+    0 0 0 1px rgba(0, 245, 255, 0.06),
+    0 0 40px rgba(0, 245, 255, 0.06),
+    0 25px 60px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.ftj-modal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 245, 255, 0.012) 3px,
+    rgba(0, 245, 255, 0.012) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ftj-modal > * {
+  position: relative;
+  z-index: 1;
 }
 
 .ftj-modal--contract {
@@ -522,7 +592,9 @@
   transition: color 0.2s;
 }
 
-.ftj-modal__close:hover { color: #fca5a5; }
+.ftj-modal__close:hover {
+  color: #fca5a5;
+}
 
 .ftj-modal__eyebrow {
   display: block;
@@ -553,6 +625,83 @@
   gap: 0.65rem;
 }
 
+.ftj-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(1, 4, 18, 0.82);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.ftj-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 1rem;
+  border-bottom: 1px solid rgba(0, 245, 255, 0.08);
+  margin-bottom: 1rem;
+}
+
+.ftj-modal__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.ftj-modal__title svg {
+  color: #00f5ff;
+}
+
+.ftj-modal__close {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+  transition: color 0.15s ease;
+  line-height: 1;
+}
+
+.ftj-modal__body {
+  padding: 0.25rem 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.ftj-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ftj-modal__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.ftj-required {
+  color: #f87171;
+}
+
+.ftj-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid rgba(0, 245, 255, 0.06);
+}
+
 .ftj-fullpage__signal-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -564,7 +713,11 @@
   border-radius: 18px;
   border: 1px solid rgba(96, 165, 250, 0.12);
   background:
-    radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 28%),
+    radial-gradient(
+      circle at top right,
+      rgba(14, 165, 233, 0.08),
+      transparent 28%
+    ),
     rgba(8, 15, 30, 0.62);
 }
 
@@ -653,8 +806,16 @@
   border-radius: 18px;
   border: 1px solid rgba(34, 211, 238, 0.28);
   background:
-    radial-gradient(ellipse at top left, rgba(34, 211, 238, 0.12), transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(6, 182, 212, 0.08), transparent 50%),
+    radial-gradient(
+      ellipse at top left,
+      rgba(34, 211, 238, 0.12),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at bottom right,
+      rgba(6, 182, 212, 0.08),
+      transparent 50%
+    ),
     linear-gradient(135deg, rgba(6, 20, 38, 0.92), rgba(3, 10, 22, 0.96));
   box-shadow:
     0 0 0 1px rgba(34, 211, 238, 0.08),
@@ -666,7 +827,7 @@
 }
 
 .ftj-contracts__completion-banner::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background-image:
@@ -736,7 +897,9 @@
   font-weight: 900;
   font-size: 0.7rem;
   text-transform: uppercase;
-  text-shadow: 0 0 12px rgba(34, 211, 238, 0.8), 0 0 24px rgba(34, 211, 238, 0.4);
+  text-shadow:
+    0 0 12px rgba(34, 211, 238, 0.8),
+    0 0 24px rgba(34, 211, 238, 0.4);
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -814,7 +977,11 @@
   color: #e0f2fe;
   font-size: 0.86rem;
   font-weight: 800;
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.22), rgba(59, 130, 246, 0.16));
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 233, 0.22),
+    rgba(59, 130, 246, 0.16)
+  );
 }
 
 .ftj-applicant-card__identity strong,
@@ -848,11 +1015,40 @@
   font-size: 0.76rem;
 }
 
+.ftj-applicant-card__meta {
+  align-items: center;
+  padding-bottom: 0.1rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+}
+
 .ftj-applicant-card__letter {
   margin: 0;
   color: #dbeafe;
   line-height: 1.65;
   font-size: 0.84rem;
+  padding: 0.72rem 0.82rem;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ftj-applicant-card__actions {
+  align-items: flex-start;
+  row-gap: 0.7rem;
+  column-gap: 0.55rem;
+}
+
+.ftj-applicant-card__actions > .ftj-btn {
+  flex: 0 0 auto;
+  min-height: 36px;
+}
+
+.ftj-applicant-card__actions > .ftj-offer-response,
+.ftj-applicant-card__actions > .ftj-onsite-hire {
+  flex: 1 1 100%;
+  margin-top: 0.1rem;
 }
 
 .ftj-contracts__rail {
@@ -908,7 +1104,10 @@
   background: rgba(15, 23, 42, 0.55);
   color: #e2e8f0;
   cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .ftj-contracts__candidate:hover,
@@ -947,7 +1146,10 @@
   padding: 1rem;
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .ftj-contract-card__number {
@@ -994,7 +1196,11 @@
   padding: 1.1rem;
   border-radius: 22px;
   border: 1px solid rgba(231, 224, 216, 0.92);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 243, 238, 0.97));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(247, 243, 238, 0.97)
+  );
   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
 }
 
@@ -1056,7 +1262,11 @@
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(221, 214, 206, 0.9);
-  background: linear-gradient(135deg, rgba(245, 243, 239, 1), rgba(250, 247, 242, 1));
+  background: linear-gradient(
+    135deg,
+    rgba(245, 243, 239, 1),
+    rgba(250, 247, 242, 1)
+  );
   color: #1f2937;
   font-size: 0.95rem;
   font-weight: 800;
@@ -1125,7 +1335,11 @@
 
 .ftj-contract-composer__empty--completed {
   border-color: rgba(16, 185, 129, 0.26);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(240, 253, 244, 0.92));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(240, 253, 244, 0.92)
+  );
 }
 
 .ftj-contract-composer__empty--completed svg {
@@ -1252,18 +1466,55 @@
   width: 100%;
   resize: vertical;
   min-height: 140px;
-  border-radius: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  background: rgba(15, 23, 42, 0.6);
+  border-radius: 12px;
+  border: 1.5px solid rgba(0, 245, 255, 0.12);
+  background: rgba(0, 8, 20, 0.5);
   color: #e2e8f0;
   padding: 0.95rem 1rem;
   outline: none;
   font: inherit;
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
 }
 
 .ftj-modal__textarea:focus {
-  border-color: rgba(14, 165, 233, 0.3);
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.08);
+  border-color: rgba(0, 245, 255, 0.45);
+  box-shadow:
+    0 0 0 3px rgba(0, 245, 255, 0.1),
+    0 0 20px rgba(0, 245, 255, 0.05);
+  background: rgba(0, 8, 20, 0.7);
+}
+
+.ftj-modal__input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1.5px solid rgba(0, 245, 255, 0.15);
+  background: rgba(0, 8, 20, 0.55);
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.ftj-modal__input:focus {
+  border-color: rgba(0, 245, 255, 0.5);
+  box-shadow:
+    0 0 0 3px rgba(0, 245, 255, 0.1),
+    0 0 20px rgba(0, 245, 255, 0.05);
+  background: rgba(0, 8, 20, 0.8);
+}
+
+.ftj-modal__input::placeholder {
+  color: #334155;
+}
+
+.ftj-modal__field-hint {
+  display: block;
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-top: 0.3rem;
 }
 
 /* ===== Interviews Tab ===== */
@@ -1341,10 +1592,16 @@
   border-radius: 18px;
   border: 1px solid rgba(59, 130, 246, 0.1);
   background:
-    radial-gradient(circle at top right, rgba(0, 245, 255, 0.04), transparent 30%),
+    radial-gradient(
+      circle at top right,
+      rgba(0, 245, 255, 0.04),
+      transparent 30%
+    ),
     rgba(8, 15, 30, 0.62);
   backdrop-filter: blur(12px);
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .ftj-interview-card:hover {
@@ -1381,7 +1638,11 @@
   color: #e0f2fe;
   font-size: 0.86rem;
   font-weight: 800;
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.22), rgba(59, 130, 246, 0.16));
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 233, 0.22),
+    rgba(59, 130, 246, 0.16)
+  );
 }
 
 .ftj-interview-card__avatar img {
@@ -1552,14 +1813,24 @@
 
 /* === OFFER RESPONSE PANEL (recruiter side) === */
 .ftj-offer-response {
-  margin-top: 0.75rem;
+  margin-top: 0;
   padding: 0.85rem;
   border-radius: 12px;
   background: rgba(15, 23, 42, 0.45);
   border: 1px solid rgba(6, 182, 212, 0.15);
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 0.75rem;
+}
+
+.ftj-offer-response__header,
+.ftj-offer-rejected-actions,
+.ftj-offer-response > .ftj-btn {
+  grid-column: 1 / -1;
+}
+
+.ftj-offer-response > .ftj-btn {
+  justify-self: start;
 }
 
 .ftj-offer-response__header {
@@ -1596,7 +1867,30 @@
   border: 1px solid rgba(148, 163, 184, 0.08);
 }
 
+.ftj-offer-response__amount {
+  margin-bottom: 0.3rem;
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.ftj-offer-response__amount--offer {
+  color: #34d399;
+}
+
+.ftj-offer-response__amount--counter {
+  color: #fbbf24;
+}
+
+.ftj-offer-response__extra {
+  margin: 0.3rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #94a3b8;
+}
+
 .ftj-offer-response__original p {
+  margin: 0;
   font-size: 0.8rem;
   line-height: 1.5;
   color: #64748b;
@@ -1620,6 +1914,7 @@
 }
 
 .ftj-offer-response__candidate p {
+  margin: 0;
   font-size: 0.82rem;
   line-height: 1.55;
   color: #cbd5e1;
@@ -1633,9 +1928,6 @@
   background: rgba(251, 191, 36, 0.04);
   padding: 0.9rem;
   border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
 }
 
 .ftj-offer-rejected-actions {
@@ -1664,4 +1956,505 @@
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .ftj-applicant-card__actions > .ftj-btn {
+    flex: 1 1 calc(50% - 0.3rem);
+    justify-content: center;
+  }
+
+  .ftj-offer-response {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .ftj-applicant-card__actions > .ftj-btn {
+    flex-basis: 100%;
+  }
+}
+
+/* === OFFERS TAB === */
+.ftj-offers {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.ftj-offers__hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: rgba(0, 245, 255, 0.04);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  border-radius: 14px;
+  gap: 1.5rem;
+}
+
+.ftj-offers__hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ftj-offers__hero-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ftj-offers__hero-title svg {
+  color: #00f5ff;
+}
+
+.ftj-offers__hero-sub {
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.ftj-offers__hero-stats {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.ftj-offers__hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.ftj-offers__hero-stat-val {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #00f5ff;
+  line-height: 1;
+}
+
+.ftj-offers__hero-stat-val--amber {
+  color: #fbbf24;
+}
+.ftj-offers__hero-stat-val--green {
+  color: #10b981;
+}
+.ftj-offers__hero-stat-val--red {
+  color: #f87171;
+}
+
+.ftj-offers__hero-stat-lbl {
+  font-size: 0.68rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Layout: rail + detail */
+.ftj-offers__layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1rem;
+  min-height: 480px;
+}
+
+/* Rail (left) */
+.ftj-offers__rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ftj-offers__rail-filters {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(0, 245, 255, 0.1);
+  border-radius: 10px;
+}
+
+.ftj-offers__rail-filter {
+  flex: 1;
+  padding: 0.35rem 0.5rem;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.ftj-offers__rail-filter:hover {
+  color: #e2e8f0;
+  background: rgba(0, 245, 255, 0.07);
+}
+
+.ftj-offers__rail-filter.is-active {
+  background: rgba(0, 245, 255, 0.12);
+  border-color: rgba(0, 245, 255, 0.35);
+  color: #00f5ff;
+}
+
+.ftj-offers__rail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  max-height: 520px;
+}
+
+/* Offer card in rail */
+.ftj-offer-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.85rem 1rem;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(0, 245, 255, 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.ftj-offer-card:hover {
+  border-color: rgba(0, 245, 255, 0.3);
+  background: rgba(0, 245, 255, 0.06);
+}
+
+.ftj-offer-card.is-active {
+  border-color: rgba(0, 245, 255, 0.5);
+  background: rgba(0, 245, 255, 0.09);
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.15);
+}
+
+.ftj-offer-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ftj-offer-card__name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.ftj-offer-card__badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ftj-offer-card__badge--r1 {
+  background: rgba(0, 245, 255, 0.15);
+  color: #00f5ff;
+  border: 1px solid rgba(0, 245, 255, 0.25);
+}
+
+.ftj-offer-card__badge--r2 {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.ftj-offer-card__status-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+}
+
+.ftj-offer-card__status-row svg {
+  flex-shrink: 0;
+}
+
+.ftj-offer-card__status-row--pending {
+  color: #a78bfa;
+}
+.ftj-offer-card__status-row--accepted {
+  color: #10b981;
+}
+.ftj-offer-card__status-row--rejected {
+  color: #f87171;
+}
+
+.ftj-offer-card__meta {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+/* Detail panel (right) */
+.ftj-offer-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: rgba(10, 18, 38, 0.5);
+  border: 1px solid rgba(0, 245, 255, 0.1);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.ftj-offer-detail__empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem;
+  color: #475569;
+  text-align: center;
+}
+
+.ftj-offer-detail__empty svg {
+  opacity: 0.3;
+}
+
+.ftj-offer-detail__empty p {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.ftj-offer-detail__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 245, 255, 0.08);
+  gap: 1rem;
+}
+
+.ftj-offer-detail__candidate {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.ftj-offer-detail__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 245, 255, 0.15);
+  border: 1px solid rgba(0, 245, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #00f5ff;
+  flex-shrink: 0;
+}
+
+.ftj-offer-detail__candidate-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.ftj-offer-detail__candidate-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.ftj-offer-detail__candidate-title {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.ftj-offer-detail__body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+}
+
+.ftj-offer-detail__round-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.ftj-offer-detail__round-badge--r1 {
+  background: rgba(0, 245, 255, 0.1);
+  color: #00f5ff;
+  border: 1px solid rgba(0, 245, 255, 0.25);
+}
+
+.ftj-offer-detail__round-badge--r2 {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.ftj-offer-detail__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ftj-offer-detail__section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+}
+
+.ftj-offer-detail__offer-text {
+  padding: 0.85rem 1rem;
+  background: rgba(0, 245, 255, 0.04);
+  border: 1px solid rgba(0, 245, 255, 0.1);
+  border-radius: 10px;
+  font-size: 0.82rem;
+  color: #e2e8f0;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.ftj-offer-detail__response {
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.ftj-offer-detail__response--counter {
+  background: rgba(251, 191, 36, 0.07);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.ftj-offer-detail__response--accepted {
+  background: rgba(16, 185, 129, 0.07);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.ftj-offer-detail__actions {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(0, 245, 255, 0.08);
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.ftj-offer-detail__round2-warning {
+  margin: 0 1.25rem 0.5rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+/* Ready pool */
+.ftj-ready-pool {
+  padding: 1rem 1.25rem;
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(0, 245, 255, 0.08);
+  border-radius: 12px;
+}
+
+.ftj-ready-pool__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ftj-ready-pool__header svg {
+  color: #06b6d4;
+}
+
+.ftj-ready-pool__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ftj-ready-pool__empty {
+  font-size: 0.8rem;
+  color: #475569;
+  text-align: center;
+  padding: 0.75rem;
+}
+
+.ftj-ready-pool__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(10, 18, 38, 0.4);
+  border: 1px solid rgba(0, 245, 255, 0.1);
+  border-radius: 8px;
+  transition: border-color 0.15s ease;
+}
+
+.ftj-ready-pool__item:hover {
+  border-color: rgba(0, 245, 255, 0.25);
+}
+
+.ftj-ready-pool__item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ftj-ready-pool__item-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 245, 255, 0.1);
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #00f5ff;
+  flex-shrink: 0;
+}
+
+.ftj-ready-pool__item-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.ftj-ready-pool__item-title {
+  font-size: 0.7rem;
+  color: #64748b;
 }

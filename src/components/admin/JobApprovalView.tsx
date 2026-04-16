@@ -14,6 +14,8 @@ import {
   AdminPendingJob,
   formatBudgetRange,
   formatDate,
+  resolveRecruiterCompanyName,
+  resolveRecruiterEmail,
 } from "./jobManagementCommon";
 
 interface JobApprovalViewProps {
@@ -31,9 +33,10 @@ const toPendingJob = (
   title: String(source.title ?? "Chưa có tiêu đề"),
   description: String(source.description ?? ""),
   status: String(source.status ?? "PENDING_APPROVAL"),
-  recruiterCompanyName: String(
-    source.recruiterCompanyName ?? "Không rõ công ty",
-  ),
+  isNegotiable:
+    typeof source.isNegotiable === "boolean" ? source.isNegotiable : undefined,
+  recruiterCompanyName: resolveRecruiterCompanyName(source),
+  recruiterEmail: resolveRecruiterEmail(source),
   createdAt: source.createdAt ? String(source.createdAt) : undefined,
   deadline: source.deadline ? String(source.deadline) : undefined,
   budget: typeof source.budget === "number" ? source.budget : undefined,
@@ -46,7 +49,9 @@ const toPendingJob = (
   applicantCount:
     typeof source.applicantCount === "number"
       ? source.applicantCount
-      : undefined,
+      : typeof source.totalApplicants === "number"
+        ? source.totalApplicants
+        : undefined,
   requiredSkills: Array.isArray(source.requiredSkills)
     ? (source.requiredSkills as string[])
     : undefined,
@@ -114,6 +119,9 @@ export const JobApprovalView: React.FC<JobApprovalViewProps> = ({
           String(job.title).toLowerCase().includes(normalizedKeyword) ||
           String(job.recruiterCompanyName)
             .toLowerCase()
+            .includes(normalizedKeyword) ||
+          String(job.recruiterEmail ?? "")
+            .toLowerCase()
             .includes(normalizedKeyword)
         );
       }),
@@ -128,6 +136,9 @@ export const JobApprovalView: React.FC<JobApprovalViewProps> = ({
           String(job.id).includes(normalizedKeyword) ||
           String(job.title).toLowerCase().includes(normalizedKeyword) ||
           String(job.recruiterCompanyName)
+            .toLowerCase()
+            .includes(normalizedKeyword) ||
+          String(job.recruiterEmail ?? "")
             .toLowerCase()
             .includes(normalizedKeyword)
         );
@@ -224,6 +235,23 @@ export const JobApprovalView: React.FC<JobApprovalViewProps> = ({
   };
 
   const totalPending = pendingFullTime.length + pendingShortTerm.length;
+  const selectedJobCompanyName = selectedJob
+    ? resolveRecruiterCompanyName(selectedJob)
+    : "Không rõ công ty";
+  const selectedJobRecruiterEmail = selectedJob
+    ? resolveRecruiterEmail(selectedJob)
+    : undefined;
+  const selectedJobTypeLabel =
+    selectedJob?._jobType === "FULL_TIME"
+      ? "Full-time"
+      : selectedJob?._jobType === "SHORT_TERM"
+        ? "Short-term"
+        : "N/A";
+  const selectedJobLocation = selectedJob
+    ? selectedJob.isRemote
+      ? "Remote"
+      : selectedJob.location || "On-site"
+    : "N/A";
 
   const renderPendingSection = (
     title: string,
@@ -273,6 +301,14 @@ export const JobApprovalView: React.FC<JobApprovalViewProps> = ({
                   <span>Ngân sách: {formatBudgetRange(job)}</span>
                   <span>Hạn: {formatDate(job.deadline)}</span>
                   <span>Tạo: {formatDate(job.createdAt)}</span>
+                  <span>
+                    Địa điểm:{" "}
+                    {job.isRemote ? "Remote" : job.location || "On-site"}
+                  </span>
+                  <span>Ứng viên: {job.applicantCount ?? 0}</span>
+                  {job.recruiterEmail ? (
+                    <span>Email: {job.recruiterEmail}</span>
+                  ) : null}
                 </div>
 
                 <div className="jmt-tag-row">
@@ -436,6 +472,51 @@ export const JobApprovalView: React.FC<JobApprovalViewProps> = ({
               <button className="jmt-icon-btn" onClick={closeActionModal}>
                 <X size={16} />
               </button>
+            </div>
+
+            <p className="jmt-subtitle">
+              {selectedJob.title || "Chưa có tiêu đề"} ·{" "}
+              {selectedJobCompanyName}
+            </p>
+
+            <div className="jmt-modal-grid">
+              <section className="jmt-modal-panel">
+                <h5>Thông tin tin cần duyệt</h5>
+                <p>
+                  <strong>Loại tin:</strong> {selectedJobTypeLabel}
+                </p>
+                <p>
+                  <strong>Công ty:</strong> {selectedJobCompanyName}
+                </p>
+                {selectedJobRecruiterEmail ? (
+                  <p>
+                    <strong>Email recruiter:</strong>{" "}
+                    {selectedJobRecruiterEmail}
+                  </p>
+                ) : null}
+                <p>
+                  <strong>Ngân sách:</strong> {formatBudgetRange(selectedJob)}
+                </p>
+                <p>
+                  <strong>Địa điểm:</strong> {selectedJobLocation}
+                </p>
+                <p>
+                  <strong>Hạn nộp:</strong> {formatDate(selectedJob.deadline)}
+                </p>
+              </section>
+
+              <section className="jmt-modal-panel">
+                <h5>Lưu ý kiểm duyệt</h5>
+                <p>
+                  {action === "approve"
+                    ? "Duyệt tin sẽ đưa job ra trạng thái public để ứng viên có thể ứng tuyển."
+                    : "Từ chối tin sẽ trả job về trạng thái chỉnh sửa và gửi lý do cho recruiter."}
+                </p>
+                <p>
+                  Kiểm tra rõ tên công ty, mô tả công việc, ngân sách và
+                  deadline trước khi xác nhận.
+                </p>
+              </section>
             </div>
 
             {action === "reject" ? (

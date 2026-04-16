@@ -18,7 +18,11 @@ import portfolioService from "../../services/portfolioService";
 import userService from "../../services/userService";
 import { validateImage } from "../../services/fileUploadService";
 import getCroppedImg from "../../utils/cropImage";
-import { UserProfileDTO } from "../../data/portfolioDTOs";
+import {
+  PortfolioEducationDTO,
+  PortfolioWorkExperienceDTO,
+  UserProfileDTO,
+} from "../../data/portfolioDTOs";
 import "./dossier-portfolio-styles.css";
 import "./dossier-create-portfolio-styles.css";
 
@@ -47,6 +51,32 @@ const buildSlugFromName = (input?: string) => {
     .slice(0, 60);
 };
 
+const createPortfolioItemId = (prefix: string) =>
+  `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+const createEmptyWorkExperience = (): PortfolioWorkExperienceDTO => ({
+  id: createPortfolioItemId("work"),
+  companyName: "",
+  position: "",
+  location: "",
+  startDate: "",
+  endDate: "",
+  currentJob: false,
+  description: "",
+});
+
+const createEmptyEducation = (): PortfolioEducationDTO => ({
+  id: createPortfolioItemId("edu"),
+  institution: "",
+  degree: "",
+  fieldOfStudy: "",
+  location: "",
+  startDate: "",
+  endDate: "",
+  status: "STUDYING",
+  description: "",
+});
+
 const DossierCreatePortfolioPage = () => {
   const { theme } = useTheme();
   const { isAuthenticated, user } = useAuth();
@@ -68,9 +98,12 @@ const DossierCreatePortfolioPage = () => {
 
   const [formData, setFormData] = useState<Partial<UserProfileDTO>>({
     fullName: "",
+    phone: "",
     professionalTitle: "",
     careerGoals: "",
     yearsOfExperience: 0,
+    workExperiences: [createEmptyWorkExperience()],
+    educationHistory: [createEmptyEducation()],
     tagline: "",
     location: "",
     availabilityStatus: "AVAILABLE",
@@ -281,6 +314,64 @@ const DossierCreatePortfolioPage = () => {
     }
   };
 
+  const handleAddWorkExperience = () => {
+    setFormData((prev) => ({
+      ...prev,
+      workExperiences: [...(prev.workExperiences || []), createEmptyWorkExperience()],
+    }));
+  };
+
+  const handleUpdateWorkExperience = (
+    index: number,
+    field: keyof PortfolioWorkExperienceDTO,
+    value: string | boolean,
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      workExperiences: (prev.workExperiences || []).map((item, itemIndex) =>
+        itemIndex === index ? { ...item, [field]: value } : item,
+      ),
+    }));
+  };
+
+  const handleRemoveWorkExperience = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      workExperiences: (prev.workExperiences || []).filter(
+        (_item, itemIndex) => itemIndex !== index,
+      ),
+    }));
+  };
+
+  const handleAddEducation = () => {
+    setFormData((prev) => ({
+      ...prev,
+      educationHistory: [...(prev.educationHistory || []), createEmptyEducation()],
+    }));
+  };
+
+  const handleUpdateEducation = (
+    index: number,
+    field: keyof PortfolioEducationDTO,
+    value: string,
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      educationHistory: (prev.educationHistory || []).map((item, itemIndex) =>
+        itemIndex === index ? { ...item, [field]: value } : item,
+      ),
+    }));
+  };
+
+  const handleRemoveEducation = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      educationHistory: (prev.educationHistory || []).filter(
+        (_item, itemIndex) => itemIndex !== index,
+      ),
+    }));
+  };
+
   const handleApplyStarterPreset = () => {
     setFormData((prev) => ({
       ...prev,
@@ -315,6 +406,7 @@ const DossierCreatePortfolioPage = () => {
       setFormData((prev) => ({
         ...prev,
         fullName: prev.fullName?.trim() ? prev.fullName : profile?.fullName || user?.fullName || "",
+        phone: prev.phone?.trim() ? prev.phone : profile?.phone || "",
         professionalTitle: prev.professionalTitle?.trim()
           ? prev.professionalTitle
           : "Freelancer",
@@ -749,6 +841,334 @@ const DossierCreatePortfolioPage = () => {
               rows={4}
             />
           </div>
+        </div>
+
+        <div className="dossier-form-section">
+          <h3 className="dossier-form-section-title">Liên hệ</h3>
+          <div className="dossier-form-group" style={{ marginBottom: 0 }}>
+            <label className="dossier-form-label">Số điện thoại</label>
+            <input
+              type="tel"
+              className="dossier-input"
+              value={formData.phone || ""}
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              placeholder="Ví dụ: 0901234567"
+            />
+          </div>
+        </div>
+
+        <div className="dossier-form-section">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "1rem",
+              marginBottom: "1rem",
+            }}
+          >
+            <h3 className="dossier-form-section-title" style={{ marginBottom: 0 }}>
+              Kinh nghiệm làm việc
+            </h3>
+            <button
+              type="button"
+              className="dossier-btn-secondary"
+              onClick={handleAddWorkExperience}
+            >
+              + Thêm kinh nghiệm
+            </button>
+          </div>
+
+          {(formData.workExperiences || []).map((experience, index) => (
+            <div
+              key={experience.id || index}
+              style={{
+                border: "1px solid var(--dossier-border-silver)",
+                padding: "1rem",
+                marginBottom: "1rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                <strong>Kinh nghiệm #{index + 1}</strong>
+                {(formData.workExperiences || []).length > 1 && (
+                  <button
+                    type="button"
+                    className="dossier-btn-secondary"
+                    onClick={() => handleRemoveWorkExperience(index)}
+                  >
+                    Xóa
+                  </button>
+                )}
+              </div>
+
+              <div className="dossier-form-row">
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Công ty</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={experience.companyName || ""}
+                    onChange={(e) =>
+                      handleUpdateWorkExperience(index, "companyName", e.target.value)
+                    }
+                    placeholder="Ví dụ: FPT Software"
+                  />
+                </div>
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Vị trí</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={experience.position || ""}
+                    onChange={(e) =>
+                      handleUpdateWorkExperience(index, "position", e.target.value)
+                    }
+                    placeholder="Ví dụ: Frontend Developer"
+                  />
+                </div>
+              </div>
+
+              <div className="dossier-form-row">
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Địa điểm</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={experience.location || ""}
+                    onChange={(e) =>
+                      handleUpdateWorkExperience(index, "location", e.target.value)
+                    }
+                    placeholder="TP.HCM / Remote"
+                  />
+                </div>
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Bắt đầu</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={experience.startDate || ""}
+                    onChange={(e) =>
+                      handleUpdateWorkExperience(index, "startDate", e.target.value)
+                    }
+                    placeholder="01/2023"
+                  />
+                </div>
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Kết thúc</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={experience.endDate || ""}
+                    onChange={(e) =>
+                      handleUpdateWorkExperience(index, "endDate", e.target.value)
+                    }
+                    placeholder="12/2024"
+                    disabled={Boolean(experience.currentJob)}
+                  />
+                </div>
+              </div>
+
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  marginBottom: "1rem",
+                  color: "var(--dossier-silver)",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={Boolean(experience.currentJob)}
+                  onChange={(e) =>
+                    handleUpdateWorkExperience(index, "currentJob", e.target.checked)
+                  }
+                />
+                Đang làm việc tại đây
+              </label>
+
+              <div className="dossier-form-group" style={{ marginBottom: 0 }}>
+                <label className="dossier-form-label">Mô tả</label>
+                <textarea
+                  className="dossier-textarea"
+                  value={experience.description || ""}
+                  onChange={(e) =>
+                    handleUpdateWorkExperience(index, "description", e.target.value)
+                  }
+                  rows={3}
+                  placeholder="Mô tả vai trò, phạm vi công việc hoặc thành tựu chính"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="dossier-form-section">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "1rem",
+              marginBottom: "1rem",
+            }}
+          >
+            <h3 className="dossier-form-section-title" style={{ marginBottom: 0 }}>
+              Học vấn
+            </h3>
+            <button
+              type="button"
+              className="dossier-btn-secondary"
+              onClick={handleAddEducation}
+            >
+              + Thêm học vấn
+            </button>
+          </div>
+
+          {(formData.educationHistory || []).map((education, index) => (
+            <div
+              key={education.id || index}
+              style={{
+                border: "1px solid var(--dossier-border-silver)",
+                padding: "1rem",
+                marginBottom: "1rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                <strong>Học vấn #{index + 1}</strong>
+                {(formData.educationHistory || []).length > 1 && (
+                  <button
+                    type="button"
+                    className="dossier-btn-secondary"
+                    onClick={() => handleRemoveEducation(index)}
+                  >
+                    Xóa
+                  </button>
+                )}
+              </div>
+
+              <div className="dossier-form-row">
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Trường / tổ chức đào tạo</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={education.institution || ""}
+                    onChange={(e) =>
+                      handleUpdateEducation(index, "institution", e.target.value)
+                    }
+                    placeholder="Ví dụ: Đại học FPT"
+                  />
+                </div>
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Bằng cấp / chương trình</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={education.degree || ""}
+                    onChange={(e) =>
+                      handleUpdateEducation(index, "degree", e.target.value)
+                    }
+                    placeholder="Ví dụ: Cử nhân CNTT"
+                  />
+                </div>
+              </div>
+
+              <div className="dossier-form-row">
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Chuyên ngành</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={education.fieldOfStudy || ""}
+                    onChange={(e) =>
+                      handleUpdateEducation(index, "fieldOfStudy", e.target.value)
+                    }
+                    placeholder="Ví dụ: Kỹ thuật phần mềm"
+                  />
+                </div>
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Địa điểm</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={education.location || ""}
+                    onChange={(e) =>
+                      handleUpdateEducation(index, "location", e.target.value)
+                    }
+                    placeholder="TP.HCM"
+                  />
+                </div>
+              </div>
+
+              <div className="dossier-form-row">
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Bắt đầu</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={education.startDate || ""}
+                    onChange={(e) =>
+                      handleUpdateEducation(index, "startDate", e.target.value)
+                    }
+                    placeholder="2020"
+                  />
+                </div>
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Kết thúc</label>
+                  <input
+                    type="text"
+                    className="dossier-input"
+                    value={education.endDate || ""}
+                    onChange={(e) =>
+                      handleUpdateEducation(index, "endDate", e.target.value)
+                    }
+                    placeholder="2024"
+                  />
+                </div>
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Trạng thái</label>
+                  <select
+                    className="dossier-select"
+                    value={education.status || "STUDYING"}
+                    onChange={(e) =>
+                      handleUpdateEducation(index, "status", e.target.value)
+                    }
+                  >
+                    <option value="STUDYING">Đang học</option>
+                    <option value="GRADUATED">Đã tốt nghiệp</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="dossier-form-group" style={{ marginBottom: 0 }}>
+                <label className="dossier-form-label">Ghi chú</label>
+                <textarea
+                  className="dossier-textarea"
+                  value={education.description || ""}
+                  onChange={(e) =>
+                    handleUpdateEducation(index, "description", e.target.value)
+                  }
+                  rows={3}
+                  placeholder="Thêm thông tin về chương trình, thành tích hoặc ghi chú khác"
+                />
+              </div>
+            </div>
+          ))}
         </div>
 
         {showAdvancedFields && (
