@@ -296,10 +296,7 @@ const MessengerPage: React.FC = () => {
     } else if (type === 'FAMILY') {
       setActiveTab('FAMILY');
     } else if (type === 'RECRUITMENT') {
-      const sessionExists = recruitmentSessions.some((session) => session.id.toString() === targetId);
-      if (sessionExists || recruitmentSessions.length === 0) {
-        setActiveTab('RECRUITMENT');
-      }
+      setActiveTab('RECRUITMENT');
     } else {
       setActiveTab('MENTOR');
       // When navigating from a booking, create a synthetic contact if no thread exists yet.

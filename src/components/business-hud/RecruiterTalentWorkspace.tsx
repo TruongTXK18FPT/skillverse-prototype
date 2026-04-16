@@ -64,8 +64,10 @@ import {
   getApplicantInitials,
   getApplicantSubtitle,
   resolveRecruitmentAssetUrl,
+  getPortfolioPath,
 } from "../../utils/recruitmentUi";
-import { useToast } from "../../hooks/useToast";
+import { useToast as useLocalToast } from "../../hooks/useToast";
+import { showAppError, showAppSuccess } from "../../context/ToastContext";
 import "./RecruiterTalentWorkspace.css";
 
 type TalentTab = "applicants";
@@ -1494,7 +1496,9 @@ const RecruiterTalentWorkspace = ({
   shortTermJobs,
 }: RecruiterTalentWorkspaceProps) => {
   const navigate = useNavigate();
-  const { showError, showSuccess } = useToast();
+  const { showInfo } = useLocalToast();
+  const showToastError = (title: string, message: string) => showAppError(title, message);
+  const showToastSuccess = (title: string, message: string) => showAppSuccess(title, message, 5);
   const portfolioRequestRef = useRef(0);
   const [jobRoster, setJobRoster] = useState<WorkspaceJob[]>(() => [
     ...fullTimeJobs.map(toWorkspaceFullTimeJob),
@@ -1670,18 +1674,29 @@ const RecruiterTalentWorkspace = ({
       const result = await recruiterSubscriptionService.getSubscriptionInfo();
       setSubscription(result);
     } catch (error: any) {
-      showError(
+      showToastError(
         "Không thể tải quyền recruiter",
         error.message || "Vui lòng thử lại sau",
       );
     }
   };
 
+  const buildPublicPortfolioPath = (portfolioSlug?: string | null) => {
+    return getPortfolioPath(portfolioSlug);
+  };
+
   const openPortfolioExternally = () => {
     if (!selectedCandidate) return;
-    const targetPath = selectedCandidate.portfolioSlug
-      ? `/portfolio/${selectedCandidate.portfolioSlug}`
-      : `/portfolio/profile/${selectedCandidate.candidateId}`;
+    const targetPath = buildPublicPortfolioPath(
+      selectedCandidate.portfolioSlug,
+    );
+    if (!targetPath) {
+      showInfo(
+        "Chưa có portfolio",
+        "Ứng viên này chưa công khai portfolio trên SkillVerse.",
+      );
+      return;
+    }
     window.open(targetPath, "_blank", "noopener,noreferrer");
   };
 
@@ -1762,7 +1777,7 @@ const RecruiterTalentWorkspace = ({
       }
     } catch (error: any) {
       setApplicants([]);
-      showError("Không thể tải ứng viên", error.message || "Vui lòng thử lại");
+      showToastError("Không thể tải ứng viên", error.message || "Vui lòng thử lại");
     } finally {
       setIsApplicantsLoading(false);
     }
@@ -1797,7 +1812,7 @@ const RecruiterTalentWorkspace = ({
       }
     } catch (error: any) {
       setSessions([]);
-      showError(
+      showToastError(
         "Không thể tải chat tuyển dụng",
         error.message || "Vui lòng thử lại",
       );
@@ -1820,13 +1835,13 @@ const RecruiterTalentWorkspace = ({
       await jobService.updateApplicationStatus(application.id, {
         status: JobApplicationStatus.REVIEWED,
       });
-      showSuccess(
+      showToastSuccess(
         "Đã đánh dấu",
         "Ứng viên đã được chuyển sang trạng thái đã xem.",
       );
       await loadApplicants(selectedJob);
     } catch (error: any) {
-      showError(
+      showToastError(
         "Không thể cập nhật ứng viên",
         error.message || "Vui lòng thử lại",
       );
@@ -1836,10 +1851,20 @@ const RecruiterTalentWorkspace = ({
   };
 
   const handleConfirmDecision = async () => {
-    if (!decisionModal || !selectedJob) return;
+    console.log("[DEBUG] handleConfirmDecision called", {
+      decisionModal,
+      decisionNote: decisionNote.trim(),
+      isActionBusy,
+    });
+
+    if (!decisionModal || !selectedJob) {
+      console.log("[DEBUG] early return: no decisionModal or no selectedJob");
+      return;
+    }
 
     if (!decisionNote.trim()) {
-      showError("Thiếu nội dung", "Vui lòng nhập ghi chú cho quyết định này.");
+      console.log("[DEBUG] early return: no decisionNote");
+      showToastError("Thiếu nội dung", "Vui lòng nhập ghi chú cho quyết định này.");
       return;
     }
 
@@ -1865,15 +1890,24 @@ const RecruiterTalentWorkspace = ({
             ? "acceptanceMessage"
             : "rejectionReason";
 
+        console.log("[DEBUG] calling jobService.updateApplicationStatus", {
+          appId: decisionModal.application.id,
+          status: decisionModal.status,
+          fieldName,
+          fieldValue: decisionNote.trim(),
+        });
+
         await jobService.updateApplicationStatus(decisionModal.application.id, {
           status: decisionModal.status as JobApplicationStatus,
           [fieldName]: decisionNote.trim(),
         });
+
+        console.log("[DEBUG] jobService.updateApplicationStatus succeeded");
       }
 
       setDecisionModal(null);
       setDecisionNote("");
-      showSuccess(
+      showToastSuccess(
         decisionModal.status === "ACCEPTED"
           ? "Đã duyệt ứng viên"
           : "Đã loại ứng viên",
@@ -1881,7 +1915,7 @@ const RecruiterTalentWorkspace = ({
       );
       await loadApplicants(selectedJob);
     } catch (error: any) {
-      showError(
+      showToastError(
         "Không thể cập nhật ứng viên",
         error.message || "Vui lòng thử lại",
       );
@@ -1912,7 +1946,7 @@ const RecruiterTalentWorkspace = ({
         },
       });
     } catch (error: any) {
-      showError("Không thể mở chat", error.message || "Vui lòng thử lại.");
+      showToastError("Không thể mở chat", error.message || "Vui lòng thử lại.");
     } finally {
       setIsActionBusy(false);
     }
@@ -1944,7 +1978,7 @@ const RecruiterTalentWorkspace = ({
   const handleRunAiInsight = async (seed?: CandidateSeed) => {
     const target = seed || selectedCandidate;
     if (!selectedJob || !target) {
-      showError(
+      showToastError(
         "Thiếu context",
         "Hãy chọn cả job và ứng viên trước khi chạy AI insight.",
       );
@@ -1975,7 +2009,7 @@ const RecruiterTalentWorkspace = ({
 
       setAiInsight(enhancedInsight);
     } catch (error: any) {
-      showError(
+      showToastError(
         "Không thể phân tích AI",
         error.message || "Vui lòng kiểm tra gói recruiter.",
       );
@@ -2761,7 +2795,7 @@ const RecruiterTalentWorkspace = ({
                 </span>
                 <h3>{selectedCandidate?.fullName || "Chọn ứng viên để xem"}</h3>
               </div>
-              {selectedCandidate && (
+              {selectedCandidate?.portfolioSlug && (
                 <div
                   style={{
                     display: "flex",
@@ -2770,6 +2804,7 @@ const RecruiterTalentWorkspace = ({
                   }}
                 >
                   <button
+                    type="button"
                     className="rtw-chip-btn rtw-chip-btn--cyan"
                     title="Mở portfolio"
                     onClick={openPortfolioExternally}

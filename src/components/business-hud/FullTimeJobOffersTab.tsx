@@ -14,7 +14,7 @@ import jobService from "../../services/jobService";
 import { getApplicantDisplayName, getApplicantInitials } from "../../utils/recruitmentUi";
 
 interface FullTimeJobOffersTabProps {
-  job: { isRemote: boolean; isNegotiable: boolean; id: number; minBudget?: number; maxBudget?: number };
+  job: { isRemote?: boolean; isNegotiable?: boolean; id: number; minBudget?: number; maxBudget?: number };
   applications: JobApplicationResponse[];
   onRefresh: () => void;
 }

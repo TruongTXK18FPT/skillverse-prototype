@@ -17,7 +17,7 @@ import {
 } from "../../services/interviewService";
 import interviewService from "../../services/interviewService";
 import { JobApplicationResponse } from "../../data/jobDTOs";
-import { useToast } from "../../hooks/useToast";
+import { showAppError, showAppSuccess } from "../../context/ToastContext";
 import GoogleMeetLogo from "../../assets/meeting/ggmeet.png";
 import ZoomLogo from "../../assets/meeting/zoomicon.webp";
 import TeamsLogo from "../../assets/meeting/mslogo.png";
@@ -144,7 +144,8 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
   onClose,
   onScheduled,
 }) => {
-  const { showError, showSuccess } = useToast();
+  const showToastError = (title: string, message: string) => showAppError(title, message);
+const showToastSuccess = (title: string, message: string, autoCloseDelay?: number) => showAppSuccess(title, message, autoCloseDelay ?? 5);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [scheduledDate, setScheduledDate] = useState("");
@@ -179,18 +180,18 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
 
   const handleSubmit = async () => {
     if (!scheduledDate) {
-      showError("Thiếu ngày phỏng vấn", "Vui lòng chọn ngày phỏng vấn.");
+      showToastError("Thiếu ngày phỏng vấn", "Vui lòng chọn ngày phỏng vấn.");
       return;
     }
 
     if (!scheduledTime) {
-      showError("Thiếu giờ phỏng vấn", "Vui lòng chọn giờ phỏng vấn.");
+      showToastError("Thiếu giờ phỏng vấn", "Vui lòng chọn giờ phỏng vấn.");
       return;
     }
 
     const scheduledAt = parseLocalScheduledAt(scheduledDate, scheduledTime);
     if (isNaN(scheduledAt.getTime())) {
-      showError(
+      showToastError(
         "Ngày giờ không hợp lệ",
         "Không thể phân tích thời gian bạn đã chọn.",
       );
@@ -198,7 +199,7 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
     }
 
     if (scheduledAt.getTime() <= Date.now()) {
-      showError(
+      showToastError(
         "Ngày giờ không hợp lệ",
         "Thời gian phỏng vấn phải là ngày giờ trong tương lai.",
       );
@@ -209,7 +210,7 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
       Date.now() + MIN_SCHEDULE_AHEAD_MINUTES * 60 * 1000,
     );
     if (scheduledAt.getTime() < minAllowedTime.getTime()) {
-      showError(
+      showToastError(
         "Lịch hẹn quá gần",
         `Buổi phỏng vấn phải bắt đầu sau ít nhất ${MIN_SCHEDULE_AHEAD_MINUTES} phút kể từ hiện tại.`,
       );
@@ -218,7 +219,7 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
 
     const normalizedInterviewer = interviewerName.trim();
     if (!normalizedInterviewer) {
-      showError(
+      showToastError(
         "Thiếu người phỏng vấn",
         "Vui lòng nhập tên người phỏng vấn để ứng viên biết ai phụ trách buổi hẹn.",
       );
@@ -226,7 +227,7 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
     }
 
     if (normalizedInterviewer.length < MIN_INTERVIEWER_NAME_LENGTH) {
-      showError(
+      showToastError(
         "Tên người phỏng vấn quá ngắn",
         `Tên người phỏng vấn cần tối thiểu ${MIN_INTERVIEWER_NAME_LENGTH} ký tự.`,
       );
@@ -243,7 +244,7 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
       meetingType === MeetingType.PHONE_CALL
     ) {
       if (!normalizedMeetingLink) {
-        showError(
+        showToastError(
           "Thiếu thông tin kết nối",
           meetingType === MeetingType.PHONE_CALL
             ? "Vui lòng nhập số điện thoại hoặc link gọi."
@@ -255,14 +256,14 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
 
     if (meetingType === MeetingType.GOOGLE_MEET) {
       if (!isValidHttpUrl(normalizedMeetingLink)) {
-        showError(
+        showToastError(
           "Link Google Meet không hợp lệ",
           "Link cuộc họp phải bắt đầu bằng http:// hoặc https://.",
         );
         return;
       }
       if (!isHostMatch(normalizedMeetingLink, "meet.google.com")) {
-        showError(
+        showToastError(
           "Sai link Google Meet",
           "Vui lòng nhập đúng link từ domain meet.google.com.",
         );
@@ -272,14 +273,14 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
 
     if (meetingType === MeetingType.ZOOM) {
       if (!isValidHttpUrl(normalizedMeetingLink)) {
-        showError(
+        showToastError(
           "Link Zoom không hợp lệ",
           "Link cuộc họp phải bắt đầu bằng http:// hoặc https://.",
         );
         return;
       }
       if (!isHostMatch(normalizedMeetingLink, "zoom.us")) {
-        showError(
+        showToastError(
           "Sai link Zoom",
           "Vui lòng nhập đúng link từ domain zoom.us.",
         );
@@ -289,14 +290,14 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
 
     if (meetingType === MeetingType.MICROSOFT_TEAMS) {
       if (!isValidHttpUrl(normalizedMeetingLink)) {
-        showError(
+        showToastError(
           "Link Teams không hợp lệ",
           "Link cuộc họp phải bắt đầu bằng http:// hoặc https://.",
         );
         return;
       }
       if (!isHostMatch(normalizedMeetingLink, "teams.microsoft.com")) {
-        showError(
+        showToastError(
           "Sai link Teams",
           "Vui lòng nhập đúng link từ domain teams.microsoft.com.",
         );
@@ -308,7 +309,7 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
       const validPhone = isValidPhoneLike(normalizedMeetingLink);
       const validUrl = isValidHttpUrl(normalizedMeetingLink);
       if (!validPhone && !validUrl) {
-        showError(
+        showToastError(
           "Số điện thoại hoặc link gọi chưa hợp lệ",
           "Vui lòng nhập số điện thoại hợp lệ hoặc link gọi trực tuyến.",
         );
@@ -317,7 +318,7 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
     }
 
     if (meetingType === MeetingType.ONSITE && !normalizedLocation) {
-      showError(
+      showToastError(
         "Thiếu địa điểm",
         "Vui lòng nhập địa điểm phỏng vấn trực tiếp.",
       );
@@ -328,7 +329,7 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
       meetingType === MeetingType.ONSITE &&
       normalizedLocation.length < MIN_ONSITE_LOCATION_LENGTH
     ) {
-      showError(
+      showToastError(
         "Địa điểm quá ngắn",
         `Vui lòng nhập địa chỉ chi tiết tối thiểu ${MIN_ONSITE_LOCATION_LENGTH} ký tự.`,
       );
@@ -337,7 +338,7 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
 
     const normalizedNotes = interviewNotes.trim();
     if (normalizedNotes.length > MAX_INTERVIEW_NOTE_LENGTH) {
-      showError(
+      showToastError(
         "Ghi chú quá dài",
         `Ghi chú cho ứng viên tối đa ${MAX_INTERVIEW_NOTE_LENGTH} ký tự.`,
       );
@@ -360,14 +361,14 @@ const InterviewScheduleForm: React.FC<InterviewScheduleFormProps> = ({
       };
 
       await interviewService.scheduleInterview(request);
-      showSuccess(
+      showToastSuccess(
         "Lịch phỏng vấn đã được xếp",
         `Đã gửi thông báo cho ứng viên.`,
       );
       onScheduled();
     } catch (error) {
       console.error("Error scheduling interview:", error);
-      showError(
+      showToastError(
         "Lỗi xếp lịch",
         error instanceof Error
           ? error.message

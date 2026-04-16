@@ -287,28 +287,16 @@ const AppContents = () => {
             {/* BACKUP - Old Portfolio */}
             <Route
               path="/portfolio"
-              element={
-                <StudentOnlyRoute>
-                  <TacticalDossierPortfolio />
-                </StudentOnlyRoute>
-              }
+              element={<TacticalDossierPortfolio />}
             />{" "}
             {/* ACTIVE - Mothership Theme */}
             <Route
               path="/portfolio/create"
-              element={
-                <StudentOnlyRoute>
-                  <DossierCreatePortfolioPage />
-                </StudentOnlyRoute>
-              }
+              element={<DossierCreatePortfolioPage />}
             />
             <Route
               path="/portfolio/:slug"
-              element={
-                <StudentOnlyRoute>
-                  <TacticalDossierPortfolio />
-                </StudentOnlyRoute>
-              }
+              element={<TacticalDossierPortfolio />}
             />
             <Route
               path="/portfolio-debug"
@@ -337,7 +325,10 @@ const AppContents = () => {
                 </StudentOnlyRoute>
               }
             />
-            <Route path="/certificate/verify/:serial" element={<CertificateVerifyPage />} />
+            <Route
+              path="/certificate/verify/:serial"
+              element={<CertificateVerifyPage />}
+            />
             <Route path="/login" element={<ElevatorLoginPage />} />
             <Route
               path="/auth-warning"
@@ -755,7 +746,10 @@ const isCourseLearningRoute = (pathname: string) => {
 };
 
 const isCourseDetailRoute = (pathname: string) => {
-  return /^\/courses\/[^/]+(?:\/[^/]+)?$/.test(pathname) || /^\/course\/[^/]+\/preview$/.test(pathname);
+  return (
+    /^\/courses\/[^/]+(?:\/[^/]+)?$/.test(pathname) ||
+    /^\/course\/[^/]+\/preview$/.test(pathname)
+  );
 };
 
 // Check if path is any admin route
@@ -805,8 +799,8 @@ const FooterVisibilityWrapper = () => {
     isRoadmapDetailRoute(location.pathname) ||
     isJobDetailRoute(location.pathname) ||
     isBookingRoute(location.pathname) ||
-    isContractRoute(location.pathname)
-    || isCourseDetailRoute(location.pathname)
+    isContractRoute(location.pathname) ||
+    isCourseDetailRoute(location.pathname)
   ) {
     return null;
   }

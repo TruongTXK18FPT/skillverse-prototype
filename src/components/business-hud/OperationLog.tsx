@@ -88,6 +88,7 @@ const formatDateTime = (value: string) =>
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+    timeZone: "Asia/Ho_Chi_Minh",
   });
 
 const formatCurrency = (value: number) =>
@@ -124,9 +125,11 @@ const summarizeText = (value: string, maxLength = 156) => {
 };
 
 const formatRelative = (value: string) => {
+  const now = new Date();
+  const target = new Date(value);
   const diffMinutes = Math.max(
     0,
-    Math.round((Date.now() - new Date(value).getTime()) / (1000 * 60)),
+    Math.round((now.getTime() - target.getTime()) / (1000 * 60)),
   );
   if (diffMinutes < 1) return "vừa xong";
   if (diffMinutes < 60) return `${diffMinutes} phút trước`;

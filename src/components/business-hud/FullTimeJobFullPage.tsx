@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  AlertTriangle,
   ArrowLeft,
   Briefcase,
   Calendar,
@@ -14,6 +15,7 @@ import {
   Loader2,
   MapPin,
   MessageSquare,
+  Paperclip,
   Plus,
   SearchCheck,
   Send,
@@ -22,7 +24,6 @@ import {
   UserCheck,
   Users,
   XCircle,
-  Paperclip,
 } from "lucide-react";
 import {
   JobApplicationResponse,
@@ -39,7 +40,7 @@ import interviewService, {
   InterviewStatus,
 } from "../../services/interviewService";
 import { ContractListResponse, ContractStatus } from "../../types/contract";
-import { useToast } from "../../hooks/useToast";
+import { showAppError, showAppInfo, showAppSuccess } from "../../context/ToastContext";
 import { JobMarkdownSurface } from "../shared/JobMarkdownSurface";
 import ContractForm from "../contract/ContractForm";
 import GoogleMeetLogo from "../../assets/meeting/ggmeet.png";
@@ -140,7 +141,9 @@ const CONTRACT_STATUS_LABELS: Record<string, string> = {
 
 const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
   const navigate = useNavigate();
-  const { showError, showSuccess, showInfo } = useToast();
+  const showToastError = (title: string, message: string) => showAppError(title, message);
+  const showToastInfo = (title: string, message: string) => showAppInfo(title, message);
+  const showToastSuccess = (title: string, message: string, autoCloseDelay?: number) => showAppSuccess(title, message, autoCloseDelay ?? 5);
 
   const [activeTab, setActiveTab] = useState<FullPageTab>("overview");
   const [job, setJob] = useState<JobPostingResponse | null>(null);
@@ -229,7 +232,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
 
       const message =
         error instanceof Error ? error.message : "Vui lòng thử lại sau.";
-      showError("Không thể tải trung tâm job", message);
+      showToastError("Không thể tải trung tâm job", message);
     } finally {
       if (requestId === latestLoadRequestRef.current) {
         setIsLoading(false);
@@ -339,9 +342,9 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       setIsActionBusy(true);
       const updated = await jobService.submitForApproval(jobId);
       setJob(updated);
-      showSuccess("Đã gửi duyệt", "Tin tuyển dụng đã được gửi đến admin.");
+      showToastSuccess("Đã gửi duyệt", "Tin tuyển dụng đã được gửi đến admin.");
     } catch (error: unknown) {
-      showError(
+      showToastError(
         "Không thể gửi duyệt",
         error instanceof Error ? error.message : "Vui lòng thử lại.",
       );
@@ -357,9 +360,9 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       setIsActionBusy(true);
       const updated = await jobService.changeJobStatus(jobId, JobStatus.CLOSED);
       setJob(updated);
-      showSuccess("Đã đóng tin", "Tin tuyển dụng đã ngừng nhận hồ sơ.");
+      showToastSuccess("Đã đóng tin", "Tin tuyển dụng đã ngừng nhận hồ sơ.");
     } catch (error: unknown) {
-      showError(
+      showToastError(
         "Không thể đóng tin",
         error instanceof Error ? error.message : "Vui lòng thử lại.",
       );
@@ -372,10 +375,10 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
     try {
       setIsActionBusy(true);
       await jobService.deleteJob(jobId);
-      showSuccess("Đã xóa job", "Job dài hạn đã được xóa.");
+      showToastSuccess("Đã xóa job", "Job dài hạn đã được xóa.");
       onBack();
     } catch (error: unknown) {
-      showError(
+      showToastError(
         "Không thể xóa job",
         error instanceof Error ? error.message : "Vui lòng thử lại.",
       );
@@ -399,7 +402,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
         Number.isNaN(salaryValue) ||
         salaryValue <= 0
       ) {
-        showError(
+        showToastError(
           "Thiếu mức lương đề nghị",
           "Vui lòng nhập mức lương hợp lệ trước khi gửi đề nghị.",
         );
@@ -407,7 +410,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       }
 
       if (note.length < MIN_DECISION_MESSAGE_LENGTH) {
-        showError(
+        showToastError(
           "Thiếu nội dung đề nghị",
           `Vui lòng nhập mô tả đề nghị tối thiểu ${MIN_DECISION_MESSAGE_LENGTH} ký tự.`,
         );
@@ -419,7 +422,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       decisionModal.mode === "ACCEPTED" &&
       note.length < MIN_DECISION_MESSAGE_LENGTH
     ) {
-      showError(
+      showToastError(
         "Thiếu lời nhắn duyệt",
         `Vui lòng nhập lời nhắn cho ứng viên tối thiểu ${MIN_DECISION_MESSAGE_LENGTH} ký tự.`,
       );
@@ -430,7 +433,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       decisionModal.mode === "REJECTED" &&
       note.length < MIN_DECISION_MESSAGE_LENGTH
     ) {
-      showError(
+      showToastError(
         "Thiếu lý do từ chối",
         `Vui lòng nhập lý do từ chối tối thiểu ${MIN_DECISION_MESSAGE_LENGTH} ký tự.`,
       );
@@ -441,7 +444,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       decisionModal.mode === "INTERVIEW_REJECTED" &&
       note.length < MIN_DECISION_MESSAGE_LENGTH
     ) {
-      showError(
+      showToastError(
         "Thiếu nhận xét sau phỏng vấn",
         `Vui lòng nhập nhận xét từ chối tối thiểu ${MIN_DECISION_MESSAGE_LENGTH} ký tự.`,
       );
@@ -472,8 +475,9 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
           });
           setDecisionModal(null);
           setDecisionNote("");
-          const { applications: loadedApps } = await loadData();
-          const freshApp = loadedApps.find((a) => a.id === applicationId);
+          const result = await loadData();
+          const loadedApps = result?.applications ?? [];
+          const freshApp = loadedApps.find((a: JobApplicationResponse) => a.id === applicationId);
           if (freshApp) {
             setContractApplication({ ...freshApp });
             setActiveTab("contracts");
@@ -486,7 +490,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
         if (decisionModal.mode === "INTERVIEW_APPROVED" && job?.isNegotiable) {
           setDecisionModal(null);
           setDecisionNote("");
-          showInfo(
+          showToastInfo(
             "Hoàn thành phỏng vấn",
             `Đã xác nhận phỏng vấn. Vui lòng vào tab "Đề nghị" để gửi đề nghị cho ${getApplicantDisplayName(
               decisionModal.application.userFullName,
@@ -508,7 +512,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
           setDecisionModal(null);
           setDecisionNote("");
           await loadData();
-          showSuccess(
+          showToastSuccess(
             "Đã từ chối",
             `${getApplicantDisplayName(
               decisionModal.application.userFullName,
@@ -528,7 +532,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
           offerAdditionalRequirements:
             decisionAdditionalReqs.trim() || undefined,
         });
-        showSuccess(
+        showToastSuccess(
           "Đã gửi đề nghị",
           `Đề nghị đã được gửi tới ${getApplicantDisplayName(
             decisionModal.application.userFullName,
@@ -572,23 +576,24 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       const appIdForContract = applicationId;
       setDecisionModal(null);
       setDecisionNote("");
-      const { applications: loadedApps } = await loadData();
+      const result = await loadData();
+      const loadedApps = result?.applications ?? [];
 
       if (wasAccepted) {
-        const freshApp = loadedApps.find((a) => a.id === appIdForContract);
+        const freshApp = loadedApps.find((a: JobApplicationResponse) => a.id === appIdForContract);
         if (freshApp) {
           setContractApplication({ ...freshApp });
           setActiveTab("contracts");
         }
-        showSuccess("Đã duyệt ứng viên", "Chuyển sang bước tạo hợp đồng.");
+        showToastSuccess("Đã duyệt ứng viên", "Chuyển sang bước tạo hợp đồng.");
       } else {
-        showSuccess(
+        showToastSuccess(
           "Đã từ chối ứng viên",
           "Ứng viên đã được cập nhật trạng thái.",
         );
       }
     } catch (error: unknown) {
-      showError(
+      showToastError(
         "Không thể cập nhật hồ sơ",
         error instanceof Error ? error.message : "Vui lòng thử lời.",
       );
@@ -599,15 +604,20 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
 
   const handleOpenPortfolio = (application: JobApplicationResponse) => {
     const portfolioPath = getPortfolioPath(application.portfolioSlug);
-    if (!portfolioPath) {
-      showInfo(
-        "Chưa có portfolio",
-        "Ứng viên này chưa công khai portfolio trên SkillVerse.",
-      );
+    if (portfolioPath) {
+      navigate(portfolioPath);
       return;
     }
 
-    window.open(portfolioPath, "_blank", "noopener,noreferrer");
+    if (application.userId) {
+      navigate(`/portfolio/profile/${application.userId}`);
+      return;
+    }
+
+    showToastInfo(
+      "Chưa có portfolio",
+      "Ứng viên này chưa công khai portfolio trên SkillVerse.",
+    );
   };
 
   const handleContactApplicant = async (
@@ -621,14 +631,14 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
         "MANUAL",
         RecruitmentJobContextType.JOB_POSTING,
       );
-      navigate("/messenger", {
+      navigate("/messages", {
         state: {
           openChatWith: session.id.toString(),
           type: "RECRUITMENT",
         },
       });
     } catch (error: unknown) {
-      showError(
+      showToastError(
         "Không thể mở chat",
         error instanceof Error ? error.message : "Vui lòng thử lại.",
       );
@@ -1383,13 +1393,13 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                                         jobId,
                                         JobStatus.CLOSED,
                                       );
-                                      showSuccess(
+                                      showToastSuccess(
                                         "Đã hoàn thành đợt tuyển",
                                         `Đợt tuyển đã được đánh dấu tuyển đủ và đóng lại.`,
                                       );
                                       await loadData();
                                     } catch (err: any) {
-                                      showError(
+                                      showToastError(
                                         "Không thể cập nhật",
                                         err instanceof Error
                                           ? err.message
@@ -1780,7 +1790,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                               }
                               onClick={() => {
                                 if (!interviewCanBeCompleted) {
-                                  showError(
+                                  showToastError(
                                     "Chưa thể hoàn thành",
                                     completeBlockedReason,
                                   );
@@ -1815,7 +1825,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                                       );
                                       void loadData();
                                     } catch (e) {
-                                      showError(
+                                      showToastError(
                                         "Lỗi",
                                         "Không thể hoàn thành phỏng vấn",
                                       );
@@ -1837,7 +1847,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                                   );
                                   void loadData();
                                 } catch (e) {
-                                  showError("Lỗi", "Không thể hủy phỏng vấn");
+                                  showToastError("Lỗi", "Không thể hủy phỏng vấn");
                                 }
                               }}
                             >
@@ -1858,7 +1868,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                             }
                             onClick={() => {
                               if (!interviewCanBeCompleted) {
-                                showError(
+                                showToastError(
                                   "Chưa thể hoàn thành",
                                   completeBlockedReason,
                                 );
@@ -1892,7 +1902,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                                     );
                                     void loadData();
                                   } catch (e) {
-                                    showError(
+                                    showToastError(
                                       "Lỗi",
                                       "Không thể hoàn thành phỏng vấn",
                                     );
@@ -2208,7 +2218,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                         job.location || (job.isRemote ? "Remote" : "")
                       }
                       onSuccess={(contract) => {
-                        showSuccess(
+                        showToastSuccess(
                           "Đã tạo hợp đồng",
                           `Hợp đồng #${contract.contractNumber} đã được tạo và gửi ký.`,
                         );

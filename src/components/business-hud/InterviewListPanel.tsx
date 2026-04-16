@@ -212,6 +212,14 @@ const InterviewListPanel: React.FC<InterviewListPanelProps> = ({
   }, [loadInterviews]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const refreshInterval = window.setInterval(() => {
+      void loadInterviews();
+    }, 300000);
+    return () => window.clearInterval(refreshInterval);
+  }, [loadInterviews]);
+
+  useEffect(() => {
     if (typeof document === "undefined") return undefined;
     if (!declineModalInterview) return undefined;
 

@@ -90,7 +90,7 @@ const TacticalDossierPortfolio = () => {
   const { theme } = useTheme();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const { slug } = useParams<{ slug: string }>();
+  const { slug, userId } = useParams<{ slug?: string; userId?: string }>();
 
   // Loading & Error States
   const [loading, setLoading] = useState(true);
@@ -194,13 +194,19 @@ const TacticalDossierPortfolio = () => {
       setLoading(true);
       setError(null);
 
-      if (slug) {
+      if (slug || userId) {
         // Public View
-        
-        const profileData = await portfolioService.getProfileBySlug(slug);
-        setProfile(profileData);
         setHasExtendedProfile(true);
         setIsOwner(false); // Viewing someone else's profile
+
+        let profileData;
+        if (slug) {
+          profileData = await portfolioService.getProfileBySlug(slug);
+        } else {
+          profileData = await portfolioService.getPublicProfile(Number(userId));
+        }
+
+        setProfile(profileData);
 
         // Load public data
         if (profileData.userId) {

@@ -27,7 +27,7 @@ import interviewService, {
 import { JobApplicationStatus } from "../../data/jobDTOs";
 import type { AppItem } from "./JobLabPage";
 import jobService from "../../services/jobService";
-import { useToast } from "../../hooks/useToast";
+import { showAppError, showAppSuccess } from "../../context/ToastContext";
 import "../../styles/JobLabWorkspace.css";
 
 interface JobLabFullTimeInlineViewProps {
@@ -74,7 +74,8 @@ export default function JobLabFullTimeInlineView({
   onBack,
   onRefresh,
 }: JobLabFullTimeInlineViewProps) {
-  const { showError, showSuccess } = useToast();
+  const showToastError = (title: string, message: string) => showAppError(title, message);
+const showToastSuccess = (title: string, message: string, autoCloseDelay?: number) => showAppSuccess(title, message, autoCloseDelay ?? 5);
   const [activeTab, setActiveTab] = useState<FullTimeTab>("overview");
   const [interviews, setInterviews] = useState<InterviewScheduleResponse[]>([]);
   const [loadingInterviews, setLoadingInterviews] = useState(false);
@@ -120,6 +121,15 @@ export default function JobLabFullTimeInlineView({
   useEffect(() => {
     if (activeTab !== "interviews") return;
     void loadMyInterviews();
+  }, [activeTab, loadMyInterviews]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || activeTab !== "interviews")
+      return undefined;
+    const refreshInterval = window.setInterval(() => {
+      void loadMyInterviews();
+    }, 300000);
+    return () => window.clearInterval(refreshInterval);
   }, [activeTab, loadMyInterviews]);
 
   // Load contracts for this application (filter by applicationId)
@@ -229,9 +239,9 @@ export default function JobLabFullTimeInlineView({
       await interviewService.confirmInterview(interviewId);
       await loadMyInterviews();
       onRefresh();
-      showSuccess("Đã xác nhận", "Bạn đã xác nhận tham gia phỏng vấn.");
+      showToastSuccess("Đã xác nhận", "Bạn đã xác nhận tham gia phỏng vấn.");
     } catch (error) {
-      showError(
+      showToastError(
         "Không thể xác nhận",
         error instanceof Error ? error.message : "Vui lòng thử lại.",
       );
@@ -243,7 +253,7 @@ export default function JobLabFullTimeInlineView({
   const handleDeclineInterview = async (interviewId: number) => {
     const interview = interviews.find((item) => item.id === interviewId);
     if (!interview) {
-      showError(
+      showToastError(
         "Không tìm thấy lịch",
         "Lịch phỏng vấn không tồn tại hoặc đã được cập nhật.",
       );
@@ -259,7 +269,7 @@ export default function JobLabFullTimeInlineView({
 
     const reason = declineReason.trim();
     if (reason.length < 10) {
-      showError(
+      showToastError(
         "Lý do chưa đủ chi tiết",
         "Vui lòng nhập lý do từ chối tối thiểu 10 ký tự.",
       );
@@ -273,12 +283,12 @@ export default function JobLabFullTimeInlineView({
       onRefresh();
       setDeclineModalInterview(null);
       setDeclineReason("");
-      showSuccess(
+      showToastSuccess(
         "Đã từ chối lịch",
         "Hệ thống đã ghi nhận từ chối và cập nhật hồ sơ của bạn.",
       );
     } catch (error) {
-      showError(
+      showToastError(
         "Không thể từ chối",
         error instanceof Error ? error.message : "Vui lòng thử lại.",
       );

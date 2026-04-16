@@ -25,7 +25,7 @@ export enum InterviewCancelledBy {
 
 export interface CreateInterviewRequest {
   applicationId: number;
-  scheduledAt: string; // ISO datetime string
+  scheduledAt: string; // Local datetime string: yyyy-MM-ddTHH:mm:ss
   durationMinutes?: number;
   meetingType: MeetingType;
   meetingLink?: string;
@@ -34,6 +34,28 @@ export interface CreateInterviewRequest {
   interviewerName?: string;
   interviewNotes?: string;
 }
+
+const LOCAL_DATE_TIME_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/;
+
+const toBackendLocalDateTime = (value: string): string => {
+  if (LOCAL_DATE_TIME_PATTERN.test(value)) {
+    return value.length === 16 ? `${value}:00` : value;
+  }
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+
+  const year = parsed.getFullYear();
+  const month = String(parsed.getMonth() + 1).padStart(2, "0");
+  const day = String(parsed.getDate()).padStart(2, "0");
+  const hours = String(parsed.getHours()).padStart(2, "0");
+  const minutes = String(parsed.getMinutes()).padStart(2, "0");
+  const seconds = String(parsed.getSeconds()).padStart(2, "0");
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+};
 
 export interface InterviewScheduleResponse {
   id: number;
@@ -65,9 +87,14 @@ class InterviewService {
     data: CreateInterviewRequest,
   ): Promise<InterviewScheduleResponse> {
     try {
+      const payload: CreateInterviewRequest = {
+        ...data,
+        scheduledAt: toBackendLocalDateTime(data.scheduledAt),
+      };
+
       const response = await axiosInstance.post<InterviewScheduleResponse>(
         "/api/interviews",
-        data,
+        payload,
       );
       return response.data;
     } catch (error: unknown) {
