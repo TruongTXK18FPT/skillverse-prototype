@@ -9,6 +9,7 @@
 
 import React, { createContext, useContext, useState, useCallback, ReactNode, useRef } from 'react';
 import { useAuth } from '../AuthContext';
+import { sanitizeHtml } from '../../utils/sanitizeHtml';
 import { 
   CourseLevel, 
   CourseStatus, 
@@ -279,6 +280,9 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
       isRequired: c.isRequired ?? true,
     }));
   };
+
+  const normalizeAssignmentDescription = (description?: string): string =>
+    sanitizeHtml(description || '').trim();
 
   // ============================================================================
   // COURSE OPERATIONS
@@ -625,7 +629,7 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                        // Handle Assignment
                       const assignmentDTO: any = {
                          title: lesson.title,
-                         description: lesson.assignmentDescription || '',
+                         description: normalizeAssignmentDescription(lesson.assignmentDescription),
                          submissionType: lesson.assignmentSubmissionType || 'TEXT',
                          maxScore: lesson.assignmentMaxScore || 100,
                          passingScore: lesson.assignmentPassingScore || 50,
@@ -905,7 +909,7 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
                      // Handle Assignment
                      const assignmentDTO: any = {
                         title: lesson.title,
-                        description: lesson.assignmentDescription || '',
+                      description: normalizeAssignmentDescription(lesson.assignmentDescription),
                         submissionType: lesson.assignmentSubmissionType || 'TEXT',
                         maxScore: lesson.assignmentMaxScore || 100,
                         passingScore: lesson.assignmentPassingScore || 50,

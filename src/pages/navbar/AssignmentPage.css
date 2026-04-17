@@ -409,6 +409,105 @@
   overflow-wrap: break-word;
 }
 
+.ap-v2-rich-content {
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.65;
+  color: #cbd5e1;
+}
+
+.ap-v2-rich-content > :first-child {
+  margin-top: 0;
+}
+
+.ap-v2-rich-content > :last-child {
+  margin-bottom: 0;
+}
+
+.ap-v2-rich-content p,
+.ap-v2-rich-content ul,
+.ap-v2-rich-content ol,
+.ap-v2-rich-content blockquote,
+.ap-v2-rich-content pre,
+.ap-v2-rich-content table,
+.ap-v2-rich-content figure {
+  margin: 0.55rem 0;
+}
+
+.ap-v2-rich-content ul,
+.ap-v2-rich-content ol {
+  padding-left: 1.15rem;
+}
+
+.ap-v2-rich-content a {
+  color: #7dd3fc;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ap-v2-rich-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.ap-v2-rich-content figcaption {
+  margin-top: 0.4rem;
+  font-size: 0.76rem;
+  color: #94a3b8;
+}
+
+.ap-v2-rich-content pre {
+  padding: 0.72rem 0.82rem;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(15, 23, 42, 0.56);
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.ap-v2-rich-content code {
+  padding: 0.12rem 0.34rem;
+  border-radius: 6px;
+  background: rgba(148, 163, 184, 0.2);
+  color: #e2e8f0;
+  font-size: 0.82em;
+}
+
+.ap-v2-rich-content pre code {
+  background: transparent;
+  padding: 0;
+  font-size: 1em;
+}
+
+.ap-v2-rich-content table {
+  width: 100%;
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+}
+
+.ap-v2-rich-content th,
+.ap-v2-rich-content td {
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  padding: 0.45rem 0.55rem;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.ap-v2-rich-content th {
+  background: rgba(15, 23, 42, 0.6);
+  color: #dbeafe;
+  font-weight: 700;
+}
+
+.ap-v2-rich-content--req [style*="background"],
+.ap-v2-rich-content--req [style*="background-color"] {
+  background: transparent !important;
+}
+
 .ap-v2-rubric-box {
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.3);
@@ -420,6 +519,145 @@
   min-width: 0;
   word-break: break-word;
   overflow-wrap: break-word;
+}
+
+.ap-v2-section--rubric-criteria h3 {
+  color: #22d3ee;
+}
+
+.ap-v2-rubric-criteria-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  background: rgba(8, 145, 178, 0.12);
+}
+
+.ap-v2-rubric-criteria-head span {
+  font-size: 0.72rem;
+  color: #67e8f9;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.ap-v2-rubric-criteria-head strong {
+  font-size: 0.8rem;
+  color: #cffafe;
+  font-weight: 700;
+}
+
+.ap-v2-rubric-criteria-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ap-v2-rubric-criteria-item {
+  border-radius: 12px;
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  background: rgba(15, 23, 42, 0.45);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.ap-v2-rubric-criteria-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.ap-v2-rubric-criteria-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.95rem;
+  height: 1.95rem;
+  border-radius: 999px;
+  background: rgba(6, 182, 212, 0.2);
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  color: #67e8f9;
+  font-size: 0.7rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.ap-v2-rubric-criteria-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.ap-v2-rubric-criteria-main strong {
+  display: block;
+  font-size: 0.86rem;
+  color: #e2e8f0;
+  line-height: 1.4;
+}
+
+.ap-v2-rubric-criteria-main p {
+  margin: 0.28rem 0 0;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.ap-v2-rubric-criteria-points {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 185, 129, 0.38);
+  background: rgba(16, 185, 129, 0.14);
+  color: #86efac;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.ap-v2-rubric-criteria-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  padding-top: 0.45rem;
+  border-top: 1px dashed rgba(148, 163, 184, 0.22);
+}
+
+.ap-v2-rubric-criteria-meta > span:first-child {
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.ap-v2-rubric-criteria-required {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ap-v2-rubric-criteria-required.is-required {
+  background: rgba(234, 179, 8, 0.18);
+  color: #fde68a;
+  border: 1px solid rgba(250, 204, 21, 0.28);
+}
+
+.ap-v2-rubric-criteria-required.is-optional {
+  background: rgba(148, 163, 184, 0.2);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.28);
 }
 
 .ap-v2-section {

@@ -960,6 +960,29 @@
   gap: 0.85rem;
 }
 
+.jlx-workspace-bar__right {
+  margin-left: auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.jlx-type-tabs--workspace {
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 12px;
+  padding: 0.25rem;
+  gap: 0.35rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.jlx-type-tabs--workspace .jlx-type-tab {
+  font-size: 0.76rem;
+  padding: 0.45rem 0.72rem;
+  white-space: nowrap;
+}
+
 .jlx-workspace-bar__back {
   display: inline-flex;
   align-items: center;
@@ -1776,9 +1799,19 @@
   .jlx-toolbar,
   .jlx-submit-bar,
   .jlx-panel__head,
-  .jlx-workspace-hero {
+  .jlx-workspace-hero,
+  .jlx-workspace-bar {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .jlx-workspace-bar__left,
+  .jlx-workspace-bar__right {
+    width: 100%;
+  }
+
+  .jlx-type-tabs--workspace {
+    width: 100%;
   }
 
   .jlx-search {
@@ -2455,6 +2488,207 @@
   color: #85a4c2;
 }
 
+.jlx-income-history {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.jlx-income-history__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.jlx-income-history__search {
+  flex: 1 1 260px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(103, 232, 249, 0.2);
+  background: rgba(9, 28, 46, 0.62);
+  color: #7dd3fc;
+}
+
+.jlx-income-history__search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #f4fbff;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.jlx-income-history__search input::placeholder {
+  color: #6b8aa6;
+}
+
+.jlx-income-history__toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.jlx-income-history__control {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid rgba(103, 232, 249, 0.15);
+  background: rgba(9, 28, 46, 0.55);
+}
+
+.jlx-income-history__control span {
+  font-size: 0.62rem;
+  color: #89a9c7;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.jlx-income-history__control select {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 0.74rem;
+  min-width: 125px;
+}
+
+.jlx-income-history__control option {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.jlx-income-history__table-wrap {
+  border: 1px solid rgba(103, 232, 249, 0.16);
+  border-radius: 12px;
+  overflow: auto;
+  background: rgba(7, 20, 34, 0.6);
+}
+
+.jlx-income-history__table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+}
+
+.jlx-income-history__table th {
+  text-align: left;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #7fa5c7;
+  background: rgba(8, 27, 46, 0.78);
+  border-bottom: 1px solid rgba(103, 232, 249, 0.15);
+}
+
+.jlx-income-history__table td {
+  padding: 0.72rem 0.8rem;
+  font-size: 0.78rem;
+  color: #dbeafe;
+  border-top: 1px solid rgba(103, 232, 249, 0.08);
+  vertical-align: middle;
+}
+
+.jlx-income-history__table tbody tr:hover {
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.jlx-income-history__table th.is-right,
+.jlx-income-history__table td.is-right {
+  text-align: right;
+}
+
+.jlx-income-history__job-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f4fbff;
+}
+
+.jlx-income-history__job-meta {
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  color: #83a4bf;
+}
+
+.jlx-income-history__type {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #7dd3fc;
+  border: 1px solid rgba(125, 211, 252, 0.25);
+  background: rgba(14, 116, 144, 0.25);
+}
+
+.jlx-income-history__status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.jlx-income-history__status.is-paid {
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+  border: 1px solid rgba(134, 239, 172, 0.32);
+}
+
+.jlx-income-history__status.is-completed {
+  background: rgba(56, 189, 248, 0.16);
+  color: #7dd3fc;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+}
+
+.jlx-income-history__amount {
+  color: #86efac;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.jlx-income-history__empty {
+  padding: 1.35rem 0.8rem;
+  text-align: center;
+  color: #7fa5c7;
+  font-size: 0.78rem;
+}
+
+.jlx-income-history__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  font-size: 0.76rem;
+  color: #95b5d1;
+}
+
+.jlx-income-history__pagination-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.jlx-income-history__pagination-actions .jlx-btn {
+  padding: 0.4rem 0.72rem;
+  font-size: 0.74rem;
+}
+
 .jlx-pipeline-step {
   margin-bottom: 1.25rem;
   padding: 1rem;
@@ -2632,6 +2866,12 @@
   }
   .jlx-main-visuals {
     grid-template-columns: 1fr;
+  }
+  .jlx-income-history__toolbar {
+    align-items: stretch;
+  }
+  .jlx-income-history__toolbar-right {
+    width: 100%;
   }
   .jlx-pipeline-content {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5673,21 +5913,26 @@ body.jlx-modal-open {
 /* Timeline stepper */
 .jlx-ft-timeline {
   display: flex;
-  flex-direction: column;
-  gap: 0;
-  padding: 0.5rem 0;
+  gap: 0.45rem;
+  padding: 0.5rem 0 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .jlx-ft-step {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: 0.5rem;
   position: relative;
-  padding-bottom: 0.75rem;
+  flex: 1 1 0;
+  min-width: 132px;
+  padding-right: 0.45rem;
 }
 
 .jlx-ft-step:last-child {
-  padding-bottom: 0;
+  min-width: 118px;
+  padding-right: 0;
 }
 
 .jlx-ft-step__dot {
@@ -5698,7 +5943,7 @@ body.jlx-modal-open {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-top: 0.15rem;
+  margin-top: 0;
   z-index: 1;
   border: 2px solid transparent;
   transition: all 0.2s ease;
@@ -5725,16 +5970,17 @@ body.jlx-modal-open {
 
 .jlx-ft-step__connector {
   position: absolute;
-  left: 13px;
-  top: 26px;
-  bottom: 0;
-  width: 2px;
+  left: 30px;
+  right: -0.35rem;
+  top: 13px;
+  height: 2px;
+  width: auto;
   background: rgba(0, 245, 255, 0.12);
 }
 
 .jlx-ft-step.is-done .jlx-ft-step__connector {
   background: linear-gradient(
-    to bottom,
+    to right,
     rgba(0, 245, 255, 0.4),
     rgba(0, 245, 255, 0.08)
   );
@@ -5746,14 +5992,15 @@ body.jlx-modal-open {
 
 .jlx-ft-step__info {
   flex: 1;
-  padding-top: 0.15rem;
+  padding-top: 0;
   min-width: 0;
 }
 
 .jlx-ft-step__label {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: #e2e8f0;
+  line-height: 1.35;
 }
 
 .jlx-ft-step.is-pending .jlx-ft-step__label {
@@ -5772,6 +6019,15 @@ body.jlx-modal-open {
 
 .jlx-ft-step.is-active .jlx-ft-step__time {
   color: #00f5ff;
+}
+
+.jlx-ft-timeline::-webkit-scrollbar {
+  height: 6px;
+}
+
+.jlx-ft-timeline::-webkit-scrollbar-thumb {
+  background: rgba(0, 245, 255, 0.2);
+  border-radius: 999px;
 }
 
 /* Interview cards in full-time inline view */
@@ -6055,6 +6311,10 @@ body.jlx-modal-open {
 
   .jlx-fulltime-tabs {
     overflow-x: auto;
+  }
+
+  .jlx-ft-step {
+    min-width: 148px;
   }
 }
 

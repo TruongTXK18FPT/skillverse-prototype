@@ -11,7 +11,58 @@ const BLOCKED_CSS_PROPS = [
   'grid', 'grid-template', 'grid-area', 'grid-column', 'grid-row',
   'transform',
   'background-image',
+  'background',
+  'background-color',
+  'font-family',
+  'margin',
+  'padding',
+  'border',
+  'border-radius',
+  'box-shadow',
+  'text-shadow',
 ];
+
+const HTML_TAG_REGEX = /<\/?[a-z][\s\S]*>/i;
+const ENCODED_HTML_TAG_REGEX = /&lt;\/?[a-z][\s\S]*?&gt;/i;
+
+const normalizeLineBreaks = (value: string): string =>
+  value.replace(/\r\n?/g, '\n');
+
+const escapeHtml = (value: string): string =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
+const decodeHtmlEntities = (value: string): string => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return value;
+  }
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = value;
+  return textarea.value;
+};
+
+const toHtmlFromPlainText = (value: string): string =>
+  escapeHtml(normalizeLineBreaks(value)).replace(/\n/g, '<br />');
+
+const normalizeRichHtmlInput = (value: string): string => {
+  const trimmed = value.trim();
+  if (!trimmed) return '';
+
+  let normalized = trimmed;
+  if (!HTML_TAG_REGEX.test(normalized) && ENCODED_HTML_TAG_REGEX.test(normalized)) {
+    normalized = decodeHtmlEntities(normalized).trim();
+  }
+
+  if (!HTML_TAG_REGEX.test(normalized)) {
+    return toHtmlFromPlainText(normalized);
+  }
+
+  return normalized;
+};
 
 /**
  * Normalize layout-breaking white-space values so code formatting is preserved
@@ -42,19 +93,24 @@ const stripBlockedStyles = (rawStyle: string): string => {
   return kept.length ? kept.join('; ') : '';
 };
 
+let sanitizeHookRegistered = false;
+
 // Register hook once — runs after every element is sanitized
-DOMPurify.addHook('afterSanitizeAttributes', (node) => {
-  if (node.hasAttribute('style')) {
-    const rawStyle = node.getAttribute('style') || '';
-    const normalized = normalizeWhiteSpace(rawStyle);
-    const cleaned = stripBlockedStyles(normalized);
-    if (cleaned) {
-      node.setAttribute('style', cleaned);
-    } else {
-      node.removeAttribute('style');
+if (!sanitizeHookRegistered) {
+  DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+    if (node.hasAttribute('style')) {
+      const rawStyle = node.getAttribute('style') || '';
+      const normalized = normalizeWhiteSpace(rawStyle);
+      const cleaned = stripBlockedStyles(normalized);
+      if (cleaned) {
+        node.setAttribute('style', cleaned);
+      } else {
+        node.removeAttribute('style');
+      }
     }
-  }
-});
+  });
+  sanitizeHookRegistered = true;
+}
 
 /**
  * Sanitize HTML content before rendering via dangerouslySetInnerHTML.
@@ -64,13 +120,17 @@ DOMPurify.addHook('afterSanitizeAttributes', (node) => {
  */
 export const sanitizeHtml = (html: string): string => {
   if (!html) return '';
-  return DOMPurify.sanitize(html, {
+  const normalizedHtml = normalizeRichHtmlInput(html);
+
+  return DOMPurify.sanitize(normalizedHtml, {
     ALLOWED_TAGS: [
       'p', 'br', 'span', 'div', 'strong', 'b', 'em', 'i', 'u', 's', 'strike',
       'ul', 'ol', 'li', 'a', 'font', 'blockquote', 'code', 'pre',
       'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'figure', 'figcaption', 'img',
+      'table', 'thead', 'tbody', 'tr', 'th', 'td',
     ],
-    ALLOWED_ATTR: ['style', 'color', 'href', 'target', 'rel', 'class'],
+    ALLOWED_ATTR: ['style', 'color', 'href', 'target', 'rel', 'class', 'src', 'alt'],
     FORCE_BODY: true,
   });
 };

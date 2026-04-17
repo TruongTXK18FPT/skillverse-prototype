@@ -56,6 +56,13 @@ import RichTextEditor from '../../components/shared/RichTextEditor';
 
 import './AssignmentPage.css';
 
+const formatRubricPoints = (value?: number | null) => {
+  const numeric = Number(value ?? 0);
+  if (!Number.isFinite(numeric)) return '0';
+  if (Number.isInteger(numeric)) return String(numeric);
+  return numeric.toFixed(2).replace(/\.?0+$/, '');
+};
+
 const AssignmentPage: React.FC = () => {
   const { assignmentId } = useParams<{ assignmentId: string }>();
   const navigate = useNavigate();
@@ -74,8 +81,6 @@ const AssignmentPage: React.FC = () => {
   const [draftSavedAt, setDraftSavedAt] = useState<string | null>(null);
   const [draftDirty, setDraftDirty] = useState(false);
   const [showPreview, setShowPreview] = useState(true);
-  /** When student fails AI, they choose between AI-resubmit and mentor-resubmit */
-  const [pendingResubmitMode, setPendingResubmitMode] = useState<'AI' | 'MENTOR' | null>(null);
   const [showResubmitModal, setShowResubmitModal] = useState(false);
 
   // Form state
@@ -206,7 +211,6 @@ const AssignmentPage: React.FC = () => {
       setUploadProgress(0);
       setDraftSavedAt(null);
       setDraftDirty(false);
-      setPendingResubmitMode(null);
 
       const draftKey = `assignment_draft_${assignmentId}_${user.id}`;
       localStorage.removeItem(draftKey);
@@ -374,7 +378,7 @@ const AssignmentPage: React.FC = () => {
         pollingRef.current = { targetId: null, intervalId: null };
       }
     };
-  }, [submissions, assignment?.aiGradingEnabled]);
+  }, [submissions, assignment?.aiGradingEnabled, assignmentId]);
 
   const handleBackToCourse = useCallback(() => {
     const returnContext = locationState?.courseId
@@ -411,6 +415,36 @@ const AssignmentPage: React.FC = () => {
   }
 
   const status = getAssignmentStatus();
+  const rubricCriteria = [...(assignment.criteria ?? [])]
+    .sort((left, right) => {
+      const leftIndex = left.orderIndex ?? Number.MAX_SAFE_INTEGER;
+      const rightIndex = right.orderIndex ?? Number.MAX_SAFE_INTEGER;
+      if (leftIndex !== rightIndex) {
+        return leftIndex - rightIndex;
+      }
+      return (left.id ?? 0) - (right.id ?? 0);
+    })
+    .map((criteria, index) => {
+      const maxPoints = Number(criteria.maxPoints ?? 0);
+      const passingRaw = criteria.passingPoints;
+      const passingPoints =
+        passingRaw == null ? null : Number(passingRaw);
+
+      return {
+        ...criteria,
+        ordinal: index + 1,
+        maxPoints: Number.isFinite(maxPoints) ? maxPoints : 0,
+        passingPoints:
+          passingPoints != null && Number.isFinite(passingPoints)
+            ? passingPoints
+            : null,
+      };
+    });
+
+  const rubricMaxPoints = rubricCriteria.reduce(
+    (sum, criteria) => sum + criteria.maxPoints,
+    0,
+  );
 
   return (
     <div className="assignment-page-v2">
@@ -483,16 +517,76 @@ const AssignmentPage: React.FC = () => {
                 <div className="ap-v2-section ap-v2-section--req">
                   <h3><Info size={16} /> Yêu cầu nhiệm vụ</h3>
                   {assignment.description ? (
-                    <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(assignment.description) }} />
+                    <div
+                      className="ap-v2-rich-content ap-v2-rich-content--req"
+                      dangerouslySetInnerHTML={{ __html: sanitizeHtml(assignment.description) }}
+                    />
                   ) : (
                     <p style={{ fontStyle: 'italic', color: '#64748b' }}>Chưa có mô tả chi tiết.</p>
                   )}
                 </div>
 
+                {rubricCriteria.length > 0 && (
+                  <div className="ap-v2-section ap-v2-section--rubric-criteria">
+                    <h3><CheckSquare size={16} /> Rubric chấm điểm</h3>
+
+                    <div className="ap-v2-rubric-criteria-head">
+                      <span>{rubricCriteria.length} tiêu chí</span>
+                      <strong>{formatRubricPoints(rubricMaxPoints)} điểm tối đa</strong>
+                    </div>
+
+                    <div className="ap-v2-rubric-criteria-list">
+                      {rubricCriteria.map((criteria) => {
+                        const hasPassingPoints =
+                          criteria.passingPoints != null &&
+                          criteria.passingPoints > 0;
+
+                        return (
+                          <article key={`criteria-${criteria.id ?? criteria.ordinal}`} className="ap-v2-rubric-criteria-item">
+                            <div className="ap-v2-rubric-criteria-top">
+                              <span className="ap-v2-rubric-criteria-index">
+                                C{criteria.ordinal}
+                              </span>
+
+                              <div className="ap-v2-rubric-criteria-main">
+                                <strong>
+                                  {criteria.name?.trim() || `Tiêu chí ${criteria.ordinal}`}
+                                </strong>
+                                {criteria.description?.trim() && (
+                                  <p>{criteria.description}</p>
+                                )}
+                              </div>
+
+                              <span className="ap-v2-rubric-criteria-points">
+                                {formatRubricPoints(criteria.maxPoints)} điểm
+                              </span>
+                            </div>
+
+                            <div className="ap-v2-rubric-criteria-meta">
+                              <span>
+                                {hasPassingPoints
+                                  ? `Điểm đạt tối thiểu: ${formatRubricPoints(criteria.passingPoints)} điểm`
+                                  : 'Không có ngưỡng điểm tối thiểu riêng'}
+                              </span>
+
+                              <span className={`ap-v2-rubric-criteria-required ${criteria.isRequired ? 'is-required' : 'is-optional'}`}>
+                                {criteria.isRequired ? 'Bắt buộc' : 'Khuyến nghị'}
+                              </span>
+                            </div>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
                 {assignment.gradingCriteria && (
                   <div className="ap-v2-section ap-v2-section--rubric">
                     <h3><CheckSquare size={16} /> Tiêu chí chấm điểm</h3>
-                    <div className="ap-v2-rubric-box" dangerouslySetInnerHTML={{ __html: sanitizeHtml(assignment.gradingCriteria) }} />
+                    <div
+                      className="ap-v2-rubric-box ap-v2-rich-content"
+                      dangerouslySetInnerHTML={{ __html: sanitizeHtml(assignment.gradingCriteria) }}
+                    />
                   </div>
                 )}
               </div>

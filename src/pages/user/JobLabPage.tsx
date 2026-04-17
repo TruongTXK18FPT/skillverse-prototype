@@ -32,7 +32,6 @@ import {
   XCircle,
   Zap,
   Cpu,
-  Layers,
   PieChart,
   Target,
   TrendingUp,
@@ -62,6 +61,13 @@ type ViewMode =
   | "interviews"
   | "offers";
 type ApplicationTimeFilter = "ALL" | "THIS_WEEK" | "THIS_MONTH" | "CUSTOM";
+type IncomeStatusFilter = "ALL" | "PAID" | "COMPLETED";
+type IncomeSort =
+  | "NEWEST"
+  | "OLDEST"
+  | "AMOUNT_DESC"
+  | "AMOUNT_ASC"
+  | "TITLE_ASC";
 type JobLabLocationState = {
   viewMode?: ViewMode;
   jobType?: JobType;
@@ -103,6 +109,18 @@ export type AppItem = {
   counterAdditionalRequirements?: string;
   isNegotiable?: boolean;
   offerRound?: number;
+};
+
+type IncomeHistoryItem = {
+  id: string;
+  applicationId: number;
+  type: "REGULAR" | "SHORT_TERM";
+  title: string;
+  company: string;
+  status: "PAID" | "COMPLETED";
+  statusLabel: string;
+  amount: number;
+  recordedAt: string;
 };
 
 const STATUS_META: Record<
@@ -196,6 +214,7 @@ const WORKSPACE_STEPS: Record<string, string> = {
 
 const APPLICATIONS_PAGE_SIZE = 9;
 const WORKSPACE_PAGE_SIZE = 8;
+const INCOME_HISTORY_PAGE_SIZE = 3;
 
 const startOfDay = (date: Date) =>
   new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -351,6 +370,12 @@ const JobLabPage: React.FC = () => {
   const [applicationDateTo, setApplicationDateTo] = useState("");
   const [applicationsPage, setApplicationsPage] = useState(1);
   const [workspacePage, setWorkspacePage] = useState(1);
+  const [incomePage, setIncomePage] = useState(1);
+  const [incomeSearch, setIncomeSearch] = useState("");
+  const [incomeStatusFilter, setIncomeStatusFilter] =
+    useState<IncomeStatusFilter>("ALL");
+  const [incomeTypeFilter, setIncomeTypeFilter] = useState<JobType>("ALL");
+  const [incomeSort, setIncomeSort] = useState<IncomeSort>("NEWEST");
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [fullTimeAppId, setFullTimeAppId] = useState<string | null>(null);
@@ -461,7 +486,7 @@ const JobLabPage: React.FC = () => {
     );
   }, [regularApps, shortTermApps]);
 
-  const workspaceApplications = useMemo(() => {
+  const applicationsFilteredByTypeAndSearch = useMemo(() => {
     return applications.filter((app) => {
       const matchesType = jobType === "ALL" || app.type === jobType;
       const query = searchTerm.trim().toLowerCase();
@@ -474,15 +499,23 @@ const JobLabPage: React.FC = () => {
     });
   }, [applications, jobType, searchTerm]);
 
-  // Workspace rail: SHORT_TERM only (full-time opens inline view instead)
-  const workspaceRailApplications = useMemo(
-    () => workspaceApplications.filter((app) => app.type === "SHORT_TERM"),
-    [workspaceApplications],
+  const workspaceListApplications = useMemo(
+    () =>
+      applications.filter(
+        (app) => jobType === "ALL" || app.type === jobType,
+      ),
+    [applications, jobType],
+  );
+
+  // Workspace detail panel currently supports short-term jobs only.
+  const workspaceDetailShortTermApps = useMemo(
+    () => workspaceListApplications.filter((app) => app.type === "SHORT_TERM"),
+    [workspaceListApplications],
   );
 
   const applicationsViewItems = useMemo(
     () =>
-      workspaceApplications.filter((app) =>
+      applicationsFilteredByTypeAndSearch.filter((app) =>
         matchesTimeFilter(
           app.appliedAt,
           applicationTimeFilter,
@@ -491,7 +524,7 @@ const JobLabPage: React.FC = () => {
         ),
       ),
     [
-      workspaceApplications,
+      applicationsFilteredByTypeAndSearch,
       applicationTimeFilter,
       applicationDateFrom,
       applicationDateTo,
@@ -510,13 +543,13 @@ const JobLabPage: React.FC = () => {
 
   const workspaceTotalPages = Math.max(
     1,
-    Math.ceil(workspaceRailApplications.length / WORKSPACE_PAGE_SIZE),
+    Math.ceil(workspaceListApplications.length / WORKSPACE_PAGE_SIZE),
   );
 
   const pagedWorkspaceApplications = useMemo(() => {
     const start = (workspacePage - 1) * WORKSPACE_PAGE_SIZE;
-    return workspaceRailApplications.slice(start, start + WORKSPACE_PAGE_SIZE);
-  }, [workspaceRailApplications, workspacePage]);
+    return workspaceListApplications.slice(start, start + WORKSPACE_PAGE_SIZE);
+  }, [workspaceListApplications, workspacePage]);
 
   useEffect(() => {
     setApplicationsPage(1);
@@ -541,21 +574,21 @@ const JobLabPage: React.FC = () => {
   }, [workspaceTotalPages]);
 
   useEffect(() => {
-    if (!workspaceApplications.length) {
+    if (!workspaceDetailShortTermApps.length) {
       setSelectedId(null);
       return;
     }
     if (
       !selectedId ||
-      !workspaceApplications.some((app) => app.id === selectedId)
+      !workspaceDetailShortTermApps.some((app) => app.id === selectedId)
     ) {
-      setSelectedId(workspaceApplications[0].id);
+      setSelectedId(workspaceDetailShortTermApps[0].id);
     }
-  }, [workspaceApplications, selectedId]);
+  }, [workspaceDetailShortTermApps, selectedId]);
 
   useEffect(() => {
-    if (!selectedId || !workspaceRailApplications.length) return;
-    const index = workspaceRailApplications.findIndex(
+    if (!selectedId || !workspaceListApplications.length) return;
+    const index = workspaceListApplications.findIndex(
       (app) => app.id === selectedId,
     );
     if (index < 0) return;
@@ -563,10 +596,10 @@ const JobLabPage: React.FC = () => {
     if (workspacePage !== page) {
       setWorkspacePage(page);
     }
-  }, [selectedId, workspaceRailApplications, workspacePage]);
+  }, [selectedId, workspaceListApplications, workspacePage]);
 
   const selectedApp =
-    workspaceRailApplications.find((app) => app.id === selectedId) || null;
+    workspaceDetailShortTermApps.find((app) => app.id === selectedId) || null;
 
   useEffect(() => {
     const navigationState = location.state as JobLabLocationState | null;
@@ -617,6 +650,93 @@ const JobLabPage: React.FC = () => {
     [applications],
   );
 
+  const incomeHistoryItems = useMemo<IncomeHistoryItem[]>(() => {
+    return applications
+      .filter(
+        (app): app is AppItem & { status: "PAID" | "COMPLETED" } =>
+          app.budget > 0 && ["PAID", "COMPLETED"].includes(app.status),
+      )
+      .map((app) => ({
+        id: app.id,
+        applicationId: app.applicationId,
+        type: app.type,
+        title: app.title,
+        company: app.company,
+        status: app.status,
+        statusLabel: app.status === "PAID" ? "Đã thanh toán" : "Hoàn tất",
+        amount: app.budget,
+        recordedAt: app.appliedAt,
+      }));
+  }, [applications]);
+
+  const filteredIncomeHistory = useMemo(() => {
+    const keyword = incomeSearch.trim().toLowerCase();
+
+    const filtered = incomeHistoryItems.filter((item) => {
+      const matchesKeyword =
+        !keyword ||
+        [item.title, item.company, item.type]
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(keyword));
+
+      const matchesStatus =
+        incomeStatusFilter === "ALL" || item.status === incomeStatusFilter;
+
+      const matchesType =
+        incomeTypeFilter === "ALL" || item.type === incomeTypeFilter;
+
+      return matchesKeyword && matchesStatus && matchesType;
+    });
+
+    return [...filtered].sort((left, right) => {
+      switch (incomeSort) {
+        case "OLDEST":
+          return (
+            new Date(left.recordedAt).getTime() -
+            new Date(right.recordedAt).getTime()
+          );
+        case "AMOUNT_DESC":
+          return right.amount - left.amount;
+        case "AMOUNT_ASC":
+          return left.amount - right.amount;
+        case "TITLE_ASC":
+          return left.title.localeCompare(right.title, "vi", {
+            sensitivity: "base",
+          });
+        case "NEWEST":
+        default:
+          return (
+            new Date(right.recordedAt).getTime() -
+            new Date(left.recordedAt).getTime()
+          );
+      }
+    });
+  }, [
+    incomeHistoryItems,
+    incomeSearch,
+    incomeStatusFilter,
+    incomeTypeFilter,
+    incomeSort,
+  ]);
+
+  const incomeTotalPages = Math.max(
+    1,
+    Math.ceil(filteredIncomeHistory.length / INCOME_HISTORY_PAGE_SIZE),
+  );
+
+  const pagedIncomeHistory = useMemo(() => {
+    const start = (incomePage - 1) * INCOME_HISTORY_PAGE_SIZE;
+    return filteredIncomeHistory.slice(start, start + INCOME_HISTORY_PAGE_SIZE);
+  }, [filteredIncomeHistory, incomePage]);
+
+  const incomeRangeStart = filteredIncomeHistory.length
+    ? (incomePage - 1) * INCOME_HISTORY_PAGE_SIZE + 1
+    : 0;
+  const incomeRangeEnd = Math.min(
+    incomePage * INCOME_HISTORY_PAGE_SIZE,
+    filteredIncomeHistory.length,
+  );
+
   const offerAppsCount = useMemo(
     () =>
       applications.filter(
@@ -629,45 +749,14 @@ const JobLabPage: React.FC = () => {
     [applications],
   );
 
-  const pipeline = useMemo(() => {
-    const reviewed = applications.filter(
-      (app) => app.status === "REVIEWED",
-    ).length;
-    const accepted = applications.filter(
-      (app) => app.status === "ACCEPTED",
-    ).length;
-    const working = applications.filter((app) =>
-      ["WORKING", "REVISION_REQUIRED", "SUBMITTED", "APPROVED"].includes(
-        app.status,
-      ),
-    ).length;
-    const paid = applications.filter((app) =>
-      ["PAID", "COMPLETED"].includes(app.status),
-    ).length;
-
-    const stages = [
-      {
-        id: "applied",
-        label: "Applied",
-        count: applications.length,
-        tone: "cyan",
-      },
-      { id: "reviewed", label: "Reviewed", count: reviewed, tone: "blue" },
-      { id: "accepted", label: "Accepted", count: accepted, tone: "purple" },
-      { id: "working", label: "Working", count: working, tone: "violet" },
-      { id: "paid", label: "Paid", count: paid, tone: "green" },
-    ] as const;
-
-    const progress =
-      stages.length > 0
-        ? (stages.filter((stage) => stage.count > 0).length / stages.length) *
-          100
-        : 0;
-
-    return { stages, progress };
-  }, [applications]);
-
   const statusSummary = useMemo(() => {
+    const closedCount = applications.filter((app) =>
+      ["REJECTED", "WITHDRAWN"].includes(app.status),
+    ).length;
+    const accountedCount =
+      stats.waiting + stats.active + stats.completed + closedCount;
+    const otherCount = Math.max(0, applications.length - accountedCount);
+
     const items = [
       {
         key: "waiting",
@@ -690,10 +779,14 @@ const JobLabPage: React.FC = () => {
       {
         key: "closed",
         label: "Đã đóng",
-        count: applications.filter((app) =>
-          ["REJECTED", "WITHDRAWN"].includes(app.status),
-        ).length,
+        count: closedCount,
         color: "#f59e0b",
+      },
+      {
+        key: "other",
+        label: "Khác",
+        count: otherCount,
+        color: "#94a3b8",
       },
     ] as const;
 
@@ -728,19 +821,29 @@ const JobLabPage: React.FC = () => {
     };
   }, [applications, stats.active, stats.completed, stats.waiting]);
 
+  useEffect(() => {
+    setIncomePage(1);
+  }, [incomeSearch, incomeStatusFilter, incomeTypeFilter, incomeSort]);
+
+  useEffect(() => {
+    setIncomePage((current) => Math.min(current, incomeTotalPages));
+  }, [incomeTotalPages]);
+
   const openWorkspace = (app: AppItem) => {
     // Full-time REGULAR jobs open inline view, not workspace
     if (app.type === "REGULAR") {
+      setJobType("REGULAR");
       setFullTimeAppId(app.id);
       setViewMode("workspace");
       return;
     }
-    const appIndex = workspaceApplications.findIndex(
+    const appIndex = workspaceListApplications.findIndex(
       (item) => item.id === app.id,
     );
     if (appIndex >= 0) {
       setWorkspacePage(Math.floor(appIndex / WORKSPACE_PAGE_SIZE) + 1);
     }
+    setFullTimeAppId(null);
     setSelectedId(app.id);
     setWorkNote("");
     setWorkFiles([]);
@@ -903,7 +1006,7 @@ const JobLabPage: React.FC = () => {
 
   return (
     <div
-      className={`jlx-shell${viewMode === "workspace" && workspaceApplications.length > 0 ? " jlx-shell--workspace" : ""}`}
+      className={`jlx-shell${viewMode === "workspace" && workspaceListApplications.length > 0 ? " jlx-shell--workspace" : ""}`}
     >
       <aside className="jlx-sidebar">
         <div className="jlx-brand">
@@ -1071,7 +1174,12 @@ const JobLabPage: React.FC = () => {
                     <button
                       type="button"
                       className="jlx-btn jlx-btn--ghost"
-                      onClick={() => setViewMode("workspace")}
+                      onClick={() => {
+                        setJobType("ALL");
+                        setSearchTerm("");
+                        setFullTimeAppId(null);
+                        setViewMode("workspace");
+                      }}
                     >
                       <FileText size={18} />
                       <span>WORKSPACE</span>
@@ -1159,43 +1267,8 @@ const JobLabPage: React.FC = () => {
                 {/* PIPELINE VISUALIZATION */}
                 <div className="jlx-card jlx-pipeline">
                   <div className="jlx-card-header">
-                    <Layers size={18} className="jlx-header-icon" />
-                    <h3 className="jlx-card-title">QUY TRÌNH ỨNG TUYỂN</h3>
-                  </div>
-                  <div className="jlx-pipeline-content">
-                    {pipeline.stages.map((stage, index) => (
-                      <div
-                        key={stage.id}
-                        className={`jlx-pipeline-step step-${stage.id}`}
-                      >
-                        <div className="jlx-step-header">
-                          <span className="jlx-step-index">0{index + 1}</span>
-                          <span className="jlx-step-label">
-                            {stage.label.toUpperCase()}
-                          </span>
-                        </div>
-                        <div className="jlx-step-bar-container">
-                          <div
-                            className="jlx-step-bar"
-                            style={{
-                              width: `${(stage.count / (applications.length || 1)) * 100}%`,
-                              backgroundColor: `var(--hud-${stage.tone})`,
-                            }}
-                          ></div>
-                        </div>
-                        <div className="jlx-step-footer">
-                          <span className="jlx-step-count">
-                            {stage.count} UNITS
-                          </span>
-                          <span className="jlx-step-percent">
-                            {Math.round(
-                              (stage.count / (applications.length || 1)) * 100,
-                            )}
-                            %
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                    <DollarSign size={18} className="jlx-header-icon" />
+                    <h3 className="jlx-card-title">LỊCH SỬ THU NHẬP</h3>
                   </div>
                   <article
                     className="jlx-income-summary"
@@ -1214,6 +1287,165 @@ const JobLabPage: React.FC = () => {
                       Thu nhập từ các đơn đã hoàn tất và đã thanh toán.
                     </span>
                   </article>
+
+                  <section className="jlx-income-history" aria-label="Bảng lịch sử thu nhập">
+                    <div className="jlx-income-history__toolbar">
+                      <label className="jlx-income-history__search">
+                        <Search size={14} />
+                        <input
+                          value={incomeSearch}
+                          onChange={(event) => setIncomeSearch(event.target.value)}
+                          placeholder="Tìm theo job hoặc công ty..."
+                        />
+                      </label>
+
+                      <div className="jlx-income-history__toolbar-right">
+                        <label className="jlx-income-history__control">
+                          <span>Trạng thái</span>
+                          <select
+                            value={incomeStatusFilter}
+                            onChange={(event) =>
+                              setIncomeStatusFilter(
+                                event.target.value as IncomeStatusFilter,
+                              )
+                            }
+                          >
+                            <option value="ALL">Tất cả</option>
+                            <option value="PAID">Đã thanh toán</option>
+                            <option value="COMPLETED">Hoàn tất</option>
+                          </select>
+                        </label>
+
+                        <label className="jlx-income-history__control">
+                          <span>Loại job</span>
+                          <select
+                            value={incomeTypeFilter}
+                            onChange={(event) =>
+                              setIncomeTypeFilter(event.target.value as JobType)
+                            }
+                          >
+                            <option value="ALL">Tất cả</option>
+                            <option value="REGULAR">Full-time</option>
+                            <option value="SHORT_TERM">Gig</option>
+                          </select>
+                        </label>
+
+                        <label className="jlx-income-history__control">
+                          <span>Sắp xếp</span>
+                          <select
+                            value={incomeSort}
+                            onChange={(event) =>
+                              setIncomeSort(event.target.value as IncomeSort)
+                            }
+                          >
+                            <option value="NEWEST">Mới nhất</option>
+                            <option value="OLDEST">Cũ nhất</option>
+                            <option value="AMOUNT_DESC">Tiền giảm dần</option>
+                            <option value="AMOUNT_ASC">Tiền tăng dần</option>
+                            <option value="TITLE_ASC">Tên job A-Z</option>
+                          </select>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="jlx-income-history__table-wrap">
+                      <table className="jlx-income-history__table">
+                        <thead>
+                          <tr>
+                            <th>Job</th>
+                            <th>Loại</th>
+                            <th>Trạng thái ghi nhận</th>
+                            <th>Ngày ghi nhận</th>
+                            <th className="is-right">Số tiền</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {pagedIncomeHistory.length === 0 ? (
+                            <tr>
+                              <td colSpan={5}>
+                                <div className="jlx-income-history__empty">
+                                  Không có khoản thu nhập nào phù hợp bộ lọc.
+                                </div>
+                              </td>
+                            </tr>
+                          ) : (
+                            pagedIncomeHistory.map((item) => (
+                              <tr key={`${item.id}-${item.applicationId}`}>
+                                <td>
+                                  <div className="jlx-income-history__job-title">
+                                    {item.title}
+                                  </div>
+                                  <div className="jlx-income-history__job-meta">
+                                    {item.company || "Không rõ công ty"}
+                                  </div>
+                                </td>
+                                <td>
+                                  <span className="jlx-income-history__type">
+                                    {item.type === "SHORT_TERM"
+                                      ? "Gig"
+                                      : "Full-time"}
+                                  </span>
+                                </td>
+                                <td>
+                                  <span
+                                    className={`jlx-income-history__status ${
+                                      item.status === "PAID"
+                                        ? "is-paid"
+                                        : "is-completed"
+                                    }`}
+                                  >
+                                    {item.statusLabel}
+                                  </span>
+                                </td>
+                                <td>{formatDate(item.recordedAt)}</td>
+                                <td className="is-right">
+                                  <span className="jlx-income-history__amount">
+                                    + {formatCurrency(item.amount)}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="jlx-income-history__pagination">
+                      <span>
+                        {filteredIncomeHistory.length
+                          ? `Hiển thị ${incomeRangeStart}-${incomeRangeEnd} / ${filteredIncomeHistory.length} khoản thu`
+                          : "Chưa có khoản thu nhập"}
+                      </span>
+                      <div className="jlx-income-history__pagination-actions">
+                        <button
+                          type="button"
+                          className="jlx-btn jlx-btn--ghost"
+                          onClick={() =>
+                            setIncomePage((current) => Math.max(1, current - 1))
+                          }
+                          disabled={incomePage <= 1}
+                        >
+                          Trước
+                        </button>
+                        <span>
+                          Trang {incomePage}/{incomeTotalPages}
+                        </span>
+                        <button
+                          type="button"
+                          className="jlx-btn jlx-btn--ghost"
+                          onClick={() =>
+                            setIncomePage((current) =>
+                              Math.min(incomeTotalPages, current + 1),
+                            )
+                          }
+                          disabled={incomePage >= incomeTotalPages}
+                        >
+                          Sau
+                        </button>
+                      </div>
+                    </div>
+                  </section>
+
                   <div className="jlx-card-corner top-left"></div>
                   <div className="jlx-card-corner bottom-right"></div>
                 </div>
@@ -1496,7 +1728,7 @@ const JobLabPage: React.FC = () => {
                 onBack={() => setFullTimeAppId(null)}
                 onRefresh={loadApplications}
               />
-            ) : !workspaceApplications.length ? (
+            ) : !workspaceListApplications.length ? (
               <div className="jlx-empty-state">
                 <FolderOpen size={42} />
                 <h3>Chưa có workspace nào</h3>
@@ -1516,7 +1748,34 @@ const JobLabPage: React.FC = () => {
                     </button>
                     <div className="jlx-workspace-bar__info">
                       <strong>{selectedApp?.title || "Workspace"}</strong>
-                      <span>{workspaceRailApplications.length} đơn Gig</span>
+                      <span>
+                        {workspaceListApplications.length} đơn • {jobType === "ALL"
+                          ? "Tất cả"
+                          : jobType === "REGULAR"
+                            ? "Dài hạn"
+                            : "Ngắn hạn"}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="jlx-workspace-bar__right">
+                    <div className="jlx-type-tabs jlx-type-tabs--workspace">
+                      {[
+                        { id: "ALL", label: "Tất cả" },
+                        { id: "REGULAR", label: "Dài hạn (Freelance)" },
+                        { id: "SHORT_TERM", label: "Ngắn hạn (Gig)" },
+                      ].map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          className={`jlx-type-tab${jobType === item.id ? " is-active" : ""}`}
+                          onClick={() => {
+                            setJobType(item.id as JobType);
+                            setWorkspacePage(1);
+                          }}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -1530,7 +1789,7 @@ const JobLabPage: React.FC = () => {
                         <h3>Workspace</h3>
                       </div>
                       <span className="jlx-pill-count">
-                        {workspaceRailApplications.length}
+                        {workspaceListApplications.length}
                       </span>
                     </div>
                     <div className="jlx-workspace-rail__list">
@@ -1543,15 +1802,17 @@ const JobLabPage: React.FC = () => {
                           <button
                             key={app.id}
                             type="button"
-                            className={`jlx-workspace-entry${selectedApp?.id === app.id ? " is-active" : ""}`}
-                            onClick={() => setSelectedId(app.id)}
+                            className={`jlx-workspace-entry${app.type === "SHORT_TERM" && selectedApp?.id === app.id ? " is-active" : ""}`}
+                            onClick={() => openWorkspace(app)}
                           >
                             <div className="jlx-workspace-entry__top">
                               <span className={`jlx-status is-${status.tone}`}>
                                 {status.label}
                               </span>
                               <span className="jlx-type is-compact">
-                                {app.type === "SHORT_TERM" ? "Gig" : "FT"}
+                                {app.type === "SHORT_TERM"
+                                  ? "Gig"
+                                  : "Freelance"}
                               </span>
                             </div>
                             <strong>{app.title}</strong>
@@ -1592,7 +1853,7 @@ const JobLabPage: React.FC = () => {
                   </aside>
 
                   <div className="jlx-workspace-detail">
-                    {selectedApp && (
+                    {selectedApp ? (
                       <>
                         <div className="jlx-workspace-hero">
                           <div>
@@ -2332,6 +2593,14 @@ const JobLabPage: React.FC = () => {
                           </article>
                         )}
                       </>
+                    ) : (
+                      <div className="jlx-empty-inline">
+                        {jobType === "REGULAR"
+                          ? "Chọn một đơn dài hạn ở cột trái để mở workspace chi tiết."
+                          : jobType === "SHORT_TERM"
+                            ? "Chọn một đơn Gig ở cột trái để xem workspace chi tiết."
+                            : "Chọn một đơn ở cột trái để mở workspace chi tiết."}
+                      </div>
                     )}
                   </div>
                 </div>

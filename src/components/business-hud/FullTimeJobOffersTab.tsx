@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -43,6 +43,8 @@ export default function FullTimeJobOffersTab({
   const [sendOfferModalAppId, setSendOfferModalAppId] = useState<number | null>(null);
   const [offerSalary, setOfferSalary] = useState<string>("");
   const [offerAdditionalReqs, setOfferAdditionalReqs] = useState<string>("");
+  const roundFiltersRef = useRef<HTMLDivElement | null>(null);
+  const openOfferModalTimeoutRef = useRef<number | null>(null);
 
   // Derive offer applications
   const offerApps = useMemo(() => {
@@ -73,20 +75,52 @@ export default function FullTimeJobOffersTab({
     if (filter === "round1") return round1Apps;
     if (filter === "round2") return round2Apps;
     return offerApps;
-  }, [filter, round1Apps, round2Apps]);
+  }, [filter, offerApps, round1Apps, round2Apps]);
 
   // Selected application
   const selectedApp = useMemo(
-    () => offerApps.find((a) => a.id === selectedId) ?? null,
-    [offerApps, selectedId]
+    () => filteredApps.find((a) => a.id === selectedId) ?? null,
+    [filteredApps, selectedId]
   );
 
-  // Auto-select first offer when list changes
+  // Keep selected offer aligned with current round filter.
   useEffect(() => {
-    if (selectedId === null && offerApps.length > 0) {
-      setSelectedId(offerApps[0].id);
+    if (filteredApps.length === 0) {
+      if (selectedId !== null) {
+        setSelectedId(null);
+      }
+      return;
     }
-  }, [offerApps]);
+
+    const selectedInFilter =
+      selectedId !== null && filteredApps.some((app) => app.id === selectedId);
+    if (!selectedInFilter) {
+      setSelectedId(filteredApps[0].id);
+    }
+  }, [filteredApps, selectedId]);
+
+  useEffect(() => {
+    return () => {
+      if (openOfferModalTimeoutRef.current !== null) {
+        window.clearTimeout(openOfferModalTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const openSendOfferModal = (
+    applicationId: number,
+    salary: string,
+    additionalReqs: string
+  ) => {
+    if (openOfferModalTimeoutRef.current !== null) {
+      window.clearTimeout(openOfferModalTimeoutRef.current);
+      openOfferModalTimeoutRef.current = null;
+    }
+
+    setSendOfferModalAppId(applicationId);
+    setOfferSalary(salary);
+    setOfferAdditionalReqs(additionalReqs);
+  };
 
   const handleSendOffer = async () => {
     if (sendOfferModalAppId === null) return;
@@ -110,9 +144,29 @@ export default function FullTimeJobOffersTab({
   };
 
   const handleSendOfferRound2 = (app: JobApplicationResponse) => {
-    setSendOfferModalAppId(app.id);
-    setOfferSalary(app.offerSalary ? String(app.offerSalary) : "");
-    setOfferAdditionalReqs(app.offerAdditionalRequirements ?? app.offerDetails ?? "");
+    openSendOfferModal(
+      app.id,
+      app.offerSalary ? String(app.offerSalary) : "",
+      app.offerAdditionalRequirements ?? app.offerDetails ?? ""
+    );
+  };
+
+  const handleReadyPoolOfferClick = (app: JobApplicationResponse) => {
+    setFilter("round1");
+    setSelectedId(round1Apps[0]?.id ?? null);
+    roundFiltersRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
+    if (openOfferModalTimeoutRef.current !== null) {
+      window.clearTimeout(openOfferModalTimeoutRef.current);
+    }
+
+    openOfferModalTimeoutRef.current = window.setTimeout(() => {
+      openSendOfferModal(app.id, "", "");
+      openOfferModalTimeoutRef.current = null;
+    }, 280);
   };
 
   const formatDate = (date?: string) => {
@@ -172,12 +226,53 @@ export default function FullTimeJobOffersTab({
         </div>
       </div>
 
+      {/* Ready pool */}
+      <div className="ftj-ready-pool">
+        <div className="ftj-ready-pool__header">
+          <UserCheck size={14} />
+          Ứng viên sẵn sàng nhận đề nghị ({readyPool.length})
+        </div>
+        {readyPool.length === 0 ? (
+          <div className="ftj-ready-pool__empty">
+            Không có ứng viên nào đang chờ nhận đề nghị
+          </div>
+        ) : (
+          <div className="ftj-ready-pool__list">
+            {readyPool.map((app) => (
+              <div key={app.id} className="ftj-ready-pool__item">
+                <div className="ftj-ready-pool__item-left">
+                  <div className="ftj-ready-pool__item-avatar">
+                    {getApplicantInitials(app.userFullName, app.userEmail)}
+                  </div>
+                  <div>
+                    <div className="ftj-ready-pool__item-name">
+                      {getApplicantDisplayName(app.userFullName, app.userEmail)}
+                    </div>
+                    <div className="ftj-ready-pool__item-title">
+                      {app.userProfessionalTitle ?? "Ứng viên"}
+                    </div>
+                  </div>
+                </div>
+                <button
+                  className="ftj-btn ftj-btn--cyan"
+                  style={{ padding: "0.35rem 0.75rem", fontSize: "0.72rem" }}
+                  onClick={() => handleReadyPoolOfferClick(app)}
+                >
+                  <Send size={12} />
+                  Gửi đề nghị
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* Main layout */}
       <div className="ftj-offers__layout">
         {/* Rail */}
         <div className="ftj-offers__rail">
           {/* Filters */}
-          <div className="ftj-offers__rail-filters">
+          <div className="ftj-offers__rail-filters" ref={roundFiltersRef}>
             {(["all", "round1", "round2"] as OfferFilter[]).map((f) => {
               const count =
                 f === "all"
@@ -409,51 +504,6 @@ export default function FullTimeJobOffersTab({
             </>
           )}
         </div>
-      </div>
-
-      {/* Ready pool */}
-      <div className="ftj-ready-pool">
-        <div className="ftj-ready-pool__header">
-          <UserCheck size={14} />
-          Ứng viên sẵn sàng nhận đề nghị ({readyPool.length})
-        </div>
-        {readyPool.length === 0 ? (
-          <div className="ftj-ready-pool__empty">
-            Không có ứng viên nào đang chờ nhận đề nghị
-          </div>
-        ) : (
-          <div className="ftj-ready-pool__list">
-            {readyPool.map((app) => (
-              <div key={app.id} className="ftj-ready-pool__item">
-                <div className="ftj-ready-pool__item-left">
-                  <div className="ftj-ready-pool__item-avatar">
-                    {getApplicantInitials(app.userFullName, app.userEmail)}
-                  </div>
-                  <div>
-                    <div className="ftj-ready-pool__item-name">
-                      {getApplicantDisplayName(app.userFullName, app.userEmail)}
-                    </div>
-                    <div className="ftj-ready-pool__item-title">
-                      {app.userProfessionalTitle ?? "Ứng viên"}
-                    </div>
-                  </div>
-                </div>
-                <button
-                  className="ftj-btn ftj-btn--cyan"
-                  style={{ padding: "0.35rem 0.75rem", fontSize: "0.72rem" }}
-                  onClick={() => {
-                    setSendOfferModalAppId(app.id);
-                    setOfferSalary("");
-                    setOfferAdditionalReqs("");
-                  }}
-                >
-                  <Send size={12} />
-                  Gửi đề nghị
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Send offer modal */}
