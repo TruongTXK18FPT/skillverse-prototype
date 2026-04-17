@@ -40,9 +40,9 @@ interface Mentor {
 const MentorshipPage = () => {
   const { isAuthenticated, user } = useAuth();
   const { showInfo } = useAppToast();
-  const primaryRole = user?.primaryRole?.toUpperCase() ?? '';
+  const primaryRole = user?.primaryRole?.toUpperCase() ?? "";
   const canUseMentorshipActions =
-    primaryRole === 'USER' || primaryRole === 'LEARNER' || primaryRole === '';
+    primaryRole === "USER" || primaryRole === "LEARNER" || primaryRole === "";
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -209,16 +209,16 @@ const MentorshipPage = () => {
     const shouldLock = bookingModalOpen || showLoginModal;
 
     if (shouldLock) {
-      document.body.classList.add('uplink-scroll-lock');
-      document.documentElement.classList.add('uplink-scroll-lock');
+      document.body.classList.add("uplink-scroll-lock");
+      document.documentElement.classList.add("uplink-scroll-lock");
     } else {
-      document.body.classList.remove('uplink-scroll-lock');
-      document.documentElement.classList.remove('uplink-scroll-lock');
+      document.body.classList.remove("uplink-scroll-lock");
+      document.documentElement.classList.remove("uplink-scroll-lock");
     }
 
     return () => {
-      document.body.classList.remove('uplink-scroll-lock');
-      document.documentElement.classList.remove('uplink-scroll-lock');
+      document.body.classList.remove("uplink-scroll-lock");
+      document.documentElement.classList.remove("uplink-scroll-lock");
     };
   }, [bookingModalOpen, showLoginModal]);
 
@@ -239,6 +239,16 @@ const MentorshipPage = () => {
   };
 
   const location = useLocation();
+
+  useEffect(() => {
+    const searchFromUrl = new URLSearchParams(location.search)
+      .get("search")
+      ?.trim();
+
+    if (searchFromUrl) {
+      setSearchQuery(searchFromUrl);
+    }
+  }, [location.search]);
 
   useEffect(() => {
     if (location.state && (location.state as any).openChatWith) {
@@ -392,9 +402,12 @@ const MentorshipPage = () => {
         <div className="uplink-content">
           <div className="uplink-empty">
             <Lock className="uplink-empty-icon" />
-            <h3 className="uplink-empty-title">Đăng nhập để truy cập Mentorship</h3>
+            <h3 className="uplink-empty-title">
+              Đăng nhập để truy cập Mentorship
+            </h3>
             <p className="uplink-empty-text">
-              Bạn cần đăng nhập để xem danh sách mentor, đặt lịch và nhắn tin trong khu vực này.
+              Bạn cần đăng nhập để xem danh sách mentor, đặt lịch và nhắn tin
+              trong khu vực này.
             </p>
             <button
               type="button"

@@ -37,6 +37,85 @@ const QUICK_SKILL_SUGGESTIONS = [
 ];
 const QUICK_LANGUAGE_SUGGESTIONS = ["Tiếng Việt", "English", "日本語", "한국어"];
 
+// Quick-fill templates
+const QUICK_CAREER_GOALS = [
+  "Tìm kiếm cơ hội phát triển trong lĩnh vực Frontend Development, mong muốn đóng góp vào các dự án có ý nghĩa và mang lại giá trị thực tiễn.",
+  "Theo đuổi sự nghiệp Full Stack Developer, không ngừng học hỏi công nghệ mới và xây dựng sản phẩm chất lượng cao.",
+  "Phát triển kỹ năng UI/UX Design, hướng đến tạo ra trải nghiệm người dùng tối ưu và giao diện hiện đại.",
+  "Xây dựng sự nghiệp trong lĩnh vực Mobile Development, thành thạo React Native và Flutter.",
+  "Trở thành Backend Developer chuyên sâu, thiết kế hệ thống scalable và hiệu quả.",
+  "Theo đuổi vai trò DevOps Engineer, tối ưu CI/CD pipeline và infrastructure automation.",
+];
+
+const QUICK_PROFESSIONAL_TITLES = [
+  "Frontend Developer",
+  "Full Stack Developer",
+  "Backend Developer",
+  "UI/UX Designer",
+  "Mobile Developer",
+  "DevOps Engineer",
+  "Data Analyst",
+  "Project Manager",
+  "Freelancer",
+];
+
+const COMMON_LOCATIONS = [
+  "TP.HCM", "Hà Nội", "Đà Nẵng", "Cần Thơ", "Hải Phòng",
+  "Buôn Ma Thuột", "Nha Trang", "Vinh", "Remote / Toàn quốc",
+];
+
+const CURRENT_YEAR = new Date().getFullYear();
+const MONTHS = [
+  { value: "01", label: "Tháng 1" }, { value: "02", label: "Tháng 2" },
+  { value: "03", label: "Tháng 3" }, { value: "04", label: "Tháng 4" },
+  { value: "05", label: "Tháng 5" }, { value: "06", label: "Tháng 6" },
+  { value: "07", label: "Tháng 7" }, { value: "08", label: "Tháng 8" },
+  { value: "09", label: "Tháng 9" }, { value: "10", label: "Tháng 10" },
+  { value: "11", label: "Tháng 11" }, { value: "12", label: "Tháng 12" },
+];
+
+const YEAR_OPTIONS = Array.from({ length: CURRENT_YEAR - 1980 + 1 }, (_, i) => CURRENT_YEAR - i);
+
+const COMMON_INSTITUTIONS = [
+  "Đại học FPT", "Đại học Bách Khoa TP.HCM", "Đại học KHTN TP.HCM",
+  "Đại học Kinh tế TP.HCM", "Đại học RMIT", "VNU University of Science",
+  "Đại học Bách Khoa Hà Nội", "FPT Polytechnic", "Cao đẳng FPT",
+];
+
+const COMMON_DEGREES = [
+  "Cử nhân", "Kỹ sư", "Cử nhân Kinh tế", "Thạc sĩ", "Kỹ sư phần mềm",
+  "Cử nhân Quản trị Kinh doanh", "Cử nhân CNTT", "Cử nhân Thiết kế",
+];
+
+const COMMON_FIELD_OF_STUDY = [
+  "Kỹ thuật phần mềm", "Công nghệ thông tin", "Khoa học máy tính",
+  "Thiết kế đồ họa", "Quản trị kinh doanh", "Marketing",
+  "Kinh tế", "Luật", "Ngôn ngữ Anh", "Toán tin",
+];
+
+const COMMON_COMPANIES = [
+  "FPT Software", "Viettel", "VNPT", "CMC Corporation", "NashTech",
+  "Enouvo", "Orient Software", "VNG", "MoMo", "Shopee", "TikTok",
+];
+
+const COMMON_POSITIONS = [
+  "Frontend Developer", "Backend Developer", "Full Stack Developer",
+  "UI/UX Designer", "Mobile Developer", "QA Engineer",
+  "DevOps Engineer", "Data Analyst", "Business Analyst",
+  "Project Manager", "Product Owner", "Tech Lead",
+];
+
+const parseDateStr = (val?: string) => {
+  if (!val) return { month: "", year: "" };
+  const parts = val.split("/");
+  if (parts.length === 2) return { month: parts[0], year: parts[1] };
+  if (val.length === 4) return { month: "", year: val };
+  return { month: "", year: "" };
+};
+
+const formatDateVal = (month: string, year: string) =>
+  month ? `${month}/${year}` : year;
+
 const buildSlugFromName = (input?: string) => {
   if (!input) return "";
   return input
@@ -76,6 +155,21 @@ const createEmptyEducation = (): PortfolioEducationDTO => ({
   status: "STUDYING",
   description: "",
 });
+
+const applyTimePreset = (
+  currentJob: boolean,
+  startDate: string,
+  endDate: string,
+  field: "start" | "end",
+): { month: string; year: string } => {
+  if (field === "start") {
+    const parsed = parseDateStr(startDate);
+    return { month: parsed.month || "01", year: parsed.year || String(CURRENT_YEAR) };
+  }
+  if (currentJob) return { month: "", year: "" };
+  const parsed = parseDateStr(endDate);
+  return { month: parsed.month || "", year: parsed.year || String(CURRENT_YEAR) };
+};
 
 const DossierCreatePortfolioPage = () => {
   const { theme } = useTheme();
@@ -144,6 +238,9 @@ const DossierCreatePortfolioPage = () => {
   const [showAdvancedFields, setShowAdvancedFields] = useState(false);
   const [loadingSmartFill, setLoadingSmartFill] = useState(false);
   const [manualSlugEdited, setManualSlugEdited] = useState(false);
+  const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
+  const [filteredLocations, setFilteredLocations] = useState<string[]>([]);
+  const [locationListIdx, setLocationListIdx] = useState(-1);
 
   useEffect(() => {
     const checkProfileState = async () => {
@@ -204,13 +301,10 @@ const DossierCreatePortfolioPage = () => {
     const reader = new FileReader();
     reader.onloadend = () => {
       const preview = reader.result as string;
-      if (type === "avatar") {
-        setAvatar(file);
-        setAvatarPreview(preview);
-      } else if (type === "video") {
+      if (type === "video") {
         setVideo(file);
         setVideoPreview(preview);
-      } else {
+      } else if (type === "cover") {
         setCoverImage(file);
         setCoverPreview(preview);
       }
@@ -334,6 +428,18 @@ const DossierCreatePortfolioPage = () => {
     }));
   };
 
+  const handleWorkStartTimeChange = (index: number, month: string, year: string) => {
+    handleUpdateWorkExperience(index, "startDate", formatDateVal(month, year));
+  };
+
+  const handleWorkEndTimeChange = (index: number, month: string, year: string) => {
+    handleUpdateWorkExperience(index, "endDate", formatDateVal(month, year));
+  };
+
+  const handleWorkStartNow = (index: number) => {
+    handleUpdateWorkExperience(index, "startDate", `01/${CURRENT_YEAR}`);
+  };
+
   const handleRemoveWorkExperience = (index: number) => {
     setFormData((prev) => ({
       ...prev,
@@ -361,6 +467,14 @@ const DossierCreatePortfolioPage = () => {
         itemIndex === index ? { ...item, [field]: value } : item,
       ),
     }));
+  };
+
+  const handleEduStartTimeChange = (index: number, year: string) => {
+    handleUpdateEducation(index, "startDate", year);
+  };
+
+  const handleEduEndTimeChange = (index: number, year: string) => {
+    handleUpdateEducation(index, "endDate", year);
   };
 
   const handleRemoveEducation = (index: number) => {
@@ -448,6 +562,40 @@ const DossierCreatePortfolioPage = () => {
       });
     } finally {
       setLoadingSmartFill(false);
+    }
+  };
+
+  const handleLocationChange = (val: string) => {
+    setFormData((prev) => ({ ...prev, location: val }));
+    setLocationListIdx(-1);
+    if (val.trim().length < 1) {
+      setLocationDropdownOpen(false);
+      setFilteredLocations([]);
+      return;
+    }
+    const lower = val.toLowerCase();
+    const matches = COMMON_LOCATIONS.filter((l) => l.toLowerCase().includes(lower));
+    setFilteredLocations(matches.slice(0, 6));
+    setLocationDropdownOpen(matches.length > 0);
+  };
+
+  const handleLocationKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!locationDropdownOpen) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setLocationListIdx((i) => Math.min(i + 1, filteredLocations.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setLocationListIdx((i) => Math.max(i - 1, -1));
+    } else if (e.key === "Enter" && locationListIdx >= 0) {
+      e.preventDefault();
+      const selected = filteredLocations[locationListIdx];
+      setFormData((prev) => ({ ...prev, location: selected }));
+      setLocationDropdownOpen(false);
+      setFilteredLocations([]);
+      setLocationListIdx(-1);
+    } else if (e.key === "Escape") {
+      setLocationDropdownOpen(false);
     }
   };
 
@@ -788,6 +936,18 @@ const DossierCreatePortfolioPage = () => {
               placeholder="Ví dụ: Lập trình viên Full Stack"
               required
             />
+            <div className="dossier-create-quick-fill-row">
+              {QUICK_PROFESSIONAL_TITLES.map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  className="dossier-create-quick-fill-chip"
+                  onClick={() => setFormData((p) => ({ ...p, professionalTitle: t }))}
+                >
+                  + {t}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="dossier-form-group">
@@ -817,17 +977,50 @@ const DossierCreatePortfolioPage = () => {
                 }
                 min="0"
               />
+              <div className="dossier-create-quick-fill-row">
+                {[0, 1, 2, 3, 5, 7, 10].map((y) => (
+                  <button
+                    key={y}
+                    type="button"
+                    className="dossier-create-quick-fill-chip"
+                    onClick={() =>
+                      setFormData((p) => ({ ...p, yearsOfExperience: y }))
+                    }
+                  >
+                    {y === 0 ? "Mới" : `${y} năm`}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="dossier-form-group">
+            <div className="dossier-form-group dossier-create-location-wrap">
               <label className="dossier-form-label">Địa điểm</label>
               <input
                 type="text"
                 className="dossier-input"
                 value={formData.location || ""}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                placeholder="Ví dụ: TP.HCM, Việt Nam"
+                onChange={(e) => handleLocationChange(e.target.value)}
+                onKeyDown={handleLocationKeyDown}
+                onBlur={() => setTimeout(() => setLocationDropdownOpen(false), 150)}
+                placeholder="TP.HCM / Remote / Hà Nội..."
               />
+              {locationDropdownOpen && filteredLocations.length > 0 && (
+                <div className="dossier-create-location-list">
+                  {filteredLocations.map((loc, i) => (
+                    <div
+                      key={loc}
+                      className={`dossier-create-location-option${locationListIdx === i ? " active" : ""}`}
+                      onMouseDown={() => {
+                        setFormData((p) => ({ ...p, location: loc }));
+                        setLocationDropdownOpen(false);
+                        setFilteredLocations([]);
+                      }}
+                    >
+                      {loc}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -840,6 +1033,21 @@ const DossierCreatePortfolioPage = () => {
               placeholder="Mô tả ngắn gọn mục tiêu nghề nghiệp..."
               rows={4}
             />
+            <div className="dossier-create-quick-fill-row">
+              {QUICK_CAREER_GOALS.map((goal, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className="dossier-create-quick-fill-chip"
+                  onClick={() =>
+                    setFormData((p) => ({ ...p, careerGoals: goal }))
+                  }
+                  title={goal}
+                >
+                  Mẫu {i + 1}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -918,8 +1126,20 @@ const DossierCreatePortfolioPage = () => {
                     onChange={(e) =>
                       handleUpdateWorkExperience(index, "companyName", e.target.value)
                     }
-                    placeholder="Ví dụ: FPT Software"
+                    placeholder="FPT Software"
                   />
+                  <div className="dossier-create-quick-fill-row">
+                    {COMMON_COMPANIES.slice(0, 6).map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        className="dossier-create-quick-fill-chip"
+                        onClick={() => handleUpdateWorkExperience(index, "companyName", c)}
+                      >
+                        + {c}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <div className="dossier-form-group">
                   <label className="dossier-form-label">Vị trí</label>
@@ -930,8 +1150,20 @@ const DossierCreatePortfolioPage = () => {
                     onChange={(e) =>
                       handleUpdateWorkExperience(index, "position", e.target.value)
                     }
-                    placeholder="Ví dụ: Frontend Developer"
+                    placeholder="Frontend Developer"
                   />
+                  <div className="dossier-create-quick-fill-row">
+                    {COMMON_POSITIONS.slice(0, 5).map((p) => (
+                      <button
+                        key={p}
+                        type="button"
+                        className="dossier-create-quick-fill-chip"
+                        onClick={() => handleUpdateWorkExperience(index, "position", p)}
+                      >
+                        + {p}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -947,32 +1179,97 @@ const DossierCreatePortfolioPage = () => {
                     }
                     placeholder="TP.HCM / Remote"
                   />
+                  <div className="dossier-create-quick-fill-row">
+                    {COMMON_LOCATIONS.slice(0, 5).map((l) => (
+                      <button
+                        key={l}
+                        type="button"
+                        className="dossier-create-quick-fill-chip"
+                        onClick={() => handleUpdateWorkExperience(index, "location", l)}
+                      >
+                        + {l}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="dossier-form-group">
-                  <label className="dossier-form-label">Bắt đầu</label>
-                  <input
-                    type="text"
-                    className="dossier-input"
-                    value={experience.startDate || ""}
-                    onChange={(e) =>
-                      handleUpdateWorkExperience(index, "startDate", e.target.value)
-                    }
-                    placeholder="01/2023"
-                  />
-                </div>
-                <div className="dossier-form-group">
-                  <label className="dossier-form-label">Kết thúc</label>
-                  <input
-                    type="text"
-                    className="dossier-input"
-                    value={experience.endDate || ""}
-                    onChange={(e) =>
-                      handleUpdateWorkExperience(index, "endDate", e.target.value)
-                    }
-                    placeholder="12/2024"
-                    disabled={Boolean(experience.currentJob)}
-                  />
-                </div>
+                <div className="dossier-create-time-card">
+                    <div className="dossier-create-time-group">
+                      <div className="dossier-form-group" style={{ marginBottom: 0, flex: 1 }}>
+                        <label className="dossier-form-label" style={{ fontSize: "0.78rem" }}>Bắt đầu</label>
+                        <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
+                          <select
+                            className="dossier-select dossier-create-month-select"
+                            value={parseDateStr(experience.startDate).month}
+                            onChange={(e) =>
+                              handleWorkStartTimeChange(index, e.target.value, parseDateStr(experience.startDate).year || String(CURRENT_YEAR))
+                            }
+                          >
+                            <option value="">Tháng</option>
+                            {MONTHS.map((m) => (
+                              <option key={m.value} value={m.value}>{m.label}</option>
+                            ))}
+                          </select>
+                          <select
+                            className="dossier-select dossier-create-year-select"
+                            value={parseDateStr(experience.startDate).year}
+                            onChange={(e) =>
+                              handleWorkStartTimeChange(index, parseDateStr(experience.startDate).month || "01", e.target.value)
+                            }
+                          >
+                            <option value="">Năm</option>
+                            {YEAR_OPTIONS.map((y) => (
+                              <option key={y} value={String(y)}>{y}</option>
+                            ))}
+                          </select>
+                          <button
+                            type="button"
+                            className="dossier-create-time-preset-btn"
+                            onClick={() => handleWorkStartNow(index)}
+                            title="Đặt về tháng hiện tại"
+                          >
+                            Nay
+                          </button>
+                        </div>
+                      </div>
+
+                      <span className="dossier-create-time-separator">→</span>
+
+                      <div className="dossier-form-group" style={{ marginBottom: 0, flex: 1 }}>
+                        <label className="dossier-form-label" style={{ fontSize: "0.78rem" }}>Kết thúc</label>
+                        <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
+                          <select
+                            className="dossier-select dossier-create-month-select"
+                            value={parseDateStr(experience.endDate).month}
+                            onChange={(e) =>
+                              handleWorkEndTimeChange(index, e.target.value, parseDateStr(experience.endDate).year || String(CURRENT_YEAR))
+                            }
+                            disabled={Boolean(experience.currentJob)}
+                          >
+                            <option value="">Tháng</option>
+                            {MONTHS.map((m) => (
+                              <option key={m.value} value={m.value}>{m.label}</option>
+                            ))}
+                          </select>
+                          <select
+                            className="dossier-select dossier-create-year-select"
+                            value={parseDateStr(experience.endDate).year}
+                            onChange={(e) =>
+                              handleWorkEndTimeChange(index, parseDateStr(experience.endDate).month || "01", e.target.value)
+                            }
+                            disabled={Boolean(experience.currentJob)}
+                          >
+                            <option value="">Năm</option>
+                            {YEAR_OPTIONS.map((y) => (
+                              <option key={y} value={String(y)}>{y}</option>
+                            ))}
+                          </select>
+                          {experience.currentJob && (
+                            <span style={{ fontSize: "0.7rem", color: "#22d3ee" }}>Đang làm</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
               </div>
 
               <label
@@ -1071,8 +1368,20 @@ const DossierCreatePortfolioPage = () => {
                     onChange={(e) =>
                       handleUpdateEducation(index, "institution", e.target.value)
                     }
-                    placeholder="Ví dụ: Đại học FPT"
+                    placeholder="Đại học FPT"
                   />
+                  <div className="dossier-create-quick-fill-row">
+                    {COMMON_INSTITUTIONS.slice(0, 5).map((inst) => (
+                      <button
+                        key={inst}
+                        type="button"
+                        className="dossier-create-quick-fill-chip"
+                        onClick={() => handleUpdateEducation(index, "institution", inst)}
+                      >
+                        + {inst}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <div className="dossier-form-group">
                   <label className="dossier-form-label">Bằng cấp / chương trình</label>
@@ -1083,8 +1392,20 @@ const DossierCreatePortfolioPage = () => {
                     onChange={(e) =>
                       handleUpdateEducation(index, "degree", e.target.value)
                     }
-                    placeholder="Ví dụ: Cử nhân CNTT"
+                    placeholder="Cử nhân CNTT"
                   />
+                  <div className="dossier-create-quick-fill-row">
+                    {COMMON_DEGREES.slice(0, 5).map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        className="dossier-create-quick-fill-chip"
+                        onClick={() => handleUpdateEducation(index, "degree", d)}
+                      >
+                        + {d}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -1098,8 +1419,20 @@ const DossierCreatePortfolioPage = () => {
                     onChange={(e) =>
                       handleUpdateEducation(index, "fieldOfStudy", e.target.value)
                     }
-                    placeholder="Ví dụ: Kỹ thuật phần mềm"
+                    placeholder="Kỹ thuật phần mềm"
                   />
+                  <div className="dossier-create-quick-fill-row">
+                    {COMMON_FIELD_OF_STUDY.slice(0, 5).map((f) => (
+                      <button
+                        key={f}
+                        type="button"
+                        className="dossier-create-quick-fill-chip"
+                        onClick={() => handleUpdateEducation(index, "fieldOfStudy", f)}
+                      >
+                        + {f}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <div className="dossier-form-group">
                   <label className="dossier-form-label">Địa điểm</label>
@@ -1112,33 +1445,49 @@ const DossierCreatePortfolioPage = () => {
                     }
                     placeholder="TP.HCM"
                   />
+                  <div className="dossier-create-quick-fill-row">
+                    {COMMON_LOCATIONS.slice(0, 5).map((l) => (
+                      <button
+                        key={l}
+                        type="button"
+                        className="dossier-create-quick-fill-chip"
+                        onClick={() => handleUpdateEducation(index, "location", l)}
+                      >
+                        + {l}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               <div className="dossier-form-row">
                 <div className="dossier-form-group">
                   <label className="dossier-form-label">Bắt đầu</label>
-                  <input
-                    type="text"
-                    className="dossier-input"
+                  <select
+                    className="dossier-select dossier-create-year-select"
                     value={education.startDate || ""}
-                    onChange={(e) =>
-                      handleUpdateEducation(index, "startDate", e.target.value)
-                    }
-                    placeholder="2020"
-                  />
+                    onChange={(e) => handleEduStartTimeChange(index, e.target.value)}
+                    style={{ width: "100%" }}
+                  >
+                    <option value="">Chọn năm</option>
+                    {YEAR_OPTIONS.map((y) => (
+                      <option key={y} value={String(y)}>{y}</option>
+                    ))}
+                  </select>
                 </div>
                 <div className="dossier-form-group">
                   <label className="dossier-form-label">Kết thúc</label>
-                  <input
-                    type="text"
-                    className="dossier-input"
+                  <select
+                    className="dossier-select dossier-create-year-select"
                     value={education.endDate || ""}
-                    onChange={(e) =>
-                      handleUpdateEducation(index, "endDate", e.target.value)
-                    }
-                    placeholder="2024"
-                  />
+                    onChange={(e) => handleEduEndTimeChange(index, e.target.value)}
+                    style={{ width: "100%" }}
+                  >
+                    <option value="">Chọn năm</option>
+                    {YEAR_OPTIONS.map((y) => (
+                      <option key={y} value={String(y)}>{y}</option>
+                    ))}
+                  </select>
                 </div>
                 <div className="dossier-form-group">
                   <label className="dossier-form-label">Trạng thái</label>
@@ -1443,10 +1792,31 @@ const DossierCreatePortfolioPage = () => {
                 <option value="BUSY">Bận</option>
                 <option value="NOT_AVAILABLE">Chưa sẵn sàng</option>
               </select>
+              <div className="dossier-create-quick-fill-row">
+                {[
+                  { val: "AVAILABLE", label: "Sẵn sàng" },
+                  { val: "BUSY", label: "Bận" },
+                  { val: "NOT_AVAILABLE", label: "Chưa sẵn sàng" },
+                ].map((s) => (
+                  <button
+                    key={s.val}
+                    type="button"
+                    className={`dossier-create-quick-fill-chip${formData.availabilityStatus === s.val ? " active" : ""}`}
+                    style={
+                      formData.availabilityStatus === s.val
+                        ? { borderColor: "#22d3ee", background: "rgba(6,182,212,0.22)", color: "#ecfeff" }
+                        : {}
+                    }
+                    onClick={() => setFormData((p) => ({ ...p, availabilityStatus: s.val }))}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Mức giá theo giờ</label>
+              <label className="dossier-form-label">Mức giá theo giờ (VND)</label>
               <input
                 type="number"
                 className="dossier-input"
@@ -1458,8 +1828,20 @@ const DossierCreatePortfolioPage = () => {
                   })
                 }
                 min="0"
-                step="1000"
+                step="10000"
               />
+              <div className="dossier-create-quick-fill-row">
+                {[50000, 100000, 150000, 200000, 300000, 500000].map((amt) => (
+                  <button
+                    key={amt}
+                    type="button"
+                    className="dossier-create-quick-fill-chip"
+                    onClick={() => setFormData((p) => ({ ...p, hourlyRate: amt }))}
+                  >
+                    {amt >= 1000 ? `${(amt / 1000).toFixed(0)}K` : amt}/h
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="dossier-form-group">

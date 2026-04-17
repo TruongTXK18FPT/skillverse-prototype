@@ -16,7 +16,6 @@ import {
   Cpu,
   Layers,
   Activity,
-  MessageSquare,
   ExternalLink,
 } from "lucide-react";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
@@ -484,29 +483,17 @@ const CourseDetailPage = () => {
       });
   };
 
-  const handleMentorChat = () => {
-    if (!user) {
-      setShowLoginModal(true);
-      return;
-    }
-    showInfo(
-      "Chat mở sau khi đặt lịch",
-      "Mentor chat chỉ được mở sau khi bạn tạo booking. Hệ thống sẽ đưa bạn tới trang mentorship để đặt lịch.",
-    );
-    navigate(
-      `/mentorship?search=${encodeURIComponent(course?.author?.fullName || "")}`,
-    );
-  };
-
   const handleMentorProfile = () => {
-    if (!user) {
-      setShowLoginModal(true);
+    const mentorSlug = mentorProfile?.slug?.trim();
+    if (!mentorSlug) {
+      showInfo(
+        "Chưa có portfolio công khai",
+        "Mentor này chưa thiết lập đường dẫn portfolio công khai.",
+      );
       return;
     }
 
-    navigate(
-      `/mentorship?search=${encodeURIComponent(course?.author?.fullName || "")}`,
-    );
+    navigate(`/portfolio/${encodeURIComponent(mentorSlug)}`);
   };
 
   const handlePreviewLearning = () => {
@@ -617,7 +604,7 @@ const CourseDetailPage = () => {
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         title="Đăng nhập để tiếp tục"
-        message="Bạn cần đăng nhập để kích hoạt khóa học, xem hồ sơ và nhắn tin với mentor"
+        message="Bạn cần đăng nhập để kích hoạt khóa học và sử dụng đầy đủ tính năng học tập"
         feature="Khóa học"
       />
 
@@ -815,13 +802,6 @@ const CourseDetailPage = () => {
                     >
                       <ExternalLink className="cockpit-detail-instructor-mini-btn-icon" />
                       HỒ SƠ MENTOR
-                    </button>
-                    <button
-                      className="cockpit-detail-instructor-mini-btn primary"
-                      onClick={handleMentorChat}
-                    >
-                      <MessageSquare className="cockpit-detail-instructor-mini-btn-icon" />
-                      NHẮN TIN
                     </button>
                   </div>
                 </div>

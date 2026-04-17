@@ -61,7 +61,13 @@ export interface UserProfileDTO {
   customUrlSlug?: string;
   metaDescription?: string;
   keywords?: string; // JSON array
-  
+
+  // Achievements (JSON array - for mentor accounts)
+  achievements?: string; // JSON array: ["Best Mentor 2024", "Top Rated"]
+
+  // Owner role for frontend tab visibility
+  primaryRole?: string; // MENTOR, USER, RECRUITER, ADMIN
+
   // Timestamps
   createdAt?: string;
   updatedAt?: string;

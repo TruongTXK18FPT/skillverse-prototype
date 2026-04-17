@@ -675,7 +675,7 @@ const Header: React.FC = () => {
                       {
                         name: "Hồ Sơ",
                         description: "Quản lý hồ sơ giảng viên của bạn",
-                        path: "/profile/mentor",
+                        path: "/portfolio",
                         icon: User,
                         requireAuth: true,
                       },
@@ -770,57 +770,57 @@ const Header: React.FC = () => {
 
                     // Student-only primary actions.
                     const userSection = isStudentRole ? (
-                        <div className="sv-mega-section">
-                          <h4 className="sv-mega-section-title">
-                            <Target size={14} className="sv-section-icon" />
-                            <span>Hành động chính</span>
-                          </h4>
-                          <div className="sv-mega-grid sv-mega-grid--primary">
-                            {userPrimaryItems.map((item) =>
-                              item.requireAuth && !isAuthenticated ? (
-                                <div
-                                  key={item.path + item.name}
-                                  className="sv-mega-link sv-mega-link--primary"
-                                  style={{ cursor: "pointer" }}
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    setLoginRequiredFeature(item.name);
-                                    setShowLoginModal(true);
-                                    setShowQuickNav(false);
-                                  }}
-                                >
-                                  <item.icon className="sv-mega-link-icon" />
-                                  <div className="sv-mega-link-content">
-                                    <h3 className="sv-mega-link-title">
-                                      {item.name}
-                                    </h3>
-                                    <p className="sv-mega-link-desc">
-                                      {item.description}
-                                    </p>
-                                  </div>
+                      <div className="sv-mega-section">
+                        <h4 className="sv-mega-section-title">
+                          <Target size={14} className="sv-section-icon" />
+                          <span>Hành động chính</span>
+                        </h4>
+                        <div className="sv-mega-grid sv-mega-grid--primary">
+                          {userPrimaryItems.map((item) =>
+                            item.requireAuth && !isAuthenticated ? (
+                              <div
+                                key={item.path + item.name}
+                                className="sv-mega-link sv-mega-link--primary"
+                                style={{ cursor: "pointer" }}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setLoginRequiredFeature(item.name);
+                                  setShowLoginModal(true);
+                                  setShowQuickNav(false);
+                                }}
+                              >
+                                <item.icon className="sv-mega-link-icon" />
+                                <div className="sv-mega-link-content">
+                                  <h3 className="sv-mega-link-title">
+                                    {item.name}
+                                  </h3>
+                                  <p className="sv-mega-link-desc">
+                                    {item.description}
+                                  </p>
                                 </div>
-                              ) : (
-                                <Link
-                                  key={item.path + item.name}
-                                  to={item.path}
-                                  className="sv-mega-link sv-mega-link--primary"
-                                  onClick={() => setShowQuickNav(false)}
-                                >
-                                  <item.icon className="sv-mega-link-icon" />
-                                  <div className="sv-mega-link-content">
-                                    <h3 className="sv-mega-link-title">
-                                      {item.name}
-                                    </h3>
-                                    <p className="sv-mega-link-desc">
-                                      {item.description}
-                                    </p>
-                                  </div>
-                                </Link>
-                              ),
-                            )}
-                          </div>
+                              </div>
+                            ) : (
+                              <Link
+                                key={item.path + item.name}
+                                to={item.path}
+                                className="sv-mega-link sv-mega-link--primary"
+                                onClick={() => setShowQuickNav(false)}
+                              >
+                                <item.icon className="sv-mega-link-icon" />
+                                <div className="sv-mega-link-content">
+                                  <h3 className="sv-mega-link-title">
+                                    {item.name}
+                                  </h3>
+                                  <p className="sv-mega-link-desc">
+                                    {item.description}
+                                  </p>
+                                </div>
+                              </Link>
+                            ),
+                          )}
                         </div>
-                      ) : null;
+                      </div>
+                    ) : null;
 
                     // Recruiter primary actions.
                     const recruiterSection = isRecruiterRole ? (
@@ -874,19 +874,22 @@ const Header: React.FC = () => {
                             {[
                               {
                                 name: "Lộ Trình Học Tập",
-                                description: "Khám phá lộ trình học tập và phát triển kỹ năng",
+                                description:
+                                  "Khám phá lộ trình học tập và phát triển kỹ năng",
                                 path: "/roadmap",
                                 icon: Map,
                               },
                               {
                                 name: "Trợ Lý AI",
-                                description: "Nhận hỗ trợ từ trợ lý AI thông minh",
+                                description:
+                                  "Nhận hỗ trợ từ trợ lý AI thông minh",
                                 path: "/chatbot",
                                 icon: Bot,
                               },
                               {
                                 name: "Meowl Shop",
-                                description: "Cửa hàng Skin Neon Tech độc quyền",
+                                description:
+                                  "Cửa hàng Skin Neon Tech độc quyền",
                                 path: "/meowl-shop",
                                 icon: ShoppingBag,
                               },
@@ -905,8 +908,12 @@ const Header: React.FC = () => {
                               >
                                 <item.icon className="sv-mega-link-icon" />
                                 <div className="sv-mega-link-content">
-                                  <h3 className="sv-mega-link-title">{item.name}</h3>
-                                  <p className="sv-mega-link-desc">{item.description}</p>
+                                  <h3 className="sv-mega-link-title">
+                                    {item.name}
+                                  </h3>
+                                  <p className="sv-mega-link-desc">
+                                    {item.description}
+                                  </p>
                                 </div>
                               </Link>
                             ))}
@@ -1490,7 +1497,9 @@ const Header: React.FC = () => {
                           }
 
                           const isGuest = !isAuthenticated;
-                          return isGuest && guestShowcaseQuickNavPaths.has(item.path);
+                          return (
+                            isGuest && guestShowcaseQuickNavPaths.has(item.path)
+                          );
                         }
 
                         return true;

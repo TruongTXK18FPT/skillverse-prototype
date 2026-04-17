@@ -66,6 +66,18 @@ export const getProfileBySlug = async (
 };
 
 /**
+ * Get all public portfolios (used for mentorship listing)
+ * Maps to Mentor interface for MentorshipPage
+ */
+export const getAllMentorsFromPortfolio = async (): Promise<any[]> => {
+  const response = await api.get<ApiResponse<any[]>>("/portfolio/public");
+  if (!response.data.success || !response.data.data) {
+    return [];
+  }
+  return response.data.data;
+};
+
+/**
  * Get public profile by user ID
  */
 export const getPublicProfile = async (
@@ -190,9 +202,10 @@ export const updateExtendedProfile = async (
     "/portfolio/profile",
     formData,
     {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      // NOTE: Do NOT set Content-Type manually for FormData.
+      // axiosInstance interceptor will remove it so axios auto-sets
+      // the correct multipart/form-data with boundary parameter.
+      headers: {},
       timeout: 360000, // 2 minutes for large file uploads
       onUploadProgress: (progressEvent) => {
         if (progressEvent.total) {

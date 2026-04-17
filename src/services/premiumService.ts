@@ -8,7 +8,12 @@ import {
 
 type PremiumPlanApiResponse = Omit<
   PremiumPlan,
-  "price" | "discountPercent" | "discountedPrice" | "studentDiscountPercent" | "studentPrice" | "features"
+  | "price"
+  | "discountPercent"
+  | "discountedPrice"
+  | "studentDiscountPercent"
+  | "studentPrice"
+  | "features"
 > & {
   price: number | string;
   discountPercent?: number | string;
@@ -92,7 +97,8 @@ const normalizeSubscription = (
   isStudentSubscription:
     subscription.isStudentSubscription ?? subscription.isDiscountedSubscription,
   renewalPrice:
-    subscription.renewalPrice !== undefined && subscription.renewalPrice !== null
+    subscription.renewalPrice !== undefined &&
+    subscription.renewalPrice !== null
       ? String(subscription.renewalPrice)
       : undefined,
   scheduledChangeRenewalPrice:
@@ -116,15 +122,62 @@ const normalizeCheckoutPreview = (
   proratedTargetPrice: String(preview.proratedTargetPrice ?? "0"),
 });
 
+const SUBSCRIPTION_CACHE_TTL_MS = 60 * 1000;
+const SUBSCRIPTION_MISS_TTL_MS = 30 * 1000;
+
+type SubscriptionCacheEntry = {
+  value: UserSubscriptionResponse | null;
+  expiresAt: number;
+};
+
+let currentSubscriptionCache: SubscriptionCacheEntry | null = null;
+let currentSubscriptionRequest: Promise<UserSubscriptionResponse | null> | null =
+  null;
+
+const getCachedCurrentSubscription = ():
+  | UserSubscriptionResponse
+  | null
+  | undefined => {
+  if (!currentSubscriptionCache) {
+    return undefined;
+  }
+
+  if (Date.now() >= currentSubscriptionCache.expiresAt) {
+    currentSubscriptionCache = null;
+    return undefined;
+  }
+
+  return currentSubscriptionCache.value;
+};
+
+const cacheCurrentSubscription = (
+  value: UserSubscriptionResponse | null,
+  ttlMs: number,
+) => {
+  currentSubscriptionCache = {
+    value,
+    expiresAt: Date.now() + ttlMs,
+  };
+};
+
+const invalidateCurrentSubscriptionCache = () => {
+  currentSubscriptionCache = null;
+};
+
 export const premiumService = {
-  async getPremiumPlans(includeFreeTier: boolean = false): Promise<PremiumPlan[]> {
+  async getPremiumPlans(
+    includeFreeTier: boolean = false,
+  ): Promise<PremiumPlan[]> {
     const params: Record<string, string | boolean> = {
       includeFreeTier,
     };
 
-    const { data } = await api.get<PremiumPlanApiResponse[]>("/api/premium/plans", {
-      params,
-    });
+    const { data } = await api.get<PremiumPlanApiResponse[]>(
+      "/api/premium/plans",
+      {
+        params,
+      },
+    );
     return data.map(normalizePlan);
   },
 
@@ -153,17 +206,54 @@ export const premiumService = {
   },
 
   async getCurrentSubscription(): Promise<UserSubscriptionResponse | null> {
-    try {
-      const { data } = await api.get<UserSubscriptionApiResponse>(
-        "/api/premium/subscription/current",
-      );
-      return normalizeSubscription(data);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return null;
-      }
-      throw error;
+    const cached = getCachedCurrentSubscription();
+    if (cached !== undefined) {
+      return cached;
     }
+
+    if (currentSubscriptionRequest) {
+      return currentSubscriptionRequest;
+    }
+
+    currentSubscriptionRequest = (async () => {
+      try {
+        // Short-circuit for non-premium accounts to avoid noisy 404 responses.
+        try {
+          const { data: hasPremium } = await api.get<boolean>(
+            "/api/premium/status",
+          );
+          if (!hasPremium) {
+            cacheCurrentSubscription(null, SUBSCRIPTION_MISS_TTL_MS);
+            return null;
+          }
+        } catch {
+          // If status endpoint fails, continue with current-subscription call.
+        }
+
+        const { data } = await api.get<UserSubscriptionApiResponse | null>(
+          "/api/premium/subscription/current",
+        );
+
+        if (!data) {
+          cacheCurrentSubscription(null, SUBSCRIPTION_MISS_TTL_MS);
+          return null;
+        }
+
+        const normalized = normalizeSubscription(data);
+        cacheCurrentSubscription(normalized, SUBSCRIPTION_CACHE_TTL_MS);
+        return normalized;
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+          cacheCurrentSubscription(null, SUBSCRIPTION_MISS_TTL_MS);
+          return null;
+        }
+        throw error;
+      } finally {
+        currentSubscriptionRequest = null;
+      }
+    })();
+
+    return currentSubscriptionRequest;
   },
 
   async getSubscriptionHistory(): Promise<UserSubscriptionResponse[]> {
@@ -177,6 +267,7 @@ export const premiumService = {
     await api.put("/api/premium/subscription/cancel", null, {
       params: { reason },
     });
+    invalidateCurrentSubscriptionCache();
   },
 
   async checkPremiumStatus(): Promise<boolean> {
@@ -200,13 +291,16 @@ export const premiumService = {
         params,
       },
     );
-    return normalizeSubscription(data);
+    const normalized = normalizeSubscription(data);
+    cacheCurrentSubscription(normalized, SUBSCRIPTION_CACHE_TTL_MS);
+    return normalized;
   },
 
   async enableAutoRenewal(): Promise<{ success: boolean; message: string }> {
     const { data } = await api.post(
       "/api/premium/subscription/enable-auto-renewal",
     );
+    invalidateCurrentSubscriptionCache();
     return data;
   },
 
@@ -214,6 +308,7 @@ export const premiumService = {
     const { data } = await api.post(
       "/api/premium/subscription/cancel-auto-renewal",
     );
+    invalidateCurrentSubscriptionCache();
     return data;
   },
 
@@ -227,6 +322,7 @@ export const premiumService = {
         params: { reason },
       },
     );
+    invalidateCurrentSubscriptionCache();
     return data;
   },
 
@@ -248,6 +344,7 @@ export const premiumService = {
     message: string;
   }> {
     const { data } = await api.post("/api/premium/subscription/recover");
+    invalidateCurrentSubscriptionCache();
     return data;
   },
 
