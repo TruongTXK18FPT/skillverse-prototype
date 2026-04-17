@@ -7,17 +7,21 @@ import './CommanderStyles.css';
 interface CommanderHeaderProps {
   profile: MentorProfile | null;
   reviewStats?: ReviewStatsResponse | null;
-  onAvatarUpload: (file: File) => void | Promise<void>;
-  preChatEnabled: boolean;
-  onTogglePreChat: () => void;
+  onAvatarUpload?: (file: File) => void | Promise<void>;
+  preChatEnabled?: boolean;
+  onTogglePreChat?: () => void;
+  allowAvatarUpload?: boolean;
+  showPresenceToggle?: boolean;
 }
 
 const CommanderHeader: React.FC<CommanderHeaderProps> = ({
   profile,
   reviewStats,
   onAvatarUpload,
-  preChatEnabled,
+  preChatEnabled = true,
   onTogglePreChat,
+  allowAvatarUpload = true,
+  showPresenceToggle = true,
 }) => {
   const hasReviewStats = Boolean(reviewStats && reviewStats.totalReviews > 0);
   const resolvedAverageRating = hasReviewStats
@@ -63,6 +67,11 @@ const CommanderHeader: React.FC<CommanderHeaderProps> = ({
   ].filter((item) => !!item.value);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!onAvatarUpload) {
+      e.target.value = '';
+      return;
+    }
+
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       onAvatarUpload(selectedFile);
@@ -81,31 +90,34 @@ const CommanderHeader: React.FC<CommanderHeaderProps> = ({
           alt="Commander Avatar" 
           className="cmdr-avatar-img"
         />
-        
-        {/* Hidden File Input for Avatar Upload */}
-        <input 
-          type="file" 
-          id="avatar-upload" 
-          style={{ display: 'none' }} 
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        <label 
-          htmlFor="avatar-upload" 
-          style={{ 
-            position: 'absolute', 
-            bottom: 0, 
-            right: 0, 
-            background: 'var(--cmdr-accent-blue)', 
-            color: '#fff', 
-            padding: '5px', 
-            borderRadius: '50%', 
-            cursor: 'pointer',
-            fontSize: '12px'
-          }}
-        >
-          <Camera size={24} />
-        </label>
+
+        {allowAvatarUpload && onAvatarUpload && (
+          <>
+            <input
+              type="file"
+              id="avatar-upload"
+              style={{ display: 'none' }}
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+            <label
+              htmlFor="avatar-upload"
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                background: 'var(--cmdr-accent-blue)',
+                color: '#fff',
+                padding: '5px',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                fontSize: '12px'
+              }}
+            >
+              <Camera size={24} />
+            </label>
+          </>
+        )}
       </div>
 
       <div className="cmdr-info-col">
@@ -132,19 +144,21 @@ const CommanderHeader: React.FC<CommanderHeaderProps> = ({
         )}
       </div>
 
-      <div className="cmdr-actions-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', marginLeft: 'auto' }}>
-        <div style={{ fontSize: '0.7rem', color: 'var(--cmdr-text-dim)', marginBottom: '0.5rem', letterSpacing: '1px' }}>
-          TRẠNG THÁI
+      {showPresenceToggle && onTogglePreChat && (
+        <div className="cmdr-actions-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', marginLeft: 'auto' }}>
+          <div style={{ fontSize: '0.7rem', color: 'var(--cmdr-text-dim)', marginBottom: '0.5rem', letterSpacing: '1px' }}>
+            TRẠNG THÁI
+          </div>
+          <button
+            type="button"
+            className={`cmdr-btn ${preChatEnabled ? 'cmdr-btn-primary' : 'cmdr-btn-danger'}`}
+            onClick={onTogglePreChat}
+            style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
+          >
+            {preChatEnabled ? 'TRỰC TUYẾN' : 'NGOẠI TUYẾN'}
+          </button>
         </div>
-        <button 
-          type="button"
-          className={`cmdr-btn ${preChatEnabled ? 'cmdr-btn-primary' : 'cmdr-btn-danger'}`}
-          onClick={onTogglePreChat}
-          style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
-        >
-          {preChatEnabled ? 'TRỰC TUYẾN' : 'NGOẠI TUYẾN'}
-        </button>
-      </div>
+      )}
     </div>
   );
 };

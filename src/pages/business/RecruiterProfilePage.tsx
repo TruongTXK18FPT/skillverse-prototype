@@ -10,10 +10,12 @@ import {
   FileText,
   Globe,
   ImagePlus,
+  Lock,
   MapPin,
   PencilLine,
   RefreshCw,
   Save,
+  Shield,
   ShieldCheck,
   X,
   type LucideIcon,
@@ -375,6 +377,11 @@ const RecruiterProfilePage = () => {
   const hasRejectionReason =
     profile.applicationStatus === 'REJECTED' && !!profile.rejectionReason;
 
+  const canSetBackupPassword =
+    user?.authProvider === 'GOOGLE' && !user?.googleLinked;
+  const canChangePassword =
+    user?.authProvider === 'LOCAL' || user?.googleLinked;
+
   return (
     <div className="corp-container">
       <div className="corp-shell">
@@ -721,6 +728,59 @@ const RecruiterProfilePage = () => {
                   </div>
                 </div>
               </div>
+            </section>
+
+            <section className="corp-card">
+              <header className="corp-card-header">
+                <div>
+                  <h2>Bảo mật tài khoản</h2>
+                  <p>Cập nhật mật khẩu đăng nhập cho tài khoản doanh nghiệp.</p>
+                </div>
+              </header>
+
+              <div className="corp-security-grid">
+                {canSetBackupPassword && (
+                  <article className="corp-security-item corp-security-item--warning">
+                    <h3>Mật khẩu dự phòng</h3>
+                    <p>Thiết lập mật khẩu để đăng nhập khi Google OAuth không khả dụng.</p>
+                    <button
+                      type="button"
+                      className="corp-btn corp-btn--secondary"
+                      onClick={() => navigate('/set-password')}
+                    >
+                      <Shield size={16} />
+                      Thiết lập mật khẩu
+                    </button>
+                  </article>
+                )}
+
+                {canChangePassword && (
+                  <article className="corp-security-item">
+                    <h3>Đổi mật khẩu</h3>
+                    <p>Khuyến nghị thay đổi mật khẩu định kỳ để bảo vệ tài khoản.</p>
+                    <button
+                      type="button"
+                      className="corp-btn corp-btn--primary"
+                      onClick={() => navigate('/change-password')}
+                    >
+                      <Lock size={16} />
+                      Đổi mật khẩu
+                    </button>
+                  </article>
+                )}
+              </div>
+
+              {user?.googleLinked && (
+                <p className="corp-security-note">
+                  Bạn đã bật xác thực kép: có thể đăng nhập bằng cả Google và email + mật khẩu.
+                </p>
+              )}
+
+              {!canSetBackupPassword && !canChangePassword && (
+                <p className="corp-muted-note">
+                  Chưa có tác vụ bảo mật khả dụng cho tài khoản hiện tại.
+                </p>
+              )}
             </section>
           </aside>
         </div>

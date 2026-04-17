@@ -400,7 +400,16 @@ const Header: React.FC = () => {
   };
 
   const handleProfile = () => {
-    navigate("/profile");
+    const roles = user?.roles || [];
+    const isRecruiter = roles.includes("RECRUITER");
+    const isMentor = roles.includes("MENTOR");
+
+    if (!isRecruiter && isMentor) {
+      navigate("/change-password");
+    } else {
+      navigate("/profile");
+    }
+
     setShowUserMenu(false);
   };
 
@@ -461,7 +470,7 @@ const Header: React.FC = () => {
   const profileMenuLabel = isRecruiterRole
     ? "Hồ sơ doanh nghiệp"
     : isMentorRole
-      ? "Hồ sơ giảng viên"
+      ? "Đổi mật khẩu"
       : "Hồ sơ cá nhân";
 
   const recruiterCompanyLogoUrl = isRecruiterRole
