@@ -109,7 +109,7 @@ const MentorGradingPage: React.FC = () => {
   const [submissions, setSubmissions] = useState<AssignmentSubmissionDetailDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<FilterType>('pending');
+  const [filter, setFilter] = useState<FilterType>('all');
   const [descriptionCollapsed, setDescriptionCollapsed] = useState(false);
   const [gradingWorkspace, setGradingWorkspace] = useState<GradingWorkspaceState>(emptyWorkspaceState);
   const [aiGradingResult, setAiGradingResult] = useState<AiGradingResultDTO | null>(null);
@@ -118,6 +118,8 @@ const MentorGradingPage: React.FC = () => {
   const [priorSubmission, setPriorSubmission] = useState<AssignmentSubmissionDetailDTO | null>(null);
   const [priorSubmissionLoading, setPriorSubmissionLoading] = useState(false);
   const [priorFeedbackCollapsed, setPriorFeedbackCollapsed] = useState(true);
+  /** True when the open submission is AI-graded (auto-confirmed) — workspace becomes read-only. */
+  const [isReadOnly, setIsReadOnly] = useState(false);
 
   const loadData = useCallback(async () => {
     if (!assignmentId || !user?.id) return;
@@ -234,6 +236,7 @@ const MentorGradingPage: React.FC = () => {
   const canSubmitGrade = Boolean(
     activeSubmission &&
       !gradingWorkspace.submitting &&
+      !isReadOnly &&
       (hasCriteria
         ? criteriaValidation.criteriaCount > 0 && !criteriaValidation.hasBlockingError
         : !flatScoreValidation.error)
@@ -299,8 +302,12 @@ const MentorGradingPage: React.FC = () => {
       criteriaScores,
       criteriaFeedback,
       expandedCriteriaFeedback,
-      submitting: false
+      submitting: false,
+      confirmingAiGrade: false
     });
+
+    // Any AI-graded submission is read-only in the mentor workspace.
+    setIsReadOnly(submission.isAiGraded === true);
 
     // Load prior submission AI feedback if this is a resubmit (attempt N >= 2)
     if (submission.attemptNumber != null && submission.attemptNumber > 1) {
@@ -350,7 +357,8 @@ const MentorGradingPage: React.FC = () => {
         // Flag that this grade is confirming an AI pre-grade result
         confirmingAiGrade: true,
       }));
-      if (result.overallConfidence >= 0.95 && assignment?.trustAiEnabled) {
+      setIsReadOnly(true);
+      if (result.overallConfidence >= 0.95) {
         toast.showSuccess('AI tự tin cao', `Điểm tự tin: ${Math.round(result.overallConfidence * 100)}%. Bạn có thể xác nhận nhanh.`);
       }
     } catch (err: any) {
@@ -368,6 +376,7 @@ const MentorGradingPage: React.FC = () => {
     setAiGradingResult(null);
     setAiError(null);
     setPriorSubmission(null);
+    setIsReadOnly(false);
   };
 
   const toggleCriterionFeedback = (criterionId: number) => {
@@ -440,8 +449,13 @@ const MentorGradingPage: React.FC = () => {
   };
 
   const filteredSubmissions = submissions.filter((submission) => {
-    if (filter === 'pending' && (submission.status === SubmissionStatus.GRADED || submission.status === SubmissionStatus.AI_COMPLETED)) return false;
-    if (filter === 'graded' && submission.status !== SubmissionStatus.GRADED && submission.status !== SubmissionStatus.AI_COMPLETED) return false;
+    const isAiGradedSubmission = submission.isAiGraded === true;
+    const isGradedSubmission = isAiGradedSubmission
+      || submission.status === SubmissionStatus.GRADED
+      || submission.status === SubmissionStatus.AI_COMPLETED;
+
+    if (filter === 'pending' && isGradedSubmission) return false;
+    if (filter === 'graded' && !isGradedSubmission) return false;
     if (filter === 'late' && !submission.isLate) return false;
     if (filter === 'aiProcessing' && !(submission.isAiGraded && submission.mentorConfirmed === null)) return false;
     return true;
@@ -766,14 +780,34 @@ const MentorGradingPage: React.FC = () => {
                         : '-'}
                     </td>
                     <td className="actions-cell">
-                      <button
-                        className={`grading-action-btn ${submission.status !== SubmissionStatus.GRADED ? 'grading-action-btn--primary' : ''}`}
-                        onClick={() => openGradingWorkspace(submission)}
-                        title={submission.status === SubmissionStatus.GRADED ? 'Xem hoặc chấm lại bài đã chấm' : 'Mở khung chấm cho bài nộp'}
-                      >
-                        {submission.status === SubmissionStatus.GRADED ? <Eye size={16} /> : <Edit3 size={16} />}
-                        <span>{submission.status === SubmissionStatus.GRADED ? 'Xem / chấm lại' : 'Mở khung chấm'}</span>
-                      </button>
+                      {submission.isAiGraded === true ? (
+                        <button
+                          className="grading-action-btn grading-action-btn--readonly"
+                          onClick={() => openGradingWorkspace(submission)}
+                          title="Xem kết quả AI"
+                        >
+                          <Eye size={16} />
+                          <span>Xem kết quả</span>
+                        </button>
+                      ) : submission.status === SubmissionStatus.GRADED ? (
+                        <button
+                          className="grading-action-btn"
+                          onClick={() => openGradingWorkspace(submission)}
+                          title="Xem hoặc chấm lại bài đã chấm"
+                        >
+                          <Eye size={16} />
+                          <span>Xem / chấm lại</span>
+                        </button>
+                      ) : (
+                        <button
+                          className="grading-action-btn grading-action-btn--primary"
+                          onClick={() => openGradingWorkspace(submission)}
+                          title="Mở khung chấm cho bài nộp"
+                        >
+                          <Edit3 size={16} />
+                          <span>Mở khung chấm</span>
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -796,12 +830,16 @@ const MentorGradingPage: React.FC = () => {
           <span className={`compact-bar__status ${
             (activeSubmission.isAiGraded && activeSubmission.score != null && activeSubmission.isPassed === true)
               ? 'graded'
+              : activeSubmission.isAiGraded
+              ? 'graded'
               : (activeSubmission.status === SubmissionStatus.GRADED || activeSubmission.status === SubmissionStatus.AI_COMPLETED)
               ? 'graded'
               : 'pending'
           }`}>
             {activeSubmission.isAiGraded && activeSubmission.score != null && activeSubmission.isPassed === true
               ? 'Đã đạt'
+              : activeSubmission.isAiGraded
+              ? 'AI đã chấm'
               : activeSubmission.status === SubmissionStatus.GRADED || activeSubmission.status === SubmissionStatus.AI_COMPLETED
               ? 'Đã chấm'
               : activeSubmission.isAiGraded && activeSubmission.aiScore != null
@@ -857,7 +895,7 @@ const MentorGradingPage: React.FC = () => {
             <button
               className="workspace-close-btn"
               onClick={closeGradingWorkspace}
-              disabled={gradingWorkspace.submitting}
+              disabled={gradingWorkspace.submitting || isReadOnly}
             >
               <X size={18} />
               Đóng
@@ -1049,8 +1087,8 @@ const MentorGradingPage: React.FC = () => {
                 </>
               )}
 
-              {/* CASE B: Mentor triggered AI Pre-grade (result from API call) */}
-              {aiGradingResult && (
+              {/* CASE B: Mentor triggered AI Pre-grade (result from API call) — NOT shown for auto-confirmed */}
+              {aiGradingResult && !isReadOnly && (
                 <div className="ai-result-card">
                   <div className="ai-result-card__header">
                     <span>🤖 Kết quả AI</span>
@@ -1113,6 +1151,18 @@ const MentorGradingPage: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Banner: AI đã chấm → read-only */}
+          {isReadOnly && (
+            <div className="ai-graded-readonly-banner">
+              <Sparkles size={16} />
+              <span>
+                Bài này đã được AI chấm với điểm{' '}
+                <strong>{aiGradingResult?.totalScore ?? activeSubmission?.aiScore ?? activeSubmission?.score ?? 0}/{assignment?.maxScore}</strong>.
+                Đây là kết quả cuối cùng.
+              </span>
+            </div>
+          )}
 
           <div className="grading-workspace__grid">
             <div className="grading-workspace__panel grading-workspace__panel--left">
@@ -1208,7 +1258,7 @@ const MentorGradingPage: React.FC = () => {
 
                 {/* Actions sticky trong cột trái */}
                 <div className="workspace-left-actions">
-                  <button className="workspace-btn workspace-btn-secondary" onClick={closeGradingWorkspace} disabled={gradingWorkspace.submitting}>
+                  <button className="workspace-btn workspace-btn-secondary" onClick={closeGradingWorkspace} disabled={gradingWorkspace.submitting || isReadOnly}>
                     Đóng khung chấm
                   </button>
                   <button className="workspace-btn workspace-btn-primary" onClick={handleGrade} disabled={!canSubmitGrade}>
@@ -1238,6 +1288,7 @@ const MentorGradingPage: React.FC = () => {
                     </div>
                   </div>
 
+                  {!isReadOnly && hasCriteria && (
                   <div className="workspace-scrollable-criteria">
                     <div className={`workspace-inline-note ${!hasRequiredCriterionThresholds || criteriaValidation.requiredPassed ? 'success' : 'warning'}`}>
                       {!hasRequiredCriterionThresholds
@@ -1289,7 +1340,7 @@ const MentorGradingPage: React.FC = () => {
                                   step="0.5"
                                   inputMode="decimal"
                                   value={rawValue}
-                                  disabled={gradingWorkspace.submitting}
+                                  disabled={gradingWorkspace.submitting || isReadOnly}
                                   onWheelCapture={handleNumberInputWheel}
                                   onChange={(event) => {
                                     setError(null);
@@ -1318,7 +1369,7 @@ const MentorGradingPage: React.FC = () => {
                                   type="button"
                                   className={`criteria-feedback-toggle ${isFeedbackExpanded ? 'expanded' : ''}`}
                                   onClick={() => toggleCriterionFeedback(criterion.id)}
-                                  disabled={gradingWorkspace.submitting}
+                                  disabled={gradingWorkspace.submitting || isReadOnly}
                                 >
                                   {isFeedbackExpanded ? 'Ẩn nhận xét tiêu chí' : 'Thêm nhận xét tiêu chí'}
                                 </button>
@@ -1329,7 +1380,7 @@ const MentorGradingPage: React.FC = () => {
                                   <label>Nhận xét tiêu chí</label>
                                   <textarea
                                     value={gradingWorkspace.criteriaFeedback[criterion.id] || ''}
-                                    disabled={gradingWorkspace.submitting}
+                                    disabled={gradingWorkspace.submitting || isReadOnly}
                                     onChange={(event) =>
                                       setGradingWorkspace((prev) => ({
                                         ...prev,
@@ -1347,13 +1398,14 @@ const MentorGradingPage: React.FC = () => {
                       })}
                     </div>
                   </div>
+                )}
 
                   <div className="grade-input-group">
                     <label htmlFor="workspace-feedback">Nhận xét chung</label>
                     <textarea
                       id="workspace-feedback"
                       value={gradingWorkspace.feedback}
-                      disabled={gradingWorkspace.submitting}
+                      disabled={gradingWorkspace.submitting || isReadOnly}
                       onChange={(event) => setGradingWorkspace((prev) => ({ ...prev, feedback: event.target.value }))}
                       placeholder="Nhận xét tổng quát cho học viên..."
                       rows={3}
@@ -1378,7 +1430,7 @@ const MentorGradingPage: React.FC = () => {
                         step="0.5"
                         inputMode="decimal"
                         value={gradingWorkspace.score}
-                        disabled={gradingWorkspace.submitting}
+                        disabled={gradingWorkspace.submitting || isReadOnly}
                         onWheelCapture={handleNumberInputWheel}
                         onChange={(event) => {
                           setError(null);
@@ -1398,7 +1450,7 @@ const MentorGradingPage: React.FC = () => {
                     <textarea
                       id="workspace-feedback"
                       value={gradingWorkspace.feedback}
-                      disabled={gradingWorkspace.submitting}
+                      disabled={gradingWorkspace.submitting || isReadOnly}
                       onChange={(event) => setGradingWorkspace((prev) => ({ ...prev, feedback: event.target.value }))}
                       placeholder="Nhận xét tổng quát cho học viên..."
                       rows={3}
@@ -1406,7 +1458,7 @@ const MentorGradingPage: React.FC = () => {
                   </div>
 
                   <div className="workspace-actions">
-                    <button className="workspace-btn workspace-btn-secondary" onClick={closeGradingWorkspace} disabled={gradingWorkspace.submitting}>
+                    <button className="workspace-btn workspace-btn-secondary" onClick={closeGradingWorkspace} disabled={gradingWorkspace.submitting || isReadOnly}>
                       Đóng khung chấm
                     </button>
                     <button className="workspace-btn workspace-btn-primary" onClick={handleGrade} disabled={!canSubmitGrade}>

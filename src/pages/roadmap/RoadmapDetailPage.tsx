@@ -694,6 +694,7 @@ const RoadmapDetailPage = () => {
             onCreateStudyPlan: handleCreateStudyTask,
             onOpenStudyPlanner: handleOpenStudyPlannerForNode,
             onNavigateToCourse: handleNavigateToCourse,
+            allNodes: roadmapNodes,
           } as RoadmapNodeFocusPanelProps}
         />
         <MeowlGuide
@@ -717,9 +718,7 @@ const RoadmapDetailPage = () => {
         isOpen={isPlanModalOpen}
         node={planModalNode}
         learningContext={selectedNode && planModalNode && selectedNode.id === planModalNode.id ? selectedNodeLearningContext : undefined}
-        childBranchTitles={planModalNode?.children
-          ?.map((childId) => roadmap.roadmap.find((node) => node.id === childId)?.title)
-          .filter((title): title is string => Boolean(title)) ?? []}
+        roadmapMode={roadmap?.metadata?.roadmapMode}
         isSubmitting={Boolean(creatingTaskNodeId)}
         onClose={handleClosePlanModal}
         onSubmit={handleSubmitNodePlan}

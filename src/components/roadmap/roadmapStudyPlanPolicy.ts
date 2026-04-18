@@ -146,6 +146,19 @@ const getNextMatchingStudyDate = (
   return currentDate;
 };
 
+export const DEADLINE_BEFORE_START_ERROR = 'Deadline phải lớn hơn hoặc bằng ngày bắt đầu';
+
+export const getTodayDate = (): string => new Date().toISOString().slice(0, 10);
+
+export const getMaxDeadlineDate = (startDateStr: string): string => {
+  const start = new Date(`${startDateStr}T00:00:00`);
+  if (Number.isNaN(start.getTime())) {
+    return getTodayDate();
+  }
+  const max = addDays(start, 365);
+  return toIsoDate(max);
+};
+
 export const inferRoadmapStudyPlanDeadline = ({
   startDate,
   intensity,

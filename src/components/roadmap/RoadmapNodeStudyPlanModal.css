@@ -384,6 +384,14 @@
   padding: 0.55rem;
 }
 
+.deadline-warning {
+  display: block;
+  color: #f87171;
+  font-size: 12px;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .roadmap-node-plan-modal__overlay {
     padding: 74px 12px 12px;

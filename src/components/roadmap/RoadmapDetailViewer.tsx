@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, CheckCircle, Info, BookOpen } from 'lucide-react';
 import { RoadmapResponse, QuestProgress } from '../../types/Roadmap';
 import RoadmapFlow from '../ai-roadmap/RoadmapFlow';
@@ -154,7 +154,7 @@ const RoadmapDetailViewer = memo(({
   onNodeSelect,
   nodeFocusPanel,
 }: RoadmapDetailViewerProps) => {
-  const [showAdvancedSections, setShowAdvancedSections] = useState(false);
+  const showAdvancedSections = true;
 
   const handleQuestComplete = useCallback(async (questId: string, completed: boolean) => {
     onQuestComplete(questId, completed);
@@ -287,7 +287,7 @@ const RoadmapDetailViewer = memo(({
                 </div>
                 <div className="rm-spec-item">
                   <span className="rm-spec-label">Cấp độ hiện tại</span>
-                  {renderSpecValue(roadmap.metadata.currentLevel || 'Zero')}
+                  {renderSpecValue(roadmap.metadata.currentLevel || roadmap.metadata.skillMode?.currentSkillLevel || 'Zero')}
                 </div>
                 <div className="rm-spec-item">
                   <span className="rm-spec-label">Thời gian/ngày</span>
@@ -449,9 +449,6 @@ const RoadmapDetailViewer = memo(({
   }, [derivedStats, roadmap]);
 
   const advancedSection = useMemo(() => {
-    if (!showAdvancedSections) {
-      return null;
-    }
 
     return (
       <div className="rm-footer-briefing rm-footer-briefing--advanced">
@@ -549,7 +546,7 @@ const RoadmapDetailViewer = memo(({
         )}
       </div>
     );
-  }, [roadmap, showAdvancedSections]);
+  }, [roadmap]);
 
   return (
     <div className="roadmap-detail-viewer">
@@ -578,19 +575,7 @@ const RoadmapDetailViewer = memo(({
           />
         </div>
 
-        {hasAdvancedSections && (
-          <div className="rm-advanced-toggle-wrap">
-            <button
-              type="button"
-              className="rm-advanced-toggle-btn"
-              onClick={() => setShowAdvancedSections((previous) => !previous)}
-            >
-              {showAdvancedSections ? 'Ẩn bớt chi tiết roadmap' : 'Xem thêm chi tiết roadmap'}
-            </button>
-          </div>
-        )}
-
-        {advancedSection}
+        {hasAdvancedSections && advancedSection}
       </div>
     </div>
   );

@@ -232,13 +232,11 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
       </div>
       {submission.feedback && (
         <div className="learning-hud-submission-feedback">
-          <h4>Nhận xét của mentor:</h4>
+          <h4>Nhận xét:</h4>
           <p>{submission.feedback}</p>
-          {submission.gradedByName && (
-            <span className="learning-hud-grader">
-              - {submission.gradedByName}
-            </span>
-          )}
+          <span className="learning-hud-grader">
+            {submission.isAiGraded && submission.mentorConfirmed !== true ? '— AI đã chấm' : submission.gradedByName ? `— ${submission.gradedByName}` : ''}
+          </span>
         </div>
       )}
       {submission.criteriaScores && submission.criteriaScores.length > 0 && submission.status === SubmissionStatus.GRADED && (

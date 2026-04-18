@@ -674,6 +674,19 @@
   color: #f0f9ff;
 }
 
+.mentor-grading-page .grading-action-btn.grading-action-btn--readonly {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
+  cursor: default;
+}
+
+.mentor-grading-page .grading-action-btn.grading-action-btn--readonly:hover {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #c4b5fd;
+}
+
 .submissions-table tbody tr.selected-row {
   background: rgba(8, 47, 73, 0.55);
 }
@@ -941,6 +954,30 @@
   border-radius: 8px;
   font-size: 0.875rem;
   margin: 0.75rem 0;
+}
+
+/* Banner: AI đã chấm → read-only */
+.ai-graded-readonly-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-left: 4px solid #10b981;
+  border-radius: 10px;
+  color: #6ee7b7;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.ai-graded-readonly-banner svg {
+  flex-shrink: 0;
+  color: #10b981;
+}
+
+.ai-graded-readonly-banner strong {
+  color: #86efac;
 }
 
 .submission-content-section {

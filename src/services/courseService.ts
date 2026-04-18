@@ -63,6 +63,9 @@ export const createCourse = async (
     if (courseData.requirements?.length) {
       courseData.requirements.forEach((item) => formData.append('requirements', item));
     }
+    if (courseData.courseSkills?.length) {
+      courseData.courseSkills.forEach((item) => formData.append('courseSkills', item));
+    }
     if (thumbnailFile) formData.append('thumbnailFile', thumbnailFile);
     if (courseData.price !== undefined && courseData.price !== null) {
       formData.append('price', courseData.price.toString());
@@ -114,6 +117,9 @@ export const updateCourse = async (
     }
     if (courseData.requirements?.length) {
       courseData.requirements.forEach((item) => formData.append('requirements', item));
+    }
+    if (courseData.courseSkills?.length) {
+      courseData.courseSkills.forEach((item) => formData.append('courseSkills', item));
     }
     if (thumbnailFile) formData.append('thumbnailFile', thumbnailFile);
     if (courseData.price !== undefined && courseData.price !== null) {
@@ -651,8 +657,11 @@ export interface CourseRevisionDTO {
   currency?: string;
   learningObjectivesJson?: string;
   requirementsJson?: string;
+  courseSkillTagsJson?: string;
   contentSnapshotJson?: string;
   sourceCourseStatus?: string;
+  thumbnailMediaId?: number;
+  thumbnailUrl?: string;
   createdBy?: number;
   createdAt?: string;
   updatedAt?: string;
@@ -681,7 +690,9 @@ export interface CourseRevisionUpdateDTO {
   currency?: string;
   learningObjectives?: string[];
   requirements?: string[];
+  courseSkills?: string[];
   contentSnapshotJson?: string;
+  thumbnailMediaId?: number;
 }
 
 export type CourseRevisionStatus = 'DRAFT' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'ARCHIVED';
@@ -754,8 +765,39 @@ export const submitCourseRevision = async (
 
 export const updateCourseRevision = async (
   revisionId: number,
-  payload: CourseRevisionUpdateDTO
+  payload: CourseRevisionUpdateDTO,
+  thumbnailFile?: File
 ): Promise<CourseRevisionDTO> => {
+  // Revision thumbnail upload: send as FormData when file is provided,
+  // otherwise send as JSON (for metadata-only updates).
+  if (thumbnailFile) {
+    const formData = new FormData();
+    // Append JSON fields
+    const jsonFields = ['title','description','level','category','shortDescription',
+      'estimatedDurationHours','language','price','currency'];
+    jsonFields.forEach((field) => {
+      const value = (payload as Record<string, unknown>)[field];
+      if (value !== undefined && value !== null) formData.append(field, String(value));
+    });
+    if (payload.learningObjectives?.length) {
+      payload.learningObjectives.forEach((item) => formData.append('learningObjectives', item));
+    }
+    if (payload.requirements?.length) {
+      payload.requirements.forEach((item) => formData.append('requirements', item));
+    }
+    if (payload.courseSkills?.length) {
+      payload.courseSkills.forEach((item) => formData.append('courseSkills', item));
+    }
+    if (payload.contentSnapshotJson) formData.append('contentSnapshotJson', payload.contentSnapshotJson);
+    if (payload.thumbnailMediaId) formData.append('thumbnailMediaId', String(payload.thumbnailMediaId));
+    formData.append('thumbnailFile', thumbnailFile);
+    const response = await axiosInstance.put<CourseRevisionDTO>(
+      `/course-revisions/${revisionId}`,
+      formData,
+      { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
+    return response.data;
+  }
   const response = await axiosInstance.put<CourseRevisionDTO>(
     `/course-revisions/${revisionId}`,
     payload

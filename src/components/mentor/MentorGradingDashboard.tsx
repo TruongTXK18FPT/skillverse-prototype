@@ -34,8 +34,19 @@ const resolveLearnerName = (userName?: string | null, userId?: number) => {
 
 type DashboardFilter = 'ALL' | 'PENDING' | 'GRADED' | 'LATE';
 
-const getWorkflowLabel = (status: SubmissionStatus) => {
-  switch (status) {
+const isAiReadonlySubmission = (submission: MentorSubmissionItemDTO['submission']) => submission.isAiGraded === true;
+
+const isFinalGradedSubmission = (submission: MentorSubmissionItemDTO['submission']) =>
+  isAiReadonlySubmission(submission)
+  || submission.status === SubmissionStatus.GRADED
+  || submission.status === SubmissionStatus.AI_COMPLETED;
+
+const getWorkflowLabel = (submission: MentorSubmissionItemDTO['submission']) => {
+  if (isAiReadonlySubmission(submission)) {
+    return 'AI đã chấm';
+  }
+
+  switch (submission.status) {
     case SubmissionStatus.GRADED:
       return 'Đã chấm';
     case SubmissionStatus.LATE_PENDING:
@@ -415,10 +426,10 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ onPendi
           <div className="grading-group-list">
             {Object.entries(groupedSubmissions).map(([moduleKey, group]) => {
               const modulePending = Object.values(group.assignments).reduce(
-                (sum, a) => sum + a.items.filter(i => i.submission.status !== SubmissionStatus.GRADED).length, 0
+                (sum, a) => sum + a.items.filter(i => !isFinalGradedSubmission(i.submission)).length, 0
               );
               const moduleGraded = Object.values(group.assignments).reduce(
-                (sum, a) => sum + a.items.filter(i => i.submission.status === SubmissionStatus.GRADED).length, 0
+                (sum, a) => sum + a.items.filter(i => isFinalGradedSubmission(i.submission)).length, 0
               );
               const totalAssignments = Object.keys(group.assignments).length;
               const isCollapsed = collapsedGroups.has(moduleKey);
@@ -458,8 +469,8 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ onPendi
 
                   {/* Assignment rows — hidden when collapsed */}
                   {!isCollapsed && allAssignments.map(([asgKey, asgData]) => {
-                    const asgPending = asgData.items.filter(i => i.submission.status !== SubmissionStatus.GRADED).length;
-                    const asgGraded = asgData.items.filter(i => i.submission.status === SubmissionStatus.GRADED).length;
+                    const asgPending = asgData.items.filter(i => !isFinalGradedSubmission(i.submission)).length;
+                    const asgGraded = asgData.items.filter(i => isFinalGradedSubmission(i.submission)).length;
                     return (
                       <div key={asgKey} className="grading-assignment-row">
                         <div className="grading-assignment-row__header">
@@ -491,28 +502,26 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ onPendi
                                   </div>
                                 </td>
                                 <td>
-                                  <span className="submission-date">
-                                    {new Date(item.submission.submittedAt).toLocaleDateString('vi-VN', {
-                                      day: '2-digit',
-                                      month: '2-digit',
-                                      year: 'numeric',
-                                      hour: '2-digit',
-                                      minute: '2-digit'
-                                    })}
-                                  </span>
+                                  {item.submission.submittedAt
+                                    ? new Date(item.submission.submittedAt).toLocaleDateString('vi-VN', {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: 'numeric'
+                                      })
+                                    : '-'}
                                 </td>
                                 <td>
                                   <div className="submission-status-stack">
-                                    <span className={`submission-status ${item.submission.status === SubmissionStatus.GRADED ? 'graded' : 'pending'}`}>
-                                      {item.submission.status === SubmissionStatus.GRADED ? (
+                                    <span className={`submission-status ${isFinalGradedSubmission(item.submission) ? 'graded' : 'pending'}`}>
+                                      {isFinalGradedSubmission(item.submission) ? (
                                         <>
                                           <CheckSquare className="w-4 h-4" />
-                                          {getWorkflowLabel(item.submission.status)}
+                                          {getWorkflowLabel(item.submission)}
                                         </>
                                       ) : (
                                         <>
                                           <AlertCircle className="w-4 h-4" />
-                                          {getWorkflowLabel(item.submission.status)}
+                                          {getWorkflowLabel(item.submission)}
                                         </>
                                       )}
                                     </span>
@@ -525,31 +534,61 @@ const MentorGradingDashboard: React.FC<MentorGradingDashboardProps> = ({ onPendi
                                   </div>
                                 </td>
                                 <td>
-                                  <button
-                                    className={`mentor-grade-btn ${item.submission.status !== SubmissionStatus.GRADED ? 'mentor-grade-btn--primary' : ''}`}
-                                    onClick={() => navigate(`/mentor/assignments/${item.submission.assignmentId}/grade`, {
-                                      state: {
-                                        courseName: item.courseName,
-                                        courseId: item.courseId,
-                                        moduleName: item.moduleName,
-                                        moduleId: item.moduleId,
-                                        assignmentName: item.assignmentName,
-                                        fromGradingDashboard: true
-                                      }
-                                    })}
-                                  >
-                                    {item.submission.status === SubmissionStatus.GRADED ? (
-                                      <>
-                                        <Eye className="w-4 h-4" />
-                                        Xem / chấm lại
-                                      </>
-                                    ) : (
-                                      <>
-                                        <FileText className="w-4 h-4" />
-                                        Mở khung chấm
-                                      </>
-                                    )}
-                                  </button>
+                                  {item.submission.isAiGraded === true ? (
+                                    <button
+                                      className="mentor-grade-btn mentor-grade-btn--readonly"
+                                      onClick={() => navigate(`/mentor/assignments/${item.submission.assignmentId}/grade`, {
+                                        state: {
+                                          courseName: item.courseName,
+                                          courseId: item.courseId,
+                                          moduleName: item.moduleName,
+                                          moduleId: item.moduleId,
+                                          assignmentName: item.assignmentName,
+                                          fromGradingDashboard: true
+                                        }
+                                      })}
+                                      title="Xem kết quả AI"
+                                    >
+                                      <Eye className="w-4 h-4" />
+                                      Xem kết quả
+                                    </button>
+                                  ) : item.submission.status === SubmissionStatus.GRADED || item.submission.status === SubmissionStatus.AI_COMPLETED ? (
+                                    <button
+                                      className="mentor-grade-btn"
+                                      onClick={() => navigate(`/mentor/assignments/${item.submission.assignmentId}/grade`, {
+                                        state: {
+                                          courseName: item.courseName,
+                                          courseId: item.courseId,
+                                          moduleName: item.moduleName,
+                                          moduleId: item.moduleId,
+                                          assignmentName: item.assignmentName,
+                                          fromGradingDashboard: true
+                                        }
+                                      })}
+                                      title="Xem hoặc chấm lại bài đã chấm"
+                                    >
+                                      <Eye className="w-4 h-4" />
+                                      Xem / chấm lại
+                                    </button>
+                                  ) : (
+                                    <button
+                                      className="mentor-grade-btn mentor-grade-btn--primary"
+                                      onClick={() => navigate(`/mentor/assignments/${item.submission.assignmentId}/grade`, {
+                                        state: {
+                                          courseName: item.courseName,
+                                          courseId: item.courseId,
+                                          moduleName: item.moduleName,
+                                          moduleId: item.moduleId,
+                                          assignmentName: item.assignmentName,
+                                          fromGradingDashboard: true
+                                        }
+                                      })}
+                                      title="Mở khung chấm"
+                                    >
+                                      <FileText className="w-4 h-4" />
+                                      Mở khung chấm
+                                    </button>
+                                  )}
                                 </td>
                               </tr>
                             ))}

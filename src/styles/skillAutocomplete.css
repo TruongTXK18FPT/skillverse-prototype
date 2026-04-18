@@ -1,0 +1,190 @@
+/**
+ * Skill Tag Autocomplete Styles
+ * Combobox-style inline suggestion panel — NOT a dropdown/select.
+ *
+ * UX flow:
+ * 1. Mentor types → debounced API call to /api/skills/suggest?prefix=...
+ * 2. Panel shows matching skills from DB (UPPERCASE, from DB casing)
+ * 3. Mentor clicks suggestion → use DB name (UPPERCASE)
+ * 4. Mentor presses Enter with custom text → create new (normalize UPPERCASE)
+ * 5. Panel closes on selection, outside click, or Escape
+ *
+ * @module styles/course-builder
+ */
+
+/* ============================================================================
+   SKILL AUTOCOMPLETE COMBOBOX PANEL
+   ============================================================================ */
+
+.cb-skill-autocomplete {
+  position: relative;
+  width: 100%;
+}
+
+/* Floating suggestion panel */
+.cb-skill-autocomplete__panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 500;
+  background: rgba(8, 14, 26, 0.97);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: var(--cb-radius-md);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(6, 182, 212, 0.06) inset;
+  max-height: 240px;
+  overflow-y: auto;
+  backdrop-filter: blur(12px);
+  animation: cb-ac-slide-down 0.15s ease;
+}
+
+@keyframes cb-ac-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Suggestion item */
+.cb-skill-autocomplete__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cb-spacing-sm);
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  transition: background var(--cb-transition-fast);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.875rem;
+}
+
+.cb-skill-autocomplete__item:last-child {
+  border-bottom: none;
+}
+
+.cb-skill-autocomplete__item:hover,
+.cb-skill-autocomplete__item--highlighted {
+  background: rgba(6, 182, 212, 0.12);
+}
+
+.cb-skill-autocomplete__item--highlighted {
+  background: rgba(6, 182, 212, 0.18);
+}
+
+/* Skill name — shown in DB casing (UPPERCASE) */
+.cb-skill-autocomplete__name {
+  font-weight: 600;
+  color: var(--cb-text-primary);
+  letter-spacing: 0.02em;
+}
+
+/* Highlighted prefix match */
+.cb-skill-autocomplete__match {
+  color: var(--cb-accent-cyan);
+}
+
+/* Category badge */
+.cb-skill-autocomplete__category {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  background: rgba(139, 92, 246, 0.12);
+  color: #c4b5fd;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Loading state */
+.cb-skill-autocomplete__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cb-spacing-sm);
+  padding: 0.75rem;
+  color: var(--cb-text-muted);
+  font-size: 0.8rem;
+}
+
+.cb-skill-autocomplete__spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(6, 182, 212, 0.2);
+  border-top-color: var(--cb-accent-cyan);
+  border-radius: 50%;
+  animation: cb-ac-spin 0.6s linear infinite;
+}
+
+@keyframes cb-ac-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Empty state */
+.cb-skill-autocomplete__empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  color: var(--cb-text-muted);
+  font-size: 0.8rem;
+}
+
+.cb-skill-autocomplete__empty-hint {
+  font-size: 0.72rem;
+  color: var(--cb-accent-cyan);
+}
+
+/* Keyboard navigation hint */
+.cb-skill-autocomplete__kbd-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--cb-text-muted);
+}
+
+.cb-skill-autocomplete__kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--cb-text-secondary);
+}
+
+/* Scrollbar styling */
+.cb-skill-autocomplete__panel::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cb-skill-autocomplete__panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cb-skill-autocomplete__panel::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.25);
+  border-radius: 999px;
+}
+
+/* Focus ring for the input */
+.cb-skill-autocomplete__input--focused {
+  border-color: var(--cb-accent-cyan) !important;
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.14) !important;
+}

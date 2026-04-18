@@ -818,9 +818,11 @@ const AssignmentPage: React.FC = () => {
                       <div className="ap-v2-feedback-box">
                         <div className="ap-v2-fb-title"><Terminal size={14} /> Nhận xét tổng thể</div>
                         <div className="ap-v2-fb-text">{newestSubmission.feedback}</div>
-                        {newestSubmission.gradedByName && (
+                        {newestSubmission.gradedByName ? (
                           <div className="ap-v2-fb-mentor">Mentor: {newestSubmission.gradedByName}</div>
-                        )}
+                        ) : newestSubmission.isAiGraded ? (
+                          <div className="ap-v2-fb-mentor">AI đã chấm</div>
+                        ) : null}
                       </div>
                     )}
 

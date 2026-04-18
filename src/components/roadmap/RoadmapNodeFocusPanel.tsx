@@ -30,6 +30,8 @@ export type RoadmapNodeFocusPanelProps = {
   onNavigateToCourse: (courseId: number) => void;
   variant?: RoadmapNodeFocusPanelVariant;
   placement?: RoadmapNodeFocusPanelPlacement;
+  /** All nodes in the roadmap — used to resolve prerequisite IDs to titles */
+  allNodes?: RoadmapNode[];
 };
 
 const clampProgress = (value?: number): number => {
@@ -94,12 +96,20 @@ const RoadmapNodeFocusPanel = ({
   onNavigateToCourse,
   variant = 'overlay',
   placement = 'right',
+  allNodes,
 }: RoadmapNodeFocusPanelProps) => {
   const progressPercent = clampProgress(progress?.progress ?? (progress?.status === 'COMPLETED' ? 100 : 0));
   const statusLabel = resolveStatusLabel(node, progress);
   const objectiveItems = useMemo(() => pickNonEmptyItems(node?.learningObjectives, 99), [node?.learningObjectives]);
   const keyConceptItems = useMemo(() => pickNonEmptyItems(node?.keyConcepts, 99), [node?.keyConcepts]);
-  const prerequisiteItems = useMemo(() => pickNonEmptyItems(node?.prerequisites, 99), [node?.prerequisites]);
+  const prerequisiteItems = useMemo(() => {
+    const raw = pickNonEmptyItems(node?.prerequisites, 99);
+    if (!allNodes) return raw;
+    return raw.map((id) => {
+      const found = allNodes.find((n) => n.id === id);
+      return found ? found.title : id;
+    });
+  }, [node?.prerequisites, allNodes]);
   const practicalExerciseItems = useMemo(() => pickNonEmptyItems(node?.practicalExercises, 99), [node?.practicalExercises]);
   const successCriteriaItems = useMemo(() => pickNonEmptyItems(node?.successCriteria, 99), [node?.successCriteria]);
   const normalizedDescription = useMemo(

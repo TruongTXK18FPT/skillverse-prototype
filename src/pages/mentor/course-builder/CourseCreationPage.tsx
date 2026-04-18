@@ -165,6 +165,7 @@ const CourseCreationPage = () => {
   >({});
   const [learningObjectives, setLearningObjectives] = useState<string[]>([""]);
   const [requirements, setRequirements] = useState<string[]>([""]);
+  const [courseSkills, setCourseSkills] = useState<string[]>([]);
   const [assignmentErrors, setAssignmentErrors] = useState<
     Record<string, AssignmentFieldErrors>
   >({});
@@ -483,6 +484,18 @@ const CourseCreationPage = () => {
             setRequirements(parsedRequirements);
           }
         }
+        if (revision.courseSkillTagsJson) {
+          try {
+            const parsedSkills = JSON.parse(
+              revision.courseSkillTagsJson,
+            ) as string[];
+            if (Array.isArray(parsedSkills) && parsedSkills.length > 0) {
+              setCourseSkills(parsedSkills);
+            }
+          } catch {
+            // ignore parse errors
+          }
+        }
         const snapshotModules = parseModulesFromRevisionSnapshot(
           revision.contentSnapshotJson,
         );
@@ -537,6 +550,9 @@ const CourseCreationPage = () => {
     }
     if (state.courseForm.requirements?.length) {
       setRequirements(state.courseForm.requirements);
+    }
+    if (state.courseForm.courseSkills?.length) {
+      setCourseSkills(state.courseForm.courseSkills);
     }
 
     // Map context modules to local draft modules if needed
@@ -723,11 +739,15 @@ const CourseCreationPage = () => {
           return;
         }
         setThumbnailFile(file);
-        // Preview immediately
+        // Revoke previous blob URL to prevent memory leak
+        const prev = state.courseForm.thumbnailUrl;
+        if (prev && prev.startsWith('blob:')) {
+          URL.revokeObjectURL(prev);
+        }
         updateCourseForm({ thumbnailUrl: URL.createObjectURL(file) });
       }
     },
-    [isEditable, showToast, updateCourseForm],
+    [isEditable, showToast, updateCourseForm, state.courseForm.thumbnailUrl],
   );
 
   const updateLessonField = (
@@ -1211,8 +1231,10 @@ const CourseCreationPage = () => {
               currency: state.courseForm.currency,
               learningObjectives,
               requirements,
+              courseSkills,
               contentSnapshotJson,
             },
+            thumbnailFile || undefined,
           );
           setActiveRevision(updatedRevision);
           if (!options?.silentSuccess) {
@@ -1228,9 +1250,9 @@ const CourseCreationPage = () => {
         const fileToUpload = thumbnailFile || undefined;
 
         if (isEditMode && courseId) {
-          savedCourse = await updateCourse(courseId, modules, {}, fileToUpload);
+          savedCourse = await updateCourse(courseId, modules, { courseSkills }, fileToUpload);
         } else {
-          savedCourse = await createCourse(modules, {}, fileToUpload);
+          savedCourse = await createCourse(modules, { courseSkills }, fileToUpload);
         }
 
         if (!savedCourse) {
@@ -1419,6 +1441,7 @@ const CourseCreationPage = () => {
     [
       activeRevision,
       courseId,
+      courseSkills,
       createCourse,
       getApiErrorMessage,
       isEditMode,
@@ -1725,11 +1748,13 @@ const CourseCreationPage = () => {
               changedCourseInfoFields={changedCourseInfoFields}
               learningObjectives={learningObjectives}
               requirements={requirements}
+              courseSkills={courseSkills}
               CATEGORIES={CATEGORIES}
               LEVELS={LEVELS}
               onUpdateCourseForm={updateCourseForm}
               onSetLearningObjectives={setLearningObjectives}
               onSetRequirements={setRequirements}
+              onSetCourseSkills={setCourseSkills}
               onThumbnailChange={handleThumbnailChangeFromFile}
               onShowToast={showToast}
               onBlurOnWheel={blurOnWheel}

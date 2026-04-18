@@ -392,6 +392,19 @@
   color: #f0f9ff;
 }
 
+.mentor-grade-btn--readonly {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
+  cursor: default;
+}
+
+.mentor-grade-btn--readonly:hover {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #c4b5fd;
+}
+
 /* === Grouped submission display === */
 .grading-group-list {
   display: flex;
