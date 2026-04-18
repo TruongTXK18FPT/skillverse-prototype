@@ -89,7 +89,13 @@ const RoadmapDetailPage = () => {
         continue;
       }
       const progress = progressMap.get(node.id);
-      if (progress?.status !== ProgressStatus.COMPLETED) {
+      if (progress?.status === ProgressStatus.COMPLETED) {
+        continue;
+      }
+      if (
+        node.nodeStatus === RoadmapNodeAvailability.AVAILABLE
+        || node.nodeStatus === RoadmapNodeAvailability.IN_PROGRESS
+      ) {
         return node.id;
       }
     }
@@ -158,11 +164,11 @@ const RoadmapDetailPage = () => {
     if (!hasStudentTierAccess) {
       return false;
     }
-    if (studyTaskNodeIds.has(selectedNode.id)) {
+    if (selectedNode.nodeStatus === RoadmapNodeAvailability.LOCKED) {
       return false;
     }
-    if (!eligibleNodeId) {
-      return true;
+    if (studyTaskNodeIds.has(selectedNode.id)) {
+      return false;
     }
     return selectedNode.id === eligibleNodeId;
   }, [eligibleNodeId, hasStudentTierAccess, selectedNode, studyTaskNodeIds]);
@@ -225,7 +231,7 @@ const RoadmapDetailPage = () => {
       setProgressMap(nextProgressMap);
 
       try {
-        const board = await taskBoardService.getBoard();
+        const board = await taskBoardService.getBoard(roadmapData.sessionId);
         const nodeSummaries = extractNodeStudyPlanSummaries(board, roadmapData.sessionId);
         setNodePlanSummaryMap(nodeSummaries);
         setStudyTaskNodeIds(new Set(Object.keys(nodeSummaries)));
@@ -475,6 +481,49 @@ const RoadmapDetailPage = () => {
     setPlanModalNode(null);
     setAiPrefilledParams(null);
   }, [creatingTaskNodeId]);
+
+  const handleMarkNodeDone = useCallback(async (nodeId: string) => {
+    if (!roadmap) return;
+
+    // Step 1: Call atomic endpoint — success or failure only.
+    // Any ApiException (sequential lock, invalid node, etc.) throws here.
+    let result: Awaited<ReturnType<typeof aiRoadmapService.completeNode>>;
+    try {
+      result = await aiRoadmapService.completeNode(roadmap.sessionId, nodeId);
+    } catch (err) {
+      showError('Lỗi', (err as Error).message);
+      return;
+    }
+
+    // Step 2: Show success immediately — BE committed or rolled back, state is consistent.
+    showSuccess('Hoàn thành', result.message);
+
+    // Step 3: Refresh state (non-critical — failures here don't affect data consistency)
+    try {
+      const updatedRoadmap = await aiRoadmapService.getRoadmapById(roadmap.sessionId);
+
+      const nextProgressMap = new Map<string, QuestProgress>();
+      if (updatedRoadmap.progress) {
+        Object.entries(updatedRoadmap.progress).forEach(([questId, progress]) => {
+          nextProgressMap.set(questId, {
+            questId: progress.questId,
+            status: progress.status as ProgressStatus,
+            progress: progress.progress,
+            completedAt: progress.completedAt,
+          });
+        });
+      }
+      setProgressMap(nextProgressMap);
+
+      const board = await taskBoardService.getBoard(roadmap.sessionId);
+      const summaries = extractNodeStudyPlanSummaries(board, roadmap.sessionId);
+      setNodePlanSummaryMap(summaries);
+    } catch {
+      // non-critical: BE state is already consistent; refresh failure is purely cosmetic
+    }
+
+    setSelectedNodeId(null);
+  }, [roadmap, showSuccess, showError]);
 
   const handleSubmitNodePlan = useCallback(async (request: RoadmapNodeStudyPlanRequest) => {
     if (!roadmap || !planModalNode) return;
@@ -746,6 +795,8 @@ const RoadmapDetailPage = () => {
             onOpenStudyPlanner: handleOpenStudyPlannerForNode,
             onNavigateToCourse: handleNavigateToCourse,
             allNodes: roadmapNodes,
+            onMarkNodeDone: handleMarkNodeDone,
+            linkedTaskCount: selectedNodePlanSummary?.totalLinkedTasks ?? 0,
           } as RoadmapNodeFocusPanelProps}
         />
         <MeowlGuide

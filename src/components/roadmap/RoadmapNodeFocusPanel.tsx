@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { QuestProgress, RoadmapNode } from '../../types/Roadmap';
 import { NodeLearningContext, resolveRoadmapNodeTimeEstimate } from './nodeLearningContext';
 import { normalizeRoadmapMarkdown } from '../../utils/roadmapMarkdown';
+import { confirmAction } from '../../context/ConfirmDialogContext';
 import './RoadmapNodeFocusPanel.css';
 
 export type RoadmapNodeFocusPanelPlacement = 'left' | 'right';
@@ -33,6 +34,10 @@ export type RoadmapNodeFocusPanelProps = {
   placement?: RoadmapNodeFocusPanelPlacement;
   /** All nodes in the roadmap — used to resolve prerequisite IDs to titles */
   allNodes?: RoadmapNode[];
+  /** Called when user confirms "Mark Done" — to mark the node complete */
+  onMarkNodeDone?: (nodeId: string) => Promise<void>;
+  /** Number of tasks linked to this node — drives ConfirmDialog visibility */
+  linkedTaskCount?: number;
 };
 
 const clampProgress = (value?: number): number => {
@@ -99,6 +104,8 @@ const RoadmapNodeFocusPanel = ({
   variant = 'overlay',
   placement = 'right',
   allNodes,
+  onMarkNodeDone,
+  linkedTaskCount = 0,
 }: RoadmapNodeFocusPanelProps) => {
   const progressPercent = clampProgress(progress?.progress ?? (progress?.status === 'COMPLETED' ? 100 : 0));
   const statusLabel = resolveStatusLabel(node, progress);
@@ -156,11 +163,43 @@ const RoadmapNodeFocusPanel = ({
     onCreateStudyPlan(node.id);
   };
 
+  const handleMarkDone = async () => {
+    if (!node || !onMarkNodeDone || node.nodeStatus === 'LOCKED') return;
+
+    // Case A: no linked tasks → done immediately
+    if (linkedTaskCount === 0) {
+      try {
+        await onMarkNodeDone(node.id);
+      } catch (err) {
+        console.error('Mark node done failed:', err);
+      }
+      return;
+    }
+
+    // Case B: has linked tasks → show ConfirmDialog
+    const confirmed = await confirmAction({
+      title: 'Xác nhận đánh dấu hoàn thành',
+      message: `Có ${linkedTaskCount} tasks trong node này. Đánh dấu hoàn thành node sẽ đồng thời hoàn thành toàn bộ ${linkedTaskCount} tasks. Bạn có muốn tiếp tục?`,
+      confirmLabel: 'Xác nhận',
+      cancelLabel: 'Hủy',
+      variant: 'default',
+    });
+
+    if (!confirmed) return;
+
+    try {
+      await onMarkNodeDone(node.id);
+    } catch (err) {
+      console.error('Mark node done failed:', err);
+    }
+  };
+
   const timeEstimate = resolveRoadmapNodeTimeEstimate(node, learningContext?.primaryCourse);
   const nodeTypeLabel = node.type === 'MAIN' ? 'Mục tiêu chính' : 'Mục tiêu phụ';
   const courseLabel = learningContext?.primaryCourse?.title || 'Chưa gắn khóa học';
   const parentLabel = learningContext?.parentNode?.title || 'Không có node cha';
   const childCount = learningContext?.childNodes.length ?? 0;
+  const canMarkNodeDone = Boolean(onMarkNodeDone) && node.nodeStatus !== 'LOCKED';
 
   const panelClassName = [
     'roadmap-node-focus-panel',
@@ -395,6 +434,27 @@ const RoadmapNodeFocusPanel = ({
             </p>
           )}
         </section>
+
+        {progress?.status !== 'COMPLETED' && (
+          <section className="roadmap-node-focus-panel__mark-done-section">
+            <hr className="roadmap-node-focus-panel__mark-done-divider" />
+            <button
+              type="button"
+              className="roadmap-node-focus-panel__mark-done-btn"
+              onClick={handleMarkDone}
+              disabled={!canMarkNodeDone}
+            >
+              <CheckCircle2 size={15} />
+              <span>Đánh dấu hoàn thành</span>
+            </button>
+            {node.nodeStatus === 'LOCKED' && (
+              <p className="roadmap-node-focus-panel__action-note">
+                Hoàn thành node hiện tại trước để đánh dấu hoàn thành node này.
+              </p>
+            )}
+          </section>
+        )}
+
       </>
     </aside>
   );

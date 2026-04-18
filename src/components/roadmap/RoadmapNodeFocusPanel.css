@@ -452,6 +452,56 @@
   border-color: rgba(249, 115, 22, 0.7);
 }
 
+/* Mark Done button */
+.roadmap-node-focus-panel__mark-done-section {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.roadmap-node-focus-panel__mark-done-divider {
+  border: none;
+  border-top: 1px solid rgba(251, 191, 36, 0.18);
+  margin: 0;
+}
+
+.roadmap-node-focus-panel__mark-done-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(34, 211, 238, 0.45);
+  background: rgba(6, 182, 212, 0.1);
+  color: #67e8f9;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.roadmap-node-focus-panel__mark-done-btn:hover {
+  background: rgba(6, 182, 212, 0.22);
+  border-color: rgba(6, 182, 212, 0.7);
+  color: #a5f3fc;
+}
+
+.roadmap-node-focus-panel__mark-done-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: rgba(6, 182, 212, 0.08);
+  border-color: rgba(34, 211, 238, 0.25);
+  color: #7dd3fc;
+}
+
+.roadmap-node-focus-panel__mark-done-btn:active {
+  background: rgba(6, 182, 212, 0.35);
+  transform: scale(0.98);
+}
+
 .roadmap-node-focus-panel__list-group {
   margin-top: 10px;
 }

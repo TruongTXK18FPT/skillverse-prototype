@@ -276,6 +276,33 @@ const aiRoadmapService = {
     }
   },
 
+/**
+   * Atomically mark a node as complete — marks linked tasks done, then marks node done.
+   * Step 1: marks all linked study-plan tasks as done.
+   * Step 2: marks the node itself complete (enforces sequential locking).
+   * Both steps are executed atomically on BE — rollback on either step reverts the entire operation.
+   */
+  completeNode: async (
+    sessionId: number,
+    nodeId: string
+  ): Promise<{
+    doneCount: number;
+    failedCount: number;
+    nodeCompleted: boolean;
+    message: string;
+  }> => {
+    try {
+      const response = await axiosInstance.post(
+        `/api/v1/ai/roadmap/${sessionId}/nodes/${nodeId}/complete`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Failed to complete node:', error);
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      throw new Error(message || 'Failed to complete node.');
+    }
+  },
+
 };
 
 export default aiRoadmapService;

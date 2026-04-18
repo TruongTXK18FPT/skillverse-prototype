@@ -1,8 +1,8 @@
 import axiosInstance from './axiosInstance';
-import { 
-  TaskColumnResponse, 
-  TaskResponse, 
-  CreateTaskRequest, 
+import {
+  TaskColumnResponse,
+  TaskResponse,
+  CreateTaskRequest,
   UpdateTaskRequest,
   ClearOverdueTasksResponse,
 } from '../types/TaskBoard';
@@ -13,6 +13,25 @@ export const taskBoardService = {
   getBoard: async (roadmapSessionId?: number): Promise<TaskColumnResponse[]> => {
     const params = roadmapSessionId !== undefined ? { roadmapSessionId } : {};
     const response = await axiosInstance.get<TaskColumnResponse[]>(`${BASE_URL}`, { params });
+    return response.data;
+  },
+
+  /**
+   * Mark all tasks linked to a roadmap node as done.
+   * Backend resolves node → task matching via [ROADMAP_NODE_LINK] userNotes marker,
+   * moves each to Done column, and triggers RoadmapCompletionSyncService to derive node completion.
+   *
+   * @param roadmapSessionId roadmap session ID
+   * @param nodeId           node ID to complete
+   * @returns {doneCount, failedCount}
+   */
+  markAllTasksDoneForNode: async (
+    roadmapSessionId: number,
+    nodeId: string
+  ): Promise<{ doneCount: number; failedCount: number }> => {
+    const response = await axiosInstance.post<{ doneCount: number; failedCount: number }>(
+      `${BASE_URL}/nodes/${roadmapSessionId}/${nodeId}/complete-all`
+    );
     return response.data;
   },
 

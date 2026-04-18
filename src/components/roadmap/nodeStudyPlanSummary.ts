@@ -1,6 +1,9 @@
 import { TaskColumnResponse, TaskResponse } from "../../types/TaskBoard";
 
-const ROADMAP_NODE_LINK_PATTERN =
+/** Canonical regex for matching [ROADMAP_NODE_LINK] markers in task.userNotes.
+ *  Pattern: [ROADMAP_NODE_LINK] (optional journey=N) roadmap={id} node={id}
+ *  Case-insensitive. Reuse this across all roadmap ↔ task linking logic — do not duplicate. */
+export const ROADMAP_NODE_LINK_PATTERN =
   /\[ROADMAP_NODE_LINK\](?:\s+journey=\d+)?\s+roadmap=(\d+)\s+node=([^\s]+)/i;
 
 export type NodeStudyPlanSummary = {
