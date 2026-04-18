@@ -43,6 +43,7 @@ export interface CourseFormData {
   language?: string;
   learningObjectives?: string[];
   requirements?: string[];
+  courseSkills?: string[];
   status?: CourseStatus;
 }
 
@@ -123,9 +124,10 @@ const initialCourseForm: CourseFormData = {
   currency: 'VND',
   thumbnailUrl: '',
   estimatedDuration: undefined,
-  language: 'English',
+  language: 'Vietnamese',
   learningObjectives: [],
   requirements: [],
+  courseSkills: [],
   status: CourseStatus.DRAFT
 };
 
@@ -516,7 +518,8 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
           estimatedDurationHours: formData.estimatedDuration,
           language: formData.language,
           learningObjectives: formData.learningObjectives,
-          requirements: formData.requirements
+          requirements: formData.requirements,
+          courseSkills: formData.courseSkills
         };
 
         const courseService = await import('../../services/courseService');
@@ -740,7 +743,8 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
         estimatedDurationHours: formData.estimatedDuration,
         language: formData.language,
         learningObjectives: formData.learningObjectives,
-        requirements: formData.requirements
+        requirements: formData.requirements,
+        courseSkills: formData.courseSkills
       };
 
       const courseService = await import('../../services/courseService');
@@ -1049,6 +1053,7 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
           language: courseWithDetails.language,
           learningObjectives: courseWithDetails.learningObjectives || [],
           requirements: courseWithDetails.requirements || [],
+          courseSkills: courseWithDetails.courseSkills || [],
           status: courseWithDetails.status
         }
       }));

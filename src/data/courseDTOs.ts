@@ -101,6 +101,7 @@ export interface CourseDetailDTO {
   language?: string;
   learningObjectives?: string[];
   requirements?: string[];
+  courseSkills?: string[];
   averageRating?: number;
   totalReviews?: number;
   createdAt: string;
@@ -131,6 +132,7 @@ export interface CourseCreateDTO {
   price?: number;
   currency?: string;
   purchaseOption?: CoursePurchaseOption; // Optional purchase setup
+  courseSkills?: string[];
 }
 
 // Course Update DTO
@@ -147,6 +149,7 @@ export interface CourseUpdateDTO {
   thumbnailMediaId?: number;
   price?: number;
   currency?: string;
+  courseSkills?: string[];
 }
 
 // Lesson Summary DTO

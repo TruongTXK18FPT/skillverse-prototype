@@ -1,11 +1,13 @@
 /**
  * Course Builder Styles
- * 
+ *
  * Gaming/Sci-fi theme consistent with SkillVerse design system.
  * CSS naming convention: .cb-* (course-builder prefix)
- * 
+ *
  * @module styles/course-builder
  */
+
+@import './skillAutocomplete.css';
 
 /* ============================================================================
    CSS VARIABLES - Inherits from learning-hud design system
@@ -3411,4 +3413,57 @@
   color: var(--cb-text-muted);
   text-align: center;
   gap: var(--cb-spacing-md);
+}
+
+/* ============================================================================
+   SKILL TAGS INPUT
+   ============================================================================ */
+
+.cb-skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  min-height: 28px;
+}
+
+.cb-skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.18);
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  color: #c4b5fd;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.cb-skill-tag__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #9f7aea;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color var(--cb-transition-fast);
+}
+
+.cb-skill-tag__remove:hover {
+  color: #fca5a5;
+}
+
+.cb-skill-tags-input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.cb-skill-tags-input-row .cb-input {
+  flex: 1;
 }

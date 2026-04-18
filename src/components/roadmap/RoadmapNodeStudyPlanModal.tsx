@@ -5,6 +5,9 @@ import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
 import TicTacToeGame from '../game/tic-tac-toe/TicTacToeGame';
 import { NodeLearningContext } from './nodeLearningContext';
 import {
+  DEADLINE_BEFORE_START_ERROR,
+  getMaxDeadlineDate,
+  getTodayDate,
   inferRoadmapStudyPlanDeadline,
   resolvePreferredStudyDays,
   resolvePreferredTimeWindows,
@@ -48,7 +51,6 @@ interface RoadmapNodeStudyPlanModalProps {
   isOpen: boolean;
   node: RoadmapNode | null;
   learningContext?: NodeLearningContext | null;
-  childBranchTitles?: string[];
   isSubmitting: boolean;
   onClose: () => void;
   onSubmit: (request: RoadmapNodeStudyPlanRequest) => Promise<void> | void;
@@ -59,9 +61,10 @@ interface RoadmapNodeStudyPlanModalProps {
     studyWindow: StudyWindowId;
     selectedDays: string[];
   } | null;
+  /** Roadmap type — determines deadline behavior */
+  roadmapMode?: 'SKILL_BASED' | 'CAREER_BASED';
 }
 
-type ScopeMode = 'node_only' | 'node_with_children';
 const NODE_PLAN_GAME_DELAY_MS = 7000;
 
 const DAY_OPTIONS = [
@@ -119,26 +122,24 @@ const STUDY_WINDOWS: Record<StudyWindowId, { label: string }> = {
   },
 };
 
-const getTodayDate = (): string => new Date().toISOString().slice(0, 10);
-
 const RoadmapNodeStudyPlanModal = ({
   isOpen,
   node,
   learningContext,
-  childBranchTitles = [],
   isSubmitting,
   onClose,
   onSubmit,
   aiPrefilledParams,
+  roadmapMode,
 }: RoadmapNodeStudyPlanModalProps) => {
   const [startDate, setStartDate] = useState<string>(getTodayDate());
   const [deadline, setDeadline] = useState<string>('');
+  const [deadlineError, setDeadlineError] = useState<string>('');
   const [intensity, setIntensity] = useState<StudyPlanIntensityId>('balanced');
   const [studyWindow, setStudyWindow] = useState<StudyWindowId>('flexible');
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [desiredOutcome, setDesiredOutcome] = useState<string>('');
   const [freeTimeDescription, setFreeTimeDescription] = useState<string>('');
-  const [scopeMode, setScopeMode] = useState<ScopeMode>('node_only');
   const [showSubmittingGame, setShowSubmittingGame] = useState(false);
 
   const intensityMeta = useMemo(
@@ -161,15 +162,13 @@ const RoadmapNodeStudyPlanModal = ({
       workloadMinutes,
       durationMinutes: intensityMeta.durationMinutes,
       maxSessionsPerDay: intensityMeta.maxSessionsPerDay,
-      childBranchCount: scopeMode === 'node_with_children' ? childBranchTitles.length : 0,
+      childBranchCount: 0,
     }),
     [
-      childBranchTitles.length,
       inferredPreferredDays,
       intensity,
       intensityMeta.durationMinutes,
       intensityMeta.maxSessionsPerDay,
-      scopeMode,
       startDate,
       workloadMinutes,
     ],
@@ -195,12 +194,12 @@ const RoadmapNodeStudyPlanModal = ({
     if (!isOpen) return;
     setStartDate(getTodayDate());
     setDeadline('');
+    setDeadlineError('');
     setIntensity('balanced');
     setStudyWindow('flexible');
     setSelectedDays([]);
     setDesiredOutcome('');
     setFreeTimeDescription('');
-    setScopeMode('node_only');
   }, [isOpen, node?.id]);
 
   // Apply AI-prefilled params when they change
@@ -257,14 +256,9 @@ const RoadmapNodeStudyPlanModal = ({
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Ho_Chi_Minh';
     const windowPreset = STUDY_WINDOW_PRESETS[studyWindow];
     const normalizedDays = inferredPreferredDays;
-    const scopeDescription =
-      scopeMode === 'node_with_children' && childBranchTitles.length > 0
-        ? `Phạm vi: tập trung node hiện tại và mở rộng sang các nhánh con trực tiếp gồm ${childBranchTitles.join(', ')}.`
-        : 'Phạm vi: chỉ tập trung hoàn thành node hiện tại trước.';
     const mergedDesiredOutcome = [
       learningContext?.objectiveSummary,
       desiredOutcome.trim(),
-      scopeDescription,
     ].filter(Boolean).join(' ');
     const mergedFreeTimeDescription = [freeTimeDescription.trim()].filter(Boolean).join(' ');
     const plannerTopics = Array.from(
@@ -339,36 +333,6 @@ const RoadmapNodeStudyPlanModal = ({
           <section className="roadmap-node-plan-modal__section">
             <label className="roadmap-node-plan-modal__label">
               <Target size={14} />
-              Scope kế hoạch
-            </label>
-            <div className="roadmap-node-plan-modal__choice-list roadmap-node-plan-modal__choice-list--compact">
-              <button
-                type="button"
-                className={`roadmap-node-plan-modal__choice-item ${scopeMode === 'node_only' ? 'is-active' : ''}`}
-                onClick={() => setScopeMode('node_only')}
-              >
-                <span className="roadmap-node-plan-modal__choice-title">Chỉ node này</span>
-                <span className="roadmap-node-plan-modal__choice-desc">Tập trung hoàn thành node hiện tại trước.</span>
-              </button>
-              <button
-                type="button"
-                className={`roadmap-node-plan-modal__choice-item ${scopeMode === 'node_with_children' ? 'is-active' : ''}`}
-                onClick={() => setScopeMode('node_with_children')}
-                disabled={childBranchTitles.length === 0}
-              >
-                <span className="roadmap-node-plan-modal__choice-title">Node này + nhánh con</span>
-                <span className="roadmap-node-plan-modal__choice-desc">
-                  {childBranchTitles.length > 0
-                    ? `Mở rộng tiếp sang ${childBranchTitles.length} nhánh con trực tiếp.`
-                    : 'Node này hiện chưa có nhánh con trực tiếp.'}
-                </span>
-              </button>
-            </div>
-          </section>
-
-          <section className="roadmap-node-plan-modal__section">
-            <label className="roadmap-node-plan-modal__label">
-              <Target size={14} />
               Mục tiêu chi tiết (tuỳ chọn)
             </label>
             <textarea
@@ -388,24 +352,51 @@ const RoadmapNodeStudyPlanModal = ({
                 type="date"
                 className="roadmap-node-plan-modal__input"
                 value={startDate}
-                onChange={(event) => setStartDate(event.target.value)}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setStartDate(value);
+                  // Clear deadline + error if deadline < new startDate
+                  if (deadline && value && deadline < value) {
+                    setDeadline('');
+                    setDeadlineError('');
+                  }
+                }}
+                min={getTodayDate()}
               />
             </label>
 
             <label className="roadmap-node-plan-modal__label">
               <CalendarDays size={14} />
-              Deadline (tuỳ chọn)
+              {roadmapMode === 'CAREER_BASED' ? 'Deadline (bắt buộc)' : 'Deadline (tuỳ chọn)'}
               <input
                 type="date"
                 className="roadmap-node-plan-modal__input"
                 value={deadline}
-                onChange={(event) => setDeadline(event.target.value)}
-                min={startDate || undefined}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setDeadline(value);
+                  if (value && startDate && value < startDate) {
+                    setDeadlineError(DEADLINE_BEFORE_START_ERROR);
+                  } else {
+                    setDeadlineError('');
+                  }
+                }}
+                min={startDate || getTodayDate()}
+                max={startDate ? getMaxDeadlineDate(startDate) : getMaxDeadlineDate(getTodayDate())}
               />
+              {deadlineError && (
+                <span className="deadline-warning">{deadlineError}</span>
+              )}
             </label>
-            <p className="roadmap-node-plan-modal__hint">
-              Nếu bỏ trống, hệ thống sẽ tự ước tính deadline theo khối lượng node và cường độ học. Dự kiến hiện tại: {inferredDeadline}.
-            </p>
+            {roadmapMode === 'CAREER_BASED' ? (
+              <p className="roadmap-node-plan-modal__hint">
+                Vì roadmap career có nhiều milestone, bạn hãy tự ước tính deadline phù hợp với lịch trình cá nhân.
+              </p>
+            ) : (
+              <p className="roadmap-node-plan-modal__hint">
+                Nếu bỏ trống, hệ thống sẽ tự ước tính deadline theo khối lượng node và cường độ học. Dự kiến: {inferredDeadline}.
+              </p>
+            )}
           </section>
 
           <section className="roadmap-node-plan-modal__section">
@@ -497,7 +488,7 @@ const RoadmapNodeStudyPlanModal = ({
             type="button"
             className="roadmap-node-plan-modal__action roadmap-node-plan-modal__action--primary"
             onClick={handleSubmit}
-            disabled={isSubmitting || !startDate}
+            disabled={isSubmitting || !startDate || (roadmapMode === 'CAREER_BASED' && !deadline)}
           >
             {isSubmitting ? 'Đang tạo kế hoạch...' : 'Tạo kế hoạch AI'}
           </button>

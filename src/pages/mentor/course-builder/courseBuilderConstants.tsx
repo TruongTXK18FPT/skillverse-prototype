@@ -45,6 +45,11 @@ export const CATEGORIES = [
   "Personal Development",
 ];
 
+export const LANGUAGES = [
+  { value: 'Vietnamese', label: 'Tiếng Việt' },
+  { value: 'English', label: 'English' },
+] as const;
+
 export const LEVELS = [
   { value: CourseLevel.BEGINNER, label: "Cơ bản" },
   { value: CourseLevel.INTERMEDIATE, label: "Trung bình" },

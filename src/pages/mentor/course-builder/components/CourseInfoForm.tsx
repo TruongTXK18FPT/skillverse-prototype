@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { FiInfo, FiImage, FiPlus, FiX } from "react-icons/fi";
 import { CourseLevel } from "../../../../data/courseDTOs";
-
+import { LANGUAGES } from "../courseBuilderConstants";
+import { skillService } from "../../../../services/skillService";
+import { SkillDto } from "../../../../data/skillDTOs";
+import useClickOutside from "../../../../hooks/useClickOutside";
 interface CourseInfoFormProps {
   courseForm: {
     title?: string;
@@ -12,12 +15,14 @@ interface CourseInfoFormProps {
     price?: number;
     estimatedDuration?: number;
     thumbnailUrl?: string;
+    language?: string;
   };
   isRevisionMode: boolean;
   isEditable: boolean;
   changedCourseInfoFields: string[];
   learningObjectives: string[];
   requirements: string[];
+  courseSkills: string[];
   CATEGORIES: string[];
   LEVELS: { value: CourseLevel; label: string }[];
   onUpdateCourseForm: (update: Partial<{
@@ -28,9 +33,11 @@ interface CourseInfoFormProps {
     level?: CourseLevel;
     price?: number;
     estimatedDuration?: number;
+    language?: string;
   }>) => void;
   onSetLearningObjectives: (objs: string[]) => void;
   onSetRequirements: (reqs: string[]) => void;
+  onSetCourseSkills: (skills: string[]) => void;
   onThumbnailChange: (file: File) => void;
   onShowToast: (type: "success" | "error" | "info" | "warning", message: string) => void;
   onBlurOnWheel: (e: React.WheelEvent<HTMLInputElement>) => void;
@@ -38,6 +45,212 @@ interface CourseInfoFormProps {
   onOpenThumbnailUpload: () => void;
 }
 
+// ---------- Skill Autocomplete Sub-Component ----------
+interface SkillAutocompleteProps {
+  onAddSkill: (skillName: string) => void;
+  onShowToast: (type: "success" | "error" | "info" | "warning", message: string) => void;
+}
+
+const SkillAutocomplete: React.FC<SkillAutocompleteProps> = ({
+  onAddSkill,
+  onShowToast,
+}) => {
+  const [inputValue, setInputValue] = useState("");
+  const [suggestions, setSuggestions] = useState<SkillDto[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+
+  // Debounce timer ref
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Focus state
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+  // Click outside to close panel
+  const containerRef = useClickOutside<HTMLDivElement>(() => {
+    setIsPanelOpen(false);
+    setHighlightedIndex(-1);
+  });
+
+  // Fetch suggestions with debounce
+  // NOTE: Always normalize prefix BEFORE searching so "java core" finds "JAVA_CORE"
+  const fetchSuggestions = useCallback(async (rawInput: string) => {
+    if (!rawInput.trim()) {
+      setSuggestions([]);
+      setIsPanelOpen(false);
+      return;
+    }
+    setIsLoading(true);
+    try {
+      // Normalize input so "java core" / "java-core" both search "JAVA_CORE"
+      const normalized = skillService.normalize(rawInput);
+      const results = await skillService.suggestByPrefix(normalized, 0, 10);
+      setSuggestions(results);
+      // Show panel if suggestions exist OR if typed value doesn't exactly match any
+      const alreadyAdded = results.some(
+        (s) => s.name.toUpperCase() === normalized,
+      );
+      setIsPanelOpen(results.length > 0 || !alreadyAdded);
+      setHighlightedIndex(-1);
+    } catch {
+      setSuggestions([]);
+      setIsPanelOpen(false);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const handleInputChange = (value: string) => {
+    setInputValue(value);
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      fetchSuggestions(value);
+    }, 300);
+  };
+
+  // Add a skill tag
+  const addSkillFromSuggestion = (skillName: string) => {
+    const normalized = skillService.normalize(skillName);
+    // Prevent duplicates (case-insensitive check against current tags)
+    onAddSkill(normalized);
+    setInputValue("");
+    setSuggestions([]);
+    setIsPanelOpen(false);
+    setHighlightedIndex(-1);
+  };
+
+  // Add skill on Enter key
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (highlightedIndex >= 0 && suggestions[highlightedIndex]) {
+        // Keyboard-navigated selection
+        addSkillFromSuggestion(suggestions[highlightedIndex].name);
+      } else if (inputValue.trim()) {
+        // Custom text → normalize and add
+        addSkillFromSuggestion(inputValue);
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedIndex((prev) =>
+        prev < suggestions.length - 1 ? prev + 1 : prev,
+      );
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+    } else if (e.key === "Escape") {
+      setIsPanelOpen(false);
+      setHighlightedIndex(-1);
+    }
+  };
+
+  // Clean up debounce on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
+
+  // Show panel if input has value and either: loading, results, or user is typing
+  const showPanel = isPanelOpen && (
+    isInputFocused || suggestions.length > 0 || (inputValue.trim().length > 0 && !isLoading)
+  );
+
+  return (
+    <div className="cb-skill-autocomplete" ref={containerRef}>
+      <div className="cb-skill-tags-input-row">
+        <input
+          type="text"
+          className={`cb-input${isInputFocused ? " cb-skill-autocomplete__input--focused" : ""}`}
+          placeholder="Nhập kỹ năng, ví dụ: JAVA, PYTHON, DOCKER..."
+          value={inputValue}
+          onChange={(e) => handleInputChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onFocus={() => {
+            setIsInputFocused(true);
+            // Re-open panel if there are suggestions
+            if (suggestions.length > 0) setIsPanelOpen(true);
+          }}
+          onBlur={() => setIsInputFocused(false)}
+          autoComplete="off"
+          spellCheck={false}
+        />
+        <button
+          type="button"
+          className="cb-button cb-button--ghost cb-button--sm"
+          onClick={() => {
+            if (inputValue.trim()) addSkillFromSuggestion(inputValue);
+          }}
+          disabled={!inputValue.trim()}
+        >
+          <FiPlus /> Thêm
+        </button>
+      </div>
+
+      {/* Floating suggestion panel */}
+      {showPanel && (
+        <div className="cb-skill-autocomplete__panel">
+          {isLoading ? (
+            <div className="cb-skill-autocomplete__loading">
+              <div className="cb-skill-autocomplete__spinner" />
+              <span>Đang tìm...</span>
+            </div>
+          ) : suggestions.length > 0 ? (
+            <>
+              {suggestions.map((skill, idx) => (
+                <div
+                  key={skill.id}
+                  className={`cb-skill-autocomplete__item${
+                    idx === highlightedIndex ? " cb-skill-autocomplete__item--highlighted" : ""
+                  }`}
+                  onMouseDown={(e) => {
+                    // Use mousedown instead of click to prevent input blur closing panel
+                    e.preventDefault();
+                    addSkillFromSuggestion(skill.name);
+                  }}
+                  onMouseEnter={() => setHighlightedIndex(idx)}
+                >
+                  <span className="cb-skill-autocomplete__name">
+                    {skill.name}
+                  </span>
+                  {skill.category && (
+                    <span className="cb-skill-autocomplete__category">
+                      {skill.category}
+                    </span>
+                  )}
+                </div>
+              ))}
+              <div className="cb-skill-autocomplete__empty">
+                <span className="cb-skill-autocomplete__kbd-hint">
+                  <kbd className="cb-skill-autocomplete__kbd">↑↓</kbd> di chuyển
+                  <kbd className="cb-skill-autocomplete__kbd">Enter</kbd> chọn
+                  <kbd className="cb-skill-autocomplete__kbd">Esc</kbd> đóng
+                </span>
+                <span className="cb-skill-autocomplete__empty-hint">
+                  Nhấn Enter để tạo mới
+                </span>
+              </div>
+            </>
+          ) : inputValue.trim() ? (
+            <div className="cb-skill-autocomplete__empty">
+              <span>Không tìm thấy "{inputValue.trim()}"</span>
+              <span
+                className="cb-skill-autocomplete__empty-hint"
+                onMouseDown={(e) => e.preventDefault()}
+                style={{ cursor: "default" }}
+              >
+                Nhấn Enter để tạo mới
+              </span>
+            </div>
+          ) : null}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ---------- Main Component ----------
 const CourseInfoForm: React.FC<CourseInfoFormProps> = ({
   courseForm,
   isRevisionMode,
@@ -45,17 +258,34 @@ const CourseInfoForm: React.FC<CourseInfoFormProps> = ({
   changedCourseInfoFields,
   learningObjectives,
   requirements,
+  courseSkills,
   CATEGORIES,
   LEVELS,
   onUpdateCourseForm,
   onSetLearningObjectives,
   onSetRequirements,
+  onSetCourseSkills,
   onThumbnailChange,
   onShowToast,
   onBlurOnWheel,
   thumbnailFile,
   onOpenThumbnailUpload,
 }) => {
+  const addSkill = (tag: string) => {
+    const normalized = skillService.normalize(tag);
+    if (!normalized) return;
+    if (courseSkills.some((s) => s === normalized)) {
+      onShowToast("warning", "Tag đã tồn tại");
+      return;
+    }
+    onSetCourseSkills([...courseSkills, normalized]);
+  };
+
+  const removeSkill = (tag: string) => {
+    const normalized = skillService.normalize(tag);
+    onSetCourseSkills(courseSkills.filter((s) => s !== normalized));
+  };
+
   return (
     <div className="cb-main-content">
       <div className="cb-panel">
@@ -386,6 +616,53 @@ const CourseInfoForm: React.FC<CourseInfoFormProps> = ({
                     }
                   />
                 </div>
+              </div>
+
+              <div className="cb-grid cb-grid--2">
+                <div className="cb-form-group">
+                  <label className="cb-label">Ngôn ngữ</label>
+                  <select
+                    className="cb-input cb-select"
+                    value={courseForm.language || "Vietnamese"}
+                    onChange={(e) =>
+                      onUpdateCourseForm({ language: e.target.value })
+                    }
+                  >
+                    {LANGUAGES.map((lang) => (
+                      <option key={lang.value} value={lang.value}>
+                        {lang.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Skill Tags — show read-only chips OR edit controls based on isEditable */}
+              <div className="cb-form-group">
+                <label className="cb-label">Kỹ năng / Tags</label>
+                <div className="cb-skill-tags">
+                  {courseSkills.map((skill) => (
+                    <span key={skill} className="cb-skill-tag">
+                      {skill}
+                      {isEditable && (
+                        <button
+                          type="button"
+                          className="cb-skill-tag__remove"
+                          onClick={() => removeSkill(skill)}
+                          title="Xóa tag"
+                        >
+                          <FiX size={12} />
+                        </button>
+                      )}
+                    </span>
+                  ))}
+                </div>
+                {isEditable && (
+                  <SkillAutocomplete
+                    onAddSkill={addSkill}
+                    onShowToast={onShowToast}
+                  />
+                )}
               </div>
             </section>
           </div>
