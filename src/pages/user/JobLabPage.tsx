@@ -988,7 +988,7 @@ const JobLabPage: React.FC = () => {
   if (loading) {
     return (
       <div className="jlx-shell">
-        <div className="jlx-loading">
+        <div className="jlx-loading jlx-loading--full">
           <div className="jlx-loading-skeleton" aria-hidden="true">
             <div className="jlx-loading-skeleton__line is-wide" />
             <div className="jlx-loading-skeleton__line" />

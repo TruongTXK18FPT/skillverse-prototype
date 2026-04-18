@@ -23,6 +23,7 @@ export type RoadmapNodeFocusPanelProps = {
   hasStudyTask: boolean;
   linkedTaskId?: string | null;
   canCreateStudyTask: boolean;
+  studyPlanLockedReason?: string | null;
   isCreatingStudyTask: boolean;
   onClose: () => void;
   onCreateStudyPlan: (nodeId: string) => void;
@@ -87,6 +88,7 @@ const RoadmapNodeFocusPanel = ({
   hasStudyTask,
   linkedTaskId,
   canCreateStudyTask,
+  studyPlanLockedReason,
   isCreatingStudyTask,
   onClose,
   onCreateStudyPlan,
@@ -379,7 +381,7 @@ const RoadmapNodeFocusPanel = ({
           </button>
           {!hasStudyTask && !canCreateStudyTask && (
             <p className="roadmap-node-focus-panel__action-note">
-              Hoàn thành node hiện tại trước để mở kế hoạch cho node này.
+              {studyPlanLockedReason || 'Hoàn thành node hiện tại trước để mở kế hoạch cho node này.'}
             </p>
           )}
         </section>

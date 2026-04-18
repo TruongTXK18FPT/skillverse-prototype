@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { HelpCircle, Bell, BellOff } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
 import { useMeowlSkin } from "../../context/MeowlSkinContext";
 import { useMeowlState } from "../../context/MeowlStateContext";
+import usePremiumAccess from "../../hooks/usePremiumAccess";
 import LoginRequiredModal from "../auth/LoginRequiredModal";
 import "../../styles/MeowlGuide.css";
 import guideMessages from "./MeowlGuideMsg.json";
@@ -82,6 +83,15 @@ const STORAGE_KEYS = {
 };
 
 const MEOWL_GUIDE_PRESENCE_EVENT = "meowl-guide-presence-changed";
+const MENTOR_PRO_REQUIRED_MODES: MeowlContextMode[] = [
+  "MODE_ROADMAP_OVERVIEW",
+  "MODE_COURSE_LEARNING",
+];
+const DEFAULT_CONTEXT_ALLOWED_MODES: MeowlContextMode[] = [
+  "MODE_GENERAL_FAQ",
+  "MODE_ROADMAP_OVERVIEW",
+  "MODE_COURSE_LEARNING",
+];
 
 const MeowlGuide: React.FC<MeowlGuideProps> = ({
   currentPage = "home",
@@ -107,7 +117,30 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
     checkInCoins,
     closeCheckInSuccess,
   } = useMeowlState();
+  const { hasMentorProAccess } = usePremiumAccess();
   const language = languageOverride || contextLanguage;
+
+  const resolvedAllowedModes = useMemo<MeowlContextMode[]>(() => {
+    const baseModes =
+      initialAllowedModes && initialAllowedModes.length > 0
+        ? initialAllowedModes
+        : DEFAULT_CONTEXT_ALLOWED_MODES;
+
+    const filteredModes = hasMentorProAccess
+      ? baseModes
+      : baseModes.filter(
+          (mode) => !MENTOR_PRO_REQUIRED_MODES.includes(mode),
+        );
+
+    const uniqueModes = Array.from(new Set(filteredModes));
+    return uniqueModes.length > 0 ? uniqueModes : ["MODE_GENERAL_FAQ"];
+  }, [hasMentorProAccess, initialAllowedModes]);
+
+  const resolvedPanelMode = useMemo<MeowlContextMode>(() => {
+    return resolvedAllowedModes.includes(initialPanelMode)
+      ? initialPanelMode
+      : "MODE_GENERAL_FAQ";
+  }, [initialPanelMode, resolvedAllowedModes]);
 
   // Use state image if available (lose-streak or sleeping), otherwise use skin
   const displayImage = stateImage || currentSkinImage;
@@ -388,9 +421,9 @@ const MeowlGuide: React.FC<MeowlGuideProps> = ({
         isOpen={isChatOpen}
         onClose={handleChatClose}
         onRequestLogin={handleRequestLogin}
-        panelMode={initialPanelMode}
+        panelMode={resolvedPanelMode}
         panelTheme={panelTheme}
-        panelAllowedModes={initialAllowedModes}
+        panelAllowedModes={resolvedAllowedModes}
         roadmapContext={roadmapContext ?? undefined}
         courseContext={courseContext ?? undefined}
       />

@@ -1,4 +1,4 @@
-﻿import React, {
+import React, {
   useState,
   useRef,
   useEffect,
@@ -23,6 +23,7 @@ import {
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import { useLanguage } from "../../context/LanguageContext";
 import { useAuth } from "../../context/AuthContext";
+import usePremiumAccess from "../../hooks/usePremiumAccess";
 import "../../styles/MeowlChatV2.css";
 import { guardUserInput, pickFallback } from "./MeowlGuard.ts";
 import axiosInstance from "../../services/axiosInstance";
@@ -302,6 +303,7 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
 }) => {
   const { language } = useLanguage();
   const { user, isAuthenticated } = useAuth();
+  const { hasStudentTierAccess, hasMentorProAccess } = usePremiumAccess();
   const navigate = useNavigate();
 
   // Chat state
@@ -503,15 +505,43 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
     "MODE_FALLBACK_TEACHER",
     "MODE_SOCRATIC_READING",
   ];
+  const mentorProRequiredModes: MeowlContextMode[] = [
+    "MODE_ROADMAP_OVERVIEW",
+    "MODE_COURSE_LEARNING",
+  ];
   const [contextMode, setContextMode] = useState<MeowlContextMode>(initialPanelMode);
-  const effectiveAllowedModes = panelAllowedModes ?? allContextModes.filter(
-    (m) => m !== "MODE_SOCRATIC_READING" && m !== "MODE_FALLBACK_TEACHER"
-  );
+  const effectiveAllowedModes = useMemo<MeowlContextMode[]>(() => {
+    const defaultModes = allContextModes.filter(
+      (mode) =>
+        mode !== "MODE_SOCRATIC_READING" && mode !== "MODE_FALLBACK_TEACHER",
+    );
+    const baseModes =
+      panelAllowedModes && panelAllowedModes.length > 0
+        ? panelAllowedModes
+        : defaultModes;
+    const tierFilteredModes = hasMentorProAccess
+      ? baseModes
+      : baseModes.filter(
+          (mode) => !mentorProRequiredModes.includes(mode),
+        );
+    const dedupedModes = Array.from(new Set(tierFilteredModes));
+    return dedupedModes.length > 0 ? dedupedModes : ["MODE_GENERAL_FAQ"];
+  }, [hasMentorProAccess, panelAllowedModes]);
 
   // Reset context mode when initialPanelMode changes
   useEffect(() => {
-    setContextMode(initialPanelMode);
-  }, [initialPanelMode]);
+    const nextMode = effectiveAllowedModes.includes(initialPanelMode)
+      ? initialPanelMode
+      : effectiveAllowedModes[0] ?? "MODE_GENERAL_FAQ";
+    setContextMode(nextMode);
+  }, [effectiveAllowedModes, initialPanelMode]);
+
+  useEffect(() => {
+    if (effectiveAllowedModes.includes(contextMode)) {
+      return;
+    }
+    setContextMode(effectiveAllowedModes[0] ?? "MODE_GENERAL_FAQ");
+  }, [contextMode, effectiveAllowedModes]);
 
   // Roadmap selector state (for MODE_ROADMAP_OVERVIEW)
   const [roadmapList, setRoadmapList] = useState<RoadmapSessionSummary[]>([]);
@@ -721,7 +751,7 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
 
   // Course context welcome message (for MODE_COURSE_LEARNING)
   const courseWelcomeContent = useMemo(() => {
-    if (!courseContext) return null;
+    if (!courseContext || !isCourseMode) return null;
     const isVi = language === "vi";
 
     const activeModuleId = selectedCourseModuleId ?? courseContext.activeModuleId;
@@ -784,7 +814,7 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
       nextAction,
       suggestedPrompts: suggestedPromptsArr,
     };
-  }, [courseContext, language, selectedCourseModuleId, selectedCourseLessonId]);
+  }, [courseContext, isCourseMode, language, selectedContentType, selectedCourseModuleId, selectedCourseLessonId]);
 
   // Course context summary for context envelope
   const courseContextSummary = useMemo(() => {
@@ -1175,7 +1205,7 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
 
   // Roadmap context welcome message
   const roadmapWelcomeContent = useMemo(() => {
-    if (!activeRoadmapContext) return null;
+    if (!activeRoadmapContext || !isRoadmapMode) return null;
     const isVi = language === "vi";
     const nodeTitle = activeRoadmapContext.nodeTitle || (isVi ? "nút hiện tại" : "current node");
     const roadmapTitle = activeRoadmapContext.roadmapTitle || (isVi ? "Lộ trình học tập" : "Learning roadmap");
@@ -1225,7 +1255,7 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
       nextAction,
       suggestedPrompts: suggestedPromptsArr,
     };
-  }, [activeRoadmapContext, language]);
+  }, [activeRoadmapContext, isRoadmapMode, language]);
 
   const useBackendText = Boolean(onboardingContext);
   const baseWelcomeMessage =
@@ -1811,6 +1841,21 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
           : null;
 
       if (quickIntent) {
+        if (!hasStudentTierAccess) {
+          const lockedResponse: Message = {
+            id: (Date.now() + 1).toString(),
+            role: "assistant",
+            content:
+              language === "vi"
+                ? 'Tính năng tạo Study Plan từ roadmap node yêu cầu gói Bạc (Sinh viên) trở lên. Bạn có thể tiếp tục chat ở chế độ thường nhé. 🐱'
+                : "Creating Study Plan from a roadmap node requires Student tier or above. You can keep chatting in normal mode. 🐱",
+            timestamp: new Date(),
+          };
+          setMessages((prev) => [...prev, lockedResponse]);
+          incrementGuestCount();
+          return;
+        }
+
         await handleQuickCreateStudyPlan(quickIntent);
         incrementGuestCount();
         return;
@@ -1868,8 +1913,10 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
           roadmapNodeDossier,
           selectedRoadmapId,
         );
-        if (intent) {
+        if (intent && hasStudentTierAccess) {
           setStudyPlanIntent(intent);
+        } else {
+          setStudyPlanIntent(null);
         }
       }
     } catch (error) {
@@ -2519,7 +2566,7 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
         </div>
 
         {/* Study Plan Intent Action Card */}
-        {studyPlanIntent && (
+        {studyPlanIntent && hasStudentTierAccess && (
           <div
             className={
               panelTheme === "hud"

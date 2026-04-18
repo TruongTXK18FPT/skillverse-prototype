@@ -26,6 +26,7 @@ import {
 } from '../../types/Roadmap';
 import { useToast } from '../../hooks/useToast';
 import { useAuth } from '../../context/AuthContext';
+import usePremiumAccess from '../../hooks/usePremiumAccess';
 import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import Toast from '../../components/shared/Toast';
@@ -41,7 +42,9 @@ const RoadmapDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, user, loading: authLoading } = useAuth();
+  const { hasStudentTierAccess } = usePremiumAccess();
   const { toast, isVisible, showError, showSuccess, showToast, hideToast } = useToast();
+  const studentPlanLockMessage = 'Tính năng này yêu cầu gói Bạc (Sinh viên) trở lên.';
 
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
   const [progressMap, setProgressMap] = useState<Map<string, QuestProgress>>(new Map());
@@ -152,6 +155,9 @@ const RoadmapDetailPage = () => {
     if (!selectedNode) {
       return false;
     }
+    if (!hasStudentTierAccess) {
+      return false;
+    }
     if (studyTaskNodeIds.has(selectedNode.id)) {
       return false;
     }
@@ -159,7 +165,7 @@ const RoadmapDetailPage = () => {
       return true;
     }
     return selectedNode.id === eligibleNodeId;
-  }, [eligibleNodeId, selectedNode, studyTaskNodeIds]);
+  }, [eligibleNodeId, hasStudentTierAccess, selectedNode, studyTaskNodeIds]);
 
   const linkedTaskIdForSelectedNode = selectedNodePlanSummary?.linkedTaskIds?.[0] ?? null;
 
@@ -289,6 +295,11 @@ const RoadmapDetailPage = () => {
         return;
       }
 
+      if (!hasStudentTierAccess) {
+        showError('Yêu cầu gói Bạc', studentPlanLockMessage);
+        return;
+      }
+
       // Check eligible node constraint
       if (eligibleNodeId && node.id !== eligibleNodeId) {
         showError('Chưa thể tạo plan', 'Bạn cần hoàn thành node hiện tại trước khi mở plan node tiếp theo.');
@@ -303,7 +314,16 @@ const RoadmapDetailPage = () => {
 
     window.addEventListener('meowl-study-plan-intent', handleStudyPlanIntent);
     return () => window.removeEventListener('meowl-study-plan-intent', handleStudyPlanIntent);
-  }, [roadmap, studyTaskNodeIds, nodePlanSummaryMap, eligibleNodeId, navigate, showError]);
+  }, [
+    roadmap,
+    studyTaskNodeIds,
+    nodePlanSummaryMap,
+    hasStudentTierAccess,
+    eligibleNodeId,
+    navigate,
+    showError,
+    studentPlanLockMessage,
+  ]);
 
   const handleQuestComplete = useCallback(async (questId: string, completed: boolean) => {
     if (!roadmap) return;
@@ -371,10 +391,24 @@ const RoadmapDetailPage = () => {
       return;
     }
 
+    if (!hasStudentTierAccess) {
+      showError('Yêu cầu gói Bạc', studentPlanLockMessage);
+      return;
+    }
+
     setPlanModalNode(node);
     setIsPlanModalOpen(true);
     setSelectedNodeId(null);
-  }, [roadmap, eligibleNodeId, showError, studyTaskNodeIds, nodePlanSummaryMap, navigate]);
+  }, [
+    roadmap,
+    eligibleNodeId,
+    hasStudentTierAccess,
+    showError,
+    studyTaskNodeIds,
+    nodePlanSummaryMap,
+    navigate,
+    studentPlanLockMessage,
+  ]);
 
   const handleNodeSelect = useCallback((nodeId: string) => {
     if (!nodeId || !nodeId.trim()) {
@@ -444,6 +478,11 @@ const RoadmapDetailPage = () => {
 
   const handleSubmitNodePlan = useCallback(async (request: RoadmapNodeStudyPlanRequest) => {
     if (!roadmap || !planModalNode) return;
+
+    if (!hasStudentTierAccess) {
+      showError('Yêu cầu gói Bạc', studentPlanLockMessage);
+      return;
+    }
 
     try {
       setCreatingTaskNodeId(planModalNode.id);
@@ -544,7 +583,16 @@ const RoadmapDetailPage = () => {
     } finally {
       setCreatingTaskNodeId(null);
     }
-  }, [roadmap, planModalNode, showToast, showError, hideToast, navigate]);
+  }, [
+    roadmap,
+    planModalNode,
+    hasStudentTierAccess,
+    showToast,
+    showError,
+    hideToast,
+    navigate,
+    studentPlanLockMessage,
+  ]);
 
   const handleBack = useCallback(() => {
     navigate('/roadmap');
@@ -685,6 +733,9 @@ const RoadmapDetailPage = () => {
             hasStudyTask: Boolean(selectedNodePlanSummary?.hasLinkedPlan),
             linkedTaskId: linkedTaskIdForSelectedNode,
             canCreateStudyTask: canCreateStudyPlanForSelectedNode,
+            studyPlanLockedReason: hasStudentTierAccess
+              ? null
+              : studentPlanLockMessage,
             isCreatingStudyTask: Boolean(
               creatingTaskNodeId
               && selectedNode

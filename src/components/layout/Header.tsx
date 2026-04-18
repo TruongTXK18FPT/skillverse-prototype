@@ -389,6 +389,7 @@ const Header: React.FC = () => {
 
     try {
       await logout();
+      window.location.reload();
     } finally {
       setIsLoggingOut(false);
     }

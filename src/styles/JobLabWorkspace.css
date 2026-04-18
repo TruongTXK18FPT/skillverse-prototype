@@ -35,6 +35,11 @@
   place-items: center;
 }
 
+.jlx-loading--full {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
 /* === BUTTONS === */
 .jlx-btn {
   display: inline-flex;

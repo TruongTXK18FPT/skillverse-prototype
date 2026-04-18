@@ -50,14 +50,14 @@ type PlannerLoadingPhase =
 
 const STUDY_PLANNER_GAME_DELAY_MS = 7000;
 
-const hasAiPlannerGoldAccess = (
+const hasAiPlannerSilverAccess = (
   subscription: UserSubscriptionResponse | null,
 ): boolean =>
   Boolean(
     subscription?.isActive &&
       subscription.status === 'ACTIVE' &&
-      (subscription.plan?.planType === 'PREMIUM_BASIC' ||
-        subscription.plan?.planType === 'PREMIUM_PLUS'),
+      subscription.plan?.planType &&
+      subscription.plan.planType !== 'FREE_TIER',
   );
 
 type SubjectPreset = {
@@ -501,11 +501,11 @@ const AIAgentPlanner: React.FC<AIAgentPlannerProps> = ({
         const sub = await premiumService.getCurrentSubscription();
         setSubscription(sub);
 
-        if (hasAiPlannerGoldAccess(sub)) {
+        if (hasAiPlannerSilverAccess(sub)) {
           setIsPremium(true);
           setAiModelName(
-            sub?.plan?.planType === 'PREMIUM_PLUS'
-              ? 'Mistral Large - Kim cương'
+            sub?.plan?.planType === 'PREMIUM_PLUS' || sub?.plan?.planType === 'RECRUITER_PRO'
+              ? 'Mistral Large - Kim cương+'
               : 'Mistral Large - Gold',
           );
         } else {

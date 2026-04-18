@@ -71,6 +71,16 @@ const WalletPaymentModal: React.FC<WalletPaymentModalProps> = ({
     return () => window.clearInterval(intervalId);
   }, [isOpen]);
 
+  useEffect(() => {
+    if (isOpen) {
+      return;
+    }
+
+    setProcessing(false);
+    setError(null);
+    setSuccess(false);
+  }, [isOpen]);
+
   const graceCountdown = useMemo(() => {
     if (!isGraceWindowUpgrade || !currentSubscription?.startDate) {
       return null;
@@ -110,10 +120,7 @@ const WalletPaymentModal: React.FC<WalletPaymentModalProps> = ({
     try {
       await onConfirm();
       setSuccess(true);
-      setTimeout(() => {
-        onClose();
-        window.location.reload(); // Reload to update subscription status
-      }, 2000);
+      setProcessing(false);
     } catch (err: any) {
       setError(err.message || 'Thanh toán thất bại. Vui lòng thử lại.');
       setProcessing(false);
@@ -151,6 +158,19 @@ const WalletPaymentModal: React.FC<WalletPaymentModalProps> = ({
                 ? 'Gói Premium của bạn đã được nâng cấp thành công.'
                 : 'Gói Premium của bạn đã được kích hoạt.'}
             </p>
+            <div className="wallet-payment-modal__footer" style={{ marginTop: '16px' }}>
+              <button
+                className="wallet-btn-primary"
+                onClick={() => {
+                  window.location.href = '/chatbot';
+                }}
+              >
+                Trải nghiệm đặc quyền mới ngay
+              </button>
+              <button className="wallet-btn-secondary" onClick={onClose}>
+                Để sau
+              </button>
+            </div>
           </div>
         ) : (
           <>
