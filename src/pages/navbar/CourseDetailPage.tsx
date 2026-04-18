@@ -970,7 +970,7 @@ const CourseDetailPage = () => {
                   </div>
                 </div>
 
-                {Boolean(course.learningObjectives?.length) && (
+                {Boolean(course.learningObjectives?.length || course.courseSkills?.length) && (
                   <div className="cockpit-detail-section-panel">
                     <div className="cockpit-detail-section-header">
                       <div className="cockpit-detail-section-marker"></div>
@@ -978,18 +978,31 @@ const CourseDetailPage = () => {
                         BẠN SẼ HỌC ĐƯỢC
                       </h2>
                     </div>
-                    <div className="cockpit-detail-outcomes-grid">
-                      {(course.learningObjectives || []).map(
-                        (objective, idx) => (
-                          <div
-                            key={`${objective}-${idx}`}
-                            className="cockpit-detail-outcome-card"
-                          >
-                            <span>{objective}</span>
-                          </div>
-                        ),
-                      )}
-                    </div>
+                    
+                    {Boolean(course.learningObjectives?.length) && (
+                      <div className="cockpit-detail-outcomes-grid" style={{ marginBottom: course.courseSkills?.length ? '1.5rem' : 0 }}>
+                        {(course.learningObjectives || []).map(
+                          (objective, idx) => (
+                            <div
+                              key={`${objective}-${idx}`}
+                              className="cockpit-detail-outcome-card"
+                            >
+                              <span>{objective}</span>
+                            </div>
+                          ),
+                        )}
+                      </div>
+                    )}
+
+                    {Boolean(course.courseSkills?.length) && (
+                      <div className="cockpit-detail-skills-grid">
+                        {course.courseSkills!.map((skill, idx) => (
+                          <span key={`${skill}-${idx}`} className="cockpit-detail-skill-tag">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -1008,6 +1021,7 @@ const CourseDetailPage = () => {
                     </ul>
                   </div>
                 )}
+
               </div>
             )}
 

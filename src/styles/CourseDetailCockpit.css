@@ -1218,6 +1218,36 @@
   color: var(--cockpit-detail-text-primary);
 }
 
+/* Skills Tags */
+.cockpit-detail-skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.cockpit-detail-skill-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 246, 255, 0.05);
+  border: 1px solid rgba(0, 246, 255, 0.3);
+  border-radius: 999px;
+  color: var(--cockpit-detail-neon-cyan);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(0, 246, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.cockpit-detail-skill-tag:hover {
+  background: rgba(0, 246, 255, 0.15);
+  border-color: var(--cockpit-detail-neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 246, 255, 0.4);
+  transform: translateY(-2px);
+}
+
 /* Course Facts */
 .cockpit-detail-facts-grid {
   display: grid;
