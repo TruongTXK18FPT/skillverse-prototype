@@ -99,7 +99,7 @@ const LessonEditorForm: React.FC<LessonEditorFormProps> = ({
         </div>
         <div className="cb-panel__body">
           <div className="cb-form-group">
-            <label className="cb-label">Loai bai hoc</label>
+            <label className="cb-label">Loại bài học</label>
             <div className="cb-chips">
               {LESSON_TYPES.map((type) => (
                 <button
@@ -120,7 +120,7 @@ const LessonEditorForm: React.FC<LessonEditorFormProps> = ({
           </div>
 
           <div className="cb-form-group">
-            <label className="cb-label">Tieu de</label>
+            <label className="cb-label">Tiêu đề</label>
             <input
               className="cb-input"
               value={lesson.title}

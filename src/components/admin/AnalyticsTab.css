@@ -537,10 +537,11 @@
 }
 
 .sv-admin-analytics__donut-layout {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
   align-items: center;
+  justify-content: center;
 }
 
 .sv-admin-analytics__donut {
@@ -551,6 +552,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 22px 48px rgba(2, 8, 23, 0.38);
+  flex-shrink: 0;
 }
 
 .sv-admin-analytics__donut-center {
@@ -576,6 +578,8 @@
 
 .sv-admin-analytics__legend {
   gap: 10px;
+  flex: 1 1 200px;
+  width: 100%;
 }
 
 .sv-admin-analytics__legend-item,
@@ -601,6 +605,7 @@
 
 .sv-admin-analytics__legend-label {
   color: #dff8ff;
+  white-space: nowrap;
 }
 
 .sv-admin-analytics__legend-value {
@@ -715,7 +720,6 @@
 
   .sv-admin-analytics__date-grid,
   .sv-admin-analytics__revenue-foot,
-  .sv-admin-analytics__donut-layout,
   .sv-admin-analytics__mini-grid,
   .sv-admin-analytics__action-grid,
   .sv-admin-analytics__insights,
