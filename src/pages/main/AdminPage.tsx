@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import UserManagementTabCosmic from "../../components/admin/UserManagementTabCosmic";
-import AccountVerificationTabCosmic from "../../components/admin/AccountVerificationTabCosmic";
+import AdminVerificationTabs from "../../components/admin/AdminVerificationTabs";
 import AdminCourseHub from "../../components/admin/AdminCourseHub";
 import AnalyticsTab from "../../components/admin/AnalyticsTab";
 import NotificationsTabCosmic from "../../components/admin/NotificationsTabCosmic";
@@ -49,7 +49,7 @@ const AdminPage: React.FC = () => {
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
-  const [stats, setStats] = useState<AdminStats>({
+  const [, setStats] = useState<AdminStats>({
     totalUsers: 0,
     pendingWithdrawals: 0,
     pendingVerifications: 0,
@@ -117,7 +117,7 @@ const AdminPage: React.FC = () => {
       case "users":
         return <UserManagementTabCosmic />;
       case "verification":
-        return <AccountVerificationTabCosmic />;
+        return <AdminVerificationTabs />;
       case "courses":
       case "course-analytics":
         return <AdminCourseHub />;

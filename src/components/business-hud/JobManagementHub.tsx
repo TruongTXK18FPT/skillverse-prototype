@@ -15,6 +15,7 @@ import {
   PieChart,
   Activity,
   Shield,
+  FileSignature,
 } from "lucide-react";
 import jobService from "../../services/jobService";
 import shortTermJobService from "../../services/shortTermJobService";
@@ -27,10 +28,13 @@ import OperationLog from "./OperationLog";
 import MissionLaunchPad from "./MissionLaunchPad";
 import ShortTermJobManager from "./ShortTermJobManager";
 import RegulationsTab from "./RegulationsTab";
+import ContractsHubPanel from "./ContractsHubPanel";
+import contractService from "../../services/contractService";
+import { ContractListResponse } from "../../types/contract";
 import "./job-hub.css";
 
 // ==================== TYPES ====================
-type HubPanel = "overview" | "fulltime" | "shortterm" | "regulations";
+type HubPanel = "overview" | "fulltime" | "shortterm" | "contracts" | "regulations";
 
 interface OverviewStats {
   // Full-time
@@ -44,6 +48,14 @@ interface OverviewStats {
   stInProgress: number;
   stCompleted: number;
   stApplicants: number;
+  // Contracts
+  ctTotal: number;
+  ctDraft: number;
+  ctPending: number;
+  ctSigned: number;
+  ctRejected: number;
+  ctCancelled: number;
+  ctTotalValue: number;
   // Combined
   totalJobs: number;
   totalApplicants: number;
@@ -144,21 +156,26 @@ const JobManagementHub: React.FC = () => {
   // Data
   const [ftJobs, setFtJobs] = useState<JobPostingResponse[]>([]);
   const [stJobs, setStJobs] = useState<ShortTermJobResponse[]>([]);
+  const [contracts, setContracts] = useState<ContractListResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchAllData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [ftData, stData] = await Promise.all([
+      const [ftData, stData, ctData] = await Promise.all([
         jobService.getMyJobs().catch(() => [] as JobPostingResponse[]),
         shortTermJobService
           .getMyJobs()
           .catch(() => [] as ShortTermJobResponse[]),
+        contractService
+          .getMyContracts("EMPLOYER")
+          .catch(() => [] as ContractListResponse[]),
       ]);
       setFtJobs(ftData);
       setStJobs(stData);
+      setContracts(ctData);
     } catch (error) {
-      console.error("Failed to fetch job data:", error);
+      console.error("Failed to fetch data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -190,6 +207,15 @@ const JobManagementHub: React.FC = () => {
       ),
     ).length,
     stApplicants: stJobs.reduce((sum, j) => sum + (j.applicantCount || 0), 0),
+    ctTotal: contracts.length,
+    ctDraft: contracts.filter((c) => c.status === "DRAFT").length,
+    ctPending: contracts.filter((c) =>
+      ["PENDING_SIGNER", "PENDING_EMPLOYER"].includes(c.status),
+    ).length,
+    ctSigned: contracts.filter((c) => c.status === "SIGNED").length,
+    ctRejected: contracts.filter((c) => c.status === "REJECTED").length,
+    ctCancelled: contracts.filter((c) => c.status === "CANCELLED").length,
+    ctTotalValue: contracts.reduce((sum, c) => sum + (c.salary || 0), 0),
     totalJobs: ftJobs.length + stJobs.length,
     totalApplicants:
       ftJobs.reduce((sum, j) => sum + (j.applicantCount || 0), 0) +
@@ -223,6 +249,13 @@ const JobManagementHub: React.FC = () => {
       label: "Ngắn Hạn",
       badge: stats.stTotal,
       color: "#f59e0b",
+    },
+    {
+      id: "contracts" as HubPanel,
+      icon: <FileSignature size={20} />,
+      label: "Hợp Đồng",
+      badge: stats.ctTotal,
+      color: "#8b5cf6",
     },
     {
       id: "regulations" as HubPanel,
@@ -361,6 +394,18 @@ const JobManagementHub: React.FC = () => {
                   <span className="jh-stat-card__label">Tổng Ứng Viên</span>
                 </div>
                 <TrendingUp size={16} className="jh-stat-card__trend" />
+              </div>
+              <div className="jh-stat-card jh-stat-card--violet">
+                <div className="jh-stat-card__icon">
+                  <FileSignature size={22} />
+                </div>
+                <div className="jh-stat-card__info">
+                  <span className="jh-stat-card__value">
+                    {stats.ctTotal}
+                  </span>
+                  <span className="jh-stat-card__label">Hợp Đồng</span>
+                </div>
+                <Activity size={16} className="jh-stat-card__trend" />
               </div>
             </div>
 
@@ -690,6 +735,11 @@ const JobManagementHub: React.FC = () => {
         {/* ==================== REGULATIONS PANEL ==================== */}
         {activePanel === "regulations" && (
           <RegulationsTab />
+        )}
+
+        {/* ==================== CONTRACTS PANEL ==================== */}
+        {activePanel === "contracts" && (
+          <ContractsHubPanel contracts={contracts} onRefresh={fetchAllData} />
         )}
       </main>
     </div>

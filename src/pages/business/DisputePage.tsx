@@ -148,21 +148,9 @@ const DisputePage: React.FC = () => {
                 </div>
               )}
             </div>
-            <div
-              style={{
-                marginTop: "1rem",
-                padding: "0.75rem 1rem",
-                borderRadius: "10px",
-                background: "rgba(8, 15, 30, 0.45)",
-                border: "1px solid rgba(148, 163, 184, 0.08)",
-              }}
-            >
-              <p style={{ margin: "0 0 0.35rem", fontSize: "0.8rem", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                Lý do
-              </p>
-              <p style={{ margin: 0, fontSize: "0.88rem", color: "#cbd5e1", lineHeight: 1.6 }}>
-                {dispute.reason}
-              </p>
+            <div className="stj-fullpage__reason-block">
+              <p className="stj-fullpage__reason-label">Lý do</p>
+              <p className="stj-fullpage__reason-content">{dispute.reason}</p>
             </div>
           </div>
 
@@ -183,18 +171,8 @@ const DisputePage: React.FC = () => {
                 )}
               </div>
               {dispute.resolutionNotes && (
-                <div
-                  style={{
-                    marginTop: "0.75rem",
-                    padding: "0.75rem 1rem",
-                    borderRadius: "10px",
-                    background: "rgba(74, 222, 128, 0.08)",
-                    border: "1px solid rgba(74, 222, 128, 0.2)",
-                  }}
-                >
-                  <p style={{ margin: 0, fontSize: "0.88rem", color: "#94a3b8", lineHeight: 1.6 }}>
-                    {dispute.resolutionNotes}
-                  </p>
+                <div className="stj-fullpage__resolution-notes">
+                  <p>{dispute.resolutionNotes}</p>
                 </div>
               )}
             </div>
@@ -205,55 +183,33 @@ const DisputePage: React.FC = () => {
         {dispute.evidence && dispute.evidence.length > 0 && (
           <div className="stj-fullpage__detail-card">
             <h3>Bằng chứng ({dispute.evidence.length})</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "0.5rem" }}>
+            <div className="stj-fullpage__evidence-list">
               {dispute.evidence.map((ev: any) => (
                 <div
                   key={ev.id}
-                  style={{
-                    padding: "0.85rem 1rem",
-                    borderRadius: "12px",
-                    background: "rgba(8, 15, 30, 0.45)",
-                    border: ev.isOfficial
-                      ? "1px solid rgba(251, 191, 36, 0.2)"
-                      : "1px solid rgba(148, 163, 184, 0.08)",
-                  }}
+                  className={`stj-fullpage__evidence-card ${ev.isOfficial ? "is-official" : ""}`}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.4rem" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                      {ev.evidenceType === "TEXT" && <FileText size={14} style={{ color: "#94a3b8" }} />}
-                      {ev.evidenceType === "FILE" && <Upload size={14} style={{ color: "#94a3b8" }} />}
-                      {ev.evidenceType === "LINK" && <LinkIcon size={14} style={{ color: "#94a3b8" }} />}
-                      <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#e0f2fe" }}>
-                        {ev.submittedByName}
-                      </span>
+                  <div className="stj-fullpage__evidence-header">
+                    <div className="stj-fullpage__evidence-author">
+                      {ev.evidenceType === "TEXT" && <FileText size={14} />}
+                      {ev.evidenceType === "FILE" && <Upload size={14} />}
+                      {ev.evidenceType === "LINK" && <LinkIcon size={14} />}
+                      <span>{ev.submittedByName}</span>
                       {ev.isOfficial && (
-                        <span
-                          style={{
-                            padding: "0.1rem 0.4rem",
-                            borderRadius: "999px",
-                            fontSize: "0.65rem",
-                            fontWeight: 700,
-                            background: "rgba(251, 191, 36, 0.15)",
-                            color: "#fbbf24",
-                          }}
-                        >
-                          Admin
-                        </span>
+                        <span className="stj-fullpage__admin-badge">Admin</span>
                       )}
                     </div>
-                    <span style={{ fontSize: "0.72rem", color: "#64748b" }}>{formatTime(ev.createdAt)}</span>
+                    <span className="stj-fullpage__evidence-time">{formatTime(ev.createdAt)}</span>
                   </div>
                   {ev.content && (
-                    <p style={{ margin: "0 0 0.35rem", fontSize: "0.88rem", color: "#cbd5e1", lineHeight: 1.6 }}>
-                      {ev.content}
-                    </p>
+                    <p className="stj-fullpage__evidence-content">{ev.content}</p>
                   )}
                   {ev.fileUrl && (
                     <a
                       href={ev.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ fontSize: "0.82rem", color: "#67e8f9", textDecoration: "none" }}
+                      className="stj-fullpage__evidence-file"
                     >
                       <LinkIcon size={11} /> {ev.fileName || "Tệp đính kèm"}
                     </a>
@@ -261,27 +217,15 @@ const DisputePage: React.FC = () => {
 
                   {/* Responses */}
                   {ev.responses && ev.responses.length > 0 && (
-                    <div
-                      style={{
-                        marginTop: "0.6rem",
-                        paddingLeft: "0.75rem",
-                        borderLeft: "2px solid rgba(148, 163, 184, 0.12)",
-                      }}
-                    >
+                    <div className="stj-fullpage__evidence-responses">
                       {ev.responses.map((resp: any) => (
-                        <div key={resp.id} style={{ marginBottom: "0.4rem" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                            <MessageSquare size={11} style={{ color: "#64748b" }} />
-                            <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "#94a3b8" }}>
-                              {resp.respondedByName}
-                            </span>
-                            <span style={{ fontSize: "0.7rem", color: "#64748b" }}>
-                              {formatTime(resp.createdAt)}
-                            </span>
+                        <div key={resp.id} className="stj-fullpage__evidence-response">
+                          <div className="stj-fullpage__evidence-response-header">
+                            <MessageSquare size={11} />
+                            <span>{resp.respondedByName}</span>
+                            <span>{formatTime(resp.createdAt)}</span>
                           </div>
-                          <p style={{ margin: "0.1rem 0 0 1.2rem", fontSize: "0.85rem", color: "#cbd5e1", lineHeight: 1.5 }}>
-                            {resp.content}
-                          </p>
+                          <p className="stj-fullpage__evidence-response-content">{resp.content}</p>
                         </div>
                       ))}
                     </div>

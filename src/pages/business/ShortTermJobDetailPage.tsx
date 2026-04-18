@@ -42,6 +42,8 @@ import {
   FiCheck,
   FiX,
 } from "react-icons/fi";
+import { Shield } from "lucide-react";
+import DisputePanel from "../../components/short-term-job/DisputePanel";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   StatusBadge,
@@ -137,6 +139,7 @@ const ShortTermJobDetailPage: React.FC = () => {
     useState<RecruitmentSessionResponse | null>(null);
   const [chatApplicant, setChatApplicant] =
     useState<ShortTermJobApplication | null>(null);
+  const [hasDispute, setHasDispute] = useState(false);
 
   // ========== FETCH DATA ==========
   const fetchJob = useCallback(async () => {
@@ -225,6 +228,14 @@ const ShortTermJobDetailPage: React.FC = () => {
       fetchReviews();
     }
   }, [job, fetchApplications, checkMyApplication, fetchReviews]);
+
+  useEffect(() => {
+    if (job?.id) {
+      shortTermJobService.getDisputeByJob(job.id)
+        .then(d => setHasDispute(!!d))
+        .catch(() => setHasDispute(false));
+    }
+  }, [job?.id]);
 
   // ========== HANDLERS ==========
   const handleApply = async () => {
@@ -654,6 +665,17 @@ const ShortTermJobDetailPage: React.FC = () => {
                 {myApplication && (
                   <Tabs.Trigger value="my-application">
                     Đơn của tôi
+                  </Tabs.Trigger>
+                )}
+                {(isOwner || myApplication) && (
+                  <Tabs.Trigger value="disputes">
+                    <HStack gap={1}>
+                      <Shield size={14} />
+                      Khiếu nại
+                    </HStack>
+                    {hasDispute && (
+                      <Badge ml={2} colorPalette="red" variant="subtle">1</Badge>
+                    )}
                   </Tabs.Trigger>
                 )}
               </Tabs.List>
@@ -1146,6 +1168,35 @@ const ShortTermJobDetailPage: React.FC = () => {
                               />
                             </Box>
                           )}
+                      </VStack>
+                    </Card.Body>
+                  </Card.Root>
+                </Tabs.Content>
+              )}
+
+              {/* Disputes Tab */}
+              {(isOwner || myApplication) && (
+                <Tabs.Content value="disputes">
+                  <Card.Root
+                    bg="rgba(8,15,30,0.72)"
+                    border="1px solid rgba(6,182,212,0.22)"
+                    boxShadow="0 0 24px rgba(6,182,212,0.06)"
+                  >
+                    <Card.Body>
+                      <VStack align="stretch" gap={4}>
+                        <HStack>
+                          <Shield size={18} color="#00f5ff" />
+                          <Text fontWeight="bold" color="#e0f2fe">Khiếu nại — {job?.title}</Text>
+                        </HStack>
+                        <DisputePanel
+                          jobId={job?.id || 0}
+                          applicationId={isOwner ? job?.selectedApplicantId : myApplication?.id}
+                          currentUserId={user?.id || 0}
+                          currentUserRole={isOwner ? "RECRUITER" : "WORKER"}
+                          jobStatus={job?.status}
+                          disputeEligibilityUnlocked={myApplication?.disputeEligibilityUnlocked}
+                          revisionCount={myApplication?.revisionCount}
+                        />
                       </VStack>
                     </Card.Body>
                   </Card.Root>

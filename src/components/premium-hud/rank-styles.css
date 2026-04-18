@@ -502,15 +502,21 @@
   border-radius: 12px;
   text-align: left;
   border: 1px solid rgba(34, 211, 238, 0.28);
-  background:
-    linear-gradient(135deg, rgba(12, 74, 110, 0.35), rgba(15, 23, 42, 0.82));
+  background: linear-gradient(
+    135deg,
+    rgba(12, 74, 110, 0.35),
+    rgba(15, 23, 42, 0.82)
+  );
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .hall-upgrade-window--current {
   border-color: rgba(251, 191, 36, 0.62);
-  background:
-    linear-gradient(135deg, rgba(120, 53, 15, 0.28), rgba(15, 23, 42, 0.85));
+  background: linear-gradient(
+    135deg,
+    rgba(120, 53, 15, 0.28),
+    rgba(15, 23, 42, 0.85)
+  );
   box-shadow:
     0 0 0 1px rgba(251, 191, 36, 0.12),
     0 0 24px rgba(251, 191, 36, 0.16);
@@ -525,14 +531,20 @@
 
 .hall-upgrade-window--expired {
   border-color: rgba(148, 163, 184, 0.32);
-  background:
-    linear-gradient(135deg, rgba(51, 65, 85, 0.28), rgba(15, 23, 42, 0.82));
+  background: linear-gradient(
+    135deg,
+    rgba(51, 65, 85, 0.28),
+    rgba(15, 23, 42, 0.82)
+  );
 }
 
 .hall-upgrade-window--scheduled {
   border-color: rgba(34, 197, 94, 0.38);
-  background:
-    linear-gradient(135deg, rgba(6, 95, 70, 0.28), rgba(15, 23, 42, 0.82));
+  background: linear-gradient(
+    135deg,
+    rgba(6, 95, 70, 0.28),
+    rgba(15, 23, 42, 0.82)
+  );
   box-shadow:
     0 0 0 1px rgba(34, 197, 94, 0.08),
     0 0 24px rgba(34, 197, 94, 0.12);
@@ -779,6 +791,28 @@
   flex-direction: column;
   gap: 4px;
   margin-top: 8px;
+}
+
+.hall-plan-action-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.hall-plan-action-stack .hall-btn {
+  margin-top: 0;
+}
+
+.hall-btn-student-verify {
+  border-color: rgba(34, 211, 238, 0.82) !important;
+  color: #67e8f9 !important;
+  background: rgba(12, 74, 110, 0.24) !important;
+}
+
+.hall-btn-student-verify:hover:not(:disabled) {
+  background: rgba(6, 182, 212, 0.34) !important;
+  color: #ecfeff !important;
 }
 
 .hall-btn-autorenew {

@@ -1,0 +1,576 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap&subset=vietnamese");
+
+.svVerifyPage {
+  --sv-font-body: "Be Vietnam Pro", "Segoe UI", Tahoma, sans-serif;
+  --sv-font-head:
+    "Montserrat", "Be Vietnam Pro", "Segoe UI", Tahoma, sans-serif;
+  --sv-bg-1: #020816;
+  --sv-bg-2: #051126;
+  --sv-cyan: #1ff1ff;
+  --sv-blue: #4da2ff;
+  --sv-ink: #9ec5e7;
+  --sv-soft: rgba(31, 241, 255, 0.12);
+  --sv-border: rgba(77, 162, 255, 0.35);
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(31, 241, 255, 0.12),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 84% 15%,
+      rgba(77, 162, 255, 0.14),
+      transparent 42%
+    ),
+    linear-gradient(165deg, var(--sv-bg-1), var(--sv-bg-2) 55%, #030d1e 100%);
+  color: #d7eeff;
+  padding: 36px 20px 56px;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--sv-font-body);
+}
+
+.svVerifyTitle,
+.svVerifyPanelTitle {
+  font-family: var(--sv-font-head) !important;
+}
+
+.svVerifyEyebrow,
+.svVerifySub,
+.svVerifyGhostBtn,
+.svVerifyPanelSub,
+.svVerifyStepTitle,
+.svVerifyStatusLabel,
+.svVerifyBadge,
+.svVerifyNotice,
+.svVerifyLabel,
+.svVerifyUploadTitle,
+.svVerifyUploadBtn,
+.svVerifyPrimaryBtn,
+.svVerifySecondaryBtn,
+.svVerifyLinkBtn {
+  font-family: var(--sv-font-body) !important;
+}
+
+.svVerifyPage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(31, 241, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31, 241, 255, 0.08) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at center, black 12%, transparent 88%);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.svVerifyShell {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: relative;
+  z-index: 1;
+}
+
+.svVerifyHead {
+  border: 1px solid var(--sv-border);
+  background: linear-gradient(
+    135deg,
+    rgba(6, 19, 41, 0.9),
+    rgba(3, 12, 30, 0.88)
+  );
+  box-shadow:
+    0 0 32px rgba(21, 184, 255, 0.18),
+    inset 0 0 20px rgba(31, 241, 255, 0.08);
+  border-radius: 16px;
+  padding: 22px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.svVerifyTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.svVerifyEyebrow {
+  font-family: "Rajdhani", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.86rem;
+  color: var(--sv-cyan);
+}
+
+.svVerifyTitle {
+  margin: 0;
+  font-family: "Orbitron", sans-serif;
+  font-size: clamp(1.38rem, 2.4vw, 2.08rem);
+  letter-spacing: 0.04em;
+  color: #e4f8ff;
+}
+
+.svVerifySub {
+  margin: 0;
+  color: var(--sv-ink);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1rem;
+  max-width: 640px;
+}
+
+.svVerifyHeadActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.svVerifyGhostBtn {
+  border: 1px solid rgba(31, 241, 255, 0.4);
+  background: rgba(31, 241, 255, 0.08);
+  color: #bdefff;
+  border-radius: 10px;
+  height: 40px;
+  padding: 0 16px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+
+.svVerifyGhostBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(31, 241, 255, 0.34);
+}
+
+.svVerifyBoard {
+  display: grid;
+  grid-template-columns: 0.96fr 1.04fr;
+  gap: 18px;
+}
+
+.svVerifyPanel {
+  border: 1px solid var(--sv-border);
+  background: linear-gradient(
+    160deg,
+    rgba(5, 17, 38, 0.9),
+    rgba(3, 11, 27, 0.94)
+  );
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow:
+    0 0 22px rgba(16, 136, 226, 0.2),
+    inset 0 0 18px rgba(31, 241, 255, 0.07);
+}
+
+.svVerifyPanelTitle {
+  margin: 0;
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.02rem;
+  letter-spacing: 0.04em;
+  color: #d6f4ff;
+}
+
+.svVerifyPanelSub {
+  margin: 6px 0 0;
+  color: #87b3d6;
+  font-size: 0.95rem;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.svVerifySteps {
+  margin: 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.svVerifyStep {
+  border: 1px solid rgba(31, 241, 255, 0.2);
+  background: rgba(5, 16, 34, 0.75);
+  border-radius: 12px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 10px;
+}
+
+.svVerifyStepIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(31, 241, 255, 0.34);
+  background: rgba(31, 241, 255, 0.11);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sv-cyan);
+}
+
+.svVerifyStepTitle {
+  margin: 0;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #dcf2ff;
+}
+
+.svVerifyStepText {
+  margin: 2px 0 0;
+  font-size: 0.92rem;
+  color: #86aecd;
+  line-height: 1.4;
+}
+
+.svVerifyStatusCard {
+  margin-top: 16px;
+  border: 1px solid rgba(77, 162, 255, 0.32);
+  border-radius: 12px;
+  background: rgba(9, 26, 52, 0.72);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.svVerifyStatusTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.svVerifyStatusLabel {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  color: #d8efff;
+}
+
+.svVerifyBadge {
+  border-radius: 999px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 5px 10px;
+  text-transform: uppercase;
+}
+
+.svVerifyBadgeApproved {
+  background: rgba(63, 244, 197, 0.2);
+  color: #76ffd8;
+  border: 1px solid rgba(63, 244, 197, 0.5);
+}
+
+.svVerifyBadgePendingOtp {
+  background: rgba(31, 241, 255, 0.2);
+  color: #8af7ff;
+  border: 1px solid rgba(31, 241, 255, 0.5);
+}
+
+.svVerifyBadgeReview {
+  background: rgba(255, 202, 114, 0.2);
+  color: #ffd488;
+  border: 1px solid rgba(255, 202, 114, 0.45);
+}
+
+.svVerifyBadgeRejected {
+  background: rgba(255, 125, 125, 0.2);
+  color: #ffaaaa;
+  border: 1px solid rgba(255, 125, 125, 0.48);
+}
+
+.svVerifyInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.svVerifyInfoItem {
+  border: 1px solid rgba(77, 162, 255, 0.28);
+  border-radius: 10px;
+  background: rgba(4, 14, 32, 0.75);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.svVerifyInfoCaption {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #78a4c6;
+}
+
+.svVerifyInfoValue {
+  font-size: 0.92rem;
+  color: #ddf3ff;
+  word-break: break-word;
+}
+
+.svVerifyNotice {
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.92rem;
+  font-family: "Rajdhani", sans-serif;
+  border: 1px solid transparent;
+}
+
+.svVerifyNoticeInfo {
+  background: rgba(77, 162, 255, 0.16);
+  border-color: rgba(77, 162, 255, 0.4);
+  color: #bae2ff;
+}
+
+.svVerifyNoticeSuccess {
+  background: rgba(85, 255, 213, 0.16);
+  border-color: rgba(85, 255, 213, 0.4);
+  color: #9fffe0;
+}
+
+.svVerifyNoticeError {
+  background: rgba(255, 128, 128, 0.15);
+  border-color: rgba(255, 128, 128, 0.45);
+  color: #ffb3b3;
+}
+
+.svVerifyForm {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.svVerifyField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.svVerifyLabel {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: #ccecff;
+}
+
+.svVerifyInput,
+.svVerifyTextArea {
+  border: 1px solid rgba(77, 162, 255, 0.4);
+  background: rgba(3, 12, 28, 0.86);
+  color: #d6efff;
+  border-radius: 10px;
+  padding: 11px 12px;
+  outline: none;
+  font-size: 0.94rem;
+  transition: all 0.22s ease;
+}
+
+.svVerifyInput:focus,
+.svVerifyTextArea:focus {
+  border-color: rgba(31, 241, 255, 0.7);
+  box-shadow: 0 0 16px rgba(31, 241, 255, 0.23);
+}
+
+.svVerifyTextArea {
+  min-height: 104px;
+  resize: vertical;
+}
+
+.svVerifyUpload {
+  border: 1px dashed rgba(31, 241, 255, 0.45);
+  border-radius: 12px;
+  background: rgba(4, 13, 29, 0.74);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.svVerifyUploadTitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #d9f2ff;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+}
+
+.svVerifyUploadHint {
+  margin: 0;
+  color: #7eabcf;
+  font-size: 0.84rem;
+}
+
+.svVerifyUploadInput {
+  display: none;
+}
+
+.svVerifyUploadBtn {
+  border: 1px solid rgba(31, 241, 255, 0.48);
+  background: rgba(31, 241, 255, 0.13);
+  color: #b5f1ff;
+  border-radius: 10px;
+  height: 38px;
+  padding: 0 16px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.svVerifyImagePreviewWrap {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(77, 162, 255, 0.34);
+  background: rgba(5, 18, 39, 0.85);
+  padding: 10px;
+}
+
+.svVerifyImagePreview {
+  width: 100%;
+  border-radius: 8px;
+  max-height: 220px;
+  object-fit: cover;
+}
+
+.svVerifyBtnRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.svVerifyPrimaryBtn,
+.svVerifySecondaryBtn {
+  border-radius: 10px;
+  height: 42px;
+  padding: 0 18px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.svVerifyPrimaryBtn {
+  border: 1px solid rgba(31, 241, 255, 0.55);
+  background: linear-gradient(
+    130deg,
+    rgba(31, 241, 255, 0.28),
+    rgba(77, 162, 255, 0.33)
+  );
+  color: #dff8ff;
+}
+
+.svVerifySecondaryBtn {
+  border: 1px solid rgba(139, 181, 215, 0.46);
+  background: rgba(72, 109, 145, 0.24);
+  color: #d6eeff;
+}
+
+.svVerifyPrimaryBtn:hover,
+.svVerifySecondaryBtn:hover,
+.svVerifyUploadBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 14px rgba(31, 241, 255, 0.2);
+}
+
+.svVerifyPrimaryBtn:disabled,
+.svVerifySecondaryBtn:disabled,
+.svVerifyUploadBtn:disabled,
+.svVerifyGhostBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.svVerifyHintList {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #8eb6d6;
+  font-size: 0.9rem;
+}
+
+.svVerifySpinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(226, 247, 255, 0.35);
+  border-top-color: #d7f5ff;
+  border-radius: 50%;
+  animation: svVerifySpin 0.85s linear infinite;
+}
+
+@keyframes svVerifySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.svVerifyFullWidth {
+  width: 100%;
+}
+
+.svVerifyLinkBtn {
+  border: none;
+  background: transparent;
+  color: #86ddff;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.svVerifyReadOnly {
+  background: rgba(14, 29, 56, 0.56);
+}
+
+@media (max-width: 980px) {
+  .svVerifyBoard {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .svVerifyPage {
+    padding: 22px 14px 42px;
+  }
+
+  .svVerifyHead {
+    padding: 18px;
+  }
+
+  .svVerifyInfoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .svVerifyHeadActions,
+  .svVerifyBtnRow {
+    width: 100%;
+  }
+
+  .svVerifyGhostBtn,
+  .svVerifyPrimaryBtn,
+  .svVerifySecondaryBtn {
+    width: 100%;
+  }
+}

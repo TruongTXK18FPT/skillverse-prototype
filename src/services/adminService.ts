@@ -1,17 +1,62 @@
 import axiosInstance from "./axiosInstance";
 import {
   ApplicationActionRequest,
+  ApproveStudentVerificationRequest,
   AdminApprovalResponse,
   ApplicationsResponse,
   ApplicationStatusFilter,
   AdminFullTimeJobStats,
   AdminJobStats,
+  ExpireStudentVerificationEmailRequest,
   PageResponse,
+  RejectStudentVerificationRequest,
   ResolveDisputeRequest,
   DisputeResponse,
+  StudentVerificationDetailDto,
+  StudentVerificationListItemDto,
+  StudentVerificationStatus,
 } from "../data/adminDTOs";
-import { Dispute, JobStatusAuditLog, ShortTermJobStatus } from "../types/ShortTermJob";
+import {
+  Dispute,
+  JobStatusAuditLog,
+  ShortTermJobStatus,
+} from "../types/ShortTermJob";
 import { JobPostingResponse, JobStatus } from "../data/jobDTOs";
+
+function normalizeAuditLogs(data: unknown): JobStatusAuditLog[] {
+  if (Array.isArray(data)) {
+    return data as JobStatusAuditLog[];
+  }
+
+  if (!data || typeof data !== "object") {
+    return [];
+  }
+
+  const payload = data as Record<string, unknown>;
+  const candidates = [
+    payload.content,
+    payload.items,
+    payload.data,
+    payload.auditLogs,
+  ];
+
+  for (const candidate of candidates) {
+    if (Array.isArray(candidate)) {
+      return candidate as JobStatusAuditLog[];
+    }
+  }
+
+  if (
+    "id" in payload &&
+    ("previousStatus" in payload ||
+      "newStatus" in payload ||
+      "createdAt" in payload)
+  ) {
+    return [payload as unknown as JobStatusAuditLog];
+  }
+
+  return [];
+}
 
 /**
  * AdminService - Service for admin operations to manage mentor/recruiter applications
@@ -328,7 +373,10 @@ class AdminService {
   /**
    * Close a full-time job
    */
-  async closeFullTimeJob(jobId: number, reason?: string): Promise<JobPostingResponse> {
+  async closeFullTimeJob(
+    jobId: number,
+    reason?: string,
+  ): Promise<JobPostingResponse> {
     const response = await axiosInstance.post<JobPostingResponse>(
       `${this.BASE_URL}/jobs/${jobId}/close`,
       null,
@@ -387,7 +435,7 @@ class AdminService {
   }): Promise<PageResponse<any>> {
     const response = await axiosInstance.get<PageResponse<any>>(
       `${this.BASE_URL}/short-term-jobs`,
-      { params }
+      { params },
     );
     return response.data;
   }
@@ -418,7 +466,7 @@ class AdminService {
   async deleteJob(jobId: number, reason?: string): Promise<any> {
     const response = await axiosInstance.delete(
       `${this.BASE_URL}/short-term-jobs/${jobId}`,
-      { params: { reason } }
+      { params: { reason } },
     );
     return response.data;
   }
@@ -457,7 +505,7 @@ class AdminService {
   }): Promise<PageResponse<DisputeResponse>> {
     const response = await axiosInstance.get<PageResponse<DisputeResponse>>(
       `${this.BASE_URL}/short-term-jobs/disputes`,
-      { params }
+      { params },
     );
     return response.data;
   }
@@ -479,17 +527,97 @@ class AdminService {
     const response = await axiosInstance.get<JobStatusAuditLog[]>(
       `${this.BASE_URL}/short-term-jobs/disputes/${disputeId}/audit-logs`,
     );
-    return response.data;
+    return normalizeAuditLogs(response.data);
   }
 
   /**
    * Resolve a dispute (admin action)
    */
-  async resolveDispute(disputeId: number, request: Omit<ResolveDisputeRequest, never>): Promise<DisputeResponse> {
+  async resolveDispute(
+    disputeId: number,
+    request: Omit<ResolveDisputeRequest, never>,
+  ): Promise<DisputeResponse> {
     const response = await axiosInstance.post<DisputeResponse>(
       `${this.BASE_URL}/short-term-jobs/disputes/${disputeId}/resolve`,
       request,
     );
+    return response.data;
+  }
+
+  // ===================== STUDENT VERIFICATION MANAGEMENT =====================
+
+  /**
+   * [Nghiep vu] Admin lay danh sach ho so xac thuc sinh vien de chia queue review theo trang thai.
+   */
+  async getStudentVerificationRequests(params?: {
+    status?: StudentVerificationStatus;
+    page?: number;
+    size?: number;
+  }): Promise<PageResponse<StudentVerificationListItemDto>> {
+    const response = await axiosInstance.get<
+      PageResponse<StudentVerificationListItemDto>
+    >(`${this.BASE_URL}/student-verifications/requests`, { params });
+
+    return response.data;
+  }
+
+  /**
+   * [Nghiep vu] Admin xem chi tiet day du cua 1 ho so sinh vien truoc khi quyet dinh.
+   */
+  async getStudentVerificationRequestDetail(
+    requestId: number,
+  ): Promise<StudentVerificationDetailDto> {
+    const response = await axiosInstance.get<StudentVerificationDetailDto>(
+      `${this.BASE_URL}/student-verifications/requests/${requestId}`,
+    );
+
+    return response.data;
+  }
+
+  /**
+   * [Nghiep vu] Approve se mo khoa mua Student Pack cho student.
+   */
+  async approveStudentVerificationRequest(
+    requestId: number,
+    request?: ApproveStudentVerificationRequest,
+  ): Promise<StudentVerificationDetailDto> {
+    const payload = request ?? {};
+
+    const response = await axiosInstance.post<StudentVerificationDetailDto>(
+      `${this.BASE_URL}/student-verifications/requests/${requestId}/approve`,
+      payload,
+    );
+
+    return response.data;
+  }
+
+  /**
+   * [Nghiep vu] Reject bat buoc kem ly do de student biet can cap nhat ho so nao.
+   */
+  async rejectStudentVerificationRequest(
+    requestId: number,
+    request: RejectStudentVerificationRequest,
+  ): Promise<StudentVerificationDetailDto> {
+    const response = await axiosInstance.post<StudentVerificationDetailDto>(
+      `${this.BASE_URL}/student-verifications/requests/${requestId}/reject`,
+      request,
+    );
+
+    return response.data;
+  }
+
+  /**
+   * [Nghiep vu] Admin co the danh dau het han ho so da duyet de giai phong email truong cho lan xac thuc moi.
+   */
+  async expireStudentVerificationRequest(
+    requestId: number,
+    request: ExpireStudentVerificationEmailRequest,
+  ): Promise<StudentVerificationDetailDto> {
+    const response = await axiosInstance.post<StudentVerificationDetailDto>(
+      `${this.BASE_URL}/student-verifications/requests/${requestId}/expire`,
+      request,
+    );
+
     return response.data;
   }
 }

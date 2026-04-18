@@ -43,9 +43,13 @@ import shortTermJobService from "../../services/shortTermJobService";
 import { uploadMedia } from "../../services/mediaService";
 import { JobApplicationResponse } from "../../data/jobDTOs";
 import {
+  DisputeResolution,
+  DisputeStatus,
+  DisputeType,
   ShortTermApplicationResponse,
   SubmitDeliverableRequest,
   RevisionNote,
+  UserSubmittedDispute,
 } from "../../types/ShortTermJob";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import ContractListPage from "../../components/contract/ContractListPage";
@@ -59,9 +63,11 @@ type ViewMode =
   | "workspace"
   | "contracts"
   | "interviews"
-  | "offers";
+  | "offers"
+  | "disputes";
 type ApplicationTimeFilter = "ALL" | "THIS_WEEK" | "THIS_MONTH" | "CUSTOM";
 type IncomeStatusFilter = "ALL" | "PAID" | "COMPLETED";
+type DisputeStatusFilter = "ALL" | DisputeStatus;
 type IncomeSort =
   | "NEWEST"
   | "OLDEST"
@@ -78,6 +84,7 @@ type JobLabLocationState = {
 export type AppItem = {
   id: string;
   type: "REGULAR" | "SHORT_TERM";
+  jobId?: number;
   applicationId: number;
   title: string;
   company: string;
@@ -203,6 +210,115 @@ const STATUS_META: Record<
     tone: "violet",
     hint: "Admin đang xử lý khiếu nại.",
   },
+  // Full-time / Freelance job application statuses
+  INTERVIEW_SCHEDULED: {
+    label: "Lịch phỏng vấn",
+    tone: "cyan",
+    hint: "Đã có lịch phỏng vấn, chờ đến ngày hẹn.",
+  },
+  INTERVIEWED: {
+    label: "Đã phỏng vấn",
+    tone: "sky",
+    hint: "Buổi phỏng vấn đã hoàn tất, chờ kết quả.",
+  },
+  OFFER_SENT: {
+    label: "Nhận đề nghị",
+    tone: "violet",
+    hint: "Nhà tuyển dụng đã gửi đề nghị, chờ bạn phản hồi.",
+  },
+  OFFER_ACCEPTED: {
+    label: "Đã nhận việc",
+    tone: "emerald",
+    hint: "Bạn đã chấp nhận đề nghị. Chờ ký hợp đồng.",
+  },
+  OFFER_REJECTED: {
+    label: "Từ chối đề nghị",
+    tone: "red",
+    hint: "Bạn đã từ chối đề nghị này.",
+  },
+  CONTRACT_SIGNED: {
+    label: "Đã ký hợp đồng",
+    tone: "fuchsia",
+    hint: "Hợp đồng đã được ký, chờ bắt đầu công việc.",
+  },
+};
+
+const DISPUTE_STATUS_META: Record<
+  string,
+  { label: string; tone: string; hint: string }
+> = {
+  OPEN: {
+    label: "Mới mở",
+    tone: "red",
+    hint: "Đang chờ admin tiếp nhận xử lý.",
+  },
+  UNDER_INVESTIGATION: {
+    label: "Đang điều tra",
+    tone: "amber",
+    hint: "Admin đang xác minh chứng cứ và lịch sử bàn giao.",
+  },
+  AWAITING_RESPONSE: {
+    label: "Chờ phản hồi",
+    tone: "sky",
+    hint: "Cần phản hồi bổ sung từ một trong hai bên.",
+  },
+  ESCALATED: {
+    label: "Đã escalated",
+    tone: "violet",
+    hint: "Case đã leo thang do quá hạn SLA xử lý.",
+  },
+  RESOLVED: {
+    label: "Đã giải quyết",
+    tone: "green",
+    hint: "Admin đã chốt kết quả dispute.",
+  },
+  DISMISSED: {
+    label: "Bác bỏ",
+    tone: "slate",
+    hint: "Dispute bị bác bỏ do không đủ điều kiện hoặc chứng cứ.",
+  },
+};
+
+const DISPUTE_STATUS_FILTER_ITEMS: Array<{
+  value: DisputeStatusFilter;
+  label: string;
+}> = [
+  { value: "ALL", label: "Tất cả trạng thái" },
+  { value: DisputeStatus.OPEN, label: "Mới mở" },
+  { value: DisputeStatus.UNDER_INVESTIGATION, label: "Đang điều tra" },
+  { value: DisputeStatus.AWAITING_RESPONSE, label: "Chờ phản hồi" },
+  { value: DisputeStatus.ESCALATED, label: "Đã escalated" },
+  { value: DisputeStatus.RESOLVED, label: "Đã giải quyết" },
+  { value: DisputeStatus.DISMISSED, label: "Bác bỏ" },
+];
+
+const DISPUTE_TYPE_LABELS: Record<DisputeType, string> = {
+  NO_SUBMISSION: "Không nộp sản phẩm",
+  POOR_QUALITY: "Chất lượng kém",
+  MISSING_DELIVERABLE: "Thiếu sản phẩm bàn giao",
+  DEADLINE_VIOLATION: "Vi phạm deadline",
+  PAYMENT_ISSUE: "Vấn đề thanh toán",
+  COMMUNICATION_FAILURE: "Mất liên lạc",
+  SCOPE_CHANGE: "Thay đổi phạm vi",
+  SCAM_REPORT: "Báo cáo lừa đảo",
+  OTHER: "Khác",
+  WORKER_PROTECTION: "Bảo vệ quyền lợi worker",
+  RECRUITER_ABUSE: "Nhà tuyển dụng lạm dụng",
+  CANCELLATION_REVIEW: "Yêu cầu admin review hủy",
+};
+
+const DISPUTE_RESOLUTION_LABELS: Record<DisputeResolution, string> = {
+  FULL_REFUND: "Hoàn tiền toàn bộ",
+  FULL_RELEASE: "Giải ngân toàn bộ",
+  PARTIAL_REFUND: "Hoàn tiền một phần",
+  PARTIAL_RELEASE: "Giải ngân một phần",
+  RESUBMIT_REQUIRED: "Yêu cầu nộp lại",
+  NO_ACTION: "Không hành động",
+  CANCEL_JOB: "Hủy công việc",
+  RECRUITER_WARNING: "Cảnh báo recruiter",
+  WORKER_WINS: "Worker thắng",
+  WORKER_PARTIAL: "Worker nhận một phần",
+  RECRUITER_WINS: "Recruiter thắng",
 };
 
 const WORKSPACE_STEPS: Record<string, string> = {
@@ -215,6 +331,7 @@ const WORKSPACE_STEPS: Record<string, string> = {
 const APPLICATIONS_PAGE_SIZE = 9;
 const WORKSPACE_PAGE_SIZE = 8;
 const INCOME_HISTORY_PAGE_SIZE = 3;
+const DISPUTES_PAGE_SIZE = 8;
 
 const startOfDay = (date: Date) =>
   new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -304,6 +421,27 @@ const formatDate = (value?: string) =>
         year: "numeric",
       })
     : "Cập nhật sau";
+
+const formatDateTime = (value?: string | null) =>
+  value
+    ? new Date(value).toLocaleString("vi-VN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "Chưa cập nhật";
+
+const getDisputeTypeLabel = (type?: DisputeType) => {
+  if (!type) return "Chưa rõ loại";
+  return DISPUTE_TYPE_LABELS[type] || type;
+};
+
+const getDisputeResolutionLabel = (resolution?: DisputeResolution) => {
+  if (!resolution) return "Chưa có kết quả";
+  return DISPUTE_RESOLUTION_LABELS[resolution] || resolution;
+};
 
 /** Format countdown string from deadline timestamp */
 const formatCountdown = (deadline?: string): string => {
@@ -397,6 +535,15 @@ const JobLabPage: React.FC = () => {
   const [disputeFilesPreview, setDisputeFilesPreview] = useState<string[]>([]);
   const [disputeSelectedEvidenceType, setDisputeSelectedEvidenceType] =
     useState<string>("TEXT");
+  const [submittedDisputes, setSubmittedDisputes] = useState<
+    UserSubmittedDispute[]
+  >([]);
+  const [disputesLoading, setDisputesLoading] = useState(false);
+  const [disputesLoaded, setDisputesLoaded] = useState(false);
+  const [disputeSearchTerm, setDisputeSearchTerm] = useState("");
+  const [disputeStatusFilter, setDisputeStatusFilter] =
+    useState<DisputeStatusFilter>("ALL");
+  const [disputesPage, setDisputesPage] = useState(1);
 
   const loadApplications = async () => {
     setLoading(true);
@@ -415,6 +562,41 @@ const JobLabPage: React.FC = () => {
   useEffect(() => {
     loadApplications();
   }, []);
+
+  // [Nghiệp vụ] Tab dispute cần tổng hợp tất cả dispute user đã gửi để filter trạng thái đầy đủ ở frontend.
+  const loadSubmittedDisputes = async () => {
+    setDisputesLoading(true);
+    try {
+      const merged: UserSubmittedDispute[] = [];
+      let page = 0;
+      let totalPages = 1;
+
+      do {
+        const response = await shortTermJobService.getMySubmittedDisputes(
+          page,
+          50,
+        );
+        merged.push(...(response.content || []));
+        totalPages = Math.max(1, response.totalPages || 1);
+        page += 1;
+      } while (page < totalPages && page < 20);
+
+      const deduped = Array.from(
+        new Map(merged.map((item) => [item.id, item])).values(),
+      ).sort(
+        (left, right) =>
+          new Date(right.createdAt).getTime() -
+          new Date(left.createdAt).getTime(),
+      );
+
+      setSubmittedDisputes(deduped);
+      setDisputesLoaded(true);
+    } catch (error: any) {
+      setMessage(error?.message || "Không thể tải danh sách dispute đã gửi.");
+    } finally {
+      setDisputesLoading(false);
+    }
+  };
 
   const applications = useMemo<AppItem[]>(() => {
     const regular: AppItem[] = regularApps.map((app) => ({
@@ -453,6 +635,7 @@ const JobLabPage: React.FC = () => {
       return {
         id: `shortterm-${app.id}`,
         type: "SHORT_TERM",
+        jobId: app.jobId,
         applicationId: app.id,
         title: app.jobTitle || app.jobDetails?.title || "Gig job",
         company: app.jobDetails?.recruiterCompanyName || "",
@@ -501,9 +684,7 @@ const JobLabPage: React.FC = () => {
 
   const workspaceListApplications = useMemo(
     () =>
-      applications.filter(
-        (app) => jobType === "ALL" || app.type === jobType,
-      ),
+      applications.filter((app) => jobType === "ALL" || app.type === jobType),
     [applications, jobType],
   );
 
@@ -749,6 +930,56 @@ const JobLabPage: React.FC = () => {
     [applications],
   );
 
+  const filteredSubmittedDisputes = useMemo(() => {
+    const normalizedQuery = disputeSearchTerm.trim().toLowerCase();
+
+    return submittedDisputes.filter((item) => {
+      const matchesStatus =
+        disputeStatusFilter === "ALL" || item.status === disputeStatusFilter;
+
+      const matchesQuery =
+        !normalizedQuery ||
+        [
+          item.id,
+          item.jobTitle,
+          item.reason,
+          item.respondentName,
+          item.disputeType,
+          item.status,
+          item.resolution,
+        ]
+          .filter((value) => value !== undefined && value !== null)
+          .some((value) =>
+            String(value).toLowerCase().includes(normalizedQuery),
+          );
+
+      return matchesStatus && matchesQuery;
+    });
+  }, [submittedDisputes, disputeSearchTerm, disputeStatusFilter]);
+
+  const disputesTotalPages = Math.max(
+    1,
+    Math.ceil(filteredSubmittedDisputes.length / DISPUTES_PAGE_SIZE),
+  );
+
+  const pagedSubmittedDisputes = useMemo(() => {
+    const start = (disputesPage - 1) * DISPUTES_PAGE_SIZE;
+    return filteredSubmittedDisputes.slice(start, start + DISPUTES_PAGE_SIZE);
+  }, [filteredSubmittedDisputes, disputesPage]);
+
+  const unresolvedSubmittedDisputesCount = useMemo(
+    () =>
+      submittedDisputes.filter((item) =>
+        [
+          DisputeStatus.OPEN,
+          DisputeStatus.UNDER_INVESTIGATION,
+          DisputeStatus.AWAITING_RESPONSE,
+          DisputeStatus.ESCALATED,
+        ].includes(item.status),
+      ).length,
+    [submittedDisputes],
+  );
+
   const statusSummary = useMemo(() => {
     const closedCount = applications.filter((app) =>
       ["REJECTED", "WITHDRAWN"].includes(app.status),
@@ -828,6 +1059,19 @@ const JobLabPage: React.FC = () => {
   useEffect(() => {
     setIncomePage((current) => Math.min(current, incomeTotalPages));
   }, [incomeTotalPages]);
+
+  useEffect(() => {
+    setDisputesPage(1);
+  }, [disputeSearchTerm, disputeStatusFilter]);
+
+  useEffect(() => {
+    setDisputesPage((current) => Math.min(current, disputesTotalPages));
+  }, [disputesTotalPages]);
+
+  useEffect(() => {
+    if (viewMode !== "disputes" || disputesLoaded || disputesLoading) return;
+    void loadSubmittedDisputes();
+  }, [viewMode, disputesLoaded, disputesLoading]);
 
   const openWorkspace = (app: AppItem) => {
     // Full-time REGULAR jobs open inline view, not workspace
@@ -920,9 +1164,14 @@ const JobLabPage: React.FC = () => {
     }
     try {
       setDisputeSubmitting(true);
+      const resolvedJobId =
+        app.jobId ?? Number(app.id.replace("shortterm-", ""));
+      if (!Number.isFinite(resolvedJobId) || resolvedJobId <= 0) {
+        throw new Error("Khong xac dinh duoc cong viec cho yeu cau khieu nai.");
+      }
       // Open the dispute first
       const dispute = await shortTermJobService.openDispute({
-        jobId: Number(app.id.replace("shortterm-", "")),
+        jobId: resolvedJobId,
         applicationId: app.applicationId,
         disputeType: disputeType as any,
         reason: disputeReason.trim(),
@@ -954,6 +1203,7 @@ const JobLabPage: React.FC = () => {
       setDisputeFiles([]);
       setDisputeFilesPreview([]);
       setDisputeSelectedEvidenceType("TEXT");
+      setDisputesLoaded(false);
       setViewMode("applications");
       await loadApplications();
     } catch (error: any) {
@@ -1052,6 +1302,12 @@ const JobLabPage: React.FC = () => {
                 icon: Send,
                 count: offerAppsCount,
               },
+              {
+                id: "disputes" as const,
+                label: "Dispute đã gửi",
+                icon: AlertTriangle,
+                count: unresolvedSubmittedDisputesCount,
+              },
             ].map((item) => (
               <button
                 key={item.id}
@@ -1094,6 +1350,7 @@ const JobLabPage: React.FC = () => {
               {viewMode === "contracts" && "Hợp đồng của tôi"}
               {viewMode === "interviews" && "Lịch phỏng vấn"}
               {viewMode === "offers" && "Các đề nghị đã nhận"}
+              {viewMode === "disputes" && "Dispute đã gửi"}
             </h1>
             <p>
               {viewMode === "dashboard" &&
@@ -1107,13 +1364,21 @@ const JobLabPage: React.FC = () => {
               {viewMode === "interviews" &&
                 "Theo dõi các buổi phỏng vấn online và onsite."}
               {viewMode === "offers" && "Xem và phản hồi đề nghị tuyển dụng."}
+              {viewMode === "disputes" &&
+                "Theo dõi toàn bộ tranh chấp bạn đã gửi theo trạng thái xử lý."}
             </p>
           </div>
           <div className="jlx-header__actions">
             <button
               type="button"
               className="jlx-btn jlx-btn--ghost"
-              onClick={loadApplications}
+              onClick={() => {
+                if (viewMode === "disputes") {
+                  void loadSubmittedDisputes();
+                  return;
+                }
+                void loadApplications();
+              }}
             >
               <RefreshCw size={14} />
               Làm mới
@@ -1288,13 +1553,18 @@ const JobLabPage: React.FC = () => {
                     </span>
                   </article>
 
-                  <section className="jlx-income-history" aria-label="Bảng lịch sử thu nhập">
+                  <section
+                    className="jlx-income-history"
+                    aria-label="Bảng lịch sử thu nhập"
+                  >
                     <div className="jlx-income-history__toolbar">
                       <label className="jlx-income-history__search">
                         <Search size={14} />
                         <input
                           value={incomeSearch}
-                          onChange={(event) => setIncomeSearch(event.target.value)}
+                          onChange={(event) =>
+                            setIncomeSearch(event.target.value)
+                          }
                           placeholder="Tìm theo job hoặc công ty..."
                         />
                       </label>
@@ -1749,7 +2019,8 @@ const JobLabPage: React.FC = () => {
                     <div className="jlx-workspace-bar__info">
                       <strong>{selectedApp?.title || "Workspace"}</strong>
                       <span>
-                        {workspaceListApplications.length} đơn • {jobType === "ALL"
+                        {workspaceListApplications.length} đơn •{" "}
+                        {jobType === "ALL"
                           ? "Tất cả"
                           : jobType === "REGULAR"
                             ? "Dài hạn"
@@ -2627,6 +2898,197 @@ const JobLabPage: React.FC = () => {
               applications={applications}
               onRefresh={loadApplications}
             />
+          </section>
+        )}
+
+        {viewMode === "disputes" && (
+          <section className="jlx-disputes-section">
+            <section className="jlx-app-toolbar">
+              <div className="jlx-app-toolbar__main">
+                <label className="jlx-search">
+                  <Search size={16} />
+                  <input
+                    value={disputeSearchTerm}
+                    onChange={(event) =>
+                      setDisputeSearchTerm(event.target.value)
+                    }
+                    placeholder="Tìm theo mã dispute, job, lý do..."
+                  />
+                </label>
+                <div className="jlx-dispute-summary-chip">
+                  <Shield size={14} />
+                  <span>
+                    Tổng {submittedDisputes.length} dispute • Đang xử lý{" "}
+                    {unresolvedSubmittedDisputesCount}
+                  </span>
+                </div>
+              </div>
+              <div className="jlx-app-toolbar__filters">
+                <label className="jlx-filter-control">
+                  <AlertTriangle size={14} />
+                  <select
+                    value={disputeStatusFilter}
+                    onChange={(event) =>
+                      setDisputeStatusFilter(
+                        event.target.value as DisputeStatusFilter,
+                      )
+                    }
+                  >
+                    {DISPUTE_STATUS_FILTER_ITEMS.map((item) => (
+                      <option key={item.value} value={item.value}>
+                        {item.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            </section>
+
+            {disputesLoading ? (
+              <div className="jlx-disputes-loading">
+                <RefreshCw size={18} className="jlx-spin" />
+                Đang tải danh sách dispute đã gửi...
+              </div>
+            ) : !filteredSubmittedDisputes.length ? (
+              <div className="jlx-empty-state">
+                <Shield size={42} />
+                <h3>Không có dispute phù hợp</h3>
+                <p>Thử đổi bộ lọc trạng thái hoặc từ khóa tìm kiếm.</p>
+              </div>
+            ) : (
+              <>
+                <div className="jlx-card-grid">
+                  {pagedSubmittedDisputes.map((item) => {
+                    const statusMeta = DISPUTE_STATUS_META[item.status] || {
+                      label: item.status,
+                      tone: "slate",
+                      hint: "Đang chờ cập nhật trạng thái từ hệ thống.",
+                    };
+
+                    return (
+                      <article
+                        key={item.id}
+                        className="jlx-job-card jlx-dispute-card"
+                      >
+                        <div className="jlx-job-card__top">
+                          <span className={`jlx-status is-${statusMeta.tone}`}>
+                            {statusMeta.label}
+                          </span>
+                          <span className="jlx-type is-gig">
+                            Dispute #{item.id}
+                          </span>
+                        </div>
+
+                        <h4>
+                          {item.jobTitle ||
+                            (item.jobId
+                              ? `Công việc #${item.jobId}`
+                              : "Dispute chưa gắn job")}
+                        </h4>
+
+                        <p className="jlx-job-card__company">
+                          <Building2 size={14} />
+                          {item.respondentName
+                            ? `Đối tác: ${item.respondentName}`
+                            : "Đối tác đang cập nhật"}
+                        </p>
+
+                        <div className="jlx-job-card__meta">
+                          <span>
+                            <Shield size={14} />
+                            {getDisputeTypeLabel(item.disputeType)}
+                          </span>
+                          <span>
+                            <Calendar size={14} />
+                            Tạo lúc {formatDateTime(item.createdAt)}
+                          </span>
+                        </div>
+
+                        <p className="jlx-dispute-card__reason">
+                          {item.reason}
+                        </p>
+
+                        <div className="jlx-dispute-card__meta-grid">
+                          <div className="jlx-dispute-card__meta-item">
+                            <span>Job / Application</span>
+                            <strong>
+                              #{item.jobId || "-"} / #
+                              {item.applicationId || "-"}
+                            </strong>
+                          </div>
+                          <div className="jlx-dispute-card__meta-item">
+                            <span>
+                              {item.resolvedAt ? "Đóng lúc" : "Hạn SLA"}
+                            </span>
+                            <strong>
+                              {item.resolvedAt
+                                ? formatDateTime(item.resolvedAt)
+                                : formatDateTime(
+                                    item.adminResolutionDeadlineAt,
+                                  )}
+                            </strong>
+                          </div>
+                        </div>
+
+                        <p className="jlx-job-card__hint">{statusMeta.hint}</p>
+
+                        {item.resolution && (
+                          <p className="jlx-dispute-card__resolution">
+                            Kết quả:{" "}
+                            {getDisputeResolutionLabel(item.resolution)}
+                            {item.partialRefundPct !== undefined
+                              ? ` (${item.partialRefundPct}%)`
+                              : ""}
+                          </p>
+                        )}
+
+                        {item.resolutionNotes && (
+                          <p className="jlx-dispute-card__notes">
+                            Ghi chú admin: {item.resolutionNotes}
+                          </p>
+                        )}
+                      </article>
+                    );
+                  })}
+                </div>
+
+                {disputesTotalPages > 1 && (
+                  <div className="jlx-pagination">
+                    <div className="jlx-pagination__summary">
+                      {filteredSubmittedDisputes.length} dispute •{" "}
+                      {DISPUTES_PAGE_SIZE} dispute/trang
+                    </div>
+                    <div className="jlx-pagination__actions">
+                      <button
+                        type="button"
+                        className="jlx-btn jlx-btn--ghost"
+                        onClick={() =>
+                          setDisputesPage((page) => Math.max(1, page - 1))
+                        }
+                        disabled={disputesPage === 1}
+                      >
+                        Trước
+                      </button>
+                      <span className="jlx-pagination__page">
+                        Trang {disputesPage}/{disputesTotalPages}
+                      </span>
+                      <button
+                        type="button"
+                        className="jlx-btn jlx-btn--ghost"
+                        onClick={() =>
+                          setDisputesPage((page) =>
+                            Math.min(disputesTotalPages, page + 1),
+                          )
+                        }
+                        disabled={disputesPage >= disputesTotalPages}
+                      >
+                        Sau
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </section>
         )}
 

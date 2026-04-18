@@ -9,6 +9,7 @@ import {
   ShieldAlert,
   X,
 } from "lucide-react";
+import ConfirmDialog from "../shared/ConfirmDialog";
 import {
   DisputeResponse,
   DisputeResolution,
@@ -65,73 +66,103 @@ const DISPUTE_STATUS_FILTER_ITEMS: Array<{
 const toneClass = (tone: StatusTone) =>
   `jmt-status-chip jmt-status-chip--${tone}`;
 
-const getResolutionOptions = (disputeType?: string): ResolutionOption[] => {
-  if (
-    disputeType === "WORKER_PROTECTION" ||
-    disputeType === "RECRUITER_ABUSE" ||
-    disputeType === "CANCELLATION_REVIEW"
-  ) {
-    return [
-      ...(disputeType === "CANCELLATION_REVIEW"
-        ? [
-            {
-              value: "CANCEL_JOB" as DisputeResolution,
-              label: "Hủy job",
-              hint: "Xác nhận yêu cầu hủy mission.",
-            },
-          ]
-        : []),
-      {
-        value: "FULL_RELEASE" as DisputeResolution,
-        label: "Giải ngân toàn phần",
-        hint: "Giải ngân 100% cho ứng viên.",
-      },
-      {
-        value: "RECRUITER_WARNING" as DisputeResolution,
-        label: "Cảnh báo recruiter",
-        hint: "Ghi nhận vi phạm nhưng không xử lý tài chính.",
-      },
-      {
-        value: "RESUBMIT_REQUIRED" as DisputeResolution,
-        label: "Yêu cầu làm tiếp",
-        hint: "Bác dispute, giữ flow thực thi.",
-      },
-    ];
+const PARTIAL_RESOLUTION_VALUES: DisputeResolution[] = [
+  "WORKER_PARTIAL",
+  "PARTIAL_REFUND",
+  "PARTIAL_RELEASE",
+];
+
+const isPartialResolution = (
+  value: DisputeResolution | "",
+): value is DisputeResolution =>
+  PARTIAL_RESOLUTION_VALUES.includes(value as DisputeResolution);
+
+const getPartialPercentHint = (value: DisputeResolution | "") => {
+  if (value === "PARTIAL_REFUND") {
+    return "Nhập tỷ lệ % hoàn cho recruiter (1-99%). Ứng viên sẽ nhận phần còn lại.";
   }
 
-  return [
-    {
-      value: "WORKER_WINS" as DisputeResolution,
-      label: "Ứng viên thắng",
-      hint: "Ứng viên nhận toàn bộ khoản thanh toán.",
-    },
-    {
-      value: "RECRUITER_WINS" as DisputeResolution,
-      label: "Nhà tuyển dụng thắng",
-      hint: "Nhà tuyển dụng nhận toàn bộ khoản hoàn.",
-    },
-    {
-      value: "WORKER_PARTIAL" as DisputeResolution,
-      label: "Ứng viên thắng một phần",
-      hint: "Cần nhập tỷ lệ phần trăm chia tiền.",
-    },
-    {
-      value: "FULL_REFUND" as DisputeResolution,
-      label: "Hoàn tiền toàn phần",
-      hint: "Refund 100% cho nhà tuyển dụng.",
-    },
-    {
-      value: "FULL_RELEASE" as DisputeResolution,
-      label: "Giải ngân toàn phần",
-      hint: "Release 100% cho ứng viên.",
-    },
-    {
-      value: "RESUBMIT_REQUIRED" as DisputeResolution,
-      label: "Yêu cầu nộp lại",
-      hint: "Không quyết định tài chính ngay.",
-    },
-  ];
+  return "Nhập tỷ lệ % chi trả cho ứng viên (1-99%). Recruiter sẽ nhận phần còn lại.";
 };
+
+const getResolutionTone = (value: DisputeResolution) => {
+  switch (value) {
+    case "WORKER_WINS":
+    case "WORKER_PARTIAL":
+    case "FULL_RELEASE":
+    case "PARTIAL_RELEASE":
+      return "success";
+    case "RECRUITER_WINS":
+    case "FULL_REFUND":
+    case "CANCEL_JOB":
+      return "danger";
+    case "RESUBMIT_REQUIRED":
+    case "RECRUITER_WARNING":
+      return "warning";
+    case "NO_ACTION":
+      return "neutral";
+    default:
+      return "info";
+  }
+};
+
+const getResolutionOptions = (): ResolutionOption[] => [
+  {
+    value: "WORKER_WINS",
+    label: "Ứng viên thắng",
+    hint: "Giải ngân 100% cho ứng viên. Không hoàn tiền cho recruiter.",
+  },
+  {
+    value: "RECRUITER_WINS",
+    label: "Nhà tuyển dụng thắng",
+    hint: "Hoàn 100% cho recruiter. Không trả cho ứng viên.",
+  },
+  {
+    value: "WORKER_PARTIAL",
+    label: "Ứng viên thắng một phần",
+    hint: "Cần nhập tỷ lệ phần trăm chia tiền cho ứng viên (1-99%).",
+  },
+  {
+    value: "PARTIAL_REFUND",
+    label: "Hoàn một phần cho recruiter",
+    hint: "Recruiter nhận %, ứng viên nhận phần còn lại. Cần nhập tỷ lệ.",
+  },
+  {
+    value: "PARTIAL_RELEASE",
+    label: "Giải ngân một phần cho ứng viên",
+    hint: "Ứng viên nhận %, recruiter nhận phần còn lại. Cần nhập tỷ lệ.",
+  },
+  {
+    value: "CANCEL_JOB",
+    label: "Hủy job",
+    hint: "Hủy công việc, hoàn tiền cho recruiter (trừ phí nền tảng).",
+  },
+  {
+    value: "FULL_REFUND",
+    label: "Hoàn tiền toàn phần",
+    hint: "Hoàn 100% cho recruiter (trừ phí nền tảng).",
+  },
+  {
+    value: "FULL_RELEASE",
+    label: "Giải ngân toàn phần",
+    hint: "Trả 100% cho ứng viên (trừ phí nền tảng).",
+  },
+  {
+    value: "RESUBMIT_REQUIRED",
+    label: "Yêu cầu nộp lại",
+    hint: "Không quyết định tài chính. Mở lại luồng revision cho ứng viên.",
+  },
+  {
+    value: "NO_ACTION",
+    label: "Không xử lý / Bác bỏ",
+    hint: "Bác bỏ khiếu nại. Không có thay đổi tài chính.",
+  },
+  {
+    value: "RECRUITER_WARNING",
+    label: "Cảnh báo recruiter",
+    hint: "Ghi nhận vi phạm nhưng không xử lý tài chính. Gia hạn review 48h.",
+  },
+];
 
 const getAuditActorLabel = (log: JobStatusAuditLog) => {
   if (typeof log.changedBy === "number") {
@@ -168,6 +199,16 @@ export const JobDisputesView: React.FC<JobDisputesViewProps> = ({
   const [resolutionNotes, setResolutionNotes] = useState("");
   const [partialPercent, setPartialPercent] = useState("");
   const [resolving, setResolving] = useState(false);
+  const [showResolveConfirm, setShowResolveConfirm] = useState(false);
+
+  const resolutionOptions = useMemo(() => getResolutionOptions(), []);
+
+  const selectedResolutionOption = useMemo(
+    () => resolutionOptions.find((item) => item.value === resolution),
+    [resolutionOptions, resolution],
+  );
+
+  const requiresPartialPercent = isPartialResolution(resolution);
 
   const loadDisputes = useCallback(
     async (
@@ -234,7 +275,7 @@ export const JobDisputesView: React.FC<JobDisputesViewProps> = ({
       ]);
 
       setDetail(fetchedDetail);
-      setAuditLogs(fetchedLogs);
+      setAuditLogs(Array.isArray(fetchedLogs) ? fetchedLogs : []);
     } catch (error) {
       console.error("Failed to load dispute detail", error);
       showError("Lỗi", "Không thể tải chi tiết tranh chấp");
@@ -248,6 +289,7 @@ export const JobDisputesView: React.FC<JobDisputesViewProps> = ({
     setResolution("");
     setResolutionNotes("");
     setPartialPercent("");
+    setShowResolveConfirm(false);
     setDetail(null);
     setAuditLogs([]);
   };
@@ -259,7 +301,7 @@ export const JobDisputesView: React.FC<JobDisputesViewProps> = ({
       return;
     }
 
-    if (resolution === "WORKER_PARTIAL") {
+    if (requiresPartialPercent) {
       const parsed = Number(partialPercent);
       if (!Number.isFinite(parsed) || parsed <= 0 || parsed >= 100) {
         showWarning(
@@ -275,8 +317,9 @@ export const JobDisputesView: React.FC<JobDisputesViewProps> = ({
       const payload: ResolveDisputeRequest = {
         resolution,
         resolutionNotes: resolutionNotes || undefined,
-        partialRefundPct:
-          resolution === "WORKER_PARTIAL" ? Number(partialPercent) : undefined,
+        partialRefundPct: requiresPartialPercent
+          ? Number(partialPercent)
+          : undefined,
       };
 
       await adminService.resolveDispute(selectedDispute.id, payload);
@@ -522,6 +565,18 @@ export const JobDisputesView: React.FC<JobDisputesViewProps> = ({
                         {getResolutionLabel(detail.resolution)}
                       </p>
                     ) : null}
+                    {detail?.resolvedBy ? (
+                      <p>
+                        <strong>Người xử lý:</strong>{" "}
+                        {detail.resolvedByName || `Admin #${detail.resolvedBy}`}
+                      </p>
+                    ) : null}
+                    {detail?.resolvedAt ? (
+                      <p>
+                        <strong>Xử lý lúc:</strong>{" "}
+                        {formatDateTime(detail.resolvedAt)}
+                      </p>
+                    ) : null}
                   </div>
 
                   <div className="jmt-modal-panel">
@@ -551,51 +606,60 @@ export const JobDisputesView: React.FC<JobDisputesViewProps> = ({
                 selectedDispute.status !== "DISMISSED" ? (
                   <div className="jmt-modal-panel">
                     <h5>Phương án xử lý</h5>
-                    <label className="jmt-input-wrap">
-                      <select
-                        className="jmt-input"
-                        value={resolution}
-                        onChange={(event) =>
-                          setResolution(
-                            event.target.value as DisputeResolution | "",
-                          )
-                        }
-                      >
-                        <option value="">Chọn phương án</option>
-                        {getResolutionOptions(detail?.disputeType).map(
-                          (option) => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ),
-                        )}
-                      </select>
-                    </label>
+                    <div
+                      className="jmt-resolution-grid"
+                      role="radiogroup"
+                      aria-label="Danh sách phương án xử lý tranh chấp"
+                    >
+                      {resolutionOptions.map((option) => {
+                        const isActive = resolution === option.value;
+                        const tone = getResolutionTone(option.value);
 
-                    {resolution ? (
+                        return (
+                          <button
+                            key={option.value}
+                            type="button"
+                            className={`jmt-resolution-option jmt-resolution-option--${tone} ${isActive ? "is-active" : ""}`}
+                            onClick={() => setResolution(option.value)}
+                            aria-pressed={isActive}
+                          >
+                            <span className="jmt-resolution-option__label">
+                              {option.label}
+                            </span>
+                            <span className="jmt-resolution-option__hint">
+                              {option.hint}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {selectedResolutionOption ? (
                       <p className="jmt-subtitle">
-                        {
-                          getResolutionOptions(detail?.disputeType).find(
-                            (item) => item.value === resolution,
-                          )?.hint
-                        }
+                        Đang chọn:{" "}
+                        <strong>{selectedResolutionOption.label}</strong>
                       </p>
                     ) : null}
 
-                    {resolution === "WORKER_PARTIAL" ? (
-                      <label className="jmt-input-wrap">
-                        <input
-                          className="jmt-input"
-                          type="number"
-                          min={1}
-                          max={99}
-                          value={partialPercent}
-                          onChange={(event) =>
-                            setPartialPercent(event.target.value)
-                          }
-                          placeholder="Nhập % phần ứng viên được nhận"
-                        />
-                      </label>
+                    {requiresPartialPercent ? (
+                      <>
+                        <p className="jmt-subtitle">
+                          {getPartialPercentHint(resolution)}
+                        </p>
+                        <label className="jmt-input-wrap">
+                          <input
+                            className="jmt-input"
+                            type="number"
+                            min={1}
+                            max={99}
+                            value={partialPercent}
+                            onChange={(event) =>
+                              setPartialPercent(event.target.value)
+                            }
+                            placeholder="Nhập tỷ lệ phần trăm (1-99)"
+                          />
+                        </label>
+                      </>
                     ) : null}
 
                     <textarea
@@ -611,7 +675,7 @@ export const JobDisputesView: React.FC<JobDisputesViewProps> = ({
                     <div className="jmt-row jmt-row--end">
                       <button
                         className="jmt-btn jmt-btn--success"
-                        onClick={handleResolve}
+                        onClick={() => setShowResolveConfirm(true)}
                         disabled={resolving}
                       >
                         {resolving ? (
@@ -631,6 +695,17 @@ export const JobDisputesView: React.FC<JobDisputesViewProps> = ({
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={showResolveConfirm}
+        title="Xác nhận xử lý tranh chấp"
+        message={`Bạn sắp xử lý tranh chấp #${selectedDispute?.id} với phương án "${selectedResolutionOption?.label ?? "Chưa chọn"}".\n\nHành động này sẽ được ghi nhận trong audit log và số tiền escrow sẽ được xử lý. Bạn không thể hoàn tác.`}
+        confirmLabel="Xác nhận xử lý"
+        cancelLabel="Hủy"
+        variant="primary"
+        onConfirm={handleResolve}
+        onCancel={() => setShowResolveConfirm(false)}
+      />
 
       {toast && (
         <Toast

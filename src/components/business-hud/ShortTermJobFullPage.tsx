@@ -63,6 +63,7 @@ const STATUS_COLORS: Record<string, string> = {
   CANCELLED: "#64748b",
   DISPUTED: "#fb7185",
   CLOSED: "#94a3b8",
+  ESCALATED: "#f97316",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -80,6 +81,7 @@ const STATUS_LABELS: Record<string, string> = {
   CANCELLED: "Đã hủy",
   DISPUTED: "Tranh chấp",
   CLOSED: "Đã đóng",
+  ESCALATED: "Đã leo thang",
 };
 
 const APP_STATUS_COLORS: Record<string, string> = {
@@ -88,12 +90,18 @@ const APP_STATUS_COLORS: Record<string, string> = {
   REJECTED: "#fb7185",
   WORKING: "#f97316",
   SUBMITTED: "#a855f7",
+  SUBMITTED_OVERDUE: "#fb7185",
   REVISION_REQUIRED: "#fbbf24",
+  REVISION_RESPONSE_OVERDUE: "#fbbf24",
   APPROVED: "#34d399",
   COMPLETED: "#4ade80",
   PAID: "#4ade80",
   CANCELLED: "#64748b",
   WITHDRAWN: "#64748b",
+  CANCELLATION_REQUESTED: "#f97316",
+  AUTO_CANCELLED: "#fb7185",
+  DISPUTE_OPENED: "#818cf8",
+  IN_PROGRESS: "#f97316",
 };
 
 const APP_STATUS_LABELS: Record<string, string> = {
@@ -102,12 +110,18 @@ const APP_STATUS_LABELS: Record<string, string> = {
   REJECTED: "Từ chối",
   WORKING: "Đang làm",
   SUBMITTED: "Đã nộp",
+  SUBMITTED_OVERDUE: "Quá hạn review",
   REVISION_REQUIRED: "Cần sửa",
+  REVISION_RESPONSE_OVERDUE: "Quá hạn phản hồi",
   APPROVED: "Đã duyệt",
-  COMPLETED: "Hoàn thành",
+  COMPLETED: "Hoàn tất",
   PAID: "Đã thanh toán",
   CANCELLED: "Đã hủy",
   WITHDRAWN: "Đã rút đơn",
+  CANCELLATION_REQUESTED: "Yêu cầu hủy",
+  AUTO_CANCELLED: "Tự động hủy",
+  DISPUTE_OPENED: "Đang khiếu nại",
+  IN_PROGRESS: "Đang thực hiện",
 };
 
 const ShortTermJobFullPage = ({
@@ -130,6 +144,7 @@ const ShortTermJobFullPage = ({
   const [escrow, setEscrow] = useState<JobEscrow | null>(null);
   const [walletBalance, setWalletBalance] = useState<number>(0);
   const [showFundingModal, setShowFundingModal] = useState(false);
+  const [selectedApplicantRevisionCount, setSelectedApplicantRevisionCount] = useState(0);
 
   useEffect(() => {
     loadData();
@@ -148,6 +163,15 @@ const ShortTermJobFullPage = ({
       setApplications(appData.content || []);
       setEscrow(escrowData);
       setWalletBalance(walletData?.cashBalance || 0);
+
+      // Track revision count for cancel-button gating in HandoverBoard
+      if (appData.content && jobData.selectedApplicantId) {
+        const selected = appData.content.find(
+          (a: ShortTermApplicationResponse) => a.id === jobData.selectedApplicantId
+        );
+        setSelectedApplicantRevisionCount(selected?.revisionCount || 0);
+      }
+
     } catch (error: any) {
       showError(
         "Không thể tải chi tiết job",
@@ -161,6 +185,7 @@ const ShortTermJobFullPage = ({
   const handleRefresh = () => {
     loadData();
   };
+
 
   const handleDeleteJob = async () => {
     if (!job) return;
@@ -731,6 +756,7 @@ const ShortTermJobFullPage = ({
             applications={applications}
             onRefresh={handleRefresh}
             onJobUpdate={(updated) => setJob(updated)}
+            selectedApplicantRevisionCount={selectedApplicantRevisionCount}
           />
         )}
 

@@ -22,11 +22,14 @@ import {
   DisputeResponseEntity,
   TrustScore,
   TrustTier,
+  UserSubmittedDispute,
 } from "../types/ShortTermJob";
 import { getStoredUserRaw } from "../utils/authStorage";
 
-// Helper type for axios error handling
-type AxiosError = { response?: { data?: { message?: string } } };
+// Helper type for axios error handling — includes status for 404 detection
+type AxiosError = {
+  response?: { status?: number; data?: { message?: string } };
+};
 
 class ShortTermJobService {
   // ==================== PRIVATE HELPERS ====================
@@ -93,16 +96,26 @@ class ShortTermJobService {
   }
 
   private normalizeDisputeResponse(data: any): Dispute | null {
-    const raw = Array.isArray(data) ? data[0] : data;
+    const unwrapped =
+      data?.data && typeof data.data === "object" ? data.data : data;
+    const raw = Array.isArray(unwrapped) ? unwrapped[0] : unwrapped;
     if (!raw) {
       return null;
     }
 
+    const disputeId = this.toNumber(raw.id);
+    const jobId = this.toNumber(
+      raw.jobId ?? raw.job?.id ?? raw.shortTermJob?.id,
+    );
+    const applicationId = this.toNumber(
+      raw.applicationId ?? raw.application?.id,
+    );
+
     return {
-      id: this.toNumber(raw.id),
-      jobId: this.toNumber(raw.jobId),
-      applicationId: this.toNumber(raw.applicationId),
-      jobTitle: raw.jobTitle,
+      id: disputeId,
+      jobId,
+      applicationId,
+      jobTitle: raw.jobTitle ?? raw.job?.title ?? raw.shortTermJob?.title,
       initiatorId: this.toNumber(raw.initiatorId),
       initiatorName: raw.initiatorName,
       respondentId: this.toNumber(raw.respondentId),
@@ -120,12 +133,18 @@ class ShortTermJobService {
         raw.resolvedBy !== undefined && raw.resolvedBy !== null
           ? this.toNumber(raw.resolvedBy)
           : undefined,
+      resolvedByName: raw.resolvedByName,
       resolvedAt: raw.resolvedAt ?? undefined,
+      adminResolutionDeadlineAt: raw.adminResolutionDeadlineAt ?? undefined,
+      escalationLevel: raw.escalationLevel,
+      priority: raw.priority,
       createdAt: raw.createdAt ?? new Date().toISOString(),
       evidence: Array.isArray(raw.evidence)
         ? raw.evidence.map((ev: any) => ({
             id: this.toNumber(ev.id),
-            disputeId: this.toNumber(ev.disputeId ?? raw.id),
+            disputeId: this.toNumber(
+              ev.disputeId ?? ev.dispute?.id ?? disputeId,
+            ),
             submittedBy: this.toNumber(ev.submittedBy),
             submittedByName: ev.submittedByName,
             evidenceType: ev.evidenceType,
@@ -138,16 +157,70 @@ class ShortTermJobService {
             responses: Array.isArray(ev.responses)
               ? ev.responses.map((resp: any) => ({
                   id: this.toNumber(resp.id),
-                  disputeId: this.toNumber(resp.disputeId ?? raw.id),
-                  evidenceId: this.toNumber(resp.evidenceId ?? ev.id),
+                  disputeId: this.toNumber(
+                    resp.disputeId ?? resp.dispute?.id ?? disputeId,
+                  ),
+                  evidenceId: this.toNumber(
+                    resp.evidenceId ?? resp.evidence?.id ?? ev.id,
+                  ),
                   respondedBy: this.toNumber(resp.respondedBy),
                   respondedByName: resp.respondedByName,
                   content: resp.content ?? "",
+                  isAdminResponse: Boolean(resp.isAdminResponse),
                   createdAt: resp.createdAt ?? new Date().toISOString(),
                 }))
               : [],
           }))
         : [],
+    };
+  }
+
+  private normalizeUserSubmittedDisputeResponse(
+    data: any,
+  ): UserSubmittedDispute | null {
+    if (!data) {
+      return null;
+    }
+
+    return {
+      id: this.toNumber(data.id),
+      jobId:
+        data.jobId !== undefined && data.jobId !== null
+          ? this.toNumber(data.jobId)
+          : undefined,
+      applicationId:
+        data.applicationId !== undefined && data.applicationId !== null
+          ? this.toNumber(data.applicationId)
+          : undefined,
+      jobTitle: data.jobTitle ?? undefined,
+      jobStatus: data.jobStatus ?? undefined,
+      applicationStatus: data.applicationStatus ?? undefined,
+      initiatorId: this.toNumber(data.initiatorId),
+      initiatorName: data.initiatorName ?? undefined,
+      respondentId: this.toNumber(data.respondentId),
+      respondentName: data.respondentName ?? undefined,
+      disputeType: (data.disputeType ?? DisputeType.OTHER) as DisputeType,
+      reason: data.reason ?? "",
+      status: data.status,
+      resolution: data.resolution ?? undefined,
+      partialRefundPct:
+        data.partialRefundPct !== undefined && data.partialRefundPct !== null
+          ? this.toNumber(data.partialRefundPct)
+          : undefined,
+      resolutionNotes: data.resolutionNotes ?? undefined,
+      resolvedBy:
+        data.resolvedBy !== undefined && data.resolvedBy !== null
+          ? this.toNumber(data.resolvedBy)
+          : undefined,
+      resolvedByName: data.resolvedByName ?? undefined,
+      resolvedAt: data.resolvedAt ?? undefined,
+      createdAt: data.createdAt ?? new Date().toISOString(),
+      adminResolutionDeadlineAt: data.adminResolutionDeadlineAt ?? undefined,
+      escalationLevel:
+        data.escalationLevel !== undefined && data.escalationLevel !== null
+          ? this.toNumber(data.escalationLevel)
+          : undefined,
+      priority: data.priority ?? undefined,
     };
   }
 
@@ -424,7 +497,9 @@ class ShortTermJobService {
         totalElements: number;
       }>(`/api/short-term-jobs/public/paged?page=${page}&size=${size}`);
       return {
-        content: response.data.content.map((job) => this.transformResponse(job)),
+        content: response.data.content.map((job) =>
+          this.transformResponse(job),
+        ),
         totalPages: response.data.totalPages,
         totalElements: response.data.totalElements,
       };
@@ -777,7 +852,9 @@ class ShortTermJobService {
    * POST /api/short-term-jobs/applications/{id}/accept-cancellation
    * @requires USER role
    */
-  async acceptCancellation(applicationId: number): Promise<ShortTermApplicationResponse> {
+  async acceptCancellation(
+    applicationId: number,
+  ): Promise<ShortTermApplicationResponse> {
     try {
       const response = await axiosInstance.post<ShortTermApplicationResponse>(
         `/api/short-term-jobs/applications/${applicationId}/accept-cancellation`,
@@ -981,10 +1058,7 @@ class ShortTermJobService {
 
   // ==================== DISPUTE METHODS ====================
 
-  /**
-   * Open a dispute
-   * POST /api/disputes
-   */
+  // [Nghiệp vụ] Mở dispute — handle 404 để phân biệt job không tồn tại vs lỗi khác
   async openDispute(data: {
     jobId: number;
     applicationId: number;
@@ -993,8 +1067,27 @@ class ShortTermJobService {
   }): Promise<Dispute> {
     try {
       const response = await axiosInstance.post("/api/disputes", data);
-      return this.normalizeDisputeResponse(response.data) ?? response.data;
+      const dispute =
+        this.normalizeDisputeResponse(response.data) ?? response.data;
+      if (
+        !dispute ||
+        !Number.isFinite(Number(dispute.id)) ||
+        Number(dispute.id) <= 0
+      ) {
+        throw new Error("Khong the doc dispute ID tu phan hoi tao khieu nai.");
+      }
+      return dispute;
     } catch (error) {
+      // [Nghiệp vụ] Phân biệt 404 (job không tồn tại/hủy) vs lỗi khác để hiển thị message phù hợp
+      const axiosError = error as AxiosError;
+      const status = axiosError.response?.status;
+      if (status === 404) {
+        const message =
+          axiosError.response?.data?.message ||
+          "Công việc không tồn tại hoặc đã bị hủy.";
+        console.error("Không thể mở dispute:", message);
+        throw new Error(message);
+      }
       this.handleError(error, "Không thể mở dispute");
     }
   }
@@ -1025,6 +1118,43 @@ class ShortTermJobService {
       return this.normalizeDisputeResponse(list[0]) ?? list[0] ?? null;
     } catch {
       return null;
+    }
+  }
+
+  // [Nghiệp vụ] Tab dispute đã gửi cần danh sách dispute do chính user khởi tạo để theo dõi read-only.
+  async getMySubmittedDisputes(
+    page: number = 0,
+    size: number = 12,
+  ): Promise<{
+    content: UserSubmittedDispute[];
+    totalPages: number;
+    totalElements: number;
+    number: number;
+    size: number;
+  }> {
+    try {
+      const response = await axiosInstance.get<any>(
+        `/api/disputes/my-submitted?page=${page}&size=${size}`,
+      );
+
+      const data = response.data ?? {};
+      const content = Array.isArray(data.content)
+        ? data.content
+            .map((item: any) =>
+              this.normalizeUserSubmittedDisputeResponse(item),
+            )
+            .filter(Boolean)
+        : [];
+
+      return {
+        content: content as UserSubmittedDispute[],
+        totalPages: this.toNumber(data.totalPages),
+        totalElements: this.toNumber(data.totalElements),
+        number: this.toNumber(data.number),
+        size: this.toNumber(data.size, size),
+      };
+    } catch (error) {
+      this.handleError(error, "Không thể lấy danh sách dispute đã gửi");
     }
   }
 

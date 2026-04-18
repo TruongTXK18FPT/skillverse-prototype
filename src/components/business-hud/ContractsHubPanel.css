@@ -1,0 +1,611 @@
+/* ======================================================================
+   CONTRACTS HUB PANEL STYLES
+   Prefix: chp- (Contracts Hub Panel)
+   ====================================================================== */
+
+/* ==================== PANEL SHELL ==================== */
+.chp-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 100%;
+}
+
+/* ==================== HEADER ==================== */
+.chp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.12);
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.chp-header__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.chp-header__desc {
+  color: #94a3b8;
+  font-size: 0.82rem;
+  margin: 4px 0 0;
+}
+
+.chp-refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: rgba(15, 23, 42, 0.6);
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chp-refresh-btn:hover {
+  background: rgba(6, 182, 212, 0.08);
+  border-color: rgba(6, 182, 212, 0.25);
+  color: #22d3ee;
+}
+
+.chp-refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chp-spin {
+  animation: chp-spin 0.8s linear infinite;
+}
+
+@keyframes chp-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==================== STAT CARDS ROW ==================== */
+.chp-stat-cards {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.08);
+}
+
+.chp-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(15, 23, 42, 0.6);
+  transition: all 0.2s ease;
+}
+
+.chp-stat-card:hover {
+  transform: translateY(-1px);
+}
+
+.chp-stat-card > svg {
+  flex-shrink: 0;
+}
+
+.chp-stat-card > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chp-stat-card strong {
+  color: #f1f5f9;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.chp-stat-card span {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Stat card color variants */
+.chp-stat-card--total { border-color: rgba(139, 92, 246, 0.2); }
+.chp-stat-card--total > svg { color: #a78bfa; }
+
+.chp-stat-card--draft { border-color: rgba(148, 163, 184, 0.15); }
+.chp-stat-card--draft > svg { color: #94a3b8; }
+
+.chp-stat-card--pending { border-color: rgba(251, 191, 36, 0.2); }
+.chp-stat-card--pending > svg { color: #fbbf24; }
+
+.chp-stat-card--signed { border-color: rgba(52, 211, 153, 0.2); }
+.chp-stat-card--signed > svg { color: #34d399; }
+
+.chp-stat-card--rejected { border-color: rgba(251, 113, 133, 0.15); }
+.chp-stat-card--rejected > svg { color: #fb7185; }
+
+.chp-stat-card--value {
+  border-color: rgba(6, 182, 212, 0.2);
+  grid-column: span 2;
+}
+.chp-stat-card--value > svg { color: #22d3ee; }
+.chp-stat-card--value strong {
+  color: #22d3ee;
+  font-size: 0.95rem;
+}
+
+/* ==================== CHART ROW ==================== */
+.chp-overview-row {
+  display: flex;
+  gap: 16px;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.08);
+}
+
+.chp-chart-card {
+  flex: 1;
+  border-radius: 14px;
+  border: 1px solid rgba(6, 182, 212, 0.12);
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.chp-chart-card--narrow {
+  max-width: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chp-chart-card__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0.85rem 1rem;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin: 0;
+}
+
+.chp-chart-card__title svg {
+  color: #06b6d4;
+}
+
+.chp-chart-card__body {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem;
+}
+
+/* Donut chart */
+.chp-donut-wrap {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  flex-shrink: 0;
+}
+
+.chp-donut-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.chp-donut-seg {
+  transition: opacity 0.2s;
+}
+
+.chp-donut-seg:hover {
+  opacity: 0.8;
+}
+
+.chp-donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.chp-donut-value {
+  color: #f1f5f9;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.chp-donut-label {
+  color: #94a3b8;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* Legend */
+.chp-chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.chp-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+.chp-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.chp-legend-label {
+  color: #94a3b8;
+  flex: 1;
+}
+
+.chp-legend-value {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+/* Avg salary */
+.chp-avg-salary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  gap: 4px;
+  flex: 1;
+}
+
+.chp-avg-salary__value {
+  color: #22d3ee;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.chp-avg-salary__label {
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
+
+/* ==================== FILTER BAR ==================== */
+.chp-filter-bar {
+  display: flex;
+  gap: 10px;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.08);
+  flex-wrap: wrap;
+}
+
+.chp-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 220px;
+  padding: 0.55rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.6);
+  transition: border-color 0.2s;
+}
+
+.chp-search:focus-within {
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.chp-search-icon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.chp-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+}
+
+.chp-search-input::placeholder {
+  color: #475569;
+}
+
+.chp-select {
+  padding: 0.55rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.6);
+  color: #94a3b8;
+  font-size: 0.82rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+  min-width: 160px;
+}
+
+.chp-select:focus {
+  border-color: rgba(6, 182, 212, 0.3);
+  color: #e2e8f0;
+}
+
+.chp-select option {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+/* ==================== RESULT BAR ==================== */
+.chp-result-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1.5rem;
+  color: #64748b;
+  font-size: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.chp-result-bar strong {
+  color: #94a3b8;
+}
+
+.chp-clear-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid rgba(251, 113, 133, 0.2);
+  background: transparent;
+  color: #fb7185;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.chp-clear-btn:hover {
+  background: rgba(251, 113, 133, 0.08);
+  border-color: rgba(251, 113, 133, 0.35);
+}
+
+/* ==================== CONTRACT LIST ==================== */
+.chp-contract-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1rem 1.5rem;
+}
+
+.chp-contract-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.chp-contract-card:hover {
+  border-color: rgba(6, 182, 212, 0.18);
+  background: rgba(20, 30, 52, 0.7);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.05);
+}
+
+/* Top row */
+.chp-contract-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chp-contract-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chp-contract-card__number {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #06b6d4;
+  background: rgba(6, 182, 212, 0.08);
+  padding: 2px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(6, 182, 212, 0.15);
+}
+
+.chp-contract-card__type {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.08);
+  padding: 2px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.chp-contract-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.chp-contract-card__status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Candidate */
+.chp-contract-card__candidate {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.chp-contract-card__candidate strong {
+  color: #f1f5f9;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.chp-contract-card__candidate span {
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+/* Job */
+.chp-contract-card__job {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.chp-contract-card__job svg {
+  flex-shrink: 0;
+}
+
+.chp-contract-card__job span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Footer */
+.chp-contract-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.chp-contract-card__info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.chp-contract-card__salary {
+  color: #34d399;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.chp-contract-card__salary small {
+  color: #64748b;
+  font-weight: 400;
+  font-size: 0.72rem;
+}
+
+.chp-contract-card__date {
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.chp-contract-card__action {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  background: rgba(6, 182, 212, 0.06);
+  color: #22d3ee;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chp-contract-card__action:hover {
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 12px rgba(6, 182, 212, 0.12);
+}
+
+/* ==================== EMPTY STATE ==================== */
+.chp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 4rem 2rem;
+  color: #475569;
+  text-align: center;
+}
+
+.chp-empty svg {
+  color: #334155;
+}
+
+.chp-empty h4 {
+  color: #64748b;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.chp-empty p {
+  color: #475569;
+  font-size: 0.85rem;
+  max-width: 380px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ==================== PAGINATION WRAP ==================== */
+.chp-pagination-wrap {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid rgba(6, 182, 212, 0.08);
+}

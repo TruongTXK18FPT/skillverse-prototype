@@ -28,6 +28,8 @@ interface ClearanceLevelPageProps {
   onEnableAutoRenew?: () => void;
   onCancelAutoRenew?: () => void;
   onCancelSubscription?: () => void;
+  needsStudentVerification?: boolean;
+  onStudentVerify?: () => void;
   targetLabel?: string;
 }
 
@@ -50,6 +52,8 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
   onEnableAutoRenew,
   onCancelAutoRenew,
   onCancelSubscription,
+  needsStudentVerification,
+  onStudentVerify,
   targetLabel = "NÂNG CẤP",
 }) => {
   const [now, setNow] = useState(() => Date.now());
@@ -88,8 +92,7 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
 
     if (activePlanName) {
       return (
-        plan.displayName === activePlanName ||
-        plan.name === activePlanName
+        plan.displayName === activePlanName || plan.name === activePlanName
       );
     }
 
@@ -98,11 +101,17 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
 
   const graceWindowInfo = useMemo(() => {
     const currentPlan = currentSub?.plan;
-    if (!currentSub?.startDate || !currentPlan || currentPlan.planType === "FREE_TIER") {
+    if (
+      !currentSub?.startDate ||
+      !currentPlan ||
+      currentPlan.planType === "FREE_TIER"
+    ) {
       return null;
     }
 
-    const graceEndsAt = new Date(currentSub.startDate).getTime() + GRACE_WINDOW_HOURS * 60 * 60 * 1000;
+    const graceEndsAt =
+      new Date(currentSub.startDate).getTime() +
+      GRACE_WINDOW_HOURS * 60 * 60 * 1000;
     const remainingMs = Math.max(0, graceEndsAt - now);
 
     return {
@@ -158,9 +167,21 @@ const ClearanceLevelPage: React.FC<ClearanceLevelPageProps> = ({
                     ? () => onViewInvoice(currentSub)
                     : undefined
                 }
-                onEnableAutoRenew={planIsCurrent ? onEnableAutoRenew : undefined}
-                onCancelAutoRenew={planIsCurrent ? onCancelAutoRenew : undefined}
-                onCancelSubscription={planIsCurrent ? onCancelSubscription : undefined}
+                onEnableAutoRenew={
+                  planIsCurrent ? onEnableAutoRenew : undefined
+                }
+                onCancelAutoRenew={
+                  planIsCurrent ? onCancelAutoRenew : undefined
+                }
+                onCancelSubscription={
+                  planIsCurrent ? onCancelSubscription : undefined
+                }
+                showStudentVerifyCta={Boolean(
+                  !planIsCurrent &&
+                  plan.planType === "STUDENT_PACK" &&
+                  needsStudentVerification,
+                )}
+                onStudentVerify={onStudentVerify}
                 targetLabel={targetLabel}
                 graceWindowInfo={graceWindowInfo}
               />

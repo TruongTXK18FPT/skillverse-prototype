@@ -6,8 +6,8 @@
 
 export interface ApplicationActionRequest {
   userId: number;
-  applicationType: 'MENTOR' | 'RECRUITER';
-  action: 'APPROVE' | 'REJECT';
+  applicationType: "MENTOR" | "RECRUITER";
+  action: "APPROVE" | "REJECT";
   rejectionReason?: string; // Required if action is REJECT
 }
 
@@ -83,15 +83,73 @@ export interface ApplicationsResponse {
   statusStats: ApplicationStatusStatsDto;
 }
 
+export interface StudentVerificationListItemDto {
+  id: number;
+  userId: number;
+  userEmail: string;
+  userFullName: string;
+  schoolEmail: string;
+  status: StudentVerificationStatus;
+  createdAt: string;
+  reviewedAt?: string | null;
+}
+
+export interface StudentVerificationDetailDto {
+  id: number;
+  userId: number;
+  userEmail: string;
+  userFullName: string;
+  schoolEmail: string;
+  schoolDomain: string;
+  emailDomainValid: boolean;
+  status: StudentVerificationStatus;
+  otpExpiresAt?: string | null;
+  otpVerifiedAt?: string | null;
+  imageUrl?: string | null;
+  uploadedFileName?: string | null;
+  uploadedContentType?: string | null;
+  uploadedFileSize?: number | null;
+  reviewNote?: string | null;
+  rejectionReason?: string | null;
+  reviewedById?: number | null;
+  reviewedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApproveStudentVerificationRequest {
+  reviewNote?: string;
+}
+
+export interface RejectStudentVerificationRequest {
+  reason: string;
+}
+
+export interface ExpireStudentVerificationEmailRequest {
+  reason: string;
+}
+
 // ==================== ENUMS ====================
 
 export enum ApplicationStatus {
-  PENDING = 'PENDING',
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED'
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
 }
 
-export type ApplicationStatusFilter = 'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED';
+export type ApplicationStatusFilter =
+  | "ALL"
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED";
+export type StudentVerificationStatus =
+  | "EMAIL_OTP_PENDING"
+  | "PENDING_REVIEW"
+  | "APPROVED"
+  | "REJECTED"
+  | "EXPIRED";
+
+export type StudentVerificationStatusFilter = "ALL" | StudentVerificationStatus;
 
 // ==================== SHORT-TERM JOB ADMIN TYPES ====================
 
@@ -156,17 +214,17 @@ export interface ResolveDisputeRequest {
 }
 
 export type DisputeResolution =
-  | 'CANCEL_JOB'
-  | 'FULL_REFUND'
-  | 'FULL_RELEASE'
-  | 'PARTIAL_REFUND'
-  | 'PARTIAL_RELEASE'
-  | 'RESUBMIT_REQUIRED'
-  | 'NO_ACTION'
-  | 'WORKER_WINS'
-  | 'WORKER_PARTIAL'
-  | 'RECRUITER_WINS'
-  | 'RECRUITER_WARNING';
+  | "CANCEL_JOB"
+  | "FULL_REFUND"
+  | "FULL_RELEASE"
+  | "PARTIAL_REFUND"
+  | "PARTIAL_RELEASE"
+  | "RESUBMIT_REQUIRED"
+  | "NO_ACTION"
+  | "WORKER_WINS"
+  | "WORKER_PARTIAL"
+  | "RECRUITER_WINS"
+  | "RECRUITER_WARNING";
 
 export interface DisputeResponse {
   id: number;
@@ -188,9 +246,9 @@ export interface DisputeResponse {
 }
 
 export type DisputeStatus =
-  | 'OPEN'
-  | 'UNDER_INVESTIGATION'
-  | 'AWAITING_RESPONSE'
-  | 'RESOLVED'
-  | 'DISMISSED'
-  | 'ESCALATED';
+  | "OPEN"
+  | "UNDER_INVESTIGATION"
+  | "AWAITING_RESPONSE"
+  | "RESOLVED"
+  | "DISMISSED"
+  | "ESCALATED";

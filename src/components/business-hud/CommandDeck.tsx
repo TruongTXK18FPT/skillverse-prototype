@@ -23,6 +23,7 @@ import {
   Shield,
   TrendingUp,
   Wallet,
+  FileSignature,
 } from "lucide-react";
 import OperationLog from "./OperationLog";
 import MissionLaunchPad from "./MissionLaunchPad";
@@ -31,11 +32,14 @@ import ShortTermJobManager from "./ShortTermJobManager";
 import RecruiterTalentWorkspace from "./RecruiterTalentWorkspace";
 import SubscriptionWidget from "./SubscriptionWidget";
 import RegulationsTab from "./RegulationsTab";
+import ContractsHubPanel from "./ContractsHubPanel";
 import LineChart from "./stats/LineChart";
 import recruiterStatsService, {
   SpendingDataPoint,
   TIME_RANGES,
 } from "../../services/recruiterStatsService";
+import contractService from "../../services/contractService";
+import { ContractListResponse } from "../../types/contract";
 import portfolioService from "../../services/portfolioService";
 import {
   FreelancerCardDisplay,
@@ -61,6 +65,7 @@ type RecruiterSection =
   | "fulltime"
   | "shortterm"
   | "candidates"
+  | "contracts"
   | "regulations"
   | "seminar";
 
@@ -75,6 +80,9 @@ interface Stats {
   stInProgress: number;
   stCompleted: number;
   stApplicants: number;
+  ctTotal: number;
+  ctPending: number;
+  ctSigned: number;
   totalJobs: number;
   totalApplicants: number;
   totalHires: number;
@@ -205,6 +213,7 @@ const CommandDeck: React.FC = () => {
 
   const [ftJobs, setFtJobs] = useState<JobPostingResponse[]>([]);
   const [stJobs, setStJobs] = useState<ShortTermJobResponse[]>([]);
+  const [contracts, setContracts] = useState<ContractListResponse[]>([]);
   const [_freelancers, setFreelancers] = useState<FreelancerCardDisplay[]>([]);
   const [radarPage, setRadarPage] = useState(0);
   const [_radarTotalPages, setRadarTotalPages] = useState(0);
@@ -242,14 +251,18 @@ const CommandDeck: React.FC = () => {
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [ftData, stData] = await Promise.all([
+      const [ftData, stData, ctData] = await Promise.all([
         jobService.getMyJobs().catch(() => [] as JobPostingResponse[]),
         shortTermJobService
           .getMyJobs()
           .catch(() => [] as ShortTermJobResponse[]),
+        contractService
+          .getMyContracts("EMPLOYER")
+          .catch(() => [] as ContractListResponse[]),
       ]);
       setFtJobs(ftData);
       setStJobs(stData);
+      setContracts(ctData);
 
       // Pass empty arrays — recruiter doesn't have an aggregate "my-applications" endpoint
       const ftApps: JobApplicationResponse[] = [];
@@ -402,6 +415,11 @@ const CommandDeck: React.FC = () => {
       ),
     ).length,
     stApplicants: stJobs.reduce((s, j) => s + (j.applicantCount || 0), 0),
+    ctTotal: contracts.length,
+    ctPending: contracts.filter((c) =>
+      ["PENDING_SIGNER", "PENDING_EMPLOYER"].includes(c.status),
+    ).length,
+    ctSigned: contracts.filter((c) => c.status === "SIGNED").length,
     totalJobs: ftJobs.length + stJobs.length,
     totalApplicants:
       ftJobs.reduce((s, j) => s + (j.applicantCount || 0), 0) +
@@ -473,6 +491,14 @@ const CommandDeck: React.FC = () => {
       label: "Quy Định Nghiệp Vụ",
       color: "#06b6d4",
       rgb: "6,182,212",
+    },
+    {
+      id: "contracts",
+      icon: <FileSignature size={18} />,
+      label: "Quản Lý Hợp Đồng",
+      badge: stats.ctTotal || undefined,
+      color: "#8b5cf6",
+      rgb: "139,92,246",
     },
   ];
 
@@ -1129,6 +1155,16 @@ const CommandDeck: React.FC = () => {
             style={{ "--rh-item-color": "#06b6d4" } as React.CSSProperties}
           >
             <RegulationsTab />
+          </div>
+        )}
+
+        {/* ---------- CONTRACTS ---------- */}
+        {section === "contracts" && (
+          <div
+            className="rh-panel"
+            style={{ "--rh-item-color": "#8b5cf6" } as React.CSSProperties}
+          >
+            <ContractsHubPanel contracts={contracts} onRefresh={fetchData} />
           </div>
         )}
 

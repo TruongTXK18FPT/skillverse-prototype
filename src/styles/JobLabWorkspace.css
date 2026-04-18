@@ -6345,3 +6345,111 @@ body.jlx-modal-open {
     width: 100%;
   }
 }
+
+/* ======================================================================
+   DISPUTES TAB (USER SUBMITTED)
+   ====================================================================== */
+.jlx-disputes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.jlx-disputes-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.42);
+  color: #94a3b8;
+  font-size: 0.82rem;
+}
+
+.jlx-dispute-summary-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  background: rgba(168, 85, 247, 0.1);
+  color: #c4b5fd;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.jlx-dispute-card {
+  gap: 0.62rem;
+}
+
+.jlx-dispute-card__reason {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.jlx-dispute-card__meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.jlx-dispute-card__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.36);
+}
+
+.jlx-dispute-card__meta-item span {
+  font-size: 0.68rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.jlx-dispute-card__meta-item strong {
+  font-size: 0.76rem;
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.jlx-dispute-card__resolution {
+  margin: 0;
+  color: #86efac;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.jlx-dispute-card__notes {
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  background: rgba(56, 189, 248, 0.08);
+  color: #bae6fd;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .jlx-dispute-summary-chip {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .jlx-dispute-card__meta-grid {
+    grid-template-columns: 1fr;
+  }
+}

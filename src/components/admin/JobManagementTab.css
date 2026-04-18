@@ -882,6 +882,93 @@
   font-weight: 600;
 }
 
+.jmt-resolution-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.jmt-resolution-option {
+  border-radius: var(--jmt-radius-sm);
+  border: 1px solid var(--jmt-border);
+  background: rgba(7, 22, 42, 0.72);
+  color: var(--jmt-text);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.jmt-resolution-option:hover {
+  transform: translateY(-1px);
+  border-color: rgba(34, 211, 238, 0.45);
+}
+
+.jmt-resolution-option.is-active {
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.32);
+}
+
+.jmt-resolution-option__label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #e8f8ff;
+}
+
+.jmt-resolution-option__hint {
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: #9fc5e3;
+}
+
+.jmt-resolution-option--success {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(6, 37, 34, 0.62);
+}
+
+.jmt-resolution-option--success.is-active {
+  box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.38);
+}
+
+.jmt-resolution-option--danger {
+  border-color: rgba(248, 113, 113, 0.35);
+  background: rgba(45, 17, 24, 0.64);
+}
+
+.jmt-resolution-option--danger.is-active {
+  box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.4);
+}
+
+.jmt-resolution-option--warning {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(47, 28, 5, 0.62);
+}
+
+.jmt-resolution-option--warning.is-active {
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.38);
+}
+
+.jmt-resolution-option--info {
+  border-color: rgba(96, 165, 250, 0.35);
+  background: rgba(9, 24, 48, 0.66);
+}
+
+.jmt-resolution-option--info.is-active {
+  box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.36);
+}
+
+.jmt-resolution-option--neutral {
+  border-color: rgba(148, 163, 184, 0.34);
+  background: rgba(21, 31, 48, 0.68);
+}
+
+.jmt-resolution-option--neutral.is-active {
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.35);
+}
+
 .jmt-modal-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -977,6 +1064,10 @@
   .jmt-job-card__footer {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .jmt-resolution-grid {
+    grid-template-columns: 1fr;
   }
 }
 

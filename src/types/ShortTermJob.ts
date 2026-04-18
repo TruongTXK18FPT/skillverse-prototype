@@ -250,7 +250,10 @@ export interface JobStatusAuditLog {
   applicationId?: number;
   previousStatus: string;
   newStatus: string;
-  changedBy?: number | { id?: number; fullName?: string; email?: string } | null;
+  changedBy?:
+    | number
+    | { id?: number; fullName?: string; email?: string }
+    | null;
   changedByRole: "RECRUITER" | "CANDIDATE" | "USER" | "ADMIN" | "SYSTEM";
   reason?: string;
   metadata?: Record<string, unknown>;
@@ -829,7 +832,8 @@ export const APPLICATION_STATUS_DISPLAY: Record<
     text: "Yêu Cầu Hủy",
     color: "red",
     icon: "⚠️",
-    description: "Recruiter yêu cầu hủy sau 5 lần sửa. Bạn có 72 giờ để phản hồi.",
+    description:
+      "Recruiter yêu cầu hủy sau 5 lần sửa. Bạn có 72 giờ để phản hồi.",
   },
   [ShortTermApplicationStatus.AUTO_CANCELLED]: {
     text: "Tự Động Hủy",
@@ -889,13 +893,19 @@ export enum EscrowStatus {
   PARTIALLY_RELEASED = "PARTIALLY_RELEASED",
   FULLY_RELEASED = "FULLY_RELEASED",
   REFUNDED = "REFUNDED",
-  DISPUTED = "DISPUTED"
+  DISPUTED = "DISPUTED",
 }
 
 export interface EscrowTransaction {
   id: number;
   escrowId: number;
-  transactionType: "FUND" | "RELEASE" | "PARTIAL_RELEASE" | "REFUND" | "FEE_DEDUCTION" | "PAYOUT_RELEASE";
+  transactionType:
+    | "FUND"
+    | "RELEASE"
+    | "PARTIAL_RELEASE"
+    | "REFUND"
+    | "FEE_DEDUCTION"
+    | "PAYOUT_RELEASE";
   amount: number;
   feeAmount: number;
   netAmount: number;
@@ -948,7 +958,7 @@ export enum DisputeStatus {
   AWAITING_RESPONSE = "AWAITING_RESPONSE",
   RESOLVED = "RESOLVED",
   DISMISSED = "DISMISSED",
-  ESCALATED = "ESCALATED"
+  ESCALATED = "ESCALATED",
 }
 
 export enum DisputeResolution {
@@ -970,7 +980,13 @@ export interface DisputeEvidence {
   disputeId: number;
   submittedBy: number;
   submittedByName?: string;
-  evidenceType: "TEXT" | "FILE" | "LINK" | "SCREENSHOT" | "CHAT_LOG" | "DELIVERABLE_SNAPSHOT";
+  evidenceType:
+    | "TEXT"
+    | "FILE"
+    | "LINK"
+    | "SCREENSHOT"
+    | "CHAT_LOG"
+    | "DELIVERABLE_SNAPSHOT";
   content?: string;
   fileUrl?: string;
   fileName?: string;
@@ -987,6 +1003,7 @@ export interface DisputeResponseEntity {
   respondedBy: number;
   respondedByName?: string;
   content: string;
+  isAdminResponse?: boolean;
   createdAt: string;
 }
 
@@ -1006,9 +1023,39 @@ export interface Dispute {
   partialRefundPct?: number;
   resolutionNotes?: string;
   resolvedBy?: number;
+  resolvedByName?: string;
   resolvedAt?: string;
+  adminResolutionDeadlineAt?: string;
+  escalationLevel?: number;
+  priority?: string;
   createdAt: string;
   evidence?: DisputeEvidence[];
+}
+
+export interface UserSubmittedDispute {
+  id: number;
+  jobId?: number;
+  applicationId?: number;
+  jobTitle?: string;
+  jobStatus?: string;
+  applicationStatus?: string;
+  initiatorId: number;
+  initiatorName?: string;
+  respondentId: number;
+  respondentName?: string;
+  disputeType: DisputeType;
+  reason: string;
+  status: DisputeStatus;
+  resolution?: DisputeResolution;
+  partialRefundPct?: number;
+  resolutionNotes?: string;
+  resolvedBy?: number;
+  resolvedByName?: string;
+  resolvedAt?: string;
+  createdAt: string;
+  adminResolutionDeadlineAt?: string;
+  escalationLevel?: number;
+  priority?: string;
 }
 
 // ==================== TRUST SCORE TYPES ====================
@@ -1017,13 +1064,13 @@ export enum TrustTier {
   NEWCOMER = "NEWCOMER",
   BASIC = "BASIC",
   TRUSTED = "TRUSTED",
-  ELITE = "ELITE"
+  ELITE = "ELITE",
 }
 
 export interface TrustScore {
   userId: number;
   userName?: string;
-  totalScore: number;           // backend: totalScore (BigDecimal → number)
+  totalScore: number; // backend: totalScore (BigDecimal → number)
   trustTier: TrustTier;
   completionRate: number;
   avgRating: number;

@@ -1,16 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   AlertTriangle,
+  ArrowLeft,
   ChevronDown,
   ChevronUp,
   Loader2,
   FileText,
+  Info,
   Link as LinkIcon,
+  RefreshCw,
   Upload,
   MessageSquare,
   Plus,
   Send,
   Shield,
+  ShieldAlert,
   Clock,
   Users,
   Briefcase,
@@ -28,8 +32,10 @@ import { getStoredUserRaw } from "../../utils/authStorage";
 import {
   Dispute,
   DisputeStatus,
+  DisputeType,
   DisputeEvidence,
 } from "../../types/ShortTermJob";
+import ConfirmDialog from "../shared/ConfirmDialog";
 import "../business-hud/short-term-fleet.css";
 
 interface DisputePanelProps {
@@ -39,6 +45,7 @@ interface DisputePanelProps {
   currentUserRole: "RECRUITER" | "WORKER";
   jobStatus?: string;
   disputeEligibilityUnlocked?: boolean;
+  revisionCount?: number;
   isOpen?: boolean;
   onToggle?: () => void;
   jobTitle?: string;
@@ -58,6 +65,20 @@ const EVIDENCE_TYPE_OPTIONS: { value: EvidenceType; label: string; icon: React.R
   { value: "DELIVERABLE_SNAPSHOT", label: "Bàn giao đã nộp", icon: <File size={14} /> },
 ];
 
+const DISPUTE_TYPE_OPTIONS: { value: DisputeType; label: string; description: string; icon: React.ReactNode }[] = [
+  { value: DisputeType.WORKER_PROTECTION, label: "Bảo vệ ứng viên", description: "Ứng viên bị lạm dụng hoặc bất công trong quy trình revision (≥5 lần sửa).", icon: <Shield size={14} /> },
+  { value: DisputeType.POOR_QUALITY, label: "Chất lượng kém", description: "Sản phẩm bàn giao không đạt yêu cầu hoặc không đúng scope.", icon: <AlertTriangle size={14} /> },
+  { value: DisputeType.NO_SUBMISSION, label: "Không nộp bài", description: "Ứng viên không nộp sản phẩm hoặc bỏ bê công việc.", icon: <FileText size={14} /> },
+  { value: DisputeType.MISSING_DELIVERABLE, label: "Thiếu sản phẩm", description: "Bàn giao thiếu file, tài liệu hoặc nội dung quan trọng.", icon: <File size={14} /> },
+  { value: DisputeType.DEADLINE_VIOLATION, label: "Vi phạm deadline", description: "Công việc giao trễ so với deadline thỏa thuận ban đầu.", icon: <Clock size={14} /> },
+  { value: DisputeType.PAYMENT_ISSUE, label: "Vấn đề thanh toán", description: "Thanh toán không đúng hạn hoặc không đúng số tiền.", icon: <Scale size={14} /> },
+  { value: DisputeType.COMMUNICATION_FAILURE, label: "Không liên lạc được", description: "Ứng viên hoặc recruiter không phản hồi trong thời gian dài.", icon: <X size={14} /> },
+  { value: DisputeType.SCOPE_CHANGE, label: "Thay đổi phạm vi", description: "Recruiter thay đổi yêu cầu ngoài phạm vi công việc ban đầu.", icon: <Plus size={14} /> },
+  { value: DisputeType.RECRUITER_ABUSE, label: "Lạm dụng từ recruiter", description: "Recruiter yêu cầu sửa liên tục mà không có lý do hợp lý.", icon: <ShieldAlert size={14} /> },
+  { value: DisputeType.CANCELLATION_REVIEW, label: "Yêu cầu hủy job", description: "Xem xét yêu cầu hủy công việc từ recruiter.", icon: <X size={14} /> },
+  { value: DisputeType.OTHER, label: "Khác", description: "Các vấn đề khác không thuộc danh mục trên.", icon: <AlertTriangle size={14} /> },
+];
+
 const DisputePanel: React.FC<DisputePanelProps> = ({
   jobId,
   applicationId,
@@ -65,6 +86,7 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
   currentUserRole,
   jobStatus,
   disputeEligibilityUnlocked,
+  revisionCount,
   isOpen: controlledIsOpen,
   onToggle,
   jobTitle,
@@ -94,11 +116,16 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
   // Expand/collapse evidence
   const [expandedEvidence, setExpandedEvidence] = useState<Record<number, boolean>>({});
 
-  useEffect(() => {
-    loadDispute();
-  }, [jobId]);
+  // Dispute creation form state
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [createDisputeType, setCreateDisputeType] = useState("");
+  const [createReason, setCreateReason] = useState("");
+  const [isCreatingDispute, setIsCreatingDispute] = useState(false);
+  const [showCreateConfirm, setShowCreateConfirm] = useState(false);
 
-  const loadDispute = async () => {
+  // ========== CALLBACKS (must be defined before useEffect) ==========
+
+  const loadDispute = useCallback(async () => {
     setIsLoading(true);
     try {
       const d = await shortTermJobService.getDisputeByJob(jobId);
@@ -108,24 +135,18 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [jobId]);
 
-  // Recruiter can never open disputes — only worker can.
-  // Worker can open dispute on these job statuses, BUT only if disputeEligibilityUnlocked is true
-  // (recruiter must have failed to review within SLA, or admin manually unlocked it).
-  // AUTO_APPROVED is included because the worker can still dispute if they believe the
-  // auto-approval was improper (e.g., recruiter claims non-delivery).
-  const ELIGIBLE_JOB_STATUSES = ["CANCELLATION_REQUESTED", "IN_PROGRESS", "SUBMITTED", "UNDER_REVIEW", "AUTO_APPROVED"];
-  const canOpenDispute = currentUserRole === "WORKER" &&
-    disputeEligibilityUnlocked === true &&
-    ELIGIBLE_JOB_STATUSES.includes(jobStatus || "");
-
-  // Both recruiter and worker can submit evidence when dispute is active
-  const isDisputeActive = dispute && !["RESOLVED", "DISMISSED"].includes(dispute.status);
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
   // File handling
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
+    const oversized = files.filter(f => f.size > MAX_FILE_SIZE);
+    if (oversized.length > 0) {
+      showError("File quá lớn", `Từng file tối đa 10MB. File vượt quá: ${oversized.map(f => f.name).join(", ")}`);
+      return;
+    }
     const previews = files.map((f) => URL.createObjectURL(f));
     setEvidenceFiles((prev) => [...prev, ...files]);
     setEvidenceFilesPreview((prev) => [...prev, ...previews]);
@@ -220,6 +241,29 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
 
   const formatTime = (ts: string) => new Date(ts).toLocaleString("vi-VN");
 
+  const handleSubmitDispute = async () => {
+    if (!createDisputeType || !createReason.trim() || !applicationId) return;
+    setIsCreatingDispute(true);
+    try {
+      const newDispute = await shortTermJobService.openDispute({
+        jobId,
+        applicationId,
+        disputeType: createDisputeType as DisputeType,
+        reason: createReason.trim(),
+      });
+      setDispute(newDispute);
+      setShowCreateForm(false);
+      setCreateDisputeType("");
+      setCreateReason("");
+      showSuccess("Đã gửi khiếu nại", "Admin sẽ xem xét trong 5 ngày làm việc.");
+    } catch (err: any) {
+      showError("Gửi khiếu nại thất bại", err.message || "Vui lòng thử lại.");
+    } finally {
+      setIsCreatingDispute(false);
+      setShowCreateConfirm(false);
+    }
+  };
+
   const getStatusMeta = (status: string) => {
     const meta: Record<string, { bg: string; color: string; label: string }> = {
       OPEN: { bg: "rgba(251, 113, 133, 0.15)", color: "#fb7185", label: "Đang mở" },
@@ -246,6 +290,25 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
 
   const statusMeta = dispute ? getStatusMeta(dispute.status) : null;
 
+  // ========== COMPUTED VALUES (derived from state) ==========
+  const ELIGIBLE_JOB_STATUSES = ["CANCELLATION_REQUESTED", "IN_PROGRESS", "SUBMITTED", "UNDER_REVIEW", "AUTO_APPROVED"];
+  const canOpenDispute = currentUserRole === "WORKER" &&
+    !!disputeEligibilityUnlocked &&
+    (revisionCount || 0) >= 5 &&
+    ELIGIBLE_JOB_STATUSES.includes(jobStatus || "");
+  const isDisputeActive = dispute && !["RESOLVED", "DISMISSED"].includes(dispute.status);
+
+  // ========== EFFECTS ==========
+  useEffect(() => {
+    loadDispute();
+  }, [loadDispute]);
+
+  useEffect(() => {
+    if (!isDisputeActive) return;
+    const interval = setInterval(loadDispute, 30_000);
+    return () => clearInterval(interval);
+  }, [isDisputeActive, loadDispute]);
+
   return (
     <div className="dp-panel">
       {/* Header */}
@@ -267,7 +330,18 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
             </span>
           )}
         </div>
-        {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+          {isOpen && dispute && isDisputeActive && (
+            <button
+              onClick={(e) => { e.stopPropagation(); loadDispute(); }}
+              style={{ background: "none", border: "none", cursor: "pointer", color: "#64748b", display: "flex", alignItems: "center", padding: "0.2rem" }}
+              title="Làm mới"
+            >
+              <RefreshCw size={14} style={{ opacity: isLoading ? 0.5 : 1 }} />
+            </button>
+          )}
+          {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </div>
       </div>
 
       {/* Content */}
@@ -279,11 +353,133 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
               <span>Đang tải...</span>
             </div>
           ) : !dispute ? (
-            <div className="dp-empty">
-              <AlertTriangle size={24} />
-              <p>Chưa có dispute nào cho công việc này.</p>
-              <span>Dispute sẽ xuất hiện khi có khiếu nại được gửi.</span>
-            </div>
+            canOpenDispute ? (
+              showCreateForm ? (
+                <div className="dp-create-form">
+                  <div className="dp-create-form__header">
+                    <ShieldAlert size={18} />
+                    <span>Mở khiếu nại</span>
+                  </div>
+
+                  <div className="dp-create-form__type-section">
+                    <div className="dp-section-title">
+                      <AlertTriangle size={13} /> Loại khiếu nại
+                    </div>
+                    <div className="dp-dispute-type-grid">
+                      {DISPUTE_TYPE_OPTIONS.map((opt) => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          className={`dp-dispute-type-card ${createDisputeType === opt.value ? "is-selected" : ""}`}
+                          onClick={() => setCreateDisputeType(opt.value)}
+                          title={opt.description}
+                        >
+                          <div className="dp-dispute-type-card__icon">{opt.icon}</div>
+                          <div className="dp-dispute-type-card__info">
+                            <span className="dp-dispute-type-card__label">{opt.label}</span>
+                            <span className="dp-dispute-type-card__desc">{opt.description}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="dp-create-form__reason">
+                    <div className="dp-section-title">
+                      <MessageSquare size={13} /> Mô tả chi tiết
+                    </div>
+                    <textarea
+                      className="dp-textarea"
+                      value={createReason}
+                      onChange={(e) => setCreateReason(e.target.value)}
+                      placeholder="Mô tả chi tiết vấn đề bạn gặp phải, kèm bằng chứng nếu có..."
+                      rows={5}
+                    />
+                    <span className="dp-create-form__char-count">
+                      {createReason.length} / 2000 ký tự
+                    </span>
+                  </div>
+
+                  <div className="dp-create-form__warning">
+                    <AlertTriangle size={14} />
+                    <span>
+                      <strong>Lưu ý:</strong> Mở khiếu nại sẽ đóng băng số tiền escrow cho đến khi Admin xử lý (tối đa 5 ngày). Khiếu nại không được rút lại sau khi gửi.
+                    </span>
+                  </div>
+
+                  <div className="dp-create-form__continue">
+                    <button
+                      className="dp-btn dp-btn--ghost"
+                      onClick={() => setShowCreateForm(false)}
+                    >
+                      <ArrowLeft size={14} /> Tiếp tục làm việc
+                    </button>
+                    <span className="dp-create-form__or">hoặc</span>
+                    <button
+                      className="dp-btn dp-btn--danger"
+                      onClick={() => setShowCreateConfirm(true)}
+                      disabled={!createDisputeType || !createReason.trim() || isCreatingDispute}
+                    >
+                      {isCreatingDispute ? (
+                        <><Loader2 size={13} className="dp-spin" /> Đang gửi...</>
+                      ) : (
+                        <><ShieldAlert size={14} /> Mở khiếu nại</>
+                      )}
+                    </button>
+                  </div>
+
+                  <ConfirmDialog
+                    isOpen={showCreateConfirm}
+                    title="Xác nhận gửi khiếu nại"
+                    message={`Bạn sắp gửi khiếu nại.\n\nSố tiền escrow sẽ bị đóng băng. Bạn không thể rút lại khiếu nại sau khi gửi. Tiếp tục?`}
+                    confirmLabel="Gửi khiếu nại"
+                    cancelLabel="Hủy"
+                    variant="danger"
+                    onConfirm={handleSubmitDispute}
+                    onCancel={() => setShowCreateConfirm(false)}
+                  />
+                </div>
+              ) : (
+                <div className="dp-empty dp-empty--can-dispute">
+                  <CheckCircle2 size={24} color="#00ff88" />
+                  <p>Đã đạt 5 lần sửa — bạn có thể mở khiếu nại</p>
+                  <span>Bạn có thể tiếp tục làm việc hoặc mở khiếu nại nếu cần.</span>
+                  <button
+                    className="dp-btn dp-btn--danger"
+                    style={{ marginTop: "0.75rem" }}
+                    onClick={() => setShowCreateForm(true)}
+                  >
+                    <ShieldAlert size={14} /> Mở khiếu nại
+                  </button>
+                </div>
+              )
+            ) : (
+              <div className="dp-empty">
+                {currentUserRole === "RECRUITER" ? (
+                  <>
+                    {(revisionCount || 0) >= 5 ? (
+                      <>
+                        <CheckCircle2 size={24} color="#00f5ff" />
+                        <p>Ứng viên đã đạt 5 lần sửa — có thể mở khiếu nại</p>
+                        <span>Chờ ứng viên mở khiếu nại hoặc liên hệ admin.</span>
+                      </>
+                    ) : (
+                      <>
+                        <Info size={24} />
+                        <p>Chưa có khiếu nại cho công việc này.</p>
+                        <span>Ứng viên đã {revisionCount || 0}/5 lần yêu cầu sửa.</span>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <AlertTriangle size={24} />
+                    <p>Chưa đủ điều kiện mở khiếu nại.</p>
+                    <span>Đã {revisionCount || 0}/5 lần yêu cầu sửa. Khiếu nại sẽ mở sau lần sửa thứ 5.</span>
+                  </>
+                )}
+              </div>
+            )
           ) : (
             <>
               {/* Dispute Overview */}
@@ -314,6 +510,26 @@ const DisputePanel: React.FC<DisputePanelProps> = ({
                       </div>
                       <div className="dp-info-card__value dp-info-card__value--money">
                         {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 0 }).format(escrowAmount)}
+                      </div>
+                    </div>
+                  )}
+                  {dispute.adminResolutionDeadlineAt && (
+                    <div className="dp-info-card">
+                      <div className="dp-info-card__label">
+                        <Clock size={13} /> Hạn xử lý
+                      </div>
+                      <div className="dp-info-card__value dp-info-card__value--urgent">
+                        {formatTime(dispute.adminResolutionDeadlineAt)}
+                      </div>
+                    </div>
+                  )}
+                  {dispute.escalationLevel !== undefined && dispute.escalationLevel > 0 && (
+                    <div className="dp-info-card">
+                      <div className="dp-info-card__label">
+                        <AlertTriangle size={13} /> Cấp leo thang
+                      </div>
+                      <div className="dp-info-card__value" style={{ color: "#fb7185" }}>
+                        Cấp {dispute.escalationLevel} — {dispute.priority || "Thường"}
                       </div>
                     </div>
                   )}

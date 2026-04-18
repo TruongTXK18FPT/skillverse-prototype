@@ -115,6 +115,20 @@ const APP_STATUS_COLORS: Record<string, string> = {
   OFFER_REJECTED: "#fb7185",
   CONTRACT_SIGNED: "#8b5cf6",
   REJECTED: "#fb7185",
+  // Short-term cross-statuses
+  WORKING: "#f97316",
+  SUBMITTED: "#a855f7",
+  REVISION_REQUIRED: "#fbbf24",
+  APPROVED: "#34d399",
+  COMPLETED: "#4ade80",
+  PAID: "#4ade80",
+  CANCELLED: "#64748b",
+  WITHDRAWN: "#64748b",
+  SUBMITTED_OVERDUE: "#fb7185",
+  REVISION_RESPONSE_OVERDUE: "#fbbf24",
+  CANCELLATION_REQUESTED: "#f97316",
+  AUTO_CANCELLED: "#fb7185",
+  DISPUTE_OPENED: "#818cf8",
 };
 
 const APP_STATUS_LABELS: Record<string, string> = {
@@ -128,6 +142,20 @@ const APP_STATUS_LABELS: Record<string, string> = {
   OFFER_REJECTED: "Từ chối đề nghị",
   CONTRACT_SIGNED: "Đã ký hợp đồng",
   REJECTED: "Từ chối",
+  // Short-term cross-statuses
+  WORKING: "Đang làm",
+  SUBMITTED: "Đã nộp",
+  REVISION_REQUIRED: "Cần sửa",
+  APPROVED: "Đã duyệt",
+  COMPLETED: "Hoàn tất",
+  PAID: "Đã thanh toán",
+  CANCELLED: "Đã hủy",
+  WITHDRAWN: "Đã rút đơn",
+  SUBMITTED_OVERDUE: "Quá hạn review",
+  REVISION_RESPONSE_OVERDUE: "Quá hạn phản hồi",
+  CANCELLATION_REQUESTED: "Yêu cầu hủy",
+  AUTO_CANCELLED: "Tự động hủy",
+  DISPUTE_OPENED: "Đang khiếu nại",
 };
 
 const CONTRACT_STATUS_LABELS: Record<string, string> = {

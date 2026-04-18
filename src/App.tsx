@@ -57,6 +57,7 @@ import SetPasswordPage from "./pages/settings/SetPasswordPage";
 import ChangePasswordPage from "./pages/settings/ChangePasswordPage";
 import Transactional from "./pages/payment/Transactional";
 import PremiumPageCosmic from "./pages/payment/PremiumPageCosmic";
+import StudentVerificationPage from "./pages/payment/StudentVerificationPage";
 import ManagerPage from "./pages/main/ManagerPage";
 // import CoinWallet from './pages/main/CoinWallet'; // Replaced by MyWalletCosmic
 import MyWalletCosmic from "./pages/my-wallet/MyWalletCosmic";
@@ -405,6 +406,14 @@ const AppContents = () => {
                 </PremiumAccessRoute>
               }
             />
+            <Route
+              path="/student-verification"
+              element={
+                <AuthenticatedRoute>
+                  <StudentVerificationPage />
+                </AuthenticatedRoute>
+              }
+            />
             <Route path="/manager" element={<ManagerPage />} />
             <Route
               path="/wallet"
@@ -682,6 +691,7 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/notifications",
   "/messages",
   "/premium",
+  "/student-verification",
   "/mentor",
   "/business",
   "/jobs",
@@ -700,6 +710,7 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/journey/create",
   "/journey",
   "/portfolio",
+  "/my-bookings",
 ]);
 
 // Check if path matches quiz attempt pattern

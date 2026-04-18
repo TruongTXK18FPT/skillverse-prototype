@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "../../styles/PremiumPageCosmic.css";
 import MeowGuide from "../../components/meowl/MeowlGuide";
 import { premiumService } from "../../services/premiumService";
 import walletService from "../../services/walletService";
 import userService from "../../services/userService";
+import studentVerifyService from "../../services/studentVerifyService";
 import {
   PremiumPlan,
   SubscriptionCheckoutPreviewResponse,
@@ -26,13 +27,15 @@ import parentService, { StudentDetail } from "../../services/parentService";
 import { showAppInfo } from "../../context/ToastContext";
 
 const PremiumPageCosmic = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { user, isAuthenticated } = useAuth();
   const [premiumPlans, setPremiumPlans] = useState<PremiumPlan[]>([]);
 
   const roles = (user?.roles || []).map((role) => String(role).toUpperCase());
   const isParent = roles.includes("PARENT");
-  const isBusinessRole = roles.includes("RECRUITER") || roles.includes("BUSINESS");
+  const isBusinessRole =
+    roles.includes("RECRUITER") || roles.includes("BUSINESS");
 
   const [students, setStudents] = useState<StudentDetail[]>([]);
   const [selectedStudentId, setSelectedStudentId] = useState<number | null>(
@@ -44,6 +47,10 @@ const PremiumPageCosmic = () => {
     null,
   );
   const [hasActive, setHasActive] = useState<boolean>(false);
+  const [studentVerificationApproved, setStudentVerificationApproved] =
+    useState(false);
+  const [isCheckingStudentVerification, setIsCheckingStudentVerification] =
+    useState(false);
   const [walletData, setWalletData] = useState<WalletResponse | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(
     null,
@@ -62,12 +69,12 @@ const PremiumPageCosmic = () => {
   const [showCancelAutoRenewalModal, setShowCancelAutoRenewalModal] =
     useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const previewCacheRef = useRef<Map<string, SubscriptionCheckoutPreviewResponse>>(
-    new Map(),
-  );
-  const previewInFlightRef = useRef<Map<string, Promise<SubscriptionCheckoutPreviewResponse | null>>>(
-    new Map(),
-  );
+  const previewCacheRef = useRef<
+    Map<string, SubscriptionCheckoutPreviewResponse>
+  >(new Map());
+  const previewInFlightRef = useRef<
+    Map<string, Promise<SubscriptionCheckoutPreviewResponse | null>>
+  >(new Map());
 
   // Invoice hook
   const { showInvoice, invoiceData, openInvoice, closeInvoice } = useInvoice();
@@ -93,6 +100,37 @@ const PremiumPageCosmic = () => {
       }
     }
   }, [isAuthenticated, isParent, user]);
+
+  useEffect(() => {
+    if (!isAuthenticated || isBusinessRole || Boolean(selectedStudentId)) {
+      setStudentVerificationApproved(false);
+      return;
+    }
+
+    void loadStudentVerificationEligibility();
+  }, [isAuthenticated, isBusinessRole, selectedStudentId, user?.id]);
+
+  // [Nghiep vu] Frontend canh bao som trang thai xac thuc de chan thanh toan Student Pack truoc khi goi API mua.
+  const loadStudentVerificationEligibility = async () => {
+    setIsCheckingStudentVerification(true);
+
+    try {
+      const eligibility = await studentVerifyService.getEligibility();
+      setStudentVerificationApproved(
+        Boolean(eligibility.approved && eligibility.canBuyStudentPremium),
+      );
+    } catch (error) {
+      console.error("Failed to check student verification eligibility:", error);
+      setStudentVerificationApproved(false);
+    } finally {
+      setIsCheckingStudentVerification(false);
+    }
+  };
+
+  // [Nghiep vu] Dieu huong user sang man hinh xac thuc ngay tai diem bi chan mua Student Pack.
+  const handleOpenStudentVerification = () => {
+    navigate("/student-verification", { state: { from: "/premium" } });
+  };
 
   const loadStudents = async () => {
     try {
@@ -126,9 +164,9 @@ const PremiumPageCosmic = () => {
 
       const isActivePremium = Boolean(
         subscription &&
-          subscription.isActive &&
-          subscription.status === "ACTIVE" &&
-          subscription.plan?.planType !== "FREE_TIER",
+        subscription.isActive &&
+        subscription.status === "ACTIVE" &&
+        subscription.plan?.planType !== "FREE_TIER",
       );
 
       setHasActive(isActivePremium);
@@ -212,6 +250,33 @@ const PremiumPageCosmic = () => {
 
     const selectedPlan = premiumPlans.find((p) => p.name === planName);
     if (!selectedPlan) return;
+
+    if (selectedPlan.planType === "STUDENT_PACK") {
+      if (selectedStudentId) {
+        showAppInfo(
+          "Chưa thể tiếp tục",
+          "Tài khoản được mua cần tự đăng nhập và xác thực sinh viên trước khi mua Student Pack.",
+        );
+        return;
+      }
+
+      if (isCheckingStudentVerification) {
+        showAppInfo(
+          "Đang kiểm tra xác thực",
+          "Vui lòng chờ hệ thống cập nhật trạng thái xác thực sinh viên.",
+        );
+        return;
+      }
+
+      if (!studentVerificationApproved) {
+        showAppInfo(
+          "Cần xác thực sinh viên",
+          "Bạn cần hoàn tất xác thực sinh viên trước khi thanh toán Student Pack.",
+        );
+        handleOpenStudentVerification();
+        return;
+      }
+    }
 
     void (async () => {
       try {
@@ -323,7 +388,9 @@ const PremiumPageCosmic = () => {
 
   const activePlanName = selectedStudentId
     ? selectedStudentActivePlanName
-    : displayCurrentSub?.plan?.displayName || displayCurrentSub?.plan?.name || null;
+    : displayCurrentSub?.plan?.displayName ||
+      displayCurrentSub?.plan?.name ||
+      null;
 
   const isCancellationLimitMessage = (message?: string) =>
     !!message &&
@@ -442,14 +509,25 @@ const PremiumPageCosmic = () => {
         onPlanPreview={handlePlanPreview}
         onViewInvoice={!selectedStudentId ? handleViewInvoice : undefined}
         onEnableAutoRenew={
-          !selectedStudentId ? () => setShowEnableAutoRenewalModal(true) : undefined
+          !selectedStudentId
+            ? () => setShowEnableAutoRenewalModal(true)
+            : undefined
         }
         onCancelAutoRenew={
-          !selectedStudentId ? () => setShowCancelAutoRenewalModal(true) : undefined
+          !selectedStudentId
+            ? () => setShowCancelAutoRenewalModal(true)
+            : undefined
         }
         onCancelSubscription={
           !selectedStudentId ? handleOpenCancelSubscription : undefined
         }
+        needsStudentVerification={
+          isAuthenticated &&
+          !selectedStudentId &&
+          !isBusinessRole &&
+          !studentVerificationApproved
+        }
+        onStudentVerify={handleOpenStudentVerification}
         targetLabel={
           selectedStudentId
             ? selectedStudentActivePlanName
