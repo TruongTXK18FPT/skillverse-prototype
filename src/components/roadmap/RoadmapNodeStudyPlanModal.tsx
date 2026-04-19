@@ -21,11 +21,34 @@ import './RoadmapNodeStudyPlanModal.css';
 /**
  * When studyWindow is 'flexible', compute earliestStartLocalTime dynamically:
  * current time + 30 min buffer, rounded up to next 15-min mark.
+ * Clamp the result so it always fits in the allowed window for one session.
  * For fixed windows (morning/afternoon/evening), use the preset default.
  */
+const parseTimeToMinutes = (value: string): number | null => {
+  const [hourText, minuteText] = value.split(':');
+  const hour = Number(hourText);
+  const minute = Number(minuteText);
+  if (!Number.isFinite(hour) || !Number.isFinite(minute)) {
+    return null;
+  }
+  if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+    return null;
+  }
+  return hour * 60 + minute;
+};
+
+const formatMinutesToTime = (totalMinutes: number): string => {
+  const safe = Math.max(0, Math.min(23 * 60 + 59, totalMinutes));
+  const hour = Math.floor(safe / 60);
+  const minute = safe % 60;
+  return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+};
+
 const resolveEarliestStartTime = (
   studyWindow: StudyWindowId,
   presetDefault: string,
+  latestEndLocalTime: string,
+  sessionDurationMinutes: number,
 ): string => {
   if (studyWindow !== 'flexible') {
     return presetDefault;
@@ -41,10 +64,33 @@ const resolveEarliestStartTime = (
   withBuffer.setSeconds(0);
   withBuffer.setMilliseconds(0);
 
-  // Format as HH:MM
   const h = String(withBuffer.getHours()).padStart(2, '0');
   const m = String(withBuffer.getMinutes()).padStart(2, '0');
-  return `${h}:${m}`;
+  const dynamicEarliest = `${h}:${m}`;
+
+  const dynamicMinutes = parseTimeToMinutes(dynamicEarliest);
+  const presetMinutes = parseTimeToMinutes(presetDefault);
+  const latestMinutes = parseTimeToMinutes(latestEndLocalTime);
+  const requiredWindowMinutes = Math.max(30, sessionDurationMinutes);
+
+  if (
+    dynamicMinutes === null
+    || presetMinutes === null
+    || latestMinutes === null
+  ) {
+    return presetDefault;
+  }
+
+  const maxStartMinutes = latestMinutes - requiredWindowMinutes;
+  if (maxStartMinutes <= presetMinutes || dynamicMinutes > maxStartMinutes) {
+    return presetDefault;
+  }
+
+  if (dynamicMinutes < presetMinutes) {
+    return presetDefault;
+  }
+
+  return formatMinutesToTime(dynamicMinutes);
 };
 
 interface RoadmapNodeStudyPlanModalProps {
@@ -288,7 +334,12 @@ const RoadmapNodeStudyPlanModal = ({
       studyMethod: 'Active Recall + Practical Exercise',
       resourcesPreference: 'mixed resources',
       studyPreference: studyWindow,
-      earliestStartLocalTime: resolveEarliestStartTime(studyWindow, windowPreset.earliestStartLocalTime),
+      earliestStartLocalTime: resolveEarliestStartTime(
+        studyWindow,
+        windowPreset.earliestStartLocalTime,
+        windowPreset.latestEndLocalTime,
+        intensityMeta.durationMinutes,
+      ),
       latestEndLocalTime: windowPreset.latestEndLocalTime,
       avoidLateNight: studyWindow !== 'evening',
       allowLateNight: studyWindow === 'evening',

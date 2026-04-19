@@ -1,5 +1,22 @@
 import axiosInstance from './axiosInstance';
 
+export interface NotificationActionPayload {
+  key?: string;
+  path?: string;
+  anchor?: string | null;
+}
+
+export interface NotificationResourcePayload {
+  courseId?: number | null;
+  assignmentId?: number | null;
+  submissionId?: number | null;
+}
+
+export interface NotificationPayload {
+  action?: NotificationActionPayload;
+  resource?: NotificationResourcePayload;
+}
+
 export interface Notification {
   id: number;
   title: string;
@@ -7,6 +24,7 @@ export interface Notification {
   type: string;
   isRead: boolean;
   relatedId: string;
+  payload?: NotificationPayload;
   createdAt: string;
   senderId?: number;
   senderName?: string;
