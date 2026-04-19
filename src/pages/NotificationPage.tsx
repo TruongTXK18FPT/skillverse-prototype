@@ -74,6 +74,7 @@ const getIcon = (type: string) => {
     case "COMMENT":
       return <MessageSquare size={24} />;
     case "PRECHAT_MESSAGE":
+    case "PRECHAT_NEW_MESSAGE":
       return <MessageCircle size={24} />;
     case "RECRUITMENT_MESSAGE":
       return <Send size={24} />;
@@ -181,10 +182,24 @@ const getIcon = (type: string) => {
       return <UserCheck size={24} />;
     case "FULLTIME_APPLICATION_REJECTED":
       return <UserX size={24} />;
+    case "INTERVIEW_SCHEDULED":
+      return <CalendarCheck size={24} />;
+    case "INTERVIEW_COMPLETED":
+      return <CheckCircle size={24} />;
+    case "OFFER_SENT":
+      return <Handshake size={24} />;
+    case "OFFER_ACCEPTED":
+      return <UserCheck size={24} />;
+    case "OFFER_REJECTED":
+      return <UserX size={24} />;
 
     // Admin / Escalation
     case "WORKER_CANCELLATION_REQUESTED":
       return <AlertTriangle size={24} />;
+    case "ADMIN_CANCELLATION_REJECTED":
+      return <Shield size={24} />;
+    case "WORKER_CANCELLATION_REJECTED":
+      return <XCircle size={24} />;
     case "WORKER_AUTO_CANCELLED":
       return <XCircle size={24} />;
     case "WORKER_AUTO_APPROVED":
@@ -232,6 +247,7 @@ const getIconColor = (type: string): string => {
       return "var(--notif-like)";
     case "COMMENT":
     case "PRECHAT_MESSAGE":
+    case "PRECHAT_NEW_MESSAGE":
     case "RECRUITMENT_MESSAGE":
       return "var(--notif-comment)";
     case "PREMIUM_PURCHASE":
@@ -288,7 +304,14 @@ const getIconColor = (type: string): string => {
     case "FULLTIME_APPLICATION_REVIEWED":
     case "FULLTIME_APPLICATION_ACCEPTED":
     case "FULLTIME_APPLICATION_REJECTED":
+    case "INTERVIEW_SCHEDULED":
+    case "INTERVIEW_COMPLETED":
+    case "OFFER_SENT":
+    case "OFFER_ACCEPTED":
+    case "OFFER_REJECTED":
     case "WORKER_CANCELLATION_REQUESTED":
+    case "ADMIN_CANCELLATION_REJECTED":
+    case "WORKER_CANCELLATION_REJECTED":
     case "WORKER_AUTO_CANCELLED":
     case "WORKER_AUTO_APPROVED":
     case "RECRUITER_AUTO_APPROVED_WARNING":
@@ -316,7 +339,13 @@ const getIconColor = (type: string): string => {
 // ==================== TYPE CATEGORY ====================
 const getTypeCategory = (type: string): string => {
   const categories: Record<string, string[]> = {
-    social: ["LIKE", "COMMENT", "PRECHAT_MESSAGE", "RECRUITMENT_MESSAGE"],
+    social: [
+      "LIKE",
+      "COMMENT",
+      "PRECHAT_MESSAGE",
+      "PRECHAT_NEW_MESSAGE",
+      "RECRUITMENT_MESSAGE",
+    ],
     premium: ["PREMIUM_PURCHASE", "PREMIUM_EXPIRATION", "PREMIUM_CANCEL"],
     wallet: [
       "WALLET_DEPOSIT",
@@ -374,7 +403,14 @@ const getTypeCategory = (type: string): string => {
       "FULLTIME_APPLICATION_REVIEWED",
       "FULLTIME_APPLICATION_ACCEPTED",
       "FULLTIME_APPLICATION_REJECTED",
+      "INTERVIEW_SCHEDULED",
+      "INTERVIEW_COMPLETED",
+      "OFFER_SENT",
+      "OFFER_ACCEPTED",
+      "OFFER_REJECTED",
       "WORKER_CANCELLATION_REQUESTED",
+      "ADMIN_CANCELLATION_REJECTED",
+      "WORKER_CANCELLATION_REJECTED",
       "WORKER_AUTO_CANCELLED",
       "WORKER_AUTO_APPROVED",
       "RECRUITER_AUTO_APPROVED_WARNING",
@@ -455,7 +491,14 @@ const buildJobLabTarget = ({
   selectedApplicationId,
   applicationType,
 }: {
-  viewMode?: "dashboard" | "applications" | "workspace" | "contracts";
+  viewMode?:
+    | "dashboard"
+    | "applications"
+    | "workspace"
+    | "contracts"
+    | "interviews"
+    | "offers"
+    | "disputes";
   jobType?: "ALL" | "REGULAR" | "SHORT_TERM";
   selectedApplicationId?: string;
   applicationType?: "REGULAR" | "SHORT_TERM";
@@ -505,6 +548,7 @@ const getNotificationTarget = (
     case "COMMENT":
       return { pathname: `/community/${relatedId}` };
     case "PRECHAT_MESSAGE":
+    case "PRECHAT_NEW_MESSAGE":
       return {
         pathname: "/messages",
         state: {
@@ -566,7 +610,9 @@ const getNotificationTarget = (
         : { pathname: "/courses" };
     case "ASSIGNMENT_GRADED":
     case "ASSIGNMENT_LATE":
-      return { pathname: "/courses" };
+      return isMentorUser(user) || isAdminUser(user)
+        ? { pathname: "/mentor" }
+        : { pathname: "/courses" };
     case "COURSE_REJECTED":
     case "COURSE_SUSPENDED":
     case "COURSE_RESTORED":
@@ -606,11 +652,13 @@ const getNotificationTarget = (
       const normalizedMessage = `${title} ${message}`.toLowerCase();
       const looksLikeShortTermDispute =
         normalizedMessage.includes("job") ||
-        normalizedMessage.includes("công việc");
+        normalizedMessage.includes("công việc") ||
+        normalizedMessage.includes("outcome") ||
+        normalizedMessage.includes("one of your jobs");
 
       return looksLikeShortTermDispute
         ? buildJobLabTarget({
-            viewMode: "applications",
+            viewMode: "disputes",
             jobType: "SHORT_TERM",
             applicationType: "SHORT_TERM",
           })
@@ -658,13 +706,52 @@ const getNotificationTarget = (
         selectedApplicationId: relatedId,
         applicationType: "REGULAR",
       });
+    case "INTERVIEW_SCHEDULED":
+    case "INTERVIEW_COMPLETED":
+      return isRecruiterUser(user)
+        ? buildBusinessTarget("fulltime")
+        : buildJobLabTarget({
+            viewMode: "interviews",
+            jobType: "REGULAR",
+            selectedApplicationId: relatedId,
+            applicationType: "REGULAR",
+          });
+    case "OFFER_SENT":
+    case "OFFER_ACCEPTED":
+    case "OFFER_REJECTED":
+      return isRecruiterUser(user)
+        ? buildBusinessTarget("fulltime")
+        : buildJobLabTarget({
+            viewMode: "offers",
+            jobType: "REGULAR",
+            selectedApplicationId: relatedId,
+            applicationType: "REGULAR",
+          });
     case "WORKER_CANCELLATION_REQUESTED":
+      return isRecruiterUser(user)
+        ? buildBusinessTarget("shortterm")
+        : buildJobLabTarget({
+            viewMode: "disputes",
+            jobType: "SHORT_TERM",
+            applicationType: "SHORT_TERM",
+          });
     case "WORKER_AUTO_CANCELLED":
-      return buildJobLabTarget({
-        viewMode: "applications",
-        jobType: "SHORT_TERM",
-        applicationType: "SHORT_TERM",
-      });
+    case "WORKER_CANCELLATION_REJECTED":
+      return isRecruiterUser(user)
+        ? buildBusinessTarget("shortterm")
+        : buildJobLabTarget({
+            viewMode: "applications",
+            jobType: "SHORT_TERM",
+            applicationType: "SHORT_TERM",
+          });
+    case "ADMIN_CANCELLATION_REJECTED":
+      return isRecruiterUser(user)
+        ? buildBusinessTarget("shortterm")
+        : buildJobLabTarget({
+            viewMode: "applications",
+            jobType: "SHORT_TERM",
+            applicationType: "SHORT_TERM",
+          });
 
     // Contract
     case "CONTRACT_SENT_FOR_SIGNATURE":
@@ -694,6 +781,7 @@ const getTypeLabel = (type: string): string => {
     LIKE: "Thích",
     COMMENT: "Bình luận",
     PRECHAT_MESSAGE: "Tin nhắn mentor booking",
+    PRECHAT_NEW_MESSAGE: "Tin nhắn mentor booking",
     RECRUITMENT_MESSAGE: "Tin nhắn tuyển dụng",
     PREMIUM_PURCHASE: "Mua Premium",
     PREMIUM_EXPIRATION: "Premium hết hạn",
@@ -742,7 +830,14 @@ const getTypeLabel = (type: string): string => {
     FULLTIME_APPLICATION_REVIEWED: "Ứng tuyển chính thức được review",
     FULLTIME_APPLICATION_ACCEPTED: "Ứng tuyển chính thức được nhận",
     FULLTIME_APPLICATION_REJECTED: "Ứng tuyển chính thức bị từ chối",
+    INTERVIEW_SCHEDULED: "Đã lên lịch phỏng vấn",
+    INTERVIEW_COMPLETED: "Phỏng vấn đã hoàn tất",
+    OFFER_SENT: "Đã nhận đề nghị",
+    OFFER_ACCEPTED: "Đã chấp nhận đề nghị",
+    OFFER_REJECTED: "Đã từ chối đề nghị",
     WORKER_CANCELLATION_REQUESTED: "Yêu cầu hủy của Worker",
+    ADMIN_CANCELLATION_REJECTED: "Admin từ chối yêu cầu hủy",
+    WORKER_CANCELLATION_REJECTED: "Yêu cầu hủy bị từ chối",
     WORKER_AUTO_CANCELLED: "Worker bị hủy tự động",
     WORKER_AUTO_APPROVED: "Worker được duyệt tự động",
     RECRUITER_AUTO_APPROVED_WARNING: "Cảnh báo Recruiter",
@@ -767,6 +862,7 @@ const getTypeDescription = (type: string, message: string): string => {
     LIKE: "Ai đó đã thích bài viết hoặc nội dung của bạn.",
     COMMENT: "Ai đó đã bình luận trên bài viết của bạn.",
     PRECHAT_MESSAGE: "Bạn có tin nhắn mới từ booking mentor.",
+    PRECHAT_NEW_MESSAGE: "Bạn có tin nhắn mới từ booking mentor.",
     RECRUITMENT_MESSAGE: "Bạn có tin nhắn tuyển dụng mới.",
     PREMIUM_PURCHASE: "Bạn đã mua thành công gói Premium.",
     PREMIUM_EXPIRATION:
@@ -818,7 +914,16 @@ const getTypeDescription = (type: string, message: string): string => {
     FULLTIME_APPLICATION_ACCEPTED: "Chúc mừng! Bạn được nhận vào vị trí này.",
     FULLTIME_APPLICATION_REJECTED:
       "Rất tiếc, đơn ứng tuyển không được chấp nhận.",
+    INTERVIEW_SCHEDULED: "Bạn đã nhận lịch phỏng vấn mới.",
+    INTERVIEW_COMPLETED: "Buổi phỏng vấn đã hoàn thành. Hãy chờ kết quả tiếp theo.",
+    OFFER_SENT: "Nhà tuyển dụng đã gửi đề nghị cho hồ sơ của bạn.",
+    OFFER_ACCEPTED: "Bạn đã chấp nhận đề nghị tuyển dụng.",
+    OFFER_REJECTED: "Đề nghị tuyển dụng đã bị từ chối.",
     WORKER_CANCELLATION_REQUESTED: "Worker yêu cầu hủy công việc.",
+    ADMIN_CANCELLATION_REJECTED:
+      "Admin đã từ chối yêu cầu hủy. Công việc cần tiếp tục xử lý.",
+    WORKER_CANCELLATION_REJECTED:
+      "Yêu cầu hủy đã bị Admin từ chối. Bạn có thể tiếp tục công việc.",
     WORKER_AUTO_CANCELLED: "Công việc bị hủy tự động do hết hạn.",
     WORKER_AUTO_APPROVED: "Công việc được duyệt tự động.",
     RECRUITER_AUTO_APPROVED_WARNING: "Sắp tự động duyệt. Kiểm tra ngay!",
@@ -844,6 +949,7 @@ const getTypeBannerColor = (type: string): string => {
       return "linear-gradient(135deg, #ff6b9d, #c44569)";
     case "COMMENT":
     case "PRECHAT_MESSAGE":
+    case "PRECHAT_NEW_MESSAGE":
     case "RECRUITMENT_MESSAGE":
       return "linear-gradient(135deg, #4facfe, #00f2fe)";
     case "PREMIUM_PURCHASE":
@@ -917,6 +1023,19 @@ const getTypeBannerColor = (type: string): string => {
     case "SHORT_TERM_APPLICATION_ACCEPTED":
       return "linear-gradient(135deg, #10b981, #059669)";
     case "SHORT_TERM_WORK_SUBMITTED":
+      return "linear-gradient(135deg, #f59e0b, #d97706)";
+    case "INTERVIEW_SCHEDULED":
+      return "linear-gradient(135deg, #06b6d4, #0891b2)";
+    case "INTERVIEW_COMPLETED":
+      return "linear-gradient(135deg, #6366f1, #8b5cf6)";
+    case "OFFER_SENT":
+      return "linear-gradient(135deg, #a855f7, #7c3aed)";
+    case "OFFER_ACCEPTED":
+      return "linear-gradient(135deg, #10b981, #059669)";
+    case "OFFER_REJECTED":
+      return "linear-gradient(135deg, #ef4444, #dc2626)";
+    case "ADMIN_CANCELLATION_REJECTED":
+    case "WORKER_CANCELLATION_REJECTED":
       return "linear-gradient(135deg, #f59e0b, #d97706)";
     case "WORKER_CANCELLATION_REQUESTED":
     case "RECRUITER_AUTO_APPROVED_WARNING":
@@ -1112,6 +1231,19 @@ const NotificationPage: React.FC = () => {
       case "DISPUTE_OPENED":
       case "DISPUTE_RESOLVED":
         return "Xem khiếu nại";
+      case "WORKER_CANCELLATION_REQUESTED":
+        return "Mở Dispute";
+      case "WORKER_AUTO_CANCELLED":
+      case "ADMIN_CANCELLATION_REJECTED":
+      case "WORKER_CANCELLATION_REJECTED":
+        return "Mở Job Lab";
+      case "INTERVIEW_SCHEDULED":
+      case "INTERVIEW_COMPLETED":
+        return "Xem lịch phỏng vấn";
+      case "OFFER_SENT":
+      case "OFFER_ACCEPTED":
+      case "OFFER_REJECTED":
+        return "Xem đề nghị";
       case "SHORT_TERM_APPLICATION_ACCEPTED":
       case "FULLTIME_APPLICATION_ACCEPTED":
         return "Xem hợp đồng";

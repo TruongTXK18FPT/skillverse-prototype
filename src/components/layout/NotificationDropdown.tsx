@@ -94,7 +94,14 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
     selectedApplicationId,
     applicationType,
   }: {
-    viewMode?: "dashboard" | "applications" | "workspace" | "contracts";
+    viewMode?:
+      | "dashboard"
+      | "applications"
+      | "workspace"
+      | "contracts"
+      | "interviews"
+      | "offers"
+      | "disputes";
     jobType?: "ALL" | "REGULAR" | "SHORT_TERM";
     selectedApplicationId?: string;
     applicationType?: "REGULAR" | "SHORT_TERM";
@@ -225,9 +232,11 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
         if (isMentorUser()) return { pathname: "/mentor" };
         if (!isLearnerUser()) return { pathname: "/notifications" };
         return normalizedMessage.includes("job") ||
-          normalizedMessage.includes("công việc")
+          normalizedMessage.includes("công việc") ||
+          normalizedMessage.includes("outcome") ||
+          normalizedMessage.includes("one of your jobs")
           ? buildJobLabTarget({
-              viewMode: "applications",
+              viewMode: "disputes",
               jobType: "SHORT_TERM",
               applicationType: "SHORT_TERM",
             })
@@ -272,13 +281,52 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
           selectedApplicationId: notification.relatedId,
           applicationType: "REGULAR",
         });
+      case "INTERVIEW_SCHEDULED":
+      case "INTERVIEW_COMPLETED":
+        return isRecruiterUser()
+          ? buildBusinessTarget("fulltime")
+          : buildJobLabTarget({
+              viewMode: "interviews",
+              jobType: "REGULAR",
+              selectedApplicationId: notification.relatedId,
+              applicationType: "REGULAR",
+            });
+      case "OFFER_SENT":
+      case "OFFER_ACCEPTED":
+      case "OFFER_REJECTED":
+        return isRecruiterUser()
+          ? buildBusinessTarget("fulltime")
+          : buildJobLabTarget({
+              viewMode: "offers",
+              jobType: "REGULAR",
+              selectedApplicationId: notification.relatedId,
+              applicationType: "REGULAR",
+            });
       case "WORKER_CANCELLATION_REQUESTED":
+        return isRecruiterUser()
+          ? buildBusinessTarget("shortterm")
+          : buildJobLabTarget({
+              viewMode: "disputes",
+              jobType: "SHORT_TERM",
+              applicationType: "SHORT_TERM",
+            });
       case "WORKER_AUTO_CANCELLED":
-        return buildJobLabTarget({
-          viewMode: "applications",
-          jobType: "SHORT_TERM",
-          applicationType: "SHORT_TERM",
-        });
+      case "WORKER_CANCELLATION_REJECTED":
+        return isRecruiterUser()
+          ? buildBusinessTarget("shortterm")
+          : buildJobLabTarget({
+              viewMode: "applications",
+              jobType: "SHORT_TERM",
+              applicationType: "SHORT_TERM",
+            });
+      case "ADMIN_CANCELLATION_REJECTED":
+        return isRecruiterUser()
+          ? buildBusinessTarget("shortterm")
+          : buildJobLabTarget({
+              viewMode: "applications",
+              jobType: "SHORT_TERM",
+              applicationType: "SHORT_TERM",
+            });
       case "CONTRACT_SENT_FOR_SIGNATURE":
       case "CONTRACT_SIGNED":
       case "CONTRACT_REJECTED":
@@ -462,10 +510,25 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
             className="notification-icon-dispute-escalated"
           />
         );
+      case "WORKER_CANCELLATION_REQUESTED":
+      case "ADMIN_CANCELLATION_REJECTED":
+      case "WORKER_CANCELLATION_REJECTED":
+        return (
+          <AlertCircle
+            size={16}
+            className="notification-icon-dispute-escalated"
+          />
+        );
       case "DISPUTE_ELIGIBILITY_UNLOCKED":
         return (
           <Lock size={16} className="notification-icon-dispute-eligible" />
         );
+      case "INTERVIEW_SCHEDULED":
+      case "INTERVIEW_COMPLETED":
+      case "OFFER_SENT":
+      case "OFFER_ACCEPTED":
+      case "OFFER_REJECTED":
+        return <Briefcase size={16} className="notification-icon-community" />;
       case "WELCOME":
         return <Info size={16} className="notification-icon-info" />;
       default:
