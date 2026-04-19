@@ -1,4 +1,11 @@
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -19,12 +26,16 @@ import {
   StudentVerificationEligibilityResponse,
   StudentVerificationStatus,
 } from "../../types/studentVerification";
+import StudentCardCropModal from "../../components/payment/StudentCardCropModal";
 import styles from "./StudentVerificationPage.module.css";
 
 interface NoticeState {
   tone: "info" | "success" | "error";
   message: string;
 }
+
+const STUDENT_CARD_MAX_SIZE = 10 * 1024 * 1024;
+const ALLOWED_CARD_MIME_TYPES = new Set(["image/jpeg", "image/png"]);
 
 // [Nghiep vu] Day la man hinh trung tam cho user hoan tat xac thuc sinh vien truoc khi mua Student Pack.
 const StudentVerificationPage = () => {
@@ -43,6 +54,10 @@ const StudentVerificationPage = () => {
 
   const [schoolEmail, setSchoolEmail] = useState("");
   const [studentCardFile, setStudentCardFile] = useState<File | null>(null);
+  const [studentCardEditorOpen, setStudentCardEditorOpen] = useState(false);
+  const [studentCardTempUrl, setStudentCardTempUrl] = useState<string | null>(
+    null,
+  );
   const [otp, setOtp] = useState("");
 
   const [isBootstrapping, setIsBootstrapping] = useState(true);
@@ -105,6 +120,14 @@ const StudentVerificationPage = () => {
     };
   }, [imagePreview]);
 
+  useEffect(() => {
+    return () => {
+      if (studentCardTempUrl) {
+        URL.revokeObjectURL(studentCardTempUrl);
+      }
+    };
+  }, [studentCardTempUrl]);
+
   const currentStatus: StudentVerificationStatus | "NONE" =
     latestRequest?.status ?? "NONE";
 
@@ -116,6 +139,7 @@ const StudentVerificationPage = () => {
 
   const isStartDisabled =
     !schoolEmail.trim() || !studentCardFile || isSubmittingStart;
+  const isUploadDisabled = isOtpPending || isPendingReview || isSubmittingStart;
 
   // [Nghiep vu] Khoi tao request moi de he thong gui OTP vao email truong.
   const handleStartVerification = async (event: FormEvent<HTMLFormElement>) => {
@@ -250,10 +274,52 @@ const StudentVerificationPage = () => {
     setIsRefreshing(false);
   };
 
+  const closeStudentCardEditor = useCallback(() => {
+    setStudentCardEditorOpen(false);
+
+    if (studentCardTempUrl) {
+      URL.revokeObjectURL(studentCardTempUrl);
+    }
+    setStudentCardTempUrl(null);
+  }, [studentCardTempUrl]);
+
+  const handleStudentCardCropConfirm = async (croppedStudentCard: File) => {
+    setStudentCardFile(croppedStudentCard);
+    setNotice(null);
+    closeStudentCardEditor();
+  };
+
   // [Nghiep vu] Cap nhat file anh the va reset thong bao loi neu user chon lai anh.
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
-    setStudentCardFile(file);
+    event.target.value = "";
+
+    if (!file) {
+      return;
+    }
+
+    if (!ALLOWED_CARD_MIME_TYPES.has(file.type)) {
+      setNotice({
+        tone: "error",
+        message: "Định dạng ảnh không hợp lệ. Chỉ chấp nhận JPG/PNG.",
+      });
+      return;
+    }
+
+    if (file.size > STUDENT_CARD_MAX_SIZE) {
+      setNotice({
+        tone: "error",
+        message: `Ảnh quá lớn. Tối đa 10MB. Hiện tại: ${(file.size / (1024 * 1024)).toFixed(2)}MB.`,
+      });
+      return;
+    }
+
+    if (studentCardTempUrl) {
+      URL.revokeObjectURL(studentCardTempUrl);
+    }
+
+    setStudentCardTempUrl(URL.createObjectURL(file));
+    setStudentCardEditorOpen(true);
     setNotice(null);
   };
 
@@ -322,6 +388,13 @@ const StudentVerificationPage = () => {
 
   return (
     <div className={styles.svVerifyPage}>
+      <StudentCardCropModal
+        isOpen={studentCardEditorOpen}
+        imageUrl={studentCardTempUrl}
+        onCancel={closeStudentCardEditor}
+        onConfirm={handleStudentCardCropConfirm}
+      />
+
       <div className={styles.svVerifyShell}>
         <section className={styles.svVerifyHead}>
           <div className={styles.svVerifyTitleGroup}>
@@ -427,7 +500,9 @@ const StudentVerificationPage = () => {
                   </span>
                 </div>
 
-                <div className={styles.svVerifyInfoItem}>
+                <div
+                  className={`${styles.svVerifyInfoItem} ${styles.svVerifyInfoItemFull}`}
+                >
                   <span className={styles.svVerifyInfoCaption}>
                     Cập nhật gần nhất
                   </span>
@@ -525,10 +600,18 @@ const StudentVerificationPage = () => {
                     </p>
 
                     <label
-                      className={styles.svVerifyUploadBtn}
+                      className={`${styles.svVerifyUploadBtn} ${
+                        isUploadDisabled ? styles.svVerifyUploadBtnDisabled : ""
+                      }`}
                       htmlFor="sv-card-upload"
+                      aria-disabled={isUploadDisabled}
                     >
-                      <UploadCloud size={14} /> Chọn ảnh
+                      <span className={styles.svVerifyUploadBtnIcon}>
+                        <UploadCloud size={16} />
+                      </span>
+                      <span className={styles.svVerifyUploadBtnText}>
+                        <strong>Chọn ảnh thẻ sinh viên</strong>
+                      </span>
                     </label>
                     <input
                       id="sv-card-upload"
@@ -536,14 +619,14 @@ const StudentVerificationPage = () => {
                       type="file"
                       accept="image/jpeg,image/png"
                       onChange={handleFileChange}
-                      disabled={
-                        isOtpPending || isPendingReview || isSubmittingStart
-                      }
+                      disabled={isUploadDisabled}
                     />
 
                     {studentCardFile && (
-                      <span className={styles.svVerifyUploadHint}>
-                        {studentCardFile.name}
+                      <span
+                        className={`${styles.svVerifyUploadHint} ${styles.svVerifyUploadReady}`}
+                      >
+                        Ảnh thẻ đã sẵn sàng gửi xác thực.
                       </span>
                     )}
 

@@ -305,6 +305,10 @@
   gap: 4px;
 }
 
+.svVerifyInfoItemFull {
+  grid-column: 1 / -1;
+}
+
 .svVerifyInfoCaption {
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -418,15 +422,66 @@
 
 .svVerifyUploadBtn {
   border: 1px solid rgba(31, 241, 255, 0.48);
-  background: rgba(31, 241, 255, 0.13);
-  color: #b5f1ff;
-  border-radius: 10px;
-  height: 38px;
-  padding: 0 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(31, 241, 255, 0.14),
+    rgba(77, 162, 255, 0.18)
+  );
+  color: #c8f5ff;
+  border-radius: 12px;
+  min-height: 54px;
+  padding: 10px 12px;
   font-family: "Rajdhani", sans-serif;
   font-weight: 700;
   letter-spacing: 0.03em;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.svVerifyUploadBtnIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(31, 241, 255, 0.15);
+  border: 1px solid rgba(31, 241, 255, 0.42);
+  color: #8ef2ff;
+  flex: 0 0 auto;
+}
+
+.svVerifyUploadBtnText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+}
+
+.svVerifyUploadBtnText strong {
+  font-size: 0.94rem;
+  line-height: 1.2;
+}
+
+.svVerifyUploadBtnText small {
+  font-size: 0.76rem;
+  color: #86b4d5;
+  letter-spacing: 0.01em;
+  line-height: 1.24;
+}
+
+.svVerifyUploadBtnDisabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.svVerifyUploadReady {
+  color: #97ffd9;
+  font-weight: 600;
 }
 
 .svVerifyImagePreviewWrap {

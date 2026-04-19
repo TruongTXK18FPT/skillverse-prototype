@@ -1,0 +1,251 @@
+.studentCardCropOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1300;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(1, 7, 20, 0.78);
+    backdrop-filter: blur(4px);
+}
+
+.studentCardCropModal {
+    margin-top: 3.5rem;
+    width: min(760px, 100%);
+    max-height: calc(100vh - 36px);
+    overflow: auto;
+    border-radius: 16px;
+    border: 1px solid rgba(77, 162, 255, 0.46);
+    background: linear-gradient(160deg,
+            rgba(7, 20, 42, 0.97),
+            rgba(4, 13, 30, 0.98));
+    box-shadow:
+        0 22px 52px rgba(0, 0, 0, 0.55),
+        inset 0 0 20px rgba(31, 241, 255, 0.08);
+    padding: 18px;
+}
+
+.studentCardCropHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.studentCardCropHeader h3 {
+    margin: 0;
+    color: #e7f8ff;
+    font-size: 1.02rem;
+    letter-spacing: 0.03em;
+    font-family: "Montserrat", "Be Vietnam Pro", "Segoe UI", sans-serif;
+}
+
+.studentCardCropClose {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(124, 170, 212, 0.55);
+    background: rgba(65, 99, 136, 0.24);
+    color: #d0ebff;
+    font-size: 1.2rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.studentCardCropHint {
+    margin: 10px 0 0;
+    color: #90b8d8;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.studentCardCropMode {
+    margin-top: 10px;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.studentCardCropModeBtn {
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(116, 173, 217, 0.45);
+    background: rgba(58, 92, 126, 0.2);
+    color: #c9e7ff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+}
+
+.studentCardCropModeBtnActive {
+    border-color: rgba(30, 222, 255, 0.7);
+    background: linear-gradient(
+        140deg,
+        rgba(31, 241, 255, 0.24),
+        rgba(77, 162, 255, 0.28)
+    );
+    color: #e6f9ff;
+    box-shadow: 0 0 12px rgba(31, 241, 255, 0.18);
+}
+
+.studentCardCropAspectMeta {
+    margin: 8px 0 0;
+    color: #7fb3d7;
+    font-size: 0.8rem;
+}
+
+.studentCardCropStage {
+    margin-top: 12px;
+    position: relative;
+    width: 100%;
+    height: clamp(280px, 48vh, 420px);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(77, 162, 255, 0.38);
+    background:
+        radial-gradient(circle at 50% 20%, rgba(46, 152, 255, 0.14), transparent 60%),
+        rgba(3, 11, 26, 0.96);
+}
+
+.studentCardCropTools {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.studentCardCropZoomLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #9bc6e7;
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.studentCardCropSlider {
+    grid-column: 1 / -1;
+    width: 100%;
+    accent-color: #35deff;
+}
+
+.studentCardCropReset {
+    border-radius: 9px;
+    border: 1px solid rgba(120, 172, 217, 0.5);
+    background: rgba(58, 92, 126, 0.28);
+    color: #cae7ff;
+    min-height: 34px;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.studentCardCropError {
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 141, 141, 0.45);
+    background: rgba(255, 120, 120, 0.14);
+    color: #ffb6b6;
+    font-size: 0.86rem;
+    padding: 8px 10px;
+}
+
+.studentCardCropActions {
+    margin-top: 14px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.studentCardCropPrimaryBtn,
+.studentCardCropSecondaryBtn {
+    border-radius: 10px;
+    min-height: 40px;
+    padding: 0 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.studentCardCropPrimaryBtn {
+    border: 1px solid rgba(39, 233, 255, 0.58);
+    background: linear-gradient(135deg,
+            rgba(30, 216, 255, 0.28),
+            rgba(77, 162, 255, 0.36));
+    color: #e2f8ff;
+}
+
+.studentCardCropSecondaryBtn {
+    border: 1px solid rgba(133, 176, 214, 0.48);
+    background: rgba(72, 108, 145, 0.24);
+    color: #d4edff;
+}
+
+.studentCardCropPrimaryBtn:hover,
+.studentCardCropSecondaryBtn:hover,
+.studentCardCropReset:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(31, 241, 255, 0.22);
+}
+
+.studentCardCropPrimaryBtn:disabled,
+.studentCardCropSecondaryBtn:disabled,
+.studentCardCropClose:disabled,
+.studentCardCropReset:disabled,
+.studentCardCropModeBtn:disabled {
+    opacity: 0.58;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.studentCardCropSpinner {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(229, 247, 255, 0.35);
+    border-top-color: #d8f4ff;
+    animation: studentCardCropSpin 0.85s linear infinite;
+}
+
+@keyframes studentCardCropSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 720px) {
+    .studentCardCropModal {
+        padding: 14px;
+    }
+
+    .studentCardCropTools {
+        grid-template-columns: 1fr;
+    }
+
+    .studentCardCropActions {
+        flex-direction: column;
+    }
+
+    .studentCardCropPrimaryBtn,
+    .studentCardCropSecondaryBtn {
+        width: 100%;
+    }
+}

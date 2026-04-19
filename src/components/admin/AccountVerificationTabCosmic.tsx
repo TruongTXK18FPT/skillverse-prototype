@@ -607,7 +607,7 @@ const AccountVerificationTabCosmic: React.FC = () => {
           autoCloseDelay={toast.autoCloseDelay}
           showCountdown={false}
           countdownText={toast.countdownText}
-          position="top-right"
+          position="center"
           useOverlay={false}
           actionButton={toast.actionButton}
         />
