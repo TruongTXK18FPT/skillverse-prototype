@@ -768,39 +768,49 @@ export const updateCourseRevision = async (
   payload: CourseRevisionUpdateDTO,
   thumbnailFile?: File
 ): Promise<CourseRevisionDTO> => {
-  // Revision thumbnail upload: send as FormData when file is provided,
-  // otherwise send as JSON (for metadata-only updates).
-  if (thumbnailFile) {
-    const formData = new FormData();
-    // Append JSON fields
-    const jsonFields = ['title','description','level','category','shortDescription',
-      'estimatedDurationHours','language','price','currency'];
-    jsonFields.forEach((field) => {
-      const value = (payload as Record<string, unknown>)[field];
-      if (value !== undefined && value !== null) formData.append(field, String(value));
-    });
-    if (payload.learningObjectives?.length) {
-      payload.learningObjectives.forEach((item) => formData.append('learningObjectives', item));
-    }
-    if (payload.requirements?.length) {
-      payload.requirements.forEach((item) => formData.append('requirements', item));
-    }
-    if (payload.courseSkills?.length) {
-      payload.courseSkills.forEach((item) => formData.append('courseSkills', item));
-    }
-    if (payload.contentSnapshotJson) formData.append('contentSnapshotJson', payload.contentSnapshotJson);
-    if (payload.thumbnailMediaId) formData.append('thumbnailMediaId', String(payload.thumbnailMediaId));
-    formData.append('thumbnailFile', thumbnailFile);
-    const response = await axiosInstance.put<CourseRevisionDTO>(
-      `/course-revisions/${revisionId}`,
-      formData,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
-    return response.data;
+  // Always use FormData to match BE @ModelAttribute contract.
+  // @ModelAttribute only binds multipart/form-data — JSON body silently drops
+  // array fields (courseSkills, requirements, learningObjectives).
+  const formData = new FormData();
+
+  // Scalar fields
+  const scalarFields = [
+    'title', 'description', 'level', 'category', 'shortDescription',
+    'estimatedDurationHours', 'language', 'price', 'currency',
+  ];
+  scalarFields.forEach((field) => {
+    const value = (payload as Record<string, unknown>)[field];
+    if (value !== undefined && value !== null) formData.append(field, String(value));
+  });
+
+  // Array fields — send sentinel when empty to tell BE to clear the field.
+  // Spring @ModelAttribute cannot distinguish missing field (→ null) from empty array,
+  // so we send "__EMPTY__" as a marker to represent "user intentionally cleared this".
+  if (payload.learningObjectives?.length) {
+    payload.learningObjectives.forEach((item) => formData.append('learningObjectives', item));
+  } else {
+    formData.append('learningObjectives', '__EMPTY__');
   }
+  if (payload.requirements?.length) {
+    payload.requirements.forEach((item) => formData.append('requirements', item));
+  } else {
+    formData.append('requirements', '__EMPTY__');
+  }
+  if (payload.courseSkills?.length) {
+    payload.courseSkills.forEach((item) => formData.append('courseSkills', item));
+  } else {
+    formData.append('courseSkills', '__EMPTY__');
+  }
+
+  // Content snapshot & thumbnail
+  if (payload.contentSnapshotJson) formData.append('contentSnapshotJson', payload.contentSnapshotJson);
+  if (payload.thumbnailMediaId) formData.append('thumbnailMediaId', String(payload.thumbnailMediaId));
+  if (thumbnailFile) formData.append('thumbnailFile', thumbnailFile);
+
   const response = await axiosInstance.put<CourseRevisionDTO>(
     `/course-revisions/${revisionId}`,
-    payload
+    formData,
+    { headers: { 'Content-Type': 'multipart/form-data' } }
   );
   return response.data;
 };

@@ -553,6 +553,8 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
   } | null>(null);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [roadmapLoading, setRoadmapLoading] = useState(false);
+  // Track if user has explicitly selected a node (via event) — used to prevent auto-select from overriding
+  const userHasSelectedNodeRef = useRef(false);
 
   // Course selector state (for MODE_COURSE_LEARNING)
   const [selectedCourseModuleId, setSelectedCourseModuleId] = useState<number | null>(null);
@@ -599,18 +601,26 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
     if (!selectedRoadmapId) {
       setSelectedRoadmap(null);
       setSelectedNodeId(null);
+      userHasSelectedNodeRef.current = false;
       return;
     }
 
     const fetchRoadmapDetail = async () => {
+      // Reset user-selection flag when loading a new roadmap
+      // This ensures auto-select runs for the new roadmap even if user had selected a node in a previous roadmap
+      userHasSelectedNodeRef.current = false;
+      const currentRoadmapId = selectedRoadmapId;
       try {
         const detail = await aiRoadmapService.getRoadmapById(selectedRoadmapId);
+        // Ignore result if roadmap changed while fetching (stale callback)
+        if (currentRoadmapId !== selectedRoadmapId) return;
         setSelectedRoadmap({
           sessionId: detail.sessionId,
           title: detail.metadata?.title || detail.overview?.purpose || "Untitled Roadmap",
           nodes: detail.roadmap,
         });
-        // Auto-select first non-completed node
+        // Auto-select first non-completed node — only as fallback if user has not explicitly selected a node
+        if (userHasSelectedNodeRef.current) return;
         const firstActive = detail.roadmap.find(
           (n) => n.nodeStatus !== "COMPLETED"
         );
@@ -669,7 +679,10 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
         const existing = roadmapList.find((r) => r.sessionId === roadmapId);
         if (existing) {
           setSelectedRoadmapId(roadmapId);
-          if (nodeId) setSelectedNodeId(nodeId);
+          if (nodeId) {
+            userHasSelectedNodeRef.current = true;
+            setSelectedNodeId(nodeId);
+          }
         } else {
           // Roadmap not in list yet — trigger a refetch
           setSelectedRoadmapId(roadmapId);
@@ -681,7 +694,10 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
               title,
               nodes: detail.roadmap,
             });
-            if (nodeId) setSelectedNodeId(nodeId);
+            if (nodeId) {
+              userHasSelectedNodeRef.current = true;
+              setSelectedNodeId(nodeId);
+            }
           }).catch((err) => {
             console.error("Failed to load roadmap detail from event:", err);
           });
@@ -695,22 +711,26 @@ const MeowlChatV2: React.FC<MeowlChatV2Props> = ({
 
   // Merge external roadmapContext with internal selector state
   const activeRoadmapContext = useMemo(() => {
-    // If parent passed a direct context, prefer it (single-node page context)
+    // Priority 1: Use internal state (set by meowl-node-select event or auto-select fallback)
+    // This ensures user-clicked node always takes precedence over parent prop
+    if (selectedRoadmap && selectedNodeId) {
+      const node = selectedRoadmap.nodes.find((n) => n.id === selectedNodeId);
+      if (node) {
+        return {
+          roadmapTitle: selectedRoadmap.title,
+          nodeTitle: node.title,
+          nodeDescription: node.description || undefined,
+          learningObjectives: node.learningObjectives?.filter(Boolean) || [],
+          keyConcepts: node.keyConcepts?.filter(Boolean) || [],
+        };
+      }
+    }
+    // Priority 2: Fall back to parent prop (for initial load when parent selectedNode is set)
     if (roadmapContext) {
       return roadmapContext;
     }
-    // Otherwise build from internal selector
-    if (!selectedRoadmap || !selectedNodeId) return null;
-    const node = selectedRoadmap.nodes.find((n) => n.id === selectedNodeId);
-    if (!node) return null;
-    return {
-      roadmapTitle: selectedRoadmap.title,
-      nodeTitle: node.title,
-      nodeDescription: node.description || undefined,
-      learningObjectives: node.learningObjectives?.filter(Boolean) || [],
-      keyConcepts: node.keyConcepts?.filter(Boolean) || [],
-    };
-  }, [roadmapContext, selectedRoadmap, selectedNodeId]);
+    return null;
+  }, [selectedRoadmap, selectedNodeId, roadmapContext]);
 
   // MeowlNodeDossier computed from selected roadmap+node (for context envelope)
   const roadmapNodeDossier = useMemo(() => {
