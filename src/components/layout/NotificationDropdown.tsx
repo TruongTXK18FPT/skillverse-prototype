@@ -14,8 +14,10 @@ import {
   ShieldAlert,
   Lock,
 } from "lucide-react";
-import { notificationService, Notification } from "../../services/notificationService";
-import { UserDto } from "../../data/authDTOs";
+import {
+  notificationService,
+  Notification,
+} from "../../services/notificationService";
 import { formatNotificationDisplay } from "../../utils/notificationDisplay";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -45,41 +47,34 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
 
   type NotificationTarget = {
     pathname: string;
-    search?: string;
-    hash?: string;
     state?: Record<string, unknown>;
   };
 
-  const getUserRoles = (currentUser: UserDto | null = user): string[] =>
-    Array.isArray(currentUser?.roles)
-      ? currentUser.roles.map((role) => role.toUpperCase())
+  const getUserRoles = (): string[] =>
+    Array.isArray(user?.roles)
+      ? user.roles.map((role) => role.toUpperCase())
       : [];
 
-  const hasAnyRole = (
-    roles: string[],
-    currentUser: UserDto | null = user,
-  ): boolean => {
-    const userRoles = getUserRoles(currentUser);
+  const hasAnyRole = (roles: string[]): boolean => {
+    const userRoles = getUserRoles();
     return roles.some((role) => userRoles.includes(role));
   };
 
-  const isAdminUser = (currentUser: UserDto | null = user): boolean => {
-    const roles = getUserRoles(currentUser);
+  const isAdminUser = (): boolean => {
+    const roles = getUserRoles();
     return (
       roles.includes("ADMIN") || roles.some((role) => role.endsWith("_ADMIN"))
     );
   };
 
-  const isMentorUser = (currentUser: UserDto | null = user): boolean =>
-    hasAnyRole(["MENTOR"], currentUser);
-  const isRecruiterUser = (currentUser: UserDto | null = user): boolean =>
-    hasAnyRole(["RECRUITER"], currentUser);
-  const isLearnerUser = (currentUser: UserDto | null = user): boolean =>
-    hasAnyRole(LEARNER_ROLES, currentUser) &&
-    !isMentorUser(currentUser) &&
-    !isRecruiterUser(currentUser) &&
-    !isAdminUser(currentUser) &&
-    !hasAnyRole(["PARENT"], currentUser);
+  const isMentorUser = (): boolean => hasAnyRole(["MENTOR"]);
+  const isRecruiterUser = (): boolean => hasAnyRole(["RECRUITER"]);
+  const isLearnerUser = (): boolean =>
+    hasAnyRole(LEARNER_ROLES) &&
+    !isMentorUser() &&
+    !isRecruiterUser() &&
+    !isAdminUser() &&
+    !hasAnyRole(["PARENT"]);
 
   const buildBusinessTarget = (
     activeSection:
@@ -139,57 +134,9 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
       : { pathname: `/contracts/${relatedId}` };
   };
 
-  const normalizePath = (path?: string): string | null => {
-    if (!path) return null;
-    return path.startsWith("/") ? path : `/${path}`;
-  };
-
-  const buildPayloadTarget = (
-    notification: Notification,
-    currentUser: UserDto | null,
-  ): NotificationTarget | null => {
-    const action = notification.payload?.action;
-    const resource = notification.payload?.resource;
-
-    // Mentor/Admin nhận ASSIGNMENT_GRADED từ BE với payload /assignment/{id} — bỏ qua payload
-    // để rơi vào switch fallback /mentor, tránh sai route sang learner page
-    if (
-      notification.type === "ASSIGNMENT_GRADED" &&
-      (isMentorUser(currentUser) || isAdminUser(currentUser))
-    ) {
-      return null;
-    }
-
-    const actionPath = normalizePath(action?.path);
-    if (actionPath) {
-      return {
-        pathname: actionPath,
-        hash: action?.anchor ? `#${action.anchor}` : undefined,
-      };
-    }
-
-    if (resource?.assignmentId != null) {
-      return { pathname: `/assignment/${resource.assignmentId}` };
-    }
-
-    if (action?.key === "COURSE_PURCHASE_SUCCESS") {
-      return {
-        pathname: "/dashboard",
-        hash: action?.anchor ? `#${action.anchor}` : "#modules-section",
-      };
-    }
-
-    return null;
-  };
-
   const getNotificationTarget = (
     notification: Notification,
   ): NotificationTarget => {
-    const payloadTarget = buildPayloadTarget(notification, user);
-    if (payloadTarget) {
-      return payloadTarget;
-    }
-
     const normalizedMessage =
       `${notification.title} ${notification.message}`.toLowerCase();
 
@@ -511,17 +458,10 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
     }
 
     const target = getNotificationTarget(notification);
-    const destination = target.search
-      ? `${target.pathname}${target.search}`
-      : target.pathname;
-    const navigateTarget = target.hash
-      ? `${destination}${target.hash}`
-      : destination;
-
     if (target.state) {
-      navigate(navigateTarget, { state: target.state });
+      navigate(target.pathname, { state: target.state });
     } else {
-      navigate(navigateTarget);
+      navigate(target.pathname);
     }
     setIsOpen(false);
   };

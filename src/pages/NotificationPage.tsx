@@ -59,7 +59,6 @@ import {
   Notification,
 } from "../services/notificationService";
 import { useNavigate } from "react-router-dom";
-import { UserDto } from "../data/authDTOs";
 import { useAuth } from "../context/AuthContext";
 import { formatNotificationDisplay } from "../utils/notificationDisplay";
 import Header from "../components/layout/Header";
@@ -435,7 +434,6 @@ const getTypeCategory = (type: string): string => {
 type NotificationTarget = {
   pathname: string;
   search?: string;
-  hash?: string;
   state?: Record<string, unknown>;
 };
 
@@ -538,58 +536,10 @@ const buildContractTarget = (
     : { pathname: `/contracts/${relatedId}` };
 };
 
-const normalizePath = (path?: string): string | null => {
-  if (!path) return null;
-  return path.startsWith("/") ? path : `/${path}`;
-};
-
-const buildPayloadTarget = (
-  notification: Pick<Notification, "type" | "payload">,
-  currentUser: UserDto | null,
-): NotificationTarget | null => {
-  const action = notification.payload?.action;
-  const resource = notification.payload?.resource;
-
-  // Mentor/Admin nhận ASSIGNMENT_GRADED từ BE với payload /assignment/{id} — bỏ qua payload
-  // để rơi vào switch fallback /mentor, tránh sai route sang learner page
-  if (
-    notification.type === "ASSIGNMENT_GRADED" &&
-    (isMentorUser(currentUser) || isAdminUser(currentUser))
-  ) {
-    return null;
-  }
-
-  const actionPath = normalizePath(action?.path);
-  if (actionPath) {
-    return {
-      pathname: actionPath,
-      hash: action?.anchor ? `#${action.anchor}` : undefined,
-    };
-  }
-
-  if (resource?.assignmentId != null) {
-    return { pathname: `/assignment/${resource.assignmentId}` };
-  }
-
-  if (action?.key === "COURSE_PURCHASE_SUCCESS") {
-    return {
-      pathname: "/dashboard",
-      hash: action?.anchor ? `#${action.anchor}` : "#modules-section",
-    };
-  }
-
-  return null;
-};
-
 const getNotificationTarget = (
-  notification: Pick<Notification, "type" | "relatedId" | "message" | "title" | "payload">,
-  user: UserDto | null,
+  notification: Pick<Notification, "type" | "relatedId" | "message" | "title">,
+  user: any,
 ): NotificationTarget => {
-  const payloadTarget = buildPayloadTarget(notification, user);
-  if (payloadTarget) {
-    return payloadTarget;
-  }
-
   const { type, relatedId, message, title } = notification;
 
   switch (type) {
@@ -1209,14 +1159,11 @@ const NotificationPage: React.FC = () => {
     const destination = target.search
       ? `${target.pathname}${target.search}`
       : target.pathname;
-    const navigateTarget = target.hash
-      ? `${destination}${target.hash}`
-      : destination;
 
     if (target.state) {
-      navigate(navigateTarget, { state: target.state });
+      navigate(destination, { state: target.state });
     } else {
-      navigate(navigateTarget);
+      navigate(destination);
     }
   };
 

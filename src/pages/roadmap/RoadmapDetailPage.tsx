@@ -498,26 +498,14 @@ const RoadmapDetailPage = () => {
     // Step 2: Show success immediately — BE committed or rolled back, state is consistent.
     showSuccess('Hoàn thành', result.message);
 
-    // Step 3: Optimistic progress update — immediate visual feedback
-    const nextProgressMap = new Map<string, QuestProgress>(progressMap);
-    nextProgressMap.set(nodeId, {
-      questId: nodeId,
-      status: ProgressStatus.COMPLETED,
-      progress: 100,
-      completedAt: new Date().toISOString(),
-    });
-    setProgressMap(nextProgressMap);
-
-    // Step 4: Refresh from BE, then auto-switch effect handles node selection
-    // Fix: compute nextEligibleNodeId AFTER setRoadmap so it uses fresh nodeStatus,
-    // not the stale roadmap.roadmap from before the refresh.
+    // Step 3: Refresh state (non-critical — failures here don't affect data consistency)
     try {
       const updatedRoadmap = await aiRoadmapService.getRoadmapById(roadmap.sessionId);
 
-      const refreshedProgressMap = new Map<string, QuestProgress>();
+      const nextProgressMap = new Map<string, QuestProgress>();
       if (updatedRoadmap.progress) {
         Object.entries(updatedRoadmap.progress).forEach(([questId, progress]) => {
-          refreshedProgressMap.set(questId, {
+          nextProgressMap.set(questId, {
             questId: progress.questId,
             status: progress.status as ProgressStatus,
             progress: progress.progress,
@@ -525,27 +513,7 @@ const RoadmapDetailPage = () => {
           });
         });
       }
-      setProgressMap(refreshedProgressMap);
-
-      // Compute next eligible node from the FRESHLY updated roadmap
-      const nextEligible = (() => {
-        for (const node of updatedRoadmap.roadmap) {
-          if (!node?.id || node.id === nodeId) continue;
-          const prog = refreshedProgressMap.get(node.id);
-          if (prog?.status === ProgressStatus.COMPLETED) continue;
-          if (
-            node.nodeStatus === RoadmapNodeAvailability.AVAILABLE
-            || node.nodeStatus === RoadmapNodeAvailability.IN_PROGRESS
-          ) {
-            return node.id;
-          }
-        }
-        return null;
-      })();
-      setSelectedNodeId(nextEligible);
-
-      // FIX: Update roadmap state so nodeStatus (AVAILABLE/LOCKED/IN_PROGRESS) refreshes
-      setRoadmap(updatedRoadmap);
+      setProgressMap(nextProgressMap);
 
       const board = await taskBoardService.getBoard(roadmap.sessionId);
       const summaries = extractNodeStudyPlanSummaries(board, roadmap.sessionId);
@@ -553,7 +521,9 @@ const RoadmapDetailPage = () => {
     } catch {
       // non-critical: BE state is already consistent; refresh failure is purely cosmetic
     }
-  }, [roadmap, showSuccess, showError, progressMap]);
+
+    setSelectedNodeId(null);
+  }, [roadmap, showSuccess, showError]);
 
   const handleSubmitNodePlan = useCallback(async (request: RoadmapNodeStudyPlanRequest) => {
     if (!roadmap || !planModalNode) return;
@@ -690,6 +660,15 @@ const RoadmapDetailPage = () => {
       footer.style.display = previousDisplay;
     };
   }, []);
+
+  // Auto-switch panel to the next non-completed node when current node is completed
+  useEffect(() => {
+    if (!eligibleNodeId || eligibleNodeId === selectedNodeId) return;
+    const currentProgress = progressMap.get(selectedNodeId ?? '');
+    if (currentProgress?.status === ProgressStatus.COMPLETED) {
+      setSelectedNodeId(eligibleNodeId);
+    }
+  }, [eligibleNodeId, selectedNodeId, progressMap]);
 
   if (authLoading || isLoading) {
     return (
