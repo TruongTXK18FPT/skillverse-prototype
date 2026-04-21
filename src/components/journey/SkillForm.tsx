@@ -16,6 +16,7 @@ import {
   getExpertDomainMeta,
 } from "../../utils/expertFieldPresentation";
 import {
+  DOMAIN_OPTIONS,
   JOBS_BY_DOMAIN_INDUSTRY,
   SKILLS_BY_JOB_ROLE,
 } from "../../types/Journey";
@@ -124,7 +125,14 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
   }, []);
 
   const domainOptions: ExpertDomainMeta[] = useMemo(() => {
-    return expertFields.map((field) => getExpertDomainMeta(field.domain));
+    const allowedLabels = ["Công nghệ thông tin", "Thiết kế", "Kinh doanh"];
+    return expertFields
+      .map((field) => getExpertDomainMeta(field.domain))
+      .filter(
+        (meta, idx, self) =>
+          allowedLabels.includes(meta.label) &&
+          self.findIndex((m) => m.label === meta.label) === idx,
+      );
   }, [expertFields]);
 
   const currentDomain = useMemo(() => {
@@ -241,9 +249,8 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
   };
 
   const handleSelectSkill = (skill: string) => {
-    if (!selectedSkills.includes(skill)) {
-      setSelectedSkills([...selectedSkills, skill]);
-    }
+    // V3 Single-skill policy: override previous selection
+    setSelectedSkills([skill]);
   };
 
   const handleNext = () => {
@@ -258,6 +265,14 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
     }
   };
 
+  const mapDomainToEnum = (domainStr: string) => {
+    const meta = getExpertDomainMeta(domainStr);
+    if (meta.label === "Công nghệ thông tin") return "IT";
+    if (meta.label === "Thiết kế") return "DESIGN";
+    if (meta.label === "Kinh doanh") return "BUSINESS";
+    return "IT"; // Fallback to avoid breaking backend
+  };
+
   const handleSubmit = () => {
     if (
       selectedDomain &&
@@ -266,7 +281,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
       selectedSkills.length > 0
     ) {
       onComplete({
-        domain: selectedDomain,
+        domain: mapDomainToEnum(selectedDomain),
         subCategory: selectedIndustry,
         jobRole: selectedJobRole,
         skills: selectedSkills,
@@ -436,9 +451,9 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
   const renderStep4 = () => (
     <div className="gsj-wizard-step">
       <div className="gsj-wizard-step__header">
-        <h2 className="gsj-wizard-step__title">Chọn kỹ năng bạn muốn học</h2>
+        <h2 className="gsj-wizard-step__title">Chọn 1 kỹ năng phát triển chính</h2>
         <p className="gsj-wizard-step__subtitle">
-          Bỏ chọn những kỹ năng bạn đã biết. Ít nhất 1 kỹ năng phải được chọn.
+          Trong phiên bản V3, mỗi Journey chỉ tập trung vào 1 kỹ năng cốt lõi. Hãy chọn kỹ năng bạn muốn master.
         </p>
       </div>
 
@@ -456,10 +471,10 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
 
       <div className="gsj-wizard-section">
         <h3 className="gsj-wizard-section__title">
-          Kỹ năng cho vị trí {selectedJobRoleMeta?.label}
+          Kỹ năng chuyên môn cho vị trí {selectedJobRoleMeta?.label}
           <span className="gsj-hint-text">
             {" "}
-            — bỏ chọn những kỹ năng đã biết
+            — chọn 1 kỹ năng để bắt đầu hành trình
           </span>
         </h3>
 
@@ -480,8 +495,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
               )}
             </div>
             <p className="gsj-hint-text gsj-hint-text--inline">
-              {selectedSkills.length} / {predefinedSkills.length} kỹ năng được
-              chọn
+              Đã chọn: {selectedSkills.length > 0 ? selectedSkills[0] : "Chưa chọn"}
             </p>
           </div>
         )}

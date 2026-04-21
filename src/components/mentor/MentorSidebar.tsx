@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Star,
   PenTool,
+  Shield,
 } from "lucide-react";
 import "./MentorSidebar.css";
 
@@ -29,7 +30,19 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
   isMobileOpen = false,
   pendingGradingCount = 0,
 }) => {
-  const groups = [
+  type NavItem = {
+    id: string;
+    label: string;
+    icon: React.ElementType;
+    badge?: number;
+  };
+  
+  type NavGroup = {
+    label: string;
+    items: NavItem[];
+  };
+
+  const groups: NavGroup[] = [
     {
       label: "MAIN",
       items: [
@@ -66,6 +79,7 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
       label: "SETTINGS",
       items: [
         { id: "certificate-settings", label: "Cài đặt chứng chỉ", icon: PenTool },
+        { id: "verification", label: "Xác thực skill", icon: Shield },
       ],
     },
   ];

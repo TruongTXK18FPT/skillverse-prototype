@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import UserManagementTabCosmic from "../../components/admin/UserManagementTabCosmic";
 import AdminVerificationTabs from "../../components/admin/AdminVerificationTabs";
+import MentorVerificationAdminTab from "../../components/admin/MentorVerificationAdminTab";
 import AdminCourseHub from "../../components/admin/AdminCourseHub";
 import AnalyticsTab from "../../components/admin/AnalyticsTab";
 import NotificationsTabCosmic from "../../components/admin/NotificationsTabCosmic";
@@ -118,6 +119,8 @@ const AdminPage: React.FC = () => {
         return <UserManagementTabCosmic />;
       case "verification":
         return <AdminVerificationTabs />;
+      case "mentor-skills":
+        return <MentorVerificationAdminTab />;
       case "courses":
       case "course-analytics":
         return <AdminCourseHub />;

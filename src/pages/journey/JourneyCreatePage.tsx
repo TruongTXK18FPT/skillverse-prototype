@@ -112,7 +112,7 @@ const mergeUniqueSkills = (a: string[], b: string[]) => {
   return merged.filter((s, idx) => merged.indexOf(s) === idx);
 };
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 2;
 const JOURNEY_CREATE_GAME_DELAY_MS = 8000;
 
 const JourneyCreatePage: React.FC = () => {
@@ -120,9 +120,7 @@ const JourneyCreatePage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [showLoadingGame, setShowLoadingGame] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [journeyType, setJourneyType] = useState<
-    (typeof JourneyType)[keyof typeof JourneyType] | null
-  >(null);
+  const journeyType = JourneyType.SKILL;
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -146,7 +144,7 @@ const JourneyCreatePage: React.FC = () => {
   }, [loading]);
 
   const [formData, setFormData] = useState<StartJourneyRequest>({
-    type: JourneyType.CAREER,
+    type: JourneyType.SKILL,
     domain: "",
     goal: "",
     level: "BEGINNER",
@@ -186,46 +184,7 @@ const JourneyCreatePage: React.FC = () => {
         ? "Nâng cấp kỹ năng"
         : "Chưa chọn";
 
-  const handleTypeSelect = (
-    type: (typeof JourneyType)[keyof typeof JourneyType],
-  ) => {
-    setJourneyType(type);
-    setFormData((prev) => ({
-      ...prev,
-      type,
-      domain: "",
-      subCategory: "",
-      industry: "",
-      jobRole: "",
-      roleKeywords: undefined,
-      goal: "",
-      level: "BEGINNER",
-      skills: [],
-      language: "VI",
-      duration: "STANDARD",
-    }));
-    setCurrentStep(2);
-    setSkillInput("");
-    setError(null);
-  };
 
-  const handleCareerComplete = (data: {
-    domain: string;
-    industry: string;
-    jobRole: string;
-    roleKeywords?: string;
-  }) => {
-    setFormData((prev) => ({
-      ...prev,
-      domain: data.domain,
-      subCategory: data.industry,
-      industry: data.industry,
-      jobRole: data.jobRole,
-      roleKeywords: data.roleKeywords,
-    }));
-    setCurrentStep(3);
-    setError(null);
-  };
 
   const handleSkillComplete = (data: {
     domain: string;
@@ -242,7 +201,7 @@ const JourneyCreatePage: React.FC = () => {
       roleKeywords: undefined,
       skills: data.skills,
     }));
-    setCurrentStep(3);
+    setCurrentStep(2);
     setError(null);
   };
 
@@ -301,9 +260,6 @@ const JourneyCreatePage: React.FC = () => {
       return;
     }
     setCurrentStep((prev) => prev - 1);
-    if (currentStep === 2) {
-      setJourneyType(null);
-    }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -381,8 +337,8 @@ const JourneyCreatePage: React.FC = () => {
     </div>
   );
 
-  // Step 3: Goal + Level + Skills + Language + Duration — all in one page
-  const renderStep3 = () => (
+  // Step 2: Goal + Level + Skills + Language + Duration — all in one page
+  const renderStep2 = () => (
     <div className="gsj-wizard-step">
       {/* Mục tiêu */}
       <div className="gsj-wizard-step__header">
@@ -670,7 +626,7 @@ const JourneyCreatePage: React.FC = () => {
           </section>
 
           <div className="gsj-progress gsj-progress--framed">
-            {[1, 2, 3].map((step) => (
+            {[1, 2].map((step) => (
               <div
                 key={step}
                 className={`gsj-progress__step ${currentStep >= step ? "gsj-progress__step--active" : ""} ${currentStep > step ? "gsj-progress__step--completed" : ""}`}
@@ -679,12 +635,8 @@ const JourneyCreatePage: React.FC = () => {
                   {currentStep > step ? <Check size={14} /> : step}
                 </div>
                 <span className="gsj-progress__step-label">
-                  {step === 1 && "Chọn loại"}
-                  {step === 2 &&
-                    (journeyType === JourneyType.CAREER
-                      ? "Nghề nghiệp"
-                      : "Kỹ năng")}
-                  {step === 3 && "Cấu hình"}
+                  {step === 1 && "Chọn Kỹ năng"}
+                  {step === 2 && "Cấu hình test"}
                 </span>
               </div>
             ))}
@@ -711,30 +663,21 @@ const JourneyCreatePage: React.FC = () => {
             onSubmit={handleSubmit}
             className="gsj-wizard-form gsj-wizard-form--framed"
           >
-            {currentStep === 1 && renderStep1()}
-            {currentStep === 2 && journeyType === JourneyType.CAREER && (
-              <CareerForm
-                onComplete={handleCareerComplete}
-                onBack={handleBack}
-              />
-            )}
-            {currentStep === 2 && journeyType === JourneyType.SKILL && (
+            {currentStep === 1 && (
               <SkillForm onComplete={handleSkillComplete} onBack={handleBack} />
             )}
-            {currentStep === 3 && renderStep3()}
+            {currentStep === 2 && renderStep2()}
 
-            {currentStep !== 2 && (
+            {currentStep !== 1 && (
               <div className="gsj-wizard-nav">
-                {currentStep > 1 && (
-                  <button
-                    type="button"
-                    className="gsj-btn gsj-btn--secondary"
-                    onClick={handleBack}
-                  >
-                    <ArrowLeft size={16} />
-                    Quay lại
-                  </button>
-                )}
+                <button
+                  type="button"
+                  className="gsj-btn gsj-btn--secondary"
+                  onClick={handleBack}
+                >
+                  <ArrowLeft size={16} />
+                  Quay lại
+                </button>
 
                 {currentStep < TOTAL_STEPS ? (
                   <button

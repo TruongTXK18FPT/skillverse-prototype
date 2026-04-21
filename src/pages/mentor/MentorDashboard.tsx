@@ -34,6 +34,7 @@ import EarningsTab from '../../components/mentor/EarningsTab';
 import ReviewsTab from '../../components/mentor/ReviewsTab';
 import MentorGradingDashboard from '../../components/mentor/MentorGradingDashboard';
 import MentorCertificateSettingsTab from '../../components/mentor/MentorCertificateSettingsTab';
+import MentorVerificationTab from '../../components/mentor/MentorVerificationTab';
 
 // Styles
 import '../../styles/MentorPage-HUD.css';
@@ -109,7 +110,7 @@ const MentorDashboard: React.FC = () => {
     return (
       <div className="mentor-hud-page">
         <div className="mentor-hud-loading-fullpage">
-          <MeowlKuruLoader size={80} />
+          <MeowlKuruLoader size="large" />
           <p>Đang tải...</p>
         </div>
       </div>
@@ -153,6 +154,9 @@ const MentorDashboard: React.FC = () => {
 
       case 'certificate-settings':
         return <MentorCertificateSettingsTab />;
+
+      case 'verification':
+        return <MentorVerificationTab />;
 
       default:
         return <MentorOverviewHUD onNavigate={handleNavigate} courseCount={courseCount} />;

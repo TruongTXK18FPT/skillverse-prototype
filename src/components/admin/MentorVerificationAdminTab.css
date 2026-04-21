@@ -1,0 +1,404 @@
+/* Neon Tech Cyan Blue CSS for Admin Mentor Verification Tab */
+
+.admin-mvt-container {
+  padding: 1.5rem;
+  background: var(--background-primary);
+  color: #e0e7ff;
+  font-family: inherit;
+  min-height: 100%;
+}
+
+[data-theme='dark'] .admin-mvt-container {
+  background: #0f172a;
+}
+
+/* Header */
+.admin-mvt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.3); /* cyan-500 border */
+}
+
+.admin-mvt-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #22d3ee; /* cyan-400 */
+  margin: 0;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+}
+
+/* Stats */
+.admin-mvt-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.admin-mvt-stat-card {
+  flex: 1;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8));
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  transition: all 0.2s;
+}
+
+.admin-mvt-stat-card.active {
+  border-color: #22d3ee;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+}
+
+.admin-mvt-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.admin-mvt-stat-icon--pending { background: linear-gradient(135deg, #facc15, #ca8a04); }
+.admin-mvt-stat-icon--approved { background: linear-gradient(135deg, #4ade80, #16a34a); }
+.admin-mvt-stat-icon--rejected { background: linear-gradient(135deg, #f87171, #dc2626); }
+.admin-mvt-stat-icon--all { background: linear-gradient(135deg, #22d3ee, #0284c7); }
+
+.admin-mvt-stat-info h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.admin-mvt-stat-info p {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+/* Filter Bar */
+.admin-mvt-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-mvt-filter-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.admin-mvt-filter-btn:hover {
+  background: rgba(148, 163, 184, 0.2);
+}
+
+.admin-mvt-filter-btn.active {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: #22d3ee;
+  color: #cffafe;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+}
+
+/* Table */
+.admin-mvt-table-wrapper {
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  overflow: hidden;
+}
+
+.admin-mvt-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-mvt-table th,
+.admin-mvt-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.admin-mvt-table th {
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.admin-mvt-table tbody tr {
+  transition: background 0.2s;
+}
+
+.admin-mvt-table tbody tr:hover {
+  background: rgba(6, 182, 212, 0.05);
+}
+
+.admin-mvt-avatar-cell {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-mvt-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #38bdf8;
+  border: 2px solid #0891b2;
+}
+
+.admin-mvt-name {
+  font-weight: 600;
+  color: #f1f5f9;
+}
+.admin-mvt-email {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Actions */
+.admin-mvt-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-mvt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.admin-mvt-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-mvt-btn--view {
+  background: rgba(6, 182, 212, 0.1);
+  color: #22d3ee;
+  border-color: rgba(6, 182, 212, 0.5);
+}
+.admin-mvt-btn--view:hover {
+  background: rgba(6, 182, 212, 0.2);
+}
+
+.admin-mvt-btn--approve {
+  background: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.5);
+}
+.admin-mvt-btn--approve:hover {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.admin-mvt-btn--reject {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.5);
+}
+.admin-mvt-btn--reject:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* Pagination */
+.admin-mvt-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.admin-mvt-page-info {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.admin-mvt-page-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-mvt-page-btn {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #cbd5e1;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.admin-mvt-page-btn:hover:not(:disabled) {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: #22d3ee;
+  color: #22d3ee;
+}
+.admin-mvt-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Modals Overlay */
+.admin-mvt-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  padding: 1rem;
+}
+
+.admin-mvt-modal {
+  background: #0f172a;
+  border: 1px solid #06b6d4;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUpNeon 0.3s ease-out;
+}
+
+@keyframes slideUpNeon {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-mvt-modal__header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-mvt-modal__header h3 {
+  margin: 0;
+  color: #22d3ee;
+  font-size: 1.25rem;
+}
+
+.admin-mvt-close-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+.admin-mvt-close-btn:hover {
+  color: #ef4444;
+}
+
+.admin-mvt-modal__body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  color: #cbd5e1;
+}
+
+.admin-mvt-modal__footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid rgba(6, 182, 212, 0.3);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* Modal Body Layouts */
+.admin-mvt-detail-group {
+  margin-bottom: 1.5rem;
+}
+.admin-mvt-detail-group h4 {
+  margin: 0 0 0.75rem 0;
+  color: #38bdf8;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-mvt-detail-row {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+.admin-mvt-detail-label {
+  font-weight: 600;
+  width: 120px;
+  flex-shrink: 0;
+  color: #94a3b8;
+}
+.admin-mvt-detail-value {
+  color: #f1f5f9;
+}
+.admin-mvt-link {
+  color: #22d3ee;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.admin-mvt-link:hover {
+  text-decoration: underline;
+}
+
+.admin-mvt-textarea {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  border-radius: 8px;
+  padding: 1rem;
+  color: #e0e7ff;
+  font-size: 0.95rem;
+  min-height: 100px;
+  resize: vertical;
+}
+.admin-mvt-textarea:focus {
+  outline: none;
+  border-color: #22d3ee;
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2);
+}
+
+.admin-mvt-evidence-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+.admin-mvt-evidence-card p {
+  margin: 0 0 0.5rem 0;
+}

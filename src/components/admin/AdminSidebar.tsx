@@ -22,6 +22,7 @@ import {
   Shield,
   ListChecks,
   Route,
+  ShieldCheck,
 } from "lucide-react";
 import "./AdminSidebar.css";
 
@@ -69,8 +70,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         },
         {
           id: "verification",
-          label: "Xác Thực",
+          label: "Xác Thực Account",
           icon: UserCheck,
+          allowedRoles: ["USER_ADMIN", "ADMIN"],
+        },
+        {
+          id: "mentor-skills",
+          label: "Duyệt Skill Mentor",
+          icon: ShieldCheck,
           allowedRoles: ["USER_ADMIN", "ADMIN"],
         },
       ],

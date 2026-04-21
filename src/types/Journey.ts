@@ -61,60 +61,6 @@ export const DOMAIN_OPTIONS = [
     icon: "📈",
     description: "Marketing, bán hàng, tài chính",
   },
-  {
-    value: "ENGINEERING",
-    label: "Kỹ thuật",
-    icon: "⚙️",
-    description: "Cơ khí, điện, xây dựng",
-  },
-  {
-    value: "HEALTHCARE",
-    label: "Y tế & Sức khỏe",
-    icon: "🏥",
-    description: "Y khoa, dược, chăm sóc sức khỏe",
-  },
-  {
-    value: "EDUCATION",
-    label: "Giáo dục",
-    icon: "📚",
-    description: "Giảng dạy, đào tạo, edtech",
-  },
-  {
-    value: "LOGISTICS",
-    label: "Logistics & Chuỗi cung ứng",
-    icon: "🚚",
-    description: "Vận tải, kho bãi, chain",
-  },
-  {
-    value: "LEGAL",
-    label: "Pháp luật",
-    icon: "⚖️",
-    description: "Tư pháp, doanh nghiệp, sở hữu trí tuệ",
-  },
-  {
-    value: "ARTS",
-    label: "Nghệ thuật & Sáng tạo",
-    icon: "🎭",
-    description: "Nhiếp ảnh, video, 3D, illustration",
-  },
-  {
-    value: "SERVICE",
-    label: "Dịch vụ",
-    icon: "🤝",
-    description: "Khách sạn, nhà hàng, event",
-  },
-  {
-    value: "SOCIALCOMMUNITY",
-    label: "Cộng đồng & Xã hội",
-    icon: "🌍",
-    description: "Phi lợi nhuận, truyền thông",
-  },
-  {
-    value: "AGRICULTUREENVIRONMENT",
-    label: "Nông nghiệp & Môi trường",
-    icon: "🌱",
-    description: "Nông nghiệp, sustainability",
-  },
 ] as const;
 
 export type DomainType = (typeof DOMAIN_OPTIONS)[number]["value"];
