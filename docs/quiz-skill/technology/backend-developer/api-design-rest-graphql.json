@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong thiết kế REST API, HTTP Method nào được sử dụng phổ biến nhất để tạo mới một tài nguyên (resource)?",
+    "options": [
+      "A. GET",
+      "B. POST",
+      "C. PUT",
+      "D. PATCH"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Theo tiêu chuẩn REST, POST được sử dụng để tạo mới một tài nguyên con trong một collection.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mã trạng thái (HTTP Status Code) nào là phù hợp nhất khi một tài nguyên được tạo thành công?",
+    "options": [
+      "A. 200 OK",
+      "B. 201 Created",
+      "C. 204 No Content",
+      "D. 400 Bad Request"
+    ],
+    "correctAnswer": "B",
+    "explanation": "201 Created cho biết yêu cầu đã thành công và dẫn đến việc tạo ra một tài nguyên mới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách đặt tên URI nào sau đây tuân thủ đúng quy tắc thiết kế RESTful cho việc lấy danh sách bài viết?",
+    "options": [
+      "A. GET /get-all-posts",
+      "B. GET /posts",
+      "C. POST /posts/list",
+      "D. GET /allPosts"
+    ],
+    "correctAnswer": "B",
+    "explanation": "REST khuyến nghị sử dụng danh từ số nhiều và HTTP Method để mô tả hành động, thay vì đưa động từ vào URI.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tính chất 'Idempotent' (độc lập) trong API có nghĩa là gì?",
+    "options": [
+      "A. Gọi API nhiều lần với cùng dữ liệu sẽ luôn trả về kết quả lỗi",
+      "B. Gọi API một lần hay nhiều lần với cùng dữ liệu đều tạo ra cùng một kết quả trên hệ thống",
+      "C. API chỉ có thể được gọi một lần duy nhất trong suốt vòng đời",
+      "D. API tự động thay đổi dữ liệu mỗi khi được gọi"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Idempotency đảm bảo rằng việc thực hiện một yêu cầu nhiều lần sẽ có tác động giống như thực hiện nó một lần duy nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong GraphQL, thành phần nào định nghĩa cấu trúc dữ liệu và các thao tác (Query, Mutation) mà client có thể thực hiện?",
+    "options": [
+      "A. Resolver",
+      "B. Schema",
+      "C. Fragment",
+      "D. Subscription"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Schema đóng vai trò như một bản hợp đồng định nghĩa các kiểu dữ liệu và các điểm truy cập dữ liệu trong GraphQL.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích chính của GraphQL so với REST API truyền thống là gì?",
+    "options": [
+      "A. Luôn nhanh hơn REST trong mọi trường hợp",
+      "B. Cho phép client yêu cầu chính xác các trường dữ liệu cần thiết, tránh Over-fetching",
+      "C. Không cần sử dụng giao thức HTTP",
+      "D. Bảo mật tuyệt đối hơn REST"
+    ],
+    "correctAnswer": "B",
+    "explanation": "GraphQL cho phép client định nghĩa cấu trúc phản hồi, giúp giảm lượng dữ liệu thừa gửi qua mạng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong REST API, HTTP Method nào thường được dùng để cập nhật một phần (partial update) của tài nguyên?",
+    "options": [
+      "A. PUT",
+      "B. POST",
+      "C. PATCH",
+      "D. UPDATE"
+    ],
+    "correctAnswer": "C",
+    "explanation": "PUT thường dùng để thay thế toàn bộ tài nguyên, trong khi PATCH dùng để cập nhật một phần.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mã lỗi 401 Unauthorized có ý nghĩa gì?",
+    "options": [
+      "A. Người dùng không có quyền truy cập tài nguyên này",
+      "B. Tài nguyên yêu cầu không tồn tại",
+      "C. Yêu cầu thiếu thông tin xác thực hợp lệ",
+      "D. Máy chủ đang bị quá tải"
+    ],
+    "correctAnswer": "C",
+    "explanation": "401 Unauthorized cho biết yêu cầu cần xác thực danh tính nhưng chưa được cung cấp hoặc không hợp lệ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thành phần nào trong GraphQL chịu trách nhiệm lấy dữ liệu thực tế cho một trường (field) cụ thể?",
+    "options": [
+      "A. Schema",
+      "B. Resolver",
+      "C. Query",
+      "D. Mutation"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Resolver là một hàm xử lý logic để trả về giá trị cho một trường trong Schema.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để thực hiện phân trang (pagination) trong REST API, thông tin thường được truyền qua đâu?",
+    "options": [
+      "A. Request Body",
+      "B. Query Parameters",
+      "C. URL Path",
+      "D. HTTP Header 'Cookie'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các tham số như page, limit, offset thường được truyền qua Query String (ví dụ: /users?page=2).",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Vấn đề 'N+1 queries' trong GraphQL thường xảy ra khi nào?",
+    "options": [
+      "A. Khi client yêu cầu quá nhiều trường dữ liệu",
+      "B. Khi server thực hiện một truy vấn cha và sau đó thực hiện N truy vấn con cho từng phần tử",
+      "C. Khi server bị treo do quá nhiều request đồng thời",
+      "D. Khi Schema quá lớn và phức tạp"
+    ],
+    "correctAnswer": "B",
+    "explanation": "N+1 xảy ra khi lấy danh sách đối tượng và với mỗi đối tượng lại gọi thêm một truy vấn riêng lẻ để lấy dữ liệu liên quan.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cách tốt nhất để thực hiện versioning cho REST API mà không làm thay đổi cấu trúc URL là gì?",
+    "options": [
+      "A. Thay đổi tên file code",
+      "B. Sử dụng Custom Header hoặc Accept Header",
+      "C. Tạo một database mới",
+      "D. Yêu cầu client cài đặt lại ứng dụng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Header (như Accept: application/vnd.myapi.v1+json) giúp giữ URL sạch và quản lý phiên bản qua metadata.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong GraphQL, nếu bạn muốn thực hiện thao tác thay đổi dữ liệu (thêm, sửa, xóa), bạn nên sử dụng Type nào?",
+    "options": [
+      "A. Query",
+      "B. Mutation",
+      "C. Subscription",
+      "D. Interface"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mutation là kiểu dữ liệu đặc biệt trong GraphQL dùng cho các hành động làm thay đổi trạng thái dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Header nào được sử dụng để chỉ định định dạng dữ liệu mà client gửi lên server (ví dụ: JSON)?",
+    "options": [
+      "A. Accept",
+      "B. Content-Type",
+      "C. Authorization",
+      "D. User-Agent"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Content-Type cho server biết kiểu media của dữ liệu trong phần body của request.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của việc sử dụng Rate Limiting trong thiết kế API là gì?",
+    "options": [
+      "A. Để thu phí người dùng",
+      "B. Để tăng tốc độ phản hồi của server",
+      "C. Để bảo vệ hệ thống khỏi việc bị lạm dụng hoặc tấn công DoS",
+      "D. Để giới hạn số lượng người dùng đăng ký"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Rate Limiting giới hạn số lượng request một client có thể gửi trong một khoảng thời gian để đảm bảo tính ổn định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế Error Response, thông tin nào sau đây KHÔNG nên trả về cho client ở môi trường Production?",
+    "options": [
+      "A. Một mã lỗi nội bộ (Error Code)",
+      "B. Một thông báo lỗi thân thiện (Message)",
+      "C. Chi tiết Stack Trace của mã nguồn",
+      "D. Đường dẫn tài liệu hướng dẫn sửa lỗi"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Stack Trace có thể tiết lộ lỗ hổng bảo mật và cấu trúc mã nguồn, không an toàn khi hiển thị công khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong REST, HTTP Method 'DELETE' có tính chất Idempotent không?",
+    "options": [
+      "A. Có",
+      "B. Không",
+      "C. Chỉ khi xóa thành công lần đầu",
+      "D. Tùy thuộc vào Database"
+    ],
+    "correctAnswer": "A",
+    "explanation": "DELETE được coi là idempotent vì gọi nhiều lần cùng một tài nguyên thì kết quả cuối cùng (tài nguyên bị xóa) vẫn không đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Caching' ở phía API giúp giải quyết vấn đề gì?",
+    "options": [
+      "A. Tăng tính bảo mật cho dữ liệu",
+      "B. Giảm tải cho server và giảm thời gian phản hồi cho client",
+      "C. Tự động sửa lỗi code",
+      "D. Giảm kích thước file cài đặt ứng dụng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Caching lưu trữ kết quả tạm thời để phục vụ các yêu cầu giống nhau nhanh hơn mà không cần xử lý lại từ đầu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "GraphQL Scalar Type nào được sử dụng cho các giá trị số nguyên?",
+    "options": [
+      "A. Float",
+      "B. String",
+      "C. Int",
+      "D. ID"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Int là kiểu vô hướng (scalar) mặc định trong GraphQL cho số nguyên 32-bit.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một API trả về mã lỗi 429, client nên làm gì?",
+    "options": [
+      "A. Thử lại ngay lập tức với tốc độ cao hơn",
+      "B. Dừng gửi yêu cầu và đợi một khoảng thời gian trước khi thử lại",
+      "C. Thay đổi phương thức từ GET sang POST",
+      "D. Xóa toàn bộ dữ liệu ứng dụng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mã 429 Too Many Requests báo hiệu client đã vượt quá giới hạn lượt gọi cho phép.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Đâu là một công cụ phổ biến dùng để viết tài liệu (documentation) cho REST API?",
+    "options": [
+      "A. Photoshop",
+      "B. Swagger (OpenAPI)",
+      "C. Excel",
+      "D. ESLint"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Swagger/OpenAPI là tiêu chuẩn công nghiệp để mô tả và tài liệu hóa RESTful API.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong GraphQL, 'Introspection' là tính năng cho phép làm gì?",
+    "options": [
+      "A. Tự động tối ưu hóa câu lệnh SQL",
+      "B. Truy vấn chính Schema để biết thông tin về các Type và Field hỗ trợ",
+      "C. Mã hóa dữ liệu truyền tải",
+      "D. Kết nối nhiều database cùng lúc"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Introspection cho phép client hỏi server về các khả năng của nó, giúp các công cụ như GraphiQL hoạt động.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Stateless' trong REST API có nghĩa là gì?",
+    "options": [
+      "A. Server không lưu trữ bất kỳ thông tin ngữ cảnh nào của client giữa các request",
+      "B. API không bao giờ bị lỗi",
+      "C. Dữ liệu trong database không bao giờ thay đổi",
+      "D. Client không cần gửi Header"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Stateless có nghĩa là mỗi request phải chứa đầy đủ thông tin để server hiểu và xử lý độc lập.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế API, việc thay đổi nào sau đây được coi là 'Breaking Change' (gây lỗi cho client cũ)?",
+    "options": [
+      "A. Thêm một trường dữ liệu mới vào JSON response",
+      "B. Thêm một endpoint mới",
+      "C. Xóa hoặc đổi tên một trường dữ liệu đang tồn tại",
+      "D. Cải thiện hiệu năng xử lý ở backend"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc xóa hoặc đổi tên trường khiến client cũ không tìm thấy dữ liệu họ kỳ vọng, dẫn đến lỗi ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao nên sử dụng UUID thay vì ID tăng dần (Auto-increment) trong public API?",
+    "options": [
+      "A. UUID ngắn hơn và dễ nhớ hơn",
+      "B. Tránh việc lộ số lượng tài nguyên và ngăn chặn việc đoán ID tiếp theo",
+      "C. UUID giúp database chạy nhanh hơn",
+      "D. Chỉ UUID mới có thể dùng làm Primary Key"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng UUID tăng tính bảo mật bằng cách làm cho các ID không thể dự đoán được.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong thiết kế RESTful API, phương thức nào sau đây được coi là Idempotent (thực hiện nhiều lần cùng một request có kết quả tương đương thực hiện một lần)?",
+    "options": [
+      "A. POST",
+      "B. PUT",
+      "C. PATCH (thông thường)",
+      "D. CONNECT"
+    ],
+    "correctAnswer": "B",
+    "explanation": "PUT được thiết kế để thay thế hoàn toàn tài nguyên, nên dù gọi nhiều lần với cùng dữ liệu, trạng thái cuối cùng của tài nguyên vẫn không đổi. POST tạo tài nguyên mới, PATCH không đảm bảo idempotent nếu thực hiện các thao tác như tăng giá trị (increment).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Vấn đề N+1 query trong GraphQL thường xảy ra ở đâu và giải pháp phổ biến nhất là gì?",
+    "options": [
+      "A. Xảy ra ở tầng Schema; giải pháp là chia nhỏ Type.",
+      "B. Xảy ra ở tầng Resolver; giải pháp là sử dụng DataLoader để batching và caching.",
+      "C. Xảy ra ở Client; giải pháp là giảm số lượng field yêu cầu.",
+      "D. Xảy ra ở Network; giải pháp là nén dữ liệu Gzip."
+    ],
+    "correctAnswer": "B",
+    "explanation": "N+1 xảy ra khi resolver của một danh sách gọi thêm N query cho các trường con. DataLoader giúp gom các ID lại để thực hiện một query duy nhất (batching), tối ưu hóa hiệu suất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế API cho ứng dụng di động có kết nối mạng không ổn định, kỹ thuật nào giúp đảm bảo một hành động thanh toán không bị thực hiện hai lần khi người dùng nhấn nút nhiều lần?",
+    "options": [
+      "A. Sử dụng HTTP ETag.",
+      "B. Sử dụng Idempotency Key trong Header của request.",
+      "C. Rút ngắn thời gian Timeout của API.",
+      "D. Sử dụng phương thức GET thay cho POST."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Idempotency Key (thường là một UUID) cho phép server nhận diện các request trùng lặp. Nếu server thấy key đã được xử lý, nó sẽ trả về kết quả cũ thay vì thực hiện lại giao dịch.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong GraphQL, sự khác biệt chính giữa 'Query' và 'Mutation' là gì?",
+    "options": [
+      "A. Query chạy bất đồng bộ, Mutation chạy đồng bộ.",
+      "B. Query dùng để đọc dữ liệu, Mutation dùng để thay đổi dữ liệu và chúng chạy tuần tự (serially).",
+      "C. Mutation không thể trả về dữ liệu sau khi thực hiện.",
+      "D. Query yêu cầu quyền admin, Mutation thì không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Query được thiết kế để đọc dữ liệu và có thể chạy song song. Mutation được thiết kế để thay đổi trạng thái dữ liệu và GraphQL quy định chúng phải chạy tuần tự để tránh race condition.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần thiết kế một API cho phép cập nhật một phần thông tin người dùng (chỉ cập nhật email mà không ảnh hưởng đến các trường khác). Lựa chọn nào là tối ưu nhất theo chuẩn REST?",
+    "options": [
+      "A. POST /users/update-email",
+      "B. PUT /users/{id}",
+      "C. PATCH /users/{id}",
+      "D. GET /users/{id}?action=updateEmail"
+    ],
+    "correctAnswer": "C",
+    "explanation": "PATCH được sử dụng để cập nhật một phần (partial update) tài nguyên. PUT yêu cầu gửi toàn bộ tài nguyên, nếu thiếu trường có thể làm mất dữ liệu cũ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để ngăn chặn việc một client gửi quá nhiều request trong một khoảng thời gian ngắn gây treo hệ thống, bạn nên triển khai cơ chế nào?",
+    "options": [
+      "A. Payload Validation",
+      "B. Rate Limiting (ví dụ Token Bucket algorithm)",
+      "C. Database Indexing",
+      "D. Content Negotiation"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rate Limiting giới hạn số lượng request từ một client hoặc IP trong một đơn vị thời gian, giúp bảo vệ tài nguyên hệ thống khỏi bị quá tải hoặc tấn công Brute-force.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong GraphQL Schema Design, tại sao nên sử dụng 'Input Types' thay vì liệt kê trực tiếp các đối số (arguments) trong Mutation?",
+    "options": [
+      "A. Để tăng tốc độ thực thi của resolver.",
+      "B. Để dễ dàng tái sử dụng cấu trúc dữ liệu và duy trì tính tương thích ngược (backward compatibility).",
+      "C. Vì GraphQL không cho phép quá 3 đối số trong một Mutation.",
+      "D. Để tự động hóa việc tạo documentation."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Input Types giúp gom nhóm các tham số liên quan, làm cho Schema gọn gàng hơn và khi cần thêm trường mới, ta chỉ cần sửa Input Type mà không làm hỏng signature của hàm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một API trả về mã lỗi 403 Forbidden có nghĩa là gì?",
+    "options": [
+      "A. Client chưa đăng nhập (Unauthenticated).",
+      "B. Server không tìm thấy tài nguyên yêu cầu.",
+      "C. Client đã đăng nhập nhưng không có quyền truy cập tài nguyên (Unauthorized/Permission denied).",
+      "D. Request gửi lên sai định dạng dữ liệu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "401 Unauthorized dành cho trường hợp thiếu thông tin danh tính. 403 Forbidden dành cho trường hợp server biết bạn là ai nhưng bạn không có quyền thực hiện hành động này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế phân trang (pagination) cho một danh sách dữ liệu cực lớn và thay đổi liên tục (như Newsfeed Facebook), phương pháp nào hiệu quả nhất?",
+    "options": [
+      "A. Offset-based pagination (Limit/Offset).",
+      "B. Cursor-based pagination (Sử dụng ID hoặc Timestamp của bản ghi cuối).",
+      "C. Tải tất cả dữ liệu về client rồi phân trang ở giao diện.",
+      "D. Random-access pagination."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cursor-based pagination ổn định hơn khi dữ liệu thay đổi (không bị nhảy trang hoặc lặp bản ghi) và hiệu suất tốt hơn Offset trên các tập dữ liệu lớn vì không phải quét qua các bản ghi cũ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Interface' hoặc 'Union' trong GraphQL là gì?",
+    "options": [
+      "A. Giảm kích thước file Schema.",
+      "B. Cho phép một trường có thể trả về nhiều kiểu đối tượng khác nhau.",
+      "C. Tự động mã hóa dữ liệu nhạy cảm.",
+      "D. Thay thế hoàn toàn cho việc sử dụng Fragment ở phía Client."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Interface và Union cho phép định nghĩa các trường có tính đa hình (polymorphism), giúp client có thể query các loại đối tượng khác nhau trong cùng một danh sách kết quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong REST, chuẩn thiết kế nào gợi ý việc cung cấp các liên kết (links) đến các hành động tiếp theo trong response body?",
+    "options": [
+      "A. JSON-RPC",
+      "B. SOAP",
+      "C. HATEOAS",
+      "D. GraphQL Federation"
+    ],
+    "correctAnswer": "C",
+    "explanation": "HATEOAS (Hypermedia as the Engine of Application State) là một thành phần của REST cho phép client khám phá các hành động khả dụng thông qua các liên kết được trả về từ server.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Versioning cho API, cách tiếp cận nào giúp tránh làm thay đổi URL nhưng vẫn cho phép client chọn phiên bản dữ liệu mong muốn?",
+    "options": [
+      "A. URI Versioning (ví dụ /v2/users).",
+      "B. Media Type Versioning (Sử dụng Accept Header).",
+      "C. Query Parameter Versioning (ví dụ ?version=2).",
+      "D. Không cần versioning, luôn ghi đè API cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Accept Header (ví dụ: application/vnd.myapi.v2+json) giúp giữ nguyên URL sạch sẽ (semantic URL) và cho phép quản lý phiên bản thông qua nội dung thương lượng (content negotiation).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng HTTP status code 200 cho tất cả các phản hồi (bao gồm cả lỗi) trong REST API được coi là một 'anti-pattern'?",
+    "options": [
+      "A. Vì nó làm tăng kích thước của gói tin HTTP.",
+      "B. Vì nó gây khó khăn cho việc giám sát (monitoring) và các lớp hạ tầng như Load Balancer/Proxy để nhận biết lỗi.",
+      "C. Vì trình duyệt sẽ không thể hiển thị dữ liệu JSON.",
+      "D. Vì nó vi phạm bản quyền của giao thức HTTP."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các công cụ giám sát và hạ tầng mạng dựa vào HTTP status code để phân tích sức khỏe hệ thống. Nếu luôn trả về 200, các hệ thống cảnh báo tự động sẽ không phát hiện được lỗi nghiệp vụ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong GraphQL, làm thế nào để giới hạn độ phức tạp của một query nhằm tránh bị tấn công từ chối dịch vụ (DoS)?",
+    "options": [
+      "A. Sử dụng Query Cost Analysis để tính điểm và chặn các query quá nặng.",
+      "B. Chỉ cho phép các query có tối đa 2 cấp lồng nhau.",
+      "C. Yêu cầu client phải gửi kèm mã token cho mỗi field.",
+      "D. Tắt tính năng Introspection trên môi trường Production."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Query Cost Analysis gán trọng số cho mỗi field và tính tổng điểm của query. Nếu vượt quá ngưỡng cho phép, server sẽ từ chối thực thi, giúp ngăn chặn các query lồng nhau vô tận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi một API endpoint mất quá nhiều thời gian để xử lý (ví dụ: xuất báo cáo nặng), giải pháp thiết kế nào là tốt nhất để không làm treo client?",
+    "options": [
+      "A. Tăng timeout của server lên 10 phút.",
+      "B. Trả về 202 Accepted kèm theo một link để client kiểm tra trạng thái (polling) hoặc webhook.",
+      "C. Yêu cầu client gửi nhiều request nhỏ liên tục.",
+      "D. Luôn trả về dữ liệu rỗng nếu quá 5 giây."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mẫu thiết kế Asynchronous Request-Reply (202 Accepted) giúp server tiếp nhận yêu cầu và xử lý ngầm, tránh việc client phải giữ kết nối mở quá lâu gây lãng phí tài nguyên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cơ chế nào trong HTTP giúp client kiểm tra xem dữ liệu trên server có thay đổi hay không trước khi tải lại toàn bộ nội dung?",
+    "options": [
+      "A. Authorization Header",
+      "B. If-None-Match header kết hợp với ETag.",
+      "C. Keep-Alive header.",
+      "D. Content-Type header."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ETag là một mã băm đại diện cho phiên bản tài nguyên. Client gửi ETag cũ qua If-None-Match, nếu server thấy dữ liệu chưa đổi sẽ trả về 304 Not Modified mà không kèm body, giúp tiết kiệm băng thông.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong GraphQL, 'Directive' thường được sử dụng để làm gì?",
+    "options": [
+      "A. Để định nghĩa kiểu dữ liệu mới.",
+      "B. Để thay đổi logic thực thi của một field hoặc fragment (ví dụ: @skip, @include).",
+      "C. Để kết nối với database trực tiếp từ Schema.",
+      "D. Để thay thế cho Resolver."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Directives cung cấp cách để thay đổi hành vi của query một cách linh hoạt mà không cần thay đổi cấu trúc Schema, ví dụ như ẩn/hiện một trường dựa trên biến truyền vào.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt lớn nhất về mặt dữ liệu trả về giữa REST và GraphQL là gì?",
+    "options": [
+      "A. REST luôn trả về JSON, GraphQL luôn trả về XML.",
+      "B. REST thường bị Over-fetching hoặc Under-fetching, GraphQL cho phép client lấy đúng dữ liệu cần thiết.",
+      "C. REST nhanh hơn GraphQL trong mọi trường hợp.",
+      "D. GraphQL không hỗ trợ caching ở bất kỳ tầng nào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong REST, cấu trúc response do server quyết định (thường dư hoặc thiếu trường). Trong GraphQL, client tự định nghĩa cấu trúc response, giúp tối ưu hóa lượng dữ liệu truyền tải.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế lỗi cho API, một Error Contract tốt nên bao gồm những thông tin gì?",
+    "options": [
+      "A. Chỉ cần mã HTTP status code.",
+      "B. Mã lỗi nội bộ (code), thông báo dễ hiểu (message), và chi tiết các trường lỗi (details/errors).",
+      "C. Toàn bộ Stack trace của server để dễ debug.",
+      "D. Tên của database table bị lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một error contract chuẩn giúp client biết chính xác chuyện gì đã xảy ra (thông qua code/message) và cần sửa gì (thông qua details, ví dụ: lỗi validation ở field nào). Tuyệt đối không expose stack trace vì lý do bảo mật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices, GraphQL Federation giải quyết vấn đề gì?",
+    "options": [
+      "A. Giúp gộp nhiều GraphQL service nhỏ thành một Unified Graph duy nhất.",
+      "B. Giúp chuyển đổi REST API sang GraphQL tự động.",
+      "C. Tăng tốc độ giải mã JSON.",
+      "D. Thay thế hoàn toàn cho API Gateway."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Federation cho phép các team quản lý các phần Schema riêng biệt (subgraphs) nhưng client chỉ cần truy vấn qua một Gateway duy nhất để lấy dữ liệu từ nhiều service.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Phương thức HTTP nào nên được sử dụng để thực hiện hành động 'khóa tài khoản người dùng' trong một hệ thống RESTful chuẩn?",
+    "options": [
+      "A. DELETE /users/{id}",
+      "B. POST /users/{id}/lock",
+      "C. GET /users/{id}?lock=true",
+      "D. PUT /users/{id}/status"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi một hành động không tương ứng trực tiếp với thao tác CRUD trên tài nguyên (như lock/unlock), việc sử dụng POST lên một sub-resource (controller pattern) là cách tiếp cập thực tế và phổ biến.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc caching kết quả GraphQL lại khó khăn hơn so với REST API ở tầng HTTP Cache (như Varnish, CDN)?",
+    "options": [
+      "A. Vì GraphQL không sử dụng JSON.",
+      "B. Vì GraphQL hầu hết sử dụng POST request và cùng một endpoint duy nhất.",
+      "C. Vì GraphQL query quá dài.",
+      "D. Vì GraphQL không hỗ trợ header Cache-Control."
+    ],
+    "correctAnswer": "B",
+    "explanation": "HTTP Cache truyền thống dựa trên URL và phương thức GET. GraphQL dùng POST cho mọi query và chung một URL (/graphql), khiến các proxy không thể phân biệt các yêu cầu khác nhau để cache hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế API, thuật ngữ 'Breaking Change' ám chỉ điều gì?",
+    "options": [
+      "A. Việc thêm một trường mới vào response JSON.",
+      "B. Việc thay đổi logic xử lý bên trong mà không đổi output.",
+      "C. Việc xóa một trường, đổi tên trường hoặc thay đổi kiểu dữ liệu khiến client cũ bị lỗi.",
+      "D. Việc nâng cấp phiên bản database server."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Breaking change là những thay đổi làm hỏng hợp đồng (contract) đã thống nhất với client, buộc client phải cập nhật code để không bị crash hoặc lỗi logic.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn nên làm gì nếu muốn bảo mật các trường nhạy cảm (như số điện thoại) trong GraphQL Schema dựa trên vai trò người dùng?",
+    "options": [
+      "A. Tạo hai Schema riêng biệt cho hai loại người dùng.",
+      "B. Sử dụng Custom Directives hoặc kiểm tra quyền trong hàm Resolver của trường đó.",
+      "C. Mã hóa dữ liệu ở tầng Database.",
+      "D. Yêu cầu Client tự ẩn trường đó đi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Field-level authorization trong GraphQL cho phép kiểm soát quyền truy cập đến từng trường cụ thể. Resolver là nơi lý tưởng để thực hiện kiểm tra này trước khi trả về dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong REST API, nếu một request thành công nhưng không trả về dữ liệu (ví dụ: xóa thành công), status code nào là hợp lý nhất?",
+    "options": [
+      "A. 200 OK",
+      "B. 201 Created",
+      "C. 204 No Content",
+      "D. 404 Not Found"
+    ],
+    "correctAnswer": "C",
+    "explanation": "204 No Content thông báo rằng request đã được xử lý thành công và server không có nội dung gì thêm để gửi về trong body, thường dùng cho DELETE hoặc các lệnh update không cần trả về kết quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong thiết kế REST API, khi thực hiện cập nhật một phần tài nguyên (Partial Update), tại sao phương thức PATCH lại được coi là phức tạp hơn PUT về mặt đảm bảo tính nhất quán dữ liệu (Data Consistency)?",
+    "options": [
+      "A. PATCH yêu cầu client phải gửi toàn bộ trạng thái của tài nguyên, dẫn đến lãng phí băng thông.",
+      "B. PATCH không có tính idempotent mặc định, việc gửi lại cùng một yêu cầu PATCH (như JSON Patch) có thể dẫn đến kết quả sai lệch nếu không được xử lý cẩn thận.",
+      "C. PATCH bắt buộc phải sử dụng ETag để kiểm soát phiên bản, trong khi PUT thì không cần.",
+      "D. PATCH chỉ hỗ trợ định dạng application/json, không hỗ trợ các media type tùy chỉnh khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khác với PUT (thay thế toàn bộ tài nguyên - idempotent), PATCH thường áp dụng một tập hợp các thay đổi. Nếu sử dụng JSON Patch (add/remove/replace), việc thực hiện lại cùng một thao tác trên một trạng thái đã thay đổi có thể gây lỗi hoặc sai dữ liệu nếu logic server không thiết kế tính idempotent riêng biệt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để giải quyết vấn đề N+1 query trong GraphQL mà vẫn đảm bảo tính tách biệt (decoupling) giữa các Resolver, giải pháp kiến trúc nào là tối ưu nhất?",
+    "options": [
+      "A. Sử dụng Fetching Strategy kiểu Eager Loading ngay tại Root Resolver để lấy hết dữ liệu liên quan.",
+      "B. Triển khai cơ chế DataLoader để gom nhóm (batching) và lưu nháp (caching) các yêu cầu truy vấn dữ liệu trong cùng một chu kỳ request.",
+      "C. Chuyển toàn bộ logic truy vấn vào Database View để giảm số lượng câu lệnh SQL thực thi.",
+      "D. Sử dụng GraphQL Subscriptions để đẩy dữ liệu liên quan về client một cách không đồng bộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DataLoader là pattern chuẩn giúp thu thập các ID cần truy vấn trong một tick của event loop, sau đó thực hiện một truy vấn batch duy nhất (ví dụ: WHERE IN), giúp giải quyết N+1 mà không làm các resolver phụ thuộc lẫn nhau.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống API Versioning cho một sản phẩm có hàng triệu người dùng, phương pháp 'Media Type Versioning' (Accept Header) có ưu điểm lớn nhất nào so với 'URI Versioning'?",
+    "options": [
+      "A. Giúp Client dễ dàng khám phá các phiên bản mới thông qua trình duyệt web thông thường.",
+      "B. Không làm thay đổi cấu trúc URL, giữ cho tài nguyên có một định danh duy nhất (URI) và tuân thủ nguyên tắc HATEOAS.",
+      "C. Giảm tải cho hệ thống CDN vì các phiên bản khác nhau sẽ có chung một cache key.",
+      "D. Đơn giản hóa việc cấu hình routing trên các API Gateway như Nginx hay Kong."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Media Type Versioning tuân thủ triết lý REST: một tài nguyên nên có một URI duy nhất. Việc thay đổi phiên bản qua Header giúp URI không bị phân mảnh, mặc dù việc cấu hình cache và testing sẽ phức tạp hơn URI versioning.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong GraphQL, khi nào bạn nên ưu tiên sử dụng 'Interface' thay vì 'Union'?",
+    "options": [
+      "A. Khi các object type không có bất kỳ trường (field) chung nào nhưng cần được trả về trong cùng một danh sách.",
+      "B. Khi bạn muốn thực hiện phân trang (pagination) cho một danh sách các đối tượng khác loại hoàn toàn.",
+      "C. Khi các object type chia sẻ một tập hợp các trường dữ liệu chung và bạn muốn đảm bảo tính nhất quán về schema cho các trường đó.",
+      "D. Khi bạn muốn giảm độ phức tạp của câu truy vấn phía Client khi sử dụng fragment."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Interface định nghĩa một tập hợp các trường bắt buộc mà các Object Type thực thi nó phải có. Union chỉ đơn thuần là tập hợp các Type mà không bắt buộc có trường chung. Interface giúp đảm bảo tính nhất quán dữ liệu tốt hơn khi có sự giao thoa thuộc tính.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống API cần triển khai Rate Limiting ở mức phân tán (distributed). Thuật toán nào sau đây giúp hạn chế tình trạng 'bursting' (tăng vọt lưu lượng) tại thời điểm chuyển giao giữa các cửa sổ thời gian (window boundaries)?",
+    "options": [
+      "A. Fixed Window Counter",
+      "B. Sliding Window Log",
+      "C. Leaky Bucket",
+      "D. Sliding Window Counter"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Sliding Window Counter kết hợp giữa Fixed Window và trọng số của cửa sổ trước đó để làm mượt tỷ lệ request, khắc phục nhược điểm cho phép gấp đôi lưu lượng tại điểm giao thoa của Fixed Window.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao trong thiết kế GraphQL Schema nâng cao, việc sử dụng 'Input Object Types' cho Mutation lại được khuyến nghị hơn là liệt kê các đối số (arguments) riêng lẻ?",
+    "options": [
+      "A. Để tăng tốc độ thực thi của resolver do dữ liệu được đóng gói sẵn.",
+      "B. Để hỗ trợ khả năng tái sử dụng schema, dễ dàng mở rộng (evolution) mà không gây breaking changes và hỗ trợ tốt cho các công cụ client-side.",
+      "C. Để bắt buộc client phải gửi đầy đủ tất cả các trường dữ liệu mỗi khi gọi mutation.",
+      "D. Để tự động hóa việc validate dữ liệu ở tầng network mà không cần code logic."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Input Object giúp Mutation gọn gàng hơn. Khi cần thêm trường mới, ta chỉ cần bổ sung vào Input Object mà không làm thay đổi chữ ký (signature) của mutation, giúp duy trì tính tương thích ngược tốt hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong REST API, mã trạng thái (HTTP Status Code) nào là phù hợp nhất khi một request hợp lệ về cú pháp nhưng vi phạm các quy tắc nghiệp vụ (business logic) của hệ thống?",
+    "options": [
+      "A. 400 Bad Request",
+      "B. 403 Forbidden",
+      "C. 422 Unprocessable Entity",
+      "D. 500 Internal Server Error"
+    ],
+    "correctAnswer": "C",
+    "explanation": "422 (WebDAV/RFC 4918) được sử dụng rộng rãi cho các lỗi semantic/nghiệp vụ khi server hiểu yêu cầu nhưng không thể thực hiện vì dữ liệu không hợp lệ về mặt logic (ví dụ: số dư tài khoản không đủ).",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế Pagination cho một tập dữ liệu cực lớn và thay đổi liên tục (như bảng tin mạng xã hội), tại sao Cursor-based Pagination lại ưu việt hơn Offset-based Pagination?",
+    "options": [
+      "A. Cursor-based cho phép client nhảy đến một trang bất kỳ (ví dụ trang 100) nhanh hơn.",
+      "B. Cursor-based giúp tránh hiện tượng bỏ sót hoặc lặp lại phần tử khi có dữ liệu mới được chèn vào giữa các lần fetch.",
+      "C. Cursor-based giảm thiểu tổng số lượng bản ghi cần lưu trữ trong database.",
+      "D. Cursor-based dễ triển khai hơn trên các hệ quản trị cơ sở dữ liệu quan hệ (RDBMS)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Offset-based dựa trên số lượng bản ghi đã bỏ qua, nếu dữ liệu mới được thêm vào, vị trí offset sẽ bị đẩy xuống gây lặp dữ liệu. Cursor dựa trên một mốc định danh (ID/Timestamp), đảm bảo tính ổn định của tập kết quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để bảo vệ hệ thống GraphQL khỏi các truy vấn tấn công từ chối dịch vụ (DoS) thông qua các câu lệnh lồng nhau quá sâu, giải pháp nào là hiệu quả nhất?",
+    "options": [
+      "A. Giới hạn kích thước (bytes) của chuỗi query gửi lên.",
+      "B. Sử dụng Query Depth Limiting kết hợp với Query Cost Analysis.",
+      "C. Chỉ cho phép các truy vấn đã được định nghĩa trước (Persisted Queries).",
+      "D. Sử dụng Timeout cho tất cả các resolver."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Query Depth Limiting ngăn chặn các truy vấn lồng nhau vô hạn. Query Cost Analysis gán trọng số cho các field/tài nguyên để từ chối các truy vấn quá 'đắt' về mặt tính toán, bảo vệ tài nguyên server toàn diện hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong ngữ cảnh REST API, cơ chế 'Optimistic Concurrency Control' thường được thực hiện thông qua HTTP Header nào?",
+    "options": [
+      "A. Cache-Control và Vary",
+      "B. If-Match và ETag",
+      "C. Authorization và Bearer",
+      "D. Content-Type và Accept"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Client gửi ETag của tài nguyên mà họ đã đọc trong header If-Match. Server sẽ so sánh ETag này, nếu tài nguyên đã bị thay đổi bởi người khác (ETag khác), server trả về 412 Precondition Failed, ngăn chặn việc ghi đè dữ liệu cũ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai GraphQL Federation (Microservices), thành phần nào chịu trách nhiệm phân tách một truy vấn của Client thành các truy vấn nhỏ cho từng service con và tổng hợp kết quả?",
+    "options": [
+      "A. Subgraph Service",
+      "B. API Gateway / Apollo Router",
+      "C. Schema Registry",
+      "D. DataLoader"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong kiến trúc Federation, Gateway (hoặc Router) đóng vai trò trung tâm để phân tích Query Plan, điều phối các request đến các Subgraphs và merge dữ liệu trả về cho client.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một API cần hỗ trợ cả Web và Mobile. Mobile có băng thông thấp và yêu cầu ít trường dữ liệu hơn Web. Giải pháp thiết kế nào tối ưu nhất để tránh tạo ra quá nhiều endpoint riêng biệt?",
+    "options": [
+      "A. Sử dụng REST và yêu cầu Mobile tự lọc dữ liệu sau khi nhận.",
+      "B. Sử dụng GraphQL để Client tự định nghĩa tập dữ liệu (fields) cần thiết.",
+      "C. Sử dụng REST với tham số query string như ?fields=id,name để lọc dữ liệu tại server.",
+      "D. Tạo các endpoint riêng như /mobile/user và /web/user."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GraphQL giải quyết triệt để vấn đề Over-fetching (lấy thừa dữ liệu) bằng cách cho phép client chỉ định chính xác các trường cần thiết, cực kỳ phù hợp cho môi trường mobile băng thông hạn chế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong thiết kế RESTful, thao tác 'chuyển tiền' giữa hai tài khoản nên được thiết kế như thế nào để đảm bảo đúng ngữ nghĩa (semantics)?",
+    "options": [
+      "A. POST /accounts/{id}/transfer với body chứa số tiền và tài khoản đích.",
+      "B. PUT /accounts/{id}/balance để cập nhật số dư mới.",
+      "C. POST /transfers với body chứa thông tin nguồn, đích và số tiền.",
+      "D. PATCH /accounts/{id} để trừ tiền tài khoản nguồn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong REST, nên coi 'Transfer' (giao dịch chuyển tiền) là một tài nguyên (Resource). Việc POST vào collection /transfers giúp lưu trữ lịch sử giao dịch và thực hiện các logic nghiệp vụ phức tạp một cách tường minh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một hệ thống GraphQL cần xử lý các tác vụ tốn thời gian (Long-running tasks), cách tiếp cận nào là tốt nhất để đảm bảo trải nghiệm người dùng?",
+    "options": [
+      "A. Tăng timeout của HTTP request lên mức tối đa.",
+      "B. Sử dụng Mutation để bắt đầu tác vụ, trả về một Job ID, sau đó Client dùng Subscription hoặc Polling để theo dõi trạng thái.",
+      "C. Thực hiện tác vụ đồng bộ ngay trong Resolver và trả về kết quả khi hoàn tất.",
+      "D. Chia nhỏ tác vụ thành nhiều Mutation nhỏ và gọi liên tiếp từ Client."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GraphQL (giống REST) không nên giữ kết nối HTTP quá lâu cho các tác vụ đồng bộ. Trả về một Job ID (Async Task pattern) và theo dõi qua Subscription là cách tiếp cận chuẩn cho hệ thống phân tán.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng Global ID (ví dụ: Relay Global Object Identification) lại quan trọng trong các hệ thống GraphQL quy mô lớn?",
+    "options": [
+      "A. Để thay thế hoàn toàn UUID của database nhằm bảo mật thông tin.",
+      "B. Để giúp Client-side Cache (như Apollo hoặc Relay) có thể định danh duy nhất và chuẩn hóa (normalize) mọi đối tượng trong toàn bộ hệ thống.",
+      "C. Để giảm kích thước của dữ liệu JSON trả về.",
+      "D. Để tăng tốc độ thực thi các câu lệnh JOIN trong database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Global ID (thường là base64 của Type + ID) giúp client-side cache biết chắc chắn rằng một object thuộc loại nào và ID nào, tránh xung đột giữa các object của các type khác nhau có cùng ID số nguyên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong REST API, khi thiết kế cơ chế 'Soft Delete' cho tài nguyên, phương thức và mã trạng thái nào thường được sử dụng?",
+    "options": [
+      "A. DELETE /resource/{id} và trả về 204 No Content.",
+      "B. POST /resource/{id}/archive và trả về 200 OK.",
+      "C. PATCH /resource/{id} với body { 'is_deleted': true } và trả về 200 OK.",
+      "D. DELETE /resource/{id} và trả về 410 Gone."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Dưới góc độ API consumer, họ không cần quan tâm server xóa vật lý hay xóa logic. Phương thức DELETE là đúng ngữ nghĩa nhất. Trả về 204 No Content để báo hiệu thao tác thành công và không có nội dung trả về.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Vấn đề 'Schema Stitching' trong GraphQL thường gặp khó khăn gì dẫn đến việc 'Apollo Federation' ra đời để thay thế?",
+    "options": [
+      "A. Schema Stitching không hỗ trợ các ngôn ngữ lập trình khác ngoài JavaScript.",
+      "B. Schema Stitching yêu cầu Gateway phải hiểu quá sâu về logic của các service con, gây khó khăn trong việc bảo trì và mở rộng độc lập.",
+      "C. Schema Stitching làm chậm tốc độ truy vấn do phải parse schema nhiều lần.",
+      "D. Schema Stitching không hỗ trợ cơ chế xác thực (Authentication)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Schema Stitching thường tập trung logic cấu hình tại Gateway. Federation đẩy trách nhiệm định nghĩa schema cho các Subgraph, giúp các team microservices có tính tự chủ (autonomy) cao hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng HTTP Caching, chỉ thị 'stale-while-revalidate' trong header Cache-Control có ý nghĩa gì?",
+    "options": [
+      "A. Bắt buộc client phải xóa cache ngay lập tức sau khi hết hạn.",
+      "B. Cho phép client sử dụng dữ liệu cũ (stale) trong khi server đang âm thầm fetch dữ liệu mới để cập nhật cache.",
+      "C. Yêu cầu server kiểm tra lại dữ liệu với database trước mỗi lần trả về cho client.",
+      "D. Chỉ cho phép cache dữ liệu nếu server trả về mã lỗi 5xx."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là một chiến lược tối ưu hiệu năng tuyệt vời, giúp giảm latency cho người dùng bằng cách trả về dữ liệu cũ ngay lập tức và cập nhật bản mới ở background.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong GraphQL, làm thế nào để xử lý việc trả về các thông báo lỗi chi tiết (ví dụ: lỗi validation cho từng field) một cách chuyên nghiệp?",
+    "options": [
+      "A. Ném lỗi trực tiếp từ resolver để nó xuất hiện trong mảng 'errors' mặc định.",
+      "B. Định nghĩa một Union Type cho kết quả trả về, bao gồm cả Success Object và Error Object.",
+      "C. Sử dụng HTTP Status Code 400 cho mọi lỗi validation.",
+      "D. Trả về một chuỗi JSON lỗi trong trường 'message' của GraphQL error."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng 'Errors as Data' (Union types) giúp Schema trở nên minh bạch. Client có thể dùng fragment để xử lý các loại lỗi khác nhau một cách tường minh thay vì phải parse mảng errors không có cấu trúc chặt chẽ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao Idempotency Key lại cực kỳ quan trọng trong các API thanh toán (Payment API)?",
+    "options": [
+      "A. Để mã hóa thông tin thẻ tín dụng của người dùng.",
+      "B. Để đảm bảo rằng nếu một yêu cầu bị gửi lặp lại (do lỗi mạng), giao dịch chỉ được thực hiện duy nhất một lần.",
+      "C. Để tăng tốc độ xử lý giao dịch thông qua việc lưu cache kết quả.",
+      "D. Để định danh người dùng đang thực hiện thanh toán."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong môi trường mạng không ổn định, client có thể retry request. Idempotency key giúp server nhận diện yêu cầu trùng lặp và trả về kết quả cũ thay vì thực hiện trừ tiền lần hai.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một hệ thống REST API cần cung cấp tính năng xuất báo cáo lớn (Export CSV). Để tránh làm treo hệ thống, thiết kế nào sau đây là tốt nhất?",
+    "options": [
+      "A. Trả về luồng dữ liệu (Stream) trực tiếp từ database qua HTTP.",
+      "B. Tiếp nhận yêu cầu, trả về 202 Accepted kèm theo một URL để kiểm tra trạng thái, sau đó xử lý bất đồng bộ và đẩy file lên Cloud Storage.",
+      "C. Tăng cấu hình RAM/CPU cho server để xử lý các báo cáo lớn nhanh hơn.",
+      "D. Yêu cầu client chia nhỏ báo cáo thành nhiều trang và gọi API nhiều lần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xử lý bất đồng bộ (Asynchronous Request-Reply pattern) là cách duy nhất đảm bảo hệ thống không bị cạn kiệt tài nguyên (worker threads) khi có nhiều yêu cầu xuất báo cáo cùng lúc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong GraphQL, 'Directive' nào sau đây thường được sử dụng để tối ưu hóa việc tải dữ liệu từ phía Client bằng cách trì hoãn việc lấy các field không quan trọng?",
+    "options": [
+      "A. @include",
+      "B. @skip",
+      "C. @defer",
+      "D. @deprecated"
+    ],
+    "correctAnswer": "C",
+    "explanation": "@defer cho phép server trả về phần dữ liệu quan trọng trước và 'stream' các phần dữ liệu còn lại sau, giúp cải thiện Time to First Byte (TTFB) cho các ứng dụng web.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế API cho một hệ thống Microservices, tại sao nên hạn chế việc sử dụng 'Shared Database' giữa các dịch vụ dù nó giúp việc thiết kế API dễ dàng hơn?",
+    "options": [
+      "A. Vì nó làm tăng chi phí lưu trữ dữ liệu.",
+      "B. Vì nó vi phạm tính đóng gói (encapsulation), gây khó khăn trong việc thay đổi schema và làm mất đi khả năng mở rộng độc lập của từng service.",
+      "C. Vì các database hiện đại không hỗ trợ kết nối từ nhiều service cùng lúc.",
+      "D. Vì nó làm chậm tốc độ mạng giữa các service."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Shared Database tạo ra sự phụ thuộc cứng (tight coupling). Một thay đổi nhỏ ở schema của service A có thể làm hỏng service B, phá vỡ nguyên tắc cốt lõi của Microservices.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong REST API, việc sử dụng HATEOAS (Hypermedia as the Engine of Application State) mang lại lợi ích gì cho quá trình tiến hóa (evolution) của API?",
+    "options": [
+      "A. Tăng tốc độ phản hồi của API bằng cách giảm kích thước JSON.",
+      "B. Cho phép Server thay đổi cấu trúc URL mà không làm hỏng Client, vì Client dựa vào các liên kết (links) được trả về thay vì hard-code URL.",
+      "C. Tự động tạo tài liệu API (Documentation) mà không cần dùng Swagger.",
+      "D. Giúp bảo mật API tốt hơn thông qua việc che giấu các endpoint."
+    ],
+    "correctAnswer": "B",
+    "explanation": "HATEOAS cung cấp các đường dẫn điều hướng động trong response. Điều này giúp tách biệt Client khỏi cấu trúc URL cụ thể, cho phép Server thay đổi linh hoạt miễn là các quan hệ (rel) vẫn giữ nguyên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Vấn đề 'Security Over-posting' (Mass Assignment) trong REST API thường được phòng tránh tốt nhất bằng cách nào?",
+    "options": [
+      "A. Sử dụng HTTPS để mã hóa dữ liệu truyền tải.",
+      "B. Sử dụng Data Transfer Objects (DTOs) hoặc Input Models để giới hạn các trường mà Client có thể cập nhật.",
+      "C. Kiểm tra quyền truy cập (Role-based Access Control) của người dùng.",
+      "D. Ẩn các trường nhạy cảm trong database bằng cách đổi tên chúng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Over-posting xảy ra khi client gửi thêm các trường không mong muốn (ví dụ: is_admin: true). Việc sử dụng DTO giúp kiểm soát chặt chẽ đầu vào, chỉ ánh xạ những trường được phép vào Domain Entity.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một hệ thống phân tán với lưu lượng truy cập cực lớn, bạn cần triển khai cơ chế Idempotency cho một API POST thanh toán. Giải pháp nào sau đây đảm bảo tính toàn vẹn dữ liệu tốt nhất khi có hàng nghìn yêu cầu trùng lặp gửi đến cùng lúc?",
+    "options": [
+      "A. Sử dụng cơ sở dữ liệu quan hệ với UNIQUE constraint trên cột idempotency_key.",
+      "B. Sử dụng Distributed Lock (như Redis Redlock) kết hợp với một bảng lưu trạng thái xử lý dựa trên idempotency_key.",
+      "C. Kiểm tra sự tồn tại của giao dịch trong database trước khi thực hiện logic nghiệp vụ.",
+      "D. Sử dụng cơ chế Optimistic Locking dựa trên version của bản ghi tài khoản người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong hệ thống phân tán quy mô lớn, việc chỉ dựa vào DB constraint có thể gây nghẽn. Distributed Lock giúp ngăn chặn race condition ngay từ tầng ứng dụng, kết hợp với bảng trạng thái để đảm bảo yêu cầu chỉ được thực hiện đúng một lần duy nhất (Exactly-once).",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế GraphQL Schema cho một hệ thống E-commerce phức tạp, bạn gặp vấn đề N+1 query khi truy vấn danh sách sản phẩm và các thuộc tính liên quan. Giải pháp nào là tối ưu nhất ở cấp độ kiến trúc?",
+    "options": [
+      "A. Sử dụng thư viện DataLoader để batching và caching các request trong cùng một tick của event loop.",
+      "B. Thực hiện Join toàn bộ các bảng cần thiết ngay tại tầng Database Resolver.",
+      "C. Giới hạn độ sâu (Depth Limit) của câu truy vấn GraphQL để tránh truy vấn quá nhiều dữ liệu.",
+      "D. Chuyển sang sử dụng REST API cho các màn hình danh sách có cấu trúc dữ liệu phức tạp."
+    ],
+    "correctAnswer": "A",
+    "explanation": "DataLoader là pattern chuẩn trong GraphQL để giải quyết N+1 bằng cách thu thập các ID yêu cầu và thực hiện một query duy nhất (Batching), đồng thời cache kết quả trong phạm vi một request.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang thiết kế chiến lược Versioning cho một Public API có hàng ngàn đối tác sử dụng. Yêu cầu là phải giảm thiểu breaking changes và duy trì khả năng mở rộng lâu dài. Phương pháp nào được đánh giá là linh hoạt nhất cho sự tiến hóa của schema?",
+    "options": [
+      "A. URI Versioning (ví dụ: /v1/users, /v2/users).",
+      "B. Header Versioning (ví dụ: X-API-Version: 2).",
+      "C. Content Negotiation (ví dụ: Accept: application/vnd.myapi.v2+json).",
+      "D. Evolution không versioning (chỉ thêm trường mới, không xóa trường cũ, sử dụng GraphQL hoặc mở rộng JSON)."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Trong thiết kế API hiện đại (đặc biệt là GraphQL hoặc Stripe-style REST), việc liên tục tiến hóa schema bằng cách thêm các trường không bắt buộc và deprecated các trường cũ giúp tránh việc phân mảnh endpoint và giảm chi phí bảo trì nhiều phiên bản song song.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong GraphQL Federation, làm thế nào để đảm bảo tính nhất quán dữ liệu khi một Subgraph cần dữ liệu từ một Subgraph khác để thực hiện tính toán logic trước khi trả về?",
+    "options": [
+      "A. Subgraph A gọi trực tiếp REST API của Subgraph B.",
+      "B. Sử dụng chỉ thị @external và @requires để Gateway điều phối việc lấy dữ liệu cần thiết từ các Subgraph.",
+      "C. Duplicate dữ liệu từ Subgraph B sang Subgraph A thông qua Message Broker.",
+      "D. Gộp hai Subgraph lại thành một Monolithic GraphQL service."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apollo Federation sử dụng các directive như @external và @requires để định nghĩa phụ thuộc dữ liệu giữa các service, cho phép Gateway tự động lập kế hoạch truy vấn (Query Plan) để fetch đủ dữ liệu cho resolver.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống API cần triển khai Rate Limiting cho các khách hàng Enterprise với các hạn mức (tier) khác nhau. Thuật toán nào là phù hợp nhất để xử lý các đợt bùng phát lưu lượng (traffic bursts) mà vẫn đảm bảo tính công bằng lâu dài?",
+    "options": [
+      "A. Fixed Window Counter.",
+      "B. Sliding Window Log.",
+      "C. Token Bucket.",
+      "D. Leaky Bucket."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Token Bucket cho phép một lượng burst traffic nhất định (khi bucket đầy) nhưng vẫn giới hạn tốc độ trung bình theo thời gian, phù hợp với hành vi thực tế của người dùng API.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế REST API cho một tài nguyên có trạng thái phức tạp (ví dụ: Đơn hàng), việc sử dụng HTTP PATCH thay vì PUT mang lại lợi ích chiến lược nào?",
+    "options": [
+      "A. Tăng tốc độ truyền tải vì payload nhỏ hơn.",
+      "B. Tránh việc ghi đè dữ liệu vô ý (lost updates) khi nhiều client cùng cập nhật các trường khác nhau.",
+      "C. Đảm bảo tính Idempotency mặc định cho mọi yêu cầu cập nhật.",
+      "D. Đơn giản hóa việc kiểm thử (unit test) ở phía server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "PATCH cho phép cập nhật từng phần (partial update). Khi hai client cập nhật hai trường khác nhau cùng lúc, PATCH giúp tránh việc client này ghi đè toàn bộ object của client kia (vấn đề thường gặp với PUT nếu không dùng ETag).",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong thiết kế GraphQL, 'Schema Stitching' khác biệt cơ bản như thế nào so với 'Apollo Federation'?",
+    "options": [
+      "A. Stitching thực hiện tại runtime bởi Gateway, trong khi Federation dựa trên các directive khai báo tại các service con.",
+      "B. Stitching chỉ hỗ trợ REST, còn Federation chỉ hỗ trợ GraphQL.",
+      "C. Federation yêu cầu một database tập trung, Stitching thì không.",
+      "D. Stitching có hiệu năng cao hơn Federation vì không cần Query Plan."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Schema Stitching yêu cầu Gateway phải biết cách kết hợp các schema lại với nhau (thường bằng code), trong khi Federation cho phép các subgraph tự định nghĩa mối quan hệ thông qua các directive, giúp tính module hóa cao hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần thiết kế một API trả về báo cáo tài chính cực lớn (hàng trăm MB). Phương pháp nào tối ưu nhất để giảm tải cho bộ nhớ server và cải thiện trải nghiệm client?",
+    "options": [
+      "A. Nén dữ liệu bằng Gzip trước khi trả về.",
+      "B. Sử dụng HTTP Streaming hoặc Pagination kết hợp với Cursor-based.",
+      "C. Tăng timeout của API Gateway và Server lên mức tối đa.",
+      "D. Yêu cầu client gửi yêu cầu, sau đó server gửi kết quả qua Webhook."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với dữ liệu cực lớn, HTTP Streaming giúp đẩy dữ liệu dần dần về client mà không cần load toàn bộ vào RAM. Cursor-based pagination giúp client lấy dữ liệu theo từng đoạn mà không gặp vấn đề hiệu năng của offset lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao trong thiết kế API hệ thống ngân hàng, người ta thường ưu tiên sử dụng 'Idempotency-Key' trong Header thay vì dựa vào các tham số trong Body?",
+    "options": [
+      "A. Vì Header dễ dàng được log lại bởi các công cụ giám sát hơn.",
+      "B. Để tách biệt logic điều phối hạ tầng (infrastructure) khỏi logic nghiệp vụ (business logic) trong payload.",
+      "C. Vì HTTP tiêu chuẩn bắt buộc các tham số idempotency phải nằm ở Header.",
+      "D. Để giảm kích thước của JSON Body."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc đặt Idempotency-Key ở Header giúp các thành phần hạ tầng (như API Gateway, Reverse Proxy) có thể nhận diện và xử lý trùng lặp mà không cần parse toàn bộ Body, giúp tăng hiệu năng và tính tách biệt.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong GraphQL, việc sử dụng Custom Directives (ví dụ: @auth, @cacheControl) mang lại lợi ích gì lớn nhất cho việc quản trị hệ thống?",
+    "options": [
+      "A. Giảm số lượng dòng code trong các hàm Resolver.",
+      "B. Cho phép thực thi các logic cross-cutting concerns một cách khai báo (declarative) ngay trên Schema.",
+      "C. Tăng tốc độ thực thi của các câu truy vấn SQL.",
+      "D. Thay thế hoàn toàn nhu cầu sử dụng Middleware ở tầng ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Directives cho phép đính kèm metadata và logic xử lý vào Schema, giúp các vấn đề như phân quyền (auth) hay caching được quản lý tập trung và minh bạch ngay tại định nghĩa dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một API REST trả về mã lỗi 429 (Too Many Requests), thông tin nào sau đây là quan trọng nhất cần bao gồm trong Response Header để hỗ trợ Client?",
+    "options": [
+      "A. X-RateLimit-Limit",
+      "B. Retry-After",
+      "C. X-Request-ID",
+      "D. Cache-Control: no-store"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Retry-After cho client biết chính xác thời gian cần chờ đợi trước khi thử lại, giúp giảm tải vô ích cho server và giúp client lập lịch lại request một cách thông minh.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống Microservices sử dụng GraphQL Gateway. Khi một service phía sau (downstream) bị chậm, Gateway bị nghẽn do cạn kiệt tài nguyên. Bạn nên áp dụng pattern nào để bảo vệ hệ thống?",
+    "options": [
+      "A. Bulkhead Pattern kết hợp với Circuit Breaker.",
+      "B. Tăng số lượng instance của Gateway.",
+      "C. Sử dụng Cache kết quả GraphQL tại Gateway với TTL ngắn.",
+      "D. Chuyển tất cả các query sang dạng Persisted Queries."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bulkhead cô lập tài nguyên cho từng service để lỗi một nơi không làm sập toàn bộ Gateway. Circuit Breaker giúp ngắt kết nối đến service đang lỗi để hệ thống có thời gian hồi phục.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong thiết kế RESTful API chuyên nghiệp, khi nào bạn nên sử dụng mã trạng thái 202 Accepted thay vì 201 Created?",
+    "options": [
+      "A. Khi tài nguyên đã được tạo thành công nhưng chưa có ID.",
+      "B. Khi yêu cầu đã được nhận nhưng việc xử lý diễn ra bất đồng bộ và chưa hoàn tất.",
+      "C. Khi client không có quyền xem tài nguyên vừa tạo.",
+      "D. Khi server muốn thông báo rằng dữ liệu gửi lên bị thiếu một vài trường không bắt buộc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "202 Accepted thường được dùng cho các tác vụ tốn thời gian (Long-running tasks). Server xác nhận đã nhận request hợp lệ và sẽ xử lý sau, thường trả về một link để client track trạng thái.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Vấn đề 'Over-fetching' trong REST API ảnh hưởng tiêu cực nhất đến khía cạnh nào của các ứng dụng di động trong môi trường mạng yếu?",
+    "options": [
+      "A. Độ phức tạp của mã nguồn client.",
+      "B. Tải trọng dữ liệu (Payload size) và thời gian phân giải (Parsing time).",
+      "C. Khả năng bảo mật của dữ liệu.",
+      "D. Số lượng round-trip đến server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Over-fetching khiến client phải tải những dữ liệu không cần thiết, làm lãng phí băng thông và tốn tài nguyên CPU để parse JSON lớn, điều này cực kỳ quan trọng với thiết bị di động.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để triển khai 'Global Search' qua REST API một cách chuẩn mực, phương pháp nào sau đây được khuyến nghị?",
+    "options": [
+      "A. GET /search?q=keyword",
+      "B. POST /search với body chứa từ khóa để bảo mật.",
+      "C. GET /users/search?q=... và GET /products/search?q=...",
+      "D. Sử dụng một tài nguyên ảo: GET /search-results?q=keyword"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Theo chuẩn REST, tìm kiếm là một thao tác truy vấn (Query) không thay đổi trạng thái hệ thống, nên sử dụng phương thức GET với query parameters. Nếu kết quả trả về nhiều loại thực thể, có thể dùng endpoint search chung.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong GraphQL, rủi ro bảo mật nào sau đây là đặc thù và nguy hiểm nhất nếu không được kiểm soát?",
+    "options": [
+      "A. SQL Injection thông qua các đối số của resolver.",
+      "B. Denial of Service (DoS) thông qua các câu truy vấn có độ sâu hoặc độ phức tạp cực lớn.",
+      "C. Broken Object Level Authorization (BOLA).",
+      "D. Cross-Site Scripting (XSS) trong các trường chuỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GraphQL cho phép client tự định nghĩa cấu trúc trả về. Kẻ tấn công có thể gửi các query lồng nhau vô tận hoặc cực kỳ phức tạp để làm cạn kiệt tài nguyên CPU/RAM của server.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế API cho một hệ thống đa quốc gia, chiến lược nào là tốt nhất để xử lý định dạng ngày tháng và múi giờ?",
+    "options": [
+      "A. Trả về chuỗi định dạng theo locale của người dùng.",
+      "B. Trả về Unix Timestamp (số giây/mili giây).",
+      "C. Sử dụng chuẩn ISO 8601 với múi giờ UTC (ví dụ: 2023-10-27T10:00:00Z).",
+      "D. Trả về hai trường: một cho ngày giờ địa phương và một cho tên múi giờ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "ISO 8601 ở chuẩn UTC là tiêu chuẩn vàng cho API, giúp tránh hiểu lầm về múi giờ và dễ dàng cho việc parse/convert ở phía client bất kể ngôn ngữ lập trình nào.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng HTTP ETag lại quan trọng trong việc tối ưu hóa băng thông cho các API có dữ liệu ít thay đổi?",
+    "options": [
+      "A. Nó nén dữ liệu hiệu quả hơn Gzip.",
+      "B. Nó cho phép server trả về mã 304 Not Modified nếu dữ liệu phía client vẫn còn hiệu lực.",
+      "C. Nó mã hóa dữ liệu để bảo mật đường truyền.",
+      "D. Nó giúp tự động phân trang dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ETag là một identifier cho một phiên bản của tài nguyên. Nếu ETag client gửi lên khớp với server, server chỉ trả về header 304 mà không cần gửi lại toàn bộ body, tiết kiệm băng thông đáng kể.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống Microservices, bạn muốn theo dõi một yêu cầu từ lúc nó vào API Gateway cho đến khi qua 5 service khác nhau. Bạn nên thiết kế API như thế nào để hỗ trợ việc này?",
+    "options": [
+      "A. Ghi log tập trung tại mỗi service với timestamp.",
+      "B. Yêu cầu mỗi request phải có một 'Correlation ID' (hoặc Trace ID) được truyền qua Header.",
+      "C. Sử dụng Database chung để lưu vết mọi bước xử lý.",
+      "D. Sử dụng Sticky Sessions tại Load Balancer."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Correlation ID là kỹ thuật cơ bản trong Distributed Tracing. Nó cho phép liên kết các log rời rạc từ nhiều service khác nhau thành một luồng xử lý duy nhất của một yêu cầu người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Persisted Queries' trong GraphQL là gì?",
+    "options": [
+      "A. Cho phép query dữ liệu từ nhiều database khác nhau cùng lúc.",
+      "B. Giảm kích thước request từ client và ngăn chặn các query lạ (arbitrary queries) không được phép.",
+      "C. Tự động tối ưu hóa các câu lệnh SQL bên dưới.",
+      "D. Giúp việc debug lỗi trên môi trường Production dễ dàng hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Persisted Queries thay thế câu query dài bằng một hash. Client chỉ gửi hash, giúp giảm băng thông và quan trọng nhất là server chỉ thực thi các query đã được đăng ký trước (whitelist), tăng tính bảo mật.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế một API cho phép Upload file lớn, phương pháp nào giúp hệ thống chịu tải tốt nhất và giảm áp lực lên Backend service?",
+    "options": [
+      "A. Nhận file dưới dạng Base64 trong JSON body.",
+      "B. Sử dụng Multipart/form-data để upload trực tiếp lên Backend.",
+      "C. Sử dụng Pre-signed URLs để client upload trực tiếp lên Cloud Storage (như S3).",
+      "D. Chia nhỏ file thành nhiều chunk và gửi qua nhiều request POST."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Pre-signed URLs cho phép client upload thẳng lên storage provider. Backend chỉ đóng vai trò cấp quyền, không tốn tài nguyên xử lý luồng dữ liệu file (I/O, RAM), giúp hệ thống scale tốt hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong REST, nguyên tắc HATEOAS (Hypermedia as the Engine of Application State) giải quyết vấn đề gì?",
+    "options": [
+      "A. Tăng tốc độ phản hồi của API bằng cách giảm metadata.",
+      "B. Giúp client khám phá các hành động có thể thực hiện tiếp theo một cách động mà không cần hard-code URL.",
+      "C. Đảm bảo dữ liệu trả về luôn được nén.",
+      "D. Thay thế hoàn toàn nhu cầu sử dụng tài liệu API như Swagger."
+    ],
+    "correctAnswer": "B",
+    "explanation": "HATEOAS cung cấp các link điều hướng trong response, giúp client biết được các state chuyển đổi hợp lệ. Điều này làm giảm sự phụ thuộc (coupling) giữa client và cấu trúc URL của server.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế lỗi (Error Handling) cho một bộ API dùng chung cho toàn doanh nghiệp, cấu trúc nào được coi là 'Best Practice'?",
+    "options": [
+      "A. Trả về HTTP 200 kèm theo field 'success: false' và message lỗi.",
+      "B. Trả về mã HTTP phù hợp và một JSON body chuẩn hóa chứa: code, message, và chi tiết lỗi (details/errors).",
+      "C. Chỉ trả về mã HTTP (4xx, 5xx) để tiết kiệm băng thông.",
+      "D. Trả về toàn bộ Stack Trace của server để developer dễ dàng debug."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng đúng HTTP status codes kết hợp với một error contract thống nhất giúp client xử lý lỗi tự động (qua code) và thông báo cho người dùng (qua message) một cách hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao trong GraphQL, việc thiết kế Schema dựa trên 'Domain-Driven Design' (DDD) lại quan trọng hơn là thiết kế dựa trên cấu trúc Database?",
+    "options": [
+      "A. Vì GraphQL không hỗ trợ các kiểu dữ liệu phức tạp của Database.",
+      "B. Để đảm bảo Schema phản ánh đúng ngôn ngữ nghiệp vụ và nhu cầu của UI, thay vì bị ràng buộc bởi cách lưu trữ dữ liệu.",
+      "C. Để giảm số lượng bảng cần phải join trong SQL.",
+      "D. Vì thiết kế theo Database sẽ làm tăng độ trễ của mạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GraphQL là tầng giao tiếp giữa client và server. Thiết kế theo Domain giúp API dễ hiểu, linh hoạt và không bị phá vỡ khi cấu trúc DB bên dưới thay đổi (decoupling).",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần triển khai cơ chế 'Soft Deprecation' cho một trường trong GraphQL Schema. Cách tiếp cận chuyên nghiệp nhất là gì?",
+    "options": [
+      "A. Xóa trường đó ngay lập tức và thông báo qua email.",
+      "B. Đổi tên trường bằng cách thêm tiền tố 'old_'.",
+      "C. Sử dụng directive @deprecated với lý do và trường thay thế trong schema.",
+      "D. Trả về giá trị null cho trường đó và log cảnh báo ở server."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Directive @deprecated là chuẩn của GraphQL để thông báo cho client rằng một trường không nên được dùng nữa. Các công cụ như GraphiQL/Playground sẽ hiển thị cảnh báo này trực quan cho developer.",
+    "difficulty": "EXPERT",
+    "skillArea": "API Design (REST/GraphQL)",
+    "category": "SKILL"
+  }
+]

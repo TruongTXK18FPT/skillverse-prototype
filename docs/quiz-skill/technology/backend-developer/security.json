@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Sự khác biệt cơ bản giữa Authentication (Xác thực) và Authorization (Phân quyền) là gì?",
+    "options": [
+      "A. Authentication kiểm tra danh tính người dùng, Authorization kiểm tra quyền truy cập tài nguyên.",
+      "B. Authentication cấp quyền truy cập, Authorization kiểm tra mật khẩu.",
+      "C. Authentication và Authorization là hai thuật ngữ có ý nghĩa giống hệt nhau.",
+      "D. Authentication chỉ dành cho người dùng, Authorization chỉ dành cho hệ thống."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Authentication trả lời câu hỏi 'Bạn là ai?', trong khi Authorization trả lời câu hỏi 'Bạn được phép làm gì?'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao không nên lưu mật khẩu người dùng dưới dạng văn bản thuần túy (plain-text) trong cơ sở dữ liệu?",
+    "options": [
+      "A. Để tiết kiệm dung lượng lưu trữ của ổ cứng.",
+      "B. Để ngăn chặn quản trị viên hệ thống nhìn thấy mật khẩu.",
+      "C. Để bảo vệ mật khẩu nếu cơ sở dữ liệu bị rò rỉ hoặc bị tấn công.",
+      "D. Để tăng tốc độ tìm kiếm người dùng khi đăng nhập."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lưu mật khẩu dưới dạng hash giúp đảm bảo rằng ngay cả khi dữ liệu bị đánh cắp, kẻ tấn công cũng không thể biết ngay mật khẩu thực tế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật nào là cách hiệu quả nhất để ngăn chặn lỗi SQL Injection?",
+    "options": [
+      "A. Sử dụng hàm replace() để loại bỏ các ký tự đặc biệt như dấu nháy đơn.",
+      "B. Sử dụng Prepared Statements (Parameterized Queries).",
+      "C. Mã hóa toàn bộ dữ liệu đầu vào từ người dùng bằng Base64.",
+      "D. Chỉ cho phép người dùng nhập số vào các ô tìm kiếm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Prepared Statements tách biệt mã SQL và dữ liệu, khiến dữ liệu đầu vào không thể bị thực thi như một câu lệnh SQL.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiến trúc JWT (JSON Web Token), phần 'Payload' thường chứa thông tin gì?",
+    "options": [
+      "A. Chứa thuật toán mã hóa được sử dụng.",
+      "B. Chứa chữ ký số để xác thực tính toàn vẹn.",
+      "C. Chứa các thông tin về người dùng (claims) như user_id hoặc roles.",
+      "D. Chứa mật khẩu của người dùng để server kiểm tra lại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Payload là nơi chứa các thông báo (claims) về đối tượng (thường là người dùng) và các dữ liệu bổ sung.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lỗ hổng Cross-Site Scripting (XSS) xảy ra khi nào?",
+    "options": [
+      "A. Khi kẻ tấn công gửi một lượng lớn yêu cầu làm sập server.",
+      "B. Khi ứng dụng nhúng dữ liệu không an toàn vào trang web, cho phép thực thi mã JavaScript độc hại trên trình duyệt.",
+      "C. Khi kẻ tấn công truy cập trực tiếp vào cơ sở dữ liệu thông qua cổng 3306.",
+      "D. Khi người dùng quên đăng xuất khỏi tài khoản của họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "XSS cho phép kẻ tấn công thực thi script trong trình duyệt của nạn nhân bằng cách chèn mã độc vào nội dung trang web.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Giao thức HTTPS bảo vệ dữ liệu truyền tải giữa client và server bằng cách nào?",
+    "options": [
+      "A. Nén dữ liệu để kẻ tấn công không thể đọc được.",
+      "B. Sử dụng TLS/SSL để mã hóa kênh truyền thông.",
+      "C. Tự động xóa dữ liệu sau khi gửi đi thành công.",
+      "D. Chặn tất cả các yêu cầu từ các địa chỉ IP lạ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "HTTPS sử dụng giao thức mã hóa TLS (Transport Layer Security) để bảo mật dữ liệu trên đường truyền.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc lưu trữ JWT trong LocalStorage lại tiềm ẩn rủi ro bảo mật?",
+    "options": [
+      "A. Vì LocalStorage có giới hạn dung lượng rất nhỏ.",
+      "B. Vì LocalStorage có thể bị truy cập bởi bất kỳ JavaScript nào chạy trên cùng domain (nguy cơ bị XSS).",
+      "C. Vì LocalStorage sẽ bị xóa ngay khi người dùng đóng trình duyệt.",
+      "D. Vì LocalStorage chỉ lưu trữ được dữ liệu dạng số."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dữ liệu trong LocalStorage không có cơ chế bảo vệ chống lại các script độc hại chạy trên trang web.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Mục đích chính của cơ chế 'Salt' khi băm (hashing) mật khẩu là gì?",
+    "options": [
+      "A. Để làm cho chuỗi hash ngắn hơn và dễ lưu trữ hơn.",
+      "B. Để tăng tốc độ tính toán của thuật toán hash.",
+      "C. Để ngăn chặn việc sử dụng Rainbow Tables (bảng tra cứu hash có sẵn) để bẻ khóa mật khẩu.",
+      "D. Để mã hóa mật khẩu thành dạng có thể giải mã ngược lại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Salt là một chuỗi ngẫu nhiên được thêm vào mật khẩu trước khi hash, đảm bảo cùng một mật khẩu sẽ có các chuỗi hash khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế API, bạn nên làm gì với các thông báo lỗi (error messages) trả về cho người dùng cuối?",
+    "options": [
+      "A. Trả về chi tiết Stack Trace để lập trình viên dễ dàng debug.",
+      "B. Trả về thông báo lỗi chung chung và lưu chi tiết lỗi vào log hệ thống.",
+      "C. Trả về toàn bộ câu lệnh SQL bị lỗi để người dùng biết họ nhập sai ở đâu.",
+      "D. Không trả về bất kỳ thông báo lỗi nào để đảm bảo bí mật tuyệt đối."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trả về chi tiết lỗi hệ thống có thể làm lộ thông tin nhạy cảm về cấu trúc server, phiên bản phần mềm, giúp kẻ tấn công khai thác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Nguyên tắc 'Least Privilege' (Quyền hạn tối thiểu) có nghĩa là gì?",
+    "options": [
+      "A. Mọi người dùng trong hệ thống đều có quyền quản trị như nhau.",
+      "B. Chỉ cấp cho người dùng hoặc tiến trình những quyền hạn vừa đủ để thực hiện công việc của họ.",
+      "C. Luôn cấp quyền cao nhất cho người dùng để tránh lỗi 'Permission Denied'.",
+      "D. Chỉ những người dùng có thâm niên mới được cấp quyền truy cập vào database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giảm thiểu quyền hạn giúp hạn chế thiệt hại nếu một tài khoản hoặc tiến trình bị chiếm quyền kiểm soát.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong OWASP Top 10, 'Broken Access Control' thường ám chỉ điều gì?",
+    "options": [
+      "A. Người dùng có thể truy cập vào dữ liệu hoặc chức năng mà họ không được phép.",
+      "B. Máy chủ bị treo do quá tải lưu lượng truy cập.",
+      "C. Mật khẩu của người dùng quá ngắn và dễ đoán.",
+      "D. Website không sử dụng chứng chỉ SSL."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đây là lỗi khi hệ thống không thực thi đúng các hạn chế về quyền truy cập tài nguyên.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách an toàn nhất để quản lý các thông số nhạy cảm như API Key hoặc Database Password trong mã nguồn là gì?",
+    "options": [
+      "A. Khai báo chúng dưới dạng hằng số (constant) trực tiếp trong file code.",
+      "B. Lưu trữ trong file cấu hình .env và không push file này lên Git.",
+      "C. Ghi chú chúng trong file README để các thành viên khác dễ tìm thấy.",
+      "D. Mã hóa chúng thành Base64 rồi đặt trực tiếp vào code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng biến môi trường (environment variables) và quản lý bí mật (secrets management) giúp tránh lộ thông tin nhạy cảm khi chia sẻ mã nguồn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cơ chế Cross-Origin Resource Sharing (CORS) được trình duyệt sử dụng nhằm mục đích gì?",
+    "options": [
+      "A. Để ngăn chặn các trang web khác thực hiện yêu cầu API đến server của bạn mà không được phép.",
+      "B. Để tăng tốc độ tải dữ liệu từ các domain khác nhau.",
+      "C. Để tự động mã hóa dữ liệu khi gửi qua các domain khác.",
+      "D. Để cho phép mọi trang web đều có thể lấy dữ liệu từ server của bạn một cách tự do."
+    ],
+    "correctAnswer": "A",
+    "explanation": "CORS là một cơ chế bảo mật giúp trình duyệt kiểm soát việc chia sẻ tài nguyên giữa các domain khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thuật toán băm (hashing) nào sau đây được coi là an toàn và phù hợp nhất để lưu trữ mật khẩu hiện nay?",
+    "options": [
+      "A. MD5",
+      "B. SHA-1",
+      "C. bcrypt",
+      "D. Base64"
+    ],
+    "correctAnswer": "C",
+    "explanation": "bcrypt được thiết kế chậm và có salt tích hợp, giúp chống lại các cuộc tấn công brute-force hiệu quả hơn MD5 hay SHA-1.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc kiểm tra dữ liệu đầu vào (Input Validation) ở phía Backend là bắt buộc ngay cả khi đã kiểm tra ở Frontend?",
+    "options": [
+      "A. Vì kiểm tra ở Frontend chỉ mang tính chất làm đẹp giao diện.",
+      "B. Vì kẻ tấn công có thể dễ dàng bỏ qua các kiểm tra ở Frontend bằng cách gửi request trực tiếp đến API.",
+      "C. Vì Backend có nhiều bộ nhớ hơn để thực hiện kiểm tra dữ liệu.",
+      "D. Vì trình duyệt không hỗ trợ tất cả các kiểu dữ liệu phức tạp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Frontend là môi trường không tin cậy. Mọi dữ liệu đến Backend đều phải được kiểm tra lại để đảm bảo an toàn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Mục đích chính của việc sử dụng 'Refresh Token' trong cơ chế OAuth2 là gì?",
+    "options": [
+      "A. Để thay thế hoàn toàn Access Token nhằm tăng tính bảo mật.",
+      "B. Để cho phép người dùng đổi mật khẩu mà không cần đăng xuất.",
+      "C. Để lấy một Access Token mới khi Access Token cũ hết hạn mà không cần người dùng đăng nhập lại.",
+      "D. Để mã hóa dữ liệu được gửi đi từ client."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Refresh Token giúp duy trì phiên làm việc của người dùng một cách an toàn bằng cách cấp mới Access Token có thời hạn ngắn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lỗ hổng Cross-Site Request Forgery (CSRF) là gì?",
+    "options": [
+      "A. Kẻ tấn công đánh cắp mật khẩu của người dùng thông qua email lừa đảo.",
+      "B. Kẻ tấn công lừa trình duyệt của người dùng gửi một yêu cầu không mong muốn đến một ứng dụng mà họ đã đăng nhập.",
+      "C. Kẻ tấn công cài đặt mã độc vào máy chủ của ứng dụng.",
+      "D. Kẻ tấn công làm tràn bộ nhớ đệm của ứng dụng để chiếm quyền điều khiển."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CSRF lợi dụng sự tin tưởng của ứng dụng đối với trình duyệt của người dùng đã được xác thực.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Rate Limiting giúp bảo vệ hệ thống khỏi loại tấn công nào sau đây?",
+    "options": [
+      "A. SQL Injection.",
+      "B. Brute-force mật khẩu và tấn công từ chối dịch vụ (DoS).",
+      "C. XSS (Cross-Site Scripting).",
+      "D. Hardcoded secrets."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rate Limiting giới hạn số lượng yêu cầu trong một khoảng thời gian, ngăn chặn việc thử mật khẩu liên tục hoặc làm quá tải server.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng Cookie để lưu trữ Session ID, thuộc tính 'HttpOnly' có tác dụng gì?",
+    "options": [
+      "A. Chỉ cho phép Cookie được gửi qua kết nối HTTPS.",
+      "B. Ngăn chặn JavaScript truy cập vào Cookie, giúp giảm rủi ro bị đánh cắp Session qua XSS.",
+      "C. Tự động xóa Cookie khi trình duyệt đóng lại.",
+      "D. Giới hạn Cookie chỉ được gửi đến một domain cụ thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "HttpOnly đảm bảo rằng cookie không thể bị đọc bởi `document.cookie`, bảo vệ session khỏi các script độc hại.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện một thư viện bên thứ ba (third-party library) trong dự án có lỗ hổng bảo mật đã được công bố. Hành động nào là phù hợp nhất?",
+    "options": [
+      "A. Tiếp tục sử dụng vì nó chưa gây ra lỗi thực tế nào cho ứng dụng.",
+      "B. Tự viết lại toàn bộ chức năng của thư viện đó để đảm bảo an toàn.",
+      "C. Cập nhật thư viện lên phiên bản mới nhất đã vá lỗi hoặc tìm thư viện thay thế.",
+      "D. Xóa bỏ hoàn toàn tính năng liên quan đến thư viện đó khỏi ứng dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quản lý phụ thuộc (dependency management) yêu cầu cập nhật thường xuyên để vá các lỗ hổng bảo mật đã biết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong mô hình bảo mật, 'Multi-Factor Authentication' (MFA) yêu cầu điều gì?",
+    "options": [
+      "A. Người dùng phải nhập mật khẩu ít nhất 2 lần để xác nhận.",
+      "B. Người dùng phải cung cấp ít nhất hai loại bằng chứng xác thực khác nhau (ví dụ: mật khẩu và mã OTP).",
+      "C. Hệ thống phải có ít nhất hai máy chủ xác thực hoạt động song song.",
+      "D. Người dùng phải đổi mật khẩu định kỳ 2 tháng một lần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MFA kết hợp các yếu tố: cái bạn biết (mật khẩu), cái bạn có (điện thoại/OTP), hoặc cái bạn là (vân tay).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Header nào sau đây giúp trình duyệt hiểu rằng trang web chỉ nên được truy cập qua kết nối HTTPS an toàn?",
+    "options": [
+      "A. Content-Type",
+      "B. Strict-Transport-Security (HSTS)",
+      "C. Access-Control-Allow-Origin",
+      "D. Cache-Control"
+    ],
+    "correctAnswer": "B",
+    "explanation": "HSTS buộc trình duyệt sử dụng HTTPS cho tất cả các yêu cầu trong tương lai đến domain đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc ghi Log (Logging) thông tin nhạy cảm như số thẻ tín dụng hoặc mật khẩu vào file log của hệ thống được coi là:",
+    "options": [
+      "A. Một thực hành tốt để hỗ trợ việc điều tra khi có sự cố.",
+      "B. Một lỗ hổng bảo mật nghiêm trọng (Sensitive Data Exposure).",
+      "C. Một cách để tối ưu hóa hiệu suất của cơ sở dữ liệu.",
+      "D. Một yêu cầu bắt buộc của các tiêu chuẩn bảo mật quốc tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Log thường không được bảo vệ nghiêm ngặt như database, nên việc lưu dữ liệu nhạy cảm vào log rất dễ dẫn đến rò rỉ thông tin.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục tiêu của việc thực hiện 'Threat Modeling' (Mô hình hóa mối đe dọa) trong giai đoạn thiết kế là gì?",
+    "options": [
+      "A. Để viết code nhanh hơn và ít lỗi logic hơn.",
+      "B. Để xác định các rủi ro bảo mật tiềm ẩn và lập kế hoạch phòng vệ sớm.",
+      "C. Để kiểm tra xem hệ thống có chịu tải được 1 triệu người dùng hay không.",
+      "D. Để tự động hóa việc triển khai ứng dụng lên môi trường Production."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Threat modeling giúp nhận diện các mối nguy hiểm ngay từ khâu thiết kế để đưa ra các biện pháp ngăn chặn phù hợp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi truyền API Key qua HTTP request, vị trí nào sau đây thường được coi là an toàn hơn cả?",
+    "options": [
+      "A. Trong chuỗi Query Parameter của URL (ví dụ: ?api_key=123).",
+      "B. Trong một Custom HTTP Header (ví dụ: X-API-KEY).",
+      "C. Trong nội dung của thẻ <img> trên trang web.",
+      "D. Trong phần tên đăng nhập của Basic Auth."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đặt API Key trong URL dễ bị lộ qua lịch sử trình duyệt, log của web server hoặc referer headers. Header là lựa chọn tốt hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một API endpoint yêu cầu người dùng phải được xác thực và có vai trò 'admin' để truy cập. Cơ chế ủy quyền nào phù hợp nhất cho Backend Developer để triển khai trong trường hợp này?",
+    "options": [
+      "A. Role-Based Access Control (RBAC).",
+      "B. Attribute-Based Access Control (ABAC).",
+      "C. Discretionary Access Control (DAC).",
+      "D. Mandatory Access Control (MAC)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "RBAC là cơ chế ủy quyền phổ biến nhất, nơi quyền truy cập được cấp dựa trên vai trò của người dùng trong hệ thống. Trong trường hợp này, 'admin' là một vai trò rõ ràng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi triển khai OAuth 2.0 cho một ứng dụng web, loại cấp quyền (grant type) nào thường được khuyến nghị cho các client bí mật (ứng dụng phía máy chủ) để lấy access token một cách an toàn?",
+    "options": [
+      "A. Authorization Code Grant.",
+      "B. Implicit Grant.",
+      "C. Client Credentials Grant.",
+      "D. Resource Owner Password Credentials Grant."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Authorization Code Grant là phương thức an toàn nhất cho các ứng dụng web phía máy chủ vì access token không bao giờ được hiển thị trực tiếp cho trình duyệt và được trao đổi thông qua một mã ủy quyền tạm thời.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Danh mục lỗ hổng OWASP Top 10 nào chủ yếu được giải quyết bằng cách triển khai xác thực đầu vào nghiêm ngặt và parameterized queries?",
+    "options": [
+      "A. Broken Access Control.",
+      "B. Injection.",
+      "C. Security Misconfiguration.",
+      "D. Cross-Site Scripting (XSS)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Injection (ví dụ: SQL Injection, Command Injection) xảy ra khi dữ liệu không đáng tin cậy được gửi đến trình thông dịch. Xác thực đầu vào và parameterized queries là các biện pháp chính để ngăn chặn các cuộc tấn công này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thực hành tốt nhất được khuyến nghị để lưu trữ các khóa API nhạy cảm và thông tin đăng nhập cơ sở dữ liệu trong một ứng dụng backend sản xuất là gì?",
+    "options": [
+      "A. Lưu trữ trực tiếp trong mã nguồn của ứng dụng.",
+      "B. Lưu trữ trong các biến môi trường.",
+      "C. Lưu trữ trong hệ thống quản lý bí mật (Secrets Management System) chuyên dụng.",
+      "D. Lưu trữ trong một file cấu hình được mã hóa trên máy chủ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hệ thống quản lý bí mật (như HashiCorp Vault, AWS Secrets Manager) cung cấp một cách an toàn và tập trung để lưu trữ, truy cập và quản lý các bí mật, giảm thiểu rủi ro rò rỉ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của Transport Layer Security (TLS) trong việc bảo mật giao tiếp giữa client và server backend là gì?",
+    "options": [
+      "A. Mã hóa dữ liệu khi nghỉ (data at rest).",
+      "B. Đảm bảo tính toàn vẹn, bảo mật và xác thực cho dữ liệu đang truyền (data in transit).",
+      "C. Quản lý phiên đăng nhập của người dùng.",
+      "D. Ngăn chặn các cuộc tấn công SQL Injection."
+    ],
+    "correctAnswer": "B",
+    "explanation": "TLS (và tiền thân là SSL) được thiết kế để cung cấp một kênh giao tiếp an toàn trên mạng, đảm bảo rằng dữ liệu không bị nghe lén (confidentiality), không bị giả mạo (integrity) và các bên giao tiếp là chính xác (authentication).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một người dùng đăng xuất khỏi ứng dụng web sử dụng JWT để xác thực. Cách hiệu quả nhất để backend ngay lập tức vô hiệu hóa JWT đang hoạt động của người dùng là gì?",
+    "options": [
+      "A. Xóa JWT khỏi trình duyệt của người dùng.",
+      "B. Lưu trữ JWT vào một danh sách đen (blacklist) trên backend.",
+      "C. Thay đổi khóa bí mật dùng để ký JWT.",
+      "D. Đợi JWT hết hạn tự nhiên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vì JWT về bản chất là stateless (không trạng thái), cách duy nhất để vô hiệu hóa ngay lập tức một JWT trước khi nó hết hạn là lưu trữ nó vào một danh sách đen trên backend và kiểm tra danh sách này trong mỗi yêu cầu. Việc xóa khỏi trình duyệt không ngăn chặn việc sử dụng lại token nếu nó đã bị đánh cắp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để ngăn chặn các cuộc tấn công SQL Injection, một Backend Developer nên luôn sử dụng kỹ thuật nào khi tương tác với cơ sở dữ liệu?",
+    "options": [
+      "A. Nối chuỗi (string concatenation) để xây dựng truy vấn SQL.",
+      "B. Sử dụng Prepared Statements hoặc Parameterized Queries.",
+      "C. Mã hóa toàn bộ cơ sở dữ liệu.",
+      "D. Giới hạn quyền truy cập của người dùng cơ sở dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Prepared Statements hoặc Parameterized Queries tách biệt mã SQL khỏi dữ liệu đầu vào của người dùng, đảm bảo rằng dữ liệu được xử lý như một giá trị chứ không phải một phần của câu lệnh SQL, từ đó ngăn chặn SQL Injection.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "OpenID Connect (OIDC) bổ sung thêm tiện ích chính nào vào OAuth 2.0?",
+    "options": [
+      "A. Khả năng ủy quyền truy cập vào các tài nguyên được bảo vệ.",
+      "B. Cung cấp một lớp nhận dạng (identity layer) đơn giản trên OAuth 2.0.",
+      "C. Các loại cấp quyền mới cho ứng dụng di động.",
+      "D. Mã hóa dữ liệu người dùng khi truyền."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OAuth 2.0 là một framework ủy quyền. OIDC được xây dựng trên OAuth 2.0 để thêm một lớp nhận dạng, cho phép client xác minh danh tính của người dùng cuối dựa trên xác thực được thực hiện bởi Authorization Server và để lấy thông tin hồ sơ cơ bản về người dùng cuối.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điều nào sau đây mô tả đúng nhất mục đích của Threat Modeling trong vòng đời phát triển phần mềm?",
+    "options": [
+      "A. Viết mã bảo mật và kiểm tra đơn vị.",
+      "B. Xác định, hiểu và giảm thiểu các mối đe dọa tiềm ẩn đối với ứng dụng.",
+      "C. Triển khai tường lửa và hệ thống phát hiện xâm nhập.",
+      "D. Phân tích nhật ký hệ thống sau một sự cố bảo mật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Threat Modeling là một quá trình có cấu trúc để xác định các mối đe dọa tiềm ẩn, các lỗ hổng và các cuộc tấn công có thể xảy ra đối với một hệ thống, sau đó đưa ra các biện pháp đối phó để giảm thiểu rủi ro.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi lưu trữ dữ liệu người dùng nhạy cảm ở trạng thái nghỉ (ví dụ: trong cơ sở dữ liệu), loại mã hóa nào thường được ưu tiên vì khả năng mã hóa/giải mã lượng lớn dữ liệu một cách hiệu quả?",
+    "options": [
+      "A. Mã hóa đối xứng (Symmetric encryption).",
+      "B. Mã hóa bất đối xứng (Asymmetric encryption).",
+      "C. Hàm băm (Hashing).",
+      "D. Ký điện tử (Digital signatures)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mã hóa đối xứng (ví dụ: AES) sử dụng cùng một khóa để mã hóa và giải mã, làm cho nó nhanh hơn và hiệu quả hơn nhiều so với mã hóa bất đối xứng cho việc mã hóa lượng lớn dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một API backend xử lý nội dung HTML do người dùng gửi. Để ngăn chặn các cuộc tấn công Cross-Site Scripting (XSS), backend nên thực hiện hành động nào trước khi hiển thị nội dung này?",
+    "options": [
+      "A. Mã hóa toàn bộ nội dung HTML.",
+      "B. Chuyển đổi (sanitize) hoặc thoát (escape) tất cả các ký tự đặc biệt trong HTML.",
+      "C. Chỉ cho phép người dùng đã xác thực gửi nội dung HTML.",
+      "D. Lưu trữ nội dung HTML trong một cơ sở dữ liệu riêng biệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để ngăn chặn XSS, backend cần đảm bảo rằng bất kỳ nội dung nào do người dùng tạo không thể thực thi mã độc trong trình duyệt của người dùng khác. Việc sanitize (loại bỏ các thẻ hoặc thuộc tính nguy hiểm) hoặc escape (chuyển đổi các ký tự đặc biệt thành thực thể HTML) là cần thiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc xoay vòng khóa (key rotation) được coi là một thực hành bảo mật quan trọng đối với các khóa mã hóa?",
+    "options": [
+      "A. Để giảm độ phức tạp của thuật toán mã hóa.",
+      "B. Để tăng tốc độ mã hóa và giải mã.",
+      "C. Để giảm thiểu rủi ro nếu một khóa bị lộ hoặc bị xâm phạm.",
+      "D. Để đảm bảo tính tương thích với các hệ thống cũ hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Xoay vòng khóa giới hạn lượng dữ liệu được mã hóa bằng một khóa cụ thể và giảm thiểu tác động nếu khóa đó bị lộ. Nếu một khóa bị xâm phạm, chỉ dữ liệu được mã hóa bằng khóa đó trong một khoảng thời gian nhất định mới gặp rủi ro.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bước đầu tiên trong kế hoạch ứng phó sự cố điển hình sau khi phát hiện một vi phạm bảo mật là gì?",
+    "options": [
+      "A. Phục hồi hệ thống từ bản sao lưu.",
+      "B. Cô lập (containment) hệ thống bị ảnh hưởng để ngăn chặn thiệt hại lan rộng.",
+      "C. Thông báo cho các bên liên quan và công chúng.",
+      "D. Phân tích nguyên nhân gốc rễ của cuộc tấn công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Theo các khung ứng phó sự cố như NIST, bước đầu tiên sau khi phát hiện là containment (cô lập) để ngăn chặn cuộc tấn công lan rộng và gây thêm thiệt hại, bảo vệ các hệ thống khác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh phòng thủ theo chiều sâu (defense-in-depth), việc triển khai Web Application Firewall (WAF) đóng góp như thế nào vào bảo mật tổng thể?",
+    "options": [
+      "A. WAF mã hóa dữ liệu người dùng trong cơ sở dữ liệu.",
+      "B. WAF thực hiện xác thực người dùng cuối cho ứng dụng.",
+      "C. WAF cung cấp một lớp bảo vệ bổ sung bằng cách lọc và giám sát lưu lượng HTTP giữa client và server.",
+      "D. WAF quản lý các khóa mã hóa cho ứng dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "WAF là một lớp bảo vệ ở biên mạng, giúp bảo vệ ứng dụng web khỏi các cuộc tấn công phổ biến như XSS, SQL Injection bằng cách phân tích và lọc lưu lượng HTTP/S trước khi nó đến server backend.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống backend cần xác thực người dùng từ nhiều nhà cung cấp danh tính (ví dụ: Google, Facebook). Giao thức hoặc framework nào phù hợp nhất để xử lý xác thực liên kết (federated authentication) này?",
+    "options": [
+      "A. Basic Authentication.",
+      "B. OAuth 2.0 với OpenID Connect (OIDC).",
+      "C. HTTP Session.",
+      "D. API Key Authentication."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OIDC được xây dựng trên OAuth 2.0 và được thiết kế đặc biệt để cho phép các ứng dụng xác minh danh tính của người dùng cuối và lấy thông tin hồ sơ cơ bản, làm cho nó lý tưởng cho xác thực liên kết với nhiều nhà cung cấp danh tính.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế một hệ thống ủy quyền, mô hình nào cho phép kiểm soát chi tiết các tài nguyên dựa trên các hành động và điều kiện cụ thể, thay vì chỉ dựa vào vai trò?",
+    "options": [
+      "A. Role-Based Access Control (RBAC).",
+      "B. Attribute-Based Access Control (ABAC).",
+      "C. Discretionary Access Control (DAC).",
+      "D. Mandatory Access Control (MAC)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ABAC cho phép kiểm soát truy cập dựa trên các thuộc tính của người dùng, tài nguyên và môi trường, cung cấp sự linh hoạt và chi tiết hơn nhiều so với RBAC truyền thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Danh mục lỗ hổng OWASP Top 10 nào đề cập đến các vấn đề khi ứng dụng làm lộ dữ liệu nhạy cảm do xử lý, lưu trữ hoặc truyền tải không đúng cách?",
+    "options": [
+      "A. Broken Access Control.",
+      "B. Cryptographic Failures (trước đây là Sensitive Data Exposure).",
+      "C. Server-Side Request Forgery (SSRF).",
+      "D. Security Logging and Monitoring Failures."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cryptographic Failures (trước đây gọi là Sensitive Data Exposure) tập trung vào việc không bảo vệ dữ liệu nhạy cảm bằng mã hóa hoặc các biện pháp bảo mật khác một cách hiệu quả, dẫn đến việc dữ liệu bị lộ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách tiếp cận an toàn nhất để xác thực đầu vào người dùng nhận được bởi một API backend là gì?",
+    "options": [
+      "A. Chỉ xác thực đầu vào ở phía client (frontend).",
+      "B. Chỉ cho phép các ký tự chữ và số cơ bản.",
+      "C. Xác thực đầu vào ở cả phía client và phía server (server-side validation là bắt buộc).",
+      "D. Không xác thực đầu vào, tin tưởng rằng người dùng sẽ cung cấp dữ liệu hợp lệ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Xác thực phía client cung cấp trải nghiệm người dùng tốt hơn, nhưng xác thực phía server là bắt buộc và là tuyến phòng thủ cuối cùng để bảo vệ ứng dụng khỏi dữ liệu độc hại hoặc không hợp lệ, vì client-side validation có thể dễ dàng bị bỏ qua.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng backend sử dụng session cookies. Để tăng cường bảo mật, thuộc tính nào nên được đặt trên các cookie này để ngăn các script phía client truy cập chúng?",
+    "options": [
+      "A. `Secure`.",
+      "B. `HttpOnly`.",
+      "C. `SameSite`.",
+      "D. `Expires`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thuộc tính `HttpOnly` ngăn chặn các script phía client (JavaScript) truy cập cookie, giảm thiểu rủi ro bị đánh cắp thông qua các cuộc tấn công Cross-Site Scripting (XSS).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi triển khai một ứng dụng vào môi trường đám mây, cách an toàn nhất để quản lý thông tin đăng nhập cơ sở dữ liệu và các bí mật khác là gì?",
+    "options": [
+      "A. Mã hóa các bí mật và lưu trữ chúng trong kho lưu trữ mã nguồn.",
+      "B. Nhúng các bí mật trực tiếp vào mã nguồn của ứng dụng.",
+      "C. Sử dụng dịch vụ quản lý bí mật của nhà cung cấp đám mây (ví dụ: AWS Secrets Manager, Azure Key Vault).",
+      "D. Lưu trữ các bí mật trong các file cấu hình không được mã hóa trên máy chủ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các dịch vụ quản lý bí mật của nhà cung cấp đám mây được thiết kế để lưu trữ, quản lý và truy xuất các bí mật một cách an toàn, tích hợp tốt với các dịch vụ đám mây khác và thường bao gồm các tính năng như xoay vòng khóa tự động.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hãy xem xét một kịch bản trong đó một dịch vụ backend cần truy cập một API bên thứ ba thay mặt cho người dùng. Luồng OAuth 2.0 nào phù hợp nhất cho ủy quyền được ủy quyền (delegated authorization) này?",
+    "options": [
+      "A. Client Credentials Grant.",
+      "B. Implicit Grant.",
+      "C. Authorization Code Grant với Proof Key for Code Exchange (PKCE).",
+      "D. Resource Owner Password Credentials Grant."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Authorization Code Grant (đặc biệt là với PKCE cho các client công khai) là luồng tiêu chuẩn cho ủy quyền được ủy quyền, cho phép người dùng cấp quyền truy cập vào tài nguyên của họ trên một dịch vụ khác mà không cần chia sẻ thông tin đăng nhập với client.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một Backend Developer đang xây dựng một endpoint cho phép người dùng tải lên file. Biện pháp bảo mật quan trọng nào cần được triển khai để ngăn chặn tải lên file độc hại?",
+    "options": [
+      "A. Chỉ cho phép tải lên các loại file được liệt kê trong danh sách đen.",
+      "B. Kiểm tra phần mở rộng file và loại MIME ở phía server, đồng thời quét virus các file đã tải lên.",
+      "C. Giới hạn kích thước file tải lên tối đa.",
+      "D. Lưu trữ tất cả các file tải lên trong cùng một thư mục công khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm tra phần mở rộng file và loại MIME ở phía server (không chỉ dựa vào client-side) là rất quan trọng. Thêm vào đó, việc quét virus là một lớp bảo vệ bổ sung để phát hiện và ngăn chặn các file chứa mã độc, ngay cả khi chúng có vẻ hợp lệ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để đảm bảo rằng một máy chủ backend chỉ chấp nhận các kết nối TLS an toàn và giảm thiểu các cuộc tấn công hạ cấp (downgrade attacks), khía cạnh cấu hình nào là quan trọng nhất?",
+    "options": [
+      "A. Sử dụng chứng chỉ TLS tự ký.",
+      "B. Vô hiệu hóa tất cả các giao thức TLS cũ (ví dụ: TLS 1.0, TLS 1.1) và chỉ cho phép các phiên bản mạnh hơn (ví dụ: TLS 1.2, TLS 1.3).",
+      "C. Giới hạn số lượng kết nối TLS đồng thời.",
+      "D. Tăng thời gian hết hạn của chứng chỉ TLS."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các phiên bản TLS cũ hơn có thể chứa các lỗ hổng đã biết. Việc vô hiệu hóa chúng và chỉ cho phép các phiên bản mới hơn, mạnh hơn, cùng với các bộ mã hóa an toàn, là rất quan trọng để ngăn chặn các cuộc tấn công hạ cấp và đảm bảo bảo mật đường truyền tối đa.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quá trình thực hiện mô hình hóa mối đe dọa (threat modeling) bằng mô hình STRIDE, 'T' đại diện cho điều gì và nó thể hiện loại lỗ hổng nào?",
+    "options": [
+      "A. Tampering - Thay đổi dữ liệu không được phép.",
+      "B. Trust - Vi phạm niềm tin.",
+      "C. Threat - Mối đe dọa bên ngoài.",
+      "D. Testing - Thiếu kiểm thử bảo mật."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong mô hình STRIDE, 'T' là viết tắt của Tampering, đề cập đến việc thay đổi dữ liệu không được phép. Nó liên quan đến việc đảm bảo tính toàn vẹn của dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Nguyên tắc phòng thủ theo chiều sâu (defense-in-depth) nào gợi ý rằng nên triển khai nhiều lớp kiểm soát bảo mật, ngay cả khi một lớp bị lỗi?",
+    "options": [
+      "A. Least Privilege.",
+      "B. Separation of Duties.",
+      "C. Redundancy.",
+      "D. Fail-Safe Defaults."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Redundancy (dư thừa) trong bối cảnh phòng thủ theo chiều sâu có nghĩa là có nhiều lớp bảo vệ độc lập. Nếu một lớp bị phá vỡ, các lớp khác vẫn hoạt động để bảo vệ hệ thống, tương tự như các lớp của một củ hành.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai hệ thống phân tán với lưu lượng truy cập cực lớn, phương pháp nào là tối ưu nhất để thu hồi (revoke) một JSON Web Token (JWT) trước khi nó hết hạn mà vẫn đảm bảo hiệu năng của hệ thống?",
+    "options": [
+      "A. Truy vấn Database mỗi khi kiểm tra token để xác thực trạng thái 'revoked'.",
+      "B. Sử dụng một danh sách đen (Blacklist) lưu trong Redis với cơ chế TTL bằng thời gian còn lại của token.",
+      "C. Giảm thời gian hết hạn (Expiration time) của Access Token xuống mức cực ngắn (ví dụ 1 phút).",
+      "D. Thay đổi Secret Key của server để làm mất hiệu lực toàn bộ các token đã phát hành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Redis Blacklist là sự cân bằng tốt nhất giữa bảo mật và hiệu năng. Nó tránh được việc truy vấn DB nặng nề và cho phép thu hồi tức thì, trong khi TTL tự động dọn dẹp bộ nhớ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices, kỹ thuật nào giúp ngăn chặn hiệu quả nhất cuộc tấn công 'Server-Side Request Forgery' (SSRF) khi một service cần gọi đến một URL do người dùng cung cấp?",
+    "options": [
+      "A. Sử dụng Regex để kiểm tra URL đầu vào có thuộc domain của công ty hay không.",
+      "B. Chặn tất cả các yêu cầu HTTP từ backend service ra internet bằng Firewall.",
+      "C. Sử dụng một 'Egress Proxy' với danh sách trắng (Allow-list) các domain/IP cụ thể và cô lập network của service.",
+      "D. Chuyển đổi URL người dùng cung cấp sang địa chỉ IP và kiểm tra xem có phải IP nội bộ không."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Egress Proxy cung cấp khả năng kiểm soát tập trung và mạnh mẽ nhất, ngăn chặn service truy cập vào các tài nguyên nội bộ nhạy cảm hoặc các domain độc hại thông qua cấu hình Allow-list nghiêm ngặt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng OAuth2 'Implicit Flow' hiện nay bị coi là không an toàn cho các ứng dụng web và được khuyến nghị thay thế bằng 'Authorization Code Flow with PKCE'?",
+    "options": [
+      "A. Vì Implicit Flow yêu cầu client phải lưu trữ Client Secret ở phía trình duyệt.",
+      "B. Vì Access Token trong Implicit Flow được trả về trực tiếp qua URL Fragment, dễ bị lộ qua lịch sử trình duyệt hoặc Referer header.",
+      "C. Vì Implicit Flow không hỗ trợ cơ chế Refresh Token.",
+      "D. Vì PKCE sử dụng thuật toán mã hóa đối xứng mạnh hơn để bảo vệ Access Token."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Implicit Flow truyền token qua URL fragment, tạo ra bề mặt tấn công lớn. PKCE giải quyết vấn đề này bằng cách sử dụng code_challenge và code_verifier để đảm bảo chỉ client yêu cầu mới đổi được code lấy token.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống lưu trữ mật khẩu cho hàng triệu người dùng, lựa chọn nào sau đây đảm bảo khả năng chống lại tấn công Brute-force và GPU-accelerated cracking tốt nhất?",
+    "options": [
+      "A. Sử dụng SHA-256 kèm theo một chuỗi Salt ngẫu nhiên cho mỗi người dùng.",
+      "B. Sử dụng PBKDF2 với số vòng lặp (iterations) ít nhất là 10,000.",
+      "C. Sử dụng Argon2id với các tham số về bộ nhớ (memory cost) và độ song song (parallelism) được tinh chỉnh.",
+      "D. Sử dụng HMAC-SHA512 để băm mật khẩu và lưu trữ key trong HSM (Hardware Security Module)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Argon2id là thuật toán thắng giải Password Hashing Competition, được thiết kế để chống lại các cuộc tấn công bằng phần cứng chuyên dụng (GPU/ASIC) nhờ khả năng cấu hình sử dụng bộ nhớ cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống sử dụng kiến trúc Event-driven, làm thế nào để đảm bảo tính toàn vẹn và chống chối bỏ (non-repudiation) cho các message quan trọng chạy qua Message Broker?",
+    "options": [
+      "A. Sử dụng kết nối TLS/SSL giữa các Producer/Consumer và Message Broker.",
+      "B. Producer ký số (Digital Signature) vào payload của message bằng Private Key và Consumer xác thực bằng Public Key.",
+      "C. Mã hóa toàn bộ payload của message bằng thuật toán AES-256 trước khi gửi.",
+      "D. Sử dụng cơ chế xác thực Username/Password mạnh cho các kết nối vào Message Broker."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ký số (Digital Signature) đảm bảo message không bị thay đổi (Integrity) và xác nhận chính xác nguồn gốc từ Producer (Non-repudiation), điều mà mã hóa đơn thuần hoặc TLS không giải quyết triệt để ở mức ứng dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang xử lý một hệ thống bị dính lỗi 'Insecure Deserialization'. Cách tiếp cận nào là an toàn nhất để thay thế việc truyền nhận object trực tiếp?",
+    "options": [
+      "A. Sử dụng danh sách trắng (Allow-list) các class được phép deserialization.",
+      "B. Ký số vào dữ liệu đã được serialize trước khi gửi và kiểm tra chữ ký trước khi deserialize.",
+      "C. Chuyển sang sử dụng các định dạng dữ liệu thuần túy (pure data) như JSON hoặc Protobuf và thực hiện validation nghiêm ngặt.",
+      "D. Cập nhật thư viện serialization lên phiên bản mới nhất để vá các lỗ hổng đã biết."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thay thế hoàn toàn việc serialize object bằng các định dạng dữ liệu thuần túy (JSON/Protobuf) loại bỏ khả năng thực thi mã độc thông qua các gadget chains trong quá trình phục hồi đối tượng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi triển khai cơ chế 'Rate Limiting' để chống DDoS ở tầng ứng dụng, thuật toán nào cho phép xử lý các đợt lưu lượng tăng đột biến (bursts) một cách linh hoạt nhất mà vẫn giữ được giới hạn trung bình?",
+    "options": [
+      "A. Fixed Window Counter.",
+      "B. Sliding Window Log.",
+      "C. Token Bucket.",
+      "D. Leaky Bucket."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Token Bucket cho phép tích lũy token khi hệ thống rảnh rỗi, từ đó cho phép một lượng burst traffic nhất định vượt ngưỡng trung bình, trong khi Leaky Bucket ép lưu lượng ra ở tốc độ cố định.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh 'Secrets Management', tại sao việc sử dụng 'Dynamic Secrets' (ví dụ từ HashiCorp Vault) lại ưu việt hơn so với 'Static Secrets'?",
+    "options": [
+      "A. Vì Dynamic Secrets có độ dài lớn hơn và khó bị bẻ khóa hơn.",
+      "B. Vì Dynamic Secrets được tạo ra theo yêu cầu, có thời hạn ngắn và tự động bị thu hồi, giảm thiểu rủi ro khi secret bị lộ.",
+      "C. Vì Dynamic Secrets không yêu cầu kết nối mạng để giải mã.",
+      "D. Vì Dynamic Secrets cho phép lưu trữ trực tiếp trong mã nguồn mà không sợ bị lộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dynamic Secrets giảm thiểu 'blast radius'. Nếu một secret bị lộ, nó chỉ có giá trị trong thời gian ngắn và gắn liền với một phiên làm việc cụ thể, giúp kiểm soát thiệt hại tốt hơn nhiều so với static secrets.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để ngăn chặn tấn công 'Broken Object Level Authorization' (BOLA/IDOR), phương pháp nào sau đây là hiệu quả nhất ở mức kiến trúc?",
+    "options": [
+      "A. Sử dụng UUID thay cho ID tăng dần (Auto-increment) để kẻ tấn công không đoán được ID.",
+      "B. Kiểm tra quyền sở hữu của người dùng đối với tài nguyên (Resource Ownership) trong mọi yêu cầu truy cập dữ liệu ở tầng Service/Repository.",
+      "C. Mã hóa ID của tài nguyên trước khi gửi về phía client.",
+      "D. Sử dụng Web Application Firewall (WAF) để nhận diện các hành vi duyệt ID bất thường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "UUID chỉ làm khó việc đoán ID chứ không ngăn chặn được truy cập trái phép nếu kẻ tấn công có ID. Việc kiểm tra quyền sở hữu (Ownership check) ở tầng logic là cách duy nhất đảm bảo người dùng chỉ truy cập đúng dữ liệu của họ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống thanh toán, bạn cần lưu trữ thông tin thẻ tín dụng (PCI DSS). Kỹ thuật nào giúp giảm thiểu rủi ro nhất khi cơ sở dữ liệu bị chiếm quyền điều khiển?",
+    "options": [
+      "A. Mã hóa toàn bộ ổ cứng (Transparent Data Encryption - TDE).",
+      "B. Sử dụng mã hóa đối xứng AES-256 cho các cột nhạy cảm trong DB.",
+      "C. Sử dụng 'Envelope Encryption' với Master Key được lưu trữ trong một HSM hoặc Cloud KMS riêng biệt.",
+      "D. Băm (Hash) số thẻ tín dụng bằng SHA-512 trước khi lưu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Envelope Encryption tách biệt Data Encryption Key (DEK) và Key Encryption Key (KEK). Việc lưu KEK trong HSM đảm bảo rằng dù kẻ tấn công có DB và DEK, họ vẫn không thể giải mã nếu không có quyền truy cập vào HSM.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một ứng dụng Web bị phát hiện có lỗ hổng 'Cross-Site Request Forgery' (CSRF). Nếu ứng dụng này chỉ sử dụng JSON API và xác thực qua Header 'Authorization: Bearer <JWT>', tại sao nó vẫn có thể bị tấn công CSRF?",
+    "options": [
+      "A. Vì JWT có thể bị đánh cắp thông qua XSS.",
+      "B. Thực tế ứng dụng này KHÔNG bị tấn công CSRF vì trình duyệt không tự động gửi Header Authorization trong các cross-site request.",
+      "C. Vì kẻ tấn công có thể thực hiện 'CORS preflight bypass'.",
+      "D. Vì JWT vẫn được lưu trong Cookie nếu lập trình viên cấu hình sai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CSRF dựa trên việc trình duyệt tự động gửi các thông tin định danh như Cookie hoặc Basic Auth. Nếu token chỉ nằm trong Header Authorization, trình duyệt sẽ không tự động đính kèm nó, do đó ứng dụng miễn nhiễm với CSRF truyền thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quy trình Incident Response, hành động nào nên được ưu tiên hàng đầu khi phát hiện một Backend Server đang bị rò rỉ dữ liệu do một tiến trình lạ thực thi?",
+    "options": [
+      "A. Xóa tiến trình lạ đó ngay lập tức để dừng việc rò rỉ.",
+      "B. Tắt server ngay lập tức để bảo vệ dữ liệu.",
+      "C. Cô lập server về mặt network (Isolate) và thực hiện snapshot bộ nhớ/ổ đĩa để phục vụ điều tra (Forensics).",
+      "D. Thay đổi toàn bộ mật khẩu quản trị và secret keys của hệ thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cô lập giúp ngăn chặn rò rỉ tiếp diễn mà không làm mất dữ liệu trong bộ nhớ (RAM) - nơi chứa các dấu vết quan trọng của cuộc tấn công, giúp việc điều tra nguyên nhân gốc rễ chính xác hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Certificate Pinning' giúp giải quyết vấn đề bảo mật nào sau đây trong giao tiếp giữa Mobile App và Backend?",
+    "options": [
+      "A. Ngăn chặn tấn công Man-in-the-Middle (MitM) ngay cả khi thiết bị người dùng bị cài đặt Certificate Authority (CA) giả mạo.",
+      "B. Đảm bảo dữ liệu được mã hóa mạnh hơn mức TLS tiêu chuẩn.",
+      "C. Tự động gia hạn chứng chỉ SSL khi hết hạn.",
+      "D. Xác thực danh tính của người dùng cuối thông qua chứng chỉ số."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Certificate Pinning buộc ứng dụng chỉ tin tưởng một chứng chỉ hoặc public key cụ thể, thay vì tin tưởng bất kỳ CA nào có trong store của hệ điều hành, giúp chống lại các cuộc tấn công MitM tinh vi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai 'Role-Based Access Control' (RBAC) trong một hệ thống lớn, vấn đề 'Role Explosion' thường xảy ra. Giải pháp nâng cao nào giúp quản lý quyền truy cập linh hoạt hơn dựa trên ngữ cảnh (ví dụ: thời gian, địa điểm, thuộc tính tài nguyên)?",
+    "options": [
+      "A. Chuyển sang sử dụng Hierarchical RBAC.",
+      "B. Triển khai Attribute-Based Access Control (ABAC).",
+      "C. Tăng số lượng Role để bao phủ mọi trường hợp.",
+      "D. Sử dụng JWT Scopes để định nghĩa quyền hạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ABAC cho phép định nghĩa các chính sách truy cập dựa trên thuộc tính (attributes) của user, resource và environment, giúp giảm số lượng role và xử lý được các logic phức tạp mà RBAC không làm được.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào để bảo vệ một hệ thống GraphQL khỏi các cuộc tấn công 'Deeply Nested Query' gây cạn kiệt tài nguyên (DoS)?",
+    "options": [
+      "A. Sử dụng WAF để chặn các request có kích thước lớn.",
+      "B. Giới hạn độ sâu của query (Query Depth Limiting) và tính toán độ phức tạp của query (Query Cost Analysis) trước khi thực thi.",
+      "C. Chỉ cho phép các truy vấn GET, cấm các truy vấn POST.",
+      "D. Sử dụng cơ chế phân trang (Pagination) bắt buộc cho mọi field."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong GraphQL, kẻ tấn công có thể tạo ra các query đệ quy sâu. Kiểm tra độ sâu và chi phí (cost) trước khi chạy là cách hiệu quả nhất để từ chối các query độc hại trước khi chúng làm treo server.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong cơ chế 'Double Submit Cookie' để chống CSRF, tại sao giá trị CSRF token trong Cookie và trong Request Header phải giống nhau nhưng không cần lưu trữ phía Server?",
+    "options": [
+      "A. Vì Server chỉ cần so sánh tính khớp nhau của hai giá trị này để xác nhận request đến từ cùng một nguồn (Same-origin).",
+      "B. Vì Cookie đã được mã hóa bởi trình duyệt nên Server không cần kiểm tra lại.",
+      "C. Vì kẻ tấn công có thể đọc được Cookie nhưng không thể sửa đổi Header của request.",
+      "D. Để tiết kiệm dung lượng bộ nhớ đệm (Cache) trên Server."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cơ chế này dựa trên chính sách đồng nguồn (Same-origin policy). Kẻ tấn công từ domain khác có thể ép trình duyệt gửi cookie nhưng không thể đọc hoặc can thiệp vào header của request để làm cho chúng khớp nhau.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống Microservices sử dụng mTLS (mutual TLS) để giao tiếp nội bộ. Lợi ích lớn nhất của việc này so với TLS thông thường là gì?",
+    "options": [
+      "A. Tốc độ truyền tải dữ liệu nhanh hơn do không cần handshake.",
+      "B. Cả Client và Server đều phải xác thực lẫn nhau bằng chứng chỉ số, đảm bảo chỉ các service được cấp phép mới có thể gọi nhau.",
+      "C. Dữ liệu được mã hóa hai lần để tăng tính bảo mật.",
+      "D. Không cần sử dụng API Gateway để quản lý lưu lượng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "mTLS yêu cầu cả hai bên cung cấp chứng chỉ, giúp thiết lập mô hình Zero Trust trong mạng nội bộ, ngăn chặn các service lạ hoặc bị chiếm quyền có thể giao tiếp với các service nhạy cảm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện 'Key Rotation' cho các khóa mã hóa dữ liệu trong DB, thách thức lớn nhất là gì và làm thế nào để xử lý mà không gây downtime?",
+    "options": [
+      "A. Thách thức là dung lượng DB tăng lên; xử lý bằng cách nén dữ liệu.",
+      "B. Thách thức là dữ liệu cũ không giải mã được bằng khóa mới; xử lý bằng cách lưu trữ phiên bản khóa (Key Versioning) và re-encrypt dần dần.",
+      "C. Thách thức là CPU bị quá tải; xử lý bằng cách nâng cấp server chuyên dụng.",
+      "D. Thách thức là thuật toán cũ bị lỗi thời; xử lý bằng cách thay đổi thuật toán mã hóa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Key Versioning cho phép hệ thống biết dữ liệu nào được mã hóa bởi khóa nào. Việc re-encrypt (mã hóa lại) có thể thực hiện dưới nền (background job) để tránh làm gián đoạn dịch vụ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lỗ hổng 'Log4Shell' (CVE-2021-44228) chủ yếu khai thác yếu điểm nào trong việc xử lý log?",
+    "options": [
+      "A. Việc ghi log quá nhiều làm tràn bộ đệm (Buffer Overflow).",
+      "B. Việc tự động thực thi JNDI lookup khi gặp các chuỗi ký tự đặc biệt trong nội dung log, dẫn đến Remote Code Execution (RCE).",
+      "C. Việc lưu log dưới dạng plain text cho phép kẻ tấn công đọc được thông tin nhạy cảm.",
+      "D. Việc log không được phân quyền truy cập đúng cách trên hệ điều hành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Log4j cho phép tính năng 'lookups' thực thi các truy vấn JNDI. Kẻ tấn công gửi một chuỗi đặc biệt khiến thư viện tự kết nối đến server của chúng và tải về/thực thi mã độc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để bảo vệ API khỏi các cuộc tấn công 'Credential Stuffing', biện pháp nào sau đây mang lại hiệu quả cao nhất mà ít ảnh hưởng đến trải nghiệm người dùng thông thường?",
+    "options": [
+      "A. Bắt buộc tất cả người dùng đổi mật khẩu định kỳ 30 ngày.",
+      "B. Triển khai cơ chế phân tích hành vi (Anomaly Detection) để phát hiện tỷ lệ đăng nhập thất bại tăng đột biến từ một dải IP.",
+      "C. Sử dụng CAPTCHA cho mọi lần đăng nhập.",
+      "D. Chỉ cho phép đăng nhập từ các thiết bị đã được đăng ký trước."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân tích hành vi giúp phát hiện các cuộc tấn công tự động quy mô lớn mà không gây phiền hà cho người dùng hợp lệ bằng CAPTCHA hay ép đổi mật khẩu vô lý.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng 'Content Security Policy' (CSP), chỉ thị (directive) nào giúp ngăn chặn hiệu quả nhất các cuộc tấn công XSS bằng cách chỉ cho phép script từ các nguồn tin cậy?",
+    "options": [
+      "A. default-src 'self'",
+      "B. script-src 'self' https://trusted.com",
+      "C. object-src 'none'",
+      "D. style-src 'unsafe-inline'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "script-src giới hạn các nguồn mà trình duyệt có thể tải và thực thi mã JavaScript. Việc chỉ định rõ domain tin cậy ngăn chặn việc thực thi các inline script độc hại hoặc script từ domain lạ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng hàm băm MD5 hoặc SHA-1 để kiểm tra tính toàn vẹn của file (Integrity Check) trong các hệ thống yêu cầu bảo mật cao hiện nay?",
+    "options": [
+      "A. Vì chúng có tốc độ tính toán quá chậm.",
+      "B. Vì chúng đã bị chứng minh là dễ bị tấn công va chạm (Collision attack), cho phép hai file khác nhau có cùng một mã băm.",
+      "C. Vì mã băm của chúng quá ngắn, không đủ để lưu trữ trong database.",
+      "D. Vì chúng không hỗ trợ mã hóa dữ liệu bên trong file."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các cuộc tấn công va chạm đã được thực hiện thành công trên MD5 và SHA-1, nghĩa là kẻ tấn công có thể tạo ra một file độc hại có cùng mã băm với file sạch, đánh lừa hệ thống kiểm tra.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiến trúc 'Zero Trust', nguyên tắc 'Least Privilege' nên được áp dụng như thế nào đối với các microservices?",
+    "options": [
+      "A. Mỗi service có toàn quyền truy cập vào database của nó.",
+      "B. Mỗi service chỉ được cấp quyền thực hiện các hành động cụ thể trên các tài nguyên cụ thể cần thiết cho chức năng của nó, và quyền này được xác thực liên tục.",
+      "C. Các service trong cùng một mạng nội bộ mặc định tin tưởng lẫn nhau.",
+      "D. Chỉ các service có public API mới cần được kiểm soát quyền truy cập."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Least Privilege trong Zero Trust nghĩa là không có sự tin tưởng mặc định. Mọi yêu cầu giữa các service phải được xác thực, ủy quyền và chỉ giới hạn trong phạm vi tối thiểu cần thiết để hoàn thành công việc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi xử lý dữ liệu PII (Personally Identifiable Information) trong log, phương pháp 'Masking' nên được thực hiện ở giai đoạn nào để đảm bảo an toàn nhất?",
+    "options": [
+      "A. Thực hiện Masking tại tầng hiển thị (Log Viewer UI).",
+      "B. Thực hiện Masking ngay tại ứng dụng (Application Level) trước khi dữ liệu được gửi đến log collector.",
+      "C. Thực hiện Masking định kỳ hàng ngày trên các file log đã lưu.",
+      "D. Không cần Masking nếu ổ đĩa lưu log đã được mã hóa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Masking tại nguồn (Application Level) đảm bảo dữ liệu nhạy cảm không bao giờ rời khỏi bộ nhớ ứng dụng dưới dạng plain text, ngăn chặn rò rỉ dữ liệu ngay cả khi hệ thống lưu trữ log bị xâm nhập.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một API trả về thông tin chi tiết về lỗi (Stack trace) khi có ngoại lệ xảy ra. Rủi ro bảo mật lớn nhất ở đây là gì?",
+    "options": [
+      "A. Gây lãng phí băng thông mạng.",
+      "B. Làm chậm hiệu năng của ứng dụng do phải xử lý chuỗi lớn.",
+      "C. Tiết lộ thông tin nhạy cảm về cấu trúc hệ thống, thư viện sử dụng và các điểm yếu tiềm ẩn (Information Exposure).",
+      "D. Làm cho người dùng cảm thấy ứng dụng không chuyên nghiệp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Stack trace chứa thông tin về đường dẫn file, phiên bản thư viện, cấu trúc code và DB. Kẻ tấn công có thể sử dụng thông tin này để tìm kiếm các lỗ hổng đã biết (known vulnerabilities) phù hợp với môi trường đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một tổ chức lớn đang di chuyển sang kiến trúc microservices và cần một giải pháp quản lý danh tính và truy cập (IAM) tập trung, hỗ trợ Single Sign-On (SSO) trên nhiều ứng dụng và dịch vụ. Giải pháp nào sau đây là phù hợp nhất để triển khai một cách an toàn và hiệu quả, đồng thời tối ưu hóa trải nghiệm người dùng và khả năng mở rộng?",
+    "options": [
+      "A. Triển khai một Identity Provider (IdP) sử dụng OpenID Connect (OIDC) cho xác thực và OAuth 2.0 cho ủy quyền, tích hợp với các dịch vụ thông qua JWTs.",
+      "B. Sử dụng cơ chế xác thực dựa trên session cookie truyền thống và quản lý session tập trung cho tất cả microservices.",
+      "C. Mỗi microservice tự quản lý cơ sở dữ liệu người dùng và thực hiện xác thực/ủy quyền độc lập.",
+      "D. Áp dụng xác thực cơ bản (Basic Authentication) với API key cho mỗi dịch vụ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "OIDC cung cấp lớp xác thực trên OAuth 2.0, cho phép SSO và chia sẻ thông tin danh tính an toàn giữa các ứng dụng và dịch vụ, đặc biệt phù hợp cho kiến trúc microservices với khả năng mở rộng và quản lý tập trung. JWTs là lựa chọn tốt cho token truy cập.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống tài chính yêu cầu bảo mật cao cho các khóa mã hóa (encryption keys) được sử dụng để bảo vệ dữ liệu nhạy cảm trong cơ sở dữ liệu và khi truyền tải. Làm thế nào để đảm bảo rằng các khóa này được quản lý an toàn nhất, bao gồm cả việc xoay vòng khóa (key rotation) và bảo vệ khỏi truy cập trái phép ở cấp độ hạ tầng?",
+    "options": [
+      "A. Lưu trữ các khóa mã hóa trong một tệp cấu hình được mã hóa trên máy chủ ứng dụng và thực hiện xoay vòng thủ công định kỳ.",
+      "B. Tích hợp với một dịch vụ Quản lý Khóa (Key Management Service - KMS) chuyên dụng, sử dụng Hardware Security Module (HSM) hoặc các giải pháp tương đương để bảo vệ khóa gốc (root key) và tự động hóa quy trình xoay vòng khóa.",
+      "C. Mã hóa khóa bằng một khóa chính (master key) được lưu trữ trong mã nguồn ứng dụng và chỉ xoay vòng khi có yêu cầu thay đổi mã.",
+      "D. Sử dụng biến môi trường để lưu trữ khóa trên các máy chủ sản xuất và tin tưởng vào bảo mật vật lý của trung tâm dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "KMS với HSM cung cấp mức độ bảo mật cao nhất cho khóa mã hóa, bao gồm bảo vệ khóa gốc, kiểm soát truy cập chặt chẽ, ghi nhật ký kiểm toán và khả năng tự động hóa việc xoay vòng khóa, đáp ứng yêu cầu của hệ thống tài chính.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh phát triển API GraphQL cho một ứng dụng e-commerce lớn, nguy cơ bảo mật nào sau đây thường bị bỏ qua và có thể gây ra hậu quả nghiêm trọng nếu không được xử lý đúng cách, đặc biệt liên quan đến việc lạm dụng tài nguyên và tiết lộ dữ liệu?",
+    "options": [
+      "A. SQL Injection thông qua các tham số của query.",
+      "B. Cross-Site Scripting (XSS) trong các trường dữ liệu trả về.",
+      "C. Denial of Service (DoS) thông qua các query lồng nhau (nested queries) sâu hoặc các query phức tạp không giới hạn độ sâu/tài nguyên.",
+      "D. Broken Authentication khi sử dụng JWT."
+    ],
+    "correctAnswer": "C",
+    "explanation": "GraphQL có thể dễ bị tấn công DoS thông qua các query lồng nhau sâu hoặc các query yêu cầu tài nguyên lớn, vì chúng có thể tiêu tốn bộ nhớ và CPU của máy chủ một cách nhanh chóng, làm chậm hoặc sập dịch vụ. Việc giới hạn độ sâu query, giới hạn độ phức tạp và áp dụng rate limiting là cần thiết.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một công ty đang phát triển nền tảng IoT cho các thiết bị công nghiệp. Khi thực hiện Threat Modeling cho hệ thống này, bước nào sau đây là quan trọng nhất để đảm bảo rằng các rủi ro bảo mật tiềm ẩn từ các thành phần đa dạng (thiết bị, gateway, cloud backend) được xác định và giảm thiểu một cách toàn diện?",
+    "options": [
+      "A. Chỉ tập trung vào các lỗ hổng phần mềm trên cloud backend vì đây là nơi lưu trữ dữ liệu nhạy cảm nhất.",
+      "B. Phân tích luồng dữ liệu (data flow) và điểm tin cậy (trust boundaries) qua toàn bộ kiến trúc từ thiết bị đến cloud, sử dụng các khung như STRIDE để xác định mối đe dọa tại mỗi điểm.",
+      "C. Thực hiện kiểm tra thâm nhập (penetration testing) định kỳ sau khi hệ thống đã hoàn thành.",
+      "D. Yêu cầu các nhà cung cấp thiết bị IoT cung cấp chứng nhận bảo mật của họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Threat Modeling hiệu quả yêu cầu phân tích toàn diện kiến trúc, bao gồm các luồng dữ liệu và ranh giới tin cậy, để xác định các mối đe dọa tại từng thành phần và điểm tương tác. Phương pháp như STRIDE giúp cấu trúc hóa quá trình này, đặc biệt quan trọng cho các hệ thống phức tạp như IoT.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quy trình Ứng phó Sự cố Bảo mật (Security Incident Response), sau khi đã phát hiện và xác định phạm vi sự cố, bước tiếp theo quan trọng nhất để ngăn chặn thiệt hại lan rộng và chuẩn bị cho việc khôi phục là gì?",
+    "options": [
+      "A. Bắt đầu quá trình điều tra pháp y (forensic investigation) chi tiết.",
+      "B. Gửi thông báo cho tất cả các bên liên quan và khách hàng.",
+      "C. Chứa đựng (containment) sự cố để ngăn chặn sự lây lan và cô lập các hệ thống bị ảnh hưởng.",
+      "D. Khôi phục hệ thống từ bản sao lưu gần nhất."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Theo các khung ứng phó sự cố như NIST, sau khi phát hiện và phân tích, bước tiếp theo là containment (chứa đựng) để ngăn chặn sự cố lây lan và giảm thiểu thiệt hại, trước khi tiến hành loại bỏ (eradication) và khôi phục (recovery).",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai một ứng dụng SPA (Single Page Application) sử dụng OpenID Connect để xác thực, luồng (flow) OAuth 2.0 nào sau đây được khuyến nghị nhất để đảm bảo an toàn, đặc biệt là chống lại các cuộc tấn công chiếm đoạt mã (authorization code interception) và tránh lưu trữ secrets trên client-side?",
+    "options": [
+      "A. Implicit Flow.",
+      "B. Authorization Code Flow with PKCE (Proof Key for Code Exchange).",
+      "C. Client Credentials Flow.",
+      "D. Resource Owner Password Credentials Flow."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Implicit Flow không còn được khuyến nghị do rủi ro bảo mật. Client Credentials và Resource Owner Password Credentials Flow không phù hợp cho SPA. Authorization Code Flow with PKCE là luồng được khuyến nghị cho SPA và mobile apps vì nó bảo vệ mã ủy quyền khỏi bị chiếm đoạt và không yêu cầu ứng dụng client lưu trữ client secret.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để bảo vệ giao tiếp giữa các microservices nội bộ trong một môi trường đám mây, ngoài việc sử dụng TLS/SSL, biện pháp bảo mật nào sau đây là quan trọng nhất để đảm bảo rằng chỉ các dịch vụ được ủy quyền mới có thể giao tiếp với nhau, ngay cả khi TLS đã được thiết lập?",
+    "options": [
+      "A. Triển khai Mutual TLS (mTLS) để cả client và server đều xác thực lẫn nhau bằng chứng chỉ số.",
+      "B. Sử dụng IP whitelisting để chỉ cho phép các địa chỉ IP cụ thể truy cập dịch vụ.",
+      "C. Mã hóa payload của thông điệp ở tầng ứng dụng.",
+      "D. Áp dụng rate limiting cho tất cả các API endpoint."
+    ],
+    "correctAnswer": "A",
+    "explanation": "mTLS cung cấp xác thực hai chiều, nghĩa là cả client và server đều phải trình chứng chỉ hợp lệ cho nhau. Điều này đảm bảo rằng chỉ các dịch vụ được cấp phép mới có thể thiết lập kết nối, tăng cường đáng kể bảo mật giao tiếp nội bộ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng backend đang xử lý các yêu cầu tải lên tệp (file upload) từ người dùng. Để ngăn chặn các cuộc tấn công như tải lên mã độc (malicious file upload) hoặc vượt qua kiểm soát loại tệp (mime type bypass), chiến lược bảo mật toàn diện nào sau đây là hiệu quả nhất?",
+    "options": [
+      "A. Chỉ kiểm tra phần mở rộng tệp (file extension) ở phía client trước khi tải lên.",
+      "B. Kiểm tra phần mở rộng tệp ở phía server, đồng thời quét nội dung tệp bằng phần mềm diệt virus và lưu trữ tệp trên một máy chủ riêng biệt, không thể thực thi.",
+      "C. Chỉ dựa vào Content-Type header để xác định loại tệp và giới hạn kích thước tệp.",
+      "D. Chuyển đổi tất cả các tệp thành định dạng PDF sau khi tải lên để vô hiệu hóa mã độc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm tra phần mở rộng ở server là cần thiết, nhưng không đủ. Quét virus và lưu trữ tệp trên một hệ thống lưu trữ không thể thực thi (ví dụ: S3 bucket không có quyền thực thi) là các biện pháp quan trọng để ngăn chặn việc thực thi mã độc. Dựa vào Content-Type header là không an toàn vì nó dễ dàng bị giả mạo.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lỗ hổng \"Server-Side Request Forgery (SSRF)\" trong OWASP Top 10 đề cập đến điều gì và tại sao nó lại nguy hiểm ở cấp độ hệ thống?",
+    "options": [
+      "A. Kẻ tấn công có thể buộc server thực hiện các yêu cầu HTTP đến các tài nguyên nội bộ hoặc bên ngoài mà server có thể truy cập, thường thông qua một URL được cung cấp bởi người dùng.",
+      "B. Kẻ tấn công có thể chèn mã độc vào phản hồi của server để thực thi trên trình duyệt của người dùng.",
+      "C. Kẻ tấn công có thể truy cập vào các tệp hệ thống nhạy cảm trên server bằng cách thao túng đường dẫn tệp.",
+      "D. Kẻ tấn công có thể chiếm đoạt session của người dùng hợp lệ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "SSRF cho phép kẻ tấn công điều khiển server thực hiện các yêu cầu đến các tài nguyên khác, bao gồm các dịch vụ nội bộ (như metadata service của cloud provider, các dịch vụ nội bộ khác) hoặc các hệ thống bên ngoài, dẫn đến tiết lộ thông tin nhạy cảm hoặc tấn công các hệ thống khác từ bên trong mạng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống đang lưu trữ hàng petabyte dữ liệu khách hàng nhạy cảm, được mã hóa bằng khóa đối xứng (symmetric key). Để giảm thiểu rủi ro khi một khóa bị lộ, chiến lược xoay vòng khóa (key rotation) nào sau đây là hiệu quả nhất và an toàn nhất ở quy mô lớn?",
+    "options": [
+      "A. Xoay vòng khóa mã hóa dữ liệu (Data Encryption Key - DEK) hàng ngày và mã hóa lại toàn bộ dữ liệu hiện có bằng khóa mới.",
+      "B. Xoay vòng khóa gốc (Key Encryption Key - KEK) định kỳ, nhưng không cần mã hóa lại toàn bộ dữ liệu, chỉ mã hóa lại các DEK bằng KEK mới.",
+      "C. Xoay vòng khóa chỉ khi có sự cố bảo mật hoặc khi có yêu cầu từ kiểm toán.",
+      "D. Sử dụng một khóa duy nhất cho tất cả dữ liệu và không bao giờ xoay vòng để tránh phức tạp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mã hóa lại toàn bộ petabyte dữ liệu hàng ngày (A) là không khả thi về mặt hiệu suất. Xoay vòng KEK định kỳ và mã hóa lại các DEK bằng KEK mới là chiến lược hiệu quả và an toàn nhất. DEK được sử dụng để mã hóa dữ liệu thực tế, trong khi KEK mã hóa DEK. Khi KEK được xoay vòng, chỉ các DEK cần được mã hóa lại, không phải toàn bộ dữ liệu, giảm thiểu tác động hiệu suất trong khi vẫn tăng cường bảo mật.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khái niệm \"Defense-in-Depth\" trong bảo mật hệ thống đề cập đến nguyên tắc nào sau đây?",
+    "options": [
+      "A. Tập trung tất cả các nỗ lực bảo mật vào một lớp duy nhất, mạnh nhất của hệ thống để tối ưu hóa tài nguyên.",
+      "B. Triển khai nhiều lớp kiểm soát bảo mật độc lập và chồng chéo lên nhau để bảo vệ dữ liệu và tài sản, sao cho nếu một lớp bị vượt qua, các lớp khác vẫn có thể bảo vệ.",
+      "C. Chỉ sử dụng các giải pháp bảo mật của một nhà cung cấp duy nhất để đảm bảo tính tương thích và quản lý dễ dàng.",
+      "D. Đặt ưu tiên cao nhất cho việc bảo mật biên (perimeter security) và coi các hệ thống nội bộ là đáng tin cậy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Defense-in-Depth là một chiến lược bảo mật đa lớp, nơi nhiều cơ chế bảo mật được triển khai để tạo ra các rào cản khác nhau. Điều này đảm bảo rằng ngay cả khi một lớp bị xâm phạm, vẫn còn các lớp khác để bảo vệ tài sản, giảm thiểu rủi ro tổng thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai cơ chế refresh token trong một hệ thống sử dụng JWT để xác thực, biện pháp bảo mật nào sau đây là quan trọng nhất để ngăn chặn việc lạm dụng refresh token trong trường hợp chúng bị đánh cắp?",
+    "options": [
+      "A. Lưu trữ refresh token trong Local Storage của trình duyệt để dễ dàng truy cập.",
+      "B. Gắn refresh token vào HTTP-only cookie với thuộc tính `Secure` và `SameSite=Strict`, đồng thời triển khai cơ chế xoay vòng refresh token (refresh token rotation) và phát hiện sử dụng lại (reuse detection).",
+      "C. Gửi refresh token qua header `Authorization` trong mỗi yêu cầu.",
+      "D. Không sử dụng refresh token mà chỉ dựa vào access token có thời gian sống dài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lưu trữ trong HTTP-only cookie giúp giảm thiểu rủi ro XSS. `Secure` đảm bảo chỉ gửi qua HTTPS. `SameSite=Strict` bảo vệ khỏi CSRF. Quan trọng nhất, xoay vòng refresh token (sau mỗi lần sử dụng, cấp một refresh token mới và vô hiệu hóa cái cũ) kết hợp với phát hiện sử dụng lại giúp phát hiện và vô hiệu hóa ngay lập tức các refresh token bị đánh cắp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng web đang sử dụng JSON Web Tokens (JWT) cho xác thực. Gần đây, một cuộc tấn công đã xảy ra khi kẻ tấn công có thể thay đổi thuật toán mã hóa (algorithm) trong header của JWT từ RSA256 thành None, khiến token được chấp nhận mà không cần xác minh chữ ký. Để khắc phục lỗ hổng này một cách triệt để, biện pháp nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Thêm logic kiểm tra thuật toán được yêu cầu (expected algorithm) trên server và từ chối bất kỳ token nào có thuật toán không khớp.",
+      "B. Chỉ sử dụng JWT được mã hóa (JWE) thay vì JWT có chữ ký (JWS).",
+      "C. Tăng độ dài của khóa bí mật (secret key) được sử dụng để ký JWT.",
+      "D. Chuyển sang sử dụng session cookie truyền thống thay vì JWT."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lỗ hổng \"alg=None\" là một vấn đề đã biết trong JWT. Server phải luôn kiểm tra và chỉ chấp nhận các thuật toán mã hóa đã được cấu hình trước đó và từ chối bất kỳ token nào yêu cầu thuật toán \"None\" hoặc thuật toán không mong muốn khác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc chỉ dựa vào việc sanitization (làm sạch) đầu vào người dùng để ngăn chặn các cuộc tấn công injection (ví dụ: SQL Injection, XSS) là không đủ và có thể gây ra rủi ro nghiêm trọng so với việc kết hợp với validation (kiểm tra hợp lệ) và parameterized queries/encoding?",
+    "options": [
+      "A. Sanitization có thể loại bỏ các ký tự hợp lệ, gây ra lỗi chức năng.",
+      "B. Sanitization chỉ xử lý các ký tự đặc biệt, không ngăn chặn được logic tấn công phức tạp.",
+      "C. Sanitization có thể bỏ sót các trường hợp tấn công tinh vi hoặc bị bypass, trong khi validation đảm bảo dữ liệu tuân thủ định dạng mong muốn và parameterized queries/encoding ngăn chặn việc diễn giải dữ liệu như mã lệnh.",
+      "D. Sanitization làm giảm hiệu suất của ứng dụng một cách đáng kể."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sanitization cố gắng loại bỏ hoặc thay đổi các ký tự độc hại, nhưng rất khó để thực hiện một cách hoàn hảo cho tất cả các loại tấn công và có thể bị bypass. Validation đảm bảo dữ liệu đầu vào tuân thủ các quy tắc nghiệp vụ và định dạng mong muốn. Parameterized queries (cho SQL) và output encoding (cho XSS) là các biện pháp phòng thủ chủ động, ngăn chặn việc dữ liệu người dùng bị hiểu nhầm là mã lệnh hoặc cấu trúc HTML/JS, là cách hiệu quả và an toàn hơn nhiều.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh phát triển ứng dụng đám mây (cloud-native applications), nguyên tắc \"Don't hardcode secrets\" có ý nghĩa gì và giải pháp nào được khuyến nghị để tuân thủ nguyên tắc này một cách an toàn?",
+    "options": [
+      "A. Không bao giờ sử dụng bất kỳ loại secret nào trong ứng dụng.",
+      "B. Không nhúng trực tiếp các thông tin nhạy cảm (như mật khẩu, API keys) vào mã nguồn hoặc tệp cấu hình, mà thay vào đó sử dụng các dịch vụ quản lý secret (Secret Management Services) như HashiCorp Vault, AWS Secrets Manager, hoặc Azure Key Vault.",
+      "C. Mã hóa tất cả secrets và lưu trữ chúng trong một tệp cấu hình trên máy chủ ứng dụng.",
+      "D. Chỉ sử dụng biến môi trường để lưu trữ secrets."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc \"Don't hardcode secrets\" là một thực hành bảo mật cơ bản. Các dịch vụ quản lý secret cung cấp một cách an toàn, tập trung để lưu trữ, truy xuất và quản lý vòng đời của secrets, bao gồm cả xoay vòng và kiểm soát truy cập chi tiết, vượt trội so với việc mã hóa tệp cấu hình hoặc chỉ sử dụng biến môi trường.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một công ty đang thiết kế một cổng API Gateway để quản lý truy cập vào hàng trăm microservices. Để đảm bảo ủy quyền mạnh mẽ và linh hoạt cho các ứng dụng client khác nhau (web, mobile, third-party), giải pháp nào sau đây là tốt nhất để tích hợp với OAuth 2.0 và OpenID Connect?",
+    "options": [
+      "A. API Gateway sẽ hoạt động như một Resource Server, xác thực và ủy quyền dựa trên các Access Token (JWT) được cấp bởi một Authorization Server tập trung, đồng thời sử dụng các scope và claims để kiểm soát quyền truy cập chi tiết.",
+      "B. Mỗi microservice sẽ tự xác thực Access Token riêng.",
+      "C. API Gateway sẽ yêu cầu client gửi username/password để xác thực trực tiếp.",
+      "D. API Gateway sẽ chỉ dựa vào IP whitelisting để kiểm soát truy cập."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một API Gateway hoạt động như một Resource Server, xác thực JWT từ Authorization Server tập trung là kiến trúc tiêu chuẩn và hiệu quả. Nó cho phép ủy quyền tập trung, linh hoạt thông qua scopes và claims, giảm gánh nặng cho từng microservice và cung cấp một điểm kiểm soát truy cập thống nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lỗ hổng \"Broken Access Control\" trong OWASP Top 10 (2021) bao gồm những loại tấn công nào và tại sao nó lại phổ biến và nguy hiểm?",
+    "options": [
+      "A. Chỉ các cuộc tấn công liên quan đến việc bỏ qua kiểm soát xác thực.",
+      "B. Các cuộc tấn công mà kẻ tấn công có thể thực hiện các hành động không được phép, truy cập dữ liệu trái phép hoặc thay đổi quyền của người dùng khác, thường do kiểm tra quyền không đầy đủ hoặc bị lỗi.",
+      "C. Các cuộc tấn công liên quan đến việc tiêm mã độc vào cơ sở dữ liệu.",
+      "D. Các cuộc tấn công dựa trên việc khai thác các lỗi cấu hình máy chủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Broken Access Control là một loại lỗ hổng rất rộng, bao gồm nhiều kịch bản khi người dùng có thể vượt qua các hạn chế quyền truy cập. Nó cho phép kẻ tấn công thực hiện các hành động mà họ không được phép, như truy cập tài khoản người dùng khác, thay đổi dữ liệu mà họ không sở hữu, hoặc leo thang đặc quyền. Đây là một trong những lỗ hổng phổ biến và nguy hiểm nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống backend quan trọng đã bị xâm nhập và dữ liệu nhạy cảm có thể đã bị đánh cắp. Sau khi đã chứa đựng (contained) sự cố, bước tiếp theo nào là quan trọng nhất để đảm bảo rằng nguyên nhân gốc rễ được xác định và hệ thống được khôi phục một cách an toàn, ngăn chặn tái diễn?",
+    "options": [
+      "A. Ngay lập tức khôi phục hệ thống từ bản sao lưu gần nhất và đưa vào hoạt động trở lại.",
+      "B. Thực hiện phân tích pháp y (forensic analysis) và điều tra nguyên nhân gốc rễ (root cause analysis) để hiểu cách thức tấn công, các lỗ hổng bị khai thác và phạm vi thiệt hại, trước khi tiến hành loại bỏ (eradication) và khôi phục.",
+      "C. Thay đổi tất cả mật khẩu của người dùng và quản trị viên.",
+      "D. Tắt toàn bộ hệ thống để tránh thiệt hại thêm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sau containment, việc điều tra và phân tích nguyên nhân gốc rễ là cực kỳ quan trọng để hiểu rõ cuộc tấn công, vá lỗ hổng, và đảm bảo rằng khi hệ thống được khôi phục, nó không còn dễ bị tấn công tương tự nữa. Chỉ khôi phục mà không hiểu nguyên nhân có thể dẫn đến tái diễn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi cấu hình TLS cho một ứng dụng backend, để đạt được mức độ bảo mật cao nhất chống lại các cuộc tấn công downgrade và sử dụng các thuật toán mã hóa mạnh mẽ, cấu hình nào sau đây là quan trọng nhất?",
+    "options": [
+      "A. Chỉ sử dụng TLS 1.0/1.1 để đảm bảo khả năng tương thích rộng.",
+      "B. Vô hiệu hóa các bộ mật mã (cipher suites) yếu và không an toàn (ví dụ: RC4, 3DES, ciphers có SHA1), ưu tiên các bộ mật mã sử dụng Perfect Forward Secrecy (PFS) như ECDHE/DHE với AES-GCM và SHA256/384, đồng thời bắt buộc sử dụng TLS 1.2 hoặc cao hơn.",
+      "C. Chỉ sử dụng chứng chỉ SSL/TLS tự ký (self-signed certificates) để tiết kiệm chi phí.",
+      "D. Không cần cấu hình HSTS (HTTP Strict Transport Security) vì TLS đã đủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc vô hiệu hóa các cipher suites yếu và không an toàn, ưu tiên PFS, và bắt buộc sử dụng TLS 1.2+ là các bước quan trọng để bảo vệ chống lại các cuộc tấn công downgrade, đảm bảo tính bảo mật và toàn vẹn của giao tiếp. HSTS cũng quan trọng nhưng không phải là phần chính của cấu hình cipher suites.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiến trúc microservices, tại sao việc sử dụng xác thực dựa trên token (ví dụ: JWT) lại thường được ưu tiên hơn so với xác thực dựa trên session cookie truyền thống cho các API gateway và các dịch vụ nội bộ?",
+    "options": [
+      "A. Token luôn được mã hóa, trong khi session cookie thì không.",
+      "B. Token không yêu cầu cơ sở dữ liệu để lưu trữ trạng thái, stateless, dễ dàng scale horizontally và chia sẻ giữa các dịch vụ mà không cần cơ chế session tập trung phức tạp.",
+      "C. Session cookie dễ bị tấn công CSRF hơn token.",
+      "D. Token có thời gian sống dài hơn session cookie."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ưu điểm chính của xác thực dựa trên token (stateless) trong microservices là khả năng mở rộng (scalability) và đơn giản hóa kiến trúc. Mỗi yêu cầu chứa token tự chứa thông tin xác thực, loại bỏ nhu cầu về session state tập trung, giúp các microservices hoạt động độc lập và dễ dàng mở rộng theo chiều ngang. Session cookie yêu cầu quản lý trạng thái, phức tạp hơn trong môi trường phân tán.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Nguyên tắc bảo mật \"Principle of Least Privilege\" (Nguyên tắc đặc quyền tối thiểu) khi áp dụng trong phát triển backend có ý nghĩa gì?",
+    "options": [
+      "A. Cấp cho tất cả người dùng và ứng dụng quyền truy cập đầy đủ vào tất cả các tài nguyên để đảm bảo tính linh hoạt.",
+      "B. Chỉ cấp cho người dùng, ứng dụng hoặc dịch vụ các quyền truy cập tối thiểu cần thiết để thực hiện chức năng được giao và không hơn.",
+      "C. Tập trung tất cả các quyền quản trị vào một tài khoản duy nhất để dễ dàng quản lý.",
+      "D. Thiết kế hệ thống sao cho chỉ quản trị viên mới có thể thực hiện bất kỳ hành động nào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc đặc quyền tối thiểu là một nền tảng của bảo mật. Nó yêu cầu rằng một thực thể (người dùng, quy trình, chương trình) chỉ được cấp quyền truy cập vào các tài nguyên và chức năng cần thiết để thực hiện nhiệm vụ của nó. Điều này giới hạn phạm vi thiệt hại nếu thực thể đó bị xâm phạm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Threat Modeling cho một tính năng mới trong ứng dụng, một nhà phát triển backend nên bắt đầu bằng cách nào để có cái nhìn tổng quan về các mối đe dọa tiềm ẩn?",
+    "options": [
+      "A. Trực tiếp liệt kê tất cả các lỗ hổng OWASP Top 10 và kiểm tra xem tính năng có bị ảnh hưởng không.",
+      "B. Vẽ biểu đồ luồng dữ liệu (Data Flow Diagram - DFD) của tính năng, xác định các thành phần, luồng dữ liệu, điểm tin cậy và các yếu tố bên ngoài, sau đó áp dụng một khung phân tích mối đe dọa như STRIDE.",
+      "C. Chờ đợi kết quả từ penetration testing sau khi tính năng đã được triển khai.",
+      "D. Chỉ tập trung vào việc bảo mật cơ sở dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bắt đầu bằng cách tạo DFD giúp hình dung kiến trúc và luồng dữ liệu của tính năng, xác định các ranh giới tin cậy và các điểm tương tác. Sau đó, áp dụng các khung như STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) giúp hệ thống hóa việc xác định các mối đe dọa tiềm ẩn tại mỗi điểm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng backend cho phép người dùng nhập các biểu thức tùy chỉnh để lọc dữ liệu trong cơ sở dữ liệu. Để ngăn chặn các cuộc tấn công Code Injection hoặc Command Injection, biện pháp bảo mật nào sau đây là hiệu quả nhất?",
+    "options": [
+      "A. Chỉ cho phép các ký tự chữ và số trong biểu thức.",
+      "B. Sử dụng một trình phân tích cú pháp (parser) và một công cụ xây dựng biểu thức an toàn (safe expression builder) để phân tích và thực thi biểu thức trong một môi trường sandbox hoặc bằng cách sử dụng các API được xác định trước, thay vì đánh giá trực tiếp chuỗi biểu thức.",
+      "C. Mã hóa tất cả đầu vào của người dùng trước khi lưu vào cơ sở dữ liệu.",
+      "D. Giới hạn độ dài của biểu thức nhập vào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc cho phép người dùng nhập biểu thức tùy chỉnh là một rủi ro cao đối với Code/Command Injection. Cách an toàn nhất là không bao giờ đánh giá trực tiếp chuỗi biểu thức. Thay vào đó, một parser an toàn và một công cụ xây dựng biểu thức sẽ chuyển đổi biểu thức thành một cấu trúc dữ liệu an toàn và sau đó thực thi nó trong một môi trường được kiểm soát chặt chẽ hoặc thông qua các hàm an toàn đã được định nghĩa.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi nào thì nên sử dụng mã hóa bất đối xứng (asymmetric encryption) thay vì mã hóa đối xứng (symmetric encryption) trong các hệ thống backend, đặc biệt liên quan đến việc trao đổi khóa và xác thực?",
+    "options": [
+      "A. Mã hóa bất đối xứng luôn nhanh hơn mã hóa đối xứng.",
+      "B. Mã hóa bất đối xứng được ưu tiên khi cần mã hóa và giải mã một lượng lớn dữ liệu hiệu quả.",
+      "C. Mã hóa bất đối xứng được sử dụng chủ yếu cho việc trao đổi khóa an toàn, chữ ký số (digital signatures) và xác thực danh tính, nơi cần hai khóa khác nhau (công khai và riêng tư).",
+      "D. Mã hóa bất đối xứng không yêu cầu quản lý khóa."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mã hóa đối xứng nhanh hơn và hiệu quả hơn cho việc mã hóa lượng lớn dữ liệu. Mã hóa bất đối xứng, mặc dù chậm hơn, lại cung cấp khả năng trao đổi khóa an toàn mà không cần một kênh an toàn trước đó, cũng như khả năng tạo chữ ký số để xác thực danh tính và đảm bảo tính toàn vẹn, nhờ vào cặp khóa công khai/riêng tư độc đáo của nó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một doanh nghiệp đang xem xét việc triển khai một kiến trúc bảo mật toàn diện cho môi trường đám mây của mình. Ngoài các biện pháp bảo mật ứng dụng (application security) và mạng (network security), yếu tố nào sau đây đại diện cho một lớp phòng thủ quan trọng trong chiến lược \"Defense-in-Depth\" ở cấp độ hạ tầng đám mây?",
+    "options": [
+      "A. Chỉ tập trung vào việc đào tạo người dùng cuối về nhận thức bảo mật.",
+      "B. Triển khai các chính sách Quản lý Danh tính và Truy cập (Identity and Access Management - IAM) mạnh mẽ với nguyên tắc đặc quyền tối thiểu, giám sát hoạt động API của đám mây, và sử dụng các dịch vụ bảo mật đám mây gốc (native cloud security services) như WAF, Security Groups, KMS.",
+      "C. Mua bảo hiểm an ninh mạng để trang trải mọi thiệt hại.",
+      "D. Chỉ dựa vào tường lửa biên (perimeter firewall) truyền thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong môi trường đám mây, Defense-in-Depth mở rộng ra cả các dịch vụ và cơ chế bảo mật của nhà cung cấp đám mây. IAM mạnh mẽ là nền tảng, đảm bảo quyền truy cập được kiểm soát chặt chẽ. Giám sát API của đám mây cung cấp khả năng phát hiện mối đe dọa. Sử dụng các dịch vụ bảo mật đám mây gốc (như WAF, Security Groups, KMS) tạo ra nhiều lớp phòng thủ ở cấp độ hạ tầng, bổ sung cho bảo mật ứng dụng và mạng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security",
+    "category": "ANALYSIS"
+  }
+]

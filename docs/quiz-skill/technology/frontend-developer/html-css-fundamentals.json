@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong HTML, thẻ nào sau đây được sử dụng để định nghĩa nội dung chính (main content) của tài liệu, giúp cải thiện ngữ nghĩa và khả năng truy cập?",
+    "options": [
+      "A. <div>",
+      "B. <section>",
+      "C. <main>",
+      "D. <article>"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thẻ <main> được sử dụng để bao bọc nội dung chính, độc lập và duy nhất của tài liệu. Nó giúp các công cụ tìm kiếm và công nghệ hỗ trợ hiểu rõ hơn về cấu trúc trang.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thuộc tính `alt` trong thẻ `<img>` có mục đích chính là gì?",
+    "options": [
+      "A. Đặt tiêu đề cho hình ảnh khi di chuột qua.",
+      "B. Cung cấp văn bản thay thế khi hình ảnh không tải được hoặc cho người dùng khiếm thị.",
+      "C. Xác định kích thước chiều cao của hình ảnh.",
+      "D. Liên kết hình ảnh với một tệp CSS bên ngoài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thuộc tính `alt` (alternative text) cung cấp mô tả văn bản cho hình ảnh, rất quan trọng cho khả năng truy cập (accessibility) và khi hình ảnh không thể hiển thị.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để tạo một danh sách không có thứ tự (unordered list) trong HTML, bạn sẽ sử dụng thẻ nào?",
+    "options": [
+      "A. <ol>",
+      "B. <li>",
+      "C. <ul>",
+      "D. <dl>"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thẻ <ul> (unordered list) được dùng để tạo danh sách các mục không có thứ tự cụ thể, thường hiển thị với dấu chấm (bullet points).",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong CSS, thuộc tính nào được sử dụng để thay đổi màu nền của một phần tử?",
+    "options": [
+      "A. color",
+      "B. font-color",
+      "C. background-color",
+      "D. text-color"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thuộc tính `background-color` trong CSS được dùng để thiết lập màu nền cho một phần tử HTML.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đơn vị đo nào sau đây trong CSS là tương đối với kích thước font chữ của phần tử gốc (root element) của tài liệu (thường là <html>)?",
+    "options": [
+      "A. px",
+      "B. em",
+      "C. rem",
+      "D. vw"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đơn vị `rem` (root em) là tương đối so với kích thước font chữ của phần tử gốc (<html>), giúp dễ dàng quản lý kích thước font chữ trên toàn bộ trang web và hỗ trợ responsive design.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để căn giữa một khối (block-level element) theo chiều ngang trong CSS, bạn thường sử dụng thuộc tính `margin` với giá trị nào?",
+    "options": [
+      "A. margin: center;",
+      "B. margin: auto;",
+      "C. margin: 0 auto;",
+      "D. margin-left: auto; margin-right: auto;"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để căn giữa một khối theo chiều ngang, bạn cần đặt `margin-left` và `margin-right` thành `auto`. Cách viết tắt phổ biến là `margin: 0 auto;`, trong đó `0` là margin trên/dưới và `auto` là margin trái/phải.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thẻ HTML nào được sử dụng để tạo một liên kết (hyperlink) đến một trang khác hoặc một tài nguyên khác?",
+    "options": [
+      "A. <link>",
+      "B. <a>",
+      "C. <href>",
+      "D. <nav>"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thẻ <a> (anchor) được sử dụng để tạo hyperlink. Thuộc tính `href` của nó chỉ định URL đích.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong CSS, giá trị mặc định của thuộc tính `position` là gì?",
+    "options": [
+      "A. relative",
+      "B. absolute",
+      "C. fixed",
+      "D. static"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Giá trị mặc định của thuộc tính `position` là `static`. Các phần tử với `position: static` được đặt theo luồng tài liệu thông thường và không bị ảnh hưởng bởi các thuộc tính `top`, `bottom`, `left`, `right`.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để áp dụng một kiểu CSS chỉ khi chiều rộng màn hình nhỏ hơn 768px, bạn sẽ sử dụng cú pháp Media Query nào?",
+    "options": [
+      "A. @media screen and (max-width: 768px) { ... }",
+      "B. @media screen and (min-width: 768px) { ... }",
+      "C. @media (width < 768px) { ... }",
+      "D. @media handheld and (max-width: 768px) { ... }"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cú pháp `@media screen and (max-width: 768px)` sẽ áp dụng các kiểu CSS bên trong khi thiết bị hiển thị là màn hình và chiều rộng của khung nhìn (viewport) nhỏ hơn hoặc bằng 768px.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thuộc tính `display: flex;` trong CSS được sử dụng để làm gì?",
+    "options": [
+      "A. Biến phần tử thành một khối độc lập không ảnh hưởng đến các phần tử khác.",
+      "B. Tạo một container Flexbox, cho phép các mục con được sắp xếp linh hoạt.",
+      "C. Ẩn phần tử khỏi trang web.",
+      "D. Hiển thị phần tử dưới dạng một bảng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`display: flex;` biến phần tử thành một Flex container, cho phép bạn sử dụng các thuộc tính Flexbox để điều khiển cách các mục con (flex items) được sắp xếp, căn chỉnh và phân phối không gian.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong HTML, thẻ `<form>` được sử dụng để làm gì?",
+    "options": [
+      "A. Định nghĩa một đoạn văn bản được định dạng trước.",
+      "B. Tạo một bảng dữ liệu.",
+      "C. Thu thập dữ liệu đầu vào của người dùng.",
+      "D. Nhúng một tài liệu HTML khác vào trang hiện tại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thẻ `<form>` được dùng để tạo một biểu mẫu HTML để thu thập dữ liệu đầu vào từ người dùng, chẳng hạn như văn bản, mật khẩu, nút chọn, v.v.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thẻ HTML nào sau đây là một 'landmark element' (phần tử điểm mốc) cung cấp cấu trúc ngữ nghĩa cho phần điều hướng chính của trang web?",
+    "options": [
+      "A. <header>",
+      "B. <nav>",
+      "C. <footer>",
+      "D. <aside>"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thẻ <nav> được thiết kế để chứa các liên kết điều hướng chính của trang web, giúp người dùng và công nghệ hỗ trợ dễ dàng tìm thấy các phần quan trọng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thuộc tính `box-sizing: border-box;` trong CSS có tác dụng gì?",
+    "options": [
+      "A. Đảm bảo rằng padding và border được thêm vào kích thước tổng của phần tử (width/height).",
+      "B. Đảm bảo rằng padding và border không được thêm vào kích thước tổng của phần tử (width/height).",
+      "C. Đặt kích thước của box shadow.",
+      "D. Thay đổi hình dạng của border."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Với `box-sizing: border-box;`, thuộc tính `width` và `height` của một phần tử sẽ bao gồm cả `padding` và `border`, giúp việc tính toán kích thước các phần tử trở nên dễ dàng và trực quan hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong CSS, quy tắc nào có độ ưu tiên (specificity) cao nhất?",
+    "options": [
+      "A. Kiểu nội tuyến (Inline styles)",
+      "B. Bộ chọn ID (#id)",
+      "C. Bộ chọn lớp (.class)",
+      "D. Bộ chọn phần tử (element selector)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Kiểu nội tuyến (được định nghĩa trực tiếp trong thuộc tính `style` của thẻ HTML) có độ ưu tiên cao nhất, sau đó đến ID, lớp và cuối cùng là phần tử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để tạo một nút bấm (button) trong HTML, bạn sẽ sử dụng thẻ nào?",
+    "options": [
+      "A. <input type=\"button\">",
+      "B. <button>",
+      "C. Cả A và B đều đúng.",
+      "D. <click>"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cả `<input type=\"button\">` và `<button>` đều có thể tạo nút bấm. Thẻ `<button>` linh hoạt hơn vì nó có thể chứa các nội dung HTML khác (như hình ảnh, văn bản được định dạng).",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thuộc tính CSS nào được sử dụng để điều khiển khoảng cách giữa các chữ cái trong một văn bản?",
+    "options": [
+      "A. word-spacing",
+      "B. line-height",
+      "C. letter-spacing",
+      "D. text-indent"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`letter-spacing` điều chỉnh khoảng cách giữa các ký tự (chữ cái) trong một từ hoặc cụm từ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để nhúng một tệp CSS bên ngoài vào tài liệu HTML, bạn sẽ sử dụng thẻ nào trong phần `<head>`?",
+    "options": [
+      "A. <style>",
+      "B. <script>",
+      "C. <link>",
+      "D. <meta>"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thẻ `<link>` với thuộc tính `rel=\"stylesheet\"` và `href=\"path/to/style.css\"` được sử dụng để liên kết một tệp CSS bên ngoài với tài liệu HTML.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng Flexbox, thuộc tính nào trên Flex Container sẽ căn chỉnh các mục con (flex items) theo trục chính (main axis)?",
+    "options": [
+      "A. align-items",
+      "B. justify-content",
+      "C. align-self",
+      "D. flex-direction"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`justify-content` điều khiển cách các mục con được phân phối không gian và căn chỉnh dọc theo trục chính của Flex container.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thẻ HTML nào được sử dụng để hiển thị một đoạn mã lập trình (code snippet)?",
+    "options": [
+      "A. <p>",
+      "B. <code>",
+      "C. <pre>",
+      "D. <var>"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thẻ `<code>` được dùng để hiển thị các đoạn mã lập trình. Để giữ nguyên định dạng (khoảng trắng, xuống dòng), thường kết hợp nó với thẻ `<pre>`.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để đảm bảo một trang web hiển thị tốt trên các thiết bị khác nhau (responsive design), bạn nên thêm thẻ meta viewport nào vào phần `<head>` của HTML?",
+    "options": [
+      "A. <meta name=\"viewport\" content=\"width=device-width\">",
+      "B. <meta name=\"viewport\" content=\"initial-scale=1.0\">",
+      "C. <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+      "D. <meta name=\"viewport\" content=\"responsive=true\">"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thẻ meta viewport với `width=device-width` đặt chiều rộng của viewport bằng chiều rộng của thiết bị, và `initial-scale=1.0` đặt mức độ phóng to ban đầu, rất quan trọng cho responsive design.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thuộc tính CSS nào được sử dụng để thêm khoảng đệm (padding) bên trong một phần tử?",
+    "options": [
+      "A. margin",
+      "B. border",
+      "C. spacing",
+      "D. padding"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Thuộc tính `padding` tạo khoảng trống giữa nội dung của phần tử và đường viền (border) của nó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong CSS, bộ chọn nào có độ ưu tiên thấp nhất?",
+    "options": [
+      "A. Bộ chọn ID",
+      "B. Bộ chọn lớp",
+      "C. Bộ chọn phần tử",
+      "D. Bộ chọn thuộc tính"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Theo quy tắc độ ưu tiên của CSS, bộ chọn phần tử (ví dụ: `p`, `div`) có độ ưu tiên thấp nhất so với bộ chọn lớp, ID hoặc thuộc tính.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để tạo một đường viền (border) cho một phần tử trong CSS, bạn sẽ sử dụng thuộc tính nào?",
+    "options": [
+      "A. outline",
+      "B. border-style",
+      "C. border",
+      "D. line"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thuộc tính `border` là viết tắt để thiết lập `border-width`, `border-style` và `border-color` của một phần tử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong HTML, thẻ nào được sử dụng để nhóm các tùy chọn liên quan trong một danh sách thả xuống (dropdown list) được tạo bởi thẻ `<select>`?",
+    "options": [
+      "A. <group>",
+      "B. <options>",
+      "C. <optgroup>",
+      "D. <fieldset>"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thẻ `<optgroup>` được sử dụng để nhóm các tùy chọn có liên quan lại với nhau trong một danh sách thả xuống, thường hiển thị với một nhãn (label) cho nhóm đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thuộc tính CSS nào được sử dụng để thay đổi kiểu con trỏ chuột khi di chuột qua một phần tử?",
+    "options": [
+      "A. mouse-style",
+      "B. cursor",
+      "C. pointer",
+      "D. hover-cursor"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thuộc tính `cursor` cho phép bạn xác định hình dạng con trỏ chuột khi nó nằm trên một phần tử, ví dụ: `cursor: pointer;` để hiển thị con trỏ dạng bàn tay.",
+    "difficulty": "BEGINNER",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một trang blog và cần hiển thị danh sách các bài viết mới nhất. Mỗi bài viết có tiêu đề, ảnh thumbnail và đoạn tóm tắt. Bạn nên sử dụng cấu trúc HTML nào tốt nhất để đảm bảo ngữ nghĩa và khả năng truy cập?",
+    "options": [
+      "A. Sử dụng một `div` lớn chứa nhiều `div` con cho mỗi bài viết.",
+      "B. Sử dụng thẻ `ul` hoặc `ol` để chứa các thẻ `li`, và mỗi `li` chứa một thẻ `article`.",
+      "C. Sử dụng thẻ `section` cho danh sách, và mỗi bài viết là một thẻ `div`.",
+      "D. Sử dụng thẻ `main` cho danh sách, và mỗi bài viết là một thẻ `p`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng `ul`/`ol` cho danh sách và `article` cho mỗi mục là cách tiếp cận ngữ nghĩa và dễ tiếp cận nhất cho danh sách bài viết. `article` đại diện cho một phần nội dung độc lập và có thể phân phối lại.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để cải thiện khả năng truy cập cho người dùng khi một phần tử không có ngữ nghĩa rõ ràng (ví dụ: một `div` được dùng làm nút), thuộc tính ARIA nào sau đây là phù hợp nhất để cung cấp mô tả ngắn gọn về mục đích của phần tử?",
+    "options": [
+      "A. `aria-describedby`",
+      "B. `aria-label`",
+      "C. `aria-labelledby`",
+      "D. `aria-hidden`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`aria-label` cung cấp một nhãn văn bản cho một phần tử khi không có văn bản hiển thị nào khác để làm nhãn. Nó ghi đè bất kỳ nội dung văn bản nào bên trong phần tử đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi tạo một form đăng nhập, bạn muốn đảm bảo rằng trường mật khẩu không hiển thị các ký tự khi người dùng nhập liệu và trình duyệt không tự động điền các mật khẩu đã lưu. Thuộc tính HTML nào cần được sử dụng cho trường input mật khẩu để đạt được cả hai yêu cầu này?",
+    "options": [
+      "A. `<input type=\"password\" autocomplete=\"off\">`",
+      "B. `<input type=\"text\" autocomplete=\"new-password\">`",
+      "C. `<input type=\"password\" readonly>`",
+      "D. `<input type=\"text\" placeholder=\"Mật khẩu\">`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`type=\"password\"` sẽ ẩn ký tự nhập. `autocomplete=\"off\"` ngăn trình duyệt tự động điền thông tin đã lưu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng các thẻ HTML5 semantic như `<nav>`, `<main>`, `<aside>`, `<header>`, `<footer>` được khuyến nghị hơn việc chỉ sử dụng `<div>` với các class tương ứng (ví dụ: `<div class=\"nav\">`)?",
+    "options": [
+      "A. Các thẻ semantic tự động áp dụng các kiểu CSS đẹp hơn mà không cần viết CSS.",
+      "B. Các thẻ semantic giúp công cụ tìm kiếm xếp hạng trang web cao hơn mà không cần tối ưu SEO khác.",
+      "C. Các thẻ semantic cung cấp ngữ nghĩa rõ ràng cho trình duyệt và các công nghệ hỗ trợ (như trình đọc màn hình), cải thiện khả năng truy cập và cấu trúc tài liệu.",
+      "D. Các thẻ semantic có hiệu suất tải trang nhanh hơn đáng kể so với `div`."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các thẻ semantic cung cấp ngữ nghĩa về mục đích của nội dung, giúp các công nghệ hỗ trợ và công cụ tìm kiếm hiểu rõ hơn cấu trúc và nội dung trang web, từ đó cải thiện khả năng truy cập và SEO.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Flexbox, thuộc tính nào được sử dụng để căn chỉnh các item dọc theo trục chính (main axis) của container?",
+    "options": [
+      "A. `align-items`",
+      "B. `justify-content`",
+      "C. `align-content`",
+      "D. `flex-direction`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`justify-content` điều khiển sự phân bổ không gian giữa các item dọc theo trục chính. `align-items` điều khiển căn chỉnh dọc theo trục phụ (cross axis).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn có một container Flexbox và muốn các item con của nó phân bổ đều không gian còn lại, với khoảng cách bằng nhau giữa chúng và giữa các item với các cạnh của container. Thuộc tính `justify-content` nào nên được sử dụng?",
+    "options": [
+      "A. `space-between`",
+      "B. `space-around`",
+      "C. `space-evenly`",
+      "D. `center`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`space-evenly` phân bổ không gian trống sao cho khoảng cách giữa mỗi item và giữa item đầu/cuối với các cạnh của container là như nhau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để tạo một layout lưới 3 cột với độ rộng bằng nhau và khoảng cách giữa các cột là 20px, bạn sẽ sử dụng thuộc tính CSS nào trên container Grid?",
+    "options": [
+      "A. `grid-template-columns: repeat(3, 1fr); grid-column-gap: 20px;`",
+      "B. `grid-template-columns: 1fr 1fr 1fr; gap: 20px;`",
+      "C. `grid-template-columns: auto auto auto; column-gap: 20px;`",
+      "D. `grid-template-columns: repeat(3, 33.33%); row-gap: 20px;`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`repeat(3, 1fr)` hoặc `1fr 1fr 1fr` tạo 3 cột có độ rộng bằng nhau. `gap: 20px;` là shorthand cho `row-gap` và `column-gap`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một trang web hiển thị tốt trên cả màn hình máy tính và thiết bị di động. Khi kích thước màn hình nhỏ hơn 768px, bạn muốn một khối nội dung (hiện đang là 2 cột) chuyển thành hiển thị 1 cột duy nhất. Kỹ thuật nào sau đây là phù hợp nhất để đạt được điều này?",
+    "options": [
+      "A. Sử dụng thuộc tính `max-width` trên các phần tử con.",
+      "B. Sử dụng JavaScript để thay đổi style khi kích thước màn hình thay đổi.",
+      "C. Sử dụng Media Queries để thay đổi thuộc tính `display` hoặc `flex-direction`/`grid-template-columns` của container.",
+      "D. Thiết lập `width: 100%;` cho tất cả các phần tử con."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Media Queries là công cụ tiêu chuẩn trong CSS để áp dụng các kiểu khác nhau dựa trên các đặc điểm của thiết bị, bao gồm chiều rộng màn hình, cho phép điều chỉnh layout một cách hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Thuộc tính viewport meta tag nào là bắt buộc để đảm bảo trang web của bạn hiển thị đúng cách trên các thiết bị di động, cho phép trình duyệt điều chỉnh tỷ lệ khung hình?",
+    "options": [
+      "A. `<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">`",
+      "B. `<meta name=\"viewport\" content=\"width=1024, height=768\">`",
+      "C. `<meta name=\"viewport\" content=\"minimal-ui\">`",
+      "D. `<meta name=\"viewport\" content=\"target-densitydpi=device-dpi\">`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`width=device-width` đặt chiều rộng viewport bằng chiều rộng của thiết bị. `initial-scale=1.0` thiết lập mức zoom ban đầu. Đây là cấu hình tiêu chuẩn cho responsive design.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Giả sử bạn có các quy tắc CSS sau. Quy tắc nào sẽ được áp dụng cho một phần tử `<p id=\"intro\" class=\"text\">Hello</p>`? ```css p { color: blue; } .text { color: red; } #intro { color: green; } ```",
+    "options": [
+      "A. `color: blue;`",
+      "B. `color: red;`",
+      "C. `color: green;`",
+      "D. Không có màu nào được áp dụng do xung đột."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Specificty của ID selector (#intro) là cao nhất (1,0,0), cao hơn class selector (.text) (0,1,0) và element selector (p) (0,0,1). Do đó, màu xanh lá cây sẽ được áp dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn chắc chắn rằng một kiểu CSS cụ thể (ví dụ: `color: purple;`) luôn được áp dụng cho một phần tử, bất kể các quy tắc CSS khác có thể ghi đè nó. Cách nào sau đây có độ ưu tiên (specificity) cao nhất và nên được sử dụng cẩn thận?",
+    "options": [
+      "A. Sử dụng `!important` trên thuộc tính CSS (`color: purple !important;`).",
+      "B. Áp dụng kiểu trực tiếp vào thẻ HTML bằng thuộc tính `style` (`<p style=\"color: purple;\">`).",
+      "C. Sử dụng một selector ID (`#myElement { color: purple; }`).",
+      "D. Sử dụng một selector class lồng nhau (`.parent .child { color: purple; }`)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`!important` có độ ưu tiên cao nhất, ghi đè tất cả các quy tắc khác, kể cả inline styles và ID selectors. Tuy nhiên, nó nên được sử dụng rất hạn chế vì có thể gây khó khăn trong việc debug và bảo trì CSS.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi xây dựng một hệ thống CSS lớn, tại sao việc sử dụng các phương pháp như BEM (Block, Element, Modifier) hoặc utility classes lại được khuyến khích hơn việc chỉ dựa vào các ID hoặc selector lồng nhau sâu?",
+    "options": [
+      "A. Các phương pháp này giúp giảm kích thước file CSS đáng kể, cải thiện tốc độ tải trang.",
+      "B. Chúng tăng cường tính mô-đun, khả năng tái sử dụng và dễ bảo trì của CSS bằng cách giảm specificity và tránh xung đột.",
+      "C. Các phương pháp này tự động tạo ra các hiệu ứng động mà không cần JavaScript.",
+      "D. Chúng chỉ được hỗ trợ bởi các trình duyệt hiện đại nhất, đảm bảo hiệu suất tốt hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BEM và utility classes tập trung vào việc tạo ra các class có mục đích rõ ràng, độ ưu tiên thấp và độc lập, giúp CSS dễ hiểu, dễ tái sử dụng và ít bị xung đột hơn trong các dự án lớn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn phát hiện ra rằng một font chữ tùy chỉnh mà bạn đã nhúng bằng `@font-face` hiển thị khác nhau (ví dụ: độ dày hoặc độ sắc nét) giữa Chrome và Firefox. Bạn nên kiểm tra yếu tố nào đầu tiên để khắc phục vấn đề này?",
+    "options": [
+      "A. Kiểm tra xem các trình duyệt có hỗ trợ `@font-face` hay không (đã lỗi thời).",
+      "B. Đảm bảo bạn đã cung cấp các định dạng font khác nhau (ví dụ: WOFF2, WOFF, TTF, EOT) để tương thích chéo trình duyệt.",
+      "C. Thêm thuộc tính `font-smoothing` với giá trị `antialiased`.",
+      "D. Sử dụng JavaScript để thay đổi font dựa trên trình duyệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các trình duyệt khác nhau hỗ trợ các định dạng font khác nhau. Việc cung cấp nhiều định dạng (như WOFF2 cho hiện đại, WOFF cho phổ biến, TTF/EOT cho cũ hơn) là rất quan trọng để đảm bảo font hiển thị nhất quán trên nhiều trình duyệt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để tạo một nút bấm có hiệu ứng hover thay đổi màu nền và màu chữ, bạn sẽ sử dụng kết hợp các thuộc tính CSS nào?",
+    "options": [
+      "A. `button:active { background-color: ..., color: ...; }`",
+      "B. `button:focus { background-color: ..., color: ...; }`",
+      "C. `button:hover { background-color: ..., color: ...; }` và `transition: all 0.3s ease;`",
+      "D. `button:visited { background-color: ..., color: ...; }`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Pseudo-class `:hover` áp dụng kiểu khi con trỏ chuột di qua. Thuộc tính `transition` tạo hiệu ứng chuyển động mượt mà giữa các trạng thái.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một form đăng ký và muốn người dùng không thể gửi form nếu một trường `input` cụ thể (ví dụ: email) bị bỏ trống. Thuộc tính HTML nào sau đây có thể được sử dụng trực tiếp trên thẻ `input` để thực hiện yêu cầu này mà không cần JavaScript?",
+    "options": [
+      "A. `disabled`",
+      "B. `readonly`",
+      "C. `required`",
+      "D. `pattern`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thuộc tính `required` là một thuộc tính validation tích hợp của HTML5, yêu cầu người dùng điền giá trị vào trường trước khi gửi form.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để đảm bảo rằng một hình ảnh trang trí (ví dụ: biểu tượng nhỏ không mang thông tin quan trọng) không bị các trình đọc màn hình đọc lên, bạn nên sử dụng thuộc tính `alt` như thế nào?",
+    "options": [
+      "A. Không thêm thuộc tính `alt` vào thẻ `img`.",
+      "B. Đặt `alt=\"decorative image\"`.",
+      "C. Đặt `alt=\"\"` (chuỗi rỗng).",
+      "D. Sử dụng thuộc tính `aria-hidden=\"true\"`."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đặt `alt=\"\"` (chuỗi rỗng) là cách chuẩn để báo hiệu cho trình đọc màn hình rằng hình ảnh là trang trí và nên bỏ qua.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi nào thì bạn nên ưu tiên sử dụng CSS Grid cho layout chính của trang (page layout) thay vì Flexbox?",
+    "options": [
+      "A. Khi bạn cần căn giữa một item duy nhất trong container.",
+      "B. Khi bạn cần sắp xếp các item theo một chiều (ngang hoặc dọc) duy nhất.",
+      "C. Khi bạn cần một layout hai chiều (hàng và cột) phức tạp, với các item có thể trải dài qua nhiều hàng hoặc cột.",
+      "D. Khi bạn cần tạo một danh sách các item có độ rộng linh hoạt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "CSS Grid được thiết kế cho layout hai chiều, cho phép kiểm soát vị trí và kích thước của các item theo cả hàng và cột, làm cho nó lý tưởng cho các layout trang phức tạp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Thứ tự ưu tiên (precedence) của các loại stylesheet trong CSS cascade là gì, từ thấp nhất đến cao nhất (không tính `!important`)?",
+    "options": [
+      "A. User Agent Stylesheet -> User Stylesheet -> Author Stylesheet (Normal) -> Author Stylesheet (Inline)",
+      "B. Author Stylesheet (Normal) -> User Stylesheet -> User Agent Stylesheet -> Author Stylesheet (Inline)",
+      "C. User Stylesheet -> User Agent Stylesheet -> Author Stylesheet (Normal) -> Author Stylesheet (Inline)",
+      "D. Author Stylesheet (Inline) -> Author Stylesheet (Normal) -> User Stylesheet -> User Agent Stylesheet"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thứ tự ưu tiên chuẩn của cascade là: User Agent Stylesheet (mặc định của trình duyệt) < User Stylesheet (do người dùng định nghĩa) < Author Stylesheet (do nhà phát triển định nghĩa, bao gồm cả external/internal) < Inline Styles (trực tiếp trên thẻ HTML).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn một hình ảnh luôn chiếm 100% chiều rộng của phần tử cha nhưng không vượt quá kích thước gốc của nó. Thuộc tính CSS nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. `width: 100%; height: auto;`",
+      "B. `max-width: 100%; height: auto;`",
+      "C. `width: 100vw; height: auto;`",
+      "D. `object-fit: contain;`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`max-width: 100%;` đảm bảo hình ảnh không bao giờ rộng hơn phần tử cha hoặc kích thước gốc của nó (nếu kích thước gốc nhỏ hơn 100% của cha). `height: auto;` duy trì tỷ lệ khung hình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần hiển thị một đoạn mã lập trình trên trang web của mình. Thẻ HTML nào là phù hợp nhất để bao bọc đoạn mã này, đảm bảo ngữ nghĩa và thường đi kèm với các kiểu hiển thị font monospace?",
+    "options": [
+      "A. `<code>`",
+      "B. `<pre>`",
+      "C. `<pre><code>`",
+      "D. `<samp>`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thẻ `<code>` dùng để đánh dấu một đoạn mã lập trình. Thẻ `<pre>` dùng để hiển thị văn bản được định dạng trước, giữ nguyên khoảng trắng và ngắt dòng. Kết hợp cả hai (`<pre><code>`) là cách tốt nhất để hiển thị các khối mã nhiều dòng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục đích chính của việc sử dụng CSS Reset hoặc Normalize.css là gì?",
+    "options": [
+      "A. Để thêm các hiệu ứng động và chuyển tiếp mượt mà vào trang web.",
+      "B. Để đảm bảo rằng các kiểu mặc định của trình duyệt được nhất quán trên các trình duyệt khác nhau.",
+      "C. Để tối ưu hóa hình ảnh và tài nguyên khác cho tốc độ tải trang nhanh hơn.",
+      "D. Để tự động tạo responsive layout mà không cần media queries."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các trình duyệt có các kiểu CSS mặc định khác nhau. CSS Reset loại bỏ tất cả các kiểu mặc định, trong khi Normalize.css cung cấp các kiểu nhất quán để làm cho các phần tử trông giống nhau trên các trình duyệt, đồng thời giữ lại các giá trị mặc định hữu ích.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn tạo một tooltip (gợi ý nhỏ) xuất hiện khi người dùng di chuột qua một icon. Thuộc tính CSS nào thường được sử dụng để ẩn tooltip ban đầu và chỉ hiển thị nó khi hover?",
+    "options": [
+      "A. `opacity: 0; visibility: hidden;` kết hợp với `:hover`.",
+      "B. `display: none;` kết hợp với `:hover`.",
+      "C. `position: absolute; left: -9999px;` kết hợp với `:hover`.",
+      "D. `z-index: -1;` kết hợp với `:hover`."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sử dụng `opacity: 0;` và `visibility: hidden;` cho phép tooltip tồn tại trong luồng tài liệu nhưng không hiển thị, và quan trọng hơn là cho phép bạn chuyển tiếp (transition) hiệu ứng mờ dần (fade-in/out) khi hover. `display: none;` sẽ loại bỏ phần tử khỏi luồng và không thể transition.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng `tabindex=\"0\"` cho một phần tử không tương tác (như `div`) có thể hữu ích trong một số trường hợp nhất định về khả năng truy cập, nhưng cũng cần được xem xét cẩn thận?",
+    "options": [
+      "A. Nó làm cho phần tử có thể nhận focus bằng bàn phím, cải thiện khả năng điều hướng cho người dùng bàn phím, nhưng có thể gây nhầm lẫn nếu phần tử không có chức năng tương tác rõ ràng.",
+      "B. Nó tự động thêm một đường viền focus màu xanh lam xung quanh phần tử, giúp dễ nhìn thấy hơn.",
+      "C. Nó cho phép phần tử được kéo và thả, cải thiện tương tác người dùng.",
+      "D. Nó thay đổi thứ tự tab mặc định của trang, giúp người dùng di chuyển nhanh hơn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`tabindex=\"0\"` đưa một phần tử vào thứ tự tab tự nhiên của tài liệu, làm cho nó có thể nhận focus bằng bàn phím. Điều này hữu ích cho các phần tử tùy chỉnh có chức năng tương tác nhưng không có ngữ nghĩa focusable mặc định. Tuy nhiên, nếu phần tử không có chức năng, nó có thể gây khó hiểu cho người dùng bàn phím.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang làm việc trên một dự án lớn và muốn tổ chức CSS theo cách module hóa, dễ quản lý. Phương pháp nào sau đây giúp chia nhỏ các stylesheet thành các file nhỏ hơn, sau đó nhập chúng vào một file CSS chính?",
+    "options": [
+      "A. Sử dụng thuộc tính `link` nhiều lần trong HTML.",
+      "B. Sử dụng `@import` rule trong CSS.",
+      "C. Sử dụng JavaScript để tải các file CSS động.",
+      "D. Ghép nối tất cả CSS vào một file duy nhất để giảm HTTP requests."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`@import` rule trong CSS cho phép bạn nhập các stylesheet khác vào stylesheet hiện tại, giúp tổ chức code thành các module nhỏ hơn và dễ quản lý hơn. Mặc dù có thể ảnh hưởng đến hiệu suất tải (tạo thêm HTTP requests), nó là một cách phổ biến để quản lý CSS trong quá trình phát triển.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần căn giữa một khối `div` có kích thước cố định (ví dụ: rộng 300px, cao 200px) theo cả chiều ngang và chiều dọc trong phần tử cha của nó mà không cần biết kích thước của phần tử cha. Phương pháp nào sau đây là hiệu quả và phổ biến nhất?",
+    "options": [
+      "A. Sử dụng `margin: auto;` và `position: absolute; top: 0; bottom: 0; left: 0; right: 0;`.",
+      "B. Sử dụng `display: flex; justify-content: center; align-items: center;` trên phần tử cha.",
+      "C. Sử dụng `position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);` trên phần tử con.",
+      "D. Sử dụng `display: grid; place-items: center;` trên phần tử cha."
+    ],
+    "correctAnswer": "D",
+    "explanation": "`display: grid; place-items: center;` là cách hiện đại và ngắn gọn nhất để căn giữa hoàn toàn một phần tử con trong phần tử cha bằng CSS Grid. `place-items` là shorthand cho `align-items` và `justify-items`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một dự án lớn, nhóm của bạn đang phát triển một bảng dữ liệu phức tạp với khả năng sắp xếp cột, phân trang và nhiều bộ lọc. Để đảm bảo khả năng truy cập (accessibility) tối ưu cho người dùng sử dụng trình đọc màn hình, bạn sẽ ưu tiên triển khai giải pháp nào?",
+    "options": [
+      "A. Sử dụng các thuộc tính `aria-label` trên tiêu đề cột và nút phân trang để cung cấp mô tả chi tiết.",
+      "B. Đảm bảo mỗi ô tiêu đề (`<th>`) đều có thuộc tính `scope` phù hợp (`col` hoặc `row`) và sử dụng `aria-sort` trên các cột có thể sắp xếp.",
+      "C. Tập trung vào việc tạo ra giao diện trực quan rõ ràng và cung cấp hướng dẫn sử dụng chi tiết cho người dùng.",
+      "D. Sử dụng JavaScript để thay đổi nội dung văn bản của các phần tử khi trạng thái thay đổi, ví dụ: 'Sắp xếp tăng dần' hoặc 'Sắp xếp giảm dần'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thuộc tính `scope` trên `<th>` giúp trình đọc màn hình hiểu mối quan hệ giữa tiêu đề và dữ liệu. `aria-sort` thông báo trạng thái sắp xếp của cột. Đây là cách tiêu chuẩn và mạnh mẽ nhất để làm cho bảng dữ liệu phức tạp trở nên dễ tiếp cận.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế một dashboard với nhiều widget độc lập, mỗi widget có cấu trúc nội dung riêng cần căn chỉnh nội bộ, và toàn bộ dashboard cần một bố cục tổng thể linh hoạt. Bạn sẽ lựa chọn kết hợp các hệ thống layout CSS nào để đạt được hiệu quả tốt nhất về khả năng bảo trì và hiệu suất?",
+    "options": [
+      "A. Sử dụng CSS Grid cho bố cục tổng thể của dashboard và Flexbox bên trong từng widget để căn chỉnh nội dung.",
+      "B. Sử dụng hoàn toàn CSS Grid cho cả bố cục tổng thể và căn chỉnh nội dung bên trong từng widget.",
+      "C. Sử dụng hoàn toàn Flexbox cho cả bố cục tổng thể và căn chỉnh nội dung bên trong từng widget.",
+      "D. Sử dụng CSS Grid cho bố cục tổng thể và `position: absolute` kết hợp với `calc()` cho các widget bên trong."
+    ],
+    "correctAnswer": "A",
+    "explanation": "CSS Grid lý tưởng cho bố cục 2 chiều (tổng thể) của trang, trong khi Flexbox mạnh mẽ trong việc căn chỉnh các mục theo một chiều (bên trong widget). Kết hợp cả hai tận dụng ưu điểm của mỗi hệ thống, mang lại sự linh hoạt, dễ bảo trì và hiệu suất tốt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một dự án web lớn với hàng trăm component và nhiều nhóm phát triển đang gặp vấn đề về xung đột CSS và khó khăn trong việc mở rộng. Kiến trúc sư Frontend đề xuất một phương pháp quản lý CSS. Giải pháp nào sau đây mang lại khả năng mở rộng, dễ bảo trì và giảm thiểu xung đột tốt nhất trong bối cảnh này?",
+    "options": [
+      "A. Sử dụng CSS Modules hoặc CSS-in-JS để đảm bảo style được scoped cục bộ cho từng component.",
+      "B. Áp dụng phương pháp BEM (Block, Element, Modifier) một cách nghiêm ngặt trên toàn bộ dự án.",
+      "C. Sử dụng các class tiện ích (utility-first CSS) như Tailwind CSS để giảm thiểu việc viết CSS tùy chỉnh.",
+      "D. Tăng cường sử dụng `!important` để ghi đè các style không mong muốn và giải quyết xung đột."
+    ],
+    "correctAnswer": "A",
+    "explanation": "CSS Modules hoặc CSS-in-JS cung cấp khả năng scoping style tự động, ngăn chặn xung đột giữa các component và giữa các nhóm phát triển, làm cho việc quản lý CSS trong dự án lớn trở nên hiệu quả và dễ bảo trì hơn đáng kể. BEM cũng tốt nhưng đòi hỏi kỷ luật cao và không tự động ngăn xung đột như CSS Modules/CSS-in-JS.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để tối ưu hiệu suất tải trang cho một trang web responsive có nhiều hình ảnh, đặc biệt là trên các thiết bị di động với kết nối mạng chậm, bạn sẽ triển khai chiến lược nào để phục vụ hình ảnh hiệu quả nhất?",
+    "options": [
+      "A. Sử dụng thuộc tính `srcset` và `sizes` trên thẻ `<img>` để trình duyệt tự chọn hình ảnh phù hợp với kích thước viewport và độ phân giải.",
+      "B. Luôn sử dụng hình ảnh có độ phân giải cao nhất và nén chúng bằng các công cụ tối ưu hình ảnh.",
+      "C. Sử dụng thẻ `<picture>` với nhiều thẻ `<source>` để cung cấp các định dạng hình ảnh khác nhau (ví dụ: WebP, JPEG) và kích thước khác nhau.",
+      "D. Tải tất cả hình ảnh dưới dạng nền CSS và sử dụng media queries để thay đổi chúng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thẻ `<picture>` với `<source>` cho phép 'art direction' (phục vụ các phiên bản hình ảnh khác nhau tùy theo ngữ cảnh) và cung cấp các định dạng hình ảnh hiện đại (như WebP) cho các trình duyệt hỗ trợ, đồng thời có fallback cho các trình duyệt cũ hơn. Kết hợp với `srcset`/`sizes` bên trong `<img>` bên trong `<picture>`, đây là giải pháp toàn diện nhất cho hiệu suất và khả năng tương thích.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh quản lý CSS cho một hệ thống thiết kế (design system) lớn, bạn cần triển khai một giải pháp chủ đề động (dynamic theming) cho phép người dùng chuyển đổi giữa các chủ đề sáng và tối. Phương pháp nào tận dụng tốt nhất CSS Cascade và Specificity để đạt được điều này một cách hiệu quả và dễ bảo trì?",
+    "options": [
+      "A. Sử dụng JavaScript để trực tiếp thay đổi các giá trị thuộc tính CSS trên các phần tử DOM khi chủ đề thay đổi.",
+      "B. Định nghĩa tất cả các biến màu sắc và font-size dưới dạng CSS Custom Properties trên `:root` và cập nhật một class trên `<body>` (ví dụ: `theme-dark`) để thay đổi giá trị của các Custom Properties đó.",
+      "C. Tạo ra hai file CSS riêng biệt cho chủ đề sáng và tối, sau đó dùng JavaScript để chuyển đổi giữa hai file này.",
+      "D. Sử dụng `!important` trên các style của chủ đề tối để đảm bảo chúng luôn được áp dụng khi chuyển đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng CSS Custom Properties (biến CSS) trên `:root` cho phép định nghĩa các giá trị toàn cục. Khi một class (ví dụ: `theme-dark`) được thêm vào `<body>`, nó có thể ghi đè các Custom Properties này theo cascade, mà không ảnh hưởng đến specificity của các quy tắc CSS khác. Đây là cách linh hoạt, hiệu quả và dễ bảo trì nhất cho dynamic theming.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Nhóm của bạn đang phát triển một component dropdown select tùy chỉnh phức tạp. Để đảm bảo component này hoàn toàn dễ tiếp cận (accessible) cho người dùng bàn phím và trình đọc màn hình, bạn cần triển khai những thuộc tính ARIA và kỹ thuật quản lý focus nào?",
+    "options": [
+      "A. Sử dụng `role=\"listbox\"` cho danh sách tùy chọn, `role=\"option\"` cho mỗi mục và `aria-selected` để chỉ trạng thái chọn.",
+      "B. Đặt `tabindex=\"0\"` cho nút kích hoạt dropdown và sử dụng JavaScript để quản lý focus vào các mục trong danh sách khi dropdown mở.",
+      "C. Kết hợp `role=\"combobox\"` cho phần tử chứa input/nút kích hoạt, `aria-expanded` để chỉ trạng thái mở/đóng, `aria-controls` trỏ đến `role=\"listbox\"` chứa các `role=\"option\"` với `aria-selected` và quản lý focus bằng JavaScript.",
+      "D. Chỉ cần đảm bảo các mục trong dropdown là các thẻ `<a>` hoặc `<button>` để chúng tự động có thể focus được."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để tạo một dropdown select tùy chỉnh hoàn chỉnh và dễ tiếp cận, cần mô phỏng hành vi của native `<select>`. `role=\"combobox\"` là vai trò phù hợp nhất cho phần tử kích hoạt. `aria-expanded` báo hiệu trạng thái mở/đóng. `aria-controls` liên kết nó với danh sách tùy chọn (`role=\"listbox\"`). `role=\"option\"` và `aria-selected` cho các mục. Quản lý focus bằng JavaScript là cần thiết để đảm bảo người dùng bàn phím có thể điều hướng chính xác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn cần tạo một animation di chuyển một phần tử trên màn hình. Để đảm bảo animation mượt mà và tối ưu hiệu suất, tránh gây ra layout thrashing (reflow) không cần thiết, bạn nên ưu tiên sử dụng thuộc tính CSS nào để điều khiển vị trí của phần tử?",
+    "options": [
+      "A. `top` và `left` (hoặc `right`, `bottom`)",
+      "B. `margin-top` và `margin-left`",
+      "C. `transform: translate()`",
+      "D. `width` và `height`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`transform: translate()` là thuộc tính được ưu tiên để di chuyển phần tử vì nó không gây ra reflow (thay đổi bố cục). Thay vào đó, nó được xử lý ở lớp compositing của trình duyệt, tận dụng GPU để rendering mượt mà hơn. Các thuộc tính khác như `top`, `left`, `margin` hoặc `width`, `height` thường gây ra reflow, ảnh hưởng đến hiệu suất animation.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong việc cấu trúc nội dung của một trang blog, bạn cần quyết định cách nhóm các bài viết, các phần liên quan và các khối nội dung khác. Việc lựa chọn giữa `<article>`, `<section>` và `<div>` có ý nghĩa quan trọng đối với khả năng truy cập và SEO. Bạn sẽ sử dụng các thẻ này như thế nào để tối ưu hóa document outline và ngữ nghĩa?",
+    "options": [
+      "A. Sử dụng `<article>` cho mỗi bài viết độc lập, `<section>` để nhóm các bài viết liên quan hoặc các phần trong một bài viết, và `<div>` cho mục đích tạo kiểu (styling) không có ý nghĩa ngữ nghĩa cụ thể.",
+      "B. Sử dụng `<section>` cho tất cả các khối nội dung chính và `<article>` chỉ cho các nội dung rất dài.",
+      "C. Chỉ sử dụng `<div>` cho tất cả các khối nội dung và thêm các thuộc tính ARIA để cung cấp ngữ nghĩa.",
+      "D. Sử dụng `<article>` cho mọi thứ có tiêu đề và `<section>` cho mọi thứ còn lại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`<article>` được dùng cho nội dung độc lập, có thể phân phối lại một cách riêng lẻ (ví dụ: một bài blog, một bình luận). `<section>` dùng để nhóm các nội dung có liên quan theo chủ đề trong một tài liệu hoặc `article`. `<div>` là một phần tử chung, không có ý nghĩa ngữ nghĩa, chỉ nên dùng khi không có thẻ ngữ nghĩa nào phù hợp hơn. Cách này giúp xây dựng document outline rõ ràng, cải thiện SEO và khả năng truy cập.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang triển khai một tính năng CSS mới (ví dụ: `container-queries` hoặc `gap` trong Flexbox) mà chưa được tất cả các trình duyệt hỗ trợ đầy đủ. Để đảm bảo trải nghiệm người dùng tốt nhất trên các trình duyệt khác nhau, bạn sẽ áp dụng chiến lược nào?",
+    "options": [
+      "A. Chỉ triển khai tính năng đó và yêu cầu người dùng nâng cấp trình duyệt lên phiên bản mới nhất.",
+      "B. Sử dụng `@supports` để kiểm tra khả năng hỗ trợ của trình duyệt và cung cấp các style fallback khi tính năng không được hỗ trợ.",
+      "C. Sử dụng JavaScript để phát hiện trình duyệt và áp dụng các style khác nhau dựa trên User Agent.",
+      "D. Chờ đợi cho đến khi tính năng được hỗ trợ rộng rãi trên tất cả các trình duyệt chính trước khi triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`@supports` là một quy tắc CSS cho phép bạn kiểm tra xem trình duyệt có hỗ trợ một thuộc tính hoặc giá trị CSS cụ thể hay không. Điều này cho phép triển khai progressive enhancement: cung cấp trải nghiệm nâng cao cho các trình duyệt hiện đại và một trải nghiệm cơ bản nhưng vẫn hoạt động cho các trình duyệt cũ hơn, mà không cần dựa vào JavaScript hoặc User Agent sniffing.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Nhóm của bạn đang cân nhắc việc tích hợp một CSS preprocessor (ví dụ: Sass hoặc Less) vào quy trình phát triển cho một dự án mới có quy mô lớn. Quyết định này cần được đánh giá dựa trên các lợi ích và nhược điểm tiềm năng. Nhận định nào sau đây là đúng nhất về tác động của preprocessor đến kiến trúc và khả năng bảo trì CSS?",
+    "options": [
+      "A. Preprocessor giúp cải thiện đáng kể khả năng bảo trì và tổ chức code CSS thông qua biến, mixin, nesting và partials, nhưng thêm một bước build phức tạp.",
+      "B. Preprocessor chủ yếu chỉ giúp viết code nhanh hơn và không có tác động đáng kể đến kiến trúc hoặc khả năng bảo trì của dự án lớn.",
+      "C. Sử dụng preprocessor sẽ làm tăng kích thước file CSS cuối cùng và giảm hiệu suất tải trang.",
+      "D. Preprocessor loại bỏ hoàn toàn nhu cầu về các phương pháp kiến trúc CSS như BEM hoặc SMACSS."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Preprocessor như Sass/Less mang lại các tính năng mạnh mẽ như biến, mixin, function, nesting và partials, giúp tổ chức code CSS một cách mô-đun, dễ tái sử dụng và dễ bảo trì hơn, đặc biệt trong các dự án lớn. Tuy nhiên, chúng đòi hỏi một bước biên dịch (build step) để chuyển đổi sang CSS thuần, điều này có thể làm tăng độ phức tạp của quy trình build.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một ứng dụng web, bạn cần triển khai một modal dialog. Để đảm bảo khả năng truy cập (accessibility), một yêu cầu quan trọng là 'focus trapping' – tức là khi modal mở, focus bàn phím phải được giữ bên trong modal và không thể thoát ra ngoài cho đến khi modal đóng. Bạn sẽ sử dụng kỹ thuật nào để đạt được điều này một cách hiệu quả?",
+    "options": [
+      "A. Đặt `tabindex=\"-1\"` cho tất cả các phần tử bên ngoài modal và `tabindex=\"0\"` cho các phần tử bên trong modal.",
+      "B. Sử dụng JavaScript để lắng nghe sự kiện `keydown` (đặc biệt là phím Tab) và chặn/chuyển hướng focus khi người dùng cố gắng thoát khỏi modal.",
+      "C. Áp dụng thuộc tính `aria-modal=\"true\"` cho modal và sử dụng `inert` attribute (nếu trình duyệt hỗ trợ) cho các phần tử bên ngoài modal.",
+      "D. Chỉ cần đảm bảo modal có nút đóng rõ ràng và người dùng có thể thoát bằng phím Escape."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`aria-modal=\"true\"` thông báo cho trình đọc màn hình rằng nội dung bên ngoài modal hiện tại không khả dụng. Thuộc tính `inert` (một tính năng mới hơn trong HTML) sẽ làm cho các phần tử bên ngoài modal không thể focus hoặc tương tác được, tự động triển khai focus trapping một cách hiệu quả và ngữ nghĩa. Kết hợp JavaScript để quản lý focus ban đầu và đóng modal bằng Escape vẫn là cần thiết, nhưng `aria-modal` và `inert` là nền tảng vững chắc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Nhóm của bạn đang xây dựng một ứng dụng web có tính năng chuyển đổi chủ đề (theme switching) giữa chế độ sáng và tối. Mục tiêu là làm cho việc chuyển đổi này mượt mà, hiệu quả và dễ dàng mở rộng. Phương pháp nào sau đây là tối ưu nhất để quản lý và áp dụng các style chủ đề?",
+    "options": [
+      "A. Tạo hai bộ CSS riêng biệt cho chế độ sáng và tối, sau đó dùng JavaScript để thêm/xóa thẻ `<link>` CSS tương ứng.",
+      "B. Sử dụng CSS Custom Properties (biến CSS) được định nghĩa trên `:root` và thay đổi giá trị của chúng bằng JavaScript khi chuyển đổi chủ đề, có thể thông qua việc thêm/xóa một class trên `<body>`.",
+      "C. Sử dụng JavaScript để duyệt qua tất cả các phần tử DOM và cập nhật trực tiếp các thuộc tính style của chúng dựa trên chủ đề được chọn.",
+      "D. Dùng Sass để tạo các biến chủ đề và biên dịch lại toàn bộ CSS mỗi khi người dùng thay đổi chủ đề."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CSS Custom Properties là giải pháp mạnh mẽ nhất cho dynamic theming. Bằng cách định nghĩa các biến màu sắc, font, v.v., trên `:root` và sau đó ghi đè chúng trong một selector cụ thể (ví dụ: `.theme-dark`), bạn có thể thay đổi toàn bộ giao diện chỉ bằng cách thêm/xóa một class trên `<body>`. Điều này tận dụng tốt cascade, hiệu quả về hiệu suất và rất dễ bảo trì, mở rộng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn cần triển khai một hệ thống typography phản hồi (responsive typography) cho một dự án web, nơi kích thước font chữ phải tự động điều chỉnh mượt mà theo kích thước viewport, không chỉ ở các breakpoint cố định. Phương pháp nào sau đây cung cấp giải pháp linh hoạt và hiệu quả nhất cho yêu cầu này?",
+    "options": [
+      "A. Sử dụng đơn vị `vw` (viewport width) trực tiếp cho `font-size` để font chữ luôn tỷ lệ với chiều rộng viewport.",
+      "B. Kết hợp đơn vị `rem` với nhiều media queries để định nghĩa kích thước font chữ ở các breakpoint khác nhau.",
+      "C. Sử dụng hàm `clamp()` trong CSS để định nghĩa kích thước font chữ với giá trị tối thiểu, giá trị ưu tiên (fluid) và giá trị tối đa.",
+      "D. Sử dụng JavaScript để tính toán và cập nhật `font-size` dựa trên chiều rộng của viewport."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hàm `clamp()` (ví dụ: `font-size: clamp(1rem, 2vw + 1rem, 2.5rem);`) cho phép bạn định nghĩa một kích thước font chữ có giới hạn tối thiểu, một giá trị 'fluid' (thường dựa trên `vw`) và một giới hạn tối đa. Điều này tạo ra typography phản hồi mượt mà, tự động điều chỉnh theo viewport mà không cần nhiều media queries, và tránh các vấn đề của `vw` đơn thuần (quá nhỏ hoặc quá lớn).",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi tối ưu hiệu suất rendering của một trang web, việc lựa chọn selector CSS có thể ảnh hưởng đến tốc độ trình duyệt áp dụng style. Trong các loại selector sau, loại nào thường được coi là hiệu quả nhất về mặt hiệu suất khi trình duyệt phân tích và áp dụng style?",
+    "options": [
+      "A. ID selectors (ví dụ: `#my-id`)",
+      "B. Class selectors (ví dụ: `.my-class`)",
+      "C. Universal selectors (ví dụ: `*`)",
+      "D. Descendant selectors phức tạp (ví dụ: `div > ul > li > a`)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trình duyệt đọc selector từ phải sang trái. Class selectors (`.my-class`) thường rất hiệu quả vì chúng cho phép trình duyệt nhanh chóng tìm thấy các phần tử phù hợp mà không cần duyệt qua cây DOM quá sâu hoặc kiểm tra các mối quan hệ phức tạp. ID selectors (`#my-id`) cũng rất nhanh vì chúng là duy nhất, nhưng việc lạm dụng có thể dẫn đến specificity cao khó quản lý. Universal và descendant selectors phức tạp thường kém hiệu quả hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một biểu mẫu đăng ký tùy chỉnh và cần hiển thị thông báo lỗi validation rõ ràng và dễ tiếp cận (accessible) cho người dùng. Khi một trường nhập liệu không hợp lệ, thông báo lỗi phải được liên kết ngữ nghĩa với trường đó và được trình đọc màn hình thông báo. Bạn sẽ sử dụng thuộc tính ARIA nào để đạt được điều này?",
+    "options": [
+      "A. Sử dụng `aria-label` trên trường nhập liệu để mô tả lỗi.",
+      "B. Đặt `role=\"alert\"` cho phần tử chứa thông báo lỗi.",
+      "C. Sử dụng `aria-describedby` trên trường nhập liệu, trỏ đến `id` của phần tử chứa thông báo lỗi, và `aria-invalid=\"true\"` trên trường nhập liệu.",
+      "D. Chỉ cần hiển thị thông báo lỗi bằng văn bản bên cạnh trường nhập liệu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`aria-invalid=\"true\"` trên trường nhập liệu báo hiệu cho trình đọc màn hình rằng trường đó có lỗi. `aria-describedby` tạo liên kết ngữ nghĩa giữa trường nhập liệu và phần tử chứa thông báo lỗi (thường là một `<span>` hoặc `<div>` có `id`). Khi focus vào trường nhập liệu, trình đọc màn hình sẽ đọc cả nhãn và mô tả lỗi, cung cấp ngữ cảnh đầy đủ cho người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một component trên trang web của bạn tải nội dung hình ảnh hoặc quảng cáo một cách không đồng bộ, gây ra hiện tượng Cumulative Layout Shift (CLS) đáng kể, làm ảnh hưởng đến trải nghiệm người dùng. Giải pháp CSS nào sau đây là hiệu quả nhất để giảm thiểu CLS cho các thành phần tải không đồng bộ?",
+    "options": [
+      "A. Đặt `position: absolute` cho các phần tử tải không đồng bộ để chúng không chiếm không gian trong bố cục.",
+      "B. Sử dụng `min-height` hoặc `min-width` trên phần tử chứa để dự trữ không gian trước khi nội dung được tải.",
+      "C. Áp dụng `content-visibility: auto` cho phần tử chứa để trình duyệt bỏ qua việc render nội dung ẩn.",
+      "D. Sử dụng JavaScript để tính toán và đặt `height` chính xác cho phần tử chứa sau khi nội dung được tải."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CLS xảy ra khi nội dung bất ngờ thay đổi vị trí. Để giảm thiểu, cần 'dự trữ' không gian cho nội dung sẽ được tải. Sử dụng `min-height` hoặc `aspect-ratio` (nếu biết tỷ lệ khung hình của hình ảnh) trên phần tử chứa là cách hiệu quả nhất bằng CSS để đảm bảo bố cục không bị dịch chuyển khi nội dung tải xong. `position: absolute` có thể gây ra các vấn đề bố cục khác. `content-visibility` hữu ích cho hiệu suất render nhưng không trực tiếp giải quyết CLS do thay đổi kích thước.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một trang sản phẩm và muốn cung cấp dữ liệu có cấu trúc (structured data) cho các công cụ tìm kiếm để cải thiện hiển thị trong kết quả tìm kiếm (rich snippets). Để đánh dấu thông tin về sản phẩm (tên, giá, đánh giá) bằng Microdata, bạn sẽ sử dụng các thuộc tính HTML nào?",
+    "options": [
+      "A. Sử dụng thuộc tính `data-*` tùy chỉnh trên các phần tử.",
+      "B. Sử dụng các thuộc tính `itemprop`, `itemscope`, và `itemtype` theo schema.org.",
+      "C. Đặt thông tin sản phẩm trong các thẻ `<meta>` với thuộc tính `name` và `content`.",
+      "D. Chỉ cần đảm bảo các tiêu đề và giá được hiển thị rõ ràng trong HTML."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Microdata là một trong các định dạng để cung cấp dữ liệu có cấu trúc. `itemscope` định nghĩa một item, `itemtype` chỉ định loại item (ví dụ: `http://schema.org/Product`), và `itemprop` được sử dụng trên các thuộc tính của item (ví dụ: `name`, `price`, `aggregateRating`). Đây là cách tiêu chuẩn để các công cụ tìm kiếm hiểu rõ hơn về nội dung trang của bạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một đội phát triển đang tranh luận về việc áp dụng CSS-in-JS (ví dụ: Styled Components) hay tiếp tục sử dụng phương pháp CSS truyền thống kết hợp với một methodology như BEM cho dự án quy mô lớn. Với vai trò kiến trúc sư Frontend, bạn sẽ phân tích các yếu tố nào để đưa ra quyết định, tập trung vào khả năng bảo trì, hiệu suất và trải nghiệm phát triển của đội?",
+    "options": [
+      "A. CSS-in-JS cung cấp khả năng scoping style mạnh mẽ, loại bỏ xung đột class và cho phép logic động trong style, nhưng có thể tăng kích thước bundle và thời gian runtime. BEM yêu cầu kỷ luật cao nhưng tạo ra CSS sạch, dễ hiểu.",
+      "B. CSS-in-JS luôn có hiệu suất kém hơn CSS truyền thống do cần JavaScript để inject style.",
+      "C. BEM là một phương pháp lỗi thời và không còn phù hợp cho các ứng dụng hiện đại.",
+      "D. CSS-in-JS chỉ nên được sử dụng cho các dự án nhỏ và đơn giản."
+    ],
+    "correctAnswer": "A",
+    "explanation": "CSS-in-JS giải quyết triệt để vấn đề xung đột style bằng cách scoping chúng ở cấp độ component và cho phép style động dựa trên props. Tuy nhiên, nó có thể tăng kích thước bundle và thời gian xử lý runtime. BEM, mặt khác, là một phương pháp tổ chức CSS mạnh mẽ, tạo ra code dễ đọc và dễ bảo trì, nhưng đòi hỏi sự tuân thủ nghiêm ngặt từ đội ngũ. Quyết định phụ thuộc vào ưu tiên của dự án và kinh nghiệm của đội.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một Single Page Application (SPA), nội dung trang thường thay đổi mà không cần tải lại toàn bộ trang. Để đảm bảo khả năng truy cập, khi một phần nội dung chính được cập nhật hoặc một phần mới được tải vào DOM, trình đọc màn hình cần được thông báo về sự thay đổi này. Kỹ thuật nào là phù hợp nhất để quản lý focus và thông báo cập nhật nội dung cho trình đọc màn hình trong SPA?",
+    "options": [
+      "A. Sử dụng `aria-live` regions để thông báo các thay đổi nội dung động và đặt focus chương trình vào tiêu đề của nội dung mới.",
+      "B. Luôn đặt `tabindex=\"0\"` trên tất cả các phần tử mới được thêm vào DOM.",
+      "C. Chỉ cần đảm bảo rằng các liên kết điều hướng được cập nhật chính xác.",
+      "D. Sử dụng `role=\"alert\"` cho tất cả các phần tử nội dung mới để đảm bảo chúng được đọc ngay lập tức."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`aria-live` regions là cách tiêu chuẩn để thông báo cho trình đọc màn hình về các cập nhật nội dung động mà không làm mất focus của người dùng. Kết hợp với việc đặt focus chương trình (programmatically focus) vào tiêu đề hoặc phần tử quan trọng nhất của nội dung mới được tải, sẽ giúp người dùng trình đọc màn hình hiểu rõ đã có gì thay đổi và điều hướng đến đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi bắt đầu một dự án web mới, bạn cần quyết định chiến lược CSS cơ bản để đảm bảo tính nhất quán và khả năng tương thích trên các trình duyệt. Bạn sẽ lựa chọn giữa CSS Reset, Normalize.css, hay một custom base stylesheet. Phương pháp nào mang lại sự cân bằng tốt nhất giữa việc loại bỏ sự khác biệt mặc định của trình duyệt và giữ lại các giá trị mặc định hữu ích?",
+    "options": [
+      "A. Sử dụng một CSS Reset toàn diện để loại bỏ tất cả các style mặc định của trình duyệt, sau đó xây dựng lại từ đầu.",
+      "B. Áp dụng Normalize.css để làm cho các style mặc định của trình duyệt nhất quán hơn giữa các trình duyệt mà vẫn giữ lại nhiều giá trị mặc định hữu ích.",
+      "C. Viết một custom base stylesheet từ đầu, chỉ đặt lại những thuộc tính mà bạn biết chắc chắn cần thay đổi.",
+      "D. Không sử dụng bất kỳ reset/normalize nào và để trình duyệt tự xử lý các style mặc định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Normalize.css là một lựa chọn phổ biến vì nó tập trung vào việc làm cho các style mặc định của trình duyệt trở nên nhất quán hơn, thay vì loại bỏ hoàn toàn chúng. Điều này giữ lại nhiều giá trị mặc định hữu ích (ví dụ: `font-size` của `<h1>`) và giảm thiểu lượng CSS bạn cần viết lại. CSS Reset có thể quá mạnh tay, và việc viết custom base stylesheet có thể tốn thời gian hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang triển khai một animation phức tạp trên một trang web, bao gồm nhiều thuộc tính CSS thay đổi đồng thời (ví dụ: `transform`, `opacity`, `filter`). Để đảm bảo animation chạy mượt mà ở 60 khung hình/giây (FPS) trên hầu hết các thiết bị, bạn nên ưu tiên các kỹ thuật tối ưu hiệu suất nào?",
+    "options": [
+      "A. Chỉ animate các thuộc tính `transform` và `opacity` vì chúng thường được xử lý trên GPU (composited properties).",
+      "B. Sử dụng `transition` thay vì `animation` vì chúng nhẹ hơn.",
+      "C. Sử dụng `will-change` trên các phần tử được animate để thông báo cho trình duyệt chuẩn bị tài nguyên trước.",
+      "D. Cả A và C đều đúng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Chỉ animate các thuộc tính `transform` và `opacity` là một chiến lược hiệu quả vì chúng thường được xử lý bởi GPU, tránh gây ra reflow hoặc repaint. Ngoài ra, sử dụng `will-change` (ví dụ: `will-change: transform, opacity;`) có thể giúp trình duyệt tối ưu hóa trước khi animation bắt đầu, bằng cách chuẩn bị các lớp compositing cần thiết. Kết hợp cả hai sẽ mang lại hiệu suất animation tốt nhất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để cấu trúc một trang web điển hình với header, navigation, main content và footer, việc sử dụng các phần tử HTML5 ngữ nghĩa phù hợp là rất quan trọng để cải thiện khả năng truy cập (accessibility) và SEO. Bạn sẽ sử dụng những phần tử nào để định nghĩa các vùng (landmarks) chính của tài liệu?",
+    "options": [
+      "A. `div` cho tất cả các vùng và thêm `id` để phân biệt.",
+      "B. `header`, `nav`, `main`, `footer`, và `aside`.",
+      "C. `section` cho tất cả các vùng chính của trang.",
+      "D. `div` với các thuộc tính `role` ARIA tương ứng như `role=\"banner\"`, `role=\"navigation\"`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các phần tử HTML5 như `<header>`, `<nav>`, `<main>`, `<footer>`, và `<aside>` được gọi là 'landmarks' và cung cấp ý nghĩa ngữ nghĩa rõ ràng cho cấu trúc trang. Trình đọc màn hình có thể sử dụng các landmark này để người dùng điều hướng nhanh chóng qua các phần chính của trang. Mặc dù `div` với `role` ARIA có thể đạt được điều tương tự, việc sử dụng các thẻ ngữ nghĩa gốc luôn được ưu tiên hơn (quy tắc 'use native HTML elements first').",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần hiển thị một hình ảnh trên trang web với yêu cầu 'art direction': tức là hiển thị các phiên bản hình ảnh khác nhau (ví dụ: cắt xén khác nhau, kích thước khác nhau, hoặc định dạng khác nhau) tùy thuộc vào kích thước màn hình hoặc khả năng hỗ trợ định dạng của trình duyệt. Bạn sẽ sử dụng phần tử HTML nào để đạt được điều này một cách hiệu quả?",
+    "options": [
+      "A. Chỉ sử dụng thẻ `<img>` với thuộc tính `srcset` và `sizes`.",
+      "B. Sử dụng thẻ `<picture>` kết hợp với các thẻ `<source>` và một thẻ `<img>` fallback.",
+      "C. Sử dụng CSS `background-image` với các media queries để thay đổi hình ảnh.",
+      "D. Sử dụng JavaScript để phát hiện kích thước màn hình và thay đổi thuộc tính `src` của thẻ `<img>`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thẻ `<picture>` được thiết kế đặc biệt cho 'art direction'. Nó cho phép bạn cung cấp nhiều thẻ `<source>` với các thuộc tính `media` (cho kích thước màn hình) và `type` (cho định dạng hình ảnh như WebP, AVIF). Trình duyệt sẽ chọn `<source>` đầu tiên phù hợp, và `<img>` bên trong đóng vai trò là fallback cho các trình duyệt không hỗ trợ `<picture>` hoặc không tìm thấy `<source>` phù hợp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một codebase CSS kế thừa, việc sử dụng `!important` tràn lan đã dẫn đến các vấn đề nghiêm trọng về xung đột style và khó khăn trong việc debug. Nhóm của bạn được giao nhiệm vụ refactor để giảm thiểu sự phụ thuộc vào `!important`. Chiến lược nào sau đây là hiệu quả nhất để loại bỏ `!important` mà vẫn duy trì tính đúng đắn của giao diện?",
+    "options": [
+      "A. Thay thế tất cả các `!important` bằng inline styles để tăng độ ưu tiên.",
+      "B. Tăng độ đặc hiệu (specificity) của các quy tắc CSS thông thường bằng cách thêm nhiều selector hơn hoặc sử dụng ID selectors.",
+      "C. Chuyển đổi sang sử dụng CSS Custom Properties và quản lý các giá trị qua JavaScript.",
+      "D. Sử dụng một CSS preprocessor để tổ chức lại code và sau đó loại bỏ `!important`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`!important` ghi đè mọi quy tắc specificity thông thường. Để loại bỏ nó mà không làm thay đổi giao diện, bạn cần đảm bảo rằng quy tắc thay thế có độ đặc hiệu cao hơn hoặc được khai báo sau trong cascade. Tăng độ đặc hiệu của các quy tắc thông thường (ví dụ: từ `.class` thành `div.parent .class` hoặc sử dụng ID) là phương pháp trực tiếp nhất để ghi đè các style `!important` mà không cần dùng đến `!important` khác. Các phương pháp khác có thể hữu ích cho việc tổ chức nhưng không trực tiếp giải quyết vấn đề ghi đè specificity.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một component giao diện tab tùy chỉnh. Để đảm bảo component này hoàn toàn dễ tiếp cận (accessible) cho người dùng bàn phím và trình đọc màn hình, bạn cần triển khai các thuộc tính và vai trò ARIA nào?",
+    "options": [
+      "A. Sử dụng `role=\"button\"` cho mỗi tab và `aria-label` để mô tả nội dung của tab panel.",
+      "B. Sử dụng `role=\"tablist\"` cho container của các tab, `role=\"tab\"` cho mỗi tab, `aria-selected` để chỉ tab đang hoạt động, và `role=\"tabpanel\"` cho nội dung của mỗi tab panel với `aria-labelledby` và `aria-controls`.",
+      "C. Chỉ cần đảm bảo các tab là các thẻ `<a>` và các tab panel là `<div>`.",
+      "D. Dùng JavaScript để ẩn/hiện các tab panel và quản lý focus bằng `tabindex`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để tạo một giao diện tab accessible, cần tuân thủ mô hình WAI-ARIA Tabs. `role=\"tablist\"` xác định danh sách các tab. `role=\"tab\"` cho mỗi tab. `aria-selected=\"true\"` cho tab đang hoạt động. `role=\"tabpanel\"` cho mỗi panel nội dung, với `aria-labelledby` trỏ đến `id` của tab tương ứng và `aria-controls` trỏ đến `id` của tabpanel tương ứng. Điều này giúp trình đọc màn hình hiểu cấu trúc và mối quan hệ giữa các tab và nội dung của chúng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một hệ thống dashboard doanh nghiệp lớn, bạn cần hiển thị dữ liệu dạng bảng phức tạp với nhiều cấp độ tiêu đề (ví dụ: năm, quý, tháng). Làm thế nào để đảm bảo bảng này có cấu trúc ngữ nghĩa và dễ tiếp cận nhất cho người dùng sử dụng trình đọc màn hình?",
+    "options": [
+      "A. Sử dụng thuộc tính `scope` trên các thẻ `<th>` và kết hợp `aria-labelledby` cho các ô dữ liệu phức tạp.",
+      "B. Đặt tất cả dữ liệu vào các thẻ `<div>` và sử dụng `role=\"table\"`, sau đó dùng `aria-label` cho từng ô.",
+      "C. Chỉ cần dùng `<th>` thông thường và để trình đọc màn hình tự động suy luận cấu trúc.",
+      "D. Sử dụng CSS Grid để tạo layout bảng và bỏ qua các thẻ `<table>` truyền thống để tăng hiệu suất."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đối với bảng phức tạp, việc sử dụng `scope` cho các tiêu đề cột/hàng là cần thiết. Khi có nhiều cấp độ tiêu đề hoặc các ô dữ liệu có mối quan hệ phức tạp, `aria-labelledby` giúp liên kết một ô dữ liệu với nhiều tiêu đề, cung cấp ngữ cảnh rõ ràng cho trình đọc màn hình. Các phương án khác không đảm bảo ngữ nghĩa và khả năng tiếp cận tốt nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một hệ thống component library cho một ứng dụng web quy mô lớn. Một component cụ thể (ví dụ: một card sản phẩm) cần thay đổi đáng kể bố cục nội bộ của nó (ví dụ: từ hàng ngang sang cột dọc) tùy thuộc vào không gian có sẵn của chính nó, chứ không phải kích thước viewport tổng thể. Giải pháp CSS nào là hiệu quả và hiện đại nhất để đạt được điều này?",
+    "options": [
+      "A. Sử dụng `@media` queries truyền thống và áp dụng chúng cho component dựa trên kích thước viewport.",
+      "B. Sử dụng CSS Container Queries (`@container`) để định nghĩa các breakpoint dựa trên kích thước của phần tử cha chứa component.",
+      "C. Dùng JavaScript để theo dõi kích thước của component và thay đổi class CSS tương ứng.",
+      "D. Áp dụng Flexbox với `flex-wrap` và `flex-basis` để component tự động điều chỉnh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CSS Container Queries (`@container`) là giải pháp hiện đại và hiệu quả nhất cho responsive design cấp component. Nó cho phép một component tự điều chỉnh bố cục nội bộ dựa trên kích thước của container chứa nó, thay vì dựa vào kích thước viewport toàn trang, giúp xây dựng các component độc lập và dễ tái sử dụng hơn. `@media` queries truyền thống chỉ hoạt động ở cấp độ viewport. JavaScript là một giải pháp không tối ưu về hiệu suất và độ phức tạp.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án web lớn với hàng trăm file CSS được phát triển bởi nhiều đội nhóm, bạn nhận thấy có sự xung đột CSS liên tục do specificity wars và khó khăn trong việc debug. Để giải quyết vấn đề này và cải thiện khả năng bảo trì, bạn sẽ đề xuất chiến lược kiến trúc CSS nào?",
+    "options": [
+      "A. Triển khai một hệ thống CSS-in-JS toàn diện để quản lý tất cả các styles trong JavaScript.",
+      "B. Áp dụng phương pháp BEM (Block, Element, Modifier) kết hợp với CSS Modules hoặc `@layer` để quản lý specificity.",
+      "C. Sử dụng `!important` thường xuyên hơn để ghi đè các styles xung đột.",
+      "D. Tăng cường sử dụng inline styles để đảm bảo các styles cụ thể được áp dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BEM cung cấp một quy ước đặt tên rõ ràng giúp giảm thiểu xung đột và quản lý specificity. Kết hợp với CSS Modules (để scope CSS cục bộ) hoặc `@layer` (để quản lý thứ tự cascade) sẽ tạo ra một kiến trúc CSS có khả năng mở rộng và bảo trì cao trong môi trường nhiều đội nhóm. CSS-in-JS là một lựa chọn khác nhưng có thể không phù hợp với mọi dự án hoặc đã có sẵn một lượng lớn CSS. `!important` và inline styles làm tăng specificity và gây khó khăn trong việc debug và bảo trì. Framework UI giúp chuẩn hóa nhưng không giải quyết triệt để vấn đề xung đột nếu không có quy tắc rõ ràng.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn được giao nhiệm vụ xây dựng một component slider (thanh trượt) tùy chỉnh để chọn phạm vi giá. Component này cần phải hoạt động mượt mà, dễ tiếp cận và tương thích trên nhiều trình duyệt. Những yếu tố nào là quan trọng nhất cần xem xét khi triển khai?",
+    "options": [
+      "A. Chỉ cần sử dụng `<input type=\"range\">` và áp dụng CSS để tạo kiểu mà không cần ARIA.",
+      "B. Đảm bảo hỗ trợ đầy đủ các sự kiện bàn phím, sử dụng `role=\"slider\"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax` và quản lý focus.",
+      "C. Dùng JavaScript để thay đổi style trực tiếp khi kéo thanh trượt để đảm bảo hiệu suất.",
+      "D. Sử dụng thuộc tính `appearance: none` để loại bỏ toàn bộ style mặc định của trình duyệt và sau đó xây dựng lại từ đầu bằng `div`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để một component tùy chỉnh như slider hoạt động mượt mà, dễ tiếp cận và tương thích, việc hỗ trợ đầy đủ các sự kiện bàn phím (tab, mũi tên), quản lý focus và sử dụng các thuộc tính ARIA (như `role=\"slider\"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`) là cực kỳ quan trọng. Điều này giúp trình đọc màn hình hiểu rõ chức năng và trạng thái của component. `appearance: none` là một bước khởi đầu tốt để tạo kiểu tùy chỉnh, nhưng không đủ để đảm bảo khả năng tiếp cận mà không có ARIA và quản lý bàn phím.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong việc phát triển một biểu mẫu đăng ký phức tạp cho một ứng dụng tài chính, bạn cần đảm bảo rằng tất cả các trường nhập liệu đều có khả năng truy cập cao và cung cấp phản hồi lỗi rõ ràng cho người dùng, bao gồm cả người dùng trình đọc màn hình. Giải pháp nào sau đây là toàn diện nhất?",
+    "options": [
+      "A. Sử dụng thuộc tính `placeholder` để cung cấp hướng dẫn và `required` để đánh dấu các trường bắt buộc.",
+      "B. Kết hợp `<label>` cho mỗi trường, sử dụng `aria-describedby` để liên kết thông báo lỗi, `aria-invalid` khi có lỗi, và `<fieldset>` với `<legend>` cho các nhóm trường.",
+      "C. Chỉ dựa vào `pattern` attribute và trình duyệt tự động hiển thị lỗi khi submit.",
+      "D. Dùng JavaScript để hiển thị thông báo lỗi dưới dạng tooltip khi người dùng hover vào trường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để đạt được khả năng truy cập cao và phản hồi lỗi rõ ràng trong biểu mẫu phức tạp: `<label>` liên kết ngữ nghĩa với trường. `aria-describedby` liên kết trường với mô tả hoặc thông báo lỗi, giúp trình đọc màn hình đọc thông tin lỗi. `aria-invalid` thông báo trạng thái lỗi của trường. `<fieldset>` và `<legend>` nhóm các trường có liên quan, cải thiện cấu trúc ngữ nghĩa. Các phương pháp khác không cung cấp mức độ hỗ trợ truy cập tương tự.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một layout dashboard với các widget có kích thước động, cần tự động sắp xếp lại và lấp đầy khoảng trống khi kích thước màn hình thay đổi. Một số widget có thể chiếm nhiều không gian hơn các widget khác. Giải pháp CSS Grid nào sẽ cung cấp sự linh hoạt và kiểm soát tốt nhất cho kịch bản này?",
+    "options": [
+      "A. Sử dụng `grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))` kết hợp với `grid-auto-rows: minmax(100px, auto)`.",
+      "B. Chỉ định `grid-template-areas` cố định cho từng widget.",
+      "C. Dùng Flexbox với `flex-wrap: wrap` và `flex-grow` cho các widget.",
+      "D. Sử dụng `display: table` và `display: table-cell` để tạo bố cục động."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))` tạo ra các cột tự động lấp đầy hàng, mỗi cột có chiều rộng tối thiểu 200px và tối đa 1fr (chia đều không gian còn lại). `grid-auto-rows: minmax(100px, auto)` cho phép các hàng tự động điều chỉnh chiều cao, đảm bảo các widget có thể lấp đầy khoảng trống hiệu quả. Đây là cách tiếp cận mạnh mẽ cho bố cục 'masonry-like' hoặc dashboard động. `grid-template-areas` và `grid-column-span` phù hợp hơn với bố cục cố định hoặc bán cố định.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án web lớn, bạn nhận thấy rằng việc thêm một style mới thường xuyên dẫn đến việc phải sử dụng `!important` hoặc các selector rất cụ thể để ghi đè style hiện có. Điều này gây khó khăn trong việc bảo trì và mở rộng. Phân tích nào sau đây về nguyên nhân gốc rễ và giải pháp là chính xác nhất?",
+    "options": [
+      "A. Vấn đề là do trình duyệt không tuân thủ đúng Cascade. Giải pháp là reset CSS toàn bộ dự án.",
+      "B. Nguyên nhân là do specificity quá cao của các selector hiện có. Giải pháp là áp dụng một kiến trúc CSS có quy tắc rõ ràng về specificity, như BEM hoặc utility-first CSS, và sử dụng `@layer` để quản lý thứ tự cascade.",
+      "C. Vấn đề nằm ở việc sử dụng quá nhiều class. Giải pháp là chuyển sang sử dụng ID cho mọi phần tử để tăng specificity.",
+      "D. Nguyên nhân là do CSS được viết quá ngắn gọn. Giải pháp là viết các selector dài hơn và phức tạp hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Specificity wars là một vấn đề phổ biến trong các dự án lớn, thường xuất phát từ việc sử dụng các selector quá cụ thể hoặc thiếu một quy tắc nhất quán trong kiến trúc CSS. Giải pháp hiệu quả là áp dụng các phương pháp như BEM để giữ specificity thấp và dễ đoán, hoặc utility-first CSS để khuyến khích tái sử dụng. CSS `@layer` là một công cụ mới mạnh mẽ để quản lý thứ tự cascade và giải quyết xung đột mà không cần tăng specificity. Các phương án khác đều không giải quyết được nguyên nhân gốc rễ hoặc làm trầm trọng thêm vấn đề.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang triển khai một animation phức tạp cho một hero section trên trang chủ, bao gồm nhiều hiệu ứng chuyển động, mờ dần và thay đổi kích thước. Animation này cần phải mượt mà, không gây giật lag trên các thiết bị khác nhau và trình duyệt khác nhau. Để tối ưu hiệu suất, bạn sẽ thực hiện các biện pháp nào?",
+    "options": [
+      "A. Sử dụng thuộc tính `transition` cho tất cả các thay đổi CSS và đặt `duration` rất ngắn.",
+      "B. Chỉ animate các thuộc tính `transform` và `opacity`, sử dụng `will-change` để báo cho trình duyệt biết các thuộc tính sẽ thay đổi, và ưu tiên `requestAnimationFrame` cho các animation phức tạp dựa trên JavaScript.",
+      "C. Sử dụng `top`, `left`, `width`, `height` để điều khiển vị trí và kích thước, vì chúng dễ hiểu hơn.",
+      "D. Tải tất cả animation dưới dạng GIF hoặc video để đảm bảo tính nhất quán."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để tối ưu hiệu suất animation, nên ưu tiên animate các thuộc tính `transform` và `opacity` vì chúng thường được xử lý trực tiếp bởi GPU (hardware acceleration), tránh gây reflow và repaint. `will-change` là một gợi ý cho trình duyệt biết các thuộc tính nào sẽ thay đổi, giúp trình duyệt tối ưu tài nguyên trước. `requestAnimationFrame` là cách tốt nhất để đồng bộ hóa animation dựa trên JavaScript với chu kỳ làm mới của trình duyệt, đảm bảo sự mượt mà. Animate `top`, `left`, `width`, `height` thường gây reflow và repaint, ảnh hưởng đến hiệu suất.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một ứng dụng Single Page Application (SPA) với cấu trúc phức tạp, bạn cần đảm bảo rằng các vùng nội dung chính, thanh điều hướng và các khu vực phụ trợ được xác định rõ ràng cho người dùng trình đọc màn hình, giúp họ dễ dàng điều hướng giữa các phần. Giải pháp ARIA nào là phù hợp nhất để đạt được điều này?",
+    "options": [
+      "A. Chỉ cần sử dụng các thẻ HTML5 ngữ nghĩa như `<nav>`, `<main>`, `<aside>`, `<footer>` mà không cần ARIA.",
+      "B. Sử dụng `role=\"region\"` kết hợp với `aria-label` hoặc `aria-labelledby` cho các phần tử `<div>` để định nghĩa các vùng nội dung chính.",
+      "C. Đặt tất cả nội dung vào một thẻ `div` lớn và sử dụng `tabindex` để điều khiển thứ tự focus.",
+      "D. Sử dụng CSS `float` để sắp xếp các vùng nội dung và để trình đọc màn hình tự động hiểu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc dù các thẻ HTML5 ngữ nghĩa (`<nav>`, `<main>`, `<aside>`, `<footer>`) rất quan trọng, trong các SPA phức tạp với nhiều vùng động hoặc khi các thẻ HTML5 không đủ để mô tả hết các 'region' độc lập, việc sử dụng `role=\"region\"` kết hợp với `aria-label` hoặc `aria-labelledby` trên các phần tử container (thường là `<div>`) là cách mạnh mẽ để xác định các vùng nội dung chính và giúp người dùng trình đọc màn hình dễ dàng điều hướng đến chúng. Điều này cung cấp ngữ cảnh rõ ràng hơn cho các vùng không có vai trò HTML ngữ nghĩa cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một trang sản phẩm với một thanh header cố định và một thanh sidebar cuộn độc lập chứa thông tin sản phẩm bổ sung. Thanh header phải luôn hiển thị ở đầu trang, trong khi sidebar cần cuộn cùng với nội dung chính cho đến khi nó chạm đến một điểm nhất định trên viewport, sau đó nó sẽ 'dính' lại. Bạn sẽ sử dụng thuộc tính CSS nào cho sidebar để đạt được hiệu ứng 'dính' này?",
+    "options": [
+      "A. `position: fixed`",
+      "B. `position: absolute`",
+      "C. `position: sticky`",
+      "D. `position: relative`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`position: sticky` được thiết kế chính xác cho kịch bản này. Một phần tử với `position: sticky` sẽ hoạt động như `position: relative` cho đến khi nó cuộn đến một ngưỡng offset nhất định (ví dụ: `top: 0`), sau đó nó sẽ 'dính' lại như `position: fixed` cho đến khi container cha của nó cuộn ra khỏi viewport. `position: fixed` sẽ luôn giữ phần tử cố định trên viewport, không cuộn cùng nội dung ban đầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống thiết kế (design system) lớn, bạn muốn tạo ra một bộ màu sắc và typography linh hoạt có thể dễ dàng thay đổi cho các chủ đề (themes) khác nhau hoặc chế độ sáng/tối. Giải pháp CSS nào là tối ưu nhất để quản lý các biến này một cách tập trung và có thể truy cập được trên toàn bộ ứng dụng?",
+    "options": [
+      "A. Định nghĩa tất cả các màu sắc và font-size trong một file SCSS variables và compile chúng.",
+      "B. Sử dụng CSS Custom Properties (biến CSS) được định nghĩa ở cấp độ `:root` hoặc trên các phần tử cha cụ thể.",
+      "C. Dùng JavaScript để quản lý và áp dụng các giá trị style trực tiếp cho các phần tử.",
+      "D. Sử dụng inline styles cho từng phần tử để đảm bảo tính linh hoạt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CSS Custom Properties (biến CSS) là giải pháp tối ưu nhất cho việc quản lý các giá trị style động như màu sắc, font-size trong một design system. Chúng có thể được định nghĩa ở cấp độ `:root` (toàn cục) hoặc trong scope của một phần tử cụ thể, kế thừa xuống các phần tử con, và có thể dễ dàng thay đổi bằng JavaScript hoặc qua các media queries (ví dụ: `prefers-color-scheme`). Điều này tạo ra một hệ thống styling linh hoạt, dễ bảo trì và mở rộng.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một component phức tạp trong ứng dụng của bạn hiển thị không nhất quán hoặc có vấn đề về hiệu suất trên một số trình duyệt (ví dụ: Safari cũ hoặc một số phiên bản Android Chrome). Bạn cần chẩn đoán và khắc phục vấn đề này. Phương pháp tiếp cận nào là hiệu quả nhất để xác định nguyên nhân và đưa ra giải pháp?",
+    "options": [
+      "A. Chỉ tập trung vào việc thêm các vendor prefixes cho tất cả các thuộc tính CSS có thể.",
+      "B. Sử dụng công cụ Browser Developer Tools của trình duyệt gặp lỗi để kiểm tra DOM, CSS, console logs và hiệu suất rendering; kết hợp với feature detection thay vì user agent sniffing.",
+      "C. Đơn giản là thông báo cho người dùng rằng trình duyệt của họ không được hỗ trợ.",
+      "D. Viết lại toàn bộ component bằng JavaScript để đảm bảo tính nhất quán."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Browser Developer Tools là bước quan trọng nhất để chẩn đoán các vấn đề cross-browser, cho phép kiểm tra chi tiết DOM, CSS được áp dụng, lỗi console và hiệu suất rendering trên chính trình duyệt gặp lỗi. Feature detection (kiểm tra xem một tính năng có được hỗ trợ hay không) là cách tiếp cận mạnh mẽ và đáng tin cậy hơn user agent sniffing (kiểm tra tên trình duyệt) để áp dụng các polyfill hoặc fallback cần thiết. Vendor prefixes đã trở nên ít quan trọng hơn với các chuẩn CSS hiện đại.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một biểu mẫu đa bước (multi-step form) cho quy trình thanh toán trực tuyến. Mỗi bước có thể có các trường bắt buộc khác nhau và cần hiển thị phản hồi lỗi động ngay lập tức khi người dùng tương tác. Làm thế nào để đảm bảo biểu mẫu này vừa có trải nghiệm người dùng tốt vừa có khả năng truy cập cao?",
+    "options": [
+      "A. Dùng JavaScript để ẩn/hiện các bước và chỉ kiểm tra lỗi khi người dùng nhấn nút 'Tiếp theo'.",
+      "B. Sử dụng `aria-live` regions để thông báo các thay đổi trạng thái và lỗi động, liên kết các thông báo lỗi với trường bằng `aria-describedby`, và sử dụng `fieldset`/`legend` để nhóm các trường trong mỗi bước.",
+      "C. Chỉ cần sử dụng `<input type=\"submit\">` và để trình duyệt tự động xử lý validation.",
+      "D. Đặt tất cả các trường vào một thẻ `form` duy nhất và sử dụng CSS để tạo hiệu ứng chuyển đổi giữa các bước."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để có trải nghiệm người dùng tốt và khả năng truy cập cao trong biểu mẫu đa bước: `aria-live` regions đảm bảo rằng trình đọc màn hình sẽ thông báo các thông báo lỗi động hoặc thay đổi trạng thái. `aria-describedby` liên kết thông báo lỗi với trường nhập liệu. `fieldset` và `legend` cung cấp cấu trúc ngữ nghĩa cho các nhóm trường trong mỗi bước, giúp người dùng dễ hiểu. Validation phía client (không tắt `novalidate`) cũng rất quan trọng để cung cấp phản hồi nhanh chóng.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn cần xây dựng một bố cục linh hoạt cho một trang tin tức, nơi các bài viết được hiển thị dưới dạng các 'card'. Các card này cần lấp đầy không gian có sẵn, tự động xuống hàng khi không đủ chỗ, và duy trì khoảng cách đều giữa chúng. Đồng thời, bạn muốn có khả năng sắp xếp lại thứ tự của một số card một cách linh hoạt. Giải pháp nào kết hợp Flexbox và Grid một cách hiệu quả nhất cho kịch bản này?",
+    "options": [
+      "A. Chỉ sử dụng Flexbox với `flex-wrap: wrap` và `justify-content: space-around`.",
+      "B. Chỉ sử dụng CSS Grid với `grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))`.",
+      "C. Sử dụng CSS Grid làm bố cục chính cho các hàng và cột, và dùng Flexbox bên trong mỗi ô Grid để sắp xếp nội dung của từng card.",
+      "D. Dùng `display: inline-block` cho các card và điều chỉnh `margin`."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kết hợp Grid và Flexbox là một mô hình mạnh mẽ. CSS Grid phù hợp cho bố cục tổng thể của trang (macro-layout), nơi bạn định nghĩa các hàng và cột rõ ràng cho các vùng chính. Flexbox lại xuất sắc trong việc sắp xếp các mục bên trong một container (micro-layout), đặc biệt khi cần sự linh hoạt về thứ tự, căn chỉnh và phân phối không gian. Trong kịch bản này, Grid có thể quản lý việc tự động xuống hàng và lấp đầy không gian cho các card, trong khi Flexbox bên trong mỗi card có thể sắp xếp tiêu đề, hình ảnh, mô tả một cách linh hoạt.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một dự án web hiệu năng cao, việc hiểu cách trình duyệt render trang là rất quan trọng. Phân tích nào sau đây mô tả chính xác nhất mối quan hệ giữa CSS và quá trình Rendering Tree, Layout, Paint và Compositing?",
+    "options": [
+      "A. Trình duyệt xây dựng DOM Tree từ HTML và sau đó áp dụng CSS trực tiếp lên DOM Tree để tạo ra Render Tree. Layout tính toán kích thước và vị trí, Paint vẽ pixel, và Compositing xếp lớp các layer.",
+      "B. CSS được áp dụng sau khi Render Tree đã hoàn thành Layout và Paint, chỉ ảnh hưởng đến giai đoạn Compositing.",
+      "C. CSS chỉ ảnh hưởng đến DOM Tree, không có vai trò trực tiếp trong việc xây dựng Render Tree hoặc quá trình Layout.",
+      "D. Render Tree được tạo ra độc lập với CSS, sau đó CSS mới được sử dụng để điều chỉnh các style của nó."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Quá trình rendering của trình duyệt bao gồm các bước: 1. **DOM Tree** từ HTML. 2. **CSSOM Tree** từ CSS. 3. **Render Tree** (hoặc Layout Tree) được xây dựng bằng cách kết hợp DOM Tree và CSSOM Tree, chứa các phần tử hiển thị và style của chúng. 4. **Layout** (hoặc Reflow) tính toán vị trí và kích thước chính xác của từng phần tử. 5. **Paint** (hoặc Rasterization) vẽ các pixel lên màn hình. 6. **Compositing** kết hợp các layer đã vẽ vào một hình ảnh cuối cùng. CSS có vai trò trực tiếp và quan trọng trong việc xây dựng Render Tree và ảnh hưởng đến tất cả các giai đoạn sau đó, đặc biệt là Layout và Paint, do đó ảnh hưởng lớn đến hiệu suất.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần triển khai chức năng 'chế độ tối' (dark mode) cho một ứng dụng web hiện có. Chức năng này phải phản ánh sở thích của người dùng từ hệ điều hành và cho phép người dùng ghi đè thủ công. Giải pháp nào là hiệu quả nhất và có khả năng truy cập cao?",
+    "options": [
+      "A. Sử dụng JavaScript để thay đổi tất cả các giá trị màu sắc trong CSS khi người dùng bật/tắt dark mode.",
+      "B. Định nghĩa các biến CSS (Custom Properties) cho màu sắc, sử dụng `@media (prefers-color-scheme: dark)` để áp dụng chủ đề tối mặc định, và cung cấp một cơ chế JavaScript để ghi đè các biến CSS này khi người dùng thay đổi thủ công.",
+      "C. Tạo hai file CSS riêng biệt (`light.css` và `dark.css`) và chuyển đổi giữa chúng bằng JavaScript.",
+      "D. Chỉ cần sử dụng một bộ màu sắc duy nhất phù hợp cho cả hai chế độ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng CSS Custom Properties kết hợp với `@media (prefers-color-scheme: dark)` là cách tiếp cận hiện đại và hiệu quả nhất. `@media (prefers-color-scheme: dark)` tự động áp dụng chủ đề tối dựa trên cài đặt hệ điều hành của người dùng. Các biến CSS cho phép dễ dàng quản lý và thay đổi màu sắc. Khi người dùng ghi đè thủ công, JavaScript có thể thay đổi giá trị của các biến CSS này trên phần tử `:root` hoặc `<body>`, đảm bảo tính linh hoạt và khả năng truy cập. Filter `invert()` thường gây ra các vấn đề về màu sắc hình ảnh và video.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang thực hiện kiểm tra khả năng truy cập (accessibility audit) cho một trang web thương mại điện tử lớn. Bạn phát hiện ra rằng nhiều phần tử không có ngữ nghĩa rõ ràng và người dùng trình đọc màn hình gặp khó khăn khi điều hướng. Phân tích nào sau đây về việc sử dụng các landmark roles (vai trò vùng) và các thẻ HTML5 ngữ nghĩa là chính xác nhất để cải thiện khả năng truy cập?",
+    "options": [
+      "A. Việc sử dụng các thẻ `<div>` với `id` là đủ để trình đọc màn hình hiểu cấu trúc trang.",
+      "B. Cần đảm bảo rằng các vùng chính của trang (header, navigation, main content, sidebar, footer) được bao bọc bởi các thẻ HTML5 ngữ nghĩa như `<header>`, `<nav>`, `<main>`, `<aside>`, `<footer>` hoặc các `role` ARIA tương ứng, và mỗi vùng chính có một nhãn duy nhất (ví dụ: `aria-label`).",
+      "C. Chỉ cần tập trung vào việc đảm bảo độ tương phản màu sắc tốt và kích thước font lớn.",
+      "D. Các landmark roles chỉ quan trọng cho SEO, không ảnh hưởng đến khả năng truy cập."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc sử dụng chính xác các thẻ HTML5 ngữ nghĩa (hoặc các `role` ARIA tương ứng khi HTML không đủ) cho các vùng chính của trang là cực kỳ quan trọng cho khả năng truy cập. Chúng tạo ra các 'landmark' giúp người dùng trình đọc màn hình nhanh chóng điều hướng đến các phần khác nhau của trang. Mỗi landmark cần có một nhãn duy nhất (sử dụng `aria-label` hoặc `aria-labelledby` nếu cần) để phân biệt chúng. Điều này cải thiện đáng kể trải nghiệm điều hướng cho người dùng khuyết tật.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang đánh giá một giải pháp bố cục CSS cho một trang web có cấu trúc 'holy grail' (header, footer, main content, và hai sidebars). Yêu cầu là nội dung chính phải chiếm phần lớn không gian, các sidebars có thể có chiều rộng cố định hoặc linh hoạt, và toàn bộ bố cục phải phản hồi tốt trên mọi kích thước màn hình. Phân tích nào sau đây là chính xác nhất về việc lựa chọn giữa Flexbox và Grid cho bố cục tổng thể này?",
+    "options": [
+      "A. Flexbox là lựa chọn tốt nhất vì nó đơn giản hơn và có thể xử lý tất cả các yêu cầu bố cục này một cách dễ dàng.",
+      "B. CSS Grid là lựa chọn vượt trội vì nó được thiết kế cho bố cục hai chiều (hàng và cột), cho phép định nghĩa rõ ràng các vùng, và dễ dàng điều chỉnh bố cục trên các breakpoint khác nhau bằng `grid-template-areas`.",
+      "C. Cả Flexbox và Grid đều không phù hợp; nên sử dụng `float` và `clear` để đạt được bố cục này.",
+      "D. Nên sử dụng `display: table` và các thuộc tính liên quan để tạo bố cục 'holy grail'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CSS Grid được thiết kế đặc biệt để giải quyết các vấn đề bố cục hai chiều (hàng và cột) phức tạp như 'holy grail'. Nó cho phép bạn định nghĩa các vùng bố cục bằng `grid-template-areas`, kiểm soát kích thước hàng/cột một cách mạnh mẽ (ví dụ: `fr`, `minmax()`), và dễ dàng thay đổi cấu trúc bố cục trên các breakpoint khác nhau. Flexbox rất tốt cho bố cục một chiều, nhưng trở nên phức tạp hơn khi xử lý bố cục trang tổng thể hai chiều. `float` và `display: table` là các kỹ thuật cũ hơn và kém linh hoạt hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một đội phát triển frontend mới đang bắt đầu một dự án quy mô lớn. Họ cần quyết định về một kiến trúc CSS sẽ hỗ trợ khả năng mở rộng, khả năng bảo trì và sự hợp tác của nhiều lập trình viên trong nhiều năm tới. Bạn sẽ đề xuất phương pháp luận hoặc công cụ nào và tại sao?",
+    "options": [
+      "A. Sử dụng một file CSS duy nhất cho toàn bộ dự án để đơn giản hóa việc quản lý.",
+      "B. Áp dụng một phương pháp luận như SMACSS hoặc BEM để cấu trúc CSS theo module, kết hợp với CSS Modules hoặc `@layer` để quản lý scope và cascade, và sử dụng Preprocessor (Sass/Less) để tổ chức code.",
+      "C. Chỉ dựa vào inline styles để đảm bảo các style không xung đột.",
+      "D. Sử dụng một framework CSS như Bootstrap hoặc Tailwind CSS mà không cần thêm bất kỳ quy tắc kiến trúc nào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với dự án quy mô lớn, việc áp dụng một phương pháp luận CSS có cấu trúc (như SMACSS hoặc BEM) là rất quan trọng để tổ chức code thành các module, giảm thiểu xung đột và tăng khả năng bảo trì. Kết hợp với các công cụ như CSS Modules (để scope CSS cục bộ) hoặc `@layer` (để quản lý thứ tự cascade) sẽ cung cấp sự kiểm soát mạnh mẽ hơn. Preprocessor (Sass/Less) giúp tổ chức code tốt hơn với variables, mixins, nesting. Phương án A, C, E sẽ dẫn đến hỗn loạn và khó bảo trì. Framework CSS (D) có thể là một phần của giải pháp nhưng vẫn cần một kiến trúc rõ ràng để tùy chỉnh và mở rộng.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một ứng dụng web có nhiều hình ảnh, bạn cần tối ưu hóa việc tải hình ảnh để cải thiện hiệu suất, đặc biệt là trên các thiết bị di động và mạng chậm. Đồng thời, bạn cần đảm bảo chất lượng hình ảnh tốt trên các màn hình có mật độ pixel cao (Retina) và khả năng tương thích trình duyệt rộng. Giải pháp nào sau đây là toàn diện nhất?",
+    "options": [
+      "A. Chỉ sử dụng định dạng JPEG cho tất cả hình ảnh và nén chúng đến mức tối đa.",
+      "B. Sử dụng thẻ `<picture>` với các thẻ `<source>` để cung cấp nhiều định dạng (ví dụ: WebP, AVIF) và kích thước hình ảnh khác nhau (`srcset`, `sizes`), kết hợp với `loading=\"lazy\"` và fallback về JPEG/PNG cho trình duyệt cũ.",
+      "C. Tải tất cả hình ảnh dưới dạng SVG để đảm bảo chất lượng và kích thước nhỏ.",
+      "D. Sử dụng JavaScript để tải hình ảnh sau khi trang đã tải xong."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp toàn diện nhất bao gồm: 1. Thẻ `<picture>` với `<source>` cho phép cung cấp nhiều định dạng hình ảnh hiện đại (WebP, AVIF) với kích thước file nhỏ hơn và chất lượng tốt hơn, cùng với fallback về JPEG/PNG cho trình duyệt không hỗ trợ. 2. `srcset` và `sizes` cho phép trình duyệt chọn hình ảnh phù hợp nhất với kích thước viewport và mật độ pixel của màn hình. 3. `loading=\"lazy\"` trì hoãn việc tải hình ảnh nằm ngoài viewport, cải thiện thời gian tải ban đầu. Đây là cách tiếp cận 'responsive images' chuẩn mực và hiệu quả nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang phát triển một biểu mẫu đăng ký phức tạp với nhiều bước và các trường nhập liệu có điều kiện. Bạn cần cung cấp phản hồi lỗi tùy chỉnh và rõ ràng cho người dùng, bao gồm cả người dùng trình đọc màn hình, ngay lập tức khi họ nhập sai. Làm thế nào để triển khai hiệu quả cơ chế validation và thông báo lỗi này?",
+    "options": [
+      "A. Chỉ dựa vào `alert()` JavaScript để thông báo lỗi khi submit form.",
+      "B. Sử dụng `aria-live=\"assertive\"` cho vùng chứa thông báo lỗi, `aria-invalid=\"true\"` cho các trường có lỗi, và liên kết thông báo lỗi với trường bằng `aria-describedby`.",
+      "C. Hiển thị thông báo lỗi dưới dạng tooltip chỉ khi người dùng hover vào trường có lỗi.",
+      "D. Tắt tất cả validation phía client và chỉ dựa vào validation phía server để kiểm tra lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để cung cấp phản hồi lỗi tùy chỉnh và có khả năng truy cập cao: `aria-live=\"assertive\"` đảm bảo rằng trình đọc màn hình sẽ ngay lập tức thông báo các thông báo lỗi mới xuất hiện. `aria-invalid=\"true\"` cho biết trường đang ở trạng thái không hợp lệ. `aria-describedby` liên kết thông báo lỗi cụ thể với trường nhập liệu, cung cấp ngữ cảnh chi tiết cho trình đọc màn hình. Đây là các kỹ thuật ARIA chuẩn để xây dựng form validation mạnh mẽ và dễ tiếp cận.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần xây dựng một thanh điều hướng (navigation bar) cho một ứng dụng web, thanh này phải có bố cục ngang trên desktop và chuyển thành một menu hamburger có thể mở/đóng trên thiết bị di động. Ngoài ra, thanh điều hướng này cần phải dễ tiếp cận, đặc biệt là với người dùng bàn phím và trình đọc màn hình. Giải pháp nào là hiệu quả nhất để triển khai?",
+    "options": [
+      "A. Sử dụng Flexbox cho bố cục ngang trên desktop và `@media` query để ẩn/hiện menu hamburger, sau đó dùng JavaScript để toggle class `open` cho menu di động, đảm bảo quản lý `tabindex` và `aria-expanded`.",
+      "B. Chỉ sử dụng CSS `display: none` và `display: block` để ẩn/hiện menu trên các breakpoint khác nhau.",
+      "C. Dùng JavaScript để xây dựng toàn bộ thanh điều hướng và quản lý tất cả các trạng thái.",
+      "D. Sử dụng `float` cho các mục menu trên desktop và một `div` ẩn cho menu di động."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp hiệu quả nhất là kết hợp: 1. Flexbox cho bố cục ngang linh hoạt trên desktop. 2. `@media` queries để chuyển đổi hiển thị giữa menu desktop và menu hamburger trên mobile. 3. JavaScript để điều khiển trạng thái mở/đóng của menu hamburger. 4. Quan trọng nhất, để đảm bảo khả năng truy cập, cần quản lý `tabindex` để điều khiển focus, và `aria-expanded` (để thông báo trạng thái mở/đóng của menu) cùng với `aria-controls` (để liên kết nút hamburger với menu mà nó điều khiển) cho người dùng trình đọc màn hình.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một dự án web lớn kế thừa từ nhiều năm trước có một lượng lớn CSS với các selector lồng nhau sâu, sử dụng `!important` tràn lan và các file CSS không có cấu trúc rõ ràng. Điều này dẫn đến khó khăn cực độ trong việc thêm tính năng mới, debug và bảo trì. Bạn được yêu cầu đề xuất một chiến lược refactoring để cải thiện tình hình. Chiến lược nào là hợp lý và ít rủi ro nhất?",
+    "options": [
+      "A. Viết lại toàn bộ CSS từ đầu bằng một framework CSS-in-JS mới.",
+      "B. Từng bước giới thiệu CSS `@layer` để quản lý thứ tự cascade, áp dụng một phương pháp luận đặt tên module (ví dụ BEM) cho các component mới, và dần dần refactor các component cũ để giảm specificity và loại bỏ `!important`.",
+      "C. Sử dụng công cụ tự động để chuyển đổi tất cả CSS hiện có sang inline styles.",
+      "D. Đơn giản là thêm `!important` vào tất cả các style mới để đảm bảo chúng được áp dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Viết lại toàn bộ CSS (A) là một chiến lược rủi ro cao và tốn kém. Chiến lược refactoring hợp lý nhất là tiếp cận từng bước: 1. Giới thiệu CSS `@layer` để kiểm soát thứ tự cascade, giúp quản lý các style mới và cũ mà không gây xung đột ngay lập tức. 2. Áp dụng một phương pháp luận đặt tên module như BEM cho các component mới để đảm bảo CSS mới có cấu trúc tốt. 3. Dần dần refactor các component cũ, tập trung vào việc giảm độ sâu của selector, loại bỏ `!important` và chuyển đổi sang quy ước đặt tên mới. Điều này giúp giảm thiểu rủi ro và cho phép cải thiện dần dần.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một khách hàng báo cáo rằng một widget tương tác quan trọng trên trang web (ví dụ: một biểu đồ tùy chỉnh) không hoạt động hoặc hiển thị sai trên một trình duyệt cụ thể (ví dụ: IE11 hoặc một phiên bản cũ của trình duyệt di động). Bạn cần nhanh chóng chẩn đoán và đưa ra giải pháp để đảm bảo chức năng cơ bản hoạt động. Phương pháp tiếp cận nào là thực tế và hiệu quả nhất?",
+    "options": [
+      "A. Yêu cầu khách hàng nâng cấp trình duyệt của họ ngay lập tức.",
+      "B. Sử dụng polyfills cho các tính năng JavaScript và CSS không được hỗ trợ, kết hợp với progressive enhancement hoặc graceful degradation để cung cấp trải nghiệm chấp nhận được cho các trình duyệt cũ.",
+      "C. Viết lại toàn bộ widget chỉ sử dụng các tính năng CSS/JS được hỗ trợ bởi trình duyệt cũ nhất.",
+      "D. Đơn giản là ẩn widget đó trên các trình duyệt không tương thích."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối phó với các vấn đề tương thích trình duyệt cũ, phương pháp hiệu quả nhất là kết hợp: 1. **Polyfills**: Mã JavaScript hoặc CSS giúp các trình duyệt cũ 'hiểu' và thực thi các tính năng hiện đại. 2. **Progressive Enhancement**: Bắt đầu với chức năng cơ bản, có khả năng truy cập và hoạt động trên mọi trình duyệt, sau đó thêm các tính năng nâng cao cho các trình duyệt hiện đại. 3. **Graceful Degradation**: Thiết kế cho các trình duyệt hiện đại và cung cấp các giải pháp thay thế (fallback) cho các trình duyệt cũ. User agent sniffing (E) thường không đáng tin cậy. Viết lại toàn bộ widget (C) là không hiệu quả. Ẩn widget (D) làm mất chức năng cho người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Với vai trò là một chuyên gia Frontend, bạn cần đảm bảo rằng một ứng dụng web doanh nghiệp tuân thủ các nguyên tắc WCAG (Web Content Accessibility Guidelines) ở mức độ cao nhất. Phân tích nào sau đây mô tả chính xác nhất cách các lựa chọn HTML và CSS của bạn trực tiếp đóng góp vào việc đáp ứng các nguyên tắc WCAG P.O.U.R (Perceivable, Operable, Understandable, Robust)?",
+    "options": [
+      "A. HTML và CSS chỉ ảnh hưởng đến nguyên tắc Perceivable (nhận biết được) thông qua màu sắc và kích thước font.",
+      "B. HTML ngữ nghĩa (semantic HTML) và ARIA (Accessible Rich Internet Applications) trực tiếp hỗ trợ cả 4 nguyên tắc P.O.U.R bằng cách cung cấp cấu trúc, ngữ cảnh và khả năng tương tác cho công nghệ hỗ trợ, trong khi CSS đảm bảo khả năng nhận biết và bố cục linh hoạt.",
+      "C. Các nguyên tắc WCAG chủ yếu liên quan đến JavaScript và không bị ảnh hưởng đáng kể bởi HTML/CSS.",
+      "D. Chỉ cần đảm bảo tất cả các hình ảnh đều có thuộc tính `alt` là đủ để đáp ứng WCAG."
+    ],
+    "correctAnswer": "B",
+    "explanation": "HTML ngữ nghĩa và ARIA là nền tảng để đáp ứng cả 4 nguyên tắc WCAG P.O.U.R: **Perceivable** (ví dụ: `alt` text, đủ độ tương phản màu sắc qua CSS, cấu trúc tiêu đề). **Operable** (ví dụ: điều hướng bàn phím, `tabindex`, vai trò ARIA cho các widget tương tác). **Understandable** (ví dụ: `label` cho form, cấu trúc ngữ nghĩa rõ ràng, thông báo lỗi). **Robust** (ví dụ: code HTML/ARIA hợp lệ, tương thích với công nghệ hỗ trợ). CSS đóng vai trò quan trọng trong việc làm cho nội dung Perceivable (ví dụ: responsive design, độ tương phản) và có thể ảnh hưởng đến Operable (ví dụ: focus styles).",
+    "difficulty": "EXPERT",
+    "skillArea": "HTML/CSS Fundamentals",
+    "category": "KNOWLEDGE"
+  }
+]

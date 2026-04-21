@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Khái niệm 'closure' trong JavaScript mô tả điều gì?",
+    "options": [
+      "A. Một hàm có thể truy cập các biến từ phạm vi bên ngoài của nó, ngay cả sau khi hàm bên ngoài đã thực thi xong.",
+      "B. Một hàm chỉ có thể được gọi một lần duy nhất.",
+      "C. Một cơ chế để ẩn các biến toàn cục khỏi các hàm khác.",
+      "D. Một loại vòng lặp đặc biệt để xử lý các tác vụ bất đồng bộ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Closure là khả năng của một hàm ghi nhớ và truy cập môi trường từ vựng (lexical environment) mà nó được tạo ra, bao gồm các biến cục bộ của hàm bên ngoài, ngay cả khi hàm bên ngoài đã hoàn thành.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cho đoạn mã sau, giá trị nào sẽ được in ra console? ```javascript function createCounter() { let count = 0; return function() { count++; return count; }; } const counter = createCounter(); console.log(counter()); console.log(counter()); ```",
+    "options": [
+      "A. 1, 1",
+      "B. 1, 2",
+      "C. 0, 1",
+      "D. Lỗi"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hàm `createCounter` trả về một closure. Mỗi lần `counter()` được gọi, nó truy cập và tăng biến `count` từ phạm vi bên ngoài của nó, duy trì trạng thái của `count` giữa các lần gọi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong JavaScript, từ khóa `async` được sử dụng với hàm có mục đích gì?",
+    "options": [
+      "A. Để đảm bảo hàm luôn trả về một giá trị đồng bộ.",
+      "B. Để biến một hàm thành một Promise ngầm định (implicitly).",
+      "C. Để cho phép hàm được gọi mà không cần chờ đợi kết quả.",
+      "D. Để đánh dấu hàm là một hàm tạo (constructor function)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi một hàm được đánh dấu là `async`, nó luôn trả về một Promise. Nếu hàm trả về một giá trị không phải Promise, JavaScript sẽ tự động bọc giá trị đó vào một Promise đã được giải quyết (resolved Promise).",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kết quả của đoạn mã sau là gì? ```javascript console.log('Start'); setTimeout(() => { console.log('Timeout'); }, 0); Promise.resolve().then(() => { console.log('Promise'); }); console.log('End'); ```",
+    "options": [
+      "A. Start, Timeout, Promise, End",
+      "B. Start, End, Timeout, Promise",
+      "C. Start, End, Promise, Timeout",
+      "D. Timeout, Promise, Start, End"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thứ tự thực thi dựa trên Event Loop: Các tác vụ đồng bộ (`Start`, `End`) chạy trước. Sau đó, các microtask (Promise) chạy trước các macrotask (`setTimeout`).",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thành phần nào của Event Loop chịu trách nhiệm xử lý các tác vụ như `setTimeout` và `setInterval`?",
+    "options": [
+      "A. Call Stack",
+      "B. Microtask Queue",
+      "C. Macrotask Queue (hoặc Task Queue)",
+      "D. Heap"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Macrotask Queue (còn gọi là Task Queue) là nơi chứa các tác vụ như `setTimeout`, `setInterval`, I/O, UI rendering. Microtask Queue chứa các Promise callbacks.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để chờ đợi kết quả của một Promise trong một hàm `async`, bạn sẽ sử dụng từ khóa nào?",
+    "options": [
+      "A. `await`",
+      "B. `then`",
+      "C. `catch`",
+      "D. `finally`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Từ khóa `await` chỉ có thể được sử dụng bên trong một hàm `async` để tạm dừng việc thực thi hàm cho đến khi Promise được giải quyết (resolved) hoặc bị từ chối (rejected).",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Event Loop, điều gì xảy ra khi Call Stack trống rỗng?",
+    "options": [
+      "A. Chương trình kết thúc ngay lập tức.",
+      "B. Event Loop kiểm tra Microtask Queue, sau đó là Macrotask Queue để đưa tác vụ vào Call Stack.",
+      "C. Event Loop chỉ kiểm tra Macrotask Queue.",
+      "D. Event Loop đợi người dùng tương tác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi Call Stack trống, Event Loop sẽ ưu tiên xử lý tất cả các tác vụ trong Microtask Queue trước, sau đó mới đến một tác vụ từ Macrotask Queue.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khối `try...catch` trong JavaScript được sử dụng để làm gì?",
+    "options": [
+      "A. Để tạo một vòng lặp mới cho các tác vụ bất đồng bộ.",
+      "B. Để kiểm tra kiểu dữ liệu của một biến trước khi sử dụng.",
+      "C. Để xử lý các lỗi có thể xảy ra trong một khối mã mà không làm dừng chương trình.",
+      "D. Để định nghĩa một khối mã sẽ luôn được thực thi, bất kể có lỗi hay không."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khối `try` chứa mã có thể gây lỗi, và khối `catch` sẽ được thực thi nếu có lỗi xảy ra trong khối `try`, cho phép chương trình tiếp tục chạy.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong đoạn mã sau, điều gì sẽ xảy ra khi hàm `divide` được gọi với `b = 0`? ```javascript function divide(a, b) { if (b === 0) { throw new Error('Cannot divide by zero'); } return a / b; } try { console.log(divide(10, 0)); } catch (error) { console.log(error.message); } ```",
+    "options": [
+      "A. Chương trình sẽ dừng lại với lỗi 'Cannot divide by zero'.",
+      "B. Giá trị `Infinity` sẽ được in ra console.",
+      "C. Dòng 'Cannot divide by zero' sẽ được in ra console.",
+      "D. Không có gì được in ra console."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi `b` bằng 0, một `Error` sẽ được `throw`. Khối `catch` sẽ bắt lỗi này và in ra thuộc tính `message` của lỗi, tức là 'Cannot divide by zero'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong TypeScript, sự khác biệt chính giữa `interface` và `type` là gì khi định nghĩa một đối tượng?",
+    "options": [
+      "A. `interface` chỉ có thể định nghĩa các kiểu nguyên thủy, còn `type` có thể định nghĩa đối tượng.",
+      "B. `interface` có thể được kế thừa (extended) và hợp nhất (merged) tự động, còn `type` thì không.",
+      "C. `type` có thể định nghĩa các kiểu dữ liệu phức tạp hơn `interface`.",
+      "D. Không có sự khác biệt đáng kể nào, chúng có thể thay thế cho nhau trong mọi trường hợp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`interface` có khả năng mở rộng (extension) và hợp nhất khai báo (declaration merging), điều này hữu ích cho việc mở rộng các thư viện hoặc định nghĩa nhiều lần cùng một interface. `type` linh hoạt hơn trong việc định nghĩa các kiểu phức tạp như union types hoặc intersection types.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để khai báo một biến có thể là `string` hoặc `number` trong TypeScript, bạn sẽ sử dụng cú pháp nào?",
+    "options": [
+      "A. `let myVar: string & number;`",
+      "B. `let myVar: string | number;`",
+      "C. `let myVar: string, number;`",
+      "D. `let myVar: (string | number);`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Union type (`|`) cho phép một biến có thể có một trong nhiều kiểu dữ liệu được liệt kê. Intersection type (`&`) yêu cầu một biến phải có tất cả các kiểu được liệt kê.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kiểu dữ liệu `any` trong TypeScript có ý nghĩa gì?",
+    "options": [
+      "A. Biến đó chỉ có thể nhận giá trị `null` hoặc `undefined`.",
+      "B. Biến đó có thể nhận bất kỳ kiểu dữ liệu nào và TypeScript sẽ không kiểm tra kiểu tại thời điểm biên dịch.",
+      "C. Biến đó chỉ có thể nhận giá trị boolean.",
+      "D. Biến đó là một kiểu dữ liệu đặc biệt chỉ dùng cho các hàm bất đồng bộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`any` là một kiểu dữ liệu thoát ly (escape hatch) trong TypeScript. Khi một biến được khai báo với kiểu `any`, TypeScript sẽ bỏ qua việc kiểm tra kiểu cho biến đó, cho phép nó nhận bất kỳ giá trị nào và truy cập bất kỳ thuộc tính hoặc phương thức nào mà không có lỗi biên dịch.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn định nghĩa một hàm chấp nhận một đối tượng có thuộc tính `name` là `string` và thuộc tính `age` là `number`. Kiểu dữ liệu phù hợp nhất cho tham số của hàm là gì?",
+    "options": [
+      "A. `function greet(user: object)`",
+      "B. `function greet(user: { name: string, age: number })`",
+      "C. `function greet(user: any)`",
+      "D. `function greet(user: string | number)`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để định nghĩa kiểu cho một đối tượng với các thuộc tính cụ thể, bạn có thể sử dụng inline type literal `{ name: string, age: number }` hoặc một `interface`/`type` đã định nghĩa trước.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của Generics trong TypeScript là gì?",
+    "options": [
+      "A. Để tạo các hàm và kiểu dữ liệu có thể hoạt động với nhiều kiểu dữ liệu khác nhau mà vẫn giữ được tính an toàn kiểu.",
+      "B. Để biến tất cả các kiểu dữ liệu thành `any` một cách an toàn.",
+      "C. Để hạn chế một hàm chỉ chấp nhận một kiểu dữ liệu cụ thể.",
+      "D. Để tự động chuyển đổi kiểu dữ liệu tại thời điểm chạy (runtime)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Generics cho phép bạn viết các thành phần linh hoạt, có thể tái sử dụng, hoạt động trên nhiều kiểu dữ liệu khác nhau mà không làm mất thông tin kiểu hoặc tính an toàn kiểu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cho hàm generic sau: `function identity<T>(arg: T): T { return arg; }`. Kiểu trả về khi gọi `identity<string>('hello')` là gì?",
+    "options": [
+      "A. `any`",
+      "B. `unknown`",
+      "C. `string`",
+      "D. `void`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi sử dụng Generics, kiểu `T` sẽ được thay thế bằng kiểu được truyền vào. Trong trường hợp này, `T` là `string`, nên hàm sẽ nhận một `string` và trả về một `string`.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Utility type `Partial<T>` trong TypeScript có công dụng gì?",
+    "options": [
+      "A. Biến tất cả các thuộc tính của kiểu `T` thành bắt buộc (required).",
+      "B. Biến tất cả các thuộc tính của kiểu `T` thành tùy chọn (optional).",
+      "C. Loại bỏ một số thuộc tính cụ thể khỏi kiểu `T`.",
+      "D. Biến tất cả các thuộc tính của kiểu `T` thành chỉ đọc (readonly)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`Partial<T>` tạo ra một kiểu mới với tất cả các thuộc tính của `T` được đánh dấu là tùy chọn (optional), cho phép bạn tạo một đối tượng chỉ với một phần các thuộc tính của kiểu gốc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'immutable update' (cập nhật bất biến) trong quản lý trạng thái có nghĩa là gì?",
+    "options": [
+      "A. Thay đổi trực tiếp (mutate) trạng thái hiện có để tiết kiệm bộ nhớ.",
+      "B. Luôn tạo một bản sao mới của trạng thái với các thay đổi, thay vì sửa đổi trạng thái gốc.",
+      "C. Chỉ cập nhật trạng thái một lần duy nhất trong suốt vòng đời ứng dụng.",
+      "D. Sử dụng các biến toàn cục để quản lý trạng thái dễ dàng hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cập nhật bất biến là một phương pháp mà thay vì sửa đổi trực tiếp dữ liệu (trạng thái), bạn tạo một bản sao mới của dữ liệu với các thay đổi mong muốn. Điều này giúp dễ dàng theo dõi các thay đổi, gỡ lỗi và tối ưu hóa hiệu suất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để cập nhật một thuộc tính `age` trong đối tượng `user` (`{ name: 'Alice', age: 30 }`) một cách bất biến, bạn sẽ sử dụng cách nào?",
+    "options": [
+      "A. `user.age = 31;`",
+      "B. `const newUser = { ...user, age: 31 };`",
+      "C. `Object.assign(user, { age: 31 });`",
+      "D. `delete user.age; user.age = 31;`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng spread syntax (`...user`) tạo ra một bản sao nông (shallow copy) của đối tượng `user`, sau đó bạn có thể ghi đè (override) hoặc thêm các thuộc tính mới mà không làm thay đổi đối tượng gốc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng các cập nhật bất biến (immutable updates) lại quan trọng trong các thư viện UI như React?",
+    "options": [
+      "A. Để giảm số lượng component cần render lại, cải thiện hiệu suất.",
+      "B. Để đảm bảo rằng trạng thái không bao giờ thay đổi.",
+      "C. Để dễ dàng truy cập trực tiếp vào DOM.",
+      "D. Để bắt buộc sử dụng các lớp (classes) thay vì hàm (functions)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các thư viện UI như React dựa vào việc phát hiện thay đổi tham chiếu của đối tượng/mảng để quyết định có nên render lại component hay không. Nếu trạng thái được thay đổi trực tiếp (mutate), tham chiếu không thay đổi, dẫn đến việc không render lại hoặc render lại không hiệu quả. Cập nhật bất biến tạo ra tham chiếu mới, giúp React dễ dàng phát hiện thay đổi và tối ưu hóa.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phương pháp đơn giản và phổ biến nhất để kiểm tra giá trị của biến hoặc luồng thực thi trong JavaScript khi gỡ lỗi là gì?",
+    "options": [
+      "A. Sử dụng `debugger;` statement.",
+      "B. Sử dụng `console.log()`.",
+      "C. Sử dụng `alert()`.",
+      "D. Đọc toàn bộ mã nguồn một cách thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`console.log()` là công cụ gỡ lỗi cơ bản và được sử dụng rộng rãi nhất để in ra giá trị của biến, thông báo hoặc theo dõi luồng thực thi của chương trình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi gặp một lỗi trong trình duyệt, công cụ nào sau đây thường được sử dụng để kiểm tra lỗi, đặt breakpoint và xem giá trị biến?",
+    "options": [
+      "A. VS Code Editor",
+      "B. Node.js REPL",
+      "C. Browser Developer Tools (Công cụ nhà phát triển trình duyệt)",
+      "D. Postman"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Browser Developer Tools (F12) cung cấp các tab như Console để xem lỗi, Sources để đặt breakpoint và kiểm tra mã, Elements để xem DOM, Network để kiểm tra các yêu cầu mạng, v.v., là công cụ không thể thiếu cho Frontend Developer.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của 'Unit Testing' (kiểm thử đơn vị) là gì?",
+    "options": [
+      "A. Kiểm tra toàn bộ ứng dụng như một hệ thống duy nhất.",
+      "B. Đảm bảo rằng các thành phần nhỏ nhất của mã (ví dụ: hàm, lớp) hoạt động đúng như mong đợi một cách độc lập.",
+      "C. Kiểm tra cách người dùng tương tác với giao diện người dùng.",
+      "D. Xác minh rằng ứng dụng hoạt động tốt trên nhiều trình duyệt khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Unit Testing tập trung vào việc kiểm tra các đơn vị mã nhỏ nhất một cách riêng lẻ để đảm bảo chúng thực hiện đúng chức năng của mình, giúp phát hiện lỗi sớm và dễ dàng hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn kiểm tra xem một hàm `sum(a, b)` có trả về đúng tổng của hai số không. Trường hợp kiểm thử (test case) cơ bản nhất sẽ là gì?",
+    "options": [
+      "A. Gọi `sum(1, 2)` và kiểm tra xem kết quả có phải là `3` không.",
+      "B. Gọi `sum('a', 'b')` và kiểm tra xem có lỗi không.",
+      "C. Gọi `sum()` mà không có tham số nào.",
+      "D. Gọi `sum(1, 2, 3)` với ba tham số."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Test case cơ bản nhất cho một hàm `sum(a, b)` là kiểm tra với các giá trị đầu vào hợp lệ và xác nhận rằng nó trả về kết quả mong đợi (`1 + 2 = 3`). Các lựa chọn khác kiểm tra các trường hợp biên hoặc lỗi, cũng quan trọng nhưng không phải là test case cơ bản nhất cho chức năng chính.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Công cụ 'Linter' (ví dụ: ESLint) trong phát triển Frontend có vai trò gì?",
+    "options": [
+      "A. Tự động triển khai mã lên máy chủ.",
+      "B. Kiểm tra cú pháp, phong cách mã hóa và các vấn đề tiềm ẩn trong mã nguồn để duy trì chất lượng và tính nhất quán.",
+      "C. Chuyển đổi mã TypeScript thành JavaScript.",
+      "D. Quản lý các gói phụ thuộc của dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Linter là công cụ phân tích mã tĩnh để tìm kiếm các lỗi lập trình, lỗi cú pháp, lỗi phong cách và các vấn đề tiềm ẩn khác. Nó giúp cải thiện chất lượng mã, đảm bảo tính nhất quán và tuân thủ các quy tắc mã hóa.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong việc viết mã sạch (Clean Code), việc đặt tên biến và hàm rõ ràng, dễ hiểu có ý nghĩa gì?",
+    "options": [
+      "A. Giúp mã chạy nhanh hơn.",
+      "B. Giúp trình biên dịch hiểu mã tốt hơn.",
+      "C. Cải thiện khả năng đọc, bảo trì và cộng tác của mã nguồn.",
+      "D. Là yêu cầu bắt buộc của tất cả các ngôn ngữ lập trình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tên biến và hàm rõ ràng, dễ hiểu là một trong những nguyên tắc cơ bản của Clean Code, giúp cho người đọc mã (bao gồm cả bạn trong tương lai) dễ dàng nắm bắt mục đích và chức năng của mã mà không cần phải đọc chi tiết từng dòng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điều gì sẽ xảy ra khi bạn chạy đoạn code sau? ```javascript function createCounter() { let count = 0; return function() { count++; return count; }; } const counter1 = createCounter(); const counter2 = createCounter(); console.log(counter1()); console.log(counter1()); console.log(counter2()); ```",
+    "options": [
+      "A. 1, 2, 1",
+      "B. 1, 1, 1",
+      "C. 1, 2, 3",
+      "D. Lỗi do biến `count` không được định nghĩa"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mỗi lần `createCounter` được gọi, một biến `count` mới và một closure mới được tạo ra. `counter1` và `counter2` hoạt động độc lập với các `count` riêng của chúng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cho đoạn mã sau, giá trị nào sẽ được in ra console? ```javascript Promise.resolve(1) .then(result => { console.log(result); return 2; }) .then(result => { console.log(result); return Promise.resolve(3); }) .then(result => { console.log(result); }); ```",
+    "options": [
+      "A. 1, 2, 3",
+      "B. 1, 2, Promise {<fulfilled>: 3}",
+      "C. 1, 3, undefined",
+      "D. 1, 2, undefined"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các `.then()` handlers được gọi tuần tự. Khi một Promise được trả về từ `.then()`, Promise đó sẽ được resolved trước khi `.then()` tiếp theo được gọi, đảm bảo giá trị 3 được truyền đúng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Làm thế nào để xử lý lỗi một cách hiệu quả nhất trong một hàm `async` sử dụng `await`?",
+    "options": [
+      "A. Sử dụng `.catch()` ở cuối chuỗi `Promise` bên ngoài hàm `async`.",
+      "B. Đặt toàn bộ logic `await` bên trong một khối `try...catch`.",
+      "C. Kiểm tra giá trị trả về của mỗi `await` để xem có phải là `Error` không.",
+      "D. Sử dụng một `global error handler` để bắt tất cả các lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`try...catch` là cách tiêu chuẩn và hiệu quả để xử lý lỗi đồng bộ và không đồng bộ (bao gồm các Promise bị reject bởi `await`) trong các hàm `async`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Điểm khác biệt chính giữa `interface` và `type` trong TypeScript là gì?",
+    "options": [
+      "A. `interface` có thể được triển khai bởi các class, `type` thì không.",
+      "B. `interface` có thể được mở rộng (extended) và hợp nhất (merged) tự động, `type` thì không.",
+      "C. `type` có thể định nghĩa các kiểu dữ liệu nguyên thủy (primitive types) và union/intersection types, `interface` thì không.",
+      "D. `interface` chỉ dùng cho object types, `type` dùng cho mọi thứ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`interface` có khả năng declaration merging và có thể được mở rộng bằng từ khóa `extends` bởi các `interface` khác hoặc `class`. `type` thì không có khả năng hợp nhất tự động nhưng linh hoạt hơn trong việc định nghĩa các kiểu phức tạp như union, intersection, tuple, và primitive types.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để cập nhật một thuộc tính của object trong state một cách bất biến (immutable) mà không làm thay đổi object gốc, bạn nên sử dụng phương pháp nào?",
+    "options": [
+      "A. Gán trực tiếp giá trị mới vào thuộc tính của object, ví dụ: `state.user.name = 'New Name';`.",
+      "B. Sử dụng `Object.assign({}, state.user, { name: 'New Name' });`.",
+      "C. Sử dụng `JSON.parse(JSON.stringify(state.user))` sau đó cập nhật thuộc tính.",
+      "D. Chỉ cần tạo một bản sao nông (shallow copy) của object, ví dụ: `{ ...state.user, name: 'New Name' }`."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Spread syntax `{ ...state.user, name: 'New Name' }` tạo một bản sao nông của `state.user` và ghi đè thuộc tính `name`, đảm bảo tính bất biến. `Object.assign` cũng làm tương tự nhưng spread syntax thường được ưu tiên hơn vì cú pháp ngắn gọn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cho đoạn mã sau, thứ tự output nào là đúng? ```javascript console.log('Start'); setTimeout(() => console.log('Timeout'), 0); Promise.resolve().then(() => console.log('Promise')); console.log('End'); ```",
+    "options": [
+      "A. Start, End, Promise, Timeout",
+      "B. Start, Promise, End, Timeout",
+      "C. Start, End, Timeout, Promise",
+      "D. Start, Timeout, Promise, End"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`console.log` là đồng bộ. `Promise.resolve().then()` thêm một microtask vào hàng đợi microtask. `setTimeout` thêm một macrotask vào hàng đợi macrotask. Event loop ưu tiên xử lý tất cả microtasks trước khi chuyển sang macrotasks.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn muốn viết một hàm nhận vào một mảng bất kỳ và trả về phần tử đầu tiên của mảng đó, đồng thời giữ nguyên kiểu dữ liệu của phần tử. Cách nào sau đây sử dụng generics đúng nhất?",
+    "options": [
+      "A. `function getFirst<T>(arr: T[]): T { return arr[0]; }`",
+      "B. `function getFirst(arr: any[]): any { return arr[0]; }`",
+      "C. `function getFirst<T>(arr: Array<any>): T { return arr[0]; }`",
+      "D. `function getFirst(arr: Array<unknown>): unknown { return arr[0]; }`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`getFirst<T>(arr: T[]): T` sử dụng một type parameter `T` để đại diện cho kiểu của các phần tử trong mảng và kiểu trả về, đảm bảo an toàn kiểu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang phát triển một ứng dụng web và nhận thấy một biến có giá trị không mong muốn tại một thời điểm cụ thể trong quá trình thực thi. Công cụ nào trong Chrome DevTools sẽ giúp bạn tạm dừng thực thi code tại điểm đó và kiểm tra giá trị của biến?",
+    "options": [
+      "A. Tab Network",
+      "B. Tab Elements",
+      "C. Tab Sources với breakpoint",
+      "D. Tab Console với `console.log()`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tab Sources cho phép bạn đặt breakpoints, tạm dừng thực thi code và kiểm tra trạng thái của các biến tại điểm đó. `console.log()` cũng hữu ích nhưng không thể tạm dừng thực thi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Làm thế nào để tạo một biến \"private\" trong JavaScript mà chỉ có thể được truy cập hoặc sửa đổi thông qua các phương thức công khai (public methods)?",
+    "options": [
+      "A. Khai báo biến với từ khóa `private` (chỉ trong TypeScript).",
+      "B. Sử dụng `Symbol` để tạo một thuộc tính duy nhất không thể truy cập trực tiếp.",
+      "C. Đặt biến bên trong một closure và trả về các hàm truy cập nó.",
+      "D. Đặt tên biến bắt đầu bằng dấu gạch dưới `_` để báo hiệu nó là private."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Closures là cơ chế chính trong JavaScript để tạo ra các biến \"private\" bằng cách đóng gói chúng trong phạm vi của một hàm và chỉ cho phép truy cập thông qua các hàm bên trong được trả về.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn muốn tạo một loại lỗi tùy chỉnh (custom error) trong JavaScript để phân biệt các lỗi cụ thể trong ứng dụng của mình. Cách tốt nhất để làm điều này là gì?",
+    "options": [
+      "A. Tạo một object JavaScript đơn giản với thuộc tính `message`.",
+      "B. Kế thừa từ class `Error` và thêm các thuộc tính tùy chỉnh.",
+      "C. Sử dụng `throw 'My custom error message';`.",
+      "D. Định nghĩa một hàm trả về một chuỗi lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kế thừa từ class `Error` (ví dụ: `class CustomError extends Error { ... }`) là cách chuẩn để tạo lỗi tùy chỉnh, cho phép bạn giữ lại các thuộc tính như `stack` và thêm các thuộc tính riêng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn có một interface `User { id: number; name: string; email: string; }`. Bạn muốn tạo một kiểu mới cho phép tất cả các thuộc tính của `User` là tùy chọn (optional). Utility type nào của TypeScript sẽ giúp bạn làm điều này?",
+    "options": [
+      "A. `Pick<User, 'id' | 'name' | 'email'>`",
+      "B. `Omit<User, never>`",
+      "C. `Partial<User>`",
+      "D. `Required<User>`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`Partial<Type>` tạo một kiểu mới với tất cả các thuộc tính của `Type` được đặt là optional.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần cập nhật một thuộc tính nằm sâu bên trong một object lồng nhau trong state (ví dụ: `state.user.address.street`). Để đảm bảo tính bất biến của toàn bộ state, bạn nên làm gì?",
+    "options": [
+      "A. Gán trực tiếp giá trị mới: `state.user.address.street = 'New Street';`",
+      "B. Sử dụng spread syntax `{ ...state, user: { ...state.user, address: { ...state.user.address, street: 'New Street' } } }`.",
+      "C. Sử dụng `Object.assign` cho từng cấp độ lồng nhau.",
+      "D. Chỉ cần tạo một bản sao nông của object gốc: `{ ...state }`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để cập nhật một thuộc tính sâu mà vẫn giữ tính bất biến, bạn cần tạo bản sao nông (shallow copy) của từng cấp độ object từ gốc đến thuộc tính cần thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của unit testing là gì?",
+    "options": [
+      "A. Kiểm tra toàn bộ luồng người dùng của ứng dụng.",
+      "B. Đảm bảo các thành phần nhỏ nhất của code (unit) hoạt động đúng một cách độc lập.",
+      "C. Kiểm tra sự tương tác giữa các hệ thống khác nhau.",
+      "D. Đo lường hiệu suất của ứng dụng dưới tải cao."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Unit testing tập trung vào việc kiểm tra các đơn vị code nhỏ nhất (hàm, class, module) một cách riêng biệt để đảm bảo chúng hoạt động như mong đợi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cả `async/await` và `Promise.then()` đều được sử dụng để xử lý các hoạt động bất đồng bộ. Lợi ích chính của việc sử dụng `async/await` so với chuỗi `.then()` dài là gì?",
+    "options": [
+      "A. `async/await` luôn nhanh hơn `Promise.then()`.",
+      "B. `async/await` cho phép xử lý lỗi dễ dàng hơn với `try...catch` giống như code đồng bộ.",
+      "C. `async/await` chỉ hoạt động với các API mới hơn, trong khi `Promise.then()` tương thích rộng hơn.",
+      "D. `async/await` có thể tự động bắt các lỗi không được xử lý (unhandled rejections)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`async/await` giúp code bất đồng bộ trông và hoạt động giống như code đồng bộ, đặc biệt là trong việc xử lý lỗi với `try...catch`, làm cho code dễ đọc và bảo trì hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn có một hàm nhận vào một tham số có thể là `string` hoặc `number`. Làm thế nào để thu hẹp kiểu dữ liệu của tham số này bên trong hàm để thực hiện các thao tác cụ thể cho từng kiểu?",
+    "options": [
+      "A. Sử dụng `if (typeof param === 'string')` hoặc `if (typeof param === 'number')`.",
+      "B. Ép kiểu (type assertion) `param as string` hoặc `param as number`.",
+      "C. Sử dụng một `switch` statement trên giá trị của `param`.",
+      "D. Định nghĩa hai hàm riêng biệt, một cho `string` và một cho `number`."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`typeof` là một type guard cơ bản giúp TypeScript thông minh thu hẹp kiểu dữ liệu của biến trong phạm vi điều kiện, cho phép bạn truy cập các phương thức và thuộc tính cụ thể của kiểu đó mà không cần ép kiểu thủ công.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Vai trò chính của ESLint và Prettier trong quy trình phát triển frontend hiện đại là gì?",
+    "options": [
+      "A. Tự động triển khai code lên môi trường production.",
+      "B. Tối ưu hóa hiệu suất runtime của ứng dụng.",
+      "C. Đảm bảo chất lượng code bằng cách thực thi quy tắc định dạng và phát hiện lỗi tiềm ẩn.",
+      "D. Quản lý các gói thư viện và dependencies của dự án."
+    ],
+    "correctAnswer": "C",
+    "explanation": "ESLint dùng để phát hiện lỗi cú pháp, lỗi logic tiềm ẩn, và thực thi các quy tắc code style. Prettier tập trung vào việc tự động định dạng code để đảm bảo tính nhất quán. Cả hai đều cải thiện chất lượng và tính dễ đọc của code.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần tạo một hàm `logger` có thể ghi lại các thông báo với một tiền tố (prefix) cụ thể (ví dụ: `[INFO]`, `[WARNING]`). Bạn muốn tạo nhiều logger với các tiền tố khác nhau mà không lặp lại code. Phương pháp nào sử dụng closure là phù hợp nhất?",
+    "options": [
+      "A. Định nghĩa một hàm `logger(prefix, message)` và truyền `prefix` mỗi lần gọi.",
+      "B. Tạo một đối tượng với các phương thức `info(message)`, `warn(message)`, v.v.",
+      "C. Viết một hàm factory trả về một hàm `logger` đã được cấu hình với `prefix`.",
+      "D. Sử dụng biến toàn cục `globalPrefix` và thay đổi nó trước mỗi lần ghi log."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Một hàm factory sử dụng closure có thể tạo ra các hàm `logger` được cấu hình sẵn với `prefix` riêng, giúp tái sử dụng code và giữ trạng thái `prefix` cho mỗi logger riêng biệt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi sử dụng `Promise.all([promise1, promise2, promise3])`, điều gì sẽ xảy ra nếu `promise2` bị reject?",
+    "options": [
+      "A. `Promise.all` sẽ chờ tất cả các promise khác hoàn thành rồi trả về một mảng chứa kết quả và lỗi của `promise2`.",
+      "B. `Promise.all` sẽ ngay lập tức reject với lỗi của `promise2` và không chờ các promise còn lại.",
+      "C. `Promise.all` sẽ bỏ qua lỗi của `promise2` và chỉ trả về kết quả của `promise1` và `promise3`.",
+      "D. `Promise.all` sẽ tự động thử lại `promise2` cho đến khi nó thành công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`Promise.all` có hành vi \"fail-fast\": nếu bất kỳ promise nào trong mảng bị reject, `Promise.all` sẽ ngay lập tức reject với lỗi của promise đó mà không chờ các promise khác hoàn thành.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn muốn viết một hàm generic `getProperty<T, K extends keyof T>(obj: T, key: K): T[K]` để lấy giá trị của một thuộc tính từ một object. Mục đích của `K extends keyof T` là gì?",
+    "options": [
+      "A. Để đảm bảo rằng `K` phải là một chuỗi (string).",
+      "B. Để giới hạn `K` chỉ có thể là một trong các tên thuộc tính hợp lệ của kiểu `T`.",
+      "C. Để cho phép `K` có thể là bất kỳ kiểu dữ liệu nào.",
+      "D. Để định nghĩa kiểu trả về của hàm là `T[K]`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`K extends keyof T` là một generic constraint, nó đảm bảo rằng type parameter `K` chỉ có thể là một literal string thuộc tập hợp các key của type `T`, cung cấp an toàn kiểu khi truy cập thuộc tính.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng các bản cập nhật bất biến (immutable updates) trong quản lý state là gì?",
+    "options": [
+      "A. Tăng tốc độ ghi vào bộ nhớ.",
+      "B. Giúp dễ dàng theo dõi và gỡ lỗi các thay đổi trạng thái, cũng như tối ưu hóa render trong một số framework.",
+      "C. Giảm dung lượng bộ nhớ cần thiết cho state.",
+      "D. Đảm bảo rằng state chỉ có thể được đọc, không thể thay đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Immutability giúp việc theo dõi lịch sử thay đổi state dễ dàng hơn (undo/redo), đơn giản hóa việc gỡ lỗi, và cho phép các framework như React tối ưu hóa việc render bằng cách so sánh tham chiếu (reference equality) để biết khi nào cần cập nhật UI.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ứng dụng của bạn đang chạy chậm và bạn nghi ngờ có một hàm nào đó đang tiêu tốn quá nhiều tài nguyên CPU. Công cụ nào trong Chrome DevTools sẽ giúp bạn xác định hàm nào đang gây ra vấn đề này?",
+    "options": [
+      "A. Tab Elements để kiểm tra cấu trúc DOM.",
+      "B. Tab Console để xem các thông báo lỗi.",
+      "C. Tab Performance để ghi lại và phân tích hồ sơ CPU.",
+      "D. Tab Network để kiểm tra thời gian tải tài nguyên."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tab Performance (hoặc Performance Monitor) trong DevTools cho phép bạn ghi lại hoạt động của ứng dụng và phân tích hồ sơ CPU, giúp xác định các hàm hoặc tác vụ tốn thời gian.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn muốn bắt và ghi lại tất cả các lỗi JavaScript không được xử lý (unhandled errors) xảy ra trong ứng dụng web của mình. Sự kiện (event) nào của trình duyệt bạn nên lắng nghe?",
+    "options": [
+      "A. `window.onload`",
+      "B. `document.ready`",
+      "C. `window.onerror` hoặc `window.addEventListener('error', ...)`",
+      "D. `document.addEventListener('click', ...)`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`window.onerror` (hoặc `window.addEventListener('error', ...)`) là cách tiêu chuẩn để bắt các lỗi JavaScript không được xử lý (uncaught errors) ở cấp độ toàn cục trong trình duyệt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong TypeScript, `type ID = string | number;` định nghĩa một `union type`. Điều này có ý nghĩa gì?",
+    "options": [
+      "A. Biến kiểu `ID` phải là cả `string` và `number` cùng một lúc.",
+      "B. Biến kiểu `ID` có thể là `string` HOẶC `number`.",
+      "C. Biến kiểu `ID` là một mảng chứa cả `string` và `number`.",
+      "D. Biến kiểu `ID` là một đối tượng có thuộc tính `string` và `number`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Union type (`|`) cho phép một biến có thể có nhiều hơn một kiểu dữ liệu. Trong trường hợp này, `ID` có thể là một `string` hoặc một `number`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của quy trình code review là gì?",
+    "options": [
+      "A. Chỉ để tìm lỗi cú pháp và lỗi đánh máy.",
+      "B. Để đảm bảo code tuân thủ các tiêu chuẩn, phát hiện lỗi, cải thiện chất lượng thiết kế và chia sẻ kiến thức.",
+      "C. Để tự động biên dịch và kiểm tra code.",
+      "D. Để đo lường thời gian cần thiết để hoàn thành một tính năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Code review là một thực hành quan trọng để cải thiện chất lượng code, phát hiện lỗi sớm, đảm bảo tuân thủ tiêu chuẩn, và là cơ hội để các thành viên trong nhóm học hỏi lẫn nhau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cho đoạn mã sau: ```javascript async function fetchData() { console.log('Fetching data...'); await new Promise(resolve => setTimeout(resolve, 100)); console.log('Data fetched!'); return 'Result'; } async function processData() { console.log('Start processing'); const data = await fetchData(); console.log('Processing complete:', data); } processData(); console.log('Main thread continues'); ``` Thứ tự output nào là đúng?",
+    "options": [
+      "A. Fetching data..., Data fetched!, Start processing, Processing complete: Result, Main thread continues",
+      "B. Start processing, Fetching data..., Data fetched!, Processing complete: Result, Main thread continues",
+      "C. Start processing, Fetching data..., Main thread continues, Data fetched!, Processing complete: Result",
+      "D. Fetching data..., Start processing, Main thread continues, Data fetched!, Processing complete: Result"
+    ],
+    "correctAnswer": "C",
+    "explanation": "1. `processData()` được gọi, in 'Start processing'. 2. `fetchData()` được gọi, in 'Fetching data...'. 3. `await new Promise(...)` tạm dừng `fetchData()` (và do đó `processData()`). Control quay về main thread. 4. `console.log('Main thread continues')` được thực thi. 5. Sau 100ms, Promise trong `fetchData` resolve. `fetchData` tiếp tục, in 'Data fetched!'. 6. `fetchData` trả về 'Result', và `processData` tiếp tục. 7. `processData` in 'Processing complete: Result'.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh Event Loop của JavaScript, đâu là sự khác biệt chính về thời điểm thực thi giữa Microtasks (như Promise callbacks) và Macrotasks (như setTimeout callbacks) khi có một hàng đợi công việc lớn?",
+    "options": [
+      "A. Microtasks luôn được ưu tiên thực thi trước tất cả các Macrotasks trong cùng một chu kỳ Event Loop, kể cả khi Macrotasks đã được thêm vào hàng đợi trước đó.",
+      "B. Macrotasks luôn được ưu tiên thực thi trước Microtasks để đảm bảo phản hồi UI nhanh chóng.",
+      "C. Microtasks và Macrotasks được thực thi xen kẽ theo thứ tự chúng được thêm vào hàng đợi, không có ưu tiên đặc biệt.",
+      "D. Trình duyệt sẽ quyết định ngẫu nhiên thứ tự thực thi giữa Microtasks và Macrotasks dựa trên tài nguyên hệ thống."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Microtasks (như các callback của Promise, MutationObserver) được thực thi hoàn toàn sau khi Macrotask hiện tại kết thúc và trước khi trình duyệt thực hiện render hoặc chuyển sang Macrotask tiếp theo. Điều này có nghĩa là tất cả Microtasks trong hàng đợi sẽ được xử lý hết trước khi bất kỳ Macrotask mới nào được lấy ra từ hàng đợi Macrotask.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một thư viện UI component và muốn tạo một component 'Table' có thể hiển thị dữ liệu của bất kỳ kiểu nào, đồng thời cho phép người dùng định nghĩa các cột một cách linh hoạt với kiểu dữ liệu riêng. Làm thế nào để sử dụng TypeScript Generics và Conditional Types để đạt được điều này một cách an toàn và linh hoạt nhất?",
+    "options": [
+      "A. Sử dụng `Table<TData, TColumn extends keyof TData>` để định nghĩa kiểu dữ liệu cho bảng và cột, đảm bảo rằng tên cột phải là một thuộc tính của dữ liệu.",
+      "B. Dùng `Table<TData, TColumn = any>` và để người dùng tự truyền kiểu cho cột, bỏ qua kiểm tra kiểu nếu không cần thiết.",
+      "C. Định nghĩa `Table<TData>` và sử dụng `TData[keyof TData]` cho kiểu của các cột, hạn chế khả năng tùy chỉnh cột.",
+      "D. Tạo một interface `ITableColumn<TData>` riêng cho từng cột và buộc người dùng phải tự định nghĩa tất cả các kiểu liên quan đến cột, không sử dụng Generics cho Table."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sử dụng Generics `TData` cho kiểu dữ liệu của hàng và `TColumn extends keyof TData` cho tên cột cho phép TypeScript kiểm tra rằng tên cột được cung cấp thực sự tồn tại trong kiểu dữ liệu `TData`. Điều này mang lại sự linh hoạt và an toàn kiểu cao nhất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một ứng dụng React lớn, bạn đang gặp vấn đề về hiệu năng do re-render không cần thiết khi cập nhật trạng thái lồng sâu (deeply nested state). Đội của bạn đang tranh luận giữa việc sử dụng thư viện immutability (như Immer) hay tự viết các hàm cập nhật trạng thái immutable thủ công. Quyết định nào sẽ tối ưu hơn về mặt hiệu năng và maintainability cho một đội lớn?",
+    "options": [
+      "A. Sử dụng Immer vì nó cho phép viết code cập nhật trạng thái theo kiểu mutable, sau đó tự động chuyển đổi thành immutable, giảm thiểu lỗi và tăng tốc độ phát triển mà vẫn đảm bảo hiệu năng tối ưu.",
+      "B. Tự viết các hàm cập nhật trạng thái immutable thủ công bằng cách sử dụng spread operator (`...`) hoặc `Object.assign()` để có toàn quyền kiểm soát hiệu năng và tránh phụ thuộc thư viện bên ngoài.",
+      "C. Chuyển toàn bộ trạng thái lồng sâu thành trạng thái phẳng (flat state) để tránh các vấn đề về immutability, mặc dù điều này có thể làm phức tạp logic quản lý trạng thái.",
+      "D. Sử dụng `JSON.parse(JSON.stringify(state))` để tạo bản sao sâu (deep clone) trước khi cập nhật, đảm bảo immutability nhưng chấp nhận hiệu năng thấp hơn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Immer cho phép bạn viết code cập nhật trạng thái như thể bạn đang mutate trực tiếp đối tượng, nhưng nó sử dụng Proxy để theo dõi các thay đổi và tạo ra một bản sao immutable mới chỉ với những phần bị thay đổi. Điều này giúp giảm thiểu lỗi khi làm việc với trạng thái lồng sâu, cải thiện maintainability và vẫn đảm bảo hiệu năng tốt hơn so với việc deep clone thủ công hoặc tự viết phức tạp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn nghi ngờ ứng dụng web của mình đang bị rò rỉ bộ nhớ (memory leak) sau một thời gian dài sử dụng, dẫn đến hiệu suất giảm sút. Công cụ nào trong Chrome DevTools là phù hợp nhất để xác định và phân tích nguyên nhân của vấn đề này?",
+    "options": [
+      "A. Memory panel (Heap Snapshot) để chụp ảnh bộ nhớ tại các thời điểm khác nhau và so sánh chúng để tìm các đối tượng bị giữ lại không cần thiết.",
+      "B. Performance panel để ghi lại luồng hoạt động của CPU và GPU, tìm các tác vụ tốn nhiều tài nguyên.",
+      "C. Network panel để kiểm tra các yêu cầu mạng và thời gian phản hồi của chúng.",
+      "D. Console panel để tìm kiếm các lỗi JavaScript hoặc cảnh báo liên quan đến bộ nhớ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Memory panel, đặc biệt là tính năng Heap Snapshot, cho phép bạn chụp ảnh bộ nhớ của ứng dụng tại các thời điểm khác nhau. Bằng cách so sánh các snapshot này, bạn có thể xác định các đối tượng đang tăng lên về số lượng hoặc kích thước mà không được giải phóng, từ đó giúp tìm ra nguyên nhân rò rỉ bộ nhớ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong JavaScript, Closures thường được sử dụng để triển khai Module Pattern hoặc để tạo các biến 'private'. Đâu là lợi ích chính của việc sử dụng Closure để tạo ra một module với các biến và hàm private?",
+    "options": [
+      "A. Bảo vệ dữ liệu nội bộ của module khỏi sự truy cập và thay đổi từ bên ngoài, đảm bảo tính đóng gói (encapsulation).",
+      "B. Tăng cường hiệu suất bằng cách lưu trữ các biến trong bộ nhớ cache, giảm thời gian truy cập.",
+      "C. Cho phép các hàm bên ngoài truy cập và sửa đổi các biến private một cách an toàn thông qua các setter/getter được định nghĩa rõ ràng.",
+      "D. Giúp giảm thiểu việc sử dụng bộ nhớ bằng cách giải phóng các biến private ngay sau khi module được khởi tạo."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lợi ích chính của Closure trong Module Pattern là tạo ra một phạm vi (scope) riêng biệt, nơi các biến và hàm có thể được định nghĩa và truy cập nội bộ (private), trong khi chỉ một phần giao diện công khai (public API) được trả về. Điều này đảm bảo tính đóng gói và ngăn chặn sự can thiệp từ bên ngoài vào trạng thái nội bộ của module.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong TypeScript, bạn có một hàm async trả về một Promise. Để trích xuất kiểu dữ liệu mà Promise đó sẽ giải quyết (resolve) thành, bạn nên sử dụng Utility Type nào?",
+    "options": [
+      "A. `Awaited<T>`",
+      "B. `PromiseType<T>`",
+      "C. `ResolvedType<T>`",
+      "D. `ReturnType<T>`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`Awaited<T>` là một Utility Type được thêm vào TypeScript 4.5, được thiết kế để mô phỏng hành vi của từ khóa `await` trong JavaScript. Nó sẽ giải quyết (unwraps) kiểu của một Promise, trả về kiểu dữ liệu mà Promise đó sẽ resolve thành. `ReturnType<T>` chỉ trả về kiểu trả về của một hàm, không tự động 'await' Promise.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần thực hiện nhiều yêu cầu API song song và quan tâm đến việc thu thập kết quả của TẤT CẢ các yêu cầu, bất kể chúng thành công hay thất bại. Phương thức Promise nào bạn nên sử dụng và tại sao?",
+    "options": [
+      "A. `Promise.allSettled()` vì nó trả về một Promise resolved với một mảng các đối tượng mô tả trạng thái (fulfilled hoặc rejected) của từng Promise, cho phép xử lý tất cả các kết quả.",
+      "B. `Promise.all()` vì nó chờ đợi tất cả các Promise hoàn thành và trả về một mảng các giá trị đã resolve, bỏ qua các Promise bị reject.",
+      "C. `Promise.race()` vì nó trả về kết quả của Promise đầu tiên hoàn thành (resolve hoặc reject), phù hợp cho việc thu thập tất cả kết quả.",
+      "D. `Promise.any()` vì nó trả về kết quả của Promise đầu tiên được resolve, bỏ qua các Promise bị reject."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`Promise.allSettled()` là lựa chọn phù hợp nhất khi bạn muốn biết kết quả của tất cả các Promise, bất kể chúng thành công hay thất bại. Nó luôn resolve với một mảng các đối tượng trạng thái (status: 'fulfilled' | 'rejected', value | reason), cho phép bạn xử lý cả các trường hợp thành công và lỗi một cách tường minh. `Promise.all()` sẽ reject ngay lập tức nếu bất kỳ Promise nào trong mảng bị reject.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đội của bạn đang phát triển một ứng dụng React lớn với nhiều module và trạng thái phức tạp, yêu cầu quản lý trạng thái toàn cục hiệu quả, dễ dàng debug và có khả năng mở rộng. Bạn nên đề xuất giải pháp quản lý trạng thái nào và tại sao?",
+    "options": [
+      "A. Redux Toolkit, vì nó cung cấp một cấu trúc rõ ràng, công cụ devtools mạnh mẽ, và giúp chuẩn hóa cách cập nhật trạng thái, phù hợp cho các ứng dụng lớn và đội nhóm đông người.",
+      "B. React Context API, vì nó là giải pháp tích hợp sẵn của React, đơn giản để thiết lập và tránh được các thư viện bên thứ ba.",
+      "C. Zustand, vì nó nhẹ và dễ sử dụng hơn Redux, phù hợp cho các ứng dụng có hiệu suất cao và ít boilerplate.",
+      "D. MobX, vì nó sử dụng observable và tự động re-render, giúp code ngắn gọn và dễ hiểu hơn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Redux Toolkit (RTK) là lựa chọn mạnh mẽ cho các ứng dụng lớn. Nó cung cấp một kiến trúc dự đoán được, dễ dàng debug với Redux DevTools, và giúp quản lý trạng thái phức tạp một cách có tổ chức. Mặc dù có boilerplate nhất định, RTK đã giảm đáng kể điều đó và rất phù hợp cho các đội lớn cần sự nhất quán và khả năng mở rộng. Các lựa chọn khác có thể phù hợp cho các trường hợp khác nhưng không tối ưu bằng cho quy mô và yêu cầu đã nêu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong chiến lược kiểm thử phần mềm, mục tiêu chính của kiểm thử tích hợp (Integration Testing) là gì?",
+    "options": [
+      "A. Đảm bảo rằng các module hoặc component khác nhau của ứng dụng hoạt động chính xác khi kết hợp với nhau.",
+      "B. Kiểm tra từng đơn vị code (hàm, class) một cách riêng biệt để đảm bảo chúng hoạt động đúng theo yêu cầu.",
+      "C. Mô phỏng hành vi của người dùng cuối trên toàn bộ ứng dụng để xác minh các luồng công việc chính.",
+      "D. Đánh giá hiệu suất, khả năng chịu tải và khả năng mở rộng của ứng dụng dưới các điều kiện khác nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Kiểm thử tích hợp tập trung vào việc xác minh sự tương tác và giao tiếp giữa các module hoặc component riêng lẻ đã được kiểm thử đơn vị. Mục tiêu là phát hiện lỗi ở các giao diện và luồng dữ liệu giữa chúng, đảm bảo rằng chúng hoạt động hài hòa khi được kết hợp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang làm việc với TypeScript và cần tạo một hàm có thể kiểm tra xem một giá trị có phải là một instance của một class cụ thể hay không, đồng thời giúp TypeScript thu hẹp kiểu của giá trị đó. Cú pháp nào sau đây thể hiện một User-Defined Type Guard chính xác?",
+    "options": [
+      "A. `function isMyClass(value: unknown): value is MyClass { return value instanceof MyClass; }`",
+      "B. `function isMyClass(value: any): boolean { return value instanceof MyClass; }`",
+      "C. `function isMyClass(value: object): value is MyClass { return typeof value === 'object' && 'property' in value; }`",
+      "D. `function isMyClass(value: MyClass): boolean { return true; }`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một User-Defined Type Guard được định nghĩa bằng cách sử dụng cú pháp `parameterName is Type` làm kiểu trả về. Khi hàm này trả về `true`, TypeScript sẽ tự động thu hẹp kiểu của `value` thành `MyClass` trong phạm vi đó. Lựa chọn A tuân thủ cú pháp và mục đích này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Event Loop của trình duyệt, các tác vụ liên quan đến việc cập nhật giao diện người dùng (rendering) thường được thực hiện ở thời điểm nào so với Microtasks và Macrotasks?",
+    "options": [
+      "A. Sau khi tất cả Microtasks trong hàng đợi hiện tại đã được thực thi và trước khi Macrotask tiếp theo được lấy ra.",
+      "B. Ngay sau khi một Macrotask hoàn thành và trước khi bất kỳ Microtask nào được thực thi.",
+      "C. Xen kẽ giữa các Microtasks và Macrotasks, bất cứ khi nào trình duyệt cảm thấy cần thiết.",
+      "D. Chỉ khi không có bất kỳ Microtasks hoặc Macrotasks nào trong hàng đợi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mỗi chu kỳ của Event Loop (còn gọi là 'tick') sẽ thực thi một Macrotask, sau đó thực thi tất cả Microtasks trong hàng đợi. Sau khi tất cả Microtasks đã hoàn thành, trình duyệt sẽ kiểm tra xem có cần thực hiện cập nhật giao diện người dùng (rendering) hay không trước khi chuyển sang Macrotask tiếp theo.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang tối ưu hóa hiệu suất của một component React và nhận thấy một hàm callback được truyền xuống các component con thường xuyên bị tạo lại, gây ra re-render không cần thiết cho các component con đã được `React.memo` bọc. Giải pháp nào sau đây là phù hợp nhất để khắc phục vấn đề này?",
+    "options": [
+      "A. Sử dụng `useCallback` hook để memoize hàm callback, đảm bảo nó chỉ được tạo lại khi các dependency của nó thay đổi.",
+      "B. Sử dụng `useMemo` hook để memoize hàm callback, đảm bảo nó chỉ được tạo lại khi các dependency của nó thay đổi.",
+      "C. Bọc component cha bằng `React.memo` để ngăn chặn nó re-render, từ đó ngăn callback bị tạo lại.",
+      "D. Chuyển hàm callback thành một hàm thông thường bên ngoài component để nó không bao giờ bị tạo lại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`useCallback` được thiết kế đặc biệt để memoize các hàm callback. Nó trả về một phiên bản memoized của hàm, chỉ thay đổi khi một trong các dependencies của nó thay đổi. Điều này rất hiệu quả khi truyền các hàm xuống các component con được bọc bởi `React.memo` để tránh re-render không cần thiết. `useMemo` được dùng để memoize giá trị, không phải hàm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một ứng dụng React, khi một component gặp lỗi không mong muốn trong quá trình render, lifecycle method, hoặc constructor, cơ chế nào sau đây được sử dụng để bắt và xử lý lỗi một cách duyên dáng, ngăn chặn toàn bộ ứng dụng bị crash?",
+    "options": [
+      "A. Error Boundaries (được triển khai bằng các class component với `componentDidCatch` hoặc `static getDerivedStateFromError`).",
+      "B. `try...catch` block xung quanh toàn bộ hàm render của component.",
+      "C. `window.onerror` event handler toàn cục để bắt tất cả các lỗi JavaScript.",
+      "D. `Promise.catch()` để bắt các lỗi bất đồng bộ trong component."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Error Boundaries là một tính năng của React (được triển khai dưới dạng class component với `componentDidCatch` hoặc `static getDerivedStateFromError`) cho phép bạn bắt lỗi JavaScript trong cây con của chúng, ghi lại lỗi đó và hiển thị UI dự phòng thay vì làm sập toàn bộ cây component. `try...catch` không hoạt động cho lỗi trong render của React. `window.onerror` là toàn cục và không cho phép hiển thị UI dự phòng cục bộ. `Promise.catch()` chỉ xử lý lỗi bất đồng bộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang làm việc với TypeScript và cần tạo một kiểu dữ liệu mới dựa trên việc trích xuất kiểu trả về của một hàm hiện có. Utility Type nào sau đây có thể giúp bạn làm điều này?",
+    "options": [
+      "A. `ReturnType<T>`",
+      "B. `Extract<T, U>`",
+      "C. `Parameters<T>`",
+      "D. `Awaited<T>`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`ReturnType<T>` là một Utility Type trong TypeScript được sử dụng để trích xuất kiểu trả về của một hàm. Ví dụ, nếu bạn có `type MyFunction = () => string;`, thì `ReturnType<MyFunction>` sẽ là `string`.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quá trình debug một ứng dụng web, bạn nhận thấy các yêu cầu mạng đến một API cụ thể đang mất quá nhiều thời gian để phản hồi, đặc biệt là trên các kết nối chậm. Công cụ nào trong Chrome DevTools giúp bạn mô phỏng các điều kiện mạng khác nhau (ví dụ: 3G chậm, offline) để kiểm tra và tối ưu hóa trải nghiệm người dùng?",
+    "options": [
+      "A. Network panel (tab Throttling) để giảm băng thông mạng và thêm độ trễ.",
+      "B. Performance panel để ghi lại và phân tích các sự kiện hiệu suất của trình duyệt.",
+      "C. Console panel để xem các lỗi và thông báo log.",
+      "D. Application panel để quản lý Local Storage, Session Storage và Service Workers."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Network panel trong Chrome DevTools có một tính năng 'Throttling' cho phép bạn mô phỏng các điều kiện mạng khác nhau, bao gồm các tốc độ kết nối chậm và trạng thái offline. Điều này rất hữu ích để kiểm tra cách ứng dụng của bạn hoạt động dưới các điều kiện mạng thực tế và xác định các điểm nghẽn liên quan đến mạng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang phát triển một hàm tính toán phức tạp tốn nhiều tài nguyên, và kết quả của nó chỉ phụ thuộc vào các đối số đầu vào. Để tối ưu hiệu suất, bạn muốn hàm này chỉ thực hiện tính toán khi các đối số thay đổi. Kỹ thuật nào sau đây, sử dụng Closures, là phù hợp nhất để triển khai một cơ chế memoization cho hàm này?",
+    "options": [
+      "A. Tạo một Closure để lưu trữ kết quả trước đó và các đối số tương ứng, chỉ tính toán lại nếu đối số hiện tại khác với đối số đã lưu.",
+      "B. Sử dụng một biến toàn cục để lưu trữ kết quả và đối số, kiểm tra trước khi tính toán.",
+      "C. Đặt hàm tính toán vào một `setTimeout` để trì hoãn việc thực thi và giảm tải CPU.",
+      "D. Chuyển hàm tính toán thành một `async` function để nó chạy bất đồng bộ và không chặn luồng chính."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Memoization là một kỹ thuật tối ưu hóa bằng cách lưu trữ kết quả của các hàm tốn kém và trả về kết quả đã lưu khi các đối số đầu vào giống nhau được sử dụng lại. Closures rất phù hợp để triển khai điều này bằng cách tạo ra một phạm vi để lưu trữ cache (kết quả trước đó và đối số) mà chỉ hàm memoized có thể truy cập.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một ứng dụng React/Redux, bạn cần cập nhật một thuộc tính lồng sâu trong trạng thái (ví dụ: `state.user.profile.address.street`). Việc cập nhật này cần phải đảm bảo tính bất biến (immutability) của trạng thái. Phương pháp nào sau đây là hiệu quả nhất và ít gây lỗi nhất để thực hiện cập nhật này?",
+    "options": [
+      "A. Sử dụng thư viện Immer để viết code cập nhật như thể đang mutate trực tiếp, sau đó Immer sẽ xử lý việc tạo bản sao bất biến.",
+      "B. Tạo bản sao của từng cấp độ đối tượng từ gốc đến thuộc tính cần thay đổi bằng cách sử dụng spread operator (`...`).",
+      "C. Sử dụng `Object.assign()` để hợp nhất các đối tượng mới vào cấu trúc trạng thái hiện có.",
+      "D. Chuyển đổi trạng thái thành JSON string, sửa đổi string, sau đó parse lại thành đối tượng JavaScript."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi làm việc với trạng thái lồng sâu, việc cập nhật bất biến thủ công bằng spread operator hoặc `Object.assign()` có thể trở nên rất phức tạp và dễ gây lỗi. Immer giải quyết vấn đề này bằng cách cho phép bạn viết code theo kiểu mutable thông thường, và nó sẽ tự động tạo ra một bản sao bất biến mới với các thay đổi cần thiết. Điều này giảm đáng kể sự phức tạp và khả năng gây lỗi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiểm thử đơn vị (Unit Testing), đâu là sự khác biệt chính giữa 'Mock' và 'Stub' khi sử dụng các đối tượng kiểm thử giả (test doubles)?",
+    "options": [
+      "A. Mock là đối tượng kiểm thử giả mà bạn thiết lập các kỳ vọng (expectations) về các cuộc gọi phương thức sẽ xảy ra, trong khi Stub là đối tượng cung cấp các phản hồi được lập trình sẵn cho các cuộc gọi phương thức.",
+      "B. Stub là đối tượng kiểm thử giả mà bạn thiết lập các kỳ vọng về các cuộc gọi phương thức sẽ xảy ra, trong khi Mock là đối tượng cung cấp các phản hồi được lập trình sẵn cho các cuộc gọi phương thức.",
+      "C. Mock và Stub là hai thuật ngữ có thể thay thế cho nhau, không có sự khác biệt đáng kể về chức năng.",
+      "D. Mock được sử dụng cho kiểm thử tích hợp, còn Stub được sử dụng cho kiểm thử đơn vị."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Stub là một đối tượng kiểm thử giả cung cấp các phản hồi được lập trình sẵn cho các cuộc gọi. Nó chủ yếu được sử dụng để kiểm soát hành vi của các dependencies trong quá trình kiểm thử. Mock là một đối tượng kiểm thử giả phức tạp hơn, nó không chỉ cung cấp phản hồi mà còn thiết lập các kỳ vọng về cách nó sẽ được gọi (ví dụ: số lần gọi, đối số được truyền). Sau khi kiểm thử, bạn sẽ xác minh rằng các kỳ vọng trên mock đã được đáp ứng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong TypeScript, khi nào bạn nên ưu tiên sử dụng kiểu `unknown` thay vì `any`?",
+    "options": [
+      "A. Khi bạn muốn đảm bảo an toàn kiểu tối đa và buộc người dùng phải thu hẹp kiểu trước khi thực hiện bất kỳ thao tác nào trên giá trị đó.",
+      "B. Khi bạn muốn tắt tất cả các kiểm tra kiểu TypeScript cho một biến cụ thể, cho phép mọi thao tác mà không cần kiểm tra.",
+      "C. Khi bạn chắc chắn rằng giá trị sẽ luôn là một kiểu cụ thể, nhưng không muốn khai báo rõ ràng kiểu đó.",
+      "D. Khi bạn đang làm việc với các thư viện JavaScript cũ không có định nghĩa kiểu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`unknown` an toàn hơn `any`. Khi một biến có kiểu `unknown`, bạn không thể thực hiện bất kỳ thao tác nào trên nó (ví dụ: gọi phương thức, truy cập thuộc tính) mà không thực hiện kiểm tra kiểu (type assertion hoặc type guard) trước. Điều này buộc bạn phải suy nghĩ về kiểu của dữ liệu và xử lý nó một cách an toàn. `any` tắt hoàn toàn kiểm tra kiểu, tiềm ẩn nhiều lỗi runtime.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một ứng dụng web phức tạp, bạn đang xử lý một chuỗi các yêu cầu bất đồng bộ (ví dụ: fetch dữ liệu người dùng, sau đó fetch các bài đăng của người dùng đó). Bạn nhận thấy rằng đôi khi, do tốc độ mạng hoặc thứ tự thực thi, dữ liệu cũ có thể được hiển thị trước dữ liệu mới nếu người dùng thực hiện một hành động nhanh chóng (ví dụ: tìm kiếm liên tục). Đây là một ví dụ về 'race condition'. Làm thế nào bạn có thể xử lý hiệu quả vấn đề này để đảm bảo chỉ dữ liệu mới nhất được hiển thị?",
+    "options": [
+      "A. Sử dụng một cơ chế hủy (cancellation token) hoặc cờ (flag) để bỏ qua hoặc hủy các yêu cầu cũ hơn khi một yêu cầu mới được gửi đi.",
+      "B. Đặt tất cả các yêu cầu vào một hàng đợi và đảm bảo chúng được thực thi tuần tự, chờ yêu cầu trước đó hoàn thành trước khi bắt đầu yêu cầu tiếp theo.",
+      "C. Tăng thời gian chờ (timeout) cho tất cả các yêu cầu để đảm bảo chúng có đủ thời gian hoàn thành theo thứ tự.",
+      "D. Lưu trữ tất cả các kết quả và chỉ hiển thị kết quả của yêu cầu cuối cùng được gửi đi, bỏ qua các kết quả trung gian."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Race conditions trong các yêu cầu bất đồng bộ thường xảy ra khi thứ tự hoàn thành không khớp với thứ tự bắt đầu. Một cách hiệu quả để xử lý là sử dụng cơ chế hủy (ví dụ: `AbortController` trong Fetch API) hoặc một cờ để đánh dấu các yêu cầu cũ là không hợp lệ khi một yêu cầu mới được gửi đi. Điều này đảm bảo rằng chỉ kết quả từ yêu cầu gần nhất mới được xử lý và hiển thị.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quá trình tối ưu hóa kích thước bundle của ứng dụng JavaScript, 'tree shaking' là một kỹ thuật quan trọng. Yếu tố nào sau đây là cần thiết để tree shaking có thể hoạt động hiệu quả?",
+    "options": [
+      "A. Sử dụng cú pháp import/export của ES Modules (ESM) và đảm bảo các module không có 'side effects'.",
+      "B. Sử dụng `require()` và `module.exports` của CommonJS để định nghĩa các module.",
+      "C. Đảm bảo tất cả các hàm và biến được khai báo dưới dạng biến toàn cục.",
+      "D. Tắt tính năng minification trong quá trình build."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tree shaking (còn gọi là dead code elimination) dựa vào phân tích tĩnh của ES Modules (ESM) để xác định các import và export nào thực sự được sử dụng. Nếu các module có 'side effects' (ví dụ: sửa đổi biến toàn cục), trình đóng gói sẽ không thể loại bỏ chúng một cách an toàn. Do đó, việc sử dụng ESM và thiết kế module không có side effects là rất quan trọng cho tree shaking.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang phát triển một thư viện TypeScript và muốn tạo một decorator `@Logger` có thể ghi lại các cuộc gọi phương thức của một class, bao gồm tên phương thức và các đối số. Làm thế nào để định nghĩa decorator này một cách chính xác để nó có thể được áp dụng cho các phương thức?",
+    "options": [
+      "A. `function Logger(target: any, propertyKey: string, descriptor: PropertyDescriptor) { ... }`",
+      "B. `function Logger(target: Function) { ... }`",
+      "C. `function Logger(target: any, propertyKey: string) { ... }`",
+      "D. `function Logger(target: any, propertyKey: string, parameterIndex: number) { ... }`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một method decorator trong TypeScript nhận ba đối số: `target` (prototype của class), `propertyKey` (tên của phương thức), và `descriptor` (PropertyDescriptor của phương thức đó). `descriptor` chứa `value` là hàm gốc, cho phép bạn ghi đè nó bằng một hàm mới có thêm logic logging trước hoặc sau khi gọi hàm gốc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong JavaScript, khi nào bạn nên sử dụng `requestAnimationFrame` thay vì `setTimeout` hoặc `setInterval` để thực hiện các hoạt ảnh (animations) trên trình duyệt?",
+    "options": [
+      "A. `requestAnimationFrame` nên được sử dụng cho các hoạt ảnh vì nó đồng bộ hóa với chu kỳ làm mới màn hình của trình duyệt, giúp hoạt ảnh mượt mà hơn và tiết kiệm pin hơn.",
+      "B. `setTimeout` và `setInterval` luôn tốt hơn vì chúng cho phép kiểm soát chính xác thời gian giữa các khung hình.",
+      "C. `requestAnimationFrame` chỉ nên dùng cho các hoạt ảnh không quan trọng, còn `setTimeout` cho các hoạt ảnh ưu tiên cao.",
+      "D. Không có sự khác biệt đáng kể giữa ba phương pháp này đối với hoạt ảnh."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`requestAnimationFrame` được thiết kế đặc biệt cho hoạt ảnh. Trình duyệt sẽ gọi callback của nó ngay trước khi chu kỳ làm mới màn hình tiếp theo, đảm bảo rằng hoạt ảnh được đồng bộ hóa với tốc độ khung hình của màn hình (thường là 60fps), dẫn đến hoạt ảnh mượt mà hơn và tránh 'jank'. Nó cũng tự động dừng khi tab không hoạt động, giúp tiết kiệm pin. `setTimeout` và `setInterval` không có những lợi ích này và có thể gây ra hoạt ảnh giật cục hoặc chạy khi không cần thiết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đội của bạn đang phát triển một ứng dụng React có quy mô trung bình và cần quản lý trạng thái toàn cục. Các thành viên đang tranh luận giữa việc sử dụng React Context API cho tất cả trạng thái toàn cục hay chuyển sang một thư viện như Redux. Trong trường hợp nào, việc tiếp tục sử dụng React Context API là một quyết định kiến trúc hợp lý, và khi nào nên cân nhắc Redux?",
+    "options": [
+      "A. Context API hợp lý khi trạng thái toàn cục ít thay đổi hoặc chỉ được sử dụng bởi một số ít component con. Nên cân nhắc Redux khi trạng thái toàn cục phức tạp, thay đổi thường xuyên, và cần công cụ debug mạnh mẽ cũng như khả năng mở rộng cho đội lớn.",
+      "B. Context API luôn tốt hơn Redux vì nó không yêu cầu thư viện bên thứ ba và giảm boilerplate.",
+      "C. Redux luôn là lựa chọn tốt hơn cho mọi ứng dụng có trạng thái toàn cục, bất kể quy mô hay độ phức tạp.",
+      "D. Context API chỉ nên được dùng cho các theme hoặc ngôn ngữ, không bao giờ cho dữ liệu ứng dụng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "React Context API rất phù hợp cho trạng thái toàn cục ít thay đổi (ví dụ: theme, thông tin người dùng đăng nhập) hoặc khi provider và consumer không quá xa nhau trong cây component. Tuy nhiên, khi trạng thái toàn cục trở nên phức tạp, thay đổi thường xuyên, và cần các tính năng như undo/redo, logging, hoặc dễ dàng debug cho một đội lớn, Redux (đặc biệt là với Redux Toolkit) sẽ cung cấp một giải pháp mạnh mẽ, có cấu trúc và công cụ tốt hơn để quản lý độ phức tạp đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang debug một ứng dụng web và nghi ngờ rằng một hàm JavaScript cụ thể đang tiêu tốn quá nhiều thời gian CPU, gây ra hiện tượng giật lag (jank). Công cụ nào trong Chrome DevTools giúp bạn xác định chính xác hàm nào đang là 'nút cổ chai' về hiệu suất CPU?",
+    "options": [
+      "A. Performance panel (tab Main) với chế độ 'Record' để ghi lại hoạt động của CPU và sau đó phân tích biểu đồ 'Flame Chart' hoặc 'Bottom-Up'.",
+      "B. Network panel để kiểm tra thời gian tải tài nguyên và phản hồi API.",
+      "C. Sources panel để đặt breakpoint và bước qua từng dòng code.",
+      "D. Console panel để xem các thông báo lỗi và cảnh báo."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Performance panel là công cụ chính để phân tích hiệu suất runtime của ứng dụng. Bằng cách ghi lại một phiên hoạt động, bạn có thể xem biểu đồ 'Flame Chart' hoặc 'Bottom-Up' trong tab 'Main' để xác định chính xác các hàm JavaScript đang chiếm nhiều thời gian CPU nhất, từ đó tìm ra các điểm nghẽn hiệu suất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một ứng dụng Frontend cấp doanh nghiệp với kiến trúc micro-frontend, bạn cần quản lý trạng thái xác thực người dùng (user authentication state) xuyên suốt các micro-frontend được triển khai độc lập. Chiến lược nào sau đây là hiệu quả và an toàn nhất để đồng bộ hóa trạng thái này?",
+    "options": [
+      "A. Lưu trạng thái xác thực vào Local Storage và mỗi micro-frontend tự đọc/ghi trực tiếp.",
+      "B. Sử dụng Broadcast Channel API để các micro-frontend giao tiếp và đồng bộ trạng thái.",
+      "C. Triển khai một dịch vụ xác thực (Authentication Service) dùng Shared Worker hoặc Service Worker để quản lý trạng thái tập trung và cung cấp API cho các micro-frontend.",
+      "D. Truyền trạng thái xác thực qua URL params hoặc query strings khi điều hướng giữa các micro-frontend."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Shared Worker hoặc Service Worker cung cấp một môi trường tập trung, an toàn và bền bỉ để quản lý trạng thái xác thực, tránh các vấn đề về bảo mật của Local Storage (XSS) và giới hạn của Broadcast Channel API (chỉ hoạt động giữa các tab cùng origin, không bền vững khi đóng tab). Truyền qua URL không an toàn và không hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng React sử dụng Redux Toolkit để quản lý trạng thái, bạn nhận thấy hiệu suất giảm sút đáng kể do các component re-render không cần thiết, đặc biệt khi cập nhật các phần tử sâu trong cây trạng thái lớn. Bạn nghi ngờ vấn đề nằm ở việc sử dụng selector. Giải pháp nào sau đây là tối ưu nhất để khắc phục tình trạng này?",
+    "options": [
+      "A. Sử dụng `useSelector` mà không cần memoization, vì Redux Toolkit đã tối ưu hóa.",
+      "B. Đảm bảo tất cả các selector được tạo bằng `createSelector` từ Reselect để memoize kết quả và chỉ re-render khi dữ liệu đầu vào thay đổi thực sự.",
+      "C. Chuyển toàn bộ trạng thái sang `useState` và `useContext` để tránh Redux overhead.",
+      "D. Luôn truyền toàn bộ trạng thái Redux xuống tất cả các component con thông qua props."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng `createSelector` từ Reselect (đã tích hợp trong Redux Toolkit) giúp memoize các selector. Điều này đảm bảo rằng component chỉ re-render khi giá trị được chọn từ trạng thái thay đổi một cách sâu sắc (deep equality), chứ không phải chỉ khi tham chiếu của trạng thái thay đổi, từ đó cải thiện hiệu suất đáng kể.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một hệ thống frontend phức tạp, bạn cần thiết kế một cơ chế xử lý lỗi toàn cầu (global error handling) để thu thập và gửi các lỗi không mong muốn về máy chủ. Bạn cũng muốn đảm bảo trải nghiệm người dùng không bị gián đoạn hoàn toàn khi một component con gặp lỗi. Cách tiếp cận nào sau đây là toàn diện và mạnh mẽ nhất?",
+    "options": [
+      "A. Chỉ sử dụng `window.onerror` và `window.onunhandledrejection` để bắt tất cả các lỗi và Promise rejection.",
+      "B. Triển khai Error Boundaries (trong React) hoặc các cơ chế tương tự trong framework khác, kết hợp với các trình lắng nghe lỗi toàn cầu (`window.onerror`, `window.onunhandledrejection`) và một dịch vụ logging tập trung.",
+      "C. Bao bọc mọi hàm async bằng `try...catch` và gửi lỗi thủ công.",
+      "D. Hiển thị một thông báo lỗi chung cho toàn bộ ứng dụng mỗi khi có lỗi xảy ra."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Boundaries (hoặc các cơ chế tương tự) cho phép cô lập lỗi trong một phần UI, ngăn chặn sự cố lan rộng ra toàn ứng dụng và hiển thị UI dự phòng. Kết hợp với các trình lắng nghe lỗi toàn cầu và dịch vụ logging, đây là một chiến lược toàn diện để vừa cải thiện trải nghiệm người dùng vừa thu thập thông tin lỗi đầy đủ.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang phát triển một thư viện UI component dùng TypeScript. Bạn cần tạo một component `Table` có thể nhận dữ liệu của nhiều kiểu khác nhau và hiển thị các cột tương ứng, đồng thời cung cấp tính năng sắp xếp (sorting) và lọc (filtering) mà vẫn đảm bảo an toàn kiểu (type-safety) cho các hàm callback. Cách tiếp cận nào sau đây sử dụng Generics hiệu quả nhất?",
+    "options": [
+      "A. Sử dụng `any` cho kiểu dữ liệu của `Table` để linh hoạt nhất.",
+      "B. Định nghĩa `Table` với một generic type parameter `TData` để đại diện cho kiểu của mỗi hàng dữ liệu, và sử dụng `keyof TData` cho các prop liên quan đến cột và sắp xếp.",
+      "C. Tạo một component `Table` riêng cho mỗi kiểu dữ liệu khác nhau.",
+      "D. Chỉ sử dụng `interface` cho dữ liệu và bỏ qua Generics."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng generic type parameter `TData` cho phép component `Table` làm việc với bất kỳ kiểu dữ liệu nào một cách type-safe. `keyof TData` đảm bảo rằng các prop như `columnKey` hoặc `sortField` chỉ chấp nhận các khóa hợp lệ của `TData`, cung cấp an toàn kiểu mạnh mẽ cho các hàm callback như `onSort` hoặc `onFilter`.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một ứng dụng web phức tạp, bạn cần thực hiện một tác vụ tính toán chuyên sâu (CPU-intensive) mà không làm đóng băng giao diện người dùng. Tác vụ này liên quan đến việc xử lý một lượng lớn dữ liệu nhận được từ API. Giải pháp kiến trúc nào sau đây là phù hợp nhất để duy trì phản hồi UI?",
+    "options": [
+      "A. Chạy tác vụ này trực tiếp trên luồng chính (main thread) và hy vọng trình duyệt sẽ tối ưu.",
+      "B. Sử dụng `setTimeout(..., 0)` để chia nhỏ tác vụ thành các phần nhỏ và chạy chúng không đồng bộ.",
+      "C. Tải tác vụ tính toán vào một Web Worker để chạy trên một luồng riêng biệt, sau đó gửi kết quả trở lại luồng chính.",
+      "D. Sử dụng `requestAnimationFrame` để thực hiện tính toán trong mỗi khung hình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Web Worker cho phép chạy các script trong một luồng nền riêng biệt, tách biệt hoàn toàn khỏi luồng chính của UI. Điều này ngăn chặn các tác vụ tính toán nặng làm đóng băng giao diện người dùng, đảm bảo ứng dụng vẫn phản hồi mượt mà. `setTimeout` chỉ hoãn tác vụ, không chạy nó trên luồng riêng. `requestAnimationFrame` dùng cho animation, không phải tính toán nặng.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang debug một ứng dụng JavaScript có vấn đề về rò rỉ bộ nhớ (memory leak). Ứng dụng này đã chạy trong một thời gian dài và bạn nhận thấy mức sử dụng bộ nhớ tăng liên tục. Công cụ nào trong Chrome DevTools sẽ hữu ích nhất để xác định nguyên nhân gốc rễ của rò rỉ bộ nhớ?",
+    "options": [
+      "A. Tab 'Network' để kiểm tra các yêu cầu HTTP.",
+      "B. Tab 'Performance' để phân tích hiệu suất CPU và rendering.",
+      "C. Tab 'Memory' (Heap Snapshot và Allocation instrumentation) để chụp và phân tích ảnh chụp bộ nhớ, so sánh giữa các thời điểm khác nhau.",
+      "D. Tab 'Console' để xem các thông báo lỗi và log."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tab 'Memory' trong Chrome DevTools, đặc biệt là các công cụ Heap Snapshot và Allocation instrumentation, được thiết kế để phân tích việc sử dụng bộ nhớ của ứng dụng. Chụp và so sánh các Heap Snapshot theo thời gian có thể giúp xác định các đối tượng đang được giữ lại trong bộ nhớ một cách không cần thiết, chỉ ra vị trí rò rỉ.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một hệ thống quản lý trạng thái cho một ứng dụng Frontend lớn, nơi nhiều thành phần cần truy cập và cập nhật cùng một dữ liệu. Bạn muốn đảm bảo rằng mọi cập nhật trạng thái đều là bất biến (immutable) để dễ dàng theo dõi thay đổi và tránh các lỗi do đột biến dữ liệu trực tiếp. Thư viện nào sau đây là lựa chọn tối ưu để thực hiện các cập nhật bất biến một cách hiệu quả và dễ dàng?",
+    "options": [
+      "A. Lodash để thực hiện `cloneDeep` mỗi khi cập nhật.",
+      "B. Immer.js để cho phép 'viết mã đột biến' trong khi vẫn tạo ra trạng thái bất biến mới.",
+      "C. Chỉ sử dụng toán tử spread (`...`) và các phương thức mảng như `map`, `filter`.",
+      "D. Trực tiếp sửa đổi các đối tượng trạng thái và dựa vào `Object.freeze()`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Immer.js cho phép bạn viết mã cập nhật trạng thái theo cách đột biến (mutative-looking code), nhưng nó sẽ tự động tạo ra một bản sao bất biến mới của trạng thái gốc, chỉ đột biến các phần tử cần thiết và chia sẻ cấu trúc (structural sharing) với các phần không thay đổi. Điều này giúp đơn giản hóa code cập nhật trạng thái phức tạp trong khi vẫn duy trì tính bất biến và hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng Frontend gửi nhiều yêu cầu API đến một dịch vụ backend có thể không ổn định. Để cải thiện khả năng chịu lỗi và trải nghiệm người dùng, bạn quyết định triển khai một cơ chế 'circuit breaker' (ngắt mạch) ở phía client. Mô hình nào sau đây mô tả đúng cách hoạt động của Circuit Breaker pattern trong ngữ cảnh Frontend?",
+    "options": [
+      "A. Khi một yêu cầu API thất bại, ngay lập tức thử lại yêu cầu đó nhiều lần cho đến khi thành công.",
+      "B. Theo dõi số lượng yêu cầu thất bại; nếu tỷ lệ thất bại vượt quá ngưỡng, tạm thời ngừng gửi yêu cầu đến dịch vụ đó và chuyển sang một cơ chế dự phòng hoặc hiển thị thông báo lỗi, sau đó định kỳ kiểm tra lại dịch vụ đã phục hồi chưa.",
+      "C. Chỉ đơn giản là hiển thị thông báo lỗi cho người dùng mỗi khi một yêu cầu API thất bại.",
+      "D. Đợi một khoảng thời gian cố định sau mỗi lỗi trước khi thử lại yêu cầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Circuit Breaker pattern ở phía client theo dõi sức khỏe của một dịch vụ. Khi phát hiện nhiều lỗi liên tiếp (mạch 'mở'), nó sẽ ngăn chặn các yêu cầu tiếp theo đến dịch vụ đó để tránh làm quá tải dịch vụ đang gặp sự cố và cho phép nó phục hồi. Sau một thời gian, nó sẽ thử một yêu cầu (mạch 'nửa mở') để kiểm tra xem dịch vụ đã sẵn sàng chưa, và nếu thành công, sẽ đóng mạch lại.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang làm việc trên một ứng dụng React/TypeScript và cần tạo một component `Button` có thể nhận các props khác nhau tùy thuộc vào loại button (ví dụ: `link` button cần `href`, `submit` button không cần). Bạn muốn đảm bảo an toàn kiểu tại compile-time. Cách tiếp cận nào sử dụng Conditional Types hiệu quả nhất?",
+    "options": [
+      "A. Định nghĩa một interface duy nhất với tất cả các props có thể có và đánh dấu chúng là `optional`.",
+      "B. Sử dụng `any` cho các props để linh hoạt tối đa.",
+      "C. Sử dụng Discriminated Unions kết hợp với Conditional Types để định nghĩa các tập hợp props cụ thể cho từng loại button.",
+      "D. Tạo một component `Button` riêng cho mỗi loại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Discriminated Unions (ví dụ: `type ButtonProps = { type: 'submit' } & SubmitProps | { type: 'link' } & LinkProps;`) kết hợp với Conditional Types cho phép bạn định nghĩa các kiểu props khác nhau dựa trên giá trị của một 'discriminant' prop (ví dụ: `type`). Điều này cung cấp an toàn kiểu mạnh mẽ, giúp TypeScript hiểu rõ các prop nào có sẵn tùy thuộc vào `type` của button, tránh lỗi runtime và cải thiện trải nghiệm phát triển.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một ứng dụng web hiệu suất cao, bạn cần tối ưu hóa việc cập nhật DOM. Bạn có một danh sách lớn các phần tử cần được cập nhật dựa trên dữ liệu mới và muốn đảm bảo các thay đổi này được thực hiện mượt mà nhất có thể, tránh jank. Cơ chế nào của trình duyệt nên được ưu tiên sử dụng để lên lịch cập nhật DOM?",
+    "options": [
+      "A. `setTimeout(updateDOM, 0)` để cập nhật ngay lập tức.",
+      "B. `setInterval(updateDOM, 16)` để cập nhật đều đặn.",
+      "C. `requestAnimationFrame(updateDOM)` để đồng bộ hóa cập nhật với chu kỳ làm mới của trình duyệt.",
+      "D. Trực tiếp sửa đổi DOM trong một vòng lặp `for`."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`requestAnimationFrame` được thiết kế để lên lịch các tác vụ liên quan đến animation và cập nhật DOM sao cho chúng được thực hiện ngay trước khi trình duyệt thực hiện chu kỳ vẽ tiếp theo. Điều này giúp đảm bảo các thay đổi DOM được đồng bộ hóa với tốc độ khung hình của màn hình, mang lại trải nghiệm mượt mà, tránh hiện tượng jank. Các phương pháp khác có thể gây ra hiện tượng giật lag hoặc không hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang phát triển một ứng dụng Frontend với nhiều API call không đồng bộ. Người dùng có thể nhanh chóng chuyển đổi giữa các trang hoặc thực hiện các hành động liên tiếp, dẫn đến các yêu cầu API cũ có thể hoàn thành sau khi người dùng đã không còn quan tâm đến kết quả của chúng nữa, gây ra lỗi hoặc cập nhật trạng thái không mong muốn. Kỹ thuật nào sau đây là hiệu quả nhất để xử lý các 'race conditions' và hủy bỏ các yêu cầu API không còn cần thiết?",
+    "options": [
+      "A. Bỏ qua các yêu cầu cũ và chỉ xử lý kết quả của yêu cầu cuối cùng.",
+      "B. Sử dụng `AbortController` để hủy bỏ các yêu cầu `fetch` đang chờ xử lý khi có yêu cầu mới hoặc khi component unmount.",
+      "C. Đợi tất cả các yêu cầu hoàn thành trước khi cập nhật UI.",
+      "D. Sử dụng `setTimeout` để trì hoãn việc xử lý các phản hồi API."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`AbortController` cung cấp một cơ chế tiêu chuẩn để hủy bỏ các yêu cầu `fetch` đang chờ xử lý. Bằng cách liên kết một `AbortSignal` với mỗi `fetch` request và sau đó gọi `abort()` trên `AbortController` tương ứng khi một yêu cầu trở nên lỗi thời, bạn có thể ngăn chặn các phản hồi không mong muốn cập nhật trạng thái và giải phóng tài nguyên mạng, giải quyết hiệu quả các race conditions.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án TypeScript lớn, bạn cần mở rộng các thuộc tính của đối tượng `Window` toàn cục để thêm một số biến hoặc hàm tùy chỉnh mà thư viện của bạn sử dụng. Cách tiếp cận nào là an toàn kiểu và được khuyến nghị nhất trong TypeScript?",
+    "options": [
+      "A. Sử dụng `(window as any).myCustomProperty = 'value';` để bỏ qua kiểm tra kiểu.",
+      "B. Khai báo một interface `Window` mới trong một file `.d.ts` và sử dụng declaration merging để thêm các thuộc tính mới.",
+      "C. Tạo một biến toàn cục mới không liên quan đến `window`.",
+      "D. Đặt các thuộc tính tùy chỉnh vào một đối tượng riêng biệt và gán nó cho `window`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Declaration merging là một tính năng mạnh mẽ của TypeScript cho phép bạn mở rộng các interface và module đã tồn tại. Bằng cách khai báo một interface `Window` trong một file `.d.ts` (ví dụ: `declare global { interface Window { myCustomProperty: string; } }`), TypeScript sẽ tự động hợp nhất định nghĩa này với interface `Window` gốc, cho phép bạn truy cập `window.myCustomProperty` một cách an toàn kiểu.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang tối ưu hóa hiệu suất của một ứng dụng web và nhận thấy một số tác vụ JavaScript tính toán nặng đang gây ra hiện tượng 'long tasks' (tác vụ dài) làm tắc nghẽn luồng chính và gây ra jank. Để xác định chính xác nguyên nhân và vị trí của các tác vụ này, công cụ nào trong Chrome DevTools là hiệu quả nhất?",
+    "options": [
+      "A. Tab 'Console' để kiểm tra các lỗi.",
+      "B. Tab 'Sources' để xem mã nguồn.",
+      "C. Tab 'Performance' (ghi lại hồ sơ hiệu suất) để phân tích Flame Chart, Main Thread activity và Long Tasks.",
+      "D. Tab 'Application' để kiểm tra Local Storage."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tab 'Performance' trong Chrome DevTools là công cụ chính để phân tích hiệu suất runtime của ứng dụng. Bằng cách ghi lại hồ sơ hiệu suất, bạn có thể xem Flame Chart của luồng chính, xác định các 'long tasks' (thường được đánh dấu bằng cờ đỏ), và đi sâu vào các chức năng JavaScript cụ thể đang tiêu tốn nhiều thời gian nhất, giúp xác định nguyên nhân gốc rễ của jank.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một ứng dụng Frontend sử dụng Redux, bạn cần quản lý một phần trạng thái phức tạp mà có thể được cập nhật từ nhiều nguồn khác nhau và cần đảm bảo tính bất biến. Bạn muốn tránh việc viết quá nhiều boilerplate code cho các reducer. Thư viện nào sau đây được Redux Toolkit khuyến nghị để đơn giản hóa việc quản lý trạng thái bất biến?",
+    "options": [
+      "A. Immutable.js để tạo các cấu trúc dữ liệu bất biến.",
+      "B. Immer.js để cho phép các reducer 'đột biến' trạng thái cục bộ một cách an toàn, tự động tạo ra trạng thái bất biến mới.",
+      "C. Lodash để thực hiện các phép nhân bản sâu (deep cloning).",
+      "D. Chỉ sử dụng toán tử spread (`...`) và các phương thức mảng/đối tượng gốc của JavaScript."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Redux Toolkit tích hợp và khuyến nghị sử dụng Immer.js. Immer.js cho phép bạn viết các reducer theo phong cách 'đột biến' (mutative style) trên một 'draft state' cục bộ. Sau đó, Immer sẽ tự động sản xuất một trạng thái mới, bất biến dựa trên các thay đổi của draft, đồng thời tối ưu hóa bằng cách chia sẻ cấu trúc với trạng thái cũ. Điều này giúp giảm đáng kể boilerplate và làm cho code reducer dễ đọc và viết hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một ứng dụng Frontend chuyên sâu về dữ liệu, yêu cầu xử lý và hiển thị hàng ngàn bản ghi một cách nhanh chóng. Để duy trì hiệu suất UI mượt mà, bạn cần đảm bảo rằng các tác vụ đọc/ghi trạng thái không gây ra tắc nghẽn. Mô hình quản lý trạng thái nào sau đây là phù hợp nhất cho các ứng dụng có yêu cầu hiệu suất cao và dữ liệu lớn?",
+    "options": [
+      "A. Sử dụng `useState` và `useContext` của React cho tất cả trạng thái.",
+      "B. Redux với `redux-thunk` và các selector không được memoize.",
+      "C. Các thư viện quản lý trạng thái dựa trên nguyên tắc atomic/recoil (ví dụ: Jotai, Recoil, Zustand) với các selector được memoize và cập nhật tối ưu.",
+      "D. Trực tiếp thao tác DOM để cập nhật dữ liệu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các thư viện quản lý trạng thái dựa trên nguyên tắc atomic/recoil như Jotai, Recoil, Zustand được thiết kế để tối ưu hóa hiệu suất cho các ứng dụng có dữ liệu lớn và cập nhật thường xuyên. Chúng cho phép bạn định nghĩa các 'atom' hoặc 'slice' trạng thái nhỏ, độc lập và cung cấp cơ chế để chỉ re-render các component thực sự phụ thuộc vào trạng thái đã thay đổi, thường thông qua các selector được memoize, giúp tránh re-render không cần thiết và duy trì UI mượt mà.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng Frontend cần thực hiện một chuỗi các yêu cầu API phụ thuộc lẫn nhau. Ví dụ: lấy ID người dùng, sau đó lấy thông tin chi tiết của người dùng đó, và cuối cùng lấy danh sách bài viết của người dùng. Cách tiếp cận nào sử dụng `async/await` hiệu quả và dễ đọc nhất để quản lý luồng bất đồng bộ này?",
+    "options": [
+      "A. Sử dụng các callback lồng nhau (callback hell).",
+      "B. Sử dụng chuỗi Promise (`.then().then().catch()`).",
+      "C. Sử dụng `async/await` với `try...catch` để xử lý lỗi một cách rõ ràng và tuần tự.",
+      "D. Gửi tất cả các yêu cầu cùng một lúc và xử lý kết quả khi chúng đến."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`async/await` cung cấp một cú pháp đồng bộ để viết mã bất đồng bộ, giúp cho các chuỗi Promise phức tạp trở nên dễ đọc và dễ bảo trì hơn rất nhiều. Kết hợp với `try...catch`, nó cho phép xử lý lỗi một cách rõ ràng và kiểm soát luồng thực thi tuần tự của các yêu cầu phụ thuộc.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang làm việc trên một dự án Frontend lớn với nhiều nhóm phát triển và nhiều repository. Để đảm bảo chất lượng code và tính nhất quán trên toàn bộ dự án, bạn cần thiết lập một quy trình kiểm tra chất lượng code tự động trong CI/CD. Công cụ nào sau đây là cần thiết nhất để thực hiện kiểm tra code style, lỗi tiềm ẩn và các quy tắc lập trình tùy chỉnh?",
+    "options": [
+      "A. Chỉ sử dụng trình biên dịch TypeScript để kiểm tra lỗi kiểu.",
+      "B. Sử dụng ESLint (kết hợp với Prettier) để định dạng code và kiểm tra các quy tắc lập trình, và tích hợp chúng vào Git hooks và CI/CD pipeline.",
+      "C. Chỉ dựa vào code review thủ công.",
+      "D. Sử dụng một công cụ kiểm tra hiệu suất runtime."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ESLint là một công cụ phân tích tĩnh mạnh mẽ giúp tìm lỗi tiềm ẩn, enforce code style và các quy tắc lập trình. Khi kết hợp với Prettier (để định dạng code tự động), chúng tạo thành một bộ công cụ mạnh mẽ để đảm bảo chất lượng và tính nhất quán của code trên toàn bộ dự án. Tích hợp vào Git hooks (`lint-staged`) và CI/CD pipeline đảm bảo mọi code commit đều tuân thủ các tiêu chuẩn đã định.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang phát triển một tính năng mới trong ứng dụng Frontend và muốn áp dụng Test-Driven Development (TDD). Tính năng này liên quan đến việc xử lý và chuyển đổi dữ liệu phức tạp nhận được từ một API. Bước đầu tiên và quan trọng nhất trong quy trình TDD là gì?",
+    "options": [
+      "A. Viết mã nguồn của tính năng trước, sau đó viết test.",
+      "B. Viết một test thất bại (red test) để định nghĩa hành vi mong muốn của tính năng.",
+      "C. Chạy tất cả các test hiện có để đảm bảo chúng vẫn pass.",
+      "D. Thiết kế giao diện người dùng cho tính năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bước đầu tiên của TDD là 'Red' – viết một test thất bại. Test này phải thất bại vì tính năng chưa được triển khai hoặc chưa đúng. Mục đích là để định nghĩa rõ ràng hành vi mong muốn của tính năng từ góc độ của người dùng hoặc hệ thống, trước khi viết bất kỳ mã triển khai nào. Điều này đảm bảo rằng bạn chỉ viết mã cần thiết để vượt qua test và đáp ứng yêu cầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn cần tạo một hàm tiện ích TypeScript có thể nhận vào một đối tượng bất kỳ và trả về một đối tượng mới chỉ chứa các thuộc tính được đánh dấu là `readonly` trong kiểu gốc của nó. Utility Type nào sau đây là nền tảng tốt nhất để xây dựng kiểu cho hàm này?",
+    "options": [
+      "A. `Partial<T>`",
+      "B. `Required<T>`",
+      "C. `Readonly<T>`",
+      "D. `Pick<T, K>` kết hợp với Conditional Types và Mapped Types để lọc các thuộc tính `readonly`."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Để chỉ lấy các thuộc tính `readonly`, bạn cần một sự kết hợp của `Pick` (hoặc `Omit`) với Mapped Types và Conditional Types. `Readonly<T>` chỉ đơn thuần làm cho T trở thành readonly, không lọc. `Partial` làm cho tất cả thuộc tính tùy chọn, `Required` làm cho tất cả thuộc tính bắt buộc. Một Utility Type tùy chỉnh sẽ cần lặp qua các thuộc tính của `T` và kiểm tra xem chúng có phải là `readonly` hay không bằng cách so sánh `T[P]` với `Readonly<T>[P]`.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Xem xét đoạn mã JavaScript sau: ```javascript function createCounter() { let count = 0; return { increment: function() { count++; console.log(count); }, decrement: function() { count--; console.log(count); }, getCount: function() { return count; } }; } const counter1 = createCounter(); const counter2 = createCounter(); counter1.increment(); // 1 counter2.increment(); // 1 counter1.increment(); // 2 ``` Khái niệm Closure đóng vai trò gì trong việc cho phép `counter1` và `counter2` duy trì trạng thái `count` độc lập?",
+    "options": [
+      "A. Closure cho phép `count` trở thành một biến toàn cục, có thể truy cập từ bất cứ đâu.",
+      "B. Mỗi lần `createCounter()` được gọi, một môi trường lexical mới (bao gồm biến `count`) được tạo ra, và các hàm `increment`, `decrement`, `getCount` đóng lại (close over) môi trường đó, tạo ra một 'bản sao' riêng của `count` cho mỗi đối tượng counter.",
+      "C. Closure là một cách để biến `count` thành một hằng số.",
+      "D. Closure chỉ áp dụng cho các hàm bất đồng bộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi khi `createCounter()` được gọi, nó tạo ra một phạm vi thực thi mới và một biến `count` mới bên trong phạm vi đó. Các hàm bên trong (`increment`, `decrement`, `getCount`) được trả về và 'đóng lại' (close over) biến `count` của phạm vi mà chúng được tạo ra. Điều này có nghĩa là mỗi đối tượng `counter` (ví dụ: `counter1` và `counter2`) có một biến `count` riêng biệt và độc lập, được duy trì thông qua cơ chế closure.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang làm việc với một API trả về dữ liệu có thể có nhiều cấu trúc khác nhau dựa trên một trường 'type' cụ thể (ví dụ: `type: 'user'` có `name` và `email`, `type: 'product'` có `title` và `price`). Trong TypeScript, làm thế nào bạn có thể kiểm tra kiểu an toàn để xử lý các cấu trúc dữ liệu khác nhau này?",
+    "options": [
+      "A. Sử dụng `if (data.type === 'user') { ... }` và TypeScript sẽ tự động thu hẹp kiểu.",
+      "B. Sử dụng `any` để bỏ qua kiểm tra kiểu.",
+      "C. Định nghĩa một Discriminated Union Type (kiểu liên hợp phân biệt) và sử dụng Type Guards (kiểm tra kiểu) dựa trên trường 'type'.",
+      "D. Tạo một interface riêng cho mỗi cấu trúc dữ liệu và ép kiểu thủ công."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Discriminated Union Types là một mô hình mạnh mẽ trong TypeScript để xử lý các kiểu dữ liệu có cấu trúc khác nhau nhưng chia sẻ một trường phân biệt chung (discriminant property). Bằng cách định nghĩa một union của các interface, mỗi interface có một giá trị cụ thể cho trường 'type', TypeScript có thể sử dụng kiểm tra `if` hoặc `switch` trên trường 'type' để tự động thu hẹp kiểu (type narrowing) và cung cấp an toàn kiểu cho các thuộc tính cụ thể của mỗi cấu trúc.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một ứng dụng Frontend, bạn cần thực hiện các yêu cầu API đến một dịch vụ backend có thể gặp sự cố tạm thời (ví dụ: lỗi mạng, dịch vụ quá tải). Để cải thiện độ tin cậy, bạn muốn triển khai một cơ chế thử lại (retry mechanism) với 'exponential backoff' ở phía client. Chiến lược nào sau đây mô tả đúng cách hoạt động của retry với exponential backoff?",
+    "options": [
+      "A. Thử lại yêu cầu ngay lập tức một số lần cố định nếu thất bại.",
+      "B. Thử lại yêu cầu sau một khoảng thời gian chờ cố định giữa mỗi lần thử lại.",
+      "C. Khi một yêu cầu thất bại, thử lại sau một khoảng thời thời gian chờ tăng dần theo cấp số nhân (ví dụ: 1s, 2s, 4s, 8s, ...), có thể kết hợp với jitter (ngẫu nhiên hóa nhỏ) để tránh hiệu ứng 'thundering herd'.",
+      "D. Chỉ thử lại yêu cầu một lần duy nhất nếu thất bại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Retry với exponential backoff là một chiến lược mạnh mẽ cho các lỗi tạm thời. Thay vì thử lại ngay lập tức hoặc sau một khoảng thời gian cố định, nó tăng dần thời gian chờ giữa các lần thử lại. Điều này giúp tránh làm quá tải dịch vụ đang gặp sự cố và cho phép nó có thời gian phục hồi. Thêm jitter (một phần nhỏ ngẫu nhiên vào thời gian chờ) giúp tránh tất cả các client thử lại cùng một lúc.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang phân tích hiệu suất của một ứng dụng web và phát hiện ra rằng các tác vụ JavaScript đang chiếm quá nhiều thời gian trên luồng chính, dẫn đến độ trễ trong phản hồi UI. Bạn sử dụng Chrome DevTools và nhận thấy nhiều 'microtask' và 'macrotask' đang được xử lý. Để tối ưu hóa, điều quan trọng nhất cần hiểu về Event Loop là gì?",
+    "options": [
+      "A. Microtask queue luôn được ưu tiên xử lý hoàn toàn trước khi bất kỳ macrotask nào được chọn từ macrotask queue.",
+      "B. Macrotask và microtask được xử lý theo thứ tự ngẫu nhiên.",
+      "C. Chỉ có một loại task queue duy nhất trong Event Loop.",
+      "D. Tất cả các tác vụ JavaScript đều là microtask."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Hiểu biết sâu sắc về Event Loop là rất quan trọng. Quy tắc cơ bản là mỗi khi một macrotask (ví dụ: `setTimeout`, `setInterval`, I/O) hoàn thành, trình duyệt sẽ kiểm tra và thực thi TẤT CẢ các microtask (ví dụ: Promise callbacks, `queueMicrotask`) trong microtask queue trước khi chuyển sang macrotask tiếp theo trong macrotask queue. Điều này có nghĩa là các microtask có thể trì hoãn việc render UI hoặc xử lý các macrotask khác nếu có quá nhiều microtask đang chờ xử lý.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống Frontend lớn, bạn cần triển khai một cơ chế ghi nhớ (memoization) cho một hàm tính toán phức tạp để tránh tính toán lại cùng một kết quả khi đầu vào không thay đổi. Bạn muốn đảm bảo rằng mỗi phiên bản của hàm được memoize hoạt động độc lập và không chia sẻ cache với các phiên bản khác. Cách tiếp cận nào sử dụng closures hiệu quả nhất để tạo hàm memoize này?",
+    "options": [
+      "A. Sử dụng một biến toàn cục để lưu trữ cache cho tất cả các hàm memoize.",
+      "B. Tạo một hàm Higher-Order Function (HOF) `memoize` nhận vào một hàm và trả về một hàm mới. HOF này sử dụng closure để tạo một cache riêng (ví dụ: `Map` hoặc `Object`) cho mỗi hàm được memoize.",
+      "C. Chỉ đơn giản là sao chép mã tính toán vào mỗi nơi cần sử dụng.",
+      "D. Sử dụng `localStorage` để lưu trữ kết quả của hàm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một Higher-Order Function (HOF) `memoize` sử dụng closure là cách tiếp cận lý tưởng. Khi `memoize` được gọi, nó tạo ra một phạm vi mới và một cache riêng (ví dụ: `Map`) bên trong phạm vi đó. Hàm mới được trả về (hàm được memoize) 'đóng lại' (close over) cache này, cho phép nó truy cập và quản lý cache riêng của mình mà không ảnh hưởng đến các hàm khác được memoize, đảm bảo tính độc lập và hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang thiết kế kiến trúc cho một ứng dụng Frontend với yêu cầu về khả năng mở rộng và dễ bảo trì cao. Bạn muốn áp dụng các nguyên tắc của 'Clean Architecture' hoặc 'Domain-Driven Design' để tách biệt logic nghiệp vụ khỏi các chi tiết triển khai UI và cơ sở hạ tầng. Trong ngữ cảnh TypeScript, chiến lược typing nào hỗ trợ tốt nhất cho việc này?",
+    "options": [
+      "A. Sử dụng `any` cho tất cả các kiểu dữ liệu để đạt được sự linh hoạt tối đa.",
+      "B. Tập trung vào việc tạo các kiểu dữ liệu `interface` và `type` rõ ràng cho các thực thể miền (domain entities), các trường hợp sử dụng (use cases), và các cổng (ports/adapters) để định nghĩa ranh giới và hợp đồng dữ liệu giữa các lớp.",
+      "C. Chỉ sử dụng các kiểu dữ liệu cơ bản như `string`, `number`, `boolean`.",
+      "D. Tránh sử dụng TypeScript và dựa vào JavaScript thuần túy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Clean Architecture hoặc Domain-Driven Design, việc định nghĩa các ranh giới và hợp đồng dữ liệu rõ ràng là cực kỳ quan trọng. TypeScript với `interface` và `type` cho phép bạn định nghĩa chính xác cấu trúc của các thực thể miền, đầu vào/đầu ra của các trường hợp sử dụng, và các giao diện của các cổng (ports) và adapters. Điều này giúp enforce sự tách biệt giữa các lớp, cải thiện khả năng đọc, bảo trì và kiểm thử của toàn bộ hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "JavaScript/TypeScript",
+    "category": "ANALYSIS"
+  }
+]

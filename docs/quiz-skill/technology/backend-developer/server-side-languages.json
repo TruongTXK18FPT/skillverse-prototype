@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong Node.js, 'Event Loop' đóng vai trò gì chính?",
+    "options": [
+      "A. Quản lý việc thực thi các tác vụ bất đồng bộ (async) và callback.",
+      "B. Tạo ra nhiều thread để xử lý các yêu cầu tính toán nặng.",
+      "C. Tối ưu hóa việc truy vấn cơ sở dữ liệu SQL.",
+      "D. Biên dịch mã nguồn JavaScript sang mã máy."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Node.js sử dụng mô hình single-threaded với Event Loop để điều phối các tác vụ I/O không chặn (non-blocking).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cơ chế Garbage Collection (GC) trong Java Spring Boot có mục đích chính là gì?",
+    "options": [
+      "A. Tự động biên dịch mã nguồn Java.",
+      "B. Tự động giải phóng bộ nhớ của các đối tượng không còn được sử dụng.",
+      "C. Quản lý các kết nối đến cơ sở dữ liệu.",
+      "D. Kiểm tra lỗi cú pháp trong quá trình runtime."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GC giúp lập trình viên không phải quản lý bộ nhớ thủ công bằng cách thu hồi vùng nhớ của các object không còn tham chiếu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong dự án Python Django, file 'requirements.txt' thường được dùng để làm gì?",
+    "options": [
+      "A. Lưu trữ cấu hình database của ứng dụng.",
+      "B. Chứa danh sách các thư viện phụ thuộc (dependencies) và phiên bản của chúng.",
+      "C. Định nghĩa các route cho ứng dụng web.",
+      "D. Lưu trữ các biến môi trường nhạy cảm như mật khẩu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "requirements.txt là file tiêu chuẩn để liệt kê các package cần thiết để chạy dự án Python.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Công cụ quản lý thư viện (Dependency Manager) mặc định của PHP/Laravel là gì?",
+    "options": [
+      "A. NPM",
+      "B. Pip",
+      "C. Composer",
+      "D. Maven"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Composer là công cụ quản lý các gói thư viện phổ biến nhất cho PHP và là thành phần cốt lõi của Laravel.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Từ khóa 'await' trong Node.js có tác dụng gì khi được đặt trước một Promise?",
+    "options": [
+      "A. Làm cho chương trình chạy nhanh hơn gấp đôi.",
+      "B. Dừng việc thực thi hàm async cho đến khi Promise đó được giải quyết (resolved).",
+      "C. Chuyển đổi Promise thành một mảng (Array).",
+      "D. Ngay lập tức hủy bỏ tác vụ đang thực hiện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "await tạm dừng thực thi code trong hàm async để chờ kết quả của Promise, giúp code trông giống như đồng bộ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Spring Boot, annotation nào được sử dụng để đánh dấu một class là một RESTful Controller?",
+    "options": [
+      "A. @Service",
+      "B. @Repository",
+      "C. @RestController",
+      "D. @Component"
+    ],
+    "correctAnswer": "C",
+    "explanation": "@RestController kết hợp @Controller và @ResponseBody, dùng để xây dựng các API trả về dữ liệu (thường là JSON).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi gặp lỗi HTTP 500 (Internal Server Error) trên backend, bước đầu tiên hợp lý nhất là gì?",
+    "options": [
+      "A. Cài đặt lại toàn bộ hệ điều hành server.",
+      "B. Kiểm tra log của ứng dụng trên server để tìm nguyên nhân cụ thể.",
+      "C. Xóa database và khởi tạo lại từ đầu.",
+      "D. Yêu cầu người dùng kiểm tra lại kết nối internet của họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi 500 là lỗi phía server, việc kiểm tra application logs là cách nhanh nhất để xác định traceback và nguyên nhân gây lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "ORM (Object-Relational Mapping) trong các framework như Django hay Laravel giúp ích gì cho lập trình viên?",
+    "options": [
+      "A. Tự động thiết kế giao diện người dùng (UI).",
+      "B. Thao tác với cơ sở dữ liệu thông qua ngôn ngữ lập trình thay vì viết SQL thuần.",
+      "C. Tăng tốc độ mạng giữa client và server.",
+      "D. Mã hóa toàn bộ dữ liệu trong database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ORM ánh xạ các bảng trong database thành các object trong code, giúp thao tác dữ liệu dễ dàng và an toàn hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao Node.js thường được coi là không phù hợp cho các tác vụ xử lý CPU nặng (như giải mã video)?",
+    "options": [
+      "A. Vì nó không hỗ trợ kết nối database.",
+      "B. Vì mô hình single-thread sẽ bị chặn (block) bởi tác vụ nặng, làm treo toàn bộ ứng dụng.",
+      "C. Vì JavaScript là ngôn ngữ quá cũ.",
+      "D. Vì Node.js tốn quá nhiều dung lượng ổ cứng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Do chạy trên một thread chính, nếu thread này bận xử lý CPU nặng, nó không thể xử lý các request khác cùng lúc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "File '.env' trong dự án Laravel dùng để làm gì?",
+    "options": [
+      "A. Chứa mã nguồn CSS của website.",
+      "B. Lưu trữ các cấu hình môi trường như thông tin kết nối database, API keys.",
+      "C. Định nghĩa các bảng trong database.",
+      "D. Chứa các file ảnh của dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": ".env lưu trữ các biến môi trường giúp tách biệt cấu hình giữa các môi trường dev, staging và production.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mức độ log (Log Level) nào thường được dùng để ghi lại thông tin chi tiết phục vụ việc tìm lỗi trong quá trình phát triển?",
+    "options": [
+      "A. ERROR",
+      "B. FATAL",
+      "C. DEBUG",
+      "D. INFO"
+    ],
+    "correctAnswer": "C",
+    "explanation": "DEBUG là mức độ log chi tiết nhất, dùng để theo dõi luồng chạy của code trong môi trường phát triển.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Python Django, 'Middleware' là gì?",
+    "options": [
+      "A. Một loại cơ sở dữ liệu mới.",
+      "B. Các hàm xử lý can thiệp vào quá trình request và response của ứng dụng.",
+      "C. Một thư viện để vẽ biểu đồ.",
+      "D. Trình biên dịch mã Python sang C++."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Middleware là các lớp xử lý nằm giữa request và response, thường dùng cho authentication, logging, security.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Global Interpreter Lock (GIL) trong Python có ảnh hưởng gì đến lập trình đa luồng (multi-threading)?",
+    "options": [
+      "A. Nó cho phép các thread chạy song song thực sự trên nhiều nhân CPU.",
+      "B. Nó ngăn cản nhiều thread thực thi mã Python cùng một lúc trên một tiến trình.",
+      "C. Nó làm cho database chạy nhanh hơn.",
+      "D. Nó tự động sửa lỗi cú pháp cho lập trình viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GIL đảm bảo chỉ có một thread thực thi bytecode Python tại một thời điểm, hạn chế hiệu năng đa luồng với tác vụ CPU-bound.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Unit Test trong phát triển Backend có mục đích chính là gì?",
+    "options": [
+      "A. Kiểm tra xem toàn bộ hệ thống có hoạt động tốt với nhau không.",
+      "B. Kiểm tra tính đúng đắn của từng hàm hoặc đơn vị mã nguồn nhỏ nhất một cách độc lập.",
+      "C. Kiểm tra tốc độ mạng của người dùng.",
+      "D. Kiểm tra giao diện người dùng trên điện thoại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Unit Test tập trung vào việc kiểm tra các đơn vị (unit) nhỏ nhất của code để đảm bảo logic cơ bản chính xác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Node.js, file 'package-lock.json' quan trọng vì lý do gì?",
+    "options": [
+      "A. Nó chứa mật khẩu của admin.",
+      "B. Nó cố định phiên bản chính xác của các thư viện để đảm bảo tính nhất quán trên các môi trường.",
+      "C. Nó giúp ứng dụng chạy nhanh hơn 50%.",
+      "D. Nó là file bắt buộc để chạy ứng dụng trên trình duyệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "package-lock.json ghi lại phiên bản cụ thể của cây thư viện phụ thuộc, tránh lỗi do cập nhật phiên bản thư viện không mong muốn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Maven và Gradle trong hệ sinh thái Java được gọi là gì?",
+    "options": [
+      "A. Web Server",
+      "B. IDE (Integrated Development Environment)",
+      "C. Build Automation Tools",
+      "D. Database Management Systems"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Maven và Gradle giúp tự động hóa việc quản lý thư viện, biên dịch và đóng gói ứng dụng Java.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Laravel, 'Migration' được sử dụng để làm gì?",
+    "options": [
+      "A. Di chuyển code từ server này sang server khác.",
+      "B. Quản lý phiên bản và thay đổi cấu trúc của cơ sở dữ liệu.",
+      "C. Nén ảnh tự động.",
+      "D. Gửi email cho người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Migration giống như 'version control' cho database, giúp định nghĩa và thay đổi bảng một cách có hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Blocking và Non-blocking I/O là gì?",
+    "options": [
+      "A. Blocking I/O luôn nhanh hơn Non-blocking I/O.",
+      "B. Blocking dừng việc thực thi cho đến khi I/O hoàn tất; Non-blocking cho phép tiếp tục làm việc khác trong khi chờ.",
+      "C. Non-blocking chỉ dùng được cho lưu trữ file, không dùng được cho mạng.",
+      "D. Blocking chỉ có trong ngôn ngữ PHP."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Blocking I/O khiến thread phải chờ đợi, trong khi Non-blocking tận dụng thời gian chờ để xử lý các tác vụ khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Java Spring Boot, Dependency Injection (DI) giúp giải quyết vấn đề gì?",
+    "options": [
+      "A. Giảm sự phụ thuộc cứng (tight coupling) giữa các lớp (classes).",
+      "B. Tăng tốc độ truy cập internet.",
+      "C. Tự động viết code cho lập trình viên.",
+      "D. Thay thế hoàn toàn việc sử dụng database."
+    ],
+    "correctAnswer": "A",
+    "explanation": "DI cho phép cung cấp các đối tượng phụ thuộc từ bên ngoài vào, giúp code linh hoạt và dễ kiểm thử (test) hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Node.js (Express framework), middleware 'app.use(express.json())' dùng để làm gì?",
+    "options": [
+      "A. Để kết nối với MongoDB.",
+      "B. Để phân tích (parse) thân hàm (body) của request có định dạng JSON.",
+      "C. Để mã hóa dữ liệu trả về cho client.",
+      "D. Để kiểm tra lỗi cú pháp JavaScript."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Middleware này giúp Express hiểu và chuyển đổi dữ liệu JSON gửi từ client thành object trong `req.body`.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao nên sử dụng khối 'try-catch' khi thực hiện các thao tác như đọc file hoặc gọi API?",
+    "options": [
+      "A. Để code trông chuyên nghiệp hơn.",
+      "B. Để chương trình không bị crash (dừng đột ngột) khi có lỗi xảy ra.",
+      "C. Để tăng tốc độ đọc file.",
+      "D. Vì ngôn ngữ lập trình bắt buộc phải có try-catch ở mọi dòng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Try-catch giúp bắt các ngoại lệ (exceptions) và xử lý chúng một cách chủ động thay vì để ứng dụng bị dừng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong PHP, 'Namespace' được sử dụng để làm gì?",
+    "options": [
+      "A. Để đặt tên cho database.",
+      "B. Để tránh xung đột tên giữa các class hoặc function có cùng tên.",
+      "C. Để lưu trữ mật khẩu người dùng.",
+      "D. Để tăng tốc độ thực thi của script."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Namespace giúp phân nhóm các code liên quan và ngăn chặn lỗi trùng tên class khi sử dụng nhiều thư viện khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng môi trường ảo (Virtual Environment) như 'venv' hay 'conda' lại quan trọng trong Python?",
+    "options": [
+      "A. Để máy tính chạy mát hơn.",
+      "B. Để cô lập các thư viện của từng dự án, tránh xung đột phiên bản giữa các dự án khác nhau.",
+      "C. Để tăng dung lượng ổ cứng.",
+      "D. Để có thể chạy Python mà không cần cài đặt Python."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi dự án có thể yêu cầu phiên bản thư viện khác nhau; môi trường ảo giúp quản lý chúng độc lập.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Spring Boot, phạm vi (scope) mặc định của một Bean là gì?",
+    "options": [
+      "A. Prototype",
+      "B. Request",
+      "C. Singleton",
+      "D. Session"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mặc định, Spring tạo ra duy nhất một instance của Bean (Singleton) và dùng chung cho toàn bộ ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi thế lớn nhất của các ngôn ngữ thông dịch (Interpreted) như Python/PHP so với ngôn ngữ biên dịch (Compiled) như Java/C++ trong quá trình phát triển là gì?",
+    "options": [
+      "A. Tốc độ thực thi luôn nhanh hơn.",
+      "B. Thời gian phản hồi (feedback loop) nhanh hơn vì không cần bước biên dịch dài dòng.",
+      "C. Bảo mật tốt hơn tuyệt đối.",
+      "D. Tiết kiệm bộ nhớ RAM hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ngôn ngữ thông dịch cho phép chạy code ngay lập tức sau khi sửa, giúp tăng tốc độ phát triển và thử nghiệm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Node.js, khi thực hiện một tác vụ tính toán nặng (CPU-intensive) như mã hóa dữ liệu lớn, cách tiếp cận nào là tối ưu nhất để không làm nghẽn Event Loop?",
+    "options": [
+      "A. Sử dụng hàm setImmediate() để chia nhỏ tác vụ.",
+      "B. Sử dụng Worker Threads để chạy tác vụ trên một luồng riêng biệt.",
+      "C. Sử dụng thư viện async/await để biến tác vụ thành bất đồng bộ.",
+      "D. Tăng số lượng Cluster instances của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Worker Threads cho phép chạy mã JavaScript song song trên các luồng khác nhau, giúp giải phóng Event Loop chính khỏi các tác vụ tính toán nặng. async/await chỉ giúp xử lý I/O không chặn, không giải quyết được vấn đề CPU-bound.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Java Spring Boot, tại sao việc gọi một phương thức có đánh dấu @Transactional từ một phương thức khác trong cùng một class lại thường không kích hoạt được Transaction?",
+    "options": [
+      "A. Spring Boot không hỗ trợ lồng Transaction trong cùng một Bean.",
+      "B. Do cơ chế Proxy của Spring, các lời gọi nội bộ (self-invocation) không đi qua lớp Proxy.",
+      "C. Phương thức được gọi phải là static mới có thể kích hoạt Transaction.",
+      "D. Cần phải cấu hình TransactionManager thủ công trong file application.properties."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spring AOP sử dụng Proxy để quản lý Transaction. Khi gọi một phương thức nội bộ trong cùng một class, nó sẽ bỏ qua Proxy và gọi trực tiếp đến đối tượng thực tế, dẫn đến việc các Aspect (như Transaction) không được áp dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Python Django, sự khác biệt chính giữa 'select_related' và 'prefetch_related' khi tối ưu truy vấn ORM là gì?",
+    "options": [
+      "A. select_related dùng cho quan hệ Many-to-Many, prefetch_related dùng cho ForeignKey.",
+      "B. select_related thực hiện SQL JOIN, prefetch_related thực hiện các truy vấn riêng biệt rồi kết hợp bằng Python.",
+      "C. select_related luôn nhanh hơn prefetch_related trong mọi trường hợp.",
+      "D. prefetch_related chỉ hoạt động với cơ sở dữ liệu PostgreSQL."
+    ],
+    "correctAnswer": "B",
+    "explanation": "select_related sử dụng JOIN trong SQL để lấy dữ liệu liên quan (thường là 1-1 hoặc N-1), trong khi prefetch_related thực hiện các truy vấn SQL riêng lẻ và thực hiện 'joining' ở mức ứng dụng (thường dùng cho N-N hoặc 1-N).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Laravel, khi sử dụng Service Container, sự khác biệt giữa phương thức 'bind' và 'singleton' là gì?",
+    "options": [
+      "A. bind tạo một instance mới mỗi khi được gọi, singleton trả về cùng một instance cho cả vòng đời ứng dụng.",
+      "B. singleton chỉ dùng cho các class tĩnh (static), bind dùng cho class thông thường.",
+      "C. bind chỉ dùng trong Service Provider, singleton có thể dùng ở bất cứ đâu.",
+      "D. Không có sự khác biệt về hiệu năng hay cách hoạt động giữa hai phương thức này."
+    ],
+    "correctAnswer": "A",
+    "explanation": "bind đăng ký một cách khởi tạo đối tượng và tạo mới mỗi lần resolve. singleton đảm bảo rằng đối tượng chỉ được tạo một lần duy nhất và các lần gọi sau sẽ nhận lại instance đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Node.js, nếu bạn cần đọc một file log dung lượng 10GB để tìm kiếm một chuỗi ký tự, phương pháp nào sử dụng bộ nhớ hiệu quả nhất?",
+    "options": [
+      "A. Sử dụng fs.readFileSync() để đọc toàn bộ file vào bộ nhớ đệm.",
+      "B. Sử dụng fs.readFile() với callback để xử lý bất đồng bộ.",
+      "C. Sử dụng fs.createReadStream() để đọc file theo từng chunk nhỏ.",
+      "D. Sử dụng child_process để gọi lệnh 'grep' của hệ điều hành."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Streams cho phép xử lý dữ liệu theo từng phần (chunks) mà không cần nạp toàn bộ file vào RAM, giúp tránh lỗi Out of Memory (OOM) khi làm việc với file lớn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Spring Boot, annotation @ControllerAdvice thường được sử dụng với mục đích chính là gì?",
+    "options": [
+      "A. Cấu hình các tham số bảo mật cho toàn bộ ứng dụng.",
+      "B. Xử lý ngoại lệ (Exception Handling) tập trung cho tất cả các Controller.",
+      "C. Định nghĩa các API endpoint dùng chung cho nhiều module.",
+      "D. Quản lý việc nạp các file cấu hình từ server bên ngoài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "@ControllerAdvice cho phép viết code xử lý lỗi ở một nơi duy nhất thay vì lặp lại các khối try-catch trong từng Controller, giúp code sạch và dễ bảo trì hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao Python thường được coi là chậm hơn Java hoặc Go trong các tác vụ tính toán song song đa luồng (multi-threading)?",
+    "options": [
+      "A. Do Python không hỗ trợ thư viện đa luồng.",
+      "B. Do cơ chế Global Interpreter Lock (GIL) ngăn cản nhiều luồng thực thi mã Python cùng lúc.",
+      "C. Do Python là ngôn ngữ thông dịch (interpreted language).",
+      "D. Do Python tiêu tốn quá nhiều bộ nhớ cho mỗi thread."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GIL là một cơ chế trong CPython đảm bảo chỉ có một luồng thực thi bytecode Python tại một thời điểm, làm hạn chế hiệu năng của đa luồng trên các CPU đa nhân đối với các tác vụ CPU-bound.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong PHP (Laravel), Queue Worker xử lý các job như thế nào để đảm bảo tính ổn định?",
+    "options": [
+      "A. Chạy các job trực tiếp trong luồng HTTP request của người dùng.",
+      "B. Lưu trữ job vào database/redis và sử dụng một tiến trình chạy ngầm riêng biệt để xử lý.",
+      "C. Tự động khởi động lại server mỗi khi một job thất bại.",
+      "D. Chỉ cho phép chạy tối đa 1 job tại một thời điểm trên toàn hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hệ thống hàng đợi (Queue) tách rời việc nhận yêu cầu và xử lý tác vụ nặng. Các job được đẩy vào một store (Redis, Database) và các worker process sẽ lấy ra xử lý độc lập.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế một REST API bằng Node.js, việc không xử lý sự kiện 'unhandledRejection' có thể dẫn đến hậu quả gì?",
+    "options": [
+      "A. Ứng dụng sẽ tự động thử lại (retry) các request bị lỗi.",
+      "B. Hiệu năng của ứng dụng sẽ giảm dần theo thời gian do rò rỉ bộ nhớ.",
+      "C. Process có thể bị crash bất ngờ hoặc rơi vào trạng thái không xác định.",
+      "D. Các lỗi này sẽ tự động được gửi về client dưới dạng mã lỗi 500."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các Promise bị reject mà không có catch block sẽ kích hoạt 'unhandledRejection'. Trong các phiên bản Node.js mới, điều này có thể khiến process dừng hoạt động (exit) nếu không được xử lý đúng cách.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Java Spring, scope nào của Bean sẽ tạo ra một instance duy nhất cho mỗi HTTP request?",
+    "options": [
+      "A. Singleton",
+      "B. Prototype",
+      "C. Request",
+      "D. Session"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Scope 'request' tạo ra một instance của Bean cho mỗi HTTP request cụ thể. Nó chỉ có hiệu lực trong ứng dụng web có sử dụng Spring Web.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Django, 'Middleware' đóng vai trò gì trong chu kỳ Request/Response?",
+    "options": [
+      "A. Là một framework để xây dựng giao diện người dùng.",
+      "B. Là các hook can thiệp vào quá trình xử lý request trước khi đến View và response trước khi gửi về Client.",
+      "C. Là một thư viện dùng để kết nối với các loại cơ sở dữ liệu NoSQL.",
+      "D. Là công cụ để quản lý các file tĩnh như CSS và JavaScript."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Middleware là một hệ thống plugin nhẹ, cấp thấp để can thiệp vào đầu vào (request) hoặc đầu ra (response) của Django một cách toàn cục.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Node.js, sự khác biệt giữa process.nextTick() và setImmediate() là gì?",
+    "options": [
+      "A. setImmediate() chạy trước process.nextTick() trong cùng một vòng lặp Event Loop.",
+      "B. process.nextTick() chạy ngay sau khi thao tác hiện tại kết thúc, trước khi Event Loop tiếp tục.",
+      "C. Cả hai đều có chức năng giống hệt nhau và có thể dùng thay thế cho nhau.",
+      "D. process.nextTick() chỉ hoạt động trong môi trường trình duyệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "process.nextTick() đưa callback vào hàng đầu của hàng đợi xử lý ngay sau operation hiện tại, trong khi setImmediate() đưa callback vào phase 'check' của vòng lặp Event Loop tiếp theo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi làm việc với Laravel Eloquent, vấn đề 'N+1 query' thường xảy ra khi nào?",
+    "options": [
+      "A. Khi bạn thực hiện quá nhiều lệnh INSERT vào database cùng lúc.",
+      "B. Khi bạn truy cập một quan hệ (relation) của một danh sách các model mà không sử dụng eager loading.",
+      "C. Khi database có quá nhiều index dẫn đến truy vấn chậm.",
+      "D. Khi bạn sử dụng phân trang (pagination) cho một bảng có hàng triệu bản ghi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "N+1 xảy ra khi bạn lấy N bản ghi, sau đó với mỗi bản ghi lại thực hiện thêm 1 truy vấn để lấy dữ liệu liên quan. Giải pháp là sử dụng phương thức with() (eager loading).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Java, từ khóa 'volatile' có tác dụng gì khi biến được truy cập bởi nhiều luồng?",
+    "options": [
+      "A. Đảm bảo biến đó không bao giờ bị thay đổi giá trị.",
+      "B. Đảm bảo việc đọc/ghi biến luôn được thực hiện trực tiếp từ bộ nhớ chính (main memory) thay vì CPU cache.",
+      "C. Tự động khóa (lock) biến đó cho đến khi luồng hiện tại kết thúc.",
+      "D. Chuyển đổi biến đó thành kiểu dữ liệu thread-safe như AtomicInteger."
+    ],
+    "correctAnswer": "B",
+    "explanation": "volatile đảm bảo tính hiển thị (visibility) của biến giữa các luồng, giúp các luồng luôn đọc được giá trị mới nhất được ghi bởi luồng khác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Python Django, phương thức 'F expressions' được sử dụng để làm gì?",
+    "options": [
+      "A. Định dạng chuỗi ký tự trong template.",
+      "B. Thực hiện các phép toán trực tiếp ở mức cơ sở dữ liệu mà không cần nạp dữ liệu vào bộ nhớ Python.",
+      "C. Tạo ra các form HTML tự động từ Model.",
+      "D. Lọc dữ liệu dựa trên các biểu thức chính quy (Regex)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "F expressions cho phép tham chiếu đến các giá trị trường của model và thực hiện các phép toán trên database, giúp tránh race conditions và tối ưu hiệu năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cách tốt nhất để quản lý các biến môi trường (environment variables) nhạy cảm như DB_PASSWORD trong một ứng dụng backend là gì?",
+    "options": [
+      "A. Lưu trực tiếp vào file mã nguồn và commit lên Git.",
+      "B. Sử dụng file .env và thêm nó vào .gitignore, kết hợp với các công cụ quản lý secret của cloud.",
+      "C. Mã hóa các biến đó và lưu vào database của ứng dụng.",
+      "D. Truyền trực tiếp các giá trị này qua URL parameters của API."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng file .env giúp tách biệt cấu hình và mã nguồn. Việc dùng .gitignore và secret manager (như AWS Secrets Manager) đảm bảo an toàn thông tin nhạy cảm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Node.js, cơ chế 'Cluster module' giúp giải quyết vấn đề gì?",
+    "options": [
+      "A. Tự động sao lưu dữ liệu sang một server khác.",
+      "B. Cho phép tận dụng tối đa các nhân CPU bằng cách tạo ra nhiều tiến trình con chia sẻ cùng một cổng server.",
+      "C. Kết nối nhiều database khác nhau vào cùng một ứng dụng.",
+      "D. Giảm dung lượng của các gói npm khi cài đặt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vì Node.js chạy đơn luồng, Cluster module cho phép khởi tạo nhiều process (thường bằng số nhân CPU) để xử lý tải song song, tăng khả năng chịu tải của ứng dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Spring Boot, @MockBean khác gì so với @Mock của Mockito?",
+    "options": [
+      "A. @MockBean dùng cho unit test, @Mock dùng cho integration test.",
+      "B. @MockBean thêm mock object vào Spring ApplicationContext, thay thế bất kỳ bean cùng loại nào hiện có.",
+      "C. @MockBean chỉ có thể dùng để mock các interface, không dùng được cho class.",
+      "D. Không có sự khác biệt, chúng hoàn toàn giống nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "@MockBean là một annotation của Spring Boot Test, nó tạo ra một mock và đưa nó vào context của Spring, rất hữu ích cho các bài test tích hợp cần thay thế một phần của hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một ứng dụng PHP chạy trên môi trường PHP-FPM, điều gì xảy ra với các biến toàn cục sau khi một request kết thúc?",
+    "options": [
+      "A. Chúng được giữ lại trong bộ nhớ cho request tiếp theo để tăng tốc độ.",
+      "B. Chúng được giải phóng hoàn toàn và trạng thái ứng dụng được reset cho request mới.",
+      "C. Chúng được lưu vào session của người dùng một cách tự động.",
+      "D. PHP-FPM sẽ báo lỗi nếu các biến toàn cục không được xóa thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "PHP có mô hình 'shared-nothing'. Mỗi request bắt đầu với một trạng thái sạch và mọi tài nguyên/biến được giải phóng khi request kết thúc, khác với Node.js hay Java nơi ứng dụng chạy liên tục.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Node.js, hàm 'Promise.allSettled()' khác gì so với 'Promise.all()'?",
+    "options": [
+      "A. Promise.allSettled() chạy nhanh hơn Promise.all().",
+      "B. Promise.allSettled() chờ tất cả các promise hoàn thành dù thành công hay thất bại, thay vì dừng ngay khi có một lỗi.",
+      "C. Promise.allSettled() chỉ hoạt động với các tác vụ file system.",
+      "D. Promise.allSettled() tự động thực hiện lại các promise bị lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Promise.all() sẽ reject ngay lập tức nếu bất kỳ promise nào thất bại. Promise.allSettled() đảm bảo bạn nhận được kết quả của mọi promise sau khi tất cả đã kết thúc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Django, khi nào bạn nên ghi đè (override) phương thức 'save()' của một Model thay vì sử dụng Signals (post_save)?",
+    "options": [
+      "A. Khi bạn muốn logic đó chỉ áp dụng cho model cụ thể này và luôn chạy khi model được lưu.",
+      "B. Khi bạn muốn logic đó chạy bất đồng bộ (asynchronous).",
+      "C. Khi bạn cần thực hiện logic trên nhiều model khác nhau cùng lúc.",
+      "D. Khi bạn muốn tránh việc truy cập vào database."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ghi đè save() tường minh và dễ theo dõi hơn cho logic nội bộ của model. Signals thường dùng khi logic ảnh hưởng đến nhiều module hoặc khi bạn không có quyền chỉnh sửa code của model (thư viện bên thứ 3).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Laravel, 'Method Injection' trong Controller hoạt động nhờ vào thành phần nào?",
+    "options": [
+      "A. PHP Reflection API và Service Container.",
+      "B. Hệ thống định tuyến (Routing) của Laravel.",
+      "C. Các file cấu hình trong thư mục config/.",
+      "D. Trình biên dịch JIT của PHP 8."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Laravel sử dụng Reflection API để kiểm tra các type-hint của tham số trong phương thức và sau đó sử dụng Service Container để tự động resolve và inject các dependency tương ứng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng Connection Pooling khi kết nối từ Backend đến Database là gì?",
+    "options": [
+      "A. Nó giúp mã hóa dữ liệu truyền đi giữa backend và database.",
+      "B. Nó giảm chi phí thiết lập và đóng kết nối TCP cho mỗi request bằng cách tái sử dụng các kết nối hiện có.",
+      "C. Nó cho phép database lưu trữ nhiều dữ liệu hơn.",
+      "D. Nó tự động sửa các lỗi cú pháp SQL trong mã nguồn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc tạo mới một kết nối database rất tốn kém về tài nguyên và thời gian. Connection pooling giữ một tập hợp các kết nối mở sẵn để dùng lại, giúp tăng đáng kể hiệu năng ứng dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Java Spring Boot, làm thế nào để cấu hình các giá trị khác nhau cho môi trường 'development' và 'production'?",
+    "options": [
+      "A. Tạo nhiều file main class khác nhau.",
+      "B. Sử dụng Spring Profiles (ví dụ: application-dev.properties và application-prod.properties).",
+      "C. Viết các câu lệnh if-else kiểm tra IP của server trong code.",
+      "D. Thay đổi code thủ công trước mỗi lần deploy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spring Profiles cho phép phân tách các phần cấu hình ứng dụng và chỉ kích hoạt chúng trong các môi trường cụ thể bằng cách sử dụng spring.profiles.active.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Node.js, tại sao việc sử dụng biến toàn cục (global variables) để lưu trữ thông tin phiên làm việc của người dùng (user session) là một hành động nguy hiểm?",
+    "options": [
+      "A. Vì biến toàn cục sẽ bị xóa ngay sau khi request kết thúc.",
+      "B. Vì tất cả người dùng sẽ dùng chung một giá trị biến đó, dẫn đến rò rỉ dữ liệu giữa các phiên làm việc.",
+      "C. Vì Node.js không cho phép khai báo biến toàn cục.",
+      "D. Vì nó làm cho file mã nguồn trở nên quá nặng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Node.js là một tiến trình chạy liên tục và dùng chung bộ nhớ cho tất cả các request. Nếu lưu thông tin user vào biến toàn cục, request của User A có thể đọc/ghi đè dữ liệu của User B.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Node.js, khi thực hiện một tác vụ CPU-intensive (như tính toán mã hóa) trong Event Loop, hệ quả nào là nghiêm trọng nhất đối với hệ thống?",
+    "options": [
+      "A. Làm tăng mức sử dụng RAM đột biến do cơ chế Garbage Collection.",
+      "B. Làm nghẽn (block) tất cả các request I/O khác do Event Loop chỉ chạy đơn luồng.",
+      "C. Gây ra lỗi Stack Overflow do đệ quy không kiểm soát.",
+      "D. Node.js sẽ tự động tạo một Worker Thread mới để xử lý tác vụ đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Node.js xử lý JavaScript trên một luồng duy nhất (Event Loop). Nếu luồng này bị chiếm dụng bởi tác vụ CPU-intensive, nó không thể xử lý các sự kiện I/O hoặc request mới, dẫn đến treo toàn bộ ứng dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Java Spring Boot, sự khác biệt chính giữa Spring WebFlux và Spring MVC khi xử lý tải cao (high concurrency) là gì?",
+    "options": [
+      "A. WebFlux sử dụng mô hình Thread-per-request, MVC sử dụng Event Loop.",
+      "B. WebFlux sử dụng non-blocking I/O với số lượng thread cố định, giúp tối ưu tài nguyên khi có nhiều kết nối đợi.",
+      "C. MVC luôn nhanh hơn WebFlux về mặt tốc độ xử lý thô (raw execution speed).",
+      "D. WebFlux chỉ hỗ trợ các cơ sở dữ liệu NoSQL."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spring WebFlux dựa trên Project Reactor, sử dụng mô hình non-blocking I/O, cho phép xử lý hàng nghìn kết nối đồng thời với rất ít thread, trong khi MVC bị giới hạn bởi số lượng thread trong pool (Thread-per-request).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao Python (CPython) thường gặp khó khăn trong việc tận dụng tối đa CPU đa nhân cho các tác vụ tính toán song song (parallel computing)?",
+    "options": [
+      "A. Do Python là ngôn ngữ thông dịch (interpreted).",
+      "B. Do cơ chế Global Interpreter Lock (GIL) ngăn cản nhiều thread thực thi bytecode Python cùng lúc.",
+      "C. Do Python không hỗ trợ thư viện đa luồng (threading).",
+      "D. Do quản lý bộ nhớ của Python không an toàn (thread-safe)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GIL trong CPython đảm bảo chỉ một thread được giữ quyền kiểm soát interpreter tại một thời điểm, làm mất đi lợi thế của đa nhân khi chạy các tác vụ CPU-bound bằng threading. Cần dùng multiprocessing để thay thế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong PHP-FPM, việc thiết lập 'pm.max_children' quá cao so với tài nguyên hệ thống sẽ dẫn đến tình trạng gì?",
+    "options": [
+      "A. Tăng tốc độ phản hồi cho tất cả người dùng.",
+      "B. Gây ra tình trạng tranh chấp CPU và cạn kiệt RAM, dẫn đến hệ thống bị swap và treo.",
+      "C. Giảm số lượng database connection khả dụng.",
+      "D. PHP sẽ tự động chuyển sang chế độ async để tối ưu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi process PHP-FPM tiêu tốn một lượng RAM nhất định. Nếu max_children quá lớn, tổng RAM vượt quá RAM vật lý sẽ khiến OS dùng swap, làm hiệu năng giảm thê thảm hoặc gây crash.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi sử dụng Hibernate/JPA trong Spring Boot, vấn đề 'N+1 Query' thường xảy ra do đâu và cách khắc phục tối ưu nhất là gì?",
+    "options": [
+      "A. Do fetch type là EAGER; khắc phục bằng cách đổi sang LAZY.",
+      "B. Do fetch type là LAZY khi truy cập collection; khắc phục bằng cách dùng 'JOIN FETCH' trong JPQL hoặc EntityGraph.",
+      "C. Do cache level 1 bị đầy; khắc phục bằng cách clear cache thủ công.",
+      "D. Do database thiếu index; khắc phục bằng cách đánh index cho khóa ngoại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "N+1 xảy ra khi ta lấy 1 thực thể chính nhưng sau đó Hibernate thực hiện thêm N câu lệnh để lấy dữ liệu liên quan. JOIN FETCH cho phép lấy toàn bộ dữ liệu trong 1 câu query duy nhất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Node.js, cơ chế 'Cluster module' hoạt động dựa trên nguyên lý nào để mở rộng ứng dụng?",
+    "options": [
+      "A. Chia sẻ bộ nhớ (shared memory) giữa các worker threads.",
+      "B. Tạo ra các tiến trình con (child processes) chia sẻ cùng cổng mạng (port).",
+      "C. Sử dụng một thread pool duy nhất cho tất cả các CPU core.",
+      "D. Chuyển đổi mã JavaScript sang mã máy C++ để chạy nhanh hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cluster module cho phép tạo ra nhiều process con (workers) tận dụng đa nhân CPU. Master process quản lý và phân phối các kết nối đến các worker thông qua cơ chế Round-Robin hoặc OS.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một microservice bằng Django, tại sao nên hạn chế thực hiện các tác vụ nặng (như gửi email, xử lý ảnh) trực tiếp trong View?",
+    "options": [
+      "A. Vì Django không hỗ trợ xử lý chuỗi (string manipulation) tốt.",
+      "B. Vì nó sẽ block worker process, làm tăng response time và giảm throughput của hệ thống.",
+      "C. Vì Django sẽ tự động retry request nếu quá 30 giây.",
+      "D. Vì database connection sẽ bị đóng nếu view chạy quá lâu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các framework đồng bộ như Django (truyền thống) sẽ giữ worker process cho đến khi view trả về kết quả. Tác vụ nặng nên được đẩy vào Task Queue (như Celery) để xử lý bất đồng bộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Java, Garbage Collector (GC) loại 'ZGC' hoặc 'Shenandoah' giải quyết vấn đề gì tốt hơn so với 'G1GC'?",
+    "options": [
+      "A. Tối ưu hóa dung lượng bộ nhớ sử dụng (footprint).",
+      "B. Giảm thiểu thời gian tạm dừng hệ thống (Stop-the-world pause time) xuống mức cực thấp (dưới 10ms).",
+      "C. Tăng throughput tổng thể của ứng dụng lên mức tối đa.",
+      "D. Tự động phát hiện lỗi memory leak trong code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ZGC và Shenandoah là các low-latency GC, thực hiện hầu hết việc dọn dẹp đồng thời với luồng ứng dụng, giúp giảm thiểu thời gian pause, cực kỳ quan trọng cho các ứng dụng real-time.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt về quản lý bộ nhớ giữa PHP-FPM truyền thống và các giải pháp như Swoole hay RoadRunner là gì?",
+    "options": [
+      "A. PHP-FPM giải phóng toàn bộ bộ nhớ sau mỗi request; Swoole giữ lại trạng thái trong bộ nhớ giữa các request.",
+      "B. PHP-FPM chạy nhanh hơn vì không phải quản lý bộ nhớ lâu dài.",
+      "C. Swoole không thể bị memory leak vì nó có cơ chế tự dọn dẹp thông minh hơn.",
+      "D. RoadRunner yêu cầu server phải có dung lượng RAM gấp đôi PHP-FPM."
+    ],
+    "correctAnswer": "A",
+    "explanation": "PHP-FPM theo mô hình 'shared-nothing', dọn dẹp sạch sẽ sau mỗi request. Swoole/RoadRunner chạy dưới dạng long-running process, giúp tăng tốc độ (không phải khởi động lại framework) nhưng đòi hỏi lập trình viên phải quản lý memory leak chặt chẽ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Node.js, khi nào bạn nên sử dụng 'Worker Threads' thay vì 'Cluster Module'?",
+    "options": [
+      "A. Khi cần chạy nhiều instance của ứng dụng trên nhiều port khác nhau.",
+      "B. Khi cần xử lý các tác vụ tính toán nặng và cần chia sẻ dữ liệu bộ nhớ (ArrayBuffer) một cách hiệu quả giữa các luồng.",
+      "C. Khi muốn tăng khả năng chịu lỗi (fault tolerance) của ứng dụng.",
+      "D. Khi ứng dụng bị nghẽn ở tầng I/O (database, network)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Worker Threads chạy trong cùng một process và có thể chia sẻ bộ nhớ, phù hợp cho tác vụ CPU-bound trong một instance. Cluster tạo ra các process riêng biệt với bộ nhớ riêng, phù hợp cho việc mở rộng throughput.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cơ chế 'Dependency Injection' (DI) trong Spring Framework giúp giải quyết vấn đề gì quan trọng nhất trong phát triển phần mềm doanh nghiệp?",
+    "options": [
+      "A. Giảm thời gian thực thi của ứng dụng.",
+      "B. Tự động hóa việc viết unit test mà không cần mock.",
+      "C. Giảm sự phụ thuộc cứng (tight coupling) giữa các thành phần, tăng tính linh hoạt và dễ kiểm thử.",
+      "D. Thay thế hoàn toàn việc sử dụng interface trong lập trình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "DI cho phép tách rời việc khởi tạo đối tượng khỏi logic sử dụng đối tượng đó, giúp dễ dàng thay thế các implementation (ví dụ: đổi từ MySQL sang PostgreSQL) hoặc inject mock object khi testing.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Python Django, trade-off khi sử dụng 'select_related' thay vì 'prefetch_related' là gì?",
+    "options": [
+      "A. 'select_related' thực hiện nhiều query hơn nhưng nhanh hơn.",
+      "B. 'select_related' sử dụng SQL JOIN (tốt cho 1-1, 1-N), trong khi 'prefetch_related' thực hiện query riêng biệt và join bằng Python (tốt cho M-M, N-1).",
+      "C. 'select_related' chỉ hoạt động với database NoSQL.",
+      "D. 'prefetch_related' luôn luôn nhanh hơn 'select_related' trong mọi trường hợp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "select_related tạo ra một câu query phức tạp với JOIN, giảm số lượng query nhưng có thể làm phình to tập kết quả. prefetch_related thực hiện các query rời rạc và kết hợp chúng ở tầng ứng dụng, tránh được 'Cartesian product' lớn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng Node.js bị rò rỉ bộ nhớ (memory leak). Công cụ/kỹ thuật nào hiệu quả nhất để xác định nguyên nhân gốc rễ trong môi trường production?",
+    "options": [
+      "A. Restart server định kỳ để giải phóng RAM.",
+      "B. Sử dụng Heap Snapshot và so sánh chúng qua công cụ Chrome DevTools hoặc Clinic.js.",
+      "C. Tăng thông số --max-old-space-size.",
+      "D. Chèn console.log vào tất cả các hàm để theo dõi biến."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Heap Snapshot cho phép xem chi tiết các đối tượng đang chiếm bộ nhớ và tham chiếu nào đang giữ chúng lại không cho GC thu hồi. So sánh 2 snapshot tại 2 thời điểm khác nhau giúp tìm ra đối tượng tăng trưởng bất thường.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Laravel, việc sử dụng 'Interface' cùng với 'Service Container' mang lại lợi ích gì cho kiến trúc hệ thống?",
+    "options": [
+      "A. Làm code chạy nhanh hơn do không phải load class thực thi.",
+      "B. Cho phép dễ dàng thay đổi implementation (ví dụ: đổi PaymentGateway) chỉ bằng cách thay đổi cấu hình binding trong Provider.",
+      "C. Tự động bảo mật các API chống lại SQL Injection.",
+      "D. Giảm dung lượng file source code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là nguyên lý Dependency Inversion. Bằng cách bind một Interface với một Class cụ thể trong Service Container, ta có thể thay đổi toàn bộ logic xử lý của hệ thống mà không cần sửa code ở những nơi sử dụng interface đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao trong các hệ thống đòi hỏi tính nhất quán cao (High Consistency), người ta thường chọn Java/Spring thay vì Node.js?",
+    "options": [
+      "A. Vì Node.js không hỗ trợ giao dịch (transactions).",
+      "B. Vì Java có hệ sinh thái quản lý giao dịch phân tán (JTA) và hỗ trợ ACID cực kỳ mạnh mẽ, trưởng thành.",
+      "C. Vì Node.js chỉ có thể kết nối với MongoDB.",
+      "D. Vì Java không bao giờ bị crash khi gặp lỗi runtime."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dù Node.js có thể làm việc với SQL, nhưng Java có lịch sử lâu đời với các framework như Spring/Hibernate cung cấp khả năng quản lý transaction phức tạp, bao gồm cả transaction phân tán (2PC), rất quan trọng cho tài chính/ngân hàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong lập trình Python Asyncio, điều gì xảy ra nếu bạn gọi một hàm blocking (như time.sleep) thay vì hàm non-blocking (như asyncio.sleep)?",
+    "options": [
+      "A. Python sẽ tự động chuyển đổi nó thành non-blocking.",
+      "B. Toàn bộ Event Loop sẽ bị dừng lại, không có coroutine nào khác được thực thi trong lúc đó.",
+      "C. Chỉ có coroutine hiện tại bị dừng, các coroutine khác vẫn chạy bình thường.",
+      "D. Sẽ có một ngoại lệ (Exception) được ném ra ngay lập tức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Asyncio chạy trên một luồng duy nhất. Một hàm blocking sẽ chiếm quyền điều khiển và không nhường lại cho Event Loop, dẫn đến việc tất cả các tác vụ khác bị treo cho đến khi hàm blocking chạy xong.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai Microservices, chiến lược xử lý lỗi 'Circuit Breaker' ở tầng Server-side giúp ngăn chặn điều gì?",
+    "options": [
+      "A. Ngăn chặn hacker tấn công vào hệ thống.",
+      "B. Ngăn chặn tình trạng lỗi dây chuyền (cascading failures) khi một dịch vụ phía dưới (downstream) bị chậm hoặc hỏng.",
+      "C. Tự động sửa lỗi trong code của dịch vụ.",
+      "D. Giảm chi phí thuê server cloud."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Circuit Breaker theo dõi tỷ lệ lỗi. Nếu lỗi vượt ngưỡng, nó sẽ 'ngắt mạch', trả về lỗi ngay lập tức thay vì bắt các dịch vụ khác phải chờ đợi vô ích, giúp hệ thống tổng thể không bị sụp đổ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Spring Boot, annotation '@Transactional' hoạt động dựa trên cơ chế nào của Java?",
+    "options": [
+      "A. Java Reflection.",
+      "B. Dynamic Proxy hoặc CGLIB bytecode generation.",
+      "C. Đa kế thừa (Multiple Inheritance).",
+      "D. Trực tiếp can thiệp vào nhân của JVM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spring tạo ra một Proxy bao quanh bean. Khi phương thức được gọi, Proxy sẽ mở transaction, thực thi code, và sau đó commit hoặc rollback dựa trên kết quả. Nếu gọi nội bộ (self-invocation), annotation này sẽ không có tác dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Vấn đề 'Backpressure' trong luồng dữ liệu (Streaming I/O) của Node.js là gì?",
+    "options": [
+      "A. Khi tốc độ đọc dữ liệu chậm hơn tốc độ ghi dữ liệu.",
+      "B. Khi tốc độ ghi dữ liệu (Writable stream) không kịp so với tốc độ đọc (Readable stream), dẫn đến tràn bộ đệm RAM.",
+      "C. Khi kết nối mạng bị đứt đột ngột.",
+      "D. Khi file hệ thống không cho phép ghi đè."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Backpressure xảy ra khi buffer của stream bị đầy do bên nhận (Writable) xử lý quá chậm. Nếu không xử lý backpressure (dừng đọc khi buffer đầy), ứng dụng sẽ tiêu tốn RAM cực lớn và có thể bị crash.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiến trúc Laravel, 'Middleware' đóng vai trò tốt nhất cho việc nào sau đây?",
+    "options": [
+      "A. Thực hiện các truy vấn database phức tạp.",
+      "B. Lọc và kiểm tra các HTTP request (như Authentication, Logging, CORS) trước khi vào Controller.",
+      "C. Định nghĩa cấu trúc của các bảng trong database.",
+      "D. Hiển thị giao diện người dùng (HTML/CSS)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Middleware là các lớp lọc nằm giữa request và response. Nó lý tưởng để xử lý các logic xuyên suốt (cross-cutting concerns) như xác thực người dùng hoặc kiểm tra quyền truy cập.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng biến Global trong các môi trường như Node.js hoặc Python Web Framework lại được coi là một 'anti-pattern' nguy hiểm?",
+    "options": [
+      "A. Vì nó làm code khó đọc hơn.",
+      "B. Vì nó gây ra xung đột dữ liệu giữa các request đồng thời (race conditions) và khó khăn trong việc debug/testing.",
+      "C. Vì biến Global luôn bị xóa bởi Garbage Collector.",
+      "D. Vì biến Global chỉ có thể chứa kiểu dữ liệu String."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong môi trường server-side xử lý nhiều request đồng thời, biến global bị chia sẻ giữa các request. Nếu một request thay đổi giá trị của nó, nó sẽ ảnh hưởng đến các request khác, gây ra các lỗi logic cực kỳ khó tìm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Java, sự khác biệt giữa 'Strong Reference' và 'Weak Reference' trong ngữ cảnh quản lý bộ nhớ là gì?",
+    "options": [
+      "A. Strong Reference không bao giờ bị GC thu hồi; Weak Reference thì có.",
+      "B. Đối tượng chỉ có Weak Reference sẽ bị GC thu hồi ngay trong lần dọn dẹp tiếp theo nếu bộ nhớ cần thiết.",
+      "C. Weak Reference làm ứng dụng chạy chậm hơn.",
+      "D. Strong Reference chỉ dùng cho các biến primitive."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Weak Reference cho phép GC thu hồi đối tượng ngay cả khi nó vẫn đang được tham chiếu bởi WeakReference đó. Điều này hữu ích để xây dựng các bộ nhớ đệm (cache) không gây ra OutOfMemory.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi làm việc với các hệ thống phân tán, tại sao việc sử dụng 'Local Caching' (như biến cục bộ trong Node.js) có thể dẫn đến sai sót dữ liệu?",
+    "options": [
+      "A. Vì Local Cache có tốc độ truy cập quá nhanh.",
+      "B. Vì dữ liệu giữa các instance khác nhau của server sẽ không đồng bộ (Inconsistency).",
+      "C. Vì Local Cache sẽ làm database bị quá tải.",
+      "D. Vì Node.js không cho phép lưu cache quá 1MB."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong mô hình nhiều instance (scale out), mỗi instance có một bộ nhớ riêng. Nếu update dữ liệu ở instance A mà instance B vẫn dùng cache cũ, người dùng sẽ thấy dữ liệu không nhất quán. Cần dùng Distributed Cache như Redis.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Python, cơ chế 'Context Managers' (từ khóa 'with') giải quyết vấn đề gì một cách an toàn nhất?",
+    "options": [
+      "A. Tăng tốc độ thực thi của vòng lặp.",
+      "B. Đảm bảo các tài nguyên (file, database connection) luôn được đóng/giải phóng đúng cách kể cả khi có ngoại lệ xảy ra.",
+      "C. Tự động chuyển đổi code sang dạng bất đồng bộ.",
+      "D. Giấu các thông tin nhạy cảm trong code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Context Managers tự động gọi các phương thức __enter__ và __exit__. Điều này đảm bảo việc cleanup tài nguyên luôn được thực hiện, tránh rò rỉ file descriptor hoặc connection pool.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống PHP yêu cầu xử lý hàng triệu bản ghi từ file CSV và lưu vào Database. Cách tiếp cận nào tối ưu nhất về bộ nhớ?",
+    "options": [
+      "A. Đọc toàn bộ file vào một mảng (array) rồi dùng foreach.",
+      "B. Sử dụng Generator (yield) để đọc từng dòng của file, tránh load toàn bộ file vào RAM.",
+      "C. Tăng memory_limit của PHP lên 10GB.",
+      "D. Chuyển file CSV thành file JSON rồi mới xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Generators cho phép lặp qua dữ liệu mà không cần tạo mảng trong bộ nhớ. Điều này giúp xử lý các tập dữ liệu khổng lồ với mức sử dụng RAM cực thấp và ổn định.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một hệ thống Node.js xử lý hàng triệu request mỗi giây, bạn phát hiện Event Loop bị block định kỳ khoảng 50ms. Nguyên nhân nào sau đây là rủi ro nhất về mặt thiết kế hệ thống?",
+    "options": [
+      "A. Sử dụng quá nhiều middleware trong Express.js.",
+      "B. Thực hiện JSON.parse() trên các payload có kích thước cực lớn (vài chục MB).",
+      "C. Sử dụng Promise.all() cho quá nhiều truy vấn database đồng thời.",
+      "D. Cấu hình sai số lượng Worker Threads trong Cluster module."
+    ],
+    "correctAnswer": "B",
+    "explanation": "JSON.parse/stringify là các thao tác đồng bộ (synchronous). Khi xử lý payload lớn, nó sẽ chiếm giữ thread chính, chặn Event Loop, làm tăng latency cho toàn bộ các request khác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Với Java 21, việc chuyển đổi từ Platform Threads sang Virtual Threads (Project Loom) mang lại lợi ích lớn nhất trong kịch bản nào?",
+    "options": [
+      "A. Các ứng dụng tính toán khoa học nặng về CPU (CPU-bound).",
+      "B. Các ứng dụng có số lượng kết nối đồng thời cực lớn và chủ yếu là I/O-bound.",
+      "C. Các ứng dụng yêu cầu quản lý bộ nhớ heap cực kỳ khắt khe.",
+      "D. Các ứng dụng cần tính tương thích ngược với các thư viện native cũ (JNI)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Virtual threads rất nhẹ, cho phép tạo hàng triệu thread mà không tốn nhiều tài nguyên hệ điều hành, cực kỳ hiệu quả cho các tác vụ chờ đợi I/O (network, database).",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Python, khi sử dụng thư viện asyncio để xây dựng một High-performance API, tại sao việc gọi một hàm đồng bộ (blocking) như 'time.sleep()' hoặc 'requests.get()' lại là một sai lầm nghiêm trọng?",
+    "options": [
+      "A. Nó sẽ gây ra lỗi 'RuntimeError: Event loop is closed'.",
+      "B. Nó sẽ ép buộc Python phải tạo một thread mới để xử lý, gây tốn RAM.",
+      "C. Nó sẽ dừng toàn bộ Event Loop, khiến tất cả các coroutine khác không thể chạy.",
+      "D. Nó làm mất tính toàn vẹn dữ liệu trong Global Interpreter Lock (GIL)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Asyncio chạy trên một single thread duy nhất. Bất kỳ thao tác blocking nào cũng sẽ chiếm quyền điều khiển và không trả lại cho event loop, làm tê liệt toàn bộ ứng dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi triển khai PHP-FPM cho một hệ thống Enterprise có lưu lượng truy cập biến động mạnh, chiến lược quản lý 'pm' (process manager) nào tối ưu nhất để cân bằng giữa tài nguyên và tốc độ phản hồi?",
+    "options": [
+      "A. pm = static để tránh overhead của việc tạo/hủy process.",
+      "B. pm = dynamic với start_servers thấp để tiết kiệm bộ nhớ.",
+      "C. pm = ondemand để chỉ sử dụng tài nguyên khi thực sự có request.",
+      "D. pm = static kết hợp với việc khởi động lại hàng ngày qua cronjob."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ở quy mô Enterprise với traffic cao, 'static' là lựa chọn tốt nhất vì nó loại bỏ chi phí (overhead) của việc fork process mới, giúp latency ổn định hơn, miễn là server có đủ RAM.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Node.js, kỹ thuật 'Backpressure' trong Stream API giải quyết vấn đề gì?",
+    "options": [
+      "A. Tăng tốc độ đọc dữ liệu từ ổ đĩa.",
+      "B. Ngăn chặn việc dữ liệu bị ghi đè khi có nhiều luồng cùng truy cập.",
+      "C. Kiểm soát việc dữ liệu từ nguồn đọc (Readable) quá nhanh so với khả năng xử lý của đích đến (Writable).",
+      "D. Tự động mã hóa dữ liệu khi truyền tải qua mạng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Backpressure là cơ chế báo hiệu cho nguồn đọc tạm dừng khi buffer của bên nhận đã đầy, tránh tràn bộ nhớ (memory overflow).",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi tối ưu hóa Garbage Collection (GC) trong Java Spring Boot cho một microservice yêu cầu Low Latency, việc chọn ZGC thay vì G1GC có ý nghĩa chiến lược gì?",
+    "options": [
+      "A. ZGC giúp giảm kích thước file JAR khi đóng gói.",
+      "B. ZGC có thể xử lý heap lên tới hàng TB với thời gian dừng (pause time) dưới 1ms.",
+      "C. ZGC tối ưu hóa việc thực thi các câu lệnh SQL tốt hơn.",
+      "D. ZGC không yêu cầu cấu hình tham số dòng lệnh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ZGC là một scalable low-latency GC, mục tiêu chính là giữ pause time cực thấp bất kể kích thước heap, rất quan trọng cho các hệ thống nhạy cảm về độ trễ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Django (Python), khi nào bạn nên ưu tiên sử dụng 'select_related' thay vì 'prefetch_related'?",
+    "options": [
+      "A. Khi cần truy vấn các quan hệ Many-to-Many.",
+      "B. Khi cần truy vấn các quan hệ One-to-Many (Reverse foreign key).",
+      "C. Khi cần truy vấn các quan hệ Foreign Key hoặc One-to-One bằng cách sử dụng SQL JOIN.",
+      "D. Khi muốn giảm số lượng câu truy vấn SQL nhưng không quan tâm đến bộ nhớ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "select_related thực hiện SQL JOIN trong một câu lệnh duy nhất, hiệu quả cho các quan hệ đơn lẻ. prefetch_related thực hiện các câu truy vấn riêng biệt và join bằng Python, dùng cho tập hợp (Many).",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng Node.js bị rò rỉ bộ nhớ (Memory Leak) khiến heap usage tăng dần theo thời gian. Sau khi lấy Heap Dump, bạn thấy hàng triệu object 'IncomingMessage'. Nguyên nhân khả thi nhất là gì?",
+    "options": [
+      "A. Các request HTTP không được đóng đúng cách (chưa gọi res.end()).",
+      "B. Sử dụng quá nhiều biến toàn cục (global variables).",
+      "C. Database connection pool bị quá tải.",
+      "D. File hệ thống bị lỗi quyền ghi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "IncomingMessage thường liên quan đến request object. Nếu logic code không kết thúc response hoặc không xử lý timeout, các object liên quan đến request sẽ không được GC giải phóng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Laravel, việc sử dụng 'Eloquent Serialization' trong các job đẩy vào Queue có thể gây ra rủi ro gì nếu job đó bị delay lâu?",
+    "options": [
+      "A. Dữ liệu trong database có thể đã thay đổi, khiến trạng thái của Model trong job bị cũ (stale).",
+      "B. Queue sẽ bị crash vì Eloquent Model quá nặng.",
+      "C. Tự động xóa dữ liệu trong database sau khi job thực hiện xong.",
+      "D. Không thể sử dụng Redis làm driver cho queue."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi một Model được serialize vào queue, nó lưu ID. Khi job thực thi, nó sẽ fetch lại từ DB. Nếu logic dựa trên dữ liệu cũ được truyền vào constructor thay vì fetch mới, sẽ dẫn đến sai lệch dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'SharedArrayBuffer' trong Node.js Worker Threads lại đòi hỏi sự cẩn trọng cực cao?",
+    "options": [
+      "A. Nó làm chậm tốc độ truyền tin giữa các thread.",
+      "B. Nó cho phép nhiều thread truy cập và sửa đổi cùng một vùng nhớ đồng thời, dễ gây ra Race Condition.",
+      "C. Nó chỉ hoạt động trên hệ điều hành Linux.",
+      "D. Nó tự động copy dữ liệu nên gây tốn RAM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SharedArrayBuffer cung cấp bộ nhớ dùng chung. Nếu không sử dụng Atomics để quản lý truy cập, các thread sẽ ghi đè lên nhau gây lỗi dữ liệu nghiêm trọng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Java Spring Boot, cơ chế 'Circuit Breaker' (như Resilience4j) giải quyết vấn đề gì trong kiến trúc Microservices?",
+    "options": [
+      "A. Tự động tăng số lượng instance khi traffic tăng.",
+      "B. Ngăn chặn lỗi lan truyền (cascading failure) khi một dịch vụ hạ tầng bị chậm hoặc hỏng.",
+      "C. Mã hóa toàn bộ lưu lượng giữa các service.",
+      "D. Thay thế load balancer của hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Circuit Breaker ngắt kết nối đến service đang lỗi, trả về fallback nhanh chóng thay vì để các request chờ đợi và làm cạn kiệt tài nguyên của hệ thống gọi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng Python 3.12+, tính năng 'Per-Interpreter GIL' (sub-interpreters) có ý nghĩa gì đối với việc xử lý song song?",
+    "options": [
+      "A. Nó loại bỏ hoàn toàn GIL khỏi Python.",
+      "B. Nó cho phép mỗi interpreter chạy trên một luồng riêng với GIL riêng, giúp tận dụng đa nhân thực sự mà không cần multiprocessing.",
+      "C. Nó chỉ dành cho các ứng dụng chạy trên web browser.",
+      "D. Nó giúp tăng tốc độ của các vòng lặp for-loop thông thường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trước đây GIL là global cho toàn process. Với sub-interpreters, mỗi interpreter có GIL riêng, cho phép chạy code Python song song trên nhiều CPU core trong cùng một process.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong PHP 8, tính năng 'JIT (Just-In-Time) compilation' mang lại hiệu suất vượt trội nhất cho loại tác vụ nào?",
+    "options": [
+      "A. Các ứng dụng CRUD web thông thường gọi database nhiều.",
+      "B. Các tác vụ tính toán toán học, xử lý ảnh hoặc mã hóa (CPU-bound).",
+      "C. Các ứng dụng sử dụng nhiều thư viện bên thứ ba qua Composer.",
+      "D. Các ứng dụng chạy trên môi trường Shared Hosting."
+    ],
+    "correctAnswer": "B",
+    "explanation": "JIT biên dịch bytecode thành mã máy. Với web app thông thường, bottleneck là I/O (DB, Network). JIT chỉ thực sự tỏa sáng với các tác vụ nặng về tính toán CPU.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống Java Spring Boot bị 'Stop-the-world' quá lâu trong quá trình GC. Bạn nhận thấy tỷ lệ sống sót của các object ngắn hạn (short-lived) ở vùng Young Generation quá cao. Bạn nên điều chỉnh tham số nào?",
+    "options": [
+      "A. Tăng kích thước vùng Old Generation.",
+      "B. Tăng kích thước vùng Survivor spaces hoặc điều chỉnh MaxTenuringThreshold.",
+      "C. Giảm tổng kích thước Heap (Xmx).",
+      "D. Tắt hoàn toàn tính năng Adaptive Size Policy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu object ngắn hạn không kịp bị dọn dẹp ở Young Gen và bị đẩy lên Old Gen sớm (premature promotion), nó sẽ gây áp lực lên Major GC. Điều chỉnh Survivor space giúp giữ chúng ở Young Gen lâu hơn để được dọn dẹp bởi Minor GC.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Node.js, khi sử dụng 'cluster' module, làm thế nào để đảm bảo tính 'Stateful' (ví dụ: Session) giữa các worker?",
+    "options": [
+      "A. Sử dụng biến global trong thread chính.",
+      "B. Sử dụng một store bên ngoài như Redis hoặc Memcached.",
+      "C. Node.js tự động đồng bộ bộ nhớ giữa các worker.",
+      "D. Sử dụng file system để ghi đè dữ liệu session."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các worker trong cluster là các process riêng biệt, không chia sẻ bộ nhớ. Do đó, mọi dữ liệu trạng thái chung phải được lưu trữ ở một database/store bên ngoài.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Dependency Injection' (DI) lại cực kỳ quan trọng trong việc viết Unit Test cho các Server-side language?",
+    "options": [
+      "A. DI giúp code chạy nhanh hơn ở môi trường production.",
+      "B. DI cho phép dễ dàng thay thế các phụ thuộc thực (như Database, API bên thứ ba) bằng các Mock/Stub object.",
+      "C. DI tự động bắt lỗi cú pháp khi biên dịch.",
+      "D. DI giúp giảm dung lượng file thực thi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DI tách biệt logic của class khỏi việc khởi tạo các phụ thuộc, giúp test có thể inject các mock object để kiểm tra logic mà không cần kết nối thật đến các thành phần bên ngoài.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Python Django, rủi ro lớn nhất khi sử dụng 'Signals' (như post_save) cho các logic nghiệp vụ quan trọng là gì?",
+    "options": [
+      "A. Signals làm chậm tốc độ lưu database.",
+      "B. Signals làm code trở nên khó theo dõi (implicit execution) và gây khó khăn cho việc debug/trace lỗi.",
+      "C. Signals không thể truy cập được vào thông tin user hiện tại.",
+      "D. Signals chỉ hoạt động với database PostgreSQL."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Signals tạo ra các luồng thực thi ngầm định, không hiển thị rõ ràng trong code gọi, dẫn đến khó bảo trì và dễ gây ra các side-effect không mong muốn khi hệ thống phức tạp dần.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế một hệ thống Logging cho một ứng dụng phân tán (Distributed System), yếu tố nào là quan trọng nhất để có thể điều tra lỗi xuyên suốt các dịch vụ?",
+    "options": [
+      "A. Tốc độ ghi log vào ổ đĩa cục bộ.",
+      "B. Sử dụng màu sắc khác nhau cho các mức độ log (INFO, ERROR).",
+      "C. Gắn kèm một Correlation ID (Trace ID) duy nhất vào mọi log entry liên quan đến một request.",
+      "D. Nén các file log định kỳ để tiết kiệm dung lượng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Correlation ID cho phép liên kết tất cả các log từ nhiều service khác nhau về cùng một transaction ban đầu, điều cốt yếu để debug trong kiến trúc microservices.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Node.js, sự khác biệt chính giữa 'setImmediate()' và 'process.nextTick()' là gì?",
+    "options": [
+      "A. process.nextTick() chạy sau khi I/O hoàn thành, setImmediate() chạy trước.",
+      "B. process.nextTick() đưa callback vào ngay sau thao tác hiện tại (trước khi Event Loop tiếp tục), còn setImmediate() chạy ở phase 'check' của vòng lặp kế tiếp.",
+      "C. setImmediate() nhanh hơn process.nextTick().",
+      "D. process.nextTick() chỉ dùng được trong Worker Threads."
+    ],
+    "correctAnswer": "B",
+    "explanation": "process.nextTick() thực thi callback ngay lập tức sau khi operation hiện tại kết thúc, có thể gây 'starve' I/O nếu gọi đệ quy. setImmediate() an toàn hơn vì nó tuân thủ các phase của Event Loop.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai một API Gateway bằng Java (Spring Cloud Gateway), việc sử dụng 'WebFlux' (Reactive) thay vì 'Spring MVC' (Servlet) mang lại lợi ích gì?",
+    "options": [
+      "A. Dễ viết code và debug hơn nhờ mô hình tuần tự.",
+      "B. Tiết kiệm tài nguyên thread bằng cách sử dụng non-blocking I/O, cho phép xử lý hàng vạn kết nối đồng thời với ít thread hơn.",
+      "C. Tương thích tốt hơn với tất cả các thư viện JDBC cũ.",
+      "D. Tự động bảo mật các endpoint bằng JWT."
+    ],
+    "correctAnswer": "B",
+    "explanation": "WebFlux sử dụng mô hình event-loop tương tự Node.js, cực kỳ hiệu quả cho Gateway vốn chủ yếu là proxy và chờ đợi I/O, giúp giảm thiểu overhead của việc quản lý hàng nghìn platform threads.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong môi trường Production, tại sao không nên sử dụng 'npm install' mà nên dùng 'npm ci' cho ứng dụng Node.js?",
+    "options": [
+      "A. npm ci nhanh hơn vì nó không kiểm tra package.json.",
+      "B. npm ci đảm bảo cài đặt chính xác các phiên bản trong package-lock.json và xóa thư mục node_modules cũ để đảm bảo tính nhất quán (reproducibility).",
+      "C. npm ci tự động cập nhật các package lên phiên bản mới nhất.",
+      "D. npm ci không yêu cầu kết nối internet."
+    ],
+    "correctAnswer": "B",
+    "explanation": "npm ci (clean install) được thiết kế cho môi trường CI/CD và Production để đảm bảo môi trường build luôn giống hệt nhau dựa trên lockfile, tránh lỗi 'it works on my machine'.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng Laravel gặp vấn đề hiệu năng khi xử lý một table có 100 triệu dòng. Câu lệnh 'User::all()' gây tràn bộ nhớ. Giải pháp nào là đúng đắn nhất để duyệt qua toàn bộ dữ liệu?",
+    "options": [
+      "A. Tăng memory_limit của PHP lên 10GB.",
+      "B. Sử dụng phương thức 'chunk()' hoặc 'cursor()' để xử lý dữ liệu theo từng phần nhỏ hoặc sử dụng generator.",
+      "C. Sử dụng 'User::pluck('id')' để chỉ lấy ID.",
+      "D. Chuyển sang sử dụng Raw SQL thay vì Eloquent."
+    ],
+    "correctAnswer": "B",
+    "explanation": "chunk() chia nhỏ tập dữ liệu thành nhiều truy vấn, cursor() sử dụng database cursor (generator) để chỉ giữ một record trong bộ nhớ tại một thời điểm, giúp xử lý tập dữ liệu lớn mà không tốn RAM.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Java, từ khóa 'volatile' có tác dụng gì trong lập trình đa luồng (multi-threading)?",
+    "options": [
+      "A. Nó khóa (lock) biến đó lại để chỉ một thread được truy cập.",
+      "B. Nó đảm bảo rằng mọi thay đổi trên biến đó sẽ được nhìn thấy ngay lập tức bởi tất cả các thread khác (visibility) và ngăn chặn việc tái sắp xếp lệnh (reordering).",
+      "C. Nó biến một biến bình thường thành một hằng số.",
+      "D. Nó tự động thực hiện các thao tác nguyên tử (atomic operations) như increment."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Volatile đảm bảo tính hiển thị của biến trong bộ nhớ chính (main memory), tránh việc các thread sử dụng giá trị cũ lưu trong CPU cache của riêng chúng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng một ứng dụng Python xử lý dữ liệu thời gian thực (Real-time), tại sao 'WebSockets' thường được ưu tiên hơn 'Polling'?",
+    "options": [
+      "A. WebSockets dễ triển khai hơn trên phía client.",
+      "B. WebSockets giảm thiểu overhead của HTTP header trong mỗi lần truyền tin và cung cấp kênh giao tiếp hai chiều toàn song công (full-duplex).",
+      "C. WebSockets không yêu cầu server phải chạy async.",
+      "D. WebSockets bảo mật hơn vì nó tự động mã hóa dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Polling tạo ra quá nhiều request HTTP vô ích. WebSockets giữ một kết nối duy nhất, cho phép server đẩy dữ liệu xuống client ngay khi có sự kiện, giảm latency và tải cho server.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Graceful Shutdown' lại quan trọng trong việc triển khai các ứng dụng server-side trên Kubernetes/Docker?",
+    "options": [
+      "A. Để tránh việc container bị khởi động lại liên tục.",
+      "B. Để đảm bảo ứng dụng hoàn thành các request đang xử lý và đóng các kết nối database/queue một cách sạch sẽ trước khi process bị kill.",
+      "C. Để giảm dung lượng image của container.",
+      "D. Để Kubernetes không cần gửi tín hiệu SIGTERM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi scale down hoặc cập nhật, K8s gửi SIGTERM. Nếu ứng dụng không xử lý tín hiệu này để 'dọn dẹp', các request đang chạy sẽ bị ngắt đột ngột, gây lỗi cho người dùng hoặc sai lệch dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Server-side Languages",
+    "category": "SKILL"
+  }
+]

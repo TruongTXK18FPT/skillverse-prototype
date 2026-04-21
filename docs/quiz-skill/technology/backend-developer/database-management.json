@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục đích chính của Khóa chính (Primary Key) trong một bảng cơ sở dữ liệu quan hệ là gì?",
+    "options": [
+      "A. Để đảm bảo dữ liệu được mã hóa an toàn.",
+      "B. Để định danh duy nhất mỗi bản ghi trong bảng.",
+      "C. Để tăng tốc độ cho tất cả các câu lệnh UPDATE.",
+      "D. Để cho phép lưu trữ các giá trị trùng lặp trong cột."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Primary Key được sử dụng để xác định duy nhất một hàng trong bảng, đảm bảo không có hai hàng nào có cùng giá trị khóa chính.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khóa ngoại (Foreign Key) được sử dụng để làm gì?",
+    "options": [
+      "A. Để tạo bản sao dự phòng cho dữ liệu.",
+      "B. Để thiết lập mối liên kết giữa dữ liệu trong hai bảng.",
+      "C. Để thay thế hoàn toàn cho Khóa chính.",
+      "D. Để tự động xóa toàn bộ cơ sở dữ liệu khi cần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Foreign Key là một cột hoặc nhóm cột trong một bảng dùng để tham chiếu tới Khóa chính của một bảng khác, tạo ra mối quan hệ giữa chúng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong chuẩn hóa cơ sở dữ liệu, dạng chuẩn 1 (1NF) yêu cầu điều gì?",
+    "options": [
+      "A. Mỗi ô trong bảng chỉ chứa các giá trị đơn tử (atomic values).",
+      "B. Bảng không được phép có Khóa ngoại.",
+      "C. Mọi cột không khóa phải phụ thuộc hàm vào khóa chính.",
+      "D. Phải loại bỏ tất cả các phụ thuộc bắc cầu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Dạng chuẩn 1 (1NF) yêu cầu các giá trị trong mỗi cột phải là nguyên tố (không thể chia nhỏ hơn) và không có nhóm lặp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Câu lệnh SQL nào được dùng để lấy các bản ghi có giá trị khớp nhau ở cả hai bảng?",
+    "options": [
+      "A. LEFT JOIN",
+      "B. RIGHT JOIN",
+      "C. INNER JOIN",
+      "D. FULL OUTER JOIN"
+    ],
+    "correctAnswer": "C",
+    "explanation": "INNER JOIN trả về các bản ghi khi có ít nhất một giá trị khớp giữa các cột được liên kết ở cả hai bảng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong tính chất ACID của Transaction, chữ 'A' (Atomicity) có ý nghĩa gì?",
+    "options": [
+      "A. Dữ liệu phải luôn luôn sẵn sàng cho người dùng.",
+      "B. Một giao dịch phải được thực hiện hoàn toàn hoặc không thực hiện gì cả.",
+      "C. Các giao dịch phải được thực hiện một cách tuần tự.",
+      "D. Dữ liệu sau khi lưu phải tồn tại vĩnh viễn dù có lỗi hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Atomicity (Tính nguyên tử) đảm bảo rằng nếu một phần của giao dịch thất bại, toàn bộ giao dịch sẽ bị hủy bỏ (rollback).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Việc đánh Index (chỉ mục) cho một cột trong Database thường mang lại lợi ích gì?",
+    "options": [
+      "A. Giảm dung lượng lưu trữ trên đĩa cứng.",
+      "B. Tăng tốc độ truy vấn dữ liệu (SELECT).",
+      "C. Tăng tốc độ ghi dữ liệu (INSERT/UPDATE).",
+      "D. Tự động sửa lỗi dữ liệu bị sai định dạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Index giúp Database tìm kiếm dữ liệu nhanh hơn mà không cần quét toàn bộ bảng, tuy nhiên nó làm chậm thao tác ghi vì phải cập nhật chỉ mục.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa cơ sở dữ liệu SQL và NoSQL là gì?",
+    "options": [
+      "A. SQL không hỗ trợ giao dịch (Transactions).",
+      "B. NoSQL luôn nhanh hơn SQL trong mọi trường hợp.",
+      "C. SQL dựa trên mô hình quan hệ và schema cố định, NoSQL linh hoạt hơn về cấu trúc.",
+      "D. NoSQL chỉ có thể lưu trữ dữ liệu dạng văn bản đơn giản."
+    ],
+    "correctAnswer": "C",
+    "explanation": "SQL (Relational) sử dụng cấu trúc bảng và schema chặt chẽ, trong khi NoSQL (Non-relational) cho phép lưu trữ dữ liệu không cấu trúc hoặc bán cấu trúc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Câu lệnh nào được dùng để hoàn tác các thay đổi trong một Transaction khi có lỗi xảy ra?",
+    "options": [
+      "A. COMMIT",
+      "B. SAVEPOINT",
+      "C. ROLLBACK",
+      "D. DELETE"
+    ],
+    "correctAnswer": "C",
+    "explanation": "ROLLBACK được sử dụng để hủy bỏ các thay đổi chưa được lưu (commit) trong một giao dịch, đưa dữ liệu về trạng thái trước đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để xem kế hoạch thực thi (Execution Plan) của một câu lệnh SQL nhằm tối ưu hóa, bạn thường dùng từ khóa nào?",
+    "options": [
+      "A. SHOW",
+      "B. EXPLAIN",
+      "C. DESCRIBE",
+      "D. PLAN"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Từ khóa EXPLAIN (trong MySQL, PostgreSQL...) cung cấp thông tin về cách Database engine dự định thực hiện truy vấn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Ràng buộc UNIQUE trong SQL có tác dụng gì?",
+    "options": [
+      "A. Ngăn chặn các giá trị NULL trong cột.",
+      "B. Đảm bảo tất cả các giá trị trong một cột là khác nhau.",
+      "C. Tự động tăng giá trị của cột lên 1 đơn vị.",
+      "D. Chỉ cho phép các giá trị số dương."
+    ],
+    "correctAnswer": "B",
+    "explanation": "UNIQUE constraint đảm bảo rằng không có giá trị trùng lặp nào được nhập vào cột đó, ngoại trừ giá trị NULL (tùy DBMS).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của việc tạo 'Read Replica' (Bản sao chỉ đọc) là gì?",
+    "options": [
+      "A. Để tăng tốc độ ghi dữ liệu vào Database chính.",
+      "B. Để giảm tải cho Database chính bằng cách xử lý các truy vấn đọc.",
+      "C. Để thay đổi cấu trúc bảng mà không ảnh hưởng người dùng.",
+      "D. Để mã hóa dữ liệu nhạy cảm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Read Replica giúp mở rộng khả năng đọc (read scalability) bằng cách chuyển hướng các truy vấn SELECT sang các máy chủ phụ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Database Migration, mục đích của file 'Down' (hoặc Rollback script) là gì?",
+    "options": [
+      "A. Để xóa toàn bộ dữ liệu người dùng.",
+      "B. Để nâng cấp phiên bản ứng dụng.",
+      "C. Để hoàn tác các thay đổi cấu trúc mà file 'Up' đã thực hiện.",
+      "D. Để nén dung lượng cơ sở dữ liệu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Migration thường đi theo cặp Up (áp dụng thay đổi) và Down (hủy bỏ thay đổi) để quản lý phiên bản schema.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế quan hệ Nhiều - Nhiều (Many-to-Many) giữa bảng SinhVien và bảng MonHoc, giải pháp tốt nhất là gì?",
+    "options": [
+      "A. Thêm danh sách MonHoc vào một cột trong bảng SinhVien.",
+      "B. Thêm danh sách SinhVien vào một cột trong bảng MonHoc.",
+      "C. Tạo một bảng trung gian (Junction table) chứa khóa ngoại của cả hai bảng.",
+      "D. Gộp hai bảng SinhVien và MonHoc thành một bảng duy nhất."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong mô hình quan hệ, quan hệ Many-to-Many được giải quyết bằng một bảng trung gian kết nối Khóa chính của hai thực thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tính chất 'Durability' trong ACID đảm bảo điều gì?",
+    "options": [
+      "A. Dữ liệu không bao giờ bị trùng lặp.",
+      "B. Các thay đổi đã commit sẽ được lưu lại vĩnh viễn ngay cả khi hệ thống gặp sự cố.",
+      "C. Tốc độ truy vấn luôn ổn định.",
+      "D. Chỉ những người có quyền mới được truy cập dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Durability (Tính bền vững) đảm bảo kết quả của một giao dịch đã thành công sẽ không bị mất đi kể cả khi mất điện hoặc crash hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa câu lệnh DELETE và TRUNCATE là gì?",
+    "options": [
+      "A. DELETE xóa bảng, TRUNCATE xóa dữ liệu.",
+      "B. DELETE có thể đi kèm điều kiện WHERE, TRUNCATE thì không.",
+      "C. TRUNCATE chậm hơn DELETE vì nó kiểm tra từng dòng.",
+      "D. DELETE tự động reset giá trị Auto-increment, TRUNCATE thì không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DELETE là lệnh DML cho phép xóa từng dòng cụ thể, trong khi TRUNCATE là lệnh DDL xóa toàn bộ dữ liệu trong bảng nhanh chóng và không dùng WHERE.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong SQL, mệnh đề HAVING thường được sử dụng khi nào?",
+    "options": [
+      "A. Thay thế hoàn toàn cho mệnh đề WHERE.",
+      "B. Để lọc dữ liệu sau khi đã thực hiện gom nhóm (GROUP BY).",
+      "C. Để sắp xếp kết quả theo thứ tự giảm dần.",
+      "D. Để nối hai bảng với nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "WHERE lọc các dòng riêng lẻ trước khi nhóm, còn HAVING lọc các kết quả sau khi đã được tính toán bởi các hàm tập hợp (Aggregate functions) và GROUP BY.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Loại sao lưu (Backup) nào chỉ lưu lại những thay đổi kể từ lần sao lưu gần nhất (bất kể loại nào)?",
+    "options": [
+      "A. Full Backup",
+      "B. Differential Backup",
+      "C. Incremental Backup",
+      "D. Snapshot Backup"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Incremental Backup chỉ sao lưu những phần dữ liệu đã thay đổi kể từ lần backup gần nhất, giúp tiết kiệm không gian và thời gian thực hiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đâu là một ví dụ điển hình của cơ sở dữ liệu NoSQL dạng Document Store?",
+    "options": [
+      "A. MySQL",
+      "B. Redis",
+      "C. MongoDB",
+      "D. Oracle Database"
+    ],
+    "correctAnswer": "C",
+    "explanation": "MongoDB là cơ sở dữ liệu NoSQL phổ biến nhất lưu trữ dữ liệu dưới dạng các tài liệu (documents) tương tự JSON.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một 'Deadlock' xảy ra trong Database khi nào?",
+    "options": [
+      "A. Khi cơ sở dữ liệu bị hết dung lượng lưu trữ.",
+      "B. Khi hai hoặc nhiều giao dịch chờ đợi lẫn nhau giải phóng khóa (lock).",
+      "C. Khi người dùng nhập sai mật khẩu quá nhiều lần.",
+      "D. Khi một bảng có quá nhiều Index."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Deadlock là tình trạng đình trệ khi Transaction A giữ tài nguyên B cần, và Transaction B lại giữ tài nguyên A cần, khiến cả hai không thể tiếp tục.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Giá trị NULL trong cơ sở dữ liệu có ý nghĩa là gì?",
+    "options": [
+      "A. Giá trị bằng 0.",
+      "B. Một chuỗi ký tự rỗng (empty string).",
+      "C. Dữ liệu bị thiếu hoặc chưa xác định.",
+      "D. Một khoảng trắng (space)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "NULL đại diện cho việc không có giá trị hoặc giá trị không xác định, nó khác hoàn toàn với số 0 hoặc chuỗi rỗng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao không nên đánh Index cho tất cả các cột trong một bảng?",
+    "options": [
+      "A. Vì nó sẽ làm tăng đáng kể thời gian truy vấn SELECT.",
+      "B. Vì nó gây lãng phí bộ nhớ và làm chậm các thao tác INSERT/UPDATE/DELETE.",
+      "C. Vì Database sẽ bị lỗi và không thể khởi động.",
+      "D. Vì Index chỉ hoạt động trên các cột kiểu số."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi Index cần không gian lưu trữ và phải được cập nhật mỗi khi dữ liệu thay đổi, do đó quá nhiều Index sẽ làm giảm hiệu suất ghi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong SQL, lệnh nào dùng để thay đổi cấu trúc của một bảng đã tồn tại (ví dụ: thêm cột)?",
+    "options": [
+      "A. UPDATE TABLE",
+      "B. CHANGE TABLE",
+      "C. ALTER TABLE",
+      "D. MODIFY TABLE"
+    ],
+    "correctAnswer": "C",
+    "explanation": "ALTER TABLE là lệnh DDL được sử dụng để thêm, xóa hoặc sửa đổi các cột và ràng buộc trong một bảng hiện có.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục tiêu chính của việc 'Normalization' (Chuẩn hóa) cơ sở dữ liệu là gì?",
+    "options": [
+      "A. Để làm cho dữ liệu khó đọc hơn đối với người lạ.",
+      "B. Để giảm thiểu dư thừa dữ liệu và đảm bảo tính toàn vẹn.",
+      "C. Để gộp tất cả thông tin vào một bảng duy nhất cho dễ quản lý.",
+      "D. Để tăng dung lượng file cơ sở dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuẩn hóa giúp tổ chức dữ liệu một cách khoa học, tránh lặp lại thông tin dư thừa và ngăn ngừa các lỗi logic khi cập nhật dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào bạn nên chọn NoSQL thay vì SQL cho dự án của mình?",
+    "options": [
+      "A. Khi dữ liệu có cấu trúc rất ổn định và ít thay đổi.",
+      "B. Khi dự án đòi hỏi tính tuân thủ ACID cực kỳ khắt khe.",
+      "C. Khi cần mở rộng quy mô dữ liệu cực lớn và schema linh hoạt.",
+      "D. Khi bạn chỉ muốn sử dụng các câu lệnh SELECT đơn giản."
+    ],
+    "correctAnswer": "C",
+    "explanation": "NoSQL thường được ưu tiên khi cần xử lý Big Data, yêu cầu khả năng mở rộng ngang (horizontal scaling) và dữ liệu không có cấu trúc cố định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Thứ tự thực thi đúng của các mệnh đề trong một câu lệnh SQL SELECT là gì?",
+    "options": [
+      "A. SELECT -> FROM -> WHERE -> GROUP BY",
+      "B. FROM -> WHERE -> GROUP BY -> SELECT",
+      "C. WHERE -> FROM -> SELECT -> GROUP BY",
+      "D. SELECT -> WHERE -> FROM -> GROUP BY"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Về mặt logic, Database engine sẽ xác định nguồn dữ liệu (FROM) trước, lọc dòng (WHERE), nhóm dữ liệu (GROUP BY) rồi mới chọn các cột hiển thị (SELECT).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống E-commerce, bạn cần tối ưu hóa câu lệnh SELECT có chứa nhiều JOIN giữa bảng Orders, OrderItems và Products. Giải pháp nào sau đây giúp cải thiện hiệu năng tốt nhất mà không làm thay đổi cấu trúc logic dữ liệu?",
+    "options": [
+      "A. Tạo Covering Index chứa các cột thường xuyên xuất hiện trong mệnh đề SELECT và WHERE.",
+      "B. Chuyển tất cả dữ liệu sang NoSQL để tận dụng khả năng mở rộng ngang.",
+      "C. Thực hiện De-normalization bằng cách gộp 3 bảng thành 1 bảng duy nhất.",
+      "D. Sử dụng SELECT * để đảm bảo không bỏ sót dữ liệu khi JOIN."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Covering Index cho phép database lấy toàn bộ dữ liệu cần thiết ngay từ index tree mà không cần truy cập vào data blocks (Heap), giúp giảm I/O đáng kể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hiện tượng 'Phantom Read' xảy ra trong tình huống nào dưới đây?",
+    "options": [
+      "A. Một transaction đọc một dòng dữ liệu hai lần và nhận được giá trị khác nhau do transaction khác đã Update.",
+      "B. Một transaction đọc một tập hợp các dòng thỏa mãn điều kiện, sau đó transaction khác Insert thêm dòng mới thỏa mãn điều kiện đó.",
+      "C. Một transaction đọc dữ liệu chưa được Commit của một transaction khác.",
+      "D. Một transaction bị treo vô thời hạn do tranh chấp tài nguyên với transaction khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phantom Read xảy ra khi một transaction chạy cùng một query nhiều lần nhưng nhận được các tập kết quả khác nhau do các dòng mới được chèn vào bởi transaction khác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế Index cho câu lệnh: SELECT * FROM users WHERE status = 'active' ORDER BY created_at DESC, bạn nên chọn loại index nào để tối ưu nhất?",
+    "options": [
+      "A. Single index trên cột status.",
+      "B. Single index trên cột created_at.",
+      "C. Composite index trên (status, created_at).",
+      "D. Composite index trên (created_at, status)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thứ tự trong Composite Index rất quan trọng. Cột dùng trong mệnh đề lọc (Equality) nên đứng trước cột dùng để sắp xếp (Range/Sort) để database có thể tìm và trả về kết quả theo đúng thứ tự mà không cần bước Sort phụ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong PostgreSQL hoặc MySQL (InnoDB), Isolation level mặc định thường là gì và nó ngăn chặn được lỗi nào?",
+    "options": [
+      "A. READ UNCOMMITTED; không ngăn chặn được lỗi nào.",
+      "B. READ COMMITTED; ngăn chặn được Dirty Read.",
+      "C. REPEATABLE READ; ngăn chặn được cả Phantom Read.",
+      "D. SERIALIZABLE; ngăn chặn tất cả các hiện tượng tranh chấp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đa số các RDBMS hiện đại mặc định ở mức READ COMMITTED (hoặc REPEATABLE READ tùy cấu hình), mức này đảm bảo một transaction chỉ thấy dữ liệu đã được commit, tránh Dirty Read.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thực hiện migration một bảng có 100 triệu dòng để thêm một cột mới có giá trị mặc định. Cách tiếp cận nào ít gây ảnh hưởng đến hệ thống đang chạy (Zero-downtime) nhất?",
+    "options": [
+      "A. Chạy trực tiếp lệnh ALTER TABLE ADD COLUMN DEFAULT giá trị ngay lập tức.",
+      "B. Tạo một bảng mới với cấu trúc mới, copy dữ liệu sang, sau đó đổi tên bảng.",
+      "C. Thêm cột mới cho phép NULL, sau đó cập nhật giá trị theo từng batch nhỏ và cuối cùng thêm ràng buộc NOT NULL.",
+      "D. Khóa bảng (Lock table) trong giờ thấp điểm để thực hiện migration nhanh nhất."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thêm cột cho phép NULL là thao tác metadata nhanh. Cập nhật theo batch giúp tránh khóa bảng lâu và không làm đầy transaction log, đảm bảo hệ thống vẫn hoạt động bình thường.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa B-Tree Index và Hash Index là gì?",
+    "options": [
+      "A. Hash Index hỗ trợ tìm kiếm khoảng (range scan), B-Tree thì không.",
+      "B. B-Tree Index hỗ trợ tìm kiếm chính xác và tìm kiếm khoảng, Hash Index chỉ hỗ trợ tìm kiếm chính xác.",
+      "C. Hash Index luôn chậm hơn B-Tree Index trong mọi trường hợp.",
+      "D. B-Tree Index chỉ dùng được cho dữ liệu kiểu số, Hash Index dùng được cho mọi kiểu dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "B-Tree lưu trữ dữ liệu có thứ tự nên hỗ trợ các toán tử >, <, BETWEEN. Hash Index sử dụng bảng băm nên chỉ hiệu quả với toán tử bằng (=).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong chiến lược Database Replication, 'Replication Lag' lớn thường gây ra vấn đề gì cho ứng dụng?",
+    "options": [
+      "A. Làm hỏng dữ liệu trên node Primary.",
+      "B. Người dùng vừa cập nhật thông tin nhưng khi tải lại trang (đọc từ Replica) thì thấy dữ liệu cũ.",
+      "C. Làm tăng thời gian phản hồi (latency) của các câu lệnh Write.",
+      "D. Khiến các câu lệnh JOIN trên node Replica không hoạt động chính xác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Replication Lag là độ trễ khi đồng bộ dữ liệu từ Primary sang Replica. Nếu ứng dụng đọc từ Replica ngay sau khi ghi vào Primary, người dùng có thể thấy dữ liệu chưa kịp cập nhật (Inconsistency).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi nào bạn nên cân nhắc sử dụng Database Sharding thay vì chỉ sử dụng Read Replicas?",
+    "options": [
+      "A. Khi số lượng câu lệnh Read tăng quá cao.",
+      "B. Khi kích thước database vượt quá khả năng lưu trữ của một server vật lý hoặc throughput ghi (Write) đạt ngưỡng giới hạn.",
+      "C. Khi bạn muốn đơn giản hóa việc quản lý backup dữ liệu.",
+      "D. Khi bạn cần thực hiện các câu lệnh JOIN phức tạp giữa nhiều bảng lớn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Read Replicas chỉ giúp mở rộng khả năng đọc. Sharding (phân mảnh dữ liệu) là giải pháp để mở rộng cả khả năng ghi và dung lượng lưu trữ bằng cách chia nhỏ dữ liệu ra nhiều node.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong SQL, mệnh đề 'EXPLAIN ANALYZE' (PostgreSQL) hoặc 'EXPLAIN' (MySQL) cung cấp thông tin quan trọng nhất là gì?",
+    "options": [
+      "A. Danh sách các user đang truy cập vào bảng.",
+      "B. Cấu trúc DDL của bảng hiện tại.",
+      "C. Cách thức database engine dự định thực thi query và thời gian thực tế tại mỗi bước.",
+      "D. Ước tính dung lượng bộ nhớ RAM mà database đang sử dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "EXPLAIN giúp lập trình viên biết query có dùng Index không, loại Join là gì, và chi phí (cost) thực tế của từng bước trong Query Plan.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống yêu cầu tính sẵn sàng cao (High Availability) và không chấp nhận mất dữ liệu khi có sự cố server. Bạn nên chọn cấu hình Replication nào?",
+    "options": [
+      "A. Asynchronous Replication.",
+      "B. Synchronous Replication.",
+      "C. Snapshot Replication.",
+      "D. Chỉ cần thực hiện Backup hàng giờ là đủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Synchronous Replication đảm bảo dữ liệu được ghi thành công ở cả Primary và ít nhất một Replica trước khi báo thành công cho client, giúp đảm bảo không mất dữ liệu nếu Primary chết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng UUID làm Primary Key trong một bảng có lưu lượng ghi lớn (High Write) đôi khi lại gây ra vấn đề hiệu năng so với Auto-increment Integer?",
+    "options": [
+      "A. UUID tốn nhiều bộ nhớ hơn (128-bit vs 32/64-bit).",
+      "B. UUID không có tính thứ tự, dẫn đến việc chèn dữ liệu gây ra hiện tượng phân mảnh Index (Index fragmentation).",
+      "C. Database không hỗ trợ đánh Index cho kiểu dữ liệu String/UUID.",
+      "D. UUID dễ bị trùng lặp hơn so với Auto-increment."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vì UUID v4 mang tính ngẫu nhiên, việc chèn vào B-Tree Index sẽ xảy ra ở các vị trí ngẫu nhiên thay vì nối tiếp ở cuối, dẫn đến việc phải sắp xếp lại các node liên tục và gây phân mảnh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kỹ thuật xử lý tranh chấp (Concurrency Control), 'Optimistic Locking' thường được triển khai như thế nào?",
+    "options": [
+      "A. Sử dụng lệnh SELECT ... FOR UPDATE để khóa dòng dữ liệu.",
+      "B. Sử dụng một cột version hoặc timestamp để kiểm tra dòng dữ liệu có bị thay đổi bởi người khác trước khi Update hay không.",
+      "C. Thiết lập Isolation level của database lên mức SERIALIZABLE.",
+      "D. Ngăn chặn tất cả các kết nối khác vào database khi một transaction đang chạy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Optimistic Locking giả định ít xảy ra tranh chấp. Nó không dùng khóa vật lý mà dùng logic (như cột version) để kiểm tra tính toàn vẹn tại thời điểm commit.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn có câu lệnh: SELECT * FROM products WHERE category_id = 10 AND price < 100. Chỉ mục (Index) nào sau đây là tối ưu nhất?",
+    "options": [
+      "A. Index(price).",
+      "B. Index(category_id).",
+      "C. Index(price, category_id).",
+      "D. Index(category_id, price)."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Theo quy tắc tối ưu index, các cột so sánh bằng (=) nên đứng trước các cột so sánh khoảng (<, >) trong một composite index.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Foreign Key' trong Database là gì?",
+    "options": [
+      "A. Làm tăng tốc độ của các câu lệnh JOIN.",
+      "B. Đảm bảo tính toàn vẹn tham chiếu (Referential Integrity) giữa các bảng.",
+      "C. Tự động tạo Index cho các cột liên quan.",
+      "D. Giảm dung lượng lưu trữ của database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Foreign Key đảm bảo rằng mối quan hệ giữa các bảng luôn hợp lệ (ví dụ: không thể xóa một Product nếu vẫn còn OrderItems tham chiếu tới nó).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices, khi một nghiệp vụ cần cập nhật dữ liệu ở hai database khác nhau, giải pháp nào đảm bảo tính nhất quán dữ liệu (Consistency) tốt nhất mà vẫn giữ được hiệu năng?",
+    "options": [
+      "A. Sử dụng Distributed Transactions (2PC - Two Phase Commit).",
+      "B. Sử dụng Saga Pattern (Choreography hoặc Orchestration).",
+      "C. Gộp hai database thành một database duy nhất.",
+      "D. Chấp nhận dữ liệu sai lệch và sửa thủ công hàng ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Saga Pattern giúp quản lý các giao dịch phân tán thông qua một chuỗi các giao dịch địa phương và các bước bù đắp (compensating transactions) nếu có lỗi, tránh được nhược điểm treo tài nguyên của 2PC.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Câu lệnh nào dùng để xóa toàn bộ dữ liệu trong bảng nhưng giữ lại cấu trúc bảng và có tốc độ nhanh hơn DELETE?",
+    "options": [
+      "A. DROP TABLE.",
+      "B. REMOVE ALL.",
+      "C. TRUNCATE TABLE.",
+      "D. CLEAN TABLE."
+    ],
+    "correctAnswer": "C",
+    "explanation": "TRUNCATE là một lệnh DDL, nó xóa dữ liệu bằng cách giải phóng các data pages thay vì xóa từng dòng và ghi log chi tiết cho từng dòng như DELETE, nên tốc độ nhanh hơn nhiều.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một hệ thống Logging lưu trữ hàng tỷ bản ghi mỗi tháng và chỉ truy vấn theo khoảng thời gian, kỹ thuật nào giúp quản lý dữ liệu hiệu quả nhất?",
+    "options": [
+      "A. Tạo thật nhiều Index trên các cột.",
+      "B. Sử dụng Table Partitioning theo thời gian (ví dụ: theo tháng).",
+      "C. Sử dụng View để gộp dữ liệu các năm lại.",
+      "D. Nén dữ liệu định kỳ bằng các công cụ bên ngoài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Partitioning giúp chia bảng lớn thành các phần nhỏ hơn dựa trên giá trị cột (như thời gian). Việc truy vấn theo thời gian sẽ chỉ quét trên các partition liên quan (Partition Pruning) và việc xóa dữ liệu cũ (Drop partition) cực kỳ nhanh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một câu query chạy rất chậm. Sau khi kiểm tra EXPLAIN, bạn thấy 'Full Table Scan' mặc dù đã có Index trên cột ở mệnh đề WHERE. Nguyên nhân có thể là gì?",
+    "options": [
+      "A. Cột trong mệnh đề WHERE đang bị bao bọc bởi một hàm (ví dụ: WHERE YEAR(created_at) = 2023).",
+      "B. Database engine bị lỗi và cần phải khởi động lại.",
+      "C. Bảng có quá ít dữ liệu (ví dụ: chỉ có 10 dòng).",
+      "D. Cả A và C đều có thể đúng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Database sẽ bỏ qua Index nếu: 1. Sử dụng hàm trên cột khiến Index không thể sử dụng (Sargability). 2. Bảng quá nhỏ, việc quét toàn bộ bảng nhanh hơn là đọc Index rồi mới tìm dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt giữa INNER JOIN và LEFT JOIN là gì?",
+    "options": [
+      "A. INNER JOIN nhanh hơn LEFT JOIN trong mọi trường hợp.",
+      "B. INNER JOIN chỉ trả về các dòng có sự khớp nhau ở cả hai bảng; LEFT JOIN trả về tất cả các dòng ở bảng bên trái và các dòng khớp ở bảng bên phải.",
+      "C. LEFT JOIN chỉ trả về các dòng không khớp nhau giữa hai bảng.",
+      "D. INNER JOIN trả về tất cả các dòng của cả hai bảng bất kể có khớp hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là kiến thức cơ bản về Join. INNER JOIN lấy phần giao, LEFT JOIN lấy toàn bộ bảng bên trái và phần giao với bảng bên phải.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong CAP Theorem, một hệ thống RDBMS truyền thống (như MySQL đơn lẻ) thường ưu tiên hai yếu tố nào?",
+    "options": [
+      "A. Consistency (C) và Availability (A).",
+      "B. Availability (A) và Partition Tolerance (P).",
+      "C. Consistency (C) và Partition Tolerance (P).",
+      "D. Hệ thống RDBMS không tuân theo CAP Theorem."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các RDBMS truyền thống tập trung vào tính nhất quán dữ liệu cao và tính sẵn sàng trên một node duy nhất (CA). Khi chuyển sang hệ thống phân tán, chúng phải đối mặt với bài toán Partition Tolerance.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao không nên đặt Index trên những cột có độ chọn lọc (Cardinality) thấp như 'Gender' (Nam/Nữ)?",
+    "options": [
+      "A. Vì Index sẽ chiếm quá nhiều dung lượng ổ cứng.",
+      "B. Vì Database engine thường thấy việc quét toàn bộ bảng (Full Table Scan) hiệu quả hơn là sử dụng Index cho các giá trị lặp lại quá nhiều.",
+      "C. Vì kiểu dữ liệu Boolean/Enum không hỗ trợ Index.",
+      "D. Vì nó sẽ làm chậm các câu lệnh SELECT."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cardinality thấp nghĩa là một giá trị chiếm tỷ lệ lớn trong bảng. Khi đó, chi phí để đọc Index rồi quay lại đọc Data block (Random I/O) sẽ cao hơn việc đọc tuần tự toàn bộ bảng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Mục đích của 'Write-Ahead Logging' (WAL) trong các hệ thống Database là gì?",
+    "options": [
+      "A. Để tăng tốc độ của các câu lệnh SELECT.",
+      "B. Để đảm bảo tính bền vững (Durability) của dữ liệu, cho phép khôi phục lại các thay đổi nếu hệ thống bị crash đột ngột.",
+      "C. Để lưu trữ lịch sử các câu lệnh SQL mà người dùng đã thực hiện.",
+      "D. Để tự động sao lưu dữ liệu sang một server khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "WAL đảm bảo rằng mọi thay đổi dữ liệu đều được ghi vào log trước khi ghi vào file dữ liệu chính thức. Nếu hệ thống sập, database có thể replay log này để khôi phục trạng thái nhất quán.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần lưu trữ thông tin sản phẩm với các thuộc tính thay đổi linh hoạt tùy theo loại sản phẩm (ví dụ: Laptop có RAM, CPU; Quần áo có Size, Màu). Giải pháp nào linh hoạt nhất trong RDBMS?",
+    "options": [
+      "A. Tạo thêm hàng trăm cột cho mỗi thuộc tính có thể có.",
+      "B. Sử dụng kiểu dữ liệu JSONB (trong PostgreSQL) hoặc JSON (trong MySQL) để lưu các thuộc tính động.",
+      "C. Tạo một bảng mới cho mỗi loại sản phẩm.",
+      "D. Chỉ lưu trữ dưới dạng text và parse bằng code ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng cột JSON/JSONB cho phép lưu trữ schema-less trong lòng RDBMS, giúp linh hoạt trong việc thêm bớt thuộc tính mà không cần thay đổi cấu trúc bảng (Migration).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện 'Soft Delete' (dùng cột deleted_at thay vì xóa dòng), vấn đề gì cần lưu ý nhất về Index?",
+    "options": [
+      "A. Index không còn hoạt động trên các bảng có Soft Delete.",
+      "B. Cần thêm điều kiện 'WHERE deleted_at IS NULL' vào hầu hết các query và cân nhắc đưa cột này vào Composite Index.",
+      "C. Soft Delete làm database chạy nhanh hơn vì không phải xóa dữ liệu vật lý.",
+      "D. Không cần quan tâm vì database tự động xử lý các dòng bị Soft Delete."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi dùng Soft Delete, hầu như mọi câu query đều phải lọc bỏ các dòng đã xóa. Nếu không có index phù hợp bao gồm cả cột deleted_at, hiệu năng sẽ giảm dần khi lượng dữ liệu 'rác' tăng lên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong mô hình Master-Slave (Primary-Replica), node Replica thường được sử dụng cho mục đích chính nào?",
+    "options": [
+      "A. Thực hiện các câu lệnh INSERT, UPDATE, DELETE để giảm tải cho Master.",
+      "B. Lưu trữ các bản backup định kỳ của hệ thống.",
+      "C. Mở rộng khả năng đọc (Read Scaling) và làm dự phòng khi Master gặp sự cố (Failover).",
+      "D. Chạy các tiến trình dọn dẹp dữ liệu rác (Garbage Collection)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Replica nhận dữ liệu từ Master và thường chỉ dùng để phục vụ các truy vấn đọc hoặc chuyển thành Master mới nếu Master chính bị hỏng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống có lưu lượng ghi cực cao, bạn nên chọn cấu trúc dữ liệu lưu trữ (Storage Engine) nào để tối ưu hóa hiệu năng ghi (Write Throughput)?",
+    "options": [
+      "A. B+ Tree",
+      "B. LSM-Tree (Log-Structured Merge-Tree)",
+      "C. Hash Index",
+      "D. In-memory Heap"
+    ],
+    "correctAnswer": "B",
+    "explanation": "LSM-Tree tối ưu hóa việc ghi bằng cách biến các thao tác ghi ngẫu nhiên thành ghi tuần tự vào log và memtable, sau đó mới merge xuống đĩa, vượt trội hơn B+ Tree vốn đòi hỏi nhiều thao tác cập nhật trang đĩa ngẫu nhiên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện Database Sharding dựa trên 'User ID', thách thức lớn nhất mà đội ngũ phát triển phải đối mặt khi mở rộng hệ thống là gì?",
+    "options": [
+      "A. Không thể thực hiện các câu lệnh JOIN giữa các shard một cách trực tiếp.",
+      "B. Tốc độ đọc dữ liệu từ một shard đơn lẻ sẽ bị chậm đi.",
+      "C. Dữ liệu User ID không đủ độ phân tán để băm (hash).",
+      "D. Chi phí lưu trữ trên mỗi shard tăng lên gấp đôi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi dữ liệu bị phân mảnh sang các node vật lý khác nhau, các ràng buộc quan hệ và thao tác JOIN liên shard trở nên cực kỳ phức tạp và tốn kém, thường yêu cầu xử lý ở tầng ứng dụng hoặc dùng công cụ trung gian.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong cơ chế MVCC (Multi-Version Concurrency Control), làm thế nào để database xử lý việc đọc dữ liệu trong khi một transaction khác đang cập nhật chính dòng đó?",
+    "options": [
+      "A. Sử dụng Shared Lock để ngăn chặn việc cập nhật.",
+      "B. Transaction đang đọc sẽ phải đợi cho đến khi transaction cập nhật Commit.",
+      "C. Database cung cấp một bản snapshot (phiên bản cũ) của dữ liệu cho transaction đọc.",
+      "D. Database sẽ rollback transaction cập nhật để ưu tiên transaction đọc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "MVCC cho phép đọc và ghi không chặn nhau bằng cách duy trì nhiều phiên bản của một dòng dữ liệu. Transaction đọc sẽ nhìn thấy phiên bản dữ liệu tại thời điểm nó bắt đầu (snapshot).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Vấn đề 'Write Amplification' trong các hệ thống NoSQL như Cassandra hay RocksDB chủ yếu gây ra bởi quy trình nào?",
+    "options": [
+      "A. Quá trình Indexing dữ liệu mới.",
+      "B. Quá trình Compaction (nén và hợp nhất các SSTables).",
+      "C. Quá trình Replication dữ liệu sang các node khác.",
+      "D. Quá trình phân tích Query Plan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Write Amplification xảy ra khi dữ liệu được ghi lại nhiều lần vào đĩa thông qua quá trình Compaction để dọn dẹp và sắp xếp lại các file dữ liệu trong kiến trúc LSM-Tree.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao mức cô lập 'Serializable' lại ít được sử dụng trong các hệ thống OLTP có độ trễ thấp mặc dù nó đảm bảo tính nhất quán cao nhất?",
+    "options": [
+      "A. Vì nó không hỗ trợ các câu lệnh phức tạp.",
+      "B. Vì nó gây ra xung đột khóa (lock contention) nghiêm trọng và làm giảm throughput.",
+      "C. Vì nó không thể ngăn chặn hiện tượng Dirty Read.",
+      "D. Vì nó yêu cầu dung lượng bộ nhớ RAM gấp đôi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Serializable yêu cầu kiểm soát nghiêm ngặt để đảm bảo các transaction thực thi như thể tuần tự, dẫn đến việc khóa dữ liệu diện rộng hoặc rollback thường xuyên do xung đột, làm giảm hiệu năng hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống phân tán, nếu bạn ưu tiên tính 'Availability' và 'Partition Tolerance' (theo định lý CAP), bạn buộc phải chấp nhận đánh đổi điều gì?",
+    "options": [
+      "A. Mất khả năng mở rộng theo chiều ngang (Scalability).",
+      "B. Chấp nhận tính nhất quán cuối cùng (Eventual Consistency) thay vì nhất quán tức thì.",
+      "C. Không thể sử dụng các chỉ mục (Index).",
+      "D. Hệ thống sẽ không thể phục hồi sau thảm họa (Disaster Recovery)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Theo định lý CAP, trong một hệ thống phân tán gặp sự cố phân mảnh mạng (P), nếu chọn tính sẵn sàng (A), bạn không thể đảm bảo mọi node đều có dữ liệu mới nhất ngay lập tức (C).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một truy vấn SQL chạy chậm do 'Index Scan' thay vì 'Index Seek'. Nguyên nhân phổ biến nhất dẫn đến tình trạng này là gì?",
+    "options": [
+      "A. Bảng có quá ít dữ liệu.",
+      "B. Cột được đánh index nằm trong mệnh đề SELECT.",
+      "C. Sử dụng hàm (function) hoặc toán tử không tối ưu trên cột có index trong mệnh đề WHERE.",
+      "D. Database vừa mới được khởi động lại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi áp dụng hàm lên cột (ví dụ: WHERE YEAR(date_col) = 2023), Optimizer thường không thể sử dụng cấu trúc cây của index để tìm kiếm nhanh (Seek) mà phải duyệt qua toàn bộ index (Scan).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong PostgreSQL, hiện tượng 'Bloat' trong các bảng dữ liệu thường do cơ chế nào gây ra?",
+    "options": [
+      "A. Quá trình sao lưu dữ liệu liên tục.",
+      "B. Việc thực hiện quá nhiều lệnh JOIN.",
+      "C. Cách MVCC xử lý UPDATE/DELETE bằng cách đánh dấu dòng cũ là 'dead' nhưng chưa thu hồi không gian đĩa.",
+      "D. Do kích thước của Index quá lớn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "PostgreSQL không ghi đè trực tiếp mà tạo phiên bản mới. Các dòng cũ (dead tuples) chỉ được dọn dẹp bởi tiến trình VACUUM. Nếu không dọn kịp, file dữ liệu sẽ phình to (Bloat).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần thực hiện thay đổi schema (migration) cho một bảng có hàng tỷ dòng dữ liệu trong khi hệ thống vẫn đang hoạt động. Chiến lược nào là an toàn nhất?",
+    "options": [
+      "A. Chạy lệnh ALTER TABLE trực tiếp vào giờ thấp điểm.",
+      "B. Sử dụng công cụ như gh-ost hoặc pt-online-schema-change để copy dữ liệu sang bảng mới ngầm định.",
+      "C. Khóa bảng (Table Lock) để thực hiện migration nhanh nhất có thể.",
+      "D. Tăng cấu hình phần cứng server lên tối đa trước khi chạy migration."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các công cụ online schema change tạo một bảng tạm, copy dữ liệu dần dần và dùng trigger hoặc binlog để đồng bộ các thay đổi mới, giúp tránh khóa bảng lâu gây treo hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi nào việc sử dụng 'Denormalization' (Phi chuẩn hóa) là một quyết định kiến trúc hợp lý?",
+    "options": [
+      "A. Khi cần đảm bảo tính toàn vẹn dữ liệu tuyệt đối.",
+      "B. Khi hệ thống có tần suất ghi cao hơn tần suất đọc.",
+      "C. Khi cần tối ưu hóa hiệu năng đọc cho các truy vấn phức tạp trong hệ thống quy mô lớn.",
+      "D. Khi muốn giảm thiểu dung lượng lưu trữ trên đĩa cứng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Denormalization làm tăng tốc độ đọc bằng cách giảm số lượng JOIN, đổi lại là sự dư thừa dữ liệu và độ phức tạp khi cập nhật, phù hợp cho các hệ thống đọc nhiều hoặc báo cáo.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Replicaton, hiện tượng 'Replication Lag' kéo dài thường dẫn đến hậu quả trực tiếp nào đối với ứng dụng?",
+    "options": [
+      "A. Dữ liệu bị mất hoàn toàn trên node Master.",
+      "B. Người dùng đọc phải dữ liệu cũ (stale data) khi truy vấn từ Read Replicas.",
+      "C. Không thể thực hiện lệnh INSERT vào database.",
+      "D. Tốc độ mạng nội bộ bị nghẽn hoàn toàn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Replication Lag là độ trễ giữa thời điểm ghi vào Master và thời điểm dữ liệu đó xuất hiện trên Replica. Nếu lag lớn, người dùng đọc từ Replica sẽ thấy dữ liệu chưa được cập nhật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao 'Composite Index' (Index trên nhiều cột) lại quan trọng thứ tự các cột?",
+    "options": [
+      "A. Vì Database sẽ tự động sắp xếp lại các cột theo bảng chữ cái.",
+      "B. Vì Index chỉ có thể được sử dụng hiệu quả nếu truy vấn chứa các cột theo đúng thứ tự từ trái sang phải (Left-most prefix rule).",
+      "C. Vì thứ tự cột quyết định dung lượng lưu trữ của Index.",
+      "D. Vì cột đứng sau sẽ ghi đè giá trị của cột đứng trước."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cấu trúc cây của Composite Index được sắp xếp dựa trên cột đầu tiên, sau đó mới đến các cột tiếp theo. Truy vấn thiếu cột tiền tố bên trái thường không tận dụng được index này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cơ chế 'Two-Phase Commit' (2PC) giải quyết vấn đề gì trong hệ thống cơ sở dữ liệu phân tán?",
+    "options": [
+      "A. Tăng tốc độ thực thi transaction.",
+      "B. Đảm bảo tính nguyên tử (Atomicity) của transaction trải dài trên nhiều node.",
+      "C. Tự động phân mảnh dữ liệu (Auto-sharding).",
+      "D. Giảm thiểu độ trễ mạng giữa các data center."
+    ],
+    "correctAnswer": "B",
+    "explanation": "2PC đảm bảo rằng tất cả các node tham gia vào một transaction phân tán đều commit hoặc tất cả đều rollback, giữ cho dữ liệu nhất quán trên toàn hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong SQL Server hoặc MySQL, 'Deadlock' xảy ra khi nào?",
+    "options": [
+      "A. Khi một transaction chạy quá lâu và bị hệ thống tự động ngắt.",
+      "B. Khi hai hoặc nhiều transaction giữ khóa các tài nguyên mà đối phương đang cần, tạo thành vòng lặp chờ đợi.",
+      "C. Khi ổ cứng bị đầy và database không thể ghi thêm dữ liệu.",
+      "D. Khi có quá nhiều kết nối cùng lúc vào một bảng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Deadlock là tình trạng bế tắc khi T1 giữ Resource A chờ Resource B, trong khi T2 giữ Resource B chờ Resource A. Database phải can thiệp bằng cách hủy một transaction.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Database Partitioning' (theo chiều dọc hoặc ngang) mục đích chính là để làm gì?",
+    "options": [
+      "A. Để thay thế hoàn toàn việc sử dụng Index.",
+      "B. Để chia nhỏ dữ liệu giúp quản lý dễ dàng hơn và cải thiện hiệu năng bằng cách giảm phạm vi quét dữ liệu.",
+      "C. Để mã hóa dữ liệu an toàn hơn.",
+      "D. Để tự động chuyển đổi từ SQL sang NoSQL."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Partitioning giúp chia bảng lớn thành các phần nhỏ hơn dựa trên một tiêu chí (như thời gian). Optimizer có thể loại bỏ các partition không liên quan (partition pruning), tăng tốc truy vấn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Redis làm Cache, chiến lược 'Cache Aside' hoạt động như thế nào?",
+    "options": [
+      "A. Ứng dụng luôn ghi vào Cache trước, sau đó Cache tự đồng bộ vào DB.",
+      "B. Ứng dụng kiểm tra Cache; nếu thiếu (miss), đọc từ DB rồi cập nhật vào Cache.",
+      "C. DB tự động đẩy dữ liệu mới nhất vào Cache mỗi khi có thay đổi.",
+      "D. Ứng dụng chỉ đọc từ Cache, nếu không có thì trả về lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cache Aside là mô hình phổ biến nhất: Ứng dụng chịu trách nhiệm điều phối giữa Cache và DB. Đọc: Cache -> DB -> Update Cache. Ghi: DB -> Invalidate Cache.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Connection Pooling' trong ứng dụng Backend là gì?",
+    "options": [
+      "A. Giảm chi phí thiết lập và hủy kết nối TCP/Database session cho mỗi request.",
+      "B. Tự động tối ưu hóa các câu lệnh SQL chạy chậm.",
+      "C. Cho phép thực hiện các transaction mà không cần commit.",
+      "D. Tăng dung lượng lưu trữ của cơ sở dữ liệu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Việc khởi tạo một kết nối database mới rất tốn kém (handshake, authentication). Pooling giữ lại các kết nối đã mở để tái sử dụng, giúp giảm đáng kể latency và tải cho DB.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh Microservices, mẫu thiết kế 'Saga' được sử dụng để thay thế điều gì khi làm việc với database?",
+    "options": [
+      "A. Thay thế việc sử dụng REST API bằng gRPC.",
+      "B. Thay thế các Transaction phân tán (Distributed Transactions/2PC) khó mở rộng.",
+      "C. Thay thế việc sử dụng Index trong database.",
+      "D. Thay thế cơ chế Load Balancing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Saga quản lý các transaction cục bộ trên nhiều service và sử dụng các 'compensating transactions' để hoàn tác nếu có lỗi, giúp duy trì tính nhất quán mà không cần khóa tài nguyên lâu như 2PC.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một 'Covering Index' là loại index như thế nào?",
+    "options": [
+      "A. Là index bao phủ toàn bộ các bảng trong database.",
+      "B. Là index chứa tất cả các cột cần thiết cho một truy vấn cụ thể, giúp database không cần truy cập vào bảng gốc (Table Access by Index Rowid).",
+      "C. Là index tự động được tạo trên khóa chính.",
+      "D. Là index dùng để mã hóa dữ liệu nhạy cảm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu một index chứa đủ tất cả các cột trong phần SELECT và WHERE, database chỉ cần đọc dữ liệu ngay trên index, giảm thiểu I/O đĩa đáng kể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng UUID làm Primary Key trong các bảng có lưu lượng ghi lớn (đặc biệt là B-Tree dựa trên đĩa) có thể gây vấn đề hiệu năng?",
+    "options": [
+      "A. Vì UUID quá ngắn không đủ bảo mật.",
+      "B. Vì UUID ngẫu nhiên gây ra tình trạng 'Page Fragmentation' và chèn dữ liệu vào các trang đĩa một cách lộn xộn.",
+      "C. Vì UUID không thể so sánh được trong câu lệnh WHERE.",
+      "D. Vì UUID bắt buộc phải đi kèm với Auto Increment."
+    ],
+    "correctAnswer": "B",
+    "explanation": "UUID ngẫu nhiên khiến dữ liệu mới không được chèn vào cuối bảng mà chèn vào giữa các trang đĩa ngẫu nhiên, dẫn đến việc tách trang (page split) liên tục và làm giảm hiệu suất ghi/đọc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong hệ thống phân tán, 'Quorum Reads/Writes' (N, R, W) được sử dụng để làm gì?",
+    "options": [
+      "A. Để đảm bảo dữ liệu luôn được nén trước khi lưu.",
+      "B. Để cấu hình sự cân bằng giữa độ trễ (latency) và tính nhất quán (consistency) của dữ liệu.",
+      "C. Để tự động tạo các bản backup định kỳ.",
+      "D. Để ngăn chặn các cuộc tấn công SQL Injection."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bằng cách điều chỉnh số lượng node cần xác nhận ghi (W) và đọc (R) so với tổng số bản sao (N), ta có thể đạt được tính nhất quán mạnh (W+R > N) hoặc ưu tiên tốc độ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện 'Database Sharding', 'Hotspot' là tình trạng gì?",
+    "options": [
+      "A. Khi server database bị quá nhiệt do thiếu tản nhiệt.",
+      "B. Khi một shard cụ thể nhận quá nhiều dữ liệu hoặc truy vấn so với các shard khác do chọn Shard Key không tốt.",
+      "C. Khi dữ liệu được lưu trữ hoàn toàn trên RAM.",
+      "D. Khi tất cả các kết nối bị từ chối do sai mật khẩu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hotspot xảy ra khi phân phối dữ liệu không đều (ví dụ: sharding theo ngày hiện tại), khiến một node bị quá tải trong khi các node khác rảnh rỗi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cơ chế 'Write-Ahead Logging' (WAL) có vai trò chính là gì?",
+    "options": [
+      "A. Để lưu trữ kết quả của các câu lệnh SELECT nhằm tăng tốc độ đọc.",
+      "B. Để đảm bảo tính bền vững (Durability) bằng cách ghi lại mọi thay đổi vào log trước khi cập nhật vào file dữ liệu chính.",
+      "C. Để tự động xóa các dữ liệu cũ không sử dụng.",
+      "D. Để kiểm tra lỗi cú pháp của các câu lệnh SQL."
+    ],
+    "correctAnswer": "B",
+    "explanation": "WAL đảm bảo nếu hệ thống bị crash, database có thể tái hiện lại các thay đổi từ log để phục hồi dữ liệu về trạng thái nhất quán, vì ghi log tuần tự nhanh hơn ghi dữ liệu ngẫu nhiên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong tối ưu hóa truy vấn, 'Hash Join' thường được Optimizer lựa chọn khi nào?",
+    "options": [
+      "A. Khi một trong hai bảng rất nhỏ và có thể nằm gọn trong bộ nhớ.",
+      "B. Khi cả hai bảng đều đã được sắp xếp theo cột join.",
+      "C. Khi thực hiện join trên các cột không có index và tập dữ liệu lớn.",
+      "D. Khi chỉ cần lấy ra 1 dòng duy nhất từ bảng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hash Join hiệu quả cho các tập dữ liệu lớn không có index. Nó xây dựng một hash table từ bảng nhỏ hơn và quét bảng lớn hơn để tìm các dòng khớp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa 'Optimistic Locking' và 'Pessimistic Locking' là gì?",
+    "options": [
+      "A. Optimistic dùng cho SQL, Pessimistic dùng cho NoSQL.",
+      "B. Optimistic khóa dữ liệu ngay khi đọc, Pessimistic chỉ kiểm tra khi cập nhật.",
+      "C. Optimistic giả định ít xung đột và dùng version/timestamp để kiểm tra, Pessimistic khóa tài nguyên ngay từ đầu để ngăn chặn xung đột.",
+      "D. Pessimistic luôn nhanh hơn Optimistic trong mọi trường hợp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Optimistic Locking không thực sự khóa mà dùng kiểm tra phiên bản lúc ghi, phù hợp hệ thống ít xung đột. Pessimistic Locking dùng khóa thực tế, phù hợp khi xác suất xung đột cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống phân tán yêu cầu tính sẵn sàng cao (High Availability) và khả năng mở rộng ghi, bạn chọn mô hình nhất quán nào để tối ưu hóa hiệu suất theo định lý PACELC khi xảy ra phân đoạn mạng (partition)?",
+    "options": [
+      "A. Ưu tiên tính nhất quán (Consistency) tuyệt đối bằng cách sử dụng giao thức Two-Phase Commit (2PC).",
+      "B. Chấp nhận tính nhất quán cuối cùng (Eventual Consistency) để duy trì tính sẵn sàng (Availability).",
+      "C. Sử dụng mô hình Strong Consistency và dừng toàn bộ tiến trình ghi cho đến khi mạng ổn định.",
+      "D. Chuyển sang chế độ Read-only để bảo vệ tính toàn vẹn dữ liệu trên tất cả các node."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Theo PACELC (mở rộng của CAP), khi có phân đoạn mạng (P), hệ thống phải chọn giữa A và C. Với yêu cầu tối ưu hiệu suất và sẵn sàng ghi, Eventual Consistency là lựa chọn phù hợp nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế Index cho một bảng có hàng tỷ bản ghi trong PostgreSQL, tại sao việc sử dụng BRIN (Block Range Index) đôi khi lại hiệu quả hơn B-Tree?",
+    "options": [
+      "A. BRIN index luôn nhanh hơn B-Tree trong việc tìm kiếm các giá trị đơn lẻ (point lookup).",
+      "B. BRIN có kích thước cực nhỏ và hiệu quả cho các dữ liệu có sự tương quan vật lý cao với thứ tự sắp xếp trên đĩa.",
+      "C. BRIN tự động cân bằng lại cây chỉ mục nhanh hơn B-Tree khi có nhiều thao tác INSERT.",
+      "D. BRIN không yêu cầu quét toàn bộ bảng (Sequential Scan) trong khi B-Tree thì có."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BRIN lưu trữ tóm tắt về các dải block, rất nhỏ gọn. Nó cực kỳ hiệu quả cho các bảng lớn mà dữ liệu được nạp theo thứ tự (như log, timestamp) vì nó tận dụng sự tương quan vật lý.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong SQL Server, mức độ cô lập giao dịch (Isolation Level) 'Snapshot Isolation' giải quyết vấn đề gì mà 'Read Committed' không giải quyết được mà không gây ra hiện tượng Blocking giữa người đọc và người ghi?",
+    "options": [
+      "A. Ngăn chặn hoàn toàn hiện tượng Dirty Read bằng cách sử dụng Exclusive Locks.",
+      "B. Ngăn chặn hiện tượng Non-repeatable Read bằng cách cung cấp một phiên bản dữ liệu nhất quán tại thời điểm bắt đầu giao dịch.",
+      "C. Đảm bảo tính nhất quán bằng cách khóa toàn bộ bảng cho đến khi giao dịch hoàn tất.",
+      "D. Giải quyết vấn đề Phantom Read bằng cách sử dụng Range Locks trên các chỉ mục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Snapshot Isolation sử dụng row versioning trong tempdb để cung cấp cái nhìn nhất quán tại thời điểm bắt đầu transaction, giúp tránh Non-repeatable Read mà không cần dùng Shared Locks gây block người ghi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang xử lý một hệ thống bị 'Write Amplification' nghiêm trọng trên RocksDB hoặc các LSM-tree based storage. Chiến lược nào sau đây là hiệu quả nhất để giảm thiểu vấn đề này?",
+    "options": [
+      "A. Tăng tần suất thực hiện Major Compaction để dọn dẹp các bản ghi cũ.",
+      "B. Chuyển từ Leveled Compaction sang Size-tiered Compaction để giảm số lần ghi lại dữ liệu.",
+      "C. Giảm kích thước của Memtable để dữ liệu được đẩy xuống đĩa nhanh hơn.",
+      "D. Sử dụng Bloom Filter với độ chính xác cao hơn để lọc các truy vấn đọc không tồn tại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Size-tiered Compaction thường có Write Amplification thấp hơn Leveled Compaction vì nó ít khắt khe hơn trong việc sắp xếp lại các tầng dữ liệu, dù nó có Read Amplification cao hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices, khi thực hiện một nghiệp vụ liên quan đến nhiều Database khác nhau mà cần đảm bảo tính nguyên tử, tại sao mô hình Saga (Choreography) thường được ưu tiên hơn Distributed Transactions (2PC)?",
+    "options": [
+      "A. Saga đảm bảo tính nhất quán tức thời (Immediate Consistency) tốt hơn 2PC.",
+      "B. 2PC gây ra vấn đề về hiệu suất và rủi ro treo hệ thống nếu điều phối viên (Coordinator) gặp sự cố.",
+      "C. Saga không yêu cầu viết mã xử lý bù (Compensating Transactions) như 2PC.",
+      "D. Các cơ sở dữ liệu hiện đại như MongoDB hay Cassandra không hỗ trợ giao thức 2PC."
+    ],
+    "correctAnswer": "B",
+    "explanation": "2PC là giao thức chặn (blocking), gây trễ lớn và là điểm yếu duy nhất (single point of failure). Saga sử dụng các transaction cục bộ và sự kiện, phù hợp hơn với tính chất lỏng lẻo của Microservices.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một truy vấn SQL thực hiện Join giữa hai bảng lớn đang chạy rất chậm. Execution Plan cho thấy một 'Hash Join' đang tràn (spill) ra đĩa (TempDB/Workfile). Bạn nên làm gì trước tiên?",
+    "options": [
+      "A. Thêm Index vào các cột tham gia Join để ép Optimizer sử dụng Nested Loop Join.",
+      "B. Tăng bộ nhớ cấp phát cho truy vấn (Query Grant Memory) hoặc tăng RAM cho Database.",
+      "C. Chia nhỏ bảng thành các Partition dựa trên cột Join.",
+      "D. Cập nhật thống kê (Statistics) của các bảng để Optimizer có thông tin chính xác về Cardinality."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hash Join spill xảy ra khi Hash Table không vừa trong bộ nhớ (Memory Grant). Tăng bộ nhớ khả dụng cho phép Hash Join thực hiện hoàn toàn trong RAM, cải thiện tốc độ đáng kể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi triển khai Sharding cho một cơ sở dữ liệu quan hệ, thách thức lớn nhất đối với việc thực hiện các truy vấn 'Cross-shard Join' là gì?",
+    "options": [
+      "A. Khó khăn trong việc duy trì chỉ mục (Index) trên các shard khác nhau.",
+      "B. Hiệu suất giảm đột ngột do phải thu thập và kết hợp dữ liệu từ nhiều node qua mạng.",
+      "C. Không thể sử dụng cú pháp SQL chuẩn để thực hiện Join giữa các shard.",
+      "D. Sharding không cho phép thực hiện các lệnh JOIN dưới bất kỳ hình thức nào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cross-shard joins yêu cầu kéo dữ liệu từ nhiều node mạng về một nơi để xử lý, gây ra độ trễ mạng lớn và tiêu tốn tài nguyên CPU/RAM của node điều phối.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong MySQL (InnoDB), hiện tượng 'Deadlock' thường xảy ra nhất ở mức độ nào và cơ chế phát hiện của nó hoạt động ra sao?",
+    "options": [
+      "A. Mức Table-level; MySQL đợi cho đến khi timeout để hủy giao dịch.",
+      "B. Mức Row-level; InnoDB sử dụng đồ thị chờ (Wait-for Graph) để phát hiện chu trình khóa vòng lặp.",
+      "C. Mức Database-level; MySQL kiểm tra log file định kỳ để tìm các transaction bị treo.",
+      "D. Mức Page-level; InnoDB tự động rollback tất cả các giao dịch đang hoạt động khi phát hiện xung đột."
+    ],
+    "correctAnswer": "B",
+    "explanation": "InnoDB thực hiện locking ở mức dòng và có cơ chế 'Deadlock Detection' bằng cách xây dựng wait-for graph để tìm các vòng lặp phụ thuộc, sau đó rollback transaction ít tốn kém nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chiến lược 'Blue-Green Deployment' cho Database Schema Migration gặp khó khăn nhất ở điểm nào?",
+    "options": [
+      "A. Việc chuyển đổi traffic từ môi trường cũ sang môi trường mới.",
+      "B. Đảm bảo tính tương thích ngược (Backward Compatibility) của dữ liệu khi cả hai phiên bản cùng tồn tại.",
+      "C. Sao lưu dữ liệu trước khi thực hiện migration.",
+      "D. Thời gian downtime cần thiết để chạy các câu lệnh ALTER TABLE."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Blue-Green hoặc Canary, ứng dụng cũ và mới có thể cùng chạy. Database phải hỗ trợ cả hai schema (ví dụ: không xóa cột ngay lập tức) để tránh làm hỏng ứng dụng phiên bản cũ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng UUID v4 làm Primary Key cho một bảng có tần suất INSERT cao trong MySQL/InnoDB lại gây ra vấn đề hiệu suất nghiêm trọng?",
+    "options": [
+      "A. UUID v4 quá dài khiến kích thước Index tăng lên không cần thiết.",
+      "B. Tính ngẫu nhiên của UUID v4 gây ra hiện tượng 'Page Fragmentation' và 'Page Splits' liên tục trong Clustered Index.",
+      "C. MySQL không hỗ trợ kiểu dữ liệu UUID nguyên bản nên phải lưu dưới dạng String.",
+      "D. Việc so sánh UUID chậm hơn rất nhiều so với so sánh số nguyên (Integer)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "InnoDB lưu dữ liệu theo Clustered Index (thường là PK). UUID v4 ngẫu nhiên khiến dữ liệu bị chèn vào các vị trí bất kỳ, dẫn đến việc phải tách Page liên tục và làm hỏng cấu trúc lưu trữ vật lý.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiến trúc Replication của PostgreSQL, sự khác biệt cốt lõi giữa 'Synchronous Replication' và 'Asynchronous Replication' về mặt rủi ro dữ liệu là gì?",
+    "options": [
+      "A. Synchronous đảm bảo không mất dữ liệu (Zero Data Loss) nhưng có thể làm treo Master nếu Slave gặp sự cố.",
+      "B. Asynchronous đảm bảo hiệu suất ghi cao nhất nhưng có nguy cơ mất dữ liệu khi Master sập trước khi kịp gửi WAL.",
+      "C. Synchronous yêu cầu tất cả các Slave phải phản hồi thành công trước khi Master xác nhận transaction.",
+      "D. Cả A và B đều mô tả đúng các khía cạnh đánh đổi giữa hai phương thức."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Synchronous ưu tiên tính nhất quán và an toàn dữ liệu (RPO=0) nhưng đánh đổi bằng tính sẵn sàng của Master. Asynchronous ưu tiên hiệu suất và tính sẵn sàng nhưng chấp nhận rủi ro mất dữ liệu (RPO > 0).",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống E-commerce yêu cầu tính toán tổng doanh thu theo thời gian thực từ hàng triệu đơn hàng. Giải pháp nào tối ưu nhất để giảm tải cho DB chính mà vẫn đảm bảo độ trễ thấp?",
+    "options": [
+      "A. Tạo một Materialized View và refresh nó mỗi khi có đơn hàng mới.",
+      "B. Sử dụng Change Data Capture (CDC) để đẩy dữ liệu sang một OLAP Database hoặc In-memory Store để tính toán.",
+      "C. Viết một câu truy vấn SQL phức tạp với nhiều hàm Aggregate và chạy trực tiếp trên Read Replica.",
+      "D. Thêm Index vào tất cả các cột liên quan đến doanh thu và thời gian."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CDC cho phép đồng bộ dữ liệu sang các hệ thống chuyên biệt cho phân tích (như ClickHouse, Druid) mà không gây tải cho OLTP DB chính, đồng thời hỗ trợ tính toán thời gian thực hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong cơ chế MVCC (Multi-Version Concurrency Control), làm thế nào hệ thống xử lý các bản ghi cũ (dead tuples) để tránh lãng phí không gian đĩa?",
+    "options": [
+      "A. Hệ thống tự động ghi đè lên dữ liệu cũ ngay khi transaction commit.",
+      "B. Sử dụng tiến trình nền (như VACUUM trong Postgres) để đánh dấu và thu hồi không gian từ các version không còn được tham chiếu.",
+      "C. Các bản ghi cũ được di chuyển sang một file lưu trữ riêng biệt (Archive Log).",
+      "D. Hệ thống sẽ xóa toàn bộ dữ liệu cũ khi cơ sở dữ liệu khởi động lại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MVCC tạo ra các version mới cho mỗi lần update. Các version cũ (dead tuples) cần được dọn dẹp bởi tiến trình như VACUUM để tái sử dụng không gian đĩa cho dữ liệu mới.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào bạn nên sử dụng 'Denormalization' (Phi chuẩn hóa) trong thiết kế Database hệ thống lớn?",
+    "options": [
+      "A. Khi cần đảm bảo tính toàn vẹn dữ liệu ở mức cao nhất và tránh dư thừa.",
+      "B. Khi các truy vấn đọc yêu cầu Join quá nhiều bảng gây ảnh hưởng nghiêm trọng đến hiệu suất (Read-heavy workload).",
+      "C. Khi dung lượng lưu trữ đĩa cứng bị giới hạn và cần tiết kiệm không gian.",
+      "D. Khi muốn đơn giản hóa việc viết các câu lệnh INSERT và UPDATE."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Denormalization chấp nhận dư thừa dữ liệu để giảm thiểu các phép Join tốn kém, từ đó tăng tốc độ truy vấn đọc trong các hệ thống quy mô lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng 'Partitioned Tables' so với một bảng duy nhất cực lớn là gì?",
+    "options": [
+      "A. Tự động tối ưu hóa tất cả các câu lệnh SQL mà không cần Index.",
+      "B. Giảm tranh chấp khóa (Lock Contention) và cải thiện khả năng quản lý dữ liệu (như xóa dữ liệu cũ bằng cách drop partition).",
+      "C. Đảm bảo dữ liệu luôn được sắp xếp theo thứ tự bảng chữ cái.",
+      "D. Tăng tốc độ kết nối từ Application Server đến Database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Partitioning giúp quản lý dữ liệu dễ dàng hơn (như ILM - Information Lifecycle Management) và cải thiện hiệu suất thông qua Partition Pruning, đồng thời giảm phạm vi khóa khi thao tác dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Redis, chiến lược 'Eviction Policy' nào là phù hợp nhất cho một hệ thống Cache dữ liệu phổ biến (Hot data) mà vẫn muốn giữ lại các key mới chèn gần đây?",
+    "options": [
+      "A. allkeys-random",
+      "B. volatile-ttl",
+      "C. allkeys-lru",
+      "D. allkeys-lfu"
+    ],
+    "correctAnswer": "D",
+    "explanation": "LFU (Least Frequently Used) theo dõi tần suất truy cập, giúp giữ lại các 'hot keys' ngay cả khi chúng không phải là keys mới nhất, phù hợp hơn LRU trong kịch bản này.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống phân tán sử dụng Cassandra gặp hiện tượng 'Tombstones'. Nguyên nhân gốc rễ và ảnh hưởng của nó là gì?",
+    "options": [
+      "A. Do việc chèn quá nhiều dữ liệu mới; làm tăng tốc độ đọc dữ liệu.",
+      "B. Do lệnh DELETE tạo ra các đánh dấu xóa; nếu quá nhiều sẽ làm chậm quá trình quét dữ liệu (Read Latency).",
+      "C. Do các node bị mất kết nối; gây ra hiện tượng không nhất quán dữ liệu.",
+      "D. Do việc cấu hình sai Replication Factor; dẫn đến mất dữ liệu vĩnh viễn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Cassandra (LSM-tree), DELETE không xóa ngay mà tạo ra Tombstone. Khi đọc, hệ thống phải quét qua các Tombstone này, nếu số lượng lớn sẽ gây suy giảm hiệu suất đọc nghiêm trọng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi cấu hình 'Quorum' trong một cụm Database phân tán có 5 nodes, số lượng node tối thiểu cần thiết để đảm bảo tính nhất quán cho thao tác Ghi (Write) và Đọc (Read) là bao nhiêu để đảm bảo R + W > N?",
+    "options": [
+      "A. Read: 2, Write: 2",
+      "B. Read: 1, Write: 5",
+      "C. Read: 3, Write: 3",
+      "D. Read: 2, Write: 4"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Với N=5, để đảm bảo tính nhất quán (Strong Consistency), tổng số node Read (R) và Write (W) phải lớn hơn N. Cặp (3,3) cho tổng là 6 > 5, đảm bảo luôn đọc được dữ liệu mới nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao 'Database Connection Pooling' lại cực kỳ quan trọng đối với các ứng dụng Backend hiệu suất cao?",
+    "options": [
+      "A. Nó giúp mã hóa dữ liệu truyền giữa App và DB.",
+      "B. Việc thiết lập một kết nối TCP và thực hiện Handshake với DB rất tốn kém về thời gian và tài nguyên CPU.",
+      "C. Nó tự động thực hiện việc tối ưu hóa các câu lệnh SQL trước khi gửi đi.",
+      "D. Nó cho phép ứng dụng chạy mà không cần tài khoản đăng nhập Database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiết lập kết nối mới yêu cầu network round-trips, xác thực, và cấp phát tài nguyên phía server. Pooling tái sử dụng các kết nối có sẵn, giảm đáng kể độ trễ cho mỗi request.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong MongoDB, 'Covered Query' là gì và tại sao nó lại quan trọng cho hiệu suất?",
+    "options": [
+      "A. Là truy vấn có sử dụng Regular Expression để tìm kiếm.",
+      "B. Là truy vấn mà tất cả các trường yêu cầu đều nằm trong Index, giúp MongoDB không cần đọc dữ liệu từ Document gốc.",
+      "C. Là truy vấn được thực hiện trên tất cả các shard cùng một lúc.",
+      "D. Là truy vấn tự động tạo ra Index mới nếu chưa tồn tại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Covered Query cực nhanh vì MongoDB chỉ cần truy xuất dữ liệu từ RAM (nơi chứa index) mà không cần thực hiện I/O để đọc document từ đĩa.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn gặp lỗi 'Lock wait timeout exceeded' trong một hệ thống giao dịch tài chính. Sau khi kiểm tra, bạn thấy nhiều transaction đang đợi nhau theo vòng tròn. Đây là hiện tượng gì và giải pháp triệt để nhất là gì?",
+    "options": [
+      "A. Hiện tượng Livelock; tăng cấu hình RAM cho Server.",
+      "B. Hiện tượng Deadlock; thiết kế ứng dụng để truy cập các tài nguyên theo một thứ tự cố định (Consistent Ordering).",
+      "C. Hiện tượng Starvation; giảm số lượng kết nối đồng thời vào Database.",
+      "D. Hiện tượng Write Skew; chuyển sang mức cô lập Serializable."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Deadlock xảy ra khi các tiến trình giữ khóa và đợi nhau. Việc truy cập tài nguyên theo thứ tự nhất quán (ví dụ luôn khóa ID nhỏ trước) là cách phòng chống deadlock hiệu quả nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi sử dụng Elasticsearch làm công cụ tìm kiếm bên cạnh RDBMS, làm thế nào để xử lý vấn đề 'Data Consistency' giữa hai hệ thống một cách bền vững nhất?",
+    "options": [
+      "A. Cập nhật đồng thời vào cả hai trong cùng một transaction của ứng dụng.",
+      "B. Sử dụng cơ chế Dual-write và hy vọng không có lỗi mạng xảy ra.",
+      "C. Sử dụng Transactional Outbox Pattern kết hợp với một Message Broker và Consumer để cập nhật ES.",
+      "D. Chạy một script định kỳ mỗi 5 phút để đồng bộ toàn bộ dữ liệu từ RDBMS sang ES."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Transactional Outbox đảm bảo tính nguyên tử: hoặc cả dữ liệu và message đều được lưu, hoặc không. Consumer sẽ đảm bảo ES cuối cùng sẽ nhất quán với DB chính.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh Cloud-native Databases (như AWS Aurora), kiến trúc 'Storage and Compute Separation' mang lại lợi ích đột phá nào so với kiến trúc truyền thống?",
+    "options": [
+      "A. Cho phép mở rộng dung lượng lưu trữ mà không cần khởi động lại hay thay đổi cấu hình instance.",
+      "B. Loại bỏ hoàn toàn nhu cầu sử dụng Index cho các bảng lớn.",
+      "C. Đảm bảo dữ liệu luôn được mã hóa mà không tốn tài nguyên CPU.",
+      "D. Tự động chuyển đổi toàn bộ SQL sang NoSQL khi cần thiết."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Việc tách biệt giúp Compute node (CPU/RAM) và Storage node mở rộng độc lập. Nó cũng giúp Read Replicas hoạt động hiệu quả hơn vì dùng chung lớp storage, giảm độ trễ replication.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một bảng trong Database có cột 'Status' chỉ có 3 giá trị: PENDING, PROCESSING, COMPLETED. Tại sao việc tạo B-Tree Index trên cột này thường không mang lại hiệu quả cho các câu lệnh SELECT?",
+    "options": [
+      "A. Vì B-Tree không hỗ trợ kiểu dữ liệu String/Enum.",
+      "B. Vì cột này có 'Low Cardinality', Optimizer sẽ ưu tiên quét toàn bộ bảng thay vì dùng Index.",
+      "C. Vì giá trị của cột này thay đổi quá thường xuyên khiến Index bị hỏng.",
+      "D. Vì B-Tree chỉ hiệu quả cho các phép so sánh lớn hơn hoặc nhỏ hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi một cột có ít giá trị phân biệt (low cardinality), việc sử dụng Index không giúp lọc dữ liệu hiệu quả. Chi phí đọc Index cộng với đọc dữ liệu gốc thường cao hơn quét thẳng toàn bộ bảng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Sharding' theo kiểu 'Hash-based' có ưu điểm gì vượt trội so với 'Range-based' sharding trong việc xử lý tải?",
+    "options": [
+      "A. Giúp các truy vấn tìm kiếm theo dải (range query) nhanh hơn.",
+      "B. Phân phối dữ liệu đồng đều hơn giữa các shard, tránh hiện tượng 'Hotspot' trên các node.",
+      "C. Dễ dàng thực hiện việc thêm shard mới mà không cần di chuyển dữ liệu cũ.",
+      "D. Cho phép thực hiện Join giữa các shard dễ dàng hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hash-based sharding phân tán dữ liệu ngẫu nhiên dựa trên hash key, giúp tránh việc một node phải chịu tải quá lớn khi có một dải dữ liệu (ví dụ theo thời gian) được truy cập nhiều.",
+    "difficulty": "EXPERT",
+    "skillArea": "Database Management",
+    "category": "KNOWLEDGE"
+  }
+]
