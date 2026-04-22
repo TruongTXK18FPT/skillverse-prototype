@@ -133,7 +133,7 @@ const Header: React.FC = () => {
     {
       name: "Lộ Trình Học Tập",
       description: "Khám phá lộ trình học tập và phát triển kỹ năng",
-      path: "/roadmap",
+      path: "/journey",
       icon: Map,
       hideForRoles: ["RECRUITER"],
     },
@@ -215,6 +215,7 @@ const Header: React.FC = () => {
   const studentOnlyQuickNavPaths = new Set([
     "/dashboard",
     "/roadmap",
+    "/journey",
     "/study-planner",
     "/chatbot",
     "/portfolio",
@@ -222,7 +223,7 @@ const Header: React.FC = () => {
   ]);
 
   const guestShowcaseQuickNavPaths = new Set([
-    "/roadmap",
+    "/journey",
     "/chatbot",
     "/meowl-shop",
   ]);
@@ -482,9 +483,9 @@ const Header: React.FC = () => {
     recruiterCompanyLogoUrl ||
     resolveRecruitmentAssetUrl(
       user?.avatarMediaUrl ||
-        mentorProfile?.avatar ||
-        userProfile?.avatarMediaUrl ||
-        user?.avatarUrl,
+      mentorProfile?.avatar ||
+      userProfile?.avatarMediaUrl ||
+      user?.avatarUrl,
     );
 
   const modalProtectedPaths = new Set([
@@ -702,7 +703,7 @@ const Header: React.FC = () => {
                       {
                         name: "Lộ Trình Học Tập",
                         description: "Lộ trình học tập và phát triển kỹ năng",
-                        path: "/roadmap",
+                        path: "/journey",
                         icon: Map,
                         requireAuth: true,
                       },
@@ -873,8 +874,8 @@ const Header: React.FC = () => {
                     // Guest primary actions — only for users with no special role (not MENTOR, not USER, not RECRUITER)
                     const guestSection =
                       !isMentorRole &&
-                      !user?.roles.includes("USER") &&
-                      !isRecruiterRole ? (
+                        !user?.roles.includes("USER") &&
+                        !isRecruiterRole ? (
                         <div className="sv-mega-section">
                           <h4 className="sv-mega-section-title">
                             <Target size={14} className="sv-section-icon" />
@@ -970,24 +971,24 @@ const Header: React.FC = () => {
                           },
                           ...(hasLearnerRole
                             ? [
-                                {
-                                  name: "Meowl Shop",
-                                  description:
-                                    "Cửa hàng Skin Neon Tech độc quyền",
-                                  path: "/meowl-shop",
-                                  icon: ShoppingBag,
-                                  className: "sv-mega-link--shop-highlight",
-                                },
-                              ]
+                              {
+                                name: "Meowl Shop",
+                                description:
+                                  "Cửa hàng Skin Neon Tech độc quyền",
+                                path: "/meowl-shop",
+                                icon: ShoppingBag,
+                                className: "sv-mega-link--shop-highlight",
+                              },
+                            ]
                             : [
-                                {
-                                  name: "Việc Làm",
-                                  description:
-                                    "Tìm kiếm cơ hội việc làm phù hợp",
-                                  path: "/jobs",
-                                  icon: Briefcase,
-                                },
-                              ]),
+                              {
+                                name: "Việc Làm",
+                                description:
+                                  "Tìm kiếm cơ hội việc làm phù hợp",
+                                path: "/jobs",
+                                icon: Briefcase,
+                              },
+                            ]),
                         ].map((item) => (
                           <Link
                             key={item.path}
@@ -1134,11 +1135,10 @@ const Header: React.FC = () => {
                           <img
                             src={resolvedHeaderAvatar}
                             alt="Avatar"
-                            className={`header-avatar-img${
-                              recruiterCompanyLogoUrl
-                                ? " header-avatar-img--company-logo"
-                                : ""
-                            }`}
+                            className={`header-avatar-img${recruiterCompanyLogoUrl
+                              ? " header-avatar-img--company-logo"
+                              : ""
+                              }`}
                           />
                         ) : (
                           <User size={18} />
@@ -1161,7 +1161,7 @@ const Header: React.FC = () => {
                           {loadingBalance
                             ? "..."
                             : walletBalance !== null &&
-                                walletBalance !== undefined
+                              walletBalance !== undefined
                               ? walletBalance.toLocaleString("vi-VN") + " đ"
                               : "N/A"}
                         </span>
@@ -1353,11 +1353,10 @@ const Header: React.FC = () => {
                           <img
                             src={resolvedHeaderAvatar}
                             alt="Avatar"
-                            className={`header-avatar-img-large${
-                              recruiterCompanyLogoUrl
-                                ? " header-avatar-img-large--company-logo"
-                                : ""
-                            }`}
+                            className={`header-avatar-img-large${recruiterCompanyLogoUrl
+                              ? " header-avatar-img-large--company-logo"
+                              : ""
+                              }`}
                           />
                         ) : (
                           <User size={32} />
@@ -1420,18 +1419,18 @@ const Header: React.FC = () => {
                       )}
                       {(user.roles.includes("ADMIN") ||
                         user.roles.some((role) => role.endsWith("_ADMIN"))) && (
-                        <button
-                          onClick={() => {
-                            navigate("/admin");
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="mobile-menu-item"
-                          style={{ color: "#F472B6" }}
-                        >
-                          <Shield size={18} />
-                          <span>Quản Trị Viên</span>
-                        </button>
-                      )}
+                          <button
+                            onClick={() => {
+                              navigate("/admin");
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className="mobile-menu-item"
+                            style={{ color: "#F472B6" }}
+                          >
+                            <Shield size={18} />
+                            <span>Quản Trị Viên</span>
+                          </button>
+                        )}
                       {user.roles.includes("MENTOR") && (
                         <button
                           onClick={handleMentor}

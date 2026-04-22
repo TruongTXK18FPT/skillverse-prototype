@@ -11,6 +11,7 @@ import {
   Github,
   Globe,
   ExternalLink,
+  Award,
 } from "lucide-react";
 
 interface Props {
@@ -132,54 +133,20 @@ export const CreativeTemplate: React.FC<Props> = ({ data }) => {
                     {exp.startDate} — {exp.isCurrent ? "Hiện tại" : exp.endDate}
                   </div>
                   {exp.description && (
-                    <div
-                      style={{
-                        fontSize: "0.88rem",
-                        marginTop: "0.5rem",
-                        lineHeight: 1.6,
-                      }}
-                    >
+                    <div className="cv-cre-exp-desc">
                       <CVMarkdownRenderer content={exp.description} />
                     </div>
                   )}
                   {exp.achievements?.map((ach, j) => (
-                    <div
-                      key={j}
-                      style={{
-                        fontSize: "0.85rem",
-                        paddingLeft: "0.75rem",
-                        position: "relative",
-                        marginTop: "0.2rem",
-                      }}
-                    >
-                      <span
-                        style={{
-                          position: "absolute",
-                          left: 0,
-                          color: "#ec4899",
-                        }}
-                      >
-                        ▸
-                      </span>
+                    <div key={j} className="cv-cre-achievement">
+                      <span className="cv-cre-achievement-bullet">▸</span>
                       {ach}
                     </div>
                   ))}
                   {exp.technologies && exp.technologies.length > 0 && (
-                    <div
-                      className="cv-cre-tags"
-                      style={{ marginTop: "0.5rem" }}
-                    >
+                    <div className="cv-cre-tags cv-cre-tags--spaced">
                       {exp.technologies.map((t, k) => (
-                        <span
-                          key={k}
-                          style={{
-                            fontSize: "0.72rem",
-                            padding: "0.15rem 0.5rem",
-                            background: "rgba(139,92,246,0.1)",
-                            borderRadius: "10px",
-                            color: "#7c3aed",
-                          }}
-                        >
+                        <span key={k} className="cv-cre-inline-tag">
                           {t}
                         </span>
                       ))}
@@ -224,7 +191,7 @@ export const CreativeTemplate: React.FC<Props> = ({ data }) => {
                         href={proj.url}
                         target="_blank"
                         rel="noreferrer"
-                        style={{ marginLeft: "0.4rem", color: "#ec4899" }}
+                        className="cv-cre-project-link"
                       >
                         <ExternalLink size={12} />
                       </a>
@@ -234,21 +201,9 @@ export const CreativeTemplate: React.FC<Props> = ({ data }) => {
                     <CVMarkdownRenderer content={proj.description} />
                   </div>
                   {proj.technologies.length > 0 && (
-                    <div
-                      className="cv-cre-tags"
-                      style={{ marginTop: "0.4rem" }}
-                    >
+                    <div className="cv-cre-tags cv-cre-tags--spaced-sm">
                       {proj.technologies.map((t, k) => (
-                        <span
-                          key={k}
-                          style={{
-                            fontSize: "0.7rem",
-                            padding: "0.1rem 0.4rem",
-                            background: "rgba(236,72,153,0.1)",
-                            borderRadius: "8px",
-                            color: "#be185d",
-                          }}
-                        >
+                        <span key={k} className="cv-cre-inline-tag cv-cre-inline-tag--alt">
                           {t}
                         </span>
                       ))}
@@ -266,18 +221,14 @@ export const CreativeTemplate: React.FC<Props> = ({ data }) => {
             <div className="cv-cre-section-title">Chứng Chỉ</div>
             {certificates.map((cert, i) => (
               <div key={i} className="cv-cre-cert-item">
-                <div className="cv-cre-cert-icon">🏆</div>
+                <div className="cv-cre-cert-icon">
+                  <Award size={18} />
+                </div>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: "0.9rem" }}>
-                    {cert.title}
-                  </div>
-                  <div style={{ fontSize: "0.8rem", color: "#7c3aed" }}>
-                    {cert.issuingOrganization}
-                  </div>
+                  <div className="cv-cre-cert-title">{cert.title}</div>
+                  <div className="cv-cre-cert-org">{cert.issuingOrganization}</div>
                   {cert.issueDate && (
-                    <div style={{ fontSize: "0.75rem", color: "#9ca3af" }}>
-                      {cert.issueDate}
-                    </div>
+                    <div className="cv-cre-cert-date">{cert.issueDate}</div>
                   )}
                 </div>
               </div>
@@ -291,11 +242,7 @@ export const CreativeTemplate: React.FC<Props> = ({ data }) => {
             <div className="cv-cre-section-title">Ngôn Ngữ</div>
             <div className="cv-cre-skill-tags">
               {languages.map((lang, i) => (
-                <span
-                  key={i}
-                  className="cv-cre-skill-tag"
-                  style={{ background: "#3b82f6" }}
-                >
+                <span key={i} className="cv-cre-skill-tag cv-cre-lang-tag">
                   {cleanCVString(lang.name)} — {lang.proficiency}
                 </span>
               ))}
@@ -310,15 +257,7 @@ export const CreativeTemplate: React.FC<Props> = ({ data }) => {
             {endorsements.map((end, i) => (
               <div key={i} className="cv-cre-endorsement">
                 "{end.quote}"
-                <div
-                  style={{
-                    fontStyle: "normal",
-                    fontWeight: 600,
-                    fontSize: "0.82rem",
-                    color: "#7c3aed",
-                    marginTop: "0.35rem",
-                  }}
-                >
+                <div className="cv-cre-endorsement-author">
                   — {end.authorName}
                   {end.authorTitle ? `, ${end.authorTitle}` : ""}
                 </div>

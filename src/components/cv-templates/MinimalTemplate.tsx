@@ -21,6 +21,9 @@ export const MinimalTemplate: React.FC<Props> = ({ data }) => {
     endorsements,
   } = data;
 
+  const normalizedFullName = cleanCVString(pi.fullName || "");
+  const normalizedTitle = cleanCVString(pi.professionalTitle || "");
+
   const allSkills = skills.flatMap((c) =>
     c.skills.map((s) => cleanCVString(s.name)),
   );
@@ -28,10 +31,8 @@ export const MinimalTemplate: React.FC<Props> = ({ data }) => {
   return (
     <div className="cv-tpl-minimal">
       {/* Header */}
-      <h1 className="cv-min-name">{pi.fullName}</h1>
-      {pi.professionalTitle && (
-        <p className="cv-min-title">{pi.professionalTitle}</p>
-      )}
+      <h1 className="cv-min-name">{normalizedFullName}</h1>
+      {normalizedTitle && <p className="cv-min-title">{normalizedTitle}</p>}
 
       <div className="cv-min-contact-line">
         {pi.email && <span>{pi.email}</span>}
@@ -71,14 +72,7 @@ export const MinimalTemplate: React.FC<Props> = ({ data }) => {
                 </div>
               )}
               {exp.achievements?.map((ach, j) => (
-                <div
-                  key={j}
-                  style={{
-                    fontSize: "0.85rem",
-                    paddingLeft: "0.75rem",
-                    color: "#374151",
-                  }}
-                >
+                <div key={j} className="cv-min-achievement">
                   — {ach}
                 </div>
               ))}
@@ -127,13 +121,7 @@ export const MinimalTemplate: React.FC<Props> = ({ data }) => {
                 <CVMarkdownRenderer content={proj.description} />
               </div>
               {proj.technologies.length > 0 && (
-                <div
-                  style={{
-                    fontSize: "0.82rem",
-                    color: "#6b7280",
-                    marginTop: "0.15rem",
-                  }}
-                >
+                <div className="cv-min-project-tech">
                   Tech: {proj.technologies.join(", ")}
                 </div>
               )}

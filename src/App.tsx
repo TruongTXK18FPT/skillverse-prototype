@@ -685,6 +685,7 @@ const fullScreenRoutes = new Set<string>([
   "/forgot-password",
   "/reset-password",
   "/course-learning",
+  "/cv",
 ]);
 
 // Routes that only hide footer (keep header visible)
@@ -694,7 +695,6 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/chatbot/general",
   "/chatbot/expert",
   "/roadmap",
-  "/cv",
   "/learning-report",
   "/admin-security",
   "/course-learning",
@@ -799,7 +799,8 @@ const HeaderVisibilityWrapper = () => {
     isCourseLearningRoute(location.pathname) ||
     isCertificateRoute(location.pathname) ||
     isAssignmentRoute(location.pathname) ||
-    isQuizAttemptRoute(location.pathname)
+    isQuizAttemptRoute(location.pathname) ||
+    location.pathname === "/cv"
   )
     return null;
   return <Header />;

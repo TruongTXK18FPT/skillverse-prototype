@@ -168,7 +168,7 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
                         href={proj.url}
                         target="_blank"
                         rel="noreferrer"
-                        style={{ marginLeft: "0.5rem", color: "#8b5cf6" }}
+                        className="cv-mod-project-link"
                       >
                         <ExternalLink size={12} />
                       </a>
@@ -206,15 +206,7 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
               {endorsements.map((end, i) => (
                 <div key={i} className="cv-mod-endorsement-card">
                   "{end.quote}"
-                  <div
-                    style={{
-                      fontStyle: "normal",
-                      fontWeight: 600,
-                      fontSize: "0.8rem",
-                      color: "#64748b",
-                      marginTop: "0.35rem",
-                    }}
-                  >
+                  <div className="cv-mod-endorsement-author">
                     — {end.authorName}
                     {end.authorTitle ? `, ${end.authorTitle}` : ""}
                   </div>
@@ -233,16 +225,7 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
               {skills.map((cat, ci) => (
                 <div key={ci}>
                   {cat.category && (
-                    <div
-                      style={{
-                        fontSize: "0.75rem",
-                        fontWeight: 600,
-                        color: "#7c3aed",
-                        marginBottom: "0.5rem",
-                      }}
-                    >
-                      {cat.category}
-                    </div>
+                    <div className="cv-mod-skill-category">{cat.category}</div>
                   )}
                   <div className="cv-mod-skill-grid">
                     {cat.skills.map((skill, si) => {
@@ -274,15 +257,7 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
             <>
               <div className="cv-mod-section-title">Ngôn Ngữ</div>
               {languages.map((lang, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: "0.85rem",
-                    marginBottom: "0.4rem",
-                  }}
-                >
+                <div key={i} className="cv-mod-lang-row">
                   <span>{cleanCVString(lang.name)}</span>
                   <span className="cv-mod-badge">{lang.proficiency}</span>
                 </div>
@@ -301,16 +276,10 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
               </div>
               {certificates.map((cert, i) => (
                 <div key={i} className="cv-mod-cert-item">
-                  <div style={{ fontWeight: 600, fontSize: "0.85rem" }}>
-                    {cert.title}
-                  </div>
-                  <div style={{ fontSize: "0.78rem", color: "#64748b" }}>
-                    {cert.issuingOrganization}
-                  </div>
+                  <div className="cv-mod-cert-title">{cert.title}</div>
+                  <div className="cv-mod-cert-org">{cert.issuingOrganization}</div>
                   {cert.issueDate && (
-                    <div style={{ fontSize: "0.72rem", color: "#94a3b8" }}>
-                      {cert.issueDate}
-                    </div>
+                    <div className="cv-mod-cert-date">{cert.issueDate}</div>
                   )}
                 </div>
               ))}

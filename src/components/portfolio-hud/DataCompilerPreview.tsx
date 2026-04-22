@@ -15,6 +15,12 @@ import {
   ChevronUp,
   FileText,
   Check,
+  Languages,
+  Globe,
+  AlertTriangle,
+  Briefcase,
+  FolderOpen,
+  Palette,
 } from "lucide-react";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import { motion, AnimatePresence } from "framer-motion";
@@ -67,9 +73,9 @@ const DataCompilerPreview = () => {
   const cvPreviewRef = useRef<HTMLDivElement>(null);
 
   // UI states
-  const [activeTab, setActiveTab] = useState<"preview" | "edit" | "generate">(
-    "preview",
-  );
+  const [activeTab, setActiveTab] = useState<
+    "preview" | "edit" | "generate"
+  >("preview");
   const [saving, setSaving] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [alertModal, setAlertModal] = useState<{
@@ -123,6 +129,21 @@ const DataCompilerPreview = () => {
     if (["PROFESSIONAL", "CREATIVE", "MINIMAL", "MODERN"].includes(name))
       return name;
     return templateName || "PROFESSIONAL";
+  };
+
+  const renderTemplateIcon = (name: CVTemplateName, size = 16) => {
+    switch (name) {
+      case "PROFESSIONAL":
+        return <Briefcase size={size} />;
+      case "MODERN":
+        return <Sparkles size={size} />;
+      case "MINIMAL":
+        return <FileText size={size} />;
+      case "CREATIVE":
+        return <Palette size={size} />;
+      default:
+        return <FileText size={size} />;
+    }
   };
 
   const normalizeValue = (value?: string | null) =>
@@ -752,6 +773,28 @@ const DataCompilerPreview = () => {
 
     return (
       <div className="cv-edit-panel">
+        <div className="cv-edit-template-panel">
+          <div className="cv-edit-template-panel-title">
+            <Palette size={16} />
+            Đổi template preview nhanh
+          </div>
+          <div className="cv-edit-template-quick-grid">
+            {CV_TEMPLATES.map((tpl) => (
+              <button
+                key={`edit-${tpl.name}`}
+                type="button"
+                className={`cv-edit-template-quick-btn ${getActiveTemplateName() === tpl.name ? "active" : ""}`}
+                onClick={() => switchTemplate(tpl.name)}
+              >
+                <span className="cv-edit-template-quick-icon">
+                  {renderTemplateIcon(tpl.name, 14)}
+                </span>
+                <span>{tpl.displayName}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* ===== PERSONAL INFO ===== */}
         {renderSectionHeader("personal", "Thông Tin Cá Nhân")}
         {expandedSections.personal && (
@@ -888,19 +931,21 @@ const DataCompilerPreview = () => {
               </button>
               <button
                 type="button"
-                className="cv-edit-btn-add"
+                className="cv-edit-btn-add cv-edit-btn-import-mission"
                 onClick={() => completedMissions.forEach(importMissionAsExperience)}
                 disabled={!completedMissions.length}
               >
-                {"Mission -> kinh nghiệm"}
+                <Briefcase size={14} />
+                Mission sang kinh nghiệm
               </button>
               <button
                 type="button"
-                className="cv-edit-btn-add"
+                className="cv-edit-btn-add cv-edit-btn-import-mission"
                 onClick={() => completedMissions.forEach(importMissionAsProject)}
                 disabled={!completedMissions.length}
               >
-                {"Mission -> dự án"}
+                <FolderOpen size={14} />
+                Mission sang dự án
               </button>
             </div>
 
@@ -1030,7 +1075,8 @@ const DataCompilerPreview = () => {
             {!!completedMissions.length && (
               <div>
                 <div style={{ marginBottom: "0.5rem", fontWeight: 600 }}>
-                  Mission đã hoàn thành trong hệ thống </div>
+                  Mission đã hoàn thành trong hệ thống
+                </div>
                 {completedMissions.map((mission) => (
                   <div key={mission.applicationId} className="cv-edit-card">
                     <div
@@ -1062,25 +1108,21 @@ const DataCompilerPreview = () => {
                           </div>
                         )}
                       </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "0.5rem",
-                          flexWrap: "wrap",
-                        }}
-                      >
+                      <div className="cv-edit-mission-actions">
                         <button
                           type="button"
-                          className="cv-edit-btn-add"
+                          className="cv-edit-btn-add cv-edit-btn-import-mission"
                           onClick={() => importMissionAsExperience(mission)}
                         >
+                          <Briefcase size={14} />
                           Import kinh nghiệm
                         </button>
                         <button
                           type="button"
-                          className="cv-edit-btn-add"
+                          className="cv-edit-btn-add cv-edit-btn-import-mission"
                           onClick={() => importMissionAsProject(mission)}
                         >
+                          <FolderOpen size={14} />
                           Import dự án
                         </button>
                       </div>
@@ -1689,9 +1731,11 @@ const DataCompilerPreview = () => {
               key={tpl.name}
               type="button"
               className={`cv-template-card ${templateName === tpl.name ? "cv-template-card--active" : ""}`}
-              onClick={() => setTemplateName(tpl.name)}
+              onClick={() => switchTemplate(tpl.name)}
             >
-              <div className="cv-template-card-icon">{tpl.icon}</div>
+              <div className="cv-template-card-icon">
+                {renderTemplateIcon(tpl.name, 20)}
+              </div>
               <div className="cv-template-card-name">{tpl.displayName}</div>
               <div className="cv-template-card-desc">{tpl.descriptionVi}</div>
               <div className="cv-template-card-colors">
@@ -1718,13 +1762,13 @@ const DataCompilerPreview = () => {
             className={`cv-generate-toggle ${language === "vi" ? "active" : ""}`}
             onClick={() => setLanguage("vi")}
           >
-            🇻🇳 Tiếng Việt
+            <Languages size={14} /> Tiếng Việt
           </button>
           <button
             className={`cv-generate-toggle ${language === "en" ? "active" : ""}`}
             onClick={() => setLanguage("en")}
           >
-            🇺🇸 English
+            <Globe size={14} /> English
           </button>
         </div>
       </div>
@@ -1789,13 +1833,6 @@ const DataCompilerPreview = () => {
               value={targetRole}
               onChange={(e) => setTargetRole(e.target.value)}
               placeholder="VD: Frontend Developer"
-            />
-          </div>
-          <div className="cv-edit-field">
-            <input
-              value={targetIndustry}
-              onChange={(e) => setTargetIndustry(e.target.value)}
-              placeholder="VD: Fintech, E-commerce"
             />
           </div>
         </div>
@@ -1889,11 +1926,7 @@ const DataCompilerPreview = () => {
             </button>
             <button
               className={`compiler-tab ${activeTab === "edit" ? "compiler-tab--active" : ""}`}
-              onClick={() => {
-                if (cvData) setActiveTab("edit");
-                else showToast("Chưa có CV để chỉnh sửa");
-              }}
-              disabled={!cvData}
+              onClick={() => setActiveTab("edit")}
             >
               <Edit size={16} />
               <span>Chỉnh sửa</span>
@@ -1903,7 +1936,7 @@ const DataCompilerPreview = () => {
               onClick={() => setActiveTab("generate")}
             >
               <Sparkles size={16} />
-              <span>{activeCV ? "Tạo lại" : "Tạo mới"}</span>
+              <span>{activeCV ? "Tạo lại AI" : "Tạo mới AI"}</span>
             </button>
           </div>
         </div>
@@ -1955,7 +1988,9 @@ const DataCompilerPreview = () => {
       </AnimatePresence>
 
       {/* ===== MAIN CONTENT ===== */}
-      <div className="compiler-content">
+      <div
+        className={`compiler-content ${activeTab !== "preview" ? "compiler-content--split" : ""}`}
+      >
         {/* LEFT: Edit / Generate Panel */}
         <AnimatePresence mode="wait">
           {activeTab !== "preview" && (
@@ -1979,22 +2014,6 @@ const DataCompilerPreview = () => {
           layout
           transition={{ duration: 0.3 }}
         >
-          {/* Template Switcher Bar */}
-          {cvData && (
-            <div className="cv-template-switcher">
-              <span className="cv-template-switcher-label">Template:</span>
-              {CV_TEMPLATES.map((tpl) => (
-                <button
-                  key={tpl.name}
-                  className={`cv-template-switcher-btn ${getActiveTemplateName() === tpl.name ? "active" : ""}`}
-                  onClick={() => switchTemplate(tpl.name)}
-                >
-                  {tpl.icon} {tpl.displayName}
-                </button>
-              ))}
-            </div>
-          )}
-
           <div className="compiler-document">
             {loading && (
               <div className="compiler-loading">
@@ -2004,7 +2023,9 @@ const DataCompilerPreview = () => {
 
             {!loading && error && (
               <div className="compiler-error">
-                <div className="compiler-error-icon">⚠️</div>
+                <div className="compiler-error-icon">
+                  <AlertTriangle size={40} />
+                </div>
                 <div className="compiler-error-text">{error}</div>
                 <button
                   className="compiler-btn compiler-btn--primary"
@@ -2030,7 +2051,9 @@ const DataCompilerPreview = () => {
 
             {!loading && !error && !cvData && !activeCV && (
               <div className="compiler-empty">
-                <div className="compiler-empty-icon">📄</div>
+                <div className="compiler-empty-icon">
+                  <FileText size={44} />
+                </div>
                 <h3>Chưa có CV</h3>
                 <p>Tạo CV chuyên nghiệp từ dữ liệu portfolio của bạn</p>
                 <button
