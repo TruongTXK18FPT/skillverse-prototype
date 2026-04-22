@@ -28,6 +28,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./data-compiler-preview.css";
 import "../../styles/cv-templates.css";
+import cvTemplateStylesForPrint from "../../styles/cv-templates.css?raw";
 import portfolioService from "../../services/portfolioService";
 import {
   CompletedMissionDTO,
@@ -148,6 +149,57 @@ const DataCompilerPreview = () => {
 
   const normalizeValue = (value?: string | null) =>
     (value || "").trim().toLowerCase();
+
+  const escapeHtml = (value: string) =>
+    value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+
+  const waitForPrintWindowReady = async (printWindow: Window) => {
+    const doc = printWindow.document;
+    const fonts = (doc as Document & { fonts?: FontFaceSet }).fonts;
+
+    if (fonts) {
+      try {
+        await fonts.ready;
+      } catch {
+        // Ignore font loading failure and continue printing.
+      }
+    }
+
+    const images = Array.from(doc.images);
+    await Promise.all(
+      images.map(
+        (img) =>
+          new Promise<void>((resolve) => {
+            if (img.complete) {
+              resolve();
+              return;
+            }
+
+            let settled = false;
+            const finish = () => {
+              if (settled) return;
+              settled = true;
+              resolve();
+            };
+
+            img.addEventListener("load", finish, { once: true });
+            img.addEventListener("error", finish, { once: true });
+            setTimeout(finish, 5000);
+          }),
+      ),
+    );
+
+    await new Promise<void>((resolve) => {
+      printWindow.requestAnimationFrame(() => {
+        printWindow.requestAnimationFrame(() => resolve());
+      });
+    });
+  };
 
   const buildPortfolioUrl = (currentProfile?: UserProfileDTO | null) => {
     if (currentProfile?.portfolioWebsiteUrl) {
@@ -559,10 +611,8 @@ const DataCompilerPreview = () => {
       const cvJsonStr = JSON.stringify(cvData);
       await portfolioService.updateCV(activeCV.id, "", cvJsonStr);
       showToast("Lưu CV thành công!");
-      const cv = await portfolioService.getActiveCV();
-      setActiveCV(cv);
-      const parsed = parseCVJson(cv.cvJson);
-      if (parsed) setCvData(parsed);
+      // Update the activeCV with new cvJson without switching to a different CV
+      setActiveCV({ ...activeCV, cvJson: cvJsonStr });
       setActiveTab("preview");
     } catch (e: any) {
       showToast(e?.message || "Không thể lưu CV");
@@ -610,6 +660,18 @@ const DataCompilerPreview = () => {
 
   const handleDownloadPDF = async () => {
     if (!cvData) return;
+
+    const cvHtml = cvPreviewRef.current?.innerHTML.trim() || "";
+    if (!cvHtml) {
+      setAlertModal({
+        show: true,
+        message:
+          "Không tìm thấy nội dung CV để in. Vui lòng thử lại sau khi preview hiển thị đầy đủ.",
+        type: "warning",
+      });
+      return;
+    }
+
     try {
       const printWindow = globalThis.open("", "_blank");
       if (!printWindow) {
@@ -620,16 +682,106 @@ const DataCompilerPreview = () => {
         });
         return;
       }
-      const cvHtml = cvPreviewRef.current?.innerHTML || "";
-      const printHTML = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>CV - ${cvData.personalInfo?.fullName || "CV"}</title><link rel="stylesheet" href="${window.location.origin}/src/styles/cv-templates.css"><style>body{margin:0;padding:0;background:white}@media print{body{margin:0;padding:0}@page{margin:1cm}}</style></head><body>${cvHtml}</body></html>`;
+
+      // Collect all CSS from parent document
+      const allStyles: string[] = [];
+      // Get all stylesheet links
+      document.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
+        try {
+          const href = link.getAttribute("href");
+          if (href) allStyles.push(`@import url("${href}");`);
+        } catch {
+          // Ignore
+        }
+      });
+      // Get all inline styles
+      document.querySelectorAll("style").forEach((style) => {
+        try {
+          allStyles.push(style.textContent || "");
+        } catch {
+          // Ignore
+        }
+      });
+      // Get CSS from stylesheets
+      try {
+        for (const sheet of document.styleSheets) {
+          try {
+            const rules = sheet.cssRules || sheet.rules;
+            if (rules) {
+              for (const rule of rules) {
+                allStyles.push(rule.cssText);
+              }
+            }
+          } catch {
+            // Cross-origin stylesheet, skip
+          }
+        }
+      } catch {
+        // Ignore
+      }
+
+      const cvTitle = escapeHtml(cvData.personalInfo?.fullName || "CV");
+      const printHTML = `<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <title>CV - ${cvTitle}</title>
+    <style>${cvTemplateStylesForPrint}</style>
+    <style>${allStyles.join("\n")}</style>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #ffffff;
+      }
+
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .cv-print-shell {
+        margin: 0;
+        padding: 0;
+      }
+
+      @page {
+        size: A4;
+        margin: 10mm;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cv-print-shell">${cvHtml}</div>
+  </body>
+</html>`;
+
+      printWindow.document.open();
       printWindow.document.write(printHTML);
       printWindow.document.close();
-      printWindow.onload = () =>
-        setTimeout(() => {
-          printWindow.print();
+
+      await waitForPrintWindowReady(printWindow);
+
+      printWindow.onafterprint = () => {
+        try {
           printWindow.close();
-        }, 500);
-      showToast("Đang tạo PDF...");
+        } catch {
+          // Ignore close errors.
+        }
+      };
+
+      printWindow.focus();
+      printWindow.print();
+      showToast("Đang mở hộp thoại tải PDF...");
     } catch {
       setAlertModal({
         show: true,
@@ -669,6 +821,7 @@ const DataCompilerPreview = () => {
         setError(null);
 
         const editCvId = searchParams.get("edit");
+        const viewCvId = searchParams.get("view");
         if (editCvId) {
           const [allCvs, pf, missions] = await Promise.all([
             portfolioService.getAllCVs(),
@@ -694,6 +847,27 @@ const DataCompilerPreview = () => {
             setActiveTab("edit");
           } else {
             setError("Không tìm thấy CV để chỉnh sửa.");
+          }
+        } else if (viewCvId) {
+          const [allCvs, pf, missions] = await Promise.all([
+            portfolioService.getAllCVs(),
+            portfolioService.getProfile().catch(() => null),
+            portfolioService.getCompletedMissions().catch(() => []),
+          ]);
+          const cvToView = allCvs.find(
+            (cv) => cv.id === Number.parseInt(viewCvId, 10),
+          );
+          if (cvToView) {
+            setActiveCV(cvToView);
+            const parsed = parseCVJson(cvToView.cvJson);
+            if (parsed) setCvData(parsed);
+            if (cvToView.templateName)
+              setTemplateName(cvToView.templateName.toUpperCase() as CVTemplateName);
+            if (pf) setProfile(pf);
+            setCompletedMissions(missions);
+            setActiveTab("preview");
+          } else {
+            setError("Không tìm thấy CV để xem.");
           }
         } else {
           const [cv, pf, missions] = await Promise.all([
@@ -1945,20 +2119,6 @@ const DataCompilerPreview = () => {
           <div className="compiler-header__actions">
             {cvData && (
               <>
-                <button
-                  className="compiler-btn compiler-btn--outline compiler-btn--sm"
-                  onClick={() => globalThis.print?.()}
-                  title="In CV"
-                >
-                  <Printer size={16} />
-                </button>
-                <button
-                  className="compiler-btn compiler-btn--outline compiler-btn--sm"
-                  onClick={handleShare}
-                  title="Chia sẻ"
-                >
-                  <Share2 size={16} />
-                </button>
                 <button
                   className="compiler-btn compiler-btn--primary compiler-btn--sm"
                   onClick={handleDownloadPDF}

@@ -1282,12 +1282,66 @@
     box-shadow: none;
     border-radius: 0;
     max-width: 100%;
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
+  /* Ensure grid layouts are preserved in print */
+  .cv-tpl-professional {
+    display: grid !important;
+    grid-template-columns: 300px 1fr !important;
+  }
+
+  .cv-tpl-modern .cv-mod-body {
+    display: grid !important;
+    grid-template-columns: 1fr 280px !important;
+  }
+
+  /* Prevent unwanted breaks inside sections */
+  .cv-tpl-professional .cv-pro-sidebar,
+  .cv-tpl-professional .cv-pro-main,
+  .cv-tpl-modern .cv-mod-main,
+  .cv-tpl-modern .cv-mod-side,
+  .cv-tpl-modern .cv-mod-header,
+  .cv-tpl-creative .cv-cre-sidebar,
+  .cv-tpl-creative .cv-cre-main {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    page-break-before: avoid;
+  }
+
+  /* Prevent page break before CV starts */
+  .cv-tpl-professional,
+  .cv-tpl-modern,
+  .cv-tpl-creative,
+  .cv-tpl-minimal {
+    page-break-before: avoid;
+    break-before: avoid;
+  }
+
+  /* Ensure Modern template header stays with content */
+  .cv-tpl-modern .cv-mod-header {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  /* Disable hover effects in print */
   .cv-tpl-modern .cv-mod-card:hover,
   .cv-tpl-creative .cv-cre-project-card:hover {
     transform: none;
     box-shadow: none;
+  }
+
+  /* Ensure colors print correctly */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 10mm;
   }
 }
 

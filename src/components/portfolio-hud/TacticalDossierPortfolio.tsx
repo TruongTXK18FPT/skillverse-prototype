@@ -563,15 +563,68 @@ const TacticalDossierPortfolio = () => {
     navigate(`/cv?edit=${cvId}`);
   };
 
-  const handleExportCV = async () => {
+  const handleViewCV = (cvId: number) => {
+    navigate(`/cv?view=${cvId}`);
+  };
+
+  const handleExportCV = async (cvId?: number) => {
     try {
-      const activeCV = await portfolioService.getActiveCV();
+      let cvToExport;
+      if (cvId) {
+        cvToExport = cvs.find((cv) => cv.id === cvId);
+      }
+      if (!cvToExport) {
+        cvToExport = cvs.find((cv) => cv.isActive) || cvs[0];
+      }
+      if (!cvToExport) {
+        setAlertModal({
+          show: true,
+          message: "Không tìm thấy CV để xuất.",
+          type: "warning",
+        });
+        return;
+      }
+
+      // Collect all CSS from current document
+      const allStyles: string[] = [];
+      document.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
+        const href = link.getAttribute("href");
+        if (href) allStyles.push(`@import url("${href}");`);
+      });
+      document.querySelectorAll("style").forEach((style) => {
+        allStyles.push(style.textContent || "");
+      });
+      try {
+        for (const sheet of document.styleSheets) {
+          try {
+            const rules = sheet.cssRules || sheet.rules;
+            if (rules) {
+              for (const rule of rules) {
+                allStyles.push(rule.cssText);
+              }
+            }
+          } catch {
+            // Cross-origin stylesheet, skip
+          }
+        }
+      } catch {
+        // Ignore
+      }
+
       const printWindow = window.open("", "_blank");
       if (printWindow) {
         printWindow.document.write(`
           <html>
-            <head><title>CV - ${activeCV.templateName}</title></head>
-            <body>${activeCV.cvContent}</body>
+            <head>
+              <title>CV - ${cvToExport.templateName}</title>
+              <style>${allStyles.join("\n")}</style>
+              <style>
+                @page { size: A4; margin: 10mm; }
+                * { -webkit-print-color-adjust: exact; print-color-adjust: exact; box-sizing: border-box; }
+                body { margin: 0; padding: 0; background: #fff; }
+              </style>
+            </head>
+            <body>${cvToExport.cvContent}</body>
           </html>
         `);
         printWindow.document.close();
@@ -580,9 +633,8 @@ const TacticalDossierPortfolio = () => {
     } catch {
       setAlertModal({
         show: true,
-        message:
-          "Chưa có CV đang dùng. Vui lòng tạo hoặc đặt CV đang dùng trước.",
-        type: "warning",
+        message: "Không thể xuất CV. Vui lòng thử lại.",
+        type: "error",
       });
     }
   };
@@ -855,21 +907,21 @@ const TacticalDossierPortfolio = () => {
               <>
                 <motion.button
                   className="dossier-btn-primary"
-                  onClick={() => navigate("/cv")}
+                  onClick={() => {
+                    const activeCv = cvs.find((cv) => cv.isActive);
+                    if (activeCv) {
+                      handleViewCV(activeCv.id!);
+                    } else if (cvs.length > 0) {
+                      handleViewCV(cvs[0].id!);
+                    } else {
+                      navigate("/cv");
+                    }
+                  }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <Eye size={18} />
                   Xem CV
-                </motion.button>
-                <motion.button
-                  className="dossier-btn-primary"
-                  onClick={handleExportCV}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Download size={18} />
-                  Xuất CV
                 </motion.button>
               </>
             )}
@@ -2467,7 +2519,7 @@ const TacticalDossierPortfolio = () => {
                         }}
                       >
                         <button
-                          onClick={() => navigate("/cv")}
+                          onClick={() => handleViewCV(cv.id!)}
                           className="dossier-btn-secondary"
                           style={{
                             fontSize: "0.75rem",
@@ -2501,29 +2553,6 @@ const TacticalDossierPortfolio = () => {
                             Đặt làm CV chính
                           </button>
                         )}
-                        <button
-                          onClick={() => {
-                            const printWindow = window.open("", "_blank");
-                            if (printWindow) {
-                              printWindow.document.write(`
-                                <html>
-                                  <head><title>CV - ${cv.templateName}</title></head>
-                                  <body>${cv.cvContent}</body>
-                                </html>
-                              `);
-                              printWindow.document.close();
-                              printWindow.print();
-                            }
-                          }}
-                          className="dossier-btn-primary"
-                          style={{
-                            fontSize: "0.75rem",
-                            padding: "0.5rem 1rem",
-                          }}
-                        >
-                          <Download size={14} />
-                          PDF
-                        </button>
                         <button
                           onClick={() => handleDeleteCV(cv.id!)}
                           className="dossier-btn-secondary"
