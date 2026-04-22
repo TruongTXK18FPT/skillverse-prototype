@@ -37,6 +37,8 @@ import {
   Trash2,
 } from "lucide-react";
 import journeyService from "../../services/journeyService";
+import { getMentorsByVerifiedSkill, type MentorProfile } from "../../services/mentorProfileService";
+import BookingModal from "../../components/mentorship-hud/BookingModal";
 import {
   JourneySummaryResponse,
   JourneyDetailResponse,
@@ -51,9 +53,14 @@ import {
 import GSJTestTaking from "./GSJTestTaking";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
+import NodeVerificationGate from "../../components/journey/NodeVerificationGate";
+import JourneyVerificationDossier from "../../components/journey/JourneyVerificationDossier";
+import JourneyOutputAssessmentPanel from "../../components/journey/JourneyOutputAssessmentPanel";
+import Toast from "../../components/shared/Toast";
 import TicTacToeGame from "../../components/game/tic-tac-toe/TicTacToeGame";
 import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
 import { useAuth } from "../../context/AuthContext";
+import { useToast } from "../../hooks/useToast";
 import { getExpertDomainMeta } from "../../utils/expertFieldPresentation";
 import { getDomainImage } from "../../utils/domainImageMap";
 import technologyDomainImage from "../../assets/domain/Technology.png";
@@ -294,11 +301,23 @@ const GSJJourneyPage: React.FC = () => {
   const [pendingDelete, setPendingDelete] = useState<DeleteDialogState>(null);
   const [error, setError] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const { toast, isVisible, showError, showSuccess, showWarning, hideToast } = useToast();
+
+  // V3 Phase 1: Mentor suggestion by verified skill
+  const [suggestedMentors, setSuggestedMentors] = useState<MentorProfile[]>([]);
+  const [bookingMentor, setBookingMentor] = useState<MentorProfile | null>(null);
+  const [showMentorList, setShowMentorList] = useState(false);
+  const [loadingMentors, setLoadingMentors] = useState(false);
 
   useEffect(() => {
     setShowDetailedFeedback(false);
     setShowAllQuestionReviews(false);
   }, [currentResult?.id]);
+
+  useEffect(() => {
+    setSuggestedMentors([]);
+    setShowMentorList(false);
+  }, [selectedJourney?.id]);
 
   // Load journeys on mount
   const loadJourneys = useCallback(async () => {
@@ -632,7 +651,9 @@ const GSJJourneyPage: React.FC = () => {
       const roadmapSessionId =
         generated.roadmapSessionId ?? updated.roadmapSessionId;
       if (roadmapSessionId) {
-        navigate(`/roadmap/${roadmapSessionId}`);
+        navigate(`/roadmap/${roadmapSessionId}`, {
+          state: { journeyId: selectedJourney.id },
+        });
         return;
       }
 
@@ -672,6 +693,58 @@ const GSJJourneyPage: React.FC = () => {
       setActionMode("idle");
     }
   };
+
+  const handleCompleteJourney = useCallback(async () => {
+    if (!selectedJourney) return;
+
+    try {
+      setActionLoading(true);
+      setActionMode("toggling-status");
+
+      const completedJourney = await journeyService.completeJourney(selectedJourney.id);
+      const detail = await journeyService.getJourneyById(completedJourney.id);
+      setSelectedJourney(detail);
+      await loadJourneys();
+      setError(null);
+      showSuccess("Hoàn thành hành trình", "Journey đã được cập nhật trạng thái hoàn thành.");
+    } catch (err: any) {
+      const statusCode = (err as { status?: number })?.status ?? (err?.response?.status as number | undefined);
+      const message: string = err?.response?.data?.message || err?.message || "Không thể hoàn thành hành trình";
+
+      if (statusCode === 409) {
+        showWarning("Gate blocked", message || "Hành trình chưa đạt final verification gate.");
+        return;
+      }
+
+      if (statusCode === 500 && message.toLowerCase().includes("constraint")) {
+        showError("Lỗi hệ thống", "Cơ sở dữ liệu chưa được cập nhật. Vui lòng liên hệ admin để chạy patch SQL.");
+        return;
+      }
+
+      showError("Không thể hoàn thành hành trình", message);
+    } finally {
+      setActionLoading(false);
+      setActionMode("idle");
+    }
+  }, [loadJourneys, selectedJourney, showError, showSuccess, showWarning]);
+
+  const handleRequestVerification = useCallback(async () => {
+    if (!selectedJourney) return;
+    try {
+      setActionLoading(true);
+      setActionMode("toggling-status");
+      const updated = await journeyService.requestVerification(selectedJourney.id);
+      const detail = await journeyService.getJourneyById(updated.id);
+      setSelectedJourney(detail);
+      await loadJourneys();
+      showSuccess("Yêu cầu đã gửi", "Hành trình đã chuyển sang trạng thái chờ xác thực mentor.");
+    } catch (err: any) {
+      showError("Không thể yêu cầu xác thực", err?.message || "Vui lòng thử lại.");
+    } finally {
+      setActionLoading(false);
+      setActionMode("idle");
+    }
+  }, [loadJourneys, selectedJourney, showError, showSuccess]);
 
   const handleDeleteJourney = useCallback(
     async (
@@ -775,6 +848,12 @@ const GSJJourneyPage: React.FC = () => {
     return jobRole;
   };
 
+  const isCompletedJourneyStatus = (status: JourneyStatus): boolean => (
+    status === JourneyStatus.COMPLETED
+    || status === JourneyStatus.COMPLETED_UNVERIFIED
+    || status === JourneyStatus.COMPLETED_VERIFIED
+  );
+
   // Get status label
   const getStatusLabel = (status: JourneyStatus): string => {
     const labels: Record<JourneyStatus, string> = {
@@ -789,6 +868,9 @@ const GSJJourneyPage: React.FC = () => {
       [JourneyStatus.IN_PROGRESS]: "Đang học",
       [JourneyStatus.PAUSED]: "Tạm dừng",
       [JourneyStatus.COMPLETED]: "Hoàn thành",
+      [JourneyStatus.COMPLETED_UNVERIFIED]: "Hoàn thành (chưa xác thực)",
+      [JourneyStatus.AWAITING_VERIFICATION]: "Chờ xác thực",
+      [JourneyStatus.COMPLETED_VERIFIED]: "Hoàn thành (đã xác thực)",
       [JourneyStatus.CANCELLED]: "Đã hủy",
     };
     return labels[status] || status;
@@ -808,6 +890,9 @@ const GSJJourneyPage: React.FC = () => {
       [JourneyStatus.IN_PROGRESS]: "active",
       [JourneyStatus.PAUSED]: "paused",
       [JourneyStatus.COMPLETED]: "completed",
+      [JourneyStatus.COMPLETED_UNVERIFIED]: "completed",
+      [JourneyStatus.AWAITING_VERIFICATION]: "pending",
+      [JourneyStatus.COMPLETED_VERIFIED]: "completed",
       [JourneyStatus.CANCELLED]: "cancelled",
     };
     return colors[status] || "pending";
@@ -815,7 +900,7 @@ const GSJJourneyPage: React.FC = () => {
 
   // Get current step index from real journey artifacts (test/result/roadmap), not only status flag
   const getCurrentStepIndex = (journey: JourneyDetailResponse): number => {
-    if (journey.status === JourneyStatus.COMPLETED) {
+    if (isCompletedJourneyStatus(journey.status)) {
       return 4;
     }
 
@@ -1400,7 +1485,7 @@ const GSJJourneyPage: React.FC = () => {
     (journey) => journey.status === JourneyStatus.PAUSED,
   ).length;
   const completedJourneys = journeys.filter(
-    (journey) => journey.status === JourneyStatus.COMPLETED,
+    (journey) => isCompletedJourneyStatus(journey.status),
   ).length;
   const assessmentJourneys = journeys.filter((journey) =>
     assessmentJourneyStatuses.includes(journey.status),
@@ -1464,6 +1549,10 @@ const GSJJourneyPage: React.FC = () => {
     selectedJourney?.assessmentTestStatus?.toUpperCase() === "COMPLETED";
   const selectedJourneyHasTest = Boolean(selectedJourney?.assessmentTestId);
   const selectedJourneyHasRoadmap = Boolean(selectedJourney?.roadmapSessionId);
+  // Roadmap đã hoàn thành: có roadmap và progress đạt 100%
+  const selectedJourneyHasProgress = selectedJourneyHasRoadmap &&
+    (selectedJourneyProgress > 0 || selectedJourney?.status !== JourneyStatus.ACTIVE);
+  const selectedJourneyRoadmapCompleted = selectedJourneyHasRoadmap && selectedJourneyProgress >= 100;
   const selectedJourneyStepLabel = selectedJourney
     ? [
         "Đánh giá ban đầu",
@@ -2319,6 +2408,159 @@ const GSJJourneyPage: React.FC = () => {
               </div>
             </div>
 
+            {selectedJourney.status === JourneyStatus.AWAITING_VERIFICATION && (
+              <div className="gsj-mb-16">
+                <div className="gsj-info-banner">
+                  ⏳ Hành trình đang chờ mentor xác thực. Khi mentor đã PASS, bạn có thể hoàn thành hành trình.
+                </div>
+                <JourneyOutputAssessmentPanel
+                  journeyId={selectedJourney.id}
+                />
+                <JourneyVerificationDossier
+                  journeyId={selectedJourney.id}
+                  journeyTitle={selectedJourney.goal}
+                />
+                <NodeVerificationGate
+                  journeyId={selectedJourney.id}
+                  onCompleteClick={handleCompleteJourney}
+                />
+              </div>
+            )}
+
+            {(selectedJourney.status === JourneyStatus.COMPLETED_VERIFIED ||
+              selectedJourney.status === JourneyStatus.COMPLETED_UNVERIFIED) && (
+              <div className="gsj-mb-16">
+                <JourneyVerificationDossier
+                  journeyId={selectedJourney.id}
+                  journeyTitle={selectedJourney.goal}
+                />
+              </div>
+            )}
+
+            {/* Mentor suggestion: button-triggered, lazy fetch */}
+            {selectedJourney.skillName &&
+              selectedJourney.roadmapSessionId &&
+              !selectedJourney.finalVerificationRequired &&
+              !isCompletedJourneyStatus(selectedJourney.status) &&
+              selectedJourney.status !== JourneyStatus.AWAITING_VERIFICATION && (
+              <div className="gsj-mb-16" style={{ border: '1px solid rgba(56,189,248,0.2)', borderRadius: '10px', padding: '12px' }}>
+                <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '8px' }}>
+                  Học có mentor giúp bạn được xác thực kỹ năng và nhận <strong style={{ color: '#22c55e' }}>COMPLETED_VERIFIED</strong>
+                </div>
+                {!showMentorList ? (
+                  <button
+                    className="gsj-btn gsj-btn--secondary"
+                    style={{ width: '100%', justifyContent: 'center', fontSize: '0.85rem' }}
+                    onClick={() => {
+                      setShowMentorList(true);
+                      if (suggestedMentors.length === 0) {
+                        setLoadingMentors(true);
+                        getMentorsByVerifiedSkill(selectedJourney.skillName!)
+                          .then(setSuggestedMentors)
+                          .catch(() => setSuggestedMentors([]))
+                          .finally(() => setLoadingMentors(false));
+                      }
+                    }}
+                  >
+                    🎯 Tìm mentor phù hợp kỹ năng <strong style={{ color: '#38bdf8', marginLeft: 4 }}>{selectedJourney.skillName}</strong>
+                  </button>
+                ) : (
+                  <>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <div className="gsj-section-title" style={{ fontSize: '0.9rem', fontWeight: 600, color: '#94a3b8', margin: 0 }}>
+                        🎯 Mentor kỹ năng <strong style={{ color: '#38bdf8' }}>{selectedJourney.skillName}</strong>
+                      </div>
+                      <button
+                        style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '0.75rem' }}
+                        onClick={() => setShowMentorList(false)}
+                      >
+                        Ẩn ▲
+                      </button>
+                    </div>
+                    {loadingMentors ? (
+                      <div style={{ fontSize: '0.8rem', color: '#64748b', textAlign: 'center', padding: '8px 0' }}>Đang tìm...</div>
+                    ) : suggestedMentors.length === 0 ? (
+                      <div style={{ fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic' }}>
+                        Chưa có mentor nào xác thực kỹ năng này.
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {suggestedMentors.slice(0, 3).map((mentor) => (
+                          <div
+                            key={mentor.id}
+                            style={{
+                              display: 'flex', alignItems: 'center', gap: '10px',
+                              background: 'rgba(15,23,42,0.6)', border: '1px solid rgba(148,163,184,0.15)',
+                              borderRadius: '8px', padding: '8px 12px',
+                            }}
+                          >
+                            {mentor.avatar ? (
+                              <img src={mentor.avatar} alt={mentor.firstName} style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
+                            ) : (
+                              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(56,189,248,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: '#38bdf8', fontWeight: 700 }}>
+                                {(mentor.firstName?.[0] ?? '?').toUpperCase()}
+                              </div>
+                            )}
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#e2e8f0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {mentor.firstName} {mentor.lastName}
+                              </div>
+                              <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                                {mentor.ratingAverage != null && <>⭐ {mentor.ratingAverage.toFixed(1)} · </>}
+                                {mentor.hourlyRate != null ? mentor.hourlyRate.toLocaleString('vi-VN') + ' VNĐ/giờ' : 'Liên hệ'}
+                              </div>
+                            </div>
+                            <button
+                              className="gsj-btn gsj-btn--primary"
+                              style={{ padding: '4px 12px', fontSize: '0.78rem' }}
+                              onClick={() => setBookingMentor(mentor)}
+                            >
+                              Book
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+
+            {!isCompletedJourneyStatus(selectedJourney.status) &&
+              selectedJourney.status !== JourneyStatus.AWAITING_VERIFICATION &&
+              selectedJourneyHasProgress && (
+              <div className="gsj-mb-16">
+                <NodeVerificationGate
+                  journeyId={selectedJourney.id}
+                  onCompleteClick={handleCompleteJourney}
+                  onRequestVerificationClick={
+                    selectedJourney.finalVerificationRequired
+                      ? handleRequestVerification
+                      : undefined
+                  }
+                />
+                {!selectedJourney.finalVerificationRequired && selectedJourneyRoadmapCompleted && (
+                  <button
+                    className="gsj-btn gsj-btn--primary gsj-btn--full gsj-mt-12"
+                    onClick={handleCompleteJourney}
+                    disabled={actionLoading}
+                  >
+                    {actionLoading ? (
+                      <>
+                        <RefreshCw size={16} className="gsj-spin" />
+                        Đang hoàn thành journey...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle size={16} />
+                        Hoàn thành journey
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+            )}
+
             {canTakeTest && (
               <button
                 className="gsj-btn gsj-btn--primary gsj-btn--full gsj-mb-16"
@@ -2422,7 +2664,9 @@ const GSJJourneyPage: React.FC = () => {
               <button
                 className="gsj-btn gsj-btn--secondary gsj-btn--full"
                 onClick={() =>
-                  navigate(`/roadmap/${selectedJourney.roadmapSessionId}`)
+                  navigate(`/roadmap/${selectedJourney.roadmapSessionId}`, {
+                    state: { journeyId: selectedJourney.id },
+                  })
                 }
               >
                 <Map size={16} />
@@ -3481,7 +3725,9 @@ const GSJJourneyPage: React.FC = () => {
               <button
                 className="gsj-btn gsj-btn--primary"
                 onClick={() =>
-                  navigate(`/roadmap/${selectedJourney.roadmapSessionId}`)
+                  navigate(`/roadmap/${selectedJourney.roadmapSessionId}`, {
+                    state: { journeyId: selectedJourney.id },
+                  })
                 }
               >
                 <Map size={16} />
@@ -3520,9 +3766,39 @@ const GSJJourneyPage: React.FC = () => {
         feature="Journey"
       />
 
+      {bookingMentor && selectedJourney && (
+        <BookingModal
+          isOpen={true}
+          onClose={() => setBookingMentor(null)}
+          mentorId={String(bookingMentor.id)}
+          mentorName={`${bookingMentor.firstName ?? ''} ${bookingMentor.lastName ?? ''}`.trim()}
+          hourlyRate={bookingMentor.hourlyRate ?? 0}
+          journeyContext={{
+            journeyId: selectedJourney.id,
+            bookingType: 'JOURNEY_MENTORING',
+          }}
+        />
+      )}
+
       <div className="gsj-container">
         {/* Hero Section */}
         {renderHero()}
+
+        {toast && (
+          <Toast
+            type={toast.type}
+            title={toast.title}
+            message={toast.message}
+            isVisible={isVisible}
+            onClose={hideToast}
+            autoCloseDelay={toast.autoCloseDelay}
+            showCountdown={toast.showCountdown}
+            countdownText={toast.countdownText}
+            useOverlay={toast.useOverlay}
+            actionButton={toast.actionButton}
+            secondaryActionButton={toast.secondaryActionButton}
+          />
+        )}
 
         {/* Action Loading Overlay */}
         {actionLoading && (

@@ -23,6 +23,10 @@ export enum JourneyStatus {
   PAUSED = "PAUSED",
   COMPLETED = "COMPLETED",
   CANCELLED = "CANCELLED",
+  // V3 Phase 1 — node mentoring / final verification gate lifecycle
+  COMPLETED_UNVERIFIED = "COMPLETED_UNVERIFIED",
+  AWAITING_VERIFICATION = "AWAITING_VERIFICATION",
+  COMPLETED_VERIFIED = "COMPLETED_VERIFIED",
 }
 
 export enum SkillLevel {
@@ -3841,6 +3845,12 @@ export interface JourneySummaryResponse {
     isCompleted: boolean;
     completedAt: string;
   }[];
+
+  // V3 Phase 1 — single verified skill tied to this journey
+  skillName?: string;
+
+  // V3 Phase 1 — final verification gate flag
+  finalVerificationRequired?: boolean;
 
   // Assessment test info
   assessmentTestId?: number;

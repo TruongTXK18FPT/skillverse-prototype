@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Lock } from "lucide-react";
+import { Lock, ShieldCheck } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useAppToast } from "../../context/ToastContext";
 import {
   getAllMentors,
   toggleFavoriteMentor,
   getMyFavoriteMentors,
+  getVerifiedSkillsByMentorId,
 } from "../../services/mentorProfileService";
 import { getPublicBookingReviewsByMentor } from "../../services/reviewService";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
@@ -35,6 +36,8 @@ interface Mentor {
   isFavorite: boolean;
   slug?: string;
   preChatEnabled?: boolean;
+  verifiedSkills?: string[];      // Skills đã được admin xác thực
+  hasVerifiedSkills?: boolean;  // Có ít nhất 1 skill đã xác thực
 }
 
 const MentorshipPage = () => {
@@ -55,6 +58,7 @@ const MentorshipPage = () => {
   const [selectedMentorForBooking, setSelectedMentorForBooking] =
     useState<Mentor | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showVerifiedOnly, setShowVerifiedOnly] = useState(false);
   const navigate = useNavigate();
 
   const mentorsPerPage = 6;
@@ -150,6 +154,27 @@ const MentorshipPage = () => {
           }
         } catch {
           // ignore enrichment failures
+        }
+
+        // Fetch verified skills for each mentor (parallel)
+        try {
+          const mentorsWithVerifiedSkills = await Promise.all(
+            transformedMentors.map(async (mentor) => {
+              try {
+                const verifiedSkills = await getVerifiedSkillsByMentorId(Number(mentor.id));
+                return {
+                  ...mentor,
+                  verifiedSkills,
+                  hasVerifiedSkills: verifiedSkills.length > 0,
+                };
+              } catch {
+                return { ...mentor, verifiedSkills: [], hasVerifiedSkills: false };
+              }
+            })
+          );
+          setMentors(mentorsWithVerifiedSkills);
+        } catch {
+          // If fetching verified skills fails, continue with original mentors
         }
 
         // Generate Dynamic Categories from Skills
@@ -349,7 +374,10 @@ const MentorshipPage = () => {
       );
     }
 
-    return matchesSearch && matchesCategory;
+    // Filter by verified skills toggle
+    const matchesVerifiedFilter = showVerifiedOnly ? mentor.hasVerifiedSkills : true;
+
+    return matchesSearch && matchesCategory && matchesVerifiedFilter;
   });
 
   const startIndex = (currentPage - 1) * mentorsPerPage;
@@ -447,6 +475,51 @@ const MentorshipPage = () => {
           }}
         />
 
+        {/* Verified Skills Filter Toggle */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            padding: "0 1.5rem 1rem",
+          }}
+        >
+          <button
+            onClick={() => {
+              setShowVerifiedOnly(!showVerifiedOnly);
+              setCurrentPage(1);
+            }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px 16px",
+              background: showVerifiedOnly
+                ? "rgba(34, 197, 94, 0.2)"
+                : "rgba(15, 23, 42, 0.6)",
+              border: showVerifiedOnly
+                ? "1px solid rgba(34, 197, 94, 0.5)"
+                : "1px solid rgba(148, 163, 184, 0.2)",
+              borderRadius: "8px",
+              color: showVerifiedOnly ? "#22c55e" : "#94a3b8",
+              fontSize: "0.875rem",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+            title={
+              showVerifiedOnly
+                ? "Hiển thị tất cả mentor"
+                : "Chỉ hiển thị mentor đã xác thực kỹ năng"
+            }
+          >
+            <ShieldCheck size={16} />
+            <span>
+              {showVerifiedOnly
+                ? "Đang lọc: Đã xác thực"
+                : "Lọc: Chỉ mentor đã xác thực"}
+            </span>
+          </button>
+        </div>
+
         {/* Master Archives Grid */}
         <UplinkGrid
           loading={loading}
@@ -470,6 +543,7 @@ const MentorshipPage = () => {
               badges={mentor.badges}
               isFavorite={mentor.isFavorite}
               preChatEnabled={mentor.preChatEnabled}
+              verifiedSkills={mentor.verifiedSkills}
               onEstablishLink={() => handleBookSession(mentor)}
               onToggleFavorite={() => handleToggleFavoriteWrapper(mentor.id)}
               onViewProfile={() => {

@@ -1,4 +1,5 @@
 import { axiosInstance } from "./axiosInstance";
+import { skillService } from "./skillService";
 
 export interface MentorProfile {
   id: number;
@@ -372,6 +373,39 @@ export const getTotalStudents = async (mentorId: number): Promise<number> => {
     return response.data.totalStudents;
   } catch (error) {
     console.error("Error fetching total students:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get mentors by verified skill
+ * GET /api/mentors/by-skill/{skillName}
+ */
+export const getMentorsByVerifiedSkill = async (skillName: string): Promise<MentorProfile[]> => {
+  try {
+    const normalizedSkill = skillService.normalize(skillName);
+    const response = await axiosInstance.get<MentorProfile[]>(
+      `/api/mentors/by-skill/${encodeURIComponent(normalizedSkill)}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching mentors by skill ${skillName}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Get verified skills for a specific mentor
+ * GET /api/mentors/{mentorId}/verified-skills
+ */
+export const getVerifiedSkillsByMentorId = async (mentorId: number): Promise<string[]> => {
+  try {
+    const response = await axiosInstance.get<string[]>(
+      `/api/mentors/${mentorId}/verified-skills`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching verified skills for mentor ${mentorId}:`, error);
     throw error;
   }
 };

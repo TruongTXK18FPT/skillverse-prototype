@@ -1,0 +1,383 @@
+/**
+ * Styles for JourneyVerificationDossier
+ */
+
+.jvd-container {
+  background: #1a1a2e;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.jvd-loading,
+.jvd-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #a0a0a0;
+  gap: 12px;
+}
+
+.jvd-error {
+  color: #dc3545;
+}
+
+/* Header */
+.jvd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.jvd-header-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #eaeaea;
+}
+
+.jvd-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #eaeaea;
+}
+
+.jvd-subtitle {
+  font-size: 13px;
+  color: #a0a0a0;
+  margin: 4px 0 0 0;
+}
+
+.jvd-header-meta {
+  display: flex;
+  gap: 16px;
+}
+
+.jvd-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #a0a0a0;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+/* Card */
+.jvd-card {
+  margin: 16px;
+  background: #16213e;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.jvd-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.jvd-card-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #eaeaea;
+  margin: 0;
+}
+
+/* Gate Card */
+.jvd-gate-card {
+  border-left: 3px solid #e94560;
+}
+
+/* Badges */
+.jvd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.jvd-badge-success {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.jvd-badge-danger {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+.jvd-badge-warning {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.jvd-badge-muted {
+  background: rgba(160, 160, 160, 0.2);
+  color: #a0a0a0;
+}
+
+/* Checklist */
+.jvd-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+
+.jvd-check-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #a0a0a0;
+  transition: all 0.2s;
+}
+
+.jvd-check-item.passed {
+  color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
+}
+
+.jvd-check-item.required {
+  color: #e94560;
+  background: rgba(233, 69, 96, 0.1);
+}
+
+/* Blocking Reasons */
+.jvd-blocking {
+  background: rgba(220, 53, 69, 0.08);
+  border-top: 1px solid rgba(220, 53, 69, 0.2);
+  padding: 16px 20px;
+}
+
+.jvd-blocking h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #dc3545;
+  margin: 0 0 12px 0;
+}
+
+.jvd-blocking ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.jvd-blocking li {
+  font-size: 13px;
+  color: #eaeaea;
+  padding-left: 8px;
+  border-left: 2px solid rgba(220, 53, 69, 0.3);
+}
+
+/* Assessment Status */
+.jvd-assessment-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.jvd-assessment-status.pending {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.jvd-assessment-status.approved {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.jvd-assessment-status.rejected {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+/* Assessment Content */
+.jvd-assessment-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.jvd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.jvd-field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.jvd-text {
+  font-size: 14px;
+  color: #eaeaea;
+  line-height: 1.6;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+}
+
+.jvd-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #4fbdba;
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.jvd-link:hover {
+  color: #7ec8c3;
+  text-decoration: underline;
+}
+
+.jvd-feedback {
+  font-size: 13px;
+  color: #ffc107;
+  font-style: italic;
+  background: rgba(255, 193, 7, 0.1);
+  padding: 10px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #ffc107;
+}
+
+.jvd-score {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: rgba(79, 189, 186, 0.2);
+  color: #4fbdba;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Empty State */
+.jvd-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #a0a0a0;
+  gap: 12px;
+}
+
+.jvd-empty p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Nodes List */
+.jvd-nodes-list {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.jvd-node-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.jvd-node-status {
+  display: flex;
+  align-items: center;
+}
+
+.jvd-icon-success {
+  color: #28a745;
+}
+
+.jvd-icon-danger {
+  color: #dc3545;
+}
+
+.jvd-icon-warning {
+  color: #ffc107;
+}
+
+.jvd-icon-muted {
+  color: #a0a0a0;
+}
+
+.jvd-node-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.jvd-node-id {
+  font-size: 13px;
+  font-weight: 500;
+  color: #eaeaea;
+}
+
+.jvd-node-verification {
+  font-size: 11px;
+  color: #a0a0a0;
+  text-transform: uppercase;
+}
+
+.jvd-node-review {
+  font-size: 12px;
+  color: #a0a0a0;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+/* Readonly Notice */
+.jvd-readonly-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  font-size: 12px;
+  color: #a0a0a0;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}

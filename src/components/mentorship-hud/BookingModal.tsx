@@ -8,12 +8,18 @@ import { usePaymentToast } from '../../utils/useToast';
 import Toast from '../shared/Toast';
 import './uplink-styles.css';
 
+interface JourneyContext {
+  journeyId: number;
+  bookingType: 'GENERAL' | 'NODE_MENTORING' | 'JOURNEY_MENTORING';
+}
+
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
   mentorId: string;
   mentorName: string;
   hourlyRate: number; // VND
+  journeyContext?: JourneyContext;
 }
 
 interface BookableSlot {
@@ -30,7 +36,8 @@ const BookingModal: React.FC<BookingModalProps> = ({
   onClose,
   mentorId,
   mentorName,
-  hourlyRate
+  hourlyRate,
+  journeyContext,
 }) => {
   const { user } = useAuth();
   const [step, setStep] = useState<'schedule' | 'payment'>('schedule');
@@ -270,7 +277,8 @@ const BookingModal: React.FC<BookingModalProps> = ({
             startTime: startTimeStr,
             durationMinutes: 60,
             priceVnd: priceVND,
-            paymentMethod: 'WALLET'
+            paymentMethod: 'WALLET',
+            ...(journeyContext ?? {}),
         });
 
         const link = booking.meetingLink;
@@ -318,7 +326,9 @@ const BookingModal: React.FC<BookingModalProps> = ({
           <div>
             <p className="chat-protocol-label">MENTOR_BOOKING_PROTOCOL</p>
             <h3 className="uplink-chat-name">
-              {step === 'schedule' ? 'Đặt lịch hẹn' : 'Thanh toán bằng ví'}
+              {step === 'schedule'
+                ? (journeyContext?.bookingType === 'JOURNEY_MENTORING' ? 'Đặt lịch buổi kick-off' : 'Đặt lịch hẹn')
+                : 'Thanh toán bằng ví'}
             </h3>
           </div>
           <button className="uplink-close-btn" onClick={onClose}>
@@ -363,7 +373,9 @@ const BookingModal: React.FC<BookingModalProps> = ({
 
               <div className="booking-panel booking-panel-slots">
                 <label className="booking-label">
-                  Giờ rảnh ngày {selectedDate.toLocaleDateString('vi-VN')}
+                  {journeyContext?.bookingType === 'JOURNEY_MENTORING'
+                    ? `Giờ rảnh cho buổi kick-off — ${selectedDate.toLocaleDateString('vi-VN')}`
+                    : `Giờ rảnh ngày ${selectedDate.toLocaleDateString('vi-VN')}`}
                 </label>
                 
                 {loadingSlots ? (
@@ -404,10 +416,14 @@ const BookingModal: React.FC<BookingModalProps> = ({
               <div className="order-summary booking-order-summary">
                 <div className="booking-order-row">
                   <span>Dịch vụ:</span>
-                  <span>Mentorship 1:1 với {mentorName}</span>
+                  <span>
+                    {journeyContext?.bookingType === 'JOURNEY_MENTORING'
+                      ? `Mentor đồng hành Journey với ${mentorName}`
+                      : `Mentorship 1:1 với ${mentorName}`}
+                  </span>
                 </div>
                 <div className="booking-order-row">
-                  <span>Thời gian:</span>
+                  <span>{journeyContext?.bookingType === 'JOURNEY_MENTORING' ? 'Buổi kick-off:' : 'Thời gian:'}</span>
                   <span>{selectedSlot ? `${selectedSlot.startTime.toLocaleDateString('vi-VN')} | ${formatTimeRange(selectedSlot.startTime, selectedSlot.endTime)}` : ''}</span>
                 </div>
                 <div className="booking-order-row booking-order-total">

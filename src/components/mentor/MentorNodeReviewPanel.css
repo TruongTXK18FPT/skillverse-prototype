@@ -1,0 +1,231 @@
+/**
+ * Styles for MentorNodeReviewPanel
+ */
+
+.mnrp-panel {
+  background: #1a1a2e;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.mnrp-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #eaeaea;
+}
+
+.mnrp-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.mnrp-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Evidence Summary */
+.mnrp-evidence-summary {
+  background: #16213e;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mnrp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mnrp-field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mnrp-text {
+  font-size: 14px;
+  color: #eaeaea;
+  line-height: 1.6;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+}
+
+.mnrp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #4fbdba;
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.mnrp-link:hover {
+  color: #7ec8c3;
+  text-decoration: underline;
+}
+
+/* Form */
+.mnrp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mnrp-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mnrp-form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #a0a0a0;
+}
+
+.mnrp-result-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mnrp-result-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #16213e;
+  color: #a0a0a0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mnrp-result-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #eaeaea;
+}
+
+.mnrp-result-btn.active {
+  background: rgba(233, 69, 96, 0.2);
+  border-color: #e94560;
+  color: #e94560;
+}
+
+.mnrp-result-btn.active[data-result="APPROVED"] {
+  background: rgba(40, 167, 69, 0.2);
+  border-color: #28a745;
+  color: #28a745;
+}
+
+.mnrp-result-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #a0a0a0;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+}
+
+.mnrp-input {
+  background: #16213e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #eaeaea;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 120px;
+}
+
+.mnrp-input:focus {
+  border-color: #e94560;
+}
+
+.mnrp-textarea {
+  background: #16213e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 14px;
+  color: #eaeaea;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.mnrp-textarea:focus {
+  border-color: #e94560;
+}
+
+/* Actions */
+.mnrp-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mnrp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mnrp-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mnrp-btn-primary {
+  background: linear-gradient(135deg, #e94560 0%, #c73e54 100%);
+  color: white;
+}
+
+.mnrp-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f05a73 0%, #e0455a 100%);
+}
+
+.mnrp-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #eaeaea;
+}
+
+.mnrp-btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+}

@@ -1,0 +1,288 @@
+/**
+ * Styles for MentorNodeVerifyPanel
+ */
+
+.mnvp-panel {
+  background: #1a1a2e;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.mnvp-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #eaeaea;
+}
+
+.mnvp-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.mnvp-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Already Verified State */
+.mnvp-already-verified {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.mnvp-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.mnvp-status.verified {
+  color: #28a745;
+}
+
+.mnvp-status.rejected {
+  color: #dc3545;
+}
+
+.mnvp-note {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px 16px;
+  border-radius: 8px;
+  max-width: 100%;
+}
+
+.mnvp-note label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0a0a0;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.mnvp-note p {
+  font-size: 14px;
+  color: #eaeaea;
+  margin: 0;
+}
+
+.mnvp-meta {
+  font-size: 12px;
+  color: #a0a0a0;
+}
+
+/* No Review State */
+.mnvp-no-review {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 20px;
+  color: #ffc107;
+  text-align: center;
+}
+
+.mnvp-no-review p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Review Summary */
+.mnvp-review-summary {
+  background: #16213e;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mnvp-section-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mnvp-review-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.mnvp-review-result.approved {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.mnvp-review-result.rejected {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+.mnvp-review-result.rework_requested {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.mnvp-review-feedback {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.mnvp-review-feedback label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0a0a0;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.mnvp-review-feedback p {
+  font-size: 13px;
+  color: #eaeaea;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Form */
+.mnvp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mnvp-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mnvp-form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #a0a0a0;
+}
+
+.mnvp-status-options {
+  display: flex;
+  gap: 8px;
+}
+
+.mnvp-status-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #16213e;
+  color: #a0a0a0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mnvp-status-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #eaeaea;
+}
+
+.mnvp-status-btn.active {
+  background: rgba(40, 167, 69, 0.2);
+  border-color: #28a745;
+  color: #28a745;
+}
+
+.mnvp-status-btn.active[data-status="REJECTED"] {
+  background: rgba(220, 53, 69, 0.2);
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.mnvp-textarea {
+  background: #16213e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 14px;
+  color: #eaeaea;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.mnvp-textarea:focus {
+  border-color: #e94560;
+}
+
+/* Actions */
+.mnvp-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mnvp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mnvp-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mnvp-btn-primary {
+  background: linear-gradient(135deg, #4fbdba 0%, #3da9a4 100%);
+  color: white;
+}
+
+.mnvp-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5fcfc9 0%, #4db8b3 100%);
+}
+
+.mnvp-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #eaeaea;
+}
+
+.mnvp-btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+}

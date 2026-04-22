@@ -1126,3 +1126,92 @@
   font-weight: 600;
   padding: 0 0.5rem;
 }
+
+/* ─── Node Mentoring Integration ──────────────────────────────────────── */
+
+.mbm-card-context {
+  margin-bottom: 0.75rem;
+}
+
+.mbm-context-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(79, 189, 186, 0.1);
+  border: 1px solid rgba(79, 189, 186, 0.2);
+  border-radius: 8px;
+}
+
+.mbm-context-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 2px 8px;
+  background: rgba(79, 189, 186, 0.2);
+  color: #4fbdba;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+}
+
+.mbm-context-detail {
+  font-size: 0.75rem;
+  color: #a0a0a0;
+}
+
+.mbm-btn-mentoring {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  background: rgba(79, 189, 186, 0.15);
+  color: #4fbdba;
+  border: 1px solid rgba(79, 189, 186, 0.3);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.mbm-btn-mentoring:hover {
+  background: rgba(79, 189, 186, 0.25);
+  border-color: rgba(79, 189, 186, 0.5);
+  transform: translateY(-1px);
+}
+
+.mbm-mentoring-icon {
+  font-size: 0.9rem;
+}
+
+/* Large modal for Node Mentoring Workspace */
+.mbm-modal-overlay--large {
+  align-items: flex-start;
+  padding-top: 3vh;
+  padding-bottom: 3vh;
+  overflow-y: auto;
+}
+
+.mbm-modal--large {
+  width: 90vw;
+  max-width: 900px;
+  max-height: 94vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.mbm-modal-body--nopad {
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.mbm-modal-body--nopad > * {
+  border: none;
+  border-radius: 0;
+}

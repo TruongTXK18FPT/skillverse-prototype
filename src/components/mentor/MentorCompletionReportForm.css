@@ -1,0 +1,208 @@
+/**
+ * Styles for MentorCompletionReportForm
+ */
+
+.mcrf-container {
+  background: #1a1a2e;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.mcrf-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #eaeaea;
+}
+
+.mcrf-header h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.mcrf-subtitle {
+  font-size: 13px;
+  color: #a0a0a0;
+  margin: 4px 0 0 0;
+}
+
+.mcrf-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mcrf-learner {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.mcrf-label {
+  color: #a0a0a0;
+}
+
+.mcrf-value {
+  color: #eaeaea;
+  font-weight: 500;
+}
+
+/* Form Group */
+.mcrf-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mcrf-form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #eaeaea;
+}
+
+/* Decision Options */
+.mcrf-decision-options {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mcrf-decision-btn {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: #16213e;
+  color: #a0a0a0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mcrf-decision-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mcrf-decision-btn.active {
+  border-color: #28a745;
+  background: rgba(40, 167, 69, 0.15);
+  color: #28a745;
+}
+
+.mcrf-decision-btn.active[data-decision="FAIL"] {
+  border-color: #dc3545;
+  background: rgba(220, 53, 69, 0.15);
+  color: #dc3545;
+}
+
+.mcrf-decision-btn svg {
+  flex-shrink: 0;
+}
+
+.mcrf-decision-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.mcrf-decision-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.mcrf-decision-desc {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* Textarea */
+.mcrf-textarea {
+  background: #16213e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #eaeaea;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.mcrf-textarea:focus {
+  border-color: #e94560;
+}
+
+/* Warning */
+.mcrf-warning {
+  padding: 12px 16px;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 8px;
+  font-size: 13px;
+  color: #ffc107;
+  line-height: 1.5;
+}
+
+/* Actions */
+.mcrf-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mcrf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mcrf-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mcrf-btn-primary {
+  background: linear-gradient(135deg, #e94560 0%, #c73e54 100%);
+  color: white;
+}
+
+.mcrf-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f05a73 0%, #e0455a 100%);
+}
+
+.mcrf-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #eaeaea;
+}
+
+.mcrf-btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+}

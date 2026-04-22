@@ -1,5 +1,5 @@
 import React from "react";
-import { Eye, Heart, Star } from "lucide-react";
+import { Eye, Heart, Star, ShieldCheck } from "lucide-react";
 import "./uplink-styles.css";
 
 interface MasterProfileCardProps {
@@ -18,6 +18,7 @@ interface MasterProfileCardProps {
   badges: string[];
   isFavorite: boolean;
   preChatEnabled?: boolean;
+  verifiedSkills?: string[];  // Skills đã được admin xác thực
   onEstablishLink: () => void;
   onToggleFavorite?: () => void;
   onViewProfile?: () => void;
@@ -36,10 +37,12 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
   avatar,
   isFavorite,
   preChatEnabled = true,
+  verifiedSkills = [],
   onEstablishLink,
   onToggleFavorite,
   onViewProfile,
 }) => {
+  const hasVerifiedSkills = verifiedSkills.length > 0;
   // Legacy mentor presence flag now only drives the online dot.
   const isOnline = preChatEnabled;
 
@@ -101,6 +104,27 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
                 ({reviews})
               </span>
             </div>
+            {hasVerifiedSkills && (
+              <div
+                className="uplink-verified-badge"
+                title={`Đã xác thực: ${verifiedSkills.join(", ")}`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  background: "rgba(34, 197, 94, 0.2)",
+                  border: "1px solid rgba(34, 197, 94, 0.5)",
+                  borderRadius: "4px",
+                  padding: "2px 6px",
+                  fontSize: "0.65rem",
+                  color: "#22c55e",
+                  marginLeft: "8px",
+                }}
+              >
+                <ShieldCheck size={12} />
+                <span>Đã xác thực</span>
+              </div>
+            )}
           </div>
           <h3
             className="uplink-mentor-name"

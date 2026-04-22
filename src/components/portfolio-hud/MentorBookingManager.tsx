@@ -43,6 +43,7 @@ import {
   downloadBookingInvoice,
   BookingResponse,
 } from "../../services/bookingService";
+import NodeMentoringWorkspace from "../../components/mentor/NodeMentoringWorkspace";
 import { confirmAction } from "../../context/ConfirmDialogContext";
 import {
   onBookingSyncMessage,
@@ -179,6 +180,17 @@ const MentorBookingManager: React.FC = () => {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const PAGE_SIZE = 8;
+
+  // ── Node Mentoring Workspace state ─────────────────────────────────────────
+  const [mentoringWorkspace, setMentoringWorkspace] = useState<{
+    isOpen: boolean;
+    booking: BookingResponse | null;
+  }>({ isOpen: false, booking: null });
+
+  // Helper: Check if booking has node/journey context
+  const hasMentoringContext = (b: BookingResponse): boolean => {
+    return !!(b.journeyId && (b.nodeId || b.bookingType === 'JOURNEY_MENTORING'));
+  };
 
   // ── Live clock + sync ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -586,6 +598,17 @@ const MentorBookingManager: React.FC = () => {
 
         {/* Body */}
         <div className="mbm-card-body">
+          {/* Node/Journey Context */}
+          {hasMentoringContext(b) && (
+            <div className="mbm-card-context">
+              <div className="mbm-context-item">
+                <span className="mbm-context-badge">Node Mentoring</span>
+                {b.journeyId && <span className="mbm-context-detail">Journey #{b.journeyId}</span>}
+                {b.nodeId && <span className="mbm-context-detail">Node: {b.nodeId}</span>}
+              </div>
+            </div>
+          )}
+
           <div className="mbm-card-datetime">
             <Calendar size={14} />
             <span>{formatDate(b.startTime)}</span>
@@ -688,6 +711,17 @@ const MentorBookingManager: React.FC = () => {
               onClick={() => handleInvoice(b.id)}
             >
               <FileText size={14} /> Hóa đơn
+            </button>
+          )}
+
+          {/* Mentoring Workspace button for node/journey bookings */}
+          {hasMentoringContext(b) && (
+            <button
+              className="mbm-btn mbm-btn-mentoring"
+              onClick={() => setMentoringWorkspace({ isOpen: true, booking: b })}
+              title="Mở Node Mentoring Workspace"
+            >
+              <span className="mbm-mentoring-icon">🎯</span> Mentoring
             </button>
           )}
 
@@ -1229,6 +1263,54 @@ const MentorBookingManager: React.FC = () => {
                       </>
                     )}
                   </button>
+                </div>
+              </motion.div>
+            </motion.div>,
+            document.body,
+          )}
+      </AnimatePresence>
+
+      {/* Node Mentoring Workspace Modal */}
+      <AnimatePresence>
+        {mentoringWorkspace.isOpen && mentoringWorkspace.booking &&
+          ReactDOM.createPortal(
+            <motion.div
+              className="mbm-modal-overlay mbm-modal-overlay--large"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  setMentoringWorkspace({ isOpen: false, booking: null });
+                }
+              }}
+            >
+              <motion.div
+                className="mbm-modal mbm-modal--large"
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="mbm-modal-hdr">
+                  <div className="mbm-modal-title">
+                    <span>🎯</span> Node Mentoring Workspace
+                  </div>
+                  <button
+                    className="mbm-modal-close"
+                    onClick={() => setMentoringWorkspace({ isOpen: false, booking: null })}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+                <div className="mbm-modal-body mbm-modal-body--nopad">
+                  <NodeMentoringWorkspace
+                    booking={mentoringWorkspace.booking}
+                    onActionComplete={() => {
+                      fetchBookings();
+                    }}
+                  />
                 </div>
               </motion.div>
             </motion.div>,

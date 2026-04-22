@@ -1,0 +1,302 @@
+/**
+ * Styles for MentorOutputAssessmentReview
+ */
+
+.moar-container {
+  background: #1a1a2e;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.moar-loading,
+.moar-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #a0a0a0;
+  gap: 12px;
+}
+
+.moar-empty p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Header */
+.moar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #eaeaea;
+}
+
+.moar-header > div {
+  flex: 1;
+}
+
+.moar-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.moar-subtitle {
+  font-size: 13px;
+  color: #a0a0a0;
+  margin: 4px 0 0 0;
+}
+
+/* Badges */
+.moar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.moar-badge-success {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.moar-badge-danger {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+.moar-badge-pending {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+/* Content */
+.moar-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Section */
+.moar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.moar-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #eaeaea;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Field */
+.moar-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.moar-field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.moar-text {
+  font-size: 14px;
+  color: #eaeaea;
+  line-height: 1.6;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+}
+
+.moar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #4fbdba;
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.moar-link:hover {
+  color: #7ec8c3;
+  text-decoration: underline;
+}
+
+.moar-meta {
+  font-size: 12px;
+  color: #a0a0a0;
+  margin-top: 4px;
+}
+
+/* Form */
+.moar-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moar-form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #a0a0a0;
+}
+
+.moar-status-options {
+  display: flex;
+  gap: 8px;
+}
+
+.moar-status-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #16213e;
+  color: #a0a0a0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.moar-status-btn:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #eaeaea;
+}
+
+.moar-status-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.moar-status-btn.active {
+  background: rgba(40, 167, 69, 0.2);
+  border-color: #28a745;
+  color: #28a745;
+}
+
+.moar-status-btn.active[data-status="REJECTED"] {
+  background: rgba(220, 53, 69, 0.2);
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.moar-input {
+  background: #16213e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #eaeaea;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 120px;
+}
+
+.moar-input:focus {
+  border-color: #e94560;
+}
+
+.moar-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.moar-textarea {
+  background: #16213e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 14px;
+  color: #eaeaea;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.moar-textarea:focus {
+  border-color: #e94560;
+}
+
+.moar-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Actions */
+.moar-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.moar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.moar-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.moar-btn-primary {
+  background: linear-gradient(135deg, #e94560 0%, #c73e54 100%);
+  color: white;
+}
+
+.moar-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f05a73 0%, #e0455a 100%);
+}
+
+/* Assessed Notice */
+.moar-assessed-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  font-size: 13px;
+  color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
+  border-top: 1px solid rgba(40, 167, 69, 0.2);
+}

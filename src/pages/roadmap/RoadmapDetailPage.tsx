@@ -30,6 +30,7 @@ import usePremiumAccess from '../../hooks/usePremiumAccess';
 import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import Toast from '../../components/shared/Toast';
+import NodeVerificationGate from '../../components/journey/NodeVerificationGate';
 import './RoadmapDetailPage.css';
 import '../../styles/RoadmapHUD.css';
 
@@ -41,6 +42,9 @@ const RoadmapDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  // V3 Phase 1: caller (e.g. GSJJourneyPage) passes journeyId via navigate state
+  // so node evidence + gate can target the right journey context.
+  const journeyId = (location.state as { journeyId?: number } | null)?.journeyId;
   const { isAuthenticated, user, loading: authLoading } = useAuth();
   const { hasStudentTierAccess } = usePremiumAccess();
   const { toast, isVisible, showError, showSuccess, showToast, hideToast } = useToast();
@@ -759,6 +763,11 @@ const RoadmapDetailPage = () => {
       </div>
 
       <div className="roadmap-hud-starmap">
+        {journeyId != null && (
+          <div style={{ marginBottom: 16 }}>
+            <NodeVerificationGate journeyId={journeyId} />
+          </div>
+        )}
         <RoadmapDetailViewer
           roadmap={roadmap}
           progressMap={progressMap}
@@ -797,6 +806,7 @@ const RoadmapDetailPage = () => {
             allNodes: roadmapNodes,
             onMarkNodeDone: handleMarkNodeDone,
             linkedTaskCount: selectedNodePlanSummary?.totalLinkedTasks ?? 0,
+            journeyId,
           } as RoadmapNodeFocusPanelProps}
         />
         <MeowlGuide

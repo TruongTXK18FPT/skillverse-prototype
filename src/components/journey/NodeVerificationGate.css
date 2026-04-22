@@ -1,0 +1,145 @@
+.nvg-container {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  padding: 18px 20px;
+  color: #e2e8f0;
+}
+
+.nvg-container--loading,
+.nvg-container--error {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.nvg-container--error {
+  color: #b91c1c;
+}
+
+.nvg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.nvg-header__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nvg-header__title h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.nvg-desc {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.nvg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nvg-badge--approved {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.nvg-badge--pending {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.nvg-badge--muted {
+  background: rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+}
+
+.nvg-reasons {
+  margin: 0 0 12px 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: #fbbf24;
+}
+
+.nvg-reasons li {
+  margin-bottom: 2px;
+}
+
+.nvg-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.nvg-checklist__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #cbd5e1;
+}
+
+.nvg-checklist__item.is-done {
+  color: #4ade80;
+}
+
+.nvg-checklist__item.is-done strong {
+  color: #4ade80;
+}
+
+.nvg-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.nvg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.nvg-btn--primary {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.nvg-btn--primary:hover:not(:disabled) {
+  background: #4338ca;
+}
+
+.nvg-btn--ghost {
+  background: transparent;
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.nvg-btn--ghost:hover {
+  background: rgba(148, 163, 184, 0.15);
+}

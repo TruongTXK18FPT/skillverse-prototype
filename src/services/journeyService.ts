@@ -232,7 +232,7 @@ const mapJourneySummary = (payload: unknown): JourneySummaryResponse => {
   const parsedRoadmapSessionId = data.roadmapSessionId == null ? undefined : toNumber(data.roadmapSessionId);
 
   return {
-    ...(data as JourneySummaryResponse),
+    ...(data as unknown as JourneySummaryResponse),
     id: toNumber(data.id),
     type: toStringValue(data.type, 'SKILL'),
     domain: toStringValue(data.domain),
@@ -262,6 +262,7 @@ const mapJourneySummary = (payload: unknown): JourneySummaryResponse => {
           evaluatedAt: typeof latestTestResultRaw.evaluatedAt === 'string' ? latestTestResultRaw.evaluatedAt : undefined
         }
       : undefined,
+    finalVerificationRequired: typeof data.finalVerificationRequired === 'boolean' ? data.finalVerificationRequired : undefined,
     milestones: Array.isArray(data.milestones)
       ? data.milestones
           .filter((milestone) => milestone && typeof milestone === 'object')
@@ -462,7 +463,7 @@ const buildQuestionReviews = (payload: BackendTestResultResponse): QuestionRevie
         explanation
       } satisfies QuestionReviewItem;
     })
-    .filter((item): item is QuestionReviewItem => item !== null);
+    .filter((item): item is NonNullable<typeof item> => item !== null);
 };
 
 const getScoreBandLabel = (scoreBand: string, score: number): string => {
@@ -812,7 +813,30 @@ const journeyService = {
       return mapJourneySummary(response.data);
     } catch (error) {
       console.error('Failed to complete journey:', error);
-      throw new Error(getErrorMessage(error, 'Failed to complete journey.'));
+      const completionError = new Error(
+        getErrorMessage(error, 'Failed to complete journey.'),
+      ) as Error & { status?: number };
+      completionError.status = (error as { response?: { status?: number } })?.response?.status;
+      throw completionError;
+    }
+  },
+
+  /**
+   * Request mentor final verification — transitions journey to AWAITING_VERIFICATION.
+   * Only valid when finalVerificationRequired=true.
+   */
+  requestVerification: async (journeyId: number): Promise<JourneySummaryResponse> => {
+    try {
+      const response = await axiosInstance.post<JourneySummaryResponse>(
+        `/v1/journey/${journeyId}/request-verification`
+      );
+      return mapJourneySummary(response.data);
+    } catch (error) {
+      const reqVerError = new Error(
+        getErrorMessage(error, 'Failed to request verification.'),
+      ) as Error & { status?: number };
+      reqVerError.status = (error as { response?: { status?: number } })?.response?.status;
+      throw reqVerError;
     }
   },
 

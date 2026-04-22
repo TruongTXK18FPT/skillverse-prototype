@@ -6,6 +6,7 @@ import { QuestProgress, RoadmapNode } from '../../types/Roadmap';
 import { NodeLearningContext, resolveRoadmapNodeTimeEstimate } from './nodeLearningContext';
 import { normalizeRoadmapMarkdown } from '../../utils/roadmapMarkdown';
 import { confirmAction } from '../../context/ConfirmDialogContext';
+import NodeEvidenceSubmissionPanel from '../journey/NodeEvidenceSubmissionPanel';
 import './RoadmapNodeFocusPanel.css';
 
 export type RoadmapNodeFocusPanelPlacement = 'left' | 'right';
@@ -38,6 +39,8 @@ export type RoadmapNodeFocusPanelProps = {
   onMarkNodeDone?: (nodeId: string) => Promise<void>;
   /** Number of tasks linked to this node — drives ConfirmDialog visibility */
   linkedTaskCount?: number;
+  /** V3 Phase 1 — when set, an evidence submission panel is rendered for this node. */
+  journeyId?: number;
 };
 
 const clampProgress = (value?: number): number => {
@@ -106,6 +109,7 @@ const RoadmapNodeFocusPanel = ({
   allNodes,
   onMarkNodeDone,
   linkedTaskCount = 0,
+  journeyId,
 }: RoadmapNodeFocusPanelProps) => {
   const progressPercent = clampProgress(progress?.progress ?? (progress?.status === 'COMPLETED' ? 100 : 0));
   const statusLabel = resolveStatusLabel(node, progress);
@@ -452,6 +456,12 @@ const RoadmapNodeFocusPanel = ({
                 Hoàn thành node hiện tại trước để đánh dấu hoàn thành node này.
               </p>
             )}
+          </section>
+        )}
+
+        {journeyId != null && node?.id && (
+          <section className="roadmap-node-focus-panel__section">
+            <NodeEvidenceSubmissionPanel journeyId={journeyId} nodeId={node.id} />
           </section>
         )}
 
