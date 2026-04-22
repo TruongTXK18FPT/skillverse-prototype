@@ -10,6 +10,7 @@ import {
   Star,
   PenTool,
   Shield,
+  ListChecks,
 } from "lucide-react";
 import "./MentorSidebar.css";
 
@@ -36,7 +37,7 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
     icon: React.ElementType;
     badge?: number;
   };
-  
+
   type NavGroup = {
     label: string;
     items: NavItem[];
@@ -44,20 +45,20 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
 
   const groups: NavGroup[] = [
     {
-      label: "MAIN",
+      label: "TỔNG QUAN",
       items: [
         { id: "overview", label: "Bảng điều khiển", icon: LayoutDashboard },
       ],
     },
     {
-      label: "TEACHING",
+      label: "GIẢNG DẠY",
       items: [
         { id: "courses", label: "Quản lý khóa học", icon: BookOpen },
         { id: "schedule", label: "Lịch trình", icon: Calendar },
       ],
     },
     {
-      label: "MENTORING",
+      label: "CỐ VẤN",
       items: [
         { id: "bookings", label: "Quản lý booking", icon: Calendar },
         { id: "earnings", label: "Quản lý doanh thu", icon: DollarSign },
@@ -65,7 +66,7 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
       ],
     },
     {
-      label: "ACTIONS",
+      label: "CÔNG VIỆC",
       items: [
         {
           id: "grading",
@@ -73,10 +74,11 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
           icon: CheckSquare,
           badge: pendingGradingCount > 0 ? pendingGradingCount : undefined,
         },
+        { id: "question-bank", label: "Ngân hàng câu hỏi", icon: ListChecks },
       ],
     },
     {
-      label: "SETTINGS",
+      label: "THIẾT LẬP",
       items: [
         { id: "certificate-settings", label: "Cài đặt chứng chỉ", icon: PenTool },
         { id: "verification", label: "Xác thực skill", icon: Shield },
@@ -142,7 +144,7 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
         {!isCollapsed && (
           <div className="mentor-sidebar__user-mini">
             <div className="user-mini__status"></div>
-            <span className="user-mini__text">SYSTEM ONLINE</span>
+            <span className="user-mini__text">HỆ THỐNG HOẠT ĐỘNG</span>
           </div>
         )}
       </div>

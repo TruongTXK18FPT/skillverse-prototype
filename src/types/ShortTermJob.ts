@@ -286,6 +286,7 @@ export interface CreateShortTermJobRequest {
   // Extended fields for form UI
   requirements?: string;
   workDeadline?: string;
+  primarySkill?: string;
   subCategory?: string;
   allowsRevision?: boolean;
   maxRevisions?: number;

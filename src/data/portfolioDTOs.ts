@@ -360,6 +360,11 @@ export interface CandidateSearchResult {
   matchScore?: number;
   skillMatchPercent?: number;
   matchQuality?: 'EXCELLENT' | 'GOOD' | 'FAIR' | 'POOR';
+  primarySkillMatch?: boolean;
+  skillMatchScore?: number;
+  projectMatchScore?: number;
+  certMatchScore?: number;
+  missionMatchScore?: number;
   fitExplanation?: string;
   aiSummary?: string;
   lastActive?: string;

@@ -162,6 +162,81 @@ const JOURNEYS_PER_PAGE = 6;
 const JOURNEY_FETCH_BATCH_SIZE = 100;
 const JOURNEY_ACTION_GAME_DELAY_MS = 8000;
 
+type ScoreBandFrameworkItem = {
+  key: string;
+  label: string;
+  range: string;
+  recommendation: string;
+  description: string;
+};
+
+type LevelFrameworkItem = {
+  key: SkillLevel;
+  range: string;
+  description: string;
+};
+
+const SCORE_BAND_FRAMEWORK: ScoreBandFrameworkItem[] = [
+  {
+    key: "ZERO_BASE",
+    label: "Nền tảng 0",
+    range: "0-20%",
+    recommendation: "FROM_ZERO",
+    description: "Bắt đầu từ kiến thức cốt lõi, cần roadmap nhập môn theo từng bước.",
+  },
+  {
+    key: "FOUNDATION",
+    label: "Nền tảng",
+    range: "21-45%",
+    recommendation: "FOUNDATION",
+    description: "Đã có nhận biết cơ bản, nên củng cố nền trước khi tăng độ khó.",
+  },
+  {
+    key: "CORE",
+    label: "Cốt lõi",
+    range: "46-70%",
+    recommendation: "STANDARD",
+    description: "Đạt mức thực hành lõi, phù hợp lộ trình học tiêu chuẩn để bứt lên.",
+  },
+  {
+    key: "ADVANCED",
+    label: "Nâng cao",
+    range: "71-85%",
+    recommendation: "ADVANCED",
+    description: "Năng lực khá tốt, nên tập trung bài toán thực chiến và mở rộng phạm vi.",
+  },
+  {
+    key: "EXPERT",
+    label: "Chuyên sâu",
+    range: "86-100%",
+    recommendation: "FAST_TRACK",
+    description: "Năng lực mạnh, phù hợp lộ trình tăng tốc hoặc chuyên sâu theo mục tiêu cao hơn.",
+  },
+];
+
+const LEVEL_FRAMEWORK: LevelFrameworkItem[] = [
+  {
+    key: SkillLevel.BEGINNER,
+    range: "0-40%",
+    description: "Cần xây nền tảng chắc trước khi vào bài tập nâng cao.",
+  },
+  {
+    key: SkillLevel.INTERMEDIATE,
+    range: "41-70%",
+    description: "Có năng lực thực hành cơ bản, cần tăng độ ổn định và chiều sâu.",
+  },
+  {
+    key: SkillLevel.ADVANCED,
+    range: "71-85%",
+    description: "Làm tốt phần lớn tình huống điển hình, sẵn sàng cho thử thách khó hơn.",
+  },
+  {
+    key: SkillLevel.EXPERT,
+    range: "86-100%",
+    description: "Đủ vững để xử lý bài toán phức tạp, có thể tăng tốc theo chuyên môn hẹp.",
+  },
+];
+
 type ViewMode = "list" | "detail" | "test" | "result";
 type DeleteDialogState = {
   journeyId: number;
@@ -829,6 +904,44 @@ const GSJJourneyPage: React.FC = () => {
       default:
         return "advanced";
     }
+  };
+
+  const resolveScoreBandByScore = (score: number): string => {
+    if (score <= 20) return "ZERO_BASE";
+    if (score <= 45) return "FOUNDATION";
+    if (score <= 70) return "CORE";
+    if (score <= 85) return "ADVANCED";
+    return "EXPERT";
+  };
+
+  const resolveScoreBandFrameworkItem = (
+    scoreBand: string,
+    score: number,
+  ): ScoreBandFrameworkItem => {
+    const normalizedBand = (scoreBand || "").trim().toUpperCase();
+    return (
+      SCORE_BAND_FRAMEWORK.find((item) => item.key === normalizedBand) ||
+      SCORE_BAND_FRAMEWORK.find(
+        (item) => item.key === resolveScoreBandByScore(score),
+      ) ||
+      SCORE_BAND_FRAMEWORK[2]
+    );
+  };
+
+  const resolveLevelFrameworkItem = (
+    level: SkillLevel,
+    score: number,
+  ): LevelFrameworkItem => {
+    return (
+      LEVEL_FRAMEWORK.find((item) => item.key === level) ||
+      (score <= 40
+        ? LEVEL_FRAMEWORK[0]
+        : score <= 70
+          ? LEVEL_FRAMEWORK[1]
+          : score <= 85
+            ? LEVEL_FRAMEWORK[2]
+            : LEVEL_FRAMEWORK[3])
+    );
   };
 
   const formatDateTime = (value?: string): string => {
@@ -2562,6 +2675,14 @@ const GSJJourneyPage: React.FC = () => {
     const canRetakeQuiz =
       remainingRetakes > 0 &&
       selectedJourney?.assessmentTestStatus?.toUpperCase() !== "IN_PROGRESS";
+    const activeScoreBandFramework = resolveScoreBandFrameworkItem(
+      currentResult.scoreBand,
+      currentResult.score,
+    );
+    const activeLevelFramework = resolveLevelFrameworkItem(
+      currentResult.evaluatedLevel,
+      currentResult.score,
+    );
 
     const strengths =
       currentResult.overallStrengths.length > 0
@@ -2701,6 +2822,74 @@ const GSJJourneyPage: React.FC = () => {
               </div>
             </div>
           </div>
+
+          <section className="gsj-result-framework">
+            <h4 className="gsj-result-framework__title">
+              Cơ sở chấm điểm minh bạch
+            </h4>
+            <p className="gsj-result-framework__intro">
+              Điểm được tính trực tiếp theo số câu đúng, sau đó đối chiếu với
+              thang chuẩn để ra band điểm, mức năng lực và hướng roadmap.
+            </p>
+            <div className="gsj-result-framework__formula">
+              Điểm = (Câu đúng / Tổng câu) x 100 = ({currentResult.correctAnswers}
+              /{Math.max(currentResult.totalQuestions, 1)}) x 100 = {" "}
+              <strong>{currentResult.score}%</strong>
+            </div>
+
+            <div className="gsj-result-framework__current">
+              <div className="gsj-result-framework__current-item">
+                <span>Band điểm hiện tại</span>
+                <strong>
+                  {activeScoreBandFramework.label} ({activeScoreBandFramework.range})
+                </strong>
+              </div>
+              <div className="gsj-result-framework__current-item">
+                <span>Mức năng lực hiện tại</span>
+                <strong>
+                  {getSkillLevelLabel(currentResult.evaluatedLevel)} ({activeLevelFramework.range})
+                </strong>
+              </div>
+            </div>
+
+            <div className="gsj-result-framework__grid">
+              <article className="gsj-result-framework__card">
+                <h5>Thang band điểm</h5>
+                <div className="gsj-result-framework__list">
+                  {SCORE_BAND_FRAMEWORK.map((item) => (
+                    <div
+                      key={item.key}
+                      className={`gsj-result-framework__row ${activeScoreBandFramework.key === item.key ? "gsj-result-framework__row--active" : ""}`}
+                    >
+                      <div>
+                        <strong>{item.label}</strong>
+                        <p>{item.description}</p>
+                      </div>
+                      <span>{item.range}</span>
+                    </div>
+                  ))}
+                </div>
+              </article>
+
+              <article className="gsj-result-framework__card">
+                <h5>Chuẩn mức năng lực</h5>
+                <div className="gsj-result-framework__list">
+                  {LEVEL_FRAMEWORK.map((item) => (
+                    <div
+                      key={item.key}
+                      className={`gsj-result-framework__row ${activeLevelFramework.key === item.key ? "gsj-result-framework__row--active" : ""}`}
+                    >
+                      <div>
+                        <strong>{getSkillLevelLabel(item.key)}</strong>
+                        <p>{item.description}</p>
+                      </div>
+                      <span>{item.range}</span>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            </div>
+          </section>
 
           {currentResult.reassessmentRecommended && (
             <div className="gsj-result-note">

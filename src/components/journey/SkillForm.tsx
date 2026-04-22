@@ -237,14 +237,12 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
 
   const handleJobRoleSelect = (role: string) => {
     setSelectedJobRole(role);
-    const roleEntry = currentJobRoles.find((item) => item.value === role);
-    const allSkills = resolveRoleSkills(roleEntry);
-    setSelectedSkills(allSkills);
+    // [Nghiệp vụ] Khi đổi job role, người dùng cần chọn lại 1 kỹ năng mục tiêu thay vì hệ thống tự chọn toàn bộ.
+    setSelectedSkills([]);
     setSkillSearch("");
   };
 
   const handleDeselectSkill = (skill: string) => {
-    if (selectedSkills.length <= 1) return;
     setSelectedSkills(selectedSkills.filter((s) => s !== skill));
   };
 
@@ -453,7 +451,8 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
       <div className="gsj-wizard-step__header">
         <h2 className="gsj-wizard-step__title">Chọn 1 kỹ năng phát triển chính</h2>
         <p className="gsj-wizard-step__subtitle">
-          Trong phiên bản V3, mỗi Journey chỉ tập trung vào 1 kỹ năng cốt lõi. Hãy chọn kỹ năng bạn muốn master.
+          Mỗi Journey tập trung vào 1 kỹ năng cốt lõi. Bước tiếp theo bạn sẽ khai báo
+          riêng các kỹ năng đã có để AI đánh giá chuẩn hơn.
         </p>
       </div>
 
@@ -495,27 +494,36 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
               )}
             </div>
             <p className="gsj-hint-text gsj-hint-text--inline">
-              Đã chọn: {selectedSkills.length > 0 ? selectedSkills[0] : "Chưa chọn"}
+              Kỹ năng mục tiêu: {selectedSkills.length > 0 ? selectedSkills[0] : "Chưa chọn"}
             </p>
           </div>
         )}
 
-        <div className="gsj-skill-grid gsj-skill-grid--dense">
+        <div className="gsj-target-skill-grid">
           {filteredPredefinedSkills.map((skill) => {
             const isSelected = selectedSkills.includes(skill);
             return (
               <button
                 key={skill}
                 type="button"
-                className={`gsj-skill-chip ${isSelected ? "gsj-skill-chip--selected" : "gsj-skill-chip--deselected"}`}
+                className={`gsj-target-skill-card ${isSelected ? "gsj-target-skill-card--selected" : ""}`}
                 onClick={() =>
                   isSelected
                     ? handleDeselectSkill(skill)
                     : handleSelectSkill(skill)
                 }
               >
-                {isSelected ? <Check size={14} /> : <X size={14} />}
-                {skill}
+                <div className="gsj-target-skill-card__content">
+                  <span className="gsj-target-skill-card__title">{skill}</span>
+                  <span className="gsj-target-skill-card__subtitle">
+                    {isSelected
+                      ? "Đang là kỹ năng mục tiêu của journey"
+                      : "Nhấn để chọn kỹ năng này làm mục tiêu"}
+                  </span>
+                </div>
+                <span className="gsj-target-skill-card__icon">
+                  {isSelected ? <Check size={16} /> : <ArrowRight size={16} />}
+                </span>
               </button>
             );
           })}

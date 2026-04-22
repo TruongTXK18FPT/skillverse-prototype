@@ -18,6 +18,7 @@ export interface QuestionBankSummary {
   domain: string;
   industry?: string;
   jobRole?: string;
+  skillName?: string;
   title: string;
   activeQuestionCount: number;
   isActive: boolean;
@@ -35,6 +36,7 @@ export interface CreateQuestionBank {
   domain: string;
   industry?: string;
   jobRole?: string;
+  skillName?: string;
   title: string;
   description?: string;
   difficultyDistribution?: string;
@@ -45,6 +47,7 @@ export interface UpdateQuestionBank {
   description?: string;
   industry?: string;
   jobRole?: string;
+  skillName?: string;
   difficultyDistribution?: string;
   isActive?: boolean;
 }
@@ -139,4 +142,66 @@ export interface AiGenerateDraftRequest {
 export interface BulkAddQuestions {
   questions: CreateQuestion[];
   source?: string;
+}
+
+export type QuestionBankSubmissionStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+export type QuestionBankSubmissionSource = 'MANUAL' | 'JSON_IMPORT';
+
+export interface QuestionBankSubmissionQuestion {
+  id?: number;
+  displayOrder?: number;
+  questionText: string;
+  options: string[];
+  correctAnswer: string;
+  explanation?: string;
+  difficulty: string;
+  skillArea?: string;
+  category?: string;
+}
+
+export interface CreateQuestionBankSubmission {
+  domain: string;
+  industry: string;
+  jobRole: string;
+  skillName: string;
+  title?: string;
+  description?: string;
+  difficultyDistribution?: string;
+  source: QuestionBankSubmissionSource;
+  questions: CreateQuestion[];
+}
+
+export interface ReviewQuestionBankSubmission {
+  approved: boolean;
+  reviewNote?: string;
+}
+
+export interface QuestionBankSubmission {
+  id: number;
+  mentorId: number;
+  mentorName: string;
+  mentorEmail: string;
+  mentorAvatarUrl?: string;
+  mentorPortfolioSlug?: string;
+  domain: string;
+  industry: string;
+  jobRole: string;
+  skillName: string;
+  title: string;
+  description?: string;
+  difficultyDistribution?: string;
+  status: QuestionBankSubmissionStatus;
+  source: QuestionBankSubmissionSource;
+  questionCount: number;
+  savedQuestionCount: number;
+  duplicateQuestionCount: number;
+  resolvedQuestionBankId?: number;
+  resolvedQuestionBankTitle?: string;
+  reviewNote?: string;
+  reviewedById?: number;
+  reviewedByName?: string;
+  createdAt: string;
+  updatedAt: string;
+  reviewedAt?: string;
+  questions?: QuestionBankSubmissionQuestion[];
 }

@@ -80,20 +80,17 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
     }
   };
 
-  const parseSkills = (skillsJson?: string): string[] => {
-    if (!skillsJson) return [];
+  const parseSkills = (skills?: string | string[]): string[] => {
+    if (!skills) return [];
+    if (Array.isArray(skills)) return skills;
     try {
-      return JSON.parse(skillsJson);
+      return JSON.parse(skills);
     } catch {
       return [];
     }
   };
 
-  const topSkills = candidate.topSkills?.length > 0
-    ? parseSkills(candidate.topSkills).length > 0
-      ? parseSkills(candidate.topSkills)
-      : candidate.topSkills
-    : [];
+  const topSkills = parseSkills(candidate.topSkills);
 
   return (
     <div className={`candidate-card ${candidate.isPremium ? 'candidate-card--premium' : ''} ${candidate.isHighlighted ? 'candidate-card--highlighted' : ''}`}>
@@ -120,7 +117,9 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
           <div className="candidate-card__name-row">
             <h3 className="candidate-card__name">{candidate.fullName}</h3>
             {candidate.isVerified && (
-              <CheckCircle size={16} className="candidate-card__verified" title="Verified" />
+              <span title="Verified" className="candidate-card__verified" style={{ display: 'inline-flex' }}>
+                <CheckCircle size={16} />
+              </span>
             )}
           </div>
 
@@ -155,11 +154,11 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
           <div
             className="candidate-card__match-score"
             style={{
-              background: `conic-gradient(${getMatchQualityColor(candidate.matchQuality)} ${candidate.matchScore * 3.6}deg, #e5e7eb 0deg)`
+              background: `conic-gradient(${getMatchQualityColor(candidate.matchQuality)} ${(candidate.matchScore || 0) * 3.6}deg, #e5e7eb 0deg)`
             }}
           >
             <span style={{ color: getMatchQualityColor(candidate.matchQuality) }}>
-              {Math.round(candidate.matchScore * 100)}%
+              {Math.round((candidate.matchScore || 0) * 100)}%
             </span>
           </div>
           <span className="candidate-card__match-label">
@@ -182,17 +181,66 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
         </div>
       )}
 
-      {/* AI Fit Explanation */}
+      {/* Ranking Breakdown (Deterministic) */}
+      {(candidate.skillMatchScore !== undefined) && (
+        <div className="candidate-card__ranking-breakdown">
+          <div className="candidate-card__ranking-header">
+            <Sparkles size={14} className="neon-icon" />
+            <span>Phân tích Độ phù hợp (Thuật toán)</span>
+          </div>
+          <div className="candidate-card__ranking-grid">
+            <div className="ranking-item">
+              <div className="ranking-label-row">
+                <span className="ranking-label">Kỹ năng (40%)</span>
+                {candidate.primarySkillMatch && <span className="neon-badge">⭐ Primary Match</span>}
+              </div>
+              <div className="ranking-bar-wrapper">
+                <div className="ranking-bar-bg"><div className="ranking-bar-fill cyan-glow" style={{width: `${Math.min(100, (candidate.skillMatchScore || 0) / 0.4 * 100)}%`}}></div></div>
+                <span className="ranking-score">+{Math.round((candidate.skillMatchScore || 0) * 100)}%</span>
+              </div>
+            </div>
+            <div className="ranking-item">
+              <div className="ranking-label-row">
+                <span className="ranking-label">Dự án (20%)</span>
+              </div>
+              <div className="ranking-bar-wrapper">
+                <div className="ranking-bar-bg"><div className="ranking-bar-fill blue-glow" style={{width: `${Math.min(100, (candidate.projectMatchScore || 0) / 0.2 * 100)}%`}}></div></div>
+                <span className="ranking-score">+{Math.round((candidate.projectMatchScore || 0) * 100)}%</span>
+              </div>
+            </div>
+            <div className="ranking-item">
+              <div className="ranking-label-row">
+                <span className="ranking-label">Chứng chỉ (20%)</span>
+              </div>
+              <div className="ranking-bar-wrapper">
+                <div className="ranking-bar-bg"><div className="ranking-bar-fill cyan-glow" style={{width: `${Math.min(100, (candidate.certMatchScore || 0) / 0.2 * 100)}%`}}></div></div>
+                <span className="ranking-score">+{Math.round((candidate.certMatchScore || 0) * 100)}%</span>
+              </div>
+            </div>
+            <div className="ranking-item">
+              <div className="ranking-label-row">
+                <span className="ranking-label">Missions (20%)</span>
+              </div>
+              <div className="ranking-bar-wrapper">
+                <div className="ranking-bar-bg"><div className="ranking-bar-fill blue-glow" style={{width: `${Math.min(100, (candidate.missionMatchScore || 0) / 0.2 * 100)}%`}}></div></div>
+                <span className="ranking-score">+{Math.round((candidate.missionMatchScore || 0) * 100)}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* AI Fit Explanation - Keep as secondary context if available */}
       {(candidate.fitExplanation || candidate.aiSummary) && (
         <div className="candidate-card__ai-summary">
           <div className="candidate-card__ai-header">
             <Sparkles size={14} />
-            <span>Tại sao phù hợp</span>
+            <span>AI Đánh giá thêm</span>
           </div>
           <p className="candidate-card__ai-text">
             {isExpanded ? (candidate.fitExplanation || candidate.aiSummary) : (candidate.fitExplanation || candidate.aiSummary)?.slice(0, 120) + '...'}
           </p>
-          {(candidate.fitExplanation || candidate.aiSummary)?.length > 120 && (
+          {((candidate.fitExplanation || candidate.aiSummary)?.length || 0) > 120 && (
             <button
               className="candidate-card__expand-btn"
               onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}

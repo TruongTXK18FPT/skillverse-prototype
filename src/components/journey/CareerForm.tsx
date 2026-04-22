@@ -31,6 +31,7 @@ interface CareerFormProps {
     roleKeywords?: string;
   }) => void;
   onBack: () => void;
+  allowedDomains?: string[];
 }
 
 const parseKeywords = (keywords?: string): string[] =>
@@ -40,7 +41,7 @@ const parseKeywords = (keywords?: string): string[] =>
     .filter(Boolean)
     .filter((keyword, index, array) => array.indexOf(keyword) === index);
 
-const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
+const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack, allowedDomains }) => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -71,13 +72,22 @@ const CareerForm: React.FC<CareerFormProps> = ({ onComplete, onBack }) => {
     loadFields();
   }, []);
 
+  const visibleFields = useMemo(() => {
+    if (!allowedDomains || allowedDomains.length === 0) {
+      return expertFields;
+    }
+
+    const allowedDomainSet = new Set(allowedDomains.map((domain) => domain.toUpperCase()));
+    return expertFields.filter((field) => allowedDomainSet.has(field.domain.toUpperCase()));
+  }, [allowedDomains, expertFields]);
+
   const domainOptions: ExpertDomainMeta[] = useMemo(() => {
-    return expertFields.map((field) => getExpertDomainMeta(field.domain));
-  }, [expertFields]);
+    return visibleFields.map((field) => getExpertDomainMeta(field.domain));
+  }, [visibleFields]);
 
   const currentDomain = useMemo(() => {
-    return expertFields.find((field) => field.domain === selectedDomain);
-  }, [expertFields, selectedDomain]);
+    return visibleFields.find((field) => field.domain === selectedDomain);
+  }, [visibleFields, selectedDomain]);
 
   const currentSubCategories = useMemo(() => {
     return (currentDomain?.industries || []).map((industry) => ({

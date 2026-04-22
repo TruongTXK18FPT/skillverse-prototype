@@ -1,0 +1,734 @@
+.mentor-qb-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: #e8f7ff;
+}
+
+.mentor-qb-hero,
+.mentor-qb-composerCard,
+.mentor-qb-historyCard,
+.mentor-qb-detailPanel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(52, 211, 153, 0.18);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(52, 211, 153, 0.14), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.14), transparent 36%),
+    linear-gradient(145deg, rgba(3, 10, 25, 0.96), rgba(9, 27, 48, 0.9));
+  box-shadow:
+    0 18px 44px rgba(2, 6, 23, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.mentor-qb-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 1.5rem;
+  padding: 1.9rem;
+}
+
+.mentor-qb-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.24);
+  color: #86efac;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mentor-qb-hero h2 {
+  margin: 0.9rem 0 0.6rem;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.mentor-qb-hero p {
+  margin: 0;
+  color: #b9d6ea;
+  line-height: 1.7;
+  max-width: 780px;
+}
+
+.mentor-qb-heroStats {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.mentor-qb-heroStat {
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  background: rgba(2, 12, 27, 0.56);
+}
+
+.mentor-qb-heroStat strong {
+  display: block;
+  font-size: 2rem;
+  line-height: 1;
+  color: #ecfeff;
+}
+
+.mentor-qb-heroStat span {
+  display: block;
+  margin-top: 0.45rem;
+  color: #8db2c9;
+  font-size: 0.92rem;
+}
+
+.mentor-qb-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(340px, 0.95fr);
+  gap: 1.5rem;
+}
+
+.mentor-qb-composerCard,
+.mentor-qb-historyCard,
+.mentor-qb-detailPanel {
+  padding: 1.4rem;
+}
+
+.mentor-qb-sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.2rem;
+}
+
+.mentor-qb-sectionHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  font-size: 1.18rem;
+}
+
+.mentor-qb-sectionHeader p {
+  margin: 0.35rem 0 0;
+  color: #8db2c9;
+}
+
+.mentor-qb-headerActions,
+.mentor-qb-importActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.mentor-qb-btn,
+.mentor-qb-chip,
+.mentor-qb-modeCard,
+.mentor-qb-historyMain {
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mentor-qb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 14px;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mentor-qb-btn.primary {
+  background: linear-gradient(135deg, #22c55e, #14b8a6);
+  color: #041119;
+}
+
+.mentor-qb-btn.secondary {
+  background: rgba(56, 189, 248, 0.12);
+  color: #a5f3fc;
+  border: 1px solid rgba(56, 189, 248, 0.24);
+}
+
+.mentor-qb-btn.success {
+  background: linear-gradient(135deg, #34d399, #38bdf8);
+  color: #03131f;
+  min-width: 170px;
+}
+
+.mentor-qb-btn.subtle {
+  background: rgba(148, 163, 184, 0.12);
+  color: #d5f3ff;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.mentor-qb-btn.small {
+  padding: 0.55rem 0.8rem;
+  border-radius: 12px;
+}
+
+.mentor-qb-btn:hover,
+.mentor-qb-chip:hover,
+.mentor-qb-modeCard:hover,
+.mentor-qb-historyMain:hover {
+  transform: translateY(-1px);
+}
+
+.mentor-qb-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.mentor-qb-verifiedSkills,
+.mentor-qb-importCard,
+.mentor-qb-selectionBar,
+.mentor-qb-submitBar,
+.mentor-qb-reviewNote,
+.mentor-qb-skillGate {
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  border-radius: 18px;
+  background: rgba(6, 20, 38, 0.62);
+}
+
+.mentor-qb-verifiedSkills,
+.mentor-qb-skillGate {
+  padding: 1rem 1.05rem;
+  margin-bottom: 1rem;
+}
+
+.mentor-qb-verifiedSkillsHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #7dd3fc;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.mentor-qb-chipWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.mentor-qb-chip {
+  border: 1px solid rgba(52, 211, 153, 0.15);
+  border-radius: 999px;
+  background: rgba(2, 24, 28, 0.8);
+  color: #d6fdf1;
+  padding: 0.58rem 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mentor-qb-chip.active {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.22), rgba(56, 189, 248, 0.22));
+  border-color: rgba(52, 211, 153, 0.42);
+}
+
+.mentor-qb-skillGate label,
+.mentor-qb-field span,
+.mentor-qb-questionHeader p,
+.mentor-qb-selectionMeta span,
+.mentor-qb-detailFacts span {
+  font-size: 0.92rem;
+}
+
+.mentor-qb-skillInputWrap,
+.mentor-qb-historySearch {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 14px;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  background: rgba(2, 12, 27, 0.78);
+  padding: 0.8rem 0.95rem;
+}
+
+.mentor-qb-skillInputWrap input,
+.mentor-qb-historySearch input,
+.mentor-qb-field input,
+.mentor-qb-field textarea,
+.mentor-qb-field select {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #effbff;
+  font: inherit;
+}
+
+.mentor-qb-field textarea {
+  resize: vertical;
+}
+
+.mentor-qb-skillHint {
+  margin-top: 0.65rem;
+  font-size: 0.88rem;
+}
+
+.mentor-qb-skillHint.valid {
+  color: #86efac;
+}
+
+.mentor-qb-skillHint.invalid {
+  color: #fda4af;
+}
+
+.mentor-qb-careerShell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mentor-qb-selectionBar,
+.mentor-qb-submitBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.95rem 1rem;
+}
+
+.mentor-qb-selectionMeta,
+.mentor-qb-detailFacts,
+.mentor-qb-previewTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.mentor-qb-selectionMeta span,
+.mentor-qb-detailFacts span,
+.mentor-qb-previewTags span,
+.mentor-qb-skillPill {
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  background: rgba(5, 18, 31, 0.82);
+  color: #d6f1ff;
+}
+
+.mentor-qb-selectionMeta span.active,
+.mentor-qb-skillPill.valid {
+  border-color: rgba(52, 211, 153, 0.35);
+  color: #86efac;
+}
+
+.mentor-qb-skillPill.invalid {
+  border-color: rgba(251, 113, 133, 0.3);
+  color: #fda4af;
+}
+
+.mentor-qb-formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.mentor-qb-formGrid.compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.mentor-qb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  background: rgba(5, 18, 31, 0.82);
+}
+
+.mentor-qb-field.full {
+  grid-column: 1 / -1;
+}
+
+.mentor-qb-field span {
+  color: #8dd3ff;
+  font-weight: 600;
+}
+
+.mentor-qb-modeSwitch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.95rem;
+  margin-top: 1rem;
+}
+
+.mentor-qb-modeCard {
+  text-align: left;
+  padding: 1rem 1.05rem;
+  border-radius: 20px;
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  background: rgba(5, 18, 31, 0.82);
+  color: #effbff;
+  cursor: pointer;
+}
+
+.mentor-qb-modeCard strong {
+  display: block;
+  margin-top: 0.6rem;
+  margin-bottom: 0.35rem;
+}
+
+.mentor-qb-modeCard span {
+  color: #8db2c9;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.mentor-qb-modeCard.active {
+  border-color: rgba(52, 211, 153, 0.35);
+  box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.12);
+}
+
+.mentor-qb-importCard,
+.mentor-qb-questionCard,
+.mentor-qb-previewCard,
+.mentor-qb-historyItem {
+  padding: 1rem 1.05rem;
+}
+
+.mentor-qb-importCard {
+  margin-top: 1rem;
+}
+
+.mentor-qb-fileName {
+  color: #a5f3fc;
+  font-size: 0.9rem;
+}
+
+.mentor-qb-questionHeader,
+.mentor-qb-questionCardHeader,
+.mentor-qb-previewHeader,
+.mentor-qb-detailTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.mentor-qb-questionHeader {
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.mentor-qb-questionHeader h4,
+.mentor-qb-detailTop h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.mentor-qb-questionHeader p,
+.mentor-qb-detailTop p {
+  margin: 0.35rem 0 0;
+  color: #8db2c9;
+}
+
+.mentor-qb-questionList,
+.mentor-qb-historyList,
+.mentor-qb-questionPreviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mentor-qb-questionCard,
+.mentor-qb-previewCard,
+.mentor-qb-historyItem {
+  border-radius: 20px;
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  background: rgba(5, 18, 31, 0.82);
+}
+
+.mentor-qb-questionIndex {
+  display: inline-flex;
+  margin-bottom: 0.45rem;
+  color: #86efac;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.mentor-qb-questionCardHeader h5 {
+  margin: 0;
+  font-size: 1.02rem;
+}
+
+.mentor-qb-iconBtn {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 113, 133, 0.24);
+  background: rgba(127, 29, 29, 0.18);
+  color: #fecdd3;
+  cursor: pointer;
+}
+
+.mentor-qb-iconBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.mentor-qb-optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin: 1rem 0;
+}
+
+.mentor-qb-submitMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  color: #d6f1ff;
+}
+
+.mentor-qb-submitMeta strong {
+  font-size: 1.35rem;
+}
+
+.mentor-qb-historyMain {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.mentor-qb-historyMain strong {
+  display: block;
+}
+
+.mentor-qb-historyMain span {
+  display: block;
+  margin-top: 0.35rem;
+  color: #8db2c9;
+}
+
+.mentor-qb-historyMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mentor-qb-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.mentor-qb-status-badge.pending {
+  background: rgba(250, 204, 21, 0.12);
+  border: 1px solid rgba(250, 204, 21, 0.22);
+  color: #fde68a;
+}
+
+.mentor-qb-status-badge.approved {
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.22);
+  color: #86efac;
+}
+
+.mentor-qb-status-badge.rejected {
+  background: rgba(251, 113, 133, 0.12);
+  border: 1px solid rgba(251, 113, 133, 0.22);
+  color: #fecdd3;
+}
+
+.mentor-qb-historyDetail {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.mentor-qb-historyDetail p {
+  margin: 0.75rem 0;
+  color: #b9d6ea;
+  line-height: 1.6;
+}
+
+.mentor-qb-detailMetrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.mentor-qb-detailMetrics.large {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.mentor-qb-detailMetrics > div {
+  padding: 0.85rem 0.9rem;
+  border-radius: 16px;
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  background: rgba(2, 12, 27, 0.66);
+}
+
+.mentor-qb-detailMetrics strong {
+  display: block;
+  font-size: 1.3rem;
+  color: #effbff;
+}
+
+.mentor-qb-detailMetrics span {
+  display: block;
+  margin-top: 0.35rem;
+  color: #8db2c9;
+}
+
+.mentor-qb-detailPanel {
+  min-height: 320px;
+}
+
+.mentor-qb-reviewNote {
+  padding: 1rem 1.05rem;
+  margin-top: 1rem;
+}
+
+.mentor-qb-reviewNote strong {
+  display: block;
+  margin-bottom: 0.45rem;
+}
+
+.mentor-qb-reviewNote p {
+  margin: 0;
+  color: #b9d6ea;
+  line-height: 1.6;
+}
+
+.mentor-qb-previewCard p {
+  margin: 0.75rem 0;
+  line-height: 1.7;
+  color: #eef9ff;
+}
+
+.mentor-qb-previewHeader span {
+  color: #8dd3ff;
+  font-size: 0.9rem;
+}
+
+.mentor-qb-previewOptions {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.mentor-qb-previewOption {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  border-radius: 14px;
+  padding: 0.75rem 0.8rem;
+  background: rgba(2, 12, 27, 0.72);
+  border: 1px solid rgba(56, 189, 248, 0.1);
+}
+
+.mentor-qb-previewOption.correct {
+  border-color: rgba(74, 222, 128, 0.24);
+  background: rgba(20, 83, 45, 0.24);
+}
+
+.mentor-qb-previewOption strong {
+  min-width: 18px;
+  color: #8dd3ff;
+}
+
+.mentor-qb-previewCard small {
+  display: block;
+  margin-top: 0.85rem;
+  color: #9fc5da;
+  line-height: 1.6;
+}
+
+.mentor-qb-emptyState,
+.mentor-qb-loading,
+.mentor-qb-emptyInline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 120px;
+  border-radius: 18px;
+  border: 1px dashed rgba(148, 163, 184, 0.18);
+  background: rgba(2, 12, 27, 0.45);
+  color: #9fc5da;
+  text-align: center;
+  padding: 1.2rem;
+}
+
+.mentor-qb-emptyState.large {
+  min-height: 220px;
+  flex-direction: column;
+}
+
+.mentor-qb-spin {
+  animation: mentorQbSpin 1s linear infinite;
+}
+
+@keyframes mentorQbSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1200px) {
+  .mentor-qb-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .mentor-qb-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .mentor-qb-formGrid,
+  .mentor-qb-formGrid.compact,
+  .mentor-qb-modeSwitch,
+  .mentor-qb-optionsGrid,
+  .mentor-qb-detailMetrics.large {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .mentor-qb-hero,
+  .mentor-qb-composerCard,
+  .mentor-qb-historyCard,
+  .mentor-qb-detailPanel {
+    padding: 1rem;
+    border-radius: 20px;
+  }
+
+  .mentor-qb-selectionBar,
+  .mentor-qb-submitBar,
+  .mentor-qb-sectionHeader,
+  .mentor-qb-questionHeader,
+  .mentor-qb-detailTop {
+    flex-direction: column;
+  }
+}

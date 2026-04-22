@@ -85,6 +85,7 @@ export interface CreateJobRequest {
   benefits?: string;
   genderRequirement?: string;
   isNegotiable?: boolean;
+  primarySkill?: string;
 }
 
 export interface UpdateJobRequest {
@@ -103,6 +104,7 @@ export interface UpdateJobRequest {
   benefits?: string;
   genderRequirement?: string;
   isNegotiable?: boolean;
+  primarySkill?: string;
 }
 
 export interface ApplyJobRequest {
@@ -146,6 +148,7 @@ export interface JobPostingResponse {
   benefits?: string;
   genderRequirement?: string;
   isNegotiable?: boolean;
+  primarySkill?: string;
 
   // Recruiter information
   recruiterCompanyName: string; // From nested RecruiterProfile

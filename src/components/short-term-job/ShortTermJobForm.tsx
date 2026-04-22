@@ -112,6 +112,7 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     maxApplicants: initialData?.maxApplicants || 10,
     subCategory: initialData?.subCategory || "OTHER",
     requiredSkills: initialData?.requiredSkills || [],
+    primarySkill: initialData?.primarySkill || "",
     allowsRevision: initialData?.allowsRevision ?? true,
     maxRevisions: initialData?.maxRevisions || 2,
     tags: initialData?.tags || [],
@@ -157,16 +158,24 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
     setFormData((prev) => ({
       ...prev,
       requiredSkills: [...prev.requiredSkills, normalized],
+      // If no primary skill is set, set this one automatically
+      primarySkill: prev.primarySkill ? prev.primarySkill : normalized,
     }));
     setSkillInput("");
     setErrors((prev) => ({ ...prev, requiredSkills: undefined }));
   };
 
   const removeSkill = (skill: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      requiredSkills: prev.requiredSkills.filter((item) => item !== skill),
-    }));
+    setFormData((prev) => {
+      const newSkills = prev.requiredSkills.filter((item) => item !== skill);
+      return {
+        ...prev,
+        requiredSkills: newSkills,
+        primarySkill: prev.primarySkill === skill 
+          ? (newSkills.length > 0 ? newSkills[0] : "") 
+          : prev.primarySkill,
+      };
+    });
   };
 
   const addTag = () => {
@@ -397,8 +406,11 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                 <div className="sjf-chip-row">
                   {formData.requiredSkills.length > 0 ? (
                     formData.requiredSkills.map((skill) => (
-                      <span key={skill} className="sjf-chip sjf-chip--active">
+                      <span key={skill} className={`sjf-chip ${formData.primarySkill === skill ? 'sjf-chip--primary' : 'sjf-chip--active'}`}>
                         {skill}
+                        {formData.primarySkill === skill && (
+                          <span className="sjf-chip__badge" title="Kỹ năng chính mang trọng số cao nhất">⭐ Chính</span>
+                        )}
                         <button
                           type="button"
                           className="sjf-chip__remove"
@@ -415,6 +427,24 @@ export const ShortTermJobForm: React.FC<ShortTermJobFormProps> = ({
                     </span>
                   )}
                 </div>
+                {formData.requiredSkills.length > 0 && (
+                  <div className="sjf-field sjf-field--sub" style={{ marginTop: '1rem' }}>
+                    <label className="sjf-label" style={{ fontSize: '0.85rem' }}>
+                      Chọn Kỹ Năng Chính (⭐)
+                    </label>
+                    <select
+                      className="sjf-select"
+                      value={formData.primarySkill || ""}
+                      onChange={(e) => setFormData(prev => ({ ...prev, primarySkill: e.target.value }))}
+                      style={{ padding: '0.5rem', fontSize: '0.9rem' }}
+                    >
+                      {formData.requiredSkills.map(skill => (
+                        <option key={skill} value={skill}>{skill}</option>
+                      ))}
+                    </select>
+                    <p className="sjf-note" style={{ marginTop: '0.5rem' }}>Kỹ năng này mang trọng số cao nhất trong thuật toán tìm kiếm ứng viên.</p>
+                  </div>
+                )}
               </div>
             </div>
           </section>

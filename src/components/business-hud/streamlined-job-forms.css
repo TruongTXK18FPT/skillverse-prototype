@@ -768,10 +768,29 @@
   color: #b7f7ee !important;
 }
 
+/* Primary chip (Neon Gold/Tech vibe) */
+.sjf-chip--primary {
+  border-color: rgba(247, 198, 108, 0.7) !important;
+  background: rgba(247, 198, 108, 0.2) !important;
+  color: #fff !important;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(247, 198, 108, 0.3);
+}
+
 .sjf-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
+}
+
+.sjf-chip__badge {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.35rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  margin-left: 0.2rem;
+  color: #f7c66c;
+  font-weight: normal;
 }
 
 .sjf-chip__remove {

@@ -16,11 +16,13 @@ import {
 } from '../../../data/questionBankDTOs';
 import { useToast } from '../../../hooks/useToast';
 import CareerForm from '../../journey/CareerForm';
+import SkillAutoResolve from '../../shared/SkillAutoResolve';
 import {
   getAllDomains,
 } from '../../../services/expertPromptService';
 import { getExpertDomainLabel } from '../../../utils/expertFieldPresentation';
 import MeowlKuruLoader from '../../kuru-loader/MeowlKuruLoader';
+import QuestionBankSubmissionReviewPanel from './QuestionBankSubmissionReviewPanel';
 import '../../../styles/GSJJourney.css';
 import './QuestionBankTab.css';
 
@@ -117,6 +119,7 @@ const localizeImportError = (error: string): string => {
 const QuestionBankTab: React.FC = () => {
   const { showSuccess, showError, showWarning } = useToast();
   type CreateBankMode = 'MANUAL' | 'IMPORT' | 'AI';
+  type AdminSection = 'library' | 'mentorReview';
 
   // ============================================================
   // State
@@ -150,8 +153,9 @@ const QuestionBankTab: React.FC = () => {
   const [activeModal, setActiveModal] = useState<ModalType>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<QuestionResponse | null>(null);
   const [formLoading, setFormLoading] = useState(false);
-  const [createBankStep, setCreateBankStep] = useState<'career' | 'config'>('career');
+  const [createBankStep, setCreateBankStep] = useState<'skillResolve' | 'manualCareer' | 'config'>('skillResolve');
   const [createBankMode, setCreateBankMode] = useState<CreateBankMode>('MANUAL');
+  const [adminSkillInput, setAdminSkillInput] = useState('');
 
   // ============================================================
   // Form State
@@ -187,6 +191,7 @@ const QuestionBankTab: React.FC = () => {
   const [aiDrafts, setAiDrafts] = useState<AiDraftQuestion[]>([]);
   const [selectedDraftIds, setSelectedDraftIds] = useState<Set<number>>(new Set());
   const [editedDraftIds, setEditedDraftIds] = useState<Set<number>>(new Set());
+  const [adminSection, setAdminSection] = useState<AdminSection>('library');
 
   // ============================================================
   // Load Data
@@ -262,7 +267,8 @@ const QuestionBankTab: React.FC = () => {
       b.title?.toLowerCase().includes(term) ||
       b.domain?.toLowerCase().includes(term) ||
       b.industry?.toLowerCase().includes(term) ||
-      b.jobRole?.toLowerCase().includes(term)
+      b.jobRole?.toLowerCase().includes(term) ||
+      b.skillName?.toLowerCase().includes(term)
     );
   }, [banks, searchTerm]);
 
@@ -378,11 +384,12 @@ const QuestionBankTab: React.FC = () => {
     setAiDrafts([]);
     setSelectedDraftIds(new Set());
     setEditedDraftIds(new Set());
-    setCreateBankStep('career');
+    setCreateBankStep('skillResolve');
     setCreateBankMode('MANUAL');
     setAiQuestionCount(10);
     setAiDistribution({ ...DEFAULT_DISTRIBUTION });
     setAiFocusSkills('');
+    setAdminSkillInput('');
   };
 
   const openAddQuestionWorkspace = () => {
@@ -437,9 +444,28 @@ const QuestionBankTab: React.FC = () => {
 
   const openCreateBankModal = (mode: CreateBankMode = 'MANUAL') => {
     resetBankForm();
-    setCreateBankStep('career');
+    setCreateBankStep('skillResolve');
     setCreateBankMode(mode);
+    setAdminSkillInput('');
     setActiveModal('createBank');
+  };
+
+  // [Skill Auto-Resolve] Admin auto-resolve handler
+  const handleSkillAutoResolve = (data: {
+    domain: string;
+    industry: string;
+    jobRole: string;
+    keywords?: string;
+  }) => {
+    setBankForm(prev => ({
+      ...prev,
+      domain: data.domain,
+      industry: data.industry,
+      jobRole: data.jobRole,
+      title: prev.title || `Bộ câu hỏi đầu vào ${data.jobRole}`,
+      description: prev.description || `Bộ câu hỏi đánh giá đầu vào cho vị trí ${data.jobRole} thuộc ngành ${data.industry}.`,
+    }));
+    setCreateBankStep('config');
   };
 
   const handleCareerSelectionComplete = (data: {
@@ -836,7 +862,7 @@ const QuestionBankTab: React.FC = () => {
       {/* Header */}
       <div className="qb-header">
         <h2><ListChecks size={28} /> Ngân hàng câu hỏi</h2>
-        {view === 'detail' ? null : (
+        {adminSection === 'library' && view === 'detail' ? null : adminSection === 'library' ? (
           <div className="qb-header-actions">
             <button className="qb-btn secondary" onClick={() => loadBanks(bankPage)}>
               <RefreshCw size={18} />
@@ -851,8 +877,30 @@ const QuestionBankTab: React.FC = () => {
               <Plus size={18} /> Tạo ngân hàng câu hỏi
             </button>
           </div>
-        )}
+        ) : null}
       </div>
+
+      <div className="qb-topTabs">
+        <button
+          type="button"
+          className={`qb-topTab ${adminSection === 'library' ? 'active' : ''}`}
+          onClick={() => setAdminSection('library')}
+        >
+          Ngân hàng hiện có
+        </button>
+        <button
+          type="button"
+          className={`qb-topTab ${adminSection === 'mentorReview' ? 'active' : ''}`}
+          onClick={() => setAdminSection('mentorReview')}
+        >
+          Duyệt đóng góp từ mentor
+        </button>
+      </div>
+
+      {adminSection === 'mentorReview' ? (
+        <QuestionBankSubmissionReviewPanel />
+      ) : (
+        <>
 
       {/* Breadcrumb */}
       {view === 'detail' && (
@@ -964,6 +1012,7 @@ const QuestionBankTab: React.FC = () => {
                               <span>{getExpertDomainLabel(bank.domain)}</span>
                               {bank.industry && <span>{bank.industry}</span>}
                               {bank.jobRole && <span>{bank.jobRole}</span>}
+                              {bank.skillName && <span>{bank.skillName}</span>}
                             </div>
                           </div>
                         </div>
@@ -1012,6 +1061,7 @@ const QuestionBankTab: React.FC = () => {
                 <span>{getExpertDomainLabel(selectedBank.domain)}</span>
                 {selectedBank.industry && <span>{selectedBank.industry}</span>}
                 {selectedBank.jobRole && <span>{selectedBank.jobRole}</span>}
+                {selectedBank.skillName && <span>{selectedBank.skillName}</span>}
                 <span style={{
                   padding: '0.25rem 0.6rem',
                   borderRadius: '6px',
@@ -1153,11 +1203,25 @@ const QuestionBankTab: React.FC = () => {
               <button className="qb-close-btn" onClick={closeModal}><X size={20} /></button>
             </div>
             <div className="qb-modal-body">
-              {createBankStep === 'career' ? (
+              {createBankStep === 'skillResolve' ? (
+                <div className="qb-journey-selector-shell">
+                  <SkillAutoResolve
+                    skillInput={adminSkillInput}
+                    onSkillChange={setAdminSkillInput}
+                    onResolve={handleSkillAutoResolve}
+                    showManualFallback={true}
+                    onManualFallback={() => setCreateBankStep('manualCareer')}
+                    onBack={closeModal}
+                    label="Nhập skill hoặc chủ đề để tự động xác định lộ trình"
+                    description="Hệ thống sẽ tự động nhận diện lĩnh vực, ngành và vị trí công việc dựa trên skill bạn nhập."
+                    placeholder="Ví dụ: React, Java Spring Boot, Data Analyst..."
+                  />
+                </div>
+              ) : createBankStep === 'manualCareer' ? (
                 <div className="qb-journey-selector-shell">
                   <CareerForm
                     onComplete={handleCareerSelectionComplete}
-                    onBack={closeModal}
+                    onBack={() => setCreateBankStep('skillResolve')}
                   />
                 </div>
               ) : (
@@ -1172,7 +1236,7 @@ const QuestionBankTab: React.FC = () => {
                         <span>{bankForm.jobRole}</span>
                       </div>
                     </div>
-                    <button className="qb-btn secondary small" onClick={() => setCreateBankStep('career')}>
+                    <button className="qb-btn secondary small" onClick={() => setCreateBankStep('skillResolve')}>
                       Chọn lại
                     </button>
                   </div>
@@ -1932,6 +1996,8 @@ const QuestionBankTab: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

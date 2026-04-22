@@ -151,6 +151,7 @@ const JourneyCreatePage: React.FC = () => {
     language: "VI",
     duration: "STANDARD",
     skills: [],
+    existingSkills: [],
   });
 
   const [skillInput, setSkillInput] = useState("");
@@ -174,15 +175,18 @@ const JourneyCreatePage: React.FC = () => {
   const selectedDuration = DURATION_OPTIONS.find(
     (option) => option.value === formData.duration,
   );
+  const selectedTargetSkills = formData.skills || [];
+  const selectedExistingSkills = formData.existingSkills || [];
+  const targetSkillSummary =
+    selectedTargetSkills.length === 0
+      ? "Chưa chọn"
+      : selectedTargetSkills.length === 1
+        ? selectedTargetSkills[0]
+        : `${selectedTargetSkills[0]} +${selectedTargetSkills.length - 1} kỹ năng`;
   const domainMeta = formData.domain
     ? getExpertDomainMeta(formData.domain)
     : null;
-  const journeyTypeLabel =
-    journeyType === JourneyType.CAREER
-      ? "Định hướng nghề nghiệp"
-      : journeyType === JourneyType.SKILL
-        ? "Nâng cấp kỹ năng"
-        : "Chưa chọn";
+  const journeyTypeLabel = "Học kỹ năng mới";
 
 
 
@@ -200,6 +204,9 @@ const JourneyCreatePage: React.FC = () => {
       jobRole: data.jobRole,
       roleKeywords: undefined,
       skills: data.skills,
+      existingSkills: (prev.existingSkills || []).filter(
+        (skill) => !data.skills.includes(skill),
+      ),
     }));
     setCurrentStep(2);
     setError(null);
@@ -223,34 +230,55 @@ const JourneyCreatePage: React.FC = () => {
 
   const handleAddSkill = () => {
     const trimmed = skillInput.trim();
-    if (trimmed && !formData.skills?.includes(trimmed)) {
+    if (!trimmed) {
+      return;
+    }
+
+    // [Nghiệp vụ] Kỹ năng mục tiêu đang học không được trùng với kỹ năng người dùng tự khai báo là đã có.
+    if (selectedTargetSkills.includes(trimmed)) {
+      setError(`"${trimmed}" đang là kỹ năng mục tiêu cần học. Vui lòng chọn kỹ năng đã có khác.`);
+      return;
+    }
+
+    if (!selectedExistingSkills.includes(trimmed)) {
       setFormData((prev) => ({
         ...prev,
-        skills: [...(prev.skills || []), trimmed],
+        existingSkills: [...(prev.existingSkills || []), trimmed],
       }));
       setSkillInput("");
+      setError(null);
     }
   };
 
   const handleRemoveSkill = (skill: string) => {
     setFormData((prev) => ({
       ...prev,
-      skills: (prev.skills || []).filter((s) => s !== skill),
+      existingSkills: (prev.existingSkills || []).filter((s) => s !== skill),
     }));
   };
 
   const handleAddSuggestedSkill = (skill: string) => {
-    if (!formData.skills?.includes(skill)) {
+    if (selectedTargetSkills.includes(skill)) {
+      setError(`"${skill}" là kỹ năng mục tiêu cần học, không thể thêm vào kỹ năng đã có.`);
+      return;
+    }
+
+    if (!selectedExistingSkills.includes(skill)) {
       setFormData((prev) => ({
         ...prev,
-        skills: [...(prev.skills || []), skill],
+        existingSkills: [...(prev.existingSkills || []), skill],
       }));
+      setError(null);
     }
   };
 
   const canSubmit = () => {
     return Boolean(
-      formData.goal && formData.level && formData.language && formData.duration,
+      formData.goal &&
+        formData.level &&
+        formData.language &&
+        formData.duration &&
+        selectedTargetSkills.length > 0,
     );
   };
 
@@ -269,6 +297,11 @@ const JourneyCreatePage: React.FC = () => {
       return;
     }
 
+    if (selectedTargetSkills.length === 0) {
+      setError("Vui lòng chọn ít nhất 1 kỹ năng mục tiêu trước khi tạo bài test.");
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -283,59 +316,7 @@ const JourneyCreatePage: React.FC = () => {
     }
   };
 
-  const renderStep1 = () => (
-    <div className="gsj-wizard-step">
-      <div className="gsj-wizard-step__header">
-        <h2 className="gsj-wizard-step__title">Chọn loại hành trình</h2>
-        <p className="gsj-wizard-step__subtitle">
-          Mỗi lựa chọn sẽ mở ra bộ câu hỏi đầu vào và roadmap khác nhau. Chọn
-          đúng mục đích để kết quả sát với nhu cầu của bạn.
-        </p>
-      </div>
 
-      <div className="gsj-type-grid">
-        <button
-          type="button"
-          className={`gsj-type-card ${journeyType === JourneyType.CAREER ? "gsj-type-card--selected" : ""}`}
-          onClick={() => handleTypeSelect(JourneyType.CAREER)}
-        >
-          <span className="gsj-type-card__icon">
-            <Briefcase size={48} />
-          </span>
-          <span className="gsj-type-card__label">Định hướng nghề nghiệp</span>
-          <span className="gsj-type-card__desc">
-            Chọn lĩnh vực, ngành và vị trí mục tiêu để kiểm tra mức độ sẵn sàng
-            trước khi đi theo một hướng nghề nghiệp cụ thể.
-          </span>
-          {journeyType === JourneyType.CAREER && (
-            <span className="gsj-type-card__check">
-              <Check size={20} />
-            </span>
-          )}
-        </button>
-
-        <button
-          type="button"
-          className={`gsj-type-card ${journeyType === JourneyType.SKILL ? "gsj-type-card--selected" : ""}`}
-          onClick={() => handleTypeSelect(JourneyType.SKILL)}
-        >
-          <span className="gsj-type-card__icon">
-            <Lightbulb size={48} />
-          </span>
-          <span className="gsj-type-card__label">Học kỹ năng mới</span>
-          <span className="gsj-type-card__desc">
-            Chọn nhóm kỹ năng bạn muốn tập trung để nhận bài đánh giá đầu vào và
-            kế hoạch luyện tập phù hợp.
-          </span>
-          {journeyType === JourneyType.SKILL && (
-            <span className="gsj-type-card__check">
-              <Check size={20} />
-            </span>
-          )}
-        </button>
-      </div>
-    </div>
-  );
 
   // Step 2: Goal + Level + Skills + Language + Duration — all in one page
   const renderStep2 = () => (
@@ -440,6 +421,20 @@ const JourneyCreatePage: React.FC = () => {
         </div>
       </div>
 
+      <div className="gsj-wizard-section">
+        <h3 className="gsj-wizard-section__title">Kỹ năng mục tiêu đang học</h3>
+        <p className="gsj-hint-text gsj-hint-text--sm">
+          Đây là kỹ năng bạn đã chọn ở bước trước và sẽ là trọng tâm của bài test.
+        </p>
+        <div className="gsj-chip-list gsj-chip-list--wrap">
+          {selectedTargetSkills.map((skill) => (
+            <span key={skill} className="gsj-chip gsj-chip--selected">
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* Kỹ năng đã có */}
       <div className="gsj-wizard-section">
         <h3 className="gsj-wizard-section__title">
@@ -449,9 +444,9 @@ const JourneyCreatePage: React.FC = () => {
           Thêm kỹ năng bạn đã nắm vững để AI đánh giá chính xác hơn.
         </p>
 
-        {formData.skills && formData.skills.length > 0 && (
+        {selectedExistingSkills.length > 0 && (
           <div className="gsj-chip-list">
-            {formData.skills.map((skill) => (
+            {selectedExistingSkills.map((skill) => (
               <span key={skill} className="gsj-chip gsj-chip--removable">
                 {skill}
                 <button type="button" onClick={() => handleRemoveSkill(skill)}>
@@ -496,7 +491,8 @@ const JourneyCreatePage: React.FC = () => {
         {skillSuggestions.length > 0 && (
           <div className="gsj-skill-grid">
             {skillSuggestions
-              .filter((skill) => !formData.skills?.includes(skill))
+              .filter((skill) => !selectedExistingSkills.includes(skill))
+              .filter((skill) => !selectedTargetSkills.includes(skill))
               .slice(0, 12)
               .map((skill) => (
                 <button
@@ -730,10 +726,19 @@ const JourneyCreatePage: React.FC = () => {
                   Vai trò / kỹ năng
                 </span>
                 <strong>
-                  {formData.jobRole ||
-                    (formData.skills && formData.skills.length > 0
-                      ? `${formData.skills.length} kỹ năng đã chọn`
-                      : "Chưa chọn")}
+                  {formData.jobRole || "Chưa chọn"}
+                  {" · "}
+                  {targetSkillSummary}
+                </strong>
+              </div>
+              <div className="gsj-create-summary-item">
+                <span className="gsj-create-summary-item__label">
+                  Kỹ năng đã có
+                </span>
+                <strong>
+                  {selectedExistingSkills.length > 0
+                    ? `${selectedExistingSkills.length} kỹ năng`
+                    : "Chưa khai báo"}
                 </strong>
               </div>
               <div className="gsj-create-summary-item">

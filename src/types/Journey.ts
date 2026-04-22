@@ -2548,8 +2548,8 @@ export const SKILLS_BY_DOMAIN: Record<string, string[]> = {
 };
 
 // ==================== Skills by Job Role (authoritative for SkillForm) ====================
-// All skills for a job role are pre-selected in SkillForm step 3.
-// User deselects skills they already know; at least 1 must remain selected.
+// SkillForm uses this map to render selectable target skills for the chosen role.
+// V3 journey flow allows user to pick a focused target skill instead of auto-selecting all.
 // Skills are ordered by importance/frequency for the role.
 
 export const SKILLS_BY_JOB_ROLE: Record<string, string[]> = {
@@ -3781,7 +3781,12 @@ export interface StartJourneyRequest {
   roleKeywords?: string;
 
   // Optional fields
+  // Target skill(s) user wants to develop in this journey
   skills?: string[];
+
+  // Existing skills user already has (used to calibrate AI evaluation context)
+  existingSkills?: string[];
+
   focusAreas?: string[];
   language?: string;
   duration?: string;

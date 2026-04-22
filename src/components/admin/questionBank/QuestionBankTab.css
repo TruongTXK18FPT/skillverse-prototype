@@ -1798,6 +1798,282 @@
 .qb-breakdown-item.expert .qb-breakdown-value { color: #f87171; }
 
 /* ============================================================================
+   Top Tabs + Mentor Review
+   ========================================================================== */
+.qb-topTabs {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 0.45rem;
+  border-radius: 16px;
+  border: 1px solid rgba(6, 182, 212, 0.22);
+  background: rgba(0, 10, 20, 0.62);
+}
+
+.qb-topTab {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: #9fbdd0;
+  padding: 0.8rem 1.1rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qb-topTab:hover {
+  color: #e0f2fe;
+  background: rgba(6, 182, 212, 0.08);
+}
+
+.qb-topTab.active {
+  color: #ecfeff;
+  border-color: rgba(34, 211, 238, 0.34);
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.22), rgba(14, 165, 233, 0.12));
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12);
+}
+
+.qb-review-section {
+  position: relative;
+  z-index: 1;
+}
+
+.qb-spin {
+  animation: qbSpinInline 1s linear infinite;
+}
+
+@keyframes qbSpinInline {
+  to { transform: rotate(360deg); }
+}
+
+.qb-review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.qb-review-card,
+.qb-review-detailCard,
+.qb-review-questionCard {
+  border-radius: 18px;
+  border: 1px solid rgba(6, 182, 212, 0.18);
+  background: rgba(0, 10, 20, 0.78);
+  box-shadow: 0 16px 36px rgba(2, 6, 23, 0.28);
+}
+
+.qb-review-card {
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.qb-review-card__header,
+.qb-review-questionCard__header,
+.qb-review-detailCard__hero,
+.qb-review-card__footer,
+.qb-review-decisionActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.qb-review-card__header h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.02rem;
+  color: #f8fafc;
+}
+
+.qb-review-card__header p,
+.qb-review-readonlyBox span,
+.qb-review-detailCard__statusBlock span,
+.qb-review-questionCard__header p,
+.qb-review-explanation p {
+  margin: 0;
+  color: #9fbdd0;
+  line-height: 1.6;
+}
+
+.qb-review-card__meta,
+.qb-review-questionCard__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.qb-review-card__meta span,
+.qb-review-questionCard__tags span {
+  padding: 0.42rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  background: rgba(4, 19, 34, 0.82);
+  color: #cffafe;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.qb-review-card__stats,
+.qb-review-detailCard__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.qb-review-detailCard__stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.qb-review-card__stats > div,
+.qb-review-metricCard {
+  padding: 0.85rem 0.9rem;
+  border-radius: 16px;
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  background: rgba(4, 19, 34, 0.78);
+}
+
+.qb-review-card__stats strong,
+.qb-review-metricCard strong {
+  display: block;
+  font-size: 1.25rem;
+  color: #effbff;
+}
+
+.qb-review-card__stats span,
+.qb-review-metricCard span {
+  display: block;
+  margin-top: 0.28rem;
+  color: #8db2c9;
+  font-size: 0.84rem;
+}
+
+.qb-review-card__portfolio a,
+.qb-review-detailCard__statusBlock a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  color: #67e8f9;
+  text-decoration: none;
+}
+
+.qb-review-card__portfolio span {
+  color: #8db2c9;
+  font-size: 0.86rem;
+}
+
+.qb-review-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.46rem 0.78rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.qb-review-status.pending {
+  color: #fde68a;
+  border: 1px solid rgba(250, 204, 21, 0.22);
+  background: rgba(250, 204, 21, 0.12);
+}
+
+.qb-review-status.approved {
+  color: #86efac;
+  border: 1px solid rgba(74, 222, 128, 0.24);
+  background: rgba(74, 222, 128, 0.12);
+}
+
+.qb-review-status.rejected {
+  color: #fecdd3;
+  border: 1px solid rgba(251, 113, 133, 0.24);
+  background: rgba(251, 113, 133, 0.12);
+}
+
+.qb-review-detailCard {
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.qb-review-detailCard__hero h2 {
+  margin: 0 0 0.45rem;
+  color: #ecfeff;
+}
+
+.qb-review-detailCard__hero p {
+  margin: 0;
+  color: #9fbdd0;
+  line-height: 1.7;
+}
+
+.qb-review-detailCard__statusBlock {
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.qb-review-decisionBox,
+.qb-review-readonlyBox,
+.qb-review-explanation {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  background: rgba(4, 19, 34, 0.72);
+}
+
+.qb-review-decisionActions {
+  margin-top: 1rem;
+}
+
+.qb-review-readonlyBox strong,
+.qb-review-explanation strong {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #ecfeff;
+}
+
+.qb-review-questionList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.qb-review-questionCard {
+  padding: 1rem 1.05rem;
+}
+
+.qb-review-optionList {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+.qb-review-optionItem {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.78rem 0.9rem;
+  border-radius: 14px;
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  background: rgba(2, 12, 27, 0.72);
+}
+
+.qb-review-optionItem.correct {
+  border-color: rgba(74, 222, 128, 0.26);
+  background: rgba(20, 83, 45, 0.24);
+}
+
+.qb-review-optionItem strong {
+  min-width: 16px;
+  color: #a5f3fc;
+}
+
+/* ============================================================================
    Responsive
    ========================================================================== */
 @media (max-width: 768px) {
@@ -1871,5 +2147,19 @@
 
   .qb-distribution-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .qb-topTabs,
+  .qb-review-card__header,
+  .qb-review-card__footer,
+  .qb-review-questionCard__header,
+  .qb-review-detailCard__hero,
+  .qb-review-decisionActions {
+    flex-direction: column;
+  }
+
+  .qb-review-card__stats,
+  .qb-review-detailCard__stats {
+    grid-template-columns: 1fr;
   }
 }

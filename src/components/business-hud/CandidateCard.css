@@ -335,3 +335,107 @@
     width: 100%;
   }
 }
+
+/* Ranking Breakdown - Cyan Blue Neon Tech */
+.candidate-card__ranking-breakdown {
+  background: linear-gradient(135deg, rgba(8, 20, 36, 0.95), rgba(4, 10, 20, 0.98));
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.05), inset 0 0 10px rgba(0, 255, 255, 0.02);
+  color: #e0f2fe;
+}
+
+.candidate-card__ranking-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #22d3ee;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.15);
+  padding-bottom: 0.5rem;
+}
+
+.neon-icon {
+  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.6));
+}
+
+.candidate-card__ranking-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ranking-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ranking-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ranking-label {
+  font-size: 0.75rem;
+  color: #bae6fd;
+  font-weight: 600;
+}
+
+.neon-badge {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+  background: rgba(250, 204, 21, 0.15);
+  border: 1px solid rgba(250, 204, 21, 0.4);
+  color: #fde047;
+  border-radius: 4px;
+  text-shadow: 0 0 4px rgba(250, 204, 21, 0.4);
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.1);
+}
+
+.ranking-bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ranking-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ranking-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease-out;
+}
+
+.cyan-glow {
+  background: linear-gradient(90deg, #06b6d4, #22d3ee);
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
+}
+
+.blue-glow {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+}
+
+.ranking-score {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  min-width: 2.25rem;
+  text-align: right;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+}
