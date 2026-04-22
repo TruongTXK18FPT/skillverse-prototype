@@ -2,6 +2,8 @@
 // Inspired by modern executive CV designs
 import React from "react";
 import { CVStructuredData } from "../../data/cvTemplateTypes";
+import CVMarkdownRenderer from "./CVMarkdownRenderer";
+import { cleanCVString } from "./cvUtils";
 import {
   Mail,
   Phone,
@@ -143,7 +145,9 @@ export const ProfessionalTemplate: React.FC<Props> = ({ data }) => {
                 )}
                 {cat.skills.map((skill, si) => (
                   <div key={si} className="cv-pro-skill-bar">
-                    <div className="cv-pro-skill-name">{skill.name}</div>
+                    <div className="cv-pro-skill-name">
+                      {cleanCVString(skill.name)}
+                    </div>
                     <div className="cv-pro-skill-bar-track">
                       <div
                         className="cv-pro-skill-bar-fill"
@@ -167,7 +171,9 @@ export const ProfessionalTemplate: React.FC<Props> = ({ data }) => {
               const dots = proficiencyToDots(lang.proficiency);
               return (
                 <div key={i} className="cv-pro-lang-item">
-                  <span className="cv-pro-lang-name">{lang.name}</span>
+                  <span className="cv-pro-lang-name">
+                    {cleanCVString(lang.name)}
+                  </span>
                   <div className="cv-pro-lang-dots">
                     {[1, 2, 3, 4, 5].map((d) => (
                       <span
@@ -228,7 +234,9 @@ export const ProfessionalTemplate: React.FC<Props> = ({ data }) => {
                   </div>
                 </div>
                 {exp.description && (
-                  <p className="cv-pro-exp-desc">{exp.description}</p>
+                  <div className="cv-pro-exp-desc">
+                    <CVMarkdownRenderer content={exp.description} />
+                  </div>
                 )}
                 {exp.achievements && exp.achievements.length > 0 && (
                   <ul className="cv-pro-achievements">
@@ -275,7 +283,9 @@ export const ProfessionalTemplate: React.FC<Props> = ({ data }) => {
                     <div className="cv-pro-exp-date">{proj.role}</div>
                   )}
                 </div>
-                <p className="cv-pro-exp-desc">{proj.description}</p>
+                <div className="cv-pro-exp-desc">
+                  <CVMarkdownRenderer content={proj.description} />
+                </div>
                 {proj.technologies.length > 0 && (
                   <div className="cv-pro-tags">
                     {proj.technologies.map((t, k) => (

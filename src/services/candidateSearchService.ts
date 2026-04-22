@@ -4,6 +4,7 @@ import {
   CandidateSearchResult,
   CandidateSearchResponse,
   AICandidateMatchResponse,
+  AiEnhancedAnalysisResponse,
   RecruitmentSessionResponse
 } from '../data/portfolioDTOs';
 
@@ -107,8 +108,19 @@ const normalizeCandidate = (candidate: CandidateSearchApiItem): CandidateSearchR
   matchScore: candidate.matchScore ?? 0,
   skillMatchPercent: candidate.skillMatchPercent ?? 0,
   matchQuality: candidate.matchQuality ?? deriveMatchQuality(candidate.matchScore),
-  fitExplanation: candidate.aiFitSummary ?? undefined,
+  fitExplanation: (candidate as any).fitExplanation ?? candidate.aiFitSummary ?? undefined,
   aiSummary: candidate.aiFitSummary ?? undefined,
+  primarySkillMatch: (candidate as any).primarySkillMatch ?? undefined,
+  skillMatchScore: (candidate as any).skillMatchScore ?? undefined,
+  projectMatchScore: (candidate as any).projectMatchScore ?? undefined,
+  certMatchScore: (candidate as any).certMatchScore ?? undefined,
+  missionMatchScore: (candidate as any).missionMatchScore ?? undefined,
+  matchedSkills: (candidate as any).matchedSkills ?? undefined,
+  unmatchedSkills: (candidate as any).unmatchedSkills ?? undefined,
+  totalRequiredSkills: (candidate as any).totalRequiredSkills ?? undefined,
+  totalCandidateSkills: (candidate as any).totalCandidateSkills ?? undefined,
+  completedMissionsCount: (candidate as any).completedMissionsCount ?? undefined,
+  totalCertificatesCount: (candidate as any).totalCertificatesCount ?? undefined,
   shortlistId: candidate.shortlistId ?? undefined,
   shortlistStatus: candidate.shortlistStatus ?? undefined,
   shortlistNotes: candidate.shortlistNotes ?? undefined,
@@ -198,68 +210,50 @@ class CandidateSearchService {
   }
 
   /**
-   * Get AI-generated match explanation for a candidate-job pair
+   * Get deterministic match breakdown for a candidate-job pair
    * @requires RECRUITER role with premium subscription
    */
-  async getAIMatchExplanation(jobId: number, candidateId: number): Promise<AICandidateMatchResponse> {
+  async getAIMatchExplanation(jobId: number, candidateId: number): Promise<CandidateSearchResult> {
     try {
-      const response = await axiosInstance.get<CandidateMatchApiEnvelope>(
+      const response = await axiosInstance.get<{success: boolean; data: CandidateSearchApiItem}>(
         `/api/v1/recruiter/candidates/${candidateId}/match?jobId=${jobId}`
       );
-      const match = response.data.data;
-
-      return {
-        candidateId: match?.candidateId || candidateId,
-        jobId: match?.jobId || jobId,
-        fitSummary: match?.fitSummary || '',
-        skillSignals: (match?.skillSignals || []).map((signal) => ({
-          skill: signal.skill || '',
-          evidence: (signal as any).evidence || '',
-          isRequired: signal.isRequired || false,
-          relevanceScore: signal.relevanceScore || 0,
-        })),
-        reasoning: match?.reasoning || '',
-        confidenceScore: match?.confidenceScore || 0,
-        matchQuality: (match?.matchQuality as AICandidateMatchResponse['matchQuality']) || 'FAIR',
-        modelUsed: (match as any)?.modelUsed,
-        processingTimeMs: (match as any)?.processingTimeMs,
-        isFallback: (match as any)?.isFallback,
-      };
+      return normalizeCandidate(response.data.data);
     } catch (error) {
-      this.handleError(error, 'Failed to get AI match explanation');
+      this.handleError(error, 'Failed to get match explanation');
     }
   }
 
   /**
-   * Get AI-generated match explanation for a candidate-shortTermJob pair
+   * Get deterministic match breakdown for a candidate-shortTermJob pair
    * @requires RECRUITER role with premium subscription
    */
-  async getShortTermJobMatchExplanation(shortTermJobId: number, candidateId: number): Promise<AICandidateMatchResponse> {
+  async getShortTermJobMatchExplanation(shortTermJobId: number, candidateId: number): Promise<CandidateSearchResult> {
     try {
-      const response = await axiosInstance.get<CandidateMatchApiEnvelope>(
+      const response = await axiosInstance.get<{success: boolean; data: CandidateSearchApiItem}>(
         `/api/v1/recruiter/candidates/${candidateId}/shortterm-match?shortTermJobId=${shortTermJobId}`
       );
-      const match = response.data.data;
-
-      return {
-        candidateId: match?.candidateId || candidateId,
-        jobId: match?.jobId || shortTermJobId,
-        fitSummary: match?.fitSummary || '',
-        skillSignals: (match?.skillSignals || []).map((signal) => ({
-          skill: signal.skill || '',
-          evidence: (signal as any).evidence || '',
-          isRequired: signal.isRequired || false,
-          relevanceScore: signal.relevanceScore || 0,
-        })),
-        reasoning: match?.reasoning || '',
-        confidenceScore: match?.confidenceScore || 0,
-        matchQuality: (match?.matchQuality as AICandidateMatchResponse['matchQuality']) || 'FAIR',
-        modelUsed: (match as any)?.modelUsed,
-        processingTimeMs: (match as any)?.processingTimeMs,
-        isFallback: (match as any)?.isFallback,
-      };
+      return normalizeCandidate(response.data.data);
     } catch (error) {
-      this.handleError(error, 'Failed to get short-term job AI match explanation');
+      this.handleError(error, 'Failed to get short-term job match explanation');
+    }
+  }
+
+  /**
+   * AI-enhanced analysis — combines deterministic scores + AI reasoning
+   * @requires RECRUITER role
+   */
+  async getAiEnhancedAnalysis(candidateId: number, jobId?: number, shortTermJobId?: number): Promise<AiEnhancedAnalysisResponse> {
+    try {
+      const params = new URLSearchParams();
+      if (jobId !== undefined) params.append('jobId', jobId.toString());
+      if (shortTermJobId !== undefined) params.append('shortTermJobId', shortTermJobId.toString());
+      const response = await axiosInstance.get<{success: boolean; data: AiEnhancedAnalysisResponse}>(
+        `/api/v1/recruiter/candidates/${candidateId}/ai-analysis?${params.toString()}`
+      );
+      return response.data.data;
+    } catch (error) {
+      this.handleError(error, 'Failed to get AI enhanced analysis');
     }
   }
 

@@ -365,6 +365,13 @@ export interface CandidateSearchResult {
   projectMatchScore?: number;
   certMatchScore?: number;
   missionMatchScore?: number;
+  // Detailed breakdown context
+  matchedSkills?: string[];
+  unmatchedSkills?: string[];
+  totalRequiredSkills?: number;
+  totalCandidateSkills?: number;
+  completedMissionsCount?: number;
+  totalCertificatesCount?: number;
   fitExplanation?: string;
   aiSummary?: string;
   lastActive?: string;
@@ -493,4 +500,29 @@ export interface SendRecruitmentMessageRequest {
   messageType?: 'TEXT' | 'IMAGE' | 'GIF' | 'EMOJI';
   actionType?: string;
   actionData?: string;
+}
+
+// AI-Enhanced Analysis Response (combines deterministic scores + AI reasoning)
+export interface AiEnhancedAnalysisResponse {
+  deterministicScores: CandidateSearchResult;
+  verdict: 'STRONG_ACCEPT' | 'ACCEPT' | 'CONSIDER' | 'WEAK' | 'RISKY' | 'REJECT';
+  recommendation: string;
+  matchScore: number;
+  primarySkillMatch: boolean;
+  aiAnalysis?: {
+    fitSummary?: string;
+    reasoning?: string;
+    confidenceScore?: number;
+    matchQuality?: string;
+    skillSignals?: Array<{
+      skill: string;
+      evidence?: string;
+      isRequired?: boolean;
+      relevanceScore: number;
+    }>;
+    modelUsed?: string;
+    processingTimeMs?: number;
+    isFallback?: boolean;
+  };
+  aiError?: string;
 }

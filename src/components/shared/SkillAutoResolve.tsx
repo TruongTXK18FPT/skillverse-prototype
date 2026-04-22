@@ -1,13 +1,31 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
-  Search, Check, ChevronRight, AlertTriangle, Zap,
-  ArrowLeft, Sparkles, MousePointerClick, Brain, Loader2,
-} from 'lucide-react';
-import { resolveSkill, SkillResolveResponse } from '../../services/questionBankService';
-import { ExpertFieldResponse, getExpertFields } from '../../services/expertPromptService';
-import { resolveSkillToCareer, isSkillFuzzyVerified, SkillResolveResult } from '../../utils/skillResolver';
-import { getExpertDomainLabel } from '../../utils/expertFieldPresentation';
-import './SkillAutoResolve.css';
+  Search,
+  Check,
+  ChevronRight,
+  AlertTriangle,
+  Zap,
+  ArrowLeft,
+  Sparkles,
+  MousePointerClick,
+  Brain,
+  Loader2,
+} from "lucide-react";
+import {
+  resolveSkill,
+  SkillResolveResponse,
+} from "../../services/questionBankService";
+import {
+  ExpertFieldResponse,
+  getExpertFields,
+} from "../../services/expertPromptService";
+import {
+  resolveSkillToCareer,
+  isSkillFuzzyVerified,
+  SkillResolveResult as _SkillResolveResult,
+} from "../../utils/skillResolver";
+import { getExpertDomainLabel } from "../../utils/expertFieldPresentation";
+import "./SkillAutoResolve.css";
 
 interface SkillAutoResolveProps {
   /** Current skill input value */
@@ -15,7 +33,12 @@ interface SkillAutoResolveProps {
   /** Called when user types in the skill box */
   onSkillChange: (skill: string) => void;
   /** Called when user confirms a resolved career path */
-  onResolve: (result: { domain: string; industry: string; jobRole: string; keywords?: string }) => void;
+  onResolve: (result: {
+    domain: string;
+    industry: string;
+    jobRole: string;
+    keywords?: string;
+  }) => void;
   /** Filter by allowed domains (e.g. mentor limited to IT/Business/Design) */
   allowedDomains?: string[];
   /** Show "chọn thủ công" fallback button */
@@ -39,21 +62,24 @@ interface SkillAutoResolveProps {
 }
 
 const formatSkillLabel = (value?: string): string => {
-  if (!value) return '';
+  if (!value) return "";
   return value
     .toLowerCase()
-    .replace(/[_\-]+/g, ' ')
-    .split(' ')
+    .replace(/[_-]+/g, " ")
+    .split(" ")
     .filter(Boolean)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
+    .join(" ");
 };
 
 /**
  * Map short domain aliases to the real domain values from ExpertPromptConfig.
  * "IT" -> matches "Information Technology", "BUSINESS" -> "Business", "DESIGN" -> "Design"
  */
-const isDomainAllowed = (domain: string, allowedDomains?: string[]): boolean => {
+const isDomainAllowed = (
+  domain: string,
+  allowedDomains?: string[],
+): boolean => {
   if (!allowedDomains || allowedDomains.length === 0) return true;
   const lower = domain.toLowerCase();
   return allowedDomains.some((allowed) => {
@@ -61,23 +87,31 @@ const isDomainAllowed = (domain: string, allowedDomains?: string[]): boolean => 
     // Direct match
     if (al === lower) return true;
     // Alias map
-    if (al === 'it' && lower.includes('information technology')) return true;
-    if (al === 'business' && (lower.includes('business') || lower.includes('kinh doanh'))) return true;
-    if (al === 'design' && (lower.includes('design') || lower.includes('thiết kế'))) return true;
+    if (al === "it" && lower.includes("information technology")) return true;
+    if (
+      al === "business" &&
+      (lower.includes("business") || lower.includes("kinh doanh"))
+    )
+      return true;
+    if (
+      al === "design" &&
+      (lower.includes("design") || lower.includes("thiết kế"))
+    )
+      return true;
     // Partial match
     if (lower.includes(al) || al.includes(lower)) return true;
     return false;
   });
 };
 
-type ResolveMode = 'idle' | 'resolving' | 'done' | 'error';
+type ResolveMode = "idle" | "resolving" | "done" | "error";
 
 interface MergedResult {
   domain: string;
   industry: string;
   jobRole: string;
   confidence: number;
-  source: 'ai' | 'local';
+  source: "ai" | "local";
   reasoning?: string;
 }
 
@@ -90,8 +124,8 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
   onManualFallback,
   verifiedSkills,
   onSkillChipClick,
-  placeholder = 'Ví dụ: React, Java Spring Boot, UI Design...',
-  label = 'Nhập skill để tự động xác định lộ trình',
+  placeholder = "Ví dụ: React, Java Spring Boot, UI Design...",
+  label = "Nhập skill để tự động xác định lộ trình",
   description,
   onBack,
   useAi = true,
@@ -102,7 +136,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
   const [confirmed, setConfirmed] = useState(false);
 
   // AI resolve state
-  const [resolveMode, setResolveMode] = useState<ResolveMode>('idle');
+  const [resolveMode, setResolveMode] = useState<ResolveMode>("idle");
   const [aiResult, setAiResult] = useState<SkillResolveResponse | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
 
@@ -124,7 +158,9 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
       }
     };
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Verified skill fuzzy check
@@ -140,7 +176,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
       setMergedResults([]);
       setAiResult(null);
       setAiError(null);
-      setResolveMode('idle');
+      setResolveMode("idle");
       setSelectedIndex(0);
       setConfirmed(false);
       return;
@@ -151,21 +187,28 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
 
     // Step 1: Instant local matching
     if (expertFields.length > 0) {
-      const localResults = resolveSkillToCareer(skillInput, expertFields, { maxResults: 5, minScore: 20 });
-      const filtered = localResults.filter((r) => isDomainAllowed(r.domain, allowedDomains));
-      setMergedResults(filtered.map((r) => ({
-        domain: r.domain,
-        industry: r.industry,
-        jobRole: r.jobRole,
-        confidence: r.score,
-        source: 'local' as const,
-      })));
+      const localResults = resolveSkillToCareer(skillInput, expertFields, {
+        maxResults: 5,
+        minScore: 20,
+      });
+      const filtered = localResults.filter((r) =>
+        isDomainAllowed(r.domain, allowedDomains),
+      );
+      setMergedResults(
+        filtered.map((r) => ({
+          domain: r.domain,
+          industry: r.industry,
+          jobRole: r.jobRole,
+          confidence: r.score,
+          source: "local" as const,
+        })),
+      );
     }
 
     // Step 2: Delayed AI call (only if enabled)
     if (!useAi) return;
 
-    setResolveMode('resolving');
+    setResolveMode("resolving");
     const timer = setTimeout(async () => {
       try {
         const result = await resolveSkill(skillInput.trim());
@@ -178,7 +221,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
           industry: result.industry,
           jobRole: result.jobRole,
           confidence: result.confidence,
-          source: 'ai',
+          source: "ai",
           reasoning: result.reasoning,
         };
 
@@ -189,7 +232,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
             industry: alt.industry,
             jobRole: alt.jobRole,
             confidence: alt.confidence,
-            source: 'ai' as const,
+            source: "ai" as const,
           }));
 
         // Combine: AI primary first, then AI alternatives, deduped
@@ -212,7 +255,10 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
 
         // Add local results that aren't in AI results
         if (expertFields.length > 0) {
-          const localResults = resolveSkillToCareer(skillInput, expertFields, { maxResults: 3, minScore: 40 });
+          const localResults = resolveSkillToCareer(skillInput, expertFields, {
+            maxResults: 3,
+            minScore: 40,
+          });
           for (const lr of localResults) {
             if (!isDomainAllowed(lr.domain, allowedDomains)) continue;
             const key = `${lr.domain}|${lr.industry}|${lr.jobRole}`;
@@ -222,7 +268,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
                 industry: lr.industry,
                 jobRole: lr.jobRole,
                 confidence: lr.score,
-                source: 'local',
+                source: "local",
               });
               seen.add(key);
             }
@@ -230,12 +276,13 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
         }
 
         setMergedResults(combined.slice(0, 5));
-        setResolveMode('done');
+        setResolveMode("done");
         setSelectedIndex(0);
       } catch (err) {
-        const message = err instanceof Error ? err.message : 'AI analysis failed';
+        const message =
+          err instanceof Error ? err.message : "AI analysis failed";
         setAiError(message);
-        setResolveMode('error');
+        setResolveMode("error");
         // Keep local results as fallback
       }
     }, 600);
@@ -256,7 +303,11 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
   }, [mergedResults, selectedIndex, onResolve]);
 
   const hasResults = mergedResults.length > 0;
-  const noMatch = skillInput.trim().length > 1 && resolveMode !== 'resolving' && !hasResults && !loadingFields;
+  const noMatch =
+    skillInput.trim().length > 1 &&
+    resolveMode !== "resolving" &&
+    !hasResults &&
+    !loadingFields;
 
   return (
     <div className="sar-container">
@@ -282,8 +333,10 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
                 <button
                   key={skill}
                   type="button"
-                  className={`sar-chip ${active ? 'active' : ''}`}
-                  onClick={() => onSkillChipClick?.(skill) ?? onSkillChange(skill)}
+                  className={`sar-chip ${active ? "active" : ""}`}
+                  onClick={() =>
+                    onSkillChipClick?.(skill) ?? onSkillChange(skill)
+                  }
                 >
                   {formatSkillLabel(skill)}
                 </button>
@@ -304,20 +357,20 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
           placeholder={placeholder}
           disabled={loadingFields}
         />
-        {resolveMode === 'resolving' && <div className="sar-input-spinner" />}
+        {resolveMode === "resolving" && <div className="sar-input-spinner" />}
       </div>
 
       {/* Verification status */}
       {verifiedSkills && verifiedSkills.length > 0 && skillInput.trim() && (
-        <div className={`sar-verify-hint ${isVerified ? 'valid' : 'invalid'}`}>
+        <div className={`sar-verify-hint ${isVerified ? "valid" : "invalid"}`}>
           {isVerified
             ? `✓ Skill hợp lệ: ${formatSkillLabel(skillInput)}`
-            : '✗ Skill này chưa nằm trong danh sách đã xác thực.'}
+            : "✗ Skill này chưa nằm trong danh sách đã xác thực."}
         </div>
       )}
 
       {/* AI analyzing indicator */}
-      {resolveMode === 'resolving' && (
+      {resolveMode === "resolving" && (
         <div className="sar-ai-analyzing">
           <Brain size={16} className="sar-ai-icon" />
           <span>AI đang phân tích skill...</span>
@@ -326,7 +379,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
       )}
 
       {/* AI reasoning */}
-      {resolveMode === 'done' && aiResult?.reasoning && (
+      {resolveMode === "done" && aiResult?.reasoning && (
         <div className="sar-ai-reasoning">
           <Brain size={14} />
           <span>{aiResult.reasoning}</span>
@@ -334,21 +387,20 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
       )}
 
       {/* Existing QB info */}
-      {resolveMode === 'done' && aiResult?.questionBankExists && (
+      {resolveMode === "done" && aiResult?.questionBankExists && (
         <div className="sar-existing-qb">
           <Sparkles size={14} />
           <span>
-            Đã có Question Bank: <strong>{aiResult.existingQuestionBankTitle}</strong>
-            {' '}(ID: {aiResult.existingQuestionBankId})
+            Đã có Question Bank:{" "}
+            <strong>{aiResult.existingQuestionBankTitle}</strong> (ID:{" "}
+            {aiResult.existingQuestionBankId})
           </span>
         </div>
       )}
 
       {/* Loading state */}
       {loadingFields && (
-        <div className="sar-loading">
-          Đang tải dữ liệu ngành nghề...
-        </div>
+        <div className="sar-loading">Đang tải dữ liệu ngành nghề...</div>
       )}
 
       {/* Results */}
@@ -357,7 +409,9 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
           <div className="sar-results__header">
             <Sparkles size={16} />
             <span>
-              {resolveMode === 'done' ? 'AI gợi ý lộ trình phù hợp:' : 'Gợi ý lộ trình phù hợp:'}
+              {resolveMode === "done"
+                ? "AI gợi ý lộ trình phù hợp:"
+                : "Gợi ý lộ trình phù hợp:"}
             </span>
           </div>
           <div className="sar-results__list">
@@ -365,7 +419,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
               <button
                 key={`${result.domain}-${result.industry}-${result.jobRole}`}
                 type="button"
-                className={`sar-result-item ${selectedIndex === index ? 'selected' : ''} ${confirmed && selectedIndex === index ? 'confirmed' : ''}`}
+                className={`sar-result-item ${selectedIndex === index ? "selected" : ""} ${confirmed && selectedIndex === index ? "confirmed" : ""}`}
                 onClick={() => setSelectedIndex(index)}
                 onDoubleClick={handleConfirm}
               >
@@ -377,14 +431,16 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
                   )}
                 </div>
                 <div className="sar-result-path">
-                  <span className="sar-result-domain">{getExpertDomainLabel(result.domain)}</span>
+                  <span className="sar-result-domain">
+                    {getExpertDomainLabel(result.domain)}
+                  </span>
                   <ChevronRight size={12} className="sar-result-sep" />
                   <span className="sar-result-industry">{result.industry}</span>
                   <ChevronRight size={12} className="sar-result-sep" />
                   <span className="sar-result-role">{result.jobRole}</span>
                 </div>
                 <div className="sar-result-meta">
-                  {result.source === 'ai' && (
+                  {result.source === "ai" && (
                     <span className="sar-ai-badge" title="AI-powered">
                       <Brain size={10} /> AI
                     </span>
@@ -393,10 +449,14 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
                     <div className="sar-score-bar">
                       <div
                         className="sar-score-fill"
-                        style={{ width: `${Math.min(result.confidence, 100)}%` }}
+                        style={{
+                          width: `${Math.min(result.confidence, 100)}%`,
+                        }}
                       />
                     </div>
-                    <span className="sar-score-label">{result.confidence}%</span>
+                    <span className="sar-score-label">
+                      {result.confidence}%
+                    </span>
                   </div>
                 </div>
               </button>
@@ -406,7 +466,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
       )}
 
       {/* AI Error — show as warning, not blocking (local results still shown) */}
-      {resolveMode === 'error' && aiError && (
+      {resolveMode === "error" && aiError && (
         <div className="sar-ai-error">
           <AlertTriangle size={14} />
           <span>AI không phản hồi — sử dụng kết quả phân tích cục bộ.</span>
@@ -435,7 +495,11 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
 
         <div className="sar-actions-right">
           {showManualFallback && onManualFallback && (
-            <button type="button" className="sar-btn subtle" onClick={onManualFallback}>
+            <button
+              type="button"
+              className="sar-btn subtle"
+              onClick={onManualFallback}
+            >
               <MousePointerClick size={16} />
               Chọn thủ công
             </button>
@@ -453,7 +517,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
               }
             >
               <Check size={16} />
-              {confirmed ? 'Đã xác nhận' : 'Xác nhận lộ trình'}
+              {confirmed ? "Đã xác nhận" : "Xác nhận lộ trình"}
             </button>
           )}
         </div>

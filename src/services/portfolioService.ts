@@ -531,6 +531,23 @@ export const generateCV = async (
 };
 
 /**
+ * Export CV from portfolio without AI
+ * Maps portfolio data directly to CV structure for manual editing
+ */
+export const exportCV = async (
+  request: CVGenerationRequest,
+): Promise<GeneratedCVDTO> => {
+  const response = await api.post<ApiResponse<GeneratedCVDTO>>(
+    "/portfolio/cv/export",
+    request,
+  );
+  if (!response.data.success || !response.data.data) {
+    throw new Error(response.data.message || "Failed to export CV");
+  }
+  return response.data.data;
+};
+
+/**
  * Update an existing CV
  */
 export const updateCV = async (
@@ -741,6 +758,7 @@ export const portfolioService = {
 
   // CV Generation
   generateCV,
+  exportCV,
   updateCV,
   getActiveCV,
   getAllCVs,

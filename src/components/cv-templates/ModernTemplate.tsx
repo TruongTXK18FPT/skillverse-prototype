@@ -1,6 +1,8 @@
 // Modern CV Template - Gradient header, card-based layout
 import React from "react";
 import { CVStructuredData } from "../../data/cvTemplateTypes";
+import CVMarkdownRenderer from "./CVMarkdownRenderer";
+import { cleanCVString } from "./cvUtils";
 import {
   Mail,
   Phone,
@@ -110,7 +112,9 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
                     {exp.location ? ` | ${exp.location}` : ""}
                   </div>
                   {exp.description && (
-                    <div className="cv-mod-exp-desc">{exp.description}</div>
+                    <div className="cv-mod-exp-desc">
+                      <CVMarkdownRenderer content={exp.description} />
+                    </div>
                   )}
                   {exp.achievements?.map((ach, j) => (
                     <div key={j} className="cv-mod-achievement">
@@ -170,7 +174,9 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
                       </a>
                     )}
                   </div>
-                  <div className="cv-mod-exp-desc">{proj.description}</div>
+                  <div className="cv-mod-exp-desc">
+                    <CVMarkdownRenderer content={proj.description} />
+                  </div>
                   {proj.technologies.length > 0 && (
                     <div
                       className="cv-mod-tags"
@@ -251,7 +257,9 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
                           >
                             <span>{pct}%</span>
                           </div>
-                          <div className="cv-mod-skill-label">{skill.name}</div>
+                          <div className="cv-mod-skill-label">
+                            {cleanCVString(skill.name)}
+                          </div>
                         </div>
                       );
                     })}
@@ -275,7 +283,7 @@ export const ModernTemplate: React.FC<Props> = ({ data }) => {
                     marginBottom: "0.4rem",
                   }}
                 >
-                  <span>{lang.name}</span>
+                  <span>{cleanCVString(lang.name)}</span>
                   <span className="cv-mod-badge">{lang.proficiency}</span>
                 </div>
               ))}

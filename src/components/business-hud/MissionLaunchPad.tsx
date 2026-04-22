@@ -21,6 +21,7 @@ interface MissionFormState {
   title: string;
   description: string;
   skills: string[];
+  primarySkill: string;
   minBudget: string;
   maxBudget: string;
   deadline: string;
@@ -81,6 +82,7 @@ const createInitialFormData = (): MissionFormState => ({
   title: "",
   description: "",
   skills: [],
+  primarySkill: "",
   minBudget: "",
   maxBudget: "",
   deadline: "",
@@ -237,15 +239,20 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
     setFormData((prev) => ({
       ...prev,
       skills: [...prev.skills, normalized],
+      primarySkill: prev.skills.length === 0 ? normalized : prev.primarySkill,
     }));
     setSkillInput("");
   };
 
   const removeSkill = (skill: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      skills: prev.skills.filter((item) => item !== skill),
-    }));
+    setFormData((prev) => {
+      const newSkills = prev.skills.filter((item) => item !== skill);
+      return {
+        ...prev,
+        skills: newSkills,
+        primarySkill: prev.primarySkill === skill ? (newSkills.length > 0 ? newSkills[0] : "") : prev.primarySkill,
+      };
+    });
   };
 
   const validateForm = () => {
@@ -342,6 +349,7 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
         title: formData.title.trim(),
         description: formData.description.trim(),
         requiredSkills: formData.skills,
+        primarySkill: formData.primarySkill || (formData.skills.length > 0 ? formData.skills[0] : undefined),
         minBudget: formData.isNegotiable ? 0 : Number(formData.minBudget),
         maxBudget: formData.isNegotiable ? 0 : Number(formData.maxBudget),
         deadline: formData.deadline,
@@ -680,10 +688,26 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
 
                 <div className="sjf-chip-row">
                   {formData.skills.length > 0 ? (
-                    formData.skills.map((skill) => (
-                      <span key={skill} className="sjf-chip sjf-chip--active sjf-chip--gold">
-                        {skill}
-                        <button
+                    <div className="sjf-skills-container">
+                      <div className="sjf-field sjf-primary-skill-selector" style={{ marginBottom: '16px' }}>
+                        <label className="sjf-label" style={{ fontSize: '13px' }}>⭐ Kỹ năng quan trọng nhất (Được ưu tiên khi match với ứng viên)</label>
+                        <select
+                          className="sjf-input sjf-input--gold"
+                          value={formData.primarySkill}
+                          onChange={(e) => setFormData(prev => ({ ...prev, primarySkill: e.target.value }))}
+                          style={{ padding: '8px 12px', height: 'auto', backgroundColor: 'rgba(251, 191, 36, 0.05)', borderColor: 'rgba(251, 191, 36, 0.3)' }}
+                        >
+                          {formData.skills.map(s => (
+                            <option key={s} value={s}>{s}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="sjf-chip-row" style={{ marginTop: '8px' }}>
+                        {formData.skills.map((skill) => (
+                          <span key={skill} className={`sjf-chip sjf-chip--active sjf-chip--gold ${skill === formData.primarySkill ? 'sjf-chip--primary' : ''}`}>
+                            {skill === formData.primarySkill && <span className="sjf-chip__badge">⭐</span>}
+                            {skill}
+                            <button
                           type="button"
                           className="sjf-chip__remove"
                           onClick={() => removeSkill(skill)}
@@ -691,8 +715,10 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
                         >
                           ×
                         </button>
-                      </span>
-                    ))
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   ) : (
                     <span className="sjf-empty">
                       Chưa có kỹ năng nào.
@@ -1053,7 +1079,8 @@ const MissionLaunchPad: React.FC<MissionLaunchPadProps> = ({
                 <div className="sjf-chip-row">
                   {formData.skills.length > 0 ? (
                     formData.skills.map((skill) => (
-                      <span key={skill} className="sjf-chip sjf-chip--active sjf-chip--gold">
+                      <span key={skill} className={`sjf-chip sjf-chip--active sjf-chip--gold ${skill === formData.primarySkill ? 'sjf-chip--primary' : ''}`}>
+                        {skill === formData.primarySkill && <span className="sjf-chip__badge">⭐</span>}
                         {skill}
                       </span>
                     ))

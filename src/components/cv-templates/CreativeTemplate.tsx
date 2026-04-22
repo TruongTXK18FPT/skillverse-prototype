@@ -1,6 +1,8 @@
 // Creative CV Template - Bold colors, timeline layout, infographic style
 import React from "react";
 import { CVStructuredData } from "../../data/cvTemplateTypes";
+import CVMarkdownRenderer from "./CVMarkdownRenderer";
+import { cleanCVString } from "./cvUtils";
 import {
   Mail,
   Phone,
@@ -110,7 +112,7 @@ export const CreativeTemplate: React.FC<Props> = ({ data }) => {
                 .flatMap((cat) => cat.skills)
                 .map((skill, i) => (
                   <span key={i} className="cv-cre-skill-tag">
-                    {skill.name}
+                    {cleanCVString(skill.name)}
                   </span>
                 ))}
             </div>
@@ -137,7 +139,7 @@ export const CreativeTemplate: React.FC<Props> = ({ data }) => {
                         lineHeight: 1.6,
                       }}
                     >
-                      {exp.description}
+                      <CVMarkdownRenderer content={exp.description} />
                     </div>
                   )}
                   {exp.achievements?.map((ach, j) => (
@@ -228,7 +230,9 @@ export const CreativeTemplate: React.FC<Props> = ({ data }) => {
                       </a>
                     )}
                   </div>
-                  <div className="cv-cre-project-desc">{proj.description}</div>
+                  <div className="cv-cre-project-desc">
+                    <CVMarkdownRenderer content={proj.description} />
+                  </div>
                   {proj.technologies.length > 0 && (
                     <div
                       className="cv-cre-tags"
@@ -292,7 +296,7 @@ export const CreativeTemplate: React.FC<Props> = ({ data }) => {
                   className="cv-cre-skill-tag"
                   style={{ background: "#3b82f6" }}
                 >
-                  {lang.name} — {lang.proficiency}
+                  {cleanCVString(lang.name)} — {lang.proficiency}
                 </span>
               ))}
             </div>

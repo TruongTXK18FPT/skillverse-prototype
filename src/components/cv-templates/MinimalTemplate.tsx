@@ -1,6 +1,8 @@
 // Minimal CV Template - Ultra-clean single-column layout
 import React from "react";
 import { CVStructuredData } from "../../data/cvTemplateTypes";
+import CVMarkdownRenderer from "./CVMarkdownRenderer";
+import { cleanCVString } from "./cvUtils";
 
 interface Props {
   data: CVStructuredData;
@@ -19,7 +21,9 @@ export const MinimalTemplate: React.FC<Props> = ({ data }) => {
     endorsements,
   } = data;
 
-  const allSkills = skills.flatMap((c) => c.skills.map((s) => s.name));
+  const allSkills = skills.flatMap((c) =>
+    c.skills.map((s) => cleanCVString(s.name)),
+  );
 
   return (
     <div className="cv-tpl-minimal">
@@ -62,7 +66,9 @@ export const MinimalTemplate: React.FC<Props> = ({ data }) => {
                 {exp.location ? `, ${exp.location}` : ""}
               </div>
               {exp.description && (
-                <div className="cv-min-exp-desc">{exp.description}</div>
+                <div className="cv-min-exp-desc">
+                  <CVMarkdownRenderer content={exp.description} />
+                </div>
               )}
               {exp.achievements?.map((ach, j) => (
                 <div
@@ -117,7 +123,9 @@ export const MinimalTemplate: React.FC<Props> = ({ data }) => {
           {projects.map((proj, i) => (
             <div key={i} className="cv-min-project-item">
               <div className="cv-min-project-title">{proj.title}</div>
-              <div className="cv-min-project-desc">{proj.description}</div>
+              <div className="cv-min-project-desc">
+                <CVMarkdownRenderer content={proj.description} />
+              </div>
               {proj.technologies.length > 0 && (
                 <div
                   style={{
@@ -152,7 +160,9 @@ export const MinimalTemplate: React.FC<Props> = ({ data }) => {
         <div className="cv-min-section">
           <div className="cv-min-section-title">Ngôn ngữ</div>
           <div className="cv-min-skills-list">
-            {languages.map((l) => `${l.name} (${l.proficiency})`).join(", ")}
+            {languages
+              .map((l) => `${cleanCVString(l.name)} (${l.proficiency})`)
+              .join(", ")}
           </div>
         </div>
       )}

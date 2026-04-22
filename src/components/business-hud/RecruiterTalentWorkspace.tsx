@@ -30,13 +30,14 @@ import {
   Zap,
 } from "lucide-react";
 import {
-  AICandidateMatchResponse,
   CompletedMissionDTO,
   ExternalCertificateDTO,
   PortfolioProjectDTO,
   RecruitmentJobContextType,
   RecruitmentSessionResponse,
   UserProfileDTO,
+  CandidateSearchResult,
+  AiEnhancedAnalysisResponse,
 } from "../../data/portfolioDTOs";
 import {
   JobApplicationResponse,
@@ -681,814 +682,9 @@ const summarizeCompletedMissions = (
   };
 };
 
-const deriveMatchQualityFromScore = (score: number): MatchQuality => {
-  if (score >= 0.82) return "EXCELLENT";
-  if (score >= 0.66) return "GOOD";
-  if (score >= 0.45) return "FAIR";
-  return "POOR";
-};
 
-const enhanceInsightWithMissionContext = (
-  insight: AICandidateMatchResponse,
-  options: {
-    missions: CompletedMissionDTO[];
-    requiredSkills?: string[];
-    candidateMatchScore?: number;
-  },
-): AICandidateMatchResponse => {
-  const baseConfidence = normalizeConfidenceScore(insight.confidenceScore);
-  const missionSummary = summarizeCompletedMissions(
-    options.missions,
-    options.requiredSkills || [],
-  );
 
-  const normalizedCandidateMatch =
-    typeof options.candidateMatchScore === "number"
-      ? clamp01(
-          options.candidateMatchScore > 1
-            ? options.candidateMatchScore / 100
-            : options.candidateMatchScore,
-        )
-      : undefined;
 
-  const avgSignalScore = insight.skillSignals?.length
-    ? clamp01(
-        insight.skillSignals.reduce(
-          (total, signal) => total + signal.relevanceScore,
-          0,
-        ) / insight.skillSignals.length,
-      )
-    : undefined;
-
-  const signalBaseline =
-    avgSignalScore ?? normalizedCandidateMatch ?? baseConfidence;
-  const candidateBaseline = normalizedCandidateMatch ?? signalBaseline;
-  const fallbackLike =
-    Boolean(insight.isFallback) || Math.abs(baseConfidence - 0.5) <= 0.03;
-
-  let enhancedConfidence = fallbackLike
-    ? baseConfidence * 0.35 + signalBaseline * 0.35 + candidateBaseline * 0.3
-    : baseConfidence * 0.62 + signalBaseline * 0.23 + candidateBaseline * 0.15;
-
-  if (missionSummary.totalMissions > 0) {
-    const missionWeight = fallbackLike ? 0.45 : 0.3;
-    enhancedConfidence =
-      enhancedConfidence * (1 - missionWeight) +
-      missionSummary.evidenceScore * missionWeight;
-  }
-
-  enhancedConfidence = clamp01(enhancedConfidence);
-
-  const contextualSignals: SkillSignal[] =
-    missionSummary.totalMissions > 0
-      ? [
-          {
-            skill: "Lịch sử nhiệm vụ đã hoàn thành",
-            evidence: `${missionSummary.totalMissions} job hoàn thành, ${missionSummary.paidMissions} job đã thanh toán.`,
-            isRequired: true,
-            relevanceScore: clamp01(missionSummary.totalMissions / 8),
-          },
-          {
-            skill: "Độ ổn định chất lượng bàn giao",
-            evidence:
-              missionSummary.averageRating != null
-                ? `Điểm trung bình ${missionSummary.averageRating.toFixed(1)}/5 từ các job đã hoàn thành.`
-                : "Chưa đủ dữ liệu rating, đánh giá dựa trên tiến độ hoàn thành và thanh toán.",
-            isRequired: false,
-            relevanceScore: clamp01(
-              missionSummary.averageRating != null
-                ? missionSummary.averageRating / 5
-                : missionSummary.paidMissions /
-                    Math.max(missionSummary.totalMissions, 1),
-            ),
-          },
-          {
-            skill: "Mức khớp kỹ năng theo nhiệm vụ thực tế",
-            evidence:
-              missionSummary.requiredSkillsCount > 0
-                ? `Khớp ${missionSummary.matchedRequiredSkills.length}/${missionSummary.requiredSkillsCount} kỹ năng yêu cầu: ${missionSummary.matchedRequiredSkills.slice(0, 4).join(", ") || "chưa có tín hiệu rõ ràng"}.`
-                : `Có ${missionSummary.relevantMissions} nhiệm vụ liên quan trong portfolio công khai.`,
-            isRequired: true,
-            relevanceScore: clamp01(
-              missionSummary.requiredSkillsCount > 0
-                ? missionSummary.matchedRequiredSkills.length /
-                    missionSummary.requiredSkillsCount
-                : missionSummary.relevantMissions /
-                    Math.max(missionSummary.totalMissions, 1),
-            ),
-          },
-        ]
-      : [];
-
-  const missionSummaryLine =
-    missionSummary.totalMissions > 0
-      ? `Bổ sung đối chiếu ${missionSummary.totalMissions} nhiệm vụ đã hoàn thành trên hệ thống để tăng độ chính xác phân tích.`
-      : "";
-
-  const missionReasoning =
-    missionSummary.totalMissions > 0
-      ? [
-          "## Bổ sung từ lịch sử job đã hoàn thành",
-          `- Tổng nhiệm vụ hoàn thành: **${missionSummary.totalMissions}** (đã thanh toán: **${missionSummary.paidMissions}**).`,
-          missionSummary.averageRating != null
-            ? `- Điểm chất lượng trung bình: **${missionSummary.averageRating.toFixed(1)}/5**.`
-            : "- Chưa có đủ điểm rating, ưu tiên đánh giá theo độ ổn định hoàn thành.",
-          missionSummary.requiredSkillsCount > 0
-            ? `- Khớp kỹ năng yêu cầu: **${missionSummary.matchedRequiredSkills.length}/${missionSummary.requiredSkillsCount}**.`
-            : `- Nhiệm vụ liên quan: **${missionSummary.relevantMissions}**.`,
-        ].join("\n")
-      : "";
-
-  const nextFitSummary = [insight.fitSummary, missionSummaryLine]
-    .map((part) => part?.trim())
-    .filter(Boolean)
-    .join(" ");
-
-  const nextReasoning = [insight.reasoning, missionReasoning]
-    .map((part) => part?.trim())
-    .filter(Boolean)
-    .join("\n\n");
-
-  return {
-    ...insight,
-    confidenceScore: enhancedConfidence,
-    matchQuality: deriveMatchQualityFromScore(enhancedConfidence),
-    fitSummary: nextFitSummary,
-    reasoning: nextReasoning,
-    skillSignals: [...(insight.skillSignals || []), ...contextualSignals],
-  };
-};
-
-const CircularScoreRing = ({
-  score,
-  size = 56,
-  strokeWidth = 5,
-  color,
-}: {
-  score: number;
-  size?: number;
-  strokeWidth?: number;
-  color: string;
-}) => {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (score / 100) * circumference;
-  return (
-    <svg width={size} height={size} className="rtw-ai-insight__confidence-svg">
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
-        fill="none"
-        stroke="rgba(255,255,255,0.06)"
-        strokeWidth={strokeWidth}
-      />
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
-        fill="none"
-        stroke={color}
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeDasharray={circumference}
-        strokeDashoffset={offset}
-        transform={`rotate(-90 ${size / 2} ${size / 2})`}
-        style={{ transition: "stroke-dashoffset 0.8s ease" }}
-      />
-      <text
-        x="50%"
-        y="50%"
-        dominantBaseline="central"
-        textAnchor="middle"
-        fill={color}
-        fontSize={size * 0.22}
-        fontWeight="700"
-        fontFamily="inherit"
-      >
-        {Math.round(score)}%
-      </text>
-    </svg>
-  );
-};
-
-const AIInsightRenderer = ({
-  insight,
-}: {
-  insight: AICandidateMatchResponse;
-}) => {
-  const [expanded, setExpanded] = useState(false);
-  const confidence = Math.round((insight.confidenceScore || 0) * 100);
-  const signals: SkillSignal[] = insight.skillSignals || [];
-  const quality: MatchQuality = insight.matchQuality || "FAIR";
-  const qualityMeta = getMatchQuality(quality);
-
-  // Strip escape artifacts from AI output
-  const cleanText = (text: string): string => {
-    if (!text) return "";
-    return text
-      .replace(/\\n/g, "\n")
-      .replace(/\\"/g, '"')
-      .replace(/\\\\/g, "\\")
-      .replace(/\\\{/g, "{")
-      .replace(/\\\}/g, "}")
-      .replace(/\\\[/g, "[")
-      .replace(/\\\]/g, "]")
-      .replace(/\\\|/g, "|")
-      .replace(/\\`/g, "`")
-      .replace(/\\-/g, "-")
-      .replace(/\\#/g, "#")
-      .replace(/\{\{/g, "{")
-      .replace(/\}\}/g, "}")
-      .replace(/\[\[/g, "[")
-      .replace(/\]\]/g, "]")
-      .replace(/""/g, '"')
-      .replace(/"{2,}/g, '"')
-      .replace(/\*{3,}/g, "**")
-      .replace(/_{3,}/g, "_")
-      .trim();
-  };
-
-  // Inline markdown: **bold**, `code`, *italic*, emojis
-  const parseInline = (line: string): React.ReactNode => {
-    if (!line) return null;
-    const parts: React.ReactNode[] = [];
-    let remaining = line;
-    let partKey = 0;
-
-    while (remaining.length > 0) {
-      const boldMatch = remaining.match(/^\*\*(.+?)\*\*/);
-      if (boldMatch) {
-        parts.push(
-          <strong key={partKey++} className="ai-md-bold">
-            {boldMatch[1]}
-          </strong>,
-        );
-        remaining = remaining.slice(boldMatch[0].length);
-        continue;
-      }
-      const codeMatch = remaining.match(/^`([^`]+)`/);
-      if (codeMatch) {
-        parts.push(
-          <code key={partKey++} className="ai-md-code">
-            {codeMatch[1]}
-          </code>,
-        );
-        remaining = remaining.slice(codeMatch[0].length);
-        continue;
-      }
-      const italicMatch = remaining.match(/^(\*|_)([^*_]+?)\1/);
-      if (italicMatch) {
-        parts.push(
-          <em key={partKey++} className="ai-md-italic">
-            {italicMatch[2]}
-          </em>,
-        );
-        remaining = remaining.slice(italicMatch[0].length);
-        continue;
-      }
-      const nextSpecial = remaining.search(/\*\*|`|\*_|_[\s\W]/);
-      if (nextSpecial === -1) {
-        parts.push(remaining);
-        break;
-      } else if (nextSpecial === 0) {
-        remaining = remaining.slice(1);
-      } else {
-        parts.push(remaining.slice(0, nextSpecial));
-        remaining = remaining.slice(nextSpecial);
-      }
-    }
-    return parts.length > 0 ? (
-      <span key={`inline-${partKey}`}>{parts}</span>
-    ) : null;
-  };
-
-  // Parse rich markdown into structured JSX blocks
-  const parseRichMarkdown = (raw: string): React.ReactNode => {
-    const text = cleanText(raw);
-    if (!text) return null;
-
-    const lines = text.split("\n");
-    const sections: React.ReactNode[] = [];
-    let i = 0;
-    let key = 0;
-
-    while (i < lines.length) {
-      const line = lines[i].trim();
-
-      if (
-        (line === "---" || line === "***" || line === "___") &&
-        sections.length === 0
-      ) {
-        i++;
-        continue;
-      }
-
-      if (line === "---" || line === "***" || line === "___") {
-        sections.push(<hr key={key++} className="ai-md-hr" />);
-        i++;
-        continue;
-      }
-
-      // Top-level heading: ## 🧠 Đánh giá tổng quan
-      if (line.startsWith("## ")) {
-        const headingText = line.slice(3).trim();
-        const emojiMatch = headingText.match(/^([^\s]+\s)/);
-        const emoji = emojiMatch ? emojiMatch[1] : "";
-        const heading = emojiMatch
-          ? headingText.slice(emojiMatch[0].length)
-          : headingText;
-        sections.push(
-          <div key={key++} className="ai-md-section">
-            <div className="ai-md-section__heading">
-              {emoji && <span className="ai-md-section__emoji">{emoji}</span>}
-              <span>{parseInline(heading)}</span>
-            </div>
-          </div>,
-        );
-        i++;
-        continue;
-      }
-
-      // Sub-heading: ### 1. React (Quan trọng)  or  #### Skill Name
-      if (line.startsWith("### ") || line.startsWith("#### ")) {
-        const subText = line.slice(line.startsWith("#### ") ? 5 : 4).trim();
-        const indexMatch = subText.match(/^(\d+\.\s*)/);
-        const idx = indexMatch ? indexMatch[1] : "";
-        const rest = indexMatch ? subText.slice(indexMatch[0].length) : subText;
-
-        const badgeMatch = rest.match(/\s*\(([^)]+)\)\s*$/);
-        const badge = badgeMatch ? badgeMatch[1].trim() : "";
-        const title = badgeMatch
-          ? rest.slice(0, -badgeMatch[0].length).trim()
-          : rest;
-
-        const contentLines: string[] = [];
-        let j = i + 1;
-        while (j < lines.length) {
-          const t = lines[j].trim();
-          if (
-            t.startsWith("## ") ||
-            t.startsWith("---") ||
-            t.startsWith("### ") ||
-            t.startsWith("#### ")
-          )
-            break;
-          if (t) contentLines.push(lines[j]);
-          j++;
-        }
-
-        const content = parseSkillContent(contentLines.join("\n"), badge);
-
-        sections.push(
-          <div
-            key={key++}
-            className={`ai-md-skill-block ${badge.toLowerCase().includes("quan") ? "ai-md-skill-block--required" : ""}`}
-          >
-            <div className="ai-md-skill-block__header">
-              {idx && (
-                <span className="ai-md-skill-block__idx">
-                  {idx.replace(".", "")}
-                </span>
-              )}
-              <span className="ai-md-skill-block__name">
-                {parseInline(title)}
-              </span>
-              {badge && (
-                <span
-                  className={`ai-md-skill-block__badge ${badge.toLowerCase().includes("quan") ? "ai-md-skill-block__badge--required" : "ai-md-skill-block__badge--optional"}`}
-                >
-                  {badge}
-                </span>
-              )}
-            </div>
-            {content}
-          </div>,
-        );
-        i = j;
-        continue;
-      }
-
-      if (line.match(/^[-*+] /)) {
-        const items: React.ReactNode[] = [];
-        while (i < lines.length && lines[i].trim().match(/^[-*+] /)) {
-          const itemText = lines[i].trim().slice(2);
-          items.push(<li key={key++}>{parseInline(itemText)}</li>);
-          i++;
-        }
-        sections.push(
-          <ul key={key++} className="ai-md-ul">
-            {items}
-          </ul>,
-        );
-        continue;
-      }
-
-      if (line.match(/^\d+\. /)) {
-        const items: React.ReactNode[] = [];
-        while (i < lines.length && lines[i].trim().match(/^\d+\. /)) {
-          const itemText = lines[i].trim().replace(/^\d+\. /, "");
-          items.push(<li key={key++}>{parseInline(itemText)}</li>);
-          i++;
-        }
-        sections.push(
-          <ol key={key++} className="ai-md-ol">
-            {items}
-          </ol>,
-        );
-        continue;
-      }
-
-      if (line) {
-        const paraLines: string[] = [line];
-        let j = i + 1;
-        while (j < lines.length) {
-          const t = lines[j].trim();
-          if (
-            !t ||
-            t.startsWith("#") ||
-            t.startsWith("-") ||
-            t.startsWith("*") ||
-            t.match(/^\d+\./) ||
-            t === "---"
-          )
-            break;
-          if (t) paraLines.push(t);
-          j++;
-        }
-        sections.push(
-          <p key={key++} className="ai-md-p">
-            {paraLines.map((l, li) => (
-              <span key={li}>{parseInline(l)}</span>
-            ))}
-          </p>,
-        );
-        i = j;
-        continue;
-      }
-
-      i++;
-    }
-
-    return <>{sections}</>;
-  };
-
-  // Parse skill block content
-  const parseSkillContent = (
-    content: string,
-    _badge: string,
-  ): React.ReactNode => {
-    const lines = content.split("\n");
-    const rows: React.ReactNode[] = [];
-    let key = 0;
-
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed) continue;
-
-      const kvMatch = trimmed.match(/^\*\*([^*]+):\*\*\s*(.+)/);
-      if (kvMatch) {
-        const label = kvMatch[1].trim();
-        const value = kvMatch[2].trim();
-
-        if (label.includes("Mức độ phù hợp") || label.includes("Mức độ")) {
-          const scoreMatch = value.match(/([0-9.]+)\/1\.0/);
-          const score = scoreMatch ? parseFloat(scoreMatch[1]) : 0;
-          const scoreColor = getScoreColor(score);
-
-          rows.push(
-            <div key={key++} className="ai-md-skill-row">
-              <span className="ai-md-skill-row__label">
-                {parseInline(label)}
-              </span>
-              <div className="ai-md-skill-row__score">
-                <span className="ai-md-skill-score-num">
-                  ({score.toFixed(1)}/1.0)
-                </span>
-                <div className="ai-md-skill-bar">
-                  <div
-                    className="ai-md-skill-bar__fill"
-                    style={{ width: `${score * 100}%`, background: scoreColor }}
-                  />
-                </div>
-              </div>
-            </div>,
-          );
-        } else if (label.includes("Trạng thái")) {
-          rows.push(
-            <div key={key++} className="ai-md-skill-row">
-              <span className="ai-md-skill-row__label">
-                {parseInline(label)}
-              </span>
-              <span className="ai-md-skill-status">{parseInline(value)}</span>
-            </div>,
-          );
-        } else {
-          rows.push(
-            <div key={key++} className="ai-md-skill-row">
-              <span className="ai-md-skill-row__label">
-                {parseInline(label)}
-              </span>
-              <span className="ai-md-skill-row__value">
-                {parseInline(value)}
-              </span>
-            </div>,
-          );
-        }
-        continue;
-      }
-
-      if (trimmed.match(/^[-*+] /)) {
-        rows.push(
-          <li key={key++} className="ai-md-skill-subitem">
-            {parseInline(trimmed.slice(2))}
-          </li>,
-        );
-        continue;
-      }
-
-      rows.push(
-        <p key={key++} className="ai-md-skill-note">
-          {parseInline(trimmed)}
-        </p>,
-      );
-    }
-
-    return <div className="ai-md-skill-content">{rows}</div>;
-  };
-
-  const reasoning = cleanText(insight.reasoning || "");
-  const hasReasoning = /^(##|###|####|\*\*)/.test(reasoning.trim());
-  const avgSignalScore =
-    signals.length > 0
-      ? signals.reduce((s, sig) => s + sig.relevanceScore, 0) / signals.length
-      : 0;
-
-  return (
-    <div className="rtw-ai-insight">
-      {/* Hero section */}
-      <div className="rtw-ai-insight__hero">
-        <div className="rtw-ai-insight__hero-left">
-          {/* Quality badge */}
-          <div
-            className="rtw-ai-insight__quality-badge"
-            style={
-              { "--badge-color": qualityMeta.color } as React.CSSProperties
-            }
-          >
-            <span className="rtw-ai-insight__quality-icon">
-              {qualityMeta.icon}
-            </span>
-            <span
-              className="rtw-ai-insight__quality-label"
-              style={{ color: qualityMeta.color }}
-            >
-              {qualityMeta.label}
-            </span>
-          </div>
-          <div className="rtw-ai-insight__title">
-            <Sparkles size={14} />
-            <span>Phân tích AI</span>
-          </div>
-          {insight.fitSummary && (
-            <p
-              className="ai-md-p"
-              style={{
-                fontSize: "0.78rem",
-                color: "rgba(200,190,180,0.85)",
-                margin: "0.25rem 0 0 0",
-                lineHeight: 1.5,
-              }}
-            >
-              {parseInline(insight.fitSummary)}
-            </p>
-          )}
-        </div>
-        <div className="rtw-ai-insight__hero-right">
-          <div
-            className="rtw-ai-insight__confidence-ring"
-            style={{ "--ring-color": qualityMeta.color } as React.CSSProperties}
-          >
-            <CircularScoreRing score={confidence} color={qualityMeta.color} />
-          </div>
-        </div>
-      </div>
-
-      {/* Skill signals summary */}
-      {signals.length > 0 && (
-        <div className="ai-signal-summary">
-          <div className="ai-signal-summary__score-group">
-            <div
-              className="ai-signal-summary__score-ring"
-              style={
-                { "--ring-color": qualityMeta.color } as React.CSSProperties
-              }
-            >
-              <CircularScoreRing
-                score={avgSignalScore * 100}
-                size={48}
-                strokeWidth={4}
-                color={getScoreColor(avgSignalScore)}
-              />
-            </div>
-            <div style={{ marginLeft: "0.5rem" }}>
-              <div
-                className="ai-signal-summary__score-val"
-                style={{ color: getScoreColor(avgSignalScore) }}
-              >
-                {(avgSignalScore * 100).toFixed(0)}
-              </div>
-              <div className="ai-signal-summary__score-label">Điểm TB</div>
-            </div>
-          </div>
-          <div className="ai-signal-summary__breakdown">
-            {signals.map((sig, idx) => {
-              const scoreColor = getScoreColor(sig.relevanceScore);
-              return (
-                <div key={idx} className="ai-signal-summary__breakdown-row">
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.4rem",
-                      flex: 1,
-                      minWidth: 0,
-                    }}
-                  >
-                    <span
-                      className="ai-skill-bar-mini"
-                      style={{
-                        width: "3rem",
-                        height: "4px",
-                        borderRadius: "2px",
-                        background: "rgba(255,255,255,0.06)",
-                        overflow: "hidden",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <div
-                        className="ai-skill-bar-mini__fill"
-                        style={{
-                          width: `${sig.relevanceScore * 100}%`,
-                          height: "100%",
-                          background: scoreColor,
-                          borderRadius: "2px",
-                        }}
-                      />
-                    </span>
-                    <span
-                      className="ai-signal-summary__breakdown-label"
-                      style={{
-                        fontSize: "0.72rem",
-                        color: "rgba(200,190,180,0.9)",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {sig.skill}
-                    </span>
-                  </div>
-                  <span
-                    className="ai-signal-summary__breakdown-val"
-                    style={{
-                      color: scoreColor,
-                      fontWeight: 600,
-                      fontSize: "0.72rem",
-                      marginLeft: "0.5rem",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {sig.relevanceScore.toFixed(1)}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Content */}
-      <div className="rtw-ai-insight__content">
-        {hasReasoning && (
-          <div className="rtw-ai-insight__reasoning">
-            {parseRichMarkdown(reasoning)}
-          </div>
-        )}
-
-        {/* Signal cards when no reasoning */}
-        {!hasReasoning && signals.length > 0 && (
-          <div className="rtw-ai-insight__signal-cards">
-            {signals.map((sig, idx) => {
-              const scoreColor = getScoreColor(sig.relevanceScore);
-              return (
-                <div
-                  key={idx}
-                  className={`ai-signal-card ${sig.isRequired ? "ai-signal-card--required" : ""}`}
-                >
-                  <div className="ai-signal-card__header">
-                    <span className="ai-signal-card__name">
-                      {parseInline(sig.skill)}
-                    </span>
-                    <span
-                      className={`ai-signal-card__badge ${sig.isRequired ? "ai-signal-card__badge--required" : "ai-signal-card__badge--optional"}`}
-                    >
-                      {sig.isRequired ? "Bắt buộc" : "Ưu tiên"}
-                    </span>
-                    <span
-                      className="ai-signal-card__score"
-                      style={{ color: scoreColor }}
-                    >
-                      {(sig.relevanceScore * 100).toFixed(0)}%
-                    </span>
-                  </div>
-                  {sig.evidence && (
-                    <div
-                      className="ai-signal-card__evidence"
-                      style={{
-                        fontSize: "0.75rem",
-                        color: "rgba(200,190,180,0.8)",
-                        marginTop: "0.3rem",
-                        lineHeight: 1.5,
-                      }}
-                    >
-                      {parseInline(sig.evidence)}
-                    </div>
-                  )}
-                  <div
-                    className="ai-skill-bar-mini"
-                    style={{
-                      height: "3px",
-                      borderRadius: "2px",
-                      background: "rgba(255,255,255,0.06)",
-                      overflow: "hidden",
-                      marginTop: "0.4rem",
-                    }}
-                  >
-                    <div
-                      className="ai-skill-bar-mini__fill"
-                      style={{
-                        width: `${sig.relevanceScore * 100}%`,
-                        height: "100%",
-                        background: scoreColor,
-                        borderRadius: "2px",
-                        transition: "width 0.5s ease",
-                      }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Empty state */}
-        {!hasReasoning && signals.length === 0 && (
-          <div className="rtw-ai-insight__empty">
-            <Sparkles size={20} style={{ opacity: 0.3 }} />
-            <span>Không có dữ liệu phân tích chi tiết</span>
-          </div>
-        )}
-
-        {/* Raw markdown toggle */}
-        {reasoning && (
-          <div>
-            <button
-              className="rtw-ai-insight__toggle"
-              onClick={() => setExpanded(!expanded)}
-            >
-              {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-              {expanded ? "Thu gọn" : "Xem markdown gốc"}
-            </button>
-            {expanded && <pre className="rtw-ai-insight__raw">{reasoning}</pre>}
-          </div>
-        )}
-      </div>
-
-      {/* Footer */}
-      <div className="rtw-ai-insight__footer">
-        {insight.modelUsed && (
-          <span className="rtw-ai-insight__footer-chip">
-            {insight.modelUsed}
-          </span>
-        )}
-        {insight.processingTimeMs != null && (
-          <span className="rtw-ai-insight__footer-chip">
-            {insight.processingTimeMs}ms
-          </span>
-        )}
-        {insight.isFallback && (
-          <span className="rtw-ai-insight__footer-chip rtw-ai-insight__footer-chip--warn">
-            Fallback
-          </span>
-        )}
-        <span className="rtw-ai-insight__footer-chip">
-          Confidence {confidence}%
-        </span>
-      </div>
-    </div>
-  );
-};
 
 // ============ MAIN COMPONENT ============
 const RecruiterTalentWorkspace = ({
@@ -1535,9 +731,11 @@ const RecruiterTalentWorkspace = ({
   >([]);
   const [portfolioError, setPortfolioError] = useState<string | null>(null);
 
-  const [aiInsight, setAiInsight] = useState<AICandidateMatchResponse | null>(
+  const [aiInsight, setAiInsight] = useState<CandidateSearchResult | null>(
     null,
   );
+  const [aiEnhancedResult, setAiEnhancedResult] = useState<AiEnhancedAnalysisResponse | null>(null);
+  const [isAiEnhancedLoading, setIsAiEnhancedLoading] = useState(false);
 
   const [decisionNote, setDecisionNote] = useState("");
 
@@ -1980,14 +1178,14 @@ const RecruiterTalentWorkspace = ({
     if (!selectedJob || !target) {
       showToastError(
         "Thiếu context",
-        "Hãy chọn cả job và ứng viên trước khi chạy AI insight.",
+        "Hãy chọn cả job và ứng viên trước khi phân tích.",
       );
       return;
     }
 
     try {
       setIsAiLoading(true);
-      let result: AICandidateMatchResponse;
+      let result: CandidateSearchResult | undefined;
 
       if (selectedJob.kind === "shortterm") {
         result = await candidateSearchService.getShortTermJobMatchExplanation(
@@ -2001,13 +1199,9 @@ const RecruiterTalentWorkspace = ({
         );
       }
 
-      const enhancedInsight = enhanceInsightWithMissionContext(result, {
-        missions: portfolioCompletedMissions,
-        requiredSkills: selectedJob.requiredSkills,
-        candidateMatchScore: target.matchScore,
-      });
-
-      setAiInsight(enhancedInsight);
+      if (result) {
+        setAiInsight(result);
+      }
     } catch (error: any) {
       showToastError(
         "Không thể phân tích AI",
@@ -2939,55 +2133,14 @@ const RecruiterTalentWorkspace = ({
                         </div>
                       </div>
 
-                      {/* Col 3: AI Summary + Actions */}
+                      {/* Col 3: Actions */}
                       <div className="rtw-dossier-actions-col">
-                        {aiInsight && (
-                          <div className="rtw-dossier-ai-summary">
-                            <div className="rtw-dossier-ai-confidence">
-                              <span>Độ tự tin AI</span>
-                              <span className="rtw-dossier-ai-score">
-                                {aiInsight.confidenceScore != null
-                                  ? `${Math.round(aiInsight.confidenceScore * 100)}%`
-                                  : "—"}
-                              </span>
-                            </div>
-                            <div className="rtw-dossier-ai-bar">
-                              <div
-                                className="rtw-dossier-ai-bar__fill"
-                                style={{
-                                  width:
-                                    aiInsight.confidenceScore != null
-                                      ? `${Math.round(aiInsight.confidenceScore * 100)}%`
-                                      : "0%",
-                                }}
-                              />
-                            </div>
-                            {completedMissionSummary.totalMissions > 0 && (
-                              <p className="rtw-dossier-ai-note">
-                                Đã đối chiếu{" "}
-                                {completedMissionSummary.totalMissions} nhiệm vụ
-                                hoàn thành để hiệu chỉnh độ tự tin.
-                              </p>
-                            )}
-                          </div>
-                        )}
-
-                        {isAiLoading && !aiInsight && (
-                          <div className="rtw-dossier-ai-loading">
-                            <Loader2 size={14} className="rtw-spin" />
-                            <span>AI đang phân tích...</span>
-                          </div>
-                        )}
-
                         <div className="rtw-dossier-cta">
                           <button
                             className="rtw-primary-btn"
                             disabled={isActionBusy}
                             onClick={() =>
-                              openChatWithCandidate(
-                                selectedCandidate,
-                                "PROFILE_VIEW",
-                              )
+                              openChatWithCandidate(selectedCandidate, "PROFILE_VIEW")
                             }
                           >
                             <MessageSquare size={14} />
@@ -2995,22 +2148,225 @@ const RecruiterTalentWorkspace = ({
                           </button>
                           <button
                             className="rtw-secondary-btn"
-                            disabled={isAiLoading}
-                            onClick={() => handleRunAiInsight()}
+                            disabled={isAiEnhancedLoading}
+                            onClick={async () => {
+                              if (!selectedJob || !selectedCandidate) return;
+                              setIsAiEnhancedLoading(true);
+                              setAiEnhancedResult(null); // Clear any old AI result
+                              setAiInsight(null);
+                              try {
+                                let result;
+                                if (selectedJob.kind === "shortterm") {
+                                  result = await candidateSearchService.getShortTermJobMatchExplanation(selectedJob.id, selectedCandidate.candidateId);
+                                } else {
+                                  result = await candidateSearchService.getAIMatchExplanation(selectedJob.id, selectedCandidate.candidateId);
+                                }
+                                setAiInsight(result);
+                              } catch (e: any) {
+                                showToastError("Lỗi phân tích", e.message || "Thử lại sau.");
+                              } finally {
+                                setIsAiEnhancedLoading(false);
+                              }
+                            }}
                           >
-                            {isAiLoading ? (
-                              <Loader2 size={14} className="rtw-spin" />
-                            ) : (
-                              <Sparkles size={14} />
-                            )}
-                            AI phân tích
+                            {isAiEnhancedLoading ? <Loader2 size={14} className="rtw-spin" /> : <Sparkles size={14} />}
+                            Phân tích
                           </button>
                         </div>
                       </div>
                     </div>
 
-                    {/* AI INSIGHT — Premium Rendered */}
-                    {aiInsight && <AIInsightRenderer insight={aiInsight} />}
+                    {/* DETERMINISTIC RANKING BREAKDOWN */}
+                    {aiInsight && aiInsight.skillMatchScore !== undefined && (() => {
+                      // Pre-compute local helper data for skill overlap in projects & missions
+                      const requiredSkills = selectedJob?.requiredSkills || [];
+                      const reqSkillsLower = requiredSkills.map(s => s.toLowerCase().trim());
+                      
+                      // Skill overlap in projects
+                      const projectSkillOverlap = portfolioProjects.flatMap(p => p.tools || [])
+                        .filter(t => reqSkillsLower.some(rs => t.toLowerCase().includes(rs)));
+                      const uniqueProjectSkillOverlap = [...new Set(projectSkillOverlap.map(s => s.toLowerCase()))];
+                      
+                      // Skill overlap in missions
+                      const missionSkillOverlap = portfolioCompletedMissions.flatMap(m => m.requiredSkills || [])
+                        .filter(t => reqSkillsLower.some(rs => t.toLowerCase().includes(rs)));
+                      const uniqueMissionSkillOverlap = [...new Set(missionSkillOverlap.map(s => s.toLowerCase()))];
+
+                      const matchedSkills = aiInsight.matchedSkills || [];
+                      const unmatchedSkills = aiInsight.unmatchedSkills || [];
+                      const totalRequired = aiInsight.totalRequiredSkills || 0;
+                      const completedMissions = aiInsight.completedMissionsCount ?? portfolioCompletedMissions.length;
+                      const totalCerts = aiInsight.totalCertificatesCount ?? portfolioCertificates.length;
+                      const totalProjects = aiInsight.totalProjects ?? portfolioProjects.length;
+
+                      const skillPct = totalRequired > 0 ? Math.round(matchedSkills.length / totalRequired * 100) : 0;
+
+                      return (
+                      <div style={{ marginTop: '1.5rem', background: 'rgba(16, 24, 39, 0.7)', border: '1px solid rgba(6, 182, 212, 0.25)', padding: '1.5rem', borderRadius: '14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', color: '#06b6d4', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                          <Sparkles size={16} />
+                          <span>Phân tích Độ phù hợp (Thuật toán)</span>
+                          <span style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>Trọng số: Kỹ năng(50%), Dự án(25%), Mission(15%), Chứng chỉ(10%)</span>
+                        </div>
+
+                        {/* ── SKILL SECTION (50%) ── */}
+                        <div style={{ marginBottom: '1.25rem', padding: '1rem', background: 'rgba(6, 182, 212, 0.05)', borderRadius: '10px', border: '1px solid rgba(6, 182, 212, 0.12)' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>🎯 Kỹ năng (50%)</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              {aiInsight.primarySkillMatch && <span style={{ color: '#06b6d4', fontWeight: 600, fontSize: '0.72rem', padding: '2px 8px', background: 'rgba(6, 182, 212, 0.15)', borderRadius: '6px', border: '1px solid rgba(6, 182, 212, 0.3)' }} title="Primary skill chiếm tối đa 20% (tức 40% của khung điểm Kỹ năng)">⭐ Primary Match (20%)</span>}
+                              <span style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#06b6d4' }}>+{Math.round((aiInsight.skillMatchScore || 0) * 100)}%</span>
+                            </div>
+                          </div>
+                          <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.75rem' }}>
+                            <div style={{ height: '100%', background: 'linear-gradient(90deg, #06b6d4, #22d3ee)', width: `${Math.min(100, (aiInsight.skillMatchScore || 0) / 0.5 * 100)}%`, borderRadius: '3px', transition: 'width 0.6s ease' }}></div>
+                          </div>
+                          {totalRequired > 0 ? (
+                            <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
+                              <p style={{ margin: '0 0 0.4rem' }}>Khớp <strong style={{ color: '#22d3ee' }}>{matchedSkills.length}/{totalRequired}</strong> kỹ năng yêu cầu ({skillPct}%)</p>
+                              {matchedSkills.length > 0 && (
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginBottom: '0.4rem' }}>
+                                  {matchedSkills.map(s => (
+                                    <span key={s} style={{ padding: '2px 8px', background: 'rgba(34, 211, 238, 0.12)', border: '1px solid rgba(34, 211, 238, 0.3)', borderRadius: '4px', fontSize: '0.72rem', color: '#22d3ee' }}>✓ {s}</span>
+                                  ))}
+                                </div>
+                              )}
+                              {unmatchedSkills.length > 0 && (
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
+                                  {unmatchedSkills.map(s => (
+                                    <span key={s} style={{ padding: '2px 8px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '4px', fontSize: '0.72rem', color: '#f87171' }}>✗ {s}</span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <p style={{ margin: 0, fontSize: '0.76rem', color: 'rgba(255,255,255,0.5)' }}>Không có yêu cầu kỹ năng cụ thể cho vị trí này.</p>
+                          )}
+                        </div>
+
+                        {/* ── PROJECT SECTION (25%) ── */}
+                        <div style={{ marginBottom: '1.25rem', padding: '1rem', background: 'rgba(59, 130, 246, 0.04)', borderRadius: '10px', border: '1px solid rgba(59, 130, 246, 0.12)' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>📁 Dự án (25%)</span>
+                            <span style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#3b82f6' }}>+{Math.round((aiInsight.projectMatchScore || 0) * 100)}%</span>
+                          </div>
+                          <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.75rem' }}>
+                            <div style={{ height: '100%', background: 'linear-gradient(90deg, #3b82f6, #60a5fa)', width: `${Math.min(100, (aiInsight.projectMatchScore || 0) / 0.25 * 100)}%`, borderRadius: '3px', transition: 'width 0.6s ease' }}></div>
+                          </div>
+                          <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
+                            <p style={{ margin: '0 0 0.3rem' }}><strong style={{ color: '#60a5fa' }}>{totalProjects}</strong> dự án trong portfolio {totalProjects === 0 ? '— chưa có dự án nào.' : totalProjects < 3 ? '— khá ít, đạt một phần điểm kinh nghiệm.' : '— portfolio đầy đủ (tối đa điểm kinh nghiệm).'}</p>
+                            {uniqueProjectSkillOverlap.length > 0 && reqSkillsLower.length > 0 && (
+                              <p style={{ margin: '0 0 0.3rem' }}>Kỹ năng trùng khớp với yêu cầu job trong dự án: <strong style={{ color: '#60a5fa' }}>{uniqueProjectSkillOverlap.join(', ')}</strong></p>
+                            )}
+                            {uniqueProjectSkillOverlap.length === 0 && reqSkillsLower.length > 0 && totalProjects > 0 && (
+                              <p style={{ margin: 0, color: '#fbbf24', fontStyle: 'italic' }}>⚠ Dự án chưa liên quan trực tiếp đến kỹ năng yêu cầu của job.</p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* ── CERTIFICATE SECTION (10%) ── */}
+                        <div style={{ marginBottom: '1.25rem', padding: '1rem', background: 'rgba(6, 182, 212, 0.04)', borderRadius: '10px', border: '1px solid rgba(6, 182, 212, 0.12)' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>🏅 Chứng chỉ (10%)</span>
+                            <span style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#06b6d4' }}>+{Math.round((aiInsight.certMatchScore || 0) * 100)}%</span>
+                          </div>
+                          <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.75rem' }}>
+                            <div style={{ height: '100%', background: 'linear-gradient(90deg, #06b6d4, #22d3ee)', width: `${Math.min(100, (aiInsight.certMatchScore || 0) / 0.1 * 100)}%`, borderRadius: '3px', transition: 'width 0.6s ease' }}></div>
+                          </div>
+                          <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
+                            <p style={{ margin: 0 }}><strong style={{ color: '#22d3ee' }}>{totalCerts}</strong> chứng chỉ {totalCerts === 0 ? '— chưa có chứng chỉ, khuyến khích bổ sung.' : totalCerts < 2 ? '— có chứng chỉ cơ bản.' : '— đạt điểm lý thuyết tối đa.'}</p>
+                          </div>
+                        </div>
+
+                        {/* ── MISSION SECTION (15%) ── */}
+                        <div style={{ padding: '1rem', background: 'rgba(59, 130, 246, 0.04)', borderRadius: '10px', border: '1px solid rgba(59, 130, 246, 0.12)' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>🚀 Missions hoàn thành (15%)</span>
+                            <span style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#3b82f6' }}>+{Math.round((aiInsight.missionMatchScore || 0) * 100)}%</span>
+                          </div>
+                          <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.75rem' }}>
+                            <div style={{ height: '100%', background: 'linear-gradient(90deg, #3b82f6, #60a5fa)', width: `${Math.min(100, (aiInsight.missionMatchScore || 0) / 0.15 * 100)}%`, borderRadius: '3px', transition: 'width 0.6s ease' }}></div>
+                          </div>
+                          <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
+                            <p style={{ margin: '0 0 0.3rem' }}><strong style={{ color: '#60a5fa' }}>{completedMissions}</strong> nhiệm vụ hoàn thành {completedMissions === 0 ? '— chưa hoàn thành nhiệm vụ nào trên hệ thống.' : completedMissions < 3 ? '— đạt một phần điểm kinh nghiệm thực chiến.' : '— đạt điểm thực chiến tối đa.'}</p>
+                            {uniqueMissionSkillOverlap.length > 0 && reqSkillsLower.length > 0 && (
+                              <p style={{ margin: 0 }}>Kỹ năng trùng khớp với yêu cầu job trong missions: <strong style={{ color: '#60a5fa' }}>{uniqueMissionSkillOverlap.join(', ')}</strong></p>
+                            )}
+                            {uniqueMissionSkillOverlap.length === 0 && reqSkillsLower.length > 0 && completedMissions > 0 && (
+                              <p style={{ margin: 0, color: '#fbbf24', fontStyle: 'italic' }}>⚠ Missions chưa liên quan trực tiếp đến kỹ năng yêu cầu.</p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* ── OVERALL VERDICT ── */}
+                        <div style={{ marginTop: '1.25rem', padding: '0.75rem 1rem', background: 'rgba(6, 182, 212, 0.08)', borderRadius: '8px', border: '1px solid rgba(6, 182, 212, 0.2)', fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+                          <strong style={{ color: '#06b6d4' }}>💡 Tổng kết:</strong>{' '}
+                          {(aiInsight.matchScore || 0) >= 0.8
+                            ? 'Ứng viên phù hợp xuất sắc — đáp ứng hầu hết yêu cầu, nên ưu tiên liên hệ.'
+                            : (aiInsight.matchScore || 0) >= 0.5
+                            ? 'Ứng viên phù hợp tốt — có tiềm năng nhưng cần đánh giá thêm một số kỹ năng thiếu.'
+                            : (aiInsight.matchScore || 0) >= 0.25
+                            ? 'Ứng viên phù hợp trung bình — thiếu một số yếu tố quan trọng, cần cân nhắc kỹ.'
+                            : 'Ứng viên phù hợp thấp — thiếu nhiều kỹ năng/kinh nghiệm yêu cầu.'}
+                        </div>
+                      </div>
+                      );
+                    })()}
+
+                    {/* ── AI ENHANCED ANALYSIS (Optional) ── */}
+                    {aiEnhancedResult && (
+                      <div style={{ marginTop: '1.5rem', background: 'rgba(139, 92, 246, 0.06)', border: '1px solid rgba(139, 92, 246, 0.25)', padding: '1.5rem', borderRadius: '14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                          <Zap size={16} style={{ color: '#a78bfa' }} />
+                          <span style={{ fontWeight: 'bold', color: '#a78bfa', fontSize: '0.9rem' }}>AI Phân tích nâng cao</span>
+                          {aiEnhancedResult.aiAnalysis?.modelUsed && (
+                            <span style={{ marginLeft: 'auto', fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
+                              {aiEnhancedResult.aiAnalysis.modelUsed} • {aiEnhancedResult.aiAnalysis.processingTimeMs}ms
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Verdict Banner */}
+                        <div style={{
+                          padding: '0.75rem 1rem', borderRadius: '8px', marginBottom: '1rem',
+                          background: aiEnhancedResult.verdict === 'STRONG_ACCEPT' || aiEnhancedResult.verdict === 'ACCEPT' ? 'rgba(74, 222, 128, 0.1)' : aiEnhancedResult.verdict === 'REJECT' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(251, 191, 36, 0.1)',
+                          border: `1px solid ${aiEnhancedResult.verdict === 'STRONG_ACCEPT' || aiEnhancedResult.verdict === 'ACCEPT' ? 'rgba(74, 222, 128, 0.3)' : aiEnhancedResult.verdict === 'REJECT' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(251, 191, 36, 0.3)'}`,
+                          fontSize: '0.82rem', lineHeight: 1.6, color: 'rgba(255,255,255,0.8)'
+                        }}>
+                          <strong>{aiEnhancedResult.recommendation}</strong>
+                        </div>
+
+                        {/* AI Fit Summary */}
+                        {aiEnhancedResult.aiAnalysis?.fitSummary && (
+                          <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)', marginBottom: '1rem', lineHeight: 1.6, padding: '0.75rem', background: 'rgba(139, 92, 246, 0.05)', borderRadius: '8px' }}>
+                            <strong style={{ color: '#c4b5fd' }}>Tóm tắt AI:</strong> {aiEnhancedResult.aiAnalysis.fitSummary}
+                          </div>
+                        )}
+
+                        {/* AI Skill Signals */}
+                        {(aiEnhancedResult.aiAnalysis?.skillSignals?.length ?? 0) > 0 && (
+                          <div style={{ marginBottom: '0.75rem' }}>
+                            <p style={{ fontSize: '0.76rem', color: '#c4b5fd', fontWeight: 600, marginBottom: '0.5rem' }}>Tín hiệu kỹ năng từ AI:</p>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
+                              {aiEnhancedResult.aiAnalysis!.skillSignals!.slice(0, 8).map((sig, i) => (
+                                <span key={i} style={{
+                                  padding: '3px 8px', borderRadius: '4px', fontSize: '0.72rem',
+                                  background: sig.relevanceScore >= 0.7 ? 'rgba(74, 222, 128, 0.1)' : sig.relevanceScore >= 0.4 ? 'rgba(251, 191, 36, 0.1)' : 'rgba(239, 68, 68, 0.08)',
+                                  border: `1px solid ${sig.relevanceScore >= 0.7 ? 'rgba(74, 222, 128, 0.3)' : sig.relevanceScore >= 0.4 ? 'rgba(251, 191, 36, 0.3)' : 'rgba(239, 68, 68, 0.25)'}`,
+                                  color: sig.relevanceScore >= 0.7 ? '#4ade80' : sig.relevanceScore >= 0.4 ? '#fbbf24' : '#f87171',
+                                }}>
+                                  {sig.skill} ({Math.round(sig.relevanceScore * 100)}%)
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {aiEnhancedResult.aiError && (
+                          <p style={{ fontSize: '0.76rem', color: '#fbbf24', fontStyle: 'italic' }}>⚠ {aiEnhancedResult.aiError}</p>
+                        )}
+                      </div>
+                    )}
 
                     {/* ── BOTTOM ROW: Projects | Certificates | Completed Tasks ── */}
                     <div className="rtw-dossier-bottom-row">

@@ -513,6 +513,11 @@ const TacticalDossierPortfolio = () => {
     await loadPortfolioData();
   };
 
+  const handleExportCVFromPortfolio = async (request: CVGenerationRequest) => {
+    await portfolioService.exportCV(request);
+    await loadPortfolioData();
+  };
+
   const handleSetActiveCV = async (cvId: number) => {
     try {
       await portfolioService.setActiveCV(cvId);
@@ -2568,6 +2573,7 @@ const TacticalDossierPortfolio = () => {
         isOpen={cvModalOpen}
         onClose={() => setCvModalOpen(false)}
         onSubmit={handleGenerateCV}
+        onExport={handleExportCVFromPortfolio}
       />
 
       <SystemAlertModal

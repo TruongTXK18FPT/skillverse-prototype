@@ -43,6 +43,7 @@ import DossierCreatePortfolioPage from "./components/portfolio-hud/DossierCreate
 import PortfolioDebug from "./pages/navbar/PortfolioDebug";
 // import CVPage from './pages/navbar/CV';  // OLD - Backup
 import DataCompilerPreview from "./components/portfolio-hud/DataCompilerPreview"; // NEW - Mothership Theme
+import CVBuilderPage from "./pages/portfolio/CVBuilderPage"; // CV Builder for manual editing
 import ElevatorLoginPage from "./pages/auth/ElevatorLoginPage";
 import ElevatorPersonalRegisterPage from "./pages/auth/ElevatorPersonalRegisterPage";
 import ElevatorBusinessRegisterPage from "./pages/auth/ElevatorBusinessRegisterPage";
@@ -318,6 +319,15 @@ const AppContents = () => {
               }
             />{" "}
             {/* ACTIVE - Mothership Theme */}
+            <Route
+              path="/cv/builder"
+              element={
+                <AuthenticatedRoute>
+                  <CVBuilderPage />
+                </AuthenticatedRoute>
+              }
+            />{" "}
+            {/* CV Builder - Manual Edit */}
             <Route
               path="/certificate/:id"
               element={
