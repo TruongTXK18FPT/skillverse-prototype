@@ -21,6 +21,7 @@ import { JobManagementTab } from "../../components/admin/JobManagementTab";
 import MeowlSkinUploadTab from "../../components/admin/MeowlSkinUploadTab";
 import SliderManagementTab from "../../components/admin/SliderManagementTab";
 import AdminAiGradingDashboard from "../admin/AdminAiGradingDashboard";
+import AdminAiKnowledgeDashboard from "../admin/AdminAiKnowledgeDashboard";
 // import AdminSeminarManager from './AdminSeminarManager';
 import adminUserService from "../../services/adminUserService";
 import adminService from "../../services/adminService";
@@ -154,6 +155,8 @@ const AdminPage: React.FC = () => {
         return <AIExpertManagementTab />;
       case "ai-grading":
         return <AdminAiGradingDashboard />;
+      case "ai-knowledge":
+        return <AdminAiKnowledgeDashboard />;
       case "question-bank":
         return <QuestionBankTab />;
       case "journey-management":

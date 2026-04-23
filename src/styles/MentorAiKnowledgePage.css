@@ -1,0 +1,403 @@
+.mentor-ai-knowledge-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: var(--mentor-hud-text-primary);
+}
+
+.mentor-ai-knowledge-header,
+.mentor-ai-knowledge-panel {
+  background: var(--mentor-hud-bg-surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--mentor-hud-border);
+  box-shadow: var(--mentor-hud-glow-cyan);
+}
+
+.mentor-ai-knowledge-header {
+  padding: 1.8rem;
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 0 100%);
+}
+
+.mentor-ai-knowledge-header__status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.mentor-ai-knowledge-header__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--mentor-hud-accent-green);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+}
+
+.mentor-ai-knowledge-header__status-text,
+.mentor-ai-knowledge-panel__eyebrow {
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--mentor-hud-accent-cyan);
+}
+
+.mentor-ai-knowledge-header__title {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mentor-ai-knowledge-header__title-accent {
+  color: var(--mentor-hud-accent-cyan);
+}
+
+.mentor-ai-knowledge-header__subtitle,
+.mentor-ai-knowledge-panel__header p,
+.mentor-ai-knowledge-empty,
+.mentor-ai-knowledge-list-item__sub,
+.mentor-ai-knowledge-meta-grid span,
+.mentor-ai-knowledge-pagination span,
+.mentor-ai-knowledge-detail__headline p {
+  color: var(--mentor-hud-text-secondary);
+}
+
+.mentor-ai-knowledge-panel {
+  padding: 1.25rem;
+}
+
+.mentor-ai-knowledge-panel__header,
+.mentor-ai-knowledge-tab-switcher,
+.mentor-ai-knowledge-form__actions,
+.mentor-ai-knowledge-status-row,
+.mentor-ai-knowledge-detail__headline,
+.mentor-ai-knowledge-status-stack,
+.mentor-ai-knowledge-detail__actions,
+.mentor-ai-knowledge-pagination,
+.mentor-ai-knowledge-legend {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.mentor-ai-knowledge-panel__header,
+.mentor-ai-knowledge-detail__headline,
+.mentor-ai-knowledge-pagination {
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.mentor-ai-knowledge-panel__header {
+  margin-bottom: 1rem;
+}
+
+.mentor-ai-knowledge-grid,
+.mentor-ai-knowledge-form__grid,
+.mentor-ai-knowledge-meta-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.mentor-ai-knowledge-grid {
+  grid-template-columns: minmax(340px, 0.95fr) minmax(0, 1.15fr);
+}
+
+.mentor-ai-knowledge-form__grid,
+.mentor-ai-knowledge-meta-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mentor-ai-knowledge-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.mentor-ai-knowledge-field--full {
+  grid-column: 1 / -1;
+}
+
+.mentor-ai-knowledge-field span {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--mentor-hud-text-primary);
+}
+
+.mentor-ai-knowledge-field input,
+.mentor-ai-knowledge-field select,
+.mentor-ai-knowledge-field textarea,
+.mentor-ai-knowledge-primary-btn,
+.mentor-ai-knowledge-secondary-btn,
+.mentor-ai-knowledge-danger-btn,
+.mentor-ai-knowledge-tab-btn,
+.mentor-ai-knowledge-pagination button {
+  border-radius: 12px;
+}
+
+.mentor-ai-knowledge-field input,
+.mentor-ai-knowledge-field select,
+.mentor-ai-knowledge-field textarea {
+  width: 100%;
+  padding: 0.82rem 0.95rem;
+  border: 1px solid rgba(6, 182, 212, 0.18);
+  background: rgba(5, 11, 20, 0.82);
+  color: var(--mentor-hud-text-primary);
+  outline: none;
+}
+
+.mentor-ai-knowledge-field textarea {
+  resize: vertical;
+}
+
+.mentor-ai-knowledge-primary-btn,
+.mentor-ai-knowledge-secondary-btn,
+.mentor-ai-knowledge-danger-btn,
+.mentor-ai-knowledge-tab-btn,
+.mentor-ai-knowledge-pagination button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.mentor-ai-knowledge-primary-btn {
+  border: 1px solid rgba(6, 182, 212, 0.32);
+  background: rgba(6, 182, 212, 0.12);
+  color: #8ceafe;
+}
+
+.mentor-ai-knowledge-secondary-btn,
+.mentor-ai-knowledge-tab-btn,
+.mentor-ai-knowledge-pagination button {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(7, 15, 28, 0.82);
+  color: var(--mentor-hud-text-primary);
+  text-decoration: none;
+}
+
+.mentor-ai-knowledge-danger-btn {
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+}
+
+.mentor-ai-knowledge-tab-btn.active {
+  border-color: rgba(6, 182, 212, 0.4);
+  background: rgba(6, 182, 212, 0.12);
+  color: #c8f8ff;
+}
+
+.mentor-ai-knowledge-primary-btn:hover:not(:disabled),
+.mentor-ai-knowledge-secondary-btn:hover:not(:disabled),
+.mentor-ai-knowledge-danger-btn:hover:not(:disabled),
+.mentor-ai-knowledge-tab-btn:hover:not(:disabled),
+.mentor-ai-knowledge-pagination button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.mentor-ai-knowledge-primary-btn:disabled,
+.mentor-ai-knowledge-secondary-btn:disabled,
+.mentor-ai-knowledge-danger-btn:disabled,
+.mentor-ai-knowledge-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mentor-ai-knowledge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.mentor-ai-knowledge-list-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid rgba(6, 182, 212, 0.14);
+  background: rgba(5, 11, 20, 0.72);
+  padding: 1rem;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.mentor-ai-knowledge-list-item.active {
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.18) inset;
+}
+
+.mentor-ai-knowledge-list-item__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+}
+
+.mentor-ai-knowledge-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 0.7rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.mentor-ai-knowledge-chip--pending {
+  background: rgba(234, 179, 8, 0.14);
+  color: #fde68a;
+}
+
+.mentor-ai-knowledge-chip--approved,
+.mentor-ai-knowledge-chip--indexed,
+.mentor-ai-knowledge-chip--indexed-strong {
+  background: rgba(16, 185, 129, 0.14);
+  color: #a7f3d0;
+  border: 1px solid rgba(16, 185, 129, 0.32);
+}
+
+.mentor-ai-knowledge-chip--indexed-strong {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mentor-ai-knowledge-chip--rejected,
+.mentor-ai-knowledge-chip--failed {
+  background: rgba(239, 68, 68, 0.14);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.32);
+}
+
+.mentor-ai-knowledge-chip--neutral,
+.mentor-ai-knowledge-chip--not-ingested-strong {
+  background: rgba(59, 130, 246, 0.14);
+  color: #bfdbfe;
+  border: 1px solid rgba(59, 130, 246, 0.32);
+}
+
+.mentor-ai-knowledge-chip--not-ingested-strong {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mentor-ai-knowledge-empty,
+.mentor-ai-knowledge-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+}
+
+.mentor-ai-knowledge-empty {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(7, 15, 28, 0.62);
+}
+
+.mentor-ai-knowledge-alert--error,
+.mentor-ai-knowledge-alert--warning {
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(52, 16, 16, 0.78);
+  color: #fecaca;
+}
+
+.mentor-ai-knowledge-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mentor-ai-knowledge-status-stack,
+.mentor-ai-knowledge-legend {
+  flex-wrap: wrap;
+}
+
+.mentor-ai-knowledge-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.84rem;
+  color: var(--mentor-hud-text-secondary);
+}
+
+.mentor-ai-knowledge-meta-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.mentor-ai-knowledge-meta-grid strong,
+.mentor-ai-knowledge-detail__section h4,
+.mentor-ai-knowledge-panel__header h2,
+.mentor-ai-knowledge-list-item strong,
+.mentor-ai-knowledge-detail__headline h3 {
+  color: var(--mentor-hud-text-primary);
+}
+
+.mentor-ai-knowledge-detail-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.mentor-ai-knowledge-detail__section {
+  border-top: 1px solid rgba(6, 182, 212, 0.12);
+  padding-top: 1rem;
+}
+
+.mentor-ai-knowledge-extracted-text {
+  margin: 0;
+  max-height: 360px;
+  overflow: auto;
+  padding: 1rem;
+  border-radius: 14px;
+  background: rgba(5, 11, 20, 0.82);
+  border: 1px solid rgba(6, 182, 212, 0.14);
+  color: var(--mentor-hud-text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+}
+
+.mentor-ai-knowledge-spinning {
+  animation: mentor-ai-knowledge-spin 0.8s linear infinite;
+}
+
+@keyframes mentor-ai-knowledge-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1100px) {
+  .mentor-ai-knowledge-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .mentor-ai-knowledge-panel__header,
+  .mentor-ai-knowledge-detail__headline,
+  .mentor-ai-knowledge-pagination {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mentor-ai-knowledge-form__grid,
+  .mentor-ai-knowledge-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}

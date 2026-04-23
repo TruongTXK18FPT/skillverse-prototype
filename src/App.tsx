@@ -82,6 +82,7 @@ import { MentorNoticeProvider } from "./context/mentor/MentorNoticeContext";
 import AdminPage from "./pages/main/AdminPage";
 import AdminSecurityPage from "./pages/admin/AdminSecurityPage";
 import AdminAiGradingDashboard from "./pages/admin/AdminAiGradingDashboard";
+import AdminAiKnowledgeDashboard from "./pages/admin/AdminAiKnowledgeDashboard";
 import AdminCoursePreviewPage from "./pages/admin/AdminCoursePreviewPage";
 import AiRoadmapPage from "./pages/roadmap/AiRoadmapPage";
 import RoadmapDetailPage from "./pages/roadmap/RoadmapDetailPage";
@@ -607,6 +608,14 @@ const AppContents = () => {
               element={
                 <AdminRoute>
                   <AdminAiGradingDashboard />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/ai-knowledge"
+              element={
+                <AdminRoute>
+                  <AdminAiKnowledgeDashboard />
                 </AdminRoute>
               }
             />

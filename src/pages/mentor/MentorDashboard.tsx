@@ -24,6 +24,7 @@ import MentorCertificateSettingsTab from '../../components/mentor/MentorCertific
 import MentorVerificationTab from '../../components/mentor/MentorVerificationTab';
 import MentorQuestionBankTab from '../../components/mentor/MentorQuestionBankTab';
 import MentorRoadmapSettingsTab from '../../components/mentor/MentorRoadmapSettingsTab';
+import MentorAiKnowledgePage from './MentorAiKnowledgePage';
 import '../../styles/MentorPage-HUD.css';
 
 const MentorDashboard: React.FC = () => {
@@ -118,6 +119,8 @@ const MentorDashboard: React.FC = () => {
         return <ReviewsTab />;
       case 'grading':
         return <MentorGradingDashboard onPendingCountChange={setPendingGradingCount} />;
+      case 'ai-knowledge':
+        return <MentorAiKnowledgePage />;
       case 'question-bank':
         return <MentorQuestionBankTab />;
       case 'certificate-settings':

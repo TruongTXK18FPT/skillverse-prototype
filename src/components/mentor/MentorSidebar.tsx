@@ -12,6 +12,7 @@ import {
   Shield,
   ListChecks,
   Target,
+  LibraryBig,
 } from "lucide-react";
 import "./MentorSidebar.css";
 
@@ -75,6 +76,7 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
           icon: CheckSquare,
           badge: pendingGradingCount > 0 ? pendingGradingCount : undefined,
         },
+        { id: "ai-knowledge", label: "Tài liệu AI", icon: LibraryBig },
         { id: "question-bank", label: "Ngân hàng câu hỏi", icon: ListChecks },
       ],
     },
