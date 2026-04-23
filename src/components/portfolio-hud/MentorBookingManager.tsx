@@ -102,6 +102,11 @@ const statusConfig: Record<
   PENDING: { label: "Chờ duyệt", cls: "pending", accent: "#f59e0b" },
   CONFIRMED: { label: "Đã xác nhận", cls: "confirmed", accent: "#3b82f6" },
   ONGOING: { label: "Đang học", cls: "ongoing", accent: "#8b5cf6" },
+  MENTORING_ACTIVE: {
+    label: "Đang mentoring",
+    cls: "mentoring-active",
+    accent: "#06b6d4",
+  },
   PENDING_COMPLETION: {
     label: "Chờ xác nhận",
     cls: "pending-completion",
@@ -113,6 +118,57 @@ const statusConfig: Record<
   DISPUTED: { label: "Khiếu nại", cls: "disputed", accent: "#fb923c" },
   REFUNDED: { label: "Đã hoàn tiền", cls: "refunded", accent: "#475569" },
 };
+
+const BOOKING_TYPE_CONFIG: Record<
+  string,
+  { label: string; icon: string; color: string }
+> = {
+  ROADMAP_MENTORING: {
+    label: "Đồng hành Roadmap",
+    icon: "🗺️",
+    color: "#06b6d4",
+  },
+  NODE_MENTORING: { label: "Node Mentoring", icon: "🎯", color: "#8b5cf6" },
+  JOURNEY_MENTORING: {
+    label: "Journey Mentoring",
+    icon: "🚀",
+    color: "#f59e0b",
+  },
+  GENERAL: { label: "1:1 Mentoring", icon: "👤", color: "#3b82f6" },
+};
+
+const PENDING_AUTO_CANCEL_HOURS = 24;
+
+const getAutoReleaseCountdown = (
+  booking: BookingResponse,
+  now: Date,
+): { text: string; level: "critical" | "warning" | "normal" } | null => {
+  if (booking.status !== "PENDING" || !booking.createdAt) return null;
+  const createdAt = new Date(booking.createdAt);
+  const deadline = new Date(
+    createdAt.getTime() + PENDING_AUTO_CANCEL_HOURS * 60 * 60 * 1000,
+  );
+  const remainingMs = deadline.getTime() - now.getTime();
+  if (remainingMs <= 0) return { text: "Sắp tự động hủy", level: "critical" };
+  const remainingHours = Math.floor(remainingMs / (60 * 60 * 1000));
+  const remainingMinutes = Math.floor(
+    (remainingMs % (60 * 60 * 1000)) / (60 * 1000),
+  );
+  if (remainingHours < 2)
+    return {
+      text: `Còn ${remainingHours}h ${remainingMinutes}m`,
+      level: "critical",
+    };
+  if (remainingHours < 6)
+    return {
+      text: `Còn ${remainingHours}h ${remainingMinutes}m`,
+      level: "warning",
+    };
+  return { text: `Còn ${remainingHours}h để duyệt`, level: "normal" };
+};
+
+const isRoadmapMentoring = (b: BookingResponse): boolean =>
+  b.bookingType === "ROADMAP_MENTORING";
 
 const formatCurrency = (n: number) =>
   new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
@@ -189,7 +245,18 @@ const MentorBookingManager: React.FC = () => {
 
   // Helper: Check if booking has node/journey context
   const hasMentoringContext = (b: BookingResponse): boolean => {
-    return !!(b.journeyId && (b.nodeId || b.bookingType === 'JOURNEY_MENTORING'));
+    return !!(
+      b.journeyId &&
+      (b.nodeId || b.bookingType === "JOURNEY_MENTORING")
+    );
+  };
+
+  // Helper: Get booking type config
+  const getBookingTypeConfig = (b: BookingResponse) => {
+    return (
+      BOOKING_TYPE_CONFIG[b.bookingType || "GENERAL"] ||
+      BOOKING_TYPE_CONFIG.GENERAL
+    );
   };
 
   // ── Live clock + sync ──────────────────────────────────────────────────────
@@ -562,6 +629,23 @@ const MentorBookingManager: React.FC = () => {
           </div>
         )}
 
+        {/* Booking Type Badge */}
+        {(() => {
+          const typeConfig = getBookingTypeConfig(b);
+          const isRoadmap = isRoadmapMentoring(b);
+          return (
+            <div
+              className={`mbm-card-type-badge ${isRoadmap ? "mbm-card-type-badge--roadmap" : ""}`}
+              style={
+                { "--type-color": typeConfig.color } as React.CSSProperties
+              }
+            >
+              <span className="mbm-type-icon">{typeConfig.icon}</span>
+              <span className="mbm-type-label">{typeConfig.label}</span>
+            </div>
+          );
+        })()}
+
         {/* Header */}
         <div className="mbm-card-hdr">
           <div className="mbm-card-hdr-left">
@@ -588,6 +672,20 @@ const MentorBookingManager: React.FC = () => {
           </div>
         </div>
 
+        {/* Auto-cancel countdown for PENDING */}
+        {(() => {
+          const autoRelease = getAutoReleaseCountdown(b, now);
+          if (!autoRelease) return null;
+          return (
+            <div
+              className={`mbm-card-auto-release mbm-auto-release--${autoRelease.level}`}
+            >
+              <AlertCircle size={12} />
+              <span>{autoRelease.text} để duyệt</span>
+            </div>
+          );
+        })()}
+
         {/* Deadline ribbon */}
         {deadline && (
           <div className={`mbm-card-deadline mbm-deadline--${deadline.level}`}>
@@ -603,8 +701,14 @@ const MentorBookingManager: React.FC = () => {
             <div className="mbm-card-context">
               <div className="mbm-context-item">
                 <span className="mbm-context-badge">Node Mentoring</span>
-                {b.journeyId && <span className="mbm-context-detail">Journey #{b.journeyId}</span>}
-                {b.nodeId && <span className="mbm-context-detail">Node: {b.nodeId}</span>}
+                {b.journeyId && (
+                  <span className="mbm-context-detail">
+                    Journey #{b.journeyId}
+                  </span>
+                )}
+                {b.nodeId && (
+                  <span className="mbm-context-detail">Node: {b.nodeId}</span>
+                )}
               </div>
             </div>
           )}
@@ -615,8 +719,12 @@ const MentorBookingManager: React.FC = () => {
           </div>
           <div className="mbm-card-meta">
             <Clock size={14} />
-            <span>{b.durationMinutes} phút</span>
-            {b.meetingLink && (
+            <span>
+              {isRoadmapMentoring(b)
+                ? "Đến khi hoàn thành roadmap"
+                : `${b.durationMinutes} phút`}
+            </span>
+            {b.meetingLink && !isRoadmapMentoring(b) && (
               <>
                 <Video size={14} className="mbm-meta-video" />
                 <span className="mbm-meta-ready">Phòng họp sẵn sàng</span>
@@ -718,7 +826,9 @@ const MentorBookingManager: React.FC = () => {
           {hasMentoringContext(b) && (
             <button
               className="mbm-btn mbm-btn-mentoring"
-              onClick={() => setMentoringWorkspace({ isOpen: true, booking: b })}
+              onClick={() =>
+                setMentoringWorkspace({ isOpen: true, booking: b })
+              }
               title="Mở Node Mentoring Workspace"
             >
               <span className="mbm-mentoring-icon">🎯</span> Mentoring
@@ -1272,7 +1382,8 @@ const MentorBookingManager: React.FC = () => {
 
       {/* Node Mentoring Workspace Modal */}
       <AnimatePresence>
-        {mentoringWorkspace.isOpen && mentoringWorkspace.booking &&
+        {mentoringWorkspace.isOpen &&
+          mentoringWorkspace.booking &&
           ReactDOM.createPortal(
             <motion.div
               className="mbm-modal-overlay mbm-modal-overlay--large"
@@ -1299,7 +1410,9 @@ const MentorBookingManager: React.FC = () => {
                   </div>
                   <button
                     className="mbm-modal-close"
-                    onClick={() => setMentoringWorkspace({ isOpen: false, booking: null })}
+                    onClick={() =>
+                      setMentoringWorkspace({ isOpen: false, booking: null })
+                    }
                   >
                     <X size={18} />
                   </button>

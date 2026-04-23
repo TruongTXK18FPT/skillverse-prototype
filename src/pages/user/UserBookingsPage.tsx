@@ -17,6 +17,10 @@ import {
   CalendarDays,
   SlidersHorizontal,
   X,
+  Map,
+  Target,
+  Rocket,
+  User,
 } from "lucide-react";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +38,65 @@ import "../../styles/UserBookings.css";
 
 type ViewTab = "upcoming" | "history";
 const USER_BOOKINGS_PAGE_SIZE = 10;
+const PENDING_AUTO_CANCEL_HOURS = 24;
+
+const BOOKING_TYPE_CONFIG: Record<
+  string,
+  { label: string; icon: React.ReactNode; color: string }
+> = {
+  ROADMAP_MENTORING: {
+    label: "Đồng hành Roadmap",
+    icon: <Map size={13} />,
+    color: "#06b6d4",
+  },
+  NODE_MENTORING: {
+    label: "Node Mentoring",
+    icon: <Target size={13} />,
+    color: "#8b5cf6",
+  },
+  JOURNEY_MENTORING: {
+    label: "Journey Mentoring",
+    icon: <Rocket size={13} />,
+    color: "#f59e0b",
+  },
+  GENERAL: {
+    label: "1:1 Mentoring",
+    icon: <User size={13} />,
+    color: "#3b82f6",
+  },
+};
+
+const isRoadmapMentoring = (b: BookingResponse): boolean =>
+  b.bookingType === "ROADMAP_MENTORING";
+
+const getAutoReleaseCountdown = (
+  booking: BookingResponse,
+  now: Date,
+): { text: string; level: "critical" | "warning" | "normal" } | null => {
+  if (booking.status !== "PENDING" || !booking.createdAt) return null;
+  const createdAt = new Date(booking.createdAt);
+  const deadline = new Date(
+    createdAt.getTime() + PENDING_AUTO_CANCEL_HOURS * 60 * 60 * 1000,
+  );
+  const remainingMs = deadline.getTime() - now.getTime();
+  if (remainingMs <= 0)
+    return { text: "Sắp tự động hoàn tiền", level: "critical" };
+  const remainingHours = Math.floor(remainingMs / (60 * 60 * 1000));
+  const remainingMinutes = Math.floor(
+    (remainingMs % (60 * 60 * 1000)) / (60 * 1000),
+  );
+  if (remainingHours < 2)
+    return {
+      text: `Còn ${remainingHours}h ${remainingMinutes}m`,
+      level: "critical",
+    };
+  if (remainingHours < 6)
+    return {
+      text: `Còn ${remainingHours}h ${remainingMinutes}m`,
+      level: "warning",
+    };
+  return { text: `Còn ${remainingHours}h chờ mentor`, level: "normal" };
+};
 
 const UserBookingsPage: React.FC = () => {
   const [viewTab, setViewTab] = useState<ViewTab>("upcoming");
@@ -203,10 +266,16 @@ const UserBookingsPage: React.FC = () => {
       setConfirmingId(id);
       try {
         await confirmCompleteBooking(id);
-        showAppSuccess("Đã hoàn tất", "Buổi học đã được đánh dấu hoàn tất. Đang chờ mentor xác nhận.");
+        showAppSuccess(
+          "Đã hoàn tất",
+          "Buổi học đã được đánh dấu hoàn tất. Đang chờ mentor xác nhận.",
+        );
         fetchBookings();
       } catch (err: any) {
-        showAppError("Không thể hoàn tất", err?.response?.data?.message || "Vui lòng thử lại sau.");
+        showAppError(
+          "Không thể hoàn tất",
+          err?.response?.data?.message || "Vui lòng thử lại sau.",
+        );
       } finally {
         setConfirmingId(null);
       }
@@ -586,12 +655,50 @@ const UserBookingsPage: React.FC = () => {
 
                   {/* Card Center — Date/Time */}
                   <div className="usbk-card-center">
+                    {/* Booking Type Badge */}
+                    {(() => {
+                      const typeConfig =
+                        BOOKING_TYPE_CONFIG[booking.bookingType || "GENERAL"] ||
+                        BOOKING_TYPE_CONFIG.GENERAL;
+                      const isRoadmap = isRoadmapMentoring(booking);
+                      return (
+                        <div
+                          className={`usbk-type-badge ${isRoadmap ? "usbk-type-badge--roadmap" : ""}`}
+                          style={
+                            {
+                              "--type-color": typeConfig.color,
+                            } as React.CSSProperties
+                          }
+                        >
+                          {typeConfig.icon}
+                          <span>{typeConfig.label}</span>
+                        </div>
+                      );
+                    })()}
+
                     <div className="usbk-card-date">{full}</div>
                     <div className="usbk-card-time">
                       <Clock size={14} />
-                      {time} · {booking.durationMinutes} phút
+                      {isRoadmapMentoring(booking)
+                        ? "Đến khi hoàn thành roadmap"
+                        : `${time} · ${booking.durationMinutes} phút`}
                     </div>
-                    {soonBadge && (
+
+                    {/* Auto-cancel countdown for PENDING */}
+                    {(() => {
+                      const autoRelease = getAutoReleaseCountdown(booking, now);
+                      if (!autoRelease) return null;
+                      return (
+                        <div
+                          className={`usbk-auto-release usbk-auto-release--${autoRelease.level}`}
+                        >
+                          <Clock size={11} />
+                          <span>{autoRelease.text}</span>
+                        </div>
+                      );
+                    })()}
+
+                    {soonBadge && !isRoadmapMentoring(booking) && (
                       <div className="usbk-card-soon-badge">
                         <AlertTriangle size={12} />
                         Sắp diễn ra
@@ -660,7 +767,8 @@ const UserBookingsPage: React.FC = () => {
                         )}
 
                       {/* Learner complete button — session ended but not yet in PENDING_COMPLETION */}
-                      {(booking.status === "ONGOING" || booking.status === "CONFIRMED") &&
+                      {(booking.status === "ONGOING" ||
+                        booking.status === "CONFIRMED") &&
                         isSessionEnded(booking) && (
                           <button
                             className="usbk-btn-primary"
@@ -668,7 +776,9 @@ const UserBookingsPage: React.FC = () => {
                             disabled={confirmingId === booking.id}
                           >
                             <CheckCircle size={14} />
-                            {confirmingId === booking.id ? "Đang xử lý..." : "Hoàn thành"}
+                            {confirmingId === booking.id
+                              ? "Đang xử lý..."
+                              : "Hoàn thành"}
                           </button>
                         )}
 
@@ -708,12 +818,14 @@ const UserBookingsPage: React.FC = () => {
                           )}
                           {!learnerCompleted && (
                             <button
-                            className="usbk-btn-primary"
-                            onClick={() => handleLearnerComplete(booking.id)}
-                            disabled={confirmingId === booking.id}
-                          >
-                            <CheckCircle size={14} />
-                            {confirmingId === booking.id ? "Đang xử lý..." : "Xác nhận hoàn tất"}
+                              className="usbk-btn-primary"
+                              onClick={() => handleLearnerComplete(booking.id)}
+                              disabled={confirmingId === booking.id}
+                            >
+                              <CheckCircle size={14} />
+                              {confirmingId === booking.id
+                                ? "Đang xử lý..."
+                                : "Xác nhận hoàn tất"}
                             </button>
                           )}
                           <button
@@ -790,7 +902,7 @@ const UserBookingsPage: React.FC = () => {
                               counterpartId: booking.mentorId,
                               name: booking.mentorName,
                               avatar: booking.mentorAvatar,
-                              type: 'MENTOR',
+                              type: "MENTOR",
                               chatEnabled: booking.chatAllowed,
                               bookingStatus: booking.status,
                               bookingStartTime: booking.startTime,
@@ -799,7 +911,11 @@ const UserBookingsPage: React.FC = () => {
                           })
                         }
                         disabled={!booking.chatAllowed}
-                        title={booking.chatAllowed ? "Mo mentor chat" : "Booking da dong chat"}
+                        title={
+                          booking.chatAllowed
+                            ? "Mo mentor chat"
+                            : "Booking da dong chat"
+                        }
                       >
                         <MessageSquare size={14} />
                       </button>

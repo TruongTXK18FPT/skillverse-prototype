@@ -672,6 +672,56 @@ export const getAllPublicPortfolios = async (): Promise<UserProfileDTO[]> => {
   return response.data.data;
 };
 
+// ==================== VERIFIED SKILL DETAILS ====================
+
+export interface PortfolioVerifiedSkillEvidence {
+  id?: number;
+  type: 'CERTIFICATE' | 'GITHUB' | 'PORTFOLIO_LINK' | 'WORK_EXPERIENCE' | 'OUTPUT_ASSESSMENT' | 'NODE_SUBMISSION';
+  title?: string;
+  url?: string;
+  imageUrl?: string;
+  issuer?: string;
+  description?: string;
+}
+
+export interface PortfolioVerifiedSkillDetail {
+  id: number;
+  skillName: string;
+  displaySkillName?: string;
+  verificationSource: 'ADMIN_MENTOR_VERIFICATION' | 'ROADMAP_MENTORING';
+  verifiedAt?: string;
+  reviewerId?: number;
+  reviewerName?: string;
+  reviewerRole?: string;
+  reviewNote?: string;
+  journeyId?: number;
+  bookingId?: number;
+  verificationRequestId?: number;
+  evidences: PortfolioVerifiedSkillEvidence[];
+}
+
+/**
+ * Get verified skill details for the authenticated user
+ */
+export const getVerifiedSkillDetails = async (): Promise<PortfolioVerifiedSkillDetail[]> => {
+  const response = await api.get<PortfolioVerifiedSkillDetail[]>(
+    "/portfolio/verified-skill-details",
+  );
+  return response.data;
+};
+
+/**
+ * Get verified skill details for a public user
+ */
+export const getPublicVerifiedSkillDetails = async (
+  userId: number,
+): Promise<PortfolioVerifiedSkillDetail[]> => {
+  const response = await api.get<PortfolioVerifiedSkillDetail[]>(
+    `/portfolio/public/${userId}/verified-skill-details`,
+  );
+  return response.data;
+};
+
 // Export all services
 export const portfolioService = {
   // Profile
@@ -756,6 +806,10 @@ export const portfolioService = {
   getUserReviews,
   getPublicUserReviews,
 
+  // Verified Skills
+  getVerifiedSkillDetails,
+  getPublicVerifiedSkillDetails,
+
   // CV Generation
   generateCV,
   exportCV,
@@ -764,6 +818,12 @@ export const portfolioService = {
   getAllCVs,
   setActiveCV,
   deleteCV,
+
+  // Convenience alias to match existing FE usage
+  updateProfile: async (profile: Partial<UserProfileDTO>): Promise<UserProfileDTO> => {
+    return updateExtendedProfile(profile);
+  },
 };
 
 export default portfolioService;
+

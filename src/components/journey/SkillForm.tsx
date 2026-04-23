@@ -1,25 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
-import {
-  Check,
-  X,
-  ArrowLeft,
-  ArrowRight,
-  RefreshCw,
-  Search,
-} from "lucide-react";
-import {
-  getExpertFields,
-  ExpertFieldResponse,
-} from "../../services/expertPromptService";
-import {
-  ExpertDomainMeta,
-  getExpertDomainMeta,
-} from "../../utils/expertFieldPresentation";
-import {
-  DOMAIN_OPTIONS,
-  JOBS_BY_DOMAIN_INDUSTRY,
-  SKILLS_BY_JOB_ROLE,
-} from "../../types/Journey";
+import { useState, useCallback } from "react";
+import { ArrowLeft, Search, Plus, X, Check } from "lucide-react";
+import SkillAutoResolve from "../shared/SkillAutoResolve";
 
 interface SkillFormProps {
   onComplete: (data: {
@@ -31,631 +12,200 @@ interface SkillFormProps {
   onBack: () => void;
 }
 
-type SkillJobRoleOption = {
-  value: string;
-  label: string;
-  icon: string;
-  desc?: string;
-  keywords?: string;
-  skillKey?: string;
-};
-
-const parseKeywords = (keywords?: string): string[] =>
-  (keywords || "")
-    .split(",")
-    .map((keyword) => keyword.trim())
-    .filter(Boolean)
-    .filter((keyword, index, array) => array.indexOf(keyword) === index);
-
-const normalizeLookupValue = (value?: string | null): string =>
-  (value || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-
-const findStaticRoleMatch = (
-  domain: string | null,
-  industry: string | null,
-  jobRole: string,
-):
-  | { value: string; label: string; icon: string; desc?: string }
-  | undefined => {
-  if (!domain) return undefined;
-
-  const normalizedJobRole = normalizeLookupValue(jobRole);
-  const domainRolesByIndustry = JOBS_BY_DOMAIN_INDUSTRY[domain] || {};
-  const rolesInSelectedIndustry = industry
-    ? domainRolesByIndustry[industry] || []
-    : [];
-  const rolesInSelectedDomain = Object.values(domainRolesByIndustry).flat();
-
-  return [...rolesInSelectedIndustry, ...rolesInSelectedDomain].find((role) => {
-    return (
-      normalizeLookupValue(role.value) === normalizedJobRole ||
-      normalizeLookupValue(role.label) === normalizedJobRole
-    );
-  });
-};
-
-const resolveRoleSkills = (role?: SkillJobRoleOption): string[] => {
-  const lookupKeys = [role?.skillKey, role?.value, role?.label].filter(
-    Boolean,
-  ) as string[];
-
-  for (const lookupKey of lookupKeys) {
-    const mappedSkills = SKILLS_BY_JOB_ROLE[lookupKey];
-    if (mappedSkills?.length) {
-      return mappedSkills;
-    }
-  }
-
-  return parseKeywords(role?.keywords);
+const mapDomainToEnum = (domain: string): string => {
+  const upper = domain.toUpperCase();
+  if (
+    upper === "IT" ||
+    upper.includes("INFORMATION TECHNOLOGY") ||
+    upper.includes("CÔNG NGHỆ THÔNG TIN")
+  )
+    return "IT";
+  if (
+    upper === "BUSINESS" ||
+    upper.includes("BUSINESS") ||
+    upper.includes("KINH DOANH") ||
+    upper.includes("MARKETING")
+  )
+    return "BUSINESS";
+  if (
+    upper === "DESIGN" ||
+    upper.includes("DESIGN") ||
+    upper.includes("THIẾT KẾ") ||
+    upper.includes("SÁNG TẠO")
+  )
+    return "DESIGN";
+  return upper;
 };
 
 const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
-  const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
-  const [expertFields, setExpertFields] = useState<ExpertFieldResponse[]>([]);
-
-  const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
-  const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
-  const [selectedJobRole, setSelectedJobRole] = useState<string | null>(null);
+  const [skillInput, setSkillInput] = useState("");
+  const [resolvedCareer, setResolvedCareer] = useState<{
+    domain: string;
+    industry: string;
+    jobRole: string;
+  } | null>(null);
+  const [customSkillInput, setCustomSkillInput] = useState("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [skillSearch, setSkillSearch] = useState("");
+  const [confirmed, setConfirmed] = useState(false);
 
-  useEffect(() => {
-    const loadFields = async () => {
-      try {
-        setLoading(true);
-        setLoadError(null);
-        const data = await getExpertFields();
-        setExpertFields(data || []);
-      } catch (error) {
-        console.error("Failed to load expert fields:", error);
-        setLoadError("Không tải được danh sách ngành nghề. Vui lòng thử lại.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleResolve = useCallback(
+    (data: {
+      domain: string;
+      industry: string;
+      jobRole: string;
+      keywords?: string;
+    }) => {
+      setResolvedCareer({
+        domain: mapDomainToEnum(data.domain),
+        industry: data.industry,
+        jobRole: data.jobRole,
+      });
+      const trimmed = skillInput.trim();
+      if (trimmed) setSelectedSkills([trimmed]);
+      setConfirmed(true);
+    },
+    [skillInput],
+  );
 
-    loadFields();
-  }, []);
-
-  const domainOptions: ExpertDomainMeta[] = useMemo(() => {
-    const allowedLabels = ["Công nghệ thông tin", "Thiết kế", "Kinh doanh"];
-    return expertFields
-      .map((field) => getExpertDomainMeta(field.domain))
-      .filter(
-        (meta, idx, self) =>
-          allowedLabels.includes(meta.label) &&
-          self.findIndex((m) => m.label === meta.label) === idx,
-      );
-  }, [expertFields]);
-
-  const currentDomain = useMemo(() => {
-    return expertFields.find((field) => field.domain === selectedDomain);
-  }, [expertFields, selectedDomain]);
-
-  // Step 2: industries/sub-categories for selected domain
-  const currentIndustries = useMemo(() => {
-    return (currentDomain?.industries || []).map((industry) => ({
-      value: industry.industry,
-      label: industry.industry,
-    }));
-  }, [currentDomain]);
-
-  // Step 3: job roles filtered by (domain, industry)
-  const currentJobRoles: SkillJobRoleOption[] = useMemo(() => {
-    if (!currentDomain || !selectedIndustry) return [];
-
-    const industry = currentDomain.industries.find(
-      (item) => item.industry === selectedIndustry,
-    );
-    if (!industry) return [];
-
-    return industry.roles.map((role) => {
-      const staticMatch = findStaticRoleMatch(
-        selectedDomain,
-        selectedIndustry,
-        role.jobRole,
-      );
-      const keywordHints = parseKeywords(role.keywords);
-
-      return {
-        value: role.jobRole,
-        label: role.jobRole,
-        icon: staticMatch?.icon || "💼",
-        desc:
-          staticMatch?.desc || keywordHints.slice(0, 2).join(", ") || undefined,
-        keywords: role.keywords,
-        skillKey: staticMatch?.value,
-      };
-    });
-  }, [currentDomain, selectedDomain, selectedIndustry]);
-
-  const selectedDomainMeta = useMemo(() => {
-    return selectedDomain
-      ? domainOptions.find((d) => d.value === selectedDomain)
-      : undefined;
-  }, [domainOptions, selectedDomain]);
-
-  const selectedIndustryLabel = useMemo(() => {
-    return (
-      currentIndustries.find((i) => i.value === selectedIndustry)?.label || ""
-    );
-  }, [currentIndustries, selectedIndustry]);
-
-  const selectedJobRoleMeta = useMemo(() => {
-    return currentJobRoles.find((r) => r.value === selectedJobRole);
-  }, [currentJobRoles, selectedJobRole]);
-
-  // Step 4: predefined skills for selected job role
-  const predefinedSkills = useMemo(() => {
-    if (!selectedJobRoleMeta) return [];
-    return resolveRoleSkills(selectedJobRoleMeta);
-  }, [selectedJobRoleMeta]);
-
-  const filteredPredefinedSkills = useMemo(() => {
-    if (!skillSearch.trim()) return predefinedSkills;
-    const normalizedQuery = skillSearch.trim().toLowerCase();
-    return predefinedSkills.filter((skill) =>
-      skill.toLowerCase().includes(normalizedQuery),
-    );
-  }, [predefinedSkills, skillSearch]);
-
-  const handleRetry = async () => {
-    try {
-      setLoading(true);
-      setLoadError(null);
-      const data = await getExpertFields();
-      setExpertFields(data || []);
-    } catch (error) {
-      console.error("Failed to load expert fields:", error);
-      setLoadError("Không tải được danh sách ngành nghề. Vui lòng thử lại.");
-    } finally {
-      setLoading(false);
-    }
+  const handleAddCustomSkill = () => {
+    const trimmed = customSkillInput.trim();
+    if (!trimmed) return;
+    setSelectedSkills([trimmed]);
+    setCustomSkillInput("");
   };
 
-  const handleDomainSelect = (domain: string) => {
-    setSelectedDomain(domain);
-    setSelectedIndustry(null);
-    setSelectedJobRole(null);
-    setSelectedSkills([]);
-    setSkillSearch("");
-  };
-
-  const handleIndustrySelect = (industry: string) => {
-    setSelectedIndustry(industry);
-    setSelectedJobRole(null);
-    setSelectedSkills([]);
-    setSkillSearch("");
-  };
-
-  const handleJobRoleSelect = (role: string) => {
-    setSelectedJobRole(role);
-    // [Nghiệp vụ] Khi đổi job role, người dùng cần chọn lại 1 kỹ năng mục tiêu thay vì hệ thống tự chọn toàn bộ.
-    setSelectedSkills([]);
-    setSkillSearch("");
-  };
-
-  const handleDeselectSkill = (skill: string) => {
-    setSelectedSkills(selectedSkills.filter((s) => s !== skill));
-  };
-
-  const handleSelectSkill = (skill: string) => {
-    // V3 Single-skill policy: override previous selection
-    setSelectedSkills([skill]);
-  };
-
-  const handleNext = () => {
-    if (step < 4) setStep(step + 1);
-  };
-
-  const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1);
-    } else {
-      onBack();
-    }
-  };
-
-  const mapDomainToEnum = (domainStr: string) => {
-    const meta = getExpertDomainMeta(domainStr);
-    if (meta.label === "Công nghệ thông tin") return "IT";
-    if (meta.label === "Thiết kế") return "DESIGN";
-    if (meta.label === "Kinh doanh") return "BUSINESS";
-    return "IT"; // Fallback to avoid breaking backend
-  };
+  const canSubmit = resolvedCareer && selectedSkills.length > 0;
 
   const handleSubmit = () => {
-    if (
-      selectedDomain &&
-      selectedIndustry &&
-      selectedJobRole &&
-      selectedSkills.length > 0
-    ) {
-      onComplete({
-        domain: mapDomainToEnum(selectedDomain),
-        subCategory: selectedIndustry,
-        jobRole: selectedJobRole,
-        skills: selectedSkills,
-      });
-    }
+    if (!canSubmit) return;
+    onComplete({
+      domain: resolvedCareer!.domain,
+      subCategory: resolvedCareer!.industry,
+      jobRole: resolvedCareer!.jobRole,
+      skills: selectedSkills,
+    });
   };
-
-  const canProceed = () => {
-    switch (step) {
-      case 1:
-        return !!selectedDomain;
-      case 2:
-        return !!selectedIndustry;
-      case 3:
-        return !!selectedJobRole;
-      case 4:
-        return selectedSkills.length > 0;
-      default:
-        return false;
-    }
-  };
-
-  // Step 1: Select Domain
-  const renderStep1 = () => (
-    <div className="gsj-wizard-step">
-      <div className="gsj-wizard-step__header">
-        <h2 className="gsj-wizard-step__title">Chọn lĩnh vực</h2>
-        <p className="gsj-wizard-step__subtitle">
-          Bạn muốn học kỹ năng trong lĩnh vực nào?
-        </p>
-      </div>
-      <div className="gsj-domain-grid">
-        {domainOptions.map((domain) => (
-          <button
-            key={domain.value}
-            type="button"
-            className={`gsj-domain-card ${selectedDomain === domain.value ? "gsj-domain-card--selected" : ""}`}
-            onClick={() => handleDomainSelect(domain.value)}
-          >
-            {domain.image ? (
-              <div className="gsj-domain-card__image-wrap">
-                <img
-                  src={domain.image}
-                  alt={domain.label}
-                  className="gsj-domain-card__image"
-                />
-              </div>
-            ) : (
-              <div className="gsj-domain-card__image-wrap">
-                <span className="gsj-domain-card__icon">{domain.icon}</span>
-              </div>
-            )}
-            <div className="gsj-domain-card__content">
-              <span className="gsj-domain-card__label">{domain.label}</span>
-              <span className="gsj-domain-card__desc">
-                {domain.description}
-              </span>
-            </div>
-            {selectedDomain === domain.value && (
-              <span className="gsj-domain-card__check">
-                <Check size={16} />
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-
-  // Step 2: Select Industry
-  const renderStep2 = () => (
-    <div className="gsj-wizard-step">
-      <div className="gsj-wizard-step__header">
-        <h2 className="gsj-wizard-step__title">Chọn ngành chi tiết</h2>
-        <p className="gsj-wizard-step__subtitle">
-          {selectedDomainMeta?.label} — Bạn muốn học về ngành nào?
-        </p>
-      </div>
-      <div className="gsj-subcategory-grid">
-        {currentIndustries.map((ind) => (
-          <button
-            key={ind.value}
-            type="button"
-            className={`gsj-subcategory-card ${selectedIndustry === ind.value ? "gsj-subcategory-card--selected" : ""}`}
-            onClick={() => handleIndustrySelect(ind.value)}
-          >
-            <span className="gsj-subcategory-card__label">{ind.label}</span>
-            {selectedIndustry === ind.value && (
-              <span className="gsj-subcategory-card__check">
-                <Check size={16} />
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-
-  // Step 3: Select Job Role
-  const renderStep3 = () => (
-    <div className="gsj-wizard-step">
-      <div className="gsj-wizard-step__header">
-        <h2 className="gsj-wizard-step__title">Chọn vị trí công việc</h2>
-        <p className="gsj-wizard-step__subtitle">
-          {selectedDomainMeta?.label} &rsaquo; {selectedIndustryLabel} — Bạn
-          hướng đến vị trí nào?
-        </p>
-      </div>
-      {currentJobRoles.length === 0 ? (
-        <div className="gsj-no-roles">
-          Không tìm thấy vị trí cho ngành này. Vui lòng quay lại và chọn ngành
-          khác.
-        </div>
-      ) : (
-        <div className="gsj-job-grid">
-          {currentJobRoles.map((role) => {
-            const roleKeywords = parseKeywords(role.keywords);
-
-            return (
-              <button
-                key={role.value}
-                type="button"
-                className={`gsj-job-card ${selectedJobRole === role.value ? "gsj-job-card--selected" : ""}`}
-                onClick={() => handleJobRoleSelect(role.value)}
-              >
-                <div className="gsj-job-card__content">
-                  <span className="gsj-job-card__eyebrow">
-                    Vai trò chuyên môn
-                  </span>
-                  <span className="gsj-job-card__label">{role.label}</span>
-                  <span className="gsj-job-card__desc">
-                    {role.desc || selectedIndustryLabel}
-                  </span>
-
-                  {roleKeywords.length > 0 && (
-                    <div className="gsj-job-card__keywords">
-                      {roleKeywords.slice(0, 4).map((keyword) => (
-                        <span
-                          key={`${role.value}-${keyword}`}
-                          className="gsj-job-card__keyword"
-                        >
-                          {keyword}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <span className="gsj-job-card__icon-badge" aria-hidden="true">
-                  {role.icon}
-                </span>
-
-                {selectedJobRole === role.value && (
-                  <span className="gsj-job-card__check">
-                    <Check size={16} />
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-
-  // Step 4: Skill chips — pre-selected, user deselects known skills
-  const renderStep4 = () => (
-    <div className="gsj-wizard-step">
-      <div className="gsj-wizard-step__header">
-        <h2 className="gsj-wizard-step__title">Chọn 1 kỹ năng phát triển chính</h2>
-        <p className="gsj-wizard-step__subtitle">
-          Mỗi Journey tập trung vào 1 kỹ năng cốt lõi. Bước tiếp theo bạn sẽ khai báo
-          riêng các kỹ năng đã có để AI đánh giá chuẩn hơn.
-        </p>
-      </div>
-
-      <div className="gsj-selection-banner">
-        <span className="gsj-selection-banner__item">
-          {selectedDomainMeta?.label || "—"}
-        </span>
-        <span className="gsj-selection-banner__item">
-          {selectedIndustryLabel || "—"}
-        </span>
-        <span className="gsj-selection-banner__item">
-          {selectedJobRoleMeta?.label || "—"}
-        </span>
-      </div>
-
-      <div className="gsj-wizard-section">
-        <h3 className="gsj-wizard-section__title">
-          Kỹ năng chuyên môn cho vị trí {selectedJobRoleMeta?.label}
-          <span className="gsj-hint-text">
-            {" "}
-            — chọn 1 kỹ năng để bắt đầu hành trình
-          </span>
-        </h3>
-
-        {predefinedSkills.length > 0 && (
-          <div className="gsj-skill-picker-toolbar">
-            <div className="gsj-search-input gsj-search-input--compact">
-              <Search size={16} />
-              <input
-                type="text"
-                placeholder="Tìm kỹ năng..."
-                value={skillSearch}
-                onChange={(event) => setSkillSearch(event.target.value)}
-              />
-              {skillSearch && (
-                <button type="button" onClick={() => setSkillSearch("")}>
-                  <X size={14} />
-                </button>
-              )}
-            </div>
-            <p className="gsj-hint-text gsj-hint-text--inline">
-              Kỹ năng mục tiêu: {selectedSkills.length > 0 ? selectedSkills[0] : "Chưa chọn"}
-            </p>
-          </div>
-        )}
-
-        <div className="gsj-target-skill-grid">
-          {filteredPredefinedSkills.map((skill) => {
-            const isSelected = selectedSkills.includes(skill);
-            return (
-              <button
-                key={skill}
-                type="button"
-                className={`gsj-target-skill-card ${isSelected ? "gsj-target-skill-card--selected" : ""}`}
-                onClick={() =>
-                  isSelected
-                    ? handleDeselectSkill(skill)
-                    : handleSelectSkill(skill)
-                }
-              >
-                <div className="gsj-target-skill-card__content">
-                  <span className="gsj-target-skill-card__title">{skill}</span>
-                  <span className="gsj-target-skill-card__subtitle">
-                    {isSelected
-                      ? "Đang là kỹ năng mục tiêu của journey"
-                      : "Nhấn để chọn kỹ năng này làm mục tiêu"}
-                  </span>
-                </div>
-                <span className="gsj-target-skill-card__icon">
-                  {isSelected ? <Check size={16} /> : <ArrowRight size={16} />}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {predefinedSkills.length > 0 &&
-          filteredPredefinedSkills.length === 0 && (
-            <p className="gsj-skill-filter-empty">
-              Không tìm thấy kỹ năng phù hợp với từ khóa &quot;{skillSearch}
-              &quot;.
-            </p>
-          )}
-      </div>
-
-      {predefinedSkills.length === 0 && (
-        <p className="gsj-hint-text">
-          Không tìm thấy danh sách kỹ năng cho vị trí này. Vui lòng quay lại và
-          chọn vị trí khác.
-        </p>
-      )}
-    </div>
-  );
-
-  if (loading) {
-    return (
-      <div className="gsj-wizard-step">
-        <div className="gsj-wizard-step__header">
-          <h2 className="gsj-wizard-step__title">
-            Đang tải dữ liệu nghề nghiệp...
-          </h2>
-          <p className="gsj-wizard-step__subtitle">
-            Vui lòng chờ trong giây lát.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (loadError) {
-    return (
-      <div className="gsj-wizard-step">
-        <div className="gsj-wizard-step__header">
-          <h2 className="gsj-wizard-step__title">
-            Không thể tải danh sách ngành nghề
-          </h2>
-          <p className="gsj-wizard-step__subtitle">{loadError}</p>
-        </div>
-        <div className="gsj-wizard-nav">
-          <button
-            type="button"
-            className="gsj-btn gsj-btn--secondary"
-            onClick={onBack}
-          >
-            <ArrowLeft size={16} /> Quay lại
-          </button>
-          <button
-            type="button"
-            className="gsj-btn gsj-btn--primary"
-            onClick={handleRetry}
-          >
-            <RefreshCw size={16} /> Thử lại
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const stepLabels = ["Lĩnh vực", "Ngành", "Vị trí", "Kỹ năng"];
 
   return (
     <div className="gsj-skill-form">
-      {/* Progress */}
-      <div className="gsj-career-progress">
-        <div className="gsj-career-progress__steps">
-          {[1, 2, 3, 4].map((s) => (
-            <div
-              key={s}
-              className={`gsj-career-progress__step ${step >= s ? "gsj-career-progress__step--active" : ""} ${step > s ? "gsj-career-progress__step--completed" : ""}`}
-            >
-              <div className="gsj-career-progress__step-dot">
-                {step > s ? <Check size={12} /> : s}
+      <div className="gsj-wizard-step">
+        <div className="gsj-wizard-step__header">
+          <h2 className="gsj-wizard-step__title">Nhập kỹ năng muốn học</h2>
+          <p className="gsj-wizard-step__subtitle">
+            Nhập tên kỹ năng — AI sẽ tự động xác định lĩnh vực và lộ trình phù
+            hợp.
+          </p>
+        </div>
+
+        <SkillAutoResolve
+          skillInput={skillInput}
+          onSkillChange={(val) => {
+            setSkillInput(val);
+            setResolvedCareer(null);
+            setConfirmed(false);
+            setSelectedSkills([]);
+          }}
+          onResolve={handleResolve}
+          showManualFallback={false}
+          onBack={onBack}
+          label="Kỹ năng bạn muốn phát triển"
+          description="Nhập bất kỳ kỹ năng nào — AI sẽ tự động gợi ý lộ trình phù hợp."
+          placeholder="Ví dụ: React, Java Spring Boot, UI Design, Digital Marketing..."
+          useAi={true}
+        />
+
+        {confirmed && resolvedCareer && (
+          <div className="gsj-wizard-section" style={{ marginTop: 24 }}>
+            <h3 className="gsj-wizard-section__title">
+              Kỹ năng mục tiêu sẽ học
+            </h3>
+            <p className="gsj-hint-text gsj-hint-text--sm">
+              Xác nhận kỹ năng chính bạn muốn học. Bạn có thể nhập tên khác nếu
+              muốn.
+            </p>
+
+            {selectedSkills.length > 0 && (
+              <div
+                className="gsj-chip-list gsj-chip-list--wrap"
+                style={{ marginBottom: 12 }}
+              >
+                {selectedSkills.map((skill) => (
+                  <span key={skill} className="gsj-chip gsj-chip--selected">
+                    <Check size={14} style={{ marginRight: 4 }} />
+                    {skill}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSkills([])}
+                      style={{ marginLeft: 4 }}
+                    >
+                      <X size={13} />
+                    </button>
+                  </span>
+                ))}
               </div>
-              <span className="gsj-career-progress__step-label">
-                {stepLabels[s - 1]}
-              </span>
+            )}
+
+            <div className="gsj-skill-input-wrapper">
+              <div className="gsj-search-input">
+                <Search size={18} />
+                <input
+                  type="text"
+                  placeholder="Hoặc nhập tên kỹ năng khác..."
+                  value={customSkillInput}
+                  onChange={(e) => setCustomSkillInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleAddCustomSkill();
+                    }
+                  }}
+                />
+                {customSkillInput && (
+                  <button type="button" onClick={() => setCustomSkillInput("")}>
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+              <button
+                type="button"
+                className="gsj-btn gsj-btn--primary gsj-btn--sm"
+                onClick={handleAddCustomSkill}
+                disabled={!customSkillInput.trim()}
+              >
+                <Plus size={16} />
+                Dùng kỹ năng này
+              </button>
             </div>
-          ))}
-        </div>
-        <div className="gsj-career-progress__bar">
-          <div
-            className="gsj-career-progress__bar-fill"
-            style={{ width: `${((step - 1) / 3) * 100}%` }}
-          />
-        </div>
+
+            <p
+              className="gsj-hint-text gsj-hint-text--sm"
+              style={{ marginTop: 8 }}
+            >
+              Lộ trình: <strong>{resolvedCareer.domain}</strong> &rsaquo;{" "}
+              {resolvedCareer.industry} &rsaquo; {resolvedCareer.jobRole}
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Step Content */}
-      {step === 1 && renderStep1()}
-      {step === 2 && renderStep2()}
-      {step === 3 && renderStep3()}
-      {step === 4 && renderStep4()}
-
-      {/* Navigation */}
       <div className="gsj-wizard-nav">
         <button
           type="button"
           className="gsj-btn gsj-btn--secondary"
-          onClick={handleBack}
+          onClick={onBack}
         >
           <ArrowLeft size={16} />
-          {step === 1 ? "Quay lại" : "Trước đó"}
+          Quay lại
         </button>
-
-        {step < 4 ? (
-          <button
-            type="button"
-            className="gsj-btn gsj-btn--primary"
-            onClick={handleNext}
-            disabled={!canProceed()}
-          >
-            Tiếp theo <ArrowRight size={16} />
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="gsj-btn gsj-btn--primary"
-            onClick={handleSubmit}
-            disabled={!canProceed()}
-          >
-            <Check size={16} /> Xác nhận lựa chọn
-          </button>
-        )}
+        <button
+          type="button"
+          className="gsj-btn gsj-btn--primary"
+          onClick={handleSubmit}
+          disabled={!canSubmit}
+        >
+          <Check size={16} />
+          Xác nhận kỹ năng
+        </button>
       </div>
     </div>
   );

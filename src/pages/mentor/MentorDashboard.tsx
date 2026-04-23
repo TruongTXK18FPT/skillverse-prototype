@@ -23,6 +23,7 @@ import MentorGradingDashboard from '../../components/mentor/MentorGradingDashboa
 import MentorCertificateSettingsTab from '../../components/mentor/MentorCertificateSettingsTab';
 import MentorVerificationTab from '../../components/mentor/MentorVerificationTab';
 import MentorQuestionBankTab from '../../components/mentor/MentorQuestionBankTab';
+import MentorRoadmapSettingsTab from '../../components/mentor/MentorRoadmapSettingsTab';
 import '../../styles/MentorPage-HUD.css';
 
 const MentorDashboard: React.FC = () => {
@@ -123,6 +124,8 @@ const MentorDashboard: React.FC = () => {
         return <MentorCertificateSettingsTab />;
       case 'verification':
         return <MentorVerificationTab />;
+      case 'roadmap-settings':
+        return <MentorRoadmapSettingsTab />;
       default:
         return <MentorOverviewHUD onNavigate={handleNavigate} courseCount={courseCount} />;
     }

@@ -27,6 +27,7 @@ interface NodeEvidenceSubmissionPanelProps {
   nodeId: string;
   /** Optional callback when a submission succeeds so parent can refresh. */
   onSubmitted?: (record: NodeEvidenceRecordResponse) => void;
+  compact?: boolean;
 }
 
 const statusBadge = (status: NodeVerificationStatus) => {
@@ -69,6 +70,7 @@ const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
   journeyId,
   nodeId,
   onSubmitted,
+  compact = false,
 }) => {
   const [current, setCurrent] = useState<NodeEvidenceRecordResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -113,14 +115,14 @@ const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
 
   if (loading) {
     return (
-      <div className="nesp-container">
+      <div className={`nesp-container ${compact ? 'nesp-container--compact' : ''}`}>
         <div className="nesp-loading">Đang tải evidence…</div>
       </div>
     );
   }
 
   return (
-    <div className="nesp-container">
+    <div className={`nesp-container ${compact ? 'nesp-container--compact' : ''}`}>
       <div className="nesp-header">
         <div className="nesp-header__title">
           <Shield size={18} />

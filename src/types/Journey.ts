@@ -3860,6 +3860,9 @@ export interface JourneySummaryResponse {
   assessmentAttemptCount?: number;
   maxAssessmentAttempts?: number;
   remainingAssessmentRetakes?: number;
+
+  // V3 Phase 3 — single-journey enforcement
+  hasActiveMentorBooking?: boolean;
 }
 
 /**

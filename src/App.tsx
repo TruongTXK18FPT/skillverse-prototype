@@ -73,6 +73,7 @@ import HelpCenter from "./pages/footer/HelpCenter";
 import BusinessPage from "./pages/main/BusinessPage";
 // Mentor pages - organized in /pages/mentor/
 import MentorDashboard from "./pages/mentor/MentorDashboard";
+import SkillVerificationDetailPage from "./pages/mentor/SkillVerificationDetailPage";
 import AllBadgesPage from "./pages/mentor/AllBadgesPage";
 import MentorGradingPage from "./pages/mentor/MentorGradingPage";
 import CourseCreationPage from "./pages/mentor/course-builder/CourseCreationPage";
@@ -239,6 +240,10 @@ const AppContents = () => {
               }
             />
             <Route path="/mentorship" element={<MentorshipPage />} />
+            <Route
+              path="/mentors/:mentorId/verified-skills/:skillName"
+              element={<SkillVerificationDetailPage />}
+            />
             <Route path="/community" element={<CommunityHUD />} />
             <Route path="/community/:id" element={<PostDetailPage />} />
             <Route path="/community/create" element={<BroadcastForm />} />

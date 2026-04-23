@@ -11,6 +11,7 @@ import {
   PenTool,
   Shield,
   ListChecks,
+  Target,
 } from "lucide-react";
 import "./MentorSidebar.css";
 
@@ -80,6 +81,7 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({
     {
       label: "THIẾT LẬP",
       items: [
+        { id: "roadmap-settings", label: "Đồng hành Roadmap", icon: Target },
         { id: "certificate-settings", label: "Cài đặt chứng chỉ", icon: PenTool },
         { id: "verification", label: "Xác thực skill", icon: Shield },
       ],

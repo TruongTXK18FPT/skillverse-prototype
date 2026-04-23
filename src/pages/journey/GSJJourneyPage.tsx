@@ -37,7 +37,10 @@ import {
   Trash2,
 } from "lucide-react";
 import journeyService from "../../services/journeyService";
-import { getMentorsByVerifiedSkill, type MentorProfile } from "../../services/mentorProfileService";
+import {
+  getMentorsByVerifiedSkill,
+  type MentorProfile,
+} from "../../services/mentorProfileService";
 import BookingModal from "../../components/mentorship-hud/BookingModal";
 import {
   JourneySummaryResponse,
@@ -189,35 +192,40 @@ const SCORE_BAND_FRAMEWORK: ScoreBandFrameworkItem[] = [
     label: "Nền tảng 0",
     range: "0-20%",
     recommendation: "FROM_ZERO",
-    description: "Bắt đầu từ kiến thức cốt lõi, cần roadmap nhập môn theo từng bước.",
+    description:
+      "Bắt đầu từ kiến thức cốt lõi, cần roadmap nhập môn theo từng bước.",
   },
   {
     key: "FOUNDATION",
     label: "Nền tảng",
     range: "21-45%",
     recommendation: "FOUNDATION",
-    description: "Đã có nhận biết cơ bản, nên củng cố nền trước khi tăng độ khó.",
+    description:
+      "Đã có nhận biết cơ bản, nên củng cố nền trước khi tăng độ khó.",
   },
   {
     key: "CORE",
     label: "Cốt lõi",
     range: "46-70%",
     recommendation: "STANDARD",
-    description: "Đạt mức thực hành lõi, phù hợp lộ trình học tiêu chuẩn để bứt lên.",
+    description:
+      "Đạt mức thực hành lõi, phù hợp lộ trình học tiêu chuẩn để bứt lên.",
   },
   {
     key: "ADVANCED",
     label: "Nâng cao",
     range: "71-85%",
     recommendation: "ADVANCED",
-    description: "Năng lực khá tốt, nên tập trung bài toán thực chiến và mở rộng phạm vi.",
+    description:
+      "Năng lực khá tốt, nên tập trung bài toán thực chiến và mở rộng phạm vi.",
   },
   {
     key: "EXPERT",
     label: "Chuyên sâu",
     range: "86-100%",
     recommendation: "FAST_TRACK",
-    description: "Năng lực mạnh, phù hợp lộ trình tăng tốc hoặc chuyên sâu theo mục tiêu cao hơn.",
+    description:
+      "Năng lực mạnh, phù hợp lộ trình tăng tốc hoặc chuyên sâu theo mục tiêu cao hơn.",
   },
 ];
 
@@ -230,17 +238,20 @@ const LEVEL_FRAMEWORK: LevelFrameworkItem[] = [
   {
     key: SkillLevel.INTERMEDIATE,
     range: "41-70%",
-    description: "Có năng lực thực hành cơ bản, cần tăng độ ổn định và chiều sâu.",
+    description:
+      "Có năng lực thực hành cơ bản, cần tăng độ ổn định và chiều sâu.",
   },
   {
     key: SkillLevel.ADVANCED,
     range: "71-85%",
-    description: "Làm tốt phần lớn tình huống điển hình, sẵn sàng cho thử thách khó hơn.",
+    description:
+      "Làm tốt phần lớn tình huống điển hình, sẵn sàng cho thử thách khó hơn.",
   },
   {
     key: SkillLevel.EXPERT,
     range: "86-100%",
-    description: "Đủ vững để xử lý bài toán phức tạp, có thể tăng tốc theo chuyên môn hẹp.",
+    description:
+      "Đủ vững để xử lý bài toán phức tạp, có thể tăng tốc theo chuyên môn hẹp.",
   },
 ];
 
@@ -291,7 +302,6 @@ const GSJJourneyPage: React.FC = () => {
   const [currentResult, setCurrentResult] = useState<TestResultResponse | null>(
     null,
   );
-  const [showDetailedFeedback, setShowDetailedFeedback] = useState(false);
   const [showAllQuestionReviews, setShowAllQuestionReviews] = useState(false);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -301,16 +311,18 @@ const GSJJourneyPage: React.FC = () => {
   const [pendingDelete, setPendingDelete] = useState<DeleteDialogState>(null);
   const [error, setError] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { toast, isVisible, showError, showSuccess, showWarning, hideToast } = useToast();
+  const { toast, isVisible, showError, showSuccess, showWarning, hideToast } =
+    useToast();
 
   // V3 Phase 1: Mentor suggestion by verified skill
   const [suggestedMentors, setSuggestedMentors] = useState<MentorProfile[]>([]);
-  const [bookingMentor, setBookingMentor] = useState<MentorProfile | null>(null);
+  const [bookingMentor, setBookingMentor] = useState<MentorProfile | null>(
+    null,
+  );
   const [showMentorList, setShowMentorList] = useState(false);
   const [loadingMentors, setLoadingMentors] = useState(false);
 
   useEffect(() => {
-    setShowDetailedFeedback(false);
     setShowAllQuestionReviews(false);
   }, [currentResult?.id]);
 
@@ -372,7 +384,10 @@ const GSJJourneyPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const totalPages = Math.max(1, Math.ceil(journeys.length / JOURNEYS_PER_PAGE));
+    const totalPages = Math.max(
+      1,
+      Math.ceil(journeys.length / JOURNEYS_PER_PAGE),
+    );
     if (currentPage > totalPages) {
       setCurrentPage(totalPages);
     }
@@ -438,26 +453,31 @@ const GSJJourneyPage: React.FC = () => {
                   : "Meowl đang chuẩn bị cho bạn đây...";
 
   // Select journey and load details
-  const handleSelectJourney = useCallback(async (journeyId: number) => {
-    try {
-      setLoading(true);
-      const selectedIndex = journeys.findIndex((journey) => journey.id === journeyId);
-      if (selectedIndex >= 0) {
-        setCurrentPage(Math.floor(selectedIndex / JOURNEYS_PER_PAGE) + 1);
+  const handleSelectJourney = useCallback(
+    async (journeyId: number) => {
+      try {
+        setLoading(true);
+        const selectedIndex = journeys.findIndex(
+          (journey) => journey.id === journeyId,
+        );
+        if (selectedIndex >= 0) {
+          setCurrentPage(Math.floor(selectedIndex / JOURNEYS_PER_PAGE) + 1);
+        }
+        const detail = await journeyService.getJourneyById(journeyId);
+        setSelectedJourney(detail);
+        setCurrentTest(null);
+        setCurrentResult(null);
+        setViewMode("detail");
+        setError(null);
+      } catch (err: any) {
+        console.error("Failed to load journey details:", err);
+        setError(err.message || "Failed to load journey details");
+      } finally {
+        setLoading(false);
       }
-      const detail = await journeyService.getJourneyById(journeyId);
-      setSelectedJourney(detail);
-      setCurrentTest(null);
-      setCurrentResult(null);
-      setViewMode("detail");
-      setError(null);
-    } catch (err: any) {
-      console.error("Failed to load journey details:", err);
-      setError(err.message || "Failed to load journey details");
-    } finally {
-      setLoading(false);
-    }
-  }, [journeys]);
+    },
+    [journeys],
+  );
 
   useEffect(() => {
     const routeState = location.state as { autoOpenJourneyId?: number } | null;
@@ -477,14 +497,41 @@ const GSJJourneyPage: React.FC = () => {
     navigate(location.pathname, { replace: true, state: null });
   }, [handleSelectJourney, location.pathname, location.state, navigate, user]);
 
+  // V3 Phase 3: Handle blockReason from JourneyCreatePage redirect
+  useEffect(() => {
+    const routeState = location.state as { blockReason?: string } | null;
+    const blockReason = routeState?.blockReason;
+    if (blockReason) {
+      showWarning("Không thể tạo hành trình mới", blockReason);
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.pathname, location.state, navigate, showWarning]);
+
+  // V3 Phase 3: Compute whether user has any active (non-terminal) journey
+  const hasActiveJourney = journeys.some(
+    (j) =>
+      j.status !== JourneyStatus.COMPLETED &&
+      j.status !== JourneyStatus.CANCELLED &&
+      j.status !== JourneyStatus.COMPLETED_UNVERIFIED &&
+      j.status !== JourneyStatus.COMPLETED_VERIFIED,
+  );
+
   const handleCreateJourneyClick = useCallback(() => {
     if (!user) {
       setShowLoginModal(true);
       return;
     }
 
+    if (hasActiveJourney) {
+      showWarning(
+        "Không thể tạo hành trình mới",
+        "Bạn đang có một hành trình chưa hoàn thành. Hãy hoàn thành hoặc xóa hành trình cũ trước khi tạo mới.",
+      );
+      return;
+    }
+
     navigate("/journey/create");
-  }, [navigate, user]);
+  }, [navigate, user, hasActiveJourney, showWarning]);
 
   const syncSelectedJourneyTest = useCallback(
     (test: AssessmentTestResponse) => {
@@ -701,23 +748,39 @@ const GSJJourneyPage: React.FC = () => {
       setActionLoading(true);
       setActionMode("toggling-status");
 
-      const completedJourney = await journeyService.completeJourney(selectedJourney.id);
+      const completedJourney = await journeyService.completeJourney(
+        selectedJourney.id,
+      );
       const detail = await journeyService.getJourneyById(completedJourney.id);
       setSelectedJourney(detail);
       await loadJourneys();
       setError(null);
-      showSuccess("Hoàn thành hành trình", "Journey đã được cập nhật trạng thái hoàn thành.");
+      showSuccess(
+        "Hoàn thành hành trình",
+        "Journey đã được cập nhật trạng thái hoàn thành.",
+      );
     } catch (err: any) {
-      const statusCode = (err as { status?: number })?.status ?? (err?.response?.status as number | undefined);
-      const message: string = err?.response?.data?.message || err?.message || "Không thể hoàn thành hành trình";
+      const statusCode =
+        (err as { status?: number })?.status ??
+        (err?.response?.status as number | undefined);
+      const message: string =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Không thể hoàn thành hành trình";
 
       if (statusCode === 409) {
-        showWarning("Gate blocked", message || "Hành trình chưa đạt final verification gate.");
+        showWarning(
+          "Gate blocked",
+          message || "Hành trình chưa đạt final verification gate.",
+        );
         return;
       }
 
       if (statusCode === 500 && message.toLowerCase().includes("constraint")) {
-        showError("Lỗi hệ thống", "Cơ sở dữ liệu chưa được cập nhật. Vui lòng liên hệ admin để chạy patch SQL.");
+        showError(
+          "Lỗi hệ thống",
+          "Cơ sở dữ liệu chưa được cập nhật. Vui lòng liên hệ admin để chạy patch SQL.",
+        );
         return;
       }
 
@@ -733,13 +796,21 @@ const GSJJourneyPage: React.FC = () => {
     try {
       setActionLoading(true);
       setActionMode("toggling-status");
-      const updated = await journeyService.requestVerification(selectedJourney.id);
+      const updated = await journeyService.requestVerification(
+        selectedJourney.id,
+      );
       const detail = await journeyService.getJourneyById(updated.id);
       setSelectedJourney(detail);
       await loadJourneys();
-      showSuccess("Yêu cầu đã gửi", "Hành trình đã chuyển sang trạng thái chờ xác thực mentor.");
+      showSuccess(
+        "Yêu cầu đã gửi",
+        "Hành trình đã chuyển sang trạng thái chờ xác thực mentor.",
+      );
     } catch (err: any) {
-      showError("Không thể yêu cầu xác thực", err?.message || "Vui lòng thử lại.");
+      showError(
+        "Không thể yêu cầu xác thực",
+        err?.message || "Vui lòng thử lại.",
+      );
     } finally {
       setActionLoading(false);
       setActionMode("idle");
@@ -775,7 +846,10 @@ const GSJJourneyPage: React.FC = () => {
       setActionMode("deleting-journey");
       await journeyService.deleteJourney(pendingDelete.journeyId);
 
-      if (selectedJourney?.id === pendingDelete.journeyId || pendingDelete.fromDetail) {
+      if (
+        selectedJourney?.id === pendingDelete.journeyId ||
+        pendingDelete.fromDetail
+      ) {
         setSelectedJourney(null);
         setCurrentTest(null);
         setCurrentResult(null);
@@ -848,11 +922,10 @@ const GSJJourneyPage: React.FC = () => {
     return jobRole;
   };
 
-  const isCompletedJourneyStatus = (status: JourneyStatus): boolean => (
-    status === JourneyStatus.COMPLETED
-    || status === JourneyStatus.COMPLETED_UNVERIFIED
-    || status === JourneyStatus.COMPLETED_VERIFIED
-  );
+  const isCompletedJourneyStatus = (status: JourneyStatus): boolean =>
+    status === JourneyStatus.COMPLETED ||
+    status === JourneyStatus.COMPLETED_UNVERIFIED ||
+    status === JourneyStatus.COMPLETED_VERIFIED;
 
   // Get status label
   const getStatusLabel = (status: JourneyStatus): string => {
@@ -1477,15 +1550,18 @@ const GSJJourneyPage: React.FC = () => {
   );
   const currentPageStart =
     totalJourneys === 0 ? 0 : (currentPage - 1) * JOURNEYS_PER_PAGE + 1;
-  const currentPageEnd = Math.min(currentPage * JOURNEYS_PER_PAGE, totalJourneys);
+  const currentPageEnd = Math.min(
+    currentPage * JOURNEYS_PER_PAGE,
+    totalJourneys,
+  );
   const activeJourneys = journeys.filter((journey) =>
     activeJourneyStatuses.includes(journey.status),
   ).length;
   const pausedJourneys = journeys.filter(
     (journey) => journey.status === JourneyStatus.PAUSED,
   ).length;
-  const completedJourneys = journeys.filter(
-    (journey) => isCompletedJourneyStatus(journey.status),
+  const completedJourneys = journeys.filter((journey) =>
+    isCompletedJourneyStatus(journey.status),
   ).length;
   const assessmentJourneys = journeys.filter((journey) =>
     assessmentJourneyStatuses.includes(journey.status),
@@ -1550,9 +1626,12 @@ const GSJJourneyPage: React.FC = () => {
   const selectedJourneyHasTest = Boolean(selectedJourney?.assessmentTestId);
   const selectedJourneyHasRoadmap = Boolean(selectedJourney?.roadmapSessionId);
   // Roadmap đã hoàn thành: có roadmap và progress đạt 100%
-  const selectedJourneyHasProgress = selectedJourneyHasRoadmap &&
-    (selectedJourneyProgress > 0 || selectedJourney?.status !== JourneyStatus.ACTIVE);
-  const selectedJourneyRoadmapCompleted = selectedJourneyHasRoadmap && selectedJourneyProgress >= 100;
+  const selectedJourneyHasProgress =
+    selectedJourneyHasRoadmap &&
+    (selectedJourneyProgress > 0 ||
+      selectedJourney?.status !== JourneyStatus.IN_PROGRESS);
+  const selectedJourneyRoadmapCompleted =
+    selectedJourneyHasRoadmap && selectedJourneyProgress >= 100;
   const selectedJourneyStepLabel = selectedJourney
     ? [
         "Đánh giá ban đầu",
@@ -1766,7 +1845,11 @@ const GSJJourneyPage: React.FC = () => {
                 className="gsj-btn gsj-btn--secondary gsj-btn--lg"
                 onClick={handleMyJourneysButtonClick}
               >
-                {viewMode === "list" ? <Map size={20} /> : <ArrowLeft size={20} />}
+                {viewMode === "list" ? (
+                  <Map size={20} />
+                ) : (
+                  <ArrowLeft size={20} />
+                )}
                 {viewMode === "list" ? "Xem hành trình của tôi" : "Quay lại"}
               </button>
             )}
@@ -2024,7 +2107,8 @@ const GSJJourneyPage: React.FC = () => {
         <div className="gsj-section-header__actions">
           {totalJourneys > 0 && (
             <span className="gsj-journey-pagination__summary">
-              Hiển thị {currentPageStart}-{currentPageEnd} trên {totalJourneys} hành trình
+              Hiển thị {currentPageStart}-{currentPageEnd} trên {totalJourneys}{" "}
+              hành trình
             </span>
           )}
           <button
@@ -2108,14 +2192,21 @@ const GSJJourneyPage: React.FC = () => {
                       <button
                         type="button"
                         className="gsj-journey-card__delete"
-                        onClick={(event) =>
+                        onClick={(event) => {
+                          if (journey.hasActiveMentorBooking) {
+                            showWarning(
+                              "Không thể xóa",
+                              "Hành trình đã được book mentor. Bạn cần hoàn thành lộ trình học và giải phóng tiền cho mentor trước.",
+                            );
+                            return;
+                          }
                           handleDeleteJourney(journey.id, {
                             event,
                             journeyLabel: `"${journeyLabel}"`,
-                          })
-                        }
+                          });
+                        }}
                         disabled={actionLoading}
-                        title="Xóa hành trình"
+                        title={journey.hasActiveMentorBooking ? "Không thể xóa — đã book mentor" : "Xóa hành trình"}
                         aria-label={`Xóa hành trình ${journeyLabel}`}
                       >
                         <Trash2 size={14} />
@@ -2132,7 +2223,10 @@ const GSJJourneyPage: React.FC = () => {
                     journey.skills.length > 0 && (
                       <div className="gsj-journey-card__skills">
                         {journey.skills.slice(0, 3).map((skill, idx) => (
-                          <span key={idx} className="gsj-journey-card__skill-tag">
+                          <span
+                            key={idx}
+                            className="gsj-journey-card__skill-tag"
+                          >
                             {skill}
                           </span>
                         ))}
@@ -2167,7 +2261,9 @@ const GSJJourneyPage: React.FC = () => {
                       {journey.startedAt && (
                         <span className="gsj-journey-card__date">
                           <Calendar size={12} />
-                          {new Date(journey.startedAt).toLocaleDateString("vi-VN")}
+                          {new Date(journey.startedAt).toLocaleDateString(
+                            "vi-VN",
+                          )}
                         </span>
                       )}
                     </div>
@@ -2194,25 +2290,28 @@ const GSJJourneyPage: React.FC = () => {
               </button>
 
               <div className="gsj-pagination__pages">
-                {Array.from({ length: totalJourneyPages }, (_, index) => index + 1).map(
-                  (pageNumber) => (
-                    <button
-                      key={pageNumber}
-                      type="button"
-                      className={`gsj-pagination__page${pageNumber === currentPage ? " gsj-pagination__page--active" : ""}`}
-                      onClick={() => setCurrentPage(pageNumber)}
-                    >
-                      {pageNumber}
-                    </button>
-                  ),
-                )}
+                {Array.from(
+                  { length: totalJourneyPages },
+                  (_, index) => index + 1,
+                ).map((pageNumber) => (
+                  <button
+                    key={pageNumber}
+                    type="button"
+                    className={`gsj-pagination__page${pageNumber === currentPage ? " gsj-pagination__page--active" : ""}`}
+                    onClick={() => setCurrentPage(pageNumber)}
+                  >
+                    {pageNumber}
+                  </button>
+                ))}
               </div>
 
               <button
                 type="button"
                 className="gsj-btn gsj-btn--secondary gsj-pagination__nav"
                 onClick={() =>
-                  setCurrentPage((prev) => Math.min(totalJourneyPages, prev + 1))
+                  setCurrentPage((prev) =>
+                    Math.min(totalJourneyPages, prev + 1),
+                  )
                 }
                 disabled={currentPage === totalJourneyPages}
               >
@@ -2411,11 +2510,10 @@ const GSJJourneyPage: React.FC = () => {
             {selectedJourney.status === JourneyStatus.AWAITING_VERIFICATION && (
               <div className="gsj-mb-16">
                 <div className="gsj-info-banner">
-                  ⏳ Hành trình đang chờ mentor xác thực. Khi mentor đã PASS, bạn có thể hoàn thành hành trình.
+                  ⏳ Hành trình đang chờ mentor xác thực. Khi mentor đã PASS,
+                  bạn có thể hoàn thành hành trình.
                 </div>
-                <JourneyOutputAssessmentPanel
-                  journeyId={selectedJourney.id}
-                />
+                <JourneyOutputAssessmentPanel journeyId={selectedJourney.id} />
                 <JourneyVerificationDossier
                   journeyId={selectedJourney.id}
                   journeyTitle={selectedJourney.goal}
@@ -2428,7 +2526,8 @@ const GSJJourneyPage: React.FC = () => {
             )}
 
             {(selectedJourney.status === JourneyStatus.COMPLETED_VERIFIED ||
-              selectedJourney.status === JourneyStatus.COMPLETED_UNVERIFIED) && (
+              selectedJourney.status ===
+                JourneyStatus.COMPLETED_UNVERIFIED) && (
               <div className="gsj-mb-16">
                 <JourneyVerificationDossier
                   journeyId={selectedJourney.id}
@@ -2442,124 +2541,243 @@ const GSJJourneyPage: React.FC = () => {
               selectedJourney.roadmapSessionId &&
               !selectedJourney.finalVerificationRequired &&
               !isCompletedJourneyStatus(selectedJourney.status) &&
-              selectedJourney.status !== JourneyStatus.AWAITING_VERIFICATION && (
-              <div className="gsj-mb-16" style={{ border: '1px solid rgba(56,189,248,0.2)', borderRadius: '10px', padding: '12px' }}>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '8px' }}>
-                  Học có mentor giúp bạn được xác thực kỹ năng và nhận <strong style={{ color: '#22c55e' }}>COMPLETED_VERIFIED</strong>
-                </div>
-                {!showMentorList ? (
-                  <button
-                    className="gsj-btn gsj-btn--secondary"
-                    style={{ width: '100%', justifyContent: 'center', fontSize: '0.85rem' }}
-                    onClick={() => {
-                      setShowMentorList(true);
-                      if (suggestedMentors.length === 0) {
-                        setLoadingMentors(true);
-                        getMentorsByVerifiedSkill(selectedJourney.skillName!)
-                          .then(setSuggestedMentors)
-                          .catch(() => setSuggestedMentors([]))
-                          .finally(() => setLoadingMentors(false));
-                      }
+              selectedJourney.status !==
+                JourneyStatus.AWAITING_VERIFICATION && (
+                <div
+                  className="gsj-mb-16"
+                  style={{
+                    border: "1px solid rgba(56,189,248,0.2)",
+                    borderRadius: "10px",
+                    padding: "12px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "#64748b",
+                      marginBottom: "8px",
                     }}
                   >
-                    🎯 Tìm mentor phù hợp kỹ năng <strong style={{ color: '#38bdf8', marginLeft: 4 }}>{selectedJourney.skillName}</strong>
-                  </button>
-                ) : (
-                  <>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                      <div className="gsj-section-title" style={{ fontSize: '0.9rem', fontWeight: 600, color: '#94a3b8', margin: 0 }}>
-                        🎯 Mentor kỹ năng <strong style={{ color: '#38bdf8' }}>{selectedJourney.skillName}</strong>
-                      </div>
-                      <button
-                        style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '0.75rem' }}
-                        onClick={() => setShowMentorList(false)}
+                    Học có mentor giúp bạn được xác thực kỹ năng và nhận{" "}
+                    <strong style={{ color: "#22c55e" }}>
+                      COMPLETED_VERIFIED
+                    </strong>
+                  </div>
+                  {!showMentorList ? (
+                    <button
+                      className="gsj-btn gsj-btn--secondary"
+                      style={{
+                        width: "100%",
+                        justifyContent: "center",
+                        fontSize: "0.85rem",
+                      }}
+                      onClick={() => {
+                        setShowMentorList(true);
+                        if (suggestedMentors.length === 0) {
+                          setLoadingMentors(true);
+                          getMentorsByVerifiedSkill(selectedJourney.skillName!)
+                            .then(setSuggestedMentors)
+                            .catch(() => setSuggestedMentors([]))
+                            .finally(() => setLoadingMentors(false));
+                        }
+                      }}
+                    >
+                      🎯 Tìm mentor phù hợp kỹ năng{" "}
+                      <strong style={{ color: "#38bdf8", marginLeft: 4 }}>
+                        {selectedJourney.skillName}
+                      </strong>
+                    </button>
+                  ) : (
+                    <>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          marginBottom: "8px",
+                        }}
                       >
-                        Ẩn ▲
-                      </button>
-                    </div>
-                    {loadingMentors ? (
-                      <div style={{ fontSize: '0.8rem', color: '#64748b', textAlign: 'center', padding: '8px 0' }}>Đang tìm...</div>
-                    ) : suggestedMentors.length === 0 ? (
-                      <div style={{ fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic' }}>
-                        Chưa có mentor nào xác thực kỹ năng này.
+                        <div
+                          className="gsj-section-title"
+                          style={{
+                            fontSize: "0.9rem",
+                            fontWeight: 600,
+                            color: "#94a3b8",
+                            margin: 0,
+                          }}
+                        >
+                          🎯 Mentor kỹ năng{" "}
+                          <strong style={{ color: "#38bdf8" }}>
+                            {selectedJourney.skillName}
+                          </strong>
+                        </div>
+                        <button
+                          style={{
+                            background: "none",
+                            border: "none",
+                            color: "#64748b",
+                            cursor: "pointer",
+                            fontSize: "0.75rem",
+                          }}
+                          onClick={() => setShowMentorList(false)}
+                        >
+                          Ẩn ▲
+                        </button>
                       </div>
-                    ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {suggestedMentors.slice(0, 3).map((mentor) => (
-                          <div
-                            key={mentor.id}
-                            style={{
-                              display: 'flex', alignItems: 'center', gap: '10px',
-                              background: 'rgba(15,23,42,0.6)', border: '1px solid rgba(148,163,184,0.15)',
-                              borderRadius: '8px', padding: '8px 12px',
-                            }}
-                          >
-                            {mentor.avatar ? (
-                              <img src={mentor.avatar} alt={mentor.firstName} style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
-                            ) : (
-                              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(56,189,248,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: '#38bdf8', fontWeight: 700 }}>
-                                {(mentor.firstName?.[0] ?? '?').toUpperCase()}
-                              </div>
-                            )}
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#e2e8f0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                {mentor.firstName} {mentor.lastName}
-                              </div>
-                              <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-                                {mentor.ratingAverage != null && <>⭐ {mentor.ratingAverage.toFixed(1)} · </>}
-                                {mentor.hourlyRate != null ? mentor.hourlyRate.toLocaleString('vi-VN') + ' VNĐ/giờ' : 'Liên hệ'}
-                              </div>
-                            </div>
-                            <button
-                              className="gsj-btn gsj-btn--primary"
-                              style={{ padding: '4px 12px', fontSize: '0.78rem' }}
-                              onClick={() => setBookingMentor(mentor)}
+                      {loadingMentors ? (
+                        <div
+                          style={{
+                            fontSize: "0.8rem",
+                            color: "#64748b",
+                            textAlign: "center",
+                            padding: "8px 0",
+                          }}
+                        >
+                          Đang tìm...
+                        </div>
+                      ) : suggestedMentors.length === 0 ? (
+                        <div
+                          style={{
+                            fontSize: "0.8rem",
+                            color: "#64748b",
+                            fontStyle: "italic",
+                          }}
+                        >
+                          Chưa có mentor nào xác thực kỹ năng này.
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "8px",
+                          }}
+                        >
+                          {suggestedMentors.slice(0, 3).map((mentor) => (
+                            <div
+                              key={mentor.id}
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                background: "rgba(15,23,42,0.6)",
+                                border: "1px solid rgba(148,163,184,0.15)",
+                                borderRadius: "8px",
+                                padding: "8px 12px",
+                              }}
                             >
-                              Book
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            )}
+                              {mentor.avatar ? (
+                                <img
+                                  src={mentor.avatar}
+                                  alt={mentor.firstName}
+                                  style={{
+                                    width: 32,
+                                    height: 32,
+                                    borderRadius: "50%",
+                                    objectFit: "cover",
+                                  }}
+                                />
+                              ) : (
+                                <div
+                                  style={{
+                                    width: 32,
+                                    height: 32,
+                                    borderRadius: "50%",
+                                    background: "rgba(56,189,248,0.2)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontSize: "0.75rem",
+                                    color: "#38bdf8",
+                                    fontWeight: 700,
+                                  }}
+                                >
+                                  {(mentor.firstName?.[0] ?? "?").toUpperCase()}
+                                </div>
+                              )}
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div
+                                  style={{
+                                    fontSize: "0.85rem",
+                                    fontWeight: 600,
+                                    color: "#e2e8f0",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                  }}
+                                >
+                                  {mentor.firstName} {mentor.lastName}
+                                </div>
+                                <div
+                                  style={{
+                                    fontSize: "0.75rem",
+                                    color: "#94a3b8",
+                                  }}
+                                >
+                                  {mentor.ratingAverage != null && (
+                                    <>⭐ {mentor.ratingAverage.toFixed(1)} · </>
+                                  )}
+                                  {mentor.hourlyRate != null
+                                    ? mentor.hourlyRate.toLocaleString(
+                                        "vi-VN",
+                                      ) + " VNĐ/giờ"
+                                    : "Liên hệ"}
+                                </div>
+                              </div>
+                              <button
+                                className="gsj-btn gsj-btn--primary"
+                                style={{
+                                  padding: "4px 12px",
+                                  fontSize: "0.78rem",
+                                }}
+                                onClick={() => setBookingMentor(mentor)}
+                              >
+                                Book
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
 
             {!isCompletedJourneyStatus(selectedJourney.status) &&
               selectedJourney.status !== JourneyStatus.AWAITING_VERIFICATION &&
               selectedJourneyHasProgress && (
-              <div className="gsj-mb-16">
-                <NodeVerificationGate
-                  journeyId={selectedJourney.id}
-                  onCompleteClick={handleCompleteJourney}
-                  onRequestVerificationClick={
-                    selectedJourney.finalVerificationRequired
-                      ? handleRequestVerification
-                      : undefined
-                  }
-                />
-                {!selectedJourney.finalVerificationRequired && selectedJourneyRoadmapCompleted && (
-                  <button
-                    className="gsj-btn gsj-btn--primary gsj-btn--full gsj-mt-12"
-                    onClick={handleCompleteJourney}
-                    disabled={actionLoading}
-                  >
-                    {actionLoading ? (
-                      <>
-                        <RefreshCw size={16} className="gsj-spin" />
-                        Đang hoàn thành journey...
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle size={16} />
-                        Hoàn thành journey
-                      </>
+                <div className="gsj-mb-16">
+                  <NodeVerificationGate
+                    journeyId={selectedJourney.id}
+                    onCompleteClick={handleCompleteJourney}
+                    onRequestVerificationClick={
+                      selectedJourney.finalVerificationRequired
+                        ? handleRequestVerification
+                        : undefined
+                    }
+                  />
+                  {!selectedJourney.finalVerificationRequired &&
+                    selectedJourneyRoadmapCompleted && (
+                      <button
+                        className="gsj-btn gsj-btn--primary gsj-btn--full gsj-mt-12"
+                        onClick={handleCompleteJourney}
+                        disabled={actionLoading}
+                      >
+                        {actionLoading ? (
+                          <>
+                            <RefreshCw size={16} className="gsj-spin" />
+                            Đang hoàn thành journey...
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle size={16} />
+                            Hoàn thành journey
+                          </>
+                        )}
+                      </button>
                     )}
-                  </button>
-                )}
-              </div>
-            )}
+                </div>
+              )}
 
             {canTakeTest && (
               <button
@@ -2676,16 +2894,24 @@ const GSJJourneyPage: React.FC = () => {
 
             <button
               className="gsj-btn gsj-btn--danger gsj-btn--full gsj-mt-16"
-              onClick={() =>
+              onClick={() => {
+                if (selectedJourney.hasActiveMentorBooking) {
+                  showWarning(
+                    "Không thể xóa",
+                    "Hành trình đã được book mentor. Bạn cần hoàn thành lộ trình học và giải phóng tiền cho mentor trước.",
+                  );
+                  return;
+                }
                 handleDeleteJourney(selectedJourney.id, {
                   journeyLabel: `"${roleTitle}"`,
                   fromDetail: true,
-                })
-              }
-              disabled={actionLoading}
+                });
+              }}
+              disabled={actionLoading || !!selectedJourney.hasActiveMentorBooking}
+              title={selectedJourney.hasActiveMentorBooking ? "Không thể xóa — đã book mentor" : "Xóa hành trình"}
             >
               <Trash2 size={16} />
-              Xóa hành trình
+              {selectedJourney.hasActiveMentorBooking ? "Đã book mentor — không thể xóa" : "Xóa hành trình"}
             </button>
           </div>
         </div>
@@ -2898,13 +3124,6 @@ const GSJJourneyPage: React.FC = () => {
   const renderResultView = () => {
     if (!currentResult) return null;
 
-    const completionRate =
-      currentResult.totalQuestions > 0
-        ? Math.round(
-            (currentResult.answeredQuestions / currentResult.totalQuestions) *
-              100,
-          )
-        : 0;
     const correctRate =
       currentResult.totalQuestions > 0
         ? Math.round(
@@ -2928,59 +3147,13 @@ const GSJJourneyPage: React.FC = () => {
       currentResult.score,
     );
 
-    const strengths =
-      currentResult.overallStrengths.length > 0
-        ? currentResult.overallStrengths
-        : [
-            "Chưa có nhóm điểm mạnh rõ ràng. Cần thêm dữ liệu từ các lần luyện tập tiếp theo.",
-          ];
-    const weaknesses =
-      currentResult.overallWeaknesses.length > 0
-        ? currentResult.overallWeaknesses
-        : [
-            "Hiện chưa phát hiện nhóm điểm yếu lớn. Hãy tiếp tục luyện tập để xác thực kết quả.",
-          ];
-    const improvementTips =
-      currentResult.improvementTips.length > 0
-        ? currentResult.improvementTips
-        : ["Tiếp tục hoàn thành các bài học nền tảng để củng cố kiến thức."];
-    const strengthItems = splitInsightItems(
-      strengths,
-      "Chưa có dữ liệu điểm mạnh nổi bật.",
-    );
-    const weaknessItems = splitInsightItems(
-      weaknesses,
-      "Chưa có dữ liệu điểm cần cải thiện.",
-    );
-    const tipItems = splitInsightItems(
-      improvementTips,
-      "Hãy tiếp tục học theo roadmap để cải thiện kết quả.",
-    );
-    const resultHighlightKeywords = normalizeHighlightKeywords(
-      currentResult.highlightKeywords.length > 0
-        ? currentResult.highlightKeywords
-        : [
-            ...currentResult.skillGaps,
-            ...currentResult.skillAnalysis.map((skill) => skill.skillName),
-            currentResult.evaluatedLevel,
-          ].filter(
-            (item): item is string =>
-              typeof item === "string" && item.trim().length > 0,
-          ),
-    );
-    const questionPreviewLimit = 8;
+    const questionPreviewLimit = 10;
     const totalQuestionReviews = currentResult.questionReviews.length;
     const hasHiddenQuestionReviews =
       totalQuestionReviews > questionPreviewLimit;
     const visibleQuestionReviews = showAllQuestionReviews
       ? currentResult.questionReviews
       : currentResult.questionReviews.slice(0, questionPreviewLimit);
-    const reviewByQuestionId = new globalThis.Map(
-      currentResult.questionReviews.map((review) => [
-        review.questionId,
-        review,
-      ]),
-    );
 
     return (
       <div className="gsj-card">
@@ -2995,697 +3168,243 @@ const GSJJourneyPage: React.FC = () => {
         </div>
 
         <div className="gsj-card__body">
+          {/* ── Hero Score ── */}
           <div
-            className={`gsj-result-panel ${currentResult.passed ? "gsj-result-panel--pass" : "gsj-result-panel--fail"}`}
+            className={`gsj-result-hero ${currentResult.passed ? "gsj-result-hero--pass" : "gsj-result-hero--fail"}`}
           >
-            <div className="gsj-result-panel__score">
-              {currentResult.score}%
+            <div className="gsj-result-hero__score-wrap">
+              <div className="gsj-result-hero__score">
+                {currentResult.score}
+                <span className="gsj-result-hero__pct">%</span>
+              </div>
+              <div className="gsj-result-hero__formula">
+                {currentResult.correctAnswers}/{currentResult.totalQuestions}{" "}
+                câu đúng
+              </div>
             </div>
-            <div className="gsj-result-panel__status">
-              {currentResult.passed
-                ? "Đạt yêu cầu đánh giá"
-                : "Cần củng cố thêm kiến thức"}
-            </div>
-            <div className="gsj-result-panel__chips">
-              <span className="gsj-result-pill">
+            <div className="gsj-result-hero__right">
+              <div
+                className={`gsj-result-hero__level-badge gsj-result-hero__level-badge--${getSkillLevelClass(currentResult.evaluatedLevel)}`}
+              >
                 {getSkillLevelLabel(currentResult.evaluatedLevel)}
-              </span>
-              <span className="gsj-result-pill">
-                {currentResult.scoreBandLabel}
-              </span>
-              <span className="gsj-result-pill">
-                {currentResult.recommendationLabel}
-              </span>
+              </div>
+              <div className="gsj-result-hero__pills">
+                <span className="gsj-result-pill">
+                  {currentResult.scoreBandLabel}
+                </span>
+                <span className="gsj-result-pill">
+                  {currentResult.recommendationLabel}
+                </span>
+              </div>
+              <p className="gsj-result-hero__verdict">
+                {currentResult.passed
+                  ? "✓ Đạt ngưỡng đánh giá"
+                  : "✗ Cần củng cố thêm kiến thức"}
+              </p>
             </div>
           </div>
 
+          {/* ── KPI Row ── */}
           <div className="gsj-result-kpi-grid">
-            <div className="gsj-result-kpi-card">
-              <div className="gsj-result-kpi-card__label">Câu đúng</div>
+            <div className="gsj-result-kpi-card gsj-result-kpi-card--correct">
               <div className="gsj-result-kpi-card__value">
-                {currentResult.correctAnswers}/{currentResult.totalQuestions}
+                {currentResult.correctAnswers}
               </div>
+              <div className="gsj-result-kpi-card__label">Câu đúng</div>
             </div>
-            <div className="gsj-result-kpi-card">
-              <div className="gsj-result-kpi-card__label">Câu sai</div>
+            <div className="gsj-result-kpi-card gsj-result-kpi-card--wrong">
               <div className="gsj-result-kpi-card__value">
                 {currentResult.incorrectAnswers}
               </div>
+              <div className="gsj-result-kpi-card__label">Câu sai</div>
             </div>
             <div className="gsj-result-kpi-card">
-              <div className="gsj-result-kpi-card__label">Độ tin cậy</div>
               <div className="gsj-result-kpi-card__value">
-                {currentResult.assessmentConfidence}%
+                {currentResult.totalQuestions}
               </div>
+              <div className="gsj-result-kpi-card__label">Tổng câu</div>
             </div>
           </div>
 
-          <div className="gsj-result-kpi-progress-grid">
-            <div className="gsj-result-kpi-progress">
-              <div className="gsj-result-kpi-progress__head">
-                <span>Tiến độ trả lời</span>
-                <strong>{completionRate}%</strong>
-              </div>
-              <div className="gsj-result-kpi-progress__track">
-                <div
-                  className="gsj-result-kpi-progress__fill gsj-result-kpi-progress__fill--completion"
-                  style={{ width: `${completionRate}%` }}
-                />
-              </div>
+          {/* ── Accuracy bar ── */}
+          <div className="gsj-result-acc-bar">
+            <div className="gsj-result-acc-bar__head">
+              <span>Tỷ lệ chính xác</span>
+              <strong>{correctRate}%</strong>
             </div>
-            <div className="gsj-result-kpi-progress">
-              <div className="gsj-result-kpi-progress__head">
-                <span>Tỷ lệ chính xác</span>
-                <strong>{correctRate}%</strong>
-              </div>
-              <div className="gsj-result-kpi-progress__track">
-                <div
-                  className="gsj-result-kpi-progress__fill gsj-result-kpi-progress__fill--accuracy"
-                  style={{ width: `${correctRate}%` }}
-                />
-              </div>
+            <div className="gsj-result-acc-bar__track">
+              <div
+                className="gsj-result-acc-bar__fill"
+                style={{ width: `${correctRate}%` }}
+              />
             </div>
           </div>
 
-          <section className="gsj-result-framework">
-            <h4 className="gsj-result-framework__title">
-              Cơ sở chấm điểm minh bạch
-            </h4>
-            <p className="gsj-result-framework__intro">
-              Điểm được tính trực tiếp theo số câu đúng, sau đó đối chiếu với
-              thang chuẩn để ra band điểm, mức năng lực và hướng roadmap.
-            </p>
-            <div className="gsj-result-framework__formula">
-              Điểm = (Câu đúng / Tổng câu) x 100 = ({currentResult.correctAnswers}
-              /{Math.max(currentResult.totalQuestions, 1)}) x 100 = {" "}
-              <strong>{currentResult.score}%</strong>
-            </div>
-
-            <div className="gsj-result-framework__current">
-              <div className="gsj-result-framework__current-item">
-                <span>Band điểm hiện tại</span>
-                <strong>
-                  {activeScoreBandFramework.label} ({activeScoreBandFramework.range})
-                </strong>
-              </div>
-              <div className="gsj-result-framework__current-item">
-                <span>Mức năng lực hiện tại</span>
-                <strong>
-                  {getSkillLevelLabel(currentResult.evaluatedLevel)} ({activeLevelFramework.range})
-                </strong>
-              </div>
-            </div>
-
-            <div className="gsj-result-framework__grid">
-              <article className="gsj-result-framework__card">
-                <h5>Thang band điểm</h5>
-                <div className="gsj-result-framework__list">
-                  {SCORE_BAND_FRAMEWORK.map((item) => (
-                    <div
-                      key={item.key}
-                      className={`gsj-result-framework__row ${activeScoreBandFramework.key === item.key ? "gsj-result-framework__row--active" : ""}`}
-                    >
-                      <div>
-                        <strong>{item.label}</strong>
-                        <p>{item.description}</p>
-                      </div>
+          {/* ── Level Framework ── */}
+          <section className="gsj-result-levels">
+            <h4 className="gsj-result-levels__title">Thang mức năng lực</h4>
+            <div className="gsj-result-levels__grid">
+              {LEVEL_FRAMEWORK.map((item) => {
+                const isActive = activeLevelFramework.key === item.key;
+                return (
+                  <div
+                    key={item.key}
+                    className={`gsj-result-level-row ${isActive ? "gsj-result-level-row--active" : ""}`}
+                  >
+                    <div className="gsj-result-level-row__dot" />
+                    <div className="gsj-result-level-row__info">
+                      <strong>{getSkillLevelLabel(item.key)}</strong>
                       <span>{item.range}</span>
                     </div>
-                  ))}
-                </div>
-              </article>
-
-              <article className="gsj-result-framework__card">
-                <h5>Chuẩn mức năng lực</h5>
-                <div className="gsj-result-framework__list">
-                  {LEVEL_FRAMEWORK.map((item) => (
-                    <div
-                      key={item.key}
-                      className={`gsj-result-framework__row ${activeLevelFramework.key === item.key ? "gsj-result-framework__row--active" : ""}`}
-                    >
-                      <div>
-                        <strong>{getSkillLevelLabel(item.key)}</strong>
-                        <p>{item.description}</p>
-                      </div>
-                      <span>{item.range}</span>
-                    </div>
-                  ))}
-                </div>
-              </article>
+                    {isActive && (
+                      <span className="gsj-result-level-row__you">Bạn</span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </section>
 
-          {currentResult.reassessmentRecommended && (
-            <div className="gsj-result-note">
-              <Lightbulb size={16} />
-              <span>
-                Hệ thống khuyến nghị làm lại quiz sau khi học xong phần nền tảng
-                để tối ưu lộ trình.
-              </span>
-            </div>
-          )}
-
-          {resultHighlightKeywords.length > 0 && (
-            <section className="gsj-result-keywords">
-              <h4 className="gsj-result-keywords__title">Từ khóa nổi bật</h4>
-              <div className="gsj-result-keywords__list">
-                {resultHighlightKeywords.map((keyword) => (
-                  <span key={keyword} className="gsj-result-keywords__chip">
-                    {keyword}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
-
-          <div className="gsj-result-section-grid">
-            <section className="gsj-result-section">
-              <h4 className="gsj-result-section__title">Đánh giá chung</h4>
-              {renderMarkdownContent(
-                normalizeMarkdownText(
-                  currentResult.evaluationSummary,
-                  "Chưa có đánh giá tổng quan từ AI.",
-                ),
-                "gsj-result-section__markdown",
-                resultHighlightKeywords,
-              )}
-            </section>
-
-            <section className="gsj-result-section">
-              <h4 className="gsj-result-section__title">Phản hồi chi tiết</h4>
-              <p className="gsj-result-section__hint">
-                Nội dung AI phân tích khá dài, mở khi bạn cần đọc sâu từng điểm.
-              </p>
-              <button
-                type="button"
-                className="gsj-result-toggle"
-                onClick={() => setShowDetailedFeedback((prev) => !prev)}
-              >
-                {showDetailedFeedback
-                  ? "Ẩn phản hồi chi tiết"
-                  : "Xem phản hồi chi tiết"}
-              </button>
-              {showDetailedFeedback &&
-                renderMarkdownContent(
-                  normalizeMarkdownText(
-                    currentResult.detailedFeedback,
-                    "Chưa có phản hồi chi tiết cho bài đánh giá này.",
-                  ),
-                  "gsj-result-section__markdown",
-                  resultHighlightKeywords,
-                )}
-            </section>
-
-            <section className="gsj-result-section gsj-result-section--strength">
-              <h4 className="gsj-result-section__title gsj-result-section__title--with-icon">
-                <CircleCheckBig size={18} />
-                Điểm mạnh
-              </h4>
-              <ul className="gsj-insight-list">
-                {strengthItems.map((item, index) => {
-                  const parsed = parseInsightLine(item);
-                  const linkedQuestionIds = extractQuestionIdsFromText(
-                    parsed.detail,
-                  );
-                  const linkedReviews = linkedQuestionIds
-                    .map((id) => reviewByQuestionId.get(id))
-                    .filter((review): review is NonNullable<typeof review> =>
-                      Boolean(review),
-                    );
-                  return (
-                    <li key={`strength-${index}`} className="gsj-insight-item">
-                      {parsed.title && (
-                        <p className="gsj-insight-item__title">
-                          {renderHighlightedInlineText(
-                            parsed.title,
-                            resultHighlightKeywords,
-                            `strength-title-${index}`,
-                          )}
-                        </p>
-                      )}
-                      <p className="gsj-insight-item__detail">
-                        {renderHighlightedInlineText(
-                          parsed.detail,
-                          resultHighlightKeywords,
-                          `strength-detail-${index}`,
-                        )}
-                      </p>
-                      {linkedReviews.length > 0 && (
-                        <details className="gsj-insight-item__details">
-                          <summary>
-                            Xem câu hỏi gốc ({linkedReviews.length})
-                          </summary>
-                          <div className="gsj-insight-question-list">
-                            {linkedReviews.map((review) => {
-                              const userKey = extractOptionKey(
-                                review.userAnswer,
-                              );
-                              const correctKey = extractOptionKey(
-                                review.correctAnswer,
-                              );
-                              return (
-                                <article
-                                  key={`strength-question-${review.questionId}`}
-                                  className="gsj-insight-question-item"
-                                >
-                                  <div className="gsj-insight-question-item__meta-row">
-                                    <p className="gsj-insight-question-item__meta">
-                                      Câu Q{review.questionId} ·{" "}
-                                      {review.skillArea} · {review.difficulty}
-                                    </p>
-                                    <span
-                                      className={`gsj-insight-question-item__badge ${
-                                        review.isCorrect
-                                          ? "gsj-insight-question-item__badge--correct"
-                                          : "gsj-insight-question-item__badge--wrong"
-                                      }`}
-                                    >
-                                      {review.isCorrect ? "Đúng" : "Sai"}
-                                    </span>
-                                  </div>
-                                  <p className="gsj-insight-question-item__text">
-                                    {review.question}
-                                  </p>
-                                  {review.options.length > 0 && (
-                                    <ul className="gsj-insight-option-list">
-                                      {review.options.map(
-                                        (option, optionIndex) => {
-                                          const optionKey =
-                                            toOptionLabel(optionIndex);
-                                          const isCorrect =
-                                            optionKey === correctKey;
-                                          const isSelected =
-                                            optionKey === userKey;
-                                          return (
-                                            <li
-                                              key={`strength-option-${review.questionId}-${optionKey}`}
-                                              className={`gsj-insight-option ${
-                                                isCorrect
-                                                  ? "gsj-insight-option--correct"
-                                                  : ""
-                                              } ${
-                                                isSelected
-                                                  ? "gsj-insight-option--selected"
-                                                  : ""
-                                              }`}
-                                            >
-                                              <span className="gsj-insight-option__key">
-                                                {optionKey}.
-                                              </span>
-                                              <span className="gsj-insight-option__text">
-                                                {option}
-                                              </span>
-                                              {(isSelected || isCorrect) && (
-                                                <span className="gsj-insight-option__badges">
-                                                  {isSelected && (
-                                                    <span className="gsj-insight-option__badge gsj-insight-option__badge--selected">
-                                                      <Target size={12} />
-                                                      Bạn chọn
-                                                    </span>
-                                                  )}
-                                                  {isCorrect && (
-                                                    <span className="gsj-insight-option__badge gsj-insight-option__badge--correct">
-                                                      <CheckCircle size={12} />
-                                                      Đáp án đúng
-                                                    </span>
-                                                  )}
-                                                </span>
-                                              )}
-                                            </li>
-                                          );
-                                        },
-                                      )}
-                                    </ul>
-                                  )}
-                                </article>
-                              );
-                            })}
-                          </div>
-                        </details>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-
-            <section className="gsj-result-section gsj-result-section--weakness">
-              <h4 className="gsj-result-section__title gsj-result-section__title--with-icon">
-                <CircleAlert size={18} />
-                Cần cải thiện
-              </h4>
-              <ul className="gsj-insight-list">
-                {weaknessItems.map((item, index) => {
-                  const parsed = parseInsightLine(item);
-                  const linkedQuestionIds = extractQuestionIdsFromText(
-                    parsed.detail,
-                  );
-                  const linkedReviews = linkedQuestionIds
-                    .map((id) => reviewByQuestionId.get(id))
-                    .filter((review): review is NonNullable<typeof review> =>
-                      Boolean(review),
-                    );
-                  return (
-                    <li key={`weakness-${index}`} className="gsj-insight-item">
-                      {parsed.title && (
-                        <p className="gsj-insight-item__title">
-                          {renderHighlightedInlineText(
-                            parsed.title,
-                            resultHighlightKeywords,
-                            `weakness-title-${index}`,
-                          )}
-                        </p>
-                      )}
-                      <p className="gsj-insight-item__detail">
-                        {renderHighlightedInlineText(
-                          parsed.detail,
-                          resultHighlightKeywords,
-                          `weakness-detail-${index}`,
-                        )}
-                      </p>
-                      {linkedReviews.length > 0 && (
-                        <details className="gsj-insight-item__details">
-                          <summary>
-                            Xem câu hỏi gốc ({linkedReviews.length})
-                          </summary>
-                          <div className="gsj-insight-question-list">
-                            {linkedReviews.map((review) => {
-                              const userKey = extractOptionKey(
-                                review.userAnswer,
-                              );
-                              const correctKey = extractOptionKey(
-                                review.correctAnswer,
-                              );
-                              return (
-                                <article
-                                  key={`weakness-question-${review.questionId}`}
-                                  className="gsj-insight-question-item"
-                                >
-                                  <div className="gsj-insight-question-item__meta-row">
-                                    <p className="gsj-insight-question-item__meta">
-                                      Câu Q{review.questionId} ·{" "}
-                                      {review.skillArea} · {review.difficulty}
-                                    </p>
-                                    <span
-                                      className={`gsj-insight-question-item__badge ${
-                                        review.isCorrect
-                                          ? "gsj-insight-question-item__badge--correct"
-                                          : "gsj-insight-question-item__badge--wrong"
-                                      }`}
-                                    >
-                                      {review.isCorrect ? "Đúng" : "Sai"}
-                                    </span>
-                                  </div>
-                                  <p className="gsj-insight-question-item__text">
-                                    {review.question}
-                                  </p>
-                                  {review.options.length > 0 && (
-                                    <ul className="gsj-insight-option-list">
-                                      {review.options.map(
-                                        (option, optionIndex) => {
-                                          const optionKey =
-                                            toOptionLabel(optionIndex);
-                                          const isCorrect =
-                                            optionKey === correctKey;
-                                          const isSelected =
-                                            optionKey === userKey;
-                                          return (
-                                            <li
-                                              key={`weakness-option-${review.questionId}-${optionKey}`}
-                                              className={`gsj-insight-option ${
-                                                isCorrect
-                                                  ? "gsj-insight-option--correct"
-                                                  : ""
-                                              } ${
-                                                isSelected
-                                                  ? "gsj-insight-option--selected"
-                                                  : ""
-                                              }`}
-                                            >
-                                              <span className="gsj-insight-option__key">
-                                                {optionKey}.
-                                              </span>
-                                              <span className="gsj-insight-option__text">
-                                                {option}
-                                              </span>
-                                              {(isSelected || isCorrect) && (
-                                                <span className="gsj-insight-option__badges">
-                                                  {isSelected && (
-                                                    <span className="gsj-insight-option__badge gsj-insight-option__badge--selected">
-                                                      <Target size={12} />
-                                                      Bạn chọn
-                                                    </span>
-                                                  )}
-                                                  {isCorrect && (
-                                                    <span className="gsj-insight-option__badge gsj-insight-option__badge--correct">
-                                                      <CheckCircle size={12} />
-                                                      Đáp án đúng
-                                                    </span>
-                                                  )}
-                                                </span>
-                                              )}
-                                            </li>
-                                          );
-                                        },
-                                      )}
-                                    </ul>
-                                  )}
-                                </article>
-                              );
-                            })}
-                          </div>
-                        </details>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-
-            <section className="gsj-result-section">
-              <h4 className="gsj-result-section__title">Gợi ý hành động</h4>
-              <ul className="gsj-insight-list">
-                {tipItems.map((item, index) => {
-                  const parsed = parseInsightLine(item);
-                  return (
-                    <li key={`tip-${index}`} className="gsj-insight-item">
-                      {parsed.title && (
-                        <p className="gsj-insight-item__title">
-                          {renderHighlightedInlineText(
-                            parsed.title,
-                            resultHighlightKeywords,
-                            `tip-title-${index}`,
-                          )}
-                        </p>
-                      )}
-                      <p className="gsj-insight-item__detail">
-                        {renderHighlightedInlineText(
-                          parsed.detail,
-                          resultHighlightKeywords,
-                          `tip-detail-${index}`,
-                        )}
-                      </p>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          </div>
-
+          {/* ── Skill breakdown (nếu có) ── */}
           {currentResult.skillAnalysis.length > 0 && (
-            <section className="gsj-result-section gsj-result-section--full">
-              <h4 className="gsj-result-section__title">
+            <section className="gsj-result-skills">
+              <h4 className="gsj-result-skills__title">
+                <Activity size={16} />
                 Phân tích theo nhóm kỹ năng
               </h4>
-              <div className="gsj-result-skill-grid">
+              <div className="gsj-result-skills__grid">
                 {currentResult.skillAnalysis.map((skill, index) => (
-                  <article
-                    key={`${skill.skillName}-${index}`}
-                    className="gsj-result-skill-card"
+                  <div
+                    key={`skill-${index}`}
+                    className={`gsj-result-skill-chip ${skill.gap < 0 ? "gsj-result-skill-chip--weak" : "gsj-result-skill-chip--strong"}`}
                   >
-                    <div className="gsj-result-skill-card__head">
-                      <strong>{skill.skillName}</strong>
-                      <span
-                        className={`gsj-result-skill-card__level gsj-skill-item__level--${getSkillLevelClass(skill.currentLevel)}`}
-                      >
-                        {getSkillLevelLabel(skill.currentLevel)}
-                      </span>
-                    </div>
-                    {renderMarkdownContent(
-                      [
-                        skill.strengths.length > 0
-                          ? `**Thế mạnh**\n${toMarkdownList(skill.strengths, "")}`
-                          : "",
-                        skill.weaknesses.length > 0
-                          ? `**Cần cải thiện**\n${toMarkdownList(skill.weaknesses, "")}`
-                          : "",
-                        skill.recommendations.length > 0
-                          ? `**Gợi ý hành động**\n${toMarkdownList(skill.recommendations, "")}`
-                          : "",
-                      ]
-                        .filter(Boolean)
-                        .join("\n\n") ||
-                        "- Chưa có phân tích chi tiết cho nhóm kỹ năng này.",
-                      "gsj-result-skill-card__markdown",
-                      resultHighlightKeywords,
-                    )}
-                  </article>
+                    <span className="gsj-result-skill-chip__name">
+                      {skill.skillName}
+                    </span>
+                    <span className="gsj-result-skill-chip__level">
+                      {getSkillLevelLabel(skill.currentLevel)}
+                    </span>
+                  </div>
                 ))}
               </div>
             </section>
           )}
 
+          {/* ── Quiz Review ── */}
           {currentResult.questionReviews.length > 0 && (
-            <section className="gsj-result-section gsj-result-section--full">
-              <div className="gsj-result-review-header">
-                <div>
-                  <h4 className="gsj-result-section__title">
-                    Chi tiết bài quiz
-                  </h4>
-                  <p className="gsj-result-review-caption">
-                    Mỗi câu hiển thị lựa chọn của bạn, đáp án đúng và phần giải
-                    thích AI để bạn xem lại nhanh từng điểm.
-                  </p>
-                </div>
-                <span className="gsj-result-review-counter">
-                  Hiển thị {visibleQuestionReviews.length}/
-                  {totalQuestionReviews} câu
+            <section className="gsj-result-quiz">
+              <div className="gsj-result-quiz__header">
+                <h4 className="gsj-result-quiz__title">
+                  <BookOpen size={16} />
+                  Chi tiết từng câu hỏi
+                </h4>
+                <span className="gsj-result-quiz__counter">
+                  {visibleQuestionReviews.length}/{totalQuestionReviews}
                 </span>
               </div>
-              <div className="gsj-result-review-legend">
-                <span className="gsj-result-review-legend__item">
-                  <span className="gsj-result-review-legend__dot gsj-result-review-legend__dot--selected"></span>
-                  Lựa chọn của bạn
+
+              <div className="gsj-result-quiz__legend">
+                <span>
+                  <span className="gsj-rq-dot gsj-rq-dot--user" />
+                  Bạn chọn
                 </span>
-                <span className="gsj-result-review-legend__item">
-                  <span className="gsj-result-review-legend__dot gsj-result-review-legend__dot--correct"></span>
+                <span>
+                  <span className="gsj-rq-dot gsj-rq-dot--correct" />
                   Đáp án đúng
                 </span>
               </div>
-              <div className="gsj-result-review-list">
+
+              <div className="gsj-result-quiz__list">
                 {visibleQuestionReviews.map((question, index) => {
                   const userKey = extractOptionKey(question.userAnswer);
                   const correctKey = extractOptionKey(question.correctAnswer);
-
                   return (
                     <article
-                      key={`${question.questionId}-${index}`}
-                      className={`gsj-result-review-item ${question.isCorrect ? "gsj-result-review-item--correct" : "gsj-result-review-item--wrong"}`}
+                      key={`q-${question.questionId}-${index}`}
+                      className={`gsj-rq-item ${question.isCorrect ? "gsj-rq-item--correct" : "gsj-rq-item--wrong"}`}
                     >
-                      <div className="gsj-result-review-item__head">
-                        <span>
-                          Câu {question.questionId} · {question.skillArea} ·{" "}
-                          {question.difficulty}
-                        </span>
+                      <div className="gsj-rq-item__head">
+                        <div className="gsj-rq-item__meta">
+                          <span className="gsj-rq-item__num">#{index + 1}</span>
+                          {question.skillArea && (
+                            <span className="gsj-rq-item__tag">
+                              {question.skillArea}
+                            </span>
+                          )}
+                          {question.difficulty && (
+                            <span className="gsj-rq-item__tag">
+                              {question.difficulty}
+                            </span>
+                          )}
+                        </div>
                         <span
-                          className={`gsj-result-review-item__status ${question.isCorrect ? "gsj-result-review-item__status--correct" : "gsj-result-review-item__status--wrong"}`}
+                          className={`gsj-rq-item__badge ${question.isCorrect ? "gsj-rq-item__badge--correct" : "gsj-rq-item__badge--wrong"}`}
                         >
                           {question.isCorrect ? (
                             <>
-                              <CheckCircle size={14} />
+                              <CheckCircle size={12} />
                               Đúng
                             </>
                           ) : (
                             <>
-                              <X size={14} />
+                              <X size={12} />
                               Sai
                             </>
                           )}
                         </span>
                       </div>
 
-                      <p className="gsj-result-review-item__question">
+                      <p className="gsj-rq-item__question">
                         {question.question}
                       </p>
 
                       {question.options.length > 0 && (
-                        <div className="gsj-result-review-item__options">
-                          {question.options.map((option, optionIndex) => {
-                            const optionKey = toOptionLabel(optionIndex);
-                            const isSelected = optionKey === userKey;
-                            const isCorrect = optionKey === correctKey;
-
+                        <div className="gsj-rq-item__options">
+                          {question.options.map((option, oi) => {
+                            const key = toOptionLabel(oi);
+                            const isSelected = key === userKey;
+                            const isCorrect = key === correctKey;
                             return (
                               <div
-                                key={`${question.questionId}-${optionKey}`}
-                                className={`gsj-result-review-option ${
-                                  isSelected
-                                    ? "gsj-result-review-option--selected"
-                                    : ""
-                                } ${
-                                  isCorrect
-                                    ? "gsj-result-review-option--correct"
-                                    : ""
-                                }`}
+                                key={`opt-${question.questionId}-${key}`}
+                                className={`gsj-rq-option${isCorrect ? " gsj-rq-option--correct" : ""}${isSelected && !isCorrect ? " gsj-rq-option--wrong-pick" : ""}${isSelected && isCorrect ? " gsj-rq-option--correct-pick" : ""}`}
                               >
-                                <div className="gsj-result-review-option__main">
-                                  <span className="gsj-result-review-option__key">
-                                    {optionKey}
-                                  </span>
-                                  <span className="gsj-result-review-option__text">
-                                    {option}
-                                  </span>
-                                </div>
-                                <div className="gsj-result-review-option__flags">
+                                <span className="gsj-rq-option__key">
+                                  {key}
+                                </span>
+                                <span className="gsj-rq-option__text">
+                                  {option}
+                                </span>
+                                <span className="gsj-rq-option__flags">
                                   {isSelected && (
-                                    <span className="gsj-result-review-option__flag">
+                                    <span className="gsj-rq-flag gsj-rq-flag--user">
+                                      <Target size={10} />
                                       Bạn chọn
                                     </span>
                                   )}
                                   {isCorrect && (
-                                    <span className="gsj-result-review-option__flag gsj-result-review-option__flag--correct">
+                                    <span className="gsj-rq-flag gsj-rq-flag--correct">
+                                      <CheckCircle size={10} />
                                       Đáp án đúng
                                     </span>
                                   )}
-                                </div>
+                                </span>
                               </div>
                             );
                           })}
                         </div>
                       )}
 
-                      <div className="gsj-result-review-item__summary-grid">
-                        <div className="gsj-result-review-item__summary-card">
-                          <span className="gsj-result-review-item__summary-label">
-                            Lựa chọn của bạn
-                          </span>
-                          <strong>
-                            {question.userAnswer || "Bạn chưa chọn đáp án"}
-                          </strong>
-                        </div>
-                        <div className="gsj-result-review-item__summary-card">
-                          <span className="gsj-result-review-item__summary-label">
-                            Đáp án đúng
-                          </span>
-                          <strong>{question.correctAnswer}</strong>
-                        </div>
-                        <div className="gsj-result-review-item__summary-card">
-                          <span className="gsj-result-review-item__summary-label">
-                            Nhận định của AI
-                          </span>
-                          <strong>
-                            {question.isCorrect
-                              ? "Bạn nắm chắc câu này"
-                              : "Bạn cần xem lại câu này"}
-                          </strong>
-                        </div>
-                      </div>
-
                       {question.explanation && (
                         <details
-                          className="gsj-result-review-item__details"
+                          className="gsj-rq-item__explain"
                           open={!question.isCorrect}
                         >
-                          <summary>
-                            {question.isCorrect
-                              ? "Xem giải thích AI"
-                              : "Xem AI phân tích vì sao bạn làm sai"}
-                          </summary>
-                          <div className="gsj-result-review-item__explain">
+                          <summary>Giải thích</summary>
+                          <div className="gsj-rq-item__explain-body">
                             {renderMarkdownContent(
                               normalizeMarkdownText(question.explanation, ""),
-                              "gsj-result-review-item__markdown",
-                              resultHighlightKeywords,
+                              "gsj-rq-item__markdown",
                             )}
                           </div>
                         </details>
@@ -3694,6 +3413,7 @@ const GSJJourneyPage: React.FC = () => {
                   );
                 })}
               </div>
+
               {hasHiddenQuestionReviews && (
                 <button
                   type="button"
@@ -3701,13 +3421,14 @@ const GSJJourneyPage: React.FC = () => {
                   onClick={() => setShowAllQuestionReviews((prev) => !prev)}
                 >
                   {showAllQuestionReviews
-                    ? "Thu gọn danh sách câu hỏi"
+                    ? "Thu gọn"
                     : `Xem tất cả ${totalQuestionReviews} câu`}
                 </button>
               )}
             </section>
           )}
 
+          {/* ── Actions ── */}
           <div className="gsj-result-actions">
             {!hasRoadmap && (
               <button
@@ -3771,11 +3492,11 @@ const GSJJourneyPage: React.FC = () => {
           isOpen={true}
           onClose={() => setBookingMentor(null)}
           mentorId={String(bookingMentor.id)}
-          mentorName={`${bookingMentor.firstName ?? ''} ${bookingMentor.lastName ?? ''}`.trim()}
+          mentorName={`${bookingMentor.firstName ?? ""} ${bookingMentor.lastName ?? ""}`.trim()}
           hourlyRate={bookingMentor.hourlyRate ?? 0}
           journeyContext={{
             journeyId: selectedJourney.id,
-            bookingType: 'JOURNEY_MENTORING',
+            bookingType: "JOURNEY_MENTORING",
           }}
         />
       )}
@@ -3807,11 +3528,15 @@ const GSJJourneyPage: React.FC = () => {
           >
             <div className="gsj-action-loading-overlay__shell">
               <div className="gsj-action-loading-overlay__loader">
-                <MeowlKuruLoader text={actionLoadingMessage} layout="vertical" />
+                <MeowlKuruLoader
+                  text={actionLoadingMessage}
+                  layout="vertical"
+                />
 
                 {showActionGame && (
                   <p className="gsj-action-loading-overlay__hint">
-                    Hệ thống đang xử lý sâu hơn bình thường. Chơi một ván caro với Meowl trong lúc chờ nhé.
+                    Hệ thống đang xử lý sâu hơn bình thường. Chơi một ván caro
+                    với Meowl trong lúc chờ nhé.
                   </p>
                 )}
               </div>
@@ -3823,7 +3548,9 @@ const GSJJourneyPage: React.FC = () => {
                 {showActionGame && (
                   <>
                     <header className="gsj-action-loading-overlay__game-header">
-                      <span className="gsj-action-loading-overlay__game-eyebrow">MINI GAME KHI CHỜ</span>
+                      <span className="gsj-action-loading-overlay__game-eyebrow">
+                        MINI GAME KHI CHỜ
+                      </span>
                       <h3>MEOWL TIC-TAC-TOE</h3>
                     </header>
                     <div className="gsj-action-loading-overlay__game-body">
@@ -3946,24 +3673,33 @@ const GSJJourneyPage: React.FC = () => {
                 <img src={meowlAcwyImage} alt="Meowl xác nhận xóa" />
               </div>
               <div className="gsj-delete-modal__eyebrow">Xác nhận thao tác</div>
-              <h3 id="gsj-delete-modal-title" className="gsj-delete-modal__title">
+              <h3
+                id="gsj-delete-modal-title"
+                className="gsj-delete-modal__title"
+              >
                 Xóa hành trình này?
               </h3>
               <p className="gsj-delete-modal__subtitle">
-                Dữ liệu bài đánh giá, kết quả và tiến độ đi kèm sẽ bị xóa vĩnh viễn.
+                Dữ liệu bài đánh giá, kết quả, tiến độ và lộ trình (roadmap) đi kèm sẽ bị xóa vĩnh
+                viễn.
               </p>
             </div>
 
             <div className="gsj-delete-modal__body">
               <div className="gsj-delete-modal__journey">
-                <span className="gsj-delete-modal__label">Đối tượng bị xóa</span>
+                <span className="gsj-delete-modal__label">
+                  Đối tượng bị xóa
+                </span>
                 <strong className="gsj-delete-modal__journey-name">
                   {pendingDelete.journeyLabel}
                 </strong>
               </div>
+              <div className="gsj-delete-modal__note" style={{ color: 'var(--gsj-accent-warning, #f59e0b)' }}>
+                ⚠️ Xóa hành trình sẽ đồng thời xóa roadmap và toàn bộ study plan đi kèm.
+              </div>
               <div className="gsj-delete-modal__note">
-                Hành động này không thể hoàn tác. Bạn chỉ nên tiếp tục khi chắc chắn
-                không cần dùng lại Journey này nữa.
+                Hành động này không thể hoàn tác. Bạn chỉ nên tiếp tục khi chắc
+                chắn không cần dùng lại Journey này nữa.
               </div>
             </div>
 

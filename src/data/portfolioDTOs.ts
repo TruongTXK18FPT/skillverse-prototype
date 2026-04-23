@@ -68,6 +68,9 @@ export interface UserProfileDTO {
   // Owner role for frontend tab visibility
   primaryRole?: string; // MENTOR, USER, RECRUITER, ADMIN
 
+  // Roadmap mentoring price (for mentor accounts)
+  roadmapMentoringPrice?: number;
+
   // Timestamps
   createdAt?: string;
   updatedAt?: string;

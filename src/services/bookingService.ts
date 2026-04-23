@@ -8,7 +8,7 @@ export interface BookingResponse {
   startTime: string;
   endTime: string;
   durationMinutes: number;
-  status: 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED' | 'ONGOING' | 'PENDING_COMPLETION' | 'DISPUTED' | 'REFUNDED';
+  status: 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED' | 'ONGOING' | 'MENTORING_ACTIVE' | 'PENDING_COMPLETION' | 'DISPUTED' | 'REFUNDED';
   confirmedByLearner?: boolean;
   mentorCompletedAt?: string;
   learnerConfirmedAt?: string;
@@ -17,18 +17,22 @@ export interface BookingResponse {
   priceVnd: number;
   meetingLink?: string;
   paymentReference?: string;
-  mentorName?: string; // Optional, might need to fetch separately or enrich
+  mentorName?: string;
   mentorAvatar?: string;
   learnerName?: string;
   learnerAvatar?: string;
   disputeId?: number;
   chatAllowed?: boolean;
-  // Node/Journey context for mentoring flow (optional, per §6.3.5)
+  // Node/Journey context for mentoring flow
   journeyId?: number;
   roadmapSessionId?: number;
   nodeId?: string;
   nodeSkillId?: number;
-  bookingType?: 'GENERAL' | 'NODE_MENTORING' | 'JOURNEY_MENTORING';
+  bookingType?: 'GENERAL' | 'NODE_MENTORING' | 'JOURNEY_MENTORING' | 'ROADMAP_MENTORING';
+  // V3 Phase 2: ROADMAP_MENTORING tracking
+  roadmapMentoringStartedAt?: string;
+  verificationAttempts?: number;
+  nextVerifyAllowedAt?: string;
 }
 
 export interface Page<T> {
@@ -56,12 +60,12 @@ export interface CreateBookingRequest {
   durationMinutes: number;
   priceVnd: number;
   paymentMethod: 'WALLET';
-  // Node/Journey context for mentoring flow (optional, per §6.3.5)
+  // Node/Journey context for mentoring flow
   journeyId?: number;
   roadmapSessionId?: number;
   nodeId?: string;
   nodeSkillId?: number;
-  bookingType?: 'GENERAL' | 'NODE_MENTORING' | 'JOURNEY_MENTORING';
+  bookingType?: 'GENERAL' | 'NODE_MENTORING' | 'JOURNEY_MENTORING' | 'ROADMAP_MENTORING';
 }
 
 export const createBookingWithWallet = async (request: CreateBookingRequest): Promise<BookingResponse> => {

@@ -44,6 +44,9 @@ import {
   SystemCertificateDTO,
   CompletedMissionDTO,
 } from "../../data/portfolioDTOs";
+import { UserVerifiedSkillDTO } from "../../types/NodeMentoring";
+import { getVerifiedSkills, getPublicVerifiedSkills } from "../../services/nodeMentoringService";
+import { isSkillFuzzyVerified } from "../../utils/skillResolver";
 import { PilotIDModal } from "./PilotIDModal";
 import { MissionLogModal } from "./MissionLogModal";
 import { CommendationModal } from "./CommendationModal";
@@ -143,6 +146,8 @@ const TacticalDossierPortfolio = () => {
   const [isOwner, setIsOwner] = useState(false);
   const [achievements, setAchievements] = useState<string[]>([]);
   const [achievementsModalOpen, setAchievementsModalOpen] = useState(false);
+  const [verifiedSkills, setVerifiedSkills] = useState<UserVerifiedSkillDTO[]>([]);
+  const [selectedVerifiedSkill, setSelectedVerifiedSkill] = useState<UserVerifiedSkillDTO | null>(null);
 
   // New: System Certificates & Completed Missions
   const [systemCertificates, setSystemCertificates] = useState<
@@ -293,17 +298,19 @@ const TacticalDossierPortfolio = () => {
 
         // Load public data
         if (profileData.userId) {
-          const [projectsData, certsData, reviewsData, missionsData] =
+          const [projectsData, certsData, reviewsData, missionsData, verifiedSkillsData] =
             await Promise.all([
               portfolioService.getPublicUserProjects(profileData.userId),
               portfolioService.getPublicUserCertificates(profileData.userId),
               portfolioService.getPublicUserReviews(profileData.userId),
               portfolioService.getPublicCompletedMissions(profileData.userId),
+              getPublicVerifiedSkills(profileData.userId).catch(() => []),
             ]);
           setProjects(projectsData);
           setCertificates(certsData);
           setReviews(reviewsData);
           setCompletedMissions(missionsData);
+          setVerifiedSkills(verifiedSkillsData);
         }
       } else {
         // Private View (Owner)
@@ -324,6 +331,7 @@ const TacticalDossierPortfolio = () => {
             reviewsData,
             cvsData,
             missionsData,
+            verifiedSkillsData,
           ] = await Promise.all([
             portfolioService.getProfile(),
             portfolioService.getUserProjects(),
@@ -331,6 +339,7 @@ const TacticalDossierPortfolio = () => {
             portfolioService.getUserReviews(),
             portfolioService.getAllCVs(),
             portfolioService.getCompletedMissions(),
+            getVerifiedSkills().catch(() => []),
           ]);
 
           setProfile(profileData);
@@ -339,6 +348,7 @@ const TacticalDossierPortfolio = () => {
           setReviews(reviewsData);
           setCvs(cvsData);
           setCompletedMissions(missionsData);
+          setVerifiedSkills(verifiedSkillsData);
 
           // Parse achievements for mentor accounts
           if (
@@ -1476,11 +1486,20 @@ const TacticalDossierPortfolio = () => {
                         KỸ NĂNG CỐT LÕI
                       </h3>
                       <div className="dossier-module-tags">
-                        {getSkills().map((skill: string, idx: number) => (
-                          <span key={idx} className="dossier-module-tag">
-                            {skill}
-                          </span>
-                        ))}
+                        {getSkills().map((skill: string, idx: number) => {
+                          const vs = verifiedSkills.find(s => isSkillFuzzyVerified(skill, [s.skillName]));
+                          return (
+                            <span 
+                              key={idx} 
+                              className={`dossier-module-tag ${vs ? 'verified-skill-tag' : ''}`}
+                              onClick={vs ? () => setSelectedVerifiedSkill(vs) : undefined}
+                              style={vs ? { cursor: 'pointer', borderColor: '#10b981', background: 'rgba(16, 185, 129, 0.1)', display: 'inline-flex', alignItems: 'center', gap: '4px' } : undefined}
+                            >
+                              {skill}
+                              {vs && <BadgeCheck size={14} style={{ color: '#10b981' }} />}
+                            </span>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -2620,6 +2639,52 @@ const TacticalDossierPortfolio = () => {
 
       {/* Meowl Guide */}
       <MeowlGuide currentPage="portfolio" />
+
+      {/* Verified Skill Detail Modal */}
+      {selectedVerifiedSkill && (
+        <div className="dossier-modal-overlay" onClick={() => setSelectedVerifiedSkill(null)} style={{ zIndex: 1100 }}>
+          <div className="dossier-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="dossier-modal-header">
+              <h2 className="dossier-modal-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <ShieldCheck color="#10b981" />
+                Chứng nhận Kỹ năng
+              </h2>
+              <button className="dossier-modal-close" onClick={() => setSelectedVerifiedSkill(null)}>×</button>
+            </div>
+            <div className="dossier-modal-body" style={{ padding: '1.5rem' }}>
+              <h3 style={{ color: 'var(--dossier-cyan)', fontSize: '1.25rem', marginBottom: '1rem' }}>
+                {selectedVerifiedSkill.skillName}
+              </h3>
+              <div style={{ display: 'grid', gap: '1rem', color: 'var(--dossier-silver)' }}>
+                <div>
+                  <strong style={{ color: '#fff' }}>Được xác thực bởi: </strong>
+                  <span style={{ color: 'var(--dossier-cyan)' }}>{selectedVerifiedSkill.verifiedByMentorName || 'Hệ thống Admin'}</span>
+                </div>
+                <div>
+                  <strong style={{ color: '#fff' }}>Thời gian xác thực: </strong>
+                  {new Date(selectedVerifiedSkill.verifiedAt).toLocaleDateString('vi-VN')}
+                </div>
+                {selectedVerifiedSkill.verificationNote && (
+                  <div>
+                    <strong style={{ color: '#fff' }}>Đánh giá chi tiết: </strong>
+                    <div style={{ marginTop: '0.5rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '0.5rem', fontStyle: 'italic' }}>
+                      "{selectedVerifiedSkill.verificationNote}"
+                    </div>
+                  </div>
+                )}
+                {selectedVerifiedSkill.journeyId && (
+                  <div style={{ marginTop: '1rem' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', padding: '0.35rem 0.75rem', background: 'var(--dossier-cyan)', color: '#000', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+                      <Target size={14} />
+                      Xác thực qua lộ trình (Roadmap Mentoring)
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };

@@ -167,3 +167,61 @@ export const assessOutputAssessment = async (
   );
   return response.data;
 };
+
+// ==================== V3 Phase 2: ROADMAP_MENTORING ====================
+
+import type {
+  SubmitEvidenceReportRequest,
+  VerificationEvidenceReportResponse,
+  UserVerifiedSkillDTO,
+} from '../types/NodeMentoring';
+
+/** Create a Jitsi meeting link for final verification. */
+export const createFinalMeetingLink = async (
+  journeyId: number,
+): Promise<string> => {
+  const response = await axiosInstance.post<{ meetingLink: string }>(
+    `${journeyBase(journeyId)}/final-meeting/create`,
+  );
+  return response.data.meetingLink;
+};
+
+/** Mentor: submit evidence report + PASS/FAIL verdict. */
+export const submitEvidenceReportAndVerdict = async (
+  journeyId: number,
+  request: SubmitEvidenceReportRequest,
+): Promise<VerificationEvidenceReportResponse> => {
+  const response = await axiosInstance.post<VerificationEvidenceReportResponse>(
+    `${journeyBase(journeyId)}/final-meeting/verdict`,
+    request,
+  );
+  return response.data;
+};
+
+/** Get full verification history (all attempts). */
+export const getVerificationHistory = async (
+  journeyId: number,
+): Promise<VerificationEvidenceReportResponse[]> => {
+  const response = await axiosInstance.get<VerificationEvidenceReportResponse[]>(
+    `${journeyBase(journeyId)}/verification-history`,
+  );
+  return response.data;
+};
+
+/** Get verified skills for own portfolio. */
+export const getVerifiedSkills = async (): Promise<UserVerifiedSkillDTO[]> => {
+  const response = await axiosInstance.get<{ success: boolean; data: UserVerifiedSkillDTO[] }>(
+    '/api/portfolio/verified-skills',
+  );
+  return response.data.data;
+};
+
+/** Get public verified skills. */
+export const getPublicVerifiedSkills = async (
+  userId: number,
+): Promise<UserVerifiedSkillDTO[]> => {
+  const response = await axiosInstance.get<{ success: boolean; data: UserVerifiedSkillDTO[] }>(
+    `/api/portfolio/public/${userId}/verified-skills`,
+  );
+  return response.data.data;
+};

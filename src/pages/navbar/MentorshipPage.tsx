@@ -26,6 +26,7 @@ interface Mentor {
   rating: number;
   reviews: number;
   hourlyRate: number;
+  roadmapMentoringPrice?: number;
   expertise: string[];
   languages: string[];
   availability: string;
@@ -57,8 +58,9 @@ const MentorshipPage = () => {
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [selectedMentorForBooking, setSelectedMentorForBooking] =
     useState<Mentor | null>(null);
+  const [bookingContext, setBookingContext] = useState<{ bookingType: 'GENERAL' | 'ROADMAP_MENTORING' } | undefined>(undefined);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showVerifiedOnly, setShowVerifiedOnly] = useState(false);
+  const [showVerifiedOnly, setShowVerifiedOnly] = useState(true);
   const navigate = useNavigate();
 
   const mentorsPerPage = 6;
@@ -97,6 +99,9 @@ const MentorshipPage = () => {
             reviews:
               typeof profile.ratingCount === "number" ? profile.ratingCount : 0,
             hourlyRate: finalRate,
+            roadmapMentoringPrice: profile.roadmapMentoringPrice && profile.roadmapMentoringPrice > 0 
+              ? profile.roadmapMentoringPrice 
+              : undefined,
             expertise:
               profile.skills && profile.skills.length > 0
                 ? profile.skills
@@ -292,7 +297,8 @@ const MentorshipPage = () => {
       title: "Senior Frontend Developer", // Use direct string instead of translation
       rating: 4.9,
       reviews: 128,
-      hourlyRate: 120,
+      hourlyRate: 120000,
+      roadmapMentoringPrice: 1500000,
       expertise: ["React", "Vue.js", "TypeScript", "UI/UX Design"],
       languages: ["English", "Spanish"], // Use direct strings
       availability: "Weekdays", // Use direct string
@@ -411,6 +417,35 @@ const MentorshipPage = () => {
     }
 
     setSelectedMentorForBooking(mentor);
+    setBookingContext(undefined);
+    setBookingModalOpen(true);
+  };
+
+  const handleBookRoadmap = (mentor: Mentor) => {
+    if (!canUseMentorshipActions) {
+      showInfo(
+        "Chỉ học viên được đặt lịch",
+        "Tính năng đặt lịch mentorship chỉ dành cho tài khoản học viên.",
+      );
+      return;
+    }
+
+    if (mentor.id === String(user?.id)) {
+      showInfo(
+        "Không thể tự đặt lịch",
+        "Bạn không thể đặt lịch mentorship với chính tài khoản mentor của mình.",
+      );
+      return;
+    }
+
+    if (!isAuthenticated) {
+      setSelectedMentorForBooking(mentor);
+      setShowLoginModal(true);
+      return;
+    }
+
+    setSelectedMentorForBooking(mentor);
+    setBookingContext({ bookingType: 'ROADMAP_MENTORING' });
     setBookingModalOpen(true);
   };
 
@@ -534,6 +569,7 @@ const MentorshipPage = () => {
               rating={mentor.rating}
               reviews={mentor.reviews}
               hourlyRate={mentor.hourlyRate}
+              roadmapMentoringPrice={mentor.roadmapMentoringPrice}
               expertise={mentor.expertise}
               languages={mentor.languages}
               availability={mentor.availability}
@@ -545,6 +581,7 @@ const MentorshipPage = () => {
               preChatEnabled={mentor.preChatEnabled}
               verifiedSkills={mentor.verifiedSkills}
               onEstablishLink={() => handleBookSession(mentor)}
+              onBookRoadmap={() => handleBookRoadmap(mentor)}
               onToggleFavorite={() => handleToggleFavoriteWrapper(mentor.id)}
               onViewProfile={() => {
                 if (mentor.slug) {
@@ -582,6 +619,8 @@ const MentorshipPage = () => {
           mentorId={selectedMentorForBooking.id}
           mentorName={selectedMentorForBooking.name}
           hourlyRate={selectedMentorForBooking.hourlyRate}
+          roadmapMentoringPrice={selectedMentorForBooking.roadmapMentoringPrice}
+          journeyContext={bookingContext as any}
         />
       )}
 

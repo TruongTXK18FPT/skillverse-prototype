@@ -263,6 +263,7 @@ const mapJourneySummary = (payload: unknown): JourneySummaryResponse => {
         }
       : undefined,
     finalVerificationRequired: typeof data.finalVerificationRequired === 'boolean' ? data.finalVerificationRequired : undefined,
+    hasActiveMentorBooking: typeof data.hasActiveMentorBooking === 'boolean' ? data.hasActiveMentorBooking : undefined,
     milestones: Array.isArray(data.milestones)
       ? data.milestones
           .filter((milestone) => milestone && typeof milestone === 'object')

@@ -122,6 +122,30 @@ const JourneyCreatePage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const journeyType = JourneyType.SKILL;
   const [error, setError] = useState<string | null>(null);
+  const [activeJourneyCheck, setActiveJourneyCheck] = useState(true);
+
+  // V3 Phase 3: Block journey creation if user already has an active journey
+  useEffect(() => {
+    let cancelled = false;
+    const checkActiveJourney = async () => {
+      try {
+        const activeJourneys = await journeyService.getActiveJourneys();
+        if (!cancelled && activeJourneys.length > 0) {
+          navigate("/journey", {
+            state: { blockReason: "Bạn đang có một hành trình chưa hoàn thành. Hãy hoàn thành hoặc xóa hành trình cũ trước khi tạo mới." },
+          });
+          return;
+        }
+      } catch {
+        // If check fails, allow creation — backend will enforce
+      }
+      if (!cancelled) {
+        setActiveJourneyCheck(false);
+      }
+    };
+    void checkActiveJourney();
+    return () => { cancelled = true; };
+  }, [navigate]);
 
   useEffect(() => {
     document.body.style.overflow = loading ? "hidden" : "";
@@ -509,6 +533,16 @@ const JourneyCreatePage: React.FC = () => {
       </div>
     </div>
   );
+
+  if (activeJourneyCheck) {
+    return (
+      <div className="gsj-page gsj-create-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <div style={{ textAlign: 'center', color: 'var(--gsj-text-secondary, #9ca3af)' }}>
+          <p>Đang kiểm tra hành trình hiện tại...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

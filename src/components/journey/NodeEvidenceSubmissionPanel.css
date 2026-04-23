@@ -6,6 +6,17 @@
   color: #e2e8f0;
 }
 
+.nesp-container--compact {
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.nesp-container--compact .nesp-header {
+  margin-bottom: 8px;
+}
+
 .nesp-loading {
   color: #94a3b8;
   font-size: 14px;
@@ -38,6 +49,10 @@
   font-size: 16px;
   font-weight: 600;
   color: #e2e8f0;
+}
+
+.nesp-container--compact .nesp-header__title h3 {
+  font-size: 14px;
 }
 
 /* Badges */

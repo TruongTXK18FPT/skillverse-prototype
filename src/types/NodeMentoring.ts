@@ -173,3 +173,44 @@ export interface JourneyOutputAssessmentResponse {
   submittedAt: string;
   assessedAt?: string;
 }
+
+// ==================== V3 Phase 2: ROADMAP_MENTORING ====================
+
+export type BookingType = 'GENERAL' | 'NODE_MENTORING' | 'JOURNEY_MENTORING' | 'ROADMAP_MENTORING';
+
+export interface SubmitEvidenceReportRequest {
+  summaryReport: string;
+  assignmentsGiven?: string[];
+  meetingDurationMinutes?: number;
+  gateDecision: GateDecision;
+  weakNodeIds?: string[];
+  failReason?: string;
+}
+
+export interface VerificationEvidenceReportResponse {
+  id: number;
+  journeyId: number;
+  bookingId: number;
+  mentorId: number;
+  meetingJitsiLink?: string;
+  meetingDurationMinutes?: number;
+  summaryReport: string;
+  assignmentsGiven?: string[];
+  weakNodeIds?: string[];
+  failReason?: string;
+  gateDecision: GateDecision;
+  attemptNumber: number;
+  submittedAt: string;
+}
+
+export interface UserVerifiedSkillDTO {
+  id: number;
+  skillName: string;
+  skillLevel?: string;
+  verifiedByMentorId: number;
+  verifiedByMentorName?: string;
+  journeyId?: number;
+  bookingId?: number;
+  verificationNote?: string;
+  verifiedAt: string;
+}

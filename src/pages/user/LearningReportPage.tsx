@@ -1,1012 +1,882 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { motion } from "framer-motion";
 import {
-  X,
-  FileText,
-  RefreshCw,
-  Clock,
-  TrendingUp,
-  Target,
-  Brain,
-  Sparkles,
-  Award,
-  AlertCircle,
-  CheckCircle2,
-  Zap,
-  BookOpen,
-  BarChart2,
-  Lightbulb,
-  Trophy,
-  Flame,
-  Star,
-  GraduationCap,
-  Download,
   ArrowLeft,
+  BarChart3,
+  BookOpenCheck,
+  Briefcase,
+  Clock3,
+  Cpu,
+  Download,
+  Flame,
+  GraduationCap,
+  Layers,
+  LineChart,
+  ListTodo,
+  RefreshCw,
+  Save,
+  Target,
+  TrendingUp,
+  Zap,
 } from "lucide-react";
+import {
+  Area,
+  AreaChart,
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Legend,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import learningReportService, {
+  ReportRange,
   StudentLearningReportResponse,
-  ReportType,
-  CanGenerateResponse,
   isValidReportId,
   parseReportId,
 } from "../../services/learningReportService";
-import streakService from "../../services/streakService";
-import { useAuth } from "../../context/AuthContext";
-import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
-import MarkdownRenderer from "../../components/learning-report/MarkdownRenderer";
 import { downloadLearningReportPDF } from "../../components/learning-report/PDFGenerator";
-import TicTacToeGame from "../../components/game/tic-tac-toe/TicTacToeGame";
 import "./LearningReportPage.css";
-import "../../components/learning-report/MarkdownRenderer.css";
 
-interface TocChildItem {
-  id: string;
-  title: string;
-  level: 2 | 3;
-}
+const RANGE_OPTIONS: ReportRange[] = ["7d", "30d", "90d"];
 
-interface TocParentItem {
-  id: string;
-  key: string;
-  title: string;
-  children: TocChildItem[];
-}
+const statNumber = (value: number | undefined) => value ?? 0;
 
-// Section configuration for navigation
-const SECTION_CONFIG = [
-  { key: "overview", label: "Tổng quan", icon: BarChart2 },
-  { key: "currentSkills", label: "Kỹ năng", icon: Brain },
-  { key: "progress", label: "Tiến độ", icon: TrendingUp },
-  { key: "strengths", label: "Điểm mạnh", icon: Award },
-  { key: "areasToImprove", label: "Cần cải thiện", icon: AlertCircle },
-  { key: "recommendations", label: "Đề xuất", icon: Lightbulb },
-  { key: "learningGoals", label: "Mục tiêu", icon: Target },
-  { key: "skillGaps", label: "Khoảng trống", icon: BookOpen },
-  { key: "nextSteps", label: "Bước tiếp theo", icon: Zap },
-  { key: "motivation", label: "Động lực", icon: Star },
-];
-
-const GENERATING_GAME_DELAY_MS = 10000;
-
-// Meowl speech bubbles based on state
-const getMeowlSpeech = (
-  state: "loading" | "generating" | "error" | "no-report" | "report",
-  trend?: string,
-) => {
-  const speeches = {
-    loading: [
-      "Meowl đang xem dữ liệu của bạn... 📚",
-      "Chờ chút nha, Meowl đang tìm hiểu! 🔍",
-    ],
-    generating: [
-      "Meowl đang phân tích rất chăm chỉ! 🧠",
-      "AI đang làm việc, đợi Meowl tí nha~ ⚡",
-      "Báo cáo sắp xong rồi! 🎯",
-      "Đang thu thập thông tin học tập... 📊",
-      "Meowl đang xử lý dữ liệu lớn! 💪",
-    ],
-    error: [
-      "Ôi không! Có lỗi gì đó rồi... 😿",
-      "Meowl gặp trục trặc, thử lại nha! 🔄",
-    ],
-    "no-report": [
-      "Bạn chưa có báo cáo nào! Tạo ngay nha~ ✨",
-      "Meowl sẵn sàng phân tích cho bạn! 📊",
-    ],
-    report: {
-      improving: [
-        "Woww! Bạn đang tiến bộ tuyệt vời! 🚀",
-        "Meowl rất tự hào về bạn! 🌟",
-        "Cứ giữ phong độ này nha! 💪",
-      ],
-      stable: ["Bạn đang học đều đặn đó! 📈", "Ổn định là tốt, cố lên! 🎯"],
-      declining: [
-        "Meowl thấy bạn hơi chùng... 😔",
-        "Đừng lo, Meowl sẽ giúp bạn! 💖",
-        "Cùng lập kế hoạch mới nha! 📝",
-      ],
-    },
-  };
-
-  if (state === "report" && trend) {
-    const trendSpeeches =
-      speeches.report[trend as keyof typeof speeches.report] ||
-      speeches.report.stable;
-    return trendSpeeches[Math.floor(Math.random() * trendSpeeches.length)];
-  }
-
-  const stateSpeeches = speeches[state as keyof typeof speeches];
-  if (Array.isArray(stateSpeeches)) {
-    return stateSpeeches[Math.floor(Math.random() * stateSpeeches.length)];
-  }
-  return "Meowl ở đây nè! 🐱";
+// Neon Cyan Tech Theme Colors
+const NEON_COLORS = {
+  cyan: {
+    primary: "#00f5ff",
+    glow: "rgba(0, 245, 255, 0.5)",
+    dark: "#00c8d6",
+    bg: "rgba(0, 245, 255, 0.1)",
+  },
+  blue: {
+    primary: "#00d4ff",
+    glow: "rgba(0, 212, 255, 0.5)",
+    dark: "#0099cc",
+    bg: "rgba(0, 212, 255, 0.1)",
+  },
+  purple: {
+    primary: "#a855f7",
+    glow: "rgba(168, 85, 247, 0.5)",
+    dark: "#7c3aed",
+    bg: "rgba(168, 85, 247, 0.1)",
+  },
+  green: {
+    primary: "#00ff88",
+    glow: "rgba(0, 255, 136, 0.5)",
+    dark: "#00cc6a",
+    bg: "rgba(0, 255, 136, 0.1)",
+  },
+  orange: {
+    primary: "#ff6b35",
+    glow: "rgba(255, 107, 53, 0.5)",
+    dark: "#e55a2b",
+    bg: "rgba(255, 107, 53, 0.1)",
+  },
+  yellow: {
+    primary: "#ffd700",
+    glow: "rgba(255, 215, 0, 0.5)",
+    dark: "#ccac00",
+    bg: "rgba(255, 215, 0, 0.1)",
+  },
 };
 
-const slugifyHeading = (input: string): string =>
-  input
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
+interface NeonStatCardProps {
+  label: string;
+  value: string;
+  helper: string;
+  color: keyof typeof NEON_COLORS;
+  icon: React.ReactNode;
+  trend?: "up" | "down" | "stable";
+}
 
-const isSameLocalDate = (sourceDate: Date, targetDate: Date): boolean => {
+const NeonStatCard: React.FC<NeonStatCardProps> = ({
+  label,
+  value,
+  helper,
+  color,
+  icon,
+  trend,
+}) => {
+  const theme = NEON_COLORS[color];
+
   return (
-    sourceDate.getFullYear() === targetDate.getFullYear() &&
-    sourceDate.getMonth() === targetDate.getMonth() &&
-    sourceDate.getDate() === targetDate.getDate()
+    <article
+      className="neon-stat-card"
+      style={{
+        borderColor: theme.primary,
+        boxShadow: `0 0 20px ${theme.glow}, inset 0 0 20px ${theme.bg}`,
+      }}
+    >
+      <div className="neon-stat-header">
+        <span
+          className="neon-stat-icon"
+          style={{
+            background: `linear-gradient(135deg, ${theme.dark}, ${theme.primary})`,
+            boxShadow: `0 0 15px ${theme.glow}`,
+          }}
+        >
+          {icon}
+        </span>
+        <div className="neon-stat-label-group">
+          <span className="neon-stat-label">{label}</span>
+          {trend && (
+            <span className={`neon-stat-trend neon-trend-${trend}`}>
+              {trend === "up" ? "▲" : trend === "down" ? "▼" : "▸"}
+            </span>
+          )}
+        </div>
+      </div>
+      <strong
+        className="neon-stat-value"
+        style={{
+          textShadow: `0 0 10px ${theme.glow}, 0 0 20px ${theme.glow}`,
+          color: theme.primary,
+        }}
+      >
+        {value}
+      </strong>
+      <span className="neon-stat-helper" style={{ color: "#8b9bb4" }}>
+        {helper}
+      </span>
+    </article>
   );
 };
 
-/** Memoized section content – only re-renders when section content actually changes */
-const SectionContent = memo(
-  ({ content }: { content: string }) => (
-    <motion.div
-      className="lr-page__section-markdown"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
-      <MarkdownRenderer content={content} />
-    </motion.div>
-  ),
-  (prev, next) => prev.content === next.content,
+// Live Analysis Badge
+const LiveAnalysisBadge: React.FC = () => (
+  <div className="live-analysis-badge">
+    <span className="live-pulse" />
+    <span className="live-text">LIVE ANALYSIS</span>
+  </div>
 );
-SectionContent.displayName = "SectionContent";
+
+// Custom Neon Tooltip for Charts
+const NeonTooltip: React.FC<any> = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div
+        className="neon-tooltip"
+        style={{
+          background: "rgba(10, 15, 30, 0.95)",
+          border: "1px solid #00f5ff",
+          boxShadow: "0 0 20px rgba(0, 245, 255, 0.3)",
+          borderRadius: "12px",
+          padding: "12px 16px",
+        }}
+      >
+        <p style={{ color: "#00f5ff", margin: "0 0 8px 0", fontWeight: 600 }}>
+          {label}
+        </p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} style={{ color: entry.color, margin: "4px 0", fontSize: "0.9rem" }}>
+            {entry.name}: {entry.value}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
 
 const LearningReportPage: React.FC = () => {
-  const { user } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const reportIdParam = searchParams.get("id");
+  const snapshotId = isValidReportId(reportIdParam)
+    ? parseReportId(reportIdParam)
+    : null;
+  const isSnapshotView = snapshotId !== null;
 
+  const [selectedRange, setSelectedRange] = useState<ReportRange>("30d");
+  const [report, setReport] = useState<StudentLearningReportResponse | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
-  const [report, setReport] = useState<StudentLearningReportResponse | null>(null);
-  const [canGenerate, setCanGenerate] = useState<CanGenerateResponse | null>(null);
-  const [streakInfo, setStreakInfo] = useState<{ currentStreak: number; longestStreak: number } | null>(null);
+  const [isSavingSnapshot, setIsSavingSnapshot] = useState(false);
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState("overview");
-  const [activeHeadingId, setActiveHeadingId] = useState("lr-doc-overview");
-  const [tocItems, setTocItems] = useState<TocParentItem[]>([]);
-  const [selectedReportType, setSelectedReportType] = useState<ReportType>("COMPREHENSIVE");
-  const [meowlSpeech, setMeowlSpeech] = useState("");
-  const [generatingStep, setGeneratingStep] = useState(0);
-  const [showGeneratingGame, setShowGeneratingGame] = useState(false);
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
-  const headingElementMapRef = useRef<Record<string, HTMLElement>>({});
-  const headingParentMapRef = useRef<Record<string, string>>({});
 
   useEffect(() => {
-    if (isValidReportId(reportIdParam)) {
-      try {
-        const validId = parseReportId(reportIdParam);
-        loadReportById(validId);
-      } catch {
-        loadInitialData();
-      }
-    } else {
-      loadInitialData();
-    }
-  }, [reportIdParam]);
+    const loadReport = async () => {
+      setIsLoading(true);
+      setError(null);
 
-  const loadReportById = async (reportId: number) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const [reportData, canGen, streak] = await Promise.all([
-        learningReportService.getReportById(reportId),
-        learningReportService.canGenerateReport(),
-        streakService.getStreakInfo(),
-      ]);
-      setReport(reportData);
-      setCanGenerate(canGen);
-      setStreakInfo(streak);
-    } catch (err: unknown) {
-      console.error("Error loading report by ID:", err);
-      setError("Không thể tải báo cáo. Báo cáo có thể không tồn tại hoặc đã bị xóa.");
       try {
-        const latestReport = await learningReportService.getLatestReport();
-        if (latestReport) {
-          setReport(latestReport);
-          setError(null);
+        if (snapshotId) {
+          const [snapshot, timeline] = await Promise.all([
+            learningReportService.getReportById(snapshotId),
+            learningReportService.getTimeline(selectedRange, snapshotId),
+          ]);
+
+          setReport({
+            ...snapshot,
+            range: selectedRange,
+            timeline: timeline.timeline,
+          });
+          return;
         }
-      } catch {
-        // Keep the original error
+
+        const liveSummary = await learningReportService.getSummary(selectedRange);
+        setReport(liveSummary);
+      } catch (err: unknown) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Không thể tải learning report lúc này."
+        );
+      } finally {
+        setIsLoading(false);
       }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
 
-  const loadInitialData = async () => {
-    setIsLoading(true);
+    void loadReport();
+  }, [selectedRange, snapshotId]);
+
+  const handleSaveSnapshot = async () => {
+    setIsSavingSnapshot(true);
     setError(null);
     try {
-      const [latestReport, canGen, streak] = await Promise.all([
-        learningReportService.getLatestReport(),
-        learningReportService.canGenerateReport(),
-        streakService.getStreakInfo(),
-      ]);
-      setReport(latestReport);
-      setCanGenerate(canGen);
-      setStreakInfo(streak);
+      const snapshot = await learningReportService.createSnapshot(selectedRange);
+      setSearchParams({ id: String(snapshot.reportId) });
+      setReport(snapshot);
     } catch (err: unknown) {
-      console.error("Error loading report data:", err);
-      setError("Không thể tải dữ liệu. Vui lòng thử lại.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Không thể lưu snapshot cho báo cáo."
+      );
     } finally {
-      setIsLoading(false);
+      setIsSavingSnapshot(false);
     }
   };
 
-  useEffect(() => {
-    if (isLoading) {
-      setMeowlSpeech(getMeowlSpeech("loading"));
-    } else if (isGenerating) {
-      setMeowlSpeech(getMeowlSpeech("generating"));
-    } else if (error) {
-      setMeowlSpeech(getMeowlSpeech("error"));
-    } else if (!report) {
-      setMeowlSpeech(getMeowlSpeech("no-report"));
-    } else {
-      setMeowlSpeech(getMeowlSpeech("report", report.learningTrend));
-    }
-  }, [isLoading, isGenerating, error, report]);
-
-  useEffect(() => {
-    if (isGenerating) {
-      const interval = setInterval(() => {
-        setGeneratingStep((prev) => (prev + 1) % 4);
-      }, 3000);
-      return () => clearInterval(interval);
-    } else {
-      setGeneratingStep(0);
-    }
-  }, [isGenerating]);
-
-  useEffect(() => {
-    if (!isGenerating) {
-      setShowGeneratingGame(false);
-      return undefined;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setShowGeneratingGame(true);
-    }, GENERATING_GAME_DELAY_MS);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [isGenerating]);
-
-  const handleGenerateReport = async () => {
-    if (!canGenerate?.canGenerate) return;
-
-    setIsGenerating(true);
-    setShowGeneratingGame(false);
-    setError(null);
-    setGeneratingStep(0);
-    try {
-      const newReport = await learningReportService.generateReport({
-        reportType: selectedReportType,
-        includeChatHistory: true,
-        includeDetailedSkills: true,
-      });
-      const [canGen, streak] = await Promise.all([
-        learningReportService.canGenerateReport(),
-        streakService.getStreakInfo(),
-      ]);
-      setReport(newReport);
-      setCanGenerate(canGen);
-      setStreakInfo(streak);
-      setActiveSection("overview");
-      setActiveHeadingId("lr-doc-overview");
-    } catch (err: unknown) {
-      console.error("Error generating report:", err);
-      setError(err instanceof Error ? err.message : "Không thể tạo báo cáo.");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleGenerateQuickReport = async () => {
-    setIsGenerating(true);
-    setShowGeneratingGame(false);
-    setError(null);
-    setGeneratingStep(0);
-    try {
-      const newReport = await learningReportService.generateQuickReport();
-      const [canGen, streak] = await Promise.all([
-        learningReportService.canGenerateReport(),
-        streakService.getStreakInfo(),
-      ]);
-      setReport(newReport);
-      setCanGenerate(canGen);
-      setStreakInfo(streak);
-      setActiveSection("overview");
-      setActiveHeadingId("lr-doc-overview");
-    } catch (err: unknown) {
-      console.error("Error generating quick report:", err);
-      setError(err instanceof Error ? err.message : "Không thể tạo báo cáo.");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleDownloadPDF = async () => {
+  const handleDownloadPdf = async () => {
     if (!report) return;
-    setIsDownloadingPDF(true);
+
+    setIsDownloadingPdf(true);
+    setError(null);
     try {
-      let avatarUrl = user?.avatarMediaUrl || user?.avatarUrl;
-      if (!user?.avatarMediaUrl && user?.id) {
-        try {
-          const userService = (await import('../../services/userService')).default;
-          const freshUser = await userService.getUserProfile(user.id);
-          if (freshUser.avatarMediaUrl) avatarUrl = freshUser.avatarMediaUrl;
-        } catch (error) {
-          console.error('Failed to fetch fresh profile:', error);
-        }
-      }
       await downloadLearningReportPDF(report, {
         filename: learningReportService.formatReportFileName(report),
-        includeHeader: true,
-        includeFooter: true,
-        includePageNumbers: true,
-        quality: "high",
-        userAvatar: avatarUrl,
-        branding: {
-          companyName: "SkillVerse",
-          tagline: "Your AI-Powered Learning Companion",
-        },
       });
-    } catch (err) {
-      console.error("Error downloading PDF:", err);
-      setError("Không thể tải PDF. Vui lòng thử lại.");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "Không thể tải PDF lúc này."
+      );
     } finally {
-      setIsDownloadingPDF(false);
+      setIsDownloadingPdf(false);
     }
   };
 
-  const getTotalStudyHours = (): string => {
-    if (!report?.metrics) return "0h";
-    const totalHours = report.metrics.totalStudyHours || 0;
-    return `${totalHours}h`;
+  const handleViewLive = () => {
+    setSearchParams({});
   };
 
-  const getStreakDisplay = () => {
-    const streak = report?.metrics?.currentStreak || 0;
-    let emoji = "🔥";
-    let description = "ngày liên tiếp";
-    if (streak === 0) {
-      emoji = "💤";
-      description = "Bắt đầu streak!";
-    } else if (streak >= 30) {
-      emoji = "🔥🔥🔥";
-      description = "Streak cháy!";
-    } else if (streak >= 14) {
-      emoji = "🔥🔥";
-      description = "Streak mạnh!";
-    } else if (streak >= 7) {
-      emoji = "🔥";
-      description = "Streak tốt!";
-    }
-    return { value: streak, emoji, description };
-  };
+  // Enhanced chart data with tasks and jobs
+  const chartData = useMemo(() => {
+    if (!report?.timeline) return [];
+    return report.timeline.map((point) => ({
+      ...point,
+      // Ensure all values are numbers for the chart
+      studyHours: Math.round((point.studyMinutes || 0) / 60 * 10) / 10,
+      productivity: (point.missionsCompleted || 0) + (point.tasksCompleted || 0) + (point.jobsCompleted || 0),
+    }));
+  }, [report?.timeline]);
 
-  const getAvailableSections = () => {
-    if (!report) return [];
-    const sections = [{ key: "overview", available: true }];
-    Object.entries(report.sections || {}).forEach(([key, content]) => {
-      if (content && content.trim()) {
-        sections.push({ key, available: true });
-      }
-    });
-    return sections;
-  };
-
-  const availableSections = useMemo(() => getAvailableSections(), [report]);
-  const detailSections = useMemo(
-    () => availableSections.filter(({ key }) => key !== "overview"),
-    [availableSections],
-  );
-
-  const isReportFromToday = useMemo(() => {
-    if (!report?.generatedAt) return false;
-
-    const reportDate = new Date(report.generatedAt);
-    if (Number.isNaN(reportDate.getTime())) return false;
-
-    return isSameLocalDate(reportDate, new Date());
-  }, [report?.generatedAt]);
-
-  const setSectionRef = useCallback(
-    (key: string) => (node: HTMLElement | null) => {
-      sectionRefs.current[key] = node;
-    },
-    [],
-  );
-
-  const handleSidebarSectionClick = useCallback((headingId: string) => {
-    const headingNode = headingElementMapRef.current[headingId];
-    if (!headingNode) return;
-    headingNode.scrollIntoView({ behavior: "smooth", block: "start" });
-    const parentKey = headingParentMapRef.current[headingId];
-    if (parentKey) {
-      setActiveSection(parentKey);
-    }
-    setActiveHeadingId(headingId);
-  }, []);
-
-  useEffect(() => {
-    if (!report || detailSections.length === 0) {
-      setTocItems([]);
-      headingElementMapRef.current = {};
-      headingParentMapRef.current = {};
-      return;
-    }
-
-    if (isLoading || isGenerating) {
-      return;
-    }
-
-    let isCancelled = false;
-    let retryFrameId: number | null = null;
-
-    const buildTocFromDom = (): boolean => {
-      const parentItems: TocParentItem[] = [];
-      const headingElementMap: Record<string, HTMLElement> = {};
-      const headingParentMap: Record<string, string> = {};
-
-      detailSections.forEach(({ key }) => {
-        const sectionNode = sectionRefs.current[key];
-        if (!sectionNode) return;
-
-        const config = SECTION_CONFIG.find((section) => section.key === key);
-        if (!config) return;
-
-        const parentId = `lr-doc-${key}`;
-        const parentHeading = sectionNode.querySelector(
-          ".lr-page__doc-h2",
-        ) as HTMLHeadingElement | null;
-
-        if (parentHeading) {
-          parentHeading.id = parentId;
-          headingElementMap[parentId] = parentHeading;
-          headingParentMap[parentId] = key;
-        }
-
-        const childHeadings = Array.from(
-          sectionNode.querySelectorAll(
-            ".lr-page__content-section-body h2.lr-markdown__h2, .lr-page__content-section-body h3.lr-markdown__h3",
-          ),
-        ) as HTMLHeadingElement[];
-
-        const slugCounter: Record<string, number> = {};
-        const children: TocChildItem[] = childHeadings.map((headingNode) => {
-          const title = headingNode.textContent?.trim() || "Mục con";
-          const level = headingNode.tagName.toLowerCase() === "h2" ? 2 : 3;
-          const slug = slugifyHeading(title) || "section";
-          const nextCount = (slugCounter[slug] ?? 0) + 1;
-          slugCounter[slug] = nextCount;
-          const childId = `${parentId}--${slug}-${nextCount}`;
-
-          headingNode.id = childId;
-          headingNode.dataset.parentHeading = parentId;
-          headingElementMap[childId] = headingNode;
-          headingParentMap[childId] = key;
-
-          return { id: childId, title, level };
-        });
-
-        parentItems.push({
-          id: parentId,
-          key,
-          title: config.label,
-          children,
-        });
-      });
-
-      if (parentItems.length === 0) {
-        return false;
-      }
-
-      headingElementMapRef.current = headingElementMap;
-      headingParentMapRef.current = headingParentMap;
-      setTocItems(parentItems);
-
-      const firstDetailKey = detailSections[0]?.key;
-      const firstDetailHeadingId = firstDetailKey
-        ? `lr-doc-${firstDetailKey}`
-        : "lr-doc-overview";
-
-      setActiveHeadingId((previous) =>
-        headingElementMap[previous] ? previous : firstDetailHeadingId,
-      );
-      setActiveSection((previous) =>
-        previous && sectionRefs.current[previous]
-          ? previous
-          : firstDetailKey || "overview",
-      );
-
-      return true;
-    };
-
-    const frameId = window.requestAnimationFrame(() => {
-      if (isCancelled) return;
-
-      const builtOnFirstFrame = buildTocFromDom();
-      if (builtOnFirstFrame || isCancelled) return;
-
-      // Retry once on the next frame in case markdown sections mount one tick later.
-      retryFrameId = window.requestAnimationFrame(() => {
-        if (isCancelled) return;
-        buildTocFromDom();
-      });
-    });
-
-    return () => {
-      isCancelled = true;
-      window.cancelAnimationFrame(frameId);
-      if (retryFrameId !== null) {
-        window.cancelAnimationFrame(retryFrameId);
-      }
-    };
-  }, [report, detailSections, isGenerating, isLoading]);
-
-  useEffect(() => {
-    if (tocItems.length === 0) return;
-
-    const visibleHeadings = new Map<string, { ratio: number; top: number }>();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const heading = entry.target as HTMLElement;
-          const id = heading.id;
-          if (!id) return;
-
-          if (entry.isIntersecting) {
-            visibleHeadings.set(id, {
-              ratio: entry.intersectionRatio,
-              top: entry.boundingClientRect.top,
-            });
-          } else {
-            visibleHeadings.delete(id);
-          }
-        });
-
-        if (visibleHeadings.size === 0) return;
-
-        const sorted = Array.from(visibleHeadings.entries()).sort((a, b) => {
-          const scoreA = Math.abs(a[1].top - 100) - a[1].ratio * 35;
-          const scoreB = Math.abs(b[1].top - 100) - b[1].ratio * 35;
-          return scoreA - scoreB;
-        });
-
-        const nextHeadingId = sorted[0]?.[0];
-        if (!nextHeadingId) return;
-
-        setActiveHeadingId((prev) =>
-          prev === nextHeadingId ? prev : nextHeadingId,
-        );
-
-        const parentKey = headingParentMapRef.current[nextHeadingId];
-        if (parentKey) {
-          setActiveSection((prev) => (prev === parentKey ? prev : parentKey));
-        }
-      },
-      {
-        root: null,
-        threshold: [0.1, 0.25, 0.4, 0.6],
-        rootMargin: "-100px 0px -70% 0px",
-      },
-    );
-
-    Object.values(headingElementMapRef.current).forEach((element) => {
-      observer.observe(element);
-    });
-
-    return () => observer.disconnect();
-  }, [tocItems]);
-
-  const renderOverviewContent = () => {
-    if (!report) return null;
-    const progressValue = report.overallProgress ?? 0;
-    const studyHours = report.metrics?.totalStudyHours ?? 0;
-    const streakValue = streakInfo?.currentStreak ?? 0;
-    const completedTasks = report.metrics?.totalTasksCompleted ?? 0;
-
-    const renderEmptyStat = (unit = "") => (
-      <div className="lr-page__stat-empty">
-        <span className="lr-page__stat-empty-value">
-          -{unit ? ` ${unit}` : ""}
-        </span>
-        <span className="lr-page__stat-empty-text">
-          Chưa có dữ liệu, bắt đầu học ngay nhé!
-        </span>
-      </div>
-    );
-
+  const hasAnyData = useMemo(() => {
+    if (!report) return false;
     return (
-      <div className="lr-page__overview-content">
-          <div className="lr-page__stats-grid">
-            <motion.div className="lr-page__stat-card lr-page__stat-card--primary" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
-              <div className="lr-page__stat-icon"><BarChart2 size={24} /></div>
-              <div className="lr-page__stat-details">
-                {progressValue > 0 ? (
-                  <span className="lr-page__stat-value">{progressValue}%</span>
-                ) : (
-                  renderEmptyStat("%")
-                )}
-                <span className="lr-page__stat-label">Tiến độ tổng thể</span>
-              </div>
-              <div className="lr-page__stat-progress">
-                <div className="lr-page__stat-progress-bar" style={{ width: `${progressValue}%` }} />
-              </div>
-            </motion.div>
-            <motion.div className="lr-page__stat-card" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }}>
-              <div className="lr-page__stat-icon lr-page__stat-icon--time"><Clock size={24} /></div>
-              <div className="lr-page__stat-details">
-                {studyHours > 0 ? (
-                  <span className="lr-page__stat-value">{getTotalStudyHours()}</span>
-                ) : (
-                  renderEmptyStat("h")
-                )}
-                <span className="lr-page__stat-label">Giờ học tổng</span>
-              </div>
-            </motion.div>
-            <motion.div className="lr-page__stat-card" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}>
-              <div className="lr-page__stat-icon lr-page__stat-icon--streak"><Flame size={24} /></div>
-              <div className="lr-page__stat-details">
-                {streakValue > 0 ? (
-                  <span className="lr-page__stat-value">{getStreakDisplay().emoji} {getStreakDisplay().value}</span>
-                ) : (
-                  renderEmptyStat("")
-                )}
-                <span className="lr-page__stat-label">{getStreakDisplay().description}</span>
-              </div>
-            </motion.div>
-            <motion.div className="lr-page__stat-card" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}>
-              <div className="lr-page__stat-icon lr-page__stat-icon--tasks"><CheckCircle2 size={24} /></div>
-              <div className="lr-page__stat-details">
-                {completedTasks > 0 ? (
-                  <span className="lr-page__stat-value">{completedTasks}</span>
-                ) : (
-                  renderEmptyStat("")
-                )}
-                <span className="lr-page__stat-label">Tasks hoàn thành</span>
-              </div>
-            </motion.div>
-          </div>
-
-          <motion.div className={`lr-page__trend-banner lr-page__trend-banner--${report.learningTrend}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-             {report.learningTrend === "improving" && <><Trophy size={20} /><span>Xu hướng: <strong>Đang tiến bộ tuyệt vời!</strong></span></>}
-             {report.learningTrend === "stable" && <><TrendingUp size={20} /><span>Xu hướng: <strong>Ổn định và đều đặn</strong></span></>}
-             {report.learningTrend === "declining" && <><AlertCircle size={20} /><span>Xu hướng: <strong>Cần tập trung hơn</strong></span></>}
-          </motion.div>
-
-          <div className="lr-page__cards-row">
-            {report.recommendedFocus && (
-              <motion.div className="lr-page__focus-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="lr-page__focus-header"><Target size={20} /><span>Đề xuất tập trung</span></div>
-                <p className="lr-page__focus-text">{report.recommendedFocus}</p>
-              </motion.div>
-            )}
-            <motion.div className="lr-page__summary-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-              <div className="lr-page__summary-header"><GraduationCap size={20} /><span>Tóm tắt nhanh</span></div>
-              <div className="lr-page__summary-content">
-                <p>Báo cáo tạo vào <strong>{learningReportService.formatReportDate(report.generatedAt)}</strong>. Bạn đã dành <strong>{report.metrics?.totalStudyHours ?? 0} giờ</strong> học tập và hoàn thành <strong>{report.metrics?.totalTasksCompleted ?? 0} công việc</strong>.</p>
-              </div>
-              {!isReportFromToday && (
-                <div className="lr-page__summary-actions">
-                  <button
-                    className="lr-page__action-btn lr-page__action-btn--pdf"
-                    onClick={handleDownloadPDF}
-                    disabled={isDownloadingPDF}
-                  >
-                    <Download size={16} className={isDownloadingPDF ? "spinning" : ""} />
-                    <span>{isDownloadingPDF ? "ĐANG TẢI..." : "TẢI PDF"}</span>
-                  </button>
-                  <button
-                    className="lr-page__action-btn lr-page__action-btn--new"
-                    onClick={handleGenerateQuickReport}
-                    disabled={!canGenerate?.canGenerate}
-                  >
-                    {canGenerate?.canGenerate ? (
-                      <>
-                        <RefreshCw size={16} />
-                        <span>TẠO BÁO CÁO MỚI</span>
-                      </>
-                    ) : (
-                      <>
-                        <Clock size={16} />
-                        <span>Đợi {canGenerate?.remainingCooldownMinutes !== undefined
-                          ? learningReportService.getTimeUntilNextReport(canGenerate.remainingCooldownMinutes)
-                          : "..."}</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              )}
-            </motion.div>
-          </div>
-      </div>
+      statNumber(report.studyStats.totalStudyHours) > 0 ||
+      statNumber(report.roadmapStats.totalRoadmaps) > 0 ||
+      statNumber(report.taskStats.totalTasks) > 0 ||
+      statNumber(report.courseStats.activeCourses) > 0 ||
+      statNumber(report.courseStats.completedCourses) > 0 ||
+      statNumber(report.jobStats?.completedJobs) > 0
     );
-  };
+  }, [report]);
 
-  const renderSectionBody = (sectionKey: string) => {
-    if (sectionKey === "overview") {
-      return renderOverviewContent();
-    }
-
-    if (!report) return null;
-    const content = report.sections?.[sectionKey as keyof typeof report.sections];
-    if (!content) {
-      return (
-        <div className="lr-page__empty-section">
-          <FileText size={48} />
-          <p>Không có dữ liệu cho phần này</p>
-        </div>
-      );
-    }
-
-    return <SectionContent content={content} />;
+  // Determine trend for each stat
+  const getTrend = (current: number, threshold: number): "up" | "down" | "stable" => {
+    if (current > threshold) return "up";
+    if (current < threshold / 2) return "down";
+    return "stable";
   };
 
   return (
-    <div className="lr-page">
-      <div className="lr-page__container">
-        {/* Header - Alien HUD Style */}
-        <header className="lr-page__header">
-          <div className="lr-page__header-left">
-            <button className="lr-page__back-btn" onClick={() => navigate("/dashboard")}>
-              <ArrowLeft size={20} />
+    <div className="neon-learning-report">
+      {/* Animated Background */}
+      <div className="neon-bg-grid" />
+      <div className="neon-bg-glow cyan" />
+      <div className="neon-bg-glow blue" />
+      <div className="neon-bg-glow purple" />
+
+      <div className="neon-report-container">
+        {/* Hero Header */}
+        <header className="neon-hero">
+          <div className="neon-hero-main">
+            <button
+              className="neon-back-btn"
+              onClick={() => navigate("/dashboard")}
+            >
+              <ArrowLeft size={18} />
+              <span>Dashboard</span>
             </button>
-            <div className="lr-page__meowl-avatar">
-              <img src="/images/meowl_bg_clear.png" alt="Meowl" />
-              <div className="lr-page__meowl-status" />
-            </div>
-            <div className="lr-page__header-title">
-              <h1>MEOWL LEARNING REPORT</h1>
-              <p>{meowlSpeech}</p>
+
+            <div className="neon-hero-content">
+              <div className="neon-hero-badge">
+                {isSnapshotView ? (
+                  <span className="neon-badge snapshot">SNAPSHOT</span>
+                ) : (
+                  <LiveAnalysisBadge />
+                )}
+              </div>
+              <h1 className="neon-title">
+                <Cpu size={32} className="neon-title-icon" />
+                Learning Analytics
+              </h1>
+              <p className="neon-subtitle">
+                {report
+                  ? `${isSnapshotView ? "Snapshot lưu lúc" : "Cập nhật lúc"} ${learningReportService.formatReportDate(
+                      report.generatedAt
+                    )}`
+                  : "Phân tích tiến độ học tập và làm việc theo thời gian thực"}
+              </p>
             </div>
           </div>
-          <div className="lr-page__header-actions">
-            <button className="lr-page__close-btn" onClick={() => navigate("/dashboard")}>
-              <X size={24} />
+
+          <div className="neon-hero-actions">
+            {isSnapshotView && (
+              <button
+                className="neon-btn neon-btn-ghost"
+                onClick={handleViewLive}
+              >
+                <RefreshCw size={16} />
+                <span>Live View</span>
+              </button>
+            )}
+            <button
+              className="neon-btn neon-btn-ghost"
+              onClick={handleDownloadPdf}
+              disabled={!report || isDownloadingPdf}
+            >
+              <Download size={16} />
+              <span>{isDownloadingPdf ? "Đang tạo..." : "Export PDF"}</span>
+            </button>
+            <button
+              className="neon-btn neon-btn-primary"
+              onClick={handleSaveSnapshot}
+              disabled={isSavingSnapshot || isSnapshotView}
+            >
+              <Save size={16} />
+              <span>{isSavingSnapshot ? "Đang lưu..." : "Lưu Snapshot"}</span>
             </button>
           </div>
         </header>
 
-        {/* Main Interface */}
-        <main className="lr-page__main">
-          {isLoading ? (
-            <div className="lr-page__loading-state">
-              <MeowlKuruLoader size="large" text="Đang đồng bộ dữ liệu hệ thống..." fullScreen={false} />
+        {/* Range Selector */}
+        <section className="neon-range-section">
+          <div className="neon-range-info">
+            <Cpu size={20} className="neon-range-icon" />
+            <div>
+              <strong className="neon-range-title">Analysis Range</strong>
+              <p className="neon-range-desc">
+                Timeline chi tiết: Study Minutes | Tasks | Missions | Jobs
+              </p>
             </div>
-          ) : isGenerating ? (
-            <div className={`lr-page__generating-state ${showGeneratingGame ? "lr-page__generating-state--split" : ""}`}>
-              <div className="lr-page__generating-shell">
-                <div className="lr-page__loader-center">
-                  <MeowlKuruLoader size="large" text="Đang xử lý dữ liệu..." />
-
-                  <div className="lr-page__generating-steps">
-                    <div className={`lr-page__step ${generatingStep >= 0 ? "lr-page__step--done" : ""}`}>
-                      <CheckCircle2 size={16} />
-                      <span>Thu thập dữ liệu</span>
-                    </div>
-                    <div className="lr-page__step-connector" />
-                    <div
-                      className={`lr-page__step ${generatingStep >= 1 ? "lr-page__step--done" : ""} ${generatingStep === 1 ? "lr-page__step--active" : ""}`}
-                    >
-                      {generatingStep === 1 ? (
-                        <RefreshCw size={16} className="spinning" />
-                      ) : (
-                        <Brain size={16} />
-                      )}
-                      <span>Phân tích AI</span>
-                    </div>
-                    <div className="lr-page__step-connector" />
-                    <div
-                      className={`lr-page__step ${generatingStep >= 2 ? "lr-page__step--done" : ""} ${generatingStep === 2 ? "lr-page__step--active" : ""}`}
-                    >
-                      {generatingStep === 2 ? (
-                        <RefreshCw size={16} className="spinning" />
-                      ) : (
-                        <FileText size={16} />
-                      )}
-                      <span>Tạo báo cáo</span>
-                    </div>
-                    <div className="lr-page__step-connector" />
-                    <div
-                      className={`lr-page__step ${generatingStep >= 3 ? "lr-page__step--done" : ""} ${generatingStep === 3 ? "lr-page__step--active" : ""}`}
-                    >
-                      {generatingStep === 3 ? (
-                        <RefreshCw size={16} className="spinning" />
-                      ) : (
-                        <Sparkles size={16} />
-                      )}
-                      <span>Hoàn thiện</span>
-                    </div>
-                  </div>
-
-                  {showGeneratingGame && (
-                    <p className="lr-page__generating-helper">
-                      Hệ thống đang phân tích sâu hơn bình thường. Làm một ván caro với Meowl trong lúc chờ nhé.
-                    </p>
-                  )}
-                </div>
-
-                <aside className="lr-page__generating-game-pane" aria-hidden={!showGeneratingGame}>
-                  {showGeneratingGame && (
-                    <>
-                      <header className="lr-page__generating-game-header">
-                        <span className="lr-page__generating-game-eyebrow">MINI GAME KHI CHỜ BÁO CÁO</span>
-                        <h3>MEOWL TIC-TAC-TOE</h3>
-                      </header>
-                      <div className="lr-page__generating-game-body">
-                        <TicTacToeGame mode="embedded" />
-                      </div>
-                    </>
-                  )}
-                </aside>
-              </div>
-            </div>
-          ) : error ? (
-            <div className="lr-page__error-state">
-              <AlertCircle size={64} color="#f87171" />
-              <h3>TRỤC TRẶC HỆ THỐNG</h3>
-              <button onClick={loadInitialData} className="lr-page__retry-btn">
-                <RefreshCw size={18} /> THỬ LẠI
+          </div>
+          <div className="neon-range-switch">
+            {RANGE_OPTIONS.map((range) => (
+              <button
+                key={range}
+                className={`neon-range-btn ${selectedRange === range ? "active" : ""}`}
+                onClick={() => setSelectedRange(range)}
+              >
+                {range === "7d" ? "7 Ngày" : range === "30d" ? "30 Ngày" : "90 Ngày"}
               </button>
-            </div>
-          ) : !report ? (
-             <div className="lr-page__no-report-state">
-               <div className="lr-page__setup-container">
-                 <div className="lr-page__setup-icon"><Sparkles size={48} /></div>
-                 <h3>TẠO PHÂN TÍCH MỚI</h3>
-                 <p>Hệ thống AI Meowl đã sẵn sàng tổng hợp quá trình phát triển của bạn.</p>
-                 
-                 <div className="lr-page__setup-options">
-                    <div className="lr-page__option-field">
-                      <label>CẤU HÌNH PHẠM VI:</label>
-                      <select value={selectedReportType} onChange={(e) => setSelectedReportType(e.target.value as ReportType)}>
-                        <option value="COMPREHENSIVE">Báo cáo toàn diện</option>
-                        <option value="WEEKLY_SUMMARY">Tổng kết tuần</option>
-                        <option value="MONTHLY_SUMMARY">Tổng kết tháng</option>
-                        <option value="SKILL_ASSESSMENT">Đánh giá kỹ năng</option>
-                      </select>
-                    </div>
-                    <button className="lr-page__generate-btn-main" onClick={handleGenerateReport} disabled={!canGenerate?.canGenerate}>
-                      {canGenerate?.canGenerate ? (
-                        <><Zap size={20} /> KÍCH HOẠT PHÂN TÍCH</>
-                      ) : (
-                        <><Clock size={20} /> Đợi {canGenerate?.remainingCooldownMinutes !== undefined
-                            ? learningReportService.getTimeUntilNextReport(canGenerate.remainingCooldownMinutes)
-                            : "..."}</>
-                      )}
-                    </button>
-                 </div>
-               </div>
-             </div>
-          ) : (
-            <>
-              <section className="lr-page__overview-block">
-                <header className="lr-page__content-section-header">
-                  <div className="lr-page__content-section-title">
-                    <BarChart2 size={18} />
-                    <h2 className="lr-page__doc-h2">Tổng quan</h2>
+            ))}
+          </div>
+        </section>
+
+        {error && (
+          <div className="neon-error">
+            <Zap size={20} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {isLoading ? (
+          <section className="neon-loading">
+            <div className="neon-loader" />
+            <p>Đang phân tích dữ liệu...</p>
+            <span className="neon-loading-sub">Tổng hợp từ Roadmap, Tasks, Courses & Jobs</span>
+          </section>
+        ) : report ? (
+          <>
+            {/* Stats Grid - 8 cards for comprehensive tracking */}
+            <section className="neon-stats-grid">
+              <NeonStatCard
+                label="Overall Progress"
+                value={`${statNumber(report.overallProgress)}%`}
+                helper={`Trend: ${report.learningTrend}`}
+                color="cyan"
+                icon={<Target size={18} />}
+                trend={report.learningTrend === "improving" ? "up" : report.learningTrend === "declining" ? "down" : "stable"}
+              />
+              <NeonStatCard
+                label="Study Hours"
+                value={`${statNumber(report.studyStats.totalStudyHours)}h`}
+                helper={`${statNumber(report.studyStats.studyMinutesWeek)} phút / tuần`}
+                color="blue"
+                icon={<Clock3 size={18} />}
+                trend={getTrend(report.studyStats.studyMinutesWeek, 120)}
+              />
+              <NeonStatCard
+                label="Current Streak"
+                value={`${statNumber(report.studyStats.currentStreak)} ngày`}
+                helper={`${statNumber(report.studyStats.studyMinutesToday)} phút hôm nay`}
+                color="orange"
+                icon={<Flame size={18} />}
+                trend={report.studyStats.currentStreak > 3 ? "up" : "stable"}
+              />
+              <NeonStatCard
+                label="Tasks Completed"
+                value={`${statNumber(report.taskStats.completedTasks)} / ${statNumber(report.taskStats.totalTasks)}`}
+                helper={`${statNumber(report.taskStats.pendingTasks)} chờ, ${statNumber(report.taskStats.overdueTasks)} quá hạn`}
+                color="green"
+                icon={<ListTodo size={18} />}
+                trend={report.taskStats.overdueTasks > 0 ? "down" : "stable"}
+              />
+              <NeonStatCard
+                label="Missions Done"
+                value={`${statNumber(report.roadmapStats.completedMissions)} / ${statNumber(report.roadmapStats.totalMissions)}`}
+                helper={`${statNumber(report.roadmapStats.pendingMissions)} mission còn lại`}
+                color="purple"
+                icon={<BookOpenCheck size={18} />}
+                trend={getTrend(report.roadmapStats.completedMissions, report.roadmapStats.totalMissions / 2)}
+              />
+              <NeonStatCard
+                label="Active Courses"
+                value={`${statNumber(report.courseStats.activeCourses)}`}
+                helper={`${statNumber(report.courseStats.completedCourses)} khóa hoàn thành`}
+                color="yellow"
+                icon={<GraduationCap size={18} />}
+                trend="stable"
+              />
+              <NeonStatCard
+                label="Course Progress"
+                value={`${statNumber(report.courseStats.averageActiveCourseProgress)}%`}
+                helper="Trung bình khóa đang học"
+                color="cyan"
+                icon={<BarChart3 size={18} />}
+                trend={getTrend(report.courseStats.averageActiveCourseProgress, 50)}
+              />
+              <NeonStatCard
+                label="Jobs Completed"
+                value={`${statNumber(report.jobStats?.completedJobs)}`}
+                helper={`${statNumber(report.jobStats?.totalJobsApplied)} apply | ${statNumber(report.jobStats?.onTimeDeliveryRate)}% on-time`}
+                color="green"
+                icon={<Briefcase size={18} />}
+                trend={getTrend(report.jobStats?.completedJobs || 0, 1)}
+              />
+            </section>
+
+            {/* Main Content Grid */}
+            <section className="neon-main-grid">
+              {/* Enhanced Timeline Chart */}
+              <article className="neon-panel neon-panel-chart">
+                <div className="neon-panel-header">
+                  <div>
+                    <h2 className="neon-panel-title">
+                      <TrendingUp size={20} />
+                      Activity Timeline
+                    </h2>
+                    <p className="neon-panel-subtitle">
+                      Phân tích chi tiết: Tasks, Missions & Jobs theo thời gian
+                    </p>
                   </div>
-                </header>
-                <div className="lr-page__content-section-body">
-                  {renderOverviewContent()}
+                  <LineChart size={24} className="neon-panel-icon" />
                 </div>
-              </section>
 
-              <div className="lr-page__report-layout">
-                <aside className="lr-page__sidebar">
-                  <nav className="lr-page__nav lr-page__toc" aria-label="Mục lục báo cáo">
-                    {tocItems.map((parent) => {
-                      const config = SECTION_CONFIG.find((section) => section.key === parent.key);
-                      const IconComponent = config?.icon || FileText;
-                      const isParentActive = activeSection === parent.key;
-                      const isExpanded = isParentActive;
+                <div className="neon-chart-container">
+                  {chartData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={380}>
+                      <ComposedChart data={chartData}>
+                        <defs>
+                          <linearGradient id="studyGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor={NEON_COLORS.cyan.primary} stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor={NEON_COLORS.cyan.primary} stopOpacity={0}/>
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid
+                          strokeDasharray="3 3"
+                          stroke="rgba(0, 245, 255, 0.1)"
+                          vertical={false}
+                        />
+                        <XAxis
+                          dataKey="bucketLabel"
+                          tick={{ fill: "#8b9bb4", fontSize: 11 }}
+                          axisLine={{ stroke: "rgba(0, 245, 255, 0.2)" }}
+                          tickLine={{ stroke: "rgba(0, 245, 255, 0.2)" }}
+                        />
+                        <YAxis
+                          yAxisId="left"
+                          tick={{ fill: "#8b9bb4", fontSize: 11 }}
+                          axisLine={{ stroke: "rgba(0, 245, 255, 0.2)" }}
+                          tickLine={{ stroke: "rgba(0, 245, 255, 0.2)" }}
+                          label={{ value: 'Study (min)', angle: -90, position: 'insideLeft', fill: '#00f5ff' }}
+                        />
+                        <YAxis
+                          yAxisId="right"
+                          orientation="right"
+                          tick={{ fill: "#8b9bb4", fontSize: 11 }}
+                          axisLine={{ stroke: "rgba(0, 245, 255, 0.2)" }}
+                          tickLine={{ stroke: "rgba(0, 245, 255, 0.2)" }}
+                          label={{ value: 'Completed', angle: 90, position: 'insideRight', fill: '#00d4ff' }}
+                        />
+                        <Tooltip content={<NeonTooltip />} />
+                        <Legend
+                          wrapperStyle={{ color: "#8b9bb4" }}
+                        />
+                        <Area
+                          yAxisId="left"
+                          type="monotone"
+                          dataKey="studyMinutes"
+                          stroke={NEON_COLORS.cyan.primary}
+                          strokeWidth={2}
+                          fillOpacity={1}
+                          fill="url(#studyGradient)"
+                          name="Study Minutes"
+                        />
+                        <Bar
+                          yAxisId="right"
+                          dataKey="tasksCompleted"
+                          fill={NEON_COLORS.green.primary}
+                          radius={[4, 4, 0, 0]}
+                          name="Tasks"
+                        />
+                        <Line
+                          yAxisId="right"
+                          type="monotone"
+                          dataKey="missionsCompleted"
+                          stroke={NEON_COLORS.purple.primary}
+                          strokeWidth={3}
+                          dot={{ fill: NEON_COLORS.purple.primary, r: 4, strokeWidth: 0 }}
+                          activeDot={{ r: 6, fill: NEON_COLORS.purple.glow }}
+                          name="Missions"
+                        />
+                        <Line
+                          yAxisId="right"
+                          type="monotone"
+                          dataKey="jobsCompleted"
+                          stroke={NEON_COLORS.orange.primary}
+                          strokeWidth={2}
+                          strokeDasharray="5 5"
+                          dot={{ fill: NEON_COLORS.orange.primary, r: 3, strokeWidth: 0 }}
+                          name="Jobs"
+                        />
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="neon-empty">
+                      <Layers size={48} />
+                      <p>Chưa có dữ liệu timeline cho khoảng này.</p>
+                      <span>Bắt đầu học và làm việc để xem phân tích chi tiết</span>
+                    </div>
+                  )}
+                </div>
+              </article>
 
-                      return (
-                        <div key={parent.id} className="lr-page__toc-group">
-                          <button
-                            className={`lr-page__nav-item ${isParentActive ? "active" : ""}`}
-                            onClick={() => handleSidebarSectionClick(parent.id)}
-                          >
-                            <IconComponent size={18} />
-                            <span>{parent.title.toUpperCase()}</span>
-                            <div className="lr-page__nav-indicator" />
-                          </button>
-
-                          <div className={`lr-page__toc-children ${isExpanded ? "lr-page__toc-children--open" : ""}`}>
-                            {parent.children.map((child) => (
-                              <button
-                                key={child.id}
-                                className={`lr-page__toc-child lr-page__toc-child--l${child.level} ${activeHeadingId === child.id ? "active" : ""}`}
-                                onClick={() => handleSidebarSectionClick(child.id)}
-                              >
-                                <span>{child.title}</span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </nav>
-                </aside>
-
-                <section className="lr-page__content-view">
-                  <div className="lr-page__content-scrollable">
-                    {detailSections.map(({ key }) => {
-                      const config = SECTION_CONFIG.find((section) => section.key === key);
-                      if (!config) return null;
-                      const IconComponent = config.icon;
-
-                      return (
-                        <section
-                          key={key}
-                          id={`lr-section-${key}`}
-                          ref={setSectionRef(key)}
-                          className="lr-page__content-section"
-                        >
-                          <header className="lr-page__content-section-header">
-                            <div className="lr-page__content-section-title">
-                              <IconComponent size={18} />
-                              <h2 className="lr-page__doc-h2">{config.label}</h2>
-                            </div>
-                          </header>
-                          <div className="lr-page__content-section-body">
-                            {renderSectionBody(key)}
-                          </div>
-                        </section>
-                      );
-                    })}
-
-                    <section className="lr-page__content-footer">
-                      <div className="lr-page__content-footer-meta">
-                        <span>Thời gian khởi tạo:</span>
-                        <strong>{learningReportService.formatReportDate(report.generatedAt)}</strong>
-                      </div>
-                      <div className="lr-page__content-footer-actions">
-                        <button className="lr-page__action-btn lr-page__action-btn--pdf" onClick={handleDownloadPDF} disabled={isDownloadingPDF}>
-                          <Download size={18} className={isDownloadingPDF ? "spinning" : ""} />
-                          <span>{isDownloadingPDF ? "ĐANG TẢI..." : "TẢI PDF"}</span>
-                        </button>
-                        <button className="lr-page__action-btn lr-page__action-btn--new" disabled={!canGenerate?.canGenerate}>
-                          {canGenerate?.canGenerate ? (
-                            <>
-                              <RefreshCw size={18} />
-                              <span>TẠO BÁO CÁO MỚI</span>
-                            </>
-                          ) : (
-                            <>
-                              <Clock size={18} />
-                              <span>
-                                Đợi {canGenerate?.remainingCooldownMinutes !== undefined
-                                  ? learningReportService.getTimeUntilNextReport(canGenerate.remainingCooldownMinutes)
-                                  : "..."}
-                              </span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </section>
+              {/* AI Recommendations Panel */}
+              <article className="neon-panel neon-panel-tips">
+                <div className="neon-panel-header">
+                  <div>
+                    <h2 className="neon-panel-title">
+                      <Zap size={20} />
+                      AI Analysis & Recommendations
+                    </h2>
+                    <p className="neon-panel-subtitle">
+                      Đánh giá chi tiết dựa trên thuật toán phân tích dữ liệu
+                    </p>
                   </div>
-                </section>
-              </div>
-            </>
-          )}
-        </main>
+                  <Target size={24} className="neon-panel-icon" />
+                </div>
+                <div className="neon-tips-list">
+                  {report.overview.recommendations.map((tip, index) => {
+                    const isAssessment = tip.includes("Phân tích:") || tip.includes("✅");
+                    const isEarning = tip.includes("💰");
+                    return (
+                      <div
+                        key={`${tip}-${index}`}
+                        className={`neon-tip ${isAssessment ? "assessment" : ""} ${isEarning ? "earning" : ""}`}
+                      >
+                        <span
+                          className="neon-tip-number"
+                          style={{
+                            background: isAssessment
+                              ? "linear-gradient(135deg, #00ff88, #00cc6a)"
+                              : isEarning
+                              ? "linear-gradient(135deg, #ffd700, #ccac00)"
+                              : "linear-gradient(135deg, #00f5ff, #00c8d6)",
+                            boxShadow: isAssessment
+                              ? "0 0 10px rgba(0, 255, 136, 0.5)"
+                              : isEarning
+                              ? "0 0 10px rgba(255, 215, 0, 0.5)"
+                              : "0 0 10px rgba(0, 245, 255, 0.5)",
+                          }}
+                        >
+                          {isAssessment ? "✓" : isEarning ? "$" : index + 1}
+                        </span>
+                        <p>{tip}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </article>
+            </section>
+
+            {/* Job Performance Section */}
+            {report.jobStats && report.jobStats.totalJobsApplied > 0 && (
+              <section className="neon-jobs-section">
+                <div className="neon-section-header">
+                  <Briefcase size={24} className="neon-section-icon" />
+                  <div>
+                    <h2 className="neon-section-title">Job Performance Analytics</h2>
+                    <p className="neon-section-subtitle">
+                      Đánh giá hiệu suất làm việc từ Short-term Jobs đã hoàn thành
+                    </p>
+                  </div>
+                </div>
+
+                <div className="neon-jobs-grid">
+                  <div className="neon-job-metric">
+                    <span className="neon-job-metric-value" style={{ color: NEON_COLORS.green.primary }}>
+                      {report.jobStats.completedJobs}
+                    </span>
+                    <span className="neon-job-metric-label">Jobs Hoàn Thành</span>
+                  </div>
+                  <div className="neon-job-metric">
+                    <span className="neon-job-metric-value" style={{ color: NEON_COLORS.cyan.primary }}>
+                      {report.jobStats.totalJobsApplied}
+                    </span>
+                    <span className="neon-job-metric-label">Tổng Apply</span>
+                  </div>
+                  <div className="neon-job-metric">
+                    <span className="neon-job-metric-value" style={{ color: NEON_COLORS.purple.primary }}>
+                      {report.jobStats.onTimeDeliveryRate}%
+                    </span>
+                    <span className="neon-job-metric-label">On-Time Rate</span>
+                  </div>
+                  <div className="neon-job-metric">
+                    <span className="neon-job-metric-value" style={{ color: NEON_COLORS.yellow.primary }}>
+                      {report.jobStats.totalEarnings?.toLocaleString() || 0}đ
+                    </span>
+                    <span className="neon-job-metric-label">Tổng Thu Nhập</span>
+                  </div>
+                </div>
+
+                {report.jobBreakdown && report.jobBreakdown.length > 0 && (
+                  <div className="neon-jobs-table-wrap">
+                    <table className="neon-jobs-table">
+                      <thead>
+                        <tr>
+                          <th>Job</th>
+                          <th>Recruiter</th>
+                          <th>Status</th>
+                          <th>Milestones</th>
+                          <th>Thu Nhập</th>
+                          <th>Kỹ Năng</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {report.jobBreakdown.slice(0, 5).map((job) => (
+                          <tr key={job.jobId}>
+                            <td>
+                              <strong>{job.jobTitle}</strong>
+                              <span className="neon-job-date">
+                                {job.completedAt
+                                  ? new Date(job.completedAt).toLocaleDateString("vi-VN")
+                                  : job.appliedAt
+                                  ? `Apply: ${new Date(job.appliedAt).toLocaleDateString("vi-VN")}`
+                                  : "Pending"}
+                              </span>
+                            </td>
+                            <td>{job.recruiterName}</td>
+                            <td>
+                              <span className={`neon-job-status ${job.status}`}>
+                                {job.status}
+                              </span>
+                            </td>
+                            <td>{job.milestonesCompleted}/{job.milestonesTotal}</td>
+                            <td style={{ color: NEON_COLORS.yellow.primary, fontWeight: 600 }}>
+                              {job.earnedAmount?.toLocaleString() || 0}đ
+                            </td>
+                            <td>
+                              <div className="neon-job-skills">
+                                {job.primarySkill && (
+                                  <span className="neon-skill primary">{job.primarySkill}</span>
+                                )}
+                                {job.skillsDemonstrated?.slice(0, 2).map((skill, i) => (
+                                  <span key={i} className="neon-skill">{skill}</span>
+                                ))}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/* Detailed Breakdown Tables */}
+            <section className="neon-tables-grid">
+              {/* Roadmap Breakdown */}
+              <article className="neon-panel">
+                <div className="neon-panel-header">
+                  <div>
+                    <h2 className="neon-panel-title">
+                      <BookOpenCheck size={20} />
+                      Roadmap Progress
+                    </h2>
+                    <p className="neon-panel-subtitle">Chi tiết tiến độ từng roadmap</p>
+                  </div>
+                </div>
+                <div className="neon-table-wrap">
+                  <table className="neon-table">
+                    <thead>
+                      <tr>
+                        <th>Roadmap</th>
+                        <th>Progress</th>
+                        <th>Missions</th>
+                        <th>Next Mission</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {report.roadmapBreakdown.length > 0 ? (
+                        report.roadmapBreakdown.map((item) => (
+                          <tr key={item.roadmapId}>
+                            <td>
+                              <strong>{item.title}</strong>
+                              <span>{item.goal || "Chưa có goal mô tả"}</span>
+                            </td>
+                            <td>
+                              <div className="neon-progress-cell">
+                                <div className="neon-progress-bar">
+                                  <div
+                                    className="neon-progress-fill"
+                                    style={{
+                                      width: `${item.progressPercent}%`,
+                                      background: `linear-gradient(90deg, ${NEON_COLORS.purple.dark}, ${NEON_COLORS.purple.primary})`,
+                                      boxShadow: `0 0 10px ${NEON_COLORS.purple.glow}`,
+                                    }}
+                                  />
+                                </div>
+                                <span>{item.progressPercent}%</span>
+                              </div>
+                            </td>
+                            <td>
+                              {item.completedMissions}/{item.totalMissions}
+                            </td>
+                            <td>{item.nextMissionTitle || "✓ Đã hoàn thành"}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={4} className="neon-empty-cell">
+                            Chưa có roadmap để hiển thị
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              {/* Course Breakdown */}
+              <article className="neon-panel">
+                <div className="neon-panel-header">
+                  <div>
+                    <h2 className="neon-panel-title">
+                      <GraduationCap size={20} />
+                      Course Progress
+                    </h2>
+                    <p className="neon-panel-subtitle">Tiến độ các khóa học</p>
+                  </div>
+                </div>
+                <div className="neon-table-wrap">
+                  <table className="neon-table">
+                    <thead>
+                      <tr>
+                        <th>Course</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                        <th>Completed</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {report.courseBreakdown.length > 0 ? (
+                        report.courseBreakdown.map((item) => (
+                          <tr key={`${item.courseId}-${item.status}`}>
+                            <td>{item.courseTitle}</td>
+                            <td>
+                              <span className={`neon-status-badge ${item.status}`}>
+                                {item.status}
+                              </span>
+                            </td>
+                            <td>
+                              <div className="neon-progress-cell">
+                                <div className="neon-progress-bar">
+                                  <div
+                                    className="neon-progress-fill"
+                                    style={{
+                                      width: `${item.progressPercent}%`,
+                                      background: `linear-gradient(90deg, ${NEON_COLORS.yellow.dark}, ${NEON_COLORS.yellow.primary})`,
+                                      boxShadow: `0 0 10px ${NEON_COLORS.yellow.glow}`,
+                                    }}
+                                  />
+                                </div>
+                                <span>{item.progressPercent}%</span>
+                              </div>
+                            </td>
+                            <td>
+                              {item.completedAt
+                                ? learningReportService.formatReportDate(item.completedAt)
+                                : "—"}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={4} className="neon-empty-cell">
+                            Chưa có khóa học để hiển thị
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+            </section>
+
+            {!hasAnyData && (
+              <section className="neon-empty-state">
+                <Layers size={64} />
+                <h3>Chưa có dữ liệu phân tích</h3>
+                <p>
+                  Bắt đầu học tập, hoàn thành tasks, theo dõi roadmap hoặc apply job
+                  để xem phân tích chi tiết về tiến độ của bạn.
+                </p>
+              </section>
+            )}
+          </>
+        ) : null}
       </div>
-      
-      {/* Background Decor */}
-      <div className="lr-page__bg-overlay" />
-      <div className="lr-page__scanline" />
     </div>
   );
 };

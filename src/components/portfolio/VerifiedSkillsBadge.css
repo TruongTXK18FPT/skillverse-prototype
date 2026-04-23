@@ -1,0 +1,241 @@
+/**
+ * VerifiedSkillsBadge — "Aurora Violet" design
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Standalone grid component for displaying verified skills in Portfolio.
+ * Can be embedded in any page (portfolio, public profile, etc).
+ *
+ * Uses the same Aurora Violet palette as RoadmapMentoringPanel.
+ */
+
+/* Container */
+.vsb-container {
+  --vsb-primary: #7c3aed;
+  --vsb-primary-light: #a78bfa;
+  --vsb-secondary: #a855f7;
+  --vsb-accent: #f59e0b;
+  --vsb-success: #10b981;
+  --vsb-surface: #0f0a1e;
+  --vsb-surface-raised: #1a1030;
+  --vsb-text: #ede9fe;
+  --vsb-text-muted: #a78bfa;
+  --vsb-border: rgba(124, 58, 237, 0.2);
+
+  padding: 24px;
+}
+
+.vsb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.vsb-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vsb-header-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--vsb-primary), var(--vsb-secondary));
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
+}
+
+.vsb-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--vsb-text);
+  margin: 0;
+}
+
+.vsb-count {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--vsb-primary-light);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+}
+
+/* Grid */
+.vsb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Skill Card */
+.vsb-card {
+  background: var(--vsb-surface-raised);
+  border: 1px solid var(--vsb-border);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+.vsb-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--vsb-primary) 0%,
+    var(--vsb-secondary) 40%,
+    var(--vsb-accent) 100%
+  );
+  opacity: 0.8;
+}
+
+.vsb-card:hover {
+  border-color: rgba(124, 58, 237, 0.45);
+  box-shadow: 0 8px 40px rgba(168, 85, 247, 0.15);
+  transform: translateY(-3px);
+}
+
+.vsb-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.vsb-skill-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--vsb-text);
+  letter-spacing: -0.2px;
+}
+
+.vsb-verified-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--vsb-primary), var(--vsb-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(124, 58, 237, 0.35);
+  animation: vsb-glow 3s ease-in-out infinite;
+}
+
+@keyframes vsb-glow {
+  0%, 100% { box-shadow: 0 2px 10px rgba(124, 58, 237, 0.35); }
+  50% { box-shadow: 0 2px 20px rgba(168, 85, 247, 0.5); }
+}
+
+.vsb-level {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.vsb-level.beginner {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.vsb-level.intermediate {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.25);
+}
+
+.vsb-level.advanced {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.vsb-level.expert {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.25);
+}
+
+.vsb-mentor-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--vsb-text-muted);
+}
+
+.vsb-mentor-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--vsb-primary), var(--vsb-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.vsb-date {
+  font-size: 11px;
+  color: rgba(167, 139, 250, 0.5);
+}
+
+.vsb-note {
+  font-size: 12px;
+  color: rgba(237, 233, 254, 0.45);
+  line-height: 1.5;
+  font-style: italic;
+  padding: 8px 12px;
+  background: rgba(124, 58, 237, 0.06);
+  border-radius: 8px;
+  border-left: 2px solid rgba(124, 58, 237, 0.3);
+}
+
+/* Empty */
+.vsb-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  color: var(--vsb-text-muted);
+  gap: 14px;
+  text-align: center;
+}
+
+.vsb-empty svg {
+  opacity: 0.3;
+}
+
+.vsb-empty p {
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .vsb-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -15,7 +15,6 @@ export {
   generatePDFFromHTML,
   downloadVietnamesePDF,
   generateReportHTML,
-  markdownToHTML,
 } from "./HTMLPDFGenerator";
 
 // Vietnamese Font utilities

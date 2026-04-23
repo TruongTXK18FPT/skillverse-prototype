@@ -39,6 +39,7 @@ const DEFAULT_FORM_DATA: Partial<UserProfileDTO> = {
   phone: '',
   availabilityStatus: 'AVAILABLE',
   hourlyRate: 0,
+  roadmapMentoringPrice: 0,
   preferredCurrency: 'VND',
   linkedinUrl: '',
   githubUrl: '',
@@ -754,6 +755,17 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
                     onChange={(e) => setFormData({ ...formData, hourlyRate: parseFloat(e.target.value) || 0 })}
                     min="0"
                     step="1000"
+                  />
+                </div>
+
+                <div className="pf-form-group">
+                  <label>Mức Giá Roadmap/Khoá</label>
+                  <input
+                    type="number"
+                    value={formData.roadmapMentoringPrice || 0}
+                    onChange={(e) => setFormData({ ...formData, roadmapMentoringPrice: parseFloat(e.target.value) || 0 })}
+                    min="0"
+                    step="10000"
                   />
                 </div>
 

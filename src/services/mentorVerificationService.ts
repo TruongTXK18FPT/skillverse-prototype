@@ -1,15 +1,19 @@
 /**
  * [Nghiệp vụ] Service cho luồng xác thực skill mentor.
- * 
+ *
  * Mentor: gửi request kèm chứng chỉ → xem trạng thái → xem skill verified.
  * Admin: xem queue → duyệt/reject → xem tất cả request.
  */
-import axiosInstance from './axiosInstance';
+import axiosInstance from "./axiosInstance";
 
 // ==================== Types ====================
 
-export type VerificationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
-export type EvidenceType = 'CERTIFICATE' | 'GITHUB' | 'PORTFOLIO_LINK' | 'WORK_EXPERIENCE';
+export type VerificationStatus = "PENDING" | "APPROVED" | "REJECTED";
+export type EvidenceType =
+  | "CERTIFICATE"
+  | "GITHUB"
+  | "PORTFOLIO_LINK"
+  | "WORK_EXPERIENCE";
 
 export interface EvidenceItem {
   evidenceType: EvidenceType;
@@ -75,19 +79,26 @@ export interface PageResponse<T> {
 export const submitVerification = async (
   request: CreateVerificationRequest,
 ): Promise<MentorVerificationResponse> => {
-  const response = await axiosInstance.post('/api/v1/mentor/verifications', request);
+  const response = await axiosInstance.post(
+    "/api/v1/mentor/verifications",
+    request,
+  );
   return response.data;
 };
 
 /** Mentor: xem tất cả request của mình */
-export const getMyVerifications = async (): Promise<MentorVerificationResponse[]> => {
-  const response = await axiosInstance.get('/api/v1/mentor/verifications');
+export const getMyVerifications = async (): Promise<
+  MentorVerificationResponse[]
+> => {
+  const response = await axiosInstance.get("/api/v1/mentor/verifications");
   return response.data;
 };
 
 /** Mentor: xem danh sách skill đã verified */
 export const getMyVerifiedSkills = async (): Promise<string[]> => {
-  const response = await axiosInstance.get('/api/v1/mentor/verifications/verified-skills');
+  const response = await axiosInstance.get(
+    "/api/v1/mentor/verifications/verified-skills",
+  );
   return response.data;
 };
 
@@ -98,9 +109,12 @@ export const getPendingVerifications = async (
   page = 0,
   size = 20,
 ): Promise<PageResponse<MentorVerificationResponse>> => {
-  const response = await axiosInstance.get('/api/v1/admin/mentor-verifications/pending', {
-    params: { page, size },
-  });
+  const response = await axiosInstance.get(
+    "/api/v1/admin/mentor-verifications/pending",
+    {
+      params: { page, size },
+    },
+  );
   return response.data;
 };
 
@@ -110,9 +124,12 @@ export const getAllVerifications = async (
   page = 0,
   size = 20,
 ): Promise<PageResponse<MentorVerificationResponse>> => {
-  const response = await axiosInstance.get('/api/v1/admin/mentor-verifications', {
-    params: { statuses, page, size },
-  });
+  const response = await axiosInstance.get(
+    "/api/v1/admin/mentor-verifications",
+    {
+      params: { statuses, page, size },
+    },
+  );
   return response.data;
 };
 
@@ -120,7 +137,9 @@ export const getAllVerifications = async (
 export const getVerificationById = async (
   requestId: number,
 ): Promise<MentorVerificationResponse> => {
-  const response = await axiosInstance.get(`/api/v1/admin/mentor-verifications/${requestId}`);
+  const response = await axiosInstance.get(
+    `/api/v1/admin/mentor-verifications/${requestId}`,
+  );
   return response.data;
 };
 
@@ -138,26 +157,44 @@ export const reviewVerification = async (
 
 /** Admin: đếm pending (cho badge) */
 export const countPendingVerifications = async (): Promise<number> => {
-  const response = await axiosInstance.get('/api/v1/admin/mentor-verifications/count-pending');
+  const response = await axiosInstance.get(
+    "/api/v1/admin/mentor-verifications/count-pending",
+  );
   return response.data.count;
 };
+// ==================== Public APIs ====================
+
+/** Public: lấy danh sách skill APPROVED kèm evidence của 1 mentor (không cần auth) */
+export const getPublicMentorVerifiedSkillDetails = async (
+  mentorId: number,
+): Promise<MentorVerificationResponse[]> => {
+  const response = await axiosInstance.get(
+    `/api/v1/public/mentors/${mentorId}/verified-skills/details`,
+  );
+  return response.data;
+};
+
 // ==================== Cloudinary Upload APIs ====================
 
-/** 
- * Mentor/Admin: Upload image evidence to Cloudinary 
+/**
+ * Mentor/Admin: Upload image evidence to Cloudinary
  */
 export const uploadEvidence = async (file: File): Promise<string> => {
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append("file", file);
   // Using the exact endpoint specified (/api/media/upload/image)
-  const response = await axiosInstance.post('/api/media/upload/image', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
+  const response = await axiosInstance.post(
+    "/api/media/upload/image",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     },
-  });
-  
+  );
+
   if (response.data && response.data.url) {
     return response.data.url;
   }
-  throw new Error('Upload failed or missing secure_url');
+  throw new Error("Upload failed or missing secure_url");
 };
