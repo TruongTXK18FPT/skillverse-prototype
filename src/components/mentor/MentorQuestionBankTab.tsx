@@ -20,6 +20,8 @@ import {
   Trash2,
   Upload,
   XCircle,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import SkillAutoResolve from "../shared/SkillAutoResolve";
 import { useToast } from "../../hooks/useToast";
@@ -120,6 +122,7 @@ const MentorQuestionBankTab: React.FC = () => {
   >(null);
   const [selectedSubmission, setSelectedSubmission] =
     useState<QuestionBankSubmission | null>(null);
+  const [previewPageIndex, setPreviewPageIndex] = useState(0);
   const [expandedSubmissionId, setExpandedSubmissionId] = useState<
     number | null
   >(null);
@@ -142,6 +145,21 @@ const MentorQuestionBankTab: React.FC = () => {
   const [questions, setQuestions] = useState<LocalQuestionItem[]>([
     createEmptyQuestion(),
   ]);
+
+  const questionListRef = useRef<HTMLDivElement>(null);
+
+  const scrollToTop = () => {
+    questionListRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const scrollToBottom = () => {
+    if (questionListRef.current) {
+      questionListRef.current.scrollTo({
+        top: questionListRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
 
   const loadData = useCallback(async () => {
     try {
@@ -384,6 +402,7 @@ const MentorQuestionBankTab: React.FC = () => {
         const detail = await getMyQuestionBankSubmission(submissionId);
         setSelectedSubmissionId(submissionId);
         setSelectedSubmission(detail);
+        setPreviewPageIndex(0);
       } catch {
         showError("Lỗi", "Không thể tải chi tiết bộ câu hỏi đã gửi.");
       } finally {
@@ -635,13 +654,65 @@ const MentorQuestionBankTab: React.FC = () => {
               {mode === "JSON_IMPORT" && (
                 <div className="mentor-qb-importCard">
                   <div>
-                    <strong>Nhập file JSON</strong>
-                    <p>
+                    <strong style={{ marginBottom: "0.5rem" }}>Nhập file JSON</strong>
+                    <p style={{ marginBottom: "0.5rem" }}>
                       Định dạng mong đợi: mảng câu hỏi với `questionText`,
                       `options`, `correctAnswer`, `difficulty`...
                     </p>
                   </div>
                   <div className="mentor-qb-importActions">
+                    <button
+                      type="button"
+                      className="mentor-qb-btn secondary"
+                      onClick={() => {
+                        const templateData = [
+                          {
+                            questionText: "[Nhập nội dung câu hỏi vào đây]",
+                            options: [
+                              "A. [Lựa chọn 1]",
+                              "B. [Lựa chọn 2]",
+                              "C. [Lựa chọn 3]",
+                              "D. [Lựa chọn 4]",
+                            ],
+                            correctAnswer: "[Nhập A, B, C, hoặc D]",
+                            explanation: "[Giải thích vì sao đáp án đó đúng]",
+                            difficulty:
+                              "[Chọn 1: BEGINNER, INTERMEDIATE, ADVANCED, EXPERT]",
+                            skillArea: "[Ví dụ: HTML/CSS Fundamentals]",
+                            category:
+                              "[Chọn 1: KNOWLEDGE, SKILL, ANALYSIS, SITUATION]",
+                          },
+                          {
+                            questionText:
+                              "Mẫu ví dụ: Trong HTML, thẻ nào sau đây được sử dụng để định nghĩa nội dung chính (main content) của tài liệu, giúp cải thiện ngữ nghĩa và khả năng truy cập?",
+                            options: [
+                              "A. <div>",
+                              "B. <section>",
+                              "C. <main>",
+                              "D. <article>",
+                            ],
+                            correctAnswer: "C",
+                            explanation:
+                              "Thẻ <main> được sử dụng để bao bọc nội dung chính, độc lập và duy nhất của tài liệu. Nó giúp các công cụ tìm kiếm và công nghệ hỗ trợ hiểu rõ hơn về cấu trúc trang.",
+                            difficulty: "BEGINNER",
+                            skillArea: "HTML/CSS Fundamentals",
+                            category: "KNOWLEDGE",
+                          },
+                        ];
+                        const blob = new Blob(
+                          [JSON.stringify(templateData, null, 2)],
+                          { type: "application/json" },
+                        );
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = "quiz-template.json";
+                        a.click();
+                        URL.revokeObjectURL(url);
+                      }}
+                    >
+                      <FileJson size={16} /> Tải file mẫu
+                    </button>
                     <button
                       type="button"
                       className="mentor-qb-btn secondary"
@@ -677,16 +748,29 @@ const MentorQuestionBankTab: React.FC = () => {
                   </h4>
                   <p>{questions.length} câu hỏi đang sẵn sàng gửi duyệt.</p>
                 </div>
-                <button
-                  type="button"
-                  className="mentor-qb-btn primary"
-                  onClick={addQuestion}
-                >
-                  <Plus size={16} /> Thêm câu hỏi
-                </button>
+                <div className="mentor-qb-headerActions">
+                  <div className="mentor-qb-scrollActions">
+                    <button
+                      type="button"
+                      className="mentor-qb-btn subtle small"
+                      onClick={scrollToTop}
+                      title="Cuộn lên đầu danh sách"
+                    >
+                      <ChevronUp size={16} /> Đầu
+                    </button>
+                    <button
+                      type="button"
+                      className="mentor-qb-btn subtle small"
+                      onClick={scrollToBottom}
+                      title="Cuộn xuống cuối danh sách"
+                    >
+                      <ChevronDown size={16} /> Cuối
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              <div className="mentor-qb-questionList">
+              <div className="mentor-qb-questionList" ref={questionListRef}>
                 {questions.map((question, questionIndex) => (
                   <article key={question.id} className="mentor-qb-questionCard">
                     <div className="mentor-qb-questionCardHeader">
@@ -694,10 +778,11 @@ const MentorQuestionBankTab: React.FC = () => {
                         <span className="mentor-qb-questionIndex">
                           Câu {questionIndex + 1}
                         </span>
-                        <h5>
-                          {question.questionText.trim() ||
-                            "Câu hỏi chưa hoàn thiện"}
-                        </h5>
+                        {!question.questionText.trim() && (
+                          <h5 className="mentor-qb-pending-text">
+                            Câu hỏi chưa hoàn thiện
+                          </h5>
+                        )}
                       </div>
                       <button
                         type="button"
@@ -732,7 +817,8 @@ const MentorQuestionBankTab: React.FC = () => {
                             className="mentor-qb-field option"
                           >
                             <span>Đáp án {letter}</span>
-                            <input
+                            <textarea
+                              rows={1}
                               value={option}
                               onChange={(event) =>
                                 updateOption(
@@ -829,6 +915,17 @@ const MentorQuestionBankTab: React.FC = () => {
                     </label>
                   </article>
                 ))}
+
+                <div className="mentor-qb-listFooter">
+                  <button
+                    type="button"
+                    className="mentor-qb-btn primary large"
+                    onClick={addQuestion}
+                  >
+                    <Plus size={18} /> Thêm câu hỏi mới
+                  </button>
+                  <p>Bạn có thể thêm không giới hạn câu hỏi cho bộ kỹ năng này.</p>
+                </div>
               </div>
 
               <div className="mentor-qb-submitBar">
@@ -845,9 +942,9 @@ const MentorQuestionBankTab: React.FC = () => {
                 </div>
                 <button
                   type="button"
-                  className="mentor-qb-btn success"
+                  className={`mentor-qb-btn success ${!isVerifiedSkill ? "locked" : ""}`}
                   onClick={handleSubmit}
-                  disabled={submitting}
+                  disabled={submitting || !isVerifiedSkill}
                 >
                   {submitting ? "Đang gửi..." : "Gửi admin duyệt"}
                 </button>
@@ -856,223 +953,268 @@ const MentorQuestionBankTab: React.FC = () => {
           )}
         </section>
 
-        <aside className="mentor-qb-historyCard">
-          <div className="mentor-qb-sectionHeader">
-            <div>
-              <h3>
-                <Clock3 size={20} /> Lịch sử đóng góp
-              </h3>
-              <p>Theo dõi trạng thái duyệt và phản hồi từ admin.</p>
+        <div className="mentor-qb-historySection">
+          <aside className="mentor-qb-historyCard">
+            <div className="mentor-qb-sectionHeader">
+              <div>
+                <h3>
+                  <Clock3 size={20} /> Lịch sử đóng góp
+                </h3>
+                <p>Theo dõi trạng thái duyệt và phản hồi từ admin.</p>
+              </div>
+              <button
+                type="button"
+                className="mentor-qb-btn subtle"
+                onClick={loadData}
+              >
+                <RefreshCw size={16} /> Tải lại
+              </button>
             </div>
-            <button
-              type="button"
-              className="mentor-qb-btn subtle"
-              onClick={loadData}
-            >
-              <RefreshCw size={16} /> Tải lại
-            </button>
-          </div>
 
-          <div className="mentor-qb-historySearch">
-            <Search size={18} />
-            <input
-              value={historySearch}
-              onChange={(event) => setHistorySearch(event.target.value)}
-              placeholder="Tìm theo tiêu đề, skill, trạng thái..."
-            />
-          </div>
-
-          {filteredSubmissions.length === 0 ? (
-            <div className="mentor-qb-emptyState">
-              <ListChecks size={36} />
-              <p>Chưa có bộ câu hỏi nào được gửi.</p>
+            <div className="mentor-qb-historySearch">
+              <Search size={18} />
+              <input
+                value={historySearch}
+                onChange={(event) => setHistorySearch(event.target.value)}
+                placeholder="Tìm theo tiêu đề, skill, trạng thái..."
+              />
             </div>
-          ) : (
-            <div className="mentor-qb-historyList">
-              {filteredSubmissions.map((submission) => {
-                const expanded = expandedSubmissionId === submission.id;
-                return (
-                  <article
-                    key={submission.id}
-                    className="mentor-qb-historyItem"
-                  >
-                    <button
-                      type="button"
-                      className="mentor-qb-historyMain"
-                      onClick={() => {
-                        setExpandedSubmissionId(
-                          expanded ? null : submission.id,
-                        );
-                        if (
-                          !expanded ||
-                          selectedSubmissionId !== submission.id
-                        ) {
-                          loadSubmissionDetail(submission.id);
-                        }
-                      }}
+
+            {filteredSubmissions.length === 0 ? (
+              <div className="mentor-qb-emptyState">
+                <ListChecks size={36} />
+                <p>Chưa có bộ câu hỏi nào được gửi.</p>
+              </div>
+            ) : (
+              <div className="mentor-qb-historyList">
+                {filteredSubmissions.map((submission) => {
+                  const expanded = expandedSubmissionId === submission.id;
+                  return (
+                    <article
+                      key={submission.id}
+                      className="mentor-qb-historyItem"
                     >
-                      <div>
-                        <strong>{submission.title}</strong>
-                        <span>
-                          {formatSkillLabel(submission.skillName)} ·{" "}
-                          {submission.questionCount} câu hỏi
-                        </span>
-                      </div>
-                      <div className="mentor-qb-historyMeta">
-                        {renderStatusBadge(submission.status)}
-                        {expanded ? (
-                          <ChevronUp size={16} />
-                        ) : (
-                          <ChevronDown size={16} />
-                        )}
-                      </div>
-                    </button>
-                    {expanded && (
-                      <div className="mentor-qb-historyDetail">
-                        <div className="mentor-qb-detailFacts">
-                          <span>{getExpertDomainLabel(submission.domain)}</span>
-                          <span>{submission.industry}</span>
-                          <span>{submission.jobRole}</span>
+                      <button
+                        type="button"
+                        className="mentor-qb-historyMain"
+                        onClick={() => {
+                          setExpandedSubmissionId(
+                            expanded ? null : submission.id,
+                          );
+                          if (
+                            !expanded ||
+                            selectedSubmissionId !== submission.id
+                          ) {
+                            loadSubmissionDetail(submission.id);
+                          }
+                        }}
+                      >
+                        <div>
+                          <strong>{submission.title}</strong>
+                          <span>
+                            {formatSkillLabel(submission.skillName)} ·{" "}
+                            {submission.questionCount} câu hỏi
+                          </span>
                         </div>
-                        <p>{submission.description || "Không có mô tả."}</p>
-                        <div className="mentor-qb-detailMetrics">
-                          <div>
-                            <strong>{submission.savedQuestionCount}</strong>
-                            <span>Câu sẽ lưu</span>
+                        <div className="mentor-qb-historyMeta">
+                          {renderStatusBadge(submission.status)}
+                          {expanded ? (
+                            <ChevronUp size={16} />
+                          ) : (
+                            <ChevronDown size={16} />
+                          )}
+                        </div>
+                      </button>
+                      {expanded && (
+                        <div className="mentor-qb-historyDetail">
+                          <div className="mentor-qb-detailFacts">
+                            <span>{getExpertDomainLabel(submission.domain)}</span>
+                            <span>{submission.industry}</span>
+                            <span>{submission.jobRole}</span>
                           </div>
-                          <div>
-                            <strong>{submission.duplicateQuestionCount}</strong>
-                            <span>Câu trùng</span>
+                          <p>{submission.description || "Không có mô tả."}</p>
+                          <div className="mentor-qb-detailMetrics">
+                            <div>
+                              <strong>{submission.savedQuestionCount}</strong>
+                              <span>Câu sẽ lưu</span>
+                            </div>
+                            <div>
+                              <strong>{submission.duplicateQuestionCount}</strong>
+                              <span>Câu trùng</span>
+                            </div>
                           </div>
                         </div>
-                        <button
-                          type="button"
-                          className="mentor-qb-btn secondary small"
-                          onClick={() => loadSubmissionDetail(submission.id)}
-                        >
-                          Xem chi tiết
-                        </button>
-                      </div>
-                    )}
-                  </article>
-                );
-              })}
-            </div>
-          )}
-        </aside>
-      </div>
-
-      <section className="mentor-qb-detailPanel">
-        <div className="mentor-qb-sectionHeader">
-          <div>
-            <h3>
-              <Sparkles size={20} /> Chi tiết bộ gửi duyệt
-            </h3>
-            <p>Xem trước chính xác bộ câu hỏi admin sẽ kiểm duyệt.</p>
-          </div>
-        </div>
-
-        {historyLoading ? (
-          <div className="mentor-qb-loading">
-            <RefreshCw size={18} className="mentor-qb-spin" />
-            <span>Đang tải chi tiết bộ gửi duyệt...</span>
-          </div>
-        ) : !selectedSubmission ? (
-          <div className="mentor-qb-emptyState large">
-            <FileJson size={42} />
-            <p>Chọn một bộ gửi duyệt trong lịch sử để xem chi tiết.</p>
-          </div>
-        ) : (
-          <div className="mentor-qb-detailContent">
-            <div className="mentor-qb-detailTop">
-              <div>
-                <h4>{selectedSubmission.title}</h4>
-                <p>{selectedSubmission.description || "Không có mô tả."}</p>
-              </div>
-              {renderStatusBadge(selectedSubmission.status)}
-            </div>
-
-            <div className="mentor-qb-detailFacts large">
-              <span>{getExpertDomainLabel(selectedSubmission.domain)}</span>
-              <span>{selectedSubmission.industry}</span>
-              <span>{selectedSubmission.jobRole}</span>
-              <span>{formatSkillLabel(selectedSubmission.skillName)}</span>
-              <span>
-                {statusLabelMap[selectedSubmission.status] ||
-                  selectedSubmission.status}
-              </span>
-            </div>
-
-            <div className="mentor-qb-detailMetrics large">
-              <div>
-                <strong>{selectedSubmission.questionCount}</strong>
-                <span>Tổng câu hỏi</span>
-              </div>
-              <div>
-                <strong>{selectedSubmission.savedQuestionCount}</strong>
-                <span>Câu có thể lưu</span>
-              </div>
-              <div>
-                <strong>{selectedSubmission.duplicateQuestionCount}</strong>
-                <span>Câu trùng</span>
-              </div>
-            </div>
-
-            {selectedSubmission.reviewNote && (
-              <div className="mentor-qb-reviewNote">
-                <strong>Ghi chú từ admin</strong>
-                <p>{selectedSubmission.reviewNote}</p>
+                      )}
+                    </article>
+                  );
+                })}
               </div>
             )}
+          </aside>
 
-            <div className="mentor-qb-questionPreviewList">
-              {(selectedSubmission.questions || []).map((question, index) => (
-                <article
-                  key={question.id || `${selectedSubmission.id}-${index}`}
-                  className="mentor-qb-previewCard"
-                >
-                  <div className="mentor-qb-previewHeader">
-                    <strong>Câu {question.displayOrder || index + 1}</strong>
-                    <span>
-                      {difficultyLabels[question.difficulty] ||
-                        question.difficulty}
-                    </span>
-                  </div>
-                  <p>{question.questionText}</p>
-                  <div className="mentor-qb-previewOptions">
-                    {question.options.map((option, optionIndex) => {
-                      const letter = String.fromCharCode(65 + optionIndex);
-                      return (
-                        <div
-                          key={`${question.id || index}-${letter}`}
-                          className={`mentor-qb-previewOption ${question.correctAnswer === letter ? "correct" : ""}`}
-                        >
-                          <strong>{letter}</strong>
-                          <span>{option}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  {(question.skillArea || question.category) && (
-                    <div className="mentor-qb-previewTags">
-                      {question.skillArea && <span>{question.skillArea}</span>}
-                      {question.category && (
-                        <span>
-                          {categoryLabels[question.category] ||
-                            question.category}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  {question.explanation && (
-                    <small>{question.explanation}</small>
-                  )}
-                </article>
-              ))}
+          <section className="mentor-qb-detailPanel">
+            <div className="mentor-qb-sectionHeader">
+              <div>
+                <h3>
+                  <Sparkles size={20} /> Chi tiết bộ gửi duyệt
+                </h3>
+                <p>Xem trước chính xác bộ câu hỏi admin sẽ kiểm duyệt.</p>
+              </div>
             </div>
-          </div>
-        )}
-      </section>
+
+            {historyLoading ? (
+              <div className="mentor-qb-loading">
+                <RefreshCw size={18} className="mentor-qb-spin" />
+                <span>Đang tải chi tiết bộ gửi duyệt...</span>
+              </div>
+            ) : !selectedSubmission ? (
+              <div className="mentor-qb-emptyState large">
+                <FileJson size={42} />
+                <p>Chọn một bộ gửi duyệt trong lịch sử để xem chi tiết.</p>
+              </div>
+            ) : (
+              <div className="mentor-qb-detailContent">
+                <div className="mentor-qb-detailTop">
+                  <div>
+                    <h4>{selectedSubmission.title}</h4>
+                    <p>{selectedSubmission.description || "Không có mô tả."}</p>
+                  </div>
+                  {renderStatusBadge(selectedSubmission.status)}
+                </div>
+
+                <div className="mentor-qb-detailFacts large">
+                  <span>{getExpertDomainLabel(selectedSubmission.domain)}</span>
+                  <span>{selectedSubmission.industry}</span>
+                  <span>{selectedSubmission.jobRole}</span>
+                  <span>{formatSkillLabel(selectedSubmission.skillName)}</span>
+                  <span>
+                    {statusLabelMap[selectedSubmission.status] ||
+                      selectedSubmission.status}
+                  </span>
+                </div>
+
+                <div className="mentor-qb-detailMetrics large">
+                  <div>
+                    <strong>{selectedSubmission.questionCount}</strong>
+                    <span>Tổng câu hỏi</span>
+                  </div>
+                  <div>
+                    <strong>{selectedSubmission.savedQuestionCount}</strong>
+                    <span>Câu có thể lưu</span>
+                  </div>
+                  <div>
+                    <strong>{selectedSubmission.duplicateQuestionCount}</strong>
+                    <span>Câu trùng</span>
+                  </div>
+                </div>
+
+                {selectedSubmission.reviewNote && (
+                  <div className="mentor-qb-reviewNote">
+                    <strong>Ghi chú từ admin</strong>
+                    <p>{selectedSubmission.reviewNote}</p>
+                  </div>
+                )}
+
+                <div className="mentor-qb-questionPreviewList">
+                  {(() => {
+                    const questions = selectedSubmission.questions || [];
+                    const question = questions[previewPageIndex];
+
+                    if (!question) return null;
+
+                    return (
+                      <>
+                        <div className="mentor-qb-previewPagination">
+                          <button
+                            type="button"
+                            className="mentor-qb-btn subtle small"
+                            disabled={previewPageIndex === 0}
+                            onClick={() =>
+                              setPreviewPageIndex((prev) => prev - 1)
+                            }
+                          >
+                            <ChevronLeft size={16} /> Câu trước
+                          </button>
+                          <div className="mentor-qb-pageIndicator">
+                            <strong>{previewPageIndex + 1}</strong>
+                            <span>/ {questions.length}</span>
+                          </div>
+                          <button
+                            type="button"
+                            className="mentor-qb-btn subtle small"
+                            disabled={previewPageIndex === questions.length - 1}
+                            onClick={() =>
+                              setPreviewPageIndex((prev) => prev + 1)
+                            }
+                          >
+                            Câu tiếp <ChevronRight size={16} />
+                          </button>
+                        </div>
+
+                        <article
+                          key={
+                            question.id ||
+                            `${selectedSubmission.id}-${previewPageIndex}`
+                          }
+                          className="mentor-qb-previewCard active"
+                        >
+                          <div className="mentor-qb-previewHeader">
+                            <strong>
+                              Câu {question.displayOrder || previewPageIndex + 1}
+                            </strong>
+                            <span>
+                              {difficultyLabels[question.difficulty] ||
+                                question.difficulty}
+                            </span>
+                          </div>
+                          <p className="mentor-qb-previewText">
+                            {question.questionText}
+                          </p>
+                          <div className="mentor-qb-previewOptions">
+                            {question.options.map((option, optionIndex) => {
+                              const letter = String.fromCharCode(
+                                65 + optionIndex,
+                              );
+                              return (
+                                <div
+                                  key={`${question.id || previewPageIndex}-${letter}`}
+                                  className={`mentor-qb-previewOption ${question.correctAnswer === letter ? "correct" : ""}`}
+                                >
+                                  <strong>{letter}</strong>
+                                  <span>{option}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                          {(question.skillArea || question.category) && (
+                            <div className="mentor-qb-previewTags">
+                              {question.skillArea && (
+                                <span>{question.skillArea}</span>
+                              )}
+                              {question.category && (
+                                <span>
+                                  {categoryLabels[question.category] ||
+                                    question.category}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                          {question.explanation && (
+                            <div className="mentor-qb-previewExplanation">
+                              <strong>Giải thích:</strong>
+                              <small>{question.explanation}</small>
+                            </div>
+                          )}
+                        </article>
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+            )}
+          </section>
+        </div>
+      </div>
     </div>
   );
 };

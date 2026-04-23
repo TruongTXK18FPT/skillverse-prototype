@@ -64,7 +64,7 @@ const escapeHtml = (value: string) =>
 const renderTimelineBars = (report: StudentLearningReportResponse) => {
   const timeline = report.timeline || [];
   if (timeline.length === 0) {
-    return `<div class="pdf-empty">Chưa có timeline cho khoảng này.</div>`;
+    return `<div class="pdf-empty">Chưa có dữ liệu cho khoảng thời gian này.</div>`;
   }
 
   const maxStudy = Math.max(
@@ -73,22 +73,24 @@ const renderTimelineBars = (report: StudentLearningReportResponse) => {
   );
 
   return `
-    <div class="pdf-chart">
+    <div class="pdf-chart" style="grid-template-columns: repeat(${Math.max(timeline.length, 1)}, minmax(0, 1fr));">
       ${timeline
         .map((point) => {
           const height = Math.max(
-            12,
-            Math.round(((point.studyMinutes || 0) / maxStudy) * 130),
+            2,
+            Math.round(((point.studyMinutes || 0) / maxStudy) * 100),
           );
+
+          // Get just the day for the label to save space, e.g. '30/04' -> '30'
+          const label = point.bucketLabel ? point.bucketLabel.split("/")[0] : "";
 
           return `
             <div class="pdf-chart__item">
-              <div class="pdf-chart__meta">${point.missionsCompleted || 0} mission</div>
+              <div class="pdf-chart__value">${point.studyMinutes || 0}</div>
               <div class="pdf-chart__bar-wrap">
-                <div class="pdf-chart__bar" style="height:${height}px"></div>
+                <div class="pdf-chart__bar" style="height:${height}%"></div>
               </div>
-              <div class="pdf-chart__value">${point.studyMinutes || 0}m</div>
-              <div class="pdf-chart__label">${escapeHtml(point.bucketLabel || "")}</div>
+              <div class="pdf-chart__label">${escapeHtml(label)}</div>
             </div>
           `;
         })
@@ -99,7 +101,7 @@ const renderTimelineBars = (report: StudentLearningReportResponse) => {
 
 const renderRoadmapTable = (report: StudentLearningReportResponse) => {
   if (!report.roadmapBreakdown.length) {
-    return `<div class="pdf-empty">Chưa có roadmap để hiển thị.</div>`;
+    return `<div class="pdf-empty">Chưa có lộ trình nào để hiển thị.</div>`;
   }
 
   return `
@@ -108,8 +110,8 @@ const renderRoadmapTable = (report: StudentLearningReportResponse) => {
         <tr>
           <th>Roadmap</th>
           <th>Progress</th>
-          <th>Missions</th>
-          <th>Next Mission</th>
+          <th>Roadmap Node</th>
+          <th>Kế tiếp</th>
         </tr>
       </thead>
       <tbody>
@@ -119,7 +121,7 @@ const renderRoadmapTable = (report: StudentLearningReportResponse) => {
           <tr>
             <td>
               <strong>${escapeHtml(item.title)}</strong>
-              <div class="pdf-subtle">${escapeHtml(item.goal || "Chưa có goal")}</div>
+              <div class="pdf-subtle">${escapeHtml(item.goal || "Chưa có mô tả mục tiêu")}</div>
             </td>
             <td>${item.progressPercent}%</td>
             <td>${item.completedMissions}/${item.totalMissions}</td>
@@ -135,7 +137,7 @@ const renderRoadmapTable = (report: StudentLearningReportResponse) => {
 
 const renderCourseTable = (report: StudentLearningReportResponse) => {
   if (!report.courseBreakdown.length) {
-    return `<div class="pdf-empty">Chưa có course để hiển thị.</div>`;
+    return `<div class="pdf-empty">Chưa có khóa học nào để hiển thị.</div>`;
   }
 
   return `
@@ -153,7 +155,7 @@ const renderCourseTable = (report: StudentLearningReportResponse) => {
           .map(
             (item) => `
           <tr>
-            <td>${escapeHtml(item.courseTitle)}</td>
+            <td><strong>${escapeHtml(item.courseTitle)}</strong></td>
             <td>${escapeHtml(item.status)}</td>
             <td>${item.progressPercent}%</td>
             <td>${escapeHtml(item.completedAt ? formatDate(item.completedAt) : "—")}</td>
@@ -180,6 +182,7 @@ export function generateReportHTML(
     <html lang="vi">
       <head>
         <meta charset="UTF-8" />
+        <title>SkillVerse Learning Report</title>
         <style>
           * { box-sizing: border-box; }
           body {
@@ -188,14 +191,23 @@ export function generateReportHTML(
             background: #ffffff;
             color: #123041;
             font-family: "Segoe UI", Arial, sans-serif;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+          @page {
+            size: A4 portrait;
+            margin: 0;
           }
           .pdf-page {
             width: 210mm;
             min-height: 297mm;
-            padding: 16mm;
+            padding: 20mm;
+            margin: 0 auto;
             background:
               radial-gradient(circle at top left, rgba(20, 184, 166, 0.14), transparent 28%),
               linear-gradient(180deg, #ffffff 0%, #f4fafb 100%);
+            display: flex;
+            flex-direction: column;
           }
           .pdf-hero {
             display: flex;
@@ -206,6 +218,7 @@ export function generateReportHTML(
             border-radius: 22px;
             border: 1px solid rgba(18, 48, 65, 0.08);
             background: rgba(255, 255, 255, 0.92);
+            page-break-inside: avoid;
           }
           .pdf-brand {
             text-transform: uppercase;
@@ -237,6 +250,7 @@ export function generateReportHTML(
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 12px;
             margin-top: 14px;
+            page-break-inside: avoid;
           }
           .pdf-card {
             border-radius: 18px;
@@ -291,6 +305,7 @@ export function generateReportHTML(
             padding: 12px;
             border-radius: 16px;
             background: linear-gradient(135deg, #f6fdfc, #fff7ed);
+            page-break-inside: avoid;
           }
           .pdf-tip__index {
             width: 28px;
@@ -305,38 +320,44 @@ export function generateReportHTML(
           }
           .pdf-chart {
             display: grid;
-            grid-template-columns: repeat(${Math.max(report.timeline.length, 1)}, minmax(0, 1fr));
-            gap: 10px;
+            gap: 4px;
             align-items: end;
-            min-height: 190px;
+            height: 140px;
+            margin-top: 16px;
           }
           .pdf-chart__item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            height: 100%;
+            justify-content: flex-end;
           }
-          .pdf-chart__meta,
-          .pdf-chart__value,
-          .pdf-chart__label {
-            font-size: 10px;
+          .pdf-chart__value {
+            font-size: 8px;
             color: #5d7485;
-            text-align: center;
+            margin-bottom: 4px;
+            transform: rotate(-45deg);
+            transform-origin: left bottom;
+            white-space: nowrap;
           }
           .pdf-chart__bar-wrap {
             width: 100%;
-            min-height: 140px;
+            height: 100px;
             display: flex;
-            align-items: end;
-            justify-content: center;
-            border-radius: 16px;
-            background: #eef5f6;
-            padding: 8px;
+            align-items: flex-end;
+            background: rgba(20, 184, 166, 0.05);
+            border-radius: 4px 4px 0 0;
           }
           .pdf-chart__bar {
             width: 100%;
-            border-radius: 12px 12px 0 0;
             background: linear-gradient(180deg, #14b8a6 0%, #0f766e 100%);
+            border-radius: 2px 2px 0 0;
+            min-height: 2px;
+          }
+          .pdf-chart__label {
+            font-size: 8px;
+            color: #5d7485;
+            margin-top: 4px;
           }
           .pdf-table {
             width: 100%;
@@ -368,7 +389,8 @@ export function generateReportHTML(
             color: #567083;
           }
           .pdf-footer {
-            margin-top: 16px;
+            margin-top: auto;
+            padding-top: 24px;
             display: flex;
             justify-content: space-between;
             color: #6a8192;
@@ -396,65 +418,69 @@ export function generateReportHTML(
 
           <section class="pdf-grid">
             <div class="pdf-card">
-              <small>Overall Progress</small>
+              <small>Tiến Độ Tổng Thể</small>
               <strong>${report.overallProgress}%</strong>
-              <span>Trend: ${escapeHtml(report.learningTrend)}</span>
+              <span>Xu hướng: ${escapeHtml(report.learningTrend)}</span>
             </div>
             <div class="pdf-card">
-              <small>Study Hours</small>
+              <small>Thời Gian Học</small>
               <strong>${report.studyStats.totalStudyHours}h</strong>
               <span>${report.studyStats.studyMinutesWeek} phút / tuần</span>
             </div>
             <div class="pdf-card">
-              <small>Streak</small>
+              <small>Chuỗi Liên Tiếp</small>
               <strong>${report.studyStats.currentStreak}</strong>
               <span>ngày liên tiếp</span>
             </div>
             <div class="pdf-card">
-              <small>Tasks</small>
+              <small>Task Đã Xong</small>
               <strong>${report.taskStats.completedTasks}/${report.taskStats.totalTasks}</strong>
-              <span>${report.taskStats.pendingTasks} chờ, ${report.taskStats.overdueTasks} quá hạn</span>
+              <span>${report.taskStats.pendingTasks} chờ, ${report.taskStats.overdueTasks} trễ</span>
             </div>
             <div class="pdf-card">
-              <small>Missions</small>
+              <small>Roadmap Node Đã Xong</small>
               <strong>${report.roadmapStats.completedMissions}/${report.roadmapStats.totalMissions}</strong>
-              <span>${report.roadmapStats.pendingMissions} mission còn lại</span>
+              <span>${report.roadmapStats.pendingMissions} roadmap node còn lại</span>
             </div>
             <div class="pdf-card">
-              <small>Courses</small>
-              <strong>${report.courseStats.averageActiveCourseProgress}%</strong>
-              <span>${report.courseStats.activeCourses} khóa đang học</span>
+              <small>Khóa Học Đang Mở</small>
+              <strong>${report.courseStats.activeCourses}</strong>
+              <span>${report.courseStats.completedCourses} khóa hoàn thành</span>
             </div>
           </section>
 
           <section class="pdf-section">
-            <h2>Khuyến nghị ngắn</h2>
+          <section class="pdf-section">
+            <h2>Đề xuất AI phân tích</h2>
             <div class="pdf-tips">
               ${recommendations
                 .map(
-                  (item, index) => `
-                <div class="pdf-tip">
-                  <div class="pdf-tip__index">${index + 1}</div>
-                  <div>${escapeHtml(item)}</div>
-                </div>
-              `,
+                  (item, index) => {
+                    const cleanItem = item.replace(/✅/g, '').replace(/💰/g, '').trim();
+                    return `
+                      <div class="pdf-tip">
+                        <div class="pdf-tip__index">${index + 1}</div>
+                        <div>${escapeHtml(cleanItem)}</div>
+                      </div>
+                    `;
+                  }
                 )
                 .join("")}
             </div>
           </section>
 
           <section class="pdf-section">
-            <h2>Timeline ${escapeHtml(report.range)}</h2>
+            <h2>Dòng Thời Gian - ${escapeHtml(report.range)}</h2>
             ${renderTimelineBars(report)}
           </section>
 
           <section class="pdf-section">
-            <h2>Roadmap Breakdown</h2>
+            <h2>Tiến Độ Lộ Trình</h2>
             ${renderRoadmapTable(report)}
           </section>
 
           <section class="pdf-section">
-            <h2>Course Breakdown</h2>
+            <h2>Tiến Độ Khóa Học</h2>
             ${renderCourseTable(report)}
           </section>
 
@@ -472,64 +498,7 @@ export async function generatePDFFromHTML(
   report: StudentLearningReportResponse,
   options: HTMLPDFOptions = {},
 ): Promise<Blob> {
-  const opts = { ...defaultOptions, ...options };
-  let avatar = opts.userAvatar;
-
-  if (avatar && !avatar.startsWith("data:")) {
-    avatar = await imageUrlToBase64(avatar);
-  }
-
-  const container = document.createElement("div");
-  container.style.cssText = `
-    position: absolute;
-    left: -9999px;
-    top: 0;
-    width: 210mm;
-    background: white;
-  `;
-  container.innerHTML = generateReportHTML(report, avatar);
-  document.body.appendChild(container);
-
-  try {
-    await document.fonts.ready;
-    const canvas = await html2canvas(container, {
-      scale: opts.scale,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: "#ffffff",
-      logging: false,
-      width: 794,
-    });
-
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
-
-    const pageWidth = 210;
-    const pageHeight = 297;
-    const imgWidth = pageWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    const imgData = canvas.toDataURL("image/jpeg", opts.quality);
-
-    let heightLeft = imgHeight;
-    let position = 0;
-
-    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-
-    while (heightLeft > 0) {
-      position -= pageHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-    }
-
-    return pdf.output("blob");
-  } finally {
-    document.body.removeChild(container);
-  }
+  throw new Error("generatePDFFromHTML is deprecated. Use downloadVietnamesePDF instead to utilize the browser's native print engine.");
 }
 
 export async function downloadVietnamesePDF(
@@ -537,15 +506,39 @@ export async function downloadVietnamesePDF(
   options: HTMLPDFOptions = {},
 ): Promise<void> {
   const opts = { ...defaultOptions, ...options };
-  const blob = await generatePDFFromHTML(report, opts);
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `${opts.filename}.pdf`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  let avatar = opts.userAvatar;
+
+  if (avatar && !avatar.startsWith("data:")) {
+    avatar = await imageUrlToBase64(avatar);
+  }
+
+  const printHTML = generateReportHTML(report, avatar);
+
+  const printWindow = globalThis.open("", "_blank");
+  if (!printWindow) {
+    alert("Vui lòng cho phép popup để tải xuống PDF.");
+    return;
+  }
+
+  printWindow.document.open();
+  printWindow.document.write(printHTML);
+  printWindow.document.close();
+
+  // Wait for resources (images, fonts) to load
+  await new Promise<void>((resolve) => {
+    if (printWindow.document.readyState === "complete") {
+      setTimeout(resolve, 500);
+    } else {
+      printWindow.onload = () => setTimeout(resolve, 500);
+    }
+  });
+
+  printWindow.onafterprint = () => {
+    printWindow.close();
+  };
+
+  printWindow.focus();
+  printWindow.print();
 }
 
 export default {

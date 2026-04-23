@@ -1,0 +1,30 @@
+[
+    {
+        "questionText": "[Nhập nội dung câu hỏi vào đây]",
+        "options": [
+            "A. [Lựa chọn 1]",
+            "B. [Lựa chọn 2]",
+            "C. [Lựa chọn 3]",
+            "D. [Lựa chọn 4]"
+        ],
+        "correctAnswer": "[Nhập A, B, C, hoặc D]",
+        "explanation": "[Giải thích vì sao đáp án đó đúng]",
+        "difficulty": "[Chọn 1: BEGINNER, INTERMEDIATE, ADVANCED, EXPERT]",
+        "skillArea": "[Ví dụ: HTML/CSS Fundamentals]",
+        "category": "[Chọn 1: KNOWLEDGE, SKILL, ANALYSIS, SITUATION]"
+    },
+    {
+        "questionText": "Mẫu ví dụ: Trong HTML, thẻ nào sau đây được sử dụng để định nghĩa nội dung chính (main content) của tài liệu, giúp cải thiện ngữ nghĩa và khả năng truy cập?",
+        "options": [
+            "A. <div>",
+            "B. <section>",
+            "C. <main>",
+            "D. <article>"
+        ],
+        "correctAnswer": "C",
+        "explanation": "Thẻ <main> được sử dụng để bao bọc nội dung chính, độc lập và duy nhất của tài liệu. Nó giúp các công cụ tìm kiếm và công nghệ hỗ trợ hiểu rõ hơn về cấu trúc trang.",
+        "difficulty": "BEGINNER",
+        "skillArea": "HTML/CSS Fundamentals",
+        "category": "KNOWLEDGE"
+    }
+]

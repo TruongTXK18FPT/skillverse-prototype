@@ -518,6 +518,7 @@ const RoadmapDetailPage = () => {
         });
       }
       setProgressMap(nextProgressMap);
+      setRoadmap(updatedRoadmap);
 
       const board = await taskBoardService.getBoard(roadmap.sessionId);
       const summaries = extractNodeStudyPlanSummaries(board, roadmap.sessionId);
@@ -665,7 +666,9 @@ const RoadmapDetailPage = () => {
     };
   }, []);
 
-  // Auto-switch panel to the next non-completed node when current node is completed
+  // Auto-switch panel to the next non-completed node removed as it was too aggressive
+  // and prevented viewing completed nodes. handleMarkNodeDone already handles panel closing.
+  /*
   useEffect(() => {
     if (!eligibleNodeId || eligibleNodeId === selectedNodeId) return;
     const currentProgress = progressMap.get(selectedNodeId ?? '');
@@ -673,6 +676,7 @@ const RoadmapDetailPage = () => {
       setSelectedNodeId(eligibleNodeId);
     }
   }, [eligibleNodeId, selectedNodeId, progressMap]);
+  */
 
   if (authLoading || isLoading) {
     return (

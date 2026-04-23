@@ -344,86 +344,111 @@ const MentorVerificationTab: React.FC = () => {
           {/* Additional Evidence */}
           <div className="mvt-form__group">
             <label className="mvt-form__label">Bằng chứng bổ sung</label>
-            <div className="mvt-evidence-buttons">
-              <button type="button" className="mvt-btn mvt-btn--outline mvt-btn--sm"
-                onClick={() => addEvidence('WORK_EXPERIENCE')}>
-                <Briefcase size={14} /> Kinh nghiệm
-              </button>
-              <button type="button" className="mvt-btn mvt-btn--outline mvt-btn--sm"
-                onClick={() => addEvidence('CERTIFICATE')}>
-                <FileText size={14} /> Chứng chỉ (URL)
-              </button>
-              <button type="button" className="mvt-btn mvt-btn--outline mvt-btn--sm"
-                onClick={() => addEvidence('PORTFOLIO_LINK')}>
-                <ExternalLink size={14} /> Link dự án
-              </button>
-            </div>
-
             {evidences.map((ev, idx) => (
               <div key={idx} className="mvt-evidence-item">
                 <div className="mvt-evidence-item__header">
-                  {getEvidenceIcon(ev.evidenceType)}
-                  <span>{getEvidenceLabel(ev.evidenceType)}</span>
-                  <button type="button" className="mvt-btn--icon" onClick={() => removeEvidence(idx)}>
-                    <XCircle size={14} />
+                  <div className="mvt-evidence-type-selector">
+                    {getEvidenceIcon(ev.evidenceType)}
+                    <select
+                      value={ev.evidenceType}
+                      onChange={(e) =>
+                        updateEvidence(
+                          idx,
+                          "evidenceType",
+                          e.target.value as EvidenceItem["evidenceType"],
+                        )
+                      }
+                      className="mvt-evidence-select"
+                    >
+                      <option value="CERTIFICATE">Chứng chỉ / Bằng cấp</option>
+                      <option value="WORK_EXPERIENCE">Kinh nghiệm công tác</option>
+                      <option value="PORTFOLIO_LINK">Dự án / Sản phẩm</option>
+                      <option value="GITHUB">GitHub / Mã nguồn</option>
+                    </select>
+                  </div>
+                  <button
+                    type="button"
+                    className="mvt-btn--icon mvt-btn--delete"
+                    onClick={() => removeEvidence(idx)}
+                    title="Xóa minh chứng này"
+                  >
+                    <XCircle size={16} />
                   </button>
                 </div>
-                {ev.evidenceType !== 'WORK_EXPERIENCE' && (
+                {ev.evidenceType !== "WORK_EXPERIENCE" && (
                   <>
                     <div className="mvt-file-upload-wrapper">
                       <input
                         type="url"
                         className="mvt-form__input"
                         value={ev.evidenceUrl}
-                        onChange={e => updateEvidence(idx, 'evidenceUrl', e.target.value)}
+                        onChange={(e) =>
+                          updateEvidence(idx, "evidenceUrl", e.target.value)
+                        }
                         placeholder="Hoặc nhập URL..."
                         style={{ flex: 1 }}
                       />
                       <label className="mvt-file-upload-btn">
-                        <input 
-                          type="file" 
-                          accept="image/*" 
-                          className="mvt-file-input" 
-                          onChange={(e) => handleUploadImage(idx, e)} 
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="mvt-file-input"
+                          onChange={(e) => handleUploadImage(idx, e)}
                         />
                         Upload Ảnh
                       </label>
                     </div>
                     {isImageUrl(ev.evidenceUrl) && (
                       <div className="mvt-image-preview-wrapper">
-                        <img src={ev.evidenceUrl} alt="Preview" className="mvt-image-preview" />
+                        <img
+                          src={ev.evidenceUrl}
+                          alt="Preview"
+                          className="mvt-image-preview"
+                        />
                       </div>
                     )}
                     <textarea
                       className="mvt-form__textarea mvt-form__textarea--sm"
                       value={ev.description}
-                      onChange={e => updateEvidence(idx, 'description', e.target.value)}
+                      onChange={(e) =>
+                        updateEvidence(idx, "description", e.target.value)
+                      }
                       placeholder="Mô tả minh chứng..."
                       rows={2}
                     />
                   </>
                 )}
 
-                {ev.evidenceType === 'WORK_EXPERIENCE' && (
+                {ev.evidenceType === "WORK_EXPERIENCE" && (
                   <div className="mvt-work-experience-inputs">
                     <input
                       type="text"
                       className="mvt-form__input mvt-form__input--sm"
-                      value={ev.workplace || ''}
-                      onChange={e => updateEvidence(idx, 'workplace', e.target.value)}
+                      value={ev.workplace || ""}
+                      onChange={(e) =>
+                        updateEvidence(idx, "workplace", e.target.value)
+                      }
                       placeholder="Nơi làm việc, tên trường học, công ty..."
                     />
                     <input
                       type="text"
                       className="mvt-form__input mvt-form__input--sm"
-                      value={ev.position || ''}
-                      onChange={e => updateEvidence(idx, 'position', e.target.value)}
+                      value={ev.position || ""}
+                      onChange={(e) =>
+                        updateEvidence(idx, "position", e.target.value)
+                      }
                       placeholder="Chức vụ, vị trí, hoặc thể loại bằng cấp..."
                     />
                     <textarea
                       className="mvt-form__textarea mvt-form__textarea--sm"
-                      value={ev.detailDescription || ''}
-                      onChange={e => updateEvidence(idx, 'detailDescription', e.target.value)}
+                      value={ev.detailDescription || ""}
+                      onChange={(e) =>
+                        updateEvidence(
+                          idx,
+                          "detailDescription",
+                          e.target.value,
+                        )
+                      }
                       placeholder="Mô tả chi tiết kỹ năng bạn áp dụng, dự án cụ thể ở đây..."
                       rows={3}
                     />
@@ -431,6 +456,20 @@ const MentorVerificationTab: React.FC = () => {
                 )}
               </div>
             ))}
+
+            <div className="mvt-evidence-actions">
+              <button
+                type="button"
+                className="mvt-btn mvt-btn--primary mvt-btn--sm"
+                onClick={() => addEvidence("CERTIFICATE")}
+              >
+                <Plus size={14} /> Thêm bằng chứng mới
+              </button>
+              <p className="mvt-form__hint">
+                Chọn loại bằng chứng và cung cấp thông tin chi tiết (URL, ảnh
+                chứng chỉ, hoặc mô tả kinh nghiệm).
+              </p>
+            </div>
           </div>
 
           <div className="mvt-form__actions">

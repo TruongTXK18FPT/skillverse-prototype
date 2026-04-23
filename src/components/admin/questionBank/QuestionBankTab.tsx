@@ -905,9 +905,9 @@ const QuestionBankTab: React.FC = () => {
         difficultyDistribution: aiDistribution,
         focusSkillAreas: aiFocusSkills
           ? aiFocusSkills
-              .split(",")
-              .map((s) => s.trim())
-              .filter(Boolean)
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
           : undefined,
       };
       const response = await generateAiDraft(selectedBank.id, request);
@@ -1078,34 +1078,34 @@ const QuestionBankTab: React.FC = () => {
           <ListChecks size={28} /> Ngân hàng câu hỏi
         </h2>
         {adminSection === "library" &&
-        view === "detail" ? null : adminSection === "library" ? (
-          <div className="qb-header-actions">
-            <button
-              className="qb-btn secondary"
-              onClick={() => loadBanks(bankPage)}
-            >
-              <RefreshCw size={18} />
-            </button>
-            <button
-              className="qb-btn secondary"
-              onClick={() => openCreateBankModal("IMPORT")}
-            >
-              <Upload size={18} /> Tạo nhanh từ file
-            </button>
-            <button
-              className="qb-btn primary"
-              onClick={() => openCreateBankModal("AI")}
-            >
-              <Brain size={18} /> Tạo nhanh bằng AI
-            </button>
-            <button
-              className="qb-btn success"
-              onClick={() => openCreateBankModal("MANUAL")}
-            >
-              <Plus size={18} /> Tạo ngân hàng câu hỏi
-            </button>
-          </div>
-        ) : null}
+          view === "detail" ? null : adminSection === "library" ? (
+            <div className="qb-header-actions">
+              <button
+                className="qb-btn secondary"
+                onClick={() => loadBanks(bankPage)}
+              >
+                <RefreshCw size={18} />
+              </button>
+              <button
+                className="qb-btn secondary"
+                onClick={() => openCreateBankModal("IMPORT")}
+              >
+                <Upload size={18} /> Tạo nhanh từ file
+              </button>
+              <button
+                className="qb-btn primary"
+                onClick={() => openCreateBankModal("AI")}
+              >
+                <Brain size={18} /> Tạo nhanh bằng AI
+              </button>
+              <button
+                className="qb-btn success"
+                onClick={() => openCreateBankModal("MANUAL")}
+              >
+                <Plus size={18} /> Tạo ngân hàng câu hỏi
+              </button>
+            </div>
+          ) : null}
       </div>
 
       <div className="qb-topTabs">
@@ -1121,7 +1121,7 @@ const QuestionBankTab: React.FC = () => {
           className={`qb-topTab ${adminSection === "mentorReview" ? "active" : ""}`}
           onClick={() => setAdminSection("mentorReview")}
         >
-          Duyệt đóng góp từ mentor
+          Đóng góp từ mentor
         </button>
       </div>
 
@@ -1712,15 +1712,15 @@ const QuestionBankTab: React.FC = () => {
                                 0,
                               ) - 1.0,
                             ) > 0.001 && (
-                              <span
-                                style={{
-                                  color: "#f87171",
-                                  marginLeft: "0.5rem",
-                                }}
-                              >
-                                Phải bằng 100%
-                              </span>
-                            )}
+                                <span
+                                  style={{
+                                    color: "#f87171",
+                                    marginLeft: "0.5rem",
+                                  }}
+                                >
+                                  Phải bằng 100%
+                                </span>
+                              )}
                           </div>
                         </div>
                       </div>
@@ -1865,12 +1865,12 @@ const QuestionBankTab: React.FC = () => {
                             0,
                           ) - 1.0,
                         ) > 0.001 && (
-                          <span
-                            style={{ color: "#f87171", marginLeft: "0.5rem" }}
-                          >
-                            Phải bằng 100%
-                          </span>
-                        )}
+                            <span
+                              style={{ color: "#f87171", marginLeft: "0.5rem" }}
+                            >
+                              Phải bằng 100%
+                            </span>
+                          )}
                       </div>
                     </div>
                   </div>
@@ -1937,202 +1937,202 @@ const QuestionBankTab: React.FC = () => {
           {/* ADD / EDIT QUESTION WORKSPACE */}
           {(activeModal === "addQuestion" ||
             activeModal === "editQuestion") && (
-            <div className="qb-inline-workspace">
-              <div className="qb-modal extra-large qb-inline-workspace__card">
-                <div className="qb-modal-header">
-                  <h2>
-                    {activeModal === "addQuestion" ? (
-                      <Plus size={22} />
-                    ) : (
-                      <Edit3 size={22} />
-                    )}
-                    {activeModal === "addQuestion"
-                      ? "Thêm câu hỏi"
-                      : "Chỉnh sửa câu hỏi"}
-                  </h2>
-                  <button className="qb-close-btn" onClick={closeModal}>
-                    <X size={20} />
-                  </button>
-                </div>
-                <div className="qb-modal-body">
-                  <div className="qb-form-grid">
-                    <div className="qb-form-group full-width">
-                      <label>
-                        Câu hỏi <span className="required">*</span>
-                      </label>
-                      <textarea
-                        className="qb-textarea"
-                        placeholder="Nhập nội dung câu hỏi..."
-                        value={questionForm.questionText}
-                        onChange={(e) =>
-                          setQuestionForm((p) => ({
-                            ...p,
-                            questionText: e.target.value,
-                          }))
-                        }
-                        style={{ minHeight: "100px" }}
-                      />
-                    </div>
+              <div className="qb-inline-workspace">
+                <div className="qb-modal extra-large qb-inline-workspace__card">
+                  <div className="qb-modal-header">
+                    <h2>
+                      {activeModal === "addQuestion" ? (
+                        <Plus size={22} />
+                      ) : (
+                        <Edit3 size={22} />
+                      )}
+                      {activeModal === "addQuestion"
+                        ? "Thêm câu hỏi"
+                        : "Chỉnh sửa câu hỏi"}
+                    </h2>
+                    <button className="qb-close-btn" onClick={closeModal}>
+                      <X size={20} />
+                    </button>
+                  </div>
+                  <div className="qb-modal-body">
+                    <div className="qb-form-grid">
+                      <div className="qb-form-group full-width">
+                        <label>
+                          Câu hỏi <span className="required">*</span>
+                        </label>
+                        <textarea
+                          className="qb-textarea"
+                          placeholder="Nhập nội dung câu hỏi..."
+                          value={questionForm.questionText}
+                          onChange={(e) =>
+                            setQuestionForm((p) => ({
+                              ...p,
+                              questionText: e.target.value,
+                            }))
+                          }
+                          style={{ minHeight: "100px" }}
+                        />
+                      </div>
 
-                    <div className="qb-form-group full-width">
-                      <label>
-                        4 đáp án <span className="required">*</span>
-                      </label>
-                      <div className="qb-options-grid">
-                        {["A", "B", "C", "D"].map((letter, idx) => (
-                          <div key={letter} className="qb-option-item">
-                            <div
-                              className={`qb-option-letter ${questionForm.correctAnswer === letter ? "selected" : ""}`}
-                              onClick={() =>
-                                setQuestionForm((p) => ({
-                                  ...p,
-                                  correctAnswer: letter,
-                                }))
-                              }
-                              title="Click để chọn làm đáp án đúng"
-                            >
-                              {letter}
+                      <div className="qb-form-group full-width">
+                        <label>
+                          4 đáp án <span className="required">*</span>
+                        </label>
+                        <div className="qb-options-grid">
+                          {["A", "B", "C", "D"].map((letter, idx) => (
+                            <div key={letter} className="qb-option-item">
+                              <div
+                                className={`qb-option-letter ${questionForm.correctAnswer === letter ? "selected" : ""}`}
+                                onClick={() =>
+                                  setQuestionForm((p) => ({
+                                    ...p,
+                                    correctAnswer: letter,
+                                  }))
+                                }
+                                title="Click để chọn làm đáp án đúng"
+                              >
+                                {letter}
+                              </div>
+                              <input
+                                className="qb-input"
+                                placeholder={`Đáp án ${letter}`}
+                                value={questionForm.options[idx] || ""}
+                                onChange={(e) =>
+                                  setQuestionForm((p) => {
+                                    const opts = [...p.options];
+                                    opts[idx] = e.target.value;
+                                    return { ...p, options: opts };
+                                  })
+                                }
+                              />
                             </div>
-                            <input
-                              className="qb-input"
-                              placeholder={`Đáp án ${letter}`}
-                              value={questionForm.options[idx] || ""}
-                              onChange={(e) =>
-                                setQuestionForm((p) => {
-                                  const opts = [...p.options];
-                                  opts[idx] = e.target.value;
-                                  return { ...p, options: opts };
-                                })
-                              }
-                            />
-                          </div>
-                        ))}
+                          ))}
+                        </div>
+                        <div
+                          style={{
+                            marginTop: "0.5rem",
+                            fontSize: "0.8rem",
+                            color: "#64748b",
+                          }}
+                        >
+                          Click chữ cái (A/B/C/D) để chọn đáp án đúng. Đang chọn:{" "}
+                          <strong style={{ color: "#67e8f9" }}>
+                            {questionForm.correctAnswer || "chưa chọn"}
+                          </strong>
+                        </div>
                       </div>
-                      <div
-                        style={{
-                          marginTop: "0.5rem",
-                          fontSize: "0.8rem",
-                          color: "#64748b",
-                        }}
-                      >
-                        Click chữ cái (A/B/C/D) để chọn đáp án đúng. Đang chọn:{" "}
-                        <strong style={{ color: "#67e8f9" }}>
-                          {questionForm.correctAnswer || "chưa chọn"}
-                        </strong>
+
+                      <div className="qb-form-group">
+                        <label>
+                          Độ khó <span className="required">*</span>
+                        </label>
+                        <select
+                          className="qb-select"
+                          value={questionForm.difficulty}
+                          onChange={(e) =>
+                            setQuestionForm((p) => ({
+                              ...p,
+                              difficulty: e.target.value,
+                            }))
+                          }
+                        >
+                          {DIFFICULTIES.map((d) => (
+                            <option key={d} value={d}>
+                              {getDifficultyLabel(d)}
+                            </option>
+                          ))}
+                        </select>
                       </div>
-                    </div>
 
-                    <div className="qb-form-group">
-                      <label>
-                        Độ khó <span className="required">*</span>
-                      </label>
-                      <select
-                        className="qb-select"
-                        value={questionForm.difficulty}
-                        onChange={(e) =>
-                          setQuestionForm((p) => ({
-                            ...p,
-                            difficulty: e.target.value,
-                          }))
-                        }
-                      >
-                        {DIFFICULTIES.map((d) => (
-                          <option key={d} value={d}>
-                            {getDifficultyLabel(d)}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                      <div className="qb-form-group">
+                        <label>Nguồn</label>
+                        <select
+                          className="qb-select"
+                          value={
+                            activeModal === "addQuestion"
+                              ? "MANUAL"
+                              : selectedQuestion?.source || "MANUAL"
+                          }
+                          disabled={activeModal === "editQuestion"}
+                        >
+                          {SOURCE_OPTIONS.map((s) => (
+                            <option key={s} value={s}>
+                              {getSourceLabel(s)}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
-                    <div className="qb-form-group">
-                      <label>Nguồn</label>
-                      <select
-                        className="qb-select"
-                        value={
-                          activeModal === "addQuestion"
-                            ? "MANUAL"
-                            : selectedQuestion?.source || "MANUAL"
-                        }
-                        disabled={activeModal === "editQuestion"}
-                      >
-                        {SOURCE_OPTIONS.map((s) => (
-                          <option key={s} value={s}>
-                            {getSourceLabel(s)}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                      <div className="qb-form-group">
+                        <label>Kỹ năng</label>
+                        <input
+                          className="qb-input"
+                          placeholder="VD: JavaScript, Cấu trúc dữ liệu..."
+                          value={questionForm.skillArea}
+                          onChange={(e) =>
+                            setQuestionForm((p) => ({
+                              ...p,
+                              skillArea: e.target.value,
+                            }))
+                          }
+                        />
+                      </div>
 
-                    <div className="qb-form-group">
-                      <label>Kỹ năng</label>
-                      <input
-                        className="qb-input"
-                        placeholder="VD: JavaScript, Cấu trúc dữ liệu..."
-                        value={questionForm.skillArea}
-                        onChange={(e) =>
-                          setQuestionForm((p) => ({
-                            ...p,
-                            skillArea: e.target.value,
-                          }))
-                        }
-                      />
-                    </div>
+                      <div className="qb-form-group">
+                        <label>Nhóm câu hỏi</label>
+                        <input
+                          className="qb-input"
+                          placeholder="VD: Frontend, Kiến thức nền tảng..."
+                          value={questionForm.category}
+                          onChange={(e) =>
+                            setQuestionForm((p) => ({
+                              ...p,
+                              category: e.target.value,
+                            }))
+                          }
+                        />
+                      </div>
 
-                    <div className="qb-form-group">
-                      <label>Nhóm câu hỏi</label>
-                      <input
-                        className="qb-input"
-                        placeholder="VD: Frontend, Kiến thức nền tảng..."
-                        value={questionForm.category}
-                        onChange={(e) =>
-                          setQuestionForm((p) => ({
-                            ...p,
-                            category: e.target.value,
-                          }))
-                        }
-                      />
-                    </div>
-
-                    <div className="qb-form-group full-width">
-                      <label>Giải thích</label>
-                      <textarea
-                        className="qb-textarea"
-                        placeholder="Giải thích đáp án đúng..."
-                        value={questionForm.explanation}
-                        onChange={(e) =>
-                          setQuestionForm((p) => ({
-                            ...p,
-                            explanation: e.target.value,
-                          }))
-                        }
-                        style={{ minHeight: "80px" }}
-                      />
+                      <div className="qb-form-group full-width">
+                        <label>Giải thích</label>
+                        <textarea
+                          className="qb-textarea"
+                          placeholder="Giải thích đáp án đúng..."
+                          value={questionForm.explanation}
+                          onChange={(e) =>
+                            setQuestionForm((p) => ({
+                              ...p,
+                              explanation: e.target.value,
+                            }))
+                          }
+                          style={{ minHeight: "80px" }}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="qb-modal-footer">
-                  <button className="qb-btn secondary" onClick={closeModal}>
-                    Hủy
-                  </button>
-                  <button
-                    className="qb-btn success"
-                    onClick={
-                      activeModal === "addQuestion"
-                        ? handleAddQuestion
-                        : handleUpdateQuestion
-                    }
-                    disabled={formLoading}
-                  >
-                    {formLoading
-                      ? "Đang xử lý..."
-                      : activeModal === "addQuestion"
-                        ? "Thêm"
-                        : "Lưu"}
-                  </button>
+                  <div className="qb-modal-footer">
+                    <button className="qb-btn secondary" onClick={closeModal}>
+                      Hủy
+                    </button>
+                    <button
+                      className="qb-btn success"
+                      onClick={
+                        activeModal === "addQuestion"
+                          ? handleAddQuestion
+                          : handleUpdateQuestion
+                      }
+                      disabled={formLoading}
+                    >
+                      {formLoading
+                        ? "Đang xử lý..."
+                        : activeModal === "addQuestion"
+                          ? "Thêm"
+                          : "Lưu"}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* DELETE QUESTION WORKSPACE */}
           {activeModal === "deleteQuestion" && selectedQuestion && (

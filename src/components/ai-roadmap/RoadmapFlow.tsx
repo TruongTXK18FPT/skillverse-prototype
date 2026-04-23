@@ -169,13 +169,13 @@ const RoadmapFlow = ({
       position: { x: 0, y: 0 }, // Vị trí tạm
       data: {
         node,
-        progress: undefined,
-        onComplete: undefined,
-        onCreateStudyTask: undefined,
-        isCreatingStudyTask: false,
-        isEligibleForStudyTask: true,
-        hasStudyTask: false,
-        isSelected: false
+        progress: progressMap?.get(node.id),
+        onComplete: onQuestComplete,
+        onCreateStudyTask,
+        isCreatingStudyTask: creatingTaskNodeId === node.id,
+        isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
+        hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false,
+        isSelected: selectedNodeId === node.id
       }
     }));
 

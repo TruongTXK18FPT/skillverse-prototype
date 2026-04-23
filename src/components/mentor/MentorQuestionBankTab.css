@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 1.5rem;
   color: #e8f7ff;
+  padding: 1.5rem 2rem;
 }
 
 .mentor-qb-hero,
@@ -84,9 +85,15 @@
 }
 
 .mentor-qb-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(340px, 0.95fr);
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
+}
+
+.mentor-qb-historySection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .mentor-qb-composerCard,
@@ -184,6 +191,12 @@
   transform: none;
 }
 
+.mentor-qb-btn.locked {
+  background: linear-gradient(135deg, #334155, #1e293b);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #64748b;
+}
+
 .mentor-qb-verifiedSkills,
 .mentor-qb-importCard,
 .mentor-qb-selectionBar,
@@ -261,10 +274,24 @@
   background: transparent;
   color: #effbff;
   font: inherit;
+  cursor: pointer;
+}
+
+.mentor-qb-field select option {
+  background: #0f172a;
+  color: #effbff;
 }
 
 .mentor-qb-field textarea {
   resize: vertical;
+  min-height: 1.5em;
+  line-height: 1.5;
+}
+
+.mentor-qb-field.option textarea {
+  resize: none;
+  min-height: 2.8rem;
+  overflow-y: auto;
 }
 
 .mentor-qb-skillHint {
@@ -434,12 +461,137 @@
   color: #8db2c9;
 }
 
+.mentor-qb-scrollActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-right: 0.5rem;
+  padding-right: 1rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .mentor-qb-questionList,
 .mentor-qb-historyList,
 .mentor-qb-questionPreviewList {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mentor-qb-previewPagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+}
+
+.mentor-qb-pageIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  color: #94a3b8;
+}
+
+.mentor-qb-pageIndicator strong {
+  color: #38bdf8;
+  font-size: 1.1rem;
+}
+
+.mentor-qb-previewCard.active {
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mentor-qb-previewText {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #f1f5f9;
+  margin: 1.25rem 0;
+}
+
+.mentor-qb-previewExplanation {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(56, 189, 248, 0.05);
+  border-radius: 12px;
+  border-left: 3px solid #38bdf8;
+}
+
+.mentor-qb-previewExplanation strong {
+  display: block;
+  font-size: 0.85rem;
+  color: #7dd3fc;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.mentor-qb-questionList {
+  max-height: 800px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scroll-behavior: smooth;
+}
+
+.mentor-qb-listFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 1rem;
+  padding: 3rem 2rem;
+  margin-top: 1rem;
+  border: 2px dashed rgba(52, 211, 153, 0.2);
+  border-radius: 24px;
+  background: rgba(16, 185, 129, 0.03);
+  transition: all 0.3s ease;
+}
+
+.mentor-qb-listFooter:hover {
+  background: rgba(16, 185, 129, 0.06);
+  border-color: rgba(52, 211, 153, 0.4);
+}
+
+.mentor-qb-listFooter p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.mentor-qb-btn.large {
+  padding: 0.85rem 2.5rem;
+  font-size: 1.1rem;
+  border-radius: 16px;
+}
+
+.mentor-qb-questionList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mentor-qb-questionList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.mentor-qb-questionList::-webkit-scrollbar-thumb {
+  background: rgba(52, 211, 153, 0.2);
+  border-radius: 10px;
 }
 
 .mentor-qb-questionCard,
@@ -461,6 +613,12 @@
 .mentor-qb-questionCardHeader h5 {
   margin: 0;
   font-size: 1.02rem;
+}
+
+.mentor-qb-pending-text {
+  color: #fb923c !important;
+  font-style: italic;
+  font-weight: 400 !important;
 }
 
 .mentor-qb-iconBtn {
@@ -582,7 +740,7 @@
   margin-top: 1rem;
 }
 
-.mentor-qb-detailMetrics > div {
+.mentor-qb-detailMetrics>div {
   padding: 0.85rem 0.9rem;
   border-radius: 16px;
   border: 1px solid rgba(56, 189, 248, 0.12);
@@ -696,7 +854,7 @@
 }
 
 @media (max-width: 1200px) {
-  .mentor-qb-layout {
+  .mentor-qb-historySection {
     grid-template-columns: 1fr;
   }
 }
@@ -716,6 +874,7 @@
 }
 
 @media (max-width: 640px) {
+
   .mentor-qb-hero,
   .mentor-qb-composerCard,
   .mentor-qb-historyCard,
