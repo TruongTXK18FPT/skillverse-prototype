@@ -37,8 +37,8 @@ interface Mentor {
   isFavorite: boolean;
   slug?: string;
   preChatEnabled?: boolean;
-  verifiedSkills?: string[];      // Skills đã được admin xác thực
-  hasVerifiedSkills?: boolean;  // Có ít nhất 1 skill đã xác thực
+  verifiedSkills?: string[]; // Skills đã được admin xác thực
+  hasVerifiedSkills?: boolean; // Có ít nhất 1 skill đã xác thực
 }
 
 const MentorshipPage = () => {
@@ -58,7 +58,9 @@ const MentorshipPage = () => {
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [selectedMentorForBooking, setSelectedMentorForBooking] =
     useState<Mentor | null>(null);
-  const [bookingContext, setBookingContext] = useState<{ bookingType: 'GENERAL' | 'ROADMAP_MENTORING' } | undefined>(undefined);
+  const [bookingContext, setBookingContext] = useState<
+    { bookingType: "GENERAL" | "ROADMAP_MENTORING" } | undefined
+  >(undefined);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showVerifiedOnly, setShowVerifiedOnly] = useState(true);
   const navigate = useNavigate();
@@ -99,9 +101,10 @@ const MentorshipPage = () => {
             reviews:
               typeof profile.ratingCount === "number" ? profile.ratingCount : 0,
             hourlyRate: finalRate,
-            roadmapMentoringPrice: profile.roadmapMentoringPrice && profile.roadmapMentoringPrice > 0 
-              ? profile.roadmapMentoringPrice 
-              : undefined,
+            roadmapMentoringPrice:
+              profile.roadmapMentoringPrice && profile.roadmapMentoringPrice > 0
+                ? profile.roadmapMentoringPrice
+                : undefined,
             expertise:
               profile.skills && profile.skills.length > 0
                 ? profile.skills
@@ -129,11 +132,13 @@ const MentorshipPage = () => {
         try {
           enrichedMentors = await Promise.all(
             transformedMentors.map(async (mentor) => {
-              let updatedMentor = { ...mentor };
-              
+              const updatedMentor = { ...mentor };
+
               // 1. Fetch verified skills
               try {
-                const verifiedSkills = await getVerifiedSkillsByMentorId(Number(mentor.id));
+                const verifiedSkills = await getVerifiedSkillsByMentorId(
+                  Number(mentor.id),
+                );
                 updatedMentor.verifiedSkills = verifiedSkills;
                 updatedMentor.hasVerifiedSkills = verifiedSkills.length > 0;
               } catch {
@@ -153,7 +158,7 @@ const MentorshipPage = () => {
               }
 
               return updatedMentor;
-            })
+            }),
           );
           setMentors(enrichedMentors);
         } catch {
@@ -202,7 +207,7 @@ const MentorshipPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [user?.id]);
+  }, [user?.id, mockMentors]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -360,7 +365,9 @@ const MentorshipPage = () => {
     }
 
     // Filter by verified skills toggle
-    const matchesVerifiedFilter = showVerifiedOnly ? mentor.hasVerifiedSkills : true;
+    const matchesVerifiedFilter = showVerifiedOnly
+      ? mentor.hasVerifiedSkills
+      : true;
 
     return matchesSearch && matchesCategory && matchesVerifiedFilter;
   });
@@ -424,7 +431,7 @@ const MentorshipPage = () => {
     }
 
     setSelectedMentorForBooking(mentor);
-    setBookingContext({ bookingType: 'ROADMAP_MENTORING' });
+    setBookingContext({ bookingType: "ROADMAP_MENTORING" });
     setBookingModalOpen(true);
   };
 
