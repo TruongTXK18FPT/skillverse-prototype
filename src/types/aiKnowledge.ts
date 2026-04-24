@@ -18,6 +18,30 @@ export enum AiKnowledgeIngestionStatus {
   FAILED = 'FAILED'
 }
 
+export const AI_KNOWLEDGE_INDUSTRY_OPTIONS = [
+  { value: '', label: 'General / Không áp dụng' },
+  { value: 'IT', label: 'Technology / IT' },
+  { value: 'Business', label: 'Business' },
+  { value: 'Finance', label: 'Finance' },
+  { value: 'Marketing', label: 'Marketing' },
+  { value: 'Design', label: 'Design' },
+  { value: 'Education', label: 'Education' },
+  { value: 'Healthcare', label: 'Healthcare' },
+  { value: 'Logistics', label: 'Logistics' },
+  { value: 'Legal', label: 'Legal' },
+  { value: 'Public Administration', label: 'Public Administration' },
+  { value: 'Agriculture', label: 'Agriculture' },
+  { value: 'Service Hospitality', label: 'Service Hospitality' },
+  { value: 'Arts Entertainment', label: 'Arts Entertainment' },
+] as const;
+
+export const AI_KNOWLEDGE_LEVEL_OPTIONS = [
+  { value: '', label: 'General / Không áp dụng' },
+  { value: 'beginner', label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced', label: 'Advanced' },
+] as const;
+
 export interface SpringPageResponse<T> {
   content: T[];
   totalPages: number;

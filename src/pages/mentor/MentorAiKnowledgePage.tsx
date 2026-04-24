@@ -29,6 +29,8 @@ import { AssignmentSummaryDTO } from '../../data/assignmentDTOs';
 import { CourseSummaryDTO } from '../../data/courseDTOs';
 import { ModuleDetailDTO } from '../../data/moduleDTOs';
 import {
+  AI_KNOWLEDGE_INDUSTRY_OPTIONS,
+  AI_KNOWLEDGE_LEVEL_OPTIONS,
   AiKnowledgeApprovalStatus,
   AiKnowledgeDocumentDetailResponse,
   AiKnowledgeDocumentListItemResponse,
@@ -458,8 +460,7 @@ const MentorAiKnowledgePage: React.FC = () => {
 
               <label className="mentor-ai-knowledge-field">
                 <span>Industry</span>
-                <input
-                  type="text"
+                <select
                   value={roadmapForm.industry}
                   onChange={(event) =>
                     setRoadmapForm((previous) => ({
@@ -467,13 +468,18 @@ const MentorAiKnowledgePage: React.FC = () => {
                       industry: event.target.value,
                     }))
                   }
-                />
+                >
+                  {AI_KNOWLEDGE_INDUSTRY_OPTIONS.map((option) => (
+                    <option key={option.value || 'general'} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
               </label>
 
               <label className="mentor-ai-knowledge-field">
                 <span>Level</span>
-                <input
-                  type="text"
+                <select
                   value={roadmapForm.level}
                   onChange={(event) =>
                     setRoadmapForm((previous) => ({
@@ -481,7 +487,13 @@ const MentorAiKnowledgePage: React.FC = () => {
                       level: event.target.value,
                     }))
                   }
-                />
+                >
+                  {AI_KNOWLEDGE_LEVEL_OPTIONS.map((option) => (
+                    <option key={option.value || 'general'} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
               </label>
 
               <label className="mentor-ai-knowledge-field mentor-ai-knowledge-field--full">

@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { FileUp, FileText, Layers3 } from 'lucide-react';
 import {
+  AI_KNOWLEDGE_INDUSTRY_OPTIONS,
+  AI_KNOWLEDGE_LEVEL_OPTIONS,
   AdminChatbotKnowledgeUploadRequest,
   AdminRoadmapKnowledgeUploadRequest,
 } from '../../../types/aiKnowledge';
@@ -161,8 +163,7 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
 
           <label className="adminaiknowledge-field">
             <span>Industry</span>
-            <input
-              type="text"
+            <select
               value={chatbotForm.industry}
               onChange={(event) =>
                 setChatbotForm((previous) => ({
@@ -170,13 +171,18 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
                   industry: event.target.value,
                 }))
               }
-            />
+            >
+              {AI_KNOWLEDGE_INDUSTRY_OPTIONS.map((option) => (
+                <option key={option.value || 'general'} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="adminaiknowledge-field">
             <span>Level</span>
-            <input
-              type="text"
+            <select
               value={chatbotForm.level}
               onChange={(event) =>
                 setChatbotForm((previous) => ({
@@ -184,7 +190,13 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
                   level: event.target.value,
                 }))
               }
-            />
+            >
+              {AI_KNOWLEDGE_LEVEL_OPTIONS.map((option) => (
+                <option key={option.value || 'general'} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="adminaiknowledge-field adminaiknowledge-field--full">
@@ -264,8 +276,7 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
 
           <label className="adminaiknowledge-field">
             <span>Industry</span>
-            <input
-              type="text"
+            <select
               value={roadmapForm.industry}
               onChange={(event) =>
                 setRoadmapForm((previous) => ({
@@ -273,13 +284,18 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
                   industry: event.target.value,
                 }))
               }
-            />
+            >
+              {AI_KNOWLEDGE_INDUSTRY_OPTIONS.map((option) => (
+                <option key={option.value || 'general'} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="adminaiknowledge-field">
             <span>Level</span>
-            <input
-              type="text"
+            <select
               value={roadmapForm.level}
               onChange={(event) =>
                 setRoadmapForm((previous) => ({
@@ -287,7 +303,13 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
                   level: event.target.value,
                 }))
               }
-            />
+            >
+              {AI_KNOWLEDGE_LEVEL_OPTIONS.map((option) => (
+                <option key={option.value || 'general'} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="adminaiknowledge-field adminaiknowledge-field--full">
