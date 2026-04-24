@@ -45,7 +45,12 @@ type SortOption = {
 
 const SORT_OPTIONS: SortOption[] = [
   { value: 'matchScore,desc', label: 'Độ phù hợp cao nhất' },
-  { value: 'skillMatchPercent,desc', label: 'Kỹ năng phù hợp' },
+  { value: 'skillFit,desc', label: 'Kỹ năng phù hợp' },
+  { value: 'evidenceFit,desc', label: 'Bằng chứng mạnh nhất' },
+  { value: 'experienceFit,desc', label: 'Kinh nghiệm phù hợp' },
+  { value: 'deliveryFit,desc', label: 'Delivery tốt nhất' },
+  { value: 'confidenceFit,desc', label: 'Độ tin cậy cao nhất' },
+  { value: 'riskPenalty,asc', label: 'Rủi ro thấp nhất' },
   { value: 'lastActive,desc', label: 'Hoạt động gần đây' },
   { value: 'totalProjects,desc', label: 'Nhiều dự án nhất' },
 ];
@@ -90,6 +95,12 @@ const CandidateSearchPage: React.FC<CandidateSearchPageProps> = ({
     isVerified: undefined,
     isPremium: undefined,
     isAvailable: undefined,
+    hasRelevantProjects: undefined,
+    hasCompletedMissions: undefined,
+    mustMatchPrimarySkill: undefined,
+    minOverallScore: undefined,
+    minSkillFit: undefined,
+    location: undefined,
     jobId: initialJobId
   });
 
@@ -238,6 +249,15 @@ const CandidateSearchPage: React.FC<CandidateSearchPageProps> = ({
     setPage(0);
   };
 
+  const handleNumberFilterChange = (key: keyof CandidateSearchFilters, value: string) => {
+    const parsed = Number(value);
+    setFilters(prev => ({
+      ...prev,
+      [key]: value === '' || Number.isNaN(parsed) ? undefined : Math.max(0, Math.min(100, parsed))
+    }));
+    setPage(0);
+  };
+
   const handleClearFilters = () => {
     setFilters({
       skills: [],
@@ -246,6 +266,12 @@ const CandidateSearchPage: React.FC<CandidateSearchPageProps> = ({
       isVerified: undefined,
       isPremium: undefined,
       isAvailable: undefined,
+      hasRelevantProjects: undefined,
+      hasCompletedMissions: undefined,
+      mustMatchPrimarySkill: undefined,
+      minOverallScore: undefined,
+      minSkillFit: undefined,
+      location: undefined,
       jobId: selectedJobType === 'LONG' ? selectedJobId : undefined,
       shortTermJobId: selectedJobType === 'SHORT' ? selectedJobId : undefined,
     });
@@ -333,7 +359,13 @@ const CandidateSearchPage: React.FC<CandidateSearchPageProps> = ({
     filters.hasPortfolio !== undefined ||
     filters.isVerified !== undefined ||
     filters.isPremium !== undefined ||
-    filters.isAvailable !== undefined;
+    filters.isAvailable !== undefined ||
+    filters.hasRelevantProjects !== undefined ||
+    filters.hasCompletedMissions !== undefined ||
+    filters.mustMatchPrimarySkill !== undefined ||
+    filters.minOverallScore !== undefined ||
+    filters.minSkillFit !== undefined ||
+    Boolean(filters.location);
 
   // Build unified job list for selector tabs
   const allJobs = [
@@ -513,6 +545,47 @@ const CandidateSearchPage: React.FC<CandidateSearchPageProps> = ({
               </select>
             </div>
 
+            <div className="csp-filter-group">
+              <label className="csp-filter-label">Địa điểm</label>
+              <input
+                type="text"
+                className="csp-filter-input"
+                placeholder="Remote, HCM, Ha Noi..."
+                value={filters.location || ''}
+                onChange={(e) => handleFilterChange('location', e.target.value.trim() || undefined)}
+              />
+            </div>
+
+            <div className="csp-filter-group">
+              <label className="csp-filter-label">Ngưỡng điểm</label>
+              <div className="csp-score-filters">
+                <label className="csp-score-filter">
+                  <span>Fit tổng thể</span>
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    className="csp-filter-input"
+                    value={filters.minOverallScore ?? ''}
+                    onChange={(e) => handleNumberFilterChange('minOverallScore', e.target.value)}
+                    placeholder="0-100"
+                  />
+                </label>
+                <label className="csp-score-filter">
+                  <span>Skill fit</span>
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    className="csp-filter-input"
+                    value={filters.minSkillFit ?? ''}
+                    onChange={(e) => handleNumberFilterChange('minSkillFit', e.target.value)}
+                    placeholder="0-100"
+                  />
+                </label>
+              </div>
+            </div>
+
             {/* Toggle Filters */}
             <div className="csp-filter-group">
               <label className="csp-filter-label">Tính năng</label>
@@ -548,6 +621,36 @@ const CandidateSearchPage: React.FC<CandidateSearchPageProps> = ({
                     onChange={(e) => handleFilterChange('isAvailable', e.target.checked ? true : undefined)}
                   />
                   <span>Đang rảnh</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="csp-filter-group">
+              <label className="csp-filter-label">Bằng chứng fit</label>
+              <div className="csp-filter-toggles">
+                <label className="csp-filter-toggle">
+                  <input
+                    type="checkbox"
+                    checked={filters.hasRelevantProjects === true}
+                    onChange={(e) => handleFilterChange('hasRelevantProjects', e.target.checked ? true : undefined)}
+                  />
+                  <span>Có dự án liên quan</span>
+                </label>
+                <label className="csp-filter-toggle">
+                  <input
+                    type="checkbox"
+                    checked={filters.hasCompletedMissions === true}
+                    onChange={(e) => handleFilterChange('hasCompletedMissions', e.target.checked ? true : undefined)}
+                  />
+                  <span>Đã hoàn thành mission</span>
+                </label>
+                <label className="csp-filter-toggle">
+                  <input
+                    type="checkbox"
+                    checked={filters.mustMatchPrimarySkill === true}
+                    onChange={(e) => handleFilterChange('mustMatchPrimarySkill', e.target.checked ? true : undefined)}
+                  />
+                  <span>Bắt buộc khớp skill chính</span>
                 </label>
               </div>
             </div>
@@ -599,8 +702,8 @@ const CandidateSearchPage: React.FC<CandidateSearchPageProps> = ({
               onChange={(e) => setSortBy(e.target.value)}
               className="csp-sort-select"
             >
-              {SORT_OPTIONS.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
+              {SORT_OPTIONS.map((option, index) => (
+                <option key={`${option.value}-${index}`} value={option.value}>{option.label}</option>
               ))}
             </select>
           </div>

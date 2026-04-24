@@ -60,6 +60,7 @@ import NodeVerificationGate from "../../components/journey/NodeVerificationGate"
 import JourneyVerificationDossier from "../../components/journey/JourneyVerificationDossier";
 import JourneyOutputAssessmentPanel from "../../components/journey/JourneyOutputAssessmentPanel";
 import Toast from "../../components/shared/Toast";
+import { decodeHtml } from "../../utils/htmlDecoder";
 import TicTacToeGame from "../../components/game/tic-tac-toe/TicTacToeGame";
 import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
 import { useAuth } from "../../context/AuthContext";
@@ -3381,7 +3382,7 @@ const GSJJourneyPage: React.FC = () => {
                       </div>
 
                       <p className="gsj-rq-item__question">
-                        {question.question}
+                        {decodeHtml(question.question)}
                       </p>
 
                       {question.options.length > 0 && (
@@ -3399,7 +3400,7 @@ const GSJJourneyPage: React.FC = () => {
                                   {key}
                                 </span>
                                 <span className="gsj-rq-option__text">
-                                  {option}
+                                  {decodeHtml(option)}
                                 </span>
                                 <span className="gsj-rq-option__flags">
                                   {isSelected && (

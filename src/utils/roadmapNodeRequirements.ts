@@ -18,12 +18,11 @@ export const normalizeRequirementItems = (
 export const multilineTextToList = (value?: string | null): string[] =>
   (value ?? '')
     .split(/\r?\n/)
-    .map((item) => item.trim())
-    .filter(Boolean);
+    .filter((line) => line.trim().length > 0);
 
 export const listToMultilineText = (
   items?: string[] | null,
-): string => normalizeRequirementItems(items).join('\n');
+): string => (items ?? []).join('\n');
 
 export const hasMentorAssignmentContent = (
   assignment?: Partial<NodeAssignmentResponse> | null,

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowLeft, CheckCircle, ChevronRight, Clock, RefreshCw } from 'lucide-react';
 import { AssessmentTestResponse } from '../../types/Journey';
 import { confirmAction } from '../../context/ConfirmDialogContext';
+import { decodeHtml } from '../../utils/htmlDecoder';
 
 interface GSJTestTakingProps {
   test: AssessmentTestResponse;
@@ -185,7 +186,7 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
             </span>
           </div>
 
-          <div className="gsj-test__question-text">{currentQuestion.question}</div>
+          <div className="gsj-test__question-text">{decodeHtml(currentQuestion.question)}</div>
 
           <div className="gsj-test__options">
             {currentQuestion.options.map((option, index) => (
@@ -196,7 +197,7 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
               >
                 <span className="gsj-option__marker"></span>
                 <span className="gsj-option__label">{getOptionLabel(index)}.</span>
-                <span className="gsj-option__text">{normalizeOptionText(option)}</span>
+                <span className="gsj-option__text">{decodeHtml(normalizeOptionText(option))}</span>
               </button>
             ))}
           </div>

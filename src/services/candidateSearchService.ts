@@ -19,12 +19,42 @@ type CandidateSearchApiItem = {
   customUrlSlug?: string;
   topSkills?: string[] | string | null;
   isHighlighted?: boolean;
+  isPremium?: boolean;
+  isVerified?: boolean;
+  hasPortfolio?: boolean;
   hourlyRate?: number;
   preferredCurrency?: string;
   totalProjects?: number;
+  yearsOfExperience?: number;
+  location?: string;
+  availabilityStatus?: string;
   matchScore?: number | null;
   skillMatchPercent?: number | null;
   matchQuality?: 'EXCELLENT' | 'GOOD' | 'FAIR' | 'POOR' | null;
+  primarySkillMatch?: boolean | null;
+  skillMatchScore?: number | null;
+  projectMatchScore?: number | null;
+  certMatchScore?: number | null;
+  missionMatchScore?: number | null;
+  experienceMatchScore?: number | null;
+  evidenceMatchScore?: number | null;
+  deliveryMatchScore?: number | null;
+  logisticsMatchScore?: number | null;
+  confidenceMatchScore?: number | null;
+  riskPenaltyScore?: number | null;
+  matchedSkills?: string[] | null;
+  unmatchedSkills?: string[] | null;
+  totalRequiredSkills?: number | null;
+  totalCandidateSkills?: number | null;
+  completedMissionsCount?: number | null;
+  totalCertificatesCount?: number | null;
+  totalVerifiedSkillsCount?: number | null;
+  relevantProjectsCount?: number | null;
+  relevantCertificatesCount?: number | null;
+  relevantMissionsCount?: number | null;
+  averageMissionRating?: number | null;
+  fitExplanation?: string | null;
+  fitAnalysis?: CandidateSearchResult['fitAnalysis'];
   aiFitSummary?: string | null;
   shortlistId?: number | null;
   shortlistStatus?: string | null;
@@ -91,40 +121,59 @@ const deriveMatchQuality = (
   return 'POOR';
 };
 
-const normalizeCandidate = (candidate: CandidateSearchApiItem): CandidateSearchResult => ({
-  userId: candidate.userId,
-  fullName: candidate.fullName,
-  professionalTitle: candidate.professionalTitle,
-  avatarUrl: candidate.avatarUrl,
-  customUrlSlug: candidate.customUrlSlug,
-  topSkills: normalizeSkills(candidate.topSkills),
-  isHighlighted: Boolean(candidate.isHighlighted),
-  isPremium: Boolean(candidate.isHighlighted),
-  isVerified: false,
-  hasPortfolio: true,
-  hourlyRate: candidate.hourlyRate,
-  preferredCurrency: candidate.preferredCurrency,
-  totalProjects: candidate.totalProjects,
-  matchScore: candidate.matchScore ?? 0,
-  skillMatchPercent: candidate.skillMatchPercent ?? 0,
-  matchQuality: candidate.matchQuality ?? deriveMatchQuality(candidate.matchScore),
-  fitExplanation: (candidate as any).fitExplanation ?? candidate.aiFitSummary ?? undefined,
-  aiSummary: candidate.aiFitSummary ?? undefined,
-  primarySkillMatch: (candidate as any).primarySkillMatch ?? undefined,
-  skillMatchScore: (candidate as any).skillMatchScore ?? undefined,
-  projectMatchScore: (candidate as any).projectMatchScore ?? undefined,
-  certMatchScore: (candidate as any).certMatchScore ?? undefined,
-  missionMatchScore: (candidate as any).missionMatchScore ?? undefined,
-  matchedSkills: (candidate as any).matchedSkills ?? undefined,
-  unmatchedSkills: (candidate as any).unmatchedSkills ?? undefined,
-  totalRequiredSkills: (candidate as any).totalRequiredSkills ?? undefined,
-  totalCandidateSkills: (candidate as any).totalCandidateSkills ?? undefined,
-  completedMissionsCount: (candidate as any).completedMissionsCount ?? undefined,
-  totalCertificatesCount: (candidate as any).totalCertificatesCount ?? undefined,
-  shortlistId: candidate.shortlistId ?? undefined,
-  shortlistStatus: candidate.shortlistStatus ?? undefined,
-  shortlistNotes: candidate.shortlistNotes ?? undefined,
-});
+const normalizeCandidate = (candidate: CandidateSearchApiItem): CandidateSearchResult => {
+  const matchScore = candidate.matchScore ?? candidate.fitAnalysis?.overallScore ?? 0;
+
+  return {
+    userId: candidate.userId,
+    fullName: candidate.fullName,
+    professionalTitle: candidate.professionalTitle,
+    avatarUrl: candidate.avatarUrl,
+    customUrlSlug: candidate.customUrlSlug,
+    topSkills: normalizeSkills(candidate.topSkills),
+    isHighlighted: Boolean(candidate.isHighlighted),
+    isPremium: Boolean(candidate.isPremium ?? candidate.isHighlighted),
+    isVerified: Boolean(candidate.isVerified),
+    hasPortfolio: Boolean(candidate.hasPortfolio ?? candidate.customUrlSlug),
+    hourlyRate: candidate.hourlyRate,
+    preferredCurrency: candidate.preferredCurrency,
+    totalProjects: candidate.totalProjects,
+    yearsOfExperience: candidate.yearsOfExperience,
+    location: candidate.location,
+    availabilityStatus: candidate.availabilityStatus,
+    matchScore,
+    skillMatchPercent: candidate.skillMatchPercent ?? 0,
+    matchQuality: candidate.matchQuality ?? deriveMatchQuality(matchScore),
+    fitExplanation: candidate.fitExplanation ?? candidate.aiFitSummary ?? undefined,
+    aiSummary: candidate.aiFitSummary ?? undefined,
+    primarySkillMatch: candidate.primarySkillMatch ?? undefined,
+    skillMatchScore: candidate.skillMatchScore ?? undefined,
+    projectMatchScore: candidate.projectMatchScore ?? undefined,
+    certMatchScore: candidate.certMatchScore ?? undefined,
+    missionMatchScore: candidate.missionMatchScore ?? undefined,
+    experienceMatchScore: candidate.experienceMatchScore ?? undefined,
+    evidenceMatchScore: candidate.evidenceMatchScore ?? undefined,
+    deliveryMatchScore: candidate.deliveryMatchScore ?? undefined,
+    logisticsMatchScore: candidate.logisticsMatchScore ?? undefined,
+    confidenceMatchScore: candidate.confidenceMatchScore ?? undefined,
+    riskPenaltyScore: candidate.riskPenaltyScore ?? undefined,
+    matchedSkills: candidate.matchedSkills ?? undefined,
+    unmatchedSkills: candidate.unmatchedSkills ?? undefined,
+    totalRequiredSkills: candidate.totalRequiredSkills ?? undefined,
+    totalCandidateSkills: candidate.totalCandidateSkills ?? undefined,
+    completedMissionsCount: candidate.completedMissionsCount ?? undefined,
+    totalCertificatesCount: candidate.totalCertificatesCount ?? undefined,
+    totalVerifiedSkillsCount: candidate.totalVerifiedSkillsCount ?? undefined,
+    relevantProjectsCount: candidate.relevantProjectsCount ?? undefined,
+    relevantCertificatesCount: candidate.relevantCertificatesCount ?? undefined,
+    relevantMissionsCount: candidate.relevantMissionsCount ?? undefined,
+    averageMissionRating: candidate.averageMissionRating ?? undefined,
+    fitAnalysis: candidate.fitAnalysis,
+    shortlistId: candidate.shortlistId ?? undefined,
+    shortlistStatus: candidate.shortlistStatus ?? undefined,
+    shortlistNotes: candidate.shortlistNotes ?? undefined,
+  };
+};
 
 class CandidateSearchService {
 
@@ -154,11 +203,19 @@ class CandidateSearchService {
       }
       if (filters.query) params.append('query', filters.query);
       if (filters.experienceLevel) params.append('experienceLevel', filters.experienceLevel);
+      if (filters.location) params.append('location', filters.location);
       if (filters.minHourlyRate !== undefined) params.append('minHourlyRate', filters.minHourlyRate.toString());
       if (filters.maxHourlyRate !== undefined) params.append('maxHourlyRate', filters.maxHourlyRate.toString());
       if (filters.isAvailable !== undefined) params.append('openToOffers', filters.isAvailable.toString());
       if (filters.hasPortfolio !== undefined) params.append('hasPortfolio', filters.hasPortfolio.toString());
+      if (filters.isVerified !== undefined) params.append('isVerified', filters.isVerified.toString());
+      if (filters.isPremium !== undefined) params.append('isPremium', filters.isPremium.toString());
       if (filters.hasCertificates !== undefined) params.append('hasCertificates', filters.hasCertificates.toString());
+      if (filters.hasRelevantProjects !== undefined) params.append('hasRelevantProjects', filters.hasRelevantProjects.toString());
+      if (filters.hasCompletedMissions !== undefined) params.append('hasCompletedMissions', filters.hasCompletedMissions.toString());
+      if (filters.mustMatchPrimarySkill !== undefined) params.append('mustMatchPrimarySkill', filters.mustMatchPrimarySkill.toString());
+      if (filters.minOverallScore !== undefined) params.append('minOverallScore', filters.minOverallScore.toString());
+      if (filters.minSkillFit !== undefined) params.append('minSkillFit', filters.minSkillFit.toString());
       if (filters.openToOffers !== undefined) params.append('openToOffers', filters.openToOffers.toString());
       if (filters.jobId !== undefined) params.append('jobId', filters.jobId.toString());
       if (filters.shortTermJobId !== undefined) params.append('shortTermJobId', filters.shortTermJobId.toString());

@@ -36,7 +36,6 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
   selectedJobId
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isLoadingAI, setIsLoadingAI] = useState(false);
 
   const formatHourlyRate = (rate?: number, currency?: string) => {
     if (!rate) return null;
@@ -91,6 +90,20 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
   };
 
   const topSkills = parseSkills(candidate.topSkills);
+  const fitAnalysis = candidate.fitAnalysis;
+  const hasDetailedFitAnalysis = Boolean(
+    fitAnalysis?.components?.length ||
+    fitAnalysis?.skillBreakdown?.length ||
+    fitAnalysis?.evidenceHighlights?.length ||
+    fitAnalysis?.missingRequirements?.length ||
+    fitAnalysis?.riskFlags?.length
+  );
+
+  const formatPercent = (value?: number | null) => `${Math.round((value || 0) * 100)}%`;
+  const getComponentWeightedScore = (score?: number, weight?: number, weightedScore?: number) =>
+    weightedScore ?? ((score || 0) * (weight || 0));
+  const matchedSkillDetails = fitAnalysis?.skillBreakdown?.filter(skill => skill.matched) || [];
+  const missingSkillDetails = fitAnalysis?.skillBreakdown?.filter(skill => !skill.matched) || [];
 
   return (
     <div className={`candidate-card ${candidate.isPremium ? 'candidate-card--premium' : ''} ${candidate.isHighlighted ? 'candidate-card--highlighted' : ''}`}>
@@ -140,6 +153,18 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
                 {candidate.totalProjects} dự án
               </span>
             )}
+            {candidate.yearsOfExperience !== undefined && (
+              <span className="candidate-card__projects">
+                <Briefcase size={12} />
+                {candidate.yearsOfExperience}y exp
+              </span>
+            )}
+            {candidate.location && (
+              <span className="candidate-card__projects">
+                <MapPin size={12} />
+                {candidate.location}
+              </span>
+            )}
             {candidate.lastActive && (
               <span className="candidate-card__activity">
                 <Clock size={12} />
@@ -181,8 +206,138 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
         </div>
       )}
 
+      {hasDetailedFitAnalysis && fitAnalysis && (
+        <div className="candidate-card__fit-analysis">
+          <div className="candidate-card__ranking-header">
+            <Sparkles size={14} className="neon-icon" />
+            <span>Fit analysis</span>
+            {fitAnalysis.band && <span className="candidate-card__fit-band">{fitAnalysis.band}</span>}
+          </div>
+
+          {(fitAnalysis.recommendation || candidate.fitExplanation) && (
+            <p className="candidate-card__fit-recommendation">
+              {fitAnalysis.recommendation || candidate.fitExplanation}
+            </p>
+          )}
+
+          <div className="candidate-card__fit-stats">
+            <span>{candidate.totalVerifiedSkillsCount ?? 0} verified skills</span>
+            <span>{candidate.relevantProjectsCount ?? 0} relevant projects</span>
+            <span>{candidate.completedMissionsCount ?? 0} completed missions</span>
+            {candidate.averageMissionRating !== undefined && (
+              <span>{candidate.averageMissionRating.toFixed(1)}/5 rating</span>
+            )}
+          </div>
+
+          {(fitAnalysis.components?.length ?? 0) > 0 && (
+            <div className="candidate-card__ranking-grid">
+              {fitAnalysis.components!.map((component) => {
+                const weighted = getComponentWeightedScore(component.score, component.weight, component.weightedScore);
+                return (
+                  <div className="ranking-item" key={component.key}>
+                    <div className="ranking-label-row">
+                      <span className="ranking-label">
+                        {component.label} ({Math.round((component.weight || 0) * 100)}%)
+                      </span>
+                      <span className="ranking-score">+{Math.round(weighted * 100)}%</span>
+                    </div>
+                    <div className="ranking-bar-wrapper">
+                      <div className="ranking-bar-bg">
+                        <div
+                          className="ranking-bar-fill cyan-glow"
+                          style={{ width: `${Math.min(100, Math.max(0, (component.score || 0) * 100))}%` }}
+                        />
+                      </div>
+                      <span className="candidate-card__raw-score">{formatPercent(component.score)}</span>
+                    </div>
+                    {component.explanation && (
+                      <p className="candidate-card__component-note">{component.explanation}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {(matchedSkillDetails.length > 0 || missingSkillDetails.length > 0 || candidate.matchedSkills?.length || candidate.unmatchedSkills?.length) && (
+            <div className="candidate-card__skill-fit-row">
+              <div>
+                <strong>Matched</strong>
+                <div className="candidate-card__mini-tags">
+                  {(matchedSkillDetails.length ? matchedSkillDetails.map(skill => skill.skill) : candidate.matchedSkills || [])
+                    .slice(0, 8)
+                    .map(skill => <span key={skill} className="candidate-card__mini-tag candidate-card__mini-tag--good">{skill}</span>)}
+                </div>
+              </div>
+              <div>
+                <strong>Missing</strong>
+                <div className="candidate-card__mini-tags">
+                  {(missingSkillDetails.length ? missingSkillDetails.map(skill => skill.skill) : candidate.unmatchedSkills || [])
+                    .slice(0, 8)
+                    .map(skill => <span key={skill} className="candidate-card__mini-tag candidate-card__mini-tag--risk">{skill}</span>)}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isExpanded && (
+            <div className="candidate-card__fit-detail">
+              {(fitAnalysis.evidenceHighlights?.length ?? 0) > 0 && (
+                <div className="candidate-card__detail-section">
+                  <strong>Evidence</strong>
+                  {fitAnalysis.evidenceHighlights!.slice(0, 4).map((evidence, index) => (
+                    <p key={`${evidence.type}-${index}`}>
+                      {evidence.title}
+                      {evidence.relevanceScore !== undefined && ` (${formatPercent(evidence.relevanceScore)})`}
+                    </p>
+                  ))}
+                </div>
+              )}
+
+              {(fitAnalysis.missingRequirements?.length ?? 0) > 0 && (
+                <div className="candidate-card__detail-section">
+                  <strong>Gaps</strong>
+                  {fitAnalysis.missingRequirements!.slice(0, 4).map((item) => (
+                    <p key={item.skill}>{item.skill}{item.suggestion ? ` - ${item.suggestion}` : ''}</p>
+                  ))}
+                </div>
+              )}
+
+              {(fitAnalysis.riskFlags?.length ?? 0) > 0 && (
+                <div className="candidate-card__detail-section candidate-card__detail-section--risk">
+                  <strong>Risk flags</strong>
+                  {fitAnalysis.riskFlags!.slice(0, 4).map((flag) => <p key={flag}>{flag}</p>)}
+                </div>
+              )}
+
+              {(fitAnalysis.interviewQuestions?.length ?? 0) > 0 && (
+                <div className="candidate-card__detail-section">
+                  <strong>Interview questions</strong>
+                  {fitAnalysis.interviewQuestions!.slice(0, 3).map((question) => <p key={question}>{question}</p>)}
+                </div>
+              )}
+
+              {(fitAnalysis.nextActions?.length ?? 0) > 0 && (
+                <div className="candidate-card__detail-section">
+                  <strong>Next actions</strong>
+                  {fitAnalysis.nextActions!.slice(0, 3).map((action) => <p key={action}>{action}</p>)}
+                </div>
+              )}
+            </div>
+          )}
+
+          <button
+            className="candidate-card__expand-btn candidate-card__fit-toggle"
+            onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
+          >
+            {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            {isExpanded ? 'Thu gon' : 'Xem bang chung'}
+          </button>
+        </div>
+      )}
+
       {/* Ranking Breakdown (Deterministic) */}
-      {(candidate.skillMatchScore !== undefined) && (
+      {(!hasDetailedFitAnalysis && candidate.skillMatchScore !== undefined) && (
         <div className="candidate-card__ranking-breakdown">
           <div className="candidate-card__ranking-header">
             <Sparkles size={14} className="neon-icon" />
@@ -231,7 +386,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
       )}
 
       {/* AI Fit Explanation - Keep as secondary context if available */}
-      {(candidate.fitExplanation || candidate.aiSummary) && (
+      {(!hasDetailedFitAnalysis && (candidate.fitExplanation || candidate.aiSummary)) && (
         <div className="candidate-card__ai-summary">
           <div className="candidate-card__ai-header">
             <Sparkles size={14} />
