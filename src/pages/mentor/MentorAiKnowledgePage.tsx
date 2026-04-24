@@ -141,7 +141,7 @@ const MentorAiKnowledgePage: React.FC = () => {
         if (previous && response.content.some((item) => item.id === previous)) {
           return previous;
         }
-        return response.content[0].id;
+        return null;
       });
     } catch (loadError) {
       setError(getApiErrorMessage(loadError, 'Không thể tải danh sách tài liệu AI của mentor.'));
@@ -656,37 +656,188 @@ const MentorAiKnowledgePage: React.FC = () => {
             </button>
           </div>
 
-          <div className="mentor-ai-knowledge-list">
-            {listLoading && <div className="mentor-ai-knowledge-empty">Đang tải danh sách submission...</div>}
+          <div className="mentor-ai-knowledge-table-wrap">
+            <table className="mentor-ai-knowledge-table">
+              <thead>
+                <tr>
+                  <th>Tài liệu</th>
+                  <th>Trạng thái</th>
+                  <th>Use Case</th>
+                  <th>Cập nhật</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                {listLoading && (
+                  <tr>
+                    <td colSpan={5} className="mentor-ai-knowledge-empty">Đang tải danh sách submission...</td>
+                  </tr>
+                )}
 
-            {!listLoading && documents.length === 0 && (
-              <div className="mentor-ai-knowledge-empty">Bạn chưa có submission AI knowledge nào.</div>
-            )}
+                {!listLoading && documents.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="mentor-ai-knowledge-empty">Bạn chưa có submission AI knowledge nào.</td>
+                  </tr>
+                )}
 
-            {!listLoading &&
-              documents.map((document) => {
-                const statusTone = getStatusTone(document.approvalStatus, document.ingestionStatus);
-                return (
-                  <button
-                    key={document.id}
-                    type="button"
-                    className={`mentor-ai-knowledge-list-item ${selectedId === document.id ? 'active' : ''}`}
-                    onClick={() => setSelectedId(document.id)}
-                  >
-                    <div className="mentor-ai-knowledge-list-item__head">
-                      <strong>{document.title}</strong>
-                      <span className={`mentor-ai-knowledge-chip mentor-ai-knowledge-chip--${statusTone}`}>
-                        {document.approvalStatus}
-                      </span>
-                    </div>
-                    <div className="mentor-ai-knowledge-list-item__sub">{document.useCase}</div>
-                    <div className="mentor-ai-knowledge-status-row">
-                      <span className="mentor-ai-knowledge-chip mentor-ai-knowledge-chip--neutral">{document.ingestionStatus}</span>
-                      <span className="mentor-ai-knowledge-list-item__sub">{formatDateTime(document.updatedAt)}</span>
-                    </div>
-                  </button>
-                );
-              })}
+                {!listLoading && documents.map((document) => {
+                  const isSelected = selectedId === document.id;
+                  const statusTone = getStatusTone(document.approvalStatus, document.ingestionStatus);
+                  
+                  return (
+                    <React.Fragment key={document.id}>
+                      <tr 
+                        className={`mentor-ai-knowledge-row-clickable ${isSelected ? 'active' : ''}`}
+                        onClick={() => setSelectedId(prev => prev === document.id ? null : document.id)}
+                      >
+                        <td>
+                          <strong>{document.title}</strong>
+                        </td>
+                        <td>
+                          <div className="mentor-ai-knowledge-status-row">
+                            <span className={`mentor-ai-knowledge-chip mentor-ai-knowledge-chip--${statusTone}`}>
+                              {document.approvalStatus}
+                            </span>
+                            <span className="mentor-ai-knowledge-chip mentor-ai-knowledge-chip--neutral">{document.ingestionStatus}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <span className="mentor-ai-knowledge-list-item__sub">{document.useCase}</span>
+                        </td>
+                        <td>
+                          <span className="mentor-ai-knowledge-list-item__sub">{formatDateTime(document.updatedAt)}</span>
+                        </td>
+                        <td>
+                          <button type="button" className="mentor-ai-knowledge-secondary-btn" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
+                            {isSelected ? 'Đóng' : 'Xem chi tiết'}
+                          </button>
+                        </td>
+                      </tr>
+
+                      {isSelected && (
+                        <tr className="mentor-ai-knowledge-detail-row">
+                          <td colSpan={5}>
+                            <div className="mentor-ai-knowledge-accordion-content">
+                              {detailLoading && (
+                                <div className="mentor-ai-knowledge-detail-loading">
+                                  <RefreshCw size={24} className="mentor-ai-knowledge-spinning" />
+                                  <span>Đang tải chi tiết...</span>
+                                </div>
+                              )}
+
+                              {!detailLoading && detail && detail.id === document.id && (
+                                <div className="mentor-ai-knowledge-detail">
+                                  <div className="mentor-ai-knowledge-detail-grid">
+                                    <div className="mentor-ai-knowledge-detail-main">
+                                      <div className="mentor-ai-knowledge-detail__headline">
+                                        <div>
+                                          <h3>{detail.title}</h3>
+                                          <p>{detail.description || 'Chưa có mô tả.'}</p>
+                                        </div>
+                                        <div className="mentor-ai-knowledge-status-stack">
+                                          <span className={`mentor-ai-knowledge-chip mentor-ai-knowledge-chip--${getStatusTone(detail.approvalStatus, detail.ingestionStatus)}`}>
+                                            {detail.approvalStatus}
+                                          </span>
+                                          <span
+                                            className={`mentor-ai-knowledge-chip ${
+                                              detail.ingestionStatus === 'INDEXED'
+                                                ? 'mentor-ai-knowledge-chip--indexed-strong'
+                                                : detail.ingestionStatus === 'NOT_INGESTED'
+                                                  ? 'mentor-ai-knowledge-chip--not-ingested-strong'
+                                                  : 'mentor-ai-knowledge-chip--neutral'
+                                            }`}
+                                          >
+                                            {detail.ingestionStatus}
+                                          </span>
+                                        </div>
+                                      </div>
+
+                                      <div className="mentor-ai-knowledge-legend">
+                                        <span className="mentor-ai-knowledge-legend-item"><AlertCircle size={15} />PENDING</span>
+                                        <span className="mentor-ai-knowledge-legend-item"><CheckCircle2 size={15} />APPROVED</span>
+                                        <span className="mentor-ai-knowledge-legend-item"><XCircle size={15} />REJECTED</span>
+                                        <span className="mentor-ai-knowledge-legend-item"><FileText size={15} />NOT_INGESTED</span>
+                                        <span className="mentor-ai-knowledge-legend-item"><CheckCircle2 size={15} />INDEXED</span>
+                                        <span className="mentor-ai-knowledge-legend-item"><ShieldX size={15} />FAILED</span>
+                                      </div>
+
+                                      <div className="mentor-ai-knowledge-meta-grid">
+                                        <div><strong>Use case</strong><span>{detail.useCase}</span></div>
+                                        <div><strong>Doc type</strong><span>{detail.docType || 'Không rõ'}</span></div>
+                                        <div><strong>Skill</strong><span>{detail.skillName || detail.skillSlug || '—'}</span></div>
+                                        <div><strong>Industry / Level</strong><span>{detail.industry || '—'} / {detail.level || '—'}</span></div>
+                                        <div><strong>Course / Module / Assignment</strong><span>{detail.courseId ?? '—'} / {detail.moduleId ?? '—'} / {detail.assignmentId ?? '—'}</span></div>
+                                        <div><strong>Tệp</strong><span>{detail.originalFileName || 'Không rõ'}</span></div>
+                                        <div><strong>Approved at</strong><span>{formatDateTime(detail.approvedAt)}</span></div>
+                                        <div><strong>Indexed at</strong><span>{formatDateTime(detail.indexedAt)}</span></div>
+                                        <div><strong>Created at</strong><span>{formatDateTime(detail.createdAt)}</span></div>
+                                        <div><strong>Updated at</strong><span>{formatDateTime(detail.updatedAt)}</span></div>
+                                      </div>
+
+                                      <div className="mentor-ai-knowledge-detail-actions" onClick={(e) => e.stopPropagation()}>
+                                        <button
+                                          type="button"
+                                          className="mentor-ai-knowledge-secondary-btn"
+                                          onClick={() => void handleRefreshDetail()}
+                                          disabled={detailLoading || refreshing}
+                                        >
+                                          <RefreshCw size={16} className={detailLoading ? 'mentor-ai-knowledge-spinning' : ''} />
+                                          Làm mới chi tiết
+                                        </button>
+                                        
+                                        {canDeletePending && (
+                                          <button
+                                            type="button"
+                                            className="mentor-ai-knowledge-danger-btn"
+                                            onClick={() => setConfirmDeleteOpen(true)}
+                                            disabled={deleting}
+                                          >
+                                            <Trash2 size={16} />
+                                            {deleting ? 'Đang xóa...' : 'Xóa pending submission'}
+                                          </button>
+                                        )}
+
+                                        {detail.storageUrl && (
+                                          <a href={detail.storageUrl} target="_blank" rel="noreferrer" className="mentor-ai-knowledge-secondary-btn">
+                                            <SquareArrowOutUpRight size={16} />
+                                            Mở file gốc
+                                          </a>
+                                        )}
+                                      </div>
+
+                                      {detail.reviewNote && (
+                                        <section className="mentor-ai-knowledge-detail__section">
+                                          <h4>Review note</h4>
+                                          <p>{detail.reviewNote}</p>
+                                        </section>
+                                      )}
+                                    </div>
+
+                                    <div className="mentor-ai-knowledge-detail-sidebar">
+                                      <section className="mentor-ai-knowledge-detail__section">
+                                        <h4>Extracted text</h4>
+                                        {detail.extractError ? (
+                                          <div className="mentor-ai-knowledge-alert mentor-ai-knowledge-alert--warning">
+                                            <AlertCircle size={18} />
+                                            <span>{detail.extractError}</span>
+                                          </div>
+                                        ) : (
+                                          <pre className="mentor-ai-knowledge-extracted-text">{detail.extractedText || 'Chưa có extracted text.'}</pre>
+                                        )}
+                                      </section>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
 
           <div className="mentor-ai-knowledge-pagination">
@@ -704,120 +855,6 @@ const MentorAiKnowledgePage: React.FC = () => {
               Sau
             </button>
           </div>
-        </section>
-
-        <section className="mentor-ai-knowledge-panel mentor-ai-knowledge-panel--detail">
-          <div className="mentor-ai-knowledge-panel__header">
-            <div>
-              <span className="mentor-ai-knowledge-panel__eyebrow">Chi tiết submission</span>
-              <h2>Submission detail</h2>
-            </div>
-            <div className="mentor-ai-knowledge-detail-actions">
-              <button
-                type="button"
-                className="mentor-ai-knowledge-secondary-btn"
-                onClick={() => void handleRefreshDetail()}
-                disabled={detailLoading || refreshing}
-              >
-                <RefreshCw size={16} className={detailLoading ? 'mentor-ai-knowledge-spinning' : ''} />
-                Làm mới chi tiết
-              </button>
-              {canDeletePending && (
-              <button
-                type="button"
-                className="mentor-ai-knowledge-danger-btn"
-                onClick={() => setConfirmDeleteOpen(true)}
-                disabled={deleting}
-              >
-                <Trash2 size={16} />
-                {deleting ? 'Đang xóa...' : 'Xóa pending submission'}
-              </button>
-            )}
-            </div>
-          </div>
-
-          {detailLoading && <div className="mentor-ai-knowledge-empty">Đang tải chi tiết submission...</div>}
-
-          {!detailLoading && !detail && (
-            <div className="mentor-ai-knowledge-empty">Chọn một submission để xem chi tiết trạng thái và nội dung đã trích xuất.</div>
-          )}
-
-          {!detailLoading && detail && (
-            <div className="mentor-ai-knowledge-detail">
-              <div className="mentor-ai-knowledge-detail__headline">
-                <div>
-                  <h3>{detail.title}</h3>
-                  <p>{detail.description || 'Chưa có mô tả.'}</p>
-                </div>
-                <div className="mentor-ai-knowledge-status-stack">
-                  <span className={`mentor-ai-knowledge-chip mentor-ai-knowledge-chip--${getStatusTone(detail.approvalStatus, detail.ingestionStatus)}`}>
-                    {detail.approvalStatus}
-                  </span>
-                  <span
-                    className={`mentor-ai-knowledge-chip ${
-                      detail.ingestionStatus === 'INDEXED'
-                        ? 'mentor-ai-knowledge-chip--indexed-strong'
-                        : detail.ingestionStatus === 'NOT_INGESTED'
-                          ? 'mentor-ai-knowledge-chip--not-ingested-strong'
-                          : 'mentor-ai-knowledge-chip--neutral'
-                    }`}
-                  >
-                    {detail.ingestionStatus}
-                  </span>
-                </div>
-              </div>
-
-              <div className="mentor-ai-knowledge-legend">
-                <span className="mentor-ai-knowledge-legend-item"><AlertCircle size={15} />PENDING</span>
-                <span className="mentor-ai-knowledge-legend-item"><CheckCircle2 size={15} />APPROVED</span>
-                <span className="mentor-ai-knowledge-legend-item"><XCircle size={15} />REJECTED</span>
-                <span className="mentor-ai-knowledge-legend-item"><FileText size={15} />NOT_INGESTED</span>
-                <span className="mentor-ai-knowledge-legend-item"><CheckCircle2 size={15} />INDEXED</span>
-                <span className="mentor-ai-knowledge-legend-item"><ShieldX size={15} />FAILED</span>
-              </div>
-
-              <div className="mentor-ai-knowledge-meta-grid">
-                <div><strong>Use case</strong><span>{detail.useCase}</span></div>
-                <div><strong>Doc type</strong><span>{detail.docType || 'Không rõ'}</span></div>
-                <div><strong>Skill</strong><span>{detail.skillName || detail.skillSlug || '—'}</span></div>
-                <div><strong>Industry / Level</strong><span>{detail.industry || '—'} / {detail.level || '—'}</span></div>
-                <div><strong>Course / Module / Assignment</strong><span>{detail.courseId ?? '—'} / {detail.moduleId ?? '—'} / {detail.assignmentId ?? '—'}</span></div>
-                <div><strong>Tệp</strong><span>{detail.originalFileName || 'Không rõ'}</span></div>
-                <div><strong>Approved at</strong><span>{formatDateTime(detail.approvedAt)}</span></div>
-                <div><strong>Indexed at</strong><span>{formatDateTime(detail.indexedAt)}</span></div>
-                <div><strong>Created at</strong><span>{formatDateTime(detail.createdAt)}</span></div>
-                <div><strong>Updated at</strong><span>{formatDateTime(detail.updatedAt)}</span></div>
-              </div>
-
-              <div className="mentor-ai-knowledge-detail__actions">
-                {detail.storageUrl && (
-                  <a href={detail.storageUrl} target="_blank" rel="noreferrer" className="mentor-ai-knowledge-secondary-btn">
-                    <SquareArrowOutUpRight size={16} />
-                    Mở file gốc
-                  </a>
-                )}
-              </div>
-
-              {detail.reviewNote && (
-                <section className="mentor-ai-knowledge-detail__section">
-                  <h4>Review note</h4>
-                  <p>{detail.reviewNote}</p>
-                </section>
-              )}
-
-              <section className="mentor-ai-knowledge-detail__section">
-                <h4>Extracted text</h4>
-                {detail.extractError ? (
-                  <div className="mentor-ai-knowledge-alert mentor-ai-knowledge-alert--warning">
-                    <AlertCircle size={18} />
-                    <span>{detail.extractError}</span>
-                  </div>
-                ) : (
-                  <pre className="mentor-ai-knowledge-extracted-text">{detail.extractedText || 'Chưa có extracted text.'}</pre>
-                )}
-              </section>
-            </div>
-          )}
         </section>
       </div>
 

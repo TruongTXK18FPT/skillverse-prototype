@@ -70,12 +70,12 @@
 }
 
 .adminaiknowledge-top-grid {
-  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.95fr);
+  grid-template-columns: 1fr;
   margin-bottom: 1rem;
 }
 
 .adminaiknowledge-content-grid {
-  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  grid-template-columns: 1fr;
 }
 
 .adminaiknowledge-card {
@@ -181,6 +181,19 @@
 .adminaiknowledge-filter-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.adminaiknowledge-filter-grid--compact {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.adminaiknowledge-filter-actions-inline {
+  justify-content: flex-end;
+}
+
+.adminaiknowledge-filter-actions-inline .adminaiknowledge-secondary-btn {
+  height: 44px;
 }
 
 .adminaiknowledge-field {
@@ -389,9 +402,69 @@
   }
 }
 
+.adminaiknowledge-row-clickable {
+  cursor: pointer;
+}
+
+.adminaiknowledge-row-clickable:hover {
+  background: rgba(0, 198, 255, 0.04);
+}
+
+.adminaiknowledge-detail-row {
+  background: rgba(7, 15, 28, 0.45);
+}
+
+.adminaiknowledge-detail-row td {
+  padding: 0 !important;
+  border-bottom: 2px solid rgba(0, 198, 255, 0.2) !important;
+}
+
+.adminaiknowledge-accordion-content {
+  padding: 1.5rem;
+  animation: adminaiknowledge-slide-down 0.25s ease-out;
+}
+
+@keyframes adminaiknowledge-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.adminaiknowledge-detail-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: #76d4ff;
+}
+
+.adminaiknowledge-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.adminaiknowledge-detail-inner {
+  width: 100%;
+}
+
+.adminaiknowledge-action-btn.active {
+  background: #00c6ff;
+  color: #040a16;
+  border-color: #00c6ff;
+}
+
 @media (max-width: 1200px) {
   .adminaiknowledge-top-grid,
-  .adminaiknowledge-content-grid {
+  .adminaiknowledge-content-grid,
+  .adminaiknowledge-detail-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -408,5 +481,9 @@
   .adminaiknowledge-filter-grid,
   .adminaiknowledge-detail-meta {
     grid-template-columns: 1fr;
+  }
+
+  .adminaiknowledge-filter-grid--compact {
+    grid-template-columns: 1fr 1fr;
   }
 }
