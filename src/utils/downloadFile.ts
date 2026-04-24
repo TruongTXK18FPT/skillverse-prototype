@@ -8,6 +8,31 @@
  */
 import axiosInstance from '../services/axiosInstance';
 
+const extractFilename = (contentDisposition?: string, fallback = 'download') => {
+  if (!contentDisposition) {
+    return fallback;
+  }
+
+  const encodedMatch = contentDisposition.match(/filename\*=([^;]+)/i);
+  if (encodedMatch?.[1]) {
+    const encodedValue = encodedMatch[1].trim().replace(/^UTF-8''/i, '').replace(/^"|"$/g, '');
+    try {
+      return decodeURIComponent(encodedValue);
+    } catch {
+      return encodedValue || fallback;
+    }
+  }
+
+  const quotedMatch = contentDisposition.match(/filename[^;=\n]*=(?:(\\?['"])(.*?)\1|([^;\n]*))/i);
+  if (quotedMatch?.[2]) {
+    return quotedMatch[2].replace(/['"]/g, '') || fallback;
+  }
+  if (quotedMatch?.[3]) {
+    return quotedMatch[3].replace(/['"]/g, '') || fallback;
+  }
+  return fallback;
+};
+
 export const downloadFile = async (
   url: string,
   defaultFilename: string = 'download',
@@ -25,18 +50,7 @@ export const downloadFile = async (
       response = await axiosInstance.get(url, config);
     }
 
-    // Extract filename from Content-Disposition header if present
-    const contentDisposition = response.headers['content-disposition'];
-    let filename = defaultFilename;
-
-    if (contentDisposition) {
-      const match = contentDisposition.match(/filename[^;=\n]*=(?:(\\?['"])(.*?)\1|([^;\n]*))/i);
-      if (match && match[2]) {
-        filename = match[2].replace(/['"]/g, '');
-      } else if (match && match[3]) {
-        filename = match[3].replace(/['"]/g, '');
-      }
-    }
+    const filename = extractFilename(response.headers['content-disposition'], defaultFilename);
 
     // Extract content type
     const contentType = response.headers['content-type'] || 'application/octet-stream';

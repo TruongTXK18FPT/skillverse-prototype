@@ -11,6 +11,7 @@ import {
   AiKnowledgeApprovalStatus,
   AiKnowledgeDocumentDetailResponse,
 } from '../../../types/aiKnowledge';
+import { downloadFile } from '../../../utils/downloadFile';
 
 interface AdminAiKnowledgeDetailPanelProps {
   detail: AiKnowledgeDocumentDetailResponse | null;
@@ -60,6 +61,12 @@ const AdminAiKnowledgeDetailPanel: React.FC<AdminAiKnowledgeDetailPanelProps> = 
 
   const canReview = detail.approvalStatus === AiKnowledgeApprovalStatus.PENDING && detail.mentorId != null;
   const canReindex = detail.approvalStatus === AiKnowledgeApprovalStatus.APPROVED;
+  const handleDownload = () => {
+    void downloadFile(
+      `/admin/ai-knowledge/documents/${detail.id}/download`,
+      detail.originalFileName || 'ai-knowledge-document'
+    );
+  };
 
   return (
     <aside className="adminaiknowledge-card adminaiknowledge-detail-panel">
@@ -109,15 +116,14 @@ const AdminAiKnowledgeDetailPanel: React.FC<AdminAiKnowledgeDetailPanelProps> = 
 
       <div className="adminaiknowledge-detail-actions">
         {detail.storageUrl && (
-          <a
-            href={detail.storageUrl}
-            target="_blank"
-            rel="noreferrer"
+          <button
+            type="button"
+            onClick={handleDownload}
             className="adminaiknowledge-secondary-btn adminaiknowledge-link-btn"
           >
             <SquareArrowOutUpRight size={16} />
-            Mở file gốc
-          </a>
+            Tải file gốc
+          </button>
         )}
 
         {canReview && (

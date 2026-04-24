@@ -39,6 +39,7 @@ interface AdminAiKnowledgeListProps {
   onReject: () => void;
   onReindex: () => void;
   onArchive: () => void;
+  onDownload: (document: AiKnowledgeDocumentDetailResponse) => void;
   reviewNote: string;
   onReviewNoteChange: (value: string) => void;
 }
@@ -81,6 +82,7 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
   onReject,
   onReindex,
   onArchive,
+  onDownload,
   reviewNote,
   onReviewNoteChange,
 }) => {
@@ -226,15 +228,14 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
 
                                     <div className="adminaiknowledge-detail-actions">
                                       {detail.storageUrl && (
-                                        <a
-                                          href={detail.storageUrl}
-                                          target="_blank"
-                                          rel="noreferrer"
+                                        <button
+                                          type="button"
+                                          onClick={(e) => { e.stopPropagation(); onDownload(detail); }}
                                           className="adminaiknowledge-secondary-btn adminaiknowledge-link-btn"
                                         >
                                           <SquareArrowOutUpRight size={16} />
-                                          Mở file gốc
-                                        </a>
+                                          Tải file gốc
+                                        </button>
                                       )}
 
                                       {canReview && (

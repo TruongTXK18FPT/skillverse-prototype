@@ -22,6 +22,7 @@ import {
   ListAdminAiKnowledgeDocumentsParams,
 } from '../../types/aiKnowledge';
 import { useToast } from '../../hooks/useToast';
+import { downloadFile } from '../../utils/downloadFile';
 import './AdminAiKnowledgeDashboard.css';
 
 type UploadKind = 'chatbot' | 'roadmap' | null;
@@ -150,6 +151,17 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
     }
 
     await fetchDetail(selectedId);
+  };
+
+  const handleDownloadDocument = async (document: AiKnowledgeDocumentDetailResponse) => {
+    try {
+      await downloadFile(
+        `/admin/ai-knowledge/documents/${document.id}/download`,
+        document.originalFileName || 'ai-knowledge-document'
+      );
+    } catch (downloadError) {
+      showError('Tải file thất bại', getApiErrorMessage(downloadError, 'Không thể tải file gốc của tài liệu AI.'));
+    }
   };
 
   const handleUploadChatbotDocument = async (payload: AdminChatbotKnowledgeUploadRequest) => {
@@ -338,6 +350,7 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
           onReject={() => setConfirmAction('reject')}
           onReindex={() => setConfirmAction('reindex')}
           onArchive={() => setConfirmAction('archive')}
+          onDownload={handleDownloadDocument}
           reviewNote={reviewNote}
           onReviewNoteChange={setReviewNote}
         />

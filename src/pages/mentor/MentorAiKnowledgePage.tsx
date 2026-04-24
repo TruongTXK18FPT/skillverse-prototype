@@ -26,6 +26,7 @@ import {
   AiKnowledgeDocumentListItemResponse,
   AiKnowledgeIngestionStatus,
 } from '../../types/aiKnowledge';
+import { downloadFile } from '../../utils/downloadFile';
 import '../../styles/MentorAiKnowledgePage.css';
 
 const PAGE_SIZE = 10;
@@ -151,6 +152,21 @@ const MentorAiKnowledgePage: React.FC = () => {
       return;
     }
     await loadDetail(selectedId);
+  };
+
+  const handleDownloadDetail = async () => {
+    if (!detail) {
+      return;
+    }
+
+    try {
+      await downloadFile(
+        `/mentor/ai-knowledge/documents/${detail.id}/download`,
+        detail.originalFileName || 'ai-knowledge-document'
+      );
+    } catch (downloadError) {
+      showError('Tải file thất bại', getApiErrorMessage(downloadError, 'Không thể tải file gốc của tài liệu AI.'));
+    }
   };
 
   const handleRoadmapSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -508,10 +524,14 @@ const MentorAiKnowledgePage: React.FC = () => {
                                         )}
 
                                         {detail.storageUrl && (
-                                          <a href={detail.storageUrl} target="_blank" rel="noreferrer" className="mentor-ai-knowledge-secondary-btn">
+                                          <button
+                                            type="button"
+                                            onClick={() => void handleDownloadDetail()}
+                                            className="mentor-ai-knowledge-secondary-btn"
+                                          >
                                             <SquareArrowOutUpRight size={16} />
-                                            Mở file gốc
-                                          </a>
+                                            Tải file gốc
+                                          </button>
                                         )}
                                       </div>
 
