@@ -74,6 +74,7 @@ const CareerChatPage = () => {
   const [aiAgentMode, setAiAgentMode] = useState<'NORMAL' | 'DEEP_RESEARCH'>('NORMAL');
   const [showModelDropdown, setShowModelDropdown] = useState(false);
   const [expertContext, setExpertContext] = useState<ExpertContext | null>(null);
+  const [detectedDomain, setDetectedDomain] = useState<string | null>(null);
   const [userAvatar, setUserAvatar] = useState<string | null>(user?.avatarUrl || null);
   const [subscription, setSubscription] = useState<UserSubscriptionResponse | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -152,6 +153,7 @@ const CareerChatPage = () => {
     setSessionId(null);
     setChatMode(ChatMode.GENERAL_CAREER_ADVISOR);
     setExpertContext(null);
+    setDetectedDomain(null);
     setMessages([{
       id: '1', role: 'assistant',
       content: `### 👋 Xin chào! Mình là Meowl 🐾
@@ -321,6 +323,9 @@ const CareerChatPage = () => {
         loadSessions();
       }
 
+      // Update detected domain from smart detection (clear if no domain)
+      setDetectedDomain(response.detectedDomain || null);
+
       const assistantMsg = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -489,6 +494,21 @@ const CareerChatPage = () => {
           <div className="chat-hud-title">
             <Sparkles size={18} style={{ marginRight: '8px', color: 'var(--chat-hud-accent)' }} />
             Trợ lý Meowl
+            {detectedDomain && (
+              <span style={{
+                marginLeft: '12px',
+                padding: '4px 10px',
+                background: 'linear-gradient(135deg, #06b6d4, #2563eb)',
+                borderRadius: '12px',
+                fontSize: '11px',
+                fontWeight: 600,
+                color: '#fff',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>
+                {detectedDomain}
+              </span>
+            )}
           </div>
 
           {/* Model Selector */}

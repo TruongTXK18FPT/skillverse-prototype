@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Users, ArrowRight, ChevronRight, X, Search, SlidersHorizontal, Filter, Lock } from 'lucide-react';
+import { Sparkles, Users, ArrowRight, ChevronRight, X, Search, SlidersHorizontal, Filter } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import careerChatService from '../../services/careerChatService';
 import { premiumService } from '../../services/premiumService';
@@ -187,25 +187,6 @@ const CareerChatLanding = () => {
     navigate('/chatbot/general');
   };
 
-  const handleExpertChat = () => {
-    if (!isAuthenticated) {
-      setShowLoginModal(true);
-      return;
-    }
-
-    const hasActiveSubscription = subscription && subscription.isActive;
-    const isFreeTier = subscription?.plan?.planType === 'FREE_TIER';
-
-    if (!hasActiveSubscription || isFreeTier) {
-      showError('Truy cập bị từ chối', 'Chế độ Expert Chat chỉ dành cho thành viên Premium!');
-      return;
-    }
-
-    setShowExpertFlow(true);
-    setStep('choice');
-    loadExpertFields();
-  };
-
   const handleDomainSelect = (domain: string) => {
     setSelectedDomain(domain);
     setStep('domain-roles');
@@ -308,7 +289,7 @@ const CareerChatLanding = () => {
       <div className="career-landing__container">
         <AnimatePresence mode="wait">
           {!showExpertFlow ? (
-            // Initial Choice Screen
+            // Unified Career Advisor Screen
             <motion.div
               key="choice"
               className="choice-screen"
@@ -329,8 +310,8 @@ const CareerChatLanding = () => {
                   <div className="holo-corner tr"></div>
                   <div className="holo-corner bl"></div>
                   <div className="holo-corner br"></div>
-                  <h1 className="holo-title">CAREER COUNSELING SYSTEM</h1>
-                  <p className="holo-subtitle">SELECT YOUR ADVISORY MODE</p>
+                  <h1 className="holo-title">AI CAREER ADVISOR</h1>
+                  <p className="holo-subtitle">MEOWL - TRỢ LÝ NGHỀ NGHIỆP THÔNG MINH</p>
                 </div>
               </motion.div>
 
@@ -424,19 +405,18 @@ const CareerChatLanding = () => {
                 </div>
               </motion.div>
 
-              {/* Cards */}
-              <div className="choice-cards">
-                {/* General Career Advisor Card */}
+              {/* Unified Career Advisor Card - Single Option */}
+              <div className="choice-cards unified">
                 <motion.div
-                  className="choice-card general"
-                  initial={{ x: -50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
+                  className="choice-card unified-card"
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4 }}
                   onClick={handleGeneralChat}
                   whileHover={{ scale: 1.02, y: -5 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <div className="card-glow"></div>
+                  <div className="card-glow unified-glow"></div>
                   <div className="card-border">
                     <div className="border-corner tl"></div>
                     <div className="border-corner tr"></div>
@@ -444,72 +424,38 @@ const CareerChatLanding = () => {
                     <div className="border-corner br"></div>
                   </div>
                   
-                  <div className="card-icon">
-                    <Sparkles size={48} />
+                  <div className="card-icon unified-icon">
+                    <Sparkles size={56} />
                     <div className="icon-pulse"></div>
                   </div>
                   
-                  <h2 className="card-title">TƯ VẤN NGHỀ NGHIỆP</h2>
-                  <p className="card-subtitle">GENERAL CAREER ADVISOR</p>
+                  <h2 className="card-title unified-title">TRÒ CHUYỆN VỚI MEOWL</h2>
+                  <p className="card-subtitle unified-subtitle">UNIFIED CAREER ADVISOR</p>
                   
-                  <div className="card-features">
-                    <div className="feature-item">✓ Tư vấn nghề nghiệp tổng quát</div>
-                    <div className="feature-item">✓ Xu hướng thị trường lao động</div>
-                    <div className="feature-item">✓ Lộ trình phát triển kỹ năng</div>
-                    <div className="feature-item">✓ Định hướng học tập</div>
+                  <div className="smart-detection-badge">
+                    <span className="badge-dot"></span>
+                    <span>Nhận diện ngành nghề tự động</span>
                   </div>
                   
-                  <div className="card-action">
-                    <span>BẮT ĐẦU</span>
+                  <div className="card-features unified-features">
+                    <div className="feature-item">
+                      <span>Tư vấn theo ngữ cảnh: IT, Business, Design, Healthcare...</span>
+                    </div>
+                    <div className="feature-item">
+                      <span>Định hướng nghề nghiệp & phát triển kỹ năng</span>
+                    </div>
+                    <div className="feature-item">
+                      <span>Thông tin thị trường lao động cập nhật</span>
+                    </div>
+                  </div>
+                  
+                  <div className="hint-text professional">
+                    <p>Đề cập "<strong>Java</strong>", "<strong>Marketing</strong>" hoặc "<strong>UI Design</strong>" — AI sẽ tự động điều chỉnh chuyên môn phù hợp</p>
+                  </div>
+                  
+                  <div className="card-action unified-action">
+                    <span>BẮT ĐẦU TRÒ CHUYỆN</span>
                     <ArrowRight size={20} />
-                  </div>
-                </motion.div>
-
-                {/* Expert Mode Card */}
-                <motion.div
-                  className="choice-card expert"
-                  initial={{ x: 50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  onClick={handleExpertChat}
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="card-glow"></div>
-                  <div className="card-border">
-                    <div className="border-corner tl"></div>
-                    <div className="border-corner tr"></div>
-                    <div className="border-corner bl"></div>
-                    <div className="border-corner br"></div>
-                  </div>
-                  
-                  <div className="card-icon">
-                    <Users size={48} />
-                    <div className="icon-pulse"></div>
-                  </div>
-                  
-                  <h2 className="card-title">CHAT VỚI CHUYÊN GIA</h2>
-                  <p className="card-subtitle">EXPERT MODE</p>
-                  
-                  <div className="card-features">
-                    <div className="feature-item">✓ Tư vấn chuyên sâu theo lĩnh vực</div>
-                    <div className="feature-item">✓ Chuyên gia theo ngành nghề</div>
-                    <div className="feature-item">✓ Kiến thức chuyên môn chi tiết</div>
-                    <div className="feature-item">✓ Lộ trình cụ thể cho từng vai trò</div>
-                  </div>
-                  
-                  <div className="card-action">
-                    {(!subscription?.isActive || subscription?.plan?.planType === 'FREE_TIER') ? (
-                      <>
-                        <span>PREMIUM ONLY</span>
-                        <Lock size={20} />
-                      </>
-                    ) : (
-                      <>
-                        <span>CHỌN CHUYÊN GIA</span>
-                        <ArrowRight size={20} />
-                      </>
-                    )}
                   </div>
                 </motion.div>
               </div>

@@ -33,6 +33,7 @@ export interface ChatResponse {
   timestamp: string;
   chatMode: ChatMode;
   expertContext?: ExpertContext;
+  detectedDomain?: string; // e.g., "it", "business", "design" - populated by smart detection
 }
 
 export interface ChatSession {
