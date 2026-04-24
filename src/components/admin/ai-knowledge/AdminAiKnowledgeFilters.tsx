@@ -24,12 +24,9 @@ const AdminAiKnowledgeFilters: React.FC<AdminAiKnowledgeFiltersProps> = ({
           <span className="adminaiknowledge-section-eyebrow">Bộ lọc</span>
           <h2>Danh sách tài liệu</h2>
         </div>
-        <button type="button" className="adminaiknowledge-secondary-btn" onClick={onReset}>
-          Xóa bộ lọc
-        </button>
       </div>
 
-      <div className="adminaiknowledge-filter-grid">
+      <div className="adminaiknowledge-filter-grid adminaiknowledge-filter-grid--compact">
         <label className="adminaiknowledge-field">
           <span>Use case</span>
           <select
@@ -97,6 +94,7 @@ const AdminAiKnowledgeFilters: React.FC<AdminAiKnowledgeFiltersProps> = ({
           <span>Skill slug</span>
           <input
             type="text"
+            placeholder="Search slug..."
             value={filters.skillSlug ?? ''}
             onChange={(event) =>
               onChange({
@@ -113,6 +111,7 @@ const AdminAiKnowledgeFilters: React.FC<AdminAiKnowledgeFiltersProps> = ({
           <input
             type="number"
             min="1"
+            placeholder="ID..."
             value={filters.courseId ?? ''}
             onChange={(event) =>
               onChange({
@@ -129,6 +128,7 @@ const AdminAiKnowledgeFilters: React.FC<AdminAiKnowledgeFiltersProps> = ({
           <input
             type="number"
             min="1"
+            placeholder="ID..."
             value={filters.moduleId ?? ''}
             onChange={(event) =>
               onChange({
@@ -145,6 +145,7 @@ const AdminAiKnowledgeFilters: React.FC<AdminAiKnowledgeFiltersProps> = ({
           <input
             type="number"
             min="1"
+            placeholder="ID..."
             value={filters.assignmentId ?? ''}
             onChange={(event) =>
               onChange({
@@ -155,6 +156,13 @@ const AdminAiKnowledgeFilters: React.FC<AdminAiKnowledgeFiltersProps> = ({
             }
           />
         </label>
+
+        <div className="adminaiknowledge-field adminaiknowledge-filter-actions-inline">
+          <span>&nbsp;</span>
+          <button type="button" className="adminaiknowledge-secondary-btn" onClick={onReset}>
+            Xóa bộ lọc
+          </button>
+        </div>
       </div>
     </section>
   );

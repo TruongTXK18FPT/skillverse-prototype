@@ -289,134 +289,66 @@ const CareerChatLanding = () => {
       <div className="career-landing__container">
         <AnimatePresence mode="wait">
           {!showExpertFlow ? (
-            // Unified Career Advisor Screen
+            // Unified Career Advisor Screen - Isolated & Viewport Optimized
             <motion.div
               key="choice"
-              className="choice-screen"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              className="ccl-landing-screen"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {/* Header */}
-              <motion.div
-                className="choice-header"
-                initial={{ y: -30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                <div className="holo-title-wrapper">
-                  <div className="holo-corner tl"></div>
-                  <div className="holo-corner tr"></div>
-                  <div className="holo-corner bl"></div>
-                  <div className="holo-corner br"></div>
-                  <h1 className="holo-title">AI CAREER ADVISOR</h1>
-                  <p className="holo-subtitle">MEOWL - TRỢ LÝ NGHỀ NGHIỆP THÔNG MINH</p>
-                </div>
-              </motion.div>
-
-              {/* Expert Summary Dashboard - Performance Optimized */}
-              <motion.div
-                className="expert-summary-dashboard"
-                initial={{ y: 30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <div className="summary-header">
-                  <div className="summary-title-wrapper">
-                    <Users size={24} strokeWidth={2} aria-hidden="true" />
-                    <h2 className="summary-title">HỆ THỐNG CHUYÊN GIA SKILLVERSE</h2>
-                  </div>
-                  <p className="summary-subtitle">Luôn cập nhật - Phục vụ 24/7 - Chuyên môn đa dạng</p>
-                </div>
-
-                <div className="ai-chat-summary-stats">
-                  <div className="ai-chat-stat-card">
-                    <div className="ai-chat-stat-icon">
-                      <Users size={28} strokeWidth={2} aria-hidden="true" />
-                    </div>
-                    <div className="ai-chat-stat-content">
-                      <div className="ai-chat-stat-number" id="expertCount">{statistics.totalExperts}+</div>
-                      <div className="ai-chat-stat-label">CHUYÊN GIA</div>
-                    </div>
-                    <div className="ai-chat-stat-glow" aria-hidden="true"></div>
-                  </div>
-
-                  <div className="ai-chat-stat-card">
-                    <div className="ai-chat-stat-icon">
-                      <Sparkles size={28} strokeWidth={2} aria-hidden="true" />
-                    </div>
-                    <div className="ai-chat-stat-content">
-                      <div className="ai-chat-stat-number" id="domainCount">{statistics.totalDomains}</div>
-                      <div className="ai-chat-stat-label">LĨNH VỰC</div>
-                    </div>
-                    <div className="ai-chat-stat-glow" aria-hidden="true"></div>
-                  </div>
-
-                  <div className="ai-chat-stat-card">
-                    <div className="ai-chat-stat-icon">
-                      <ChevronRight size={28} strokeWidth={2} aria-hidden="true" />
-                    </div>
-                    <div className="ai-chat-stat-content">
-                      <div className="ai-chat-stat-number" id="industryCount">{statistics.totalIndustries}+</div>
-                      <div className="ai-chat-stat-label">NGÀNH NGHỀ</div>
-                    </div>
-                    <div className="ai-chat-stat-glow" aria-hidden="true"></div>
-                  </div>
-                </div>
-
-                <div className="summary-features">
-                  <div className="feature-badge">
-                    <div className="feature-icon">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                      </svg>
-                    </div>
-                    <span className="badge-text">Cập nhật liên tục</span>
-                  </div>
-                  <div className="feature-badge">
-                    <div className="feature-icon">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <circle cx="12" cy="12" r="6"/>
-                        <circle cx="12" cy="12" r="2"/>
-                      </svg>
-                    </div>
-                    <span className="badge-text">Chuyên môn sâu</span>
-                  </div>
-                  <div className="feature-badge">
-                    <div className="feature-icon">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                      </svg>
-                    </div>
-                    <span className="badge-text">Phù hợp Việt Nam</span>
-                  </div>
-                  <div className="feature-badge">
-                    <div className="feature-icon">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
-                        <circle cx="12" cy="12" r="3"/>
-                      </svg>
-                    </div>
-                    <span className="badge-text">Phản hồi tức thì</span>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Unified Career Advisor Card - Single Option */}
-              <div className="choice-cards unified">
+              <div className="ccl-landing-col-left">
+                {/* Isolated Header */}
                 <motion.div
-                  className="choice-card unified-card"
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  onClick={handleGeneralChat}
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  whileTap={{ scale: 0.98 }}
+                  className="ccl-landing-header"
+                  initial={{ x: -50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
                 >
-                  <div className="card-glow unified-glow"></div>
+                  <div className="ccl-landing-title-wrapper">
+                    <div className="holo-corner tl"></div>
+                    <div className="holo-corner tr"></div>
+                    <div className="holo-corner bl"></div>
+                    <div className="holo-corner br"></div>
+                    <h1 className="holo-title">AI CAREER ADVISOR</h1>
+                    <p className="holo-subtitle">MEOWL - TRỢ LÝ NGHỀ NGHIỆP THÔNG MINH</p>
+                  </div>
+                </motion.div>
+
+                {/* Isolated Consultation Features */}
+                <motion.div 
+                  className="ccl-landing-features"
+                  initial={{ x: -50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <div className="ccl-landing-feature-item">
+                    <div className="ccl-landing-feature-dot"></div>
+                    <span>Tư vấn theo ngữ cảnh: IT, Business, Design, Healthcare...</span>
+                  </div>
+                  <div className="ccl-landing-feature-item">
+                    <div className="ccl-landing-feature-dot"></div>
+                    <span>Định hướng nghề nghiệp & phát triển kỹ năng</span>
+                  </div>
+                  <div className="ccl-landing-feature-item">
+                    <div className="ccl-landing-feature-dot"></div>
+                    <span>Thông tin thị trường lao động cập nhật</span>
+                  </div>
+                </motion.div>
+              </div>
+
+              <div className="ccl-landing-col-right">
+                {/* Redesigned Card - More Synchronized with Theme */}
+                <motion.div
+                  className="ccl-landing-card"
+                  initial={{ x: 50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <div className="ccl-landing-card-glow"></div>
+                  <div className="ccl-landing-card-pattern"></div>
+                  
                   <div className="card-border">
                     <div className="border-corner tl"></div>
                     <div className="border-corner tr"></div>
@@ -424,38 +356,31 @@ const CareerChatLanding = () => {
                     <div className="border-corner br"></div>
                   </div>
                   
-                  <div className="card-icon unified-icon">
-                    <Sparkles size={56} />
-                    <div className="icon-pulse"></div>
+                  <div className="ccl-landing-card-icon-wrap">
+                    <Sparkles size={48} />
+                    <div className="ccl-landing-card-pulse"></div>
                   </div>
                   
-                  <h2 className="card-title unified-title">TRÒ CHUYỆN VỚI MEOWL</h2>
-                  <p className="card-subtitle unified-subtitle">UNIFIED CAREER ADVISOR</p>
-                  
-                  <div className="smart-detection-badge">
-                    <span className="badge-dot"></span>
-                    <span>Nhận diện ngành nghề tự động</span>
-                  </div>
-                  
-                  <div className="card-features unified-features">
-                    <div className="feature-item">
-                      <span>Tư vấn theo ngữ cảnh: IT, Business, Design, Healthcare...</span>
+                  <div className="ccl-landing-card-body">
+                    <h2 className="ccl-landing-card-title">TRÒ CHUYỆN VỚI MEOWL</h2>
+                    <p className="ccl-landing-card-subtitle">UNIFIED CAREER ADVISOR</p>
+                    
+                    <div className="ccl-landing-card-badge">
+                      <span className="badge-dot"></span>
+                      <span>Nhận diện ngành nghề tự động</span>
                     </div>
-                    <div className="feature-item">
-                      <span>Định hướng nghề nghiệp & phát triển kỹ năng</span>
+
+                    <div className="ccl-landing-card-hint">
+                      <p>Đề cập "<strong>Java</strong>", "<strong>Marketing</strong>" hoặc "<strong>UI Design</strong>" — AI tự điều chỉnh chuyên môn</p>
                     </div>
-                    <div className="feature-item">
-                      <span>Thông tin thị trường lao động cập nhật</span>
-                    </div>
-                  </div>
-                  
-                  <div className="hint-text professional">
-                    <p>Đề cập "<strong>Java</strong>", "<strong>Marketing</strong>" hoặc "<strong>UI Design</strong>" — AI sẽ tự động điều chỉnh chuyên môn phù hợp</p>
-                  </div>
-                  
-                  <div className="card-action unified-action">
-                    <span>BẮT ĐẦU TRÒ CHUYỆN</span>
-                    <ArrowRight size={20} />
+                    
+                    <button 
+                      className="ccl-landing-card-btn"
+                      onClick={handleGeneralChat}
+                    >
+                      <span>BẮT ĐẦU TRÒ CHUYỆN</span>
+                      <ArrowRight size={18} />
+                    </button>
                   </div>
                 </motion.div>
               </div>

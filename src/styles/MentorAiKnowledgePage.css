@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 1.5rem;
   color: var(--mentor-hud-text-primary);
+  padding: 1rem;
 }
 
 .mentor-ai-knowledge-header,
@@ -103,12 +104,102 @@
 }
 
 .mentor-ai-knowledge-grid {
-  grid-template-columns: minmax(340px, 0.95fr) minmax(0, 1.15fr);
+  grid-template-columns: 1fr;
 }
 
 .mentor-ai-knowledge-form__grid,
 .mentor-ai-knowledge-meta-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mentor-ai-knowledge-table-wrap {
+  overflow-x: auto;
+  margin-top: 0.5rem;
+}
+
+.mentor-ai-knowledge-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mentor-ai-knowledge-table th,
+.mentor-ai-knowledge-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.12);
+  text-align: left;
+  vertical-align: top;
+}
+
+.mentor-ai-knowledge-table th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--mentor-hud-text-secondary);
+}
+
+.mentor-ai-knowledge-row-clickable {
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.mentor-ai-knowledge-row-clickable:hover {
+  background: rgba(6, 182, 212, 0.04);
+}
+
+.mentor-ai-knowledge-row-clickable.active {
+  background: rgba(6, 182, 212, 0.08);
+}
+
+.mentor-ai-knowledge-detail-row {
+  background: rgba(5, 11, 20, 0.4);
+}
+
+.mentor-ai-knowledge-detail-row td {
+  padding: 0 !important;
+  border-bottom: 2px solid rgba(6, 182, 212, 0.2) !important;
+}
+
+.mentor-ai-knowledge-accordion-content {
+  padding: 1.5rem;
+  animation: mentor-ai-knowledge-slide-down 0.25s ease-out;
+}
+
+@keyframes mentor-ai-knowledge-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mentor-ai-knowledge-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.mentor-ai-knowledge-detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mentor-ai-knowledge-detail-sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.mentor-ai-knowledge-detail-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: var(--mentor-hud-accent-cyan);
 }
 
 .mentor-ai-knowledge-field {
@@ -377,6 +468,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -389,6 +481,7 @@
 }
 
 @media (max-width: 768px) {
+
   .mentor-ai-knowledge-panel__header,
   .mentor-ai-knowledge-detail__headline,
   .mentor-ai-knowledge-pagination {

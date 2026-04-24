@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { AlertTriangle, BrainCircuit, RefreshCw } from 'lucide-react';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
 import ConfirmDialog from '../../components/shared/ConfirmDialog';
 import Toast from '../../components/shared/Toast';
 import AdminAiKnowledgeUploadPanel from '../../components/admin/ai-knowledge/AdminAiKnowledgeUploadPanel';
 import AdminAiKnowledgeFilters from '../../components/admin/ai-knowledge/AdminAiKnowledgeFilters';
 import AdminAiKnowledgeList from '../../components/admin/ai-knowledge/AdminAiKnowledgeList';
-import AdminAiKnowledgeDetailPanel from '../../components/admin/ai-knowledge/AdminAiKnowledgeDetailPanel';
 import {
   archiveAdminAiKnowledgeDocument,
   getAdminAiKnowledgeDocumentDetail,
@@ -91,7 +90,7 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
         if (previous && response.content.some((item: AiKnowledgeDocumentListItemResponse) => item.id === previous)) {
           return previous;
         }
-        return response.content[0].id;
+        return null;
       });
 
       return response;
@@ -137,7 +136,7 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
   };
 
   const handleSelectDocument = (id: number) => {
-    setSelectedId(id);
+    setSelectedId((prev) => (prev === id ? null : id));
   };
 
   const handleRefreshAll = async () => {
@@ -269,7 +268,7 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
     const nextId =
       preferredId != null && response.content.some((item) => item.id === preferredId)
         ? preferredId
-        : response.content[0].id;
+        : null;
 
     setSelectedId(nextId);
   }, [fetchList]);
@@ -301,28 +300,11 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
       )}
 
       <div className="adminaiknowledge-layout">
-        <div className="adminaiknowledge-top-grid">
-          <AdminAiKnowledgeUploadPanel
-            uploadingKind={uploadingKind}
-            onUploadChatbotDocument={handleUploadChatbotDocument}
-            onUploadRoadmapDocument={handleUploadRoadmapDocument}
-          />
-
-          <section className="adminaiknowledge-card">
-            <div className="adminaiknowledge-section-header">
-              <div>
-                <span className="adminaiknowledge-section-eyebrow">Tổng quan</span>
-                <h2>Điều phối tài liệu</h2>
-                <p>Chọn một tài liệu để review và kiểm tra extracted text trước khi ingest hoặc archive.</p>
-              </div>
-            </div>
-
-            <div className="adminaiknowledge-empty-block">
-              <BrainCircuit size={18} />
-              Sau upload/approve/reindex, màn hình luôn refetch lại danh sách và chi tiết để phản ánh trạng thái backend thực tế.
-            </div>
-          </section>
-        </div>
+        <AdminAiKnowledgeUploadPanel
+          uploadingKind={uploadingKind}
+          onUploadChatbotDocument={handleUploadChatbotDocument}
+          onUploadRoadmapDocument={handleUploadRoadmapDocument}
+        />
 
         <AdminAiKnowledgeFilters
           filters={filters}
@@ -330,39 +312,35 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
           onReset={handleResetFilters}
         />
 
-        <div className="adminaiknowledge-content-grid">
-          <AdminAiKnowledgeList
-            documents={documents}
-            loading={listLoading}
-            selectedId={selectedId}
-            currentPage={pageMeta.number}
-            totalPages={pageMeta.totalPages}
-            totalElements={pageMeta.totalElements}
-            onSelect={handleSelectDocument}
-            onPrevPage={() => setFilters((previous) => ({ ...previous, page: Math.max((previous.page ?? 0) - 1, 0) }))}
-            onNextPage={() =>
-              setFilters((previous) => ({
-                ...previous,
-                page: Math.min((previous.page ?? 0) + 1, Math.max(pageMeta.totalPages - 1, 0)),
-              }))
-            }
-            onRefresh={() => void fetchList(true)}
-            refreshing={listRefreshing}
-          />
-
-          <AdminAiKnowledgeDetailPanel
-            detail={detail}
-            loading={detailLoading}
-            actionLoading={actionLoading}
-            onRefresh={handleRefreshDetail}
-            onApprove={() => setConfirmAction('approve')}
-            onReject={() => setConfirmAction('reject')}
-            onReindex={() => setConfirmAction('reindex')}
-            onArchive={() => setConfirmAction('archive')}
-            reviewNote={reviewNote}
-            onReviewNoteChange={setReviewNote}
-          />
-        </div>
+        <AdminAiKnowledgeList
+          documents={documents}
+          loading={listLoading}
+          selectedId={selectedId}
+          currentPage={pageMeta.number}
+          totalPages={pageMeta.totalPages}
+          totalElements={pageMeta.totalElements}
+          onSelect={handleSelectDocument}
+          onPrevPage={() => setFilters((previous) => ({ ...previous, page: Math.max((previous.page ?? 0) - 1, 0) }))}
+          onNextPage={() =>
+            setFilters((previous) => ({
+              ...previous,
+              page: Math.min((previous.page ?? 0) + 1, Math.max(pageMeta.totalPages - 1, 0)),
+            }))
+          }
+          onRefresh={() => void fetchList(true)}
+          refreshing={listRefreshing}
+          // Accordion Detail Props
+          detail={detail}
+          detailLoading={detailLoading}
+          actionLoading={actionLoading}
+          onRefreshDetail={handleRefreshDetail}
+          onApprove={() => setConfirmAction('approve')}
+          onReject={() => setConfirmAction('reject')}
+          onReindex={() => setConfirmAction('reindex')}
+          onArchive={() => setConfirmAction('archive')}
+          reviewNote={reviewNote}
+          onReviewNoteChange={setReviewNote}
+        />
       </div>
 
       <ConfirmDialog
