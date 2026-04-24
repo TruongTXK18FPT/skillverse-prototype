@@ -136,15 +136,6 @@ export interface MentorRoadmapKnowledgeSubmissionRequest {
   level?: string;
 }
 
-export interface MentorGradingKnowledgeSubmissionRequest {
-  file: File;
-  title: string;
-  description?: string;
-  courseId: number;
-  moduleId?: number;
-  assignmentId?: number;
-}
-
 export interface ReviewAiKnowledgeRequest {
   approved: boolean;
   reviewNote?: string;

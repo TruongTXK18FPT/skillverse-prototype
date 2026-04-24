@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   AlertCircle,
-  BookOpen,
   CheckCircle2,
   FileText,
-  Layers3,
   RefreshCw,
   ShieldX,
   SquareArrowOutUpRight,
@@ -14,20 +12,12 @@ import {
 import Toast from '../../components/shared/Toast';
 import ConfirmDialog from '../../components/shared/ConfirmDialog';
 import { useToast } from '../../hooks/useToast';
-import { useAuth } from '../../context/AuthContext';
 import {
   deleteMentorAiKnowledgeDocument,
   getMentorAiKnowledgeDocumentDetail,
   listMentorAiKnowledgeDocuments,
-  submitMentorGradingDocument,
   submitMentorRoadmapDocument,
 } from '../../services/aiKnowledgeService';
-import { listAssignmentsByModule } from '../../services/assignmentService';
-import { listCoursesByAuthor } from '../../services/courseService';
-import { listModulesWithContent } from '../../services/moduleService';
-import { AssignmentSummaryDTO } from '../../data/assignmentDTOs';
-import { CourseSummaryDTO } from '../../data/courseDTOs';
-import { ModuleDetailDTO } from '../../data/moduleDTOs';
 import {
   AI_KNOWLEDGE_INDUSTRY_OPTIONS,
   AI_KNOWLEDGE_LEVEL_OPTIONS,
@@ -37,8 +27,6 @@ import {
   AiKnowledgeIngestionStatus,
 } from '../../types/aiKnowledge';
 import '../../styles/MentorAiKnowledgePage.css';
-
-type SubmitTab = 'roadmap' | 'grading';
 
 const PAGE_SIZE = 10;
 
@@ -64,30 +52,21 @@ const getApiErrorMessage = (error: unknown, fallback: string) => {
 };
 
 const MentorAiKnowledgePage: React.FC = () => {
-  const { user } = useAuth();
   const { toast, isVisible, hideToast, showError, showInfo, showSuccess } = useToast();
 
-  const [activeTab, setActiveTab] = useState<SubmitTab>('roadmap');
   const [documents, setDocuments] = useState<AiKnowledgeDocumentListItemResponse[]>([]);
   const [detail, setDetail] = useState<AiKnowledgeDocumentDetailResponse | null>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [listLoading, setListLoading] = useState(true);
   const [detailLoading, setDetailLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [submitting, setSubmitting] = useState<SubmitTab | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
-
-  const [courses, setCourses] = useState<CourseSummaryDTO[]>([]);
-  const [coursesLoading, setCoursesLoading] = useState(false);
-  const [modules, setModules] = useState<ModuleDetailDTO[]>([]);
-  const [modulesLoading, setModulesLoading] = useState(false);
-  const [assignments, setAssignments] = useState<AssignmentSummaryDTO[]>([]);
-  const [assignmentsLoading, setAssignmentsLoading] = useState(false);
 
   const [roadmapForm, setRoadmapForm] = useState({
     file: null as File | null,
@@ -98,20 +77,7 @@ const MentorAiKnowledgePage: React.FC = () => {
     level: '',
   });
 
-  const [gradingForm, setGradingForm] = useState({
-    file: null as File | null,
-    title: '',
-    description: '',
-    courseId: '',
-    moduleId: '',
-    assignmentId: '',
-  });
-
-  const selectedCourseId = gradingForm.courseId ? Number(gradingForm.courseId) : null;
-  const selectedModuleId = gradingForm.moduleId ? Number(gradingForm.moduleId) : null;
-
   const roadmapFileRef = useRef<HTMLInputElement>(null);
-  const gradingFileRef = useRef<HTMLInputElement>(null);
 
   const loadDocuments = async (showRefreshing = false) => {
     if (showRefreshing) {
@@ -165,46 +131,6 @@ const MentorAiKnowledgePage: React.FC = () => {
     }
   };
 
-  const loadCourses = async () => {
-    if (!user?.id) return;
-
-    setCoursesLoading(true);
-    try {
-      const response = await listCoursesByAuthor(user.id, 0, 100);
-      setCourses(response.content || []);
-    } catch (loadError) {
-      showError('Không thể tải khóa học', getApiErrorMessage(loadError, 'Không thể tải danh sách khóa học mentor phụ trách.'));
-    } finally {
-      setCoursesLoading(false);
-    }
-  };
-
-  const loadModules = async (courseId: number) => {
-    setModulesLoading(true);
-    try {
-      const response = await listModulesWithContent(courseId);
-      setModules(response);
-    } catch (loadError) {
-      setModules([]);
-      showError('Không thể tải module', getApiErrorMessage(loadError, 'Không thể tải danh sách module.'));
-    } finally {
-      setModulesLoading(false);
-    }
-  };
-
-  const loadAssignments = async (moduleId: number) => {
-    setAssignmentsLoading(true);
-    try {
-      const response = await listAssignmentsByModule(moduleId);
-      setAssignments(response || []);
-    } catch (loadError) {
-      setAssignments([]);
-      showError('Không thể tải assignment', getApiErrorMessage(loadError, 'Không thể tải danh sách assignment.'));
-    } finally {
-      setAssignmentsLoading(false);
-    }
-  };
-
   useEffect(() => {
     void loadDocuments();
   }, [page]);
@@ -214,36 +140,6 @@ const MentorAiKnowledgePage: React.FC = () => {
       void loadDetail(selectedId);
     }
   }, [selectedId]);
-
-  useEffect(() => {
-    void loadCourses();
-  }, [user?.id]);
-
-  useEffect(() => {
-    if (selectedCourseId != null) {
-      void loadModules(selectedCourseId);
-    } else {
-      setModules([]);
-    }
-    setAssignments([]);
-    setGradingForm((previous) => ({
-      ...previous,
-      moduleId: '',
-      assignmentId: '',
-    }));
-  }, [selectedCourseId]);
-
-  useEffect(() => {
-    if (selectedModuleId != null) {
-      void loadAssignments(selectedModuleId);
-    } else {
-      setAssignments([]);
-    }
-    setGradingForm((previous) => ({
-      ...previous,
-      assignmentId: '',
-    }));
-  }, [selectedModuleId]);
 
   const handleRefresh = async () => {
     await loadDocuments(true);
@@ -264,7 +160,7 @@ const MentorAiKnowledgePage: React.FC = () => {
       return;
     }
 
-    setSubmitting('roadmap');
+    setSubmitting(true);
     try {
       const created = await submitMentorRoadmapDocument({
         file: roadmapForm.file,
@@ -292,52 +188,7 @@ const MentorAiKnowledgePage: React.FC = () => {
     } catch (submitError) {
       showError('Gửi thất bại', getApiErrorMessage(submitError, 'Không thể gửi tài liệu roadmap.'));
     } finally {
-      setSubmitting(null);
-    }
-  };
-
-  const handleGradingSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!gradingForm.file) {
-      showInfo('Thiếu tệp', 'Bạn cần chọn tệp PDF, DOCX, MD, hoặc TXT trước khi gửi tài liệu grading.');
-      return;
-    }
-    if (!gradingForm.courseId) {
-      showInfo('Thiếu khóa học', 'Bạn cần chọn khóa học để gắn phạm vi tài liệu grading.');
-      return;
-    }
-
-    setSubmitting('grading');
-    try {
-      const created = await submitMentorGradingDocument({
-        file: gradingForm.file,
-        title: gradingForm.title,
-        description: gradingForm.description || undefined,
-        courseId: Number(gradingForm.courseId),
-        moduleId: gradingForm.moduleId ? Number(gradingForm.moduleId) : undefined,
-        assignmentId: gradingForm.assignmentId ? Number(gradingForm.assignmentId) : undefined,
-      });
-
-      showSuccess('Đã gửi tài liệu', 'Tài liệu grading đã được gửi để admin review.');
-      setGradingForm({
-        file: null,
-        title: '',
-        description: '',
-        courseId: '',
-        moduleId: '',
-        assignmentId: '',
-      });
-      setModules([]);
-      setAssignments([]);
-      if (gradingFileRef.current) {
-        gradingFileRef.current.value = '';
-      }
-      await loadDocuments(true);
-      setSelectedId(created.id);
-    } catch (submitError) {
-      showError('Gửi thất bại', getApiErrorMessage(submitError, 'Không thể gửi tài liệu grading.'));
-    } finally {
-      setSubmitting(null);
+      setSubmitting(false);
     }
   };
 
@@ -372,7 +223,7 @@ const MentorAiKnowledgePage: React.FC = () => {
           MENTOR <span className="mentor-ai-knowledge-header__title-accent">AI KNOWLEDGE</span>
         </h1>
         <p className="mentor-ai-knowledge-header__subtitle">
-          Gửi tài liệu roadmap hoặc grading, theo dõi trạng thái review và quản lý submission của riêng bạn.
+          Gửi tài liệu roadmap cho skill đã verify, theo dõi trạng thái review và quản lý submission của riêng bạn. AI grading sử dụng nội dung assignment, rubric, và bài giảng trong khóa học.
         </p>
       </header>
 
@@ -387,259 +238,118 @@ const MentorAiKnowledgePage: React.FC = () => {
         <div className="mentor-ai-knowledge-panel__header">
           <div>
             <span className="mentor-ai-knowledge-panel__eyebrow">Gửi tài liệu</span>
-            <h2>Submission workspace</h2>
-          </div>
-          <div className="mentor-ai-knowledge-tab-switcher">
-            <button
-              type="button"
-              className={`mentor-ai-knowledge-tab-btn ${activeTab === 'roadmap' ? 'active' : ''}`}
-              onClick={() => setActiveTab('roadmap')}
-            >
-              <Layers3 size={16} />
-              Roadmap doc
-            </button>
-            <button
-              type="button"
-              className={`mentor-ai-knowledge-tab-btn ${activeTab === 'grading' ? 'active' : ''}`}
-              onClick={() => setActiveTab('grading')}
-            >
-              <BookOpen size={16} />
-              Grading doc
-            </button>
+            <h2>Roadmap submission workspace</h2>
           </div>
         </div>
 
-        {activeTab === 'roadmap' && (
-          <form className="mentor-ai-knowledge-form" onSubmit={(event) => void handleRoadmapSubmit(event)}>
-            <div className="mentor-ai-knowledge-form__grid">
-              <label className="mentor-ai-knowledge-field mentor-ai-knowledge-field--full">
-                <span>Tệp tài liệu</span>
-                <input
-                  ref={roadmapFileRef}
-                  type="file"
-                  accept=".pdf,.docx,.md,.txt"
-                  required
-                  onChange={(event) =>
-                    setRoadmapForm((previous) => ({
-                      ...previous,
-                      file: event.target.files?.[0] ?? null,
-                    }))
-                  }
-                />
-              </label>
+        <form className="mentor-ai-knowledge-form" onSubmit={(event) => void handleRoadmapSubmit(event)}>
+          <div className="mentor-ai-knowledge-form__grid">
+            <label className="mentor-ai-knowledge-field mentor-ai-knowledge-field--full">
+              <span>Tệp tài liệu</span>
+              <input
+                ref={roadmapFileRef}
+                type="file"
+                accept=".pdf,.docx,.md,.txt"
+                required
+                onChange={(event) =>
+                  setRoadmapForm((previous) => ({
+                    ...previous,
+                    file: event.target.files?.[0] ?? null,
+                  }))
+                }
+              />
+            </label>
 
-              <label className="mentor-ai-knowledge-field">
-                <span>Tiêu đề</span>
-                <input
-                  type="text"
-                  required
-                  value={roadmapForm.title}
-                  onChange={(event) =>
-                    setRoadmapForm((previous) => ({
-                      ...previous,
-                      title: event.target.value,
-                    }))
-                  }
-                />
-              </label>
+            <label className="mentor-ai-knowledge-field">
+              <span>Tiêu đề</span>
+              <input
+                type="text"
+                required
+                value={roadmapForm.title}
+                onChange={(event) =>
+                  setRoadmapForm((previous) => ({
+                    ...previous,
+                    title: event.target.value,
+                  }))
+                }
+              />
+            </label>
 
-              <label className="mentor-ai-knowledge-field">
-                <span>Skill name</span>
-                <input
-                  type="text"
-                  required
-                  value={roadmapForm.skillName}
-                  onChange={(event) =>
-                    setRoadmapForm((previous) => ({
-                      ...previous,
-                      skillName: event.target.value,
-                    }))
-                  }
-                />
-              </label>
+            <label className="mentor-ai-knowledge-field">
+              <span>Skill name</span>
+              <input
+                type="text"
+                required
+                value={roadmapForm.skillName}
+                onChange={(event) =>
+                  setRoadmapForm((previous) => ({
+                    ...previous,
+                    skillName: event.target.value,
+                  }))
+                }
+              />
+            </label>
 
-              <label className="mentor-ai-knowledge-field">
-                <span>Industry</span>
-                <select
-                  value={roadmapForm.industry}
-                  onChange={(event) =>
-                    setRoadmapForm((previous) => ({
-                      ...previous,
-                      industry: event.target.value,
-                    }))
-                  }
-                >
-                  {AI_KNOWLEDGE_INDUSTRY_OPTIONS.map((option) => (
-                    <option key={option.value || 'general'} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+            <label className="mentor-ai-knowledge-field">
+              <span>Industry</span>
+              <select
+                value={roadmapForm.industry}
+                onChange={(event) =>
+                  setRoadmapForm((previous) => ({
+                    ...previous,
+                    industry: event.target.value,
+                  }))
+                }
+              >
+                {AI_KNOWLEDGE_INDUSTRY_OPTIONS.map((option) => (
+                  <option key={option.value || 'general'} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-              <label className="mentor-ai-knowledge-field">
-                <span>Level</span>
-                <select
-                  value={roadmapForm.level}
-                  onChange={(event) =>
-                    setRoadmapForm((previous) => ({
-                      ...previous,
-                      level: event.target.value,
-                    }))
-                  }
-                >
-                  {AI_KNOWLEDGE_LEVEL_OPTIONS.map((option) => (
-                    <option key={option.value || 'general'} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+            <label className="mentor-ai-knowledge-field">
+              <span>Level</span>
+              <select
+                value={roadmapForm.level}
+                onChange={(event) =>
+                  setRoadmapForm((previous) => ({
+                    ...previous,
+                    level: event.target.value,
+                  }))
+                }
+              >
+                {AI_KNOWLEDGE_LEVEL_OPTIONS.map((option) => (
+                  <option key={option.value || 'general'} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-              <label className="mentor-ai-knowledge-field mentor-ai-knowledge-field--full">
-                <span>Mô tả</span>
-                <textarea
-                  rows={4}
-                  value={roadmapForm.description}
-                  onChange={(event) =>
-                    setRoadmapForm((previous) => ({
-                      ...previous,
-                      description: event.target.value,
-                    }))
-                  }
-                />
-              </label>
-            </div>
+            <label className="mentor-ai-knowledge-field mentor-ai-knowledge-field--full">
+              <span>Mô tả</span>
+              <textarea
+                rows={4}
+                value={roadmapForm.description}
+                onChange={(event) =>
+                  setRoadmapForm((previous) => ({
+                    ...previous,
+                    description: event.target.value,
+                  }))
+                }
+              />
+            </label>
+          </div>
 
-            <div className="mentor-ai-knowledge-form__actions">
-              <button type="submit" className="mentor-ai-knowledge-primary-btn" disabled={submitting === 'roadmap'}>
-                <FileText size={16} />
-                {submitting === 'roadmap' ? 'Đang gửi...' : 'Gửi roadmap doc'}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {activeTab === 'grading' && (
-          <form className="mentor-ai-knowledge-form" onSubmit={(event) => void handleGradingSubmit(event)}>
-            <div className="mentor-ai-knowledge-form__grid">
-              <label className="mentor-ai-knowledge-field mentor-ai-knowledge-field--full">
-                <span>Tệp tài liệu</span>
-                <input
-                  ref={gradingFileRef}
-                  type="file"
-                  accept=".pdf,.docx,.md,.txt"
-                  required
-                  onChange={(event) =>
-                    setGradingForm((previous) => ({
-                      ...previous,
-                      file: event.target.files?.[0] ?? null,
-                    }))
-                  }
-                />
-              </label>
-
-              <label className="mentor-ai-knowledge-field">
-                <span>Tiêu đề</span>
-                <input
-                  type="text"
-                  required
-                  value={gradingForm.title}
-                  onChange={(event) =>
-                    setGradingForm((previous) => ({
-                      ...previous,
-                      title: event.target.value,
-                    }))
-                  }
-                />
-              </label>
-
-              <label className="mentor-ai-knowledge-field">
-                <span>Khóa học</span>
-                <select
-                  value={gradingForm.courseId}
-                  required
-                  onChange={(event) =>
-                    setGradingForm((previous) => ({
-                      ...previous,
-                      courseId: event.target.value,
-                    }))
-                  }
-                >
-                  <option value="">{coursesLoading ? 'Đang tải khóa học...' : 'Chọn khóa học'}</option>
-                  {courses.map((course) => (
-                    <option key={course.id} value={course.id}>
-                      {course.title}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="mentor-ai-knowledge-field">
-                <span>Module</span>
-                <select
-                  value={gradingForm.moduleId}
-                  onChange={(event) =>
-                    setGradingForm((previous) => ({
-                      ...previous,
-                      moduleId: event.target.value,
-                    }))
-                  }
-                  disabled={!gradingForm.courseId || modulesLoading}
-                >
-                  <option value="">{modulesLoading ? 'Đang tải module...' : 'Toàn khóa học'}</option>
-                  {modules.map((module) => (
-                    <option key={module.id} value={module.id}>
-                      {module.title}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="mentor-ai-knowledge-field">
-                <span>Assignment</span>
-                <select
-                  value={gradingForm.assignmentId}
-                  onChange={(event) =>
-                    setGradingForm((previous) => ({
-                      ...previous,
-                      assignmentId: event.target.value,
-                    }))
-                  }
-                  disabled={!gradingForm.moduleId || assignmentsLoading}
-                >
-                  <option value="">{assignmentsLoading ? 'Đang tải assignment...' : 'Không chọn assignment cụ thể'}</option>
-                  {assignments.map((assignment) => (
-                    <option key={assignment.id} value={assignment.id}>
-                      {assignment.title}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="mentor-ai-knowledge-field mentor-ai-knowledge-field--full">
-                <span>Mô tả</span>
-                <textarea
-                  rows={4}
-                  value={gradingForm.description}
-                  onChange={(event) =>
-                    setGradingForm((previous) => ({
-                      ...previous,
-                      description: event.target.value,
-                    }))
-                  }
-                />
-              </label>
-            </div>
-
-            <div className="mentor-ai-knowledge-form__actions">
-              <button type="submit" className="mentor-ai-knowledge-primary-btn" disabled={submitting === 'grading'}>
-                <BookOpen size={16} />
-                {submitting === 'grading' ? 'Đang gửi...' : 'Gửi grading doc'}
-              </button>
-            </div>
-          </form>
-        )}
+          <div className="mentor-ai-knowledge-form__actions">
+            <button type="submit" className="mentor-ai-knowledge-primary-btn" disabled={submitting}>
+              <FileText size={16} />
+              {submitting ? 'Đang gửi...' : 'Gửi roadmap doc'}
+            </button>
+          </div>
+        </form>
       </section>
 
       <div className="mentor-ai-knowledge-grid">

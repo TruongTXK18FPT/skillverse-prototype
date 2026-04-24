@@ -6,7 +6,6 @@ import {
   AiKnowledgeDocumentListItemResponse,
   ListAdminAiKnowledgeDocumentsParams,
   ListMentorAiKnowledgeDocumentsParams,
-  MentorGradingKnowledgeSubmissionRequest,
   MentorRoadmapKnowledgeSubmissionRequest,
   ReviewAiKnowledgeRequest,
   SpringPageResponse,
@@ -15,12 +14,6 @@ import {
 const appendOptionalString = (formData: FormData, key: string, value?: string) => {
   if (value != null && value.trim() !== '') {
     formData.append(key, value.trim());
-  }
-};
-
-const appendOptionalNumber = (formData: FormData, key: string, value?: number) => {
-  if (value != null) {
-    formData.append(key, String(value));
   }
 };
 
@@ -59,19 +52,6 @@ const buildMentorRoadmapSubmissionFormData = (
   appendOptionalString(formData, 'description', payload.description);
   appendOptionalString(formData, 'industry', payload.industry);
   appendOptionalString(formData, 'level', payload.level);
-  return formData;
-};
-
-const buildMentorGradingSubmissionFormData = (
-  payload: MentorGradingKnowledgeSubmissionRequest
-): FormData => {
-  const formData = new FormData();
-  formData.append('file', payload.file);
-  formData.append('title', payload.title);
-  formData.append('courseId', String(payload.courseId));
-  appendOptionalString(formData, 'description', payload.description);
-  appendOptionalNumber(formData, 'moduleId', payload.moduleId);
-  appendOptionalNumber(formData, 'assignmentId', payload.assignmentId);
   return formData;
 };
 
@@ -144,16 +124,6 @@ export const submitMentorRoadmapDocument = async (
   const response = await axiosInstance.post<AiKnowledgeDocumentDetailResponse>(
     '/mentor/ai-knowledge/roadmap-documents',
     buildMentorRoadmapSubmissionFormData(payload)
-  );
-  return response.data;
-};
-
-export const submitMentorGradingDocument = async (
-  payload: MentorGradingKnowledgeSubmissionRequest
-): Promise<AiKnowledgeDocumentDetailResponse> => {
-  const response = await axiosInstance.post<AiKnowledgeDocumentDetailResponse>(
-    '/mentor/ai-knowledge/grading-documents',
-    buildMentorGradingSubmissionFormData(payload)
   );
   return response.data;
 };
