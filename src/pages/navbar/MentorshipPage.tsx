@@ -9,7 +9,7 @@ import {
   getMyFavoriteMentors,
   getVerifiedSkillsByMentorId,
 } from "../../services/mentorProfileService";
-import { getPublicBookingReviewsByMentor } from "../../services/reviewService";
+import { getMentorReviewStats } from "../../services/reviewService";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
 import UplinkHeader from "../../components/mentorship-hud/UplinkHeader";
 import UplinkGrid from "../../components/mentorship-hud/UplinkGrid";
@@ -78,7 +78,7 @@ const MentorshipPage = () => {
 
       if (Array.isArray(profiles)) {
         // Transform API data to match our interface
-        const transformedMentors = profiles.map((profile: any) => {
+        const transformedMentors: Mentor[] = profiles.map((profile: any) => {
           // Fallback hourly rate in VND based on experience if missing
           const experienceYears = profile.experience || 0;
           const calculatedRate = 200000 + experienceYears * 50000;
@@ -124,68 +124,47 @@ const MentorshipPage = () => {
         });
         setMentors(transformedMentors);
 
-        // Enrich ratings if missing: fetch public reviews and compute average for current page mentors
+        // Enrich ratings and verified skills simultaneously
+        let enrichedMentors = [...transformedMentors];
         try {
-          const toEnrich = transformedMentors.filter(
-            (m) => (m.reviews ?? 0) === 0,
-          );
-          const updates = await Promise.all(
-            toEnrich.map(async (m) => {
-              try {
-                const reviews = await getPublicBookingReviewsByMentor(
-                  Number(m.id),
-                );
-                const ratings = reviews
-                  .map((r) => r.rating)
-                  .filter((n) => typeof n === "number");
-                const count = ratings.length;
-                const avg =
-                  count === 0 ? 0 : ratings.reduce((a, b) => a + b, 0) / count;
-                return { id: m.id, rating: avg, reviews: count };
-              } catch {
-                return { id: m.id, rating: m.rating, reviews: m.reviews };
-              }
-            }),
-          );
-          if (updates.length > 0) {
-            setMentors((prev) =>
-              prev.map((m) => {
-                const upd = updates.find((u) => u.id === m.id);
-                return upd
-                  ? { ...m, rating: upd.rating, reviews: upd.reviews }
-                  : m;
-              }),
-            );
-          }
-        } catch {
-          // ignore enrichment failures
-        }
-
-        // Fetch verified skills for each mentor (parallel)
-        try {
-          const mentorsWithVerifiedSkills = await Promise.all(
+          enrichedMentors = await Promise.all(
             transformedMentors.map(async (mentor) => {
+              let updatedMentor = { ...mentor };
+              
+              // 1. Fetch verified skills
               try {
                 const verifiedSkills = await getVerifiedSkillsByMentorId(Number(mentor.id));
-                return {
-                  ...mentor,
-                  verifiedSkills,
-                  hasVerifiedSkills: verifiedSkills.length > 0,
-                };
+                updatedMentor.verifiedSkills = verifiedSkills;
+                updatedMentor.hasVerifiedSkills = verifiedSkills.length > 0;
               } catch {
-                return { ...mentor, verifiedSkills: [], hasVerifiedSkills: false };
+                updatedMentor.verifiedSkills = [];
+                updatedMentor.hasVerifiedSkills = false;
               }
+
+              // 2. Fetch missing ratings using the new stats endpoint
+              if ((updatedMentor.reviews ?? 0) === 0) {
+                try {
+                  const stats = await getMentorReviewStats(Number(mentor.id));
+                  updatedMentor.rating = stats.averageRating;
+                  updatedMentor.reviews = stats.totalReviews;
+                } catch {
+                  // Keep original 0 values
+                }
+              }
+
+              return updatedMentor;
             })
           );
-          setMentors(mentorsWithVerifiedSkills);
+          setMentors(enrichedMentors);
         } catch {
-          // If fetching verified skills fails, continue with original mentors
+          // If fetching fails completely, fallback to transformedMentors
+          setMentors(transformedMentors);
         }
 
         // Generate Dynamic Categories from Skills
         const skillCounts: Record<string, { name: string; count: number }> = {};
 
-        transformedMentors.forEach((mentor) => {
+        enrichedMentors.forEach((mentor) => {
           mentor.expertise.forEach((skill: string) => {
             const normalizedKey = skill.trim().toLowerCase();
             if (!skillCounts[normalizedKey]) {

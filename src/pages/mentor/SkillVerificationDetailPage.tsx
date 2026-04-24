@@ -23,6 +23,10 @@ import {
   EvidenceResponse,
   EvidenceType,
 } from "../../services/mentorVerificationService";
+import {
+  getPublicStudentVerifiedSkillDetails,
+  StudentVerificationResponse,
+} from "../../services/studentSkillVerificationService";
 import "./SkillVerificationDetailPage.css";
 
 const EVIDENCE_META: Record<EvidenceType, { label: string; icon: LucideIcon }> =
@@ -251,11 +255,16 @@ const SkillVerificationBlock: React.FC<{
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 const SkillVerificationDetailPage: React.FC = () => {
-  const { mentorId, skillName } = useParams<{
-    mentorId: string;
+  const { mentorId, userId, skillName } = useParams<{
+    mentorId?: string;
+    userId?: string;
     skillName: string;
   }>();
   const navigate = useNavigate();
+
+  // Detect context: student or mentor
+  const isStudentContext = !!userId && !mentorId;
+  const targetId = mentorId || userId;
 
   const [verifications, setVerifications] = useState<
     MentorVerificationResponse[]
@@ -266,14 +275,38 @@ const SkillVerificationDetailPage: React.FC = () => {
   const decodedSkill = skillName ? decodeURIComponent(skillName) : null;
 
   useEffect(() => {
-    if (!mentorId) return;
+    if (!targetId) return;
 
     const load = async () => {
       try {
         setLoading(true);
-        const data = await getPublicMentorVerifiedSkillDetails(
-          Number(mentorId),
-        );
+        let data: MentorVerificationResponse[];
+
+        if (isStudentContext) {
+          // Fetch student verified skills and map to MentorVerificationResponse shape
+          const studentData = await getPublicStudentVerifiedSkillDetails(Number(targetId));
+          data = studentData.map((s: StudentVerificationResponse) => ({
+            id: s.id,
+            mentorId: s.userId,
+            mentorName: s.userName,
+            mentorEmail: s.userEmail,
+            mentorAvatarUrl: s.userAvatarUrl,
+            skillName: s.skillName,
+            status: s.status,
+            githubUrl: s.githubUrl,
+            portfolioUrl: s.portfolioUrl,
+            additionalNotes: s.additionalNotes,
+            reviewNote: s.reviewNote,
+            reviewedById: s.reviewedById,
+            reviewedByName: s.reviewedByName,
+            requestedAt: s.requestedAt,
+            reviewedAt: s.reviewedAt,
+            evidences: s.evidences,
+          }));
+        } else {
+          data = await getPublicMentorVerifiedSkillDetails(Number(targetId));
+        }
+
         // Filter to the specific skill if provided
         const filtered = decodedSkill
           ? data.filter(
@@ -289,10 +322,10 @@ const SkillVerificationDetailPage: React.FC = () => {
     };
 
     load();
-  }, [mentorId, decodedSkill]);
+  }, [targetId, decodedSkill, isStudentContext]);
 
-  const mentorName = verifications[0]?.mentorName ?? "Mentor";
-  const mentorAvatar = verifications[0]?.mentorAvatarUrl;
+  const ownerName = verifications[0]?.mentorName ?? (isStudentContext ? "Student" : "Mentor");
+  const ownerAvatar = verifications[0]?.mentorAvatarUrl;
 
   return (
     <div className="svd-page">
@@ -309,10 +342,10 @@ const SkillVerificationDetailPage: React.FC = () => {
           </button>
 
           <div className="svd-page__mentor-identity">
-            {mentorAvatar ? (
+            {ownerAvatar ? (
               <img
-                src={mentorAvatar}
-                alt={mentorName}
+                src={ownerAvatar}
+                alt={ownerName}
                 className="svd-page__mentor-avatar"
               />
             ) : (
@@ -324,7 +357,7 @@ const SkillVerificationDetailPage: React.FC = () => {
               <p className="svd-page__mentor-label">
                 Hồ sơ xác thực kỹ năng của
               </p>
-              <h1 className="svd-page__mentor-name">{mentorName}</h1>
+              <h1 className="svd-page__mentor-name">{ownerName}</h1>
             </div>
           </div>
 

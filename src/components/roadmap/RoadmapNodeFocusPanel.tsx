@@ -21,7 +21,6 @@ import {
 } from "./nodeLearningContext";
 import { normalizeRoadmapMarkdown } from "../../utils/roadmapMarkdown";
 import { confirmAction } from "../../context/ConfirmDialogContext";
-import NodeEvidenceSubmissionPanel from "../journey/NodeEvidenceSubmissionPanel";
 import "./RoadmapNodeFocusPanel.css";
 
 export type RoadmapNodeFocusPanelPlacement = "left" | "right";
@@ -545,8 +544,9 @@ const RoadmapNodeFocusPanel = ({
           <div className="roadmap-node-focus-panel__action-notes">
             {!hasStudyTask && !canCreateStudyTask && (
               <p className="roadmap-node-focus-panel__action-note">
-                {studyPlanLockedReason ||
-                  "Hoàn thành node hiện tại trước để mở kế hoạch."}
+                {progress?.status === "COMPLETED"
+                  ? "Node này đã được hoàn thành."
+                  : (studyPlanLockedReason || "Hoàn thành node hiện tại trước để mở kế hoạch.")}
               </p>
             )}
             {progress?.status !== "COMPLETED" && node.nodeStatus === "LOCKED" && (
@@ -555,16 +555,6 @@ const RoadmapNodeFocusPanel = ({
               </p>
             )}
           </div>
-
-          {journeyId != null && node?.id && (
-            <div className="roadmap-node-focus-panel__evidence-wrapper">
-              <NodeEvidenceSubmissionPanel
-                journeyId={journeyId}
-                nodeId={node.id}
-                compact={true}
-              />
-            </div>
-          )}
         </section>
       </>
     </aside>

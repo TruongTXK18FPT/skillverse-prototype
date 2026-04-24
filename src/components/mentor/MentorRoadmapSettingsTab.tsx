@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Target,
   DollarSign,
@@ -6,7 +7,6 @@ import {
   Save,
   Info,
   ListChecks,
-  LayoutDashboard,
   Inbox,
   ExternalLink,
   Clock,
@@ -28,10 +28,9 @@ import { mentorRoadmapWorkspaceService } from "../../services/mentorRoadmapWorks
 import type { BookingResponse } from "../../services/bookingService";
 import { approveBooking, rejectBooking } from "../../services/bookingService";
 import { useAppToast } from "../../context/ToastContext";
-import MentorRoadmapWorkspacePanel from "./MentorRoadmapWorkspacePanel";
 import "./MentorRoadmapSettingsTab.css";
 
-type HubSection = "settings" | "bookings" | "workspace";
+type HubSection = "settings" | "bookings";
 type BookingFilter = "all" | "pending" | "active" | "history";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -47,6 +46,7 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 const MentorRoadmapSettingsTab: React.FC = () => {
+  const navigate = useNavigate();
   const [section, setSection] = useState<HubSection>("settings");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -69,11 +69,6 @@ const MentorRoadmapSettingsTab: React.FC = () => {
     bookingId: number | null;
   }>({ open: false, bookingId: null });
   const [rejectReason, setRejectReason] = useState("");
-
-  // Workspace state
-  const [selectedBookingId, setSelectedBookingId] = useState<number | null>(
-    null,
-  );
 
   // ── Settings: load profile ──────────────────────────────────
 
@@ -155,8 +150,7 @@ const MentorRoadmapSettingsTab: React.FC = () => {
   };
 
   const handleOpenWorkspace = (bookingId: number) => {
-    setSelectedBookingId(bookingId);
-    setSection("workspace");
+    navigate(`/mentor/roadmap-workspace/${bookingId}`);
   };
 
   // ── Approve / Reject ──────────────────────────────────────────
@@ -310,15 +304,6 @@ const MentorRoadmapSettingsTab: React.FC = () => {
           {activeBookingsCount > 0 && (
             <span className="mr-hub-tab__badge">{activeBookingsCount}</span>
           )}
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={section === "workspace"}
-          className={`mr-hub-tab ${section === "workspace" ? "mr-hub-tab--active" : ""}`}
-          onClick={() => handleSectionSwitch("workspace")}
-        >
-          <LayoutDashboard size={16} /> Workspace
         </button>
       </div>
 
@@ -706,24 +691,6 @@ const MentorRoadmapSettingsTab: React.FC = () => {
                   </div>
                 );
               })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ═══ Section: Workspace ══════════════════════════════ */}
-      {section === "workspace" && (
-        <div>
-          {selectedBookingId ? (
-            <MentorRoadmapWorkspacePanel bookingId={selectedBookingId} />
-          ) : (
-            <div className="mr-empty-state">
-              <LayoutDashboard size={48} />
-              <h4>Chưa chọn booking</h4>
-              <p>
-                Hãy vào tab "Roadmap đã book" và chọn một booking đang active để
-                mở workspace.
-              </p>
             </div>
           )}
         </div>

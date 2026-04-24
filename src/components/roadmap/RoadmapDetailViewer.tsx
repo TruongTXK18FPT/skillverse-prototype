@@ -1,8 +1,12 @@
 import { memo, useCallback, useMemo } from 'react';
-import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, CheckCircle, Info, BookOpen } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, CheckCircle, Info, BookOpen, ClipboardList } from 'lucide-react';
 import { RoadmapResponse, QuestProgress } from '../../types/Roadmap';
 import RoadmapFlow from '../ai-roadmap/RoadmapFlow';
 import type { RoadmapNodeFocusPanelProps } from './RoadmapNodeFocusPanel';
+import { normalizeRoadmapMarkdown } from '../../utils/roadmapMarkdown';
 import './RoadmapDetailViewer.css';
 import '../../styles/RoadmapHUD.css';
 
@@ -16,6 +20,7 @@ interface RoadmapDetailViewerProps {
   eligibleNodeId?: string | null;
   studyTaskNodeIds?: Set<string>;
   selectedNodeId?: string | null;
+  workspaceJourneyId?: number | null;
   onNodeSelect?: (nodeId: string) => void;
   nodeFocusPanel?: RoadmapNodeFocusPanelProps | null;
 }
@@ -141,6 +146,21 @@ const renderSpecValue = (value: string | undefined | null) => {
   return <span className="rm-spec-value">{safeValue}</span>;
 };
 
+const renderMarkdownInline = (value: string | undefined | null) => {
+  const normalizedValue = normalizeRoadmapMarkdown(value);
+  if (!normalizedValue) {
+    return null;
+  }
+
+  return (
+    <div className="rm-markdown-inline">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {normalizedValue}
+      </ReactMarkdown>
+    </div>
+  );
+};
+
 const RoadmapDetailViewer = memo(({
   roadmap,
   progressMap,
@@ -151,9 +171,11 @@ const RoadmapDetailViewer = memo(({
   eligibleNodeId,
   studyTaskNodeIds,
   selectedNodeId,
+  workspaceJourneyId,
   onNodeSelect,
   nodeFocusPanel,
 }: RoadmapDetailViewerProps) => {
+  const navigate = useNavigate();
   const showAdvancedSections = true;
 
   const handleQuestComplete = useCallback(async (questId: string, completed: boolean) => {
@@ -420,19 +442,28 @@ const RoadmapDetailViewer = memo(({
            {roadmap.overview.purpose && (
              <div className="rm-overview-item">
                 <Brain size={16} className="rm-icon-sub" />
-                <span><strong>Mục đích:</strong> {roadmap.overview.purpose}</span>
+                <div>
+                  <strong>Mục đích:</strong>
+                  {renderMarkdownInline(roadmap.overview.purpose)}
+                </div>
              </div>
            )}
            {roadmap.overview.postRoadmapState && (
              <div className="rm-overview-item">
                 <Rocket size={16} className="rm-icon-sub" />
-                <span><strong>Kết quả:</strong> {roadmap.overview.postRoadmapState}</span>
+                <div>
+                  <strong>Kết quả:</strong>
+                  {renderMarkdownInline(roadmap.overview.postRoadmapState)}
+                </div>
              </div>
            )}
            {roadmap.overview.audience && (
              <div className="rm-overview-item">
                 <Target size={16} className="rm-icon-sub" />
-                <span><strong>Đối tượng:</strong> {roadmap.overview.audience}</span>
+                <div>
+                  <strong>Đối tượng:</strong>
+                  {renderMarkdownInline(roadmap.overview.audience)}
+                </div>
              </div>
            )}
            {/* Prerequisites might be in metadata if not in overview object */}
@@ -444,9 +475,44 @@ const RoadmapDetailViewer = memo(({
            )}
         </div>
       )}
+
+      {/* Action Bar inside Mission Briefing */}
+      <div className="rm-action-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
+        <button onClick={onBack} className="roadmap-detail-viewer__back-btn" style={{ background: 'transparent', border: 'none', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem' }}>
+          <ArrowLeft className="h-4 w-4" />
+          <span>QUAY LẠI</span>
+        </button>
+
+        <button 
+          className="rm-workspace-btn" 
+          onClick={() => {
+            const nextSearchParams = new URLSearchParams();
+            if (selectedNodeId) {
+              nextSearchParams.set('nodeId', selectedNodeId);
+            }
+            if (workspaceJourneyId) {
+              nextSearchParams.set('journeyId', String(workspaceJourneyId));
+            }
+
+            navigate({
+              pathname: `/roadmap/${roadmap.sessionId}/workspace`,
+              search: nextSearchParams.toString() ? `?${nextSearchParams.toString()}` : '',
+            }, {
+              state: {
+                journeyId: workspaceJourneyId,
+                selectedNodeId,
+              },
+            });
+          }}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', background: 'var(--mr-accent)', color: '#020617', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }}
+        >
+          <ClipboardList size={18} /> Đi đến Workspace
+        </button>
+      </div>
+
     </div>
   );
-  }, [derivedStats, roadmap]);
+  }, [derivedStats, navigate, onBack, roadmap, selectedNodeId, workspaceJourneyId]);
 
   const advancedSection = useMemo(() => {
 
@@ -550,13 +616,6 @@ const RoadmapDetailViewer = memo(({
 
   return (
     <div className="roadmap-detail-viewer">
-      <div className="roadmap-detail-viewer__header">
-        <button onClick={onBack} className="roadmap-detail-viewer__back-btn">
-          <ArrowLeft className="h-5 w-5" />
-          <span>QUAY LẠI</span>
-        </button>
-      </div>
-
       <div className="roadmap-detail-viewer__content">
         {metadataSection}
         

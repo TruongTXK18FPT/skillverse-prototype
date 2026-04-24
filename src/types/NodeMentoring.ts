@@ -100,6 +100,8 @@ export interface NodeEvidenceRecordResponse {
   mentorFeedback?: string;
   submittedAt: string;
   updatedAt?: string;
+  learnerMarkedComplete?: boolean;
+  roadmapProgressStatus?: string;
   latestReview?: NodeReviewResponse;
   latestVerification?: NodeVerificationResponseDto;
 }

@@ -46,6 +46,8 @@ import {
 } from "../../data/portfolioDTOs";
 import { UserVerifiedSkillDTO } from "../../types/NodeMentoring";
 import { getVerifiedSkills, getPublicVerifiedSkills } from "../../services/nodeMentoringService";
+import { getPublicStudentVerifiedSkillDetails, StudentVerificationResponse } from "../../services/studentSkillVerificationService";
+import { getPublicMentorVerifiedSkillDetails, MentorVerificationResponse } from "../../services/mentorVerificationService";
 import { isSkillFuzzyVerified } from "../../utils/skillResolver";
 import { PilotIDModal } from "./PilotIDModal";
 import { MissionLogModal } from "./MissionLogModal";
@@ -115,6 +117,21 @@ const resolveCertificateVerificationLink = (
   }
 
   return trimmed;
+};
+
+const mapManualToVerifiedSkill = (
+  items: (StudentVerificationResponse | MentorVerificationResponse)[]
+): UserVerifiedSkillDTO[] => {
+  return items.map(item => ({
+    id: item.id,
+    skillName: item.skillName,
+    skillLevel: 'Chuyên gia',
+    verifiedByMentorId: item.reviewedById || 0,
+    verifiedByMentorName: item.reviewedByName || "SkillVerse System",
+    verificationNote: item.reviewNote,
+    verifiedAt: item.reviewedAt || item.requestedAt,
+    source: 'MANUAL' as any
+  }));
 };
 
 const TacticalDossierPortfolio = () => {
@@ -298,19 +315,28 @@ const TacticalDossierPortfolio = () => {
 
         // Load public data
         if (profileData.userId) {
-          const [projectsData, certsData, reviewsData, missionsData, verifiedSkillsData] =
+          const [projectsData, certsData, reviewsData, missionsData, roadmapVerifiedSkills, studentManualSkills, mentorManualSkills] =
             await Promise.all([
               portfolioService.getPublicUserProjects(profileData.userId),
               portfolioService.getPublicUserCertificates(profileData.userId),
               portfolioService.getPublicUserReviews(profileData.userId),
               portfolioService.getPublicCompletedMissions(profileData.userId),
               getPublicVerifiedSkills(profileData.userId).catch(() => []),
+              getPublicStudentVerifiedSkillDetails(profileData.userId).catch(() => []),
+              getPublicMentorVerifiedSkillDetails(profileData.userId).catch(() => []),
             ]);
+            
+          const allVerifiedSkills = [
+            ...roadmapVerifiedSkills,
+            ...mapManualToVerifiedSkill(studentManualSkills),
+            ...mapManualToVerifiedSkill(mentorManualSkills)
+          ];
+          
           setProjects(projectsData);
           setCertificates(certsData);
           setReviews(reviewsData);
           setCompletedMissions(missionsData);
-          setVerifiedSkills(verifiedSkillsData);
+          setVerifiedSkills(allVerifiedSkills);
         }
       } else {
         // Private View (Owner)
@@ -323,7 +349,7 @@ const TacticalDossierPortfolio = () => {
         setHasExtendedProfile(checkResult.hasExtendedProfile);
         setIsOwner(true);
 
-        if (checkResult.hasExtendedProfile) {
+        if (checkResult.hasExtendedProfile && user?.id) {
           const [
             profileData,
             projectsData,
@@ -331,7 +357,9 @@ const TacticalDossierPortfolio = () => {
             reviewsData,
             cvsData,
             missionsData,
-            verifiedSkillsData,
+            roadmapVerifiedSkills,
+            studentManualSkills,
+            mentorManualSkills
           ] = await Promise.all([
             portfolioService.getProfile(),
             portfolioService.getUserProjects(),
@@ -340,7 +368,15 @@ const TacticalDossierPortfolio = () => {
             portfolioService.getAllCVs(),
             portfolioService.getCompletedMissions(),
             getVerifiedSkills().catch(() => []),
+            getPublicStudentVerifiedSkillDetails(user.id).catch(() => []),
+            getPublicMentorVerifiedSkillDetails(user.id).catch(() => []),
           ]);
+          
+          const allVerifiedSkills = [
+            ...roadmapVerifiedSkills,
+            ...mapManualToVerifiedSkill(studentManualSkills),
+            ...mapManualToVerifiedSkill(mentorManualSkills)
+          ];
 
           setProfile(profileData);
           setProjects(projectsData);
@@ -348,7 +384,7 @@ const TacticalDossierPortfolio = () => {
           setReviews(reviewsData);
           setCvs(cvsData);
           setCompletedMissions(missionsData);
-          setVerifiedSkills(verifiedSkillsData);
+          setVerifiedSkills(allVerifiedSkills);
 
           // Parse achievements for mentor accounts
           if (
@@ -1491,12 +1527,40 @@ const TacticalDossierPortfolio = () => {
                           return (
                             <span 
                               key={idx} 
-                              className={`dossier-module-tag ${vs ? 'verified-skill-tag' : ''}`}
-                              onClick={vs ? () => setSelectedVerifiedSkill(vs) : undefined}
-                              style={vs ? { cursor: 'pointer', borderColor: '#10b981', background: 'rgba(16, 185, 129, 0.1)', display: 'inline-flex', alignItems: 'center', gap: '4px' } : undefined}
+                              className={`dossier-module-tag ${vs ? 'verified-skill-tag' : 'unverified-skill-tag'}`}
+                              onClick={vs ? () => {
+                                if (profile?.userId) {
+                                  const encodedSkill = encodeURIComponent(vs.skillName);
+                                  if (isMentorAccount) {
+                                    navigate(`/mentors/${profile.userId}/verified-skills/${encodedSkill}`);
+                                  } else {
+                                    navigate(`/students/${profile.userId}/verified-skills/${encodedSkill}`);
+                                  }
+                                }
+                              } : undefined}
+                              style={{ 
+                                display: 'inline-flex', 
+                                alignItems: 'center', 
+                                padding: '6px 6px 6px 12px',
+                                gap: '8px',
+                                ...(vs 
+                                  ? { cursor: 'pointer', borderColor: 'rgba(16, 185, 129, 0.5)', background: 'rgba(16, 185, 129, 0.05)' } 
+                                  : { borderColor: 'rgba(148, 163, 184, 0.2)', background: 'transparent' })
+                              }}
+                              title={vs ? "Kỹ năng đã được hệ thống xác thực" : "Kỹ năng tự thêm (Chưa xác thực)"}
                             >
-                              {skill}
-                              {vs && <BadgeCheck size={14} style={{ color: '#10b981' }} />}
+                              <span style={{ fontWeight: vs ? 600 : 400, color: vs ? '#fff' : 'var(--dossier-silver)' }}>{skill}</span>
+                              {vs ? (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(16, 185, 129, 0.15)', padding: '3px 8px', borderRadius: '4px' }}>
+                                  <BadgeCheck size={12} style={{ color: '#10b981' }} />
+                                  <span style={{ fontSize: '0.65rem', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Đã xác thực</span>
+                                </div>
+                              ) : (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(148, 163, 184, 0.1)', padding: '3px 8px', borderRadius: '4px' }}>
+                                  <AlertCircle size={12} style={{ color: '#94a3b8' }} />
+                                  <span style={{ fontSize: '0.65rem', color: '#94a3b8', fontStyle: 'italic' }}>Chưa xác thực</span>
+                                </div>
+                              )}
                             </span>
                           );
                         })}

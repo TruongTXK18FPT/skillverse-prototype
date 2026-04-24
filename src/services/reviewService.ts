@@ -163,6 +163,11 @@ export const getMyMentorReviewStats = async (): Promise<ReviewStatsResponse> => 
   return response.data;
 };
 
+export const getMentorReviewStats = async (mentorId: number): Promise<ReviewStatsResponse> => {
+  const response = await axiosInstance.get<ReviewStatsResponse>(`/api/reviews/mentor/${mentorId}/stats`);
+  return response.data;
+};
+
 export const getPublicBookingReviewsByMentor = async (mentorId: number): Promise<ReviewResponse[]> => {
   const response = await axiosInstance.get<BackendReviewResponse[]>(`/api/reviews/mentor/${mentorId}`);
   return response.data.map(normalizeReview);

@@ -30,7 +30,6 @@ import usePremiumAccess from '../../hooks/usePremiumAccess';
 import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import Toast from '../../components/shared/Toast';
-import NodeVerificationGate from '../../components/journey/NodeVerificationGate';
 import './RoadmapDetailPage.css';
 import '../../styles/RoadmapHUD.css';
 
@@ -44,7 +43,12 @@ const RoadmapDetailPage = () => {
   const location = useLocation();
   // V3 Phase 1: caller (e.g. GSJJourneyPage) passes journeyId via navigate state
   // so node evidence + gate can target the right journey context.
-  const journeyId = (location.state as { journeyId?: number } | null)?.journeyId;
+  const routeState = (location.state as {
+    journeyId?: number;
+    selectedNodeId?: string | null;
+  } | null) ?? null;
+  const journeyId = routeState?.journeyId;
+  const preferredSelectedNodeId = routeState?.selectedNodeId?.trim() || null;
   const { isAuthenticated, user, loading: authLoading } = useAuth();
   const { hasStudentTierAccess } = usePremiumAccess();
   const { toast, isVisible, showError, showSuccess, showToast, hideToast } = useToast();
@@ -229,6 +233,10 @@ const RoadmapDetailPage = () => {
         if (previous && roadmapData.roadmap.some((node) => node.id === previous)) {
           return previous;
         }
+        if (preferredSelectedNodeId && roadmapData.roadmap.some((node) => node.id === preferredSelectedNodeId)) {
+          return preferredSelectedNodeId;
+        }
+
         return firstNonCompletedNode?.id ?? roadmapData.roadmap[0]?.id ?? null;
       });
 
@@ -262,7 +270,7 @@ const RoadmapDetailPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [authLoading, id, isAuthenticated, showError]);
+  }, [authLoading, id, isAuthenticated, preferredSelectedNodeId, showError]);
 
   useEffect(() => {
     if (!authLoading) {
@@ -527,7 +535,7 @@ const RoadmapDetailPage = () => {
       // non-critical: BE state is already consistent; refresh failure is purely cosmetic
     }
 
-    setSelectedNodeId(null);
+    setSelectedNodeId(nodeId);
   }, [roadmap, showSuccess, showError]);
 
   const handleSubmitNodePlan = useCallback(async (request: RoadmapNodeStudyPlanRequest) => {
@@ -767,11 +775,6 @@ const RoadmapDetailPage = () => {
       </div>
 
       <div className="roadmap-hud-starmap">
-        {journeyId != null && (
-          <div style={{ marginBottom: 16 }}>
-            <NodeVerificationGate journeyId={journeyId} />
-          </div>
-        )}
         <RoadmapDetailViewer
           roadmap={roadmap}
           progressMap={progressMap}
@@ -782,6 +785,7 @@ const RoadmapDetailPage = () => {
           eligibleNodeId={eligibleNodeId}
           studyTaskNodeIds={studyTaskNodeIds}
           selectedNodeId={selectedNodeId}
+          workspaceJourneyId={journeyId}
           onNodeSelect={handleNodeSelect}
           nodeFocusPanel={{
             isOpen: Boolean(selectedNode),

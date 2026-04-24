@@ -1,5 +1,5 @@
-import { axiosInstance } from './axiosInstance';
-import type { BookingResponse } from './bookingService';
+import { axiosInstance } from "./axiosInstance";
+import type { BookingResponse } from "./bookingService";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -10,18 +10,23 @@ export interface RoadmapFollowUpMeetingDTO {
   mentorId?: number;
   learnerId?: number;
   title: string;
+  purpose?: string;
   agenda?: string;
   scheduledAt: string;
   durationMinutes?: number;
   meetingLink?: string;
   status?: string;
   notes?: string;
+  createdByUserId?: number;
+  createdByRole?: string;
+  canJoin?: boolean;
+  rejectReason?: string;
 }
 
 export interface RoadmapMentorWorkspaceResponse {
   booking: BookingResponse;
   journeyId: number;
-  roadmapSessionId: number;
+  roadmapSessionId: number | null;
   roadmap: any; // RoadmapResponse — reuse existing type from roadmap module
   followUpMeetings: RoadmapFollowUpMeetingDTO[];
 }
@@ -41,7 +46,7 @@ export interface RoadmapMentorNodeUpsertRequest {
   title?: string;
   description?: string;
   estimatedTimeMinutes?: number;
-  type?: 'MAIN' | 'SIDE';
+  type?: "MAIN" | "SIDE";
   difficulty?: string;
   isCore?: boolean;
   learningObjectives?: string[];
@@ -61,17 +66,23 @@ export interface RoadmapMentorNodeReorderRequest {
 
 // ─── API ─────────────────────────────────────────────────────────────────────
 
-const BASE = '/api/v1/mentor-roadmap-bookings';
+const BASE = "/api/v1/mentor-roadmap-bookings";
 
 /** Danh sách booking ROADMAP_MENTORING của mentor */
-export const getMentorRoadmapBookings = async (): Promise<BookingResponse[]> => {
+export const getMentorRoadmapBookings = async (): Promise<
+  BookingResponse[]
+> => {
   const res = await axiosInstance.get<BookingResponse[]>(BASE);
   return res.data;
 };
 
 /** Lấy workspace đầy đủ (roadmap + booking + follow-ups) */
-export const getWorkspace = async (bookingId: number): Promise<RoadmapMentorWorkspaceResponse> => {
-  const res = await axiosInstance.get<RoadmapMentorWorkspaceResponse>(`${BASE}/${bookingId}/workspace`);
+export const getWorkspace = async (
+  bookingId: number,
+): Promise<RoadmapMentorWorkspaceResponse> => {
+  const res = await axiosInstance.get<RoadmapMentorWorkspaceResponse>(
+    `${BASE}/${bookingId}/workspace`,
+  );
   return res.data;
 };
 
@@ -127,8 +138,12 @@ export const reorderNodes = async (
 // ─── Follow-Up Meetings ─────────────────────────────────────────────────────
 
 /** Danh sách follow-up meetings */
-export const getFollowUps = async (bookingId: number): Promise<RoadmapFollowUpMeetingDTO[]> => {
-  const res = await axiosInstance.get<RoadmapFollowUpMeetingDTO[]>(`${BASE}/${bookingId}/follow-ups`);
+export const getFollowUps = async (
+  bookingId: number,
+): Promise<RoadmapFollowUpMeetingDTO[]> => {
+  const res = await axiosInstance.get<RoadmapFollowUpMeetingDTO[]>(
+    `${BASE}/${bookingId}/follow-ups`,
+  );
   return res.data;
 };
 
@@ -165,6 +180,30 @@ export const deleteFollowUp = async (
   await axiosInstance.delete(`${BASE}/${bookingId}/follow-ups/${meetingId}`);
 };
 
+/** Chấp nhận meeting (bên đối diện creator) */
+export const acceptFollowUp = async (
+  bookingId: number,
+  meetingId: number,
+): Promise<RoadmapFollowUpMeetingDTO> => {
+  const res = await axiosInstance.post<RoadmapFollowUpMeetingDTO>(
+    `${BASE}/${bookingId}/follow-ups/${meetingId}/accept`,
+  );
+  return res.data;
+};
+
+/** Từ chối meeting kèm lý do tùy chọn */
+export const rejectFollowUp = async (
+  bookingId: number,
+  meetingId: number,
+  reason?: string,
+): Promise<RoadmapFollowUpMeetingDTO> => {
+  const res = await axiosInstance.post<RoadmapFollowUpMeetingDTO>(
+    `${BASE}/${bookingId}/follow-ups/${meetingId}/reject`,
+    { reason },
+  );
+  return res.data;
+};
+
 // ─── Export as namespace-like object ─────────────────────────────────────────
 
 export const mentorRoadmapWorkspaceService = {
@@ -178,4 +217,6 @@ export const mentorRoadmapWorkspaceService = {
   createFollowUp,
   updateFollowUp,
   deleteFollowUp,
+  acceptFollowUp,
+  rejectFollowUp,
 };

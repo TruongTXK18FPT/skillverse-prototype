@@ -1069,3 +1069,11 @@
 .rm-overview-item strong {
   color: #22d3ee;
 }
+
+.rm-markdown-inline > *:first-child {
+  margin-top: 0.2rem;
+}
+
+.rm-markdown-inline p {
+  margin: 0;
+}

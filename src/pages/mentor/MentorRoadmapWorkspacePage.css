@@ -1,0 +1,154 @@
+/* ═══════════════════════════════════════════════════════════════════
+   MentorRoadmapWorkspacePage — full-bleed workspace container
+   Dark Tech Cyan Blue, Vietnamese, aligned with --mr-* variables.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --mrwp-bg: #05131f;
+  --mrwp-panel: #081c2b;
+  --mrwp-border: rgba(34, 211, 238, 0.18);
+  --mrwp-accent: #22d3ee;
+  --mrwp-accent-soft: rgba(34, 211, 238, 0.12);
+  --mrwp-text: #e2e8f0;
+  --mrwp-text-dim: rgba(226, 232, 240, 0.58);
+}
+
+.mrwp-page {
+  /* --mr-* fallbacks for the embedded panel */
+  --mr-bg: var(--mrwp-bg);
+  --mr-panel: var(--mrwp-panel);
+  --mr-border: var(--mrwp-border);
+  --mr-accent: var(--mrwp-accent);
+  --mr-text: var(--mrwp-text);
+  --mr-text-dim: var(--mrwp-text-dim);
+  --mr-font: "Be Vietnam Pro", "Inter", sans-serif;
+
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(34, 211, 238, 0.08), transparent 60%),
+    radial-gradient(900px 500px at 120% 110%, rgba(59, 130, 246, 0.08), transparent 60%),
+    linear-gradient(180deg, #04101a 0%, #05131f 100%);
+  color: var(--mrwp-text);
+  font-family: "Be Vietnam Pro", "Inter", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.mrwp-page__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.75rem;
+  background: linear-gradient(180deg, rgba(8, 28, 43, 0.95), rgba(8, 28, 43, 0.75));
+  border-bottom: 1px solid var(--mrwp-border);
+  backdrop-filter: blur(14px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.mrwp-page__title {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.mrwp-page__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--mrwp-accent-soft);
+  border: 1px solid var(--mrwp-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mrwp-accent);
+  flex-shrink: 0;
+}
+
+.mrwp-page__title h1 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: 0.2px;
+}
+
+.mrwp-page__title p {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  color: var(--mrwp-text-dim);
+  line-height: 1.4;
+}
+
+.mrwp-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: var(--mrwp-text);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mrwp-back-btn:hover {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.45);
+  color: var(--mrwp-accent);
+}
+
+.mrwp-page__body {
+  flex: 1;
+  padding: 1.25rem 1.75rem 2rem;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.mrwp-invalid {
+  max-width: 480px;
+  margin: 6rem auto;
+  padding: 2rem;
+  background: var(--mrwp-panel);
+  border: 1px solid var(--mrwp-border);
+  border-radius: 14px;
+  text-align: center;
+}
+
+.mrwp-invalid h2 {
+  margin: 0 0 0.5rem;
+  color: #f8fafc;
+  font-size: 1.15rem;
+}
+
+.mrwp-invalid p {
+  margin: 0 0 1.25rem;
+  color: var(--mrwp-text-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .mrwp-page__header {
+    flex-wrap: wrap;
+    padding: 0.85rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .mrwp-page__body {
+    padding: 0.85rem 1rem 1.5rem;
+  }
+
+  .mrwp-page__title h1 {
+    font-size: 1rem;
+  }
+}

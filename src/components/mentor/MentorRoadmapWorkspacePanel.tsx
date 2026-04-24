@@ -1,62 +1,271 @@
-import React, { useState, useEffect } from 'react';
-import { Target, Video, Plus, Edit, Trash2, Save, X, RefreshCw, LayoutDashboard, ChevronRight, FileText, Calendar } from 'lucide-react';
-import { mentorRoadmapWorkspaceService, RoadmapMentorWorkspaceResponse, RoadmapFollowUpMeetingDTO, RoadmapMentorNodeUpsertRequest } from '../../services/mentorRoadmapWorkspaceService';
-import { useAppToast } from '../../context/ToastContext';
-import NodeMentoringWorkspace from './NodeMentoringWorkspace';
-import './MentorRoadmapSettingsTab.css';
+/**
+ * MentorRoadmapWorkspacePanel — Phase 3 Redesign
+ *
+ * Full-featured workspace for mentors to manage student roadmaps:
+ * - View/edit roadmap nodes (tree sidebar)
+ * - Review node submissions & verify completions
+ * - Schedule follow-up meetings
+ * - Create assessments & send completion reports
+ *
+ * Layout: 2-column (sidebar tree + main action panel)
+ * Theme: Neon Tech Cyan Blue
+ */
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import {
+  Target,
+  Video,
+  Plus,
+  Edit,
+  Trash2,
+  Save,
+  X,
+  RefreshCw,
+  ChevronRight,
+  FileText,
+  Calendar,
+  Clock,
+  Layers,
+  MapPin,
+  AlertTriangle,
+  ClipboardList,
+  ShieldCheck,
+  Star,
+  CheckCircle2,
+  XCircle,
+  Hourglass,
+  UserRound,
+  Link as LinkIcon,
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import {
+  mentorRoadmapWorkspaceService,
+  RoadmapMentorWorkspaceResponse,
+  RoadmapFollowUpMeetingDTO,
+  RoadmapMentorNodeUpsertRequest,
+} from "../../services/mentorRoadmapWorkspaceService";
+import { getNodeAssignment } from "../../services/nodeMentoringService";
+import { useAppToast } from "../../context/ToastContext";
+import type { NodeAssignmentResponse } from "../../types/NodeMentoring";
+import RoadmapNodeRequirementsCard from "../roadmap/RoadmapNodeRequirementsCard";
+import NodeMentoringWorkspace from "./NodeMentoringWorkspace";
+import MentorAssessmentCreator from "./MentorAssessmentCreator";
+import MentorCompletionReportForm from "./MentorCompletionReportForm";
+import MentorNodeReportTab from "./MentorNodeReportTab";
+import RichTextEditor from "../shared/RichTextEditor";
+import {
+  EditableRequirementField,
+  listToMultilineText,
+  multilineTextToList,
+  normalizeRequirementItems,
+  resolvePrerequisiteIds,
+  resolvePrerequisiteLabels,
+} from "../../utils/roadmapNodeRequirements";
+import "./MentorRoadmapWorkspace.css";
 
 interface Props {
   bookingId: number;
 }
 
+/** Helper: extract nodes array from the workspace roadmap response */
+const getNodes = (workspace: RoadmapMentorWorkspaceResponse | null): any[] => {
+  if (!workspace?.roadmap) return [];
+  // Backend returns { roadmap: [...nodes], statistics: {...}, ... }
+  const r = workspace.roadmap;
+  if (Array.isArray(r.roadmap)) return r.roadmap;
+  if (Array.isArray(r.nodes)) return r.nodes;
+  if (Array.isArray(r)) return r;
+  return [];
+};
+
 const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
   const [loading, setLoading] = useState(true);
-  const [workspace, setWorkspace] = useState<RoadmapMentorWorkspaceResponse | null>(null);
+  const [workspace, setWorkspace] =
+    useState<RoadmapMentorWorkspaceResponse | null>(null);
   const { showSuccess, showError } = useAppToast();
+  const { user } = useAuth();
+  const currentUserId = user?.id;
 
-  // Follow-up Meeting state
-  const [followUpModalOpen, setFollowUpModalOpen] = useState(false);
-  const [editingMeeting, setEditingMeeting] = useState<Partial<RoadmapFollowUpMeetingDTO> | null>(null);
+  // Sidebar selection
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+
+  // Right panel tab
+  const [rightTab, setRightTab] = useState<
+    "MENTORING" | "EDIT_NODE" | "ASSESSMENT" | "REPORT"
+  >("MENTORING");
+
+  // Overview panel tab (when no node selected)
+  const [overviewTab, setOverviewTab] = useState<
+    "GATE" | "ASSESSMENT" | "REPORT"
+  >("GATE");
+
+  // Follow-up Meeting modal
+  const [meetingModalOpen, setMeetingModalOpen] = useState(false);
+  const [editingMeeting, setEditingMeeting] =
+    useState<Partial<RoadmapFollowUpMeetingDTO> | null>(null);
   const [meetingSaving, setMeetingSaving] = useState(false);
 
-  // Node state
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const [rightPanelTab, setRightPanelTab] = useState<'MENTORING' | 'EDIT_NODE'>('MENTORING');
-  
-  // Node editing state
+  // Node editor modal (for creating new nodes)
   const [nodeModalOpen, setNodeModalOpen] = useState(false);
-  const [editingNode, setEditingNode] = useState<Partial<RoadmapMentorNodeUpsertRequest> & { isNew?: boolean }>({});
+  const [editingNode, setEditingNode] = useState<
+    Partial<RoadmapMentorNodeUpsertRequest> & { isNew?: boolean }
+  >({});
   const [nodeSaving, setNodeSaving] = useState(false);
 
-  const loadWorkspace = async () => {
+  // Inline edit state for the EDIT_NODE tab
+  const [inlineEdit, setInlineEdit] = useState<
+    Partial<RoadmapMentorNodeUpsertRequest>
+  >({});
+  const [selectedNodeAssignment, setSelectedNodeAssignment] =
+    useState<NodeAssignmentResponse | null>(null);
+
+  const loadWorkspace = useCallback(async () => {
     try {
       setLoading(true);
       const data = await mentorRoadmapWorkspaceService.getWorkspace(bookingId);
       setWorkspace(data);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      showError('Lỗi', 'Không thể tải workspace.');
+      showError(
+        "Lỗi",
+        err.response?.data?.message || "Không thể tải workspace.",
+      );
     } finally {
       setLoading(false);
     }
-  };
+  }, [bookingId, showError]);
 
   useEffect(() => {
     loadWorkspace();
-  }, [bookingId]);
+  }, [loadWorkspace]);
+
+  const nodes = getNodes(workspace);
+  const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
+  const stats = workspace?.roadmap?.statistics;
+  const hasRoadmap = workspace?.roadmapSessionId != null;
+
+  // Node MAIN cuối cùng trong roadmap được coi là Final Assessment node.
+  const finalNodeId: string | null = useMemo(() => {
+    if (!nodes.length) return null;
+    const mainOnly = nodes.filter((n: any) => n.type !== "SIDE");
+    const last = (mainOnly.length > 0 ? mainOnly : nodes).slice(-1)[0];
+    return last?.id ?? null;
+  }, [nodes]);
+
+  const isFinalSelected = !!selectedNodeId && selectedNodeId === finalNodeId;
+
+  // Build workspace summary for the completion report
+  const workspaceSummary = useMemo(() => {
+    if (!workspace) return undefined;
+    const meetings = workspace.followUpMeetings || [];
+    return {
+      totalNodes: stats?.totalNodes ?? nodes.length,
+      mainNodes:
+        stats?.mainNodes ?? nodes.filter((n: any) => n.type !== "SIDE").length,
+      sideNodes:
+        stats?.sideNodes ?? nodes.filter((n: any) => n.type === "SIDE").length,
+      totalMeetings: meetings.length,
+      completedMeetings: meetings.filter((m) => m.status === "COMPLETED")
+        .length,
+      assessmentStatus: undefined, // Will be populated by MentorAssessmentCreator
+      learnerName: workspace.booking?.learnerName,
+      bookingStatus: workspace.booking?.status,
+    };
+  }, [workspace, stats, nodes]);
+
+  // Reset inline edit when node selection changes
+  useEffect(() => {
+    if (selectedNode) {
+      setInlineEdit({
+        nodeId: selectedNode.id,
+        title: selectedNode.title || "",
+        description: selectedNode.description || "",
+        estimatedTimeMinutes: selectedNode.estimatedTimeMinutes ?? 120,
+        type: selectedNode.type || "MAIN",
+        difficulty: selectedNode.difficulty || "medium",
+        learningObjectives: normalizeRequirementItems(
+          selectedNode.learningObjectives,
+        ),
+        keyConcepts: normalizeRequirementItems(selectedNode.keyConcepts),
+        practicalExercises: normalizeRequirementItems(
+          selectedNode.practicalExercises,
+        ),
+        successCriteria: normalizeRequirementItems(
+          selectedNode.successCriteria,
+        ),
+        prerequisites: resolvePrerequisiteLabels(
+          selectedNode.prerequisites,
+          nodes,
+        ),
+      });
+    }
+  }, [nodes, selectedNode]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!selectedNodeId || !workspace?.journeyId) {
+      setSelectedNodeAssignment(null);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    setSelectedNodeAssignment(null);
+
+    getNodeAssignment(workspace.journeyId, selectedNodeId)
+      .then((assignment) => {
+        if (!cancelled) {
+          setSelectedNodeAssignment(assignment);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setSelectedNodeAssignment(null);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedNodeId, workspace?.journeyId]);
+
+  const handleInlineListChange = useCallback(
+    (field: EditableRequirementField, value: string) => {
+      setInlineEdit((previous) => ({
+        ...previous,
+        [field]: multilineTextToList(value),
+      }));
+    },
+    [],
+  );
+
+  const getInlineListValue = (field: EditableRequirementField): string =>
+    listToMultilineText((inlineEdit[field] as string[] | undefined) ?? []);
+
+  // ─── Handlers ───────────────────────────────────────────────
 
   const handleSaveFollowUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingMeeting?.title || !editingMeeting.scheduledAt) {
-      showError('Lỗi', 'Vui lòng điền tiêu đề và thời gian.');
+      showError("Lỗi", "Vui lòng điền tiêu đề và thời gian.");
       return;
     }
-
+    if (!editingMeeting.purpose || !editingMeeting.purpose.trim()) {
+      showError(
+        "Thiếu mục đích",
+        "Mỗi buổi họp phải có mục đích rõ ràng để học viên nắm nội dung trước khi chấp nhận.",
+      );
+      return;
+    }
     try {
       setMeetingSaving(true);
       if (editingMeeting.id) {
-        await mentorRoadmapWorkspaceService.updateFollowUp(bookingId, editingMeeting.id, editingMeeting);
-        showSuccess('Thành công', 'Đã cập nhật meeting.');
+        await mentorRoadmapWorkspaceService.updateFollowUp(
+          bookingId,
+          editingMeeting.id,
+          editingMeeting,
+        );
+        showSuccess("Thành công", "Đã cập nhật meeting.");
       } else {
         await mentorRoadmapWorkspaceService.createFollowUp(bookingId, {
           title: editingMeeting.title,
@@ -64,413 +273,1012 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
           durationMinutes: editingMeeting.durationMinutes || 60,
           meetingLink: editingMeeting.meetingLink,
           agenda: editingMeeting.agenda,
+          purpose: editingMeeting.purpose,
         } as RoadmapFollowUpMeetingDTO);
-        showSuccess('Thành công', 'Đã tạo meeting mới.');
+        showSuccess(
+          "Đã gửi yêu cầu",
+          "Meeting được tạo, chờ học viên chấp nhận để kích hoạt link tham gia.",
+        );
       }
-      setFollowUpModalOpen(false);
+      setMeetingModalOpen(false);
       loadWorkspace();
-    } catch (err) {
-      console.error(err);
-      showError('Lỗi', 'Không thể lưu meeting.');
+    } catch (err: any) {
+      showError("Lỗi", err.response?.data?.message || "Không thể lưu meeting.");
     } finally {
       setMeetingSaving(false);
     }
   };
 
-  const handleDeleteFollowUp = async (meetingId: number) => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa meeting này?')) return;
+  const handleAcceptMeeting = async (meetingId: number) => {
     try {
-      await mentorRoadmapWorkspaceService.deleteFollowUp(bookingId, meetingId);
-      showSuccess('Thành công', 'Đã xóa meeting.');
+      await mentorRoadmapWorkspaceService.acceptFollowUp(bookingId, meetingId);
+      showSuccess(
+        "Đã chấp nhận",
+        "Meeting đã được kích hoạt. Link tham gia sẵn sàng.",
+      );
       loadWorkspace();
-    } catch (err) {
-      console.error(err);
-      showError('Lỗi', 'Không thể xóa meeting.');
+    } catch (err: any) {
+      showError(
+        "Không thể chấp nhận",
+        err?.response?.data?.message || "Vui lòng thử lại.",
+      );
     }
   };
 
-  const handleSaveNode = async (e: React.FormEvent) => {
+  const handleRejectMeeting = async (meetingId: number) => {
+    const reason = window.prompt(
+      "Nhập lý do từ chối (tùy chọn) — học viên/mentor sẽ nhận được:",
+      "",
+    );
+    if (reason === null) return; // user cancelled
+    try {
+      await mentorRoadmapWorkspaceService.rejectFollowUp(
+        bookingId,
+        meetingId,
+        reason || undefined,
+      );
+      showSuccess("Đã từ chối", "Meeting đã được đánh dấu từ chối.");
+      loadWorkspace();
+    } catch (err: any) {
+      showError(
+        "Không thể từ chối",
+        err?.response?.data?.message || "Vui lòng thử lại.",
+      );
+    }
+  };
+
+  const handleDeleteFollowUp = async (meetingId: number) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xóa meeting này?")) return;
+    try {
+      await mentorRoadmapWorkspaceService.deleteFollowUp(bookingId, meetingId);
+      showSuccess("Thành công", "Đã xóa meeting.");
+      loadWorkspace();
+    } catch (err: any) {
+      showError("Lỗi", err.response?.data?.message || "Không thể xóa meeting.");
+    }
+  };
+
+  const handleSaveNodeModal = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingNode.title) {
-      showError('Lỗi', 'Vui lòng nhập tên Node.');
+      showError("Lỗi", "Vui lòng nhập tên Node.");
       return;
     }
-
     try {
       setNodeSaving(true);
       if (editingNode.isNew) {
-        await mentorRoadmapWorkspaceService.createNode(bookingId, editingNode as RoadmapMentorNodeUpsertRequest);
-        showSuccess('Thành công', 'Đã thêm Node mới.');
+        await mentorRoadmapWorkspaceService.createNode(
+          bookingId,
+          editingNode as RoadmapMentorNodeUpsertRequest,
+        );
+        showSuccess("Thành công", "Đã thêm Node mới.");
       } else if (editingNode.nodeId) {
-        await mentorRoadmapWorkspaceService.updateNode(bookingId, editingNode.nodeId, editingNode as RoadmapMentorNodeUpsertRequest);
-        showSuccess('Thành công', 'Đã cập nhật Node.');
-        setSelectedNodeId(editingNode.nodeId);
+        await mentorRoadmapWorkspaceService.updateNode(
+          bookingId,
+          editingNode.nodeId,
+          editingNode as RoadmapMentorNodeUpsertRequest,
+        );
+        showSuccess("Thành công", "Đã cập nhật Node.");
       }
       setNodeModalOpen(false);
       loadWorkspace();
-    } catch (err) {
-      console.error(err);
-      showError('Lỗi', 'Không thể lưu Node.');
+    } catch (err: any) {
+      showError("Lỗi", err.response?.data?.message || "Không thể lưu Node.");
     } finally {
       setNodeSaving(false);
     }
   };
 
-  const selectedNode = workspace?.roadmap?.nodes?.find((n: any) => n.id === selectedNodeId);
+  const handleInlineSaveNode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inlineEdit.title || !selectedNode) return;
+    try {
+      setNodeSaving(true);
+      await mentorRoadmapWorkspaceService.updateNode(
+        bookingId,
+        selectedNode.id,
+        {
+          ...inlineEdit,
+          nodeId: selectedNode.id,
+          prerequisites: resolvePrerequisiteIds(
+            (inlineEdit.prerequisites as string[] | undefined) ?? [],
+            nodes,
+          ),
+        } as RoadmapMentorNodeUpsertRequest,
+      );
+      showSuccess("Thành công", "Đã cập nhật Node.");
+      setSelectedNodeId(selectedNode.id);
+      loadWorkspace();
+    } catch (err: any) {
+      showError("Lỗi", err.response?.data?.message || "Không thể lưu Node.");
+    } finally {
+      setNodeSaving(false);
+    }
+  };
+
+  // ─── Render ─────────────────────────────────────────────────
 
   if (loading) {
     return (
-      <div className="mentor-roadmap-settings-loading">
-        <div className="spinner"></div>
+      <div className="mrw-loading">
+        <div className="spinner" />
         <p>Đang tải Workspace...</p>
       </div>
     );
   }
 
   if (!workspace) {
-    return <div className="mr-empty-state">Không có dữ liệu workspace.</div>;
+    return (
+      <div className="mrw-empty">
+        <AlertTriangle size={48} />
+        <h4>Không có dữ liệu workspace</h4>
+        <p>Không thể kết nối đến hệ thống. Vui lòng thử lại sau.</p>
+      </div>
+    );
   }
 
+  const booking = workspace.booking;
+
   return (
-    <div className="mr-workspace-panel">
-      <div className="mr-workspace-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <div>
-          <h2>Workspace Đồng Hành (Booking #{workspace.booking.id})</h2>
-          <p style={{ color: 'var(--mr-text-muted)' }}>Quản lý roadmap và lịch hẹn cho học viên {workspace.booking.learnerName}</p>
+    <div className="mrw-shell">
+      {/* ── Top Bar ── */}
+      <div className="mrw-topbar">
+        <div className="mrw-topbar-left">
+          <h2 className="mrw-topbar-title">
+            <Layers size={20} /> Workspace Đồng Hành
+          </h2>
+          <p className="mrw-topbar-sub">
+            <span>Booking #{booking.id}</span>
+            <span>•</span>
+            <span>
+              Học viên: <strong>{booking.learnerName || "N/A"}</strong>
+            </span>
+            <span className="mrw-chip mrw-chip--status">{booking.status}</span>
+          </p>
         </div>
-        <button className="mr-btn-secondary" onClick={loadWorkspace}>
-          <RefreshCw size={16} /> Làm mới
-        </button>
+        <div className="mrw-topbar-actions">
+          <button
+            className="mrw-btn-icon"
+            onClick={loadWorkspace}
+            title="Làm mới"
+          >
+            <RefreshCw size={16} />
+          </button>
+        </div>
       </div>
 
-      <div className="mr-workspace-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem' }}>
-        
-        {/* Left Column: Roadmap Tree & Journey Info */}
-        <div className="mr-workspace-column" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          
+      {/* ── Stats Bar ── */}
+      {stats && (
+        <div className="mrw-stats-bar">
+          <span className="mrw-stat">
+            <Layers size={12} /> Tổng:{" "}
+            <strong>{stats.totalNodes ?? nodes.length}</strong>
+          </span>
+          <span className="mrw-stat">
+            <MapPin size={12} /> Chính:{" "}
+            <strong>{stats.mainNodes ?? "—"}</strong>
+          </span>
+          <span className="mrw-stat">
+            <Target size={12} /> Phụ: <strong>{stats.sideNodes ?? "—"}</strong>
+          </span>
+          {stats.totalEstimatedHours != null && (
+            <span className="mrw-stat">
+              <Clock size={12} /> ~<strong>{stats.totalEstimatedHours}h</strong>
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* ── Main Grid ── */}
+      <div className="mrw-grid">
+        {/* ─ Left Sidebar ─ */}
+        <div className="mrw-sidebar">
           {/* Roadmap Tree */}
-          <div style={{ background: 'rgba(15, 23, 42, 0.4)', border: '1px solid #334155', borderRadius: '12px', padding: '1.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#e2e8f0' }}>Roadmap Tree</h3>
-              <button 
-                className="mr-btn-primary" 
-                onClick={() => {
-                  setEditingNode({ isNew: true, title: '', type: 'MAIN', estimatedTimeMinutes: 120 });
-                  setNodeModalOpen(true);
-                }}
-                style={{ padding: '0.4rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem', background: '#0891b2', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}
-              >
-                <Plus size={14} /> Thêm Node
-              </button>
+          <div
+            className="mrw-sidebar-section"
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+            }}
+          >
+            <div className="mrw-section-header">
+              <h4 className="mrw-section-title">
+                <Layers size={15} /> Roadmap
+              </h4>
+              {hasRoadmap && (
+                <button
+                  className="mrw-btn-sm"
+                  onClick={() => {
+                    setEditingNode({
+                      isNew: true,
+                      title: "",
+                      type: "MAIN",
+                      estimatedTimeMinutes: 120,
+                      parentId: undefined,
+                    });
+                    setNodeModalOpen(true);
+                  }}
+                >
+                  <Plus size={12} /> Thêm
+                </button>
+              )}
             </div>
 
-            <div className="mr-nodes-list" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '400px', overflowY: 'auto', paddingRight: '0.5rem' }}>
-              {workspace.roadmap?.nodes ? (
-                (workspace.roadmap.nodes as any[]).map((node, index) => {
-                  const isSelected = selectedNodeId === node.id;
+            <div className="mrw-tree">
+              {!hasRoadmap ? (
+                <div className="mrw-waiting">
+                  <div className="mrw-waiting-icon">
+                    <Clock size={24} />
+                  </div>
+                  <h4>Chờ tạo Roadmap</h4>
+                  <p>
+                    Học viên cần hoàn thành bài đánh giá năng lực để hệ thống
+                    tạo roadmap. Workspace sẽ tự động cập nhật.
+                  </p>
+                </div>
+              ) : nodes.length === 0 ? (
+                <div className="mrw-empty" style={{ padding: "1.5rem 0" }}>
+                  <FileText size={32} />
+                  <p style={{ fontSize: "0.82rem" }}>
+                    Chưa có node nào. Thêm node đầu tiên để bắt đầu.
+                  </p>
+                </div>
+              ) : (
+                nodes.map((node: any, i: number) => {
+                  const isFinal = node.id === finalNodeId;
                   return (
-                    <div 
-                      key={node.id} 
+                    <div
+                      key={node.id}
+                      className={`mrw-node ${selectedNodeId === node.id ? "mrw-node--active" : ""} ${isFinal ? "mrw-node--final" : ""}`}
                       onClick={() => {
                         setSelectedNodeId(node.id);
-                        setRightPanelTab('MENTORING');
-                      }}
-                      style={{ 
-                        padding: '0.75rem 1rem', 
-                        background: isSelected ? 'rgba(8, 145, 178, 0.15)' : 'rgba(255,255,255,0.03)', 
-                        border: `1px solid ${isSelected ? '#0891b2' : 'var(--mr-border)'}`, 
-                        borderRadius: '8px', 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        alignItems: 'center',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s'
+                        setRightTab("MENTORING");
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <span style={{ display: 'inline-flex', justifyContent: 'center', alignItems: 'center', width: '24px', height: '24px', background: isSelected ? '#0891b2' : '#334155', color: '#fff', borderRadius: '50%', fontSize: '0.75rem', flexShrink: 0 }}>
-                          {index + 1}
-                        </span>
-                        <div>
-                          <h4 style={{ margin: 0, fontSize: '0.95rem', color: isSelected ? '#22d3ee' : '#e2e8f0' }}>
-                            {node.title}
-                          </h4>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--mr-text-muted)', marginTop: '0.25rem' }}>
-                            {node.type === 'MAIN' ? 'Chính' : 'Phụ'} • {node.estimatedTimeMinutes} phút
-                          </div>
+                      <span className="mrw-node-index">{i + 1}</span>
+                      <div className="mrw-node-info">
+                        <p className="mrw-node-name">
+                          {node.title}
+                          {isFinal && (
+                            <span
+                              className="mrw-node-final-badge"
+                              title="Node cuối — Final Assessment"
+                            >
+                              <Star size={10} /> Final
+                            </span>
+                          )}
+                        </p>
+                        <div className="mrw-node-meta">
+                          <span
+                            className={`mrw-node-type mrw-node-type--${node.type || "MAIN"}`}
+                          >
+                            {node.type === "SIDE" ? "Phụ" : "Chính"}
+                          </span>
+                          <span>{node.estimatedTimeMinutes || "—"} phút</span>
+                          {node.difficulty && <span>• {node.difficulty}</span>}
                         </div>
                       </div>
-                      <ChevronRight size={16} style={{ color: isSelected ? '#22d3ee' : '#64748b' }} />
+                      <ChevronRight size={14} className="mrw-node-chevron" />
+                    </div>
+                  );
+                })
+              )}
+
+              {/* Overview / Gate button */}
+              <button
+                className={`mrw-overview-btn ${!selectedNodeId ? "mrw-overview-btn--active" : ""}`}
+                onClick={() => setSelectedNodeId(null)}
+              >
+                <Target size={15} /> Thông tin chung & Gate
+              </button>
+            </div>
+          </div>
+
+          {/* Follow-up Meetings */}
+          <div className="mrw-sidebar-section">
+            <div className="mrw-section-header">
+              <h4 className="mrw-section-title">
+                <Calendar size={15} /> Lịch hẹn (
+                {workspace.followUpMeetings.length})
+              </h4>
+              <button
+                className="mrw-btn-sm"
+                onClick={() => {
+                  setEditingMeeting({
+                    title: "",
+                    scheduledAt: new Date().toISOString().slice(0, 16),
+                    durationMinutes: 60,
+                  });
+                  setMeetingModalOpen(true);
+                }}
+              >
+                <Plus size={12} />
+              </button>
+            </div>
+            <div className="mrw-meetings-list">
+              {workspace.followUpMeetings.length > 0 ? (
+                workspace.followUpMeetings.map((m) => {
+                  const status = (m.status || "SCHEDULED").toUpperCase();
+                  const canAccept =
+                    status === "PENDING_MENTOR" ||
+                    (status === "SCHEDULED" &&
+                      m.createdByUserId != null &&
+                      m.createdByUserId !== currentUserId);
+                  const waitingLearner = status === "PENDING_LEARNER";
+                  const isCreator =
+                    m.createdByUserId != null &&
+                    m.createdByUserId === currentUserId;
+                  const statusLabel =
+                    status === "PENDING_MENTOR"
+                      ? "Chờ mentor chấp nhận"
+                      : status === "PENDING_LEARNER"
+                        ? "Chờ học viên chấp nhận"
+                        : status === "ACCEPTED"
+                          ? "Đã kích hoạt"
+                          : status === "REJECTED"
+                            ? "Đã từ chối"
+                            : status === "CANCELLED"
+                              ? "Đã huỷ"
+                              : status === "COMPLETED"
+                                ? "Đã hoàn tất"
+                                : status === "SCHEDULED"
+                                  ? "Đã lên lịch"
+                                  : status;
+                  const creatorLabel =
+                    m.createdByRole === "LEARNER"
+                      ? "Học viên đề xuất"
+                      : "Mentor đề xuất";
+                  const canJoin =
+                    m.canJoin === true ||
+                    (status === "ACCEPTED" && !!m.meetingLink);
+                  return (
+                    <div
+                      key={m.id}
+                      className={`mrw-meeting-card mrw-meeting-card--${status}`}
+                    >
+                      <div className="mrw-meeting-top">
+                        <span className="mrw-meeting-title">{m.title}</span>
+                        <span
+                          className={`mrw-meeting-status mrw-meeting-status--${status}`}
+                        >
+                          {statusLabel}
+                        </span>
+                      </div>
+                      {m.purpose && (
+                        <p className="mrw-meeting-purpose">
+                          <Target size={11} /> {m.purpose}
+                        </p>
+                      )}
+                      <div className="mrw-meeting-time">
+                        <Clock size={11} />{" "}
+                        {new Date(m.scheduledAt).toLocaleString("vi-VN")}
+                        {m.durationMinutes
+                          ? ` • ${m.durationMinutes} phút`
+                          : ""}
+                      </div>
+                      <div className="mrw-meeting-creator">
+                        <UserRound size={11} /> {creatorLabel}
+                      </div>
+                      {status === "REJECTED" && m.rejectReason && (
+                        <p className="mrw-meeting-reject-reason">
+                          Lý do: {m.rejectReason}
+                        </p>
+                      )}
+                      <div className="mrw-meeting-actions">
+                        {canAccept && (
+                          <button
+                            className="mrw-accept-btn"
+                            onClick={() => handleAcceptMeeting(m.id!)}
+                            title="Chấp nhận meeting"
+                          >
+                            <CheckCircle2 size={13} /> Chấp nhận
+                          </button>
+                        )}
+                        {(canAccept || waitingLearner) && (
+                          <button
+                            className="mrw-reject-btn"
+                            onClick={() => handleRejectMeeting(m.id!)}
+                            title="Từ chối meeting"
+                          >
+                            <XCircle size={13} /> Từ chối
+                          </button>
+                        )}
+                        {waitingLearner && (
+                          <span className="mrw-meeting-hint">
+                            <Hourglass size={11} /> Đang chờ học viên
+                          </span>
+                        )}
+                        {isCreator &&
+                          status !== "ACCEPTED" &&
+                          status !== "COMPLETED" && (
+                            <button
+                              onClick={() => {
+                                setEditingMeeting(m);
+                                setMeetingModalOpen(true);
+                              }}
+                              title="Sửa"
+                            >
+                              <Edit size={13} />
+                            </button>
+                          )}
+                        {isCreator && (
+                          <button
+                            className="mrw-delete-btn"
+                            onClick={() => handleDeleteFollowUp(m.id!)}
+                            title="Xóa"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        )}
+                        {canJoin && m.meetingLink && (
+                          <a
+                            className="mrw-join-btn"
+                            href={m.meetingLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            title="Tham gia meeting"
+                          >
+                            <Video size={13} /> Tham gia
+                          </a>
+                        )}
+                        {!canJoin && m.meetingLink && status !== "REJECTED" && (
+                          <span
+                            className="mrw-meeting-link-preview"
+                            title={m.meetingLink}
+                          >
+                            <LinkIcon size={11} /> Link sẽ mở sau khi chấp nhận
+                          </span>
+                        )}
+                      </div>
                     </div>
                   );
                 })
               ) : (
-                <p style={{ color: 'var(--mr-text-muted)', fontStyle: 'italic', fontSize: '0.9rem' }}>Chưa có node nào. Hãy thêm node đầu tiên.</p>
-              )}
-            </div>
-            
-            <button
-              onClick={() => setSelectedNodeId(null)}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                marginTop: '1rem',
-                background: !selectedNodeId ? 'rgba(8, 145, 178, 0.15)' : 'transparent',
-                border: `1px solid ${!selectedNodeId ? '#0891b2' : '#334155'}`,
-                color: !selectedNodeId ? '#22d3ee' : '#e2e8f0',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem',
-                transition: 'all 0.2s'
-              }}
-            >
-              <Target size={16} /> Thông tin chung & Gate
-            </button>
-          </div>
-
-          {/* Follow-up Meetings Summary */}
-          <div style={{ background: 'rgba(15, 23, 42, 0.4)', border: '1px solid #334155', borderRadius: '12px', padding: '1.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Calendar size={18} /> Lịch hẹn ({workspace.followUpMeetings.length})
-              </h3>
-              <button 
-                className="mr-btn-primary" 
-                onClick={() => {
-                  setEditingMeeting({ title: '', scheduledAt: new Date().toISOString().slice(0, 16), durationMinutes: 60 });
-                  setFollowUpModalOpen(true);
-                }}
-                style={{ padding: '0.25rem', background: 'transparent', color: '#22d3ee', border: 'none', cursor: 'pointer' }}
-                title="Thêm lịch hẹn"
-              >
-                <Plus size={18} />
-              </button>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '200px', overflowY: 'auto' }}>
-              {workspace.followUpMeetings.length > 0 ? (
-                workspace.followUpMeetings.map((meeting) => (
-                  <div key={meeting.id} style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.02)', border: '1px solid #334155', borderRadius: '6px', fontSize: '0.85rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                      <strong style={{ color: '#22d3ee' }}>{meeting.title}</strong>
-                      <span style={{ fontSize: '0.7rem', padding: '2px 4px', background: meeting.status === 'COMPLETED' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)', color: meeting.status === 'COMPLETED' ? '#10b981' : '#f59e0b', borderRadius: '4px' }}>
-                        {meeting.status}
-                      </span>
-                    </div>
-                    <div style={{ color: '#94a3b8', marginBottom: '0.5rem' }}>
-                      {new Date(meeting.scheduledAt).toLocaleString('vi-VN')}
-                    </div>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button onClick={() => { setEditingMeeting(meeting); setFollowUpModalOpen(true); }} style={{ background: 'transparent', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: 0 }}><Edit size={14} /></button>
-                      <button onClick={() => handleDeleteFollowUp(meeting.id!)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 0 }}><Trash2 size={14} /></button>
-                      {meeting.meetingLink && (
-                        <a href={meeting.meetingLink} target="_blank" rel="noreferrer" style={{ marginLeft: 'auto', color: '#22d3ee' }}><Video size={14} /></a>
-                      )}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p style={{ color: 'var(--mr-text-muted)', fontSize: '0.85rem', margin: 0, fontStyle: 'italic' }}>Chưa có lịch hẹn.</p>
+                <p
+                  style={{
+                    color: "var(--mr-text-dim)",
+                    fontSize: "0.8rem",
+                    margin: 0,
+                    fontStyle: "italic",
+                  }}
+                >
+                  Chưa có lịch hẹn nào. Mọi buổi họp cần có mục đích và thời
+                  gian rõ ràng.
+                </p>
               )}
             </div>
           </div>
         </div>
 
-        {/* Right Column: Node Details & Mentoring Workspace */}
-        <div className="mr-workspace-column" style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '12px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          
+        {/* ─ Right Main Panel ─ */}
+        <div className="mrw-main">
           {selectedNodeId ? (
             <>
-              {/* Tabs for Selected Node */}
-              <div style={{ display: 'flex', borderBottom: '1px solid #334155', background: 'rgba(15, 23, 42, 0.8)' }}>
+              {/* Tab Bar — 4 tabs for selected node */}
+              <div className="mrw-panel-tabs">
                 <button
-                  onClick={() => setRightPanelTab('MENTORING')}
-                  style={{
-                    flex: 1, padding: '1rem', background: 'transparent', border: 'none',
-                    borderBottom: rightPanelTab === 'MENTORING' ? '2px solid #0891b2' : '2px solid transparent',
-                    color: rightPanelTab === 'MENTORING' ? '#22d3ee' : '#94a3b8',
-                    fontWeight: rightPanelTab === 'MENTORING' ? 'bold' : 'normal',
-                    cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '0.5rem', alignItems: 'center'
-                  }}
+                  className={`mrw-panel-tab ${rightTab === "MENTORING" ? "mrw-panel-tab--active" : ""}`}
+                  onClick={() => setRightTab("MENTORING")}
                 >
-                  <FileText size={16} /> Chấm điểm & Review Node
+                  <FileText size={15} /> Review
                 </button>
                 <button
-                  onClick={() => setRightPanelTab('EDIT_NODE')}
-                  style={{
-                    flex: 1, padding: '1rem', background: 'transparent', border: 'none',
-                    borderBottom: rightPanelTab === 'EDIT_NODE' ? '2px solid #0891b2' : '2px solid transparent',
-                    color: rightPanelTab === 'EDIT_NODE' ? '#22d3ee' : '#94a3b8',
-                    fontWeight: rightPanelTab === 'EDIT_NODE' ? 'bold' : 'normal',
-                    cursor: 'pointer', display: 'flex', justifyContent: 'center', gap: '0.5rem', alignItems: 'center'
-                  }}
+                  className={`mrw-panel-tab ${rightTab === "EDIT_NODE" ? "mrw-panel-tab--active" : ""}`}
+                  onClick={() => setRightTab("EDIT_NODE")}
                 >
-                  <Edit size={16} /> Chỉnh sửa Node
+                  <Edit size={15} /> Chỉnh sửa
+                </button>
+                <button
+                  className={`mrw-panel-tab ${rightTab === "ASSESSMENT" ? "mrw-panel-tab--active" : ""}`}
+                  onClick={() => setRightTab("ASSESSMENT")}
+                >
+                  <ClipboardList size={15} /> Yêu cầu node
+                </button>
+                <button
+                  className={`mrw-panel-tab ${rightTab === "REPORT" ? "mrw-panel-tab--active" : ""}`}
+                  onClick={() => setRightTab("REPORT")}
+                >
+                  <ShieldCheck size={15} /> Report
                 </button>
               </div>
 
               {/* Tab Content */}
-              <div style={{ padding: '1.5rem', flex: 1, overflowY: 'auto' }}>
-                {rightPanelTab === 'MENTORING' && (
-                  <div className="mr-embedded-mentoring">
-                    <NodeMentoringWorkspace 
-                      booking={{
-                        ...workspace.booking,
-                        journeyId: workspace.journeyId,
-                        nodeId: selectedNodeId
-                      }}
-                      onActionComplete={loadWorkspace}
+              <div className="mrw-panel-content">
+                {selectedNode && (
+                  <div
+                    className={`mrw-selected-node-summary ${isFinalSelected ? "mrw-selected-node-summary--final" : ""}`}
+                  >
+                    {isFinalSelected && (
+                      <div className="mrw-final-banner">
+                        <Star size={14} />
+                        <div>
+                          <strong>Node cuối — Final Assessment</strong>
+                          <span>
+                            Đây là node kết thúc roadmap. Assignment giao ở đây
+                            được xem như bài bảo vệ cuối kỳ; report sẽ ảnh hưởng
+                            trực tiếp tới gate hoàn thành.
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="mrw-selected-node-summary__header">
+                      <div>
+                        <p className="mrw-selected-node-summary__eyebrow">
+                          Student Preview
+                        </p>
+                        <h3 className="mrw-selected-node-summary__title">
+                          Yêu cầu hiện tại của node
+                        </h3>
+                        <p className="mrw-selected-node-summary__desc">
+                          <strong>Chỉnh sửa</strong> — cập nhật tiêu đề, mô tả,
+                          mục tiêu, khái niệm, bài tập, tiêu chí hoàn thành của
+                          node. <strong>Yêu cầu node</strong> — soạn assignment
+                          (markdown), rubric chấm điểm để học viên làm theo.
+                        </p>
+                      </div>
+                      <div className="mrw-selected-node-summary__actions">
+                        <button
+                          type="button"
+                          className="mrw-btn-sm"
+                          onClick={() => setRightTab("EDIT_NODE")}
+                        >
+                          <Edit size={12} /> Sửa roadmap
+                        </button>
+                        <button
+                          type="button"
+                          className="mrw-btn-sm"
+                          onClick={() => setRightTab("ASSESSMENT")}
+                        >
+                          <ClipboardList size={12} /> Sửa assignment
+                        </button>
+                      </div>
+                    </div>
+                    <RoadmapNodeRequirementsCard
+                      node={selectedNode}
+                      allNodes={nodes}
+                      assignment={selectedNodeAssignment}
+                      heading="Checklist học viên đang thấy"
+                      intro="Khối này gom mô tả node, bài tập, tiêu chí hoàn thành và assignment hiện tại để mentor đối chiếu nhanh trước khi review."
+                      emptyMessage="Node này chưa có mô tả hoặc yêu cầu rõ ràng. Hãy bổ sung ở tab Chỉnh sửa hoặc Yêu cầu node."
                     />
                   </div>
                 )}
-                
-                {rightPanelTab === 'EDIT_NODE' && selectedNode && (
-                  <div className="mr-edit-node-panel">
-                    <h3 style={{ marginTop: 0, marginBottom: '1.5rem', color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <Edit size={18} /> Chỉnh sửa thông tin Node
-                    </h3>
-                    <form onSubmit={(e) => {
-                      e.preventDefault();
-                      setEditingNode({ ...selectedNode, nodeId: selectedNode.id });
-                      handleSaveNode(e);
-                    }}>
-                      {/* Reuse the same form fields but embedded */}
-                      <div style={{ marginBottom: '1.25rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', color: '#cbd5e1', fontSize: '0.9rem' }}>Tên Node</label>
-                        <input 
-                          type="text" 
-                          defaultValue={selectedNode.title || ''} 
-                          onChange={(e) => setEditingNode({ ...editingNode, title: e.target.value })}
-                          style={{ width: '100%', padding: '0.75rem', background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', color: '#fff' }}
+
+                {rightTab === "MENTORING" && (
+                  <NodeMentoringWorkspace
+                    booking={{
+                      ...workspace.booking,
+                      journeyId: workspace.journeyId,
+                      nodeId: selectedNodeId,
+                    }}
+                    onActionComplete={loadWorkspace}
+                  />
+                )}
+
+                {rightTab === "EDIT_NODE" && selectedNode && (
+                  <div className="mrw-edit-form">
+                    <div className="mrw-node-detail-header">
+                      <Edit size={18} />
+                      <h3>Chỉnh sửa: {selectedNode.title}</h3>
+                    </div>
+                    <form onSubmit={handleInlineSaveNode}>
+                      <div className="mrw-form-group">
+                        <label className="mrw-form-label">Tên Node</label>
+                        <input
+                          type="text"
+                          className="mrw-form-input"
+                          value={inlineEdit.title || ""}
+                          onChange={(e) =>
+                            setInlineEdit({
+                              ...inlineEdit,
+                              title: e.target.value,
+                            })
+                          }
                           required
                         />
                       </div>
-                      <div style={{ marginBottom: '1.25rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', color: '#cbd5e1', fontSize: '0.9rem' }}>Mô tả ngắn</label>
-                        <textarea 
-                          defaultValue={selectedNode.description || ''} 
-                          onChange={(e) => setEditingNode({ ...editingNode, description: e.target.value })}
-                          style={{ width: '100%', padding: '0.75rem', background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', color: '#fff', minHeight: '100px' }}
+                      <div className="mrw-form-group">
+                        <label className="mrw-form-label">Mô tả ngắn</label>
+                        <RichTextEditor
+                          initialContent={inlineEdit.description || ""}
+                          onChange={(val) =>
+                            setInlineEdit({ ...inlineEdit, description: val })
+                          }
+                          placeholder="Mô tả nội dung node..."
+                          userId={user?.id}
                         />
                       </div>
-                      <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                        <div style={{ flex: 1 }}>
-                          <label style={{ display: 'block', marginBottom: '0.5rem', color: '#cbd5e1', fontSize: '0.9rem' }}>Thời gian (phút)</label>
-                          <input 
-                            type="number" 
-                            defaultValue={selectedNode.estimatedTimeMinutes || 120} 
-                            onChange={(e) => setEditingNode({ ...editingNode, estimatedTimeMinutes: Number(e.target.value) })}
-                            style={{ width: '100%', padding: '0.75rem', background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', color: '#fff' }}
+                      <div className="mrw-form-row">
+                        <div className="mrw-form-group">
+                          <label className="mrw-form-label">
+                            Thời gian (phút)
+                          </label>
+                          <input
+                            type="number"
+                            className="mrw-form-input"
+                            value={inlineEdit.estimatedTimeMinutes || 120}
+                            onChange={(e) =>
+                              setInlineEdit({
+                                ...inlineEdit,
+                                estimatedTimeMinutes: Number(e.target.value),
+                              })
+                            }
                           />
                         </div>
-                        <div style={{ flex: 1 }}>
-                          <label style={{ display: 'block', marginBottom: '0.5rem', color: '#cbd5e1', fontSize: '0.9rem' }}>Loại Node</label>
+                        <div className="mrw-form-group">
+                          <label className="mrw-form-label">Loại Node</label>
                           <select
-                            defaultValue={selectedNode.type || 'MAIN'} 
-                            onChange={(e) => setEditingNode({ ...editingNode, type: e.target.value as any })}
-                            style={{ width: '100%', padding: '0.75rem', background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', color: '#fff' }}
+                            className="mrw-form-select"
+                            value={inlineEdit.type || "MAIN"}
+                            onChange={(e) =>
+                              setInlineEdit({
+                                ...inlineEdit,
+                                type: e.target.value as any,
+                              })
+                            }
                           >
                             <option value="MAIN">Node Chính (Main)</option>
                             <option value="SIDE">Node Phụ (Side)</option>
                           </select>
                         </div>
                       </div>
-                      <button type="submit" disabled={nodeSaving} style={{ width: '100%', padding: '0.75rem', background: '#0891b2', border: 'none', color: '#fff', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '1rem' }}>
-                        <Save size={18} /> {nodeSaving ? 'Đang lưu...' : 'Lưu thay đổi'}
+                      <div className="mrw-form-group">
+                        <label className="mrw-form-label">Độ khó</label>
+                        <select
+                          className="mrw-form-select"
+                          value={inlineEdit.difficulty || "medium"}
+                          onChange={(e) =>
+                            setInlineEdit({
+                              ...inlineEdit,
+                              difficulty: e.target.value,
+                            })
+                          }
+                        >
+                          <option value="easy">Dễ (Easy)</option>
+                          <option value="medium">Trung bình (Medium)</option>
+                          <option value="hard">Khó (Hard)</option>
+                        </select>
+                      </div>
+                      <div className="mrw-edit-section">
+                        <h4 className="mrw-edit-section__title">
+                          Yêu cầu hiển thị cho học viên
+                        </h4>
+                        <p className="mrw-form-hint">
+                          Mỗi dòng là một ý riêng. Các mục này sẽ xuất hiện trực
+                          tiếp trong roadmap workspace của học viên.
+                        </p>
+                      </div>
+                      <div className="mrw-form-grid">
+                        <div className="mrw-form-group">
+                          <label className="mrw-form-label">
+                            Mục tiêu học tập
+                          </label>
+                          <textarea
+                            className="mrw-form-textarea"
+                            value={getInlineListValue("learningObjectives")}
+                            onChange={(e) =>
+                              handleInlineListChange(
+                                "learningObjectives",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Mỗi dòng là một mục tiêu học tập"
+                          />
+                        </div>
+                        <div className="mrw-form-group">
+                          <label className="mrw-form-label">
+                            Khái niệm trọng tâm
+                          </label>
+                          <textarea
+                            className="mrw-form-textarea"
+                            value={getInlineListValue("keyConcepts")}
+                            onChange={(e) =>
+                              handleInlineListChange(
+                                "keyConcepts",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Mỗi dòng là một khái niệm hoặc kiến thức chính"
+                          />
+                        </div>
+                        <div className="mrw-form-group">
+                          <label className="mrw-form-label">
+                            Bài tập / đầu việc
+                          </label>
+                          <textarea
+                            className="mrw-form-textarea"
+                            value={getInlineListValue("practicalExercises")}
+                            onChange={(e) =>
+                              handleInlineListChange(
+                                "practicalExercises",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Mỗi dòng là một bài tập hoặc sản phẩm cần làm"
+                          />
+                        </div>
+                        <div className="mrw-form-group">
+                          <label className="mrw-form-label">
+                            Tiêu chí hoàn thành
+                          </label>
+                          <textarea
+                            className="mrw-form-textarea"
+                            value={getInlineListValue("successCriteria")}
+                            onChange={(e) =>
+                              handleInlineListChange(
+                                "successCriteria",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Mỗi dòng là một tiêu chí để học viên biết khi nào node đã đạt"
+                          />
+                        </div>
+                      </div>
+                      <div className="mrw-form-group">
+                        <label className="mrw-form-label">
+                          Điều kiện tiên quyết
+                        </label>
+                        <textarea
+                          className="mrw-form-textarea"
+                          value={getInlineListValue("prerequisites")}
+                          onChange={(e) =>
+                            handleInlineListChange(
+                              "prerequisites",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Mỗi dòng là một prerequisite hoặc node cần nắm trước"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className="mrw-form-submit"
+                        disabled={nodeSaving}
+                      >
+                        <Save size={16} />{" "}
+                        {nodeSaving ? "Đang lưu..." : "Lưu thay đổi"}
                       </button>
                     </form>
                   </div>
                 )}
+
+                {rightTab === "ASSESSMENT" && (
+                  <MentorAssessmentCreator
+                    journeyId={workspace.journeyId}
+                    nodeId={selectedNodeId}
+                    bookingId={bookingId}
+                    learnerName={workspace.booking?.learnerName}
+                    nodes={nodes}
+                    onAssessed={loadWorkspace}
+                  />
+                )}
+
+                {rightTab === "REPORT" && (
+                  <MentorNodeReportTab
+                    journeyId={workspace.journeyId}
+                    nodeId={selectedNodeId}
+                    nodeTitle={selectedNode?.title}
+                    learnerName={workspace.booking?.learnerName}
+                    bookingId={bookingId}
+                    onReportSubmitted={loadWorkspace}
+                  />
+                )}
               </div>
             </>
           ) : (
-            <div style={{ padding: '1.5rem', height: '100%', overflowY: 'auto' }}>
-              <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{ margin: 0, color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Target size={20} /> Thông tin chung & Hành trình
-                </h3>
-                <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Bạn có thể xem tổng quan và quyết định xác nhận hoàn thành Roadmap cho học viên tại đây.</p>
+            /* Overview Panel — 3 tabs: Gate, Assessment, Report */
+            <>
+              <div className="mrw-panel-tabs">
+                <button
+                  className={`mrw-panel-tab ${overviewTab === "GATE" ? "mrw-panel-tab--active" : ""}`}
+                  onClick={() => setOverviewTab("GATE")}
+                >
+                  <Target size={15} /> Gate & Xác nhận
+                </button>
+                <button
+                  className={`mrw-panel-tab ${overviewTab === "ASSESSMENT" ? "mrw-panel-tab--active" : ""}`}
+                  onClick={() => setOverviewTab("ASSESSMENT")}
+                >
+                  <ClipboardList size={15} /> Assessment
+                </button>
+                <button
+                  className={`mrw-panel-tab ${overviewTab === "REPORT" ? "mrw-panel-tab--active" : ""}`}
+                  onClick={() => setOverviewTab("REPORT")}
+                >
+                  <ShieldCheck size={15} /> Report
+                </button>
               </div>
-              
-              <div className="mr-embedded-mentoring">
-                <NodeMentoringWorkspace 
-                  booking={{
-                    ...workspace.booking,
-                    journeyId: workspace.journeyId
-                    // No nodeId -> forces it to default to FINAL_CONFIRMATION logic or disabled review
-                  }}
-                  onActionComplete={loadWorkspace}
-                />
+              <div className="mrw-panel-content">
+                {overviewTab === "GATE" && (
+                  <>
+                    <div className="mrw-node-detail-header">
+                      <Target size={20} />
+                      <h3>Thông tin chung & Hành trình</h3>
+                    </div>
+                    <div className="mrw-overview-info">
+                      <p>
+                        Xem tổng quan, review bằng chứng học tập, và quyết định
+                        xác nhận hoàn thành Roadmap cho học viên tại đây.
+                      </p>
+                    </div>
+                    <NodeMentoringWorkspace
+                      booking={{
+                        ...workspace.booking,
+                        journeyId: workspace.journeyId,
+                      }}
+                      onActionComplete={loadWorkspace}
+                    />
+                  </>
+                )}
+
+                {overviewTab === "ASSESSMENT" && (
+                  <MentorAssessmentCreator
+                    journeyId={workspace.journeyId}
+                    bookingId={bookingId}
+                    learnerName={workspace.booking?.learnerName}
+                    nodes={nodes}
+                    onAssessed={loadWorkspace}
+                  />
+                )}
+
+                {overviewTab === "REPORT" && (
+                  <MentorCompletionReportForm
+                    journeyId={workspace.journeyId}
+                    learnerName={workspace.booking?.learnerName}
+                    bookingId={bookingId}
+                    workspaceSummary={workspaceSummary}
+                    onSubmitted={loadWorkspace}
+                  />
+                )}
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>
 
       {/* ── Follow-Up Meeting Modal ── */}
-      {followUpModalOpen && editingMeeting && (
-        <div className="mr-modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="mr-modal-content" style={{ background: '#1e293b', width: '500px', maxWidth: '90vw', borderRadius: '12px', overflow: 'hidden', border: '1px solid #334155' }}>
-            <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #334155', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ margin: 0, color: '#fff' }}>{editingMeeting.id ? 'Sửa Lịch Hẹn' : 'Tạo Lịch Hẹn Mới'}</h3>
-              <button onClick={() => setFollowUpModalOpen(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}><X size={20} /></button>
+      {meetingModalOpen && editingMeeting && (
+        <div
+          className="mrw-modal-overlay"
+          onClick={() => setMeetingModalOpen(false)}
+        >
+          <div className="mrw-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="mrw-modal-header">
+              <h3>
+                <Calendar size={16} />{" "}
+                {editingMeeting.id ? "Sửa Lịch Hẹn" : "Tạo Lịch Hẹn Mới"}
+              </h3>
+              <button
+                className="mrw-modal-close"
+                onClick={() => setMeetingModalOpen(false)}
+              >
+                <X size={18} />
+              </button>
             </div>
-            <form onSubmit={handleSaveFollowUp} style={{ padding: '1.5rem' }}>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0', fontSize: '0.85rem' }}>Tiêu đề</label>
-                <input 
-                  type="text" 
-                  value={editingMeeting.title || ''} 
-                  onChange={(e) => setEditingMeeting({ ...editingMeeting, title: e.target.value })}
-                  style={{ width: '100%', padding: '0.75rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#fff' }}
+            <form className="mrw-modal-body" onSubmit={handleSaveFollowUp}>
+              <div className="mrw-form-group">
+                <label className="mrw-form-label">Tiêu đề</label>
+                <input
+                  type="text"
+                  className="mrw-form-input"
+                  value={editingMeeting.title || ""}
+                  onChange={(e) =>
+                    setEditingMeeting({
+                      ...editingMeeting,
+                      title: e.target.value,
+                    })
+                  }
                   required
                 />
               </div>
-              <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0', fontSize: '0.85rem' }}>Thời gian</label>
-                  <input 
-                    type="datetime-local" 
-                    value={editingMeeting.scheduledAt ? new Date(editingMeeting.scheduledAt).toISOString().slice(0, 16) : ''} 
-                    onChange={(e) => setEditingMeeting({ ...editingMeeting, scheduledAt: new Date(e.target.value).toISOString() })}
-                    style={{ width: '100%', padding: '0.75rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#fff' }}
+              <div className="mrw-form-row">
+                <div className="mrw-form-group">
+                  <label className="mrw-form-label">Thời gian</label>
+                  <input
+                    type="datetime-local"
+                    className="mrw-form-input"
+                    value={
+                      editingMeeting.scheduledAt
+                        ? new Date(editingMeeting.scheduledAt)
+                            .toISOString()
+                            .slice(0, 16)
+                        : ""
+                    }
+                    onChange={(e) =>
+                      setEditingMeeting({
+                        ...editingMeeting,
+                        scheduledAt: new Date(e.target.value).toISOString(),
+                      })
+                    }
                     required
                   />
                 </div>
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0', fontSize: '0.85rem' }}>Thời lượng (phút)</label>
-                  <input 
-                    type="number" 
-                    value={editingMeeting.durationMinutes || 60} 
-                    onChange={(e) => setEditingMeeting({ ...editingMeeting, durationMinutes: Number(e.target.value) })}
-                    style={{ width: '100%', padding: '0.75rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#fff' }}
+                <div className="mrw-form-group">
+                  <label className="mrw-form-label">Thời lượng (phút)</label>
+                  <input
+                    type="number"
+                    className="mrw-form-input"
+                    value={editingMeeting.durationMinutes || 60}
+                    onChange={(e) =>
+                      setEditingMeeting({
+                        ...editingMeeting,
+                        durationMinutes: Number(e.target.value),
+                      })
+                    }
                   />
                 </div>
               </div>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0', fontSize: '0.85rem' }}>Link Meeting</label>
-                <input 
-                  type="url" 
-                  value={editingMeeting.meetingLink || ''} 
-                  onChange={(e) => setEditingMeeting({ ...editingMeeting, meetingLink: e.target.value })}
-                  style={{ width: '100%', padding: '0.75rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#fff' }}
-                  placeholder="https://meet.google.com/..."
+              <div className="mrw-form-group">
+                <label className="mrw-form-label">
+                  Mục đích buổi họp <span style={{ color: "#ef4444" }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  className="mrw-form-input"
+                  value={editingMeeting.purpose || ""}
+                  onChange={(e) =>
+                    setEditingMeeting({
+                      ...editingMeeting,
+                      purpose: e.target.value,
+                    })
+                  }
+                  placeholder="VD: Review checkpoint node 3, demo sản phẩm..."
+                  required
+                />
+                <p className="mrw-form-hint">
+                  Học viên phải thấy rõ mục đích trước khi chấp nhận tham gia.
+                </p>
+              </div>
+              <div className="mrw-form-group">
+                <label className="mrw-form-label">
+                  Link Meeting (tuỳ chọn)
+                </label>
+                <input
+                  type="url"
+                  className="mrw-form-input"
+                  value={editingMeeting.meetingLink || ""}
+                  onChange={(e) =>
+                    setEditingMeeting({
+                      ...editingMeeting,
+                      meetingLink: e.target.value,
+                    })
+                  }
+                  placeholder="Để trống để hệ thống tự tạo link Jitsi"
+                />
+                <p className="mrw-form-hint">
+                  Nếu bạn không điền, hệ thống sẽ tự sinh phòng Jitsi riêng cho
+                  booking này.
+                </p>
+              </div>
+              <div className="mrw-form-group">
+                <label className="mrw-form-label">Agenda / Nội dung</label>
+                <textarea
+                  className="mrw-form-textarea"
+                  value={editingMeeting.agenda || ""}
+                  onChange={(e) =>
+                    setEditingMeeting({
+                      ...editingMeeting,
+                      agenda: e.target.value,
+                    })
+                  }
                 />
               </div>
-              <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0', fontSize: '0.85rem' }}>Agenda / Nội dung</label>
-                <textarea 
-                  value={editingMeeting.agenda || ''} 
-                  onChange={(e) => setEditingMeeting({ ...editingMeeting, agenda: e.target.value })}
-                  style={{ width: '100%', padding: '0.75rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#fff', minHeight: '80px' }}
-                />
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
-                <button type="button" onClick={() => setFollowUpModalOpen(false)} style={{ padding: '0.5rem 1rem', background: 'transparent', border: '1px solid #334155', color: '#fff', borderRadius: '6px', cursor: 'pointer' }}>Hủy</button>
-                <button type="submit" disabled={meetingSaving} style={{ padding: '0.5rem 1rem', background: '#0891b2', border: 'none', color: '#fff', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Save size={16} /> {meetingSaving ? 'Đang lưu...' : 'Lưu lại'}
+              <div className="mrw-modal-actions">
+                <button
+                  type="button"
+                  className="mrw-btn-cancel"
+                  onClick={() => setMeetingModalOpen(false)}
+                >
+                  Hủy
+                </button>
+                <button
+                  type="submit"
+                  className="mrw-btn-save"
+                  disabled={meetingSaving}
+                >
+                  <Save size={14} /> {meetingSaving ? "Đang lưu..." : "Lưu lại"}
                 </button>
               </div>
             </form>
@@ -478,73 +1286,124 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
         </div>
       )}
 
-      {/* ── Node Editor Modal ── */}
+      {/* ── Node Creator Modal ── */}
       {nodeModalOpen && editingNode && (
-        <div className="mr-modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="mr-modal-content" style={{ background: '#1e293b', width: '600px', maxWidth: '95vw', maxHeight: '90vh', overflowY: 'auto', borderRadius: '12px', border: '1px solid #334155' }}>
-            <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #334155', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, background: '#1e293b', zIndex: 10 }}>
-              <h3 style={{ margin: 0, color: '#fff' }}>{editingNode.isNew ? 'Thêm Node Mới' : 'Sửa Node'}</h3>
-              <button onClick={() => setNodeModalOpen(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}><X size={20} /></button>
+        <div
+          className="mrw-modal-overlay"
+          onClick={() => setNodeModalOpen(false)}
+        >
+          <div className="mrw-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="mrw-modal-header">
+              <h3>
+                <Plus size={16} /> Thêm Node Mới
+              </h3>
+              <button
+                className="mrw-modal-close"
+                onClick={() => setNodeModalOpen(false)}
+              >
+                <X size={18} />
+              </button>
             </div>
-            <form onSubmit={handleSaveNode} style={{ padding: '1.5rem' }}>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0', fontSize: '0.85rem' }}>Tên Node</label>
-                <input 
-                  type="text" 
-                  value={editingNode.title || ''} 
-                  onChange={(e) => setEditingNode({ ...editingNode, title: e.target.value })}
-                  style={{ width: '100%', padding: '0.75rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#fff' }}
+            <form className="mrw-modal-body" onSubmit={handleSaveNodeModal}>
+              <div className="mrw-form-group">
+                <label className="mrw-form-label">Tên Node</label>
+                <input
+                  type="text"
+                  className="mrw-form-input"
+                  value={editingNode.title || ""}
+                  onChange={(e) =>
+                    setEditingNode({ ...editingNode, title: e.target.value })
+                  }
                   required
                 />
               </div>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0', fontSize: '0.85rem' }}>Mô tả ngắn</label>
-                <textarea 
-                  value={editingNode.description || ''} 
-                  onChange={(e) => setEditingNode({ ...editingNode, description: e.target.value })}
-                  style={{ width: '100%', padding: '0.75rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#fff', minHeight: '80px' }}
+              <div className="mrw-form-group">
+                <label className="mrw-form-label">Mô tả ngắn</label>
+                <textarea
+                  className="mrw-form-textarea"
+                  value={editingNode.description || ""}
+                  onChange={(e) =>
+                    setEditingNode({
+                      ...editingNode,
+                      description: e.target.value,
+                    })
+                  }
                 />
               </div>
-              <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0', fontSize: '0.85rem' }}>Thời gian dự kiến (phút)</label>
-                  <input 
-                    type="number" 
-                    value={editingNode.estimatedTimeMinutes || 120} 
-                    onChange={(e) => setEditingNode({ ...editingNode, estimatedTimeMinutes: Number(e.target.value) })}
-                    style={{ width: '100%', padding: '0.75rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#fff' }}
+              <div className="mrw-form-row">
+                <div className="mrw-form-group">
+                  <label className="mrw-form-label">Thời gian (phút)</label>
+                  <input
+                    type="number"
+                    className="mrw-form-input"
+                    value={editingNode.estimatedTimeMinutes || 120}
+                    onChange={(e) =>
+                      setEditingNode({
+                        ...editingNode,
+                        estimatedTimeMinutes: Number(e.target.value),
+                      })
+                    }
                   />
                 </div>
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0', fontSize: '0.85rem' }}>Loại Node</label>
+                <div className="mrw-form-group">
+                  <label className="mrw-form-label">Loại Node</label>
                   <select
-                    value={editingNode.type || 'MAIN'} 
-                    onChange={(e) => setEditingNode({ ...editingNode, type: e.target.value as any })}
-                    style={{ width: '100%', padding: '0.75rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#fff' }}
+                    className="mrw-form-select"
+                    value={editingNode.type || "MAIN"}
+                    onChange={(e) =>
+                      setEditingNode({
+                        ...editingNode,
+                        type: e.target.value as any,
+                      })
+                    }
                   >
                     <option value="MAIN">Node Chính (Main)</option>
                     <option value="SIDE">Node Phụ (Side)</option>
                   </select>
                 </div>
               </div>
-              
-              <div style={{ background: 'rgba(6, 182, 212, 0.05)', border: '1px dashed #0891b2', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#22d3ee' }}>
-                  Tính năng chỉnh sửa sâu (tiêu chí đánh giá, danh sách bài tập thực hành...) sẽ được mở trong cập nhật tiếp theo.
-                </p>
+              <div className="mrw-form-group" style={{ marginTop: "1rem" }}>
+                <label className="mrw-form-label">Nhánh cha (Tùy chọn)</label>
+                <select
+                  className="mrw-form-select"
+                  value={editingNode.parentId || ""}
+                  onChange={(e) =>
+                    setEditingNode({
+                      ...editingNode,
+                      parentId: e.target.value || undefined,
+                    })
+                  }
+                >
+                  <option value="">
+                    -- Tạo trực tiếp (Không có nhánh cha) --
+                  </option>
+                  {nodes.map((n) => (
+                    <option key={n.id} value={n.id}>
+                      {n.title}
+                    </option>
+                  ))}
+                </select>
               </div>
-
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
-                <button type="button" onClick={() => setNodeModalOpen(false)} style={{ padding: '0.5rem 1rem', background: 'transparent', border: '1px solid #334155', color: '#fff', borderRadius: '6px', cursor: 'pointer' }}>Hủy</button>
-                <button type="submit" disabled={nodeSaving} style={{ padding: '0.5rem 1rem', background: '#0891b2', border: 'none', color: '#fff', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Save size={16} /> {nodeSaving ? 'Đang lưu...' : 'Lưu lại'}
+              <div className="mrw-modal-actions">
+                <button
+                  type="button"
+                  className="mrw-btn-cancel"
+                  onClick={() => setNodeModalOpen(false)}
+                >
+                  Hủy
+                </button>
+                <button
+                  type="submit"
+                  className="mrw-btn-save"
+                  disabled={nodeSaving}
+                >
+                  <Save size={14} /> {nodeSaving ? "Đang lưu..." : "Tạo Node"}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-
     </div>
   );
 };

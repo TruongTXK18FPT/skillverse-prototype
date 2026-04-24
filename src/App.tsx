@@ -74,8 +74,10 @@ import BusinessPage from "./pages/main/BusinessPage";
 // Mentor pages - organized in /pages/mentor/
 import MentorDashboard from "./pages/mentor/MentorDashboard";
 import SkillVerificationDetailPage from "./pages/mentor/SkillVerificationDetailPage";
+import StudentSkillVerificationPage from "./pages/student/StudentSkillVerificationPage";
 import AllBadgesPage from "./pages/mentor/AllBadgesPage";
 import MentorGradingPage from "./pages/mentor/MentorGradingPage";
+import MentorRoadmapWorkspacePage from "./pages/mentor/MentorRoadmapWorkspacePage";
 import CourseCreationPage from "./pages/mentor/course-builder/CourseCreationPage";
 import { CourseManagementProvider } from "./context/mentor/CourseManagementContext";
 import { MentorNoticeProvider } from "./context/mentor/MentorNoticeContext";
@@ -86,6 +88,7 @@ import AdminAiKnowledgeDashboard from "./pages/admin/AdminAiKnowledgeDashboard";
 import AdminCoursePreviewPage from "./pages/admin/AdminCoursePreviewPage";
 import AiRoadmapPage from "./pages/roadmap/AiRoadmapPage";
 import RoadmapDetailPage from "./pages/roadmap/RoadmapDetailPage";
+import StudentRoadmapWorkspacePage from "./pages/roadmap/StudentRoadmapWorkspacePage";
 import StudyPlannerPage from "./pages/study-planner/StudyPlannerPage";
 import GSJJourneyPage from "./pages/journey/GSJJourneyPage";
 import JourneyCreatePage from "./pages/journey/JourneyCreatePage";
@@ -140,7 +143,8 @@ const AppContents = () => {
     isCertificateRoute(location.pathname) ||
     isCourseLearningRoute(location.pathname) ||
     isAssignmentRoute(location.pathname) ||
-    isQuizAttemptRoute(location.pathname);
+    isQuizAttemptRoute(location.pathname) ||
+    isRoadmapWorkspaceRoute(location.pathname);
 
   return (
     <div
@@ -233,6 +237,14 @@ const AppContents = () => {
               }
             />
             <Route
+              path="/roadmap/:id/workspace"
+              element={
+                <StudentOnlyRoute>
+                  <StudentRoadmapWorkspacePage />
+                </StudentOnlyRoute>
+              }
+            />
+            <Route
               path="/study-planner"
               element={
                 <StudentOnlyRoute>
@@ -244,6 +256,18 @@ const AppContents = () => {
             <Route
               path="/mentors/:mentorId/verified-skills/:skillName"
               element={<SkillVerificationDetailPage />}
+            />
+            <Route
+              path="/students/:userId/verified-skills/:skillName"
+              element={<SkillVerificationDetailPage />}
+            />
+            <Route
+              path="/my-skill-verification"
+              element={
+                <StudentOnlyRoute>
+                  <StudentSkillVerificationPage />
+                </StudentOnlyRoute>
+              }
             />
             <Route path="/community" element={<CommunityHUD />} />
             <Route path="/community/:id" element={<PostDetailPage />} />
@@ -596,6 +620,16 @@ const AppContents = () => {
               }
             />
             <Route
+              path="/mentor/roadmap-workspace/:bookingId"
+              element={
+                <MentorRoute>
+                  <MentorNoticeProvider>
+                    <MentorRoadmapWorkspacePage />
+                  </MentorNoticeProvider>
+                </MentorRoute>
+              }
+            />
+            <Route
               path="/admin"
               element={
                 <AdminRoute>
@@ -735,6 +769,7 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/journey",
   "/portfolio",
   "/my-bookings",
+  "/my-skill-verification",
 ]);
 
 // Check if path matches quiz attempt pattern
@@ -774,6 +809,11 @@ const isRoadmapDetailRoute = (pathname: string) => {
   return pathname.startsWith("/roadmap/") && pathname !== "/roadmap";
 };
 
+// Check if path is roadmap workspace
+const isRoadmapWorkspaceRoute = (pathname: string) => {
+  return pathname.startsWith("/roadmap/") && pathname.endsWith("/workspace");
+};
+
 const isCourseLearningRoute = (pathname: string) => {
   return (
     pathname === "/course-learning" || pathname.startsWith("/course-learning/")
@@ -808,22 +848,22 @@ const isJobDetailRoute = (pathname: string) => {
 // Hide Header on specific routes
 const HeaderVisibilityWrapper = () => {
   const location = useLocation();
-  if (
+  const isHidden =
     fullScreenRoutes.has(location.pathname) ||
-    isCourseLearningRoute(location.pathname) ||
     isCertificateRoute(location.pathname) ||
+    isCourseLearningRoute(location.pathname) ||
     isAssignmentRoute(location.pathname) ||
     isQuizAttemptRoute(location.pathname) ||
-    location.pathname === "/cv"
-  )
-    return null;
+    isRoadmapWorkspaceRoute(location.pathname);
+
+  if (isHidden) return null;
   return <Header />;
 };
 
 // Hide Footer on specific routes
 const FooterVisibilityWrapper = () => {
   const location = useLocation();
-  if (
+  const isHidden =
     fullScreenRoutes.has(location.pathname) ||
     hideFooterOnlyRoutes.has(location.pathname) ||
     isCourseLearningRoute(location.pathname) ||
@@ -833,11 +873,12 @@ const FooterVisibilityWrapper = () => {
     isAssignmentRoute(location.pathname) ||
     isQuizAttemptRoute(location.pathname) ||
     isRoadmapDetailRoute(location.pathname) ||
+    isRoadmapWorkspaceRoute(location.pathname) ||
     isJobDetailRoute(location.pathname) ||
     isBookingRoute(location.pathname) ||
     isContractRoute(location.pathname) ||
-    isCourseDetailRoute(location.pathname)
-  ) {
+    isCourseDetailRoute(location.pathname);
+  if (isHidden) {
     return null;
   }
   return <Footer />;

@@ -84,11 +84,11 @@ const MentorNodeReviewPanel: React.FC<MentorNodeReviewPanelProps> = ({
   const getResultLabel = () => {
     switch (reviewResult) {
       case 'APPROVED':
-        return 'Chấp nhận (Learner có thể qua node)';
+        return 'Chấp nhận (node giữ trạng thái hoàn thành)';
       case 'REJECTED':
-        return 'Từ chối (Node không đạt)';
+        return 'Từ chối (node sẽ mở lại cho learner)';
       case 'REWORK_REQUESTED':
-        return 'Cần làm lại (Learner cần cải thiện)';
+        return 'Cần làm lại (node sẽ mở lại cho learner)';
     }
   };
 

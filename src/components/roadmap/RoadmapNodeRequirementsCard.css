@@ -1,0 +1,190 @@
+.roadmap-node-requirements-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.86), rgba(6, 19, 29, 0.92));
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.roadmap-node-requirements-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.roadmap-node-requirements-card__title-wrap {
+  min-width: 0;
+}
+
+.roadmap-node-requirements-card__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #67e8f9;
+}
+
+.roadmap-node-requirements-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #f8fafc;
+}
+
+.roadmap-node-requirements-card__node-pill,
+.roadmap-node-requirements-card__source-badge,
+.roadmap-node-requirements-card__count-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.28rem 0.62rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.roadmap-node-requirements-card__node-pill {
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  color: #67e8f9;
+}
+
+.roadmap-node-requirements-card__source-badge,
+.roadmap-node-requirements-card__count-pill {
+  background: rgba(148, 163, 184, 0.12);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.roadmap-node-requirements-card__intro,
+.roadmap-node-requirements-card__footer-note {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.roadmap-node-requirements-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.roadmap-node-requirements-card__section {
+  padding: 0.95rem 1rem;
+  border-radius: 12px;
+  background: rgba(2, 6, 23, 0.38);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.roadmap-node-requirements-card__section--assignment {
+  border-color: rgba(245, 158, 11, 0.28);
+  background: linear-gradient(180deg, rgba(56, 27, 7, 0.35), rgba(2, 6, 23, 0.4));
+}
+
+.roadmap-node-requirements-card__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.7rem;
+}
+
+.roadmap-node-requirements-card__section-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #e2e8f0;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.roadmap-node-requirements-card__section-title svg {
+  color: #22d3ee;
+}
+
+.roadmap-node-requirements-card__assignment-title {
+  margin: 0 0 0.7rem;
+  color: #f8fafc;
+  font-size: 0.98rem;
+}
+
+.roadmap-node-requirements-card__list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #e2e8f0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.roadmap-node-requirements-card__list li {
+  line-height: 1.55;
+}
+
+.roadmap-node-requirements-card__markdown {
+  color: #dbeafe;
+  line-height: 1.65;
+  font-size: 0.92rem;
+}
+
+.roadmap-node-requirements-card__markdown > *:first-child {
+  margin-top: 0;
+}
+
+.roadmap-node-requirements-card__markdown > *:last-child {
+  margin-bottom: 0;
+}
+
+.roadmap-node-requirements-card__markdown h1,
+.roadmap-node-requirements-card__markdown h2,
+.roadmap-node-requirements-card__markdown h3 {
+  color: #f8fafc;
+}
+
+.roadmap-node-requirements-card__markdown ul,
+.roadmap-node-requirements-card__markdown ol {
+  padding-left: 1.2rem;
+}
+
+.roadmap-node-requirements-card__markdown code {
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.82);
+  color: #67e8f9;
+}
+
+.roadmap-node-requirements-card__markdown pre {
+  overflow-x: auto;
+  padding: 0.9rem;
+  border-radius: 10px;
+  background: rgba(2, 6, 23, 0.82);
+}
+
+.roadmap-node-requirements-card__empty {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1rem;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px dashed rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+}
+
+.roadmap-node-requirements-card__empty p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .roadmap-node-requirements-card {
+    padding: 1rem;
+  }
+}

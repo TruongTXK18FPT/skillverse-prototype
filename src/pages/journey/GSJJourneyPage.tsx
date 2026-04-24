@@ -2014,20 +2014,23 @@ const GSJJourneyPage: React.FC = () => {
                   )}
                   <div className="gsj-journey-card__info">
                     <span className="gsj-journey-card__name">
-                      {journey.jobRole
-                        ? getJobRoleLabel(journey.jobRole, journey.domain)
-                        : getDomainLabel(journey.domain)}
+                      {journey.skillName ||
+                        (journey.skills && journey.skills.length > 0
+                          ? journey.skills[0]
+                          : journey.jobRole
+                            ? getJobRoleLabel(journey.jobRole, journey.domain)
+                            : getDomainLabel(journey.domain))}
                     </span>
                     <span className="gsj-journey-card__sub">
+                      {journey.jobRole
+                        ? getJobRoleLabel(journey.jobRole, journey.domain)
+                        : "Hành trình kỹ năng"}
+                    </span>
+                    <span className="gsj-journey-card__domain-label">
                       {getDomainLabel(journey.domain)}
                     </span>
                   </div>
                 </div>
-                <span
-                  className={`gsj-journey-card__status gsj-journey-card__status--${getStatusColor(journey.status)}`}
-                >
-                  {getStatusLabel(journey.status)}
-                </span>
               </div>
 
               {journey.goal && (
@@ -2065,6 +2068,11 @@ const GSJJourneyPage: React.FC = () => {
                   </div>
                 </div>
                 <div className="gsj-journey-card__meta">
+                  <span
+                    className={`gsj-journey-card__status gsj-journey-card__status--${getStatusColor(journey.status)}`}
+                  >
+                    {getStatusLabel(journey.status)}
+                  </span>
                   {journey.currentLevel && (
                     <span className="gsj-journey-card__level">
                       <Brain size={12} />
@@ -2176,19 +2184,20 @@ const GSJJourneyPage: React.FC = () => {
                       )}
                       <div className="gsj-journey-card__info">
                         <span className="gsj-journey-card__name">
-                          {journeyLabel}
+                          {journey.skillName ||
+                            (journey.skills && journey.skills.length > 0
+                              ? journey.skills[0]
+                              : journeyLabel)}
                         </span>
                         <span className="gsj-journey-card__sub">
+                          {journeyLabel}
+                        </span>
+                        <span className="gsj-journey-card__domain-label">
                           {getDomainLabel(journey.domain)}
                         </span>
                       </div>
                     </div>
                     <div className="gsj-journey-card__header-actions">
-                      <span
-                        className={`gsj-journey-card__status gsj-journey-card__status--${getStatusColor(journey.status)}`}
-                      >
-                        {getStatusLabel(journey.status)}
-                      </span>
                       <button
                         type="button"
                         className="gsj-journey-card__delete"
@@ -2206,7 +2215,11 @@ const GSJJourneyPage: React.FC = () => {
                           });
                         }}
                         disabled={actionLoading}
-                        title={journey.hasActiveMentorBooking ? "Không thể xóa — đã book mentor" : "Xóa hành trình"}
+                        title={
+                          journey.hasActiveMentorBooking
+                            ? "Không thể xóa — đã book mentor"
+                            : "Xóa hành trình"
+                        }
                         aria-label={`Xóa hành trình ${journeyLabel}`}
                       >
                         <Trash2 size={14} />
@@ -2252,6 +2265,11 @@ const GSJJourneyPage: React.FC = () => {
                       </div>
                     </div>
                     <div className="gsj-journey-card__meta">
+                      <span
+                        className={`gsj-journey-card__status gsj-journey-card__status--${getStatusColor(journey.status)}`}
+                      >
+                        {getStatusLabel(journey.status)}
+                      </span>
                       {journey.currentLevel && (
                         <span className="gsj-journey-card__level">
                           <Brain size={12} />
@@ -2907,11 +2925,19 @@ const GSJJourneyPage: React.FC = () => {
                   fromDetail: true,
                 });
               }}
-              disabled={actionLoading || !!selectedJourney.hasActiveMentorBooking}
-              title={selectedJourney.hasActiveMentorBooking ? "Không thể xóa — đã book mentor" : "Xóa hành trình"}
+              disabled={
+                actionLoading || !!selectedJourney.hasActiveMentorBooking
+              }
+              title={
+                selectedJourney.hasActiveMentorBooking
+                  ? "Không thể xóa — đã book mentor"
+                  : "Xóa hành trình"
+              }
             >
               <Trash2 size={16} />
-              {selectedJourney.hasActiveMentorBooking ? "Đã book mentor — không thể xóa" : "Xóa hành trình"}
+              {selectedJourney.hasActiveMentorBooking
+                ? "Đã book mentor — không thể xóa"
+                : "Xóa hành trình"}
             </button>
           </div>
         </div>
@@ -3680,8 +3706,8 @@ const GSJJourneyPage: React.FC = () => {
                 Xóa hành trình này?
               </h3>
               <p className="gsj-delete-modal__subtitle">
-                Dữ liệu bài đánh giá, kết quả, tiến độ và lộ trình (roadmap) đi kèm sẽ bị xóa vĩnh
-                viễn.
+                Dữ liệu bài đánh giá, kết quả, tiến độ và lộ trình (roadmap) đi
+                kèm sẽ bị xóa vĩnh viễn.
               </p>
             </div>
 
@@ -3694,8 +3720,12 @@ const GSJJourneyPage: React.FC = () => {
                   {pendingDelete.journeyLabel}
                 </strong>
               </div>
-              <div className="gsj-delete-modal__note" style={{ color: 'var(--gsj-accent-warning, #f59e0b)' }}>
-                ⚠️ Xóa hành trình sẽ đồng thời xóa roadmap và toàn bộ study plan đi kèm.
+              <div
+                className="gsj-delete-modal__note"
+                style={{ color: "var(--gsj-accent-warning, #f59e0b)" }}
+              >
+                ⚠️ Xóa hành trình sẽ đồng thời xóa roadmap và toàn bộ study plan
+                đi kèm.
               </div>
               <div className="gsj-delete-modal__note">
                 Hành động này không thể hoàn tác. Bạn chỉ nên tiếp tục khi chắc

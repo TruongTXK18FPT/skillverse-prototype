@@ -1,0 +1,393 @@
+/* ═══════════════════════════════════════════════════════════════════
+   MentorAssessmentCreator — Neon Tech Cyan Blue
+   ═══════════════════════════════════════════════════════════════════ */
+
+.mac-container {
+  color: var(--mr-text, #e2e8f0);
+  font-family: var(--mr-font, "Be Vietnam Pro", "Inter", sans-serif);
+}
+
+.mac-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.mac-header-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(34,211,238,0.1);
+  border: 1px solid var(--mr-border, rgba(34,211,238,0.18));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--mr-accent, #22d3ee);
+  flex-shrink: 0;
+}
+
+.mac-title { margin: 0; font-size: 1.05rem; color: #f8fafc; }
+.mac-subtitle { margin: 0.2rem 0 0; font-size: 0.8rem; color: var(--mr-text-dim, rgba(226,232,240,0.55)); }
+
+/* ─── Section ────────────────────────────────────────────────── */
+
+.mac-section {
+  background: rgba(11,31,46,0.4);
+  border: 1px solid var(--mr-border, rgba(34,211,238,0.18));
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.mac-section-toggle {
+  width: 100%; display: flex; align-items: center;
+  justify-content: space-between; padding: 0.85rem 1rem;
+  background: transparent; border: none;
+  color: #e2e8f0; font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  transition: background 0.18s;
+}
+
+.mac-section-toggle:hover { background: rgba(34,211,238,0.04); }
+
+.mac-section-label {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.88rem; font-weight: 600; color: #cbd5e1;
+}
+
+.mac-section-label svg { color: var(--mr-accent, #22d3ee); }
+
+.mac-section-body { padding: 0 1rem 1rem; }
+
+/* ─── Form ───────────────────────────────────────────────────── */
+
+.mac-form-group { margin-bottom: 1rem; }
+
+.mac-label {
+  display: block; margin-bottom: 0.4rem;
+  color: #94a3b8; font-size: 0.8rem; font-weight: 600;
+}
+
+.mac-input, .mac-textarea {
+  width: 100%; padding: 0.6rem 0.8rem;
+  background: rgba(6,19,29,0.7);
+  border: 1px solid var(--mr-border, rgba(34,211,238,0.18));
+  border-radius: 8px; color: #f8fafc; font-size: 0.85rem;
+  font-family: inherit; box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.mac-input:focus, .mac-textarea:focus {
+  outline: none;
+  border-color: var(--mr-accent, #22d3ee);
+  box-shadow: 0 0 0 2px rgba(34,211,238,0.15);
+}
+
+.mac-textarea { resize: vertical; min-height: 80px; }
+
+/* ─── Evidence Type Selector ─────────────────────────────────── */
+
+.mac-evidence-types { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+.mac-type-btn {
+  padding: 0.45rem 0.8rem; border-radius: 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8; font-size: 0.78rem; font-weight: 500;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.18s;
+}
+
+.mac-type-btn:hover { border-color: var(--mr-border); color: #e2e8f0; }
+
+.mac-type-btn.active {
+  background: rgba(34,211,238,0.12);
+  border-color: var(--mr-accent, #22d3ee);
+  color: var(--mr-accent, #22d3ee);
+}
+
+/* ─── Rubric ─────────────────────────────────────────────────── */
+
+.mac-rubric { margin-top: 0.5rem; }
+
+.mac-rubric-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.mac-weight-total { font-size: 0.78rem; font-weight: 700; font-family: var(--mr-font-mono, monospace); }
+
+.mac-rubric-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.mac-rubric-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(34,211,238,0.1); color: var(--mr-accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.68rem; font-weight: 700; flex-shrink: 0;
+}
+
+.mac-rubric-criterion { flex: 1; }
+
+.mac-rubric-weight {
+  display: flex; align-items: center; gap: 2px;
+  color: #64748b; font-size: 0.78rem;
+}
+
+.mac-rubric-weight-input { width: 50px !important; text-align: center; padding: 0.4rem !important; }
+
+.mac-rubric-remove {
+  background: transparent; border: none; color: #475569;
+  cursor: pointer; padding: 4px; border-radius: 4px;
+  display: flex; transition: color 0.15s;
+}
+
+.mac-rubric-remove:hover { color: #ef4444; }
+
+.mac-add-rubric {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 0.4rem 0.8rem; margin-top: 0.4rem;
+  background: transparent; border: 1px dashed var(--mr-border);
+  border-radius: 6px; color: var(--mr-accent);
+  font-size: 0.78rem; cursor: pointer; font-family: inherit;
+  transition: all 0.18s;
+}
+
+.mac-add-rubric:hover { background: rgba(34,211,238,0.06); }
+
+/* ─── Context Hint ───────────────────────────────────────────── */
+
+.mac-context-hint {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.65rem 0.85rem; margin-top: 0.75rem;
+  background: rgba(34,211,238,0.05);
+  border: 1px solid rgba(34,211,238,0.15);
+  border-radius: 8px; font-size: 0.78rem;
+  color: var(--mr-accent, #22d3ee);
+}
+
+/* ─── Assessment Card ────────────────────────────────────────── */
+
+.mac-loading {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 1rem; color: var(--mr-text-dim); font-size: 0.85rem;
+}
+
+.mac-empty-assessment {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 2rem 1rem; text-align: center;
+  color: var(--mr-text-dim);
+}
+
+.mac-empty-assessment svg { opacity: 0.3; margin-bottom: 0.5rem; }
+.mac-empty-assessment p { margin: 0; font-size: 0.88rem; color: #94a3b8; }
+.mac-empty-assessment span { margin-top: 0.3rem; font-size: 0.78rem; }
+
+.mac-assessment-card { padding: 1rem; }
+
+.mac-assessment-status {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;
+}
+
+.mac-status-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: 6px;
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+
+.mac-status-badge--PENDING { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.mac-status-badge--APPROVED { background: rgba(16,185,129,0.15); color: #10b981; }
+.mac-status-badge--REJECTED { background: rgba(239,68,68,0.15); color: #ef4444; }
+
+.mac-assessment-date { font-size: 0.72rem; color: #64748b; }
+
+.mac-assessment-body { margin-bottom: 1rem; }
+
+.mac-field { margin-bottom: 0.6rem; }
+.mac-field label { display: block; font-size: 0.75rem; color: #64748b; margin-bottom: 0.2rem; font-weight: 600; }
+.mac-field-text { font-size: 0.85rem; color: #e2e8f0; line-height: 1.5; padding: 0.5rem 0.75rem; background: rgba(0,0,0,0.15); border-radius: 6px; }
+
+.mac-link { color: var(--mr-accent); font-size: 0.82rem; text-decoration: none; }
+.mac-link:hover { text-decoration: underline; }
+
+/* ─── Decision Buttons ───────────────────────────────────────── */
+
+.mac-decision-btns { display: flex; gap: 0.5rem; }
+
+.mac-decision-btn {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.5rem 1rem; border-radius: 8px;
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  border: 1px solid; font-family: inherit;
+  transition: all 0.18s;
+}
+
+.mac-decision-btn--approve {
+  background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.3); color: #10b981;
+}
+.mac-decision-btn--approve.active {
+  background: rgba(16,185,129,0.2); border-color: #10b981; box-shadow: 0 0 10px rgba(16,185,129,0.15);
+}
+
+.mac-decision-btn--reject {
+  background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.3); color: #ef4444;
+}
+.mac-decision-btn--reject.active {
+  background: rgba(239,68,68,0.2); border-color: #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.15);
+}
+
+.mac-submit-btn {
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  width: 100%; padding: 0.7rem;
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  border: none; border-radius: 8px;
+  color: #fff; font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 4px 12px rgba(6,182,212,0.3);
+  transition: all 0.2s;
+}
+
+.mac-submit-btn:hover:not(:disabled) { box-shadow: 0 6px 16px rgba(6,182,212,0.45); transform: translateY(-1px); }
+.mac-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.mac-assess-form {
+  padding-top: 0.75rem; border-top: 1px solid rgba(34,211,238,0.1);
+}
+
+.mac-assessed-notice {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.6rem 0.8rem; margin-top: 0.75rem;
+  background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25);
+  border-radius: 8px; font-size: 0.78rem; color: #10b981;
+}
+
+.mac-assessed-notice strong { font-weight: 700; }
+
+/* ─── Upload Zone (Mentor) ──────────────────────────────────── */
+
+.mac-upload-zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  border: 2px dashed rgba(34, 211, 238, 0.25);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(6, 19, 29, 0.6), rgba(11, 31, 46, 0.3));
+  cursor: pointer;
+  transition: all 0.3s ease;
+  gap: 0.6rem;
+  min-height: 100px;
+}
+
+.mac-upload-zone:hover {
+  border-color: rgba(34, 211, 238, 0.45);
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.06), rgba(59, 130, 246, 0.04));
+}
+
+.mac-upload-zone--dragging {
+  border-color: var(--mr-accent, #22d3ee);
+  background: rgba(34, 211, 238, 0.1);
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.15);
+  transform: scale(1.01);
+}
+
+.mac-upload-zone--has-file {
+  border-style: solid;
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.04);
+  padding: 0.75rem 1rem;
+}
+
+.mac-upload-zone__icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--mr-accent, #22d3ee);
+  transition: all 0.3s;
+}
+
+.mac-upload-zone:hover .mac-upload-zone__icon {
+  background: rgba(34, 211, 238, 0.18);
+  transform: translateY(-2px);
+}
+
+.mac-upload-zone__text { text-align: center; }
+.mac-upload-zone__text p { margin: 0; font-size: 0.82rem; color: #cbd5e1; font-weight: 500; }
+.mac-upload-zone__text span { display: block; margin-top: 0.2rem; font-size: 0.72rem; color: #64748b; }
+
+.mac-upload-zone__accept { display: flex; gap: 0.4rem; margin-top: 0.2rem; }
+
+.mac-upload-zone__badge {
+  padding: 2px 6px; border-radius: 4px;
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.4px;
+}
+
+.mac-upload-zone__badge--pdf { background: rgba(239, 68, 68, 0.12); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+.mac-upload-zone__badge--docx { background: rgba(59, 130, 246, 0.12); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+
+.mac-file-preview {
+  display: flex; align-items: center; gap: 0.6rem;
+  width: 100%; padding: 0.6rem 0.8rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+}
+
+.mac-file-preview__icon {
+  width: 36px; height: 36px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+}
+
+.mac-file-preview__icon--pdf { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+.mac-file-preview__icon--docx { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+.mac-file-preview__icon--other { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
+
+.mac-file-preview__info { flex: 1; min-width: 0; }
+.mac-file-preview__name { font-size: 0.8rem; color: #e2e8f0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mac-file-preview__size { font-size: 0.68rem; color: #64748b; margin-top: 1px; }
+
+.mac-file-preview__remove {
+  width: 26px; height: 26px; border-radius: 6px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #fca5a5; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.2s;
+}
+
+.mac-file-preview__remove:hover { background: rgba(239, 68, 68, 0.25); color: #ef4444; }
+
+/* RichTextEditor overrides */
+.mac-section-body .rich-text-editor-container {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--mr-border, rgba(34, 211, 238, 0.18));
+}
+
+.mac-section-body .rte-content {
+  min-height: 180px;
+  background: rgba(6, 19, 29, 0.5);
+  color: #e2e8f0;
+}
+
+.mac-section-body .rte-toolbar {
+  background: rgba(11, 31, 46, 0.6);
+  border-bottom: 1px solid rgba(34, 211, 238, 0.12);
+}
+
+.mac-upload-error {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 6px; color: #fca5a5;
+  font-size: 0.75rem; margin-top: 0.4rem;
+}
+

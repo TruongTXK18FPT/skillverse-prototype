@@ -1192,6 +1192,18 @@ const Header: React.FC = () => {
                                 <span>Đơn Ứng Tuyển</span>
                               </button>
                             )}
+                            {user.roles.includes("USER") && (
+                              <button
+                                onClick={() => {
+                                  navigate("/my-skill-verification");
+                                  setShowUserMenu(false);
+                                }}
+                                className="dropdown-item"
+                              >
+                                <Shield size={16} />
+                                <span>Xác thực Skill</span>
+                              </button>
+                            )}
                             {canManageBookings && (
                               <button
                                 onClick={() => {

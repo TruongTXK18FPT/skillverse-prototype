@@ -28,18 +28,46 @@ import {
   reviewVerification,
   MentorVerificationResponse,
   VerificationStatus,
-  ReviewVerificationRequest
+  ReviewVerificationRequest,
+  EvidenceResponse
 } from '../../services/mentorVerificationService';
+import {
+  getAllStudentVerifications,
+  reviewStudentVerification,
+  StudentVerificationResponse
+} from '../../services/studentSkillVerificationService';
 import { useToast } from '../../hooks/useToast';
 import './MentorVerificationAdminTab.css';
 
 type FilterType = 'ALL' | 'PENDING' | 'HISTORY';
+type RequesterRole = 'MENTOR' | 'STUDENT';
+
+interface UnifiedVerificationResponse {
+  id: number;
+  requesterId: number;
+  requesterName: string;
+  requesterEmail: string;
+  requesterAvatarUrl?: string;
+  requesterRole: RequesterRole;
+  skillName: string;
+  status: VerificationStatus;
+  githubUrl?: string;
+  portfolioUrl?: string;
+  additionalNotes?: string;
+  reviewNote?: string;
+  reviewedById?: number;
+  reviewedByName?: string;
+  requestedAt: string;
+  reviewedAt?: string;
+  evidences: EvidenceResponse[];
+}
 
 const MentorVerificationAdminTab: React.FC = () => {
-  const [verifications, setVerifications] = useState<MentorVerificationResponse[]>([]);
+  const [verifications, setVerifications] = useState<UnifiedVerificationResponse[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Filters & Pagination
+  const [requesterRole, setRequesterRole] = useState<RequesterRole>('MENTOR');
   const [filterType, setFilterType] = useState<FilterType>('PENDING');
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -47,7 +75,7 @@ const MentorVerificationAdminTab: React.FC = () => {
   const PAGE_SIZE = 10;
   
   // Modals
-  const [selectedReq, setSelectedReq] = useState<MentorVerificationResponse | null>(null);
+  const [selectedReq, setSelectedReq] = useState<UnifiedVerificationResponse | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
@@ -68,24 +96,49 @@ const MentorVerificationAdminTab: React.FC = () => {
         statuses = ['APPROVED', 'REJECTED'];
       }
 
-      const response = await getAllVerifications(statuses, currentPage, PAGE_SIZE);
-      setVerifications(response.content);
-      setTotalPages(response.totalPages);
-      setTotalElements(response.totalElements);
+      let responseData: UnifiedVerificationResponse[] = [];
+
+      if (requesterRole === 'MENTOR') {
+        const response = await getAllVerifications(statuses, currentPage, PAGE_SIZE);
+        setTotalPages(response.totalPages);
+        setTotalElements(response.totalElements);
+        responseData = response.content.map(r => ({
+          ...r,
+          requesterId: r.mentorId,
+          requesterName: r.mentorName,
+          requesterEmail: r.mentorEmail,
+          requesterAvatarUrl: r.mentorAvatarUrl,
+          requesterRole: 'MENTOR'
+        }));
+      } else {
+        const response = await getAllStudentVerifications(statuses, currentPage, PAGE_SIZE);
+        setTotalPages(response.totalPages);
+        setTotalElements(response.totalElements);
+        responseData = response.content.map(r => ({
+          ...r,
+          requesterId: r.userId,
+          requesterName: r.userName,
+          requesterEmail: r.userEmail,
+          requesterAvatarUrl: r.userAvatarUrl,
+          requesterRole: 'STUDENT'
+        }));
+      }
+
+      setVerifications(responseData);
     } catch (err: any) {
       console.error('Lỗi tải danh sách xác thực', err);
       showError('Lỗi', 'Không thể tải danh sách xác thực skill. Vui lòng thử lại sau.');
     } finally {
       setLoading(false);
     }
-  }, [filterType, currentPage, PAGE_SIZE, showError]);
+  }, [requesterRole, filterType, currentPage, PAGE_SIZE, showError]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
 
   // Handle Action
-  const handleApprove = (req: MentorVerificationResponse) => {
+  const handleApprove = (req: UnifiedVerificationResponse) => {
     setSelectedReq(req);
     setShowApproveModal(true);
   };
@@ -96,7 +149,11 @@ const MentorVerificationAdminTab: React.FC = () => {
     try {
       setActionLoading(true);
       const payload: ReviewVerificationRequest = { approved: true };
-      await reviewVerification(selectedReq.id, payload);
+      if (selectedReq.requesterRole === 'MENTOR') {
+        await reviewVerification(selectedReq.id, payload);
+      } else {
+        await reviewStudentVerification(selectedReq.id, payload);
+      }
       showSuccess('Thành công', `Đã duyệt skill ${selectedReq.skillName}`);
       setShowApproveModal(false);
       setShowDetailModal(false);
@@ -117,7 +174,11 @@ const MentorVerificationAdminTab: React.FC = () => {
         approved: false, 
         reviewNote: rejectReason.trim() 
       };
-      await reviewVerification(selectedReq.id, payload);
+      if (selectedReq.requesterRole === 'MENTOR') {
+        await reviewVerification(selectedReq.id, payload);
+      } else {
+        await reviewStudentVerification(selectedReq.id, payload);
+      }
       showSuccess('Thành công', `Đã từ chối skill ${selectedReq.skillName}`);
       setShowRejectModal(false);
       setShowDetailModal(false);
@@ -142,8 +203,22 @@ const MentorVerificationAdminTab: React.FC = () => {
       {/* Header */}
       <div className="admin-mvt-header">
         <h2 className="admin-mvt-title">
-          <ShieldCheck size={28} /> Xác thực Kỹ năng Mentor
+          <ShieldCheck size={28} /> Quản lý Xác thực Kỹ Năng
         </h2>
+        <div className="admin-mvt-role-toggle" style={{ display: 'flex', gap: '0.5rem', background: 'rgba(30, 41, 59, 0.6)', padding: '0.25rem', borderRadius: '8px', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+          <button 
+            style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: 'none', background: requesterRole === 'MENTOR' ? 'linear-gradient(135deg, #0891b2, #06b6d4)' : 'transparent', color: requesterRole === 'MENTOR' ? '#fff' : '#94a3b8', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
+            onClick={() => { setRequesterRole('MENTOR'); setCurrentPage(0); }}
+          >
+            Giảng Viên (Mentor)
+          </button>
+          <button 
+            style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: 'none', background: requesterRole === 'STUDENT' ? 'linear-gradient(135deg, #0891b2, #06b6d4)' : 'transparent', color: requesterRole === 'STUDENT' ? '#fff' : '#94a3b8', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
+            onClick={() => { setRequesterRole('STUDENT'); setCurrentPage(0); }}
+          >
+            Học Viên (Student)
+          </button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -174,7 +249,7 @@ const MentorVerificationAdminTab: React.FC = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Mentor</th>
+              <th>Người Yêu Cầu</th>
               <th>Skill Yêu Cầu</th>
               <th>Ngày Gửi</th>
               <th>Trạng Thái</th>
@@ -201,11 +276,11 @@ const MentorVerificationAdminTab: React.FC = () => {
                   <td>
                     <div className="admin-mvt-avatar-cell">
                       <div className="admin-mvt-avatar">
-                        {req.mentorName.charAt(0).toUpperCase()}
+                        {req.requesterName.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <div className="admin-mvt-name">{req.mentorName}</div>
-                        <div className="admin-mvt-email">{req.mentorEmail}</div>
+                        <div className="admin-mvt-name">{req.requesterName} <span style={{ fontSize: '0.7rem', background: req.requesterRole === 'MENTOR' ? 'rgba(139, 92, 246, 0.2)' : 'rgba(6, 182, 212, 0.2)', color: req.requesterRole === 'MENTOR' ? '#c084fc' : '#22d3ee', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.3rem' }}>{req.requesterRole}</span></div>
+                        <div className="admin-mvt-email">{req.requesterEmail}</div>
                       </div>
                     </div>
                   </td>
@@ -287,18 +362,20 @@ const MentorVerificationAdminTab: React.FC = () => {
               </button>
             </div>
             <div className="admin-mvt-modal__body">
-              <div className="admin-mvt-detail-group">
-                <h4>Thông tin Mentor</h4>
-                <div className="admin-mvt-detail-row">
-                  <div className="admin-mvt-detail-label">Tên:</div>
-                  <div className="admin-mvt-detail-value">{selectedReq.mentorName}</div>
-                </div>
-                <div className="admin-mvt-detail-row">
-                  <div className="admin-mvt-detail-label">Email:</div>
-                  <div className="admin-mvt-detail-value">{selectedReq.mentorEmail}</div>
+              <div className="admin-mvt-detail-item">
+                <span className="admin-mvt-detail-label">Người Yêu Cầu</span>
+                <div className="admin-mvt-detail-user">
+                  {selectedReq.requesterAvatarUrl ? (
+                    <img src={selectedReq.requesterAvatarUrl} alt={selectedReq.requesterName} className="admin-mvt-detail-avatar" />
+                  ) : (
+                    <div className="admin-mvt-avatar">{selectedReq.requesterName.charAt(0).toUpperCase()}</div>
+                  )}
+                  <div>
+                    <div className="admin-mvt-name">{selectedReq.requesterName}</div>
+                    <div className="admin-mvt-email">{selectedReq.requesterEmail}</div>
+                  </div>
                 </div>
               </div>
-
               <div className="admin-mvt-detail-group">
                 <h4>Thông tin Kỹ năng</h4>
                 <div className="admin-mvt-detail-row">
@@ -425,7 +502,7 @@ const MentorVerificationAdminTab: React.FC = () => {
             <div className="admin-mvt-modal__body">
               <div style={{ marginBottom: '1rem', color: '#f87171', display: 'flex', gap: '0.5rem' }}>
                 <AlertCircle size={20}/>
-                <span>Bạn đang từ chối yêu cầu xác thực skill <strong>{selectedReq.skillName}</strong> của <strong>{selectedReq.mentorName}</strong>. Vui lòng nêu rõ lý do từ chối.</span>
+                <span>Bạn đang từ chối yêu cầu xác thực skill <strong>{selectedReq.skillName}</strong> của <strong>{selectedReq.requesterName}</strong>. Vui lòng nêu rõ lý do từ chối.</span>
               </div>
               <textarea 
                 className="admin-mvt-textarea"
@@ -467,7 +544,7 @@ const MentorVerificationAdminTab: React.FC = () => {
               <div style={{ marginBottom: '1rem', color: '#f1f5f9', display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                 <ShieldCheck size={32} color="#4ade80" />
                 <span style={{ fontSize: '1.05rem', lineHeight: '1.5' }}>
-                  Bạn có chắc chắn muốn duyệt skill <strong>{selectedReq.skillName}</strong> cho Mentor <strong>{selectedReq.mentorName}</strong>?
+                  Bạn có chắc chắn muốn duyệt skill <strong>{selectedReq.skillName}</strong> cho <strong>{selectedReq.requesterName}</strong>?
                 </span>
               </div>
             </div>
