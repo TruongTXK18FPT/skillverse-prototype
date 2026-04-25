@@ -45,7 +45,7 @@ const BOOKING_TYPE_CONFIG: Record<
   { label: string; icon: React.ReactNode; color: string }
 > = {
   ROADMAP_MENTORING: {
-    label: "Đồng hành Roadmap",
+    label: "Đồng hành Journey",
     icon: <Map size={13} />,
     color: "#06b6d4",
   },

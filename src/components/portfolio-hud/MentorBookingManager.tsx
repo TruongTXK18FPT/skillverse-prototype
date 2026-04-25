@@ -124,7 +124,7 @@ const BOOKING_TYPE_CONFIG: Record<
   { label: string; icon: string; color: string }
 > = {
   ROADMAP_MENTORING: {
-    label: "Đồng hành Roadmap",
+    label: "Đồng hành Journey",
     icon: "🗺️",
     color: "#06b6d4",
   },

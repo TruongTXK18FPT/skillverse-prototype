@@ -198,16 +198,13 @@ const MentorshipPage = () => {
         setCategories(dynamicCategories);
       } else {
         console.error("Invalid data format from API");
-        setMentors(mockMentors);
       }
     } catch (error) {
       console.error("Error fetching mentors:", error);
-      // Fallback to mock data
-      // setMentors(mockMentors);
     } finally {
       setLoading(false);
     }
-  }, [user?.id, mockMentors]);
+  }, [user?.id]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -273,78 +270,6 @@ const MentorshipPage = () => {
     }
   }, [location.state, showInfo]);
 
-  // Mock data as fallback
-  const mockMentors: Mentor[] = [
-    {
-      id: "1",
-      name: "Dr. Sarah Johnson",
-      title: "Senior Frontend Developer", // Use direct string instead of translation
-      rating: 4.9,
-      reviews: 128,
-      hourlyRate: 120000,
-      roadmapMentoringPrice: 1500000,
-      expertise: ["React", "Vue.js", "TypeScript", "UI/UX Design"],
-      languages: ["English", "Spanish"], // Use direct strings
-      availability: "Weekdays", // Use direct string
-      experience: "12+ years",
-      bio: "Experienced frontend developer with expertise in modern web technologies and mentoring.",
-      avatar:
-        "https://images.pexels.com/photos/3796217/pexels-photo-3796217.jpeg?auto=compress&cs=tinysrgb&w=400",
-      badges: ["Top Rated", "Pro Mentor", "Google Expert"], // Use direct strings
-      isFavorite: false,
-    },
-    {
-      id: "2",
-      name: "Michael Chen",
-      title: "Lead Backend Developer", // Use direct string
-      rating: 4.8,
-      reviews: 95,
-      hourlyRate: 150,
-      expertise: ["Node.js", "Python", "AWS", "System Design"],
-      languages: ["English", "Mandarin"], // Use direct strings
-      availability: "Weekends", // Use direct string
-      experience: "10+ years",
-      bio: "Backend specialist with extensive experience in scalable systems and cloud architecture.",
-      avatar:
-        "https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=400",
-      badges: ["AWS Certified", "System Design Expert"], // Use direct strings
-      isFavorite: true,
-    },
-    {
-      id: "3",
-      name: "Emily Rodriguez",
-      title: "Full Stack Developer",
-      rating: 4.7,
-      reviews: 76,
-      hourlyRate: 100,
-      expertise: ["JavaScript", "React", "Node.js", "MongoDB"],
-      languages: ["English", "Spanish"],
-      availability: "Flexible",
-      experience: "8+ years",
-      bio: "Full stack developer passionate about clean code and mentoring new developers.",
-      avatar:
-        "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400",
-      badges: ["Verified", "Mentor"],
-      isFavorite: false,
-    },
-    {
-      id: "4",
-      name: "David Kim",
-      title: "Mobile Developer",
-      rating: 4.9,
-      reviews: 112,
-      hourlyRate: 130,
-      expertise: ["React Native", "Flutter", "iOS", "Android"],
-      languages: ["English", "Korean"],
-      availability: "Weekdays",
-      experience: "10+ years",
-      bio: "Mobile development expert with experience in cross-platform solutions.",
-      avatar:
-        "https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=400",
-      badges: ["Top Rated", "Mobile Expert"],
-      isFavorite: false,
-    },
-  ];
 
   const filteredMentors = mentors.filter((mentor) => {
     const matchesSearch =

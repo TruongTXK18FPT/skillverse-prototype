@@ -589,12 +589,18 @@ const MentorQuestionBankTab: React.FC = () => {
               </div>
 
               <div className="mentor-qb-formGrid">
-                <label className="mentor-qb-field">
+                <label className="mentor-qb-field mentor-qb-field--locked">
                   <span>Skill đóng góp</span>
                   <input
                     value={skillInput}
-                    onChange={(event) => setSkillInput(event.target.value)}
+                    readOnly
+                    aria-readonly="true"
+                    title="Skill đóng góp được khóa theo lựa chọn ở bước trước. Bấm 'Chọn lại lộ trình' để đổi skill."
                   />
+                  <small className="mentor-qb-fieldNote">
+                    Skill được khóa theo bước chọn lộ trình. Muốn đổi skill,
+                    hãy bấm "Chọn lại lộ trình".
+                  </small>
                 </label>
                 <label className="mentor-qb-field">
                   <span>Tên bộ câu hỏi</span>

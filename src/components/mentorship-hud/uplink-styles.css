@@ -1537,6 +1537,13 @@ html.uplink-scroll-lock {
   text-transform: uppercase;
 }
 
+.booking-sub-label {
+  margin: 0 0 1rem;
+  color: var(--uplink-text-grey);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
 .booking-state-message {
   color: var(--uplink-text-grey);
   padding: 2rem;
@@ -1555,6 +1562,148 @@ html.uplink-scroll-lock {
   max-height: 300px;
   overflow-y: auto;
   padding-right: 0.25rem;
+}
+
+.booking-journey-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.booking-journey-card {
+  width: 100%;
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid var(--uplink-border);
+  border-radius: 0.75rem;
+  background:
+    radial-gradient(circle at top right, rgba(34, 211, 238, 0.12), transparent 34%),
+    linear-gradient(160deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.68));
+  color: var(--uplink-text-white);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-family: var(--uplink-mono);
+  transition: all 0.2s ease;
+}
+
+.booking-journey-card:hover {
+  border-color: var(--uplink-primary);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.18);
+}
+
+.booking-journey-card.active {
+  border-color: var(--uplink-primary-light);
+  background:
+    radial-gradient(circle at top right, rgba(34, 211, 238, 0.22), transparent 38%),
+    linear-gradient(160deg, rgba(8, 47, 73, 0.88), rgba(15, 23, 42, 0.74));
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.25);
+}
+
+.booking-journey-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.booking-journey-card__title {
+  display: block;
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.booking-journey-card__goal {
+  display: block;
+  color: rgba(226, 232, 240, 0.78);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.booking-journey-card__progress {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  color: var(--uplink-primary-light);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.booking-journey-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.booking-journey-card__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: rgba(226, 232, 240, 0.66);
+  font-size: 0.72rem;
+}
+
+.booking-journey-card__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.booking-journey-skill-chip {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.45rem;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  color: var(--uplink-primary-light);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.booking-journey-card__progressbar {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.16);
+}
+
+.booking-journey-card__progressfill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--uplink-primary), var(--uplink-primary-light));
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.45);
+}
+
+.booking-journey-card__progressfill--10 {
+  width: 10%;
+}
+
+.booking-journey-card__progressfill--25 {
+  width: 25%;
+}
+
+.booking-journey-card__progressfill--50 {
+  width: 50%;
+}
+
+.booking-journey-card__progressfill--75 {
+  width: 75%;
+}
+
+.booking-journey-card__progressfill--100 {
+  width: 100%;
+}
+
+.booking-journey-card__notice {
+  color: #fbbf24;
+  font-size: 0.72rem;
 }
 
 .booking-slot-chip {
@@ -1643,6 +1792,15 @@ html.uplink-scroll-lock {
   margin-bottom: 0.5rem;
 }
 
+.booking-order-detail {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--uplink-text-grey);
+  font-size: 0.84rem;
+  margin-bottom: 0.5rem;
+}
+
 .booking-order-total {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
@@ -1709,6 +1867,33 @@ html.uplink-scroll-lock {
   width: 100%;
 }
 
+.booking-wallet-hint {
+  color: var(--uplink-text-grey);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.booking-action-full {
+  width: 100%;
+  justify-content: center;
+}
+
+.booking-action-back {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--uplink-border);
+  justify-content: center;
+}
+
+.booking-action-pay {
+  flex: 2;
+  justify-content: center;
+}
+
+.booking-action-pay--processing {
+  opacity: 0.7;
+}
+
 @media (max-width: 768px) {
   .booking-flow-shell {
     padding: 1rem;
@@ -1721,6 +1906,11 @@ html.uplink-scroll-lock {
   .booking-order-row {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .booking-order-detail {
+    flex-direction: column;
     gap: 0.25rem;
   }
 

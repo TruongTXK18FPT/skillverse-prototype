@@ -448,6 +448,7 @@ const CareerChatPage = () => {
             sessions.map(s => (
               <div key={s.sessionId} className={`chat-hud-session-item ${sessionId === s.sessionId ? 'active' : ''}`}>
                 <div 
+                  className="chat-hud-session-title"
                   onClick={() => {
                     careerChatService.getHistory(s.sessionId).then(h => {
                       const msgs: UIMessage[] = [];
@@ -460,13 +461,12 @@ const CareerChatPage = () => {
                       if (window.innerWidth < 768) setIsSidebarOpen(false);
                     });
                   }}
-                  style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
                 >
                   {s.title}
                 </div>
                 <button
+                  className="chat-hud-session-delete-btn"
                   onClick={(e) => { e.stopPropagation(); handleDeleteSession(s.sessionId); }}
-                  style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', opacity: 0.7 }}
                 >
                   <Trash2 size={14} />
                 </button>

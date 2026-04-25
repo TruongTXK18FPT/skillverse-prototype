@@ -5,7 +5,7 @@ import MentorRoadmapWorkspacePanel from '../../components/mentor/MentorRoadmapWo
 import './MentorRoadmapWorkspacePage.css';
 
 /**
- * Trang workspace chuyên dụng cho mentor điều phối một booking đồng hành roadmap.
+ * Trang workspace chuyên dụng cho mentor điều phối một booking đồng hành journey.
  * Đường dẫn: /mentor/roadmap-workspace/:bookingId
  */
 const MentorRoadmapWorkspacePage: React.FC = () => {
@@ -43,7 +43,7 @@ const MentorRoadmapWorkspacePage: React.FC = () => {
             <LayoutDashboard size={18} />
           </div>
           <div>
-            <h1>Workspace Đồng Hành Roadmap</h1>
+            <h1>Workspace Đồng Hành Journey</h1>
             <p>Quản lý roadmap, assignment, meeting và xác nhận hoàn thành cho học viên.</p>
           </div>
         </div>

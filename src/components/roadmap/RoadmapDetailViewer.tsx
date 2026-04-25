@@ -1,12 +1,15 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, CheckCircle, Info, BookOpen, ClipboardList } from 'lucide-react';
+import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, CheckCircle, Info, BookOpen, ClipboardList, UserCheck, Star, Wallet, Loader2 } from 'lucide-react';
 import { RoadmapResponse, QuestProgress } from '../../types/Roadmap';
 import RoadmapFlow from '../ai-roadmap/RoadmapFlow';
 import type { RoadmapNodeFocusPanelProps } from './RoadmapNodeFocusPanel';
 import { normalizeRoadmapMarkdown } from '../../utils/roadmapMarkdown';
+import BookingModal from '../mentorship-hud/BookingModal';
+import { getMentorsByVerifiedSkill, type MentorProfile } from '../../services/mentorProfileService';
+import { getMyBookings, type BookingResponse } from '../../services/bookingService';
 import './RoadmapDetailViewer.css';
 import '../../styles/RoadmapHUD.css';
 
@@ -63,6 +66,34 @@ const SPEC_KEY_LABELS: Record<string, string> = {
   gaps: 'Gaps',
   background: 'Background',
 };
+
+const ACTIVE_ROADMAP_BOOKING_STATUSES = [
+  'PENDING',
+  'CONFIRMED',
+  'ONGOING',
+  'MENTORING_ACTIVE',
+  'PENDING_COMPLETION',
+] as const;
+
+const ROADMAP_BOOKING_STATUS_LABELS: Partial<Record<BookingResponse['status'], string>> = {
+  PENDING: 'Chờ mentor duyệt',
+  CONFIRMED: 'Đã xác nhận',
+  ONGOING: 'Đang diễn ra',
+  MENTORING_ACTIVE: 'Đang đồng hành',
+  PENDING_COMPLETION: 'Chờ hoàn tất',
+};
+
+const getMentorDisplayName = (mentor: MentorProfile): string => {
+  const fullName = `${mentor.firstName ?? ''} ${mentor.lastName ?? ''}`.trim();
+  return fullName || mentor.email || `Mentor #${mentor.id}`;
+};
+
+const formatVnd = (value?: number): string => (
+  new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(value || 0)
+);
 
 const formatSpecKey = (key: string): string => {
   const normalizedKey = key.replace(/[^a-z0-9]/gi, '').toLowerCase();
@@ -177,6 +208,11 @@ const RoadmapDetailViewer = memo(({
 }: RoadmapDetailViewerProps) => {
   const navigate = useNavigate();
   const showAdvancedSections = true;
+  const [matchedMentors, setMatchedMentors] = useState<MentorProfile[]>([]);
+  const [mentorMatchLoading, setMentorMatchLoading] = useState(false);
+  const [mentorMatchError, setMentorMatchError] = useState<string | null>(null);
+  const [currentRoadmapBooking, setCurrentRoadmapBooking] = useState<BookingResponse | null>(null);
+  const [bookingMentor, setBookingMentor] = useState<MentorProfile | null>(null);
 
   const handleQuestComplete = useCallback(async (questId: string, completed: boolean) => {
     onQuestComplete(questId, completed);
@@ -260,6 +296,85 @@ const RoadmapDetailViewer = memo(({
     (roadmap.projectsEvidence?.length ?? 0) > 0 ||
     Boolean(roadmap.nextSteps)
   ), [roadmap]);
+
+  const roadmapMentorSkill = useMemo(() => {
+    const candidates = [
+      roadmap.metadata.skillMode?.skillName,
+      roadmap.metadata.target,
+      roadmap.metadata.careerMode?.targetRole,
+      roadmap.structure?.flatMap((phase) => phase.skillFocus ?? [])[0],
+      roadmap.projectsEvidence?.flatMap((project) => project.skillsProven ?? [])[0],
+    ];
+
+    return candidates.find((value) => typeof value === 'string' && value.trim().length > 0)?.trim() ?? '';
+  }, [roadmap]);
+
+  const refreshRoadmapBooking = useCallback(async () => {
+    if (!workspaceJourneyId) {
+      setCurrentRoadmapBooking(null);
+      return;
+    }
+
+    try {
+      const response = await getMyBookings(false, 0, 100);
+      const activeBooking = (response.content || []).find((booking) => (
+        booking.bookingType === 'ROADMAP_MENTORING' &&
+        booking.journeyId === workspaceJourneyId &&
+        ACTIVE_ROADMAP_BOOKING_STATUSES.includes(booking.status as typeof ACTIVE_ROADMAP_BOOKING_STATUSES[number])
+      ));
+      setCurrentRoadmapBooking(activeBooking ?? null);
+    } catch (error) {
+      console.error('Failed to load roadmap mentor booking:', error);
+    }
+  }, [workspaceJourneyId]);
+
+  useEffect(() => {
+    refreshRoadmapBooking();
+  }, [refreshRoadmapBooking]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadMatchedMentors = async () => {
+      if (!roadmapMentorSkill) {
+        setMatchedMentors([]);
+        setMentorMatchError(null);
+        return;
+      }
+
+      try {
+        setMentorMatchLoading(true);
+        setMentorMatchError(null);
+        const mentors = await getMentorsByVerifiedSkill(roadmapMentorSkill);
+        if (cancelled) return;
+        setMatchedMentors(
+          mentors
+            .filter((mentor) => (mentor.roadmapMentoringPrice ?? 0) > 0)
+            .slice(0, 3),
+        );
+      } catch (error) {
+        if (cancelled) return;
+        console.error('Failed to load matched roadmap mentors:', error);
+        setMatchedMentors([]);
+        setMentorMatchError('Không thể tải mentor phù hợp lúc này.');
+      } finally {
+        if (!cancelled) {
+          setMentorMatchLoading(false);
+        }
+      }
+    };
+
+    loadMatchedMentors();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [roadmapMentorSkill]);
+
+  const closeBookingModal = useCallback(() => {
+    setBookingMentor(null);
+    refreshRoadmapBooking();
+  }, [refreshRoadmapBooking]);
 
   // --- NEW METADATA SECTION (ISOLATED CLASSES: rm-*) ---
   const metadataSection = useMemo(() => {
@@ -477,8 +592,8 @@ const RoadmapDetailViewer = memo(({
       )}
 
       {/* Action Bar inside Mission Briefing */}
-      <div className="rm-action-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
-        <button onClick={onBack} className="roadmap-detail-viewer__back-btn" style={{ background: 'transparent', border: 'none', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem' }}>
+      <div className="rm-action-bar">
+        <button onClick={onBack} className="roadmap-detail-viewer__back-btn roadmap-detail-viewer__back-btn--briefing">
           <ArrowLeft className="h-4 w-4" />
           <span>QUAY LẠI</span>
         </button>
@@ -504,7 +619,6 @@ const RoadmapDetailViewer = memo(({
               },
             });
           }}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', background: 'var(--mr-accent)', color: '#020617', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }}
         >
           <ClipboardList size={18} /> Đi đến Workspace
         </button>
@@ -514,10 +628,138 @@ const RoadmapDetailViewer = memo(({
   );
   }, [derivedStats, navigate, onBack, roadmap, selectedNodeId, workspaceJourneyId]);
 
+  const mentorBookingSection = useMemo(() => {
+    if (!workspaceJourneyId) {
+      return (
+        <section className="rdmv-mentor-match" aria-label="Đồng hành mentor">
+          <div className="rdmv-mentor-match__copy">
+            <span className="rdmv-mentor-match__eyebrow">Mentor Companion</span>
+            <h2>Gắn hành trình trước khi book mentor</h2>
+            <p>Roadmap này chưa có journey id nên chưa thể tạo booking đồng hành.</p>
+          </div>
+        </section>
+      );
+    }
+
+    if (currentRoadmapBooking) {
+      return (
+        <section className="rdmv-mentor-match rdmv-mentor-match--current" aria-label="Mentor đang đồng hành">
+          <div className="rdmv-mentor-match__copy">
+            <span className="rdmv-mentor-match__eyebrow">Mentor hiện tại</span>
+            <h2>Hành trình này đã có mentor đồng hành</h2>
+            <p>Mentor sẽ theo sát tiến độ, cập nhật roadmap và hỗ trợ bạn đi tới buổi verify cuối cùng.</p>
+          </div>
+
+          <div className="rdmv-current-mentor-card">
+            <div className="rdmv-current-mentor-card__avatar">
+              {currentRoadmapBooking.mentorAvatar ? (
+                <img src={currentRoadmapBooking.mentorAvatar} alt={currentRoadmapBooking.mentorName || 'Mentor'} />
+              ) : (
+                <UserCheck size={24} />
+              )}
+            </div>
+            <div className="rdmv-current-mentor-card__body">
+              <strong>{currentRoadmapBooking.mentorName || `Mentor #${currentRoadmapBooking.mentorId}`}</strong>
+              <span>{ROADMAP_BOOKING_STATUS_LABELS[currentRoadmapBooking.status] || currentRoadmapBooking.status}</span>
+            </div>
+            <div className="rdmv-current-mentor-card__price">
+              {formatVnd(currentRoadmapBooking.priceVnd)}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    return (
+      <section className="rdmv-mentor-match" aria-label="Book mentor đồng hành">
+        <div className="rdmv-mentor-match__copy">
+          <span className="rdmv-mentor-match__eyebrow">Mentor Match</span>
+          <h2>Book mentor đồng hành journey</h2>
+          <p>
+            SkillVerse tìm mentor đã xác thực theo skill trọng tâm
+            {roadmapMentorSkill ? <strong> {roadmapMentorSkill}</strong> : null}
+            . Book xong bạn thanh toán ngay bằng ví và mentor sẽ nhận yêu cầu đồng hành.
+          </p>
+        </div>
+
+        <div className="rdmv-mentor-match__content">
+          {mentorMatchLoading ? (
+            <div className="rdmv-mentor-match__state">
+              <Loader2 size={20} className="rdmv-mentor-match__spin" />
+              <span>Đang tìm mentor phù hợp...</span>
+            </div>
+          ) : mentorMatchError ? (
+            <div className="rdmv-mentor-match__state rdmv-mentor-match__state--error">
+              <AlertTriangle size={20} />
+              <span>{mentorMatchError}</span>
+            </div>
+          ) : matchedMentors.length === 0 ? (
+            <div className="rdmv-mentor-match__state">
+              <Info size={20} />
+              <span>Chưa có mentor bật gói đồng hành cho skill này.</span>
+            </div>
+          ) : (
+            <div className="rdmv-mentor-list">
+              {matchedMentors.map((mentor) => (
+                <article key={mentor.id} className="rdmv-mentor-card">
+                  <div className="rdmv-mentor-card__avatar">
+                    {mentor.avatar ? (
+                      <img src={mentor.avatar} alt={getMentorDisplayName(mentor)} />
+                    ) : (
+                      <UserCheck size={22} />
+                    )}
+                  </div>
+                  <div className="rdmv-mentor-card__main">
+                    <div className="rdmv-mentor-card__header">
+                      <h3>{getMentorDisplayName(mentor)}</h3>
+                      {(mentor.ratingAverage ?? 0) > 0 && (
+                        <span className="rdmv-mentor-card__rating">
+                          <Star size={13} />
+                          {mentor.ratingAverage?.toFixed(1)}
+                        </span>
+                      )}
+                    </div>
+                    <p>{mentor.specialization || mentor.bio || 'Mentor đã xác thực skill phù hợp với roadmap này.'}</p>
+                    <div className="rdmv-mentor-card__skills">
+                      {(mentor.skills || []).slice(0, 4).map((skill) => (
+                        <span key={`${mentor.id}-${skill}`}>{skill}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="rdmv-mentor-card__aside">
+                    <span className="rdmv-mentor-card__price">
+                      {formatVnd(mentor.roadmapMentoringPrice)}
+                    </span>
+                    <button
+                      type="button"
+                      className="rdmv-mentor-card__book-btn"
+                      onClick={() => setBookingMentor(mentor)}
+                    >
+                      <Wallet size={15} />
+                      Book ngay
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  }, [
+    currentRoadmapBooking,
+    matchedMentors,
+    mentorMatchError,
+    mentorMatchLoading,
+    roadmapMentorSkill,
+    workspaceJourneyId,
+  ]);
+
   const advancedSection = useMemo(() => {
 
     return (
       <div className="rm-footer-briefing rm-footer-briefing--advanced">
+
         {roadmap.warnings && roadmap.warnings.length > 0 && (
           <div className="rm-footer-section rm-warning-block">
             <h3 className="rm-footer-title rm-text-warning"><AlertTriangle size={20} /> Warnings</h3>
@@ -618,6 +860,8 @@ const RoadmapDetailViewer = memo(({
     <div className="roadmap-detail-viewer">
       <div className="roadmap-detail-viewer__content">
         {metadataSection}
+
+        {mentorBookingSection}
         
         <div className="roadmap-detail-viewer__flow">
           <RoadmapFlow
@@ -636,6 +880,21 @@ const RoadmapDetailViewer = memo(({
 
         {hasAdvancedSections && advancedSection}
       </div>
+
+      {bookingMentor && (
+        <BookingModal
+          isOpen={Boolean(bookingMentor)}
+          onClose={closeBookingModal}
+          mentorId={String(bookingMentor.id)}
+          mentorName={getMentorDisplayName(bookingMentor)}
+          hourlyRate={bookingMentor.hourlyRate || bookingMentor.roadmapMentoringPrice || 0}
+          roadmapMentoringPrice={bookingMentor.roadmapMentoringPrice}
+          journeyContext={{
+            bookingType: 'ROADMAP_MENTORING',
+            journeyId: workspaceJourneyId ?? undefined,
+          }}
+        />
+      )}
     </div>
   );
 });

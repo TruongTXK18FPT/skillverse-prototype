@@ -382,6 +382,17 @@
   font-weight: 600;
 }
 
+.mentor-qb-field--locked input {
+  cursor: not-allowed;
+  opacity: 0.88;
+}
+
+.mentor-qb-fieldNote {
+  color: #8db2c9;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
 .mentor-qb-modeSwitch {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

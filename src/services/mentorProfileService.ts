@@ -21,6 +21,7 @@ export interface MentorProfile {
   ratingAverage?: number;
   ratingCount?: number;
   hourlyRate?: number;
+  roadmapMentoringPrice?: number;
   createdAt: string;
   updatedAt: string;
   preChatEnabled?: boolean;

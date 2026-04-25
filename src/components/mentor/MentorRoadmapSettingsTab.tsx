@@ -111,7 +111,7 @@ const MentorRoadmapSettingsTab: React.FC = () => {
         roadmapMentoringPrice: priceToSave,
       });
 
-      showSuccess("Thành công", "Đã cập nhật cài đặt Đồng hành Roadmap.");
+      showSuccess("Thành công", "Đã cập nhật cài đặt Đồng hành Journey.");
       loadProfile();
     } catch (err) {
       console.error(err);
@@ -315,7 +315,7 @@ const MentorRoadmapSettingsTab: React.FC = () => {
               <Target size={32} className="mrs-icon" />
             </div>
             <div>
-              <h2>Đồng Hành Roadmap Mentoring</h2>
+              <h2>Đồng Hành Journey Mentoring</h2>
               <p>
                 Thiết lập dịch vụ theo sát và hướng dẫn học viên hoàn thành toàn
                 bộ lộ trình học tập chuyên sâu.
@@ -334,7 +334,7 @@ const MentorRoadmapSettingsTab: React.FC = () => {
                 >
                   {isActive
                     ? "Dịch vụ đang ĐƯỢC KÍCH HOẠT. Học viên có thể đặt lịch đồng hành cùng bạn."
-                    : "Dịch vụ đang TẠM NGƯNG. Học viên không thể đặt lịch đồng hành roadmap."}
+                    : "Dịch vụ đang TẠM NGƯNG. Học viên không thể đặt lịch đồng hành journey."}
                 </p>
               </div>
               <label className="mrs-toggle-switch">
@@ -567,7 +567,7 @@ const MentorRoadmapSettingsTab: React.FC = () => {
               </h4>
               <p>
                 {bookings.length === 0
-                  ? "Khi học viên đặt dịch vụ đồng hành roadmap, booking sẽ xuất hiện tại đây."
+                  ? "Khi học viên đặt dịch vụ đồng hành journey, booking sẽ xuất hiện tại đây."
                   : "Hãy thử chọn bộ lọc khác."}
               </p>
             </div>

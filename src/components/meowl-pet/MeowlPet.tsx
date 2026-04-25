@@ -11,6 +11,20 @@ interface MeowlPetProps {
   onExitComplete?: () => void;
 }
 
+const MEOWL_PET_AUDIO_ENABLED = false;
+
+const playOneShotSound = (
+  src?: string,
+  volume = 0.5,
+): HTMLAudioElement | null => {
+  if (!MEOWL_PET_AUDIO_ENABLED || !src) return null;
+
+  const audio = new Audio(src);
+  audio.volume = volume;
+  audio.play().catch(console.error);
+  return audio;
+};
+
 const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitComplete }) => {
   // Position State
   const [position, setPosition] = useState<Position>({ 
@@ -79,12 +93,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
         // Realize for 3.2s (slower) then flee
         setTimeout(() => {
           setPetState(PetState.FLEE_CRY);
-          // Play cry sound
-          if (SOUNDS.cry) {
-            const cryAudio = new Audio(SOUNDS.cry);
-            cryAudio.volume = 0.5;
-            cryAudio.play().catch(console.error);
-          }
+          playOneShotSound(SOUNDS.cry);
         }, 2000);
       } else if (!isJobPage && isJobPanicRef.current) {
         // Exit Panic Mode
@@ -195,12 +204,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   // Handle Intro Animation
   useEffect(() => {
     if (petState === PetState.INTRO) {
-      // Play intro sound
-      if (SOUNDS.intro) {
-        const introAudio = new Audio(SOUNDS.intro);
-        introAudio.volume = 0.5;
-        introAudio.play().catch(console.error);
-      }
+      playOneShotSound(SOUNDS.intro);
 
       const timer = setTimeout(() => {
         setPetState(PetState.WALKING);
@@ -215,12 +219,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     if (isExiting) {
       setPetState(PetState.OUTRO);
 
-      // Play outro sound
-      if (SOUNDS.outro) {
-        const outroAudio = new Audio(SOUNDS.outro);
-        outroAudio.volume = 0.5;
-        outroAudio.play().catch(console.error);
-      }
+      playOneShotSound(SOUNDS.outro);
 
       const timer = setTimeout(() => {
         if (onExitComplete) onExitComplete();
@@ -244,10 +243,8 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   useEffect(() => {
     let angryAudio: HTMLAudioElement | null = null;
 
-    if (petState === PetState.ANGRY && SOUNDS.angry) {
-      angryAudio = new Audio(SOUNDS.angry);
-      angryAudio.volume = 0.5;
-      angryAudio.play().catch(console.error);
+    if (petState === PetState.ANGRY) {
+      angryAudio = playOneShotSound(SOUNDS.angry);
     }
 
     return () => {
@@ -360,12 +357,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   // Handle Toilet Logic
   useEffect(() => {
     if (petState === PetState.TOILET_BREAK) {
-      // Play flush sound
-      if (SOUNDS.flush) {
-        const flushAudio = new Audio(SOUNDS.flush);
-        flushAudio.volume = 0.5;
-        flushAudio.play().catch(console.error);
-      }
+      playOneShotSound(SOUNDS.flush);
 
       const timer = setTimeout(() => {
         // Return to user from the edge it disappeared
@@ -386,13 +378,26 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
 
   // Initialize audio
   useEffect(() => {
+    if (!MEOWL_PET_AUDIO_ENABLED) {
+      return;
+    }
+
     audioRef.current = new Audio(SOUNDS.interact);
     audioRef.current.preload = 'auto';
     audioRef.current.loop = true; // Loop sound while hovering
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
   }, []);
 
   // Play sound function
   const playInteractSound = () => {
+    if (!MEOWL_PET_AUDIO_ENABLED) return;
+
     if (audioRef.current) {
       audioRef.current.currentTime = 0; // Reset to start
       audioRef.current.play().catch(console.error); // Handle autoplay restrictions
@@ -400,6 +405,8 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
   };
 
   const stopInteractSound = () => {
+    if (!MEOWL_PET_AUDIO_ENABLED) return;
+
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -696,12 +703,7 @@ const MeowlPet: React.FC<MeowlPetProps> = ({ targetPosition, isExiting, onExitCo
     if (isJobPanicRef.current) {
       // If dropped in panic mode, flee back to corner
       setPetState(PetState.FLEE_CRY);
-      // Play cry sound again
-      if (SOUNDS.cry) {
-        const cryAudio = new Audio(SOUNDS.cry);
-        cryAudio.volume = 0.5;
-        cryAudio.play().catch(console.error);
-      }
+      playOneShotSound(SOUNDS.cry);
     } else {
       // If was angry, stay angry for a bit
       if (petState === PetState.ANGRY) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './MeowlActor.css';
 
 // Import Assets
@@ -11,11 +11,6 @@ import winImg from '../../../assets/meowl-tic-tac-toe/sprite-sheet/meowl-win.png
 import loseImg from '../../../assets/meowl-tic-tac-toe/sprite-sheet/meowl-lose.png';
 // --- NEW IMPORT ---
 import thinkImg from '../../../assets/meowl-tic-tac-toe/sprite-sheet/idle-think.png';
-
-// Import Sound
-import panicSound from '../../../assets/meowl-tic-tac-toe/sound/anh-ban-a.mp3';
-import loseSound from '../../../assets/meowl-tic-tac-toe/sound/banana-cat-cry.mp3';
-import happySound from '../../../assets/meowl-tic-tac-toe/sound/happy-happy-happy-cat.mp3';
 
 // Thêm 'think' vào type
 export type MeowlAction = 'idle' | 'walk' | 'pickup' | 'place' | 'smug' | 'panic' | 'win' | 'lose' | 'think';
@@ -49,15 +44,8 @@ const SPRITE_CONFIGS: Record<MeowlAction, SpriteConfig> = {
 };
 
 const MeowlActor: React.FC<MeowlActorProps> = ({ action, style, size = 150 }) => {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [frameIndex, setFrameIndex] = useState(0);
   const config = SPRITE_CONFIGS[action];
-
-  useEffect(() => {
-    if (action === 'panic') playAudio(panicSound);
-    else if (action === 'lose') playAudio(loseSound);
-    else if (action === 'win') playAudio(happySound);
-  }, [action]);
 
   useEffect(() => {
     setFrameIndex(0);
@@ -80,15 +68,6 @@ const MeowlActor: React.FC<MeowlActorProps> = ({ action, style, size = 150 }) =>
     }, config.speed);
     return () => clearInterval(interval);
   }, [config, action]);
-
-  const playAudio = (src: string) => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-    audioRef.current = new Audio(src);
-    audioRef.current.play().catch(e => console.error(e));
-  };
 
   const col = frameIndex % config.cols;
   const row = Math.floor(frameIndex / config.cols) % config.rows;

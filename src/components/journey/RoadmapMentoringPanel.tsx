@@ -220,7 +220,7 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
             <Shield size={24} />
           </div>
           <div className="rmp-header-text">
-            <h2>Đồng hành Roadmap Mentoring</h2>
+            <h2>Đồng hành Journey Mentoring</h2>
             <p>Journey #{journeyId} — Verify & Certify</p>
           </div>
         </div>

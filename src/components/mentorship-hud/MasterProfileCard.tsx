@@ -322,7 +322,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
               }}
             >
               <span className="uplink-price-label" style={{ color: "#22d3ee" }}>
-                Đồng hành Roadmap
+                Đồng hành Journey
               </span>
               <div className="uplink-price-value" style={{ color: "#22d3ee" }}>
                 {roadmapMentoringPrice.toLocaleString("vi-VN")}&nbsp;
@@ -372,7 +372,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
                   color: "#fff",
                 }}
               >
-                Đồng hành Roadmap
+                Đồng hành Journey
               </button>
             ) : null}
           </div>

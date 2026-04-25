@@ -6,6 +6,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Lock,
+  Target,
+  Layers,
+  Briefcase,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import walletService from "../../services/walletService";
@@ -98,10 +101,30 @@ const BookingModal: React.FC<BookingModalProps> = ({
   // Calendar state
   const [calendarStartDate, setCalendarStartDate] = useState(new Date());
 
+  const selectedJourney = userJourneys.find((j) => j.id === selectedJourneyId);
+
   const priceVND =
     isRoadmapMentoring && roadmapMentoringPrice
       ? roadmapMentoringPrice
       : hourlyRate;
+
+  const getJourneySkills = (journey: JourneySummaryResponse): string[] => {
+    const skills = [
+      journey.skillName,
+      ...(Array.isArray(journey.skills) ? journey.skills : []),
+    ].filter((skill): skill is string => Boolean(skill?.trim()));
+
+    return Array.from(new Set(skills.map((skill) => skill.trim()))).slice(0, 6);
+  };
+
+  const getJourneyProgressClass = (progress?: number): string => {
+    const normalized = Math.min(Math.max(progress || 0, 0), 100);
+    if (normalized >= 100) return "booking-journey-card__progressfill--100";
+    if (normalized >= 75) return "booking-journey-card__progressfill--75";
+    if (normalized >= 50) return "booking-journey-card__progressfill--50";
+    if (normalized >= 25) return "booking-journey-card__progressfill--25";
+    return "booking-journey-card__progressfill--10";
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -475,15 +498,8 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 <label className="booking-label">
                   Chọn Hành Trình Đồng Hành
                 </label>
-                <p
-                  className="booking-sub-label"
-                  style={{
-                    marginBottom: "1rem",
-                    color: "var(--uplink-text-grey)",
-                    fontSize: "0.85rem",
-                  }}
-                >
-                  Roadmap Mentoring yêu cầu bạn gắn với một hành trình hiện tại.
+                <p className="booking-sub-label">
+                  Journey Mentoring yêu cầu bạn gắn với một hành trình hiện tại.
                   Mentor sẽ theo sát và cập nhật Roadmap cho hành trình này.
                 </p>
 
@@ -497,35 +513,78 @@ const BookingModal: React.FC<BookingModalProps> = ({
                     trình trước khi đặt lịch Roadmap.
                   </div>
                 ) : (
-                  <div
-                    className="slots-grid booking-slots-grid"
-                    style={{ gridTemplateColumns: "1fr", gap: "0.5rem" }}
-                  >
-                    {userJourneys.map((journey) => (
-                      <div
-                        key={journey.id}
-                        onClick={() => setSelectedJourneyId(journey.id)}
-                        className={`booking-slot-chip ${selectedJourneyId === journey.id ? "active" : ""}`}
-                        style={{
-                          padding: "1rem",
-                          textAlign: "left",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "4px",
-                          height: "auto",
-                        }}
-                      >
-                        <strong style={{ fontSize: "1rem", color: "#fff" }}>
-                          {journey.domain || journey.type}
-                        </strong>
-                        <span style={{ fontSize: "0.8rem", opacity: 0.8 }}>
-                          Mục tiêu: {journey.goal}
-                        </span>
-                        <span style={{ fontSize: "0.75rem", opacity: 0.6 }}>
-                          Tiến độ: {journey.progressPercentage}%
-                        </span>
-                      </div>
-                    ))}
+                  <div className="booking-journey-list">
+                    {userJourneys.map((journey) => {
+                      const journeySkills = getJourneySkills(journey);
+                      return (
+                        <button
+                          type="button"
+                          key={journey.id}
+                          onClick={() => setSelectedJourneyId(journey.id)}
+                          className={`booking-journey-card ${selectedJourneyId === journey.id ? "active" : ""}`}
+                        >
+                          <div className="booking-journey-card__header">
+                            <div>
+                              <strong className="booking-journey-card__title">
+                                {journey.domain || journey.type || "Hành trình"}
+                              </strong>
+                              <span className="booking-journey-card__goal">
+                                {journey.goal}
+                              </span>
+                            </div>
+                            <span className="booking-journey-card__progress">
+                              {journey.progressPercentage}%
+                            </span>
+                          </div>
+
+                          <div className="booking-journey-card__meta">
+                            {journey.industry && (
+                              <span>
+                                <Layers size={12} />
+                                {journey.industry}
+                              </span>
+                            )}
+                            {journey.jobRole && (
+                              <span>
+                                <Briefcase size={12} />
+                                {journey.jobRole}
+                              </span>
+                            )}
+                            {journey.currentLevel && (
+                              <span>
+                                <Target size={12} />
+                                Level: {journey.currentLevel}
+                              </span>
+                            )}
+                          </div>
+
+                          {journeySkills.length > 0 && (
+                            <div className="booking-journey-card__skills">
+                              {journeySkills.map((skill) => (
+                                <span
+                                  key={`${journey.id}-${skill}`}
+                                  className="booking-journey-skill-chip"
+                                >
+                                  {skill}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          <div className="booking-journey-card__progressbar">
+                            <span
+                              className={`booking-journey-card__progressfill ${getJourneyProgressClass(journey.progressPercentage)}`}
+                            />
+                          </div>
+
+                          {journey.hasActiveMentorBooking && (
+                            <span className="booking-journey-card__notice">
+                              Hành trình này đang có mentor booking
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -633,7 +692,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                   <span>Dịch vụ:</span>
                   <span>
                     {isRoadmapMentoring
-                      ? `Gói đồng hành Roadmap với ${mentorName}`
+                      ? `Gói đồng hành Journey với ${mentorName}`
                       : journeyContext?.bookingType === "JOURNEY_MENTORING"
                         ? `Mentor đồng hành Journey với ${mentorName}`
                         : `Mentorship 1:1 với ${mentorName}`}
@@ -645,12 +704,21 @@ const BookingModal: React.FC<BookingModalProps> = ({
                       <span>Hành trình:</span>
                       <span>
                         {selectedJourneyId
-                          ? userJourneys.find((j) => j.id === selectedJourneyId)
-                              ?.domain || "Đã chọn"
+                          ? selectedJourney?.domain || "Đã chọn"
                           : "Hành trình hiện tại"}
                       </span>
                     </div>
                   )}
+                {isRoadmapMentoring && selectedJourney && (
+                  <div className="booking-order-detail">
+                    <span>Skill:</span>
+                    <span>
+                      {getJourneySkills(selectedJourney).join(", ") ||
+                        selectedJourney.skillName ||
+                        "Chưa có skill cụ thể"}
+                    </span>
+                  </div>
+                )}
                 {!isRoadmapMentoring && (
                   <div className="booking-order-row">
                     <span>
@@ -687,13 +755,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 <CheckCircle size={20} color="#22d3ee" />
               </div>
 
-              <p
-                style={{
-                  color: "var(--uplink-text-grey)",
-                  fontSize: "0.85rem",
-                  margin: 0,
-                }}
-              >
+              <p className="booking-wallet-hint">
                 Nếu số dư chưa đủ, hãy nạp thêm tiền vào ví trước khi xác nhận.
               </p>
             </div>
@@ -703,7 +765,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
         <div className="uplink-chat-input-area booking-footer-actions">
           {step === "journey" ? (
             <button
-              className="uplink-establish-btn"
+              className="uplink-establish-btn booking-action-full"
               onClick={() => {
                 if (!selectedJourneyId) {
                   showWarning(
@@ -715,15 +777,13 @@ const BookingModal: React.FC<BookingModalProps> = ({
                 setStep("payment");
               }}
               disabled={!selectedJourneyId}
-              style={{ width: "100%", justifyContent: "center" }}
             >
               Tiếp tục
             </button>
           ) : step === "schedule" ? (
             <button
-              className="uplink-establish-btn"
+              className="uplink-establish-btn booking-action-full"
               onClick={handleScheduleConfirm}
-              style={{ width: "100%", justifyContent: "center" }}
             >
               Tiếp tục
             </button>
@@ -732,29 +792,18 @@ const BookingModal: React.FC<BookingModalProps> = ({
               {((isRoadmapMentoring && !journeyContext?.journeyId) ||
                 !isRoadmapMentoring) && (
                 <button
-                  className="uplink-establish-btn"
+                  className="uplink-establish-btn booking-action-back"
                   onClick={() =>
                     setStep(isRoadmapMentoring ? "journey" : "schedule")
                   }
-                  style={{
-                    flex: 1,
-                    background: "transparent",
-                    border: "1px solid var(--uplink-border)",
-                    justifyContent: "center",
-                  }}
                 >
                   Quay lại
                 </button>
               )}
               <button
-                className="uplink-establish-btn"
+                className={`uplink-establish-btn booking-action-pay ${isProcessing ? "booking-action-pay--processing" : ""}`}
                 onClick={handlePayment}
                 disabled={isProcessing}
-                style={{
-                  flex: 2,
-                  justifyContent: "center",
-                  opacity: isProcessing ? 0.7 : 1,
-                }}
               >
                 {isProcessing
                   ? "Đang xử lý..."
