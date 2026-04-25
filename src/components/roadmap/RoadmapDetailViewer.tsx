@@ -8,8 +8,11 @@ import RoadmapFlow from '../ai-roadmap/RoadmapFlow';
 import type { RoadmapNodeFocusPanelProps } from './RoadmapNodeFocusPanel';
 import { normalizeRoadmapMarkdown } from '../../utils/roadmapMarkdown';
 import BookingModal from '../mentorship-hud/BookingModal';
-import { getMentorsByVerifiedSkill, type MentorProfile } from '../../services/mentorProfileService';
+import { getAllMentors, getMentorsByVerifiedSkill, type MentorProfile } from '../../services/mentorProfileService';
 import { getMyBookings, type BookingResponse } from '../../services/bookingService';
+import journeyService from '../../services/journeyService';
+import { isSkillFuzzyVerified } from '../../utils/skillResolver';
+import type { JourneyDetailResponse } from '../../types/Journey';
 import './RoadmapDetailViewer.css';
 import '../../styles/RoadmapHUD.css';
 
@@ -87,6 +90,67 @@ const getMentorDisplayName = (mentor: MentorProfile): string => {
   const fullName = `${mentor.firstName ?? ''} ${mentor.lastName ?? ''}`.trim();
   return fullName || mentor.email || `Mentor #${mentor.id}`;
 };
+
+const normalizeSkillCandidates = (values: Array<string | string[] | undefined | null>): string[] => {
+  const result: string[] = [];
+  const seen = new Set<string>();
+
+  values.forEach((value) => {
+    const items = Array.isArray(value) ? value : [value];
+    items.forEach((item) => {
+      const skill = typeof item === 'string' ? item.trim() : '';
+      if (!skill) {
+        return;
+      }
+
+      const key = skill.toLowerCase();
+      if (seen.has(key)) {
+        return;
+      }
+
+      seen.add(key);
+      result.push(skill);
+    });
+  });
+
+  return result;
+};
+
+const mentorSupportsRoadmapSkill = (mentor: MentorProfile, skillNames: string[]): boolean => {
+  const profileSkills = Array.isArray(mentor.skills) ? mentor.skills : [];
+  for (const skillName of skillNames) {
+    if (profileSkills.length > 0 && isSkillFuzzyVerified(skillName, profileSkills)) {
+      return true;
+    }
+
+    const specialization = mentor.specialization?.trim();
+    if (specialization && isSkillFuzzyVerified(skillName, [specialization])) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+const getMatchedMentorSkills = (mentor: MentorProfile, skillNames: string[]): string[] => {
+  const profileSkills = Array.isArray(mentor.skills) ? mentor.skills : [];
+  const matchedSkills = profileSkills.filter((skill) => (
+    skillNames.some((skillName) => isSkillFuzzyVerified(skillName, [skill]))
+  ));
+
+  if (matchedSkills.length > 0) {
+    return Array.from(new Set(matchedSkills.map((skill) => skill.trim()).filter(Boolean))).slice(0, 4);
+  }
+
+  return skillNames.slice(0, 4);
+};
+
+const getRoadmapMentoringMentors = (mentors: MentorProfile[], skillNames: string[]): MentorProfile[] => (
+  mentors
+    .filter((mentor) => (mentor.roadmapMentoringPrice ?? 0) > 0)
+    .filter((mentor) => mentorSupportsRoadmapSkill(mentor, skillNames))
+    .slice(0, 3)
+);
 
 const formatVnd = (value?: number): string => (
   new Intl.NumberFormat('vi-VN', {
@@ -213,6 +277,8 @@ const RoadmapDetailViewer = memo(({
   const [mentorMatchError, setMentorMatchError] = useState<string | null>(null);
   const [currentRoadmapBooking, setCurrentRoadmapBooking] = useState<BookingResponse | null>(null);
   const [bookingMentor, setBookingMentor] = useState<MentorProfile | null>(null);
+  const [journeyDetail, setJourneyDetail] = useState<JourneyDetailResponse | null>(null);
+  const [journeyContextResolved, setJourneyContextResolved] = useState(false);
 
   const handleQuestComplete = useCallback(async (questId: string, completed: boolean) => {
     onQuestComplete(questId, completed);
@@ -297,17 +363,65 @@ const RoadmapDetailViewer = memo(({
     Boolean(roadmap.nextSteps)
   ), [roadmap]);
 
-  const roadmapMentorSkill = useMemo(() => {
-    const candidates = [
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadJourneyDetail = async () => {
+      setJourneyContextResolved(false);
+
+      if (!workspaceJourneyId) {
+        setJourneyDetail(null);
+        setJourneyContextResolved(true);
+        return;
+      }
+
+      try {
+        const detail = await journeyService.getJourneyById(workspaceJourneyId);
+        if (!cancelled) {
+          setJourneyDetail(detail);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.warn('Failed to load journey context for roadmap mentor match:', error);
+          setJourneyDetail(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setJourneyContextResolved(true);
+        }
+      }
+    };
+
+    loadJourneyDetail();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [workspaceJourneyId]);
+
+  const roadmapMentorSkills = useMemo(() => {
+    const journeySkills = normalizeSkillCandidates([
+      journeyDetail?.skillName,
+      journeyDetail?.skills,
+      (journeyDetail as { skill?: string } | null)?.skill,
+    ]);
+    if (journeySkills.length > 0) {
+      return journeySkills;
+    }
+
+    if (workspaceJourneyId && !journeyContextResolved) {
+      return [];
+    }
+
+    return normalizeSkillCandidates([
       roadmap.metadata.skillMode?.skillName,
-      roadmap.metadata.target,
-      roadmap.metadata.careerMode?.targetRole,
       roadmap.structure?.flatMap((phase) => phase.skillFocus ?? [])[0],
       roadmap.projectsEvidence?.flatMap((project) => project.skillsProven ?? [])[0],
-    ];
+      roadmap.metadata.target,
+    ]);
+  }, [journeyContextResolved, journeyDetail, roadmap, workspaceJourneyId]);
 
-    return candidates.find((value) => typeof value === 'string' && value.trim().length > 0)?.trim() ?? '';
-  }, [roadmap]);
+  const roadmapMentorSkillLabel = roadmapMentorSkills[0] ?? '';
 
   const refreshRoadmapBooking = useCallback(async () => {
     if (!workspaceJourneyId) {
@@ -336,7 +450,7 @@ const RoadmapDetailViewer = memo(({
     let cancelled = false;
 
     const loadMatchedMentors = async () => {
-      if (!roadmapMentorSkill) {
+      if (roadmapMentorSkills.length === 0) {
         setMatchedMentors([]);
         setMentorMatchError(null);
         return;
@@ -345,13 +459,30 @@ const RoadmapDetailViewer = memo(({
       try {
         setMentorMatchLoading(true);
         setMentorMatchError(null);
-        const mentors = await getMentorsByVerifiedSkill(roadmapMentorSkill);
+        let mentors: MentorProfile[] = [];
+        for (const skillName of roadmapMentorSkills) {
+          try {
+            const matches = await getMentorsByVerifiedSkill(skillName);
+            mentors.push(...matches);
+          } catch (verifiedSkillError) {
+            console.warn('Verified-skill mentor lookup failed, falling back to all mentors:', verifiedSkillError);
+          }
+        }
+
         if (cancelled) return;
-        setMatchedMentors(
-          mentors
-            .filter((mentor) => (mentor.roadmapMentoringPrice ?? 0) > 0)
-            .slice(0, 3),
-        );
+        const mentorsById = new Map(mentors.map((mentor) => [mentor.id, mentor]));
+        const verifiedSkillMatches = Array.from(mentorsById.values())
+          .filter((mentor) => (mentor.roadmapMentoringPrice ?? 0) > 0)
+          .slice(0, 3);
+
+        if (verifiedSkillMatches.length > 0) {
+          setMatchedMentors(verifiedSkillMatches);
+          return;
+        }
+
+        const allMentors = await getAllMentors();
+        if (cancelled) return;
+        setMatchedMentors(getRoadmapMentoringMentors(allMentors, roadmapMentorSkills));
       } catch (error) {
         if (cancelled) return;
         console.error('Failed to load matched roadmap mentors:', error);
@@ -369,7 +500,7 @@ const RoadmapDetailViewer = memo(({
     return () => {
       cancelled = true;
     };
-  }, [roadmapMentorSkill]);
+  }, [roadmapMentorSkills]);
 
   const closeBookingModal = useCallback(() => {
     setBookingMentor(null);
@@ -641,6 +772,25 @@ const RoadmapDetailViewer = memo(({
       );
     }
 
+    if (!journeyContextResolved) {
+      return (
+        <section className="rdmv-mentor-match" aria-label="Book mentor đồng hành">
+          <div className="rdmv-mentor-match__copy">
+            <span className="rdmv-mentor-match__eyebrow">Mentor Match</span>
+            <h2>Book mentor đồng hành journey</h2>
+            <p>SkillVerse đang đọc journey gắn với roadmap để lấy skill trọng tâm.</p>
+          </div>
+
+          <div className="rdmv-mentor-match__content">
+            <div className="rdmv-mentor-match__state">
+              <Loader2 size={20} className="rdmv-mentor-match__spin" />
+              <span>Đang xác định skill của journey...</span>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
     if (currentRoadmapBooking) {
       return (
         <section className="rdmv-mentor-match rdmv-mentor-match--current" aria-label="Mentor đang đồng hành">
@@ -677,7 +827,7 @@ const RoadmapDetailViewer = memo(({
           <h2>Book mentor đồng hành journey</h2>
           <p>
             SkillVerse tìm mentor đã xác thực theo skill trọng tâm
-            {roadmapMentorSkill ? <strong> {roadmapMentorSkill}</strong> : null}
+            {roadmapMentorSkillLabel ? <strong> {roadmapMentorSkillLabel}</strong> : null}
             . Book xong bạn thanh toán ngay bằng ví và mentor sẽ nhận yêu cầu đồng hành.
           </p>
         </div>
@@ -721,7 +871,7 @@ const RoadmapDetailViewer = memo(({
                     </div>
                     <p>{mentor.specialization || mentor.bio || 'Mentor đã xác thực skill phù hợp với roadmap này.'}</p>
                     <div className="rdmv-mentor-card__skills">
-                      {(mentor.skills || []).slice(0, 4).map((skill) => (
+                      {getMatchedMentorSkills(mentor, roadmapMentorSkills).map((skill) => (
                         <span key={`${mentor.id}-${skill}`}>{skill}</span>
                       ))}
                     </div>
@@ -751,7 +901,8 @@ const RoadmapDetailViewer = memo(({
     matchedMentors,
     mentorMatchError,
     mentorMatchLoading,
-    roadmapMentorSkill,
+    journeyContextResolved,
+    roadmapMentorSkillLabel,
     workspaceJourneyId,
   ]);
 

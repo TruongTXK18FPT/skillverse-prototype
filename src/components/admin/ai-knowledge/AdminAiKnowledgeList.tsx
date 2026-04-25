@@ -112,7 +112,6 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
               <th>Tiêu đề</th>
               <th>Use case</th>
               <th>Trạng thái</th>
-              <th>Scope</th>
               <th>Thời gian</th>
               <th>Thao tác</th>
             </tr>
@@ -174,13 +173,6 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
                           >
                             {document.ingestionStatus}
                           </span>
-                        </div>
-                      </td>
-                      <td>
-                        <strong>{document.skillSlug || '—'}</strong>
-                        <div className="adminaiknowledge-cell-sub">
-                          C:{document.courseId ?? '—'} · M:{document.moduleId ?? '—'} · A:
-                          {document.assignmentId ?? '—'}
                         </div>
                       </td>
                       <td>

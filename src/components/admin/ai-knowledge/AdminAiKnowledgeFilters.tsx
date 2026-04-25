@@ -43,9 +43,9 @@ const AdminAiKnowledgeFilters: React.FC<AdminAiKnowledgeFiltersProps> = ({
             <option value={AiKnowledgeUseCase.CHATBOT_GLOBAL}>CHATBOT_GLOBAL</option>
             <option value={AiKnowledgeUseCase.ROADMAP_SKILL}>ROADMAP_SKILL</option>
             {/* Legacy filters for historical grading docs only. Mentor grading-doc uploads were removed 2026-04-24. */}
-            <option value={AiKnowledgeUseCase.GRADING_ASSIGNMENT}>GRADING_ASSIGNMENT</option>
+            {/* <option value={AiKnowledgeUseCase.GRADING_ASSIGNMENT}>GRADING_ASSIGNMENT</option>
             <option value={AiKnowledgeUseCase.GRADING_MODULE}>GRADING_MODULE</option>
-            <option value={AiKnowledgeUseCase.GRADING_COURSE}>GRADING_COURSE</option>
+            <option value={AiKnowledgeUseCase.GRADING_COURSE}>GRADING_COURSE</option> */}
           </select>
         </label>
 
@@ -106,7 +106,7 @@ const AdminAiKnowledgeFilters: React.FC<AdminAiKnowledgeFiltersProps> = ({
             }
           />
         </label>
-
+{/* 
         <label className="adminaiknowledge-field">
           <span>Course ID</span>
           <input
@@ -156,7 +156,7 @@ const AdminAiKnowledgeFilters: React.FC<AdminAiKnowledgeFiltersProps> = ({
               })
             }
           />
-        </label>
+        </label> */}
 
         <div className="adminaiknowledge-field adminaiknowledge-filter-actions-inline">
           <span>&nbsp;</span>
