@@ -206,6 +206,8 @@ body.sv-roadmap-lock-scroll {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
   margin-bottom: 12px;
 }
 
@@ -236,6 +238,20 @@ body.sv-roadmap-lock-scroll {
 
 .sv-roadmap-node__badge-icon {
   flex-shrink: 0;
+}
+
+.sv-roadmap-node__optional-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #67e8f9;
+  background: rgba(8, 145, 178, 0.16);
+  border: 1px solid rgba(103, 232, 249, 0.25);
 }
 
 .sv-roadmap-node__status-pill {

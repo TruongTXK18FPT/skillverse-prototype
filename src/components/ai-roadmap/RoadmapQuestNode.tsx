@@ -1,21 +1,21 @@
 import { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
-import { FlowNodeData } from '../../types/Roadmap';
 import { CheckCircle, Circle, Clock, PlayCircle, Star, ChevronRight } from 'lucide-react';
+import { FlowNodeData } from '../../types/Roadmap';
 import { toRoadmapPlainTextPreview } from '../../utils/roadmapMarkdown';
 
-/**
- * Custom React Flow node for roadmap quests (V2 Enhanced)
- */
 const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
   const {
     node,
     progress,
-    isSelected
+    isSelected,
   } = data;
   const isCompleted = progress?.status === 'COMPLETED';
   const isInProgress = progress?.status === 'IN_PROGRESS';
   const isMain = node.type === 'MAIN';
+  const stepLabel = node.mainPathIndex
+    ? (isMain ? `Bước chính ${node.mainPathIndex}` : `Bổ trợ bước ${node.mainPathIndex}`)
+    : (isMain ? 'Bước chính' : 'Bổ trợ');
   const normalizedProgress = Math.max(0, Math.min(100, progress?.progress ?? (isCompleted ? 100 : 0)));
   const nodeStatusLabel = isCompleted
     ? 'Hoàn thành'
@@ -42,14 +42,12 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
         isCompleted ? 'sv-roadmap-node--completed' : ''
       } ${isInProgress ? 'sv-roadmap-node--in-progress' : ''} ${isSelected ? 'sv-roadmap-node--selected' : ''}`}
     >
-      {/* Handles for connections */}
       <Handle
         type="target"
         position={Position.Top}
         className="sv-roadmap-node__handle sv-roadmap-node__handle--target"
       />
 
-      {/* Node Header */}
       <div className="sv-roadmap-node__header">
         <div className="sv-roadmap-node__badge">
           {isMain ? (
@@ -57,8 +55,12 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
           ) : (
             <ChevronRight className="sv-roadmap-node__badge-icon" size={14} />
           )}
-          <span className="sv-roadmap-node__badge-text">{isMain ? 'Mục tiêu chính' : 'Mục tiêu phụ'}</span>
+          <span className="sv-roadmap-node__badge-text">{stepLabel}</span>
         </div>
+
+        {!isMain && (
+          <span className="sv-roadmap-node__optional-badge">Optional</span>
+        )}
 
         <span className={`sv-roadmap-node__status-pill sv-roadmap-node__status-pill--${isCompleted ? 'done' : (isInProgress || normalizedProgress > 0) ? 'progress' : node.nodeStatus === 'LOCKED' ? 'locked' : 'ready'}`}>
           {isCompleted ? <CheckCircle size={14} /> : isInProgress || normalizedProgress > 0 ? <PlayCircle size={14} /> : <Circle size={14} />}
@@ -66,7 +68,6 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
         </span>
       </div>
 
-      {/* Node Content */}
       <div className="sv-roadmap-node__content">
         <h3 className="sv-roadmap-node__title" title={node.title}>{node.title}</h3>
         {descriptionPreview && (
@@ -76,15 +77,13 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
         )}
       </div>
 
-      {/* Node Footer */}
       <div className="sv-roadmap-node__footer">
         <div className="sv-roadmap-node__meta">
           <div className="sv-roadmap-node__time">
             <Clock size={14} />
             <span>{formatTime(node.estimatedTimeMinutes)}</span>
           </div>
-          
-          {/* V2 Difficulty Badge */}
+
           {node.difficulty && (
             <span className={`sv-roadmap-node__difficulty sv-roadmap-node__difficulty--${node.difficulty}`}>
               {node.difficulty}
@@ -107,7 +106,6 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
         </div>
       </div>
 
-      {/* Handles for connections */}
       <Handle
         type="source"
         position={Position.Bottom}
