@@ -65,6 +65,9 @@ export interface RoadmapNode {
   description: string;
   estimatedTimeMinutes: number | null;
   type: NodeType;
+  phaseId?: string | null;
+  orderIndex?: number | null;
+  mainPathIndex?: number | null;
   children: string[];
   isCore?: boolean;
   parentId?: string | null;

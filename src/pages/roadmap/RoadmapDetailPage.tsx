@@ -178,6 +178,9 @@ const RoadmapDetailPage = () => {
     if (studyTaskNodeIds.has(selectedNode.id)) {
       return false;
     }
+    if (selectedNode.type === 'SIDE') {
+      return selectedNode.nodeStatus !== RoadmapNodeAvailability.LOCKED;
+    }
     return selectedNode.id === eligibleNodeId;
   }, [eligibleNodeId, hasStudentTierAccess, selectedNode, studyTaskNodeIds]);
 
@@ -318,8 +321,13 @@ const RoadmapDetailPage = () => {
         return;
       }
 
-      // Check eligible node constraint
-      if (eligibleNodeId && node.id !== eligibleNodeId) {
+      if (node.nodeStatus === RoadmapNodeAvailability.LOCKED) {
+        showError('Chưa thể tạo plan', 'Node này đang bị khóa. Hãy mở node chính liên quan trước.');
+        return;
+      }
+
+      // Check eligible node constraint for the required MAIN spine only.
+      if (eligibleNodeId && node.id !== eligibleNodeId && node.type !== 'SIDE') {
         showError('Chưa thể tạo plan', 'Bạn cần hoàn thành node hiện tại trước khi mở plan node tiếp theo.');
         return;
       }
@@ -404,7 +412,12 @@ const RoadmapDetailPage = () => {
       return;
     }
 
-    if (eligibleNodeId && normalizedNodeId !== eligibleNodeId) {
+    if (node.nodeStatus === RoadmapNodeAvailability.LOCKED) {
+      showError('Chưa thể tạo plan', 'Node này đang bị khóa. Hãy mở node chính liên quan trước.');
+      return;
+    }
+
+    if (eligibleNodeId && normalizedNodeId !== eligibleNodeId && node.type !== 'SIDE') {
       showError('Chưa thể tạo plan', 'Bạn cần hoàn thành node hiện tại trước khi mở plan node tiếp theo.');
       return;
     }

@@ -13,7 +13,6 @@ import ReactFlow, {
   Position,
   ReactFlowInstance,
 } from 'reactflow';
-import ELK from 'elkjs/lib/elk.bundled.js'; // Import ELK
 import 'reactflow/dist/style.css';
 import { RoadmapNode as RoadmapNodeType, QuestProgress } from '../../types/Roadmap';
 import RoadmapQuestNode from './RoadmapQuestNode';
@@ -35,18 +34,44 @@ interface RoadmapFlowProps {
   nodeFocusPanel?: RoadmapNodeFocusPanelProps | null;
 }
 
-// Cấu hình ELK Layout
-const elk = new ELK();
-const elkOptions = {
-  'elk.algorithm': 'layered',
-  'elk.direction': 'DOWN', // Sắp xếp từ trên xuống
-  'elk.spacing.nodeNode': '80', // Khoảng cách ngang giữa các node
-  'elk.layered.spacing.nodeNodeBetweenLayers': '150', // Khoảng cách dọc giữa các tầng
-  'elk.layered.noCollision.handling': 'true', // Tự động tránh đè lên nhau
-};
-
 const FLOW_NODE_WIDTH = 400;
 const FLOW_NODE_HEIGHT = 250;
+const MAIN_SPINE_X = 0;
+const MAIN_SPINE_GAP_Y = 420;
+const SIDE_LANE_GAP_X = 560;
+const SIDE_NODE_GAP_Y = 290;
+const SIDE_NODE_Y_OFFSET = 85;
+
+const isMainNode = (node: RoadmapNodeType): boolean =>
+  node.type === 'MAIN' || node.isCore === true;
+
+const compareRoadmapOrder = (
+  left: RoadmapNodeType,
+  right: RoadmapNodeType,
+  originalIndex: Map<string, number>,
+): number => {
+  const leftMain = Number.isFinite(left.mainPathIndex ?? NaN)
+    ? Number(left.mainPathIndex)
+    : Number.MAX_SAFE_INTEGER;
+  const rightMain = Number.isFinite(right.mainPathIndex ?? NaN)
+    ? Number(right.mainPathIndex)
+    : Number.MAX_SAFE_INTEGER;
+  if (leftMain !== rightMain) {
+    return leftMain - rightMain;
+  }
+
+  const leftOrder = Number.isFinite(left.orderIndex ?? NaN)
+    ? Number(left.orderIndex)
+    : Number.MAX_SAFE_INTEGER;
+  const rightOrder = Number.isFinite(right.orderIndex ?? NaN)
+    ? Number(right.orderIndex)
+    : Number.MAX_SAFE_INTEGER;
+  if (leftOrder !== rightOrder) {
+    return leftOrder - rightOrder;
+  }
+
+  return (originalIndex.get(left.id) ?? 0) - (originalIndex.get(right.id) ?? 0);
+};
 
 const RoadmapFlow = ({
   roadmap,
@@ -60,9 +85,8 @@ const RoadmapFlow = ({
   onNodeSelect,
   nodeFocusPanel,
 }: RoadmapFlowProps) => {
-  // Giữ nguyên Node cũ của bạn
   const nodeTypes = useMemo(() => ({
-    questNode: RoadmapQuestNode
+    questNode: RoadmapQuestNode,
   }), []);
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -81,15 +105,17 @@ const RoadmapFlow = ({
   const isFocusModeActive = Boolean(nodeFocusPanel?.isOpen && nodeFocusPanel?.node);
 
   const buildInitialEdges = useCallback((roadmapItems: RoadmapNodeType[]): Edge[] => {
+    const roadmapById = new Map(roadmapItems.map((node) => [node.id, node]));
     const initialEdges: Edge[] = [];
+
     roadmapItems.forEach((node) => {
-      node.children.forEach((childId) => {
-        const childNode = roadmapItems.find((n) => n.id === childId);
+      (node.children ?? []).forEach((childId) => {
+        const childNode = roadmapById.get(childId);
         if (!childNode) {
           return;
         }
 
-        const isMainPath = node.type === 'MAIN' && childNode.type === 'MAIN';
+        const isMainPath = isMainNode(node) && isMainNode(childNode);
         initialEdges.push({
           id: `${node.id}-${childId}`,
           source: node.id,
@@ -97,13 +123,14 @@ const RoadmapFlow = ({
           type: 'smoothstep',
           animated: isMainPath,
           style: {
-            stroke: isMainPath ? '#6366f1' : '#475569',
+            stroke: isMainPath ? '#6366f1' : '#38bdf8',
             strokeWidth: isMainPath ? 3 : 1.5,
-            opacity: 0.8,
+            strokeDasharray: isMainPath ? undefined : '6 6',
+            opacity: isMainPath ? 0.9 : 0.72,
           },
           markerEnd: {
             type: MarkerType.ArrowClosed,
-            color: isMainPath ? '#6366f1' : '#475569',
+            color: isMainPath ? '#6366f1' : '#38bdf8',
           },
         });
       });
@@ -112,85 +139,94 @@ const RoadmapFlow = ({
     return initialEdges;
   }, []);
 
-  // 1. Hàm tính toán Layout bằng ELK (Thay thế cho thuật toán BFS cũ)
-  const getLayoutedElements = useCallback(async (rawNodes: Node[], rawEdges: Edge[]) => {
-    const graph = {
-      id: 'root',
-      layoutOptions: {
-        'elk.algorithm': 'layered',
-        'elk.direction': 'DOWN',
-        'elk.spacing.nodeNode': '300', // <--- Đẩy chiều ngang ra thật xa (300px)
-        'elk.layered.spacing.nodeNodeBetweenLayers': '250', // <--- Đẩy chiều dọc ra xa (250px)
-        'elk.layered.noCollision.handling': 'true',
-      },
-      children: rawNodes.map((node) => ({
-        id: node.id,
-        // <--- Khai báo kích thước vùng chiếm dụng lớn hơn để tạo khoảng thở
-        width: FLOW_NODE_WIDTH,
-        height: FLOW_NODE_HEIGHT,
-      })),
-      edges: rawEdges.map((edge) => ({
-        id: edge.id,
-        sources: [edge.source],
-        targets: [edge.target],
-      })),
-    };
+  const buildInitialNodes = useCallback((roadmapItems: RoadmapNodeType[]): Node[] => {
+    const originalIndex = new Map(roadmapItems.map((node, index) => [node.id, index]));
+    const roadmapById = new Map(roadmapItems.map((node) => [node.id, node]));
+    const mainNodes = roadmapItems
+      .filter(isMainNode)
+      .sort((left, right) => compareRoadmapOrder(left, right, originalIndex));
+    const fallbackMain = mainNodes[0] ?? roadmapItems[0] ?? null;
+    const mainPositionById = new Map<string, { x: number; y: number; node: RoadmapNodeType }>();
 
-    try {
-      const layoutedGraph = await elk.layout(graph);
-
-      const layoutedNodes = rawNodes.map((node) => {
-        const elkNode = layoutedGraph.children?.find((n) => n.id === node.id);
-        return {
-          ...node,
-          position: {
-            // Thêm offset nhẹ nếu cần căn chỉnh tâm
-            x: elkNode?.x || 0,
-            y: elkNode?.y || 0
-          },
-          targetPosition: Position.Top,
-          sourcePosition: Position.Bottom,
-        };
-      });
-
-      return { nodes: layoutedNodes, edges: rawEdges };
-    } catch (e) {
-      console.error("ELK Layout Error:", e);
-      return { nodes: rawNodes, edges: rawEdges };
-    }
-  }, []);
-
-  // 2. Effect: Xây dựng cấu trúc Graph và chạy Layout
-  useEffect(() => {
-    // A. Tạo Nodes thô (chưa có vị trí chuẩn)
-    const initialNodes: Node[] = roadmap.map((node) => ({
-      id: node.id,
-      type: 'questNode',
-      position: { x: 0, y: 0 }, // Vị trí tạm
-      data: {
+    mainNodes.forEach((node, index) => {
+      mainPositionById.set(node.id, {
+        x: MAIN_SPINE_X,
+        y: index * MAIN_SPINE_GAP_Y,
         node,
-        progress: progressMap?.get(node.id),
-        onComplete: onQuestComplete,
-        onCreateStudyTask,
-        isCreatingStudyTask: creatingTaskNodeId === node.id,
-        isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
-        hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false,
-        isSelected: selectedNodeId === node.id
-      }
-    }));
-
-    // B. Tạo Edges (Dây nối)
-    const initialEdges = buildInitialEdges(roadmap);
-
-    // C. Gọi hàm Layout
-    getLayoutedElements(initialNodes, initialEdges).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
-      setNodes(layoutedNodes);
-      setEdges(layoutedEdges);
+      });
     });
 
-  }, [roadmap, getLayoutedElements, buildInitialEdges]); // Chỉ chạy lại khi cấu trúc roadmap thay đổi
+    const sideOrdinalByParent = new Map<string, number>();
 
-  // 3. Effect: Cập nhật tiến độ (Không chạy lại Layout -> Fix Lag)
+    const resolveParentMain = (node: RoadmapNodeType): RoadmapNodeType | null => {
+      const explicitParent = node.parentId ? roadmapById.get(node.parentId) : null;
+      if (explicitParent && isMainNode(explicitParent)) {
+        return explicitParent;
+      }
+
+      if (node.mainPathIndex != null) {
+        const matchedByMainIndex = mainNodes.find((main) => main.mainPathIndex === node.mainPathIndex);
+        if (matchedByMainIndex) {
+          return matchedByMainIndex;
+        }
+      }
+
+      return fallbackMain;
+    };
+
+    return roadmapItems.map((node) => {
+      let position = mainPositionById.get(node.id);
+
+      if (!position) {
+        const parentMain = resolveParentMain(node);
+        const parentPosition = parentMain ? mainPositionById.get(parentMain.id) : null;
+        const parentId = parentMain?.id ?? 'root';
+        const ordinal = sideOrdinalByParent.get(parentId) ?? 0;
+        sideOrdinalByParent.set(parentId, ordinal + 1);
+
+        const lane = Math.floor(ordinal / 2) + 1;
+        const direction = ordinal % 2 === 0 ? -1 : 1;
+        const verticalPair = Math.floor(ordinal / 2);
+        position = {
+          x: (parentPosition?.x ?? MAIN_SPINE_X) + direction * SIDE_LANE_GAP_X * lane,
+          y: (parentPosition?.y ?? 0) + SIDE_NODE_Y_OFFSET + verticalPair * SIDE_NODE_GAP_Y,
+          node,
+        };
+      }
+
+      return {
+        id: node.id,
+        type: 'questNode',
+        position: { x: position.x, y: position.y },
+        targetPosition: Position.Top,
+        sourcePosition: Position.Bottom,
+        data: {
+          node,
+          progress: progressMap?.get(node.id),
+          onComplete: onQuestComplete,
+          onCreateStudyTask,
+          isCreatingStudyTask: creatingTaskNodeId === node.id,
+          isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
+          hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false,
+          isSelected: selectedNodeId === node.id,
+        },
+      };
+    });
+  }, [
+    progressMap,
+    onQuestComplete,
+    onCreateStudyTask,
+    creatingTaskNodeId,
+    eligibleNodeId,
+    studyTaskNodeIds,
+    selectedNodeId,
+  ]);
+
+  useEffect(() => {
+    setNodes(buildInitialNodes(roadmap));
+    setEdges(buildInitialEdges(roadmap));
+  }, [roadmap, buildInitialNodes, buildInitialEdges, setNodes, setEdges]);
+
   useEffect(() => {
     setNodes((nds) =>
       nds.map((node) => ({
@@ -198,14 +234,13 @@ const RoadmapFlow = ({
         data: {
           ...node.data,
           progress: progressMap?.get(node.id),
-          // Quan trọng: Update lại callback để tránh stale closure
           onComplete: onQuestComplete,
           onCreateStudyTask,
           isCreatingStudyTask: creatingTaskNodeId === node.id,
           isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
           hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false,
-          isSelected: selectedNodeId === node.id
-        }
+          isSelected: selectedNodeId === node.id,
+        },
       }))
     );
   }, [progressMap, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId, setNodes, studyTaskNodeIds, selectedNodeId]);
@@ -238,9 +273,7 @@ const RoadmapFlow = ({
       return;
     }
 
-    const graphMinX = Math.min(
-      ...nodes.map((node) => (node.positionAbsolute?.x ?? node.position.x))
-    );
+    const graphMinX = Math.min(...nodes.map((node) => (node.positionAbsolute?.x ?? node.position.x)));
     const graphMaxX = Math.max(
       ...nodes.map((node) => {
         const nodeLeft = node.positionAbsolute?.x ?? node.position.x;
@@ -283,48 +316,10 @@ const RoadmapFlow = ({
   }, [isFocusModeActive]);
 
   const handleResetLayout = useCallback(() => {
-    const resetNodes: Node[] = roadmap.map((node) => {
-      const currentNode = nodes.find((flowNode) => flowNode.id === node.id);
-      return {
-        id: node.id,
-        type: 'questNode',
-        position: { x: 0, y: 0 },
-        data: currentNode?.data ?? {
-          node,
-          progress: progressMap?.get(node.id),
-          onComplete: onQuestComplete,
-          onCreateStudyTask,
-          isCreatingStudyTask: creatingTaskNodeId === node.id,
-          isEligibleForStudyTask: eligibleNodeId == null ? true : eligibleNodeId === node.id,
-          hasStudyTask: studyTaskNodeIds?.has(node.id) ?? false,
-          isSelected: selectedNodeId === node.id,
-        },
-      };
-    });
-
-    const resetEdges = buildInitialEdges(roadmap);
-
-    getLayoutedElements(resetNodes, resetEdges).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
-      setNodes(layoutedNodes);
-      setEdges(layoutedEdges);
-      reactFlowInstance?.fitView({ padding: 0.2, duration: 450 });
-    });
-  }, [
-    roadmap,
-    nodes,
-    progressMap,
-    onQuestComplete,
-    onCreateStudyTask,
-    creatingTaskNodeId,
-    eligibleNodeId,
-    studyTaskNodeIds,
-    selectedNodeId,
-    buildInitialEdges,
-    getLayoutedElements,
-    reactFlowInstance,
-    setNodes,
-    setEdges,
-  ]);
+    setNodes(buildInitialNodes(roadmap));
+    setEdges(buildInitialEdges(roadmap));
+    reactFlowInstance?.fitView({ padding: 0.2, duration: 450 });
+  }, [roadmap, buildInitialNodes, buildInitialEdges, reactFlowInstance, setNodes, setEdges]);
 
   return (
     <div
@@ -364,7 +359,6 @@ const RoadmapFlow = ({
         zoomOnPinch={!isFocusModeActive}
         zoomOnDoubleClick={!isFocusModeActive}
         preventScrolling
-        // Thêm các props này để tối ưu performance khi drag
         onlyRenderVisibleElements={true}
         defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
         onInit={setReactFlowInstance}
