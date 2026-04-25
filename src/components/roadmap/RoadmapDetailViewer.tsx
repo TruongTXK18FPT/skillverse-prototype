@@ -459,7 +459,7 @@ const RoadmapDetailViewer = memo(({
       try {
         setMentorMatchLoading(true);
         setMentorMatchError(null);
-        let mentors: MentorProfile[] = [];
+        const mentors: MentorProfile[] = [];
         for (const skillName of roadmapMentorSkills) {
           try {
             const matches = await getMentorsByVerifiedSkill(skillName);
