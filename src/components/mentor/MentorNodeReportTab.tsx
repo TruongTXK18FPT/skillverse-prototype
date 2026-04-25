@@ -11,6 +11,7 @@ import {
   NodeReviewResult,
   NodeFinalVerificationStatus,
 } from '../../types/NodeMentoring';
+import { getForceDownloadUrl, getFileExtFromUrl } from '../../services/fileUploadService';
 import MarkdownEditorField from '../shared/MarkdownEditorField';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -80,7 +81,7 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
     if (!evidence) return;
     try {
       setSubmittingReview(true);
-      await reviewNodeSubmission(evidence.id, {
+      await reviewNodeSubmission(journeyId, nodeId, {
         reviewResult,
         score,
         feedback,
@@ -100,7 +101,7 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
     if (!evidence) return;
     try {
       setSubmittingVerify(true);
-      await verifyNode(evidence.id, {
+      await verifyNode(journeyId, nodeId, {
         nodeVerificationStatus: verifyStatus,
         verificationNote: verifyNote,
         bookingId,
@@ -170,8 +171,8 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
                 </a>
               )}
               {evidence.attachmentUrl && (
-                <a href={evidence.attachmentUrl} target="_blank" rel="noreferrer" className="mnrt-link">
-                  📎 File đính kèm
+                <a href={getForceDownloadUrl(evidence.attachmentUrl)} download rel="noreferrer" className="mnrt-link">
+                  📎 ⬇ Tải file đính kèm (.{getFileExtFromUrl(evidence.attachmentUrl)})
                 </a>
               )}
             </div>

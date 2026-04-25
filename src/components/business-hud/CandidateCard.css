@@ -334,9 +334,145 @@
   .candidate-card__action {
     width: 100%;
   }
+
+  .candidate-card__fit-stats,
+  .candidate-card__skill-fit-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Ranking Breakdown - Cyan Blue Neon Tech */
+.candidate-card__fit-analysis {
+  background: linear-gradient(135deg, rgba(8, 20, 36, 0.96), rgba(4, 10, 20, 0.98));
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: #e0f2fe;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.05), inset 0 0 10px rgba(0, 255, 255, 0.02);
+}
+
+.candidate-card__fit-band {
+  margin-left: auto;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  color: #67e8f9;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.candidate-card__fit-recommendation {
+  margin: 0 0 0.75rem;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.candidate-card__fit-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+
+.candidate-card__fit-stats span {
+  padding: 0.35rem 0.45rem;
+  border-radius: 6px;
+  background: rgba(148, 163, 184, 0.08);
+  color: #cbd5e1;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.candidate-card__raw-score {
+  min-width: 2.4rem;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  text-align: right;
+}
+
+.candidate-card__component-note {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.candidate-card__skill-fit-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(34, 211, 238, 0.15);
+}
+
+.candidate-card__skill-fit-row strong,
+.candidate-card__detail-section strong {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #bae6fd;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.candidate-card__mini-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.candidate-card__mini-tag {
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.candidate-card__mini-tag--good {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.24);
+  color: #86efac;
+}
+
+.candidate-card__mini-tag--risk {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.22);
+  color: #fca5a5;
+}
+
+.candidate-card__fit-detail {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(34, 211, 238, 0.15);
+}
+
+.candidate-card__detail-section {
+  padding: 0.65rem;
+  border-radius: 8px;
+  background: rgba(148, 163, 184, 0.07);
+}
+
+.candidate-card__detail-section--risk {
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.candidate-card__detail-section p {
+  margin: 0.25rem 0 0;
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.candidate-card__fit-toggle {
+  margin-top: 0.75rem;
+}
+
 .candidate-card__ranking-breakdown {
   background: linear-gradient(135deg, rgba(8, 20, 36, 0.95), rgba(4, 10, 20, 0.98));
   border: 1px solid rgba(0, 255, 255, 0.2);

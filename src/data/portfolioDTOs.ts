@@ -333,6 +333,7 @@ export interface CandidateSearchFilters {
   query?: string;
   skills?: string[];
   experienceLevel?: string;
+  location?: string;
   minHourlyRate?: number;
   maxHourlyRate?: number;
   isAvailable?: boolean;
@@ -340,10 +341,63 @@ export interface CandidateSearchFilters {
   isVerified?: boolean;
   isPremium?: boolean;
   hasCertificates?: boolean;
+  hasRelevantProjects?: boolean;
+  hasCompletedMissions?: boolean;
+  mustMatchPrimarySkill?: boolean;
+  minOverallScore?: number;
+  minSkillFit?: number;
   openToOffers?: boolean;
   enableAIMatching?: boolean;
   jobId?: number; // For long-term job matching
   shortTermJobId?: number; // For short-term job (gig/freelance) matching
+}
+
+export interface CandidateFitComponentScore {
+  key: string;
+  label: string;
+  score: number;
+  weight: number;
+  weightedScore?: number;
+  explanation?: string;
+}
+
+export interface CandidateSkillBreakdown {
+  skill: string;
+  primary?: boolean;
+  required?: boolean;
+  matched?: boolean;
+  matchType?: string;
+  relevanceScore?: number;
+  confidenceScore?: number;
+  evidenceSources?: string[];
+}
+
+export interface CandidateEvidenceHighlight {
+  type: string;
+  title: string;
+  relevanceScore?: number;
+  matchedSkills?: string[];
+}
+
+export interface CandidateMissingRequirement {
+  skill: string;
+  severity?: string;
+  suggestion?: string;
+}
+
+export interface CandidateFitAnalysis {
+  overallScore: number;
+  band?: string;
+  recommendation?: string;
+  confidenceScore?: number;
+  riskPenalty?: number;
+  components?: CandidateFitComponentScore[];
+  skillBreakdown?: CandidateSkillBreakdown[];
+  evidenceHighlights?: CandidateEvidenceHighlight[];
+  missingRequirements?: CandidateMissingRequirement[];
+  riskFlags?: string[];
+  interviewQuestions?: string[];
+  nextActions?: string[];
 }
 
 export interface CandidateSearchResult {
@@ -360,6 +414,9 @@ export interface CandidateSearchResult {
   hourlyRate?: number;
   preferredCurrency?: string;
   totalProjects?: number;
+  yearsOfExperience?: number;
+  location?: string;
+  availabilityStatus?: string;
   matchScore?: number;
   skillMatchPercent?: number;
   matchQuality?: 'EXCELLENT' | 'GOOD' | 'FAIR' | 'POOR';
@@ -368,6 +425,12 @@ export interface CandidateSearchResult {
   projectMatchScore?: number;
   certMatchScore?: number;
   missionMatchScore?: number;
+  experienceMatchScore?: number;
+  evidenceMatchScore?: number;
+  deliveryMatchScore?: number;
+  logisticsMatchScore?: number;
+  confidenceMatchScore?: number;
+  riskPenaltyScore?: number;
   // Detailed breakdown context
   matchedSkills?: string[];
   unmatchedSkills?: string[];
@@ -375,7 +438,13 @@ export interface CandidateSearchResult {
   totalCandidateSkills?: number;
   completedMissionsCount?: number;
   totalCertificatesCount?: number;
+  totalVerifiedSkillsCount?: number;
+  relevantProjectsCount?: number;
+  relevantCertificatesCount?: number;
+  relevantMissionsCount?: number;
+  averageMissionRating?: number;
   fitExplanation?: string;
+  fitAnalysis?: CandidateFitAnalysis;
   aiSummary?: string;
   lastActive?: string;
   shortlistId?: number;

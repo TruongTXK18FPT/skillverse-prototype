@@ -682,10 +682,6 @@ const summarizeCompletedMissions = (
   };
 };
 
-
-
-
-
 // ============ MAIN COMPONENT ============
 const RecruiterTalentWorkspace = ({
   fullTimeJobs,
@@ -693,8 +689,10 @@ const RecruiterTalentWorkspace = ({
 }: RecruiterTalentWorkspaceProps) => {
   const navigate = useNavigate();
   const { showInfo } = useLocalToast();
-  const showToastError = (title: string, message: string) => showAppError(title, message);
-  const showToastSuccess = (title: string, message: string) => showAppSuccess(title, message, 5);
+  const showToastError = (title: string, message: string) =>
+    showAppError(title, message);
+  const showToastSuccess = (title: string, message: string) =>
+    showAppSuccess(title, message, 5);
   const portfolioRequestRef = useRef(0);
   const [jobRoster, setJobRoster] = useState<WorkspaceJob[]>(() => [
     ...fullTimeJobs.map(toWorkspaceFullTimeJob),
@@ -734,7 +732,8 @@ const RecruiterTalentWorkspace = ({
   const [aiInsight, setAiInsight] = useState<CandidateSearchResult | null>(
     null,
   );
-  const [aiEnhancedResult, setAiEnhancedResult] = useState<AiEnhancedAnalysisResponse | null>(null);
+  const [aiEnhancedResult, setAiEnhancedResult] =
+    useState<AiEnhancedAnalysisResponse | null>(null);
   const [isAiEnhancedLoading, setIsAiEnhancedLoading] = useState(false);
 
   const [decisionNote, setDecisionNote] = useState("");
@@ -907,6 +906,7 @@ const RecruiterTalentWorkspace = ({
 
     setSelectedCandidate(seed);
     setAiInsight(null);
+    setAiEnhancedResult(null);
     setPortfolioError(null);
     setIsPortfolioLoading(true);
 
@@ -972,10 +972,14 @@ const RecruiterTalentWorkspace = ({
         setPortfolioCompletedMissions([]);
         setPortfolioError(null);
         setAiInsight(null);
+        setAiEnhancedResult(null);
       }
     } catch (error: any) {
       setApplicants([]);
-      showToastError("Không thể tải ứng viên", error.message || "Vui lòng thử lại");
+      showToastError(
+        "Không thể tải ứng viên",
+        error.message || "Vui lòng thử lại",
+      );
     } finally {
       setIsApplicantsLoading(false);
     }
@@ -1062,7 +1066,10 @@ const RecruiterTalentWorkspace = ({
 
     if (!decisionNote.trim()) {
       console.log("[DEBUG] early return: no decisionNote");
-      showToastError("Thiếu nội dung", "Vui lòng nhập ghi chú cho quyết định này.");
+      showToastError(
+        "Thiếu nội dung",
+        "Vui lòng nhập ghi chú cho quyết định này.",
+      );
       return;
     }
 
@@ -1185,23 +1192,21 @@ const RecruiterTalentWorkspace = ({
 
     try {
       setIsAiLoading(true);
-      let result: CandidateSearchResult | undefined;
+      setAiEnhancedResult(null);
+      setAiInsight(null);
 
-      if (selectedJob.kind === "shortterm") {
-        result = await candidateSearchService.getShortTermJobMatchExplanation(
-          selectedJob.id,
-          target.candidateId,
-        );
-      } else {
-        result = await candidateSearchService.getAIMatchExplanation(
-          selectedJob.id,
-          target.candidateId,
-        );
-      }
+      const result =
+        selectedJob.kind === "shortterm"
+          ? await candidateSearchService.getShortTermJobMatchExplanation(
+              selectedJob.id,
+              target.candidateId,
+            )
+          : await candidateSearchService.getAIMatchExplanation(
+              selectedJob.id,
+              target.candidateId,
+            );
 
-      if (result) {
-        setAiInsight(result);
-      }
+      setAiInsight(result);
     } catch (error: any) {
       showToastError(
         "Không thể phân tích AI",
@@ -1301,6 +1306,7 @@ const RecruiterTalentWorkspace = ({
     setPortfolioCompletedMissions([]);
     setPortfolioError(null);
     setAiInsight(null);
+    setAiEnhancedResult(null);
     setApplicantKeyword("");
     syncJobContext(selectedJob);
   }, [selectedJob?.key, subscription?.hasCandidateDatabaseAccess]);
@@ -2140,7 +2146,10 @@ const RecruiterTalentWorkspace = ({
                             className="rtw-primary-btn"
                             disabled={isActionBusy}
                             onClick={() =>
-                              openChatWithCandidate(selectedCandidate, "PROFILE_VIEW")
+                              openChatWithCandidate(
+                                selectedCandidate,
+                                "PROFILE_VIEW",
+                              )
                             }
                           >
                             <MessageSquare size={14} />
@@ -2152,218 +2161,1053 @@ const RecruiterTalentWorkspace = ({
                             onClick={async () => {
                               if (!selectedJob || !selectedCandidate) return;
                               setIsAiEnhancedLoading(true);
-                              setAiEnhancedResult(null); // Clear any old AI result
+                              setAiEnhancedResult(null);
                               setAiInsight(null);
                               try {
-                                let result;
-                                if (selectedJob.kind === "shortterm") {
-                                  result = await candidateSearchService.getShortTermJobMatchExplanation(selectedJob.id, selectedCandidate.candidateId);
-                                } else {
-                                  result = await candidateSearchService.getAIMatchExplanation(selectedJob.id, selectedCandidate.candidateId);
-                                }
+                                const result =
+                                  selectedJob.kind === "shortterm"
+                                    ? await candidateSearchService.getShortTermJobMatchExplanation(
+                                        selectedJob.id,
+                                        selectedCandidate.candidateId,
+                                      )
+                                    : await candidateSearchService.getAIMatchExplanation(
+                                        selectedJob.id,
+                                        selectedCandidate.candidateId,
+                                      );
                                 setAiInsight(result);
                               } catch (e: any) {
-                                showToastError("Lỗi phân tích", e.message || "Thử lại sau.");
+                                showToastError(
+                                  "Lỗi phân tích",
+                                  e.message || "Thử lại sau.",
+                                );
                               } finally {
                                 setIsAiEnhancedLoading(false);
                               }
                             }}
                           >
-                            {isAiEnhancedLoading ? <Loader2 size={14} className="rtw-spin" /> : <Sparkles size={14} />}
+                            {isAiEnhancedLoading ? (
+                              <Loader2 size={14} className="rtw-spin" />
+                            ) : (
+                              <Sparkles size={14} />
+                            )}
                             Phân tích
                           </button>
                         </div>
                       </div>
                     </div>
 
-                    {/* DETERMINISTIC RANKING BREAKDOWN */}
-                    {aiInsight && aiInsight.skillMatchScore !== undefined && (() => {
-                      // Pre-compute local helper data for skill overlap in projects & missions
-                      const requiredSkills = selectedJob?.requiredSkills || [];
-                      const reqSkillsLower = requiredSkills.map(s => s.toLowerCase().trim());
-                      
-                      // Skill overlap in projects
-                      const projectSkillOverlap = portfolioProjects.flatMap(p => p.tools || [])
-                        .filter(t => reqSkillsLower.some(rs => t.toLowerCase().includes(rs)));
-                      const uniqueProjectSkillOverlap = [...new Set(projectSkillOverlap.map(s => s.toLowerCase()))];
-                      
-                      // Skill overlap in missions
-                      const missionSkillOverlap = portfolioCompletedMissions.flatMap(m => m.requiredSkills || [])
-                        .filter(t => reqSkillsLower.some(rs => t.toLowerCase().includes(rs)));
-                      const uniqueMissionSkillOverlap = [...new Set(missionSkillOverlap.map(s => s.toLowerCase()))];
-
-                      const matchedSkills = aiInsight.matchedSkills || [];
-                      const unmatchedSkills = aiInsight.unmatchedSkills || [];
-                      const totalRequired = aiInsight.totalRequiredSkills || 0;
-                      const completedMissions = aiInsight.completedMissionsCount ?? portfolioCompletedMissions.length;
-                      const totalCerts = aiInsight.totalCertificatesCount ?? portfolioCertificates.length;
-                      const totalProjects = aiInsight.totalProjects ?? portfolioProjects.length;
-
-                      const skillPct = totalRequired > 0 ? Math.round(matchedSkills.length / totalRequired * 100) : 0;
-
-                      return (
-                      <div style={{ marginTop: '1.5rem', background: 'rgba(16, 24, 39, 0.7)', border: '1px solid rgba(6, 182, 212, 0.25)', padding: '1.5rem', borderRadius: '14px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', color: '#06b6d4', fontWeight: 'bold', fontSize: '0.9rem' }}>
+                    {aiInsight?.fitAnalysis?.components?.length && (
+                      <div
+                        style={{
+                          marginTop: "1.5rem",
+                          background: "rgba(16, 24, 39, 0.72)",
+                          border: "1px solid rgba(6, 182, 212, 0.25)",
+                          padding: "1.5rem",
+                          borderRadius: "14px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            marginBottom: "1rem",
+                            color: "#06b6d4",
+                            fontWeight: "bold",
+                            fontSize: "0.9rem",
+                          }}
+                        >
                           <Sparkles size={16} />
-                          <span>Phân tích Độ phù hợp (Thuật toán)</span>
-                          <span style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>Trọng số: Kỹ năng(50%), Dự án(25%), Mission(15%), Chứng chỉ(10%)</span>
-                        </div>
-
-                        {/* ── SKILL SECTION (50%) ── */}
-                        <div style={{ marginBottom: '1.25rem', padding: '1rem', background: 'rgba(6, 182, 212, 0.05)', borderRadius: '10px', border: '1px solid rgba(6, 182, 212, 0.12)' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>🎯 Kỹ năng (50%)</span>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                              {aiInsight.primarySkillMatch && <span style={{ color: '#06b6d4', fontWeight: 600, fontSize: '0.72rem', padding: '2px 8px', background: 'rgba(6, 182, 212, 0.15)', borderRadius: '6px', border: '1px solid rgba(6, 182, 212, 0.3)' }} title="Primary skill chiếm tối đa 20% (tức 40% của khung điểm Kỹ năng)">⭐ Primary Match (20%)</span>}
-                              <span style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#06b6d4' }}>+{Math.round((aiInsight.skillMatchScore || 0) * 100)}%</span>
-                            </div>
-                          </div>
-                          <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.75rem' }}>
-                            <div style={{ height: '100%', background: 'linear-gradient(90deg, #06b6d4, #22d3ee)', width: `${Math.min(100, (aiInsight.skillMatchScore || 0) / 0.5 * 100)}%`, borderRadius: '3px', transition: 'width 0.6s ease' }}></div>
-                          </div>
-                          {totalRequired > 0 ? (
-                            <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
-                              <p style={{ margin: '0 0 0.4rem' }}>Khớp <strong style={{ color: '#22d3ee' }}>{matchedSkills.length}/{totalRequired}</strong> kỹ năng yêu cầu ({skillPct}%)</p>
-                              {matchedSkills.length > 0 && (
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginBottom: '0.4rem' }}>
-                                  {matchedSkills.map(s => (
-                                    <span key={s} style={{ padding: '2px 8px', background: 'rgba(34, 211, 238, 0.12)', border: '1px solid rgba(34, 211, 238, 0.3)', borderRadius: '4px', fontSize: '0.72rem', color: '#22d3ee' }}>✓ {s}</span>
-                                  ))}
-                                </div>
-                              )}
-                              {unmatchedSkills.length > 0 && (
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
-                                  {unmatchedSkills.map(s => (
-                                    <span key={s} style={{ padding: '2px 8px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '4px', fontSize: '0.72rem', color: '#f87171' }}>✗ {s}</span>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          ) : (
-                            <p style={{ margin: 0, fontSize: '0.76rem', color: 'rgba(255,255,255,0.5)' }}>Không có yêu cầu kỹ năng cụ thể cho vị trí này.</p>
+                          <span>Độ tương thích với công việc</span>
+                          {aiInsight.fitAnalysis.band && (
+                            <span
+                              style={{
+                                marginLeft: "auto",
+                                fontSize: "0.72rem",
+                                padding: "2px 8px",
+                                borderRadius: "999px",
+                                border: "1px solid rgba(6, 182, 212, 0.35)",
+                                background: "rgba(6, 182, 212, 0.12)",
+                              }}
+                            >
+                              {aiInsight.fitAnalysis.band}
+                            </span>
                           )}
                         </div>
 
-                        {/* ── PROJECT SECTION (25%) ── */}
-                        <div style={{ marginBottom: '1.25rem', padding: '1rem', background: 'rgba(59, 130, 246, 0.04)', borderRadius: '10px', border: '1px solid rgba(59, 130, 246, 0.12)' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>📁 Dự án (25%)</span>
-                            <span style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#3b82f6' }}>+{Math.round((aiInsight.projectMatchScore || 0) * 100)}%</span>
-                          </div>
-                          <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.75rem' }}>
-                            <div style={{ height: '100%', background: 'linear-gradient(90deg, #3b82f6, #60a5fa)', width: `${Math.min(100, (aiInsight.projectMatchScore || 0) / 0.25 * 100)}%`, borderRadius: '3px', transition: 'width 0.6s ease' }}></div>
-                          </div>
-                          <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
-                            <p style={{ margin: '0 0 0.3rem' }}><strong style={{ color: '#60a5fa' }}>{totalProjects}</strong> dự án trong portfolio {totalProjects === 0 ? '— chưa có dự án nào.' : totalProjects < 3 ? '— khá ít, đạt một phần điểm kinh nghiệm.' : '— portfolio đầy đủ (tối đa điểm kinh nghiệm).'}</p>
-                            {uniqueProjectSkillOverlap.length > 0 && reqSkillsLower.length > 0 && (
-                              <p style={{ margin: '0 0 0.3rem' }}>Kỹ năng trùng khớp với yêu cầu job trong dự án: <strong style={{ color: '#60a5fa' }}>{uniqueProjectSkillOverlap.join(', ')}</strong></p>
-                            )}
-                            {uniqueProjectSkillOverlap.length === 0 && reqSkillsLower.length > 0 && totalProjects > 0 && (
-                              <p style={{ margin: 0, color: '#fbbf24', fontStyle: 'italic' }}>⚠ Dự án chưa liên quan trực tiếp đến kỹ năng yêu cầu của job.</p>
-                            )}
-                          </div>
+                        {aiInsight.fitAnalysis.recommendation && (
+                          <p
+                            style={{
+                              margin: "0 0 1rem",
+                              fontSize: "0.8rem",
+                              color: "rgba(255,255,255,0.72)",
+                              lineHeight: 1.6,
+                            }}
+                          >
+                            {aiInsight.fitAnalysis.recommendation}
+                          </p>
+                        )}
+
+                        <div style={{ display: "grid", gap: "0.75rem" }}>
+                          {aiInsight.fitAnalysis.components!.map(
+                            (component) => {
+                              const weighted =
+                                component.weightedScore ??
+                                (component.score || 0) *
+                                  (component.weight || 0);
+                              return (
+                                <div
+                                  key={component.key}
+                                  style={{
+                                    padding: "0.85rem",
+                                    borderRadius: "10px",
+                                    background: "rgba(6, 182, 212, 0.05)",
+                                    border: "1px solid rgba(6, 182, 212, 0.12)",
+                                  }}
+                                >
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      gap: "1rem",
+                                      marginBottom: "0.45rem",
+                                      fontSize: "0.8rem",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        color: "rgba(255,255,255,0.86)",
+                                        fontWeight: 700,
+                                      }}
+                                    >
+                                      {component.label} (
+                                      {Math.round(
+                                        (component.weight || 0) * 100,
+                                      )}
+                                      %)
+                                    </span>
+                                    <strong style={{ color: "#22d3ee" }}>
+                                      +{Math.round(weighted * 100)}%
+                                    </strong>
+                                  </div>
+                                  <div
+                                    style={{
+                                      height: "6px",
+                                      background: "rgba(255,255,255,0.08)",
+                                      borderRadius: "3px",
+                                      overflow: "hidden",
+                                      marginBottom: component.explanation
+                                        ? "0.5rem"
+                                        : 0,
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        height: "100%",
+                                        background:
+                                          "linear-gradient(90deg, #06b6d4, #22d3ee)",
+                                        width: `${Math.min(100, Math.max(0, (component.score || 0) * 100))}%`,
+                                        borderRadius: "3px",
+                                      }}
+                                    />
+                                  </div>
+                                  {component.explanation && (
+                                    <p
+                                      style={{
+                                        margin: 0,
+                                        fontSize: "0.74rem",
+                                        color: "rgba(255,255,255,0.58)",
+                                        lineHeight: 1.5,
+                                      }}
+                                    >
+                                      {component.explanation}
+                                    </p>
+                                  )}
+                                </div>
+                              );
+                            },
+                          )}
                         </div>
 
-                        {/* ── CERTIFICATE SECTION (10%) ── */}
-                        <div style={{ marginBottom: '1.25rem', padding: '1rem', background: 'rgba(6, 182, 212, 0.04)', borderRadius: '10px', border: '1px solid rgba(6, 182, 212, 0.12)' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>🏅 Chứng chỉ (10%)</span>
-                            <span style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#06b6d4' }}>+{Math.round((aiInsight.certMatchScore || 0) * 100)}%</span>
+                        {(aiInsight.fitAnalysis.skillBreakdown?.length ?? 0) >
+                          0 && (
+                          <div
+                            style={{
+                              marginTop: "1rem",
+                              display: "grid",
+                              gridTemplateColumns:
+                                "repeat(auto-fit, minmax(180px, 1fr))",
+                              gap: "0.75rem",
+                            }}
+                          >
+                            <div>
+                              <strong
+                                style={{
+                                  display: "block",
+                                  fontSize: "0.74rem",
+                                  color: "#86efac",
+                                  marginBottom: "0.4rem",
+                                }}
+                              >
+                                Matched skills
+                              </strong>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  gap: "0.3rem",
+                                }}
+                              >
+                                {aiInsight.fitAnalysis
+                                  .skillBreakdown!.filter(
+                                    (skill) => skill.matched,
+                                  )
+                                  .slice(0, 10)
+                                  .map((skill) => (
+                                    <span
+                                      key={skill.skill}
+                                      style={{
+                                        padding: "2px 8px",
+                                        borderRadius: "4px",
+                                        fontSize: "0.72rem",
+                                        color: "#86efac",
+                                        border:
+                                          "1px solid rgba(134, 239, 172, 0.25)",
+                                        background: "rgba(34, 197, 94, 0.1)",
+                                      }}
+                                    >
+                                      {skill.skill}
+                                    </span>
+                                  ))}
+                              </div>
+                            </div>
+                            <div>
+                              <strong
+                                style={{
+                                  display: "block",
+                                  fontSize: "0.74rem",
+                                  color: "#fca5a5",
+                                  marginBottom: "0.4rem",
+                                }}
+                              >
+                                Missing skills
+                              </strong>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  gap: "0.3rem",
+                                }}
+                              >
+                                {aiInsight.fitAnalysis
+                                  .skillBreakdown!.filter(
+                                    (skill) => !skill.matched,
+                                  )
+                                  .slice(0, 10)
+                                  .map((skill) => (
+                                    <span
+                                      key={skill.skill}
+                                      style={{
+                                        padding: "2px 8px",
+                                        borderRadius: "4px",
+                                        fontSize: "0.72rem",
+                                        color: "#fca5a5",
+                                        border:
+                                          "1px solid rgba(252, 165, 165, 0.25)",
+                                        background: "rgba(239, 68, 68, 0.08)",
+                                      }}
+                                    >
+                                      {skill.skill}
+                                    </span>
+                                  ))}
+                              </div>
+                            </div>
                           </div>
-                          <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.75rem' }}>
-                            <div style={{ height: '100%', background: 'linear-gradient(90deg, #06b6d4, #22d3ee)', width: `${Math.min(100, (aiInsight.certMatchScore || 0) / 0.1 * 100)}%`, borderRadius: '3px', transition: 'width 0.6s ease' }}></div>
-                          </div>
-                          <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
-                            <p style={{ margin: 0 }}><strong style={{ color: '#22d3ee' }}>{totalCerts}</strong> chứng chỉ {totalCerts === 0 ? '— chưa có chứng chỉ, khuyến khích bổ sung.' : totalCerts < 2 ? '— có chứng chỉ cơ bản.' : '— đạt điểm lý thuyết tối đa.'}</p>
-                          </div>
-                        </div>
+                        )}
 
-                        {/* ── MISSION SECTION (15%) ── */}
-                        <div style={{ padding: '1rem', background: 'rgba(59, 130, 246, 0.04)', borderRadius: '10px', border: '1px solid rgba(59, 130, 246, 0.12)' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>🚀 Missions hoàn thành (15%)</span>
-                            <span style={{ fontSize: '0.82rem', fontWeight: 'bold', color: '#3b82f6' }}>+{Math.round((aiInsight.missionMatchScore || 0) * 100)}%</span>
+                        {(aiInsight.fitAnalysis.evidenceHighlights?.length ??
+                          0) > 0 && (
+                          <div
+                            style={{
+                              marginTop: "1rem",
+                              padding: "0.85rem",
+                              borderRadius: "10px",
+                              background: "rgba(255,255,255,0.04)",
+                              color: "rgba(255,255,255,0.68)",
+                              fontSize: "0.76rem",
+                              lineHeight: 1.55,
+                            }}
+                          >
+                            <strong style={{ color: "#c4b5fd" }}>
+                              Evidence:
+                            </strong>{" "}
+                            {aiInsight.fitAnalysis
+                              .evidenceHighlights!.slice(0, 4)
+                              .map((item) => item.title)
+                              .join(" | ")}
                           </div>
-                          <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.75rem' }}>
-                            <div style={{ height: '100%', background: 'linear-gradient(90deg, #3b82f6, #60a5fa)', width: `${Math.min(100, (aiInsight.missionMatchScore || 0) / 0.15 * 100)}%`, borderRadius: '3px', transition: 'width 0.6s ease' }}></div>
-                          </div>
-                          <div style={{ fontSize: '0.76rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
-                            <p style={{ margin: '0 0 0.3rem' }}><strong style={{ color: '#60a5fa' }}>{completedMissions}</strong> nhiệm vụ hoàn thành {completedMissions === 0 ? '— chưa hoàn thành nhiệm vụ nào trên hệ thống.' : completedMissions < 3 ? '— đạt một phần điểm kinh nghiệm thực chiến.' : '— đạt điểm thực chiến tối đa.'}</p>
-                            {uniqueMissionSkillOverlap.length > 0 && reqSkillsLower.length > 0 && (
-                              <p style={{ margin: 0 }}>Kỹ năng trùng khớp với yêu cầu job trong missions: <strong style={{ color: '#60a5fa' }}>{uniqueMissionSkillOverlap.join(', ')}</strong></p>
-                            )}
-                            {uniqueMissionSkillOverlap.length === 0 && reqSkillsLower.length > 0 && completedMissions > 0 && (
-                              <p style={{ margin: 0, color: '#fbbf24', fontStyle: 'italic' }}>⚠ Missions chưa liên quan trực tiếp đến kỹ năng yêu cầu.</p>
-                            )}
-                          </div>
-                        </div>
+                        )}
 
-                        {/* ── OVERALL VERDICT ── */}
-                        <div style={{ marginTop: '1.25rem', padding: '0.75rem 1rem', background: 'rgba(6, 182, 212, 0.08)', borderRadius: '8px', border: '1px solid rgba(6, 182, 212, 0.2)', fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
-                          <strong style={{ color: '#06b6d4' }}>💡 Tổng kết:</strong>{' '}
-                          {(aiInsight.matchScore || 0) >= 0.8
-                            ? 'Ứng viên phù hợp xuất sắc — đáp ứng hầu hết yêu cầu, nên ưu tiên liên hệ.'
-                            : (aiInsight.matchScore || 0) >= 0.5
-                            ? 'Ứng viên phù hợp tốt — có tiềm năng nhưng cần đánh giá thêm một số kỹ năng thiếu.'
-                            : (aiInsight.matchScore || 0) >= 0.25
-                            ? 'Ứng viên phù hợp trung bình — thiếu một số yếu tố quan trọng, cần cân nhắc kỹ.'
-                            : 'Ứng viên phù hợp thấp — thiếu nhiều kỹ năng/kinh nghiệm yêu cầu.'}
-                        </div>
+                        {(aiInsight.fitAnalysis.riskFlags?.length ?? 0) > 0 && (
+                          <div
+                            style={{
+                              marginTop: "0.75rem",
+                              padding: "0.85rem",
+                              borderRadius: "10px",
+                              background: "rgba(239, 68, 68, 0.08)",
+                              border: "1px solid rgba(239, 68, 68, 0.2)",
+                              color: "#fca5a5",
+                              fontSize: "0.76rem",
+                              lineHeight: 1.55,
+                            }}
+                          >
+                            <strong>Risk flags:</strong>{" "}
+                            {aiInsight.fitAnalysis
+                              .riskFlags!.slice(0, 4)
+                              .join(" | ")}
+                          </div>
+                        )}
                       </div>
-                      );
-                    })()}
+                    )}
+
+                    {/* DETERMINISTIC RANKING BREAKDOWN */}
+                    {aiInsight &&
+                      !aiInsight.fitAnalysis?.components?.length &&
+                      aiInsight.skillMatchScore !== undefined &&
+                      (() => {
+                        // Pre-compute local helper data for skill overlap in projects & missions
+                        const requiredSkills =
+                          selectedJob?.requiredSkills || [];
+                        const reqSkillsLower = requiredSkills.map((s) =>
+                          s.toLowerCase().trim(),
+                        );
+
+                        // Skill overlap in projects
+                        const projectSkillOverlap = portfolioProjects
+                          .flatMap((p) => p.tools || [])
+                          .filter((t) =>
+                            reqSkillsLower.some((rs) =>
+                              t.toLowerCase().includes(rs),
+                            ),
+                          );
+                        const uniqueProjectSkillOverlap = [
+                          ...new Set(
+                            projectSkillOverlap.map((s) => s.toLowerCase()),
+                          ),
+                        ];
+
+                        // Skill overlap in missions
+                        const missionSkillOverlap = portfolioCompletedMissions
+                          .flatMap((m) => m.requiredSkills || [])
+                          .filter((t) =>
+                            reqSkillsLower.some((rs) =>
+                              t.toLowerCase().includes(rs),
+                            ),
+                          );
+                        const uniqueMissionSkillOverlap = [
+                          ...new Set(
+                            missionSkillOverlap.map((s) => s.toLowerCase()),
+                          ),
+                        ];
+
+                        const matchedSkills = aiInsight.matchedSkills || [];
+                        const unmatchedSkills = aiInsight.unmatchedSkills || [];
+                        const totalRequired =
+                          aiInsight.totalRequiredSkills || 0;
+                        const completedMissions =
+                          aiInsight.completedMissionsCount ??
+                          portfolioCompletedMissions.length;
+                        const totalCerts =
+                          aiInsight.totalCertificatesCount ??
+                          portfolioCertificates.length;
+                        const totalProjects =
+                          aiInsight.totalProjects ?? portfolioProjects.length;
+
+                        const skillPct =
+                          totalRequired > 0
+                            ? Math.round(
+                                (matchedSkills.length / totalRequired) * 100,
+                              )
+                            : 0;
+
+                        return (
+                          <div
+                            style={{
+                              marginTop: "1.5rem",
+                              background: "rgba(16, 24, 39, 0.7)",
+                              border: "1px solid rgba(6, 182, 212, 0.25)",
+                              padding: "1.5rem",
+                              borderRadius: "14px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "0.5rem",
+                                marginBottom: "1.25rem",
+                                color: "#06b6d4",
+                                fontWeight: "bold",
+                                fontSize: "0.9rem",
+                              }}
+                            >
+                              <Sparkles size={16} />
+                              <span>Phân tích Độ phù hợp (Thuật toán)</span>
+                              <span
+                                style={{
+                                  marginLeft: "auto",
+                                  fontSize: "0.75rem",
+                                  color: "rgba(255,255,255,0.4)",
+                                }}
+                              >
+                                Trọng số: Kỹ năng(50%), Dự án(25%),
+                                Mission(15%), Chứng chỉ(10%)
+                              </span>
+                            </div>
+
+                            {/* ── SKILL SECTION (50%) ── */}
+                            <div
+                              style={{
+                                marginBottom: "1.25rem",
+                                padding: "1rem",
+                                background: "rgba(6, 182, 212, 0.05)",
+                                borderRadius: "10px",
+                                border: "1px solid rgba(6, 182, 212, 0.12)",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  marginBottom: "0.5rem",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontSize: "0.82rem",
+                                    fontWeight: 600,
+                                    color: "rgba(255,255,255,0.85)",
+                                  }}
+                                >
+                                  🎯 Kỹ năng (50%)
+                                </span>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "0.5rem",
+                                  }}
+                                >
+                                  {aiInsight.primarySkillMatch && (
+                                    <span
+                                      style={{
+                                        color: "#06b6d4",
+                                        fontWeight: 600,
+                                        fontSize: "0.72rem",
+                                        padding: "2px 8px",
+                                        background: "rgba(6, 182, 212, 0.15)",
+                                        borderRadius: "6px",
+                                        border:
+                                          "1px solid rgba(6, 182, 212, 0.3)",
+                                      }}
+                                      title="Primary skill chiếm tối đa 20% (tức 40% của khung điểm Kỹ năng)"
+                                    >
+                                      ⭐ Primary Match (20%)
+                                    </span>
+                                  )}
+                                  <span
+                                    style={{
+                                      fontSize: "0.82rem",
+                                      fontWeight: "bold",
+                                      color: "#06b6d4",
+                                    }}
+                                  >
+                                    +
+                                    {Math.round(
+                                      (aiInsight.skillMatchScore || 0) * 100,
+                                    )}
+                                    %
+                                  </span>
+                                </div>
+                              </div>
+                              <div
+                                style={{
+                                  height: "6px",
+                                  background: "rgba(255,255,255,0.08)",
+                                  borderRadius: "3px",
+                                  overflow: "hidden",
+                                  marginBottom: "0.75rem",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    height: "100%",
+                                    background:
+                                      "linear-gradient(90deg, #06b6d4, #22d3ee)",
+                                    width: `${Math.min(100, ((aiInsight.skillMatchScore || 0) / 0.5) * 100)}%`,
+                                    borderRadius: "3px",
+                                    transition: "width 0.6s ease",
+                                  }}
+                                ></div>
+                              </div>
+                              {totalRequired > 0 ? (
+                                <div
+                                  style={{
+                                    fontSize: "0.76rem",
+                                    color: "rgba(255,255,255,0.6)",
+                                    lineHeight: 1.6,
+                                  }}
+                                >
+                                  <p style={{ margin: "0 0 0.4rem" }}>
+                                    Khớp{" "}
+                                    <strong style={{ color: "#22d3ee" }}>
+                                      {matchedSkills.length}/{totalRequired}
+                                    </strong>{" "}
+                                    kỹ năng yêu cầu ({skillPct}%)
+                                  </p>
+                                  {matchedSkills.length > 0 && (
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: "0.3rem",
+                                        marginBottom: "0.4rem",
+                                      }}
+                                    >
+                                      {matchedSkills.map((s) => (
+                                        <span
+                                          key={s}
+                                          style={{
+                                            padding: "2px 8px",
+                                            background:
+                                              "rgba(34, 211, 238, 0.12)",
+                                            border:
+                                              "1px solid rgba(34, 211, 238, 0.3)",
+                                            borderRadius: "4px",
+                                            fontSize: "0.72rem",
+                                            color: "#22d3ee",
+                                          }}
+                                        >
+                                          ✓ {s}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
+                                  {unmatchedSkills.length > 0 && (
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        gap: "0.3rem",
+                                      }}
+                                    >
+                                      {unmatchedSkills.map((s) => (
+                                        <span
+                                          key={s}
+                                          style={{
+                                            padding: "2px 8px",
+                                            background:
+                                              "rgba(239, 68, 68, 0.08)",
+                                            border:
+                                              "1px solid rgba(239, 68, 68, 0.25)",
+                                            borderRadius: "4px",
+                                            fontSize: "0.72rem",
+                                            color: "#f87171",
+                                          }}
+                                        >
+                                          ✗ {s}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              ) : (
+                                <p
+                                  style={{
+                                    margin: 0,
+                                    fontSize: "0.76rem",
+                                    color: "rgba(255,255,255,0.5)",
+                                  }}
+                                >
+                                  Không có yêu cầu kỹ năng cụ thể cho vị trí
+                                  này.
+                                </p>
+                              )}
+                            </div>
+
+                            {/* ── PROJECT SECTION (25%) ── */}
+                            <div
+                              style={{
+                                marginBottom: "1.25rem",
+                                padding: "1rem",
+                                background: "rgba(59, 130, 246, 0.04)",
+                                borderRadius: "10px",
+                                border: "1px solid rgba(59, 130, 246, 0.12)",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  marginBottom: "0.5rem",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontSize: "0.82rem",
+                                    fontWeight: 600,
+                                    color: "rgba(255,255,255,0.85)",
+                                  }}
+                                >
+                                  📁 Dự án (25%)
+                                </span>
+                                <span
+                                  style={{
+                                    fontSize: "0.82rem",
+                                    fontWeight: "bold",
+                                    color: "#3b82f6",
+                                  }}
+                                >
+                                  +
+                                  {Math.round(
+                                    (aiInsight.projectMatchScore || 0) * 100,
+                                  )}
+                                  %
+                                </span>
+                              </div>
+                              <div
+                                style={{
+                                  height: "6px",
+                                  background: "rgba(255,255,255,0.08)",
+                                  borderRadius: "3px",
+                                  overflow: "hidden",
+                                  marginBottom: "0.75rem",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    height: "100%",
+                                    background:
+                                      "linear-gradient(90deg, #3b82f6, #60a5fa)",
+                                    width: `${Math.min(100, ((aiInsight.projectMatchScore || 0) / 0.25) * 100)}%`,
+                                    borderRadius: "3px",
+                                    transition: "width 0.6s ease",
+                                  }}
+                                ></div>
+                              </div>
+                              <div
+                                style={{
+                                  fontSize: "0.76rem",
+                                  color: "rgba(255,255,255,0.6)",
+                                  lineHeight: 1.6,
+                                }}
+                              >
+                                <p style={{ margin: "0 0 0.3rem" }}>
+                                  <strong style={{ color: "#60a5fa" }}>
+                                    {totalProjects}
+                                  </strong>{" "}
+                                  dự án trong portfolio{" "}
+                                  {totalProjects === 0
+                                    ? "— chưa có dự án nào."
+                                    : totalProjects < 3
+                                      ? "— khá ít, đạt một phần điểm kinh nghiệm."
+                                      : "— portfolio đầy đủ (tối đa điểm kinh nghiệm)."}
+                                </p>
+                                {uniqueProjectSkillOverlap.length > 0 &&
+                                  reqSkillsLower.length > 0 && (
+                                    <p style={{ margin: "0 0 0.3rem" }}>
+                                      Kỹ năng trùng khớp với yêu cầu job trong
+                                      dự án:{" "}
+                                      <strong style={{ color: "#60a5fa" }}>
+                                        {uniqueProjectSkillOverlap.join(", ")}
+                                      </strong>
+                                    </p>
+                                  )}
+                                {uniqueProjectSkillOverlap.length === 0 &&
+                                  reqSkillsLower.length > 0 &&
+                                  totalProjects > 0 && (
+                                    <p
+                                      style={{
+                                        margin: 0,
+                                        color: "#fbbf24",
+                                        fontStyle: "italic",
+                                      }}
+                                    >
+                                      ⚠ Dự án chưa liên quan trực tiếp đến kỹ
+                                      năng yêu cầu của job.
+                                    </p>
+                                  )}
+                              </div>
+                            </div>
+
+                            {/* ── CERTIFICATE SECTION (10%) ── */}
+                            <div
+                              style={{
+                                marginBottom: "1.25rem",
+                                padding: "1rem",
+                                background: "rgba(6, 182, 212, 0.04)",
+                                borderRadius: "10px",
+                                border: "1px solid rgba(6, 182, 212, 0.12)",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  marginBottom: "0.5rem",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontSize: "0.82rem",
+                                    fontWeight: 600,
+                                    color: "rgba(255,255,255,0.85)",
+                                  }}
+                                >
+                                  🏅 Chứng chỉ (10%)
+                                </span>
+                                <span
+                                  style={{
+                                    fontSize: "0.82rem",
+                                    fontWeight: "bold",
+                                    color: "#06b6d4",
+                                  }}
+                                >
+                                  +
+                                  {Math.round(
+                                    (aiInsight.certMatchScore || 0) * 100,
+                                  )}
+                                  %
+                                </span>
+                              </div>
+                              <div
+                                style={{
+                                  height: "6px",
+                                  background: "rgba(255,255,255,0.08)",
+                                  borderRadius: "3px",
+                                  overflow: "hidden",
+                                  marginBottom: "0.75rem",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    height: "100%",
+                                    background:
+                                      "linear-gradient(90deg, #06b6d4, #22d3ee)",
+                                    width: `${Math.min(100, ((aiInsight.certMatchScore || 0) / 0.1) * 100)}%`,
+                                    borderRadius: "3px",
+                                    transition: "width 0.6s ease",
+                                  }}
+                                ></div>
+                              </div>
+                              <div
+                                style={{
+                                  fontSize: "0.76rem",
+                                  color: "rgba(255,255,255,0.6)",
+                                  lineHeight: 1.6,
+                                }}
+                              >
+                                <p style={{ margin: 0 }}>
+                                  <strong style={{ color: "#22d3ee" }}>
+                                    {totalCerts}
+                                  </strong>{" "}
+                                  chứng chỉ{" "}
+                                  {totalCerts === 0
+                                    ? "— chưa có chứng chỉ, khuyến khích bổ sung."
+                                    : totalCerts < 2
+                                      ? "— có chứng chỉ cơ bản."
+                                      : "— đạt điểm lý thuyết tối đa."}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* ── MISSION SECTION (15%) ── */}
+                            <div
+                              style={{
+                                padding: "1rem",
+                                background: "rgba(59, 130, 246, 0.04)",
+                                borderRadius: "10px",
+                                border: "1px solid rgba(59, 130, 246, 0.12)",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  marginBottom: "0.5rem",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontSize: "0.82rem",
+                                    fontWeight: 600,
+                                    color: "rgba(255,255,255,0.85)",
+                                  }}
+                                >
+                                  🚀 Missions hoàn thành (15%)
+                                </span>
+                                <span
+                                  style={{
+                                    fontSize: "0.82rem",
+                                    fontWeight: "bold",
+                                    color: "#3b82f6",
+                                  }}
+                                >
+                                  +
+                                  {Math.round(
+                                    (aiInsight.missionMatchScore || 0) * 100,
+                                  )}
+                                  %
+                                </span>
+                              </div>
+                              <div
+                                style={{
+                                  height: "6px",
+                                  background: "rgba(255,255,255,0.08)",
+                                  borderRadius: "3px",
+                                  overflow: "hidden",
+                                  marginBottom: "0.75rem",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    height: "100%",
+                                    background:
+                                      "linear-gradient(90deg, #3b82f6, #60a5fa)",
+                                    width: `${Math.min(100, ((aiInsight.missionMatchScore || 0) / 0.15) * 100)}%`,
+                                    borderRadius: "3px",
+                                    transition: "width 0.6s ease",
+                                  }}
+                                ></div>
+                              </div>
+                              <div
+                                style={{
+                                  fontSize: "0.76rem",
+                                  color: "rgba(255,255,255,0.6)",
+                                  lineHeight: 1.6,
+                                }}
+                              >
+                                <p style={{ margin: "0 0 0.3rem" }}>
+                                  <strong style={{ color: "#60a5fa" }}>
+                                    {completedMissions}
+                                  </strong>{" "}
+                                  nhiệm vụ hoàn thành{" "}
+                                  {completedMissions === 0
+                                    ? "— chưa hoàn thành nhiệm vụ nào trên hệ thống."
+                                    : completedMissions < 3
+                                      ? "— đạt một phần điểm kinh nghiệm thực chiến."
+                                      : "— đạt điểm thực chiến tối đa."}
+                                </p>
+                                {uniqueMissionSkillOverlap.length > 0 &&
+                                  reqSkillsLower.length > 0 && (
+                                    <p style={{ margin: 0 }}>
+                                      Kỹ năng trùng khớp với yêu cầu job trong
+                                      missions:{" "}
+                                      <strong style={{ color: "#60a5fa" }}>
+                                        {uniqueMissionSkillOverlap.join(", ")}
+                                      </strong>
+                                    </p>
+                                  )}
+                                {uniqueMissionSkillOverlap.length === 0 &&
+                                  reqSkillsLower.length > 0 &&
+                                  completedMissions > 0 && (
+                                    <p
+                                      style={{
+                                        margin: 0,
+                                        color: "#fbbf24",
+                                        fontStyle: "italic",
+                                      }}
+                                    >
+                                      ⚠ Missions chưa liên quan trực tiếp đến kỹ
+                                      năng yêu cầu.
+                                    </p>
+                                  )}
+                              </div>
+                            </div>
+
+                            {/* ── OVERALL VERDICT ── */}
+                            <div
+                              style={{
+                                marginTop: "1.25rem",
+                                padding: "0.75rem 1rem",
+                                background: "rgba(6, 182, 212, 0.08)",
+                                borderRadius: "8px",
+                                border: "1px solid rgba(6, 182, 212, 0.2)",
+                                fontSize: "0.78rem",
+                                color: "rgba(255,255,255,0.7)",
+                                lineHeight: 1.6,
+                              }}
+                            >
+                              <strong style={{ color: "#06b6d4" }}>
+                                💡 Tổng kết:
+                              </strong>{" "}
+                              {(aiInsight.matchScore || 0) >= 0.8
+                                ? "Ứng viên phù hợp xuất sắc — đáp ứng hầu hết yêu cầu, nên ưu tiên liên hệ."
+                                : (aiInsight.matchScore || 0) >= 0.5
+                                  ? "Ứng viên phù hợp tốt — có tiềm năng nhưng cần đánh giá thêm một số kỹ năng thiếu."
+                                  : (aiInsight.matchScore || 0) >= 0.25
+                                    ? "Ứng viên phù hợp trung bình — thiếu một số yếu tố quan trọng, cần cân nhắc kỹ."
+                                    : "Ứng viên phù hợp thấp — thiếu nhiều kỹ năng/kinh nghiệm yêu cầu."}
+                            </div>
+                          </div>
+                        );
+                      })()}
 
                     {/* ── AI ENHANCED ANALYSIS (Optional) ── */}
                     {aiEnhancedResult && (
-                      <div style={{ marginTop: '1.5rem', background: 'rgba(139, 92, 246, 0.06)', border: '1px solid rgba(139, 92, 246, 0.25)', padding: '1.5rem', borderRadius: '14px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                          <Zap size={16} style={{ color: '#a78bfa' }} />
-                          <span style={{ fontWeight: 'bold', color: '#a78bfa', fontSize: '0.9rem' }}>AI Phân tích nâng cao</span>
+                      <div
+                        style={{
+                          marginTop: "1.5rem",
+                          background: "rgba(139, 92, 246, 0.06)",
+                          border: "1px solid rgba(139, 92, 246, 0.25)",
+                          padding: "1.5rem",
+                          borderRadius: "14px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            marginBottom: "1rem",
+                          }}
+                        >
+                          <Zap size={16} style={{ color: "#a78bfa" }} />
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              color: "#a78bfa",
+                              fontSize: "0.9rem",
+                            }}
+                          >
+                            AI Phân tích nâng cao
+                          </span>
                           {aiEnhancedResult.aiAnalysis?.modelUsed && (
-                            <span style={{ marginLeft: 'auto', fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
-                              {aiEnhancedResult.aiAnalysis.modelUsed} • {aiEnhancedResult.aiAnalysis.processingTimeMs}ms
+                            <span
+                              style={{
+                                marginLeft: "auto",
+                                fontSize: "0.68rem",
+                                color: "rgba(255,255,255,0.35)",
+                                padding: "2px 6px",
+                                background: "rgba(255,255,255,0.05)",
+                                borderRadius: "4px",
+                              }}
+                            >
+                              {aiEnhancedResult.aiAnalysis.modelUsed} •{" "}
+                              {aiEnhancedResult.aiAnalysis.processingTimeMs}ms
                             </span>
                           )}
                         </div>
 
                         {/* Verdict Banner */}
-                        <div style={{
-                          padding: '0.75rem 1rem', borderRadius: '8px', marginBottom: '1rem',
-                          background: aiEnhancedResult.verdict === 'STRONG_ACCEPT' || aiEnhancedResult.verdict === 'ACCEPT' ? 'rgba(74, 222, 128, 0.1)' : aiEnhancedResult.verdict === 'REJECT' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(251, 191, 36, 0.1)',
-                          border: `1px solid ${aiEnhancedResult.verdict === 'STRONG_ACCEPT' || aiEnhancedResult.verdict === 'ACCEPT' ? 'rgba(74, 222, 128, 0.3)' : aiEnhancedResult.verdict === 'REJECT' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(251, 191, 36, 0.3)'}`,
-                          fontSize: '0.82rem', lineHeight: 1.6, color: 'rgba(255,255,255,0.8)'
-                        }}>
+                        <div
+                          style={{
+                            padding: "0.75rem 1rem",
+                            borderRadius: "8px",
+                            marginBottom: "1rem",
+                            background:
+                              aiEnhancedResult.verdict === "STRONG_ACCEPT" ||
+                              aiEnhancedResult.verdict === "ACCEPT"
+                                ? "rgba(74, 222, 128, 0.1)"
+                                : aiEnhancedResult.verdict === "REJECT"
+                                  ? "rgba(239, 68, 68, 0.1)"
+                                  : "rgba(251, 191, 36, 0.1)",
+                            border: `1px solid ${aiEnhancedResult.verdict === "STRONG_ACCEPT" || aiEnhancedResult.verdict === "ACCEPT" ? "rgba(74, 222, 128, 0.3)" : aiEnhancedResult.verdict === "REJECT" ? "rgba(239, 68, 68, 0.3)" : "rgba(251, 191, 36, 0.3)"}`,
+                            fontSize: "0.82rem",
+                            lineHeight: 1.6,
+                            color: "rgba(255,255,255,0.8)",
+                          }}
+                        >
                           <strong>{aiEnhancedResult.recommendation}</strong>
                         </div>
 
                         {/* AI Fit Summary */}
                         {aiEnhancedResult.aiAnalysis?.fitSummary && (
-                          <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)', marginBottom: '1rem', lineHeight: 1.6, padding: '0.75rem', background: 'rgba(139, 92, 246, 0.05)', borderRadius: '8px' }}>
-                            <strong style={{ color: '#c4b5fd' }}>Tóm tắt AI:</strong> {aiEnhancedResult.aiAnalysis.fitSummary}
+                          <div
+                            style={{
+                              fontSize: "0.78rem",
+                              color: "rgba(255,255,255,0.7)",
+                              marginBottom: "1rem",
+                              lineHeight: 1.6,
+                              padding: "0.75rem",
+                              background: "rgba(139, 92, 246, 0.05)",
+                              borderRadius: "8px",
+                            }}
+                          >
+                            <strong style={{ color: "#c4b5fd" }}>
+                              Tóm tắt AI:
+                            </strong>{" "}
+                            {aiEnhancedResult.aiAnalysis.fitSummary}
                           </div>
                         )}
 
                         {/* AI Skill Signals */}
-                        {(aiEnhancedResult.aiAnalysis?.skillSignals?.length ?? 0) > 0 && (
-                          <div style={{ marginBottom: '0.75rem' }}>
-                            <p style={{ fontSize: '0.76rem', color: '#c4b5fd', fontWeight: 600, marginBottom: '0.5rem' }}>Tín hiệu kỹ năng từ AI:</p>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
-                              {aiEnhancedResult.aiAnalysis!.skillSignals!.slice(0, 8).map((sig, i) => (
-                                <span key={i} style={{
-                                  padding: '3px 8px', borderRadius: '4px', fontSize: '0.72rem',
-                                  background: sig.relevanceScore >= 0.7 ? 'rgba(74, 222, 128, 0.1)' : sig.relevanceScore >= 0.4 ? 'rgba(251, 191, 36, 0.1)' : 'rgba(239, 68, 68, 0.08)',
-                                  border: `1px solid ${sig.relevanceScore >= 0.7 ? 'rgba(74, 222, 128, 0.3)' : sig.relevanceScore >= 0.4 ? 'rgba(251, 191, 36, 0.3)' : 'rgba(239, 68, 68, 0.25)'}`,
-                                  color: sig.relevanceScore >= 0.7 ? '#4ade80' : sig.relevanceScore >= 0.4 ? '#fbbf24' : '#f87171',
-                                }}>
-                                  {sig.skill} ({Math.round(sig.relevanceScore * 100)}%)
-                                </span>
-                              ))}
+                        {(aiEnhancedResult.aiAnalysis?.skillSignals?.length ??
+                          0) > 0 && (
+                          <div style={{ marginBottom: "0.75rem" }}>
+                            <p
+                              style={{
+                                fontSize: "0.76rem",
+                                color: "#c4b5fd",
+                                fontWeight: 600,
+                                marginBottom: "0.5rem",
+                              }}
+                            >
+                              Tín hiệu kỹ năng từ AI:
+                            </p>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: "0.3rem",
+                              }}
+                            >
+                              {aiEnhancedResult
+                                .aiAnalysis!.skillSignals!.slice(0, 8)
+                                .map((sig, i) => (
+                                  <span
+                                    key={i}
+                                    style={{
+                                      padding: "3px 8px",
+                                      borderRadius: "4px",
+                                      fontSize: "0.72rem",
+                                      background:
+                                        sig.relevanceScore >= 0.7
+                                          ? "rgba(74, 222, 128, 0.1)"
+                                          : sig.relevanceScore >= 0.4
+                                            ? "rgba(251, 191, 36, 0.1)"
+                                            : "rgba(239, 68, 68, 0.08)",
+                                      border: `1px solid ${sig.relevanceScore >= 0.7 ? "rgba(74, 222, 128, 0.3)" : sig.relevanceScore >= 0.4 ? "rgba(251, 191, 36, 0.3)" : "rgba(239, 68, 68, 0.25)"}`,
+                                      color:
+                                        sig.relevanceScore >= 0.7
+                                          ? "#4ade80"
+                                          : sig.relevanceScore >= 0.4
+                                            ? "#fbbf24"
+                                            : "#f87171",
+                                    }}
+                                  >
+                                    {sig.skill} (
+                                    {Math.round(sig.relevanceScore * 100)}%)
+                                  </span>
+                                ))}
                             </div>
                           </div>
                         )}
 
                         {aiEnhancedResult.aiError && (
-                          <p style={{ fontSize: '0.76rem', color: '#fbbf24', fontStyle: 'italic' }}>⚠ {aiEnhancedResult.aiError}</p>
+                          <p
+                            style={{
+                              fontSize: "0.76rem",
+                              color: "#fbbf24",
+                              fontStyle: "italic",
+                            }}
+                          >
+                            ⚠ {aiEnhancedResult.aiError}
+                          </p>
                         )}
                       </div>
                     )}

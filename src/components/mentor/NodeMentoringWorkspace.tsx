@@ -25,6 +25,7 @@ import { useToast } from "../../hooks/useToast";
 import { BookingResponse } from "../../services/bookingService";
 import { NodeEvidenceRecordResponse } from "../../types/NodeMentoring";
 import { getNodeEvidence } from "../../services/nodeMentoringService";
+import { getForceDownloadUrl, getFileExtFromUrl } from "../../services/fileUploadService";
 import MentorNodeReviewPanel from "./MentorNodeReviewPanel";
 import MentorNodeVerifyPanel from "./MentorNodeVerifyPanel";
 import "./NodeMentoringWorkspace.css";
@@ -208,12 +209,12 @@ const NodeMentoringWorkspace: React.FC<NodeMentoringWorkspaceProps> = ({
                   <div className="nmw-evidence-field">
                     <label>Tệp đính kèm:</label>
                     <a
-                      href={evidence.attachmentUrl}
-                      target="_blank"
+                      href={getForceDownloadUrl(evidence.attachmentUrl)}
+                      download
                       rel="noopener noreferrer"
                       className="nmw-link"
                     >
-                      <FileText size={14} /> Tải tệp đính kèm
+                      <FileText size={14} /> ⬇ Tải tệp (.{getFileExtFromUrl(evidence.attachmentUrl)})
                     </a>
                   </div>
                 )}

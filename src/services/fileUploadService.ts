@@ -151,14 +151,18 @@ export const validateVideo = (file: File): { valid: boolean; error?: string } =>
 };
 
 /**
- * Validate document file
+ * Validate document file — also accepts images for evidence submissions.
  */
 export const validateDocument = (file: File): { valid: boolean; error?: string } => {
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
   const ALLOWED_TYPES = [
     'application/pdf',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
   ];
   
   if (file.size > MAX_SIZE) {
@@ -171,12 +175,43 @@ export const validateDocument = (file: File): { valid: boolean; error?: string }
   if (!ALLOWED_TYPES.includes(file.type)) {
     return {
       valid: false,
-      error: 'Định dạng không hợp lệ. Chỉ chấp nhận: PDF, DOCX, PPTX'
+      error: 'Định dạng không hợp lệ. Chấp nhận: PDF, DOCX, PPTX, JPG, PNG, GIF, WebP'
     };
   }
   
   
   return { valid: true };
+};
+
+/**
+ * Detect file extension from a URL.
+ */
+export const getFileExtFromUrl = (url: string): string => {
+  try {
+    const pathname = new URL(url).pathname;
+    const ext = pathname.split('.').pop()?.toLowerCase();
+    if (ext && ['pdf', 'docx', 'pptx', 'jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+      return ext;
+    }
+  } catch {
+    // ignore malformed URLs
+  }
+  return 'file';
+};
+
+/**
+ * Transform a Cloudinary URL to force browser download instead of inline display.
+ * Appends `fl_attachment` flag to Cloudinary delivery URLs.
+ * For non-Cloudinary URLs, returns the original URL unchanged.
+ */
+export const getForceDownloadUrl = (url: string): string => {
+  if (!url) return url;
+  // Cloudinary URLs follow pattern: .../upload/v1234/path/file.ext
+  // We insert fl_attachment after /upload/
+  if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+    return url.replace('/upload/', '/upload/fl_attachment/');
+  }
+  return url;
 };
 
 /**

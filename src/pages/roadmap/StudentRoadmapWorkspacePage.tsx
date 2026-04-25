@@ -48,8 +48,11 @@ import {
 import { uploadEvidence } from "../../services/mentorVerificationService";
 import {
   uploadDocument,
+  uploadImage,
   validateDocument,
   formatFileSize,
+  getForceDownloadUrl,
+  getFileExtFromUrl,
 } from "../../services/fileUploadService";
 import {
   NodeAssignmentResponse,
@@ -388,6 +391,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
     file.type ===
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
+  const isImageFile = (file: File) =>
+    file.type.startsWith("image/");
+
   const getFileExt = (file: File) => {
     if (file.type === "application/pdf") return "pdf";
     if (
@@ -395,6 +401,10 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
       return "docx";
+    if (file.type === "image/jpeg") return "jpg";
+    if (file.type === "image/png") return "png";
+    if (file.type === "image/gif") return "gif";
+    if (file.type === "image/webp") return "webp";
     return file.name.split(".").pop()?.toLowerCase() || "file";
   };
 
@@ -434,6 +444,13 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
       if (attachmentFile) {
         if (isDocFile(attachmentFile) && currentUserId) {
           const result = await uploadDocument(
+            attachmentFile,
+            currentUserId,
+            (p) => setUploadProgress(p.percentage),
+          );
+          attachmentUrl = result.url;
+        } else if (isImageFile(attachmentFile) && currentUserId) {
+          const result = await uploadImage(
             attachmentFile,
             currentUserId,
             (p) => setUploadProgress(p.percentage),
@@ -832,11 +849,11 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                       </div>
 
                       <div className="srwp-form-group">
-                        <label>File đính kèm — PDF / DOCX (Tùy chọn)</label>
+                        <label>File đính kèm — PDF / DOCX / Ảnh (Tùy chọn)</label>
                         <input
                           ref={fileInputRef}
                           type="file"
-                          accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                          accept=".pdf,.docx,image/jpeg,image/png,image/gif,image/webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                           style={{ display: "none" }}
                           onChange={(e) => {
                             const f = e.target.files?.[0];
@@ -880,6 +897,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                               <div className="srwp-upload-zone__accept">
                                 <span className="srwp-upload-zone__badge srwp-upload-zone__badge--pdf">PDF</span>
                                 <span className="srwp-upload-zone__badge srwp-upload-zone__badge--docx">DOCX</span>
+                                <span className="srwp-upload-zone__badge srwp-upload-zone__badge--img">IMG</span>
                               </div>
                             </>
                           )}
@@ -903,8 +921,8 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                         {evidence?.attachmentUrl && !attachmentFile && (
                           <div className="srwp-existing-attachment">
                             <FileText size={14} />
-                            <a href={evidence.attachmentUrl} target="_blank" rel="noreferrer">
-                              Xem file đã đính kèm trước đó ↗
+                            <a href={getForceDownloadUrl(evidence.attachmentUrl)} download rel="noreferrer">
+                              ⬇ Tải file đã đính kèm (.{getFileExtFromUrl(evidence.attachmentUrl)})
                             </a>
                           </div>
                         )}
@@ -1069,11 +1087,11 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                       </div>
 
                       <div className="srwp-form-group">
-                        <label>File đính kèm — PDF / DOCX (Tùy chọn)</label>
+                        <label>File đính kèm — PDF / DOCX / Ảnh (Tùy chọn)</label>
                         <input
                           ref={fileInputRef}
                           type="file"
-                          accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                          accept=".pdf,.docx,image/jpeg,image/png,image/gif,image/webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                           style={{ display: "none" }}
                           onChange={(e) => {
                             const f = e.target.files?.[0];
@@ -1117,6 +1135,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                               <div className="srwp-upload-zone__accept">
                                 <span className="srwp-upload-zone__badge srwp-upload-zone__badge--pdf">PDF</span>
                                 <span className="srwp-upload-zone__badge srwp-upload-zone__badge--docx">DOCX</span>
+                                <span className="srwp-upload-zone__badge srwp-upload-zone__badge--img">IMG</span>
                               </div>
                             </>
                           )}
