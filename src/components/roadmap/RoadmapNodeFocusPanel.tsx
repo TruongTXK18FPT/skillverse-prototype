@@ -1,15 +1,14 @@
 import { MouseEvent, TouchEvent, WheelEvent, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   BookOpen,
   BookMarked,
-  CalendarDays,
   CheckCircle2,
   Circle,
   Clock3,
   Compass,
   GitBranch,
   Layers3,
-  Sparkles,
   X,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -161,6 +160,7 @@ const RoadmapNodeFocusPanel = ({
     () => normalizeRoadmapMarkdown(node?.description),
     [node?.description],
   );
+  const navigate = useNavigate();
 
   if (!isOpen || !node) {
     return null;
@@ -510,23 +510,30 @@ const RoadmapNodeFocusPanel = ({
 
         <section className="roadmap-node-focus-panel__footer-actions">
           <div className="roadmap-node-focus-panel__primary-actions">
-            <button
-              type="button"
-              className="roadmap-node-focus-panel__planner-cta"
-              onClick={handlePlannerAction}
-              disabled={
-                isCreatingStudyTask || (!hasStudyTask && !canCreateStudyTask)
-              }
-            >
-              {hasStudyTask ? <CalendarDays size={16} /> : <Sparkles size={16} />}
-              <span>
-                {hasStudyTask
-                  ? "Đi tới Study Planner"
-                  : isCreatingStudyTask
-                    ? "Đang tạo..."
-                    : "Tạo study plan"}
-              </span>
-            </button>
+            {hasStudyTask || canCreateStudyTask ? (
+              <button
+                type="button"
+                className="roadmap-node-focus-panel__planner-cta"
+                onClick={handlePlannerAction}
+                disabled={isCreatingStudyTask}
+              >
+                <span>
+                  {hasStudyTask
+                    ? "Đi tới Study Planner"
+                    : isCreatingStudyTask
+                      ? "Đang tạo..."
+                      : "Tạo study plan"}
+                </span>
+              </button>
+            ) : studyPlanLockedReason ? (
+              <button
+                type="button"
+                className="roadmap-node-focus-panel__planner-cta roadmap-node-focus-panel__planner-cta--locked"
+                onClick={() => navigate('/premium')}
+              >
+                <span>Mở khóa Study Plan</span>
+              </button>
+            ) : null}
             
             {progress?.status !== "COMPLETED" && (
               <button
@@ -542,11 +549,14 @@ const RoadmapNodeFocusPanel = ({
           </div>
 
           <div className="roadmap-node-focus-panel__action-notes">
-            {!hasStudyTask && !canCreateStudyTask && (
+            {!hasStudyTask && !canCreateStudyTask && studyPlanLockedReason && (
+              <p className="roadmap-node-focus-panel__action-note roadmap-node-focus-panel__action-note--premium">
+                Nâng cấp Premium để sử dụng tính năng lập kế hoạch học tập AI
+              </p>
+            )}
+            {!hasStudyTask && !canCreateStudyTask && !studyPlanLockedReason && progress?.status !== "COMPLETED" && (
               <p className="roadmap-node-focus-panel__action-note">
-                {progress?.status === "COMPLETED"
-                  ? "Node này đã được hoàn thành."
-                  : (studyPlanLockedReason || "Hoàn thành node hiện tại trước để mở kế hoạch.")}
+                Hoàn thành node hiện tại trước để mở kế hoạch.
               </p>
             )}
             {progress?.status !== "COMPLETED" && node.nodeStatus === "LOCKED" && (
