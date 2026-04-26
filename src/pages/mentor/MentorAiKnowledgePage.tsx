@@ -492,7 +492,9 @@ const MentorAiKnowledgePage: React.FC = () => {
                                         <div><strong>Doc type</strong><span>{detail.docType || 'Không rõ'}</span></div>
                                         <div><strong>Skill</strong><span>{detail.skillName || detail.skillSlug || '—'}</span></div>
                                         <div><strong>Industry / Level</strong><span>{detail.industry || '—'} / {detail.level || '—'}</span></div>
-                                        <div><strong>Course / Module / Assignment</strong><span>{detail.courseId ?? '—'} / {detail.moduleId ?? '—'} / {detail.assignmentId ?? '—'}</span></div>
+                                        {detail.useCase !== 'ROADMAP_SKILL' && detail.useCase !== 'CHATBOT_GLOBAL' && (
+                                          <div><strong>Course / Module / Assignment</strong><span>{detail.courseId ?? '—'} / {detail.moduleId ?? '—'} / {detail.assignmentId ?? '—'}</span></div>
+                                        )}
                                         <div><strong>Tệp</strong><span>{detail.originalFileName || 'Không rõ'}</span></div>
                                         <div><strong>Approved at</strong><span>{formatDateTime(detail.approvedAt)}</span></div>
                                         <div><strong>Indexed at</strong><span>{formatDateTime(detail.indexedAt)}</span></div>
