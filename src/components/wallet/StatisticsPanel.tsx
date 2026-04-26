@@ -114,9 +114,6 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
     }
   });
   
-  // Debug: Log processed data
-  
-
   // Monthly trend data for Area Chart - Calculate from real transactions
   const getMonthlyTrendData = () => {
     const months = [];
@@ -161,9 +158,6 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ walletData, transacti
   };
   
   const monthlyTrendData = getMonthlyTrendData();
-  
-  // Debug: Log monthly data
-  
 
   // Transaction type distribution
   const transactionTypeData = [

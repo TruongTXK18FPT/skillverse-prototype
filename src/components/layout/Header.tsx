@@ -204,12 +204,6 @@ const Header: React.FC = () => {
       icon: ShoppingBag,
       hideForRoles: ["MENTOR", "RECRUITER"],
     },
-    // {
-    //   name: 'Cầu Nguyện',
-    //   description: 'Đôi khi chỉ cần có niềm tin là đủ',
-    //   path: '/pray',
-    //   icon: BadgeQuestionMark
-    // }
   ];
 
   const studentOnlyQuickNavPaths = new Set([

@@ -1053,19 +1053,11 @@ const RecruiterTalentWorkspace = ({
   };
 
   const handleConfirmDecision = async () => {
-    console.log("[DEBUG] handleConfirmDecision called", {
-      decisionModal,
-      decisionNote: decisionNote.trim(),
-      isActionBusy,
-    });
-
     if (!decisionModal || !selectedJob) {
-      console.log("[DEBUG] early return: no decisionModal or no selectedJob");
       return;
     }
 
     if (!decisionNote.trim()) {
-      console.log("[DEBUG] early return: no decisionNote");
       showToastError(
         "Thiếu nội dung",
         "Vui lòng nhập ghi chú cho quyết định này.",
@@ -1095,19 +1087,10 @@ const RecruiterTalentWorkspace = ({
             ? "acceptanceMessage"
             : "rejectionReason";
 
-        console.log("[DEBUG] calling jobService.updateApplicationStatus", {
-          appId: decisionModal.application.id,
-          status: decisionModal.status,
-          fieldName,
-          fieldValue: decisionNote.trim(),
-        });
-
         await jobService.updateApplicationStatus(decisionModal.application.id, {
           status: decisionModal.status as JobApplicationStatus,
           [fieldName]: decisionNote.trim(),
         });
-
-        console.log("[DEBUG] jobService.updateApplicationStatus succeeded");
       }
 
       setDecisionModal(null);

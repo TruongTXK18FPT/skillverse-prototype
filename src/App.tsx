@@ -40,7 +40,6 @@ import Gamification from "./pages/navbar/Gamification";
 // import PortfolioPage from './pages/navbar/PortfolioPage';  // OLD - Backup
 import TacticalDossierPortfolio from "./components/portfolio-hud/TacticalDossierPortfolio"; // NEW - Mothership Theme
 import DossierCreatePortfolioPage from "./components/portfolio-hud/DossierCreatePortfolioPage";
-import PortfolioDebug from "./pages/navbar/PortfolioDebug";
 // import CVPage from './pages/navbar/CV';  // OLD - Backup
 import DataCompilerPreview from "./components/portfolio-hud/DataCompilerPreview"; // NEW - Mothership Theme
 import CVBuilderPage from "./pages/portfolio/CVBuilderPage"; // CV Builder for manual editing
@@ -112,7 +111,6 @@ import UserBookingsPage from "./pages/user/UserBookingsPage";
 import BookingDetailPage from "./pages/booking/BookingDetailPage";
 import MeowlBubbleNotification from "./components/meowl/MeowlBubbleNotification";
 import MeowlPetWrapper from "./components/meowl-pet/MeowlPetWrapper";
-import ForbiddenTemple from "./components/easter-egg/ForbiddenTemple";
 import TicTacToeGame from "./components/game/tic-tac-toe/TicTacToeGame";
 import MeowlAdventure from "./components/game/meowl-adventure/MeowlAdventure";
 
@@ -133,7 +131,6 @@ import Certificate from "./components/certificate/Certificate";
 const CertificateVerifyPage = lazy(
   () => import("./components/certificate/CertificateVerifyPage"),
 );
-const CertificateDemoPage = lazy(() => import("./pages/CertificateDemoPage"));
 
 const AppContents = () => {
   const location = useLocation();
@@ -329,14 +326,6 @@ const AppContents = () => {
             <Route
               path="/portfolio/:slug"
               element={<TacticalDossierPortfolio />}
-            />
-            <Route
-              path="/portfolio-debug"
-              element={
-                <AdminRoute>
-                  <PortfolioDebug />
-                </AdminRoute>
-              }
             />
             {/* <Route path="/cv" element={<CVPage />} /> */}{" "}
             {/* BACKUP - Old CV Page */}
@@ -664,17 +653,6 @@ const AppContents = () => {
             <Route path="/admin-security" element={<AdminSecurityPage />} />
             {/* Unauthorized Access */}
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
-            {/* Easter Egg Route */}
-            <Route path="/pray" element={<ForbiddenTemple />} />
-            {/* Certificate Demo Route */}
-            <Route
-              path="/certificate-demo"
-              element={
-                <AdminRoute>
-                  <CertificateDemoPage />
-                </AdminRoute>
-              }
-            />
             {/* Meowl Skin Shop */}
             <Route
               path="/meowl-shop"

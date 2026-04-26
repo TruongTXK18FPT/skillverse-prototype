@@ -558,19 +558,10 @@ const ProfilePage = () => {
             <ParentConnectionSection />
           )}
 
-          {/* Security Section - ALWAYS SHOW */}
-          <div className="profile-section" style={{ border: '2px solid red', padding: '20px' }}>
-            <h2 className="profile-section-title">🔒 BẢO MẬT (TEST)</h2>
-            
-            {/* Debug info */}
-            <div style={{ background: 'yellow', padding: '10px', marginBottom: '10px' }}>
-              <strong>Debug:</strong><br/>
-              authProvider: {user?.authProvider}<br/>
-              googleLinked: {user?.googleLinked ? 'true' : 'false'}<br/>
-              Show Set Password: {(user?.authProvider === 'GOOGLE' && !user?.googleLinked) ? 'YES' : 'NO'}<br/>
-              Show Change Password: {(user?.authProvider === 'LOCAL' || user?.googleLinked) ? 'YES' : 'NO'}
-            </div>
-            
+          {/* Security Section */}
+          <div className="profile-section">
+            <h2 className="profile-section-title">Bảo mật tài khoản</h2>
+
             <div className="security-actions">
               {/* Set Password - Chỉ cho Google users chưa có password */}
               {user?.authProvider === 'GOOGLE' && !user?.googleLinked && (
