@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong React hoặc Vue, 'Component' được hiểu cơ bản là gì?",
+    "options": [
+      "A. Một hàm hoặc đối tượng độc lập chứa giao diện và logic riêng biệt",
+      "B. Một tệp tin cấu hình hệ thống cho toàn bộ ứng dụng",
+      "C. Một cơ sở dữ liệu lưu trữ thông tin người dùng",
+      "D. Một giao thức kết nối giữa client và server"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Component là đơn vị xây dựng cơ bản của UI, cho phép chia nhỏ giao diện thành các phần có thể tái sử dụng và quản lý logic độc lập.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của 'Props' trong các UI framework là gì?",
+    "options": [
+      "A. Để thay đổi dữ liệu nội bộ của chính component đó",
+      "B. Để truyền dữ liệu từ component cha xuống component con",
+      "C. Để lưu trữ dữ liệu vĩnh viễn trong trình duyệt",
+      "D. Để kết nối trực tiếp với Database"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Props (Properties) là cơ chế cho phép component cha truyền dữ liệu hoặc cấu hình xuống các component con.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa 'State' và 'Props' là gì?",
+    "options": [
+      "A. Props có thể thay đổi bởi chính component, State thì không",
+      "B. State được truyền từ bên ngoài vào, Props khởi tạo bên trong",
+      "C. State dùng để quản lý dữ liệu nội bộ có thể thay đổi, Props dùng để nhận dữ liệu từ cha",
+      "D. Không có sự khác biệt nào, cả hai đều dùng giống hệt nhau"
+    ],
+    "correctAnswer": "C",
+    "explanation": "State là trạng thái nội bộ của component và có thể thay đổi (mutable), trong khi Props là dữ liệu nhận từ bên ngoài và thường được coi là bất biến (read-only) đối với component nhận.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao cần sử dụng thuộc tính 'key' khi render một danh sách các phần tử?",
+    "options": [
+      "A. Để định dạng CSS cho các phần tử đó",
+      "B. Để framework xác định hiệu quả phần tử nào đã thay đổi, thêm hoặc xóa",
+      "C. Để lưu trữ dữ liệu vào LocalStorage",
+      "D. Để bắt buộc trình duyệt phải tải lại trang"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thuộc tính 'key' giúp thuật toán diffing của React/Vue xác định chính xác phần tử nào trong danh sách cần được cập nhật, từ đó tối ưu hóa hiệu năng render.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong React, Hook nào được sử dụng để quản lý trạng thái (state) trong Functional Component?",
+    "options": [
+      "A. useEffect",
+      "B. useContext",
+      "C. useState",
+      "D. useReducer"
+    ],
+    "correctAnswer": "C",
+    "explanation": "useState là Hook cơ bản nhất dùng để khai báo và cập nhật trạng thái bên trong một functional component.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Vue (Options API), dữ liệu phản ứng (reactive data) được khai báo trong hàm nào?",
+    "options": [
+      "A. methods",
+      "B. computed",
+      "C. data",
+      "D. watch"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Vue Options API, tất cả các thuộc tính dữ liệu cần tính phản ứng phải được trả về từ hàm data().",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Virtual DOM' có lợi ích chính là gì?",
+    "options": [
+      "A. Thay thế hoàn toàn HTML truyền thống",
+      "B. Giảm thiểu việc thao tác trực tiếp lên DOM thật để tăng hiệu năng render",
+      "C. Giúp trang web chạy được khi không có internet",
+      "D. Tự động bảo mật mã nguồn phía client"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Virtual DOM là một bản sao nhẹ của DOM thật. Framework tính toán sự thay đổi trên Virtual DOM trước rồi mới cập nhật vào DOM thật một cách tối ưu nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn thực hiện một hành động (như gọi API) ngay sau khi component hiển thị lần đầu tiên. Bạn nên dùng gì?",
+    "options": [
+      "A. useEffect với mảng phụ thuộc rỗng (React) hoặc mounted hook (Vue)",
+      "B. Một vòng lặp while(true) bên trong component",
+      "C. Sự kiện onClick của thẻ <div> bao ngoài",
+      "D. Hàm render() chính của component"
+    ],
+    "correctAnswer": "A",
+    "explanation": "useEffect với [] (React) và mounted (Vue) là những nơi phù hợp nhất để thực hiện side effects như gọi API ngay sau khi component được gắn vào DOM.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Làm thế nào để truyền một sự kiện từ component con lên component cha?",
+    "options": [
+      "A. Thay đổi trực tiếp props nhận được từ cha",
+      "B. Sử dụng callback function truyền qua props (React) hoặc $emit (Vue)",
+      "C. Sử dụng biến toàn cục window.event",
+      "D. Tải lại toàn bộ trang web"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để giao tiếp ngược lên cha, React sử dụng hàm callback được truyền qua props, còn Vue sử dụng cơ chế phát sự kiện (emit).",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong JSX (React), làm thế nào để hiển thị một biến 'name' vào trong thẻ h1?",
+    "options": [
+      "A. <h1>name</h1>",
+      "B. <h1>$name</h1>",
+      "C. <h1>{name}</h1>",
+      "D. <h1>{{name}}</h1>"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong JSX, các biểu thức JavaScript được đặt bên trong cặp ngoặc nhọn { }.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cú pháp nào trong Vue được dùng để liên kết dữ liệu hai chiều (two-way binding) với thẻ input?",
+    "options": [
+      "A. v-bind",
+      "B. v-on",
+      "C. v-model",
+      "D. v-if"
+    ],
+    "correctAnswer": "C",
+    "explanation": "v-model là directive của Vue giúp đồng bộ hóa dữ liệu giữa thẻ input và biến trong state một cách tự động.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điều gì xảy ra khi bạn gọi hàm cập nhật State (như setState hoặc setX)?",
+    "options": [
+      "A. Trình duyệt sẽ đóng lại ngay lập tức",
+      "B. Component sẽ được kích hoạt quá trình render lại (re-render)",
+      "C. Chỉ có CSS của component bị thay đổi",
+      "D. Dữ liệu trong database sẽ được cập nhật tự động"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi state thay đổi, framework sẽ nhận biết và thực hiện render lại component (và các con của nó nếu cần) để cập nhật giao diện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong React, 'Fragment' (<> ... </>) được dùng để làm gì?",
+    "options": [
+      "A. Để tạo ra một hiệu ứng chuyển động",
+      "B. Để nhóm nhiều phần tử con mà không cần thêm thẻ bao ngoài dư thừa vào DOM",
+      "C. Để lưu trữ dữ liệu tạm thời",
+      "D. Để kết nối với Redux"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Fragment cho phép trả về nhiều phần tử từ một component mà không làm phình cấu trúc HTML bởi các thẻ div không cần thiết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một component bị xóa khỏi giao diện (unmount), hành động nào là cần thiết để tránh rò rỉ bộ nhớ?",
+    "options": [
+      "A. Xóa toàn bộ file mã nguồn",
+      "B. Hủy bỏ các bộ hẹn giờ (timers) hoặc các đăng ký sự kiện (subscriptions)",
+      "C. Đặt tất cả biến về giá trị null",
+      "D. F5 lại trình duyệt"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc dọn dẹp (cleanup) các tác vụ bất đồng bộ hoặc sự kiện khi component unmount giúp ngăn ngừa lỗi và tối ưu bộ nhớ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Vue, directive nào được dùng để render một phần tử dựa trên điều kiện?",
+    "options": [
+      "A. v-for",
+      "B. v-show hoặc v-if",
+      "C. v-bind",
+      "D. v-on"
+    ],
+    "correctAnswer": "B",
+    "explanation": "v-if (xóa/thêm phần tử vào DOM) và v-show (ẩn/hiện qua CSS display) được dùng cho render có điều kiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Single Page Application' (SPA) có đặc điểm gì nổi bật?",
+    "options": [
+      "A. Mỗi khi chuyển trang, trình duyệt phải tải lại toàn bộ file HTML từ server",
+      "B. Chỉ có duy nhất một trang HTML và nội dung được cập nhật động bằng JavaScript",
+      "C. Không thể sử dụng CSS trong ứng dụng",
+      "D. Ứng dụng chỉ chạy được trên một kích thước màn hình duy nhất"
+    ],
+    "correctAnswer": "B",
+    "explanation": "SPA tải trang một lần duy nhất, sau đó việc chuyển trang hoặc cập nhật nội dung diễn ra mượt mà nhờ JS thao tác trên DOM mà không cần load lại trang.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để xử lý sự kiện click chuột vào một nút trong React?",
+    "options": [
+      "A. <button onclick='handleClick()'>",
+      "B. <button onClick={handleClick}>",
+      "C. <button click={handleClick}>",
+      "D. <button on-click={handleClick}>"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong React, các sự kiện được viết theo kiểu camelCase (onClick) và nhận vào một tham chiếu hàm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong phát triển Frontend, file 'package.json' dùng để làm gì?",
+    "options": [
+      "A. Lưu trữ mã nguồn CSS của ứng dụng",
+      "B. Chứa danh sách các thư viện phụ thuộc (dependencies) và cấu hình dự án",
+      "C. Là nơi viết các câu lệnh SQL",
+      "D. Để lưu trữ ảnh của ứng dụng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "package.json quản lý thông tin dự án, các phiên bản thư viện cần thiết để ứng dụng có thể chạy và các scripts thực thi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn có một component cha và một component con rất sâu bên trong. Để tránh việc truyền props qua quá nhiều cấp (prop drilling), bạn nên dùng gì?",
+    "options": [
+      "A. Copy dữ liệu vào mọi component trung gian",
+      "B. Sử dụng Context API (React) hoặc Provide/Inject (Vue)",
+      "C. Sử dụng thẻ <iframe>",
+      "D. Lưu dữ liệu vào file .txt trên máy người dùng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Context API và Provide/Inject cho phép truyền dữ liệu xuyên cấp mà không cần thông qua các component trung gian không liên quan.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong React, tại sao không nên thay đổi State trực tiếp như 'this.state.count = 1'?",
+    "options": [
+      "A. Vì nó sẽ gây ra lỗi cú pháp và không chạy được",
+      "B. Vì framework sẽ không nhận biết được sự thay đổi để render lại giao diện",
+      "C. Vì nó sẽ xóa sạch dữ liệu trong LocalStorage",
+      "D. Vì nó làm cho trình duyệt chạy chậm hơn 100 lần"
+    ],
+    "correctAnswer": "B",
+    "explanation": "State phải được cập nhật thông qua các hàm chuyên dụng (setState/setX) để framework kích hoạt quy trình so sánh Virtual DOM và cập nhật UI.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cấu trúc thư mục phổ biến 'src/components' thường dùng để chứa gì?",
+    "options": [
+      "A. Các file ảnh và video lớn",
+      "B. Các file thực thi của hệ điều hành",
+      "C. Các file mã nguồn của các component giao diện",
+      "D. Tài liệu hướng dẫn sử dụng cho khách hàng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Theo quy ước thông thường, thư mục 'components' là nơi chứa các thành phần giao diện được chia nhỏ của ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh nào thường được dùng để cài đặt các thư viện mới vào dự án React/Vue?",
+    "options": [
+      "A. npm install <tên_thư_viện>",
+      "B. download <tên_thư_viện>",
+      "C. git push <tên_thư_viện>",
+      "D. setup <tên_thư_viện>"
+    ],
+    "correctAnswer": "A",
+    "explanation": "npm install (hoặc yarn add) là lệnh tiêu chuẩn để tải và thêm thư viện vào node_modules và package.json.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Vue, thuộc tính 'computed' khác gì với 'methods'?",
+    "options": [
+      "A. Computed không thể nhận tham số",
+      "B. Computed được lưu đệm (cached) dựa trên các biến phụ thuộc, chỉ tính toán lại khi cần",
+      "C. Methods luôn chạy nhanh hơn Computed",
+      "D. Computed chỉ dùng cho việc gọi API"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Computed properties có tính năng caching, giúp tối ưu hiệu năng khi thực hiện các tính toán phức tạp dựa trên dữ liệu có sẵn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi làm việc nhóm, việc tuân thủ 'Coding Conventions' (quy ước viết code) giúp ích gì?",
+    "options": [
+      "A. Giúp code chạy nhanh hơn trên trình duyệt",
+      "B. Làm cho mã nguồn dễ đọc, dễ bảo trì và nhất quán giữa các thành viên",
+      "C. Giảm dung lượng file ảnh trong dự án",
+      "D. Tự động sửa lỗi logic trong code"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quy ước viết code giúp đội ngũ làm việc hiệu quả hơn, người khác dễ dàng đọc hiểu và tiếp quản mã nguồn của bạn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để hiển thị một danh sách mảng 'items' trong React, phương thức JavaScript nào thường được dùng nhất?",
+    "options": [
+      "A. items.forEach()",
+      "B. items.map()",
+      "C. items.filter()",
+      "D. items.push()"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phương thức .map() trả về một mảng mới chứa các phần tử JSX, là cách chuẩn để render danh sách trong React.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong React, bạn có một component cha thường xuyên cập nhật trạng thái của nó. Component con nhận một prop là một hàm xử lý sự kiện. Để tránh component con re-render không cần thiết khi component cha re-render mà hàm prop không thay đổi, bạn nên sử dụng hook nào?",
+    "options": [
+      "A. `useMemo`",
+      "B. `useCallback`",
+      "C. `useEffect`",
+      "D. `useRef`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`useCallback` được sử dụng để memoize (ghi nhớ) một hàm callback, đảm bảo rằng hàm đó chỉ được tạo lại khi các phần phụ thuộc của nó thay đổi. Điều này giúp ngăn chặn các component con được truyền hàm này làm prop re-render không cần thiết khi hàm đó không thực sự thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Vue 3 với Composition API, bạn muốn tạo một giá trị phụ thuộc vào các reactive state khác và tự động cập nhật khi các state đó thay đổi. Bạn nên sử dụng tính năng nào?",
+    "options": [
+      "A. `watch`",
+      "B. `ref`",
+      "C. `computed`",
+      "D. `reactive`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`computed` trong Vue được sử dụng để tạo ra các giá trị dẫn xuất (derived values) từ các reactive state khác. Chúng tự động cập nhật khi các dependency của chúng thay đổi và được cache cho đến khi dependency thay đổi, giúp tối ưu hiệu suất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang phát triển một ứng dụng React và nhận thấy một component con re-render quá thường xuyên, ngay cả khi props của nó không thay đổi. Component con này nhận các prop là các giá trị nguyên thủy và một số hàm callback. Giải pháp tối ưu nhất để ngăn chặn re-render không cần thiết cho component con này là gì?",
+    "options": [
+      "A. Bọc component con bằng `React.memo` và đảm bảo các hàm callback được truyền qua `useCallback`.",
+      "B. Sử dụng `useEffect` trong component con để kiểm tra sự thay đổi của props theo cách thủ công.",
+      "C. Chuyển đổi component con thành class component và triển khai `shouldComponentUpdate`.",
+      "D. Di chuyển trạng thái của component con lên component cha để kiểm soát re-render tốt hơn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`React.memo` là một Higher-Order Component (HOC) giúp ghi nhớ component và chỉ re-render khi props của nó thay đổi. Khi các prop bao gồm hàm, cần sử dụng `useCallback` cho các hàm đó để đảm bảo chúng không bị tạo lại trên mỗi lần re-render của component cha, từ đó giúp `React.memo` hoạt động hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Vue 3, bạn muốn chia sẻ một đối tượng cấu hình (ví dụ: cài đặt chủ đề) từ component gốc xuống nhiều cấp con cháu mà không cần truyền qua từng prop. Cơ chế nào phù hợp nhất cho tình huống này?",
+    "options": [
+      "A. Sử dụng Vuex hoặc Pinia để quản lý trạng thái.",
+      "B. Sử dụng `provide` và `inject`.",
+      "C. Truyền đối tượng cấu hình qua props ở mọi cấp.",
+      "D. Sử dụng `globalProperties` để gắn đối tượng vào ứng dụng toàn cục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`provide` và `inject` trong Vue 3 cung cấp một cách để component cha (provider) có thể 'cung cấp' dữ liệu mà các component con cháu (injector) ở bất kỳ cấp độ sâu nào cũng có thể 'tiêm' vào. Đây là giải pháp lý tưởng cho việc truyền dữ liệu xuống sâu mà không gặp phải vấn đề 'prop drilling'.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang làm việc trên một ứng dụng React và cần thực hiện một thao tác DOM đo lường (ví dụ: lấy kích thước của một phần tử) ngay sau khi DOM được cập nhật và trước khi trình duyệt vẽ lại màn hình. Hook nào bạn nên sử dụng?",
+    "options": [
+      "A. `useEffect`",
+      "B. `useLayoutEffect`",
+      "C. `useCallback`",
+      "D. `useRef`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`useLayoutEffect` chạy đồng bộ sau khi tất cả các thay đổi DOM đã được thực hiện nhưng trước khi trình duyệt có cơ hội vẽ lại màn hình. Điều này làm cho nó lý tưởng cho các thao tác DOM đo lường hoặc sửa đổi DOM cần phải xảy ra trước khi người dùng nhìn thấy bất kỳ thay đổi nào.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Vue 3, bạn có một component chứa một danh sách các mục và bạn muốn tối ưu hóa hiệu suất bằng cách chỉ render lại một mục khi dữ liệu của chính mục đó thay đổi, chứ không phải khi toàn bộ danh sách thay đổi. Thuộc tính đặc biệt nào trên `v-for` có thể giúp bạn đạt được điều này?",
+    "options": [
+      "A. `v-if`",
+      "B. `key`",
+      "C. `v-once`",
+      "D. `ref`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thuộc tính `key` trong `v-for` giúp Vue theo dõi danh tính của mỗi node trong danh sách. Khi danh sách thay đổi, Vue sử dụng `key` để xác định những item nào đã được thêm, xóa, hoặc di chuyển, từ đó tối ưu hóa quá trình cập nhật DOM và tránh re-render không cần thiết cho các item không đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một ứng dụng React lớn và muốn giảm kích thước bundle ban đầu bằng cách chỉ tải các thành phần cần thiết khi chúng được hiển thị lần đầu tiên. Cách tiếp cận nào là tốt nhất để thực hiện code splitting (chia tách mã) cho các component trong React?",
+    "options": [
+      "A. Sử dụng `React.lazy` kết hợp với `Suspense`.",
+      "B. Tải tất cả các component cùng lúc nhưng sử dụng `v-if` để ẩn chúng.",
+      "C. Sử dụng `useEffect` để tải component động.",
+      "D. Chia nhỏ ứng dụng thành nhiều ứng dụng React nhỏ hơn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`React.lazy` cho phép bạn định nghĩa một component được tải động (lazy-loaded). Nó được sử dụng kết hợp với `Suspense` để hiển thị một fallback UI (ví dụ: spinner loading) trong khi component đang được tải. Đây là cách tiêu chuẩn để thực hiện code splitting cấp component trong React.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Vue 3, bạn muốn thực hiện một side effect (ví dụ: gọi API, thao tác DOM) mỗi khi một hoặc nhiều reactive state cụ thể thay đổi. Hook nào phù hợp nhất để theo dõi các thay đổi này một cách rõ ràng?",
+    "options": [
+      "A. `computed`",
+      "B. `watch`",
+      "C. `watchEffect`",
+      "D. `onMounted`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`watch` cho phép bạn theo dõi một nguồn dữ liệu reactive cụ thể (ví dụ: một `ref`, một `reactive` object, hoặc một hàm getter) và thực hiện một hàm callback khi nguồn đó thay đổi. Nó cung cấp quyền kiểm soát rõ ràng về những gì được theo dõi và khi nào side effect được kích hoạt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một component React của bạn hiển thị danh sách các mục và cần tính toán một giá trị tổng hợp phức tạp từ danh sách đó. Việc tính toán này tốn nhiều tài nguyên. Để tránh tính toán lại mỗi khi component re-render nhưng danh sách các mục không thay đổi, bạn nên sử dụng hook nào?",
+    "options": [
+      "A. `useCallback`",
+      "B. `useEffect`",
+      "C. `useMemo`",
+      "D. `useRef`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`useMemo` được sử dụng để ghi nhớ một giá trị đã tính toán. Nó chỉ tính toán lại giá trị khi các phần phụ thuộc của nó thay đổi, giúp tránh các phép tính tốn kém không cần thiết trên mỗi lần re-render của component.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Vue 3, bạn muốn tạo một component có thể nhận và hiển thị nội dung tùy chỉnh được truyền từ component cha. Ví dụ, một component `Card` có thể hiển thị bất kỳ nội dung nào bên trong nó. Cơ chế nào của Vue giúp bạn đạt được điều này?",
+    "options": [
+      "A. `props`",
+      "B. `emit`",
+      "C. `slots`",
+      "D. `provide/inject`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`slots` (khe cắm) trong Vue cho phép bạn tạo các điểm mở rộng trong component, nơi mà component cha có thể 'chèn' nội dung HTML/component tùy chỉnh. Điều này giúp tạo ra các component linh hoạt và có khả năng tái sử dụng cao.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một ứng dụng React và muốn xử lý lỗi một cách duyên dáng khi có lỗi xảy ra trong một component con, ngăn chặn toàn bộ ứng dụng bị sập. Tính năng nào của React được thiết kế cho mục đích này?",
+    "options": [
+      "A. `try-catch` block xung quanh JSX.",
+      "B. `Error Boundaries`.",
+      "C. `componentDidCatch` lifecycle method trong functional component.",
+      "D. Sử dụng `useEffect` để bắt lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Boundaries là các React component bắt lỗi JavaScript ở bất kỳ đâu trong cây con của chúng, ghi lại các lỗi đó và hiển thị giao diện người dùng dự phòng thay vì làm sập toàn bộ cây component. Chúng được triển khai dưới dạng class component với `componentDidCatch` hoặc `static getDerivedStateFromError`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Vue 3, bạn đang cân nhắc giữa việc sử dụng Options API và Composition API cho một dự án mới. Lợi ích chính của việc chọn Composition API là gì?",
+    "options": [
+      "A. Dễ học hơn cho người mới bắt đầu.",
+      "B. Giúp tổ chức code theo các tính năng (logic concerns) thay vì theo các tùy chọn (options) như `data`, `methods`, `computed`.",
+      "C. Hoàn toàn loại bỏ nhu cầu về reactivity.",
+      "D. Tự động tối ưu hóa hiệu suất render mà không cần cấu hình thêm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Composition API cho phép nhóm các logic liên quan đến một tính năng cụ thể lại với nhau, bất kể chúng thuộc `data`, `methods` hay `computed`. Điều này giúp code dễ đọc và bảo trì hơn, đặc biệt trong các component lớn hoặc khi tái sử dụng logic (thông qua composables).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang phát triển một ứng dụng React và cần quản lý trạng thái phức tạp với nhiều hành động phụ thuộc lẫn nhau, tương tự như cách Redux hoạt động nhưng ở cấp độ component. Hook nào của React phù hợp nhất cho tình huống này?",
+    "options": [
+      "A. `useState`",
+      "B. `useContext`",
+      "C. `useReducer`",
+      "D. `useRef`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`useReducer` là một hook thay thế cho `useState` cho các trường hợp quản lý trạng thái phức tạp hơn, nơi trạng thái có logic chuyển đổi phức tạp hoặc bao gồm nhiều giá trị con phụ thuộc lẫn nhau. Nó hoạt động tương tự như Redux, sử dụng một hàm reducer để cập nhật trạng thái dựa trên các action.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Vue 3, bạn có một phần của template mà nội dung của nó sẽ không bao giờ thay đổi sau lần render đầu tiên. Để tối ưu hóa hiệu suất, bạn muốn Vue bỏ qua quá trình reactivity cho phần này. Chỉ thị nào của Vue có thể giúp bạn đạt được điều này?",
+    "options": [
+      "A. `v-if`",
+      "B. `v-show`",
+      "C. `v-once`",
+      "D. `v-memo`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`v-once` là một chỉ thị đặc biệt trong Vue cho phép bạn chỉ render một element hoặc component một lần duy nhất. Sau lần render đầu tiên, nó sẽ được cache và bỏ qua các cập nhật trong tương lai, giúp tối ưu hóa hiệu suất cho các nội dung tĩnh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang thiết kế kiến trúc cho một dự án React lớn. Để cải thiện khả năng bảo trì và tái sử dụng, bạn quyết định tổ chức các component theo từng tính năng (feature-based) thay vì theo loại (type-based như `components`, `containers`, `pages`). Lợi ích chính của cách tiếp cận này là gì?",
+    "options": [
+      "A. Giảm kích thước bundle cuối cùng của ứng dụng.",
+      "B. Giúp các nhà phát triển dễ dàng tìm thấy tất cả các tệp liên quan đến một tính năng cụ thể.",
+      "C. Loại bỏ hoàn toàn nhu cầu về quản lý trạng thái toàn cục.",
+      "D. Đảm bảo rằng tất cả các component đều là pure components."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tổ chức theo tính năng (feature-based) có nghĩa là tất cả các tệp liên quan đến một tính năng (component, hook, service, test, v.v.) được nhóm lại trong cùng một thư mục. Điều này giúp các nhà phát triển dễ dàng hiểu và làm việc với một tính năng cụ thể, cải thiện khả năng bảo trì và mở rộng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Vue 3, bạn muốn tái sử dụng một đoạn logic trạng thái (stateful logic) giữa nhiều component khác nhau, ví dụ: logic quản lý một bộ đếm hoặc một form input. Cách tiếp cận nào được khuyến nghị để chia sẻ logic này một cách hiệu quả?",
+    "options": [
+      "A. Sử dụng mixins.",
+      "B. Tạo một component cha và truyền logic qua props.",
+      "C. Sử dụng composables (hàm sử dụng Composition API).",
+      "D. Sao chép và dán logic vào từng component."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Composables (các hàm được viết bằng Composition API) là cách được khuyến nghị trong Vue 3 để tái sử dụng logic trạng thái giữa các component. Chúng cung cấp một cách linh hoạt và rõ ràng để đóng gói và chia sẻ logic, tránh các vấn đề của mixins như xung đột tên và nguồn gốc dữ liệu không rõ ràng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang phát triển một ứng dụng React và cần truy cập trực tiếp vào một phần tử DOM (ví dụ: để focus vào một input hoặc đo kích thước). Hook nào bạn nên sử dụng để tạo một tham chiếu đến phần tử DOM đó?",
+    "options": [
+      "A. `useState`",
+      "B. `useRef`",
+      "C. `useContext`",
+      "D. `useEffect`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`useRef` trả về một đối tượng ref có thuộc tính `.current` được khởi tạo với giá trị truyền vào. Đối tượng ref này tồn tại trong suốt vòng đời của component. Nó thường được dùng để truy cập trực tiếp vào các phần tử DOM hoặc lưu trữ các giá trị có thể thay đổi mà không gây re-render.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Vue 3, bạn muốn tải một component chỉ khi nó thực sự cần thiết (ví dụ: khi người dùng nhấp vào một nút để mở modal chứa component đó). Hàm nào được sử dụng để định nghĩa một component tải bất đồng bộ (lazy-loaded)?",
+    "options": [
+      "A. `defineComponent`",
+      "B. `defineAsyncComponent`",
+      "C. `createApp`",
+      "D. `h`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`defineAsyncComponent` cho phép bạn định nghĩa một component được tải động. Component này sẽ chỉ được tải từ server khi nó được render lần đầu tiên, giúp giảm kích thước bundle ban đầu và cải thiện thời gian tải trang.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang phát triển một ứng dụng React với một form đăng ký phức tạp. Form này có nhiều trường, các quy tắc xác thực phụ thuộc lẫn nhau và logic gửi dữ liệu. Cách tiếp cận nào sau đây được coi là tốt nhất để quản lý trạng thái của form này?",
+    "options": [
+      "A. Sử dụng nhiều hook `useState` riêng lẻ cho mỗi trường input.",
+      "B. Sử dụng `useReducer` để quản lý trạng thái form tập trung.",
+      "C. Sử dụng một thư viện quản lý trạng thái form chuyên dụng như Formik hoặc React Hook Form.",
+      "D. Lưu trữ tất cả trạng thái form trong Context API."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với các form phức tạp, việc sử dụng thư viện quản lý trạng thái form chuyên dụng như Formik hoặc React Hook Form là cách tiếp cận tốt nhất. Chúng cung cấp các giải pháp đã được tối ưu hóa cho việc quản lý trạng thái, xác thực, gửi dữ liệu và xử lý lỗi, giảm đáng kể lượng boilerplate code và công sức phát triển.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Vue, hệ thống reactivity hoạt động như thế nào khi bạn thay đổi một thuộc tính của một đối tượng reactive (được tạo bằng `reactive` hoặc bên trong `data` của Options API)?",
+    "options": [
+      "A. Vue sử dụng Proxy để theo dõi các thay đổi thuộc tính của đối tượng.",
+      "B. Vue thực hiện một vòng lặp sâu để so sánh đối tượng cũ và mới.",
+      "C. Vue thay thế toàn bộ đối tượng reactive bằng một đối tượng mới.",
+      "D. Vue chỉ theo dõi các thay đổi của các thuộc tính cấp cao nhất, không phải các thuộc tính lồng nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong Vue 3, hệ thống reactivity sử dụng JavaScript Proxies để theo dõi các thay đổi của đối tượng. Khi bạn truy cập hoặc sửa đổi một thuộc tính của đối tượng reactive, Proxy sẽ chặn các thao tác này và thông báo cho Vue biết để cập nhật DOM.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang phát triển một component trong React và cần truyền một hàm xử lý sự kiện từ component cha xuống component con. Hàm này sẽ được gọi khi có sự kiện xảy ra trong component con. Cách tốt nhất để truyền hàm này là gì?",
+    "options": [
+      "A. Sử dụng `useRef` để truyền tham chiếu của hàm.",
+      "B. Sử dụng `Context API` để cung cấp hàm.",
+      "C. Truyền hàm trực tiếp như một prop.",
+      "D. Gắn hàm vào đối tượng `window` toàn cục."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Truyền hàm xử lý sự kiện trực tiếp như một prop từ component cha xuống component con là cách tiêu chuẩn và rõ ràng nhất trong React. Điều này tuân thủ nguyên tắc 'data down, events up' và duy trì luồng dữ liệu một chiều dễ hiểu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Vue 3, bạn đang sử dụng Pinia để quản lý trạng thái. Để truy cập một state hoặc getter từ một store trong một component, bạn nên sử dụng phương pháp nào?",
+    "options": [
+      "A. Trực tiếp import store và truy cập `store.state.myValue`.",
+      "B. Sử dụng `mapState` hoặc `mapGetters` từ Pinia (tương tự Vuex).",
+      "C. Import store và sử dụng `storeToRefs` để destructure các state/getters và duy trì reactivity.",
+      "D. Sử dụng `inject` để tiêm store vào component."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi destructure (phân rã) một store từ Pinia, các state thuộc tính sẽ mất tính reactivity. `storeToRefs` là một utility của Pinia cho phép bạn destructure các thuộc tính reactive từ store mà vẫn duy trì tính reactivity của chúng, giúp chúng tự động cập nhật trong template hoặc các `watch`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong một đội phát triển Frontend và cần chọn một chiến lược CSS cho dự án React/Vue mới. Đội của bạn ưu tiên khả năng mở rộng, tránh xung đột tên và dễ dàng quản lý các style theo từng component. Giải pháp nào sau đây phù hợp nhất?",
+    "options": [
+      "A. Sử dụng CSS toàn cục truyền thống với các quy ước đặt tên BEM.",
+      "B. Sử dụng inline styles cho mọi phần tử.",
+      "C. Sử dụng CSS-in-JS (như Styled Components) hoặc CSS Modules.",
+      "D. Sử dụng một framework CSS như Bootstrap hoặc MaterializeCSS trực tiếp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "CSS-in-JS (ví dụ: Styled Components, Emotion) và CSS Modules cung cấp các giải pháp scoped CSS, giúp cô lập style cho từng component, tránh xung đột tên và dễ dàng quản lý. Đây là cách tiếp cận phổ biến và được khuyến nghị trong các dự án lớn, hiện đại với các UI frameworks.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong React, bạn có một component cha truyền một đối tượng phức tạp làm prop cho component con. Component con re-render mỗi khi component cha re-render, ngay cả khi đối tượng prop không thay đổi về mặt giá trị (chỉ thay đổi tham chiếu). Làm thế nào để tối ưu hóa việc này?",
+    "options": [
+      "A. Sử dụng `JSON.stringify` để so sánh đối tượng prop trong component con.",
+      "B. Đảm bảo đối tượng prop được tạo lại chỉ khi giá trị thực sự thay đổi trong component cha (ví dụ: bằng `useMemo`).",
+      "C. Chuyển đổi component con thành một class component và triển khai `shouldComponentUpdate` thủ công.",
+      "D. Không cần tối ưu hóa vì React đủ thông minh để nhận ra đối tượng không thay đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong React, khi một đối tượng được truyền làm prop, React so sánh tham chiếu của đối tượng đó. Nếu component cha tạo lại đối tượng trên mỗi lần re-render (ngay cả khi nội dung giống nhau), component con sẽ luôn coi là prop đã thay đổi. Sử dụng `useMemo` trong component cha để ghi nhớ đối tượng prop, đảm bảo nó chỉ được tạo lại khi các phần phụ thuộc của nó thay đổi, từ đó giúp `React.memo` (nếu component con được bọc bởi nó) hoặc `shouldComponentUpdate` hoạt động hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi nào việc sử dụng Server-Side Rendering (SSR) cho một ứng dụng Frontend (React/Vue) thường được ưu tiên hơn Client-Side Rendering (CSR) truyền thống?",
+    "options": [
+      "A. Khi ứng dụng cần hiệu suất cao cho các tương tác người dùng phức tạp và động.",
+      "B. Khi SEO (Search Engine Optimization) và thời gian hiển thị nội dung đầu tiên (FCP) là yếu tố cực kỳ quan trọng.",
+      "C. Khi ứng dụng chỉ hiển thị dữ liệu tĩnh và không có tương tác người dùng.",
+      "D. Khi muốn giảm kích thước bundle JavaScript của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SSR giúp cải thiện SEO đáng kể vì nội dung HTML đã được render sẵn trên server, dễ dàng được các crawler của công cụ tìm kiếm đọc. Nó cũng cải thiện thời gian hiển thị nội dung đầu tiên (First Contentful Paint - FCP) vì người dùng nhận được HTML hoàn chỉnh ngay lập tức, không cần đợi JavaScript tải và thực thi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong React Fiber, cơ chế 'Concurrent Rendering' giải quyết vấn đề cốt lõi nào của mô hình rendering truyền thống?",
+    "options": [
+      "A. Giảm thiểu dung lượng bundle size của ứng dụng.",
+      "B. Cho phép tạm dừng và tiếp tục quá trình render để tránh chặn (blocking) main thread.",
+      "C. Tự động hóa việc memoize tất cả các component mà không cần useMemo.",
+      "D. Loại bỏ hoàn toàn sự phụ thuộc vào Virtual DOM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Concurrent Rendering cho phép React ngắt quãng quá trình render các update có độ ưu tiên thấp để xử lý các sự kiện tương tác người dùng (như gõ phím), giúp UI luôn mượt mà.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Vue 3 Composition API, việc sử dụng 'shallowRef' thay vì 'ref' mang lại lợi ích gì trong việc tối ưu hiệu năng?",
+    "options": [
+      "A. Giúp dữ liệu có tính reactive sâu (deeply reactive) hơn.",
+      "B. Chỉ theo dõi sự thay đổi của giá trị .value mà không chuyển đổi các thuộc tính bên trong thành reactive.",
+      "C. Cho phép truy cập trực tiếp vào DOM mà không cần thông qua template.",
+      "D. Tự động xóa bỏ các watcher khi component bị unmount."
+    ],
+    "correctAnswer": "B",
+    "explanation": "shallowRef chỉ quan tâm đến sự thay đổi của chính biến đó (identity change). Điều này cực kỳ hữu ích cho các cấu trúc dữ liệu lớn hoặc tích hợp thư viện bên ngoài mà ta không muốn Vue tốn tài nguyên quan sát từng thuộc tính con.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một ứng dụng React quy mô lớn, tại sao việc lạm dụng Context API cho các trạng thái thay đổi thường xuyên (high-frequency updates) được coi là một anti-pattern?",
+    "options": [
+      "A. Vì Context API không hỗ trợ truyền dữ liệu xuống các component con quá sâu.",
+      "B. Vì mỗi khi giá trị Context thay đổi, tất cả các component tiêu thụ (consume) nó đều bị re-render bất kể phần dữ liệu nào thay đổi.",
+      "C. Vì Context API chỉ có thể chứa các giá trị primitive, không chứa được object.",
+      "D. Vì nó làm tăng độ phức tạp khi debug bằng React DevTools."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Context không có cơ chế 'selector' mặc định để ngăn chặn re-render không cần thiết. Với các state thay đổi liên tục, điều này gây ra vấn đề hiệu năng nghiêm trọng cho các component con.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Compound Components' trong React (như mô hình của Select/Option) chủ yếu giải quyết vấn đề gì trong thiết kế hệ thống component?",
+    "options": [
+      "A. Giảm số lượng component cần khai báo trong project.",
+      "B. Tăng tốc độ render bằng cách sử dụng Shadow DOM.",
+      "C. Cung cấp tính linh hoạt trong việc sắp xếp layout đồng thời ẩn đi logic quản lý trạng thái nội bộ.",
+      "D. Thay thế hoàn toàn cho Higher-Order Components (HOC)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Compound Components cho phép các component con chia sẻ trạng thái ngầm định (thường qua Context), giúp người dùng thư viện tự do sắp xếp cấu trúc HTML mà không cần truyền props thủ công qua nhiều tầng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Vue 3, 'Patch Flags' đóng vai trò gì trong quá trình tối ưu hóa Virtual DOM?",
+    "options": [
+      "A. Đánh dấu các node tĩnh để hoàn toàn bỏ qua chúng trong quá trình diffing.",
+      "B. Cho phép Vue thực hiện render trực tiếp lên DOM mà không cần Virtual DOM.",
+      "C. Cung cấp thông tin cụ thể về loại thay đổi (như class, props, text) để compiler tối ưu việc so sánh.",
+      "D. Là một cơ chế để đồng bộ hóa trạng thái giữa server và client trong SSR."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Patch Flags là các bitmask được compiler thêm vào VNode, giúp runtime biết chính xác cần kiểm tra thuộc tính nào, thay vì phải duyệt qua toàn bộ props của node đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện Server-Side Rendering (SSR) với React, hiện tượng 'Hydration Mismatch' thường xảy ra do nguyên nhân nào?",
+    "options": [
+      "A. Do phiên bản Node.js trên server khác với phiên bản trình duyệt của client.",
+      "B. Do cấu trúc cây DOM được render ở server không khớp chính xác với cây DOM mà React tạo ra ở client lần đầu.",
+      "C. Do các file CSS không được tải kịp trước khi JavaScript thực thi.",
+      "D. Do API trả về dữ liệu chậm hơn thời gian timeout của server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hydration yêu cầu cây DOM tĩnh từ server phải khớp hoàn toàn với kết quả render lần đầu của React ở client. Nếu có sự khác biệt (ví dụ dùng biến window ở server), React sẽ cảnh báo và có thể render lại toàn bộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong React, tại sao ta không nên gọi `setState` bên trong vòng lặp hoặc câu lệnh điều kiện (ngoại trừ các trường hợp đặc biệt như trong useEffect)?",
+    "options": [
+      "A. Vì nó vi phạm nguyên tắc bất biến (immutability) của React.",
+      "B. Vì React dựa vào thứ tự gọi các Hook để quản lý trạng thái giữa các lần render.",
+      "C. Vì nó sẽ gây ra lỗi tràn bộ nhớ (memory leak) ngay lập tức.",
+      "D. Vì nó làm cho component không thể được test bằng Jest."
+    ],
+    "correctAnswer": "B",
+    "explanation": "React lưu trữ các hook trong một mảng (hoặc linked list) theo thứ tự thực hiện. Nếu thứ tự này thay đổi do câu lệnh điều kiện, React sẽ gán sai trạng thái cho các hook tiếp theo.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Vue, khi nào bạn nên ưu tiên sử dụng 'provide/inject' thay vì truyền props thông thường?",
+    "options": [
+      "A. Khi cần truyền dữ liệu giữa các component anh em (siblings).",
+      "B. Khi muốn tránh tình trạng 'Prop Drilling' qua nhiều cấp component trung gian không cần thiết.",
+      "C. Khi cần đảm bảo dữ liệu luôn được đồng bộ với LocalStorage.",
+      "D. Khi muốn tăng tốc độ render của các component dạng danh sách (list)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Provide/Inject cho phép một component tổ tiên cung cấp dữ liệu cho tất cả các hậu duệ của nó mà không cần truyền qua từng cấp trung gian, giúp code sạch hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa `useMemo` và `useCallback` trong React là gì?",
+    "options": [
+      "A. useMemo trả về một giá trị đã được tính toán, useCallback trả về một function instance.",
+      "B. useMemo chạy ở server-side, useCallback chạy ở client-side.",
+      "C. useCallback nhanh hơn useMemo vì nó không cần dependency array.",
+      "D. useMemo chỉ dùng cho biến primitive, useCallback dùng cho object."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cả hai đều dùng để memoize, nhưng useMemo lưu kết quả của một hàm, còn useCallback lưu chính định nghĩa của hàm đó để tránh tạo hàm mới mỗi lần render.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiến trúc Micro-frontends, thách thức lớn nhất khi tích hợp nhiều framework (ví dụ cả React và Vue) vào cùng một trang là gì?",
+    "options": [
+      "A. Không thể sử dụng chung một cơ sở dữ liệu.",
+      "B. Xung đột về routing và quản lý trạng thái toàn cục (global state).",
+      "C. Kích thước bundle tăng vọt và rủi ro xung đột style/biến toàn cục.",
+      "D. Các framework này không thể giao tiếp với nhau qua Custom Events."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc tải nhiều runtime (React, Vue) làm tăng đáng kể dung lượng tải trang. Ngoài ra, việc quản lý CSS isolation và tránh ô nhiễm biến toàn cục (window) là những thách thức kỹ thuật lớn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Hàm `useDeferredValue` trong React 18 được sử dụng tốt nhất cho kịch bản nào?",
+    "options": [
+      "A. Trì hoãn việc gọi API cho đến khi người dùng ngừng gõ (debouncing).",
+      "B. Giảm ưu tiên render một phần của UI dựa trên giá trị mới để giữ cho input phản hồi tức thì.",
+      "C. Tự động lưu trạng thái vào cache của trình duyệt.",
+      "D. Chờ đợi tất cả các ảnh trong trang tải xong mới hiển thị nội dung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "useDeferredValue cho phép React 'trì hoãn' việc cập nhật các phần UI nặng (như danh sách kết quả tìm kiếm) trong khi vẫn cho phép phần UI quan trọng (như ô input) cập nhật ngay lập tức.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'index' làm 'key' trong danh sách (list) được coi là không tốt trong React/Vue nếu danh sách đó có thể thay đổi thứ tự?",
+    "options": [
+      "A. Vì nó làm cho mã nguồn khó đọc và khó bảo trì hơn.",
+      "B. Vì nó có thể dẫn đến lỗi hiển thị sai dữ liệu và làm giảm hiệu năng re-render do Virtual DOM không xác định đúng node cần di chuyển.",
+      "C. Vì React/Vue sẽ báo lỗi đỏ (error) và dừng ứng dụng ngay lập tức.",
+      "D. Vì index không phải là một chuỗi (string) hợp lệ cho thuộc tính key."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Key giúp framework xác định danh tính của phần tử. Nếu dùng index và danh sách bị đảo ngược, framework sẽ hiểu lầm rằng dữ liệu tại vị trí đó thay đổi thay vì node đó được di chuyển, dẫn đến re-render không cần thiết hoặc lỗi trạng thái nội bộ của component.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Vue 3, 'Effect Scope' API được thiết kế để giải quyết vấn đề gì?",
+    "options": [
+      "A. Quản lý phạm vi của các biến CSS trong component.",
+      "B. Tự động thu gom (dispose) các hiệu ứng reactive (computed, watchers) một cách tập trung.",
+      "C. Thay thế cho Vuex trong việc quản lý state toàn cục.",
+      "D. Giới hạn tầm vực của các slot trong component cha."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Effect Scope cho phép gom nhóm các watcher và computed để có thể hủy bỏ tất cả chúng chỉ bằng một lệnh duy nhất, rất hữu ích khi viết các thư viện hoặc logic phức tạp ngoài component.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi tối ưu hiệu năng cho một bảng dữ liệu (Table) có hàng ngàn dòng trong React, kỹ thuật nào sau đây mang lại hiệu quả cao nhất?",
+    "options": [
+      "A. Sử dụng React.memo cho từng ô (cell) của bảng.",
+      "B. Chuyển toàn bộ dữ liệu bảng vào Context API.",
+      "C. Áp dụng kỹ thuật 'Windowing' hoặc 'Virtualization' để chỉ render các dòng đang hiển thị.",
+      "D. Chia nhỏ bảng thành nhiều component con khác nhau."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Virtualization (như react-window) chỉ render các DOM node nằm trong khung nhìn (viewport), giúp giảm tải cực lớn cho trình duyệt so với việc render hàng ngàn node cùng lúc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong React, sự khác biệt về hành vi giữa 'Layout Effect' (useLayoutEffect) và 'Effect' (useEffect) là gì?",
+    "options": [
+      "A. useLayoutEffect chạy bất đồng bộ, useEffect chạy đồng bộ.",
+      "B. useLayoutEffect chỉ chạy ở phía server.",
+      "C. useLayoutEffect chạy đồng bộ ngay sau khi DOM được cập nhật nhưng trước khi trình duyệt vẽ (paint).",
+      "D. Không có sự khác biệt về hành vi, chỉ khác nhau về tên gọi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "useLayoutEffect chặn việc trình duyệt vẽ UI cho đến khi nó thực thi xong. Điều này hữu ích khi cần đo đạc kích thước DOM và thay đổi UI mà không gây ra hiện tượng giật (flicker).",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Functional Updates' trong `setState` (ví dụ: `setCount(prev => prev + 1)`) lại quan trọng trong các ứng dụng phức tạp?",
+    "options": [
+      "A. Để đảm bảo giá trị state mới luôn dựa trên giá trị state mới nhất, tránh lỗi closure stale state.",
+      "B. Để tăng tốc độ thực thi của hàm setState.",
+      "C. Để tự động trigger một useEffect khác mà không cần dependency.",
+      "D. Để có thể sử dụng setState bên ngoài component."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Do tính chất bất đồng bộ của state updates và closure, việc truy cập trực tiếp biến state có thể lấy phải giá trị cũ. Functional update đảm bảo bạn luôn làm việc với giá trị thực tế hiện tại trong hàng đợi của React.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Vue, 'v-once' và 'v-memo' khác nhau như thế nào?",
+    "options": [
+      "A. v-once chỉ render một lần, v-memo cho phép render lại khi các điều kiện phụ thuộc thay đổi.",
+      "B. v-once dùng cho component, v-memo dùng cho plain HTML.",
+      "C. v-memo là phiên bản cũ của v-once trong Vue 2.",
+      "D. v-once lưu vào cache trình duyệt, v-memo lưu vào bộ nhớ RAM."
+    ],
+    "correctAnswer": "A",
+    "explanation": "v-once bỏ qua hoàn toàn việc cập nhật sau lần render đầu. v-memo (Vue 3.2+) cho phép bỏ qua việc cập nhật cây Virtual DOM trừ khi các giá trị trong mảng phụ thuộc thay đổi, giúp tối ưu các danh sách lớn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một component React bị re-render, điều gì xảy ra với các biến được khai báo trực tiếp bên trong thân hàm component (không dùng hook)?",
+    "options": [
+      "A. Chúng được giữ nguyên giá trị nhờ cơ chế bộ nhớ đệm của JavaScript.",
+      "B. Chúng được khởi tạo lại hoàn toàn mới trong mỗi lần render.",
+      "C. React tự động đưa chúng vào một vùng nhớ dùng chung.",
+      "D. Chúng bị xóa bỏ và gây ra lỗi tham chiếu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi lần render là một lần gọi hàm component. Mọi biến local sẽ được khởi tạo lại. Đây là lý do ta cần useMemo, useCallback hoặc useRef để giữ lại giá trị/tham chiếu giữa các lần render.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chiến lược 'Error Boundary' trong React không thể bắt được loại lỗi nào sau đây?",
+    "options": [
+      "A. Lỗi xảy ra trong phương thức render của component con.",
+      "B. Lỗi xảy ra trong các lifecycle methods.",
+      "C. Lỗi xảy ra trong các trình xử lý sự kiện (event handlers) hoặc code bất đồng bộ (setTimeout).",
+      "D. Lỗi xảy ra trong hàm constructor của class component."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Error Boundary chỉ bắt lỗi trong quá trình render, lifecycle và constructors của cây component bên dưới. Với event handlers hoặc async code, ta phải dùng try/catch thủ công.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Vue 3, tại sao 'Static Hoisting' lại giúp cải thiện hiệu năng của ứng dụng?",
+    "options": [
+      "A. Vì nó chuyển các component thành Web Components.",
+      "B. Vì nó đưa các VNode tĩnh ra ngoài hàm render để không phải tạo lại chúng trong mỗi lần re-render.",
+      "C. Vì nó nén mã nguồn JavaScript thành mã máy.",
+      "D. Vì nó tự động tải trước (preload) các component sẽ được sử dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Static Hoisting nhận diện các phần template không bao giờ thay đổi và tạo chúng một lần duy nhất. Khi render lại, Vue chỉ việc dùng lại tham chiếu đó thay vì tạo mới object VNode.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một đội phát triển quyết định chuyển từ Redux sang React Query (TanStack Query) cho phần lớn state của họ. Quyết định này thường dựa trên lý do kiến trúc nào?",
+    "options": [
+      "A. Redux không còn được hỗ trợ bởi cộng đồng.",
+      "B. Tách biệt rõ ràng giữa 'Server State' (dữ liệu từ API) và 'Client State' (UI state).",
+      "C. React Query giúp viết code CSS-in-JS tốt hơn.",
+      "D. Để giảm bớt số lượng component trong ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phần lớn state trong ứng dụng web là dữ liệu từ server. React Query chuyên biệt hóa việc quản lý caching, fetching và synchronization cho server state, giúp reducer của Redux không bị phình to bởi logic bất đồng bộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Vue, thuộc tính 'scoped' trong thẻ <style> hoạt động như thế nào để đảm bảo tính cô lập?",
+    "options": [
+      "A. Nó sử dụng Shadow DOM API của trình duyệt.",
+      "B. Nó thêm một attribute duy nhất (như data-v-xxxx) vào các phần tử DOM và sửa đổi selector CSS tương ứng.",
+      "C. Nó chuyển đổi toàn bộ CSS thành Inline Styles.",
+      "D. Nó tạo ra một file CSS riêng biệt cho mỗi component."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vue compiler thêm một data attribute ngẫu nhiên vào các element trong component và hậu tố hóa các CSS selector với attribute đó, đảm bảo style không bị rò rỉ ra ngoài.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng 'Portal' (React) hoặc 'Teleport' (Vue) là gì?",
+    "options": [
+      "A. Tăng tốc độ render bằng cách bỏ qua Virtual DOM.",
+      "B. Cho phép render một component con vào một vị trí DOM nằm ngoài cây phân cấp của component cha (như cuối thẻ body).",
+      "C. Tự động dịch nội dung sang nhiều ngôn ngữ khác nhau.",
+      "D. Giúp quản lý state toàn cục mà không cần Context."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Portal/Teleport cực kỳ hữu ích cho Modals, Tooltips, Popovers nơi mà cấu trúc DOM cần nằm ngoài để tránh các vấn đề về z-index hoặc overflow:hidden của component cha.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng 'Custom Hooks' trong React để chia sẻ logic, rủi ro lớn nhất về mặt hiệu năng nếu không thiết kế kỹ là gì?",
+    "options": [
+      "A. Custom Hooks làm tăng kích thước bundle quá mức.",
+      "B. Mỗi component sử dụng hook sẽ chia sẻ chung một instance trạng thái, gây xung đột dữ liệu.",
+      "C. Hook trả về các object/function mới trong mỗi lần render, gây re-render không cần thiết cho các component tiêu thụ.",
+      "D. Custom Hooks không thể sử dụng được các hook cơ bản như useEffect."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nếu một custom hook trả về một object literal hoặc một function mà không được memoize (useMemo/useCallback), các component sử dụng nó sẽ nhận được tham chiếu mới và bị re-render liên tục.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Vue 3, tại sao việc sử dụng 'reactive()' cho các biến primitive (string, number) lại không được khuyến khích?",
+    "options": [
+      "A. Vì reactive() sẽ ném ra lỗi nếu nhận vào giá trị primitive.",
+      "B. Vì reactive() chỉ hoạt động với các kiểu dữ liệu tham chiếu (objects, arrays) và sẽ mất tính reactive khi gán lại giá trị primitive.",
+      "C. Vì reactive() tiêu tốn nhiều bộ nhớ hơn ref().",
+      "D. Vì reactive() không thể theo dõi được sự thay đổi của string."
+    ],
+    "correctAnswer": "B",
+    "explanation": "reactive() sử dụng Proxy, vốn yêu cầu một object. Với primitive, ta phải dùng ref() vì nó bọc giá trị đó vào một object có thuộc tính .value để duy trì tính reactive.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống Enterprise với hàng nghìn component, khi sử dụng React 18 Concurrent Rendering, sự khác biệt cốt lõi giữa 'useTransition' và 'useDeferredValue' về mặt chiến lược điều phối (scheduling) là gì?",
+    "options": [
+      "A. useTransition bao bọc các hàm cập nhật state để đánh dấu chúng là 'non-urgent', trong khi useDeferredValue nhận vào một giá trị và trả về một bản sao có độ trễ để tránh block UI.",
+      "B. useTransition chỉ hoạt động với các tác vụ đồng bộ, còn useDeferredValue được thiết kế riêng cho các tác vụ bất đồng bộ như gọi API.",
+      "C. useTransition ép buộc component render lại ngay lập tức ở chế độ ưu tiên thấp, còn useDeferredValue chờ cho đến khi trình duyệt rảnh rỗi (idle).",
+      "D. useTransition làm giảm số lượng lần render, trong khi useDeferredValue chỉ đơn thuần là một kỹ thuật debounce/throttle thông thường."
+    ],
+    "correctAnswer": "A",
+    "explanation": "useTransition dùng để can thiệp vào quá trình phát sinh cập nhật state (state update logic), trong khi useDeferredValue can thiệp vào luồng dữ liệu (data flow) khi giá trị đã thay đổi nhưng ta muốn trì hoãn việc render lại UI dựa trên giá trị đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế một hệ thống Micro-frontends sử dụng Webpack Module Federation với React, làm thế nào để xử lý xung đột phiên bản của các thư viện dùng chung (shared dependencies) như 'react' hoặc 'react-dom' hiệu quả nhất?",
+    "options": [
+      "A. Luôn thiết lập 'singleton: true' và 'strictVersion: true' trong cấu hình shared để đảm bảo chỉ có một instance duy nhất và báo lỗi nếu phiên bản không khớp.",
+      "B. Copy toàn bộ source code của React vào từng micro-app để đảm bảo tính độc lập tuyệt đối (isolation).",
+      "C. Sử dụng External CDN cho toàn bộ thư viện dùng chung và bỏ qua cấu hình shared của Webpack.",
+      "D. Cho phép mỗi micro-app tự tải phiên bản React của riêng mình để tránh xung đột runtime."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong React, việc có nhiều instance của thư viện (đặc biệt là hooks) sẽ dẫn đến lỗi runtime nghiêm trọng. Singleton: true đảm bảo duy nhất 1 instance, và strictVersion giúp phát hiện sớm các rủi ro không tương thích phiên bản giữa các app.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Vue 3, tại sao việc sử dụng 'shallowRef' thay vì 'ref' cho các danh sách dữ liệu lớn (ví dụ: 10,000 objects từ API) lại là một quyết định tối ưu hóa quan trọng?",
+    "options": [
+      "A. shallowRef chỉ theo dõi thay đổi của chính biến đó (.value), bỏ qua việc tạo proxy đệ quy cho các thuộc tính bên trong, giúp giảm đáng kể overhead bộ nhớ và CPU.",
+      "B. shallowRef tự động giải phóng bộ nhớ (garbage collection) nhanh hơn so với ref.",
+      "C. shallowRef cho phép truy cập dữ liệu nhanh hơn vì nó không sử dụng Proxy API của ES6.",
+      "D. ref không hỗ trợ các kiểu dữ liệu phức tạp như Array hoặc Object trong Vue 3."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc định 'ref' sẽ thực hiện deep reactivity (tạo proxy cho mọi object con). Với dữ liệu lớn chỉ dùng để hiển thị (read-only), shallowRef tránh được việc duyệt cây object, giúp tăng hiệu năng khởi tạo và giảm tải cho hệ thống reactivity.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng React Dashboard bị hiện tượng giật lag khi nhận dữ liệu qua WebSocket liên tục (high-frequency updates). Giải pháp kiến trúc nào là tối ưu nhất để xử lý vấn đề này?",
+    "options": [
+      "A. Đưa dữ liệu WebSocket vào một biến global ngoài React, sau đó sử dụng useSyncExternalStore với cơ chế throttling để cập nhật UI định kỳ.",
+      "B. Sử dụng useEffect để lắng nghe WebSocket và gọi setState ngay lập tức mỗi khi có message mới.",
+      "C. Chuyển toàn bộ logic xử lý WebSocket vào Redux Saga để tận dụng tính năng debounce của saga.",
+      "D. Sử dụng React.memo cho tất cả các component con để ngăn chặn việc render lại không cần thiết."
+    ],
+    "correctAnswer": "A",
+    "explanation": "useSyncExternalStore (React 18) được thiết kế để kết nối với các nguồn dữ liệu bên ngoài một cách an toàn. Kết hợp với throttling giúp kiểm soát tần suất render, tránh làm nghẽn Main Thread khi tần suất message quá cao.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện Server-Side Rendering (SSR) với Vue 3 (Nuxt), lỗi 'Hydration node mismatch' thường xuyên xảy ra do đâu và cách xử lý triệt để nhất là gì?",
+    "options": [
+      "A. Do cấu trúc DOM tạo ra ở Server và Client khác nhau (thường do dữ liệu ngẫu nhiên hoặc thẻ HTML không hợp lệ); xử lý bằng cách bọc component trong <ClientOnly> hoặc đảm bảo dữ liệu đồng nhất.",
+      "B. Do phiên bản Vue trên Server và Client khác nhau; xử lý bằng cách update package.json.",
+      "C. Do CSS không được tải kịp lúc trên Client; xử lý bằng cách inline toàn bộ CSS.",
+      "D. Do trình duyệt không hỗ trợ các tính năng mới của ES Next; xử lý bằng cách sử dụng Babel."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Hydration yêu cầu cây DOM từ Server phải khớp chính xác với lần render đầu tiên ở Client. Nếu có sự khác biệt (ví dụ: dùng Date.now() hoặc render dựa trên localStorage), Vue sẽ không thể 'attach' reactivity vào DOM hiện có.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Xét về mặt cơ chế Reconciliation của React, tại sao việc sử dụng 'index' làm 'key' cho danh sách có khả năng thay đổi thứ tự (sort/filter) lại được coi là một rủi ro hệ thống?",
+    "options": [
+      "A. Nó khiến React tái sử dụng sai state của component cũ cho dữ liệu mới, dẫn đến lỗi logic UI và làm giảm hiệu năng do phải re-render toàn bộ list.",
+      "B. Nó làm cho trình duyệt tốn nhiều bộ nhớ hơn để lưu trữ mảng index.",
+      "C. Nó gây ra lỗi bảo mật XSS khi render dữ liệu từ người dùng.",
+      "D. Nó ngăn cản việc sử dụng các tính năng mới như React Server Components."
+    ],
+    "correctAnswer": "A",
+    "explanation": "React dùng key để định danh instance. Khi index thay đổi nhưng key vẫn giữ nguyên cho vị trí đó, React sẽ giữ lại state của component cũ (ví dụ: giá trị input) và áp cho dữ liệu mới ở vị trí index đó, gây sai lệch dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiến trúc Vue 3 Composition API, việc 'provide/inject' khác biệt như thế nào so với 'Pinia' trong việc quản lý trạng thái của một ứng dụng lớn?",
+    "options": [
+      "A. Pinia cung cấp công cụ devtools, hỗ trợ SSR tốt hơn và có cấu trúc định nghĩa rõ ràng, trong khi provide/inject thiếu tính năng tracking và dễ gây khó khăn khi debug luồng dữ liệu.",
+      "B. provide/inject nhanh hơn Pinia vì không tốn công cài đặt thư viện bên thứ ba.",
+      "C. Pinia chỉ dùng được ở cấp độ component, còn provide/inject dùng được ở toàn bộ ứng dụng.",
+      "D. provide/inject tự động thực hiện tính năng 'time-travel debugging' mà Pinia không có."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc dù cả hai đều giải quyết vấn đề prop-drilling, Pinia là một state management pattern hoàn chỉnh với khả năng debug, middleware, và tích hợp sâu với hệ sinh thái Vue, phù hợp cho quy mô doanh nghiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Island Architecture' (như trong Astro) giải quyết bài toán hiệu năng nào mà các framework SPA truyền thống (React/Vue) thường gặp phải?",
+    "options": [
+      "A. Giảm thiểu lượng JavaScript cần thiết tải xuống Client bằng cách chỉ hydrate các thành phần có tính tương tác, thay vì hydrate toàn bộ trang.",
+      "B. Tự động chuyển đổi toàn bộ mã React sang Vue để chạy nhanh hơn.",
+      "C. Loại bỏ hoàn toàn nhu cầu sử dụng CSS-in-JS.",
+      "D. Tăng tốc độ kết nối cơ sở dữ liệu từ phía Client."
+    ],
+    "correctAnswer": "A",
+    "explanation": "SPA truyền thống yêu cầu tải và thực thi JS cho toàn bộ trang để 'hydrate'. Island Architecture cho phép giữ phần lớn trang là HTML tĩnh và chỉ nạp JS cho các 'đảo' tương tác, giúp cải thiện chỉ số LCP và TBT.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong React, khi sử dụng 'useCallback' một cách bừa bãi cho mọi function, rủi ro lớn nhất mà lập trình viên phải đối mặt là gì?",
+    "options": [
+      "A. Tăng chi phí bộ nhớ để lưu trữ định nghĩa hàm và chi phí tính toán so sánh dependency array, đôi khi làm chậm ứng dụng hơn là không dùng.",
+      "B. Khiến ứng dụng bị crash do tràn bộ nhớ đệm (stack overflow).",
+      "C. Làm cho code không thể thực hiện unit test.",
+      "D. Vô hiệu hóa tính năng Tree Shaking của Webpack."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Việc khởi tạo useCallback có chi phí (overhead). Nếu component con không được bọc trong React.memo, việc giữ nguyên tham chiếu hàm qua useCallback là vô nghĩa và chỉ làm tốn thêm tài nguyên so sánh dependencies.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào để xử lý triệt để vấn đề 'Memory Leak' trong một ứng dụng Vue 3 Single Page Application có sử dụng các thư viện đồ họa bên ngoài (như Chart.js hoặc D3.js)?",
+    "options": [
+      "A. Sử dụng lifecycle hook 'onBeforeUnmount' để gọi hàm hủy (destroy/cleanup) instance của thư viện đồ họa và gỡ bỏ các event listener thủ công.",
+      "B. Chỉ cần đặt biến chứa instance của thư viện về null trong hook 'onUnmounted'.",
+      "C. Vue 3 tự động dọn dẹp mọi instance bên thứ ba khi component bị hủy.",
+      "D. Chuyển sang sử dụng thư viện đồ họa viết hoàn toàn bằng Vue template."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các thư viện không thuộc hệ sinh thái Vue thường tạo ra các tham chiếu DOM và event listener ngoài tầm kiểm soát của Vue. Nếu không gọi hàm hủy thủ công trong onBeforeUnmount, các tham chiếu này sẽ tồn tại mãi trong bộ nhớ.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong React Fiber architecture, giai đoạn 'Commit Phase' khác gì so với 'Render Phase' về khả năng bị ngắt quãng (interruptible)?",
+    "options": [
+      "A. Render Phase có thể bị tạm dừng và khởi động lại để ưu tiên các tác vụ quan trọng hơn, trong khi Commit Phase là đồng bộ và không thể ngắt quãng.",
+      "B. Cả hai giai đoạn đều có thể bị ngắt quãng để đảm bảo 60fps.",
+      "C. Commit Phase có thể bị ngắt quãng, còn Render Phase thì không.",
+      "D. Commit Phase diễn ra trước Render Phase trong mọi chu kỳ cập nhật."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Render Phase thực hiện tính toán sự thay đổi (diffing) trên Virtual DOM, có thể tạm dừng. Tuy nhiên, khi đã bắt đầu áp dụng thay đổi lên DOM thật (Commit Phase), React phải thực hiện liên tục để tránh tình trạng UI không nhất quán.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng một Design System dùng chung cho nhiều dự án, tại sao 'Compound Components pattern' lại được ưu tiên hơn việc truyền quá nhiều props (Prop Drilling/God Props)?",
+    "options": [
+      "A. Nó cung cấp sự linh hoạt cao trong việc sắp xếp thứ tự các phần tử con và giúp quản lý state nội bộ giữa các phần tử đó một cách tường minh mà không làm ô nhiễm interface của component cha.",
+      "B. Nó giúp giảm kích thước bundle size của thư viện.",
+      "C. Nó bắt buộc người dùng phải viết nhiều code hơn, giúp code rõ ràng hơn.",
+      "D. Nó là pattern duy nhất hỗ trợ TypeScript hoàn hảo."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Compound Components (như Select/Option) cho phép người dùng tùy biến cấu trúc UI bên trong linh hoạt thông qua composition, đồng thời che giấu các logic phức tạp (như quản lý focus, keyboard navigation) vào Context chung.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Vue 3, cơ chế 'Static Hoisting' của compiler hoạt động như thế nào để tối ưu hiệu năng?",
+    "options": [
+      "A. Nó đưa các phần VNode tĩnh ra ngoài hàm render để chúng không bị tạo lại ở mỗi lần component cập nhật, giúp giảm áp lực cho Garbage Collector.",
+      "B. Nó tự động chuyển các component phức tạp thành Web Components.",
+      "C. Nó di chuyển toàn bộ logic xử lý API lên Server-side.",
+      "D. Nó nén các chuỗi template thành mã nhị phân để trình duyệt đọc nhanh hơn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Vue compiler thông minh nhận diện được các phần template không bao giờ thay đổi (static). Bằng cách đưa chúng ra ngoài hàm render, Vue chỉ cần tạo chúng một lần duy nhất và tái sử dụng tham chiếu ở các lần render sau.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng React sử dụng Context API để quản lý UserTheme, UserLocale và UserPermissions. Khi UserPermissions thay đổi, toàn bộ ứng dụng bị re-render mặc dù nhiều component chỉ dùng UserTheme. Giải pháp tối ưu nhất là gì?",
+    "options": [
+      "A. Chia nhỏ Context thành nhiều Provider riêng biệt (ThemeContext, LocaleContext, PermissionsContext) để thu hẹp phạm vi ảnh hưởng khi dữ liệu thay đổi.",
+      "B. Sử dụng React.memo cho tất cả các component trong hệ thống.",
+      "C. Sử dụng useMemo bên trong component để bọc lấy toàn bộ phần JSX trả về.",
+      "D. Chuyển toàn bộ state vào một object duy nhất và sử dụng Redux để quản lý."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bất kỳ thay đổi nào trong giá trị của Context Provider cũng sẽ khiến tất cả các component tiêu thụ (consume) context đó re-render. Chia nhỏ context giúp tách biệt các mối quan tâm (separation of concerns) và tối ưu hiệu năng render.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao trong các ứng dụng quy mô lớn, việc sử dụng 'Scoped Slots' (Vue) hoặc 'Render Props' (React) lại quan trọng cho việc tái sử dụng logic UI?",
+    "options": [
+      "A. Chúng cho phép component cha kiểm soát cách dữ liệu từ component con được hiển thị mà không cần can thiệp vào logic xử lý dữ liệu bên trong component con.",
+      "B. Chúng giúp tăng tốc độ tải trang bằng cách lazy-load component.",
+      "C. Chúng là cách duy nhất để truyền dữ liệu từ con lên cha.",
+      "D. Chúng giúp tự động hóa việc viết Unit Test cho component."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các pattern này cho phép tách biệt logic (data/behavior) và trình diễn (UI). Component con cung cấp dữ liệu và các hàm xử lý, còn component cha quyết định diện mạo cuối cùng của dữ liệu đó thông qua template/JSX được truyền vào.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi cấu hình 'Code Splitting' cho một ứng dụng React lớn, chiến lược nào giúp cân bằng tốt nhất giữa số lượng request và kích thước file tải về?",
+    "options": [
+      "A. Chia code theo Route (Route-based splitting) kết hợp với việc gộp các thư viện vendor lớn vào các chunk riêng biệt (Cache groups).",
+      "B. Chia nhỏ mọi component thành từng file JS riêng lẻ để tối ưu hóa việc tải song song.",
+      "C. Chỉ sử dụng một file bundle duy nhất để giảm số lượng HTTP request xuống tối thiểu.",
+      "D. Sử dụng Dynamic Import cho mọi hàm xử lý sự kiện (event handler) trong ứng dụng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Route-based splitting đảm bảo người dùng chỉ tải code cần thiết cho trang hiện tại. Việc tách vendor chunks giúp tận dụng cache của trình duyệt vì mã nguồn thư viện ít khi thay đổi so với mã nguồn ứng dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong React Server Components (RSC), điều gì là KHÔNG THỂ thực hiện được bên trong một Server Component?",
+    "options": [
+      "A. Sử dụng các hooks như useState, useEffect hoặc truy cập vào các Web API như window, localStorage.",
+      "B. Thực hiện truy vấn trực tiếp vào Database thông qua async/await.",
+      "C. Đọc dữ liệu từ file system của server.",
+      "D. Import và render các Client Components khác."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Server Components chỉ chạy trên server và không có môi trường trình duyệt. Do đó, chúng không có state, không có hiệu ứng (effects) và không thể truy cập các API đặc thù của trình duyệt như window hay DOM.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một lỗi bảo mật phổ biến trong Vue/React là 'XSS thông qua v-html hoặc dangerouslySetInnerHTML'. Cách tốt nhất để phòng tránh khi bắt buộc phải render HTML từ người dùng là gì?",
+    "options": [
+      "A. Sử dụng một thư viện như 'DOMPurify' để làm sạch (sanitize) chuỗi HTML trước khi đưa vào hàm render.",
+      "B. Sử dụng hàm replace() của JavaScript để loại bỏ tất cả các thẻ <script>.",
+      "C. Mã hóa chuỗi HTML thành Base64 trước khi render.",
+      "D. Tin tưởng vào cơ chế bảo mật tự động của trình duyệt hiện đại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Việc loại bỏ thẻ <script> bằng regex không đủ an toàn vì XSS có thể nằm trong các attribute như 'onload' hay 'onerror'. DOMPurify là giải pháp chuẩn công nghiệp để loại bỏ các đoạn mã độc hại trong HTML một cách triệt để.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi triển khai 'Error Boundary' trong React, tại sao chúng ta thường chỉ đặt nó ở các cấp độ cao (như Layout hoặc Module) thay vì bọc mọi component nhỏ?",
+    "options": [
+      "A. Để tránh làm gián đoạn trải nghiệm người dùng quá mức và giảm thiểu overhead trong việc quản lý lỗi, đồng thời cho phép hiển thị một UI thay thế (fallback) có ý nghĩa cho toàn bộ khu vực bị lỗi.",
+      "B. Vì Error Boundary không hoạt động với các component nhỏ.",
+      "C. Vì Error Boundary làm chậm tốc độ render của ứng dụng.",
+      "D. Vì React chỉ cho phép tối đa 3 Error Boundary trong một ứng dụng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Error Boundary dùng để khoanh vùng lỗi. Đặt ở cấp độ module giúp 'cô lập' lỗi của một tính năng mà không làm sập toàn bộ ứng dụng, đồng thời giữ cho code sạch sẽ hơn thay vì bọc lỗi ở khắp nơi.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Vue 3, 'Teleport' giải quyết vấn đề gì trong việc xây dựng UI phức tạp cho doanh nghiệp?",
+    "options": [
+      "A. Cho phép render một phần của component template vào một vị trí DOM khác nằm ngoài cây phân cấp của component đó (như Modals, Tooltips) để tránh các vấn đề về z-index và overflow.",
+      "B. Giúp chuyển dữ liệu giữa các component cách xa nhau mà không cần dùng store.",
+      "C. Tăng tốc độ render bằng cách di chuyển logic tính toán sang Web Workers.",
+      "D. Tự động đồng bộ hóa trạng thái giữa các tab trình duyệt khác nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Teleport rất hữu ích cho các thành phần UI cần 'thoát' khỏi các ràng buộc CSS của cha (như overflow: hidden), giúp việc quản lý layout và layer (z-index) trở nên dễ dàng và chuẩn xác hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng 'useMemo' để tối ưu hóa một phép tính tốn kém, rủi ro nào xảy ra nếu dependency array bị truyền thiếu (missing dependencies)?",
+    "options": [
+      "A. Giá trị trả về sẽ bị 'stale' (cũ), dẫn đến UI hiển thị dữ liệu không chính xác so với trạng thái thực tế của ứng dụng.",
+      "B. React sẽ ném ra một lỗi runtime và dừng ứng dụng ngay lập tức.",
+      "C. Trình duyệt sẽ bị treo do vòng lặp vô tận.",
+      "D. Toàn bộ các component cha sẽ bị re-render liên tục."
+    ],
+    "correctAnswer": "A",
+    "explanation": "useMemo chỉ tính toán lại khi các giá trị trong dependency array thay đổi. Nếu thiếu dependency, nó sẽ giữ kết quả cũ từ lần render trước đó, gây ra sai lệch logic nghiêm trọng trong ứng dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quá trình Refactoring một ứng dụng Vue 2 sang Vue 3, chiến lược nào giúp giảm thiểu rủi ro cho hệ thống đang chạy (production)?",
+    "options": [
+      "A. Sử dụng 'Vue 2.7' để làm quen với Composition API trước, sau đó dùng 'Migration Build' để chạy song song và chuyển đổi từng module một.",
+      "B. Viết lại toàn bộ ứng dụng từ đầu bằng Vue 3 trong một branch riêng và merge sau 6 tháng.",
+      "C. Chuyển đổi toàn bộ component sang Vue 3 cùng một lúc để đảm bảo tính đồng nhất.",
+      "D. Sử dụng một công cụ tự động convert code và deploy trực tiếp lên production."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Di chuyển từng bước (incremental migration) là chiến lược an toàn nhất. Vue 2.7 mang lại các tính năng của Vue 3 cho Vue 2, và Migration Build giúp phát hiện các thay đổi không tương thích (breaking changes) trong khi vẫn giữ ứng dụng hoạt động.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Web Workers' kết hợp với React/Vue lại cần thiết cho các ứng dụng xử lý dữ liệu nặng (như parse file Excel lớn hoặc xử lý ảnh)?",
+    "options": [
+      "A. Để chuyển các tác vụ tính toán nặng ra khỏi Main Thread, giúp UI luôn phản hồi mượt mà và không bị hiện tượng 'Jank'.",
+      "B. Vì Web Workers có thể truy cập trực tiếp vào Virtual DOM nhanh hơn Main Thread.",
+      "C. Để vượt qua giới hạn bộ nhớ của trình duyệt dành cho một tab.",
+      "D. Vì React/Vue yêu cầu Web Workers để chạy các tính năng nâng cao."
+    ],
+    "correctAnswer": "A",
+    "explanation": "JavaScript chạy đơn luồng trên Main Thread (nơi xử lý cả UI và logic). Các tác vụ nặng sẽ block Main Thread khiến trình duyệt không thể render khung hình mới. Web Workers chạy ở luồng riêng, giúp giải phóng Main Thread cho UI.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một vấn đề lớn của Single Page Application (SPA) là kích thước bundle quá lớn. Ngoài Code Splitting, kỹ thuật nào sau đây giúp loại bỏ mã nguồn không sử dụng hiệu quả nhất?",
+    "options": [
+      "A. Tree Shaking - dựa trên phân tích tĩnh (static analysis) của ES Modules để loại bỏ các export không được import ở bất kỳ đâu.",
+      "B. Minification - nén code thành dạng ngắn gọn để giảm dung lượng file.",
+      "C. Gzip/Brotli compression - nén file ở mức độ network truyền tải.",
+      "D. Image Optimization - giảm dung lượng ảnh để bù đắp cho phần JS nặng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tree Shaking là kỹ thuật loại bỏ 'dead code' ở mức độ logic mã nguồn. Nó phụ thuộc vào việc sử dụng cú pháp ESM (import/export) giúp bundler biết chính xác phần code nào thực sự được sử dụng trong ứng dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một hệ thống quản lý form phức tạp với hàng trăm input field trong React, tại sao 'Uncontrolled Components' (sử dụng Ref) đôi khi lại tốt hơn 'Controlled Components'?",
+    "options": [
+      "A. Vì nó giảm thiểu số lần re-render của toàn bộ form mỗi khi người dùng gõ một phím, giúp tăng hiệu năng đáng kể cho các form cực lớn.",
+      "B. Vì Uncontrolled Components tự động validate dữ liệu tốt hơn.",
+      "C. Vì nó dễ viết Unit Test hơn so với Controlled Components.",
+      "D. Vì React khuyến khích sử dụng Ref thay vì State cho mọi trường hợp."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong Controlled Components, mỗi lần gõ phím đều trigger setState và re-render. Với form lớn, điều này gây lag. Uncontrolled Components để DOM tự giữ giá trị và chỉ truy xuất khi cần (ví dụ: khi submit), giúp giảm tải cho React render cycle.",
+    "difficulty": "EXPERT",
+    "skillArea": "UI Frameworks (React/Vue)",
+    "category": "ANALYSIS"
+  }
+]

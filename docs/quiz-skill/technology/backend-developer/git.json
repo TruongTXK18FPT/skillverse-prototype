@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Một Git repository (kho lưu trữ) là gì?",
+    "options": [
+      "A. Một thư mục chứa các tệp tạm thời của dự án.",
+      "B. Một cơ sở dữ liệu lưu trữ tất cả các phiên bản của dự án và lịch sử thay đổi.",
+      "C. Một máy chủ từ xa để triển khai ứng dụng.",
+      "D. Một tập hợp các thư viện bên ngoài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Git repository là nơi Git lưu trữ tất cả các tệp dự án, lịch sử thay đổi, nhánh (branches) và các thông tin khác cần thiết để quản lý phiên bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh `git init` dùng để làm gì?",
+    "options": [
+      "A. Tải về một repository từ xa.",
+      "B. Khởi tạo một Git repository mới trong thư mục hiện tại.",
+      "C. Xóa toàn bộ lịch sử Git của dự án.",
+      "D. Đặt lại trạng thái của repository."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git init` được sử dụng để khởi tạo một Git repository mới, biến thư mục hiện tại thành một dự án được Git theo dõi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một 'commit' trong Git là gì?",
+    "options": [
+      "A. Một bản sao lưu toàn bộ dự án trên máy chủ từ xa.",
+      "B. Một bản ghi về các thay đổi được thực hiện đối với các tệp trong repository tại một thời điểm cụ thể.",
+      "C. Một yêu cầu hợp nhất code từ một nhánh này sang một nhánh khác.",
+      "D. Một tệp cấu hình cho Git."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một commit là một 'ảnh chụp nhanh' (snapshot) của dự án tại một thời điểm nhất định, ghi lại các thay đổi đã được staging.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khu vực 'staging area' (hoặc 'index') trong Git có vai trò gì?",
+    "options": [
+      "A. Nơi lưu trữ các tệp đã được commit.",
+      "B. Nơi lưu trữ các tệp bị bỏ qua bởi Git.",
+      "C. Một khu vực trung gian để chuẩn bị các thay đổi trước khi tạo commit.",
+      "D. Nơi lưu trữ các tệp tạm thời không liên quan đến Git."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Staging area là một khu vực trung gian nơi bạn chọn các thay đổi cụ thể từ working directory để đưa vào commit tiếp theo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh `git status` dùng để làm gì?",
+    "options": [
+      "A. Hiển thị lịch sử commit của repository.",
+      "B. Hiển thị trạng thái của working directory và staging area, bao gồm các tệp đã thay đổi, đã staging và chưa được theo dõi.",
+      "C. Đặt lại repository về một trạng thái trước đó.",
+      "D. Hợp nhất các thay đổi từ một nhánh khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git status` cung cấp thông tin tổng quan về những gì đã và đang xảy ra trong repository, giúp bạn biết những tệp nào đã được sửa đổi, đã được thêm vào staging, hoặc chưa được Git theo dõi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh `git add <file_name>` dùng để làm gì?",
+    "options": [
+      "A. Xóa một tệp khỏi repository.",
+      "B. Di chuyển một tệp từ staging area về working directory.",
+      "C. Thêm một tệp vào staging area để chuẩn bị cho commit tiếp theo.",
+      "D. Đổi tên một tệp trong repository."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`git add` được sử dụng để thêm các thay đổi của một tệp (hoặc nhiều tệp) vào staging area, đánh dấu chúng sẵn sàng để được commit.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh `git commit -m 'Your message'` dùng để làm gì?",
+    "options": [
+      "A. Hợp nhất các thay đổi vào nhánh chính.",
+      "B. Tạo một bản ghi mới (commit) với các thay đổi đã được staging và một thông điệp mô tả.",
+      "C. Đẩy các thay đổi lên remote repository.",
+      "D. Xem lại các thay đổi trước khi commit."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git commit` tạo một commit mới, lưu lại các thay đổi đã được đưa vào staging area vào lịch sử của repository.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao chúng ta nên sử dụng các nhánh (branches) trong Git?",
+    "options": [
+      "A. Để giảm dung lượng của repository.",
+      "B. Để cô lập các tính năng mới hoặc sửa lỗi khỏi code chính, cho phép phát triển song song mà không ảnh hưởng đến phiên bản ổn định.",
+      "C. Để tăng tốc độ tải xuống repository.",
+      "D. Để mã hóa các tệp dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các nhánh cho phép các nhà phát triển làm việc độc lập trên các tính năng hoặc sửa lỗi mà không làm ảnh hưởng đến nhánh chính (ví dụ: `main` hoặc `master`), đảm bảo phiên bản ổn định luôn sẵn sàng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh nào dùng để tạo một nhánh mới và chuyển sang nhánh đó ngay lập tức?",
+    "options": [
+      "A. `git branch <branch_name>`",
+      "B. `git checkout <branch_name>`",
+      "C. `git checkout -b <branch_name>`",
+      "D. `git merge <branch_name>`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`git checkout -b <branch_name>` là cách viết tắt để tạo một nhánh mới (`git branch <branch_name>`) và sau đó chuyển sang nhánh đó (`git checkout <branch_name>`).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh `git merge <branch_name>` dùng để làm gì?",
+    "options": [
+      "A. Xóa một nhánh khỏi repository.",
+      "B. Hợp nhất các thay đổi từ nhánh được chỉ định vào nhánh hiện tại.",
+      "C. Đổi tên một nhánh.",
+      "D. Tạo một bản sao của nhánh được chỉ định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git merge` tích hợp lịch sử của một nhánh vào nhánh hiện tại, tạo ra một commit hợp nhất (merge commit) nếu cần.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nhánh `main` (hoặc `master`) trong một Git repository thường được sử dụng cho mục đích gì?",
+    "options": [
+      "A. Để phát triển các tính năng thử nghiệm.",
+      "B. Để lưu trữ các tệp cấu hình của dự án.",
+      "C. Để chứa phiên bản code ổn định, sẵn sàng để triển khai.",
+      "D. Để lưu trữ các tài liệu hướng dẫn sử dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nhánh `main` (hoặc `master`) theo quy ước là nhánh chính, chứa phiên bản code ổn định và đã được kiểm thử, thường là cơ sở để triển khai sản phẩm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điều gì gây ra một 'merge conflict' (xung đột hợp nhất)?",
+    "options": [
+      "A. Khi hai nhà phát triển chỉnh sửa các tệp khác nhau trong cùng một nhánh.",
+      "B. Khi Git không thể tự động hợp nhất các thay đổi vì cùng một dòng code đã được chỉnh sửa khác nhau trên hai nhánh đang được hợp nhất.",
+      "C. Khi một tệp bị xóa trên một nhánh nhưng vẫn tồn tại trên nhánh kia.",
+      "D. Khi dung lượng repository quá lớn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Merge conflict xảy ra khi Git không thể tự động quyết định cách hợp nhất các thay đổi, thường là do cùng một phần của tệp đã được sửa đổi khác nhau trên hai nhánh.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi gặp merge conflict, bước đầu tiên để giải quyết là gì?",
+    "options": [
+      "A. Xóa tất cả các tệp bị xung đột.",
+      "B. Chạy `git commit` ngay lập tức.",
+      "C. Mở các tệp bị xung đột và chỉnh sửa thủ công để giữ lại các thay đổi mong muốn.",
+      "D. Khởi tạo lại repository."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để giải quyết xung đột, bạn cần mở các tệp bị ảnh hưởng, tìm các khối code bị xung đột (được đánh dấu bởi Git), chỉnh sửa chúng để chọn ra phiên bản đúng hoặc kết hợp các thay đổi, sau đó thêm tệp đã giải quyết vào staging và commit.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh `git revert <commit_hash>` dùng để làm gì?",
+    "options": [
+      "A. Xóa commit khỏi lịch sử vĩnh viễn.",
+      "B. Tạo một commit mới để hoàn tác các thay đổi của một commit cụ thể, giữ nguyên lịch sử commit gốc.",
+      "C. Đặt lại nhánh hiện tại về commit đó, xóa bỏ các commit sau đó.",
+      "D. Chuyển sang một commit khác mà không ảnh hưởng đến nhánh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git revert` tạo ra một commit mới để hoàn tác các thay đổi của một commit trước đó, điều này an toàn hơn khi làm việc trên các nhánh đã được chia sẻ vì nó không thay đổi lịch sử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa `git merge` và `git rebase` là gì?",
+    "options": [
+      "A. `git merge` chỉ hoạt động với các nhánh cục bộ, còn `git rebase` chỉ hoạt động với các nhánh từ xa.",
+      "B. `git merge` tạo ra một merge commit, giữ nguyên lịch sử không đổi, trong khi `git rebase` viết lại lịch sử bằng cách di chuyển các commit của nhánh lên trên các commit của nhánh khác, tạo ra lịch sử tuyến tính.",
+      "C. `git rebase` luôn gây ra xung đột, còn `git merge` thì không.",
+      "D. `git merge` chỉ dùng để hợp nhất code, `git rebase` chỉ dùng để sửa lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git merge` tạo ra một commit mới để hợp nhất lịch sử, giữ nguyên lịch sử phân nhánh. `git rebase` di chuyển (hoặc 'phát lại') các commit của bạn lên một commit cơ sở mới, tạo ra một lịch sử tuyến tính và 'sạch sẽ' hơn nhưng viết lại lịch sử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh `git cherry-pick <commit_hash>` dùng để làm gì?",
+    "options": [
+      "A. Hợp nhất toàn bộ một nhánh vào nhánh hiện tại.",
+      "B. Áp dụng một commit cụ thể từ một nhánh này sang một nhánh khác.",
+      "C. Xóa một commit khỏi lịch sử.",
+      "D. So sánh hai commit với nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git cherry-pick` cho phép bạn chọn và áp dụng một commit cụ thể từ bất kỳ nhánh nào vào nhánh hiện tại của bạn, rất hữu ích khi bạn chỉ muốn một thay đổi nhỏ từ một nhánh khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Git LFS (Large File Storage) được sử dụng để làm gì?",
+    "options": [
+      "A. Nén các tệp dự án để giảm kích thước repository.",
+      "B. Lưu trữ các tệp lớn (như hình ảnh, video, tệp nhị phân) bên ngoài repository Git chính, chỉ lưu trữ con trỏ đến chúng trong Git.",
+      "C. Quản lý các module con trong một repository lớn.",
+      "D. Tự động triển khai ứng dụng khi có thay đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Git LFS giúp quản lý các tệp lớn mà Git không được thiết kế để xử lý hiệu quả, bằng cách thay thế chúng bằng các con trỏ nhỏ trong repository và lưu trữ các tệp thực tế trên một máy chủ riêng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm cơ bản về Git submodules là gì?",
+    "options": [
+      "A. Một cách để chia nhỏ một repository lớn thành nhiều repository nhỏ hơn.",
+      "B. Một tính năng cho phép một Git repository chứa một Git repository khác như một thư mục con, duy trì lịch sử riêng của nó.",
+      "C. Một công cụ để tự động hóa các tác vụ Git.",
+      "D. Một phương pháp để mã hóa các tệp trong Git."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Git submodules cho phép bạn nhúng một repository khác vào repository của mình như một thư mục con, hữu ích cho việc quản lý các thư viện hoặc dự án phụ thuộc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tệp `.gitignore` có mục đích gì?",
+    "options": [
+      "A. Chỉ định các tệp cần được theo dõi bởi Git.",
+      "B. Liệt kê các tệp và thư mục mà Git nên bỏ qua, không theo dõi và không đưa vào repository.",
+      "C. Chứa các thông tin bí mật của dự án.",
+      "D. Định cấu hình các Git hooks."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tệp `.gitignore` được sử dụng để chỉ định các tệp hoặc thư mục mà bạn không muốn Git theo dõi, chẳng hạn như các tệp tạm thời, tệp cấu hình cục bộ hoặc các module đã cài đặt.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Pull Request (PR) hoặc Merge Request (MR) trong quy trình làm việc cộng tác chủ yếu được sử dụng để làm gì?",
+    "options": [
+      "A. Để tự động triển khai code lên môi trường sản phẩm.",
+      "B. Để yêu cầu xem xét code và hợp nhất các thay đổi từ một nhánh phát triển vào một nhánh chính (ví dụ: `main`).",
+      "C. Để sao lưu toàn bộ repository lên đám mây.",
+      "D. Để xóa các nhánh không còn sử dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pull Request là một cơ chế quan trọng trong phát triển cộng tác, cho phép các nhà phát triển đề xuất các thay đổi của họ, thảo luận và nhận được phản hồi trước khi hợp nhất chúng vào nhánh chính.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh `git remote -v` dùng để làm gì?",
+    "options": [
+      "A. Xóa tất cả các remote repository.",
+      "B. Hiển thị danh sách các remote repository đã được cấu hình cùng với URL của chúng.",
+      "C. Thêm một remote repository mới.",
+      "D. Đặt lại URL của một remote repository."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git remote -v` hiển thị tên viết tắt và URL của các remote repository mà local repository của bạn đang theo dõi, giúp bạn biết bạn đang tương tác với những máy chủ từ xa nào.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh nào được dùng để tải về các thay đổi từ remote repository về local repository nhưng không tự động hợp nhất?",
+    "options": [
+      "A. `git push`",
+      "B. `git merge`",
+      "C. `git fetch`",
+      "D. `git pull`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`git fetch` tải về các thay đổi từ remote repository vào local repository nhưng không tự động hợp nhất chúng vào nhánh hiện tại của bạn. `git pull` là sự kết hợp của `git fetch` và `git merge`.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh `git log` dùng để làm gì?",
+    "options": [
+      "A. Hiển thị các tệp đã bị xóa gần đây.",
+      "B. Hiển thị lịch sử commit của repository, bao gồm tác giả, ngày tháng và thông điệp commit.",
+      "C. Ghi lại các lỗi trong quá trình chạy Git.",
+      "D. So sánh các phiên bản khác nhau của một tệp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git log` hiển thị danh sách các commit đã được thực hiện trong repository, cho phép bạn xem lịch sử thay đổi của dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của việc sử dụng các nhánh (branches) trong Git là gì?",
+    "options": [
+      "A. Để lưu trữ các phiên bản khác nhau của cùng một tệp.",
+      "B. Để cho phép nhiều nhà phát triển làm việc độc lập trên các tính năng hoặc sửa lỗi mà không ảnh hưởng đến mã nguồn chính.",
+      "C. Để tăng tốc độ tải xuống mã nguồn từ remote repository.",
+      "D. Để tự động giải quyết các xung đột hợp nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các nhánh cho phép các nhà phát triển tạo ra một môi trường làm việc độc lập, nơi họ có thể phát triển các tính năng mới hoặc sửa lỗi mà không làm ảnh hưởng đến nhánh chính (ví dụ: `main` hoặc `master`) đang ổn định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trước khi thực hiện `git commit`, nhà phát triển thường sử dụng lệnh `git add` để làm gì?",
+    "options": [
+      "A. Để xóa các tệp đã thay đổi khỏi thư mục làm việc.",
+      "B. Để di chuyển các thay đổi từ thư mục làm việc vào khu vực staging (staging area).",
+      "C. Để gửi các thay đổi lên remote repository.",
+      "D. Để xem lịch sử các commit."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lệnh `git add` được sử dụng để chọn lọc các thay đổi mà bạn muốn đưa vào commit tiếp theo. Các thay đổi này được đưa vào 'staging area', một khu vực tạm thời trước khi được ghi lại vĩnh viễn bằng `git commit`.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong mô hình GitFlow, nhánh nào được sử dụng để tích hợp các tính năng đã hoàn thành và sẵn sàng cho bản phát hành tiếp theo?",
+    "options": [
+      "A. main",
+      "B. hotfix",
+      "C. develop",
+      "D. feature"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nhánh `develop` là nơi tích hợp tất cả các tính năng đã hoàn thành từ các nhánh `feature` và là cơ sở cho các bản phát hành tiếp theo trong GitFlow.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một nhóm phát triển đang sử dụng mô hình Trunk-Based Development. Khi một thành viên hoàn thành một tính năng nhỏ, họ nên làm gì để đảm bảo code của mình được tích hợp nhanh chóng và an toàn?",
+    "options": [
+      "A. Tạo một nhánh feature dài hạn và merge vào `main` sau vài ngày.",
+      "B. Merge code của mình vào nhánh `main` và triển khai liên tục.",
+      "C. Đợi cho đến khi có nhiều tính năng nhỏ khác được hoàn thành rồi mới merge vào `main`.",
+      "D. Tạo một Pull Request và đợi ít nhất hai người review trước khi merge."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trunk-Based Development khuyến khích các commit nhỏ, thường xuyên vào nhánh chính (`main` hoặc `trunk`) và triển khai liên tục để giảm thiểu rủi ro tích hợp và đảm bảo dòng chảy code nhanh chóng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi nào thì nên ưu tiên sử dụng `git rebase` thay vì `git merge --no-ff` khi tích hợp một nhánh tính năng cá nhân vào nhánh chính?",
+    "options": [
+      "A. Khi muốn giữ lịch sử commit tuyến tính, sạch sẽ và dễ đọc.",
+      "B. Khi muốn giữ lại tất cả các commit merge để biết rõ nguồn gốc của các thay đổi.",
+      "C. Khi nhánh tính năng đã được push lên remote và có nhiều người khác đang làm việc trên đó.",
+      "D. Khi muốn bỏ qua các commit trung gian và chỉ giữ lại commit cuối cùng của nhánh tính năng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`git rebase` giúp tạo ra lịch sử commit tuyến tính bằng cách di chuyển các commit của nhánh tính năng lên trên đầu nhánh đích, loại bỏ các commit merge không cần thiết và làm cho lịch sử dễ theo dõi hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang làm việc trên một nhánh tính năng và đã thực hiện một số commit. Nhánh `main` đã có thêm các commit mới. Bạn muốn cập nhật nhánh tính năng của mình với những thay đổi mới nhất từ `main` mà không tạo ra commit merge. Lệnh nào sau đây bạn nên sử dụng?",
+    "options": [
+      "A. git merge main",
+      "B. git rebase main",
+      "C. git pull main",
+      "D. git reset --hard main"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git rebase main` sẽ di chuyển các commit của nhánh hiện tại lên trên các commit mới nhất của `main`, giữ cho lịch sử tuyến tính và tránh tạo commit merge không cần thiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Nhược điểm chính của việc sử dụng `git rebase` trên một nhánh đã được push lên remote và có người khác đang làm việc là gì?",
+    "options": [
+      "A. Nó làm cho quá trình merge trở nên phức tạp hơn.",
+      "B. Nó không cho phép bạn giải quyết xung đột.",
+      "C. Nó làm mất tất cả các commit trên nhánh đó.",
+      "D. Nó có thể thay đổi lịch sử commit, gây ra xung đột khi người khác cố gắng push hoặc pull."
+    ],
+    "correctAnswer": "D",
+    "explanation": "`git rebase` viết lại lịch sử commit. Nếu nhánh đã được chia sẻ, việc rebase sẽ làm cho lịch sử của bạn khác với người khác, dẫn đến xung đột khi push/pull và yêu cầu `git push --force` (có thể nguy hiểm).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong GitFlow, mục đích của nhánh `release` là gì?",
+    "options": [
+      "A. Phát triển các tính năng mới cho bản phát hành tiếp theo.",
+      "B. Chuẩn bị một bản phát hành mới, cho phép sửa lỗi nhỏ và thử nghiệm cuối cùng.",
+      "C. Sửa các lỗi khẩn cấp trong phiên bản đã được phát hành.",
+      "D. Lưu trữ lịch sử của tất cả các bản phát hành đã hoàn thành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nhánh `release` được tạo ra từ `develop` để ổn định code, sửa lỗi và thực hiện thử nghiệm trước khi phát hành chính thức, không thêm tính năng mới vào giai đoạn này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một dự án yêu cầu lịch sử commit rõ ràng, không có commit merge thừa thãi, và các commit trên nhánh chính luôn là các 'điểm ổn định' có thể deploy được. Mô hình branching nào sẽ phù hợp nhất?",
+    "options": [
+      "A. GitFlow với các nhánh feature dài hạn.",
+      "B. Forking Workflow với nhiều remote repository.",
+      "C. Trunk-Based Development với rebase hoặc squash merge vào `main`.",
+      "D. Sử dụng một nhánh `dev` và `master` riêng biệt, merge thường xuyên từ `dev` lên `master`."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trunk-Based Development kết hợp với rebase hoặc squash merge giúp duy trì lịch sử tuyến tính và sạch sẽ trên nhánh chính, đảm bảo mỗi commit trên nhánh chính là một trạng thái ổn định, có thể triển khai được.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang thực hiện `git merge` và gặp xung đột. Sau khi chỉnh sửa các file bị xung đột, bạn cần làm gì tiếp theo để hoàn tất quá trình merge?",
+    "options": [
+      "A. `git add <file_bị_xung_đột>` sau đó `git commit`",
+      "B. `git commit --amend`",
+      "C. `git rebase --continue`",
+      "D. `git merge --abort`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sau khi giải quyết xung đột thủ công trong các file, bạn phải `git add` các file đã chỉnh sửa để đánh dấu chúng là đã được giải quyết, sau đó `git commit` để tạo commit merge và hoàn tất quá trình merge.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn phát hiện một commit cụ thể trên nhánh `develop` đã gây ra lỗi nghiêm trọng trong môi trường staging. Bạn muốn loại bỏ tác động của commit đó mà không muốn xóa nó khỏi lịch sử. Lệnh nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. git reset --hard <commit_hash>",
+      "B. git revert <commit_hash>",
+      "C. git cherry-pick <commit_hash> --no-commit",
+      "D. git rebase -i <commit_hash>^"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git revert` tạo ra một commit mới để hoàn tác các thay đổi của commit đã chọn, giữ nguyên lịch sử commit gốc và không làm mất bất kỳ commit nào.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn cần đưa một commit cụ thể từ một nhánh khác vào nhánh hiện tại của mình, nhưng không muốn merge toàn bộ nhánh đó. Lệnh nào sau đây bạn nên sử dụng?",
+    "options": [
+      "A. git merge <branch_name>",
+      "B. git rebase <branch_name>",
+      "C. git cherry-pick <commit_hash>",
+      "D. git reset --soft <commit_hash>"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`git cherry-pick` cho phép bạn chọn một hoặc nhiều commit từ một nhánh khác và áp dụng chúng vào nhánh hiện tại, rất hữu ích khi bạn chỉ cần một vài thay đổi cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một lỗi mới xuất hiện trong ứng dụng và bạn nghi ngờ nó được đưa vào bởi một trong số hàng chục commit gần đây. Bạn muốn tìm commit chính xác đã gây ra lỗi đó một cách hiệu quả. Công cụ Git nào sẽ giúp bạn?",
+    "options": [
+      "A. git log -S 'lỗi_cụ_thể'",
+      "B. git blame <file_bị_ảnh_hưởng>",
+      "C. git diff <commit_cũ> <commit_mới>",
+      "D. git bisect"
+    ],
+    "correctAnswer": "D",
+    "explanation": "`git bisect` là một công cụ mạnh mẽ để tìm kiếm nhị phân (binary search) trong lịch sử commit, giúp nhanh chóng xác định commit nào đã giới thiệu lỗi bằng cách đánh dấu các commit là 'good' hoặc 'bad'.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sau khi thực hiện `git rebase` và gặp xung đột, bạn đã giải quyết các xung đột và `git add` các file. Bước tiếp theo để tiếp tục quá trình rebase là gì?",
+    "options": [
+      "A. git commit -m 'Giải quyết xung đột rebase'",
+      "B. git rebase --continue",
+      "C. git rebase --skip",
+      "D. git merge --continue"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sau khi giải quyết xung đột và `git add` các file trong quá trình rebase, bạn dùng `git rebase --continue` để Git tiếp tục áp dụng các commit còn lại trong chuỗi rebase.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang giải quyết một xung đột merge lớn với nhiều thay đổi. Để xem các thay đổi từ cả hai phía (ours và theirs) một cách rõ ràng và quyết định giữ phần nào, bạn có thể sử dụng công cụ nào?",
+    "options": [
+      "A. Một công cụ merge GUI như Meld, KDiff3, hoặc VS Code's merge editor.",
+      "B. Chỉ sử dụng `git diff` trên terminal.",
+      "C. Xóa các file bị xung đột và kéo lại từ remote.",
+      "D. Thực hiện `git reset --hard` để bỏ qua xung đột."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các công cụ merge GUI cung cấp giao diện trực quan để so sánh và chọn lựa các phần của code khi giải quyết xung đột, đặc biệt hữu ích cho các xung đột phức tạp hơn so với việc chỉ dùng `git diff` trên terminal.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn vô tình `git reset --hard` về một commit cũ và mất các thay đổi chưa được commit. Bạn có thể làm gì để cố gắng khôi phục lại trạng thái trước khi reset?",
+    "options": [
+      "A. Không có cách nào để khôi phục các thay đổi đã mất.",
+      "B. `git checkout HEAD@{1}`",
+      "C. `git revert HEAD`",
+      "D. `git reflog`"
+    ],
+    "correctAnswer": "D",
+    "explanation": "`git reflog` hiển thị lịch sử của HEAD, bao gồm cả các thao tác reset, merge, rebase. Bạn có thể tìm thấy SHA của trạng thái trước đó trong reflog và khôi phục bằng `git reset --hard <sha_từ_reflog>`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi nào thì nên cân nhắc sử dụng Git Submodules trong một dự án?",
+    "options": [
+      "A. Khi bạn muốn chia một repository lớn thành nhiều repository nhỏ hơn mà không có sự phụ thuộc.",
+      "B. Khi bạn muốn quản lý các file lớn như hình ảnh hoặc video trong Git.",
+      "C. Khi dự án của bạn phụ thuộc vào một thư viện hoặc thành phần bên ngoài được quản lý trong một repository Git riêng biệt và bạn muốn đóng băng phiên bản cụ thể của nó.",
+      "D. Khi bạn muốn tự động hóa các tác vụ CI/CD cho các thành phần khác nhau của dự án."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Submodules cho phép nhúng một repository khác vào repository của bạn tại một commit cụ thể, hữu ích khi quản lý các dependency bên ngoài mà bạn muốn kiểm soát phiên bản chính xác và tách biệt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của Git Large File Storage (LFS) là gì?",
+    "options": [
+      "A. Quản lý các file lớn (như video, ảnh, binary) trong Git mà không làm phình to kích thước repository.",
+      "B. Mã hóa các file nhạy cảm trong repository Git để tăng cường bảo mật.",
+      "C. Tích hợp Git với các dịch vụ lưu trữ đám mây như AWS S3 hoặc Google Drive.",
+      "D. Tự động nén các file trong repository để giảm dung lượng lưu trữ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Git LFS thay thế các file lớn bằng các con trỏ nhỏ trong repository Git thực tế, lưu trữ nội dung file lớn trên một máy chủ LFS riêng biệt, giúp giữ cho repository Git chính nhỏ gọn và hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một công ty đang phát triển nhiều dịch vụ microservices nhỏ và muốn quản lý tất cả chúng trong một repository duy nhất để đơn giản hóa việc chia sẻ code, quản lý dependency và CI/CD. Đây là một ví dụ về mô hình nào?",
+    "options": [
+      "A. Polyrepo",
+      "B. Monorepo",
+      "C. Submodule-based repo",
+      "D. Distributed repo"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Monorepo là một repository duy nhất chứa code cho nhiều dự án hoặc dịch vụ độc lập, thường được sử dụng để quản lý microservices, chia sẻ code và đơn giản hóa quy trình build/deploy.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Nhược điểm chính của việc sử dụng Git Submodules là gì?",
+    "options": [
+      "A. Tăng kích thước repository chính một cách đáng kể.",
+      "B. Không thể đóng băng phiên bản cụ thể của thư viện con.",
+      "C. Không thể theo dõi các thay đổi trong submodule.",
+      "D. Khó khăn trong việc quản lý các thay đổi đồng thời giữa submodule và dự án chính, và yêu cầu các bước bổ sung để clone/pull."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Submodules có thể phức tạp để quản lý, đặc biệt khi cần cập nhật submodule hoặc khi nhiều người làm việc trên cả repo chính và submodule, đòi hỏi lệnh `git submodule update --init --recursive` khi clone/pull và có thể dẫn đến các vấn đề về trạng thái HEAD tách rời.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi làm việc trong một monorepo lớn, một thách thức phổ biến là hiệu suất của các lệnh Git (như `git status`, `git checkout`) có thể bị chậm. Giải pháp nào sau đây KHÔNG phải là một cách tiếp cận phổ biến để giảm thiểu vấn đề này?",
+    "options": [
+      "A. Sử dụng sparse-checkout để chỉ checkout các thư mục cần thiết.",
+      "B. Sử dụng các công cụ build/versioning được thiết kế cho monorepo (ví dụ: Bazel, Lerna).",
+      "C. Sử dụng `git clone --depth 1` để chỉ clone lịch sử gần nhất.",
+      "D. Cấu hình `core.untrackedCache` để tăng tốc `git status`."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`git clone --depth 1` chỉ clone lịch sử gần nhất, nhưng không giải quyết vấn đề hiệu suất của các lệnh Git *sau khi* clone trong một monorepo lớn với nhiều file và thư mục. Các giải pháp thường tập trung vào việc giảm số lượng file mà Git cần theo dõi hoặc xử lý trong thư mục làm việc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Git hooks là gì và chúng được sử dụng để làm gì?",
+    "options": [
+      "A. Là các script tùy chỉnh được kích hoạt tự động bởi các sự kiện Git nhất định (ví dụ: pre-commit, post-merge) để tự động hóa tác vụ hoặc thực thi chính sách.",
+      "B. Là các công cụ tích hợp sẵn của Git để quản lý các file lớn và submodules.",
+      "C. Là các file cấu hình được sử dụng để tùy chỉnh giao diện dòng lệnh của Git.",
+      "D. Là các alias lệnh Git được định nghĩa sẵn để tăng tốc độ làm việc."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Git hooks là các chương trình tùy chỉnh được đặt trong thư mục `.git/hooks` của repository, chạy tự động khi các sự kiện Git cụ thể xảy ra, cho phép tự động hóa và thực thi quy tắc, ví dụ như kiểm tra chất lượng code trước khi commit.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để đảm bảo rằng tất cả các commit vào nhánh `main` phải tuân thủ một định dạng message nhất định (ví dụ: bắt đầu bằng \"feat:\", \"fix:\", \"chore:\"), bạn nên sử dụng loại Git hook nào?",
+    "options": [
+      "A. pre-receive hook",
+      "B. commit-msg hook",
+      "C. pre-commit hook",
+      "D. post-commit hook"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`commit-msg` hook được kích hoạt sau khi người dùng nhập commit message nhưng trước khi commit thực sự được tạo. Nó cho phép bạn kiểm tra và sửa đổi nội dung của commit message, đảm bảo tuân thủ định dạng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một quy trình CI/CD, tại sao việc tích hợp Git vào hệ thống CI là quan trọng?",
+    "options": [
+      "A. Để giảm thiểu số lượng commit cần thiết cho mỗi tính năng.",
+      "B. Để cho phép các nhà phát triển làm việc ngoại tuyến mà không cần kết nối internet.",
+      "C. Để quản lý các phiên bản của ứng dụng trong môi trường production.",
+      "D. Để tự động hóa việc build, kiểm thử và triển khai mỗi khi có thay đổi được push lên repository."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Tích hợp Git với CI cho phép hệ thống CI tự động nhận biết các thay đổi mới trong repository (ví dụ: khi có push mới), sau đó kích hoạt các pipeline để build, kiểm thử và có thể triển khai code, đảm bảo phản hồi nhanh chóng về chất lượng code.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để duy trì \"PR hygiene\" tốt và đảm bảo lịch sử commit sạch sẽ trên nhánh chính, nhóm phát triển nên khuyến khích thực hành nào sau đây khi merge Pull Request?",
+    "options": [
+      "A. Luôn sử dụng `git merge --no-ff` để giữ lại tất cả các commit merge.",
+      "B. Luôn sử dụng `git rebase` thủ công trước khi tạo PR.",
+      "C. Sử dụng \"Squash and Merge\" hoặc \"Rebase and Merge\" để giữ lịch sử tuyến tính và gọn gàng.",
+      "D. Cho phép bất kỳ ai merge PR mà không cần review."
+    ],
+    "correctAnswer": "C",
+    "explanation": "\"Squash and Merge\" gom tất cả các commit của PR thành một commit duy nhất. \"Rebase and Merge\" di chuyển các commit của PR lên đầu nhánh đích. Cả hai đều giúp duy trì lịch sử tuyến tính và sạch sẽ trên nhánh chính, cải thiện \"PR hygiene\".",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một quy trình làm việc an toàn với Git yêu cầu không bao giờ push trực tiếp lên nhánh `main`. Thay vào đó, mọi thay đổi phải thông qua Pull Request. Để thực thi điều này ở cấp độ repository, giải pháp nào là hiệu quả nhất?",
+    "options": [
+      "A. Yêu cầu tất cả các nhà phát triển ký cam kết không push trực tiếp.",
+      "B. Cấu hình branch protection rules trên nền tảng Git hosting (GitHub, GitLab, Bitbucket).",
+      "C. Sử dụng `pre-push` hook để ngăn chặn các push trực tiếp.",
+      "D. Đặt nhánh `main` là read-only cho tất cả mọi người trừ quản trị viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Branch protection rules trên các nền tảng Git hosting cho phép bạn thiết lập các quy tắc như yêu cầu Pull Request, review code, kiểm tra CI/CD thành công trước khi merge vào các nhánh quan trọng như `main`, thực thi quy trình làm việc an toàn một cách hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn muốn đảm bảo rằng mỗi khi một commit được tạo, tất cả các linter và formatter code đều chạy và sửa lỗi tự động trước khi commit được hoàn tất. Loại Git hook nào phù hợp nhất cho việc này?",
+    "options": [
+      "A. `pre-commit` hook",
+      "B. `post-commit` hook",
+      "C. `pre-push` hook",
+      "D. `post-merge` hook"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`pre-commit` hook chạy trước khi commit được tạo. Nếu script trả về mã lỗi khác 0, commit sẽ bị hủy, rất lý tưởng để chạy linter, formatter và các kiểm tra chất lượng code khác để đảm bảo code sạch trước khi nó đi vào lịch sử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án lớn, đội phát triển quyết định chuyển từ GitFlow sang Trunk-Based Development (TBD). Quyết định này thường được thúc đẩy bởi yếu tố nào?",
+    "options": [
+      "A. Mong muốn có lịch sử commit tuyến tính, dễ đọc hơn.",
+      "B. Nhu cầu tăng tốc độ tích hợp liên tục và triển khai liên tục.",
+      "C. Khả năng quản lý nhiều phiên bản sản phẩm cùng lúc dễ dàng hơn.",
+      "D. Giảm thiểu số lượng xung đột merge do ít nhánh hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "TBD ưu tiên tích hợp thường xuyên vào nhánh chính (trunk), giúp phát hiện lỗi sớm và đẩy nhanh chu trình CI/CD, phù hợp với các đội cần triển khai nhanh. GitFlow phức tạp hơn và thường chậm hơn do có nhiều nhánh tồn tại lâu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi nào việc sử dụng git rebase để làm sạch lịch sử commit trước khi merge vào nhánh chính được ưu tiên hơn so với git merge --no-ff trong một dự án có yêu cầu lịch sử rõ ràng và dễ truy vết?",
+    "options": [
+      "A. Khi cần giữ lại tất cả các commit trung gian của feature branch để debug sau này.",
+      "B. Khi nhánh feature đã được push lên remote và nhiều developer khác đã pull về.",
+      "C. Khi muốn tạo một lịch sử tuyến tính, loại bỏ các commit \"merge\" không cần thiết và nhóm các commit liên quan.",
+      "D. Khi nhánh chính có nhiều commit mới và việc rebase sẽ giúp giải quyết xung đột dễ dàng hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "git rebase tạo ra lịch sử tuyến tính, \"viết lại\" các commit của nhánh feature lên trên HEAD của nhánh đích, giúp loại bỏ các commit merge và nhóm các thay đổi liên quan, làm cho lịch sử sạch và dễ đọc hơn. git merge --no-ff giữ lại lịch sử phân nhánh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đội của bạn đang gặp phải xung đột merge phức tạp lặp đi lặp lại giữa hai nhánh phát triển chính. Để giải quyết vấn đề này một cách hiệu quả và tránh lặp lại công việc, bạn nên cân nhắc công cụ Git nào?",
+    "options": [
+      "A. git cherry-pick để chọn lọc các commit không gây xung đột.",
+      "B. git stash để tạm thời lưu trữ các thay đổi và sau đó áp dụng lại.",
+      "C. git rerere (reuse recorded resolution) để tự động áp dụng lại các giải pháp xung đột đã ghi nhận trước đó.",
+      "D. git reflog để xem lại lịch sử các thao tác Git và tìm điểm khôi phục."
+    ],
+    "correctAnswer": "C",
+    "explanation": "git rerere được thiết kế để xử lý các xung đột lặp lại. Khi bạn giải quyết một xung đột, Git sẽ ghi lại giải pháp đó. Nếu xung đột tương tự xảy ra lần nữa, git rerere có thể tự động áp dụng lại giải pháp đã ghi nhận, tiết kiệm thời gian và công sức.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một lỗi nghiêm trọng (regression) được báo cáo trong môi trường sản phẩm, nhưng không ai trong nhóm biết chính xác commit nào đã gây ra nó. Bạn cần tìm ra commit gây lỗi trong hàng trăm commit gần đây một cách nhanh chóng. Kỹ thuật Git nào là phù hợp nhất?",
+    "options": [
+      "A. Sử dụng git log -S \"buggy_code\" để tìm kiếm mã lỗi trong lịch sử.",
+      "B. Dùng git blame trên các file liên quan để xem ai đã thay đổi dòng mã đó.",
+      "C. Áp dụng git bisect để tự động chia đôi phạm vi commit và tìm ra commit lỗi.",
+      "D. Thực hiện git revert từng commit một từ HEAD cho đến khi lỗi biến mất."
+    ],
+    "correctAnswer": "C",
+    "explanation": "git bisect là công cụ mạnh mẽ để tìm kiếm commit gây lỗi bằng cách thực hiện tìm kiếm nhị phân trên lịch sử commit. Nó giúp tự động kiểm tra và đánh dấu các commit là \"good\" hoặc \"bad\" cho đến khi tìm thấy commit đầu tiên gây ra lỗi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Đội của bạn đang phát triển một hệ thống microservices phức tạp. Bạn đang cân nhắc giữa việc giữ tất cả các service trong một monorepo hoặc chia thành nhiều repository riêng biệt và quản lý chúng bằng git submodule. Lựa chọn nào sau đây là một trade-off quan trọng khi quyết định sử dụng git submodule?",
+    "options": [
+      "A. git submodule giúp đơn giản hóa việc quản lý phiên bản và đồng bộ hóa giữa các service.",
+      "B. git submodule làm tăng đáng kể thời gian clone repository chính do phải tải về tất cả các submodule.",
+      "C. git submodule cho phép các service có vòng đời độc lập và quyền truy cập riêng biệt.",
+      "D. git submodule cung cấp khả năng atomic commit (một commit thay đổi nhiều service cùng lúc) dễ dàng hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "git submodule cho phép các dự án con (submodule) duy trì lịch sử và vòng đời phát triển độc lập, với các quyền truy cập riêng. Đây là lợi thế chính so với monorepo. Tuy nhiên, nó phức tạp hóa việc quản lý và đồng bộ hóa phiên bản giữa các submodule và repo chính.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Dự án của bạn sử dụng Git LFS để quản lý các file lớn như tài nguyên đồ họa và file dữ liệu. Trong quy trình CI/CD, bạn nhận thấy thời gian clone repository tăng lên đáng kể do việc tải về các đối tượng LFS. Bạn nên làm gì để tối ưu hóa hiệu suất?",
+    "options": [
+      "A. Vô hiệu hóa Git LFS trong môi trường CI/CD và lưu trữ các file lớn trên một server riêng.",
+      "B. Sử dụng git clone --depth 1 để chỉ clone lịch sử gần nhất, bỏ qua các đối tượng LFS cũ.",
+      "C. Cấu hình CI/CD chỉ tải về các đối tượng LFS cần thiết cho build hiện tại bằng cách sử dụng git lfs pull --include=... hoặc git lfs fetch --recent.",
+      "D. Chuyển đổi tất cả các file LFS thành file nhị phân nhỏ hơn để Git có thể quản lý trực tiếp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "git lfs pull --include hoặc git lfs fetch --recent cho phép bạn chỉ tải về các đối tượng LFS được tham chiếu bởi các commit gần đây hoặc các file cụ thể, giảm đáng kể lượng dữ liệu cần tải về trong môi trường CI/CD.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để đảm bảo tất cả các commit vào nhánh main đều tuân thủ các quy tắc định dạng mã (code formatting) và vượt qua kiểm tra tĩnh (static analysis) trước khi được push lên remote, bạn nên triển khai loại Git hook nào?",
+    "options": [
+      "A. pre-commit hook trên máy cục bộ của developer.",
+      "B. post-receive hook trên server Git remote.",
+      "C. pre-rebase hook trên máy cục bộ của developer.",
+      "D. update hook trên server Git remote."
+    ],
+    "correctAnswer": "A",
+    "explanation": "pre-commit hook chạy trước khi một commit được tạo. Nó là nơi lý tưởng để chạy các công cụ kiểm tra định dạng mã và phân tích tĩnh, ngăn chặn các commit không đạt chuẩn ngay tại máy cục bộ của developer.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Đội của bạn muốn thiết lập một quy trình CI/CD trong đó mỗi Pull Request (PR) phải được xây dựng (build) và chạy kiểm thử (test) trên một môi trường độc lập trước khi có thể merge. Điều này yêu cầu tích hợp chặt chẽ với hệ thống Git. Bạn sẽ cấu hình CI/CD như thế nào để đạt được mục tiêu này?",
+    "options": [
+      "A. Cấu hình CI/CD để chỉ chạy khi có commit mới được push trực tiếp vào nhánh main.",
+      "B. Sử dụng Git hooks cục bộ để kích hoạt CI/CD pipeline sau mỗi commit.",
+      "C. Cấu hình CI/CD để lắng nghe các sự kiện Pull Request (hoặc Merge Request) từ Git host (GitHub, GitLab, Bitbucket) và tự động kích hoạt pipeline trên nhánh PR.",
+      "D. Yêu cầu developer chạy CI/CD thủ công sau khi tạo PR."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hầu hết các hệ thống CI/CD hiện đại đều có tích hợp sâu với các Git host, cho phép họ lắng nghe các sự kiện như tạo/cập nhật Pull Request. Khi một PR được mở hoặc cập nhật, CI/CD sẽ tự động kích hoạt pipeline trên nhánh của PR đó để kiểm tra thay đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một môi trường phát triển đòi hỏi bảo mật cao, đội của bạn muốn đảm bảo rằng tất cả các commit quan trọng đều được ký số (signed) để xác minh danh tính của người tạo commit và tính toàn vẹn của mã. Bạn nên áp dụng cơ chế nào để thực hiện điều này?",
+    "options": [
+      "A. Yêu cầu developer thêm tên và email vào mỗi commit message.",
+      "B. Cấu hình Git để sử dụng GPG key để ký các commit và cấu hình Git host để yêu cầu và xác minh chữ ký.",
+      "C. Sử dụng git credential helper để lưu trữ thông tin đăng nhập một cách an toàn.",
+      "D. Chỉ cho phép commit từ các địa chỉ IP đã được phê duyệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ký commit bằng GPG key là một tiêu chuẩn để xác minh danh tính người tạo commit và đảm bảo rằng commit không bị giả mạo hoặc thay đổi sau khi được tạo. Các Git host lớn như GitHub, GitLab đều hỗ trợ hiển thị và xác minh chữ ký GPG.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đội của bạn đang gặp vấn đề với các Pull Request (PR) lớn, khó review và thường xuyên gây ra xung đột merge. Để cải thiện quy trình làm việc và chất lượng mã, bạn nên khuyến khích thực hành nào sau đây?",
+    "options": [
+      "A. Tăng số lượng người review cho mỗi PR để đảm bảo chất lượng.",
+      "B. Khuyến khích developer tạo các PR nhỏ, tập trung vào một thay đổi duy nhất, và thường xuyên rebase với nhánh chính.",
+      "C. Yêu cầu developer viết tài liệu chi tiết cho mỗi PR trước khi mở.",
+      "D. Sử dụng git squash để gom tất cả các commit của PR thành một commit duy nhất trước khi merge."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các PR nhỏ, tập trung giúp việc review dễ dàng hơn, giảm khả năng xảy ra lỗi và xung đột merge. Thường xuyên rebase với nhánh chính giúp giữ cho nhánh feature luôn cập nhật và giảm thiểu xung đột khi merge cuối cùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Đội của bạn đang cân nhắc chuyển từ nhiều repository nhỏ sang một monorepo. Một trong những thách thức lớn nhất của monorepo là hiệu suất của các thao tác Git cơ bản (clone, fetch, checkout) khi codebase trở nên rất lớn. Giải pháp kiến trúc nào sau đây được sử dụng để giảm thiểu vấn đề này?",
+    "options": [
+      "A. Sử dụng git shallow clone cho tất cả các hoạt động phát triển hàng ngày.",
+      "B. Triển khai các công cụ như Google Repo (cho Android) hoặc Facebook Sapling/Microsoft VFS for Git để quản lý các phần của monorepo một cách hiệu quả.",
+      "C. Giới hạn số lượng file trong monorepo và di chuyển các file lớn ra khỏi Git.",
+      "D. Bắt buộc tất cả developer chỉ làm việc trên một phần nhỏ của codebase tại một thời điểm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với các monorepo cực lớn, các công cụ như Google Repo, Facebook Sapling (fbsub), hoặc Microsoft VFS for Git (nay là GVFS) được thiết kế để chỉ tải xuống và hiển thị các phần liên quan của repository, cải thiện đáng kể hiệu suất cho các thao tác Git.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đã push một loạt 3 commit lên nhánh main và sau đó nhận ra rằng chúng chứa một lỗi nghiêm trọng và cần được loại bỏ khỏi lịch sử một cách an toàn mà không ảnh hưởng đến các commit sau đó của người khác. Bạn nên sử dụng lệnh Git nào?",
+    "options": [
+      "A. git reset --hard HEAD~3 và sau đó git push --force.",
+      "B. git revert HEAD~3..HEAD.",
+      "C. git cherry-pick các commit tốt sau đó.",
+      "D. git rebase -i HEAD~3 và xóa các commit đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "git revert tạo ra các commit mới đảo ngược các thay đổi của commit đã chọn. Nó an toàn để sử dụng trên các nhánh đã được chia sẻ công khai vì nó không viết lại lịch sử. git reset --hard và git rebase -i đều viết lại lịch sử và không nên dùng trên nhánh đã public.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Đội của bạn đang phát triển một sản phẩm phần mềm có nhiều phiên bản (ví dụ: v1.0, v1.1, v2.0) cần được bảo trì và phát hành độc lập. Chiến lược branching nào phù hợp nhất để quản lý vòng đời của các phiên bản này, bao gồm cả việc vá lỗi (hotfix) cho các phiên bản cũ?",
+    "options": [
+      "A. Trunk-Based Development với các release tag.",
+      "B. GitFlow.",
+      "C. Feature Branching đơn giản.",
+      "D. Forking Workflow."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GitFlow được thiết kế đặc biệt để quản lý các bản phát hành và bảo trì nhiều phiên bản sản phẩm cùng lúc thông qua các nhánh develop, main, release, và hotfix chuyên dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để đảm bảo không có thông tin nhạy cảm (ví dụ: API keys, mật khẩu) vô tình bị commit vào repository công khai, bạn nên tích hợp biện pháp kiểm tra nào vào quy trình CI/CD và Git workflow của mình?",
+    "options": [
+      "A. Yêu cầu developer tự kiểm tra thủ công trước khi commit.",
+      "B. Sử dụng git clean -fdx trước mỗi commit để xóa các file không cần thiết.",
+      "C. Triển khai pre-commit hooks cục bộ để quét các mẫu regex thông thường cho thông tin nhạy cảm và tích hợp các công cụ quét bí mật (secret scanning) vào CI/CD pipeline.",
+      "D. Chỉ cho phép các commit từ các tài khoản đã được xác minh."
+    ],
+    "correctAnswer": "C",
+    "explanation": "pre-commit hooks có thể ngăn chặn thông tin nhạy cảm được commit ngay từ máy cục bộ. Ngoài ra, việc tích hợp các công cụ quét bí mật (ví dụ: detect-secrets, git-secrets) vào CI/CD pipeline sẽ cung cấp một lớp bảo vệ thứ hai, quét toàn bộ repository hoặc các commit mới để phát hiện và cảnh báo về thông tin nhạy cảm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một monorepo chứa nhiều dự án độc lập, làm thế nào để bạn chỉ xây dựng (build) và triển khai (deploy) các dự án con mà có thay đổi trong một commit cụ thể, thay vì xây dựng lại toàn bộ monorepo trong CI/CD?",
+    "options": [
+      "A. Luôn xây dựng lại toàn bộ monorepo để đảm bảo tính nhất quán.",
+      "B. Sử dụng git diff --name-only HEAD~1 HEAD để xác định các file đã thay đổi và từ đó suy ra dự án con bị ảnh hưởng.",
+      "C. Yêu cầu developer thủ công chỉ định dự án con nào đã thay đổi trong commit message.",
+      "D. Chia nhỏ monorepo thành nhiều repository nhỏ hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bằng cách sử dụng git diff --name-only giữa commit hiện tại và commit trước đó, bạn có thể lấy danh sách các file đã thay đổi. Từ danh sách này, các script CI/CD có thể xác định dự án con nào bị ảnh hưởng và chỉ kích hoạt build/deploy cho các dự án đó, tiết kiệm thời gian và tài nguyên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi nào thì git cherry-pick là lựa chọn tốt hơn so với git merge hoặc git rebase để di chuyển một thay đổi từ nhánh này sang nhánh khác?",
+    "options": [
+      "A. Khi bạn muốn áp dụng toàn bộ lịch sử của một nhánh vào nhánh khác.",
+      "B. Khi bạn cần chọn lọc một hoặc một vài commit cụ thể từ một nhánh khác mà không muốn mang theo toàn bộ lịch sử hoặc các thay đổi không liên quan của nhánh đó.",
+      "C. Khi bạn muốn giữ lịch sử commit tuyến tính và sạch sẽ.",
+      "D. Khi bạn đang làm việc trên nhánh chính và muốn hợp nhất các thay đổi từ một nhánh feature."
+    ],
+    "correctAnswer": "B",
+    "explanation": "git cherry-pick được sử dụng để chọn một hoặc một vài commit cụ thể từ một nhánh và áp dụng chúng lên nhánh hiện tại. Điều này hữu ích khi bạn chỉ cần một phần nhỏ các thay đổi từ một nhánh khác mà không muốn hợp nhất toàn bộ nhánh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đội của bạn muốn đảm bảo rằng tất cả các Pull Request (PR) đều được squash thành một commit duy nhất trước khi merge vào nhánh main để giữ cho lịch sử commit luôn sạch sẽ và dễ đọc. Bạn nên cấu hình điều này như thế nào trong workflow của mình?",
+    "options": [
+      "A. Yêu cầu developer thực hiện git rebase -i và squash thủ công trước khi tạo PR.",
+      "B. Sử dụng tính năng \"Squash and Merge\" được cung cấp bởi các Git host (GitHub, GitLab, Bitbucket) khi merge PR.",
+      "C. Cấu hình pre-receive hook trên server để tự động squash tất cả các commit của PR.",
+      "D. Luôn sử dụng git merge --squash thủ công trên nhánh main sau khi PR được chấp thuận."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hầu hết các Git host hiện đại đều cung cấp tùy chọn \"Squash and Merge\" khi đóng một Pull Request. Tính năng này tự động gom tất cả các commit trong PR thành một commit duy nhất khi merge vào nhánh đích, giúp duy trì lịch sử sạch sẽ mà không cần developer phải thực hiện thủ công.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Đội của bạn muốn tự động cập nhật một file VERSION trong repository mỗi khi có một commit mới được push lên nhánh main, đồng thời gửi thông báo đến một kênh Slack. Loại Git hook nào phù hợp nhất để thực hiện tác vụ này trên server Git remote?",
+    "options": [
+      "A. pre-commit hook.",
+      "B. post-update hook.",
+      "C. pre-receive hook.",
+      "D. applypatch-msg hook."
+    ],
+    "correctAnswer": "B",
+    "explanation": "post-update hook chạy trên server remote sau khi một push đã hoàn tất và các tham chiếu đã được cập nhật. Đây là nơi lý tưởng để thực hiện các tác vụ như cập nhật file VERSION, kích hoạt CI/CD, hoặc gửi thông báo sau khi thay đổi đã được chấp nhận vào repository.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một monorepo với hàng ngàn file và lịch sử commit dày đặc, thao tác git blame trên một file cụ thể trở nên rất chậm. Để cải thiện hiệu suất của git blame trong môi trường này, bạn có thể áp dụng kỹ thuật nào?",
+    "options": [
+      "A. Sử dụng git blame -w để bỏ qua khoảng trắng.",
+      "B. Sử dụng git blame --ignore-revs-file <file> để bỏ qua các commit \"dọn dẹp\" (cleanup commits) lớn hoặc các commit tự động.",
+      "C. Giới hạn phạm vi thời gian của git blame bằng cách sử dụng --since hoặc --until.",
+      "D. Chạy git gc thường xuyên để dọn dẹp repository."
+    ],
+    "correctAnswer": "B",
+    "explanation": "git blame --ignore-revs-file cho phép bạn chỉ định một danh sách các SHA của các commit mà Git nên bỏ qua khi tính toán blame. Điều này cực kỳ hữu ích để bỏ qua các commit lớn, tự động, hoặc các commit chỉ thay đổi định dạng mã mà không thay đổi logic, giúp git blame nhanh hơn và cung cấp thông tin hữu ích hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Đội của bạn đang tranh luận về việc sử dụng git rebase hay git merge cho các nhánh feature trước khi hợp nhất vào nhánh develop. Một lập luận chống lại git rebase là gì, đặc biệt trong một môi trường cộng tác?",
+    "options": [
+      "A. git rebase tạo ra lịch sử commit lộn xộn và khó đọc.",
+      "B. git rebase không thể giải quyết xung đột merge một cách hiệu quả.",
+      "C. git rebase có thể ghi đè lịch sử commit, gây khó khăn cho các developer khác nếu nhánh đã được public và họ đã pull về.",
+      "D. git rebase đòi hỏi nhiều thao tác thủ công hơn so với git merge."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lập luận chính chống lại git rebase trên các nhánh đã public là nó viết lại lịch sử commit. Nếu các developer khác đã pull nhánh đó về và dựa trên các commit cũ, việc rebase và force push nhánh đó sẽ gây ra xung đột lịch sử và yêu cầu họ phải thực hiện các thao tác phức tạp để đồng bộ lại, phá vỡ quy trình làm việc chung.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Git LFS, các file lớn thực sự không được lưu trữ trong repository Git mà được lưu trữ trên một server LFS riêng biệt. Điều này đặt ra những cân nhắc bảo mật nào?",
+    "options": [
+      "A. Các file LFS được tự động mã hóa khi lưu trữ trên server LFS.",
+      "B. Việc truy cập các đối tượng LFS chỉ có thể thực hiện thông qua SSH.",
+      "C. Cần đảm bảo rằng server LFS được bảo mật đúng cách và có các biện pháp kiểm soát truy cập phù hợp, vì các file LFS không được bảo vệ bởi các quyền của Git repository.",
+      "D. Git LFS tự động xóa các file cũ để tiết kiệm dung lượng, có thể dẫn đến mất dữ liệu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mặc dù Git LFS giúp quản lý các file lớn, nhưng nó chuyển trách nhiệm bảo mật các file đó sang server LFS. Cần đảm bảo server LFS được cấu hình bảo mật, có xác thực và ủy quyền phù hợp để ngăn chặn truy cập trái phép vào các file nhạy cảm. Git repository chỉ lưu trữ các con trỏ LFS, không phải dữ liệu thực.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang sử dụng git bisect để tìm một commit gây lỗi, nhưng việc kiểm tra lỗi yêu cầu một quy trình phức tạp, có thể là chạy một script kiểm thử tự động. Làm thế nào để tự động hóa quá trình git bisect này?",
+    "options": [
+      "A. Chạy git bisect start, sau đó git bisect good/bad thủ công sau mỗi lần kiểm tra.",
+      "B. Sử dụng git bisect run <script_kiểm_thử> để Git tự động kiểm tra từng commit và đánh dấu.",
+      "C. Viết một Git hook để tự động chạy kiểm thử sau mỗi checkout.",
+      "D. git bisect không hỗ trợ tự động hóa quá trình kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "git bisect run cho phép bạn chỉ định một script hoặc lệnh sẽ được chạy trên mỗi commit được kiểm tra. Dựa vào mã thoát của script (0 cho \"good\", khác 0 cho \"bad\"), git bisect sẽ tự động tiếp tục quá trình tìm kiếm nhị phân, tiết kiệm rất nhiều thời gian so với việc kiểm tra thủ công.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn vô tình thực hiện git reset --hard HEAD~5 và mất đi một số commit quan trọng. Bạn chưa push những thay đổi này lên remote. Làm thế nào để khôi phục lại trạng thái trước khi reset?",
+    "options": [
+      "A. Sử dụng git revert HEAD~5.",
+      "B. git reflog để tìm SHA của commit trước khi reset và sau đó git reset --hard <SHA>.",
+      "C. git cherry-pick các commit đã mất từ một nhánh khác.",
+      "D. Không thể khôi phục được vì git reset --hard xóa vĩnh viễn các commit."
+    ],
+    "correctAnswer": "B",
+    "explanation": "git reflog ghi lại lịch sử của HEAD (các thao tác như commit, reset, merge, rebase, v.v.). Ngay cả khi các commit không còn được tham chiếu bởi bất kỳ nhánh nào, chúng vẫn tồn tại trong reflog trong một thời gian. Bạn có thể tìm thấy SHA của trạng thái mong muốn trong reflog và sử dụng git reset --hard để quay lại.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một môi trường Trunk-Based Development (TBD) với các feature flag, điều gì là một trade-off tiềm năng khi sử dụng TBD so với GitFlow?",
+    "options": [
+      "A. TBD làm tăng sự phức tạp trong việc quản lý nhiều phiên bản sản phẩm cùng lúc.",
+      "B. TBD yêu cầu tích hợp liên tục và kiểm thử tự động mạnh mẽ hơn để đảm bảo nhánh chính luôn ổn định.",
+      "C. TBD làm giảm khả năng phát hiện lỗi sớm do các tính năng được tích hợp muộn hơn.",
+      "D. TBD khuyến khích các Pull Request lớn hơn, khó review hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "TBD yêu cầu các tính năng được tích hợp vào nhánh chính thường xuyên, đôi khi nhiều lần một ngày. Để đảm bảo nhánh chính luôn hoạt động và không bị lỗi, cần có một hệ thống CI/CD mạnh mẽ với kiểm thử tự động toàn diện và nhanh chóng. Đây là một yêu cầu và cũng là một thách thức lớn của TBD.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang giải quyết một xung đột merge phức tạp, và bạn nhận ra rằng một phần của xung đột là do các thay đổi định dạng mã (whitespace changes) không đáng kể. Làm thế nào để bạn có thể giải quyết xung đột này một cách hiệu quả mà không phải xử lý thủ công từng thay đổi whitespace?",
+    "options": [
+      "A. Sử dụng git merge -Xignore-space-change.",
+      "B. Chạy git rebase --whitespace=fix trước khi merge.",
+      "C. Sử dụng git diff -w để xem các thay đổi và giải quyết thủ công.",
+      "D. Cấu hình Git để bỏ qua tất cả các thay đổi whitespace vĩnh viễn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "git merge -Xignore-space-change (hoặc -Xignore-all-space) là một tùy chọn chiến lược merge cho phép Git bỏ qua các thay đổi về khoảng trắng khi so sánh các dòng trong quá trình merge, giúp giảm số lượng xung đột cần giải quyết thủ công và tập trung vào các thay đổi logic thực sự.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một công ty phần mềm lớn đang chuyển đổi từ kiến trúc microservices sang một monorepo. Đội ngũ phát triển đang tranh luận về chiến lược branching phù hợp nhất để duy trì tốc độ phát triển và tích hợp liên tục. Chiến lược nào sau đây sẽ tối ưu nhất cho monorepo và CI/CD mạnh mẽ?",
+    "options": [
+      "A. GitFlow truyền thống với các nhánh `develop`, `release`, `feature` dài hạn.",
+      "B. Trunk-Based Development (TBD) với các nhánh tính năng ngắn ngủi và merge thường xuyên vào `main`.",
+      "C. Sử dụng nhiều nhánh `release` song song để quản lý các phiên bản khác nhau của microservices.",
+      "D. Mỗi nhóm phát triển duy trì một nhánh riêng biệt và chỉ merge vào `main` khi hoàn thành sprint."
+    ],
+    "correctAnswer": "B",
+    "explanation": "TBD thúc đẩy tích hợp liên tục, giảm thiểu xung đột và rất phù hợp cho monorepo và CI/CD mạnh mẽ, nơi các thay đổi nhỏ, thường xuyên được tích hợp và kiểm thử.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án có yêu cầu tuân thủ lịch sử commit tuyến tính (linear history) nghiêm ngặt để dễ dàng truy vết và rollback, đồng thời sử dụng CI/CD tự động. Kỹ thuật nào sau đây là lựa chọn tốt nhất khi tích hợp nhánh tính năng vào nhánh chính?",
+    "options": [
+      "A. `git merge --no-ff` để tạo một commit merge rõ ràng.",
+      "B. `git rebase` nhánh tính năng lên nhánh chính trước khi fast-forward merge.",
+      "C. `git merge --squash` để gom tất cả commit thành một commit duy nhất.",
+      "D. `git cherry-pick` từng commit từ nhánh tính năng sang nhánh chính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git rebase` tạo ra lịch sử commit tuyến tính, giúp dễ dàng theo dõi và rollback. Sau khi rebase, merge vào nhánh chính thường là fast-forward, giữ cho lịch sử sạch sẽ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một nhóm phát triển đang gặp khó khăn với các nhánh tính năng tồn tại quá lâu, dẫn đến xung đột merge phức tạp khi cố gắng tích hợp vào nhánh `develop`. Để giải quyết vấn đề này và cải thiện quy trình làm việc, giải pháp chiến lược nào là phù hợp nhất?",
+    "options": [
+      "A. Yêu cầu các nhà phát triển sử dụng `git rebase` thường xuyên hơn trên nhánh tính năng của họ.",
+      "B. Áp dụng Trunk-Based Development để khuyến khích các nhánh tính năng ngắn hơn và tích hợp thường xuyên.",
+      "C. Chỉ định một người chịu trách nhiệm giải quyết tất cả các xung đột merge.",
+      "D. Sử dụng `git merge --strategy=ours` để ưu tiên nhánh `develop` trong mọi xung đột."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trunk-Based Development trực tiếp giải quyết vấn đề nhánh dài bằng cách khuyến khích các nhánh tính năng ngắn và tích hợp liên tục, giảm thiểu khả năng xảy ra xung đột lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi nào thì việc sử dụng `git merge --no-ff` (no fast-forward merge) có ý nghĩa chiến lược hơn so với `git merge` thông thường (fast-forward if possible) trong một dự án lớn?",
+    "options": [
+      "A. Khi bạn muốn giữ lịch sử commit sạch sẽ và tuyến tính.",
+      "B. Khi bạn muốn tạo một commit merge rõ ràng để đánh dấu điểm tích hợp của một nhánh tính năng hoặc release.",
+      "C. Khi nhánh tính năng không có commit nào khác ngoài nhánh chính.",
+      "D. Khi bạn muốn loại bỏ tất cả các commit trung gian từ nhánh tính năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`--no-ff` đảm bảo rằng một commit merge mới luôn được tạo, ngay cả khi fast-forward có thể thực hiện được. Điều này giúp duy trì thông tin về việc một nhánh đã được tích hợp vào khi nào và từ đâu, hữu ích cho việc truy vết các tính năng hoặc releases cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một môi trường phát triển có nhiều nhóm làm việc trên cùng một codebase và yêu cầu các bản phát hành nhanh chóng, việc sử dụng `git rebase` trên các nhánh đã được push lên remote có thể gây ra những rủi ro nghiêm trọng nào?",
+    "options": [
+      "A. Làm tăng kích thước của repository do tạo ra các commit trùng lặp.",
+      "B. Gây ra xung đột merge không thể giải quyết được.",
+      "C. Thay đổi lịch sử commit của nhánh, gây khó khăn cho các thành viên khác đã pull nhánh đó.",
+      "D. Tự động xóa các commit đã được push lên remote."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Rebase viết lại lịch sử commit. Nếu bạn rebase một nhánh đã được push và người khác đã pull nó, khi họ cố gắng push lại, họ sẽ gặp xung đột lịch sử vì commit của họ dựa trên lịch sử cũ, không còn tồn tại sau rebase. Điều này đòi hỏi `git push --force` và có thể dẫn đến mất việc hoặc xung đột phức tạp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một công ty đang áp dụng chiến lược GitFlow nhưng gặp khó khăn trong việc quản lý các hotfix cần được áp dụng cho nhiều phiên bản release đang được duy trì song song. Giải pháp nào sau đây là hiệu quả nhất để xử lý tình huống này?",
+    "options": [
+      "A. Cherry-pick các commit hotfix từ nhánh `hotfix` sang từng nhánh `release` và `develop` tương ứng.",
+      "B. Rebase nhánh `hotfix` lên từng nhánh `release` và `develop` rồi merge.",
+      "C. Tạo một nhánh `hotfix` riêng cho mỗi phiên bản release.",
+      "D. Yêu cầu các nhóm phát triển tự giải quyết các xung đột khi merge hotfix."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`git cherry-pick` cho phép chọn một hoặc nhiều commit cụ thể và áp dụng chúng vào nhánh hiện tại. Đây là cách hiệu quả để áp dụng các bản sửa lỗi khẩn cấp (hotfix) cho nhiều nhánh release hoặc develop mà không làm ảnh hưởng đến lịch sử của các nhánh đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong một dự án lớn với nhiều nhà phát triển. Sau một `git pull --rebase`, bạn gặp phải hàng loạt xung đột. Cách tiếp cận chiến lược nào sau đây là tốt nhất để giải quyết các xung đột này một cách hiệu quả và giảm thiểu rủi ro?",
+    "options": [
+      "A. Sử dụng `git mergetool` để giải quyết từng xung đột một cách thủ công, sau đó `git rebase --continue`.",
+      "B. Chấp nhận phiên bản của bạn cho tất cả các xung đột bằng `git rebase --ours`.",
+      "C. Hủy bỏ rebase bằng `git rebase --abort` và thực hiện `git merge` thay thế.",
+      "D. Yêu cầu các nhà phát triển khác tạm dừng công việc để bạn có thể giải quyết xung đột mà không bị gián đoạn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`git mergetool` cung cấp một giao diện trực quan để giải quyết xung đột từng bước, đảm bảo bạn xem xét và chọn đúng các thay đổi cần thiết từ cả hai phía, sau đó `git rebase --continue` để tiếp tục quá trình rebase.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một bug nghiêm trọng đã được phát hiện trong môi trường production. Bạn cần tìm ra commit nào đã gây ra bug này trong một lịch sử commit rất dài và phức tạp. Công cụ Git nào là phù hợp nhất để thực hiện việc này một cách hiệu quả?",
+    "options": [
+      "A. `git log -S \"buggy_code_pattern\"`",
+      "B. `git blame <file>`",
+      "C. `git bisect`",
+      "D. `git reflog`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`git bisect` là công cụ mạnh mẽ để tìm kiếm nhị phân (binary search) trong lịch sử commit, giúp xác định commit đầu tiên giới thiệu một lỗi hoặc thay đổi hành vi một cách nhanh chóng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đã vô tình `git push --force` lên nhánh `main` và ghi đè lên lịch sử mà các đồng nghiệp khác đã pull về. Điều này gây ra sự không nhất quán nghiêm trọng. Hành động nào sau đây là tốt nhất để khắc phục tình huống này và giảm thiểu thiệt hại?",
+    "options": [
+      "A. Yêu cầu tất cả mọi người `git pull --rebase` để đồng bộ lại.",
+      "B. Sử dụng `git revert` để hoàn tác commit force push.",
+      "C. Sử dụng `git reflog` để tìm commit trước khi force push và `git reset --hard` sau đó `git push --force-with-lease` lại.",
+      "D. Xóa repository remote và tạo lại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`git reflog` cho phép bạn xem lịch sử của các thao tác cục bộ, giúp bạn tìm lại trạng thái của nhánh trước khi force push. Sau đó, bạn có thể `git reset --hard` về commit đó và `git push --force-with-lease` để cập nhật remote một cách an toàn hơn, tránh ghi đè lên các thay đổi mới của người khác nếu có.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một kịch bản hotfix khẩn cấp, một commit đã được áp dụng cho nhánh `release-v1.0`. Bây giờ, commit đó cần được áp dụng cho nhánh `release-v1.1` và `develop`. Phương pháp nào là hiệu quả nhất để đảm bảo commit đó được áp dụng chính xác mà không mang theo các thay đổi không liên quan?",
+    "options": [
+      "A. Merge nhánh `release-v1.0` vào `release-v1.1` và `develop`.",
+      "B. Rebase `release-v1.1` và `develop` lên `release-v1.0`.",
+      "C. `git cherry-pick` commit hotfix từ `release-v1.0` sang `release-v1.1` và `develop`.",
+      "D. Copy thủ công các thay đổi từ commit đó sang các nhánh khác."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`git cherry-pick` cho phép chọn một commit cụ thể và áp dụng nó vào nhánh hiện tại, rất lý tưởng cho việc áp dụng các sửa lỗi hoặc tính năng nhỏ lẻ giữa các nhánh khác nhau mà không cần merge toàn bộ nhánh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một tính năng mới đã được triển khai và merge vào `main`, nhưng sau đó phát hiện ra nó gây ra lỗi nghiêm trọng trong production. Nhóm cần nhanh chóng loại bỏ tính năng này khỏi `main` mà không làm mất đi lịch sử của các commit khác. Lệnh nào sau đây là lựa chọn an toàn và phù hợp nhất?",
+    "options": [
+      "A. `git reset --hard <commit_trước_tính_năng>`",
+      "B. `git revert <commit_của_tính_năng>`",
+      "C. `git rebase -i <commit_trước_tính_năng>`",
+      "D. `git push --force origin main`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`git revert` tạo ra một commit mới để hoàn tác các thay đổi của một commit cụ thể. Nó an toàn vì không viết lại lịch sử đã được push, giữ nguyên các commit khác và cho phép dễ dàng hoàn tác lại nếu cần.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang giải quyết một xung đột phức tạp sau khi `git pull --rebase`. Có một tệp mà bạn biết chắc chắn rằng phiên bản của bạn là đúng và bạn muốn giữ nguyên nó mà không cần giải quyết từng dòng. Lệnh nào sau đây giúp bạn làm điều đó cho tệp cụ thể này trong quá trình giải quyết xung đột?",
+    "options": [
+      "A. `git checkout --ours <file_path>`",
+      "B. `git checkout --theirs <file_path>`",
+      "C. `git add <file_path>` sau đó `git rebase --continue`",
+      "D. `git reset <file_path>`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong quá trình giải quyết xung đột, `git checkout --ours <file_path>` sẽ chọn phiên bản của tệp từ nhánh hiện tại (của bạn) và đánh dấu nó là đã được giải quyết. Sau đó bạn chỉ cần `git add` và `git rebase --continue`.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một công ty đang cân nhắc giữa việc sử dụng monorepo hoặc polyrepo cho dự án phần mềm lớn của mình, bao gồm nhiều dịch vụ và thư viện chia sẻ. Yếu tố nào sau đây là **lợi ích chính** của monorepo trong bối cảnh này?",
+    "options": [
+      "A. Giảm thiểu thời gian clone repository.",
+      "B. Đơn giản hóa quản lý quyền truy cập và bảo mật.",
+      "C. Tăng cường khả năng tái sử dụng mã và đồng bộ hóa phiên bản thư viện giữa các dịch vụ.",
+      "D. Giúp các nhóm làm việc độc lập hơn và giảm sự phụ thuộc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Monorepo giúp dễ dàng chia sẻ mã, tái sử dụng các thư viện và đảm bảo tất cả các dịch vụ sử dụng cùng một phiên bản của các dependency nội bộ, giảm thiểu vấn đề về quản lý phiên bản và khả năng tương thích.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang quản lý một repository Git chứa nhiều tệp nhị phân lớn (ví dụ: mô hình AI, asset đồ họa) gây ra hiệu suất chậm khi clone, fetch và checkout. Giải pháp nào sau đây là phù hợp nhất để quản lý hiệu quả các tệp này trong Git?",
+    "options": [
+      "A. Chia repository thành nhiều repository nhỏ hơn.",
+      "B. Sử dụng `git archive` để nén các tệp lớn.",
+      "C. Triển khai Git LFS (Large File Storage).",
+      "D. Lưu trữ các tệp lớn trên một dịch vụ lưu trữ đám mây riêng biệt và chỉ lưu trữ đường dẫn trong Git."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Git LFS được thiết kế đặc biệt để quản lý các tệp nhị phân lớn trong Git bằng cách thay thế chúng bằng các con trỏ trong repository Git thực tế và lưu trữ nội dung tệp trên một máy chủ LFS riêng biệt, giúp cải thiện đáng kể hiệu suất của các thao tác Git.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng Git Submodules trong một dự án lớn, thách thức chính nào thường phát sinh liên quan đến việc duy trì và cập nhật các dependency?",
+    "options": [
+      "A. Khó khăn trong việc kiểm soát quyền truy cập vào các submodule.",
+      "B. Submodule không thể được versioning độc lập.",
+      "C. Việc cập nhật submodule lên một commit cụ thể đòi hỏi phải cập nhật thủ công commit hash trong repository chính.",
+      "D. Submodule làm tăng đáng kể kích thước của repository chính."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Submodule được tham chiếu bằng một commit hash cụ thể. Để cập nhật submodule lên phiên bản mới, bạn phải vào thư mục submodule, pull các thay đổi, sau đó quay lại repository chính và commit thay đổi của commit hash submodule. Điều này có thể phức tạp và dễ gây lỗi nếu không được quản lý cẩn thận.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh monorepo, một trong những thách thức lớn nhất là việc tối ưu hóa CI/CD để chỉ chạy các pipeline liên quan đến các thay đổi đã được thực hiện. Kỹ thuật nào sau đây là hiệu quả nhất để đạt được điều này?",
+    "options": [
+      "A. Chạy tất cả các pipeline cho mọi commit để đảm bảo an toàn.",
+      "B. Sử dụng Git hooks để kích hoạt các pipeline cụ thể dựa trên đường dẫn tệp bị thay đổi.",
+      "C. Cấu hình CI/CD để chỉ lắng nghe các thay đổi trên nhánh `main`.",
+      "D. Chia monorepo thành nhiều polyrepo nhỏ hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các hệ thống CI/CD hiện đại có khả năng cấu hình để kiểm tra các tệp hoặc thư mục bị thay đổi trong một commit (hoặc PR) và chỉ kích hoạt các pipeline liên quan đến các thành phần đó, giúp tiết kiệm tài nguyên và thời gian build trong monorepo.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một dự án đang sử dụng Git Submodules để tích hợp các thư viện bên ngoài. Đội ngũ phát triển thường xuyên gặp phải tình trạng \"detached HEAD\" trong các submodule khi clone hoặc pull repository chính. Nguyên nhân chính của vấn đề này là gì và làm thế nào để khắc phục?",
+    "options": [
+      "A. Submodule không được khởi tạo đúng cách; cần chạy `git submodule init` và `git submodule update`.",
+      "B. Submodule được tham chiếu đến một nhánh thay vì một commit cụ thể; cần thay đổi tham chiếu trong `.gitmodules`.",
+      "C. Submodule đã bị xóa khỏi repository gốc; cần cập nhật URL của submodule.",
+      "D. Repository chính đã bị hỏng; cần clone lại toàn bộ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi clone một repository có submodule, submodule chỉ được tạo thư mục rỗng. Để tải nội dung và chuyển submodule về đúng commit được tham chiếu, cần chạy `git submodule init` (để đăng ký submodule) và `git submodule update` (để checkout commit cụ thể). Nếu không, submodule sẽ ở trạng thái \"detached HEAD\" trỏ đến commit đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần đảm bảo rằng một số tệp cấu hình nhạy cảm (ví dụ: khóa API, thông tin đăng nhập database) không bao giờ được commit vào Git repository, ngay cả khi chúng cần tồn tại cục bộ cho quá trình phát triển. Phương pháp nào sau đây là tốt nhất để quản lý các tệp này một cách an toàn?",
+    "options": [
+      "A. Thêm các tệp này vào `.gitignore`.",
+      "B. Lưu trữ chúng trong Git LFS.",
+      "C. Mã hóa chúng trước khi commit.",
+      "D. Sử dụng Git Hooks để chặn commit các tệp này."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`.gitignore` là cách tiêu chuẩn và đơn giản nhất để ngăn Git theo dõi các tệp cụ thể. Đối với các tệp cấu hình nhạy cảm cần tồn tại cục bộ nhưng không được đưa vào lịch sử Git, `.gitignore` là giải pháp trực tiếp và hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để đảm bảo tất cả các commit vào nhánh `main` tuân thủ một định dạng thông điệp commit chuẩn (ví dụ: Conventional Commits) và vượt qua kiểm tra linting cơ bản trước khi được push, bạn nên triển khai giải pháp nào?",
+    "options": [
+      "A. Cấu hình quy tắc trên nền tảng CI/CD để kiểm tra sau khi push.",
+      "B. Sử dụng `pre-commit` hook cục bộ để chạy linter và kiểm tra định dạng commit.",
+      "C. Yêu cầu các nhà phát triển tự kiểm tra trước khi commit.",
+      "D. Sử dụng `post-receive` hook trên remote server để từ chối các commit không hợp lệ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`pre-commit` hook chạy trước khi commit được tạo, cho phép chặn commit nếu nó không đáp ứng các tiêu chuẩn (ví dụ: lỗi linting, định dạng commit sai). Điều này đảm bảo rằng chỉ các commit hợp lệ mới đi vào lịch sử Git.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một quy trình CI/CD phức tạp, bạn muốn tự động tạo các bản phát hành (release) và gắn thẻ (tag) chúng trong Git khi một pull request được merge vào nhánh `main` và tất cả các kiểm thử đã vượt qua. Kỹ thuật nào sau đây là cách tiếp cận tốt nhất để tự động hóa việc này?",
+    "options": [
+      "A. Yêu cầu nhà phát triển tạo tag thủ công sau mỗi lần merge.",
+      "B. Sử dụng `post-merge` hook trên máy cục bộ của nhà phát triển.",
+      "C. Cấu hình CI/CD pipeline để tạo tag và release sau khi merge thành công vào `main`.",
+      "D. Sử dụng `pre-push` hook để tạo tag trước khi push lên remote."
+    ],
+    "correctAnswer": "C",
+    "explanation": "CI/CD pipeline là nơi lý tưởng để tự động hóa các tác vụ sau merge như tạo tag, build artifacts, và triển khai release. Nó đảm bảo tính nhất quán và tự động hóa toàn bộ quy trình.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để tăng cường bảo mật và tính toàn vẹn của lịch sử commit trong một dự án mã nguồn mở quan trọng, bạn muốn đảm bảo rằng tất cả các commit vào nhánh `main` đều được ký số (signed commits). Cách hiệu quả nhất để thực thi chính sách này là gì?",
+    "options": [
+      "A. Yêu cầu tất cả nhà phát triển cấu hình GPG để ký commit.",
+      "B. Sử dụng `pre-receive` hook trên Git server để từ chối các commit không được ký.",
+      "C. Cấu hình branch protection rules trên nền tảng Git hosting (GitHub, GitLab, Bitbucket) để yêu cầu commit đã ký.",
+      "D. Chạy kiểm tra ký commit trong CI/CD pipeline sau khi push."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các nền tảng Git hosting hiện đại cung cấp tính năng \"branch protection rules\" cho phép bạn yêu cầu các commit phải được ký số trước khi chúng có thể được merge vào một nhánh được bảo vệ, đảm bảo tính toàn vẹn và nguồn gốc của code.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một đội ngũ phát triển lớn đang gặp khó khăn trong việc duy trì \"PR hygiene\" (chất lượng Pull Request), với các PR thường chứa nhiều commit nhỏ, không liên quan và lịch sử commit lộn xộn. Để cải thiện tình hình, chiến lược nào sau đây là hiệu quả nhất?",
+    "options": [
+      "A. Yêu cầu các nhà phát triển sử dụng `git rebase -i` để làm sạch lịch sử cục bộ trước khi tạo PR.",
+      "B. Áp dụng chính sách \"squash merge\" hoặc \"rebase merge\" khi merge PR trên nền tảng Git hosting.",
+      "C. Tăng cường số lượng người review cho mỗi PR.",
+      "D. Giới hạn số lượng commit trong mỗi PR."
+    ],
+    "correctAnswer": "B",
+    "explanation": "\"Squash merge\" gom tất cả các commit của PR thành một commit duy nhất trên nhánh chính, tạo ra lịch sử sạch sẽ. \"Rebase merge\" rebase các commit của PR lên nhánh chính, giữ lịch sử tuyến tính. Cả hai đều giúp duy trì PR hygiene tốt hơn so với merge thông thường.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn cần thiết lập một quy trình CI/CD để tự động chạy các bài kiểm thử hiệu năng (performance tests) chỉ khi có thay đổi trong các tệp liên quan đến hiệu năng hoặc khi một PR được gắn nhãn \"performance-critical\". Làm thế nào để cấu hình pipeline CI/CD để kích hoạt có điều kiện này?",
+    "options": [
+      "A. Chạy tất cả các bài kiểm thử hiệu năng trên mọi commit.",
+      "B. Sử dụng Git `post-commit` hook để kiểm tra các thay đổi và kích hoạt pipeline.",
+      "C. Cấu hình CI/CD để kiểm tra các đường dẫn tệp bị thay đổi và/hoặc nhãn (labels) của PR để kích hoạt pipeline cụ thể.",
+      "D. Yêu cầu nhà phát triển chạy kiểm thử hiệu năng thủ công trước khi push."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các hệ thống CI/CD hiện đại cung cấp khả năng cấu hình các điều kiện kích hoạt pipeline dựa trên nhiều yếu tố như đường dẫn tệp bị thay đổi (path filters), nhãn của pull request, hoặc nội dung commit message. Điều này cho phép tối ưu hóa việc sử dụng tài nguyên CI/CD.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một nhóm phát triển đang gặp vấn đề với việc các thông tin nhạy cảm (ví dụ: token, mật khẩu) vô tình bị commit vào Git repository. Để ngăn chặn điều này xảy ra trong tương lai, biện pháp phòng ngừa mạnh mẽ nhất nào nên được triển khai?",
+    "options": [
+      "A. Thêm các tệp chứa thông tin nhạy cảm vào `.gitignore`.",
+      "B. Đào tạo các nhà phát triển về tầm quan trọng của việc không commit thông tin nhạy cảm.",
+      "C. Sử dụng `pre-commit` hook để quét các thông tin nhạy cảm phổ biến trước khi commit.",
+      "D. Thực hiện kiểm tra thủ công các commit trước khi merge vào nhánh chính."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`pre-commit` hook có thể được cấu hình để chạy các công cụ quét mã nguồn (secret scanners) để phát hiện và chặn các commit chứa thông tin nhạy cảm trước khi chúng đi vào lịch sử Git, cung cấp một lớp bảo vệ chủ động và tự động.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi làm việc với Pull Requests trên một nền tảng Git hosting, việc sử dụng \"squash and merge\" thay vì \"merge commit\" thông thường có lợi ích chiến lược nào cho lịch sử Git của nhánh chính?",
+    "options": [
+      "A. Giữ nguyên toàn bộ lịch sử commit chi tiết của nhánh tính năng trên nhánh chính.",
+      "B. Tạo ra một lịch sử commit tuyến tính, sạch sẽ và dễ đọc hơn trên nhánh chính.",
+      "C. Giúp dễ dàng revert từng commit riêng lẻ từ nhánh tính năng.",
+      "D. Đảm bảo rằng tất cả các commit được ký số."
+    ],
+    "correctAnswer": "B",
+    "explanation": "\"Squash and merge\" gom tất cả các commit của một nhánh tính năng thành một commit duy nhất khi merge vào nhánh chính. Điều này tạo ra một lịch sử tuyến tính, gọn gàng trên nhánh chính, mỗi commit đại diện cho một tính năng hoặc bugfix hoàn chỉnh, làm cho lịch sử dễ đọc và quản lý hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Git",
+    "category": "KNOWLEDGE"
+  }
+]

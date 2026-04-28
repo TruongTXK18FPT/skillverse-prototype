@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong MongoDB, đơn vị lưu trữ dữ liệu cơ bản là gì?",
+    "options": [
+      "A. Bảng (Table)",
+      "B. Dòng (Row)",
+      "C. Tài liệu (Document)",
+      "D. Cột (Column)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong MongoDB, dữ liệu được lưu trữ dưới dạng các tài liệu BSON (Binary JSON), là đơn vị cơ bản nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một tập hợp các tài liệu (documents) trong MongoDB được gọi là gì?",
+    "options": [
+      "A. Database",
+      "B. Collection",
+      "C. Table",
+      "D. Schema"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Collection là một nhóm các tài liệu trong MongoDB, tương tự như khái niệm bảng trong cơ sở dữ liệu quan hệ nhưng không có schema cố định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phát biểu nào sau đây MÔ TẢ ĐÚNG nhất về MongoDB schema?",
+    "options": [
+      "A. MongoDB yêu cầu một schema cố định và được định nghĩa trước cho mỗi collection.",
+      "B. MongoDB là một cơ sở dữ liệu không schema (schema-less), cho phép các tài liệu trong cùng một collection có cấu trúc khác nhau.",
+      "C. MongoDB sử dụng XML để định nghĩa schema.",
+      "D. MongoDB chỉ cho phép lưu trữ dữ liệu dạng key-value đơn giản mà không có cấu trúc nested."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MongoDB là một cơ sở dữ liệu NoSQL, nổi bật với tính linh hoạt của schema, cho phép các tài liệu trong cùng một collection có cấu trúc khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào bạn nên cân nhắc sử dụng phương pháp nhúng (embedding) dữ liệu (ví dụ: nhúng địa chỉ vào tài liệu người dùng) thay vì tham chiếu (referencing) trong MongoDB?",
+    "options": [
+      "A. Khi dữ liệu nhúng có kích thước rất lớn và được truy cập độc lập.",
+      "B. Khi dữ liệu nhúng có mối quan hệ một-nhiều và thường xuyên được truy cập cùng với tài liệu cha.",
+      "C. Khi dữ liệu nhúng cần được cập nhật thường xuyên bởi nhiều tài liệu khác.",
+      "D. Khi muốn giảm thiểu kích thước của tài liệu cha."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nhúng dữ liệu phù hợp khi dữ liệu con có mối quan hệ một-nhiều với tài liệu cha và thường xuyên được truy cập cùng nhau, giúp giảm số lượng truy vấn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kiểu dữ liệu nào được MongoDB sử dụng để tự động tạo một ID duy nhất cho mỗi tài liệu mới?",
+    "options": [
+      "A. UUID",
+      "B. NumberInt",
+      "C. ObjectId",
+      "D. String"
+    ],
+    "correctAnswer": "C",
+    "explanation": "ObjectId là kiểu dữ liệu mặc định được MongoDB sử dụng cho trường `_id`, đảm bảo tính duy nhất và khả năng phân tán.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong MongoDB, mối quan hệ \"một-nhiều\" (one-to-many) giữa hai collection (ví dụ: một tác giả có nhiều bài viết) thường được triển khai như thế nào?",
+    "options": [
+      "A. Sử dụng Foreign Key giống như SQL.",
+      "B. Nhúng trực tiếp tất cả các bài viết vào tài liệu tác giả.",
+      "C. Lưu trữ ObjectId của tác giả trong tài liệu bài viết (tham chiếu).",
+      "D. Tạo một collection trung gian để liên kết."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với mối quan hệ một-nhiều, việc lưu trữ ObjectId của tài liệu \"một\" (tác giả) trong tài liệu \"nhiều\" (bài viết) là cách phổ biến để thiết lập tham chiếu, tránh tài liệu cha trở nên quá lớn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của việc tạo index trong MongoDB là gì?",
+    "options": [
+      "A. Để tăng cường bảo mật dữ liệu.",
+      "B. Để đảm bảo tính toàn vẹn dữ liệu (data integrity).",
+      "C. Để cải thiện hiệu suất truy vấn (query performance).",
+      "D. Để giảm dung lượng lưu trữ của database."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Index giúp MongoDB tìm kiếm và sắp xếp dữ liệu nhanh hơn bằng cách tạo một cấu trúc dữ liệu đặc biệt trên một hoặc nhiều trường.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh nào sau đây được sử dụng để tạo một index đơn trường (single-field index) trên trường `userId` trong collection `users`?",
+    "options": [
+      "A. db.users.createIndex({ userId: 1 })",
+      "B. db.users.addIndex({ userId: 'ASC' })",
+      "C. db.users.buildIndex({ userId: 1 })",
+      "D. db.users.makeIndex({ userId: 'ascending' })"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`db.collection.createIndex()` là phương thức chuẩn để tạo index. Giá trị 1 chỉ định thứ tự tăng dần.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi nào thì một index duy nhất (unique index) là hữu ích?",
+    "options": [
+      "A. Khi bạn muốn đảm bảo rằng không có hai tài liệu nào có cùng giá trị cho một trường cụ thể.",
+      "B. Khi bạn muốn tăng tốc độ truy vấn trên các trường không phải là `_id`.",
+      "C. Khi bạn muốn lưu trữ dữ liệu dưới dạng mảng.",
+      "D. Khi bạn cần tạo index trên nhiều trường cùng lúc."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Unique index đảm bảo rằng không có hai tài liệu nào trong collection có thể có cùng giá trị cho trường (hoặc các trường) được index, giúp duy trì tính duy nhất của dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phương thức `explain()` trong MongoDB được sử dụng để làm gì?",
+    "options": [
+      "A. Để hiển thị schema của một collection.",
+      "B. Để giải thích lỗi khi một truy vấn thất bại.",
+      "C. Để cung cấp thông tin chi tiết về cách MongoDB thực thi một truy vấn, bao gồm việc sử dụng index.",
+      "D. Để tạo tài liệu hướng dẫn cho các truy vấn phức tạp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`explain()` là một công cụ quan trọng để phân tích hiệu suất truy vấn, giúp bạn hiểu cách MongoDB chọn index và thực hiện các bước để trả về kết quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Stage `$match` trong Aggregation Pipeline của MongoDB được sử dụng với mục đích gì?",
+    "options": [
+      "A. Để nhóm các tài liệu theo một trường cụ thể.",
+      "B. Để lọc các tài liệu dựa trên các điều kiện được chỉ định.",
+      "C. Để thêm các trường mới vào tài liệu.",
+      "D. Để sắp xếp các tài liệu theo thứ tự."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`$match` là stage đầu tiên thường được sử dụng để lọc tài liệu, giúp giảm số lượng tài liệu đi qua các stage tiếp theo và cải thiện hiệu suất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Stage nào sau đây được sử dụng để tính toán các giá trị tổng hợp (aggregate values) như tổng, trung bình, đếm, v.v., bằng cách nhóm các tài liệu theo một hoặc nhiều trường?",
+    "options": [
+      "A. $project",
+      "B. $sort",
+      "C. $group",
+      "D. $limit"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Stage `$group` được thiết kế để nhóm các tài liệu và thực hiện các phép tính tổng hợp trên các nhóm đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để tối ưu hóa hiệu suất của một Aggregation Pipeline, bạn nên đặt stage `$match` ở đâu?",
+    "options": [
+      "A. Luôn luôn ở cuối pipeline.",
+      "B. Luôn luôn ở đầu pipeline, nếu có thể.",
+      "C. Ở giữa pipeline, sau `$project`.",
+      "D. Vị trí của `$match` không ảnh hưởng đến hiệu suất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đặt `$match` ở đầu pipeline giúp lọc bỏ các tài liệu không cần thiết càng sớm càng tốt, giảm số lượng dữ liệu phải xử lý ở các stage sau, từ đó cải thiện hiệu suất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của Replication (nhân bản) trong MongoDB là gì?",
+    "options": [
+      "A. Để phân tán dữ liệu trên nhiều server nhằm tăng dung lượng lưu trữ.",
+      "B. Để cung cấp tính sẵn sàng cao (High Availability) và khả năng chịu lỗi (Fault Tolerance).",
+      "C. Để thực hiện các giao dịch đa tài liệu.",
+      "D. Để mã hóa dữ liệu khi lưu trữ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Replication tạo ra các bản sao dữ liệu trên nhiều server, đảm bảo rằng hệ thống vẫn hoạt động ngay cả khi một server bị lỗi, và cung cấp khả năng phục hồi dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một Replica Set trong MongoDB bao gồm những thành phần chính nào?",
+    "options": [
+      "A. Chỉ một Primary server.",
+      "B. Một Primary server và nhiều Secondary server.",
+      "C. Nhiều Primary server và một Secondary server.",
+      "D. Chỉ các Secondary server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một Replica Set bao gồm một Primary node (nơi tất cả các hoạt động ghi diễn ra) và một hoặc nhiều Secondary node (duy trì bản sao dữ liệu và có thể phục vụ các hoạt động đọc).",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sharding trong MongoDB được sử dụng để giải quyết vấn đề gì?",
+    "options": [
+      "A. Tăng cường bảo mật dữ liệu.",
+      "B. Cải thiện hiệu suất của các truy vấn tổng hợp.",
+      "C. Mở rộng quy mô theo chiều ngang (horizontal scaling) để xử lý lượng dữ liệu lớn và lưu lượng truy cập cao.",
+      "D. Tự động hóa quá trình sao lưu và phục hồi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sharding là phương pháp phân tán dữ liệu trên nhiều máy chủ (shards), cho phép hệ thống mở rộng quy mô bằng cách thêm nhiều server hơn để xử lý dữ liệu và tải.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Yếu tố quan trọng nhất cần cân nhắc khi thiết kế một shard key là gì?",
+    "options": [
+      "A. Tên của shard key phải dễ nhớ.",
+      "B. Shard key phải đảm bảo phân phối dữ liệu đồng đều và hỗ trợ các truy vấn phổ biến.",
+      "C. Shard key phải luôn là trường `_id`.",
+      "D. Shard key phải là một trường có kiểu dữ liệu String."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một shard key tốt là chìa khóa để phân phối dữ liệu hiệu quả và đảm bảo hiệu suất truy vấn tối ưu trong một cluster sharded.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "MongoDB hỗ trợ ACID transactions trên tài liệu nào?",
+    "options": [
+      "A. Chỉ các tài liệu trong cùng một collection.",
+      "B. Chỉ các tài liệu trong cùng một database.",
+      "C. Các giao dịch đa tài liệu, đa collection và đa shard.",
+      "D. Chỉ các tài liệu được nhúng (embedded documents)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kể từ MongoDB 4.0, nó hỗ trợ ACID transactions trên các tài liệu, collection và database, bao gồm cả các cluster sharded.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm \"Write Concern\" trong MongoDB dùng để làm gì?",
+    "options": [
+      "A. Để xác định mức độ an toàn dữ liệu mà ứng dụng yêu cầu khi thực hiện các thao tác ghi.",
+      "B. Để kiểm soát số lượng tài liệu được ghi vào database.",
+      "C. Để chỉ định máy chủ nào sẽ nhận các yêu cầu ghi.",
+      "D. Để mã hóa dữ liệu trước khi ghi vào đĩa."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Write Concern cho phép bạn chỉ định mức độ xác nhận rằng một thao tác ghi đã được ghi thành công vào một số lượng node nhất định trước khi trả về kết quả cho ứng dụng, ảnh hưởng đến độ bền và tính nhất quán của dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ dòng lệnh (command-line tool) nào của MongoDB được sử dụng để tạo bản sao lưu (backup) của một database?",
+    "options": [
+      "A. mongorestore",
+      "B. mongodump",
+      "C. mongoexport",
+      "D. mongoimport"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`mongodump` tạo ra một bản sao nhị phân của dữ liệu MongoDB, phù hợp cho việc sao lưu và phục hồi toàn bộ database hoặc collection.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để phục hồi dữ liệu từ một bản sao lưu được tạo bởi `mongodump`, bạn sẽ sử dụng công cụ nào?",
+    "options": [
+      "A. mongodump",
+      "B. mongorestore",
+      "C. mongoexport",
+      "D. mongoimport"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`mongorestore` được sử dụng để khôi phục dữ liệu từ các tệp BSON đã được tạo bởi `mongodump`.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Công cụ nào sau đây cung cấp khả năng giám sát hiệu suất và trạng thái của MongoDB deployment theo thời gian thực?",
+    "options": [
+      "A. MongoDB Compass",
+      "B. MongoDB Atlas Monitoring",
+      "C. mongorestore",
+      "D. mongoexport"
+    ],
+    "correctAnswer": "B",
+    "explanation": "MongoDB Atlas cung cấp các công cụ giám sát mạnh mẽ, bao gồm biểu đồ hiệu suất, cảnh báo và nhật ký để theo dõi trạng thái của cluster.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi nào bạn nên cân nhắc sử dụng Sharding thay vì chỉ Replication để mở rộng quy mô MongoDB?",
+    "options": [
+      "A. Khi bạn cần tăng cường tính sẵn sàng và khả năng chịu lỗi.",
+      "B. Khi database của bạn đã đạt đến giới hạn lưu trữ hoặc hiệu suất của một server đơn lẻ và cần phân tán tải.",
+      "C. Khi bạn muốn thực hiện các giao dịch đa tài liệu.",
+      "D. Khi bạn chỉ cần một bản sao lưu dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sharding được sử dụng để mở rộng quy mô theo chiều ngang, phân tán dữ liệu và tải trọng trên nhiều server, giải quyết các vấn đề về giới hạn của một server đơn lẻ. Replication chủ yếu để đảm bảo tính sẵn sàng và chịu lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để đảm bảo tính sẵn sàng cao (High Availability) cho một ứng dụng sử dụng MongoDB, phương pháp triển khai cơ bản nào là phù hợp nhất?",
+    "options": [
+      "A. Triển khai một server MongoDB độc lập.",
+      "B. Triển khai một Replica Set.",
+      "C. Triển khai một cluster Sharded.",
+      "D. Chỉ sử dụng `mongodump` định kỳ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Replica Set là cấu hình cơ bản để đạt được tính sẵn sàng cao, đảm bảo rằng nếu Primary node gặp sự cố, một Secondary node có thể được bầu làm Primary mới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi nâng cấp phiên bản MongoDB, điều quan trọng nhất cần làm trước khi bắt đầu quá trình là gì?",
+    "options": [
+      "A. Thay đổi tất cả các index trong database.",
+      "B. Tạo một bản sao lưu đầy đủ của tất cả dữ liệu.",
+      "C. Tắt tất cả các ứng dụng kết nối đến database.",
+      "D. Chuyển đổi tất cả các collection sang dạng sharded."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Luôn luôn tạo bản sao lưu đầy đủ trước bất kỳ thay đổi lớn nào đối với hệ thống, đặc biệt là nâng cấp phiên bản, để đảm bảo khả năng phục hồi dữ liệu trong trường hợp có sự cố.",
+    "difficulty": "BEGINNER",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong thiết kế schema MongoDB, khi nào nên sử dụng mô hình nhúng (embedded documents) thay vì tham chiếu (referenced documents) cho dữ liệu liên quan?",
+    "options": [
+      "A. Khi dữ liệu liên quan thường xuyên được truy cập cùng với tài liệu chính và không cần truy cập độc lập.",
+      "B. Khi dữ liệu liên quan có kích thước rất lớn và có thể phát triển không giới hạn.",
+      "C. Khi dữ liệu liên quan cần được chia sẻ và cập nhật bởi nhiều tài liệu chính khác nhau.",
+      "D. Khi cần duy trì tính nhất quán ACID mạnh mẽ giữa tài liệu chính và tài liệu liên quan."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mô hình nhúng phù hợp khi dữ liệu con được coi là một phần của tài liệu cha, thường xuyên được truy cập cùng nhau và không cần truy cập độc lập. Điều này giúp giảm số lượng truy vấn đọc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng mạng xã hội lưu trữ bài đăng và bình luận. Mỗi bài đăng có thể có hàng ngàn bình luận. Phương pháp thiết kế schema nào là tốt nhất để quản lý các bình luận này trong MongoDB?",
+    "options": [
+      "A. Nhúng tất cả bình luận vào tài liệu bài đăng (embedded documents).",
+      "B. Sử dụng mảng ID bình luận trong tài liệu bài đăng để tham chiếu đến các bình luận trong một collection riêng (referenced documents).",
+      "C. Tạo một collection riêng cho bình luận và sử dụng trường 'postId' để tham chiếu ngược về bài đăng (referenced documents).",
+      "D. Tạo một collection riêng cho mỗi bài đăng để lưu trữ bình luận của nó."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi một tài liệu con có thể phát triển rất lớn (hàng ngàn bình luận), việc nhúng trực tiếp sẽ làm tài liệu cha quá lớn, vượt quá giới hạn 16MB. Sử dụng tham chiếu ngược (child-referencing) là một giải pháp tốt để tránh giới hạn kích thước tài liệu và cho phép bình luận phát triển độc lập.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mô hình thiết kế 'Attribute Pattern' trong MongoDB thường được sử dụng trong trường hợp nào?",
+    "options": [
+      "A. Khi cần lưu trữ dữ liệu thời gian thực (time-series data) với các bản ghi liên tục.",
+      "B. Khi các tài liệu có nhiều thuộc tính (attributes) khác nhau, nhưng chỉ một số ít được áp dụng cho mỗi tài liệu.",
+      "C. Khi cần nhúng một số lượng lớn các tài liệu con vào tài liệu cha.",
+      "D. Khi cần tạo một trường được lập chỉ mục (indexed field) chứa các giá trị tổng hợp từ các tài liệu khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Attribute Pattern hữu ích khi các tài liệu trong một collection có thể có nhiều thuộc tính khác nhau (ví dụ: sản phẩm có các đặc điểm khác nhau như màu sắc, kích thước, chất liệu), nhưng mỗi tài liệu chỉ sử dụng một tập con các thuộc tính đó. Nó giúp tạo chỉ mục hiệu quả cho các thuộc tính biến đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để cải thiện hiệu suất đọc cho các truy vấn thường xuyên cần thông tin khách hàng (tên, email) cùng với thông tin đơn hàng, mặc dù thông tin khách hàng được lưu trữ trong một collection riêng. Giải pháp nào là hợp lý nhất để tối ưu hóa mà vẫn cân nhắc việc tên khách hàng có thể thay đổi?",
+    "options": [
+      "A. Nhúng toàn bộ tài liệu khách hàng vào mỗi tài liệu đơn hàng.",
+      "B. Chỉ nhúng các trường thông tin khách hàng cần thiết (như tên, email) vào tài liệu đơn hàng và cập nhật chúng khi thông tin khách hàng thay đổi.",
+      "C. Luôn thực hiện hai truy vấn riêng biệt: một để lấy đơn hàng, một để lấy thông tin khách hàng.",
+      "D. Sử dụng `$lookup` trong aggregation pipeline mỗi khi cần kết hợp thông tin."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc nhúng một phần (denormalization) các trường thường xuyên được truy cập giúp cải thiện hiệu suất đọc. Đối với các trường có thể thay đổi như tên khách hàng, cần có cơ chế cập nhật đồng bộ. Nhúng toàn bộ tài liệu khách hàng có thể dẫn đến trùng lặp dữ liệu lớn, còn `$lookup` hoặc hai truy vấn riêng biệt sẽ làm tăng chi phí đọc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mô hình thiết kế 'Bucket Pattern' trong MongoDB thường được sử dụng để tối ưu hóa việc lưu trữ và truy vấn loại dữ liệu nào?",
+    "options": [
+      "A. Dữ liệu có cấu trúc phức tạp với nhiều cấp độ lồng nhau.",
+      "B. Dữ liệu quan hệ truyền thống cần các phép nối (joins) phức tạp.",
+      "C. Dữ liệu chuỗi thời gian (time-series data) hoặc dữ liệu sự kiện với tần suất ghi cao.",
+      "D. Dữ liệu cần được phân phối đồng đều trên nhiều shard key khác nhau."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bucket Pattern rất hiệu quả cho dữ liệu chuỗi thời gian hoặc dữ liệu sự kiện, nơi nhiều bản ghi nhỏ có thể được nhóm lại thành một 'bucket' lớn hơn dựa trên khoảng thời gian (ví dụ: một giờ, một ngày). Điều này giúp giảm số lượng tài liệu, tăng hiệu suất ghi và truy vấn theo khoảng thời gian.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn có một collection 'posts' và một collection 'users'. Khi hiển thị danh sách bài đăng, bạn cần hiển thị tên người dùng và ảnh đại diện của họ. Bạn quyết định nhúng tên và ảnh đại diện vào tài liệu 'posts' và cập nhật chúng khi thông tin người dùng thay đổi. Đây là ví dụ của mô hình thiết kế nào?",
+    "options": [
+      "A. One-to-Few Relationship",
+      "B. Extended Reference Pattern",
+      "C. Subset Pattern",
+      "D. Polymorphic Pattern"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Extended Reference Pattern là khi bạn nhúng một tập hợp con các trường từ một tài liệu tham chiếu vào tài liệu chính để tối ưu hóa hiệu suất đọc, và duy trì tính nhất quán bằng cách cập nhật các trường nhúng khi tài liệu gốc thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn có một collection 'users' với các trường 'city' và 'age'. Bạn thường xuyên thực hiện các truy vấn tìm kiếm người dùng trong một thành phố cụ thể và sau đó sắp xếp theo tuổi. Chỉ mục nào sau đây sẽ tối ưu nhất cho truy vấn `db.users.find({city: 'Hanoi', age: {$gt: 25}}).sort({age: 1})`?",
+    "options": [
+      "A. `{ age: 1, city: 1 }`",
+      "B. `{ city: 1, age: 1 }`",
+      "C. `{ city: 1 }`",
+      "D. `{ age: 1 }`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với truy vấn có nhiều điều kiện, chỉ mục tổng hợp (compound index) nên được tạo theo thứ tự các trường trong điều kiện truy vấn (equality) trước, sau đó là các trường sắp xếp (sort) hoặc phạm vi (range). Trong trường hợp này, `city` là điều kiện bằng, `age` là điều kiện phạm vi và sắp xếp, vì vậy `{ city: 1, age: 1 }` là tối ưu nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích kết quả `explain()` của một truy vấn, bạn thấy 'stage' là 'COLLSCAN'. Điều này thường chỉ ra điều gì?",
+    "options": [
+      "A. Truy vấn đang sử dụng một chỉ mục được bao phủ (covered index) rất hiệu quả.",
+      "B. Truy vấn đang thực hiện quét toàn bộ collection thay vì sử dụng chỉ mục, có thể gây ra hiệu suất kém.",
+      "C. Truy vấn đang sử dụng một chỉ mục tổng hợp (compound index) để quét các tài liệu.",
+      "D. Truy vấn đang sử dụng bộ nhớ cache rất hiệu quả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "COLLSCAN (Collection Scan) có nghĩa là MongoDB phải quét toàn bộ collection để tìm các tài liệu phù hợp. Điều này thường là dấu hiệu của việc thiếu chỉ mục phù hợp hoặc chỉ mục không được sử dụng hiệu quả, dẫn đến hiệu suất truy vấn kém, đặc biệt với các collection lớn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một truy vấn được gọi là 'covered query' trong MongoDB khi nào?",
+    "options": [
+      "A. Khi truy vấn chỉ trả về các trường được định nghĩa trong chỉ mục mà không cần truy cập tài liệu.",
+      "B. Khi truy vấn sử dụng nhiều chỉ mục khác nhau để tìm kiếm dữ liệu.",
+      "C. Khi truy vấn được thực hiện trên một collection đã được sharded.",
+      "D. Khi truy vấn được bảo vệ bởi các quy tắc bảo mật (security rules)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một covered query là một truy vấn có thể được thỏa mãn hoàn toàn bằng cách sử dụng một chỉ mục, mà không cần truy cập vào các tài liệu thực tế. Điều này tối ưu hóa hiệu suất vì MongoDB không cần đọc dữ liệu từ đĩa hoặc bộ nhớ cho tài liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn có một collection 'products' với trường 'tags' là một mảng các chuỗi. Bạn muốn tìm kiếm các sản phẩm có một tag cụ thể. Loại chỉ mục nào phù hợp nhất để tối ưu hóa truy vấn này?",
+    "options": [
+      "A. Chỉ mục đơn trường (single-field index) trên 'tags'.",
+      "B. Chỉ mục tổng hợp (compound index) trên 'tags' và 'name'.",
+      "C. Chỉ mục đa khóa (multi-key index) trên 'tags'.",
+      "D. Chỉ mục toàn văn bản (text index) trên 'tags'."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi một chỉ mục được tạo trên một trường chứa mảng, MongoDB sẽ tự động tạo một chỉ mục đa khóa (multi-key index). Chỉ mục này sẽ có một mục nhập cho mỗi phần tử trong mảng, cho phép tìm kiếm hiệu quả các tài liệu dựa trên các giá trị trong mảng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một pipeline aggregation, việc đặt stage `$match` càng sớm càng tốt thường mang lại lợi ích gì?",
+    "options": [
+      "A. Giảm thiểu số lượng tài liệu cần xử lý trong các stage tiếp theo, giúp cải thiện hiệu suất.",
+      "B. Đảm bảo rằng tất cả các chỉ mục đều được sử dụng trong pipeline.",
+      "C. Tăng cường khả năng sử dụng bộ nhớ cache của MongoDB.",
+      "D. Cho phép MongoDB thực hiện các phép toán phức tạp hơn ở các stage sau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đặt `$match` sớm trong pipeline giúp lọc bỏ các tài liệu không cần thiết ngay từ đầu, giảm đáng kể số lượng dữ liệu mà các stage tiếp theo phải xử lý. Điều này giúp tiết kiệm tài nguyên CPU và bộ nhớ, cải thiện hiệu suất tổng thể của aggregation.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang chạy một aggregation pipeline rất lớn và gặp lỗi 'Exceeded memory limit for aggregation'. Giải pháp phổ biến nhất để xử lý vấn đề này là gì?",
+    "options": [
+      "A. Tăng kích thước bộ nhớ RAM của máy chủ MongoDB.",
+      "B. Tối ưu hóa pipeline để giảm số lượng tài liệu hoặc dữ liệu được xử lý trong bộ nhớ, hoặc sử dụng tùy chọn `allowDiskUse: true`.",
+      "C. Chia nhỏ pipeline thành nhiều pipeline nhỏ hơn và chạy chúng tuần tự.",
+      "D. Thay đổi shard key của collection để phân phối dữ liệu tốt hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi này xảy ra khi một stage aggregation vượt quá giới hạn bộ nhớ 100MB (hoặc 500MB trong MongoDB 4.2+). Giải pháp là tối ưu hóa pipeline để giảm lượng dữ liệu trong bộ nhớ (ví dụ: dùng `$match` sớm, `$project` chỉ các trường cần thiết) hoặc cho phép MongoDB ghi dữ liệu tạm thời ra đĩa bằng cách sử dụng `allowDiskUse: true`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng stage `$sort` trong một aggregation pipeline, điều gì sẽ xảy ra nếu có một chỉ mục phù hợp cho trường sắp xếp?",
+    "options": [
+      "A. MongoDB sẽ bỏ qua chỉ mục và thực hiện sắp xếp trong bộ nhớ.",
+      "B. MongoDB sẽ sử dụng chỉ mục để thực hiện sắp xếp, giúp cải thiện hiệu suất.",
+      "C. MongoDB sẽ tạo một chỉ mục tạm thời cho hoạt động sắp xếp đó.",
+      "D. `$sort` sẽ tự động chuyển đổi thành `$group` để tận dụng chỉ mục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu có một chỉ mục phù hợp cho trường được sắp xếp, MongoDB có thể sử dụng chỉ mục đó để thực hiện sắp xếp. Điều này giúp tránh việc phải thực hiện sắp xếp trong bộ nhớ (in-memory sort), đặc biệt khi tập dữ liệu lớn, giúp cải thiện đáng kể hiệu suất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của việc sử dụng Replica Set trong MongoDB là gì?",
+    "options": [
+      "A. Phân phối dữ liệu trên nhiều máy chủ để mở rộng quy mô lưu trữ (horizontal scaling).",
+      "B. Cung cấp tính sẵn sàng cao (high availability) và khả năng chịu lỗi (fault tolerance) cho dữ liệu.",
+      "C. Cho phép thực hiện các giao dịch đa tài liệu (multi-document transactions) trên các collection khác nhau.",
+      "D. Tối ưu hóa hiệu suất truy vấn bằng cách tạo các chỉ mục phân tán."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Replica Set là một nhóm các tiến trình `mongod` duy trì cùng một tập hợp dữ liệu. Mục đích chính là cung cấp tính sẵn sàng cao bằng cách tự động chuyển đổi sang một secondary node nếu primary node gặp sự cố, và cung cấp khả năng chịu lỗi thông qua việc sao chép dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi bạn cấu hình 'read concern' là 'majority' trong MongoDB, điều này đảm bảo điều gì?",
+    "options": [
+      "A. Dữ liệu được đọc đã được ghi thành công trên tất cả các thành viên của replica set.",
+      "B. Dữ liệu được đọc đã được ghi thành công trên một số lượng đa số các thành viên của replica set.",
+      "C. Dữ liệu được đọc luôn là dữ liệu mới nhất từ primary node.",
+      "D. Dữ liệu được đọc đã được ghi thành công trên ít nhất một secondary node."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Read concern 'majority' đảm bảo rằng dữ liệu được đọc đã được ghi và xác nhận bởi một số lượng đa số các thành viên của replica set. Điều này cung cấp mức độ nhất quán dữ liệu cao hơn, tránh đọc dữ liệu chưa được cam kết rộng rãi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi chọn shard key cho một collection trong MongoDB, yếu tố nào sau đây là quan trọng nhất để đảm bảo phân phối dữ liệu đồng đều và tránh 'hot spots'?",
+    "options": [
+      "A. Shard key nên có cardinality thấp (ít giá trị duy nhất).",
+      "B. Shard key nên là trường `_id` mặc định.",
+      "C. Shard key nên là một trường có tính tăng dần (monotonically increasing) để tối ưu hóa việc ghi.",
+      "D. Shard key nên có cardinality cao và phân phối giá trị đồng đều trên toàn bộ phạm vi."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Một shard key tốt nên có cardinality cao (nhiều giá trị duy nhất) và các giá trị của nó nên được phân phối đồng đều. Điều này giúp MongoDB phân tán dữ liệu và các hoạt động ghi/đọc trên tất cả các shard một cách hiệu quả, tránh tình trạng 'hot spots' (một shard chịu tải quá mức).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Điều gì sẽ xảy ra nếu một shard key được chọn có cardinality thấp (ví dụ: một trường boolean hoặc giới tính)?",
+    "options": [
+      "A. Dữ liệu sẽ được phân phối rất đồng đều trên tất cả các shard.",
+      "B. Sẽ tạo ra 'hot spots' vì một số shard sẽ chứa phần lớn dữ liệu và các hoạt động.",
+      "C. Hiệu suất truy vấn sẽ được cải thiện đáng kể do ít shard phải được truy cập.",
+      "D. MongoDB sẽ tự động bổ sung các trường khác vào shard key để tăng cardinality."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu shard key có cardinality thấp, chỉ có một số ít các giá trị duy nhất. Điều này dẫn đến việc dữ liệu sẽ được nhóm lại trên một số shard nhất định, tạo ra 'hot spots' nơi các shard đó phải xử lý phần lớn các truy vấn và ghi, làm giảm hiệu quả của sharding.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kể từ MongoDB 4.0, điều gì đã thay đổi đáng kể về khả năng xử lý giao dịch (transactions)?",
+    "options": [
+      "A. Giới thiệu các giao dịch ACID đa tài liệu (multi-document ACID transactions) trên một replica set.",
+      "B. Giới thiệu các giao dịch ACID đa tài liệu trên một sharded cluster.",
+      "C. Loại bỏ hoàn toàn khả năng thực hiện giao dịch, thay vào đó khuyến khích mô hình eventual consistency.",
+      "D. Chỉ cho phép giao dịch trên một tài liệu duy nhất."
+    ],
+    "correctAnswer": "A",
+    "explanation": "MongoDB 4.0 đã giới thiệu khả năng thực hiện các giao dịch ACID đa tài liệu trong phạm vi một replica set. Điều này cho phép các ứng dụng duy trì tính nhất quán dữ liệu mạnh mẽ hơn khi thay đổi nhiều tài liệu hoặc collection trong một thao tác duy nhất. MongoDB 4.2 mở rộng khả năng này cho sharded clusters.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống phân tán với MongoDB, việc cân nhắc giữa tính nhất quán (Consistency), tính sẵn sàng (Availability) và khả năng chịu phân vùng mạng (Partition Tolerance) theo định lý CAP thường dẫn đến sự đánh đổi nào?",
+    "options": [
+      "A. Không thể đạt được cả C, A và P cùng một lúc; thường phải chọn giữa CA hoặc CP hoặc AP.",
+      "B. MongoDB luôn ưu tiên Consistency và Availability hơn Partition Tolerance.",
+      "C. MongoDB luôn ưu tiên Partition Tolerance và Availability hơn Consistency.",
+      "D. Với MongoDB, luôn có thể đạt được cả ba yếu tố C, A và P đồng thời."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Theo định lý CAP, trong một hệ thống phân tán, không thể đồng thời đảm bảo cả ba thuộc tính: Consistency (nhất quán), Availability (sẵn sàng) và Partition Tolerance (chịu lỗi phân vùng mạng). Khi có sự cố phân vùng mạng, bạn phải chọn giữa Consistency và Availability. MongoDB thường được coi là hệ thống CP (Consistency và Partition Tolerance) hoặc AP (Availability và Partition Tolerance) tùy thuộc vào cấu hình read/write concern.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Công cụ nào sau đây thường được sử dụng để tạo bản sao lưu dữ liệu toàn bộ collection hoặc database trong MongoDB?",
+    "options": [
+      "A. `mongoexport`",
+      "B. `mongodump`",
+      "C. `mongorestore`",
+      "D. `mongoimport`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`mongodump` là tiện ích dòng lệnh để tạo bản sao lưu nhị phân (binary backup) của dữ liệu MongoDB. Nó tạo ra các BSON files có thể được khôi phục bằng `mongorestore`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để thực hiện 'point-in-time recovery' (khôi phục tại một thời điểm cụ thể) cho MongoDB, ngoài bản sao lưu toàn bộ dữ liệu, yếu tố quan trọng nào khác là cần thiết?",
+    "options": [
+      "A. Một bản sao lưu của các tập tin cấu hình của MongoDB.",
+      "B. Bản sao lưu của oplog (operation log) sau thời điểm sao lưu đầy đủ.",
+      "C. Một bản sao lưu của tất cả các chỉ mục trong database.",
+      "D. Một bản sao lưu của các file log của hệ điều hành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Point-in-time recovery cho phép bạn khôi phục dữ liệu đến một thời điểm cụ thể. Điều này được thực hiện bằng cách kết hợp một bản sao lưu đầy đủ (thường là từ `mongodump` hoặc snapshot) với các bản ghi từ oplog (operation log) được tạo sau thời điểm sao lưu, áp dụng các hoạt động đã xảy ra sau đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ nào sau đây là giải pháp giám sát (monitoring) chính thức của MongoDB, cung cấp các tính năng mạnh mẽ như giám sát hiệu suất, cảnh báo và tự động hóa hoạt động?",
+    "options": [
+      "A. Prometheus",
+      "B. Grafana",
+      "C. MongoDB Atlas / Ops Manager",
+      "D. Nagios"
+    ],
+    "correctAnswer": "C",
+    "explanation": "MongoDB Atlas là dịch vụ đám mây của MongoDB, cung cấp giám sát tích hợp. Ops Manager là một sản phẩm tự quản lý (on-premise) tương tự, cung cấp các tính năng giám sát, sao lưu và tự động hóa cho các triển khai MongoDB. Cả hai đều là giải pháp chính thức và toàn diện nhất cho việc quản lý và giám sát MongoDB.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nâng cấp phiên bản MongoDB cho một replica set mà không muốn gây ra downtime, chiến lược triển khai nào thường được sử dụng?",
+    "options": [
+      "A. Dừng toàn bộ replica set, nâng cấp tất cả các node, sau đó khởi động lại.",
+      "B. Thực hiện nâng cấp từng node một, bắt đầu từ secondary nodes, sau đó là primary node.",
+      "C. Nâng cấp primary node trước, sau đó là secondary nodes.",
+      "D. Xây dựng một replica set mới với phiên bản MongoDB mới và chuyển đổi lưu lượng truy cập sang đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược 'rolling upgrade' (nâng cấp cuốn chiếu) là phương pháp chuẩn để nâng cấp phiên bản MongoDB cho một replica set mà không gây downtime. Bằng cách nâng cấp từng secondary node một, sau đó chuyển đổi một secondary thành primary mới và nâng cấp primary cũ, hệ thống luôn có một primary hoạt động.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một ứng dụng MongoDB gặp phải vấn đề về hiệu suất do lượng dữ liệu và lưu lượng truy cập tăng lên đáng kể, giải pháp mở rộng quy mô (scaling) nào thường được ưu tiên để xử lý vấn đề này?",
+    "options": [
+      "A. Mở rộng quy mô theo chiều dọc (vertical scaling) bằng cách nâng cấp CPU, RAM và ổ cứng của máy chủ hiện có.",
+      "B. Mở rộng quy mô theo chiều ngang (horizontal scaling) bằng cách thêm các node shard vào sharded cluster.",
+      "C. Tối ưu hóa các truy vấn và chỉ mục trên máy chủ hiện có.",
+      "D. Giảm số lượng bản ghi được lưu trữ trong database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi lượng dữ liệu và lưu lượng truy cập tăng đáng kể, mở rộng quy mô theo chiều ngang (horizontal scaling) thông qua sharding là giải pháp hiệu quả nhất trong MongoDB. Sharding phân phối dữ liệu và tải truy vấn trên nhiều máy chủ, cho phép hệ thống mở rộng gần như vô hạn. Vertical scaling có giới hạn vật lý và thường chỉ là giải pháp tạm thời.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để tăng cường bảo mật cho một triển khai MongoDB, bước đầu tiên và quan trọng nhất cần thực hiện là gì?",
+    "options": [
+      "A. Mã hóa toàn bộ dữ liệu trên đĩa (encryption at rest).",
+      "B. Kích hoạt xác thực (authentication) và ủy quyền (authorization) cho người dùng.",
+      "C. Giới hạn truy cập mạng vào các cổng MongoDB từ các địa chỉ IP đáng tin cậy.",
+      "D. Sử dụng TLS/SSL cho tất cả các kết nối mạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kích hoạt xác thực và ủy quyền là bước cơ bản và quan trọng nhất để bảo mật MongoDB. Điều này đảm bảo rằng chỉ những người dùng được cấp quyền mới có thể truy cập và thao tác với dữ liệu, ngăn chặn truy cập trái phép. Các biện pháp khác cũng quan trọng nhưng không thể thay thế việc xác thực người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong thiết kế schema MongoDB, khi cần truy vấn và hiển thị dữ liệu con cùng với tài liệu cha một cách thường xuyên và dữ liệu con không quá lớn, chiến lược nào sau đây thường được ưu tiên để tối ưu hiệu năng đọc và giảm số lượng truy vấn?",
+    "options": [
+      "A. Nhúng tài liệu con (embedding) trực tiếp vào tài liệu cha.",
+      "B. Sử dụng tham chiếu (referencing) tài liệu con từ tài liệu cha.",
+      "C. Tạo một collection riêng cho tài liệu con và thực hiện $lookup trong aggregation.",
+      "D. Lưu trữ ID của tài liệu cha trong tài liệu con và sử dụng hai truy vấn riêng biệt."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nhúng tài liệu con giúp tối ưu hiệu năng đọc bằng cách giảm số lượng truy vấn cần thiết, vì dữ liệu con được tải cùng với tài liệu cha trong một lần đọc duy nhất. Điều này đặc biệt hiệu quả khi dữ liệu con luôn được truy cập cùng với tài liệu cha và không quá lớn, tránh giới hạn kích thước tài liệu 16MB.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng cần hiển thị tên người dùng (username) trên hàng ngàn bài viết và bình luận. Tên người dùng có thể thay đổi. Để tối ưu tốc độ đọc và giảm tải cho cơ sở dữ liệu khi hiển thị, đồng thời quản lý việc cập nhật tên người dùng hiệu quả, chiến lược denormalization nào là phù hợp nhất trong MongoDB?",
+    "options": [
+      "A. Nhúng toàn bộ tài liệu người dùng vào mỗi bài viết và bình luận.",
+      "B. Chỉ nhúng _id của người dùng và thực hiện $lookup khi cần.",
+      "C. Nhúng _id và username vào mỗi bài viết và bình luận, sau đó sử dụng Change Streams để cập nhật username khi nó thay đổi.",
+      "D. Không denormalize, chỉ lưu _id người dùng và luôn truy vấn collection users riêng biệt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nhúng _id và username giúp tối ưu tốc độ đọc vì username có sẵn. Sử dụng Change Streams để cập nhật username khi nó thay đổi là một kỹ thuật nâng cao để duy trì tính nhất quán, giải quyết vấn đề cập nhật dữ liệu denormalized một cách hiệu quả mà không cần quét toàn bộ collection.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang tối ưu một truy vấn thường xuyên db.collection.find({'status': 'pending', 'createdAt': {$lt: ISODate(\"...\")}}).sort({'createdAt': 1}). Chỉ mục kết hợp nào sau đây sẽ cung cấp hiệu suất tốt nhất cho truy vấn này, bao gồm cả việc hỗ trợ sắp xếp?",
+    "options": [
+      "A. {'status': 1, 'createdAt': 1}",
+      "B. {'createdAt': 1, 'status': 1}",
+      "C. {'status': 1}",
+      "D. {'createdAt': 1}"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Chỉ mục {'status': 1, 'createdAt': 1} hỗ trợ cả điều kiện lọc trên status và createdAt, đồng thời hỗ trợ sắp xếp trên createdAt. MongoDB có thể sử dụng chỉ mục này để tìm các tài liệu có status: 'pending', sau đó trong các tài liệu đó, nó có thể hiệu quả tìm và sắp xếp theo createdAt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích kết quả explain() cho một truy vấn trong MongoDB, nếu bạn thấy winningPlan.stage là COLLSCAN và totalDocsExamined rất lớn, điều này ngụ ý gì về hiệu suất của truy vấn và giải pháp khắc phục cơ bản là gì ở cấp độ kiến trúc/tối ưu?",
+    "options": [
+      "A. Truy vấn đang sử dụng một chỉ mục hiệu quả; cần xem xét lại các trường trong chỉ mục.",
+      "B. Truy vấn đang phải quét toàn bộ collection; cần tạo hoặc tối ưu chỉ mục cho các trường trong điều kiện lọc.",
+      "C. Truy vấn đang sử dụng quá nhiều bộ nhớ; cần tăng kích thước RAM cho máy chủ MongoDB.",
+      "D. Truy vấn đang bị chặn bởi các write lock; cần tăng số lượng replica set thành viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "COLLSCAN chỉ ra rằng MongoDB phải quét toàn bộ collection để tìm các tài liệu phù hợp, đây là một thao tác rất tốn kém về hiệu năng, đặc biệt với các collection lớn. Giải pháp cơ bản là tạo chỉ mục phù hợp cho các trường được sử dụng trong điều kiện lọc (query predicate) để MongoDB có thể sử dụng chỉ mục thay vì quét toàn bộ collection.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một pipeline aggregation phức tạp xử lý một lượng lớn dữ liệu, bước nào sau đây nên được đặt càng sớm càng tốt trong pipeline để tối ưu hiệu năng và giảm thiểu việc sử dụng tài nguyên (CPU, bộ nhớ)?",
+    "options": [
+      "A. $sort",
+      "B. $group",
+      "C. $project",
+      "D. $match"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Đặt $match càng sớm càng tốt trong pipeline giúp lọc bỏ các tài liệu không cần thiết ngay từ đầu, giảm số lượng tài liệu đi qua các stage tiếp theo. Điều này giúp giảm đáng kể tải trọng xử lý và yêu cầu bộ nhớ cho các stage phức tạp hơn như $group hoặc $sort.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng tài chính yêu cầu đảm bảo rằng dữ liệu giao dịch quan trọng phải được ghi thành công vào đa số thành viên của replica set trước khi trả về xác nhận thành công cho client. Write concern nào sau đây nên được cấu hình để đạt được yêu cầu này, cân bằng giữa độ bền dữ liệu và độ trễ?",
+    "options": [
+      "A. w: 1",
+      "B. w: \"majority\"",
+      "C. w: 0",
+      "D. w: \"all\""
+    ],
+    "correctAnswer": "B",
+    "explanation": "w: \"majority\" đảm bảo rằng thao tác ghi đã được áp dụng thành công trên primary và ít nhất (n/2) + 1 secondary nodes trong replica set. Điều này cung cấp sự cân bằng tốt giữa độ bền dữ liệu (dữ liệu sẽ không bị mất ngay cả khi primary gặp sự cố) và độ trễ chấp nhận được.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc lựa chọn một shard key có cardinality thấp (ví dụ: một trường chỉ có vài giá trị phân biệt như gender hoặc status) có thể gây ra vấn đề nghiêm trọng gì trong một sharded cluster lớn?",
+    "options": [
+      "A. Giảm khả năng mở rộng của cluster vì dữ liệu không thể phân tán đều.",
+      "B. Tăng số lượng kết nối client đến mỗi shard.",
+      "C. Giảm dung lượng lưu trữ khả dụng trên mỗi shard.",
+      "D. Tăng hiệu năng của các truy vấn không sử dụng shard key."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Shard key có cardinality thấp sẽ dẫn đến việc phân phối dữ liệu không đồng đều (hot spots), nơi một hoặc một vài shard sẽ chứa phần lớn dữ liệu và nhận phần lớn truy vấn. Điều này làm giảm khả năng mở rộng của cluster vì các shard đó sẽ trở thành nút thắt cổ chai, không thể tận dụng hết tài nguyên của các shard khác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong MongoDB 4.0 trở lên, khi nào nên ưu tiên sử dụng multi-document transactions thay vì các thao tác nguyên tử trên một tài liệu duy nhất (single-document atomicity) hoặc các phương pháp khác?",
+    "options": [
+      "A. Khi cần đảm bảo tính nguyên tử cho các thao tác trên nhiều collection hoặc nhiều tài liệu trong cùng một collection mà không thể đạt được bằng các thao tác nguyên tử đơn tài liệu.",
+      "B. Khi cần tối ưu hiệu năng cho các thao tác đọc đơn giản trên một tài liệu.",
+      "C. Khi cần thực hiện các thao tác ghi với write concern w:0.",
+      "D. Khi chỉ cần cập nhật một trường duy nhất trong một tài liệu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Multi-document transactions cung cấp tính nguyên tử (ACID properties) cho các thao tác ghi trên nhiều tài liệu, có thể trên nhiều collection và thậm chí trên nhiều shard. Chúng được sử dụng khi logic nghiệp vụ yêu cầu tất cả các thao tác phải thành công hoặc tất cả phải thất bại cùng nhau, điều mà single-document atomicity không thể đáp ứng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để thực hiện Point-in-Time Recovery (PITR) cho một MongoDB cluster, tức là khôi phục dữ liệu về một thời điểm chính xác trong quá khứ, phương pháp backup nào sau đây là hiệu quả và tin cậy nhất?",
+    "options": [
+      "A. Chỉ sử dụng mongodump định kỳ.",
+      "B. Chỉ sao chép các tệp dữ liệu của MongoDB (filesystem snapshot) khi mongod đang chạy.",
+      "C. Kết hợp filesystem snapshot hoặc mongodump với việc sao lưu liên tục oplog của replica set.",
+      "D. Chỉ sử dụng mongorestore từ một bản backup cũ nhất."
+    ],
+    "correctAnswer": "C",
+    "explanation": "PITR yêu cầu một bản backup cơ sở (snapshot hoặc mongodump) và sau đó áp dụng các thao tác từ oplog (operational log) được sao lưu liên tục kể từ thời điểm backup cơ sở đó. Điều này cho phép khôi phục dữ liệu đến bất kỳ thời điểm nào trong phạm vi cửa sổ oplog.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chỉ số oplog window trong MongoDB có ý nghĩa quan trọng gì đối với hoạt động của replica set và khả năng phục hồi sau sự cố?",
+    "options": [
+      "A. Nó chỉ ra số lượng tài liệu có thể được lưu trữ trong oplog.",
+      "B. Nó là khoảng thời gian (tính bằng giờ hoặc ngày) mà oplog có thể lưu trữ các thao tác ghi, ảnh hưởng đến khả năng đồng bộ hóa của secondary nodes và PITR.",
+      "C. Nó đại diện cho dung lượng tối đa của oplog trên đĩa.",
+      "D. Nó là thời gian trung bình để một thao tác ghi được ghi vào oplog."
+    ],
+    "correctAnswer": "B",
+    "explanation": "oplog window là khoảng thời gian mà các thao tác ghi được lưu trữ trong oplog. Một oplog window quá nhỏ có thể khiến secondary nodes bị \"stale\" (không thể đồng bộ hóa với primary) nếu chúng bị ngắt kết nối quá lâu. Nó cũng là yếu tố then chốt để thực hiện Point-in-Time Recovery.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế schema cho dữ liệu chuỗi thời gian (time series data) có tần suất ghi cao và các truy vấn thường xuyên theo khoảng thời gian (ví dụ: dữ liệu cảm biến IoT), mẫu thiết kế nào sau đây giúp tối ưu cả việc ghi và đọc dữ liệu?",
+    "options": [
+      "A. Lưu mỗi điểm dữ liệu vào một tài liệu riêng biệt.",
+      "B. Sử dụng mẫu \"Bucket Pattern\", nhóm nhiều điểm dữ liệu trong một khoảng thời gian (ví dụ: một giờ, một ngày) vào một tài liệu duy nhất.",
+      "C. Sử dụng mẫu \"Attribute Pattern\", lưu trữ tất cả các thuộc tính của cảm biến trong một tài liệu lớn.",
+      "D. Sử dụng mẫu \"Extended Reference Pattern\" để tham chiếu dữ liệu từ các collection khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mẫu \"Bucket Pattern\" nhóm nhiều điểm dữ liệu chuỗi thời gian vào một tài liệu \"bucket\" duy nhất cho một khoảng thời gian nhất định. Điều này giảm số lượng tài liệu cần ghi và đọc, cải thiện hiệu suất I/O và tối ưu hóa các truy vấn theo khoảng thời gian bằng cách giảm số lượng tài liệu phải quét.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi nào nên cân nhắc sử dụng partial index (chỉ mục một phần) trong MongoDB?",
+    "options": [
+      "A. Khi cần chỉ mục cho tất cả các tài liệu trong một collection.",
+      "B. Khi các truy vấn chỉ tập trung vào một tập hợp con nhỏ các tài liệu thỏa mãn một điều kiện nhất định, giúp giảm kích thước chỉ mục và cải thiện hiệu năng.",
+      "C. Khi cần đảm bảo tính duy nhất cho một trường trong toàn bộ collection.",
+      "D. Khi cần chỉ mục cho các trường có giá trị null."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Partial index chỉ lập chỉ mục cho các tài liệu trong một collection thỏa mãn một điều kiện lọc cụ thể. Điều này rất hữu ích khi các truy vấn của bạn thường xuyên nhắm mục tiêu vào một tập hợp con của dữ liệu (ví dụ: chỉ các tài liệu đang \"active\" hoặc có \"error\"). Nó giúp giảm kích thước chỉ mục, giảm chi phí I/O và cải thiện hiệu năng cho các truy vấn liên quan.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một pipeline aggregation trong MongoDB thường xuyên gặp lỗi \"Exceeded memory limit for aggregation pipeline\" khi xử lý một lượng lớn dữ liệu. Giải pháp nào sau đây là hiệu quả nhất để xử lý vấn đề này mà không làm thay đổi logic nghiệp vụ cốt lõi?",
+    "options": [
+      "A. Tăng kích thước bộ nhớ RAM của máy chủ MongoDB.",
+      "B. Sử dụng tùy chọn allowDiskUse: true trong lệnh aggregation.",
+      "C. Chia nhỏ pipeline thành nhiều pipeline nhỏ hơn và thực thi tuần tự.",
+      "D. Giảm số lượng trường được $project ở cuối pipeline."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tùy chọn allowDiskUse: true cho phép các stage của aggregation pipeline ghi dữ liệu tạm thời vào đĩa nếu chúng vượt quá giới hạn bộ nhớ RAM. Đây là giải pháp trực tiếp và hiệu quả nhất để xử lý lỗi \"Exceeded memory limit\" mà không cần thay đổi logic của pipeline, mặc dù nó có thể làm chậm quá trình aggregation do I/O đĩa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để đảm bảo các truy vấn đọc luôn trả về dữ liệu đã được commit và bền vững trên đa số thành viên của replica set, read concern nào sau đây là phù hợp nhất, cân bằng giữa tính nhất quán và độ trễ?",
+    "options": [
+      "A. local",
+      "B. majority",
+      "C. linearizable",
+      "D. available"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Read concern majority đảm bảo rằng dữ liệu được đọc đã được ghi thành công vào đa số thành viên của replica set. Điều này cung cấp một mức độ nhất quán mạnh mẽ, đảm bảo bạn không đọc dữ liệu \"roll back\" ngay cả khi primary gặp sự cố, với độ trễ chấp nhận được so với linearizable.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một shard key được chọn tốt trong MongoDB phải có đặc điểm gì để tránh các \"hot spots\" (nút nóng) và đảm bảo phân phối dữ liệu cũng như tải truy vấn đồng đều trên các shard?",
+    "options": [
+      "A. Cardinality thấp và phân phối giá trị không đồng đều.",
+      "B. Cardinality cao và phân phối giá giá trị đơn điệu (monotonic).",
+      "C. Cardinality cao và phân phối giá trị ngẫu nhiên hoặc đồng đều.",
+      "D. Cardinality thấp và phân phối giá trị ngẫu nhiên."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Một shard key lý tưởng nên có cardinality cao (nhiều giá trị phân biệt) để tạo ra nhiều chunk, và phân phối giá trị ngẫu nhiên hoặc đồng đều để dữ liệu và tải truy vấn được phân tán đều khắp các shard. Shard key đơn điệu (monotonic) có thể dẫn đến hot spots ở shard cuối cùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Quy trình rolling upgrade (nâng cấp cuốn chiếu) cho một replica set MongoDB có những lợi ích chính nào so với việc dừng toàn bộ cluster để nâng cấp?",
+    "options": [
+      "A. Giảm chi phí phần cứng cho việc nâng cấp.",
+      "B. Đảm bảo thời gian hoạt động liên tục (high availability) của ứng dụng trong suốt quá trình nâng cấp.",
+      "C. Tăng tốc độ backup dữ liệu trước khi nâng cấp.",
+      "D. Đơn giản hóa việc quản lý các phiên bản MongoDB khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rolling upgrade cho phép nâng cấp từng thành viên của replica set một cách tuần tự, đảm bảo rằng luôn có đủ thành viên hoạt động để duy trì tính sẵn sàng của dịch vụ. Điều này giúp ứng dụng có thể tiếp tục hoạt động mà không bị gián đoạn đáng kể, là một yếu tố quan trọng cho các hệ thống yêu cầu high availability.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một collection cần lưu trữ các tài liệu có cấu trúc hơi khác nhau (ví dụ: các loại sản phẩm khác nhau với các thuộc tính riêng biệt nhưng vẫn thuộc cùng một danh mục chung), mẫu thiết kế schema nào là linh hoạt nhất để quản lý sự đa dạng này mà vẫn giữ được hiệu quả truy vấn?",
+    "options": [
+      "A. Mẫu \"Pre-joining\" (nhúng tất cả các thuộc tính có thể có).",
+      "B. Mẫu \"Polymorphic Pattern\" (sử dụng một trường type để phân biệt và có các thuộc tính khác nhau tùy theo type).",
+      "C. Mẫu \"Subset Pattern\" (chia thành nhiều collection nhỏ hơn).",
+      "D. Mẫu \"Attribute Pattern\" (chỉ lưu trữ các thuộc tính chung)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mẫu \"Polymorphic Pattern\" cho phép các tài liệu trong cùng một collection có cấu trúc khác nhau dựa trên một trường phân biệt (ví dụ: productType). Điều này mang lại sự linh hoạt cao, cho phép lưu trữ các biến thể của một thực thể trong một collection duy nhất, giúp quản lý và truy vấn hiệu quả hơn so với việc tạo nhiều collection hoặc nhúng quá nhiều trường rỗng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để một truy vấn trở thành covered query trong MongoDB, điều kiện nào sau đây phải được đáp ứng để tối ưu hiệu năng đọc bằng cách tránh truy cập tài liệu trên đĩa?",
+    "options": [
+      "A. Truy vấn chỉ trả về trường _id.",
+      "B. Tất cả các trường trong điều kiện truy vấn và các trường được trả về (projection) đều phải nằm trong cùng một chỉ mục.",
+      "C. Truy vấn phải được thực thi trên primary node của replica set.",
+      "D. Kích thước của chỉ mục phải nhỏ hơn kích thước của collection."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một truy vấn được gọi là covered query khi tất cả các trường được sử dụng trong điều kiện lọc (query predicate) và tất cả các trường được trả về trong kết quả (projection) đều nằm trong cùng một chỉ mục. Điều này cho phép MongoDB trả về kết quả trực tiếp từ chỉ mục mà không cần truy cập các tài liệu thực tế trên đĩa, giúp tăng tốc độ truy vấn đáng kể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng $lookup trong một aggregation pipeline để thực hiện phép nối (join) với một collection khác, việc đặt $match (lọc) trước hay sau $lookup có thể ảnh hưởng như thế nào đến hiệu năng?",
+    "options": [
+      "A. Luôn đặt $match sau $lookup để đảm bảo tất cả các tài liệu được nối.",
+      "B. Đặt $match trước $lookup nếu điều kiện lọc có thể giảm đáng kể số lượng tài liệu đầu vào cho $lookup, giúp giảm tải xử lý.",
+      "C. Vị trí của $match không ảnh hưởng đến hiệu năng của $lookup.",
+      "D. $lookup luôn được thực thi trước $match bất kể vị trí trong pipeline."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đặt $match trước $lookup là một chiến lược tối ưu quan trọng. Nếu điều kiện $match có thể lọc bỏ một lượng lớn tài liệu, nó sẽ giảm đáng kể số lượng tài liệu cần được xử lý bởi $lookup, từ đó giảm tải bộ nhớ và CPU, cải thiện hiệu năng tổng thể của pipeline.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một replica set MongoDB, điều gì xảy ra nếu primary node gặp sự cố và không thể phục hồi, và có đủ các secondary node có thể bầu cử?",
+    "options": [
+      "A. Toàn bộ replica set sẽ ngừng hoạt động cho đến khi primary node được khôi phục thủ công.",
+      "B. Một trong các secondary node đủ điều kiện sẽ tự động được bầu làm primary mới thông qua quá trình bầu cử.",
+      "C. Các thao tác ghi sẽ chuyển hướng sang một secondary node ngẫu nhiên.",
+      "D. Dữ liệu trên các secondary node sẽ tự động bị xóa để chuẩn bị cho primary mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu primary node gặp sự cố, các thành viên còn lại của replica set sẽ tự động khởi động một quá trình bầu cử để chọn ra một secondary node đủ điều kiện làm primary mới. Đây là cơ chế chính để MongoDB replica set duy trì tính sẵn sàng cao (high availability).",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Vai trò chính của balancer trong một sharded cluster MongoDB là gì và tại sao nó lại quan trọng cho hiệu suất lâu dài của cluster?",
+    "options": [
+      "A. Balancer chịu trách nhiệm định tuyến các truy vấn đọc và ghi đến đúng shard.",
+      "B. Balancer tự động di chuyển các \"chunk\" dữ liệu giữa các shard để đảm bảo phân phối dữ liệu đồng đều và tránh hot spots.",
+      "C. Balancer quản lý việc bầu cử primary trong các replica set của shard.",
+      "D. Balancer thực hiện sao lưu dữ liệu của toàn bộ cluster."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Balancer trong một sharded cluster có nhiệm vụ tự động di chuyển các chunk dữ liệu giữa các shard để duy trì sự phân phối dữ liệu đồng đều. Điều này ngăn chặn tình trạng hot spots và đảm bảo rằng tải truy vấn được phân bổ cân bằng trên tất cả các shard, tối ưu hóa hiệu suất và khả năng mở rộng của cluster theo thời gian.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để bảo vệ dữ liệu nhạy cảm ở trạng thái nghỉ (at rest) trong MongoDB, tức là dữ liệu được lưu trữ trên đĩa, giải pháp bảo mật nào sau đây là hiệu quả nhất và thường được khuyến nghị ở cấp độ doanh nghiệp?",
+    "options": [
+      "A. Chỉ dựa vào mã hóa truyền tải (TLS/SSL) cho dữ liệu khi đang di chuyển.",
+      "B. Mã hóa ở cấp độ ứng dụng trước khi lưu trữ vào MongoDB.",
+      "C. Sử dụng tính năng Encryption at Rest của MongoDB Enterprise hoặc mã hóa cấp độ hệ điều hành/hệ thống tệp.",
+      "D. Chỉ giới hạn quyền truy cập mạng vào máy chủ MongoDB."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Encryption at Rest (mã hóa dữ liệu ở trạng thái nghỉ) là phương pháp bảo mật quan trọng để bảo vệ dữ liệu trên đĩa. MongoDB Enterprise cung cấp tính năng này tích hợp sẵn. Ngoài ra, mã hóa cấp độ hệ điều hành hoặc hệ thống tệp (như LUKS trên Linux) cũng là các giải pháp hiệu quả để đảm bảo rằng ngay cả khi đĩa bị truy cập trái phép, dữ liệu vẫn được bảo vệ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi nào nên sử dụng causal consistency (được triển khai thông qua session trong driver MongoDB) trong các ứng dụng MongoDB?",
+    "options": [
+      "A. Khi cần đảm bảo rằng tất cả các thao tác đọc và ghi đều được thực hiện trên primary node duy nhất.",
+      "B. Khi cần đảm bảo rằng một chuỗi các thao tác đọc và ghi liên quan logic được thực hiện theo thứ tự mà chúng được phát ra, ngay cả khi chúng được định tuyến đến các secondary node khác nhau.",
+      "C. Khi cần tối ưu hóa độ trễ đọc bằng cách đọc từ secondary node gần nhất mà không quan tâm đến tính nhất quán.",
+      "D. Khi cần thực hiện các multi-document transactions trên nhiều shard."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Causal consistency đảm bảo rằng một client session sẽ luôn thấy các thao tác ghi của chính nó và các thao tác ghi mà nó đã \"thấy\" trước đó. Điều này rất quan trọng cho các ứng dụng nơi thứ tự logic của các sự kiện là cần thiết, đặc biệt khi đọc từ các secondary node, đảm bảo rằng dữ liệu được đọc phản ánh trạng thái sau các thao tác ghi đã biết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào nên cân nhắc sử dụng \"Extended Reference Pattern\" trong thiết kế schema MongoDB, đặc biệt là khi cần tối ưu các truy vấn đọc thường xuyên mà không muốn nhúng toàn bộ tài liệu con?",
+    "options": [
+      "A. Khi dữ liệu con rất lớn và thay đổi thường xuyên.",
+      "B. Khi cần tham chiếu đến một tài liệu khác và muốn nhúng một số trường được truy cập thường xuyên từ tài liệu tham chiếu vào tài liệu cha để giảm $lookup.",
+      "C. Khi cần đảm bảo tính nguyên tử cho các thao tác trên nhiều tài liệu.",
+      "D. Khi chỉ cần lưu trữ ID của tài liệu tham chiếu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Extended Reference Pattern là một sự kết hợp giữa embedding và referencing. Bạn lưu trữ _id của tài liệu tham chiếu (referencing) nhưng cũng nhúng một số trường quan trọng, thường xuyên được truy cập từ tài liệu tham chiếu vào tài liệu cha. Điều này giúp tối ưu các truy vấn đọc bằng cách tránh $lookup cho các trường đó, đồng thời vẫn giữ được sự linh hoạt của referencing cho các trường ít quan trọng hơn hoặc thay đổi thường xuyên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi lập kế hoạch mở rộng cho một sharded cluster MongoDB, yếu tố quan trọng nhất cần xem xét để đảm bảo hiệu suất ổn định và khả năng mở rộng trong tương lai là gì?",
+    "options": [
+      "A. Chỉ tập trung vào việc tăng số lượng shard để tăng dung lượng lưu trữ.",
+      "B. Lựa chọn shard key phù hợp ngay từ đầu để đảm bảo phân phối dữ liệu đồng đều và hỗ trợ các truy vấn chính.",
+      "C. Chỉ quan tâm đến việc tăng kích thước RAM trên mỗi shard.",
+      "D. Luôn sử dụng hashed shard key cho mọi trường hợp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lựa chọn shard key là quyết định kiến trúc quan trọng nhất khi thiết kế một sharded cluster. Một shard key được chọn kém có thể dẫn đến hot spots, phân phối dữ liệu không đồng đều, và cuối cùng làm giảm hiệu suất và khả năng mở rộng của toàn bộ cluster, bất kể bạn thêm bao nhiêu shard hay RAM.",
+    "difficulty": "ADVANCED",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một nền tảng thương mại điện tử cần lưu trữ hàng triệu đánh giá sản phẩm. Các đánh giá cần được truy cập nhanh chóng theo từng sản phẩm, nhưng cũng cần có khả năng tìm kiếm toàn cầu theo từ khóa và tác giả. Bạn sẽ đề xuất mô hình thiết kế schema nào để cân bằng hiệu suất đọc, hiệu suất ghi và sự linh hoạt trong truy vấn cho kịch bản này, và tại sao?",
+    "options": [
+      "A. Nhúng tất cả đánh giá vào tài liệu sản phẩm (Embedded Documents) để tối ưu truy vấn theo sản phẩm.",
+      "B. Sử dụng mô hình Referenced Documents (Tham chiếu tài liệu), với mỗi đánh giá là một tài liệu riêng và tham chiếu đến sản phẩm.",
+      "C. Kết hợp cả Embedded và Referenced Documents: nhúng một số đánh giá gần đây nhất vào sản phẩm và tham chiếu phần còn lại.",
+      "D. Sử dụng mô hình Bucket Pattern, nhóm các đánh giá theo khoảng thời gian hoặc theo số lượng để giảm số lượng tài liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với hàng triệu đánh giá, việc nhúng tất cả vào tài liệu sản phẩm (A) sẽ dẫn đến tài liệu quá lớn, vượt quá giới hạn 16MB và gây khó khăn cho việc cập nhật. Mô hình Referenced Documents (B) là phù hợp nhất, cho phép đánh giá là các tài liệu riêng biệt, dễ dàng tìm kiếm toàn cầu và quản lý kích thước tài liệu. Việc truy vấn theo sản phẩm sẽ cần một truy vấn JOIN (lookup) nhưng có thể được tối ưu bằng index. C và D có thể là các tối ưu hóa cho các trường hợp cụ thể nhưng B là nền tảng cho sự linh hoạt và khả năng mở rộng khi số lượng đánh giá rất lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang thiết kế schema cho một ứng dụng mạng xã hội nơi người dùng có thể theo dõi lẫn nhau. Tài liệu người dùng cần lưu trữ danh sách 'người đang theo dõi' (following) và 'người theo dõi' (followers). Nếu một người dùng có thể có hàng triệu người theo dõi, mô hình thiết kế nào là phù hợp nhất để tránh giới hạn kích thước tài liệu và đảm bảo cập nhật/truy vấn hiệu quả cho các danh sách này?",
+    "options": [
+      "A. Nhúng trực tiếp danh sách 'following' và 'followers' vào tài liệu người dùng.",
+      "B. Sử dụng mô hình Two-Way Referencing, với mỗi người dùng lưu ID của những người họ theo dõi và những người theo dõi họ.",
+      "C. Sử dụng mô hình 'Outbound References' và 'Inbound References' riêng biệt, lưu trữ danh sách following và followers trong các collection riêng.",
+      "D. Sử dụng mô hình 'Bucket Pattern' để nhóm các mối quan hệ theo dõi vào các tài liệu nhỏ hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Với hàng triệu người theo dõi, việc nhúng trực tiếp (A) sẽ vượt quá giới hạn kích thước tài liệu. Two-Way Referencing (B) vẫn gặp vấn đề tương tự. Mô hình 'Outbound References' (danh sách người dùng theo dõi) và 'Inbound References' (danh sách người theo dõi) được lưu trữ trong các collection riêng biệt (C) là giải pháp tối ưu. Ví dụ, một collection `follows` với `{ 'followerId': 'userA', 'followingId': 'userB' }` cho phép quản lý mối quan hệ 1:N một cách hiệu quả, tránh kích thước tài liệu lớn và dễ dàng truy vấn theo cả hai chiều.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng thường xuyên truy vấn một collection dữ liệu cảm biến IoT, lọc theo `deviceId` và `timestamp`, và thường sắp xếp theo `timestamp` giảm dần. Trường `deviceId` có độ phân giải cao (high cardinality), và `timestamp` liên tục tăng. Chiến lược lập chỉ mục nào sẽ cung cấp hiệu suất tối ưu cho các truy vấn này, có tính đến cả việc lọc và sắp xếp?",
+    "options": [
+      "A. Tạo một chỉ mục đơn trên trường `timestamp` theo thứ tự giảm dần.",
+      "B. Tạo một chỉ mục đơn trên trường `deviceId`.",
+      "C. Tạo một chỉ mục kết hợp trên `deviceId` và `timestamp` theo thứ tự giảm dần: `{ deviceId: 1, timestamp: -1 }`.",
+      "D. Tạo hai chỉ mục riêng biệt: một trên `deviceId` và một trên `timestamp` giảm dần."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để tối ưu cho cả lọc (`deviceId`, `timestamp`) và sắp xếp (`timestamp: -1`), chỉ mục kết hợp `{ deviceId: 1, timestamp: -1 }` (C) là lựa chọn tốt nhất. Nó cho phép MongoDB sử dụng chỉ mục để lọc nhanh chóng theo `deviceId`, sau đó tiếp tục sử dụng cùng chỉ mục để lọc theo `timestamp` và sắp xếp dữ liệu hiệu quả mà không cần sắp xếp trong bộ nhớ (in-memory sort).",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn quan sát thấy một truy vấn chậm trong MongoDB. Sau khi chạy `db.collection.explain(\"executionStats\").find(...)`, bạn thấy một giai đoạn `COLLSCAN` và `totalDocsExamined` cao nhưng `nReturned` thấp. Kết luận nào có khả năng nhất và hành động chiến lược tức thì bạn sẽ thực hiện là gì?",
+    "options": [
+      "A. Truy vấn đang sử dụng một chỉ mục không phù hợp; cần tạo chỉ mục mới hoặc điều chỉnh chỉ mục hiện có.",
+      "B. Dữ liệu quá lớn, cần mở rộng quy mô (scale up) máy chủ MongoDB.",
+      "C. `COLLSCAN` là bình thường cho các truy vấn phức tạp; cần tối ưu logic ứng dụng thay vì chỉ mục.",
+      "D. Có vấn đề về kết nối mạng giữa ứng dụng và MongoDB; cần kiểm tra cấu hình mạng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một `COLLSCAN` (quét toàn bộ collection) với `totalDocsExamined` cao và `nReturned` thấp rõ ràng chỉ ra rằng truy vấn không sử dụng chỉ mục hoặc sử dụng chỉ mục không hiệu quả, buộc MongoDB phải quét một lượng lớn tài liệu để tìm kết quả. Hành động chiến lược là phân tích truy vấn và tạo hoặc điều chỉnh chỉ mục để truy vấn có thể sử dụng chỉ mục hiệu quả, giảm `totalDocsExamined`.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cho một collection `orders` với các tài liệu như `{ \"_id\": 1, \"userId\": \"A\", \"items\": [{ \"productId\": \"X\", \"qty\": 2, \"price\": 10 }], \"status\": \"completed\", \"orderDate\": ISODate(...) }`. Bạn cần tính tổng doanh thu mỗi ngày cho các đơn hàng đã hoàn thành. Chuỗi pipeline aggregation nào sẽ hiệu quả nhất?",
+    "options": [
+      "A. `[ { $group: { _id: { $dateToString: { format: \"%Y-%m-%d\", date: \"$orderDate\" } }, totalRevenue: { $sum: { $sum: \"$items.price\" } } } }, { $match: { \"status\": \"completed\" } } ]`",
+      "B. `[ { $match: { \"status\": \"completed\" } }, { $unwind: \"$items\" }, { $group: { _id: { $dateToString: { format: \"%Y-%m-%d\", date: \"$orderDate\" } }, totalRevenue: { $sum: { $multiply: [\"$items.qty\", \"$items.price\"] } } } } ]`",
+      "C. `[ { $unwind: \"$items\" }, { $group: { _id: { $dateToString: { format: \"%Y-%m-%d\", date: \"$orderDate\" } }, totalRevenue: { $sum: { $multiply: [\"$items.qty\", \"$items.price\"] } } } }, { $match: { \"status\": \"completed\" } } ]`",
+      "D. `[ { $group: { _id: \"$orderDate\", totalRevenue: { $sum: { $sum: \"$items.price\" } } } }, { $match: { \"status\": \"completed\" } } ]`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để tính tổng doanh thu, cần nhân `qty` với `price` cho mỗi mặt hàng. Sau đó, `$match` các đơn hàng 'completed' trước `$unwind` và `$group` là hiệu quả nhất để giảm số lượng tài liệu được xử lý trong các giai đoạn sau. `$unwind` cần thiết để truy cập từng `item` riêng lẻ. `$group` sau đó tổng hợp doanh thu theo ngày. Lựa chọn A sai vị trí `$match` và tính tổng `price` sai. Lựa chọn C đặt `$match` sau `$unwind` và `$group`, không hiệu quả bằng. Lựa chọn D tính tổng sai và không xử lý từng item.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một replica set của MongoDB, mục đích chính của một thành viên \"Delayed Secondary\" là gì?",
+    "options": [
+      "A. Cung cấp một bản sao dữ liệu với độ trễ cố định, hữu ích cho việc phục hồi từ các thao tác ghi dữ liệu không mong muốn (ví dụ: xóa nhầm).",
+      "B. Tăng cường hiệu suất đọc bằng cách cung cấp một bản sao dữ liệu luôn cập nhật nhất cho các ứng dụng đọc nặng.",
+      "C. Đóng vai trò là một thành viên bầu cử (arbiter) trong trường hợp replica set có số lượng thành viên chẵn.",
+      "D. Giảm thiểu chi phí lưu trữ bằng cách chỉ lưu trữ một phần dữ liệu của collection chính."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Delayed Secondary là một bản sao phụ có độ trễ cố định (ví dụ: vài giờ) so với Primary. Mục đích chính của nó là cung cấp một điểm phục hồi dữ liệu từ các lỗi logic của ứng dụng (ví dụ: xóa nhầm, cập nhật sai) mà không thể phục hồi bằng các bản sao thông thường đã đồng bộ hóa.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một sharded cluster của MongoDB đang gặp phải sự phân bổ dữ liệu không cân bằng giữa các shard, dẫn đến các điểm nóng (hotspots) trên một số shard nhất định. Điều này chủ yếu là do khóa shard được chọn là trường `_id` (ObjectId) cho một collection có khối lượng ghi cao trên các tài liệu mới. Chiến lược dài hạn hiệu quả nhất để giảm thiểu vấn đề điểm nóng này là gì?",
+    "options": [
+      "A. Tăng số lượng shard trong cluster để phân tán dữ liệu rộng hơn.",
+      "B. Thay đổi khóa shard sang một trường có độ phân giải cao và phân tán đều hơn, như một hash của `_id` hoặc một trường có giá trị ngẫu nhiên.",
+      "C. Tối ưu hóa các truy vấn ghi để chúng ít gây tranh chấp hơn trên các tài liệu nóng.",
+      "D. Sử dụng read preference `secondaryPreferred` để giảm tải cho shard chính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng `_id` (ObjectId) làm khóa shard cho collection có khối lượng ghi cao thường dẫn đến hotspots vì `_id` tăng đơn điệu theo thời gian, khiến tất cả các ghi mới đổ vào cùng một shard. Chiến lược hiệu quả nhất là thay đổi khóa shard sang một trường có độ phân giải cao và phân tán đều hơn, ví dụ như một hash của `_id` hoặc một trường có giá trị ngẫu nhiên, để đảm bảo dữ liệu được phân tán đồng đều hơn trên tất cả các shard.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một hệ thống yêu cầu các giao dịch ACID đa tài liệu (multi-document) trên các collection khác nhau trong một sharded cluster của MongoDB. Hạn chế quan trọng nào bạn phải nhận thức về các giao dịch phân tán của MongoDB, đặc biệt khi xem xét hiệu suất và khả năng thử lại?",
+    "options": [
+      "A. Các giao dịch phân tán của MongoDB không hỗ trợ các hoạt động trên nhiều collection.",
+      "B. Các giao dịch phân tán có thể có hiệu suất thấp hơn đáng kể so với các hoạt động ghi đơn lẻ và yêu cầu logic thử lại phía ứng dụng.",
+      "C. Các giao dịch phân tán chỉ có thể hoạt động trong một shard duy nhất, không hỗ trợ đa shard.",
+      "D. MongoDB không cung cấp các giao dịch ACID cho các hoạt động đa tài liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MongoDB hỗ trợ các giao dịch đa tài liệu, đa shard từ phiên bản 4.0 trở lên. Tuy nhiên, các giao dịch phân tán có chi phí hiệu suất cao hơn đáng kể so với các hoạt động ghi đơn lẻ do yêu cầu duy trì tính nhất quán trên nhiều node. Ngoài ra, ứng dụng cần triển khai logic thử lại (retry logic) để xử lý các lỗi tạm thời như xung đột ghi (write conflicts) hoặc mất kết nối trong quá trình giao dịch.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng write concern `majority` trong một replica set của MongoDB, nó đảm bảo mức độ bền vững và nhất quán dữ liệu nào trước khi xác nhận một thao tác ghi?",
+    "options": [
+      "A. Dữ liệu đã được ghi vào Primary và ít nhất một Secondary.",
+      "B. Dữ liệu đã được ghi vào Primary và đã được ghi vào đa số các thành viên đủ điều kiện bỏ phiếu (voting members).",
+      "C. Dữ liệu đã được ghi vào Primary và đã được ghi vào tất cả các Secondary.",
+      "D. Dữ liệu đã được ghi vào Primary và đã được ghi vào Secondary gần nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Write concern `majority` đảm bảo rằng một thao tác ghi đã được áp dụng vào Primary và đã được réplica thành công tới đa số các thành viên đủ điều kiện bỏ phiếu (voting members) trong replica set. Điều này cung cấp mức độ bền vững dữ liệu cao, đảm bảo dữ liệu không bị mất ngay cả khi Primary gặp sự cố.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cơ sở dữ liệu sản xuất MongoDB của bạn rất quan trọng và bạn cần triển khai một chiến lược sao lưu cho phép phục hồi tại một thời điểm bất kỳ (point-in-time recovery) đến từng giây trong vòng 24 giờ qua, với tác động tối thiểu đến hiệu suất. Phương pháp sao lưu nào sẽ đáp ứng tốt nhất các yêu cầu này?",
+    "options": [
+      "A. Sử dụng `mongodump` định kỳ theo lịch trình.",
+      "B. Sao lưu toàn bộ thư mục dữ liệu MongoDB bằng snapshot hệ thống tệp (filesystem snapshot) kết hợp với sao lưu oplog.",
+      "C. Chỉ sao lưu `oplog` liên tục và khôi phục từ bản sao lưu dữ liệu gần nhất.",
+      "D. Sử dụng dịch vụ sao lưu đám mây của nhà cung cấp MongoDB (ví dụ: MongoDB Atlas Backup)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để đạt được point-in-time recovery đến từng giây, cần có một bản sao lưu dữ liệu đầy đủ (thường là qua filesystem snapshot để giảm thiểu downtime) và sau đó áp dụng các bản ghi oplog liên tục kể từ thời điểm snapshot. `mongodump` (A) không cung cấp point-in-time recovery chính xác. Chỉ sao lưu oplog (C) không đủ nếu không có bản sao lưu dữ liệu đầy đủ. Dịch vụ của nhà cung cấp (D) là một lựa chọn tốt, nhưng B là phương pháp kỹ thuật cơ bản để đạt được điều đó on-premise.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cluster MongoDB của bạn đang gặp phải độ trễ cao và tăng đột biến kết nối một cách không liên tục. Bạn nghi ngờ do tranh chấp tài nguyên hoặc các truy vấn không hiệu quả. Những chỉ số và công cụ chính nào bạn sẽ ưu tiên để giám sát thời gian thực nhằm nhanh chóng xác định nguyên nhân gốc rễ?",
+    "options": [
+      "A. Giám sát kích thước của `oplog` và số lượng `connections`.",
+      "B. Giám sát CPU, bộ nhớ, I/O đĩa, số lượng `active connections`, `queued reads/writes` và sử dụng `mongotop`, `mongostat`.",
+      "C. Kiểm tra trạng thái của các shard và balancer.",
+      "D. Phân tích log của ứng dụng để tìm lỗi kết nối."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Độ trễ cao và tăng đột biến kết nối thường liên quan đến tranh chấp tài nguyên hoặc tắc nghẽn I/O/CPU. Giám sát CPU, bộ nhớ, I/O đĩa sẽ cho biết liệu có giới hạn tài nguyên vật lý hay không. `active connections` và `queued reads/writes` chỉ ra áp lực lên cơ sở dữ liệu. `mongotop` và `mongostat` cung cấp thông tin chi tiết về hoạt động đọc/ghi trên các collection và trạng thái hệ thống theo thời gian thực, giúp xác định các truy vấn hoặc collection gây tải cao.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Nền tảng thương mại điện tử của bạn đang trải qua sự gia tăng đáng kể về lưu lượng đọc, chủ yếu là dữ liệu danh mục sản phẩm tương đối tĩnh. Lưu lượng ghi vẫn ở mức vừa phải. Chiến lược nào là hiệu quả nhất về chi phí và khả năng mở rộng để xử lý tải đọc tăng cao này trong MongoDB mà không cần cung cấp quá mức cho khả năng ghi?",
+    "options": [
+      "A. Tăng số lượng shard trong cluster để phân tán tải đọc.",
+      "B. Thêm các Secondary node vào replica set và định cấu hình ứng dụng để đọc từ các Secondary (read preference `secondaryPreferred`).",
+      "C. Nâng cấp Primary node lên cấu hình phần cứng mạnh hơn.",
+      "D. Triển khai một bộ nhớ đệm (cache) bên ngoài (ví dụ: Redis) cho dữ liệu danh mục sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi tải đọc tăng cao và dữ liệu tương đối tĩnh, việc thêm các Secondary node và đọc từ chúng (sử dụng `secondaryPreferred` read preference) là một chiến lược mở rộng quy mô đọc hiệu quả về chi phí. Nó phân tán tải đọc mà không cần tăng khả năng ghi của Primary, đồng thời duy trì tính sẵn sàng cao. Phương án A chủ yếu giải quyết vấn đề mở rộng quy mô ghi. C là mở rộng quy mô dọc, có giới hạn. D là một giải pháp bổ sung rất tốt, nhưng B là giải pháp MongoDB nội tại trực tiếp nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai một replica set của MongoDB, thực hành tốt nhất quan trọng nào liên quan đến vị trí của các node arbiter trong thiết lập đa trung tâm dữ liệu hoặc vùng khả dụng đám mây?",
+    "options": [
+      "A. Đặt arbiter trong cùng trung tâm dữ liệu với Primary để giảm độ trễ.",
+      "B. Đặt arbiter trong một trung tâm dữ liệu riêng biệt không chứa các thành viên dữ liệu khác để tránh sự cố đồng thời (simultaneous failure).",
+      "C. Không nên sử dụng arbiter trong thiết lập đa trung tâm dữ liệu vì chúng không chứa dữ liệu.",
+      "D. Đặt arbiter trong trung tâm dữ liệu có nhiều Secondary nhất để đảm bảo bầu cử nhanh chóng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Arbiter không lưu trữ dữ liệu, nhưng chúng tham gia vào quá trình bầu cử Primary. Để đảm bảo tính sẵn sàng cao và khả năng chịu lỗi trong thiết lập đa trung tâm dữ liệu, arbiter nên được đặt trong một trung tâm dữ liệu riêng biệt, khác với các trung tâm dữ liệu chứa Primary và Secondary. Điều này giúp ngăn chặn một sự cố toàn bộ trung tâm dữ liệu làm mất đa số phiếu bầu, đảm bảo quá trình bầu cử Primary vẫn có thể diễn ra.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần triển khai xác thực mạnh mẽ cho cluster MongoDB của mình, tích hợp với dịch vụ thư mục doanh nghiệp hiện có (ví dụ: Active Directory, OpenLDAP). Cơ chế xác thực nào được MongoDB hỗ trợ mà bạn sẽ chọn?",
+    "options": [
+      "A. SCRAM-SHA-256 (Salted Challenge Response Authentication Mechanism).",
+      "B. X.509 Certificate Authentication.",
+      "C. LDAP Authentication.",
+      "D. Kerberos Authentication."
+    ],
+    "correctAnswer": "C",
+    "explanation": "LDAP Authentication (C) được thiết kế để tích hợp MongoDB với các dịch vụ thư mục doanh nghiệp như Active Directory hoặc OpenLDAP, cho phép quản lý người dùng tập trung. SCRAM-SHA-256 (A) là cơ chế xác thực mặc định, mạnh mẽ nhưng không tích hợp với dịch vụ thư mục. X.509 (B) là xác thực dựa trên chứng chỉ, thường dùng cho giao tiếp giữa các thành phần. Kerberos (D) cũng là một lựa chọn cho xác thực doanh nghiệp, nhưng LDAP phổ biến hơn cho việc tích hợp với các dịch vụ thư mục hiện có.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng \"Attribute Pattern\" trong thiết kế schema của MongoDB là gì, đặc biệt đối với các tài liệu có số lượng lớn các thuộc tính khác nhau?",
+    "options": [
+      "A. Giảm kích thước tài liệu bằng cách chỉ lưu trữ các thuộc tính được sử dụng thường xuyên.",
+      "B. Cho phép truy vấn linh hoạt trên các thuộc tính động mà không cần tạo nhiều chỉ mục riêng biệt.",
+      "C. Cải thiện hiệu suất ghi bằng cách giảm số lượng trường cần cập nhật.",
+      "D. Đảm bảo tính nhất quán dữ liệu bằng cách áp dụng một schema cố định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Attribute Pattern nhóm các thuộc tính động/biến thể vào một mảng các sub-document hoặc key-value pairs. Điều này cho phép bạn tạo một chỉ mục trên các trường trong mảng đó (ví dụ: `attributes.key` và `attributes.value`), giúp truy vấn linh hoạt trên nhiều thuộc tính khác nhau mà không cần tạo chỉ mục riêng cho từng thuộc tính tiềm năng, giảm số lượng chỉ mục và tăng khả năng mở rộng.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một collection lưu trữ nhật ký hoạt động của người dùng, với các trường như `userId`, `actionType`, `timestamp` và `details`. Các truy vấn thường xuyên lọc theo `userId` và `actionType`, nhưng chỉ cho các hoạt động gần đây (ví dụ: 30 ngày qua). Loại chỉ mục nào sẽ phù hợp nhất để tối ưu hóa các truy vấn này trong khi quản lý kích thước chỉ mục một cách hiệu quả?",
+    "options": [
+      "A. Chỉ mục kết hợp: `{ userId: 1, actionType: 1, timestamp: -1 }`.",
+      "B. Chỉ mục TTL (Time-To-Live) trên trường `timestamp`.",
+      "C. Chỉ mục một phần (Partial Index) trên `{ userId: 1, actionType: 1 }` với `partialFilterExpression` cho `timestamp` gần đây.",
+      "D. Chỉ mục trên `userId` và chỉ mục riêng trên `actionType`."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Chỉ mục một phần (Partial Index) là lựa chọn tối ưu. Nó cho phép bạn tạo chỉ mục chỉ trên một tập hợp con các tài liệu đáp ứng một điều kiện nhất định (ví dụ: `timestamp` trong 30 ngày qua). Điều này giúp giảm kích thước chỉ mục đáng kể và cải thiện hiệu suất cho các truy vấn chỉ quan tâm đến dữ liệu gần đây, mà vẫn có thể sử dụng chỉ mục kết hợp trên `userId` và `actionType` cho tập hợp con đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn có một pipeline aggregation thực hiện `$lookup` trên một collection lớn, sau đó là giai đoạn `$group`. Giai đoạn `$lookup` rất chậm. Chiến lược tối ưu hóa phổ biến nào cho `$lookup` trong các kịch bản như vậy, đặc biệt khi collection được join được truy cập thường xuyên và tương đối ổn định?",
+    "options": [
+      "A. Đảm bảo rằng trường `localField` và `foreignField` trong `$lookup` đã được lập chỉ mục.",
+      "B. Sử dụng `$sample` trước `$lookup` để giảm số lượng tài liệu được join.",
+      "C. Denormalize dữ liệu bằng cách nhúng các trường cần thiết từ collection được join vào collection chính.",
+      "D. Tăng bộ nhớ RAM cho máy chủ MongoDB để xử lý `$lookup` trong bộ nhớ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mặc dù lập chỉ mục cho các trường `$lookup` (A) là cần thiết, nhưng với một collection lớn và `$lookup` thường xuyên, việc denormalize dữ liệu (C) bằng cách nhúng các trường cần thiết từ collection được join vào collection chính là chiến lược mạnh mẽ nhất để tránh các hoạt động join tốn kém. Điều này chuyển đổi chi phí join tại thời điểm đọc sang chi phí ghi (khi dữ liệu được cập nhật), thường là một sự đánh đổi có lợi cho các ứng dụng đọc nặng.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quá trình chuyển đổi Primary (failover) trong một replica set của MongoDB, bạn quan sát thấy Primary mới được bầu, nhưng các client vẫn thỉnh thoảng cố gắng ghi vào Primary cũ, dẫn đến lỗi. Nguyên nhân có khả năng nhất của vấn đề này từ góc độ cấu hình client là gì, và cần làm gì để ngăn chặn nó?",
+    "options": [
+      "A. Client không được cấu hình với `readPreference` phù hợp.",
+      "B. Client không sử dụng `replicaSet` name trong connection string của nó.",
+      "C. Client đang sử dụng driver MongoDB lỗi thời không hỗ trợ phát hiện Primary mới.",
+      "D. Các Secondary node đang chậm đồng bộ hóa, khiến Primary cũ vẫn được coi là hợp lệ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu client không sử dụng tên `replicaSet` trong connection string, nó có thể không nhận biết được sự thay đổi của Primary và tiếp tục cố gắng kết nối với Primary cũ dựa trên địa chỉ IP/hostname ban đầu. Việc cấu hình `replicaSet` name cho phép driver MongoDB tự động khám phá các thành viên của replica set và định tuyến lại các hoạt động đến Primary hiện tại sau khi failover.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Vai trò của \"Config Servers\" trong một sharded cluster của MongoDB là gì?",
+    "options": [
+      "A. Lưu trữ tất cả dữ liệu người dùng của sharded cluster.",
+      "B. Lưu trữ siêu dữ liệu (metadata) của cluster, bao gồm ánh xạ giữa dữ liệu và các shard, và cấu hình của các shard.",
+      "C. Xử lý tất cả các truy vấn đọc và ghi cho toàn bộ cluster.",
+      "D. Cung cấp khả năng bầu cử Primary cho các replica set của shard."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Config Servers lưu trữ tất cả siêu dữ liệu và cấu hình của sharded cluster, bao gồm thông tin về các shard, chunk ranges, và khóa shard. Chúng là thành phần quan trọng để `mongos` (router) biết cách định tuyến các truy vấn đến đúng shard và để balancer quản lý việc di chuyển chunk.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ứng dụng của bạn thường xuyên thực hiện một hoạt động giống như two-phase commit liên quan đến việc cập nhật số dư của người dùng trong một collection và ghi lại lịch sử giao dịch trong một collection khác. Tính nguyên tử (Atomicity) là rất quan trọng. Nếu bạn đang hoạt động trên một sharded cluster, yếu tố quan trọng nào bạn phải xem xét khi dựa vào các giao dịch đa tài liệu của MongoDB cho kịch bản này?",
+    "options": [
+      "A. Các giao dịch đa tài liệu trên sharded cluster không thể bao gồm các hoạt động trên nhiều shard.",
+      "B. Hiệu suất của các giao dịch đa tài liệu trên sharded cluster có thể bị ảnh hưởng đáng kể bởi độ trễ mạng và cần logic thử lại phía ứng dụng.",
+      "C. Các giao dịch đa tài liệu trên sharded cluster chỉ hỗ trợ các hoạt động đọc, không hỗ trợ ghi.",
+      "D. MongoDB tự động tối ưu hóa các giao dịch đa tài liệu trên sharded cluster để đảm bảo hiệu suất cao."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MongoDB hỗ trợ các giao dịch đa tài liệu trên sharded cluster, bao gồm cả các hoạt động trên nhiều shard. Tuy nhiên, các giao dịch phân tán có chi phí hiệu suất cao hơn do yêu cầu phối hợp giữa các shard và có thể bị ảnh hưởng bởi độ trễ mạng. Do đó, cần có logic thử lại (retry logic) ở phía ứng dụng để xử lý các lỗi tạm thời và đảm bảo độ bền của giao dịch.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang lên kế hoạch nâng cấp phiên bản lớn cho sharded cluster MongoDB của mình. Bạn cần giảm thiểu thời gian ngừng hoạt động và đảm bảo tính nhất quán dữ liệu trong suốt quá trình nâng cấp. Chiến lược nâng cấp nào thường được khuyến nghị cho các sharded cluster sản xuất để đạt được các mục tiêu này?",
+    "options": [
+      "A. Nâng cấp toàn bộ cluster cùng một lúc (stop-the-world upgrade).",
+      "B. Nâng cấp từng thành phần theo thứ tự: Config Servers, sau đó là Shards (replica sets), và cuối cùng là `mongos` instances, từng bước một (rolling upgrade).",
+      "C. Nâng cấp tất cả các Primary node trước, sau đó là các Secondary node.",
+      "D. Sao lưu toàn bộ cluster, sau đó cài đặt phiên bản mới và khôi phục dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược nâng cấp từng bước (rolling upgrade) là phương pháp được khuyến nghị cho các sharded cluster sản xuất để giảm thiểu downtime. Nó liên quan đến việc nâng cấp từng thành phần (Config Servers, sau đó là các replica set của shard từng node một, và cuối cùng là `mongos` instances) mà không làm ngừng hoạt động toàn bộ cluster, đảm bảo tính sẵn sàng và nhất quán dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để chủ động phát hiện các vấn đề về dung lượng lưu trữ tiềm ẩn và đảm bảo cửa sổ oplog đủ lớn cho các hoạt động phục hồi trong một replica set, bạn nên theo dõi chỉ số cụ thể nào thường xuyên?",
+    "options": [
+      "A. Kích thước ổ đĩa còn trống của máy chủ.",
+      "B. Số lượng tài liệu trong mỗi collection.",
+      "C. Kích thước và tuổi của `oplog` (oplog window).",
+      "D. Số lượng kết nối client đang hoạt động."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kích thước và tuổi của `oplog` (oplog window) là chỉ số quan trọng để giám sát. Oplog là nhật ký các thao tác ghi. Một `oplog window` quá nhỏ có thể dẫn đến việc các Secondary không thể đồng bộ hóa kịp thời hoặc gây khó khăn cho việc phục hồi point-in-time. Giám sát nó giúp đảm bảo rằng có đủ lịch sử thao tác để phục hồi hoặc đồng bộ hóa các Secondary.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Ứng dụng MongoDB của bạn trải qua tranh chấp ghi cao (high write contention) trên một tài liệu duy nhất được cập nhật thường xuyên (ví dụ: một bộ đếm toàn cầu hoặc một tài liệu cấu hình nhỏ). Mô hình thiết kế hoặc chiến lược nào được khuyến nghị để giảm bớt loại tắc nghẽn ghi cụ thể này?",
+    "options": [
+      "A. Sử dụng mô hình \"Atomic Operators\" (ví dụ: `$inc`) để cập nhật trường cụ thể thay vì đọc-sửa-ghi toàn bộ tài liệu.",
+      "B. Chia tài liệu nóng thành nhiều tài liệu nhỏ hơn và phân tán các cập nhật trên chúng (ví dụ: Counter Pattern).",
+      "C. Tăng kích thước `write concern` để đảm bảo tính nhất quán dữ liệu tốt hơn.",
+      "D. Đặt tài liệu nóng trên một shard riêng biệt để cô lập tải."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với các tài liệu có tranh chấp ghi cao như bộ đếm toàn cầu, chiến lược hiệu quả là chia tài liệu đó thành nhiều tài liệu nhỏ hơn và phân tán các cập nhật trên chúng (ví dụ: Counter Pattern hoặc Sharded Counter Pattern). Sau đó, tổng hợp kết quả khi cần. Điều này giảm thiểu tranh chấp ghi trên một tài liệu duy nhất. Sử dụng Atomic Operators (A) là tốt nhưng không đủ cho tranh chấp cực cao. C và D không giải quyết được vấn đề tranh chấp trên một tài liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một schema cho một ứng dụng SaaS đa người thuê (multi-tenant) nơi mỗi người thuê có bộ dữ liệu riêng và việc cách ly dữ liệu là tối quan trọng. Mô hình thiết kế schema phổ biến và hiệu quả nào để đạt được sự cách ly dữ liệu logic cho người thuê trong một cluster MongoDB duy nhất, có tính đến cả hiệu suất và chi phí vận hành?",
+    "options": [
+      "A. Sử dụng một cơ sở dữ liệu riêng biệt cho mỗi người thuê.",
+      "B. Sử dụng một collection riêng biệt cho mỗi người thuê.",
+      "C. Sử dụng một trường `tenantId` trong mỗi tài liệu và lập chỉ mục trên đó.",
+      "D. Sử dụng sharding dựa trên `tenantId` làm shard key."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng một trường `tenantId` trong mỗi tài liệu và lập chỉ mục trên đó (C) là mô hình phổ biến và cân bằng tốt nhất cho việc cách ly dữ liệu logic trong các ứng dụng SaaS đa người thuê. Nó cho phép tất cả dữ liệu nằm trong cùng một collection/database, đơn giản hóa việc quản lý và sao lưu, trong khi vẫn đảm bảo hiệu suất truy vấn tốt cho từng người thuê thông qua chỉ mục. A và B có thể dẫn đến overhead quản lý rất lớn khi số lượng người thuê tăng lên. D là một lựa chọn tốt cho việc mở rộng quy mô, nhưng C là nền tảng cho việc cách ly logic.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Ứng dụng của bạn có một quy trình nghiệp vụ quan trọng yêu cầu đọc dữ liệu cam kết mới nhất từ MongoDB, ngay cả khi điều đó có nghĩa là độ trễ hơi cao hơn. Bạn sẽ cấu hình \"read concern\" nào cho các hoạt động đọc cụ thể này để đảm bảo yêu cầu này?",
+    "options": [
+      "A. `local`",
+      "B. `majority`",
+      "C. `linearizable`",
+      "D. `available`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`linearizable` read concern đảm bảo rằng dữ liệu được đọc phản ánh trạng thái của cơ sở dữ liệu sau tất cả các hoạt động ghi đã được xác nhận (acknowledged) bởi `majority` của các thành viên, và dữ liệu được trả về là dữ liệu mới nhất. Điều này cung cấp mức độ nhất quán mạnh mẽ nhất, nhưng có thể đi kèm với độ trễ cao hơn. `majority` (B) cung cấp tính nhất quán tốt nhưng không đảm bảo đọc dữ liệu mới nhất theo thứ tự tuyến tính. `local` (A) và `available` (D) cung cấp tính nhất quán yếu hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "MongoDB",
+    "category": "SITUATION"
+  }
+]

@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Node.js được xây dựng dựa trên Engine JavaScript nào?",
+    "options": [
+      "A. SpiderMonkey",
+      "B. V8",
+      "C. Chakra",
+      "D. JavaScriptCore"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Node.js sử dụng V8 Engine của Google, vốn được viết bằng C++ và cũng là engine chạy trong trình duyệt Chrome.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đặc điểm nổi bật nhất của kiến trúc Node.js là gì?",
+    "options": [
+      "A. Multi-threaded và Blocking I/O",
+      "B. Single-threaded và Blocking I/O",
+      "C. Single-threaded và Non-blocking I/O",
+      "D. Multi-threaded và Synchronous"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Node.js sử dụng mô hình single-threaded kết hợp với cơ chế non-blocking I/O (không chặn) giúp xử lý nhiều kết nối đồng thời một cách hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Node.js, file nào dùng để quản lý các dependencies và metadata của dự án?",
+    "options": [
+      "A. index.js",
+      "B. config.json",
+      "C. package.json",
+      "D. node_modules.json"
+    ],
+    "correctAnswer": "C",
+    "explanation": "package.json là file quan trọng nhất của một dự án Node.js, chứa thông tin phiên bản, script và các thư viện cần thiết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để import một module trong hệ thống CommonJS (mặc định của Node.js), bạn sử dụng từ khóa nào?",
+    "options": [
+      "A. import",
+      "B. require",
+      "C. include",
+      "D. fetch"
+    ],
+    "correctAnswer": "B",
+    "explanation": "CommonJS sử dụng hàm require() để nạp các module khác vào file hiện tại.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh nào được dùng để cài đặt một thư viện và lưu vào danh sách 'dependencies' trong package.json?",
+    "options": [
+      "A. npm install <package-name>",
+      "B. npm create <package-name>",
+      "C. npm start <package-name>",
+      "D. npm run <package-name>"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lệnh npm install (hoặc npm i) sẽ tải thư viện về thư mục node_modules và mặc định lưu vào mục dependencies.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Biến môi trường toàn cục (Global Object) nào cung cấp đường dẫn tuyệt đối đến thư mục chứa file đang thực thi?",
+    "options": [
+      "A. __filename",
+      "B. process.cwd()",
+      "C. __dirname",
+      "D. path.location"
+    ],
+    "correctAnswer": "C",
+    "explanation": "__dirname là một biến toàn cục trong Node.js trả về đường dẫn thư mục chứa file hiện tại.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Module nào có sẵn trong Node.js dùng để xử lý các đường dẫn file và thư mục?",
+    "options": [
+      "A. fs",
+      "B. path",
+      "C. http",
+      "D. url"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Module 'path' cung cấp các tiện ích để làm việc với đường dẫn file và thư mục, đảm bảo tính tương thích giữa các hệ điều hành.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa fs.readFile và fs.readFileSync là gì?",
+    "options": [
+      "A. fs.readFile nhanh hơn fs.readFileSync",
+      "B. fs.readFileSync trả về Promise, còn fs.readFile dùng callback",
+      "C. fs.readFile là bất đồng bộ (asynchronous), còn fs.readFileSync là đồng bộ (synchronous)",
+      "D. Không có sự khác biệt nào về cách hoạt động"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các hàm có đuôi 'Sync' trong module fs sẽ chặn (block) việc thực thi các dòng code tiếp theo cho đến khi thao tác file hoàn thành.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Node.js, đối tượng nào được dùng để quản lý và phát đi các sự kiện (events)?",
+    "options": [
+      "A. EventLoop",
+      "B. EventEmitter",
+      "C. Dispatcher",
+      "D. Listener"
+    ],
+    "correctAnswer": "B",
+    "explanation": "EventEmitter là một class trong module 'events', cho phép tạo ra các đối tượng có thể phát (emit) và lắng nghe (on) các sự kiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh 'npm install <package> --save-dev' dùng để làm gì?",
+    "options": [
+      "A. Cài đặt thư viện chỉ dùng cho môi trường production",
+      "B. Cài đặt thư viện và lưu vào mục devDependencies",
+      "C. Cài đặt thư viện toàn cục trên máy tính",
+      "D. Cập nhật phiên bản mới nhất cho thư viện"
+    ],
+    "correctAnswer": "B",
+    "explanation": "devDependencies chứa các thư viện chỉ cần thiết trong quá trình phát triển (như nodemon, jest) mà không cần khi chạy ứng dụng thật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng Streams lại quan trọng khi xử lý các file có dung lượng lớn?",
+    "options": [
+      "A. Vì Streams giúp mã hóa dữ liệu an toàn hơn",
+      "B. Vì Streams cho phép đọc/ghi dữ liệu theo từng phần nhỏ thay vì nạp toàn bộ vào RAM",
+      "C. Vì Streams tự động nén dữ liệu để tiết kiệm ổ cứng",
+      "D. Vì Streams là cách duy nhất để đọc file trong Node.js"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Streams giúp xử lý dữ liệu theo từng khối (chunks), tránh tình trạng tràn bộ nhớ (V8 heap limit) khi làm việc với file lớn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để truy cập các tham số dòng lệnh truyền vào khi chạy script Node.js, bạn sử dụng biến nào?",
+    "options": [
+      "A. process.env",
+      "B. process.argv",
+      "C. process.args",
+      "D. process.input"
+    ],
+    "correctAnswer": "B",
+    "explanation": "process.argv là một mảng chứa các đối số dòng lệnh, trong đó phần tử đầu tiên là đường dẫn thực thi Node, phần tử thứ hai là file script.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiến trúc Event Loop, phase nào chịu trách nhiệm thực thi các callback của setTimeout và setInterval?",
+    "options": [
+      "A. Poll phase",
+      "B. Check phase",
+      "C. Timers phase",
+      "D. Close phase"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Timers phase là giai đoạn đầu tiên của Event Loop, nơi Node.js kiểm tra và thực thi các callback của các hàm định thời.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách tốt nhất để xử lý lỗi trong một hàm sử dụng async/await là gì?",
+    "options": [
+      "A. Sử dụng câu lệnh if/else",
+      "B. Sử dụng khối try...catch",
+      "C. Sử dụng hàm process.exit()",
+      "D. Không cần xử lý vì Node.js tự động bắt lỗi"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với async/await, cú pháp try...catch giúp bắt các lỗi từ Promise bị reject một cách tường minh và sạch sẽ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lệnh 'npm init' dùng để làm gì?",
+    "options": [
+      "A. Cài đặt tất cả các thư viện trong dự án",
+      "B. Khởi tạo một dự án Node.js mới và tạo file package.json",
+      "C. Chạy file index.js của dự án",
+      "D. Xóa toàn bộ thư mục node_modules"
+    ],
+    "correctAnswer": "B",
+    "explanation": "npm init là lệnh khởi tạo, nó sẽ hỏi người dùng một số thông tin để tạo ra file cấu hình package.json ban đầu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Đối tượng 'Buffer' trong Node.js chủ yếu được dùng để làm gì?",
+    "options": [
+      "A. Lưu trữ các chuỗi văn bản (String) dài",
+      "B. Thao tác với dữ liệu nhị phân (Binary data)",
+      "C. Quản lý các kết nối cơ sở dữ liệu",
+      "D. Tăng tốc độ thực thi của các vòng lặp for"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Buffer được thiết kế để xử lý các luồng dữ liệu nhị phân thô, thường gặp khi đọc file hoặc nhận dữ liệu từ mạng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong module 'http', phương thức nào được dùng để gửi dữ liệu phản hồi và kết thúc request?",
+    "options": [
+      "A. res.send()",
+      "B. res.write()",
+      "C. res.end()",
+      "D. res.finish()"
+    ],
+    "correctAnswer": "C",
+    "explanation": "res.end() báo hiệu cho server rằng tất cả các header và body của phản hồi đã được gửi đi, kết thúc phiên làm việc của request đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Ký hiệu '^' trước phiên bản thư viện trong package.json (ví dụ: '^1.2.3') có ý nghĩa gì?",
+    "options": [
+      "A. Chỉ cài đặt chính xác phiên bản 1.2.3",
+      "B. Cho phép cập nhật lên các bản vá (patch) và bản cập nhật tính năng (minor)",
+      "C. Cho phép cập nhật lên cả các bản thay đổi lớn (major)",
+      "D. Không bao giờ cập nhật thư viện này"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ký hiệu Caret (^) cho phép cập nhật các phiên bản không làm thay đổi chữ số đầu tiên bên trái nhất (trừ khi là 0).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh nào dùng để cài đặt một thư viện Node.js ở cấp độ toàn hệ thống (Global)?",
+    "options": [
+      "A. npm install <package> -g",
+      "B. npm install <package> --save",
+      "C. npm install <package> -s",
+      "D. npm install <package> --all"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Flag -g (global) cài đặt package vào thư mục hệ thống, thường dùng cho các công cụ dòng lệnh (CLI tools).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một hàm callback nhận tham số đầu tiên là 'err', đây là quy ước gì trong Node.js?",
+    "options": [
+      "A. Error-first callback",
+      "B. Exception handling",
+      "C. Callback hell",
+      "D. Async-first"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Error-first callback là quy ước chuẩn trong Node.js: nếu có lỗi xảy ra, tham số đầu tiên sẽ chứa thông tin lỗi, ngược lại nó sẽ là null/undefined.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hàm 'process.nextTick()' dùng để làm gì?",
+    "options": [
+      "A. Đợi 1 giây rồi mới thực thi code",
+      "B. Đưa callback vào hàng đợi để thực thi ngay sau khi operation hiện tại kết thúc",
+      "C. Chạy code trên một thread hoàn toàn mới",
+      "D. Dừng chương trình Node.js ngay lập tức"
+    ],
+    "correctAnswer": "B",
+    "explanation": "process.nextTick() cho phép thực thi một callback ngay sau khi stack hiện tại hoàn tất, trước khi Event Loop tiếp tục sang phase tiếp theo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn nên làm gì khi gặp lỗi 'EADDRINUSE' khi khởi động server Node.js?",
+    "options": [
+      "A. Cài đặt lại Node.js",
+      "B. Kiểm tra và tắt ứng dụng khác đang sử dụng cùng cổng (port) đó",
+      "C. Xóa thư mục node_modules",
+      "D. Đổi tên file package.json"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi EADDRINUSE (Error Address In Use) nghĩa là cổng mà bạn muốn server chạy đã bị chiếm dụng bởi một tiến trình khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Module nào được sử dụng để tạo ra các tiến trình con (child processes) trong Node.js?",
+    "options": [
+      "A. process",
+      "B. child_process",
+      "C. cluster",
+      "D. worker_threads"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Module 'child_process' cung cấp khả năng sinh ra các tiến trình mới để thực thi các lệnh hệ thống hoặc script khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích của việc sử dụng 'package-lock.json' là gì?",
+    "options": [
+      "A. Giúp file package.json nhỏ gọn hơn",
+      "B. Đảm bảo cài đặt chính xác cùng một phiên bản dependencies trên mọi môi trường",
+      "C. Tự động cập nhật các thư viện lên bản mới nhất",
+      "D. Tăng tốc độ mạng khi tải thư viện"
+    ],
+    "correctAnswer": "B",
+    "explanation": "package-lock.json lưu lại cấu trúc cây thư mục node_modules chính xác tại thời điểm cài đặt, giúp tính nhất quán giữa các máy development và production.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để xuất (export) nhiều hàm từ một file trong CommonJS, cách nào sau đây là đúng?",
+    "options": [
+      "A. export { func1, func2 }",
+      "B. module.exports = { func1, func2 }",
+      "C. return { func1, func2 }",
+      "D. exports.default = { func1, func2 }"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bằng cách gán một object chứa các hàm vào module.exports, các file khác có thể require và sử dụng các hàm đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Node.js Event Loop, sự khác biệt chính giữa 'setImmediate()' và 'process.nextTick()' là gì?",
+    "options": [
+      "A. process.nextTick() chạy ngay sau pha hiện tại của Event Loop, trong khi setImmediate() chạy ở pha Check.",
+      "B. setImmediate() chạy trước tất cả các I/O callback, còn process.nextTick() chạy sau.",
+      "C. Cả hai đều chạy ở pha Timers nhưng process.nextTick() có độ ưu tiên thấp hơn.",
+      "D. process.nextTick() chỉ dành cho các tác vụ file system, còn setImmediate() dành cho network."
+    ],
+    "correctAnswer": "A",
+    "explanation": "process.nextTick() không thuộc Event Loop mà nó thực hiện ngay sau khi thao tác hiện tại kết thúc, trước khi Event Loop tiếp tục. setImmediate() được thiết kế để thực thi trong pha 'check' của Event Loop.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xử lý một file log dung lượng 10GB trong Node.js để tìm kiếm một từ khóa, phương pháp nào tối ưu nhất về bộ nhớ?",
+    "options": [
+      "A. Sử dụng fs.readFile() để đọc toàn bộ file vào một Buffer.",
+      "B. Sử dụng fs.readFileSync() để đọc file một cách đồng bộ.",
+      "C. Sử dụng fs.createReadStream() và xử lý dữ liệu theo từng chunk.",
+      "D. Chuyển đổi file sang định dạng JSON rồi dùng require() để load."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Streams cho phép xử lý dữ liệu theo từng mảnh nhỏ (chunks) mà không cần nạp toàn bộ file vào RAM, giúp tránh lỗi Out of Memory khi làm việc với file lớn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hiện tượng 'Backpressure' trong Node.js Streams xảy ra khi nào?",
+    "options": [
+      "A. Khi Writable stream ghi dữ liệu nhanh hơn mức Readable stream có thể cung cấp.",
+      "B. Khi Readable stream đọc dữ liệu nhanh hơn mức Writable stream có thể tiêu thụ.",
+      "C. Khi bộ nhớ đệm (buffer) của Stream bị trống hoàn toàn.",
+      "D. Khi kết nối mạng bị ngắt đột ngột trong quá trình truyền dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Backpressure xảy ra khi dữ liệu được đọc vào nhanh hơn khả năng xử lý/ghi của phía nhận, làm đầy buffer. Node.js giải quyết bằng cách tạm dừng Readable stream.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng các hàm 'Sync' (như fs.readFileSync) lại bị coi là anti-pattern trong các ứng dụng Node.js server-side hiệu năng cao?",
+    "options": [
+      "A. Vì chúng chiếm quá nhiều dung lượng ổ cứng khi thực thi.",
+      "B. Vì chúng làm chặn (block) Event Loop, khiến server không thể xử lý các request khác.",
+      "C. Vì chúng không hỗ trợ xử lý lỗi bằng try-catch.",
+      "D. Vì chúng tự động tạo ra thêm các Worker Threads gây tốn tài nguyên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Node.js là đơn luồng (single-threaded) cho Event Loop. Các hàm Sync sẽ chặn luồng này cho đến khi tác vụ I/O hoàn tất, làm giảm khả năng đáp ứng đồng thời của server.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một ứng dụng Cluster mode, các worker process chia sẻ tài nguyên nào sau đây?",
+    "options": [
+      "A. Chia sẻ chung bộ nhớ Heap và các biến toàn cục.",
+      "B. Chia sẻ chung cổng TCP (server port) thông qua process cha.",
+      "C. Chia sẻ chung Event Loop duy nhất cho tất cả worker.",
+      "D. Chia sẻ chung các file descriptor mà không cần IPC."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong module Cluster, các worker chạy trên các process riêng biệt (không chia sẻ bộ nhớ), nhưng chúng có thể chia sẻ cổng mạng thông qua sự điều phối của Master process.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh nào được sử dụng để debug một ứng dụng Node.js và cho phép kết nối với Chrome DevTools?",
+    "options": [
+      "A. node --debug app.js",
+      "B. node --inspect app.js",
+      "C. node --trace app.js",
+      "D. node --dev app.js"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Flag --inspect kích hoạt trình thanh tra V8, cho phép các công cụ như Chrome DevTools kết nối để debug code, xem heap snapshot và profile hiệu năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn nên sử dụng 'Worker Threads' thay vì 'Cluster Module' trong trường hợp nào?",
+    "options": [
+      "A. Khi cần chạy nhiều instance của HTTP server để tận dụng đa nhân CPU.",
+      "B. Khi cần thực hiện các tác vụ tính toán nặng (CPU-intensive) và chia sẻ bộ nhớ hiệu quả.",
+      "C. Khi muốn cô lập hoàn toàn các lỗi giữa các tiến trình khác nhau.",
+      "D. Khi ứng dụng cần kết nối tới nhiều database khác nhau cùng lúc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Worker Threads phù hợp cho các tác vụ tính toán nặng vì chúng nhẹ hơn process và có thể chia sẻ bộ nhớ (ArrayBuffer), trong khi Cluster dùng để scale ứng dụng I/O thông qua nhiều process.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong module 'events', nếu bạn đăng ký một listener bằng 'on' nhưng không bao giờ gỡ bỏ nó trên một object tồn tại lâu dài, điều gì sẽ xảy ra?",
+    "options": [
+      "A. Node.js sẽ tự động gỡ bỏ listener sau 10 phút.",
+      "B. Sẽ gây ra lỗi 'MaxListenersExceededWarning' và có thể dẫn đến rò rỉ bộ nhớ (memory leak).",
+      "C. Event Loop sẽ dừng hoạt động ngay lập tức.",
+      "D. Không có vấn đề gì vì Node.js quản lý bộ nhớ cho listener rất tốt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi listener chiếm bộ nhớ. Nếu liên tục thêm listener mà không gỡ bỏ (off/removeListener), mảng listeners sẽ lớn dần, gây leak và Node.js sẽ cảnh báo nếu vượt quá giới hạn mặc định (thường là 10).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa CommonJS (require) và ECMAScript Modules (import) trong Node.js là gì?",
+    "options": [
+      "A. require() là bất đồng bộ, import là đồng bộ.",
+      "B. require() có thể được gọi động bên trong câu lệnh if, còn import (static) phải ở top-level.",
+      "C. import chỉ hoạt động với các file .json.",
+      "D. CommonJS không hỗ trợ caching module sau khi load lần đầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CommonJS nạp module đồng bộ và có thể nằm trong logic điều kiện. ESM (static import) được phân tích tại thời điểm parse code và phải nằm ở đầu file (trừ dynamic import()).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng 'Promise.all([p1, p2, p3])', nếu p2 bị reject, kết quả trả về sẽ là gì?",
+    "options": [
+      "A. Một mảng chứa kết quả của p1, lỗi của p2, và kết quả của p3.",
+      "B. Nó sẽ đợi cho đến khi p1 và p3 hoàn thành rồi mới trả về lỗi.",
+      "C. Nó sẽ bị reject ngay lập tức với lỗi của p2 mà không đợi p1 và p3.",
+      "D. Nó sẽ bỏ qua p2 và chỉ trả về kết quả của p1 và p3."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Promise.all có cơ chế 'fail-fast'. Nếu bất kỳ promise nào bị reject, promise tổng sẽ bị reject ngay lập tức với lý do đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Biến môi trường 'NODE_ENV' được thiết lập là 'production' có tác dụng gì quan trọng nhất đối với Express.js?",
+    "options": [
+      "A. Nó tự động mã hóa toàn bộ database connection string.",
+      "B. Nó vô hiệu hóa hoàn toàn console.log để tăng tốc độ.",
+      "C. Nó giúp cache các view templates và giảm bớt các thông báo lỗi chi tiết trả về client.",
+      "D. Nó bắt buộc ứng dụng phải chạy trên cổng 80 hoặc 443."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong môi trường production, Express và nhiều thư viện khác tối ưu hiệu năng bằng cách cache template, giảm verbose logging và không gửi stack trace lỗi cho người dùng cuối để bảo mật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để xử lý các lỗi không được catch (uncaught exceptions) mà không làm crash server ngay lập tức một cách không kiểm soát?",
+    "options": [
+      "A. Sử dụng process.on('uncaughtException') để log lỗi và thực hiện 'graceful shutdown'.",
+      "B. Bọc toàn bộ code trong một khối try-catch khổng lồ ở file index.js.",
+      "C. Sử dụng flag --ignore-errors khi chạy node.",
+      "D. Node.js tự động bỏ qua các lỗi này nếu chạy ở chế độ Cluster."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi có uncaughtException, ứng dụng đang ở trạng thái không ổn định. Cách tốt nhất là log lỗi, dọn dẹp tài nguyên và khởi động lại process (graceful shutdown).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao 'Buffer.allocUnsafe()' lại nhanh hơn 'Buffer.alloc()', và rủi ro của nó là gì?",
+    "options": [
+      "A. Nó không xóa dữ liệu cũ trong vùng nhớ được cấp phát, có thể lộ dữ liệu nhạy cảm.",
+      "B. Nó bỏ qua cơ chế kiểm tra lỗi của V8 engine.",
+      "C. Nó sử dụng bộ nhớ ảo thay vì bộ nhớ vật lý.",
+      "D. Nó không cho phép ghi đè dữ liệu sau khi đã khởi tạo."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Buffer.allocUnsafe() cấp phát bộ nhớ mà không ghi đè giá trị 0 lên đó. Do đó nó nhanh hơn nhưng vùng nhớ đó có thể chứa dữ liệu cũ từ các tiến trình khác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Mặc định, Thread Pool của libuv (sử dụng cho fs, dns.lookup, crypto) có bao nhiêu threads?",
+    "options": [
+      "A. 1",
+      "B. 2",
+      "C. 4",
+      "D. Tương đương số nhân CPU của máy."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mặc định libuv khởi tạo 4 threads trong thread pool. Con số này có thể thay đổi bằng cách đặt biến môi trường UV_THREADPOOL_SIZE.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng một API gateway bằng Node.js, phương thức nào hiệu quả nhất để chuyển tiếp (forward) request từ client tới microservice?",
+    "options": [
+      "A. Đọc toàn bộ request body vào biến, sau đó gửi lại bằng axios.",
+      "B. Sử dụng stream.pipe() để nối request của client trực tiếp tới request gửi tới service.",
+      "C. Sử dụng fs.writeFile để tạm lưu request vào ổ cứng trước khi forward.",
+      "D. Sử dụng JSON.stringify để chuyển đổi request sang chuỗi rồi gửi đi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng pipe() giúp truyền dữ liệu trực tiếp từ nguồn đến đích theo luồng, tiết kiệm RAM và giảm độ trễ vì không cần đợi nhận hết dữ liệu mới bắt đầu gửi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng 'pipeline' từ module 'stream' thay vì phương thức '.pipe()' truyền thống là gì?",
+    "options": [
+      "A. Nó hỗ trợ nén dữ liệu tự động.",
+      "B. Nó cho phép nối nhiều hơn 2 stream cùng lúc.",
+      "C. Nó tự động xử lý việc dọn dẹp stream và bắt lỗi (error handling) tập trung.",
+      "D. Nó chạy nhanh hơn gấp đôi so với .pipe()."
+    ],
+    "correctAnswer": "C",
+    "explanation": "stream.pipeline() nhận vào một callback để xử lý khi kết thúc hoặc có lỗi, tự động đóng tất cả các streams liên quan nếu một stream gặp sự cố, tránh rò rỉ bộ nhớ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Node.js, module nào cung cấp khả năng thực hiện các câu lệnh hệ thống như 'ls' hoặc 'mkdir'?",
+    "options": [
+      "A. os",
+      "B. path",
+      "C. child_process",
+      "D. fs-extra"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Module child_process cho phép thực thi các lệnh hệ thống hoặc các file thực thi khác bằng cách tạo ra các tiến trình con (spawn, exec, fork).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Middleware trong Express.js hoạt động theo mô hình nào?",
+    "options": [
+      "A. First-In-First-Out (FIFO) không đồng bộ hoàn toàn.",
+      "B. Onion Model (Mô hình củ hành) tương tự như Koa.js nhưng dựa trên callback/next.",
+      "C. Priority Queue dựa trên độ dài của route.",
+      "D. Chạy song song tất cả các middleware cùng một lúc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Express sử dụng chuỗi các hàm middleware. Mỗi hàm có quyền kết thúc request hoặc chuyển tiếp cho hàm kế tiếp bằng cách gọi next(). Nó tuân theo trình tự đăng ký.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ nào thường được dùng để quản lý các tiến trình Node.js trong môi trường Production để đảm bảo tự động restart khi crash?",
+    "options": [
+      "A. Nodemon",
+      "B. PM2",
+      "C. Webpack",
+      "D. Babel"
+    ],
+    "correctAnswer": "B",
+    "explanation": "PM2 là một production process manager cho Node.js, hỗ trợ load balancing, monitoring và tự động khởi động lại ứng dụng khi gặp lỗi hoặc khi server reboot.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh 'npm ci' khác với 'npm install' như thế nào?",
+    "options": [
+      "A. 'npm ci' dùng để cài đặt các package cho môi trường Continuous Integration và yêu cầu có file package-lock.json.",
+      "B. 'npm ci' cài đặt các package nhanh hơn vì nó bỏ qua phần kiểm tra bảo mật.",
+      "C. 'npm ci' chỉ cài đặt các devDependencies.",
+      "D. 'npm ci' tự động cập nhật các package lên phiên bản mới nhất."
+    ],
+    "correctAnswer": "A",
+    "explanation": "npm ci (Clean Install) xóa thư mục node_modules và cài đặt chính xác các phiên bản trong package-lock.json, đảm bảo tính nhất quán trong môi trường CI/CD.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng 'crypto.readFileSync()' để băm mật khẩu (hashing) trong một request handler của web server?",
+    "options": [
+      "A. Vì nó không an toàn bằng phiên bản async.",
+      "B. Vì các hàm crypto nặng về tính toán sẽ chặn Event Loop, làm giảm khả năng xử lý các request khác.",
+      "C. Vì nó yêu cầu quyền root để thực thi.",
+      "D. Vì nó không hỗ trợ muối (salt) cho mật khẩu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các thao tác mã hóa/băm rất tốn CPU. Nếu dùng bản Sync, nó sẽ chiếm giữ Event Loop, khiến server không thể phản hồi bất kỳ ai khác cho đến khi băm xong.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cách nào là tốt nhất để theo dõi (monitor) tình trạng Memory Leak trong một ứng dụng Node.js đang chạy?",
+    "options": [
+      "A. Kiểm tra dung lượng file log mỗi ngày.",
+      "B. Sử dụng --inspect để lấy Heap Snapshot định kỳ và so sánh chúng.",
+      "C. Viết code để in ra process.memoryUsage() sau mỗi 1 giây.",
+      "D. Khởi động lại server mỗi 4 tiếng để giải phóng bộ nhớ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Heap Snapshot cho thấy chi tiết các đối tượng đang chiếm bộ nhớ. Bằng cách so sánh (diff) hai snapshot tại các thời điểm khác nhau, ta có thể tìm ra đối tượng nào không được giải phóng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiến trúc Node.js, 'V8 Engine' đóng vai trò gì?",
+    "options": [
+      "A. Quản lý việc đọc/ghi file và các kết nối mạng.",
+      "B. Thực thi mã JavaScript bằng cách biên dịch sang mã máy.",
+      "C. Cung cấp thư viện chuẩn để xử lý Stream và Buffer.",
+      "D. Điều phối các sự kiện trong Event Loop."
+    ],
+    "correctAnswer": "B",
+    "explanation": "V8 là engine mã nguồn mở của Google dành cho JavaScript, nó biên dịch JS trực tiếp sang mã máy để đạt hiệu suất cao nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi gặp lỗi 'EADDRINUSE' khi khởi động server Node.js, nguyên nhân thường là gì?",
+    "options": [
+      "A. File thực thi node bị hỏng.",
+      "B. Cổng (port) mà server muốn lắng nghe đang được sử dụng bởi một tiến trình khác.",
+      "C. Không đủ bộ nhớ RAM để khởi tạo server.",
+      "D. Sai cú pháp trong file cấu hình package.json."
+    ],
+    "correctAnswer": "B",
+    "explanation": "EADDRINUSE (Error: Address already in use) có nghĩa là địa chỉ IP/Port mà bạn đang cố gắng bind cho server đã bị chiếm bởi một process khác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt giữa 'Promise.allSettled()' và 'Promise.all()' là gì?",
+    "options": [
+      "A. allSettled() chỉ trả về các promise thành công.",
+      "B. allSettled() đợi tất cả các promise hoàn thành (dù thành công hay thất bại), trong khi all() dừng ngay khi có lỗi.",
+      "C. all() chạy nhanh hơn allSettled() vì nó không cần kiểm tra trạng thái.",
+      "D. allSettled() chỉ dành cho các tác vụ đồng bộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Promise.allSettled() đảm bảo bạn nhận được kết quả của mọi promise trong mảng, giúp xử lý các trường hợp cho phép một vài tác vụ thất bại mà không ảnh hưởng toàn cục.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một ứng dụng Node.js có lưu lượng truy cập cao, bạn nhận thấy Event Loop bị block thường xuyên. Sau khi profiling, nguyên nhân là do việc xử lý JSON.parse() trên các payload lớn. Giải pháp kiến trúc nào là tối ưu nhất để giải quyết vấn đề này mà không làm giảm throughput tổng thể?",
+    "options": [
+      "A. Tăng số lượng instance bằng cách sử dụng Cluster module.",
+      "B. Chuyển việc parse JSON sang một Worker Thread riêng biệt.",
+      "C. Sử dụng thư viện stream-json để parse dữ liệu theo dạng stream.",
+      "D. Tăng thông số UV_THREADPOOL_SIZE của hệ thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "JSON.parse() là hoạt động đồng bộ và tốn CPU. Với payload cực lớn, nó sẽ block Event Loop. Sử dụng stream-json cho phép xử lý dữ liệu theo từng phần (chunks), giữ cho Event Loop luôn sẵn sàng xử lý các request khác, đây là cách tối ưu nhất về tài nguyên và độ trễ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Stream trong Node.js, hiện tượng 'Backpressure' xảy ra khi nào và cách xử lý chuẩn xác nhất là gì?",
+    "options": [
+      "A. Khi Writable Stream không kịp tiêu thụ dữ liệu từ Readable Stream; cần kiểm tra giá trị trả về của phương thức write().",
+      "B. Khi Readable Stream đọc dữ liệu quá chậm; cần tăng buffer size bằng highWaterMark.",
+      "C. Khi bộ nhớ RAM bị đầy do Garbage Collector không hoạt động; cần gọi global.gc().",
+      "D. Khi Network I/O bị nghẽn; cần sử dụng module 'cluster' để cân bằng tải."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Backpressure xảy ra khi phía nhận (Writable) chậm hơn phía gửi (Readable). Khi write() trả về false, phía gửi nên tạm dừng (pause) và đợi sự kiện 'drain' trước khi tiếp tục để tránh tràn bộ nhớ đệm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi về mặt thực thi giữa process.nextTick() và setImmediate() trong Node.js là gì?",
+    "options": [
+      "A. process.nextTick() chạy ở cuối phase hiện tại của Event Loop, trong khi setImmediate() chạy ở phase Check kế tiếp.",
+      "B. setImmediate() luôn chạy nhanh hơn process.nextTick() vì nó được ưu tiên trong Poll phase.",
+      "C. process.nextTick() được đẩy vào Libuv thread pool, còn setImmediate() chạy trên main thread.",
+      "D. Không có sự khác biệt, cả hai đều dùng để lập lịch thực thi bất đồng bộ sau I/O."
+    ],
+    "correctAnswer": "A",
+    "explanation": "process.nextTick() không thuộc về Event Loop của Libuv mà thuộc về Node.js microtask queue, nó thực thi ngay sau khi operation hiện tại kết thúc. setImmediate() được thiết kế để chạy trong phase 'Check' của Event Loop sau các I/O callbacks.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Buffer.allocUnsafe()' lại tiềm ẩn rủi ro bảo mật nghiêm trọng nếu không được xử lý cẩn thận?",
+    "options": [
+      "A. Nó cho phép thực thi mã độc từ xa thông qua buffer overflow.",
+      "B. Nó không xóa dữ liệu cũ trong phân vùng bộ nhớ được cấp phát, có thể rò rỉ thông tin nhạy cảm.",
+      "C. Nó làm crash ứng dụng do không kiểm tra dung lượng bộ nhớ còn trống của hệ thống.",
+      "D. Nó tự động cấp phát bộ nhớ trên stack thay vì heap, dẫn đến stack overflow."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Buffer.allocUnsafe() cấp phát bộ nhớ mà không ghi đè giá trị 0 lên vùng nhớ đó. Nếu vùng nhớ đó trước đó chứa dữ liệu nhạy cảm (password, tokens), dữ liệu này có thể bị lộ nếu buffer được gửi ra ngoài mà không được ghi đè hoàn toàn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices sử dụng Node.js, khi nào bạn nên ưu tiên sử dụng gRPC thay vì REST/HTTP 1.1?",
+    "options": [
+      "A. Khi cần hỗ trợ tốt nhất cho các trình duyệt web đời cũ.",
+      "B. Khi cần giao tiếp giữa các service nội bộ yêu cầu hiệu suất cao, latency thấp và có schema chặt chẽ.",
+      "C. Khi muốn tận dụng khả năng caching mặc định của các CDN.",
+      "D. Khi payload dữ liệu chủ yếu là các file hình ảnh và video dung lượng lớn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "gRPC sử dụng HTTP/2 và Protocol Buffers (binary format), giúp giảm kích thước payload và hỗ trợ multiplexing, cực kỳ hiệu quả cho giao tiếp inter-service so với tính chất text-based và overhead của HTTP/1.1.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang debug một memory leak trong Node.js. Heap snapshot cho thấy số lượng lớn các object 'Closure' không được giải phóng. Nguyên nhân phổ biến nhất là gì?",
+    "options": [
+      "A. Sử dụng quá nhiều biến global trong ứng dụng.",
+      "B. Các hàm callback bất đồng bộ vẫn giữ tham chiếu đến các biến ở scope cha không còn cần thiết.",
+      "C. Do Event Emitter không được gỡ bỏ listener sau khi sử dụng.",
+      "D. Do V8 engine không thể thu gom rác trong Old Space."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Closures giữ tham chiếu đến các biến trong scope bên ngoài. Nếu một callback (ví dụ trong setTimeout hoặc một listener lâu dài) giữ tham chiếu đến một object lớn, object đó sẽ không được GC thu hồi cho đến khi callback đó bị hủy.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Worker Threads' so với 'Child Processes' trong Node.js khi xử lý các tác vụ tính toán nặng là gì?",
+    "options": [
+      "A. Worker Threads có thể chia sẻ bộ nhớ thông qua SharedArrayBuffer, giảm chi phí copy dữ liệu.",
+      "B. Worker Threads chạy độc lập hoàn toàn và không thể bị crash bởi main thread.",
+      "C. Worker Threads tự động cân bằng tải giữa các CPU core mà không cần cấu hình.",
+      "D. Child Processes tốn ít tài nguyên hệ điều hành hơn so với Worker Threads."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khác với Child Processes giao tiếp qua IPC (tốn chi phí serialize/deserialize), Worker Threads có thể chia sẻ bộ nhớ trực tiếp (SharedArrayBuffer), giúp truyền dữ liệu lớn giữa các thread cực nhanh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi cấu hình một Node.js server phía sau một Reverse Proxy (như Nginx), tại sao việc thiết lập 'keepAliveTimeout' của Node.js lớn hơn timeout của Nginx lại quan trọng?",
+    "options": [
+      "A. Để tránh lỗi '502 Bad Gateway' khi Nginx cố gắng gửi request vào một connection mà Node.js vừa đóng.",
+      "B. Để tăng tốc độ phân giải tên miền (DNS) cho các request tiếp theo.",
+      "C. Để đảm bảo tất cả các stream dữ liệu được flush hoàn toàn trước khi đóng socket.",
+      "D. Để giảm tải cho CPU của Node.js khi phải khởi tạo lại TLS handshake."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nếu Node.js đóng kết nối trước Nginx (race condition), Nginx có thể gửi request vào một socket đã đóng, dẫn đến lỗi 502. Quy tắc chung là Node.js timeout > Proxy timeout.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Node.js, cơ chế 'V8 Hidden Classes' giúp tối ưu hóa hiệu năng như thế nào?",
+    "options": [
+      "A. Bằng cách chuyển đổi code JavaScript trực tiếp sang mã máy mà không qua bytecode.",
+      "B. Bằng cách cho phép các object có cùng cấu trúc chia sẻ thông tin về layout bộ nhớ, giúp truy cập thuộc tính nhanh hơn.",
+      "C. Bằng cách ẩn các thuộc tính nhạy cảm của object để tránh bị can thiệp từ bên ngoài.",
+      "D. Bằng cách tự động nén các object trong bộ nhớ Heap để giảm dung lượng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "V8 sử dụng Hidden Classes để định danh cấu trúc object. Nếu các object được khởi tạo với cùng thứ tự thuộc tính, chúng chia sẻ Hidden Class, cho phép V8 sử dụng Inline Caching để truy cập thuộc tính mà không cần lookup dictionary.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh 'node --inspect' cho phép bạn thực hiện hành động nào sau đây để tối ưu ứng dụng?",
+    "options": [
+      "A. Tự động kiểm tra các lỗ hổng bảo mật trong node_modules.",
+      "B. Kết nối với Chrome DevTools để thực hiện CPU profiling và phân tích Heap snapshot.",
+      "C. Chạy ứng dụng trong chế độ 'strict mode' để ép kiểu dữ liệu chặt chẽ hơn.",
+      "D. Theo dõi trực tiếp các truy vấn SQL đang thực thi trong database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Flag --inspect kích hoạt bộ gỡ lỗi V8, cho phép các công cụ như Chrome DevTools kết nối để phân tích sâu về hiệu năng và bộ nhớ của ứng dụng Node.js đang chạy.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng 'fs.readFileSync()' trong một hàm xử lý request của một web server Node.js có tải cao?",
+    "options": [
+      "A. Vì nó sẽ chiếm dụng toàn bộ RAM của hệ thống.",
+      "B. Vì nó block Event Loop, khiến server không thể xử lý bất kỳ request nào khác cho đến khi file được đọc xong.",
+      "C. Vì nó không hỗ trợ đọc các file có kích thước lớn hơn 2GB.",
+      "D. Vì nó sẽ tạo ra một thread mới cho mỗi lần gọi, dẫn đến cạn kiệt thread pool."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Node.js là đơn luồng (single-threaded) cho Event Loop. Bất kỳ hàm đồng bộ (Sync) nào thực hiện I/O đều sẽ chặn luồng này, làm tê liệt khả năng đáp ứng của server đối với các người dùng khác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh xử lý lỗi, sự khác biệt giữa 'Operational Errors' và 'Programmer Errors' là gì và cách xử lý tương ứng?",
+    "options": [
+      "A. Cả hai đều nên được catch và ghi log rồi tiếp tục chạy ứng dụng.",
+      "B. Operational Errors (như timeout) cần được xử lý khéo léo; Programmer Errors (như bugs) nên làm crash và restart process.",
+      "C. Programmer Errors cần được retry tự động; Operational Errors yêu cầu can thiệp thủ công từ admin.",
+      "D. Không có sự phân biệt, Node.js tự động xử lý mọi lỗi thông qua process.on('uncaughtException')."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Operational errors là các lỗi dự kiến được (network, timeout). Programmer errors là bugs (undefined reference). Với bugs, trạng thái ứng dụng có thể đã bị hỏng, tốt nhất là crash và restart để đưa về trạng thái sạch.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi làm việc với các native addons (viết bằng C++), tại sao 'N-API' (Node-API) lại được khuyến khích sử dụng hơn là dùng trực tiếp V8 API?",
+    "options": [
+      "A. N-API cung cấp hiệu suất thực thi nhanh gấp đôi so với V8 API.",
+      "B. N-API đảm bảo tính ổn định về ABI (Application Binary Interface), giúp addon không cần compile lại khi nâng cấp phiên bản Node.js.",
+      "C. N-API tự động quản lý bộ nhớ và ngăn chặn hoàn toàn memory leak trong C++.",
+      "D. V8 API chỉ hỗ trợ JavaScript, không hỗ trợ các tính năng mới của C++17."
+    ],
+    "correctAnswer": "B",
+    "explanation": "N-API cung cấp một lớp trừu tượng độc lập với phiên bản của V8. Điều này giúp các native addons duy trì khả năng tương thích ngược mà không cần phải recompile mỗi khi Node.js cập nhật engine V8 bên dưới.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn sử dụng 'pipeline' từ module 'stream' thay vì 'pipe()'. Ưu điểm lớn nhất của 'pipeline' là gì?",
+    "options": [
+      "A. Nó tự động nén dữ liệu bằng gzip trước khi truyền đi.",
+      "B. Nó cho phép truyền dữ liệu giữa các server khác nhau qua TCP.",
+      "C. Nó tự động xử lý việc đóng các stream và forward lỗi về một callback duy nhất khi có sự cố.",
+      "D. Nó tăng tốc độ đọc file bằng cách sử dụng nhiều thread cùng lúc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hàm pipeline() giúp quản lý vòng đời của các stream tốt hơn pipe(). Nếu một stream ở giữa bị lỗi hoặc bị đóng, pipeline sẽ tự động hủy các stream còn lại và gọi callback với lỗi tương ứng, tránh rò rỉ tài nguyên (file descriptors/memory).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để thực hiện 'Graceful Shutdown' cho một Node.js HTTP server, thứ tự các bước nào sau đây là đúng nhất?",
+    "options": [
+      "A. Đóng database connection -> Dừng nhận request mới (server.close) -> Thoát process.",
+      "B. Dừng nhận request mới (server.close) -> Đợi các request hiện tại hoàn tất -> Đóng database connection -> Thoát process.",
+      "C. Thoát process ngay lập tức -> Nginx tự động xử lý các request còn lại.",
+      "D. Xóa toàn bộ cache -> Gửi tín hiệu SIGKILL -> Đóng các file descriptors."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đầu tiên phải ngừng nhận kết nối mới (server.close). Sau đó đợi các request đang xử lý (inflight requests) kết thúc để tránh mất dữ liệu. Cuối cùng mới đóng các tài nguyên như DB và thoát process.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Node.js, 'AsyncLocalStorage' thường được sử dụng để giải quyết vấn đề gì?",
+    "options": [
+      "A. Lưu trữ dữ liệu tạm thời vào ổ đĩa cứng để giảm tải cho RAM.",
+      "B. Chia sẻ dữ liệu giữa các Worker Threads mà không cần dùng tin nhắn.",
+      "C. Lưu trữ và truy cập context (như Request ID, User Session) xuyên suốt các luồng thực thi bất đồng bộ mà không cần truyền tham số qua từng hàm.",
+      "D. Tăng tốc độ truy xuất dữ liệu từ các biến global."
+    ],
+    "correctAnswer": "C",
+    "explanation": "AsyncLocalStorage cho phép lưu trữ dữ liệu tồn tại trong suốt vòng đời của một luồng thực thi bất đồng bộ. Điều này cực kỳ hữu ích cho việc logging hoặc tracing mà không cần 'prop drilling' tham số qua hàng loạt hàm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để phát hiện và ngăn chặn 'Prototype Pollution' trong ứng dụng Node.js khi xử lý dữ liệu đầu vào từ người dùng?",
+    "options": [
+      "A. Sử dụng 'JSON.stringify()' trước khi lưu dữ liệu vào database.",
+      "B. Sử dụng 'Object.create(null)' cho các object chứa dữ liệu hoặc dùng Map; kiểm tra kỹ các key như '__proto__'.",
+      "C. Luôn sử dụng 'const' thay vì 'let' để khai báo object.",
+      "D. Cập nhật phiên bản Node.js lên bản mới nhất vì Node.js đã tự động chặn lỗi này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Prototype Pollution xảy ra khi kẻ tấn công chèn các thuộc tính vào Object.prototype. Sử dụng Object.create(null) tạo ra các object không có prototype, giúp tránh việc bị ghi đè các phương thức mặc định của Object.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc tăng 'UV_THREADPOOL_SIZE' có thể cải thiện hiệu năng cho ứng dụng sử dụng module 'crypto' hoặc 'fs', nhưng lại không có tác dụng với module 'http'?",
+    "options": [
+      "A. Vì module 'http' chạy trực tiếp trên V8 engine, không sử dụng Libuv.",
+      "B. Vì các hoạt động network I/O trong Node.js sử dụng cơ chế non-blocking của OS (epoll/kqueue) thay vì dùng thread pool.",
+      "C. Vì module 'http' tự tạo ra thread pool riêng không phụ thuộc vào Libuv.",
+      "D. Vì 'UV_THREADPOOL_SIZE' chỉ có tác dụng với các hàm đồng bộ (Sync)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Libuv thread pool được dùng cho các tác vụ I/O không có cơ chế non-blocking tốt trên OS (như File System) và các tác vụ CPU-intensive (crypto, zlib). Network I/O trong Node.js sử dụng cơ chế thông báo sự kiện của OS, nên không cần dùng đến thread pool này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong cơ chế Garbage Collection của V8, vùng nhớ 'Old Space' khác gì so với 'New Space' (Young Generation)?",
+    "options": [
+      "A. Old Space chứa các object tồn tại lâu dài sau khi vượt qua các chu kỳ GC ở New Space; nó sử dụng thuật toán Mark-Sweep-Compact.",
+      "B. New Space dùng để chứa các Buffer lớn, còn Old Space chứa các biến primitive.",
+      "C. Old Space có kích thước nhỏ hơn New Space để tăng tốc độ quét rác.",
+      "D. Garbage Collector không bao giờ quét vùng nhớ Old Space để tiết kiệm CPU."
+    ],
+    "correctAnswer": "A",
+    "explanation": "New Space (Scavenge) dành cho các object ngắn hạn. Nếu một object sống sót qua 2 chu kỳ GC, nó được chuyển lên Old Space. Old Space lớn hơn và dùng thuật toán Mark-Sweep-Compact phức tạp hơn để tối ưu hóa bộ nhớ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai Node.js trên môi trường Container (Docker), tại sao việc sử dụng 'node index.js' làm ENTRYPOINT thay vì 'npm start' lại được khuyến cáo?",
+    "options": [
+      "A. Để giảm kích thước của Docker image.",
+      "B. Để Node.js process nhận trực tiếp các tín hiệu hệ thống (SIGTERM, SIGINT) từ Docker, giúp graceful shutdown hoạt động đúng.",
+      "C. Vì npm start tiêu tốn nhiều RAM hơn khi khởi động ứng dụng.",
+      "D. Vì npm không hỗ trợ cơ chế tự động restart khi ứng dụng crash."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi dùng npm, nó sẽ trở thành PID 1 và thường không forward các tín hiệu hệ thống (signals) cho process con (Node.js). Điều này khiến Docker không thể dừng ứng dụng một cách êm đẹp (graceful) mà phải dùng SIGKILL sau timeout.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn gặp lỗi 'ERR_STREAM_WRITE_AFTER_END'. Nguyên nhân kỹ thuật sâu xa thường là gì?",
+    "options": [
+      "A. Do ghi dữ liệu vào một stream đã gọi phương thức .end() hoặc đã bị đóng.",
+      "B. Do dung lượng file ghi vào vượt quá giới hạn của hệ điều hành.",
+      "C. Do stream đang ở trạng thái pause mà vẫn cố tình ghi dữ liệu.",
+      "D. Do phiên bản Node.js không tương thích với định dạng mã hóa của stream."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lỗi này xảy ra khi logic code cố gắng gọi hàm .write() sau khi stream đã phát ra sự kiện 'finish' hoặc phương thức .end() đã được thực thi. Điều này thường do xử lý bất đồng bộ không kiểm soát tốt trạng thái stream.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Node.js, cơ chế 'Module Caching' hoạt động như thế nào khi bạn require cùng một file ở nhiều nơi?",
+    "options": [
+      "A. Node.js đọc lại file từ đĩa mỗi khi có lệnh require để đảm bảo dữ liệu mới nhất.",
+      "B. Module được thực thi một lần duy nhất và kết quả (module.exports) được lưu trong require.cache dựa trên đường dẫn tuyệt đối.",
+      "C. Mỗi lần require sẽ tạo ra một instance mới của module để tránh xung đột dữ liệu.",
+      "D. Module chỉ được cache nếu nó có kích thước nhỏ hơn 1MB."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Node.js cache các module sau lần require đầu tiên. Các lần gọi sau sẽ lấy trực tiếp từ bộ nhớ. Lưu ý rằng cache dựa trên đường dẫn file, nên nếu đường dẫn khác nhau (do case-sensitive hoặc symlink) có thể dẫn đến load module nhiều lần.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng 'EventEmitter', việc quên gỡ bỏ (removeListener) các sự kiện trong các object tồn tại lâu (long-lived objects) sẽ dẫn đến hậu quả gì?",
+    "options": [
+      "A. Ứng dụng sẽ chạy nhanh hơn do không tốn công xóa listener.",
+      "B. Gây ra rò rỉ bộ nhớ (Memory Leak) vì các listener vẫn giữ tham chiếu đến các object/context liên quan.",
+      "C. Node.js sẽ tự động gỡ bỏ listener sau 10 phút nếu không có sự kiện nào được phát ra.",
+      "D. Gây ra lỗi 'MaxListenersExceededWarning' nhưng không ảnh hưởng đến bộ nhớ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi listener là một hàm giữ tham chiếu đến scope của nó. Nếu object phát sự kiện sống lâu mà listener không được gỡ bỏ, các object trong scope của listener đó sẽ không bao giờ được Garbage Collector thu hồi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Làm thế nào để tối ưu hóa việc truyền dữ liệu lớn giữa các Microservices sử dụng Node.js để tránh quá tải RAM?",
+    "options": [
+      "A. Chuyển toàn bộ dữ liệu sang định dạng Base64 trước khi gửi.",
+      "B. Sử dụng cơ chế Streaming (ví dụ: HTTP Chunked Transfer Encoding) để truyền dữ liệu theo từng phần.",
+      "C. Tăng max-old-space-size của Node.js lên mức tối đa có thể.",
+      "D. Lưu dữ liệu vào file tạm trên đĩa cứng rồi gửi đường dẫn file cho service kia."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Stream cho phép xử lý dữ liệu ngay khi nó đến mà không cần đợi load toàn bộ vào bộ nhớ. Điều này giúp giữ mức sử dụng RAM ổn định bất kể kích thước dữ liệu truyền tải lớn đến mức nào.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao trong các ứng dụng Node.js hiện đại, lập trình viên thường ưu tiên sử dụng 'AbortController' cho các tác vụ bất đồng bộ?",
+    "options": [
+      "A. Để thay thế hoàn toàn cho khối lệnh try-catch.",
+      "B. Để cung cấp một cách chuẩn hóa (standardized) nhằm hủy bỏ các tác vụ bất đồng bộ (như fetch, fs) khi không còn cần thiết.",
+      "C. Để tăng tốc độ thực thi của các Promise bằng cách bỏ qua các bước kiểm tra lỗi.",
+      "D. Để tự động khởi động lại các tiến trình bị treo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "AbortController là một API tiêu chuẩn (giống như trên Browser) giúp hủy bỏ các hoạt động bất đồng bộ một cách chủ động, giúp giải phóng tài nguyên hệ thống sớm thay vì đợi tác vụ đó tự hoàn thành hoặc timeout.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống xử lý dữ liệu thời gian thực sử dụng Node.js, bạn nhận thấy Event Loop bị block định kỳ khoảng 200ms. Sau khi phân tích, nguyên nhân là do việc parse các file JSON lớn (hàng chục MB). Giải pháp kiến trúc nào là tối ưu nhất để xử lý vấn đề này mà vẫn đảm bảo hiệu suất throughput cao?",
+    "options": [
+      "A. Tăng giá trị UV_THREADPOOL_SIZE để Node.js xử lý việc parse JSON ở thread khác.",
+      "B. Sử dụng phương thức JSON.parse() bên trong một setImmediate() để chia nhỏ quá trình xử lý.",
+      "C. Chuyển việc parse JSON sang một Worker Thread riêng biệt bằng module worker_threads.",
+      "D. Sử dụng stream-json hoặc các thư viện tương đương để parse JSON theo dạng stream thay vì nạp toàn bộ vào bộ nhớ."
+    ],
+    "correctAnswer": "D",
+    "explanation": "JSON.parse() là một hoạt động đồng bộ và chiếm dụng CPU (CPU-bound). Việc sử dụng stream-json giúp xử lý dữ liệu theo từng phần nhỏ, tránh block Event Loop và tiết kiệm bộ nhớ hơn so với việc chuyển sang Worker Thread (vẫn tốn overhead copy dữ liệu) hoặc tăng Threadpool (chỉ dùng cho I/O).",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi triển khai ứng dụng Node.js trên môi trường production với nhiều instance (Cluster mode), làm thế nào để quản lý hiệu quả trạng thái (state) của người dùng khi sử dụng WebSockets (Socket.io)?",
+    "options": [
+      "A. Sử dụng Sticky Sessions trên Load Balancer để đảm bảo client luôn kết nối tới cùng một process.",
+      "B. Sử dụng một Redis Adapter để đồng bộ hóa các sự kiện (events) và trạng thái giữa các worker processes.",
+      "C. Lưu trữ trạng thái vào biến global của mỗi process và sử dụng IPC (Inter-Process Communication) để đồng bộ.",
+      "D. Chuyển sang sử dụng giao thức HTTP Long Polling thay vì WebSockets để tận dụng cơ chế stateless."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong môi trường phân tán hoặc Cluster, các worker không chia sẻ bộ nhớ. Redis Adapter là giải pháp tiêu chuẩn để phát tán (broadcast) message giữa các instance, đảm bảo tính nhất quán của dữ liệu WebSocket.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cơ chế 'Backpressure' trong Node.js Streams giải quyết vấn đề gì và được kích hoạt khi nào?",
+    "options": [
+      "A. Khi Writable stream không thể xử lý dữ liệu nhanh bằng tốc độ Readable stream cung cấp, khiến buffer vượt ngưỡng highWaterMark.",
+      "B. Khi hệ thống hết bộ nhớ RAM và Node.js tự động tạm dừng tất cả các luồng I/O đang hoạt động.",
+      "C. Khi một lỗi xảy ra trong pipeline và cần phải đẩy ngược thông báo lỗi về phía nguồn dữ liệu.",
+      "D. Khi CPU quá tải và Event Loop không thể thực hiện các callback trong pha poll."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Backpressure xảy ra khi buffer của Writable stream đầy (vượt ngưỡng highWaterMark). Lúc này, stream.write() trả về false, báo hiệu cho Readable stream tạm dừng đọc để tránh tràn bộ nhớ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Node.js v14+, cơ chế AsyncLocalStorage được sử dụng chủ yếu để làm gì trong các ứng dụng doanh nghiệp phức tạp?",
+    "options": [
+      "A. Thay thế Redis để lưu trữ session người dùng trực tiếp trong bộ nhớ Node.js.",
+      "B. Duy trì ngữ cảnh (context) như Request ID hoặc User Info xuyên suốt các chuỗi thao tác bất đồng bộ mà không cần truyền tham số thủ công.",
+      "C. Tăng tốc độ truy cập vào Local Storage của trình duyệt khi thực hiện Server-Side Rendering (SSR).",
+      "D. Quản lý việc chia sẻ bộ nhớ giữa Main Thread và Worker Threads một cách an toàn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "AsyncLocalStorage cho phép lưu trữ dữ liệu tồn tại trong suốt vòng đời của một luồng thực thi bất đồng bộ, cực kỳ hữu ích cho việc logging (trace ID) và quản lý transaction mà không làm bẩn chữ ký hàm (function signature).",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'dns.lookup()' có thể gây ra hiện tượng nghẽn (bottleneck) cho ứng dụng Node.js khi thực hiện hàng ngàn request outbound đồng thời?",
+    "options": [
+      "A. Vì dns.lookup() sử dụng cơ chế đồng bộ (synchronous) của hệ điều hành.",
+      "B. Vì dns.lookup() chạy trên Event Loop chính và block mọi hoạt động khác.",
+      "C. Vì dns.lookup() sử dụng thread pool nội bộ (libuv), có số lượng thread mặc định hạn chế (thường là 4).",
+      "D. Vì dns.lookup() không hỗ trợ caching kết quả DNS như dns.resolve()."
+    ],
+    "correctAnswer": "C",
+    "explanation": "dns.lookup() gọi getaddrinfo() của hệ thống, vốn là một tác vụ blocking và được đẩy vào libuv thread pool. Nếu pool này đầy, các request tiếp theo (bao gồm cả fs, crypto) sẽ phải chờ, gây nghẽn hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng Node.js gặp lỗi 'JavaScript heap out of memory' sau 2 ngày chạy liên tục. Công cụ và phương pháp nào hiệu quả nhất để xác định nguyên nhân gốc rễ?",
+    "options": [
+      "A. Sử dụng console.log(process.memoryUsage()) tại mọi hàm để theo dõi sự thay đổi.",
+      "B. Chụp Heap Snapshot bằng Chrome DevTools hoặc module 'heapdump' và so sánh sự khác biệt giữa hai thời điểm (Comparison view).",
+      "C. Tăng tham số --max-old-space-size lên gấp đôi để ứng dụng có thêm không gian hoạt động.",
+      "D. Sử dụng công cụ 'top' của Linux để theo dõi RSS (Resident Set Size) của process."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Heap Snapshot cho phép phân tích chi tiết các object nào đang chiếm bộ nhớ và không được Garbage Collector giải phóng. So sánh hai snapshot là cách duy nhất để tìm ra các object 'rò rỉ' theo thời gian.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt bản chất giữa 'process.nextTick()' và 'setImmediate()' là gì?",
+    "options": [
+      "A. process.nextTick() thực hiện ở cuối pha hiện tại của Event Loop, trong khi setImmediate() thực hiện ở pha check tiếp theo.",
+      "B. setImmediate() luôn chạy nhanh hơn process.nextTick() vì nó không phải chờ đợi microtasks.",
+      "C. process.nextTick() được thiết kế để chạy các tác vụ I/O, còn setImmediate() dành cho các tác vụ tính toán.",
+      "D. Không có sự khác biệt, cả hai đều dùng để trì hoãn việc thực thi code sang vòng lặp sau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "process.nextTick() không thực sự thuộc về Event Loop mà nó thực thi ngay sau khi thao tác hiện tại kết thúc, trước khi Event Loop tiếp tục. setImmediate() chạy trong pha 'check' của Event Loop.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi viết một Native Addon bằng C++ cho Node.js, tại sao N-API (Node-API) hiện nay được ưu tiên hơn so với NAN (Native Abstractions for Node.js)?",
+    "options": [
+      "A. N-API cung cấp hiệu suất thực thi cao hơn 2 lần so với NAN.",
+      "B. N-API đảm bảo Application Binary Interface (ABI) ổn định, nghĩa là addon không cần compile lại khi nâng cấp phiên bản Node.js.",
+      "C. N-API cho phép truy cập trực tiếp vào bộ nhớ của V8 engine mà không cần thông qua wrapper.",
+      "D. NAN chỉ hỗ trợ các phiên bản Node.js cũ (dưới v10) và đã bị deprecated."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ưu điểm lớn nhất của N-API là tính ổn định ABI. Điều này giúp các nhà phát triển addon không phải bảo trì và recompile code mỗi khi Node.js ra phiên bản mới, giảm thiểu rủi ro tương thích.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices, bạn muốn triển khai cơ chế Circuit Breaker cho các request HTTP giữa các service Node.js. Bạn nên xử lý timeout như thế nào để tránh tình trạng 'cascading failure'?",
+    "options": [
+      "A. Đặt timeout của request dài hơn timeout của Circuit Breaker.",
+      "B. Đặt timeout của request ngắn hơn timeout của Circuit Breaker để Circuit Breaker có thể ghi nhận lỗi kịp thời.",
+      "C. Không sử dụng timeout cho request mà chỉ dựa vào trạng thái 'Open' của Circuit Breaker.",
+      "D. Sử dụng vô hạn số lần retry trước khi kích hoạt Circuit Breaker."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Timeout của request phải ngắn hơn ngưỡng của Circuit Breaker. Nếu request treo quá lâu mà không timeout, Circuit Breaker sẽ không nhận được tín hiệu thất bại để chuyển sang trạng thái Open, dẫn đến nghẽn tài nguyên toàn hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lệnh 'Buffer.allocUnsafe(size)' có rủi ro bảo mật tiềm ẩn nào nếu không được xử lý cẩn thận?",
+    "options": [
+      "A. Nó có thể gây ra lỗi tràn số (integer overflow) dẫn đến crash process.",
+      "B. Nó có thể chứa dữ liệu nhạy cảm từ các vùng nhớ cũ đã được giải phóng nhưng chưa được xóa trắng.",
+      "C. Nó cho phép thực thi mã độc (arbitrary code execution) thông qua buffer overflow.",
+      "D. Nó làm giảm hiệu suất của Garbage Collector do tạo ra quá nhiều object nhỏ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Buffer.allocUnsafe() cấp phát bộ nhớ mà không ghi đè giá trị 0 lên vùng nhớ đó. Nếu vùng nhớ này trước đó chứa dữ liệu nhạy cảm (như password, token), người dùng có thể đọc được nếu dữ liệu mới không lấp đầy buffer.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng module 'cluster' trong Node.js, làm thế nào để đảm bảo Zero-downtime deployment khi thực hiện reload ứng dụng?",
+    "options": [
+      "A. Gửi tín hiệu SIGKILL tới tất cả worker cùng lúc và khởi động lại.",
+      "B. Sử dụng cơ chế 'Rolling Restart': ngắt kết nối từng worker (disconnect), chờ nó đóng các connection hiện có, rồi mới khởi tạo worker mới.",
+      "C. Tăng gấp đôi số lượng worker trước khi tắt các worker cũ.",
+      "D. Node.js tự động xử lý Zero-downtime khi ta gọi phương thức cluster.restart()."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rolling Restart đảm bảo luôn có worker sẵn sàng xử lý request. Bằng cách gọi worker.disconnect(), worker đó sẽ ngừng nhận request mới nhưng vẫn xử lý xong request cũ trước khi exit.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong V8 Engine, 'Hidden Classes' (hay Shapes) giúp tối ưu hóa hiệu suất Node.js như thế nào?",
+    "options": [
+      "A. Bằng cách ẩn các thuộc tính nhạy cảm của object để bảo mật thông tin.",
+      "B. Bằng cách chuyển đổi các object JavaScript thành các struct C++ cố định để truy cập thuộc tính nhanh hơn thông qua offset.",
+      "C. Bằng cách nén bộ nhớ của các object có cấu trúc tương tự nhau.",
+      "D. Bằng cách tự động xóa các thuộc tính không sử dụng trong object để giải phóng bộ nhớ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "V8 sử dụng Hidden Classes để gán một cấu trúc tĩnh cho các object động. Khi truy cập thuộc tính, V8 không cần tìm kiếm trong dictionary mà chỉ cần cộng offset vào địa chỉ bộ nhớ, tăng tốc độ thực thi đáng kể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng 'npm install' trực tiếp trong môi trường CI/CD của một dự án lớn, thay vào đó nên dùng 'npm ci'?",
+    "options": [
+      "A. npm ci nhanh hơn vì nó không kiểm tra các lỗ hổng bảo mật (security audit).",
+      "B. npm ci đảm bảo cài đặt chính xác các phiên bản trong package-lock.json và xóa thư mục node_modules cũ để tránh xung đột.",
+      "C. npm install không thể chạy được trong môi trường không có giao diện người dùng (headless).",
+      "D. npm ci tự động nâng cấp các package lên phiên bản mới nhất để đảm bảo tính cập nhật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "npm ci (Clean Install) được thiết kế cho CI/CD. Nó yêu cầu package-lock.json, xóa node_modules hiện có và cài đặt chính xác những gì đã được chốt, đảm bảo tính nhất quán giữa các môi trường.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang debug một ứng dụng Node.js bị rò rỉ bộ nhớ (memory leak). Bạn quan sát thấy số lượng 'Scavenge' GC cycles tăng đột biến nhưng bộ nhớ tổng thể vẫn tăng. Điều này ám chỉ điều gì?",
+    "options": [
+      "A. Rò rỉ xảy ra ở 'New Space' (Young Generation), nơi chứa các object ngắn hạn.",
+      "B. Rò rỉ xảy ra ở 'Old Space', các object không được dọn dẹp và liên tục được chuyển từ New Space sang Old Space.",
+      "C. Hệ thống đang bị thiếu CPU trầm trọng khiến GC không thể hoàn thành nhiệm vụ.",
+      "D. Có quá nhiều Buffer lớn đang được cấp phát ngoài vùng nhớ Heap của V8."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scavenge GC xử lý New Space. Nếu các object không thể bị xóa, chúng sẽ 'survive' qua các chu kỳ Scavenge và được chuyển (promote) sang Old Space. Việc Scavenge chạy liên tục cho thấy áp lực cấp phát mới cao nhưng không giải phóng được.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống API Node.js sử dụng JWT để xác thực. Khi traffic tăng cao, việc verify chữ ký JWT bắt đầu chiếm dụng CPU đáng kể. Chiến lược nào là hợp lý nhất để tối ưu?",
+    "options": [
+      "A. Chuyển sang sử dụng thuật toán đối xứng (HS256) thay vì bất đối xứng (RS256) nếu tính bảo mật cho phép.",
+      "B. Thực hiện verify JWT trong một middleware chạy bằng Worker Thread.",
+      "C. Lưu trữ kết quả verify JWT vào Redis với TTL ngắn để tránh phải tính toán lại.",
+      "D. Bỏ qua bước verify chữ ký ở các service nội bộ và chỉ verify ở API Gateway."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thuật toán đối xứng (HMAC) nhanh hơn nhiều so với bất đối xứng (RSA/ECDSA) về mặt tính toán CPU. Nếu bạn kiểm soát được cả bên phát hành và bên xác thực, HS256 là lựa chọn tối ưu về hiệu suất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Node.js, khi sử dụng 'pipeline' từ module 'stream' thay vì '.pipe()', lợi ích lớn nhất bạn nhận được là gì?",
+    "options": [
+      "A. Tốc độ truyền dữ liệu nhanh hơn nhờ sử dụng bộ nhớ đệm tối ưu hơn.",
+      "B. Tự động xử lý việc đóng tất cả các stream trong chuỗi và dọn dẹp tài nguyên khi có lỗi xảy ra ở bất kỳ mắt xích nào.",
+      "C. Cho phép kết nối nhiều hơn 10 stream cùng một lúc mà không gây lỗi memory leak.",
+      "D. Hỗ trợ chuyển đổi dữ liệu tự động giữa Buffer và String."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hàm pipeline() giúp quản lý vòng đời của stream tốt hơn .pipe(). Nếu một stream ở giữa bị lỗi hoặc bị đóng, pipeline() sẽ đảm bảo các stream còn lại cũng được đóng đúng cách, tránh rò rỉ file descriptor hoặc bộ nhớ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Giả sử bạn có một tác vụ tính toán số nguyên tố rất nặng. Nếu chạy tác vụ này trực tiếp trong một async function, nó sẽ ảnh hưởng thế nào đến các request HTTP khác đang tới?",
+    "options": [
+      "A. Không ảnh hưởng vì async function chạy không đồng bộ và không block Event Loop.",
+      "B. Các request khác vẫn được nhận nhưng callback của chúng sẽ bị trì hoãn cho đến khi tác vụ tính toán xong.",
+      "C. Node.js sẽ tự động chuyển tác vụ nặng này sang thread pool của libuv.",
+      "D. Ứng dụng sẽ crash ngay lập tức do lỗi Stack Overflow."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Async/Await chỉ là cú pháp đường dẫn cho Promise. Bản thân code tính toán bên trong vẫn chạy đồng bộ trên Main Thread. Do đó, nó sẽ block Event Loop, khiến các request khác không được xử lý callback cho đến khi nó kết thúc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'SharedArrayBuffer' trong Node.js lại đi kèm với rủi ro về Race Condition, và làm thế nào để xử lý nó?",
+    "options": [
+      "A. Vì nó cho phép nhiều Worker Thread truy cập và sửa đổi cùng một vùng nhớ đồng thời; cần sử dụng Atomics để quản lý truy cập.",
+      "B. Vì nó tự động đồng bộ dữ liệu giữa các process khác nhau; cần sử dụng Mutex của hệ điều hành.",
+      "C. Vì nó làm cho Garbage Collector không thể quét được vùng nhớ đó; cần giải phóng thủ công.",
+      "D. Vì nó chỉ hoạt động với dữ liệu kiểu String; cần convert sang Buffer trước khi dùng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "SharedArrayBuffer cho phép chia sẻ bộ nhớ thực sự giữa các thread. Do không có cơ chế khóa tự động, hai thread có thể ghi đè lên nhau. Module Atomics cung cấp các thao tác nguyên tử để đảm bảo tính nhất quán dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi cấu hình một ứng dụng Node.js chạy trên Docker/Kubernetes, tại sao việc đặt 'memory limit' thấp hơn '--max-old-space-size' là một sai lầm nghiêm trọng?",
+    "options": [
+      "A. Vì V8 sẽ không bao giờ thực hiện Garbage Collection nếu không đạt tới limit.",
+      "B. Vì Node.js sẽ chiếm dụng toàn bộ RAM của node vật lý thay vì giới hạn trong container.",
+      "C. Vì khi Heap tiệm cận memory limit của container, OS sẽ gửi tín hiệu OOM Kill để tắt process trước khi V8 kịp dọn dẹp bộ nhớ.",
+      "D. Vì Docker không hỗ trợ các tham số dòng lệnh của Node.js."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nếu max-old-space-size lớn hơn giới hạn của container, V8 nghĩ rằng nó vẫn còn bộ nhớ để sử dụng và trì hoãn GC. Tuy nhiên, khi vượt quá giới hạn Docker, hệ điều hành sẽ kill process ngay lập tức (OOM Kill).",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiến trúc Event-Driven, việc lạm dụng 'EventEmitter' với số lượng listener lớn (>10) trên một object duy nhất thường dẫn đến cảnh báo gì và rủi ro thực tế là gì?",
+    "options": [
+      "A. Cảnh báo 'MaxListenersExceededWarning'; rủi ro là gây rò rỉ bộ nhớ nếu các listener không được gỡ bỏ đúng cách.",
+      "B. Cảnh báo 'EventLoopLag'; rủi ro là làm chậm tốc độ phản hồi của server.",
+      "C. Cảnh báo 'RecursiveCallError'; rủi ro là gây tràn stack (stack overflow).",
+      "D. Cảnh báo 'HighWaterMarkReached'; rủi ro là mất dữ liệu sự kiện."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc định Node.js giới hạn 10 listener để giúp lập trình viên phát hiện rò rỉ bộ nhớ. Nếu thêm quá nhiều mà không quản lý (ví dụ thêm trong một vòng lặp request), bộ nhớ sẽ tăng liên tục do các closure giữ tham chiếu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phân tích kịch bản: Ứng dụng của bạn sử dụng 'fs.readFile' để đọc các file cấu hình nhỏ khi khởi tạo. Khi chuyển sang đọc các file log lớn (hàng GB), tại sao bạn nên chuyển sang 'fs.createReadStream'?",
+    "options": [
+      "A. Vì fs.readFile không hỗ trợ đọc file lớn hơn 2GB.",
+      "B. fs.readFile nạp toàn bộ nội dung file vào Buffer trong RAM, gây nguy cơ crash do thiếu bộ nhớ; Stream xử lý theo từng chunk nhỏ.",
+      "C. fs.createReadStream nhanh hơn fs.readFile vì nó sử dụng đa luồng thực sự.",
+      "D. fs.readFile sẽ block Event Loop cho đến khi đọc xong toàn bộ file."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự khác biệt chính là quản lý bộ nhớ. readFile yêu cầu một vùng nhớ liên tục bằng kích thước file. Với file hàng GB, ứng dụng dễ dàng vượt quá giới hạn Heap. Stream chỉ giữ một lượng nhỏ dữ liệu (chunk) trong RAM tại một thời điểm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào để phát hiện 'Event Loop Lag' trong một ứng dụng Node.js đang chạy trên production mà không làm giảm hiệu suất của nó?",
+    "options": [
+      "A. Chạy ứng dụng với flag --trace-event-categories.",
+      "B. Sử dụng thư viện 'perf_hooks' để đo lường sự chênh lệch giữa thời gian dự kiến và thực tế của các timer.",
+      "C. Gửi tín hiệu SIGUSR1 để kích hoạt trình debugger và kiểm tra call stack.",
+      "D. Định kỳ gọi hàm process.nextTick() và đo thời gian thực thi của nó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Module perf_hooks (đặc biệt là monitorEventLoopDelay) cung cấp cách đo lường độ trễ của Event Loop với overhead cực thấp, rất phù hợp cho môi trường production.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một hệ thống yêu cầu bảo mật cao, tại sao việc sử dụng 'vm' module của Node.js để chạy code từ người dùng (user-submitted code) được coi là không an toàn?",
+    "options": [
+      "A. Vì module vm không hỗ trợ các tính năng mới của ES6.",
+      "B. Vì mã chạy trong vm vẫn có thể truy cập vào các global object và thoát ra khỏi sandbox để tấn công hệ thống host.",
+      "C. Vì module vm làm chậm hiệu suất thực thi code lên đến 10 lần.",
+      "D. Vì module vm chỉ hoạt động trên môi trường Linux."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tài liệu chính thức của Node.js khẳng định module 'vm' không phải là một cơ chế sandbox bảo mật. Kẻ tấn công có thể sử dụng các kỹ thuật như truy cập constructor của object để lấy quyền thực thi mã ngoài sandbox.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần tối ưu hóa một ứng dụng Node.js xử lý ảnh (image processing). Tác vụ này tiêu tốn rất nhiều CPU. Giải pháp nào mang lại khả năng mở rộng (scalability) tốt nhất cho hệ thống doanh nghiệp?",
+    "options": [
+      "A. Sử dụng module 'cluster' để tận dụng tối đa các core trên một server đơn lẻ.",
+      "B. Sử dụng 'worker_threads' để xử lý ảnh song song với main thread.",
+      "C. Tách việc xử lý ảnh thành một microservice riêng (có thể viết bằng Go/C++) và giao tiếp qua message queue (RabbitMQ/Kafka).",
+      "D. Tăng cấu hình phần cứng (Vertical Scaling) cho server hiện tại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dù cluster hay worker_threads có thể giúp tận dụng tài nguyên nội tại, nhưng với tác vụ nặng như xử lý ảnh, việc tách ra microservice giúp cô lập lỗi, mở rộng độc lập và không làm ảnh hưởng đến luồng API chính của ứng dụng Node.js.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện 'require()' bên trong một function (dynamic require) thay vì ở đầu file lại được coi là một 'bad practice' trong hầu hết các trường hợp, ngoại trừ một số kịch bản đặc thù?",
+    "options": [
+      "A. Vì require() là hàm bất đồng bộ và sẽ làm xáo trộn thứ tự thực thi.",
+      "B. Vì require() có tính chất đồng bộ (synchronous) và thực hiện đọc file từ đĩa, gây block Event Loop mỗi khi function được gọi.",
+      "C. Vì Node.js không cache các module được load theo cách dynamic.",
+      "D. Vì nó làm tăng kích thước của file bundle khi sử dụng Webpack."
+    ],
+    "correctAnswer": "B",
+    "explanation": "require() là một thao tác đồng bộ và tốn kém (I/O). Nếu đặt trong function được gọi thường xuyên, nó sẽ block Event Loop liên tục. Node.js cache module sau lần load đầu tiên, nhưng việc kiểm tra cache vẫn tốn overhead không đáng có so với việc load một lần ở đầu file.",
+    "difficulty": "EXPERT",
+    "skillArea": "Node.js",
+    "category": "ANALYSIS"
+  }
+]
