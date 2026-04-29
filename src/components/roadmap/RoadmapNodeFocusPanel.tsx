@@ -8,7 +8,6 @@ import {
   Clock3,
   Compass,
   GitBranch,
-  Layers3,
   X,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -31,10 +30,6 @@ export type RoadmapNodeFocusPanelProps = {
   node: RoadmapNode | null;
   progress?: QuestProgress;
   learningContext?: NodeLearningContext | null;
-  /** Primary course ID for the "Go to course" action button */
-  primaryCourseId?: number | null;
-  /** Whether the user is already enrolled in the primary course */
-  isEnrolled?: boolean;
   hasStudyTask: boolean;
   linkedTaskId?: string | null;
   canCreateStudyTask: boolean;
@@ -52,8 +47,10 @@ export type RoadmapNodeFocusPanelProps = {
   onMarkNodeDone?: (nodeId: string) => Promise<void>;
   /** Number of tasks linked to this node — drives ConfirmDialog visibility */
   linkedTaskCount?: number;
-  /** V3 Phase 1 — when set, an evidence submission panel is rendered for this node. */
-  journeyId?: number;
+  /** Whether courses are being loaded — used to prevent empty state flash */
+  isLoadingCourses?: boolean;
+  /** Error from loading courses — used to show error state */
+  coursesError?: Error | null;
 };
 
 const clampProgress = (value?: number): number => {
@@ -110,8 +107,6 @@ const RoadmapNodeFocusPanel = ({
   node,
   progress,
   learningContext,
-  primaryCourseId,
-  isEnrolled,
   hasStudyTask,
   linkedTaskId,
   canCreateStudyTask,
@@ -126,7 +121,8 @@ const RoadmapNodeFocusPanel = ({
   allNodes,
   onMarkNodeDone,
   linkedTaskCount = 0,
-  journeyId,
+  isLoadingCourses = false,
+  coursesError = null,
 }: RoadmapNodeFocusPanelProps) => {
   const progressPercent = clampProgress(
     progress?.progress ?? (progress?.status === "COMPLETED" ? 100 : 0),
@@ -337,7 +333,7 @@ const RoadmapNodeFocusPanel = ({
           <div className="roadmap-node-focus-panel__meta-grid">
             <article className="roadmap-node-focus-panel__meta-card">
               <span className="roadmap-node-focus-panel__meta-title">
-                <Layers3 size={13} /> Vai trò
+                <Circle size={13} /> Vai trò
               </span>
               <span className="roadmap-node-focus-panel__meta-value">
                 {nodeTypeLabel}
@@ -350,22 +346,6 @@ const RoadmapNodeFocusPanel = ({
               <span className="roadmap-node-focus-panel__meta-value">
                 {courseLabel}
               </span>
-              {primaryCourseId != null && (
-                <button
-                  type="button"
-                  className="roadmap-node-focus-panel__course-action"
-                  onClick={() => onNavigateToCourse(primaryCourseId)}
-                  aria-label={
-                    isEnrolled
-                      ? "Mở trang khóa học để tiếp tục học"
-                      : "Mở trang chi tiết khóa học"
-                  }
-                >
-                  <>
-                    <BookOpen size={13} /> Xem khóa học
-                  </>
-                </button>
-              )}
             </article>
             <article className="roadmap-node-focus-panel__meta-card">
               <span className="roadmap-node-focus-panel__meta-title">
@@ -385,67 +365,117 @@ const RoadmapNodeFocusPanel = ({
             </article>
           </div>
 
-          {/* Phase 2: Suggested Modules list */}
-          {learningContext?.suggestedModulesOrdered &&
-            learningContext.suggestedModulesOrdered.length > 0 && (
-              <div className="roadmap-node-focus-panel__module-section">
-                <div className="roadmap-node-focus-panel__module-header">
-                  <Layers3 size={14} />
-                  Modules gợi ý cho node này (
-                  {learningContext.suggestedModulesOrdered.length})
-                </div>
-                <div className="roadmap-node-focus-panel__module-list">
-                  {learningContext.suggestedModulesOrdered.map(
-                    (module, index) => {
-                      const moduleIdStr = String(module.id);
-                      const isHighlighted =
-                        node.suggestedModuleIds?.includes(moduleIdStr) ?? false;
-                      return (
-                        <div
-                          key={moduleIdStr}
-                          className={`roadmap-node-focus-panel__module-item${isHighlighted ? " is-highlighted" : ""}`}
-                          onClick={() => {
-                            // Navigate to module in course learning (open primary course at this module)
-                            if (learningContext.primaryCourse) {
-                              onNavigateToCourse(
-                                learningContext.primaryCourse.id,
-                              );
-                            }
-                          }}
-                          title={module.description || module.title}
-                        >
-                          <span className="roadmap-node-focus-panel__module-index">
-                            {index + 1}
-                          </span>
-                          <div className="roadmap-node-focus-panel__module-info">
-                            <div className="roadmap-node-focus-panel__module-title">
-                              {module.title}
-                            </div>
-                          </div>
-                          {isHighlighted && (
-                            <span className="roadmap-node-focus-panel__module-badge">
-                              Node này
-                            </span>
-                          )}
-                          {!isEnrolled && primaryCourseId != null && (
-                            <button
-                              type="button"
-                              className="roadmap-node-focus-panel__module-enroll-btn"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onNavigateToCourse(primaryCourseId);
-                              }}
-                            >
-                              <BookMarked size={10} /> Đăng ký
-                            </button>
-                          )}
-                        </div>
-                      );
-                    },
-                  )}
-                </div>
+          {/* Phase 2: Suggested Courses list - Primary + Alternatives */}
+          {(learningContext?.primaryCourse ||
+            (learningContext?.supportingCourses &&
+              learningContext.supportingCourses.length > 0) ||
+            (node?.suggestedCourseIds && node.suggestedCourseIds.length > 0)) && (
+            <div className="roadmap-node-focus-panel__course-section">
+              <div className="roadmap-node-focus-panel__course-header">
+                <BookOpen size={14} />
+                Khóa học gợi ý
               </div>
-            )}
+              <p className="roadmap-node-focus-panel__course-hint">
+                Các khóa học liên quan đến nội dung node này — học là tùy chọn, không bắt buộc
+              </p>
+
+              {/* Error state: failed to load courses */}
+              {!isLoadingCourses && coursesError && (
+                <div className="roadmap-node-focus-panel__course-error">
+                  Không tải được khóa học gợi ý. Vui lòng thử lại.
+                </div>
+              )}
+
+              {/* Empty state: no PUBLIC courses available after successful fetch */}
+              {!isLoadingCourses && !coursesError &&
+                !learningContext?.primaryCourse &&
+                (!learningContext?.supportingCourses ||
+                  learningContext.supportingCourses.length === 0) && (
+                  <div className="roadmap-node-focus-panel__course-unavailable">
+                    Khóa học gợi ý hiện chưa khả dụng.
+                  </div>
+              )}
+              <div className="roadmap-node-focus-panel__course-list">
+                {/* PRIMARY COURSE - Best match */}
+                {learningContext?.primaryCourse && (
+                  <div
+                    key={learningContext.primaryCourse.id}
+                    className="roadmap-node-focus-panel__course-item roadmap-node-focus-panel__course-item--primary"
+                    onClick={() =>
+                      onNavigateToCourse(learningContext.primaryCourse!.id)
+                    }
+                    title={learningContext.primaryCourse.description}
+                  >
+                    <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--primary">
+                      Phù hợp nhất
+                    </span>
+                    {((learningContext.primaryCourse.modules?.length || 0) > 0 && (learningContext.primaryCourse.modules?.length || 0) <= 5) && (
+                      <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--compact">
+                        Ngắn gọn
+                      </span>
+                    )}
+                    <div className="roadmap-node-focus-panel__course-info">
+                      <div className="roadmap-node-focus-panel__course-title">
+                        {learningContext.primaryCourse.title}
+                      </div>
+                      <div className="roadmap-node-focus-panel__course-meta">
+                        {learningContext.primaryCourse.level} ·{" "}
+                        {learningContext.primaryCourse.modules?.length || 0}{" "}
+                        modules
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="roadmap-node-focus-panel__course-action-btn roadmap-node-focus-panel__course-action-btn--primary"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onNavigateToCourse(learningContext.primaryCourse!.id);
+                      }}
+                    >
+                      <BookMarked size={12} /> Xem khóa học
+                    </button>
+                  </div>
+                )}
+
+                {/* ALTERNATIVE COURSES - Optional choices */}
+                {learningContext?.supportingCourses?.map((course, index) => (
+                  <div
+                    key={course.id}
+                    className="roadmap-node-focus-panel__course-item roadmap-node-focus-panel__course-item--alternative"
+                    onClick={() => onNavigateToCourse(course.id)}
+                    title={course.description}
+                  >
+                    <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--alternative">
+                      Thay thế {index + 1}
+                    </span>
+                    {((course.modules?.length || 0) > 0 && (course.modules?.length || 0) <= 5) && (
+                      <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--compact">
+                        Ngắn gọn
+                      </span>
+                    )}
+                    <div className="roadmap-node-focus-panel__course-info">
+                      <div className="roadmap-node-focus-panel__course-title">
+                        {course.title}
+                      </div>
+                      <div className="roadmap-node-focus-panel__course-meta">
+                        {course.level} · {course.modules?.length || 0} modules
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="roadmap-node-focus-panel__course-action-btn roadmap-node-focus-panel__course-action-btn--alternative"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onNavigateToCourse(course.id);
+                      }}
+                    >
+                      <BookMarked size={12} /> Xem chi tiết
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {objectiveItems.length > 0 && (
             <div className="roadmap-node-focus-panel__list-group">

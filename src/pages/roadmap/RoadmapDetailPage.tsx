@@ -74,7 +74,7 @@ const RoadmapDetailPage = () => {
   } | null>(null);
 
   const roadmapNodes = roadmap?.roadmap ?? [];
-  const { courseMap } = useRoadmapMappedCourses(roadmapNodes, Boolean(roadmap), enrollmentRefreshKey);
+  const { courseMap, isLoading: isLoadingCourses, error: coursesError } = useRoadmapMappedCourses(roadmapNodes, Boolean(roadmap), enrollmentRefreshKey);
 
   const mappedCourseIds = useMemo(() => (
     Array.from(new Set(roadmapNodes.flatMap((node) => node.suggestedCourseIds ?? [])))
@@ -805,10 +805,6 @@ const RoadmapDetailPage = () => {
             node: selectedNode,
             progress: selectedNodeProgress,
             learningContext: selectedNodeLearningContext,
-            primaryCourseId: selectedNodeLearningContext?.primaryCourse?.id,
-            isEnrolled:
-              selectedNodeLearningContext?.primaryCourse != null
-              && Boolean(enrollmentByCourseId[String(selectedNodeLearningContext.primaryCourse.id)]),
             hasStudyTask: Boolean(selectedNodePlanSummary?.hasLinkedPlan),
             linkedTaskId: linkedTaskIdForSelectedNode,
             canCreateStudyTask: canCreateStudyPlanForSelectedNode,
@@ -827,7 +823,8 @@ const RoadmapDetailPage = () => {
             allNodes: roadmapNodes,
             onMarkNodeDone: handleMarkNodeDone,
             linkedTaskCount: selectedNodePlanSummary?.totalLinkedTasks ?? 0,
-            journeyId,
+            isLoadingCourses,
+            coursesError,
           } as RoadmapNodeFocusPanelProps}
         />
         <MeowlGuide

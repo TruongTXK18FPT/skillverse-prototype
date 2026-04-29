@@ -693,114 +693,201 @@
   overflow: auto;
 }
 
-/* Module list section (Phase 2) */
-.roadmap-node-focus-panel__module-section {
+/* Course list section (Phase 2) */
+.roadmap-node-focus-panel__course-section {
   margin-top: 12px;
 }
 
-.roadmap-node-focus-panel__module-header {
+.roadmap-node-focus-panel__course-header {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 13px;
   font-weight: 700;
   color: #67e8f9;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
-.roadmap-node-focus-panel__module-list {
+.roadmap-node-focus-panel__course-hint {
+  font-size: 11px;
+  color: #93c5fd;
+  font-style: italic;
+  margin: 0 0 10px;
+  padding-left: 20px;
+}
+
+.roadmap-node-focus-panel__course-list {
   display: grid;
-  gap: 6px;
+  gap: 8px;
 }
 
-.roadmap-node-focus-panel__module-item {
+.roadmap-node-focus-panel__course-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(56, 189, 248, 0.18);
-  background: rgba(15, 23, 42, 0.5);
-  font-size: 12px;
-  color: #dbeafe;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  background: rgba(15, 23, 42, 0.55);
   cursor: pointer;
   transition: all 0.2s;
+  position: relative;
 }
 
-.roadmap-node-focus-panel__module-item:hover {
-  background: rgba(56, 189, 248, 0.1);
-  border-color: rgba(56, 189, 248, 0.4);
+.roadmap-node-focus-panel__course-item:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.45);
 }
 
-.roadmap-node-focus-panel__module-item.is-highlighted {
-  border-color: rgba(249, 115, 22, 0.5);
-  background: rgba(249, 115, 22, 0.1);
+.roadmap-node-focus-panel__course-item--primary {
+  border-color: rgba(34, 211, 238, 0.35);
+  background: rgba(34, 211, 238, 0.08);
 }
 
-.roadmap-node-focus-panel__module-index {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(34, 211, 238, 0.2);
-  color: #22d3ee;
-  font-size: 10px;
+.roadmap-node-focus-panel__course-item--primary:hover {
+  border-color: rgba(34, 211, 238, 0.55);
+  background: rgba(34, 211, 238, 0.15);
+}
+
+.roadmap-node-focus-panel__course-item--alternative {
+  border-color: rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.4);
+  opacity: 0.9;
+}
+
+.roadmap-node-focus-panel__course-item--alternative:hover {
+  border-color: rgba(148, 163, 184, 0.35);
+  background: rgba(30, 41, 59, 0.5);
+  opacity: 1;
+}
+
+.roadmap-node-focus-panel__course-badge {
+  position: absolute;
+  top: -6px;
+  left: 12px;
+  font-size: 9px;
   font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
-.roadmap-node-focus-panel__module-item.is-highlighted
-  .roadmap-node-focus-panel__module-index {
-  background: rgba(249, 115, 22, 0.25);
-  color: #fb923c;
+.roadmap-node-focus-panel__course-badge--primary {
+  background: rgba(34, 211, 238, 0.9);
+  color: #0f172a;
 }
 
-.roadmap-node-focus-panel__module-info {
+.roadmap-node-focus-panel__course-badge--alternative {
+  background: rgba(148, 163, 184, 0.25);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.roadmap-node-focus-panel__course-badge--compact {
+  position: absolute;
+  top: -6px;
+  left: auto;
+  right: 12px;
+  background: rgba(251, 191, 36, 0.85);
+  color: #0f172a;
+  font-size: 8px;
+  padding: 1px 6px;
+}
+
+/* Empty state: course recommendations not available */
+.roadmap-node-focus-panel__course-unavailable {
+  font-size: 12px;
+  color: #94a3b8;
+  font-style: italic;
+  padding: 12px;
+  text-align: center;
+  border: 1px dashed rgba(148, 163, 184, 0.3);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.3);
+  margin-bottom: 10px;
+}
+
+/* Error state: failed to load courses */
+.roadmap-node-focus-panel__course-error {
+  font-size: 12px;
+  color: #f87171;
+  padding: 12px;
+  text-align: center;
+  border: 1px dashed rgba(248, 113, 113, 0.4);
+  border-radius: 8px;
+  background: rgba(248, 113, 113, 0.1);
+  margin-bottom: 10px;
+}
+
+.roadmap-node-focus-panel__course-info {
   flex: 1;
   min-width: 0;
 }
 
-.roadmap-node-focus-panel__module-title {
+.roadmap-node-focus-panel__course-title {
   font-weight: 600;
   color: #e2e8f0;
-  line-height: 1.35;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 2px;
 }
 
-.roadmap-node-focus-panel__module-item.is-highlighted
-  .roadmap-node-focus-panel__module-title {
-  color: #fed7aa;
+.roadmap-node-focus-panel__course-item--primary
+  .roadmap-node-focus-panel__course-title {
+  color: #22d3ee;
 }
 
-.roadmap-node-focus-panel__module-badge {
-  flex-shrink: 0;
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: rgba(249, 115, 22, 0.2);
-  color: #fb923c;
-  border: 1px solid rgba(249, 115, 22, 0.4);
+.roadmap-node-focus-panel__course-meta {
+  font-size: 11px;
+  color: #7dd3fc;
+  opacity: 0.85;
 }
 
-.roadmap-node-focus-panel__module-enroll-btn {
+.roadmap-node-focus-panel__course-action-btn {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
+  padding: 5px 10px;
   border-radius: 6px;
-  border: 1px solid rgba(249, 115, 22, 0.55);
-  background: rgba(249, 115, 22, 0.18);
-  color: #fdba74;
-  font-size: 10px;
-  font-weight: 700;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  background: rgba(6, 182, 212, 0.15);
+  color: #67e8f9;
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.roadmap-node-focus-panel__module-enroll-btn:hover {
-  background: rgba(249, 115, 22, 0.32);
-  border-color: rgba(249, 115, 22, 0.8);
+.roadmap-node-focus-panel__course-action-btn:hover {
+  background: rgba(6, 182, 212, 0.28);
+  border-color: rgba(6, 182, 212, 0.75);
+  color: #a5f3fc;
+}
+
+/* Primary action button - stronger CTA */
+.roadmap-node-focus-panel__course-action-btn--primary {
+  border: 1px solid rgba(34, 211, 238, 0.6);
+  background: rgba(34, 211, 238, 0.2);
+  color: #22d3ee;
+}
+
+.roadmap-node-focus-panel__course-action-btn--primary:hover {
+  background: rgba(34, 211, 238, 0.35);
+  border-color: rgba(34, 211, 238, 0.8);
+  color: #a5f3fc;
+}
+
+/* Alternative action button - softer CTA */
+.roadmap-node-focus-panel__course-action-btn--alternative {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+}
+
+.roadmap-node-focus-panel__course-action-btn--alternative:hover {
+  background: rgba(148, 163, 184, 0.2);
+  border-color: rgba(148, 163, 184, 0.55);
+  color: #cbd5e1;
 }

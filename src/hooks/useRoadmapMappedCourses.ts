@@ -6,6 +6,7 @@ import { RoadmapNode } from "../types/Roadmap";
 type UseRoadmapMappedCoursesResult = {
   courseMap: Record<string, CourseDetailDTO | null>;
   isLoading: boolean;
+  error: Error | null;
 };
 
 /**
@@ -13,6 +14,12 @@ type UseRoadmapMappedCoursesResult = {
  * @param nodes - Array of roadmap nodes with suggestedCourseIds
  * @param enabled - Whether to fetch courses
  * @param refreshKey - Optional trigger to force re-fetch (e.g. when course data changes)
+ *
+ * <p>Limitation: If getCoursesBatch() encounters a network/server error, it falls back to
+ * individual course fetches via Promise.allSettled(). If ALL individual fetches also fail,
+ * the hook returns an empty courseMap with error=null (not an error state), because the
+ * fallback mechanism swallows errors. This is acceptable for UX (empty state shows as
+ * "courses not available") but means true network errors may not surface to the UI.
  */
 export const useRoadmapMappedCourses = (
   nodes: RoadmapNode[],
@@ -21,6 +28,7 @@ export const useRoadmapMappedCourses = (
 ): UseRoadmapMappedCoursesResult => {
   const [courseMap, setCourseMap] = useState<Record<string, CourseDetailDTO | null>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const allSuggestedCourseIds = useMemo(
     () =>
@@ -41,6 +49,7 @@ export const useRoadmapMappedCourses = (
     if (!enabled || allSuggestedCourseIds.length === 0) {
       setCourseMap({});
       setIsLoading(false);
+      setError(null);
       return;
     }
 
@@ -53,12 +62,14 @@ export const useRoadmapMappedCourses = (
         if (!cancelled) {
           startTransition(() => {
             setCourseMap(nextCourseMap);
+            setError(null);
           });
         }
-      } catch (error) {
-        console.error("Failed to load mapped roadmap courses:", error);
+      } catch (err) {
+        console.error("Failed to load mapped roadmap courses:", err);
         if (!cancelled) {
           setCourseMap({});
+          setError(err instanceof Error ? err : new Error(String(err)));
         }
       } finally {
         if (!cancelled) {
@@ -77,6 +88,7 @@ export const useRoadmapMappedCourses = (
   return {
     courseMap,
     isLoading,
+    error,
   };
 };
 

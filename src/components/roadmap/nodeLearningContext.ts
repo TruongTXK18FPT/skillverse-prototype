@@ -1,7 +1,6 @@
-import { CourseDetailDTO, CourseLevel, ModuleSummaryDTO } from "../../data/courseDTOs";
+import { CourseDetailDTO, ModuleSummaryDTO } from "../../data/courseDTOs";
 import { EnrollmentDetailDTO } from "../../data/enrollmentDTOs";
 import {
-  DifficultyLevel,
   RoadmapNode,
   RoadmapNodeAvailability,
 } from "../../types/Roadmap";
@@ -124,68 +123,6 @@ const normalizeText = (value?: string | null): string =>
     .replace(/\s+/g, " ")
     .trim();
 
-const normalizeDifficulty = (
-  difficulty?: string | null,
-): DifficultyLevel | null => {
-  const value = (difficulty ?? "").trim().toLowerCase();
-  if (!value) {
-    return null;
-  }
-  if (
-    value.includes("beginner") ||
-    value.includes("easy") ||
-    value.includes("foundation") ||
-    value.includes("basic") ||
-    value === DifficultyLevel.BEGINNER
-  ) {
-    return DifficultyLevel.BEGINNER;
-  }
-  if (
-    value.includes("advanced") ||
-    value.includes("hard") ||
-    value.includes("expert") ||
-    value === DifficultyLevel.ADVANCED
-  ) {
-    return DifficultyLevel.ADVANCED;
-  }
-  if (
-    value.includes("intermediate") ||
-    value.includes("medium") ||
-    value === DifficultyLevel.INTERMEDIATE
-  ) {
-    return DifficultyLevel.INTERMEDIATE;
-  }
-  return null;
-};
-
-const difficultyToCourseRank = (
-  difficulty?: string | null,
-): number | null => {
-  const normalized = normalizeDifficulty(difficulty);
-  if (normalized === DifficultyLevel.BEGINNER) {
-    return 0;
-  }
-  if (normalized === DifficultyLevel.INTERMEDIATE) {
-    return 1;
-  }
-  if (normalized === DifficultyLevel.ADVANCED) {
-    return 2;
-  }
-  return null;
-};
-
-const courseLevelRank = (level?: CourseLevel | string | null): number | null => {
-  switch (level) {
-    case CourseLevel.BEGINNER:
-      return 0;
-    case CourseLevel.INTERMEDIATE:
-      return 1;
-    case CourseLevel.ADVANCED:
-      return 2;
-    default:
-      return null;
-  }
-};
 
 const hasLearningContent = (node: RoadmapNode): boolean =>
   (node.learningObjectives?.length ?? 0) > 0 ||
@@ -194,47 +131,17 @@ const hasLearningContent = (node: RoadmapNode): boolean =>
   normalizeText(node.description).length > 0;
 
 const resolvePrimaryAndSupportingCourses = (
-  node: RoadmapNode,
+  _node: RoadmapNode,
   courses: CourseDetailDTO[],
 ): {
   primaryCourse: CourseDetailDTO | null;
   supportingCourses: CourseDetailDTO[];
 } => {
-  if (courses.length === 0) {
-    return {
-      primaryCourse: null,
-      supportingCourses: [],
-    };
-  }
-
-  const targetRank = difficultyToCourseRank(node.difficulty);
-  if (targetRank === null) {
-    return {
-      primaryCourse: courses[0] ?? null,
-      supportingCourses: courses.slice(1),
-    };
-  }
-
-  const rankedCourses = courses
-    .map((course, index) => ({
-      course,
-      index,
-      distance:
-        courseLevelRank(course.level) === null
-          ? Number.MAX_SAFE_INTEGER
-          : Math.abs((courseLevelRank(course.level) ?? 0) - targetRank),
-    }))
-    .sort((left, right) => {
-      if (left.distance !== right.distance) {
-        return left.distance - right.distance;
-      }
-      return left.index - right.index;
-    });
-
-  const primaryCourse = rankedCourses[0]?.course ?? null;
-  const supportingCourses = rankedCourses
-    .slice(1)
-    .map((item) => item.course);
+  // mappedCourses is already in backend suggestedCourseIds order (sorted by score)
+  // suggestedCourseIds[0] = highest scored = primary
+  // Do NOT re-sort by difficulty - preserve backend ranking for consistent UX
+  const primaryCourse = courses[0] ?? null;
+  const supportingCourses = courses.slice(1);
 
   return {
     primaryCourse,
