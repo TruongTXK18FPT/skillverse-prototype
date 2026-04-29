@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong hệ sinh thái Android, tệp tin 'Keystore' được sử dụng để làm gì?",
+    "options": [
+      "A. Lưu trữ mã nguồn của ứng dụng để bảo mật.",
+      "B. Chứa các chứng chỉ số để ký (sign) ứng dụng trước khi phát hành.",
+      "C. Lưu trữ dữ liệu người dùng dưới dạng cơ sở dữ liệu local.",
+      "D. Chứa các file hình ảnh và tài nguyên của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Keystore là một tệp tin bảo mật chứa các khóa riêng tư (private keys) dùng để ký số ứng dụng, giúp xác thực danh tính nhà phát triển và đảm bảo tính toàn vẹn của ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ nào sau đây là nền tảng chính thức của Apple để quản lý và đẩy ứng dụng lên App Store?",
+    "options": [
+      "A. Google Play Console",
+      "B. Firebase Console",
+      "C. App Store Connect",
+      "D. Xcode Cloud"
+    ],
+    "correctAnswer": "C",
+    "explanation": "App Store Connect là cổng thông tin web của Apple dành cho nhà phát triển để quản lý ứng dụng, xem báo cáo doanh thu và thiết lập các bản phát hành.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quy tắc đánh số phiên bản Semantic Versioning (ví dụ: 1.2.3), con số '2' đại diện cho thành phần nào?",
+    "options": [
+      "A. Major version (Phiên bản lớn)",
+      "B. Minor version (Phiên bản nhỏ/Tính năng mới)",
+      "C. Patch version (Bản vá lỗi)",
+      "D. Build number (Số lần đóng gói)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Semantic Versioning (Major.Minor.Patch), số ở giữa là Minor version, thường tăng lên khi có thêm tính năng mới nhưng vẫn tương thích ngược.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thành phần nào sau đây trong iOS kết nối Certificate, App ID và Device ID để cho phép ứng dụng chạy trên thiết bị thật?",
+    "options": [
+      "A. Keychain Access",
+      "B. Provisioning Profile",
+      "C. Entitlements file",
+      "D. Info.plist"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Provisioning Profile là một tệp cấu hình kết hợp các chứng chỉ (Certificates), định danh ứng dụng (App ID) và danh sách thiết bị (UDID) để xác thực quyền cài đặt ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nền tảng nào được Apple cung cấp để mời người dùng thử nghiệm các bản beta của ứng dụng trước khi phát hành chính thức?",
+    "options": [
+      "A. TestFlight",
+      "B. Beta Center",
+      "C. App Tester",
+      "D. Swift Playgrounds"
+    ],
+    "correctAnswer": "A",
+    "explanation": "TestFlight là công cụ chính thức của Apple giúp nhà phát triển mời người dùng (nội bộ hoặc bên ngoài) cài đặt và kiểm thử ứng dụng trước khi lên Store.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Định dạng tệp tin tiêu chuẩn hiện nay mà Google Play yêu cầu khi tải ứng dụng lên để tối ưu hóa kích thước cho từng thiết bị là gì?",
+    "options": [
+      "A. .apk",
+      "B. .exe",
+      "C. .aab",
+      "D. .dmg"
+    ],
+    "correctAnswer": "C",
+    "explanation": ".aab (Android App Bundle) là định dạng xuất bản mới giúp Google Play tạo ra các file APK tối ưu riêng cho từng cấu hình thiết bị của người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi chuẩn bị hình ảnh minh họa (Screenshots) cho App Store, điều nào sau đây là bắt buộc?",
+    "options": [
+      "A. Phải hiển thị giao diện thực tế của ứng dụng.",
+      "B. Phải có hình ảnh của người đang cầm điện thoại.",
+      "C. Phải sử dụng định dạng ảnh .gif để tạo hoạt ảnh.",
+      "D. Phải hiển thị mã nguồn của ứng dụng trong ảnh."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Quy định của App Store yêu cầu hình ảnh minh họa phải phản ánh đúng trải nghiệm và giao diện thực tế mà người dùng sẽ thấy trong ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khái niệm 'Staged Rollout' trên Google Play Console có ý nghĩa gì?",
+    "options": [
+      "A. Phát hành ứng dụng cho tất cả người dùng cùng một lúc.",
+      "B. Phát hành ứng dụng theo từng giai đoạn phần trăm người dùng để theo dõi lỗi.",
+      "C. Chỉ cho phép nhân viên Google tải về ứng dụng.",
+      "D. Tự động xóa phiên bản cũ ngay khi phiên bản mới được tải lên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Staged Rollout cho phép cập nhật ứng dụng tới một tỷ lệ phần trăm người dùng nhất định (ví dụ 5%, 10%) để đảm bảo tính ổn định trước khi phát hành toàn bộ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao một ứng dụng có thể bị từ chối (Reject) bởi Apple Review Team nếu yêu cầu quyền truy cập Camera ngay khi vừa mở app mà không có lý do rõ ràng?",
+    "options": [
+      "A. Do ứng dụng chiếm quá nhiều dung lượng bộ nhớ.",
+      "B. Do vi phạm chính sách về quyền riêng tư và trải nghiệm người dùng.",
+      "C. Do Apple không cho phép sử dụng Camera trong ứng dụng.",
+      "D. Do ứng dụng chưa được ký số bằng Distribution Certificate."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple yêu cầu ứng dụng chỉ xin quyền khi thực sự cần thiết và phải giải thích rõ mục đích sử dụng quyền đó trong tệp Info.plist.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục 'Release Notes' (What's New) trong trang quản lý ứng dụng dùng để làm gì?",
+    "options": [
+      "A. Để lập trình viên ghi chú các đoạn code quan trọng.",
+      "B. Để thông báo cho người dùng về các thay đổi, tính năng mới hoặc lỗi đã sửa.",
+      "C. Để lưu trữ mật khẩu đăng nhập vào hệ thống quản lý.",
+      "D. Để yêu cầu Apple tăng tốc độ duyệt ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Release Notes là nội dung hiển thị cho người dùng trên Store để họ biết phiên bản mới này có những cải tiến hoặc sửa lỗi gì.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong iOS, loại Certificate nào được dùng để đẩy ứng dụng lên TestFlight hoặc App Store?",
+    "options": [
+      "A. Development Certificate",
+      "B. Apple Pay Certificate",
+      "C. Distribution Certificate",
+      "D. Push Notification Certificate"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Distribution Certificate (Chứng chỉ phân phối) là bắt buộc để ký ứng dụng khi muốn phát hành ra bên ngoài môi trường phát triển nội bộ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Nếu bạn làm mất file Keystore và mật khẩu của nó khi phát hành ứng dụng Android (không sử dụng Play App Signing), hậu quả là gì?",
+    "options": [
+      "A. Bạn không thể cập nhật phiên bản mới cho ứng dụng đó trên Google Play.",
+      "B. Ứng dụng sẽ tự động bị xóa khỏi Google Play.",
+      "C. Người dùng sẽ không thể mở được ứng dụng đã cài đặt.",
+      "D. Google sẽ tự động cấp một Keystore mới cho bạn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nếu không dùng Play App Signing, việc mất Keystore đồng nghĩa với việc bạn không thể ký số bản cập nhật mới với cùng danh tính, buộc phải tạo app mới với package name mới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Định danh duy nhất của một ứng dụng Android trên toàn hệ thống Google Play được gọi là gì?",
+    "options": [
+      "A. App Name",
+      "B. Package Name",
+      "C. Project ID",
+      "D. Version Code"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Package Name (ví dụ: com.company.myapp) là định danh duy nhất toàn cầu cho một ứng dụng Android. Không thể có hai ứng dụng trùng Package Name trên Store.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Google Play Console, 'Internal Testing' khác gì so với 'Production'?",
+    "options": [
+      "A. Internal Testing chỉ dành cho tối đa 100 người dùng nội bộ được chọn.",
+      "B. Production là kênh thử nghiệm còn Internal Testing là kênh phát hành chính thức.",
+      "C. Internal Testing không yêu cầu Google xét duyệt ứng dụng.",
+      "D. Production chỉ dành cho các ứng dụng miễn phí."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Internal Testing là kênh thử nghiệm nhanh dành cho nhóm nhỏ nội bộ, trong khi Production là kênh phát hành rộng rãi cho tất cả người dùng trên Store.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi tải ảnh Icon cho ứng dụng iOS lên App Store Connect, yêu cầu nào sau đây về định dạng là đúng?",
+    "options": [
+      "A. Phải là ảnh hình tròn.",
+      "B. Phải có nền trong suốt (transparent).",
+      "C. Phải là ảnh hình vuông và không có các lớp trong suốt.",
+      "D. Phải là định dạng file .svg."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Apple yêu cầu App Icon phải là hình vuông, không được có các kênh alpha (trong suốt), vì hệ thống sẽ tự động bo góc icon.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trạng thái 'Pending Developer Release' trong App Store Connect có nghĩa là gì?",
+    "options": [
+      "A. Ứng dụng đang bị Apple từ chối.",
+      "B. Ứng dụng đã được duyệt nhưng đang chờ nhà phát triển nhấn nút phát hành thủ công.",
+      "C. Ứng dụng đang trong quá trình tải lên từ Xcode.",
+      "D. Ứng dụng đang chờ người dùng tải về."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là trạng thái khi ứng dụng đã vượt qua vòng kiểm duyệt của Apple, nhưng nhà phát triển đã thiết lập chế độ phát hành thủ công thay vì tự động.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tài liệu 'Privacy Policy' (Chính sách bảo mật) là bắt buộc khi nào?",
+    "options": [
+      "A. Chỉ khi ứng dụng có thu phí người dùng.",
+      "B. Chỉ khi ứng dụng được phát hành ở khu vực Châu Âu.",
+      "C. Bắt buộc đối với tất cả ứng dụng đưa lên Store hiện nay.",
+      "D. Chỉ khi ứng dụng có dung lượng trên 100MB."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cả Apple và Google hiện nay đều yêu cầu tất cả ứng dụng phải có liên kết đến chính sách bảo mật để minh bạch về cách xử lý dữ liệu người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quá trình chuẩn bị metadata, 'Keywords' trên App Store có tác dụng gì?",
+    "options": [
+      "A. Giúp Apple kiểm tra xem ứng dụng có chứa virus không.",
+      "B. Giúp ứng dụng hiển thị khi người dùng tìm kiếm các từ khóa liên quan trên Store.",
+      "C. Dùng để cấu hình các biến môi trường trong code.",
+      "D. Để liệt kê các thư viện bên thứ ba mà ứng dụng sử dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Keywords là các từ khóa giúp tối ưu hóa tìm kiếm (ASO), giúp người dùng dễ dàng tìm thấy ứng dụng của bạn hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một ứng dụng bị 'Rejected' (Từ chối) trên App Store, bước đầu tiên nhà phát triển nên làm là gì?",
+    "options": [
+      "A. Xóa ứng dụng và tạo một App ID mới.",
+      "B. Gửi email khiếu nại trực tiếp cho CEO của Apple.",
+      "C. Đọc kỹ lý do từ chối trong Resolution Center và sửa đổi theo yêu cầu.",
+      "D. Ngay lập tức tải lên lại bản build cũ mà không thay đổi gì."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Apple luôn cung cấp lý do cụ thể và điều khoản vi phạm trong Resolution Center. Nhà phát triển cần hiểu rõ lỗi để sửa chữa trước khi nộp lại.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa 'Version Number' và 'Build Number' là gì?",
+    "options": [
+      "A. Version Number dành cho người dùng thấy, Build Number dùng để định danh các lần đóng gói nội bộ.",
+      "B. Version Number phải là số nguyên, Build Number phải là số thập phân.",
+      "C. Build Number không bao giờ được thay đổi.",
+      "D. Version Number chỉ dùng cho Android, Build Number chỉ dùng cho iOS."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Version Number (như 1.0.0) hiển thị trên Store cho người dùng, còn Build Number (như 42) giúp phân biệt các lần nộp file khác nhau trong cùng một phiên bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ nào sau đây thường được dùng để phân phối các bản thử nghiệm cho cả Android và iOS mà không thông qua Store chính thức (thường dùng trong nội bộ công ty)?",
+    "options": [
+      "A. Google Search Console",
+      "B. Firebase App Distribution",
+      "C. Adobe Creative Cloud",
+      "D. Slack"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Firebase App Distribution là một công cụ phổ biến cho phép gửi các bản build thử nghiệm (.apk, .ipa) tới các tester một cách nhanh chóng và tập trung.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Android, thuộc tính 'versionCode' trong file build.gradle có đặc điểm gì quan trọng?",
+    "options": [
+      "A. Phải là một chuỗi ký tự (string).",
+      "B. Phải là một số nguyên tăng dần sau mỗi lần cập nhật lên Store.",
+      "C. Có thể giống hệt phiên bản trước đó khi tải lên Store.",
+      "D. Dùng để đặt tên cho file APK khi xuất bản."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Google Play sử dụng versionCode (số nguyên) để xác định bản cập nhật nào mới hơn. Bản cập nhật sau phải có versionCode lớn hơn bản trước đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết lập 'Content Rating' trên Google Play Console, mục đích chính là gì?",
+    "options": [
+      "A. Để đánh giá điểm chất lượng của code.",
+      "B. Để xác định độ tuổi phù hợp cho người dùng ứng dụng.",
+      "C. Để tính toán giá tiền của ứng dụng.",
+      "D. Để so sánh ứng dụng với các đối thủ cạnh tranh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Content Rating giúp phân loại ứng dụng theo độ tuổi (ví dụ: 3+, 12+, 18+) dựa trên nội dung bên trong ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tệp tin có đuôi mở rộng là .ipa được sử dụng cho hệ điều hành nào?",
+    "options": [
+      "A. Android",
+      "B. Windows Phone",
+      "C. iOS",
+      "D. HarmonyOS"
+    ],
+    "correctAnswer": "C",
+    "explanation": ".ipa (iOS App Store Package) là định dạng tệp lưu trữ ứng dụng dành cho các thiết bị chạy iOS.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu ứng dụng của bạn yêu cầu đăng nhập, bạn cần cung cấp gì cho đội ngũ Review của Apple/Google?",
+    "options": [
+      "A. Mã nguồn của module đăng nhập.",
+      "B. Một tài khoản dùng thử (demo account) hợp lệ để họ có thể kiểm tra tính năng bên trong.",
+      "C. Số điện thoại cá nhân của trưởng dự án.",
+      "D. Danh sách tất cả mật khẩu của người dùng thật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để kiểm duyệt các tính năng nằm sau màn hình đăng nhập, nhà phát triển phải cung cấp thông tin đăng nhập demo để Reviewer có thể truy cập và kiểm tra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện 'Phased Release' (Phát hành theo từng giai đoạn) trên App Store, thời gian mặc định để bản cập nhật tự động đến tay 100% người dùng là bao lâu?",
+    "options": [
+      "A. 3 ngày",
+      "B. 7 ngày",
+      "C. 14 ngày",
+      "D. 30 ngày"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trên App Store, tính năng Phased Release tự động tăng tỷ lệ người dùng nhận cập nhật theo lịch trình cố định trong vòng 7 ngày (1%, 2%, 5%, 10%, 20%, 50%, 100%).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Google Play Console, sự khác biệt chính giữa 'Internal Testing' và 'Closed Testing' là gì?",
+    "options": [
+      "A. Internal Testing giới hạn 100 người dùng, Closed Testing giới hạn 50 người dùng.",
+      "B. Internal Testing không yêu cầu Google xét duyệt ứng dụng, trong khi Closed Testing có thể yêu cầu.",
+      "C. Internal Testing chỉ dành cho nhân viên công ty, Closed Testing dành cho người dùng vãng lai.",
+      "D. Internal Testing yêu cầu file APK, Closed Testing bắt buộc dùng App Bundle (AAB)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Internal Testing là cách nhanh nhất để phân phối bản build vì nó bỏ qua hầu hết các bước kiểm duyệt của Google, giúp tester nhận bản build gần như ngay lập tức.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn phát hiện một lỗi nghiêm trọng khi ứng dụng đang trong quá trình 'Staged Rollout' ở mức 20% trên Google Play. Hành động nào là hợp lý nhất?",
+    "options": [
+      "A. Xóa bản phát hành hiện tại và tải lên bản mới ngay lập tức.",
+      "B. Chờ đợi đến khi đạt 100% rồi mới tung bản vá lỗi.",
+      "C. Tạm dừng (Halt) bản phát hành để ngăn chặn người dùng mới tải về bản lỗi.",
+      "D. Nhắn tin cho Google Support yêu cầu gỡ bản build."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi phát hiện lỗi trong quá trình rollout, việc tạm dừng (Halt) giúp cô lập lỗi, không cho bản build lỗi tiếp cận thêm người dùng trong khi đội ngũ phát triển chuẩn bị bản vá.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng Android App Bundle (.aab) lại được Google khuyến khích hơn so với APK truyền thống khi upload lên Play Store?",
+    "options": [
+      "A. AAB cho phép cài đặt trực tiếp trên các thiết bị không có Google Play Services.",
+      "B. Google Play sẽ tự động tối ưu hóa dung lượng tải về bằng cách chỉ gửi các tài nguyên (resources) phù hợp với cấu hình thiết bị của người dùng.",
+      "C. AAB không yêu cầu ký số (signing) trước khi upload.",
+      "D. AAB hỗ trợ chạy ứng dụng trên cả iOS và Android."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dynamic Delivery của Google Play sử dụng AAB để tạo ra các APK tối ưu cho từng cấu hình thiết bị (màn hình, CPU, ngôn ngữ), giúp giảm đáng kể dung lượng download.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong iOS Code Signing, 'Provisioning Profile' đóng vai trò gì?",
+    "options": [
+      "A. Là một chứng chỉ bảo mật dùng để mã hóa mã nguồn ứng dụng.",
+      "B. Là cầu nối liên kết giữa Certificate, App ID và Device ID để xác nhận quyền chạy ứng dụng trên thiết bị.",
+      "C. Là file cấu hình dùng để lưu trữ các API Key của bên thứ ba.",
+      "D. Là công cụ giúp nén ứng dụng trước khi đưa lên App Store."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Provisioning Profile chứa thông tin về Certificate (ai build), App ID (app nào) và Devices (chạy trên máy nào), đảm bảo ứng dụng được cài đặt hợp lệ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một iOS Distribution Certificate bị thu hồi (revoked) hoặc hết hạn, điều gì sẽ xảy ra với các ứng dụng đã được phát hành trên App Store?",
+    "options": [
+      "A. Ứng dụng sẽ bị xóa ngay lập tức khỏi App Store.",
+      "B. Người dùng hiện tại không thể mở ứng dụng được nữa.",
+      "C. Ứng dụng vẫn hoạt động bình thường trên máy người dùng và trên Store, nhưng bạn không thể upload bản build mới với certificate đó.",
+      "D. Ứng dụng sẽ bị chuyển về trạng thái 'Pending Contract'."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc hết hạn Distribution Certificate không ảnh hưởng đến ứng dụng đã live, nhưng nó ngăn cản việc ký số cho các bản cập nhật mới cho đến khi certificate mới được tạo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Theo nguyên tắc Semantic Versioning (SemVer), khi bạn sửa một lỗi nhỏ (bug fix) mà không thay đổi tính năng hay giao diện, bạn nên tăng thành phần nào trong chuỗi phiên bản (ví dụ: 1.2.3)?",
+    "options": [
+      "A. Major (số 1)",
+      "B. Minor (số 2)",
+      "C. Patch (số 3)",
+      "D. Build Number"
+    ],
+    "correctAnswer": "C",
+    "explanation": "SemVer quy định cấu trúc Major.Minor.Patch. Patch được tăng lên khi có các bản vá lỗi (bug fixes) mà không làm thay đổi API hoặc tính năng chính.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong App Store Connect, trạng thái 'Metadata Rejection' thường xảy ra khi nào?",
+    "options": [
+      "A. Khi ứng dụng bị crash ngay khi khởi động trên thiết bị của reviewer.",
+      "B. Khi các thông tin mô tả, ảnh chụp màn hình hoặc phân loại lứa tuổi không tuân thủ quy định.",
+      "C. Khi mã nguồn ứng dụng vi phạm các điều khoản bảo mật dữ liệu.",
+      "D. Khi server của ứng dụng không thể kết nối trong quá trình review."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Metadata Rejection liên quan đến các thông tin hiển thị trên Store (ảnh, mô tả, từ khóa) chứ không phải do lỗi logic trong code của ứng dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để mời người dùng bên ngoài (External Testers) tham gia thử nghiệm qua TestFlight, yêu cầu bắt buộc là gì?",
+    "options": [
+      "A. Bản build phải được Apple phê duyệt (Beta App Review).",
+      "B. Người dùng phải có tài khoản Apple Developer trả phí.",
+      "C. Thiết bị của người dùng phải được đăng ký UDID trong Provisioning Profile.",
+      "D. Ứng dụng phải được viết bằng ngôn ngữ Swift."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khác với Internal Testers, các bản build dành cho External Testers trên TestFlight phải trải qua một bước kiểm duyệt nhẹ từ Apple trước khi có thể gửi lời mời.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Android, 'versionCode' và 'versionName' khác nhau như thế nào?",
+    "options": [
+      "A. Cả hai đều hiển thị cho người dùng thấy trên Play Store.",
+      "B. versionCode là số nguyên dùng để hệ thống xác định thứ tự cập nhật; versionName là chuỗi ký tự hiển thị cho người dùng.",
+      "C. versionCode là tên phiên bản (ví dụ: '1.0.0'); versionName là mã định danh duy nhất của ứng dụng.",
+      "D. versionCode do Google tự sinh; versionName do lập trình viên tự đặt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "versionCode là một số nguyên tăng dần giúp Google Play biết bản build nào mới hơn. versionName là thông tin thân thiện với người dùng (ví dụ: '2.1.5-beta').",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi upload ứng dụng iOS lên App Store Connect, bạn nhận được lỗi 'Missing Compliance' liên quan đến Encryption. Bạn nên xử lý thế nào nếu ứng dụng chỉ sử dụng HTTPS tiêu chuẩn?",
+    "options": [
+      "A. Phải nộp đơn xin phép xuất khẩu phần mềm cho chính phủ Mỹ.",
+      "B. Khai báo trong file Info.plist rằng ứng dụng sử dụng các thuật toán mã hóa được miễn trừ (ITSAppUsesNonExemptEncryption = NO).",
+      "C. Gỡ bỏ toàn bộ các kết nối HTTPS để tránh bước kiểm tra này.",
+      "D. Thay đổi Bundle ID của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hầu hết các ứng dụng sử dụng HTTPS tiêu chuẩn được coi là sử dụng mã hóa được miễn trừ. Việc cấu hình trong Info.plist giúp bỏ qua câu hỏi xác nhận thủ công mỗi khi upload bản build.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tính năng 'App Signing by Google Play' mang lại lợi ích chính nào cho nhà phát triển?",
+    "options": [
+      "A. Tự động sửa lỗi crash cho ứng dụng.",
+      "B. Google sẽ quản lý và lưu trữ an toàn khóa ký ứng dụng (App Signing Key), cho phép bạn khôi phục nếu mất khóa upload.",
+      "C. Giúp ứng dụng chạy nhanh hơn trên các dòng máy Pixel.",
+      "D. Tự động dịch mô tả ứng dụng sang 50 ngôn ngữ khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với App Signing by Google Play, Google giữ khóa gốc. Nếu bạn mất khóa upload (upload key), bạn có thể yêu cầu Google reset để tiếp tục cập nhật ứng dụng, điều mà trước đây là không thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao một ứng dụng có thể bị từ chối trên App Store theo Guideline 2.1 (App Completeness) dù code không có lỗi logic?",
+    "options": [
+      "A. Vì ứng dụng không hỗ trợ chế độ Dark Mode.",
+      "B. Vì nhà phát triển không cung cấp tài khoản demo để reviewer có thể đăng nhập và kiểm tra các tính năng bên trong.",
+      "C. Vì ứng dụng có dung lượng quá lớn (trên 500MB).",
+      "D. Vì ứng dụng sử dụng quá nhiều thư viện mã nguồn mở."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple yêu cầu reviewer phải truy cập được toàn bộ tính năng. Nếu ứng dụng yêu cầu đăng nhập mà không có tài khoản demo, nó sẽ bị từ chối vì lý do không thể kiểm tra đầy đủ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quy trình CI/CD cho mobile, bước 'Fastlane Match' thường được sử dụng để giải quyết vấn đề gì?",
+    "options": [
+      "A. Tự động viết unit test cho ứng dụng.",
+      "B. Đồng bộ hóa Certificates và Provisioning Profiles giữa các thành viên trong đội ngũ phát triển và máy build server.",
+      "C. Tối ưu hóa kích thước hình ảnh trước khi upload lên Store.",
+      "D. Kiểm tra xem ứng dụng có vi phạm bản quyền hình ảnh hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Fastlane Match giúp quản lý tập trung các file code signing trong một repository riêng, giúp việc setup máy build mới hoặc thêm developer mới vào dự án iOS trở nên dễ dàng và nhất quán.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi cấu hình 'Pre-launch report' trong Google Play Console, hệ thống sẽ thực hiện hành động gì?",
+    "options": [
+      "A. Gửi email cho tất cả người dùng đã đăng ký trước.",
+      "B. Tự động chạy ứng dụng trên các thiết bị thực trong Firebase Test Lab để tìm lỗi crash, hiệu năng và bảo mật.",
+      "C. Tạo ra một bản báo cáo về doanh thu dự kiến của ứng dụng.",
+      "D. Kiểm tra lỗi chính tả trong phần mô tả ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pre-launch report tự động cài đặt bản build của bạn lên nhiều thiết bị thực để phát hiện sớm các vấn đề về tương thích và crash trước khi bạn phát hành chính thức.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần cập nhật ứng dụng iOS để sửa một lỗi bảo mật khẩn cấp nhưng quy trình review thông thường đang quá tải. Bạn nên làm gì?",
+    "options": [
+      "A. Tải lên nhiều bản build liên tục để gây chú ý.",
+      "B. Gửi yêu cầu 'Expedited Review' (Xem xét nhanh) thông qua form liên hệ hỗ trợ của Apple.",
+      "C. Xóa ứng dụng cũ và tạo một App ID mới.",
+      "D. Đổi tên ứng dụng để đánh lừa hệ thống hàng đợi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple cho phép nhà phát triển yêu cầu 'Expedited Review' trong những trường hợp khẩn cấp như sửa lỗi bảo mật nghiêm trọng hoặc các sự kiện có thời gian giới hạn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Google Play Console, chỉ số 'ANR rate' có ý nghĩa gì đối với việc duy trì ứng dụng trên Store?",
+    "options": [
+      "A. Tỷ lệ người dùng gỡ cài đặt ứng dụng hàng ngày.",
+      "B. Tỷ lệ ứng dụng bị treo (Application Not Responding). Nếu tỷ lệ này vượt ngưỡng cho phép, ứng dụng có thể bị giảm thứ hạng tìm kiếm.",
+      "C. Tỷ lệ người dùng nhấn vào quảng cáo bên trong ứng dụng.",
+      "D. Tỷ lệ chuyển đổi từ lượt xem trang cửa hàng sang lượt cài đặt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ANR (Application Not Responding) là một chỉ số chất lượng cốt lõi. Google theo dõi sát sao chỉ số này để đảm bảo trải nghiệm người dùng, và nó ảnh hưởng trực tiếp đến khả năng hiển thị của app.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi chuẩn bị 'Store Listing' cho ứng dụng hỗ trợ nhiều quốc gia, chiến lược nào là hiệu quả nhất để tăng lượt tải?",
+    "options": [
+      "A. Chỉ sử dụng tiếng Anh cho tất cả các vùng lãnh thổ.",
+      "B. Sử dụng Google Translate để dịch toàn bộ mô tả sang mọi ngôn ngữ có thể.",
+      "C. Thực hiện Localization (Bản địa hóa) bao gồm cả ngôn ngữ, ảnh chụp màn hình và từ khóa phù hợp với văn hóa từng thị trường.",
+      "D. Tạo mỗi quốc gia một App ID riêng biệt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Localization không chỉ là dịch thuật mà còn là điều chỉnh nội dung hình ảnh và từ khóa (ASO) để phù hợp với hành vi tìm kiếm và văn hóa của người dùng địa phương.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lỗi 'Invalid Bundle. The bundle contains a shortcut item with a duplicate identifier' khi upload lên App Store Connect thường do đâu?",
+    "options": [
+      "A. Do file ảnh icon bị trùng tên.",
+      "B. Do cấu hình UIApplicationShortcutItems trong Info.plist có các ID bị lặp lại.",
+      "C. Do bạn đang upload bản build có version thấp hơn bản đang live.",
+      "D. Do tài khoản developer của bạn chưa thanh toán phí thường niên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi này xuất hiện khi các phím tắt (Quick Actions) trên màn hình home được định nghĩa trong Info.plist có các định danh (identifiers) không duy nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quá trình chuẩn bị phát hành, việc kiểm tra 'Data Safety' (Android) hoặc 'App Privacy' (iOS) nhằm mục đích gì?",
+    "options": [
+      "A. Để Apple và Google kiểm tra xem code có chứa virus không.",
+      "B. Để minh bạch với người dùng về việc ứng dụng thu thập, chia sẻ dữ liệu gì và dùng vào mục đích nào.",
+      "C. Để đăng ký bản quyền cho các thuật toán xử lý dữ liệu.",
+      "D. Để giới hạn số lượng dữ liệu mà ứng dụng có thể lưu trữ trên máy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là các yêu cầu bắt buộc hiện nay nhằm bảo vệ quyền riêng tư người dùng, yêu cầu nhà phát triển tự khai báo trung thực về các loại dữ liệu được thu thập.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn phát hành một tính năng mới cho một nhóm nhỏ người dùng Android để thu thập phản hồi trước khi tung ra toàn bộ. Bạn nên sử dụng loại track nào?",
+    "options": [
+      "A. Production track với 100% rollout.",
+      "B. Open Testing track.",
+      "C. Internal Testing track.",
+      "D. Closed Testing track."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Open Testing (Beta) cho phép bất kỳ ai trên Play Store cũng có thể tham gia thử nghiệm (lên đến số lượng giới hạn bạn đặt ra), giúp thu thập phản hồi từ người dùng thực tế một cách rộng rãi hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trên iOS, 'Bitcode' là gì và tại sao nó lại quan trọng khi submit app?",
+    "options": [
+      "A. Là một loại mã nguồn mở giúp ứng dụng chạy nhanh hơn.",
+      "B. Là một dạng trung gian của chương trình đã biên dịch, cho phép Apple tối ưu hóa và biên dịch lại ứng dụng cho các kiến trúc CPU mới trong tương lai mà không cần bạn upload lại.",
+      "C. Là mã bảo mật để ngăn chặn việc dịch ngược ứng dụng.",
+      "D. Là công cụ dùng để nén dung lượng video trong ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bitcode cho phép App Store tối ưu hóa binary cho từng thiết bị cụ thể (App Thinning) và tự động cập nhật ứng dụng cho các dòng chip mới sau này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một bản build iOS bị trạng thái 'Missing Export Compliance', bạn có thể giải quyết nhanh nhất bằng cách nào nếu không muốn sửa code?",
+    "options": [
+      "A. Nhấn vào nút 'Provide Export Compliance Information' ngay trên App Store Connect và trả lời các câu hỏi trắc nghiệm.",
+      "B. Chờ 24 giờ để hệ thống tự động bỏ qua.",
+      "C. Gửi email giải trình cho Tim Cook.",
+      "D. Xóa bản build đó đi và upload lại bản build khác y hệt."
+    ],
+    "correctAnswer": "A",
+    "explanation": "App Store Connect cung cấp một quy trình xác nhận thủ công (compliance flow) ngay trên giao diện web để bạn khai báo về tình trạng mã hóa của ứng dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc duy trì 'Release Notes' (What's New) chất lượng lại quan trọng?",
+    "options": [
+      "A. Vì nó giúp thuật toán của Store ưu tiên hiển thị ứng dụng hơn.",
+      "B. Vì nó thông báo cho người dùng về các giá trị mới, lỗi đã sửa, giúp tăng tỷ lệ cập nhật và giữ chân người dùng.",
+      "C. Vì Apple sẽ từ chối ứng dụng nếu Release Notes quá ngắn.",
+      "D. Vì Release Notes là nơi duy nhất để đặt các liên kết quảng cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Release Notes minh bạch giúp người dùng hiểu tại sao họ nên cập nhật và cho thấy nhà phát triển đang tích cực cải thiện sản phẩm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Nếu bạn muốn thay đổi 'Bundle ID' (iOS) hoặc 'Package Name' (Android) của một ứng dụng đã live, điều gì sẽ xảy ra?",
+    "options": [
+      "A. Ứng dụng sẽ được cập nhật phiên bản mới bình thường.",
+      "B. Store sẽ coi đó là một ứng dụng hoàn toàn mới và bạn không thể cập nhật đè lên ứng dụng cũ.",
+      "C. Hệ thống sẽ tự động chuyển hướng người dùng từ ID cũ sang ID mới.",
+      "D. Bạn chỉ cần đổi tên trong file cấu hình là xong, không ảnh hưởng gì."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bundle ID và Package Name là định danh duy nhất của ứng dụng trên Store. Thay đổi chúng đồng nghĩa với việc tạo ra một thực thể mới, người dùng cũ sẽ không nhận được thông báo cập nhật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quy trình CI/CD cho iOS, giải pháp nào là tối ưu nhất để quản lý Code Signing cho một đội ngũ lớn nhằm tránh xung đột Certificate và Provisioning Profile?",
+    "options": [
+      "A. Chia sẻ file .p12 và profile thủ công qua kênh chat nội bộ của đội ngũ.",
+      "B. Sử dụng Fastlane Match để lưu trữ mã hóa Certificate/Profile trong một Git repo riêng biệt.",
+      "C. Để Xcode tự động quản lý (Automatic Signing) trên tất cả các máy local và CI server.",
+      "D. Mỗi developer tự tạo Certificate và Profile riêng trên trang Developer Portal của Apple."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Fastlane Match giúp đồng bộ hóa một nguồn sự thật duy nhất (Single Source of Truth) cho toàn đội ngũ, giúp tránh tình trạng vượt quá giới hạn Certificate của Apple và đảm bảo tính nhất quán giữa môi trường local và CI.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi triển khai 'Phased Rollout' trên App Store, nếu phát hiện lỗi nghiêm trọng ở mức 10% người dùng, hành động nào sau đây là đúng đắn nhất về mặt quy trình?",
+    "options": [
+      "A. Xóa bản build hiện tại khỏi App Store Connect ngay lập tức.",
+      "B. Tạm dừng (Pause) việc phát hành để ngăn chặn người dùng mới tải về bản lỗi, sau đó chuẩn bị bản fix.",
+      "C. Đợi cho đến khi rollout đạt 100% rồi mới tung bản vá lỗi (hotfix).",
+      "D. Liên hệ với Apple Support để yêu cầu họ thu hồi bản cập nhật từ máy người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "App Store cho phép tạm dừng Phased Rollout tối đa 30 ngày. Điều này giúp ngăn chặn lỗi lan rộng trong khi đội ngũ phát triển chuẩn bị một bản build mới để thay thế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi về mặt kỹ thuật giữa việc phân phối qua Google Play App Bundle (.aab) so với APK truyền thống là gì?",
+    "options": [
+      "A. App Bundle cho phép cài đặt trực tiếp trên thiết bị mà không cần qua Store.",
+      "B. Google Play sử dụng App Bundle để tạo ra các APK tối ưu (split APKs) dựa trên cấu hình thiết bị của người dùng.",
+      "C. App Bundle không hỗ trợ các thư viện native (C++), chỉ hỗ trợ Java/Kotlin.",
+      "D. APK truyền thống luôn có dung lượng nhỏ hơn vì chứa tất cả tài nguyên cho mọi thiết bị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "App Bundle cho phép Google Play Dynamic Delivery tạo ra các bản cài đặt tối ưu cho từng cấu hình máy (mật độ điểm ảnh, CPU architecture, ngôn ngữ), giúp giảm đáng kể dung lượng tải về.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi ứng dụng Android bị từ chối do vi phạm chính sách 'Permissions and APIs that Access Sensitive Information', bước phân tích nào là quan trọng nhất?",
+    "options": [
+      "A. Xóa bỏ hoàn toàn các tính năng liên quan đến quyền đó khỏi ứng dụng.",
+      "B. Kiểm tra lại file Manifest và các thư viện bên thứ ba (SDKs) xem có yêu cầu quyền ngầm hay không.",
+      "C. Gửi lại bản build cũ và hy vọng lần này sẽ được duyệt.",
+      "D. Thay đổi tên package của ứng dụng để xóa bỏ lịch sử vi phạm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nhiều trường hợp quyền nhạy cảm được yêu cầu bởi các SDK quảng cáo hoặc phân tích tích hợp bên trong mà developer không để ý. Cần kiểm tra 'Merged Manifest' để xác định nguồn gốc yêu cầu quyền.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc duy trì 'Mapping file' (Android) hoặc 'dSYM file' (iOS) lại cực kỳ quan trọng trong quy trình Release?",
+    "options": [
+      "A. Để tăng tốc độ tải ứng dụng lên Store.",
+      "B. Để Apple và Google có thể can thiệp vào mã nguồn của ứng dụng khi cần thiết.",
+      "C. Để giải mã (symbolicate/de-obfuscate) các stack trace từ crash report thành code có thể đọc được.",
+      "D. Để đảm bảo ứng dụng có thể chạy được trên các phiên bản OS cũ hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi release, mã thường được tối ưu hóa (R8/ProGuard trên Android) hoặc biên dịch sang mã máy (iOS). Mapping/dSYM file giúp ánh xạ các địa chỉ bộ nhớ hoặc tên hàm đã bị mã hóa ngược lại về code gốc để debug.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng iOS sử dụng các tính năng liên quan đến tiền điện tử (cryptocurrency) bị từ chối theo Guideline 3.1.5. Đội ngũ cần làm gì để tuân thủ?",
+    "options": [
+      "A. Chuyển sang thanh toán qua cổng ngoài thay vì sử dụng In-App Purchase.",
+      "B. Đảm bảo việc trao đổi/giao dịch chỉ được thực hiện ở các quốc gia mà ứng dụng có giấy phép hoạt động hợp lệ.",
+      "C. Giấu các tính năng này khi gửi ứng dụng đi review và bật lại sau khi đã lên Store.",
+      "D. Chỉ cung cấp tính năng này cho người dùng đã đăng ký thành viên trả phí."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple yêu cầu các ứng dụng liên quan đến giao dịch tiền điện tử phải được phát hành bởi các pháp nhân có giấy phép hợp lệ tại khu vực mà ứng dụng hoạt động.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chiến lược nào là hiệu quả nhất để giảm thiểu rủi ro khi phát hành một tính năng lớn (Epic) có khả năng gây ảnh hưởng đến hiệu năng hệ thống?",
+    "options": [
+      "A. Tung ra toàn bộ tính năng cho 100% người dùng để thu thập dữ liệu nhanh nhất.",
+      "B. Sử dụng Feature Flags (Remote Config) để bật tính năng dần dần cho các nhóm người dùng nhỏ.",
+      "C. Chỉ phát hành tính năng trên phiên bản Android và đợi phản hồi trước khi lên iOS.",
+      "D. Viết mô tả chi tiết trong Release Notes để người dùng biết cách tránh lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Feature Flags cho phép kiểm soát việc bật/tắt tính năng từ server mà không cần phát hành bản build mới, giúp cô lập rủi ro và rollback tức thì nếu có sự cố.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi quản lý Versioning cho một ứng dụng Mobile, cách tiếp cận nào giúp CI/CD tự động hóa tốt nhất mà không gây xung đột số build?",
+    "options": [
+      "A. Để Developer tự tăng số build thủ công trong code trước khi push.",
+      "B. Sử dụng số Timestamp của hệ thống làm Build Number.",
+      "C. Sử dụng số thứ tự tăng dần từ CI Pipeline (ví dụ: BUILD_NUMBER) làm Build Number.",
+      "D. Luôn giữ Build Number cố định và chỉ thay đổi Version String."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng biến số từ CI server đảm bảo mỗi bản build được tạo ra là duy nhất và tăng dần, tránh lỗi trùng lặp build number khi upload lên Store.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Custom Product Pages' trên App Store là gì?",
+    "options": [
+      "A. Giúp ứng dụng vượt qua vòng kiểm duyệt nhanh hơn.",
+      "B. Cho phép tạo nhiều trang đích khác nhau với nội dung tùy chỉnh để tối ưu hóa tỷ lệ chuyển đổi cho các nguồn traffic khác nhau.",
+      "C. Cho phép thay đổi icon ứng dụng mà không cần cập nhật bản build mới.",
+      "D. Giúp ứng dụng hiển thị ở vị trí cao hơn trong kết quả tìm kiếm tự nhiên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Custom Product Pages cho phép marketing team tạo ra các trang giới thiệu phù hợp với từng phân khúc người dùng hoặc chiến dịch quảng cáo, từ đó tăng Conversion Rate (CVR).",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng iOS bị từ chối với lý do vi phạm 'Guideline 4.0 - Design'. Team phát hiện ra ứng dụng thường xuyên bị crash ngay khi mở trên iPad, dù ứng dụng chỉ định hướng cho iPhone. Nguyên nhân là gì?",
+    "options": [
+      "A. Apple Reviewer sử dụng thiết bị hỏng để kiểm tra.",
+      "B. Ứng dụng iPhone phải có khả năng chạy ở chế độ tương thích trên iPad mà không bị crash.",
+      "C. Do ứng dụng chưa hỗ trợ Split View trên iPad.",
+      "D. Do file Info.plist chưa khai báo thiết bị iPad."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Theo quy định của Apple, ngay cả khi ứng dụng được thiết kế cho iPhone, nó vẫn phải hoạt động ổn định trên iPad ở chế độ tương thích (compatibility mode).",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện cập nhật một ứng dụng có hàng triệu người dùng, chỉ số 'ANR rate' (Android) tăng vọt. Bạn nên ưu tiên phân tích yếu tố nào đầu tiên?",
+    "options": [
+      "A. Dung lượng file APK sau khi nén.",
+      "B. Các tác vụ nặng đang chạy trên Main Thread ngay sau khi khởi động.",
+      "C. Số lượng đánh giá 1 sao trên Store.",
+      "D. Tốc độ phản hồi của API server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ANR (Application Not Responding) xảy ra khi Main Thread bị block quá lâu (thường là 5 giây). Việc phân tích các tác vụ khởi tạo ở Main Thread là ưu tiên hàng đầu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quy trình bảo mật App Release, 'App Attest' (iOS) hoặc 'Play Integrity API' (Android) được sử dụng để làm gì?",
+    "options": [
+      "A. Để kiểm tra xem người dùng có đánh giá ứng dụng hay chưa.",
+      "B. Để xác thực rằng các request gửi đến server đến từ một bản cài đặt ứng dụng hợp lệ và thiết bị chưa bị can thiệp (root/jailbreak).",
+      "C. Để mã hóa toàn bộ dữ liệu lưu trữ trong SharedPreferences hoặc UserDefaults.",
+      "D. Để tự động cập nhật ứng dụng lên phiên bản mới nhất mà không cần người dùng đồng ý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là các giải pháp chống gian lận (anti-fraud) mạnh mẽ, giúp bảo vệ backend bằng cách xác minh tính toàn vẹn của ứng dụng và thiết bị.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang quản lý một ứng dụng 'White-label' với hàng trăm client khác nhau. Chiến lược phát hành nào giúp tối ưu chi phí bảo trì nhất?",
+    "options": [
+      "A. Tạo mỗi client một repo và một App ID riêng biệt.",
+      "B. Sử dụng một codebase duy nhất với kiến trúc Modular và dùng Build Variants/Schemes để cấu hình cho từng client.",
+      "C. Yêu cầu mỗi client tự thuê developer riêng để quản lý code.",
+      "D. Chỉ phát hành một ứng dụng duy nhất và yêu cầu người dùng nhập mã client sau khi đăng nhập."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Build Variants (Android) hoặc Schemes/Targets (iOS) giúp chia sẻ code chung tối đa trong khi vẫn cho phép tùy biến UI/Logic cho từng thương hiệu riêng lẻ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Apple yêu cầu cung cấp 'App Privacy Details' (Privacy Nutrition Labels). Nếu ứng dụng của bạn sử dụng một SDK bên thứ ba để thu thập IDFA cho quảng cáo, bạn phải khai báo như thế nào?",
+    "options": [
+      "A. Không cần khai báo vì đó là trách nhiệm của SDK bên thứ ba.",
+      "B. Khai báo rằng ứng dụng thu thập 'Device ID' và dữ liệu này được dùng để 'Tracking'.",
+      "C. Chỉ khai báo nếu ứng dụng trực tiếp lưu trữ IDFA vào database của mình.",
+      "D. Khai báo là 'Data Not Collected' để tránh làm người dùng lo lắng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Developer chịu trách nhiệm khai báo mọi dữ liệu được thu thập bởi cả ứng dụng và các SDK tích hợp. Việc dùng IDFA để định danh người dùng qua các app khác nhau bắt buộc phải khai báo là Tracking.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Google Play Managed Signing' được khuyến nghị cho các ứng dụng hiện đại?",
+    "options": [
+      "A. Vì nó giúp ứng dụng chạy nhanh hơn trên các thiết bị Pixel.",
+      "B. Vì nó cho phép Google tự động sửa lỗi trong code của bạn.",
+      "C. Vì Google sẽ chịu trách nhiệm bảo mật App Signing Key và cho phép bạn khôi phục nếu làm mất Upload Key.",
+      "D. Vì nó bắt buộc phải có để ứng dụng có thể hiển thị trên Google Play Store."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nếu bạn tự quản lý App Signing Key và làm mất nó, bạn sẽ không bao giờ có thể cập nhật ứng dụng đó được nữa. Managed Signing giúp giảm thiểu rủi ro thảm họa này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi chuẩn bị Release Notes cho một bản cập nhật lớn, cách tiếp cận nào mang lại giá trị nhất cho cả người dùng và đội ngũ hỗ trợ?",
+    "options": [
+      "A. Chỉ ghi 'Bug fixes and performance improvements' để tiết kiệm thời gian.",
+      "B. Liệt kê mọi commit message kỹ thuật từ Git.",
+      "C. Tóm tắt các tính năng mới nổi bật bằng ngôn ngữ dễ hiểu và liệt kê các lỗi lớn đã được khắc phục.",
+      "D. Để trống phần Release Notes vì người dùng ít khi đọc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Release Notes minh bạch giúp tăng sự tin tưởng của người dùng và giúp đội ngũ Customer Support biết chính xác những gì đã thay đổi để hỗ trợ khách hàng tốt hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng iOS nhận được yêu cầu 'Expedited Review' (duyệt nhanh). Trường hợp nào sau đây thường được Apple chấp nhận?",
+    "options": [
+      "A. Ứng dụng cần ra mắt đúng ngày kỷ niệm thành lập công ty.",
+      "B. Khắc phục một lỗi bảo mật nghiêm trọng hoặc một lỗi gây crash diện rộng cho người dùng hiện tại.",
+      "C. Vừa thêm một tính năng mới rất thú vị mà đối thủ cạnh tranh chưa có.",
+      "D. Đã đợi quá 24 giờ mà chưa thấy ứng dụng được duyệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple chỉ dành quyền duyệt nhanh cho các tình huống khẩn cấp như lỗi kỹ thuật nghiêm trọng hoặc các sự kiện mang tính thời điểm không thể trì hoãn (như app cho một sự kiện thể thao sắp diễn ra).",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong context của Android App Bundle, 'Dynamic Feature Modules' giải quyết vấn đề gì?",
+    "options": [
+      "A. Giúp ứng dụng tự động thay đổi giao diện theo thời gian thực.",
+      "B. Cho phép tải về các phần của ứng dụng chỉ khi người dùng cần đến, giúp giảm dung lượng cài đặt ban đầu.",
+      "C. Tự động dịch nội dung ứng dụng sang ngôn ngữ của người dùng.",
+      "D. Giúp ứng dụng chạy được trên cả Web và Desktop."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dynamic Feature Modules cho phép tách các tính năng ít dùng (ví dụ: module thanh toán nâng cao, module chụp ảnh chuyên sâu) ra khỏi bản cài đặt cơ sở để tải về sau.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để tối ưu hóa quy trình 'Store Listing A/B Testing' trên Google Play, yếu tố nào thường mang lại tác động lớn nhất đến tỷ lệ chuyển đổi (Conversion Rate)?",
+    "options": [
+      "A. Tên của nhà phát triển (Developer Name).",
+      "B. Short Description và App Icon.",
+      "C. Ngày phát hành phiên bản đầu tiên.",
+      "D. Danh sách các quyền (Permissions) mà ứng dụng yêu cầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Icon và Short Description là những thứ đầu tiên người dùng nhìn thấy khi lướt qua Store. Những thay đổi nhỏ ở đây thường có tác động lớn nhất đến quyết định cài đặt của họ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi chuyển đổi một ứng dụng từ trả phí (Paid) sang miễn phí kèm theo In-App Purchase (Freemium), rủi ro lớn nhất về mặt 'Publishing' là gì?",
+    "options": [
+      "A. Apple sẽ thu phí cao hơn đối với ứng dụng Freemium.",
+      "B. Những người dùng đã mua ứng dụng trước đó có thể cảm thấy bị phản bội nếu không được đền bù xứng đáng.",
+      "C. Google Play không cho phép chuyển đổi ứng dụng từ Paid sang Free.",
+      "D. Ứng dụng sẽ bị xóa khỏi bảng xếp hạng 'Top Paid'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Về mặt kỹ thuật và quy trình, việc xử lý quyền lợi cho người dùng cũ (Legacy users) là phức tạp nhất để tránh đánh giá tiêu cực và yêu cầu hoàn tiền hàng loạt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lệnh 'fastlane deliver' trong bộ công cụ Fastlane chủ yếu được dùng để làm gì?",
+    "options": [
+      "A. Chạy các unit test tự động.",
+      "B. Gửi thông báo đẩy (Push Notification) cho người dùng.",
+      "C. Tự động hóa việc upload metadata, screenshots và bản build lên App Store Connect.",
+      "D. Phân tích mã nguồn để tìm lỗ hổng bảo mật."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Deliver là một công cụ mạnh mẽ trong hệ sinh thái Fastlane giúp quản lý và đồng bộ hóa toàn bộ thông tin trên Store thông qua các file cấu hình (Deliverfile).",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao một Mobile Architect nên ưu tiên việc 'Automated Screenshot Generation' trong quy trình Release?",
+    "options": [
+      "A. Vì Apple bắt buộc phải dùng ảnh chụp màn hình tự động.",
+      "B. Để đảm bảo tính nhất quán của giao diện trên hàng chục kích thước màn hình và ngôn ngữ khác nhau mà không tốn công sức thủ công.",
+      "C. Để ảnh chụp màn hình trông đẹp hơn so với chụp bằng tay.",
+      "D. Để giảm dung lượng của ứng dụng khi tải về."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với hàng chục loại thiết bị (iPhone, iPad các đời) và nhiều ngôn ngữ hỗ trợ, việc chụp ảnh thủ công là cực kỳ tốn kém và dễ sai sót. Tự động hóa giúp duy trì chất lượng metadata chuyên nghiệp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong trường hợp ứng dụng bị 'Metadata Rejection', bạn cần làm gì để tiếp tục quy trình review?",
+    "options": [
+      "A. Phải upload một bản build mới với số version cao hơn.",
+      "B. Chỉ cần chỉnh sửa thông tin metadata (mô tả, ảnh, v.v.) theo yêu cầu và nhấn 'Submit' lại mà không cần build mới.",
+      "C. Xóa ứng dụng và tạo một App ID mới.",
+      "D. Gửi khiếu nại lên App Review Board."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Metadata Rejection xảy ra khi code không có vấn đề nhưng thông tin hiển thị trên Store vi phạm quy định. Bạn không cần thay đổi code hay upload lại build trong trường hợp này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc sử dụng 'Bitcode' (trước đây được Apple khuyến khích) mang lại lợi ích gì cho quá trình phân phối ứng dụng?",
+    "options": [
+      "A. Cho phép ứng dụng chạy trên cả Android.",
+      "B. Cho phép Apple tự động tối ưu hóa và biên dịch lại bản build cho các kiến trúc CPU mới trong tương lai mà không cần developer upload lại.",
+      "C. Giúp mã nguồn được bảo mật tuyệt đối khỏi các hacker.",
+      "D. Giảm thời gian review ứng dụng xuống còn vài phút."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bitcode là một dạng trung gian của mã nguồn đã biên dịch. Nó cho phép Apple thực hiện các tối ưu hóa phía server để tạo ra các bản binary nhỏ gọn và hiệu quả hơn cho từng thiết bị cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện cập nhật chiến lược Certificate Pinning trong một bản release mới để thay thế chứng chỉ SSL sắp hết hạn, quy trình nào sau đây là tối ưu nhất để đảm bảo tính liên tục của dịch vụ và tránh tình trạng ứng dụng bị 'bricked' (không thể kết nối server) cho người dùng ở các phiên bản cũ?",
+    "options": [
+      "A. Thu hồi chứng chỉ cũ trên server ngay khi bản release mới đạt 10% rollout trên Google Play/App Store để buộc người dùng cũ phải cập nhật.",
+      "B. Triển khai cơ chế 'Double Pinning' (pin cả hash của chứng chỉ cũ và mới) trong mã nguồn bản release, sau đó chỉ chuyển đổi chứng chỉ trên server khi tỷ lệ adoption của phiên bản mới đạt ngưỡng an toàn.",
+      "C. Sử dụng tính năng 'Staged Rollout' và cấu hình 'Minimum OS Version' cao hơn để loại bỏ các thiết bị không hỗ trợ giao thức TLS mới nhất.",
+      "D. Cấu hình metadata trên Store để yêu cầu 'Force Update' ngay lập tức đối với tất cả người dùng trước khi thực hiện thay đổi chứng chỉ ở phía hạ tầng server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong quản lý phát hành nâng cao, 'Double Pinning' là chiến lược an toàn nhất. Việc thay đổi chứng chỉ phía server trước khi ứng dụng phía client được cập nhật sẽ khiến các bản build cũ (vẫn đang pin chứng chỉ cũ) bị từ chối kết nối. Bằng cách pin cả hai hash, bạn tạo ra một khoảng thời gian đệm cho người dùng cập nhật app trước khi thực hiện switch-over hoàn toàn trên server.",
+    "difficulty": "ADVANCED",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một hệ thống CI/CD quy mô lớn cho doanh nghiệp, phương pháp nào là tối ưu nhất để quản lý Signing Certificates và Provisioning Profiles nhằm đảm bảo tính bảo mật và tự động hóa cao?",
+    "options": [
+      "A. Lưu trữ Certificates trực tiếp trong repository của mã nguồn để Runner dễ dàng truy cập.",
+      "B. Sử dụng giải pháp quản lý tập trung như Fastlane Match kết hợp với một Git lưu trữ mã hóa hoặc Cloud Storage (S3/GCS).",
+      "C. Cài đặt thủ công Certificates lên từng máy build server và thiết lập chế độ Automatic Signing trong Xcode.",
+      "D. Sử dụng API của App Store Connect để tạo mới Certificate mỗi khi chạy pipeline build."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Fastlane Match cung cấp cơ chế 'Single source of truth', mã hóa các chứng chỉ và chia sẻ an toàn giữa các thành viên và CI server, giúp tránh xung đột và quản lý tập trung hiệu quả nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai chiến lược 'Staged Rollout' trên Google Play Console cho một bản cập nhật có thay đổi lớn về Database Schema, rủi ro lớn nhất cần quản lý là gì?",
+    "options": [
+      "A. Tốc độ tải lên của người dùng ở các vùng địa lý khác nhau không đồng đều.",
+      "B. Không thể thực hiện rollback phiên bản cũ nếu phát hiện lỗi nghiêm trọng ở dữ liệu sau khi người dùng đã migrate.",
+      "C. Dung lượng file APK/AAB tăng lên do chứa mã nguồn xử lý migration.",
+      "D. Thời gian chờ Google Review bản cập nhật quá lâu làm chậm tiến độ marketing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cửa hàng ứng dụng không hỗ trợ hạ cấp phiên bản (rollback) tự động. Nếu Schema đã migrate và gặp lỗi, việc quay lại bản cũ sẽ gây crash do không tương thích dữ liệu, đòi hỏi chiến lược xử lý lỗi tại phía client hoặc force update.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để tuân thủ yêu cầu 'App Tracking Transparency' (ATT) của Apple mà vẫn tối ưu được tỷ lệ chuyển đổi quảng cáo, một chuyên gia nên đưa ra quyết định gì?",
+    "options": [
+      "A. Hiển thị thông báo ATT ngay lập tức khi ứng dụng vừa khởi động lần đầu tiên.",
+      "B. Chỉ hiển thị thông báo ATT sau khi người dùng đã hiểu giá trị của ứng dụng và tại một thời điểm ngữ cảnh phù hợp.",
+      "C. Sử dụng các kỹ thuật Fingerprinting để thay thế IDFA nhằm tránh phải xin phép người dùng.",
+      "D. Bắt buộc người dùng phải đồng ý ATT thì mới cho phép sử dụng các tính năng chính của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược 'Contextual Prompting' giúp tăng tỷ lệ Opt-in. Việc sử dụng Fingerprinting hoặc bắt buộc đồng ý đều vi phạm chính sách nghiêm ngặt của Apple và dẫn đến rủi ro bị gỡ app.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng Android App Bundle (AAB) lại được ưu tiên hơn APK truyền thống trong quy trình phát hành trên Google Play?",
+    "options": [
+      "A. AAB cho phép người dùng tải về toàn bộ các tài nguyên cho mọi cấu hình thiết bị để dự phòng.",
+      "B. Google Play sử dụng AAB để tạo ra các APK tối ưu (Split APKs) dựa trên cấu hình thiết bị cụ thể, giảm kích thước tải về.",
+      "C. AAB hỗ trợ chạy trực tiếp trên các thiết bị cũ mà không cần thông qua Google Play Services.",
+      "D. AAB giúp mã nguồn được bảo mật tuyệt đối và không thể bị reverse engineering."
+    ],
+    "correctAnswer": "B",
+    "explanation": "AAB là định dạng xuất bản giúp Google Play Dynamic Delivery hoạt động, chỉ gửi những mã và tài nguyên cần thiết cho mật độ màn hình, CPU kiến trúc và ngôn ngữ của thiết bị đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ứng dụng của bạn bị Apple từ chối với lý do vi phạm Guideline 4.8 (Sign in with Apple). Trường hợp nào sau đây là nguyên nhân phổ biến nhất ở cấp độ kiến trúc?",
+    "options": [
+      "A. Ứng dụng chỉ sử dụng duy nhất phương thức đăng nhập bằng số điện thoại.",
+      "B. Ứng dụng cung cấp đăng nhập qua Facebook/Google nhưng không cung cấp 'Sign in with Apple' làm tùy chọn tương đương.",
+      "C. Nút 'Sign in with Apple' có kích thước nhỏ hơn các nút đăng nhập mạng xã hội khác.",
+      "D. Ứng dụng yêu cầu người dùng nhập email sau khi đã đăng nhập thành công bằng Apple ID."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple bắt buộc các ứng dụng sử dụng dịch vụ đăng nhập của bên thứ ba (social login) phải cung cấp 'Sign in with Apple' như một lựa chọn tương đương về vị trí và chức năng.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh phát triển ứng dụng ngân hàng, việc quản lý 'App Store Connect API Key' trong pipeline CI/CD cần tuân thủ nguyên tắc bảo mật nào?",
+    "options": [
+      "A. Lưu Key trực tiếp trong file .env và commit lên Git server nội bộ.",
+      "B. Sử dụng Secret Manager (như HashiCorp Vault hoặc AWS Secrets Manager) để inject Key vào môi trường runtime của CI.",
+      "C. Chia sẻ Key qua email cho các thành viên trong đội ngũ DevOps để cấu hình thủ công.",
+      "D. Tạo một Key có quyền Admin và sử dụng chung cho tất cả các ứng dụng của tổ chức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với các ứng dụng nhạy cảm như ngân hàng, việc sử dụng Secret Manager đảm bảo Key không bị lộ trong log, mã nguồn và có thể thu hồi/xoay vòng (rotate) một cách an toàn.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện 'Phased Release' trên iOS (7 ngày), nếu phát hiện lỗi nghiêm trọng ở ngày thứ 3 (tỷ lệ 5%), hành động nào là tối ưu nhất?",
+    "options": [
+      "A. Xóa bản build hiện tại khỏi App Store ngay lập tức.",
+      "B. Tạm dừng (Pause) quá trình rollout để điều tra và chuẩn bị bản vá.",
+      "C. Để quá trình tự động tiếp tục và hy vọng lỗi không ảnh hưởng nhiều người dùng.",
+      "D. Yêu cầu Apple hỗ trợ gỡ bỏ phiên bản lỗi cho những người đã tải về."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple cho phép tạm dừng Phased Release tối đa 30 ngày. Điều này giúp ngăn chặn lỗi lan rộng trong khi đội ngũ phát triển tìm nguyên nhân và chuẩn bị bản hotfix.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa 'Internal Testing' và 'Closed Testing' trên Google Play Console là gì?",
+    "options": [
+      "A. Internal Testing giới hạn 100 người dùng, Closed Testing giới hạn 1000 người dùng.",
+      "B. Internal Testing không yêu cầu Google review bản build, trong khi Closed Testing thì có.",
+      "C. Closed Testing chỉ dành cho nhân viên công ty, Internal Testing dành cho người dùng bên ngoài.",
+      "D. Internal Testing yêu cầu phải thanh toán phí bổ sung cho mỗi bản build."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Internal Testing là cách nhanh nhất để phân phối bản build cho đội ngũ nội bộ (tối đa 100 người) vì nó bỏ qua quy trình xét duyệt của Google, giúp tăng tốc độ vòng lặp phát triển.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một ứng dụng iOS sử dụng các 'Entitlements' đặc biệt như 'Critical Alerts' hoặc 'Push to Talk', quy trình phát hành cần lưu ý điều gì?",
+    "options": [
+      "A. Không có gì đặc biệt, chỉ cần khai báo trong Xcode.",
+      "B. Phải được Apple phê duyệt quyền (Permission) trước khi có thể tạo Provisioning Profile chứa các Entitlements đó.",
+      "C. Chỉ có thể phân phối qua hình thức Enterprise (In-house) chứ không được lên App Store.",
+      "D. Các quyền này sẽ tự động được kích hoạt khi ứng dụng đạt trên 1 triệu lượt tải."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một số Entitlements nhạy cảm yêu cầu nhà phát triển phải gửi đơn đăng ký và được Apple chấp thuận thủ công trước khi chúng xuất hiện trong tài khoản Developer để cấu hình Provisioning Profile.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chiến lược 'Force Update' (Bắt buộc cập nhật) nên được thiết kế như thế nào để đảm bảo trải nghiệm người dùng và tính nhất quán của hệ thống?",
+    "options": [
+      "A. Chặn hoàn toàn ứng dụng và yêu cầu cập nhật mỗi khi có phiên bản mới trên Store.",
+      "B. Sử dụng một API cấu hình (Remote Config) để trả về phiên bản tối thiểu bắt buộc (min_version) và hiển thị thông báo chặn khi phiên bản hiện tại thấp hơn.",
+      "C. Dựa vào thông tin phiên bản lấy trực tiếp từ việc scraping trang web App Store/Google Play.",
+      "D. Chỉ thực hiện Force Update bằng cách gửi Push Notification yêu cầu người dùng xóa app cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Remote Config (như Firebase hoặc server riêng) cho phép kiểm soát linh hoạt việc ép buộc cập nhật chỉ khi có thay đổi breaking changes ở backend hoặc lỗi bảo mật nghiêm trọng.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quy trình Review của App Store, 'Guideline 2.1 - Performance: App Completeness' thường bị vi phạm do nguyên nhân nào sau đây trong môi trường Production?",
+    "options": [
+      "A. Ứng dụng không hỗ trợ ngôn ngữ tiếng Anh.",
+      "B. Reviewer không thể đăng nhập do tài khoản demo bị khóa hoặc môi trường backend staging bị tắt.",
+      "C. Ứng dụng sử dụng quá nhiều bộ nhớ RAM trên các thiết bị cũ.",
+      "D. Icon ứng dụng không đúng kích thước quy định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "App Completeness yêu cầu ứng dụng phải hoạt động hoàn hảo cho Reviewer. Nếu họ không thể truy cập vào các tính năng chính do lỗi môi trường hoặc thiếu tài khoản test, ứng dụng sẽ bị từ chối ngay lập tức.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Custom Store Listings' trên Google Play đối với các chiến dịch Marketing toàn cầu là gì?",
+    "options": [
+      "A. Giúp ứng dụng chạy nhanh hơn ở các quốc gia có internet yếu.",
+      "B. Cho phép hiển thị hình ảnh, mô tả khác nhau cho người dùng ở các quốc gia hoặc trạng thái cài đặt khác nhau.",
+      "C. Tự động dịch toàn bộ nội dung ứng dụng sang ngôn ngữ bản địa.",
+      "D. Giảm phí hoa hồng cho Google tại các thị trường mới nổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Custom Store Listings cho phép tối ưu hóa tỷ lệ chuyển đổi (ASO) bằng cách cá nhân hóa nội dung hiển thị trên Store cho từng phân khúc khách hàng hoặc vùng lãnh thổ cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao một chuyên gia cần phải quan tâm đến 'Bitcode' khi chuẩn bị bản build iOS, mặc dù Apple đã bắt đầu ngừng hỗ trợ nó từ Xcode 14?",
+    "options": [
+      "A. Vì Bitcode giúp giảm kích thước ứng dụng bằng cách biên dịch lại mã nguồn trên server Apple.",
+      "B. Để hiểu rằng việc không còn Bitcode đồng nghĩa với việc các báo cáo Crash Log (dSYM) cần được quản lý chặt chẽ hơn tại local/CI.",
+      "C. Vì Bitcode là bắt buộc để ứng dụng có thể chạy trên Apple Watch.",
+      "D. Bitcode giúp ứng dụng tự động tương thích với các kiến trúc CPU tương lai mà không cần build lại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi Bitcode bị loại bỏ, Apple không còn biên dịch lại app trên server, nghĩa là dSYM được tạo ra ngay lúc build là duy nhất và cần được upload chính xác lên các công cụ crash reporting để symbolicate lỗi.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng Fintech cần phát hành bản vá khẩn cấp cho một lỗi logic giao dịch. Phương án nào giúp rút ngắn thời gian chờ đợi Review của Apple nhất?",
+    "options": [
+      "A. Gửi bản build và hy vọng Reviewer sẽ duyệt nhanh.",
+      "B. Sử dụng tính năng 'Expedited Review' và giải trình rõ lý do liên quan đến lỗi nghiêm trọng/bảo mật.",
+      "C. Tải lên nhiều bản build cùng lúc để tăng xác suất có một bản được duyệt.",
+      "D. Liên hệ trực tiếp với bộ phận pháp lý của Apple qua điện thoại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple cung cấp cơ chế 'Expedited Review' cho các trường hợp khẩn cấp như lỗi bảo mật hoặc sự cố nghiêm trọng ảnh hưởng đến người dùng, giúp bản build được đưa vào hàng đợi ưu tiên.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi quản lý phiên bản (Versioning) cho một ứng dụng có cả bản iOS và Android, tại sao nên sử dụng Semantic Versioning (SemVer)?",
+    "options": [
+      "A. Để đảm bảo số phiên bản của hai nền tảng luôn luôn phải giống hệt nhau về mặt kỹ thuật.",
+      "B. Để truyền đạt rõ ràng mức độ thay đổi (Breaking, Feature, Fix) cho các bên liên quan và hệ thống backend.",
+      "C. Vì App Store và Google Play bắt buộc phải dùng định dạng x.y.z.",
+      "D. Giúp tự động hóa việc viết Release Notes dựa trên Git tags."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SemVer (Major.Minor.Patch) giúp các đội ngũ (Mobile, Backend, QA) hiểu nhanh tính chất của bản cập nhật, từ đó có chiến lược test và hỗ trợ API tương ứng.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Google Play Console, chỉ số 'ANR rate' (App Not Responding) vượt ngưỡng 'Bad Behavior Threshold' sẽ dẫn đến hậu quả gì?",
+    "options": [
+      "A. Ứng dụng bị xóa khỏi Store ngay lập tức.",
+      "B. Ứng dụng bị giảm khả năng hiển thị (visibility) trong kết quả tìm kiếm và các danh mục đề xuất.",
+      "C. Tài khoản nhà phát triển bị khóa vĩnh viễn.",
+      "D. Google sẽ tự động sửa lỗi mã nguồn thông qua AI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Google ưu tiên trải nghiệm người dùng. Các ứng dụng có tỷ lệ Crash hoặc ANR cao vượt ngưỡng kỹ thuật sẽ bị thuật toán của Store hạn chế đề xuất và hiển thị.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai 'Universal Links' (iOS) hoặc 'App Links' (Android), bước nào trong quy trình phát hành thường gây lỗi khiến link không mở được app?",
+    "options": [
+      "A. Quên không khai báo URL trong file Info.plist.",
+      "B. File cấu hình (apple-app-site-association hoặc assetlinks.json) không được đặt đúng tại thư mục /.well-known/ trên server hoặc sai MIME type.",
+      "C. Người dùng chưa cập nhật hệ điều hành mới nhất.",
+      "D. Kích thước file cấu hình vượt quá 1MB."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là lỗi cấu hình server phổ biến nhất. Hệ điều hành cần tải các file này từ server để xác thực quyền sở hữu domain trước khi kích hoạt tính năng Deep Linking an toàn.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một doanh nghiệp muốn phân phối ứng dụng nội bộ cho 50.000 nhân viên mà không muốn đưa lên App Store công khai. Giải pháp nào là đúng đắn nhất về mặt chính sách của Apple?",
+    "options": [
+      "A. Sử dụng tài khoản Apple Developer Program cá nhân và thêm 50.000 thiết bị vào danh sách test.",
+      "B. Sử dụng Apple Business Manager (ABM) kết hợp với một giải pháp MDM (Mobile Device Management).",
+      "C. Sử dụng tài khoản Enterprise Program để phân phối qua link tải trực tiếp (In-house) mà không cần MDM.",
+      "D. Yêu cầu nhân viên tự cài đặt qua Xcode bằng mã nguồn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple hiện nay khuyến khích sử dụng ABM cho việc phân phối nội bộ quy mô lớn. Tài khoản Enterprise (In-house) hiện bị kiểm soát rất chặt chẽ và chỉ dành cho các trường hợp đặc biệt không thể dùng ABM.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quy trình 'Post-launch monitoring', công cụ nào cung cấp cái nhìn chính xác nhất về hiệu quả kinh doanh của các gói In-App Purchase (IAP)?",
+    "options": [
+      "A. Firebase Analytics.",
+      "B. App Store Connect Sales and Trends / Google Play Financial Reports.",
+      "C. Log hệ thống backend của ứng dụng.",
+      "D. Đánh giá (Reviews) của người dùng trên Store."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dữ liệu từ Store là dữ liệu gốc về doanh thu, đã trừ phí hoa hồng, xử lý hoàn tiền (refunds) và các vấn đề về thuế, là nguồn tin cậy nhất cho báo cáo tài chính.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Việc lạm dụng 'Hot Code Push' (như CodePush trong React Native) để thay đổi hoàn toàn chức năng ứng dụng mà không qua Store Review sẽ dẫn đến rủi ro gì?",
+    "options": [
+      "A. Ứng dụng chạy chậm hơn do phải tải code mới.",
+      "B. Apple có thể gỡ bỏ ứng dụng và khóa tài khoản nhà phát triển do vi phạm điều khoản về việc thay đổi tính năng cốt lõi sau khi duyệt.",
+      "C. Không thể thực hiện Hot Code Push nếu ứng dụng có kích thước trên 200MB.",
+      "D. Người dùng sẽ nhận được cảnh báo bảo mật từ hệ điều hành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple cho phép Hot Code Push để sửa lỗi hoặc thay đổi nhỏ, nhưng nghiêm cấm việc thay đổi bản chất ứng dụng (ví dụ từ app ảnh sang app cá cược) mà không qua kiểm duyệt lại.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi chuẩn bị 'Privacy Manifests' cho iOS (yêu cầu mới từ 2024), mục đích chính của Apple là gì?",
+    "options": [
+      "A. Để thay thế hoàn toàn bảng câu hỏi Privacy trên App Store Connect.",
+      "B. Để minh bạch hóa việc sử dụng các API nhạy cảm (Required Reason APIs) và thu thập dữ liệu từ các SDK bên thứ ba.",
+      "C. Để ngăn chặn ứng dụng truy cập vào danh bạ người dùng.",
+      "D. Để tự động tạo ra trang chính sách bảo mật cho nhà phát triển."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Privacy Manifests yêu cầu nhà phát triển và các nhà cung cấp SDK phải khai báo rõ ràng mục đích sử dụng các API nhất định, giúp Apple kiểm soát việc 'fingerprinting' và bảo vệ quyền riêng tư người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc cấu hình 'TestFlight Internal Testing' lại quan trọng trong quy trình phát triển Agile?",
+    "options": [
+      "A. Vì nó cho phép test trên các thiết bị simulator.",
+      "B. Vì nó giúp các thành viên trong team nhận được bản build mới gần như ngay lập tức sau khi CI build xong mà không cần chờ Apple duyệt.",
+      "C. Vì nó tự động gửi báo cáo lỗi về cho Jira.",
+      "D. Vì nó cho phép test các tính năng mà không cần viết code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "TestFlight Internal Testing bỏ qua bước 'Beta App Review', giúp rút ngắn feedback loop giữa developer và QA/Stakeholders trong nội bộ tổ chức.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong chiến lược phát hành ứng dụng đa quốc gia, việc quản lý 'Release Notes' nên được thực hiện như thế nào để đạt hiệu quả cao nhất?",
+    "options": [
+      "A. Chỉ viết một bản tiếng Anh duy nhất cho tất cả các vùng.",
+      "B. Bản địa hóa (Localization) nội dung Release Notes cho từng ngôn ngữ mà Store hỗ trợ để tăng tính gần gũi và chuyên nghiệp.",
+      "C. Luôn viết 'Bug fixes and performance improvements' để tiết kiệm thời gian.",
+      "D. Copy nội dung từ commit messages của Git."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bản địa hóa Release Notes giúp người dùng ở các thị trường khác nhau hiểu rõ giá trị của bản cập nhật, từ đó tăng tỷ lệ cập nhật và sự hài lòng của khách hàng.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi gặp lỗi 'Missing Compliance' trên TestFlight sau khi upload bản build, hành động nào là đúng để xử lý triệt để?",
+    "options": [
+      "A. Chờ 24 giờ để hệ thống tự cập nhật.",
+      "B. Cấu hình key 'ITSAppUsesNonExemptEncryption' trong file Info.plist để khai báo về việc sử dụng mã hóa.",
+      "C. Xóa bản build và upload lại với số version mới.",
+      "D. Gửi email cho bộ phận hỗ trợ kỹ thuật của Apple."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi này xuất hiện do Apple cần xác nhận ứng dụng có sử dụng các thuật toán mã hóa đặc biệt hay không. Khai báo trực tiếp trong Info.plist sẽ giúp bỏ qua bước xác nhận thủ công trên web mỗi khi có build mới.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng mạng xã hội phát hiện có nhiều nội dung vi phạm pháp luật do người dùng đăng tải ngay sau khi release. Theo Guideline của cả hai Store, tính năng nào là BẮT BUỘC phải có để không bị gỡ app?",
+    "options": [
+      "A. Tính năng tự động xóa bài viết bằng AI.",
+      "B. Tính năng báo cáo (Report/Flag) nội dung xấu và chặn (Block) người dùng vi phạm.",
+      "C. Tính năng yêu cầu người dùng chụp ảnh căn cước khi đăng ký.",
+      "D. Tính năng giới hạn số bài đăng mỗi ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với ứng dụng có nội dung do người dùng tạo (UGC), các Store bắt buộc phải có cơ chế để cộng đồng báo cáo và nhà phát triển có biện pháp xử lý kịp thời các nội dung/người dùng vi phạm.",
+    "difficulty": "EXPERT",
+    "skillArea": "App Release & Publishing",
+    "category": "SITUATION"
+  }
+]

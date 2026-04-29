@@ -128,6 +128,93 @@
   cursor: not-allowed;
 }
 
+/* ==================== Notifications - Neon Tech isolated refresh ==================== */
+.notif-cosmic {
+  --notif-tech-bg: #020817;
+  --notif-tech-panel: rgba(7, 22, 44, 0.82);
+  --notif-tech-panel-soft: rgba(9, 31, 58, 0.68);
+  --notif-tech-border: rgba(34, 211, 238, 0.26);
+  --notif-tech-border-strong: rgba(34, 211, 238, 0.46);
+  --notif-tech-cyan: #22d3ee;
+  --notif-tech-text: #e8faff;
+  --notif-tech-muted: #9ec8e8;
+}
+
+.notif-cosmic .notif-section-header {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--notif-tech-border-strong);
+  border-left: 4px solid var(--notif-tech-cyan);
+  background:
+    radial-gradient(110% 120% at 0% 0%, rgba(34, 211, 238, 0.18), transparent 46%),
+    linear-gradient(145deg, rgba(7, 22, 44, 0.92), rgba(2, 8, 23, 0.96));
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12), 0 18px 42px rgba(2, 8, 23, 0.4);
+}
+
+.notif-cosmic .notif-section-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.1), transparent);
+  transform: translateX(-100%);
+  animation: notifTechScan 4.8s linear infinite;
+}
+
+@keyframes notifTechScan {
+  to { transform: translateX(100%); }
+}
+
+.notif-cosmic .notif-header-icon,
+.notif-cosmic .notif-header h2 {
+  color: #bff8ff;
+  text-shadow: 0 0 16px rgba(34, 211, 238, 0.36);
+  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.38));
+}
+
+.notif-cosmic .notif-header p {
+  color: var(--notif-tech-muted);
+}
+
+.notif-cosmic .notif-refresh-btn {
+  border: 1px solid var(--notif-tech-border-strong);
+  background: rgba(34, 211, 238, 0.1);
+  color: #c8fbff;
+  box-shadow: none;
+}
+
+.notif-cosmic .notif-refresh-btn:hover:not(:disabled) {
+  background: rgba(34, 211, 238, 0.17);
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.2);
+}
+
+.notif-cosmic .notif-section-stats,
+.notif-cosmic .notif-section-form {
+  border: 1px solid var(--notif-tech-border);
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(34, 211, 238, 0.08), transparent 45%),
+    linear-gradient(150deg, var(--notif-tech-panel), var(--notif-tech-panel-soft));
+}
+
+.notif-cosmic .notif-stat-card.vibrant-purple {
+  border-color: rgba(34, 211, 238, 0.38);
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.notif-cosmic .notif-stat-card.vibrant-purple .notif-stat-glow {
+  background: radial-gradient(circle, var(--notif-tech-cyan) 0%, transparent 70%);
+}
+
+.notif-cosmic .notif-stat-card.vibrant-purple .notif-stat-icon {
+  background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+  box-shadow: 0 4px 15px rgba(34, 211, 238, 0.34);
+}
+
+.notif-cosmic .notif-stat-card.vibrant-purple .notif-stat-value {
+  color: #99f6ff;
+  text-shadow: 0 0 18px rgba(34, 211, 238, 0.38);
+}
+
 /* =====================================================
    VIBRANT STAT CARDS - Nổi bật với glow effect
    ===================================================== */
@@ -1152,4 +1239,44 @@
   .notif-toolbar-divider {
     display: none;
   }
+}
+
+/* Final cascade guard for the bulk-email header and stat colors */
+.notif-cosmic .notif-section-header {
+  border-color: rgba(34, 211, 238, 0.46);
+  border-left-color: #22d3ee;
+  background:
+    radial-gradient(110% 120% at 0% 0%, rgba(34, 211, 238, 0.18), transparent 46%),
+    linear-gradient(145deg, rgba(7, 22, 44, 0.92), rgba(2, 8, 23, 0.96));
+}
+
+.notif-cosmic .notif-header-icon,
+.notif-cosmic .notif-header h2 {
+  color: #bff8ff;
+  text-shadow: 0 0 16px rgba(34, 211, 238, 0.36);
+}
+
+.notif-cosmic .notif-refresh-btn {
+  border-color: rgba(34, 211, 238, 0.46);
+  background: rgba(34, 211, 238, 0.1);
+  color: #c8fbff;
+}
+
+.notif-cosmic .notif-stat-card.vibrant-purple {
+  border-color: rgba(34, 211, 238, 0.38);
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.notif-cosmic .notif-stat-card.vibrant-purple .notif-stat-glow {
+  background: radial-gradient(circle, #22d3ee 0%, transparent 70%);
+}
+
+.notif-cosmic .notif-stat-card.vibrant-purple .notif-stat-icon {
+  background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+  box-shadow: 0 4px 15px rgba(34, 211, 238, 0.34);
+}
+
+.notif-cosmic .notif-stat-card.vibrant-purple .notif-stat-value {
+  color: #99f6ff;
+  text-shadow: 0 0 18px rgba(34, 211, 238, 0.38);
 }

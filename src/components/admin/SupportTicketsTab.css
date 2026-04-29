@@ -1059,3 +1059,166 @@
   .stt-info-grid { grid-template-columns: 1fr; }
   .stt-status-row { grid-template-columns: 1fr; }
 }
+
+/* ==================== Support Tickets - Neon Tech isolated refresh ==================== */
+.stt-container {
+  --stt-tech-bg-1: #020817;
+  --stt-tech-bg-2: #031226;
+  --stt-tech-surface: rgba(7, 22, 44, 0.78);
+  --stt-tech-surface-soft: rgba(10, 29, 58, 0.62);
+  --stt-tech-border: rgba(56, 189, 248, 0.2);
+  --stt-tech-border-strong: rgba(34, 211, 238, 0.38);
+  --stt-tech-text: #e2f4ff;
+  --stt-tech-muted: #9ec8e8;
+  --stt-tech-cyan: #22d3ee;
+  --stt-tech-blue: #60a5fa;
+  --stt-tech-green: #34d399;
+  --stt-tech-amber: #f59e0b;
+  --stt-tech-red: #f87171;
+  color: var(--stt-tech-text);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stt-container .stt-header {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+  padding: 18px;
+  border: 1px solid var(--stt-tech-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(34, 211, 238, 0.2), transparent 48%),
+    radial-gradient(120% 140% at 100% 100%, rgba(59, 130, 246, 0.2), transparent 42%),
+    linear-gradient(145deg, var(--stt-tech-bg-2), var(--stt-tech-bg-1));
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.14), 0 18px 42px rgba(2, 8, 23, 0.4);
+}
+
+.stt-container .stt-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.08), transparent);
+  transform: translateX(-100%);
+  animation: sttTechScan 4.5s linear infinite;
+}
+
+@keyframes sttTechScan {
+  to { transform: translateX(100%); }
+}
+
+.stt-container .stt-header-icon,
+.stt-container .stt-ticket-code,
+.stt-container .stt-modal-title,
+.stt-container .stt-chat-modal-title,
+.stt-container .stt-chat-ticket-code,
+.stt-container .stt-search-box svg,
+.stt-container .stt-filter-group svg,
+.stt-container .stt-action-btn.view {
+  color: var(--stt-tech-cyan);
+}
+
+.stt-container .stt-header-left h2 {
+  color: #b7f3ff;
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.38);
+  font-size: 1.2rem;
+}
+
+.stt-container .stt-header-left p,
+.stt-container .stt-email-text,
+.stt-container .stt-td-date,
+.stt-container .stt-pagination span,
+.stt-container .stt-chat-ticket-subject,
+.stt-container .stt-info-item label,
+.stt-container .stt-status-label {
+  color: var(--stt-tech-muted);
+}
+
+.stt-container .stt-refresh-btn,
+.stt-container .stt-pagination button,
+.stt-container .stt-btn-save,
+.stt-container .stt-chat-message.admin .stt-chat-bubble,
+.stt-container .stt-message.admin .stt-message-bubble,
+.stt-container .stt-chat-send-btn {
+  border: 1px solid rgba(34, 211, 238, 0.34);
+  background: rgba(34, 211, 238, 0.18);
+  color: #99f6ff;
+  box-shadow: none;
+}
+
+.stt-container .stt-stat-card,
+.stt-container .stt-tickets-container,
+.stt-container .stt-modal,
+.stt-container .stt-chat-modal,
+.stt-container .stt-status-modal,
+.stt-container .stt-search-box,
+.stt-container .stt-filter-group select,
+.stt-container .stt-description-content,
+.stt-container .stt-chat-description,
+.stt-container .stt-chat-messages,
+.stt-container .stt-status-ticket-info,
+.stt-container .stt-form-group select,
+.stt-container .stt-form-group textarea,
+.stt-container .stt-chat-modal-footer textarea {
+  border: 1px solid var(--stt-tech-border);
+  background:
+    radial-gradient(120% 120% at 0% 100%, rgba(34, 211, 238, 0.05), transparent 38%),
+    linear-gradient(160deg, var(--stt-tech-surface), var(--stt-tech-surface-soft));
+}
+
+.stt-container .stt-table-header,
+.stt-container .stt-modal-header,
+.stt-container .stt-chat-modal-header,
+.stt-container .stt-modal-footer,
+.stt-container .stt-chat-modal-footer {
+  background: rgba(34, 211, 238, 0.07);
+  border-color: var(--stt-tech-border);
+  color: #c9ecff;
+}
+
+.stt-container .stt-table-row {
+  border-bottom-color: rgba(56, 189, 248, 0.12);
+}
+
+.stt-container .stt-table-row:hover {
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.stt-container .stt-subject-text,
+.stt-container .stt-ticket-subject h3,
+.stt-container .stt-chat-header,
+.stt-container .stt-info-item span,
+.stt-container .stt-status-value {
+  color: #e4f9ff;
+}
+
+.stt-container .stt-stat-card.progress {
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.stt-container .stt-stat-card.progress::before {
+  background: radial-gradient(circle, var(--stt-tech-cyan) 0%, transparent 70%);
+}
+
+.stt-container .stt-stat-card.progress .stt-stat-icon {
+  background: rgba(34, 211, 238, 0.18);
+  color: #99f6ff;
+  box-shadow: none;
+}
+
+.stt-container .stt-stat-card.progress .stt-stat-value {
+  color: #99f6ff;
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.32);
+}
+
+.stt-container .stt-search-box:focus-within,
+.stt-container .stt-filter-group select:focus,
+.stt-container .stt-form-group select:focus,
+.stt-container .stt-form-group textarea:focus,
+.stt-container .stt-chat-modal-footer textarea:focus {
+  border-color: var(--stt-tech-border-strong);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
+}

@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong quy trình CI/CD, thuật ngữ 'Continuous Integration' (CI) tập trung chủ yếu vào hoạt động nào?",
+    "options": [
+      "A. Tự động hóa việc triển khai mã nguồn lên môi trường Production.",
+      "B. Tự động hóa việc tích hợp mã nguồn và chạy các bài kiểm thử (unit test).",
+      "C. Quản lý các yêu cầu nghiệp vụ từ khách hàng.",
+      "D. Thiết kế kiến trúc hệ thống trên môi trường Cloud."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CI (Tích hợp liên tục) tập trung vào việc tự động hóa quá trình build và test mỗi khi có thay đổi mã nguồn để phát hiện lỗi sớm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa 'Continuous Delivery' và 'Continuous Deployment' là gì?",
+    "options": [
+      "A. Continuous Delivery yêu cầu phê duyệt thủ công để triển khai lên Production, còn Continuous Deployment là tự động hoàn toàn.",
+      "B. Continuous Deployment yêu cầu phê duyệt thủ công, còn Continuous Delivery là tự động hoàn toàn.",
+      "C. Continuous Delivery chỉ dành cho môi trường Staging, còn Continuous Deployment dành cho môi trường Dev.",
+      "D. Không có sự khác biệt nào giữa hai khái niệm này."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Continuous Delivery dừng lại ở việc chuẩn bị sẵn sàng bản build, việc release lên Production thường cần quyết định của con người. Continuous Deployment tự động hóa cả bước này.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Định dạng file nào thường được sử dụng nhất để cấu hình pipeline trong các công cụ hiện đại như GitHub Actions hay GitLab CI?",
+    "options": [
+      "A. XML",
+      "B. JSON",
+      "C. YAML",
+      "D. HTML"
+    ],
+    "correctAnswer": "C",
+    "explanation": "YAML là ngôn ngữ phổ biến nhất để định nghĩa pipeline nhờ cấu trúc rõ ràng, dễ đọc và hỗ trợ phân cấp tốt.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thứ tự thông thường của các giai đoạn (stages) trong một pipeline CI/CD cơ bản là gì?",
+    "options": [
+      "A. Deploy -> Test -> Build",
+      "B. Test -> Build -> Deploy",
+      "C. Build -> Test -> Deploy",
+      "D. Build -> Deploy -> Test"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mã nguồn cần được đóng gói (Build) trước, sau đó chạy kiểm thử (Test) để đảm bảo chất lượng, cuối cùng mới triển khai (Deploy).",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Jenkins, tệp tin dùng để định nghĩa quy trình pipeline được gọi là gì?",
+    "options": [
+      "A. Config.xml",
+      "B. Jenkinsfile",
+      "C. Dockerfile",
+      "D. Pipeline.sh"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Jenkinsfile là tệp văn bản chứa định nghĩa của một Jenkins Pipeline và được kiểm soát phiên bản cùng với mã nguồn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của giai đoạn 'Build' trong pipeline là gì?",
+    "options": [
+      "A. Kiểm tra lỗi cú pháp và biên dịch mã nguồn thành các tệp thực thi hoặc artifact.",
+      "B. Gửi email thông báo cho khách hàng về tính năng mới.",
+      "C. Sao lưu dữ liệu từ database Production.",
+      "D. Phân tích hiệu năng của ứng dụng dưới tải cao."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giai đoạn Build biến mã nguồn thành sản phẩm có thể chạy được (Artifact) như file .jar, .exe hoặc Docker Image.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thuật ngữ 'Artifact' trong CI/CD có nghĩa là gì?",
+    "options": [
+      "A. Một lỗi (bug) được tìm thấy trong quá trình test.",
+      "B. Một tài liệu hướng dẫn sử dụng phần mềm.",
+      "C. Sản phẩm đầu ra của quá trình build (như file nén, image) dùng để triển khai.",
+      "D. Một đoạn code chưa được biên dịch."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Artifact là kết quả của quá trình xây dựng mã nguồn, sẵn sàng để được lưu trữ hoặc triển khai lên các môi trường.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để kích hoạt pipeline tự động ngay khi lập trình viên 'push' code lên repository, ta sử dụng cơ chế nào?",
+    "options": [
+      "A. Cron Job",
+      "B. Manual Trigger",
+      "C. Webhook",
+      "D. Email Notification"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Webhook là cơ chế cho phép Git provider (như GitHub/GitLab) gửi tín hiệu HTTP đến công cụ CI/CD để bắt đầu pipeline ngay khi có sự kiện mới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Môi trường 'Staging' thường được dùng để làm gì?",
+    "options": [
+      "A. Là nơi lập trình viên viết code hàng ngày.",
+      "B. Là môi trường mô phỏng giống Production để thực hiện kiểm thử cuối cùng.",
+      "C. Là nơi lưu trữ các bản sao lưu (backup) của hệ thống.",
+      "D. Là máy tính cá nhân của nhân viên kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Môi trường Staging (tiền sản xuất) giúp kiểm tra ứng dụng trong điều kiện giống thực tế nhất trước khi phát hành chính thức.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một bước trong pipeline bị thất bại (fail), hành động nào là hợp lý nhất đối với một DevOps Engineer mới?",
+    "options": [
+      "A. Bỏ qua bước đó và tiếp tục triển khai để kịp tiến độ.",
+      "B. Xóa toàn bộ pipeline và tạo lại từ đầu.",
+      "C. Kiểm tra nhật ký (log) của bước bị lỗi để xác định nguyên nhân.",
+      "D. Chờ đợi pipeline tự sửa lỗi sau một khoảng thời gian."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kiểm tra log là kỹ năng cơ bản nhất để hiểu tại sao pipeline thất bại (lỗi code, lỗi môi trường, hay lỗi kết nối).",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc lưu trữ bí mật (secrets) như mật khẩu database trực tiếp trong file cấu hình pipeline (YAML) là không an toàn?",
+    "options": [
+      "A. Vì file YAML sẽ chạy chậm hơn nếu chứa mật khẩu.",
+      "B. Vì bất kỳ ai có quyền xem mã nguồn đều có thể thấy thông tin nhạy cảm này.",
+      "C. Vì hệ thống CI/CD không hỗ trợ ký tự đặc biệt trong mật khẩu.",
+      "D. Vì mật khẩu sẽ bị mã hóa sai cách khi build."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lưu mật khẩu dưới dạng văn bản thuần (plain text) trong code/config gây rò rỉ thông tin bảo mật nghiêm trọng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong GitHub Actions, thành phần nào chịu trách nhiệm thực thi các câu lệnh trong workflow?",
+    "options": [
+      "A. Runner",
+      "B. Repository",
+      "C. Branch",
+      "D. Pull Request"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Runner là máy chủ (server) cài đặt ứng dụng GitHub Actions runner để lắng nghe và thực hiện các job trong workflow.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hoạt động 'Linting' trong pipeline CI thường dùng để làm gì?",
+    "options": [
+      "A. Nén dung lượng mã nguồn.",
+      "B. Kiểm tra lỗi cú pháp và định dạng code theo tiêu chuẩn.",
+      "C. Gửi mã nguồn cho khách hàng duyệt.",
+      "D. Tự động viết code thay cho lập trình viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Linting giúp đảm bảo code tuân thủ các quy tắc lập trình (coding standards) và không có lỗi cú pháp cơ bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khái niệm 'Rollback' trong CI/CD có nghĩa là gì?",
+    "options": [
+      "A. Cập nhật ứng dụng lên phiên bản mới nhất.",
+      "B. Quay trở lại phiên bản hoạt động ổn định trước đó khi phiên bản mới gặp lỗi.",
+      "C. Xóa toàn bộ dữ liệu người dùng để cài đặt lại hệ thống.",
+      "D. Tăng gấp đôi tài nguyên phần cứng cho máy chủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rollback là cơ chế an toàn để khôi phục trạng thái cũ của hệ thống khi việc triển khai mới gây ra sự cố.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong GitLab CI, file cấu hình mặc định phải có tên là gì?",
+    "options": [
+      "A. gitlab-config.yaml",
+      "B. .gitlab-ci.yml",
+      "C. pipeline.gitlab",
+      "D. ci-cd.config"
+    ],
+    "correctAnswer": "B",
+    "explanation": "GitLab CI tìm kiếm file .gitlab-ci.yml ở thư mục gốc của repository để xác định các bước của pipeline.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích của việc sử dụng Docker trong pipeline CI/CD là gì?",
+    "options": [
+      "A. Để làm cho giao diện ứng dụng đẹp hơn.",
+      "B. Để đảm bảo môi trường build và chạy ứng dụng đồng nhất ở mọi nơi.",
+      "C. Để thay thế hoàn toàn việc viết code bằng kéo thả.",
+      "D. Để giảm số lượng lập trình viên trong dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Docker giúp đóng gói ứng dụng cùng mọi phụ thuộc, loại bỏ tình trạng 'chạy trên máy tôi nhưng không chạy trên server'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chiến lược triển khai 'Blue-Green Deployment' hoạt động như thế nào ở mức cơ bản?",
+    "options": [
+      "A. Chạy đồng thời hai môi trường giống hệt nhau, chuyển lưu lượng người dùng từ môi trường cũ sang môi trường mới.",
+      "B. Xóa môi trường cũ rồi mới cài đặt môi trường mới.",
+      "C. Chỉ cập nhật code trên một nửa số máy chủ hiện có.",
+      "D. Yêu cầu người dùng tự tải về phiên bản mới."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Blue-Green deployment giảm thiểu downtime bằng cách chuẩn bị sẵn môi trường mới (Green) và chuyển hướng traffic từ môi trường cũ (Blue) sang.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu bạn muốn pipeline chỉ chạy khi có một Pull Request được tạo, bạn cần cấu hình thành phần nào?",
+    "options": [
+      "A. Environment variables",
+      "B. Pipeline trigger/event",
+      "C. Artifact paths",
+      "D. Build timeout"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trigger (hoặc Event) xác định điều kiện nào sẽ kích hoạt pipeline, trong trường hợp này là sự kiện 'pull_request'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao cần giai đoạn 'Unit Test' trong pipeline CI?",
+    "options": [
+      "A. Để kiểm tra xem server có đủ dung lượng đĩa hay không.",
+      "B. Để xác minh tính đúng đắn của từng đơn vị mã nguồn nhỏ nhất.",
+      "C. Để kiểm tra tốc độ đường truyền internet của người dùng.",
+      "D. Để tự động tạo tài liệu API."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Unit Test giúp phát hiện các lỗi logic ngay sau khi build, ngăn chặn việc đưa code lỗi vào các giai đoạn sau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quy trình CI/CD, việc 'caching dependencies' (như node_modules) có lợi ích gì?",
+    "options": [
+      "A. Làm cho ứng dụng bảo mật hơn.",
+      "B. Giảm thời gian thực thi pipeline bằng cách không phải tải lại các thư viện cũ.",
+      "C. Giảm dung lượng của mã nguồn trên Git.",
+      "D. Giúp code chạy nhanh hơn trên trình duyệt người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Caching giúp tái sử dụng các thư viện đã tải từ lần build trước, giúp pipeline hoàn thành nhanh hơn đáng kể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một pipeline báo trạng thái 'Success' nhưng ứng dụng sau khi deploy lại bị lỗi 500. Nguyên nhân có thể là gì?",
+    "options": [
+      "A. Pipeline đã kiểm tra hết mọi trường hợp có thể xảy ra.",
+      "B. Các bài test trong pipeline chưa bao phủ hết các lỗi runtime hoặc cấu hình môi trường deploy bị sai.",
+      "C. Pipeline bị hacker tấn công làm giả kết quả.",
+      "D. Do lập trình viên chưa nhấn nút 'Save' trên Git."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pipeline thành công chỉ nghĩa là các bước được định nghĩa (build, test) đã vượt qua. Lỗi runtime hoặc sai lệch môi trường vẫn có thể xảy ra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Công cụ nào sau đây KHÔNG phải là một công cụ quản lý CI/CD phổ biến?",
+    "options": [
+      "A. Jenkins",
+      "B. CircleCI",
+      "C. Adobe Photoshop",
+      "D. GitLab CI"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Adobe Photoshop là phần mềm chỉnh sửa ảnh, không liên quan đến quy trình CI/CD.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi cấu hình một job trong pipeline, tham số 'timeout' dùng để làm gì?",
+    "options": [
+      "A. Quy định thời gian tối đa job được phép chạy trước khi bị hệ thống tự động hủy.",
+      "B. Quy định thời điểm job bắt đầu chạy trong ngày.",
+      "C. Quy định số lần job được phép thử lại (retry).",
+      "D. Quy định tốc độ tải của artifact."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Timeout ngăn chặn việc một job bị treo vô hạn, gây lãng phí tài nguyên của hệ thống CI/CD.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong các hệ thống CI/CD, 'Self-hosted Runner' là gì?",
+    "options": [
+      "A. Một dịch vụ cloud do GitHub/GitLab cung cấp miễn phí hoàn toàn.",
+      "B. Máy chủ do chính người dùng quản lý và cài đặt để chạy các job của pipeline.",
+      "C. Một loại virus máy tính tấn công pipeline.",
+      "D. Một công cụ dùng để viết code tự động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Self-hosted runner cho phép doanh nghiệp sử dụng hạ tầng riêng để chạy pipeline, giúp kiểm soát bảo mật và hiệu năng tốt hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao cần có bước 'Manual Approval' (phê duyệt thủ công) trước khi deploy lên Production?",
+    "options": [
+      "A. Vì hệ thống CI/CD không thể tự deploy được.",
+      "B. Để đảm bảo có sự kiểm soát cuối cùng của con người đối với các thay đổi quan trọng.",
+      "C. Để làm chậm quá trình phát triển phần mềm lại.",
+      "D. Để yêu cầu lập trình viên phải trả phí triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Manual approval là một chốt chặn an toàn trong Continuous Delivery để đảm bảo mọi thứ đã sẵn sàng về mặt kinh doanh và kỹ thuật trước khi 'go-live'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Jenkins Pipeline, cách tốt nhất để quản lý các thông tin nhạy cảm như API Key hoặc Password là gì?",
+    "options": [
+      "A. Lưu trực tiếp vào file Jenkinsfile trong source code.",
+      "B. Sử dụng Jenkins Credentials Plugin và gọi thông qua environment block hoặc hàm credentials().",
+      "C. Khai báo chúng như các biến môi trường thông thường trong cấu hình của OS build agent.",
+      "D. In chúng ra console log để dễ dàng kiểm tra khi pipeline chạy lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Credentials Plugin giúp mã hóa và quản lý tập trung các thông tin nhạy cảm, tránh lộ thông tin trong source code và log.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa 'Cache' và 'Artifacts' trong GitLab CI là gì?",
+    "options": [
+      "A. Cache dùng để chuyển dữ liệu giữa các stage, Artifacts dùng để lưu trữ dependencies.",
+      "B. Cache dùng để tăng tốc độ build bằng cách tái sử dụng các file (như npm modules), Artifacts dùng để lưu kết quả đầu ra của build stage cho các stage sau hoặc tải về.",
+      "C. Cache luôn được lưu trữ vĩnh viễn, Artifacts sẽ bị xóa ngay sau khi pipeline kết thúc.",
+      "D. Không có sự khác biệt, hai khái niệm này có thể dùng thay thế hoàn toàn cho nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cache tối ưu hóa thời gian build bằng cách giữ lại các file trung gian, trong khi Artifacts là kết quả cần chuyển giao giữa các stage hoặc lưu trữ chính thức.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một pipeline triển khai lên môi trường Production, bước 'Manual Approval' nên được đặt ở đâu là hợp lý nhất?",
+    "options": [
+      "A. Ngay sau bước Unit Test để kiểm tra code quality.",
+      "B. Trước khi tiến hành build Docker image.",
+      "C. Sau khi triển khai thành công lên môi trường Staging và trước khi deploy lên Production.",
+      "D. Sau khi đã triển khai xong lên Production để xác nhận kết quả."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Manual Approval đóng vai trò là chốt chặn cuối cùng sau khi các kiểm thử tự động trên Staging đã vượt qua, đảm bảo sự kiểm soát con người trước khi tác động tới Production.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong GitHub Actions, làm thế nào để chạy một job chỉ khi code được merge vào nhánh 'main'?",
+    "options": [
+      "A. Sử dụng điều kiện 'if: github.ref == 'refs/heads/main'' ở cấp độ job.",
+      "B. Sử dụng từ khóa 'only: main' giống như trong GitLab CI.",
+      "C. Cấu hình trigger 'on: push: branches: [main]'.",
+      "D. Sử dụng lệnh 'git branch' trong script để kiểm tra tên nhánh."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cấu hình trigger 'on: push' với filter 'branches' là cách chuẩn và hiệu quả nhất để lọc sự kiện kích hoạt workflow trong GitHub Actions.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Docker Layer Caching' lại quan trọng trong CI/CD pipeline?",
+    "options": [
+      "A. Để giảm kích thước của Docker image cuối cùng.",
+      "B. Để đảm bảo tính bảo mật cho container.",
+      "C. Để tăng tốc độ build image bằng cách không build lại các layer không thay đổi.",
+      "D. Để tự động cập nhật các thư viện mới nhất từ internet."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Docker Layer Caching giúp bỏ qua việc thực thi các lệnh Dockerfile nếu layer tương ứng đã tồn tại và không có thay đổi, giúp tiết kiệm đáng kể thời gian build.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chiến lược triển khai 'Canary Deployment' có ưu điểm chính là gì?",
+    "options": [
+      "A. Triển khai đồng loạt trên tất cả các server để tiết kiệm thời gian.",
+      "B. Giảm thiểu rủi ro bằng cách chỉ cho một lượng nhỏ người dùng tiếp cận phiên bản mới trước khi triển khai rộng rãi.",
+      "C. Đảm bảo môi trường Production và Staging luôn giống hệt nhau về dữ liệu.",
+      "D. Không yêu cầu hệ thống Load Balancer phức tạp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Canary Deployment cho phép theo dõi phản hồi của một nhóm nhỏ người dùng với phiên bản mới, giúp phát hiện lỗi sớm mà không ảnh hưởng toàn bộ hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong ngữ cảnh CI/CD, 'Immutable Artifact' nghĩa là gì?",
+    "options": [
+      "A. Artifact có thể được chỉnh sửa trực tiếp trên server sau khi deploy.",
+      "B. Artifact (như Docker image) được build một lần duy nhất và được sử dụng xuyên suốt qua các môi trường (Dev, Staging, Prod).",
+      "C. Artifact sẽ tự động thay đổi version mỗi khi có commit mới.",
+      "D. Artifact chỉ bao gồm mã nguồn mà không bao gồm các thư viện phụ thuộc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính bất biến (Immutable) đảm bảo rằng những gì bạn đã test ở Staging chính xác là những gì sẽ chạy ở Production, loại bỏ sai sót do build lại nhiều lần.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn gặp lỗi 'Disk Space Full' trên Jenkins Runner thường xuyên. Giải pháp nào là bền vững nhất?",
+    "options": [
+      "A. Mua thêm ổ cứng dung lượng lớn hơn mỗi tháng.",
+      "B. Cấu hình chính sách 'Log Rotation' và định kỳ dọn dẹp các workspace cũ, docker images không dùng tới (prune).",
+      "C. Tắt tính năng lưu trữ Artifacts trong Jenkins.",
+      "D. Xóa toàn bộ Jenkins và cài đặt lại định kỳ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quản lý vòng đời dữ liệu (cleanup policy) là phương pháp chuẩn để duy trì sức khỏe hệ thống build trong dài hạn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong GitLab CI, từ khóa 'needs' được sử dụng để làm gì?",
+    "options": [
+      "A. Để khai báo các biến môi trường bắt buộc.",
+      "B. Để thiết lập các job chạy song song (parallel).",
+      "C. Để cho phép một job bắt đầu ngay khi các job phụ thuộc hoàn thành, không cần đợi toàn bộ stage trước đó kết thúc.",
+      "D. Để yêu cầu quyền admin khi thực thi job."
+    ],
+    "correctAnswer": "C",
+    "explanation": "'needs' tạo ra Directed Acyclic Graph (DAG), giúp tối ưu hóa thời gian chạy pipeline bằng cách phá vỡ sự ràng buộc tuần tự của các stage.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một bước 'Deploy' thất bại trên Production, hành động nào nên được ưu tiên hàng đầu trong một pipeline hiện đại?",
+    "options": [
+      "A. Ngay lập tức commit code mới để sửa lỗi (Hotfix).",
+      "B. Thực hiện 'Rollback' về phiên bản ổn định gần nhất thông qua cơ chế tự động hoặc nhấn nút.",
+      "C. SSH vào server Production để sửa lỗi trực tiếp.",
+      "D. Chờ đợi team phát triển tìm ra nguyên nhân gốc rễ trước khi làm bất cứ việc gì."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ưu tiên hàng đầu là khôi phục dịch vụ cho người dùng (MTTR - Mean Time To Recovery). Rollback là cách nhanh nhất để đưa hệ thống về trạng thái an toàn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Shared Libraries' trong Jenkins là gì?",
+    "options": [
+      "A. Giúp Jenkins chạy nhanh hơn.",
+      "B. Cho phép tái sử dụng code pipeline giữa nhiều project khác nhau, giúp quản lý tập trung và giảm lặp lại code.",
+      "C. Để lưu trữ các file cấu hình YAML.",
+      "D. Để thay thế hoàn toàn việc sử dụng Docker trong pipeline."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Shared Libraries giúp chuẩn hóa quy trình CI/CD cho toàn bộ tổ chức, giúp bảo trì và cập nhật pipeline dễ dàng hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong GitHub Actions, 'Composite Actions' khác gì so với 'Reusable Workflows'?",
+    "options": [
+      "A. Composite Actions chỉ chạy được trên Linux, Reusable Workflows chạy được mọi OS.",
+      "B. Composite Actions cho phép gộp nhiều bước (steps) vào một action duy nhất, trong khi Reusable Workflows cho phép tái sử dụng toàn bộ cấu hình workflow bao gồm nhiều jobs.",
+      "C. Reusable Workflows không thể nhận input từ bên ngoài.",
+      "D. Composite Actions chỉ dùng cho Java, Reusable Workflows dùng cho Node.js."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Composite Actions tập trung vào việc đóng gói các steps, còn Reusable Workflows tập trung vào việc tái sử dụng cấu hình pipeline ở mức độ cao hơn (jobs, runners).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Blue/Green Deployment' yêu cầu điều kiện hạ tầng quan trọng nhất là gì?",
+    "options": [
+      "A. Phải sử dụng Kubernetes.",
+      "B. Phải có gấp đôi tài nguyên hệ thống (hai môi trường chạy song song) và một bộ điều hướng traffic (Load Balancer).",
+      "C. Phải có hệ thống database tự động phân mảnh (sharding).",
+      "D. Phải sử dụng ngôn ngữ lập trình Python."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Blue/Green yêu cầu hai môi trường giống hệt nhau để chuyển đổi traffic qua lại, giúp việc chuyển đổi và rollback diễn ra tức thì.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một pipeline CI/CD thường xuyên bị lỗi 'Flaky Tests' (lúc pass lúc fail mà không đổi code). Cách xử lý nào là kém hiệu quả nhất?",
+    "options": [
+      "A. Phân tích và sửa code test để đảm bảo tính nhất quán (deterministic).",
+      "B. Cấu hình cho phép chạy lại (retry) test tự động 3 lần.",
+      "C. Tạm thời bỏ qua (quarantine) các test bị flaky để không làm gián đoạn pipeline.",
+      "D. Luôn luôn nhấn 'Re-run' thủ công cho đến khi nào pass thì thôi."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Nhấn re-run thủ công không giải quyết được gốc rễ vấn đề và gây lãng phí thời gian, nguồn lực của team DevOps và Dev.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Việc tích hợp SAST (Static Application Security Testing) vào pipeline nên được thực hiện ở giai đoạn nào?",
+    "options": [
+      "A. Ngay sau khi code được commit và trước khi build (giai đoạn sớm nhất có thể).",
+      "B. Sau khi đã deploy lên Production.",
+      "C. Chỉ thực hiện khi có yêu cầu từ bộ phận Security định kỳ hàng năm.",
+      "D. Trong giai đoạn Manual Approval."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tích hợp bảo mật sớm (Shift Left Security) giúp phát hiện lỗ hổng ngay từ mã nguồn, giảm chi phí sửa chữa và tăng tính an toàn cho sản phẩm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Jenkins, 'Agent' (hoặc Slave) có vai trò gì?",
+    "options": [
+      "A. Là nơi lưu trữ database của Jenkins.",
+      "B. Là máy chủ thực hiện các công việc (jobs) được Jenkins Master phân công.",
+      "C. Là một plugin dùng để vẽ biểu đồ pipeline.",
+      "D. Là giao diện người dùng của Jenkins."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Jenkins Master quản lý điều phối, trong khi các Agents là nơi thực thi các câu lệnh build, test thực tế để giảm tải cho Master.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để tối ưu hóa thời gian 'npm install' trong một CI pipeline?",
+    "options": [
+      "A. Xóa thư mục node_modules trước mỗi lần chạy.",
+      "B. Sử dụng cơ chế caching cho thư mục node_modules dựa trên mã hash của file package-lock.json.",
+      "C. Luôn cài đặt phiên bản mới nhất của các thư viện.",
+      "D. Chạy 'npm install' ở stage cuối cùng của pipeline."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng mã hash của file lock làm key cho cache đảm bảo rằng chỉ khi dependencies thay đổi thì pipeline mới phải tải lại, giúp tiết kiệm thời gian.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của việc sử dụng 'Semantic Versioning' (SemVer) cho các artifact là gì?",
+    "options": [
+      "A. Để làm cho tên file trông chuyên nghiệp hơn.",
+      "B. Để dễ dàng nhận biết mức độ thay đổi (Breaking change, Feature, Bug fix) và quản lý phụ thuộc hiệu quả.",
+      "C. Để đảm bảo rằng không ai có thể xóa artifact đó.",
+      "D. Để tự động hóa việc viết tài liệu hướng dẫn sử dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SemVer (Major.Minor.Patch) giúp các bên liên quan hiểu rõ tính tương thích của phiên bản mới so với phiên bản cũ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Kubernetes, chiến lược 'Rolling Update' hoạt động như thế nào?",
+    "options": [
+      "A. Tắt toàn bộ các Pod cũ rồi mới khởi tạo các Pod mới.",
+      "B. Cập nhật từng Pod một (hoặc từng nhóm nhỏ) một cách tuần tự để đảm bảo không có downtime.",
+      "C. Tạo một Cluster mới hoàn toàn và chuyển hướng DNS.",
+      "D. Chỉ cập nhật code bên trong Pod mà không khởi động lại Pod."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rolling Update thay thế dần dần các instance cũ bằng instance mới, duy trì sự sẵn sàng của dịch vụ trong suốt quá trình cập nhật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần trigger một pipeline ở Project B ngay sau khi pipeline ở Project A kết thúc thành công. Kỹ thuật này gọi là gì?",
+    "options": [
+      "A. Multi-stage pipeline.",
+      "B. Upstream/Downstream pipeline (hoặc Multi-project pipeline).",
+      "C. Parallel pipeline.",
+      "D. Self-hosted pipeline."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là kỹ thuật liên kết các pipeline giữa các project khác nhau, thường dùng trong kiến trúc microservices.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng tag 'latest' cho Docker image trong file cấu hình triển khai (Deployment YAML)?",
+    "options": [
+      "A. Vì tag 'latest' làm tăng dung lượng image.",
+      "B. Vì nó gây khó khăn cho việc xác định chính xác phiên bản đang chạy và gây rủi ro khi rollback.",
+      "C. Vì Kubernetes không hỗ trợ tag 'latest'.",
+      "D. Vì tag 'latest' chỉ dành cho môi trường Development."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng tag cụ thể (như commit hash hoặc version) đảm bảo tính minh bạch và khả năng tái lập (reproducibility) của môi trường.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong GitLab CI, làm thế nào để ngăn chặn một job chạy tự động và yêu cầu người dùng kích hoạt thủ công?",
+    "options": [
+      "A. Sử dụng 'allow_failure: true'.",
+      "B. Sử dụng 'when: manual'.",
+      "C. Xóa job đó khỏi file .gitlab-ci.yml.",
+      "D. Đặt tên job bắt đầu bằng chữ 'manual_'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'when: manual' biến job thành một nút bấm trên giao diện GitLab, thường dùng cho các bước quan trọng như deploy lên Production.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích của việc sử dụng 'Containerized Runners' (ví dụ: chạy Jenkins Agent trong Docker) là gì?",
+    "options": [
+      "A. Không cần cài đặt Java trên máy host.",
+      "B. Cung cấp môi trường build sạch sẽ, cô lập và dễ dàng scale hoặc thay đổi môi trường theo yêu cầu của từng job.",
+      "C. Làm cho pipeline chạy nhanh hơn gấp 10 lần.",
+      "D. Tự động sửa lỗi code cho lập trình viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Containerization cho phép mỗi job chạy trong một môi trường được định nghĩa sẵn (Docker image), tránh xung đột thư viện giữa các job khác nhau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một 'Deployment Pipeline' lý tưởng nên tuân thủ nguyên tắc nào sau đây?",
+    "options": [
+      "A. Càng nhiều bước thủ công càng tốt để đảm bảo an toàn.",
+      "B. Phản hồi (Feedback) phải nhanh chóng, các bước chạy sớm nhất phải là các bước dễ fail nhất.",
+      "C. Chỉ chạy pipeline vào cuối tuần để tránh ảnh hưởng đến team Dev.",
+      "D. Code chỉ được test sau khi đã deploy lên Production."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc 'Fail Fast' giúp tiết kiệm tài nguyên và thời gian bằng cách phát hiện lỗi ngay lập tức ở các giai đoạn đầu (như Lint, Unit Test).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong GitHub Actions, làm thế nào để chia sẻ dữ liệu giữa các job khác nhau trong cùng một workflow?",
+    "options": [
+      "A. Các job tự động chia sẻ bộ nhớ với nhau.",
+      "B. Sử dụng các action 'actions/upload-artifact' và 'actions/download-artifact'.",
+      "C. Ghi dữ liệu vào một file tạm trên runner và job sau sẽ tự đọc được.",
+      "D. Không thể chia sẻ dữ liệu giữa các job, chỉ có thể chia sẻ giữa các step."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vì các job có thể chạy trên các runner (máy ảo) khác nhau, việc sử dụng Artifacts là cách chuẩn để truyền dữ liệu qua lại giữa chúng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế CI/CD pipeline cho một hệ thống microservices lớn trong Monorepo, chiến lược nào tối ưu nhất để giảm thời gian build và tránh lãng phí tài nguyên?",
+    "options": [
+      "A. Luôn build và test lại toàn bộ các dịch vụ để đảm bảo tính tương thích tuyệt đối.",
+      "B. Sử dụng Change Detection để chỉ kích hoạt pipeline cho các dịch vụ có thay đổi code hoặc dependencies liên quan.",
+      "C. Chia nhỏ Monorepo thành nhiều Polyrepo để mỗi dịch vụ có pipeline riêng biệt hoàn toàn.",
+      "D. Chạy song song (Parallelism) tất cả các công đoạn build cho mọi dịch vụ trong mọi lần commit."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Change Detection (Affected builds) giúp tối ưu hóa tài nguyên bằng cách chỉ xử lý những phần bị ảnh hưởng, là kỹ thuật then chốt trong quản lý Monorepo quy mô lớn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Jenkins, lợi ích chính của việc sử dụng 'Shared Libraries' so với việc viết script trực tiếp trong Jenkinsfile là gì?",
+    "options": [
+      "A. Tăng tốc độ thực thi của pipeline do code được biên dịch trước.",
+      "B. Cho phép quản lý tập trung, tái sử dụng code và giảm thiểu sự trùng lặp (DRY) giữa các đội nhóm.",
+      "C. Loại bỏ hoàn toàn nhu cầu cài đặt các plugin bổ trợ trên Jenkins server.",
+      "D. Giúp pipeline chạy bảo mật hơn vì code không nằm trong source code của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Shared Libraries cho phép chuẩn hóa quy trình CI/CD cho toàn bộ tổ chức, giúp bảo trì dễ dàng và đảm bảo tính nhất quán giữa hàng trăm pipeline khác nhau.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai Blue/Green Deployment, thách thức lớn nhất liên quan đến Database là gì và cách giải quyết phổ biến nhất?",
+    "options": [
+      "A. Database không thể chạy hai phiên bản song song; giải pháp là tắt database cũ trước khi bật mới.",
+      "B. Xung đột dữ liệu khi cả hai môi trường ghi vào cùng một bảng; giải pháp là sử dụng Backward Compatible Schema changes.",
+      "C. Độ trễ mạng khi chuyển đổi DNS; giải pháp là sử dụng IP tĩnh cho cả hai môi trường.",
+      "D. Chi phí lưu trữ database tăng gấp đôi; giải pháp là chỉ sử dụng database tạm thời cho môi trường Green."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Blue/Green, database thường được dùng chung. Các thay đổi schema phải tương thích ngược để cả code cũ (Blue) và code mới (Green) đều hoạt động bình thường trong quá trình chuyển đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao phương pháp GitOps (sử dụng công cụ như ArgoCD hoặc Flux) lại được coi là tiên tiến hơn so với việc dùng 'kubectl apply' trực tiếp từ CI pipeline?",
+    "options": [
+      "A. GitOps chạy nhanh hơn vì không cần thông qua các bước kiểm tra của CI.",
+      "B. GitOps giúp loại bỏ hoàn toàn nhu cầu sử dụng Git để lưu trữ cấu hình.",
+      "C. GitOps tự động phát hiện và khắc phục tình trạng 'Configuration Drift' giữa Git và trạng thái thực tế của Cluster.",
+      "D. GitOps cho phép triển khai ứng dụng mà không cần quyền truy cập vào Kubernetes API."
+    ],
+    "correctAnswer": "C",
+    "explanation": "GitOps sử dụng cơ chế pull-based và liên tục so khớp (reconciliation loop), đảm bảo môi trường thực tế luôn đúng với trạng thái được định nghĩa trong Git, điều mà push-based CI khó làm được.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để bảo mật thông tin nhạy cảm (Secrets) trong GitHub Actions khi deploy lên Cloud, phương thức nào được khuyến nghị nhất để tránh dùng Static Long-lived Credentials?",
+    "options": [
+      "A. Mã hóa Secrets bằng Ansible Vault và lưu mật khẩu giải mã trong GitHub Secrets.",
+      "B. Sử dụng OpenID Connect (OIDC) để cấp quyền truy cập tạm thời (Short-lived tokens) thông qua Trust Relationship.",
+      "C. Lưu trữ Secrets trong một file .env và commit trực tiếp lên private repository.",
+      "D. Sử dụng Base64 để encode các thông tin nhạy cảm trước khi đưa vào pipeline."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OIDC loại bỏ việc lưu trữ các Access Key dài hạn, thay vào đó là xác thực giữa GitHub và Cloud Provider để lấy token tạm thời, giảm thiểu rủi ro rò rỉ thông tin.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong GitLab CI, từ khóa 'needs' được sử dụng để giải quyết vấn đề gì trong một Directed Acyclic Graph (DAG) pipeline?",
+    "options": [
+      "A. Yêu cầu pipeline phải chờ tất cả các job ở stage trước hoàn thành mới được chạy.",
+      "B. Cho phép một job bắt đầu ngay khi các job phụ thuộc của nó hoàn thành, không cần đợi toàn bộ stage trước đó.",
+      "C. Định nghĩa các biến môi trường bắt buộc phải có để pipeline không bị lỗi.",
+      "D. Ràng buộc job chỉ được chạy trên các Runner có gắn tag tương ứng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'needs' cho phép phá vỡ cấu trúc stage tuần tự truyền thống, tạo ra DAG giúp pipeline thực thi nhanh hơn bằng cách chạy sớm các job không có phụ thuộc chéo.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi tối ưu hóa Docker build trong CI, kỹ thuật 'Multi-stage build' mang lại lợi ích quan trọng nhất là gì?",
+    "options": [
+      "A. Giúp giảm số lượng layer của Docker image xuống còn duy nhất 1 layer.",
+      "B. Cho phép chạy nhiều container cùng lúc trong quá trình build.",
+      "C. Giảm kích thước image cuối cùng bằng cách chỉ giữ lại runtime artifacts, loại bỏ build-time dependencies.",
+      "D. Tự động đẩy image lên nhiều Container Registry cùng một lúc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Multi-stage build tách biệt môi trường build (có trình biên dịch, tool...) và môi trường chạy (chỉ có binary/runtime), giúp image nhỏ gọn, bảo mật và deploy nhanh hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống CI/CD gặp tình trạng 'Flaky Tests' (test lúc pass lúc fail dù code không đổi). Cách xử lý nào là chuyên nghiệp nhất ở mức độ kiến trúc?",
+    "options": [
+      "A. Tự động cho phép retry job test 3-5 lần cho đến khi pass thì thôi.",
+      "B. Xóa bỏ các test case bị flaky để đảm bảo pipeline luôn xanh.",
+      "C. Cô lập flaky tests vào một bộ riêng, chạy song song và phân tích telemetry dữ liệu để tìm nguyên nhân gốc rễ (race condition, tài nguyên...).",
+      "D. Tăng cấu hình CPU/RAM cho các Build Agent để giảm thiểu độ trễ thực thi test."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Xử lý flaky tests đòi hỏi việc phân loại và phân tích dữ liệu (Quarantine) thay vì bỏ qua hoặc retry mù quáng, giúp duy trì niềm tin vào tính đúng đắn của pipeline.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi triển khai Canary Deployment, chỉ số (metric) nào là quan trọng nhất để quyết định có tiếp tục rollout hay rollback tự động?",
+    "options": [
+      "A. Thời gian build của CI pipeline.",
+      "B. Số lượng dòng code thay đổi trong phiên bản mới.",
+      "C. Các chỉ số về tỷ lệ lỗi (Error Rate) và độ trễ (Latency) so sánh giữa nhóm Canary và nhóm Baseline.",
+      "D. Tổng số lượng người dùng đang truy cập vào hệ thống tại thời điểm đó."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Canary dựa trên việc so sánh hiệu năng và độ ổn định của phiên bản mới với phiên bản hiện tại (Baseline) trên một lượng nhỏ traffic để giảm thiểu rủi ro trước khi mở rộng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong chiến lược 'Immutable Infrastructure', làm thế nào để cập nhật một ứng dụng đang chạy?",
+    "options": [
+      "A. SSH vào server hiện tại và chạy lệnh 'git pull' cùng với restart service.",
+      "B. Sử dụng các công cụ Configuration Management như Ansible để cập nhật các package trên server đang chạy.",
+      "C. Tạo ra một phiên bản hạ tầng mới hoàn toàn (ví dụ VM image mới) chứa code mới và thay thế phiên bản cũ.",
+      "D. Chỉ cập nhật các file cấu hình và giữ nguyên các file binary của ứng dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Immutable Infrastructure không thay đổi server đang chạy. Mọi thay đổi đều được thực hiện bằng cách tạo mới và thay thế, giúp đảm bảo tính nhất quán và dễ dàng rollback.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Pipeline as Code' giúp giải quyết vấn đề nào sau đây hiệu quả nhất?",
+    "options": [
+      "A. Giảm thời gian chờ đợi của developer khi cần thay đổi quy trình build/deploy thông qua việc tự phục vụ (Self-service).",
+      "B. Tăng tốc độ mạng khi tải các dependencies từ internet.",
+      "C. Đảm bảo rằng chỉ có DevOps Engineer mới có quyền thay đổi pipeline.",
+      "D. Tự động hóa việc viết tài liệu hướng dẫn sử dụng cho người dùng cuối."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Pipeline as Code cho phép định nghĩa quy trình trong source code, giúp versioning, review và cho phép developer chủ động điều chỉnh pipeline mà không phụ thuộc hoàn toàn vào team vận hành.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Late Binding' (liên kết muộn) cho các biến cấu hình (Environment Variables) lại quan trọng trong CD?",
+    "options": [
+      "A. Để các biến này được mã hóa mạnh hơn trong quá trình build.",
+      "B. Để có thể sử dụng cùng một Artifact (ví dụ Docker Image) duy nhất cho tất cả các môi trường (Staging, Prod).",
+      "C. Để giảm kích thước của file cấu hình trong repository.",
+      "D. Để đảm bảo ứng dụng không thể khởi động nếu thiếu các biến này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Artifact nên được build một lần và deploy nhiều nơi. Việc đưa cấu hình vào lúc runtime (Late Binding) thay vì build-time giúp đảm bảo tính nhất quán của artifact giữa các môi trường.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh DevSecOps, vị trí tối ưu nhất để đặt bước quét lỗ hổng bảo mật (SAST - Static Application Security Testing) là ở đâu?",
+    "options": [
+      "A. Sau khi ứng dụng đã được deploy lên môi trường Production.",
+      "B. Chạy định kỳ hàng tuần trên môi trường Staging.",
+      "C. Ngay trong giai đoạn CI (Build/Test) để phản hồi sớm cho developer (Shift Left).",
+      "D. Chỉ chạy khi có yêu cầu kiểm thử xâm nhập (Pentest) từ bên ngoài."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Shift Left Security nhấn mạnh việc đưa bảo mật vào sớm nhất có thể. SAST trong CI giúp phát hiện lỗi code ngay khi vừa được commit, giảm chi phí sửa chữa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng GitHub Actions, sự khác biệt chính giữa 'Composite Actions' và 'Reusable Workflows' là gì?",
+    "options": [
+      "A. Composite Actions có thể chứa nhiều job, còn Reusable Workflows chỉ chứa một job.",
+      "B. Reusable Workflows cho phép chia sẻ toàn bộ workflow bao gồm cả cấu hình job, trong khi Composite Actions chỉ nhóm các bước (steps) lại.",
+      "C. Composite Actions chỉ chạy được trên Linux, Reusable Workflows chạy được trên mọi OS.",
+      "D. Không có sự khác biệt về chức năng, chỉ khác nhau về cách đặt tên file."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Reusable Workflows mạnh mẽ hơn vì nó cho phép tái sử dụng toàn bộ cấu trúc workflow (jobs, runners, env), trong khi Composite Actions dùng để đóng gói các step logic thường dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một pipeline deploy lên Kubernetes bị treo ở bước 'Rolling Update'. Nguyên nhân phổ biến nhất từ phía ứng dụng là gì?",
+    "options": [
+      "A. Liveness/Readiness probe bị cấu hình sai khiến container mới không bao giờ ở trạng thái Ready.",
+      "B. Docker Image quá lớn khiến Kubernetes không thể kéo về (Pull) kịp.",
+      "C. Cluster hết dung lượng lưu trữ cho các log của container mới.",
+      "D. Tên của Service trong Kubernetes không khớp với tên của Deployment."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nếu Readiness probe fail, Kubernetes sẽ không chuyển traffic sang pod mới và không terminate pod cũ, dẫn đến quá trình Rolling Update bị treo vô hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Semantic Release' trong CI/CD giải quyết vấn đề gì?",
+    "options": [
+      "A. Tự động dịch code sang các ngôn ngữ lập trình khác nhau.",
+      "B. Tự động xác định số version (v1.0.1, v1.1.0...) và tạo changelog dựa trên các commit message có cấu trúc.",
+      "C. Đảm bảo rằng code luôn tuân thủ các quy tắc về đặt tên biến (Naming convention).",
+      "D. Tự động gửi thông báo cho khách hàng khi có tính năng mới được ra mắt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Semantic Release sử dụng Conventional Commits để tự động hóa việc quản lý phiên bản và phát hành, loại bỏ sai sót do con người và đảm bảo tính nhất quán của lịch sử phát hành.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Ephemeral Runners' (Runner dùng một lần rồi hủy) trong CI/CD là gì?",
+    "options": [
+      "A. Tiết kiệm chi phí vì không cần mua bản quyền phần mềm cho Runner.",
+      "B. Đảm bảo môi trường build luôn sạch (Clean state), tránh xung đột giữa các lần build và tăng tính bảo mật.",
+      "C. Giúp pipeline chạy nhanh hơn vì không mất thời gian khởi động hệ điều hành.",
+      "D. Cho phép lưu trữ cache của pipeline vĩnh viễn trên ổ cứng của Runner."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ephemeral Runners ngăn chặn tình trạng 'Configuration Drift' trên chính các build agent và đảm bảo các build sau không bị ảnh hưởng bởi file rác hoặc cấu hình của build trước.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống CD cho Global Application, chiến lược nào giúp giảm độ trễ khi kéo (pull) image tại các vùng địa lý khác nhau?",
+    "options": [
+      "A. Chỉ sử dụng một Container Registry duy nhất tại trụ sở chính để dễ quản lý.",
+      "B. Nén Docker image thành file .zip và gửi qua giao thức FTP.",
+      "C. Sử dụng Geo-replicated Container Registry để tự động đồng bộ image đến các region gần người dùng/cluster nhất.",
+      "D. Tăng thời gian timeout của lệnh 'docker pull' trong pipeline."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Geo-replication giúp image luôn có sẵn ở local region của cluster, giảm đáng kể thời gian deploy và tránh phụ thuộc vào đường truyền liên lục địa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một quy trình CD an toàn, 'Manual Approval Gate' nên được đặt ở đâu là hợp lý nhất?",
+    "options": [
+      "A. Trước khi bắt đầu chạy các unit test.",
+      "B. Giữa bước build image và bước đẩy image lên registry.",
+      "C. Ngay trước khi triển khai lên môi trường Production sau khi đã pass các môi trường kiểm thử.",
+      "D. Sau khi đã triển khai xong lên Production để xác nhận hệ thống chạy tốt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Manual Approval đóng vai trò là chốt chặn cuối cùng cho các quyết định kinh doanh hoặc kiểm tra cuối cùng trước khi thay đổi có tác động đến người dùng thực tế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao 'Container Image Scanning' nên được thực hiện cả ở bước CI và định kỳ trong Registry?",
+    "options": [
+      "A. Vì image có thể bị hỏng dữ liệu trong quá trình lưu trữ.",
+      "B. Để phát hiện các lỗ hổng bảo mật mới (CVE) được công bố sau khi image đã được build.",
+      "C. Để đảm bảo rằng không ai xóa image đó khỏi registry.",
+      "D. Vì quét trong Registry nhanh hơn quét trong CI pipeline."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗ hổng mới (Zero-day hoặc CVE mới) có thể xuất hiện bất cứ lúc nào. Việc quét định kỳ trong Registry giúp phát hiện rủi ro trong các image cũ đang chạy hoặc sắp dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Vấn đề 'Double Billing' hoặc 'Resource Contention' thường xảy ra trong CI khi nào?",
+    "options": [
+      "A. Khi hai developer cùng commit code vào một repository.",
+      "B. Khi pipeline không có cơ chế giới hạn số lượng job chạy đồng thời (Concurrency control) trên cùng một môi trường.",
+      "C. Khi sử dụng quá nhiều plugin trong Jenkins.",
+      "D. Khi lưu trữ quá nhiều artifact cũ trong hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu không giới hạn concurrency, nhiều pipeline có thể cùng deploy lên một môi trường staging duy nhất, gây xung đột tài nguyên và sai lệch kết quả kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong GitHub Actions, làm thế nào để tối ưu hóa thời gian cài đặt dependencies (ví dụ npm install) giữa các lần chạy pipeline?",
+    "options": [
+      "A. Sử dụng 'actions/cache' để lưu trữ và khôi phục thư mục node_modules dựa trên hash của file lock.",
+      "B. Luôn chạy lệnh 'npm install --force' để đảm bảo package mới nhất.",
+      "C. Copy thư mục node_modules từ máy local lên GitHub.",
+      "D. Sử dụng Self-hosted runner và không bao giờ xóa dữ liệu cũ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Caching dependencies dựa trên lockfile hash là cách hiệu quả nhất để giảm thời gian build, vì nó chỉ tải lại khi danh sách dependencies thực sự thay đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một tổ chức muốn áp dụng 'Compliance as Code' trong pipeline. Công cụ nào sau đây phù hợp nhất để kiểm tra cấu hình hạ tầng (Terraform/CloudFormation) trước khi deploy?",
+    "options": [
+      "A. Selenium.",
+      "B. OPA (Open Policy Agent) hoặc Checkov.",
+      "C. Prometheus.",
+      "D. Wireshark."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OPA và Checkov cho phép định nghĩa các chính sách bảo mật/tuân thủ dưới dạng code và kiểm tra các file IaC để ngăn chặn các cấu hình không an toàn (ví dụ mở port 22 công khai).",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Automated Rollback, tiêu chí nào là an toàn nhất để hệ thống tự động quay về phiên bản cũ?",
+    "options": [
+      "A. Khi có bất kỳ cảnh báo (Warning) nào xuất hiện trong log ứng dụng.",
+      "B. Khi tỷ lệ HTTP 5xx vượt quá ngưỡng cho phép (Threshold) trong một khoảng thời gian nhất định sau rollout.",
+      "C. Khi thời gian phản hồi của trang web chậm hơn 10ms so với trước đó.",
+      "D. Khi nhận được một email phàn nàn từ người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Automated Rollback cần dựa trên các chỉ số đo lường được (SLIs/SLOs) có độ tin cậy cao như Error Rate để tránh việc rollback nhầm do các dao động nhỏ của hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices, tại sao 'Contract Testing' lại quan trọng trong CI pipeline hơn là chỉ dùng Integration Testing truyền thống?",
+    "options": [
+      "A. Vì Contract Testing chạy nhanh hơn và giúp phát hiện sớm việc thay đổi API làm hỏng các dịch vụ tiêu thụ (consumers).",
+      "B. Vì Contract Testing không cần viết code, chỉ cần cấu hình trên UI.",
+      "C. Vì nó thay thế hoàn toàn được Unit Testing.",
+      "D. Vì nó đảm bảo database luôn được đồng bộ dữ liệu giữa các dịch vụ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Integration Testing thường chậm và khó thiết lập môi trường đầy đủ. Contract Testing (như Pact) kiểm tra sự tương thích giữa các dịch vụ một cách độc lập, giúp cô lập lỗi giao tiếp nhanh chóng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống microservices quy mô lớn, chiến lược nào là tối ưu nhất để quản lý sự phụ thuộc giữa các pipeline khi một service A yêu cầu service B phải được deploy trước?",
+    "options": [
+      "A. Sử dụng cơ chế 'Pipeline Chaining' hoặc 'Parent-Child Pipelines' với các điều kiện ràng buộc về artifact version.",
+      "B. Gộp tất cả microservices vào một pipeline duy nhất để đảm bảo thứ tự thực thi.",
+      "C. Sử dụng cơ chế 'Polling' để kiểm tra trạng thái của service B liên tục trước khi bắt đầu pipeline A.",
+      "D. Thiết lập thời gian delay cố định giữa các lần kích hoạt pipeline của các service khác nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ở cấp độ chuyên gia, việc sử dụng Parent-Child pipelines hoặc trigger có điều kiện giúp duy trì tính độc lập của service trong khi vẫn đảm bảo orchestration chính xác và toàn vẹn dữ liệu giữa các thành phần phụ thuộc.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai 'Canary Deployment' tự động, yếu tố nào là quan trọng nhất để quyết định việc 'Rollback' tự động mà không cần can thiệp thủ công?",
+    "options": [
+      "A. Tỷ lệ lỗi (Error Rate) và độ trễ (Latency) so sánh giữa phiên bản Canary và phiên bản Baseline thông qua phân tích thống kê.",
+      "B. Số lượng dòng code được thay đổi trong phiên bản mới.",
+      "C. Thời gian chạy của pipeline build và test trước khi deploy.",
+      "D. Ý kiến phản hồi của người dùng cuối qua kênh hỗ trợ khách hàng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tự động hóa Canary yêu cầu phân tích dữ liệu quan sát (Observability) trong thời gian thực. Việc so sánh các chỉ số kỹ thuật giữa bản Canary và Baseline (phiên bản ổn định hiện tại) là cơ sở khoa học nhất để ra quyết định rollback.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một doanh nghiệp yêu cầu tuân thủ tiêu chuẩn bảo mật khắt khe, không cho phép lưu trữ 'Long-lived Credentials' trên CI Runner. Giải pháp nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Sử dụng biến môi trường (Environment Variables) được mã hóa trong cài đặt của CI tool.",
+      "B. Sử dụng cơ chế OIDC (OpenID Connect) để lấy 'Short-lived Tokens' từ Cloud Provider dựa trên danh tính của CI Runner.",
+      "C. Mã hóa credentials bằng Ansible Vault và giải mã trực tiếp trong script của pipeline.",
+      "D. Lưu trữ credentials trong một file text trên server và giới hạn quyền truy cập file đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OIDC là tiêu chuẩn hiện đại cho phép các CI/CD platform (như GitHub Actions, GitLab CI) tương tác với Cloud (AWS, Azure, GCP) mà không cần lưu trữ secret cố định, giảm thiểu rủi ro rò rỉ thông tin xác thực.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong mô hình GitOps, sự khác biệt cốt lõi giữa 'Pull-based' và 'Push-based' deployment là gì?",
+    "options": [
+      "A. Pull-based sử dụng một agent bên trong cluster để đồng bộ hóa trạng thái từ Git, trong khi Push-based đẩy thay đổi từ CI pipeline.",
+      "B. Push-based bảo mật hơn vì không cần cài đặt agent bên trong môi trường production.",
+      "C. Pull-based chỉ hoạt động với các ứng dụng chạy trên Virtual Machines.",
+      "D. Push-based đảm bảo trạng thái thực tế luôn khớp với trạng thái mong muốn trong Git nhanh hơn Pull-based."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Pull-based (như ArgoCD hoặc Flux) sử dụng controller bên trong cluster để theo dõi sự thay đổi trong Git và tự động điều chỉnh cluster, giúp tránh việc phải mở port hoặc cung cấp quyền admin cho các hệ thống CI bên ngoài.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để tối ưu hóa tốc độ build cho một Monorepo chứa hàng trăm dự án nhỏ mà không làm giảm tính nhất quán của hệ thống?",
+    "options": [
+      "A. Build lại toàn bộ monorepo mỗi khi có bất kỳ thay đổi nhỏ nào để đảm bảo không có lỗi regression.",
+      "B. Sử dụng cơ chế 'Change Detection' để chỉ build và test những dự án có thay đổi mã nguồn hoặc bị ảnh hưởng bởi thay đổi đó.",
+      "C. Chia nhỏ Monorepo thành hàng trăm Polyrepo riêng lẻ.",
+      "D. Tăng cấu hình phần cứng của CI Runner lên mức tối đa có thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với Monorepo, việc phân tích đồ thị phụ thuộc (dependency graph) để chỉ thực thi pipeline cho các thành phần bị ảnh hưởng (Affected builds) là chiến lược sống còn để duy trì tốc độ phát triển.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Vấn đề 'Configuration Drift' trong CI/CD thường xảy ra do đâu và cách khắc phục triệt để nhất là gì?",
+    "options": [
+      "A. Do thay đổi thủ công trên môi trường; khắc phục bằng cách áp dụng Infrastructure as Code (IaC) và thực thi qua pipeline.",
+      "B. Do CI tool bị lỗi cache; khắc phục bằng cách xóa cache định kỳ.",
+      "C. Do sự khác biệt về phiên bản giữa các CI Runners; khắc phục bằng cách dùng Docker image cố định.",
+      "D. Do developers commit code quá nhanh; khắc phục bằng cách giới hạn số lượng commit mỗi ngày."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Configuration Drift xảy ra khi môi trường thực tế khác biệt với cấu hình được định nghĩa. Sử dụng IaC (Terraform, Pulumi) và cấm thay đổi thủ công (GitOps/Immutable Infrastructure) là cách duy nhất để xử lý triệt để.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế pipeline cho ứng dụng yêu cầu 'Zero Downtime' và có thay đổi về Database Schema không tương thích ngược (breaking change), bạn xử lý thế nào?",
+    "options": [
+      "A. Dừng ứng dụng, chạy migration, sau đó khởi động lại ứng dụng với version mới.",
+      "B. Sử dụng chiến lược 'Expand and Contract' (Parallel Changes) để thực hiện migration qua nhiều giai đoạn trung gian.",
+      "C. Thực hiện migration trực tiếp trên database đang chạy trước khi deploy code mới.",
+      "D. Clone database ra một bản mới, migration trên bản mới rồi trỏ ứng dụng sang đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược 'Expand and Contract' cho phép database hỗ trợ cả code cũ và code mới đồng thời, giúp việc chuyển đổi diễn ra mượt mà mà không gây gián đoạn dịch vụ.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Mutable Tags' (như :latest) cho Docker images trong CI/CD pipeline được coi là một rủi ro nghiêm trọng?",
+    "options": [
+      "A. Vì nó làm tăng dung lượng lưu trữ trên Container Registry.",
+      "B. Vì nó phá vỡ tính 'Immutability', dẫn đến việc không thể tái hiện chính xác trạng thái của hệ thống khi cần rollback.",
+      "C. Vì Docker không hỗ trợ quét lỗ hổng bảo mật cho tag :latest.",
+      "D. Vì tag :latest làm chậm quá trình pull image từ registry."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính bất biến (Immutability) là cốt lõi của DevOps. Sử dụng tag cố định (như git commit hash hoặc semantic version) đảm bảo rằng những gì được test là những gì được deploy và có thể quay lại chính xác phiên bản đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần triển khai một hệ thống CI/CD cho môi trường Hybrid Cloud. Thách thức lớn nhất về mặt bảo mật mạng là gì?",
+    "options": [
+      "A. Việc quản lý các runner nằm ở on-premises kết nối an toàn với control plane của CI tool trên Cloud.",
+      "B. Việc lựa chọn giữa Jenkins và GitHub Actions.",
+      "C. Tốc độ đường truyền internet giữa văn phòng và Cloud provider.",
+      "D. Việc viết script bằng Bash hay Python."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong Hybrid Cloud, việc thiết lập kết nối an toàn (VPN/Direct Connect) và quản lý quyền hạn cho các runner nằm sau firewall (on-premises) tiếp cận tài nguyên Cloud là bài toán kiến trúc phức tạp nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Jenkins, việc lạm dụng quá nhiều plugin dẫn đến hệ quả gì và giải pháp thay thế cho Expert là gì?",
+    "options": [
+      "A. Làm tăng chi phí bản quyền; giải pháp là chuyển sang dùng GitLab CI.",
+      "B. Gây mất ổn định, khó nâng cấp và rủi ro bảo mật; giải pháp là sử dụng Jenkins Shared Libraries và thực thi logic trong Docker containers.",
+      "C. Làm giao diện người dùng bị chậm; giải pháp là cài đặt thêm RAM cho server.",
+      "D. Giới hạn số lượng job có thể chạy; giải pháp là tạo nhiều Jenkins Master."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Plugin sprawl là 'gót chân Achilles' của Jenkins. Chuyên gia thường ưu tiên viết code trong Shared Libraries và sử dụng Docker để cô lập môi trường thực thi, giảm phụ thuộc vào các plugin không ổn định.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số 'Change Failure Rate' trong DORA metrics tăng cao đột biến sau khi áp dụng CI/CD tự động. Bạn nên phân tích điều gì đầu tiên?",
+    "options": [
+      "A. Tốc độ của CI Runner.",
+      "B. Hiệu quả và độ bao phủ của hệ thống Automated Testing trong pipeline.",
+      "C. Số lượng developer tham gia vào dự án.",
+      "D. Chi phí vận hành pipeline hàng tháng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Change Failure Rate phản ánh chất lượng của quy trình kiểm thử. Nếu chỉ số này cao, chứng tỏ pipeline đang cho phép code lỗi đi qua (false negatives) hoặc hệ thống test không phản ánh đúng thực tế production.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một pipeline được thiết kế theo mô hình 'Build Once, Deploy Many'. Artifact nên được quản lý như thế nào giữa các môi trường Staging và Production?",
+    "options": [
+      "A. Rebuild lại artifact tại mỗi môi trường để đảm bảo tương thích với biến môi trường của nơi đó.",
+      "B. Lưu trữ artifact trong một Registry tập trung và sử dụng cơ chế 'Promotion' (gán nhãn hoặc di chuyển) sau khi pass các gate kiểm thử.",
+      "C. Copy mã nguồn sang server production và chạy lệnh build trực tiếp tại đó.",
+      "D. Gửi artifact qua email hoặc Slack cho đội vận hành để họ deploy thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'Build Once, Deploy Many' yêu cầu artifact phải là duy nhất và bất biến. Việc 'Promotion' đảm bảo rằng cùng một file binary đã qua kiểm thử ở Staging sẽ được mang lên Production, loại bỏ sai lệch do build lại.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Blue/Green Deployment' yêu cầu gấp đôi tài nguyên hạ tầng. Trong trường hợp ngân sách hạn hẹp, chiến lược nào là sự thay thế hợp lý nhất mà vẫn đảm bảo an toàn?",
+    "options": [
+      "A. Rolling Update với việc kiểm soát liveness/readiness probes chặt chẽ.",
+      "B. Deploy trực tiếp vào giờ thấp điểm (off-peak hours).",
+      "C. Sử dụng duy nhất một server và thực hiện in-place update.",
+      "D. Bỏ qua bước staging để tiết kiệm chi phí server."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Rolling Update cho phép cập nhật dần dần các instance mà không cần nhân đôi toàn bộ hạ tầng như Blue/Green, đồng thời vẫn duy trì tính sẵn sàng nếu được cấu hình probes chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi tích hợp Security Scans (SAST/DAST) vào pipeline, làm thế nào để tránh việc làm chậm tốc độ release của developer?",
+    "options": [
+      "A. Chỉ chạy security scan một lần duy nhất trước khi release sản phẩm cuối năm.",
+      "B. Thực hiện scan bất đồng bộ (asynchronous) hoặc chạy song song, và chỉ chặn pipeline nếu phát hiện lỗ hổng mức 'Critical'.",
+      "C. Yêu cầu developer tự chạy scan trên máy cá nhân và cam kết kết quả.",
+      "D. Loại bỏ hoàn toàn các bước scan tự động để ưu tiên tốc độ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để cân bằng giữa bảo mật và tốc độ (DevSecOps), các bước scan nên được tối ưu hóa về thời gian thực thi và chỉ áp dụng 'hard fail' cho các rủi ro nghiêm trọng không thể bỏ qua.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Ephemeral CI Runners' (Runner dùng một lần) so với 'Static Runners' là gì?",
+    "options": [
+      "A. Tiết kiệm dung lượng ổ cứng cho server.",
+      "B. Đảm bảo môi trường build luôn sạch (clean slate), tránh xung đột giữa các lần build và tăng tính bảo mật.",
+      "C. Giúp pipeline chạy nhanh hơn do không tốn thời gian khởi động.",
+      "D. Dễ dàng debug hơn khi có lỗi xảy ra trong quá trình build."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ephemeral Runners (thường chạy trên K8s hoặc Docker) loại bỏ tình trạng 'nó chạy trên máy tôi/runner cũ' do các file rác hoặc cấu hình sót lại từ các lần build trước, đồng thời xóa bỏ dấu vết secret sau khi xong việc.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hệ thống CI/CD của bạn bị tấn công 'Supply Chain Attack' thông qua một dependency độc hại. Bước nào trong pipeline có khả năng phát hiện sớm nhất rủi ro này?",
+    "options": [
+      "A. Unit Testing.",
+      "B. Software Composition Analysis (SCA).",
+      "C. Static Application Security Testing (SAST).",
+      "D. Load Testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SCA được thiết kế đặc biệt để quét danh sách các thư viện phụ thuộc (dependencies) và đối chiếu với cơ sở dữ liệu lỗ hổng (CVE) hoặc mã độc đã biết, giúp phát hiện rủi ro từ bên thứ ba.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh 'Microservices Sprawl', làm thế nào để quản lý hàng nghìn file định nghĩa pipeline (YAML) một cách hiệu quả?",
+    "options": [
+      "A. Copy-paste code YAML vào từng repository.",
+      "B. Sử dụng 'Centralized Pipeline Templates' (như GitHub Actions Reusable Workflows hoặc GitLab CI Templates).",
+      "C. Viết một script Bash khổng lồ để điều khiển tất cả các repo.",
+      "D. Yêu cầu mỗi team tự quản lý pipeline theo cách riêng của họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Centralized Templates giúp chuẩn hóa quy trình, dễ dàng cập nhật các bước kiểm tra bảo mật hoặc deploy cho toàn bộ tổ chức chỉ bằng việc thay đổi tại một nơi duy nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng yêu cầu tuân thủ quy định 'Segregation of Duties' (SoD). Bạn cấu hình pipeline như thế nào để thỏa mãn điều kiện này?",
+    "options": [
+      "A. Cho phép mọi developer có quyền nhấn nút deploy lên Production.",
+      "B. Thiết lập 'Manual Approval Gate' yêu cầu một người không thuộc đội phát triển (ví dụ QA hoặc Lead) phê duyệt trước khi deploy.",
+      "C. Tự động hóa hoàn toàn 100% từ code đến production mà không cần ai phê duyệt.",
+      "D. Chỉ cho phép deploy từ máy cá nhân của quản lý dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SoD yêu cầu sự phân tách giữa người tạo ra thay đổi và người phê duyệt thay đổi đó lên môi trường quan trọng. Manual Approval là cơ chế phổ biến nhất để thực thi quy định này trong CI/CD.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện 'Database Rollback' trong một pipeline tự động, rủi ro lớn nhất bạn phải đối mặt là gì?",
+    "options": [
+      "A. Mất dữ liệu (Data Loss) do các giao dịch phát sinh trong khoảng thời gian giữa lúc deploy và rollback.",
+      "B. Pipeline chạy quá lâu.",
+      "C. Không đủ dung lượng lưu trữ bản backup.",
+      "D. Developer không biết cách viết script rollback."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Rollback database phức tạp hơn code rất nhiều vì dữ liệu là trạng thái liên tục. Việc quay lại snapshot cũ có thể làm mất các đơn hàng hoặc thông tin người dùng mới phát sinh, đòi hỏi chiến lược xử lý dữ liệu tinh tế.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chiến lược 'Trunk-based Development' hỗ trợ CI/CD tốt hơn 'Gitflow' ở điểm nào trong môi trường High-velocity?",
+    "options": [
+      "A. Nó cho phép duy trì nhiều phiên bản release cùng lúc.",
+      "B. Nó giảm thiểu 'Merge Hell' và thúc đẩy việc tích hợp liên tục (CI) thực thụ bằng cách đẩy code lên nhánh chính thường xuyên.",
+      "C. Nó giúp quản lý các tính năng chưa hoàn thiện dễ dàng hơn mà không cần dùng Feature Flags.",
+      "D. Nó yêu cầu ít kỹ năng của developer hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trunk-based development yêu cầu developer tích hợp code vào nhánh chính hàng ngày, giúp phát hiện xung đột sớm và phù hợp hoàn hảo với triết lý của CI/CD là phản hồi nhanh.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hệ thống CI/CD của bạn thường xuyên bị nghẽn (bottleneck) vào khung giờ sáng sớm khi mọi người bắt đầu làm việc. Giải pháp kiến trúc nào là tối ưu nhất?",
+    "options": [
+      "A. Yêu cầu nhân viên đi làm lệch giờ nhau.",
+      "B. Triển khai 'Auto-scaling CI Runners' dựa trên độ dài của hàng đợi (job queue).",
+      "C. Mua thêm server vật lý đặt tại văn phòng.",
+      "D. Giới hạn mỗi người chỉ được chạy 1 pipeline mỗi ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Auto-scaling runners (ví dụ dùng Kubernetes với Horizontal Pod Autoscaler hoặc Cluster Autoscaler) cho phép hệ thống tự mở rộng tài nguyên khi nhu cầu tăng cao và thu hẹp lại để tiết kiệm chi phí khi thấp điểm.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao 'Semantic Versioning' (SemVer) lại quan trọng trong quản lý Artifact của CI/CD?",
+    "options": [
+      "A. Để làm cho số phiên bản trông chuyên nghiệp hơn.",
+      "B. Để máy móc và con người có thể hiểu được mức độ thay đổi (Breaking, Feature, Fix) và đưa ra quyết định nâng cấp an toàn.",
+      "C. Để thay thế cho việc viết Changelog.",
+      "D. Để đảm bảo rằng mọi bản build đều thành công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SemVer cung cấp một ngôn ngữ chung về mức độ rủi ro khi cập nhật thư viện/dịch vụ, giúp các hệ thống tự động hóa có thể quyết định có nên tự động nâng cấp hay không dựa trên quy tắc (ví dụ: tự động nâng cấp patch version).",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một pipeline 'Multi-region Deployment'. Làm thế nào để đảm bảo tính nhất quán của ứng dụng trên toàn cầu?",
+    "options": [
+      "A. Deploy đồng thời lên tất cả các region cùng một lúc.",
+      "B. Sử dụng cơ chế 'Wave-based Deployment', deploy lần lượt qua các region kèm theo các bước kiểm tra sức khỏe (Health checks) nghiêm ngặt.",
+      "C. Chỉ deploy lên một region chính, các region khác sẽ tự đồng bộ code sau.",
+      "D. Mỗi region sử dụng một pipeline riêng biệt với cấu hình khác nhau hoàn toàn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Deploy theo 'sóng' (waves) giúp giảm thiểu 'Blast Radius' (phạm vi ảnh hưởng) nếu có lỗi xảy ra. Nếu region đầu tiên gặp sự cố, pipeline sẽ dừng lại trước khi thảm họa lan ra toàn cầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong GitHub Actions, sự khác biệt giữa 'Contexts' và 'Environment Variables' là gì?",
+    "options": [
+      "A. Không có sự khác biệt, chúng có thể dùng thay thế hoàn toàn cho nhau.",
+      "B. Contexts là các đối tượng chứa thông tin về workflow run, runner, v.v., có thể truy cập ở mọi nơi; Environment variables chủ yếu dùng trong các bước thực thi (steps).",
+      "C. Contexts chỉ dùng cho bảo mật, Environment variables chỉ dùng cho cấu hình ứng dụng.",
+      "D. Environment variables có thể truy cập bằng cú pháp ${{ }} còn Contexts thì không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Contexts (như `github`, `matrix`, `steps`) cung cấp dữ liệu về môi trường thực thi của GitHub Actions, trong khi Environment variables thường được dùng để truyền dữ liệu vào các shell script hoặc chương trình cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kịch bản: Một pipeline deploy lên Production thành công nhưng ứng dụng bị crash ngay lập tức do thiếu một biến môi trường mới. Bạn cần cải thiện pipeline như thế nào?",
+    "options": [
+      "A. Thêm bước 'Smoke Test' hoặc 'Post-deployment Verification' để kiểm tra trạng thái ứng dụng ngay sau khi deploy.",
+      "B. Phạt developer đã quên thêm biến môi trường.",
+      "C. Viết thêm Unit Test cho phần code đó.",
+      "D. Luôn luôn giữ lại phiên bản cũ chạy song song trong 1 tháng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Smoke test là bước kiểm tra nhanh các chức năng sống còn của ứng dụng sau deploy. Nếu smoke test thất bại, pipeline có thể kích hoạt rollback tự động ngay lập tức để giảm thiểu downtime.",
+    "difficulty": "EXPERT",
+    "skillArea": "CI/CD Pipelines",
+    "category": "SITUATION"
+  }
+]

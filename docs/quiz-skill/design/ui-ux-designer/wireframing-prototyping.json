@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục đích chính của bản Low-fidelity (lo-fi) wireframe trong thiết kế UI/UX là gì?",
+    "options": [
+      "A. Trình bày chi tiết về màu sắc và hình ảnh của sản phẩm.",
+      "B. Xác định cấu trúc, bố cục và chức năng cơ bản của giao diện.",
+      "C. Cung cấp bộ mã nguồn (source code) cho lập trình viên.",
+      "D. Kiểm tra hiệu năng tải trang của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Low-fidelity wireframe tập trung vào việc sắp xếp bố cục và luồng chức năng mà không bị xao nhãng bởi các yếu tố thẩm mỹ như màu sắc hay hình ảnh.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một bản wireframe, một hình chữ nhật có hai đường chéo bắt chéo (dấu X) thường đại diện cho yếu tố nào?",
+    "options": [
+      "A. Một nút bấm (Button).",
+      "B. Một video đang phát.",
+      "C. Một trình giữ chỗ cho hình ảnh (Image Placeholder).",
+      "D. Một thông báo lỗi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đây là ký hiệu chuẩn trong wireframing để biểu thị vị trí sẽ đặt hình ảnh mà không cần đưa ảnh thật vào giai đoạn sơ khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện wireframing lại quan trọng trước khi bắt đầu thiết kế chi tiết (High-fidelity)?",
+    "options": [
+      "A. Để khách hàng thấy được sản phẩm trông như thật.",
+      "B. Để tiết kiệm thời gian và công sức khi cần thay đổi cấu trúc sản phẩm.",
+      "C. Để lập trình viên có thể bắt đầu viết code giao diện ngay lập tức.",
+      "D. Để xác định chính xác mã màu HEX cho thương hiệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thay đổi cấu trúc trên bản wireframe nhanh và ít tốn kém hơn nhiều so với việc sửa đổi trên một bản thiết kế chi tiết hoàn chỉnh.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản nhất giữa Wireframe và Prototype là gì?",
+    "options": [
+      "A. Wireframe có màu sắc, Prototype thì không.",
+      "B. Wireframe là bản vẽ tĩnh, Prototype có tính tương tác.",
+      "C. Wireframe dùng cho mobile, Prototype dùng cho desktop.",
+      "D. Wireframe chỉ dùng cho lập trình viên, Prototype dùng cho người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Wireframe mô tả cấu trúc tĩnh, trong khi Prototype mô phỏng cách người dùng tương tác với sản phẩm (nhấn nút, chuyển trang).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thuật ngữ 'Fidelity' trong thiết kế UI/UX dùng để chỉ điều gì?",
+    "options": [
+      "A. Tốc độ hoàn thành một bản thiết kế.",
+      "B. Mức độ chi tiết và tính chân thực của bản thiết kế.",
+      "C. Khả năng tương thích của thiết kế trên các trình duyệt.",
+      "D. Số lượng thành viên tham gia vào dự án thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Fidelity (độ trung thực) phân cấp từ thấp (lo-fi) đến cao (hi-fi) dựa trên mức độ giống với sản phẩm cuối cùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong các công cụ prototyping, 'Hotspot' được hiểu là gì?",
+    "options": [
+      "A. Một lỗi thiết kế cần được sửa ngay lập tức.",
+      "B. Một vùng tương tác được gán liên kết để chuyển màn hình hoặc thực hiện hành động.",
+      "C. Điểm tập trung ánh sáng mạnh nhất trong hình ảnh.",
+      "D. Vị trí đặt logo của công ty trên giao diện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hotspot là các vùng vô hình hoặc hữu hình mà khi người dùng nhấp vào sẽ kích hoạt một tương tác trong bản prototype.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào là thời điểm thích hợp nhất để tạo một Interactive Prototype (Bản mẫu tương tác)?",
+    "options": [
+      "A. Ngay khi bắt đầu dự án mà chưa cần nghiên cứu người dùng.",
+      "B. Sau khi đã xác định được luồng người dùng và cấu trúc cơ bản.",
+      "C. Chỉ sau khi sản phẩm đã được lập trình xong hoàn toàn.",
+      "D. Khi muốn chọn màu sắc cho logo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Prototype được tạo ra để kiểm tra luồng và tính khả thi của các tương tác sau khi cấu trúc đã hình thành.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Việc sử dụng các 'Component' (thành phần) tái sử dụng trong quá trình làm wireframe giúp ích gì cho Designer?",
+    "options": [
+      "A. Làm cho bản thiết kế trông nghệ thuật hơn.",
+      "B. Tăng tính nhất quán và đẩy nhanh tốc độ thiết kế.",
+      "C. Giảm dung lượng tệp tin thiết kế xuống mức tối thiểu.",
+      "D. Thay thế hoàn toàn công việc của lập trình viên Front-end."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng lại các thành phần như nút bấm, ô nhập liệu giúp đảm bảo sự đồng bộ trên toàn bộ các trang và tiết kiệm thời gian vẽ lại.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Quá trình 'Design Handoff' trong Prototyping là gì?",
+    "options": [
+      "A. Việc chuyển giao bản thiết kế từ Designer sang cho lập trình viên.",
+      "B. Việc Designer nộp bản thiết kế cho quản lý dự án.",
+      "C. Việc xóa bỏ các bản nháp cũ để dọn dẹp bộ nhớ.",
+      "D. Việc thay đổi toàn bộ màu sắc của bản thiết kế trước khi xuất bản."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Design Handoff là giai đoạn quan trọng nơi designer cung cấp các tài sản thiết kế, thông số và prototype cho đội ngũ kỹ thuật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao trong bản Low-fidelity wireframe, người ta thường chỉ dùng các tông màu xám, đen và trắng?",
+    "options": [
+      "A. Vì các công cụ thiết kế không hỗ trợ màu sắc khác.",
+      "B. Để tránh gây xao nhãng và tập trung vào trải nghiệm người dùng cũng như cấu trúc.",
+      "C. Vì màu xám giúp lập trình viên dễ đọc mã nguồn hơn.",
+      "D. Để tiết kiệm mực khi in bản thiết kế ra giấy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Màu sắc có thể gây ra những tranh luận không cần thiết về thẩm mỹ ở giai đoạn mà mục tiêu chính là thảo luận về logic và bố cục.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế wireframe cho ứng dụng di động, yếu tố nào sau đây cần được ưu tiên hàng đầu?",
+    "options": [
+      "A. Độ phân giải của các hình ảnh trang trí.",
+      "B. Kích thước của các vùng chạm (tap targets) để đảm bảo dễ bấm.",
+      "C. Các hiệu ứng chuyển động phức tạp giữa các trang.",
+      "D. Việc lựa chọn font chữ nghệ thuật cho tiêu đề."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trên thiết bị di động, việc đảm bảo các nút và liên kết đủ lớn để ngón tay người dùng thao tác chính xác là yếu tố UX quan trọng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong prototyping, 'Transition' (chuyển cảnh) dùng để mô tả điều gì?",
+    "options": [
+      "A. Cách dữ liệu được lưu trữ trong cơ sở dữ liệu.",
+      "B. Hiệu ứng thị giác khi di chuyển từ màn hình này sang màn hình khác.",
+      "C. Quá trình thay đổi nhân sự trong đội ngũ thiết kế.",
+      "D. Việc thay đổi ngôn ngữ hiển thị trên ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Transition (như slide, fade, dissolve) giúp mô phỏng chuyển động thực tế của ứng dụng khi người dùng điều hướng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách tốt nhất để mô phỏng một menu thả xuống (dropdown) trong một bản prototype đơn giản là gì?",
+    "options": [
+      "A. Viết một đoạn ghi chú giải thích menu sẽ hoạt động thế nào.",
+      "B. Tạo một 'Overlay' hiển thị danh sách các lựa chọn khi nhấp vào menu.",
+      "C. Vẽ menu trên giấy và chụp ảnh lại.",
+      "D. Yêu cầu lập trình viên viết code cho menu đó ngay."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Overlay (lớp phủ) là kỹ thuật phổ biến trong các công cụ như Figma để mô phỏng menu hoặc popup mà không cần tạo trang mới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Công cụ nào sau đây được sử dụng phổ biến nhất để thiết kế wireframe và prototype hiện nay?",
+    "options": [
+      "A. Microsoft Word.",
+      "B. Adobe Photoshop.",
+      "C. Figma.",
+      "D. Notepad++."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Figma hiện là công cụ hàng đầu hỗ trợ cả vẽ wireframe, thiết kế UI chi tiết và tạo prototype tương tác mạnh mẽ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi trình bày prototype cho khách hàng (Stakeholders), mục tiêu chính của Designer là gì?",
+    "options": [
+      "A. Khoe kỹ năng sử dụng phần mềm thiết kế.",
+      "B. Lấy ý kiến phản hồi về luồng trải nghiệm và tính năng.",
+      "C. Thuyết phục khách hàng mua thêm các gói dịch vụ khác.",
+      "D. Chứng minh rằng thiết kế không cần thay đổi gì thêm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Prototype là công cụ giao tiếp để đảm bảo tất cả các bên liên quan hiểu và đồng thuận về cách sản phẩm vận hành trước khi sản xuất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Phương pháp 'Paper Prototyping' (làm bản mẫu trên giấy) có ưu điểm lớn nhất là gì?",
+    "options": [
+      "A. Có độ chi tiết cực cao.",
+      "B. Rất nhanh, rẻ và dễ dàng thay đổi ý tưởng tức thì.",
+      "C. Dễ dàng chuyển đổi trực tiếp thành mã lập trình.",
+      "D. Trông chuyên nghiệp hơn bản thiết kế trên máy tính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Paper Prototyping cho phép Designer thử nghiệm nhanh các ý tưởng sơ khai mà không tốn kém chi phí hay thời gian sử dụng công cụ phức tạp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Việc thêm 'Annotations' (chú thích) vào wireframe nhằm mục đích gì?",
+    "options": [
+      "A. Để trang trí cho bản thiết kế bớt trống trải.",
+      "B. Để giải thích các logic nghiệp vụ hoặc hành vi mà hình ảnh tĩnh không thể hiện được.",
+      "C. Để che đi những phần thiết kế chưa hoàn thiện.",
+      "D. Để tăng dung lượng file thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chú thích giúp người xem (khách hàng, lập trình viên) hiểu rõ các quy tắc hoạt động của các thành phần trên giao diện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thuật ngữ 'Iteration' trong quá trình thiết kế layout có nghĩa là gì?",
+    "options": [
+      "A. Việc sao chép thiết kế của đối thủ cạnh tranh.",
+      "B. Quá trình lặp lại việc thiết kế, thử nghiệm và cải tiến để đạt kết quả tốt hơn.",
+      "C. Việc xuất file thiết kế ra định dạng ảnh.",
+      "D. Việc cố định thiết kế và không cho phép chỉnh sửa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiết kế là một quá trình lặp (iterative process), nơi các bản wireframe được điều chỉnh liên tục dựa trên phản hồi và kết quả kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sử dụng văn bản giả 'Lorem Ipsum' trong wireframe có tác dụng gì?",
+    "options": [
+      "A. Để kiểm tra khả năng hỗ trợ đa ngôn ngữ của ứng dụng.",
+      "B. Để người xem tập trung vào bố cục thay vì bị cuốn vào đọc nội dung chi tiết.",
+      "C. Để làm cho bản thiết kế trông giống tiếng Latinh.",
+      "D. Để thay thế hoàn toàn công việc của người viết nội dung (Content Writer)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lorem Ipsum giúp lấp đầy các vùng văn bản để Designer xem xét phân bổ không gian mà không cần chờ nội dung thật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một bản High-fidelity (hi-fi) Prototype thường khác Low-fidelity ở điểm nào?",
+    "options": [
+      "A. Hi-fi chỉ chạy được trên máy tính để bàn.",
+      "B. Hi-fi có đầy đủ màu sắc, hình ảnh thật, typography và tương tác mượt mà.",
+      "C. Hi-fi không bao giờ cần sự tham gia của người dùng để kiểm thử.",
+      "D. Hi-fi được vẽ bằng tay trên bảng trắng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hi-fi prototype mô phỏng rất sát giao diện và trải nghiệm thực tế của sản phẩm cuối cùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Figma, tính năng nào giúp bạn thay đổi một biểu tượng ở tất cả các trang chỉ bằng một lần chỉnh sửa?",
+    "options": [
+      "A. Grouping (Nhóm).",
+      "B. Main Component (Thành phần chính).",
+      "C. Layer Mask (Mặt nạ lớp).",
+      "D. Exporting (Xuất file)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi thay đổi Main Component, tất cả các bản sao (instances) của nó trong dự án sẽ được cập nhật tự động.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Loại prototype nào tập trung chủ yếu vào việc kiểm tra luồng di chuyển giữa các màn hình?",
+    "options": [
+      "A. Visual Prototype.",
+      "B. Click-through Prototype.",
+      "C. Paper Prototype.",
+      "D. Animation Prototype."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Click-through prototype cho phép người dùng nhấp vào các nút để chuyển trang, giúp kiểm tra tính logic của luồng đi (flow).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Việc tái sử dụng các bộ 'UI Kit' khi làm wireframe mang lại lợi ích gì?",
+    "options": [
+      "A. Giúp designer không cần phải suy nghĩ về giải pháp thiết kế.",
+      "B. Đảm bảo các thành phần tuân thủ các tiêu chuẩn thiết kế phổ biến và tiết kiệm thời gian.",
+      "C. Làm cho mọi ứng dụng đều trông giống hệt nhau.",
+      "D. Giảm số lượng màn hình cần phải thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "UI Kit cung cấp các thành phần chuẩn (nút, thanh điều hướng...), giúp designer xây dựng wireframe nhanh chóng và đúng quy chuẩn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quá trình làm Prototype, 'User Flow' nên được xác định khi nào?",
+    "options": [
+      "A. Sau khi đã lập trình xong sản phẩm.",
+      "B. Trước khi bắt đầu vẽ wireframe chi tiết.",
+      "C. Chỉ khi khách hàng yêu cầu xem báo cáo.",
+      "D. Sau khi đã chọn xong màu sắc chủ đạo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xác định luồng người dùng (User Flow) trước giúp Designer biết cần vẽ những màn hình nào và chúng kết nối với nhau ra sao.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục tiêu cuối cùng của việc thực hiện Testing (kiểm thử) trên bản Prototype là gì?",
+    "options": [
+      "A. Để tìm ra lỗi lập trình (bugs).",
+      "B. Để xác nhận các giả định thiết kế và phát hiện sớm các vấn đề về trải nghiệm người dùng.",
+      "C. Để hoàn thiện hồ sơ năng lực (portfolio) của Designer.",
+      "D. Để kéo dài thời gian thực hiện dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử prototype giúp Designer biết được người dùng có gặp khó khăn gì không, từ đó điều chỉnh thiết kế trước khi tốn nguồn lực lập trình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi bắt đầu giai đoạn Low-fidelity wireframing cho một tính năng phức tạp, mục tiêu chính của bạn nên là gì?",
+    "options": [
+      "A. Xác định bảng màu và phong cách typography phù hợp với thương hiệu.",
+      "B. Tập trung vào cấu trúc thông tin, luồng người dùng và phân bổ không gian.",
+      "C. Tạo ra các hiệu ứng chuyển cảnh mượt mà để gây ấn tượng với khách hàng.",
+      "D. Đảm bảo mọi icon và hình ảnh đều đạt độ phân giải cao nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Low-fidelity wireframes tập trung vào việc giải quyết bài toán chức năng và bố cục thay vì thẩm mỹ chi tiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong buổi review wireframe, khách hàng liên tục thắc mắc về màu sắc và hình ảnh thay vì tập trung vào luồng nghiệp vụ. Bạn nên xử lý thế nào?",
+    "options": [
+      "A. Ngay lập tức thêm màu sắc vào wireframe để khách hàng hài lòng.",
+      "B. Giải thích rằng đây là bản phác thảo cấu trúc và đề nghị họ tập trung vào logic vận hành.",
+      "C. Bỏ qua các câu hỏi của khách hàng và tiếp tục trình bày.",
+      "D. Kết thúc buổi họp và quay lại khi đã có bản thiết kế High-fidelity."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc thiết lập kỳ vọng về mục đích của wireframe giúp buổi review tập trung đúng vào cấu trúc và chức năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Gray-boxing' trong wireframing thường được sử dụng nhằm mục đích gì?",
+    "options": [
+      "A. Để tiết kiệm chi phí in ấn khi trình bày bản thảo.",
+      "B. Để mô phỏng độ tương phản của giao diện ở chế độ Dark Mode.",
+      "C. Để phân cấp thị giác và xác định tầm quan trọng của các thành phần nội dung.",
+      "D. Để che giấu các lỗi thiết kế trước khi trình bày với cấp trên."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng các sắc độ xám giúp người xem nhận diện được phân cấp thông tin mà không bị xao nhãn bởi màu sắc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi nào là thời điểm thích hợp nhất để bắt đầu xây dựng một Interactive Prototype?",
+    "options": [
+      "A. Sau khi đã hoàn thiện toàn bộ các màn hình High-fidelity UI.",
+      "B. Ngay sau khi có ý tưởng sơ khai trong đầu để tránh quên.",
+      "C. Khi cần kiểm chứng luồng người dùng hoặc trình bày logic tương tác với stakeholder.",
+      "D. Chỉ khi dự án đã bước vào giai đoạn lập trình (Development)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Prototype dùng để kiểm chứng giả thuyết và luồng tương tác, giúp giảm thiểu rủi ro trước khi đầu tư vào UI chi tiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một prototype cho ứng dụng ngân hàng. Tại sao việc sử dụng dữ liệu thật (Real data) thay vì 'Lorem Ipsum' lại quan trọng trong giai đoạn này?",
+    "options": [
+      "A. Để làm cho bản thiết kế trông đẹp mắt và chuyên nghiệp hơn.",
+      "B. Để kiểm tra xem bố cục có bị vỡ khi độ dài nội dung thay đổi và đảm bảo tính thực tế.",
+      "C. Vì các công cụ prototype hiện nay bắt buộc phải nhập dữ liệu thật.",
+      "D. Để tránh việc phải chỉnh sửa lại nội dung trong giai đoạn lập trình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dữ liệu thực giúp phát hiện các vấn đề về hiển thị (như tên quá dài, số dư lớn) mà văn bản giả không bộc lộ được.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng 'Components' trong các công cụ như Figma/Adobe XD khi làm wireframe là gì?",
+    "options": [
+      "A. Giảm dung lượng file thiết kế xuống mức tối thiểu.",
+      "B. Tự động hóa việc xuất file (export) cho lập trình viên.",
+      "C. Đảm bảo tính nhất quán và dễ dàng cập nhật thay đổi trên toàn bộ dự án.",
+      "D. Cho phép nhiều người cùng chỉnh sửa một pixel cùng lúc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Components giúp duy trì sự đồng bộ; khi thay đổi component gốc, tất cả các bản sao (instances) sẽ cập nhật theo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một prototype, 'Smart Animate' (hoặc tương đương) hoạt động dựa trên nguyên tắc nào?",
+    "options": [
+      "A. Nó tự động tạo ra các khung hình trung gian giữa hai layer có cùng tên ở hai frame khác nhau.",
+      "B. Nó sử dụng trí tuệ nhân tạo để đoán ý định chuyển động của người dùng.",
+      "C. Nó chuyển đổi toàn bộ thiết kế thành mã code CSS animation.",
+      "D. Nó chỉ hoạt động nếu hai màn hình có cùng kích thước canvas."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Smart Animate khớp các layer dựa trên tên và phân cấp để tạo ra hiệu ứng chuyển động mượt mà.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi bàn giao (handoff) prototype cho lập trình viên, thông tin nào sau đây là quan trọng nhất cần được đính kèm?",
+    "options": [
+      "A. Danh sách các font chữ đã được sử dụng trong bản phác thảo.",
+      "B. Các ghi chú (annotations) giải thích logic tương tác và các trường hợp ngoại lệ (edge cases).",
+      "C. Video quay lại cảnh bạn đang thao tác trên prototype.",
+      "D. Tên của tất cả các khách hàng đã tham gia buổi user testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lập trình viên cần hiểu logic phía sau các tương tác để hiện thực hóa chúng chính xác trong code.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc tạo prototype cho các 'Edge cases' (ví dụ: lỗi đăng nhập, mất kết nối) lại cần thiết ở mức độ Intermediate?",
+    "options": [
+      "A. Để làm tăng số lượng màn hình trong bộ hồ sơ năng lực (portfolio).",
+      "B. Để đảm bảo trải nghiệm người dùng không bị đứt gãy khi có sự cố xảy ra.",
+      "C. Vì khách hàng thường chỉ quan tâm đến các lỗi này.",
+      "D. Để chứng minh rằng bạn đã sử dụng hết các tính năng của công cụ thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xử lý edge cases giúp sản phẩm hoàn thiện và bền bỉ hơn trong môi trường thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn nên chọn mức độ trung thực (fidelity) nào cho prototype khi thực hiện Usability Testing lần đầu với người dùng cuối?",
+    "options": [
+      "A. Low-fidelity (giấy hoặc đen trắng) để họ tập trung vào quy trình thực hiện tác vụ.",
+      "B. High-fidelity (đầy đủ màu sắc, hiệu ứng) để họ cảm thấy như đang dùng sản phẩm thật.",
+      "C. Chỉ cần một bản mô tả bằng văn bản về các tính năng.",
+      "D. Mức độ trung thực vừa phải (Mid-fidelity) có tương tác cơ bản để không gây xao nhãn bởi thẩm mỹ."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Mid-fidelity thường là điểm cân bằng tốt nhất để kiểm tra luồng mà không làm người dùng bị phân tâm bởi màu sắc quá sớm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Figma, việc sử dụng 'Variants' cho các nút (buttons) trong wireframe giúp ích gì cho quá trình prototyping?",
+    "options": [
+      "A. Nó cho phép thay đổi trạng thái (Hover, Pressed) một cách nhanh chóng và có hệ thống.",
+      "B. Nó giúp tăng tốc độ render của trình duyệt khi xem prototype.",
+      "C. Nó tự động dịch các nhãn trên nút sang ngôn ngữ khác.",
+      "D. Nó loại bỏ hoàn toàn nhu cầu sử dụng Auto Layout."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Variants cho phép quản lý các trạng thái khác nhau của một component trong một container duy nhất, giúp prototype gọn gàng hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế wireframe cho một dashboard chứa nhiều dữ liệu, quy tắc nào là quan trọng nhất để đảm bảo tính khả dụng?",
+    "options": [
+      "A. Sử dụng càng nhiều biểu đồ màu sắc càng tốt.",
+      "B. Ưu tiên hiển thị các thông tin quan trọng nhất ở vị trí dễ quan sát (thường là góc trên bên trái).",
+      "C. Giấu tất cả các bộ lọc (filters) vào trong một menu ẩn để tiết kiệm không gian.",
+      "D. Sử dụng kích thước chữ nhỏ để nhồi nhét được nhiều dữ liệu nhất có thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân cấp thị giác và vị trí đặt thông tin quyết định hiệu quả của một dashboard trong việc hỗ trợ ra quyết định.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một 'Click-through prototype' khác với một 'Functional prototype' ở điểm cơ bản nào?",
+    "options": [
+      "A. Click-through chỉ là các màn hình tĩnh được nối với nhau, không có xử lý logic dữ liệu phức tạp.",
+      "B. Functional prototype không thể chạy được trên thiết bị di động.",
+      "C. Click-through prototype luôn có độ phân giải cao hơn.",
+      "D. Click-through prototype yêu cầu phải biết lập trình code."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Click-through prototype tập trung vào luồng di chuyển giữa các màn hình thông qua các điểm chạm (hotspots).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi làm wireframe cho Mobile App, tại sao bạn nên tránh sử dụng các tương tác 'Hover'?",
+    "options": [
+      "A. Vì nó làm chậm hiệu năng của ứng dụng.",
+      "B. Vì thiết bị di động dựa trên tương tác chạm (touch), không có trạng thái hover như chuột.",
+      "C. Vì Google không khuyến khích sử dụng hover trong SEO.",
+      "D. Vì tương tác hover yêu cầu dung lượng pin lớn hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiết kế wireframe phải phù hợp với đặc thù phần cứng của thiết bị mục tiêu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn nhận thấy người dùng liên tục bấm nhầm vào một vùng không có tương tác trong bản prototype. Bạn nên làm gì?",
+    "options": [
+      "A. Thêm một thông báo lỗi yêu cầu người dùng bấm đúng chỗ.",
+      "B. Phân tích xem tại sao vùng đó trông giống một nút bấm và điều chỉnh lại wireframe.",
+      "C. Bỏ qua vì đó chỉ là lỗi của người dùng, không phải lỗi thiết kế.",
+      "D. Xóa bỏ hoàn toàn thành phần đó khỏi màn hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là tín hiệu cho thấy 'affordance' (khả năng gợi ý sử dụng) của thiết kế đang gặp vấn đề.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục đích chính của việc tạo 'Flow Diagrams' trước khi vẽ wireframe là gì?",
+    "options": [
+      "A. Để trình bày với bộ phận marketing về kế hoạch truyền thông.",
+      "B. Để xác định tất cả các bước và quyết định mà người dùng cần thực hiện để hoàn thành mục tiêu.",
+      "C. Để chọn lựa màu sắc chủ đạo cho ứng dụng.",
+      "D. Để thay thế hoàn toàn cho bước vẽ wireframe."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User Flow giúp định hình logic trước khi bắt tay vào thiết kế giao diện cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quá trình làm prototype, 'Fidelity' nên được hiểu như thế nào cho đúng?",
+    "options": [
+      "A. Độ chi tiết của hình ảnh minh họa.",
+      "B. Mức độ sát thực của prototype so với sản phẩm cuối cùng về cả diện mạo và chức năng.",
+      "C. Tốc độ phản hồi của các nút bấm trong công cụ thiết kế.",
+      "D. Số lượng các hiệu ứng animation có trong bản thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Fidelity bao gồm nhiều khía cạnh: nội dung, hình ảnh và tương tác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào bạn nên sử dụng 'Overlay' thay vì chuyển sang một màn hình mới trong prototype?",
+    "options": [
+      "A. Khi muốn hiển thị các thông tin phụ như Menu, Tooltip hoặc Pop-up mà không làm mất ngữ cảnh màn hình hiện tại.",
+      "B. Khi màn hình hiện tại đã quá dài và không thể cuộn thêm.",
+      "C. Khi bạn muốn tiết kiệm thời gian vẽ thêm các frame mới.",
+      "D. Khi lập trình viên yêu cầu không được tạo quá nhiều màn hình."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Overlay giúp mô phỏng các thành phần giao diện tạm thời xuất hiện phía trên nội dung chính.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc sử dụng 'Auto Layout' trong quá trình wireframing giúp ích gì cho giai đoạn Responsive Design sau này?",
+    "options": [
+      "A. Nó tự động thay đổi kích thước các thành phần khi khung chứa thay đổi, giúp giả lập các breakpoint.",
+      "B. Nó tự động chuyển đổi thiết kế Mobile thành Desktop chỉ bằng một cú click.",
+      "C. Nó giúp file thiết kế nhẹ hơn và không bị lag.",
+      "D. Nó ngăn chặn việc người khác tự ý thay đổi khoảng cách giữa các layer."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Auto Layout mô phỏng cách các thành phần co giãn trong thực tế, giúp kiểm tra tính linh hoạt của layout.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc 'Iterate' (lặp lại và cải tiến) trên wireframe lại rẻ hơn nhiều so với trên code?",
+    "options": [
+      "A. Vì công cụ thiết kế miễn phí còn công cụ lập trình thì đắt.",
+      "B. Vì thay đổi cấu trúc trên bản vẽ chỉ mất vài phút, trong khi thay đổi code yêu cầu sửa đổi logic và kiểm thử lại toàn bộ.",
+      "C. Vì designer làm việc nhanh hơn lập trình viên.",
+      "D. Vì wireframe không cần phải gửi cho khách hàng duyệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sửa lỗi ở giai đoạn thiết kế sơ khai giúp tiết kiệm tối đa nguồn lực và thời gian của dự án.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang xây dựng prototype cho một form đăng ký dài. Cách tốt nhất để kiểm tra trải nghiệm người dùng là gì?",
+    "options": [
+      "A. Chỉ làm một màn hình duy nhất với đầy đủ các trường nhập liệu.",
+      "B. Tạo prototype cho phép người dùng nhập liệu giả định và thấy được các phản hồi lỗi (validation).",
+      "C. Sử dụng ảnh chụp màn hình của một ứng dụng khác có form tương tự.",
+      "D. Chỉ tập trung vào thiết kế nút 'Gửi' thật đẹp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm tra phản hồi lỗi (error handling) là một phần quan trọng của trải nghiệm form mà prototype cần thể hiện.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh Agile, việc duy trì một bộ 'Wireframe Kit' có ý nghĩa gì?",
+    "options": [
+      "A. Để ép buộc tất cả designer phải làm việc giống hệt nhau.",
+      "B. Để nhanh chóng lắp ghép các ý tưởng và thử nghiệm mà không cần vẽ lại từ đầu.",
+      "C. Để thay thế cho tài liệu hướng dẫn sử dụng sản phẩm.",
+      "D. Để giảm bớt vai trò của UI Designer trong dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Wireframe Kit tăng tốc độ sản xuất và giúp designer tập trung vào giải quyết vấn đề thay vì vẽ các hình khối cơ bản.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi trình bày prototype cho Stakeholders, bạn nên làm gì để họ không bị lạc lối trong các luồng tương tác?",
+    "options": [
+      "A. Gửi link prototype và yêu cầu họ tự tìm hiểu.",
+      "B. Dẫn dắt họ đi theo một 'Happy Path' (luồng chính thành công) trước khi đi vào các nhánh phụ.",
+      "C. Chỉ cho họ xem các ảnh chụp màn hình tĩnh.",
+      "D. Yêu cầu họ học cách sử dụng công cụ thiết kế trước khi xem."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trình bày luồng chính giúp stakeholder nắm bắt giá trị cốt lõi của tính năng trước khi xem xét các chi tiết nhỏ hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một bản wireframe 'tốt' ở mức độ Intermediate cần đạt được tiêu chí nào sau đây?",
+    "options": [
+      "A. Phải có độ chi tiết về pixel hoàn hảo (pixel-perfect).",
+      "B. Phải truyền tải được cấu trúc, chức năng và mức độ ưu tiên của nội dung một cách rõ ràng.",
+      "C. Phải sử dụng ít nhất 5 loại màu sắc khác nhau.",
+      "D. Phải có đầy đủ các hiệu ứng đổ bóng và bo góc hiện đại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Wireframe thành công khi nó trả lời được câu hỏi: 'Cái gì nằm ở đâu và tại sao?' mà không cần dùng đến thẩm mỹ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc 'Annotation' (ghi chú) lại quan trọng trong các bản wireframe phức tạp?",
+    "options": [
+      "A. Để lấp đầy các khoảng trống trên trang thiết kế.",
+      "B. Để giải thích các hành vi không thể thể hiện được qua hình ảnh tĩnh hoặc prototype cơ bản.",
+      "C. Để chứng minh với quản lý rằng bạn đã nghiên cứu rất kỹ.",
+      "D. Để ngăn chặn lập trình viên thay đổi thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ghi chú giúp làm rõ các logic nghiệp vụ phức tạp, điều kiện hiển thị hoặc các tương tác đặc biệt cho các bên liên quan.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng prototype cho một luồng nghiệp vụ phức tạp với nhiều điều kiện rẽ nhánh (conditional logic), cách tiếp cận nào đảm bảo tính bảo trì (maintainability) tốt nhất cho đội ngũ thiết kế?",
+    "options": [
+      "A. Tạo ra tất cả các kịch bản có thể xảy ra thành các màn hình tĩnh riêng biệt và nối chúng lại.",
+      "B. Sử dụng các biến (variables) và biểu thức logic (expressions) ngay trong công cụ prototyping để điều hướng động.",
+      "C. Chỉ thiết kế luồng chính (happy path) và ghi chú các trường hợp ngoại lệ bằng văn bản bên cạnh.",
+      "D. Chụp ảnh màn hình các trạng thái và sử dụng công cụ quản lý task để mô tả logic cho lập trình viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng variables và logic giúp giảm số lượng frame cần quản lý, phản ánh đúng logic kỹ thuật và dễ dàng cập nhật khi quy trình thay đổi mà không phải sửa hàng chục màn hình tĩnh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng độ trung thực cao (High-fidelity) quá sớm trong quá trình prototyping thường dẫn đến những sai lầm về mặt kiến trúc thông tin?",
+    "options": [
+      "A. Stakeholder thường tập trung phản hồi về màu sắc, font chữ thay vì cấu trúc và luồng người dùng.",
+      "B. High-fidelity prototype tốn quá nhiều dung lượng bộ nhớ khiến việc chia sẻ file trở nên khó khăn.",
+      "C. Các công cụ prototyping hiện nay chưa hỗ trợ tốt việc chuyển đổi từ Hi-fi sang code thực tế.",
+      "D. High-fidelity làm cho người dùng thử nghiệm cảm thấy hệ thống đã hoàn thiện và không dám đưa ra nhận xét."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ở giai đoạn đầu, mục tiêu là xác thực luồng và cấu trúc. Chi tiết UI quá sớm gây nhiễu nhận thức, khiến các bên liên quan bỏ qua các lỗi logic nghiêm trọng để sa vào tranh luận thẩm mỹ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một dự án Agile với tốc độ thay đổi yêu cầu nhanh, chiến lược quản lý Wireframe Library nào là tối ưu để đảm bảo sự đồng nhất giữa Designer và Developer?",
+    "options": [
+      "A. Tạo một bộ UI Kit chi tiết ngay từ đầu và yêu cầu mọi người tuân thủ tuyệt đối.",
+      "B. Sử dụng phương pháp 'Atomic Design' để xây dựng hệ thống component từ mức wireframe (Lo-fi components).",
+      "C. Vẽ wireframe tự do bằng tay hoặc công cụ đơn giản để tối đa hóa tốc độ thay đổi.",
+      "D. Mỗi sprint tạo một file wireframe riêng biệt để tránh xung đột dữ liệu giữa các phiên bản."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xây dựng Lo-fi components dựa trên Atomic Design giúp duy trì tính hệ thống, cho phép cập nhật nhanh chóng trên diện rộng và giúp Developer hiểu sớm về cấu trúc tái sử dụng của mã nguồn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện Usability Testing trên một prototype có độ trung thực thấp (Low-fidelity), mục tiêu quan trọng nhất cần đạt được là gì?",
+    "options": [
+      "A. Kiểm tra xem người dùng có thích bảng màu và phong cách icon không.",
+      "B. Đo lường thời gian phản hồi của hệ thống khi thực hiện các tác vụ nặng.",
+      "C. Xác thực mô hình tâm trí (mental model) của người dùng đối với cấu trúc điều hướng và phân cấp thông tin.",
+      "D. Đánh giá khả năng đọc hiểu của các nội dung văn bản (copywriting) chi tiết trên màn hình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lo-fi prototype loại bỏ các yếu tố gây xao nhãng về thị giác để tập trung hoàn toàn vào việc liệu cách tổ chức thông tin và luồng đi có khớp với tư duy tự nhiên của người dùng hay không.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần bàn giao (handoff) một prototype có các hiệu ứng chuyển động (micro-interactions) phức tạp cho lập trình viên. Phương pháp nào hiệu quả nhất để đảm bảo độ chính xác khi triển khai?",
+    "options": [
+      "A. Quay video màn hình prototype và gửi cho lập trình viên xem để họ làm theo.",
+      "B. Cung cấp thông số cụ thể về duration, easing curve và thuộc tính thay đổi (CSS properties).",
+      "C. Yêu cầu lập trình viên tự truy cập vào file thiết kế và đo đạc thủ công các frame chuyển động.",
+      "D. Viết một tài liệu word mô tả chi tiết cảm giác của chuyển động (ví dụ: 'mượt mà', 'nhanh')."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuyển động trong code dựa trên toán học. Việc cung cấp duration (ms) và easing (cubic-bezier) là cách duy nhất để Developer tái hiện chính xác ý đồ thiết kế mà không phải đoán mò.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trade-off lớn nhất khi quyết định sử dụng một công cụ prototyping chuyên sâu như Axure RP hoặc Framer thay vì Figma là gì?",
+    "options": [
+      "A. Khả năng cộng tác thời gian thực (Real-time collaboration) bị hạn chế hơn.",
+      "B. Độ dốc đường cong học tập (Learning curve) cao và thời gian tạo prototype lâu hơn.",
+      "C. Không thể xuất được file ảnh chất lượng cao để làm presentation.",
+      "D. Các công cụ này không hỗ trợ thiết kế giao diện cho thiết bị di động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các công cụ mạnh về logic thường yêu cầu kỹ năng tư duy lập trình hoặc thao tác phức tạp, làm tăng thời gian sản xuất prototype so với các công cụ tập trung vào UI như Figma.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế wireframe cho một Dashboard chứa lượng dữ liệu khổng lồ, nguyên tắc nào nên được ưu tiên để tối ưu hóa trải nghiệm người dùng?",
+    "options": [
+      "A. Hiển thị tất cả các biểu đồ và bảng biểu trên một màn hình duy nhất để người dùng có cái nhìn tổng thể.",
+      "B. Sử dụng Progressive Disclosure để ẩn bớt các chi tiết chuyên sâu, chỉ hiện thị khi người dùng yêu cầu.",
+      "C. Ưu tiên các hiệu ứng chuyển động đẹp mắt khi tải dữ liệu để giảm cảm giác chờ đợi.",
+      "D. Sử dụng kích thước chữ nhỏ nhất có thể để nhồi nhét được nhiều thông tin nhất vào vùng nhìn thấy (above the fold)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Progressive Disclosure giúp giảm tải nhận thức (cognitive load) bằng cách chỉ hiển thị thông tin cần thiết tại thời điểm cần thiết, đặc biệt quan trọng trong các hệ thống dữ liệu phức tạp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quá trình lặp (iteration) wireframe, nếu stakeholder yêu cầu thêm quá nhiều tính năng vào một màn hình đã quá tải, Designer nên xử lý thế nào về mặt kiến trúc?",
+    "options": [
+      "A. Cố gắng thu nhỏ các thành phần hiện tại để tạo không gian cho tính năng mới.",
+      "B. Tạo thêm một trang phụ (sub-page) và đặt link dẫn đến đó từ màn hình chính.",
+      "C. Phân tích lại User Goal và đề xuất tách luồng hoặc sử dụng các tab/module để phân cấp lại mức độ ưu tiên.",
+      "D. Thực hiện đúng yêu cầu của stakeholder để đảm bảo tiến độ dự án và sẽ tối ưu sau ở bước UI."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở mức độ Advanced, Designer phải đóng vai trò tư vấn kiến trúc. Việc phân tích lại mục tiêu giúp giải quyết gốc rễ vấn đề quá tải thông tin thay vì chỉ giải quyết phần ngọn về không gian.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Skeleton Screens' nên được thể hiện như thế nào trong giai đoạn prototyping để hỗ trợ đội ngũ kỹ thuật?",
+    "options": [
+      "A. Là một màn hình tĩnh với các khối màu xám thay thế cho nội dung đang tải.",
+      "B. Là một trạng thái trung gian (state) trong prototype để mô tả trải nghiệm tải dữ liệu bất đồng bộ.",
+      "C. Chỉ cần ghi chú trong tài liệu handoff rằng 'cần có loading screen'.",
+      "D. Không cần thiết kế vì đây là quyết định thuần túy của lập trình viên backend."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiết kế Skeleton Screen trong prototype giúp xác định cách layout co giãn khi có/không có dữ liệu và định hướng cho Developer về trình tự load các component trên trang.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi xây dựng một prototype cho ứng dụng thương mại điện tử, việc giả lập dữ liệu (data simulation) thực tế có ý nghĩa gì quan trọng nhất?",
+    "options": [
+      "A. Làm cho bản thiết kế trông chuyên nghiệp và đẹp mắt hơn khi trình diễn.",
+      "B. Giúp phát hiện các lỗi layout phát sinh do độ dài nội dung khác nhau (ví dụ: tên sản phẩm quá dài).",
+      "C. Để bộ phận Marketing có thể lấy ảnh prototype đi quảng cáo sớm.",
+      "D. Giảm bớt thời gian viết mô tả tính năng cho lập trình viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dữ liệu thực tế (Edge cases về nội dung) giúp kiểm chứng độ bền vững của layout wireframe, đảm bảo thiết kế không bị vỡ khi áp dụng dữ liệu thật từ database.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống Design System hiệu quả cho Wireframing nên bao gồm yếu tố nào sau đây để tối ưu tốc độ làm việc của team?",
+    "options": [
+      "A. Các component có tính linh hoạt cao (slots) cho phép thay đổi nội dung bên trong mà không làm hỏng cấu trúc.",
+      "B. Tất cả các icon phải được vẽ chi tiết và có màu sắc thương hiệu đầy đủ.",
+      "C. Các mẫu layout cố định không cho phép thay đổi kích thước để đảm bảo tính nhất quán tuyệt đối.",
+      "D. Thư viện các hình ảnh minh họa (illustrations) đa dạng để làm sinh động wireframe."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sử dụng 'slots' hoặc 'placeholder components' trong wireframe library giúp Designer nhanh chóng tùy biến các module phức tạp mà vẫn giữ được sự đồng nhất về lưới (grid) và khoảng cách (spacing).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi nào việc bỏ qua giai đoạn Wireframe để nhảy thẳng vào High-fidelity Prototyping được coi là một quyết định rủi ro nhưng có thể chấp nhận được?",
+    "options": [
+      "A. Khi dự án có ngân sách rất lớn và thời gian dư dả.",
+      "B. Khi xây dựng một tính năng nhỏ dựa trên một Design System đã cực kỳ hoàn thiện và chặt chẽ.",
+      "C. Khi Designer muốn gây ấn tượng mạnh với khách hàng ngay từ buổi họp đầu tiên.",
+      "D. Khi đội ngũ lập trình yêu cầu phải có UI hoàn chỉnh mới bắt đầu viết code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu Design System đã có sẵn các quy chuẩn về UX/UI và các pattern đã được xác thực, việc lắp ghép Hi-fi components có thể nhanh tương đương với vẽ wireframe mà vẫn đảm bảo tính chính xác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Prototyping, khái niệm 'Interaction Cost' nên được đánh giá như thế nào?",
+    "options": [
+      "A. Là chi phí tiền mặt để mua bản quyền các công cụ như Figma hay Adobe XD.",
+      "B. Là tổng nỗ lực về thể chất và tâm trí mà người dùng phải bỏ ra để đạt được mục tiêu trong prototype.",
+      "C. Là số giờ làm việc mà Designer cần để hoàn thành một bản prototype hoàn chỉnh.",
+      "D. Là băng thông mạng cần thiết để tải các tương tác nặng trong bản prototype."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Advanced Designer sử dụng prototype để đo lường Interaction Cost (số lần click, quãng đường di chuyển chuột, sự tập trung cần thiết) nhằm tối ưu hóa hiệu quả sử dụng của sản phẩm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách tốt nhất để mô tả các trạng thái lỗi (Error States) trong một prototype phức tạp mà không làm rối luồng chính là gì?",
+    "options": [
+      "A. Vẽ một màn hình riêng cho mỗi loại lỗi có thể xảy ra.",
+      "B. Sử dụng Overlay hoặc Component Variants để kích hoạt trạng thái lỗi ngay tại chỗ khi tương tác.",
+      "C. Bỏ qua các trạng thái lỗi trong prototype và chỉ mô tả trong file Excel.",
+      "D. Yêu cầu Developer tự xử lý các thông báo lỗi dựa trên logic backend."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Variants hoặc Overlay giúp giữ cho luồng prototype (canvas) gọn gàng, đồng thời giúp người xem trải nghiệm được ngữ cảnh xuất hiện lỗi một cách trực quan.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc xác định 'Breakpoints' cho responsive design nên bắt đầu ngay từ giai đoạn Wireframing thay vì đợi đến lúc làm UI?",
+    "options": [
+      "A. Để đảm bảo rằng hệ thống phân cấp thông tin vẫn hoạt động tốt trên các kích thước màn hình khác nhau.",
+      "B. Để lập trình viên có thể bắt đầu viết CSS Media Queries ngay lập tức.",
+      "C. Để khách hàng biết được chính xác website trông như thế nào trên iPhone 15.",
+      "D. Vì các công cụ wireframing không hỗ trợ việc thay đổi kích thước sau khi đã hoàn thiện UI."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cấu trúc thông tin (Information Architecture) thay đổi mạnh mẽ giữa Mobile và Desktop. Xác định sớm giúp tránh việc UI bị vỡ hoặc trải nghiệm người dùng bị đứt gãy khi chuyển đổi thiết bị.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một Prototype được gọi là 'Scalable' (có khả năng mở rộng) khi nó thỏa mãn điều kiện nào?",
+    "options": [
+      "A. Có thể chạy mượt mà trên cả máy tính cấu hình thấp.",
+      "B. Được xây dựng từ các component có thể tái sử dụng và dễ dàng thay đổi logic toàn cục.",
+      "C. Có chứa tất cả các màn hình của toàn bộ hệ thống trong một file duy nhất.",
+      "D. Sử dụng thật nhiều plugin để tự động hóa việc tạo màn hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính Scalable trong thiết kế tương tự như trong code. Việc sử dụng Master Components và Global Styles giúp việc mở rộng hệ thống lên hàng trăm màn hình mà vẫn kiểm soát được sự thay đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi trình bày Wireframe cho ban giám đốc (C-level), chiến thuật nào giúp họ tập trung vào chiến lược sản phẩm thay vì tiểu tiết?",
+    "options": [
+      "A. Sử dụng màu xám và font chữ hệ thống để nhấn mạnh tính 'đang hoàn thiện'.",
+      "B. Trình bày dưới dạng các câu chuyện người dùng (User Stories) kèm theo các màn hình tương ứng.",
+      "C. Giải thích chi tiết về các kỹ thuật thiết kế đã sử dụng để vẽ wireframe.",
+      "D. Đưa ra nhiều phương án màu sắc khác nhau để họ lựa chọn ngay tại chỗ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Gắn wireframe vào User Stories giúp stakeholder cấp cao hiểu được giá trị kinh doanh và cách sản phẩm giải quyết vấn đề của khách hàng, thay vì soi xét các thành phần giao diện cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Figma, việc sử dụng 'Auto Layout' trong Wireframing mang lại lợi ích kỹ thuật lớn nhất là gì?",
+    "options": [
+      "A. Làm cho bản thiết kế trông chuyên nghiệp hơn.",
+      "B. Giúp các component tự động điều chỉnh kích thước khi nội dung thay đổi, mô phỏng hành vi của Flexbox trong CSS.",
+      "C. Giúp xuất file PDF nhanh hơn và dung lượng nhẹ hơn.",
+      "D. Tự động chuyển đổi các khối hình học thành code HTML/CSS hoàn chỉnh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Auto Layout mô phỏng tư duy của lập trình viên front-end (Flexbox). Sử dụng nó giúp wireframe có tính đáp ứng cao và giảm thiểu sai số khi chuyển giao sang giai đoạn phát triển.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện prototype cho một ứng dụng Mobile có nhiều cử chỉ (gestures) như swipe, long press, pinch, bạn nên ưu tiên điều gì?",
+    "options": [
+      "A. Vẽ các mũi tên chỉ hướng chuyển động trên màn hình tĩnh.",
+      "B. Sử dụng các công cụ hỗ trợ prototype trên thiết bị thật để kiểm tra tính công thái học (ergonomics).",
+      "C. Chỉ sử dụng click chuột vì hầu hết người dùng sẽ xem prototype trên desktop.",
+      "D. Viết tài liệu hướng dẫn sử dụng dài để giải thích các cử chỉ đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cảm giác về cử chỉ trên mobile rất khác so với click chuột. Test trên thiết bị thật giúp xác định xem các vùng chạm (touch targets) có hợp lý và cử chỉ có tự nhiên hay không.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang thiết kế wireframe cho một hệ thống quản lý nội dung (CMS). Stakeholder muốn xem cách hệ thống xử lý các quyền hạn người dùng (Roles & Permissions) khác nhau. Giải pháp tối ưu là gì?",
+    "options": [
+      "A. Tạo các file prototype riêng biệt cho mỗi loại quyền hạn.",
+      "B. Sử dụng logic điều kiện để ẩn/hiện các thành phần dựa trên biến 'UserRole' trong cùng một prototype.",
+      "C. Chỉ thiết kế quyền Admin và nói rằng các quyền khác sẽ là tập con của nó.",
+      "D. Vẽ một sơ đồ phân quyền bằng Excel thay vì làm prototype."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng logic điều kiện (Conditional Logic) giúp kiểm chứng trải nghiệm của từng loại người dùng một cách liền mạch trong cùng một hệ thống, giúp phát hiện các lỗ hổng về phân quyền ngay từ giai đoạn thiết kế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao 'Information Architecture' (IA) cần được chốt trước khi tiến hành High-fidelity Prototyping?",
+    "options": [
+      "A. Vì thay đổi cấu trúc ở giai đoạn Hi-fi tốn kém thời gian và công sức gấp nhiều lần so với giai đoạn Wireframe.",
+      "B. Vì lập trình viên không quan tâm đến IA, họ chỉ quan tâm đến màu sắc.",
+      "C. Vì IA không ảnh hưởng đến trải nghiệm người dùng cuối cùng.",
+      "D. Vì các công cụ thiết kế hiện nay không cho phép thay đổi menu sau khi đã đổ màu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Wireframe là bộ khung. Nếu khung sai, việc đắp thêm UI chỉ làm lãng phí tài nguyên. Sửa đổi cấu trúc ở mức độ Lo-fi nhanh và rẻ hơn nhiều so với việc phải làm lại toàn bộ UI và Prototype logic.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh 'Lean UX', việc tạo ra một 'Minimum Viable Prototype' nhằm mục đích gì?",
+    "options": [
+      "A. Để có sản phẩm nộp cho khách hàng đúng hạn dù chưa hoàn thiện.",
+      "B. Để tiết kiệm chi phí mua phần mềm thiết kế.",
+      "C. Để nhanh chóng thu thập phản hồi về các giả định rủi ro nhất của sản phẩm.",
+      "D. Để giảm bớt số lượng Designer cần thiết trong một dự án."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lean UX tập trung vào việc học hỏi nhanh. MVP prototype chỉ tập trung vào những tính năng cốt lõi hoặc các giả định chưa chắc chắn để kiểm chứng với người dùng trước khi đầu tư thêm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi làm việc với các hệ thống Design System lớn, làm thế nào để đảm bảo Wireframe không trở nên quá khác biệt so với sản phẩm cuối cùng về mặt không gian (spacing)?",
+    "options": [
+      "A. Sử dụng cùng một hệ thống Grid và Spacing tokens như bản UI chính thức.",
+      "B. Ước lượng khoảng cách bằng mắt để tạo cảm giác thoáng đãng.",
+      "C. Luôn để khoảng cách cố định là 20px cho mọi thành phần.",
+      "D. Không cần quan tâm vì lập trình viên sẽ tự điều chỉnh khoảng cách sau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sử dụng chung hệ thống tokens giúp wireframe phản ánh chính xác mật độ thông tin (information density), giúp việc chuyển đổi sang UI không làm thay đổi cấu trúc trang.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một lỗi phổ biến khi làm prototype là 'The Uncanny Valley of Prototyping'. Hiện tượng này mô tả điều gì?",
+    "options": [
+      "A. Prototype quá chậm khiến người dùng bực mình.",
+      "B. Prototype trông quá giống thật nhưng lại thiếu các phản hồi logic nhỏ, gây ra sự đứt gãy về kỳ vọng của người dùng.",
+      "C. Prototype có quá nhiều màu sắc khiến người dùng bị hoa mắt.",
+      "D. Prototype không thể chạy được trên trình duyệt web."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi một prototype trông rất thật (Hi-fi), người dùng kỳ vọng nó hoạt động hoàn hảo như thật. Nếu các tương tác nhỏ (như hover, scroll) không mượt, họ sẽ cảm thấy sản phẩm bị lỗi, làm sai lệch kết quả testing.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một buổi họp bàn giao prototype cho team Dev, một lập trình viên nhận xét rằng 'hiệu ứng này không khả thi về mặt kỹ thuật'. Designer nên làm gì?",
+    "options": [
+      "A. Bảo vệ ý tưởng đến cùng vì đó là trải nghiệm tốt nhất cho người dùng.",
+      "B. Yêu cầu lập trình viên tìm giải pháp khác vì thiết kế đã được phê duyệt.",
+      "C. Cùng lập trình viên thảo luận về mục đích của hiệu ứng đó và tìm một giải pháp thay thế đơn giản hơn nhưng vẫn đạt được mục tiêu UX.",
+      "D. Xóa bỏ hoàn toàn hiệu ứng đó và không cần thay thế bằng gì khác."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Advanced Designer cần hiểu về giới hạn kỹ thuật và làm việc cộng tác. Việc tìm giải pháp thay thế thể hiện sự cân bằng giữa mong muốn UX và khả năng thực thi của đội ngũ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế Wireframe cho một hệ thống quản trị dữ liệu lớn (Big Data Dashboard) với hàng trăm biến số, chiến lược nào tối ưu nhất để xử lý sự phức tạp về bố cục (layout exploration)?",
+    "options": [
+      "A. Tập trung vào việc làm đẹp các biểu đồ ngay từ đầu để thu hút sự chú ý của stakeholder.",
+      "B. Sử dụng phương pháp 'Information Hierarchy' để phân cấp dữ liệu, ưu tiên các chỉ số quan trọng nhất thông qua wireframe dạng khối (block wireframes).",
+      "C. Tạo ra nhiều phiên bản High-fidelity để stakeholder dễ dàng hình dung kết quả cuối cùng.",
+      "D. Bỏ qua giai đoạn wireframe và tiến thẳng vào thiết kế giao diện chi tiết để tiết kiệm thời gian."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ chuyên gia, việc phân cấp thông tin (Information Hierarchy) là cốt lõi để giải quyết sự phức tạp của dữ liệu lớn, giúp người dùng không bị quá tải thông tin trước khi tính đến thẩm mỹ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án Enterprise SaaS, rủi ro lớn nhất khi bỏ qua giai đoạn Low-fidelity Wireframing và tiến thẳng tới Interactive Prototyping là gì?",
+    "options": [
+      "A. Làm tăng chi phí sửa đổi cấu trúc hệ thống (structural changes) khi phát hiện sai sót về luồng nghiệp vụ ở giai đoạn muộn.",
+      "B. Stakeholder sẽ không hài lòng vì nguyên mẫu nhìn quá đơn giản.",
+      "C. Đội ngũ lập trình sẽ khó khăn trong việc chọn ngôn ngữ lập trình phù hợp.",
+      "D. Giảm khả năng sáng tạo của UI Designer do bị gò bó bởi các tương tác phức tạp."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Low-fidelity cho phép thử nghiệm nhanh các luồng nghiệp vụ phức tạp. Việc nhảy thẳng vào Interactive Prototyping khiến việc thay đổi cấu trúc cốt lõi trở nên đắt đỏ và tốn thời gian hơn nhiều.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để kiểm chứng giả thuyết về khả năng sử dụng (usability) của một tính năng mới cực kỳ phức tạp, bạn nên chọn loại Prototype nào để tối ưu hóa nguồn lực và độ chính xác của phản hồi?",
+    "options": [
+      "A. Một bản Static Wireframe in ra giấy để người dùng ghi chú trực tiếp.",
+      "B. Một bản Full-fidelity Prototype hoàn chỉnh với dữ liệu thật từ database.",
+      "C. Một bản Medium-fidelity Interactive Prototype tập trung vào 'Happy Path' và các 'Edge Cases' quan trọng.",
+      "D. Một video demo chuyển động (Motion Video) mô phỏng cách tính năng hoạt động."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Medium-fidelity với các kịch bản quan trọng (Happy Path & Edge Cases) giúp người dùng tập trung vào luồng công việc mà không bị xao nhãng bởi hình ảnh, đồng thời đủ tương tác để thu thập phản hồi thực tế.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi xây dựng hệ thống Design System cho doanh nghiệp, việc tích hợp các thành phần (components) vào Wireframe kit mang lại lợi ích chiến lược nào sau đây?",
+    "options": [
+      "A. Giúp bản Wireframe trông đẹp mắt và chuyên nghiệp hơn đối với khách hàng.",
+      "B. Đảm bảo tính nhất quán về logic và không gian (spatial logic) ngay từ giai đoạn ý tưởng, giảm thiểu sai lệch khi chuyển sang UI.",
+      "C. Thay thế hoàn toàn nhu cầu cần có tài liệu đặc tả kỹ thuật (Technical Specification).",
+      "D. Cho phép Designer bỏ qua việc nghiên cứu trải nghiệm người dùng (UX Research)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng các thành phần chuẩn hóa ngay từ Wireframe giúp đảm bảo các ràng buộc về không gian và logic được tính toán sớm, giúp quá trình chuyển đổi sang UI và Handoff diễn ra mượt mà.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một ứng dụng tài chính yêu cầu bảo mật cao. Stakeholder yêu cầu bản Prototype phải mô phỏng chính xác cảm giác tin cậy. Bạn nên ưu tiên yếu tố nào?",
+    "options": [
+      "A. Tốc độ chuyển trang cực nhanh để thể hiện hiệu năng.",
+      "B. Sử dụng các hiệu ứng chuyển động (Micro-interactions) mượt mà và thông báo phản hồi (Feedback loops) rõ ràng.",
+      "C. Chèn thật nhiều icon bảo mật và ổ khóa vào mọi vị trí trong Wireframe.",
+      "D. Sử dụng màu xanh dương chủ đạo vì đó là màu của sự tin tưởng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự tin cậy trong trải nghiệm số đến từ việc hệ thống phản hồi rõ ràng và minh bạch với hành động của người dùng (Feedback loops), điều này quan trọng hơn màu sắc hay biểu tượng đơn thuần.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quy trình Handoff cho bộ phận Frontend, một bản Wireframe chuyên nghiệp cấp độ Expert cần bao gồm thông tin nào để giảm thiểu rủi ro hiểu lầm?",
+    "options": [
+      "A. Danh sách tất cả các mã màu HEX sẽ được sử dụng.",
+      "B. Các chú thích về trạng thái biên (Edge cases), logic điều hướng (Navigation logic) và các ràng buộc dữ liệu (Data constraints).",
+      "C. Tên của tất cả các font chữ và kích thước pixel chính xác.",
+      "D. Hình ảnh chân dung của User Persona mà tính năng đó hướng tới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Developer cần hiểu logic vận hành đằng sau giao diện. Các trạng thái biên và ràng buộc dữ liệu là những thông tin quan trọng nhất để xây dựng hệ thống bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc 'Testing assumptions' bằng Low-fidelity Prototype lại quan trọng hơn High-fidelity khi làm việc với các dự án khởi nghiệp (Startups)?",
+    "options": [
+      "A. Vì Startups thường không có đủ kinh phí để thuê UI Designer giỏi.",
+      "B. Vì Low-fidelity giúp xoay trục (pivot) ý tưởng nhanh chóng mà không gây lãng phí thời gian thiết kế chi tiết.",
+      "C. Vì người dùng của Startups thích nhìn những thứ đơn giản hơn.",
+      "D. Vì Low-fidelity dễ dàng chuyển đổi sang mã nguồn (code) hơn High-fidelity."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở giai đoạn Startup, các giả thuyết về sản phẩm thay đổi liên tục. Low-fidelity cho phép thử sai với chi phí thấp nhất, tránh việc sa đà vào chi tiết khi mô hình kinh doanh chưa ổn định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng các công cụ như Figma hay Axure để tạo Prototype cho một hệ thống quản lý kho (Warehouse Management), yếu tố kỹ thuật nào cần được ưu tiên để đảm bảo tính thực tế?",
+    "options": [
+      "A. Khả năng mô phỏng việc nhập liệu bằng máy quét mã vạch thông qua các biến số (Variables) và điều kiện (Conditions).",
+      "B. Việc sử dụng các hình ảnh minh họa chất lượng cao về kho bãi.",
+      "C. Các hiệu ứng đổ bóng (Drop shadows) phức tạp để tạo chiều sâu.",
+      "D. Việc tích hợp nhạc nền để tăng trải nghiệm người dùng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đối với các hệ thống chuyên dụng như quản lý kho, việc mô phỏng đúng logic nghiệp vụ (như quét mã vạch, xử lý điều kiện) quan trọng hơn nhiều so với thẩm mỹ thị giác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một bản Wireframe 'Expert' khác biệt với bản 'Junior' ở điểm nào trong việc xử lý 'Empty States'?",
+    "options": [
+      "A. Bản Expert thường để trống và ghi chú 'No data' để tiết kiệm diện tích.",
+      "B. Bản Expert thiết kế Empty States như một cơ hội để hướng dẫn người dùng (Onboarding) và thúc đẩy hành động tiếp theo.",
+      "C. Bản Expert sử dụng các hình ảnh minh họa 3D phức tạp cho Empty States.",
+      "D. Bản Expert bỏ qua Empty States vì nó không phải là luồng chính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuyên gia nhìn nhận Empty States là một phần của hành trình trải nghiệm, dùng để giáo dục người dùng và giữ chân họ thay vì chỉ là một màn hình thông báo lỗi/trống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh Agile, việc duy trì một 'Live Prototype' (nguyên mẫu luôn cập nhật) có tác động gì đến sự phối hợp giữa Design và Engineering?",
+    "options": [
+      "A. Gây lãng phí thời gian vì Designer phải cập nhật liên tục.",
+      "B. Tạo ra một 'Single Source of Truth' giúp giảm thiểu các cuộc họp giải thích về logic giao diện.",
+      "C. Làm cho lập trình viên lười đọc tài liệu đặc tả (PRD).",
+      "D. Khiến cho dự án bị chậm tiến độ do Designer quá tập trung vào Prototype."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Live Prototype đóng vai trò là nguồn tham chiếu duy nhất và chính xác nhất, giúp các bên liên quan luôn nắm bắt được trạng thái mới nhất của sản phẩm mà không cần qua nhiều tầng văn bản.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế Wireframe cho thiết bị di động (Mobile-first), sai lầm chiến lược nào thường gặp nhất ở cấp độ hệ thống?",
+    "options": [
+      "A. Không tính đến các vùng chạm (Touch targets) tối thiểu cho người dùng.",
+      "B. Cố gắng đưa toàn bộ tính năng từ bản Desktop vào bản Mobile mà không lọc bỏ các tương tác không phù hợp.",
+      "C. Sử dụng quá nhiều màu xám trong bản Wireframe.",
+      "D. Thiết kế các nút bấm quá lớn so với kích thước màn hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sai lầm chiến lược lớn nhất là không tối ưu hóa tính năng cho ngữ cảnh di động (Context-awareness), dẫn đến trải nghiệm bị nhồi nhét và không hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Rapid Prototyping' hiệu quả nhất khi nào trong vòng đời phát triển sản phẩm?",
+    "options": [
+      "A. Sau khi sản phẩm đã được code xong để kiểm tra lỗi.",
+      "B. Trong giai đoạn khám phá (Discovery) để nhanh chóng loại bỏ các ý tưởng không khả thi.",
+      "C. Chỉ dùng khi cần thuyết trình với nhà đầu tư để gọi vốn.",
+      "D. Ở giai đoạn cuối cùng trước khi bàn giao (Handoff) cho khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rapid Prototyping mục đích chính là để 'fail fast, learn fast', giúp đội ngũ loại bỏ các hướng đi sai lầm ngay từ giai đoạn khám phá trước khi đầu tư nguồn lực lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi làm việc với các hệ thống phức tạp, việc sử dụng 'Placeholder content' (như Lorem Ipsum) trong Wireframe có thể dẫn đến rủi ro gì?",
+    "options": [
+      "A. Làm cho bản thiết kế trông kém chuyên nghiệp.",
+      "B. Che giấu các vấn đề về độ dài dữ liệu thực tế (Data length), gây vỡ layout khi áp dụng dữ liệu thật.",
+      "C. Stakeholder sẽ không đọc nội dung đó.",
+      "D. Làm chậm tốc độ tải của công cụ thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dữ liệu giả thường lý tưởng hóa không gian. Chuyên gia sử dụng dữ liệu gần với thực tế nhất để kiểm tra độ bền của layout (ví dụ: tên quá dài, số quá lớn).",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc tạo 'Global Components' trong các công cụ Prototyping (như Figma Components) đối với một dự án lớn là gì?",
+    "options": [
+      "A. Giúp file thiết kế trông gọn gàng hơn.",
+      "B. Cho phép cập nhật thay đổi đồng loạt trên hàng trăm màn hình, đảm bảo tính nhất quán và tiết kiệm thời gian bảo trì.",
+      "C. Giúp các Designer khác không thể tự ý sửa đổi thiết kế của bạn.",
+      "D. Tự động chuyển đổi thiết kế thành mã React hoặc Vue hoàn chỉnh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính nhất quán (Consistency) và khả năng bảo trì (Maintainability) là hai yếu tố sống còn trong các dự án quy mô lớn, và Global Components là công cụ thực hiện điều đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một quy trình đăng ký gồm 5 bước. Phương pháp nào tốt nhất để trình bày Wireframe này cho stakeholder để họ hiểu được logic rẽ nhánh (branching logic)?",
+    "options": [
+      "A. Trình bày 5 màn hình rời rạc trên một slide PowerPoint.",
+      "B. Xây dựng một bản User Flow kết nối các Wireframe với các chú thích điều kiện (if/then) rõ ràng.",
+      "C. Chỉ thiết kế màn hình đầu tiên và màn hình cuối cùng để tiết kiệm thời gian.",
+      "D. Tạo một video quay lại cảnh bạn thao tác trên bản Prototype."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User Flow kết hợp Wireframe cung cấp cái nhìn toàn cảnh về luồng tư duy và các kịch bản có thể xảy ra, giúp stakeholder hiểu được sự phức tạp của logic nghiệp vụ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao một chuyên gia UX nên ưu tiên 'Functional Prototyping' hơn là 'Visual Prototyping' khi làm việc với các ứng dụng công cụ (Utility Apps)?",
+    "options": [
+      "A. Vì người dùng ứng dụng công cụ không quan tâm đến cái đẹp.",
+      "B. Vì hiệu quả công việc (Task success rate) và tốc độ hoàn thành nhiệm vụ là thước đo quan trọng nhất của ứng dụng công cụ.",
+      "C. Vì Visual Prototyping tốn quá nhiều dung lượng bộ nhớ máy tính.",
+      "D. Vì Functional Prototyping dễ dàng được phê duyệt bởi các quản lý kỹ thuật hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với ứng dụng công cụ, giá trị cốt lõi nằm ở việc hoàn thành tác vụ. Functional Prototyping tập trung kiểm chứng khả năng vận hành và tính hiệu quả của các chức năng đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong giai đoạn 'Layout exploration', việc sử dụng lưới (Grid system) trong Wireframe có vai trò gì đối với khả năng đáp ứng (Responsiveness)?",
+    "options": [
+      "A. Chỉ để căn chỉnh các phần tử cho thẳng hàng và đẹp mắt.",
+      "B. Giúp xác định cách các thành phần sẽ co giãn, xếp chồng hoặc ẩn đi trên các kích thước màn hình khác nhau ngay từ đầu.",
+      "C. Grid system không quan trọng trong Wireframe, chỉ cần thiết trong giai đoạn UI chi tiết.",
+      "D. Để giới hạn số lượng cột mà Designer có thể sử dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Grid system là khung xương của thiết kế responsive. Xác định grid từ sớm giúp đảm bảo cấu trúc thông tin có thể thích ứng linh hoạt trên nhiều thiết bị.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện 'Stakeholder alignment' thông qua một bản Prototype phức tạp, bạn nên làm gì nếu stakeholder tập trung quá nhiều vào màu sắc thay vì luồng nghiệp vụ?",
+    "options": [
+      "A. Chiều theo ý họ và thay đổi màu sắc ngay lập tức trong cuộc họp.",
+      "B. Giải thích rằng đây là bản Low-fidelity và chủ động chuyển tông màu về Grayscale (thang xám) để loại bỏ sự xao nhãng về thị giác.",
+      "C. Từ chối tiếp tục cuộc họp cho đến khi họ đồng ý tập trung vào logic.",
+      "D. Hứa với họ rằng bản sau sẽ có màu sắc đẹp hơn và tiếp tục trình bày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Grayscale là kỹ thuật kinh điển của chuyên gia để hướng sự chú ý của stakeholder vào cấu trúc, phân cấp thông tin và luồng trải nghiệm thay vì thẩm mỹ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để mô phỏng chính xác trải nghiệm người dùng trên các thiết bị đeo thông minh (Wearables) với màn hình siêu nhỏ, yếu tố nào trong Prototyping là thách thức nhất?",
+    "options": [
+      "A. Việc chọn lựa màu sắc phù hợp với màn hình OLED.",
+      "B. Việc tối giản hóa thông tin và thiết kế các tương tác dựa trên cử chỉ (Gestures) thay vì nút bấm truyền thống.",
+      "C. Việc tìm kiếm các icon có kích thước nhỏ.",
+      "D. Việc đồng bộ hóa dữ liệu với điện thoại thông minh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Màn hình siêu nhỏ đòi hỏi sự tinh giản thông tin tối đa và các phương thức tương tác phi truyền thống, đây là thách thức lớn nhất về mặt UX/Prototyping cho Wearables.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án thiết kế lại (Redesign) hệ thống cũ, bước đầu tiên khi làm Wireframe nên là gì?",
+    "options": [
+      "A. Vẽ lại toàn bộ giao diện cũ nhưng với màu sắc mới.",
+      "B. Phân tích các điểm nghẽn (Pain points) hiện tại và vẽ Wireframe tập trung vào việc giải quyết các vấn đề đó.",
+      "C. Copy các đối thủ cạnh tranh và áp dụng vào bản Wireframe mới.",
+      "D. Bắt đầu bằng việc chọn một bộ UI Kit hiện đại nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Redesign không chỉ là thay áo mới. Chuyên gia bắt đầu bằng việc giải quyết các vấn đề về trải nghiệm và hiệu quả vận hành thông qua cấu trúc Wireframe mới.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc sử dụng 'Interactive Components' (ví dụ: nút bấm có trạng thái Hover/Pressed ngay trong component) giúp ích gì cho việc Testing Prototype?",
+    "options": [
+      "A. Làm cho bản Prototype nặng hơn và khó load hơn.",
+      "B. Tạo ra sự phản hồi tức thì (Immediate feedback), giúp người dùng cảm thấy hệ thống 'thật' hơn và giảm bớt gánh nặng nhận thức khi test.",
+      "C. Giúp Designer không cần phải giải thích cho Developer về các trạng thái của nút.",
+      "D. Thay thế hoàn toàn việc cần phải viết tài liệu hướng dẫn sử dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự phản hồi vi mô (Micro-feedback) giúp người dùng tương tác tự nhiên hơn, từ đó kết quả kiểm thử (Usability Testing) sẽ chính xác và khách quan hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một hệ thống thương mại điện tử đa quốc gia, bản Wireframe cần thể hiện điều gì để hỗ trợ việc bản địa hóa (Localization)?",
+    "options": [
+      "A. Chỉ cần thiết kế một bản tiếng Anh chuẩn.",
+      "B. Dự phòng không gian cho các ngôn ngữ có độ dài văn bản khác nhau (ví dụ: tiếng Đức thường dài hơn tiếng Anh) và hướng đọc (RTL/LTR).",
+      "C. Sử dụng nhiều hình ảnh văn hóa của từng quốc gia.",
+      "D. Thiết kế mỗi quốc gia một bố cục hoàn toàn khác biệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuyên gia phải tính toán đến sự thay đổi của nội dung (Content expansion) và hướng đọc để đảm bảo layout không bị vỡ khi chuyển đổi ngôn ngữ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Công cụ Prototyping nào sau đây thường được ưu tiên cho các dự án yêu cầu logic phức tạp, biến số và tính toán (như công cụ tính thuế hoặc bảo hiểm)?",
+    "options": [
+      "A. Adobe XD.",
+      "B. Axure RP.",
+      "C. InVision.",
+      "D. Marvel App."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Axure RP nổi tiếng với khả năng xử lý biến số (variables), điều kiện logic (conditional logic) và các hàm tính toán, rất phù hợp cho các sản phẩm có độ phức tạp cao.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi trình bày một giải pháp Wireframe mới cho một quy trình nghiệp vụ đã tồn tại lâu đời trong doanh nghiệp, rào cản lớn nhất bạn cần vượt qua là gì?",
+    "options": [
+      "A. Sự thiếu hụt về công nghệ để hiện thực hóa bản vẽ.",
+      "B. Thói quen sử dụng (Status quo bias) của người dùng cũ và sự phản kháng đối với thay đổi.",
+      "C. Việc tìm kiếm màu sắc phù hợp với thương hiệu công ty.",
+      "D. Chi phí mua bản quyền phần mềm thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong môi trường doanh nghiệp, thay đổi một quy trình đã quen thuộc là rất khó. Wireframe phải chứng minh được giá trị vượt trội và sự dễ dàng hơn so với cách làm cũ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một quy trình 'Prototyping-first' (tạo mẫu trước khi chốt spec) giúp giảm thiểu loại rủi ro nào trong phát triển phần mềm?",
+    "options": [
+      "A. Rủi ro về việc chọn sai máy chủ (server).",
+      "B. Rủi ro về 'Scope creep' (phình đại phạm vi) do các yêu cầu không rõ ràng được phát hiện sớm thông qua tương tác trực quan.",
+      "C. Rủi ro về việc thiếu nhân sự lập trình.",
+      "D. Rủi ro về biến động tỷ giá hối đoái khi thanh toán cho đối tác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi mọi người nhìn thấy và tương tác với Prototype, các lỗ hổng logic và yêu cầu bổ sung thường xuất hiện sớm, giúp kiểm soát phạm vi dự án tốt hơn trước khi bắt đầu code.",
+    "difficulty": "EXPERT",
+    "skillArea": "Wireframing & Prototyping",
+    "category": "KNOWLEDGE"
+  }
+]

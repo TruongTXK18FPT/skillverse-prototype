@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong kiểm thử phần mềm, mục tiêu chính của 'Unit Test' là gì?",
+    "options": [
+      "A. Kiểm tra toàn bộ giao diện người dùng của ứng dụng.",
+      "B. Kiểm tra từng thành phần hoặc hàm nhỏ nhất của mã nguồn một cách độc lập.",
+      "C. Kiểm tra khả năng tương thích giữa ứng dụng và hệ điều hành.",
+      "D. Kiểm tra tốc độ tải dữ liệu từ máy chủ về ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Unit Test tập trung vào việc kiểm tra các đơn vị mã nguồn nhỏ nhất (như hàm, phương thức) để đảm bảo chúng hoạt động đúng như thiết kế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng Android Studio, công cụ nào dùng để xem log hệ thống và thông báo lỗi từ thiết bị?",
+    "options": [
+      "A. Layout Inspector",
+      "B. Device File Explorer",
+      "C. Logcat",
+      "D. Database Inspector"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Logcat là công cụ trong Android Studio dùng để hiển thị các dòng log từ hệ thống và ứng dụng, giúp lập trình viên theo dõi quá trình thực thi và lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Xcode, 'Breakpoint' được sử dụng để làm gì trong quá trình debug?",
+    "options": [
+      "A. Để tăng tốc độ thực thi của ứng dụng.",
+      "B. Để tạm dừng chương trình tại một dòng code nhất định nhằm kiểm tra trạng thái.",
+      "C. Để tự động sửa lỗi cú pháp trong mã nguồn.",
+      "D. Để xóa các file rác trong bộ nhớ đệm của thiết bị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Breakpoint (điểm dừng) cho phép lập trình viên tạm dừng luồng thực thi của ứng dụng tại một vị trí cụ thể để kiểm tra giá trị biến và logic.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hiện tượng 'Memory Leak' (Rò rỉ bộ nhớ) trong ứng dụng di động thường dẫn đến hậu quả gì?",
+    "options": [
+      "A. Ứng dụng chạy nhanh hơn bình thường.",
+      "B. Dung lượng file cài đặt ứng dụng tăng lên.",
+      "C. Ứng dụng tiêu tốn dần bộ nhớ RAM và có thể bị hệ điều hành đóng (crash).",
+      "D. Độ phân giải của hình ảnh trong ứng dụng bị giảm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Memory Leak xảy ra khi ứng dụng chiếm dụng bộ nhớ nhưng không giải phóng khi không còn sử dụng, dẫn đến cạn kiệt RAM và gây lag hoặc crash.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Framework nào sau đây thường được sử dụng để viết UI Test tự động cho ứng dụng iOS trong môi trường Xcode?",
+    "options": [
+      "A. Espresso",
+      "B. XCUITest",
+      "C. JUnit",
+      "D. PyTest"
+    ],
+    "correctAnswer": "B",
+    "explanation": "XCUITest là framework do Apple cung cấp, tích hợp sẵn trong Xcode để thực hiện kiểm thử giao diện người dùng (UI Testing) cho iOS.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc kiểm thử trên thiết bị thật (Real Device) lại quan trọng hơn chỉ dùng Simulator/Emulator?",
+    "options": [
+      "A. Vì thiết bị thật luôn có màn hình lớn hơn.",
+      "B. Vì Simulator không thể kết nối được với internet.",
+      "C. Vì thiết bị thật phản ánh chính xác hiệu năng phần cứng, cảm biến và các điều kiện thực tế.",
+      "D. Vì dùng Simulator tốn phí bản quyền cao hơn thiết bị thật."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thiết bị thật giúp phát hiện các vấn đề về cảm biến, camera, nhiệt độ và hiệu năng thực tế mà trình giả lập (Simulator/Emulator) không mô phỏng hoàn hảo được.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Android Studio, công cụ 'CPU Profiler' giúp lập trình viên theo dõi điều gì?",
+    "options": [
+      "A. Tốc độ sạc pin của điện thoại.",
+      "B. Mức độ sử dụng vi xử lý của ứng dụng theo thời gian thực.",
+      "C. Số lượng tin nhắn SMS đã gửi.",
+      "D. Danh sách các file ảnh trong bộ nhớ máy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CPU Profiler cung cấp biểu đồ và dữ liệu về việc ứng dụng đang tiêu thụ bao nhiêu tài nguyên CPU, giúp tối ưu hóa các tác vụ xử lý nặng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thuật ngữ 'Stack Trace' trong báo cáo lỗi (Crash Report) có ý nghĩa gì?",
+    "options": [
+      "A. Danh sách các tính năng sắp được phát triển.",
+      "B. Chuỗi các hàm được gọi dẫn đến thời điểm ứng dụng bị lỗi.",
+      "C. Bản đồ vị trí GPS của người dùng khi xảy ra lỗi.",
+      "D. Danh sách các màu sắc được sử dụng trong giao diện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Stack Trace là dấu vết của các lời gọi hàm trong ngăn xếp tại thời điểm xảy ra lỗi, giúp lập trình viên xác định chính xác dòng code gây crash.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi ứng dụng bị treo và không phản hồi thao tác của người dùng trên Android, hiện tượng này gọi là gì?",
+    "options": [
+      "A. API (Application Programming Interface)",
+      "B. SDK (Software Development Kit)",
+      "C. ANR (Application Not Responding)",
+      "D. IDE (Integrated Development Environment)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "ANR xảy ra khi luồng chính (UI thread) của ứng dụng Android bị chặn quá lâu (thường là 5 giây), khiến người dùng không thể tương tác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ nào của bên thứ ba thường được dùng để theo dõi crash và log lỗi từ xa cho ứng dụng di động?",
+    "options": [
+      "A. Adobe Photoshop",
+      "B. Firebase Crashlytics",
+      "C. Microsoft Word",
+      "D. Google Maps API"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Firebase Crashlytics là một công cụ phổ biến giúp thu thập báo cáo crash từ thiết bị của người dùng thực tế và gửi về cho nhà phát triển.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quá trình debug, thao tác 'Step Over' có tác dụng gì?",
+    "options": [
+      "A. Nhảy vào bên trong nội dung của hàm đang được gọi.",
+      "B. Thực thi dòng hiện tại và dừng lại ở dòng kế tiếp trong cùng một hàm.",
+      "C. Thoát hoàn toàn khỏi trình debugger.",
+      "D. Xóa bỏ điểm dừng (breakpoint) hiện tại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Step Over cho phép thực hiện dòng code hiện tại và chuyển sang dòng tiếp theo mà không đi sâu vào chi tiết bên trong các hàm con được gọi ở dòng đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích của việc kiểm thử 'Integration Testing' là gì?",
+    "options": [
+      "A. Kiểm tra xem ứng dụng có đẹp hay không.",
+      "B. Kiểm tra sự tương tác và tích hợp giữa các module/thành phần khác nhau.",
+      "C. Kiểm tra tốc độ gõ code của lập trình viên.",
+      "D. Kiểm tra xem ứng dụng có tốn dung lượng ổ cứng không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Integration Testing (Kiểm thử tích hợp) tập trung vào việc xác minh rằng các module riêng lẻ hoạt động chính xác khi kết hợp với nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để mô phỏng tình trạng mạng yếu (Slow Network) trên iOS Simulator, bạn có thể dùng công cụ nào?",
+    "options": [
+      "A. Network Link Conditioner",
+      "B. Activity Monitor",
+      "C. Disk Utility",
+      "D. Keychain Access"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Network Link Conditioner là công cụ của Apple cho phép giả lập các điều kiện mạng khác nhau như 3G, Edge, hoặc mất gói tin để kiểm thử ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi kiểm tra mức độ tiêu thụ pin (Battery Analysis), yếu tố nào sau đây thường gây tốn pin nhất?",
+    "options": [
+      "A. Thay đổi màu sắc của một nút bấm.",
+      "B. Sử dụng GPS liên tục và quét sóng mạng cường độ cao.",
+      "C. Đọc một file văn bản nhỏ từ bộ nhớ trong.",
+      "D. Khai báo một biến số nguyên trong code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các tác vụ liên quan đến phần cứng như GPS, Camera và kết nối mạng liên tục là những nguyên nhân hàng đầu gây hao pin trên thiết bị di động.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lệnh 'adb devices' trong Android Debug Bridge dùng để làm gì?",
+    "options": [
+      "A. Để cài đặt ứng dụng mới vào máy.",
+      "B. Để liệt kê danh sách các thiết bị Android đang kết nối với máy tính.",
+      "C. Để chụp ảnh màn hình điện thoại.",
+      "D. Để xóa dữ liệu của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lệnh 'adb devices' hiển thị danh sách các thiết bị (thật hoặc giả lập) đang được kết nối và nhận diện bởi ADB.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiểm thử tự động, 'Mocking' được hiểu là gì?",
+    "options": [
+      "A. Việc gửi ứng dụng cho người dùng thật dùng thử.",
+      "B. Việc tạo ra các đối tượng giả lập để thay thế cho các thành phần thực tế (như API) khi test.",
+      "C. Việc thiết kế lại giao diện ứng dụng cho giống đối thủ.",
+      "D. Việc nén mã nguồn để giảm dung lượng ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mocking là kỹ thuật thay thế các thành phần phức tạp hoặc phụ thuộc bên ngoài bằng các đối tượng giả lập để kiểm soát dữ liệu đầu vào khi test.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ 'Instruments' trong bộ Xcode của iOS dùng để làm gì?",
+    "options": [
+      "A. Để soạn thảo văn bản hướng dẫn sử dụng.",
+      "B. Để phân tích hiệu năng, rò rỉ bộ nhớ và sử dụng năng lượng của ứng dụng.",
+      "C. Để vẽ icon cho ứng dụng.",
+      "D. Để đẩy ứng dụng lên App Store."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Instruments là công cụ mạnh mẽ đi kèm Xcode giúp đo lường hiệu năng, kiểm tra rò rỉ bộ nhớ (Leaks) và phân tích sâu về hoạt động của ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện 'Regression Testing' (Kiểm thử hồi quy), mục tiêu là gì?",
+    "options": [
+      "A. Đảm bảo các tính năng mới không làm hỏng các tính năng cũ đang hoạt động ổn định.",
+      "B. Kiểm tra xem ứng dụng có chạy được trên các đời máy cũ từ 10 năm trước không.",
+      "C. Xóa bỏ toàn bộ code cũ để viết lại từ đầu.",
+      "D. Chỉ kiểm tra giao diện mà không quan tâm đến logic."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Kiểm thử hồi quy nhằm xác nhận rằng những thay đổi mới trong code không gây ra lỗi cho các phần chức năng đã hoạt động tốt trước đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu ứng dụng bị nóng lên bất thường (Thermal Issue), nguyên nhân phổ biến nhất từ phía lập trình là gì?",
+    "options": [
+      "A. Sử dụng quá nhiều hình ảnh định dạng PNG.",
+      "B. Chạy các vòng lặp vô tận hoặc tác vụ nặng liên tục trên CPU/GPU.",
+      "C. Đặt tên biến quá dài.",
+      "D. Ứng dụng có quá nhiều màn hình giao diện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi CPU hoặc GPU phải xử lý liên tục các tác vụ nặng mà không có khoảng nghỉ, thiết bị sẽ tỏa nhiệt lớn, dẫn đến hiện tượng quá nhiệt.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Android Studio, 'Memory Profiler' giúp bạn phát hiện điều gì?",
+    "options": [
+      "A. Tốc độ download của mạng Wi-Fi.",
+      "B. Các đối tượng đang chiếm dụng bộ nhớ RAM và các lần Garbage Collection.",
+      "C. Số lượng file trong thư mục 'assets'.",
+      "D. Phiên bản hệ điều hành của thiết bị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Memory Profiler giúp theo dõi việc phân bổ bộ nhớ, giúp xác định các đối tượng không được giải phóng gây lãng phí RAM.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khái niệm 'Remote Debugging' có nghĩa là gì?",
+    "options": [
+      "A. Nhờ một người khác sửa lỗi hộ qua điện thoại.",
+      "B. Debug ứng dụng đang chạy trên thiết bị thật thông qua kết nối với máy tính.",
+      "C. Tự động sửa lỗi mà không cần lập trình viên can thiệp.",
+      "D. Xóa code lỗi từ xa thông qua internet."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Remote Debugging cho phép bạn kết nối thiết bị di động với máy tính và sử dụng các công cụ trên máy tính để kiểm tra code đang chạy trên thiết bị đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đâu là một framework phổ biến để viết Automation Test cho Android?",
+    "options": [
+      "A. Espresso",
+      "B. SwiftLint",
+      "C. CocoaPods",
+      "D. Gradle"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Espresso là framework kiểm thử giao diện (UI Testing) tiêu chuẩn và phổ biến dành cho ứng dụng Android.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một ứng dụng bị crash ngay khi vừa mở lên, bước đầu tiên bạn nên làm để tìm nguyên nhân là gì?",
+    "options": [
+      "A. Cài đặt lại hệ điều hành cho điện thoại.",
+      "B. Kiểm tra Stack Trace trong Logcat hoặc Xcode Console.",
+      "C. Viết lại toàn bộ ứng dụng từ đầu.",
+      "D. Mua một chiếc điện thoại mới để thử lại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Stack Trace cung cấp thông tin chi tiết về nơi lỗi xảy ra, là manh mối quan trọng nhất để bắt đầu quá trình sửa lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Xcode, cửa sổ 'Variables View' dùng để làm gì khi đang dừng ở một Breakpoint?",
+    "options": [
+      "A. Để thay đổi màu nền của Xcode.",
+      "B. Để xem giá trị hiện tại của các biến trong phạm vi thực thi.",
+      "C. Để tìm kiếm tài liệu hướng dẫn trên mạng.",
+      "D. Để liệt kê các file có trong project."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Variables View hiển thị danh sách và giá trị của các biến tại thời điểm chương trình đang tạm dừng, giúp kiểm tra logic dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc kiểm thử 'Performance Monitoring' tập trung vào chỉ số nào?",
+    "options": [
+      "A. Số lượng dòng code của ứng dụng.",
+      "B. Thời gian phản hồi, thời gian khởi động và độ mượt của giao diện (FPS).",
+      "C. Số lượng icon có trong ứng dụng.",
+      "D. Tên của các lập trình viên tham gia dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Performance Monitoring đo lường các chỉ số về trải nghiệm người dùng như ứng dụng mở nhanh hay chậm, giao diện có bị giật lag hay không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Unit Test cho một ViewModel có gọi API, kỹ thuật nào là tốt nhất để đảm bảo test chạy nhanh và độc lập?",
+    "options": [
+      "A. Sử dụng một môi trường staging thật để gọi API.",
+      "B. Sử dụng Mockito hoặc MockK để giả lập (mock) lớp Repository/Service.",
+      "C. Tăng thời gian timeout của test để chờ phản hồi từ server.",
+      "D. Viết code trực tiếp vào lớp Test để gọi đến database cục bộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mocking giúp cô lập unit cần test, loại bỏ phụ thuộc vào mạng và server, đảm bảo tính nhất quán và tốc độ thực thi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Android Studio, công cụ nào hiệu quả nhất để phát hiện rò rỉ bộ nhớ (memory leak) ngay trong quá trình phát triển?",
+    "options": [
+      "A. Network Inspector.",
+      "B. Database Inspector.",
+      "C. Memory Profiler kết hợp với LeakCanary.",
+      "D. CPU Profiler."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Memory Profiler giúp theo dõi biểu đồ bộ nhớ, trong khi LeakCanary tự động phát hiện và thông báo các đối tượng bị rò rỉ không được GC giải phóng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn gặp lỗi UI bị lệch trên một số dòng máy màn hình nhỏ. Công cụ nào trong Xcode giúp bạn kiểm tra cấu trúc phân cấp view mà không cần dừng app?",
+    "options": [
+      "A. Debug Navigator.",
+      "B. View Hierarchy Debugger.",
+      "C. Instruments.",
+      "D. Console Output."
+    ],
+    "correctAnswer": "B",
+    "explanation": "View Hierarchy Debugger cho phép xem trực quan 3D các lớp view, thuộc tính và ràng buộc (constraints) để tìm ra nguyên nhân lệch UI.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi ứng dụng bị crash ở môi trường Production, thông tin nào trong Firebase Crashlytics là quan trọng nhất để xác định dòng code gây lỗi khi code đã bị obfuscate?",
+    "options": [
+      "A. Device model và OS version.",
+      "B. Tệp mapping.txt hoặc dSYM tương ứng với build version.",
+      "C. Số lượng người dùng bị ảnh hưởng.",
+      "D. Thời gian xảy ra crash."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tệp mapping (Android) hoặc dSYM (iOS) giúp giải mã (de-obfuscate) stack trace từ các ký tự vô nghĩa thành tên hàm và dòng code thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Thread.sleep()' trong UI Automation Test (như Espresso hoặc XCTest) được coi là một bad practice?",
+    "options": [
+      "A. Vì nó làm ứng dụng bị crash do quá tải.",
+      "B. Vì nó làm tăng thời gian test không cần thiết và dễ gây ra lỗi flakiness.",
+      "C. Vì nó không hoạt động trên các thiết bị thật.",
+      "D. Vì nó chiếm dụng quá nhiều bộ nhớ RAM của thiết bị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thread.sleep cố định thời gian chờ, không linh hoạt theo tốc độ xử lý của máy, dẫn đến test chạy chậm hoặc fail vô lý (flakiness). Nên dùng IdlingResource hoặc Wait expectations.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Ứng dụng của bạn bị giật lag (jank) khi cuộn danh sách dài chứa hình ảnh. Bước đầu tiên bạn nên làm để debug hiệu năng là gì?",
+    "options": [
+      "A. Xóa hết cache của ứng dụng.",
+      "B. Sử dụng CPU Profiler để kiểm tra các tác vụ chạy trên Main Thread.",
+      "C. Giảm độ phân giải của toàn bộ hình ảnh trong app.",
+      "D. Chuyển sang sử dụng một thư viện load ảnh khác ngay lập tức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CPU Profiler giúp xác định xem Main Thread có bị block bởi các tác vụ nặng (như giải mã ảnh, tính toán) gây drop frame hay không.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Xcode, lệnh LLDB nào được sử dụng để in giá trị của một object và mô tả của nó trong console khi đang dừng tại breakpoint?",
+    "options": [
+      "A. print object",
+      "B. po",
+      "C. show",
+      "D. inspect"
+    ],
+    "correctAnswer": "B",
+    "explanation": "'po' (print object) là lệnh phổ biến nhất trong LLDB để xem nội dung chi tiết của biến/đối tượng khi debug trên iOS.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lỗi 'Application Not Responding' (ANR) trên Android thường xảy ra nhất do nguyên nhân nào?",
+    "options": [
+      "A. Do ứng dụng tiêu tốn quá nhiều dung lượng lưu trữ.",
+      "B. Do thực hiện tác vụ I/O hoặc mạng quá lâu trên Main Thread.",
+      "C. Do ứng dụng không có quyền truy cập Internet.",
+      "D. Do người dùng chuyển đổi giữa các ứng dụng quá nhanh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hệ điều hành Android sẽ kích hoạt ANR nếu Main Thread (UI Thread) bị block quá 5 giây (thường do xử lý logic nặng hoặc chờ phản hồi mạng).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần kiểm tra xem ứng dụng xử lý như thế nào khi mất kết nối mạng đột ngột. Cách nào là chuyên nghiệp nhất để test tình huống này?",
+    "options": [
+      "A. Rút dây mạng của router Wi-Fi.",
+      "B. Sử dụng công cụ Network Link Conditioner (iOS) hoặc Network Speed emulator (Android).",
+      "C. Viết code giả lập lỗi 404 cho mọi request.",
+      "D. Bật chế độ máy bay trên điện thoại và tắt đi liên tục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các công cụ giả lập mạng cho phép kiểm soát chính xác độ trễ (latency), băng thông và tỷ lệ mất gói tin (packet loss) để test độ ổn định.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng Charles Proxy để chặn (intercept) traffic HTTPS từ thiết bị di động, bước nào là bắt buộc để xem được nội dung request/response?",
+    "options": [
+      "A. Tắt tường lửa trên máy tính.",
+      "B. Cài đặt và tin cậy Charles Root Certificate trên thiết bị di động.",
+      "C. Sử dụng cáp USB thay vì Wi-Fi.",
+      "D. Chỉ cần cấu hình đúng địa chỉ IP Proxy là đủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để giải mã lưu lượng HTTPS, thiết bị phải tin cậy chứng chỉ của Proxy (Man-in-the-middle), nếu không dữ liệu sẽ bị mã hóa không đọc được.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong iOS, công cụ 'Instruments' với template 'Leaks' giúp bạn phát hiện điều gì?",
+    "options": [
+      "A. Các API phản hồi chậm.",
+      "B. Các vùng nhớ không còn được tham chiếu nhưng chưa được giải phóng.",
+      "C. Các hình ảnh có kích thước quá lớn.",
+      "D. Các luồng (threads) đang bị deadlock."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Instruments Leaks chuyên biệt để tìm kiếm các memory leak - nơi bộ nhớ bị chiếm dụng nhưng không có con trỏ nào quản lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng bị hao pin bất thường. Qua phân tích, bạn thấy CPU luôn ở mức cao ngay cả khi app ở background. Nguyên nhân phổ biến nhất là gì?",
+    "options": [
+      "A. Do sử dụng quá nhiều tài nguyên hình ảnh trong bộ nhớ.",
+      "B. Do một vòng lặp vô hạn hoặc tác vụ background không được dừng đúng cách.",
+      "C. Do người dùng bật độ sáng màn hình quá cao.",
+      "D. Do ứng dụng sử dụng cơ sở dữ liệu SQLite."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các tác vụ chạy ngầm (Background tasks) hoặc vòng lặp logic không có điểm dừng sẽ giữ CPU hoạt động liên tục, dẫn đến sụt pin nhanh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi viết Integration Test cho luồng Đăng nhập, tại sao nên sử dụng MockWebServer thay vì server thật?",
+    "options": [
+      "A. Để tránh việc tạo ra quá nhiều tài khoản rác trên database thật.",
+      "B. Để có thể kiểm soát các mã lỗi trả về (401, 500, 403) một cách chủ động.",
+      "C. Để test có thể chạy được khi không có kết nối Internet.",
+      "D. Tất cả các lý do trên đều đúng nhưng lý do quan trọng nhất là tính cô lập và kiểm soát."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MockWebServer cho phép giả lập mọi kịch bản phản hồi từ server (thành công, lỗi hệ thống, timeout) để kiểm tra cách xử lý của app mà không phụ thuộc backend.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Android, 'StrictMode' là công cụ dùng để làm gì?",
+    "options": [
+      "A. Ép kiểu dữ liệu nghiêm ngặt trong Java/Kotlin.",
+      "B. Phát hiện các vi phạm vô tình như truy cập disk hoặc network trên Main Thread.",
+      "C. Tăng tốc độ thực thi của các vòng lặp.",
+      "D. Bảo mật dữ liệu người dùng không bị rò rỉ ra ngoài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "StrictMode là một công cụ phát triển giúp cảnh báo hoặc crash app nếu bạn thực hiện các thao tác tiềm ẩn gây lag UI trên Main Thread.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn nhận được báo cáo crash với lỗi 'Out Of Memory' (OOM) khi người dùng mở thư viện ảnh. Giải pháp xử lý nào là hợp lý nhất?",
+    "options": [
+      "A. Yêu cầu người dùng nâng cấp lên điện thoại có RAM lớn hơn.",
+      "B. Tăng thuộc tính 'largeHeap' trong Android Manifest.",
+      "C. Sử dụng thư viện load ảnh (Glide/Picasso) và resize ảnh phù hợp với kích thước hiển thị.",
+      "D. Chuyển toàn bộ ảnh sang định dạng vector."
+    ],
+    "correctAnswer": "C",
+    "explanation": "OOM thường do load ảnh gốc quá lớn vào bộ nhớ. Resize ảnh và quản lý cache hiệu quả là cách giải quyết triệt để nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mô hình 'Page Object Model' (POM) trong UI Automation Testing mang lại lợi ích chính nào?",
+    "options": [
+      "A. Giúp test chạy nhanh hơn gấp đôi.",
+      "B. Tách biệt logic của test script và cấu trúc của UI, giúp dễ bảo trì khi UI thay đổi.",
+      "C. Giúp tự động sửa lỗi code khi UI thay đổi.",
+      "D. Giảm dung lượng file cài đặt của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "POM giúp quản lý các element của màn hình tại một nơi duy nhất. Khi UI thay đổi, bạn chỉ cần cập nhật ở Page Object thay vì sửa mọi test case.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Làm thế nào để debug một ứng dụng Hybrid (sử dụng WebView) trên thiết bị thật từ trình duyệt máy tính?",
+    "options": [
+      "A. Không thể debug được vì WebView là môi trường đóng.",
+      "B. Sử dụng Chrome DevTools (Android) hoặc Safari Web Inspector (iOS) qua cáp kết nối.",
+      "C. Đọc log bằng Logcat hoặc Console của Xcode.",
+      "D. Chụp ảnh màn hình liên tục để theo dõi thay đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cả Android và iOS đều hỗ trợ remote debugging cho WebView, cho phép inspect HTML/CSS và debug JavaScript như trên web bình thường.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Swift, lỗi 'Retain Cycle' giữa hai class thường được xử lý bằng cách nào để tránh memory leak?",
+    "options": [
+      "A. Sử dụng từ khóa 'strong' cho cả hai phía.",
+      "B. Sử dụng từ khóa 'weak' hoặc 'unowned' cho một trong các tham chiếu vòng.",
+      "C. Gán cả hai đối tượng bằng nil ngay sau khi sử dụng.",
+      "D. Sử dụng cấu trúc Struct thay vì Class cho mọi trường hợp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng 'weak' hoặc 'unowned' giúp phá vỡ vòng lặp tham chiếu mạnh (strong reference cycle), cho phép ARC giải phóng bộ nhớ khi cần.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi phân tích hiệu năng nhiệt (Thermal Analysis), tại sao hiệu năng ứng dụng thường giảm đi khi máy quá nóng?",
+    "options": [
+      "A. Do hệ điều hành tự động giảm xung nhịp CPU (Thermal Throttling) để hạ nhiệt.",
+      "B. Do pin bị cạn kiệt không đủ cung cấp năng lượng.",
+      "C. Do các linh kiện điện tử bên trong bị giãn nở.",
+      "D. Do ứng dụng tự động tắt các tính năng nặng để bảo vệ máy."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thermal Throttling là cơ chế bảo vệ phần cứng của OS, nó giới hạn hiệu năng CPU/GPU để giảm nhiệt độ tỏa ra.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để theo dõi các sự kiện tùy chỉnh (Custom Events) dẫn đến crash trên Firebase Crashlytics, bạn nên sử dụng tính năng nào?",
+    "options": [
+      "A. Crashlytics Logs hoặc Custom Keys.",
+      "B. Gửi email thông báo lỗi.",
+      "C. Sử dụng Print statement trong code.",
+      "D. Kiểm tra Google Analytics."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Custom Keys và Logs cung cấp ngữ cảnh (trạng thái biến, luồng đi của user) ngay trước khi crash xảy ra, giúp tái hiện lỗi dễ dàng hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh 'adb logcat *:E' trong Android dùng để làm gì?",
+    "options": [
+      "A. Hiển thị tất cả các log của hệ thống.",
+      "B. Chỉ hiển thị các log có mức độ ưu tiên là Error (Lỗi).",
+      "C. Xóa toàn bộ log cũ trong buffer.",
+      "D. Lưu log vào một file văn bản."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tham số '*:E' lọc các log và chỉ hiển thị những dòng có level Error, giúp lập trình viên tập trung vào các lỗi nghiêm trọng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện UI Test, bạn gặp lỗi 'Element Not Found' mặc dù element đó có tồn tại trên màn hình. Nguyên nhân nào là phổ biến nhất?",
+    "options": [
+      "A. Do ID của element đó bị sai.",
+      "B. Do element chưa kịp render xong hoặc đang bị che khuất bởi một animation khác.",
+      "C. Do thiết bị không hỗ trợ cảm ứng.",
+      "D. Do màn hình điện thoại quá tối."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là vấn đề đồng bộ (synchronization). Test script chạy nhanh hơn UI render, cần sử dụng cơ chế chờ (wait) cho đến khi element khả dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn muốn kiểm tra xem ứng dụng có tiêu tốn quá nhiều dữ liệu di động (Mobile Data) không. Công cụ nào phù hợp nhất?",
+    "options": [
+      "A. CPU Profiler.",
+      "B. Network Inspector trong Android Studio hoặc Network tab trong Xcode Instruments.",
+      "C. Battery Historian.",
+      "D. Disk Lru Cache."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Network Inspector cho phép theo dõi dung lượng dữ liệu gửi/nhận, tần suất request và kích thước của các payload.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Unit Test, khái niệm 'Code Coverage' (độ bao phủ code) 100% có ý nghĩa gì?",
+    "options": [
+      "A. Ứng dụng hoàn toàn không còn lỗi logic.",
+      "B. Mọi dòng code đều đã được thực thi ít nhất một lần bởi các test case.",
+      "C. Ứng dụng đã sẵn sàng để phát hành lên Store.",
+      "D. Tất cả các thiết bị đều chạy được ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Code Coverage chỉ đo lường việc thực thi dòng code, không đảm bảo tính đúng đắn của logic trong mọi trường hợp biên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi debug một lỗi chỉ xảy ra trên thiết bị của khách hàng mà không xảy ra trên máy dev, bước nào sau đây là kém hiệu quả nhất?",
+    "options": [
+      "A. Kiểm tra log từ Crashlytics/Sentry.",
+      "B. Yêu cầu khách hàng gửi video quay lại thao tác gây lỗi.",
+      "C. Cố gắng đoán lỗi và sửa mò rồi đẩy bản update mới lên Store.",
+      "D. Tìm một thiết bị có cùng dòng máy và phiên bản OS để tái hiện lỗi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sửa lỗi mà không xác định được nguyên nhân gốc rễ (root cause) thông qua log hoặc tái hiện lỗi là cách làm rủi ro và thiếu chuyên nghiệp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một dự án Mobile quy mô lớn, khi triển khai UI Automation Testing, vấn đề 'Flaky Tests' (test chạy lúc pass lúc fail) thường xuyên xảy ra. Chiến lược nào sau đây là tối ưu nhất để xử lý vấn đề này ở mức kiến trúc?",
+    "options": [
+      "A. Tăng thời gian timeout mặc định cho tất cả các câu lệnh chờ (wait) trong script test.",
+      "B. Sử dụng cơ chế Retry logic tự động chạy lại các test case bị fail tối đa 3 lần.",
+      "C. Áp dụng Idling Resources (Android) hoặc Expectation (iOS) kết hợp với Dependency Injection để mock dữ liệu mạng.",
+      "D. Chỉ chạy UI Test trên các thiết bị thật (Physical Devices) thay vì Simulator/Emulator."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Idling Resources/Expectations giúp đồng bộ hóa trạng thái ứng dụng với test script một cách chính xác thay vì dùng sleep cứng. Kết hợp Mock dữ liệu giúp loại bỏ sự phụ thuộc vào độ trễ mạng - nguyên nhân chính gây ra flaky tests.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi phân tích Memory Leak trên ứng dụng Android bằng Memory Profiler, bạn phát hiện một lượng lớn 'Shallow Size' nhỏ nhưng 'Retained Size' rất lớn cho một đối tượng Activity. Điều này ám chỉ điều gì?",
+    "options": [
+      "A. Activity đó đang chứa nhiều biến primitive (int, float) chiếm dung lượng lớn.",
+      "B. Activity đó đang bị giữ lại bởi một đối tượng khác, và nó đang giữ một cây phân cấp đối tượng (object graph) lớn.",
+      "C. Garbage Collector (GC) đang hoạt động quá mức dẫn đến hiện tượng 'Churning'.",
+      "D. Bộ nhớ Heap đã đạt giới hạn và ứng dụng sắp bị OutOfMemoryError."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Retained Size là tổng dung lượng bộ nhớ sẽ được giải phóng nếu đối tượng đó được GC thu hồi. Retained Size lớn trong khi Shallow Size nhỏ chứng tỏ đối tượng đó đang giữ tham chiếu đến rất nhiều đối tượng khác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để tối ưu hóa mức độ tiêu thụ pin (Battery Drain) của ứng dụng khi thực hiện các tác vụ chạy ngầm (background tasks), công cụ và phương pháp nào cung cấp cái nhìn chi tiết nhất về việc 'Wakeup' của CPU?",
+    "options": [
+      "A. Sử dụng Firebase Performance Monitoring để theo dõi thời gian phản hồi API.",
+      "B. Sử dụng Xcode Energy Organizer để xem báo cáo tiêu thụ điện năng hàng ngày.",
+      "C. Sử dụng Battery Historian phân tích file bugreport thu được từ ADB.",
+      "D. Kiểm tra logcat và tìm kiếm các từ khóa liên quan đến 'PowerManager'."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Battery Historian là công cụ chuyên sâu nhất cho Android, cho phép phân tích chi tiết các sự kiện Wakelock, Alarm, và sự thay đổi trạng thái sóng radio/CPU theo dòng thời gian.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Unit Testing cho ứng dụng iOS sử dụng mô hình MVVM, khi cần kiểm tra một ViewModel có logic phụ thuộc vào dữ liệu từ Network, cách tiếp cận nào đảm bảo tính 'Isolated' và 'Deterministic' nhất?",
+    "options": [
+      "A. Sử dụng URLSession thực tế và trỏ đến môi trường Staging/UAT.",
+      "B. Tạo một Mock Service kế thừa từ Protocol của Network Layer và inject vào ViewModel.",
+      "C. Sử dụng XCTestExpectation để đợi phản hồi từ API thực tế trong 10 giây.",
+      "D. Viết Integration Test thay vì Unit Test để kiểm tra luồng dữ liệu đầy đủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dependency Injection kết hợp với Protocol-based Mocking cho phép giả lập hoàn toàn dữ liệu trả về (success/fail) mà không phụ thuộc vào mạng, giúp test chạy nhanh và luôn cho kết quả nhất quán.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi ứng dụng gặp lỗi 'Jank' (giật lag frame) trên Android, công cụ 'System Trace' trong Android Studio Profiler cho thấy các 'Long Frames'. Bạn nên tập trung phân tích thành phần nào để tìm nguyên nhân gốc rễ trên Main Thread?",
+    "options": [
+      "A. Kiểm tra dung lượng các file ảnh trong thư mục /res/drawable.",
+      "B. Phân tích 'Choreographer' và các tác vụ thực thi bên trong 'input', 'animation', 'draw'.",
+      "C. Theo dõi số lượng thread được tạo ra trong ThreadPoolExecutor.",
+      "D. Đo lường băng thông mạng (Network throughput) tại thời điểm xảy ra lag."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Choreographer là thành phần điều phối việc vẽ các frame. Phân tích chi tiết các giai đoạn input, animation và draw trên Main Thread giúp xác định chính xác tác vụ nào (ví dụ: layout quá phức tạp) gây trễ frame.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Method Tracing' (Java/Kotlin) có thể dẫn đến kết quả đo lường hiệu năng không chính xác về mặt thời gian thực tế (Wall Clock Time)?",
+    "options": [
+      "A. Vì Method Tracing chỉ hoạt động trên Emulator, không hoạt động trên thiết bị thật.",
+      "B. Do chi phí (overhead) của việc ghi lại mọi entry/exit của method làm chậm đáng kể tốc độ thực thi của ứng dụng.",
+      "C. Vì Method Tracing không thể bắt được các lời gọi hàm từ thư viện native (C++).",
+      "D. Do Method Tracing tự động bỏ qua các hàm có thời gian thực thi dưới 1ms."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Method Tracing (đặc biệt là dạng sampled) gây ra overhead lớn vì hệ thống phải can thiệp vào quá trình thực thi để ghi log. Điều này làm sai lệch thời gian thực tế so với khi ứng dụng chạy bình thường.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng iOS bị crash khi release nhưng không xảy ra ở môi trường debug. Khi xem crash log trên App Store Connect, các dòng stack trace chỉ hiện địa chỉ bộ nhớ (hex addresses). Bước tiếp theo cần làm là gì?",
+    "options": [
+      "A. Rebuild lại ứng dụng và cài đặt trực tiếp lên thiết bị để tái hiện lỗi.",
+      "B. Sử dụng file dSYM tương ứng với build đó để symbolicate stack trace.",
+      "C. Tắt tính năng Bitcode trong build settings và upload lại bản build mới.",
+      "D. Chuyển sang sử dụng thư viện crash analytics của bên thứ ba như Sentry."
+    ],
+    "correctAnswer": "B",
+    "explanation": "File dSYM (debug Symbols) chứa thông tin ánh xạ từ địa chỉ bộ nhớ sang tên hàm và số dòng code. Đây là bước bắt buộc để hiểu nội dung crash log từ bản build đã được tối ưu hóa (stripped symbols).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện Remote Debugging cho một ứng dụng Mobile gặp lỗi chỉ xuất hiện tại một vùng địa lý cụ thể (ví dụ: latency cao), công cụ nào là phù hợp nhất để giả lập môi trường mạng này ngay tại văn phòng?",
+    "options": [
+      "A. Wireshark.",
+      "B. Android Debug Bridge (ADB).",
+      "C. Charles Proxy hoặc Proxyman với tính năng Network Throttling.",
+      "D. Postman."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Charles Proxy/Proxyman cho phép can thiệp vào luồng HTTP/HTTPS và giả lập các điều kiện mạng như giới hạn băng thông (bandwidth), độ trễ (latency) và tỉ lệ mất gói tin (packet loss).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Unit Testing, sự khác biệt cốt lõi giữa 'Stub' và 'Mock' là gì?",
+    "options": [
+      "A. Stub dùng cho Android, Mock dùng cho iOS.",
+      "B. Stub cung cấp dữ liệu định sẵn để test chạy, Mock dùng để kiểm tra các hành vi (behavior) và tương tác của đối tượng.",
+      "C. Stub luôn trả về giá trị null, Mock trả về giá trị thực tế của object.",
+      "D. Không có sự khác biệt, hai thuật ngữ này có thể dùng thay thế cho nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Stub là 'State verification' (trả về dữ liệu giả để thỏa mãn logic), còn Mock là 'Behavior verification' (kiểm tra xem hàm A có được gọi với tham số B hay không).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ứng dụng của bạn bị hệ thống Android kill khi đang chạy ngầm. Làm thế nào để phân biệt giữa việc ứng dụng bị kill do thiếu bộ nhớ (Low Memory Killer) hay do lỗi crash ngầm?",
+    "options": [
+      "A. Kiểm tra giá trị trả về của hàm onTrimMemory().",
+      "B. Sử dụng lệnh 'adb shell dumpsys activity exit-info' để xem lý do thoát ứng dụng.",
+      "C. Kiểm tra xem file SharedPreferences có bị xóa hay không.",
+      "D. Dựa vào việc ứng dụng có khởi động lại từ Splash Screen hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Từ Android 11, 'Application Exit Info' cung cấp thông tin chi tiết về lý do tiến trình kết thúc (ANR, Crash, Low Memory Killer, User request...).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi debug một vấn đề liên quan đến 'Thermal Throttling' trên thiết bị mobile, dấu hiệu nào trong Profiler cho thấy thiết bị đang bị quá nhiệt?",
+    "options": [
+      "A. Tần số CPU (Clock speed) giảm đột ngột trong khi khối lượng công việc (Workload) không đổi hoặc tăng.",
+      "B. Dung lượng RAM trống tăng lên nhanh chóng.",
+      "C. Tốc độ download dữ liệu qua Wifi bị giới hạn ở mức 1Mbps.",
+      "D. Ứng dụng tự động chuyển sang chế độ Dark Mode."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi nhiệt độ tăng quá cao, hệ điều hành sẽ chủ động giảm xung nhịp CPU (throttling) để hạ nhiệt, dẫn đến hiệu năng ứng dụng giảm sút nghiêm trọng dù code không thay đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thiết kế hệ thống Automated UI Test cho một ứng dụng có quy trình đăng ký gồm 5 bước. Để tối ưu thời gian chạy test cho bước thứ 5, bạn nên làm gì?",
+    "options": [
+      "A. Viết script record-and-playback để chạy nhanh qua 4 bước đầu.",
+      "B. Sử dụng Deep Link để điều hướng trực tiếp vào màn hình bước 5 và inject trạng thái cần thiết thông qua Mocking.",
+      "C. Chia nhỏ 5 bước thành 5 test case riêng biệt chạy tuần tự trên CI.",
+      "D. Tăng tốc độ animation của hệ thống lên 10x trong Developer Options."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Deep Link kết hợp với việc giả lập trạng thái (state injection) là kỹ thuật tiên tiến giúp giảm thời gian thực thi UI Test và tập trung vào đúng unit cần kiểm tra.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Snapshot Testing' (Visual Regression Testing) trong phát triển Mobile là gì?",
+    "options": [
+      "A. Thay thế hoàn toàn Unit Test cho các logic nghiệp vụ phức tạp.",
+      "B. Đảm bảo hiệu năng render của UI luôn dưới 16ms.",
+      "C. Phát hiện các thay đổi ngoài ý muốn trong giao diện (pixel-by-pixel) mà code-based test khó nhận ra.",
+      "D. Tự động sửa lỗi layout khi chạy trên các kích thước màn hình khác nhau."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Snapshot testing so sánh ảnh chụp màn hình hiện tại với ảnh chuẩn (reference) để phát hiện sự sai khác về giao diện, màu sắc, font chữ do thay đổi code gây ra.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Xcode, công cụ 'Instruments' nào là hiệu quả nhất để tìm kiếm các đối tượng bị 'Abandoned Memory' (bộ nhớ không bị leak hoàn toàn nhưng vẫn tăng dần theo thời gian)?",
+    "options": [
+      "A. Leaks Instrument.",
+      "B. Time Profiler.",
+      "C. Allocations Instrument với tính năng 'Generation Analysis'.",
+      "D. Core Data Instrument."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Generation Analysis trong Allocations cho phép đánh dấu các mốc thời gian (generations). Nếu sau mỗi thao tác người dùng, số lượng object tăng lên và không giảm đi giữa các generation, đó là dấu hiệu của abandoned memory.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích một báo cáo ANR (Application Not Responding) từ Google Play Console, thông tin nào trong file 'traces.txt' là quan trọng nhất để xác định nguyên nhân?",
+    "options": [
+      "A. Danh sách các quyền (permissions) mà ứng dụng đã yêu cầu.",
+      "B. Trạng thái của 'main' thread và lock mà nó đang chờ đợi.",
+      "C. Tổng dung lượng bộ nhớ Heap còn trống tại thời điểm ANR.",
+      "D. Phiên bản kernel của hệ điều hành Android."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ANR xảy ra khi Main Thread bị block quá lâu (thường là 5s). Việc kiểm tra stack trace của main thread và xem nó có đang bị deadlock hoặc thực hiện tác vụ I/O nặng hay không là chìa khóa giải quyết vấn đề.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'TDD' (Test Driven Development) mang lại giá trị lớn nhất nào cho việc bảo trì ứng dụng Mobile lâu dài?",
+    "options": [
+      "A. Giảm thiểu số lượng dòng code cần viết.",
+      "B. Đảm bảo code luôn có documentation đi kèm.",
+      "C. Tạo ra một bộ regression suite tin cậy và thúc đẩy thiết kế code dạng mô-đun (decoupled).",
+      "D. Giúp ứng dụng chạy nhanh hơn trên các thiết bị cấu hình thấp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "TDD ép buộc lập trình viên phải viết code dễ test, dẫn đến kiến trúc tách biệt (decoupled). Đồng thời, bộ test được xây dựng song song giúp tự tin refactor code mà không sợ làm hỏng tính năng cũ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện ứng dụng tiêu thụ dữ liệu mạng (Network Data) bất thường khi chạy ngầm. Làm thế nào để xác định chính xác API call nào gây ra việc này trên môi trường Production?",
+    "options": [
+      "A. Sử dụng công cụ Network Inspector trong Android Studio.",
+      "B. Cài đặt Proxy trên điện thoại của người dùng cuối.",
+      "C. Sử dụng Custom Traces và Metric Logging trong Firebase Performance Monitoring.",
+      "D. Đọc log hệ thống thông qua ADB."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trên Production, bạn không thể dùng Profiler trực tiếp. Firebase Performance Monitoring cho phép tạo các custom metric để theo dõi payload size và tần suất gọi API từ thiết bị thực tế của người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Espresso (Android), tại sao việc sử dụng 'Thread.sleep()' trong test code được coi là một Anti-pattern?",
+    "options": [
+      "A. Vì nó làm cho CPU của thiết bị quá tải.",
+      "B. Vì nó không đảm bảo được việc UI đã sẵn sàng, dẫn đến test vẫn có thể fail hoặc chạy chậm hơn mức cần thiết.",
+      "C. Vì Espresso không hỗ trợ lệnh Thread.sleep().",
+      "D. Vì nó sẽ làm crash ứng dụng đang được test."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thread.sleep() là một khoảng chờ cố định và mù quáng. Nếu UI xong sớm, test lãng phí thời gian; nếu UI xong muộn, test sẽ fail. Idling Resources là giải pháp thay thế chuẩn xác hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi debug lỗi liên quan đến Layout trên iOS, công cụ 'Debug View Hierarchy' giúp giải quyết vấn đề gì hiệu quả nhất?",
+    "options": [
+      "A. Tìm kiếm các memory leak của UIView.",
+      "B. Xác định các View bị chồng lấp (overlapping), sai kích thước hoặc bị ẩn do thuộc tính alpha/hidden.",
+      "C. Đo lường thời gian render của từng Layer.",
+      "D. Chỉnh sửa trực tiếp mã nguồn Swift từ giao diện trực quan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Debug View Hierarchy cho phép xem cấu trúc 3D của các lớp giao diện, giúp dễ dàng phát hiện các view bị đặt sai vị trí hoặc bị che khuất bởi các view khác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa 'Black-box testing' và 'White-box testing' trong bối cảnh Mobile Automation là gì?",
+    "options": [
+      "A. Black-box chỉ test giao diện, White-box chỉ test database.",
+      "B. Black-box không yêu cầu quyền truy cập vào source code, White-box kiểm tra cấu trúc bên trong và logic của code.",
+      "C. Black-box chạy nhanh hơn White-box.",
+      "D. Black-box dùng cho Android, White-box dùng cho iOS."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Black-box testing (như Appium) tương tác với ứng dụng như người dùng cuối. White-box testing (như Espresso/XCTest) có quyền truy cập vào code để thực hiện các thao tác can thiệp sâu hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc kiểm tra 'Overdraw' lại quan trọng trong việc tối ưu UI hiệu năng cao?",
+    "options": [
+      "A. Vì Overdraw làm tăng dung lượng file APK/IPA.",
+      "B. Vì Overdraw gây lãng phí tài nguyên GPU khi phải vẽ nhiều lần lên cùng một pixel trong một frame.",
+      "C. Vì Overdraw khiến ứng dụng dễ bị crash do tràn bộ nhớ RAM.",
+      "D. Vì Overdraw làm giảm độ phân giải của hình ảnh hiển thị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Overdraw xảy ra khi hệ thống vẽ lên cùng một pixel nhiều lần trong một khung hình (ví dụ: nhiều background chồng lên nhau). Giảm overdraw giúp GPU làm việc hiệu quả hơn và tăng FPS.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng ProGuard hoặc R8 trên Android, tại sao bạn cần phải giữ lại file 'mapping.txt' sau mỗi lần build release?",
+    "options": [
+      "A. Để giúp ứng dụng chạy nhanh hơn trên các máy đời cũ.",
+      "B. Để có thể giải mã (de-obfuscate) các stack trace bị mã hóa từ báo cáo lỗi của người dùng.",
+      "C. Để giảm kích thước của các file tài nguyên hình ảnh.",
+      "D. Để cho phép người dùng khác có thể đóng góp code vào dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ProGuard/R8 thay đổi tên lớp và hàm thành các ký tự ngắn (a, b, c) để bảo mật và giảm kích thước. mapping.txt là bản đồ để dịch ngược các ký tự đó về tên gốc khi phân tích lỗi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiểm thử hiệu năng (Performance Testing), chỉ số 'Cold Start' của ứng dụng được định nghĩa như thế nào?",
+    "options": [
+      "A. Thời gian ứng dụng khởi động lại sau khi được update từ Store.",
+      "B. Thời gian ứng dụng khởi động từ đầu khi chưa có process nào chạy trong hệ thống.",
+      "C. Thời gian ứng dụng khôi phục từ trạng thái background lên foreground.",
+      "D. Thời gian ứng dụng phản hồi sau khi thiết bị vừa khởi động lại (reboot)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cold Start là quá trình khởi động tốn kém nhất vì hệ thống phải tạo tiến trình mới, khởi tạo các thành phần và vẽ màn hình đầu tiên từ đầu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng bị crash do 'StackOverflowError'. Nguyên nhân phổ biến nhất gây ra lỗi này trong lập trình Mobile là gì?",
+    "options": [
+      "A. Khai báo quá nhiều biến cục bộ trong một hàm.",
+      "B. Đệ quy vô hạn hoặc vòng lặp gọi hàm quá sâu vượt quá dung lượng Stack của thread.",
+      "C. Tải một file ảnh có kích thước quá lớn vào bộ nhớ.",
+      "D. Kết nối quá nhiều socket cùng một lúc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "StackOverflowError xảy ra khi bộ nhớ ngăn xếp (stack) của một thread bị tràn, thường do các lời gọi hàm lồng nhau quá nhiều hoặc đệ quy không có điểm dừng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi viết Integration Test cho luồng thanh toán (Payment Flow) có sử dụng SDK bên thứ ba, chiến lược nào là an toàn và hiệu quả nhất?",
+    "options": [
+      "A. Sử dụng thẻ tín dụng thật để test trên môi trường Production.",
+      "B. Bỏ qua việc test phần thanh toán và chỉ test các màn hình trước đó.",
+      "C. Sử dụng Sandbox/Test environment của nhà cung cấp SDK và mock các phản hồi lỗi mạng.",
+      "D. Viết lại logic của SDK để tự điều khiển kết quả trả về."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng môi trường Sandbox của nhà cung cấp đảm bảo luồng tích hợp hoạt động đúng với logic của SDK mà không gây ra giao dịch thật, đồng thời mock mạng giúp kiểm tra khả năng chịu lỗi của ứng dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một ứng dụng iOS quy mô lớn sử dụng kiến trúc Micro-services/Modular, bạn phát hiện hiện tượng bộ nhớ tăng dần (Memory Leak) nhưng không thể xác định bằng 'Leaks' tool của Instruments do các closure phức tạp. Chiến lược nào là tối ưu nhất để định vị vấn đề?",
+    "options": [
+      "A. Sử dụng 'Memory Graph Debugger' để phân tích cây tham chiếu và tìm các chu trình tham chiếu vòng (Retain Cycles).",
+      "B. Thực hiện giải phóng thủ công tất cả các biến bằng cách gán nil trong hàm deinit.",
+      "C. Tăng giới hạn bộ nhớ của ứng dụng trong file Info.plist để tránh crash OOM.",
+      "D. Sử dụng công cụ 'Time Profiler' để theo dõi thời gian thực thi của các closure."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Memory Graph Debugger cho phép trực quan hóa các mối quan hệ tham chiếu mạnh (strong references), giúp xác định chính xác các chu trình tham chiếu vòng mà các công cụ quét tự động có thể bỏ sót trong kiến trúc phức tạp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích một lỗi ANR (App Not Responding) trên Android từ Google Play Console, bạn thấy 'main' thread đang đợi một 'Lock' được giữ bởi một thread khác đang thực hiện I/O. Giải pháp kiến trúc nào giải quyết triệt để vấn đề này?",
+    "options": [
+      "A. Sử dụng StrictMode để phát hiện các thao tác I/O trên main thread trong quá trình phát triển.",
+      "B. Chuyển toàn bộ logic đồng bộ hóa sang sử dụng ReentrantLock với timeout ngắn.",
+      "C. Áp dụng mô hình Non-blocking I/O hoặc Coroutines với Dispatchers.IO để tách biệt hoàn toàn luồng xử lý.",
+      "D. Tăng thời gian timeout mặc định của hệ thống cho các tác vụ background."
+    ],
+    "correctAnswer": "C",
+    "explanation": "ANR xảy ra khi main thread bị block quá lâu. Sử dụng Coroutines với Dispatcher phù hợp đảm bảo các tác vụ nặng không bao giờ chiếm dụng main thread, giải quyết tận gốc nguyên nhân gây treo UI.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Ứng dụng của bạn gặp sự cố 'Thermal Throttling' khiến hiệu năng giảm đột ngột sau 10 phút sử dụng liên tục trên các thiết bị cấu hình cao. Bạn nên ưu tiên kiểm tra yếu tố nào đầu tiên trong quá trình profiling?",
+    "options": [
+      "A. Tần suất render của UI và các hiệu ứng animation không cần thiết.",
+      "B. Tốc độ đọc ghi của Disk I/O trong các tác vụ lưu trữ database.",
+      "C. Việc lạm dụng GPU cho các tác vụ tính toán song song không tối ưu.",
+      "D. Tần suất đánh thức CPU (Wakeups) và mức độ sử dụng tài nguyên của các vòng lặp vô hạn hoặc polling."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Thermal Throttling thường do CPU/GPU hoạt động quá công suất sinh nhiệt. Kiểm tra CPU Wakeups và các tác vụ nền liên tục là bước quan trọng nhất để giảm tải nhiệt cho hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh CI/CD, việc chạy UI Automation Tests thường bị 'flaky' (kết quả không ổn định). Đâu là phương pháp tiếp cận chuyên gia để giảm thiểu tình trạng này mà không làm giảm độ bao phủ (coverage)?",
+    "options": [
+      "A. Sử dụng cơ chế 'Idling Resources' (Android) hoặc 'Expectations' (iOS) để đồng bộ hóa trạng thái test thay vì dùng Thread.sleep().",
+      "B. Thiết lập cơ chế tự động chạy lại (Retry) các test case bị lỗi tối đa 5 lần.",
+      "C. Loại bỏ các test case liên quan đến mạng và chỉ test UI tĩnh.",
+      "D. Chạy UI tests trực tiếp trên Emulator thay vì Real Devices để đảm bảo môi trường đồng nhất."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Idling Resources giúp framework testing biết khi nào ứng dụng đang rảnh để thực hiện bước tiếp theo, loại bỏ sự phụ thuộc vào thời gian chờ cố định - nguyên nhân chính gây ra flakiness.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần debug một lỗi chỉ xuất hiện trên môi trường Production liên quan đến việc mã hóa dữ liệu SSL/TLS. Tuy nhiên, ứng dụng đã bật SSL Pinning. Cách nào hiệu quả nhất để intercept traffic mà không cần rebuild app?",
+    "options": [
+      "A. Sử dụng Wireshark để bắt gói tin ở tầng vật lý của router.",
+      "B. Sử dụng các công cụ như Frida hoặc Objection để bypass SSL Pinning runtime trên thiết bị đã root/jailbreak.",
+      "C. Yêu cầu Backend tắt SSL Pinning tạm thời trên môi trường Staging.",
+      "D. Cài đặt chứng chỉ CA của Charles Proxy vào hệ thống máy ảo Android."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với ứng dụng đã release và bật SSL Pinning, việc can thiệp vào runtime bằng dynamic instrumentation (Frida) là cách duy nhất để quan sát traffic mà không làm thay đổi mã nguồn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích Heap Dump để xử lý lỗi OutOfMemory (OOM), bạn thấy hàng ngàn instance của lớp 'Bitmap' hoặc 'UIImage'. Bước phân tích tiếp theo nên là gì?",
+    "options": [
+      "A. Nén tất cả ảnh đầu vào xuống độ phân giải thấp hơn.",
+      "B. Kiểm tra 'Incoming References' để tìm object nào đang giữ tham chiếu đến các instance này và tại sao chúng không được GC giải phóng.",
+      "C. Chuyển sang sử dụng thư viện load ảnh khác như Glide hoặc SDWebImage.",
+      "D. Gọi System.gc() thủ công sau mỗi lần hiển thị ảnh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OOM không phải luôn do kích thước ảnh mà do các object không được giải phóng. Tìm 'Incoming References' giúp xác định 'leak path' - con đường dẫn đến việc giữ đối tượng trong bộ nhớ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Symbolication' lại quan trọng trong việc phân tích Crash Logs từ người dùng cuối?",
+    "options": [
+      "A. Nó giúp giảm kích thước file log để gửi về server nhanh hơn.",
+      "B. Nó chuyển đổi các địa chỉ bộ nhớ hex (0x...) thành tên hàm và số dòng cụ thể trong mã nguồn.",
+      "C. Nó tự động sửa các lỗi cú pháp trong mã nguồn sau khi crash.",
+      "D. Nó mã hóa thông tin người dùng để đảm bảo tính bảo mật theo chuẩn GDPR."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Symbolication là quá trình ánh xạ địa chỉ bộ nhớ trong crash log với file dSYM (iOS) hoặc mapping.txt (Android) để lập trình viên có thể đọc hiểu vị trí lỗi trong code.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng Fintech yêu cầu độ bảo mật cao và không cho phép debug qua cổng USB. Làm thế nào để đội ngũ QA có thể thực hiện kiểm thử xâm nhập (Penetration Testing) hiệu quả?",
+    "options": [
+      "A. Sử dụng Remote Debugging thông qua kết nối Wi-Fi và ADB qua mạng.",
+      "B. Tích hợp một 'Debug Menu' nội bộ trong bản build chuyên dụng cho QA để xem logs và trạng thái hệ thống.",
+      "C. Chụp ảnh màn hình thủ công và gửi cho lập trình viên phân tích.",
+      "D. Sử dụng Logcat để ghi log vào bộ nhớ máy rồi trích xuất sau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xây dựng công cụ debug nội bộ (Internal Tools) là giải pháp chuyên nghiệp cho các app bảo mật, cho phép QA kiểm tra trạng thái mà không cần mở các cổng debug hệ thống nguy hiểm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Xcode Instruments, công cụ 'Energy Log' cung cấp thông tin gì quan trọng nhất để tối ưu hóa thời lượng pin?",
+    "options": [
+      "A. Mức độ sử dụng bộ nhớ RAM của từng module.",
+      "B. Biểu đồ về mức độ tiêu thụ điện năng dựa trên tần suất sử dụng Network, CPU, và GPU.",
+      "C. Danh sách các hàm tốn nhiều thời gian thực thi nhất.",
+      "D. Số lượng các thread được tạo ra trong một khoảng thời gian."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Energy Log tập trung vào các thành phần phần cứng tiêu tốn năng lượng nhất, giúp xác định xem ứng dụng có đang lạm dụng radio (mạng) hoặc GPS quá mức hay không.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn được yêu cầu thiết lập chiến lược Unit Test cho một module chứa nhiều logic tính toán phức tạp phụ thuộc vào thời gian thực (Real-time). Cách tiếp cận nào là đúng đắn nhất?",
+    "options": [
+      "A. Sử dụng các hàm delay/sleep trong test case để đợi kết quả.",
+      "B. Mocking hệ thống thời gian (Clock/Time Provider) để có thể điều khiển giá trị thời gian trong môi trường test.",
+      "C. Chỉ test các hàm không liên quan đến thời gian.",
+      "D. Chạy test case nhiều lần và lấy giá trị trung bình để đối chiếu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dependency Injection cho Time Provider cho phép bạn 'giả lập' thời gian trôi qua, giúp các test case chạy nhanh, ổn định và có thể dự đoán được kết quả (deterministic).",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng Android Profiler, chỉ số 'Native Heap' tăng liên tục trong khi 'JVM Heap' ổn định. Nguyên nhân khả dĩ nhất là gì?",
+    "options": [
+      "A. Memory leak trong mã Java/Kotlin.",
+      "B. Memory leak trong các thư viện C++ (NDK) hoặc các tài nguyên đồ họa chưa được giải phóng.",
+      "C. Quá nhiều object được tạo ra trong vòng lặp for.",
+      "D. Hệ thống Garbage Collector đang hoạt động quá tải."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Native Heap quản lý bộ nhớ cho mã C++ và các tài nguyên hệ thống cấp thấp. Nếu JVM Heap ổn định mà Native Heap tăng, lỗi chắc chắn nằm ở phần mã native hoặc tài nguyên ngoài tầm kiểm soát của GC.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chiến lược nào hiệu quả nhất để debug lỗi 'Race Condition' xảy ra ngẫu nhiên trong môi trường đa luồng (Multi-threading)?",
+    "options": [
+      "A. Thêm thật nhiều log vào các thread để theo dõi thứ tự thực thi.",
+      "B. Sử dụng 'Thread Sanitizer' (TSan) trong Xcode hoặc các công cụ phân tích tĩnh để phát hiện data races.",
+      "C. Chuyển toàn bộ tác vụ về thực thi trên Single Thread.",
+      "D. Sử dụng 'Lock' cho tất cả các biến toàn cục trong ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thread Sanitizer là công cụ chuyên dụng để phát hiện các truy cập bộ nhớ không an toàn từ nhiều luồng khác nhau, giúp tìm ra race condition mà log thông thường khó phát hiện.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang tối ưu hóa Network Layer cho một ứng dụng có hàng triệu người dùng. Chỉ số 'Time to First Byte' (TTFB) cao trên mobile. Bạn nên dùng công cụ nào để phân tích xem độ trễ do mạng hay do xử lý tại thiết bị?",
+    "options": [
+      "A. Charles Proxy để xem timeline chi tiết của request (DNS, Connect, SSL, Request, Response).",
+      "B. Postman để test lại các API trên máy tính.",
+      "C. Firebase Crashlytics để xem thống kê lỗi mạng.",
+      "D. Xcode Network Instrument để xem tổng dung lượng data truyền tải."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Charles Proxy cung cấp biểu đồ timeline chi tiết cho từng giai đoạn của một HTTP request, giúp phân biệt rõ độ trễ do thiết lập kết nối mạng hay do server phản hồi chậm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để kiểm thử khả năng chịu tải và xử lý lỗi của ứng dụng khi đi vào vùng sóng yếu (Tunnel, Elevator), chuyên gia nên cấu hình môi trường như thế nào?",
+    "options": [
+      "A. Tắt Wi-Fi và bật 4G.",
+      "B. Sử dụng 'Network Link Conditioner' để giả lập các profile mạng như 'Very Bad Network' với độ trễ và tỷ lệ mất gói tin cao.",
+      "C. Viết code giả lập lỗi 500 từ server.",
+      "D. Yêu cầu QA di chuyển vào các khu vực không có sóng thật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Network Link Conditioner cho phép giả lập chính xác các điều kiện mạng khắc nghiệt (latency, packet loss, bandwidth) một cách có kiểm soát ngay trên thiết bị dev.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một hệ thống Enterprise, tại sao việc triển khai 'Remote Config' kết hợp với 'Feature Flags' lại được coi là một phần của chiến lược Testing & Debugging?",
+    "options": [
+      "A. Để thay đổi màu sắc giao diện mà không cần lên store.",
+      "B. Để cô lập và tắt nhanh các tính năng gây lỗi nghiêm trọng trên Production mà không cần hotfix app.",
+      "C. Để thu thập dữ liệu cá nhân của người dùng một cách bí mật.",
+      "D. Để giảm kích thước file cài đặt của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Feature Flags cho phép kiểm soát việc bật/tắt tính năng từ xa. Đây là kỹ thuật 'Kill Switch' quan trọng để xử lý khủng hoảng khi một tính năng mới gây lỗi hệ thống trên diện rộng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện UI Test cho ứng dụng đa ngôn ngữ (Localization), vấn đề 'Text Overflow' thường xuyên xảy ra. Cách tự động hóa nào tốt nhất để phát hiện lỗi này?",
+    "options": [
+      "A. Viết script so sánh độ dài chuỗi ký tự của các ngôn ngữ.",
+      "B. Sử dụng 'Snapshot Testing' (Visual Regression) để so sánh giao diện thực tế với bản mẫu chuẩn của từng ngôn ngữ.",
+      "C. Thuê người bản địa kiểm thử thủ công từng màn hình.",
+      "D. Giới hạn số lượng ký tự tối đa cho tất cả các label trong app."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Snapshot Testing chụp ảnh màn hình và so sánh pixel-by-pixel, giúp phát hiện ngay lập tức các lỗi layout, vỡ chữ hoặc tràn viền khi thay đổi ngôn ngữ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lỗi 'Zombie Objects' trong Objective-C/Swift (với các thư viện cũ) thường dẫn đến crash không rõ nguyên nhân. Cơ chế debug 'Enable Zombie Objects' hoạt động như thế nào?",
+    "options": [
+      "A. Nó ngăn chặn việc giải phóng bộ nhớ của mọi object.",
+      "B. Nó thay thế các object đã giải phóng bằng một object đặc biệt (Zombie) để ghi lại log nếu có ai đó cố gắng truy cập vào nó.",
+      "C. Nó tự động hồi sinh các object đã bị deallocate.",
+      "D. Nó quét toàn bộ bộ nhớ để tìm các object không có chủ sở hữu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cơ chế Zombie chuyển đổi các object bị deallocate thành các 'zombie' thay vì giải phóng hoàn toàn, giúp hệ thống báo lỗi chính xác khi xảy ra lỗi 'message sent to deallocated instance'.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện ứng dụng tiêu thụ pin bất thường khi chạy nền (background). Qua profiling, bạn thấy CPU usage thấp nhưng Radio power cao. Nguyên nhân có thể là gì?",
+    "options": [
+      "A. Ứng dụng đang thực hiện các phép toán phức tạp trong background.",
+      "B. Ứng dụng duy trì kết nối WebSocket liên tục hoặc polling server quá thường xuyên.",
+      "C. Màn hình của thiết bị không được tắt hoàn toàn.",
+      "D. Do hệ điều hành tự động cập nhật ứng dụng khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Radio power cao khi CPU usage thấp thường do việc truyền tải dữ liệu nhỏ nhưng liên tục, ngăn chặn chip mạng đi vào trạng thái ngủ (low-power state).",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng Android bị crash với lỗi 'TransactionTooLargeException'. Bạn nên debug và xử lý vấn đề này như thế nào?",
+    "options": [
+      "A. Tăng kích thước heap của ứng dụng trong manifest.",
+      "B. Kiểm tra lượng dữ liệu được truyền qua Intent hoặc Bundle giữa các Activity/Fragment và giảm thiểu chúng.",
+      "C. Sử dụng cơ chế nén dữ liệu Gzip trước khi truyền qua Intent.",
+      "D. Chuyển sang sử dụng Singleton để lưu trữ toàn bộ dữ liệu tạm thời."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hệ thống Android giới hạn dung lượng dữ liệu truyền qua Binder transaction (khoảng 1MB). Lỗi này xảy ra khi Bundle chứa quá nhiều dữ liệu (ví dụ ảnh hoặc list lớn). Giải pháp là truyền ID thay vì truyền cả object.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để đo lường hiệu quả của việc tối ưu hóa 'App Launch Time', bạn nên tập trung vào chỉ số nào là chính xác nhất?",
+    "options": [
+      "A. Thời gian từ khi user nhấn icon đến khi hàm main() được gọi.",
+      "B. Thời gian từ khi process bắt đầu đến khi frame đầu tiên của UI được hiển thị (TTI - Time To Interactive).",
+      "C. Kích thước file binary sau khi biên dịch.",
+      "D. Số lượng các thư viện dynamic link (dylib) được load lúc khởi động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Người dùng chỉ quan tâm khi nào họ có thể tương tác với ứng dụng. TTI bao gồm cả thời gian khởi tạo hệ thống và thời gian render UI, là chỉ số phản ánh trải nghiệm thực tế.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi debug một lỗi liên quan đến Deep Linking không hoạt động trên thiết bị thật nhưng chạy tốt trên Simulator, yếu tố nào thường bị bỏ qua nhất?",
+    "options": [
+      "A. Cấu hình 'Associated Domains' (iOS) hoặc 'Asset Links' (Android) chưa được verify trên server.",
+      "B. Phiên bản hệ điều hành trên Simulator quá cũ.",
+      "C. Sai lệch về múi giờ giữa thiết bị và server.",
+      "D. Simulator không hỗ trợ mở URL."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Deep Linking (Universal Links/App Links) yêu cầu một file cấu hình trên server để xác thực quyền sở hữu. Simulator đôi khi bỏ qua bước verify này, nhưng thiết bị thật thì bắt buộc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần thiết lập một hệ thống 'Beta Testing' cho doanh nghiệp để thu thập feedback sớm. Công cụ nào cung cấp khả năng phân phối build và thu thập crash log tốt nhất hiện nay?",
+    "options": [
+      "A. Gửi file .apk/.ipa qua email cho nhân viên.",
+      "B. Sử dụng Firebase App Distribution kết hợp với Crashlytics.",
+      "C. Upload app lên Google Drive và chia sẻ link.",
+      "D. Chỉ sử dụng TestFlight cho cả Android và iOS."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Firebase cung cấp hệ sinh thái hoàn chỉnh từ phân phối build (App Distribution) đến theo dõi sức khỏe ứng dụng thời gian thực (Crashlytics), phù hợp cho quy trình chuyên nghiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Android Studio, công cụ 'Layout Inspector' phiên bản mới nhất hỗ trợ tính năng gì cực kỳ hữu ích cho việc debug UI phức tạp?",
+    "options": [
+      "A. Tự động sửa lỗi màu sắc theo chuẩn Accessibility.",
+      "B. Live 3D visualization của phân cấp view và khả năng xem các thuộc tính của Compose runtime.",
+      "C. Xuất layout ra file Photoshop để thiết kế lại.",
+      "D. Đo lường tốc độ mạng khi load ảnh vào ImageView."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Layout Inspector hiện đại cho phép xem phân cấp view dưới dạng 3D và hỗ trợ sâu cho Jetpack Compose, giúp lập trình viên hiểu rõ cách các component lồng nhau và thuộc tính của chúng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng React Native gặp vấn đề hiệu năng (giật lag) khi scroll danh sách dài. Bạn nên sử dụng công cụ nào để xác định lỗi nằm ở phía JavaScript thread hay UI thread?",
+    "options": [
+      "A. Chrome DevTools.",
+      "B. React Native Debugger kết hợp với 'Perf Monitor' tích hợp sẵn.",
+      "C. Activity Monitor trên macOS.",
+      "D. Chỉ dựa vào console.log để đo thời gian."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Perf Monitor hiển thị FPS của cả UI thread và JS thread riêng biệt. Nếu JS FPS thấp, logic xử lý dữ liệu chậm; nếu UI FPS thấp, vấn đề nằm ở việc render native views.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng xử lý video thời gian thực trên mobile gặp hiện tượng giảm khung hình (frame drop) nghiêm trọng sau khoảng 10 phút sử dụng liên tục, mặc dù ban đầu chạy rất mượt mà. Quan sát bằng công cụ Profiling cho thấy xung nhịp CPU/GPU bị hệ điều hành giới hạn (throttling) do nhiệt độ tăng cao. Trong vai trò chuyên gia, chiến lược nào là tối ưu nhất để xử lý vấn đề này ở quy mô hệ thống?",
+    "options": [
+      "A. Tối ưu hóa thuật toán bằng cách chuyển các tác vụ tính toán từ GPU sang CPU để phân bổ lại nguồn nhiệt trên chip SoC.",
+      "B. Triển khai cơ chế lắng nghe Thermal State API để chủ động giảm độ phức tạp của thuật toán hoặc tần suất render khi thiết bị nóng lên, kết hợp đẩy dữ liệu telemetry về mức nhiệt độ để phân tích rủi ro theo model máy.",
+      "C. Thiết lập Unit Test để kiểm tra hiệu năng của các hàm xử lý video và đảm bảo chúng không chiếm dụng quá 50% tài nguyên CPU trong mọi điều kiện.",
+      "D. Sử dụng công cụ Remote Debugging để theo dõi nhiệt độ thiết bị của người dùng cuối trong thời gian thực và tự động ngắt ứng dụng khi nhiệt độ vượt ngưỡng an toàn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ Expert, việc xử lý Thermal Throttling đòi hỏi chiến lược 'Adaptive Performance'. Thay vì để OS can thiệp thô bạo (gây giật lag), ứng dụng cần chủ động nhận biết trạng thái nhiệt qua Thermal State API để điều tiết tải (load balancing). Việc thu thập telemetry giúp đội ngũ kỹ thuật phân tích ngưỡng chịu nhiệt của từng dòng máy thực tế để có cấu hình tối ưu nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Mobile Testing & Debugging",
+    "category": "ANALYSIS"
+  }
+]

@@ -261,7 +261,7 @@ const SliderManagementTab: React.FC = () => {
   };
 
   return (
-    <div className="admin-user-management-cosmic">
+    <div className="admin-user-management-cosmic slider-management-tab">
       <div className="admin-user-header">
         <div>
           <h2>Quản Lý Slider Trang Chủ</h2>

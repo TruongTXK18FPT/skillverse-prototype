@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong ngôn ngữ Kotlin (Android), sự khác biệt cơ bản giữa 'val' và 'var' là gì?",
+    "options": [
+      "A. 'val' dùng cho biến có thể thay đổi giá trị, 'var' dùng cho hằng số.",
+      "B. 'val' dùng cho biến chỉ đọc (read-only), 'var' dùng cho biến có thể thay đổi giá trị.",
+      "C. 'val' chỉ dùng trong hàm, 'var' dùng được ở mọi nơi.",
+      "D. 'val' tốn ít bộ nhớ hơn 'var' khi khai báo cùng một kiểu dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'val' (value) được dùng để khai báo biến bất biến (immutable), trong khi 'var' (variable) dùng cho biến có thể gán lại giá trị.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Swift (iOS), từ khóa nào được sử dụng để khai báo một hằng số?",
+    "options": [
+      "A. const",
+      "B. var",
+      "C. let",
+      "D. static"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Swift, 'let' được dùng để khai báo hằng số (giá trị không đổi), còn 'var' dùng để khai báo biến.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phương thức nào trong vòng đời (Lifecycle) của một Android Activity được gọi đầu tiên khi ứng dụng khởi chạy?",
+    "options": [
+      "A. onStart()",
+      "B. onResume()",
+      "C. onCreate()",
+      "D. onInit()"
+    ],
+    "correctAnswer": "C",
+    "explanation": "onCreate() là phương thức đầu tiên được hệ thống gọi khi Activity được tạo ra, dùng để khởi tạo các thành phần cơ bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong phát triển iOS, phương thức 'viewDidLoad()' của UIViewController thường được dùng để làm gì?",
+    "options": [
+      "A. Giải phóng bộ nhớ khi ViewController bị hủy.",
+      "B. Thực hiện các thiết lập giao diện bổ sung sau khi view đã được nạp vào bộ nhớ.",
+      "C. Thông báo rằng view sắp được hiển thị lên màn hình.",
+      "D. Xử lý khi người dùng nhấn nút Home để thoát ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "viewDidLoad() được gọi sau khi view của controller đã được nạp vào bộ nhớ, là nơi lý tưởng để cấu hình UI ban đầu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cơ chế 'Null Safety' trong Kotlin giúp lập trình viên tránh lỗi phổ biến nào?",
+    "options": [
+      "A. Lỗi tràn bộ nhớ (OutOfMemoryError).",
+      "B. Lỗi truy cập ngoài phạm vi mảng (ArrayIndexOutOfBoundsException).",
+      "C. Lỗi tham chiếu null (NullPointerException).",
+      "D. Lỗi vòng lặp vô tận."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Null Safety là tính năng cốt lõi của Kotlin nhằm loại bỏ rủi ro từ việc truy cập các biến mang giá trị null, tránh lỗi crash ứng dụng phổ biến.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Swift, kỹ thuật 'Optional Unwrapping' bằng cách dùng 'if let' có mục đích gì?",
+    "options": [
+      "A. Để ép kiểu dữ liệu từ String sang Int.",
+      "B. Để kiểm tra xem một biến Optional có giá trị hay không trước khi sử dụng an toàn.",
+      "C. Để tạo ra một vòng lặp chạy qua các phần tử Optional.",
+      "D. Để giải phóng bộ nhớ của biến Optional đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'if let' là một cách an toàn để mở khóa (unwrap) giá trị bên trong một biến Optional, nếu biến đó nil thì khối lệnh sẽ không thực thi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hiện tượng ANR (Application Not Responding) trên Android thường xảy ra khi nào?",
+    "options": [
+      "A. Khi ứng dụng tiêu tốn quá nhiều dung lượng lưu trữ.",
+      "B. Khi Main Thread (UI Thread) bị chặn quá lâu bởi một tác vụ nặng.",
+      "C. Khi thiết bị không có kết nối Internet.",
+      "D. Khi ứng dụng không có quyền truy cập vào Camera."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu Main Thread bị khóa bởi các tác vụ như tính toán nặng hoặc truy cập mạng quá 5 giây, hệ thống Android sẽ hiển thị thông báo ANR.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cơ chế ARC (Automatic Reference Counting) trong iOS được dùng để quản lý vấn đề gì?",
+    "options": [
+      "A. Quản lý số lượng View trên màn hình.",
+      "B. Tự động đếm số lần người dùng chạm vào màn hình.",
+      "C. Tự động quản lý bộ nhớ bằng cách đếm số lượng tham chiếu đến một đối tượng.",
+      "D. Điều chỉnh độ sáng màn hình tự động."
+    ],
+    "correctAnswer": "C",
+    "explanation": "ARC tự động giải phóng bộ nhớ của các đối tượng (class instances) khi số lượng tham chiếu đến chúng bằng không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "File 'AndroidManifest.xml' trong một dự án Android đóng vai trò gì?",
+    "options": [
+      "A. Chứa mã nguồn logic chính của ứng dụng.",
+      "B. Khai báo các thành phần của ứng dụng (Activity, Service...) và các quyền (Permissions).",
+      "C. Lưu trữ các file hình ảnh và icon của ứng dụng.",
+      "D. Định nghĩa giao diện người dùng bằng ngôn ngữ XML."
+    ],
+    "correctAnswer": "B",
+    "explanation": "AndroidManifest.xml là file cấu hình bắt buộc, cung cấp thông tin thiết yếu về app cho hệ điều hành Android.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong iOS, file 'Info.plist' được sử dụng để làm gì?",
+    "options": [
+      "A. Lưu trữ danh sách các biến toàn cục của ứng dụng.",
+      "B. Chứa các thông tin cấu hình hệ thống, quyền truy cập và thông tin hiển thị của app.",
+      "C. Là nơi viết code xử lý logic cho AppDelegate.",
+      "D. Quản lý việc cài đặt các thư viện từ bên thứ ba."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Info.plist (Information Property List) chứa các cặp key-value cấu hình cho bundle của ứng dụng iOS.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thành phần 'Intent' trong Android thường được sử dụng để làm gì?",
+    "options": [
+      "A. Để lưu trữ dữ liệu vào cơ sở dữ liệu SQLite.",
+      "B. Để thực hiện các phép tính toán học phức tạp.",
+      "C. Để chuyển đổi giữa các Activity hoặc gửi thông điệp giữa các thành phần ứng dụng.",
+      "D. Để thay đổi màu sắc của giao diện người dùng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Intent là một đối tượng truyền tin được dùng để yêu cầu một hành động từ một thành phần ứng dụng khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một nguyên nhân phổ biến gây ra 'Memory Leak' (rò rỉ bộ nhớ) trong ứng dụng di động là gì?",
+    "options": [
+      "A. Sử dụng quá nhiều biến kiểu Int.",
+      "B. Giữ tham chiếu đến một đối tượng (như Activity/ViewController) lâu hơn thời gian tồn tại thực tế của nó.",
+      "C. Tắt ứng dụng bằng cách vuốt bỏ trong danh sách đa nhiệm.",
+      "D. Sử dụng kết nối Wifi thay vì dữ liệu di động 4G."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rò rỉ bộ nhớ xảy ra khi các đối tượng không còn sử dụng nhưng vẫn bị giữ lại trong bộ nhớ do còn tham chiếu mạnh (strong reference).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện các tác vụ mạng (Network calls) trên Main Thread lại được coi là một thực hành xấu?",
+    "options": [
+      "A. Vì nó sẽ làm tốn băng thông dữ liệu của người dùng.",
+      "B. Vì nó sẽ làm treo giao diện người dùng (UI freeze) cho đến khi tác vụ hoàn tất.",
+      "C. Vì hệ thống Android/iOS sẽ tự động mã hóa dữ liệu trên Main Thread.",
+      "D. Vì nó khiến pin điện thoại bị nóng lên nhanh chóng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các tác vụ mạng có độ trễ không xác định; nếu chạy trên Main Thread, nó sẽ ngăn cản việc vẽ lại giao diện và phản hồi thao tác người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Android, 'ConstraintLayout' có ưu điểm chính nào so với 'LinearLayout' hay 'RelativeLayout'?",
+    "options": [
+      "A. Nó chỉ hỗ trợ hiển thị văn bản.",
+      "B. Nó cho phép tạo ra các phân cấp view phẳng (flat view hierarchy), giúp cải thiện hiệu năng render.",
+      "C. Nó không yêu cầu lập trình viên phải viết code XML.",
+      "D. Nó tự động dịch ứng dụng sang nhiều ngôn ngữ khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ConstraintLayout giúp giảm độ sâu của cây view (nested views), từ đó giúp hệ thống tính toán vị trí các phần tử nhanh hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong iOS, 'Auto Layout' sử dụng khái niệm nào để xác định vị trí và kích thước của các View?",
+    "options": [
+      "A. Tọa độ X và Y cố định tính bằng pixel.",
+      "B. Các ràng buộc (Constraints) về mối quan hệ giữa các thành phần UI.",
+      "C. Các bảng (Tables) chứa giá trị chiều rộng và chiều cao.",
+      "D. Các lệnh if-else trong code Swift."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Auto Layout dựa trên các ràng buộc (Constraints) để tính toán động vị trí và kích thước của các view dựa trên kích thước màn hình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ưu điểm của việc sử dụng 'Data Class' trong Kotlin là gì?",
+    "options": [
+      "A. Nó giúp ứng dụng chạy nhanh hơn 2 lần.",
+      "B. Nó tự động tạo ra các phương thức như equals(), hashCode(), và toString() dựa trên các thuộc tính.",
+      "C. Nó cho phép lưu trữ dữ liệu trực tiếp vào ổ cứng mà không cần code.",
+      "D. Nó ngăn chặn việc người dùng chụp ảnh màn hình ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data class trong Kotlin được thiết kế chuyên để chứa dữ liệu, giúp giảm bớt mã lặp (boilerplate code) cho các phương thức cơ bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Swift, sự khác biệt chính giữa 'Struct' và 'Class' là gì?",
+    "options": [
+      "A. Struct là kiểu tham chiếu (reference type), Class là kiểu giá trị (value type).",
+      "B. Struct là kiểu giá trị (value type), Class là kiểu tham chiếu (reference type).",
+      "C. Struct có thể kế thừa, còn Class thì không.",
+      "D. Struct chỉ chứa được biến, không chứa được hàm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Struct trong Swift là value type (khi gán sẽ copy), còn Class là reference type (khi gán sẽ trỏ cùng vào một vùng nhớ).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thành phần 'Fragment' trong Android có ý nghĩa gì?",
+    "options": [
+      "A. Là một file nhạc nền của ứng dụng.",
+      "B. Là một phần giao diện người dùng có thể tái sử dụng, nằm trong một Activity.",
+      "C. Là một lỗi xảy ra khi bộ nhớ bị phân mảnh.",
+      "D. Là một công cụ để nén dung lượng file APK."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Fragment đại diện cho một phần hành vi hoặc giao diện trong Activity, giúp xây dựng giao diện linh hoạt cho nhiều kích thước màn hình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Design pattern 'Delegate' trong iOS thường được dùng để làm gì?",
+    "options": [
+      "A. Để lưu trữ dữ liệu vào iCloud.",
+      "B. Để một đối tượng thay mặt đối tượng khác thực hiện hành động hoặc cung cấp dữ liệu.",
+      "C. Để mã hóa mật khẩu người dùng.",
+      "D. Để vẽ các hình đồ họa phức tạp lên màn hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Delegate là pattern cho phép một object gửi thông báo hoặc yêu cầu dữ liệu từ một object khác mà không cần biết quá sâu về nó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao từ phiên bản Android 6.0 và iOS 8.0 trở đi, ứng dụng cần yêu cầu 'Runtime Permissions'?",
+    "options": [
+      "A. Để làm ứng dụng trông chuyên nghiệp hơn.",
+      "B. Để đảm bảo người dùng có quyền kiểm soát và biết rõ khi nào ứng dụng truy cập dữ liệu nhạy cảm.",
+      "C. Để tăng tốc độ tải dữ liệu từ server.",
+      "D. Để giảm dung lượng pin tiêu thụ bởi ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Runtime permissions yêu cầu người dùng cấp quyền ngay khi tính năng được sử dụng, giúp tăng cường tính bảo mật và quyền riêng tư.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Android, tại sao 'RecyclerView' lại hiệu quả hơn 'ListView' khi hiển thị danh sách dài?",
+    "options": [
+      "A. Vì nó sử dụng ít màu sắc hơn.",
+      "B. Vì nó hỗ trợ cơ chế tái sử dụng các View đã cuộn khỏi màn hình (ViewHolder pattern).",
+      "C. Vì nó tự động tải dữ liệu từ Internet về.",
+      "D. Vì nó không yêu cầu viết code Java/Kotlin."
+    ],
+    "correctAnswer": "B",
+    "explanation": "RecyclerView tái sử dụng các view cũ thay vì tạo mới liên tục, giúp tiết kiệm bộ nhớ và mượt mà hơn khi cuộn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong iOS, phương thức 'cellForRowAt' của UITableViewDataSource dùng để làm gì?",
+    "options": [
+      "A. Để tính toán tổng số dòng trong bảng.",
+      "B. Để cấu hình và trả về một cell (ô) cụ thể để hiển thị tại một vị trí trong bảng.",
+      "C. Để xử lý sự kiện khi người dùng nhấn vào một dòng.",
+      "D. Để xóa một dòng khỏi bảng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phương thức này chịu trách nhiệm cung cấp dữ liệu và giao diện cho từng dòng (cell) khi bảng cần hiển thị chúng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của việc sử dụng 'Coroutines' trong Kotlin là gì?",
+    "options": [
+      "A. Để tạo ra các hiệu ứng hoạt hình (animation) phức tạp.",
+      "B. Để xử lý các tác vụ bất đồng bộ (asynchronous) một cách đơn giản và hiệu quả.",
+      "C. Để thay thế hoàn toàn các biến kiểu String.",
+      "D. Để bảo mật mã nguồn không bị dịch ngược."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Coroutines giúp viết code bất đồng bộ (như gọi API) theo phong cách tuần tự, dễ đọc và tiết kiệm tài nguyên hơn Thread truyền thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Swift, 'Extension' được dùng để làm gì?",
+    "options": [
+      "A. Để tạo ra một ứng dụng mới từ ứng dụng cũ.",
+      "B. Để thêm chức năng mới vào một class, struct, hoặc enum đã tồn tại mà không cần kế thừa.",
+      "C. Để thay đổi tên của ứng dụng trên màn hình chủ.",
+      "D. Để nén các file hình ảnh trong dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Extension cho phép mở rộng tính năng của các kiểu dữ liệu có sẵn (kể cả những kiểu của hệ thống) một cách sạch sẽ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Định dạng file đóng gói cuối cùng để cài đặt lên thiết bị Android và iOS lần lượt là gì?",
+    "options": [
+      "A. .exe và .dmg",
+      "B. .apk (hoặc .aab) và .ipa",
+      "C. .zip và .rar",
+      "D. .android và .ios"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Android sử dụng APK/AAB để phân phối ứng dụng, trong khi iOS sử dụng định dạng IPA.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Android, khi ứng dụng bị hệ thống tắt (System-initiated process death) để giải phóng bộ nhớ, dữ liệu trong ViewModel sẽ bị mất. Giải pháp nào là tốt nhất để khôi phục trạng thái UI trong trường hợp này?",
+    "options": [
+      "A. Sử dụng SharedPreferences để lưu mọi thay đổi nhỏ của UI.",
+      "B. Sử dụng SavedStateHandle được tích hợp sẵn trong ViewModel.",
+      "C. Chỉ cần dựa vào phương thức onRestart() của Activity.",
+      "D. Chuyển toàn bộ dữ liệu vào một Singleton class."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SavedStateHandle cho phép lưu trữ và khôi phục dữ liệu qua quá trình process death, trong khi ViewModel thông thường chỉ sống sót qua configuration changes (như xoay màn hình).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Swift, tại sao việc sử dụng '[weak self]' thường được khuyến nghị trong các escaping closure thực hiện network request?",
+    "options": [
+      "A. Để đảm bảo closure luôn chạy trên Background Thread.",
+      "B. Để tăng tốc độ giải mã dữ liệu JSON từ API.",
+      "C. Để tránh retain cycle (vòng lặp tham chiếu mạnh) gây rò rỉ bộ nhớ nếu object bị deinit trước khi request xong.",
+      "D. Để bắt buộc trình biên dịch phải tối ưu hóa mã nguồn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Escaping closure giữ một tham chiếu mạnh đến 'self'. Nếu 'self' (ví dụ ViewController) bị đóng, nhưng closure vẫn đang đợi network, retain cycle sẽ xảy ra trừ khi dùng weak hoặc unowned.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi tối ưu hóa hiệu suất cho RecyclerView trong Android với danh sách dữ liệu lớn và thay đổi liên tục, phương pháp nào hiệu quả nhất để cập nhật UI?",
+    "options": [
+      "A. Gọi notifyDataSetChanged() mỗi khi có một item thay đổi.",
+      "B. Sử dụng DiffUtil để tính toán sự khác biệt giữa hai danh sách trên background thread.",
+      "C. Khởi tạo lại Adapter mới cho mỗi lần cập nhật dữ liệu.",
+      "D. Sử dụng ScrollView thay cho RecyclerView để đơn giản hóa việc quản lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DiffUtil giúp tính toán các vị trí thay đổi (add, remove, update) một cách tối ưu, giúp RecyclerView chỉ vẽ lại những phần cần thiết thay vì toàn bộ danh sách.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong iOS, sự khác biệt chính giữa @StateObject và @ObservedObject trong SwiftUI là gì?",
+    "options": [
+      "A. @StateObject dùng cho struct, @ObservedObject dùng cho class.",
+      "B. @StateObject giữ nguyên trạng thái khi View bị render lại, trong khi @ObservedObject có thể bị khởi tạo lại.",
+      "C. @ObservedObject luôn nhanh hơn @StateObject về mặt hiệu năng.",
+      "D. @StateObject chỉ dùng được trong các View cấp cao nhất (Root View)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "@StateObject đảm bảo rằng instance của ObservableObject không bị hủy khi View cha cập nhật và render lại View hiện tại.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để thực hiện một tác vụ chạy ngầm định kỳ (ví dụ: đồng bộ dữ liệu mỗi 12 giờ) trên Android mà vẫn đảm bảo tối ưu pin và tuân thủ Doze Mode, API nào được khuyến nghị?",
+    "options": [
+      "A. IntentService",
+      "B. AlarmManager với setExactAndAllowWhileIdle",
+      "C. WorkManager",
+      "D. Thread thủ công trong một Service chạy liên tục"
+    ],
+    "correctAnswer": "C",
+    "explanation": "WorkManager là giải pháp chuẩn của Jetpack để quản lý các tác vụ background có điều kiện, tự động xử lý các hạn chế về pin và phiên bản hệ điều hành.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Kotlin Coroutines, Dispatcher nào là lựa chọn phù hợp nhất để thực hiện các thao tác ghi file hoặc truy vấn Database?",
+    "options": [
+      "A. Dispatchers.Main",
+      "B. Dispatchers.Default",
+      "C. Dispatchers.IO",
+      "D. Dispatchers.Unconfined"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dispatchers.IO được thiết kế để tối ưu hóa cho các tác vụ Blocking I/O bằng cách sử dụng một shared pool các thread bổ sung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng Auto Layout trong iOS, nếu một View có hai constraint mâu thuẫn nhau về độ ưu tiên, hệ thống sẽ xử lý như thế nào?",
+    "options": [
+      "A. Ứng dụng sẽ bị crash ngay lập tức.",
+      "B. Hệ thống sẽ bỏ qua cả hai constraint và đặt View ở tọa độ (0,0).",
+      "C. Hệ thống sẽ ưu tiên constraint có Priority (độ ưu tiên) cao hơn.",
+      "D. Hệ thống sẽ tự động tính trung bình cộng giá trị của hai constraint."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Auto Layout sử dụng thuộc tính Priority (từ 1 đến 1000) để quyết định constraint nào được áp dụng khi có xung đột.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiến trúc MVVM cho Mobile, trách nhiệm chính của tầng Repository là gì?",
+    "options": [
+      "A. Trực tiếp cập nhật dữ liệu lên các UI Component.",
+      "B. Quản lý logic điều hướng (navigation) giữa các màn hình.",
+      "C. Trừu tượng hóa nguồn dữ liệu (Local DB, API) và cung cấp dữ liệu sạch cho ViewModel.",
+      "D. Xử lý các sự kiện click của người dùng từ View."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Repository đóng vai trò là điểm truy cập dữ liệu duy nhất, giúp tách biệt logic nghiệp vụ khỏi nguồn dữ liệu cụ thể, hỗ trợ tốt cho việc viết Unit Test.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trên Android, khi sử dụng Fragment, tại sao nên thực hiện các thao tác khởi tạo View hoặc quan sát LiveData trong onViewCreated() thay vì onCreateView()?",
+    "options": [
+      "A. Vì onCreateView() chạy trên Background Thread.",
+      "B. Để đảm bảo rằng View hierarchy đã được tạo thành công trước khi truy cập.",
+      "C. Vì onViewCreated() chỉ được gọi một lần duy nhất trong vòng đời Fragment.",
+      "D. Để tránh việc Fragment bị leak bộ nhớ khi xoay màn hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "onViewCreated() được gọi ngay sau khi onCreateView() trả về một View không null, đảm bảo an toàn khi thực hiện setup UI hoặc binding.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Swift, từ khóa 'lazy' trước một biến property có ý nghĩa gì?",
+    "options": [
+      "A. Biến đó sẽ bị xóa khỏi bộ nhớ nếu không được sử dụng thường xuyên.",
+      "B. Biến đó chỉ được khởi tạo giá trị trong lần đầu tiên nó được truy cập.",
+      "C. Biến đó sẽ được khởi tạo trên một thread riêng biệt.",
+      "D. Biến đó không thể thay đổi giá trị sau khi đã khởi tạo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lazy properties giúp trì hoãn việc khởi tạo các đối tượng tốn kém tài nguyên cho đến khi thực sự cần thiết, giúp cải thiện tốc độ khởi chạy object.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để bảo mật dữ liệu nhạy cảm như Access Token trên thiết bị di động, lựa chọn nào sau đây là an toàn nhất?",
+    "options": [
+      "A. Lưu vào SharedPreferences hoặc UserDefaults dưới dạng String thuần.",
+      "B. Lưu vào một file text ẩn trong thư mục Cache của ứng dụng.",
+      "C. Sử dụng EncryptedSharedPreferences (Android) hoặc Keychain (iOS).",
+      "D. Mã hóa bằng Base64 rồi lưu vào Database cục bộ (SQLite/Realm)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Keychain và EncryptedSharedPreferences cung cấp lớp bảo mật phần cứng hoặc mã hóa hệ thống để bảo vệ dữ liệu khỏi việc truy cập trái phép.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Jetpack Compose, 'Recomposition' là gì?",
+    "options": [
+      "A. Quá trình biên dịch mã nguồn Kotlin sang Bytecode.",
+      "B. Việc gọi lại các hàm Composable để cập nhật giao diện khi dữ liệu thay đổi.",
+      "C. Một kỹ thuật để nén kích thước file APK.",
+      "D. Quá trình chuyển đổi từ XML layout sang Compose code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Recomposition là cơ chế cốt lõi của Compose, tự động cập nhật cây UI khi các trạng thái (State) mà Composable đó phụ thuộc vào bị thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi ứng dụng iOS nhận được thông báo 'Low Memory Warning', lập trình viên nên thực hiện hành động nào để tránh bị hệ thống kill app?",
+    "options": [
+      "A. Giải phóng các tài nguyên lớn đang nằm trong bộ nhớ đệm (cache) không cần thiết.",
+      "B. Ngay lập tức lưu toàn bộ dữ liệu vào Disk và tắt ứng dụng.",
+      "C. Tăng kích thước của Heap size trong file Info.plist.",
+      "D. Bật chế độ Background Fetch để duy trì hoạt động."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi nhận cảnh báo bộ nhớ, app cần giải phóng các đối tượng như ảnh, cache dữ liệu để hạ thấp mức chiếm dụng RAM, giúp hệ thống không phải cưỡng chế đóng ứng dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Kotlin, sự khác biệt chính giữa 'sealed class' và 'enum class' là gì?",
+    "options": [
+      "A. Enum có thể có nhiều instance của cùng một kiểu, sealed class thì không.",
+      "B. Sealed class cho phép các subclass chứa các trạng thái (state) khác nhau, enum thì các hằng số là duy nhất.",
+      "C. Sealed class chỉ dùng được trong nội bộ một file, enum thì không.",
+      "D. Không có sự khác biệt, chúng hoàn toàn có thể thay thế cho nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sealed class mạnh mẽ hơn enum vì mỗi subclass có thể là một class với các thuộc tính và dữ liệu riêng biệt, rất hữu ích cho việc quản lý UI State.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'SSL Pinning' được sử dụng trong Mobile App nhằm mục đích chính là gì?",
+    "options": [
+      "A. Tăng tốc độ tải dữ liệu từ Server.",
+      "B. Giảm dung lượng gói tin truyền tải qua mạng.",
+      "C. Ngăn chặn các cuộc tấn công Man-in-the-middle (MITM) bằng cách kiểm tra chứng chỉ SSL cụ thể.",
+      "D. Cho phép ứng dụng hoạt động khi không có kết nối Internet."
+    ],
+    "correctAnswer": "C",
+    "explanation": "SSL Pinning đảm bảo app chỉ giao tiếp với server có chứng chỉ (certificate) hoặc public key đã được định nghĩa trước, tránh việc tin tặc giả mạo server.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Android, tác dụng của thuộc tính 'android:launchMode=\"singleTop\"' cho một Activity là gì?",
+    "options": [
+      "A. Luôn tạo một instance mới của Activity mỗi khi được gọi.",
+      "B. Nếu Activity đã nằm ở đỉnh của stack, nó sẽ được tái sử dụng thay vì tạo mới.",
+      "C. Activity sẽ được chạy trong một Task hoàn toàn mới.",
+      "D. Activity sẽ tự động đóng lại sau khi người dùng chuyển sang app khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "singleTop ngăn việc tạo chồng chất các instance giống hệt nhau lên đỉnh stack nếu instance đó đã đang hiển thị.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao không nên thực hiện các tác vụ nặng (như xử lý ảnh lớn) trực tiếp trên Main Thread?",
+    "options": [
+      "A. Vì hệ điều hành sẽ tự động chuyển nó sang background thread.",
+      "B. Vì nó sẽ gây ra hiện tượng giật lag giao diện (Jank) hoặc lỗi Application Not Responding (ANR).",
+      "C. Vì Main Thread không có quyền truy cập vào bộ nhớ RAM.",
+      "D. Vì các biến trong Main Thread luôn là immutable."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Main thread chịu trách nhiệm vẽ UI và xử lý tương tác người dùng (60-120 fps). Nếu bị block quá lâu, app sẽ không phản hồi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong iOS, 'Protocol-Oriented Programming' (POP) khuyến khích điều gì thay vì kế thừa lớp (Class Inheritance)?",
+    "options": [
+      "A. Sử dụng Struct và Protocol để tăng tính linh hoạt và giảm sự phụ thuộc chặt chẽ.",
+      "B. Chỉ sử dụng Class cho mọi đối tượng trong ứng dụng.",
+      "C. Sử dụng Global variables để chia sẻ dữ liệu giữa các module.",
+      "D. Tránh sử dụng interface để mã nguồn ngắn gọn hơn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "POP giúp code dễ tái sử dụng, dễ test và tránh được các vấn đề của đa kế thừa bằng cách sử dụng protocols và protocol extensions.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng thư viện nạp ảnh như Glide (Android) hoặc Kingfisher (iOS), tại sao chúng ta nên ưu tiên 'Downsampling'?",
+    "options": [
+      "A. Để ảnh hiển thị sắc nét hơn độ phân giải gốc.",
+      "B. Để giảm mức chiếm dụng bộ nhớ RAM bằng cách chỉ load ảnh với kích thước bằng hoặc gần bằng View hiển thị.",
+      "C. Để thay đổi màu sắc của ảnh phù hợp với theme của app.",
+      "D. Để tự động upload ảnh lên cloud storage."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Load một ảnh 4K vào một ImageView nhỏ sẽ gây lãng phí RAM cực lớn và dễ dẫn đến OutOfMemoryError. Downsampling giải quyết vấn đề này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong phát triển ứng dụng Android, công cụ R8 (thay thế Proguard) có vai trò chính là gì khi build bản Release?",
+    "options": [
+      "A. Tự động dịch code Java sang Kotlin.",
+      "B. Thu nhỏ (shrinking), tối ưu hóa và làm xáo trộn (obfuscation) code để giảm kích thước và tăng tính bảo mật.",
+      "C. Kiểm tra lỗi chính tả trong các file XML.",
+      "D. Tự động tạo Unit Test cho các hàm logic."
+    ],
+    "correctAnswer": "B",
+    "explanation": "R8 giúp loại bỏ code thừa, tối ưu bytecode và làm khó việc reverse engineering bằng cách đổi tên các class/method thành những ký tự vô nghĩa.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trên iOS, 'Grand Central Dispatch' (GCD) sử dụng 'Concurrent Queue' để làm gì?",
+    "options": [
+      "A. Để thực hiện các công việc theo thứ tự tuần tự, việc này xong mới đến việc kia.",
+      "B. Để thực thi nhiều tác vụ đồng thời, tận dụng tối đa các nhân CPU có sẵn.",
+      "C. Để đảm bảo dữ liệu luôn được ghi vào Database một cách an toàn.",
+      "D. Để quản lý các thông báo đẩy (Push Notifications) từ server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Concurrent Queue cho phép nhiều task bắt đầu cùng lúc và chạy song song tùy thuộc vào tài nguyên hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng native cần lấy vị trí người dùng liên tục ngay cả khi app đang ở trong background. Điều gì là quan trọng nhất cần lưu ý?",
+    "options": [
+      "A. Luôn yêu cầu quyền 'Always Allow' và giải thích rõ lý do cho người dùng để tránh bị từ chối hoặc bị gỡ app.",
+      "B. Sử dụng tần suất lấy vị trí cao nhất (1 giây/lần) để đảm bảo độ chính xác.",
+      "C. Tắt hoàn toàn GPS và chỉ sử dụng Wifi để tiết kiệm pin tuyệt đối.",
+      "D. Lưu vị trí vào bộ nhớ RAM thay vì Database để truy xuất nhanh."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Quyền truy cập vị trí background rất nhạy cảm. Cả Android và iOS đều có những chính sách nghiêm ngặt và yêu cầu sự minh bạch với người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Kotlin, sự khác biệt giữa 'map' và 'flatMap' khi xử lý một danh sách các Collection là gì?",
+    "options": [
+      "A. 'map' trả về một danh sách các danh sách, còn 'flatMap' biến đổi và trải phẳng chúng thành một danh sách duy nhất.",
+      "B. 'flatMap' luôn chạy nhanh hơn 'map'.",
+      "C. 'map' chỉ dùng cho số, 'flatMap' chỉ dùng cho chuỗi.",
+      "D. 'map' làm thay đổi danh sách gốc, 'flatMap' tạo ra danh sách mới."
+    ],
+    "correctAnswer": "A",
+    "explanation": "flatMap kết hợp thao tác map và flatten, giúp chuyển đổi cấu trúc lồng nhau thành một cấu trúc phẳng đơn giản hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi debug một lỗi rò rỉ bộ nhớ (Memory Leak) trên iOS, công cụ nào trong Xcode là hữu ích nhất?",
+    "options": [
+      "A. Interface Builder",
+      "B. Instruments (với template Leaks hoặc Allocations)",
+      "C. Asset Catalog",
+      "D. XCTest Framework"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Instruments là bộ công cụ mạnh mẽ đi kèm Xcode, giúp theo dõi việc cấp phát bộ nhớ và phát hiện các retain cycle trong thời gian thực.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng Dependency Injection (DI) lại quan trọng trong phát triển Native Mobile quy mô lớn?",
+    "options": [
+      "A. Vì nó giúp ứng dụng chạy nhanh hơn trên các thiết bị yếu.",
+      "B. Vì nó giúp giảm sự phụ thuộc cứng (tight coupling), dễ dàng thay thế các module và hỗ trợ viết Unit Test hiệu quả.",
+      "C. Vì nó tự động viết code thay cho lập trình viên.",
+      "D. Vì nó là yêu cầu bắt buộc của Apple App Store và Google Play Store."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DI cho phép 'tiêm' các dependencies vào đối tượng, giúp code linh hoạt, dễ bảo trì và cho phép mock dữ liệu dễ dàng khi testing.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Swift, khi giải quyết vấn đề strong reference cycle giữa hai instance, việc chọn sử dụng 'unowned' thay vì 'weak' mang lại lợi ích gì về mặt hiệu năng và thiết kế?",
+    "options": [
+      "A. 'unowned' không yêu cầu runtime kiểm tra tính hợp lệ của reference mỗi khi truy cập, giảm overhead so với 'weak'.",
+      "B. 'unowned' tự động gán giá trị nil khi instance bị giải phóng, giúp tránh crash ứng dụng.",
+      "C. 'unowned' cho phép trình biên dịch thực hiện tối ưu hóa bộ nhớ tĩnh (static memory allocation) thay vì heap.",
+      "D. 'unowned' đảm bảo rằng reference luôn được giữ trong bộ nhớ cache L1 của CPU."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'unowned' không phải là một Optional và không sử dụng cơ chế zeroing của runtime như 'weak'. Do đó, nó có overhead thấp hơn nhưng yêu cầu lập trình viên đảm bảo object không bị giải phóng trước khi truy cập để tránh crash.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Android, tại sao việc sử dụng 'Dispatchers.Main.immediate' lại được khuyến khích hơn 'Dispatchers.Main' trong một số trường hợp cụ thể của Coroutines?",
+    "options": [
+      "A. Nó cho phép thực thi tác vụ trên một thread nền riêng biệt để không chặn UI thread.",
+      "B. Nếu code đang chạy trên UI thread rồi, nó sẽ thực thi ngay lập tức mà không cần re-dispatch qua Event Loop.",
+      "C. Nó đảm bảo rằng tác vụ sẽ được thực thi với độ ưu tiên cao nhất của hệ điều hành (Real-time priority).",
+      "D. Nó tự động hủy các coroutine khác đang chạy trên Main thread để giải phóng tài nguyên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dispatchers.Main.immediate kiểm tra xem thread hiện tại có phải là Main thread không. Nếu đúng, nó thực thi ngay lập tức thay vì đưa vào queue của Handler, giúp tránh hiện tượng trễ 1 frame hình không cần thiết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi tối ưu hóa hiệu năng render trong iOS, hiện tượng 'Off-screen rendering' thường xảy ra do nguyên nhân nào sau đây và tại sao nó gây tốn tài nguyên?",
+    "options": [
+      "A. Do sử dụng quá nhiều Auto Layout Constraints; gây tốn CPU để tính toán tọa độ.",
+      "B. Do sử dụng 'cornerRadius' kết hợp với 'masksToBounds'; GPU phải tạo một render buffer phụ để xử lý layer trước khi vẽ lên màn hình.",
+      "C. Do vẽ các hình ảnh có độ phân giải quá cao; gây tràn bộ nhớ VRAM của thiết bị.",
+      "D. Do sử dụng 'drawRect:'; ép buộc CPU phải tham gia vào quá trình vẽ thay vì chỉ dùng GPU."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Off-screen rendering yêu cầu GPU phải chuyển đổi context giữa frame buffer và off-screen buffer, gây tốn kém về băng thông bộ nhớ và giảm tốc độ render (FPS).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiến trúc Android hiện đại, tại sao 'SavedStateHandle' trong ViewModel lại quan trọng hơn việc chỉ dựa vào 'onSaveInstanceState' của Activity?",
+    "options": [
+      "A. Nó cho phép lưu trữ dữ liệu lớn như Bitmap mà không lo bị TransactionTooLargeException.",
+      "B. Nó giúp dữ liệu sống sót qua quá trình 'System-initiated process death' mà không cần boilerplate code trong UI layer.",
+      "C. Nó tự động đồng bộ dữ liệu với SharedPreferences hoặc Room database.",
+      "D. Nó cho phép chia sẻ dữ liệu giữa các Activity khác nhau trong cùng một Task."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SavedStateHandle tích hợp trực tiếp vào ViewModel, cho phép duy trì trạng thái khi hệ thống thu hồi tài nguyên (process death), giúp tách biệt logic xử lý trạng thái khỏi Activity/Fragment.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng iOS gặp tình trạng tăng bộ nhớ liên tục (memory growth) khi xử lý hàng ngàn ảnh trong một vòng lặp, dù không có retain cycle. Giải pháp tối ưu nhất là gì?",
+    "options": [
+      "A. Chuyển sang sử dụng mảng 'weak' để chứa các ảnh.",
+      "B. Sử dụng 'autoreleasepool' bao quanh thân vòng lặp để giải phóng bộ nhớ tạm thời ngay lập tức.",
+      "C. Gọi hàm 'URLCache.shared.removeAllCachedResponses()' sau mỗi lần xử lý.",
+      "D. Ép buộc hệ thống gọi 'Garbage Collection' bằng cách sử dụng private API."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Objective-C/Swift, các object tạm thời thường được đưa vào autorelease pool hiện tại. Trong vòng lặp lớn, pool này chỉ giải phóng khi vòng lặp kết thúc, dẫn đến peak memory cao. Sử dụng autoreleasepool cục bộ sẽ giải phóng chúng sớm hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Kotlin Coroutines, sự khác biệt cốt lõi giữa 'launch' và 'async' khi xảy ra ngoại lệ (exception) bên trong một 'CoroutineScope' là gì?",
+    "options": [
+      "A. 'launch' sẽ ném exception ngay lập tức, trong khi 'async' sẽ đợi đến khi gọi '.await()'.",
+      "B. 'launch' truyền exception lên cha và hủy scope, còn 'async' đóng gói exception vào Deferred và chỉ ném ra khi gọi '.await()'.",
+      "C. 'launch' không thể bắt được exception bằng try-catch, còn 'async' thì có thể.",
+      "D. Cả hai đều hành xử giống hệt nhau nếu được chạy trong một SupervisorJob."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc dù cả hai đều làm hỏng scope nếu không dùng SupervisorJob, nhưng cách chúng báo cáo lỗi khác nhau: launch coi đó là lỗi chưa xử lý (uncaught), còn async trả về lỗi qua kết quả Deferred.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống Offline-first cho Mobile, chiến lược nào là tối ưu nhất để xử lý xung đột dữ liệu (data conflict) khi đồng bộ hóa?",
+    "options": [
+      "A. Luôn ưu tiên dữ liệu từ Server (Server Wins) để đảm bảo tính nhất quán toàn hệ thống.",
+      "B. Sử dụng Vector Clocks hoặc Last-Write-Wins (LWW) dựa trên timestamp của thiết bị để xác định phiên bản mới nhất.",
+      "C. Thực hiện giải quyết xung đột dựa trên logic nghiệp vụ tại Client trước khi gửi lên Server.",
+      "D. Sử dụng cơ chế Semantic Conflict Resolution, kết hợp metadata về thay đổi để Server đưa ra quyết định trộn dữ liệu."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Semantic Conflict Resolution cho phép hiểu rõ ý định của người dùng (ví dụ: cộng thêm tiền thay vì ghi đè số dư), giảm thiểu mất mát dữ liệu so với các phương pháp ghi đè đơn thuần.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Android, kỹ thuật 'App Bundle' (Dynamic Delivery) giúp giảm kích thước ứng dụng chủ yếu bằng cách nào?",
+    "options": [
+      "A. Nén toàn bộ mã nguồn Java/Kotlin thành mã máy tối ưu hơn.",
+      "B. Loại bỏ hoàn toàn các tài nguyên hình ảnh không được sử dụng (Unused resources) trong quá trình compile.",
+      "C. Google Play tự động tạo và phân phối các APK tùy chỉnh chỉ chứa mã và tài nguyên phù hợp với cấu hình thiết bị của người dùng.",
+      "D. Chuyển đổi tất cả các thư viện native (.so) sang định dạng bytecode chạy được trên mọi kiến trúc CPU."
+    ],
+    "correctAnswer": "C",
+    "explanation": "App Bundle cho phép Google Play chia nhỏ ứng dụng thành các module (split APKs) dựa trên mật độ màn hình, ngôn ngữ và kiến trúc CPU, giúp người dùng chỉ tải xuống những gì cần thiết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'SharedFlow' lại thường được ưu tiên hơn 'StateFlow' khi xử lý các sự kiện dạng 'One-time events' (như hiển thị Snackbar) trong Android?",
+    "options": [
+      "A. StateFlow không hỗ trợ cấu hình replay buffer, dẫn đến mất sự kiện.",
+      "B. StateFlow có tính chất 'conflation', nếu giá trị mới giống giá trị cũ hoặc thay đổi quá nhanh, UI có thể không nhận được sự kiện.",
+      "C. SharedFlow tiết kiệm bộ nhớ hơn vì không lưu trữ giá trị cuối cùng.",
+      "D. StateFlow bắt buộc phải có giá trị khởi tạo, điều này không phù hợp với các sự kiện chưa xảy ra."
+    ],
+    "correctAnswer": "B",
+    "explanation": "StateFlow được thiết kế để giữ trạng thái (state). Nó sẽ bỏ qua các giá trị trùng lặp và chỉ quan tâm đến giá trị hiện tại nhất, trong khi SharedFlow có thể phát đi mọi tín hiệu sự kiện riêng biệt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong iOS, cơ chế 'Copy-on-Write' (COW) được áp dụng cho các kiểu dữ liệu nào và nó giải quyết vấn đề gì?",
+    "options": [
+      "A. Áp dụng cho Class; giúp chia sẻ instance giữa các thread mà không cần lock.",
+      "B. Áp dụng cho các Value Types lớn (như Array, Dictionary); tránh việc copy dữ liệu thật sự cho đến khi có sự thay đổi (mutation).",
+      "C. Áp dụng cho các biến 'static'; đảm bảo chúng chỉ được khởi tạo một lần duy nhất.",
+      "D. Áp dụng cho 'String' trong Objective-C; giúp tăng tốc độ nối chuỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "COW giúp tối ưu hiệu năng cho Value Types trong Swift. Khi gán một mảng cho một biến mới, dữ liệu thực tế không được copy ngay lập tức mà cả hai biến cùng trỏ về một vùng nhớ cho đến khi một trong hai thay đổi dữ liệu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai Certificate Pinning trên Mobile, rủi ro lớn nhất mà đội ngũ phát triển phải đối mặt là gì?",
+    "options": [
+      "A. Hacker có thể dễ dàng bypass bằng các công cụ như Frida nếu máy đã root/jailbreak.",
+      "B. Làm chậm tốc độ kết nối HTTPS do phải kiểm tra chứng chỉ thủ công.",
+      "C. Ứng dụng sẽ bị ngừng hoạt động hoàn toàn nếu chứng chỉ trên server hết hạn hoặc bị thay đổi mà ứng dụng chưa kịp cập nhật.",
+      "D. Không thể sử dụng các thư viện network phổ biến như OkHttp hoặc Alamofire."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Certificate Pinning cứng hóa (hardcode) thông tin chứng chỉ. Nếu server cập nhật certificate (do hết hạn hoặc sự cố bảo mật) mà client chưa update bản build mới, mọi request sẽ bị từ chối.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Android, 'WorkManager' đảm bảo một tác vụ sẽ được thực thi ngay cả khi ứng dụng bị đóng hoặc thiết bị khởi động lại bằng cách nào?",
+    "options": [
+      "A. Nó chạy một Foreground Service liên tục trong nền.",
+      "B. Nó sử dụng AlarmManager để đánh thức CPU vào đúng thời điểm đã định.",
+      "C. Nó lưu trữ yêu cầu công việc vào một cơ sở dữ liệu SQLite nội bộ và sử dụng JobScheduler hoặc GCMNetworkManager tùy theo phiên bản OS.",
+      "D. Nó đăng ký một BroadcastReceiver với độ ưu tiên cao nhất để lắng nghe sự kiện hệ thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "WorkManager là một wrapper thông minh, nó persistence hóa các task vào database để đảm bảo tính tin cậy và chọn scheduler phù hợp nhất với API level của thiết bị.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa '@StateObject' và '@ObservedObject' trong SwiftUI là gì khi View bị re-render?",
+    "options": [
+      "A. '@StateObject' sẽ bị khởi tạo lại, còn '@ObservedObject' thì không.",
+      "B. '@ObservedObject' giữ cho instance sống sót qua các lần View bị hủy, còn '@StateObject' thì không.",
+      "C. '@StateObject' đảm bảo instance chỉ được khởi tạo một lần duy nhất trong suốt vòng đời của View đó, còn '@ObservedObject' có thể bị khởi tạo lại khi View cha re-render.",
+      "D. Không có sự khác biệt về vòng đời, chỉ khác biệt về cách chúng thông báo thay đổi dữ liệu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "@StateObject sở hữu instance và giữ nó bền vững. @ObservedObject chỉ quan sát một instance được truyền từ bên ngoài vào, do đó nếu View chứa nó bị khởi tạo lại bởi View cha, instance đó có thể bị mất trạng thái.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Kotlin, từ khóa 'inline' khi dùng với Higher-order functions giúp tối ưu hóa điều gì?",
+    "options": [
+      "A. Giảm dung lượng file .apk sau khi biên dịch.",
+      "B. Loại bỏ việc tạo thêm các đối tượng Function (anonymous classes) và giảm overhead của việc gọi hàm tại runtime.",
+      "C. Cho phép hàm đó chạy trên một thread riêng biệt một cách tự động.",
+      "D. Giúp trình biên dịch tự động thực hiện các phép toán số học nhanh hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi một hàm là 'inline', trình biên dịch sẽ copy code của hàm đó và code của lambda truyền vào trực tiếp tại vị trí gọi hàm, giúp tránh việc cấp phát bộ nhớ cho các object trung gian.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng Android bị giật lag (jank) khi cuộn danh sách (RecyclerView). Qua Profiler thấy GC (Garbage Collection) chạy liên tục. Nguyên nhân khả dĩ nhất là gì?",
+    "options": [
+      "A. Layout của item quá phức tạp với nhiều tầng lồng nhau (deep hierarchy).",
+      "B. Việc cấp phát đối tượng mới (object allocation) xảy ra liên tục trong hàm 'onBindViewHolder'.",
+      "C. Sử dụng quá nhiều hình ảnh có kích thước lớn mà không dùng thư viện load ảnh.",
+      "D. Main thread đang thực hiện các tác vụ I/O nặng nề."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc tạo object trong các hàm được gọi liên tục như onBindViewHolder khi cuộn sẽ làm đầy bộ nhớ Heap nhanh chóng, kích hoạt GC liên tục (churning), gây chặn UI thread và làm rơi frame.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong iOS, tại sao 'Main Actor' lại được giới thiệu trong Swift Concurrency thay vì chỉ dùng 'DispatchQueue.main'?",
+    "options": [
+      "A. Vì 'Main Actor' nhanh hơn 'DispatchQueue.main' về tốc độ thực thi.",
+      "B. Để cung cấp cơ chế bảo vệ dữ liệu (data race safety) ở mức trình biên dịch, đảm bảo các thuộc tính UI chỉ được truy cập từ Main thread.",
+      "C. Để thay thế hoàn toàn các callback lồng nhau (callback hell) bằng async/await.",
+      "D. Để cho phép chạy các tác vụ UI trên nhiều thread khác nhau cùng một lúc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Main Actor là một global actor đảm bảo tính thread-safe cho UI. Trình biên dịch sẽ kiểm tra và báo lỗi nếu bạn cố tình thay đổi trạng thái của một MainActor-bound property từ một context không phù hợp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Dagger/Hilt trong Android, 'Scoped' dependency (ví dụ @ActivityScoped) có ảnh hưởng như thế nào đến bộ nhớ?",
+    "options": [
+      "A. Nó giúp giải phóng bộ nhớ ngay lập tức sau khi dependency được sử dụng xong.",
+      "B. Nó giữ instance của dependency trong bộ nhớ cho đến khi 'Scope' tương ứng (ví dụ Activity) bị hủy.",
+      "C. Nó lưu trữ dependency vào Disk cache để tiết kiệm RAM.",
+      "D. Nó không ảnh hưởng gì vì Dagger luôn tạo instance mới mỗi khi được yêu cầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scoping đảm bảo tính duy nhất của instance trong một vòng đời nhất định. Tuy nhiên, nếu lạm dụng scope rộng hoặc giữ các dependency lớn, nó sẽ làm tăng bộ nhớ sử dụng của ứng dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Vấn đề 'Priority Inversion' trong lập trình đa luồng trên iOS thường xảy ra khi nào?",
+    "options": [
+      "A. Khi hai thread có cùng độ ưu tiên tranh chấp một tài nguyên.",
+      "B. Khi một thread độ ưu tiên thấp giữ lock mà một thread độ ưu tiên cao đang cần, và một thread độ ưu tiên trung bình chiếm hết CPU.",
+      "C. Khi hệ thống tự động giảm độ ưu tiên của ứng dụng khi người dùng chuyển sang app khác.",
+      "D. Khi sử dụng quá nhiều 'OperationQueue' thay vì 'Grand Central Dispatch'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là hiện tượng thread ưu tiên cao bị chặn bởi thread ưu tiên thấp hơn, trong khi các thread trung bình khác lại ngăn cản thread thấp đó giải phóng lock. iOS giải quyết bằng cơ chế 'Priority Inheritance'.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Android, tại sao 'ThreadLocal' có thể gây ra rò rỉ bộ nhớ (memory leak) nếu không được xử lý cẩn thận?",
+    "options": [
+      "A. Vì nó luôn giữ một tham chiếu mạnh đến Activity hiện tại.",
+      "B. Vì các thread trong ThreadPool thường được tái sử dụng, dẫn đến giá trị trong ThreadLocal không được giải phóng trừ khi gọi '.remove()'.",
+      "C. Vì nó tự động copy dữ liệu sang tất cả các thread khác trong ứng dụng.",
+      "D. Vì nó ngăn cản Garbage Collector quét qua vùng nhớ Stack."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong môi trường sử dụng ThreadPool (như các Dispatcher), thread không chết đi. Nếu ta set giá trị vào ThreadLocal mà không remove, object đó sẽ tồn tại mãi mãi cùng với thread đó, gây leak.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kỹ thuật 'Method Swizzling' trong Objective-C/Swift thường được sử dụng cho mục đích gì, và rủi ro lớn nhất của nó là gì?",
+    "options": [
+      "A. Dùng để mã hóa code; rủi ro là làm app chạy chậm hơn.",
+      "B. Dùng để thay đổi implementation của hàm tại runtime (thường để logging/analytics); rủi ro là gây ra side-effect khó đoán và xung đột giữa các thư viện.",
+      "C. Dùng để gọi các hàm private của Apple; rủi ro là bị từ chối khi lên App Store.",
+      "D. Dùng để tối ưu hóa bộ nhớ; rủi ro là làm app bị crash trên các phiên bản OS cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Swizzling thay đổi bảng phương thức của class. Nếu nhiều thư viện cùng swizzle một method hoặc logic thay đổi không tương thích, nó sẽ gây ra các lỗi cực kỳ khó debug.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện Database Migration trong Room (Android), nếu bạn quên tăng version number nhưng lại thay đổi schema, điều gì sẽ xảy ra?",
+    "options": [
+      "A. Room sẽ tự động nhận diện thay đổi và cập nhật database.",
+      "B. Ứng dụng sẽ bị crash ngay khi khởi tạo Database do mismatch giữa schema thực tế và hash code lưu trong identity table.",
+      "C. Dữ liệu cũ sẽ bị xóa sạch và thay thế bằng database mới.",
+      "D. Room sẽ bỏ qua các cột mới và tiếp tục hoạt động với schema cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Room sử dụng một identity hash để kiểm tra tính toàn vẹn của schema. Bất kỳ thay đổi nào về cấu trúc mà không đi kèm với việc nâng version và cung cấp Migration sẽ dẫn đến IllegalStateException.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiến trúc Clean Architecture cho Mobile, thành phần 'Use Case' (hoặc Interactor) nên chứa loại logic nào?",
+    "options": [
+      "A. Logic định dạng dữ liệu để hiển thị lên UI (ví dụ: convert Date sang String).",
+      "B. Logic truy vấn dữ liệu từ Database hoặc Network API.",
+      "C. Business logic đặc thù của ứng dụng (Application-specific business rules), điều phối luồng dữ liệu giữa Entity và Repository.",
+      "D. Logic xử lý các sự kiện click và chuyển màn hình của người dùng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Use Case là trung tâm của logic nghiệp vụ. Nó không quan tâm dữ liệu đến từ đâu (Repository) hay hiển thị thế nào (Presenter/ViewModel), nó chỉ thực hiện các quy tắc nghiệp vụ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'enum' trong Java/Android trước đây thường bị cảnh báo là tốn tài nguyên hơn so với 'static final int'?",
+    "options": [
+      "A. Enum chiếm nhiều không gian lưu trữ trên Disk hơn.",
+      "B. Mỗi giá trị enum là một object instance, tiêu tốn bộ nhớ heap và yêu cầu thêm các tham chiếu tĩnh (static references).",
+      "C. Enum làm chậm quá trình biên dịch ứng dụng (compile time).",
+      "D. Enum không thể được tối ưu hóa bởi ProGuard hoặc R8."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc dù hiện nay R8 đã tối ưu hóa enum rất tốt (có thể chuyển về int), nhưng về bản chất, mỗi enum constant là một object, gây tốn RAM hơn so với kiểu nguyên thủy (primitive types).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong iOS, cơ chế 'Background Tasks' (BGTaskScheduler) có hạn chế lớn nhất nào so với các dịch vụ chạy nền trên Desktop?",
+    "options": [
+      "A. Nó không cho phép truy cập Network khi app đang ở background.",
+      "B. Hệ điều hành hoàn toàn quyết định thời điểm thực thi dựa trên thói quen người dùng và tình trạng pin, không đảm bảo chạy đúng giây.",
+      "C. Nó yêu cầu ứng dụng phải luôn được mở trong App Switcher.",
+      "D. Nó giới hạn dung lượng dữ liệu tối đa được tải về là 1MB."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Apple kiểm soát chặt chẽ tài nguyên để bảo vệ pin. BGTaskScheduler chỉ đưa ra 'gợi ý' cho OS, và OS sẽ tính toán thời điểm tối ưu nhất để chạy task, thường là khi cắm sạc hoặc nửa đêm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Jetpack Compose, 'Recomposition' có thể bị kích hoạt thừa thãi nếu ta truyền một đối tượng không có tính 'Stable'. Làm thế nào để giải quyết vấn đề này?",
+    "options": [
+      "A. Luôn sử dụng kiểu dữ liệu 'var' thay vì 'val' trong các data class.",
+      "B. Sử dụng annotation '@Stable' hoặc '@Immutable' cho class, hoặc sử dụng các collection không thể thay đổi (persistent collections).",
+      "C. Đặt toàn bộ hàm Composable vào trong một 'remember' block.",
+      "D. Ép buộc compiler sử dụng chế độ 'Strong Skipping' bằng cách cấu hình Gradle."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Compose cần biết chắc chắn một object có thay đổi hay không để quyết định bỏ qua việc vẽ lại. Các class từ thư viện ngoài hoặc có thuộc tính 'var' thường được coi là unstable trừ khi ta đánh dấu thủ công.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một ứng dụng iOS quy mô lớn sử dụng Swift Concurrency, tại sao việc lạm dụng 'Task { @MainActor in ... }' bên trong các hàm đồng bộ (synchronous) thường được coi là một anti-pattern về hiệu năng?",
+    "options": [
+      "A. Task tạo ra một đơn vị công việc mới (unstructured task) với chi phí lập lịch (scheduling overhead) và không kế thừa ngữ cảnh ưu tiên một cách tối ưu.",
+      "B. Task sẽ luôn buộc mã nguồn phải thực thi trên một luồng nền (background thread) trước khi quay lại Main Thread.",
+      "C. Việc sử dụng Task khiến trình biên dịch không thể kiểm tra lỗi race condition tại thời điểm compile.",
+      "D. Task trong Swift không hỗ trợ cơ chế tự động giải phóng bộ nhớ cho các biến local."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Việc tạo unstructured task thông qua 'Task' tạo ra overhead về cấp phát bộ nhớ và lập lịch. Thay vào đó, nên sử dụng các hàm async được đánh dấu @MainActor để trình biên dịch tối ưu hóa việc chuyển đổi ngữ cảnh (context switching) thông qua static dispatch.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống cache cho một ứng dụng Android xử lý lượng lớn hình ảnh độ phân giải cao, chiến lược nào là tối ưu nhất để tránh OutOfMemory (OOM) mà vẫn đảm bảo trải nghiệm mượt mà?",
+    "options": [
+      "A. Sử dụng WeakReference cho toàn bộ bitmap trong bộ nhớ để Garbage Collector có thể dọn dẹp bất cứ lúc nào.",
+      "B. Sử dụng LruCache dựa trên kích thước byte của Bitmap và kết hợp với thuộc tính inBitmap của BitmapFactory để tái sử dụng bộ nhớ đệm.",
+      "C. Lưu trữ toàn bộ hình ảnh dưới dạng Base64 trong SharedPreferences để truy cập nhanh.",
+      "D. Tăng thuộc tính largeHeap trong Manifest lên true và bỏ qua việc quản lý bộ nhớ thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "LruCache giúp giới hạn dung lượng bộ nhớ sử dụng dựa trên thuật toán Least Recently Used. Kết hợp với 'inBitmap' cho phép tái sử dụng vùng nhớ của các bitmap cũ cho bitmap mới, giảm thiểu việc cấp phát/giải phóng liên tục gây lag do GC.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Kotlin Coroutines, sự khác biệt cốt lõi giữa 'Dispatchers.Main' và 'Dispatchers.Main.immediate' là gì và khi nào nên dùng 'immediate'?",
+    "options": [
+      "A. 'immediate' sẽ thực thi ngay lập tức nếu đang ở Main Thread mà không cần đưa vào hàng đợi của Handler, giúp giảm độ trễ khung hình.",
+      "B. 'immediate' đảm bảo rằng coroutine sẽ chạy trên một luồng riêng biệt để không chặn UI.",
+      "C. 'immediate' chỉ có tác dụng khi ứng dụng đang chạy ở chế độ Debug.",
+      "D. Không có sự khác biệt về hiệu năng, 'immediate' chỉ là một bí danh (alias) cho Dispatchers.Main."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Dispatchers.Main thông thường sẽ đẩy công việc vào hàng đợi (queue) của Main Looper. 'immediate' kiểm tra nếu đã ở Main Thread thì thực thi ngay, tránh được một chu kỳ lập lịch không cần thiết, cực kỳ quan trọng trong các hiệu ứng animation hoặc cập nhật UI nhanh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng iOS gặp lỗi crash 'EXC_BAD_ACCESS' ngẫu nhiên khi truy cập vào một thuộc tính của đối tượng Singleton. Nguyên nhân kỹ thuật sâu xa nhất thường là gì trong ngữ cảnh đa luồng?",
+    "options": [
+      "A. Do đối tượng Singleton bị giải phóng bởi ARC quá sớm.",
+      "B. Do hiện tượng 'Race Condition' khi một luồng đang ghi vào thuộc tính trong khi luồng khác đang đọc, dẫn đến truy cập vào vùng nhớ không hợp lệ.",
+      "C. Do Singleton chiếm quá nhiều bộ nhớ khiến hệ thống cưỡng chế đóng ứng dụng.",
+      "D. Do việc sử dụng 'lazy' initialization không an toàn trong môi trường đa luồng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "EXC_BAD_ACCESS thường xảy ra khi mã nguồn cố gắng truy cập vào một vùng nhớ đã bị giải phóng hoặc đang bị thay đổi trạng thái không an toàn. Trong đa luồng, việc đọc/ghi đồng thời vào một biến mà không có cơ chế đồng bộ (như Lock hoặc Actor) là nguyên nhân phổ biến nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai Certificate Pinning trên Mobile, rủi ro lớn nhất về mặt vận hành (operation) là gì và giải pháp giảm thiểu rủi ro đó là gì?",
+    "options": [
+      "A. Rủi ro bị tấn công Man-in-the-Middle; giải pháp là mã hóa toàn bộ payload.",
+      "B. Rủi ro ứng dụng bị ngừng hoạt động khi chứng chỉ server hết hạn; giải pháp là triển khai cơ chế 'Backup Pins' hoặc cập nhật cấu hình từ xa (Remote Config).",
+      "C. Rủi ro làm chậm tốc độ kết nối mạng; giải pháp là sử dụng giao thức HTTP/3.",
+      "D. Rủi ro tốn dung lượng bộ nhớ; giải pháp là chỉ pin các domain chính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Certificate Pinning cứng (hardcoded) sẽ khiến app không thể kết nối nếu server thay đổi certificate. Chuyên gia luôn phải chuẩn bị các mã pin dự phòng (backup pins) hoặc cơ chế cập nhật pin động qua kênh an toàn để tránh việc phải đẩy bản cập nhật app khẩn cấp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiến trúc Modularization, làm thế nào để giải quyết vấn đề phụ thuộc vòng (Circular Dependency) giữa hai module tính năng cần điều hướng (navigate) qua lại lẫn nhau?",
+    "options": [
+      "A. Gộp hai module đó lại thành một module duy nhất.",
+      "B. Sử dụng một 'Router Interface' hoặc 'Coordinator' được định nghĩa ở một module trung gian cấp thấp hơn (Core/Library) mà cả hai module đều phụ thuộc vào.",
+      "C. Sử dụng Reflection để khởi tạo class của module kia tại thời điểm thực thi.",
+      "D. Sử dụng Event Bus để phát tin nhắn điều hướng mà không cần biết đích đến."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dependency Inversion là nguyên tắc cốt lõi. Bằng cách định nghĩa Interface điều hướng ở một module dùng chung (Base/Core), các module tính năng chỉ phụ thuộc vào Interface đó thay vì phụ thuộc trực tiếp vào nhau, giúp phá vỡ vòng lặp phụ thuộc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Android ViewModel' để lưu trữ các đối tượng lớn như Bitmap hoặc Context của Activity được coi là một lỗi nghiêm trọng về kiến trúc?",
+    "options": [
+      "A. Vì ViewModel có vòng đời dài hơn Activity, việc giữ Context sẽ gây ra rò rỉ bộ nhớ (Memory Leak) nghiêm trọng khi Activity bị destroy.",
+      "B. Vì ViewModel không hỗ trợ lưu trữ các kiểu dữ liệu phức tạp.",
+      "C. Vì ViewModel sẽ bị xóa ngay khi người dùng xoay màn hình.",
+      "D. Vì nó làm tăng kích thước của file APK khi đóng gói."
+    ],
+    "correctAnswer": "A",
+    "explanation": "ViewModel được thiết kế để sống sót qua các thay đổi cấu hình (như xoay màn hình). Nếu ViewModel giữ tham chiếu đến Activity (trực tiếp hoặc gián tiếp qua Context/View), Activity đó sẽ không bao giờ được GC giải phóng, dẫn đến leak toàn bộ phân cấp View.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong iOS, cơ chế 'Background Tasks' (BGTaskScheduler) có đặc điểm nào dưới đây mà lập trình viên cần phải lưu ý khi thiết kế các tác vụ đồng bộ dữ liệu lớn?",
+    "options": [
+      "A. Hệ thống đảm bảo tác vụ sẽ được chạy chính xác tại thời điểm lập lịch.",
+      "B. Thời gian thực thi là vô hạn nếu thiết bị đang cắm sạc và có Wi-Fi.",
+      "C. Hệ thống sử dụng học máy để quyết định thời điểm chạy tác vụ dựa trên thói quen người dùng và tình trạng pin, không có gì đảm bảo về thời gian thực thi.",
+      "D. Tác vụ background sẽ bị hủy ngay lập tức nếu người dùng vuốt thoát ứng dụng từ App Switcher."
+    ],
+    "correctAnswer": "C",
+    "explanation": "iOS quản lý tài nguyên rất chặt chẽ. BGTaskScheduler chỉ đưa ra 'gợi ý'. Hệ thống sẽ tính toán ngân sách năng lượng (energy budget) và thói quen sử dụng để kích hoạt tác vụ, do đó không thể dùng cho các tính năng yêu cầu tính thời điểm chính xác tuyệt đối.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Jetpack Compose, hiện tượng 'Recomposition' quá mức (excessive recomposition) thường xảy ra do nguyên nhân nào và cách khắc phục tối ưu nhất là gì?",
+    "options": [
+      "A. Do sử dụng quá nhiều Column/Row; khắc phục bằng cách dùng LazyColumn.",
+      "B. Do truyền các đối tượng không ổn định (unstable objects) như List hoặc các class không có @Stable vào Composable; khắc phục bằng cách sử dụng Immutable collections hoặc wrapper class.",
+      "C. Do đặt quá nhiều logic tính toán trong hàm Composable; khắc phục bằng cách dùng remember.",
+      "D. Do không sử dụng Modifier đúng cách; khắc phục bằng cách khai báo Modifier ở ngoài hàm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Compose dựa vào tính ổn định của tham số để quyết định có bỏ qua (skip) việc vẽ lại hay không. Các kiểu dữ liệu như List (interface) mặc định được coi là unstable. Việc sử dụng @Stable hoặc các thư viện Immutable Collections giúp Compose nhận diện chính xác sự thay đổi dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Swift, 'Opaque Types' (từ khóa 'some') khác biệt như thế nào với 'Existential Types' (từ khóa 'any') về mặt hiệu năng và tính chất?",
+    "options": [
+      "A. 'some' giữ nguyên danh tính kiểu dữ liệu cụ thể ở compile-time (static dispatch), trong khi 'any' sử dụng dynamic dispatch thông qua witness tables, gây tốn kém hơn.",
+      "B. 'any' cho phép trình biên dịch tối ưu hóa tốt hơn 'some'.",
+      "C. 'some' chỉ dùng được cho class, còn 'any' dùng được cho cả struct.",
+      "D. Không có sự khác biệt về hiệu năng, chỉ là cách viết khác nhau cho Protocol."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Opaque types (some) hứa hẹn một kiểu cụ thể duy nhất nhưng ẩn giấu nó, cho phép static dispatch. Existential types (any) tạo ra một hộp (box) chứa bất kỳ kiểu nào thỏa mãn protocol, đòi hỏi cấp phát bộ nhớ động và dynamic dispatch, dẫn đến hiệu năng thấp hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng Android thường xuyên gặp lỗi ANR (Application Not Responding) khi thực hiện các truy vấn database phức tạp qua Room. Mặc dù đã dùng Dispatchers.IO, ANR vẫn xảy ra. Giả thuyết nào sau đây là hợp lý nhất?",
+    "options": [
+      "A. Dispatchers.IO không đủ luồng để xử lý.",
+      "B. Database bị khóa (lock) bởi một transaction quá dài, và UI thread cố gắng thực hiện một truy vấn đồng bộ (synchronous) hoặc chờ đợi một kết quả từ database này.",
+      "C. Room không hỗ trợ chạy trên background thread.",
+      "D. Do thiết bị có cấu hình phần cứng quá thấp không chạy nổi SQL."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ngay cả khi dùng background thread, nếu UI thread thực hiện một thao tác bị chặn (blocking call) chờ đợi database đang bị lock bởi một tiến trình khác (dù tiến trình đó ở background), UI thread vẫn sẽ bị treo dẫn đến ANR.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để tối ưu hóa thời gian khởi động ứng dụng (App Launch Time), kỹ thuật 'Pre-warming' trong iOS hoạt động như thế nào?",
+    "options": [
+      "A. Nó chạy hàm main() của ứng dụng ngay khi người dùng vừa mở máy.",
+      "B. Hệ thống có thể khởi chạy tiến trình ứng dụng ở chế độ nền trước khi người dùng thực sự chạm vào icon, thực hiện các bước setup không liên quan đến UI.",
+      "C. Nó tự động tải toàn bộ dữ liệu từ API về cache ngay khi cài đặt app.",
+      "D. Nó nén mã thực thi của ứng dụng để nạp vào RAM nhanh hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Từ iOS 15, hệ thống có thể 'pre-warm' ứng dụng bằng cách khởi tạo tiến trình để giảm độ trễ khi người dùng mở app. Lập trình viên cần cẩn thận không thực hiện các logic nặng về UI hoặc âm thanh trong giai đoạn này vì có thể gây lỗi logic.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Kotlin, khi sử dụng 'SharedFlow' với 'replay = 0', điều gì xảy ra với một subscriber mới đăng ký sau khi một giá trị đã được emit?",
+    "options": [
+      "A. Subscriber đó sẽ nhận được giá trị gần nhất đã emit.",
+      "B. Subscriber đó sẽ không nhận được bất kỳ giá trị nào đã emit trước đó và phải đợi giá trị tiếp theo.",
+      "C. Subscriber đó sẽ bị crash nếu không có giá trị nào trong buffer.",
+      "D. Flow sẽ tự động emit lại toàn bộ lịch sử giá trị cho subscriber mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SharedFlow với replay = 0 hoạt động như một sự kiện 'hot stream' thuần túy. Nó không lưu trữ trạng thái. Nếu muốn subscriber mới nhận được giá trị cuối cùng, phải dùng StateFlow hoặc SharedFlow với replay >= 1.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai tính năng thanh toán (In-App Purchase) yêu cầu bảo mật cao, tại sao việc xác thực biên lai (receipt validation) nên được thực hiện ở Server-side thay vì Client-side?",
+    "options": [
+      "A. Vì Client-side không có đủ bộ nhớ để xử lý các thuật toán mã hóa.",
+      "B. Để ngăn chặn các cuộc tấn công 'Man-in-the-Middle' và 'Jailbreak/Root' bypass cục bộ, đồng thời đảm bảo tính duy nhất của giao dịch qua database của doanh nghiệp.",
+      "C. Vì Apple và Google bắt buộc 100% phải xác thực qua Server.",
+      "D. Để giảm tải xử lý cho CPU của điện thoại người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xác thực tại thiết bị dễ bị đánh lừa bởi các công cụ hack trên máy đã root/jailbreak. Server-to-server validation trực tiếp với Apple/Google là cách duy nhất để đảm bảo biên lai là thật và chưa từng được sử dụng trước đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Android, tại sao việc sử dụng 'WorkManager' lại được khuyến khích hơn 'JobScheduler' hoặc 'AlarmManager' cho các tác vụ đồng bộ dữ liệu định kỳ?",
+    "options": [
+      "A. Vì WorkManager chạy nhanh hơn các giải pháp khác.",
+      "B. Vì WorkManager tự động lựa chọn giải pháp tốt nhất (JobScheduler, AlarmManager, hoặc GCM) tùy theo phiên bản OS và đảm bảo tác vụ được thực thi ngay cả khi app bị restart hoặc máy khởi động lại.",
+      "C. Vì WorkManager không yêu cầu bất kỳ quyền (permission) nào từ người dùng.",
+      "D. Vì WorkManager cho phép chạy tác vụ mỗi 1 giây một lần để đảm bảo dữ liệu luôn mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "WorkManager là một thư viện trừu tượng hóa (abstraction) mạnh mẽ, xử lý tính tương thích ngược và đảm bảo tính bền bỉ (persistence) của tác vụ, giúp lập trình viên không phải lo lắng về các giới hạn khác nhau của từng phiên bản Android.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng iOS sử dụng Core Data gặp hiện tượng lag UI khi lưu một lượng lớn dữ liệu (10,000+ records). Giải pháp nào sau đây xử lý triệt để vấn đề này?",
+    "options": [
+      "A. Thực hiện lưu dữ liệu trên Main Managed Object Context và gọi hàm save() nhiều lần.",
+      "B. Sử dụng cơ chế 'Parent-Child Context' hoặc 'PerformBackgroundTask' để thực hiện việc lưu trên một background thread riêng biệt, tránh chặn Main Thread.",
+      "C. Chuyển sang sử dụng UserDefaults để lưu trữ dữ liệu thay cho Core Data.",
+      "D. Tăng ưu tiên (priority) của luồng chính lên mức tối đa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Core Data không thread-safe. Việc thực hiện các thao tác nặng trên Main Context sẽ chặn Main Thread. Sử dụng một background context (private queue) cho phép xử lý dữ liệu song song và chỉ merge kết quả về Main Context khi cần hiển thị UI.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Swift, sự khác biệt về mặt quản lý bộ nhớ giữa 'unowned' và 'weak' là gì, và rủi ro lớn nhất khi dùng 'unowned' là gì?",
+    "options": [
+      "A. 'weak' luôn là kiểu Optional và trở thành nil khi đối tượng bị giải phóng; 'unowned' giả định đối tượng luôn tồn tại, rủi ro là gây crash (runtime error) nếu đối tượng bị giải phóng.",
+      "B. 'unowned' tốn nhiều bộ nhớ hơn 'weak'.",
+      "C. 'weak' chỉ dùng cho class, 'unowned' dùng được cho cả struct.",
+      "D. Không có sự khác biệt, cả hai đều dùng để phá vỡ retain cycle."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'unowned' tương tự như 'weak' nhưng không phải là optional. Nó được dùng khi vòng đời của đối tượng tham chiếu bằng hoặc dài hơn đối tượng hiện tại. Nếu truy cập vào một tham chiếu 'unowned' đã bị giải phóng, ứng dụng sẽ crash ngay lập tức (dangling pointer).",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phân tích một file Heap Dump của ứng dụng Android để tìm kiếm Memory Leak, dấu hiệu nào sau đây cho thấy một Activity đang bị leak?",
+    "options": [
+      "A. Có nhiều instance của Activity đó tồn tại trong Heap mặc dù người dùng đã thoát khỏi màn hình đó.",
+      "B. Activity đó chiếm quá 10MB bộ nhớ RAM.",
+      "C. Activity đó có nhiều biến local kiểu String.",
+      "D. Activity đó đang thực hiện một tác vụ mạng ở background."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một Activity bình thường sau khi kết thúc (finish) sẽ được GC thu hồi. Nếu Heap Dump cho thấy nhiều instance của cùng một Activity, chắc chắn có một tham chiếu tĩnh (static reference) hoặc một tiến trình chạy ngầm (long-running task) đang giữ chặt nó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Binary Frameworks' (XCFramework) lại quan trọng đối với các dự án iOS lớn có nhiều module thay vì phân phối mã nguồn trực tiếp?",
+    "options": [
+      "A. Để che giấu mã nguồn khỏi các lập trình viên trong cùng công ty.",
+      "B. Để giảm đáng kể thời gian biên dịch (Build Time) vì mã nguồn đã được biên dịch sẵn thành mã máy cho các kiến trúc khác nhau (Simulator/Device).",
+      "C. Để ứng dụng chạy nhanh hơn trên thiết bị của người dùng cuối.",
+      "D. Để tránh việc phải viết unit test cho các module đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong các dự án khổng lồ, việc biên dịch lại hàng triệu dòng code mỗi lần build là không khả thi. XCFramework cho phép đóng gói mã đã biên dịch sẵn, giúp trình biên dịch chỉ cần thực hiện bước Linking, tiết kiệm thời gian phát triển.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiến trúc MVI (Model-View-Intent), lợi ích lớn nhất của việc sử dụng 'Single Source of Truth' và 'Immutable State' là gì?",
+    "options": [
+      "A. Giúp ứng dụng chạy nhanh hơn do không phải cập nhật UI thường xuyên.",
+      "B. Đảm bảo tính nhất quán của dữ liệu, dễ dàng debug thông qua việc tái hiện (reproduce) các trạng thái UI dựa trên lịch sử các Intent.",
+      "C. Giảm số lượng code cần viết so với MVVM.",
+      "D. Tự động hóa việc tạo unit test cho toàn bộ ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với trạng thái bất biến (Immutable State), mỗi thay đổi UI là kết quả của một trạng thái mới hoàn toàn được sinh ra từ trạng thái cũ và một Intent. Điều này giúp loại bỏ các lỗi trạng thái không nhất quán (inconsistent state) và hỗ trợ tốt cho 'Time Travel Debugging'.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi ứng dụng Android rơi vào trạng thái 'Low Memory Killer' (LMK), thành phần nào sẽ bị hệ thống ưu tiên giữ lại lâu nhất?",
+    "options": [
+      "A. Các Activity đang nằm trong Backstack.",
+      "B. Các Service đang chạy ngầm (Background Services).",
+      "C. Ứng dụng đang hiển thị trên màn hình (Foreground App).",
+      "D. Các ứng dụng mạng xã hội có nhiều thông báo."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Android xếp hạng các tiến trình theo mức độ quan trọng. Foreground Process (đang tương tác với người dùng) có độ ưu tiên cao nhất (oom_adj thấp nhất) và là đối tượng cuối cùng bị LMK tiêu diệt khi hệ thống thiếu RAM.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong SwiftUI, việc sử dụng '@StateObject' thay vì '@ObservedObject' khi khởi tạo một ViewModel bên trong một View có ý nghĩa gì?",
+    "options": [
+      "A. Không có sự khác biệt, cả hai đều dùng để quan sát dữ liệu.",
+      "B. @StateObject đảm bảo đối tượng không bị khởi tạo lại khi View bị render lại (re-render), giữ vững vòng đời của ViewModel.",
+      "C. @StateObject cho phép chia sẻ dữ liệu giữa các ứng dụng khác nhau.",
+      "D. @StateObject chỉ hoạt động với các kiểu dữ liệu struct."
+    ],
+    "correctAnswer": "B",
+    "explanation": "@StateObject sở hữu (own) đối tượng và đảm bảo nó tồn tại xuyên suốt vòng đời của View ngay cả khi View đó bị tính toán lại. @ObservedObject chỉ nên dùng cho các đối tượng được truyền từ bên ngoài vào.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống Mobile App cần đồng bộ dữ liệu offline-first với Server. Chiến lược nào hiệu quả nhất để giải quyết xung đột (conflict resolution) dữ liệu khi nhiều thiết bị cùng sửa đổi một bản ghi?",
+    "options": [
+      "A. Thiết bị nào gửi dữ liệu lên sau cùng sẽ thắng (Last Write Wins).",
+      "B. Sử dụng Vector Clocks hoặc CRDTs (Conflict-free Replicated Data Types) để tự động hợp nhất các thay đổi mà không cần can thiệp thủ công.",
+      "C. Luôn yêu cầu người dùng chọn phiên bản đúng khi có xung đột.",
+      "D. Chặn không cho chỉnh sửa offline để tránh xung đột."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong các hệ thống phân tán và offline-first phức tạp, CRDTs hoặc Vector Clocks cung cấp cơ chế toán học để hợp nhất dữ liệu một cách nhất quán trên tất cả các node mà không phụ thuộc vào thứ tự nhận tin nhắn, giảm thiểu tối đa việc mất dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Custom Views' vẽ bằng Canvas (Android) hoặc Core Graphics (iOS) đôi khi lại tốt cho hiệu năng hơn là sử dụng các Nested Layouts phức tạp?",
+    "options": [
+      "A. Vì vẽ trực tiếp bỏ qua bước đo đạc (Measure) và sắp xếp (Layout) của hàng trăm View con, giảm độ sâu của View Hierarchy.",
+      "B. Vì mã nguồn vẽ trực tiếp luôn được chạy trên GPU.",
+      "C. Vì nó làm giảm kích thước file cài đặt ứng dụng.",
+      "D. Vì hệ thống không cần quản lý các sự kiện chạm (Touch Events) cho Custom View."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mỗi View trong phân cấp đều tốn chi phí đo đạc và sắp xếp. Một View Hierarchy quá sâu (flat layout vs nested) gây ra hiện tượng lag khi cuộn. Vẽ trực tiếp lên một mặt phẳng (flat surface) giúp tối ưu hóa quá trình render cực kỳ hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi tối ưu hóa mức tiêu thụ pin, việc gom nhóm các yêu cầu mạng (Network Batching) mang lại lợi ích gì lớn nhất cho thiết bị di động?",
+    "options": [
+      "A. Giảm lượng dữ liệu truyền tải qua mạng.",
+      "B. Giảm tần suất đánh thức (wake up) và giữ cho Modem Radio ở trạng thái hoạt động, cho phép nó quay về trạng thái nghỉ (Sleep mode) lâu hơn.",
+      "C. Tăng tốc độ phản hồi của Server.",
+      "D. Tránh việc bị nhà mạng chặn kết nối do gửi quá nhiều request."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Modem Radio là thành phần tiêu tốn rất nhiều năng lượng. Mỗi khi có request, nó phải mất thời gian để chuyển từ trạng thái nghỉ sang hoạt động và duy trì trạng thái đó một lúc sau khi xong. Batching giúp giảm số lần 'đánh thức' modem, kéo dài thời lượng pin đáng kể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Native Mobile Development",
+    "category": "SKILL"
+  }
+]

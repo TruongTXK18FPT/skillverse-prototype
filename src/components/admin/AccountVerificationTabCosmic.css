@@ -1131,3 +1131,210 @@
     justify-content: center;
   }
 }
+
+/* ==================== Mentor / Recruiter Verification - Neon Tech isolated refresh ==================== */
+.verification-cosmic {
+  --vnt-bg-1: #020817;
+  --vnt-bg-2: #031226;
+  --vnt-surface: rgba(7, 22, 44, 0.78);
+  --vnt-surface-soft: rgba(10, 29, 58, 0.62);
+  --vnt-border: rgba(56, 189, 248, 0.2);
+  --vnt-border-strong: rgba(34, 211, 238, 0.38);
+  --vnt-text: #e2f4ff;
+  --vnt-muted: #9ec8e8;
+  --vnt-cyan: #22d3ee;
+  --vnt-blue: #60a5fa;
+  --vnt-green: #34d399;
+  --vnt-amber: #f59e0b;
+  --vnt-red: #f87171;
+  color: var(--vnt-text);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.verification-cosmic .verification-header {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+  padding: 18px;
+  border: 1px solid var(--vnt-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(34, 211, 238, 0.2), transparent 48%),
+    radial-gradient(120% 140% at 100% 100%, rgba(59, 130, 246, 0.2), transparent 42%),
+    linear-gradient(145deg, var(--vnt-bg-2), var(--vnt-bg-1));
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.14), 0 18px 42px rgba(2, 8, 23, 0.4);
+}
+
+.verification-cosmic .verification-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.08), transparent);
+  transform: translateX(-100%);
+  animation: vntScan 4.5s linear infinite;
+}
+
+@keyframes vntScan {
+  to { transform: translateX(100%); }
+}
+
+.verification-cosmic .verification-header h2 {
+  color: #b7f3ff;
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.38);
+  font-size: 1.2rem;
+}
+
+.verification-cosmic .verification-header p,
+.verification-cosmic .verification-email,
+.verification-cosmic .verification-brief-info,
+.verification-cosmic .verification-date,
+.verification-cosmic .verification-pagination-info,
+.verification-cosmic .verification-detail-header p,
+.verification-cosmic .verification-detail-item label,
+.verification-cosmic .verification-reject-info {
+  color: var(--vnt-muted);
+}
+
+.verification-cosmic .verification-header-icon,
+.verification-cosmic .verification-search-box svg,
+.verification-cosmic .verification-loading svg,
+.verification-cosmic .verification-detail-item svg,
+.verification-cosmic .verification-detail-section h5,
+.verification-cosmic .verification-document-title,
+.verification-cosmic .verification-link,
+.verification-cosmic .verification-detail-item a {
+  color: var(--vnt-cyan);
+}
+
+.verification-cosmic .verification-refresh-btn,
+.verification-cosmic .verification-filter-btn,
+.verification-cosmic .verification-status-select,
+.verification-cosmic .verification-pagination-btn,
+.verification-cosmic .verification-retry-btn,
+.verification-cosmic .verification-doc-btn {
+  border: 1px solid var(--vnt-border);
+  border-radius: 10px;
+  background: rgba(34, 211, 238, 0.08);
+  color: #b8f7ff;
+  box-shadow: none;
+}
+
+.verification-cosmic .verification-filter-btn.active,
+.verification-cosmic .verification-refresh-btn:hover:not(:disabled),
+.verification-cosmic .verification-pagination-btn:hover:not(:disabled) {
+  border-color: rgba(34, 211, 238, 0.6);
+  background: rgba(34, 211, 238, 0.18);
+  color: #dff9ff;
+}
+
+.verification-cosmic .verification-stat-card,
+.verification-cosmic .verification-table-container,
+.verification-cosmic .verification-pagination,
+.verification-cosmic .verification-modal,
+.verification-cosmic .verification-pdf-container {
+  border: 1px solid var(--vnt-border);
+  border-radius: 14px;
+  background:
+    radial-gradient(120% 120% at 0% 100%, rgba(34, 211, 238, 0.06), transparent 38%),
+    linear-gradient(160deg, var(--vnt-surface), var(--vnt-surface-soft));
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.verification-cosmic .verification-stat-card.mentor,
+.verification-cosmic .verification-stat-card.recruiter {
+  border-color: rgba(34, 211, 238, 0.26);
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.verification-cosmic .verification-stat-card.mentor::before,
+.verification-cosmic .verification-stat-card.recruiter::before {
+  background: radial-gradient(circle, var(--vnt-cyan) 0%, transparent 70%);
+}
+
+.verification-cosmic .verification-stat-card.mentor .verification-stat-icon,
+.verification-cosmic .verification-stat-card.recruiter .verification-stat-icon {
+  background: rgba(34, 211, 238, 0.18);
+  color: #99f6ff;
+  box-shadow: none;
+}
+
+.verification-cosmic .verification-stat-card.mentor .verification-stat-value,
+.verification-cosmic .verification-stat-card.recruiter .verification-stat-value,
+.verification-cosmic .verification-name,
+.verification-cosmic .verification-detail-header h4,
+.verification-cosmic .verification-detail-item span {
+  color: #e4f9ff;
+  text-shadow: none;
+}
+
+.verification-cosmic .verification-table thead tr {
+  background: rgba(34, 211, 238, 0.08);
+  border-bottom: 1px solid var(--vnt-border);
+}
+
+.verification-cosmic .verification-table th {
+  color: #c9ecff;
+}
+
+.verification-cosmic .verification-table td {
+  border-top: 1px solid rgba(56, 189, 248, 0.12);
+  color: var(--vnt-text);
+}
+
+.verification-cosmic .verification-table tbody tr:hover {
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.verification-cosmic .verification-search-box,
+.verification-cosmic .verification-detail-item,
+.verification-cosmic .verification-document,
+.verification-cosmic .verification-document-preview,
+.verification-cosmic .verification-admin-notes,
+.verification-cosmic .verification-form-group textarea,
+.verification-cosmic .verification-iframe,
+.verification-cosmic .verification-docx-frame,
+.verification-cosmic .verification-image {
+  border: 1px solid var(--vnt-border);
+  background: rgba(7, 22, 42, 0.85);
+}
+
+.verification-cosmic .verification-search-box:focus-within,
+.verification-cosmic .verification-form-group textarea:focus,
+.verification-cosmic .verification-status-select:focus {
+  border-color: var(--vnt-border-strong);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
+}
+
+.verification-cosmic .verification-avatar,
+.verification-cosmic .verification-detail-avatar,
+.verification-cosmic .verification-detail-avatar.recruiter {
+  background: linear-gradient(135deg, var(--vnt-cyan), var(--vnt-blue));
+  border-radius: 12px;
+}
+
+.verification-cosmic .verification-role-badge.mentor,
+.verification-cosmic .verification-role-badge.recruiter,
+.verification-cosmic .verification-action-btn.view {
+  background: rgba(34, 211, 238, 0.14);
+  color: #99f6ff;
+  border-color: rgba(34, 211, 238, 0.32);
+}
+
+.verification-cosmic .verification-action-btn.approve,
+.verification-cosmic .verification-modal-btn.approve,
+.verification-cosmic .verification-status-badge.approved {
+  background: rgba(52, 211, 153, 0.16);
+  color: #bbf7d0;
+  border-color: rgba(52, 211, 153, 0.32);
+}
+
+.verification-cosmic .verification-action-btn.reject,
+.verification-cosmic .verification-modal-btn.reject,
+.verification-cosmic .verification-status-badge.rejected {
+  background: rgba(248, 113, 113, 0.16);
+  color: #fecaca;
+  border-color: rgba(248, 113, 113, 0.32);
+}

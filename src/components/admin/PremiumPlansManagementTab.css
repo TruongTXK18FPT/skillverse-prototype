@@ -778,3 +778,225 @@
     justify-content: center;
   }
 }
+
+/* ==================== Premium Plans - Neon Tech isolated refresh ==================== */
+.admin-premium-management-cosmic {
+  --ppm-tech-bg-1: #020817;
+  --ppm-tech-bg-2: #031226;
+  --ppm-tech-surface: rgba(7, 22, 44, 0.78);
+  --ppm-tech-surface-soft: rgba(10, 29, 58, 0.62);
+  --ppm-tech-border: rgba(56, 189, 248, 0.2);
+  --ppm-tech-border-strong: rgba(34, 211, 238, 0.38);
+  --ppm-tech-text: #e2f4ff;
+  --ppm-tech-muted: #9ec8e8;
+  --ppm-tech-cyan: #22d3ee;
+  --ppm-tech-blue: #60a5fa;
+  --ppm-tech-green: #34d399;
+  --ppm-tech-amber: #f59e0b;
+  --ppm-tech-red: #f87171;
+  color: var(--ppm-tech-text);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-premium-management-cosmic .admin-premium-header {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+  padding: 18px;
+  border: 1px solid var(--ppm-tech-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(34, 211, 238, 0.2), transparent 48%),
+    radial-gradient(120% 140% at 100% 100%, rgba(59, 130, 246, 0.2), transparent 42%),
+    linear-gradient(145deg, var(--ppm-tech-bg-2), var(--ppm-tech-bg-1));
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.14), 0 18px 42px rgba(2, 8, 23, 0.4);
+}
+
+.admin-premium-management-cosmic .admin-premium-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.08), transparent);
+  transform: translateX(-100%);
+  animation: ppmTechScan 4.5s linear infinite;
+}
+
+@keyframes ppmTechScan {
+  to { transform: translateX(100%); }
+}
+
+.admin-premium-management-cosmic .admin-premium-header h2 {
+  color: #b7f3ff;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.38);
+  font-size: 1.2rem;
+}
+
+.admin-premium-management-cosmic .admin-premium-header p,
+.admin-premium-management-cosmic .admin-plan-name .code,
+.admin-premium-management-cosmic .admin-duration,
+.admin-premium-management-cosmic .admin-subscribers,
+.admin-premium-management-cosmic .admin-detail-item .label,
+.admin-premium-management-cosmic .admin-empty-state p,
+.admin-premium-management-cosmic .admin-pagination-total {
+  color: var(--ppm-tech-muted);
+}
+
+.admin-premium-management-cosmic .admin-refresh-btn,
+.admin-premium-management-cosmic .admin-create-btn,
+.admin-premium-management-cosmic .admin-pagination-btn {
+  border: 1px solid var(--ppm-tech-border);
+  border-radius: 10px;
+  background: rgba(34, 211, 238, 0.08);
+  color: #b8f7ff;
+  box-shadow: none;
+}
+
+.admin-premium-management-cosmic .admin-create-btn {
+  border-color: rgba(52, 211, 153, 0.4);
+  background: rgba(52, 211, 153, 0.18);
+  color: #bbf7d0;
+}
+
+.admin-premium-management-cosmic .admin-stat-card,
+.admin-premium-management-cosmic .admin-plans-table,
+.admin-premium-management-cosmic .admin-pagination,
+.admin-premium-management-cosmic .admin-detail-modal {
+  border: 1px solid var(--ppm-tech-border);
+  border-radius: 14px;
+  background:
+    radial-gradient(120% 120% at 0% 100%, rgba(34, 211, 238, 0.06), transparent 38%),
+    linear-gradient(160deg, var(--ppm-tech-surface), var(--ppm-tech-surface-soft));
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.admin-premium-management-cosmic .admin-stat-card.total,
+.admin-premium-management-cosmic .admin-stat-card.subscribers {
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.admin-premium-management-cosmic .admin-stat-card.total::before,
+.admin-premium-management-cosmic .admin-stat-card.subscribers::before {
+  background: radial-gradient(circle, var(--ppm-tech-cyan) 0%, transparent 70%);
+}
+
+.admin-premium-management-cosmic .admin-stat-card.total svg,
+.admin-premium-management-cosmic .admin-stat-card.subscribers svg,
+.admin-premium-management-cosmic .admin-duration svg,
+.admin-premium-management-cosmic .admin-subscribers svg,
+.admin-premium-management-cosmic .admin-detail-item svg,
+.admin-premium-management-cosmic .admin-feature-item svg {
+  color: var(--ppm-tech-cyan);
+}
+
+.admin-premium-management-cosmic .admin-stat-card.total .admin-stat-number,
+.admin-premium-management-cosmic .admin-stat-card.subscribers .admin-stat-number,
+.admin-premium-management-cosmic .admin-plan-name .name {
+  color: #99f6ff;
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.32);
+}
+
+.admin-premium-management-cosmic .admin-plans-table th {
+  background: rgba(34, 211, 238, 0.08);
+  border-bottom: 1px solid var(--ppm-tech-border);
+  color: #c9ecff;
+}
+
+.admin-premium-management-cosmic .admin-plans-table td {
+  border-top: 1px solid rgba(56, 189, 248, 0.12);
+  color: var(--ppm-tech-text);
+}
+
+.admin-premium-management-cosmic .admin-plans-table tbody tr:hover {
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.admin-premium-management-cosmic .admin-plans-table tbody tr.free-tier {
+  background: linear-gradient(90deg, rgba(34, 211, 238, 0.08), transparent);
+}
+
+.admin-premium-management-cosmic .admin-plan-type-badge.premium_plus,
+.admin-premium-management-cosmic .admin-action-btn.toggle,
+.admin-premium-management-cosmic .admin-action-btn.edit,
+.admin-premium-management-cosmic .admin-action-btn.view {
+  background: rgba(34, 211, 238, 0.14);
+  color: #99f6ff;
+  border-color: rgba(34, 211, 238, 0.32);
+}
+
+.admin-premium-management-cosmic .admin-detail-item,
+.admin-premium-management-cosmic .admin-feature-item,
+.admin-premium-management-cosmic .admin-detail-description {
+  border: 1px solid var(--ppm-tech-border);
+  background: rgba(7, 22, 42, 0.85);
+}
+
+/* Premium overview layout: 3 columns, with total/active stacked in column 1 */
+.admin-premium-management-cosmic .admin-premium-stats-overview {
+  grid-template-columns: minmax(220px, 0.85fr) minmax(260px, 1fr) minmax(340px, 1.35fr);
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.admin-premium-management-cosmic .admin-premium-stat-column {
+  min-width: 0;
+  display: grid;
+}
+
+.admin-premium-management-cosmic .admin-premium-stat-column-stacked {
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.admin-premium-management-cosmic .admin-stat-card {
+  min-width: 0;
+  height: 100%;
+  padding: 1.15rem 1.25rem;
+}
+
+.admin-premium-management-cosmic .admin-stat-card > div {
+  min-width: 0;
+}
+
+.admin-premium-management-cosmic .admin-stat-number {
+  max-width: 100%;
+  font-size: clamp(1.45rem, 2.1vw, 2rem);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.admin-premium-management-cosmic .admin-stat-card.revenue .admin-stat-number {
+  font-size: clamp(1.25rem, 1.65vw, 1.85rem);
+}
+
+.admin-premium-management-cosmic .admin-stat-label {
+  margin-top: 0.25rem;
+  line-height: 1.25;
+}
+
+.admin-premium-management-cosmic .admin-stat-card:hover {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 1180px) {
+  .admin-premium-management-cosmic .admin-premium-stats-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-premium-management-cosmic .admin-premium-stat-column-stacked {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-premium-management-cosmic .admin-premium-stat-column-stacked {
+    grid-template-columns: 1fr;
+  }
+}

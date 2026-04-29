@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục tiêu chính của UX Research trong quá trình thiết kế sản phẩm là gì?",
+    "options": [
+      "A. Để tạo ra các giao diện có màu sắc bắt mắt và thu hút",
+      "B. Để hiểu rõ nhu cầu, hành vi và khó khăn của người dùng",
+      "C. Để thay thế hoàn toàn các quyết định của bộ phận kinh doanh",
+      "D. Để kiểm tra xem lập trình viên có làm đúng yêu cầu hay không"
+    ],
+    "correctAnswer": "B",
+    "explanation": "UX Research tập trung vào việc thu thập dữ liệu về người dùng để đưa ra các quyết định thiết kế dựa trên thực tế thay vì giả định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa nghiên cứu định tính (Qualitative) và định lượng (Quantitative) là gì?",
+    "options": [
+      "A. Định tính trả lời câu hỏi 'Tại sao', định lượng trả lời 'Bao nhiêu'",
+      "B. Định tính dùng số liệu, định lượng dùng phỏng vấn",
+      "C. Định tính luôn nhanh hơn nghiên cứu định lượng",
+      "D. Định lượng chỉ dành cho thiết kế đồ họa, định tính cho trải nghiệm"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nghiên cứu định tính giúp hiểu sâu về động lực và lý do, trong khi định lượng cung cấp dữ liệu thống kê để đo lường.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện phỏng vấn người dùng, loại câu hỏi nào nên được ưu tiên sử dụng?",
+    "options": [
+      "A. Câu hỏi Có/Không để tiết kiệm thời gian",
+      "B. Câu hỏi mang tính dẫn dắt để người dùng đồng ý với mình",
+      "C. Câu hỏi mở (Open-ended) để khuyến khích người dùng chia sẻ",
+      "D. Câu hỏi kỹ thuật về cấu trúc mã nguồn của ứng dụng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Câu hỏi mở giúp người dùng tự do chia sẻ quan điểm và trải nghiệm, cung cấp nhiều thông tin giá trị hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Affinity Mapping (Sơ đồ đồng cảm) thường được sử dụng trong giai đoạn nào của quá trình nghiên cứu?",
+    "options": [
+      "A. Trước khi bắt đầu lập kế hoạch nghiên cứu",
+      "B. Sau khi thu thập dữ liệu để phân loại và tìm ra các mẫu (patterns)",
+      "C. Chỉ dùng khi cần thuyết trình với khách hàng về màu sắc",
+      "D. Trong quá trình viết code cho sản phẩm"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Affinity Mapping là kỹ thuật tổng hợp dữ liệu, giúp nhóm các thông tin tương đồng từ nghiên cứu để tìm ra insight.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Giả thuyết nghiên cứu (Research Hypothesis) là gì?",
+    "options": [
+      "A. Một sự thật đã được chứng minh 100%",
+      "B. Một dự đoán có thể kiểm chứng được về hành vi người dùng",
+      "C. Một bản hướng dẫn sử dụng phần mềm",
+      "D. Danh sách các màu sắc sẽ dùng trong bản thiết kế"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giả thuyết là một tuyên bố dựa trên quan sát ban đầu mà nghiên cứu viên cần kiểm chứng thông qua các phương pháp UX Research.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phương pháp 'Diary Study' (Nghiên cứu qua nhật ký) phù hợp nhất khi nào?",
+    "options": [
+      "A. Khi muốn biết người dùng click vào nút nào nhiều nhất trong 5 phút",
+      "B. Khi muốn tìm hiểu hành vi người dùng thay đổi theo thời gian dài",
+      "C. Khi cần kết quả nghiên cứu ngay lập tức trong vòng 1 giờ",
+      "D. Khi muốn kiểm tra lỗi chính tả trên giao diện"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Diary Study cho phép ghi lại trải nghiệm của người dùng trong bối cảnh thực tế qua nhiều ngày hoặc nhiều tuần.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bảng khảo sát (Survey), câu hỏi 'Bạn có thấy ứng dụng này dễ dùng và đẹp không?' vi phạm nguyên tắc nào?",
+    "options": [
+      "A. Câu hỏi quá ngắn gọn",
+      "B. Câu hỏi kép (Double-barreled question)",
+      "C. Câu hỏi quá chuyên môn",
+      "D. Câu hỏi không liên quan đến thiết kế"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu hỏi kép hỏi về hai vấn đề khác nhau (dễ dùng và đẹp) trong cùng một câu, khiến người dùng khó trả lời chính xác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "User Persona (Chân dung người dùng) dựa trên dữ liệu nào là đáng tin cậy nhất?",
+    "options": [
+      "A. Sở thích cá nhân của người thiết kế",
+      "B. Ý kiến của Giám đốc điều hành công ty",
+      "C. Dữ liệu thực tế thu thập từ nghiên cứu người dùng",
+      "D. Hình ảnh đẹp tìm thấy trên mạng xã hội"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Persona phải được xây dựng từ dữ liệu nghiên cứu thực tế để đại diện chính xác cho các nhóm người dùng mục tiêu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích của việc sử dụng 'Screener' trong tuyển dụng người dùng tham gia nghiên cứu là gì?",
+    "options": [
+      "A. Để tặng quà cho tất cả những người đăng ký",
+      "B. Để lọc ra những người tham gia phù hợp với tiêu chí mục tiêu",
+      "C. Để quảng cáo sản phẩm mới cho người dùng",
+      "D. Để kiểm tra tốc độ đánh máy của người dùng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Screener là một bộ câu hỏi ngắn dùng để đảm bảo người tham gia nghiên cứu thuộc đúng đối tượng mục tiêu của sản phẩm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi quan sát người dùng thực hiện nhiệm vụ (Observation), nghiên cứu viên nên làm gì?",
+    "options": [
+      "A. Liên tục nhắc nhở người dùng nếu họ làm sai",
+      "B. Làm hộ người dùng để tiết kiệm thời gian",
+      "C. Giữ im lặng và ghi chép lại các hành vi thực tế",
+      "D. Giải thích cho người dùng về cấu trúc logic của ứng dụng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quan sát khách quan giúp nhận diện các vấn đề thực tế mà người dùng gặp phải mà không bị ảnh hưởng bởi sự can thiệp của nghiên cứu viên.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Empathy Map (Sơ đồ thấu cảm) bao gồm những thành phần chính nào?",
+    "options": [
+      "A. Màu sắc, Font chữ, Hình ảnh, Bố cục",
+      "B. Nói, Nghĩ, Làm, Cảm thấy (Says, Thinks, Does, Feels)",
+      "C. Thu nhập, Độ tuổi, Giới tính, Nghề nghiệp",
+      "D. Đăng nhập, Tìm kiếm, Thanh toán, Đăng xuất"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Empathy Map tập trung vào việc thấu hiểu thế giới nội tâm và hành vi bên ngoài của người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thế nào là một 'Actionable Insight' (Thông tin có thể hành động được)?",
+    "options": [
+      "A. Một câu nói chung chung như 'Người dùng thích cái đẹp'",
+      "B. Một phát hiện cụ thể dẫn đến một giải pháp hoặc cải tiến thiết kế",
+      "C. Một danh sách các lỗi lập trình (bugs)",
+      "D. Một biểu đồ hình tròn về giới tính người dùng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Insight có giá trị là thông tin giúp đội ngũ thiết kế biết chính xác cần phải thay đổi hoặc làm gì tiếp theo để cải thiện sản phẩm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Phương pháp 'Card Sorting' (Sắp xếp thẻ) thường dùng để nghiên cứu vấn đề gì?",
+    "options": [
+      "A. Chọn màu sắc cho logo",
+      "B. Kiểm tra tốc độ tải trang",
+      "C. Xây dựng cấu trúc thông tin (Information Architecture)",
+      "D. Tính toán chi phí dự án"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Card Sorting giúp hiểu cách người dùng phân loại thông tin, từ đó thiết kế menu và cấu trúc điều hướng hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một buổi Usability Testing, nếu người dùng gặp khó khăn, bạn nên làm gì đầu tiên?",
+    "options": [
+      "A. Chỉ cho họ nút cần bấm",
+      "B. Hỏi họ: 'Bạn đang nghĩ gì hoặc mong đợi điều gì ở bước này?'",
+      "C. Ghi chú rằng người dùng này không thông minh",
+      "D. Dừng buổi kiểm tra ngay lập tức"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khuyến khích người dùng suy nghĩ thành tiếng (Think-aloud) giúp hiểu lý do tại sao họ gặp khó khăn mà không làm hỏng kết quả kiểm tra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao cần phải ưu tiên (Prioritization) các phát hiện nghiên cứu?",
+    "options": [
+      "A. Vì không có đủ nguồn lực để giải quyết tất cả mọi vấn đề cùng lúc",
+      "B. Vì chỉ có những vấn đề dễ mới cần sửa",
+      "C. Để làm cho bản báo cáo trông chuyên nghiệp hơn",
+      "D. Vì người dùng không quan tâm đến các vấn đề nhỏ"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ưu tiên giúp tập trung vào những vấn đề có tác động lớn nhất đến trải nghiệm người dùng trong điều kiện giới hạn về thời gian và ngân sách.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Công cụ nào sau đây thường được dùng để thực hiện phỏng vấn người dùng từ xa?",
+    "options": [
+      "A. Adobe Photoshop",
+      "B. Zoom hoặc Google Meet",
+      "C. Visual Studio Code",
+      "D. Microsoft Excel"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các công cụ họp trực tuyến cho phép giao tiếp và quan sát biểu cảm của người dùng khi không thể gặp trực tiếp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi tổng hợp dữ liệu nghiên cứu, 'Pain Points' có nghĩa là gì?",
+    "options": [
+      "A. Những điểm người dùng thấy đẹp nhất",
+      "B. Những khó khăn, trở ngại mà người dùng gặp phải",
+      "C. Các vị trí đặt quảng cáo trên trang web",
+      "D. Thời gian người dùng ở lại trên ứng dụng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pain points là những vấn đề cụ thể gây khó chịu hoặc ngăn cản người dùng đạt được mục tiêu của họ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một bản kế hoạch nghiên cứu (Research Plan) KHÔNG nhất thiết phải có mục nào sau đây ở mức độ cơ bản?",
+    "options": [
+      "A. Mục tiêu nghiên cứu",
+      "B. Đối tượng tham gia",
+      "C. Mã nguồn của sản phẩm",
+      "D. Phương pháp thực hiện"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kế hoạch nghiên cứu tập trung vào cách thức tìm hiểu người dùng, không liên quan đến việc viết mã nguồn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao không nên chỉ dựa vào khảo sát (Survey) để hiểu sâu về hành vi người dùng?",
+    "options": [
+      "A. Vì khảo sát thường tốn kém hơn phỏng vấn",
+      "B. Vì khảo sát không cho biết lý do đằng sau các con số",
+      "C. Vì khảo sát chỉ dành cho người dùng trẻ tuổi",
+      "D. Vì khảo sát không thể gửi qua email"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khảo sát cung cấp dữ liệu định lượng (cái gì, bao nhiêu) nhưng thiếu sự đào sâu vào động cơ và bối cảnh (tại sao).",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Customer Journey Map, 'Touchpoints' là gì?",
+    "options": [
+      "A. Các điểm người dùng chạm tay vào màn hình điện thoại",
+      "B. Các điểm tiếp xúc giữa người dùng và thương hiệu/sản phẩm",
+      "C. Các lỗi kỹ thuật làm ứng dụng bị treo",
+      "D. Các nút bấm có kích thước lớn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Touchpoints là bất kỳ thời điểm nào người dùng tương tác với dịch vụ hoặc sản phẩm trong suốt hành trình của họ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu kết quả nghiên cứu trái ngược hoàn toàn với ý kiến của Designer, bạn nên làm gì?",
+    "options": [
+      "A. Bỏ qua kết quả nghiên cứu và làm theo ý Designer",
+      "B. Thay đổi kết quả nghiên cứu để khớp với thiết kế",
+      "C. Trình bày dữ liệu khách quan và thảo luận để điều chỉnh thiết kế",
+      "D. Yêu cầu Designer nghỉ việc"
+    ],
+    "correctAnswer": "C",
+    "explanation": "UX Research dựa trên dữ liệu thực tế để hướng dẫn thiết kế, mục tiêu là tạo ra sản phẩm tốt nhất cho người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Thuật ngữ 'Bias' trong UX Research có nghĩa là gì?",
+    "options": [
+      "A. Một loại phần mềm hỗ trợ nghiên cứu",
+      "B. Định kiến hoặc sự thiên kiến làm sai lệch kết quả",
+      "C. Kỹ thuật phỏng vấn nhanh",
+      "D. Một phong cách thiết kế hiện đại"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bias là sự thiên kiến (từ phía nghiên cứu viên hoặc người tham gia) có thể làm kết quả nghiên cứu không còn khách quan.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bước đầu tiên khi bắt đầu một dự án UX Research là gì?",
+    "options": [
+      "A. Đi phỏng vấn người dùng ngay lập tức",
+      "B. Xác định mục tiêu nghiên cứu và câu hỏi cần trả lời",
+      "C. Vẽ bản phác thảo giao diện (Sketch)",
+      "D. Viết báo cáo tổng kết"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xác định rõ mục tiêu giúp bạn chọn đúng phương pháp và đối tượng, tránh lãng phí thời gian.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi viết báo cáo nghiên cứu cho Stakeholders (bên liên quan), điều gì là quan trọng nhất?",
+    "options": [
+      "A. Viết càng dài càng tốt để thể hiện sự chăm chỉ",
+      "B. Chỉ sử dụng các thuật ngữ chuyên môn khó hiểu",
+      "C. Tập trung vào các phát hiện chính và đề xuất hành động",
+      "D. Không cần dùng hình ảnh hay biểu đồ"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Stakeholders cần những thông tin súc tích, rõ ràng và biết họ cần phải làm gì tiếp theo dựa trên nghiên cứu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Nghiên cứu thứ cấp (Secondary Research) là gì?",
+    "options": [
+      "A. Tự mình đi phỏng vấn người dùng lần thứ hai",
+      "B. Thu thập và phân tích các dữ liệu đã có sẵn từ các nguồn khác",
+      "C. Nghiên cứu chỉ dành cho các sản phẩm phụ",
+      "D. Việc kiểm tra lại các lỗi thiết kế sau khi code xong"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Secondary Research tận dụng các báo cáo, bài báo, hoặc dữ liệu nội bộ đã tồn tại để hiểu về thị trường và người dùng trước khi làm nghiên cứu sơ cấp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi muốn tìm hiểu thói quen sử dụng ứng dụng của người dùng trong môi trường thực tế và diễn biến tâm lý của họ theo thời gian thực suốt một tuần, phương pháp nghiên cứu nào là hiệu quả nhất?",
+    "options": [
+      "A. Usability Testing trong phòng lab",
+      "B. Diary Study (Nghiên cứu nhật ký)",
+      "C. Khảo sát trực tuyến (Online Survey)",
+      "D. Phỏng vấn sâu (Deep Interview)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Diary Study cho phép ghi lại hành vi và cảm xúc của người dùng ngay tại thời điểm xảy ra trong ngữ cảnh thực tế qua một khoảng thời gian dài, điều mà các phương pháp khác khó thực hiện chính xác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một giả thuyết nghiên cứu (Research Hypothesis) ở mức độ chuyên nghiệp cần phải đảm bảo yếu tố cốt lõi nào?",
+    "options": [
+      "A. Phải luôn khẳng định tính năng mới sẽ thành công",
+      "B. Phải dựa trên ý kiến cá nhân của Stakeholder",
+      "C. Phải có khả năng kiểm chứng được (Testable) thông qua dữ liệu",
+      "D. Phải càng phức tạp và chi tiết càng tốt"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giả thuyết là một dự đoán có cơ sở và quan trọng nhất là nó phải có khả năng được chứng minh là đúng hoặc sai thông qua các phương pháp nghiên cứu thực nghiệm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một buổi phỏng vấn người dùng, nếu người tham gia trả lời rất ngắn gọn bằng các từ 'Có' hoặc 'Không', kỹ thuật nào sau đây giúp bạn khai thác thêm thông tin?",
+    "options": [
+      "A. Chuyển sang câu hỏi tiếp theo ngay lập tức để tiết kiệm thời gian",
+      "B. Sử dụng các câu hỏi 'Tại sao' hoặc 'Hãy kể cho tôi nghe thêm về...'",
+      "C. Tự giả định lý do của người dùng và ghi vào biên bản",
+      "D. Nhắc nhở người dùng rằng họ cần phải nói nhiều hơn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là kỹ thuật đặt câu hỏi mở (Open-ended questions) giúp khuyến khích người dùng chia sẻ chi tiết về trải nghiệm và tư duy của họ thay vì chỉ trả lời đóng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn nên tránh loại câu hỏi nào dưới đây khi thiết kế bảng khảo sát để đảm bảo tính khách quan của dữ liệu?",
+    "options": [
+      "A. Câu hỏi phân loại (Categorical questions)",
+      "B. Câu hỏi thang đo Likert (Likert scale)",
+      "C. Câu hỏi dẫn dắt (Leading questions)",
+      "D. Câu hỏi xếp hạng thứ tự (Ranking questions)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Leading questions chứa đựng gợi ý về đáp án mong muốn, làm sai lệch suy nghĩ thực tế của người dùng và dẫn đến kết quả nghiên cứu không chính xác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của việc sử dụng Affinity Mapping (Sơ đồ đồng cảm/nhóm) sau khi thu thập dữ liệu định tính là gì?",
+    "options": [
+      "A. Để thống kê số lượng người dùng tham gia",
+      "B. Để trình bày danh sách các tính năng cho khách hàng",
+      "C. Để phân loại và tìm ra các mẫu (patterns) hoặc chủ đề chung từ dữ liệu rời rạc",
+      "D. Để thiết kế giao diện chi tiết cho sản phẩm"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Affinity Mapping là phương pháp tổng hợp dữ liệu giúp nhóm các quan sát, ý kiến rời rạc thành các chủ đề có ý nghĩa, từ đó rút ra các insight cốt lõi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi có quá nhiều insight từ nghiên cứu nhưng nguồn lực phát triển có hạn, khung (framework) nào thường được dùng để ưu tiên các giải pháp?",
+    "options": [
+      "A. Sơ đồ Venn",
+      "B. Ma trận Impact vs Effort (Tác động và Nỗ lực)",
+      "C. Mô hình 5W1H",
+      "D. Quy tắc 1/3"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ma trận Impact vs Effort giúp đội ngũ UX xác định được những cải tiến mang lại giá trị cao nhất cho người dùng với chi phí/nỗ lực thực hiện thấp nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt lớn nhất giữa Contextual Inquiry (Phỏng vấn theo ngữ cảnh) và Usability Testing truyền thống là gì?",
+    "options": [
+      "A. Contextual Inquiry thực hiện tại nơi người dùng sinh hoạt/làm việc thực tế",
+      "B. Usability Testing tốn ít chi phí hơn",
+      "C. Contextual Inquiry chỉ tập trung vào giao diện",
+      "D. Usability Testing không cần kịch bản"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Contextual Inquiry nhấn mạnh việc quan sát người dùng trong môi trường tự nhiên của họ để hiểu cách các yếu tố ngoại cảnh tác động đến hành vi sử dụng sản phẩm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trước khi bắt đầu bất kỳ hoạt động nghiên cứu nào, bước nào sau đây là quan trọng nhất để đảm bảo kết quả có giá trị thực tiễn?",
+    "options": [
+      "A. Chọn màu sắc cho bản báo cáo",
+      "B. Xác định rõ mục tiêu nghiên cứu và các câu hỏi cần trả lời",
+      "C. Thuê một phòng lab hiện đại",
+      "D. Thiết kế xong toàn bộ prototype"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu không có mục tiêu rõ ràng, nghiên cứu sẽ bị lan man, thu thập dữ liệu thừa và không giải quyết được vấn đề thực tế của sản phẩm hoặc doanh nghiệp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Câu hỏi nào sau đây vi phạm nguyên tắc tránh dẫn dắt người dùng (Leading question)?",
+    "options": [
+      "A. Bạn thường gặp khó khăn gì khi thanh toán?",
+      "B. Bạn cảm thấy thế nào về quy trình này?",
+      "C. Bạn có thấy tính năng này rất dễ sử dụng không?",
+      "D. Hãy mô tả lần cuối bạn sử dụng ứng dụng này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Câu C mặc định rằng tính năng đó 'dễ sử dụng', điều này gây áp lực tâm lý khiến người dùng xuôi theo ý kiến của người phỏng vấn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi xây dựng Persona (Chân dung người dùng) dựa trên nghiên cứu, loại dữ liệu nào mang lại giá trị cao nhất cho việc ra quyết định thiết kế?",
+    "options": [
+      "A. Tên, tuổi, giới tính và nơi ở",
+      "B. Sở thích cá nhân và màu sắc yêu thích",
+      "C. Hành vi, mục tiêu và những nỗi đau (pain points) khi thực hiện tác vụ",
+      "D. Loại điện thoại họ đang sử dụng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "UX tập trung vào giải quyết vấn đề. Hiểu rõ hành vi và mục tiêu giúp Designer tạo ra luồng trải nghiệm đáp ứng đúng nhu cầu thực tế của người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Phương pháp Card Sorting (Sắp xếp thẻ) thường được sử dụng hiệu quả nhất để giải quyết vấn đề gì?",
+    "options": [
+      "A. Kiểm tra độ tương phản màu sắc",
+      "B. Xác định cấu trúc thông tin (Information Architecture) và menu điều hướng",
+      "C. Đo lường tốc độ tải trang",
+      "D. Tìm hiểu lỗi code trên giao diện"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Card Sorting giúp hiểu cách người dùng phân loại thông tin trong đầu họ, từ đó thiết kế hệ thống menu và điều hướng trực quan hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu ngân sách và thời gian cực kỳ hạn hẹp, nhưng bạn cần kiểm tra nhanh xem người dùng có hiểu luồng chính của sản phẩm hay không, bạn nên chọn cách nào?",
+    "options": [
+      "A. Tổ chức một đợt khảo sát trên 1000 người",
+      "B. Thực hiện Guerrilla Testing (Kiểm tra du kích) với 5-7 người",
+      "C. Thuê công ty nghiên cứu thị trường chuyên nghiệp",
+      "D. Bỏ qua nghiên cứu và ra mắt sản phẩm luôn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Guerrilla Testing là phương pháp nhanh, rẻ và hiệu quả để phát hiện các lỗi usability nghiêm trọng ngay lập tức với một nhóm nhỏ người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi dữ liệu định lượng (Google Analytics) cho thấy tỷ lệ thoát (Bounce rate) ở trang thanh toán rất cao, bạn nên làm gì tiếp theo để tìm nguyên nhân?",
+    "options": [
+      "A. Thiết kế lại trang thanh toán với màu sắc bắt mắt hơn",
+      "B. Chạy quảng cáo nhiều hơn để bù lại lượng người thoát",
+      "C. Thực hiện nghiên cứu định tính (như Usability Testing) để hiểu 'Tại sao' họ thoát",
+      "D. Giảm giá sản phẩm để giữ chân người dùng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dữ liệu định lượng cho biết 'Cái gì' đang xảy ra, còn nghiên cứu định tính giúp giải thích 'Tại sao' nó xảy ra, từ đó mới có giải pháp đúng đắn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong tuyển dụng người tham gia nghiên cứu (Recruitment), sai lầm phổ biến nhất của Designer cấp độ Intermediate là gì?",
+    "options": [
+      "A. Chỉ tuyển những người có chuyên môn về công nghệ",
+      "B. Tuyển bạn bè hoặc đồng nghiệp trong cùng dự án để làm người thử nghiệm",
+      "C. Trả phí tham gia quá cao",
+      "D. Tuyển quá 5 người cho một buổi test"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bạn bè hoặc đồng nghiệp thường có xu hướng thiên vị hoặc đã biết quá rõ về sản phẩm, dẫn đến kết quả không khách quan và không đại diện cho người dùng thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Thuật ngữ 'Saturation' (Bão hòa) trong nghiên cứu định tính có nghĩa là gì?",
+    "options": [
+      "A. Khi người dùng cảm thấy mệt mỏi và không muốn trả lời nữa",
+      "B. Khi bạn đã tiêu hết ngân sách dành cho nghiên cứu",
+      "C. Khi việc phỏng vấn thêm người mới không còn mang lại insight mới nào đáng kể",
+      "D. Khi dữ liệu thu được quá nhiều và không thể xử lý nổi"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự bão hòa là điểm dừng lý tưởng trong nghiên cứu định tính, cho thấy bạn đã thu thập đủ thông tin để hiểu vấn đề mà không cần tốn thêm nguồn lực.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hiện tượng người dùng cố gắng trả lời theo cách họ nghĩ là 'đúng' hoặc để làm hài lòng người phỏng vấn được gọi là gì?",
+    "options": [
+      "A. Confirmation Bias (Thiên kiến xác nhận)",
+      "B. Social Desirability Bias (Thiên kiến mong muốn xã hội)",
+      "C. Anchoring Bias (Thiên kiến mỏ neo)",
+      "D. Recency Bias (Thiên kiến gần đây)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là một rào cản lớn trong phỏng vấn, đòi hỏi người nghiên cứu phải tạo môi trường thoải mái và đặt câu hỏi trung lập để người dùng nói thật lòng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phân tích một bản ghi chép phỏng vấn, bước đầu tiên để xác định 'Pain Point' là gì?",
+    "options": [
+      "A. Tìm các đoạn mã (code) trong ứng dụng",
+      "B. Tìm các từ ngữ biểu thị sự thất vọng, do dự hoặc các hành động lặp đi lặp lại của người dùng",
+      "C. Đếm số lần người dùng mỉm cười",
+      "D. Ghi lại cấu hình máy tính của người dùng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pain points thường lộ diện qua cảm xúc tiêu cực hoặc những chỗ người dùng phải dừng lại suy nghĩ quá lâu hoặc thao tác sai nhiều lần.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để đo lường mức độ dễ dàng của một tác vụ (Task) ngay sau khi người dùng thực hiện xong trong Usability Test, thang đo nào là phù hợp nhất?",
+    "options": [
+      "A. Net Promoter Score (NPS)",
+      "B. System Usability Scale (SUS)",
+      "C. Single Ease Question (SEQ)",
+      "D. Customer Satisfaction Score (CSAT)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "SEQ là một câu hỏi duy nhất (thường là thang điểm từ 1-7) được hỏi ngay sau mỗi tác vụ để đo lường độ khó/dễ của chính tác vụ đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích chính của việc thực hiện Remote Unmoderated Usability Testing (Kiểm tra không có người điều phối từ xa) là gì?",
+    "options": [
+      "A. Giúp người nghiên cứu can thiệp kịp thời khi người dùng gặp lỗi",
+      "B. Thu thập dữ liệu từ số lượng lớn người dùng nhanh chóng với chi phí thấp",
+      "C. Hiểu sâu sắc về tư duy của người dùng thông qua việc hỏi đáp trực tiếp",
+      "D. Đảm bảo người dùng không bao giờ bỏ cuộc giữa chừng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phương pháp này cho phép nhiều người thực hiện bài test cùng lúc ở nhiều nơi mà không cần sự có mặt của Designer, giúp tăng quy mô mẫu nghiên cứu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Triangulation' (Tam giác đạc) trong UX Research có ý nghĩa gì?",
+    "options": [
+      "A. Chỉ sử dụng đúng 3 người tham gia cho mỗi dự án",
+      "B. Kết hợp nhiều phương pháp hoặc nguồn dữ liệu để kiểm chứng một kết luận",
+      "C. Thiết kế giao diện dựa trên hình tam giác để thu hút sự chú ý",
+      "D. Quy trình nghiên cứu gồm 3 bước: Hỏi, Nghe và Vẽ"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Triangulation giúp tăng độ tin cậy của kết quả nghiên cứu bằng cách đối chiếu dữ liệu từ nhiều nguồn (ví dụ: kết hợp Survey, Interview và Analytics).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một bản Research Script (Kịch bản nghiên cứu) tốt cho buổi phỏng vấn cần tránh điều gì?",
+    "options": [
+      "A. Phần giới thiệu về mục đích buổi phỏng vấn",
+      "B. Các câu hỏi dự phòng khi người dùng im lặng",
+      "C. Một danh sách các câu hỏi cứng nhắc và không được thay đổi thứ tự",
+      "D. Lời cảm ơn và cam kết bảo mật thông tin"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kịch bản phỏng vấn nên linh hoạt (Semi-structured) để người nghiên cứu có thể đào sâu vào những ý tưởng bất ngờ mà người dùng chia sẻ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích khoảng cách (Gap Analysis) trong trải nghiệm người dùng, bạn đang thực hiện công việc gì?",
+    "options": [
+      "A. Đo khoảng cách giữa các button trên giao diện",
+      "B. So sánh sự khác biệt giữa trải nghiệm hiện tại và trải nghiệm lý tưởng mong muốn",
+      "C. Tính toán thời gian phản hồi của server",
+      "D. So sánh giá sản phẩm của mình với đối thủ"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Gap Analysis giúp xác định những điểm còn thiếu sót hoặc chưa đạt kỳ vọng trong hành trình người dùng hiện tại để tập trung cải thiện.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Nếu kết quả nghiên cứu cho thấy hai nhóm người dùng mục tiêu có nhu cầu hoàn toàn trái ngược nhau, bạn nên xử lý thế nào?",
+    "options": [
+      "A. Chọn nhóm có số lượng đông hơn và bỏ qua nhóm còn lại",
+      "B. Cố gắng kết hợp tất cả nhu cầu vào một giao diện duy nhất",
+      "C. Phân đoạn người dùng (Segmentation) và ưu tiên giải pháp cho nhóm mục tiêu chính (Primary Persona)",
+      "D. Yêu cầu Stakeholder tự quyết định"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Không thể làm hài lòng tất cả mọi người bằng một giải pháp duy nhất. Việc xác định Primary Persona giúp sản phẩm có định hướng rõ ràng và hiệu quả nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc yêu cầu người tham gia ký bản Consent Form (Đồng ý tham gia nghiên cứu) là cực kỳ quan trọng?",
+    "options": [
+      "A. Để có lý do không trả tiền cho họ",
+      "B. Để đảm bảo tính pháp lý, đạo đức nghiên cứu và bảo vệ quyền riêng tư dữ liệu của người dùng",
+      "C. Để làm cho buổi nghiên cứu trông chuyên nghiệp hơn",
+      "D. Để ngăn người dùng chia sẻ ý tưởng của họ với đối thủ"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đạo đức nghiên cứu yêu cầu người tham gia phải được thông báo đầy đủ về quyền lợi, rủi ro và cách dữ liệu của họ được sử dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách hiệu quả nhất để biến kết quả nghiên cứu thành hành động (Actionable insights) cho đội ngũ lập trình là gì?",
+    "options": [
+      "A. Gửi cho họ một bản báo cáo dài 50 trang PDF",
+      "B. Chỉ cho họ thấy các biểu đồ đẹp mắt",
+      "C. Trình bày các vấn đề kèm theo bằng chứng (video/quote) và đề xuất giải pháp cụ thể gắn với User Story",
+      "D. Nói với họ rằng người dùng không thích code của họ"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lập trình viên cần hiểu vấn đề cụ thể và cách nó ảnh hưởng đến logic sản phẩm. Việc gắn insight vào User Story giúp họ dễ dàng đưa vào quy trình phát triển (Backlog).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế một kế hoạch nghiên cứu cho một sản phẩm B2B phức tạp với ngân sách hạn hẹp, yếu tố nào là quan trọng nhất để tối ưu hóa giá trị của insights thu về?",
+    "options": [
+      "A. Thực hiện khảo sát diện rộng trên tất cả các phân khúc khách hàng tiềm năng.",
+      "B. Tập trung nghiên cứu sâu vào nhóm 'Extreme Users' để tìm ra các pain points biên.",
+      "C. Ưu tiên các phương pháp nghiên cứu định lượng để có số liệu thuyết phục ban lãnh đạo.",
+      "D. Chỉ tập trung vào nhóm khách hàng hiện tại có doanh thu cao nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở mức độ nâng cao, việc nghiên cứu nhóm người dùng cực đoan (Extreme Users) giúp bộc lộ các vấn đề hệ thống mà người dùng bình thường thường bỏ qua hoặc tự thích nghi, từ đó tạo ra insights đột phá với chi phí thấp hơn diện rộng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh Agile, việc tích hợp UX Research vào Sprint thường gặp thách thức về thời gian. Chiến lược nào sau đây giúp duy trì tính liên tục của nghiên cứu mà không làm chậm tiến độ phát triển?",
+    "options": [
+      "A. Thực hiện nghiên cứu song song (Dual-track Agile) với Discovery track chạy trước Delivery track.",
+      "B. Bỏ qua bước tổng hợp insights và chuyển trực tiếp feedback thô cho đội ngũ lập trình.",
+      "C. Chỉ thực hiện nghiên cứu sau khi sản phẩm đã được phát hành hoàn chỉnh.",
+      "D. Yêu cầu toàn bộ đội ngũ phát triển dừng code để tham gia vào quá trình phỏng vấn người dùng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Dual-track Agile cho phép đội ngũ nghiên cứu chuẩn bị và kiểm chứng các giả thuyết (Discovery) trước khi đưa vào thực thi (Delivery), đảm bảo tính liên tục và giảm thiểu rủi ro làm lại.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi kết quả từ phân tích dữ liệu định lượng (Analytics) mâu thuẫn với kết quả từ phỏng vấn định tính (Interviews), bạn nên xử lý như thế nào?",
+    "options": [
+      "A. Ưu tiên dữ liệu định lượng vì nó có kích thước mẫu lớn và khách quan hơn.",
+      "B. Ưu tiên dữ liệu định tính vì nó giải thích được lý do đằng sau hành vi người dùng.",
+      "C. Thực hiện phương pháp Triangulation (Tam giác đạc) để tìm ra điểm mù của cả hai phương pháp.",
+      "D. Loại bỏ cả hai kết quả và thực hiện lại một cuộc khảo sát mới với câu hỏi khác."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Triangulation giúp kết hợp các nguồn dữ liệu khác nhau để xác thực kết quả và hiểu rõ ngữ cảnh. Sự mâu thuẫn thường chỉ ra một khía cạnh hành vi chưa được khám phá hết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một giả thuyết nghiên cứu (Research Hypothesis) tốt trong UX cần đảm bảo tiêu chí nào sau đây để có thể kiểm chứng hiệu quả?",
+    "options": [
+      "A. Giả thuyết phải luôn khẳng định tính đúng đắn của giải pháp thiết kế hiện tại.",
+      "B. Giả thuyết phải cụ thể, có khả năng bị bác bỏ (falsifiable) và dựa trên quan sát trước đó.",
+      "C. Giả thuyết nên càng chung chung càng tốt để bao quát được nhiều kịch bản.",
+      "D. Giả thuyết chỉ nên tập trung vào cảm xúc của người dùng thay vì hành vi cụ thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính có thể bị bác bỏ (Falsifiability) là cốt lõi của phương pháp khoa học. Một giả thuyết không thể bị chứng minh là sai thì không có giá trị trong việc kiểm chứng thiết kế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào việc sử dụng phương pháp Diary Study mang lại lợi ích vượt trội so với Contextual Inquiry?",
+    "options": [
+      "A. Khi cần quan sát hành vi người dùng trong một khoảnh khắc duy nhất tại văn phòng.",
+      "B. Khi cần hiểu về sự thay đổi thái độ và thói quen sử dụng sản phẩm theo thời gian thực trong thời gian dài.",
+      "C. Khi ngân sách nghiên cứu cực kỳ hạn hẹp và cần kết quả ngay lập tức.",
+      "D. Khi muốn kiểm tra tính khả dụng của một tính năng cụ thể trên giao diện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Diary Study cho phép thu thập dữ liệu dọc (longitudinal data) về thói quen và sự thay đổi hành vi mà các phương pháp quan sát trực tiếp ngắn hạn không thể bắt trọn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quá trình Affinity Mapping, nhóm của bạn phát hiện ra quá nhiều nhóm vấn đề (clusters). Cách tiếp cận nào là chuyên nghiệp nhất để xử lý tình trạng này?",
+    "options": [
+      "A. Gộp tất cả các nhóm nhỏ thành một nhóm lớn duy nhất để dễ quản lý.",
+      "B. Chỉ giữ lại 3 nhóm lớn nhất và loại bỏ hoàn toàn các nhóm còn lại.",
+      "C. Sử dụng ma trận Prioritization (như Impact vs. Effort) để lọc ra các nhóm có giá trị chiến lược.",
+      "D. Yêu cầu stakeholders chọn ra nhóm mà họ thích nhất để giải quyết."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc ưu tiên dựa trên giá trị kinh doanh và khả năng thực thi giúp chuyển đổi dữ liệu nghiên cứu thành các quyết định sản phẩm có tính thực tiễn cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kỹ thuật 'Five Whys' trong phỏng vấn UX được sử dụng nhằm mục đích chính là gì?",
+    "options": [
+      "A. Để làm cho người dùng cảm thấy bối rối và tiết lộ bí mật kinh doanh.",
+      "B. Để kéo dài thời gian phỏng vấn nhằm thu thập thêm nhiều dữ liệu thô.",
+      "C. Để vượt qua các câu trả lời bề nổi và tìm ra nguyên nhân gốc rễ (root cause) của vấn đề.",
+      "D. Để thuyết phục người dùng rằng giải pháp của chúng ta là tối ưu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kỹ thuật này giúp nhà nghiên cứu đào sâu vào động lực và nhu cầu tiềm ẩn (latent needs) thay vì chỉ dừng lại ở những lời phàn nàn trực tiếp của người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng một Research Repository cho tổ chức, cấu trúc dữ liệu nào giúp tối ưu hóa việc tái sử dụng insights cho các đội nhóm khác nhau?",
+    "options": [
+      "A. Lưu trữ dưới dạng các tệp PDF báo cáo nghiên cứu dài hàng chục trang.",
+      "B. Cấu trúc theo dạng 'Atomic Research' (Nuggets) bao gồm: Evidence, Observation, Insight, Recommendation.",
+      "C. Chỉ lưu trữ các video ghi âm buổi phỏng vấn để mọi người tự xem lại.",
+      "D. Sắp xếp theo thứ tự thời gian thực hiện nghiên cứu mà không cần tag phân loại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Atomic Research chia nhỏ dữ liệu thành các đơn vị có thể tìm kiếm và kết nối được, giúp các đội nhóm khác dễ dàng truy xuất và tổng hợp lại cho mục đích riêng của họ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thực hiện nghiên cứu cho một ứng dụng ngân hàng. Một người dùng tham gia phỏng vấn tỏ ra rất chuyên gia và liên tục đưa ra các lời khuyên về UI. Bạn nên xử lý tình huống này thế nào?",
+    "options": [
+      "A. Ghi chép lại toàn bộ lời khuyên đó và thực hiện theo vì họ là người dùng mục tiêu.",
+      "B. Ngắt lời họ ngay lập tức và yêu cầu họ không được can thiệp vào chuyên môn thiết kế.",
+      "C. Lắng nghe lịch sự nhưng khéo léo chuyển hướng câu hỏi sang trải nghiệm và vấn đề thực tế họ gặp phải.",
+      "D. Cho phép họ vẽ lại giao diện ngay trong buổi phỏng vấn để thay thế cho Designer."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Người dùng không phải là Designer. Nhiệm vụ của nhà nghiên cứu là tìm ra 'vấn đề' chứ không phải thu thập 'giải pháp' cảm tính từ người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc xác định 'Jobs-to-be-Done' (JTBD) lại quan trọng hơn việc chỉ xây dựng 'User Personas' truyền thống trong nghiên cứu chiến lược?",
+    "options": [
+      "A. Vì JTBD tập trung vào nhân khẩu học như tuổi tác và giới tính của người dùng.",
+      "B. Vì JTBD tập trung vào động lực và hoàn cảnh (context) khiến người dùng 'thuê' sản phẩm để giải quyết vấn đề.",
+      "C. Vì Personas đã lỗi thời và không còn ai sử dụng trong ngành UX hiện đại.",
+      "D. Vì JTBD dễ vẽ và trình bày đẹp mắt hơn so với Personas."
+    ],
+    "correctAnswer": "B",
+    "explanation": "JTBD giúp hiểu sâu về mục tiêu cốt lõi của người dùng, giúp sản phẩm phục vụ được nhiều nhóm nhân khẩu học khác nhau nhưng có chung một nhu cầu chức năng hoặc cảm xúc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một bài kiểm tra Tree Testing, tỷ lệ 'Direct Success' thấp nhưng tỷ lệ 'Overall Success' cao chỉ ra điều gì về cấu trúc thông tin (IA)?",
+    "options": [
+      "A. Cấu trúc thông tin hoàn toàn không có vấn đề gì.",
+      "B. Người dùng dễ dàng tìm thấy thông tin ngay từ lần thử đầu tiên.",
+      "C. Cấu trúc thông tin gây nhầm lẫn ban đầu, nhưng người dùng có khả năng tự sửa lỗi và tìm ra đích đến.",
+      "D. Nhãn (Labels) của các danh mục quá rõ ràng và dễ hiểu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Direct Success thấp nghĩa là người dùng đi sai đường lúc đầu. Overall Success cao nghĩa là sau khi đi sai, họ đã quay lại và tìm đúng, cho thấy IA cần được tối ưu hóa nhãn hoặc phân cấp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện Card Sorting để tổ chức menu cho một trang thương mại điện tử khổng lồ, kỹ thuật nào giúp giảm tải nhận thức cho người tham gia mà vẫn đảm bảo chất lượng dữ liệu?",
+    "options": [
+      "A. Sử dụng 'Open Card Sorting' với hơn 200 thẻ cùng lúc.",
+      "B. Sử dụng 'Hybrid Card Sorting' với các nhóm danh mục chính đã được định nghĩa trước.",
+      "C. Yêu cầu người tham gia tự viết tên cho tất cả các thẻ trước khi phân loại.",
+      "D. Chỉ cho phép người dùng phân loại tối đa 5 thẻ mỗi lượt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hybrid Card Sorting kết hợp giữa cấu trúc có sẵn và sự sáng tạo của người dùng, giúp định hướng nghiên cứu theo mục tiêu kinh doanh nhưng vẫn tôn trọng mô hình tâm trí của người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một báo cáo nghiên cứu UX hiệu quả cho cấp quản lý (C-level) nên tập trung vào yếu tố nào nhất?",
+    "options": [
+      "A. Mô tả chi tiết từng bước của phương pháp nghiên cứu đã sử dụng.",
+      "B. Danh sách tất cả các lỗi nhỏ về UI được tìm thấy trong quá trình test.",
+      "C. Tác động của các phát hiện nghiên cứu đối với các chỉ số kinh doanh (KPIs/ROI).",
+      "D. Trình bày đầy đủ các biểu đồ thống kê thô chưa qua phân tích."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quản lý cấp cao quan tâm đến kết quả kinh doanh. Nhà nghiên cứu cần chuyển đổi insights thành giá trị chiến lược và tác động tài chính để nhận được sự ủng hộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong nghiên cứu định tính, 'Saturation' (Sự bão hòa) được hiểu là thời điểm nào?",
+    "options": [
+      "A. Khi nhà nghiên cứu cảm thấy quá mệt mỏi và không muốn phỏng vấn thêm.",
+      "B. Khi ngân sách dành cho nghiên cứu đã được sử dụng hết sạch.",
+      "C. Khi các buổi phỏng vấn mới không còn mang lại insights hoặc thông tin mới nào đáng kể.",
+      "D. Khi tất cả người dùng đều đồng ý với mọi giải pháp mà bạn đưa ra."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự bão hòa là chỉ dấu cho thấy kích thước mẫu đã đủ để đại diện cho các mẫu hành vi chính, việc thu thập thêm dữ liệu sẽ không mang lại giá trị gia tăng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để giảm thiểu 'Social Desirability Bias' (thành kiến mong muốn xã hội) trong phỏng vấn, người phỏng vấn nên làm gì?",
+    "options": [
+      "A. Thường xuyên gật đầu và khen ngợi các câu trả lời của người dùng.",
+      "B. Đặt các câu hỏi dẫn dắt (leading questions) để người dùng dễ trả lời.",
+      "C. Sử dụng các câu hỏi mở và khẳng định rằng không có câu trả lời nào là sai hoặc đúng.",
+      "D. Cho người dùng biết trước giải pháp nào là tâm huyết nhất của đội ngũ thiết kế."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tạo ra một không gian trung lập giúp người dùng thoải mái chia sẻ những trải nghiệm tiêu cực hoặc thật lòng mà không sợ làm mất lòng nhà nghiên cứu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích dữ liệu từ một cuộc khảo sát (Survey), bạn nhận thấy tỷ lệ bỏ cuộc (drop-off rate) ở giữa chừng rất cao. Nguyên nhân kỹ thuật nào thường gặp nhất ở cấp độ thiết kế nghiên cứu?",
+    "options": [
+      "A. Do câu hỏi quá dễ khiến người dùng cảm thấy nhàm chán.",
+      "B. Do 'Survey Fatigue' vì bảng hỏi quá dài hoặc các câu hỏi yêu cầu nỗ lực nhận thức quá cao.",
+      "C. Do người dùng không được trả tiền đủ cao để hoàn thành khảo sát.",
+      "D. Do màu sắc của giao diện khảo sát không đủ bắt mắt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiết kế khảo sát không tối ưu về độ dài và độ phức tạp của câu hỏi là nguyên nhân chính gây ra sự mệt mỏi và bỏ cuộc của người tham gia.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Phương pháp 'Cognitive Walkthrough' khác biệt cơ bản như thế nào so với 'Usability Testing' truyền thống?",
+    "options": [
+      "A. Nó cần người dùng thực tham gia vào quá trình đánh giá.",
+      "B. Nó là một phương pháp đánh giá chuyên gia (Expert Review) tập trung vào khả năng học hỏi của hệ thống.",
+      "C. Nó chỉ tập trung vào giao diện đồ họa thay vì luồng công việc.",
+      "D. Nó luôn tốn kém và mất nhiều thời gian hơn Usability Testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cognitive Walkthrough được thực hiện bởi các chuyên gia đóng vai trò người dùng để đánh giá xem các bước thực hiện tác vụ có logic và dễ học đối với người mới hay không.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần đánh giá mức độ ưu tiên của các tính năng mới dựa trên sự hài lòng của người dùng. Mô hình nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Mô hình Kano.",
+      "B. Sơ đồ Venn.",
+      "C. Biểu đồ Pareto.",
+      "D. Mô hình AIDA."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mô hình Kano phân loại các tính năng dựa trên mức độ chúng gây ngạc nhiên, làm hài lòng hoặc chỉ là nhu cầu cơ bản, giúp đưa ra quyết định lộ trình sản phẩm chính xác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh nghiên cứu quốc tế (International Research), thách thức lớn nhất khi áp dụng cùng một phương pháp nghiên cứu tại các quốc gia khác nhau là gì?",
+    "options": [
+      "A. Sự khác biệt về múi giờ làm việc giữa các quốc gia.",
+      "B. Chi phí thuê phiên dịch viên quá đắt đỏ.",
+      "C. Sự khác biệt về văn hóa (Cultural Nuances) ảnh hưởng đến cách người dùng diễn đạt và phản hồi.",
+      "D. Tốc độ internet không đồng đều giữa các vùng lãnh thổ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các yếu tố văn hóa ảnh hưởng sâu sắc đến hành vi và giao tiếp. Một phương pháp hiệu quả ở phương Tây có thể không thu được dữ liệu chính xác ở phương Đông do các quy chuẩn xã hội.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chỉ số System Usability Scale (SUS) có giá trị bao nhiêu thì được coi là đạt mức trung bình (Average) trong ngành?",
+    "options": [
+      "A. 50",
+      "B. 68",
+      "C. 85",
+      "D. 100"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Điểm SUS trung bình theo các nghiên cứu hệ thống là khoảng 68. Điểm dưới mức này thường cho thấy vấn đề nghiêm trọng về tính khả dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi trình bày kết quả nghiên cứu, việc sử dụng 'User Quotes' (trích dẫn trực tiếp) có mục đích chính là gì?",
+    "options": [
+      "A. Để lấp đầy các khoảng trống trong slide báo cáo.",
+      "B. Để chứng minh rằng nhà nghiên cứu đã thực sự đi phỏng vấn.",
+      "C. Để tạo sự đồng cảm (empathy) và mang lại tiếng nói thực thực tế của người dùng vào quyết định của stakeholders.",
+      "D. Để thay thế cho các dữ liệu thống kê khô khan."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trích dẫn trực tiếp giúp các con số trở nên sống động và giúp stakeholders hiểu được nỗi đau hoặc mong muốn của người dùng một cách chân thực nhất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án thiết kế lại (Redesign), bước nghiên cứu nào nên được thực hiện đầu tiên để đảm bảo không lặp lại sai lầm cũ?",
+    "options": [
+      "A. Thiết kế ngay các Wireframes mới dựa trên xu hướng hiện đại.",
+      "B. Thực hiện Benchmark Usability Testing trên sản phẩm hiện tại.",
+      "C. Tổ chức một buổi Brainstorming với đội ngũ Marketing.",
+      "D. Thuê một công ty quảng cáo để làm lại bộ nhận diện thương hiệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đánh giá sản phẩm hiện tại giúp xác định chính xác cái gì đang hoạt động tốt và cái gì cần sửa chữa, tạo ra một vạch xuất phát (baseline) để đo lường sự cải thiện sau này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Snowball Sampling' trong tuyển dụng người tham gia nghiên cứu thường được áp dụng hiệu quả nhất khi nào?",
+    "options": [
+      "A. Khi cần số lượng mẫu cực lớn trong thời gian ngắn.",
+      "B. Khi nghiên cứu các nhóm người dùng đặc thù, khó tiếp cận (Hard-to-reach populations).",
+      "C. Khi muốn đảm bảo tính ngẫu nhiên tuyệt đối của mẫu nghiên cứu.",
+      "D. Khi nghiên cứu về các sản phẩm đại chúng như mạng xã hội."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Snowball Sampling dựa vào việc người tham gia này giới thiệu người tham gia khác, rất hữu ích khi đối tượng nghiên cứu là những nhóm nhỏ hoặc kín tiếng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một 'Service Blueprint' khác biệt với 'User Journey Map' ở điểm cốt lõi nào?",
+    "options": [
+      "A. Service Blueprint đẹp hơn và chi tiết hơn về mặt hình ảnh.",
+      "B. Service Blueprint chỉ tập trung vào cảm xúc của người dùng.",
+      "C. Service Blueprint hiển thị cả các quy trình phía sau hậu trường (backstage) và các hoạt động hỗ trợ của doanh nghiệp.",
+      "D. User Journey Map không bao gồm các điểm chạm (touchpoints) kỹ thuật số."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Service Blueprint cung cấp cái nhìn toàn diện về hệ thống, kết nối trải nghiệm khách hàng với các quy trình vận hành nội bộ của tổ chức.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng phương pháp 'Eye Tracking', chỉ số 'Fixation Duration' (thời gian cố định ánh mắt) thường phản ánh điều gì?",
+    "options": [
+      "A. Người dùng đang rất thích thú với hình ảnh đó.",
+      "B. Người dùng đang gặp khó khăn trong việc xử lý thông tin hoặc bị thu hút mạnh mẽ bởi yếu tố đó.",
+      "C. Thiết bị Eye Tracking đang bị lỗi kỹ thuật.",
+      "D. Người dùng đã hoàn thành tác vụ và đang nghỉ ngơi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thời gian nhìn chăm chú lâu có thể là dấu hiệu của sự chú ý cao độ hoặc sự bối rối/khó hiểu đối với nội dung đang hiển thị.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi lập kế hoạch nghiên cứu cho một hệ thống ERP phức tạp dành cho doanh nghiệp đa quốc gia, yếu tố nào là quan trọng nhất để đảm bảo tính đại diện của dữ liệu?",
+    "options": [
+      "A. Lựa chọn số lượng người tham gia lớn nhất có thể từ một khu vực duy nhất để tối ưu chi phí.",
+      "B. Phân tầng mẫu nghiên cứu dựa trên vai trò nghiệp vụ, quy trình làm việc đặc thù và bối cảnh văn hóa vùng miền.",
+      "C. Chỉ tập trung phỏng vấn các quản lý cấp cao vì họ là người ra quyết định mua phần mềm.",
+      "D. Sử dụng phương pháp khảo sát trực tuyến trên diện rộng để thu thập dữ liệu định lượng nhanh chóng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ chuyên gia, việc hiểu rằng ngữ cảnh (context) và vai trò (roles) trong hệ thống ERP thay đổi theo vùng miền và quy trình nghiệp vụ là then chốt để tránh sai lệch dữ liệu hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh một dự án chuyển đổi số (Digital Transformation) từ hệ thống Legacy sang Cloud, bạn nhận thấy dữ liệu định lượng (Analytics) mâu thuẫn với kết quả phỏng vấn sâu. Bạn nên xử lý như thế nào?",
+    "options": [
+      "A. Ưu tiên dữ liệu định lượng vì con số không biết nói dối và có tính khách quan cao hơn.",
+      "B. Bỏ qua dữ liệu định lượng và tin vào phỏng vấn vì đó là những phản hồi trực tiếp từ người dùng.",
+      "C. Thực hiện phương pháp Triangulation (Tam giác đạc) bằng cách bổ sung Contextual Inquiry để tìm ra nguyên nhân gốc rễ của sự sai lệch.",
+      "D. Trung hòa kết quả bằng cách lấy giá trị trung bình của cả hai nguồn dữ liệu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Chuyên gia cần sử dụng Triangulation để kiểm chứng chéo. Sự mâu thuẫn giữa hành vi thực tế (Analytics) và thái độ (Phỏng vấn) thường bộc lộ những rào cản tiềm ẩn hoặc thói quen khó bỏ trong hệ thống cũ.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi xây dựng một Research Roadmap cho sản phẩm Fintech mới, chiến lược nào giúp tối ưu hóa giá trị của nghiên cứu đối với lộ trình phát triển sản phẩm (Product Roadmap)?",
+    "options": [
+      "A. Thực hiện tất cả các nghiên cứu người dùng trước khi bắt đầu giai đoạn thiết kế UI.",
+      "B. Thiết lập các vòng lặp nghiên cứu liên tục (Continuous Discovery) song song với các Sprint phát triển.",
+      "C. Chỉ thực hiện nghiên cứu khi có yêu cầu cụ thể từ phía Stakeholders hoặc Product Manager.",
+      "D. Tập trung toàn bộ nguồn lực vào Usability Testing ở giai đoạn cuối trước khi Release."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Continuous Discovery giúp đội ngũ sản phẩm luôn bám sát nhu cầu thay đổi của thị trường và giảm thiểu rủi ro sai lệch giả định trong suốt quá trình phát triển, thay vì chỉ nghiên cứu một lần.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để đánh giá mức độ ưu tiên của các Insight sau nghiên cứu trong một hệ thống phức tạp, phương pháp nào dưới đây phản ánh tư duy chiến lược nhất?",
+    "options": [
+      "A. Ưu tiên các tính năng mà đối thủ cạnh tranh đang có trên thị trường.",
+      "B. Sử dụng ma trận RICE (Reach, Impact, Confidence, Effort) kết hợp với mục tiêu kinh doanh chiến lược của doanh nghiệp.",
+      "C. Ưu tiên những vấn đề mà người dùng phàn nàn nhiều nhất trong các cuộc phỏng vấn.",
+      "D. Chọn những thay đổi dễ thực hiện nhất (Low-hanging fruit) để chứng minh hiệu quả nhanh chóng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuyên gia cần cân đối giữa giá trị người dùng (Impact), quy mô ảnh hưởng (Reach), độ tin cậy của dữ liệu (Confidence) và nguồn lực doanh nghiệp (Effort) để ra quyết định.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện Diary Study cho một ứng dụng quản lý đầu tư, làm thế nào để giảm thiểu 'Participant Fatigue' (sự mệt mỏi của người tham gia) mà vẫn đảm bảo chất lượng dữ liệu?",
+    "options": [
+      "A. Yêu cầu người dùng ghi chép chi tiết mọi hành động ngay lập tức sau khi thực hiện.",
+      "B. Tăng mức thù lao trả cho người tham gia để họ có động lực ghi chép nhiều hơn.",
+      "C. Sử dụng kỹ thuật 'Event-contingent sampling' kết hợp với các câu hỏi ngắn, trọng tâm vào khoảnh khắc quan trọng.",
+      "D. Kéo dài thời gian nghiên cứu lên 6 tháng để người dùng quen với việc ghi chép."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Event-contingent sampling chỉ yêu cầu ghi chép khi có sự kiện cụ thể xảy ra, giúp giảm tải cho người dùng trong khi vẫn thu thập được dữ liệu tại 'moment of truth'.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một tổ chức có văn hóa 'Hippo' (Highest Paid Person's Opinion), bạn thu thập được bằng chứng nghiên cứu bác bỏ giả định của Giám đốc điều hành. Cách tiếp cận nào là chuyên nghiệp nhất?",
+    "options": [
+      "A. Trình bày báo cáo nghiên cứu một cách trực diện và khẳng định giả định của Giám đốc là sai.",
+      "B. Giấu kết quả nghiên cứu để tránh xung đột trực tiếp với ban lãnh đạo.",
+      "C. Trình bày dữ liệu dưới dạng các rủi ro kinh doanh tiềm ẩn và đề xuất một thử nghiệm quy mô nhỏ (Pilot) để kiểm chứng thêm.",
+      "D. Gửi báo cáo qua email cho toàn công ty để tạo áp lực dư luận lên Giám đốc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Chuyên gia UX Research cần kỹ năng quản trị Stakeholder, biến dữ liệu nghiên cứu thành ngôn ngữ kinh doanh (rủi ro/chi phí) và đưa ra giải pháp giảm thiểu rủi ro thay vì đối đầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Phương pháp nào hiệu quả nhất để kiểm chứng cấu trúc thông tin (Information Architecture) của một website thương mại điện tử có danh mục sản phẩm cực kỳ lớn?",
+    "options": [
+      "A. Open Card Sorting với 100 người dùng ngẫu nhiên.",
+      "B. Tree Testing để đo lường khả năng tìm thấy (Findability) của các tác vụ cụ thể trên cấu trúc dự kiến.",
+      "C. Phỏng vấn sâu để hỏi người dùng họ muốn sắp xếp danh mục như thế nào.",
+      "D. A/B Testing hai giao diện trang chủ khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tree testing là phương pháp tốt nhất để đánh giá hiệu quả của cấu trúc phân cấp thông tin mà không bị ảnh hưởng bởi các yếu tố thiết kế giao diện.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế câu hỏi khảo sát (Survey) để thu thập dữ liệu định lượng về mức độ hài lòng của khách hàng doanh nghiệp (B2B), sai lầm nào thường gặp nhất ở cấp độ chuyên gia cần tránh?",
+    "options": [
+      "A. Sử dụng thang đo Likert 5 điểm.",
+      "B. Đặt các câu hỏi dẫn dắt (Leading questions) hoặc câu hỏi kép (Double-barreled questions).",
+      "C. Phân tích dữ liệu theo các phân khúc khách hàng khác nhau.",
+      "D. Kết hợp cả câu hỏi đóng và câu hỏi mở."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các câu hỏi dẫn dắt hoặc câu hỏi kép làm sai lệch dữ liệu nghiêm trọng, dẫn đến các quyết định chiến lược sai lầm. Đây là lỗi cơ bản nhưng rất nguy hiểm trong nghiên cứu chuyên sâu.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc xác định 'Mental Model' (Mô hình tâm trí) của người dùng lại quan trọng hơn việc chỉ quan sát hành vi của họ khi sử dụng một hệ thống phần mềm chuyên dụng?",
+    "options": [
+      "A. Vì hành vi chỉ cho thấy 'cái gì' đang xảy ra, còn Mental Model giúp giải thích 'tại sao' và dự đoán phản ứng với các thay đổi tương lai.",
+      "B. Vì Mental Model dễ đo lường bằng các công cụ Analytics hơn là hành vi.",
+      "C. Vì Mental Model của mọi người dùng trong cùng một ngành nghề là hoàn toàn giống nhau.",
+      "D. Vì việc thay đổi Mental Model của người dùng dễ dàng hơn việc thay đổi giao diện phần mềm."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Hiểu Mental Model cho phép nhà thiết kế xây dựng hệ thống tương thích với cách tư duy của người dùng, từ đó giảm tải nhận thức và tăng hiệu quả sử dụng lâu dài.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong nghiên cứu UX cho các sản phẩm AI/Machine Learning, thách thức lớn nhất khi thực hiện Usability Testing là gì?",
+    "options": [
+      "A. Người dùng không biết cách sử dụng chuột và bàn phím.",
+      "B. Tính không dự đoán được (Non-deterministic) của kết quả đầu ra từ AI khiến việc thiết kế kịch bản kiểm thử cố định trở nên khó khăn.",
+      "C. Các mô hình AI luôn hoạt động hoàn hảo nên không cần kiểm thử.",
+      "D. Chi phí thuê người dùng có kiến thức về AI quá cao."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hệ thống AI có thể đưa ra các phản hồi khác nhau cho cùng một đầu vào tùy theo ngữ cảnh học máy, đòi hỏi nhà nghiên cứu phải thiết kế các kịch bản linh hoạt và tập trung vào niềm tin (Trust) cũng như sự minh bạch (Explainability).",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi tổng hợp dữ liệu từ 50 cuộc phỏng vấn sâu bằng phương pháp Affinity Mapping, bước nào là quan trọng nhất để chuyển đổi dữ liệu thô thành chiến lược sản phẩm?",
+    "options": [
+      "A. Đếm số lần một từ khóa xuất hiện để xác định độ quan trọng.",
+      "B. Nhóm các ghi chú có nội dung tương đồng và đặt tên nhóm theo hành động.",
+      "C. Tổng hợp các 'Insight' từ các nhóm dữ liệu và đối chiếu chúng với mục tiêu kinh doanh để tìm ra các cơ hội (Opportunities).",
+      "D. Chụp ảnh lại bảng Affinity Mapping để gửi cho các bên liên quan."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Affinity Mapping không chỉ là phân loại, mà là quá trình tổng hợp để tìm ra ý nghĩa ẩn sau (Insights) và biến chúng thành các bước đi chiến lược có giá trị cho sản phẩm.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số North Star Metric (NSM) trong nghiên cứu UX nên được xác định dựa trên tiêu chí nào để đảm bảo sự bền vững của doanh nghiệp?",
+    "options": [
+      "A. Tổng số lượng User đăng ký mới hàng tháng.",
+      "B. Giá trị cốt lõi mà sản phẩm mang lại cho khách hàng được phản ánh qua hành vi lặp lại.",
+      "C. Số lượng tính năng mới được Release trong mỗi quý.",
+      "D. Thời gian trung bình người dùng truy cập ứng dụng mỗi ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "NSM phải là điểm giao thoa giữa giá trị khách hàng nhận được và mục tiêu tăng trưởng dài hạn của doanh nghiệp. Các chỉ số như 'đăng ký mới' thường là chỉ số ảo (Vanity metrics).",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang nghiên cứu về trải nghiệm người dùng cho một ứng dụng y tế dành cho người cao tuổi. Phương pháp nghiên cứu nào dưới đây sẽ mang lại dữ liệu thực tế nhất về rào cản sử dụng?",
+    "options": [
+      "A. Khảo sát trực tuyến với các câu hỏi đóng về độ khó.",
+      "B. Contextual Inquiry (Điều tra theo ngữ cảnh) tại chính nhà của người dùng khi họ đang sử dụng ứng dụng.",
+      "C. Focus Group với 8-10 người cao tuổi tại văn phòng công ty.",
+      "D. Chuyên gia tự đánh giá dựa trên các nguyên tắc Heuristic."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với đối tượng đặc thù như người cao tuổi, các yếu tố môi trường (ánh sáng, sự hỗ trợ của người thân, tình trạng sức khỏe) ảnh hưởng rất lớn. Contextual Inquiry giúp quan sát được những yếu tố này mà các phương pháp khác bỏ qua.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quy trình Design Thinking, giai đoạn 'Empathize' (Thấu cảm) thường bị nhầm lẫn với việc chỉ đi hỏi người dùng họ muốn gì. Một chuyên gia UX Research sẽ làm gì khác biệt?",
+    "options": [
+      "A. Thu thập danh sách các tính năng người dùng yêu cầu.",
+      "B. Quan sát những mâu thuẫn giữa điều người dùng nói và điều họ thực sự làm để tìm ra nhu cầu tiềm ẩn (Unmet needs).",
+      "C. Thiết kế ngay các Prototype để người dùng chọn lựa.",
+      "D. Tập trung vào việc làm cho người dùng cảm thấy vui vẻ trong buổi phỏng vấn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thấu cảm thực sự đòi hỏi việc đào sâu vào tâm lý và hành vi để phát hiện ra những vấn đề mà chính người dùng cũng không tự nhận thức được hoặc không thể diễn đạt bằng lời.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện nghiên cứu định lượng để so sánh hai phiên bản thiết kế (A/B Testing), yếu tố nào quyết định kết quả thu được có đáng tin cậy để áp dụng cho toàn bộ hệ thống hay không?",
+    "options": [
+      "A. Số lượng người tham gia phiên bản A nhiều hơn phiên bản B.",
+      "B. Thời gian thực hiện thử nghiệm kéo dài ít nhất 1 tháng.",
+      "C. Ý nghĩa thống kê (Statistical Significance) và kích thước mẫu (Sample Size) đủ lớn.",
+      "D. Ý kiến chủ quan của trưởng dự án về phiên bản nào đẹp hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nếu không đạt được ý nghĩa thống kê (thường là p < 0.05), kết quả của A/B test có thể chỉ là do ngẫu nhiên và không đại diện cho hành vi thực tế của toàn bộ người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần xây dựng Persona cho một nền tảng SaaS quản lý chuỗi cung ứng. Cách tiếp cận nào là hiệu quả nhất để tránh tạo ra các 'Persona rỗng' (chỉ có hình ảnh và mô tả hời hợt)?",
+    "options": [
+      "A. Sử dụng các mẫu Persona có sẵn trên mạng và điền thông tin giả định.",
+      "B. Dựa trên dữ liệu phân khúc thị trường (Marketing Segmentation) như độ tuổi, giới tính và thu nhập.",
+      "C. Xây dựng Persona dựa trên mục tiêu (Goals), nỗi đau (Pain points), và các biến số hành vi (Behavioral variables) thu thập từ nghiên cứu thực địa.",
+      "D. Thuê một công ty thiết kế đồ họa để làm cho các bản Persona trông thật chuyên nghiệp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Persona hiệu quả phải dựa trên dữ liệu thực tế về hành vi và mục tiêu của người dùng trong ngữ cảnh sử dụng sản phẩm, giúp đội ngũ thiết kế đưa ra các quyết định chức năng chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khái niệm 'Triangulation' trong UX Research đề cập đến việc gì?",
+    "options": [
+      "A. Sử dụng ba người nghiên cứu khác nhau cho cùng một dự án.",
+      "B. Kết hợp nhiều phương pháp, nguồn dữ liệu hoặc nhà nghiên cứu để kiểm chứng một giả thuyết.",
+      "C. Chia quy trình nghiên cứu thành ba giai đoạn: Trước, Trong và Sau khi thiết kế.",
+      "D. Chỉ tập trung vào ba phân đoạn khách hàng quan trọng nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Triangulation giúp tăng độ tin cậy và tính khách quan của kết quả nghiên cứu bằng cách nhìn nhận vấn đề từ nhiều góc độ khác nhau, giảm thiểu sai số hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một dự án Agile, khi thời gian cho nghiên cứu cực kỳ hạn hẹp, phương pháp 'Lean UX Research' nào là phù hợp nhất để vẫn đảm bảo tính định hướng?",
+    "options": [
+      "A. Bỏ qua hoàn toàn nghiên cứu và đợi đến khi có sản phẩm thực tế mới thu thập feedback.",
+      "B. Thực hiện 'Guerrilla Testing' nhanh với các Prototype thô để kiểm chứng các giả định rủi ro nhất.",
+      "C. Chỉ đọc các báo cáo nghiên cứu thị trường có sẵn từ năm ngoái.",
+      "D. Yêu cầu toàn bộ team dừng phát triển trong 2 tuần để làm nghiên cứu bài bản."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lean UX tập trung vào việc giảm thiểu lãng phí. Việc kiểm chứng nhanh các giả định rủi ro (Riskiest assumptions) giúp team điều hướng kịp thời mà không làm chậm tiến độ dự án.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi trình bày kết quả nghiên cứu về hành trình khách hàng (Customer Journey Map), điểm nào là quan trọng nhất để thuyết phục các bên liên quan đầu tư vào cải thiện trải nghiệm?",
+    "options": [
+      "A. Các biểu đồ màu sắc đẹp mắt thể hiện cảm xúc người dùng.",
+      "B. Việc liệt kê tất cả các bước mà người dùng thực hiện.",
+      "C. Xác định các 'Pain points' gây sụt giảm tỷ lệ chuyển đổi (Drop-off) và tác động tài chính tương ứng.",
+      "D. Danh sách các công nghệ mới nhất có thể áp dụng vào hệ thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để thuyết phục doanh nghiệp, các Insight nghiên cứu phải được gắn liền với giá trị kinh doanh và các con số cụ thể về tổn thất hoặc cơ hội doanh thu.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống Dashboard quản trị dữ liệu lớn (Big Data) đang gặp vấn đề về 'Information Overload'. Kỹ thuật nghiên cứu nào giúp xác định thông tin nào là thực sự cần thiết cho người dùng?",
+    "options": [
+      "A. Card Sorting để phân loại các loại biểu đồ.",
+      "B. Kỹ thuật 'Critical Incident Technique' để tìm hiểu những thông tin then chốt họ cần khi có sự cố xảy ra.",
+      "C. Khảo sát người dùng về màu sắc họ yêu thích cho các biểu đồ.",
+      "D. Theo dõi mắt (Eye-tracking) để xem họ nhìn vào đâu nhiều nhất trên màn hình hiện tại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Critical Incident Technique giúp tập trung vào những tình huống quan trọng nhất, từ đó lọc ra các thông tin mang tính quyết định, giúp giảm tải lượng dữ liệu không cần thiết trên Dashboard.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện Accessibility Research (Nghiên cứu về tính tiếp cận) lại là một yêu cầu bắt buộc đối với các sản phẩm dịch vụ công hoặc doanh nghiệp lớn?",
+    "options": [
+      "A. Để làm cho giao diện trông hiện đại và chuyên nghiệp hơn.",
+      "B. Vì nó giúp mở rộng tệp khách hàng tiềm năng và tuân thủ các quy định pháp lý (như WCAG).",
+      "C. Vì người khuyết tật là nhóm đối tượng duy nhất sử dụng các sản phẩm này.",
+      "D. Để giảm chi phí lưu trữ dữ liệu trên máy chủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Accessibility không chỉ là vấn đề đạo đức mà còn là chiến lược kinh doanh để không bỏ lỡ tệp khách hàng lớn và tránh các rủi ro pháp lý cho doanh nghiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phân tích rủi ro của một tính năng mới dựa trên kết quả nghiên cứu, yếu tố nào cho thấy tính năng đó có rủi ro cao nhất (High Risk)?",
+    "options": [
+      "A. Tính năng có chi phí phát triển thấp nhưng người dùng chưa yêu cầu.",
+      "B. Tính năng dựa trên một giả định chưa được kiểm chứng và thay đổi hoàn toàn thói quen hiện tại của người dùng.",
+      "C. Tính năng đã được các đối thủ cạnh tranh áp dụng thành công từ lâu.",
+      "D. Tính năng chỉ dành cho một nhóm nhỏ người dùng chuyên gia (Power users)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự kết hợp giữa việc thiếu dữ liệu kiểm chứng và tác động lớn đến hành vi người dùng (Behavioral change) tạo ra rủi ro thất bại cực cao cho sản phẩm.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh nghiên cứu quốc tế, sai lệch văn hóa (Cultural Bias) có thể ảnh hưởng như thế nào đến kết quả phỏng vấn?",
+    "options": [
+      "A. Không ảnh hưởng gì vì UX là ngôn ngữ chung toàn cầu.",
+      "B. Người dùng ở một số nền văn hóa có xu hướng luôn đồng ý với người phỏng vấn (Acquiescence bias) để giữ phép lịch sự.",
+      "C. Mọi người dùng trên thế giới đều có cùng một cách biểu đạt cảm xúc giống nhau.",
+      "D. Chỉ cần dịch câu hỏi sang ngôn ngữ bản địa là có thể loại bỏ hoàn toàn sai lệch."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuyên gia cần nhận thức được các sắc thái văn hóa như 'giữ thể diện' hoặc 'tôn trọng thứ bậc' để điều chỉnh cách đặt câu hỏi và phân tích phản hồi một cách chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng phương pháp 'System Usability Scale' (SUS), một điểm số 70 có ý nghĩa gì đối với một chuyên gia UX?",
+    "options": [
+      "A. Hệ thống đạt mức xuất sắc và không cần cải thiện gì thêm.",
+      "B. Hệ thống nằm ở mức trung bình (Above average) nhưng vẫn còn nhiều không gian để tối ưu hóa.",
+      "C. Hệ thống hoàn toàn không thể sử dụng được và cần làm lại từ đầu.",
+      "D. Điểm số này chỉ liên quan đến giao diện đồ họa, không liên quan đến trải nghiệm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Điểm SUS trung bình là khoảng 68. Điểm 70 cho thấy hệ thống ở mức chấp nhận được nhưng chưa đạt mức 'Good' hoặc 'Excellent', cần phân tích sâu hơn các vấn đề cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một 'Research Repository' (Kho lưu trữ nghiên cứu) cho doanh nghiệp. Mục tiêu quan trọng nhất của việc này là gì?",
+    "options": [
+      "A. Để lưu trữ tất cả các video phỏng vấn cho tốn dung lượng bộ nhớ.",
+      "B. Để ngăn chặn việc lãng phí nguồn lực do thực hiện lặp lại các nghiên cứu đã có và giúp chia sẻ kiến thức (Insights) xuyên suốt tổ chức.",
+      "C. Để thay thế hoàn toàn vai trò của các nhà nghiên cứu trong tương lai.",
+      "D. Để quản lý danh sách email của những người tham gia nghiên cứu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Research Repository giúp dân chủ hóa dữ liệu nghiên cứu, đảm bảo các quyết định sản phẩm ở mọi phòng ban đều dựa trên những bằng chứng đã được xác thực.",
+    "difficulty": "EXPERT",
+    "skillArea": "UX Research",
+    "category": "SKILL"
+  }
+]

@@ -139,7 +139,7 @@ const Header: React.FC = () => {
     },
     {
       name: "Kế Hoạch AI",
-      description: "Quản lý và tiếp tục kế hoạch học tập cá nhân",
+      description: "Quản lý kế hoạch học tập cá nhân",
       path: "/study-planner",
       icon: Calendar,
       hideForRoles: ["RECRUITER"],
@@ -711,7 +711,7 @@ const Header: React.FC = () => {
                       {
                         name: "Kế Hoạch AI",
                         description:
-                          "Quản lý và tiếp tục kế hoạch học tập cá nhân",
+                          "Quản lý kế hoạch học tập cá nhân",
                         path: "/study-planner",
                         icon: Calendar,
                         requireAuth: true,

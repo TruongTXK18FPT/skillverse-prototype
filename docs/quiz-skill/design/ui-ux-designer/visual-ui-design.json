@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Tỷ lệ tương phản (contrast ratio) tối thiểu cho văn bản bình thường (normal text) theo tiêu chuẩn WCAG 2.1 mức độ AA là bao nhiêu?",
+    "options": [
+      "A. 3:1",
+      "B. 4.5:1",
+      "C. 7:1",
+      "D. 2:1"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Theo chuẩn WCAG 2.1 AA, văn bản bình thường cần tỷ lệ tương phản tối thiểu 4.5:1 để đảm bảo khả năng đọc cho người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong hệ thống thiết kế (Design System), 'Design Tokens' thường được sử dụng để lưu trữ giá trị nào sau đây?",
+    "options": [
+      "A. Các đoạn mã logic của ứng dụng",
+      "B. Các tệp hình ảnh định dạng PNG",
+      "C. Các giá trị cốt lõi như màu sắc, khoảng cách và cỡ chữ",
+      "D. Danh sách các lỗi hệ thống"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Design Tokens là những thực thể nhỏ nhất lưu trữ các thuộc tính thiết kế (màu sắc, spacing, typography) giúp duy trì sự nhất quán giữa thiết kế và code.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trạng thái 'Disabled' của một nút bấm (Button) thường được thể hiện bằng đặc điểm thị giác nào?",
+    "options": [
+      "A. Màu sắc rực rỡ và có viền đậm",
+      "B. Màu xám nhạt và giảm độ tương phản",
+      "C. Hiệu ứng đổ bóng lớn và đổ màu gradient",
+      "D. Kích thước lớn hơn các nút khác"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trạng thái Disabled thường sử dụng màu xám hoặc giảm opacity để báo hiệu cho người dùng rằng nút đó hiện không thể tương tác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của việc thiết kế 'Empty State' (Trạng thái trống) là gì?",
+    "options": [
+      "A. Để làm cho giao diện trông tối giản hơn",
+      "B. Để tiết kiệm tài nguyên hệ thống",
+      "C. Để hướng dẫn người dùng cách bắt đầu sử dụng hoặc giải thích lý do không có dữ liệu",
+      "D. Để quảng cáo các tính năng cao cấp của ứng dụng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Empty State giúp người dùng hiểu tại sao màn hình trống và cung cấp hành động tiếp theo để họ không cảm thấy bị lạc lõng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hệ thống lưới '8pt Grid' phổ biến trong UI Design vì lý do chính nào?",
+    "options": [
+      "A. Vì số 8 là số may mắn trong thiết kế",
+      "B. Vì nó giúp việc nhân rộng quy mô (scaling) trên các màn hình có mật độ điểm ảnh khác nhau dễ dàng hơn",
+      "C. Vì nó giúp giao diện trông phức tạp hơn",
+      "D. Vì nó bắt buộc mọi icon phải có kích thước 8px"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng bội số của 8 (8, 16, 24, 32...) giúp các thành phần UI hiển thị sắc nét và nhất quán trên nhiều độ phân giải màn hình khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một danh sách lựa chọn mà người dùng chỉ được chọn DUY NHẤT một phương án, bạn nên sử dụng thành phần nào?",
+    "options": [
+      "A. Checkbox",
+      "B. Toggle Switch",
+      "C. Radio Button",
+      "D. Input Field"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Radio Button được dùng cho các lựa chọn loại trừ lẫn nhau (chỉ chọn 1), trong khi Checkbox dùng cho việc chọn nhiều phương án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khái niệm 'White Space' (Khoảng trắng) trong UI Design có tác dụng gì?",
+    "options": [
+      "A. Làm cho giao diện trông trống trải và thiếu nội dung",
+      "B. Giúp phân nhóm thông tin, tạo sự thông thoáng và tăng khả năng tập trung",
+      "C. Chỉ dùng để đặt logo của thương hiệu",
+      "D. Là phần diện tích bắt buộc phải để màu trắng tinh khiết"
+    ],
+    "correctAnswer": "B",
+    "explanation": "White space (hay negative space) là yếu tố quan trọng giúp cân bằng bố cục, giảm tải nhận thức và làm nổi bật các nội dung quan trọng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây ảnh hưởng mạnh mẽ nhất đến 'Visual Hierarchy' (Phân cấp thị giác) của một tiêu đề?",
+    "options": [
+      "A. Font family (Kiểu chữ)",
+      "B. Font size (Kích thước chữ)",
+      "C. Kerning (Khoảng cách giữa các chữ cái)",
+      "D. Text alignment (Căn lề văn bản)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kích thước (Size) là cách trực quan và nhanh nhất để tạo ra sự phân cấp, giúp mắt người dùng nhận biết đâu là thông tin quan trọng nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế thông báo lỗi (Error message), màu sắc nào thường được sử dụng nhất để tuân thủ mô hình tâm lý người dùng?",
+    "options": [
+      "A. Màu Xanh lá cây",
+      "B. Màu Vàng",
+      "C. Màu Đỏ",
+      "D. Màu Xanh dương"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Màu đỏ theo quy ước chung biểu thị cho sự nguy hiểm hoặc lỗi, giúp người dùng nhận diện vấn đề ngay lập tức.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Typography, khoảng cách giữa các dòng văn bản được gọi là gì?",
+    "options": [
+      "A. Tracking",
+      "B. Kerning",
+      "C. Leading (Line height)",
+      "D. Padding"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Leading (hay Line height trong CSS) là khoảng cách theo chiều dọc giữa các dòng văn bản, ảnh hưởng trực tiếp đến khả năng đọc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một 'Micro-interaction' (Vi tương tác) tốt nên có đặc điểm nào?",
+    "options": [
+      "A. Kéo dài ít nhất 2 giây để người dùng nhìn rõ",
+      "B. Có âm thanh lớn để thu hút sự chú ý",
+      "C. Tinh tế, nhanh chóng và cung cấp phản hồi rõ ràng cho một hành động",
+      "D. Luôn sử dụng các hiệu ứng chuyển động phức tạp"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Micro-interaction cần phải mượt mà và không gây gián đoạn trải nghiệm, mục đích chính là cung cấp phản hồi ngay lập tức cho người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để đảm bảo khả năng tiếp cận (Accessibility) cho người bị mù màu, bạn không nên làm gì?",
+    "options": [
+      "A. Sử dụng thêm icon đi kèm với thông báo màu sắc",
+      "B. Chỉ dùng duy nhất màu sắc để truyền đạt thông tin quan trọng",
+      "C. Sử dụng các mẫu pattern hoặc texture khác nhau",
+      "D. Kiểm tra độ tương phản màu sắc bằng các công cụ chuyên dụng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Người mù màu có thể không phân biệt được các sắc thái màu, do đó cần có thêm các yếu tố khác như văn bản hoặc icon để truyền tải thông điệp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Thành phần 'Breadcrumbs' trong UI thường được đặt ở đâu và có vai trò gì?",
+    "options": [
+      "A. Ở cuối trang, dùng để chứa thông tin bản quyền",
+      "B. Ở đầu trang, giúp người dùng biết vị trí hiện tại của họ trong cấu trúc website",
+      "C. Ở giữa trang, dùng để hiển thị quảng cáo",
+      "D. Bên trong menu chính, dùng để mở các tab mới"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Breadcrumbs (thanh điều hướng phân cấp) giúp người dùng định vị và quay lại các cấp thư mục cha một cách nhanh chóng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một Card UI, yếu tố nào giúp phân tách Card đó với nền (Background) một cách hiệu quả nhất mà không dùng đường viền?",
+    "options": [
+      "A. Thay đổi Font chữ bên trong Card",
+      "B. Sử dụng Drop Shadow (Đổ bóng) nhẹ",
+      "C. Tăng kích thước của Card",
+      "D. Viết hoa toàn bộ văn bản trong Card"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Drop Shadow tạo ra chiều sâu (elevation), giúp người dùng nhận diện Card là một lớp nằm trên nền, tạo sự phân tách thị giác rõ ràng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa 'San-serif' và 'Serif' font là gì?",
+    "options": [
+      "A. Serif có các nét gạch nhỏ ở đầu/chân chữ, San-serif thì không",
+      "B. San-serif luôn có màu đen, Serif có màu xám",
+      "C. Serif chỉ dùng cho tiêu đề, San-serif chỉ dùng cho nội dung",
+      "D. San-serif là font chữ viết tay, Serif là font chữ máy tính"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Serif (có chân) thường mang cảm giác cổ điển, trong khi Sans-serif (không chân) mang lại cảm giác hiện đại và thường dễ đọc hơn trên màn hình kỹ thuật số.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong thiết kế giao diện di động, kích thước vùng chạm (Tap target) tối thiểu được khuyến nghị bởi Apple và Google là khoảng bao nhiêu?",
+    "options": [
+      "A. 10x10 px",
+      "B. 24x24 px",
+      "C. 44x44 px hoặc 48x48 dp",
+      "D. 100x100 px"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kích thước khoảng 44-48px đảm bảo vùng chạm đủ lớn để ngón tay người dùng tương tác chính xác mà không bấm nhầm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một ứng dụng ngân hàng cần sự tin tưởng và ổn định. Màu sắc chủ đạo (Primary color) nào sau đây thường phù hợp nhất?",
+    "options": [
+      "A. Màu Cam neon",
+      "B. Màu Hồng cánh sen",
+      "C. Màu Xanh dương (Blue)",
+      "D. Màu Tím đậm"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Màu xanh dương thường gợi liên tưởng đến sự tin cậy, an toàn và chuyên nghiệp, rất phổ biến trong lĩnh vực tài chính.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Affordance' trong UI Design có nghĩa là gì?",
+    "options": [
+      "A. Chi phí để thiết kế một màn hình",
+      "B. Khả năng đồ họa của thiết bị",
+      "C. Các đặc điểm thị giác gợi ý cách sử dụng của một đối tượng (ví dụ: nút trông giống như có thể bấm được)",
+      "D. Tốc độ tải trang của giao diện"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Affordance là thuộc tính của vật thể giúp người dùng hiểu cách tương tác với nó chỉ qua cái nhìn đầu tiên.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một trang web đang tải dữ liệu, thay vì để màn hình trắng, việc sử dụng 'Skeleton Screen' có lợi ích gì?",
+    "options": [
+      "A. Làm cho trang web tải nhanh hơn về mặt kỹ thuật",
+      "B. Giảm bớt cảm giác chờ đợi của người dùng bằng cách mô phỏng bố cục sắp hiển thị",
+      "C. Hiển thị quảng cáo trong lúc chờ",
+      "D. Tiết kiệm dung lượng pin cho thiết bị"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Skeleton Screen tạo cảm giác tiến triển (progress), giúp người dùng cảm thấy hệ thống đang hoạt động và giảm sự mất kiên nhẫn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bố cục giao diện, việc căn lề (Alignment) nhất quán giúp ích gì cho người dùng?",
+    "options": [
+      "A. Làm cho thiết kế trông nghệ thuật và ngẫu hứng hơn",
+      "B. Giúp mắt người dùng quét thông tin dễ dàng và tạo sự ngăn nắp",
+      "C. Tăng số lượng màu sắc có thể sử dụng",
+      "D. Giảm dung lượng file thiết kế"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Căn lề tạo ra các đường dẫn thị giác ẩn, giúp nội dung được tổ chức chặt chẽ và chuyên nghiệp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thành phần 'Tooltip' nên xuất hiện khi nào?",
+    "options": [
+      "A. Khi người dùng vừa mở ứng dụng lần đầu",
+      "B. Khi người dùng thực hiện hành động xóa dữ liệu",
+      "C. Khi người dùng di chuột (hover) hoặc nhấn giữ vào một phần tử để xem giải thích ngắn gọn",
+      "D. Khi hệ thống gặp lỗi nghiêm trọng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tooltip cung cấp thông tin bổ trợ ngữ cảnh cho các icon hoặc nhãn văn bản khi người dùng cần thêm giải thích.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một bảng màu 'Monochromatic' (Đơn sắc) được tạo ra như thế nào?",
+    "options": [
+      "A. Kết hợp các màu đối diện nhau trên bánh xe màu sắc",
+      "B. Sử dụng các biến thể khác nhau về độ sáng và độ bão hòa của duy nhất một màu",
+      "C. Chọn 3 màu nằm cạnh nhau trên bánh xe màu sắc",
+      "D. Chỉ sử dụng hai màu đen và trắng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phối màu đơn sắc sử dụng một màu gốc và thay đổi sắc độ (tint/shade) để tạo ra sự hài hòa tuyệt đối.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng quá nhiều font chữ khác nhau trong cùng một giao diện?",
+    "options": [
+      "A. Vì sẽ làm tăng chi phí mua bản quyền font",
+      "B. Vì sẽ gây rối mắt, mất tính nhất quán và làm giảm tốc độ tải trang",
+      "C. Vì các trình duyệt không hỗ trợ quá 2 font chữ",
+      "D. Vì font chữ sẽ tự động bị biến dạng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng quá nhiều font chữ (thường quá 2-3 font) khiến giao diện trở nên lộn xộn và khó duy trì hệ thống phân cấp thị giác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong thiết kế UI, thuật ngữ 'Opacity' dùng để chỉ thuộc tính gì?",
+    "options": [
+      "A. Độ sắc nét của hình ảnh",
+      "B. Độ trong suốt của một thành phần",
+      "C. Khoảng cách giữa các thành phần",
+      "D. Tốc độ chuyển động của hiệu ứng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Opacity điều chỉnh mức độ nhìn xuyên thấu của một đối tượng, thường dùng để tạo các lớp phủ (overlay) hoặc hiệu ứng mờ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một Modal (Hộp thoại), yếu tố nào là quan trọng nhất để người dùng không cảm thấy bị 'mắc kẹt'?",
+    "options": [
+      "A. Một tiêu đề thật dài",
+      "B. Màu nền Modal phải thật rực rỡ",
+      "C. Một nút đóng (X) rõ ràng hoặc cách để thoát khỏi Modal",
+      "D. Hình ảnh minh họa chất lượng cao"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Người dùng luôn cần có quyền kiểm soát và lối thoát rõ ràng khi một cửa sổ mới hiện lên đè lên nội dung chính.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế Dark Mode cho một ứng dụng di động, tại sao chuyên gia thường khuyên tránh sử dụng màu đen thuần (#000000) làm nền chính?",
+    "options": [
+      "A. Vì màu đen thuần làm tăng mức tiêu thụ pin trên màn hình OLED.",
+      "B. Vì nó gây ra hiện tượng 'smearing' (nhòe) khi cuộn trang và gây mỏi mắt do độ tương phản quá gắt.",
+      "C. Vì màu đen thuần không thể kết hợp được với bất kỳ hệ thống màu Accent nào.",
+      "D. Vì các tiêu chuẩn WCAG nghiêm cấm sử dụng màu đen thuần làm nền."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Màu đen thuần (#000000) tạo độ tương phản quá cao với chữ trắng gây mỏi mắt và gây ra lỗi hiển thị vật lý (smearing) trên màn hình OLED khi các pixel chuyển trạng thái tắt/mở.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Semantic Tokens' thay vì 'Global Tokens' (Raw values) trong một Design System phức tạp là gì?",
+    "options": [
+      "A. Giúp lập trình viên viết code CSS nhanh hơn bằng cách sử dụng ít biến hơn.",
+      "B. Đảm bảo tính nhất quán về mặt thẩm mỹ giữa các nền tảng Web và Mobile.",
+      "C. Cho phép thay đổi giao diện (như Dark/Light mode) dễ dàng bằng cách chỉ cần thay đổi giá trị ánh xạ của token theo ngữ cảnh.",
+      "D. Giúp giảm dung lượng file thiết kế trên các công cụ như Figma hoặc Sketch."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Semantic tokens đặt tên theo mục đích sử dụng (ví dụ: surface-primary) thay vì giá trị màu (blue-500), giúp việc quản lý theme và thay đổi quy mô lớn trở nên linh hoạt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một bảng điều khiển (Dashboard) với rất nhiều dữ liệu số. Phương pháp nào sau đây giúp tối ưu hóa khả năng quét (scannability) của người dùng?",
+    "options": [
+      "A. Sử dụng font chữ Serif để tăng tính trang trọng cho dữ liệu.",
+      "B. Căn lề trái cho tất cả các cột dữ liệu số để tạo sự đồng nhất với văn bản.",
+      "C. Sử dụng font chữ Tabular Numbers (monospaced numbers) và căn lề phải cho các cột số.",
+      "D. Sử dụng màu sắc khác nhau cho mỗi dòng để phân biệt dữ liệu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tabular numbers đảm bảo các chữ số có cùng chiều ngang, khi kết hợp với căn lề phải giúp người dùng dễ dàng so sánh các hàng đơn vị, chục, trăm theo chiều dọc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong thiết kế Icon, khái niệm 'Optical Correction' (Hiệu chỉnh thị giác) thường được áp dụng như thế nào đối với các hình tam giác (nút Play)?",
+    "options": [
+      "A. Đặt trọng tâm hình học của tam giác chính xác vào tâm của vòng tròn bao quanh.",
+      "B. Dịch chuyển tam giác hơi lệch sang phải so với tâm hình học để tạo cảm giác cân bằng về khối lượng thị giác.",
+      "C. Bo tròn tất cả các góc của tam giác để giảm bớt sự sắc nhọn.",
+      "D. Tăng kích thước của tam giác lớn hơn 10% so với các icon hình vuông khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Do khối lượng thị giác của tam giác tập trung ở phần đáy, việc đặt tâm hình học vào chính giữa sẽ khiến nó trông như bị lệch sang trái. Cần dịch sang phải để cân bằng thị giác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế trạng thái 'Empty State' cho một danh sách công việc, yếu tố nào là quan trọng nhất để giữ chân người dùng?",
+    "options": [
+      "A. Một hình minh họa (Illustration) đẹp mắt và đầy tính nghệ thuật.",
+      "B. Một thông báo lỗi rõ ràng giải thích tại sao không có dữ liệu.",
+      "C. Một lời kêu gọi hành động (CTA) rõ ràng để hướng dẫn người dùng bắt đầu tạo dữ liệu.",
+      "D. Đường dẫn quay lại trang chủ để người dùng không bị kẹt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Empty state không chỉ để thông báo mà còn là cơ hội để dẫn dắt người dùng thực hiện hành động tiếp theo (Action-oriented), giúp giảm tỷ lệ rời bỏ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Theo nguyên tắc về Visual Hierarchy, cách nào hiệu quả nhất để làm nổi bật một nút 'Primary Action' trên một trang có nền trắng?",
+    "options": [
+      "A. Sử dụng kích thước chữ (Font size) lớn nhất có thể.",
+      "B. Sử dụng màu sắc có độ tương phản cao so với nền và các thành phần xung quanh.",
+      "C. Thêm hiệu ứng đổ bóng (Drop shadow) dày và đậm màu.",
+      "D. Đặt nút ở vị trí chính giữa màn hình bất kể nội dung khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Màu sắc và độ tương phản là những tín hiệu thị giác mạnh nhất để phân cấp thông tin, giúp người dùng nhận diện hành động chính ngay lập tức.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một Micro-interaction (ví dụ: hiệu ứng khi di chuột qua nút) nên có thời lượng (duration) khoảng bao nhiêu để mang lại cảm giác phản hồi tức thì nhưng vẫn mượt mà?",
+    "options": [
+      "A. 50ms - 100ms",
+      "B. 200ms - 500ms",
+      "C. 800ms - 1000ms",
+      "D. Trên 1 giây"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dưới 100ms thường quá nhanh để nhận biết, trên 500ms gây cảm giác chậm chạp. Khoảng 200-500ms là tiêu chuẩn cho các tương tác UI mượt mà.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng hệ thống lưới 8pt (8pt Grid System), nếu bạn có một Icon kích thước 24x24px đặt cạnh một dòng văn bản, khoảng cách (spacing) hợp lý nhất nên là bao nhiêu?",
+    "options": [
+      "A. 7px",
+      "B. 10px",
+      "C. 12px",
+      "D. 15px"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong hệ thống 8pt, các khoảng cách nên là bội số của 4 hoặc 8 (4, 8, 12, 16...). 12px là giá trị phù hợp và tuân thủ hệ thống hơn các số lẻ hoặc không chia hết cho 4.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong thiết kế Form, tại sao việc đặt nhãn (Label) ngay phía trên Input field lại tốt hơn việc đặt nhãn bên trái Input field (trên Desktop)?",
+    "options": [
+      "A. Vì nó giúp tiết kiệm diện tích chiều ngang của trang web.",
+      "B. Vì nó giảm số lượng điểm dừng của mắt (fixations), giúp người dùng hoàn thành form nhanh hơn theo một trục dọc.",
+      "C. Vì nó cho phép sử dụng font chữ lớn hơn cho nhãn.",
+      "D. Vì nó là xu hướng thiết kế hiện đại của các hãng công nghệ lớn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cấu trúc nhãn phía trên tạo ra một đường quét dọc duy nhất cho mắt, giúp giảm tải nhận thức và tăng tốc độ xử lý thông tin so với việc mắt phải quét ngang qua lại.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần thiết kế một hệ thống thông báo (Feedback) cho hành động 'Xóa dữ liệu'. Lựa chọn nào là tối ưu nhất về mặt trải nghiệm thị giác và an toàn?",
+    "options": [
+      "A. Hiển thị một Toast message màu xanh lá cây ngay sau khi xóa.",
+      "B. Sử dụng một Modal Dialog xác nhận với nút xóa màu đỏ nổi bật.",
+      "C. Tự động xóa và không cần thông báo để tối ưu tốc độ.",
+      "D. Đổi màu toàn bộ màn hình sang màu đỏ để cảnh báo người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với các hành động có tính phá hủy (destructive), cần một sự xác nhận rõ ràng (Confirmation) và sử dụng màu sắc cảnh báo (thường là đỏ) để ngăn chặn sai sót.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Skeleton Screens' được sử dụng nhằm mục đích chính là gì trong Visual Design?",
+    "options": [
+      "A. Để trang trí cho ứng dụng trông chuyên nghiệp hơn.",
+      "B. Để giảm bớt dung lượng tải về của hình ảnh.",
+      "C. Để tạo cảm giác ứng dụng phản hồi nhanh hơn bằng cách hiển thị cấu trúc nội dung trước khi dữ liệu thực tải xong.",
+      "D. Để thay thế hoàn toàn cho các Loading Spinner truyền thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Skeleton screens tạo ra nhận thức về tiến độ (perceived performance), giúp người dùng cảm thấy thời gian chờ đợi ngắn hơn so với việc nhìn một vòng xoay tải trang trống rỗng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một Card chứa nội dung có độ dài biến thiên, giải pháp nào đảm bảo tính thẩm mỹ nhất cho một Grid Layout?",
+    "options": [
+      "A. Cố định chiều cao của Card và cắt bỏ văn bản thừa bằng dấu ba chấm (...).",
+      "B. Để các Card có chiều cao tự do tùy theo nội dung bên trong.",
+      "C. Ép người dùng chỉ được nhập một số lượng ký tự nhất định.",
+      "D. Sử dụng Scrollbar bên trong mỗi Card để xem hết nội dung."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong một Grid, việc giữ các Card có chiều cao đồng nhất (Equal height) giúp giao diện gọn gàng và nhịp điệu thị giác (visual rhythm) ổn định hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lỗi phổ biến nhất khi sử dụng Drop Shadows (đổ bóng) khiến thiết kế trông bị 'bẩn' và thiếu chuyên nghiệp là gì?",
+    "options": [
+      "A. Sử dụng bóng có màu đen thuần với độ mờ (opacity) quá cao.",
+      "B. Sử dụng bóng có độ nhòe (blur) quá lớn.",
+      "C. Sử dụng bóng có hướng đổ từ trên xuống dưới.",
+      "D. Sử dụng quá nhiều lớp bóng chồng lên nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bóng đen thuần (#000000) ở opacity cao tạo cảm giác nặng nề. Chuyên gia thường dùng màu của vật thể trộn với màu tối hoặc giảm opacity xuống mức rất thấp để bóng trông tự nhiên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để đảm bảo tính Accessibility (WCAG 2.1 AA), tỷ lệ tương phản tối thiểu giữa văn bản thông thường và nền là bao nhiêu?",
+    "options": [
+      "A. 3.0:1",
+      "B. 4.5:1",
+      "C. 7.0:1",
+      "D. 2.0:1"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tiêu chuẩn AA yêu cầu tỷ lệ tương phản tối thiểu là 4.5:1 cho văn bản bình thường và 3:1 cho văn bản lớn hoặc thành phần đồ họa.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một giao diện web phức tạp, việc sử dụng 'Whitespace' (khoảng trắng) hiệu quả nhất nhằm mục đích gì?",
+    "options": [
+      "A. Để giảm chi phí thiết kế vì không phải vẽ nhiều chi tiết.",
+      "B. Để tách biệt các nhóm nội dung, tạo nhịp điệu và giúp mắt người dùng dễ dàng định vị thông tin.",
+      "C. Để làm cho trang web trông có vẻ sang trọng và đắt tiền hơn.",
+      "D. Để tăng tốc độ tải trang do có ít thành phần đồ họa hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khoảng trắng là một công cụ thiết kế chủ động để nhóm các yếu tố liên quan (Law of Proximity) và tạo không gian thở cho nội dung, giúp cải thiện khả năng đọc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một ứng dụng tài chính yêu cầu sự tin tưởng và chuyên nghiệp. Palette màu nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Màu vàng neon kết hợp với màu tím đậm.",
+      "B. Màu xanh dương (Blue) chủ đạo kết hợp với các sắc thái xám trung tính.",
+      "C. Màu đỏ tươi kết hợp với màu cam rực rỡ.",
+      "D. Sử dụng bảng màu đa sắc (Rainbow) để tạo sự thân thiện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Màu xanh dương thường gợi liên tưởng đến sự ổn định, tin cậy và chuyên nghiệp, rất phù hợp cho các lĩnh vực tài chính, ngân hàng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế trạng thái 'Hover' cho một Button, sự thay đổi nào thường mang lại phản hồi thị giác tốt nhất mà không làm mất cân bằng thiết kế?",
+    "options": [
+      "A. Thay đổi hoàn toàn font chữ sang một kiểu khác.",
+      "B. Tăng kích thước nút lên gấp đôi.",
+      "C. Làm sáng hoặc đậm màu nền của nút một chút (khoảng 10-20%).",
+      "D. Làm cho nút nhấp nháy liên tục."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự thay đổi nhẹ về sắc độ (shade/tint) cung cấp đủ phản hồi thị giác để người dùng biết nút có thể tương tác mà không gây xao nhãng hoặc làm hỏng bố cục.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong thiết kế Responsive, tại sao việc sử dụng đơn vị 'rem' cho Typography lại được ưu tiên hơn 'px'?",
+    "options": [
+      "A. Vì 'rem' giúp chữ hiển thị sắc nét hơn trên màn hình Retina.",
+      "B. Vì 'rem' cho phép văn bản co giãn theo cài đặt kích thước chữ của trình duyệt người dùng, hỗ trợ tốt cho Accessibility.",
+      "C. Vì 'rem' dễ tính toán hơn so với 'px' khi thiết kế trên Figma.",
+      "D. Vì tất cả các trình duyệt cũ không còn hỗ trợ đơn vị 'px'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đơn vị 'rem' dựa trên kích thước font chữ gốc của trình duyệt. Nếu người dùng thay đổi kích thước chữ trong cài đặt hệ thống để dễ đọc hơn, giao diện sử dụng 'rem' sẽ thích ứng theo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một danh sách các lựa chọn mà người dùng chỉ được chọn DUY NHẤT một mục, thành phần UI nào là chuẩn xác nhất?",
+    "options": [
+      "A. Checkboxes",
+      "B. Toggle Switches",
+      "C. Radio Buttons",
+      "D. Multi-select Chips"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Theo quy chuẩn UI, Radio Buttons được dùng cho việc chọn 1 trong nhiều lựa chọn. Checkboxes dùng cho chọn nhiều, và Toggle dùng cho trạng thái Bật/Tắt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống Icon trong Design System cần đảm bảo yếu tố nào để đạt được 'Visual Consistency'?",
+    "options": [
+      "A. Tất cả icon phải có cùng một màu sắc duy nhất.",
+      "B. Tất cả icon phải có cùng độ dày nét vẽ (stroke weight), kiểu bo góc và cùng một phong cách (ví dụ: cùng là Outline hoặc cùng là Filled).",
+      "C. Tất cả icon phải được lấy từ các nguồn thư viện miễn phí khác nhau.",
+      "D. Tất cả icon phải có kích thước thực tế bằng chính xác 100% diện tích khung bao (bounding box)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự đồng nhất về stroke, corner radius và style giúp các icon trông như thuộc về cùng một gia đình, tạo nên sự chuyên nghiệp cho hệ thống thị giác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Animation cho UI, đường cong gia tốc 'Ease-in' thường được áp dụng tốt nhất cho trường hợp nào?",
+    "options": [
+      "A. Khi một vật thể xuất hiện từ bên ngoài vào trong màn hình.",
+      "B. Khi một vật thể rời khỏi màn hình.",
+      "C. Khi một vật thể đang di chuyển liên tục vòng quanh màn hình.",
+      "D. Khi người dùng nhấn vào một nút nhấn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ease-in (bắt đầu chậm, kết thúc nhanh) tạo cảm giác vật thể đang lấy đà để rời đi, phù hợp với các yếu tố biến mất khỏi khung nhìn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần hiển thị một thông báo lỗi cho một Input Field. Cách tiếp cận nào dưới đây là tốt nhất cho người dùng bị mù màu?",
+    "options": [
+      "A. Chỉ đổi viền của Input Field sang màu đỏ.",
+      "B. Hiển thị một biểu tượng cảnh báo và một dòng văn bản mô tả lỗi ngay dưới Input Field.",
+      "C. Làm cho Input Field rung lên khi người dùng nhập sai.",
+      "D. Sử dụng màu đỏ đậm hơn bình thường cho văn bản bên trong Input Field."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc Accessibility quan trọng là không bao giờ chỉ sử dụng màu sắc để truyền tải thông tin. Cần có thêm biểu tượng hoặc văn bản để hỗ trợ người khiếm khuyết về màu sắc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế phân cấp thông tin cho một bài báo (Article), yếu tố nào tạo ra sự khác biệt rõ rệt nhất giữa tiêu đề (Headline) và nội dung (Body text)?",
+    "options": [
+      "A. Sử dụng hai font chữ hoàn toàn khác lạ.",
+      "B. Thay đổi màu sắc của tiêu đề sang màu xanh lá cây.",
+      "C. Kết hợp sự khác biệt về độ dày (Font weight) và kích thước (Font size) theo một tỷ lệ nhất định (Type scale).",
+      "D. Gạch chân toàn bộ tiêu đề bài viết."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự kết hợp giữa Weight và Size là cách hiệu quả nhất để tạo ra sự tương phản về mặt thị giác, giúp người dùng phân biệt nhanh các cấp độ thông tin.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng quá nhiều Gradient rực rỡ trong các thành phần điều hướng (Navigation) lại thường bị coi là một lựa chọn thiết kế tồi?",
+    "options": [
+      "A. Vì Gradient làm tăng dung lượng file ảnh của trang web.",
+      "B. Vì nó gây xao nhãng, làm giảm khả năng đọc của văn bản và có thể gây khó khăn cho việc tập trung vào nội dung chính.",
+      "C. Vì Gradient không thể hiển thị đúng trên các thiết bị di động cũ.",
+      "D. Vì Gradient chỉ phù hợp với các thiết kế in ấn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Màu sắc quá rực rỡ và phức tạp ở các khu vực chức năng như Navigation có thể cạnh tranh với nội dung chính và làm giảm khả năng nhận diện các mục điều hướng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quy trình bàn giao thiết kế (Design Handoff), việc cung cấp một 'Redline Document' hoặc sử dụng công cụ như Inspect mode nhằm mục đích gì?",
+    "options": [
+      "A. Để chứng minh với khách hàng rằng thiết kế đã hoàn thành.",
+      "B. Để lập trình viên biết chính xác các thông số về khoảng cách, kích thước, màu sắc và font chữ nhằm tái hiện giao diện chính xác nhất.",
+      "C. Để lưu trữ các phiên bản cũ của thiết kế.",
+      "D. Để hướng dẫn người dùng cuối cách sử dụng ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Redlining là quá trình chú thích các thông số kỹ thuật, đảm bảo độ chính xác (pixel-perfect) khi chuyển đổi từ bản thiết kế sang sản phẩm thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng hệ thống Design Tokens cho một sản phẩm đa nền tảng (Web, iOS, Android), việc sử dụng lớp 'Alias Tokens' (Semantic Tokens) nằm giữa 'Global Tokens' và 'Component Tokens' giải quyết vấn đề cốt lõi nào?",
+    "options": [
+      "A. Giảm thiểu dung lượng file JSON khi xuất bản hệ thống tokens.",
+      "B. Tách biệt ý nghĩa sử dụng (intent) khỏi giá trị thô (raw value), cho phép thay đổi theme đồng loạt mà không ảnh hưởng đến cấu trúc component.",
+      "C. Tăng tốc độ render của trình duyệt nhờ việc gom nhóm các biến CSS.",
+      "D. Đảm bảo tính nhất quán về tên gọi giữa các nền tảng khác nhau mà không cần mapping thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Alias Tokens (như 'color-action-primary') giúp tách biệt giá trị màu cụ thể (ví dụ: Blue 500) khỏi mục đích sử dụng, giúp việc chuyển đổi Light/Dark mode hoặc rebranding trở nên linh hoạt và có hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong không gian màu OKLCH, tại sao việc điều chỉnh độ sáng (Lightness) được coi là ưu việt hơn so với không gian màu HSL khi thiết kế bảng màu (Color Palette) cho UI?",
+    "options": [
+      "A. OKLCH cho phép hiển thị nhiều màu sắc hơn trên các màn hình cũ.",
+      "B. HSL có độ sáng nhận thức (perceptual brightness) không đồng nhất, trong khi OKLCH giữ được độ sáng ổn định khi thay đổi sắc độ (Hue).",
+      "C. OKLCH tự động điều chỉnh độ tương phản để đạt chuẩn WCAG 2.1 AAA.",
+      "D. HSL không hỗ trợ các kênh màu trong suốt (Alpha channel) như OKLCH."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OKLCH là không gian màu dựa trên cảm nhận thị giác của con người, giúp các màu có cùng chỉ số Lightness trông thực sự có độ sáng bằng nhau, tránh hiện tượng màu vàng trông sáng hơn màu xanh dù cùng thông số L trong HSL.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống trạng thái (States) cho một 'Complex Data Table', phương pháp nào tối ưu nhất để thông báo lỗi ở mức dòng (row-level error) mà không gây quá tải thị giác?",
+    "options": [
+      "A. Đổi màu nền của toàn bộ dòng bị lỗi sang màu đỏ rực (Red 500).",
+      "B. Sử dụng một biểu tượng cảnh báo kết hợp với đường kẻ dọc (indicator strip) ở đầu dòng và cung cấp tooltip giải thích lỗi.",
+      "C. Hiển thị một hộp thoại Modal yêu cầu người dùng sửa lỗi ngay lập tức trước khi tiếp tục.",
+      "D. Làm mờ (opacity 50%) tất cả các dòng không bị lỗi để tập trung vào dòng lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng indicator strip và icon giúp người dùng nhận diện lỗi nhanh chóng mà không làm mất đi khả năng đọc dữ liệu của bảng, đồng thời tuân thủ nguyên tắc không chỉ dùng màu sắc để truyền đạt thông tin.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Motion Design, kỹ thuật 'Staggering' (độ trễ giữa các phần tử) nên được áp dụng như thế nào để tối ưu hóa trải nghiệm người dùng trong một danh sách dài?",
+    "options": [
+      "A. Áp dụng độ trễ bằng nhau cho tất cả các phần tử để tạo hiệu ứng đồng nhất.",
+      "B. Giới hạn tổng thời gian thực thi của toàn bộ hiệu ứng stagger không quá 300-500ms để tránh cảm giác chờ đợi.",
+      "C. Tăng độ trễ theo cấp số nhân để tạo hiệu ứng kịch tính cho giao diện.",
+      "D. Chỉ áp dụng stagger cho các phần tử nằm ngoài khung hình (off-screen)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc dù stagger tạo sự mượt mà, nhưng nếu tổng thời gian quá dài sẽ gây ức chế cho người dùng. Quy tắc chung là giữ cho toàn bộ quá trình xuất hiện nhanh chóng và gọn gàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế một 'Empty State' cho Dashboard quản lý tài chính, mục tiêu quan trọng nhất về mặt Visual Design ngoài việc thông báo là gì?",
+    "options": [
+      "A. Sử dụng hình minh họa (Illustration) phức tạp để lấp đầy không gian trống.",
+      "B. Giảm thiểu tối đa các thành phần đồ họa để tiết kiệm tài nguyên hệ thống.",
+      "C. Cung cấp một lộ trình trực quan (Visual Cue) hoặc nút CTA rõ ràng để dẫn dắt người dùng tạo dữ liệu đầu tiên.",
+      "D. Hiển thị các dữ liệu giả (Dummy data) để người dùng hình dung giao diện sau này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Empty state không chỉ là trạng thái trống mà còn là cơ hội để onboarding. Một thiết kế tốt phải hướng dẫn người dùng thoát khỏi trạng thái trống đó bằng hành động cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Theo tiêu chuẩn APCA (Accessible Perceptual Contrast Algorithm) dự kiến cho WCAG 3.0, yếu tố nào sau đây ảnh hưởng lớn nhất đến độ tương phản mà WCAG 2.1 thường bỏ qua?",
+    "options": [
+      "A. Tên của font chữ được sử dụng.",
+      "B. Kích thước font (Font size) và độ dày nét chữ (Font weight) liên quan trực tiếp đến độ tương phản cần thiết.",
+      "C. Màu sắc của các thành phần xung quanh (background context).",
+      "D. Định dạng file ảnh của logo (SVG vs PNG)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "APCA tính toán độ tương phản dựa trên ngữ cảnh thị giác, nhận định rằng chữ càng mỏng hoặc nhỏ thì cần độ tương phản cao hơn so với chữ lớn và dày để có cùng mức độ dễ đọc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Optical Grids' (Lưới quang học) lại quan trọng hơn việc tuân thủ tuyệt đối 'Mathematical Grids' trong thiết kế Icon hoặc Logo?",
+    "options": [
+      "A. Vì các phần mềm thiết kế như Figma/Sketch có sai số khi render pixel.",
+      "B. Vì mắt người cảm nhận trọng lượng thị giác (visual weight) khác với kích thước vật lý của các hình khối khác nhau.",
+      "C. Để tiết kiệm thời gian khi xuất file sang định dạng vector.",
+      "D. Để đảm bảo các icon luôn có kích thước file bằng nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các hình khối như hình tròn thường trông nhỏ hơn hình vuông nếu có cùng chiều cao/rộng vật lý. Lưới quang học giúp điều chỉnh để chúng trông cân bằng về mặt thị giác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống Design System lớn, chiến lược nào là hiệu quả nhất để quản lý 'Elevation' (độ nổi) mà vẫn đảm bảo tính nhất quán giữa Dark mode và Light mode?",
+    "options": [
+      "A. Sử dụng cùng một thông số đổ bóng (Drop shadow) màu đen cho cả hai chế độ.",
+      "B. Sử dụng các lớp phủ màu trắng (White overlays) với opacity khác nhau trên nền tối để thể hiện độ cao thay vì chỉ dùng bóng đổ.",
+      "C. Loại bỏ hoàn toàn bóng đổ trong Dark mode và thay bằng các đường viền (Borders) rực rỡ.",
+      "D. Tăng cường độ mờ (Blur) của bóng đổ lên gấp đôi trong Dark mode."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Dark mode, bóng đổ thường không hiệu quả do nền đã tối. Việc sử dụng các lớp phủ sáng dần theo độ cao (theo Material Design) giúp người dùng nhận diện phân cấp không gian tốt hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế Micro-interactions cho hành động 'Like' hoặc 'Bookmark', yếu tố nào sau đây giúp tăng cường 'Feedback Loop' một cách tinh tế nhất?",
+    "options": [
+      "A. Hiển thị một thông báo Toast lớn ở giữa màn hình ngay lập tức.",
+      "B. Sử dụng rung (Haptic feedback) kết hợp với một hiệu ứng chuyển động nhỏ (như nảy icon) để xác nhận hành động.",
+      "C. Thay đổi màu sắc của toàn bộ thanh điều hướng (Navigation bar).",
+      "D. Tự động chuyển hướng người dùng đến trang danh sách yêu thích."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Micro-interactions hiệu quả nhất khi chúng cung cấp phản hồi ngay tại vị trí tương tác thông qua các tín hiệu thị giác và xúc giác nhẹ nhàng, không gây gián đoạn luồng trải nghiệm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Việc áp dụng '8-point Grid system' mang lại lợi ích kỹ thuật lớn nhất nào cho quá trình bàn giao (Handoff) giữa Designer và Developer?",
+    "options": [
+      "A. Giúp Designer không cần phải căn chỉnh các phần tử thủ công.",
+      "B. Tạo ra sự nhất quán về tỷ lệ và khoảng cách, giúp Developer dễ dàng dự đoán và code layout mà không cần đo đạc quá chi tiết.",
+      "C. Đảm bảo tất cả các hình ảnh đều có độ phân giải cao nhất.",
+      "D. Giảm số lượng font chữ cần sử dụng trong một dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hệ thống lưới 8pt tạo ra một 'ngôn ngữ chung' về khoảng cách. Khi các giá trị là bội số của 8, việc scale giao diện và triển khai code trở nên logic và ít sai sót hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong thiết kế 'Skeleton Screens', sai lầm phổ biến nào làm giảm hiệu quả của 'Perceived Performance' (Hiệu suất cảm nhận)?",
+    "options": [
+      "A. Sử dụng màu xám quá nhạt cho các khối skeleton.",
+      "B. Hiệu ứng chuyển động (shimmer) đi từ phải sang trái thay vì trái sang phải.",
+      "C. Các khối skeleton không khớp với cấu trúc layout thực tế của dữ liệu sắp tải lên.",
+      "D. Thời gian hiển thị skeleton ngắn hơn 100ms."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nếu skeleton không khớp với layout thực tế, khi dữ liệu tải xong sẽ gây ra hiện tượng 'nhảy' layout (Layout Shift), làm mất đi mục đích tạo cảm giác tải mượt mà của skeleton.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi tích hợp yếu tố thương hiệu (Brand Expression) vào UI của một ứng dụng ngân hàng, Designer cần ưu tiên điều gì để không làm giảm Usability?",
+    "options": [
+      "A. Sử dụng font chữ thương hiệu (Display font) cho tất cả các đoạn văn bản dài và số liệu.",
+      "B. Chỉ áp dụng màu sắc thương hiệu vào các điểm chạm chính (Touchpoints) như nút hành động, icon quan trọng và trạng thái thành công.",
+      "C. Thay đổi toàn bộ các icon chuẩn (như Home, Search) thành các hình minh họa trừu tượng mang tính thương hiệu.",
+      "D. Sử dụng các hiệu ứng chuyển động phức tạp mỗi khi người dùng chuyển trang."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong các ứng dụng cần sự chính xác cao như ngân hàng, tính dễ đọc và quen thuộc phải được ưu tiên. Thương hiệu nên được thể hiện tinh tế qua màu sắc nhấn hoặc typography ở các vị trí phù hợp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Subpixel Anti-aliasing' trong hiển thị Typography ảnh hưởng như thế nào đến thiết kế UI trên các màn hình có mật độ điểm ảnh thấp (Low-DPI)?",
+    "options": [
+      "A. Nó làm cho chữ trông sắc nét hơn bằng cách tận dụng các pixel phụ màu đỏ, xanh lá, xanh dương.",
+      "B. Nó làm cho chữ luôn luôn có màu đen tuyệt đối.",
+      "C. Nó chỉ có tác dụng khi in ấn trên giấy chất lượng cao.",
+      "D. Nó làm tăng kích thước file của font chữ khi tải trang Web."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Subpixel rendering giúp làm mượt các đường cong của chữ trên màn hình độ phân giải thấp, giúp chữ dễ đọc hơn dù số lượng pixel thực tế hạn chế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một 'Visual Hierarchy' tốt trong thiết kế Dashboard phức tạp thường được thiết lập dựa trên nguyên tắc nào để điều hướng sự chú ý của người dùng?",
+    "options": [
+      "A. Đặt tất cả các biểu đồ quan trọng ở chính giữa màn hình với kích thước lớn nhất.",
+      "B. Sử dụng sự tương phản về kích thước, màu sắc và mật độ thông tin để tạo ra một 'F-pattern' hoặc 'Z-pattern' tự nhiên.",
+      "C. Sử dụng nhiều khung viền (Borders) đậm để tách biệt các khu vực chức năng.",
+      "D. Luôn sử dụng màu đỏ cho các chỉ số đang tăng trưởng để thu hút sự chú ý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng các mẫu quét mắt tự nhiên (F/Z pattern) kết hợp với các yếu tố tương phản giúp người dùng xử lý thông tin từ quan trọng nhất đến chi tiết mà không bị choáng ngợp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống Icon cho một ứng dụng Enterprise, tại sao việc duy trì 'Stroke Weight' đồng nhất lại quan trọng hơn việc thay đổi kích thước icon linh hoạt?",
+    "options": [
+      "A. Để dễ dàng xuất file sang định dạng font-icon.",
+      "B. Để duy trì sự cân bằng về 'Visual Weight' (trọng lượng thị giác) trên toàn bộ giao diện, tránh cảm giác lộn xộn.",
+      "C. Vì các trình duyệt không hỗ trợ các icon có độ dày nét khác nhau.",
+      "D. Để giảm thiểu thời gian vẽ icon cho Designer."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự đồng nhất về độ dày nét (Stroke weight) giúp các icon trông như thuộc về cùng một gia đình và tạo ra sự ổn định thị giác khi đặt cạnh các thành phần UI khác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh 'Responsive Web Design', việc sử dụng đơn vị 'rem' thay vì 'px' cho Typography và Spacing chủ yếu nhằm mục đích gì?",
+    "options": [
+      "A. Giúp hình ảnh không bị vỡ nét khi phóng to trang web.",
+      "B. Đảm bảo giao diện có thể co giãn theo cài đặt font chữ của hệ thống/trình duyệt, hỗ trợ tốt cho Accessibility.",
+      "C. Giảm dung lượng file CSS của trang web.",
+      "D. Giúp Designer dễ dàng tính toán khoảng cách hơn trên Figma."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đơn vị 'rem' dựa trên kích thước font gốc của trình duyệt. Điều này cho phép người dùng có thị lực kém (thường tăng font size hệ thống) có được trải nghiệm giao diện co giãn tương ứng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một 'Data Visualization' (Trực quan hóa dữ liệu) với 12 loại danh mục khác nhau, chiến lược sử dụng màu sắc nào là tối ưu để đảm bảo tính phân biệt?",
+    "options": [
+      "A. Sử dụng 12 sắc thái khác nhau của cùng một màu chủ đạo (Monochromatic).",
+      "B. Sử dụng bảng màu 'Qualitative' với các sắc độ (Hues) có khoảng cách đủ lớn và kiểm tra bằng các bộ lọc mù màu (Color blindness filters).",
+      "C. Sử dụng màu sắc ngẫu nhiên từ vòng tròn màu sắc (Color wheel).",
+      "D. Chỉ sử dụng 3 màu chính và lặp lại chúng cho đến khi đủ 12 danh mục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với nhiều danh mục, cần sử dụng bảng màu Qualitative để phân biệt các nhóm dữ liệu không có thứ tự. Việc kiểm tra mù màu đảm bảo mọi người dùng đều có thể phân biệt được các nhóm này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Vertical Rhythm' trong UI Design được thiết lập dựa trên yếu tố nào sau đây?",
+    "options": [
+      "A. Khoảng cách giữa các cột trong hệ thống Grid.",
+      "B. Việc thiết lập Baseline Grid và sử dụng line-height là bội số của đơn vị cơ sở (ví dụ 4px hoặc 8px).",
+      "C. Việc căn chỉnh tất cả các icon theo trục dọc của màn hình.",
+      "D. Tốc độ cuộn trang của người dùng khi xem nội dung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vertical Rhythm tạo ra sự nhất quán về nhịp điệu đọc bằng cách đảm bảo khoảng cách giữa các dòng văn bản và các thành phần UI tuân theo một hệ thống lưới cơ sở theo chiều dọc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao 'Container Queries' được coi là một bước tiến lớn so với 'Media Queries' trong việc thiết kế các Visual Components?",
+    "options": [
+      "A. Vì Container Queries giúp trang web tải nhanh hơn trên di động.",
+      "B. Vì nó cho phép một component thay đổi giao diện dựa trên kích thước của chính khung chứa nó, thay vì dựa trên kích thước toàn bộ màn hình (viewport).",
+      "C. Vì nó tự động tối ưu hóa dung lượng hình ảnh bên trong component.",
+      "D. Vì nó loại bỏ nhu cầu sử dụng Flexbox và Grid trong CSS."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Container Queries cho phép Designer tạo ra các component 'thông minh' hơn, có thể tự thích ứng khi đặt vào các khu vực khác nhau (như sidebar hay main content) mà không phụ thuộc vào màn hình.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế một 'Input Field' ở trạng thái 'Focus', kỹ thuật nào giúp tăng cường khả năng truy cập (Accessibility) tốt nhất?",
+    "options": [
+      "A. Chỉ thay đổi màu của văn bản bên trong ô nhập liệu.",
+      "B. Sử dụng một vòng bao quanh (Focus ring) có độ tương phản cao và khác biệt rõ rệt so với trạng thái bình thường.",
+      "C. Làm cho ô nhập liệu rung nhẹ để thu hút sự chú ý.",
+      "D. Tự động ẩn tất cả các nhãn (Labels) xung quanh để người dùng tập trung nhập liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Focus ring là chỉ báo quan trọng cho người dùng sử dụng bàn phím. Nó cần phải rõ ràng và có độ tương phản đủ tốt để người dùng biết họ đang ở đâu trên trang.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong việc tối ưu hóa hiệu năng Visual, việc sử dụng 'Variable Fonts' mang lại lợi thế gì so với 'Static Fonts' truyền thống?",
+    "options": [
+      "A. Variable Fonts luôn có độ sắc nét cao hơn trên mọi màn hình.",
+      "B. Cho phép chứa nhiều trọng lượng (Weights) và kiểu dáng (Styles) trong duy nhất một file font, giảm số lượng HTTP requests.",
+      "C. Tự động dịch văn bản sang nhiều ngôn ngữ khác nhau.",
+      "D. Không cần cài đặt font vào hệ thống của người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Variable fonts giúp Designer linh hoạt sử dụng bất kỳ độ dày (weight) hay độ nghiêng nào mà chỉ cần tải một file duy nhất, giúp tối ưu hóa tốc độ tải trang và khả năng thiết kế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xử lý 'Long-form content' trên thiết bị di động, kỹ thuật Visual nào giúp duy trì sự tập trung của người dùng tốt nhất?",
+    "options": [
+      "A. Sử dụng thật nhiều màu sắc để phân đoạn nội dung.",
+      "B. Thiết lập độ dài dòng (Line length) tối ưu từ 45-75 ký tự và sử dụng khoảng trắng (White space) hợp lý giữa các đoạn.",
+      "C. Chèn quảng cáo vào giữa mỗi đoạn văn để tạo điểm nghỉ.",
+      "D. Sử dụng font chữ kích thước nhỏ (12px) để hiển thị được nhiều nội dung hơn trên một màn hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Độ dài dòng quá dài hoặc quá ngắn đều gây mỏi mắt. Khoảng trắng giúp mắt người dùng có điểm nghỉ và dễ dàng quét nội dung mà không bị rối.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong thiết kế hệ thống 'Feedback Patterns', sự khác biệt chính giữa 'Toast' và 'Inline Message' về mặt ứng dụng Visual là gì?",
+    "options": [
+      "A. Toast dùng cho các thông báo hệ thống không khẩn cấp, Inline Message dùng cho các lỗi trực tiếp liên quan đến dữ liệu nhập vào.",
+      "B. Toast luôn phải có màu đỏ, Inline Message luôn phải có màu xanh.",
+      "C. Toast chỉ xuất hiện ở góc dưới bên trái, Inline Message chỉ xuất hiện ở đầu trang.",
+      "D. Không có sự khác biệt, hai loại này có thể thay thế hoàn toàn cho nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Toast thường mang tính thông báo trạng thái (ví dụ: Đã lưu), trong khi Inline Message cung cấp ngữ cảnh cụ thể cho một hành động hoặc lỗi tại vị trí tương tác (ví dụ: Sai mật khẩu).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi áp dụng hiệu ứng 'Glassmorphism' (nền mờ như kính), Designer cần lưu ý điều gì nhất để đảm bảo tính khả dụng cho người dùng thị lực kém?",
+    "options": [
+      "A. Tăng độ mờ (Blur) lên mức tối đa.",
+      "B. Luôn có một đường viền (Border) mảnh với độ tương phản cao bao quanh vật thể và đảm bảo nội dung văn bản bên trên có nền đủ đặc.",
+      "C. Sử dụng màu nền rực rỡ nhất có thể phía sau lớp kính.",
+      "D. Chỉ sử dụng hiệu ứng này cho các nút bấm quan trọng nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Glassmorphism có thể làm giảm độ tương phản của chữ nếu nền phía sau quá phức tạp. Đường viền giúp định hình vật thể và nền đặc phía sau chữ giúp duy trì tính dễ đọc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quy trình thiết kế 'High-fidelity Prototype', việc mô phỏng chính xác 'Micro-copy' và 'Real Data' có vai trò gì về mặt Visual Design?",
+    "options": [
+      "A. Để khách hàng cảm thấy dự án đã hoàn thành sớm hơn thực tế.",
+      "B. Giúp Designer đánh giá chính xác sự ảnh hưởng của độ dài văn bản và tính chất dữ liệu thực tế lên bố cục và phân cấp thị giác.",
+      "C. Để giảm bớt công việc cho bộ phận Content Marketing.",
+      "D. Đảm bảo file thiết kế có dung lượng lớn hơn để thể hiện sự chuyên nghiệp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dữ liệu thực tế (như tên quá dài, số tiền lớn) thường phá vỡ các thiết kế 'lý tưởng'. Việc dùng dữ liệu thật giúp Designer điều chỉnh Visual Hierarchy bền vững hơn trước các tình huống thực tế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống Design Tokens cho một tập đoàn đa thương hiệu (Multi-brand), cách tiếp cận nào tối ưu nhất để quản lý sự thay đổi đồng bộ mà vẫn giữ được bản sắc riêng của từng thương hiệu?",
+    "options": [
+      "A. Sử dụng cấu trúc token 3 tầng: Global Tokens (Primitive), Semantic Tokens (Alias) và Component Tokens.",
+      "B. Chỉ sử dụng Global Tokens để đảm bảo tất cả các thương hiệu đều nhất quán về thông số kỹ thuật.",
+      "C. Tạo các bộ UI Kit riêng biệt cho từng thương hiệu và không sử dụng chung hệ thống token.",
+      "D. Sử dụng Hard-coded values cho các thành phần đặc thù của thương hiệu và token cho các thành phần chung."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cấu trúc 3 tầng cho phép tách biệt giá trị thô (Global), ý nghĩa sử dụng (Semantic) và áp dụng cụ thể (Component), giúp thay đổi giao diện thương hiệu chỉ bằng cách map lại tầng Semantic.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong việc tối ưu hóa độ tương phản (Contrast) cho giao diện Dark Mode trên màn hình OLED, tại sao việc sử dụng màu đen tuyệt đối (#000000) làm nền lại thường bị các chuyên gia hạn chế?",
+    "options": [
+      "A. Vì màu đen tuyệt đối làm tăng mức tiêu thụ điện năng của màn hình OLED.",
+      "B. Vì gây ra hiện tượng 'Black Smearing' khi người dùng cuộn trang và làm mỏi mắt do độ tương phản quá gắt.",
+      "C. Vì màu đen tuyệt đối không thể đạt chuẩn WCAG AAA về độ tương phản với văn bản trắng.",
+      "D. Vì các hệ thống thiết kế hiện đại không hỗ trợ mã màu HEX 6 chữ số cho màu đen."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Màn hình OLED tắt hoàn toàn pixel khi hiển thị màu đen tuyệt đối, dẫn đến độ trễ khi bật lại pixel (smearing) và tạo ra sự chênh lệch độ sáng quá lớn gây mỏi mắt.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống phân cấp thị giác (Visual Hierarchy) cho một Dashboard quản trị dữ liệu cực lớn (Big Data), yếu tố nào là rủi ro lớn nhất khi lạm dụng màu sắc làm chỉ báo trạng thái?",
+    "options": [
+      "A. Làm tăng dung lượng tải trang do file CSS chứa quá nhiều mã màu.",
+      "B. Gây nhiễu nhận thức (Cognitive Overload) và làm giảm hiệu quả của người dùng bị mù màu.",
+      "C. Làm cho giao diện trông thiếu chuyên nghiệp và quá sặc sỡ.",
+      "D. Khiến hệ thống không thể chuyển đổi sang chế độ in ấn (Print-friendly)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong môi trường dữ liệu dày đặc, việc quá phụ thuộc vào màu sắc mà không có hình khối hoặc biểu tượng hỗ trợ sẽ gây khó khăn cho việc quét thông tin nhanh và loại trừ nhóm người dùng khiếm khuyết thị giác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một hệ thống thiết kế (Design System) quy mô lớn, việc áp dụng 'Optical Alignment' thay vì 'Mathematical Alignment' cho các icon trong button có mục đích chính là gì?",
+    "options": [
+      "A. Để đảm bảo mã nguồn CSS gọn gàng hơn khi không phải dùng padding lẻ.",
+      "B. Để bù đắp sự mất cân bằng trọng lượng thị giác do hình khối của icon gây ra, tạo cảm giác cân đối thực sự.",
+      "C. Để tuân thủ tuyệt đối quy tắc của Grid 8px mà không có ngoại lệ.",
+      "D. Để giảm thiểu thời gian render của trình duyệt đối với các thành phần đồ họa vector."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các hình khối như tam giác (nút Play) nếu căn giữa toán học sẽ trông như bị lệch sang trái; căn chỉnh quang học điều chỉnh dựa trên cảm nhận thị giác của con người.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi xử lý trạng thái trống (Empty State) cho một ứng dụng phân tích tài chính phức tạp, chiến lược thiết kế nào mang lại giá trị chuyển đổi cao nhất?",
+    "options": [
+      "A. Sử dụng hình minh họa (Illustration) đẹp mắt để lấp đầy khoảng trống và giảm bớt sự thất vọng.",
+      "B. Chỉ hiển thị một thông báo lỗi đơn giản để người dùng tự tìm cách nạp dữ liệu.",
+      "C. Cung cấp dữ liệu mẫu (Educational Placeholder) hoặc các hành động dẫn dắt trực tiếp để tạo ra dữ liệu.",
+      "D. Ẩn hoàn toàn các thành phần đó cho đến khi có dữ liệu để giữ giao diện sạch sẽ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở cấp độ chuyên gia, Empty State không chỉ là thông báo mà là cơ hội để hướng dẫn (onboarding) và thúc đẩy người dùng thực hiện hành động tạo giá trị.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Sub-pixel Antialiasing' trong thiết kế Typography trên web ngày nay lại trở nên ít quan trọng hơn so với trước đây?",
+    "options": [
+      "A. Do sự phổ biến của màn hình mật độ điểm ảnh cao (High-DPI/Retina) làm cho các răng cưa không còn dễ nhận thấy.",
+      "B. Do các trình duyệt hiện đại đã tự động xử lý mọi vấn đề về hiển thị font chữ mà không cần can thiệp.",
+      "C. Do các font chữ Google Fonts đều đã được tối ưu hóa hoàn hảo cho mọi loại màn hình.",
+      "D. Do xu hướng thiết kế phẳng (Flat Design) không sử dụng các đường cong phức tạp."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi mật độ điểm ảnh đủ cao, mắt người không còn phân biệt được các điểm ảnh đơn lẻ, khiến các kỹ thuật làm mịn mức sub-pixel trở nên không cần thiết và đôi khi gây mờ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Motion Design cho UI, khái niệm 'Choreography' (Dàn dựng chuyển động) đóng vai trò gì trong việc cải thiện trải nghiệm người dùng?",
+    "options": [
+      "A. Tạo ra càng nhiều hiệu ứng chuyển động cùng lúc càng tốt để gây ấn tượng thị giác.",
+      "B. Điều phối thứ tự xuất hiện của các thành phần để dẫn dắt sự chú ý và giải thích mối quan hệ phân cấp.",
+      "C. Đảm bảo tất cả các chuyển động đều có cùng một tốc độ (Linear duration) để nhất quán.",
+      "D. Giảm thiểu thời gian phản hồi của server thông qua các hiệu ứng đánh lừa thị giác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Choreography giúp các thành phần chuyển động có trình tự, giúp người dùng hiểu được luồng thông tin và cấu trúc của giao diện thay vì bị rối loạn bởi các chuyển động ngẫu nhiên.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế bảng màu (Color Palette) cho một hệ thống SaaS hỗ trợ khả năng tiếp cận (Accessibility), tại sao phương pháp dựa trên không gian màu LCH hoặc HSLuv lại ưu việt hơn RGB/HEX truyền thống?",
+    "options": [
+      "A. Vì chúng cho phép tạo ra các sắc độ (shades) có độ sáng cảm nhận (Perceptual Brightness) đồng nhất.",
+      "B. Vì các lập trình viên Front-end chỉ có thể đọc được mã màu LCH.",
+      "C. Vì chúng hỗ trợ nhiều màu sắc hơn so với dải màu sRGB thông thường.",
+      "D. Vì chúng tự động sửa lỗi tương phản mà không cần kiểm tra bằng công cụ bên thứ ba."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Không gian màu dựa trên cảm nhận (Perceptual) đảm bảo rằng khi bạn thay đổi Hue, độ sáng mà mắt người cảm nhận vẫn giữ nguyên, giúp việc tạo bảng màu có độ tương phản ổn định dễ dàng hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một 'Micro-interaction' được coi là thất bại về mặt Visual Design khi nào, dù nó có hiệu ứng chuyển động rất mượt mà?",
+    "options": [
+      "A. Khi nó kéo dài hơn 500ms làm chậm tiến độ công việc của người dùng.",
+      "B. Khi nó sử dụng màu sắc không nằm trong Brand Guidelines.",
+      "C. Khi nó không cung cấp phản hồi (Feedback) rõ ràng về kết quả của hành động vừa thực hiện.",
+      "D. Khi nó không sử dụng hiệu ứng Spring Physics (đàn hồi)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mục đích cốt lõi của micro-interaction là cung cấp phản hồi. Nếu chỉ đẹp mà không cho người dùng biết trạng thái hệ thống đã thay đổi như thế nào, nó chỉ là trang trí vô nghĩa.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi áp dụng hệ thống Grid 8pt (8-point grid), việc xử lý các thành phần có kích thước lẻ (ví dụ icon 20px) nên được thực hiện như thế nào để duy trì tính nhịp điệu (Rhythm)?",
+    "options": [
+      "A. Ép buộc icon phải giãn ra thành 24px bất chấp việc làm biến dạng hình ảnh.",
+      "B. Sử dụng 'Soft Grid' bằng cách đặt icon 20px vào trong một bounding box 24px để căn chỉnh.",
+      "C. Phá bỏ quy tắc 8pt và sử dụng bất kỳ kích thước nào phù hợp với icon đó.",
+      "D. Chỉ sử dụng Grid 4pt thay thế cho toàn bộ hệ thống để linh hoạt hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng bounding box (container) tuân thủ grid giúp duy trì khoảng cách và nhịp điệu tổng thể của layout trong khi vẫn giữ nguyên tỷ lệ thiết kế của các thành phần bên trong.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong thiết kế giao diện cho người cao tuổi, yếu tố Visual Design nào cần được ưu tiên hàng đầu để cân bằng giữa thẩm mỹ và công năng?",
+    "options": [
+      "A. Sử dụng các tông màu Pastel nhẹ nhàng để tạo cảm giác thư giãn.",
+      "B. Tăng kích thước mục tiêu chạm (Touch targets) và độ tương phản của Typography.",
+      "C. Sử dụng nhiều hiệu ứng đổ bóng (Drop shadows) để tạo chiều sâu.",
+      "D. Tích hợp các video hướng dẫn tự động phát ở mọi màn hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thị lực và khả năng vận động tinh giảm dần theo độ tuổi, do đó độ tương phản cao và mục tiêu chạm lớn là những yếu tố then chốt đảm bảo tính khả dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Việc sử dụng 'Glassmorphism' (hiệu ứng kính mờ) trong giao diện doanh nghiệp cần được phân tích rủi ro như thế nào?",
+    "options": [
+      "A. Rủi ro về việc làm tăng đáng kể kích thước file ảnh của giao diện.",
+      "B. Rủi ro về khả năng đọc (Readability) và hiệu suất xử lý đồ họa trên các thiết bị cấu hình thấp.",
+      "C. Rủi ro về việc không thể lập trình được bằng ngôn ngữ HTML/CSS.",
+      "D. Rủi ro về việc vi phạm bản quyền thiết kế của Apple."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Glassmorphism đòi hỏi tính toán blur theo thời gian thực gây tốn tài nguyên GPU, đồng thời nếu không xử lý khéo léo sẽ làm nền bị nhiễu, gây khó đọc văn bản phía trên.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế một hệ thống Icon cho Enterprise Product, yếu tố nào đảm bảo tính bền vững (Sustainability) nhất?",
+    "options": [
+      "A. Luôn chạy theo các xu hướng mới nhất như 3D hoặc Neumorphism.",
+      "B. Thiết kế icon dựa trên một Grid hệ thống nghiêm ngặt và giới hạn các góc bo (Border radius) nhất quán.",
+      "C. Sử dụng càng nhiều chi tiết đặc tả trong icon càng tốt để người dùng dễ hiểu.",
+      "D. Thuê một họa sĩ minh họa vẽ tay toàn bộ icon để tạo sự độc nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính nhất quán về mặt hình học (Grid, Stroke weight, Corner radius) giúp hệ thống icon dễ dàng mở rộng, thay thế và duy trì vẻ ngoài chuyên nghiệp qua thời gian.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh Responsive Design, làm thế nào để duy trì 'Visual Identity' (nhận diện thị giác) khi chuyển từ màn hình Desktop sang Mobile mà không làm hỏng trải nghiệm người dùng?",
+    "options": [
+      "A. Giữ nguyên kích thước font chữ và hình ảnh để đảm bảo thương hiệu không bị thay đổi.",
+      "B. Chuyển đổi các thành phần trang trí phức tạp thành các yếu tố tối giản nhưng giữ lại màu sắc và Typography đặc trưng.",
+      "C. Loại bỏ hoàn toàn logo thương hiệu trên mobile để tiết kiệm diện tích hiển thị dữ liệu.",
+      "D. Chỉ hiển thị phiên bản Desktop trên Mobile và cho phép người dùng phóng to (Zoom)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nhận diện thương hiệu nằm ở tinh thần (màu sắc, font, tone of voice) chứ không phải ở việc giữ nguyên layout. Việc tối giản giúp phù hợp với không gian hẹp mà vẫn tạo cảm giác quen thuộc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao 'Skeleton Screens' được coi là một mẫu thiết kế (Pattern) tốt hơn so với 'Loading Spinners' trong các ứng dụng hiện đại?",
+    "options": [
+      "A. Vì Skeleton Screens giúp ứng dụng tải dữ liệu nhanh hơn về mặt kỹ thuật.",
+      "B. Vì chúng tạo ra cảm giác tiến triển (Perceived Progress) và giúp người dùng chuẩn bị tâm thế cho cấu trúc nội dung sắp hiển thị.",
+      "C. Vì Spinners đã trở nên lỗi thời và không còn đẹp mắt về mặt thẩm mỹ.",
+      "D. Vì Skeleton Screens dễ thiết kế và lập trình hơn so với việc tạo animation cho Spinner."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Skeleton screens giảm bớt sự không chắc chắn bằng cách mô phỏng layout sắp tới, làm giảm cảm giác chờ đợi của người dùng (Perceived performance).",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế trạng thái 'Error' cho các trường nhập liệu (Input fields), cách tiếp cận nào là an toàn nhất cho khả năng tiếp cận (Accessibility)?",
+    "options": [
+      "A. Chỉ thay đổi màu viền của input sang màu đỏ.",
+      "B. Hiển thị một icon cảnh báo nhỏ bên cạnh input mà không có văn bản.",
+      "C. Kết hợp thay đổi màu sắc, thêm icon và cung cấp văn bản thông báo lỗi rõ ràng.",
+      "D. Làm cho input rung lên (Shake animation) để thu hút sự chú ý."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nguyên tắc WCAG yêu cầu không chỉ dùng màu sắc để truyền đạt thông tin. Việc kết hợp nhiều chỉ báo giúp người mù màu hoặc dùng trình đọc màn hình vẫn nhận biết được lỗi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong thiết kế Typography, khái niệm 'Vertical Rhythm' (Nhịp điệu dọc) thường được thiết lập dựa trên yếu tố nào?",
+    "options": [
+      "A. Chiều rộng tối đa của container chứa văn bản.",
+      "B. Kích thước của các hình ảnh minh họa đi kèm.",
+      "C. Giá trị Line-height (Leading) cơ sở và các bội số của nó.",
+      "D. Số lượng đoạn văn bản có trên một trang."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Vertical rhythm được tạo ra bằng cách thiết lập một baseline grid dựa trên line-height, đảm bảo khoảng cách giữa các dòng và các khối văn bản luôn nhất quán và dễ đọc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một chuyên gia UI Design sẽ xử lý như thế nào khi Brand Guidelines yêu cầu sử dụng một font chữ có độ tương phản nét thanh nét đậm rất cao (High-contrast serif) cho phần nội dung chính (Body text)?",
+    "options": [
+      "A. Tuân thủ tuyệt đối vì đó là bản sắc thương hiệu không thể thay đổi.",
+      "B. Đề xuất sử dụng font đó cho Heading và chọn một font Sans-serif bổ trợ có độ đọc (Legibility) cao cho Body text.",
+      "C. Tăng kích thước Body text lên thật lớn (trên 24px) để khắc phục vấn đề mất nét khi hiển thị.",
+      "D. Chuyển toàn bộ Body text thành dạng ảnh để đảm bảo hiển thị đúng ý đồ thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Font Serif có độ tương phản cao thường bị mất nét hoặc gây mỏi mắt khi đọc khối văn bản dài ở kích thước nhỏ trên màn hình kỹ thuật số. Cần cân bằng giữa Brand và Usability.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Drop Shadows' trong UI hiện đại thường hướng tới việc sử dụng nhiều lớp shadow (Stacked shadows) thay vì một lớp duy nhất?",
+    "options": [
+      "A. Để làm cho đối tượng trông nổi bật hơn hẳn so với các đối tượng khác.",
+      "B. Để tạo ra hiệu ứng đổ bóng mềm mại, tự nhiên và mô phỏng ánh sáng vật lý tốt hơn.",
+      "C. Để tăng độ phức tạp của file CSS, tránh việc bị sao chép thiết kế.",
+      "D. Để che đi các lỗi về răng cưa ở viền của các thành phần UI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong thực tế, bóng đổ không bao giờ là một dải màu đồng nhất. Việc xếp chồng nhiều lớp shadow với độ mờ khác nhau tạo ra hiệu ứng chuyển vùng mịn màng và chân thực hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế một hệ thống Data Visualization phức tạp, quy tắc nào là quan trọng nhất để đảm bảo tính trung thực của dữ liệu về mặt thị giác?",
+    "options": [
+      "A. Sử dụng các hiệu ứng 3D để làm biểu đồ trông sinh động hơn.",
+      "B. Luôn bắt đầu trục tọa độ (Y-axis) từ giá trị 0 để tránh gây hiểu lầm về mức độ tăng trưởng.",
+      "C. Sử dụng càng nhiều màu sắc khác nhau càng tốt để phân biệt các tập dữ liệu.",
+      "D. Bo tròn các đầu của biểu đồ cột (Bar chart) để giao diện thân thiện hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc cắt bớt trục Y có thể làm cho một thay đổi nhỏ trông có vẻ rất lớn, dẫn đến việc diễn giải sai lệch dữ liệu, vi phạm nguyên tắc thiết kế thông tin.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quá trình bàn giao (Handoff) thiết kế cho Developer, việc cung cấp 'Redlines' thủ công hiện nay đã được thay thế bằng các công cụ như Figma Inspect. Tuy nhiên, chuyên gia UI vẫn cần cung cấp thêm thông tin gì để đảm bảo Visual chính xác?",
+    "options": [
+      "A. Danh sách tất cả các mã màu HEX có trong file thiết kế.",
+      "B. Các quy tắc về chuyển động (Duration, Easing curves) và logic phản hồi của component.",
+      "C. Ảnh chụp màn hình của từng màn hình thiết kế ở định dạng PNG.",
+      "D. Tên của các layer trong file thiết kế để Developer dễ tìm kiếm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các công cụ Inspect thường chỉ cung cấp thông số tĩnh (static). Các thông số động như animation easing và logic chuyển trạng thái cần được mô tả rõ ràng để lập trình đúng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế giao diện cho một ứng dụng y tế cần sự tập trung cao, việc sử dụng 'Saturation' (độ bão hòa màu) nên được điều tiết như thế nào?",
+    "options": [
+      "A. Sử dụng màu sắc có độ bão hòa cực cao để kích thích sự tỉnh táo của bác sĩ.",
+      "B. Giảm độ bão hòa tổng thể, chỉ sử dụng màu đậm cho các cảnh báo quan trọng hoặc hành động chính.",
+      "C. Sử dụng thang màu xám (Grayscale) cho toàn bộ ứng dụng để tránh gây xao nhãng.",
+      "D. Thay đổi màu sắc liên tục theo thời gian thực để tạo sự mới mẻ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Độ bão hòa cao gây mỏi mắt và nhiễu thị giác. Trong môi trường chuyên dụng, việc tiết chế màu sắc giúp các thông tin quan trọng (như cảnh báo nguy hiểm) trở nên nổi bật và dễ nhận biết hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Atomic Design' của Brad Frost giúp ích gì nhất cho một Visual Designer khi làm việc trong các dự án Enterprise?",
+    "options": [
+      "A. Giúp việc vẽ các icon trở nên nhanh chóng hơn.",
+      "B. Tạo ra một ngôn ngữ thiết kế có tính module, dễ dàng bảo trì và mở rộng hệ thống thành phần UI.",
+      "C. Đảm bảo rằng tất cả các trang web đều có cấu trúc giống hệt nhau.",
+      "D. Thay thế hoàn toàn nhu cầu về việc viết Documentation cho thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Atomic Design cung cấp phương pháp luận để xây dựng hệ thống từ những phần tử nhỏ nhất (Atoms) lên các tổ hợp phức tạp, giúp duy trì sự nhất quán trên hàng ngàn màn hình của hệ thống doanh nghiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc kiểm tra thiết kế trên các thiết bị 'Low-end' lại là một phần quan trọng trong quy trình Visual Design chuyên nghiệp?",
+    "options": [
+      "A. Để đảm bảo rằng các hiệu ứng đổ bóng và blur không làm treo trình duyệt hoặc gây lag giật.",
+      "B. Để xem thiết kế trông như thế nào khi không có kết nối internet.",
+      "C. Để kiểm tra xem các Developer có làm đúng theo file thiết kế hay không.",
+      "D. Để so sánh kích thước vật lý của các loại màn hình khác nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thiết kế đẹp trên màn hình Macbook Pro nhưng có thể không khả dụng trên các thiết bị rẻ tiền do hạn chế về GPU/CPU khi xử lý các hiệu ứng thị giác phức tạp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong thiết kế Form phức tạp, việc sử dụng 'Inline Validation' (kiểm tra lỗi ngay khi nhập) cần lưu ý điều gì về mặt Visual Feedback để không gây khó chịu cho người dùng?",
+    "options": [
+      "A. Hiển thị lỗi ngay lập tức khi người dùng vừa gõ ký tự đầu tiên.",
+      "B. Chỉ hiển thị thông báo lỗi sau khi người dùng đã hoàn thành việc nhập và chuyển sang trường khác (On Blur).",
+      "C. Luôn hiển thị thông báo 'Hợp lệ' bằng màu xanh để khích lệ người dùng.",
+      "D. Sử dụng âm thanh cảnh báo đi kèm với thông báo lỗi màu đỏ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hiển thị lỗi quá sớm (khi người dùng chưa nhập xong) gây áp lực tâm lý. Phản hồi 'On Blur' hoặc sau một khoảng trễ ngắn (Debounce) mang lại trải nghiệm mượt mà và ít gây hấn hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Visual UI Design",
+    "category": "SKILL"
+  }
+]

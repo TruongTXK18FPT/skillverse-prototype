@@ -246,41 +246,47 @@ const PremiumPlansManagementTab: React.FC = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="admin-premium-stats">
-        <div className="admin-stat-card total">
-          <Crown size={32} />
-          <div>
-            <div className="admin-stat-number">{plans.length}</div>
-            <div className="admin-stat-label">Tổng Gói</div>
+      <div className="admin-premium-stats admin-premium-stats-overview">
+        <div className="admin-premium-stat-column admin-premium-stat-column-stacked">
+          <div className="admin-stat-card total">
+            <Crown size={32} />
+            <div>
+              <div className="admin-stat-number">{plans.length}</div>
+              <div className="admin-stat-label">Tổng Gói</div>
+            </div>
+          </div>
+          <div className="admin-stat-card active">
+            <Zap size={32} />
+            <div>
+              <div className="admin-stat-number">
+                {plans.filter((p) => p.isActive).length}/{plans.length}
+              </div>
+              <div className="admin-stat-label">Đang Hoạt Động</div>
+            </div>
           </div>
         </div>
-        <div className="admin-stat-card subscribers">
-          <Users size={32} />
-          <div>
-            <div className="admin-stat-number">
-              {plans.reduce((sum, p) => sum + p.currentSubscribers, 0)}
+        <div className="admin-premium-stat-column">
+          <div className="admin-stat-card subscribers">
+            <Users size={32} />
+            <div>
+              <div className="admin-stat-number">
+                {plans.reduce((sum, p) => sum + p.currentSubscribers, 0)}
+              </div>
+              <div className="admin-stat-label">Tổng Người Dùng</div>
             </div>
-            <div className="admin-stat-label">Tổng Người Dùng</div>
           </div>
         </div>
-        <div className="admin-stat-card revenue">
-          <TrendingUp size={32} />
-          <div>
-            <div className="admin-stat-number">
-              {adminPremiumService.formatPrice(
-                plans.reduce((sum, p) => sum + p.totalRevenue, 0),
-              )}
+        <div className="admin-premium-stat-column">
+          <div className="admin-stat-card revenue">
+            <TrendingUp size={32} />
+            <div>
+              <div className="admin-stat-number">
+                {adminPremiumService.formatPrice(
+                  plans.reduce((sum, p) => sum + p.totalRevenue, 0),
+                )}
+              </div>
+              <div className="admin-stat-label">Doanh Thu</div>
             </div>
-            <div className="admin-stat-label">Doanh Thu</div>
-          </div>
-        </div>
-        <div className="admin-stat-card active">
-          <Zap size={32} />
-          <div>
-            <div className="admin-stat-number">
-              {plans.filter((p) => p.isActive).length}/{plans.length}
-            </div>
-            <div className="admin-stat-label">Đang Hoạt Động</div>
           </div>
         </div>
       </div>

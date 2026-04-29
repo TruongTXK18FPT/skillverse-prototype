@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Dòng đầu tiên trong một script Bash thường là gì để xác định trình thông dịch?",
+    "options": [
+      "A. #!/bin/bash",
+      "B. #/bin/bash",
+      "C. !/bin/bash",
+      "D. #bash"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Shebang (#!/bin/bash) là cú pháp tiêu chuẩn để chỉ định trình thông dịch Bash sẽ thực thi script.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Bash script, cách đúng nhất để gán giá trị 'production' cho biến ENV là gì?",
+    "options": [
+      "A. ENV = production",
+      "B. ENV=production",
+      "C. set ENV production",
+      "D. $ENV=\"production\""
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Bash, khi gán biến không được có khoảng trắng xung quanh dấu '='.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh nào được sử dụng để cấp quyền thực thi cho một file script có tên 'deploy.sh'?",
+    "options": [
+      "A. chmod +r deploy.sh",
+      "B. chmod +w deploy.sh",
+      "C. chmod +x deploy.sh",
+      "D. chmod 644 deploy.sh"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quyền '+x' (execute) cho phép file được thực thi như một chương trình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Python, thư viện chuẩn nào thường được dùng để tương tác với hệ điều hành như tạo thư mục hoặc kiểm tra file?",
+    "options": [
+      "A. sys",
+      "B. os",
+      "C. math",
+      "D. requests"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thư viện 'os' cung cấp các hàm để làm việc với hệ điều hành (file system, environment variables).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ansible sử dụng định dạng file nào để viết các Playbook?",
+    "options": [
+      "A. JSON",
+      "B. XML",
+      "C. YAML",
+      "D. TOML"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ansible Playbook được viết bằng định dạng YAML vì tính dễ đọc và cấu trúc phân cấp rõ ràng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của lệnh 'terraform init' là gì?",
+    "options": [
+      "A. Áp dụng các thay đổi vào hạ tầng thực tế",
+      "B. Kiểm tra lỗi cú pháp trong code Terraform",
+      "C. Khởi tạo thư mục làm việc và tải các provider cần thiết",
+      "D. Xóa toàn bộ tài nguyên đã tạo"
+    ],
+    "correctAnswer": "C",
+    "explanation": "'terraform init' là bước đầu tiên để chuẩn bị môi trường, tải plugin và backend cấu hình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Idempotency' (Tính lũy đẳng) trong Automation có nghĩa là gì?",
+    "options": [
+      "A. Script sẽ chạy nhanh hơn sau mỗi lần thực hiện",
+      "B. Chạy script nhiều lần với cùng cấu hình sẽ luôn cho ra cùng một kết quả cuối cùng",
+      "C. Script sẽ tự động xóa các tài nguyên cũ trước khi tạo mới",
+      "D. Script chỉ có thể chạy được duy nhất một lần"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính lũy đẳng đảm bảo hệ thống đạt được trạng thái mong muốn mà không gây ra tác dụng phụ khi chạy lại nhiều lần.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Bash, làm thế nào để lấy giá trị của một biến có tên là 'APP_PORT'?",
+    "options": [
+      "A. &APP_PORT",
+      "B. {APP_PORT}",
+      "C. $APP_PORT",
+      "D. get APP_PORT"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dấu '$' được dùng trước tên biến để truy xuất giá trị của biến đó trong Shell.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "File 'inventory' trong Ansible dùng để làm gì?",
+    "options": [
+      "A. Lưu trữ mật khẩu của hệ thống",
+      "B. Định nghĩa danh sách các máy chủ mục tiêu (managed nodes)",
+      "C. Cấu hình các biến môi trường cho Ansible server",
+      "D. Chứa các script Python để mở rộng tính năng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Inventory file liệt kê các IP hoặc hostname của các máy mà Ansible sẽ quản lý.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh nào trong Terraform được dùng để xem trước các thay đổi sẽ được thực hiện mà không làm thay đổi hạ tầng thực tế?",
+    "options": [
+      "A. terraform apply",
+      "B. terraform show",
+      "C. terraform plan",
+      "D. terraform output"
+    ],
+    "correctAnswer": "C",
+    "explanation": "'terraform plan' tạo ra một bản thực thi dự kiến để người dùng kiểm tra trước khi áp dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong YAML, quy tắc nào sau đây là quan trọng nhất để thể hiện cấu trúc phân cấp?",
+    "options": [
+      "A. Sử dụng dấu ngoặc nhọn {}",
+      "B. Sử dụng dấu ngoặc vuông []",
+      "C. Sử dụng khoảng trắng (indentation) đồng nhất",
+      "D. Sử dụng phím Tab để thụt lề"
+    ],
+    "correctAnswer": "C",
+    "explanation": "YAML dựa vào khoảng trắng để phân cấp. Việc dùng Tab thường bị cấm hoặc gây lỗi trong YAML.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn kiểm tra xem một file có tồn tại hay không trong Bash script, bạn sử dụng toán tử nào?",
+    "options": [
+      "A. -d",
+      "B. -e",
+      "C. -z",
+      "D. -n"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Toán tử '-e' (exists) hoặc '-f' (file) thường được dùng để kiểm tra sự tồn tại của file.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Công cụ nào sau đây thường được coi là 'Configuration Management' thay vì 'Infrastructure Provisioning'?",
+    "options": [
+      "A. Terraform",
+      "B. CloudFormation",
+      "C. Ansible",
+      "D. Pulumi"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ansible tập trung vào việc cấu hình phần mềm bên trong máy chủ, trong khi Terraform tập trung vào việc tạo ra máy chủ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lệnh 'set -x' trong Bash script có tác dụng gì?",
+    "options": [
+      "A. Kết thúc script ngay khi có lỗi",
+      "B. Chế độ debug, in ra từng lệnh trước khi thực thi",
+      "C. Ẩn tất cả các output của script",
+      "D. Đặt quyền thực thi cho script"
+    ],
+    "correctAnswer": "B",
+    "explanation": "'set -x' (xtrace) giúp người dùng theo dõi quá trình thực thi của script để tìm lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Python, làm thế nào để cài đặt một thư viện từ bên ngoài (ví dụ: 'requests')?",
+    "options": [
+      "A. apt install requests",
+      "B. brew install requests",
+      "C. pip install requests",
+      "D. python get requests"
+    ],
+    "correctAnswer": "C",
+    "explanation": "'pip' là trình quản lý gói (package manager) tiêu chuẩn cho Python.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "File 'terraform.tfstate' có vai trò gì?",
+    "options": [
+      "A. Lưu trữ mã nguồn của hạ tầng",
+      "B. Lưu trữ trạng thái hiện tại của hạ tầng mà Terraform đang quản lý",
+      "C. Chứa các thông tin bí mật như mật khẩu DB",
+      "D. Là file log ghi lại lịch sử chạy lệnh"
+    ],
+    "correctAnswer": "B",
+    "explanation": "State file giúp Terraform biết được tài nguyên nào đã được tạo và cần cập nhật những gì.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để nối thêm (append) nội dung vào cuối một file trong Linux, bạn sử dụng ký hiệu nào?",
+    "options": [
+      "A. >",
+      "B. >>",
+      "C. |",
+      "D. <"
+    ],
+    "correctAnswer": "B",
+    "explanation": "'>' sẽ ghi đè file, còn '>>' sẽ ghi nối tiếp vào cuối file.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao nên sử dụng Virtual Environment (venv) khi viết script Python cho automation?",
+    "options": [
+      "A. Để script chạy nhanh hơn",
+      "B. Để cô lập các thư viện phụ thuộc, tránh xung đột phiên bản giữa các dự án",
+      "C. Để mã hóa code Python",
+      "D. Để tự động upload script lên server"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Virtual Environment giúp quản lý các gói phụ thuộc riêng biệt cho từng dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lệnh nào dùng để lập lịch chạy script định kỳ trong hệ điều hành Linux?",
+    "options": [
+      "A. systemctl",
+      "B. cron",
+      "C. journalctl",
+      "D. bash-schedule"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Crontab/Cron là dịch vụ tiêu chuẩn để lập lịch thực hiện các tác vụ định kỳ trên Linux.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Ansible, module nào được dùng để đảm bảo một gói phần mềm (như nginx) đã được cài đặt trên Ubuntu?",
+    "options": [
+      "A. service",
+      "B. yum",
+      "C. apt",
+      "D. shell"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Module 'apt' được dùng để quản lý gói trên các hệ điều hành Debian/Ubuntu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần viết một script Bash để lặp qua danh sách các file trong thư mục. Cấu trúc nào là phù hợp?",
+    "options": [
+      "A. for file in *; do ... done",
+      "B. foreach file (*); do ... end",
+      "C. while file in *; { ... }",
+      "D. loop file in *; do ... done"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cú pháp 'for...in...do...done' là cấu trúc vòng lặp tiêu chuẩn trong Bash.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một script Bash gặp lỗi và bạn muốn nó dừng lại ngay lập tức thay vì chạy tiếp các lệnh sau, bạn nên thêm lệnh nào ở đầu script?",
+    "options": [
+      "A. set -e",
+      "B. set -u",
+      "C. exit 0",
+      "D. stop-on-error"
+    ],
+    "correctAnswer": "A",
+    "explanation": "'set -e' khiến script kết thúc ngay khi có bất kỳ lệnh nào trả về mã lỗi (non-zero exit code).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Terraform, biến (variable) thường được định nghĩa trong file có phần mở rộng là gì?",
+    "options": [
+      "A. .tfvars",
+      "B. .json",
+      "C. .txt",
+      "D. .conf"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc dù có thể định nghĩa trong file .tf, nhưng các giá trị cụ thể thường được đặt trong file .tfvars.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách tốt nhất để xử lý thông tin nhạy cảm (như mật khẩu) trong script automation là gì?",
+    "options": [
+      "A. Viết trực tiếp mật khẩu vào code (Hardcode)",
+      "B. Sử dụng biến môi trường hoặc công cụ quản lý bí mật (Secret Manager)",
+      "C. Lưu mật khẩu vào một file text cùng thư mục",
+      "D. Đặt tên biến là PASSWORD để dễ nhận biết"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để đảm bảo an toàn, không bao giờ được lưu thông tin nhạy cảm dưới dạng bản rõ trong mã nguồn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lệnh 'pip freeze > requirements.txt' trong Python có mục đích gì?",
+    "options": [
+      "A. Xóa tất cả các thư viện đã cài đặt",
+      "B. Đóng băng hệ thống để bảo mật",
+      "C. Xuất danh sách các thư viện và phiên bản hiện tại ra file để tái tạo môi trường",
+      "D. Cập nhật tất cả các thư viện lên bản mới nhất"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lệnh này giúp ghi lại chính xác các phụ thuộc của dự án để người khác có thể cài đặt tương tự.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một Bash script, bạn muốn script dừng ngay lập tức nếu một lệnh bất kỳ thất bại hoặc nếu một biến chưa được định nghĩa được sử dụng. Bạn nên sử dụng thiết lập nào ở đầu script?",
+    "options": [
+      "A. set -x",
+      "B. set -euo pipefail",
+      "C. set -v",
+      "D. set -a"
+    ],
+    "correctAnswer": "B",
+    "explanation": "set -e dừng script khi lệnh lỗi, -u dừng khi biến chưa định nghĩa, và pipefail đảm bảo lỗi trong pipeline được ghi nhận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi viết Python script để gọi các lệnh hệ thống (shell commands), phương thức nào được khuyến nghị để đảm bảo an toàn và dễ quản lý output/error hơn?",
+    "options": [
+      "A. os.system()",
+      "B. os.popen()",
+      "C. subprocess.run()",
+      "D. commands.getstatusoutput()"
+    ],
+    "correctAnswer": "C",
+    "explanation": "subprocess.run() là API hiện đại, an toàn hơn và thay thế hoàn toàn các module cũ như os.system.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Ansible, sự khác biệt chính giữa module 'command' và 'shell' là gì?",
+    "options": [
+      "A. 'command' nhanh hơn 'shell' vì không cần khởi tạo môi trường.",
+      "B. 'command' không hỗ trợ các ký tự đặc biệt của shell như pipe (|), redirection (>) và biến môi trường.",
+      "C. 'shell' chỉ chạy được trên hệ điều hành Linux, còn 'command' chạy được trên Windows.",
+      "D. 'command' yêu cầu Python phải được cài đặt trên node đích, 'shell' thì không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Module command thực thi trực tiếp mà không qua shell, do đó các tính năng đặc thù của shell như pipe hay redirect sẽ không hoạt động.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần trích xuất giá trị 'id' từ một file JSON có cấu trúc phức tạp bằng Bash. Công cụ nào là lựa chọn tối ưu nhất về hiệu suất và độ tin cậy?",
+    "options": [
+      "A. grep và cut",
+      "B. sed và awk",
+      "C. jq",
+      "D. python -c 'import json'"
+    ],
+    "correctAnswer": "C",
+    "explanation": "jq là công cụ chuyên dụng để xử lý JSON trong command line, xử lý chính xác các cấu trúc lồng nhau mà regex khó làm được.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Terraform, mục đích chính của việc sử dụng 'State Locking' là gì?",
+    "options": [
+      "A. Để mã hóa dữ liệu nhạy cảm trong file state.",
+      "B. Để ngăn chặn việc nhiều người cùng thực hiện thay đổi hạ tầng đồng thời gây xung đột dữ liệu.",
+      "C. Để lưu trữ bản sao lưu của hạ tầng cũ.",
+      "D. Để tăng tốc độ thực thi lệnh terraform apply."
+    ],
+    "correctAnswer": "B",
+    "explanation": "State locking ngăn chặn các thao tác ghi đồng thời vào file state, tránh tình trạng hỏng dữ liệu hoặc ghi đè cấu hình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi viết script Python để tương tác với REST API, bạn nên xử lý lỗi kết nối mạng như thế nào để script hoạt động ổn định (resilient)?",
+    "options": [
+      "A. Sử dụng vòng lặp vô hạn cho đến khi thành công.",
+      "B. Sử dụng khối try-except với cơ chế retry và exponential backoff.",
+      "C. Bỏ qua lỗi và tiếp tục thực hiện các bước tiếp theo.",
+      "D. Chỉ kiểm tra mã trạng thái HTTP (status code) sau khi nhận phản hồi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Retry với exponential backoff giúp hệ thống tự phục hồi sau các lỗi mạng tạm thời mà không làm quá tải server.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Ansible, làm thế nào để đảm bảo một task chỉ chạy khi một task trước đó có sự thay đổi (changed status)?",
+    "options": [
+      "A. Sử dụng từ khóa 'when: result.changed'",
+      "B. Sử dụng 'handlers' và 'notify'",
+      "C. Sử dụng 'ignore_errors: yes'",
+      "D. Sử dụng 'register' và kiểm tra điều kiện ở task tiếp theo"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Handlers được thiết kế riêng để phản ứng với các sự kiện 'changed' từ các task khác thông qua notify.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn có một danh sách 1000 file cần nén lại. Cách tiếp cận nào trong Bash script giúp tối ưu thời gian xử lý trên CPU đa nhân?",
+    "options": [
+      "A. Sử dụng vòng lặp for đơn giản.",
+      "B. Sử dụng lệnh xargs với tùy chọn -P (parallel).",
+      "C. Sử dụng đệ quy tìm kiếm file.",
+      "D. Nén từng file một bằng lệnh tar."
+    ],
+    "correctAnswer": "B",
+    "explanation": "xargs -P cho phép chạy nhiều tiến trình song song, tận dụng tối đa các lõi CPU có sẵn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Terraform, sự khác biệt giữa 'variable' và 'local' là gì?",
+    "options": [
+      "A. Variable có thể được gán từ bên ngoài (CLI/file), còn local chỉ dùng nội bộ trong module.",
+      "B. Local có thể thay đổi giá trị trong khi chạy, variable thì không.",
+      "C. Variable chỉ dùng cho chuỗi, local dùng cho số.",
+      "D. Không có sự khác biệt, chúng có thể thay thế cho nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Input variables là tham số đầu vào cho module, locals là các biến trung gian giúp code gọn gàng và không thể ghi đè từ bên ngoài.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'pip install' trực tiếp trong các script automation trên server production thường được coi là một bad practice?",
+    "options": [
+      "A. Vì nó quá chậm.",
+      "B. Vì nó có thể gây xung đột dependency giữa các ứng dụng và không đảm bảo tính nhất quán (idempotency).",
+      "C. Vì pip không hỗ trợ cài đặt từ source code.",
+      "D. Vì pip yêu cầu quyền root để hoạt động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cài đặt trực tiếp có thể làm thay đổi môi trường hệ thống không kiểm soát được. Nên dùng Virtual Environment hoặc Docker image.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Bash, cú pháp `${VAR:-default}` có ý nghĩa gì?",
+    "options": [
+      "A. Xóa biến VAR nếu nó có giá trị là 'default'.",
+      "B. Trả về giá trị của VAR, nếu VAR trống hoặc chưa định nghĩa thì trả về 'default'.",
+      "C. Gán vĩnh viễn giá trị 'default' cho VAR nếu VAR đang trống.",
+      "D. Báo lỗi nếu VAR không có giá trị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là cú pháp parameter expansion để cung cấp giá trị mặc định tạm thời cho biến.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi triển khai Infrastructure as Code (IaC), khái niệm 'Idempotency' có nghĩa là gì?",
+    "options": [
+      "A. Script sẽ xóa toàn bộ hạ tầng cũ trước khi tạo mới.",
+      "B. Script có thể chạy nhiều lần mà vẫn đảm bảo kết quả cuối cùng giống nhau và không gây tác động thừa.",
+      "C. Script chỉ có thể chạy một lần duy nhất.",
+      "D. Script tự động sao lưu dữ liệu trước khi thực hiện thay đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính nhất quán (Idempotency) đảm bảo rằng nếu hệ thống đã ở trạng thái mong muốn, việc chạy lại script sẽ không làm thay đổi gì thêm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần viết một script Python để dọn dẹp các log file cũ hơn 30 ngày. Thư viện nào trong standard library là phù hợp nhất để xử lý đường dẫn và thời gian?",
+    "options": [
+      "A. sys và time",
+      "B. pathlib và datetime",
+      "C. requests và json",
+      "D. re và math"
+    ],
+    "correctAnswer": "B",
+    "explanation": "pathlib cung cấp hướng tiếp cận hướng đối tượng cho file system, datetime xử lý logic về thời gian hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Ansible, lệnh nào được sử dụng để mã hóa các file chứa thông tin nhạy cảm như mật khẩu?",
+    "options": [
+      "A. ansible-encrypt",
+      "B. ansible-vault",
+      "C. openssl",
+      "D. gpg"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ansible Vault là công cụ tích hợp sẵn để mã hóa dữ liệu nhạy cảm trong các playbook hoặc file biến.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Policy as Code' (ví dụ dùng OPA hoặc Sentinel) giúp ích gì trong quy trình Automation?",
+    "options": [
+      "A. Tự động viết code cho lập trình viên.",
+      "B. Kiểm tra và áp đặt các quy tắc bảo mật, tuân thủ (compliance) một cách tự động trước khi hạ tầng được tạo ra.",
+      "C. Thay thế hoàn toàn các script Bash và Python.",
+      "D. Tăng tốc độ tải dữ liệu từ database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Policy as Code cho phép định nghĩa các quy tắc quản trị dưới dạng code để tự động kiểm tra tính tuân thủ của hạ tầng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một Bash script, làm thế nào để lấy mã thoát (exit code) của lệnh vừa thực hiện ngay trước đó?",
+    "options": [
+      "A. $#",
+      "B. $!",
+      "C. $?",
+      "D. $*"
+    ],
+    "correctAnswer": "C",
+    "explanation": "$? là biến đặc biệt lưu trữ exit status của tiến trình gần nhất vừa kết thúc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn muốn chạy một Ansible Playbook nhưng chỉ thực thi các task liên quan đến 'nginx'. Bạn nên làm gì nếu các task đó đã được đánh dấu phù hợp?",
+    "options": [
+      "A. Sử dụng tham số --limit nginx",
+      "B. Sử dụng tham số --tags nginx",
+      "C. Xóa các task không liên quan trong file yaml",
+      "D. Sử dụng tham số --start-at-task nginx"
+    ],
+    "correctAnswer": "B",
+    "explanation": "--tags cho phép lọc và chỉ chạy các task có gắn tag tương ứng, trong khi --limit dùng để lọc host.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'hard-coded paths' (đường dẫn tuyệt đối cố định) trong script automation là một lựa chọn tồi?",
+    "options": [
+      "A. Vì nó làm script chạy chậm hơn.",
+      "B. Vì nó làm script không linh hoạt và dễ lỗi khi chạy trên các môi trường hoặc hệ điều hành khác nhau.",
+      "C. Vì đường dẫn tuyệt đối chiếm nhiều bộ nhớ hơn.",
+      "D. Vì Linux không hỗ trợ đường dẫn tuyệt đối trong script."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hard-coded paths làm giảm tính di động (portability) của script. Nên dùng biến môi trường hoặc đường dẫn tương đối.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Terraform, lệnh 'terraform plan' có vai trò gì?",
+    "options": [
+      "A. Áp dụng các thay đổi vào hạ tầng thực tế.",
+      "B. Hiển thị các thay đổi dự kiến mà Terraform sẽ thực hiện mà không làm thay đổi hạ tầng thực.",
+      "C. Cài đặt các provider và module cần thiết.",
+      "D. Kiểm tra lỗi cú pháp của các file .tf."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lệnh plan giúp xem trước các hành động (create, update, destroy) để đảm bảo tính an toàn trước khi apply.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi debug một Bash script bị treo không rõ lý do, phương pháp nào giúp bạn theo dõi từng dòng lệnh đang được thực thi?",
+    "options": [
+      "A. Thêm lệnh 'echo' vào mọi dòng.",
+      "B. Chạy script với 'bash -x script.sh'.",
+      "C. Sử dụng lệnh 'top' để xem tiến trình.",
+      "D. Kiểm tra log trong /var/log/messages."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Option -x (xtrace) in ra các lệnh và đối số của chúng khi chúng được thực thi, rất hữu ích để debug dòng chảy của script.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Python, từ khóa 'with' (context manager) khi thao tác với file có lợi ích gì lớn nhất?",
+    "options": [
+      "A. Tự động mã hóa nội dung file.",
+      "B. Đảm bảo file luôn được đóng đúng cách kể cả khi có ngoại lệ (exception) xảy ra.",
+      "C. Tăng tốc độ đọc file từ ổ cứng SSD.",
+      "D. Cho phép nhiều script cùng ghi vào một file một lúc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Context manager tự động quản lý tài nguyên, gọi phương thức __exit__ để đóng file giúp tránh rò rỉ bộ nhớ/file descriptor.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần quản lý cấu hình cho 500 server có môi trường mạng hạn chế, không cho phép cài đặt agent. Công cụ nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Puppet",
+      "B. Chef",
+      "C. Ansible",
+      "D. SaltStack (ở chế độ mặc định)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ansible là agentless, hoạt động qua SSH, nên không cần cài đặt phần mềm bổ trợ trên các node đích.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Terraform, làm thế nào để tái sử dụng một nhóm các tài nguyên hạ tầng đã được định nghĩa sẵn?",
+    "options": [
+      "A. Copy-paste code vào file mới.",
+      "B. Sử dụng Terraform Modules.",
+      "C. Sử dụng Terraform Workspaces.",
+      "D. Sử dụng lệnh terraform import."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Modules là cách đóng gói và tái sử dụng cấu hình Terraform, giúp quản lý hạ tầng theo dạng module hóa.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một script automation chạy định kỳ qua Cron bị lỗi 'command not found' mặc dù lệnh đó chạy bình thường khi gõ tay. Nguyên nhân phổ biến nhất là gì?",
+    "options": [
+      "A. Server hết bộ nhớ RAM.",
+      "B. Biến môi trường PATH trong Cron khác với shell của người dùng.",
+      "C. Lệnh đó yêu cầu giao diện đồ họa.",
+      "D. File script chưa được phân quyền thực thi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cron chạy với một môi trường shell rất hạn chế và PATH tối giản. Cần khai báo PATH đầy đủ hoặc dùng đường dẫn tuyệt đối cho lệnh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi sử dụng Ansible để thay đổi file cấu hình, làm thế nào để đảm bảo file chỉ được thay đổi nếu nội dung mới khác nội dung cũ?",
+    "options": [
+      "A. Ansible tự động làm việc này thông qua cơ chế so sánh checksum của các module như 'template' hoặc 'copy'.",
+      "B. Phải viết script Bash để so sánh hai file trước.",
+      "C. Sử dụng lệnh 'force: yes' trong task.",
+      "D. Sử dụng module 'shell' với lệnh 'diff'."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các module file-based của Ansible mặc định có tính Idempotency, chúng chỉ thực hiện ghi đè nếu phát hiện sự khác biệt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một script Bash phức tạp, bạn sử dụng 'set -e' để dừng script khi có lỗi. Tuy nhiên, lệnh trong một subshell (ví dụ: '(command)') thất bại nhưng script chính vẫn tiếp tục chạy. Cách tiếp cận nào là tối ưu nhất để đảm bảo tính toàn vẹn của luồng thực thi?",
+    "options": [
+      "A. Sử dụng 'set -o pipefail' ở đầu script để bắt lỗi trong các đường ống.",
+      "B. Kiểm tra mã thoát ($?) ngay sau mỗi subshell và gọi exit thủ công.",
+      "C. Sử dụng 'set -E' để các bẫy ERR được kế thừa bởi các shell con và hàm.",
+      "D. Chuyển toàn bộ logic từ subshell sang các hàm riêng biệt và gọi trực tiếp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Bash, 'set -e' không tự động áp dụng cho các subshell hoặc function trong một số phiên bản và ngữ cảnh. 'set -E' (hoặc set -o errtrace) cho phép các trap ERR được kế thừa, đảm bảo xử lý lỗi nhất quán.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi viết script Python để tương tác với Cloud API (như AWS SDK) nhằm thực hiện hàng ngàn yêu cầu đồng thời, mô hình nào mang lại hiệu năng cao nhất với mức tiêu thụ tài nguyên hệ thống thấp nhất?",
+    "options": [
+      "A. Sử dụng module 'threading' để tạo một luồng cho mỗi yêu cầu API.",
+      "B. Sử dụng 'multiprocessing' để tận dụng tối đa tất cả các lõi CPU của máy trạm.",
+      "C. Sử dụng 'asyncio' kết hợp với thư viện HTTP không đồng bộ như aiohttp hoặc httpx.",
+      "D. Sử dụng vòng lặp 'for' tuần tự với cơ chế retry exponential backoff."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các tác vụ tương tác API chủ yếu là I/O-bound. Asyncio cho phép xử lý hàng ngàn kết nối đồng thời trên một luồng duy nhất thông qua event loop, giúp giảm overhead so với việc tạo hàng ngàn thread hoặc process.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang quản lý một hệ thống Ansible với hơn 500 nodes. Thời gian thực thi playbook đang quá chậm do độ trễ SSH. Giải pháp nào tối ưu nhất để tăng tốc độ mà không thay đổi cấu trúc playbook?",
+    "options": [
+      "A. Tăng giá trị 'forks' trong file cấu hình ansible.cfg lên mức tối đa (ví dụ: 100).",
+      "B. Bật 'pipelining' trong ansible.cfg để giảm số lượng thao tác SSH cần thiết.",
+      "C. Chuyển tất cả các task sang sử dụng module 'raw' thay vì các module chuẩn.",
+      "D. Sử dụng 'strategy: free' trong playbook để các host không phải đợi nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pipelining giảm số lượng kết nối SSH bằng cách thực thi nhiều module trực tiếp trong một kết nối thay vì copy file tạm. Đây là cách hiệu quả nhất để giảm overhead mạng mà không gây quá tải CPU như việc tăng forks quá cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Terraform, khi thực hiện refactor bằng cách di chuyển một resource từ root module vào một child module, làm thế nào để tránh việc Terraform xóa và tạo lại resource đó trên hạ tầng thực tế?",
+    "options": [
+      "A. Sử dụng lệnh 'terraform state mv' để cập nhật địa chỉ resource trong state file.",
+      "B. Sử dụng block 'moved' bên trong mã nguồn để khai báo sự thay đổi vị trí.",
+      "C. Chỉnh sửa trực tiếp file terraform.tfstate bằng trình soạn thảo văn bản.",
+      "D. Sử dụng flag '-target' để chỉ cập nhật các resource không bị di chuyển."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Từ phiên bản 1.1, Terraform giới thiệu block 'moved' cho phép khai báo việc di chuyển resource trong code. Điều này giúp đồng nghiệp cũng nhận được cập nhật state mà không cần chạy lệnh CLI thủ công.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần xử lý một file log có kích thước 50GB bằng Python để tìm kiếm các mẫu lỗi. Máy chủ chỉ có 8GB RAM. Phương pháp nào đảm bảo script không bị crash do thiếu bộ nhớ?",
+    "options": [
+      "A. Sử dụng 'file.read().splitlines()' để nạp toàn bộ nội dung vào bộ nhớ.",
+      "B. Sử dụng 'mmap' để ánh xạ file vào bộ nhớ ảo của hệ điều hành.",
+      "C. Sử dụng generator để đọc file theo từng dòng (for line in file).",
+      "D. Chia nhỏ file log thành các file 1GB bằng lệnh 'split' trước khi xử lý."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng generator (iterator) trong Python giúp đọc file theo từng dòng, chỉ nạp dòng hiện tại vào RAM. Đây là cách tiếp cận chuẩn để xử lý dữ liệu lớn vượt quá dung lượng RAM có sẵn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Ansible, sự khác biệt cốt lõi về mặt vận hành giữa 'include_tasks' và 'import_tasks' là gì?",
+    "options": [
+      "A. 'include_tasks' là static (tĩnh), 'import_tasks' là dynamic (động).",
+      "B. 'import_tasks' được xử lý tại thời điểm parse playbook, 'include_tasks' được xử lý khi thực thi.",
+      "C. 'include_tasks' hỗ trợ các vòng lặp (loop), còn 'import_tasks' thì không.",
+      "D. 'import_tasks' nhanh hơn vì nó không yêu cầu kết nối SSH lại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "import_tasks là static pre-processing; nó chèn nội dung task vào playbook ngay khi load. include_tasks là dynamic; nó chỉ load task khi luồng thực thi chạy đến đó, cho phép sử dụng biến động trong tên file.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai Policy as Code bằng Open Policy Agent (OPA) cho hạ tầng Terraform, lợi ích lớn nhất của việc sử dụng Rego so với shell script kiểm tra thông thường là gì?",
+    "options": [
+      "A. Rego chạy nhanh hơn đáng kể so với Bash hoặc Python.",
+      "B. Rego là ngôn ngữ khai báo (declarative) cho phép truy vấn các cấu trúc JSON phức tạp một cách tự nhiên.",
+      "C. OPA có thể tự động sửa lỗi hạ tầng nếu phát hiện vi phạm chính sách.",
+      "D. Rego tích hợp sẵn các module để kết nối trực tiếp với Cloud provider API."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rego được thiết kế chuyên biệt để truy vấn dữ liệu có cấu trúc (như Terraform plan JSON). Tính khai báo của nó giúp việc viết các quy tắc kiểm tra logic phức tạp trở nên ngắn gọn và dễ bảo trì hơn nhiều so với script thủ công.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện một script Bash tự động hóa chạy định kỳ đang để lại nhiều tiến trình con 'zombie'. Nguyên nhân kiến trúc phổ biến nhất là gì?",
+    "options": [
+      "A. Script chính kết thúc trước khi các tiến trình con hoàn thành.",
+      "B. Script chính không gọi lệnh 'wait' để thu thập mã thoát của các tiến trình chạy ngầm.",
+      "C. Các tiến trình con bị treo do deadlock khi ghi vào cùng một file log.",
+      "D. Hệ điều hành hết tài nguyên PID nên không thể dọn dẹp tiến trình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Unix, một tiến trình con trở thành zombie khi nó kết thúc nhưng tiến trình cha chưa đọc mã thoát của nó thông qua hệ thống lệnh 'wait'. Script cần 'wait' các background jobs để dọn dẹp bảng tiến trình.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Terraform, chiến lược nào là tốt nhất để quản lý bí mật (secrets) như database password mà không làm lộ chúng trong state file?",
+    "options": [
+      "A. Sử dụng biến môi trường TF_VAR_ và đánh dấu biến là 'sensitive'.",
+      "B. Sử dụng KMS để mã hóa file terraform.tfstate sau mỗi lần chạy.",
+      "C. Không thể tránh việc lưu bí mật trong state; giải pháp là mã hóa và giới hạn quyền truy cập vào backend state.",
+      "D. Sử dụng 'external data source' để fetch bí mật tại thời điểm runtime và không gán vào resource."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Terraform luôn lưu giá trị thực của các thuộc tính resource vào state file để quản lý. Đánh dấu 'sensitive' chỉ ngăn giá trị hiển thị trên console output. Do đó, bảo mật backend state (encryption at rest, IAM) là giải pháp bắt buộc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi xây dựng một hệ thống CI/CD pipeline cho Monorepo lớn, kỹ thuật scripting nào giúp tối ưu hóa thời gian build bằng cách chỉ chạy các job cần thiết?",
+    "options": [
+      "A. Sử dụng Git hooks để ngăn chặn commit vào nhiều thư mục cùng lúc.",
+      "B. Viết script phân tích 'git diff' để xác định các thư mục bị thay đổi và sinh động pipeline cấu hình (Dynamic Pipeline Generation).",
+      "C. Chạy tất cả các unit test song song trên một cluster Kubernetes lớn.",
+      "D. Sử dụng caching ở mức Docker layer cho toàn bộ repository."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Monorepo, việc chạy lại toàn bộ pipeline cho mọi thay đổi nhỏ là lãng phí. Phân tích thay đổi thông qua Git và tạo pipeline tương ứng (như GitLab Dynamic Child Pipelines) là kỹ thuật tối ưu nhất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một Ansible Playbook sử dụng module 'command' để chạy một script shell. Làm thế nào để đảm bảo tính Idempotency (tính lặp lại không thay đổi trạng thái) cho task này?",
+    "options": [
+      "A. Thêm thuộc tính 'ignore_errors: yes' vào task.",
+      "B. Sử dụng tham số 'creates' hoặc 'removes' để kiểm tra sự tồn tại của file trước khi chạy.",
+      "C. Đặt 'changed_when: false' để Ansible luôn báo cáo trạng thái OK.",
+      "D. Bọc script shell trong một module Python tùy chỉnh của Ansible."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Module 'command' và 'shell' mặc định luôn báo 'changed'. Bằng cách dùng 'creates' (chỉ chạy nếu file không tồn tại) hoặc 'removes', bạn giúp Ansible hiểu điều kiện nào thì không cần thực thi lại script.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Python, khi cần thực hiện retry một tác vụ mạng không ổn định, tại sao việc thêm 'jitter' vào thuật toán 'exponential backoff' lại quan trọng?",
+    "options": [
+      "A. Để giảm tổng thời gian chờ đợi của script.",
+      "B. Để tránh hiện tượng 'thundering herd' khi nhiều client cùng retry vào một thời điểm.",
+      "C. Để đảm bảo script không bị rơi vào vòng lặp vô hạn.",
+      "D. Để tăng độ ưu tiên của request trên phía server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu không có jitter (biến số ngẫu nhiên), các client thất bại cùng lúc sẽ retry cùng lúc, tiếp tục gây quá tải cho server. Jitter giúp dàn trải các yêu cầu retry theo thời gian.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một hệ thống Provisioning hạ tầng đa đám mây. Tại sao việc sử dụng Terraform 'Modules' lại được ưu tiên hơn là copy-paste code giữa các môi trường?",
+    "options": [
+      "A. Modules tự động mã hóa các thông tin nhạy cảm.",
+      "B. Modules cho phép đóng gói logic, thực thi tính nhất quán và giảm thiểu rủi ro sai sót khi cập nhật hạ tầng hàng loạt.",
+      "C. Modules giúp Terraform chạy nhanh hơn do giảm kích thước file .tf.",
+      "D. Modules là cách duy nhất để Terraform có thể làm việc với nhiều Provider cùng lúc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính trừu tượng và tái sử dụng của Modules giúp duy trì 'Single Source of Truth'. Khi cần thay đổi một tiêu chuẩn bảo mật, bạn chỉ cần sửa trong module và áp dụng cho tất cả các môi trường sử dụng module đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lệnh 'jq' trong Bash cực kỳ mạnh mẽ để xử lý JSON. Lệnh nào sau đây sẽ trích xuất giá trị của trường 'id' từ tất cả các object trong một mảng JSON nằm ở root?",
+    "options": [
+      "A. jq '.id[]'",
+      "B. jq '.[].id'",
+      "C. jq 'map(.id)'",
+      "D. jq '.id' --array"
+    ],
+    "correctAnswer": "B",
+    "explanation": "'.[]' lặp qua các phần tử của mảng, và '.id' truy cập thuộc tính của từng phần tử đó. '.[].id' trả về danh sách các giá trị id.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Ansible, khi nào bạn nên sử dụng 'delegate_to: localhost' thay vì chạy task trực tiếp trên remote host?",
+    "options": [
+      "A. Khi cần thực hiện các thao tác cục bộ như gửi thông báo Slack hoặc tương tác với Cloud API.",
+      "B. Khi remote host không có Python được cài đặt.",
+      "C. Khi muốn tăng tốc độ thực thi bằng cách bỏ qua SSH.",
+      "D. Khi cần copy file giữa hai thư mục trên cùng một remote host."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nhiều tác vụ automation không thực sự diễn ra trên server đích (như gọi API để mở firewall hoặc thông báo trạng thái). 'delegate_to: localhost' hướng dẫn Ansible chạy task đó trên chính node điều khiển.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một script Bash sử dụng 'trap' để dọn dẹp file tạm. Tại sao 'trap \"rm -f $TMP\" EXIT' lại tốt hơn 'trap \"rm -f $TMP\" SIGINT SIGTERM'?",
+    "options": [
+      "A. EXIT bao gồm cả lỗi cú pháp trong script.",
+      "B. EXIT bao gồm cả SIGINT, SIGTERM và việc script kết thúc bình thường.",
+      "C. EXIT chạy nhanh hơn các signal xử lý khác.",
+      "D. Các signal như SIGINT không thể bị bắt bởi lệnh trap."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trap trên EXIT là cách an toàn nhất vì nó đảm bảo lệnh dọn dẹp luôn được thực thi dù script kết thúc thành công, bị lỗi, hoặc nhận được tín hiệu ngắt (interrupt).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi quy mô hạ tầng lên tới hàng chục ngàn node, mô hình Configuration Management nào thường bộc lộ ưu thế về khả năng mở rộng (scalability)?",
+    "options": [
+      "A. Push-based (như Ansible mặc định) vì kiểm soát tập trung tốt hơn.",
+      "B. Pull-based (như Puppet hoặc Chef) vì các node tự chủ động cập nhật cấu hình, giảm tải cho server trung tâm.",
+      "C. Ad-hoc scripting qua SSH loop vì không cần agent.",
+      "D. Cấu hình thủ công qua giao diện Web Console của Cloud Provider."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong mô hình Pull, gánh nặng tính toán và thực thi được phân tán cho hàng ngàn agent trên các node. Server trung tâm chỉ đóng vai trò lưu trữ cấu hình (Catalog), tránh được hiện tượng nghẽn cổ chai SSH của mô hình Push.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Terraform, 'count' và 'for_each' đều dùng để tạo nhiều resource. Khi nào 'for_each' là lựa chọn tốt hơn 'count'?",
+    "options": [
+      "A. Khi bạn cần tạo một số lượng tài nguyên cố định dựa trên một con số.",
+      "B. Khi danh sách các tài nguyên có thể bị xóa hoặc thêm vào ở giữa, để tránh việc Terraform re-create lại toàn bộ do thay đổi index.",
+      "C. Khi bạn muốn sử dụng các thuộc tính của resource này để định nghĩa số lượng resource kia.",
+      "D. Khi resource không hỗ trợ thuộc tính count."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'count' dựa trên index (0, 1, 2). Nếu bạn xóa phần tử index 0, các phần tử sau sẽ bị dịch chuyển index và Terraform sẽ force re-create. 'for_each' dựa trên key, giúp định danh resource độc lập với thứ tự.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần viết một script Python để giám sát tài nguyên hệ thống và gửi cảnh báo nếu CPU > 90% trong 5 phút liên tục. Cách nào để xử lý thời gian chính xác nhất?",
+    "options": [
+      "A. Sử dụng 'time.sleep(300)' giữa các lần kiểm tra.",
+      "B. Sử dụng thư viện 'sched' hoặc 'apscheduler' để lập lịch các lần kiểm tra chính xác.",
+      "C. Chạy script qua Cron job mỗi phút và lưu trạng thái vào một file tạm.",
+      "D. Sử dụng vòng lặp vô hạn và kiểm tra 'datetime.now()' liên tục."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng Cron job (hoặc Systemd Timer) kết hợp với việc lưu state (ví dụ: số lần vi phạm liên tiếp) là cách tiếp cận bền bỉ (robust) nhất. Nếu script bị crash, Cron sẽ khởi động lại nó, trong khi 'time.sleep' trong script sẽ làm mất tiến trình giám sát.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lệnh nào trong Bash cho phép bạn thực thi một câu lệnh trên hàng loạt file một cách song song để tận dụng CPU đa nhân?",
+    "options": [
+      "A. find . -name \"*.log\" -exec cat {} \\;",
+      "B. ls *.log | xargs -P 4 -n 1 gzip",
+      "C. for f in *.log; do gzip $f & done",
+      "D. parallel-ssh -i hosts.txt \"gzip *.log\""
+    ],
+    "correctAnswer": "B",
+    "explanation": "xargs với flag '-P' (max-procs) cho phép chạy song song các tiến trình. Đây là cách đơn giản và hiệu quả nhất để xử lý batch job trên local machine.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'version pinning' (cố định phiên bản) cho các Provider và Module trong Terraform lại là một best practice quan trọng?",
+    "options": [
+      "A. Để giảm thời gian 'terraform init'.",
+      "B. Để đảm bảo tính dự đoán được (predictability) và tránh các thay đổi phá vỡ (breaking changes) ngoài ý muốn khi chạy pipeline.",
+      "C. Để Terraform có thể lưu trữ code của provider trực tiếp trong state file.",
+      "D. Để ngăn chặn việc người khác chỉnh sửa code hạ tầng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu không cố định phiên bản, một bản cập nhật tự động từ provider (ví dụ AWS provider) có thể thay đổi logic hoặc yêu cầu thêm tham số, khiến pipeline bị lỗi bất ngờ trong các môi trường production.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Ansible, 'group_vars' và 'host_vars' được sử dụng để làm gì?",
+    "options": [
+      "A. Để phân tách logic của playbook và dữ liệu cấu hình, giúp playbook có thể tái sử dụng.",
+      "B. Để định nghĩa danh sách các host mà Ansible sẽ kết nối tới.",
+      "C. Để lưu trữ các mật khẩu nhạy cảm được mã hóa bởi Ansible Vault.",
+      "D. Để cài đặt các biến môi trường cho shell của người dùng root."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Việc tách biến ra khỏi playbook giúp bạn áp dụng cùng một logic (roles/tasks) cho nhiều môi trường khác nhau (dev, staging, prod) chỉ bằng cách thay đổi giá trị trong group_vars.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để tối ưu hóa hiệu năng của một script Bash thực hiện hàng nghìn phép tính số học?",
+    "options": [
+      "A. Sử dụng lệnh 'bc' cho mỗi phép tính.",
+      "B. Sử dụng cú pháp '$(( expression ))' nội tại của shell.",
+      "C. Chuyển các phép tính sang lệnh 'expr'.",
+      "D. Gọi một script Python từ bên trong Bash để tính toán."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cú pháp '$(( ))' là built-in của Bash, không tạo ra tiến trình mới (fork). Các lệnh 'bc' hay 'expr' là các chương trình bên ngoài, việc gọi chúng hàng nghìn lần sẽ gây overhead cực lớn do fork/exec.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong ngữ cảnh CI/CD, 'Infrastructure Drift' là gì và làm thế nào để tự động hóa việc phát hiện nó?",
+    "options": [
+      "A. Là hiện tượng hạ tầng tự thay đổi do lỗi phần cứng; phát hiện bằng giám sát SNMP.",
+      "B. Là sự khác biệt giữa trạng thái thực tế của hạ tầng và cấu hình được định nghĩa trong mã nguồn (IaC); phát hiện bằng cách chạy định kỳ 'terraform plan' với flag '-detailed-exitcode'.",
+      "C. Là việc developer tự ý thay đổi code ứng dụng; phát hiện bằng Git hooks.",
+      "D. Là khi database vượt quá dung lượng lưu trữ; phát hiện bằng script kiểm tra dung lượng đĩa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Drift xảy ra khi ai đó thay đổi hạ tầng thủ công qua console. Chạy 'terraform plan' định kỳ sẽ so sánh state hiện tại với code và cảnh báo nếu có sự sai lệch.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần xây dựng một hệ thống tự động hóa việc xoay vòng (rotation) API keys cho 100 dịch vụ. Công cụ nào cung cấp cơ chế an toàn nhất để thực hiện việc này?",
+    "options": [
+      "A. Một script Bash chạy bằng Cron job lưu keys trong file text.",
+      "B. Ansible Playbook sử dụng module 'lineinfile' để cập nhật file cấu hình.",
+      "C. HashiCorp Vault kết hợp với các script dynamic secrets engine.",
+      "D. Sử dụng Terraform để destroy và recreate lại các dịch vụ mỗi khi cần đổi key."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Vault được thiết kế chuyên biệt cho việc quản lý bí mật. Dynamic Secrets cho phép tự động tạo, xoay vòng và thu hồi keys với thời hạn (TTL) ngắn, giảm thiểu rủi ro lộ lọt so với việc lưu trữ tĩnh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một hệ thống phân tán quy mô lớn, bạn cần thiết kế một kịch bản Python để thu thập metric từ 10,000 nodes. Phương pháp nào tối ưu nhất để tránh làm quá tải API server và đảm bảo hiệu suất xử lý tại script?",
+    "options": [
+      "A. Sử dụng vòng lặp for đơn giản và gọi API tuần tự cho từng node để đảm bảo tính ổn định.",
+      "B. Sử dụng thư viện threading với 1000 threads để thực hiện các request đồng thời.",
+      "C. Sử dụng asyncio kết hợp với aiohttp và cơ chế semaphore để giới hạn số lượng request đồng thời (concurrency limit).",
+      "D. Chạy 100 instance của script này thông qua Crontab để chia nhỏ khối lượng công việc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở quy mô 10,000 nodes, I/O-bound tasks như gọi API nên dùng Asynchronous I/O (asyncio) để tối ưu tài nguyên hơn threading. Việc sử dụng semaphore là bắt buộc để kiểm soát áp lực lên API server (rate limiting).",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai Ansible cho một hạ tầng gồm 5,000 servers nằm ở nhiều vùng địa lý khác nhau, vấn đề lớn nhất thường gặp là độ trễ SSH (SSH overhead). Giải pháp kiến trúc nào là hiệu quả nhất?",
+    "options": [
+      "A. Tăng giá trị 'forks' trong file ansible.cfg lên mức tối đa (ví dụ: 1000).",
+      "B. Triển khai Ansible Pull mode kết hợp với Git và Crontab trên các node đầu cuối.",
+      "C. Sử dụng Mitogen plugin để tối ưu hóa việc thực thi Python và giảm bớt các kết nối SSH không cần thiết.",
+      "D. Chuyển toàn bộ sang sử dụng Terraform để quản lý cấu hình thay cho Ansible."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với quy mô cực lớn và độ trễ mạng cao, mô hình Push truyền thống của Ansible gặp rào cản về hiệu suất. Ansible Pull chuyển gánh nặng tính toán và thực thi xuống node đầu cuối, loại bỏ SSH overhead.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một Terraform state file bị 'corrupted' do hai CI/CD pipeline cùng chạy apply một lúc mặc dù đã có State Locking. Bạn sẽ xử lý tình huống này như thế nào để khôi phục hệ thống an toàn nhất?",
+    "options": [
+      "A. Xóa file state bị hỏng và chạy 'terraform init' lại từ đầu để Terraform tự quét lại hạ tầng.",
+      "B. Sử dụng 'terraform state push' với phiên bản backup gần nhất từ remote backend (như S3 versioning).",
+      "C. Chạy 'terraform refresh' để cập nhật lại trạng thái thực tế vào file state bị hỏng.",
+      "D. Chỉnh sửa trực tiếp file state bằng tay (JSON) để loại bỏ các phần lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi state bị hỏng, cách an toàn nhất là khôi phục từ bản backup (versioning) của backend. Việc xóa state hoặc sửa tay cực kỳ rủi ro vì có thể dẫn đến việc Terraform xóa nhầm tài nguyên đang chạy.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Bash scripting, khi xử lý một file log dung lượng 50GB, lệnh nào sau đây giúp tìm kiếm chuỗi ký tự mà không nạp toàn bộ file vào RAM và cho tốc độ nhanh nhất?",
+    "options": [
+      "A. cat logfile.log | grep 'ERROR'",
+      "B. awk '/ERROR/ {print $0}' logfile.log",
+      "C. LC_ALL=C grep 'ERROR' logfile.log",
+      "D. sed -n '/ERROR/p' logfile.log"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thiết lập LC_ALL=C giúp grep bỏ qua việc kiểm tra bảng mã đa ngôn ngữ (Unicode), xử lý file dưới dạng byte stream thuần túy, mang lại tốc độ vượt trội cho file dung lượng lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một hệ thống Policy as Code (PaC). Yêu cầu là ngăn chặn mọi thay đổi hạ tầng nếu tài nguyên không có tag 'CostCenter'. Công cụ và phương pháp nào phù hợp nhất?",
+    "options": [
+      "A. Viết script Python kiểm tra tag sau khi 'terraform apply' xong.",
+      "B. Sử dụng Open Policy Agent (OPA) với ngôn ngữ Rego tích hợp vào bước 'terraform plan' trong pipeline.",
+      "C. Sử dụng Ansible Playbook để quét định kỳ các tài nguyên và xóa những cái thiếu tag.",
+      "D. Thiết lập AWS Config Rule để gửi cảnh báo email khi phát hiện tài nguyên thiếu tag."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OPA tích hợp vào CI/CD pipeline cho phép thực thi chính sách (Enforcement) ngay tại bước lập kế hoạch (Plan), ngăn chặn việc tạo tài nguyên không hợp lệ trước khi nó thực sự tồn tại.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi viết một script Python để tự động hóa việc xoay vòng (rotation) các Access Key của AWS, bước nào là quan trọng nhất để đảm bảo tính sẵn sàng cao (High Availability) cho ứng dụng đang sử dụng key đó?",
+    "options": [
+      "A. Xóa ngay key cũ và tạo key mới ngay lập tức.",
+      "B. Tạo key mới, cập nhật vào Secret Manager, chờ một khoảng thời gian (propagation delay), sau đó mới vô hiệu hóa key cũ.",
+      "C. Chỉ cần tạo key mới và thông báo cho đội ngũ phát triển qua Slack.",
+      "D. Sử dụng cơ chế mã hóa đối xứng để bảo vệ key trong script."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để tránh downtime, quy trình rotation phải tuân thủ: Tạo mới -> Cập nhật ứng dụng -> Kiểm tra -> Vô hiệu hóa key cũ -> Xóa key cũ. Xóa ngay lập tức sẽ gây lỗi nếu ứng dụng chưa kịp cập nhật.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Ansible, biến 'serial' trong một Playbook được sử dụng nhằm mục đích gì trong chiến lược triển khai?",
+    "options": [
+      "A. Để đánh số thứ tự cho các server trong inventory.",
+      "B. Để thực hiện Rolling Update bằng cách giới hạn số lượng host được thực thi tại một thời điểm.",
+      "C. Để đảm bảo các task được chạy theo đúng thứ tự từ trên xuống dưới.",
+      "D. Để mã hóa các thông tin nhạy cảm trong Playbook."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Từ khóa 'serial' cho phép kiểm soát số lượng (hoặc tỷ lệ phần trăm) các host được xử lý trong mỗi đợt (batch), rất quan trọng cho Rolling Update để tránh làm sập toàn bộ dịch vụ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'local-exec' trong Terraform được coi là một 'anti-pattern' và nên hạn chế ở mức chuyên gia?",
+    "options": [
+      "A. Vì nó làm chậm quá trình thực thi của Terraform.",
+      "B. Vì nó tạo ra sự phụ thuộc vào môi trường chạy (runtime environment) và phá vỡ tính declarative của IaC.",
+      "C. Vì nó không hỗ trợ các hệ điều hành khác ngoài Linux.",
+      "D. Vì nó yêu cầu quyền root để thực thi các lệnh hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Terraform là declarative. 'local-exec' đưa tính imperative (mệnh lệnh) vào, khiến state không quản lý được kết quả của script đó, gây khó khăn cho việc tái hiện (reproducibility) và bảo trì.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần viết một script Bash để kiểm tra sự tồn tại của một tiến trình và khởi động lại nếu nó chết. Cách nào đảm bảo script không tạo ra các tiến trình con (zombie) hoặc bị treo?",
+    "options": [
+      "A. Sử dụng vòng lặp 'while true' và lệnh 'ps aux | grep'.",
+      "B. Sử dụng lệnh 'pgrep' kết hợp với 'trap' để xử lý tín hiệu hệ thống và quản lý PID file.",
+      "C. Chạy script bằng quyền 'nohup' để nó không bị tắt khi logout.",
+      "D. Sử dụng 'cron job' chạy mỗi phút để kiểm tra tiến trình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng 'pgrep' chính xác hơn 'ps | grep'. 'trap' giúp dọn dẹp tài nguyên và xử lý các tín hiệu như SIGTERM, đảm bảo script hoạt động ổn định và không để lại tiến trình rác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một hệ thống CI/CD, bạn phát hiện một automation script thỉnh thoảng thất bại do 'Race Condition' khi truy cập vào một database chung. Giải pháp kỹ thuật nào xử lý triệt để nhất?",
+    "options": [
+      "A. Thêm lệnh 'sleep 10' vào đầu script để các instance không chạy cùng lúc.",
+      "B. Sử dụng cơ chế Distributed Locking (ví dụ dùng Redis hoặc Consul) để điều phối quyền truy cập.",
+      "C. Tăng cấu hình CPU/RAM cho database server để xử lý nhanh hơn.",
+      "D. Chuyển sang sử dụng SQLite để mỗi script có một database riêng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Race condition trong hệ thống phân tán yêu cầu một cơ chế khóa tập trung (Distributed Lock) để đảm bảo tại một thời điểm chỉ một tiến trình được thao tác trên tài nguyên dùng chung.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế một module Ansible dùng chung cho toàn doanh nghiệp, làm thế nào để đảm bảo tính 'Idempotency' (tính ổn định trạng thái) khi sử dụng module 'shell'?",
+    "options": [
+      "A. Luôn thêm tham số 'creates' hoặc 'removes' để kiểm tra sự tồn tại của file trước khi chạy lệnh.",
+      "B. Đặt thuộc tính 'ignore_errors: yes' để script luôn báo thành công.",
+      "C. Sử dụng 'changed_when: false' để Ansible không bao giờ đánh dấu là có thay đổi.",
+      "D. Viết script shell sao cho nó luôn ghi đè lên các file cấu hình cũ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Module 'shell' mặc định không có tính idempotency. Tham số 'creates' (chỉ chạy nếu file không tồn tại) hoặc 'removes' giúp Ansible biết khi nào cần thực thi lệnh, tránh chạy lặp lại vô ích.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn quản lý 20 môi trường (Dev, Staging, Prod...) bằng Terraform. Cách tổ chức code nào giúp giảm thiểu lặp lại (DRY) và rủi ro sai sót cấu hình nhất?",
+    "options": [
+      "A. Copy-paste code Terraform vào 20 thư mục khác nhau.",
+      "B. Sử dụng Terraform Workspaces để quản lý tất cả môi trường trong cùng một thư mục code.",
+      "C. Sử dụng Terragrunt làm wrapper để quản lý các module và cấu hình remote state một cách phân cấp.",
+      "D. Viết một script Bash lớn để thay đổi các biến môi trường trước khi chạy Terraform."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Terragrunt là công cụ chuyên dụng cho Expert, giúp quản lý hạ tầng đa môi trường bằng cách giữ cho code Terraform 'clean', hỗ trợ kế thừa cấu hình và quản lý remote state hiệu quả hơn Workspace.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một Python script thực hiện xử lý dữ liệu lớn bị lỗi 'MemoryError'. Bạn sẽ thay đổi cách viết script như thế nào để xử lý file 100GB trên máy có 8GB RAM?",
+    "options": [
+      "A. Tăng kích thước Swap của hệ điều hành lên 120GB.",
+      "B. Sử dụng context manager và đọc file theo từng dòng (line-by-line) hoặc từng khối (chunk) thay vì read().",
+      "C. Chuyển sang sử dụng thư viện Pandas với hàm read_csv().",
+      "D. Sử dụng mảng (list) để lưu trữ toàn bộ dữ liệu trước khi xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đọc toàn bộ file vào RAM (read) sẽ gây tràn bộ nhớ. Sử dụng generator hoặc đọc theo chunk/line giúp giữ mức sử dụng RAM thấp và ổn định bất kể kích thước file.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi tự động hóa việc triển khai ứng dụng trên Kubernetes bằng Helm, làm thế nào để rollback tự động nếu quá trình triển khai (deployment) không đạt trạng thái 'Ready'?",
+    "options": [
+      "A. Sử dụng lệnh 'helm rollback' thủ công sau khi nhận cảnh báo từ Prometheus.",
+      "B. Sử dụng flag '--wait --atomic' trong lệnh 'helm upgrade'.",
+      "C. Viết script Bash để kiểm tra 'kubectl get pods' và gọi rollback nếu có lỗi.",
+      "D. Thiết lập Liveness Probe trong Kubernetes để tự động xóa pod lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Flag '--atomic' trong Helm bao gồm '--wait', nó sẽ đợi cho đến khi tất cả tài nguyên ở trạng thái sẵn sàng. Nếu quá trình timeout hoặc lỗi, Helm sẽ tự động thực hiện rollback về version trước đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Bash, sự khác biệt chính giữa 'exec command' và './command' khi chạy trong một script là gì?",
+    "options": [
+      "A. Không có sự khác biệt về mặt thực thi.",
+      "B. 'exec' sẽ thay thế tiến trình shell hiện tại bằng tiến trình của lệnh đó, script sẽ kết thúc sau khi lệnh chạy xong.",
+      "C. './command' sẽ chạy nhanh hơn vì không cần fork tiến trình mới.",
+      "D. 'exec' chỉ dùng được với các lệnh build-in của hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'exec' thay thế process image hiện tại. Điều này thường dùng trong Docker entrypoint scripts để ứng dụng nhận được tín hiệu (signals) trực tiếp từ kernel thay vì thông qua shell trung gian.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hệ thống tự động hóa của bạn cần lấy dữ liệu từ một API bên thứ ba có giới hạn 5 requests mỗi giây. Script của bạn chạy đa luồng. Cách nào xử lý 'Rate Limit' chuyên nghiệp nhất?",
+    "options": [
+      "A. Sử dụng khối try-except và 'time.sleep(1)' khi gặp lỗi 429.",
+      "B. Triển khai thuật toán 'Token Bucket' hoặc 'Leaky Bucket' trong script để điều tiết lưu lượng request.",
+      "C. Giảm số lượng thread xuống còn đúng 1 thread duy nhất.",
+      "D. Yêu cầu bên thứ ba nâng giới hạn rate limit cho tài khoản của bạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Token/Leaky Bucket là các thuật toán chuẩn để quản lý traffic. Việc triển khai chúng giúp script tận dụng tối đa băng thông cho phép mà không vi phạm chính sách của API (tránh lỗi 429).",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần thực hiện thay đổi cấu hình trên 100 database instances đồng thời. Rủi ro lớn nhất là làm sập database do quá nhiều kết nối đồng thời từ script automation. Bạn sẽ cấu hình Ansible như thế nào?",
+    "options": [
+      "A. Sử dụng 'throttle: 5' trong task để giới hạn số lượng worker chạy task đó cùng lúc.",
+      "B. Sử dụng 'ignore_unreachable: yes' để bỏ qua các DB bị sập.",
+      "C. Tăng 'timeout' của Ansible lên 600 giây.",
+      "D. Sử dụng 'run_once: true' để chỉ thực hiện trên một DB đại diện."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'throttle' (từ Ansible 2.9+) cho phép giới hạn số lượng worker tối đa cho một task cụ thể, giúp bảo vệ các tài nguyên nhạy cảm như Database khỏi bị quá tải kết nối (connection exhaustion).",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Terraform, khi nào bạn nên sử dụng 'Data Source' thay vì khai báo tài nguyên trực tiếp?",
+    "options": [
+      "A. Khi bạn muốn Terraform tự động xóa tài nguyên đó nếu nó không còn dùng đến.",
+      "B. Khi bạn cần lấy thông tin từ các tài nguyên đã tồn tại hoặc được quản lý bởi một hệ thống/stack khác.",
+      "C. Khi bạn muốn tăng tốc độ chạy 'terraform plan'.",
+      "D. Khi tài nguyên đó không có trong provider mặc định của Terraform."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data Source cho phép Terraform truy vấn thông tin từ bên ngoài (như một AMI ID hiện tại, một VPC có sẵn) mà không cần quản lý vòng đời (lifecycle) của tài nguyên đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện một script automation bằng Python chạy rất chậm. Sau khi profiling, bạn thấy phần lớn thời gian tiêu tốn vào việc khởi tạo kết nối HTTPS lặp đi lặp lại. Bạn sẽ tối ưu hóa như thế nào?",
+    "options": [
+      "A. Chuyển từ HTTPS sang HTTP để giảm bớt bước bắt tay (handshake).",
+      "B. Sử dụng 'requests.Session()' để tái sử dụng kết nối TCP (Connection Pooling).",
+      "C. Sử dụng thư viện 'urllib' thay vì 'requests'.",
+      "D. Chạy script trên một server có băng thông mạng lớn hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi lần gọi requests.get() là một lần tạo kết nối mới. Sử dụng Session object cho phép tái sử dụng kết nối TCP/SSL hiện có, giảm đáng kể độ trễ và tải cho CPU.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'set -e' (hoặc 'set -o errexit') trong shell script là một thực hành tốt (best practice) nhưng vẫn chưa đủ đối với các script phức tạp?",
+    "options": [
+      "A. Vì nó làm script dừng lại quá sớm khi gặp lỗi nhỏ.",
+      "B. Vì nó không bắt được lỗi xảy ra bên trong các lệnh nằm sau dấu pipe (|) trừ khi bật thêm 'set -o pipefail'.",
+      "C. Vì nó không hoạt động trên tất cả các phiên bản của Bash.",
+      "D. Vì nó tiêu tốn nhiều tài nguyên hệ thống hơn để theo dõi lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc định 'set -e' chỉ kiểm tra exit code của lệnh cuối cùng trong chuỗi pipe. Nếu lệnh đầu tiên thất bại nhưng lệnh cuối thành công, script vẫn tiếp tục. 'pipefail' giải quyết lỗ hổng này.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai Blue-Green Deployment bằng script automation, làm thế nào để đảm bảo dữ liệu người dùng không bị mất mát trong quá trình chuyển đổi (cutover)?",
+    "options": [
+      "A. Copy database từ môi trường Blue sang Green ngay trước khi chuyển traffic.",
+      "B. Sử dụng database dùng chung (shared database) và thực hiện các thay đổi schema có tính tương thích ngược (backward compatibility).",
+      "C. Yêu cầu người dùng không thực hiện giao dịch trong 30 phút bảo trì.",
+      "D. Sử dụng cơ chế replication hai chiều (bi-directional replication) giữa hai môi trường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Blue-Green, việc copy DB là không khả thi vì dữ liệu thay đổi liên tục. Sử dụng shared DB với schema tương thích ngược là chiến lược chuẩn để cả hai phiên bản ứng dụng cũ và mới đều hoạt động ổn định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một kịch bản Ansible, bạn cần lấy địa chỉ IP của một server vừa được tạo ra ở 'Task 1' để dùng cho 'Task 2'. Bạn sẽ sử dụng cơ chế nào?",
+    "options": [
+      "A. Sử dụng 'register' để lưu kết quả Task 1 và truy cập qua biến đó ở Task 2.",
+      "B. Viết địa chỉ IP vào một file tạm và dùng module 'command' để đọc lại.",
+      "C. Sử dụng 'set_fact' để định nghĩa một biến môi trường hệ thống.",
+      "D. Ansible tự động làm việc này thông qua 'hostvars' mà không cần khai báo gì."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'register' là cách chuẩn để bắt output của một task và lưu vào một biến để sử dụng cho các logic/task tiếp theo trong cùng một playbook run.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần xây dựng một hệ thống tự động phát hiện và sửa lỗi (Auto-remediation) cho hạ tầng đám mây. Luồng xử lý nào là an toàn và chuyên nghiệp nhất?",
+    "options": [
+      "A. Event -> Trigger Script -> Fix -> Done.",
+      "B. Event -> Trigger Script -> Check Status -> Fix -> Verify -> Log/Alert.",
+      "C. Monitor -> Alert -> Human Approval -> Fix.",
+      "D. Viết một vòng lặp vô tận chạy script sửa lỗi mỗi 5 giây."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hệ thống tự động hóa chuyên gia cần có các bước kiểm tra (Verify) sau khi sửa và ghi nhật ký (Log) để tránh tình trạng 'vòng lặp sửa lỗi' (remediation loop) nếu lỗi không thể khắc phục.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi viết script automation để tương tác với các dịch vụ Cloud (như AWS/Azure), việc sử dụng 'Hardcoded Credentials' là cấm kỵ. Phương pháp nào sau đây là bảo mật nhất cho một script chạy trên một máy ảo (EC2/VM)?",
+    "options": [
+      "A. Lưu credentials trong một file .env và phân quyền chmod 600.",
+      "B. Sử dụng Instance Metadata Service và gán IAM Role/Managed Identity cho máy ảo đó.",
+      "C. Mã hóa credentials bằng Ansible Vault và giải mã khi chạy script.",
+      "D. Truyền credentials qua tham số dòng lệnh (command line arguments)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Identity của chính máy ảo (IAM Role) giúp script tự động lấy temporary credentials mà không cần lưu trữ bất kỳ secret nào trên ổ đĩa, giảm thiểu rủi ro rò rỉ thông tin.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một dự án yêu cầu bạn tự động hóa việc cấu hình hàng nghìn thiết bị mạng (Switches/Routers) không hỗ trợ Python/Agent. Công cụ/Thư viện nào là lựa chọn hàng đầu?",
+    "options": [
+      "A. Terraform với Custom Provider.",
+      "B. Ansible với các module network (như ios_config) sử dụng kết nối network_cli.",
+      "C. Bash script sử dụng lệnh 'telnet'.",
+      "D. Puppet với Proxy Agent."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ansible cực kỳ mạnh mẽ trong mảng Network Automation nhờ khả năng 'agentless' và các module chuyên dụng hỗ trợ giao thức SSH/CLI của hầu hết các hãng thiết bị mạng lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scripting & Automation",
+    "category": "SITUATION"
+  }
+]

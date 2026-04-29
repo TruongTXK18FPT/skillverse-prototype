@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Dịch vụ nào sau đây của AWS được phân loại là Object Storage?",
+    "options": [
+      "A. Amazon EC2",
+      "B. Amazon EBS",
+      "C. Amazon S3",
+      "D. Amazon RDS"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Amazon S3 (Simple Storage Service) là dịch vụ lưu trữ đối tượng, cho phép lưu trữ và truy xuất bất kỳ lượng dữ liệu nào từ bất cứ đâu trên web.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Terraform, lệnh nào được sử dụng để khởi tạo thư mục làm việc và tải các provider cần thiết?",
+    "options": [
+      "A. terraform plan",
+      "B. terraform apply",
+      "C. terraform init",
+      "D. terraform destroy"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lệnh 'terraform init' dùng để chuẩn bị môi trường, tải các plugin provider và thiết lập backend cho file state.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng Infrastructure as Code (IaC) là gì?",
+    "options": [
+      "A. Tăng chi phí vận hành hàng tháng",
+      "B. Khả năng tái sử dụng và quản lý phiên bản hạ tầng",
+      "C. Loại bỏ hoàn toàn nhu cầu về bảo mật",
+      "D. Chỉ dành cho các hệ thống chạy trên máy chủ vật lý"
+    ],
+    "correctAnswer": "B",
+    "explanation": "IaC cho phép định nghĩa hạ tầng bằng mã nguồn, giúp dễ dàng tái sử dụng, kiểm soát phiên bản (Git) và tự động hóa việc triển khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thành phần nào cho phép các tài nguyên trong Public Subnet kết nối ra Internet trong mô hình AWS VPC?",
+    "options": [
+      "A. NAT Gateway",
+      "B. Internet Gateway",
+      "C. Virtual Private Gateway",
+      "D. Customer Gateway"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Internet Gateway (IGW) là thành phần cho phép giao tiếp giữa VPC và Internet. Một subnet trở thành public khi route table của nó trỏ traffic ra IGW.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một ứng dụng web gặp tình trạng quá tải CPU do lượng truy cập tăng đột biến, kỹ thuật nào giúp tự động bổ sung thêm các instance mới?",
+    "options": [
+      "A. Vertical Scaling",
+      "B. Manual Scaling",
+      "C. Horizontal Auto-scaling",
+      "D. Data Replication"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Horizontal Auto-scaling (mở rộng theo chiều ngang) giúp tự động thêm các instance vào nhóm để xử lý tải tăng thêm, đảm bảo tính sẵn sàng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Dịch vụ Load Balancer có vai trò chính là gì trong hạ tầng Cloud?",
+    "options": [
+      "A. Lưu trữ dữ liệu người dùng",
+      "B. Phân phối lưu lượng truy cập đến nhiều máy chủ mục tiêu",
+      "C. Mã hóa toàn bộ ổ cứng của máy chủ",
+      "D. Thay thế hoàn toàn tường lửa của hệ thống"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Load Balancer giúp phân phối đều traffic đến các server phía sau, giúp tối ưu hiệu năng và ngăn chặn việc một server bị quá tải.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong mô hình Shared Responsibility của các nhà cung cấp Cloud, khách hàng chịu trách nhiệm cho phần nào?",
+    "options": [
+      "A. Bảo trì phần cứng máy chủ vật lý",
+      "B. Quản lý hệ thống làm mát trung tâm dữ liệu",
+      "C. Cấu hình tường lửa và bảo mật dữ liệu của ứng dụng",
+      "D. Thay thế các ổ đĩa bị hỏng trong mảng lưu trữ"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nhà cung cấp quản lý bảo mật 'của' đám mây (hạ tầng), khách hàng quản lý bảo mật 'trong' đám mây (dữ liệu, cấu hình, ứng dụng).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Region và Availability Zone (AZ) trong AWS là gì?",
+    "options": [
+      "A. Region là một trung tâm dữ liệu đơn lẻ, AZ là một nhóm các Region",
+      "B. Region là một khu vực địa lý, AZ là một hoặc nhiều trung tâm dữ liệu riêng biệt trong Region đó",
+      "C. Region và AZ là hai thuật ngữ hoàn toàn giống nhau",
+      "D. AZ nằm ngoài phạm vi quản lý của Region"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Region là một vùng địa lý (như Singapore). Mỗi Region chứa nhiều AZ (trung tâm dữ liệu độc lập về nguồn điện, làm mát) để đảm bảo tính chịu lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lệnh nào trong Terraform giúp bạn xem trước các thay đổi sẽ được thực hiện đối với hạ tầng mà không thực sự thay đổi chúng?",
+    "options": [
+      "A. terraform show",
+      "B. terraform validate",
+      "C. terraform plan",
+      "D. terraform refresh"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lệnh 'terraform plan' so sánh cấu hình hiện tại với trạng thái thực tế và tạo ra một bản kế hoạch các thay đổi sẽ thực hiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để tối ưu chi phí cho các workload chạy ổn định 24/7 trong thời gian dài (1-3 năm), loại hình thanh toán EC2 nào là phù hợp nhất?",
+    "options": [
+      "A. On-Demand Instances",
+      "B. Spot Instances",
+      "C. Reserved Instances",
+      "D. Dedicated Hosts"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Reserved Instances cung cấp mức giảm giá đáng kể (lên đến 75%) so với On-Demand khi cam kết sử dụng trong một khoảng thời gian nhất định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Google Cloud Platform (GCP), dịch vụ tương đương với AWS EC2 là gì?",
+    "options": [
+      "A. Google App Engine",
+      "B. Google Cloud Storage",
+      "C. Compute Engine",
+      "D. BigQuery"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Compute Engine là dịch vụ cung cấp máy ảo (Virtual Machines) trên hạ tầng của Google, tương đương với EC2 của AWS.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích của việc sử dụng 'Tags' (nhãn) trên các tài nguyên Cloud là gì?",
+    "options": [
+      "A. Tăng tốc độ xử lý của CPU",
+      "B. Quản lý, phân loại tài nguyên và theo dõi chi phí",
+      "C. Để thay thế địa chỉ IP của máy chủ",
+      "D. Để tự động sao lưu dữ liệu hàng ngày"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tags là các cặp key-value giúp tổ chức tài nguyên theo dự án, môi trường (Dev/Prod) và hỗ trợ báo cáo chi phí chi tiết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Dịch vụ nào sau đây cung cấp mô hình Serverless Computing trên AWS?",
+    "options": [
+      "A. AWS Lambda",
+      "B. Amazon Lightsail",
+      "C. AWS Snowball",
+      "D. Amazon Route 53"
+    ],
+    "correctAnswer": "A",
+    "explanation": "AWS Lambda cho phép chạy mã nguồn mà không cần quản lý hay cung cấp máy chủ, người dùng chỉ trả tiền cho thời gian thực thi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Security Group trong AWS hoạt động ở cấp độ nào?",
+    "options": [
+      "A. Subnet",
+      "B. Instance (Network Interface)",
+      "C. VPC",
+      "D. Region"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Security Group hoạt động như một tường lửa ảo ở cấp độ instance (cụ thể là Network Interface), kiểm soát traffic vào và ra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "File 'terraform.tfstate' có vai trò gì quan trọng?",
+    "options": [
+      "A. Chứa mã nguồn Terraform để chia sẻ với đồng nghiệp",
+      "B. Lưu trữ trạng thái hiện tại của hạ tầng do Terraform quản lý",
+      "C. Là file hướng dẫn cài đặt Terraform",
+      "D. Chứa danh sách mật khẩu của các máy chủ"
+    ],
+    "correctAnswer": "B",
+    "explanation": "File state lưu trữ ánh xạ giữa các tài nguyên trong file cấu hình và các tài nguyên thực tế trên Cloud.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Vertical Scaling' (Mở rộng theo chiều dọc) có nghĩa là gì?",
+    "options": [
+      "A. Thêm nhiều máy chủ có cấu hình tương đương vào hệ thống",
+      "B. Tăng sức mạnh phần cứng (CPU, RAM) cho một máy chủ hiện có",
+      "C. Chuyển dữ liệu từ Region này sang Region khác",
+      "D. Chia nhỏ cơ sở dữ liệu thành nhiều phần"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vertical Scaling là việc nâng cấp cấu hình của một thực thể duy nhất (ví dụ: đổi từ instance t2.micro lên t2.large).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Azure, đơn vị quản lý logic dùng để nhóm các tài nguyên liên quan lại với nhau là gì?",
+    "options": [
+      "A. Resource Group",
+      "B. Management Group",
+      "C. Subscription",
+      "D. Availability Set"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Resource Group là một container chứa các tài nguyên liên quan cho một giải pháp Azure, giúp dễ dàng quản lý và xóa bỏ theo nhóm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để ngăn chặn việc vô tình xóa một tài nguyên quan trọng trong Terraform, bạn nên sử dụng tính năng nào?",
+    "options": [
+      "A. prevent_destroy lifecycle rule",
+      "B. terraform lock",
+      "C. terraform ignore",
+      "D. backend configuration"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tham số 'prevent_destroy' trong block lifecycle giúp Terraform từ chối thực hiện lệnh destroy đối với tài nguyên đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Dịch vụ nào của AWS giúp theo dõi và giám sát các chỉ số (metrics) của tài nguyên như CPU, Disk I/O?",
+    "options": [
+      "A. AWS CloudTrail",
+      "B. Amazon CloudWatch",
+      "C. AWS Config",
+      "D. AWS Trusted Advisor"
+    ],
+    "correctAnswer": "B",
+    "explanation": "CloudWatch là dịch vụ giám sát và quan sát, thu thập dữ liệu dưới dạng metric và log từ các tài nguyên AWS.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống có khả năng chịu lỗi (Fault Tolerance), bạn nên đặt các instance ở đâu?",
+    "options": [
+      "A. Tất cả trong cùng một Subnet",
+      "B. Phân tán trên nhiều Availability Zones khác nhau",
+      "C. Tất cả trong cùng một Availability Zone để giảm độ trễ",
+      "D. Chỉ đặt trong Private Subnet"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc phân tán instance trên nhiều AZ giúp hệ thống vẫn hoạt động bình thường nếu một trung tâm dữ liệu (AZ) gặp sự cố.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Cloud Agnostic' trong IaC ám chỉ điều gì?",
+    "options": [
+      "A. Chỉ sử dụng dịch vụ của một nhà cung cấp Cloud duy nhất",
+      "B. Khả năng triển khai hạ tầng trên nhiều nhà cung cấp Cloud khác nhau bằng cùng một công cụ",
+      "C. Việc không sử dụng bất kỳ công cụ tự động hóa nào",
+      "D. Chỉ chạy ứng dụng trên môi trường On-premise"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cloud Agnostic có nghĩa là công cụ (như Terraform) không bị giới hạn bởi một nhà cung cấp cụ thể, hỗ trợ đa nền tảng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Dịch vụ DNS được quản lý của AWS có tên là gì?",
+    "options": [
+      "A. Amazon Route 53",
+      "B. Amazon CloudFront",
+      "C. AWS Direct Connect",
+      "D. Amazon VPC"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Amazon Route 53 là dịch vụ Web Service DNS có tính sẵn sàng cao và khả năng mở rộng tốt.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để kết nối an toàn từ máy tính cá nhân vào các tài nguyên trong Private Subnet mà không qua Internet công cộng, bạn nên dùng gì?",
+    "options": [
+      "A. Public IP trực tiếp",
+      "B. Client VPN hoặc Site-to-Site VPN",
+      "C. Mở port 0.0.0.0/0 trên Security Group",
+      "D. Sử dụng FTP không mã hóa"
+    ],
+    "correctAnswer": "B",
+    "explanation": "VPN tạo ra một đường ống mã hóa an toàn để kết nối mạng nội bộ của bạn với VPC trên Cloud.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Terraform, biến (variables) được sử dụng để làm gì?",
+    "options": [
+      "A. Để lưu trữ dữ liệu nhạy cảm vĩnh viễn trong mã nguồn",
+      "B. Để tham số hóa cấu hình, giúp code linh hoạt và có thể tái sử dụng",
+      "C. Để thay thế hoàn toàn file state",
+      "D. Để tăng tốc độ tải của provider"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Biến cho phép người dùng truyền các giá trị khác nhau vào cùng một template cấu hình mà không cần sửa đổi mã nguồn chính.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Dịch vụ CDN (Content Delivery Network) của AWS giúp giảm độ trễ cho người dùng toàn cầu là?",
+    "options": [
+      "A. AWS Global Accelerator",
+      "B. Amazon CloudFront",
+      "C. Amazon ElastiCache",
+      "D. AWS Snowmobile"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Amazon CloudFront là dịch vụ CDN giúp phân phối dữ liệu, video, ứng dụng với tốc độ cao và độ trễ thấp thông qua các Edge Locations.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi làm việc nhóm với Terraform, giải pháp nào là tốt nhất để tránh việc hai thành viên cùng thay đổi hạ tầng tại một thời điểm gây xung đột state?",
+    "options": [
+      "A. Chia sẻ file terraform.tfstate qua Git và thực hiện merge định kỳ.",
+      "B. Sử dụng Remote Backend (như S3) kết hợp với tính năng State Locking (như DynamoDB).",
+      "C. Chỉ cho phép một người duy nhất trong nhóm có quyền chạy lệnh terraform apply.",
+      "D. Copy file state vào một thư mục chung trên server và truy cập qua SSH."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Remote Backend với State Locking đảm bảo rằng tại một thời điểm chỉ có một tiến trình Terraform được thực thi, tránh ghi đè hoặc làm hỏng file state khi nhiều người cùng thao tác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Doanh nghiệp cần kết nối 50 VPC khác nhau trong cùng một Region của AWS để chúng có thể giao tiếp với nhau theo mô hình hub-and-spoke. Giải pháp nào tối ưu nhất về mặt quản lý?",
+    "options": [
+      "A. Thiết lập Full Mesh VPC Peering giữa tất cả các VPC.",
+      "B. Sử dụng AWS Direct Connect để kết nối các VPC.",
+      "C. Sử dụng AWS Transit Gateway để quản lý kết nối tập trung.",
+      "D. Cài đặt phần mềm VPN trên các EC2 instance để tạo tunnel giữa các VPC."
+    ],
+    "correctAnswer": "C",
+    "explanation": "AWS Transit Gateway đóng vai trò như một hub trung tâm, giúp đơn giản hóa việc kết nối hàng chục VPC thay vì phải quản lý hàng trăm kết nối Peering phức tạp (Full Mesh).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Terraform, nếu bạn muốn tạo 5 instance giống hệt nhau nhưng có tên (tag Name) khác nhau dựa trên một danh sách cho trước, cách tiếp cận nào là chuyên nghiệp nhất?",
+    "options": [
+      "A. Copy-paste code khai báo resource thành 5 lần.",
+      "B. Sử dụng tham số count và truy cập index của nó.",
+      "C. Sử dụng meta-argument for_each kết hợp với một map hoặc set.",
+      "D. Viết một script bash bên ngoài để gọi lệnh terraform apply 5 lần."
+    ],
+    "correctAnswer": "C",
+    "explanation": "for_each linh hoạt hơn count vì nó cho phép ánh xạ trực tiếp các giá trị từ một map/set vào resource, giúp quản lý các instance riêng biệt dễ dàng hơn khi danh sách thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hệ thống của bạn có lưu lượng truy cập không ổn định, đôi khi tăng đột biến. Bạn nên cấu hình Auto Scaling Group (ASG) như thế nào để đảm bảo hiệu năng mà vẫn tối ưu chi phí?",
+    "options": [
+      "A. Sử dụng Scheduled Scaling để tăng instance vào các khung giờ cố định.",
+      "B. Sử dụng Target Tracking Scaling Policy dựa trên chỉ số CPU Utilization (ví dụ 70%).",
+      "C. Luôn giữ số lượng instance ở mức tối đa (Max Capacity) để đảm bảo an toàn.",
+      "D. Sử dụng Manual Scaling để quản trị viên tự điều chỉnh khi thấy lag."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Target Tracking tự động điều chỉnh số lượng instance để giữ chỉ số mục tiêu (như CPU) ổn định, giúp hệ thống phản ứng linh hoạt với lưu lượng thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một ứng dụng chạy trên EC2 cần truy cập vào file trong S3 bucket. Cách nào tuân thủ nguyên tắc bảo mật 'Least Privilege' nhất?",
+    "options": [
+      "A. Tạo một IAM User, lưu Access Key và Secret Key vào code của ứng dụng.",
+      "B. Gán quyền Public Read cho S3 bucket để EC2 có thể tải file về.",
+      "C. Tạo một IAM Role có quyền truy cập S3 cụ thể và gán Instance Profile đó cho EC2.",
+      "D. Mở cổng 443 trên Security Group của EC2 để nó kết nối được với S3."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng IAM Role cho EC2 (Instance Profile) giúp tránh việc lưu trữ thông tin đăng nhập tĩnh trong code và tự động xoay vòng credentials định kỳ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn có một lượng lớn dữ liệu log cũ trên S3, hiếm khi truy cập nhưng không được xóa vì lý do pháp lý. Lớp lưu trữ (Storage Class) nào giúp tiết kiệm chi phí nhất?",
+    "options": [
+      "A. S3 Standard",
+      "B. S3 Standard-IA (Infrequent Access)",
+      "C. S3 Glacier Deep Archive",
+      "D. S3 One Zone-IA"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Glacier Deep Archive là lớp lưu trữ rẻ nhất của AWS, phù hợp cho dữ liệu lưu trữ lâu dài (nhiều năm) và chấp nhận thời gian khôi phục từ 12-48 giờ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai Application Load Balancer (ALB), bạn muốn điều hướng các request có đường dẫn '/api/*' về một nhóm server riêng và '/static/*' về một nhóm khác. Bạn cần cấu hình gì?",
+    "options": [
+      "A. Host-based Routing",
+      "B. Path-based Routing",
+      "C. Query-string Routing",
+      "D. Source IP Routing"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Path-based Routing cho phép ALB dựa vào đường dẫn URL (path) của request để chuyển tiếp đến các Target Group tương ứng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Terraform, mục đích chính của lệnh 'terraform plan' là gì?",
+    "options": [
+      "A. Thực thi việc thay đổi hạ tầng ngay lập tức lên Cloud.",
+      "B. Kiểm tra cú pháp của code và khởi tạo các provider.",
+      "C. Hiển thị các thay đổi dự kiến sẽ được thực hiện so với trạng thái hiện tại.",
+      "D. Xóa bỏ toàn bộ các resource đã được tạo trước đó."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lệnh plan so sánh code hiện tại với trạng thái thực tế (thông qua file state) để người dùng xem trước các hành động (add, change, destroy) trước khi áp dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hệ thống yêu cầu khả năng chịu lỗi cao (High Availability). Nếu một Availability Zone (AZ) bị sập, ứng dụng vẫn phải hoạt động. Bạn nên thiết kế lớp Database (RDS) như thế nào?",
+    "options": [
+      "A. Sử dụng RDS Read Replicas ở một Region khác.",
+      "B. Sử dụng RDS Multi-AZ Deployment.",
+      "C. Thực hiện backup database định kỳ vào S3.",
+      "D. Tăng kích thước (Instance Type) của Database hiện tại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Multi-AZ tự động tạo một bản sao dự phòng (standby) ở AZ khác và tự động failover nếu AZ chính gặp sự cố, đảm bảo tính sẵn sàng cao.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn muốn ngăn chặn việc vô tình xóa một resource quan trọng (ví dụ: Database) khi chạy lệnh 'terraform destroy'. Bạn nên dùng thuộc tính nào trong block lifecycle?",
+    "options": [
+      "A. ignore_changes",
+      "B. create_before_destroy",
+      "C. prevent_destroy",
+      "D. force_destroy"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thuộc tính prevent_destroy = true sẽ khiến Terraform báo lỗi và dừng thực thi nếu lệnh apply/destroy có xu hướng xóa resource đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng Web chạy trong Private Subnet cần tải các bản cập nhật từ Internet nhưng không muốn các server bên ngoài có thể chủ động kết nối vào nó. Bạn cần thêm thành phần nào?",
+    "options": [
+      "A. Internet Gateway",
+      "B. NAT Gateway",
+      "C. Egress-Only Internet Gateway",
+      "D. Transit Gateway"
+    ],
+    "correctAnswer": "B",
+    "explanation": "NAT Gateway cho phép các instance trong Private Subnet kết nối ra ngoài Internet (outbound) nhưng ngăn chặn các kết nối từ Internet vào trong (inbound).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa Security Group và Network ACL (NACL) trong AWS là gì?",
+    "options": [
+      "A. Security Group là stateless, NACL là stateful.",
+      "B. Security Group áp dụng cho Subnet, NACL áp dụng cho Instance.",
+      "C. Security Group là stateful, NACL là stateless.",
+      "D. Security Group chỉ cho phép chặn (deny), NACL chỉ cho phép mở (allow)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Stateful nghĩa là nếu bạn cho phép inbound traffic, outbound traffic phản hồi sẽ tự động được phép. NACL là stateless nên phải cấu hình cả hai chiều.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện chi phí Cloud tháng này tăng vọt do các resource 'mồ côi' (không sử dụng). Chiến lược nào giúp quản lý chi phí tốt nhất về lâu dài?",
+    "options": [
+      "A. Xóa hết toàn bộ tài khoản và tạo lại từ đầu.",
+      "B. Áp dụng chính sách Tagging bắt buộc cho mọi resource và sử dụng công cụ Cost Explorer.",
+      "C. Chỉ sử dụng các Free Tier services.",
+      "D. Tắt toàn bộ server vào cuối tuần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tagging giúp phân loại chi phí theo dự án, team hoặc môi trường, từ đó dễ dàng xác định và tối ưu hóa các resource gây lãng phí thông qua Cost Explorer.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai kiến trúc Multi-Region để phục vụ người dùng toàn cầu, dịch vụ DNS nào của AWS hỗ trợ điều hướng người dùng đến Region có độ trễ thấp nhất?",
+    "options": [
+      "A. Route 53 với Failover Routing Policy.",
+      "B. Route 53 với Latency Routing Policy.",
+      "C. Route 53 với Weighted Routing Policy.",
+      "D. Route 53 với Multivalue Answer Routing Policy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Latency Routing Policy giúp Route 53 trả về IP của tài nguyên nằm trong Region mang lại độ trễ mạng thấp nhất cho người dùng đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang sử dụng Terraform để quản lý hạ tầng. Một đồng nghiệp đã vào giao diện Web (Console) để sửa đổi cấu hình Security Group bằng tay. Làm thế nào để đồng bộ lại code Terraform với thực tế?",
+    "options": [
+      "A. Chạy lệnh terraform refresh để cập nhật file state, sau đó sửa code cho khớp.",
+      "B. Xóa resource đó trong code và chạy terraform apply.",
+      "C. Chạy terraform import để nạp lại resource.",
+      "D. Không cần làm gì, Terraform sẽ tự động nhận diện khi có người sửa trên Web."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lệnh refresh (hoặc mặc định trong plan) sẽ cập nhật state từ thực tế. Sau đó DevOps cần sửa code cho khớp với thay đổi đó để tránh việc Terraform ghi đè lại giá trị cũ ở lần apply tới.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Google Cloud Platform (GCP), dịch vụ nào tương đương với AWS Lambda để chạy code serverless dựa trên sự kiện?",
+    "options": [
+      "A. Cloud Run",
+      "B. Compute Engine",
+      "C. Cloud Functions",
+      "D. App Engine"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cloud Functions là dịch vụ FaaS (Function as a Service) của GCP, tương đương với AWS Lambda.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để giảm thiểu thời gian downtime khi cập nhật ứng dụng, bạn triển khai một môi trường mới song song với môi trường cũ, sau đó chuyển dần traffic sang. Đây là chiến lược gì?",
+    "options": [
+      "A. Rolling Update",
+      "B. In-place Deployment",
+      "C. Blue/Green Deployment",
+      "D. Recreate Deployment"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Blue/Green Deployment sử dụng hai môi trường giống hệt nhau để giảm thiểu rủi ro và downtime bằng cách chuyển đổi traffic giữa chúng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần lưu trữ các thông tin nhạy cảm như API Key, Database Password cho ứng dụng trên Cloud. Giải pháp nào an toàn nhất?",
+    "options": [
+      "A. Lưu trực tiếp vào file biến (variables.tf) của Terraform.",
+      "B. Lưu vào biến môi trường (Environment Variables) của hệ điều hành.",
+      "C. Sử dụng dịch vụ AWS Secrets Manager hoặc HashiCorp Vault.",
+      "D. Mã hóa bằng Base64 và lưu vào Git."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các dịch vụ quản lý bí mật chuyên dụng cung cấp khả năng mã hóa, kiểm soát truy cập (IAM) và tự động xoay vòng (rotation) mật khẩu an toàn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Hệ thống của bạn cần xử lý một lượng lớn dữ liệu phân tích định kỳ vào ban đêm, không yêu cầu tính liên tục (có thể bị ngắt quãng). Loại instance nào giúp tối ưu chi phí nhất?",
+    "options": [
+      "A. On-Demand Instances",
+      "B. Reserved Instances",
+      "C. Spot Instances",
+      "D. Dedicated Hosts"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Spot Instances có giá rẻ hơn tới 90% so với On-demand, phù hợp cho các tác vụ xử lý dữ liệu có khả năng chịu lỗi khi instance bị thu hồi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi cấu hình VPC Endpoint cho S3, tại sao bạn nên ưu tiên dùng 'Gateway Endpoint' thay vì 'Interface Endpoint' (PrivateLink) nếu xét về chi phí?",
+    "options": [
+      "A. Gateway Endpoint được miễn phí hoàn toàn phí xử lý dữ liệu và giờ sử dụng.",
+      "B. Gateway Endpoint có tốc độ nhanh hơn nhiều lần.",
+      "C. Interface Endpoint chỉ hỗ trợ truy cập từ bên ngoài VPC.",
+      "D. Gateway Endpoint không yêu cầu thay đổi Route Table."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong AWS, Gateway Endpoints (cho S3 và DynamoDB) không tính phí, trong khi Interface Endpoints tính phí theo giờ và dung lượng dữ liệu đi qua.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn muốn tự động hóa việc kiểm tra xem hạ tầng thực tế có bị thay đổi (drift) so với code Terraform hay không mỗi ngày. Cách nào hiệu quả nhất?",
+    "options": [
+      "A. Chạy 'terraform destroy' mỗi tối và 'apply' lại vào sáng hôm sau.",
+      "B. Thiết lập một CI/CD job chạy 'terraform plan' định kỳ và gửi cảnh báo nếu có thay đổi.",
+      "C. Yêu cầu mọi người không được dùng Console.",
+      "D. Kiểm tra log của CloudTrail hàng ngày bằng tay."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chạy plan định kỳ trong CI/CD pipeline giúp phát hiện sự sai khác (drift) giữa code và thực tế mà không gây ảnh hưởng đến hệ thống đang chạy.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một Kubernetes cluster trên Cloud (như EKS hoặc GKE) cần tự động tăng số lượng Worker Node khi các Pod không còn đủ tài nguyên để lập lịch (schedule). Thành phần nào thực hiện việc này?",
+    "options": [
+      "A. Horizontal Pod Autoscaler (HPA)",
+      "B. Vertical Pod Autoscaler (VPA)",
+      "C. Cluster Autoscaler",
+      "D. CloudWatch Alarms"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cluster Autoscaler theo dõi các Pod ở trạng thái 'Pending' do thiếu tài nguyên và tự động điều chỉnh kích thước của Node Group/Node Pool.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Terraform, làm thế nào để tái sử dụng một nhóm các resource (ví dụ: cấu hình chuẩn cho một Web Server) cho nhiều dự án khác nhau?",
+    "options": [
+      "A. Copy file .tf sang thư mục dự án mới.",
+      "B. Sử dụng Terraform Modules.",
+      "C. Sử dụng tính năng Workspace.",
+      "D. Sử dụng lệnh terraform import."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Modules cho phép đóng gói các resource liên quan thành một khối có thể tái sử dụng, giúp quản lý code hạ tầng sạch sẽ và nhất quán.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Ứng dụng của bạn gặp lỗi 'Cold Start' khi sử dụng AWS Lambda, khiến request đầu tiên sau một thời gian không hoạt động bị chậm. Giải pháp nào xử lý vấn đề này?",
+    "options": [
+      "A. Tăng bộ nhớ (Memory) của Lambda lên mức tối đa.",
+      "B. Chuyển sang sử dụng EC2 thay vì Lambda.",
+      "C. Cấu hình Provisioned Concurrency cho Lambda function.",
+      "D. Sử dụng API Gateway để cache kết quả."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Provisioned Concurrency giữ cho một số lượng nhất định các thực thể Lambda luôn ở trạng thái 'ấm' (warm), sẵn sàng phản hồi ngay lập tức.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chiến lược Disaster Recovery (DR) nào có chi phí thấp nhất nhưng thời gian phục hồi (RTO) lâu nhất?",
+    "options": [
+      "A. Multi-site (Active-Active)",
+      "B. Warm Standby",
+      "C. Pilot Light",
+      "D. Backup and Restore"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Backup and Restore chỉ lưu trữ dữ liệu backup, khi có sự cố mới bắt đầu dựng lại hạ tầng nên rẻ nhất nhưng tốn thời gian nhất để khôi phục dịch vụ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hệ thống yêu cầu RTO (Recovery Time Objective) dưới 15 phút và RPO (Recovery Point Objective) dưới 1 phút cho một ứng dụng tài chính. Kiến trúc Disaster Recovery nào là tối ưu nhất về mặt chi phí mà vẫn đảm bảo yêu cầu này?",
+    "options": [
+      "A. Multi-region Active-Active với đồng bộ dữ liệu thời gian thực.",
+      "B. Pilot Light với database replication liên tục.",
+      "C. Warm Standby với các tài nguyên cốt lõi luôn chạy ở quy mô tối thiểu.",
+      "D. Backup and Restore từ S3 sang Region khác định kỳ mỗi 15 phút."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Warm Standby duy trì một phiên bản thu nhỏ của hệ thống luôn chạy, cho phép phục hồi nhanh (RTO thấp) và replication dữ liệu liên tục (RPO thấp) với chi phí thấp hơn Active-Active.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi quản lý hạ tầng quy mô lớn với Terraform, phương pháp nào là tốt nhất để giảm thiểu 'State Locking' và tăng tốc độ thực thi trong một đội ngũ DevOps đông thành viên?",
+    "options": [
+      "A. Sử dụng một file state duy nhất cho toàn bộ hạ tầng để dễ quản lý.",
+      "B. Chia nhỏ hạ tầng thành các component độc lập (Decoupled State) và sử dụng Remote State.",
+      "C. Tăng thời gian timeout của lock trong cấu hình Backend.",
+      "D. Chuyển sang sử dụng CloudFormation thay vì Terraform."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chia nhỏ state giúp giảm phạm vi ảnh hưởng (blast radius), giảm xung đột lock và cho phép các nhóm làm việc song song trên các phần hạ tầng khác nhau.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần kết nối 200 VPC trong cùng một AWS Region để chúng có thể giao tiếp với nhau. Giải pháp nào mang lại khả năng quản lý tập trung và hiệu quả về chi phí/vận hành nhất?",
+    "options": [
+      "A. Thiết lập Full-mesh VPC Peering giữa tất cả các VPC.",
+      "B. Sử dụng AWS Transit Gateway làm trung tâm kết nối.",
+      "C. Sử dụng AWS PrivateLink cho từng dịch vụ cụ thể.",
+      "D. Thiết lập VPN Site-to-Site giữa các VPC."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Transit Gateway hoạt động như một hub-and-spoke router, giảm độ phức tạp n^2 của VPC Peering và đơn giản hóa việc quản lý routing tập trung.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Google Cloud (GCP), khi thiết kế một mạng dùng chung cho nhiều dự án khác nhau nhưng vẫn muốn kiểm soát tập trung tài nguyên mạng, bạn nên sử dụng dịch vụ nào?",
+    "options": [
+      "A. VPC Network Peering.",
+      "B. Cloud Router với BGP.",
+      "C. Shared VPC.",
+      "D. Cloud VPN."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Shared VPC cho phép một tổ chức kết nối tài nguyên từ nhiều dự án vào một mạng VPC chung, giúp quản trị viên mạng kiểm soát tập trung IP, subnet và firewall.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để tối ưu chi phí cho các batch processing job không nhạy cảm với thời gian và có khả năng chịu lỗi, loại instance nào là lựa chọn hàng đầu trên AWS/Azure/GCP?",
+    "options": [
+      "A. On-Demand Instances.",
+      "B. Reserved Instances (1-year term).",
+      "C. Spot Instances (hoặc Preemptible VMs).",
+      "D. Dedicated Hosts."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Spot Instances tận dụng năng lượng dư thừa của cloud provider với giá rẻ hơn tới 90%, phù hợp hoàn hảo cho các công việc có thể bị ngắt quãng và chịu lỗi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi triển khai Blue-Green Deployment ở mức hạ tầng mạng, làm thế nào để đảm bảo việc rollback diễn ra gần như tức thì mà không bị ảnh hưởng bởi DNS Caching?",
+    "options": [
+      "A. Giảm TTL của bản ghi DNS xuống 0 giây.",
+      "B. Sử dụng Weighted Routing trên Route53.",
+      "C. Sử dụng Application Load Balancer (ALB) với Target Group swapping.",
+      "D. Sử dụng Global Accelerator với traffic dialing."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thay đổi Target Group tại Load Balancer diễn ra ở tầng ứng dụng/mạng nội bộ, không phụ thuộc vào DNS propagation của client, giúp rollback tức thì.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng E-commerce thường xuyên bị spike traffic vào khung giờ cố định. Giải pháp Auto-scaling nào tối ưu nhất để tránh việc hệ thống bị chậm trong quá trình khởi tạo instance mới?",
+    "options": [
+      "A. Dynamic Scaling dựa trên CPU Utilization.",
+      "B. Scheduled Scaling dựa trên lịch trình dự kiến.",
+      "C. Predictive Scaling dựa trên Machine Learning.",
+      "D. Giữ số lượng instance ở mức tối đa 24/7."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Predictive Scaling phân tích dữ liệu lịch sử để dự đoán lưu lượng và scale-out trước khi traffic thực tế tăng lên, khắc phục độ trễ của việc khởi động instance.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices, làm thế nào để giới hạn quyền truy cập giữa các service trong cùng một Cluster VPC một cách chặt chẽ nhất theo nguyên tắc Least Privilege?",
+    "options": [
+      "A. Sử dụng Network ACLs ở mức Subnet.",
+      "B. Sử dụng Security Groups gắn trực tiếp vào từng service/instance.",
+      "C. Sử dụng Service Mesh (như Istio) với Mutual TLS và Authorization Policies.",
+      "D. Cấu hình Firewall Rule ở mức OS của từng instance."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Service Mesh cung cấp khả năng kiểm soát truy cập ở tầng Layer 7 (Application) và định danh service-to-service, mạnh mẽ hơn so với Layer 4 của Security Groups.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang thiết kế hệ thống lưu trữ cho 1PB dữ liệu log truy cập web. Dữ liệu này hiếm khi được truy cập sau 30 ngày nhưng cần phải sẵn sàng ngay lập tức khi có yêu cầu điều tra. Option nào tối ưu chi phí nhất?",
+    "options": [
+      "A. Lưu trữ toàn bộ trên S3 Standard.",
+      "B. Sử dụng S3 Lifecycle Policy để chuyển dữ liệu sang S3 Standard-IA sau 30 ngày.",
+      "C. Chuyển dữ liệu sang S3 Glacier Instant Retrieval sau 30 ngày.",
+      "D. Chuyển dữ liệu sang S3 Glacier Deep Archive ngay lập tức."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Glacier Instant Retrieval phù hợp cho dữ liệu hiếm khi truy cập nhưng cần retrieval tính bằng mili giây, tiết kiệm chi phí hơn Standard-IA cho khối lượng lớn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Terraform, khái niệm 'Module' được sử dụng chủ yếu để giải quyết vấn đề gì trong các dự án hạ tầng lớn?",
+    "options": [
+      "A. Để tăng tốc độ thực thi lệnh terraform apply.",
+      "B. Để đóng gói (encapsulation) và tái sử dụng mã nguồn hạ tầng.",
+      "C. Để thay thế việc sử dụng Terraform Cloud.",
+      "D. Để tự động hóa việc backup file state."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Modules cho phép trừu tượng hóa các tài nguyên phức tạp thành các khối có thể tái sử dụng, giúp duy trì tính nhất quán và giảm lặp code (DRY).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai ứng dụng trên nhiều Region (Multi-region), thách thức lớn nhất đối với tính nhất quán dữ liệu (Data Consistency) trong cơ sở dữ liệu quan hệ là gì?",
+    "options": [
+      "A. Giới hạn băng thông mạng giữa các Region.",
+      "B. Độ trễ vật lý (Network Latency) ảnh hưởng đến synchronous replication.",
+      "C. Sự khác biệt về phiên bản OS giữa các Region.",
+      "D. Chi phí lưu trữ dữ liệu tăng gấp đôi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Độ trễ mạng giữa các vùng địa lý khiến việc ghi dữ liệu đồng bộ (synchronous) trở nên rất chậm, buộc kiến trúc sư phải đánh giá trade-off giữa Consistency và Availability (CAP theorem).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống sử dụng AWS Lambda gặp vấn đề 'Cold Start' ảnh hưởng đến trải nghiệm người dùng. Giải pháp kỹ thuật nào xử lý triệt để vấn đề này cho các request quan trọng?",
+    "options": [
+      "A. Tăng bộ nhớ (Memory) của Lambda function.",
+      "B. Sử dụng Provisioned Concurrency.",
+      "C. Chuyển code sang ngôn ngữ Python thay vì Java.",
+      "D. Thiết lập CloudWatch Events để 'ping' Lambda mỗi 5 phút."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Provisioned Concurrency giữ cho một số lượng execution environment nhất định luôn ở trạng thái 'warm', loại bỏ hoàn toàn độ trễ khởi tạo cho các request trong ngưỡng đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Hard-coded IP addresses' trong cấu hình hạ tầng Cloud được coi là một Anti-pattern nghiêm trọng?",
+    "options": [
+      "A. Vì Cloud Provider có thể thay đổi IP bất cứ lúc nào nếu không dùng Elastic IP.",
+      "B. Vì nó làm giảm hiệu năng của hệ thống mạng.",
+      "C. Vì nó vi phạm các tiêu chuẩn bảo mật PCI-DSS.",
+      "D. Vì nó cản trở khả năng tự động scale và tính linh hoạt (agility) của hạ tầng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Trong môi trường Cloud, tài nguyên thường xuyên được tạo mới/hủy bỏ. Sử dụng DNS hoặc Service Discovery thay vì IP cứng giúp hệ thống tự thích ứng khi scale.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần triển khai một ứng dụng yêu cầu độ trễ cực thấp cho người dùng toàn cầu. Dịch vụ nào giúp phân phối nội dung tĩnh và động từ các Edge Location hiệu quả nhất?",
+    "options": [
+      "A. AWS Direct Connect.",
+      "B. Amazon CloudFront.",
+      "C. AWS Global Accelerator.",
+      "D. Amazon Route 53 Geolocation Routing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CloudFront là một Content Delivery Network (CDN) sử dụng mạng lưới Edge Locations toàn cầu để cache và phân phối nội dung với độ trễ thấp nhất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong AWS Organizations, công cụ nào cho phép bạn thiết lập các rào chắn (guardrails) để ngăn chặn các tài khoản con thực hiện các hành động không được phép, ngay cả khi họ có quyền Admin?",
+    "options": [
+      "A. IAM Roles.",
+      "B. Resource-based Policies.",
+      "C. Service Control Policies (SCPs).",
+      "D. AWS Config."
+    ],
+    "correctAnswer": "C",
+    "explanation": "SCPs thiết lập giới hạn quyền tối đa cho các tài khoản trong Organization, ghi đè lên cả quyền của IAM user/role trong tài khoản đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện Migration một database 10TB từ On-premise lên Cloud với đường truyền internet 100Mbps và yêu cầu downtime tối thiểu, chiến lược nào là khả thi nhất?",
+    "options": [
+      "A. Upload trực tiếp qua VPN.",
+      "B. Sử dụng thiết bị vận chuyển dữ liệu vật lý (như Snowball) kết hợp với Database Migration Service (DMS) để sync delta.",
+      "C. Nén dữ liệu và upload lên S3 bằng Multi-part upload.",
+      "D. Sử dụng AWS DataSync."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với 10TB và 100Mbps, upload qua mạng mất nhiều tuần. Snowball giúp chuyển data lớn nhanh chóng, DMS giúp xử lý phần dữ liệu thay đổi (CDC) để giảm downtime.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng 'Immutable Infrastructure' (Hạ tầng bất biến) so với 'Mutable Infrastructure' là gì?",
+    "options": [
+      "A. Tiết kiệm chi phí lưu trữ image.",
+      "B. Loại bỏ tình trạng 'Configuration Drift' và tăng tính dự đoán khi triển khai.",
+      "C. Cho phép cập nhật phần mềm trực tiếp trên server đang chạy mà không cần khởi động lại.",
+      "D. Giảm số lượng nhân sự vận hành hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Immutable Infrastructure thay thế hoàn toàn instance cũ bằng instance mới từ image đã kiểm thử, đảm bảo mọi môi trường đều giống hệt nhau và không bị sai lệch cấu hình theo thời gian.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Azure, giải pháp nào cung cấp sự cô lập hoàn toàn về mặt vật lý cho các máy ảo của một khách hàng duy nhất trên một phần cứng server?",
+    "options": [
+      "A. Azure Dedicated Host.",
+      "B. Isolated App Service Plan.",
+      "C. Azure Virtual Machine Scale Sets.",
+      "D. Azure Private Link."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Azure Dedicated Host cung cấp server vật lý riêng biệt cho một khách hàng, đáp ứng các yêu cầu khắt khe về tuân thủ và bảo mật phần cứng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống microservices sử dụng Kubernetes trên Cloud (EKS/GKE/AKS). Cách tốt nhất để quản lý bí mật (secrets) như API keys mà không lưu trực tiếp vào etcd của K8s là gì?",
+    "options": [
+      "A. Lưu trong file configmap.yaml và mã hóa base64.",
+      "B. Sử dụng External Secrets Operator tích hợp với AWS Secrets Manager hoặc HashiCorp Vault.",
+      "C. Lưu trực tiếp vào Environment Variables trong Dockerfile.",
+      "D. Hard-code vào mã nguồn ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng các giải pháp quản lý secret chuyên dụng giúp tăng tính bảo mật, hỗ trợ xoay vòng (rotation) secret tự động và kiểm soát truy cập tập trung.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để đảm bảo tính sẵn sàng cao (High Availability) cho một ứng dụng web, bạn nên triển khai các instance của nó như thế nào trên Cloud?",
+    "options": [
+      "A. Đặt tất cả instance trong một Subnet duy nhất.",
+      "B. Đặt các instance ở các Availability Zones (AZs) khác nhau.",
+      "C. Đặt các instance ở các Region khác nhau nhưng cùng một AZ.",
+      "D. Sử dụng một instance duy nhất với cấu hình cực mạnh (Vertical Scaling)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Triển khai đa AZ bảo vệ hệ thống khỏi sự cố hỏng hóc của một trung tâm dữ liệu đơn lẻ, đảm bảo ứng dụng vẫn hoạt động nếu một AZ gặp sự cố.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng Terraform, lệnh 'terraform plan' đóng vai trò gì trong quy trình CI/CD?",
+    "options": [
+      "A. Thực thi việc thay đổi hạ tầng ngay lập tức.",
+      "B. Kiểm tra cú pháp và tạo ra bản xem trước các thay đổi sẽ thực hiện.",
+      "C. Xóa bỏ các tài nguyên không còn định nghĩa trong code.",
+      "D. Cập nhật file state từ hạ tầng thực tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Terraform plan cho phép kỹ sư review các thay đổi (create, update, delete) trước khi áp dụng thực tế, giúp tránh các sai sót gây sập hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện hóa đơn Cloud tăng đột biến do dữ liệu truyền tải (Data Transfer). Hành động nào sau đây giúp giảm chi phí này hiệu quả nhất?",
+    "options": [
+      "A. Chuyển toàn bộ traffic sang giao thức HTTP thay vì HTTPS.",
+      "B. Sử dụng VPC Endpoints để truy cập các dịch vụ Cloud nội bộ thay vì đi qua Internet Gateway.",
+      "C. Chuyển dữ liệu giữa các Region thường xuyên hơn.",
+      "D. Tăng số lượng Public IP cho các instance."
+    ],
+    "correctAnswer": "B",
+    "explanation": "VPC Endpoints giữ traffic trong mạng nội bộ của Cloud provider, tránh phí data transfer ra internet và tăng tính bảo mật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình Shared Responsibility của Cloud, khách hàng chịu trách nhiệm cho phần nào sau đây?",
+    "options": [
+      "A. Bảo trì vật lý cho các server trong data center.",
+      "B. Quản lý hệ điều hành khách (Guest OS), cấu hình Firewall và dữ liệu người dùng.",
+      "C. Tiêu hủy các ổ cứng vật lý bị hỏng.",
+      "D. Quản lý lớp ảo hóa (Virtualization layer)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cloud provider quản lý hạ tầng vật lý và lớp ảo hóa, trong khi khách hàng chịu trách nhiệm bảo mật 'trong' Cloud (dữ liệu, ứng dụng, OS).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Canary Deployment' trên hạ tầng Cloud thường được thực hiện bằng cách nào?",
+    "options": [
+      "A. Thay thế toàn bộ server cũ bằng server mới cùng lúc.",
+      "B. Chuyển một phần nhỏ traffic sang phiên bản mới để kiểm tra trước khi rollout toàn bộ.",
+      "C. Chạy hai phiên bản song song và chia traffic 50/50 mãi mãi.",
+      "D. Chỉ triển khai phiên bản mới vào ban đêm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Canary deployment giúp giảm thiểu rủi ro bằng cách kiểm tra phiên bản mới trên một nhóm nhỏ người dùng thực tế trước khi triển khai rộng rãi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện 'Tagging' tài nguyên một cách nghiêm ngặt lại cực kỳ quan trọng trong quản trị hạ tầng Cloud ở quy mô doanh nghiệp?",
+    "options": [
+      "A. Để làm cho tên tài nguyên trông đẹp hơn trên console.",
+      "B. Để tự động tăng hiệu năng của server.",
+      "C. Để phục vụ việc phân bổ chi phí (Cost Allocation), quản lý vòng đời và tự động hóa vận hành.",
+      "D. Để thay thế hoàn toàn cho việc sử dụng IAM policies."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tagging là nền tảng cho FinOps (quản lý chi phí) và Governance, cho phép lọc, báo cáo chi phí theo dự án/phòng ban và thực thi các script tự động hóa dựa trên tag.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một doanh nghiệp yêu cầu hệ thống đa vùng (multi-region) với RPO gần bằng 0 và RTO dưới 15 phút cho cơ sở dữ liệu quan trọng. Giải pháp kiến trúc nào trên AWS là tối ưu nhất?",
+    "options": [
+      "A. Sử dụng RDS Multi-AZ và thiết lập bản sao Read Replica ở vùng khác, thực hiện promote thủ công khi có sự cố.",
+      "B. Sử dụng Amazon Aurora Global Database với tính năng write forwarding và cơ chế failover tự động.",
+      "C. Thiết lập sao lưu định kỳ bằng AWS Backup và replicate các bản snapshot sang vùng khác mỗi 5 phút.",
+      "D. Sử dụng DynamoDB với Global Tables và cơ chế giải quyết xung đột Last Writer Wins."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Aurora Global Database cho phép replication vật lý với độ trễ cực thấp (thường < 1 giây), đáp ứng RPO gần bằng 0 và hỗ trợ failover nhanh chóng để đạt RTO dưới 15 phút.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Terraform, khi quản lý hạ tầng quy mô lớn với hàng nghìn tài nguyên, vấn đề 'state file locking' và 'state size' trở nên nghiêm trọng. Chiến lược nào sau đây giúp tối ưu hiệu suất và độ an toàn?",
+    "options": [
+      "A. Sử dụng một state file duy nhất cho toàn bộ doanh nghiệp để đảm bảo tính nhất quán tuyệt đối.",
+      "B. Chia nhỏ hạ tầng thành các component độc lập (như network, app, database) và sử dụng remote state data source để kết nối.",
+      "C. Chuyển sang sử dụng CloudFormation cho các tài nguyên mạng và giữ Terraform cho các tài nguyên ứng dụng.",
+      "D. Tăng thông số 'parallelism' trong lệnh terraform apply lên mức tối đa để giảm thời gian thực thi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc chia nhỏ state (State Splitting) giúp giảm rủi ro khi có lỗi, tăng tốc độ tính toán plan và giảm tranh chấp lock giữa các team.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần kết nối 50 VPC khác nhau trong cùng một AWS Region và cho phép chúng giao tiếp với mạng On-premise thông qua một kênh Direct Connect duy nhất. Giải pháp nào có khả năng mở rộng và quản trị tốt nhất?",
+    "options": [
+      "A. Thiết lập Full-mesh VPC Peering giữa tất cả các VPC.",
+      "B. Sử dụng một VPC trung tâm (Hub) và thiết lập VPN Site-to-Site tới tất cả các VPC khác.",
+      "C. Sử dụng AWS Transit Gateway để kết nối các VPC và Direct Connect Gateway.",
+      "D. Sử dụng VPC Endpoint Service (PrivateLink) để chia sẻ tài nguyên giữa các VPC."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Transit Gateway đóng vai trò như một hub router thông minh, giảm thiểu độ phức tạp của kết nối n-n và tích hợp mượt mà với Direct Connect Gateway.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một ứng dụng chạy trên Kubernetes (EKS) gặp tình trạng chi phí tăng vọt do việc sử dụng On-Demand instances. Bạn được giao nhiệm vụ tối ưu chi phí mà không làm giảm tính sẵn sàng của hệ thống. Phương án nào là hợp lý nhất?",
+    "options": [
+      "A. Chuyển toàn bộ Node Group sang Spot Instances và hy vọng không có sự cố thu hồi.",
+      "B. Sử dụng kết hợp On-Demand cho các dịch vụ core và Spot Instances cho các worker nodes thông qua Karpenter hoặc Cluster Autoscaler với priority.",
+      "C. Chuyển toàn bộ workload sang AWS Fargate để chỉ trả tiền cho những gì thực sự sử dụng.",
+      "D. Mua Reserved Instances cho toàn bộ dung lượng đỉnh (peak capacity) của cụm cluster."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược kết hợp (Mixed Instances Policy) giúp cân bằng giữa chi phí (Spot) và độ ổn định (On-demand), đặc biệt hiệu quả khi dùng các công cụ auto-scaling hiện đại.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai Landing Zone trong môi trường đa tài khoản (Multi-account), tại sao cần sử dụng SCP (Service Control Policies) trong AWS Organizations?",
+    "options": [
+      "A. Để thay thế hoàn toàn các IAM Policies của người dùng trong các tài khoản con.",
+      "B. Để thiết lập các rào chắn (guardrails) bảo mật cấp tổ chức, ngăn chặn ngay cả quyền root của tài khoản con thực hiện các hành động bị cấm.",
+      "C. Để cấp quyền truy cập tạm thời cho các bên thứ ba vào tài nguyên của doanh nghiệp.",
+      "D. Để tự động gắn tag cho tất cả các tài nguyên được tạo ra trong tổ chức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SCP là các chính sách quản trị tập trung xác định các quyền tối đa mà các tài khoản thành viên có thể có, giúp đảm bảo tuân thủ (compliance) trên quy mô lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Doanh nghiệp muốn thiết lập kết nối chuyên dụng giữa trung tâm dữ liệu tại Việt Nam và GCP tại Singapore với băng thông 10Gbps và yêu cầu độ trễ ổn định nhất. Lựa chọn nào là phù hợp?",
+    "options": [
+      "A. Carrier Peering thông qua một nhà cung cấp dịch vụ internet địa phương.",
+      "B. Dedicated Interconnect kết nối trực tiếp tại một colocation facility của Google.",
+      "C. Cloud VPN (HA) chạy qua đường truyền internet công cộng.",
+      "D. Partner Interconnect thông qua một đối tác kết nối mạng của Google."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dedicated Interconnect cung cấp kết nối vật lý trực tiếp đến mạng của Google, đảm bảo băng thông lớn và độ trễ thấp nhất so với các giải pháp khác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Azure, giải pháp nào cho phép quản lý chính sách, chi phí và tuân thủ cho nhiều Subscription cùng một lúc theo cấu trúc phân cấp?",
+    "options": [
+      "A. Azure Resource Groups.",
+      "B. Azure Management Groups.",
+      "C. Azure App Service Plans.",
+      "D. Azure Active Directory Groups."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Management Groups cung cấp phạm vi quản trị trên các Subscriptions, cho phép áp dụng Azure Policy và RBAC theo mô hình phân cấp doanh nghiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện refactor mã nguồn Terraform, bạn di chuyển một tài nguyên 'aws_instance' vào trong một 'module'. Khi chạy 'terraform plan', Terraform báo sẽ destroy và recreate instance đó. Bạn phải làm gì để tránh downtime?",
+    "options": [
+      "A. Sử dụng flag '-target' để chỉ apply module mới.",
+      "B. Chỉnh sửa thủ công file state (.tfstate) bằng text editor để cập nhật path.",
+      "C. Sử dụng lệnh 'terraform state mv' để ánh xạ lại địa chỉ của tài nguyên trong state file.",
+      "D. Xóa file state và chạy 'terraform import' lại từ đầu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "'terraform state mv' là lệnh chuẩn để di chuyển tài nguyên giữa các module hoặc đổi tên trong state mà không tác động đến tài nguyên thực tế trên cloud.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hệ thống Auto Scaling của bạn thường xuyên không phản ứng kịp với các đợt traffic tăng đột biến diễn ra vào khung giờ cố định hàng ngày. Giải pháp kỹ thuật nào là tối ưu?",
+    "options": [
+      "A. Tăng ngưỡng CPU threshold của scale-out policy xuống thấp hơn (ví dụ 30%).",
+      "B. Sử dụng Predictive Scaling dựa trên dữ liệu lịch sử kết hợp với Scheduled Scaling.",
+      "C. Luôn duy trì số lượng instance ở mức tối đa (Desired = Max).",
+      "D. Thay đổi Load Balancer sang loại Network Load Balancer để xử lý traffic nhanh hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Predictive Scaling sử dụng machine learning để dự đoán traffic, trong khi Scheduled Scaling chủ động chuẩn bị tài nguyên trước các mốc thời gian đã biết.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Amazon S3 hiện nay hỗ trợ mô hình nhất quán (consistency model) nào cho tất cả các yêu cầu PUT và DELETE?",
+    "options": [
+      "A. Eventual Consistency (Nhất quán sau cùng).",
+      "B. Strong Read-After-Write Consistency (Nhất quán mạnh ngay sau khi ghi).",
+      "C. Causal Consistency (Nhất quán nhân quả).",
+      "D. Bounded Staleness Consistency."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kể từ cuối năm 2020, Amazon S3 đã cung cấp tính năng Strong Read-After-Write Consistency cho tất cả các ứng dụng mà không làm giảm hiệu suất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một kiến trúc Hybrid Cloud, làm thế nào để các server On-premise có thể phân giải được các DNS record nội bộ (Private Hosted Zone) của AWS Route 53?",
+    "options": [
+      "A. Cấu hình server On-premise trỏ trực tiếp DNS về địa chỉ IP của Route 53.",
+      "B. Thiết lập Route 53 Inbound Resolver Endpoints để nhận các truy vấn DNS từ On-premise.",
+      "C. Copy toàn bộ file zone từ Route 53 về DNS server nội bộ định kỳ.",
+      "D. Sử dụng Public Hosted Zone thay vì Private Hosted Zone."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Inbound Resolver Endpoints cho phép các mạng bên ngoài gửi truy vấn DNS đến Route 53 Resolver, giúp phân giải các tên miền nội bộ trong VPC.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi triển khai Service Mesh (như Istio) trên một cụm Kubernetes đa vùng, thách thức lớn nhất về mặt hạ tầng mạng là gì?",
+    "options": [
+      "A. Việc cài đặt các sidecar proxy tốn quá nhiều CPU.",
+      "B. Đảm bảo kết nối Layer 3 thông suốt và quản lý mượt mà việc định danh (identity) giữa các cụm cluster khác nhau.",
+      "C. Giới hạn về số lượng Service tối đa trong một namespace.",
+      "D. Việc sử dụng YAML quá phức tạp cho các kỹ sư vận hành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong môi trường multi-cluster, việc thiết lập network reachability và trust domain (mTLS) đồng nhất là yếu tố phức tạp và quan trọng nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Hệ thống giám sát của bạn báo lỗi 'High Cardinality' khiến chi phí lưu trữ metric tăng vọt và dashboard bị chậm. Nguyên nhân thường gặp nhất là gì?",
+    "options": [
+      "A. Lưu trữ quá nhiều log file trong hệ thống.",
+      "B. Sử dụng các label/tag có giá trị thay đổi liên tục và duy nhất (như User_ID hoặc Request_ID) trong metric.",
+      "C. Tần suất lấy mẫu (sampling rate) quá cao (ví dụ 1 giây/lần).",
+      "D. Sử dụng giao thức HTTP/2 thay vì HTTP/1.1 để truyền metric."
+    ],
+    "correctAnswer": "B",
+    "explanation": "High Cardinality xảy ra khi một metric có quá nhiều tổ hợp nhãn (labels). Việc đưa các giá trị duy nhất (unique values) vào nhãn sẽ tạo ra vô số time-series, gây quá tải hệ thống lưu trữ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang thực hiện di chuyển một cơ sở dữ liệu Oracle 10TB từ On-premise lên AWS RDS với yêu cầu downtime tối thiểu (< 5 phút). Chiến lược nào là tối ưu?",
+    "options": [
+      "A. Sử dụng AWS Snowball để vận chuyển dữ liệu và import thủ công.",
+      "B. Sử dụng AWS Database Migration Service (DMS) với tính năng Full Load và Change Data Capture (CDC).",
+      "C. Backup dữ liệu ra S3 và dùng lệnh Restore của RDS Oracle.",
+      "D. Thiết lập một đường truyền VPN và dùng công cụ export/import truyền thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "AWS DMS với CDC cho phép đồng bộ hóa dữ liệu liên tục từ nguồn đến đích. Khi dữ liệu đã khớp, chỉ cần một thao tác switch-over ngắn để hoàn tất di chuyển.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một ứng dụng tài chính yêu cầu dữ liệu phải được lưu trữ tại một quốc gia cụ thể để tuân thủ luật pháp (Data Residency). Tuy nhiên, Cloud Provider bạn dùng không có Region tại đó. Giải pháp kỹ thuật nào khả thi?",
+    "options": [
+      "A. Sử dụng CloudFront để cache dữ liệu tại quốc gia đó.",
+      "B. Sử dụng giải pháp Hybrid Cloud: Lưu trữ dữ liệu tại On-premise local và xử lý logic trên Cloud thông qua kết nối bảo mật.",
+      "C. Mã hóa dữ liệu bằng key quản lý bởi khách hàng (CMK) và lưu trên Cloud bất kỳ.",
+      "D. Sử dụng Edge Location của Cloud Provider để chạy container."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi không có Region local, giải pháp Hybrid (hoặc dùng các dịch vụ như AWS Outposts) cho phép giữ dữ liệu vật lý tại chỗ trong khi vẫn tận dụng được hệ sinh thái cloud.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng Lambda@Edge trong kiến trúc phân phối nội dung toàn cầu là gì?",
+    "options": [
+      "A. Giảm chi phí tính toán so với chạy EC2.",
+      "B. Thực hiện các logic xử lý dữ liệu (như resize ảnh, header manipulation) ngay tại vị trí gần người dùng nhất để giảm độ trễ.",
+      "C. Thay thế hoàn toàn cho các server backend truyền thống.",
+      "D. Tăng cường bảo mật cho cơ sở dữ liệu nằm trong VPC."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lambda@Edge cho phép chạy code tại các AWS Edge Locations, giúp xử lý các yêu cầu HTTP/HTTPS ngay lập tức mà không cần quay về origin server, cải thiện trải nghiệm người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi quản lý các Terraform module dùng chung cho nhiều team, làm thế nào để đảm bảo một team không vô tình làm hỏng hạ tầng của team khác khi cập nhật module?",
+    "options": [
+      "A. Yêu cầu tất cả các team dùng chung một phiên bản module mới nhất.",
+      "B. Sử dụng Module Versioning (gắn tag phiên bản) và yêu cầu các team trỏ đến một version cụ thể.",
+      "C. Copy code module vào từng thư mục của mỗi team.",
+      "D. Chỉ cho phép một người duy nhất có quyền sửa module."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Versioning là nguyên tắc cốt lõi trong IaC để đảm bảo tính bất biến (immutability) và cho phép các team nâng cấp hạ tầng một cách có kiểm soát.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hệ thống Web của bạn đang bị tấn công DDoS lớp 7 (Layer 7) với hàng triệu request giả mạo mỗi giây nhắm vào endpoint tìm kiếm. Giải pháp nào hiệu quả nhất để ngăn chặn mà không ảnh hưởng người dùng thật?",
+    "options": [
+      "A. Chặn toàn bộ các dải IP từ quốc gia đang tấn công bằng Network ACL.",
+      "B. Sử dụng AWS WAF với Rate-based rules và tích hợp Managed Rules để nhận diện bot.",
+      "C. Tự động scale-up số lượng server để chịu tải.",
+      "D. Tắt dịch vụ tìm kiếm tạm thời cho đến khi cuộc tấn công kết thúc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "AWS WAF có khả năng phân tích sâu vào payload của request và áp dụng các rule dựa trên tần suất (rate-limit) để lọc bỏ traffic độc hại một cách thông minh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quy trình FinOps, làm thế nào để xác định chính xác các tài nguyên 'mồ côi' (orphaned resources) như các unattached EBS volumes hay Elastic IPs không sử dụng trên quy mô lớn?",
+    "options": [
+      "A. Kiểm tra thủ công từng vùng (Region) trên Console hàng tháng.",
+      "B. Viết script Python sử dụng Boto3 để quét tất cả tài khoản và vùng, sau đó xuất báo cáo.",
+      "C. Sử dụng AWS Trusted Advisor hoặc các công cụ bên thứ ba như CloudHealth/ProsperOps.",
+      "D. Xóa tất cả tài nguyên và đợi xem ai phàn nàn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các công cụ tối ưu hóa chi phí tự động có khả năng quét liên tục và đưa ra các khuyến nghị chính xác về tài nguyên lãng phí dựa trên các tiêu chuẩn tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc đặt AWS Lambda function bên trong một VPC đôi khi lại làm tăng thời gian khởi động (cold start) và tiêu tốn tài nguyên mạng?",
+    "options": [
+      "A. Do Lambda phải chờ cấp phát một Elastic Network Interface (ENI) và địa chỉ IP trong subnet.",
+      "B. Do Lambda không thể sử dụng bộ nhớ cache khi nằm trong VPC.",
+      "C. Do tất cả traffic của Lambda phải đi qua NAT Gateway.",
+      "D. Do giới hạn về số lượng Security Group có thể gán cho Lambda."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc dù AWS đã cải tiến với Hyperplane ENI, việc khởi tạo kết nối mạng vào VPC vẫn là một bước bổ sung trong quá trình cold start so với Lambda chạy ngoài VPC.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn thiết kế chiến lược Disaster Recovery theo mô hình 'Pilot Light'. Đặc điểm chính của mô hình này là gì?",
+    "options": [
+      "A. Một bản sao thu nhỏ của hệ thống luôn chạy ở vùng dự phòng với đầy đủ các thành phần.",
+      "B. Chỉ có dữ liệu được đồng bộ, các tài nguyên tính toán (EC2, v.v.) chỉ được tạo ra khi có sự cố xảy ra.",
+      "C. Hệ thống ở vùng dự phòng chạy song song và gánh 50% tải thực tế.",
+      "D. Sử dụng Backup/Restore truyền thống với thời gian phục hồi tính bằng ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pilot Light giữ cho các thành phần cốt lõi (thường là DB) luôn chạy và đồng bộ, trong khi các thành phần khác được cấu hình sẵn (dưới dạng IaC hoặc AMI) nhưng không chạy để tiết kiệm chi phí.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để triển khai CI/CD an toàn, bạn muốn GitHub Actions có thể deploy tài nguyên lên AWS mà không cần lưu trữ AWS Access Key/Secret Key lâu dài trong GitHub Secrets. Giải pháp nào là tốt nhất?",
+    "options": [
+      "A. Tạo một IAM User với quyền admin và copy key vào GitHub.",
+      "B. Sử dụng OIDC (OpenID Connect) để thiết lập mối quan hệ tin cậy giữa GitHub và AWS, cho phép GitHub Actions mượn IAM Role tạm thời.",
+      "C. Sử dụng một server trung gian (bastion host) để thực hiện lệnh deploy.",
+      "D. Thiết lập VPN giữa GitHub và AWS VPC."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OIDC loại bỏ nhu cầu quản lý long-lived credentials, giảm thiểu rủi ro rò rỉ key và tuân thủ nguyên tắc bảo mật hiện đại.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Hệ thống của bạn bị xâm nhập và hacker đã xóa một số CloudTrail logs để xóa dấu vết. Làm thế nào để đảm bảo tính toàn vẹn và không thể chối bỏ của log trong tương lai?",
+    "options": [
+      "A. Lưu log vào nhiều S3 bucket khác nhau.",
+      "B. Bật tính năng 'CloudTrail Log File Integrity Validation' và sử dụng S3 Object Lock (WORM).",
+      "C. Gửi log sang một Cloud Provider khác ngay lập tức.",
+      "D. Chỉ cho phép quyền Read-only đối với tất cả người dùng kể cả Admin."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Log File Integrity Validation giúp kiểm tra xem log có bị sửa đổi hay không, và S3 Object Lock ngăn chặn việc xóa log kể cả bởi người dùng có quyền cao nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong chiến lược 'Immutable Infrastructure', khi cần cập nhật một bản vá bảo mật cho OS của hàng trăm server, bạn nên làm gì?",
+    "options": [
+      "A. Sử dụng Ansible để SSH vào từng server và chạy lệnh update.",
+      "B. Tạo một Amazon Machine Image (AMI) mới đã được vá lỗi, sau đó thực hiện Rolling Update cho Auto Scaling Group.",
+      "C. Bật tính năng Automatic Update của hệ điều hành trên tất cả các máy.",
+      "D. Sử dụng AWS Systems Manager Patch Manager để vá lỗi trực tiếp trên các máy đang chạy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Immutable Infrastructure không thay đổi server đang chạy. Thay vào đó, nó thay thế chúng bằng các instance mới từ một image đã được chuẩn bị sẵn, đảm bảo tính nhất quán và dễ dàng rollback.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng web toàn cầu cần điều hướng người dùng đến Region gần nhất để giảm độ trễ, nhưng phải có khả năng tự động chuyển hướng sang Region khác nếu Region gần nhất bị sập. Bạn sẽ cấu hình Route 53 như thế nào?",
+    "options": [
+      "A. Sử dụng Simple Routing Policy với nhiều địa chỉ IP.",
+      "B. Sử dụng Geolocation Routing Policy kết hợp với Health Checks.",
+      "C. Sử dụng Latency Routing Policy kết hợp với Health Checks.",
+      "D. Sử dụng Failover Routing Policy làm chính và Latency làm phụ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Latency Routing đảm bảo người dùng đến đúng nơi có performance tốt nhất, và khi kết hợp với Health Checks, Route 53 sẽ tự động loại bỏ các endpoint không lành mạnh khỏi kết quả DNS.",
+    "difficulty": "EXPERT",
+    "skillArea": "Cloud Infrastructure",
+    "category": "SITUATION"
+  }
+]

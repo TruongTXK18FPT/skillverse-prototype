@@ -6,6 +6,9 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowLeft,
+  AlertTriangle,
+  Clock,
+  CheckCircle,
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import aiRoadmapService from '../../services/aiRoadmapService';
@@ -749,99 +752,116 @@ const StudyPlannerPage: React.FC = () => {
             </div>
           </section>
 
-          {isKanbanView ? (
-            <section className="study-plan-kanban-toolbar">
-              <div className="study-plan-kanban-toolbar__actions">
-                <button
-                  className="study-plan-hero-action study-plan-hero-action--ghost"
-                  onClick={() => navigate('/dashboard')}
-                >
-                  <ArrowLeft size={16} />
-                  <span>Về bảng điều khiển</span>
-                </button>
+          <section className="study-plan-hero-hud">
+            <div className="study-plan-hero-hud__backdrop"></div>
 
-                <button
-                  className="study-plan-hero-action study-plan-hero-action--accent"
-                  onClick={() => updateViewModeAndUrl('calendar', { clearTaskId: true })}
-                >
-                  <Calendar size={16} />
-                  <span>Chuyển sang lịch</span>
-                </button>
-              </div>
-            </section>
-          ) : (
-            <>
-              <section className="study-plan-hero-panel">
-                <div className="study-plan-hero-panel__content">
-                  <h1 className="study-plan-hero-panel__title">
-                    Trung tâm điều phối kế hoạch học tập
-                  </h1>
-                  <p className="study-plan-hero-panel__description">
-                    Ưu tiên xử lý việc gấp trước, sau đó tiếp tục theo lịch hoặc kanban với trợ lý AI khi cần.
-                  </p>
+            <div className="study-plan-hero-hud__content">
+              {/* Left Section - Title & Controls */}
+              <div className="study-plan-hero-hud__left">
+                <div className="study-plan-hero-hud__status">
+                  <div className="study-plan-hero-hud__status-dot"></div>
+                  <span className="study-plan-hero-hud__status-text">
+                    STUDY PLANNER ACTIVE
+                  </span>
                 </div>
 
-                <div className="study-plan-hero-panel__controls">
-                  <div className="study-plan-hero-actions">
+                <h1 className="study-plan-hero-hud__title">
+                  Trung tâm điều phối
+                  <span className="study-plan-hero-hud__title-accent"> kế hoạch học tập</span>
+                </h1>
+
+                <p className="study-plan-hero-hud__subtitle">
+                  Lên kế hoạch rõ ràng, theo dõi tiến độ và tối ưu việc học với trợ lý AI. <br />
+                  Học đúng trọng tâm – Không bỏ lỡ – Tiến bộ mỗi ngày.
+                </p>
+
+                <div className="study-plan-hero-hud__actions">
+                  <button
+                    className="study-plan-hero-hud__btn study-plan-hero-hud__btn--ghost"
+                    onClick={() => navigate('/dashboard')}
+                  >
+                    <ArrowLeft size={16} />
+                    <span>Về bảng điều khiển</span>
+                  </button>
+
+                  <button
+                    className="study-plan-hero-hud__btn study-plan-hero-hud__btn--premium"
+                    onClick={() => setIsAIModalOpen(true)}
+                  >
+                    <Bot size={16} />
+                    <span>Trợ lý AI</span>
+                    <span className="study-plan-hero-hud__btn-badge">PREMIUM</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Section - Stats Panel */}
+              <div className="study-plan-hero-hud__right">
+                <div className="study-plan-hero-hud__stats-panel">
+                  <div className="study-plan-hero-hud__stats-header">
+                    <span className="study-plan-hero-hud__stats-title">TỔNG QUAN NHIỆM VỤ</span>
+                  </div>
+
+                  <div className="study-plan-hero-hud__stats-grid">
+                    <div className="study-plan-hero-hud__stat-item study-plan-hero-hud__stat-item--danger">
+                      <div className="study-plan-hero-hud__stat-icon">
+                        <AlertTriangle size={18} />
+                      </div>
+                      <div className="study-plan-hero-hud__stat-info">
+                        <span className="study-plan-hero-hud__stat-value">{overdueCount}</span>
+                        <span className="study-plan-hero-hud__stat-label">Quá hạn</span>
+                      </div>
+                    </div>
+
+                    <div className="study-plan-hero-hud__stat-item study-plan-hero-hud__stat-item--warning">
+                      <div className="study-plan-hero-hud__stat-icon">
+                        <Clock size={18} />
+                      </div>
+                      <div className="study-plan-hero-hud__stat-info">
+                        <span className="study-plan-hero-hud__stat-value">{inProgressTaskCount}</span>
+                        <span className="study-plan-hero-hud__stat-label">Đang làm</span>
+                      </div>
+                    </div>
+
+                    <div className="study-plan-hero-hud__stat-item study-plan-hero-hud__stat-item--success">
+                      <div className="study-plan-hero-hud__stat-icon">
+                        <CheckCircle size={18} />
+                      </div>
+                      <div className="study-plan-hero-hud__stat-info">
+                        <span className="study-plan-hero-hud__stat-value">{completedTaskCount}</span>
+                        <span className="study-plan-hero-hud__stat-label">Hoàn thành</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* View Toggle below stats */}
+                  <div className="study-plan-hero-hud__view-toggle">
                     <button
-                      className="study-plan-hero-action study-plan-hero-action--ghost"
-                      onClick={() => navigate('/dashboard')}
+                      className={`study-plan-hero-hud__btn study-plan-hero-hud__btn--mode ${viewMode === 'calendar' ? 'is-active' : ''}`}
+                      onClick={() => updateViewModeAndUrl('calendar', { clearTaskId: true })}
                     >
-                      <ArrowLeft size={16} />
-                      <span>Về bảng điều khiển</span>
+                      <Calendar size={16} />
+                      <span>Lịch</span>
                     </button>
 
                     <button
-                      className="study-plan-hero-action study-plan-hero-action--premium study-plan-hero-action--wide"
-                      onClick={() => setIsAIModalOpen(true)}
+                      className={`study-plan-hero-hud__btn study-plan-hero-hud__btn--mode ${viewMode === 'board' ? 'is-active' : ''}`}
+                      onClick={() => updateViewModeAndUrl('board', { clearTaskId: true })}
                     >
-                      <Bot size={16} />
-                      <span>Trợ lý AI</span>
-                      <span className="study-plan-hero-action__badge">Premium Gold</span>
+                      <Trello size={16} />
+                      <span>Kanban</span>
                     </button>
                   </div>
                 </div>
-              </section>
+              </div>
+            </div>
 
-              <section className="study-plan-hero-summary">
-                <div className="study-plan-hero-stats">
-                  <article className="study-plan-hero-stat-card study-plan-hero-stat-card--danger study-plan-hero-stat-card--primary">
-                    <span className="study-plan-hero-stat-card__label">Quá hạn</span>
-                    <strong className="study-plan-hero-stat-card__value">{overdueCount}</strong>
-                  </article>
-                  <article className="study-plan-hero-stat-card study-plan-hero-stat-card--warning">
-                    <span className="study-plan-hero-stat-card__label">Đang thực hiện</span>
-                    <strong className="study-plan-hero-stat-card__value">{inProgressTaskCount}</strong>
-                  </article>
-                  <article className="study-plan-hero-stat-card study-plan-hero-stat-card--success">
-                    <span className="study-plan-hero-stat-card__label">Hoàn thành</span>
-                    <strong className="study-plan-hero-stat-card__value">{completedTaskCount}</strong>
-                  </article>
-                </div>
-
-                <div
-                  className="study-plan-segmented-control"
-                  role="tablist"
-                  aria-label="Chế độ hiển thị kế hoạch"
-                >
-                  <button
-                    className={`study-plan-segmented-control__button ${viewMode === 'calendar' ? 'is-active' : ''}`}
-                    onClick={() => updateViewModeAndUrl('calendar', { clearTaskId: true })}
-                  >
-                    <Calendar size={16} />
-                    <span>Lịch</span>
-                  </button>
-                  <button
-                    className={`study-plan-segmented-control__button ${viewMode === 'board' ? 'is-active' : ''}`}
-                    onClick={() => updateViewModeAndUrl('board', { clearTaskId: true })}
-                  >
-                    <Trello size={16} />
-                    <span>Kanban</span>
-                  </button>
-                </div>
-              </section>
-            </>
-          )}
+            {/* Corner decorations */}
+            <div className="study-plan-hero-hud__corner study-plan-hero-hud__corner--tl"></div>
+            <div className="study-plan-hero-hud__corner study-plan-hero-hud__corner--tr"></div>
+            <div className="study-plan-hero-hud__corner study-plan-hero-hud__corner--bl"></div>
+            <div className="study-plan-hero-hud__corner study-plan-hero-hud__corner--br"></div>
+          </section>
 
           {clearOverdueFeedback && (
             <div

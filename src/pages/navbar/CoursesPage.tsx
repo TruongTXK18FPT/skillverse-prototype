@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Users, Star, BookOpen, Play, Filter, TrendingUp, Folder, Radar, Zap, Target, Shield, Plus } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import { useTheme } from '../../context/ThemeContext';
@@ -41,9 +41,11 @@ const CoursesPage = () => {
   const [levelFilter, setLevelFilter] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [hasLoadedCourses, setHasLoadedCourses] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   const [enrolledIds, setEnrolledIds] = useState<Set<number>>(new Set());
   const itemsPerPage = 12;
+  const modulesSectionRef = useRef<HTMLDivElement | null>(null);
   const { user } = useAuth();
   const isMentorUser =
     (user?.roles || []).some((role) => role.toUpperCase() === 'MENTOR') ||
@@ -124,6 +126,7 @@ const CoursesPage = () => {
         setTotalItems(0);
       } finally {
         setLoading(false);
+        setHasLoadedCourses(true);
       }
     };
     fetchData();
@@ -284,7 +287,17 @@ const CoursesPage = () => {
     navigate('/mentor/courses/create');
   }, [navigate]);
 
-  if (loading) {
+  const handleCoursePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+    window.requestAnimationFrame(() => {
+      modulesSectionRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    });
+  }, []);
+
+  if (loading && !hasLoadedCourses) {
     return (
       <div className={`cockpit-courses-container ${theme}`} data-theme={theme}>
         <div className="cockpit-hud-frame">
@@ -515,7 +528,17 @@ const CoursesPage = () => {
           </div>
 
           {/* Modules Grid */}
-          <div className="cockpit-modules-section">
+          <div
+            className={`cockpit-modules-section ${loading ? 'cockpit-modules-section--loading' : ''}`}
+            ref={modulesSectionRef}
+          >
+            {loading && (
+              <div className="cockpit-inline-loading" aria-live="polite">
+                <MeowlKuruLoader size="small" text="" />
+                <span>Đang cập nhật dữ liệu...</span>
+              </div>
+            )}
+
             {displayedCourses.length === 0 ? (
               <div className="cockpit-empty-state">
                 <div className="cockpit-empty-icon">
@@ -648,7 +671,7 @@ const CoursesPage = () => {
               totalItems={totalItems}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
-              onPageChange={setCurrentPage}
+              onPageChange={handleCoursePageChange}
             />
           </div>
         )}

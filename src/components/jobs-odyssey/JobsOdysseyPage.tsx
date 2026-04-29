@@ -54,11 +54,9 @@ const JobsOdysseyPage = () => {
   });
 
   const [longTermJobs, setLongTermJobs] = useState<JobPostingResponse[]>([]);
-  const [longTermTotal, setLongTermTotal] = useState(0);
   const [longTermCurrentPage, setLongTermCurrentPage] = useState(0);
 
   const [shortTermJobs, setShortTermJobs] = useState<ShortTermJobResponse[]>([]);
-  const [shortTermTotal, setShortTermTotal] = useState(0);
   const [shortTermCurrentPage, setShortTermCurrentPage] = useState(0);
 
   const [allCurrentPage, setAllCurrentPage] = useState(0);
@@ -67,12 +65,11 @@ const JobsOdysseyPage = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const fetchLongTermJobs = useCallback(
-    async (page: number) => {
+    async () => {
       try {
-        const result = await jobService.getPublicJobsPaged(page, PAGE_SIZE);
-        setLongTermJobs(result.content);
-        setLongTermTotal(result.totalElements);
-        setLongTermCurrentPage(page);
+        const jobs = await jobService.getPublicJobs();
+        setLongTermJobs(jobs);
+        setLongTermCurrentPage(0);
       } catch {
         showError("Lỗi tải dữ liệu", "Không thể tải danh sách công việc dài hạn.");
       }
@@ -81,12 +78,11 @@ const JobsOdysseyPage = () => {
   );
 
   const fetchShortTermJobs = useCallback(
-    async (page: number) => {
+    async () => {
       try {
-        const result = await shortTermJobService.getPublishedJobsPaged(page, PAGE_SIZE);
-        setShortTermJobs(result.content);
-        setShortTermTotal(result.totalElements);
-        setShortTermCurrentPage(page);
+        const jobs = await shortTermJobService.getPublishedJobs();
+        setShortTermJobs(jobs);
+        setShortTermCurrentPage(0);
       } catch {
         showError("Lỗi tải dữ liệu", "Không thể tải danh sách công việc ngắn hạn.");
       }
@@ -96,7 +92,7 @@ const JobsOdysseyPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    Promise.all([fetchLongTermJobs(0), fetchShortTermJobs(0)])
+    Promise.all([fetchLongTermJobs(), fetchShortTermJobs()])
       .catch(() => {
         // Errors are handled in each fetch function.
       })
@@ -105,6 +101,8 @@ const JobsOdysseyPage = () => {
 
   useEffect(() => {
     setAllCurrentPage(0);
+    setLongTermCurrentPage(0);
+    setShortTermCurrentPage(0);
   }, [searchTerm, filters.workMode, filters.minBudget, filters.maxBudget]);
 
   const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -218,16 +216,6 @@ const JobsOdysseyPage = () => {
     navigate(`/short-term-jobs/${job.id}/view`);
   };
 
-  const handleLongTermPageChange = (page: number) => {
-    setIsLoading(true);
-    fetchLongTermJobs(page).finally(() => setIsLoading(false));
-  };
-
-  const handleShortTermPageChange = (page: number) => {
-    setIsLoading(true);
-    fetchShortTermJobs(page).finally(() => setIsLoading(false));
-  };
-
   const renderEmptyState = (icon: string, title: string) => (
     <div className="odyssey-empty">
       <div className="odyssey-empty__icon">{icon}</div>
@@ -319,10 +307,20 @@ const JobsOdysseyPage = () => {
       return renderEmptyState("💼", "Không có công việc dài hạn");
     }
 
+    const pageStart = longTermCurrentPage * PAGE_SIZE;
+    const pagedJobs = filteredLongTermJobs
+      .slice()
+      .sort((a, b) => {
+        const bTime = new Date(b.createdAt ?? 0).getTime();
+        const aTime = new Date(a.createdAt ?? 0).getTime();
+        return (Number.isNaN(bTime) ? 0 : bTime) - (Number.isNaN(aTime) ? 0 : aTime);
+      })
+      .slice(pageStart, pageStart + PAGE_SIZE);
+
     return (
       <>
         <div className="odyssey-grid">
-          {filteredLongTermJobs.map((job) => (
+          {pagedJobs.map((job) => (
             <LongTermJobCard
               key={job.id}
               job={job}
@@ -330,7 +328,7 @@ const JobsOdysseyPage = () => {
             />
           ))}
         </div>
-        {renderPagination(longTermTotal, longTermCurrentPage, handleLongTermPageChange)}
+        {renderPagination(filteredLongTermJobs.length, longTermCurrentPage, setLongTermCurrentPage)}
       </>
     );
   };
@@ -340,10 +338,20 @@ const JobsOdysseyPage = () => {
       return renderEmptyState("⚡", "Không có công việc ngắn hạn");
     }
 
+    const pageStart = shortTermCurrentPage * PAGE_SIZE;
+    const pagedJobs = filteredShortTermJobs
+      .slice()
+      .sort((a, b) => {
+        const bTime = new Date(b.createdAt ?? 0).getTime();
+        const aTime = new Date(a.createdAt ?? 0).getTime();
+        return (Number.isNaN(bTime) ? 0 : bTime) - (Number.isNaN(aTime) ? 0 : aTime);
+      })
+      .slice(pageStart, pageStart + PAGE_SIZE);
+
     return (
       <>
         <div className="odyssey-grid">
-          {filteredShortTermJobs.map((job) => (
+          {pagedJobs.map((job) => (
             <ShortTermJobCard
               key={job.id}
               job={job}
@@ -351,7 +359,7 @@ const JobsOdysseyPage = () => {
             />
           ))}
         </div>
-        {renderPagination(shortTermTotal, shortTermCurrentPage, handleShortTermPageChange)}
+        {renderPagination(filteredShortTermJobs.length, shortTermCurrentPage, setShortTermCurrentPage)}
       </>
     );
   };

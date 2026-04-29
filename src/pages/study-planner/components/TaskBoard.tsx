@@ -513,23 +513,6 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                   </button>
                 )}
 
-                <button
-                  className={`study-plan-column-action-btn ${showArchivedModal ? 'study-plan-column-action-btn--active' : ''}`}
-                  onClick={toggleArchived}
-                  title="Xem đã ẩn"
-                >
-                  <Archive size={14} />
-                </button>
-
-                <button
-                  className="study-plan-column-action-btn"
-                  onClick={() =>
-                    setEditingColumnId(editingColumnId === column.id ? null : column.id)
-                  }
-                  title="Đổi màu cột"
-                >
-                  <Palette size={14} />
-                </button>
 
                 {!isColumnProtected(column.name) && (
                   <button

@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Nguyên tắc 'Least Privilege' (Quyền tối thiểu) trong bảo mật hệ thống có nghĩa là gì?",
+    "options": [
+      "A. Cấp toàn bộ quyền quản trị cho tất cả nhân viên trong nhóm DevOps.",
+      "B. Chỉ cấp các quyền vừa đủ để một người dùng hoặc dịch vụ thực hiện công việc của mình.",
+      "C. Mọi người dùng đều có quyền truy cập vào tất cả các tài nguyên hệ thống.",
+      "D. Chỉ giới hạn quyền truy cập đối với các nhân viên mới vào công ty."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc Quyền tối thiểu giúp giảm thiểu rủi ro bằng cách hạn chế quyền hạn của người dùng hoặc dịch vụ chỉ ở mức cần thiết để hoàn thành nhiệm vụ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đâu là cách an toàn nhất để quản lý các thông tin nhạy cảm (secrets) như API keys hay mật khẩu cơ sở dữ liệu?",
+    "options": [
+      "A. Lưu trữ trực tiếp trong tệp cấu hình và đẩy lên Git repository.",
+      "B. Gửi qua email hoặc tin nhắn nội bộ để các thành viên cùng biết.",
+      "C. Sử dụng các công cụ quản lý chuyên dụng như HashiCorp Vault hoặc AWS Secrets Manager.",
+      "D. Ghi chú vào tệp README của dự án để dễ dàng tra cứu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng các công cụ quản lý Secret chuyên dụng giúp mã hóa, kiểm soát truy cập và ghi nhật ký sử dụng các thông tin nhạy cảm một cách an toàn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong mô hình quan sát (Observability), 'Metrics' thường được dùng để làm gì?",
+    "options": [
+      "A. Ghi lại chi tiết từng sự kiện xảy ra trong hệ thống dưới dạng văn bản.",
+      "B. Theo dõi các chỉ số định lượng về hiệu suất hệ thống như CPU, RAM, tỷ lệ lỗi theo thời gian.",
+      "C. Theo dõi hành trình của một yêu cầu đi qua nhiều dịch vụ khác nhau.",
+      "D. Lưu trữ lịch sử thay đổi mã nguồn của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Metrics là các dữ liệu dạng số được thu thập theo thời gian, giúp đánh giá trạng thái và hiệu suất tổng thể của hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Encryption at Rest' (Mã hóa dữ liệu khi nghỉ) đề cập đến việc bảo vệ dữ liệu trong trạng thái nào?",
+    "options": [
+      "A. Khi dữ liệu đang được truyền qua mạng Internet.",
+      "B. Khi dữ liệu đang được xử lý trong bộ nhớ RAM.",
+      "C. Khi dữ liệu được lưu trữ cố định trên ổ đĩa hoặc các thiết bị lưu trữ.",
+      "D. Khi dữ liệu đang được nhập từ bàn phím của người dùng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Encryption at Rest tập trung vào việc mã hóa dữ liệu khi nó được lưu trữ trên các phương tiện vật lý như HDD, SSD hoặc Cloud Storage.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "SLA (Service Level Agreement) thường được hiểu là gì trong quản lý độ tin cậy?",
+    "options": [
+      "A. Một cam kết chính thức về mức độ dịch vụ giữa nhà cung cấp và khách hàng.",
+      "B. Một công cụ dùng để tự động sửa lỗi mã nguồn ứng dụng.",
+      "C. Một quy trình kiểm thử xâm nhập để tìm lỗ hổng bảo mật.",
+      "D. Một loại tường lửa bảo vệ hệ thống khỏi tấn công DDoS."
+    ],
+    "correctAnswer": "A",
+    "explanation": "SLA là thỏa thuận cam kết về các chỉ số hiệu năng và độ sẵn sàng của dịch vụ mà nhà cung cấp phải đảm bảo cho khách hàng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của việc thực hiện 'Infrastructure Hardening' là gì?",
+    "options": [
+      "A. Tăng dung lượng lưu trữ của máy chủ để chứa nhiều dữ liệu hơn.",
+      "B. Giảm thiểu bề mặt tấn công bằng cách loại bỏ các dịch vụ, cổng và quyền không cần thiết.",
+      "C. Cài đặt càng nhiều phần mềm bảo mật lên máy chủ càng tốt.",
+      "D. Tăng tốc độ đường truyền mạng giữa các máy chủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hardening (làm cứng) là quá trình cấu hình hệ thống an toàn hơn bằng cách tắt các tính năng dư thừa, giảm cơ hội cho kẻ tấn công khai thác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quá trình xử lý sự cố (Incident Response), bước đầu tiên cần thực hiện là gì?",
+    "options": [
+      "A. Viết báo cáo chi tiết về nguyên nhân gốc rễ của sự cố.",
+      "B. Xác định, phân loại và ngăn chặn sự cố để tránh thiệt hại lan rộng.",
+      "C. Xóa bỏ toàn bộ dữ liệu của hệ thống để đảm bảo an toàn.",
+      "D. Đổ lỗi cho thành viên đã thực hiện thay đổi gần nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi có sự cố, việc quan trọng nhất là nhận diện và cô lập (containment) để hạn chế ảnh hưởng trước khi tiến hành sửa chữa sâu hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Giao thức HTTPS sử dụng cơ chế nào để bảo mật dữ liệu truyền tải trên mạng?",
+    "options": [
+      "A. SSH Tunneling.",
+      "B. TLS/SSL Encryption.",
+      "C. Basic Authentication.",
+      "D. IP Whitelisting."
+    ],
+    "correctAnswer": "B",
+    "explanation": "HTTPS sử dụng chứng chỉ TLS/SSL để mã hóa dữ liệu truyền giữa trình duyệt và máy chủ, đảm bảo tính riêng tư và toàn vẹn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc xoay vòng mật khẩu (Password Rotation) hoặc Access Key định kỳ lại quan trọng?",
+    "options": [
+      "A. Để giúp nhân viên ghi nhớ mật khẩu tốt hơn.",
+      "B. Để giảm thiểu rủi ro nếu một thông tin đăng nhập đã bị lộ mà không hay biết.",
+      "C. Để giải phóng bộ nhớ cho hệ thống quản lý danh tính.",
+      "D. Để tuân thủ quy định về việc đặt tên mật khẩu mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xoay vòng thông tin xác thực định kỳ giới hạn thời gian mà một kẻ tấn công có thể sử dụng thông tin nếu họ đánh cắp được chúng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong hệ thống giám sát, 'Alerting Rule' nên được thiết lập dựa trên nguyên tắc nào để tránh gây nhiễu?",
+    "options": [
+      "A. Gửi cảnh báo cho mọi lỗi nhỏ nhất xảy ra trong hệ thống.",
+      "B. Chỉ gửi cảnh báo khi các chỉ số vượt ngưỡng ảnh hưởng thực sự đến người dùng hoặc dịch vụ.",
+      "C. Thiết lập cảnh báo đổ về email của tất cả mọi người trong công ty.",
+      "D. Luôn đặt ngưỡng cảnh báo ở mức 50% công suất hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cảnh báo quá nhiều (Alert Fatigue) sẽ làm giảm sự tập trung. Cảnh báo cần có ý nghĩa và yêu cầu hành động xử lý cụ thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khái niệm 'Chaos Engineering' cơ bản nhất là gì?",
+    "options": [
+      "A. Cố tình gây ra các lỗi giả lập trong hệ thống để kiểm tra khả năng chịu đựng và phục hồi.",
+      "B. Để mặc hệ thống tự hoạt động cho đến khi nó tự hỏng.",
+      "C. Việc lập trình một cách lộn xộn không theo quy chuẩn nào.",
+      "D. Xóa toàn bộ mã nguồn để bắt đầu lại từ đầu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Chaos Engineering giúp xác định các điểm yếu tiềm ẩn bằng cách thử nghiệm các tình huống thất bại trong môi trường có kiểm soát.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thành phần nào sau đây đóng vai trò kiểm soát lưu lượng mạng ra/vào một subnet trong Cloud?",
+    "options": [
+      "A. Load Balancer.",
+      "B. Network ACL (Access Control List) hoặc Security Group.",
+      "C. Auto Scaling Group.",
+      "D. DNS Server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Network ACL và Security Group là các lớp bảo mật mạng cơ bản dùng để lọc lưu lượng dựa trên IP và cổng dịch vụ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống có độ sẵn sàng 'ba số 9' (99.9%) cho phép thời gian ngừng hoạt động (downtime) tối đa khoảng bao nhiêu trong một năm?",
+    "options": [
+      "A. Khoảng 52 phút.",
+      "B. Khoảng 8.77 giờ.",
+      "C. Khoảng 3.65 ngày.",
+      "D. Khoảng 1 tháng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Độ sẵn sàng 99.9% tương ứng với thời gian downtime tối đa là khoảng 8.77 giờ mỗi năm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Mục đích của việc sử dụng Multi-Factor Authentication (MFA) là gì?",
+    "options": [
+      "A. Giúp người dùng đăng nhập nhanh hơn mà không cần mật khẩu.",
+      "B. Tăng thêm một lớp bảo mật ngoài mật khẩu để xác minh danh tính người dùng.",
+      "C. Cho phép nhiều người dùng sử dụng chung một tài khoản.",
+      "D. Tự động thay đổi mật khẩu sau mỗi lần đăng nhập."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MFA yêu cầu ít nhất hai bằng chứng xác thực khác nhau, khiến việc chiếm đoạt tài khoản trở nên khó khăn hơn nhiều đối với kẻ tấn công.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện 'Post-mortem' sau một sự cố, mục tiêu quan trọng nhất là gì?",
+    "options": [
+      "A. Tìm ra người chịu trách nhiệm chính để xử phạt.",
+      "B. Học hỏi từ sự cố và đưa ra các biện pháp ngăn chặn sự cố tương tự tái diễn.",
+      "C. Xóa bỏ các bản ghi log liên quan đến sự cố để giữ hình ảnh công ty.",
+      "D. Giải thích với khách hàng rằng sự cố là do lỗi khách quan của nhà cung cấp hạ tầng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Post-mortem (hậu kiểm) nên mang tính xây dựng (blameless), tập trung vào cải thiện hệ thống và quy trình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong logging, mức độ log (Log Level) nào thường được dùng để ghi lại các thông tin hỗ trợ việc gỡ lỗi trong môi trường phát triển?",
+    "options": [
+      "A. ERROR.",
+      "B. FATAL.",
+      "C. DEBUG.",
+      "D. INFO."
+    ],
+    "correctAnswer": "C",
+    "explanation": "DEBUG là mức độ log chi tiết, thường chỉ bật trong quá trình phát triển hoặc khi cần tìm nguyên nhân lỗi cụ thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng tài khoản 'root' hoặc 'admin' cho các tác vụ hằng ngày?",
+    "options": [
+      "A. Vì tài khoản này có tốc độ xử lý chậm hơn tài khoản thường.",
+      "B. Vì nếu tài khoản này bị chiếm quyền, kẻ tấn công sẽ có toàn quyền kiểm soát hệ thống.",
+      "C. Vì hệ thống sẽ tự động khóa tài khoản admin sau 1 tiếng sử dụng.",
+      "D. Vì tài khoản admin không thể thực hiện các lệnh cài đặt phần mềm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng tài khoản có quyền hạn cao nhất cho các việc thông thường làm tăng rủi ro bảo mật nghiêm trọng nếu xảy ra sai sót hoặc bị tấn công.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Distributed Tracing giúp ích gì trong kiến trúc Microservices?",
+    "options": [
+      "A. Giúp nén dữ liệu để tiết kiệm băng thông.",
+      "B. Giúp theo dõi dòng chảy của một request qua nhiều dịch vụ khác nhau để tìm điểm nghẽn.",
+      "C. Giúp tự động sao lưu dữ liệu của tất cả các dịch vụ.",
+      "D. Giúp ngăn chặn các cuộc tấn công SQL Injection."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong hệ thống phân tán, Tracing là công cụ thiết yếu để quan sát cách các dịch vụ tương tác và xác định dịch vụ nào đang gây chậm trễ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Việc cập nhật bản vá (patching) hệ điều hành định kỳ nhằm mục đích chính là gì?",
+    "options": [
+      "A. Làm cho máy chủ chạy nhanh hơn.",
+      "B. Thay đổi giao diện người dùng của máy chủ.",
+      "C. Khắc phục các lỗ hổng bảo mật đã được phát hiện.",
+      "D. Xóa bỏ các tệp tin cũ không còn sử dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các bản vá thường chứa các sửa lỗi bảo mật quan trọng để ngăn chặn kẻ tấn công khai thác các lỗ hổng đã biết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chỉ số MTTR (Mean Time To Repair) đo lường điều gì?",
+    "options": [
+      "A. Thời gian trung bình giữa hai lần xảy ra sự cố.",
+      "B. Thời gian trung bình để khôi phục hệ thống sau khi có sự cố xảy ra.",
+      "C. Thời gian trung bình để triển khai một tính năng mới.",
+      "D. Thời gian trung bình mà một máy chủ có thể hoạt động liên tục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MTTR là chỉ số quan trọng đo lường hiệu quả của quy trình phản ứng và khắc phục sự cố của đội ngũ vận hành.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đâu là một ví dụ về 'Encryption in Transit'?",
+    "options": [
+      "A. Mã hóa một tệp tin trước khi lưu vào USB.",
+      "B. Sử dụng BitLocker để mã hóa toàn bộ ổ cứng máy tính.",
+      "C. Sử dụng giao thức SSH để kết nối và quản trị máy chủ từ xa.",
+      "D. Đặt mật khẩu cho tệp tin nén .zip."
+    ],
+    "correctAnswer": "C",
+    "explanation": "SSH mã hóa dữ liệu khi nó đang di chuyển trên mạng giữa máy khách và máy chủ, bảo vệ dữ liệu khỏi bị nghe lén.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa SLI và SLO là gì?",
+    "options": [
+      "A. SLI là mục tiêu mong muốn, SLO là chỉ số đo lường thực tế.",
+      "B. SLI là chỉ số đo lường thực tế, SLO là mục tiêu mong muốn đạt được của chỉ số đó.",
+      "C. SLI chỉ dùng cho phần cứng, SLO chỉ dùng cho phần mềm.",
+      "D. SLI và SLO hoàn toàn giống nhau, chỉ khác cách gọi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SLI (Indicator) là con số thực tế thu được, trong khi SLO (Objective) là ngưỡng giá trị mà chúng ta kỳ vọng SLI phải đạt được.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quản lý truy cập, 'Role-Based Access Control' (RBAC) dựa trên yếu tố nào để cấp quyền?",
+    "options": [
+      "A. Dựa trên địa chỉ IP của máy tính người dùng.",
+      "B. Dựa trên thời gian người dùng đăng nhập vào hệ thống.",
+      "C. Dựa trên vai trò và chức năng công việc của người dùng trong tổ chức.",
+      "D. Dựa trên độ dài của mật khẩu người dùng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "RBAC giúp quản lý quyền hạn dễ dàng hơn bằng cách gán quyền cho các nhóm vai trò (như Developer, Auditor) thay vì gán cho từng cá nhân.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện 'Backup' dữ liệu định kỳ là cần thiết cho tính Reliability?",
+    "options": [
+      "A. Để đảm bảo dữ liệu luôn được cập nhật mới nhất.",
+      "B. Để có thể khôi phục lại trạng thái hoạt động của hệ thống khi xảy ra mất mát dữ liệu nghiêm trọng.",
+      "C. Để giảm dung lượng dữ liệu trên máy chủ chính.",
+      "D. Để ngăn chặn kẻ tấn công truy cập vào hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Backup là phương án dự phòng cuối cùng để đảm bảo tính toàn vẹn và khả năng phục hồi của dịch vụ khi có thảm họa xảy ra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phát hiện một cổng (port) không xác định đang mở trên máy chủ, hành động nào là phù hợp nhất về mặt bảo mật?",
+    "options": [
+      "A. Mặc kệ vì nó không gây ảnh hưởng đến ứng dụng đang chạy.",
+      "B. Tìm hiểu dịch vụ nào đang sử dụng cổng đó và đóng lại nếu không cần thiết.",
+      "C. Mở thêm nhiều cổng khác để đánh lạc hướng kẻ tấn công.",
+      "D. Khởi động lại máy chủ mỗi giờ để tự động đóng cổng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc kiểm soát các cổng đang mở là một phần của hardening, giúp giảm thiểu các điểm yếu mà kẻ tấn công có thể lợi dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn cần kết nối hai VPC trong môi trường AWS nhưng muốn hạn chế tối đa việc lộ diện dải IP nội bộ và chỉ cho phép truy cập vào một dịch vụ cụ thể (như Database). Giải pháp nào là tối ưu nhất về mặt bảo mật?",
+    "options": [
+      "A. Thiết lập VPC Peering giữa hai VPC.",
+      "B. Sử dụng AWS PrivateLink (VPC Endpoint Services).",
+      "C. Sử dụng Transit Gateway để kết nối các VPC.",
+      "D. Thiết lập VPN Site-to-Site giữa hai VPC."
+    ],
+    "correctAnswer": "B",
+    "explanation": "PrivateLink cho phép truy cập dịch vụ qua một Endpoint nội bộ mà không cần kết nối toàn bộ dải mạng của hai VPC, giúp giảm thiểu bề mặt tấn công.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi cấu hình Network Policy trong Kubernetes để bảo mật cho một Microservice, bước đầu tiên được khuyến nghị theo nguyên tắc 'Zero Trust' là gì?",
+    "options": [
+      "A. Cho phép tất cả lưu lượng từ cùng một Namespace.",
+      "B. Tạo một rule mặc định chặn tất cả lưu lượng vào và ra (Deny-all).",
+      "C. Chỉ chặn lưu lượng từ các IP bên ngoài Cluster.",
+      "D. Cho phép lưu lượng từ Ingress Controller và chặn các nguồn khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc Zero Trust yêu cầu bắt đầu bằng cách chặn tất cả (Deny-all), sau đó mới chỉ mở các kết nối thực sự cần thiết (Whitelist).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng web thường xuyên gặp phải các cuộc tấn công SQL Injection và Cross-Site Scripting (XSS). Lớp bảo vệ nào ở tầng hạ tầng là hiệu quả nhất để ngăn chặn các cuộc tấn công này?",
+    "options": [
+      "A. Network Access Control List (NACL).",
+      "B. Security Group (SG).",
+      "C. Web Application Firewall (WAF).",
+      "D. Intrusion Detection System (IDS)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "WAF hoạt động ở tầng 7 (Application Layer), có khả năng phân tích nội dung HTTP request để phát hiện và chặn các mẫu tấn công như SQLi hoặc XSS.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quản lý danh tính và quyền truy cập (IAM), khái niệm 'Least Privilege' nên được triển khai như thế nào để đảm bảo an toàn?",
+    "options": [
+      "A. Cấp quyền Administrator cho các DevOps Engineer để xử lý sự cố nhanh.",
+      "B. Cấp quyền dựa trên vai trò (RBAC) với các quyền tối thiểu cần thiết để hoàn thành công việc.",
+      "C. Sử dụng chung một Access Key cho toàn bộ team để dễ quản lý.",
+      "D. Cấp quyền truy cập full tài nguyên nhưng giới hạn thời gian trong 1 giờ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Least Privilege yêu cầu chỉ cấp đúng và đủ quyền hạn cần thiết cho một thực thể, giúp giảm thiểu thiệt hại nếu tài khoản bị xâm nhập.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện một AWS Access Key của hệ thống Production bị vô tình commit lên một kho mã nguồn công khai (Public Repo). Hành động nào sau đây là ưu tiên xử lý hàng đầu?",
+    "options": [
+      "A. Xóa commit đó khỏi lịch sử Git của repository.",
+      "B. Chuyển repository từ Public sang Private ngay lập tức.",
+      "C. Vô hiệu hóa (Deactivate) hoặc xóa Access Key đó trên IAM console.",
+      "D. Thay đổi mật khẩu của tài khoản root AWS."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ngay khi key bị lộ, việc đầu tiên là phải vô hiệu hóa nó để ngăn chặn kẻ tấn công sử dụng key đó truy cập vào tài nguyên hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cách an toàn nhất để quản lý và cung cấp Database Password cho một ứng dụng chạy trên Kubernetes là gì?",
+    "options": [
+      "A. Lưu mật khẩu trực tiếp trong file Deployment YAML.",
+      "B. Sử dụng Kubernetes ConfigMap để lưu mật khẩu.",
+      "C. Sử dụng Kubernetes Secrets và mount chúng dưới dạng file hoặc biến môi trường.",
+      "D. Hardcode mật khẩu vào trong Dockerfile của ứng dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kubernetes Secrets cung cấp cơ chế lưu trữ dữ liệu nhạy cảm tách biệt với code, có thể được mã hóa ở trạng thái nghỉ (encryption at rest).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Dynamic Secrets' (như tính năng của HashiCorp Vault) lại an toàn hơn so với 'Static Secrets' truyền thống?",
+    "options": [
+      "A. Vì Dynamic Secrets không bao giờ hết hạn.",
+      "B. Vì Dynamic Secrets được tạo ra theo yêu cầu và tự động thu hồi sau một khoảng thời gian ngắn.",
+      "C. Vì Dynamic Secrets dễ nhớ hơn cho lập trình viên.",
+      "D. Vì Dynamic Secrets không yêu cầu mã hóa khi truyền tải."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dynamic Secrets giảm thiểu rủi ro bị lộ lâu dài vì mỗi secret chỉ tồn tại trong thời gian ngắn (TTL) và gắn liền với một phiên làm việc cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh tuân thủ bảo mật, 'Encryption at Rest' có mục đích chính là gì?",
+    "options": [
+      "A. Bảo vệ dữ liệu khi nó đang được gửi qua mạng Internet.",
+      "B. Đảm bảo dữ liệu không bị thay đổi trong quá trình truyền tải giữa các service.",
+      "C. Bảo vệ dữ liệu được lưu trữ trên các phương tiện vật lý (disk, S3) khỏi việc truy cập trái phép.",
+      "D. Tăng tốc độ truy xuất dữ liệu từ database."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Encryption at Rest tập trung vào việc mã hóa dữ liệu khi nó được ghi xuống ổ đĩa hoặc các dịch vụ lưu trữ để ngăn chặn việc đọc trộm dữ liệu vật lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hệ thống monitoring báo động CPU Spike liên tục nhưng ứng dụng vẫn phản hồi rất chậm mặc dù CPU chưa đạt ngưỡng tối đa. Bạn cần dữ liệu gì để xác định điểm nghẽn (bottleneck) bên trong các microservices?",
+    "options": [
+      "A. Infrastructure Metrics (CPU/RAM).",
+      "B. Access Logs của Load Balancer.",
+      "C. Distributed Tracing (như Jaeger hoặc Zipkin).",
+      "D. Uptime checks từ các vùng địa lý khác nhau."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Distributed Tracing cho phép theo dõi luồng yêu cầu đi qua các service khác nhau, giúp xác định service nào đang xử lý chậm hoặc gặp lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Prometheus, tham số 'for' trong một Alerting Rule (ví dụ: 'for: 5m') có ý nghĩa gì?",
+    "options": [
+      "A. Alert sẽ tự động đóng sau 5 phút.",
+      "B. Prometheus sẽ đợi 5 phút sau khi điều kiện alert thỏa mãn trước khi bắn cảnh báo.",
+      "C. Alert chỉ có hiệu lực trong vòng 5 phút mỗi ngày.",
+      "D. Prometheus sẽ kiểm tra dữ liệu cũ từ 5 phút trước."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tham số 'for' giúp lọc bỏ các nhiễu tức thời (flapping), chỉ bắn alert khi tình trạng lỗi kéo dài đủ lâu theo cấu hình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết lập Service Level Objective (SLO) cho độ khả dụng (Availability), tại sao các chuyên gia SRE khuyên không nên đặt mục tiêu 100%?",
+    "options": [
+      "A. Vì công nghệ hiện tại không thể đạt được 100%.",
+      "B. Vì việc duy trì 100% tốn chi phí cực lớn và làm giảm tốc độ đổi mới (velocity) do sợ gây lỗi.",
+      "C. Vì người dùng không thể nhận ra sự khác biệt giữa 99.9% và 100%.",
+      "D. Vì các nhà cung cấp Cloud không cam kết SLA quá 99%."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mục tiêu 100% là không thực tế, triệt tiêu Error Budget và ngăn cản việc triển khai các tính năng mới do rủi ro downtime.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chỉ số 'Error Budget' trong mô hình SRE được tính toán dựa trên thành phần nào sau đây?",
+    "options": [
+      "A. Dựa trên doanh thu của công ty.",
+      "B. Dựa trên sự chênh lệch giữa 100% và chỉ số SLO đã đề ra.",
+      "C. Dựa trên số lượng ticket hỗ trợ từ khách hàng.",
+      "D. Dựa trên tổng thời gian làm việc của team DevOps."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Budget = 100% - SLO. Nó đại diện cho lượng sai sót/downtime tối đa mà hệ thống có thể chấp nhận được trong một khoảng thời gian.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một Microservice liên tục bị lỗi timeout khi gọi sang một service phía hạ nguồn (downstream) đang quá tải, gây ra hiện tượng lỗi dây chuyền. Pattern nào nên được áp dụng để bảo vệ hệ thống?",
+    "options": [
+      "A. Retry Pattern với cấu hình retry vô hạn.",
+      "B. Circuit Breaker Pattern.",
+      "C. Sidecar Pattern.",
+      "D. Singleton Pattern."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Circuit Breaker giúp ngắt kết nối tạm thời đến service đang lỗi, ngăn chặn việc lãng phí tài nguyên và giúp service hạ nguồn có thời gian phục hồi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để thực hiện Chaos Engineering một cách an toàn trên môi trường Production, bước quan trọng nhất trước khi tiến hành thí nghiệm là gì?",
+    "options": [
+      "A. Thực hiện thí nghiệm vào lúc nửa đêm khi không có người dùng.",
+      "B. Xác định rõ 'Blast Radius' (phạm vi ảnh hưởng) và có kế hoạch rollback tự động.",
+      "C. Thông báo cho tất cả khách hàng về khả năng hệ thống bị sập.",
+      "D. Tắt toàn bộ hệ thống monitoring để tránh báo động giả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chaos Engineering cần được kiểm soát chặt chẽ về phạm vi ảnh hưởng để đảm bảo thí nghiệm không gây ra sự cố nghiêm trọng cho toàn bộ người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số RTO (Recovery Time Objective) trong kế hoạch Disaster Recovery (DR) có ý nghĩa gì?",
+    "options": [
+      "A. Lượng dữ liệu tối đa có thể bị mất tính theo thời gian.",
+      "B. Thời gian tối đa cho phép để khôi phục dịch vụ sau khi xảy ra sự cố.",
+      "C. Khoảng thời gian giữa hai lần sao lưu dữ liệu liên tiếp.",
+      "D. Tổng chi phí cần thiết để khôi phục hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "RTO đo lường tốc độ khôi phục hệ thống. Ví dụ RTO = 1h nghĩa là hệ thống phải hoạt động trở lại trong vòng 1 giờ sau sự cố.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Thành phần nào trong ELK Stack (Elasticsearch, Logstash, Kibana) chịu trách nhiệm chính trong việc thu thập, xử lý và biến đổi dữ liệu log trước khi lưu trữ?",
+    "options": [
+      "A. Elasticsearch.",
+      "B. Kibana.",
+      "C. Logstash.",
+      "D. Beats (như Filebeat)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Logstash là công cụ xử lý dữ liệu (data processing pipeline), có khả năng ingest dữ liệu từ nhiều nguồn, biến đổi (filter) và gửi đến nơi lưu trữ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn triển khai phiên bản mới của ứng dụng cho một nhóm nhỏ người dùng (khoảng 5%) để theo dõi các chỉ số về lỗi và hiệu năng trước khi áp dụng cho toàn bộ người dùng. Chiến lược này gọi là gì?",
+    "options": [
+      "A. Blue/Green Deployment.",
+      "B. Rolling Update.",
+      "C. Canary Deployment.",
+      "D. Recreate Deployment."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Canary Deployment cho phép phát hành tính năng mới cho một tập con người dùng để giảm thiểu rủi ro nếu phiên bản mới có lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cách tốt nhất để đảm bảo các cấu hình bảo mật hạ tầng (như Security Groups, IAM Policies) được áp dụng nhất quán và có thể kiểm tra (audit) được là gì?",
+    "options": [
+      "A. Thực hiện thay đổi thủ công trên UI Console và ghi chú vào file Excel.",
+      "B. Sử dụng Infrastructure as Code (IaC) như Terraform hoặc CloudFormation.",
+      "C. Viết các script Bash chạy định kỳ để cập nhật cấu hình.",
+      "D. Chỉ cho phép một người duy nhất có quyền thay đổi cấu hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "IaC giúp quản lý hạ tầng thông qua mã nguồn, cho phép version control, review code và đảm bảo tính nhất quán giữa các môi trường.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện quét lỗ hổng (Vulnerability Scanning) cho Docker Image trong pipeline CI/CD lại được coi là một thực hành bảo mật quan trọng?",
+    "options": [
+      "A. Để đảm bảo image có kích thước nhỏ nhất.",
+      "B. Để phát hiện các thư viện lỗi thời hoặc có lỗ hổng bảo mật đã biết (CVE) trước khi deploy.",
+      "C. Để kiểm tra xem code có chạy đúng logic nghiệp vụ hay không.",
+      "D. Để tự động tối ưu hóa hiệu năng của container."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scan image giúp ngăn chặn việc đưa các lỗ hổng bảo mật từ các base image hoặc thư viện bên thứ ba vào môi trường production.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Theo Google SRE, 'Golden Signals' dùng để giám sát hệ thống bao gồm những chỉ số nào?",
+    "options": [
+      "A. CPU, RAM, Disk, Network.",
+      "B. Latency, Traffic, Errors, Saturation.",
+      "C. Uptime, Downtime, MTTF, MTTR.",
+      "D. Response Time, Throughput, Success Rate, Cost."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bốn tín hiệu vàng (Golden Signals) là các chỉ số quan trọng nhất để đánh giá sức khỏe của một hệ thống dịch vụ từ góc nhìn người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hệ thống của bạn đang bị tấn công Brute-force vào API đăng nhập, gây quá tải cho Database. Giải pháp ngăn chặn tức thời và hiệu quả nhất ở tầng ứng dụng/gateway là gì?",
+    "options": [
+      "A. Tăng cấu hình CPU/RAM cho Database.",
+      "B. Triển khai Rate Limiting dựa trên IP hoặc User ID.",
+      "C. Tắt dịch vụ đăng nhập cho đến khi cuộc tấn công dừng lại.",
+      "D. Mã hóa toàn bộ dữ liệu trong Database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rate Limiting giới hạn số lượng request trong một khoảng thời gian, giúp ngăn chặn các cuộc tấn công tự động như Brute-force hoặc DoS.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để đảm bảo tính toàn vẹn và không thể bị sửa xóa của log (Log Integrity) phục vụ cho việc điều tra sự cố, bạn nên làm gì?",
+    "options": [
+      "A. Lưu log trực tiếp trên ổ cứng của server chạy ứng dụng.",
+      "B. Đẩy log về hệ thống lưu trữ tập trung và thiết lập quyền Read-only/Object Lock.",
+      "C. Nén log lại và đặt mật khẩu cho file nén.",
+      "D. Định kỳ xóa log cũ để tiết kiệm không gian lưu trữ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lưu trữ tập trung với quyền truy cập hạn chế (WORM - Write Once Read Many) đảm bảo log không bị kẻ tấn công xóa dấu vết sau khi xâm nhập.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính về mặt Reliability giữa Horizontal Pod Autoscaler (HPA) và Vertical Pod Autoscaler (VPA) trong Kubernetes là gì?",
+    "options": [
+      "A. HPA tăng số lượng Pod, VPA tăng tài nguyên (CPU/RAM) của Pod hiện có.",
+      "B. HPA chỉ dùng cho Stateless, VPA chỉ dùng cho Stateful.",
+      "C. HPA yêu cầu restart Pod, VPA thì không.",
+      "D. HPA giúp giảm chi phí, VPA giúp tăng bảo mật."
+    ],
+    "correctAnswer": "A",
+    "explanation": "HPA giúp hệ thống chịu tải tốt hơn bằng cách phân tán tải ra nhiều instance (Scale-out), trong khi VPA điều chỉnh sức mạnh của từng instance (Scale-up).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khái niệm 'Blameless Post-mortem' trong quy trình xử lý sự cố có mục tiêu chính là gì?",
+    "options": [
+      "A. Tìm ra người đã gây ra lỗi để kỷ luật.",
+      "B. Bỏ qua các lỗi lầm của nhân viên để duy trì không khí vui vẻ.",
+      "C. Tập trung vào việc hiểu tại sao sự cố xảy ra và cải thiện hệ thống/quy trình để ngăn chặn tái diễn.",
+      "D. Viết báo cáo sự cố càng ngắn gọn càng tốt để tiết kiệm thời gian."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Blameless Post-mortem giúp team học hỏi từ thất bại một cách khách quan, tập trung vào điểm yếu của hệ thống thay vì đổ lỗi cá nhân.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần lưu trữ dữ liệu nhạy cảm trong AWS S3 và yêu cầu tuân thủ quy định rằng Key mã hóa phải do bạn quản lý hoàn toàn, không được để AWS tự động quản lý. Bạn chọn phương thức nào?",
+    "options": [
+      "A. Server-Side Encryption với Amazon S3-Managed Keys (SSE-S3).",
+      "B. Server-Side Encryption với KMS keys lưu trữ trong AWS (SSE-KMS).",
+      "C. Server-Side Encryption với Customer-Provided Keys (SSE-C).",
+      "D. Không sử dụng mã hóa để đảm bảo tốc độ truy cập."
+    ],
+    "correctAnswer": "C",
+    "explanation": "SSE-C cho phép khách hàng tự quản lý và cung cấp key mã hóa riêng, AWS chỉ thực hiện việc mã hóa/giải mã mà không lưu trữ key đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống Zero Trust cho cụm Kubernetes, yếu tố nào là quan trọng nhất để đảm bảo an ninh giữa các microservices mà không làm tăng quá mức độ phức tạp vận hành?",
+    "options": [
+      "A. Sử dụng Network Policies dựa trên địa chỉ IP tĩnh của Pod.",
+      "B. Triển khai Service Mesh (như Istio) để thực thi mTLS và định danh dựa trên SPIFFE.",
+      "C. Cấu hình tất cả các dịch vụ thông qua một VPN nội bộ duy nhất.",
+      "D. Sử dụng Security Groups của Cloud Provider cho từng node trong cụm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Service Mesh cung cấp khả năng tự động hóa mTLS và định danh dịch vụ (Identity-based) thay vì dựa vào IP (thường xuyên thay đổi trong K8s), giúp thực thi Zero Trust hiệu quả và giảm thiểu sai sót cấu hình thủ công.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đội ngũ của bạn đang gặp tình trạng 'Alert Fatigue' (quá tải cảnh báo). Chiến lược nào sau đây giúp tối ưu hóa hệ thống Observability để cải thiện độ tin cậy?",
+    "options": [
+      "A. Tăng ngưỡng (threshold) của tất cả các cảnh báo CPU lên 95%.",
+      "B. Chuyển từ cảnh báo dựa trên nguyên nhân (Cause-based) sang cảnh báo dựa trên triệu chứng (Symptom-based) tác động đến SLO.",
+      "C. Tắt tất cả các cảnh báo không gửi về PagerDuty.",
+      "D. Chỉ gửi cảnh báo vào giờ hành chính để giảm áp lực cho kỹ sư."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cảnh báo dựa trên triệu chứng (như tỷ lệ lỗi tăng, latency cao) tập trung vào trải nghiệm người dùng và SLO, giúp giảm nhiễu từ các lỗi tạm thời không gây gián đoạn dịch vụ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quản lý bí mật (Secrets Management), phương pháp nào tối ưu nhất để giảm thiểu rủi ro khi một ứng dụng bị xâm nhập?",
+    "options": [
+      "A. Mã hóa bí mật bằng SOPS và lưu trực tiếp trong Git repository.",
+      "B. Sử dụng Dynamic Secrets (bí mật động) có thời gian tồn tại ngắn từ HashiCorp Vault.",
+      "C. Sử dụng Kubernetes Secrets mặc định với mã hóa base64.",
+      "D. Lưu bí mật trong các biến môi trường (Environment Variables) của CI/CD pipeline."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dynamic Secrets tạo ra thông tin đăng nhập riêng biệt cho mỗi phiên làm việc và tự động hết hạn, giúp thu hẹp phạm vi tấn công (blast radius) nếu thông tin đó bị lộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện Chaos Engineering, mục đích chính của việc xác định 'Steady State' (Trạng thái ổn định) là gì?",
+    "options": [
+      "A. Để đảm bảo hệ thống không bao giờ xảy ra lỗi trong quá trình thử nghiệm.",
+      "B. Để thiết lập một đường cơ sở (baseline) về hành vi hệ thống nhằm so sánh khi có sự cố giả lập.",
+      "C. Để tự động khôi phục hệ thống về trạng thái ban đầu sau mỗi thí nghiệm.",
+      "D. Để xác định giới hạn tài nguyên tối đa mà hệ thống có thể chịu đựng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Steady State là tập hợp các chỉ số (metrics) định nghĩa hành vi bình thường của hệ thống. Nếu thí nghiệm làm lệch khỏi trạng thái này, chúng ta sẽ phát hiện ra điểm yếu trong thiết kế độ tin cậy.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hệ thống của bạn yêu cầu RTO (Recovery Time Objective) dưới 15 phút và RPO (Recovery Point Objective) dưới 1 phút. Kiến trúc Disaster Recovery nào là phù hợp nhất?",
+    "options": [
+      "A. Backup & Restore (Sao lưu và phục hồi định kỳ).",
+      "B. Pilot Light (Duy trì cơ sở dữ liệu hoạt động, ứng dụng ở trạng thái chờ).",
+      "C. Multi-site Active-Active (Hoạt động song song tại nhiều vùng).",
+      "D. Warm Standby (Duy trì một phiên bản thu nhỏ của hệ thống tại vùng khác)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Với yêu cầu RPO cực thấp (1 phút) và RTO ngắn (15 phút), kiến trúc Active-Active đảm bảo dữ liệu được đồng bộ liên tục và lưu lượng có thể chuyển hướng ngay lập tức khi một vùng gặp sự cố.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để ngăn chặn tấn công 'Supply Chain' trong CI/CD pipeline, biện pháp kỹ thuật nào sau đây mang lại hiệu quả cao nhất?",
+    "options": [
+      "A. Quét lỗ hổng bảo mật (vulnerability scanning) cho mã nguồn ứng dụng.",
+      "B. Thực thi ký số hình ảnh (Image Signing) và kiểm tra nguồn gốc (Provenance) trước khi deploy.",
+      "C. Sử dụng mật khẩu mạnh cho các tài khoản Docker Hub.",
+      "D. Giới hạn quyền truy cập SSH vào các máy chủ Build."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Image Signing (như dùng Cosign) đảm bảo rằng chỉ những image được build từ pipeline tin cậy và đã qua kiểm định mới được phép chạy trên production, ngăn chặn image giả mạo.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Envelope Encryption' lại được khuyến nghị khi xử lý dữ liệu nhạy cảm ở quy mô lớn?",
+    "options": [
+      "A. Nó giúp việc giải mã dữ liệu nhanh hơn so với mã hóa thông thường.",
+      "B. Nó cho phép xoay vòng (rotate) khóa chính (Master Key) mà không cần mã hóa lại toàn bộ dữ liệu.",
+      "C. Nó loại bỏ hoàn toàn nhu cầu sử dụng Hardware Security Module (HSM).",
+      "D. Nó tự động nén dữ liệu trước khi thực hiện mã hóa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Envelope Encryption sử dụng Data Key để mã hóa dữ liệu và Master Key để mã hóa Data Key. Khi rotate Master Key, ta chỉ cần mã hóa lại các Data Key nhỏ, thay vì hàng Terabyte dữ liệu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống phân tán, kỹ thuật 'Load Shedding' được sử dụng để giải quyết vấn đề gì?",
+    "options": [
+      "A. Tự động tăng quy mô (Auto-scaling) khi lưu lượng tăng đột biến.",
+      "B. Chủ động từ chối các yêu cầu mới khi hệ thống quá tải để bảo vệ các tài nguyên cốt lõi.",
+      "C. Phân phối đều lưu lượng giữa các server trong cụm.",
+      "D. Giảm kích thước của các gói tin để tiết kiệm băng thông mạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Load Shedding là một cơ chế phòng vệ (reliability pattern) giúp hệ thống không bị sụp đổ hoàn toàn (cascading failure) bằng cách hy sinh các yêu cầu mới để duy trì xử lý các yêu cầu hiện tại.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi cấu hình Prometheus để giám sát một hệ thống lớn, vấn đề 'High Cardinality' thường gây ra hậu quả gì?",
+    "options": [
+      "A. Làm tăng độ trễ của mạng khi truyền tải metrics.",
+      "B. Gây tiêu tốn bộ nhớ RAM cực lớn và làm chậm quá trình truy vấn dữ liệu (TSDB).",
+      "C. Làm giảm độ chính xác của các phép tính trung bình (average).",
+      "D. Khiến các cảnh báo (alerts) không thể gửi đi đúng hạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "High Cardinality xảy ra khi các label có quá nhiều giá trị duy nhất (như user_id), tạo ra hàng triệu time-series, dẫn đến quá tải bộ nhớ và làm tê liệt cơ sở dữ liệu chuỗi thời gian.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng microservices đang gặp lỗi liên tục do một dịch vụ phía sau (downstream) phản hồi chậm. Kỹ thuật nào giúp ngăn chặn lỗi lan truyền (cascading failure)?",
+    "options": [
+      "A. Tăng thời gian Timeout của phía client.",
+      "B. Triển khai Circuit Breaker với cơ chế Fallback.",
+      "C. Cấu hình Retry vô hạn cho đến khi thành công.",
+      "D. Tăng số lượng bản sao (replicas) của dịch vụ phía sau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Circuit Breaker sẽ ngắt kết nối đến dịch vụ lỗi sau một ngưỡng thất bại nhất định, cho phép hệ thống phản hồi nhanh bằng dữ liệu thay thế (fallback) thay vì chờ đợi và làm cạn kiệt tài nguyên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn cần tuân thủ tiêu chuẩn PCI-DSS cho việc lưu trữ log. Hành động nào sau đây là bắt buộc đối với dữ liệu nhạy cảm trong log?",
+    "options": [
+      "A. Mã hóa toàn bộ ổ đĩa lưu trữ log.",
+      "B. Thực hiện Masking hoặc Redaction để loại bỏ số thẻ tín dụng trước khi ghi log.",
+      "C. Chỉ cho phép Admin truy cập vào file log.",
+      "D. Lưu trữ log trong ít nhất 30 ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "PCI-DSS nghiêm cấm việc lưu trữ dữ liệu nhạy cảm (như số thẻ chưa mã hóa) trong log. Việc Masking/Redaction tại nguồn là bắt buộc để đảm bảo an ninh và tuân thủ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Kubernetes, sự khác biệt chính giữa 'Pod Security Standards' mức Restricted và mức Baseline là gì?",
+    "options": [
+      "A. Restricted yêu cầu tất cả các container phải chạy dưới quyền root.",
+      "B. Restricted bắt buộc phải sử dụng AppArmor/Seccomp và cấm leo thang đặc quyền (privilege escalation).",
+      "C. Baseline cho phép truy cập trực tiếp vào host network.",
+      "D. Restricted chỉ áp dụng cho các Pod trong namespace 'kube-system'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mức Restricted áp dụng các biện pháp bảo mật nghiêm ngặt nhất, bao gồm việc cấm chạy quyền root, yêu cầu profile bảo mật cho kernel, nhằm giảm thiểu tối đa rủi ro tấn công container breakout.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai Distributed Tracing cho một hệ thống có lưu lượng cực cao (100k req/s), chiến lược lấy mẫu (sampling) nào tối ưu nhất để cân bằng giữa chi phí và khả năng quan sát?",
+    "options": [
+      "A. Constant Sampling (lấy mẫu 100% tất cả các request).",
+      "B. Probabilistic Sampling với tỷ lệ thấp (ví dụ 1%).",
+      "C. Adaptive/Tail-based Sampling để giữ lại các trace có lỗi hoặc latency cao.",
+      "D. Chỉ lấy mẫu các request từ môi trường Staging."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tail-based Sampling cho phép hệ thống quyết định giữ lại trace dựa trên kết quả của nó (ví dụ: chỉ lưu nếu có lỗi hoặc chậm), giúp tối ưu chi phí lưu trữ mà vẫn bắt được các vấn đề quan trọng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một Error Budget bị cạn kiệt (exhausted) có ý nghĩa gì đối với đội ngũ phát triển theo mô hình SRE?",
+    "options": [
+      "A. Đội ngũ phát triển phải dừng việc ra mắt tính năng mới để tập trung vào cải thiện độ ổn định.",
+      "B. Đội ngũ vận hành (Ops) sẽ chịu trách nhiệm hoàn toàn cho các sự cố tiếp theo.",
+      "C. Ngân sách tài chính cho dự án đã hết và cần phê duyệt thêm.",
+      "D. Hệ thống sẽ tự động chuyển sang chế độ bảo trì cho đến khi tháng mới bắt đầu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Error Budget là cầu nối giữa phát triển và vận hành. Khi hết ngân sách lỗi, ưu tiên cao nhất phải chuyển từ 'tốc độ' sang 'độ tin cậy' để duy trì cam kết SLO.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiến trúc IAM, mô hình 'ABAC' (Attribute-Based Access Control) khác biệt thế nào so với 'RBAC'?",
+    "options": [
+      "A. ABAC gán quyền dựa trên chức danh công việc, còn RBAC dựa trên tên người dùng.",
+      "B. ABAC cho phép kiểm soát truy cập linh hoạt dựa trên các thuộc tính như thời gian, địa điểm và trạng thái tài nguyên.",
+      "C. RBAC bảo mật hơn ABAC vì nó đơn giản hơn.",
+      "D. ABAC chỉ được sử dụng trong các hệ thống On-premise."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ABAC cung cấp khả năng kiểm soát truy cập tinh vi hơn (fine-grained) bằng cách kết hợp nhiều yếu tố (ví dụ: chỉ cho phép truy cập nếu IP thuộc văn phòng VÀ thời gian là giờ hành chính).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện 'Post-mortem' (Hậu kiểm sự cố) không đổ lỗi (Blameless) lại quan trọng đối với Reliability?",
+    "options": [
+      "A. Để che giấu sai lầm của cá nhân trước ban giám đốc.",
+      "B. Để khuyến khích sự trung thực trong việc báo cáo nguyên nhân gốc rễ và tập trung vào cải thiện quy trình hệ thống.",
+      "C. Để giảm bớt các thủ tục giấy tờ sau mỗi sự cố.",
+      "D. Để đảm bảo rằng không ai bị sa thải sau khi gây ra downtime."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Văn hóa Blameless tập trung vào việc tại sao hệ thống cho phép sai lầm đó xảy ra, từ đó đưa ra các biện pháp ngăn chặn bền vững thay vì trừng phạt cá nhân.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Canary Deployment' giúp giảm thiểu rủi ro về Reliability như thế nào so với 'Blue-Green Deployment'?",
+    "options": [
+      "A. Nó cho phép quay xe (rollback) nhanh hơn.",
+      "B. Nó giới hạn phạm vi tác động của lỗi chỉ đối với một nhóm nhỏ người dùng thực tế trước khi triển khai diện rộng.",
+      "C. Nó không yêu cầu gấp đôi tài nguyên hạ tầng như Blue-Green.",
+      "D. Nó đảm bảo tính nhất quán của dữ liệu tốt hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Canary Deployment triển khai phiên bản mới cho một lượng nhỏ traffic (ví dụ 5%), giúp phát hiện lỗi sớm trên môi trường thực tế mà không gây ảnh hưởng đến toàn bộ người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi cấu hình mTLS trong Service Mesh, thành phần nào chịu trách nhiệm cấp phát và quản lý chứng chỉ số cho các workload?",
+    "options": [
+      "A. Ingress Gateway.",
+      "B. Certificate Authority (CA) tích hợp trong Control Plane.",
+      "C. External Load Balancer.",
+      "D. Sidecar Proxy của từng Pod."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Control Plane (như Istiod trong Istio) đóng vai trò là CA, tự động tạo, phân phối và xoay vòng chứng chỉ cho các Sidecar Proxy để thực hiện mTLS.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để bảo vệ API khỏi các cuộc tấn công Brute-force hoặc DoS ở tầng ứng dụng, cơ chế nào là hiệu quả nhất?",
+    "options": [
+      "A. Cấu hình Firewall để chặn tất cả các IP lạ.",
+      "B. Triển khai Rate Limiting và Throttling dựa trên API Key hoặc User ID.",
+      "C. Tăng băng thông của đường truyền internet.",
+      "D. Sử dụng giao thức HTTPS thay cho HTTP."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rate Limiting giới hạn số lượng request mà một client có thể thực hiện trong một khoảng thời gian, ngăn chặn việc một người dùng làm cạn kiệt tài nguyên của hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong mô hình 'Shared Responsibility' của Cloud, khách hàng chịu trách nhiệm cho phần nào sau đây?",
+    "options": [
+      "A. Bảo mật vật lý của các trung tâm dữ liệu.",
+      "B. Cập nhật bản vá (patching) cho hệ điều hành của các máy chủ ảo (EC2/Compute Engine).",
+      "C. Quản lý vòng đời của các thiết bị lưu trữ bị hỏng.",
+      "D. Cấu hình phần mềm ảo hóa (Hypervisor)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cloud Provider quản lý bảo mật 'CỦA' đám mây (hạ tầng, vật lý), trong khi khách hàng quản lý bảo mật 'TRONG' đám mây (dữ liệu, cấu hình OS, IAM).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng Terraform để quản lý hạ tầng (IaC), rủi ro bảo mật lớn nhất liên quan đến 'State file' là gì?",
+    "options": [
+      "A. State file có thể bị hỏng dẫn đến mất dữ liệu hạ tầng.",
+      "B. State file thường chứa các thông tin nhạy cảm (secrets) ở dạng plain text.",
+      "C. State file quá lớn làm chậm quá trình triển khai.",
+      "D. State file không thể chia sẻ giữa các thành viên trong đội."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Terraform State file lưu trữ mọi thông tin cấu hình, bao gồm cả mật khẩu và khóa bí mật ở dạng văn bản thuần túy. Do đó, cần lưu trữ state file trong backend bảo mật có mã hóa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống có SLA là 99.99%. Thời gian downtime tối đa cho phép trong một năm là bao nhiêu?",
+    "options": [
+      "A. Khoảng 8.76 giờ.",
+      "B. Khoảng 52.56 phút.",
+      "C. Khoảng 5.26 phút.",
+      "D. Khoảng 24 giờ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với 99.99% (four nines), thời gian downtime cho phép là 0.01% của một năm (365 * 24 * 60 * 0.0001) = 52.56 phút.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao nên ưu tiên sử dụng 'OIDC Federation' thay vì 'IAM User Access Keys' trong các CI/CD pipeline kết nối với Cloud?",
+    "options": [
+      "A. OIDC nhanh hơn về tốc độ truyền tải.",
+      "B. OIDC loại bỏ nhu cầu lưu trữ Long-lived Credentials (khóa dài hạn) và sử dụng Short-lived Tokens.",
+      "C. OIDC dễ cấu hình hơn cho người mới bắt đầu.",
+      "D. IAM User Access Keys không thể bị thu hồi nếu bị lộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng OIDC (như GitHub Actions kết nối AWS) giúp pipeline lấy token tạm thời thông qua trust relationship, tránh rủi ro lộ khóa dài hạn được lưu trong CI secrets.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kỹ thuật 'Log Aggregation' ở quy mô lớn thường gặp thách thức gì nhất về mặt Reliability?",
+    "options": [
+      "A. Việc chọn định dạng log (JSON hay Plaintext).",
+      "B. Khả năng chịu tải của hệ thống thu thập khi có hiện tượng 'Log Spike' (tăng vọt log do lỗi).",
+      "C. Việc phân quyền truy cập vào giao diện xem log.",
+      "D. Tốc độ gõ phím của kỹ sư khi truy vấn log."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi ứng dụng gặp lỗi, nó thường ghi log nhiều hơn bình thường. Nếu hệ thống log không được thiết kế tốt (thiếu buffer/queue), nó sẽ bị sập đúng lúc kỹ sư cần nó nhất để debug.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Kubernetes, cơ chế 'Network Policy' mặc định hoạt động theo nguyên tắc nào?",
+    "options": [
+      "A. Deny-all (Cấm tất cả cho đến khi được phép).",
+      "B. Allow-all (Cho phép tất cả nếu không có policy nào được định nghĩa).",
+      "C. Chỉ cho phép traffic trong cùng một Namespace.",
+      "D. Chỉ cho phép traffic từ Ingress Controller."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc định, nếu không có Network Policy nào được áp dụng cho một Pod, nó sẽ chấp nhận traffic từ bất kỳ nguồn nào. Để bảo mật, DevOps nên cấu hình 'Default Deny' trước.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống Microservices quy mô lớn, chiến lược nào là tối ưu nhất để triển khai Zero Trust Architecture tại tầng Network?",
+    "options": [
+      "A. Sử dụng IP Whitelisting kết hợp với Security Groups chặt chẽ tại tầng Cloud Infrastructure.",
+      "B. Triển khai Service Mesh với mTLS bắt buộc và chính sách AuthorizationPolicy dựa trên định danh (Identity-based).",
+      "C. Thiết lập hệ thống VPN/Direct Connect riêng biệt cho từng cụm dịch vụ để cô lập traffic.",
+      "D. Cấu hình Firewall truyền thống tại Gateway để lọc toàn bộ traffic đi vào và đi ra giữa các subnet."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Zero Trust yêu cầu xác thực mọi yêu cầu bất kể vị trí mạng. Service Mesh với mTLS cung cấp định danh mạnh (Identity) cho từng service và mã hóa transit, trong khi AuthorizationPolicy cho phép kiểm soát truy cập tinh vi hơn IP Whitelisting.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống quản lý Secret cho doanh nghiệp đa đám mây (Multi-cloud), giải pháp nào giúp giảm thiểu rủi ro 'Secret Sprawl' và đảm bảo tính tuân thủ cao nhất?",
+    "options": [
+      "A. Sử dụng biến môi trường (Environment Variables) được mã hóa trong CI/CD pipeline.",
+      "B. Lưu trữ Secret trong Git Repository bằng các công cụ mã hóa như Git-crypt.",
+      "C. Sử dụng giải pháp Secret Management tập trung (như HashiCorp Vault) với cơ chế Dynamic Secrets và xoay vòng tự động.",
+      "D. Tận dụng dịch vụ Secret Manager mặc định của từng nhà cung cấp Cloud (AWS Secrets Manager, Azure Key Vault)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dynamic Secrets tạo ra thông tin xác thực ngắn hạn theo yêu cầu và tự hủy, giúp giảm thiểu tối đa rủi ro lộ lọt lâu dài. Quản lý tập trung giúp nhất quán chính sách trên môi trường Multi-cloud.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hệ thống của bạn gặp tình trạng 'High Cardinality' trong Prometheus khiến bộ nhớ bị quá tải. Đâu là cách tiếp cận kỹ thuật đúng đắn nhất để xử lý vấn đề này mà vẫn giữ được khả năng quan sát?",
+    "options": [
+      "A. Tăng gấp đôi tài nguyên RAM cho các instance Prometheus.",
+      "B. Chuyển sang sử dụng Logs thay vì Metrics cho các dữ liệu có độ chi tiết cao.",
+      "C. Sử dụng Recording Rules để pre-aggregate dữ liệu và áp dụng Relabeling để loại bỏ các label không cần thiết (như user_id).",
+      "D. Giảm tần suất scrape (scrape_interval) từ 15 giây lên 5 phút để giảm lượng dữ liệu nạp vào."
+    ],
+    "correctAnswer": "C",
+    "explanation": "High Cardinality thường do các label có quá nhiều giá trị duy nhất. Relabeling giúp loại bỏ các label gây bùng nổ dữ liệu, và Recording Rules giúp tính toán trước các query phức tạp, giảm tải cho hệ thống lúc truy vấn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh SRE, nếu một dịch vụ đã tiêu hết 'Error Budget' của tháng, quyết định nào sau đây thể hiện sự ưu tiên đúng đắn về Reliability?",
+    "options": [
+      "A. Tiếp tục triển khai các tính năng mới để kịp tiến độ kinh doanh nhưng tăng cường giám sát.",
+      "B. Dừng toàn bộ việc triển khai tính năng mới ( ngoại trừ bản vá bảo mật) và tập trung nguồn lực vào việc cải thiện độ ổn định hệ thống.",
+      "C. Điều chỉnh lại Service Level Objective (SLO) thấp xuống để có thêm Error Budget.",
+      "D. Chuyển trách nhiệm vận hành sang đội ngũ On-call để đội phát triển tiếp tục làm tính năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Budget là cơ chế để cân bằng giữa tốc độ phát triển và độ tin cậy. Khi hết budget, chính sách thông thường là đóng băng thay đổi để ưu tiên khôi phục độ ổn định, tránh rủi ro hệ thống sụp đổ hoàn toàn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện Chaos Engineering trên môi trường Production, nguyên tắc quan trọng nhất để đảm bảo an toàn cho doanh nghiệp là gì?",
+    "options": [
+      "A. Thực hiện vào giờ thấp điểm khi không có người dùng truy cập.",
+      "B. Luôn thông báo trước cho tất cả khách hàng về thời gian diễn ra thí nghiệm.",
+      "C. Kiểm soát 'Blast Radius' (bán kính ảnh hưởng) và thiết lập cơ chế tự động dừng thí nghiệm (Stop Button) khi các chỉ số vượt ngưỡng an toàn.",
+      "D. Chỉ thực hiện các kịch bản giả lập lỗi mạng đơn giản để tránh gây gián đoạn dịch vụ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Chaos Engineering trong Production đòi hỏi sự kiểm soát chặt chẽ. Việc giới hạn Blast Radius đảm bảo nếu có sự cố, nó chỉ ảnh hưởng một phần nhỏ người dùng, và Stop Button giúp khôi phục hệ thống ngay lập tức khi thí nghiệm đi chệch hướng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để bảo vệ hệ thống Kubernetes trước các cuộc tấn công leo thang đặc quyền (Privilege Escalation), cấu hình nào trong PodSecurityPolicy hoặc Admission Controllers là quan trọng nhất?",
+    "options": [
+      "A. allowPrivilegeEscalation: false và runAsNonRoot: true.",
+      "B. privileged: true để đảm bảo Pod có đủ quyền xử lý lỗi hệ thống.",
+      "C. Sử dụng ClusterRole thay vì Role để quản lý quyền hạn tập trung.",
+      "D. Cấu hình Resource Quotas để giới hạn CPU/RAM của Pod."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Vô hiệu hóa khả năng leo thang đặc quyền và buộc container chạy với user thường (non-root) là những bước cơ bản và quan trọng nhất để ngăn chặn kẻ tấn công chiếm quyền điều khiển node từ một container bị thỏa hiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng tài chính yêu cầu dữ liệu phải được mã hóa ở trạng thái nghỉ (at rest) nhưng phải đảm bảo hiệu năng truy vấn cao và khả năng xoay vòng khóa (key rotation) không gây downtime. Giải pháp nào là tối ưu?",
+    "options": [
+      "A. Mã hóa toàn bộ ổ đĩa (Full Disk Encryption) bằng phần mềm tại tầng OS.",
+      "B. Sử dụng Application-level Encryption với cơ chế Envelope Encryption kết hợp với Cloud KMS.",
+      "C. Mã hóa dữ liệu bằng thuật toán đối xứng AES-256 và lưu khóa trực tiếp trong Database.",
+      "D. Sử dụng TLS cho mọi kết nối đến Database để đảm bảo dữ liệu được mã hóa khi ghi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Envelope Encryption (mã hóa dữ liệu bằng Data Key, mã hóa Data Key bằng Master Key) cho phép xoay vòng Master Key mà không cần tái mã hóa toàn bộ dữ liệu, đồng thời tận dụng phần cứng chuyên dụng của KMS để bảo mật khóa.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thiết kế hệ thống Logging cho một kiến trúc Microservices xử lý 100,000 requests/giây. Làm thế nào để đảm bảo tính quan sát mà không làm nghẽn hệ thống hoặc tốn quá nhiều chi phí lưu trữ?",
+    "options": [
+      "A. Ghi lại toàn bộ log ở mức DEBUG và lưu trữ trong 1 năm trên SSD.",
+      "B. Sử dụng cơ chế Asynchronous Logging và áp dụng Dynamic Sampling dựa trên mã phản hồi (ví dụ: giữ 100% log lỗi, 1% log thành công).",
+      "C. Gửi log trực tiếp từ ứng dụng đến Elasticsearch qua giao thức HTTP để đảm bảo tính thời gian thực.",
+      "D. Tắt toàn bộ log ở môi trường Production và chỉ bật khi có sự cố xảy ra."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở quy mô lớn, việc lưu trữ mọi log là không khả thi về chi phí và hiệu năng. Dynamic Sampling cho phép tập trung vào các dữ liệu quan trọng (lỗi) trong khi vẫn duy trì cái nhìn tổng quan về hệ thống với chi phí tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong mô hình Shared Responsibility của các nhà cung cấp Cloud, phần nào sau đây thuộc trách nhiệm bảo mật của người dùng (Customer) khi sử dụng dịch vụ Managed Kubernetes (như EKS/GKE)?",
+    "options": [
+      "A. Bảo mật vật lý của các Data Center chứa các Worker Nodes.",
+      "B. Cập nhật bản vá bảo mật cho Control Plane (API Server, Etcd).",
+      "C. Cấu hình Network Policies và quản lý quyền truy cập IAM/RBAC cho ứng dụng.",
+      "D. Quản lý vòng đời phần cứng và hạ tầng mạng bên dưới."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nhà cung cấp quản lý hạ tầng và Control Plane. Người dùng chịu trách nhiệm về cấu hình bảo mật bên trong cluster, bao gồm phân quyền (RBAC), bảo mật network giữa các pod và bảo mật mã nguồn ứng dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Golden Signals' lại quan trọng trong việc xây dựng hệ thống Alerting hiệu quả?",
+    "options": [
+      "A. Vì chúng giúp giảm số lượng dashboard cần phải theo dõi hàng ngày.",
+      "B. Vì chúng tập trung vào các chỉ số phản ánh trực tiếp trải nghiệm người dùng: Latency, Traffic, Errors, và Saturation.",
+      "C. Vì chúng là các chỉ số duy nhất mà các công cụ như Prometheus có thể thu thập được.",
+      "D. Vì chúng đảm bảo hệ thống luôn đạt được độ khả dụng 100%."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Golden Signals (Latency, Traffic, Errors, Saturation) là tập hợp các chỉ số cốt lõi giúp đội ngũ vận hành nhanh chóng xác định tình trạng sức khỏe của hệ thống từ góc nhìn dịch vụ, thay vì chỉ nhìn vào các thông số hạ tầng rời rạc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hệ thống của bạn bị tấn công DDoS lớp 7 (Application Layer) nhắm vào một endpoint tiêu tốn nhiều tài nguyên xử lý. Hành động phản ứng nào là phù hợp nhất để duy trì Reliability cho các khách hàng hợp lệ?",
+    "options": [
+      "A. Tăng cường Auto-scaling để mở rộng tài nguyên xử lý cuộc tấn công.",
+      "B. Triển khai Rate Limiting dựa trên IP và sử dụng Web Application Firewall (WAF) để chặn các request có pattern bất thường.",
+      "C. Tạm thời tắt dịch vụ để kẻ tấn công từ bỏ mục tiêu.",
+      "D. Chuyển toàn bộ traffic sang một vùng (Region) khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tấn công lớp 7 mô phỏng hành vi người dùng thật. Rate Limiting và WAF giúp phân loại và ngăn chặn traffic độc hại ở biên (edge), bảo vệ tài nguyên tính toán cho người dùng thật mà không gây lãng phí chi phí scaling vô ích.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi triển khai Infrastructure as Code (IaC), rủi ro bảo mật nào là nghiêm trọng nhất và cần được kiểm soát tự động trong CI/CD pipeline?",
+    "options": [
+      "A. Sử dụng các phiên bản cũ của Terraform hoặc Ansible.",
+      "B. Hard-coded credentials trong mã nguồn và cấu hình sai quyền hạn (Misconfiguration) gây hở dữ liệu.",
+      "C. Thiếu các đoạn comment giải thích mã nguồn IaC.",
+      "D. Thời gian thực thi script IaC quá lâu gây chậm trễ quá trình deploy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Misconfiguration (như mở S3 bucket public hoặc hở port DB) và lộ Secret trong IaC là nguyên nhân hàng đầu dẫn đến các vụ vi phạm dữ liệu nghiêm trọng trên Cloud. Cần dùng các công cụ scan như Checkov hoặc Terrascan để phát hiện sớm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khái niệm 'Error Budget Policy' quy định điều gì khi một dịch vụ vi phạm SLO?",
+    "options": [
+      "A. Mức phạt tài chính đối với đội ngũ phát triển.",
+      "B. Các hành động cụ thể cần thực hiện để đưa dịch vụ trở lại trạng thái ổn định, bao gồm việc hoãn các thay đổi.",
+      "C. Danh sách các lỗi được phép xảy ra mà không cần báo cáo.",
+      "D. Cách thức tính toán lại SLA với khách hàng sau sự cố."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Budget Policy là một thỏa thuận mang tính ràng buộc giữa các bên (Dev, Ops, Product) về việc phản ứng khi độ tin cậy bị đe dọa, đảm bảo rằng Reliability luôn được ưu tiên hơn tính năng khi cần thiết.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một kỹ thuật giúp giảm thiểu rủi ro khi triển khai phiên bản mới bằng cách chuyển dần một phần nhỏ traffic sang phiên bản mới để kiểm tra lỗi là:",
+    "options": [
+      "A. Blue/Green Deployment.",
+      "B. Rolling Update.",
+      "C. Canary Deployment.",
+      "D. Recreate Deployment."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Canary Deployment cho phép thử nghiệm phiên bản mới trên một nhóm nhỏ người dùng thực tế. Nếu các chỉ số (metrics) ổn định, traffic mới được tăng dần, giúp giảm thiểu tối đa phạm vi ảnh hưởng nếu có lỗi xảy ra.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Incident Response, tại sao 'Blameless Post-mortem' lại được coi là yếu tố then chốt để tăng cường Reliability lâu dài?",
+    "options": [
+      "A. Để tránh việc phải sa thải nhân viên sau mỗi sự cố.",
+      "B. Để tập trung vào các lỗi hệ thống và quy trình thay vì chỉ trích cá nhân, từ đó tìm ra nguyên nhân gốc rễ thực sự.",
+      "C. Để giữ kín thông tin về sự cố không cho khách hàng biết.",
+      "D. Để đơn giản hóa báo cáo gửi lên ban giám đốc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Văn hóa không đổ lỗi khuyến khích sự trung thực trong báo cáo sự cố. Khi mọi người không sợ bị trừng phạt, họ sẽ chia sẻ chi tiết các sai sót, giúp tổ chức học hỏi và cải thiện các lỗ hổng hệ thống tiềm ẩn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kịch bản nào sau đây là một ví dụ về 'Cascading Failure' trong hệ thống phân tán?",
+    "options": [
+      "A. Một Database node bị chết và hệ thống tự động chuyển sang node dự phòng.",
+      "B. Một service bị quá tải dẫn đến tăng latency, khiến các service gọi nó cũng bị nghẽn queue và sụp đổ theo dây chuyền.",
+      "C. Kẻ tấn công chiếm quyền truy cập vào một server và xóa toàn bộ dữ liệu.",
+      "D. Hệ thống bị mất điện tại một Data Center nhưng vẫn chạy ổn định nhờ Region khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cascading Failure xảy ra khi một lỗi nhỏ ban đầu gây ra các phản ứng dây chuyền làm sụp đổ toàn bộ hệ thống. Cơ chế Circuit Breaker thường được dùng để ngăn chặn hiện tượng này.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để đảm bảo tính tuân thủ (Compliance) về bảo mật dữ liệu như GDPR, yêu cầu nào sau đây là bắt buộc đối với hệ thống lưu trữ log?",
+    "options": [
+      "A. Lưu trữ log mãi mãi để phục vụ điều tra.",
+      "B. Mã hóa log và áp dụng cơ chế Data Masking/Anonymization cho các thông tin định danh cá nhân (PII).",
+      "C. Cho phép tất cả nhân viên IT có quyền truy cập vào log để xử lý lỗi nhanh nhất.",
+      "D. Chỉ lưu trữ log trên các máy chủ đặt tại trụ sở chính của công ty."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các quy định như GDPR yêu cầu bảo vệ quyền riêng tư người dùng. Việc Masking PII (như email, số điện thoại) trong log đảm bảo rằng ngay cả khi log bị lộ, thông tin cá nhân vẫn được bảo vệ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng mTLS trong Service Mesh, thành phần nào chịu trách nhiệm cấp phát và quản lý vòng đời của các chứng chỉ số (Certificates)?",
+    "options": [
+      "A. Ingress Gateway.",
+      "B. Sidecar Proxy (như Envoy).",
+      "C. Control Plane (như Istiod).",
+      "D. External Certificate Authority (như Let's Encrypt)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Control Plane đóng vai trò là Certificate Authority (CA) nội bộ, tự động tạo, phân phối và xoay vòng chứng chỉ cho các Sidecar Proxy để thực hiện mTLS mà không cần can thiệp thủ công.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống có SLA là 99.99% khả dụng (availability). Thời gian downtime tối đa cho phép trong một năm là bao nhiêu?",
+    "options": [
+      "A. Khoảng 52 phút.",
+      "B. Khoảng 8.7 giờ.",
+      "C. Khoảng 3.6 ngày.",
+      "D. Khoảng 15 phút."
+    ],
+    "correctAnswer": "A",
+    "explanation": "99.99% (thường gọi là 'four nines') tương đương với mức downtime tối đa là 0.01% của một năm (365 * 24 * 60 * 0.0001 = 52.56 phút).",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong chiến lược Backup và Disaster Recovery, chỉ số RPO (Recovery Point Objective) tập trung vào khía cạnh nào?",
+    "options": [
+      "A. Thời gian cần thiết để khôi phục lại hệ thống sau sự cố.",
+      "B. Lượng dữ liệu tối đa có thể bị mất (tính theo thời gian) kể từ lần backup cuối cùng.",
+      "C. Tổng chi phí thiệt hại khi hệ thống ngừng hoạt động.",
+      "D. Số lượng nhân sự cần thiết để thực hiện quy trình khôi phục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "RPO xác định độ 'tươi' của dữ liệu cần khôi phục. Ví dụ RPO = 1 giờ nghĩa là hệ thống phải đảm bảo không mất quá 1 giờ dữ liệu khi có sự cố xảy ra.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Load Shedding' được áp dụng khi nào để bảo vệ hệ thống?",
+    "options": [
+      "A. Khi hệ thống có quá ít traffic để tiết kiệm điện năng.",
+      "B. Khi hệ thống bị quá tải và bắt đầu từ chối các request ít quan trọng để giữ tài nguyên cho các request quan trọng.",
+      "C. Khi cần chuyển dữ liệu từ Database cũ sang Database mới.",
+      "D. Khi thực hiện nâng cấp phiên bản phần mềm cho các server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Load Shedding là một kỹ thuật phòng vệ chủ động, cho phép hệ thống tự động loại bỏ các yêu cầu vượt quá khả năng xử lý của nó thay vì cố gắng xử lý tất cả và dẫn đến sụp đổ hoàn toàn (brownout).",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao 'Infrastructure Drift' lại là một rủi ro về Reliability và Security?",
+    "options": [
+      "A. Vì nó làm tăng chi phí sử dụng tài nguyên Cloud.",
+      "B. Vì trạng thái thực tế của hạ tầng không còn khớp với mã nguồn (IaC), dẫn đến các thay đổi không lường trước và lỗ hổng bảo mật không được kiểm soát.",
+      "C. Vì nó làm chậm quá trình CI/CD pipeline.",
+      "D. Vì nó yêu cầu phải cài đặt lại toàn bộ hệ điều hành cho server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Drift xảy ra khi có ai đó thay đổi hạ tầng thủ công (Click-ops). Điều này khiến IaC mất tác dụng quản lý, gây khó khăn khi khôi phục thảm họa và có thể tạo ra các 'lỗ hổng bóng ma' không có trong thiết kế ban đầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Giải pháp nào hiệu quả nhất để ngăn chặn cuộc tấn công 'Supply Chain Attack' thông qua các thư viện phụ thuộc (dependencies) trong container image?",
+    "options": [
+      "A. Chỉ sử dụng các image từ Docker Hub có nhiều sao.",
+      "B. Thực hiện quét lỗ hổng (Vulnerability Scanning) và sử dụng Software Bill of Materials (SBOM) kết hợp với ký số image (Image Signing).",
+      "C. Tự viết lại toàn bộ các thư viện cần thiết thay vì dùng mã nguồn mở.",
+      "D. Chặn toàn bộ truy cập Internet của các build server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SBOM cung cấp danh mục chi tiết các thành phần trong phần mềm, quét lỗ hổng giúp phát hiện các CVE đã biết, và Image Signing (như Sigstore/Cosign) đảm bảo image không bị thay đổi trái phép sau khi build.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong observability, 'Distributed Tracing' giải quyết vấn đề gì mà Logs và Metrics đơn thuần không làm được?",
+    "options": [
+      "A. Theo dõi lượng CPU sử dụng của từng container.",
+      "B. Cung cấp cái nhìn xuyên suốt về luồng đi của một request qua nhiều dịch vụ khác nhau trong kiến trúc Microservices.",
+      "C. Lưu trữ dữ liệu log trong thời gian dài với chi phí thấp.",
+      "D. Tự động cảnh báo khi hệ thống bị tấn công SQL Injection."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong hệ thống phân tán, một request có thể đi qua hàng chục service. Tracing sử dụng Trace ID để liên kết các hoạt động lại với nhau, giúp xác định chính xác service nào gây ra độ trễ hoặc lỗi trong chuỗi xử lý.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một kỹ sư SRE thiết lập cảnh báo (Alert) dựa trên 'Burn Rate' của Error Budget. Mục đích chính của việc này là gì?",
+    "options": [
+      "A. Để biết khi nào đội ngũ Dev làm việc quá chậm.",
+      "B. Để nhận cảnh báo sớm dựa trên tốc độ tiêu thụ Error Budget, giúp phân biệt giữa các lỗi nhỏ và các sự cố nghiêm trọng đe dọa SLO.",
+      "C. Để tự động giảm lương của nhân viên trực on-call khi có lỗi.",
+      "D. Để thống kê số lượng request lỗi trong một ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Burn Rate alerting cho phép đội ngũ vận hành phản ứng linh hoạt: nếu budget đang bị tiêu thụ quá nhanh (ví dụ: sẽ hết trong vài giờ), cần can thiệp ngay lập tức; nếu tiêu thụ chậm, có thể xử lý vào giờ hành chính.",
+    "difficulty": "EXPERT",
+    "skillArea": "Security & Reliability",
+    "category": "SKILL"
+  }
+]

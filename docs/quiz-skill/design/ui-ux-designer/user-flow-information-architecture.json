@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong thiết kế UI/UX, 'User Flow' được hiểu là gì?",
+    "options": [
+      "A. Bản phác thảo giao diện chi tiết của một màn hình ứng dụng.",
+      "B. Sơ đồ thể hiện các bước người dùng thực hiện để hoàn thành một mục tiêu cụ thể.",
+      "C. Danh sách các màu sắc và font chữ sẽ được sử dụng trong dự án.",
+      "D. Biểu đồ phân tích doanh thu của người dùng trên hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User Flow tập trung vào hành trình và các bước logic mà người dùng đi qua để đạt được mục tiêu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kiến trúc thông tin (Information Architecture - IA) tập trung chủ yếu vào việc gì?",
+    "options": [
+      "A. Thiết kế các hiệu ứng chuyển động bắt mắt.",
+      "B. Lập trình cơ sở dữ liệu cho phía server.",
+      "C. Tổ chức, cấu trúc và dán nhãn nội dung để người dùng dễ dàng tìm kiếm thông tin.",
+      "D. Chọn lựa hình ảnh minh họa cho các bài viết trên website."
+    ],
+    "correctAnswer": "C",
+    "explanation": "IA giúp người dùng hiểu họ đang ở đâu và tìm thấy thông tin họ cần một cách hiệu quả thông qua việc tổ chức nội dung.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của việc xây dựng Sitemap là gì?",
+    "options": [
+      "A. Để hiển thị tất cả các lỗi lập trình của website.",
+      "B. Để liệt kê các từ khóa SEO cho công cụ tìm kiếm.",
+      "C. Để trực quan hóa sơ đồ phân cấp và mối quan hệ giữa các trang trong một sản phẩm.",
+      "D. Để xác định vị trí địa lý của người dùng khi truy cập ứng dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sitemap là công cụ giúp nhà thiết kế bao quát được cấu trúc phân cấp và số lượng trang của toàn bộ sản phẩm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kỹ thuật Card Sorting, 'Open Card Sorting' có đặc điểm gì?",
+    "options": [
+      "A. Người dùng được cung cấp các nhóm có sẵn và chỉ việc đưa thẻ vào.",
+      "B. Người dùng tự tạo tên nhóm và phân loại các thẻ vào nhóm họ thấy phù hợp.",
+      "C. Người dùng phải sắp xếp các thẻ theo thứ tự bảng chữ cái.",
+      "D. Người dùng chỉ được phép chọn một thẻ duy nhất cho mỗi nhóm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Open Card Sorting cho phép người dùng tự do đặt tên nhóm, giúp nhà thiết kế hiểu cách người dùng tư duy về phân loại nội dung.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thuật ngữ 'Happy Path' trong thiết kế User Flow ám chỉ điều gì?",
+    "options": [
+      "A. Luồng đi mà người dùng gặp nhiều lỗi nhất.",
+      "B. Luồng đi ngắn nhất và lý tưởng nhất để người dùng đạt được mục tiêu mà không gặp lỗi.",
+      "C. Giao diện trang chủ khi người dùng đăng nhập thành công.",
+      "D. Các thông báo chúc mừng khi người dùng hoàn thành nhiệm vụ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Happy Path là kịch bản lý tưởng nhất, nơi mọi thứ diễn ra đúng như mong đợi và không có lỗi phát sinh.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế User Flow, hình thoi (diamond) trong sơ đồ thường đại diện cho yếu tố nào?",
+    "options": [
+      "A. Điểm bắt đầu của luồng.",
+      "B. Một hành động cụ thể của người dùng.",
+      "C. Một điểm quyết định hoặc câu hỏi logic (Có/Không).",
+      "D. Một màn hình giao diện cụ thể."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong sơ đồ luồng chuẩn, hình thoi đại diện cho sự rẽ nhánh dựa trên quyết định hoặc điều kiện hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc xử lý 'Edge Cases' lại quan trọng trong thiết kế luồng?",
+    "options": [
+      "A. Vì chúng là những trường hợp phổ biến nhất mà người dùng gặp phải.",
+      "B. Để đảm bảo hệ thống vẫn hoạt động ổn định và hướng dẫn người dùng khi gặp tình huống ít phổ biến hoặc lỗi.",
+      "C. Để tăng tốc độ tải trang của ứng dụng.",
+      "D. Để giảm bớt số lượng trang trong Sitemap."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Edge cases (trường hợp biên) giúp dự phòng các tình huống hiếm gặp hoặc lỗi, đảm bảo trải nghiệm không bị đứt gãy.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây giúp cải thiện khả năng tìm kiếm (Findability) trên một website thương mại điện tử?",
+    "options": [
+      "A. Sử dụng nhiều hình ảnh động lấp lánh.",
+      "B. Đặt thanh tìm kiếm ở vị trí dễ thấy và cung cấp bộ lọc (filters) rõ ràng.",
+      "C. Ẩn menu điều hướng để giao diện trông tối giản hơn.",
+      "D. Sử dụng phông chữ nghệ thuật khó đọc cho tiêu đề."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thanh tìm kiếm và bộ lọc là những công cụ cốt lõi giúp người dùng nhanh chóng tìm thấy sản phẩm họ cần.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Information Architecture, 'Labeling' (Dán nhãn) có ý nghĩa gì?",
+    "options": [
+      "A. Việc đặt tên cho các nút bấm, menu và tiêu đề sao cho dễ hiểu và thống nhất.",
+      "B. Việc chọn màu sắc cho logo thương hiệu.",
+      "C. Việc gắn thẻ giá cho các sản phẩm trong giỏ hàng.",
+      "D. Việc viết mã code cho các thẻ HTML."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Labeling giúp người dùng dự đoán được nội dung họ sẽ nhận được khi tương tác với một thành phần điều hướng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một 'Task Flow' khác với 'User Flow' ở điểm cơ bản nào?",
+    "options": [
+      "A. Task Flow chỉ tập trung vào một nhiệm vụ duy nhất và thường tuyến tính cho mọi người dùng.",
+      "B. Task Flow phức tạp hơn và bao gồm nhiều vai trò người dùng khác nhau.",
+      "C. Task Flow không sử dụng các ký hiệu hình học.",
+      "D. Task Flow chỉ được vẽ sau khi đã có bản thiết kế UI hoàn chỉnh."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Task Flow tập trung vào cách thực hiện một công việc cụ thể, thường bỏ qua các biến số về đặc điểm cá nhân người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một menu có quá nhiều mục con (sub-menu), giải pháp nào giúp giảm tải nhận thức (cognitive load) cho người dùng?",
+    "options": [
+      "A. Hiển thị tất cả các mục cùng một lúc để người dùng dễ chọn.",
+      "B. Sử dụng menu phân cấp (Mega Menu) và nhóm các mục liên quan lại với nhau.",
+      "C. Sử dụng cỡ chữ thật nhỏ để chứa được nhiều thông tin hơn.",
+      "D. Thay đổi tên các mục thường xuyên để làm mới giao diện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nhóm thông tin (Chunking) giúp người dùng xử lý lượng dữ liệu lớn mà không bị choáng ngợp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Thành phần 'Breadcrumbs' trên website có vai trò chính là gì trong IA?",
+    "options": [
+      "A. Dùng để trang trí cho trang web thêm sinh động.",
+      "B. Giúp người dùng biết họ đang ở đâu trong cấu trúc phân cấp và dễ dàng quay lại các cấp cao hơn.",
+      "C. Là nơi hiển thị các quảng cáo liên quan đến sản phẩm.",
+      "D. Thay thế hoàn toàn cho menu điều hướng chính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Breadcrumbs cung cấp manh mối về vị trí hiện tại và hỗ trợ điều hướng ngược (backtrack) hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Closed Card Sorting' thường được sử dụng khi nào?",
+    "options": [
+      "A. Khi bắt đầu dự án và chưa có ý tưởng về các danh mục.",
+      "B. Khi muốn kiểm tra xem cấu trúc danh mục hiện có có phù hợp với tư duy người dùng hay không.",
+      "C. Khi muốn người dùng tự sáng tạo ra các tính năng mới.",
+      "D. Khi muốn thiết kế màu sắc cho các icon điều hướng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Closed Card Sorting dùng để xác thực các danh mục đã được định nghĩa sẵn xem có dễ hiểu với người dùng không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong thiết kế luồng, 'Friction' (Ma sát) nên được hiểu như thế nào?",
+    "options": [
+      "A. Sự tương tác mượt mà giữa các trang.",
+      "B. Bất kỳ rào cản nào làm chậm hoặc ngăn cản người dùng hoàn thành mục tiêu.",
+      "C. Hiệu ứng đổ bóng của các nút bấm trên giao diện.",
+      "D. Tốc độ di chuyển của chuột trên màn hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Friction gây ra sự khó chịu và khiến người dùng dễ từ bỏ hành động, mục tiêu của UX là giảm thiểu ma sát tiêu cực.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thiết kế luồng 'Đăng ký tài khoản'. Nếu người dùng nhập sai định dạng email, bước tiếp theo trong User Flow nên là gì?",
+    "options": [
+      "A. Chuyển người dùng về trang chủ để bắt đầu lại.",
+      "B. Hiển thị thông báo lỗi ngay tại chỗ và yêu cầu nhập lại.",
+      "C. Tự động sửa email cho người dùng.",
+      "D. Khóa tài khoản của người dùng ngay lập tức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là cách xử lý lỗi tại chỗ (inline validation) giúp giảm thiểu friction và hướng dẫn người dùng sửa sai nhanh nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sơ đồ nào tập trung vào cảm xúc và trải nghiệm tâm lý của người dùng qua từng giai đoạn?",
+    "options": [
+      "A. Sitemap.",
+      "B. User Journey Map.",
+      "C. Wireframe Flow.",
+      "D. Database Schema."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User Journey Map không chỉ mô tả các bước mà còn ghi lại cảm xúc, suy nghĩ và các điểm đau (pain points) của người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Việc nhóm các sản phẩm như 'Áo sơ mi', 'Quần jeans', 'Váy' vào danh mục 'Thời trang' là ví dụ của hoạt động nào?",
+    "options": [
+      "A. Visual Design.",
+      "B. Content Grouping (Nhóm nội dung).",
+      "C. Interaction Design.",
+      "D. Usability Testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Content Grouping là một phần của IA, giúp tổ chức các đơn vị nội dung nhỏ vào các nhóm lớn có ý nghĩa.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống điều hướng (Navigation), quy tắc '3-click rule' (dù không tuyệt đối) gợi ý điều gì?",
+    "options": [
+      "A. Mọi trang web phải được thiết kế chỉ trong 3 trang.",
+      "B. Người dùng nên tìm thấy thông tin họ cần trong không quá 3 lần nhấp chuột.",
+      "C. Một nút bấm phải được nhấp 3 lần mới có hiệu lực.",
+      "D. Mỗi trang chỉ nên có tối đa 3 liên kết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quy tắc này nhấn mạnh vào việc tối ưu hóa cấu trúc IA để người dùng tiếp cận thông tin nhanh nhất có thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một ứng dụng di động, 'Tab Bar' ở dưới cùng màn hình thường được dùng cho loại điều hướng nào?",
+    "options": [
+      "A. Điều hướng phụ (Secondary Navigation).",
+      "B. Điều hướng chính (Primary Navigation) giữa các chức năng quan trọng nhất.",
+      "C. Điều hướng quay lại trang trước (Back Navigation).",
+      "D. Chỉ dùng để hiển thị thông báo lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tab Bar cung cấp quyền truy cập nhanh vào các khu vực chính của ứng dụng và luôn hiển thị để người dùng dễ dàng chuyển đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng quá nhiều cấp bậc (nested levels) trong một menu điều hướng?",
+    "options": [
+      "A. Vì nó làm tăng dung lượng tải của trang web.",
+      "B. Vì nó khiến người dùng dễ bị lạc và mất dấu vị trí hiện tại của mình.",
+      "C. Vì Google không thể đọc được các menu sâu.",
+      "D. Vì nó làm cho giao diện trông quá đơn điệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Menu quá sâu làm tăng độ phức tạp của IA và gây khó khăn cho trí nhớ ngắn hạn của người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế luồng 'Thanh toán' (Checkout), việc hiển thị một thanh tiến trình (Progress Bar) có tác dụng gì?",
+    "options": [
+      "A. Làm cho trang web trông chuyên nghiệp hơn.",
+      "B. Giảm bớt sự lo lắng của người dùng bằng cách cho họ biết họ đang ở đâu và còn bao nhiêu bước nữa.",
+      "C. Tăng tốc độ xử lý giao dịch ngân hàng.",
+      "D. Quảng cáo các sản phẩm khác trong khi chờ đợi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Progress Bar cung cấp phản hồi về hệ thống và giúp người dùng quản lý kỳ vọng về thời gian hoàn thành nhiệm vụ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Thuật ngữ 'Information Smell' (Mùi thông tin) trong UX đề cập đến điều gì?",
+    "options": [
+      "A. Khả năng người dùng dự đoán nội dung của một liên kết dựa trên nhãn hoặc icon của nó.",
+      "B. Tốc độ phản hồi của server khi người dùng nhấp vào link.",
+      "C. Màu sắc của các liên kết trên trang web.",
+      "D. Các thông báo pop-up xuất hiện khi di chuột qua menu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nếu một liên kết có 'mùi' tốt, người dùng sẽ tự tin nhấp vào vì họ tin rằng nó dẫn đến thông tin họ đang tìm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế Sitemap cho một blog cá nhân, cấu trúc nào thường được ưu tiên?",
+    "options": [
+      "A. Cấu trúc phẳng (Flat), tất cả bài viết nằm cùng cấp với trang chủ.",
+      "B. Cấu trúc phân cấp (Hierarchical) dựa trên các danh mục chủ đề.",
+      "C. Cấu trúc ngẫu nhiên không cần liên kết.",
+      "D. Cấu trúc một trang duy nhất (Single page) cho tất cả nội dung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cấu trúc phân cấp giúp phân loại bài viết theo chủ đề, giúp người dùng dễ dàng tìm kiếm theo sở thích.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một 'User Flow' tốt cần phải bao gồm cả những gì ngoài con đường lý tưởng?",
+    "options": [
+      "A. Danh sách các đối thủ cạnh tranh.",
+      "B. Các điểm rẽ nhánh khi người dùng thay đổi ý định hoặc gặp lỗi.",
+      "C. Mã nguồn CSS của các nút bấm.",
+      "D. Thông tin cá nhân của người thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User Flow thực tế phải bao quát được các quyết định khác nhau của người dùng để đảm bảo tính logic toàn diện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Hành động 'Search' và 'Browse' khác nhau như thế nào trong IA?",
+    "options": [
+      "A. Search là khi người dùng đã biết rõ mục tiêu; Browse là khi người dùng đang khám phá để tìm mục tiêu.",
+      "B. Search chỉ dùng trên mobile; Browse chỉ dùng trên desktop.",
+      "C. Search nhanh hơn Browse về tốc độ tải trang.",
+      "D. Browse yêu cầu người dùng phải đăng nhập tài khoản."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Search (Tìm kiếm) dành cho người dùng có mục đích cụ thể, Browse (Duyệt) dành cho người dùng muốn xem qua các lựa chọn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế User Flow cho một ứng dụng thương mại điện tử, bước nào là quan trọng nhất để xử lý 'Edge Case' trong quá trình thanh toán?",
+    "options": [
+      "A. Chỉ tập trung vào luồng thanh toán thành công (Happy Path).",
+      "B. Xác định các điểm người dùng có thể thoát ra hoặc gặp lỗi như thanh toán thất bại.",
+      "C. Loại bỏ hoàn toàn các bước xác nhận để tăng tốc độ chuyển đổi.",
+      "D. Yêu cầu người dùng đăng ký tài khoản trước khi xem giỏ hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xử lý Edge Case yêu cầu nhà thiết kế dự đoán các tình huống không mong muốn (lỗi mạng, thẻ hết hạn) để tạo ra các giải pháp dự phòng, giúp trải nghiệm không bị đứt gãy.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Information Architecture, kỹ thuật 'Open Card Sorting' thường được sử dụng tốt nhất khi nào?",
+    "options": [
+      "A. Khi bạn đã có các danh mục cố định và muốn kiểm tra xem người dùng có hiểu chúng không.",
+      "B. Khi bạn muốn người dùng xác nhận cấu trúc menu hiện tại của website.",
+      "C. Khi bạn bắt đầu xây dựng cấu trúc mới và muốn hiểu cách người dùng tự phân loại thông tin.",
+      "D. Khi bạn cần so sánh hiệu quả giữa hai hệ thống điều hướng khác nhau."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Open Card Sorting cho phép người dùng tự tạo tên danh mục, giúp nhà thiết kế hiểu được mô hình tâm trí (mental model) của họ khi chưa có khung cấu trúc sẵn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để giảm thiểu 'Cognitive Load' (tải nhận thức) trong một Task Flow phức tạp, phương pháp nào sau đây là hiệu quả nhất?",
+    "options": [
+      "A. Hiển thị tất cả các trường dữ liệu trên một màn hình duy nhất để tránh chuyển trang.",
+      "B. Sử dụng Progressive Disclosure để chỉ hiển thị thông tin cần thiết tại mỗi bước.",
+      "C. Tăng kích thước font chữ và sử dụng nhiều màu sắc tương phản mạnh.",
+      "D. Thêm nhiều văn bản hướng dẫn chi tiết tại mỗi bước thực hiện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Progressive Disclosure (tiết lộ tiến triển) giúp người dùng tập trung vào nhiệm vụ hiện tại bằng cách ẩn đi các thông tin chưa cần thiết, giảm bớt sự quá tải thông tin.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khái niệm 'Findability' trong Information Architecture tập trung vào điều gì?",
+    "options": [
+      "A. Tốc độ tải trang của các thành phần đồ họa.",
+      "B. Khả năng người dùng có thể tìm thấy nội dung hoặc chức năng họ cần.",
+      "C. Số lượng màu sắc được sử dụng trong hệ thống nhận diện thương hiệu.",
+      "D. Khả năng tương thích của ứng dụng trên các thiết bị di động khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Findability là thước đo mức độ dễ dàng để người dùng tìm thấy thông tin cụ thể thông qua hệ thống tìm kiếm hoặc điều hướng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng Sitemap cho một website tin tức lớn, cấu trúc 'Deep Hierarchy' (phân cấp sâu) có nhược điểm chính là gì?",
+    "options": [
+      "A. Làm cho trang chủ trở nên quá đơn giản và thiếu thông tin.",
+      "B. Khiến người dùng phải nhấp chuột quá nhiều lần để tiếp cận nội dung chi tiết.",
+      "C. Không thể mở rộng thêm các danh mục con trong tương lai.",
+      "D. Làm giảm khả năng hiển thị của các quảng cáo trên trang."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cấu trúc quá sâu buộc người dùng phải qua nhiều tầng điều hướng, gây mệt mỏi và dễ làm mất phương hướng (lost in navigation).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một User Journey Map, 'Pain Points' thường được xác định để làm gì?",
+    "options": [
+      "A. Để liệt kê các tính năng mà đối thủ cạnh tranh đang có.",
+      "B. Để xác định các rào cản khiến người dùng không hài lòng hoặc bỏ dở quy trình.",
+      "C. Để chọn lựa bảng màu phù hợp với cảm xúc của người dùng.",
+      "D. Để tính toán chi phí phát triển cho các giai đoạn tiếp theo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pain points là các điểm đau, nơi người dùng gặp khó khăn. Xác định chúng giúp Designer tìm ra cơ hội để cải thiện trải nghiệm và tối ưu hóa luồng công việc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống 'Labeling' (nhãn) cho thanh điều hướng, nguyên tắc nào là quan trọng nhất?",
+    "options": [
+      "A. Sử dụng các thuật ngữ chuyên môn nội bộ để thể hiện sự chuyên nghiệp.",
+      "B. Sử dụng các từ ngữ trừu tượng để kích thích sự tò mò của người dùng.",
+      "C. Sử dụng ngôn ngữ quen thuộc, rõ ràng và nhất quán với mô hình tâm trí của người dùng.",
+      "D. Thay đổi nhãn thường xuyên để làm mới giao diện người dùng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nhãn cần phải dễ hiểu và dự đoán được (predictable). Người dùng không nên phải đoán xem một mục menu sẽ dẫn họ đi đâu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một 'Task Flow' khác với một 'User Flow' ở điểm cơ bản nào?",
+    "options": [
+      "A. Task Flow chỉ tập trung vào một nhiệm vụ cụ thể, trong khi User Flow bao quát toàn bộ hành trình của một persona.",
+      "B. Task Flow luôn có nhiều nhánh rẽ hơn User Flow.",
+      "C. Task Flow chỉ dành cho lập trình viên, còn User Flow dành cho designer.",
+      "D. Task Flow không bao giờ bao gồm các bước kiểm tra điều kiện (decision nodes)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Task Flow thường tuyến tính và tập trung vào cách hoàn thành một việc nhất định. User Flow phức tạp hơn, thể hiện các con đường khác nhau mà người dùng có thể đi qua ứng dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong trường hợp một ứng dụng có quá nhiều tính năng tương đương nhau ở cấp độ cao nhất, giải pháp IA nào giúp giảm 'Hick's Law' effect?",
+    "options": [
+      "A. Hiển thị tất cả các icon trên thanh Tab Bar phía dưới.",
+      "B. Sử dụng hệ thống phân loại (Categorization) để nhóm các tính năng liên quan lại với nhau.",
+      "C. Loại bỏ bớt các tính năng cho đến khi chỉ còn 3 mục.",
+      "D. Sử dụng menu dạng danh sách dài để người dùng cuộn liên tục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hick's Law nói rằng thời gian ra quyết định tăng theo số lượng lựa chọn. Nhóm các tính năng vào danh mục giúp người dùng lọc bớt các lựa chọn không liên quan nhanh hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện 'Closed Card Sorting', người tham gia sẽ làm gì?",
+    "options": [
+      "A. Tự tạo ra các nhóm và đặt tên cho chúng dựa trên các thẻ nội dung.",
+      "B. Sắp xếp các thẻ nội dung vào các nhóm đã được định nghĩa sẵn bởi designer.",
+      "C. Chỉ được phép chọn tối đa 5 thẻ quan trọng nhất.",
+      "D. Vẽ lại sơ đồ trang web dựa trên các thẻ nội dung được cung cấp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Closed Card Sorting dùng để kiểm tra xem cấu trúc danh mục hiện tại có hợp lý và dễ hiểu đối với người dùng hay không.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng 'Breadcrumbs' trong cấu trúc thông tin của một website phức tạp là gì?",
+    "options": [
+      "A. Thay thế hoàn toàn cho menu điều hướng chính.",
+      "B. Giúp người dùng biết họ đang ở đâu và dễ dàng quay lại các cấp bậc cao hơn.",
+      "C. Tăng tốc độ tải trang bằng cách giảm dung lượng hình ảnh.",
+      "D. Cung cấp các lối tắt đến các trang web bên ngoài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Breadcrumbs là một dạng điều hướng phụ (secondary navigation) giúp người dùng định vị vị trí trong hệ thống phân cấp nội dung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong thiết kế User Flow, 'Decision Diamond' (hình thoi quyết định) thường đại diện cho điều gì?",
+    "options": [
+      "A. Điểm bắt đầu của một quy trình.",
+      "B. Một hành động mà người dùng thực hiện (ví dụ: Click nút).",
+      "C. Một điểm kiểm tra điều kiện dẫn đến các hướng đi khác nhau (ví dụ: Đã đăng nhập chưa?).",
+      "D. Điểm kết thúc của một nhiệm vụ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hình thoi trong sơ đồ luồng dùng để biểu thị logic rẽ nhánh, nơi hệ thống hoặc người dùng phải đưa ra lựa chọn Có/Không hoặc A/B.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thiết kế luồng 'Quên mật khẩu'. Sau khi người dùng nhập email, bước tiếp theo tốt nhất để giảm friction (ma sát) là gì?",
+    "options": [
+      "A. Yêu cầu người dùng trả lời 3 câu hỏi bảo mật ngay lập tức.",
+      "B. Thông báo rằng email đã được gửi và cung cấp nút mở ứng dụng email nhanh.",
+      "C. Bắt người dùng nhập lại mật khẩu cũ để xác minh danh tính.",
+      "D. Chuyển hướng người dùng về trang chủ và không thông báo gì thêm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cung cấp phản hồi rõ ràng và hỗ trợ bước tiếp theo (mở mail) giúp giảm bớt nỗ lực của người dùng trong một quy trình vốn đã gây khó chịu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc xử lý 'Empty States' lại quan trọng trong thiết kế User Flow?",
+    "options": [
+      "A. Để tiết kiệm không gian lưu trữ trên máy chủ.",
+      "B. Để hướng dẫn người dùng cách bắt đầu khi chưa có dữ liệu, tránh cảm giác bối rối.",
+      "C. Để hiển thị các quảng cáo thay thế vào chỗ trống.",
+      "D. Vì nó là yêu cầu bắt buộc của các hệ điều hành iOS và Android."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Empty states (trạng thái trống) là một phần của luồng trải nghiệm. Nếu không được thiết kế, người dùng sẽ thấy màn hình trắng và không biết phải làm gì tiếp theo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Information Architecture, 'Polyhierarchy' có nghĩa là gì?",
+    "options": [
+      "A. Một mục nội dung chỉ có thể nằm trong duy nhất một danh mục cha.",
+      "B. Một mục nội dung có thể xuất hiện trong nhiều danh mục cha khác nhau.",
+      "C. Hệ thống không có sự phân cấp, tất cả các trang đều ngang hàng.",
+      "D. Chỉ sử dụng các biểu tượng thay cho văn bản trong menu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Polyhierarchy cho phép người dùng tìm thấy cùng một sản phẩm qua các con đường khác nhau (ví dụ: 'Giày chạy bộ' nằm trong cả 'Giày' và 'Đồ thể thao').",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phân tích kết quả Card Sorting, một 'Dendrogram' giúp bạn hiểu điều gì?",
+    "options": [
+      "A. Tỷ lệ chuyển đổi của người dùng trên từng trang.",
+      "B. Các nhóm nội dung mà người dùng cho rằng có liên quan chặt chẽ với nhau.",
+      "C. Thời gian trung bình để hoàn thành một nhiệm vụ.",
+      "D. Luồng di chuyển của chuột trên màn hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dendrogram là sơ đồ cây biểu thị mức độ tương đồng giữa các thẻ, giúp designer đưa ra quyết định về cách nhóm thông tin trong IA.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một luồng đăng ký gồm 5 bước, việc hiển thị 'Progress Indicator' (thanh tiến trình) giải quyết vấn đề gì?",
+    "options": [
+      "A. Giảm thời gian thực tế để điền form.",
+      "B. Giảm sự lo lắng và giúp người dùng quản lý kỳ vọng về thời gian hoàn thành.",
+      "C. Tự động điền các thông tin còn thiếu cho người dùng.",
+      "D. Ngăn chặn người dùng quay lại các bước trước đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thanh tiến trình giúp người dùng biết họ đang ở đâu và còn bao nhiêu bước nữa, từ đó giảm tỉ lệ bỏ dở giữa chừng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống tìm kiếm, chức năng 'Auto-suggestion' ảnh hưởng như thế nào đến IA?",
+    "options": [
+      "A. Nó làm cho cấu trúc menu trở nên không cần thiết.",
+      "B. Nó giúp người dùng vượt qua các lỗi về Labeling và tìm thấy nội dung nhanh hơn.",
+      "C. Nó làm tăng đáng kể Cognitive Load vì người dùng phải đọc nhiều gợi ý.",
+      "D. Nó chỉ có tác dụng trang trí và không ảnh hưởng đến Findability."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Gợi ý tự động giúp thu hẹp khoảng cách giữa thuật ngữ của người dùng và cấu trúc dữ liệu của hệ thống, cải thiện khả năng tìm thấy thông tin.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một User Flow tốt cho chức năng 'Xóa tài khoản' nên được thiết kế như thế nào?",
+    "options": [
+      "A. Đặt nút xóa ở ngay trang chủ để người dùng dễ tìm thấy.",
+      "B. Thực hiện xóa ngay lập tức khi người dùng click để tiết kiệm thời gian.",
+      "C. Bao gồm bước xác nhận và giải thích hậu quả của việc xóa để tránh hành động vô ý.",
+      "D. Giấu chức năng xóa thật sâu để người dùng không thể tìm thấy."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với các hành động có tính phá hủy (destructive), luồng cần có sự ma sát tích cực (positive friction) để bảo vệ người dùng khỏi sai lầm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Mental Model' (mô hình tâm trí) ảnh hưởng thế nào đến việc thiết kế IA?",
+    "options": [
+      "A. Designer nên ép buộc người dùng học theo mô hình mới của ứng dụng.",
+      "B. IA nên được xây dựng dựa trên cách người dùng nghĩ về thế giới thực hoặc các ứng dụng tương tự.",
+      "C. Mental model chỉ quan trọng đối với thiết kế Visual, không liên quan đến IA.",
+      "D. Mỗi người dùng có một mental model riêng nên không thể thiết kế IA chung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiết kế IA phù hợp với Mental Model giúp người dùng cảm thấy ứng dụng 'trực quan' vì nó hoạt động đúng như họ kỳ vọng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế Navigation cho Mobile, tại sao 'Hamburger Menu' thường bị coi là làm giảm Findability so với 'Tab Bar'?",
+    "options": [
+      "A. Vì nó chiếm quá nhiều diện tích màn hình khi mở ra.",
+      "B. Vì nó che giấu các lựa chọn quan trọng, khiến người dùng 'out of sight, out of mind'.",
+      "C. Vì nó không thể chứa được nhiều hơn 3 mục menu.",
+      "D. Vì người dùng di động không biết cách sử dụng biểu tượng 3 gạch."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tab Bar hiển thị các lựa chọn ngay lập tức, trong khi Hamburger Menu yêu cầu thêm một thao tác click để xem, làm giảm khả năng khám phá tính năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh IA, 'Metadata' đóng vai trò gì?",
+    "options": [
+      "A. Là các tệp hình ảnh chất lượng cao trên website.",
+      "B. Là thông tin mô tả về nội dung, giúp việc lọc (filtering) và phân loại hiệu quả hơn.",
+      "C. Là mã nguồn CSS điều khiển giao diện.",
+      "D. Là các banner quảng cáo chạy dọc trang web."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Metadata (dữ liệu về dữ liệu) cho phép hệ thống tổ chức thông tin linh hoạt, ví dụ như lọc sản phẩm theo màu sắc, kích thước, giá cả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện người dùng thường xuyên bỏ cuộc ở bước 'Nhập địa chỉ' trong luồng Checkout. Hành động IA/UX nào là hợp lý nhất?",
+    "options": [
+      "A. Bỏ qua bước nhập địa chỉ và yêu cầu họ nhập sau khi đã thanh toán.",
+      "B. Tích hợp API tự động gợi ý địa chỉ (như Google Maps) để giảm việc nhập liệu thủ công.",
+      "C. Chia nhỏ trang nhập địa chỉ thành 3 trang con khác nhau.",
+      "D. Thêm nhiều hình ảnh minh họa vào trang nhập địa chỉ để làm nó sinh động hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giảm bớt nỗ lực (effort) trong các bước quan trọng của User Flow giúp giảm tỉ lệ drop-off và cải thiện trải nghiệm người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế luồng 'Onboarding' cho một ứng dụng phức tạp, cách tiếp cận nào giúp giảm Cognitive Load tốt nhất?",
+    "options": [
+      "A. Hiển thị một video hướng dẫn dài 5 phút ngay khi mở app.",
+      "B. Sử dụng 'Contextual Tips' (gợi ý theo ngữ cảnh) khi người dùng chạm đến tính năng đó lần đầu.",
+      "C. Bắt buộc người dùng đọc hết các điều khoản sử dụng trước khi vào trang chủ.",
+      "D. Cung cấp một file PDF hướng dẫn sử dụng để người dùng tải về."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Contextual Tips cung cấp thông tin đúng lúc, đúng chỗ (Just-in-time), giúp người dùng học cách sử dụng thông qua trải nghiệm thực tế thay vì phải ghi nhớ quá nhiều từ đầu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây là đặc trưng của một 'Linear User Flow'?",
+    "options": [
+      "A. Người dùng có thể tự do di chuyển giữa bất kỳ trang nào trong ứng dụng.",
+      "B. Quy trình có các bước cố định theo thứ tự A -> B -> C để hoàn thành mục tiêu.",
+      "C. Hệ thống tự động thay đổi nội dung dựa trên hành vi ngẫu nhiên của người dùng.",
+      "D. Không có điểm bắt đầu và điểm kết thúc rõ ràng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Luồng tuyến tính (Linear) thường được dùng cho các quy trình cần sự kiểm soát chặt chẽ như thanh toán, đăng ký hoặc làm bài kiểm tra.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế Information Architecture (IA) cho một hệ thống SaaS doanh nghiệp có cấu trúc dữ liệu cực kỳ phức tạp và đa tầng, cách tiếp cận nào tối ưu nhất để cân bằng giữa khả năng mở rộng (scalability) và khả năng tìm thấy (findability)?",
+    "options": [
+      "A. Sử dụng cấu trúc phân cấp sâu (Deep Hierarchy) để phân loại triệt để mọi tính năng.",
+      "B. Áp dụng cấu trúc phẳng (Flat IA) và dựa hoàn toàn vào thanh tìm kiếm toàn năng (Global Search).",
+      "C. Sử dụng Polyhierarchical IA kết hợp với hệ thống Metadata và Faceted Navigation.",
+      "D. Thiết kế theo mô hình Hub-and-spoke để tập trung người dùng vào một trang điều hướng trung tâm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong hệ thống phức tạp, Polyhierarchical IA cho phép một item thuộc nhiều danh mục, trong khi Faceted Navigation giúp người dùng lọc dữ liệu theo nhiều chiều, giải quyết vấn đề phân cấp sâu gây khó khăn khi tìm kiếm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một User Flow phức tạp gồm nhiều bước thanh toán và xác thực, yếu tố nào là quan trọng nhất để xử lý 'Edge Case' khi người dùng mất kết nối mạng giữa chừng?",
+    "options": [
+      "A. Hiển thị thông báo lỗi ngay lập tức và yêu cầu người dùng bắt đầu lại từ bước đầu tiên.",
+      "B. Thiết kế trạng thái 'Idempotency' và cơ chế 'State Persistence' để người dùng tiếp tục từ bước gặp lỗi khi có mạng lại.",
+      "C. Tự động chuyển hướng người dùng về trang chủ để đảm bảo an toàn dữ liệu.",
+      "D. Sử dụng Modal cảnh báo liên tục cho đến khi kết nối được khôi phục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở mức độ Advanced, việc duy trì trạng thái (State Persistence) và đảm bảo một hành động không bị lặp lại sai lệch (Idempotency) là cốt lõi để xử lý lỗi hệ thống mà không gây ma sát cho người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện Card Sorting để tái cấu trúc Menu điều hướng cho một trang tin tức lớn, kết quả từ 'Open Card Sorting' cho thấy sự phân mảnh cực lớn trong cách người dùng đặt tên nhóm. Bạn nên làm gì tiếp theo?",
+    "options": [
+      "A. Chọn tên nhóm có tần suất xuất hiện cao nhất bất kể các ý kiến khác.",
+      "B. Thực hiện một đợt 'Closed Card Sorting' với các nhóm tên đã được chuẩn hóa từ dữ liệu Open Sorting để kiểm chứng.",
+      "C. Bỏ qua kết quả Card Sorting và dựa vào phân tích từ khóa SEO để đặt tên.",
+      "D. Sử dụng thuật toán Cluster Analysis để ép buộc các thẻ vào đúng 5 nhóm chính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Open Card Sorting dùng để khám phá (generative), khi kết quả quá phân mảnh, cần bước Closed Card Sorting để xác nhận (evaluative) xem cấu trúc dự kiến có thực sự dễ hiểu với đa số người dùng hay không.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống quản lý nội dung (CMS) yêu cầu người dùng nhập rất nhiều dữ liệu kỹ thuật. Kỹ thuật IA nào giúp giảm tải nhận thức (cognitive load) hiệu quả nhất trong trường hợp này?",
+    "options": [
+      "A. Hiển thị tất cả các trường nhập liệu trên một trang duy nhất để người dùng thấy tổng thể.",
+      "B. Sử dụng Progressive Disclosure để chỉ hiển thị các trường dữ liệu liên quan dựa trên lựa chọn trước đó của người dùng.",
+      "C. Chia nhỏ quy trình thành 10-15 bước cực ngắn để người dùng không thấy quá tải.",
+      "D. Sử dụng Tooltips dày đặc cho mọi nhãn (label) để giải thích chi tiết kỹ thuật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Progressive Disclosure là kỹ thuật nâng cao giúp giảm nhiễu thị giác và tải nhận thức bằng cách trì hoãn việc hiển thị thông tin phức tạp cho đến khi thực sự cần thiết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế Navigation cho ứng dụng di động có hơn 10 tính năng chính có độ ưu tiên tương đương, giải pháp nào tối ưu về mặt UX kiến trúc?",
+    "options": [
+      "A. Sử dụng Tab Bar với 10 icon để người dùng truy cập nhanh nhất.",
+      "B. Sử dụng Hamburger Menu chứa toàn bộ 10 tính năng để giữ giao diện sạch sẽ.",
+      "C. Áp dụng mô hình 'Priority+ Navigation' (kết hợp Tab Bar cho tính năng chính và 'More' cho các tính năng phụ).",
+      "D. Thiết kế Navigation dạng Carousel để người dùng vuốt chọn tính năng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Priority+ Navigation giúp giải quyết giới hạn không gian trên mobile mà vẫn đảm bảo các tính năng quan trọng nhất luôn hiển thị, tránh việc giấu mọi thứ vào Hamburger Menu làm giảm khả năng khám phá.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Journey Mapping, sự khác biệt cốt lõi giữa 'User Journey Map' và 'Service Blueprint' là gì khi đánh giá một luồng nghiệp vụ phức tạp?",
+    "options": [
+      "A. User Journey Map tập trung vào cảm xúc người dùng, Service Blueprint tập trung vào quy trình vận hành phía sau (backstage).",
+      "B. Service Blueprint chỉ dành cho cấp quản lý, User Journey Map dành cho Designer.",
+      "C. User Journey Map mô tả tương lai, Service Blueprint mô tả hiện tại.",
+      "D. Không có sự khác biệt, hai thuật ngữ này có thể dùng thay thế cho nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ở mức độ Advanced, Designer cần hiểu Service Blueprint mở rộng từ Journey Map bằng cách kết nối trải nghiệm khách hàng với các quy trình, nhân sự và công nghệ hỗ trợ phía sau hậu trường.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi tối ưu hóa 'Task Flow' cho một ứng dụng giao dịch tài chính tốc độ cao, yếu tố 'Friction' (ma sát) nên được xử lý như thế nào?",
+    "options": [
+      "A. Loại bỏ hoàn toàn mọi bước xác nhận để đảm bảo tốc độ giao dịch nhanh nhất.",
+      "B. Thêm 'Strategic Friction' (ma sát chiến lược) vào các bước quan trọng như xác nhận số tiền lớn để tránh sai sót.",
+      "C. Luôn yêu cầu xác thực 2 lớp (2FA) ở mọi bước trong Flow để đảm bảo an toàn tuyệt đối.",
+      "D. Giấu các thông tin rủi ro vào trang điều khoản để người dùng không bị phân tâm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Advanced UX không phải luôn là xóa bỏ ma sát. 'Positive/Strategic Friction' được sử dụng chủ đích để ngăn chặn lỗi nghiêm trọng của người dùng trong các tác vụ rủi ro cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong cấu trúc Information Architecture, khái niệm 'Taxonomy' khác với 'Folksonomy' ở điểm nào?",
+    "options": [
+      "A. Taxonomy là do người dùng tự gắn tag, Folksonomy là do chuyên gia phân loại.",
+      "B. Taxonomy là hệ thống phân loại có phân cấp định sẵn, Folksonomy là hệ thống phân loại dựa trên tag tự do của cộng đồng.",
+      "C. Taxonomy chỉ dùng cho website, Folksonomy chỉ dùng cho mạng xã hội.",
+      "D. Taxonomy có tính linh hoạt cao hơn Folksonomy trong việc thay đổi cấu trúc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Taxonomy là cấu trúc từ trên xuống (top-down) được kiểm soát, trong khi Folksonomy là cấu trúc từ dưới lên (bottom-up) thông qua việc người dùng tự gắn thẻ (social tagging).",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thiết kế lại Sitemap cho một trang thương mại điện tử lớn. Chỉ số nào sau đây cho thấy IA hiện tại đang gặp vấn đề nghiêm trọng về 'Findability'?",
+    "options": [
+      "A. Tỷ lệ thoát (Bounce Rate) ở trang chủ thấp.",
+      "B. Tỷ lệ người dùng sử dụng thanh Search cực cao ngay sau khi vào trang danh mục (Category page).",
+      "C. Thời gian trung bình trên trang (Avg. Time on Page) cao.",
+      "D. Số lượng trang được xem mỗi phiên (Pages per Session) tăng lên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu người dùng lập tức dùng Search khi vừa vào Category page, điều đó chứng tỏ cấu trúc điều hướng hoặc cách phân loại (labeling) của bạn không giúp họ tìm thấy thứ họ cần một cách tự nhiên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi xây dựng User Flow cho chức năng 'Hủy đăng ký dịch vụ' (Unsubscribe), một Senior Designer nên đưa ra quyết định kiến trúc nào để cân bằng giữa mục tiêu kinh doanh và đạo đức nghề nghiệp (Ethical Design)?",
+    "options": [
+      "A. Sử dụng 'Dark Patterns' bằng cách giấu nút hủy trong nhiều lớp menu phức tạp.",
+      "B. Thiết kế luồng hủy đơn giản, rõ ràng nhưng có thêm một bước khảo sát ngắn và đề xuất phương án thay thế phù hợp.",
+      "C. Yêu cầu người dùng phải gọi điện cho tổng đài để hoàn tất việc hủy.",
+      "D. Tự động gia hạn mà không cần thông báo để giảm tỷ lệ rời bỏ (Churn rate)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ethical Design đòi hỏi luồng công việc minh bạch. Việc thêm một bước khảo sát hoặc đề xuất (Retention flow) là hợp lệ về kinh doanh nếu nó không gây cản trở ác ý (Dark Pattern).",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Tree Testing' được sử dụng hiệu quả nhất trong giai đoạn nào của quá trình thiết kế IA?",
+    "options": [
+      "A. Ngay sau khi hoàn thành Visual Design để kiểm tra màu sắc nút bấm.",
+      "B. Trước khi thiết kế giao diện, để đánh giá hiệu quả của cấu trúc phân cấp danh mục (Sitemap).",
+      "C. Trong khi đang code Backend để kiểm tra tốc độ phản hồi của API.",
+      "D. Sau khi sản phẩm đã Launch để thu thập feedback về sự hài lòng chung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tree Testing là phương pháp kiểm tra cấu trúc điều hướng thuần túy (không có giao diện) để đảm bảo người dùng có thể tìm thấy thông tin dựa trên cách sắp xếp các nhãn và phân cấp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống Enterprise Resource Planning (ERP), việc sử dụng 'Breadcrumbs' (đường dẫn liên kết) có vai trò kiến trúc quan trọng nhất là gì?",
+    "options": [
+      "A. Để trang trí cho phần header bớt trống trải.",
+      "B. Cung cấp nhận thức về vị trí (Contextual Awareness) và cho phép di chuyển ngược lại các cấp cha một cách nhanh chóng.",
+      "C. Thay thế hoàn toàn cho menu điều hướng chính để tiết kiệm không gian.",
+      "D. Tăng điểm SEO cho các trang nội bộ của doanh nghiệp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong các hệ thống có phân cấp sâu và phức tạp như ERP, Breadcrumbs là công cụ định vị quan trọng giúp người dùng hiểu họ đang ở đâu và dễ dàng quay lại các tầng kiến trúc cao hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế User Flow cho một ứng dụng ngân hàng số, bạn gặp xung đột giữa yêu cầu bảo mật (Security) và trải nghiệm mượt mà (Seamless Experience). Quyết định nào thể hiện trình độ Advanced?",
+    "options": [
+      "A. Ưu tiên tuyệt đối trải nghiệm bằng cách bỏ qua các bước xác thực sinh trắc học.",
+      "B. Ưu tiên tuyệt đối bảo mật bằng cách yêu cầu mật khẩu ở mọi thao tác click chuột.",
+      "C. Áp dụng 'Adaptive Authentication' - chỉ yêu cầu xác thực mạnh khi phát hiện hành động bất thường hoặc giao dịch giá trị cao.",
+      "D. Để người dùng tự chọn mức độ bảo mật mà họ muốn trong phần cài đặt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Adaptive Authentication (Xác thực thích ứng) là giải pháp kiến trúc thông minh giúp tối ưu hóa luồng người dùng: giữ sự mượt mà cho các tác vụ thông thường và chỉ tăng ma sát khi thực sự cần thiết vì an toàn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Wayfinding' trong thiết kế Information Architecture cho Digital Product được hiểu đúng nhất là gì?",
+    "options": [
+      "A. Là việc vẽ các mũi tên chỉ hướng trên giao diện.",
+      "B. Là hệ thống các dấu hiệu thị giác và cấu trúc giúp người dùng biết họ đang ở đâu, đã đi qua đâu và có thể đi đâu tiếp theo.",
+      "C. Là tính năng chỉ đường bằng GPS tích hợp trong ứng dụng.",
+      "D. Là việc thiết kế các trang Landing Page thu hút người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Wayfinding là một khái niệm mượn từ kiến trúc vật lý, trong IA nó đề cập đến việc hỗ trợ định hướng và khả năng di chuyển của người dùng trong không gian thông tin kỹ thuật số.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế luồng 'Onboarding' cho một sản phẩm B2B phức tạp, sai lầm nào về mặt User Flow thường gây ra tỷ lệ Drop-off cao nhất?",
+    "options": [
+      "A. Cho phép người dùng bỏ qua (skip) các bước hướng dẫn.",
+      "B. 'Front-loading' quá nhiều yêu cầu thiết lập và giải thích tính năng ngay lập tức thay vì để người dùng học qua trải nghiệm thực tế (Contextual Learning).",
+      "C. Sử dụng video thay vì các slide ảnh để hướng dẫn.",
+      "D. Thiết kế nút 'Bắt đầu' quá lớn ở trang đầu tiên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Front-loading (dồn hết mọi thứ lên đầu) gây quá tải nhận thức. Luồng Onboarding tiên tiến nên áp dụng 'Just-in-time education' - cung cấp thông tin đúng lúc người dùng cần thực hiện tác vụ đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình 'Object-Oriented UX' (OOUX), bước đầu tiên quan trọng nhất khi xây dựng IA là gì?",
+    "options": [
+      "A. Vẽ sơ đồ luồng (Flowchart) của tất cả các hành động.",
+      "B. Xác định các đối tượng thực thể (Objects) cốt lõi trong hệ thống và mối quan hệ giữa chúng trước khi thiết kế hành động.",
+      "C. Thiết kế các nút bấm và icon cho hệ thống.",
+      "D. Viết nội dung cho các trang thông báo lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OOUX tập trung vào việc xác định các đối tượng (như Khóa học, Giảng viên, Bài học) và cách chúng liên kết, giúp tạo ra một IA bền vững và nhất quán hơn là chỉ tập trung vào các hành động (verbs).",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một trang web thương mại điện tử có danh mục sản phẩm rất rộng. Việc sử dụng 'Mega Menu' so với 'Accordion Menu' trên Desktop có ưu điểm kiến trúc nào nổi bật?",
+    "options": [
+      "A. Mega Menu giúp tiết kiệm diện tích màn hình hơn.",
+      "B. Mega Menu cho phép hiển thị toàn bộ chiều rộng và chiều sâu của các lựa chọn, giúp người dùng quét (scan) thông tin nhanh hơn mà không cần click nhiều lần.",
+      "C. Accordion Menu giúp tăng tốc độ tải trang vì ít code hơn.",
+      "D. Mega Menu chỉ dành cho người dùng trẻ tuổi, Accordion dành cho người già."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mega Menu tận dụng không gian Desktop để phơi bày cấu trúc IA, giúp giảm số lần nhấp chuột và tăng khả năng khám phá các danh mục con ngay lập tức.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế luồng 'Checkout' cho ứng dụng Mobile, kỹ thuật 'Linear Flow' (luồng tuyến tính) có nhược điểm gì lớn nhất đối với người dùng chuyên nghiệp?",
+    "options": [
+      "A. Quá khó để hiểu các bước tiếp theo.",
+      "B. Thiếu tính linh hoạt nếu người dùng muốn quay lại sửa đổi một thông tin cụ thể ở bước trước đó mà không phải nhấn 'Back' nhiều lần.",
+      "C. Tốn quá nhiều dung lượng bộ nhớ của điện thoại.",
+      "D. Không thể tích hợp các phương thức thanh toán hiện đại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Luồng tuyến tính tốt cho sự đơn giản nhưng với các tác vụ phức tạp, việc thiếu khả năng truy cập trực tiếp (Non-linear access) vào các bước đã hoàn thành có thể gây ức chế cho người dùng muốn điều chỉnh thông tin.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong thiết kế IA, 'Metadata Schema' đóng vai trò gì trong việc tối ưu hóa khả năng tìm kiếm (Findability)?",
+    "options": [
+      "A. Là màu sắc của các nhãn dán trên sản phẩm.",
+      "B. Là hệ thống các thuộc tính ẩn giúp phân loại, lọc và liên kết các nội dung có tính chất tương đồng một cách tự động.",
+      "C. Là tên của các file ảnh được upload lên server.",
+      "D. Là đoạn mã JavaScript dùng để theo dõi hành vi người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Metadata là 'dữ liệu về dữ liệu'. Một Schema tốt cho phép hệ thống tạo ra các bộ lọc (facets) và gợi ý nội dung liên quan một cách chính xác, là xương sống của IA hiện đại.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần thiết kế lại luồng 'Phê duyệt hồ sơ' cho một hệ thống ngân hàng nội bộ. Nhân viên than phiền rằng họ mất quá nhiều thời gian để chuyển đổi giữa các màn hình. Giải pháp IA nào là hợp lý nhất?",
+    "options": [
+      "A. Chia nhỏ hồ sơ thành nhiều trang hơn để mỗi trang tải nhanh hơn.",
+      "B. Sử dụng cấu trúc 'Master-Detail' (Danh sách bên trái, nội dung chi tiết bên phải) để giảm thiểu việc chuyển ngữ cảnh (context switching).",
+      "C. Yêu cầu nhân viên mở nhiều tab trình duyệt cùng lúc.",
+      "D. Tăng kích thước font chữ để họ đọc nhanh hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mô hình Master-Detail cực kỳ hiệu quả cho các tác vụ duyệt danh sách và xử lý chi tiết liên tục, giúp duy trì luồng công việc (flow) mà không làm mất phương hướng của người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi phân tích một 'Task Flow', khái niệm 'Happy Path' nên được Designer xử lý như thế nào so với các 'Error Paths'?",
+    "options": [
+      "A. Chỉ cần thiết kế Happy Path, Error Paths là việc của Developer.",
+      "B. Thiết kế Happy Path trước để tối ưu trải nghiệm lý tưởng, nhưng phải dành nguồn lực tương đương để thiết kế các Error Paths nhằm đảm bảo khả năng phục hồi (Recoverability).",
+      "C. Luôn thiết kế Error Paths trước để lường trước mọi rủi ro.",
+      "D. Happy Path và Error Paths phải có giao diện hoàn toàn giống nhau để tránh gây nhầm lẫn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một Senior Designer hiểu rằng người dùng dành nhiều thời gian ở các 'Edge cases' hoặc lỗi hơn chúng ta tưởng. Thiết kế khả năng phục hồi lỗi là dấu ấn của một kiến trúc hệ thống tốt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Information Architecture, 'Locus of Control' (Tâm điểm kiểm soát) ảnh hưởng như thế nào đến thiết kế Navigation?",
+    "options": [
+      "A. Người dùng nên cảm thấy họ luôn làm chủ hệ thống thông qua các lựa chọn điều hướng rõ ràng và có thể dự đoán được.",
+      "B. Hệ thống nên tự động chuyển hướng người dùng mà không cần hỏi ý kiến để tăng tốc độ.",
+      "C. Locus of Control chỉ liên quan đến việc phân quyền Admin trong hệ thống.",
+      "D. Càng ít lựa chọn điều hướng thì người dùng càng có Locus of Control cao."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Về mặt tâm lý học trong IA, người dùng cần cảm thấy họ có quyền kiểm soát (Internal Locus of Control). Navigation không rõ ràng hoặc tự động nhảy trang làm mất đi cảm giác này, gây ra sự bất an.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện 'Hybrid Card Sorting', bạn cung cấp cho người dùng điều gì?",
+    "options": [
+      "A. Chỉ cung cấp các thẻ nội dung, không có danh mục sẵn.",
+      "B. Chỉ cung cấp danh mục sẵn, người dùng không được tạo thêm.",
+      "C. Cung cấp một số danh mục cố định nhưng vẫn cho phép người dùng tạo thêm danh mục mới nếu họ thấy cần thiết.",
+      "D. Cung cấp các thẻ đã được phân nhóm sẵn và yêu cầu người dùng đánh giá."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hybrid Card Sorting kết hợp ưu điểm của Open (khám phá) và Closed (xác nhận), giúp Designer vừa kiểm chứng được các nhóm dự kiến, vừa tìm ra các cách phân loại mới từ người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thiết kế một User Flow cho ứng dụng AI tạo ảnh. Bước 'Prompt Engineering' (nhập câu lệnh) quá phức tạp khiến người dùng mới bỏ cuộc. Bạn sẽ áp dụng chiến lược IA nào?",
+    "options": [
+      "A. Cung cấp một danh sách 500 từ khóa để người dùng tự chọn.",
+      "B. Sử dụng 'Defaulting' và 'Templates' - cung cấp các thiết lập mẫu thành công để người dùng chỉ cần chỉnh sửa nhỏ (Edit thay vì Create từ đầu).",
+      "C. Loại bỏ hoàn toàn ô nhập lệnh và thay bằng các nút bấm ngẫu nhiên.",
+      "D. Bắt người dùng phải xem video hướng dẫn 10 phút trước khi sử dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giảm ma sát bằng cách cung cấp điểm xuất phát (starting point) tốt. Trong IA, việc thiết lập các giá trị mặc định thông minh giúp giảm tải nhận thức và tăng tỷ lệ thành công của tác vụ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc duy trì 'Information Scent' (Mùi hương thông tin) lại quan trọng trong thiết kế Navigation?",
+    "options": [
+      "A. Để người dùng biết trang web có thiết kế đẹp.",
+      "B. Để cung cấp các manh mối (nhãn, icon, mô tả) giúp người dùng dự đoán chính xác nội dung họ sẽ nhận được trước khi thực hiện cú click.",
+      "C. Để làm cho các liên kết (links) có màu sắc nổi bật hơn.",
+      "D. Để tăng tốc độ load trang bằng cách dự đoán link người dùng sẽ click."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Information Scent là lý thuyết về việc người dùng đánh giá các manh mối thị giác để quyết định con đường điều hướng. Nếu 'mùi hương' yếu (nhãn mơ hồ), người dùng sẽ bị lạc hoặc mất niềm tin vào hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế cấu trúc thông tin (IA) cho một hệ thống ERP đa quốc gia với hàng nghìn chức năng, phương pháp nào là tối ưu để đảm bảo khả năng mở rộng (scalability) mà không làm quá tải menu điều hướng?",
+    "options": [
+      "A. Sử dụng cấu trúc phân cấp sâu (Deep Hierarchy) để nhóm tất cả các tính năng vào các danh mục mẹ.",
+      "B. Triển khai cấu trúc điều hướng đa chiều (Polyhierarchical IA) kết hợp với hệ thống phân loại dựa trên vai trò người dùng (Role-based Taxonomy).",
+      "C. Sử dụng Menu phẳng (Flat Navigation) và dựa hoàn toàn vào thanh tìm kiếm toàn cầu (Global Search).",
+      "D. Thiết kế Mega-menu hiển thị tất cả các liên kết ngay từ trang chủ để giảm số lần nhấp chuột."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong hệ thống phức tạp, việc phân loại dựa trên vai trò giúp giảm tải nhận thức bằng cách chỉ hiển thị những gì liên quan, trong khi cấu trúc đa chiều cho phép một mục xuất hiện ở nhiều vị trí logic khác nhau, tăng khả năng tìm thấy.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một quy trình thanh toán thương mại điện tử phức tạp (B2B), bạn phát hiện tỷ lệ bỏ rơi cao ở bước 'Cấu hình vận chuyển'. Phân tích dữ liệu cho thấy người dùng thường xuyên quay lại bước trước đó. Quyết định chiến lược nào là hợp lý nhất?",
+    "options": [
+      "A. Loại bỏ bước cấu hình vận chuyển và gộp nó vào trang thanh toán cuối cùng.",
+      "B. Thêm một hộp thoại xác nhận (Confirmation Dialog) trước khi người dùng chuyển sang bước tiếp theo.",
+      "C. Tái cấu trúc User Flow theo mô hình 'Linear with loops' cho phép chỉnh sửa dữ liệu trực tiếp tại chỗ (In-place editing) mà không cần quay lại trang trước.",
+      "D. Tăng kích thước nút 'Tiếp tục' để khuyến khích người dùng hoàn thành quy trình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc quay lại trang trước chứng tỏ luồng hiện tại quá cứng nhắc. Cho phép chỉnh sửa tại chỗ làm giảm ma sát (friction) và tải nhận thức, giúp duy trì đà hoàn thành tác vụ của người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện Open Card Sorting để tái cấu trúc một cổng thông tin chính phủ đồ sộ, bạn nhận thấy người dùng tạo ra quá nhiều nhóm nhỏ lẻ và không thống nhất. Bước tiếp theo bạn nên làm gì để đưa ra quyết định về IA?",
+    "options": [
+      "A. Chọn nhóm có số lượng người dùng đồng thuận cao nhất và bỏ qua các nhóm khác.",
+      "B. Tiến hành một đợt Closed Card Sorting với các nhóm đã được chuẩn hóa từ kết quả Open Card Sorting để kiểm chứng độ chính xác.",
+      "C. Tự mình quyết định cấu trúc dựa trên kinh nghiệm cá nhân vì dữ liệu người dùng quá nhiễu.",
+      "D. Sử dụng thuật toán phân cụm (Cluster Analysis) để ép các mục vào đúng 5 danh mục chính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Open Card Sorting dùng để khám phá mô hình tâm trí, trong khi Closed Card Sorting dùng để xác định tính hiệu quả của các nhãn (labels) đã chọn. Đây là quy trình chuẩn để tinh chỉnh IA từ dữ liệu thô.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong thiết kế User Flow cho một ứng dụng giao dịch chứng khoán, 'Edge Case' nào sau đây là rủi ro nhất và cần được ưu tiên xử lý trong sơ đồ luồng?",
+    "options": [
+      "A. Người dùng quên mật khẩu khi đang đăng nhập.",
+      "B. Lỗi kết nối mạng ngay tại thời điểm người dùng nhấn nút 'Xác nhận đặt lệnh'.",
+      "C. Người dùng nhập sai mã cổ phiếu trong thanh tìm kiếm.",
+      "D. Hệ thống bảo trì định kỳ vào lúc 2 giờ sáng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là lỗi trạng thái trung gian (Intermediate state error) cực kỳ nguy hiểm trong tài chính. Nếu không xử lý luồng này (ví dụ: kiểm tra trùng lặp, trạng thái idempotent), có thể dẫn đến việc đặt lệnh kép hoặc mất tiền của khách hàng.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Information Scent' (Mùi thông tin) ảnh hưởng như thế nào đến việc thiết kế hệ thống điều hướng (Navigation) cho một trang tin tức lớn?",
+    "options": [
+      "A. Nó yêu cầu các biểu tượng phải có màu sắc rực rỡ để thu hút sự chú ý.",
+      "B. Nó nhấn mạnh việc sử dụng các nhãn (labels) rõ ràng, mang tính dự báo cao về nội dung bên trong liên kết.",
+      "C. Nó đề xuất việc ẩn bớt các liên kết để người dùng phải tự khám phá.",
+      "D. Nó liên quan đến việc sử dụng âm thanh khi người dùng di chuột qua các menu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Information Scent là khả năng người dùng dự đoán được nội dung họ sẽ tìm thấy sau khi nhấp vào một liên kết. Nhãn rõ ràng giúp người dùng đánh giá giá trị của liên kết mà không cần nhấp thử.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế luồng 'Onboarding' cho một phần mềm SaaS phức tạp dành cho chuyên gia, chiến lược nào giúp giảm tải nhận thức (Cognitive Load) hiệu quả nhất?",
+    "options": [
+      "A. Cung cấp một video hướng dẫn dài 10 phút ngay khi người dùng đăng nhập lần đầu.",
+      "B. Sử dụng phương pháp 'Progressive Disclosure' (Tiết lộ dần dần) để giới thiệu các tính năng theo ngữ cảnh sử dụng thực tế.",
+      "C. Hiển thị tất cả các tooltip hướng dẫn trên màn hình chính để người dùng nắm bắt tổng thể.",
+      "D. Bắt buộc người dùng hoàn thành một bài kiểm tra kỹ năng trước khi cho phép sử dụng phần mềm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Progressive Disclosure giúp người dùng không bị choáng ngợp bởi quá nhiều thông tin cùng lúc, chỉ cung cấp thông tin khi nó thực sự cần thiết cho tác vụ hiện tại.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống IA được coi là 'Flexible' (Linh hoạt) khi nó đáp ứng được tiêu chí nào sau đây?",
+    "options": [
+      "A. Cho phép người dùng thay đổi màu sắc của menu điều hướng.",
+      "B. Có khả năng tích hợp thêm các loại nội dung hoặc danh mục mới mà không làm phá vỡ cấu trúc hiện tại.",
+      "C. Tự động thay đổi vị trí các nút dựa trên tần suất sử dụng của người dùng.",
+      "D. Hiển thị tốt trên cả thiết bị di động và máy tính để bàn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính linh hoạt của IA nằm ở khả năng mở rộng (extensibility). Một cấu trúc tốt phải dự phòng được sự phát triển của nội dung trong tương lai mà không cần tái cấu trúc toàn bộ.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong mô hình 'Hub and Spoke' của kiến trúc thông tin, rủi ro lớn nhất đối với trải nghiệm người dùng là gì?",
+    "options": [
+      "A. Người dùng dễ bị lạc trong các tầng nội dung sâu.",
+      "B. Việc di chuyển giữa các 'Spokes' khác nhau đòi hỏi quá nhiều thao tác quay về 'Hub'.",
+      "C. Không thể hiển thị đủ thông tin trên trang chủ (Hub).",
+      "D. Khó khăn trong việc thiết kế giao diện đáp ứng (Responsive)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mô hình Hub and Spoke yêu cầu người dùng quay lại trung tâm để chuyển sang nhánh khác. Nếu không có các lối tắt (shortcuts) hoặc điều hướng ngang, nó sẽ tạo ra ma sát lớn cho các tác vụ đa nhiệm.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thiết kế luồng khôi phục dữ liệu cho một hệ thống Cloud. Làm thế nào để áp dụng 'Friction' (Ma sát) một cách có chủ đích nhằm bảo vệ người dùng?",
+    "options": [
+      "A. Làm cho nút 'Hủy' khó tìm thấy hơn nút 'Xác nhận'.",
+      "B. Yêu cầu người dùng nhập thủ công một từ khóa xác nhận (như 'DELETE') trước khi thực hiện hành động không thể đảo ngược.",
+      "C. Tăng thời gian tải trang để người dùng có thời gian suy nghĩ lại.",
+      "D. Sử dụng các thuật ngữ kỹ thuật phức tạp để cảnh báo người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ma sát tích cực (Positive Friction) được sử dụng để ngăn chặn các lỗi nghiêm trọng do vô ý. Việc yêu cầu nhập từ khóa buộc người dùng phải chuyển từ tư duy hệ thống 1 (tự động) sang hệ thống 2 (phân tích).",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi xây dựng Sitemap cho một trang web thương mại điện tử có 1 triệu SKU, việc sử dụng 'Faceted Navigation' (Điều hướng theo thuộc tính) thay vì 'Hierarchical Navigation' (Điều hướng phân cấp) thuần túy mang lại lợi ích gì lớn nhất?",
+    "options": [
+      "A. Giảm dung lượng mã nguồn của trang web.",
+      "B. Giúp Google Index trang web nhanh hơn.",
+      "C. Cho phép người dùng thu hẹp kết quả tìm kiếm dựa trên nhiều tiêu chí đồng thời, tăng khả năng tìm thấy sản phẩm.",
+      "D. Đơn giản hóa việc quản lý cơ sở dữ liệu cho lập trình viên."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Với số lượng sản phẩm lớn, phân cấp thuần túy sẽ tạo ra quá nhiều tầng. Faceted Navigation cho phép người dùng tự tạo ra lộ trình tìm kiếm riêng dựa trên các thuộc tính họ quan tâm.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao 'Task Flow' lại quan trọng hơn 'User Flow' khi thiết kế các chức năng chuyên biệt như 'Cài đặt tường lửa' trong phần mềm quản trị mạng?",
+    "options": [
+      "A. Vì Task Flow tập trung vào các bước kỹ thuật cần thiết để hoàn thành mục tiêu, ít phụ thuộc vào các biến số tâm lý người dùng.",
+      "B. Vì Task Flow luôn ngắn hơn User Flow.",
+      "C. Vì Task Flow không cần quan tâm đến giao diện người dùng.",
+      "D. Vì Task Flow chỉ dành cho những người dùng có trình độ cao."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong các tác vụ kỹ thuật cao, sự chính xác của quy trình là ưu tiên hàng đầu. Task Flow giúp đảm bảo mọi điều kiện logic và bước kỹ thuật được thực hiện đúng trình tự để hệ thống hoạt động.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một dự án thiết kế lại (Redesign) hệ thống quản lý nội dung (CMS), bạn phát hiện ra rằng cấu trúc nhãn hiện tại sử dụng quá nhiều biệt ngữ nội bộ. Phương pháp nào hiệu quả nhất để kiểm chứng các nhãn mới?",
+    "options": [
+      "A. Hỏi ý kiến của Giám đốc sản phẩm.",
+      "B. Thực hiện Tree Testing để đo lường tỷ lệ thành công khi người dùng tìm kiếm thông tin với các nhãn mới.",
+      "C. Chạy quảng cáo A/B Testing cho hai phiên bản nhãn khác nhau.",
+      "D. Sử dụng từ điển tiếng Việt để chọn những từ phổ biến nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tree Testing là phương pháp tốt nhất để kiểm tra cấu trúc IA và tính rõ ràng của nhãn mà không bị ảnh hưởng bởi thiết kế giao diện, giúp xác định xem người dùng có hiểu và tìm đúng mục tiêu hay không.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế luồng đăng ký cho một ứng dụng Fintech yêu cầu định danh (KYC) phức tạp, làm thế nào để duy trì động lực của người dùng?",
+    "options": [
+      "A. Hiển thị tất cả 20 trường thông tin cần nhập trên một trang duy nhất để người dùng thấy tổng thể.",
+      "B. Sử dụng thanh trạng thái (Progress Bar) và chia nhỏ quy trình thành các bước có thể quản lý được (Chunking).",
+      "C. Ẩn nút 'Hủy' để người dùng không có lựa chọn nào khác ngoài việc tiếp tục.",
+      "D. Tặng quà ngay lập tức khi người dùng vừa mới bắt đầu bước đầu tiên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chunking giúp giảm tải nhận thức bằng cách chia nhỏ thông tin. Thanh trạng thái cung cấp phản hồi về tiến độ, tạo cảm giác hoàn thành và thúc đẩy người dùng đi đến cuối luồng.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một 'Service Blueprint' khác biệt như thế nào so với một 'User Journey Map' trong việc phân tích luồng hệ thống?",
+    "options": [
+      "A. Service Blueprint chỉ tập trung vào cảm xúc của khách hàng.",
+      "B. Service Blueprint bao gồm cả các quy trình phía sau (backstage) và các hoạt động hỗ trợ của doanh nghiệp để thực hiện hành trình đó.",
+      "C. User Journey Map chi tiết hơn về các thông số kỹ thuật của hệ thống.",
+      "D. Không có sự khác biệt, hai khái niệm này là một."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong khi Journey Map tập trung vào trải nghiệm của người dùng, Service Blueprint mở rộng cái nhìn sang các quy trình nội bộ, nhân sự và công nghệ cần thiết để vận hành trải nghiệm đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống điều hướng cho một ứng dụng di động có rất nhiều tính năng ngang hàng, tại sao việc sử dụng 'Hamburger Menu' có thể là một sai lầm về IA?",
+    "options": [
+      "A. Vì nó chiếm quá nhiều diện tích màn hình.",
+      "B. Vì nó làm giảm tính khám phá (discoverability) và tăng chi phí tương tác (interaction cost) để truy cập các tính năng chính.",
+      "C. Vì người dùng không biết biểu tượng ba gạch ngang có nghĩa là gì.",
+      "D. Vì nó không hỗ trợ hiển thị các thông báo (notifications)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hamburger menu ẩn đi các lựa chọn, khiến người dùng phải thực hiện thêm thao tác để xem và truy cập. Đối với các tính năng quan trọng, việc ẩn chúng đi làm giảm đáng kể tần suất sử dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh IA, 'Metadata' đóng vai trò gì trong việc cải thiện khả năng tìm thấy (Findability)?",
+    "options": [
+      "A. Nó giúp làm đẹp giao diện người dùng bằng các thẻ màu sắc.",
+      "B. Nó cung cấp các thông tin mô tả ẩn giúp công cụ tìm kiếm và hệ thống lọc hoạt động chính xác hơn.",
+      "C. Nó thay thế hoàn toàn cho việc thiết kế menu điều hướng.",
+      "D. Nó là các đoạn mã giúp trang web tải nhanh hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Metadata là 'dữ liệu về dữ liệu'. Nó cho phép hệ thống phân loại, lọc và gợi ý nội dung một cách thông minh dựa trên các thuộc tính mà người dùng không nhìn thấy trực tiếp.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thiết kế luồng làm việc cho một hệ thống phê duyệt đa cấp. Nếu một cấp từ chối (reject), luồng dữ liệu nên được xử lý như thế nào để tối ưu IA?",
+    "options": [
+      "A. Kết thúc luồng ngay lập tức và yêu cầu người dùng bắt đầu lại từ đầu.",
+      "B. Chuyển hồ sơ về trạng thái 'Chờ sửa đổi' và cho phép người dùng chỉ chỉnh sửa những phần bị sai trước khi gửi lại.",
+      "C. Tự động chuyển hồ sơ lên cấp cao hơn để xem xét lại.",
+      "D. Xóa toàn bộ dữ liệu của hồ sơ đó để đảm bảo tính bảo mật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiết kế luồng có khả năng phục hồi (Resilient flows) giúp giảm thiểu công sức của người dùng. Cho phép sửa đổi tại chỗ thay vì bắt đầu lại giúp tiết kiệm thời gian và giảm sự ức chế.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Làm thế nào để đo lường hiệu quả của một cấu trúc thông tin (IA) mới sau khi triển khai?",
+    "options": [
+      "A. Dựa trên số lượng màu sắc được sử dụng trong thiết kế.",
+      "B. Theo dõi các chỉ số như Time on Task, Success Rate trong các nhiệm vụ tìm kiếm và tỷ lệ sử dụng thanh Search so với Navigation.",
+      "C. Đếm số lượng trang web có trong Sitemap.",
+      "D. Hỏi ý kiến của nhóm phát triển phần mềm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu IA tốt, người dùng sẽ hoàn thành tác vụ nhanh hơn, tỷ lệ thành công cao hơn và ít phải dựa dẫm vào thanh tìm kiếm vì họ có thể điều hướng một cách tự nhiên.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong thiết kế luồng người dùng, khái niệm 'Happy Path' nên được hiểu như thế nào?",
+    "options": [
+      "A. Là luồng mà người dùng luôn cảm thấy vui vẻ khi sử dụng.",
+      "B. Là kịch bản lý tưởng nhất khi người dùng hoàn thành mục tiêu mà không gặp bất kỳ lỗi hay trở ngại nào.",
+      "C. Là luồng có nhiều hình ảnh minh họa sinh động nhất.",
+      "D. Là luồng dành riêng cho những khách hàng VIP của doanh nghiệp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Happy Path là kịch bản mặc định, không có lỗi, giúp xác định quy trình cốt lõi trước khi xem xét đến các nhánh lỗi hoặc trường hợp ngoại lệ (edge cases).",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xử lý một hệ thống IA kế thừa (Legacy System) bị lộn xộn, bước đầu tiên quan trọng nhất là gì?",
+    "options": [
+      "A. Xóa bỏ toàn bộ và thiết kế lại từ đầu.",
+      "B. Thực hiện 'Content Audit' (Kiểm kê nội dung) để hiểu rõ những gì đang tồn tại và giá trị của chúng.",
+      "C. Thay đổi giao diện (UI) để trông hiện đại hơn.",
+      "D. Thuê thêm nhân sự để quản lý các danh mục cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Content Audit giúp bạn có cái nhìn tổng thể về tài sản nội dung hiện có, từ đó xác định được cái gì cần giữ lại, loại bỏ hoặc gộp nhóm khi xây dựng IA mới.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong thiết kế Navigation, 'Breadcrumbs' (Đường dẫn liên kết) đóng vai trò quan trọng nhất khi nào?",
+    "options": [
+      "A. Khi trang web chỉ có một cấp độ nội dung.",
+      "B. Khi người dùng truy cập trực tiếp vào một trang sâu từ công cụ tìm kiếm và cần biết mình đang ở đâu trong hệ thống.",
+      "C. Khi trang web không có thanh điều hướng chính.",
+      "D. Khi muốn làm cho trang web trông chuyên nghiệp hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Breadcrumbs cung cấp bối cảnh về vị trí (Location-based) và cho phép người dùng ngược dòng lên các cấp cao hơn một cách dễ dàng, đặc biệt hữu ích với IA sâu.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Việc áp dụng 'Hick's Law' vào thiết kế User Flow có ý nghĩa gì?",
+    "options": [
+      "A. Càng nhiều lựa chọn thì người dùng càng thích.",
+      "B. Thời gian để đưa ra quyết định tăng lên theo số lượng và độ phức tạp của các lựa chọn.",
+      "C. Người dùng sẽ luôn chọn lựa chọn đầu tiên họ nhìn thấy.",
+      "D. Thiết kế nên sử dụng ít nhất 7 màu sắc khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hick's Law cảnh báo rằng việc đưa ra quá nhiều lựa chọn tại một bước trong luồng sẽ làm chậm quá trình ra quyết định và gây mệt mỏi cho người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống Dashboard quản trị, bạn nên tổ chức thông tin như thế nào để hỗ trợ việc ra quyết định nhanh?",
+    "options": [
+      "A. Hiển thị tất cả dữ liệu thô dưới dạng bảng biểu chi tiết.",
+      "B. Sử dụng cấu trúc 'Inverted Pyramid' (Kim tự tháp ngược): Thông tin quan trọng nhất ở trên cùng, sau đó là các chi tiết hỗ trợ.",
+      "C. Sắp xếp các biểu đồ theo thứ tự bảng chữ cái.",
+      "D. Để người dùng tự kéo thả và sắp xếp mọi thứ ngay từ đầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cấu trúc kim tự tháp ngược giúp người dùng nắm bắt ngay các chỉ số quan trọng (KPIs) và chỉ đi sâu vào chi tiết khi cần thiết, tối ưu hóa quá trình quét thông tin.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế luồng 'Search' cho một thư viện số, yếu tố nào giúp giảm thiểu 'Zero Results Page' (Trang không có kết quả)?",
+    "options": [
+      "A. Thông báo cho người dùng rằng họ đã nhập sai.",
+      "B. Sử dụng hệ thống gợi ý từ khóa (Auto-suggestion) và tìm kiếm mờ (Fuzzy search) để xử lý lỗi chính tả.",
+      "C. Chỉ cho phép tìm kiếm theo mã số ID chính xác.",
+      "D. Chuyển hướng người dùng về trang chủ khi không tìm thấy kết quả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hệ thống IA hỗ trợ tìm kiếm tốt sẽ dự đoán ý định của người dùng và cung cấp các lựa chọn thay thế thay vì đưa họ vào ngõ cụt.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc phân tích 'User Flow' lại cần thiết trước khi bắt đầu thiết kế Wireframes?",
+    "options": [
+      "A. Để xác định số lượng màu sắc cần dùng.",
+      "B. Để đảm bảo logic của hệ thống hoạt động trơn tru và các mục tiêu của người dùng được đáp ứng theo cách hiệu quả nhất.",
+      "C. Để có cái nhìn tổng thể về ngân sách dự án.",
+      "D. Để biết được khách hàng thích phong cách thiết kế nào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User Flow tập trung vào logic và trải nghiệm xuyên suốt. Nếu không có luồng chuẩn, Wireframes sẽ chỉ là các màn hình rời rạc và dễ dẫn đến các lỗi logic nghiêm trọng khi phát triển.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Flow & Information Architecture",
+    "category": "KNOWLEDGE"
+  }
+]

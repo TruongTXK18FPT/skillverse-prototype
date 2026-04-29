@@ -21,6 +21,9 @@ import {
   CheckCircle2,
   BadgeDollarSign,
   Check,
+  Filter,
+  Search,
+  SlidersHorizontal,
 } from "lucide-react";
 import HUDCard from "../../components/dashboard-hud/HUDCard";
 import StatUnit from "../../components/dashboard-hud/StatUnit";
@@ -47,6 +50,21 @@ import { downloadLearningReportPDF } from "../../components/learning-report/PDFG
 import "./LearningReportPage.css";
 
 const RANGE_OPTIONS: ReportRange[] = ["7d", "30d", "90d"];
+const BREAKDOWN_PAGE_SIZE = 5;
+
+type RoadmapBreakdownFilter = "all" | "not-started" | "in-progress" | "complete";
+type RoadmapBreakdownSort =
+  | "progress-desc"
+  | "progress-asc"
+  | "title-asc"
+  | "missions-desc";
+type CourseBreakdownFilter = "all" | "active" | "complete" | "not-started";
+type CourseBreakdownSort =
+  | "progress-desc"
+  | "progress-asc"
+  | "title-asc"
+  | "status-asc"
+  | "completed-desc";
 
 const statNumber = (value: number | undefined) => value ?? 0;
 
@@ -96,6 +114,18 @@ const LearningReportPage: React.FC = () => {
   const [isSavingSnapshot, setIsSavingSnapshot] = useState(false);
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [roadmapSearch, setRoadmapSearch] = useState("");
+  const [roadmapFilter, setRoadmapFilter] =
+    useState<RoadmapBreakdownFilter>("all");
+  const [roadmapSort, setRoadmapSort] =
+    useState<RoadmapBreakdownSort>("progress-desc");
+  const [roadmapPage, setRoadmapPage] = useState(1);
+  const [courseSearch, setCourseSearch] = useState("");
+  const [courseFilter, setCourseFilter] =
+    useState<CourseBreakdownFilter>("all");
+  const [courseSort, setCourseSort] =
+    useState<CourseBreakdownSort>("progress-desc");
+  const [coursePage, setCoursePage] = useState(1);
 
   useEffect(() => {
     const loadReport = async () => {
@@ -195,6 +225,148 @@ const LearningReportPage: React.FC = () => {
       statNumber(report.jobStats?.completedJobs) > 0
     );
   }, [report]);
+
+  const filteredRoadmaps = useMemo(() => {
+    const normalizedSearch = roadmapSearch.trim().toLowerCase();
+
+    return [...(report?.roadmapBreakdown || [])]
+      .filter((item) => {
+        if (roadmapFilter === "complete" && item.progressPercent < 100) {
+          return false;
+        }
+        if (
+          roadmapFilter === "in-progress" &&
+          (item.progressPercent <= 0 || item.progressPercent >= 100)
+        ) {
+          return false;
+        }
+        if (roadmapFilter === "not-started" && item.progressPercent > 0) {
+          return false;
+        }
+        if (!normalizedSearch) {
+          return true;
+        }
+
+        return [item.title, item.goal, item.status, item.nextMissionTitle]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(normalizedSearch);
+      })
+      .sort((a, b) => {
+        switch (roadmapSort) {
+          case "progress-asc":
+            return a.progressPercent - b.progressPercent;
+          case "title-asc":
+            return a.title.localeCompare(b.title, "vi");
+          case "missions-desc":
+            return b.totalMissions - a.totalMissions;
+          case "progress-desc":
+          default:
+            return b.progressPercent - a.progressPercent;
+        }
+      });
+  }, [report?.roadmapBreakdown, roadmapFilter, roadmapSearch, roadmapSort]);
+
+  const filteredCourses = useMemo(() => {
+    const normalizedSearch = courseSearch.trim().toLowerCase();
+
+    return [...(report?.courseBreakdown || [])]
+      .filter((item) => {
+        if (courseFilter === "complete" && item.progressPercent < 100) {
+          return false;
+        }
+        if (
+          courseFilter === "active" &&
+          (item.progressPercent <= 0 || item.progressPercent >= 100)
+        ) {
+          return false;
+        }
+        if (courseFilter === "not-started" && item.progressPercent > 0) {
+          return false;
+        }
+        if (!normalizedSearch) {
+          return true;
+        }
+
+        return [item.courseTitle, item.status, item.completedAt]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(normalizedSearch);
+      })
+      .sort((a, b) => {
+        switch (courseSort) {
+          case "progress-asc":
+            return a.progressPercent - b.progressPercent;
+          case "title-asc":
+            return a.courseTitle.localeCompare(b.courseTitle, "vi");
+          case "status-asc":
+            return a.status.localeCompare(b.status, "vi");
+          case "completed-desc":
+            return (
+              new Date(b.completedAt || 0).getTime() -
+              new Date(a.completedAt || 0).getTime()
+            );
+          case "progress-desc":
+          default:
+            return b.progressPercent - a.progressPercent;
+        }
+      });
+  }, [courseFilter, courseSearch, courseSort, report?.courseBreakdown]);
+
+  useEffect(() => {
+    setRoadmapPage(1);
+  }, [roadmapFilter, roadmapSearch, roadmapSort, report?.reportId]);
+
+  useEffect(() => {
+    setCoursePage(1);
+  }, [courseFilter, courseSearch, courseSort, report?.reportId]);
+
+  const roadmapTotalPages = Math.max(
+    1,
+    Math.ceil(filteredRoadmaps.length / BREAKDOWN_PAGE_SIZE),
+  );
+  const courseTotalPages = Math.max(
+    1,
+    Math.ceil(filteredCourses.length / BREAKDOWN_PAGE_SIZE),
+  );
+
+  useEffect(() => {
+    if (roadmapPage > roadmapTotalPages) {
+      setRoadmapPage(roadmapTotalPages);
+    }
+  }, [roadmapPage, roadmapTotalPages]);
+
+  useEffect(() => {
+    if (coursePage > courseTotalPages) {
+      setCoursePage(courseTotalPages);
+    }
+  }, [coursePage, courseTotalPages]);
+
+  const paginatedRoadmaps = useMemo(() => {
+    const start = (roadmapPage - 1) * BREAKDOWN_PAGE_SIZE;
+    return filteredRoadmaps.slice(start, start + BREAKDOWN_PAGE_SIZE);
+  }, [filteredRoadmaps, roadmapPage]);
+
+  const paginatedCourses = useMemo(() => {
+    const start = (coursePage - 1) * BREAKDOWN_PAGE_SIZE;
+    return filteredCourses.slice(start, start + BREAKDOWN_PAGE_SIZE);
+  }, [coursePage, filteredCourses]);
+
+  const resetRoadmapBreakdownTools = () => {
+    setRoadmapSearch("");
+    setRoadmapFilter("all");
+    setRoadmapSort("progress-desc");
+    setRoadmapPage(1);
+  };
+
+  const resetCourseBreakdownTools = () => {
+    setCourseSearch("");
+    setCourseFilter("all");
+    setCourseSort("progress-desc");
+    setCoursePage(1);
+  };
 
   // Determine trend for each stat
   const getTrend = (current: number, threshold: number): "up" | "down" | "stable" => {
@@ -627,6 +799,60 @@ const LearningReportPage: React.FC = () => {
                     <p className="lr-panel-subtitle">Chi tiết tiến độ từng roadmap</p>
                   </div>
                 </div>
+                <div className="lr-breakdown-tools">
+                  <label className="lr-breakdown-search">
+                    <Search size={15} />
+                    <input
+                      type="search"
+                      value={roadmapSearch}
+                      onChange={(event) => setRoadmapSearch(event.target.value)}
+                      placeholder="Tìm roadmap, goal, node kế tiếp..."
+                      aria-label="Tìm kiếm lộ trình"
+                    />
+                  </label>
+                  <label className="lr-breakdown-control">
+                    <Filter size={15} />
+                    <select
+                      value={roadmapFilter}
+                      onChange={(event) =>
+                        setRoadmapFilter(
+                          event.target.value as RoadmapBreakdownFilter,
+                        )
+                      }
+                      aria-label="Lọc lộ trình"
+                    >
+                      <option value="all">Tất cả tiến độ</option>
+                      <option value="not-started">Chưa bắt đầu</option>
+                      <option value="in-progress">Đang học</option>
+                      <option value="complete">Hoàn thành</option>
+                    </select>
+                  </label>
+                  <label className="lr-breakdown-control">
+                    <SlidersHorizontal size={15} />
+                    <select
+                      value={roadmapSort}
+                      onChange={(event) =>
+                        setRoadmapSort(event.target.value as RoadmapBreakdownSort)
+                      }
+                      aria-label="Sắp xếp lộ trình"
+                    >
+                      <option value="progress-desc">Tiến độ cao nhất</option>
+                      <option value="progress-asc">Tiến độ thấp nhất</option>
+                      <option value="title-asc">Tên A-Z</option>
+                      <option value="missions-desc">Nhiều node nhất</option>
+                    </select>
+                  </label>
+                  <div className="lr-breakdown-summary">
+                    <span>
+                      {filteredRoadmaps.length}/{report.roadmapBreakdown.length} roadmap
+                    </span>
+                    {(roadmapSearch || roadmapFilter !== "all") && (
+                      <button type="button" onClick={resetRoadmapBreakdownTools}>
+                        Xóa lọc
+                      </button>
+                    )}
+                  </div>
+                </div>
                 <div className="lr-table-wrap">
                   <table className="lr-table">
                     <thead>
@@ -638,8 +864,8 @@ const LearningReportPage: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {report.roadmapBreakdown.length > 0 ? (
-                        report.roadmapBreakdown.map((item) => (
+                      {paginatedRoadmaps.length > 0 ? (
+                        paginatedRoadmaps.map((item) => (
                           <tr key={item.roadmapId}>
                             <td>
                               <strong>{item.title}</strong>
@@ -669,13 +895,40 @@ const LearningReportPage: React.FC = () => {
                       ) : (
                         <tr>
                           <td colSpan={4} className="lr-empty-cell">
-                            Chưa có roadmap để hiển thị
+                            Không có roadmap phù hợp để hiển thị
                           </td>
                         </tr>
                       )}
                     </tbody>
                   </table>
                 </div>
+                {filteredRoadmaps.length > BREAKDOWN_PAGE_SIZE && (
+                  <div className="lr-breakdown-pagination">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setRoadmapPage((prev) => Math.max(prev - 1, 1))
+                      }
+                      disabled={roadmapPage === 1}
+                    >
+                      Trang trước
+                    </button>
+                    <span>
+                      Trang {roadmapPage}/{roadmapTotalPages}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setRoadmapPage((prev) =>
+                          Math.min(prev + 1, roadmapTotalPages),
+                        )
+                      }
+                      disabled={roadmapPage === roadmapTotalPages}
+                    >
+                      Trang sau
+                    </button>
+                  </div>
+                )}
               </HUDCard>
 
               {/* Course Breakdown */}
@@ -689,6 +942,59 @@ const LearningReportPage: React.FC = () => {
                     <p className="lr-panel-subtitle">Tiến độ các khóa học</p>
                   </div>
                 </div>
+                <div className="lr-breakdown-tools">
+                  <label className="lr-breakdown-search">
+                    <Search size={15} />
+                    <input
+                      type="search"
+                      value={courseSearch}
+                      onChange={(event) => setCourseSearch(event.target.value)}
+                      placeholder="Tìm khóa học, status, ngày hoàn thành..."
+                      aria-label="Tìm kiếm khóa học"
+                    />
+                  </label>
+                  <label className="lr-breakdown-control">
+                    <Filter size={15} />
+                    <select
+                      value={courseFilter}
+                      onChange={(event) =>
+                        setCourseFilter(event.target.value as CourseBreakdownFilter)
+                      }
+                      aria-label="Lọc khóa học"
+                    >
+                      <option value="all">Tất cả tiến độ</option>
+                      <option value="not-started">Chưa bắt đầu</option>
+                      <option value="active">Đang học</option>
+                      <option value="complete">Hoàn thành</option>
+                    </select>
+                  </label>
+                  <label className="lr-breakdown-control">
+                    <SlidersHorizontal size={15} />
+                    <select
+                      value={courseSort}
+                      onChange={(event) =>
+                        setCourseSort(event.target.value as CourseBreakdownSort)
+                      }
+                      aria-label="Sắp xếp khóa học"
+                    >
+                      <option value="progress-desc">Tiến độ cao nhất</option>
+                      <option value="progress-asc">Tiến độ thấp nhất</option>
+                      <option value="title-asc">Tên A-Z</option>
+                      <option value="status-asc">Status A-Z</option>
+                      <option value="completed-desc">Hoàn thành mới nhất</option>
+                    </select>
+                  </label>
+                  <div className="lr-breakdown-summary">
+                    <span>
+                      {filteredCourses.length}/{report.courseBreakdown.length} khóa học
+                    </span>
+                    {(courseSearch || courseFilter !== "all") && (
+                      <button type="button" onClick={resetCourseBreakdownTools}>
+                        Xóa lọc
+                      </button>
+                    )}
+                  </div>
+                </div>
                 <div className="lr-table-wrap">
                   <table className="lr-table">
                     <thead>
@@ -700,8 +1006,8 @@ const LearningReportPage: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {report.courseBreakdown.length > 0 ? (
-                        report.courseBreakdown.map((item) => (
+                      {paginatedCourses.length > 0 ? (
+                        paginatedCourses.map((item) => (
                           <tr key={`${item.courseId}-${item.status}`}>
                             <td><strong>{item.courseTitle}</strong></td>
                             <td>
@@ -725,7 +1031,7 @@ const LearningReportPage: React.FC = () => {
                               </div>
                             </td>
                             <td>
-                              {item.completedAt
+                              {item.completedAt && !item.completedAt.toString().startsWith("0001")
                                 ? learningReportService.formatReportDate(item.completedAt)
                                 : "—"}
                             </td>
@@ -734,13 +1040,40 @@ const LearningReportPage: React.FC = () => {
                       ) : (
                         <tr>
                           <td colSpan={4} className="lr-empty-cell">
-                            Chưa có khóa học để hiển thị
+                            Không có khóa học phù hợp để hiển thị
                           </td>
                         </tr>
                       )}
                     </tbody>
                   </table>
                 </div>
+                {filteredCourses.length > BREAKDOWN_PAGE_SIZE && (
+                  <div className="lr-breakdown-pagination">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setCoursePage((prev) => Math.max(prev - 1, 1))
+                      }
+                      disabled={coursePage === 1}
+                    >
+                      Trang trước
+                    </button>
+                    <span>
+                      Trang {coursePage}/{courseTotalPages}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setCoursePage((prev) =>
+                          Math.min(prev + 1, courseTotalPages),
+                        )
+                      }
+                      disabled={coursePage === courseTotalPages}
+                    >
+                      Trang sau
+                    </button>
+                  </div>
+                )}
               </HUDCard>
             </section>
 

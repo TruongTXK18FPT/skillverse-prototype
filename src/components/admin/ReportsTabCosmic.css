@@ -986,3 +986,158 @@
     justify-content: center;
   }
 }
+
+/* ==================== Reports - Neon Tech isolated refresh ==================== */
+.rpt-cosmic {
+  --rpt-tech-bg-1: #020817;
+  --rpt-tech-bg-2: #031226;
+  --rpt-tech-surface: rgba(7, 22, 44, 0.78);
+  --rpt-tech-surface-soft: rgba(10, 29, 58, 0.62);
+  --rpt-tech-border: rgba(56, 189, 248, 0.2);
+  --rpt-tech-border-strong: rgba(34, 211, 238, 0.38);
+  --rpt-tech-text: #e2f4ff;
+  --rpt-tech-muted: #9ec8e8;
+  --rpt-tech-cyan: #22d3ee;
+  --rpt-tech-blue: #60a5fa;
+  --rpt-tech-green: #34d399;
+  --rpt-tech-amber: #f59e0b;
+  --rpt-tech-red: #f87171;
+  color: var(--rpt-tech-text);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rpt-cosmic .rpt-section {
+  margin-bottom: 0;
+  border: 1px solid var(--rpt-tech-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 120% at 0% 100%, rgba(34, 211, 238, 0.06), transparent 38%),
+    linear-gradient(160deg, var(--rpt-tech-surface), var(--rpt-tech-surface-soft));
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.rpt-cosmic .rpt-section-header {
+  position: relative;
+  overflow: hidden;
+  border-left: 1px solid var(--rpt-tech-border);
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(34, 211, 238, 0.2), transparent 48%),
+    radial-gradient(120% 140% at 100% 100%, rgba(59, 130, 246, 0.2), transparent 42%),
+    linear-gradient(145deg, var(--rpt-tech-bg-2), var(--rpt-tech-bg-1));
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.14), 0 18px 42px rgba(2, 8, 23, 0.4);
+}
+
+.rpt-cosmic .rpt-section-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.08), transparent);
+  transform: translateX(-100%);
+  animation: rptTechScan 4.5s linear infinite;
+}
+
+@keyframes rptTechScan {
+  to { transform: translateX(100%); }
+}
+
+.rpt-cosmic .rpt-header h2 {
+  color: #b7f3ff;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.38);
+  font-size: 1.2rem;
+}
+
+.rpt-cosmic .rpt-header p,
+.rpt-cosmic .rpt-report-meta,
+.rpt-cosmic .rpt-party-label,
+.rpt-cosmic .rpt-resolution-label,
+.rpt-cosmic .rpt-empty-state p {
+  color: var(--rpt-tech-muted);
+}
+
+.rpt-cosmic .rpt-header-icon,
+.rpt-cosmic .rpt-refresh-btn,
+.rpt-cosmic .rpt-filter-tab.active {
+  background: rgba(34, 211, 238, 0.18);
+  border: 1px solid rgba(34, 211, 238, 0.34);
+  color: #99f6ff;
+  box-shadow: none;
+}
+
+.rpt-cosmic .rpt-search-box,
+.rpt-cosmic .rpt-filter-tab,
+.rpt-cosmic .rpt-report-card,
+.rpt-cosmic .rpt-admin-notes,
+.rpt-cosmic .rpt-evidence-item {
+  border: 1px solid var(--rpt-tech-border);
+  background: rgba(7, 22, 42, 0.85);
+}
+
+.rpt-cosmic .rpt-search-box:focus-within {
+  border-color: var(--rpt-tech-border-strong);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
+}
+
+.rpt-cosmic .rpt-search-box svg,
+.rpt-cosmic .rpt-list-header svg,
+.rpt-cosmic .rpt-report-type,
+.rpt-cosmic .rpt-report-description h5,
+.rpt-cosmic .rpt-report-evidence h5,
+.rpt-cosmic .rpt-admin-notes h5 {
+  color: var(--rpt-tech-cyan);
+}
+
+.rpt-cosmic .rpt-list-header {
+  border-bottom-color: var(--rpt-tech-border);
+}
+
+.rpt-cosmic .rpt-list-header h3,
+.rpt-cosmic .rpt-report-main h4,
+.rpt-cosmic .rpt-party-info,
+.rpt-cosmic .rpt-report-description p,
+.rpt-cosmic .rpt-empty-state h3 {
+  color: #e4f9ff;
+}
+
+.rpt-cosmic .rpt-stat-card.vibrant-purple,
+.rpt-cosmic .rpt-stat-card.vibrant-blue,
+.rpt-cosmic .rpt-stat-card.vibrant-cyan {
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.rpt-cosmic .rpt-stat-card.vibrant-purple .rpt-stat-glow,
+.rpt-cosmic .rpt-stat-card.vibrant-blue .rpt-stat-glow,
+.rpt-cosmic .rpt-stat-card.vibrant-cyan .rpt-stat-glow {
+  background: radial-gradient(circle, var(--rpt-tech-cyan) 0%, transparent 70%);
+}
+
+.rpt-cosmic .rpt-stat-card.vibrant-purple .rpt-stat-icon,
+.rpt-cosmic .rpt-stat-card.vibrant-blue .rpt-stat-icon,
+.rpt-cosmic .rpt-stat-card.vibrant-cyan .rpt-stat-icon {
+  background: rgba(34, 211, 238, 0.18);
+  color: #99f6ff;
+  box-shadow: none;
+}
+
+.rpt-cosmic .rpt-stat-card.vibrant-purple .rpt-stat-value,
+.rpt-cosmic .rpt-stat-card.vibrant-blue .rpt-stat-value,
+.rpt-cosmic .rpt-stat-card.vibrant-cyan .rpt-stat-value {
+  color: #99f6ff;
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.32);
+}
+
+.rpt-cosmic .rpt-action-btn.escalate {
+  background: rgba(34, 211, 238, 0.14);
+  color: #99f6ff;
+  border-color: rgba(34, 211, 238, 0.34);
+}
+
+.rpt-cosmic .rpt-action-btn.escalate:hover {
+  background: rgba(34, 211, 238, 0.22);
+  box-shadow: 0 4px 15px rgba(34, 211, 238, 0.24);
+}

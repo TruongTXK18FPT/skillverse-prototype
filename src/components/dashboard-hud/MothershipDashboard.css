@@ -246,6 +246,12 @@
   gap: 1.5rem;
 }
 
+.mothership-dashboard__center-ops {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 @media (max-width: 1200px) {
   .mothership-dashboard__stats-grid {
     grid-template-columns: repeat(2, 1fr);

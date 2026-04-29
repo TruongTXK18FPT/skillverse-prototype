@@ -17,6 +17,15 @@ interface LongTermJobCardProps {
 
 type SalaryTier = "base" | "mid" | "high" | "negotiable";
 
+const isPostedWithinOneDay = (value?: string | null) => {
+  if (!value) return false;
+  const postedAt = new Date(value).getTime();
+  if (Number.isNaN(postedAt)) return false;
+
+  const ageMs = Date.now() - postedAt;
+  return ageMs >= 0 && ageMs <= 24 * 60 * 60 * 1000;
+};
+
 const LongTermJobCard: React.FC<LongTermJobCardProps> = ({
   job,
   onClick,
@@ -49,6 +58,7 @@ const LongTermJobCard: React.FC<LongTermJobCardProps> = ({
   }, [job.id, job.recruiterCompanyLogoUrl]);
 
   const isBoosted = boost?.status === JobBoostStatus.ACTIVE;
+  const isNewJob = isPostedWithinOneDay(job.createdAt);
   const averageSalary = (job.minBudget + job.maxBudget) / 2;
 
   const salaryTier: SalaryTier = job.isNegotiable
@@ -130,6 +140,7 @@ const LongTermJobCard: React.FC<LongTermJobCardProps> = ({
         </div>
 
         <div className="fate-card__top-right">
+          {isNewJob && <span className="fate-card__new-badge">Job mới</span>}
           {jobTypeLabel && (
             <span className="fate-card__category-badge">{jobTypeLabel}</span>
           )}

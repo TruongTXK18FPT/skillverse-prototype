@@ -2073,6 +2073,18 @@
   color: #a5f3fc;
 }
 
+/* ==================== Question Bank color alignment ==================== */
+.qb-source-badge.import {
+  background: rgba(34, 211, 238, 0.16);
+  color: #67e8f9;
+  border-color: rgba(34, 211, 238, 0.32);
+}
+
+.qb-draft-card.edited {
+  border-color: rgba(34, 211, 238, 0.52);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.12);
+}
+
 /* ============================================================================
    Responsive
    ========================================================================== */

@@ -759,7 +759,32 @@
    =========================================== */
 
 .cockpit-modules-section {
+  position: relative;
   min-height: 400px;
+}
+
+.cockpit-modules-section--loading {
+  opacity: 0.72;
+}
+
+.cockpit-inline-loading {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+  padding: 0.58rem 0.9rem;
+  background: rgba(2, 12, 22, 0.88);
+  border: 1px solid rgba(0, 246, 255, 0.34);
+  color: var(--cockpit-neon-cyan);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 0 18px rgba(0, 246, 255, 0.16);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
 }
 
 .cockpit-modules-grid {

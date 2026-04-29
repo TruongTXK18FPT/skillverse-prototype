@@ -31,6 +31,15 @@ const getDescriptionPlainText = (value?: string | null) => {
     .trim();
 };
 
+const isPostedWithinOneDay = (value?: string | null) => {
+  if (!value) return false;
+  const postedAt = new Date(value).getTime();
+  if (Number.isNaN(postedAt)) return false;
+
+  const ageMs = Date.now() - postedAt;
+  return ageMs >= 0 && ageMs <= 24 * 60 * 60 * 1000;
+};
+
 const ShortTermJobCard = ({
   job,
   onClick,
@@ -141,6 +150,7 @@ const ShortTermJobCard = ({
     urgencyTier === "crimson" ? "fate-card--crimson" : "fate-card--blue";
   const deadlineInfo = getDeadlineInfo();
   const postedTime = getPostedTime();
+  const isNewJob = isPostedWithinOneDay(job.createdAt);
   const companyLogoUrl =
     !logoFailed
       ? job.recruiterCompanyLogoUrl || job.recruiterInfo?.companyLogoUrl
@@ -168,6 +178,7 @@ const ShortTermJobCard = ({
         </div>
 
         <div className="fate-card__top-right">
+          {isNewJob && <span className="fate-card__new-badge">Job mới</span>}
           {jobTypeLabel && (
             <span className="fate-card__category-badge">{jobTypeLabel}</span>
           )}

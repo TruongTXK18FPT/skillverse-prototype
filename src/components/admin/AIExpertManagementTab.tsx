@@ -676,8 +676,8 @@ const AIExpertManagementTab: React.FC = () => {
           <button
             className="expert-btn primary"
             style={{
-              background: "linear-gradient(135deg, #a855f7, #7c3aed)",
-              boxShadow: "0 4px 20px rgba(168, 85, 247, 0.4)",
+              background: "linear-gradient(135deg, #22d3ee, #06b6d4)",
+              boxShadow: "0 4px 20px rgba(34, 211, 238, 0.34)",
             }}
             onClick={() => {
               closeModal();

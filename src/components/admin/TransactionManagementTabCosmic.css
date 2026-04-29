@@ -895,3 +895,170 @@
 .admin-date-range input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
+
+/* ==================== Transaction Management - Neon Tech isolated refresh ==================== */
+.admin-transaction-management-cosmic {
+  --tx-tech-bg-1: #020817;
+  --tx-tech-bg-2: #031226;
+  --tx-tech-surface: rgba(7, 22, 44, 0.78);
+  --tx-tech-surface-soft: rgba(10, 29, 58, 0.62);
+  --tx-tech-border: rgba(56, 189, 248, 0.2);
+  --tx-tech-border-strong: rgba(34, 211, 238, 0.38);
+  --tx-tech-text: #e2f4ff;
+  --tx-tech-muted: #9ec8e8;
+  --tx-tech-cyan: #22d3ee;
+  --tx-tech-blue: #60a5fa;
+  --tx-tech-green: #34d399;
+  --tx-tech-red: #f87171;
+  color: var(--tx-tech-text);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-transaction-management-cosmic .admin-transaction-header {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+  padding: 18px;
+  border: 1px solid var(--tx-tech-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(34, 211, 238, 0.2), transparent 48%),
+    radial-gradient(120% 140% at 100% 100%, rgba(59, 130, 246, 0.2), transparent 42%),
+    linear-gradient(145deg, var(--tx-tech-bg-2), var(--tx-tech-bg-1));
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.14), 0 18px 42px rgba(2, 8, 23, 0.4);
+}
+
+.admin-transaction-management-cosmic .admin-transaction-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.08), transparent);
+  transform: translateX(-100%);
+  animation: txTechScan 4.5s linear infinite;
+}
+
+@keyframes txTechScan {
+  to { transform: translateX(100%); }
+}
+
+.admin-transaction-management-cosmic .admin-transaction-header h2 {
+  color: #b7f3ff;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.38);
+  font-size: 1.2rem;
+}
+
+.admin-transaction-management-cosmic .admin-transaction-header p,
+.admin-transaction-management-cosmic .admin-user-email,
+.admin-transaction-management-cosmic .admin-description,
+.admin-transaction-management-cosmic .admin-date-cell,
+.admin-transaction-management-cosmic .admin-pagination-info,
+.admin-transaction-management-cosmic .admin-detail-item .label {
+  color: var(--tx-tech-muted);
+}
+
+.admin-transaction-management-cosmic .admin-refresh-btn,
+.admin-transaction-management-cosmic .admin-filter-btn,
+.admin-transaction-management-cosmic .admin-pagination-btn,
+.admin-transaction-management-cosmic .admin-pagination-number,
+.admin-transaction-management-cosmic .admin-action-btn.download {
+  border: 1px solid var(--tx-tech-border);
+  border-radius: 10px;
+  background: rgba(34, 211, 238, 0.08);
+  color: #b8f7ff;
+  box-shadow: none;
+}
+
+.admin-transaction-management-cosmic .admin-download-btn,
+.admin-transaction-management-cosmic .admin-filter-btn.active,
+.admin-transaction-management-cosmic .admin-pagination-number.active {
+  border-color: rgba(34, 211, 238, 0.6);
+  background: rgba(34, 211, 238, 0.18);
+  color: #dff9ff;
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.16);
+}
+
+.admin-transaction-management-cosmic .admin-stat-card,
+.admin-transaction-management-cosmic .admin-transactions-table,
+.admin-transaction-management-cosmic .admin-pagination,
+.admin-transaction-management-cosmic .admin-detail-modal,
+.admin-transaction-management-cosmic .admin-date-range {
+  border: 1px solid var(--tx-tech-border);
+  border-radius: 14px;
+  background:
+    radial-gradient(120% 120% at 0% 100%, rgba(34, 211, 238, 0.06), transparent 38%),
+    linear-gradient(160deg, var(--tx-tech-surface), var(--tx-tech-surface-soft));
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.admin-transaction-management-cosmic .admin-stat-card.transactions,
+.admin-transaction-management-cosmic .admin-stat-card.today {
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.admin-transaction-management-cosmic .admin-stat-card.transactions::before,
+.admin-transaction-management-cosmic .admin-stat-card.today::before {
+  background: radial-gradient(circle, var(--tx-tech-cyan) 0%, transparent 70%);
+}
+
+.admin-transaction-management-cosmic .admin-stat-card.transactions svg,
+.admin-transaction-management-cosmic .admin-stat-card.today svg,
+.admin-transaction-management-cosmic .admin-search-box svg,
+.admin-transaction-management-cosmic .admin-status-filters svg,
+.admin-transaction-management-cosmic .admin-detail-item svg {
+  color: var(--tx-tech-cyan);
+}
+
+.admin-transaction-management-cosmic .admin-stat-card.transactions .admin-stat-number,
+.admin-transaction-management-cosmic .admin-stat-card.today .admin-stat-number,
+.admin-transaction-management-cosmic .admin-transaction-code,
+.admin-transaction-management-cosmic .admin-user-name,
+.admin-transaction-management-cosmic .admin-detail-item .value.code {
+  color: #99f6ff;
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.32);
+}
+
+.admin-transaction-management-cosmic .admin-transactions-table th {
+  background: rgba(34, 211, 238, 0.08);
+  border-bottom: 1px solid var(--tx-tech-border);
+  color: #c9ecff;
+}
+
+.admin-transaction-management-cosmic .admin-transactions-table td {
+  border-top: 1px solid rgba(56, 189, 248, 0.12);
+  color: var(--tx-tech-text);
+}
+
+.admin-transaction-management-cosmic .admin-transactions-table tbody tr:hover {
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.admin-transaction-management-cosmic .admin-search-box,
+.admin-transaction-management-cosmic .admin-date-range input[type="date"],
+.admin-transaction-management-cosmic .admin-detail-item {
+  border: 1px solid var(--tx-tech-border);
+  background: rgba(7, 22, 42, 0.85);
+}
+
+.admin-transaction-management-cosmic .admin-search-box:focus-within,
+.admin-transaction-management-cosmic .admin-date-range input[type="date"]:focus {
+  border-color: var(--tx-tech-border-strong);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
+}
+
+.admin-transaction-management-cosmic .admin-user-avatar {
+  background: linear-gradient(135deg, var(--tx-tech-cyan), var(--tx-tech-blue));
+  border-radius: 10px;
+}
+
+.admin-transaction-management-cosmic .admin-action-btn.view,
+.admin-transaction-management-cosmic .admin-type-badge.wallet {
+  background: rgba(34, 211, 238, 0.14);
+  color: #99f6ff;
+  border-color: rgba(34, 211, 238, 0.32);
+}

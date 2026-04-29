@@ -8,6 +8,9 @@ import {
   Activity,
   Eye,
   Edit2,
+  CheckCircle2,
+  RotateCcw,
+  ArrowRight,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import {
@@ -177,7 +180,6 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
   const [isPreview, setIsPreview] = useState(true);
   const [isTitleExpanded, setIsTitleExpanded] = useState(false);
   const isRoadmapLinkedTask = taskKind === 'roadmap-course' || taskKind === 'roadmap-fallback';
-  const roadmapExecutionState = resolvePlannerExecutionState(task);
   const isLongTitle = formData.title.trim().length > 44;
 
   // Validation state
@@ -260,22 +262,38 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
     }
   };
 
-  const handleQuickRoadmapStatus = async (targetState: 'in-progress' | 'done') => {
+  const handleAdvanceStatus = async () => {
     if (!task) {
       return;
     }
 
+    const currentState = resolvePlannerExecutionState(task);
+    const targetState =
+      currentState === 'todo'
+        ? 'in-progress'
+        : currentState === 'in-progress'
+          ? 'done'
+          : 'in-progress';
     const done = targetState === 'done';
 
     await onSave({
-      status: done ? 'DONE' : 'IN_PROGRESS',
-      userProgress: done ? 100 : 0,
+      status: done ? 'done' : 'in-progress',
+      userProgress: done ? 100 : targetState === 'in-progress' ? Math.min(Math.max(formData.userProgress || 25, 25), 99) : 0,
       satisfactionLevel: done
         ? formData.satisfactionLevel || 'Satisfied'
         : formData.satisfactionLevel || 'Neutral',
     });
     onClose();
   };
+
+  const currentExecutionState = resolvePlannerExecutionState(task);
+  const advanceButtonLabel =
+    currentExecutionState === 'todo'
+      ? 'Đánh dấu đang thực hiện'
+      : currentExecutionState === 'in-progress'
+        ? 'Đánh dấu hoàn thành'
+        : 'Đánh dấu là chưa hoàn thành';
+  const AdvanceButtonIcon = currentExecutionState === 'done' ? RotateCcw : currentExecutionState === 'in-progress' ? CheckCircle2 : ArrowRight;
 
   return (
     <>
@@ -421,33 +439,26 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
 
               {task && (
                 <div className="study-plan-task-progress-section">
-                  {isRoadmapLinkedTask ? (
-                    <div className="study-plan-roadmap-task-status-panel">
-                      <div className="study-plan-roadmap-task-kind-badge">
+                  <div className="study-plan-task-status-card">
+                    <span className="study-plan-task-status-card__label">
+                      <Activity size={14} />
+                      Trạng thái hiện tại
+                    </span>
+                    <strong className={`study-plan-task-status-card__value is-${currentExecutionState}`}>
+                      {currentExecutionState === 'todo'
+                        ? 'Cần làm'
+                        : currentExecutionState === 'in-progress'
+                          ? 'Đang thực hiện'
+                          : 'Hoàn thành'}
+                    </strong>
+                    {isRoadmapLinkedTask && (
+                      <span className="study-plan-roadmap-task-kind-badge">
                         {taskKind === 'roadmap-course'
                           ? 'Roadmap task: Có khóa học'
                           : 'Roadmap task: Không có khóa học'}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="study-plan-form-group">
-                      <label className="study-plan-label study-plan-label--inline">
-                        <Activity size={14} />
-                        <span>Tiến độ: {formData.userProgress}%</span>
-                      </label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        className="study-plan-range"
-                        value={formData.userProgress}
-                        onChange={(e) =>
-                          setFormData({ ...formData, userProgress: parseInt(e.target.value, 10) })
-                        }
-                      />
-                    </div>
-                  )}
-
+                      </span>
+                    )}
+                  </div>
                 </div>
               )}
             </aside>
@@ -513,70 +524,32 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
             )}
 
             <div className="study-plan-footer-actions">
-              {task && isRoadmapLinkedTask ? (
-                <>
-                  {roadmapExecutionState === 'todo' && (
-                    <button
-                      type="button"
-                      className="study-plan-btn active"
-                      style={{
-                        background: 'var(--sv-primary)',
-                        color: '#0f172a',
-                        borderColor: 'var(--sv-primary)',
-                      }}
-                      onClick={() => {
-                        void handleQuickRoadmapStatus('in-progress');
-                      }}
-                    >
-                      Bắt đầu
-                    </button>
-                  )}
-                  {roadmapExecutionState === 'in-progress' && (
-                    <button
-                      type="button"
-                      className="study-plan-btn active"
-                      style={{
-                        background: 'var(--sv-primary)',
-                        color: '#0f172a',
-                        borderColor: 'var(--sv-primary)',
-                      }}
-                      onClick={() => {
-                        void handleQuickRoadmapStatus('done');
-                      }}
-                    >
-                      Mark done
-                    </button>
-                  )}
-                  {roadmapExecutionState === 'done' && (
-                    <button
-                      type="button"
-                      className="study-plan-btn"
-                      onClick={() => {
-                        void handleQuickRoadmapStatus('in-progress');
-                      }}
-                    >
-                      Undo done
-                    </button>
-                  )}
-                </>
-              ) : (
-                <>
-                  <button type="button" className="study-plan-btn" onClick={onClose}>
-                    Hủy
-                  </button>
-                  <button
-                    type="submit"
-                    className="study-plan-btn active"
-                    style={{
-                      background: 'var(--sv-primary)',
-                      color: '#0f172a',
-                      borderColor: 'var(--sv-primary)',
-                    }}
-                  >
-                    <Save size={16} /> {task ? 'Lưu thay đổi' : 'Tạo công việc'}
-                  </button>
-                </>
+              {task && (
+                <button
+                  type="button"
+                  className={`study-plan-btn study-plan-status-advance-btn ${currentExecutionState === 'done' ? 'is-undo' : 'active'}`}
+                  onClick={() => {
+                    void handleAdvanceStatus();
+                  }}
+                >
+                  <AdvanceButtonIcon size={16} />
+                  {advanceButtonLabel}
+                </button>
               )}
+              <button type="button" className="study-plan-btn" onClick={onClose}>
+                Hủy
+              </button>
+              <button
+                type="submit"
+                className="study-plan-btn active"
+                style={{
+                  background: 'var(--sv-primary)',
+                  color: '#0f172a',
+                  borderColor: 'var(--sv-primary)',
+                }}
+              >
+                <Save size={16} /> {task ? 'Lưu thay đổi' : 'Tạo công việc'}
+              </button>
             </div>
           </div>
         </form>

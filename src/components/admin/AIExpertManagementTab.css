@@ -1407,3 +1407,52 @@
     max-width: calc(100vw - 2rem);
   }
 }
+
+/* ==================== AI Expert color alignment ==================== */
+.expert-ai-step,
+.expert-generated-section {
+  border-color: rgba(34, 211, 238, 0.24);
+}
+
+.expert-ai-step.active {
+  border-color: #22d3ee;
+  background: rgba(34, 211, 238, 0.1);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.18);
+}
+
+.expert-ai-step-number {
+  background: rgba(34, 211, 238, 0.16);
+  color: #67e8f9;
+}
+
+.expert-ai-step.active .expert-ai-step-number {
+  background: #06b6d4;
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.45);
+}
+
+.expert-ai-step.active .expert-ai-step-label,
+.expert-reference-hint,
+.expert-reference-hint strong,
+.expert-generated-section label,
+.expert-edited-badge {
+  color: #67e8f9;
+}
+
+.expert-reference-hint,
+.expert-generated-section.edited {
+  border-color: rgba(34, 211, 238, 0.5);
+}
+
+.expert-reference-hint,
+.expert-word-count,
+.expert-edited-badge {
+  background: rgba(34, 211, 238, 0.1);
+}
+
+.expert-generated-section textarea {
+  border-color: rgba(34, 211, 238, 0.22);
+}
+
+.expert-generated-section textarea:focus {
+  border-color: rgba(34, 211, 238, 0.55);
+}

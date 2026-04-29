@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Lệnh nào được sử dụng để liệt kê tất cả các container đang chạy?",
+    "options": [
+      "A. docker images",
+      "B. docker run",
+      "C. docker ps",
+      "D. docker list"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lệnh 'docker ps' hiển thị danh sách các container hiện đang hoạt động. Thêm flag '-a' để xem cả các container đã dừng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Từ khóa nào trong Dockerfile được dùng để xác định image nền (base image)?",
+    "options": [
+      "A. START",
+      "B. BASE",
+      "C. FROM",
+      "D. IMPORT"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mọi Dockerfile hợp lệ thường bắt đầu bằng lệnh FROM để chỉ định image gốc mà bạn muốn xây dựng dựa trên đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Container và Máy ảo (Virtual Machine) là gì?",
+    "options": [
+      "A. Container chia sẻ kernel của hệ điều hành host, còn VM có kernel riêng.",
+      "B. VM nhẹ hơn và khởi động nhanh hơn Container.",
+      "C. Container yêu cầu phần cứng chuyên dụng để chạy.",
+      "D. VM không thể chạy trên môi trường đám mây."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Container sử dụng chung kernel của host OS nên nhẹ và nhanh hơn so với VM (vốn phải giả lập toàn bộ phần cứng và chạy OS riêng).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lệnh nào dùng để xây dựng (build) một Docker image từ một Dockerfile trong thư mục hiện tại?",
+    "options": [
+      "A. docker build -t my-image .",
+      "B. docker create my-image",
+      "C. docker make my-image",
+      "D. docker run -b my-image"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lệnh 'docker build' kèm theo flag '-t' để đặt tên tag và dấu '.' để chỉ định context là thư mục hiện tại.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tập tin .dockerignore có tác dụng gì?",
+    "options": [
+      "A. Liệt kê các container không được phép dừng.",
+      "B. Loại trừ các file và thư mục không cần thiết khỏi build context để giảm kích thước image.",
+      "C. Quy định các user không được quyền truy cập vào Docker.",
+      "D. Chứa danh sách các mật khẩu bảo mật của image."
+    ],
+    "correctAnswer": "B",
+    "explanation": ".dockerignore giúp ngăn chặn các file rác hoặc file nhạy cảm (như .git, node_modules) bị gửi lên Docker daemon khi build image.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh nào dùng để tải một image từ Docker Hub về máy local?",
+    "options": [
+      "A. docker push",
+      "B. docker get",
+      "C. docker pull",
+      "D. docker download"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lệnh 'docker pull [image_name]' được sử dụng để tải image từ registry về máy cục bộ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Docker Compose, file cấu hình mặc định thường có tên là gì?",
+    "options": [
+      "A. docker-compose.xml",
+      "B. config.docker",
+      "C. docker-compose.yml",
+      "D. docker.json"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Docker Compose sử dụng định dạng YAML để cấu hình các dịch vụ của ứng dụng, mặc định là file docker-compose.yml.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tham số '-p 8080:80' trong lệnh 'docker run' có ý nghĩa gì?",
+    "options": [
+      "A. Giới hạn bộ nhớ của container là 8080MB.",
+      "B. Ánh xạ port 8080 của máy host vào port 80 của container.",
+      "C. Chạy container với ID là 8080.",
+      "D. Ánh xạ port 80 của máy host vào port 8080 của container."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cú pháp ánh xạ cổng là -p [host_port]:[container_port].",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để lưu trữ dữ liệu bền vững (persistent data) ngay cả khi container bị xóa, ta nên dùng gì?",
+    "options": [
+      "A. Docker Layers",
+      "B. Docker Cache",
+      "C. Docker Volumes",
+      "D. Docker Commit"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Volumes là cơ chế tốt nhất để lưu trữ dữ liệu do container tạo ra và sử dụng, độc lập với vòng đời của container.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh nào dùng để xem log (nhật ký) của một container đang chạy?",
+    "options": [
+      "A. docker read log",
+      "B. docker logs [container_id]",
+      "C. docker cat log",
+      "D. docker inspect --logs"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lệnh 'docker logs' cho phép bạn xem các luồng đầu ra (stdout/stderr) của một container để debug.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh 'docker exec -it [container_id] bash' dùng để làm gì?",
+    "options": [
+      "A. Khởi động lại container.",
+      "B. Truy cập vào giao diện dòng lệnh bên trong một container đang chạy.",
+      "C. Xóa hoàn toàn container.",
+      "D. Copy file từ host vào container."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lệnh này cho phép mở một terminal tương tác bên trong container đang hoạt động.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Dockerfile, sự khác biệt chính giữa RUN và CMD là gì?",
+    "options": [
+      "A. RUN thực thi khi build image, CMD thực thi khi container khởi chạy.",
+      "B. CMD thực thi khi build image, RUN thực thi khi container khởi chạy.",
+      "C. RUN dùng cho Windows, CMD dùng cho Linux.",
+      "D. Cả hai đều có chức năng giống hệt nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "RUN được dùng để cài đặt phần mềm/thư viện vào image layers. CMD chỉ định lệnh mặc định sẽ chạy khi container bắt đầu từ image đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lệnh nào dùng để xóa tất cả các container đã dừng, các network không dùng và các image không có tag (dangling)?",
+    "options": [
+      "A. docker system prune",
+      "B. docker clean all",
+      "C. docker remove unused",
+      "D. docker system delete"
+    ],
+    "correctAnswer": "A",
+    "explanation": "'docker system prune' là lệnh dọn dẹp mạnh mẽ giúp giải phóng không gian đĩa bị chiếm bởi các tài nguyên Docker không còn sử dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để truyền biến môi trường (environment variable) vào container khi chạy lệnh 'docker run', ta dùng flag nào?",
+    "options": [
+      "A. -v",
+      "B. -p",
+      "C. -e",
+      "D. -d"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Flag '-e' hoặc '--env' được dùng để thiết lập các biến môi trường cho container.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Container Orchestration (như Kubernetes) giải quyết vấn đề chính nào?",
+    "options": [
+      "A. Viết mã nguồn cho ứng dụng.",
+      "B. Quản lý việc triển khai, mở rộng và vận hành số lượng lớn container tự động.",
+      "C. Thay thế hoàn toàn Docker bằng máy ảo.",
+      "D. Tăng tốc độ internet cho máy chủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Điều phối container giúp tự động hóa việc quản lý vòng đời của hàng ngàn container trên nhiều máy chủ khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đâu là đơn vị triển khai nhỏ nhất trong Kubernetes (K8s)?",
+    "options": [
+      "A. Container",
+      "B. Node",
+      "C. Pod",
+      "D. Cluster"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong K8s, một Pod có thể chứa một hoặc nhiều container chia sẻ chung tài nguyên mạng và lưu trữ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh nào trong Dockerfile được khuyến nghị dùng để copy file từ máy host vào image thay vì dùng ADD nếu không cần giải nén file?",
+    "options": [
+      "A. MOVE",
+      "B. INSERT",
+      "C. COPY",
+      "D. FETCH"
+    ],
+    "correctAnswer": "C",
+    "explanation": "COPY được ưu tiên vì tính minh bạch, nó chỉ đơn thuần là copy file. ADD có thêm các tính năng như giải nén tự động hoặc tải từ URL, đôi khi gây nhầm lẫn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chế độ mạng mặc định (default network) khi bạn khởi tạo một container mà không chỉ định network là gì?",
+    "options": [
+      "A. Host",
+      "B. Bridge",
+      "C. None",
+      "D. Overlay"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc định Docker sử dụng bridge network, tạo ra một dải IP nội bộ cho các container trên cùng một host giao tiếp với nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc giảm số lượng Layer trong Dockerfile lại quan trọng?",
+    "options": [
+      "A. Để làm cho Dockerfile trông ngắn gọn hơn.",
+      "B. Để giảm kích thước image và tăng tốc độ build/push/pull.",
+      "C. Vì Docker chỉ cho phép tối đa 5 layers.",
+      "D. Để container chạy nhanh hơn trên CPU."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi layer chiếm dung lượng đĩa. Kết hợp các lệnh (ví dụ dùng &&) giúp giảm số lượng layer, từ đó tối ưu dung lượng và hiệu suất truyền tải image.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong tên image 'nginx:latest', phần 'latest' được gọi là gì?",
+    "options": [
+      "A. Repository",
+      "B. Tag",
+      "C. Namespace",
+      "D. Version Control"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tag được dùng để đánh dấu các phiên bản khác nhau của cùng một image.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để chạy container ở chế độ nền (background), bạn cần thêm flag nào vào lệnh 'docker run'?",
+    "options": [
+      "A. -it",
+      "B. -b",
+      "C. -d",
+      "D. --background"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Flag '-d' (detached mode) cho phép container chạy ngầm và trả lại quyền điều khiển terminal cho người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn muốn kiểm tra thông tin chi tiết (địa chỉ IP, cấu hình mount, network) của một container, bạn dùng lệnh nào?",
+    "options": [
+      "A. docker inspect",
+      "B. docker info",
+      "C. docker stats",
+      "D. docker show"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lệnh 'docker inspect' trả về thông tin chi tiết dưới dạng JSON về các đối tượng Docker (container, image, network, volume).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Dockerfile, lệnh nào được sử dụng để thiết lập thư mục làm việc (working directory) cho các chỉ dẫn tiếp theo như RUN, CMD hoặc COPY?",
+    "options": [
+      "A. CD",
+      "B. WORKDIR",
+      "C. SETDIR",
+      "D. FOLDER"
+    ],
+    "correctAnswer": "B",
+    "explanation": "WORKDIR thiết lập thư mục làm việc cho các lệnh sau đó trong Dockerfile. Nếu thư mục không tồn tại, Docker sẽ tự động tạo nó. Việc sử dụng 'RUN cd' sẽ không có tác dụng đối với các layer (câu lệnh) tiếp theo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng Docker Compose để triển khai một cụm ứng dụng, làm thế nào để các container trong cùng một file cấu hình có thể giao tiếp mạng với nhau?",
+    "options": [
+      "A. Phải sử dụng địa chỉ IP tĩnh của máy Host.",
+      "B. Các container tự động nằm trong một network chung và gọi nhau bằng tên service (service name).",
+      "C. Phải cài đặt thêm một phần mềm VPN trung gian bên trong mỗi container.",
+      "D. Các container chỉ có thể giao tiếp nếu chúng sử dụng chung một cổng (port)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Docker Compose mặc định tạo ra một network riêng cho project. Các service có thể tìm thấy và kết nối với nhau thông qua tên service đã định nghĩa trong file yaml nhờ cơ chế DNS nội bộ của Docker.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để chuẩn bị đẩy (push) một image từ máy cá nhân lên một Registry (như Docker Hub), bạn cần thực hiện thao tác nào để Registry nhận diện đúng tài khoản và kho lưu trữ?",
+    "options": [
+      "A. Đổi tên file Dockerfile thành tên của Registry.",
+      "B. Sử dụng lệnh 'docker tag' để gắn nhãn image theo định dạng [username]/[repository_name]:[tag].",
+      "C. Chạy lệnh 'docker rename' để đổi tên container đang thực thi.",
+      "D. Copy image vào một thư mục đặc biệt có tên trùng với Registry trên máy tính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lệnh 'docker tag' tạo ra một bí danh (alias) cho image với cấu trúc tên bao gồm tên người dùng hoặc tổ chức trên Registry, giúp Docker biết chính xác đích đến khi thực hiện lệnh push.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi tối ưu hóa Dockerfile để giảm kích thước image và tận dụng Docker layer caching, bước nào sau đây nên được thực hiện sớm nhất trong Dockerfile?",
+    "options": [
+      "A. COPY mã nguồn ứng dụng vào image.",
+      "B. Cài đặt các dependency của ứng dụng (ví dụ: `npm install`, `pip install`).",
+      "C. Cấu hình biến môi trường (ENV).",
+      "D. Đặt thư mục làm việc (WORKDIR)."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Đặt WORKDIR là một trong những lệnh đầu tiên thường ít thay đổi, giúp Docker cache layer này hiệu quả. Các lệnh cài đặt dependency và COPY mã nguồn thường xuyên thay đổi hơn, nên đặt sau để tận dụng cache cho các layer ổn định trước đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng Node.js của bạn cần biên dịch các file TypeScript và cài đặt dependency trước khi chạy. Phương pháp nào sau đây giúp tạo ra Docker image nhỏ gọn và an toàn nhất?",
+    "options": [
+      "A. Sử dụng một Dockerfile duy nhất, cài đặt tất cả dependency và biên dịch trong một layer.",
+      "B. Sử dụng multi-stage build, với stage đầu tiên để biên dịch và stage thứ hai chỉ chứa runtime và output đã biên dịch.",
+      "C. Cài đặt tất cả dependency trên host, sau đó COPY vào image.",
+      "D. Sử dụng image cơ sở chứa sẵn tất cả các công cụ biên dịch và runtime."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Multi-stage build cho phép bạn sử dụng một image lớn hơn với các công cụ build trong giai đoạn đầu, sau đó chuyển các artifact cần thiết sang một image cơ sở nhỏ gọn hơn cho giai đoạn cuối, giúp giảm kích thước image cuối cùng và bề mặt tấn công.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang quản lý một ứng dụng đa container sử dụng Docker Compose. Làm thế nào để đảm bảo rằng một service (ví dụ: web server) chỉ khởi động sau khi một service khác (ví dụ: database) đã sẵn sàng và hoạt động?",
+    "options": [
+      "A. Sử dụng thuộc tính `depends_on` trong `docker-compose.yml` để chỉ định thứ tự khởi động.",
+      "B. Sử dụng thuộc tính `healthcheck` trong `docker-compose.yml` cho service database và kết hợp với script chờ trong service web server.",
+      "C. Khởi động database service thủ công trước, sau đó khởi động web server service.",
+      "D. Tăng giá trị `restart_policy` cho web server service để nó tự khởi động lại cho đến khi database sẵn sàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`depends_on` chỉ đảm bảo thứ tự khởi tạo container, không đảm bảo service bên trong container đã sẵn sàng. `healthcheck` kết hợp với một script chờ (ví dụ: `wait-for-it.sh` hoặc logic tương tự trong ENTRYPOINT/CMD) là cách tốt nhất để đảm bảo các service phụ thuộc đã sẵn sàng trước khi service chính khởi động.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Docker Compose, bạn muốn chia sẻ dữ liệu giữa các lần chạy container hoặc giữa các container khác nhau. Loại volume nào là lựa chọn tốt nhất cho mục đích này?",
+    "options": [
+      "A. Bind mounts.",
+      "B. Anonymous volumes.",
+      "C. Named volumes.",
+      "D. tmpfs mounts."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Named volumes được Docker quản lý hoàn toàn và là lựa chọn tốt nhất để lưu trữ dữ liệu bền vững, có thể chia sẻ giữa các container và các lần chạy container mà không phụ thuộc vào cấu trúc thư mục của host.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần triển khai một ứng dụng web và một cơ sở dữ liệu trên cùng một máy chủ bằng Docker Compose. Làm thế nào để các container này có thể giao tiếp với nhau mà không cần cấu hình địa chỉ IP cụ thể?",
+    "options": [
+      "A. Sử dụng `links` trong Docker Compose.",
+      "B. Đặt cả hai container vào cùng một Docker network tùy chỉnh và sử dụng tên service làm hostname.",
+      "C. Sử dụng `host` network mode cho cả hai container.",
+      "D. Cấu hình địa chỉ IP tĩnh cho mỗi container."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi sử dụng Docker Compose, một network mặc định sẽ được tạo và các service trong file `docker-compose.yml` sẽ được thêm vào network đó. Chúng có thể giao tiếp với nhau bằng cách sử dụng tên service làm hostname (DNS resolution).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một Docker container của bạn thường xuyên bị 'Out of Memory' (OOM) và bị kill. Bạn nên làm gì để khắc phục vấn đề này mà không làm ảnh hưởng đến các container khác trên cùng host?",
+    "options": [
+      "A. Tăng giới hạn CPU cho container đó.",
+      "B. Tăng giới hạn bộ nhớ (memory limit) cho container đó.",
+      "C. Giảm số lượng container chạy trên host.",
+      "D. Thay đổi Docker network mode sang `host`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi 'Out of Memory' trực tiếp liên quan đến việc container sử dụng nhiều bộ nhớ hơn mức được cấp phát. Tăng giới hạn bộ nhớ cho container sẽ giải quyết vấn đề này. Các lựa chọn khác không trực tiếp giải quyết vấn đề OOM.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một Docker image và muốn sao chép một thư mục từ host vào thư mục `/app` bên trong container. Lệnh nào sau đây trong Dockerfile là phù hợp nhất?",
+    "options": [
+      "A. `ADD . /app`",
+      "B. `COPY . /app`",
+      "C. `RUN cp -r . /app`",
+      "D. `VOLUME /app`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`COPY` là lệnh được khuyến nghị để sao chép file/thư mục từ build context vào image. `ADD` có thêm tính năng giải nén tarball và lấy file từ URL, nhưng `COPY` rõ ràng và an toàn hơn cho việc sao chép cục bộ. `RUN cp` sẽ tạo một layer không cần thiết, và `VOLUME` dùng để tạo mount point chứ không sao chép file.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để giảm thiểu các lỗ hổng bảo mật tiềm ẩn trong Docker image, thực hành tốt nhất nào sau đây nên được áp dụng?",
+    "options": [
+      "A. Sử dụng image cơ sở lớn nhất để đảm bảo tất cả các thư viện cần thiết đều có sẵn.",
+      "B. Chạy ứng dụng bên trong container với quyền `root` để tránh các vấn đề về quyền.",
+      "C. Sử dụng các image cơ sở tối giản (ví dụ: `alpine`, `scratch`) và chỉ cài đặt các dependency cần thiết.",
+      "D. Mở tất cả các cổng trong Dockerfile bằng lệnh `EXPOSE`."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng image cơ sở tối giản và chỉ cài đặt những gì thực sự cần thiết giúp giảm đáng kể kích thước image và số lượng gói phần mềm, từ đó giảm bề mặt tấn công và các lỗ hổng bảo mật tiềm ẩn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần triển khai một ứng dụng cần truy cập vào một tệp cấu hình nhạy cảm (ví dụ: khóa API, mật khẩu database). Phương pháp nào sau đây là an toàn nhất để truyền thông tin này vào container?",
+    "options": [
+      "A. Ghi trực tiếp thông tin vào Dockerfile.",
+      "B. Đặt thông tin vào biến môi trường trong file `.env` và commit vào Git.",
+      "C. Sử dụng Docker Secrets (hoặc Kubernetes Secrets nếu dùng Kubernetes).",
+      "D. Truyền thông tin qua đối số dòng lệnh khi chạy container."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Docker Secrets (và Kubernetes Secrets) được thiết kế để quản lý dữ liệu nhạy cảm một cách an toàn, mã hóa và chỉ hiển thị cho các container được ủy quyền. Các phương pháp khác có rủi ro rò rỉ thông tin cao hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi một Docker container bị dừng và khởi động lại, dữ liệu được ghi vào hệ thống file của container sẽ bị mất. Làm thế nào để đảm bảo dữ liệu này được duy trì?",
+    "options": [
+      "A. Sử dụng `docker commit` để tạo một image mới sau mỗi lần thay đổi.",
+      "B. Sử dụng Docker volumes hoặc bind mounts để lưu trữ dữ liệu bên ngoài container.",
+      "C. Tăng giới hạn bộ nhớ của container.",
+      "D. Chạy container ở chế độ `privileged`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Docker volumes và bind mounts là các cơ chế được thiết kế để lưu trữ dữ liệu bền vững, tách biệt với vòng đời của container. Dữ liệu được lưu trữ trong các volume này sẽ không bị mất khi container bị dừng, xóa hoặc khởi động lại.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang sử dụng Docker Compose để chạy một ứng dụng backend và một cơ sở dữ liệu. Bạn nhận thấy rằng ứng dụng backend không thể kết nối tới cơ sở dữ liệu mặc dù cả hai container đều đang chạy. Nguyên nhân có thể là gì?",
+    "options": [
+      "A. Port của cơ sở dữ liệu không được expose trên host.",
+      "B. Tên service của cơ sở dữ liệu không được sử dụng làm hostname trong cấu hình của backend.",
+      "C. Ứng dụng backend đang chạy với quyền root.",
+      "D. Docker daemon đã dừng hoạt động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Docker Compose, các service có thể giao tiếp với nhau bằng tên service của chúng làm hostname. Nếu ứng dụng backend cố gắng kết nối bằng `localhost` hoặc một địa chỉ IP khác, nó sẽ không tìm thấy cơ sở dữ liệu. Việc expose port ra host không cần thiết cho giao tiếp nội bộ giữa các container trong cùng một network Compose.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để kiểm tra xem một Docker image có chứa các lỗ hổng bảo mật đã biết hay không trước khi triển khai, bạn nên sử dụng công cụ hoặc phương pháp nào?",
+    "options": [
+      "A. Chạy `docker ps -a` để kiểm tra trạng thái của các container.",
+      "B. Sử dụng các công cụ quét lỗ hổng image (ví dụ: Trivy, Clair, Anchore).",
+      "C. Kiểm tra thủ công từng dòng trong Dockerfile.",
+      "D. Đọc log của container sau khi nó khởi động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các công cụ quét lỗ hổng image được thiết kế đặc biệt để phân tích các layer của Docker image, so sánh các gói phần mềm với cơ sở dữ liệu lỗ hổng đã biết và báo cáo các rủi ro tiềm ẩn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn muốn tạo một Docker image cho ứng dụng Python của mình. Image này cần có một thư mục `/app` và ứng dụng của bạn sẽ chạy từ thư mục đó. Lệnh nào sau đây trong Dockerfile thiết lập thư mục làm việc mặc định là `/app`?",
+    "options": [
+      "A. `RUN mkdir /app`",
+      "B. `WORKDIR /app`",
+      "C. `ENV WORKDIR=/app`",
+      "D. `CMD cd /app`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lệnh `WORKDIR` trong Dockerfile thiết lập thư mục làm việc mặc định cho bất kỳ lệnh `RUN`, `CMD`, `ENTRYPOINT`, `COPY`, `ADD` nào tiếp theo. Nếu thư mục không tồn tại, nó sẽ được tạo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi bạn chạy một Docker container, cổng 8080 bên trong container cần được truy cập từ cổng 80 trên host. Lệnh `docker run` nào sau đây thực hiện điều này?",
+    "options": [
+      "A. `docker run -p 8080:80 my_image`",
+      "B. `docker run -p 80:8080 my_image`",
+      "C. `docker run --expose 8080 my_image`",
+      "D. `docker run -P my_image`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cú pháp của `-p` là `HOST_PORT:CONTAINER_PORT`. Do đó, `-p 80:8080` sẽ ánh xạ cổng 80 trên host đến cổng 8080 bên trong container.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa `CMD` và `ENTRYPOINT` trong Dockerfile là gì?",
+    "options": [
+      "A. `CMD` chỉ có thể được sử dụng một lần trong Dockerfile, trong khi `ENTRYPOINT` có thể được sử dụng nhiều lần.",
+      "B. `ENTRYPOINT` thiết lập lệnh sẽ luôn được thực thi khi container khởi động, trong khi `CMD` cung cấp các đối số mặc định cho `ENTRYPOINT` hoặc một lệnh thực thi nếu không có `ENTRYPOINT`.",
+      "C. `CMD` được sử dụng để chạy các script khởi tạo, `ENTRYPOINT` để chạy ứng dụng chính.",
+      "D. `ENTRYPOINT` không thể bị ghi đè khi chạy container, `CMD` thì có thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`ENTRYPOINT` định nghĩa lệnh chính sẽ được thực thi khi container khởi động. `CMD` cung cấp các đối số mặc định cho `ENTRYPOINT` hoặc là lệnh thực thi nếu không có `ENTRYPOINT` được định nghĩa. `CMD` có thể dễ dàng bị ghi đè bằng cách truyền đối số vào lệnh `docker run`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần triển khai một ứng dụng đa tầng (multi-tier application) với nhiều container trên một máy chủ duy nhất. Công cụ nào sau đây phù hợp nhất để định nghĩa và chạy các ứng dụng đa container này?",
+    "options": [
+      "A. Docker CLI (`docker run`).",
+      "B. Docker Compose.",
+      "C. Kubernetes.",
+      "D. Docker Swarm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Docker Compose được thiết kế để định nghĩa và chạy các ứng dụng đa container trên một máy chủ duy nhất. Kubernetes và Docker Swarm phù hợp hơn cho việc điều phối trên các cụm máy chủ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi xây dựng Docker image, bạn muốn đảm bảo rằng các dependency của ứng dụng được cài đặt hiệu quả và tận dụng cache của Docker. Lệnh nào sau đây nên được đặt ngay trước khi sao chép toàn bộ mã nguồn ứng dụng?",
+    "options": [
+      "A. `RUN apt-get update && apt-get install -y some-package`",
+      "B. `COPY package.json /app/` (đối với Node.js) hoặc `COPY requirements.txt /app/` (đối với Python).",
+      "C. `WORKDIR /app`",
+      "D. `EXPOSE 8080`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bằng cách chỉ sao chép các file chứa dependency (ví dụ: `package.json`, `requirements.txt`) và cài đặt chúng trong một layer riêng, Docker có thể cache layer này. Nếu chỉ có mã nguồn ứng dụng thay đổi, layer cài đặt dependency sẽ không cần build lại, giúp tăng tốc độ build.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang gặp sự cố với một container không thể khởi động. Lệnh nào sau đây là hữu ích nhất để chẩn đoán vấn đề?",
+    "options": [
+      "A. `docker ps -a` để xem trạng thái của tất cả các container, kể cả những container đã dừng.",
+      "B. `docker inspect <container_id>` để xem cấu hình chi tiết của container.",
+      "C. `docker logs <container_id>` để xem đầu ra của ứng dụng bên trong container.",
+      "D. `docker top <container_id>` để xem các tiến trình đang chạy bên trong container."
+    ],
+    "correctAnswer": "C",
+    "explanation": "`docker logs` là lệnh quan trọng nhất để chẩn đoán các vấn đề khởi động của container, vì nó hiển thị đầu ra tiêu chuẩn (stdout) và lỗi tiêu chuẩn (stderr) của ứng dụng, thường chứa thông báo lỗi hoặc lý do container không thể khởi động.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để đảm bảo một ứng dụng web chạy trong container luôn có sẵn, bạn muốn thiết lập một cơ chế kiểm tra sức khỏe. Lệnh nào trong Dockerfile có thể được sử dụng để định nghĩa một `HEALTHCHECK`?",
+    "options": [
+      "A. `RUN curl -f http://localhost:8080/health || exit 1`",
+      "B. `CMD curl -f http://localhost:8080/health || exit 1`",
+      "C. `HEALTHCHECK --interval=30s --timeout=10s CMD curl -f http://localhost:8080/health || exit 1`",
+      "D. `ENTRYPOINT curl -f http://localhost:8080/health || exit 1`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lệnh `HEALTHCHECK` trong Dockerfile được sử dụng để định nghĩa cách Docker kiểm tra xem một container có đang chạy bình thường hay không. Nó có thể cấu hình tần suất (`--interval`), thời gian chờ (`--timeout`), và lệnh kiểm tra thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn chia sẻ một thư mục từ hệ thống host vào một Docker container để phát triển ứng dụng. Loại mount nào là phù hợp nhất trong trường hợp này?",
+    "options": [
+      "A. Named volume.",
+      "B. Anonymous volume.",
+      "C. Bind mount.",
+      "D. tmpfs mount."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bind mounts cho phép bạn mount một thư mục hoặc file cụ thể từ host vào container. Điều này rất hữu ích cho môi trường phát triển, nơi bạn muốn thay đổi mã nguồn trên host và thấy các thay đổi đó ngay lập tức trong container mà không cần rebuild image.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi sử dụng Docker Compose, bạn muốn giới hạn tài nguyên CPU mà một service có thể sử dụng. Thuộc tính nào trong `docker-compose.yml` cho phép bạn làm điều này?",
+    "options": [
+      "A. `cpu_shares` hoặc `cpus` trong phần `deploy.resources.limits`.",
+      "B. `mem_limit` trong phần `deploy.resources.limits`.",
+      "C. `environment` để đặt biến môi trường CPU.",
+      "D. `ports` để giới hạn băng thông CPU."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong `docker-compose.yml`, bạn có thể sử dụng `deploy.resources.limits.cpus` (đối với Docker Engine 1.13+) hoặc `cpu_shares` (cũ hơn) để giới hạn tài nguyên CPU mà một service có thể sử dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng của bạn trong container cần truy cập một file trên host. Tuy nhiên, bạn không muốn file này trở thành một phần của image. Giải pháp nào sau đây là tốt nhất?",
+    "options": [
+      "A. Sử dụng `COPY` trong Dockerfile để sao chép file vào image.",
+      "B. Sử dụng `ADD` trong Dockerfile để sao chép file vào image.",
+      "C. Sử dụng bind mount để mount file từ host vào container khi chạy.",
+      "D. Chuyển đổi file thành biến môi trường."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bind mount cho phép bạn mount một file hoặc thư mục từ host vào container mà không cần đưa nó vào image. Điều này lý tưởng cho các file cấu hình hoặc dữ liệu cần truy cập nhưng không nên là một phần của image.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Làm thế nào để đẩy một Docker image đã được xây dựng lên một registry riêng tư (ví dụ: Docker Hub riêng hoặc GitLab Container Registry)?",
+    "options": [
+      "A. `docker push <image_name>`",
+      "B. `docker save <image_name> > image.tar`",
+      "C. `docker tag <image_id> <registry_url>/<username>/<repo_name>:<tag>` sau đó `docker push <registry_url>/<username>/<repo_name>:<tag>`.",
+      "D. `docker commit <container_id> <image_name>`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để đẩy image lên một registry, bạn cần tag image với định dạng `registry_url/username/repo_name:tag` trước, sau đó sử dụng lệnh `docker push` với tag đầy đủ đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang cố gắng chạy một ứng dụng trong Docker container nhưng nhận được lỗi 'permission denied' khi ứng dụng cố gắng ghi vào một thư mục. Nguyên nhân có thể là gì?",
+    "options": [
+      "A. Container đang chạy với user `root`.",
+      "B. Thư mục bên trong container không có đủ quyền ghi cho user mà ứng dụng đang chạy.",
+      "C. Cổng của container không được expose.",
+      "D. Docker daemon đang chạy ở chế độ `swarm`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi 'permission denied' khi ghi file thường xảy ra khi user mà ứng dụng chạy bên trong container không có đủ quyền ghi vào thư mục đích. Mặc định, nhiều image chạy ứng dụng với user không phải root để tăng cường bảo mật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh Docker networking, chế độ `bridge` (cầu nối) hoạt động như thế nào?",
+    "options": [
+      "A. Container được kết nối trực tiếp với giao diện mạng của host và chia sẻ địa chỉ IP của host.",
+      "B. Mỗi container nhận một địa chỉ IP riêng trong một mạng ảo nội bộ, và Docker daemon định tuyến lưu lượng giữa các container và host.",
+      "C. Container không có giao diện mạng và không thể giao tiếp với bên ngoài.",
+      "D. Container chỉ có thể giao tiếp với các container khác trên các host khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở chế độ `bridge` (mặc định), Docker tạo một mạng cầu nối nội bộ. Mỗi container được gán một địa chỉ IP riêng trong mạng này. Docker daemon sử dụng NAT để cho phép container giao tiếp với thế giới bên ngoài và định tuyến lưu lượng giữa các container trong cùng mạng cầu nối.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống CI/CD hiệu năng cao, bạn nhận thấy việc build Docker image mất quá nhiều thời gian do tải các dependency lớn. Kỹ thuật nào sau đây tối ưu nhất để tận dụng cache mà vẫn đảm bảo image cuối cùng có kích thước nhỏ nhất?",
+    "options": [
+      "A. Sử dụng Docker Squash để gộp tất cả các layer lại thành một sau khi cài đặt dependency.",
+      "B. Sử dụng Multi-stage builds, thực hiện cài đặt dependency trong stage trung gian và chỉ COPY các artifacts cần thiết sang stage cuối.",
+      "C. Đặt lệnh 'COPY . .' ở đầu Dockerfile để đảm bảo mọi thay đổi code đều được ghi nhận sớm.",
+      "D. Sử dụng duy nhất một layer bằng cách nối tất cả các lệnh RUN bằng toán tử '&&'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Multi-stage builds cho phép tách biệt môi trường build (chứa compiler, build-tools, cache) và môi trường runtime, giúp giảm kích thước image và bảo mật hơn bằng cách loại bỏ các file không cần thiết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi chạy ứng dụng Java trong Docker container, bạn gặp lỗi 'OOMKilled' mặc dù heap size (-Xmx) đã được cấu hình thấp hơn giới hạn memory của container. Nguyên nhân sâu xa thường gặp nhất là gì?",
+    "options": [
+      "A. Docker không hỗ trợ giới hạn memory cho các ứng dụng chạy trên JVM.",
+      "B. JVM không nhận biết được cgroup limits và tính toán các vùng nhớ khác (Metaspace, Code Cache, Stack) vượt quá giới hạn của container.",
+      "C. Swap trên host bị tắt khiến Docker không thể mượn thêm bộ nhớ cho container.",
+      "D. Docker daemon tiêu thụ quá nhiều RAM để quản lý log của container Java."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các phiên bản JVM cũ không nhận biết được giới hạn cgroup của container, dẫn đến việc tính toán bộ nhớ ngoài Heap (Non-heap memory) không chính xác, gây tràn tổng bộ nhớ cho phép của container.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một hệ thống logging cho cluster Docker chạy hàng trăm container. Driver logging nào sau đây giúp giảm thiểu rủi ro mất log khi network gặp sự cố và không gây nghẽn I/O trên host?",
+    "options": [
+      "A. json-file (mặc định) kết hợp với log rotation.",
+      "B. syslog driver đẩy trực tiếp về một server tập trung.",
+      "C. journald driver tận dụng khả năng lưu trữ và chuyển tiếp của systemd.",
+      "D. splunk driver với chế độ synchronous delivery."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Journald driver cho phép ghi log vào local systemd journal, sau đó các agent (như Fluentd hoặc Logstash) có thể đọc và đẩy đi một cách bất đồng bộ, tránh gây treo ứng dụng khi network gặp sự cố.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Về mặt bảo mật, tại sao việc sử dụng 'USER root' trong Dockerfile được coi là một rủi ro nghiêm trọng ngay cả khi container được cách ly bởi namespaces?",
+    "options": [
+      "A. Vì root trong container có cùng UID 0 với root trên host, nếu có lỗ hổng container breakout, kẻ tấn công sẽ có quyền root trên host.",
+      "B. Vì Docker không thể giới hạn CPU/RAM đối với các tiến trình chạy bằng quyền root.",
+      "C. Vì các image quét bởi Trivy/Clair sẽ tự động bỏ qua các layer được build bởi user root.",
+      "D. Vì lệnh 'docker exec' sẽ không hoạt động nếu container chạy bằng user không phải root."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc định, Docker không sử dụng User Namespaces để ánh xạ UID. Do đó, UID 0 bên trong container chính là UID 0 trên host, làm tăng nguy cơ leo thang đặc quyền nếu thoát khỏi container.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần triển khai một ứng dụng yêu cầu hiệu năng I/O đĩa cực cao và độ trễ thấp nhất có thể. Phương thức lưu trữ nào sau đây là tối ưu nhất?",
+    "options": [
+      "A. Sử dụng Docker Volumes với driver mặc định (local).",
+      "B. Sử dụng Bind Mounts trỏ trực tiếp tới một SSD chuyên dụng trên host.",
+      "C. Sử dụng Storage Driver 'overlay2' để ghi dữ liệu trực tiếp vào writable layer của container.",
+      "D. Sử dụng tmpfs mount để lưu trữ dữ liệu tạm thời trên RAM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bind mounts bỏ qua lớp trừu tượng của Docker Volume và Storage Driver (như CoW của overlay2), cho phép ứng dụng truy cập trực tiếp vào hệ thống file của host với overhead thấp nhất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Docker Networking, chế độ 'Userland Proxy' (docker-proxy) thường được khuyến nghị tắt (disable) trong các hệ thống tải cao vì lý do gì?",
+    "options": [
+      "A. Nó làm giảm tính bảo mật do mở quá nhiều port ngẫu nhiên.",
+      "B. Nó tiêu tốn tài nguyên CPU/RAM không cần thiết và tăng độ trễ bằng cách xử lý traffic ở level user-space thay vì kernel-space (iptables).",
+      "C. Nó không hỗ trợ giao thức IPv6 cho các container.",
+      "D. Nó xung đột với các giải pháp Service Mesh như Istio hoặc Linkerd."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Docker-proxy là một tiến trình user-space. Việc tắt nó và dựa hoàn toàn vào iptables (kernel-space) giúp cải thiện đáng kể throughput và giảm độ trễ cho các kết nối port-forwarding.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Docker Compose để triển khai microservices, tham số 'depends_on' chỉ đảm bảo container khởi chạy theo thứ tự. Làm thế nào để đảm bảo ứng dụng A chỉ chạy khi Database B đã thực sự sẵn sàng nhận kết nối?",
+    "options": [
+      "A. Sử dụng thuộc tính 'healthcheck' trong Compose file kết hợp với điều kiện 'service_healthy' trong 'depends_on'.",
+      "B. Tăng giá trị 'restart_policy' lên mức tối đa để container A tự khởi động lại cho đến khi kết nối được.",
+      "C. Sử dụng lệnh 'sleep 30' trong entrypoint của ứng dụng A.",
+      "D. Cấu hình Database B sử dụng chế độ 'network_mode: host'."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Từ Docker Compose file v2.1+, 'depends_on' hỗ trợ kiểm tra trạng thái 'service_healthy', đảm bảo container phụ thuộc chỉ start khi container đích vượt qua bài kiểm tra healthcheck thực tế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kỹ thuật 'Image Squashing' có ưu điểm là giảm số lượng layer, nhưng nhược điểm lớn nhất của nó trong môi trường sản xuất quy mô lớn là gì?",
+    "options": [
+      "A. Làm tăng thời gian khởi chạy container do phải giải nén image.",
+      "B. Làm mất khả năng chia sẻ các layer chung giữa các image khác nhau, dẫn đến tốn dung lượng storage trên Registry và Host.",
+      "C. Khiến cho các công cụ quét bảo mật không thể phân tích được nội dung bên trong image.",
+      "D. Làm hỏng các metadata như ENV và EXPOSE đã định nghĩa trong Dockerfile."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Docker sử dụng cơ chế Content-Addressable Storage. Nếu squash image, bạn tạo ra một layer duy nhất hoàn toàn mới, làm mất đi lợi ích của việc tái sử dụng các base layer (như OS, Runtime) đã có sẵn trên host.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để hạn chế một container chỉ được phép sử dụng tối đa 50% của 2 CPU core trong suốt quá trình chạy, bạn nên cấu hình tham số nào?",
+    "options": [
+      "A. --cpu-shares=512",
+      "B. --cpus=1.0",
+      "C. --cpu-period=100000 --cpu-quota=50000",
+      "D. --cpuset-cpus=0,1"
+    ],
+    "correctAnswer": "B",
+    "explanation": "--cpus là cách cấu hình thân thiện nhất để giới hạn tài nguyên CPU (1.0 tương đương 100% của 1 core hoặc 50% của 2 cores). --cpu-shares chỉ có tác dụng khi có tranh chấp tài nguyên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một container chạy ứng dụng Python thường xuyên để lại các tiến trình 'zombie' (defunct). Giải pháp kiến trúc nào xử lý triệt để vấn đề này mà không cần sửa code ứng dụng?",
+    "options": [
+      "A. Thêm option '--init' khi chạy 'docker run' hoặc sử dụng 'tini' làm Entrypoint.",
+      "B. Sử dụng lệnh 'kill -9' định kỳ thông qua một cronjob bên ngoài host.",
+      "C. Chạy container với đặc quyền '--privileged'.",
+      "D. Tăng giới hạn '--pids-limit' của container lên vô hạn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Vấn đề zombie xảy ra khi tiến trình PID 1 không thực hiện 'reaping' (thu hồi) các tiến trình con đã kết thúc. Sử dụng một init process siêu nhỏ như 'tini' giúp quản lý tín hiệu và thu hồi zombie đúng cách.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi xây dựng một Private Registry cho doanh nghiệp, tính năng nào là quan trọng nhất để đảm bảo tính toàn vẹn của image và ngăn chặn việc đẩy image giả mạo?",
+    "options": [
+      "A. Garbage Collection.",
+      "B. Role-Based Access Control (RBAC).",
+      "C. Content Trust (Docker Content Trust / Notary).",
+      "D. HTTP Basic Authentication."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Docker Content Trust (DCT) sử dụng chữ ký số để xác thực người đẩy image. Client sẽ từ chối tải image nếu chữ ký không hợp lệ hoặc không tồn tại, đảm bảo image không bị thay đổi trên đường truyền hoặc trên registry.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh 'COPY' và 'ADD' trong Dockerfile có sự khác biệt quan trọng nào mà một DevOps Engineer cần lưu ý để đảm bảo tính minh bạch và bảo mật?",
+    "options": [
+      "A. 'COPY' hỗ trợ tải file từ URL từ xa, còn 'ADD' thì không.",
+      "B. 'ADD' có khả năng tự động giải nén các file tarball cục bộ, điều này có thể gây ra các hành vi không mong muốn hoặc lỗ hổng bảo mật.",
+      "C. 'COPY' chỉ hoạt động với các file nằm trong thư mục hiện hành, còn 'ADD' có thể truy cập mọi file trên host.",
+      "D. 'ADD' nhanh hơn 'COPY' do sử dụng cơ chế truyền dữ liệu song song."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Docker khuyến nghị dùng 'COPY' cho các tác vụ sao chép file thông thường. 'ADD' có các tính năng ẩn như tự giải nén hoặc tải từ URL, có thể dẫn đến việc đưa các file không mong muốn vào image.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang debug một container bị treo nhưng không có công cụ netstat hay curl bên trong image (distroless). Cách nào hiệu quả nhất để kiểm tra các kết nối mạng của container đó từ host?",
+    "options": [
+      "A. Cài đặt thêm công cụ vào container bằng 'docker exec apt-get install'.",
+      "B. Sử dụng 'nsenter' để vào network namespace của container từ host shell.",
+      "C. Chụp packet bằng Wireshark trên interface 'docker0'.",
+      "D. Restart container với chế độ '--network host' để debug."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi container có một network namespace riêng. Lệnh 'nsenter -t <pid> -n <command>' cho phép chạy các lệnh debug của host (như netstat, ip link) bên trong namespace của container mà không cần cài thêm gì vào container.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Docker Storage Drivers, cơ chế 'Copy-on-Write' (CoW) ảnh hưởng như thế nào đến các ứng dụng có cường độ ghi (write-heavy) vào writable layer?",
+    "options": [
+      "A. Nó làm tăng tốc độ ghi do dữ liệu được ghi vào RAM trước.",
+      "B. Nó gây ra độ trễ lớn (latency) vì phải tìm kiếm và sao chép file từ các layer dưới lên layer trên cùng trước khi sửa đổi.",
+      "C. Nó không có ảnh hưởng gì vì Docker sử dụng kiến trúc zero-copy.",
+      "D. Nó chỉ ảnh hưởng đến lần ghi đầu tiên, các lần ghi sau sẽ nhanh hơn ghi trực tiếp vào host."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với CoW, khi một file ở layer thấp hơn được sửa đổi, driver phải copy toàn bộ file đó lên writable layer. Với các file lớn và tần suất ghi cao, việc này gây overhead cực lớn. Giải pháp là dùng Volumes.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để giảm thiểu bề mặt tấn công (attack surface) cho một ứng dụng Go, loại base image nào sau đây là lựa chọn tối ưu nhất cho stage cuối của multi-stage build?",
+    "options": [
+      "A. alpine:latest",
+      "B. ubuntu:22.04",
+      "C. scratch",
+      "D. golang:alpine"
+    ],
+    "correctAnswer": "C",
+    "explanation": "'scratch' là một image rỗng hoàn toàn. Vì Go có thể biên dịch thành binary tĩnh (statically linked), việc chạy nó trên 'scratch' giúp loại bỏ hoàn toàn các shell, thư viện hệ thống và công cụ quản lý gói, giảm thiểu tối đa lỗ hổng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn muốn giới hạn một container không được tiêu thụ quá 100 IOPS trên đĩa cứng để tránh làm ảnh hưởng đến các container khác trên cùng host. Tham số nào sau đây thực hiện điều đó?",
+    "options": [
+      "A. --storage-opt iops=100",
+      "B. --device-write-iops /dev/sda:100",
+      "C. --blkio-weight 100",
+      "D. --memory-swappiness 0"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Docker cung cấp các tham số '--device-read-iops' và '--device-write-iops' để giới hạn băng thông I/O (theo số lượng operation) trực tiếp trên một thiết bị block cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng tag ':latest' cho các image trong môi trường Production được coi là một 'anti-pattern'?",
+    "options": [
+      "A. Vì tag ':latest' khiến Docker daemon tiêu tốn nhiều CPU hơn để kiểm tra phiên bản mới.",
+      "B. Vì nó phá vỡ tính bất biến (immutability) và khả năng tái lập (reproducibility) của hệ thống, gây khó khăn khi cần rollback.",
+      "C. Vì Docker Registry sẽ tự động xóa các image cũ nếu tag ':latest' được cập nhật quá nhiều lần.",
+      "D. Vì tag ':latest' không hỗ trợ quét lỗ hổng bảo mật tự động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tag ':latest' là một con trỏ có thể thay đổi. Nếu deploy bằng ':latest', bạn không thể biết chính xác phiên bản code nào đang chạy, dẫn đến việc không thể quay lại phiên bản cũ một cách tin cậy nếu có lỗi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Docker Swarm hoặc Kubernetes, khi một container bị 'OOMKilled', hệ thống thường tự động restart nó. Điều này có thể dẫn đến hậu quả tiêu cực nào nếu không được giám sát?",
+    "options": [
+      "A. Tăng chi phí lưu trữ image trên các node.",
+      "B. Hiện tượng 'CrashLoopBackOff' gây lãng phí tài nguyên CPU và làm nghẽn hệ thống logging do các thông báo lỗi lặp lại.",
+      "C. Docker daemon sẽ tự động khóa (lock) image đó để bảo vệ host.",
+      "D. Các container khác trên cùng node sẽ bị ép buộc dừng lại để nhường RAM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu ứng dụng bị lỗi ngay khi khởi động (do thiếu RAM), việc restart liên tục (CrashLoop) sẽ tiêu tốn tài nguyên lập lịch và tạo ra lượng log khổng lồ, che lấp các vấn đề thực sự khác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cơ chế 'AppArmor' hoặc 'Seccomp' profiles trong Docker được sử dụng để làm gì?",
+    "options": [
+      "A. Tăng tốc độ thực thi của các câu lệnh hệ thống bên trong container.",
+      "B. Giới hạn các system calls (syscalls) mà một container có thể thực hiện với nhân Linux, giảm thiểu rủi ro khai thác lỗ hổng kernel.",
+      "C. Quản lý việc phân chia băng thông mạng giữa các container.",
+      "D. Tự động mã hóa dữ liệu trong các Docker Volumes."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Seccomp (Secure Computing mode) cho phép lọc các syscalls. Bằng cách giới hạn container chỉ được gọi những gì cần thiết (ví dụ: cấm 'mount'), ta giảm thiểu khả năng kẻ tấn công lợi dụng lỗi kernel để thoát khỏi container.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện 'docker build', Docker gửi toàn bộ nội dung thư mục hiện hành (Build Context) lên Docker Daemon. Làm thế nào để tối ưu hóa bước này khi thư mục chứa hàng GB dữ liệu không liên quan (như node_modules hoặc .git)?",
+    "options": [
+      "A. Sử dụng lệnh 'docker build --exclude'.",
+      "B. Sử dụng file '.dockerignore' để liệt kê các file/thư mục không cần gửi lên daemon.",
+      "C. Chạy lệnh 'rm -rf' các thư mục đó trước khi build và khôi phục sau khi build xong.",
+      "D. Sử dụng Multi-stage build để bỏ qua các thư mục đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tương tự '.gitignore', '.dockerignore' giúp loại bỏ các file không cần thiết khỏi build context, giúp quá trình build nhanh hơn và image nhỏ gọn, sạch sẽ hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần chia sẻ dữ liệu giữa hai container chạy trên cùng một host sao cho container A ghi và container B chỉ được phép đọc. Cấu hình nào sau đây là đúng?",
+    "options": [
+      "A. Sử dụng chung một volume và cấu hình ở container B là 'volumes: - mydata:/path:ro'.",
+      "B. Sử dụng chung một volume và cấu hình ở container A là 'volumes: - mydata:/path:wo'.",
+      "C. Sử dụng link '--link containerA:containerB' để truyền dữ liệu qua mạng.",
+      "D. Cấu hình container B sử dụng '--network container:containerA'."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Docker hỗ trợ flag ':ro' (read-only) khi mount volume. Điều này đảm bảo container B không thể sửa đổi dữ liệu do container A tạo ra, tăng tính bảo mật và toàn vẹn dữ liệu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng chạy trong container cần truy cập vào Docker socket (/var/run/docker.sock) để quản lý các container khác. Tại sao hành động này thường bị cấm trong các môi trường bảo mật cao?",
+    "options": [
+      "A. Vì nó làm giảm hiệu năng của Docker Daemon.",
+      "B. Vì bất kỳ ai có quyền truy cập vào Docker socket đều có quyền root trên host thông qua việc tạo các container đặc quyền.",
+      "C. Vì Docker socket chỉ hỗ trợ kết nối từ localhost.",
+      "D. Vì nó gây xung đột với các plugin network của Docker."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Truy cập vào Docker socket tương đương với việc có toàn quyền điều khiển Docker engine. Kẻ tấn công có thể khởi chạy một container mới với quyền '--privileged' và mount root filesystem của host để chiếm quyền điều khiển hoàn toàn host.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai ứng dụng trên Docker, bạn thấy các file log của container chiếm hết dung lượng đĩa cứng của host. Cách xử lý nào là chuyên nghiệp và bền vững nhất?",
+    "options": [
+      "A. Viết một shell script chạy cronjob để xóa file log định kỳ trong '/var/lib/docker/containers/'.",
+      "B. Cấu hình 'log-opts' với 'max-size' và 'max-file' trong file daemon.json của Docker.",
+      "C. Chạy container với flag '--no-logs'.",
+      "D. Giới hạn dung lượng đĩa của container bằng tham số '--disk-quota'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cấu hình log rotation ngay tại level Docker daemon (daemon.json) là cách quản lý log tập trung và tự động hiệu quả nhất, ngăn chặn việc một container làm treo cả host do tràn đĩa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiến trúc microservices, 'Ambassador pattern' sử dụng container để làm gì?",
+    "options": [
+      "A. Làm nhiệm vụ khởi tạo database cho ứng dụng chính (Init container).",
+      "B. Làm proxy đại diện cho ứng dụng chính để giao tiếp với các dịch vụ bên ngoài (như database, API), giúp tách biệt logic kết nối.",
+      "C. Làm nhiệm vụ thu thập log và đẩy về server tập trung (Sidecar logging).",
+      "D. Làm nhiệm vụ kiểm tra sức khỏe (healthcheck) cho các container khác trong cụm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ambassador container đóng vai trò như một proxy trung gian, giúp ứng dụng chính không cần quan tâm đến chi tiết kết nối (như retry logic, service discovery) tới các dịch vụ bên ngoài.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng 'BuildKit' (DOCKER_BUILDKIT=1) so với legacy build engine là gì?",
+    "options": [
+      "A. Chỉ đơn giản là giao diện dòng lệnh đẹp hơn.",
+      "B. Hỗ trợ song song hóa các công đoạn build không phụ thuộc nhau, cache hiệu quả hơn và hỗ trợ mount bí mật (secrets) mà không để lại vết trong image layers.",
+      "C. BuildKit cho phép chạy container Windows trên host Linux.",
+      "D. BuildKit tự động nén image xuống kích thước nhỏ hơn 50% so với bình thường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BuildKit là engine build hiện đại của Docker, mang lại hiệu năng vượt trội nhờ thực thi song song và các tính năng nâng cao như '--mount=type=secret', giúp bảo mật thông tin nhạy cảm trong quá trình build.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống CI/CD quy mô lớn, bạn nhận thấy thời gian build Docker image tăng đáng kể do việc tải các dependencies từ internet. Kỹ thuật tối ưu hóa Dockerfile nào sau đây là hiệu quả nhất để tận dụng cache mà vẫn đảm bảo tính bảo mật?",
+    "options": [
+      "A. Sử dụng lệnh 'docker squash' để gộp tất cả các layer lại thành một layer duy nhất sau khi build.",
+      "B. Sử dụng BuildKit với tính năng '--mount=type=cache' để lưu trữ các package manager cache giữa các lần build.",
+      "C. Sao chép toàn bộ mã nguồn vào image trước khi chạy lệnh cài đặt dependencies.",
+      "D. Sử dụng một base image duy nhất chứa tất cả các dependencies cần thiết cho mọi project."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BuildKit cache mounts cho phép lưu trữ cache của các trình quản lý gói (như npm, pip, apt) một cách bền vững giữa các lần build mà không làm tăng kích thước image cuối cùng, giúp giảm đáng kể thời gian tải lại dependencies.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi triển khai Docker trong môi trường doanh nghiệp yêu cầu bảo mật cao, tại sao việc sử dụng 'User Namespaces' (userns-remap) được coi là một chiến lược quan trọng?",
+    "options": [
+      "A. Nó cho phép container truy cập trực tiếp vào phần cứng của host mà không cần quyền root.",
+      "B. Nó ánh xạ user root bên trong container thành một user không có quyền (non-privileged) trên host, ngăn chặn container breakout.",
+      "C. Nó giúp tăng tốc độ mạng giữa các container bằng cách bỏ qua lớp bridge.",
+      "D. Nó tự động mã hóa tất cả dữ liệu được lưu trữ trong Docker volumes."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User Namespaces cô lập user ID và group ID, đảm bảo rằng ngay cả khi kẻ tấn công chiếm được quyền root trong container, họ cũng chỉ có quyền của một user bình thường trên hệ điều hành host, giảm thiểu rủi ro tấn công leo thang đặc quyền.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một hệ thống phân phối image cho hàng ngàn node trong nhiều khu vực địa lý khác nhau. Giải pháp nào tối ưu nhất để giảm độ trễ và băng thông đường truyền trục (backbone)?",
+    "options": [
+      "A. Sử dụng một Docker Registry trung tâm duy nhất với cấu hình lưu trữ S3.",
+      "B. Triển khai các Registry Mirror cục bộ tại mỗi khu vực và sử dụng cơ chế HTTP pull-through cache.",
+      "C. Tăng số lượng layer trong Docker image để tận dụng khả năng tải song song.",
+      "D. Chỉ sử dụng Docker Save và Docker Load qua giao thức SCP để đảm bảo tính toàn vẹn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pull-through cache (Registry Mirror) tại mỗi khu vực giúp các node tải image từ server cục bộ thay vì kéo từ registry trung tâm qua mạng WAN, giúp giảm độ trễ và tiết kiệm băng thông liên vùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một ứng dụng Java chạy trong Docker thường xuyên bị crash với lỗi 'OOMKilled' mặc dù heap size đã được giới hạn bằng -Xmx. Nguyên nhân sâu xa thường gặp nhất ở cấp độ container là gì?",
+    "options": [
+      "A. Docker daemon không cấp đủ CPU share cho container.",
+      "B. JVM không nhận biết được giới hạn bộ nhớ của cgroups, dẫn đến bộ nhớ Non-Heap và Overhead vượt quá giới hạn của container.",
+      "C. Swap trên host bị tắt khiến Docker không thể mở rộng bộ nhớ ảo.",
+      "D. File hệ thống OverlayFS chiếm dụng quá nhiều RAM của ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong các phiên bản cũ hoặc cấu hình sai, JVM chỉ nhìn thấy tổng RAM của host thay vì giới hạn của cgroups. Khi tổng bộ nhớ (Heap + Non-Heap + Stack) vượt quá giới hạn '--memory' của Docker, kernel sẽ kích hoạt OOM Killer để tắt container.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Docker Content Trust (DCT), thành phần nào chịu trách nhiệm ký và xác thực metadata của image để đảm bảo tính toàn vẹn và nguồn gốc?",
+    "options": [
+      "A. Docker Engine API.",
+      "B. Notary server.",
+      "C. GnuPG (GPG).",
+      "D. Docker Compose."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Notary là dự án mã nguồn mở cung cấp khả năng ký và xác thực dữ liệu bằng cách sử dụng các khóa mật mã. Docker Content Trust tích hợp với Notary để đảm bảo image không bị giả mạo từ lúc đẩy lên registry đến lúc kéo về.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kịch bản di chuyển một ứng dụng legacy yêu cầu địa chỉ IP tĩnh và kết nối trực tiếp vào mạng nội bộ của doanh nghiệp (L2), driver mạng nào của Docker là lựa chọn phù hợp nhất?",
+    "options": [
+      "A. Bridge driver.",
+      "B. Overlay driver.",
+      "C. Macvlan driver.",
+      "D. Host driver."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Macvlan cho phép gán một địa chỉ MAC vật lý cho mỗi container, khiến nó xuất hiện như một thiết bị vật lý thực sự trong mạng. Điều này cho phép container nhận IP trực tiếp từ mạng của doanh nghiệp mà không cần qua NAT.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'tini' hoặc 'dumb-init' làm PID 1 bên trong container được khuyến nghị cho các ứng dụng phức tạp?",
+    "options": [
+      "A. Để tăng tốc độ khởi động của container.",
+      "B. Để quản lý việc chuyển tiếp tín hiệu (signal forwarding) và thu dọn các tiến trình con bị bỏ rơi (zombie processes).",
+      "C. Để thay thế hoàn toàn Docker daemon trong việc quản lý vòng đời container.",
+      "D. Để tự động nén các file log được tạo ra bởi ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nhiều ứng dụng không được thiết kế để chạy làm PID 1, dẫn đến việc không xử lý đúng các tín hiệu như SIGTERM hoặc không dọn dẹp các tiến trình con sau khi kết thúc. Các init tool nhỏ gọn này giúp quản lý các tác vụ đó một cách chuẩn xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần tối ưu hóa một Dockerfile cho ứng dụng Python. Lệnh nào sau đây sẽ tạo ra image có kích thước nhỏ nhất và ít layer nhất mà vẫn đảm bảo tính đúng đắn?",
+    "options": [
+      "A. RUN apt-get update; RUN apt-get install -y python3; RUN rm -rf /var/lib/apt/lists/*",
+      "B. RUN apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*",
+      "C. COPY . . sau đó chạy lệnh RUN cài đặt dependencies.",
+      "D. Sử dụng lệnh FROM scratch và copy toàn bộ thư viện /usr/bin/python từ host."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc kết hợp các lệnh vào một dòng bằng '&&' và dọn dẹp cache của package manager ngay trong cùng một layer giúp tránh việc lưu lại các file tạm dư thừa trong các layer trung gian, từ đó giảm kích thước image.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Docker Swarm hoặc môi trường đa host, rủi ro lớn nhất khi sử dụng 'local' volume driver là gì?",
+    "options": [
+      "A. Dữ liệu sẽ bị mã hóa và không thể đọc được nếu không có key.",
+      "B. Dữ liệu không được đồng bộ hóa giữa các node, dẫn đến mất dữ liệu hoặc không nhất quán khi container được reschedule sang node khác.",
+      "C. Hiệu suất I/O bị giảm 50% so với việc ghi trực tiếp vào container layer.",
+      "D. Local volume driver không hỗ trợ các hệ điều hành Linux hiện đại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Local volume driver chỉ lưu trữ dữ liệu trên ổ cứng cục bộ của một node cụ thể. Nếu container bị di chuyển sang node khác bởi orchestrator, nó sẽ không thể truy cập vào dữ liệu cũ, gây gián đoạn dịch vụ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lệnh 'docker system prune -a' sẽ thực hiện hành động nào sau đây?",
+    "options": [
+      "A. Chỉ xóa các container đang chạy quá 24 giờ.",
+      "B. Xóa tất cả các container đã dừng, các network không sử dụng, các dangling images và cả các image không có container nào sử dụng.",
+      "C. Xóa toàn bộ cấu hình của Docker daemon và reset về mặc định.",
+      "D. Xóa toàn bộ các volume chứa dữ liệu quan trọng của người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tham số '-a' (all) mở rộng phạm vi xóa của lệnh prune, không chỉ xóa các dangling images (không có tag) mà còn xóa tất cả các image không được tham chiếu bởi ít nhất một container hiện có.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi cấu hình giới hạn tài nguyên, sự khác biệt chính giữa '--cpu-shares' và '--cpus' trong Docker là gì?",
+    "options": [
+      "A. '--cpus' là giới hạn mềm, '--cpu-shares' là giới hạn cứng.",
+      "B. '--cpu-shares' định nghĩa trọng số ưu tiên khi tranh chấp tài nguyên, trong khi '--cpus' giới hạn chính xác số lượng CPU core mà container có thể sử dụng.",
+      "C. '--cpu-shares' chỉ áp dụng cho Windows containers, '--cpus' chỉ áp dụng cho Linux.",
+      "D. Không có sự khác biệt, cả hai đều dùng để giới hạn bộ nhớ RAM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CPU shares là một cơ chế lập lịch tương đối (relative weighting). Nếu hệ thống rảnh, container có thể dùng quá số share. Ngược lại, '--cpus' (dựa trên CFS quota) giới hạn cứng lượng thời gian CPU mà container được phép sử dụng trong mỗi chu kỳ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để triển khai một ứng dụng Microservices có khả năng tự phục hồi (self-healing) trên một cụm Docker duy nhất mà không dùng K8s, công cụ nào là tối ưu nhất?",
+    "options": [
+      "A. Docker Bash scripts.",
+      "B. Docker Compose với chính sách 'restart: always' hoặc 'unless-stopped'.",
+      "C. Docker Scan.",
+      "D. Docker Desktop GUI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Docker Compose cung cấp các restart policies giúp tự động khởi động lại container nếu nó bị crash hoặc nếu Docker daemon khởi động lại, đáp ứng yêu cầu cơ bản về self-healing cho các hệ thống đơn giản.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một container đang chạy gặp lỗi hiệu năng nghiêm trọng. Bạn muốn kiểm tra các lời gọi hệ thống (system calls) mà ứng dụng đang thực hiện để debug. Lệnh nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. docker logs -f <container_id>",
+      "B. docker stats <container_id>",
+      "C. docker exec --privileged <container_id> strace -p 1",
+      "D. docker inspect <container_id>"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Strace là công cụ dùng để theo dõi các system calls. Để chạy strace lên một tiến trình bên trong container, bạn thường cần quyền privileged hoặc thêm các capability cụ thể (SYS_PTRACE) để can thiệp vào kernel.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Vấn đề 'Docker Image Scanning' trong quy trình DevSecOps nên được thực hiện vào thời điểm nào là hiệu quả nhất để giảm thiểu rủi ro?",
+    "options": [
+      "A. Chỉ quét sau khi ứng dụng đã chạy ổn định trên Production.",
+      "B. Quét ngay sau khi image được build trong CI pipeline và trước khi đẩy vào Registry.",
+      "C. Quét định kỳ mỗi năm một lần trên toàn bộ server.",
+      "D. Chỉ quét khi có phản hồi từ khách hàng về lỗi bảo mật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quét image sớm (Shift Left Security) trong CI pipeline giúp phát hiện các lỗ hổng (CVE) ngay từ khâu phát triển, ngăn chặn việc đưa các image không an toàn vào registry và môi trường vận hành.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiến trúc Docker, Storage Driver nào hiện được khuyến nghị sử dụng rộng rãi nhất cho hầu hết các bản phân phối Linux hiện đại nhờ hiệu suất và tính ổn định?",
+    "options": [
+      "A. AUFS",
+      "B. DeviceMapper",
+      "C. Overlay2",
+      "D. Btrfs"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Overlay2 là storage driver mặc định và được tối ưu hóa tốt nhất cho Docker trên các kernel Linux hiện đại, khắc phục nhiều nhược điểm về hiệu suất và inodes của các driver cũ như AUFS hay DeviceMapper.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần truyền các thông tin nhạy cảm như Database Password vào container. Phương pháp nào sau đây là KÉM an toàn nhất?",
+    "options": [
+      "A. Sử dụng Docker Secrets (trong Swarm mode).",
+      "B. Truyền qua biến môi trường (Environment Variables) bằng flag '-e' hoặc file '.env'.",
+      "C. Sử dụng một công cụ bên thứ ba như HashiCorp Vault.",
+      "D. Mount một file chứa mật khẩu từ một volume được mã hóa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Biến môi trường thường được lưu lại trong lịch sử shell, hiển thị rõ ràng trong lệnh 'docker inspect' và có thể bị rò rỉ qua các file log hoặc tiến trình con, do đó không an toàn cho dữ liệu nhạy cảm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tính năng 'Multi-stage builds' trong Dockerfile giải quyết vấn đề chính nào sau đây?",
+    "options": [
+      "A. Cho phép chạy nhiều container từ cùng một Dockerfile.",
+      "B. Giảm kích thước image cuối cùng bằng cách chỉ copy những artifact cần thiết từ các stage build trung gian.",
+      "C. Tự động chia nhỏ ứng dụng monolith thành microservices.",
+      "D. Tăng tốc độ kết nối mạng giữa các layer."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Multi-stage builds cho phép bạn sử dụng các image lớn chứa đầy đủ công cụ build (compiler, SDK) ở các stage đầu, sau đó chỉ copy file thực thi (binary) sang một image cực nhẹ (như alpine) ở stage cuối.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi cấu hình Docker Network, chế độ 'Internal' (không có kết nối ra ngoài) được thiết lập bằng cách nào?",
+    "options": [
+      "A. Sử dụng flag '--internal' khi tạo network.",
+      "B. Xóa file /etc/resolv.conf bên trong container.",
+      "C. Không gán gateway cho network đó.",
+      "D. Sử dụng driver 'none'."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi tạo một network với flag '--internal', Docker sẽ cấu hình các quy tắc iptables để ngăn chặn mọi lưu lượng đi ra (egress) khỏi network đó, tăng cường tính cô lập cho các database hoặc backend nhạy cảm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một kỹ sư DevOps muốn giới hạn số lượng tiến trình (processes) tối đa mà một container có thể tạo ra để ngăn chặn tấn công 'fork bomb'. Tham số nào cần được cấu hình?",
+    "options": [
+      "A. --pids-limit",
+      "B. --ulimit nproc",
+      "C. --cpu-max-procs",
+      "D. --task-limit"
+    ],
+    "correctAnswer": "A",
+    "explanation": "'--pids-limit' giới hạn số lượng tiến trình hoặc luồng (threads) mà một container có thể tạo ra tại một thời điểm, giúp bảo vệ tài nguyên của host khỏi các lỗi lập trình hoặc tấn công từ chối dịch vụ bên trong container.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Docker Compose, thuộc tính 'depends_on' đảm bảo điều gì khi khởi động các dịch vụ?",
+    "options": [
+      "A. Đảm bảo dịch vụ phụ thuộc đã hoàn thành việc khởi tạo database bên trong.",
+      "B. Đảm bảo container của dịch vụ phụ thuộc được khởi chạy trước theo thứ tự, nhưng không đảm bảo ứng dụng bên trong đã 'ready'.",
+      "C. Tự động cấu hình load balancer giữa các dịch vụ.",
+      "D. Đảm bảo các dịch vụ chia sẻ chung một địa chỉ IP."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'depends_on' chỉ kiểm soát thứ tự khởi chạy của các container. Để đảm bảo ứng dụng thực sự sẵn sàng (ví dụ: DB đã mở port), bạn cần kết hợp với 'healthcheck' hoặc các script kiểm tra trạng thái.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng tag 'latest' cho các image triển khai trên môi trường Production?",
+    "options": [
+      "A. Vì tag 'latest' sẽ khiến image bị xóa sau 24 giờ.",
+      "B. Vì nó gây mất tính định danh (non-deterministic), khó rollback và có thể gây lỗi không dự báo được khi image 'latest' bị thay đổi trên registry.",
+      "C. Vì Docker Engine sẽ từ chối kéo image có tag 'latest' nếu không có quyền root.",
+      "D. Vì tag 'latest' làm tăng dung lượng lưu trữ của image lên gấp đôi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng tag cụ thể (như v1.2.3 hoặc git-sha) đảm bảo tính nhất quán giữa các môi trường. Tag 'latest' có thể trỏ đến các phiên bản khác nhau tại các thời điểm khác nhau, gây rủi ro khi scale-out hoặc recovery.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cơ chế nào của Docker cho phép chia sẻ file giữa host và container với hiệu suất I/O cao nhất, thường dùng cho database?",
+    "options": [
+      "A. Bind mounts.",
+      "B. Named Volumes.",
+      "C. tmpfs mounts.",
+      "D. OverlayFS layers."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bind mounts gắn trực tiếp một thư mục từ host vào container mà không qua lớp quản lý của Docker volume driver, cung cấp hiệu suất I/O gần như tương đương với host, phù hợp cho các ứng dụng đòi hỏi tốc độ ghi đĩa cao.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để giảm thiểu diện tích tấn công (attack surface) cho một Docker image chạy ứng dụng Go đã được build tĩnh (statically linked), base image nào là tối ưu nhất?",
+    "options": [
+      "A. ubuntu:latest",
+      "B. alpine:latest",
+      "C. scratch",
+      "D. debian:slim"
+    ],
+    "correctAnswer": "C",
+    "explanation": "'scratch' là một image trống rỗng hoàn toàn. Với các binary đã được build tĩnh, bạn không cần bất kỳ thư viện hệ điều hành nào, giúp loại bỏ hoàn toàn các lỗ hổng bảo mật từ base OS.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh 'docker events' có thể được sử dụng cho mục đích nào trong hệ thống giám sát?",
+    "options": [
+      "A. Xem lịch sử các câu lệnh bash đã chạy trong container.",
+      "B. Theo dõi theo thời gian thực các hành động trên Docker daemon như container start, die, oom, image push.",
+      "C. Phân tích lưu lượng mạng giữa các container.",
+      "D. Dự báo thời điểm container sẽ hết tài nguyên bộ nhớ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'docker events' cung cấp một stream các sự kiện từ server, cực kỳ hữu ích để tích hợp với các hệ thống giám sát và tự động hóa nhằm phản ứng kịp thời với các thay đổi trạng thái của container.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi gặp lỗi 'No space left on device' trên host chạy Docker, mặc dù ổ cứng vẫn còn dung lượng trống đáng kể, nguyên nhân kỹ thuật nào sau đây là khả thi nhất?",
+    "options": [
+      "A. Docker daemon bị giới hạn bởi quota của người dùng.",
+      "B. Hết số lượng Inodes trên hệ thống file (thường do quá nhiều layer hoặc file nhỏ trong volumes).",
+      "C. Docker tự động khóa ổ cứng khi phát hiện virus.",
+      "D. RAM của host đã bị sử dụng hết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi file và thư mục trong Linux chiếm một Inode. Các storage driver như Overlay2 tạo ra rất nhiều layer và file trung gian. Nếu số lượng file quá lớn, hệ thống sẽ hết Inodes trước khi hết dung lượng đĩa thực tế.",
+    "difficulty": "EXPERT",
+    "skillArea": "Containers & Docker",
+    "category": "ANALYSIS"
+  }
+]

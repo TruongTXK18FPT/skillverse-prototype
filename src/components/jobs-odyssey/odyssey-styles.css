@@ -4043,6 +4043,25 @@
   padding: 0.26rem 0.58rem;
 }
 
+.fate-card__new-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(45, 255, 196, 0.55);
+  background:
+    linear-gradient(135deg, rgba(0, 246, 255, 0.22), rgba(45, 255, 196, 0.18)),
+    rgba(2, 6, 23, 0.72);
+  color: #b6fff1;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.26rem 0.58rem;
+  box-shadow:
+    0 0 12px rgba(0, 246, 255, 0.22),
+    inset 0 0 10px rgba(45, 255, 196, 0.08);
+}
+
 .fate-card__salary-tier {
   display: inline-flex;
   align-items: center;

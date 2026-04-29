@@ -716,6 +716,7 @@ const fullScreenRoutes = new Set<string>([
 
 // Routes that only hide footer (keep header visible)
 const hideFooterOnlyRoutes = new Set<string>([
+  "/dashboard",
   "/choose-role",
   "/chatbot",
   "/chatbot/general",

@@ -1082,4 +1082,194 @@ details[open] > .admin-action-buttons-row {
   }
 }
 
+/* ==================== User Management - Neon Tech isolated refresh ==================== */
+.admin-user-management-cosmic:not(.slider-management-tab) {
+  --aum-bg-1: #020817;
+  --aum-bg-2: #031226;
+  --aum-surface: rgba(7, 22, 44, 0.78);
+  --aum-surface-soft: rgba(10, 29, 58, 0.62);
+  --aum-border: rgba(56, 189, 248, 0.2);
+  --aum-border-strong: rgba(34, 211, 238, 0.38);
+  --aum-text: #e2f4ff;
+  --aum-muted: #9ec8e8;
+  --aum-cyan: #22d3ee;
+  --aum-blue: #60a5fa;
+  --aum-green: #34d399;
+  --aum-amber: #f59e0b;
+  --aum-red: #f87171;
+  color: var(--aum-text);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-user-header {
+  position: relative;
+  overflow: hidden;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 0;
+  padding: 18px;
+  border: 1px solid var(--aum-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(34, 211, 238, 0.2), transparent 48%),
+    radial-gradient(120% 140% at 100% 100%, rgba(59, 130, 246, 0.2), transparent 42%),
+    linear-gradient(145deg, var(--aum-bg-2), var(--aum-bg-1));
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.14), 0 18px 42px rgba(2, 8, 23, 0.4);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-user-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.08), transparent);
+  transform: translateX(-100%);
+  animation: aumScan 4.5s linear infinite;
+}
+
+@keyframes aumScan {
+  to { transform: translateX(100%); }
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-user-header h2 {
+  color: #b7f3ff;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.38);
+  font-size: 1.2rem;
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-user-header p,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-user-email,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-date-cell,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-pagination-total {
+  color: var(--aum-muted);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-refresh-btn,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-download-btn,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-filter-btn,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-pagination-btn,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-pagination-number,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-action-dropdown-btn {
+  border: 1px solid var(--aum-border);
+  border-radius: 10px;
+  background: rgba(34, 211, 238, 0.08);
+  color: #b8f7ff;
+  box-shadow: none;
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-download-btn,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-action-btn.save {
+  border-color: rgba(52, 211, 153, 0.4);
+  background: rgba(52, 211, 153, 0.18);
+  color: #bbf7d0;
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-filter-btn.active,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-pagination-number.active {
+  border-color: rgba(34, 211, 238, 0.6);
+  background: rgba(34, 211, 238, 0.2);
+  color: #dff9ff;
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.2);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-stat-card,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-users-table,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-pagination,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-action-buttons-row,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-detail-modal {
+  border: 1px solid var(--aum-border);
+  border-radius: 14px;
+  background:
+    radial-gradient(120% 120% at 0% 100%, rgba(34, 211, 238, 0.06), transparent 38%),
+    linear-gradient(160deg, var(--aum-surface), var(--aum-surface-soft));
+  box-shadow: 0 12px 28px rgba(2, 8, 23, 0.35);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-stat-card.mentors,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-stat-card.users {
+  border-color: rgba(34, 211, 238, 0.26);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-stat-card.mentors::before,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-stat-card.users::before {
+  background: radial-gradient(circle, var(--aum-cyan) 0%, transparent 70%);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-stat-card.mentors svg,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-stat-card.users svg,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-search-box svg,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-status-filters svg,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-date-cell svg,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-detail-item svg,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-course-item svg,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-certificate-item svg {
+  color: var(--aum-cyan);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-stat-card.mentors .admin-stat-number,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-stat-card.users .admin-stat-number,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-user-name,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-pagination-info {
+  color: #e4f9ff;
+  text-shadow: none;
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-users-table th {
+  background: rgba(34, 211, 238, 0.08);
+  border-bottom: 1px solid var(--aum-border);
+  color: #c9ecff;
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-users-table td {
+  border-top: 1px solid rgba(56, 189, 248, 0.12);
+  color: var(--aum-text);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-users-table tbody tr:hover {
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-search-box,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-form-group input,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-form-group select,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-detail-item,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-course-item,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-certificate-item {
+  border: 1px solid var(--aum-border);
+  background: rgba(7, 22, 42, 0.85);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-search-box:focus-within,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-form-group input:focus,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-form-group select:focus {
+  border-color: var(--aum-border-strong);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-user-avatar {
+  background: linear-gradient(135deg, var(--aum-cyan), var(--aum-blue));
+  border-radius: 10px;
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-role-badge.mentor,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-role-badge.user,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-action-btn.edit,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-action-btn.view {
+  background: rgba(34, 211, 238, 0.14);
+  color: #99f6ff;
+  border-color: rgba(34, 211, 238, 0.32);
+}
+
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-role-badge.recruiter,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-status-badge.active,
+.admin-user-management-cosmic:not(.slider-management-tab) .admin-action-btn.unban {
+  background: rgba(52, 211, 153, 0.16);
+  color: #bbf7d0;
+  border-color: rgba(52, 211, 153, 0.32);
+}
+
 
