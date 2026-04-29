@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục tiêu chính của Smoke Testing là gì?",
+    "options": [
+      "A. Kiểm tra chi tiết mọi tính năng của hệ thống",
+      "B. Xác định xem bản build có đủ ổn định để tiếp tục các bước kiểm thử tiếp theo hay không",
+      "C. Tìm kiếm các lỗi về giao diện người dùng (UI)",
+      "D. Kiểm tra hiệu năng của hệ thống dưới tải trọng cao"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Smoke Testing tập trung vào việc kiểm tra các chức năng cơ bản và quan trọng nhất để đảm bảo phần mềm đủ ổn định cho các giai đoạn test sâu hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Regression Testing, mục đích quan trọng nhất là gì?",
+    "options": [
+      "A. Kiểm tra các tính năng mới vừa được phát triển",
+      "B. Đảm bảo rằng các thay đổi hoặc sửa lỗi mới không làm ảnh hưởng đến các chức năng cũ đang hoạt động tốt",
+      "C. Hướng dẫn người dùng cuối cách sử dụng phần mềm",
+      "D. Thay thế hoàn toàn cho việc kiểm thử thủ công bằng kiểm thử tự động"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử hồi quy (Regression Testing) giúp xác nhận rằng các cập nhật phần mềm không gây ra lỗi phát sinh (side effects) cho các phần đã ổn định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thành phần nào sau đây là KHÔNG THỂ thiếu trong một Bug Report chuyên nghiệp?",
+    "options": [
+      "A. Mã nguồn của tính năng bị lỗi",
+      "B. Tên của lập trình viên đã viết code",
+      "C. Các bước tái hiện (Steps to Reproduce)",
+      "D. Danh sách tất cả các test case đã chạy trong ngày"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các bước tái hiện giúp lập trình viên hiểu cách thức lỗi xảy ra để có thể tìm nguyên nhân và sửa lỗi chính xác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Exploratory Testing, 'Test Charter' đóng vai trò gì?",
+    "options": [
+      "A. Một kịch bản kiểm thử chi tiết từng bước nhấn chuột",
+      "B. Một bản báo cáo tổng kết lỗi sau khi dự án kết thúc",
+      "C. Một tài liệu hướng dẫn mục tiêu, phạm vi và các khía cạnh cần tập trung kiểm thử trong một phiên làm việc",
+      "D. Một hợp đồng pháp lý giữa tester và khách hàng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Test Charter cung cấp định hướng và mục tiêu cho tester trong kiểm thử khám phá mà không gò bó họ vào các bước thực hiện cụ thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi kiểm tra tính tương thích trình duyệt (Cross-browser testing), tester cần chú trọng điều gì nhất?",
+    "options": [
+      "A. Kiểm tra xem mã nguồn có được viết bằng ngôn ngữ Java hay không",
+      "B. Kiểm tra sự hiển thị và hoạt động ổn định của ứng dụng trên các trình duyệt khác nhau như Chrome, Firefox, Safari",
+      "C. Kiểm tra tốc độ đường truyền internet của nhà cung cấp",
+      "D. Kiểm tra xem máy tính có cài đặt phần mềm diệt virus hay không"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cross-browser testing đảm bảo người dùng có trải nghiệm nhất quán dù họ sử dụng trình duyệt web nào.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa UI (User Interface) và UX (User Experience) trong kiểm thử là gì?",
+    "options": [
+      "A. UI kiểm tra màu sắc/bố cục, UX kiểm tra cảm giác và sự tiện dụng của người dùng",
+      "B. UI và UX hoàn toàn giống nhau, chỉ là cách gọi khác",
+      "C. UI chỉ dành cho web, UX chỉ dành cho mobile",
+      "D. UI kiểm tra logic nghiệp vụ, UX kiểm tra cơ sở dữ liệu"
+    ],
+    "correctAnswer": "A",
+    "explanation": "UI tập trung vào phần nhìn (giao diện), còn UX tập trung vào trải nghiệm và mức độ dễ sử dụng của ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn tìm thấy một lỗi nhưng không thể tái hiện lại nó ở lần thử thứ hai. Bạn nên làm gì?",
+    "options": [
+      "A. Bỏ qua lỗi đó và coi như nó chưa từng tồn tại",
+      "B. Lập tức báo cáo lỗi đó là lỗi nghiêm trọng (Blocker)",
+      "C. Cố gắng thử lại nhiều lần với các điều kiện khác nhau và ghi chú lại các bước đã thử trước khi báo cáo",
+      "D. Yêu cầu lập trình viên tự đi tìm lỗi đó"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Với lỗi không ổn định (intermittent bug), tester cần kiên trì tìm ra quy luật hoặc điều kiện biên khiến lỗi xuất hiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sanity Testing thường được thực hiện khi nào?",
+    "options": [
+      "A. Khi bắt đầu một dự án mới hoàn toàn",
+      "B. Sau khi nhận được một bản build có sửa lỗi cụ thể để xác nhận lỗi đó đã được fix và các logic liên quan vẫn ổn",
+      "C. Khi khách hàng yêu cầu nghiệm thu sản phẩm cuối cùng",
+      "D. Khi hệ thống bị sập hoàn toàn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sanity testing là một tập hợp con của regression testing, tập trung vào việc kiểm tra nhanh các thay đổi cụ thể sau khi sửa lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quy trình UAT (User Acceptance Testing), vai trò của Manual Tester thường là gì?",
+    "options": [
+      "A. Viết code thay cho lập trình viên",
+      "B. Quyết định thay cho khách hàng về việc mua sản phẩm",
+      "C. Hỗ trợ chuẩn bị môi trường, dữ liệu test và hướng dẫn người dùng cuối thực hiện kiểm thử",
+      "D. Chỉ ngồi quan sát và không làm gì cả"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tester đóng vai trò hỗ trợ kỹ thuật và quy trình để người dùng cuối (khách hàng) có thể kiểm thử nghiệm thu thuận lợi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây giúp mô tả một bug 'Expected Result' chính xác nhất?",
+    "options": [
+      "A. Những gì tester nghĩ là nên xảy ra theo ý kiến cá nhân",
+      "B. Kết quả thực tế mà tester quan sát thấy trên màn hình",
+      "C. Kết quả đúng được mô tả trong tài liệu yêu cầu (Requirement) hoặc thiết kế",
+      "D. Thông báo lỗi hiển thị trên màn hình"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Expected Result (Kết quả mong đợi) phải dựa trên tài liệu đặc tả hoặc tiêu chuẩn nghiệp vụ của dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Session-based Testing là phương pháp kiểm thử dựa trên điều gì?",
+    "options": [
+      "A. Dựa trên việc chạy các script tự động",
+      "B. Dựa trên các phiên làm việc có giới hạn thời gian và tập trung vào một mục tiêu cụ thể",
+      "C. Dựa trên việc đọc mã nguồn của lập trình viên",
+      "D. Dựa trên việc kiểm tra cơ sở dữ liệu (Database)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là một cách quản lý Exploratory Testing bằng cách chia nhỏ thời gian thành các 'session' để tăng tính kiểm soát.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi kiểm thử một trang web trên thiết bị di động (Mobile Web), thao tác nào sau đây là đặc thù cần kiểm tra?",
+    "options": [
+      "A. Kiểm tra gõ phím trên bàn phím vật lý",
+      "B. Kiểm tra việc xoay màn hình (ngang/dọc) và sự thay đổi giao diện tương ứng",
+      "C. Kiểm tra tốc độ in ấn của máy in",
+      "D. Kiểm tra việc sử dụng đĩa CD"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xoay màn hình (Orientation) là một thao tác quan trọng trên thiết bị di động ảnh hưởng đến việc hiển thị giao diện (Responsive).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một bug có 'Severity' (Mức độ nghiêm trọng) cao thường là lỗi như thế nào?",
+    "options": [
+      "A. Lỗi sai chính tả ở trang giới thiệu",
+      "B. Lỗi làm hệ thống bị treo hoặc mất dữ liệu người dùng",
+      "C. Lỗi màu sắc nút bấm hơi nhạt so với thiết kế",
+      "D. Lỗi logo công ty bị lệch 1 pixel"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Severity phản ánh mức độ ảnh hưởng của lỗi đối với vận hành của hệ thống. Treo máy hoặc mất dữ liệu là cực kỳ nghiêm trọng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao cần chụp ảnh màn hình (Screenshot) hoặc quay video khi báo cáo bug?",
+    "options": [
+      "A. Để làm cho báo cáo trông đẹp hơn",
+      "B. Để chứng minh là tester có làm việc",
+      "C. Để cung cấp bằng chứng trực quan giúp lập trình viên xác nhận và hiểu lỗi nhanh hơn",
+      "D. Để lưu trữ làm kỷ niệm cho dự án"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bằng chứng hình ảnh giúp loại bỏ sự hiểu lầm và giúp việc tái hiện lỗi trở nên dễ dàng hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kiểm thử 'Broken Links' (Liên kết hỏng) thuộc loại kiểm thử nào?",
+    "options": [
+      "A. Kiểm thử hiệu năng",
+      "B. Kiểm thử bảo mật",
+      "C. Kiểm thử giao diện và chức năng cơ bản",
+      "D. Kiểm thử đơn vị (Unit Testing)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kiểm tra các liên kết đảm bảo người dùng có thể điều hướng đúng giữa các trang, thuộc về chức năng và UI cơ bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu tài liệu yêu cầu (Requirement) không rõ ràng, tester nên làm gì trước khi test?",
+    "options": [
+      "A. Tự đoán ý nghĩa và thực hiện test theo ý mình",
+      "B. Bỏ qua tính năng đó và không test",
+      "C. Đặt câu hỏi và xác nhận lại với Business Analyst (BA) hoặc Product Owner (PO)",
+      "D. Đợi đến khi lập trình viên viết code xong rồi mới xem"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Làm rõ yêu cầu là bước quan trọng để đảm bảo tester hiểu đúng mong đợi của khách hàng trước khi thực hiện kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiểm thử thủ công, 'Test Case' là gì?",
+    "options": [
+      "A. Một đoạn mã lập trình tự động",
+      "B. Một tập hợp các điều kiện, các bước thực hiện và kết quả mong đợi để xác minh một tính năng cụ thể",
+      "C. Một lỗi tìm thấy trong phần mềm",
+      "D. Một danh sách các nhân sự tham gia dự án"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test case là tài liệu cơ bản nhất hướng dẫn tester cách kiểm tra một chức năng cụ thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Việc kiểm tra xem các nút bấm có cùng kích thước và font chữ trên tất cả các trang hay không gọi là gì?",
+    "options": [
+      "A. Kiểm thử tính nhất quán của giao diện (UI Consistency)",
+      "B. Kiểm thử tải (Load Testing)",
+      "C. Kiểm thử tích hợp (Integration Testing)",
+      "D. Kiểm thử bảo mật (Security Testing)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tính nhất quán (Consistency) đảm bảo giao diện chuyên nghiệp và không gây nhầm lẫn cho người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một bug được trạng thái 'Fixed' bởi Developer, bước tiếp theo của Tester là gì?",
+    "options": [
+      "A. Đóng bug ngay lập tức",
+      "B. Thực hiện Retesting để xác nhận lỗi đã thực sự được sửa trên môi trường test",
+      "C. Xóa bug đó khỏi hệ thống quản lý lỗi",
+      "D. Viết một bug mới cho tính năng khác"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Retesting là bắt buộc để đảm bảo rằng bản sửa lỗi hoạt động đúng như mong đợi trước khi đóng bug.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Error Guessing' dựa trên yếu tố nào?",
+    "options": [
+      "A. Dựa trên các công thức toán học phức tạp",
+      "B. Dựa trên kinh nghiệm và trực giác của tester về những nơi lỗi thường xảy ra",
+      "C. Dựa trên việc chọn ngẫu nhiên các phím trên bàn phím",
+      "D. Dựa trên việc đọc tài liệu hướng dẫn sử dụng của đối thủ"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Guessing là kỹ thuật dựa trên kinh nghiệm thực tế của tester để dự đoán các tình huống lỗi tiềm ẩn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điều nào sau đây mô tả đúng nhất về 'Actual Result' trong Bug Report?",
+    "options": [
+      "A. Những gì phần mềm nên làm theo tài liệu",
+      "B. Những gì phần mềm thực sự thực hiện khi tester thực hiện các bước test",
+      "C. Tên của thiết bị đang dùng để test",
+      "D. Ý kiến của khách hàng về tính năng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Actual Result phản ánh hành vi thực tế của hệ thống tại thời điểm xảy ra lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử trên thiết bị di động thật (Real devices) khác gì so với trình giả lập (Emulator)?",
+    "options": [
+      "A. Trình giả lập luôn chính xác 100% so với máy thật",
+      "B. Máy thật cho phép kiểm tra các yếu tố như độ nhạy cảm ứng, pin và các tác động vật lý thực tế",
+      "C. Máy thật không bao giờ có lỗi",
+      "D. Trình giả lập đắt tiền hơn máy thật"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử trên thiết bị thật giúp phát hiện các vấn đề về phần cứng và môi trường thực tế mà trình giả lập có thể bỏ qua.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một 'Charter' trong Exploratory Testing thường chứa thông tin nào?",
+    "options": [
+      "A. Danh sách lương của nhân viên",
+      "B. Mục tiêu (Target), Tài nguyên (Resources) và Các ghi chú cần tập trung (Focus)",
+      "C. Toàn bộ mã nguồn của ứng dụng",
+      "D. Địa chỉ văn phòng của khách hàng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Charter giúp định hướng cho phiên kiểm thử khám phá để tester không đi quá xa khỏi mục tiêu cần kiểm tra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu bạn phát hiện một lỗi chính tả trên màn hình chính, bạn nên phân loại Priority (Độ ưu tiên) như thế nào?",
+    "options": [
+      "A. High - vì nó ảnh hưởng đến uy tín công ty",
+      "B. Low - vì nó không ảnh hưởng đến chức năng của hệ thống",
+      "C. Blocker - vì người dùng sẽ không dùng ứng dụng nữa",
+      "D. Critical - vì nó làm hỏng logic nghiệp vụ"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi chính tả thường được xếp vào Priority Low vì nó không ngăn cản người dùng thực hiện các chức năng chính.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Mục đích của việc kiểm thử 'Compatibility' là gì?",
+    "options": [
+      "A. Kiểm tra xem phần mềm có chạy được trên các hệ điều hành, trình duyệt và thiết bị khác nhau không",
+      "B. Kiểm tra xem lập trình viên có hòa đồng với tester không",
+      "C. Kiểm tra xem phần mềm có tốn nhiều dung lượng ổ cứng không",
+      "D. Kiểm tra xem phần mềm có dịch sang tiếng nước ngoài được không"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Kiểm thử tương thích đảm bảo ứng dụng hoạt động tốt trên nhiều môi trường người dùng khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Exploratory Testing, một 'Test Charter' tốt cần xác định rõ những yếu tố nào để đảm bảo phiên kiểm thử hiệu quả?",
+    "options": [
+      "A. Danh sách chi tiết các bước thực hiện (step-by-step) và kết quả mong đợi.",
+      "B. Mục tiêu kiểm thử, phạm vi tập trung và các nguồn lực/công cụ hỗ trợ.",
+      "C. Toàn bộ các trường hợp kiểm thử (test cases) có trong hệ thống.",
+      "D. Chỉ bao gồm danh sách các lỗi đã tìm thấy ở phiên trước."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test Charter định hướng cho phiên Exploratory Testing bằng cách xác định mục tiêu (Mission) và phạm vi (Scope) mà không gò bó người kiểm thử vào các bước cố định.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện Session-based Testing, thời gian (time-box) cho một phiên kiểm thử thông thường nên kéo dài bao lâu để duy trì sự tập trung?",
+    "options": [
+      "A. Từ 15 đến 30 phút.",
+      "B. Từ 60 đến 120 phút.",
+      "C. Tối thiểu 4 tiếng trở lên.",
+      "D. Tùy thuộc vào việc khi nào tìm hết lỗi thì dừng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một phiên (session) tiêu chuẩn thường kéo dài từ 60-120 phút để đủ thời gian đi sâu vào chức năng nhưng không quá dài gây mệt mỏi và mất tập trung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử UI cho một ứng dụng web trên nhiều trình duyệt. Bạn phát hiện lỗi layout chỉ xuất hiện trên Safari (macOS). Bước xử lý tiếp theo hợp lý nhất là gì?",
+    "options": [
+      "A. Bỏ qua vì Safari không phải là trình duyệt phổ biến nhất.",
+      "B. Kiểm tra lỗi đó trên Safari của các phiên bản iOS (iPhone/iPad) để xác định phạm vi.",
+      "C. Yêu cầu lập trình viên sửa lỗi trên tất cả các trình duyệt ngay lập tức.",
+      "D. Ghi nhận lỗi và đánh dấu là lỗi nghiêm trọng (Critical) bất kể số lượng người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc kiểm tra thêm trên các thiết bị/phiên bản khác cùng engine (WebKit) giúp xác định lỗi là do trình duyệt cụ thể hay do engine, hỗ trợ dev khoanh vùng lỗi tốt hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiểm thử hồi quy (Regression Testing), tiêu chí nào là quan trọng nhất khi lựa chọn các test case từ bộ test suite có sẵn?",
+    "options": [
+      "A. Chọn các test case dễ thực hiện nhất để tiết kiệm thời gian.",
+      "B. Chọn các test case kiểm tra các tính năng mới vừa được thêm vào.",
+      "C. Chọn các test case bao phủ các khu vực có nguy cơ cao bị ảnh hưởng bởi thay đổi mã nguồn.",
+      "D. Chọn ngẫu nhiên 50% bộ test suite để đảm bảo tính khách quan."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Regression testing tập trung vào việc đảm bảo các thay đổi không làm hỏng tính năng cũ, do đó cần ưu tiên các vùng có rủi ro cao hoặc có liên quan trực tiếp/gián tiếp đến code vừa sửa.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Sanity Testing và Smoke Testing là gì?",
+    "options": [
+      "A. Smoke Testing kiểm tra tính ổn định cơ bản của build; Sanity Testing kiểm tra chuyên sâu sau khi có bug fix.",
+      "B. Smoke Testing do khách hàng thực hiện; Sanity Testing do Tester thực hiện.",
+      "C. Smoke Testing chỉ thực hiện trên môi trường Production; Sanity Testing thực hiện trên Staging.",
+      "D. Không có sự khác biệt, hai thuật ngữ này hoàn toàn giống nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Smoke testing xác định xem build có đủ ổn định để test tiếp không, trong khi Sanity testing tập trung kiểm tra xem một lỗi cụ thể đã được sửa và các logic liên quan có hoạt động đúng không.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi hỗ trợ UAT (User Acceptance Testing), vai trò chính của Manual Tester thường là gì?",
+    "options": [
+      "A. Thay mặt người dùng cuối ký biên bản nghiệm thu dự án.",
+      "B. Viết lại toàn bộ code nếu người dùng không hài lòng với UI.",
+      "C. Hỗ trợ chuẩn bị dữ liệu, môi trường và giải thích các thắc mắc về kỹ thuật cho người dùng.",
+      "D. Ngăn cản người dùng tìm thêm lỗi mới để đảm bảo đúng tiến độ bàn giao."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong UAT, Tester đóng vai trò hỗ trợ để người dùng (hoặc khách hàng) thực hiện kiểm thử thuận lợi nhất bằng cách cung cấp dữ liệu mẫu và giải thích hành vi hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn gặp một lỗi 'chập chờn' (intermittent bug) chỉ xuất hiện 1 lần sau 10 lần thử. Bạn nên làm gì trước khi log bug?",
+    "options": [
+      "A. Không log bug vì dev sẽ không thể tái hiện được.",
+      "B. Cố gắng tìm ra quy luật hoặc điều kiện biên đặc biệt (như tốc độ mạng, bộ nhớ) gây ra lỗi.",
+      "C. Log bug ngay lập tức và ghi chú là 'Lỗi ngẫu nhiên, không cần quan tâm'.",
+      "D. Chờ đến khi lỗi xuất hiện liên tục 100% mới báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với lỗi chập chờn, việc quan trọng nhất là cố gắng cô lập các biến số (variables) để tìm ra điều kiện tái hiện ổn định nhất có thể trước khi báo cáo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một báo cáo lỗi (Bug Report) chuyên nghiệp dành cho một lỗi logic phức tạp cần yếu tố nào nhất?",
+    "options": [
+      "A. Chỉ cần chụp ảnh màn hình lỗi là đủ.",
+      "B. Các bước tái hiện (Steps to reproduce) cực kỳ chi tiết kèm theo dữ liệu đầu vào cụ thể.",
+      "C. Tên của lập trình viên mà bạn nghi ngờ đã gây ra lỗi.",
+      "D. Một video quay lại toàn bộ quá trình test từ lúc mở máy tính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các bước tái hiện rõ ràng và dữ liệu cụ thể là yếu tố then chốt để lập trình viên hiểu, tái hiện và sửa lỗi logic hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi kiểm thử UX (User Experience), tiêu chí nào sau đây được ưu tiên hàng đầu?",
+    "options": [
+      "A. Màu sắc của các nút bấm phải là màu xanh lá cây.",
+      "B. Số lượng dòng code của trang web phải là ít nhất.",
+      "C. Sự dễ dàng trong việc hoàn thành các luồng nghiệp vụ chính (User Journey).",
+      "D. Hệ thống phải sử dụng các công nghệ mới nhất như AI hay Blockchain."
+    ],
+    "correctAnswer": "C",
+    "explanation": "UX tập trung vào trải nghiệm và cảm nhận của người dùng, do đó việc người dùng có thể hoàn thành mục tiêu của họ một cách mượt mà là quan trọng nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh Agile, khi một tính năng nhỏ được thay đổi vào cuối sprint, bạn nên thực hiện loại kiểm thử nào để đảm bảo an toàn?",
+    "options": [
+      "A. Full Regression Testing toàn bộ hệ thống.",
+      "B. Chỉ kiểm thử đơn vị (Unit Test) bởi Dev.",
+      "C. Kiểm thử tập trung vào tính năng đó và các vùng ảnh hưởng trực tiếp (Impacted areas).",
+      "D. Không cần test vì tính năng quá nhỏ không thể gây lỗi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Agile với thời gian ngắn, việc phân tích tầm ảnh hưởng (Impact Analysis) để chọn lọc phạm vi test là cách tiếp cận tối ưu nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Error Guessing' trong Manual Testing dựa trên yếu tố nào là chủ yếu?",
+    "options": [
+      "A. Dựa vào các thuật toán xác suất thống kê.",
+      "B. Dựa vào kinh nghiệm của Tester về các lỗi thường gặp trong quá khứ.",
+      "C. Dựa vào việc chọn ngẫu nhiên các giá trị đầu vào.",
+      "D. Dựa vào yêu cầu của khách hàng trong tài liệu SRS."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Guessing là kỹ thuật dựa trên kinh nghiệm và trực giác của tester để dự đoán nơi lỗi có khả năng xuất hiện cao.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử tương thích (Compatibility Testing), tại sao cần ưu tiên kiểm tra trên thiết bị thật (Real Devices) thay vì chỉ dùng Emulator/Simulator?",
+    "options": [
+      "A. Emulator/Simulator không thể cài đặt được ứng dụng.",
+      "B. Thiết bị thật giúp phản ánh chính xác các vấn đề về phần cứng, pin và cảm ứng thực tế.",
+      "C. Emulator/Simulator luôn chạy nhanh hơn thiết bị thật nên không chính xác.",
+      "D. Kiểm tra trên thiết bị thật là yêu cầu bắt buộc của pháp luật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Emulator/Simulator chỉ mô phỏng môi trường phần mềm, không thể thay thế hoàn toàn các đặc tính vật lý và sự giới hạn tài nguyên của thiết bị thật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thực hiện Exploratory Testing và phát hiện một hành vi lạ nhưng không chắc đó có phải là lỗi không vì tài liệu không ghi. Bạn nên làm gì?",
+    "options": [
+      "A. Bỏ qua vì không có trong tài liệu thì không phải là lỗi.",
+      "B. Log bug ngay lập tức với mức độ nghiêm trọng cao nhất.",
+      "C. Thảo luận với Product Owner hoặc Business Analyst để xác nhận kỳ vọng của người dùng.",
+      "D. Tự ý sửa tài liệu yêu cầu để khớp với hành vi của hệ thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi yêu cầu không rõ ràng, việc trao đổi với các bên liên quan (PO/BA) là cần thiết để xác định hành vi đúng đắn của hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiểm thử giao diện (UI Testing), lỗi nào sau đây thường được coi là lỗi nghiêm trọng (Major/Critical)?",
+    "options": [
+      "A. Sai lỗi chính tả ở phần chân trang (footer).",
+      "B. Màu sắc của logo hơi nhạt hơn so với bản thiết kế.",
+      "C. Nút 'Thanh toán' bị che khuất hoàn toàn trên màn hình điện thoại phổ biến.",
+      "D. Font chữ của tiêu đề không đồng nhất giữa các trang."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi UI ngăn cản người dùng thực hiện các hành động quan trọng (blocking functionality) được coi là lỗi nghiêm trọng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Mục đích chính của việc thực hiện 'Debriefing' sau mỗi phiên Exploratory Testing là gì?",
+    "options": [
+      "A. Để phê bình Tester nếu họ không tìm thấy lỗi nào.",
+      "B. Để tổng kết những gì đã test, những lỗi tìm thấy và quyết định các bước tiếp theo.",
+      "C. Để tính toán lương thưởng dựa trên số lượng lỗi.",
+      "D. Để viết lại toàn bộ kịch bản kiểm thử thành kịch bản tự động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Debriefing là bước quan trọng trong Session-based Testing để chia sẻ kết quả, học hỏi và điều chỉnh kế hoạch test cho các phiên sau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Regression Testing, nếu thời gian quá hạn hẹp, chiến lược nào là hợp lý nhất?",
+    "options": [
+      "A. Chỉ test các lỗi đã được fix trong bản build này.",
+      "B. Sử dụng phương pháp dựa trên rủi ro (Risk-based testing) để chọn các test case quan trọng nhất.",
+      "C. Không thực hiện Regression Testing để tập trung test tính năng mới.",
+      "D. Chạy tất cả các test case nhưng bỏ qua các bước kiểm tra (verification steps)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Risk-based testing cho phép tối ưu hóa nguồn lực bằng cách tập trung vào những phần có khả năng gây thiệt hại lớn nhất cho hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một quy trình tái hiện lỗi (Bug Reproduction) hiệu quả nên bắt đầu từ trạng thái nào của ứng dụng?",
+    "options": [
+      "A. Bất kỳ trạng thái nào ứng dụng đang có.",
+      "B. Trạng thái sau khi ứng dụng đã chạy được 24 tiếng.",
+      "C. Trạng thái 'sạch' (Clean state) hoặc một điểm bắt đầu xác định (Pre-condition).",
+      "D. Trạng thái ngay sau khi hệ thống vừa bị sập."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để đảm bảo lỗi có thể tái hiện ổn định, cần bắt đầu từ một trạng thái xác định (ví dụ: sau khi xóa cache, sau khi login mới) để loại bỏ các tác động từ dữ liệu rác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc kiểm thử trên nhiều trình duyệt (Cross-browser Testing) lại cần thiết ngay cả khi website tuân thủ các tiêu chuẩn web quốc tế?",
+    "options": [
+      "A. Vì mỗi trình duyệt có engine rendering và cách xử lý CSS/JS khác nhau đôi chút.",
+      "B. Vì các trình duyệt luôn cố tình tạo ra lỗi để cạnh tranh nhau.",
+      "C. Vì người dùng chỉ sử dụng duy nhất một trình duyệt cố định.",
+      "D. Vì tiêu chuẩn web quốc tế không có giá trị thực tiễn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc dù có tiêu chuẩn chung, các engine như Blink, WebKit, Gecko vẫn có những khác biệt trong việc hiển thị và xử lý kịch bản, dẫn đến lỗi giao diện hoặc chức năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi khách hàng báo cáo một lỗi trên môi trường Production mà bạn không thể tái hiện trên môi trường Testing, yếu tố nào bạn nên kiểm tra đầu tiên?",
+    "options": [
+      "A. Kỹ năng của khách hàng.",
+      "B. Sự khác biệt về dữ liệu và cấu hình giữa hai môi trường.",
+      "C. Tốc độ đánh máy của người dùng.",
+      "D. Màu sắc giao diện trên máy khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự khác biệt về phiên bản code, cấu hình server và đặc biệt là dữ liệu thực tế thường là nguyên nhân khiến lỗi chỉ xuất hiện trên Production.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiểm thử ứng dụng di động, 'Interrupt Testing' bao gồm việc kiểm tra hành vi ứng dụng khi nào?",
+    "options": [
+      "A. Khi người dùng tắt nguồn điện thoại.",
+      "B. Khi có cuộc gọi đến, tin nhắn hoặc thông báo pin yếu trong lúc ứng dụng đang chạy.",
+      "C. Khi lập trình viên đang sửa code.",
+      "D. Khi ứng dụng đang ở trạng thái chờ (Idle) quá lâu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Interrupt Testing kiểm tra khả năng xử lý của ứng dụng khi bị các sự kiện ngoại vi ngắt quãng, đảm bảo ứng dụng không bị crash hoặc mất dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn nên làm gì nếu một lỗi bạn báo cáo bị lập trình viên từ chối (Rejected) với lý do 'Không phải lỗi'?",
+    "options": [
+      "A. Chấp nhận và đóng lỗi ngay lập tức.",
+      "B. Tranh cãi với lập trình viên cho đến khi họ chịu sửa.",
+      "C. Cung cấp thêm bằng chứng, phân tích tác động đến người dùng và thảo luận lại.",
+      "D. Âm thầm sửa code của lập trình viên đó."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tester cần bảo vệ quan điểm dựa trên bằng chứng và góc nhìn người dùng, nhưng đồng thời cần sự cầu thị và thảo luận để tìm ra giải pháp tốt nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi viết các bước tái hiện lỗi (Steps to Reproduce), tại sao nên tránh dùng các từ ngữ mơ hồ như 'Click vài lần' hay 'Chờ một lát'?",
+    "options": [
+      "A. Vì nó làm báo cáo lỗi trông không đẹp.",
+      "B. Vì nó gây khó khăn cho việc xác định nguyên nhân gốc rễ và tái hiện lỗi chính xác.",
+      "C. Vì lập trình viên không biết đếm.",
+      "D. Vì các công cụ quản lý lỗi sẽ tự động xóa các từ đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự chính xác trong các bước tái hiện (ví dụ: 'Click 3 lần', 'Chờ 5 giây') giúp loại bỏ sự phỏng đoán và giúp Dev tái hiện lỗi nhanh hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tiêu chí thoát (Exit Criteria) cho giai đoạn UAT thường dựa trên điều gì?",
+    "options": [
+      "A. Khi đã hết thời gian kiểm thử theo kế hoạch.",
+      "B. Khi tất cả các lỗi được tìm thấy đã được sửa xong.",
+      "C. Khi người dùng cuối xác nhận hệ thống đáp ứng các yêu cầu nghiệp vụ và sẵn sàng vận hành.",
+      "D. Khi Tester cảm thấy mệt mỏi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "UAT kết thúc khi khách hàng/người dùng hài lòng và xác nhận hệ thống đủ điều kiện để đưa vào sử dụng thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiểm thử tính dễ sử dụng (Usability Testing), phương pháp 'Think Aloud' có nghĩa là gì?",
+    "options": [
+      "A. Tester phải hét to khi tìm thấy lỗi.",
+      "B. Người dùng vừa thực hiện thao tác vừa nói ra những suy nghĩ, cảm nhận của họ.",
+      "C. Lập trình viên phải giải thích code cho Tester nghe.",
+      "D. Hệ thống tự động phát ra âm thanh khi người dùng thao tác sai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Think Aloud giúp người quan sát hiểu được quá trình tư duy và những khó khăn mà người dùng gặp phải khi tương tác với hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một bộ test case Regression hiệu quả cần được bảo trì như thế nào?",
+    "options": [
+      "A. Giữ nguyên không bao giờ thay đổi để đảm bảo tính nhất quán.",
+      "B. Xóa bỏ hoàn toàn sau mỗi lần release và viết mới.",
+      "C. Cập nhật thường xuyên để loại bỏ các test case lỗi thời và thêm các kịch bản cho tính năng mới.",
+      "D. Chỉ cập nhật khi có yêu cầu từ cấp trên."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hệ thống luôn thay đổi, do đó bộ Regression suite cần được tối ưu hóa liên tục để phản ánh đúng trạng thái hiện tại của sản phẩm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi lập kế hoạch cho một Session-based Testing (SBT), yếu tố nào là quan trọng nhất để đảm bảo tính hiệu quả của một Test Charter?",
+    "options": [
+      "A. Liệt kê chi tiết từng bước thực hiện (step-by-step) để đảm bảo tính tái lập.",
+      "B. Xác định rõ mục tiêu (Mission), phạm vi (Scope) và các gợi ý kiểm thử (Heuristics) cụ thể.",
+      "C. Đảm bảo thời gian mỗi session phải kéo dài ít nhất 4 tiếng để bao phủ hết tính năng.",
+      "D. Tập trung hoàn toàn vào việc tìm lỗi bảo mật thay vì các lỗi chức năng thông thường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test Charter trong SBT cần tập trung vào mục tiêu và hướng đi thay vì các bước chi tiết, giúp tester linh hoạt nhưng vẫn bám sát phạm vi cần kiểm soát.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh dự án Agile có tốc độ thay đổi nhanh, chiến lược nào tối ưu nhất cho việc duy trì bộ Regression Test manual?",
+    "options": [
+      "A. Thực hiện toàn bộ các test case cũ trong mỗi sprint để đảm bảo không có lỗi phát sinh.",
+      "B. Chỉ thực hiện regression test khi có yêu cầu trực tiếp từ khách hàng hoặc Product Owner.",
+      "C. Phân tích tác động (Impact Analysis) để chọn lọc các test case rủi ro cao và các luồng nghiệp vụ chính.",
+      "D. Loại bỏ hoàn toàn manual regression và chuyển sang 100% automation testing ngay lập tức."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Phân tích tác động giúp tối ưu hóa nguồn lực bằng cách tập trung vào những phần có khả năng bị ảnh hưởng cao nhất bởi thay đổi mới.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện Exploratory Testing trên một hệ thống phức tạp, kỹ thuật 'Heuristics' (như SFDPOT) giúp ích gì cho Senior Tester?",
+    "options": [
+      "A. Cung cấp một bộ quy tắc cứng nhắc buộc tester phải tuân thủ tuyệt đối.",
+      "B. Thay thế hoàn toàn các tài liệu yêu cầu (SRS) khi không có đủ thời gian đọc.",
+      "C. Tạo ra một khung tư duy (Mental Map) để khai phá các khía cạnh khác nhau của sản phẩm một cách có hệ thống.",
+      "D. Tự động hóa quá trình ghi lại các bước thực hiện lỗi mà không cần công cụ hỗ trợ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Heuristics cung cấp các gợi ý tư duy giúp tester bao phủ nhiều khía cạnh (Structure, Function, Data, Platform, Operations, Time) mà không cần kịch bản chi tiết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện một lỗi giao diện (UI) chỉ xuất hiện trên Safari của iPhone 13 nhưng không bị trên Chrome của Android. Bước xử lý nào thể hiện tư duy Advanced Manual Tester?",
+    "options": [
+      "A. Báo cáo lỗi ngay lập tức và yêu cầu developer sửa trên mọi trình duyệt mobile.",
+      "B. Kiểm tra trên các phiên bản iOS khác và các dòng iPhone khác để xác định phạm vi ảnh hưởng (Isolate the issue).",
+      "C. Bỏ qua lỗi này vì tỉ lệ người dùng iPhone 13 trong báo cáo analytics là rất thấp.",
+      "D. Đề xuất thay đổi thiết kế UI sang dạng đơn giản hơn để tránh lỗi tương thích trình duyệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc cô lập lỗi (Isolate) giúp xác định lỗi do OS, do Browser engine (WebKit) hay do phần cứng, giúp developer sửa lỗi chính xác và nhanh chóng hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quy trình phối hợp UAT (User Acceptance Testing), vai trò chủ đạo của một QA chuyên nghiệp là gì?",
+    "options": [
+      "A. Thực hiện thay toàn bộ công việc kiểm thử của người dùng cuối để tiết kiệm thời gian cho họ.",
+      "B. Soạn thảo kịch bản dựa trên góc nhìn kỹ thuật và ép buộc người dùng làm theo.",
+      "C. Hỗ trợ xây dựng kịch bản thực tế (Business Scenarios) và hướng dẫn người dùng cách đánh giá chất lượng sản phẩm.",
+      "D. Chỉ chịu trách nhiệm log lỗi vào hệ thống quản lý lỗi sau khi người dùng tìm thấy."
+    ],
+    "correctAnswer": "C",
+    "explanation": "QA đóng vai trò tư vấn và hỗ trợ để đảm bảo UAT diễn ra đúng mục tiêu nghiệp vụ, giúp người dùng cuối tự tin xác nhận sản phẩm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi gặp một lỗi không thể tái lập (Intermittent Bug) một cách nhất quán, hành động nào là hợp lý nhất?",
+    "options": [
+      "A. Đóng bug ngay lập tức với trạng thái 'Cannot Reproduce' để làm sạch bảng điều khiển lỗi.",
+      "B. Ghi lại các điều kiện môi trường, dữ liệu thử nghiệm và log hệ thống tại thời điểm xảy ra lỗi trước khi báo cáo.",
+      "C. Thử lại đúng 3 lần, nếu không được thì coi như lỗi đó không tồn tại.",
+      "D. Yêu cầu developer cài đặt lại toàn bộ server vì có thể do lỗi hạ tầng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với lỗi chập chờn, thông tin về ngữ cảnh (context) và log là chìa khóa để tìm ra nguyên nhân gốc rễ (Root Cause).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một Sanity Test nên được thực hiện khi nào để tối ưu hóa quy trình kiểm thử?",
+    "options": [
+      "A. Ngay sau khi nhận một build mới để kiểm tra các tính năng cơ bản nhất (Critical Path).",
+      "B. Sau khi một số lỗi cụ thể đã được sửa để xác nhận các thay đổi đó hoạt động đúng và không phá vỡ logic liên quan.",
+      "C. Vào cuối giai đoạn dự án để đảm bảo toàn bộ hệ thống sẵn sàng release.",
+      "D. Trước khi bắt đầu viết Test Plan để hiểu về các yêu cầu của dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sanity test tập trung vào một phần hẹp của hệ thống sau khi có thay đổi/sửa lỗi để đảm bảo tính logic của phần đó vẫn ổn định.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để đánh giá hiệu quả của một buổi Exploratory Testing session?",
+    "options": [
+      "A. Dựa trên số lượng bug tìm được; càng nhiều bug thì session càng hiệu quả.",
+      "B. Dựa trên số lượng trang tài liệu được viết ra sau buổi test.",
+      "C. Dựa trên độ bao phủ (Coverage) đối với các rủi ro đã xác định trong Charter và các phát hiện mới về sản phẩm.",
+      "D. Dựa trên việc tester có tuân thủ đúng 100% các bước đã dự tính ban đầu hay không."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hiệu quả của Exploratory Testing nằm ở khả năng học hỏi về sản phẩm và kiểm soát rủi ro thông qua việc khám phá thực tế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi kiểm thử UX (User Experience) cho một ứng dụng tài chính, yếu tố nào cần được ưu tiên hàng đầu?",
+    "options": [
+      "A. Màu sắc giao diện phải thật bắt mắt và sử dụng nhiều hiệu ứng chuyển động.",
+      "B. Sự rõ ràng của thông tin, tính nhất quán của các luồng giao dịch và khả năng ngăn ngừa lỗi người dùng.",
+      "C. Số lượng font chữ sử dụng trong ứng dụng phải đa dạng để gây ấn tượng.",
+      "D. Tốc độ tải trang phải dưới 100ms trong mọi điều kiện mạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với ứng dụng tài chính, sự tin tưởng và chính xác là quan trọng nhất. UX cần tập trung vào việc giúp người dùng không thực hiện sai giao dịch.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trade-off lớn nhất khi quyết định thực hiện Manual Testing thay vì Automation Testing cho một tính năng mới là gì?",
+    "options": [
+      "A. Manual Testing tốn ít chi phí đầu tư ban đầu nhưng chi phí thực hiện lại tăng dần theo thời gian.",
+      "B. Manual Testing luôn tìm được nhiều lỗi logic hơn Automation Testing trong mọi trường hợp.",
+      "C. Automation Testing không thể thực hiện được các kiểm thử về giao diện người dùng.",
+      "D. Manual Testing đảm bảo 100% không có lỗi phát sinh sau khi release."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Manual Testing linh hoạt và rẻ lúc đầu nhưng khi bộ regression lớn dần, chi phí nhân công để test lại sẽ vượt qua chi phí đầu tư automation.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kỹ thuật Error Guessing, một Senior Tester thường dựa vào đâu để dự đoán lỗi?",
+    "options": [
+      "A. Dựa vào danh sách các test case có sẵn trong thư viện của công ty.",
+      "B. Dựa vào kinh nghiệm về các lỗi thường gặp trong quá khứ, kiến thức về hệ thống và các vùng biên nhạy cảm.",
+      "C. Dựa vào việc chọn ngẫu nhiên các nút bấm trên màn hình cho đến khi hệ thống crash.",
+      "D. Dựa vào các yêu cầu nghiệp vụ mà khách hàng đã mô tả trong hợp đồng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Guessing là kỹ thuật dựa trên kinh nghiệm (Experience-based) để nhắm vào các điểm yếu tiềm ẩn của phần mềm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Cross-browser testing, chiến lược nào giúp tối ưu hóa nỗ lực kiểm thử?",
+    "options": [
+      "A. Kiểm thử tất cả các tính năng trên mọi trình duyệt và mọi phiên bản có trên thị trường.",
+      "B. Chỉ kiểm thử trên trình duyệt mà Developer đang sử dụng để code.",
+      "C. Sử dụng dữ liệu phân tích người dùng (Analytics) để ưu tiên các trình duyệt/thiết bị phổ biến nhất.",
+      "D. Chỉ kiểm thử giao diện trên các trình duyệt khác nhau, còn logic thì chỉ cần test trên một trình duyệt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng dữ liệu thực tế giúp tập trung nguồn lực vào những gì người dùng thực sự sử dụng, tối ưu hóa ROI cho việc testing.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một báo cáo lỗi (Bug Report) chất lượng cao cho một vấn đề về hiệu năng (Performance) cần bao gồm thông tin gì ngoài các bước tái lập?",
+    "options": [
+      "A. Tên của developer mà bạn nghi ngờ đã gây ra lỗi.",
+      "B. Các chỉ số đo lường cụ thể (như thời gian phản hồi), cấu hình phần cứng và điều kiện mạng.",
+      "C. Một video quay lại cảnh tester đang phàn nàn về tốc độ chậm của ứng dụng.",
+      "D. Yêu cầu developer phải nâng cấp server ngay lập tức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi hiệu năng cần dữ liệu định lượng và thông tin môi trường chi tiết để có thể phân tích và so sánh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện 'Smoke Test' lại cực kỳ quan trọng trong mô hình CI/CD?",
+    "options": [
+      "A. Để đảm bảo mọi bug nhỏ nhất đều được phát hiện trước khi code được merge.",
+      "B. Để xác nhận nhanh chóng build mới có đủ ổn định để thực hiện các bước kiểm thử tiếp theo hay không.",
+      "C. Để thay thế hoàn toàn cho giai đoạn Regression Testing.",
+      "D. Để kiểm tra xem server có bị cháy (smoke) khi chạy quá nhiều code hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Smoke test đóng vai trò là 'gatekeeper', giúp tiết kiệm thời gian bằng cách từ chối các build lỗi nặng ở các tính năng cốt lõi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử một ứng dụng di động, yếu tố 'Interrupt Testing' bao gồm những gì?",
+    "options": [
+      "A. Kiểm tra xem ứng dụng có bị crash khi tester tắt máy đột ngột không.",
+      "B. Kiểm tra cách ứng dụng xử lý khi có cuộc gọi đến, tin nhắn, thông báo pin yếu hoặc mất kết nối mạng.",
+      "C. Kiểm tra xem tester có bị gián đoạn công việc bởi các đồng nghiệp khác hay không.",
+      "D. Kiểm tra tốc độ phản hồi của ứng dụng khi người dùng bấm liên tục vào một nút."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Interrupt testing giả lập các tình huống thực tế trên thiết bị di động để đảm bảo ứng dụng xử lý các sự kiện ngoại vi một cách mượt mà.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn sẽ làm gì nếu Product Owner yêu cầu bỏ qua giai đoạn Regression Testing để kịp ngày release?",
+    "options": [
+      "A. Tuân thủ tuyệt đối vì Product Owner là người chịu trách nhiệm cuối cùng về sản phẩm.",
+      "B. Từ chối làm việc cho đến khi giai đoạn Regression Testing được khôi phục.",
+      "C. Phân tích các rủi ro tiềm ẩn, đưa ra các phương án giảm thiểu rủi ro (như test các vùng trọng yếu) và để PO quyết định dựa trên dữ liệu đó.",
+      "D. Bí mật thực hiện Regression Testing vào thời gian cá nhân mà không báo cáo cho ai."
+    ],
+    "correctAnswer": "C",
+    "explanation": "QA cần đóng vai trò tư vấn rủi ro. Việc đưa ra các kịch bản rủi ro giúp stakeholder đưa ra quyết định kinh doanh dựa trên thông tin đầy đủ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Exploratory Testing, khái niệm 'Time-boxing' có mục đích chính là gì?",
+    "options": [
+      "A. Giới hạn thời gian để ép tester phải tìm ra lỗi nhanh hơn.",
+      "B. Đảm bảo việc khám phá không bị lan man, giúp duy trì sự tập trung và tạo ra các nhịp độ kiểm thử đều đặn.",
+      "C. Để báo cáo với quản lý rằng tester đã làm việc đủ số giờ quy định.",
+      "D. Để dành thời gian cho các công việc họp hành và viết báo cáo khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Time-boxing trong SBT giúp cấu trúc hóa quá trình khám phá, giúp tester tập trung cao độ vào mục tiêu của session đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xác thực một lỗi liên quan đến bảo mật (như IDOR) bằng tay, bước nào là quan trọng nhất?",
+    "options": [
+      "A. Chụp ảnh màn hình giao diện đẹp mắt để báo cáo.",
+      "B. Chứng minh được việc có thể truy cập hoặc thao tác trên dữ liệu của người dùng khác mà không cần quyền hạn.",
+      "C. Sử dụng các công cụ scan tự động để tìm thêm các lỗi tương tự.",
+      "D. Thay đổi mật khẩu của tất cả người dùng trong hệ thống để kiểm tra."
+    ],
+    "correctAnswer": "B",
+    "explanation": "IDOR (Insecure Direct Object Reference) là lỗi về phân quyền. Việc chứng minh truy cập trái phép là bằng chứng quan trọng nhất của lỗi này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa 'Verification' và 'Validation' trong kiểm thử phần mềm là gì?",
+    "options": [
+      "A. Verification là kiểm tra code, Validation là kiểm tra giao diện.",
+      "B. Verification đảm bảo sản phẩm được xây dựng đúng quy trình, Validation đảm bảo sản phẩm đáp ứng đúng nhu cầu người dùng.",
+      "C. Verification thực hiện bởi tester, Validation thực hiện bởi khách hàng.",
+      "D. Không có sự khác biệt, hai thuật ngữ này có thể dùng thay thế cho nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Verification (Xác nhận) tập trung vào quy trình và thiết kế (Are we building the product right?), Validation (Xác thực) tập trung vào giá trị thực tế (Are we building the right product?).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế dữ liệu kiểm thử (Test Data) cho một hệ thống quản lý thuế, Senior Tester cần lưu ý điều gì nhất?",
+    "options": [
+      "A. Sử dụng càng nhiều dữ liệu giả lập (dummy data) càng tốt để tăng số lượng test case.",
+      "B. Đảm bảo tính đại diện của dữ liệu, bao gồm các trường hợp biên, định dạng sai và các mối quan hệ logic giữa các bảng dữ liệu.",
+      "C. Copy toàn bộ database thật của khách hàng về máy cá nhân để test cho chính xác.",
+      "D. Chỉ cần sử dụng dữ liệu mặc định mà developer đã cung cấp trong môi trường staging."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dữ liệu kiểm thử chất lượng phải bao phủ được các kịch bản nghiệp vụ phức tạp và các điều kiện biên để đảm bảo tính đúng đắn của logic thuế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Làm thế nào để tối ưu hóa việc tái lập một lỗi chỉ xảy ra trên môi trường Production mà không xảy ra ở Staging?",
+    "options": [
+      "A. Yêu cầu khách hàng tự sửa lỗi vì tester không thể tái lập được.",
+      "B. Kiểm tra sự khác biệt về cấu hình server, phiên bản database, dữ liệu người dùng và các bên thứ ba (third-party services) giữa hai môi trường.",
+      "C. Thực hiện test đi test lại trên Staging cho đến khi nào lỗi xuất hiện thì thôi.",
+      "D. Đưa thẳng code từ Production về môi trường Local để debug."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự khác biệt giữa các môi trường thường là nguyên nhân gốc rễ của các lỗi 'chỉ có trên Production'. Việc đối soát cấu hình là bước đi chiến lược.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh kiểm thử khả năng truy cập (Accessibility Testing), tiêu chuẩn WCAG tập trung vào 4 nguyên tắc nào?",
+    "options": [
+      "A. Đẹp, Nhanh, Rẻ, Bền.",
+      "B. Có thể nhận thức, Có thể vận hành, Có thể hiểu được, Có tính bền vững (Robust).",
+      "C. Màu sắc, Âm thanh, Hình ảnh, Văn bản.",
+      "D. Chuột, Bàn phím, Màn hình cảm ứng, Giọng nói."
+    ],
+    "correctAnswer": "B",
+    "explanation": "WCAG (Web Content Accessibility Guidelines) dựa trên 4 nguyên tắc: Perceivable, Operable, Understandable, Robust (POUR).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một tính năng mới được tích hợp vào hệ thống hiện tại, loại kiểm thử nào cần được ưu tiên để đảm bảo không có tác dụng phụ?",
+    "options": [
+      "A. Unit Testing.",
+      "B. Integration Testing phối hợp với Regression Testing.",
+      "C. GUI Testing.",
+      "D. Alpha Testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Integration testing kiểm tra sự tương tác giữa tính năng mới và cũ, trong khi Regression testing đảm bảo tính năng cũ không bị hỏng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một Senior Manual Tester nên phản hồi như thế nào khi gặp một thiết kế UX gây khó hiểu cho người dùng dù nó đúng với tài liệu SRS?",
+    "options": [
+      "A. Bỏ qua vì tester chỉ cần làm đúng theo tài liệu yêu cầu.",
+      "B. Log một lỗi UI và yêu cầu sửa ngay lập tức.",
+      "C. Phân tích sự bất hợp lý, so sánh với các tiêu chuẩn UX và đề xuất cải tiến với Product Owner/Designer.",
+      "D. Chờ đến khi khách hàng phàn nàn thì mới đưa ra ý kiến."
+    ],
+    "correctAnswer": "C",
+    "explanation": "QA cao cấp không chỉ kiểm tra tính đúng đắn so với tài liệu mà còn phải đóng góp vào chất lượng trải nghiệm người dùng (UX).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Decision Table Testing' cực kỳ hữu ích trong trường hợp nào?",
+    "options": [
+      "A. Khi hệ thống có quá nhiều màn hình cần kiểm thử giao diện.",
+      "B. Khi các yêu cầu nghiệp vụ có nhiều điều kiện kết hợp phức tạp dẫn đến các hành động khác nhau.",
+      "C. Khi cần kiểm thử hiệu năng của hệ thống dưới tải trọng lớn.",
+      "D. Khi muốn kiểm tra khả năng tương thích của ứng dụng trên các trình duyệt khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bảng quyết định giúp liệt kê đầy đủ các tổ hợp điều kiện đầu vào để đảm bảo không bỏ sót bất kỳ kịch bản logic nghiệp vụ nào.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Session-Based Test Management (SBTM), khi phân tích số liệu từ một session report, bạn nhận thấy chỉ số 'Setup time' chiếm 50% thời lượng session. Ở cấp độ chiến lược, hành động nào là phù hợp nhất để tối ưu hóa hiệu quả kiểm thử?",
+    "options": [
+      "A. Kéo dài thời gian của mỗi session để bù đắp cho phần setup.",
+      "B. Phân tích và chuẩn bị sẵn môi trường/dữ liệu kiểm thử (Test Data) trước khi bắt đầu session.",
+      "C. Chấp nhận vì đây là đặc thù của hệ thống phức tạp và không thể thay đổi.",
+      "D. Giảm bớt các bước kiểm tra UI để tập trung vào logic nghiệp vụ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ chuyên gia, việc tối ưu hóa session dựa trên metrics là bắt buộc. Setup time quá cao làm giảm thời gian thực hiện kiểm thử (Test time), do đó cần chiến lược chuẩn bị dữ liệu hoặc môi trường tốt hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi xây dựng một Test Charter cho Exploratory Testing trên một hệ thống thanh toán trực tuyến mới, yếu tố nào sau đây đóng vai trò quan trọng nhất để đảm bảo tính bao phủ rủi ro?",
+    "options": [
+      "A. Danh sách tất cả các nút bấm và trường nhập liệu trên giao diện.",
+      "B. Các kịch bản kiểm thử (Test Cases) chi tiết đã được phê duyệt.",
+      "C. Mục tiêu cụ thể (Mission), các khu vực rủi ro cao và các ràng buộc về thời gian.",
+      "D. Tổng số lỗi dự kiến sẽ tìm thấy trong quá trình thực hiện."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Một Test Charter chuyên nghiệp phải định hướng được người kiểm thử thông qua Mission và Risk areas mà không làm mất đi tính linh hoạt của Exploratory Testing.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hệ thống ERP của doanh nghiệp vừa cập nhật một module kế toán quan trọng. Với nguồn lực hạn chế, bạn nên ưu tiên chiến lược Regression Testing nào để đảm bảo an toàn hệ thống?",
+    "options": [
+      "A. Thực hiện lại toàn bộ các test case cũ của tất cả các module.",
+      "B. Sử dụng Risk-based Regression để chọn lọc các kịch bản dựa trên phân tích tác động (Impact Analysis).",
+      "C. Chỉ thực hiện Smoke test để đảm bảo hệ thống vẫn khởi động bình thường.",
+      "D. Bỏ qua Regression testing và tập trung hoàn toàn vào kiểm thử tính năng mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong môi trường doanh nghiệp phức tạp, Risk-based testing là cách tiếp cận tối ưu nhất để cân bằng giữa chất lượng và thời gian khi nguồn lực có hạn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một lỗi nghiêm trọng chỉ xuất hiện ngẫu nhiên trên môi trường Production nhưng không thể tái lập trên Staging. Là một Expert Manual Tester, bước tiếp theo của bạn là gì?",
+    "options": [
+      "A. Đóng lỗi vì không thể tái lập (Cannot Reproduce).",
+      "B. Phân tích log hệ thống, dữ liệu người dùng thực tế và kiểm tra sự khác biệt về cấu hình môi trường.",
+      "C. Yêu cầu lập trình viên tự tìm lỗi bằng cách đọc mã nguồn.",
+      "D. Tiếp tục thực hiện các bước tái lập cũ trên Staging cho đến khi lỗi xuất hiện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuyên gia cần nhìn rộng hơn các bước manual thông thường, tập trung vào sự khác biệt giữa các môi trường và dữ liệu thực tế (Observability) để tìm ra nguyên nhân gốc rễ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi hỗ trợ User Acceptance Testing (UAT) cho khách hàng doanh nghiệp, vai trò chính của QA Manual Expert là gì?",
+    "options": [
+      "A. Thay mặt khách hàng thực hiện toàn bộ việc kiểm thử và ký xác nhận.",
+      "B. Chỉ ghi nhận lỗi và chuyển cho đội phát triển xử lý.",
+      "C. Hướng dẫn khách hàng, chuẩn bị kịch bản nghiệp vụ thực tế và giúp họ đánh giá mức độ sẵn sàng của hệ thống.",
+      "D. Thuyết phục khách hàng bỏ qua các lỗi nhỏ để kịp tiến độ bàn giao."
+    ],
+    "correctAnswer": "C",
+    "explanation": "UAT hỗ trợ đòi hỏi QA phải đóng vai trò tư vấn nghiệp vụ và đảm bảo khách hàng có đủ điều kiện để đưa ra quyết định chấp nhận sản phẩm một cách chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh hệ thống đa nền tảng (Cross-platform), làm thế nào để tối ưu hóa danh sách thiết bị kiểm thử manual mà vẫn đảm bảo độ tin cậy?",
+    "options": [
+      "A. Kiểm thử trên tất cả các thiết bị hiện có trên thị trường.",
+      "B. Sử dụng ma trận ưu tiên dựa trên số lượng người dùng thực tế và rủi ro phần cứng/phần mềm đặc thù.",
+      "C. Chỉ kiểm thử trên các thiết bị đời mới nhất của Apple và Samsung.",
+      "D. Sử dụng giả lập (Emulator) hoàn toàn để tiết kiệm chi phí mua thiết bị thật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược thiết bị phải dựa trên dữ liệu thị trường (Market share) và phân tích rủi ro kỹ thuật để tối đa hóa hiệu quả trên nguồn lực hữu hạn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện UI/UX Validation cho một ứng dụng ngân hàng, yếu tố nào sau đây thường bị các tester bỏ qua nhưng lại cực kỳ quan trọng ở cấp độ Expert?",
+    "options": [
+      "A. Màu sắc của các nút bấm có đúng thiết kế không.",
+      "B. Font chữ có đồng nhất giữa các trang hay không.",
+      "C. Tính khả dụng (Accessibility) cho người khuyết tật theo tiêu chuẩn WCAG.",
+      "D. Tốc độ phản hồi của hiệu ứng chuyển trang."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở cấp độ chuyên gia và doanh nghiệp lớn, tính tuân thủ và khả năng tiếp cận (Accessibility) là yêu cầu bắt buộc về mặt pháp lý và đạo đức kinh doanh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sau khi một Hotfix được triển khai trực tiếp lên Production, bạn nên thực hiện loại kiểm thử nào để đảm bảo tính ổn định nhanh nhất mà không làm gián đoạn hệ thống?",
+    "options": [
+      "A. Full Regression Test.",
+      "B. Sanity Test tập trung vào khu vực bị ảnh hưởng bởi Hotfix.",
+      "C. Exploratory Testing trên toàn bộ hệ thống.",
+      "D. Không cần kiểm thử vì Hotfix đã được Developer kiểm tra kỹ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sanity Test là lựa chọn phù hợp nhất để xác minh nhanh rằng các thay đổi cụ thể hoạt động đúng và không gây ra lỗi nghiêm trọng tức thời sau khi sửa lỗi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Heuristic Evaluation' trong Manual Testing thường được áp dụng hiệu quả nhất vào giai đoạn nào?",
+    "options": [
+      "A. Sau khi sản phẩm đã được phát hành ra thị trường.",
+      "B. Trong quá trình Exploratory Testing để phát hiện các vấn đề về trải nghiệm người dùng.",
+      "C. Khi viết các test case chi tiết cho Regression testing.",
+      "D. Chỉ dùng khi không có tài liệu yêu cầu (Requirements)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Heuristics (như SFDPOT) cung cấp các quy tắc ngón tay cái giúp tester định hướng quá trình khám phá hệ thống một cách có hệ thống và chuyên sâu hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Làm thế nào để xử lý tình huống một lỗi 'Intermittent' (lỗi không ổn định) được tìm thấy trong quá trình manual testing?",
+    "options": [
+      "A. Bỏ qua lỗi đó cho đến khi nó xuất hiện thường xuyên hơn.",
+      "B. Ghi lại lỗi với đầy đủ thông tin về trạng thái hệ thống, log, thời điểm và các biến số môi trường.",
+      "C. Yêu cầu Developer sửa lỗi ngay lập tức mà không cần thêm thông tin.",
+      "D. Coi đó là lỗi do mạng và không cần báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuyên gia cần kiên nhẫn thu thập dữ liệu (data points) để tìm ra quy luật của các lỗi không ổn định, thay vì bỏ qua chúng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một dự án Agile tốc độ cao, tài liệu kiểm thử manual nên được duy trì như thế nào để đảm bảo tính hiệu quả?",
+    "options": [
+      "A. Viết test case cực kỳ chi tiết từng bước một để ai cũng có thể làm theo.",
+      "B. Không viết gì cả để tiết kiệm thời gian cho việc thực hiện kiểm thử.",
+      "C. Sử dụng Test Charters, Checklist và High-level Test Cases để cân bằng giữa tài liệu và thực thi.",
+      "D. Chỉ sử dụng các ghi chú cá nhân của tester."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lean Documentation là chìa khóa trong Agile. Chuyên gia biết cách tạo ra tài liệu vừa đủ để duy trì kiến thức mà không gây lãng phí nguồn lực.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử sự tương thích (Compatibility Testing) cho một ứng dụng Web doanh nghiệp, ưu tiên hàng đầu là gì?",
+    "options": [
+      "A. Đảm bảo giao diện trông hoàn hảo trên tất cả các trình duyệt cũ.",
+      "B. Tập trung vào các luồng nghiệp vụ chính trên các trình duyệt/hệ điều hành được hỗ trợ chính thức.",
+      "C. Chỉ kiểm thử trên trình duyệt Chrome vì nó phổ biến nhất.",
+      "D. Kiểm thử mọi tính năng trên mọi phiên bản trình duyệt từ trước đến nay."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược tương thích chuyên nghiệp tập trung vào việc đảm bảo chức năng cốt lõi hoạt động ổn định trên môi trường mục tiêu (Target environment) theo thỏa thuận mức dịch vụ (SLA).",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao 'Error Guessing' lại được coi là một kỹ năng quan trọng của một Expert Manual Tester?",
+    "options": [
+      "A. Vì nó giúp tester làm việc nhanh hơn mà không cần đọc tài liệu.",
+      "B. Vì nó dựa trên kinh nghiệm và trực giác để tìm ra các lỗi mà các phương pháp chính thống thường bỏ sót.",
+      "C. Vì nó thay thế hoàn toàn được các kỹ thuật thiết kế kiểm thử khác.",
+      "D. Vì nó dễ dàng giải trình với khách hàng khi không tìm thấy lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Guessing không phải là đoán mò, mà là sự tổng hợp kinh nghiệm về các lỗi thường gặp trong quá khứ để áp dụng vào hệ thống hiện tại.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quy trình phối hợp với UAT, nếu người dùng cuối báo cáo một lỗi mà QA đã bỏ lỡ, phản ứng chuyên nghiệp nhất là gì?",
+    "options": [
+      "A. Giải thích rằng lỗi đó nằm ngoài phạm vi kiểm thử ban đầu.",
+      "B. Phân tích tại sao lỗi bị bỏ sót (Root Cause Analysis) và cập nhật quy trình/bộ test case.",
+      "C. Đổ lỗi cho môi trường UAT khác với môi trường Testing.",
+      "D. Yêu cầu người dùng cuối tự sửa lỗi nếu họ có thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Continuous Improvement là tư duy của chuyên gia. Mỗi lỗi lọt lưới (Leakage) là một cơ hội để cải thiện bộ máy kiểm thử.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện Regression Testing cho một hệ thống microservices, thách thức lớn nhất đối với Manual Tester là gì?",
+    "options": [
+      "A. Việc cài đặt các service trên máy cá nhân.",
+      "B. Quản lý sự phụ thuộc (Dependencies) và đảm bảo tính toàn vẹn của dữ liệu giữa các dịch vụ.",
+      "C. Viết báo cáo lỗi cho từng service riêng biệt.",
+      "D. Tìm kiếm tài liệu API cho các service."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong kiến trúc microservices, các lỗi thường phát sinh ở các điểm giao tiếp (Integrations). Tester cần hiểu luồng dữ liệu xuyên suốt để kiểm thử hồi quy hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một chiến lược 'Smoke Testing' hiệu quả ở cấp độ doanh nghiệp nên bao gồm những gì?",
+    "options": [
+      "A. Tất cả các test case có mức ưu tiên cao (P1).",
+      "B. Một tập hợp nhỏ các kịch bản kiểm tra các chức năng cốt yếu nhất để xác nhận build có ổn định để test tiếp hay không.",
+      "C. Kiểm thử chi tiết các tính năng mới vừa được phát triển.",
+      "D. Kiểm tra toàn bộ giao diện người dùng để tìm lỗi chính tả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Smoke test dùng để 'vệ sinh' build. Nếu các chức năng sống còn không chạy, việc test chi tiết là lãng phí thời gian.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Exploratory Testing, kỹ thuật 'Time-boxing' có mục đích chính là gì?",
+    "options": [
+      "A. Để đảm bảo tester không làm việc quá giờ.",
+      "B. Để giới hạn nỗ lực kiểm thử và tạo ra sự tập trung cao độ vào một mục tiêu cụ thể trong một khoảng thời gian ngắn.",
+      "C. Để dễ dàng báo cáo số giờ làm việc với quản lý.",
+      "D. Để ngăn chặn việc tìm thấy quá nhiều lỗi trong một ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Time-boxing giúp duy trì nhịp độ và sự tập trung trong Exploratory Testing, ngăn chặn việc tester đi quá xa khỏi mục tiêu của Charter.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Làm thế nào để tài liệu hóa các bước tái lập lỗi (reproducible steps) một cách chuyên nghiệp cho một lỗi logic phức tạp?",
+    "options": [
+      "A. Chụp thật nhiều ảnh màn hình và không cần viết chữ.",
+      "B. Viết một đoạn văn dài mô tả quá trình sử dụng phần mềm.",
+      "C. Cung cấp các bước ngắn gọn, chính xác, kèm theo dữ liệu đầu vào cụ thể, trạng thái hệ thống trước đó và kết quả mong đợi.",
+      "D. Chỉ gửi video quay lại màn hình bị lỗi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự chính xác và đầy đủ về ngữ cảnh (Context) là yếu tố giúp Developer sửa lỗi nhanh nhất mà không cần hỏi lại tester.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi đánh giá UI/UX, sự khác biệt giữa 'Usability' và 'Accessibility' là gì?",
+    "options": [
+      "A. Không có sự khác biệt, hai thuật ngữ này là một.",
+      "B. Usability tập trung vào hiệu quả sử dụng, trong khi Accessibility tập trung vào khả năng tiếp cận của mọi đối tượng người dùng kể cả người khuyết tật.",
+      "C. Usability chỉ dành cho Web, Accessibility chỉ dành cho Mobile.",
+      "D. Usability quan trọng hơn Accessibility trong các dự án doanh nghiệp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuyên gia cần phân biệt rõ các khía cạnh chất lượng. Một sản phẩm dễ dùng (Usable) chưa chắc đã có thể tiếp cận được (Accessible) bởi người khiếm thị.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiểm thử hồi quy (Regression), hiện tượng 'Pesticide Paradox' (Nghịch lý thuốc trừ sâu) có thể được khắc phục bằng cách nào?",
+    "options": [
+      "A. Chạy các test case cũ nhiều lần hơn.",
+      "B. Thường xuyên rà soát, cập nhật và làm mới bộ test case để tìm ra các lỗi mới.",
+      "C. Thuê thêm nhiều tester mới để chạy lại các test case cũ.",
+      "D. Ngừng thực hiện Regression testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu chỉ sử dụng mãi một bộ test case, hệ thống sẽ trở nên 'kháng thuốc'. Chuyên gia phải liên tục cải tiến kịch bản kiểm thử.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một lỗi được báo cáo là 'Fixed' nhưng bạn kiểm tra lại vẫn thấy xuất hiện (Re-open), hành động nào thể hiện trình độ Expert?",
+    "options": [
+      "A. Tranh cãi gay gắt với Developer tại sao không sửa kỹ.",
+      "B. Kiểm tra lại môi trường, phiên bản build và thực hiện kiểm tra chéo trên các điều kiện khác trước khi Re-open kèm bằng chứng mới.",
+      "C. Ngay lập tức Re-open và không cần giải thích gì thêm.",
+      "D. Bỏ qua và chờ đến bản build sau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xác minh kỹ lưỡng (Double-check) trước khi Re-open giúp duy trì uy tín của QA và tránh lãng phí thời gian của đội ngũ phát triển.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chiến lược nào hiệu quả nhất để thực hiện Manual Testing cho một ứng dụng có quá nhiều cấu hình (Configuration testing)?",
+    "options": [
+      "A. Kiểm thử mọi tổ hợp cấu hình có thể có.",
+      "B. Sử dụng kỹ thuật Pairwise Testing để giảm số lượng kịch bản mà vẫn đảm bảo bao phủ các cặp tương tác.",
+      "C. Chỉ kiểm thử cấu hình mặc định.",
+      "D. Để người dùng tự cấu hình và báo lỗi sau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pairwise (All-pairs) là kỹ thuật toán học giúp giảm thiểu số lượng test case trong các bài toán tổ hợp cấu hình phức tạp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quy trình bàn giao phần mềm cho khách hàng, tài liệu 'Test Summary Report' phục vụ mục đích gì quan trọng nhất?",
+    "options": [
+      "A. Liệt kê tên của tất cả các tester tham gia dự án.",
+      "B. Cung cấp cái nhìn tổng thể về chất lượng sản phẩm, các rủi ro còn tồn tại và đưa ra khuyến nghị có nên phát hành hay không.",
+      "C. Chứng minh rằng QA đã làm việc rất chăm chỉ.",
+      "D. Thay thế cho các biên bản họp hàng ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Báo cáo tổng kết kiểm thử là căn cứ để các bên liên quan (Stakeholders) đưa ra quyết định kinh doanh quan trọng (Go/No-Go decision).",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử trên các thiết bị di động thực tế (Real Devices), yếu tố ngoại cảnh nào cần được Expert Manual Tester chú trọng?",
+    "options": [
+      "A. Chỉ cần kiểm tra ứng dụng có mở được không.",
+      "B. Các điều kiện về mạng (3G/4G/Yếu), sự ngắt quãng (cuộc gọi, tin nhắn), và tình trạng pin/nhiệt độ thiết bị.",
+      "C. Màu sắc của vỏ điện thoại.",
+      "D. Thời gian sạc đầy pin của thiết bị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mobile testing đòi hỏi kiểm tra ứng dụng trong các điều kiện thực tế khắc nghiệt mà người dùng có thể gặp phải.",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống Legacy cũ không có tài liệu, bạn được yêu cầu kiểm thử hồi quy. Cách tiếp cận nào là tối ưu?",
+    "options": [
+      "A. Từ chối kiểm thử vì không có tài liệu.",
+      "B. Thực hiện Exploratory Testing để tìm hiểu hệ thống, sau đó xây dựng dần bộ Checklist và Test Cases dựa trên thực tế.",
+      "C. Đoán các tính năng dựa trên các hệ thống tương tự trên mạng.",
+      "D. Yêu cầu lập trình viên viết lại tài liệu từ đầu trước khi test."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Exploratory Testing là công cụ mạnh mẽ nhất để khám phá và học hỏi các hệ thống thiếu tài liệu (Legacy systems).",
+    "difficulty": "EXPERT",
+    "skillArea": "Manual Testing",
+    "category": "SITUATION"
+  }
+]

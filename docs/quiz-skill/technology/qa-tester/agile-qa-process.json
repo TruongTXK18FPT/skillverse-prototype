@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong mô hình Scrum, QA nên bắt đầu tham gia vào quy trình kiểm thử từ thời điểm nào?",
+    "options": [
+      "A. Sau khi lập trình viên đã hoàn thành toàn bộ mã nguồn.",
+      "B. Ngay từ khi bắt đầu thảo luận về yêu cầu và lập kế hoạch Sprint.",
+      "C. Khi sản phẩm đã được triển khai lên môi trường Staging.",
+      "D. Sau khi khách hàng đã phê duyệt bản demo của sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Agile, QA cần tham gia sớm (Shift-left) để hiểu yêu cầu, ngăn chặn lỗi từ sớm và chuẩn bị kịch bản kiểm thử song song với quá trình phát triển.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của 'Definition of Done' (DoD) đối với QA là gì?",
+    "options": [
+      "A. Để xác định danh sách các lỗi cần phải sửa trong tương lai.",
+      "B. Để liệt kê các tính năng mà khách hàng yêu cầu.",
+      "C. Để đảm bảo mọi User Story đều đạt tiêu chuẩn chất lượng trước khi coi là hoàn thành.",
+      "D. Để phân chia công việc cho các thành viên trong nhóm QA."
+    ],
+    "correctAnswer": "C",
+    "explanation": "DoD là tập hợp các tiêu chuẩn chung mà sản phẩm phải đạt được (ví dụ: đã test, đã review code) để đảm bảo tính nhất quán về chất lượng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong buổi Daily Stand-up, QA Tester nên tập trung chia sẻ thông tin gì?",
+    "options": [
+      "A. Giải thích chi tiết cách tái hiện một lỗi phức tạp cho cả nhóm.",
+      "B. Báo cáo chi tiết từng bước kiểm thử đã thực hiện ngày hôm qua.",
+      "C. Cập nhật tiến độ kiểm thử, các lỗi nghiêm trọng và các rào cản (blockers).",
+      "D. Phê bình lập trình viên vì để xảy ra quá nhiều lỗi trong code."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Daily Stand-up là buổi họp ngắn để cập nhật tiến độ và nêu ra các khó khăn cần hỗ trợ để đảm bảo mục tiêu Sprint.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khái niệm 'Shift-left testing' trong Agile có nghĩa là gì?",
+    "options": [
+      "A. Chuyển các hoạt động kiểm thử sang giai đoạn cuối của dự án.",
+      "B. Thực hiện kiểm thử càng sớm càng tốt trong vòng đời phát triển.",
+      "C. Chỉ tập trung vào kiểm thử giao diện người dùng (UI).",
+      "D. Yêu cầu lập trình viên phải tự kiểm thử toàn bộ sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Shift-left là đưa việc kiểm thử về phía bên trái của trục thời gian, tức là thực hiện sớm từ khâu yêu cầu và thiết kế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Acceptance Criteria (Tiêu chí chấp nhận) thường được viết bởi ai và khi nào?",
+    "options": [
+      "A. Chỉ bởi QA sau khi đã hoàn thành việc viết Test Case.",
+      "B. Bởi Product Owner và nhóm phát triển trong quá trình Refinement hoặc Planning.",
+      "C. Bởi khách hàng sau khi họ nhận được sản phẩm cuối cùng.",
+      "D. Bởi Scrum Master để kiểm soát tiến độ của nhóm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Acceptance Criteria xác định các điều kiện mà một User Story phải thỏa mãn, thường được thống nhất trong các buổi thảo luận yêu cầu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Agile, trách nhiệm về chất lượng sản phẩm thuộc về ai?",
+    "options": [
+      "A. Chỉ thuộc về bộ phận QA/Tester.",
+      "B. Chỉ thuộc về Product Owner.",
+      "C. Thuộc về toàn bộ nhóm phát triển (bao gồm Dev, QA, PO).",
+      "D. Chỉ thuộc về Scrum Master."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Agile đề cao tinh thần 'Whole-team quality', mọi thành viên đều có trách nhiệm đảm bảo chất lượng sản phẩm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hoạt động 'Three Amigos' trong Agile thường bao gồm những vai trò nào?",
+    "options": [
+      "A. Project Manager, Tech Lead, QA Lead.",
+      "B. Business Analyst (hoặc PO), Developer, Tester.",
+      "C. Scrum Master, Developer, Khách hàng.",
+      "D. Designer, Developer, Tester."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Three Amigos là sự kết hợp giữa 3 góc nhìn: Nghiệp vụ (PO/BA), Kỹ thuật (Dev) và Kiểm thử (Tester) để làm rõ yêu cầu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "QA nên làm gì nếu một User Story không có Acceptance Criteria rõ ràng tại buổi Sprint Planning?",
+    "options": [
+      "A. Cứ tiếp tục làm và tự đoán yêu cầu theo ý mình.",
+      "B. Từ chối kiểm thử và đợi đến khi có tài liệu chi tiết.",
+      "C. Đặt câu hỏi và phối hợp với PO để làm rõ các tiêu chí chấp nhận ngay tại đó.",
+      "D. Đợi đến khi lập trình viên code xong rồi mới hỏi yêu cầu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "QA cần chủ động làm rõ yêu cầu để có cơ sở thiết kế kịch bản kiểm thử chính xác và tránh sai sót về sau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục đích chính của buổi Sprint Retrospective đối với một QA là gì?",
+    "options": [
+      "A. Để báo cáo số lượng bug đã tìm thấy trong Sprint.",
+      "B. Để trình diễn các tính năng đã kiểm thử thành công.",
+      "C. Để cùng nhóm nhìn lại quy trình làm việc và cải tiến cách phối hợp, kiểm thử.",
+      "D. Để phân chia các task kiểm thử cho Sprint tiếp theo."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Retrospective là buổi họp cải tiến quy trình, giúp nhóm làm việc hiệu quả hơn trong các Sprint sau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Kanban, QA thường tập trung vào điều gì để đảm bảo dòng chảy công việc (workflow)?",
+    "options": [
+      "A. Đảm bảo số lượng bug tìm thấy mỗi ngày là cố định.",
+      "B. Kiểm soát giới hạn công việc đang thực hiện (WIP limit) tại cột Testing.",
+      "C. Chỉ bắt đầu test khi tất cả các task đã chuyển sang cột Testing.",
+      "D. Viết thật nhiều tài liệu kiểm thử chi tiết trước khi bắt đầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Kanban, việc quản lý WIP limit giúp tránh nghẽn cổ chai tại khâu kiểm thử và đảm bảo công việc trôi chảy.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một lỗi (bug) được phát hiện vào ngày cuối cùng của Sprint, QA nên xử lý như thế nào?",
+    "options": [
+      "A. Tự ý kéo dài Sprint thêm 1 ngày để sửa lỗi.",
+      "B. Báo cáo ngay cho nhóm và PO để đánh giá mức độ ưu tiên và rủi ro.",
+      "C. Bỏ qua lỗi đó để đảm bảo đúng tiến độ Sprint.",
+      "D. Yêu cầu lập trình viên sửa ngay lập tức mà không cần báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Agile, sự minh bạch và phối hợp là quan trọng. Nhóm cần cùng nhau quyết định xem lỗi có đủ nghiêm trọng để chặn việc release hay không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Definition of Ready' (DoR) có ý nghĩa gì đối với QA?",
+    "options": [
+      "A. Là danh sách các thiết bị di động đã sẵn sàng để test.",
+      "B. Là tiêu chuẩn để một User Story đủ điều kiện bắt đầu đưa vào phát triển.",
+      "C. Là thông báo rằng lập trình viên đã cài đặt xong môi trường test.",
+      "D. Là thời điểm QA đã viết xong toàn bộ Test Case cho dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DoR giúp đảm bảo User Story đủ rõ ràng, có AC và khả thi để nhóm bắt đầu làm việc mà không bị gián đoạn do thiếu thông tin.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện Regression Testing (Kiểm thử hồi quy) lại quan trọng trong Agile?",
+    "options": [
+      "A. Để đảm bảo các tính năng mới không làm hỏng các tính năng cũ đã chạy tốt.",
+      "B. Để tìm ra các lỗi mới trong các tính năng vừa mới phát triển.",
+      "C. Để thay thế hoàn toàn việc kiểm thử thủ công bằng tự động hóa.",
+      "D. Để kéo dài thời gian phát triển của mỗi Sprint."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Do Agile phát triển lặp đi lặp lại và thay đổi liên tục, Regression Testing giúp đảm bảo sự ổn định của hệ thống hiện tại.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong BDD (Behavior Driven Development), kịch bản kiểm thử thường được viết dưới dạng nào?",
+    "options": [
+      "A. Các câu lệnh SQL truy vấn dữ liệu.",
+      "B. Cấu trúc Given - When - Then.",
+      "C. Các bước hướng dẫn cài đặt phần mềm chi tiết.",
+      "D. Danh sách các mã lỗi (Error Codes) của hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BDD sử dụng ngôn ngữ tự nhiên theo cấu trúc Given (Bối cảnh) - When (Hành động) - Then (Kết quả) để mọi bên đều hiểu được.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "QA nên làm gì khi nhận thấy Acceptance Criteria của một User Story quá mơ hồ?",
+    "options": [
+      "A. Tự tạo ra các tiêu chí riêng theo kinh nghiệm cá nhân.",
+      "B. Đợi đến khi có bug xảy ra rồi mới điều chỉnh yêu cầu.",
+      "C. Thảo luận với Product Owner để làm rõ và cụ thể hóa các tiêu chí đó.",
+      "D. Yêu cầu Scrum Master viết lại toàn bộ User Story."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự cộng tác trực tiếp với PO là cách nhanh nhất và hiệu quả nhất để giải quyết sự mơ hồ trong yêu cầu Agile.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Vai trò của QA trong buổi Sprint Review là gì?",
+    "options": [
+      "A. Ghi biên bản cuộc họp và gửi cho các bên liên quan.",
+      "B. Hỗ trợ demo các tính năng đã hoàn thành và trả lời các câu hỏi về chất lượng.",
+      "C. Phê duyệt xem Sprint tiếp theo sẽ làm những task gì.",
+      "D. Kiểm tra xem các thành viên có đi họp đúng giờ hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Sprint Review, QA giúp chứng minh rằng các tính năng hoạt động đúng như mong đợi và đáp ứng tiêu chuẩn chất lượng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phương pháp kiểm thử nào sau đây thường được khuyến khích trong Agile để tìm ra các lỗi mà kịch bản định sẵn không có?",
+    "options": [
+      "A. Waterfall Testing.",
+      "B. Exploratory Testing (Kiểm thử thăm dò).",
+      "C. Stress Testing.",
+      "D. Documentation Testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Exploratory Testing cho phép Tester sử dụng kỹ năng và tư duy sáng tạo để phát hiện lỗi dựa trên trải nghiệm thực tế thay vì chỉ đi theo kịch bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Agile, tài liệu kiểm thử (Test Documentation) nên được quản lý như thế nào?",
+    "options": [
+      "A. Phải viết thật chi tiết và đầy đủ hàng trăm trang trước khi code.",
+      "B. Không cần viết bất kỳ tài liệu nào để tiết kiệm thời gian.",
+      "C. Viết vừa đủ (Lean), tập trung vào những giá trị thực tế và dễ bảo trì.",
+      "D. Chỉ lưu trữ trên giấy và không chia sẻ cho lập trình viên."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Agile ưu tiên 'phần mềm chạy tốt hơn tài liệu đầy đủ', do đó tài liệu cần gọn nhẹ, súc tích và có giá trị sử dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một User Story được chuyển sang trạng thái 'In Testing', QA phát hiện môi trường test bị lỗi không thể thao tác. QA nên làm gì?",
+    "options": [
+      "A. Ngồi chờ cho đến khi môi trường tự hoạt động trở lại.",
+      "B. Chuyển sang làm task khác và không thông báo cho ai.",
+      "C. Thông báo ngay cho nhóm để được hỗ trợ và ghi nhận là 'Blocker'.",
+      "D. Tự ý sửa code của hệ thống để môi trường chạy được."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Agile, các vấn đề gây tắc nghẽn (blockers) cần được nêu ra sớm để nhóm cùng giải quyết, đảm bảo tiến độ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Việc tự động hóa kiểm thử (Test Automation) trong Agile nên được thực hiện khi nào?",
+    "options": [
+      "A. Chỉ thực hiện sau khi dự án đã kết thúc hoàn toàn.",
+      "B. Thực hiện song song hoặc ngay sau khi tính năng đã ổn định trong Sprint.",
+      "C. Chỉ dành cho những dự án không có sự thay đổi về yêu cầu.",
+      "D. Khi QA không còn việc gì khác để làm thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Automation giúp tăng tốc độ Regression Test, do đó nên được triển khai sớm và liên tục để hỗ trợ các vòng lặp ngắn của Agile.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số nào sau đây thường được QA quan tâm để đánh giá chất lượng trong một Sprint?",
+    "options": [
+      "A. Số dòng code mà lập trình viên đã viết.",
+      "B. Số lượng cuộc họp mà nhóm đã tham gia.",
+      "C. Mật độ lỗi (Defect Density) và tỷ lệ lỗi được sửa thành công.",
+      "D. Số lượng trang tài liệu đã được in ra."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các chỉ số về lỗi giúp QA và nhóm đánh giá được độ ổn định và chất lượng thực tế của sản phẩm đang phát triển.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Agile, nếu thời gian Sprint quá ngắn không đủ để test hết tất cả, QA nên ưu tiên điều gì?",
+    "options": [
+      "A. Test ngẫu nhiên bất kỳ tính năng nào mình thích.",
+      "B. Chỉ test những tính năng dễ nhất để xong sớm.",
+      "C. Kiểm thử dựa trên rủi ro (Risk-based testing), tập trung vào các tính năng quan trọng nhất.",
+      "D. Yêu cầu hủy bỏ kỳ Sprint đó."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Risk-based testing giúp tối ưu hóa nguồn lực bằng cách tập trung vào những phần có khả năng lỗi cao hoặc ảnh hưởng lớn đến người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mối quan hệ giữa QA và Developer trong nhóm Agile nên như thế nào?",
+    "options": [
+      "A. Đối đầu để tìm ra càng nhiều lỗi càng tốt.",
+      "B. Hợp tác chặt chẽ để cùng tạo ra sản phẩm chất lượng.",
+      "C. QA chỉ nói chuyện với Developer thông qua các công cụ quản lý lỗi.",
+      "D. Developer không cần quan tâm đến những gì QA đang làm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự cộng tác giúp hiểu rõ vấn đề nhanh hơn, sửa lỗi sớm hơn và tạo ra môi trường làm việc tích cực.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hoạt động 'Backlog Refinement' giúp ích gì cho QA?",
+    "options": [
+      "A. Giúp QA có thời gian nghỉ ngơi giữa các Sprint.",
+      "B. Giúp QA hiểu rõ các User Story sắp tới để chuẩn bị kế hoạch test sớm.",
+      "C. Là nơi để QA báo cáo các lỗi từ Sprint trước.",
+      "D. Giúp QA thay đổi cấu trúc của nhóm phát triển."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Refinement giúp làm rõ yêu cầu cho các Sprint tương lai, cho phép QA chuẩn bị kịch bản và dữ liệu test từ trước.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điều gì là quan trọng nhất để QA duy trì tốc độ trong các Sprint liên tiếp?",
+    "options": [
+      "A. Luôn làm thêm giờ vào cuối mỗi Sprint.",
+      "B. Xây dựng bộ test case hồi quy hiệu quả và áp dụng tự động hóa hợp lý.",
+      "C. Giảm bớt số lượng kịch bản kiểm thử qua mỗi Sprint.",
+      "D. Chỉ kiểm thử các tính năng mới và bỏ qua các tính năng cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để duy trì tốc độ trong Agile, việc tối ưu hóa quy trình kiểm thử và tự động hóa các phần lặp lại là yếu tố sống còn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong buổi Sprint Planning, QA phát hiện một User Story có Acceptance Criteria (AC) quá mơ hồ. Hành động nào là hợp lý nhất?",
+    "options": [
+      "A. Đợi đến khi Developer bắt đầu code rồi mới hỏi chi tiết.",
+      "B. Yêu cầu làm rõ AC ngay trong buổi họp để đảm bảo team có thể ước lượng (estimate) chính xác.",
+      "C. Tự giả định các trường hợp kiểm thử dựa trên kinh nghiệm cá nhân.",
+      "D. Để dành việc làm rõ yêu cầu vào buổi Daily Stand-up ngày hôm sau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Agile, QA cần tham gia sớm (Shift-left) để làm rõ yêu cầu, giúp team hiểu đúng phạm vi và tránh sai sót ngay từ khâu thiết kế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Shift-left testing' trong quy trình Agile có ý nghĩa chính là gì?",
+    "options": [
+      "A. Chuyển toàn bộ việc kiểm thử sang cho Developer thực hiện.",
+      "B. Thực hiện kiểm thử càng sớm càng tốt trong vòng đời phát triển phần mềm.",
+      "C. Chỉ tập trung vào việc kiểm thử ở môi trường Production.",
+      "D. Loại bỏ hoàn toàn giai đoạn kiểm thử thủ công (Manual Test)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Shift-left là việc đưa các hoạt động kiểm thử (review, unit test, integration) lên sớm hơn để phát hiện lỗi sớm, giảm chi phí sửa lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một User Story chưa thỏa mãn 'Definition of Ready' (DoR), QA nên làm gì?",
+    "options": [
+      "A. Vẫn chấp nhận đưa vào Sprint để kịp tiến độ bàn giao.",
+      "B. Đề xuất chưa đưa Story này vào Sprint cho đến khi đủ thông tin cần thiết.",
+      "C. Chỉ thực hiện test các phần đã rõ ràng, phần còn lại bỏ qua.",
+      "D. Đợi đến khi kết thúc Sprint mới báo cáo là không test được."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DoR là điều kiện cần để bắt đầu công việc. Nếu chưa đạt DoR, việc đưa vào Sprint sẽ gây rủi ro lớn về chất lượng và tiến độ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình Scrum, ai là người chịu trách nhiệm chính về chất lượng của sản phẩm bàn giao?",
+    "options": [
+      "A. Chỉ duy nhất QA Tester chịu trách nhiệm.",
+      "B. Chỉ có Scrum Master chịu trách nhiệm điều phối.",
+      "C. Toàn bộ Scrum Team (bao gồm Dev, QA và PO).",
+      "D. Chỉ có Product Owner chịu trách nhiệm về kết quả cuối cùng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Agile/Scrum, chất lượng là trách nhiệm tập thể (Whole-team approach), không phải của riêng cá nhân hay vai trò nào.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Three Amigos' thường bao gồm những vai trò nào tham gia thảo luận?",
+    "options": [
+      "A. Scrum Master, Developer, QA.",
+      "B. Product Owner, Developer, QA.",
+      "C. Product Owner, Scrum Master, UI/UX Designer.",
+      "D. Developer, QA, Khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Three Amigos (PO, Dev, QA) giúp thống nhất hiểu biết về yêu cầu từ ba góc độ: Kinh doanh, Kỹ thuật và Kiểm thử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một User Story được coi là hoàn thành (Done) khi nào theo chuẩn Agile?",
+    "options": [
+      "A. Khi Developer thông báo đã viết xong code trên máy cá nhân.",
+      "B. Khi QA đã tìm ra tất cả các lỗi có thể có.",
+      "C. Khi Story đó thỏa mãn tất cả các tiêu chí trong Definition of Done (DoD).",
+      "D. Khi Product Owner đã xem qua bản demo sơ bộ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Definition of Done (DoD) là bảng tiêu chuẩn chung mà team cam kết phải đạt được để coi một Story là hoàn thành thực sự.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong buổi Sprint Retrospective, QA nên tập trung đóng góp ý kiến về vấn đề gì?",
+    "options": [
+      "A. Chỉ trích các lỗi sai của Developer trong Sprint vừa qua.",
+      "B. Đề xuất cải tiến quy trình làm việc và cách phối hợp để nâng cao chất lượng.",
+      "C. Liệt kê danh sách các bug chưa được sửa để yêu cầu giải trình.",
+      "D. Yêu cầu tăng thêm thời gian kiểm thử cho Sprint tiếp theo mà không cần lý do."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Retrospective là buổi họp để cải tiến quy trình. QA nên tập trung vào cách làm việc hiệu quả hơn thay vì đổ lỗi cá nhân.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi áp dụng BDD (Behavior Driven Development), kịch bản kiểm thử thường được viết dưới dạng nào?",
+    "options": [
+      "A. Các bước thực hiện chi tiết (Step-by-step) bằng ngôn ngữ kỹ thuật.",
+      "B. Cấu trúc Given - When - Then bằng ngôn ngữ tự nhiên.",
+      "C. Các câu lệnh SQL để kiểm tra dữ liệu trực tiếp.",
+      "D. Chỉ bao gồm tiêu đề lỗi và mức độ nghiêm trọng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BDD sử dụng ngôn ngữ Gherkin (Given-When-Then) để mọi thành viên (kể cả khách hàng) đều có thể hiểu được hành vi hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Vào ngày cuối cùng của Sprint, QA phát hiện một lỗi nghiêm trọng (Critical Bug) trong một Story quan trọng. Team nên xử lý thế nào?",
+    "options": [
+      "A. Giấu lỗi đó đi để Story được tính là 'Done' và sửa vào Sprint sau.",
+      "B. Báo cáo ngay cho team, thảo luận với PO để quyết định sửa ngay hoặc dời Story sang Sprint sau.",
+      "C. Tự ý sửa code nếu QA biết lập trình để kịp tiến độ.",
+      "D. Đánh dấu Story là 'Done' nhưng ghi chú thêm là có lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự minh bạch là cốt lõi của Agile. Lỗi nghiêm trọng cần được thông báo ngay để PO đưa ra quyết định dựa trên rủi ro.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Kanban, 'Work in Progress' (WIP) limit có tác dụng gì đối với QA?",
+    "options": [
+      "A. Giới hạn số lượng bug mà QA được phép tìm thấy.",
+      "B. Giúp phát hiện các điểm nghẽn (bottlenecks) trong quy trình kiểm thử.",
+      "C. Ép buộc QA phải làm việc nhanh hơn để bắt kịp Developer.",
+      "D. Giảm bớt số lượng test case cần phải thực thi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "WIP limit giúp kiểm soát luồng công việc. Nếu cột 'Testing' đầy, team sẽ nhận ra QA đang bị quá tải và cần hỗ trợ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện Regression Testing trong Agile với các Sprint ngắn (2 tuần), chiến lược nào là tối ưu nhất?",
+    "options": [
+      "A. Chạy lại toàn bộ bộ test case thủ công (Manual) sau mỗi Sprint.",
+      "B. Chỉ test các tính năng mới, bỏ qua hoàn toàn các tính năng cũ.",
+      "C. Tự động hóa các test case quan trọng và thực hiện kiểm thử dựa trên rủi ro (Risk-based).",
+      "D. Đợi 4 Sprint mới thực hiện Regression Test một lần."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Với tốc độ nhanh của Agile, tự động hóa và ưu tiên kiểm thử các vùng rủi ro cao là cách duy nhất để đảm bảo chất lượng mà không làm chậm tiến độ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao QA nên tham gia vào các buổi Product Backlog Refinement (Grooming)?",
+    "options": [
+      "A. Để bắt lỗi chính tả trong các tài liệu yêu cầu.",
+      "B. Để bắt đầu thiết kế kịch bản kiểm thử và xác định các rủi ro sớm.",
+      "C. Vì đó là quy định bắt buộc của Scrum Master.",
+      "D. Để đảm bảo Developer không estimate thời gian quá thấp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tham gia Refinement giúp QA hiểu sâu yêu cầu, từ đó chuẩn bị dữ liệu và kịch bản test sớm, đồng thời đóng góp ý kiến về tính khả thi của việc test.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Agile, việc 'Exploratory Testing' (Kiểm thử thăm dò) nên được thực hiện khi nào?",
+    "options": [
+      "A. Chỉ thực hiện khi không còn gì để làm.",
+      "B. Thực hiện song song với việc chạy các kịch bản test đã có sẵn để tìm lỗi tiềm ẩn.",
+      "C. Chỉ thực hiện bởi người dùng cuối (End-user).",
+      "D. Thay thế hoàn toàn cho việc viết Test Case."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Exploratory Testing giúp QA phát hiện những lỗi mà các kịch bản định sẵn (scripted tests) thường bỏ qua nhờ vào tư duy sáng tạo và kinh nghiệm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một 'Quality Gate' trong quy trình CI/CD của Agile thường bao gồm yếu tố nào?",
+    "options": [
+      "A. Việc phê duyệt thủ công của Giám đốc dự án.",
+      "B. Các bài kiểm tra tự động (Unit, Integration) phải vượt qua 100%.",
+      "C. Số lượng dòng code Developer viết được trong ngày.",
+      "D. Thời gian họp Daily Stand-up không quá 15 phút."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quality Gate là các rào cản tự động đảm bảo code đạt tiêu chuẩn chất lượng nhất định trước khi được chuyển sang giai đoạn tiếp theo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "QA nhận thấy Developer thường xuyên bàn giao tính năng vào sát ngày cuối Sprint, dẫn đến không đủ thời gian test. Giải pháp nào là tốt nhất?",
+    "options": [
+      "A. Làm thêm giờ vào cuối tuần để hoàn thành việc test.",
+      "B. Yêu cầu Developer bàn giao từng phần nhỏ (Sub-tasks) ngay khi xong thay vì đợi cả Story.",
+      "C. Báo cáo lên quản lý cấp cao để kỷ luật Developer.",
+      "D. Giảm bớt số lượng test case để kịp bàn giao đúng hạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chia nhỏ công việc và bàn giao sớm giúp luồng công việc trôi chảy hơn, tránh tình trạng dồn ứ (bottleneck) vào cuối Sprint.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Acceptance Criteria (AC) và Definition of Done (DoD) là gì?",
+    "options": [
+      "A. AC áp dụng cho từng Story cụ thể, DoD áp dụng chung cho tất cả các Story trong Sprint.",
+      "B. AC do QA viết, còn DoD do Developer viết.",
+      "C. AC là điều kiện để bắt đầu test, DoD là điều kiện để kết thúc test.",
+      "D. Không có sự khác biệt, hai khái niệm này là một."
+    ],
+    "correctAnswer": "A",
+    "explanation": "AC mô tả yêu cầu nghiệp vụ riêng của từng Story. DoD là bảng kiểm chung (như: đã review code, đã chạy automation, đã viết document) cho mọi Story.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong môi trường Agile, tài liệu kiểm thử (Test Documentation) nên được quản lý như thế nào?",
+    "options": [
+      "A. Phải viết thật chi tiết, đầy đủ như mô hình Waterfall.",
+      "B. Không cần viết bất kỳ tài liệu nào để tiết kiệm thời gian.",
+      "C. Viết vừa đủ (Lean documentation), tập trung vào những gì mang lại giá trị và dễ bảo trì.",
+      "D. Chỉ lưu trữ trong tin nhắn chat của nhóm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Agile ưu tiên 'phần mềm chạy tốt hơn tài liệu đầy đủ', nhưng vẫn cần tài liệu ở mức vừa đủ để duy trì kiến thức và hỗ trợ kiểm thử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một bug được phát hiện trên Production, hành động đầu tiên của QA trong quy trình Agile nên là gì?",
+    "options": [
+      "A. Tìm xem ai là người đã viết đoạn code lỗi đó.",
+      "B. Tái hiện lỗi, đánh giá mức độ ảnh hưởng và phối hợp với team để xử lý dựa trên độ ưu tiên.",
+      "C. Yêu cầu dừng toàn bộ Sprint hiện tại để sửa lỗi này.",
+      "D. Từ chối nhận trách nhiệm vì lỗi này không xuất hiện ở môi trường Staging."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xử lý sự cố Production cần sự bình tĩnh, đánh giá tác động thực tế để có phương án khắc phục (hotfix) hoặc đưa vào backlog phù hợp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc QA tham gia vào việc viết Unit Test cùng Developer là gì?",
+    "options": [
+      "A. QA có thể thay thế Developer viết code tính năng.",
+      "B. Giúp QA hiểu sâu cấu trúc code và tăng độ bao phủ kiểm thử (Test coverage) từ tầng thấp nhất.",
+      "C. Để QA kiểm soát xem Developer có làm việc lười biếng hay không.",
+      "D. Giảm bớt số lượng bug cần phải log trên hệ thống quản lý lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự phối hợp này giúp tăng chất lượng code ngay từ đầu và giúp QA thiết kế các bài test ở tầng cao (API/UI) hiệu quả hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Nếu một User Story quá lớn (Epic) không thể hoàn thành trong một Sprint, QA nên tư vấn gì?",
+    "options": [
+      "A. Cứ để nguyên và làm trong nhiều Sprint liên tiếp.",
+      "B. Chia nhỏ Epic thành các User Story nhỏ hơn có thể kiểm thử độc lập và hoàn thành trong một Sprint.",
+      "C. Chỉ test phần giao diện trong Sprint này, phần logic để Sprint sau.",
+      "D. Yêu cầu tăng gấp đôi nhân sự QA để test cho kịp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chia nhỏ công việc giúp giảm rủi ro, tăng khả năng bàn giao giá trị sớm và giúp việc kiểm thử tập trung hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong buổi Daily Stand-up, QA nên báo cáo những thông tin gì?",
+    "options": [
+      "A. Danh sách chi tiết tất cả các test case đã viết.",
+      "B. Những gì đã làm hôm qua, dự định hôm nay và các khó khăn (impediments) đang gặp phải.",
+      "C. Phàn nàn về việc môi trường test bị chậm.",
+      "D. Giải thích chi tiết cách tái hiện một bug phức tạp cho cả team nghe."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Daily Stand-up cần ngắn gọn, tập trung vào tiến độ và các rào cản để team cùng hỗ trợ giải quyết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi PO muốn thêm một tính năng mới vào giữa Sprint đang diễn ra, QA nên phản ứng thế nào?",
+    "options": [
+      "A. Đồng ý ngay lập tức để làm hài lòng PO.",
+      "B. Phân tích tác động đến các tính năng hiện tại và cảnh báo về rủi ro không đủ thời gian kiểm thử.",
+      "C. Từ chối thẳng thừng vì vi phạm nguyên tắc Scrum.",
+      "D. Yêu cầu Developer tự test tính năng đó, QA không tham gia."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA cần đóng vai trò tư vấn về chất lượng và rủi ro khi có sự thay đổi đột ngột trong phạm vi Sprint.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chỉ số (Metric) nào sau đây phản ánh tốt nhất hiệu quả của quy trình QA trong Agile?",
+    "options": [
+      "A. Tổng số lượng bug tìm được trong một Sprint.",
+      "B. Số lượng Test Case đã viết được.",
+      "C. Tỷ lệ lỗi lọt lưới (Defect Escape Rate) ra môi trường Production.",
+      "D. Số dòng code đã được kiểm thử."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Defect Escape Rate cho biết bao nhiêu lỗi nghiêm trọng đã bị bỏ sót, từ đó đánh giá trực tiếp hiệu quả của các lớp kiểm thử trong Sprint.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc 'Automated Testing' lại cực kỳ quan trọng trong các dự án Agile?",
+    "options": [
+      "A. Để thay thế hoàn toàn con người trong việc kiểm thử.",
+      "B. Để đảm bảo các tính năng cũ không bị hỏng (Regression) khi thêm tính năng mới liên tục.",
+      "C. Để chứng tỏ team đang áp dụng công nghệ hiện đại.",
+      "D. Vì viết code automation dễ hơn viết test case thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Agile, code thay đổi liên tục. Automation giúp thực hiện Regression Test nhanh chóng, đảm bảo tính ổn định của hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi kết thúc Sprint, một số bug 'Low priority' vẫn chưa được sửa. Cách xử lý nào là đúng đắn?",
+    "options": [
+      "A. Xóa bỏ các bug đó để làm sạch bảng điều khiển.",
+      "B. Buộc Developer phải ở lại sửa hết mới được kết thúc Sprint.",
+      "C. Chuyển các bug đó vào Product Backlog để PO ưu tiên sắp xếp cho các Sprint sau.",
+      "D. Đánh dấu các bug đó là 'Closed' và hy vọng khách hàng không thấy."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các lỗi chưa sửa cần được minh bạch hóa trong Backlog để PO quyết định khi nào cần xử lý dựa trên giá trị kinh doanh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Sprint Planning, một QA Tester cấp độ Advanced nên đóng góp như thế nào để tối ưu hóa nỗ lực kiểm thử và đảm bảo chất lượng từ sớm, đặc biệt khi đối mặt với các user story phức tạp có rủi ro cao?",
+    "options": [
+      "A. Chỉ tập trung vào việc ước lượng thời gian kiểm thử cho các user story được giao.",
+      "B. Đề xuất các chiến lược kiểm thử tích hợp và end-to-end, đồng thời xác định các kịch bản kiểm thử ưu tiên dựa trên rủi ro nghiệp vụ.",
+      "C. Yêu cầu developer cung cấp tài liệu thiết kế chi tiết trước khi bắt đầu kiểm thử.",
+      "D. Chờ đợi đến giai đoạn kiểm thử để phát hiện các vấn đề về yêu cầu và thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA Tester cấp độ Advanced cần chủ động tham gia phân tích rủi ro, đề xuất chiến lược kiểm thử toàn diện và ưu tiên các kịch bản quan trọng ngay từ Sprint Planning để 'shift-left' chất lượng, tối ưu hóa nguồn lực.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi áp dụng Shift-left testing trong một đội Agile, thách thức lớn nhất đối với QA Tester là gì và làm thế nào để vượt qua nó?",
+    "options": [
+      "A. Thiếu công cụ tự động hóa, giải quyết bằng cách mua thêm license.",
+      "B. Khó khăn trong việc thay đổi tư duy từ 'phát hiện lỗi' sang 'ngăn ngừa lỗi', vượt qua bằng cách thúc đẩy cộng tác sớm với BA/Dev và tham gia sâu vào phân tích yêu cầu.",
+      "C. Không đủ thời gian để viết test case, giải quyết bằng cách bỏ qua một số kịch bản ít quan trọng.",
+      "D. Developer không muốn tham gia kiểm thử, giải quyết bằng cách giao toàn bộ trách nhiệm kiểm thử cho QA."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thách thức chính là thay đổi tư duy và văn hóa. QA Tester cần chủ động hơn trong các giai đoạn đầu, hợp tác chặt chẽ với các thành viên khác để đảm bảo chất lượng được xây dựng từ gốc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một môi trường BDD, QA Tester đóng vai trò quan trọng trong việc cộng tác với Product Owner và Developer để định nghĩa Acceptance Criteria. Phương pháp nào hiệu quả nhất để đảm bảo Acceptance Criteria rõ ràng và kiểm thử được?",
+    "options": [
+      "A. Viết Acceptance Criteria dưới dạng tài liệu Word chi tiết và gửi cho các bên liên quan xem xét.",
+      "B. Sử dụng cú pháp Gherkin (Given-When-Then) để mô tả các kịch bản hành vi, đồng thời tổ chức các buổi 'Three Amigos' để thống nhất.",
+      "C. Để Product Owner tự viết Acceptance Criteria, sau đó QA sẽ kiểm tra lại.",
+      "D. Chỉ tập trung vào các yêu cầu phi chức năng trong Acceptance Criteria để tránh trùng lặp với Product Owner."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BDD khuyến khích sử dụng cú pháp Gherkin để tạo ra các kịch bản hành vi dễ hiểu và kiểm thử được. Buổi 'Three Amigos' (PO, Dev, QA) là nơi lý tưởng để thống nhất các tiêu chí này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một nhóm Agile đang gặp vấn đề về chất lượng sản phẩm thường xuyên bị từ chối ở giai đoạn UAT. Là một QA Tester cấp độ Advanced, bạn sẽ đề xuất điều chỉnh nào trong 'Definition of Done' để giải quyết vấn đề này?",
+    "options": [
+      "A. Thêm yêu cầu 'Tất cả các test case chức năng đã được thực thi và pass' vào DoD.",
+      "B. Thêm yêu cầu 'Các kịch bản kiểm thử quan trọng đã được xem xét và chấp thuận bởi Product Owner' và 'Không có P1/P2 bug đang mở' vào DoD.",
+      "C. Yêu cầu developer tự kiểm thử kỹ hơn trước khi bàn giao cho QA.",
+      "D. Mở rộng thời gian sprint để có thêm thời gian kiểm thử cuối sprint."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc thêm các tiêu chí liên quan đến sự chấp thuận của PO và tình trạng lỗi nghiêm trọng vào DoD giúp nâng cao chất lượng đầu ra, đảm bảo sản phẩm đáp ứng mong đợi của người dùng trước khi đến UAT.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một quy trình Kanban, làm thế nào một QA Tester có thể chủ động đóng góp vào việc cải thiện 'flow' và giảm 'WIP' (Work In Progress) liên quan đến kiểm thử?",
+    "options": [
+      "A. Chờ đợi đến khi tất cả các task phát triển hoàn thành rồi mới bắt đầu kiểm thử.",
+      "B. Thiết lập các 'pull mechanism' cho kiểm thử, ưu tiên các task có giá trị cao và tham gia vào việc phá vỡ các task lớn thành nhỏ hơn để giảm thời gian chờ.",
+      "C. Yêu cầu tăng số lượng QA để xử lý nhanh hơn các task kiểm thử.",
+      "D. Báo cáo tất cả các bug với mức độ ưu tiên cao nhất để thu hút sự chú ý của developer."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Kanban, QA cần chủ động quản lý dòng công việc. Thiết lập pull mechanism, ưu tiên và chia nhỏ task giúp giảm tắc nghẽn và cải thiện hiệu quả dòng chảy công việc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi đội nhóm cần ra quyết định về việc cân bằng giữa tốc độ triển khai và mức độ tin cậy của bản phát hành, một QA Tester cấp độ Advanced nên tư vấn dựa trên yếu tố nào là chính?",
+    "options": [
+      "A. Luôn ưu tiên tốc độ để đáp ứng thời hạn thị trường, bỏ qua một số rủi ro nhỏ.",
+      "B. Dựa vào phân tích rủi ro chi tiết của các tính năng mới và thay đổi, đề xuất mức độ kiểm thử phù hợp và các 'quality gate' cần thiết để đạt được mức độ tin cậy chấp nhận được.",
+      "C. Yêu cầu developer hoàn thành 100% code coverage để đảm bảo chất lượng.",
+      "D. Chỉ tin tưởng vào kết quả kiểm thử tự động và bỏ qua kiểm thử thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA Tester cấp độ Advanced cần thực hiện phân tích rủi ro, cân nhắc giữa tốc độ và chất lượng để đưa ra lời khuyên về mức độ kiểm thử và các điểm kiểm soát chất lượng phù hợp, không phải là sự đánh đổi mù quáng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một đội Agile đang cân nhắc việc tích hợp liên tục (CI) và triển khai liên tục (CD). Vai trò của QA trong việc thiết lập các 'quality gate' trong pipeline CI/CD ở mức độ Advanced là gì?",
+    "options": [
+      "A. Chỉ đảm bảo rằng các test case tự động chạy thành công.",
+      "B. Xác định và cấu hình các điểm kiểm tra tự động (ví dụ: unit test coverage, static code analysis, performance thresholds, security scans) và các tiêu chí pass/fail cho từng giai đoạn của pipeline.",
+      "C. Thực hiện kiểm thử thủ công sau mỗi lần deploy để đảm bảo chất lượng.",
+      "D. Đề xuất sử dụng một công cụ CI/CD mới nhất mà không cần hiểu rõ yêu cầu của đội."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA Tester cấp độ Advanced cần chủ động trong việc định nghĩa và cấu hình các 'quality gate' tự động trong CI/CD pipeline, đảm bảo chất lượng được kiểm soát chặt chẽ qua từng bước.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong các buổi Daily Scrum, một QA Tester cấp độ Advanced nên báo cáo như thế nào để cung cấp giá trị tối đa cho đội và hỗ trợ việc đạt được Sprint Goal?",
+    "options": [
+      "A. Báo cáo chi tiết về số lượng test case đã thực thi và số bug tìm thấy.",
+      "B. Tập trung vào các rào cản (impediments) đang ảnh hưởng đến tiến độ kiểm thử, các rủi ro chất lượng tiềm ẩn và sự sẵn sàng của các user story để kiểm thử.",
+      "C. Chỉ thông báo những gì đã làm ngày hôm qua và sẽ làm hôm nay.",
+      "D. Yêu cầu developer hỗ trợ kiểm thử để giảm tải công việc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Daily Scrum, QA cần tập trung vào các vấn đề gây tắc nghẽn, rủi ro và trạng thái sẵn sàng của công việc để đội có thể cùng nhau giải quyết và đảm bảo đạt được Sprint Goal.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để tối ưu hóa hiệu năng của quá trình kiểm thử trong một Sprint, một QA Tester cấp độ Advanced nên làm gì khi nhận thấy sự chậm trễ liên tục do môi trường kiểm thử không ổn định?",
+    "options": [
+      "A. Chấp nhận tình hình và chờ đợi nhóm DevOps khắc phục.",
+      "B. Chủ động phối hợp với nhóm DevOps để thiết lập môi trường kiểm thử ổn định, có thể tự động hóa việc triển khai môi trường (infrastructure as code) và đề xuất các giải pháp dự phòng.",
+      "C. Báo cáo lên quản lý về vấn đề môi trường mà không đề xuất giải pháp.",
+      "D. Thực hiện kiểm thử trên môi trường cục bộ của developer để tránh môi trường chung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA Tester cấp độ Advanced không chỉ phát hiện vấn đề mà còn chủ động tìm kiếm giải pháp, phối hợp với các bên liên quan để cải thiện cơ sở hạ tầng kiểm thử, giảm thiểu rủi ro và tối ưu hóa hiệu năng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi một đội Agile cần đưa ra quyết định về việc 'Definition of Ready' cho một User Story, QA Tester cấp độ Advanced nên nhấn mạnh những tiêu chí nào để đảm bảo chất lượng từ đầu?",
+    "options": [
+      "A. User Story phải có đủ trường thông tin cơ bản như tiêu đề và mô tả.",
+      "B. User Story phải có Acceptance Criteria rõ ràng, kiểm thử được, đã được thảo luận và thống nhất với QA/Dev, và có ước lượng độ phức tạp sơ bộ.",
+      "C. User Story phải được Product Owner phê duyệt cuối cùng trước khi vào Sprint.",
+      "D. User Story phải có tài liệu thiết kế kỹ thuật chi tiết đính kèm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DoR cần đảm bảo User Story đủ rõ ràng để đội có thể bắt đầu phát triển và kiểm thử. Acceptance Criteria rõ ràng và sự thống nhất giữa các bên là yếu tố then chốt để 'ready'.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Sprint Review, QA Tester cấp độ Advanced nên tập trung vào việc trình bày những thông tin nào để hỗ trợ Product Owner và các bên liên quan đưa ra quyết định sáng suốt về sản phẩm?",
+    "options": [
+      "A. Số lượng bug đã tìm thấy và trạng thái của chúng.",
+      "B. Các rủi ro chất lượng còn tồn đọng, các kịch bản kiểm thử quan trọng đã được thực hiện, những hiểu biết sâu sắc về trải nghiệm người dùng và các đề xuất cải tiến quy trình kiểm thử.",
+      "C. Danh sách tất cả các test case đã chạy trong Sprint.",
+      "D. Thời gian trung bình để hoàn thành một test case."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sprint Review là cơ hội để chia sẻ thông tin về chất lượng tổng thể, rủi ro và những hiểu biết có giá trị, giúp các bên liên quan đánh giá đúng về sản phẩm và đưa ra quyết định về hướng đi tiếp theo.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để cải thiện tốc độ phản hồi và giảm thiểu rủi ro trong các bản phát hành nhỏ, QA Tester cấp độ Advanced có thể đề xuất chiến lược kiểm thử nào?",
+    "options": [
+      "A. Chỉ thực hiện kiểm thử hồi quy thủ công cho tất cả các tính năng hiện có.",
+      "B. Xây dựng một bộ kiểm thử hồi quy tự động trọng tâm (focused automated regression suite) cho các khu vực có rủi ro cao và thường xuyên thay đổi, kết hợp với kiểm thử thăm dò (exploratory testing) cho các tính năng mới.",
+      "C. Bỏ qua kiểm thử hồi quy để đẩy nhanh tốc độ.",
+      "D. Yêu cầu developer tự kiểm thử hồi quy trước khi bàn giao."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kết hợp kiểm thử hồi quy tự động chiến lược với kiểm thử thăm dò là cách hiệu quả để cân bằng giữa tốc độ và độ tin cậy, đặc biệt trong các bản phát hành nhỏ và thường xuyên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một môi trường phát triển nhanh, làm thế nào một QA Tester có thể chủ động 'shift-left' các hoạt động kiểm thử hiệu năng và bảo mật?",
+    "options": [
+      "A. Chờ đợi đến giai đoạn kiểm thử cuối cùng để chạy các công cụ kiểm thử hiệu năng và bảo mật.",
+      "B. Tích hợp các công cụ kiểm thử hiệu năng/bảo mật tự động vào CI/CD pipeline, khuyến khích developer chạy các bài kiểm thử hiệu năng/bảo mật ở cấp độ unit/component và tham gia vào các buổi review kiến trúc/thiết kế.",
+      "C. Yêu cầu một đội ngũ chuyên gia hiệu năng/bảo mật riêng biệt để xử lý các vấn đề này.",
+      "D. Đảm bảo rằng tất cả các test case chức năng đã pass trước khi xem xét hiệu năng/bảo mật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Shift-left hiệu năng và bảo mật đòi hỏi sự tích hợp sớm vào quy trình phát triển, từ thiết kế đến các bài kiểm thử cấp độ thấp hơn, và tự động hóa trong CI/CD.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một đội Agile gặp phải tình trạng 'bug leakage' (bug lọt qua) thường xuyên ra môi trường Production, một QA Tester cấp độ Advanced nên đề xuất cải tiến nào trong quy trình để khắc phục?",
+    "options": [
+      "A. Tăng cường kiểm thử thủ công ở giai đoạn cuối của Sprint.",
+      "B. Phân tích nguyên nhân gốc rễ của bug leakage, xem xét lại 'Definition of Done' và 'quality gates', tăng cường kiểm thử tự động ở các lớp thấp hơn (unit/integration) và cải thiện quy trình review code/test case.",
+      "C. Đổ lỗi cho developer vì đã tạo ra bug.",
+      "D. Đề xuất một công cụ quản lý bug mới để theo dõi bug tốt hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải quyết bug leakage đòi hỏi cách tiếp cận hệ thống, từ phân tích nguyên nhân gốc rễ đến việc siết chặt các 'quality gate' và tăng cường kiểm thử ở các lớp sớm hơn trong vòng đời phát triển.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một đội Agile đang áp dụng BDD, QA Tester nên làm gì để đảm bảo các 'Example' trong Gherkin feature files thực sự hữu ích và bao quát các trường hợp biên (edge cases)?",
+    "options": [
+      "A. Chỉ sử dụng các ví dụ được cung cấp bởi Product Owner.",
+      "B. Chủ động phân tích yêu cầu, xác định các trường hợp biên và các kịch bản tiêu cực, sau đó cộng tác với Product Owner và Developer để thêm các ví dụ minh họa vào feature files.",
+      "C. Tạo ra một bộ test data riêng biệt mà không cần cập nhật feature files.",
+      "D. Chỉ tập trung vào các ví dụ 'happy path' để đơn giản hóa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA Tester có vai trò quan trọng trong việc đảm bảo các ví dụ trong BDD bao quát đủ các trường hợp, bao gồm cả trường hợp biên và tiêu cực, thông qua sự cộng tác chặt chẽ với các bên liên quan.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một đội Agile đang gặp khó khăn trong việc duy trì chất lượng khi tích hợp nhiều tính năng nhỏ trong một Sprint. Là QA Tester cấp độ Advanced, bạn sẽ đề xuất chiến lược kiểm thử tích hợp nào?",
+    "options": [
+      "A. Thực hiện kiểm thử tích hợp chỉ sau khi tất cả các tính năng đã được phát triển hoàn chỉnh.",
+      "B. Áp dụng 'Continuous Integration' một cách nghiêm ngặt, khuyến khích developer chạy kiểm thử tích hợp ở cấp độ API/service thường xuyên và thiết lập môi trường tích hợp tự động.",
+      "C. Yêu cầu chia nhỏ Sprint thành các mini-Sprint để dễ quản lý hơn.",
+      "D. Chỉ tập trung vào kiểm thử chức năng của từng tính năng riêng lẻ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử tích hợp liên tục và tự động ở các lớp thấp hơn là chìa khóa để duy trì chất lượng trong môi trường tích hợp nhiều tính năng nhỏ, giúp phát hiện sớm các vấn đề tương thích.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để đảm bảo 'Definition of Done' được tuân thủ hiệu quả trong một đội Agile, QA Tester cấp độ Advanced nên thực hiện vai trò gì?",
+    "options": [
+      "A. Chỉ kiểm tra xem các tiêu chí kỹ thuật có được đáp ứng hay không.",
+      "B. Đóng vai trò là người bảo vệ chất lượng, thường xuyên nhắc nhở đội về DoD, tham gia vào việc đánh giá sự hoàn thành của User Story và đề xuất cải tiến DoD dựa trên các bài học kinh nghiệm.",
+      "C. Chờ đợi Scrum Master yêu cầu kiểm tra DoD.",
+      "D. Chỉ quan tâm đến các tiêu chí liên quan trực tiếp đến kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA Tester cấp độ Advanced không chỉ kiểm tra mà còn chủ động thúc đẩy việc tuân thủ DoD, đóng góp vào việc cải tiến nó để đảm bảo chất lượng liên tục trong đội.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Sprint Retrospective, một QA Tester cấp độ Advanced nên chủ động đề xuất những loại cải tiến nào liên quan đến quy trình QA để nâng cao hiệu quả và chất lượng của đội?",
+    "options": [
+      "A. Đề xuất mua thêm công cụ kiểm thử mới mà không cần phân tích nhu cầu.",
+      "B. Đề xuất cải thiện sự cộng tác giữa QA và Dev/BA, tối ưu hóa quy trình review Acceptance Criteria, tăng cường tự động hóa kiểm thử ở các lớp thấp hơn và cải thiện quản lý test data.",
+      "C. Chỉ nêu ra các vấn đề về bug mà không đưa ra giải pháp.",
+      "D. Yêu cầu tăng thời gian kiểm thử trong Sprint tiếp theo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sprint Retrospective là cơ hội để cải thiện quy trình. QA Tester cấp độ Advanced nên đề xuất các cải tiến mang tính chiến lược, tập trung vào cộng tác, tự động hóa và hiệu quả quy trình.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một đội Agile cần ra mắt một tính năng mới có rủi ro cao nhưng phải đảm bảo tốc độ, QA Tester cấp độ Advanced nên đề xuất cách tiếp cận kiểm thử nào để cân bằng giữa rủi ro và tốc độ?",
+    "options": [
+      "A. Thực hiện kiểm thử toàn diện mọi khía cạnh của tính năng mới.",
+      "B. Áp dụng kiểm thử dựa trên rủi ro (risk-based testing), tập trung nguồn lực vào các khu vực quan trọng nhất, sử dụng kiểm thử thăm dò cho các phần ít rủi ro hơn và thiết lập 'feature flag' để kiểm soát việc phát hành.",
+      "C. Bỏ qua kiểm thử cho tính năng mới và chỉ kiểm thử sau khi nó được phát hành.",
+      "D. Yêu cầu thêm thời gian để thực hiện kiểm thử thủ công nhiều lần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử dựa trên rủi ro và 'feature flag' là các chiến lược hiệu quả để quản lý rủi ro và đảm bảo tốc độ khi phát hành các tính năng mới có độ phức tạp cao, cho phép kiểm soát việc triển khai.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để tối ưu hóa quy trình 'Definition of Ready' và 'Definition of Done' trong một đội Agile trưởng thành, QA Tester cấp độ Advanced nên làm gì để đảm bảo chúng luôn phù hợp và hiệu quả?",
+    "options": [
+      "A. Giữ nguyên DoD/DoR đã định nghĩa từ ban đầu.",
+      "B. Thường xuyên xem xét và điều chỉnh DoD/DoR trong các buổi Retrospective, dựa trên phản hồi thực tế, bài học kinh nghiệm và sự thay đổi của yêu cầu sản phẩm/công nghệ.",
+      "C. Chỉ thay đổi DoD/DoR khi có vấn đề nghiêm trọng xảy ra.",
+      "D. Để Scrum Master tự quyết định việc điều chỉnh DoD/DoR."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DoD và DoR là tài liệu sống. QA Tester cấp độ Advanced cần chủ động tham gia vào việc cải tiến liên tục chúng để đảm bảo chúng phản ánh đúng nhu cầu và thực tế của đội, duy trì sự phù hợp và hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi làm việc với các User Story liên quan đến thay đổi kiến trúc hệ thống, QA Tester cấp độ Advanced nên đóng góp như thế nào vào quá trình 'shift-left' để giảm thiểu rủi ro?",
+    "options": [
+      "A. Chỉ tập trung vào việc kiểm thử chức năng của các thay đổi sau khi chúng được phát triển.",
+      "B. Tham gia vào các buổi review kiến trúc/thiết kế, đề xuất các chiến lược kiểm thử phi chức năng (ví dụ: hiệu năng, bảo mật, khả năng mở rộng) và xác định các điểm kiểm thử quan trọng ở cấp độ kiến trúc/API.",
+      "C. Yêu cầu developer cung cấp sơ đồ kiến trúc chi tiết trước khi bắt đầu kiểm thử.",
+      "D. Bỏ qua các khía cạnh kiến trúc vì chúng không thuộc trách nhiệm của QA."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với thay đổi kiến trúc, QA Tester cấp độ Advanced cần tham gia sớm vào quá trình thiết kế, đề xuất chiến lược kiểm thử phi chức năng và xác định các điểm kiểm soát chất lượng ở cấp độ kiến trúc để 'shift-left' rủi ro.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một quy trình Kanban, khi một 'blocker' liên quan đến kiểm thử xảy ra, QA Tester cấp độ Advanced nên phản ứng như thế nào để duy trì 'flow' của công việc?",
+    "options": [
+      "A. Dừng tất cả công việc và chờ đợi blocker được giải quyết.",
+      "B. Ngay lập tức thông báo cho đội, mô tả rõ ràng tác động của blocker, và chủ động đề xuất các giải pháp khả thi hoặc tìm kiếm sự hỗ trợ để gỡ bỏ blocker một cách nhanh nhất.",
+      "C. Chuyển sang làm một task khác không liên quan đến blocker.",
+      "D. Ghi nhận blocker vào hệ thống và chờ đợi Scrum Master xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Kanban, việc xử lý blocker nhanh chóng là rất quan trọng để duy trì flow. QA Tester cấp độ Advanced cần chủ động trong việc giao tiếp và tìm kiếm giải pháp để gỡ bỏ blocker.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để cải thiện sự tin cậy của các bản phát hành trong một đội Agile, QA Tester cấp độ Advanced nên làm gì để tối ưu hóa chiến lược kiểm thử hồi quy?",
+    "options": [
+      "A. Thực hiện kiểm thử hồi quy thủ công cho tất cả các tính năng trong mỗi Sprint.",
+      "B. Phân tích các khu vực có rủi ro cao và thường xuyên thay đổi, sau đó xây dựng và duy trì một bộ kiểm thử hồi quy tự động có chọn lọc, hiệu quả, được tích hợp vào CI/CD pipeline.",
+      "C. Yêu cầu developer tự viết tất cả các bài kiểm thử hồi quy.",
+      "D. Giảm số lượng test case hồi quy để tiết kiệm thời gian."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tối ưu hóa kiểm thử hồi quy đòi hỏi sự tập trung vào các khu vực có rủi ro cao và tự động hóa chiến lược, tích hợp vào CI/CD để đảm bảo hiệu quả và tốc độ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một đội Agile, khi nào là thời điểm thích hợp nhất để QA Tester cấp độ Advanced bắt đầu tham gia vào việc định nghĩa Acceptance Criteria cho một User Story mới?",
+    "options": [
+      "A. Sau khi developer đã hoàn thành việc phát triển tính năng.",
+      "B. Ngay từ giai đoạn phân tích yêu cầu, trong các buổi thảo luận với Product Owner và Developer (ví dụ: 'Three Amigos'), để đảm bảo tính rõ ràng và kiểm thử được của các tiêu chí.",
+      "C. Sau khi Product Owner đã viết xong tất cả Acceptance Criteria.",
+      "D. Chỉ khi có yêu cầu cụ thể từ Product Owner."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA Tester cấp độ Advanced cần tham gia sớm vào việc định nghĩa Acceptance Criteria để đảm bảo chúng rõ ràng, đầy đủ và kiểm thử được, đây là một phần quan trọng của 'shift-left testing' và BDD.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một đội Agile đang trải qua tình trạng căng thẳng giữa việc đạt được Sprint Goal và duy trì chất lượng cao. Là một QA Tester cấp độ Advanced, bạn sẽ đề xuất chiến lược nào để giảm bớt áp lực này?",
+    "options": [
+      "A. Đề xuất bỏ qua một số loại kiểm thử để hoàn thành Sprint Goal.",
+      "B. Thúc đẩy việc 'shift-left' kiểm thử mạnh mẽ hơn, tăng cường tự động hóa ở các lớp thấp, cải thiện 'Definition of Ready' để đảm bảo User Story đủ chất lượng trước khi vào Sprint, và tăng cường cộng tác liên chức năng.",
+      "C. Yêu cầu Product Owner giảm số lượng User Story trong Sprint.",
+      "D. Đề xuất tăng số lượng QA để xử lý khối lượng công việc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để giảm căng thẳng giữa tốc độ và chất lượng, QA Tester cấp độ Advanced cần thúc đẩy các thực hành Agile tốt nhất như shift-left, tự động hóa và cải thiện DoR, giúp chất lượng được xây dựng từ đầu và giảm áp lực cuối Sprint.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống Microservices phức tạp, đội ngũ đang gặp khó khăn với việc tích hợp liên tục do các API thay đổi thường xuyên. Với tư cách Expert QA, chiến lược 'Shift-left' nào là tối ưu nhất để đảm bảo chất lượng mà không làm chậm tốc độ release?",
+    "options": [
+      "A. Tăng cường kiểm thử hồi quy (Regression Testing) toàn diện trên môi trường Staging trước mỗi lần deploy.",
+      "B. Triển khai Consumer-Driven Contract Testing (CDCT) để phát hiện sự không tương thích API ngay từ giai đoạn build.",
+      "C. Yêu cầu Developer viết Unit Test đạt độ bao phủ (Coverage) trên 95% cho tất cả các service.",
+      "D. Chuyển toàn bộ việc kiểm thử tích hợp sang giai đoạn sau khi đã deploy lên môi trường Production (Testing in Production)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CDCT cho phép kiểm tra sự tương thích giữa bên cung cấp và bên sử dụng API mà không cần toàn bộ hệ thống sẵn sàng, giúp phát hiện lỗi sớm (Shift-left) và giảm phụ thuộc vào môi trường tích hợp phức tạp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi áp dụng Kanban, QA nhận thấy số lượng ticket tồn đọng (bottleneck) tại cột 'Testing' ngày càng tăng. Hành động nào thể hiện tư duy điều phối dòng chảy (flow) của một Expert QA?",
+    "options": [
+      "A. Yêu cầu tuyển thêm nhân sự QA để xử lý kịp tiến độ của đội ngũ Developer.",
+      "B. Đề xuất tăng giới hạn Work In Progress (WIP limit) của cột Testing để chứa được nhiều ticket hơn.",
+      "C. Phân tích nguyên nhân gốc rễ, đề xuất Developer hỗ trợ viết Automation Test hoặc cùng kiểm thử (Pair Testing) để giải phóng bottleneck.",
+      "D. Yêu cầu Developer dừng code và chỉ tập trung vào việc sửa lỗi (Bug Fixing) của các ticket cũ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Kanban, việc tối ưu hóa dòng chảy là trách nhiệm của cả đội. Expert QA cần thúc đẩy sự cộng tác (Swarming/Pairing) và tự động hóa để giải quyết điểm nghẽn thay vì chỉ tăng nguồn lực đơn thuần.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong buổi Sprint Planning, Product Owner (PO) muốn đưa một User Story cực kỳ quan trọng vào Sprint nhưng chưa có Acceptance Criteria (AC) rõ ràng. Bạn nên xử lý như thế nào?",
+    "options": [
+      "A. Chấp nhận đưa vào Sprint và sẽ bổ sung AC trong quá trình thực hiện để đảm bảo tiến độ.",
+      "B. Từ chối thẳng thừng vì vi phạm Definition of Ready (DoR) và yêu cầu PO hoàn thiện ở Sprint sau.",
+      "C. Đề xuất tổ chức ngay một phiên 'Three Amigos' ngắn để làm rõ AC và đánh giá rủi ro trước khi quyết định nhận vào Sprint.",
+      "D. Để Developer ước lượng dựa trên tiêu đề Story, QA sẽ viết test case dựa trên những gì Developer code."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Expert QA đóng vai trò cầu nối. Việc tổ chức Three Amigos giúp làm rõ yêu cầu ngay lập tức, đảm bảo tính testability và giúp đội ngũ ra quyết định dựa trên sự hiểu biết chung về rủi ro.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chiến lược nào là hiệu quả nhất để quản lý 'Testing Debt' (nợ kiểm thử) trong một dự án Agile phát triển nhanh, nơi áp lực release tính theo tuần?",
+    "options": [
+      "A. Dành riêng một Sprint sau mỗi 4 Sprints chỉ để thực hiện kiểm thử và fix bug (Hardening Sprint).",
+      "B. Tích hợp kiểm thử tự động vào Definition of Done (DoD), đảm bảo không có nợ mới phát sinh và xử lý nợ cũ thông qua Risk-based Testing.",
+      "C. Bỏ qua việc viết tài liệu kiểm thử và chỉ tập trung vào Exploratory Testing để tiết kiệm thời gian.",
+      "D. Chỉ tập trung kiểm thử các tính năng mới, chấp nhận rủi ro lỗi hồi quy ở các tính năng cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quản lý nợ kiểm thử đòi hỏi sự kỷ luật trong DoD để ngăn chặn nợ mới, kết hợp với chiến lược dựa trên rủi ro để ưu tiên xử lý các phần quan trọng nhất của hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một đội ngũ Agile đang chuyển dịch sang mô hình DevOps. Vai trò của Expert QA trong việc thiết lập 'Quality Gates' tại CI/CD pipeline là gì?",
+    "options": [
+      "A. Là người duy nhất có quyền nhấn nút 'Approve' để code được deploy lên Production.",
+      "B. Thiết lập các ngưỡng tự động (thresholds) về tỷ lệ pass test, độ bao phủ code và tiêu chuẩn bảo mật tại từng stage của pipeline.",
+      "C. Viết toàn bộ script cho pipeline để đảm bảo Developer không can thiệp vào quy trình kiểm thử.",
+      "D. Yêu cầu pipeline dừng lại và chờ QA kiểm thử thủ công xong mới được đi tiếp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong DevOps, QA chuyển từ người kiểm soát (Gatekeeper) sang người hỗ trợ (Enabler). Việc thiết lập các tiêu chuẩn tự động giúp hệ thống tự đánh giá chất lượng ở tốc độ cao.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Behavior Driven Development (BDD), sai lầm phổ biến nhất ở cấp độ chiến lược mà một Expert QA cần tránh là gì?",
+    "options": [
+      "A. Viết kịch bản Gherkin quá chi tiết về các bước thao tác trên giao diện (UI steps) thay vì tập trung vào hành vi nghiệp vụ.",
+      "B. Để QA là người duy nhất viết và quản lý các file Feature.",
+      "C. Sử dụng BDD cho cả các unit test kỹ thuật bên dưới.",
+      "D. Không tự động hóa các kịch bản BDD ngay trong Sprint."
+    ],
+    "correctAnswer": "A",
+    "explanation": "BDD tập trung vào 'Behavior'. Nếu viết quá chi tiết về UI (như click nút nào, nhập ô nào), kịch bản sẽ trở nên dễ gãy (brittle) và mất đi ý nghĩa về mặt trao đổi nghiệp vụ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh Agile, 'Definition of Done' (DoD) nên được thay đổi như thế nào khi dự án chuyển từ giai đoạn MVP (Minimum Viable Product) sang giai đoạn Scaling (mở rộng)?",
+    "options": [
+      "A. Giữ nguyên DoD để đảm bảo tính nhất quán và ổn định của quy trình.",
+      "B. Nới lỏng DoD để đội ngũ có thể phát triển tính năng nhanh hơn nhằm chiếm lĩnh thị trường.",
+      "C. Thắt chặt DoD bằng cách bổ sung các tiêu chuẩn về Performance, Security và Scalability để đảm bảo hệ thống chịu tải được.",
+      "D. Loại bỏ DoD và thay thế bằng các chỉ số đo lường sự hài lòng của khách hàng trên Production."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi scaling, rủi ro về hệ thống tăng cao. DoD cần tiến hóa để bao hàm các yêu cầu phi chức năng (Non-functional requirements) nhằm đảm bảo chất lượng ở quy mô lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đội ngũ của bạn thường xuyên không hoàn thành Sprint Goal vì các lỗi nghiêm trọng phát hiện vào ngày cuối cùng của Sprint. Với tư cách QA Lead, bạn đề xuất giải pháp bền vững nào?",
+    "options": [
+      "A. Kéo dài thời gian Sprint từ 2 tuần lên 4 tuần để có thêm thời gian fix bug.",
+      "B. Áp dụng kỹ thuật 'In-sprint Automation' và 'Continuous Feedback' thông qua việc demo sớm các tính năng nhỏ.",
+      "C. Yêu cầu Developer hoàn thành code trước 3 ngày kết thúc Sprint để QA có thời gian kiểm thử.",
+      "D. Tăng số lượng QA trong đội để kiểm thử nhanh hơn vào cuối Sprint."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vấn đề nằm ở việc phản hồi quá trễ. Tự động hóa trong Sprint và demo sớm giúp phát hiện sai lệch ngay lập tức, thay vì dồn tích rủi ro vào cuối kỳ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chỉ số (Metric) nào sau đây phản ánh chính xác nhất hiệu quả của quy trình Agile QA trong việc cân bằng giữa tốc độ và chất lượng?",
+    "options": [
+      "A. Số lượng bug tìm thấy trong mỗi Sprint.",
+      "B. Tỷ lệ phần trăm các test case được tự động hóa.",
+      "C. Defect Leakage Rate (Tỷ lệ lỗi lọt lưới lên Production) và Lead Time (Thời gian từ lúc có ý tưởng đến khi release).",
+      "D. Tổng số giờ QA bỏ ra để thực hiện kiểm thử thủ công."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Defect Leakage đo lường chất lượng thực tế, trong khi Lead Time đo lường tốc độ. Sự kết hợp này cho thấy QA có đang thực sự hỗ trợ delivery nhanh mà vẫn an toàn hay không.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong một dự án sử dụng Scrum. Developer nói rằng: 'Tôi đã xong code, nhưng chưa viết Unit Test, hãy cứ để QA test trước đi'. Bạn phản ứng thế nào?",
+    "options": [
+      "A. Đồng ý kiểm thử ngay để không làm chậm tiến độ của Developer.",
+      "B. Từ chối nhận ticket vì chưa đạt Definition of Done (DoD) và giải thích tầm quan trọng của Unit Test trong việc giảm thiểu lỗi hồi quy.",
+      "C. Nhận ticket nhưng ghi chú lại là chưa có Unit Test để sau này báo cáo với Manager.",
+      "D. Tự mình viết Unit Test cho Developer để đảm bảo chất lượng đầu vào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tuân thủ DoD là nguyên tắc cốt lõi của Agile. Việc bỏ qua Unit Test tạo ra rủi ro lớn và phá vỡ tính cam kết về chất lượng của toàn đội.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Exploratory Testing' nên được tích hợp như thế nào vào quy trình Agile để mang lại giá trị cao nhất?",
+    "options": [
+      "A. Thay thế hoàn toàn cho các kịch bản kiểm thử có sẵn (Scripted Testing) để tăng tính linh hoạt.",
+      "B. Chỉ thực hiện khi còn dư thời gian ở cuối Sprint.",
+      "C. Thực hiện song song với quá trình phát triển, tập trung vào các khu vực rủi ro cao mà automation chưa bao phủ hết.",
+      "D. Giao cho những người mới vào dự án thực hiện để họ làm quen với hệ thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Exploratory Testing tận dụng tư duy phản biện của con người để tìm lỗi mà máy móc (automation) bỏ sót, cần được thực hiện dựa trên phân tích rủi ro xuyên suốt Sprint.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong mô hình 'Spotify Model' hoặc các tổ chức Agile lớn, vai trò của một 'QA Chapter Lead' khác biệt thế nào so với một 'QA Manager' truyền thống?",
+    "options": [
+      "A. Chapter Lead trực tiếp quản lý công việc hàng ngày và phân công task cho từng QA trong các Squad.",
+      "B. Chapter Lead tập trung vào việc phát triển năng lực chuyên môn, định hướng công nghệ và chuẩn hóa quy trình chất lượng giữa các Squad.",
+      "C. Chapter Lead chỉ chịu trách nhiệm về việc tuyển dụng và không can thiệp vào kỹ thuật.",
+      "D. Không có sự khác biệt, chỉ là thay đổi tên gọi để phù hợp với thuật ngữ Agile."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Agile lớn, Chapter Lead đóng vai trò là người dẫn dắt về mặt chuyên môn (Mentorship/Standardization) để đảm bảo tính nhất quán về chất lượng mà không làm mất đi tính tự chủ của các Squad.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để đảm bảo chất lượng cho các yêu cầu phi chức năng (Non-functional Requirements - NFRs) trong môi trường Agile vốn ưu tiên tính năng người dùng?",
+    "options": [
+      "A. Coi NFRs là các User Story riêng biệt và đưa vào Backlog để ưu tiên thực hiện như tính năng bình thường.",
+      "B. Chỉ kiểm tra NFRs một lần duy nhất trước khi dự án kết thúc (Go-live).",
+      "C. Yêu cầu khách hàng tự kiểm tra NFRs vì họ là người hiểu rõ nhu cầu nhất.",
+      "D. Tích hợp NFRs vào Definition of Done của mỗi Story hoặc mỗi Sprint."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Cách tốt nhất để NFRs không bị lãng quên là biến chúng thành một phần của tiêu chuẩn chất lượng (DoD) bắt buộc cho mọi tính năng được xuất xưởng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một Story có Acceptance Criteria quá phức tạp và khó kiểm thử, Expert QA nên đề xuất gì trong buổi Refinement?",
+    "options": [
+      "A. Yêu cầu PO viết lại toàn bộ Story đó.",
+      "B. Đề xuất chia nhỏ (Split) Story đó thành các Story nhỏ hơn, mỗi cái có AC độc lập và có giá trị nghiệp vụ riêng.",
+      "C. Tăng ước lượng (Story Points) lên thật cao để phản ánh độ khó của việc kiểm thử.",
+      "D. Chấp nhận và yêu cầu thêm thời gian kiểm thử thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chia nhỏ Story (Story Splitting) giúp giảm rủi ro, tăng khả năng kiểm soát chất lượng và giúp dòng chảy công việc mượt mà hơn (Small batches).",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Phân tích rủi ro (Risk Analysis) trong Agile QA nên được thực hiện vào thời điểm nào là hiệu quả nhất?",
+    "options": [
+      "A. Chỉ thực hiện một lần lúc bắt đầu dự án.",
+      "B. Thực hiện liên tục trong các buổi Refinement, Planning và thậm chí là Daily Stand-up.",
+      "C. Sau khi đã phát hiện ra lỗi nghiêm trọng trên Production.",
+      "D. Khi chuẩn bị viết báo cáo tổng kết Sprint."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rủi ro trong Agile thay đổi liên tục theo mỗi thay đổi của yêu cầu. Việc đánh giá rủi ro thường xuyên giúp QA ưu tiên nguồn lực kiểm thử vào đúng chỗ cần thiết.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một tính năng quan trọng bị lỗi trên Production ngay sau khi release. Đội ngũ Agile nên làm gì đầu tiên theo tư duy 'Continuous Improvement'?",
+    "options": [
+      "A. Tìm ra ai là người đã kiểm thử tính năng đó và yêu cầu giải trình.",
+      "B. Tổ chức một buổi Root Cause Analysis (RCA) để tìm ra lỗ hổng trong quy trình và cập nhật DoD hoặc bộ test suite.",
+      "C. Ngay lập tức viết thêm thật nhiều test case thủ công cho tính năng đó.",
+      "D. Đổ lỗi cho PO vì đã đưa ra yêu cầu không rõ ràng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Agile tập trung vào học hỏi từ sai lầm. RCA giúp xác định nguyên nhân hệ thống thay vì cá nhân, từ đó cải tiến quy trình để ngăn chặn lỗi tương tự.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong chiến lược 'Test Automation Pyramid', tại sao tầng Unit Test lại chiếm tỷ trọng lớn nhất ở đáy kim tự tháp đối với một dự án Agile?",
+    "options": [
+      "A. Vì Unit Test dễ viết hơn các loại test khác.",
+      "B. Vì Unit Test chạy nhanh nhất, cung cấp phản hồi tức thì và chi phí bảo trì thấp nhất khi code thay đổi.",
+      "C. Vì Unit Test có thể thay thế hoàn toàn cho Integration Test.",
+      "D. Vì đó là yêu cầu bắt buộc của các framework Agile như Scrum."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tốc độ phản hồi là chìa khóa trong Agile. Unit Test cho phép Developer biết ngay lập tức nếu họ làm hỏng thứ gì đó, giúp duy trì tốc độ phát triển ổn định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để QA đóng góp giá trị trong buổi 'Sprint Retrospective' ở mức độ chuyên gia?",
+    "options": [
+      "A. Chỉ liệt kê danh sách các bug còn tồn đọng trong Sprint.",
+      "B. Đưa ra các dữ liệu về xu hướng chất lượng (Quality Trends) và đề xuất các thay đổi cụ thể về quy trình phối hợp để giảm thiểu lãng phí (Waste).",
+      "C. Phàn nàn về việc Developer bàn giao code trễ.",
+      "D. Giữ im lặng nếu không có vấn đề gì nghiêm trọng xảy ra."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Expert QA sử dụng dữ liệu để thúc đẩy cải tiến quy trình. Việc nhận diện 'waste' (như chờ đợi, làm lại) giúp đội ngũ làm việc hiệu quả hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Quality is a shared responsibility' trong Agile có nghĩa là gì đối với công việc của một QA?",
+    "options": [
+      "A. QA không cần phải kiểm thử nữa vì Developer đã tự chịu trách nhiệm.",
+      "B. QA chuyển sang vai trò huấn luyện, thiết lập khung đảm bảo chất lượng và hỗ trợ toàn đội đạt được tiêu chuẩn chất lượng.",
+      "C. Mọi người trong đội đều phải viết test case và QA chỉ việc chạy chúng.",
+      "D. Nếu có lỗi xảy ra, toàn bộ đội ngũ sẽ bị phạt như nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chất lượng là trách nhiệm chung không có nghĩa là loại bỏ QA, mà là QA nâng tầm vai trò từ người thực thi sang người định hướng và xây dựng văn hóa chất lượng cho toàn đội.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi áp dụng 'Test-Driven Development' (TDD), vai trò của QA Expert trong việc hỗ trợ Developer là gì?",
+    "options": [
+      "A. QA không có vai trò gì vì TDD là việc của Developer.",
+      "B. QA hỗ trợ Developer xác định các 'edge cases' và kịch bản lỗi trước khi họ bắt đầu viết code và test.",
+      "C. QA viết các test case bằng ngôn ngữ lập trình cho Developer copy vào.",
+      "D. QA kiểm tra xem Developer có thực sự viết test trước khi viết code hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA mang tư duy phản biện và bao quát các trường hợp ngoại lệ (edge cases), giúp bộ test của TDD trở nên toàn diện và thực tế hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống Legacy đang được chuyển đổi sang Agile. Chiến lược kiểm thử nào là rủi ro nhất?",
+    "options": [
+      "A. Xây dựng bộ Regression Test tự động cho các tính năng cốt lõi trước khi thay đổi code.",
+      "B. Áp dụng 'Strangler Fig Pattern' và kiểm thử kỹ lưỡng phần giao tiếp giữa hệ thống mới và cũ.",
+      "C. Ngừng toàn bộ việc kiểm thử hệ thống cũ để tập trung 100% nguồn lực cho các tính năng mới của hệ thống Agile.",
+      "D. Sử dụng Exploratory Testing để tìm hiểu các hành vi chưa được tài liệu hóa của hệ thống cũ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bỏ qua hệ thống cũ trong quá trình chuyển đổi là cực kỳ rủi ro vì các lỗi hồi quy hoặc sự không tương thích có thể phá hủy toàn bộ hệ thống khi tích hợp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong môi trường Continuous Deployment (CD), làm thế nào để xử lý các 'Flaky Tests' (test lúc pass lúc fail) một cách chuyên nghiệp?",
+    "options": [
+      "A. Chạy lại test đó nhiều lần cho đến khi nó pass thì thôi.",
+      "B. Tạm thời loại bỏ Flaky Tests ra khỏi pipeline chính, gắn tag để điều tra riêng và chỉ đưa lại vào khi đã ổn định.",
+      "C. Chấp nhận Flaky Tests như một phần tất yếu của tự động hóa quy mô lớn.",
+      "D. Xóa bỏ hoàn toàn các test đó vì chúng không đáng tin cậy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Flaky tests làm giảm niềm tin vào pipeline và gây lãng phí thời gian. Cần cách ly chúng để không làm gián đoạn CI/CD nhưng phải có kế hoạch sửa chữa cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao 'Pair Testing' giữa QA và Developer lại được coi là một kỹ thuật Shift-left hiệu quả?",
+    "options": [
+      "A. Vì nó giúp QA học được cách code của Developer.",
+      "B. Vì nó giúp phát hiện lỗi ngay khi code vừa được viết xong, giảm thời gian 'vòng đời' của một bug và tăng sự hiểu biết lẫn nhau.",
+      "C. Vì nó giúp tiết kiệm nhân sự, hai người làm chung một việc.",
+      "D. Vì nó thay thế được cho việc viết tài liệu hướng dẫn sử dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pair Testing tạo ra vòng phản hồi cực ngắn. Lỗi được sửa ngay lập tức mà không cần qua các bước log bug, chuyển trạng thái, giúp tối ưu hóa tốc độ Sprint.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi quản lý chất lượng cho một sản phẩm có nhiều bên liên quan (Stakeholders) với các ưu tiên khác nhau, Expert QA nên làm gì?",
+    "options": [
+      "A. Cố gắng làm hài lòng tất cả mọi người bằng cách kiểm thử mọi thứ họ yêu cầu.",
+      "B. Chỉ nghe theo lời của Product Owner vì đó là người quyết định Backlog.",
+      "C. Sử dụng 'Risk-based Testing' kết hợp với dữ liệu sử dụng thực tế của người dùng để thuyết phục các bên về ưu tiên kiểm thử.",
+      "D. Tự đưa ra quyết định dựa trên kinh nghiệm cá nhân mà không cần tham khảo ý kiến ai."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Expert QA cần sử dụng tư duy dựa trên dữ liệu và rủi ro để điều hòa các kỳ vọng khác nhau, đảm bảo nguồn lực được tập trung vào nơi mang lại giá trị lớn nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Testing at the Speed of Agile' đòi hỏi sự thay đổi tư duy quan trọng nhất nào ở người QA?",
+    "options": [
+      "A. Từ việc 'tìm lỗi' sang việc 'ngăn ngừa lỗi' và từ 'kiểm soát quy trình' sang 'hỗ trợ tốc độ'.",
+      "B. Từ việc kiểm thử thủ công sang việc chỉ sử dụng công cụ tự động hóa.",
+      "C. Từ việc làm việc độc lập sang việc luôn phải làm việc theo nhóm.",
+      "D. Từ việc viết test case chi tiết sang việc không cần viết gì cả."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đây là sự thay đổi bản chất. Ngăn ngừa lỗi (Prevention over Detection) thông qua Shift-left và hỗ trợ flow (Enablement) là cốt lõi của Agile QA ở trình độ chuyên gia.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile QA Process",
+    "category": "ANALYSIS"
+  }
+]

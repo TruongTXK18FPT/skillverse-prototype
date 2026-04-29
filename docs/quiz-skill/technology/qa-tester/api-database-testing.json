@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong REST API, mã trạng thái HTTP (Status Code) nào cho biết yêu cầu đã được xử lý thành công?",
+    "options": [
+      "A. 404 Not Found",
+      "B. 200 OK",
+      "C. 500 Internal Server Error",
+      "D. 400 Bad Request"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mã 200 OK là mã tiêu chuẩn cho các yêu cầu HTTP thành công.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phương thức HTTP nào thường được sử dụng để tạo mới một tài nguyên trên hệ thống?",
+    "options": [
+      "A. GET",
+      "B. DELETE",
+      "C. POST",
+      "D. HEAD"
+    ],
+    "correctAnswer": "C",
+    "explanation": "POST được thiết kế để gửi dữ liệu lên server nhằm tạo mới một tài nguyên.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi kiểm tra API, mã lỗi 401 Unauthorized thường có nghĩa là gì?",
+    "options": [
+      "A. Không tìm thấy trang yêu cầu",
+      "B. Server đang bị quá tải",
+      "C. Người dùng chưa thực hiện xác thực (thiếu hoặc sai Token/Credentials)",
+      "D. Dữ liệu gửi lên không đúng định dạng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "401 Unauthorized xảy ra khi yêu cầu thiếu thông tin xác thực hợp lệ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong SQL, câu lệnh nào được dùng để lấy dữ liệu từ một bảng?",
+    "options": [
+      "A. GET",
+      "B. SELECT",
+      "C. EXTRACT",
+      "D. READ"
+    ],
+    "correctAnswer": "B",
+    "explanation": "SELECT là câu lệnh cơ bản nhất trong SQL để truy vấn dữ liệu từ các bảng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khóa chính (Primary Key) trong một bảng cơ sở dữ liệu có đặc điểm gì?",
+    "options": [
+      "A. Có thể chứa giá trị NULL",
+      "B. Có thể có nhiều giá trị trùng lặp trong cùng một cột",
+      "C. Là duy nhất cho mỗi bản ghi và không được để trống",
+      "D. Chỉ có thể là kiểu dữ liệu số"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Primary Key dùng để định danh duy nhất mỗi hàng, không được trùng lặp và không được NULL.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Định dạng dữ liệu nào phổ biến nhất được sử dụng trong các RESTful API hiện nay?",
+    "options": [
+      "A. XML",
+      "B. HTML",
+      "C. JSON",
+      "D. CSV"
+    ],
+    "correctAnswer": "C",
+    "explanation": "JSON (JavaScript Object Notation) là định dạng nhẹ và phổ biến nhất trong truyền tải dữ liệu qua API.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để lọc kết quả trong câu lệnh SQL SELECT, bạn sử dụng từ khóa nào?",
+    "options": [
+      "A. WHERE",
+      "B. FILTER",
+      "C. GROUP BY",
+      "D. HAVING"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mệnh đề WHERE được dùng để chỉ định điều kiện khi truy vấn dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử API 'Create User', sau khi nhận được mã 201 Created, bước kiểm tra Database nào là quan trọng nhất?",
+    "options": [
+      "A. Kiểm tra xem bảng User có bao nhiêu cột",
+      "B. Kiểm tra xem bản ghi mới đã được lưu đúng thông tin vào Database chưa",
+      "C. Xóa toàn bộ dữ liệu trong bảng User",
+      "D. Thay đổi mật khẩu của Database"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cần xác nhận dữ liệu gửi qua API đã thực sự được lưu xuống DB chính xác để đảm bảo tính toàn vẹn dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Mã trạng thái HTTP 403 Forbidden có ý nghĩa gì?",
+    "options": [
+      "A. Server không tìm thấy tài nguyên",
+      "B. Người dùng đã đăng nhập nhưng không có quyền truy cập tài nguyên này",
+      "C. Yêu cầu thành công nhưng không có nội dung trả về",
+      "D. Lỗi cú pháp trong yêu cầu"
+    ],
+    "correctAnswer": "B",
+    "explanation": "403 Forbidden nghĩa là server hiểu yêu cầu nhưng từ chối thực hiện do vi phạm quyền truy cập.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong SQL, từ khóa nào dùng để kết hợp các hàng từ hai hoặc nhiều bảng dựa trên một cột chung?",
+    "options": [
+      "A. COMBINE",
+      "B. ATTACH",
+      "C. JOIN",
+      "D. MERGE"
+    ],
+    "correctAnswer": "C",
+    "explanation": "JOIN được dùng để liên kết dữ liệu giữa các bảng dựa trên mối quan hệ giữa các cột.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một API trả về mã lỗi 500 Internal Server Error, Tester nên làm gì đầu tiên?",
+    "options": [
+      "A. Kiểm tra lại kết nối mạng của máy cá nhân",
+      "B. Báo cáo lỗi cho phía Backend vì đây là lỗi xử lý từ phía máy chủ",
+      "C. Thay đổi trình duyệt web",
+      "D. Xóa cache của trình duyệt"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mã 500 là lỗi phía server, cần Backend kiểm tra log để tìm nguyên nhân cụ thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tham số nằm trên URL sau dấu chấm hỏi (ví dụ: /users?id=1) được gọi là gì?",
+    "options": [
+      "A. Path Parameter",
+      "B. Request Body",
+      "C. Query Parameter",
+      "D. Header"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Query Parameters là các cặp key-value nằm sau dấu '?' trên URL dùng để lọc hoặc phân trang.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Câu lệnh SQL nào dùng để cập nhật dữ liệu đã tồn tại trong bảng?",
+    "options": [
+      "A. MODIFY",
+      "B. UPDATE",
+      "C. CHANGE",
+      "D. REFRESH"
+    ],
+    "correctAnswer": "B",
+    "explanation": "UPDATE được sử dụng để chỉnh sửa các bản ghi hiện có trong cơ sở dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi kiểm tra API Schema, Tester đang kiểm tra điều gì?",
+    "options": [
+      "A. Tốc độ phản hồi của API",
+      "B. Cấu trúc dữ liệu, kiểu dữ liệu và các trường bắt buộc trong phản hồi",
+      "C. Màu sắc giao diện của API",
+      "D. Số lượng người dùng có thể truy cập API cùng lúc"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Schema validation đảm bảo dữ liệu trả về đúng định dạng cam kết (contract) giữa Frontend và Backend.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khóa ngoại (Foreign Key) dùng để làm gì?",
+    "options": [
+      "A. Để tăng tốc độ tìm kiếm dữ liệu",
+      "B. Để tạo liên kết giữa dữ liệu của hai bảng khác nhau",
+      "C. Để mã hóa dữ liệu trong bảng",
+      "D. Để thay thế cho khóa chính"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Foreign Key tạo ra mối quan hệ giữa các bảng bằng cách tham chiếu đến khóa chính của bảng khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mã trạng thái HTTP 429 Too Many Requests có ý nghĩa gì trong API Testing?",
+    "options": [
+      "A. Tài khoản người dùng bị xóa",
+      "B. Người dùng đã vượt quá giới hạn số lượng yêu cầu cho phép (Rate Limit)",
+      "C. API không hỗ trợ phương thức này",
+      "D. Dữ liệu gửi lên quá lớn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "429 được trả về khi người dùng gửi quá nhiều request trong một khoảng thời gian quy định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để xóa một bản ghi cụ thể khỏi bảng trong SQL, bạn nên dùng câu lệnh nào?",
+    "options": [
+      "A. REMOVE FROM table",
+      "B. DROP table",
+      "C. DELETE FROM table WHERE condition",
+      "D. CLEAR table"
+    ],
+    "correctAnswer": "C",
+    "explanation": "DELETE FROM kết hợp với WHERE giúp xóa chính xác bản ghi cần thiết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa phương thức PUT và PATCH là gì?",
+    "options": [
+      "A. PUT dùng để lấy dữ liệu, PATCH dùng để xóa dữ liệu",
+      "B. PUT dùng để cập nhật toàn bộ đối tượng, PATCH dùng để cập nhật một phần đối tượng",
+      "C. PUT nhanh hơn PATCH",
+      "D. PATCH chỉ dùng cho Database, PUT chỉ dùng cho API"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Theo quy chuẩn REST, PUT thay thế toàn bộ tài nguyên, còn PATCH cập nhật các trường cụ thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiểm thử API, 'Payload' thường ám chỉ điều gì?",
+    "options": [
+      "A. Thời gian phản hồi của server",
+      "B. Phần dữ liệu thực tế được gửi đi trong Request Body hoặc nhận về trong Response Body",
+      "C. Địa chỉ IP của server",
+      "D. Tên của công cụ kiểm thử"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Payload là nội dung dữ liệu chính được trao đổi giữa client và server.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện SQL Injection testing cơ bản, Tester thường nhập ký tự nào vào trường input để kiểm tra lỗ hổng?",
+    "options": [
+      "A. Dấu phẩy (,)",
+      "B. Dấu ngoặc kép (\")",
+      "C. Dấu nháy đơn (')",
+      "D. Dấu chấm (.)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dấu nháy đơn thường được dùng để phá vỡ cấu trúc câu lệnh SQL nguyên bản nhằm kiểm tra tính bảo mật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao cần kiểm tra tính nhất quán (Consistency) giữa API Response và Database?",
+    "options": [
+      "A. Để đảm bảo giao diện đẹp",
+      "B. Để đảm bảo dữ liệu hiển thị cho người dùng khớp hoàn toàn với dữ liệu lưu trữ thực tế",
+      "C. Để làm cho API chạy nhanh hơn",
+      "D. Để giảm dung lượng của Database"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm tra tính nhất quán giúp phát hiện lỗi nếu API trả về dữ liệu ảo hoặc dữ liệu sai lệch so với DB.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Thao tác 'Rollback' trong Database Transaction có tác dụng gì?",
+    "options": [
+      "A. Lưu vĩnh viễn các thay đổi vào Database",
+      "B. Hủy bỏ các thay đổi chưa được commit và quay lại trạng thái trước đó",
+      "C. Xóa toàn bộ Database",
+      "D. Tạo một bản sao lưu Database"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rollback giúp khôi phục dữ liệu về trạng thái an toàn trước khi xảy ra lỗi trong một phiên làm việc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu bạn gửi một yêu cầu API với dữ liệu bị thiếu một trường bắt buộc (Required field), mã lỗi nào thường được mong đợi?",
+    "options": [
+      "A. 200 OK",
+      "B. 400 Bad Request",
+      "C. 404 Not Found",
+      "D. 503 Service Unavailable"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mã 400 cho biết yêu cầu từ phía client không hợp lệ hoặc sai cú pháp/thiếu dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong SQL, từ khóa ORDER BY được sử dụng để làm gì?",
+    "options": [
+      "A. Nhóm các hàng có cùng giá trị",
+      "B. Sắp xếp kết quả trả về theo thứ tự tăng dần hoặc giảm dần",
+      "C. Giới hạn số lượng bản ghi trả về",
+      "D. Đếm số lượng bản ghi trong bảng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "ORDER BY dùng để sắp xếp dữ liệu theo một hoặc nhiều cột.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Swagger/OpenAPI thường được sử dụng trong dự án với mục đích gì?",
+    "options": [
+      "A. Để viết code Backend",
+      "B. Để quản lý mã nguồn",
+      "C. Để tài liệu hóa và thử nghiệm các Endpoint của API",
+      "D. Để thiết kế giao diện người dùng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Swagger cung cấp giao diện trực quan để xem danh sách API, tham số và cho phép gọi thử API.",
+    "difficulty": "BEGINNER",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử một API POST để tạo mới người dùng, API trả về mã lỗi 201 Created. Tuy nhiên, khi bạn kiểm tra trực tiếp trong Database, bản ghi đó không hề tồn tại. Nguyên nhân nào sau đây là khả thi nhất?",
+    "options": [
+      "A. API đang kết nối với một môi trường Database khác hoặc đang sử dụng Mock Database.",
+      "B. Database đang bị khóa (Locked) nên không thể ghi dữ liệu.",
+      "C. Bạn chưa truyền Header Content-Type: application/json.",
+      "D. Mã lỗi 201 chỉ có nghĩa là Request đã được gửi đi thành công, không đảm bảo dữ liệu đã lưu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nếu API trả về 201 (đã tạo thành công) nhưng DB không có dữ liệu, thường do sự sai lệch cấu hình môi trường (API trỏ vào DB khác) hoặc logic API trả về success giả lập mà chưa thực hiện commit vào DB.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiểm thử API, sự khác biệt chính giữa mã lỗi 401 Unauthorized và 403 Forbidden là gì?",
+    "options": [
+      "A. 401 là lỗi phía Server, 403 là lỗi phía Client.",
+      "B. 401 yêu cầu xác thực danh tính, 403 xác thực quyền truy cập vào tài nguyên cụ thể.",
+      "C. 401 dùng cho Token hết hạn, 403 dùng cho Token không hợp lệ.",
+      "D. Không có sự khác biệt, hai mã này có thể dùng thay thế cho nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "401 (Unauthenticated) nghĩa là hệ thống không biết bạn là ai. 403 (Unauthorized/Forbidden) nghĩa là hệ thống biết bạn là ai nhưng bạn không có quyền thực hiện hành động này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử một API GET danh sách sản phẩm có phân trang (pagination). Khi truyền tham số 'page=1&size=10', API trả về 10 bản ghi. Để kiểm tra tính đúng đắn của dữ liệu này với Database, câu lệnh SQL nào là phù hợp nhất?",
+    "options": [
+      "A. SELECT * FROM products WHERE id <= 10;",
+      "B. SELECT * FROM products ORDER BY id LIMIT 10 OFFSET 0;",
+      "C. SELECT COUNT(*) FROM products;",
+      "D. SELECT * FROM products GROUP BY category_id HAVING COUNT(*) = 10;"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để kiểm tra phân trang, cần sử dụng LIMIT (số lượng bản ghi) và OFFSET (vị trí bắt đầu) kết hợp với ORDER BY để đảm bảo thứ tự dữ liệu khớp với API.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện phương thức PUT để cập nhật thông tin người dùng, bạn chỉ gửi một trường 'email' trong Request Body. Sau khi API báo thành công, các trường khác như 'name', 'phone' trong Database bị chuyển thành NULL. Đây là vấn đề gì?",
+    "options": [
+      "A. Đây là hành vi đúng của phương thức PUT (thay thế toàn bộ tài nguyên).",
+      "B. Đây là lỗi của Database vì không thiết lập ràng buộc NOT NULL.",
+      "C. API nên sử dụng mã lỗi 204 thay vì 200.",
+      "D. Lỗi do người dùng không truyền đầy đủ các trường bắt buộc."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Theo chuẩn REST, PUT dùng để thay thế hoàn toàn tài nguyên hiện có. Nếu chỉ muốn cập nhật một phần, nên sử dụng phương thức PATCH.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần kiểm tra tính toàn vẹn dữ liệu khi một API thực hiện giao dịch chuyển tiền giữa hai tài khoản. Nếu API trả về lỗi ở bước trừ tiền tài khoản A, bạn cần kiểm tra điều gì trong Database?",
+    "options": [
+      "A. Kiểm tra xem tài khoản B có được cộng tiền hay không.",
+      "B. Đảm bảo cả tài khoản A và B đều không thay đổi số dư (Transaction Rollback).",
+      "C. Kiểm tra xem mã lỗi trả về có phải là 500 hay không.",
+      "D. Kiểm tra xem log của Database có ghi nhận truy vấn hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính nguyên tố (Atomicity) của Database Transaction yêu cầu nếu một bước thất bại, toàn bộ giao dịch phải được hoàn tác để đảm bảo tính nhất quán.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi kiểm thử API Rate Limiting, bạn nhận thấy sau khi gửi 100 requests liên tiếp, API bắt đầu trả về lỗi. Mã trạng thái HTTP nào là phù hợp nhất trong trường hợp này?",
+    "options": [
+      "A. 400 Bad Request",
+      "B. 503 Service Unavailable",
+      "C. 429 Too Many Requests",
+      "D. 408 Request Timeout"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mã 429 Too Many Requests được sử dụng cụ thể để thông báo rằng người dùng đã vượt quá giới hạn số lượng request cho phép trong một khoảng thời gian.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Câu lệnh SQL nào giúp bạn tìm ra các bản ghi trong bảng 'Orders' mà không có thông tin khách hàng tương ứng trong bảng 'Customers'?",
+    "options": [
+      "A. SELECT * FROM Orders INNER JOIN Customers ON Orders.customer_id = Customers.id;",
+      "B. SELECT * FROM Orders LEFT JOIN Customers ON Orders.customer_id = Customers.id WHERE Customers.id IS NULL;",
+      "C. SELECT * FROM Orders RIGHT JOIN Customers ON Orders.customer_id = Customers.id;",
+      "D. SELECT * FROM Orders CROSS JOIN Customers;"
+    ],
+    "correctAnswer": "B",
+    "explanation": "LEFT JOIN kết hợp với điều kiện WHERE bên phải IS NULL là kỹ thuật phổ biến để tìm các bản ghi mồ côi (không có liên kết) trong Database.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiểm thử API, 'Schema Validation' nhằm mục đích chính là gì?",
+    "options": [
+      "A. Kiểm tra xem API có trả về dữ liệu nhanh hay không.",
+      "B. Kiểm tra cấu trúc, kiểu dữ liệu và các trường bắt buộc của Response Body.",
+      "C. Kiểm tra xem dữ liệu trong Response có khớp với Database hay không.",
+      "D. Kiểm tra xem API có hỗ trợ giao thức HTTPS hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Schema Validation tập trung vào việc xác thực định dạng của dữ liệu (JSON/XML structure, data types, required fields) theo đúng hợp đồng (contract) đã định nghĩa.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn thực hiện một API xóa người dùng (DELETE /users/1). API trả về 200 OK. Tuy nhiên, khi SELECT trong DB, bản ghi vẫn còn đó nhưng trường 'deleted_at' có giá trị thời gian. Đây gọi là cơ chế gì?",
+    "options": [
+      "A. Hard Delete",
+      "B. Soft Delete",
+      "C. Database Truncate",
+      "D. Cache Invalidation"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Soft Delete là cơ chế đánh dấu bản ghi là đã xóa bằng một flag hoặc timestamp thay vì xóa vĩnh viễn khỏi Database vật lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để kiểm tra khả năng chịu tải của Database thông qua API, bạn nên tập trung vào kịch bản nào?",
+    "options": [
+      "A. Gửi các request với payload cực lớn để làm tràn bộ nhớ đệm.",
+      "B. Gửi liên tục các request thực hiện các câu lệnh JOIN phức tạp trên các bảng lớn.",
+      "C. Thay đổi liên tục các Header của API.",
+      "D. Gửi các request sai định dạng JSON để kiểm tra xử lý lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các câu lệnh JOIN phức tạp trên tập dữ liệu lớn gây áp lực nặng nề lên CPU và I/O của Database, giúp đánh giá hiệu năng truy vấn và chỉ mục (indexing).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi kiểm thử một API tìm kiếm, bạn nhập ký tự đặc biệt như `' OR '1'='1` vào ô tìm kiếm. Mục đích của hành động này là gì?",
+    "options": [
+      "A. Kiểm tra tính năng lọc dữ liệu theo điều kiện.",
+      "B. Kiểm tra lỗi SQL Injection.",
+      "C. Kiểm tra khả năng xử lý Unicode của API.",
+      "D. Kiểm tra xem API có trả về lỗi 404 hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuỗi `' OR '1'='1` là một kỹ thuật tấn công SQL Injection cơ bản nhằm đánh lừa câu lệnh SQL luôn trả về giá trị đúng (True).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn nhận thấy API trả về dữ liệu cũ mặc dù bạn vừa cập nhật dữ liệu mới thành công vào Database. Nguyên nhân phổ biến nhất là gì?",
+    "options": [
+      "A. Database chưa kịp lưu dữ liệu.",
+      "B. Cơ chế Caching (phía Server hoặc CDN) chưa được làm mới.",
+      "C. API đang sử dụng phương thức GET thay vì POST.",
+      "D. Trình duyệt của bạn đang bị lỗi hiển thị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Caching thường lưu trữ kết quả của các request GET. Nếu dữ liệu trong DB thay đổi nhưng Cache chưa bị xóa/cập nhật, API sẽ trả về dữ liệu cũ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong SQL, từ khóa 'DISTINCT' được sử dụng trong trường hợp nào khi kiểm thử dữ liệu API?",
+    "options": [
+      "A. Khi muốn sắp xếp dữ liệu trả về theo thứ tự tăng dần.",
+      "B. Khi muốn đếm tổng số bản ghi trong một bảng.",
+      "C. Khi muốn loại bỏ các giá trị trùng lặp trong kết quả truy vấn.",
+      "D. Khi muốn gộp dữ liệu từ hai bảng khác nhau."
+    ],
+    "correctAnswer": "C",
+    "explanation": "DISTINCT giúp lấy ra danh sách các giá trị duy nhất, rất hữu ích khi so khớp danh sách các danh mục (categories) hoặc nhãn (tags) trả về từ API.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi kiểm thử API với Header 'Accept: application/xml' nhưng Server chỉ hỗ trợ JSON, mã lỗi nào nên được trả về?",
+    "options": [
+      "A. 400 Bad Request",
+      "B. 404 Not Found",
+      "C. 406 Not Acceptable",
+      "D. 415 Unsupported Media Type"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mã 406 Not Acceptable được trả về khi Server không thể tạo ra dữ liệu phù hợp với các giá trị được chấp nhận trong Header 'Accept' của Request.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Giả sử bạn có bảng 'Users' với cột 'id' là Primary Key. Bạn thực hiện API POST tạo user với một 'id' đã tồn tại. Kết quả mong đợi về phía Database và API là gì?",
+    "options": [
+      "A. DB tự động ghi đè lên bản ghi cũ; API trả về 200 OK.",
+      "B. DB báo lỗi Duplicate Key; API trả về mã lỗi 400 hoặc 409.",
+      "C. DB tạo một bản ghi mới với id tự tăng; API trả về 201 Created.",
+      "D. DB treo và không phản hồi; API trả về 504 Gateway Timeout."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ràng buộc Primary Key không cho phép trùng lặp. API cần bắt lỗi này từ DB và trả về mã lỗi phù hợp (thường là 409 Conflict hoặc 400 Bad Request).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Làm thế nào để kiểm tra xem một API có đang thực hiện kết nối Database quá lâu (Slow Query) hay không?",
+    "options": [
+      "A. Kiểm tra mã trạng thái HTTP trả về.",
+      "B. Sử dụng các công cụ Monitor/Profiling Database hoặc kiểm tra Response Time của API.",
+      "C. Kiểm tra kích thước của Response Body.",
+      "D. Đếm số lượng bảng có trong Database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Response Time cao có thể là dấu hiệu của Slow Query. Cần dùng công cụ Profiling (như Slow Query Log trong MySQL) để xác định chính xác câu lệnh SQL nào đang chạy chậm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi kiểm thử API lấy thông tin chi tiết (GET /orders/{id}), nếu truyền một {id} không tồn tại trong DB, API nên trả về mã lỗi nào là chuẩn nhất?",
+    "options": [
+      "A. 204 No Content",
+      "B. 400 Bad Request",
+      "C. 404 Not Found",
+      "D. 500 Internal Server Error"
+    ],
+    "correctAnswer": "C",
+    "explanation": "404 Not Found là mã chuẩn để thông báo rằng tài nguyên được yêu cầu cụ thể qua định danh (ID) không tồn tại trong hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử luồng dữ liệu E2E. API A gửi dữ liệu sang API B, sau đó API B lưu vào Database. Nếu dữ liệu trong DB bị sai định dạng ngày tháng, bạn sẽ kiểm tra ở đâu đầu tiên?",
+    "options": [
+      "A. Kiểm tra kiểu dữ liệu của cột trong Database.",
+      "B. Kiểm tra Request Body mà API A gửi cho API B.",
+      "C. Kiểm tra logic chuyển đổi (parsing) dữ liệu tại API B trước khi lưu DB.",
+      "D. Kiểm tra lại múi giờ của Server chứa Database."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong luồng này, API B là nơi trực tiếp xử lý và lưu dữ liệu vào DB, do đó logic parsing tại API B là nơi dễ gây ra sai lệch định dạng nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc kiểm tra 'Database Constraints' (ràng buộc dữ liệu) lại quan trọng trong API Testing?",
+    "options": [
+      "A. Để đảm bảo API không bao giờ bị lỗi 500.",
+      "B. Để đảm bảo tính nhất quán và ngăn chặn dữ liệu rác/sai lệch được lưu vào hệ thống.",
+      "C. Để tăng tốc độ phản hồi của API.",
+      "D. Để thay thế hoàn toàn cho việc kiểm thử Validation ở phía Frontend."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Constraints (như Foreign Key, Unique, Check) là lớp bảo vệ cuối cùng của dữ liệu. Kiểm thử chúng giúp đảm bảo API xử lý đúng các vi phạm quy tắc nghiệp vụ ở tầng dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần xác thực rằng API trả về đúng danh sách các sản phẩm thuộc danh mục 'Electronics'. Trong DB, bảng 'Products' có cột 'category_id'. Bạn sẽ làm gì?",
+    "options": [
+      "A. Đếm số lượng sản phẩm trên giao diện API.",
+      "B. Truy vấn DB lấy danh sách sản phẩm có category_id tương ứng và so sánh ID với kết quả API.",
+      "C. Kiểm tra xem API có trả về trường 'category_name' hay không.",
+      "D. Gửi request API nhiều lần để xem kết quả có thay đổi không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cách xác thực chính xác nhất là so khớp tập hợp dữ liệu (data set) giữa kết quả truy vấn DB trực tiếp và kết quả trả về từ API.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một API cập nhật số lượng hàng tồn kho. Nếu hai request cùng cập nhật một bản ghi cùng một lúc, vấn đề gì có thể xảy ra trong Database?",
+    "options": [
+      "A. Deadlock",
+      "B. Race Condition (Dẫn đến sai lệch số lượng tồn kho)",
+      "C. SQL Injection",
+      "D. Database Migration Error"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Race Condition xảy ra khi nhiều tiến trình cùng truy cập và sửa đổi dữ liệu đồng thời, dẫn đến kết quả cuối cùng phụ thuộc vào thứ tự thực thi, gây mất mát dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiểm thử API, việc gửi một chuỗi JSON không hợp lệ (ví dụ: thiếu dấu ngoặc nhọn) nhằm mục đích gì?",
+    "options": [
+      "A. Kiểm tra khả năng xử lý lỗi cú pháp (Malformed Request) của API.",
+      "B. Kiểm tra hiệu năng của Parser.",
+      "C. Kiểm tra tính bảo mật của Database.",
+      "D. Kiểm tra xem API có tự động sửa lỗi hay không."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đây là một dạng Negative Testing để đảm bảo API trả về mã lỗi phù hợp (thường là 400 Bad Request) khi nhận dữ liệu không đúng định dạng JSON.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Câu lệnh SQL nào dùng để cập nhật trạng thái của tất cả đơn hàng từ 'PENDING' sang 'CANCELLED' cho khách hàng có ID là 5?",
+    "options": [
+      "A. UPDATE Orders SET status = 'CANCELLED' WHERE customer_id = 5 AND status = 'PENDING';",
+      "B. SELECT * FROM Orders WHERE status = 'CANCELLED' AND customer_id = 5;",
+      "C. DELETE FROM Orders WHERE customer_id = 5;",
+      "D. INSERT INTO Orders (status) VALUES ('CANCELLED') WHERE customer_id = 5;"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Câu lệnh UPDATE kết hợp với mệnh đề WHERE là cách chính xác để thay đổi giá trị của các bản ghi cụ thể trong Database.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi kiểm thử API bảo mật, bạn sử dụng một JWT Token đã hết hạn. Kết quả mong đợi là gì?",
+    "options": [
+      "A. API trả về 200 OK với thông báo 'Token Expired'.",
+      "B. API trả về 401 Unauthorized.",
+      "C. API trả về 404 Not Found.",
+      "D. API trả về 500 Internal Server Error."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Token hết hạn đồng nghĩa với việc danh tính không còn được xác thực hợp lệ, do đó mã 401 Unauthorized là phản hồi đúng tiêu chuẩn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao cần kiểm tra trường 'Last-Modified' hoặc 'ETag' trong Header của API Response?",
+    "options": [
+      "A. Để biết dữ liệu được lưu ở bảng nào trong DB.",
+      "B. Để hỗ trợ cơ chế Caching và kiểm soát phiên bản dữ liệu (Concurrency Control).",
+      "C. Để mã hóa dữ liệu trả về.",
+      "D. Để xác định API được viết bằng ngôn ngữ lập trình nào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ETag và Last-Modified giúp Client và Server xác định xem tài nguyên đã thay đổi hay chưa, hỗ trợ tối ưu hóa cache và tránh ghi đè dữ liệu cũ (Lost Update problem).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices, khi thực hiện Consumer-Driven Contract (CDC) Testing cho API, lợi ích lớn nhất so với Integration Testing truyền thống là gì?",
+    "options": [
+      "A. Giảm thiểu việc phụ thuộc vào môi trường staging phức tạp và cho phép phát hiện lỗi sớm ngay tại build-time của Provider.",
+      "B. Đảm bảo rằng tất cả các service đều sử dụng chung một phiên bản database duy nhất để đồng bộ dữ liệu.",
+      "C. Tăng tốc độ thực thi test bằng cách bỏ qua việc kiểm tra các schema của response API.",
+      "D. Loại bỏ hoàn toàn nhu cầu phải viết unit test cho các logic xử lý dữ liệu tại phía Provider."
+    ],
+    "correctAnswer": "A",
+    "explanation": "CDC Testing giúp Provider biết chính xác Consumer cần gì, từ đó có thể verify các thay đổi mà không cần khởi chạy toàn bộ hệ thống (Staging), giúp CI/CD nhanh và tin cậy hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi kiểm thử một API có cơ chế Rate Limiting dựa trên thuật toán Token Bucket, kịch bản nào sau đây là quan trọng nhất để xác định tính ổn định của hệ thống?",
+    "options": [
+      "A. Kiểm tra xem API có trả về code 200 OK khi gửi request với tần suất cực thấp hay không.",
+      "B. Gửi một lượng request vượt định mức trong thời gian ngắn (Burst) và kiểm tra khả năng hồi phục của bucket theo thời gian.",
+      "C. Xác nhận rằng API luôn trả về code 404 khi người dùng chưa đăng nhập hệ thống.",
+      "D. Kiểm tra xem header của response có chứa thông tin về Version của API hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thuật toán Token Bucket cho phép xử lý các đợt burst traffic. Kiểm thử cần xác nhận hệ thống xử lý đúng giới hạn burst và nạp lại token đúng tốc độ quy định.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Database Testing, nếu một hệ thống yêu cầu mức độ cô lập 'Repeatable Read', hiện tượng nào sau đây vẫn có thể xảy ra và cần được QA thiết kế kịch bản kiểm thử?",
+    "options": [
+      "A. Dirty Read (Đọc dữ liệu chưa commit).",
+      "B. Non-repeatable Read (Đọc lại một dòng dữ liệu thấy giá trị thay đổi).",
+      "C. Phantom Read (Xuất hiện các dòng dữ liệu mới thỏa mãn điều kiện query trong cùng một transaction).",
+      "D. Lost Update (Hai transaction cùng ghi đè dữ liệu mà không có cơ chế lock)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mức cô lập Repeatable Read ngăn chặn được Dirty Read và Non-repeatable Read, nhưng trong nhiều DB (như MySQL/Standard SQL), nó vẫn cho phép Phantom Read xảy ra trừ khi dùng Serializable.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử một API POST dùng để thực hiện thanh toán. Để đảm bảo tính Idempotency, bạn nên thực hiện kịch bản nào?",
+    "options": [
+      "A. Gửi 2 request giống hệt nhau cùng lúc và kỳ vọng cả hai đều tạo ra 2 giao dịch khác nhau trong DB.",
+      "B. Gửi cùng một request (kèm Idempotency-Key) nhiều lần và xác nhận chỉ có 1 giao dịch được tạo, các response sau trả về kết quả giống lần đầu.",
+      "C. Gửi request với dữ liệu không hợp lệ và kiểm tra xem hệ thống có trả về lỗi 500 Internal Server Error hay không.",
+      "D. Thay đổi số tiền thanh toán trong các request liên tiếp và kỳ vọng hệ thống tự động cộng dồn giá trị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Idempotency đảm bảo rằng việc thực hiện một thao tác nhiều lần có kết quả giống như thực hiện một lần duy nhất, cực kỳ quan trọng trong các giao dịch tài chính để tránh trừ tiền nhiều lần.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử tích hợp (E2E) giữa API và Database cho một hệ thống phân tán sử dụng Eventual Consistency, QA nên xử lý việc xác thực dữ liệu như thế nào?",
+    "options": [
+      "A. Query database ngay lập tức sau khi API trả về 200 OK và đánh fail nếu dữ liệu chưa khớp.",
+      "B. Sử dụng cơ chế polling hoặc chờ một khoảng thời gian (SLA) trước khi kiểm tra dữ liệu trong database để chấp nhận độ trễ lan truyền.",
+      "C. Yêu cầu lập trình viên chuyển hệ thống sang Strong Consistency để dễ dàng viết script tự động hóa.",
+      "D. Chỉ kiểm tra response của API và bỏ qua việc kiểm tra database vì hệ thống không đảm bảo tính nhất quán tức thời."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong hệ thống Eventual Consistency, dữ liệu cần thời gian để đồng bộ giữa các node. QA cần thiết kế script có độ trễ hợp lý hoặc cơ chế retry để xác thực trạng thái cuối cùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một API trả về lỗi 429 Too Many Requests. Điều này thường ám chỉ vấn đề gì mà QA cần phân tích sâu hơn?",
+    "options": [
+      "A. Người dùng không có quyền truy cập vào tài nguyên yêu cầu (Authorization).",
+      "B. Client đã vượt quá định mức số lượng request cho phép trong một khoảng thời gian (Rate Limiting).",
+      "C. Server đang bị quá tải CPU và không thể xử lý thêm bất kỳ logic nào.",
+      "D. Payload của request quá lớn khiến server từ chối tiếp nhận dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mã lỗi 429 được định nghĩa rõ ràng cho việc vi phạm giới hạn tần suất (Rate Limit) được cấu hình trên server hoặc API Gateway.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi kiểm thử một câu lệnh SQL Join phức tạp liên quan đến 5-6 bảng lớn, phương pháp tối ưu nhất để đảm bảo hiệu năng của script kiểm thử là gì?",
+    "options": [
+      "A. Luôn sử dụng SELECT * để lấy toàn bộ dữ liệu nhằm tránh bỏ sót thông tin cần so sánh.",
+      "B. Sử dụng EXPLAIN PLAN để phân tích cách thực thi của query và đảm bảo các cột dùng để Join đều đã được đánh Index.",
+      "C. Copy toàn bộ dữ liệu về file Excel và thực hiện hàm VLOOKUP để kiểm tra tính đúng đắn.",
+      "D. Thực hiện query vào giờ cao điểm để kiểm tra khả năng chịu tải thực tế của database engine."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở mức độ Advanced, QA cần hiểu về hiệu năng database. Sử dụng EXPLAIN giúp nhận diện các vấn đề như Table Scan, từ đó tối ưu hóa script kiểm thử và tư vấn cho dev.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiểm thử bảo mật API, lỗi 'Broken Object Level Authorization' (BOLA/IDOR) thường được phát hiện thông qua kịch bản nào?",
+    "options": [
+      "A. Gửi một chuỗi SQL Injection vào trường username của API login.",
+      "B. Thay đổi ID của tài nguyên trong URL (ví dụ /api/orders/123 thành /api/orders/124) bằng token của người dùng không sở hữu order đó.",
+      "C. Gửi request với một JWT token đã hết hạn để xem server có từ chối hay không.",
+      "D. Thực hiện tấn công Brute-force vào API endpoint để tìm mật khẩu admin."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BOLA xảy ra khi ứng dụng không kiểm tra quyền sở hữu đối với object được truy cập thông qua ID, cho phép người dùng xem/sửa dữ liệu của người khác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi API trả về mã lỗi 503 Service Unavailable, bước phân tích kỹ thuật nào sau đây là hợp lý nhất cho một QA Lead?",
+    "options": [
+      "A. Kết luận ngay lập tức là do code của lập trình viên có lỗi logic nghiêm trọng.",
+      "B. Kiểm tra tình trạng của các thành phần hạ tầng như Load Balancer, Circuit Breaker hoặc sự quá tải của các service phụ thuộc (Downstream).",
+      "C. Yêu cầu frontend thay đổi thông báo lỗi cho người dùng vì 503 là lỗi phía client.",
+      "D. Thực hiện xóa toàn bộ database và restore lại từ đầu để giải phóng tài nguyên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi 503 thường liên quan đến việc server tạm thời không thể xử lý request, có thể do bảo trì, quá tải hoặc Circuit Breaker đang ngắt kết nối để bảo vệ hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kịch bản kiểm thử Database Migration, rủi ro lớn nhất về 'Data Integrity' mà bạn cần tập trung là gì?",
+    "options": [
+      "A. Tên của các bảng mới không tuân thủ quy tắc đặt tên (Naming Convention).",
+      "B. Mất mát dữ liệu hoặc sai lệch kiểu dữ liệu (Data Type Mismatch) khi chuyển đổi từ schema cũ sang schema mới.",
+      "C. Thời gian thực hiện migration kéo dài hơn 5 phút so với dự kiến.",
+      "D. Các câu lệnh SQL migration không được viết bằng chữ in hoa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Migration thường thay đổi cấu trúc hoặc kiểu dữ liệu. Việc kiểm tra sự toàn vẹn, không mất mát và đúng định dạng dữ liệu sau khi convert là ưu tiên hàng đầu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng JSON Schema Validation lại quan trọng trong kiểm thử API tự động?",
+    "options": [
+      "A. Nó giúp thay thế hoàn toàn việc kiểm tra logic nghiệp vụ của API.",
+      "B. Nó đảm bảo cấu trúc dữ liệu trả về (kiểu dữ liệu, các trường bắt buộc) luôn đúng với hợp đồng (Contract) mà không cần kiểm tra từng giá trị cụ thể.",
+      "C. Nó giúp API chạy nhanh hơn bằng cách nén dữ liệu response.",
+      "D. Nó tự động sửa lỗi dữ liệu trong database nếu API trả về sai định dạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "JSON Schema Validation giúp phát hiện nhanh các thay đổi phá vỡ (breaking changes) trong cấu trúc response, đảm bảo tính tuân thủ contract giữa các bên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế kịch bản kiểm thử cho một API hỗ trợ Pagination (phân trang), trường hợp 'Deep Paging' (truy cập trang rất xa, ví dụ page=100000) thường gây ra vấn đề gì?",
+    "options": [
+      "A. API sẽ trả về lỗi 404 Not Found vì dữ liệu quá cũ.",
+      "B. Hiệu năng giảm đột ngột và tăng latency do database phải scan qua một lượng lớn bản ghi trước khi lấy dữ liệu trang yêu cầu.",
+      "C. Dữ liệu trả về sẽ luôn bị trùng lặp với trang đầu tiên.",
+      "D. API tự động chuyển hướng người dùng về trang chủ để tiết kiệm tài nguyên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với Offset-based pagination, database phải đếm và bỏ qua (skip) N dòng đầu tiên. Khi N rất lớn, chi phí I/O và CPU tăng mạnh, dễ gây timeout.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiểm thử Database, 'Deadlock' thường được phát hiện thông qua phương pháp nào?",
+    "options": [
+      "A. Chạy một câu lệnh SELECT đơn giản trên một bảng duy nhất.",
+      "B. Giả lập nhiều transaction đồng thời cố gắng cập nhật các tài nguyên chéo nhau (Transaction A giữ Lock 1 đợi Lock 2, Transaction B giữ Lock 2 đợi Lock 1).",
+      "C. Kiểm tra xem database có cài đặt mật khẩu mạnh hay không.",
+      "D. Thực hiện backup database trong khi không có ai sử dụng hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Deadlock là tình trạng các tiến trình chờ đợi nhau giải phóng tài nguyên vô tận. QA cần giả lập concurrency để kích hoạt điều kiện này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi kiểm thử một API sử dụng OAuth2 với JWT (JSON Web Token), việc kiểm tra 'Signature Verification' nhằm mục đích gì?",
+    "options": [
+      "A. Đảm bảo token có kích thước nhỏ nhất có thể để tiết kiệm băng thông.",
+      "B. Xác nhận rằng nội dung của token (payload) không bị chỉnh sửa bởi bên thứ ba sau khi được server cấp phát.",
+      "C. Kiểm tra xem người dùng có nhớ mật khẩu của họ hay không.",
+      "D. Đảm bảo rằng token luôn được mã hóa bằng thuật toán Base64 để bảo mật tuyệt đối."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chữ ký (Signature) trong JWT dùng để đảm bảo tính toàn vẹn. Nếu QA có thể thay đổi payload (ví dụ đổi role từ user thành admin) mà server vẫn chấp nhận thì đó là lỗi nghiêm trọng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống sử dụng kiến trúc Microservices gửi dữ liệu qua Message Queue (như Kafka). QA cần verify dữ liệu từ API đầu vào cho đến Database cuối cùng. Đây là loại kiểm thử gì?",
+    "options": [
+      "A. Unit Testing.",
+      "B. Component Testing.",
+      "C. Asynchronous End-to-End Testing.",
+      "D. Static Analysis Testing."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đây là kiểm thử luồng dữ liệu bất đồng bộ xuyên suốt các thành phần của hệ thống, từ API qua Message Broker tới Persistence layer.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi kiểm tra tính toàn vẹn dữ liệu (Data Integrity) sau một thao tác DELETE qua API, QA nên kiểm tra điều gì trong Database nếu hệ thống dùng 'Soft Delete'?",
+    "options": [
+      "A. Bản ghi phải biến mất hoàn toàn khỏi bảng dữ liệu.",
+      "B. Bản ghi vẫn tồn tại nhưng một cột trạng thái (ví dụ: is_deleted) được chuyển thành true và các API lấy danh sách không được trả về bản ghi này.",
+      "C. Toàn bộ các bảng liên quan (Foreign Key) cũng phải bị xóa sạch dữ liệu.",
+      "D. Database tự động tạo một bản backup mới ngay sau khi lệnh delete được thực thi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Soft Delete chỉ đánh dấu bản ghi là đã xóa về mặt logic để có thể khôi phục hoặc giữ vết dữ liệu, không xóa vật lý khỏi disk.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong API Testing, phương thức PATCH khác với PUT như thế nào về mặt ngữ nghĩa và kịch bản kiểm thử?",
+    "options": [
+      "A. PATCH dùng để thay thế toàn bộ tài nguyên, còn PUT dùng để cập nhật một phần.",
+      "B. PUT dùng để thay thế toàn bộ tài nguyên (idempotent), còn PATCH dùng để cập nhật một phần tài nguyên (partial update).",
+      "C. Không có sự khác biệt, cả hai đều dùng để cập nhật dữ liệu.",
+      "D. PATCH chỉ dùng cho các API bảo mật cao, còn PUT dùng cho API công cộng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Theo chuẩn REST, PUT yêu cầu gửi toàn bộ payload của object để thay thế, trong khi PATCH chỉ gửi những trường cần thay đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một API yêu cầu Header 'If-Match' (ETag), kịch bản kiểm thử nào là quan trọng để kiểm tra tính nhất quán khi có nhiều người cùng chỉnh sửa dữ liệu?",
+    "options": [
+      "A. Kiểm tra xem API có chạy nhanh hơn khi có ETag hay không.",
+      "B. Giả lập trường hợp hai người dùng cùng lấy một phiên bản dữ liệu, người thứ nhất cập nhật thành công, người thứ hai cập nhật với ETag cũ và phải nhận lỗi 412 Precondition Failed.",
+      "C. Kiểm tra xem ETag có được mã hóa bằng MD5 hay SHA-256 hay không.",
+      "D. Xác nhận rằng ETag luôn thay đổi mỗi khi có người thực hiện lệnh GET."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ETag kết hợp với If-Match dùng để giải quyết xung đột (Optimistic Concurrency Control), ngăn chặn việc ghi đè dữ liệu của người khác một cách vô ý.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện Database Testing cho một hệ thống Tài chính, tại sao việc kiểm tra 'Constraint' (như Check Constraint) lại quan trọng hơn là chỉ kiểm tra code ứng dụng?",
+    "options": [
+      "A. Vì Database Constraint chạy chậm hơn code ứng dụng nên cần kiểm tra kỹ để tối ưu.",
+      "B. Vì Constraint là lớp bảo vệ cuối cùng đảm bảo tính toàn vẹn dữ liệu ngay cả khi code ứng dụng có bug hoặc dữ liệu được can thiệp trực tiếp từ script ngoài.",
+      "C. Vì Constraint giúp tự động tạo ra các báo cáo tài chính hàng tháng.",
+      "D. Vì Constraint cho phép lưu trữ dữ liệu không giới hạn dung lượng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Constraint ở tầng DB đảm bảo quy tắc nghiệp vụ (ví dụ: số dư không âm) luôn được thực thi ở mức lưu trữ, ngăn ngừa dữ liệu rác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "API của bạn trả về dữ liệu dạng XML thay vì JSON như yêu cầu trong Header 'Accept: application/json'. Đây là lỗi thuộc về cơ chế nào?",
+    "options": [
+      "A. Content Negotiation.",
+      "B. Authentication.",
+      "C. Load Balancing.",
+      "D. Data Compression."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Content Negotiation là cơ chế cho phép Client và Server thỏa thuận về định dạng dữ liệu (JSON, XML, v.v.) thông qua các header như Accept và Content-Type.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi test API tích hợp với một Database có hàng triệu bản ghi, bạn nhận thấy một query tìm kiếm mất hơn 10 giây. Với tư cách QA, bạn đề xuất giải pháp kỹ thuật nào đầu tiên?",
+    "options": [
+      "A. Đề xuất tăng RAM cho server database.",
+      "B. Kiểm tra chỉ số Index trên các cột thường xuyên xuất hiện trong điều kiện WHERE của query đó.",
+      "C. Đề xuất chuyển sang sử dụng NoSQL thay vì SQL.",
+      "D. Yêu cầu người dùng không tìm kiếm với các điều kiện phức tạp nữa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiếu Index là nguyên nhân phổ biến nhất gây chậm query khi dữ liệu lớn. QA cần có khả năng đọc hiểu cấu trúc bảng để đưa ra tư vấn này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiểm thử API bảo mật, 'Mass Assignment' vulnerability xảy ra khi nào?",
+    "options": [
+      "A. Khi hacker gửi hàng triệu request cùng lúc làm sập server.",
+      "B. Khi API cho phép client cập nhật các trường dữ liệu nhạy cảm (như 'role', 'is_admin') mà lẽ ra chỉ server mới được quyền kiểm soát.",
+      "C. Khi database không có khóa chính (Primary Key).",
+      "D. Khi API trả về mã lỗi 500 kèm theo stack trace chi tiết của code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mass Assignment xảy ra khi ứng dụng tự động map các trường từ input (JSON) vào model mà không lọc, dẫn đến việc user có thể tự nâng quyền hoặc thay đổi dữ liệu nhạy cảm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một API Batch Processing xử lý 1000 bản ghi mỗi lần gọi. Nếu có 1 bản ghi lỗi, API trả về 207 Multi-Status. QA cần verify điều gì đặc biệt ở đây?",
+    "options": [
+      "A. Xác nhận rằng toàn bộ 1000 bản ghi đều bị rollback nếu có 1 lỗi.",
+      "B. Kiểm tra phần body của response để đảm bảo mỗi bản ghi đều có trạng thái riêng biệt (thành công hoặc lỗi cụ thể) và database phản ánh đúng trạng thái từng bản ghi.",
+      "C. Đảm bảo API trả về 500 Internal Server Error để client biết có lỗi xảy ra.",
+      "D. Kiểm tra xem API có tự động xóa các bản ghi lỗi khỏi database hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mã 207 Multi-Status (RFC 4918) dùng để chỉ ra rằng các phần của request có kết quả khác nhau. QA phải verify tính đúng đắn của từng phần tử trong response.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi kiểm thử một hệ thống sử dụng Database Sharding, rủi ro lớn nhất về mặt dữ liệu mà QA cần kiểm tra là gì?",
+    "options": [
+      "A. Dữ liệu bị phân tán vào các shard khác nhau dựa trên Shard Key.",
+      "B. Các query thực hiện join giữa các bảng nằm trên các shard vật lý khác nhau (Cross-shard join) có thể bị lỗi hoặc cực chậm.",
+      "C. Dung lượng của mỗi shard quá nhỏ không chứa đủ dữ liệu.",
+      "D. Tên của các shard không được đặt theo thứ tự chữ cái."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong kiến trúc Sharding, việc truy vấn dữ liệu nằm trên nhiều node vật lý khác nhau là một thách thức lớn về hiệu năng và độ phức tạp, cần được QA kiểm thử kỹ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn phát hiện ra rằng API trả về thông tin nhạy cảm như mật khẩu đã hash và địa chỉ IP server trong trường hợp có lỗi xảy ra. Đây là loại rủi ro gì?",
+    "options": [
+      "A. Performance Leak.",
+      "B. Sensitive Data Exposure (Lộ lọt dữ liệu nhạy cảm).",
+      "C. Broken Authentication.",
+      "D. Insecure Deserialization."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc trả về quá nhiều thông tin trong response (đặc biệt là thông tin hệ thống hoặc dữ liệu cá nhân) vi phạm nguyên tắc bảo mật thông tin.",
+    "difficulty": "ADVANCED",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices, khi kiểm thử một giao dịch phân tán (Distributed Transaction) sử dụng Saga Pattern (Choreography-based), làm thế nào để xác nhận tính toàn vẹn dữ liệu giữa API và Database khi một bước trong chuỗi bị lỗi?",
+    "options": [
+      "A. Kiểm tra xem API có trả về mã lỗi 500 ngay lập tức và dừng toàn bộ tiến trình không.",
+      "B. Xác minh rằng các 'Compensating Transactions' đã được kích hoạt chính xác để hoàn tác dữ liệu trên các service liên quan về trạng thái nhất quán.",
+      "C. Chỉ cần kiểm tra Database của service gây lỗi để đảm bảo dữ liệu không bị thay đổi.",
+      "D. Sử dụng cơ chế khóa (Locking) trên toàn bộ các database liên quan cho đến khi giao dịch hoàn tất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Saga Pattern, tính toàn vẹn không dựa trên ACID truyền thống mà dựa trên các giao dịch bù (Compensating Transactions) để đưa hệ thống về trạng thái nhất quán cuối cùng (Eventual Consistency).",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử Idempotency cho một POST API tạo đơn hàng, bạn gửi hai yêu cầu trùng lặp hoàn toàn trong một khoảng thời gian cực ngắn. Kết quả lý tưởng nhất để đảm bảo hệ thống không bị 'Double Spending' là gì?",
+    "options": [
+      "A. Yêu cầu thứ nhất trả về 201 Created, yêu cầu thứ hai trả về 409 Conflict hoặc 200 OK kèm thông tin đơn hàng cũ.",
+      "B. Cả hai yêu cầu đều trả về 201 Created nhưng chỉ có một bản ghi duy nhất trong Database.",
+      "C. Yêu cầu thứ nhất trả về 201 Created, yêu cầu thứ hai trả về 500 Internal Server Error do vi phạm Unique Constraint.",
+      "D. Hệ thống tự động gộp hai yêu cầu thành một và trả về 202 Accepted."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tính Idempotency đảm bảo việc thực hiện một thao tác nhiều lần không làm thay đổi kết quả ngoài lần đầu tiên. Trả về 409 hoặc 200 kèm dữ liệu cũ là cách xử lý chuẩn để tránh tạo dữ liệu trùng lặp.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử một hệ thống có cơ chế Database Replication (Master-Slave). API đọc dữ liệu từ Slave ngay sau khi API ghi dữ liệu vào Master thành công. Bạn phát hiện dữ liệu trả về từ API đọc đôi khi bị cũ. Đây là vấn đề gì và hướng xử lý kiểm thử ra sao?",
+    "options": [
+      "A. Lỗi logic API; cần kiểm tra lại câu lệnh JOIN trong SQL.",
+      "B. Lỗi kết nối Database; cần kiểm tra lại Connection Pool.",
+      "C. Vấn đề Replication Lag; cần kiểm thử độ trễ và xem xét chiến lược 'Read-after-write consistency'.",
+      "D. Lỗi Cache; cần xóa Redis trước khi thực hiện API đọc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong mô hình Master-Slave, độ trễ đồng bộ (Replication Lag) là rủi ro phổ biến. Tester cần xác định ngưỡng trễ chấp nhận được hoặc yêu cầu đọc từ Master cho các tác vụ quan trọng.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiểm thử bảo mật API, sự khác biệt cốt yếu giữa việc kiểm tra 'JWT Validation' và 'OAuth2 Token Introspection' là gì?",
+    "options": [
+      "A. JWT Validation kiểm tra chữ ký local, trong khi Introspection yêu cầu một network call đến Authorization Server để xác thực.",
+      "B. JWT Validation chậm hơn vì phải giải mã phức tạp, Introspection nhanh hơn vì chỉ là chuỗi ngẫu nhiên.",
+      "C. JWT không thể chứa thông tin phân quyền (scopes), còn Introspection thì có.",
+      "D. Introspection chỉ dùng cho Mobile App, JWT chỉ dùng cho Web App."
+    ],
+    "correctAnswer": "A",
+    "explanation": "JWT là stateless, có thể tự xác thực bằng public key. Introspection là stateful, API Resource Server phải hỏi lại Authorization Server xem token còn hiệu lực hay không.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế kịch bản kiểm thử cho một API thực hiện truy vấn SQL phức tạp với nhiều cấp độ JOIN trên các bảng lớn, rủi ro nào về Database cần được ưu tiên phân tích?",
+    "options": [
+      "A. Lỗi cú pháp SQL khi tham số truyền vào là chuỗi rỗng.",
+      "B. Thiếu Index trên các cột điều kiện JOIN dẫn đến Table Scan và gây treo hệ thống khi tải cao.",
+      "C. Thứ tự các cột trong câu lệnh SELECT không khớp với định dạng JSON trả về.",
+      "D. Database tự động chuyển đổi kiểu dữ liệu (Implicit Conversion) làm tăng tốc độ truy vấn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ chuyên gia, việc phân tích Performance thông qua Execution Plan để phát hiện Table Scan do thiếu Index là quan trọng nhất để tránh sập hệ thống trong môi trường thực tế.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiểm thử Contract Testing (ví dụ dùng Pact), nếu Provider thay đổi kiểu dữ liệu của một trường từ Integer sang String nhưng không thông báo cho Consumer, công cụ này sẽ giúp phát hiện lỗi ở giai đoạn nào?",
+    "options": [
+      "A. Khi chạy Integration Test trên môi trường Staging.",
+      "B. Khi chạy Performance Test với tải lượng lớn.",
+      "C. Ngay tại giai đoạn Build/CI của Provider khi đối chiếu với Pact file đã cam kết.",
+      "D. Khi End-user báo cáo lỗi trên môi trường Production."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Contract Testing cho phép phát hiện sự phá vỡ tương thích (breaking changes) ngay trong pipeline CI/CD của Provider trước khi code được deploy.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một API thanh toán yêu cầu mức độ Isolation Level nào trong Database để đảm bảo tuyệt đối không xảy ra hiện tượng 'Phantom Reads' hoặc 'Write Skew'?",
+    "options": [
+      "A. Read Committed",
+      "B. Repeatable Read",
+      "C. Serializable",
+      "D. Read Uncommitted"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Serializable là mức độ cô lập cao nhất, ngăn chặn mọi hiện tượng đọc/ghi không nhất quán bằng cách thực thi các giao dịch như thể chúng tuần tự, dù đánh đổi bằng hiệu năng.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử một API Gateway có tính năng Rate Limiting sử dụng thuật toán 'Leaky Bucket'. Nếu một client gửi burst request vượt ngưỡng, API nên trả về mã lỗi nào và kèm theo thông tin gì là tốt nhất cho phía Client?",
+    "options": [
+      "A. 503 Service Unavailable kèm theo thông báo hệ thống đang bảo trì.",
+      "B. 403 Forbidden để cảnh báo client đang tấn công hệ thống.",
+      "C. 429 Too Many Requests kèm theo header 'Retry-After'.",
+      "D. 400 Bad Request kèm theo hướng dẫn giảm tần suất gửi tin."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mã 429 là mã chuẩn cho Rate Limiting. Header 'Retry-After' giúp client biết chính xác khi nào có thể thử lại, giảm tải cho server.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện Database Migration Test từ SQL Server sang PostgreSQL cho một hệ thống tài chính, tiêu chí nào là quan trọng nhất để đánh giá sự thành công về mặt dữ liệu?",
+    "options": [
+      "A. Số lượng bản ghi ở hai bên bằng nhau hoàn toàn.",
+      "B. Tên các bảng và cột được giữ nguyên không thay đổi.",
+      "C. Data Integrity và Business Logic (Triggers/Stored Procedures) hoạt động chính xác và đồng nhất trên môi trường mới.",
+      "D. Thời gian thực hiện chuyển đổi dữ liệu dưới 1 tiếng đồng hồ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Di chuyển dữ liệu không chỉ là copy-paste mà là đảm bảo tính toàn vẹn (constraints) và các logic nghiệp vụ nằm trong DB (triggers/functions) phải tương thích với engine mới.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiểm thử API bảo mật, rủi ro 'BOLA' (Broken Object Level Authorization) thường được phát hiện bằng cách nào?",
+    "options": [
+      "A. Gửi một chuỗi script SQL vào tham số đầu vào của API.",
+      "B. Thay đổi ID của đối tượng trong URL/Body sang ID của người dùng khác bằng một Token hợp lệ của chính mình.",
+      "C. Gửi yêu cầu với một Token đã hết hạn (Expired Token).",
+      "D. Gửi yêu cầu với kích thước payload cực lớn để gây tràn bộ nhớ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BOLA xảy ra khi API không kiểm tra quyền sở hữu đối tượng. User A có thể truy cập dữ liệu User B bằng cách thay đổi ID nếu server chỉ kiểm tra Token có hợp lệ hay không mà không kiểm tra quyền trên ID đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Làm thế nào để kiểm thử tính nhất quán của dữ liệu (Data Consistency) khi API sử dụng cơ chế 'Optimistic Locking' thông qua trường 'version' trong Database?",
+    "options": [
+      "A. Chạy một luồng duy nhất cập nhật dữ liệu liên tục 100 lần.",
+      "B. Giả lập hai yêu cầu API cùng đọc một bản ghi có version = 1, sau đó cả hai cùng gửi yêu cầu cập nhật bản ghi đó.",
+      "C. Xóa trường version trong Database và kiểm tra xem API có báo lỗi không.",
+      "D. Tăng giá trị version lên một số rất lớn và kiểm tra API có cho phép ghi không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Optimistic Locking được kiểm thử bằng cách cho 2 tiến trình cùng tác động vào 1 tài nguyên. Tiến trình thứ 2 phải thất bại (thường trả về 409) vì version đã bị tiến trình 1 thay đổi.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi API trả về lỗi 504 Gateway Timeout, là một Expert Tester, bạn sẽ phân tích nguyên nhân gốc rễ (Root Cause) bắt đầu từ đâu?",
+    "options": [
+      "A. Kiểm tra lại code frontend vì có thể frontend gửi request quá chậm.",
+      "B. Kiểm tra cấu hình timeout của Load Balancer/Reverse Proxy và hiệu năng xử lý của Downstream Service hoặc Database query.",
+      "C. Yêu cầu đổi mã lỗi thành 408 Request Timeout vì nó chính xác hơn.",
+      "D. Kiểm tra xem Client có kết nối Internet ổn định hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "504 là lỗi phía server-side, xảy ra khi một proxy/gateway không nhận được phản hồi kịp thời từ server phía sau (upstream). Nguyên nhân thường do query DB chậm hoặc logic xử lý quá tải.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiểm thử API Pagination, rủi ro lớn nhất khi sử dụng 'Offset-based Pagination' (LIMIT/OFFSET) trên một bảng có hàng triệu bản ghi là gì?",
+    "options": [
+      "A. Dữ liệu trả về bị trùng lặp nếu có bản ghi mới được chèn vào.",
+      "B. API sẽ trả về lỗi 404 nếu offset quá lớn.",
+      "C. Hiệu năng giảm nghiêm trọng (Deep Pagination) vì Database vẫn phải quét qua tất cả các bản ghi trước khi đến vị trí offset.",
+      "D. Không thể sắp xếp dữ liệu theo thứ tự giảm dần."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Offset-based pagination buộc DB phải đọc và bỏ qua N bản ghi đầu tiên. Với N lớn, chi phí I/O cực cao. Giải pháp Expert thường đề xuất là 'Keyset/Cursor-based Pagination'.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần kiểm thử một API cập nhật số dư ví điện tử. Để đảm bảo không có lỗi Race Condition, bạn nên sử dụng phương pháp nào?",
+    "options": [
+      "A. Sử dụng Postman Runner chạy tuần tự 100 request.",
+      "B. Sử dụng công cụ như JMeter hoặc K6 để gửi hàng loạt request cập nhật đồng thời (concurrently) cho cùng một tài khoản và kiểm tra số dư cuối cùng.",
+      "C. Kiểm tra xem API có sử dụng HTTPS hay không.",
+      "D. Kiểm tra tính đúng đắn của dữ liệu đầu vào (Input Validation)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Race Condition chỉ xuất hiện khi có sự tranh chấp tài nguyên đồng thời. Kiểm thử tải (Concurrency Testing) là cách duy nhất để xác định xem cơ chế khóa (locking) của hệ thống có hoạt động không.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử tích hợp (Integration Testing) giữa API và một Third-party Payment Gateway, rủi ro 'Callback/Webhook' không đến được hệ thống của bạn nên được xử lý thế nào?",
+    "options": [
+      "A. Yêu cầu Third-party cam kết không bao giờ lỗi.",
+      "B. Thiết kế kịch bản kiểm thử cho cơ chế 'Polling' hoặc 'Re-delivery' để chủ động cập nhật trạng thái nếu Webhook thất bại.",
+      "C. Chỉ cần kiểm tra log của API xem có nhận được request không.",
+      "D. Bỏ qua vì đây là lỗi của bên thứ ba, không thuộc phạm vi kiểm thử của dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong hệ thống phân tán, Webhook có thể thất bại do mạng. Một Expert Tester phải tính đến phương án dự phòng (fallback) như Polling API để đảm bảo dữ liệu đồng bộ.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một hệ thống sử dụng NoSQL (MongoDB) làm Database chính. API yêu cầu lọc dữ liệu theo các trường không được đánh Index. Hệ quả nào sau đây là nghiêm trọng nhất mà Tester cần cảnh báo?",
+    "options": [
+      "A. Dữ liệu trả về sẽ bị sai định dạng JSON.",
+      "B. Truy vấn sẽ gây ra hiện tượng 'Collection Scan', làm tăng CPU usage và có thể gây sập Database khi lượng dữ liệu lớn.",
+      "C. MongoDB sẽ tự động tạo Index nên không cần lo lắng.",
+      "D. API sẽ trả về mã lỗi 400 Bad Request."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tương tự SQL, NoSQL nếu không có index sẽ phải quét toàn bộ collection. Điều này cực kỳ nguy hiểm cho hiệu năng hệ thống production.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiểm thử API, chiến lược 'Backward Compatibility' (Tương thích ngược) quan trọng nhất khi nào?",
+    "options": [
+      "A. Khi phát triển một tính năng hoàn toàn mới không liên quan đến code cũ.",
+      "B. Khi cập nhật Database Schema (ví dụ: xóa một cột đang được sử dụng bởi phiên bản App cũ chưa kịp update).",
+      "C. Khi thay đổi màu sắc giao diện trên Mobile App.",
+      "D. Khi thực hiện Unit Test cho các hàm nội bộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tương thích ngược cực kỳ quan trọng khi cập nhật API/DB mà vẫn phải hỗ trợ các phiên bản client cũ đang vận hành, tránh gây lỗi crash cho người dùng chưa cập nhật app.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi kiểm thử một API Search có tích hợp Elasticsearch, bạn thấy dữ liệu vừa thêm vào Database qua API 'Create' chưa xuất hiện ngay trong kết quả Search. Bạn sẽ đánh giá tình huống này như thế nào?",
+    "options": [
+      "A. Đây là lỗi nghiêm trọng, dữ liệu phải xuất hiện ngay lập tức (Strong Consistency).",
+      "B. Đây là đặc tính 'Eventual Consistency' của các hệ thống phân tán/search engine; cần kiểm tra thời gian đồng bộ (refresh interval) có nằm trong ngưỡng cho phép không.",
+      "C. Lỗi kết nối giữa Database và Elasticsearch.",
+      "D. Do trình duyệt lưu cache kết quả tìm kiếm cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các Search Engine như Elasticsearch thường có độ trễ index (mặc định 1s). Tester cần hiểu về Eventual Consistency để không đánh nhầm lỗi nhưng vẫn phải kiểm soát ngưỡng trễ.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Prepared Statements' trong code API lại là một biện pháp kiểm thử bảo mật Database quan trọng?",
+    "options": [
+      "A. Nó làm cho câu lệnh SQL chạy nhanh hơn gấp 10 lần.",
+      "B. Nó ngăn chặn hoàn toàn lỗi SQL Injection bằng cách tách biệt phần lệnh SQL và phần dữ liệu tham số.",
+      "C. Nó giúp tự động định dạng dữ liệu JSON trả về.",
+      "D. Nó cho phép thực hiện nhiều câu lệnh SQL cùng một lúc (Batch Processing)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Prepared Statements (Parameterized Queries) đảm bảo dữ liệu đầu vào luôn được xử lý như một literal, không thể thay đổi cấu trúc câu lệnh SQL, từ đó triệt tiêu rủi ro SQL Injection.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử API Export dữ liệu lớn (hàng trăm ngàn dòng) ra file CSV. API này thường xuyên bị lỗi 'Out of Memory' trên Server. Giải pháp kiểm thử và tư vấn kỹ thuật nào là phù hợp nhất?",
+    "options": [
+      "A. Yêu cầu tăng RAM cho Server lên gấp đôi.",
+      "B. Kiểm tra xem API có đang sử dụng cơ chế 'Streaming' dữ liệu từ Database ra Response thay vì load toàn bộ vào bộ nhớ (List) hay không.",
+      "C. Giới hạn người dùng chỉ được export tối đa 10 dòng.",
+      "D. Chuyển sang sử dụng phương thức GET thay vì POST."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với dữ liệu lớn, việc load tất cả vào RAM sẽ gây crash. Streaming cho phép đọc đến đâu gửi đến đó, giữ mức sử dụng bộ nhớ thấp và ổn định.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiến trúc Microservices, rủi ro 'Cascading Failure' xảy ra khi một API phụ thuộc vào một service khác bị chậm. Công cụ/Cơ chế nào cần được kiểm thử để ngăn chặn điều này?",
+    "options": [
+      "A. API Documentation (Swagger)",
+      "B. Circuit Breaker (ví dụ: Hystrix, Resilience4j)",
+      "C. Database Triggers",
+      "D. Unit Testing"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Circuit Breaker giúp ngắt kết nối đến một service đang lỗi/chậm, trả về fallback response ngay lập tức để bảo vệ các service khác không bị kéo sập theo.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi kiểm thử một API thực hiện xóa dữ liệu (DELETE), bạn phát hiện Database sử dụng 'Soft Delete' (chỉ đánh dấu flag deleted=true). Bạn cần lưu ý điều gì trong các bài test truy vấn (GET) sau đó?",
+    "options": [
+      "A. Dữ liệu phải biến mất hoàn toàn khỏi Database.",
+      "B. Các API GET danh sách hoặc chi tiết phải không được trả về bản ghi đã đánh dấu xóa, trừ khi có yêu cầu đặc biệt.",
+      "C. Kiểm tra xem dung lượng Database có giảm đi sau khi xóa không.",
+      "D. Không cần kiểm tra vì Soft Delete không ảnh hưởng đến API."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với Soft Delete, dữ liệu vẫn tồn tại trong DB. Tester phải đảm bảo logic của tất cả các API đọc dữ liệu đã được cập nhật để lọc bỏ các bản ghi đã 'xóa' này.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một API trả về lỗi 401 Unauthorized dù bạn đã đính kèm Token hợp lệ. Sau khi phân tích, bạn thấy đồng hồ hệ thống của Server chạy chậm hơn Client 10 phút. Tại sao điều này gây lỗi?",
+    "options": [
+      "A. Do cơ chế mã hóa mật khẩu yêu cầu thời gian thực.",
+      "B. Do trường 'iat' (issued at) hoặc 'nbf' (not before) trong JWT khiến server coi token là chưa có hiệu lực hoặc đã hết hạn so với giờ server.",
+      "C. Do Database không cho phép ghi dữ liệu có timestamp quá khứ.",
+      "D. Do trình duyệt tự động chặn các request có thời gian sai lệch."
+    ],
+    "correctAnswer": "B",
+    "explanation": "JWT chứa các mốc thời gian (exp, iat, nbf). Nếu giờ server và client lệch nhau quá nhiều, việc kiểm tra tính hợp lệ của token sẽ thất bại.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi kiểm thử API tích hợp với Database, việc xác minh 'Referential Integrity' (Tính toàn vẹn tham chiếu) có ý nghĩa gì?",
+    "options": [
+      "A. Đảm bảo rằng mọi Foreign Key trong một bảng đều phải trỏ tới một Primary Key tồn tại ở bảng khác.",
+      "B. Đảm bảo rằng tên các bảng không được trùng nhau.",
+      "C. Đảm bảo rằng dữ liệu trong API luôn hiển thị đúng ngôn ngữ của người dùng.",
+      "D. Đảm bảo rằng tốc độ truy vấn giữa các bảng là bằng nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Referential Integrity ngăn chặn dữ liệu 'mồ côi' (orphan records), đảm bảo mối quan hệ giữa các thực thể luôn chính xác ở mức Database.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn thực hiện Load Test cho một API và nhận thấy khi số lượng người dùng tăng lên, tỷ lệ lỗi 503 Service Unavailable tăng cao, nhưng CPU và RAM của Server vẫn thấp. Nguyên nhân khả dĩ nhất là gì?",
+    "options": [
+      "A. Code xử lý của API quá tối ưu nên không tốn CPU.",
+      "B. Database đã đạt giới hạn tối đa số lượng kết nối (Max Connections) hoặc Connection Pool bị cạn kiệt.",
+      "C. Băng thông mạng của client bị giới hạn.",
+      "D. API đang sử dụng bộ nhớ đệm (Cache) quá nhiều."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi CPU/RAM thấp mà vẫn lỗi 503/Timeout dưới tải cao, nguyên nhân thường nằm ở việc cạn kiệt tài nguyên giới hạn như DB Connections hoặc Thread Pool.",
+    "difficulty": "EXPERT",
+    "skillArea": "API & Database Testing",
+    "category": "ANALYSIS"
+  }
+]

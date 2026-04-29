@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong quy trình kiểm thử phần mềm, 'Defect' (lỗi) được định nghĩa là gì?",
+    "options": [
+      "A. Một tính năng mới được thêm vào hệ thống.",
+      "B. Sự sai lệch giữa kết quả thực tế và kết quả mong đợi.",
+      "C. Tài liệu mô tả yêu cầu của người dùng.",
+      "D. Một công cụ tự động hóa kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Defect là sự sai lệch giữa hành vi thực tế của hệ thống so với hành vi mong đợi được quy định trong tài liệu yêu cầu hoặc thiết kế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phát hiện một lỗi, bước đầu tiên mà một QA Tester cần làm là gì?",
+    "options": [
+      "A. Gửi email cho khách hàng để thông báo lỗi.",
+      "B. Ghi nhận lỗi vào hệ thống quản lý lỗi (Bug Tracking System).",
+      "C. Tự mình sửa lỗi trong mã nguồn.",
+      "D. Bỏ qua lỗi nếu nó nhỏ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bước đầu tiên và quan trọng nhất là ghi nhận lỗi vào hệ thống quản lý lỗi để đảm bảo nó được theo dõi và xử lý.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một báo cáo lỗi (bug report), phần 'Steps to Reproduce' (Các bước tái hiện) có mục đích chính là gì?",
+    "options": [
+      "A. Liệt kê các công cụ kiểm thử đã sử dụng.",
+      "B. Cung cấp hướng dẫn chi tiết để nhà phát triển có thể tái tạo lỗi.",
+      "C. Mô tả giải pháp khắc phục lỗi.",
+      "D. Đánh giá mức độ nghiêm trọng của lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các bước tái hiện giúp nhà phát triển dễ dàng lặp lại lỗi và hiểu được nguyên nhân gây ra nó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa 'Severity' (Mức độ nghiêm trọng) và 'Priority' (Mức độ ưu tiên) của một lỗi là gì?",
+    "options": [
+      "A. Severity do khách hàng quyết định, Priority do QA quyết định.",
+      "B. Severity liên quan đến tác động kỹ thuật của lỗi, Priority liên quan đến thứ tự cần sửa lỗi.",
+      "C. Severity chỉ áp dụng cho lỗi UI, Priority áp dụng cho lỗi chức năng.",
+      "D. Hai thuật ngữ này hoàn toàn giống nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Severity mô tả mức độ ảnh hưởng của lỗi đến chức năng hoặc hệ thống, trong khi Priority chỉ định mức độ khẩn cấp cần sửa lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào một lỗi nên được đánh dấu là 'High Severity' (Nghiêm trọng cao)?",
+    "options": [
+      "A. Khi lỗi chỉ ảnh hưởng đến giao diện người dùng nhỏ.",
+      "B. Khi lỗi gây crash ứng dụng hoặc làm mất dữ liệu quan trọng.",
+      "C. Khi lỗi chỉ xảy ra một lần và không thể tái hiện.",
+      "D. Khi lỗi được tìm thấy bởi người dùng cuối."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi có Severity cao thường là lỗi phá vỡ chức năng cốt lõi, gây mất dữ liệu hoặc làm ứng dụng không thể sử dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Jira, để tạo một báo cáo lỗi mới, bạn thường chọn loại Issue nào?",
+    "options": [
+      "A. Task",
+      "B. Story",
+      "C. Bug",
+      "D. Epic"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Jira, 'Bug' là loại Issue được thiết kế đặc biệt để ghi nhận và theo dõi lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích của việc đính kèm ảnh chụp màn hình (screenshot) hoặc video vào báo cáo lỗi là gì?",
+    "options": [
+      "A. Để làm cho báo cáo trông đẹp hơn.",
+      "B. Cung cấp bằng chứng trực quan và giúp nhà phát triển dễ dàng hình dung lỗi.",
+      "C. Để tăng dung lượng của báo cáo.",
+      "D. Để giải thích cách sử dụng ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ảnh chụp màn hình hoặc video là bằng chứng mạnh mẽ, giúp nhà phát triển nhanh chóng hiểu được lỗi đang xảy ra như thế nào.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một nhà phát triển đã sửa lỗi và chuyển trạng thái lỗi sang 'Resolved' (Đã giải quyết), bước tiếp theo của QA Tester là gì?",
+    "options": [
+      "A. Đóng lỗi ngay lập tức.",
+      "B. Chuyển lỗi trở lại trạng thái 'Open'.",
+      "C. Tái kiểm tra (retest) lỗi để xác nhận đã được sửa đúng.",
+      "D. Bắt đầu kiểm thử một tính năng hoàn toàn mới."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sau khi lỗi được đánh dấu 'Resolved', QA Tester phải tái kiểm tra để đảm bảo lỗi đã được khắc phục hoàn toàn và không phát sinh lỗi mới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây là quan trọng nhất để đảm bảo một báo cáo lỗi có chất lượng cao?",
+    "options": [
+      "A. Màu sắc font chữ trong báo cáo.",
+      "B. Tiêu đề rõ ràng, các bước tái hiện chi tiết và kết quả mong đợi/thực tế chính xác.",
+      "C. Số lượng từ trong phần mô tả.",
+      "D. Tên của người tìm ra lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một báo cáo lỗi chất lượng cao cần có thông tin đầy đủ, rõ ràng và dễ hiểu để nhà phát triển có thể xử lý hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong cuộc họp 'Bug Triage', vai trò chính của QA Tester là gì?",
+    "options": [
+      "A. Quyết định ai sẽ sửa lỗi.",
+      "B. Cung cấp thông tin chi tiết về các lỗi đã báo cáo và trả lời các câu hỏi liên quan.",
+      "C. Chỉ ngồi nghe và không tham gia.",
+      "D. Đặt ra thời hạn sửa lỗi cho nhà phát triển."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA Tester là người hiểu rõ nhất về lỗi, do đó vai trò của họ là cung cấp thông tin, bằng chứng và giải đáp thắc mắc để hỗ trợ việc phân loại và ưu tiên lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Điều gì xảy ra nếu một lỗi được tái kiểm tra và phát hiện vẫn chưa được sửa hoặc phát sinh lỗi mới?",
+    "options": [
+      "A. Lỗi được đóng lại.",
+      "B. Lỗi được chuyển trạng thái thành 'Reopened' (Mở lại).",
+      "C. Lỗi được đánh dấu là 'Duplicate'.",
+      "D. Lỗi được chuyển cho khách hàng kiểm tra."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu lỗi chưa được sửa hoặc phát sinh vấn đề mới, nó cần được mở lại để nhà phát triển tiếp tục xử lý.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi nào thì một lỗi có thể được đánh dấu là 'Duplicate' (Trùng lặp)?",
+    "options": [
+      "A. Khi lỗi đó đã được sửa trong phiên bản trước.",
+      "B. Khi một lỗi tương tự đã được báo cáo và đang được theo dõi.",
+      "C. Khi lỗi không thể tái hiện.",
+      "D. Khi lỗi không ảnh hưởng đến người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một lỗi được coi là trùng lặp khi nó mô tả cùng một vấn đề đã được ghi nhận trong một báo cáo lỗi khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phần 'Environment' (Môi trường) trong báo cáo lỗi dùng để mô tả điều gì?",
+    "options": [
+      "A. Tên của người kiểm thử.",
+      "B. Cấu hình phần cứng, hệ điều hành, trình duyệt hoặc phiên bản ứng dụng nơi lỗi xảy ra.",
+      "C. Thời gian xảy ra lỗi.",
+      "D. Mức độ ưu tiên của lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thông tin môi trường giúp nhà phát triển tái tạo chính xác điều kiện xảy ra lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để liên kết một lỗi với một Test Case (trường hợp kiểm thử) trong các công cụ như Jira hoặc TestRail, bạn thường sử dụng tính năng nào?",
+    "options": [
+      "A. Comment (Bình luận).",
+      "B. Attachments (Đính kèm).",
+      "C. Linked Issues (Liên kết vấn đề).",
+      "D. Share (Chia sẻ)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tính năng 'Linked Issues' hoặc tương tự cho phép liên kết các thực thể khác nhau như lỗi, test case, yêu cầu để theo dõi mối quan hệ giữa chúng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số 'Defect Leakage' (Lỗi rò rỉ) đo lường điều gì?",
+    "options": [
+      "A. Tổng số lỗi được tìm thấy trong quá trình kiểm thử.",
+      "B. Số lỗi được tìm thấy bởi người dùng cuối sau khi sản phẩm đã phát hành.",
+      "C. Thời gian trung bình để sửa một lỗi.",
+      "D. Tỷ lệ lỗi được mở lại sau khi đã đóng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Defect Leakage là một chỉ số quan trọng đo lường hiệu quả của quá trình kiểm thử nội bộ bằng cách đếm số lỗi thoát ra môi trường production.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điều gì có thể xảy ra nếu một báo cáo lỗi không có đủ thông tin hoặc thông tin không rõ ràng?",
+    "options": [
+      "A. Lỗi sẽ được sửa nhanh hơn vì nhà phát triển không cần đọc nhiều.",
+      "B. Nhà phát triển sẽ mất nhiều thời gian để tái tạo và sửa lỗi, hoặc thậm chí không thể sửa được.",
+      "C. Lỗi sẽ tự động được đóng lại.",
+      "D. Chất lượng sản phẩm sẽ tăng lên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Báo cáo lỗi thiếu thông tin sẽ gây khó khăn cho nhà phát triển, lãng phí thời gian và có thể dẫn đến việc lỗi không được sửa hoặc sửa sai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi nào một lỗi nên được đánh dấu là 'Low Priority' (Ưu tiên thấp)?",
+    "options": [
+      "A. Khi lỗi ngăn chặn người dùng sử dụng ứng dụng.",
+      "B. Khi lỗi ảnh hưởng đến một chức năng cốt lõi.",
+      "C. Khi lỗi là một vấn đề nhỏ về giao diện người dùng và không ảnh hưởng đến chức năng chính.",
+      "D. Khi lỗi được tìm thấy trong giai đoạn đầu của dự án."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi có Priority thấp thường là những vấn đề nhỏ, ít ảnh hưởng đến trải nghiệm người dùng hoặc chức năng cốt lõi, có thể được sửa sau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong các công cụ như Jira, việc sử dụng 'Component' (Thành phần) trong báo cáo lỗi giúp ích gì?",
+    "options": [
+      "A. Giúp thay đổi màu sắc của báo cáo.",
+      "B. Giúp phân loại lỗi theo các phần cụ thể của hệ thống hoặc module, hỗ trợ việc phân công và theo dõi.",
+      "C. Giúp tự động sửa lỗi.",
+      "D. Giúp đính kèm nhiều ảnh hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Component giúp tổ chức các lỗi theo cấu trúc của dự án, dễ dàng gán cho nhóm phát triển phụ trách component đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tỷ lệ 'Reopen Rate' (Tỷ lệ mở lại) của lỗi cao cho thấy điều gì về quy trình kiểm thử hoặc phát triển?",
+    "options": [
+      "A. Quy trình đang hoạt động rất tốt.",
+      "B. Lỗi được sửa rất nhanh.",
+      "C. Có thể có vấn đề trong quá trình sửa lỗi (chất lượng sửa lỗi) hoặc quá trình tái kiểm tra (hiệu quả tái kiểm tra).",
+      "D. Không có ý nghĩa gì đặc biệt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tỷ lệ mở lại cao cho thấy lỗi không được sửa triệt để hoặc quá trình tái kiểm tra không đủ kỹ lưỡng, cần xem xét lại quy trình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để tìm kiếm một lỗi cụ thể trong Jira, bạn nên sử dụng tính năng nào?",
+    "options": [
+      "A. Dashboard.",
+      "B. Advanced Search (Tìm kiếm nâng cao) hoặc Quick Search (Tìm kiếm nhanh).",
+      "C. Settings (Cài đặt).",
+      "D. Profile (Hồ sơ)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Jira cung cấp các công cụ tìm kiếm mạnh mẽ để người dùng có thể dễ dàng tìm thấy các issue cụ thể dựa trên nhiều tiêu chí khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Điều gì là quan trọng nhất khi đặt tên (Summary) cho một báo cáo lỗi?",
+    "options": [
+      "A. Tên phải thật dài và chi tiết.",
+      "B. Tên phải ngắn gọn, súc tích và mô tả rõ ràng vấn đề.",
+      "C. Tên phải có màu sắc nổi bật.",
+      "D. Tên phải chứa tên của người tìm ra lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một tiêu đề tốt giúp người đọc nhanh chóng nắm bắt được bản chất của lỗi mà không cần đọc toàn bộ báo cáo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi bạn phát hiện một lỗi mà bạn không chắc chắn có thể tái hiện lại được, bạn nên làm gì trong báo cáo lỗi?",
+    "options": [
+      "A. Không báo cáo lỗi đó.",
+      "B. Báo cáo lỗi và ghi rõ trong phần 'Steps to Reproduce' rằng lỗi khó tái hiện hoặc không chắc chắn.",
+      "C. Báo cáo lỗi và đánh dấu là 'High Priority'.",
+      "D. Yêu cầu nhà phát triển tự tìm cách tái hiện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc ghi rõ tính không ổn định của lỗi giúp nhà phát triển hiểu rõ hơn về tính chất của vấn đề và có thể yêu cầu thêm thông tin hoặc thực hiện các bước điều tra khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một hệ thống quản lý lỗi, trạng thái 'Closed' (Đã đóng) có nghĩa là gì?",
+    "options": [
+      "A. Lỗi vẫn đang được sửa.",
+      "B. Lỗi đã được sửa, tái kiểm tra và xác nhận là không còn tồn tại.",
+      "C. Lỗi đã được phân công cho nhà phát triển.",
+      "D. Lỗi đã bị xóa khỏi hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trạng thái 'Closed' là trạng thái cuối cùng của một lỗi, cho biết lỗi đã được xử lý hoàn toàn và không còn là vấn đề.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để theo dõi xu hướng chất lượng của sản phẩm dựa trên dữ liệu lỗi, bạn có thể sử dụng biểu đồ nào trong các công cụ như Jira?",
+    "options": [
+      "A. Biểu đồ đường (Line chart) hiển thị số lượng lỗi mở/đóng theo thời gian.",
+      "B. Biểu đồ hình tròn (Pie chart) hiển thị tỷ lệ giới tính của người dùng.",
+      "C. Biểu đồ cột (Bar chart) hiển thị số giờ làm việc của nhóm.",
+      "D. Biểu đồ phân tán (Scatter plot) hiển thị mối quan hệ giữa lỗi và thời tiết."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Biểu đồ đường theo dõi số lượng lỗi mở, đóng, hoặc tổng số lỗi theo thời gian là công cụ hiệu quả để đánh giá xu hướng chất lượng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một lỗi được phát hiện và nó ảnh hưởng đến một tính năng quan trọng nhưng có thể có giải pháp thay thế (workaround), mức độ ưu tiên và nghiêm trọng thường được gán như thế nào?",
+    "options": [
+      "A. Severity: High, Priority: High.",
+      "B. Severity: Medium, Priority: Low.",
+      "C. Severity: High, Priority: Medium (hoặc Low nếu workaround dễ dàng và phổ biến).",
+      "D. Severity: Low, Priority: High."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Severity vẫn có thể cao vì ảnh hưởng đến chức năng quan trọng, nhưng Priority có thể giảm xuống Trung bình hoặc Thấp nếu có workaround hiệu quả, giúp người dùng tiếp tục sử dụng hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Jira, khi một lỗi đã được Developer đánh dấu là 'Fixed', QA nên thực hiện bước nào tiếp theo để đảm bảo quy trình chuẩn?",
+    "options": [
+      "A. Chuyển trạng thái lỗi sang 'Closed' ngay lập tức.",
+      "B. Thực hiện 'Re-test' trên môi trường tương ứng và cập nhật kết quả.",
+      "C. Xóa lỗi đó khỏi danh sách backlog của dự án.",
+      "D. Tạo một lỗi mới để thay thế lỗi cũ nhằm lưu trữ lịch sử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sau khi Developer xác nhận đã sửa lỗi, QA cần thực hiện kiểm thử lại (Re-test) để xác nhận lỗi thực sự đã được khắc phục trước khi đóng hoặc chuyển trạng thái tiếp theo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một lỗi gây treo ứng dụng hoàn toàn nhưng chỉ xảy ra trên một phiên bản hệ điều hành rất cũ (chiếm 0.1% người dùng) nên được phân loại Severity và Priority như thế nào?",
+    "options": [
+      "A. Severity: Critical / Priority: Low",
+      "B. Severity: Low / Priority: High",
+      "C. Severity: Critical / Priority: High",
+      "D. Severity: Minor / Priority: Low"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Severity phản ánh mức độ ảnh hưởng kỹ thuật (treo ứng dụng là Critical), trong khi Priority phản ánh mức độ ưu tiên xử lý dựa trên tác động kinh doanh và số lượng người dùng ảnh hưởng (0.1% là Low).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chỉ số 'Defect Leakage' (Rò rỉ lỗi) được tính toán dựa trên thông tin nào từ công cụ quản lý lỗi?",
+    "options": [
+      "A. Số lượng lỗi bị Developer từ chối (Rejected) so với tổng số lỗi.",
+      "B. Số lượng lỗi được tìm thấy bởi khách hàng sau khi sản phẩm đã release so với tổng số lỗi tìm thấy trong quá trình test.",
+      "C. Tỷ lệ lỗi được mở lại (Reopened) sau khi đã đánh dấu là Fixed.",
+      "D. Số lượng lỗi tìm thấy trong mỗi sprint chia cho tổng số test case đã thực thi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Defect Leakage đo lường hiệu quả của quá trình kiểm thử bằng cách so sánh số lỗi lọt ra môi trường thực tế (Production) so với tổng số lỗi phát hiện được.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi viết 'Steps to Reproduce' trong một bug report, yếu tố nào sau đây là quan trọng nhất để Developer có thể tái hiện lỗi nhanh chóng?",
+    "options": [
+      "A. Mô tả cảm xúc của người dùng khi gặp lỗi.",
+      "B. Liệt kê tất cả các tính năng khác của hệ thống.",
+      "C. Các bước thực hiện ngắn gọn, chính xác kèm theo dữ liệu thử nghiệm (test data).",
+      "D. Chỉ cần ghi 'Làm theo hướng dẫn trong video đính kèm'."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các bước tái hiện cần cụ thể, đi kèm dữ liệu đầu vào chính xác để Developer có thể tạo lại đúng môi trường và ngữ cảnh xảy ra lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong buổi 'Bug Triage', mục tiêu chính của nhóm là gì khi sử dụng công cụ quản lý lỗi?",
+    "options": [
+      "A. Tìm ra người đã gây ra lỗi để kỷ luật.",
+      "B. Viết lại toàn bộ mô tả lỗi cho hay hơn.",
+      "C. Xem xét, đánh giá mức độ ưu tiên và phân bổ nguồn lực để xử lý các lỗi tồn đọng.",
+      "D. Xóa bỏ tất cả các lỗi có Severity thấp để làm sạch báo cáo."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bug Triage là cuộc họp định kỳ để các bên liên quan (PO, Dev, QA) thống nhất về thứ tự ưu tiên xử lý lỗi dựa trên nguồn lực và kế hoạch dự án.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Nếu một Developer phản hồi 'Cannot Reproduce' trên Jira cho một lỗi bạn vừa báo cáo, hành động chuyên nghiệp nhất của QA là gì?",
+    "options": [
+      "A. Đóng lỗi ngay lập tức vì không muốn tranh cãi.",
+      "B. Mở lại lỗi và yêu cầu Developer phải tự tìm cách tái hiện.",
+      "C. Kiểm tra lại các bước, môi trường, dữ liệu và cung cấp thêm bằng chứng (log, video) hoặc demo trực tiếp cho Developer.",
+      "D. Báo cáo lên Quản lý dự án rằng Developer không hợp tác."
+    ],
+    "correctAnswer": "C",
+    "explanation": "QA cần hỗ trợ Developer xác định nguyên nhân bằng cách cung cấp thêm thông tin chi tiết hoặc thực hiện demo trực tiếp để chứng minh lỗi tồn tại.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để truy xuất danh sách các lỗi thuộc 'Component A' và có trạng thái là 'In Progress' trong Jira, bạn nên sử dụng câu lệnh JQL nào?",
+    "options": [
+      "A. status = 'In Progress' AND component = 'Component A'",
+      "B. status = 'In Progress' OR component = 'Component A'",
+      "C. find bugs where component is 'Component A' and status is 'In Progress'",
+      "D. select * from bugs where component = 'Component A'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "JQL (Jira Query Language) sử dụng cú pháp 'field = value' và các toán tử logic như AND để kết hợp nhiều điều kiện lọc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc đính kèm 'Console Log' hoặc 'Network Log (HAR file)' vào bug report lại cực kỳ quan trọng đối với các ứng dụng Web?",
+    "options": [
+      "A. Để làm cho báo cáo trông chuyên nghiệp và dài hơn.",
+      "B. Giúp Developer xác định nhanh các lỗi về API, lỗi cú pháp Javascript hoặc lỗi server mà giao diện không hiển thị rõ.",
+      "C. Vì công cụ quản lý lỗi bắt buộc phải có file đính kèm mới cho phép lưu.",
+      "D. Để chứng minh rằng QA đã thực sự mở trình duyệt để test."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Logs cung cấp thông tin kỹ thuật dưới nền (backend/network) giúp Developer khoanh vùng nguyên nhân gốc rễ nhanh hơn so với việc chỉ nhìn ảnh chụp màn hình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong TestRail, việc liên kết (link) một 'Defect ID' từ Jira vào một 'Test Result' có tác dụng chính là gì?",
+    "options": [
+      "A. Tự động đóng lỗi trong Jira khi test case pass.",
+      "B. Tạo ra tính truy xuất nguồn gốc (Traceability) giữa ca kiểm thử và lỗi phát sinh.",
+      "C. Để xóa test case đó khỏi hệ thống vì đã có lỗi.",
+      "D. Giúp tăng dung lượng lưu trữ của TestRail."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc liên kết giúp các bên liên quan biết được lỗi nào được phát hiện bởi test case nào, hỗ trợ việc kiểm tra lại và quản lý chất lượng tổng thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số 'Reopen Rate' cao trong một dự án thường cảnh báo vấn đề gì?",
+    "options": [
+      "A. QA đang tìm được quá nhiều lỗi nghiêm trọng.",
+      "B. Developer sửa lỗi chưa triệt để hoặc QA hiểu sai yêu cầu khi kiểm thử lại.",
+      "C. Công cụ quản lý lỗi đang hoạt động không ổn định.",
+      "D. Dự án đang đi đúng tiến độ và chất lượng rất tốt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tỷ lệ mở lại lỗi cao cho thấy quy trình sửa lỗi hoặc quy trình xác nhận lỗi đang có vấn đề, dẫn đến việc lãng phí thời gian xử lý đi xử lý lại một lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trạng thái 'Deferred' (Hoãn lại) của một lỗi thường được sử dụng trong trường hợp nào?",
+    "options": [
+      "A. Khi lỗi đó không phải là lỗi mà là một tính năng mới.",
+      "B. Khi lỗi đã được sửa và chờ deploy.",
+      "C. Khi lỗi được xác nhận nhưng sẽ được sửa trong các bản release sau do hạn chế về thời gian hoặc ưu tiên.",
+      "D. Khi QA không thể tái hiện lại lỗi đó nữa."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Deferred được dùng cho các lỗi hợp lệ nhưng chưa ưu tiên sửa ngay trong phiên bản hiện tại.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi viết tiêu đề (Summary) cho một bug report, cấu trúc nào sau đây được coi là tối ưu nhất?",
+    "options": [
+      "A. [Module] Mô tả ngắn gọn lỗi xảy ra - Điều kiện xảy ra.",
+      "B. Lỗi rất nghiêm trọng, cần sửa gấp ngay lập tức.",
+      "C. Tại sao tính năng này không hoạt động như mong đợi?",
+      "D. ID người dùng + Ngày phát hiện + Tên QA."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tiêu đề cần ngắn gọn nhưng đủ thông tin về vị trí lỗi (Module), hiện tượng lỗi và ngữ cảnh để người xem nắm bắt nhanh nội dung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc sử dụng 'Labels' trong Jira khi báo cáo lỗi nên được thực hiện như thế nào để hiệu quả?",
+    "options": [
+      "A. Gắn càng nhiều label càng tốt để dễ tìm kiếm.",
+      "B. Sử dụng các label thống nhất theo quy ước của dự án để phân loại và lọc lỗi theo nhóm (ví dụ: Regression, UI, Security).",
+      "C. Mỗi QA nên tự tạo label riêng để đánh dấu công việc cá nhân.",
+      "D. Chỉ dùng label khi không biết chọn Component nào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Labels là công cụ phân loại linh hoạt, cần sự thống nhất trong đội ngũ để hỗ trợ việc truy vấn và làm báo cáo sau này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong báo cáo lỗi, trường 'Environment' nên chứa thông tin gì là quan trọng nhất?",
+    "options": [
+      "A. Tên của người quản lý dự án.",
+      "B. Danh sách các test case liên quan.",
+      "C. Chi tiết về hệ điều hành, trình duyệt, phiên bản ứng dụng và thiết bị thử nghiệm.",
+      "D. Thời gian dự kiến hoàn thành việc sửa lỗi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thông tin môi trường giúp Developer thiết lập đúng cấu hình để tái hiện lỗi, vì nhiều lỗi chỉ xuất hiện trên các cấu hình cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện một lỗi chính tả trên Logo của công ty tại trang chủ. Bạn nên đặt Priority như thế nào?",
+    "options": [
+      "A. Low - Vì nó không ảnh hưởng đến chức năng.",
+      "B. High - Vì nó ảnh hưởng trực tiếp đến hình ảnh thương hiệu và uy tín công ty.",
+      "C. Medium - Vì lỗi chính tả là bình thường.",
+      "D. Critical - Vì nó làm hỏng toàn bộ trải nghiệm người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc dù Severity thấp (không hỏng chức năng), nhưng Priority cao vì tác động tiêu cực lớn đến bộ mặt công ty trước khách hàng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Công cụ Zephyr tích hợp trong Jira hỗ trợ QA tốt nhất ở điểm nào trong quản lý lỗi?",
+    "options": [
+      "A. Tự động sửa mã nguồn khi phát hiện lỗi.",
+      "B. Quản lý các chu kỳ kiểm thử (Test Cycles) và liên kết trực tiếp kết quả thực thi với các ticket Jira.",
+      "C. Thay thế hoàn toàn việc viết bug report thủ công.",
+      "D. Gửi email thông báo cho khách hàng mỗi khi có lỗi mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Zephyr giúp quản lý quy trình kiểm thử từ lập kế hoạch đến thực thi ngay trong môi trường Jira, tạo sự liền mạch giữa test case và defect.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một lỗi được chuyển sang trạng thái 'Resolved' nhưng bạn kiểm tra lại vẫn thấy lỗi đó tồn tại, bạn nên thực hiện thao tác gì trên công cụ?",
+    "options": [
+      "A. Tạo một ticket mới với mô tả tương tự.",
+      "B. Thực hiện hành động 'Reopen' kèm theo bằng chứng cho thấy lỗi chưa được sửa.",
+      "C. Để yên trạng thái đó và nhắn tin riêng cho Developer.",
+      "D. Chuyển trạng thái sang 'Closed' và ghi chú là 'Vẫn còn lỗi'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Reopen là quy trình chuẩn để yêu cầu Developer xem xét lại lỗi khi việc sửa chữa chưa đạt yêu cầu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc đính kèm Video quay màn hình so với chỉ đính kèm ảnh chụp màn hình (Screenshot) là gì?",
+    "options": [
+      "A. Video luôn có dung lượng nhỏ hơn ảnh.",
+      "B. Video giúp Developer thấy rõ các thao tác chuyển tiếp và hành vi động của ứng dụng dẫn đến lỗi.",
+      "C. Video không cần phải viết mô tả các bước tái hiện (Steps).",
+      "D. Công cụ quản lý lỗi ưu tiên hiển thị video hơn ảnh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Video cung cấp cái nhìn trực quan về luồng thao tác và thời điểm chính xác lỗi xảy ra, đặc biệt hữu ích với các lỗi về hiệu ứng hoặc luồng dữ liệu phức tạp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu bạn phát hiện 2 lỗi có cùng nguyên nhân gốc rễ (root cause), bạn nên xử lý như thế nào trên công cụ quản lý lỗi?",
+    "options": [
+      "A. Chỉ báo cáo 1 lỗi duy nhất.",
+      "B. Báo cáo cả 2 lỗi và đánh dấu một lỗi là 'Duplicate' của lỗi kia, đồng thời liên kết (link) chúng lại.",
+      "C. Báo cáo 2 lỗi riêng biệt và không cần ghi chú gì thêm.",
+      "D. Xóa bớt một lỗi để tiết kiệm tài nguyên hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc đánh dấu Duplicate giúp tránh trùng lặp công việc cho Developer nhưng vẫn giữ được thông tin về các điểm xuất hiện khác nhau của lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trường 'Affected Version' và 'Fix Version' trong Jira khác nhau như thế nào?",
+    "options": [
+      "A. Không có sự khác biệt, dùng cái nào cũng được.",
+      "B. Affected Version là phiên bản phát hiện lỗi, Fix Version là phiên bản dự kiến hoặc thực tế lỗi được sửa.",
+      "C. Affected Version là phiên bản của QA, Fix Version là phiên bản của Developer.",
+      "D. Affected Version là tên dự án, Fix Version là tên Sprint."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Affected Version giúp theo dõi lỗi xuất hiện từ khi nào, còn Fix Version giúp quản lý kế hoạch đóng gói sản phẩm (Release Management).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để đo lường 'Bug Density' (Mật độ lỗi) của một module thông qua công cụ quản lý?",
+    "options": [
+      "A. Tổng số lỗi chia cho tổng số Developer trong dự án.",
+      "B. Tổng số lỗi tìm thấy trong module chia cho kích thước của module đó (ví dụ: Lines of Code hoặc Function Points).",
+      "C. Số lượng lỗi Critical chia cho tổng số lỗi của module.",
+      "D. Số ngày trung bình để sửa xong một lỗi trong module."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bug Density đo lường mức độ tập trung của lỗi trên một đơn vị kích thước phần mềm, giúp xác định các phần rủi ro cao.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một bug report chất lượng thấp (thiếu thông tin, tiêu đề không rõ ràng) sẽ gây ra hậu quả trực tiếp nào?",
+    "options": [
+      "A. Làm tăng thời gian trao đổi qua lại (communication overhead) và kéo dài thời gian sửa lỗi.",
+      "B. Làm cho server của Jira bị quá tải.",
+      "C. Làm cho QA bị trừ lương ngay lập tức.",
+      "D. Không gây hậu quả gì nếu Developer giỏi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thông tin không rõ ràng buộc Developer phải hỏi lại QA nhiều lần, gây lãng phí thời gian của cả hai bên và chậm tiến độ dự án.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Jira, tính năng 'Issue Linking' loại 'blocks' / 'is blocked by' thường được dùng khi nào?",
+    "options": [
+      "A. Khi hai lỗi hoàn toàn không liên quan đến nhau.",
+      "B. Khi một lỗi nghiêm trọng ngăn cản việc kiểm thử các tính năng hoặc lỗi khác.",
+      "C. Khi QA muốn chặn Developer không cho sửa lỗi.",
+      "D. Khi lỗi đã được đóng và không cho phép mở lại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Liên kết 'blocks' thể hiện sự phụ thuộc, giúp team nhận diện các điểm nghẽn (bottlenecks) trong quá trình phát triển và kiểm thử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong biểu đồ 'Bug Ageing Report', thông tin nào được hiển thị?",
+    "options": [
+      "A. Tuổi đời của các Developer tham gia dự án.",
+      "B. Thời gian trung bình một lỗi nằm ở trạng thái 'Open' hoặc chưa được giải quyết.",
+      "C. Ngày hết hạn của bản quyền phần mềm quản lý lỗi.",
+      "D. Tổng số lỗi đã được sửa trong vòng 1 năm qua."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bug Ageing giúp quản lý biết được các lỗi nào đang bị tồn đọng quá lâu để có biện pháp thúc đẩy xử lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn tìm thấy một lỗi nghiêm trọng ngay sát giờ release. Tuy nhiên, PO quyết định 'Won't Fix' cho bản release này. Bạn nên làm gì trên công cụ quản lý lỗi?",
+    "options": [
+      "A. Xóa lỗi đó đi để không làm xấu báo cáo chất lượng.",
+      "B. Cập nhật trạng thái lỗi theo quyết định của PO (ví dụ: Won't Fix hoặc Deferred) và lưu lại lý do trong comment.",
+      "C. Cố tình để trạng thái 'Open' để ép Developer phải sửa.",
+      "D. Thay đổi Severity của lỗi xuống 'Minor' để phù hợp với quyết định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA cần tuân thủ quyết định của các bên liên quan nhưng phải đảm bảo mọi quyết định và lý do đều được ghi lại đầy đủ trên công cụ để tra cứu sau này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một dự án Agile quy mô lớn, chỉ số Defect Leakage Rate (DLR) tăng cao sau mỗi bản release. Với vai trò Senior QA, bạn đề xuất thay đổi nào trong công cụ quản lý lỗi để giải quyết vấn đề gốc rễ?",
+    "options": [
+      "A. Bắt buộc đính kèm log và video cho mọi bug report để Dev dễ debug hơn.",
+      "B. Thêm trường bắt buộc 'Root Cause Category' và phân tích mối tương quan giữa các module thường xuyên lọt lỗi.",
+      "C. Tăng Severity của tất cả các lỗi tìm thấy trong giai đoạn Regression Testing.",
+      "D. Tự động hóa việc chuyển trạng thái bug từ 'Resolved' sang 'Closed' sau 24 giờ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DLR cao phản ánh lỗ hổng trong quy trình kiểm thử hoặc thiết kế. Phân tích Root Cause (Nguyên nhân gốc rễ) thông qua công cụ giúp xác định module yếu kém để tập trung nguồn lực kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết lập workflow cho Jira để quản lý lỗi, tại sao việc phân biệt rõ ràng giữa 'Resolution' và 'Status' lại cực kỳ quan trọng ở mức độ quản lý đội nhóm?",
+    "options": [
+      "A. Để đảm bảo rằng mọi bug 'Closed' đều phải có một giá trị 'Resolution' như Fixed, Won't Fix, hoặc Duplicate nhằm phục vụ báo cáo chính xác.",
+      "B. Vì Status chỉ dùng cho Dev, còn Resolution chỉ dùng cho QA.",
+      "C. Để giảm bớt số lượng bước trong workflow giúp Dev chuyển trạng thái nhanh hơn.",
+      "D. Để Jira có thể tự động tính toán thời gian sửa lỗi (Lead time) mà không cần cấu hình thêm."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Status mô tả vị trí của bug trong quy trình (Open, In Progress), còn Resolution giải thích kết quả cuối cùng. Thiếu Resolution rõ ràng sẽ làm sai lệch các biểu đồ thống kê chất lượng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một lỗi nghiêm trọng được tìm thấy ngay trước giờ release, nhưng Product Owner muốn 'Defer' sang sprint sau. Bạn nên thực hiện thao tác nào trên công cụ quản lý để đảm bảo tính minh bạch và quản lý rủi ro?",
+    "options": [
+      "A. Xóa bug đó khỏi sprint hiện tại và tạo lại ở sprint sau.",
+      "B. Giữ nguyên trạng thái Open và ghi chú vào tài liệu Release Notes.",
+      "C. Cập nhật trạng thái 'Deferred', liên kết với Risk Issue và yêu cầu PO xác nhận trực tiếp trên ticket.",
+      "D. Hạ Severity của bug xuống mức Low để không ảnh hưởng đến báo cáo hoàn thành sprint."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quản lý rủi ro đòi hỏi bằng chứng phê duyệt (Audit trail). Việc chuyển sang 'Deferred' và yêu cầu PO xác nhận trên công cụ giúp lưu lại vết quyết định kinh doanh đối với kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chỉ số 'Reopen Rate' của đội nhóm đang ở mức 15%. Phân tích nào sau đây trên công cụ Bug Tracking cho thấy vấn đề nằm ở chất lượng test case thay vì khả năng fix bug của Dev?",
+    "options": [
+      "A. Phần lớn các bug bị reopen có comment 'Cannot reproduce' từ phía Developer.",
+      "B. Các bug bị reopen thường có thời gian fix rất ngắn (dưới 1 giờ).",
+      "C. Các bug bị reopen đều thuộc về các module cũ đã ổn định.",
+      "D. Phần lớn bug bị reopen do QA bổ sung thêm các điều kiện kiểm thử mới không có trong mô tả ban đầu."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Nếu QA bổ sung scope mới vào bug cũ thay vì tạo bug mới, Reopen Rate sẽ tăng ảo. Điều này cho thấy sự thiếu sót trong việc xác định phạm vi kiểm thử ban đầu (Test Case design).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để tối ưu hóa việc tích hợp giữa TestRail và Jira, chiến lược 'Link Defects' nào là hiệu quả nhất cho việc truy xuất nguồn gốc (Traceability)?",
+    "options": [
+      "A. Copy toàn bộ nội dung Test Case vào phần Description của Jira Bug.",
+      "B. Sử dụng tính năng đẩy lỗi trực tiếp từ TestRail sang Jira và tự động map ID của Test Run vào Bug ticket.",
+      "C. Chỉ ghi ID của Bug vào file Excel báo cáo cuối ngày.",
+      "D. Tạo một bảng thủ công trong Jira để liệt kê các Test Case liên quan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tích hợp hai chiều (bi-directional integration) giúp tự động hóa việc truy xuất từ lỗi ngược về kịch bản test và ngược lại, giảm thiểu sai sót thủ công và tăng tốc độ phân tích tác động.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh Microservices, khi báo cáo một lỗi liên quan đến dữ liệu không nhất quán giữa các service, thông tin nào sau đây là 'Advanced Evidence' cần được đưa vào công cụ báo cáo lỗi?",
+    "options": [
+      "A. Ảnh chụp màn hình giao diện người dùng bị lỗi.",
+      "B. Correlation ID của request trong hệ thống Logging tập trung (như ELK hoặc Splunk).",
+      "C. Tên của trình duyệt và phiên bản hệ điều hành đang sử dụng.",
+      "D. Danh sách các bước tái hiện lỗi ở mức UI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với Microservices, lỗi thường nằm ở luồng đi của dữ liệu qua nhiều service. Correlation ID cho phép Dev truy vết chính xác lỗi xảy ra ở service nào trong chuỗi request.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một Dashboard trên Jira để báo cáo cho CTO. Biểu đồ nào sau đây phản ánh tốt nhất 'Sức khỏe chất lượng' (Quality Health) của sản phẩm qua các Sprint?",
+    "options": [
+      "A. Pie chart hiển thị tổng số bug theo Priority.",
+      "B. Created vs. Resolved Issues Report theo thời gian thực.",
+      "C. Average Age Report hiển thị thời gian trung bình một bug tồn tại ở trạng thái Open.",
+      "D. Defect Density Heatmap dựa trên các thành phần (Components) của hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Biểu đồ Created vs. Resolved giúp nhận diện xu hướng: nếu số lượng bug tạo mới luôn cao hơn số bug được fix, nợ kỹ thuật đang tăng dần và chất lượng sản phẩm đang đi xuống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một automation test suite chạy trên CI/CD và phát hiện lỗi, cách tiếp cận nào giúp tối ưu hóa việc báo cáo lỗi vào công cụ quản lý?",
+    "options": [
+      "A. Tự động tạo một Jira ticket mới cho mỗi lần test case thất bại.",
+      "B. Chỉ báo cáo lỗi lên Slack/Teams và không đưa vào Jira để tránh làm nhiễu dữ liệu.",
+      "C. Sử dụng API để kiểm tra xem lỗi tương tự đã tồn tại chưa; nếu có thì cập nhật thông tin, nếu chưa thì mới tạo mới.",
+      "D. Chờ đến cuối ngày, QA tổng hợp thủ công các lỗi từ CI/CD vào công cụ quản lý."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tự động hóa thông minh (Smart automation reporting) giúp tránh tình trạng trùng lặp bug (duplicate) gây quá tải cho đội ngũ phát triển và giữ cho backlog sạch sẽ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Components' trong các công cụ như Jira lại quan trọng hơn việc chỉ dùng 'Labels' khi quản lý lỗi ở quy mô lớn?",
+    "options": [
+      "A. Components có thể có người chịu trách nhiệm mặc định (Component Lead) để tự động assign lỗi.",
+      "B. Labels dễ quản lý và không bị trùng lặp như Components.",
+      "C. Components chỉ dành cho các dự án Waterfall, không phù hợp với Agile.",
+      "D. Labels cho phép lọc dữ liệu nhanh hơn Components trong mọi trường hợp."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Components cung cấp cấu trúc cứng và khả năng tự động hóa (assignee, reporting) giúp quy trình triage lỗi diễn ra nhanh chóng và có trách nhiệm rõ ràng hơn so với Labels tự do.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một bug được báo cáo là 'Intermittent' (lúc xuất hiện lúc không). Cách xử lý chuyên nghiệp nhất trên công cụ báo cáo lỗi là gì?",
+    "options": [
+      "A. Đóng bug ngay lập tức vì không thể tái hiện (Cannot Reproduce).",
+      "B. Giữ bug ở trạng thái Open mãi mãi cho đến khi tìm ra nguyên nhân.",
+      "C. Ghi lại các điều kiện môi trường, tần suất xuất hiện và gắn tag 'Flaky' để theo dõi đặc biệt.",
+      "D. Yêu cầu Developer tự tìm cách tái hiện mà không cung cấp thêm thông tin."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi không liên tục cần dữ liệu thống kê về môi trường và tần suất để tìm ra pattern. Việc gắn tag giúp đội ngũ nhận diện các vấn đề về độ ổn định (stability issues).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong báo cáo 'Defect Aging', nếu một nhóm lỗi Priority High có thời gian tồn tại (age) trung bình rất cao, điều này thường ám chỉ điều gì về quy trình?",
+    "options": [
+      "A. Đội ngũ QA đang báo cáo quá nhiều lỗi không quan trọng.",
+      "B. Quy trình Triage đang hoạt động rất hiệu quả.",
+      "C. Có sự tắc nghẽn trong khâu sửa lỗi hoặc thiếu nguồn lực cho các phần quan trọng của hệ thống.",
+      "D. Các lỗi này thực chất là các yêu cầu tính năng mới (Change Requests)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Defect Aging cao cho thấy lỗi nghiêm trọng đang bị tồn đọng, gây rủi ro lớn cho dự án và phản ánh sự mất cân bằng giữa khối lượng công việc và năng lực xử lý của Dev.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi cấu hình trường 'Severity' trong công cụ quản lý lỗi, tiêu chí nào sau đây phản ánh đúng bản chất kỹ thuật nhất?",
+    "options": [
+      "A. Mức độ ảnh hưởng của lỗi tới trải nghiệm của khách hàng VIP.",
+      "B. Thời hạn mà lỗi cần phải được sửa để kịp ngày release.",
+      "C. Mức độ ảnh hưởng của lỗi tới kiến trúc hệ thống và chức năng nghiệp vụ.",
+      "D. Số lượng người dùng sẽ phát hiện ra lỗi này khi sử dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Severity là thước đo kỹ thuật về mức độ nghiêm trọng của lỗi đối với hệ thống (ví dụ: crash, mất dữ liệu), phân biệt với Priority là thước đo về mức độ ưu tiên kinh doanh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện một lỗi bảo mật nghiêm trọng (SQL Injection). Cách báo cáo nào trên công cụ quản lý lỗi là an toàn nhất?",
+    "options": [
+      "A. Tạo một bug public để toàn bộ công ty có thể vào hỗ trợ sửa lỗi.",
+      "B. Tạo bug với chế độ hạn chế quyền xem (Security Level) chỉ dành cho những người có trách nhiệm.",
+      "C. Gửi email trực tiếp cho CEO thay vì dùng công cụ quản lý lỗi.",
+      "D. Đợi đến khi lỗi được fix xong mới tạo ticket để lưu vết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi bảo mật cần được quản lý chặt chẽ về quyền truy cập thông tin (Issue Security Levels) để tránh việc thông tin nhạy cảm bị lộ ra ngoài trước khi được khắc phục.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để đánh giá hiệu quả của giai đoạn Regression Testing, chỉ số nào sau đây trích xuất từ công cụ quản lý lỗi là giá trị nhất?",
+    "options": [
+      "A. Tổng số bug tìm thấy trong giai đoạn Regression.",
+      "B. Tỷ lệ lỗi Regression so với tổng số lỗi của toàn bộ dự án.",
+      "C. Số lượng test case đã chạy thành công trong lần đầu tiên.",
+      "D. Tỷ lệ lỗi được phát hiện bởi Automation so với Manual trong Regression."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tỷ lệ lỗi Regression cho biết mức độ ổn định của code base khi có thay đổi mới. Tỷ lệ này cao chứng tỏ hệ thống dễ bị tổn thương và quy trình kiểm soát thay đổi chưa tốt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Jira, việc sử dụng 'Issue Links' (như 'is blocked by', 'relates to') mang lại lợi ích gì lớn nhất cho việc lập kế hoạch Sprint?",
+    "options": [
+      "A. Làm cho Board nhìn đẹp mắt và chuyên nghiệp hơn.",
+      "B. Giúp xác định các phụ thuộc (dependencies) kỹ thuật để sắp xếp thứ tự thực hiện task tối ưu.",
+      "C. Tự động chuyển trạng thái của các ticket liên quan khi một ticket được đóng.",
+      "D. Giảm số lượng ticket cần phải tạo trong một Sprint."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Issue Links giúp visualize các mối quan hệ phức tạp giữa các task/bug, từ đó giúp Scrum Master và Team nhận diện các điểm nghẽn tiềm ẩn trước khi bắt đầu Sprint.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một dự án có tỷ lệ 'Invalid Bugs' (lỗi không hợp lệ) lên tới 30%. Giải pháp nào trên công cụ quản lý lỗi giúp cải thiện tình hình này?",
+    "options": [
+      "A. Cấm QA báo cáo lỗi nếu không chắc chắn 100%.",
+      "B. Thiết lập 'Screen Scheme' yêu cầu các trường thông tin bắt buộc và hướng dẫn (Help text) cụ thể cho từng loại lỗi.",
+      "C. Yêu cầu Dev phải chấp nhận mọi lỗi được báo cáo mà không được từ chối.",
+      "D. Tự động đóng các lỗi không có phản hồi từ Dev sau 2 ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tỷ lệ Invalid Bugs cao thường do QA thiếu thông tin hoặc hiểu sai yêu cầu. Việc chuẩn hóa form báo cáo với hướng dẫn rõ ràng giúp nâng cao chất lượng đầu vào của bug.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc tích hợp công cụ quản lý lỗi với hệ thống quản lý phiên bản (như GitHub/GitLab) lại được coi là một kỹ thuật Advanced?",
+    "options": [
+      "A. Để QA có thể tự sửa code khi thấy lỗi đơn giản.",
+      "B. Để tự động đóng bug khi một commit có chứa ID của bug đó được merge vào branch chính.",
+      "C. Để thay thế hoàn toàn việc viết mô tả lỗi trong công cụ quản lý.",
+      "D. Để Developer không cần phải mở công cụ quản lý lỗi nữa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự liên kết giữa Code Commit và Bug ID tạo ra tính minh bạch tuyệt đối, cho phép kiểm tra chính xác đoạn code nào đã sửa lỗi nào, hỗ trợ đắc lực cho việc audit và rollback.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chỉ số 'Defect Removal Efficiency' (DRE) được tính toán như thế nào dựa trên dữ liệu từ các công cụ quản lý lỗi?",
+    "options": [
+      "A. Số bug tìm thấy trong giai đoạn phát triển chia cho tổng số bug (bao gồm cả bug khách hàng tìm thấy).",
+      "B. Số bug đã fix chia cho tổng số bug đã báo cáo.",
+      "C. Số bug tìm thấy bởi Manual Test chia cho số bug tìm thấy bởi Automation Test.",
+      "D. Tổng số bug tìm thấy trong Sprint hiện tại trừ đi số bug tồn đọng từ Sprint trước."
+    ],
+    "correctAnswer": "A",
+    "explanation": "DRE là chỉ số đo lường năng lực của quy trình kiểm thử trong việc lọc lỗi trước khi sản phẩm đến tay người dùng. DRE càng gần 100% thì quy trình càng hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi quản lý lỗi cho một ứng dụng Mobile, thông tin nào sau đây là 'Critical Evidence' cần đính kèm trong công cụ báo cáo để tái hiện lỗi hiệu năng?",
+    "options": [
+      "A. Tên nhà mạng di động.",
+      "B. File Device Logs (logcat/syslog) kết hợp với biểu đồ tiêu thụ tài nguyên (CPU/RAM) tại thời điểm xảy ra lỗi.",
+      "C. Danh sách các ứng dụng khác đang chạy ngầm trên điện thoại.",
+      "D. Ảnh chụp vỏ ngoài của thiết bị di động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi hiệu năng trên mobile rất phức tạp. Dữ liệu về tài nguyên hệ thống giúp Dev xác định xem lỗi do rò rỉ bộ nhớ (memory leak) hay do xử lý logic quá nặng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quy trình Bug Triage, vai trò của công cụ quản lý lỗi là gì để hỗ trợ việc ra quyết định của hội đồng (Triage Board)?",
+    "options": [
+      "A. Tự động xóa các lỗi có Priority thấp để rảnh tay cho đội ngũ.",
+      "B. Cung cấp các bộ lọc (Filters) và Dashboard hiển thị backlog lỗi theo mức độ rủi ro và thời gian tồn đọng.",
+      "C. Thay thế hoàn toàn các buổi họp thảo luận trực tiếp giữa các bên.",
+      "D. Tự động assign lỗi cho người bận rộn nhất để cân bằng khối lượng công việc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Công cụ quản lý lỗi đóng vai trò là 'Single Source of Truth', cung cấp dữ liệu trực quan để các bên liên quan (PO, Dev, QA) đưa ra quyết định ưu tiên dựa trên sự thật khách quan.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống có chỉ số 'Bug Density' (Mật độ lỗi) rất cao ở một module cụ thể. Quyết định kiến trúc nào có thể được đưa ra dựa trên dữ liệu này?",
+    "options": [
+      "A. Yêu cầu QA viết thêm nhiều test case hơn cho module đó.",
+      "B. Đề xuất refactor hoặc viết lại hoàn toàn module đó vì code base hiện tại quá mỏng manh.",
+      "C. Tăng thời gian Regression Testing cho toàn bộ hệ thống.",
+      "D. Chuyển module đó cho một Developer khác quản lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mật độ lỗi cao thường là dấu hiệu của 'Technical Debt' hoặc thiết kế sai lầm. Thay vì cố vá lỗi, việc refactor dựa trên dữ liệu từ công cụ báo cáo lỗi là một quyết định chiến lược.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào để cấu hình Jira nhằm ngăn chặn việc Developer đóng bug mà không qua sự kiểm chứng của QA?",
+    "options": [
+      "A. Sử dụng Workflow Conditions/Validators để chỉ cho phép User thuộc nhóm QA thực hiện transition 'Close'.",
+      "B. Gửi email nhắc nhở Dev mỗi khi họ định đóng bug.",
+      "C. Xóa nút 'Close' trên giao diện của Developer.",
+      "D. Thiết lập quyền 'Admin' cho tất cả QA trong dự án."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Workflow control là tính năng mạnh mẽ của công cụ quản lý lỗi, đảm bảo quy trình chất lượng được tuân thủ nghiêm ngặt thông qua các ràng buộc về quyền hạn (Permissions/Conditions).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong báo cáo chất lượng cuối kỳ, chỉ số 'Testing Burn-down Chart' lấy dữ liệu từ đâu và có ý nghĩa gì?",
+    "options": [
+      "A. Lấy từ số lượng bug đã fix; ý nghĩa là tốc độ làm việc của Developer.",
+      "B. Lấy từ số lượng Test Case còn lại cần thực thi; ý nghĩa là dự đoán khả năng hoàn thành kế hoạch kiểm thử.",
+      "C. Lấy từ tổng số dòng code đã viết; ý nghĩa là quy mô của dự án.",
+      "D. Lấy từ số lượng bug mới phát hiện; ý nghĩa là độ ổn định của sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Burn-down chart trong kiểm thử giúp theo dõi tiến độ thực hiện so với kế hoạch, từ đó điều chỉnh nguồn lực kịp thời nếu tốc độ thực thi test case quá chậm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng Zephyr hoặc TestRail tích hợp Jira, việc 'Traceability Matrix' bị đứt gãy thường do nguyên nhân nào sau đây?",
+    "options": [
+      "A. Do sử dụng quá nhiều loại Issue Type trong Jira.",
+      "B. Do QA tạo bug trực tiếp từ nút 'Create' của Jira thay vì tạo từ 'Test Execution' trong công cụ quản lý test.",
+      "C. Do server của Jira và TestRail không cùng múi giờ.",
+      "D. Do Developer không có tài khoản truy cập vào công cụ quản lý test."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để duy trì Traceability, bug phải được liên kết với test case/test execution cụ thể. Việc tạo bug rời rạc khiến hệ thống không thể tự động ánh xạ lỗi đó thuộc về kịch bản kiểm thử nào.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn muốn so sánh hiệu quả giữa Manual Testing và Automation Testing về mặt phát hiện lỗi. Bạn nên cấu hình trường thông tin nào trong công cụ báo cáo lỗi?",
+    "options": [
+      "A. 'Detected By' với các giá trị như 'Manual', 'Automation', 'Customer'.",
+      "B. 'Bug Type' với các giá trị 'UI', 'API', 'Database'.",
+      "C. 'Fixed By' để biết ai là người sửa lỗi.",
+      "D. 'Environment' để biết lỗi xảy ra trên Staging hay Production."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phân loại nguồn phát hiện lỗi (Detection Source) giúp đánh giá ROI của Automation và xác định xem Manual Test có đang tập trung vào đúng những phần mà Automation chưa phủ tới hay không.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích chỉ số Defect Leakage Rate (Tỉ lệ lọt lỗi) tăng cao sau mỗi bản release, một chuyên gia QA nên thực hiện hành động chiến lược nào đầu tiên để cải thiện quy trình?",
+    "options": [
+      "A. Yêu cầu đội ngũ Developer viết thêm Unit Test cho tất cả các module hiện có.",
+      "B. Phân tích hồi cứu (Retrospective) để xác định các vùng kiểm thử bị bỏ sót trong Test Suite hiện tại.",
+      "C. Tăng số lượng QA Tester để thực hiện kiểm thử thủ công kỹ lưỡng hơn.",
+      "D. Chuyển toàn bộ các bug từ Production về trạng thái Priority High trong Jira."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Defect Leakage phản ánh sự thiếu hụt trong phạm vi kiểm thử (Test Coverage) hoặc môi trường kiểm thử. Phân tích hồi cứu giúp xác định nguyên nhân gốc rễ để cập nhật Test Case/Scenario, ngăn chặn lỗi tương tự lọt ra Production.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống Microservices phức tạp, bạn phát hiện một lỗi Race Condition chỉ xảy ra khi tải cao. Cách viết Bug Report nào sau đây thể hiện trình độ Expert?",
+    "options": [
+      "A. Mô tả các bước tái hiện lỗi và đính kèm ảnh chụp màn hình thông báo lỗi.",
+      "B. Ghi lại video quá trình thao tác và yêu cầu Developer tự kiểm tra log hệ thống.",
+      "C. Cung cấp log tập trung (ELK/Splunk), thông số tài nguyên (CPU/RAM), mã lỗi trace-id và giả thuyết về xung đột tài nguyên.",
+      "D. Chỉ định lỗi này là 'Blocker' và yêu cầu dừng toàn bộ pipeline deployment cho đến khi tìm ra nguyên nhân."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với các lỗi hệ thống phức tạp như Race Condition, việc cung cấp dữ liệu phân tích sâu (logs, trace-id, metrics) giúp Developer thu hẹp phạm vi điều tra nhanh hơn nhiều so với chỉ mô tả UI.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số 'Reopen Rate' tăng cao (trên 20%) trong công cụ quản lý lỗi thường ám chỉ vấn đề cốt lõi nào trong quy trình phát triển phần mềm?",
+    "options": [
+      "A. QA Tester đang kiểm thử quá khắt khe các lỗi nhỏ.",
+      "B. Sự thiếu hụt trong việc xác nhận môi trường (Environment sync) hoặc Developer chưa fix triệt để gốc rễ vấn đề.",
+      "C. Công cụ Jira đang cấu hình sai workflow chuyển trạng thái.",
+      "D. Developer không có đủ thời gian để đọc kỹ Bug Report của QA."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tỉ lệ mở lại lỗi cao thường do lỗi được fix 'phần ngọn' mà không giải quyết gốc rễ, hoặc do sự khác biệt cấu hình giữa môi trường Dev và Staging khiến lỗi tái phát khi verify.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang quản lý Bug Triage cho một dự án Enterprise với hơn 500 lỗi tồn đọng. Tiêu chí nào là quan trọng nhất để quyết định 'Defer' (hoãn) một lỗi sang phiên bản sau?",
+    "options": [
+      "A. Lỗi được báo cáo bởi một thành viên mới trong đội ngũ QA.",
+      "B. Lỗi khó tái hiện và không có video minh họa đính kèm.",
+      "C. Phân tích rủi ro dựa trên Impact (tác động kinh doanh) và Effort (công sức sửa chữa) so với ngày release.",
+      "D. Ý kiến cá nhân của Product Owner về việc lỗi đó không làm xấu giao diện."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở mức độ chuyên gia, việc hoãn lỗi phải dựa trên quản trị rủi ro: nếu chi phí sửa lỗi và rủi ro gây regression cao hơn giá trị mang lại trước hạn release, việc hoãn là quyết định chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi tích hợp TestRail với Jira, lợi ích lớn nhất của việc sử dụng 'Push Defect' trực tiếp từ Test Execution là gì?",
+    "options": [
+      "A. Tự động hóa việc viết mô tả lỗi mà không cần QA can thiệp.",
+      "B. Duy trì tính nhất quán của dữ liệu (Traceability) giữa Test Case, Test Result và Bug Ticket.",
+      "C. Giúp giảm số lượng license cần mua cho đội ngũ phát triển.",
+      "D. Tự động đóng lỗi trong Jira khi Test Case pass ở lần chạy sau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khả năng truy xuất nguồn gốc (Traceability) giúp quản lý chất lượng hiểu rõ lỗi phát sinh từ kịch bản nào, trên phiên bản nào, từ đó hỗ trợ phân tích tác động và báo cáo chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một lỗi được đánh giá là 'Severity: Critical' nhưng 'Priority: Low'. Trường hợp nào sau đây phản ánh đúng logic này?",
+    "options": [
+      "A. Hệ thống bị crash hoàn toàn khi người dùng nhập một chuỗi ký tự cực kỳ hiếm gặp trong một tính năng phụ ít dùng.",
+      "B. Logo của công ty trên trang chủ bị hiển thị sai màu sắc thương hiệu.",
+      "C. Nút 'Thanh toán' không hoạt động trên trình duyệt Chrome.",
+      "D. Lỗi chính tả trong điều khoản sử dụng dịch vụ của ngân hàng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Severity phản ánh mức độ nghiêm trọng về kỹ thuật (crash hệ thống), trong khi Priority phản ánh mức độ ưu tiên kinh doanh. Nếu lỗi nghiêm trọng nhưng xác suất xảy ra cực thấp ở tính năng không quan trọng, Priority có thể thấp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Jira, để theo dõi hiệu suất xử lý lỗi của team Dev theo thời gian thực, biểu đồ nào là tối ưu nhất?",
+    "options": [
+      "A. Pie Chart hiển thị số lỗi theo Assignee.",
+      "B. Cumulative Flow Diagram (CFD) hiển thị trạng thái các bug qua các giai đoạn workflow.",
+      "C. Sprint Burndown Chart chỉ tính riêng các task phát triển.",
+      "D. Bar Chart hiển thị tổng số lỗi theo Priority."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CFD cung cấp cái nhìn về sự tắc nghẽn (bottlenecks) và tốc độ luân chuyển của bug qua các trạng thái (Open, In Progress, Resolved, Verified), giúp chuyên gia nhận diện vấn đề quy trình.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi cấu hình một Workflow cho Bug trong Jira cho dự án lớn, tại sao cần có trạng thái 'Awaiting Deployment'?",
+    "options": [
+      "A. Để Developer có thời gian nghỉ ngơi trước khi fix lỗi tiếp theo.",
+      "B. Để phân tách rõ ràng giữa việc 'Lỗi đã được fix trên code' và 'Lỗi đã có sẵn trên môi trường để QA verify'.",
+      "C. Để đánh dấu các lỗi không cần phải sửa trong Sprint này.",
+      "D. Để tự động thông báo cho khách hàng rằng lỗi đã được xử lý xong."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong CI/CD chuyên nghiệp, việc fix code và deploy lên môi trường test là hai bước riêng biệt. Trạng thái này giúp QA tránh lãng phí thời gian verify khi code fix chưa được deploy.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chỉ số 'Defect Removal Efficiency' (DRE) đạt 95%. Điều này có ý nghĩa gì đối với chiến lược QA?",
+    "options": [
+      "A. Quy trình kiểm thử rất hiệu quả, hầu hết lỗi được phát hiện trước khi release.",
+      "B. Đội ngũ QA đang lãng phí quá nhiều thời gian cho các lỗi không quan trọng.",
+      "C. Dự án đang có quá nhiều lỗi tiềm ẩn chưa được phát hiện.",
+      "D. Khách hàng đang phàn nàn rất nhiều về chất lượng sản phẩm."
+    ],
+    "correctAnswer": "A",
+    "explanation": "DRE = (Số lỗi tìm thấy trước release / Tổng số lỗi) * 100. Chỉ số 95% cho thấy quy trình kiểm thử nội bộ cực kỳ hiệu quả trong việc lọc lỗi trước khi đến tay người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một lỗi bảo mật nghiêm trọng được phát hiện bởi công cụ scan tự động nhưng không thể tái hiện bằng tay. Bạn nên báo cáo lỗi này như thế nào?",
+    "options": [
+      "A. Bỏ qua vì nếu không tái hiện được bằng tay thì hacker cũng không khai thác được.",
+      "B. Ghi nhận vào công cụ quản lý lỗi, đính kèm file log/report từ công cụ scan và đánh dấu mức độ rủi ro cao.",
+      "C. Chờ đến khi công cụ scan chạy lại lần nữa để xác nhận rồi mới báo cáo.",
+      "D. Gửi email riêng cho Developer thay vì tạo ticket chính thức để tránh làm giảm KPI của team."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi bảo mật (như lỗ hổng thư viện hoặc cấu hình server) thường không hiển thị trên UI. Việc ghi nhận dựa trên bằng chứng từ công cụ chuyên dụng là bắt buộc để đảm bảo an toàn hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong JQL (Jira Query Language), câu lệnh nào giúp tìm các bug đã được tạo hơn 30 ngày nhưng vẫn chưa được giải quyết (không bao gồm trạng thái Closed/Resolved)?",
+    "options": [
+      "A. project = 'PROJ' AND type = Bug AND status != Closed AND created < -30d",
+      "B. project = 'PROJ' AND type = Bug AND status not in (Closed, Resolved) AND created < -30d",
+      "C. select * from bugs where status is open and date > 30",
+      "D. project = 'PROJ' AND priority = High AND createdDate < now() - 30"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cú pháp 'not in' giúp loại trừ nhiều trạng thái kết thúc cùng lúc, và 'created < -30d' là cú pháp chuẩn của Jira để lọc theo thời gian tương đối.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại buổi Triage Meeting, Developer từ chối sửa một lỗi vì cho rằng 'Đây là tính năng, không phải lỗi'. Với tư cách Expert QA, bạn xử lý thế nào?",
+    "options": [
+      "A. Chấp nhận ý kiến của Developer và đóng ticket ngay lập tức.",
+      "B. Tranh cãi trực tiếp cho đến khi Developer đồng ý sửa lỗi.",
+      "C. Dẫn chiếu lại tài liệu Requirements/User Stories hoặc phân tích tác động tiêu cực đến trải nghiệm người dùng để bảo vệ quan điểm.",
+      "D. Yêu cầu Manager can thiệp để ép buộc Developer phải sửa."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Expert QA sử dụng bằng chứng (requirements) và phân tích rủi ro/trải nghiệm khách hàng để thuyết phục các bên liên quan, thay vì dựa vào cảm tính hay quyền lực.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Bug Convergence' (Hội tụ lỗi) trong biểu đồ theo dõi lỗi có ý nghĩa gì?",
+    "options": [
+      "A. Thời điểm mà số lượng lỗi mới được phát hiện bắt đầu thấp hơn số lượng lỗi được fix.",
+      "B. Thời điểm mà tất cả các lỗi trong hệ thống được quy về một mối.",
+      "C. Khi tất cả các Developer cùng tập trung sửa một lỗi duy nhất.",
+      "D. Khi số lượng lỗi phát hiện hàng ngày đạt mức cao kỷ lục."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bug Convergence là dấu hiệu cho thấy sản phẩm đang dần ổn định và tiến gần đến trạng thái có thể release (khi tốc độ fix lỗi vượt qua tốc độ tìm lỗi mới).",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn nhận thấy nhiều bug bị 'Rejected' với lý do 'Duplicate'. Hành động nào giúp tối ưu hóa quy trình báo cáo lỗi của team?",
+    "options": [
+      "A. Phạt các QA Tester báo cáo lỗi trùng lặp.",
+      "B. Yêu cầu QA kiểm tra kỹ danh sách bug hiện có bằng công cụ search/filter trước khi tạo ticket mới.",
+      "C. Tự động xóa các lỗi có tiêu đề tương tự nhau bằng script.",
+      "D. Chỉ cho phép Lead QA được quyền tạo bug ticket."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc kiểm tra lỗi trùng lặp giúp giảm nhiễu cho đội ngũ phát triển và tiết kiệm thời gian triage. Đây là kỹ năng cơ bản nhưng cần sự kỷ luật cao trong các dự án lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi báo cáo một lỗi về hiệu năng (Performance Bug), thông tin nào sau đây là 'quyết định' để Developer có thể xử lý?",
+    "options": [
+      "A. Cảm giác của QA rằng hệ thống chạy chậm.",
+      "B. Cấu hình phần cứng của máy tính QA đang dùng.",
+      "C. Các chỉ số định lượng (Response time, Throughput) so với Baseline và điều kiện tải (Load conditions).",
+      "D. Danh sách các đối thủ cạnh tranh có hệ thống chạy nhanh hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi hiệu năng cần dữ liệu định lượng cụ thể để so sánh. Thiếu Baseline (mức cơ sở) và điều kiện môi trường, Developer không thể xác định lỗi nằm ở code, network hay database.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án Agile, việc sử dụng nhãn (Labels/Tags) trong công cụ báo cáo lỗi nên được quản lý như thế nào để đạt hiệu quả cao nhất?",
+    "options": [
+      "A. Cho phép mọi người tự do tạo nhãn theo ý thích.",
+      "B. Không nên dùng nhãn vì làm rối hệ thống quản lý.",
+      "C. Thiết lập bộ nhãn tiêu chuẩn (ví dụ: Regression, Hotfix, UI/UX) và hướng dẫn team sử dụng thống nhất.",
+      "D. Chỉ dùng nhãn để ghi tên người phát hiện lỗi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng nhãn có hệ thống giúp việc phân loại, lọc và trích xuất báo cáo (reporting) trở nên mạnh mẽ, hỗ trợ việc phân tích xu hướng lỗi theo từng nhóm mục tiêu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lỗi 'Intermittent Bug' (lỗi không ổn định) thường bị đóng lại với trạng thái 'Cannot Reproduce'. Giải pháp chuyên gia để xử lý vấn đề này là gì?",
+    "options": [
+      "A. Tiếp tục mở lại lỗi đó cho đến khi Developer tìm ra cách fix.",
+      "B. Giữ lỗi ở trạng thái 'Open' nhưng hạ Priority xuống thấp nhất.",
+      "C. Thiết lập môi trường giám sát (Monitoring/Logging) bổ sung và thực hiện kiểm thử thăm dò (Exploratory Testing) để tìm quy luật.",
+      "D. Chấp nhận đó là một phần của hệ thống và bỏ qua."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi không ổn định thường do các yếu tố môi trường hoặc dữ liệu biên. Chuyên gia cần chủ động thu thập thêm dữ liệu thay vì chỉ lặp lại các bước tái hiện thông thường.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chỉ số 'Bug Aging' (Tuổi thọ của bug) cung cấp thông tin gì quan trọng cho Project Manager?",
+    "options": [
+      "A. Tổng số lỗi đã được tìm thấy từ đầu dự án.",
+      "B. Thời gian trung bình một lỗi nằm ở một trạng thái nhất định, giúp nhận diện sự đình trệ trong quy trình.",
+      "C. Tuổi nghề của các QA Tester trong dự án.",
+      "D. Ngày hết hạn của bản build hiện tại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bug Aging giúp nhận ra các lỗi bị 'ngâm' quá lâu mà không được xử lý, từ đó điều chỉnh nguồn lực hoặc ưu tiên để đảm bảo tiến độ dự án.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc liên kết (Linking) Bug Ticket với Requirement (User Story) lại cực kỳ quan trọng trong các dự án tuân thủ tiêu chuẩn cao (như Y tế, Tài chính)?",
+    "options": [
+      "A. Để đảm bảo Developer không quên đọc Requirement.",
+      "B. Để phục vụ mục đích Audit (kiểm toán) và chứng minh mọi yêu cầu đều đã được kiểm thử và xử lý lỗi.",
+      "C. Để làm cho giao diện Jira trông chuyên nghiệp hơn.",
+      "D. Để tự động tính toán lương thưởng cho QA dựa trên số lỗi tìm được."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong các ngành đặc thù, tính minh bạch và khả năng truy xuất (Audit Trail) là bắt buộc. Việc liên kết giúp chứng minh quy trình kiểm soát chất lượng đã bao phủ toàn bộ yêu cầu nghiệp vụ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện một lỗi nghiêm trọng trong thư viện thứ ba (Third-party library) mà dự án đang sử dụng. Bạn nên báo cáo lỗi này như thế nào trong công cụ của mình?",
+    "options": [
+      "A. Không báo cáo vì đó không phải lỗi do team mình viết ra.",
+      "B. Báo cáo lỗi, nêu rõ nguồn gốc từ thư viện bên thứ ba và đề xuất các giải pháp thay thế hoặc bản vá (nếu có).",
+      "C. Yêu cầu Developer tự đi liên hệ với nhà cung cấp thư viện đó.",
+      "D. Đánh dấu lỗi là 'Closed - Won't fix' ngay khi vừa tạo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dù lỗi không trực tiếp từ code nội bộ, nó vẫn ảnh hưởng đến sản phẩm cuối cùng. QA cần ghi nhận để team có phương án xử lý (update version, dùng thư viện khác hoặc viết wrapper).",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong báo cáo chất lượng cuối kỳ (Test Summary Report), dữ liệu nào từ công cụ Bug Reporting là thuyết phục nhất để đánh giá 'Sẵn sàng Release'?",
+    "options": [
+      "A. Tổng số lượng bug đã tìm thấy trong suốt dự án.",
+      "B. Danh sách tên của các QA đã tham gia dự án.",
+      "C. Biểu đồ xu hướng lỗi (Defect Trend) và số lượng lỗi tồn đọng phân loại theo Severity.",
+      "D. Số lượng comment trung bình trên mỗi bug ticket."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Xu hướng lỗi (giảm dần) và việc không còn lỗi nghiêm trọng (Critical/Blocker) tồn đọng là những chỉ số kỹ thuật then chốt để quyết định tính sẵn sàng của sản phẩm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một quy trình 'Root Cause Analysis' (RCA) tích hợp trong công cụ báo cáo lỗi nhằm mục đích chính là gì?",
+    "options": [
+      "A. Để đổ lỗi cho cá nhân đã gây ra lỗi đó.",
+      "B. Để thống kê xem lỗi thường phát sinh do đâu (Code, Requirement, Environment) từ đó cải tiến quy trình phòng ngừa.",
+      "C. Để kéo dài thời gian đóng ticket.",
+      "D. Để thay thế hoàn toàn việc viết Test Case."
+    ],
+    "correctAnswer": "B",
+    "explanation": "RCA hướng tới việc cải tiến quy trình (Process Improvement). Nếu lỗi thường xuyên do Requirement, team cần xem lại cách lấy yêu cầu thay vì chỉ tập trung vào fix code.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để quản lý lỗi hiệu quả khi dự án chạy song song nhiều phiên bản (Multi-release/Multi-branch)?",
+    "options": [
+      "A. Mỗi phiên bản dùng một công cụ quản lý lỗi khác nhau.",
+      "B. Sử dụng trường 'Affects Version' và 'Fix Version' một cách nghiêm ngặt trong mỗi Bug Report.",
+      "C. Chỉ báo cáo lỗi trên phiên bản mới nhất.",
+      "D. Ghi tên phiên bản vào ngay đầu tiêu đề của mọi lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng các trường dữ liệu chuẩn (Affects/Fix Version) giúp hệ thống tự động hóa việc lọc và quản lý lỗi cho từng nhánh sản phẩm, hỗ trợ đắc lực cho việc release.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một lỗi được chuyển sang trạng thái 'Fixed' bởi Developer, bước tiếp theo đúng đắn nhất của một Expert QA là gì?",
+    "options": [
+      "A. Đóng ticket ngay lập tức để tăng chỉ số hoàn thành.",
+      "B. Kiểm tra lại lỗi trên môi trường phù hợp, thực hiện Regression Test xung quanh vùng ảnh hưởng rồi mới đóng lỗi.",
+      "C. Gửi tin nhắn cảm ơn Developer.",
+      "D. Mở một ticket mới để yêu cầu Developer giải thích tại sao lại để xảy ra lỗi đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc xác nhận lỗi (Verification) không chỉ là kiểm tra xem lỗi đó đã hết chưa, mà còn phải đảm bảo việc sửa lỗi không gây ra lỗi mới ở các tính năng liên quan (Regression).",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh DevOps, việc tích hợp công cụ báo cáo lỗi với hệ thống CI/CD (như Jenkins/GitHub Actions) mang lại giá trị gì?",
+    "options": [
+      "A. Tự động tạo bug ticket khi một bản build hoặc một bộ test tự động bị fail.",
+      "B. Thay thế hoàn toàn vai trò của QA thủ công.",
+      "C. Tự động sửa code khi có lỗi phát sinh.",
+      "D. Ngăn cản Developer commit code vào ngày cuối tuần."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tích hợp này giúp phản hồi về chất lượng được thực hiện tức thì (Fast Feedback Loop), giúp team nhận biết và xử lý vấn đề ngay khi nó vừa xuất hiện trong pipeline.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting Tools",
+    "category": "KNOWLEDGE"
+  }
+]

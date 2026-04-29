@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục tiêu chính của việc áp dụng Automation Testing trong một dự án phần mềm là gì?",
+    "options": [
+      "A. Thay thế hoàn toàn con người trong mọi công đoạn kiểm thử.",
+      "B. Giảm bớt thời gian thực hiện các bài kiểm thử lặp đi lặp lại.",
+      "C. Tìm ra 100% lỗi có trong hệ thống phần mềm.",
+      "D. Loại bỏ hoàn toàn nhu cầu viết tài liệu kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Automation Testing giúp giải phóng sức người khỏi các tác vụ lặp lại (như Regression Test), giúp chạy test nhanh hơn và thường xuyên hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Loại kiểm thử nào sau đây thường được ưu tiên để tự động hóa đầu tiên?",
+    "options": [
+      "A. Kiểm thử thăm dò (Exploratory Testing).",
+      "B. Kiểm thử giao diện người dùng (UI/UX Testing) cho các tính năng mới.",
+      "C. Kiểm thử hồi quy (Regression Testing) cho các tính năng ổn định.",
+      "D. Kiểm thử tính dễ sử dụng (Usability Testing)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Regression Testing tập trung vào các tính năng đã ổn định và cần kiểm tra lại nhiều lần, mang lại giá trị ROI cao nhất khi tự động hóa.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Automation Framework, 'Assertion' dùng để làm gì?",
+    "options": [
+      "A. Để khởi tạo trình duyệt web.",
+      "B. Để khai báo các biến số trong kịch bản.",
+      "C. Để so sánh kết quả thực tế với kết quả mong đợi.",
+      "D. Để đóng trình duyệt sau khi kết thúc kiểm thử."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Assertion (khẳng định) là thành phần cốt lõi để xác định một test case là Pass hay Fail dựa trên việc so sánh kết quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Test Fixtures' (như Setup/Teardown) có mục đích gì?",
+    "options": [
+      "A. Để tăng tốc độ thực thi của CPU.",
+      "B. Để chuẩn bị môi trường trước khi test và dọn dẹp sau khi test.",
+      "C. Để viết code cho các bước kiểm thử chính.",
+      "D. Để tạo báo cáo kiểm thử tự động dưới dạng PDF."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Fixtures giúp đảm bảo môi trường kiểm thử ở trạng thái sạch và nhất quán trước và sau mỗi kịch bản kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Loại locator (selector) nào thường được coi là ổn định và nhanh nhất trong Web Automation?",
+    "options": [
+      "A. XPath tuyệt đối (Absolute XPath).",
+      "B. ID của phần tử (Element ID).",
+      "C. Tên lớp (Class Name).",
+      "D. Cấu trúc phân cấp DOM (DOM Hierarchy)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ID thường là duy nhất và ít thay đổi nhất so với các loại locator khác, giúp kịch bản ít bị lỗi khi giao diện thay đổi nhẹ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Thread.sleep()' (Hard Sleep) được coi là một thực hành không tốt (bad practice)?",
+    "options": [
+      "A. Vì nó làm cho mã nguồn khó đọc hơn.",
+      "B. Vì nó luôn chờ đủ thời gian ngay cả khi phần tử đã xuất hiện, gây lãng phí thời gian.",
+      "C. Vì nó không thể hoạt động trên trình duyệt Chrome.",
+      "D. Vì nó yêu cầu quyền quản trị viên máy tính để thực thi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hard sleep làm tăng thời gian chạy test vô ích. Thay vào đó, nên dùng Dynamic Waits (Implicit/Explicit) để tối ưu thời gian.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Implicit Wait và Explicit Wait là gì?",
+    "options": [
+      "A. Implicit Wait chờ cho một điều kiện cụ thể, Explicit Wait chờ cho toàn bộ trang.",
+      "B. Implicit Wait được cấu hình toàn cục, Explicit Wait được cấu hình cho từng phần tử cụ thể.",
+      "C. Explicit Wait chỉ hoạt động trên trình duyệt Firefox.",
+      "D. Implicit Wait nhanh hơn Explicit Wait về tốc độ xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Implicit Wait áp dụng cho mọi tìm kiếm phần tử trong một session, trong khi Explicit Wait cho phép chờ các điều kiện linh hoạt cho từng đối tượng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hiện tượng 'Flaky Tests' trong Automation Testing nghĩa là gì?",
+    "options": [
+      "A. Các bài test luôn luôn thất bại mỗi khi chạy.",
+      "B. Các bài test chạy không ổn định, lúc Pass lúc Fail dù code không đổi.",
+      "C. Các bài test chạy quá nhanh khiến báo cáo không kịp ghi nhận.",
+      "D. Các bài test chỉ chạy được trên môi trường Local."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Flaky tests là những bài test không đáng tin cậy, gây tốn thời gian điều tra và làm giảm lòng tin vào bộ test tự động.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc tích hợp Automation Test vào quy trình CI (Continuous Integration) là gì?",
+    "options": [
+      "A. Giúp mã nguồn đẹp hơn và chuẩn hóa hơn.",
+      "B. Phát hiện lỗi sớm ngay khi code mới được đẩy lên hệ thống.",
+      "C. Giảm dung lượng của file cài đặt phần mềm.",
+      "D. Tự động sửa lỗi (bug) trong mã nguồn ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CI giúp chạy bộ test tự động ngay lập tức khi có thay đổi, cung cấp phản hồi nhanh chóng cho đội ngũ phát triển.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi chọn một test case để tự động hóa, yếu tố nào sau đây là quan trọng nhất để tính toán ROI?",
+    "options": [
+      "A. Độ phức tạp của ngôn ngữ lập trình được sử dụng.",
+      "B. Tần suất thực hiện bài test đó trong tương lai.",
+      "C. Màu sắc của giao diện người dùng.",
+      "D. Số lượng dòng code của tính năng đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ROI (tỷ suất hoàn vốn) cao nhất khi tự động hóa các bài test được thực hiện thường xuyên (ví dụ: mỗi ngày hoặc mỗi bản build).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình Page Object Model (POM), mục đích của việc tách biệt Page Classes và Test Classes là gì?",
+    "options": [
+      "A. Để tăng tính bảo mật cho dữ liệu kiểm thử.",
+      "B. Để dễ dàng bảo trì khi giao diện (UI) thay đổi.",
+      "C. Để giảm số lượng file trong dự án.",
+      "D. Để kịch bản test chạy nhanh hơn trên môi trường Cloud."
+    ],
+    "correctAnswer": "B",
+    "explanation": "POM tách biệt logic thao tác UI và logic kiểm thử, giúp khi UI thay đổi, ta chỉ cần cập nhật ở Page Class thay vì sửa mọi Test Case.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng Absolute XPath (đường dẫn tuyệt đối) trong Automation?",
+    "options": [
+      "A. Vì nó không hỗ trợ trình duyệt Safari.",
+      "B. Vì nó quá ngắn và không đủ thông tin.",
+      "C. Vì nó rất dễ bị hỏng khi cấu trúc trang thay đổi dù chỉ một chút.",
+      "D. Vì nó yêu cầu phải cài đặt thêm plugin."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Absolute XPath phụ thuộc vào toàn bộ thứ tự các thẻ HTML, chỉ cần một thay đổi nhỏ ở cấp cha cũng làm locator bị sai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một báo cáo (Report) kiểm thử tự động tốt CẦN có thông tin nào sau đây để hỗ trợ Debug?",
+    "options": [
+      "A. Danh sách tất cả các lập trình viên trong dự án.",
+      "B. Lịch sử lương của đội ngũ QA.",
+      "C. Ảnh chụp màn hình (Screenshot) hoặc Log khi test thất bại.",
+      "D. Cấu hình phần cứng chi tiết của máy chủ Database."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Screenshot và Log lỗi là bằng chứng quan trọng nhất giúp QA và Developer xác định nguyên nhân gây lỗi nhanh chóng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quy trình làm việc hàng ngày, QA nên làm gì khi một Automation Test bị Fail?",
+    "options": [
+      "A. Xóa ngay bài test đó khỏi bộ code.",
+      "B. Chạy lại nhiều lần cho đến khi nó Pass thì thôi.",
+      "C. Kiểm tra xem đó là lỗi của ứng dụng (Bug) hay lỗi của script (Script issue).",
+      "D. Báo cáo ngay cho khách hàng rằng hệ thống đã hỏng hoàn toàn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bước đầu tiên khi test fail là phân tích nguyên nhân để biết đó là lỗi thật của sản phẩm hay do kịch bản test chưa cập nhật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Data-Driven Testing' trong Automation có nghĩa là gì?",
+    "options": [
+      "A. Chạy các bài test trên nhiều trình duyệt khác nhau.",
+      "B. Sử dụng một kịch bản test duy nhất với nhiều bộ dữ liệu đầu vào khác nhau.",
+      "C. Tự động tạo ra dữ liệu giả (Mock data) trong database.",
+      "D. Lưu trữ toàn bộ mã nguồn kiểm thử trên đám mây."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data-Driven Testing giúp tái sử dụng kịch bản kiểm thử bằng cách tách biệt dữ liệu (thường để trong file CSV, Excel, JSON) khỏi code.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điều gì là quan trọng nhất khi đặt tên cho một Test Case trong Automation?",
+    "options": [
+      "A. Tên phải càng ngắn càng tốt (ví dụ: T1, T2).",
+      "B. Tên phải phản ánh rõ mục đích và hành động đang kiểm thử.",
+      "C. Tên phải chứa tên của người viết code.",
+      "D. Tên phải bắt đầu bằng ngày tháng năm thực hiện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tên rõ ràng giúp người đọc báo cáo hiểu ngay bài test đang kiểm tra tính năng gì mà không cần mở code ra xem.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lệnh 'BeforeMethod' (hoặc BeforeEach) trong các Testing Framework thường được dùng để làm gì?",
+    "options": [
+      "A. Chạy một lần duy nhất trước khi tất cả các test case bắt đầu.",
+      "B. Chạy lại trước mỗi khi thực hiện một test case cụ thể.",
+      "C. Chạy sau khi tất cả các test case đã hoàn thành.",
+      "D. Chạy để kiểm tra xem máy tính có kết nối Internet không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BeforeMethod/BeforeEach đảm bảo mỗi test case đều bắt đầu từ một trạng thái chuẩn bị giống nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một phần tử trên trang web có ID thay đổi mỗi khi tải lại trang (Dynamic ID), bạn nên làm gì?",
+    "options": [
+      "A. Không bao giờ tự động hóa phần tử đó.",
+      "B. Sử dụng Absolute XPath để cố định vị trí.",
+      "C. Sử dụng các thuộc tính khác ổn định hơn hoặc dùng CSS/XPath chứa một phần text cố định.",
+      "D. Yêu cầu lập trình viên xóa phần tử đó khỏi trang web."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng các kỹ thuật như contains() trong XPath hoặc các thuộc tính tùy chỉnh (data-test-id) giúp xử lý các phần tử có thuộc tính động.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây KHÔNG thuộc về phạm vi (scope) của Automation Testing Basics?",
+    "options": [
+      "A. Tương tác với các phần tử trên trình duyệt.",
+      "B. Kiểm tra logic nghiệp vụ thông qua Assertion.",
+      "C. Sửa lỗi logic trong mã nguồn của ứng dụng (Application Code).",
+      "D. Quản lý các bộ đợi (Wait) để đồng bộ hóa trình duyệt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "QA Automation Tester viết code để kiểm tra ứng dụng, việc sửa lỗi code ứng dụng là trách nhiệm của Developer.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi chạy Automation Test trong CI, chế độ 'Headless Mode' có nghĩa là gì?",
+    "options": [
+      "A. Chạy test mà không cần kết nối mạng.",
+      "B. Chạy trình duyệt ngầm mà không hiển thị giao diện người dùng (UI).",
+      "C. Chạy test mà không cần viết Assertion.",
+      "D. Chạy test trên một thiết bị di động thật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Headless mode giúp tiết kiệm tài nguyên hệ thống và thường được dùng trong môi trường CI/Server nơi không có màn hình hiển thị.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một bộ test tự động (Automation Suite) được coi là dễ bảo trì khi nào?",
+    "options": [
+      "A. Khi tất cả code được viết trong một file duy nhất.",
+      "B. Khi các thay đổi về UI chỉ cần cập nhật ở một nơi tập trung.",
+      "C. Khi nó không bao giờ tìm thấy lỗi.",
+      "D. Khi nó sử dụng càng nhiều Thread.sleep() càng tốt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính bảo trì cao thường đi đôi với các thiết kế như Page Object Model, giúp giảm thiểu công sức khi ứng dụng thay đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc chọn đúng công cụ (Tool) Automation lại quan trọng?",
+    "options": [
+      "A. Vì công cụ đắt tiền nhất luôn là tốt nhất.",
+      "B. Vì công cụ phải phù hợp với công nghệ của ứng dụng và kỹ năng của đội ngũ.",
+      "C. Vì công cụ sẽ tự động viết test case cho QA.",
+      "D. Vì công cụ sẽ thay thế nhu cầu học lập trình của QA."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Không có công cụ vạn năng, việc chọn tool dựa trên tech stack của dự án và trình độ của team là yếu tố quyết định thành công.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Selenium, phương thức 'findElement' sẽ trả về kết quả gì nếu không tìm thấy phần tử?",
+    "options": [
+      "A. Trả về giá trị null.",
+      "B. Trả về một danh sách rỗng.",
+      "C. Ném ra một ngoại lệ (ví dụ: NoSuchElementException).",
+      "D. Tự động tải lại trang web."
+    ],
+    "correctAnswer": "C",
+    "explanation": "findElement sẽ ném ra ngoại lệ ngay lập tức nếu không tìm thấy, trong khi findElements sẽ trả về một list rỗng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích của việc sử dụng 'data-test-id' trong HTML là gì?",
+    "options": [
+      "A. Để làm cho trang web hiển thị đẹp hơn.",
+      "B. Để cung cấp một locator ổn định dành riêng cho việc kiểm thử tự động.",
+      "C. Để tăng tốc độ tải trang web.",
+      "D. Để lưu trữ mật khẩu của người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng các thuộc tính chuyên biệt cho testing giúp tách biệt nhu cầu của QA khỏi các thay đổi về CSS hay Logic của Developer.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn nên làm gì nếu một tính năng của ứng dụng thay đổi giao diện hàng ngày?",
+    "options": [
+      "A. Cố gắng viết script thật phức tạp để bắt kịp.",
+      "B. Tạm dừng tự động hóa tính năng đó cho đến khi nó ổn định hơn.",
+      "C. Yêu cầu Developer ngừng thay đổi giao diện.",
+      "D. Chỉ thực hiện kiểm thử tự động vào ban đêm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tự động hóa các tính năng chưa ổn định (unstable) sẽ gây tốn rất nhiều chi phí bảo trì script, dẫn đến ROI âm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi xem xét tự động hóa một bộ kiểm thử (test suite), yếu tố nào sau đây là tiêu chí quan trọng nhất để đạt được ROI (tỷ suất hoàn vốn) cao?",
+    "options": [
+      "A. Số lượng kịch bản kiểm thử (test cases) có trong bộ suite.",
+      "B. Tần suất lặp lại của các kịch bản kiểm thử trong các chu kỳ release.",
+      "C. Độ phức tạp của mã nguồn ứng dụng đang được kiểm thử.",
+      "D. Sử dụng công cụ tự động hóa đắt tiền nhất trên thị trường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ROI trong automation chủ yếu đến từ việc giảm thiểu công sức kiểm thử thủ công qua nhiều lần lặp lại. Các bài test chạy càng thường xuyên thì giá trị mang lại càng lớn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn nên ưu tiên loại locator nào sau đây để đảm bảo script automation ít bị lỗi (flaky) nhất khi UI thay đổi nhẹ?",
+    "options": [
+      "A. Absolute XPath (Đường dẫn tuyệt đối).",
+      "B. Thuộc tính ID duy nhất và không thay đổi (Static ID).",
+      "C. Tên class (Class name) của element.",
+      "D. Link text của các thẻ anchor."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ID duy nhất và tĩnh là locator ổn định nhất vì nó không phụ thuộc vào cấu trúc phân cấp của DOM hay nội dung hiển thị.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Implicit Wait và Explicit Wait trong Selenium là gì?",
+    "options": [
+      "A. Implicit Wait chờ cho đến khi trang web tải xong hoàn toàn, Explicit Wait thì không.",
+      "B. Implicit Wait áp dụng cho tất cả các phần tử, Explicit Wait chỉ áp dụng cho các điều kiện cụ thể của một phần tử.",
+      "C. Explicit Wait làm chậm tốc độ thực thi script nhiều hơn so với Implicit Wait.",
+      "D. Implicit Wait chỉ hoạt động với trình duyệt Chrome."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Implicit Wait thiết lập một khoảng thời gian chờ chung cho mọi tìm kiếm phần tử, trong khi Explicit Wait cho phép chờ một điều kiện cụ thể (như element clickable) cho từng phần tử riêng biệt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Thread.sleep()' thường bị coi là một thực hành không tốt (bad practice) trong automation testing?",
+    "options": [
+      "A. Nó làm cho script chạy quá nhanh khiến trình duyệt không xử lý kịp.",
+      "B. Nó không hỗ trợ các trình duyệt cũ như Internet Explorer.",
+      "C. Nó gây lãng phí thời gian chờ cố định ngay cả khi phần tử đã sẵn sàng, làm chậm bộ test.",
+      "D. Nó yêu cầu quyền quản trị viên (admin) để thực thi trên hệ thống CI."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thread.sleep tạm dừng thực thi trong một khoảng thời gian cố định, dẫn đến lãng phí thời gian nếu ứng dụng phản hồi nhanh, hoặc gây lỗi nếu ứng dụng phản hồi chậm hơn thời gian đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình Page Object Model (POM), mục đích chính của việc tách biệt Page Classes và Test Classes là gì?",
+    "options": [
+      "A. Để tăng tốc độ thực thi của các bài kiểm thử.",
+      "B. Để giảm thiểu sự phụ thuộc vào các thư viện bên thứ ba.",
+      "C. Để cải thiện khả năng bảo trì và tái sử dụng mã nguồn khi UI thay đổi.",
+      "D. Để cho phép chạy kiểm thử mà không cần trình duyệt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "POM tách biệt logic tương tác UI (Page) và logic kiểm thử (Test), giúp khi UI thay đổi, bạn chỉ cần cập nhật ở Page Class mà không phải sửa đổi hàng loạt Test Class.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một test case thất bại chỉ trên môi trường CI (Jenkins/GitHub Actions) nhưng luôn vượt qua (pass) ở máy cục bộ, nguyên nhân phổ biến nhất là gì?",
+    "options": [
+      "A. Cấu hình phần cứng máy CI mạnh hơn máy cục bộ.",
+      "B. Sự khác biệt về tài nguyên hệ thống, độ trễ mạng hoặc chế độ chạy (headless mode).",
+      "C. Do script được viết bằng ngôn ngữ lập trình không tương thích với CI.",
+      "D. Do máy CI không có màn hình hiển thị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Môi trường CI thường có độ trễ mạng khác biệt và thường chạy ở chế độ headless, dẫn đến các vấn đề về timing hoặc render element khác với máy cục bộ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn nên sử dụng 'Soft Assertion' thay vì 'Hard Assertion' trong trường hợp nào?",
+    "options": [
+      "A. Khi bạn muốn dừng bài test ngay lập tức khi gặp lỗi đầu tiên.",
+      "B. Khi bạn muốn kiểm tra nhiều điều kiện độc lập trong một bài test và báo cáo tất cả lỗi vào cuối bài.",
+      "C. Khi bạn đang kiểm tra các chức năng quan trọng như Đăng nhập.",
+      "D. Khi bạn muốn tăng tốc độ thực thi của script."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Soft Assertion không dừng bài test ngay khi thất bại, cho phép thực hiện các kiểm tra tiếp theo và tổng hợp tất cả các lỗi đã xảy ra.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi đối mặt với một element có ID thay đổi mỗi khi tải trang (Dynamic ID), chiến lược nào là hiệu quả nhất?",
+    "options": [
+      "A. Sử dụng thuộc tính ID đó và cập nhật script mỗi lần chạy.",
+      "B. Sử dụng XPath chứa các phần tĩnh của ID bằng hàm 'contains()' hoặc 'starts-with()'.",
+      "C. Luôn sử dụng tọa độ tuyệt đối (coordinates) để click vào phần tử.",
+      "D. Yêu cầu nhà phát triển gỡ bỏ ID đó khỏi ứng dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng các hàm xử lý chuỗi trong XPath/CSS giúp xác định phần tử dựa trên phần định danh không thay đổi của nó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong automation framework, 'Hooks' (như @Before, @After) thường được sử dụng để làm gì?",
+    "options": [
+      "A. Để viết các câu lệnh kiểm tra (assertions).",
+      "B. Để thiết lập môi trường (setup) và dọn dẹp dữ liệu (teardown) cho các bài test.",
+      "C. Để định nghĩa các locator cho các trang web.",
+      "D. Để tạo báo cáo kiểm thử tự động dưới dạng PDF."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hooks giúp quản lý các hành động lặp đi lặp lại như mở trình duyệt, xóa cookie hoặc đóng trình duyệt trước và sau mỗi bài test.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây là nhược điểm lớn nhất của việc tự động hóa các bài kiểm thử UI so với kiểm thử API?",
+    "options": [
+      "A. Kiểm thử UI dễ viết hơn kiểm thử API.",
+      "B. Kiểm thử UI chạy chậm hơn và dễ bị lỗi (flaky) do sự thay đổi của giao diện.",
+      "C. Kiểm thử UI không thể tích hợp vào quy trình CI/CD.",
+      "D. Kiểm thử UI yêu cầu kiến thức lập trình cao hơn kiểm thử API."
+    ],
+    "correctAnswer": "B",
+    "explanation": "UI Testing phụ thuộc vào trình duyệt và DOM, vốn thay đổi thường xuyên và chịu ảnh hưởng của tốc độ mạng, làm cho nó kém ổn định hơn API testing.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để quản lý dữ liệu kiểm thử (test data) một cách chuyên nghiệp, bạn nên thực hiện theo cách nào?",
+    "options": [
+      "A. Hard-code dữ liệu trực tiếp vào trong các câu lệnh của script.",
+      "B. Tách dữ liệu ra các tệp tin bên ngoài như CSV, JSON hoặc Excel.",
+      "C. Yêu cầu tester nhập dữ liệu thủ công khi script đang chạy.",
+      "D. Lưu trữ dữ liệu trong các biến cục bộ bên trong Page Object."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data-driven testing giúp tách biệt dữ liệu và mã nguồn, dễ dàng mở rộng kịch bản kiểm thử mà không cần thay đổi logic code.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi tích hợp bộ test tự động vào Jenkins, mục đích của việc sử dụng tệp cấu hình (như pom.xml hoặc build.gradle) là gì?",
+    "options": [
+      "A. Để lưu trữ mật khẩu của người dùng.",
+      "B. Để quản lý các thư viện phụ thuộc (dependencies) và kịch bản thực thi.",
+      "C. Để thiết kế giao diện người dùng cho ứng dụng.",
+      "D. Để thay thế hoàn toàn mã nguồn của bộ test."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các tệp quản lý build định nghĩa cách biên dịch, quản lý thư viện cần thiết và cách chạy các bài test một cách nhất quán trên mọi môi trường.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một báo cáo automation (Automation Report) tốt CẦN PHẢI bao gồm thông tin nào để hỗ trợ debug hiệu quả?",
+    "options": [
+      "A. Toàn bộ mã nguồn của framework.",
+      "B. Danh sách tất cả các tester trong dự án.",
+      "C. Ảnh chụp màn hình (screenshot) và log lỗi tại thời điểm thất bại.",
+      "D. Lịch sử lương của các thành viên trong nhóm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Screenshot và log lỗi cung cấp bằng chứng trực quan và kỹ thuật về trạng thái của ứng dụng khi gặp lỗi, giúp xác định nguyên nhân nhanh chóng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh Agile, khi nào là thời điểm thích hợp nhất để bắt đầu viết script automation cho một tính năng mới?",
+    "options": [
+      "A. Ngay khi yêu cầu (requirements) vừa được đưa ra.",
+      "B. Sau khi tính năng đã ổn định và hoàn tất kiểm thử thủ công (manual testing).",
+      "C. Sau khi dự án đã kết thúc và bàn giao cho khách hàng.",
+      "D. Chỉ khi nào khách hàng yêu cầu viết automation."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Viết automation quá sớm khi tính năng còn thay đổi liên tục sẽ dẫn đến chi phí bảo trì script cực cao. Nên đợi tính năng tương đối ổn định.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao CSS Selector thường được ưu tiên hơn XPath trong các dự án automation lớn?",
+    "options": [
+      "A. CSS Selector có thể tìm ngược lên phần tử cha (parent), còn XPath thì không.",
+      "B. CSS Selector luôn ngắn hơn XPath trong mọi trường hợp.",
+      "C. CSS Selector được các trình duyệt hỗ trợ tốt hơn và thường có tốc độ thực thi nhanh hơn.",
+      "D. CSS Selector không bao giờ bị thay đổi khi UI cập nhật."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hầu hết các trình duyệt hiện đại tối ưu hóa việc đọc CSS selector nhanh hơn so với việc phân tích cấu trúc cây XPath.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang gặp tình trạng bộ test chạy mất 2 tiếng để hoàn thành. Giải pháp kỹ thuật nào giúp giảm thời gian này hiệu quả nhất?",
+    "options": [
+      "A. Xóa bỏ bớt các bước kiểm tra (assertions) quan trọng.",
+      "B. Thực hiện chạy kiểm thử song song (Parallel Execution).",
+      "C. Chuyển từ ngôn ngữ Java sang Python.",
+      "D. Chạy bộ test vào ban đêm khi không có ai dùng mạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Parallel Execution cho phép chạy nhiều bài test cùng lúc trên các luồng hoặc node khác nhau, giúp giảm tổng thời gian thực thi theo tỷ lệ thuận với số luồng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Điều gì xảy ra nếu bạn đặt Implicit Wait là 10 giây và Explicit Wait là 20 giây cho cùng một phần tử?",
+    "options": [
+      "A. Trình duyệt sẽ chờ đúng 30 giây.",
+      "B. Trình duyệt sẽ chờ đúng 15 giây (trung bình cộng).",
+      "C. Có thể gây ra xung đột và dẫn đến thời gian chờ không thể đoán trước (thường là tổng hoặc mức cao nhất).",
+      "D. Trình duyệt sẽ báo lỗi cú pháp ngay lập tức."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc trộn lẫn Implicit và Explicit wait không được khuyến khích vì nó có thể gây ra các vấn đề về timeout không mong muốn do sự chồng chéo logic chờ của driver.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kịch bản kiểm thử một bảng dữ liệu (table) có phân trang, làm thế nào để kiểm tra một dòng cụ thể một cách ổn định?",
+    "options": [
+      "A. Click vào trang số 2 và hy vọng dòng đó nằm ở đó.",
+      "B. Sử dụng vòng lặp để duyệt qua các trang và kiểm tra sự tồn tại của dữ liệu bằng locator tương đối.",
+      "C. Chỉ kiểm tra trang đầu tiên để tiết kiệm thời gian.",
+      "D. Hard-code chỉ số dòng (index) ví dụ: //tr[5]."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Duyệt qua các trang kết hợp với locator dựa trên nội dung (text-based) là cách duy nhất để tìm dữ liệu động trong một bảng có phân trang.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích của việc sử dụng 'Headless Browser' trong CI/CD là gì?",
+    "options": [
+      "A. Để tester có thể quan sát script chạy như thế nào.",
+      "B. Để chạy kiểm thử mà không cần giao diện đồ họa, giúp tiết kiệm tài nguyên và chạy nhanh hơn.",
+      "C. Để kiểm tra xem giao diện có đẹp hay không.",
+      "D. Để thay thế hoàn toàn việc kiểm thử trên trình duyệt thật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Headless mode chạy trình duyệt trong bộ nhớ mà không hiển thị cửa sổ, rất phù hợp cho môi trường server CI không có màn hình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một script automation bị 'flaky' (lúc pass lúc fail mà không thay đổi code), hành động đầu tiên bạn nên làm là gì?",
+    "options": [
+      "A. Xóa bài test đó đi vì nó không đáng tin cậy.",
+      "B. Phân tích log và báo cáo để xác định xem lỗi do timing, môi trường hay dữ liệu.",
+      "C. Chạy lại bài test đó 10 lần và lấy kết quả của lần cuối.",
+      "D. Viết lại toàn bộ framework bằng công cụ mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân tích nguyên nhân gốc rễ (Root Cause Analysis) là bước đầu tiên để xử lý flakiness, thường liên quan đến vấn đề đồng bộ hóa (synchronization).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Selenium, phương thức 'getWindowHandles()' được sử dụng trong trường hợp nào?",
+    "options": [
+      "A. Khi muốn đóng trình duyệt.",
+      "B. Khi muốn xử lý các thông báo Alert của JavaScript.",
+      "C. Khi ứng dụng mở ra một cửa sổ hoặc tab mới và bạn cần chuyển điều hướng (switch) sang đó.",
+      "D. Khi muốn chụp ảnh màn hình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "getWindowHandles trả về một tập hợp các định danh cửa sổ đang mở, cho phép script chuyển đổi giữa các tab hoặc cửa sổ trình duyệt khác nhau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc sử dụng biến môi trường (Environment Variables) trong automation có lợi ích gì?",
+    "options": [
+      "A. Giúp bảo mật các thông tin nhạy cảm như API key hoặc mật khẩu và dễ dàng thay đổi URL môi trường (Staging/UAT).",
+      "B. Giúp script chạy nhanh hơn trên trình duyệt Chrome.",
+      "C. Làm cho mã nguồn trông phức tạp và chuyên nghiệp hơn.",
+      "D. Thay thế hoàn toàn cho việc sử dụng Page Object Model."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Biến môi trường giúp cấu hình linh hoạt cho các môi trường khác nhau mà không cần sửa code, đồng thời bảo mật thông tin bí mật khi đẩy code lên repository.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện 'Clean up' dữ liệu sau khi test (Teardown) lại quan trọng?",
+    "options": [
+      "A. Để làm cho database trông sạch sẽ hơn.",
+      "B. Để tránh việc dữ liệu rác từ bài test trước làm ảnh hưởng đến kết quả của các bài test sau.",
+      "C. Để giảm chi phí lưu trữ của server.",
+      "D. Để script chạy nhanh hơn ở lần kế tiếp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dữ liệu tồn đọng có thể gây ra xung đột (ví dụ: lỗi trùng tên user) khiến các bài test chạy sau bị thất bại oan (false failure).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một kịch bản automation 'tốt' nên có đặc điểm nào sau đây?",
+    "options": [
+      "A. Càng dài càng tốt để kiểm tra được nhiều thứ cùng lúc.",
+      "B. Phụ thuộc vào kết quả của bài test đứng trước nó.",
+      "C. Độc lập, có thể chạy riêng lẻ và có các bước kiểm tra (assertions) rõ ràng.",
+      "D. Không cần log lỗi vì đã có screenshot."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tính độc lập (Independence) giúp các bài test dễ bảo trì, dễ chạy song song và dễ xác định lỗi mà không bị ảnh hưởng bởi các yếu tố bên ngoài.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi viết automation cho một form đăng ký có 50 trường nhập liệu, cách tiếp cận nào là tối ưu nhất?",
+    "options": [
+      "A. Viết 50 hàm riêng biệt cho mỗi trường nhập liệu.",
+      "B. Sử dụng Page Object Model để định nghĩa các element và tạo một hàm nhận vào một đối tượng dữ liệu (Object/Map) để điền form.",
+      "C. Chỉ tự động hóa 5 trường quan trọng nhất, các trường còn lại bỏ qua.",
+      "D. Sử dụng tọa độ X, Y để click và điền vào từng ô."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng một hàm xử lý dữ liệu chung giúp code gọn gàng, dễ bảo trì và dễ dàng thực hiện kiểm thử với nhiều bộ dữ liệu khác nhau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi xem xét ROI (Return on Investment) cho một dự án Automation, yếu tố nào thường bị đánh giá thấp nhất nhưng lại ảnh hưởng lớn nhất đến chi phí dài hạn?",
+    "options": [
+      "A. Thời gian viết script ban đầu cho các test case.",
+      "B. Chi phí bản quyền công cụ automation (license).",
+      "C. Chi phí bảo trì script khi ứng dụng thay đổi (Maintenance cost).",
+      "D. Thời gian chạy các bộ test suite trên môi trường CI."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Chi phí bảo trì thường chiếm phần lớn ngân sách automation trong dài hạn do ứng dụng liên tục thay đổi, đòi hỏi cập nhật script thường xuyên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một kiến trúc Framework hiện đại, mục đích chính của việc tách biệt 'Test Data' ra khỏi 'Test Script' là gì?",
+    "options": [
+      "A. Để tăng tốc độ thực thi của các test case.",
+      "B. Để cho phép thay đổi dữ liệu mà không cần can thiệp vào mã nguồn logic.",
+      "C. Để tận dụng tối đa các tính năng của ngôn ngữ lập trình.",
+      "D. Để giảm thiểu số lượng assertion trong mỗi test case."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Decoupling giúp tăng tính tái sử dụng và khả năng bảo trì, cho phép non-technical members cập nhật dữ liệu kiểm thử dễ dàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn nên chọn chiến lược nào để xử lý 'Flaky Tests' (test lúc pass lúc fail) do độ trễ mạng trong môi trường CI/CD?",
+    "options": [
+      "A. Tăng thời gian 'Hard Sleep' (Thread.sleep) lên gấp đôi cho mọi bước.",
+      "B. Sử dụng cơ chế 'Retry' tự động cho đến khi test pass.",
+      "C. Sử dụng 'Explicit Wait' hoặc 'Fluent Wait' với điều kiện kiểm tra trạng thái cụ thể của element.",
+      "D. Bỏ qua các test case bị flaky khỏi bộ test suite chính."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dynamic waits giúp script linh hoạt theo tốc độ phản hồi của hệ thống thay vì chờ đợi cố định, giảm thiểu flakiness một cách bền vững.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi xây dựng locator cho ứng dụng Web sử dụng các framework như React hoặc Angular, chiến lược nào tối ưu nhất để giảm thiểu lỗi do thay đổi UI?",
+    "options": [
+      "A. Sử dụng Absolute XPath từ gốc của tài liệu HTML.",
+      "B. Sử dụng các thuộc tính tùy chỉnh (custom data attributes) như data-testid.",
+      "C. Sử dụng CSS Selector dựa trên cấu trúc phân cấp class của element.",
+      "D. Sử dụng ID tự động sinh ra từ framework (auto-generated IDs)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Custom attributes được dành riêng cho testing giúp tách biệt logic kiểm thử khỏi các thay đổi về style (class) hoặc cấu trúc (DOM tree).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh Continuous Integration (CI), tại sao việc chạy song song (Parallel Execution) lại quan trọng đối với Automation Testing?",
+    "options": [
+      "A. Để kiểm tra khả năng chịu tải (Load Test) của ứng dụng.",
+      "B. Để rút ngắn Feedback Loop, giúp lập trình viên biết kết quả sớm nhất có thể.",
+      "C. Để đảm bảo các test case không phụ thuộc vào nhau.",
+      "D. Để tận dụng hết tài nguyên phần cứng của máy chủ CI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong CI, thời gian phản hồi là cực kỳ quan trọng. Chạy song song giúp giảm tổng thời gian thực thi của bộ test suite lớn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào việc tự động hóa một tính năng mới (New Feature) được coi là không hiệu quả về mặt kinh tế?",
+    "options": [
+      "A. Khi tính năng đó có độ ưu tiên cao đối với người dùng.",
+      "B. Khi tính năng đó yêu cầu nhiều dữ liệu đầu vào phức tạp.",
+      "C. Khi UI của tính năng đó chưa ổn định và dự kiến sẽ thay đổi lớn trong sprint tới.",
+      "D. Khi tính năng đó không thể kiểm tra được bằng API."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tự động hóa trên một UI không ổn định dẫn đến chi phí bảo trì cực cao, thường vượt quá lợi ích mà nó mang lại.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa Page Object Model (POM) và Screenplay Pattern là gì?",
+    "options": [
+      "A. POM tập trung vào cấu trúc trang, Screenplay tập trung vào hành động của người dùng (Actors/Tasks).",
+      "B. POM chỉ dùng được cho Selenium, Screenplay dùng được cho mọi công cụ.",
+      "C. Screenplay khó triển khai hơn nhưng chạy nhanh hơn POM.",
+      "D. POM không hỗ trợ việc chia sẻ dữ liệu giữa các trang, còn Screenplay thì có."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Screenplay Pattern tuân thủ nguyên tắc SOLID tốt hơn bằng cách tách biệt Actor, Task, và Interaction, thay vì gom nhóm theo trang như POM.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện một số test case thường xuyên fail trên CI nhưng luôn pass trên máy local. Nguyên nhân kỹ thuật nào sau đây là đáng ngờ nhất?",
+    "options": [
+      "A. Ngôn ngữ lập trình trên CI và local khác phiên bản.",
+      "B. Sự khác biệt về cấu hình tài nguyên (CPU/RAM) và độ trễ mạng trên môi trường CI.",
+      "C. Mã nguồn của test script chưa được commit lên Git.",
+      "D. Browser trên CI chạy ở chế độ Headless còn local chạy Headful."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Môi trường CI thường có tài nguyên hạn chế và độ trễ mạng khác biệt, dẫn đến các vấn đề về race condition hoặc timing mà local không thấy.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao 'Soft Assertions' lại được ưu tiên hơn 'Hard Assertions' trong một số kịch bản End-to-End (E2E) phức tạp?",
+    "options": [
+      "A. Vì Soft Assertions thực thi nhanh hơn Hard Assertions.",
+      "B. Để tiếp tục kiểm tra các điều kiện khác ngay cả khi một điều kiện trước đó đã thất bại.",
+      "C. Để tránh việc script bị crash khi không tìm thấy element.",
+      "D. Vì Soft Assertions tự động chụp ảnh màn hình khi fail."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Soft Assertions cho phép thu thập tất cả các lỗi trong một luồng nghiệp vụ dài trước khi đánh dấu fail, giúp debug toàn diện hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế một bộ Automation Suite cho hệ thống Microservices, chiến lược nào giúp giảm thiểu sự phụ thuộc vào các dịch vụ bên thứ ba?",
+    "options": [
+      "A. Chạy tất cả test case trên môi trường Production.",
+      "B. Sử dụng Service Virtualization hoặc Mocking/Stubbing cho các API ngoại vi.",
+      "C. Tăng thời gian timeout cho các API call.",
+      "D. Chỉ thực hiện kiểm thử thủ công cho các phần tích hợp bên thứ ba."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mocking giúp cô lập hệ thống cần kiểm thử, đảm bảo bộ test ổn định và không bị ảnh hưởng bởi sự cố của các dịch vụ bên ngoài.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một báo cáo Automation chuyên nghiệp dành cho quản lý (Stakeholders) cần tập trung vào thông tin nào nhất?",
+    "options": [
+      "A. Tổng số dòng code automation đã viết.",
+      "B. Danh sách chi tiết các lỗi logic trong code script.",
+      "C. Tỷ lệ pass/fail gắn liền với các rủi ro kinh doanh (Business Risks).",
+      "D. Tên của các tester đã viết script."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Stakeholders quan tâm đến chất lượng sản phẩm và rủi ro hơn là các chi tiết kỹ thuật của mã nguồn automation.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Selenium, sự khác biệt chính giữa 'Implicit Wait' và 'Explicit Wait' là gì?",
+    "options": [
+      "A. Implicit Wait áp dụng cho toàn bộ session, Explicit Wait áp dụng cho một element cụ thể.",
+      "B. Explicit Wait luôn chờ hết thời gian quy định, Implicit Wait thì không.",
+      "C. Implicit Wait chỉ dùng được với XPath, Explicit Wait dùng được với mọi locator.",
+      "D. Không có sự khác biệt về hiệu năng giữa hai loại này."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Implicit Wait là cài đặt toàn cục, trong khi Explicit Wait cho phép định nghĩa các điều kiện chờ đợi linh hoạt cho từng đối tượng cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Hooks' (như @Before/@After) trong các test framework là gì?",
+    "options": [
+      "A. Giúp script chạy nhanh hơn bằng cách bỏ qua các bước setup.",
+      "B. Đảm bảo môi trường sạch (Clean state) trước và sau mỗi test case, tránh side effects.",
+      "C. Tự động sửa lỗi trong code khi test fail.",
+      "D. Giảm số lượng file cần quản lý trong project."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hooks giúp quản lý lifecycle của test, đảm bảo tính độc lập giữa các test case bằng cách thiết lập và dọn dẹp môi trường chuẩn xác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện Automation cho một ứng dụng có cơ sở dữ liệu thay đổi liên tục, cách tiếp cận nào đảm bảo tính ổn định của dữ liệu kiểm thử?",
+    "options": [
+      "A. Sử dụng dữ liệu có sẵn trong DB của môi trường staging.",
+      "B. Viết script để tạo mới dữ liệu cần thiết (Pre-condition) và xóa bỏ sau khi test xong (Post-condition).",
+      "C. Copy toàn bộ database production về môi trường test trước mỗi lần chạy.",
+      "D. Yêu cầu developer không thay đổi database trong quá trình test."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tự quản lý vòng đời dữ liệu (Data setup/teardown) giúp test case độc lập và có thể lặp lại trong mọi trạng thái của database.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chỉ số 'Automation Coverage' nên được hiểu như thế nào là đúng đắn nhất trong quản lý chất lượng?",
+    "options": [
+      "A. Là tỷ lệ phần trăm số dòng code ứng dụng được bao phủ bởi automation.",
+      "B. Là tỷ lệ phần trăm các test case thủ công đã được chuyển sang automation.",
+      "C. Là một chỉ số tham khảo, cần kết hợp với phân tích rủi ro và chất lượng của các test case.",
+      "D. Là mục tiêu duy nhất cần đạt 100% để loại bỏ hoàn toàn kiểm thử thủ công."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Con số coverage cao không có ý nghĩa nếu các test case đó không kiểm tra các kịch bản quan trọng hoặc không có khả năng phát hiện lỗi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Nếu một bộ test suite mất 5 tiếng để chạy xong trên CI, giải pháp kỹ thuật nào là tối ưu nhất để giảm thời gian xuống còn 30 phút?",
+    "options": [
+      "A. Xóa bỏ bớt các assertion quan trọng để script chạy nhanh hơn.",
+      "B. Chuyển toàn bộ UI test sang API test nếu logic cho phép.",
+      "C. Triển khai chạy song song trên nhiều node/container (Parallelization).",
+      "D. Chỉ chạy automation vào ban đêm khi không có ai làm việc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Parallelization là cách hiệu quả nhất để scale quy mô thực thi mà không làm giảm chất lượng kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiểm thử tự động, khái niệm 'Idempotency' có ý nghĩa gì?",
+    "options": [
+      "A. Khả năng chạy một test case nhiều lần mà kết quả và trạng thái hệ thống vẫn nhất quán.",
+      "B. Khả năng tự động sửa code khi có thay đổi về UI.",
+      "C. Việc sử dụng nhiều ngôn ngữ lập trình trong cùng một framework.",
+      "D. Tốc độ thực thi của script không thay đổi theo thời gian."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tính Idempotency đảm bảo rằng việc chạy lại test case nhiều lần không gây ra rác dữ liệu hoặc làm hỏng trạng thái hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một test case thất bại trên CI do 'ElementNotInteractableException', hành động nào sau đây là chuyên nghiệp nhất?",
+    "options": [
+      "A. Thêm 'Thread.sleep(5000)' vào trước dòng code bị lỗi.",
+      "B. Chụp ảnh màn hình/quay video và kiểm tra xem element có bị che khuất hoặc chưa hiển thị không.",
+      "C. Đánh dấu test case đó là 'Broken' và bỏ qua nó.",
+      "D. Chạy lại test case đó 10 lần, nếu có 1 lần pass thì coi như pass."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân tích bằng hình ảnh giúp xác định nguyên nhân thực tế (như hiệu ứng animation, popup che khuất) thay vì đoán mò và dùng sleep.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Global Variables' cho WebDriver instance lại được coi là một Bad Practice trong lập trình Automation?",
+    "options": [
+      "A. Vì nó tốn quá nhiều bộ nhớ RAM.",
+      "B. Vì nó ngăn cản khả năng chạy test song song (Parallel execution) một cách an toàn.",
+      "C. Vì nó làm cho code khó đọc hơn.",
+      "D. Vì WebDriver sẽ tự động đóng sau mỗi test case."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Global variables gây ra vấn đề về Thread-safety, khiến các luồng (threads) tranh chấp cùng một instance trình duyệt khi chạy song song.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế framework, việc đóng gói (wrapping) các phương thức của Selenium/Playwright (ví dụ: click(), sendKeys()) nhằm mục đích gì?",
+    "options": [
+      "A. Để làm cho code trông phức tạp và chuyên nghiệp hơn.",
+      "B. Để thêm các tính năng bổ trợ như logging, chờ đợi tự động hoặc xử lý lỗi tập trung.",
+      "C. Để tăng tốc độ thực thi của các lệnh cơ bản.",
+      "D. Để thay thế hoàn toàn thư viện gốc bằng thư viện tự viết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Wrapper methods giúp chuẩn hóa cách tương tác, giảm lặp code và dễ dàng bảo trì khi cần thay đổi logic chung (ví dụ: thêm log cho mọi cú click).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một bộ 'Smoke Test' tự động nên có những đặc điểm nào sau đây?",
+    "options": [
+      "A. Bao phủ tất cả các bug đã từng được phát hiện.",
+      "B. Thời gian chạy rất nhanh và bao phủ các luồng nghiệp vụ quan trọng nhất (Critical paths).",
+      "C. Chứa các kịch bản kiểm thử chi tiết nhất của từng module.",
+      "D. Chỉ bao gồm các test case kiểm tra giao diện (UI)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Smoke test dùng để xác nhận nhanh tình trạng sức khỏe của build, do đó cần nhanh và tập trung vào các tính năng sống còn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh Agile, thời điểm nào là tốt nhất để bắt đầu viết script automation cho một User Story?",
+    "options": [
+      "A. Sau khi Story đã được deploy lên Production.",
+      "B. Ngay khi Story được bắt đầu phát triển (song song với Dev) dựa trên Acceptance Criteria.",
+      "C. Khi kết thúc Sprint và chuẩn bị sang Sprint mới.",
+      "D. Đợi đến khi Manual Tester tìm ra hết lỗi của Story đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "In-sprint automation giúp phát hiện lỗi sớm và đảm bảo tính năng được kiểm thử tự động ngay khi hoàn thành, hỗ trợ CI/CD.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây là rào cản lớn nhất khi chuyển đổi từ Manual Testing sang Automation Testing cho một hệ thống Legacy lâu đời?",
+    "options": [
+      "A. Thiếu tài liệu hướng dẫn sử dụng công cụ automation.",
+      "B. Hệ thống thiếu các 'Hooks' kỹ thuật (như ID ổn định, API) và kiến trúc không thân thiện với kiểm thử.",
+      "C. Manual tester không muốn học ngôn ngữ lập trình mới.",
+      "D. Chi phí mua máy tính cấu hình cao để chạy script."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các hệ thống cũ thường không được thiết kế để testable, khiến việc tạo locator ổn định hoặc giả lập dữ liệu trở nên cực kỳ khó khăn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Data-Driven Testing' hiệu quả nhất trong trường hợp nào?",
+    "options": [
+      "A. Khi cần kiểm tra một luồng nghiệp vụ duy nhất với một bộ dữ liệu.",
+      "B. Khi cùng một kịch bản kiểm thử cần được thực thi với nhiều tập dữ liệu đầu vào khác nhau.",
+      "C. Khi ứng dụng không có giao diện người dùng (UI).",
+      "D. Khi muốn giảm thời gian viết code bằng cách sử dụng AI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data-driven testing cho phép tách biệt logic và dữ liệu, giúp thực thi hàng loạt kịch bản tương tự chỉ với việc thay đổi file dữ liệu (Excel/JSON).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để xử lý việc kiểm thử tự động trên các môi trường có cấu hình khác nhau (Dev, Staging, UAT) một cách linh hoạt?",
+    "options": [
+      "A. Tạo các bộ script riêng biệt cho từng môi trường.",
+      "B. Hard-code URL và thông tin đăng nhập của từng môi trường vào trong script.",
+      "C. Sử dụng các file cấu hình (Environment Variables/Config files) để truyền tham số vào script lúc runtime.",
+      "D. Chỉ chạy automation trên một môi trường duy nhất là Staging."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng cấu hình bên ngoài giúp script có tính di động (portable), có thể chạy trên bất kỳ môi trường nào mà không cần sửa code.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi xây dựng chiến lược Automation cho một hệ thống ERP lớn với tần suất cập nhật UI liên tục, cách tiếp cận nào giúp tối ưu hóa ROI (Return on Investment) dài hạn nhất?",
+    "options": [
+      "A. Tập trung tối đa vào việc bao phủ 100% các kịch bản kiểm thử giao diện (UI Regression).",
+      "B. Chuyển dịch trọng tâm sang kiểm thử ở tầng API và Integration để giảm thiểu sự phụ thuộc vào UI.",
+      "C. Sử dụng các công cụ Record and Playback để đẩy nhanh tốc độ tạo script kiểm thử.",
+      "D. Tăng cường số lượng nhân sự để cập nhật script ngay khi có thay đổi từ phía phát triển."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong các hệ thống phức tạp với UI không ổn định, việc tập trung vào tầng API (theo mô hình Test Pyramid) giúp giảm chi phí bảo trì, tăng tốc độ thực thi và mang lại giá trị phản hồi nhanh hơn so với UI Automation.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một framework Automation theo kiến trúc Page Object Model (POM), việc xử lý các 'Dynamic Elements' (ID thay đổi mỗi lần load) nên được thực hiện theo chiến lược nào là bền vững nhất?",
+    "options": [
+      "A. Sử dụng Absolute XPath để xác định vị trí chính xác của phần tử trên cây DOM.",
+      "B. Yêu cầu đội ngũ Developer thêm các thuộc tính định danh riêng (như data-testid) cho mục đích testing.",
+      "C. Sử dụng hàm Thread.sleep() với thời gian dài để đảm bảo phần tử đã được render hoàn toàn.",
+      "D. Viết các hàm Regex phức tạp để tìm kiếm phần tử dựa trên các thuộc tính biến đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc sử dụng các thuộc tính định danh riêng (Custom Data Attributes) là giải pháp ổn định nhất, giúp tách biệt logic kiểm thử khỏi sự thay đổi của cấu trúc DOM hoặc CSS/ID động.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang đối mặt với tình trạng 'Flaky Tests' (kết quả không ổn định) trong bộ suite chạy CI. Sau khi phân tích, bạn nhận thấy nguyên nhân do độ trễ mạng không đồng nhất. Giải pháp kỹ thuật nào là tối ưu?",
+    "options": [
+      "A. Tăng giá trị Global Timeout của framework lên mức tối đa (ví dụ 60 giây).",
+      "B. Triển khai cơ chế 'Smart Wait' hoặc 'Fluent Wait' dựa trên trạng thái sẵn sàng của ứng dụng.",
+      "C. Thiết lập cơ chế tự động chạy lại (Retry) kịch bản thất bại tối thiểu 5 lần.",
+      "D. Bỏ qua các test case bị flaky khỏi bộ suite chạy trên môi trường CI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Smart/Fluent Wait cho phép framework chờ đợi linh hoạt dựa trên điều kiện cụ thể (ví dụ: phần tử hiển thị hoặc biến mất), giúp xử lý độ trễ mạng mà không làm chậm tổng thời gian chạy test vô lý như Static Wait.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế một framework Automation cho doanh nghiệp (Enterprise), tại sao việc tách biệt 'Test Data' khỏi 'Test Logic' lại được coi là một yêu cầu bắt buộc?",
+    "options": [
+      "A. Để giảm dung lượng của các file mã nguồn (source code).",
+      "B. Để cho phép người dùng không biết code (như BA hoặc Manual Tester) có thể cập nhật dữ liệu kiểm thử.",
+      "C. Để tăng tính tái sử dụng của script và dễ dàng thực thi trên nhiều môi trường (Staging, UAT) khác nhau.",
+      "D. Để tránh việc vi phạm các quy tắc bảo mật khi commit code lên hệ thống quản lý phiên bản."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tách biệt dữ liệu giúp script trở nên linh hoạt (Data-driven testing), cho phép chạy cùng một logic kiểm thử với nhiều bộ dữ liệu khác nhau hoặc trên các môi trường có cấu hình dữ liệu khác nhau mà không cần sửa code.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh CI/CD, việc tích hợp Automation Suite vào Pipeline cần đảm bảo yếu tố 'Fast Feedback'. Nếu bộ suite mất 4 tiếng để hoàn thành, chiến lược nào là phù hợp nhất?",
+    "options": [
+      "A. Chỉ chạy Automation Suite vào cuối tuần khi hệ thống không có người sử dụng.",
+      "B. Chia nhỏ bộ suite và thực hiện chạy song song (Parallel Execution) trên các node/container khác nhau.",
+      "C. Cắt giảm số lượng Assertions trong mỗi test case để rút ngắn thời gian thực thi.",
+      "D. Chỉ chạy các test case quan trọng nhất (Smoke Test) và bỏ qua các phần còn lại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Parallel Execution là kỹ thuật quan trọng nhất để giảm thời gian thực thi (Execution Time) mà vẫn giữ nguyên phạm vi bao phủ (Coverage), đáp ứng yêu cầu phản hồi nhanh của CI/CD.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một Assertion trong Automation Test được coi là 'tốt' khi nó đáp ứng tiêu chí nào sau đây?",
+    "options": [
+      "A. Kiểm tra càng nhiều thuộc tính của đối tượng càng tốt trong một câu lệnh.",
+      "B. Chỉ tập trung vào một mục đích kiểm chứng duy nhất và cung cấp thông báo lỗi chi tiết khi thất bại.",
+      "C. Luôn bao quanh bởi khối try-catch để tránh việc script dừng lại đột ngột.",
+      "D. Được đặt ở đầu mỗi phương thức (method) để đảm bảo điều kiện tiền quyết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Assertion cần có tính đơn nhất (Single Responsibility) và cung cấp thông tin rõ ràng về lý do thất bại (Expected vs Actual) để hỗ trợ quá trình debug nhanh chóng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi lựa chọn công cụ Automation (Tool Selection) cho dự án, yếu tố kỹ thuật nào thường gây ra rủi ro 'Vendor Lock-in' cao nhất?",
+    "options": [
+      "A. Ngôn ngữ lập trình mà công cụ đó hỗ trợ.",
+      "B. Khả năng tích hợp với các công cụ quản lý lỗi (Bug Tracking).",
+      "C. Việc sử dụng các định dạng lưu trữ script hoặc thư viện độc quyền không thể chuyển đổi.",
+      "D. Chi phí bản quyền hàng năm của công cụ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Vendor Lock-in xảy ra khi dữ liệu và kịch bản kiểm thử bị ràng buộc vào định dạng riêng của nhà cung cấp, khiến việc chuyển đổi sang công cụ khác đòi hỏi phải làm lại từ đầu với chi phí cực lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong thiết kế Framework, 'Hooks' (như BeforeSuite, AfterMethod) thường được sử dụng để quản lý 'Test Fixtures'. Sai lầm phổ biến nhất khi sử dụng Hooks là gì?",
+    "options": [
+      "A. Sử dụng Hooks để khởi tạo trình duyệt.",
+      "B. Đặt quá nhiều logic kiểm tra (assertions) bên trong các phương thức Hooks.",
+      "C. Dùng Hooks để dọn dẹp dữ liệu rác sau khi test xong.",
+      "D. Chia sẻ trạng thái (shared state) giữa các test case thông qua các biến toàn cục trong Hooks."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Việc chia sẻ trạng thái qua Hooks tạo ra sự phụ thuộc giữa các test case, dẫn đến khó khăn khi chạy song song và gây ra lỗi lan truyền khó kiểm soát.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần thực hiện kiểm thử tự động cho một ứng dụng Web có sử dụng Shadow DOM. Kỹ thuật định danh phần tử thông thường (như ID, Class) qua Selenium WebDriver truyền thống gặp khó khăn gì?",
+    "options": [
+      "A. Selenium không thể tương tác với các phần tử bên trong Shadow DOM do tính đóng gói của nó.",
+      "B. Các phần tử trong Shadow DOM luôn có ID thay đổi liên tục.",
+      "C. Shadow DOM làm chậm tốc độ render của trình duyệt khiến script bị timeout.",
+      "D. Selenium yêu cầu phải cài đặt thêm plugin trả phí để nhận diện Shadow DOM."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Shadow DOM tạo ra một cây DOM riêng biệt bị đóng gói. Để tương tác, tester cần truy cập thông qua Shadow Root bằng JavaScript hoặc các phương thức hỗ trợ đặc biệt của các thư viện hiện đại.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chiến lược 'Test Data Clean-up' nào hiệu quả nhất để đảm bảo tính độc lập của các test case trong một hệ thống có cơ sở dữ liệu lớn?",
+    "options": [
+      "A. Xóa toàn bộ dữ liệu trong Database và phục hồi từ bản backup trước mỗi lần chạy test.",
+      "B. Sử dụng các API Delete để xóa dữ liệu ngay sau khi mỗi test case kết thúc (Teardown).",
+      "C. Thiết kế dữ liệu kiểm thử với các định danh duy nhất (Unique IDs) để không bao giờ trùng lặp.",
+      "D. Chạy một script SQL dọn dẹp định kỳ vào cuối mỗi ngày làm việc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng dữ liệu duy nhất (như timestamp hoặc UUID) là cách an toàn nhất để chạy song song và tránh xung đột dữ liệu mà không tốn thời gian chờ đợi dọn dẹp hay phục hồi database.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Hard Assertions' có thể không phù hợp cho các luồng kiểm thử End-to-End (E2E) dài và phức tạp?",
+    "options": [
+      "A. Vì Hard Assertions không thể kiểm tra được các giá trị số.",
+      "B. Vì nó dừng toàn bộ kịch bản ngay khi gặp lỗi đầu tiên, làm mất dấu các lỗi tiềm ẩn ở phía sau.",
+      "C. Vì Hard Assertions tốn nhiều tài nguyên hệ thống hơn Soft Assertions.",
+      "D. Vì nó không hỗ trợ việc chụp ảnh màn hình (screenshot) khi thất bại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong các luồng E2E dài, việc sử dụng Soft Assertions cho phép script tiếp tục chạy để thu thập tất cả các lỗi trong một lần thực thi, giúp cái nhìn tổng thể về hệ thống tốt hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi báo cáo kết quả Automation cho các cấp quản lý (Stakeholders), chỉ số (Metric) nào phản ánh chính xác nhất giá trị thực tế của bộ suite?",
+    "options": [
+      "A. Tổng số lượng test case đã được tự động hóa.",
+      "B. Tỷ lệ phần trăm code coverage của các script automation.",
+      "C. Số lượng lỗi nghiêm trọng (Critical Bugs) được phát hiện sớm bởi Automation.",
+      "D. Số dòng code (LOC) của framework đã được viết."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giá trị cuối cùng của Automation không nằm ở số lượng script mà nằm ở khả năng phát hiện lỗi sớm (Defect Detection), giúp giảm thiểu rủi ro và chi phí sửa lỗi cho doanh nghiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống có kiến trúc Microservices phức tạp. Bạn nên cấu hình Automation Test chạy trên môi trường nào để cân bằng giữa độ tin cậy và tốc độ?",
+    "options": [
+      "A. Môi trường Production để đảm bảo dữ liệu thực tế nhất.",
+      "B. Môi trường Local của Tester để dễ dàng debug.",
+      "C. Các môi trường ảo hóa/container hóa (như Docker) được khởi tạo và hủy bỏ theo yêu cầu.",
+      "D. Một máy chủ vật lý dùng chung cho toàn bộ đội phát triển."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng Containerization đảm bảo môi trường kiểm thử luôn sạch (Clean Slate), nhất quán và có thể mở rộng nhanh chóng, giải quyết vấn đề 'môi trường không ổn định'.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Selenium, sự khác biệt cốt lõi giữa `implicit wait` và `explicit wait` dẫn đến khuyến nghị không nên dùng chung chúng là gì?",
+    "options": [
+      "A. `implicit wait` chạy trên Client-side còn `explicit wait` chạy trên Server-side.",
+      "B. Việc kết hợp có thể gây ra thời gian chờ không xác định do xung đột logic giữa trình điều khiển và trình duyệt.",
+      "C. `implicit wait` chỉ dành cho mobile còn `explicit wait` dành cho web.",
+      "D. `explicit wait` không thể sử dụng với XPath."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kết hợp cả hai loại wait có thể dẫn đến các khoảng thời gian chờ đợi cộng dồn ngoài ý muốn, làm chậm script và gây ra các lỗi timeout khó hiểu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi viết script cho một ứng dụng Single Page Application (SPA), thách thức lớn nhất đối với Automation Tester là gì?",
+    "options": [
+      "A. SPA không có các thẻ HTML tiêu chuẩn.",
+      "B. Việc chuyển trang không làm tải lại trang (page reload), đòi hỏi cơ chế chờ đợi thay đổi trạng thái DOM phức tạp.",
+      "C. SPA chỉ chạy được trên trình duyệt Chrome.",
+      "D. Không thể sử dụng CSS Selector cho các ứng dụng SPA."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vì SPA thay đổi nội dung động mà không tải lại trang, các framework automation cần có cơ chế xử lý bất đồng bộ (Asynchronous) cực tốt để biết khi nào một hành động đã hoàn tất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn được yêu cầu tự động hóa một quy trình nghiệp vụ yêu cầu OTP qua SMS. Giải pháp nào là chuyên nghiệp nhất cho Automation?",
+    "options": [
+      "A. Dừng script và yêu cầu tester nhập OTP thủ công từ điện thoại.",
+      "B. Sử dụng các dịch vụ ảo hóa SMS (như Twilio API) để nhận và đọc mã OTP tự động.",
+      "C. Yêu cầu Developer tắt tính năng OTP trên môi trường Testing.",
+      "D. Cố định một mã OTP duy nhất (Hardcoded) cho tất cả các tài khoản test trên môi trường Dev."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng API của bên thứ ba để xử lý OTP đảm bảo luồng kiểm thử hoàn toàn tự động (End-to-End) mà vẫn giữ được tính bảo mật và logic của ứng dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong thiết kế Framework theo hướng 'Keyword-Driven', thành phần 'Keyword Interpreter' đóng vai trò gì?",
+    "options": [
+      "A. Lưu trữ các thông tin đăng nhập vào hệ thống.",
+      "B. Đọc các từ khóa từ file ngoại vi và ánh xạ chúng tới các hàm xử lý tương ứng trong code.",
+      "C. Tự động sinh ra các báo cáo kiểm thử dưới dạng PDF.",
+      "D. Kiểm tra lỗi cú pháp của ngôn ngữ lập trình Java/Python."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Interpreter là bộ não của Keyword-Driven framework, giúp chuyển đổi các mô tả nghiệp vụ (keywords) thành các hành động kỹ thuật thực tế trên ứng dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện bảo trì (Maintenance) một bộ suite lớn, việc phát hiện nhiều script bị hỏng do thay đổi cấu trúc CSS chung của hệ thống cho thấy thiếu sót gì trong thiết kế?",
+    "options": [
+      "A. Do không sử dụng đủ số lượng Assertions.",
+      "B. Do vi phạm nguyên tắc DRY (Don't Repeat Yourself) và không đóng gói Locators tập trung.",
+      "C. Do tốc độ mạng của môi trường test quá chậm.",
+      "D. Do ngôn ngữ lập trình được chọn không còn phù hợp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu Locators được rải rác khắp nơi trong code thay vì được quản lý tập trung (như trong POM), một thay đổi nhỏ ở UI sẽ dẫn đến việc phải sửa đổi hàng loạt script, gây tốn kém chi phí bảo trì.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'Headless Browser' trong Automation Testing là gì?",
+    "options": [
+      "A. Giúp tester quan sát được các bước thực hiện của script dễ dàng hơn.",
+      "B. Cải thiện hiệu suất thực thi và tiết kiệm tài nguyên phần cứng (CPU/RAM) trên các máy chủ CI.",
+      "C. Đảm bảo script chạy ổn định hơn so với trình duyệt có giao diện.",
+      "D. Hỗ trợ tốt hơn cho việc kiểm thử các tính năng liên quan đến đồ họa 3D."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Headless Browser không cần render UI ra màn hình, giúp giảm đáng kể lượng tài nguyên tiêu thụ, rất phù hợp cho việc chạy số lượng lớn test case trên môi trường Server/Docker.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một kịch bản Automation thất bại do 'ElementNotInteractableException' mặc dù phần tử đó đã tồn tại trong DOM. Nguyên nhân sâu xa thường là gì?",
+    "options": [
+      "A. Phần tử đó bị che khuất bởi một overlay khác hoặc nằm ngoài vùng nhìn thấy (Viewport).",
+      "B. Do sai cú pháp XPath hoặc CSS Selector.",
+      "C. Do trình duyệt không hỗ trợ phiên bản WebDriver hiện tại.",
+      "D. Do biến môi trường JAVA_HOME chưa được cấu hình đúng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Exception này xảy ra khi phần tử có trong DOM nhưng không ở trạng thái có thể tương tác (ví dụ: bị ẩn, bị che bởi loading spinner, hoặc cần phải scroll tới mới thấy).",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong chiến lược 'Shift Left', Automation Testing đóng vai trò như thế nào?",
+    "options": [
+      "A. Chạy các bài kiểm thử tự động sau khi sản phẩm đã được release cho khách hàng.",
+      "B. Thực hiện Automation sớm ngay từ các tầng Unit và Integration để phát hiện lỗi ngay trong quá trình phát triển.",
+      "C. Chuyển toàn bộ công việc viết script cho đội ngũ Developer thực hiện.",
+      "D. Chỉ tập trung vào việc kiểm thử các yêu cầu phi chức năng (Non-functional)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Shift Left hướng tới việc đưa kiểm thử vào sớm hơn trong vòng đời phát triển (SDLC). Automation giúp thực hiện điều này thông qua CI/CD và các bộ test ở tầng thấp (Unit/API).",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống Logging cho Automation Framework, thông tin nào là quan trọng nhất để giúp Developer khắc phục lỗi nhanh chóng?",
+    "options": [
+      "A. Thời gian bắt đầu và kết thúc của toàn bộ suite.",
+      "B. Tên của người đã viết kịch bản kiểm thử đó.",
+      "C. Trạng thái của hệ thống (System State), Snapshot của DOM và Stack Trace tại thời điểm lỗi.",
+      "D. Tổng số dòng code của framework."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để debug hiệu quả, thông tin tại thời điểm xảy ra lỗi (context) là quan trọng nhất, bao gồm cả log của ứng dụng và log của script kiểm thử.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Thread.sleep()' được coi là một Anti-pattern trong Automation Testing chuyên nghiệp?",
+    "options": [
+      "A. Vì nó làm cho code trở nên khó đọc hơn đối với người mới.",
+      "B. Vì nó tạo ra sự lãng phí thời gian cố định không cần thiết và không xử lý được các biến động thực tế của ứng dụng.",
+      "C. Vì nó làm tăng nguy cơ gây tràn bộ nhớ (Memory Leak) cho máy tính chạy test.",
+      "D. Vì hầu hết các ngôn ngữ lập trình hiện đại đã loại bỏ hàm này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thread.sleep() là một 'Static Wait'. Nếu ứng dụng xong sớm, nó vẫn phải chờ hết thời gian; nếu ứng dụng xong muộn hơn, test vẫn fail. Nó làm bộ suite chạy chậm và thiếu ổn định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần xây dựng một bộ Automation suite có khả năng chạy trên cả Web, Android và iOS. Kiến trúc nào là tối ưu nhất để tái sử dụng code?",
+    "options": [
+      "A. Viết 3 bộ code riêng biệt cho 3 nền tảng để đảm bảo tính chính xác.",
+      "B. Sử dụng mô hình lớp trừu tượng (Abstraction Layer) để đóng gói các hành động chung và chỉ triển khai chi tiết cho từng platform.",
+      "C. Chỉ sử dụng các công cụ dựa trên hình ảnh (Image Recognition) để nhận diện phần tử.",
+      "D. Ép buộc các nền tảng di động phải sử dụng giao diện Web (Mobile Web) để test."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiết kế framework với các lớp Abstraction cho phép chia sẻ logic nghiệp vụ (Test Logic) giữa các nền tảng, chỉ cần thay đổi tầng Driver/Implementation cho từng loại thiết bị.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong phân tích rủi ro Automation, việc 'Over-automation' (tự động hóa quá mức) dẫn đến hậu quả tiêu cực nào lớn nhất?",
+    "options": [
+      "A. Làm cho đội ngũ Tester trở nên lười biếng hơn.",
+      "B. Tăng chi phí bảo trì vượt quá giá trị mà việc kiểm thử mang lại.",
+      "C. Khiến cho ứng dụng chạy chậm hơn trên môi trường Production.",
+      "D. Làm giảm số lượng lỗi được tìm thấy bởi khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mọi script automation đều có chi phí bảo trì. Nếu tự động hóa những thứ quá nhỏ, hay thay đổi hoặc ít giá trị, chi phí duy trì chúng sẽ sớm vượt qua lợi ích thu được, gây lãng phí nguồn lực doanh nghiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Automation Testing Basics",
+    "category": "ANALYSIS"
+  }
+]

@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục tiêu chính của kiểm thử phần mềm (Software Testing) là gì?",
+    "options": [
+      "A. Chứng minh rằng phần mềm không còn bất kỳ lỗi nào.",
+      "B. Tìm ra lỗi và cung cấp thông tin về chất lượng sản phẩm.",
+      "C. Thay thế hoàn toàn quy trình đảm bảo chất lượng (QA).",
+      "D. Chỉnh sửa mã nguồn ngay khi phát hiện ra sai sót."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử không thể chứng minh phần mềm hết lỗi 100%, mà mục tiêu là tìm ra càng nhiều lỗi càng tốt để đánh giá chất lượng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa Quality Assurance (QA) và Quality Control (QC) là gì?",
+    "options": [
+      "A. QA tập trung vào quy trình, QC tập trung vào sản phẩm.",
+      "B. QA tập trung vào sản phẩm, QC tập trung vào quy trình.",
+      "C. QA là việc tìm lỗi, QC là việc ngăn ngừa lỗi.",
+      "D. QA và QC hoàn toàn giống nhau về mục tiêu và hành động."
+    ],
+    "correctAnswer": "A",
+    "explanation": "QA hướng tới cải thiện quy trình để ngăn ngừa lỗi, trong khi QC hướng tới việc kiểm tra sản phẩm cụ thể để tìm lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nguyên tắc 'Pesticide Paradox' (Nghịch lý thuốc trừ sâu) trong kiểm thử có nghĩa là gì?",
+    "options": [
+      "A. Càng dùng nhiều công cụ tự động thì càng ít lỗi.",
+      "B. Nếu lặp lại cùng một bộ test case nhiều lần, chúng sẽ không tìm thêm được lỗi mới.",
+      "C. Kiểm thử càng muộn thì chi phí sửa lỗi càng cao.",
+      "D. Một module nhỏ thường chứa phần lớn các lỗi của hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để tìm lỗi mới, Tester cần cập nhật và thay đổi các kịch bản kiểm thử thường xuyên.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hoạt động nào dưới đây thuộc về 'Verification' (Xác minh)?",
+    "options": [
+      "A. Chạy phần mềm để kiểm tra tính năng đăng nhập.",
+      "B. Kiểm tra tài liệu thiết kế hệ thống trước khi code.",
+      "C. Thực hiện kiểm thử chấp nhận người dùng (UAT).",
+      "D. Thao tác trên giao diện để kiểm tra tốc độ phản hồi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Verification tập trung vào việc kiểm tra tài liệu và quy trình (tĩnh) để đảm bảo chúng ta đang xây dựng sản phẩm đúng cách.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Câu hỏi nào mô tả đúng nhất về 'Validation' (Xác nhận)?",
+    "options": [
+      "A. Chúng ta có đang xây dựng hệ thống đúng cách không?",
+      "B. Chúng ta có đang xây dựng đúng hệ thống mà khách hàng cần không?",
+      "C. Quy trình phát triển có tuân thủ tiêu chuẩn ISO không?",
+      "D. Mã nguồn có được viết đúng quy chuẩn coding không?"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Validation kiểm tra xem sản phẩm cuối cùng có đáp ứng được nhu cầu và mong đợi của người dùng hay không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quy trình STLC (Software Testing Life Cycle), bước nào nên được thực hiện đầu tiên?",
+    "options": [
+      "A. Test Design (Thiết kế kịch bản).",
+      "B. Test Execution (Thực thi kiểm thử).",
+      "C. Requirement Analysis (Phân tích yêu cầu).",
+      "D. Environment Setup (Thiết lập môi trường)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tester cần hiểu rõ yêu cầu nghiệp vụ trước khi lập kế hoạch hay thiết kế kịch bản kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mức độ kiểm thử nào tập trung vào việc kiểm tra sự tương tác giữa các module phần mềm?",
+    "options": [
+      "A. Unit Testing.",
+      "B. Integration Testing.",
+      "C. System Testing.",
+      "D. Acceptance Testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Integration Testing (Kiểm thử tích hợp) nhằm phát hiện lỗi xảy ra khi các module kết nối và làm việc với nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ai là người thường thực hiện Unit Testing (Kiểm thử đơn vị)?",
+    "options": [
+      "A. Kiểm thử viên (Tester).",
+      "B. Lập trình viên (Developer).",
+      "C. Khách hàng (Client).",
+      "D. Quản trị dự án (PM)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Unit Testing thường do lập trình viên thực hiện ngay trên mã nguồn để kiểm tra các hàm hoặc lớp nhỏ nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kiểm thử hồi quy (Regression Testing) được thực hiện khi nào?",
+    "options": [
+      "A. Khi bắt đầu dự án để xác định rủi ro.",
+      "B. Sau khi có sự thay đổi trong code hoặc sửa lỗi để đảm bảo các tính năng cũ vẫn chạy tốt.",
+      "C. Chỉ thực hiện một lần duy nhất trước khi bàn giao sản phẩm.",
+      "D. Khi khách hàng yêu cầu thêm tính năng mới chưa có trong thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mục đích của Regression Testing là đảm bảo các thay đổi mới không làm hỏng các chức năng hiện có.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Loại kiểm thử nào dưới đây thuộc nhóm 'Non-functional Testing' (Kiểm thử phi chức năng)?",
+    "options": [
+      "A. Kiểm thử tính năng thanh toán bằng thẻ tín dụng.",
+      "B. Kiểm thử khả năng chịu tải của hệ thống khi có 10,000 người dùng.",
+      "C. Kiểm thử chức năng tìm kiếm sản phẩm theo tên.",
+      "D. Kiểm thử luồng đăng ký tài khoản mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử phi chức năng tập trung vào các đặc tính như hiệu năng, bảo mật, độ tin cậy thay vì hành vi nghiệp vụ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong báo cáo lỗi (Bug Report), trường 'Severity' (Mức độ nghiêm trọng) thể hiện điều gì?",
+    "options": [
+      "A. Thứ tự ưu tiên cần sửa lỗi sớm hay muộn.",
+      "B. Tác động của lỗi đối với hoạt động của hệ thống.",
+      "C. Thời gian cần thiết để lập trình viên sửa xong lỗi.",
+      "D. Số lượng người dùng sẽ gặp phải lỗi này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Severity đánh giá mức độ ảnh hưởng kỹ thuật của lỗi (ví dụ: gây sập hệ thống hay chỉ là lỗi chính tả).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trạng thái nào của Bug cho biết lỗi đã được Developer sửa xong và đang chờ Tester kiểm tra lại?",
+    "options": [
+      "A. New.",
+      "B. In Progress.",
+      "C. Resolved / Fixed.",
+      "D. Closed."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi Developer sửa xong, họ chuyển trạng thái sang Resolved hoặc Fixed để báo cho Tester thực hiện Re-test.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thế nào là 'Black-box Testing' (Kiểm thử hộp đen)?",
+    "options": [
+      "A. Kiểm thử dựa trên cấu trúc mã nguồn bên trong.",
+      "B. Kiểm thử mà không cần biết cấu trúc code, chỉ dựa trên yêu cầu và chức năng.",
+      "C. Kiểm thử bằng cách đọc các câu lệnh SQL trong database.",
+      "D. Kiểm thử các kết nối API giữa các server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tester chỉ quan tâm đến đầu vào (input) và đầu ra (output) mà không cần can thiệp vào logic code bên trong.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích của việc thiết lập 'Exit Criteria' (Tiêu chí kết thúc) là gì?",
+    "options": [
+      "A. Để xác định khi nào một giai đoạn kiểm thử có thể dừng lại.",
+      "B. Để liệt kê các lỗi còn tồn đọng trong hệ thống.",
+      "C. Để biết khi nào lập trình viên bắt đầu viết code.",
+      "D. Để xác định danh sách các thiết bị cần dùng để test."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Exit Criteria giúp đội ngũ kiểm thử biết khi nào mục tiêu kiểm thử đã đạt được để kết thúc chu kỳ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một lỗi được phát hiện bởi người dùng cuối trên môi trường thực tế được gọi là gì?",
+    "options": [
+      "A. Error.",
+      "B. Bug.",
+      "C. Failure.",
+      "D. Defect."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi một khiếm khuyết (bug/defect) trong code được thực thi và gây ra sai lệch trên thực tế, nó được gọi là Failure (Sự thất bại).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc 'Early Testing' (Kiểm thử sớm) lại quan trọng?",
+    "options": [
+      "A. Vì nó giúp Tester có nhiều thời gian nghỉ ngơi hơn ở cuối dự án.",
+      "B. Vì chi phí sửa lỗi ở giai đoạn đầu (yêu cầu) thấp hơn nhiều so với giai đoạn cuối.",
+      "C. Vì nó giúp lập trình viên không cần viết Unit Test.",
+      "D. Vì nó đảm bảo phần mềm sẽ không bao giờ phát sinh lỗi sau này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phát hiện lỗi từ khâu phân tích yêu cầu giúp tránh được việc xây dựng sai hệ thống, tiết kiệm chi phí sửa chữa.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Thành phần nào KHÔNG thể thiếu trong một Test Case cơ bản?",
+    "options": [
+      "A. Tên của lập trình viên viết tính năng đó.",
+      "B. Các bước thực hiện (Steps).",
+      "C. Kết quả mong đợi (Expected Result).",
+      "D. Điều kiện tiền đề (Pre-condition)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tên lập trình viên không phải là yếu tố kỹ thuật bắt buộc để thực thi một test case.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kiểm thử dựa trên rủi ro (Risk-based testing) giúp chúng ta điều gì?",
+    "options": [
+      "A. Loại bỏ hoàn toàn mọi rủi ro của dự án.",
+      "B. Ưu tiên kiểm thử các tính năng quan trọng hoặc có khả năng lỗi cao trước.",
+      "C. Giảm bớt số lượng Tester cần thiết trong dự án.",
+      "D. Bỏ qua các bước viết test case để tiết kiệm thời gian."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi thời gian có hạn, chúng ta tập trung vào những phần có rủi ro cao nhất để đảm bảo an toàn cho hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt giữa Re-testing và Regression Testing là gì?",
+    "options": [
+      "A. Re-testing là kiểm tra lại lỗi đã sửa; Regression là kiểm tra các phần khác không liên quan.",
+      "B. Re-testing là kiểm tra tính năng mới; Regression là kiểm tra lỗi cũ.",
+      "C. Re-testing do Developer làm; Regression do Tester làm.",
+      "D. Không có sự khác biệt, hai thuật ngữ này là một."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Re-testing tập trung xác nhận lỗi cụ thể đã được fix chưa. Regression đảm bảo việc fix đó không gây tác động xấu đến các phần khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình V-model, giai đoạn 'Acceptance Testing' tương ứng với giai đoạn nào?",
+    "options": [
+      "A. Detailed Design.",
+      "B. System Design.",
+      "C. Requirements Analysis.",
+      "D. Coding."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kiểm thử chấp nhận dựa trên các yêu cầu nghiệp vụ ban đầu được thu thập từ khách hàng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điều gì xảy ra nếu một Bug có 'High Priority' nhưng 'Low Severity'?",
+    "options": [
+      "A. Lỗi làm sập hệ thống nhưng không cần sửa ngay.",
+      "B. Lỗi nhỏ (như sai logo công ty) nhưng cần sửa ngay lập tức vì ảnh hưởng thương hiệu.",
+      "C. Lỗi không thể tái hiện được trên môi trường test.",
+      "D. Lỗi chỉ xuất hiện trên các trình duyệt cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Priority (Ưu tiên) thể hiện sự khẩn cấp về mặt kinh doanh, trong khi Severity (Nghiêm trọng) thể hiện mức độ hỏng hóc kỹ thuật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Hoạt động 'Static Testing' (Kiểm thử tĩnh) bao gồm những gì?",
+    "options": [
+      "A. Chạy các kịch bản kiểm thử tự động.",
+      "B. Kiểm tra hiệu năng của database.",
+      "C. Review tài liệu, kiểm tra mã nguồn mà không cần thực thi chương trình.",
+      "D. Thực hiện thao tác click trên màn hình cảm ứng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Static Testing là việc kiểm tra các sản phẩm bàn giao (tài liệu, code) bằng cách đọc và phân tích thay vì chạy phần mềm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục tiêu của 'Defect Prevention' (Ngăn ngừa lỗi) là gì?",
+    "options": [
+      "A. Tìm ra càng nhiều lỗi càng tốt sau khi code xong.",
+      "B. Cải thiện quy trình và học hỏi từ lỗi cũ để lỗi không lặp lại.",
+      "C. Phạt các lập trình viên viết code có nhiều lỗi.",
+      "D. Chỉ cho phép khách hàng sử dụng các tính năng đã test kỹ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ngăn ngừa lỗi là một tư duy QA, tập trung vào việc loại bỏ nguyên nhân gốc rễ của lỗi ngay từ quy trình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào chúng ta có thể dừng việc kiểm thử?",
+    "options": [
+      "A. Khi không còn tìm thấy lỗi nào nữa.",
+      "B. Khi hết thời gian hoặc đã thỏa mãn các tiêu chí dừng (Exit Criteria) đã định.",
+      "C. Khi lập trình viên khẳng định code đã hoàn hảo.",
+      "D. Khi đã chạy xong tất cả các test case ít nhất một lần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc dừng kiểm thử phụ thuộc vào kế hoạch, ngân sách, thời gian và các chỉ số chất lượng đã thống nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một lỗi (Bug) được coi là 'False Positive' khi nào?",
+    "options": [
+      "A. Khi Tester báo lỗi nhưng thực tế phần mềm hoạt động đúng theo yêu cầu.",
+      "B. Khi Tester bỏ sót một lỗi nghiêm trọng trong hệ thống.",
+      "C. Khi lỗi chỉ xuất hiện trên máy của Tester mà không có trên máy Developer.",
+      "D. Khi lỗi đã được sửa nhưng vẫn xuất hiện lại sau đó."
+    ],
+    "correctAnswer": "A",
+    "explanation": "False Positive là trường hợp kết quả kiểm thử báo có lỗi nhưng thực tế đó không phải là lỗi (thường do hiểu sai yêu cầu hoặc dữ liệu test sai).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình Agile, hoạt động kiểm thử nên bắt đầu từ khi nào để tối ưu hóa chi phí và ngăn ngừa lỗi sớm?",
+    "options": [
+      "A. Ngay từ khi bắt đầu dự án và song song với việc thu thập yêu cầu.",
+      "B. Sau khi các lập trình viên đã hoàn thành việc viết code cho Sprint đó.",
+      "C. Khi sản phẩm đã có bản demo ổn định để QA có thể thao tác.",
+      "D. Sau khi giai đoạn thiết kế hệ thống được phê duyệt hoàn toàn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nguyên tắc 'Early Testing' giúp phát hiện lỗi từ giai đoạn yêu cầu, giảm thiểu chi phí sửa lỗi so với việc phát hiện muộn ở các giai đoạn sau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi dự án bị giới hạn về thời gian nhưng số lượng Test Case quá lớn, chiến lược nào là hợp lý nhất?",
+    "options": [
+      "A. Chỉ thực hiện kiểm thử các tính năng mới và bỏ qua các tính năng cũ.",
+      "B. Sử dụng Risk-based Testing để ưu tiên các kịch bản có rủi ro và tác động cao.",
+      "C. Chạy tất cả các Test Case nhưng chỉ kiểm tra các lỗi nghiêm trọng (Critical).",
+      "D. Yêu cầu lập trình viên tự kiểm thử để QA tập trung vào báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử dựa trên rủi ro (Risk-based Testing) giúp tối ưu hóa nguồn lực bằng cách tập trung vào những phần quan trọng nhất của hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hoạt động 'Review tài liệu đặc tả yêu cầu' được phân loại vào nhóm nào dưới đây?",
+    "options": [
+      "A. Dynamic Testing (Kiểm thử động).",
+      "B. Validation (Xác nhận sản phẩm).",
+      "C. Verification (Xác minh quy trình).",
+      "D. Black-box Testing (Kiểm thử hộp đen)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Verification tập trung vào việc kiểm tra xem sản phẩm có được xây dựng đúng theo quy trình và đặc tả hay không thông qua các hoạt động tĩnh như Review.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Retesting và Regression Testing là gì?",
+    "options": [
+      "A. Retesting kiểm tra các lỗi đã sửa; Regression Testing kiểm tra xem thay đổi có làm hỏng các tính năng cũ không.",
+      "B. Retesting do Developer thực hiện; Regression Testing do QA thực hiện.",
+      "C. Retesting là kiểm thử tự động; Regression Testing là kiểm thử thủ công.",
+      "D. Retesting chỉ thực hiện một lần; Regression Testing phải thực hiện hàng ngày."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Retesting xác nhận lỗi cụ thể đã được khắc phục, trong khi Regression Testing đảm bảo tính ổn định của toàn bộ hệ thống sau khi có thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tiêu chí nào thường được sử dụng làm 'Exit Criteria' để kết thúc một giai đoạn kiểm thử?",
+    "options": [
+      "A. Khi đã hết thời gian dự kiến trong kế hoạch ban đầu.",
+      "B. Khi tất cả các Test Case đã được thực thi và không còn lỗi nghiêm trọng nào mở.",
+      "C. Khi khách hàng yêu cầu ngừng kiểm thử để kịp ngày ra mắt.",
+      "D. Khi lập trình viên khẳng định rằng họ đã sửa hết các lỗi được tìm thấy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Exit Criteria thường dựa trên độ bao phủ (coverage) và tình trạng lỗi (defect status) để đảm bảo chất lượng đạt ngưỡng chấp nhận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kỹ thuật Phân tích giá trị biên (Boundary Value Analysis), nếu một trường nhập liệu chấp nhận giá trị từ 1 đến 100, các giá trị nào cần được kiểm thử?",
+    "options": [
+      "A. 1, 50, 100.",
+      "B. 0, 1, 2, 99, 100, 101.",
+      "C. -1, 1, 100, 1000.",
+      "D. 1, 2, 100, 101."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giá trị biên bao gồm giá trị tại biên, ngay dưới biên và ngay trên biên (n-1, n, n+1) để phát hiện lỗi sai lệch đơn vị.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện 'Impact Analysis' (Phân tích tác động) lại quan trọng trước khi thực hiện Regression Testing?",
+    "options": [
+      "A. Để xác định các khu vực bị ảnh hưởng bởi thay đổi, từ đó chọn lọc Test Case phù hợp.",
+      "B. Để tính toán tổng số lỗi mà lập trình viên đã tạo ra trong phiên bản mới.",
+      "C. Để thay thế hoàn toàn việc thực hiện Unit Test của lập trình viên.",
+      "D. Để chứng minh rằng hệ thống không cần phải kiểm thử lại các tính năng cũ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phân tích tác động giúp QA tập trung vào các vùng rủi ro nhất bị ảnh hưởng bởi code mới, tối ưu hóa thời gian kiểm thử hồi quy.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Nguyên tắc 'Pesticide Paradox' (Nghịch lý thuốc trừ sâu) trong kiểm thử phần mềm ngụ ý điều gì?",
+    "options": [
+      "A. Càng nhiều lỗi được tìm thấy thì càng có nhiều lỗi tiềm ẩn trong module đó.",
+      "B. Nếu lặp đi lặp lại cùng một bộ Test Case, chúng sẽ không tìm thêm được lỗi mới.",
+      "C. Kiểm thử càng sớm thì chi phí khắc phục lỗi càng rẻ.",
+      "D. Không thể kiểm thử hết tất cả các trường hợp có thể xảy ra."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nghịch lý này yêu cầu QA phải thường xuyên cập nhật và thay đổi kịch bản kiểm thử để phát hiện các lỗi mới nảy sinh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một lỗi (Defect) được phát hiện bởi QA nhưng Developer không thể tái hiện (Cannot Reproduce). QA nên làm gì tiếp theo?",
+    "options": [
+      "A. Đóng lỗi ngay lập tức để tránh làm mất thời gian của dự án.",
+      "B. Yêu cầu Developer tự tìm cách tái hiện mà không cung cấp thêm thông tin.",
+      "C. Cung cấp thêm log, video, dữ liệu kiểm thử và kiểm tra lại môi trường thực thi.",
+      "D. Tranh cãi với Developer cho đến khi họ chấp nhận đó là lỗi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "QA cần cung cấp đầy đủ bằng chứng và kiểm soát biến số môi trường để giúp Developer xác định nguyên nhân gốc rễ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục tiêu chính của Kiểm thử hệ thống (System Testing) là gì?",
+    "options": [
+      "A. Kiểm tra sự tương tác giữa các module riêng lẻ.",
+      "B. Kiểm tra mã nguồn để đảm bảo tuân thủ tiêu chuẩn lập trình.",
+      "C. Đánh giá toàn bộ hệ thống dựa trên các yêu cầu chức năng và phi chức năng.",
+      "D. Đảm bảo người dùng cuối cảm thấy hài lòng với giao diện sản phẩm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "System Testing kiểm tra hệ thống tích hợp hoàn chỉnh để xác minh xem nó có đáp ứng các yêu cầu đặc tả ban đầu hay không.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử cho một ứng dụng ngân hàng, yếu tố rủi ro nào sau đây nên được ưu tiên cao nhất?",
+    "options": [
+      "A. Giao diện người dùng không đồng nhất về màu sắc.",
+      "B. Thời gian phản hồi của trang giới thiệu chậm hơn 1 giây.",
+      "C. Sai sót trong tính toán lãi suất hoặc bảo mật giao dịch.",
+      "D. Một số liên kết mạng xã hội ở chân trang bị hỏng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong lĩnh vực tài chính, tính chính xác của dữ liệu và bảo mật là rủi ro trọng yếu ảnh hưởng trực tiếp đến doanh nghiệp và người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Hoạt động nào dưới đây thuộc về 'Defect Prevention' (Ngăn ngừa lỗi)?",
+    "options": [
+      "A. Chạy bộ Regression Test định kỳ mỗi tuần.",
+      "B. Tổ chức buổi 'Requirement Clarification' giữa QA, Dev và BA.",
+      "C. Thực hiện Exploratory Testing sau khi release.",
+      "D. Phân tích biểu đồ mật độ lỗi sau khi kết thúc dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Làm rõ yêu cầu từ sớm giúp mọi bên hiểu đúng, từ đó tránh việc lập trình sai hoặc thiết kế sai ngay từ đầu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt giữa 'Validation' và 'Verification' có thể được tóm tắt như thế nào?",
+    "options": [
+      "A. Validation là 'Are we building the right product?'; Verification là 'Are we building it right?'.",
+      "B. Validation là kiểm thử tĩnh; Verification là kiểm thử động.",
+      "C. Validation do khách hàng làm; Verification do QA làm.",
+      "D. Validation kiểm tra tài liệu; Verification kiểm tra code."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Verification đảm bảo sản phẩm tuân thủ thiết kế/quy trình, còn Validation đảm bảo sản phẩm thực sự đáp ứng nhu cầu khách hàng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quy trình STLC, việc tạo 'Test Data' thường diễn ra ở giai đoạn nào?",
+    "options": [
+      "A. Test Planning.",
+      "B. Test Analysis.",
+      "C. Test Design.",
+      "D. Test Closure."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giai đoạn Test Design bao gồm việc viết Test Case và chuẩn bị các dữ liệu cần thiết để thực thi các kịch bản đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc duy trì 'Requirement Traceability Matrix' (RTM) lại cần thiết cho một QA chuyên nghiệp?",
+    "options": [
+      "A. Để theo dõi xem lập trình viên nào viết code cho tính năng nào.",
+      "B. Để đảm bảo mọi yêu cầu đều có ít nhất một Test Case tương ứng và ngược lại.",
+      "C. Để thay thế cho tài liệu Test Plan trong các dự án nhỏ.",
+      "D. Để tính toán lương thưởng dựa trên số lượng yêu cầu đã kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "RTM giúp đảm bảo độ bao phủ kiểm thử (Test Coverage) và giúp phân tích tác động khi yêu cầu thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Loại kiểm thử nào tập trung vào việc đánh giá các đặc tính như độ tin cậy (reliability) và khả năng bảo trì (maintainability)?",
+    "options": [
+      "A. Functional Testing (Kiểm thử chức năng).",
+      "B. Non-functional Testing (Kiểm thử phi chức năng).",
+      "C. Structural Testing (Kiểm thử cấu trúc).",
+      "D. Change-related Testing (Kiểm thử liên quan đến thay đổi)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử phi chức năng tập trung vào 'cách thức' hệ thống hoạt động (hiệu năng, bảo mật, độ tin cậy) thay vì 'hệ thống làm gì'.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào thì 'Exploratory Testing' (Kiểm thử thăm dò) mang lại giá trị cao nhất?",
+    "options": [
+      "A. Khi dự án có tài liệu đặc tả cực kỳ chi tiết và đầy đủ.",
+      "B. Khi cần thực hiện kiểm thử tự động cho toàn bộ hệ thống.",
+      "C. Khi thời gian hạn hẹp hoặc tài liệu thiếu, cần tìm lỗi dựa trên kinh nghiệm.",
+      "D. Khi muốn thay thế hoàn toàn các kịch bản kiểm thử có sẵn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Exploratory Testing tận dụng tư duy sáng tạo và kinh nghiệm của QA để tìm ra lỗi mà các Test Case định sẵn có thể bỏ lỡ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục đích của việc thiết lập 'Entry Criteria' cho giai đoạn Test Execution là gì?",
+    "options": [
+      "A. Để xác định khi nào thì nên dừng việc kiểm thử.",
+      "B. Để đảm bảo môi trường, dữ liệu và code đã sẵn sàng để kiểm thử hiệu quả.",
+      "C. Để báo cáo cho khách hàng về số lượng lỗi đã tìm thấy.",
+      "D. Để phân chia công việc cho các thành viên trong team QA."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Entry Criteria giúp ngăn chặn việc lãng phí thời gian khi bắt đầu kiểm thử trên một môi trường chưa ổn định hoặc thiếu dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình V-model, kiểm thử chấp nhận (Acceptance Testing) thường được đối chiếu trực tiếp với tài liệu nào?",
+    "options": [
+      "A. Tài liệu thiết kế chi tiết (Low-level Design).",
+      "B. Tài liệu kiến trúc hệ thống (High-level Design).",
+      "C. Tài liệu đặc tả yêu cầu người dùng (Business Requirements).",
+      "D. Mã nguồn của ứng dụng (Source Code)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Acceptance Testing xác nhận hệ thống đáp ứng nhu cầu thực tế của người dùng/doanh nghiệp được nêu trong Business Requirements.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một báo cáo lỗi (Bug Report) chuyên nghiệp CẦN PHẢI có yếu tố nào để hỗ trợ Developer tốt nhất?",
+    "options": [
+      "A. Tên của người đã viết đoạn code gây lỗi.",
+      "B. Các bước tái hiện lỗi (Steps to Reproduce) rõ ràng.",
+      "C. Lời phê bình về chất lượng code của lập trình viên.",
+      "D. Dự đoán về thời gian cần thiết để sửa lỗi đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Steps to Reproduce là thông tin quan trọng nhất giúp Developer hiểu và tái dựng lại lỗi để tìm nguyên nhân.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao 'Independence of Testing' (Sự độc lập của kiểm thử) lại được khuyến khích trong QA?",
+    "options": [
+      "A. Vì lập trình viên không có kỹ năng để tìm lỗi.",
+      "B. Để giảm bớt khối lượng công việc cho đội ngũ phát triển.",
+      "C. Vì người tạo ra sản phẩm thường khó nhận thấy lỗi của chính mình.",
+      "D. Để đảm bảo QA có quyền lực cao hơn Developer trong dự án."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự độc lập giúp mang lại cái nhìn khách quan, không bị ảnh hưởng bởi tư duy khi viết code, từ đó phát hiện lỗi tốt hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một hệ thống có độ phức tạp cao và rủi ro lớn, mức độ độc lập nào của tester là cao nhất?",
+    "options": [
+      "A. Tester chính là người viết code (Unit Test).",
+      "B. Tester thuộc cùng một team với lập trình viên.",
+      "C. Tester thuộc một bộ phận QA độc lập trong công ty.",
+      "D. Tester từ một tổ chức/công ty bên ngoài hoàn toàn."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Tester từ bên ngoài mang lại mức độ độc lập cao nhất vì họ không chịu ảnh hưởng bởi văn hóa hay áp lực nội bộ của team phát triển.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi phát hiện một lỗi nghiêm trọng ngay sát ngày phát hành (Release), hành động nào của QA là chuyên nghiệp nhất?",
+    "options": [
+      "A. Tự ý hoãn ngày phát hành mà không cần thông báo.",
+      "B. Báo cáo ngay lập tức, phân tích rủi ro và cùng Stakeholders đưa ra quyết định.",
+      "C. Giấu lỗi đó đi và đợi đến bản cập nhật sau mới báo cáo.",
+      "D. Sửa trực tiếp code của Developer để kịp tiến độ release."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA có nhiệm vụ cung cấp thông tin về chất lượng và rủi ro, quyết định cuối cùng thuộc về sự đồng thuận của các bên liên quan.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kiểm thử tích hợp (Integration Testing) tập trung chủ yếu vào điều gì?",
+    "options": [
+      "A. Logic xử lý bên trong của từng hàm đơn lẻ.",
+      "B. Giao diện đồ họa người dùng (GUI).",
+      "C. Sự tương tác và truyền dữ liệu giữa các thành phần/module.",
+      "D. Khả năng chịu tải của hệ thống khi có nhiều người dùng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Integration Testing kiểm tra các điểm nối (interfaces) và luồng dữ liệu giữa các phần của hệ thống đã được tích hợp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nguyên tắc 'Exhaustive testing is impossible' có ý nghĩa gì trong thực tế làm việc của QA?",
+    "options": [
+      "A. QA không cần phải kiểm thử quá nhiều vì không bao giờ hết lỗi.",
+      "B. Cần sử dụng các kỹ thuật thiết kế test case và quản lý rủi ro để chọn lọc kịch bản tối ưu.",
+      "C. Chỉ nên kiểm thử những trường hợp thành công (Happy cases).",
+      "D. Lập trình viên phải chịu trách nhiệm hoàn toàn về chất lượng vì QA không thể kiểm tra hết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vì không thể kiểm thử mọi tổ hợp dữ liệu, QA phải dùng kỹ thuật (như phân vùng tương đương) để bao phủ tối đa với số lượng test case tối thiểu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án Agile với tiến độ gấp rút, nhóm phát triển quyết định cắt giảm thời gian kiểm thử hồi quy (Regression Testing). Với vai trò QA Lead, bạn sẽ đề xuất chiến lược nào để tối ưu hóa rủi ro?",
+    "options": [
+      "A. Thực hiện kiểm thử hồi quy toàn bộ nhưng chỉ tập trung vào các lỗi đã phát hiện ở sprint trước.",
+      "B. Áp dụng Risk-based Testing để chọn lọc các test cases dựa trên mức độ ảnh hưởng và xác suất lỗi của các module thay đổi.",
+      "C. Chuyển toàn bộ việc kiểm thử hồi quy cho đội ngũ Automation và chỉ chạy các script có sẵn.",
+      "D. Bỏ qua kiểm thử hồi quy và tập trung hoàn toàn vào việc kiểm thử các tính năng mới (New Feature Testing)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Risk-based Testing (RBT) cho phép tối ưu hóa nguồn lực bằng cách ưu tiên các khu vực có rủi ro cao nhất khi thời gian bị hạn chế, đảm bảo các tính năng quan trọng nhất vẫn được bảo vệ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa 'Defect Detection' và 'Defect Prevention' trong chiến lược QA hiện đại là gì?",
+    "options": [
+      "A. Detection tập trung vào việc tìm lỗi sau khi code đã xong; Prevention tập trung vào việc cải thiện quy trình và review yêu cầu sớm.",
+      "B. Detection là công việc của Tester; Prevention là trách nhiệm duy nhất của Project Manager.",
+      "C. Detection sử dụng Dynamic Testing; Prevention chỉ sử dụng Static Testing như Review và Walkthrough.",
+      "D. Detection đảm bảo phần mềm chạy đúng; Prevention đảm bảo phần mềm không có lỗi bảo mật."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Defect Prevention (Phòng ngừa lỗi) hướng tới việc 'Shift Left', can thiệp vào giai đoạn sớm của SDLC thông qua review và cải tiến quy trình để lỗi không phát sinh, thay vì chỉ tìm lỗi khi sản phẩm đã hình thành.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi áp dụng mô hình 'Testing Pyramid', tại sao số lượng E2E (End-to-End) tests thường được khuyến nghị ở mức thấp nhất?",
+    "options": [
+      "A. Vì E2E tests không thể phát hiện được các lỗi logic nghiệp vụ phức tạp.",
+      "B. Vì E2E tests tốn chi phí bảo trì cao, tốc độ thực thi chậm và dễ bị 'flaky' (kết quả không ổn định).",
+      "C. Vì E2E tests yêu cầu kỹ năng lập trình cao hơn so với Unit tests.",
+      "D. Vì E2E tests chỉ thực hiện được trên môi trường Production."
+    ],
+    "correctAnswer": "B",
+    "explanation": "E2E tests phụ thuộc vào nhiều thành phần hệ thống, dẫn đến việc bảo trì khó khăn và thời gian phản hồi chậm. Việc tập trung vào Unit và Integration tests giúp phát hiện lỗi nhanh và rẻ hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh Microservices, chiến lược 'Contract Testing' giải quyết vấn đề gì mà Integration Testing truyền thống thường gặp khó khăn?",
+    "options": [
+      "A. Kiểm tra hiệu năng của từng service riêng lẻ dưới tải cao.",
+      "B. Đảm bảo tính tương thích giữa các dịch vụ mà không cần khởi chạy toàn bộ hệ thống phức tạp.",
+      "C. Thay thế hoàn toàn việc kiểm thử giao diện người dùng (UI Testing).",
+      "D. Kiểm tra logic nội bộ của một service cụ thể mà không quan tâm đến bên ngoài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Contract Testing xác minh các thỏa thuận (API contract) giữa Consumer và Provider, giúp phát hiện sớm sự không tương thích mà không cần môi trường tích hợp đầy đủ, giảm bớt sự cồng kềnh của Integration Testing.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống có tỷ lệ 'Defect Leakage' (lỗi lọt ra Production) cao mặc dù kết quả Test Report tại môi trường Staging rất tốt. Nguyên nhân sâu xa nào thường bị bỏ qua?",
+    "options": [
+      "A. Tester không có đủ thời gian để thực hiện kiểm thử thủ công.",
+      "B. Sự khác biệt đáng kể về cấu hình, dữ liệu và hành vi người dùng giữa môi trường Staging và Production.",
+      "C. Quy trình báo cáo lỗi (Defect Workflow) chưa được tối ưu hóa.",
+      "D. Các Unit test không đạt độ bao phủ (coverage) 100%."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi lọt ra Production thường do môi trường kiểm thử không mô phỏng đúng thực tế (Environment Discrepancy). Việc tối ưu hóa môi trường và sử dụng dữ liệu thực tế là chìa khóa để giảm thiểu rủi ro này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi xác định 'Exit Criteria' cho một dự án phần mềm tài chính, tiêu chí nào sau đây phản ánh tư duy quản trị chất lượng nâng cao?",
+    "options": [
+      "A. Khi tất cả các test cases đã được thực thi và pass 100%.",
+      "B. Khi hết thời gian dự kiến dành cho giai đoạn Testing.",
+      "C. Khi các rủi ro đã xác định được giảm thiểu xuống mức chấp nhận được và không còn lỗi nghiêm trọng (P0/P1) tồn đọng.",
+      "D. Khi khách hàng ký biên bản nghiệm thu sản phẩm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong thực tế, không bao giờ hết lỗi. Exit Criteria nâng cao dựa trên quản lý rủi ro (Residual Risk) và mức độ nghiêm trọng của lỗi để quyết định sản phẩm đã đủ điều kiện release hay chưa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hiện tượng 'Pesticide Paradox' (Nghịch lý thuốc trừ sâu) trong kiểm thử phần mềm có thể được khắc phục tốt nhất bằng cách nào?",
+    "options": [
+      "A. Chạy lại cùng một bộ test cases nhiều lần để đảm bảo tính ổn định.",
+      "B. Tăng số lượng Tester tham gia vào dự án để tìm thêm lỗi.",
+      "C. Thường xuyên review và cập nhật bộ test cases, bổ sung các kịch bản mới dựa trên thay đổi của hệ thống.",
+      "D. Sử dụng công cụ tự động hóa để chạy test cases nhanh hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nghịch lý thuốc trừ sâu chỉ ra rằng nếu lặp lại cùng một bộ test, chúng sẽ không tìm thấy lỗi mới. Cần phải liên tục cải tiến và đa dạng hóa kịch bản kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quy trình 'Shift Left', QA tham gia vào giai đoạn Requirement Review nhằm mục đích chính là gì?",
+    "options": [
+      "A. Để bắt đầu viết Test Case sớm hơn.",
+      "B. Để hiểu nghiệp vụ nhằm hỗ trợ người dùng cuối (UAT).",
+      "C. Để phát hiện các điểm mâu thuẫn, thiếu sót hoặc không khả thi trong yêu cầu trước khi code được viết.",
+      "D. Để ước lượng thời gian cần thiết cho việc kiểm thử tự động."
+    ],
+    "correctAnswer": "C",
+    "explanation": "QA tham gia sớm để thực hiện Static Testing (Verification), giúp ngăn chặn lỗi từ cấp độ yêu cầu, điều này tiết kiệm chi phí gấp nhiều lần so với việc sửa lỗi ở các giai đoạn sau.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa Validation và Verification trong quản lý chất lượng là gì?",
+    "options": [
+      "A. Verification kiểm tra xem chúng ta có xây dựng sản phẩm đúng không; Validation kiểm tra xem chúng ta có xây dựng đúng sản phẩm không.",
+      "B. Verification do Developer thực hiện; Validation do Tester thực hiện.",
+      "C. Verification tập trung vào giao diện; Validation tập trung vào database.",
+      "D. Verification diễn ra ở cuối dự án; Validation diễn ra ở đầu dự án."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Verification là kiểm tra tính tuân thủ với các đặc tả (specs), còn Validation là xác nhận sản phẩm đáp ứng đúng nhu cầu thực tế của người dùng cuối.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc chỉ dựa vào 'Code Coverage' làm chỉ số đo lường chất lượng kiểm thử duy nhất là một sai lầm?",
+    "options": [
+      "A. Vì Code Coverage không thể đo lường được bằng các công cụ tự động.",
+      "B. Vì Code Coverage cao không đồng nghĩa với việc các kịch bản kiểm thử có giá trị về mặt nghiệp vụ hoặc logic.",
+      "C. Vì Code Coverage chỉ áp dụng cho Unit Testing mà không áp dụng cho System Testing.",
+      "D. Vì Code Coverage làm chậm quá trình CI/CD."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Code Coverage chỉ cho biết dòng code nào được thực thi, không đảm bảo rằng logic nghiệp vụ được kiểm tra đúng đắn hoặc các trường hợp biên đã được bao phủ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện 'Exploratory Testing' trong một dự án phức tạp, yếu tố nào giúp đảm bảo tính chuyên nghiệp và hiệu quả của hoạt động này?",
+    "options": [
+      "A. Thực hiện kiểm thử không cần kế hoạch để tối đa hóa sự sáng tạo.",
+      "B. Sử dụng 'Test Charters' để định hướng mục tiêu và giới hạn phạm vi kiểm thử trong các phiên (sessions).",
+      "C. Chỉ thực hiện khi không còn test cases nào để chạy.",
+      "D. Không cần ghi lại kết quả vì đây là kiểm thử tự phát."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Exploratory Testing chuyên nghiệp (Session-based Testing) yêu cầu có Test Charters để tập trung vào mục tiêu cụ thể, giúp việc kiểm thử có cấu trúc và có thể đo lường được.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong chiến lược kiểm thử cho một hệ thống phân tán (Distributed System), 'Observability' (Khả năng quan sát) đóng vai trò gì?",
+    "options": [
+      "A. Thay thế hoàn toàn cho việc viết Test Cases.",
+      "B. Giúp QA theo dõi hành vi hệ thống thông qua Logs, Metrics và Traces để phát hiện và cô lập lỗi trong môi trường phức tạp.",
+      "C. Là một công cụ để tự động hóa việc báo cáo lỗi cho Developer.",
+      "D. Chỉ được sử dụng bởi đội ngũ Ops để giám sát server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với hệ thống phân tán, việc test hết mọi kịch bản là bất khả thi. Observability cho phép QA hiểu được 'tại sao' một lỗi xảy ra bằng cách phân tích dữ liệu vận hành, hỗ trợ đắc lực cho việc debug và kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang xây dựng bộ test suite cho một ứng dụng có hàng triệu người dùng. Trade-off lớn nhất khi quyết định tăng độ bao phủ của 'UI Automation' là gì?",
+    "options": [
+      "A. Tăng khả năng phát hiện lỗi giao diện nhưng làm giảm sự hài lòng của Tester.",
+      "B. Tăng độ tin cậy của hệ thống nhưng làm tăng chi phí hạ tầng server.",
+      "C. Tăng khả năng hồi quy nhưng làm chậm chu kỳ feedback và tốn nhiều công sức bảo trì do UI thường xuyên thay đổi.",
+      "D. Giảm số lượng lỗi Production nhưng làm tăng thời gian viết tài liệu hướng dẫn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "UI Automation thường chậm và dễ gãy (brittle). Việc lạm dụng nó ở mức độ cao gây ra gánh nặng bảo trì và làm chậm pipeline CI/CD, đi ngược lại mục tiêu phản hồi nhanh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một lỗi nghiêm trọng được tìm thấy trên Production. Hành động đầu tiên của một Senior QA theo tư duy 'Defect Prevention' nên là gì?",
+    "options": [
+      "A. Tìm ra Tester nào đã bỏ sót lỗi này để đào tạo lại.",
+      "B. Thực hiện Root Cause Analysis (RCA) để hiểu tại sao lỗi phát sinh và tại sao quy trình kiểm thử hiện tại không phát hiện được nó.",
+      "C. Viết ngay một automation script để kiểm tra lỗi đó trong tương lai.",
+      "D. Yêu cầu Developer sửa lỗi ngay lập tức mà không cần phân tích thêm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "RCA là công cụ cốt lõi của Defect Prevention, giúp xác định lỗ hổng trong quy trình (process gap) để cải tiến, thay vì chỉ sửa lỗi ngọn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Quality at Source' trong mô hình DevOps có nghĩa là gì đối với đội ngũ QA?",
+    "options": [
+      "A. QA phải là người trực tiếp viết code tính năng cùng với Developer.",
+      "B. Chất lượng là trách nhiệm của toàn đội; QA đóng vai trò hỗ trợ, thiết lập tiêu chuẩn và công cụ để lỗi được phát hiện ngay khi code vừa được viết.",
+      "C. QA chỉ kiểm tra code sau khi nó đã được merge vào nhánh chính.",
+      "D. Developer phải tự thực hiện toàn bộ việc kiểm thử và không cần đội ngũ QA."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quality at Source nhấn mạnh việc tích hợp kiểm thử vào mọi giai đoạn. QA không còn là 'người gác cổng' cuối cùng mà là người thúc đẩy văn hóa chất lượng xuyên suốt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi đối mặt với một hệ thống Legacy không có tài liệu và ít unit tests, chiến lược kiểm thử nào là hiệu quả nhất để bắt đầu cải thiện chất lượng?",
+    "options": [
+      "A. Dành 3 tháng để viết lại toàn bộ tài liệu đặc tả trước khi test.",
+      "B. Áp dụng 'Characterization Testing' để ghi lại hành vi hiện tại của hệ thống và bảo vệ nó khỏi các thay đổi gây lỗi (regressions).",
+      "C. Yêu cầu đập đi xây lại toàn bộ hệ thống bằng công nghệ mới.",
+      "D. Chỉ thực hiện kiểm thử thủ công khi có yêu cầu thay đổi tính năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Characterization Testing giúp xác định hành vi thực tế của hệ thống cũ, tạo ra một 'safety net' (lưới an toàn) để khi thực hiện refactor hoặc thêm tính năng, chúng ta biết mình không làm hỏng những gì đang chạy đúng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiểm thử phi chức năng (Non-functional testing), 'Scalability Testing' khác với 'Load Testing' ở điểm cốt lõi nào?",
+    "options": [
+      "A. Scalability Testing kiểm tra khả năng mở rộng tài nguyên để đáp ứng tải; Load Testing kiểm tra hành vi hệ thống dưới mức tải dự kiến.",
+      "B. Scalability Testing chỉ dành cho Database; Load Testing dành cho Web server.",
+      "C. Scalability Testing là kiểm thử thủ công; Load Testing là kiểm thử tự động.",
+      "D. Không có sự khác biệt, hai thuật ngữ này có thể dùng thay thế cho nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Load Testing tập trung vào hiệu năng tại một điểm tải nhất định. Scalability Testing tập trung vào việc hệ thống có thể 'lớn lên' (về CPU, RAM, Node...) một cách hiệu quả khi nhu cầu tăng lên hay không.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn sẽ xử lý thế nào nếu 'Entry Criteria' cho giai đoạn System Testing chưa đạt (ví dụ: Unit test coverage quá thấp) nhưng Project Manager vẫn yêu cầu bắt đầu test để kịp tiến độ?",
+    "options": [
+      "A. Từ chối kiểm thử tuyệt đối cho đến khi đạt đủ tiêu chuẩn.",
+      "B. Chấp nhận kiểm thử nhưng ghi nhận rủi ro chính thức, cảnh báo về việc tốn thời gian tìm các lỗi vụn vặt và đề xuất kiểm thử có giới hạn.",
+      "C. Làm thêm giờ để bù đắp cho việc thiếu hụt chất lượng từ phía Developer.",
+      "D. Bỏ qua Unit test và tập trung vào kiểm thử giao diện vì đó là cái khách hàng thấy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA cần linh hoạt nhưng phải chuyên nghiệp bằng cách minh bạch hóa rủi ro (Risk Communication). Việc test khi chưa đủ điều kiện thường dẫn đến 'lãng phí' do gặp quá nhiều lỗi cơ bản.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao 'Early Testing' (Kiểm thử sớm) lại giúp tối ưu hóa chi phí dự án?",
+    "options": [
+      "A. Vì Tester có nhiều thời gian nghỉ ngơi hơn ở cuối dự án.",
+      "B. Vì chi phí để sửa một lỗi ở giai đoạn yêu cầu hoặc thiết kế thấp hơn hàng chục lần so với khi sản phẩm đã release.",
+      "C. Vì nó giúp giảm số lượng Developer cần thiết cho dự án.",
+      "D. Vì nó loại bỏ hoàn toàn nhu cầu về kiểm thử hồi quy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là nguyên lý kinh điển của QA. Càng phát hiện lỗi muộn, chi phí sửa chữa, kiểm thử lại và ảnh hưởng đến hệ thống càng lớn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kỹ thuật 'State Transition Testing', yếu tố nào là quan trọng nhất để bao phủ đầy đủ các kịch bản?",
+    "options": [
+      "A. Kiểm tra mọi giá trị đầu vào có thể có của hệ thống.",
+      "B. Đảm bảo tất cả các trạng thái (states), các bước chuyển (transitions) và các đường dẫn không hợp lệ đều được kiểm tra.",
+      "C. Chỉ tập trung vào các trạng thái thành công (Happy Path).",
+      "D. Đảm bảo giao diện người dùng hiển thị đúng màu sắc ở mỗi trạng thái."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để đạt độ bao phủ cao trong State Transition, QA phải kiểm tra không chỉ các bước chuyển hợp lệ mà cả các bước chuyển bị cấm (invalid transitions) để đảm bảo tính toàn vẹn của logic.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một bộ test tự động thường xuyên cho kết quả 'False Positive' (báo lỗi nhưng thực tế không có lỗi). Tác động nguy hiểm nhất của việc này là gì?",
+    "options": [
+      "A. Làm tăng chi phí lưu trữ log trên server.",
+      "B. Gây lãng phí thời gian của Developer khi phải kiểm tra lỗi giả.",
+      "C. Làm xói mòn lòng tin của đội ngũ vào bộ test, dẫn đến việc bỏ qua cả những cảnh báo về lỗi thật (Cry Wolf effect).",
+      "D. Làm cho báo cáo chất lượng trông xấu hơn thực tế."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự tin cậy là yếu tố sống còn của Automation. Khi có quá nhiều lỗi giả, nhóm sẽ có xu hướng lờ đi các kết quả test, khiến bộ test trở nên vô dụng và rủi ro lọt lỗi thật tăng cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử cho một hệ thống ngân hàng yêu cầu tính bảo mật cực cao, QA nên ưu tiên loại hình kiểm thử nào ngay từ giai đoạn thiết kế?",
+    "options": [
+      "A. Penetration Testing trên môi trường Production.",
+      "B. Threat Modeling để xác định các lỗ hổng tiềm tàng trong kiến trúc hệ thống.",
+      "C. UI Testing để đảm bảo người dùng không nhập sai mật khẩu.",
+      "D. Manual Regression Testing cho tất cả các tính năng cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Threat Modeling là một hoạt động kiểm thử tĩnh (Static Testing) ở mức kiến trúc, giúp phát hiện các rủi ro bảo mật trước khi code được viết, phù hợp với tư duy Shift Left.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh Continuous Deployment (CD), vai trò của 'Gatekeeping' truyền thống thay đổi như thế nào?",
+    "options": [
+      "A. QA vẫn giữ quyền quyết định cuối cùng và thực hiện sign-off thủ công cho mỗi bản build.",
+      "B. QA chuyển sang thiết kế các 'Automated Quality Gates' dựa trên các chỉ số (metrics) và kết quả test tự động để quyết định việc deploy.",
+      "C. QA không còn tham gia vào quá trình release mà chỉ tập trung vào viết tài liệu.",
+      "D. QA chỉ thực hiện kiểm thử sau khi code đã được deploy lên Production."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong CD, tốc độ là then chốt. QA phải tự động hóa các tiêu chuẩn chất lượng (Quality Gates) để hệ thống tự quyết định việc đi tiếp hay dừng lại dựa trên dữ liệu khách quan.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chiến lược 'Data-driven Testing' mang lại lợi ích lớn nhất trong trường hợp nào?",
+    "options": [
+      "A. Khi ứng dụng có giao diện thay đổi liên tục hàng ngày.",
+      "B. Khi một chức năng nghiệp vụ cần được kiểm tra với một lượng lớn các tổ hợp dữ liệu đầu vào khác nhau.",
+      "C. Khi dự án không có đủ Tester để thực hiện kiểm thử thủ công.",
+      "D. Khi cần kiểm tra hiệu năng của hệ thống dưới tải cao."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data-driven Testing tách biệt script kiểm thử và dữ liệu, cho phép chạy một kịch bản với nhiều bộ data khác nhau, giúp tăng độ bao phủ mà không cần viết thêm nhiều code.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi đánh giá hiệu quả của một quy trình Test, chỉ số 'Defect Rejection Rate' (tỷ lệ lỗi bị từ chối) cao thường ám chỉ điều gì?",
+    "options": [
+      "A. Đội ngũ Developer đang làm việc rất cẩu thả.",
+      "B. Tester đang tìm được rất nhiều lỗi nghiêm trọng.",
+      "C. Có sự thiếu hiểu biết chung về yêu cầu hoặc thiếu sự giao tiếp giữa QA và Dev về cách định nghĩa lỗi.",
+      "D. Quy trình quản lý lỗi đang hoạt động rất hiệu quả."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tỷ lệ lỗi bị từ chối cao (lỗi không phải là lỗi hoặc không tái hiện được) cho thấy sự lãng phí nguồn lực và sự lệch pha trong hiểu biết về sản phẩm giữa các bên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án chuyển đổi hệ thống lõi (Core System) từ Monolith sang Microservices, chiến lược kiểm thử nào nên được ưu tiên hàng đầu để đảm bảo tính toàn vẹn của dữ liệu và luồng nghiệp vụ?",
+    "options": [
+      "A. Tập trung vào UI Automation Testing để đảm bảo trải nghiệm người dùng không thay đổi.",
+      "B. Triển khai Contract Testing để xác thực các thỏa thuận giao tiếp giữa các services.",
+      "C. Chỉ thực hiện Manual Regression Testing vì hệ thống Microservices quá phức tạp để tự động hóa.",
+      "D. Ưu tiên Unit Test cho từng service riêng lẻ và bỏ qua kiểm thử tích hợp hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong kiến trúc Microservices, sự phụ thuộc giữa các dịch vụ là rủi ro lớn nhất. Contract Testing giúp đảm bảo các service tuân thủ đúng giao thức cam kết mà không cần dựng toàn bộ hệ thống lên.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi áp dụng Risk-Based Testing (RBT) cho một hệ thống thanh toán trực tuyến, yếu tố nào sau đây đóng vai trò quyết định nhất khi tính toán 'Risk Priority Number'?",
+    "options": [
+      "A. Số lượng test case đã được viết cho tính năng đó.",
+      "B. Thời gian cần thiết để thực hiện kiểm thử tính năng.",
+      "C. Tác động kinh doanh (Business Impact) và Khả năng xảy ra lỗi (Likelihood of Failure).",
+      "D. Ý kiến cá nhân của lập trình viên phát triển tính năng đó."
+    ],
+    "correctAnswer": "C",
+    "explanation": "RBT dựa trên tích số của xác suất xảy ra lỗi và mức độ nghiêm trọng của hậu quả đối với doanh nghiệp để ưu tiên nguồn lực kiểm thử.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống ERP lớn đang gặp tình trạng 'Defect Clustering'. Là một QA Expert, hành động chiến lược nào bạn sẽ thực hiện để tối ưu hóa nỗ lực kiểm thử?",
+    "options": [
+      "A. Phân bổ nguồn lực kiểm thử đồng đều cho tất cả các module của hệ thống.",
+      "B. Tập trung phân tích nguyên nhân gốc rễ (RCA) và tăng cường kiểm thử tại các module có mật độ lỗi cao.",
+      "C. Yêu cầu lập trình viên viết lại toàn bộ các module đang có nhiều lỗi.",
+      "D. Ngừng kiểm thử các module đó và tập trung vào các module chưa có lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên lý Defect Clustering chỉ ra rằng lỗi thường tập trung ở một số module trọng yếu. Việc tập trung vào các vùng này giúp tối ưu hóa khả năng phát hiện lỗi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa 'Validation' và 'Verification' trong một dự án phát triển phần mềm theo mô hình V-Model là gì?",
+    "options": [
+      "A. Verification là kiểm tra code, Validation là chạy phần mềm.",
+      "B. Verification đảm bảo sản phẩm được xây dựng đúng quy trình, Validation đảm bảo sản phẩm đáp ứng nhu cầu khách hàng.",
+      "C. Verification thực hiện ở cuối dự án, Validation thực hiện ở đầu dự án.",
+      "D. Không có sự khác biệt đáng kể giữa hai khái niệm này trong thực tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Verification (Xác nhận) tập trung vào tính đúng đắn của tài liệu/code so với đặc tả, trong khi Validation (Xác minh) tập trung vào việc sản phẩm có giải quyết được bài toán của người dùng hay không.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh Continuous Integration/Continuous Deployment (CI/CD), khái niệm 'Shift-Left Testing' được thực hiện hiệu quả nhất thông qua hoạt động nào?",
+    "options": [
+      "A. Thực hiện kiểm thử xâm nhập (Penetration Testing) ngay trước khi release.",
+      "B. Tăng cường kiểm thử hồi quy thủ công vào cuối mỗi Sprint.",
+      "C. QA tham gia vào việc phân tích yêu cầu, review thiết kế và viết Unit Test cùng Developer.",
+      "D. Chạy các kịch bản Automation UI sau khi code đã được deploy lên môi trường Staging."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Shift-left là đưa kiểm thử vào giai đoạn sớm nhất có thể của SDLC nhằm ngăn ngừa lỗi ngay từ khâu thiết kế và yêu cầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi xác định 'Exit Criteria' cho một giai đoạn kiểm thử hệ thống (System Testing) trong dự án tài chính, điều kiện nào sau đây là quan trọng nhất?",
+    "options": [
+      "A. 100% test case đã được thực thi và không còn lỗi nghiêm trọng (Critical/Blocker) nào mở.",
+      "B. Đã hết thời gian dành cho kiểm thử theo kế hoạch ban đầu.",
+      "C. Tất cả các lỗi đã được tìm thấy và báo cáo cho bên phát triển.",
+      "D. Đội ngũ QA cảm thấy tự tin về chất lượng của sản phẩm."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Exit Criteria phải dựa trên các số liệu định lượng về độ bao phủ và tình trạng lỗi, đặc biệt là các lỗi ảnh hưởng trực tiếp đến vận hành.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc thực hiện 'Pesticide Paradox' (Nghịch lý thuốc trừ sâu) lại quan trọng trong bảo trì bộ test automation?",
+    "options": [
+      "A. Để đảm bảo bộ test case chạy nhanh hơn theo thời gian.",
+      "B. Để phát hiện các lỗi mới phát sinh khi hệ thống thay đổi, thay vì chỉ lặp lại các kiểm tra cũ.",
+      "C. Để giảm chi phí bản quyền cho các công cụ kiểm thử tự động.",
+      "D. Để đảm bảo tất cả các tester đều có cơ hội viết test case mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu chỉ chạy một bộ test case cố định, chúng sẽ mất dần khả năng phát hiện lỗi mới. Cần cập nhật và thay đổi kịch bản để duy trì hiệu quả kiểm thử.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống phân tán phức tạp, 'Operational Acceptance Testing' (OAT) tập trung vào mục tiêu chính nào?",
+    "options": [
+      "A. Kiểm tra xem người dùng cuối có hài lòng với giao diện hay không.",
+      "B. Xác nhận khả năng phục hồi, sao lưu, bảo mật và tính ổn định của hệ thống trong môi trường vận hành.",
+      "C. Đảm bảo các logic nghiệp vụ được thực hiện chính xác theo yêu cầu.",
+      "D. Kiểm tra sự tương thích giữa các trình duyệt web khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OAT tập trung vào các khía cạnh phi chức năng và khả năng vận hành lâu dài của hệ thống từ góc độ quản trị hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chiến lược nào là tối ưu nhất để quản lý kiểm thử cho một dự án áp dụng mô hình Agile với các Sprint ngắn (2 tuần)?",
+    "options": [
+      "A. Dành riêng Sprint cuối cùng để thực hiện toàn bộ việc kiểm thử.",
+      "B. Xây dựng kim tự tháp kiểm thử (Test Pyramid) với trọng tâm là Unit và Service tests tự động.",
+      "C. Chỉ thực hiện kiểm thử thủ công để linh hoạt với các thay đổi yêu cầu liên tục.",
+      "D. Bỏ qua việc viết tài liệu kiểm thử để tập trung tối đa vào việc tìm lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mô hình Test Pyramid giúp phản hồi nhanh và duy trì tốc độ trong Agile bằng cách giảm phụ thuộc vào UI testing chậm chạp và dễ gãy.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi đối mặt với một lỗi không thể tái hiện (Intermittent Bug) trên môi trường Production, QA Expert nên làm gì đầu tiên?",
+    "options": [
+      "A. Đóng ticket lỗi đó vì không có bằng chứng cụ thể để tái hiện.",
+      "B. Phân tích log hệ thống, dữ liệu giám sát (monitoring) và thử nghiệm các điều kiện biên về tải.",
+      "C. Yêu cầu khách hàng tự quay lại video khi lỗi xảy ra.",
+      "D. Viết thêm thật nhiều test case tự động để hy vọng lỗi sẽ xuất hiện lại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với lỗi không ổn định, việc phân tích dữ liệu thực tế (observability) là chìa khóa để tìm ra các điều kiện ngầm định gây lỗi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Việc sử dụng 'Orthogonal Array Testing' mang lại lợi ích lớn nhất trong trường hợp nào?",
+    "options": [
+      "A. Khi cần kiểm thử tất cả các luồng nghiệp vụ của hệ thống.",
+      "B. Khi hệ thống có quá nhiều tổ hợp cấu hình/tham số đầu vào mà không thể kiểm thử hết.",
+      "C. Khi cần thực hiện kiểm thử hiệu năng cho hệ thống.",
+      "D. Khi muốn thay thế hoàn toàn việc kiểm thử thăm dò (Exploratory Testing)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Orthogonal Array Testing là kỹ thuật tối ưu hóa số lượng kịch bản kiểm thử bằng cách chọn lọc các tổ hợp đại diện, giúp giảm số lượng test case mà vẫn đảm bảo độ bao phủ các cặp tương tác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quản lý chất lượng, khái niệm 'Cost of Quality' (CoQ) bao gồm những thành phần nào?",
+    "options": [
+      "A. Chỉ bao gồm lương của đội ngũ QA và chi phí mua tool test.",
+      "B. Chi phí phòng ngừa, chi phí đánh giá, và chi phí sai hỏng (nội bộ và bên ngoài).",
+      "C. Chi phí để sửa lỗi sau khi sản phẩm đã được phát hành.",
+      "D. Chi phí đào tạo cho nhân viên mới tham gia vào dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CoQ là tổng chi phí để đảm bảo chất lượng, bao gồm cả việc ngăn ngừa, kiểm tra và xử lý hậu quả của lỗi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một dự án có rủi ro cao về bảo mật thông tin người dùng. QA nên đề xuất loại kiểm thử nào vào giai đoạn sớm nhất?",
+    "options": [
+      "A. DAST (Dynamic Application Security Testing) trên môi trường Production.",
+      "B. SAST (Static Application Security Testing) và Review kiến trúc bảo mật.",
+      "C. Penetration Testing bởi một bên thứ ba.",
+      "D. Kiểm thử tải (Load Testing) để xem hệ thống có bị sập khi bị tấn công không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SAST và Review kiến trúc là các hoạt động 'Shift-left' giúp tìm ra lỗ hổng bảo mật ngay từ code và thiết kế trước khi ứng dụng được thực thi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao 'Decision Table Testing' được coi là kỹ thuật mạnh mẽ hơn 'Boundary Value Analysis' trong việc kiểm thử logic nghiệp vụ phức tạp?",
+    "options": [
+      "A. Vì nó dễ viết hơn và không cần hiểu sâu về code.",
+      "B. Vì nó có thể bao phủ các tương tác giữa các điều kiện đầu vào khác nhau dẫn đến các hành động khác nhau.",
+      "C. Vì nó tập trung vào việc kiểm tra các giá trị biên của dữ liệu.",
+      "D. Vì nó luôn luôn tạo ra ít test case hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BVA chỉ tập trung vào biên của từng biến đơn lẻ, trong khi Decision Table xử lý các quy tắc nghiệp vụ phụ thuộc vào sự kết hợp của nhiều biến.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong vai trò QA Expert, bạn sẽ xử lý thế nào nếu Product Owner yêu cầu bỏ qua giai đoạn Regression Testing để kịp tiến độ ra mắt tính năng mới?",
+    "options": [
+      "A. Đồng ý ngay lập tức để đảm bảo tiến độ dự án.",
+      "B. Thực hiện phân tích rủi ro, báo cáo các tác động tiềm tàng và đề xuất bộ Regression rút gọn dựa trên rủi ro.",
+      "C. Từ chối làm việc cho đến khi yêu cầu kiểm thử được thực hiện đầy đủ.",
+      "D. Yêu cầu Developer chịu trách nhiệm hoàn toàn nếu có lỗi xảy ra trên Production."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA cần đóng vai trò cố vấn rủi ro. Việc đưa ra các lựa chọn dựa trên dữ liệu (như Risk-based Regression) giúp Business ra quyết định cân bằng giữa tốc độ và chất lượng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Exploratory Testing' mang lại giá trị cao nhất khi nào trong chu kỳ STLC?",
+    "options": [
+      "A. Khi tài liệu yêu cầu rất chi tiết và không thay đổi.",
+      "B. Khi cần tìm kiếm các lỗi mà các test case theo kịch bản (Scripted Testing) chưa bao phủ được.",
+      "C. Khi muốn thay thế hoàn toàn các bài kiểm thử tự động.",
+      "D. Khi dự án có rất nhiều thời gian và không biết phải làm gì tiếp theo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Exploratory Testing dựa trên kinh nghiệm và sự sáng tạo của tester để phát hiện các lỗi biên hoặc lỗi logic không lường trước được trong kịch bản.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi đánh giá hiệu quả của một bộ test suite tự động, chỉ số nào sau đây phản ánh chính xác nhất chất lượng của các test case đó?",
+    "options": [
+      "A. Code Coverage (Độ bao phủ mã nguồn).",
+      "B. Mutation Score (Điểm kiểm thử đột biến).",
+      "C. Số lượng dòng code của bộ test.",
+      "D. Số lượng lỗi tìm được trong tháng đầu tiên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mutation Testing kiểm tra xem bộ test có thực sự phát hiện được các thay đổi (lỗi giả định) trong code hay không, điều mà Code Coverage không làm được.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiểm thử hệ thống nhúng (Embedded Systems), tại sao việc giả lập (Hardware-in-the-loop) lại được coi là một phần của Testing Fundamentals?",
+    "options": [
+      "A. Để giảm bớt công việc cho đội ngũ phần cứng.",
+      "B. Để cho phép kiểm thử sớm các kịch bản nguy hiểm hoặc khó tái hiện trên thiết bị thật.",
+      "C. Vì thiết bị thật luôn luôn rẻ hơn các bộ giả lập.",
+      "D. Để đảm bảo phần mềm chạy tốt trên mọi hệ điều hành máy tính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong hệ thống nhúng, việc chờ có phần cứng hoàn thiện thường rất trễ. Giả lập giúp thực hiện kiểm thử sớm và an toàn cho các tình huống cực đoan.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống gặp lỗi 'Memory Leak' sau 48 giờ vận hành liên tục. Loại kiểm thử nào lẽ ra đã phải phát hiện lỗi này trước khi release?",
+    "options": [
+      "A. Load Testing (Kiểm thử tải).",
+      "B. Endurance/Soak Testing (Kiểm thử sức bền).",
+      "C. Stress Testing (Kiểm thử áp lực).",
+      "D. Spike Testing (Kiểm thử đột biến tải)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Endurance Testing tập trung vào việc kiểm tra hệ thống dưới mức tải bình thường trong thời gian dài để phát hiện các vấn đề tích tụ như rò rỉ bộ nhớ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chiến lược 'Defect Prevention' (Ngăn ngừa lỗi) khác biệt thế nào với 'Defect Detection' (Phát hiện lỗi)?",
+    "options": [
+      "A. Ngăn ngừa lỗi là trách nhiệm của Dev, phát hiện lỗi là trách nhiệm của QA.",
+      "B. Ngăn ngừa lỗi tập trung vào việc cải tiến quy trình và phân tích yêu cầu để lỗi không phát sinh.",
+      "C. Phát hiện lỗi luôn rẻ hơn ngăn ngừa lỗi vì không cần họp hành nhiều.",
+      "D. Hai khái niệm này thực chất là một và có thể dùng thay thế nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ngăn ngừa lỗi là tư duy Expert QA, tập trung vào việc loại bỏ nguyên nhân gốc rễ ngay từ đầu thay vì chỉ đi tìm và sửa hậu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi tích hợp một thư viện bên thứ ba (Third-party) vào hệ thống, QA cần ưu tiên loại kiểm thử nào để giảm thiểu rủi ro?",
+    "options": [
+      "A. Unit Test cho mã nguồn của thư viện đó.",
+      "B. Integration Testing tập trung vào các điểm giao tiếp (Interface) và Compatibility Testing.",
+      "C. Viết lại toàn bộ thư viện đó bằng ngôn ngữ lập trình của dự án.",
+      "D. Chỉ tin tưởng vào kết quả kiểm thử của nhà cung cấp thư viện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "QA không kiểm soát được code bên trong thư viện nhưng phải đảm bảo hệ thống hiện tại tương tác đúng và không bị ảnh hưởng bởi thư viện đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong mô hình TMMi (Test Maturity Model integration), mức độ 'Optimizing' (Mức 5) tập trung vào điều gì?",
+    "options": [
+      "A. Thực hiện kiểm thử thủ công một cách chuyên nghiệp.",
+      "B. Cải tiến quy trình liên tục dựa trên các số liệu định lượng và áp dụng công nghệ mới.",
+      "C. Đảm bảo tất cả các dự án đều có kế hoạch kiểm thử.",
+      "D. Thuê các chuyên gia tư vấn bên ngoài để đánh giá chất lượng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mức cao nhất của TMMi là sự cải tiến không ngừng dựa trên dữ liệu thực tế và tối ưu hóa các quy trình đã ổn định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để đo lường giá trị (ROI) của hoạt động QA trong một doanh nghiệp phần mềm?",
+    "options": [
+      "A. Dựa trên số lượng bug mà mỗi QA tìm được hàng tháng.",
+      "B. Dựa trên việc giảm thiểu chi phí sửa lỗi trên Production và rút ngắn thời gian đưa sản phẩm ra thị trường (Time-to-market).",
+      "C. Dựa trên số lượng trang tài liệu kiểm thử đã viết.",
+      "D. QA không tạo ra giá trị kinh tế trực tiếp nên không thể đo lường ROI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giá trị của QA nằm ở việc tiết kiệm chi phí do phát hiện lỗi sớm và giúp quy trình phát hành sản phẩm mượt mà, tin cậy hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống AI/ML có đầu ra không định trước (Non-deterministic). Phương pháp kiểm thử cơ bản nào nên được áp dụng?",
+    "options": [
+      "A. Kiểm thử dựa trên kết quả mong đợi chính xác (Exact Match).",
+      "B. Metamorphic Testing (Kiểm thử biến hình) để kiểm tra mối quan hệ giữa các đầu vào và đầu ra.",
+      "C. Bỏ qua kiểm thử vì không thể xác định được kết quả đúng.",
+      "D. Chỉ kiểm thử giao diện người dùng của ứng dụng AI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với hệ thống không định trước, Metamorphic Testing giúp kiểm tra tính nhất quán của hệ thống bằng cách so sánh sự thay đổi của kết quả khi thay đổi đầu vào theo một quy luật nhất định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quản lý lỗi, 'Defect Leakage' (Lọt lỗi) là chỉ số phản ánh điều gì rõ ràng nhất?",
+    "options": [
+      "A. Kỹ năng lập trình của Developer quá kém.",
+      "B. Sự thiếu sót trong quy trình kiểm thử hoặc môi trường kiểm thử không tương đồng với thực tế.",
+      "C. Khách hàng quá khắt khe khi sử dụng sản phẩm.",
+      "D. Thời gian dành cho kiểm thử quá dài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Defect Leakage đo lường những lỗi bị bỏ sót trong quá trình kiểm thử và chỉ phát hiện được bởi người dùng cuối, chứng tỏ lỗ hổng trong chiến lược đảm bảo chất lượng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Testing Fundamentals",
+    "category": "ANALYSIS"
+  }
+]

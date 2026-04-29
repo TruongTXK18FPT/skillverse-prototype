@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục tiêu chính của kỹ thuật Phân vùng tương đương (Equivalence Partitioning) là gì?",
+    "options": [
+      "A. Kiểm tra mọi giá trị có thể nhập vào hệ thống.",
+      "B. Giảm số lượng test case bằng cách chia dữ liệu thành các nhóm có hành vi giống nhau.",
+      "C. Tập trung vào các giá trị tại biên của dải dữ liệu.",
+      "D. Đảm bảo mọi dòng mã nguồn đều được thực thi ít nhất một lần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân vùng tương đương giúp giảm số lượng bản ghi kiểm thử bằng cách chọn đại diện từ các nhóm dữ liệu được giả định là sẽ được xử lý giống nhau bởi hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một trường nhập liệu chấp nhận giá trị từ 1 đến 100, các giá trị nào sau đây là bộ giá trị biên (Boundary Value Analysis) điển hình?",
+    "options": [
+      "A. 0, 1, 100, 101",
+      "B. 1, 50, 100",
+      "C. 0, 50, 101",
+      "D. -1, 1, 100"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Kỹ thuật phân tích giá trị biên tập trung vào các giá trị tại biên (1, 100) và các giá trị ngay sát biên (0, 101).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thành phần nào trong Test Case mô tả các bước cần thực hiện trước khi bắt đầu kiểm thử?",
+    "options": [
+      "A. Test Steps",
+      "B. Expected Results",
+      "C. Pre-conditions",
+      "D. Post-conditions"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Pre-conditions (Điều kiện tiên quyết) xác định trạng thái cần thiết của hệ thống hoặc dữ liệu trước khi thực hiện các bước kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Test Scenario và Test Case là gì?",
+    "options": [
+      "A. Test Scenario chi tiết hơn Test Case.",
+      "B. Test Scenario mô tả 'cái gì' cần kiểm thử, còn Test Case mô tả chi tiết 'cách thức' kiểm thử.",
+      "C. Test Scenario luôn có dữ liệu kiểm thử đi kèm, Test Case thì không.",
+      "D. Test Scenario chỉ dùng cho kiểm thử tự động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test Scenario là một mô tả khái quát về một chức năng có thể kiểm thử, trong khi Test Case chứa các bước, dữ liệu và kết quả mong đợi cụ thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ma trận truy xuất nguồn gốc yêu cầu (Requirement Traceability Matrix - RTM) được sử dụng để làm gì?",
+    "options": [
+      "A. Để tính toán lương cho đội ngũ kiểm thử.",
+      "B. Để đảm bảo mọi yêu cầu của khách hàng đều được bao phủ bởi ít nhất một Test Case.",
+      "C. Để liệt kê tất cả các lỗi tìm thấy trong quá trình kiểm thử.",
+      "D. Để thay thế cho kế hoạch kiểm thử (Test Plan)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "RTM giúp theo dõi mối liên hệ giữa các yêu cầu (requirements) và các test cases tương ứng để đảm bảo độ bao phủ kiểm thử (test coverage).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật thiết kế kiểm thử nào phù hợp nhất để kiểm thử các quy tắc nghiệp vụ phức tạp với nhiều điều kiện kết hợp?",
+    "options": [
+      "A. Boundary Value Analysis",
+      "B. State Transition Testing",
+      "C. Decision Table Testing",
+      "D. Error Guessing"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bảng quyết định (Decision Table) là kỹ thuật lý tưởng để liệt kê và kiểm tra các tổ hợp điều kiện (conditions) khác nhau dẫn đến các hành động (actions) khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Test Case, 'Expected Result' (Kết quả mong đợi) nên được viết như thế nào?",
+    "options": [
+      "A. Viết chung chung như 'Hệ thống hoạt động tốt'.",
+      "B. Mô tả cụ thể trạng thái hệ thống hoặc thông báo hiển thị dựa trên tài liệu yêu cầu.",
+      "C. Để trống để người kiểm thử tự điền khi thực hiện.",
+      "D. Chỉ cần ghi 'Thành công'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kết quả mong đợi phải cụ thể và dựa trên tài liệu nghiệp vụ để người kiểm thử có thể so sánh chính xác với kết quả thực tế (Actual Result).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kỹ thuật 'State Transition Testing' thường được áp dụng cho loại đối tượng nào?",
+    "options": [
+      "A. Các màn hình nhập liệu đơn giản.",
+      "B. Các hệ thống có quy trình chuyển đổi trạng thái (ví dụ: trạng thái đơn hàng).",
+      "C. Các phép toán số học phức tạp.",
+      "D. Kiểm thử hiệu năng hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử chuyển đổi trạng thái tập trung vào việc kiểm tra cách hệ thống di chuyển từ trạng thái này sang trạng thái khác dựa trên các sự kiện (events).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi nào một Test Case cần được cập nhật hoặc bảo trì?",
+    "options": [
+      "A. Chỉ khi có lỗi (bug) được tìm thấy.",
+      "B. Khi yêu cầu phần mềm (requirements) thay đổi hoặc tính năng được cập nhật.",
+      "C. Mỗi khi bắt đầu một ngày làm việc mới.",
+      "D. Không bao giờ cần cập nhật sau khi đã viết xong."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test case cần phản ánh đúng logic hiện tại của phần mềm; do đó, khi yêu cầu thay đổi, test case phải được cập nhật tương ứng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một bộ Test Data (Dữ liệu kiểm thử) tốt là bộ dữ liệu như thế nào?",
+    "options": [
+      "A. Càng nhiều dữ liệu càng tốt, không cần phân loại.",
+      "B. Chỉ bao gồm các dữ liệu hợp lệ.",
+      "C. Bao gồm cả dữ liệu hợp lệ, không hợp lệ và các trường hợp biên.",
+      "D. Chỉ sử dụng dữ liệu thực tế của khách hàng mà không cần chỉnh sửa."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dữ liệu kiểm thử cần bao phủ nhiều kịch bản khác nhau (tích cực và tiêu cực) để đảm bảo tính ổn định của hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích của việc thực hiện 'Negative Testing' là gì?",
+    "options": [
+      "A. Để chứng minh rằng phần mềm không có lỗi.",
+      "B. Để kiểm tra xem hệ thống xử lý như thế nào đối với các dữ liệu hoặc hành động không hợp lệ.",
+      "C. Để làm cho lập trình viên cảm thấy khó chịu.",
+      "D. Chỉ để kiểm tra giao diện người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Negative testing (Kiểm thử tiêu cực) nhằm đảm bảo hệ thống không bị crash và hiển thị thông báo lỗi phù hợp khi nhận dữ liệu sai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quy trình thiết kế Test Case, bước 'Review' (Xem xét) có ý nghĩa gì?",
+    "options": [
+      "A. Để lãng phí thời gian của đội ngũ.",
+      "B. Để đồng nghiệp hoặc sếp kiểm tra tính chính xác, đầy đủ và dễ hiểu của Test Case.",
+      "C. Để đếm số lượng Test Case đã viết được.",
+      "D. Để bắt đầu chạy thử phần mềm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Review giúp phát hiện các sai sót trong logic kiểm thử, thiếu sót kịch bản hoặc các bước viết không rõ ràng trước khi thực hiện kiểm thử thực tế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một ô nhập mật khẩu yêu cầu độ dài từ 6 đến 12 ký tự, giá trị nào sau đây thuộc vùng 'Không hợp lệ' (Invalid Partition)?",
+    "options": [
+      "A. 6 ký tự",
+      "B. 8 ký tự",
+      "C. 5 ký tự",
+      "D. 12 ký tự"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dải hợp lệ là [6, 12]. Giá trị 5 nằm ngoài dải này nên thuộc vùng không hợp lệ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao mỗi Test Case nên có một ID duy nhất (Unique ID)?",
+    "options": [
+      "A. Để làm cho tài liệu trông chuyên nghiệp hơn.",
+      "B. Để dễ dàng quản lý, truy xuất và báo cáo lỗi liên quan đến Test Case đó.",
+      "C. Vì công cụ Excel bắt buộc phải có.",
+      "D. Để phân biệt tên của các Tester với nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ID duy nhất giúp định danh chính xác test case trong các báo cáo lỗi, ma trận truy xuất và trong quá trình trao đổi giữa các thành viên dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Test Suite' trong tài liệu kiểm thử nghĩa là gì?",
+    "options": [
+      "A. Là một bản kế hoạch kiểm thử chi tiết.",
+      "B. Là một tập hợp các Test Case có cùng mục đích hoặc liên quan đến cùng một tính năng.",
+      "C. Là một loại phần mềm dùng để viết code.",
+      "D. Là báo cáo kết quả kiểm thử cuối cùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test Suite là cách nhóm các test case lại với nhau (ví dụ: Regression Suite, Smoke Suite) để quản lý việc thực thi dễ dàng hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một 'Test Step' (Bước kiểm thử) tốt cần đảm bảo yếu tố nào?",
+    "options": [
+      "A. Càng dài dòng càng tốt.",
+      "B. Rõ ràng, súc tích và bất kỳ ai đọc cũng có thể thực hiện theo đúng trình tự.",
+      "C. Chỉ cần Tester viết ra hiểu là được.",
+      "D. Không cần ghi rõ dữ liệu nhập vào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các bước kiểm thử cần rõ ràng và khách quan để đảm bảo tính tái lập (reproducibility) của việc kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế Test Case cho tính năng 'Đăng nhập', trường hợp nào sau đây là 'Positive Test Case'?",
+    "options": [
+      "A. Nhập sai mật khẩu.",
+      "B. Để trống tên đăng nhập.",
+      "C. Nhập đúng tên đăng nhập và mật khẩu hợp lệ.",
+      "D. Nhập tên đăng nhập không tồn tại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Positive Test Case kiểm tra xem hệ thống có hoạt động đúng như mong đợi với dữ liệu đầu vào hợp lệ hay không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Độ bao phủ kiểm thử (Test Coverage) có thể được đo lường dựa trên yếu tố nào?",
+    "options": [
+      "A. Số lượng Tester trong dự án.",
+      "B. Tỷ lệ phần trăm các yêu cầu (requirements) đã được kiểm thử.",
+      "C. Số dòng code mà Tester đã viết.",
+      "D. Thời gian Tester ngồi tại văn phòng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test Coverage thường được đo bằng tỷ lệ các yêu cầu hoặc các thành phần chức năng đã được bao phủ bởi các Test Case.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kỹ thuật Bảng quyết định, 'Actions' đại diện cho điều gì?",
+    "options": [
+      "A. Các điều kiện đầu vào.",
+      "B. Các bước thực hiện kiểm thử.",
+      "C. Kết quả hoặc hành vi của hệ thống tương ứng với các điều kiện.",
+      "D. Tên của người thực hiện kiểm thử."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong bảng quyết định, 'Conditions' là đầu vào, còn 'Actions' là các kết quả đầu ra hoặc phản ứng của hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi viết Test Case, việc xác định 'Priority' (Mức độ ưu tiên) nhằm mục đích gì?",
+    "options": [
+      "A. Để biết Test Case nào cần được thực hiện trước khi thời gian hạn hẹp.",
+      "B. Để xác định xem ai là người viết Test Case đó.",
+      "C. Để tính độ khó của Test Case.",
+      "D. Để phân loại lỗi nặng hay nhẹ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Priority giúp đội ngũ tập trung thực hiện các kịch bản quan trọng nhất trước, đảm bảo các tính năng cốt lõi được kiểm tra sớm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây giúp tăng tính tái sử dụng (reusability) của Test Case?",
+    "options": [
+      "A. Viết các bước gắn chặt với một bộ dữ liệu cố định duy nhất.",
+      "B. Thiết kế các Test Case độc lập và mô-đun hóa các bước kiểm thử chung.",
+      "C. Viết thật nhiều bước trong một Test Case duy nhất.",
+      "D. Không sử dụng Pre-conditions."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc tách biệt dữ liệu và mô-đun hóa giúp các test case dễ dàng được sử dụng lại cho các phiên bản hoặc môi trường khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong sơ đồ chuyển đổi trạng thái, một 'Event' là gì?",
+    "options": [
+      "A. Một trạng thái tĩnh của hệ thống.",
+      "B. Một tác động hoặc điều kiện làm thay đổi trạng thái của hệ thống.",
+      "C. Kết quả cuối cùng của quy trình.",
+      "D. Một lỗi xảy ra trong hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Event (Sự kiện) là tác nhân (như click chuột, nhập liệu, hoặc tín hiệu thời gian) khiến hệ thống chuyển từ trạng thái này sang trạng thái khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tài liệu nào là nguồn thông tin chính để Tester thiết kế Test Case ở mức độ Beginner?",
+    "options": [
+      "A. Mã nguồn của ứng dụng.",
+      "B. Tài liệu đặc tả yêu cầu (Requirement Specification).",
+      "C. Email cá nhân của lập trình viên.",
+      "D. Các bài báo về công nghệ trên mạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tester dựa vào tài liệu đặc tả yêu cầu để hiểu hệ thống cần làm gì, từ đó thiết kế các kịch bản kiểm tra xem hệ thống có làm đúng như vậy không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điều gì xảy ra nếu Test Case không có 'Expected Result' rõ ràng?",
+    "options": [
+      "A. Tester sẽ dễ dàng vượt qua bài kiểm thử.",
+      "B. Khó có thể xác định được Test Case đó là 'Pass' hay 'Fail'.",
+      "C. Lập trình viên sẽ tự hiểu kết quả đúng là gì.",
+      "D. Hệ thống sẽ tự động tạo ra kết quả mong đợi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu không có tiêu chuẩn so sánh (Expected Result), việc đánh giá kết quả thực tế là đúng hay sai sẽ trở nên chủ quan và thiếu chính xác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật thiết kế kiểm thử nào dựa trên kinh nghiệm và phán đoán của Tester về nơi lỗi thường xảy ra?",
+    "options": [
+      "A. Equivalence Partitioning",
+      "B. Decision Table Testing",
+      "C. Error Guessing",
+      "D. Boundary Value Analysis"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Error Guessing (Đoán lỗi) là kỹ thuật dựa trên kinh nghiệm thực tế của Tester để dự đoán các tình huống mà lập trình viên dễ mắc sai lầm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế test case cho một trường nhập liệu chỉ chấp nhận số nguyên từ 10 đến 50, kỹ thuật Boundary Value Analysis (BVA) nên tập trung vào các giá trị nào?",
+    "options": [
+      "A. 9, 10, 11, 49, 50, 51",
+      "B. 10, 30, 50",
+      "C. 0, 10, 50, 100",
+      "D. 9, 11, 49, 51"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Kỹ thuật BVA tập trung vào biên (10, 50) và các giá trị ngay sát biên (biên - 1 và biên + 1) để tìm lỗi tại điểm chuyển đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống có 3 điều kiện logic độc lập để quyết định việc giảm giá. Nếu sử dụng Decision Table, có bao nhiêu quy tắc (rules) tối đa cần xem xét trước khi tối ưu hóa?",
+    "options": [
+      "A. 3",
+      "B. 6",
+      "C. 8",
+      "D. 9"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Số lượng quy tắc tối đa trong bảng quyết định được tính bằng 2 mũ n, với n là số lượng điều kiện (2^3 = 8).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của Requirement Traceability Matrix (RTM) là gì trong quá trình quản lý kiểm thử?",
+    "options": [
+      "A. Để tính toán tổng số lỗi tìm được trong dự án",
+      "B. Để đảm bảo mọi yêu cầu đều được bao phủ bởi ít nhất một test case",
+      "C. Để liệt kê danh sách các tester tham gia vào dự án",
+      "D. Để thay thế cho tài liệu Test Plan"
+    ],
+    "correctAnswer": "B",
+    "explanation": "RTM được sử dụng để theo dõi mối quan hệ giữa yêu cầu và các test case, đảm bảo tính đầy đủ (coverage) và hỗ trợ phân tích tác động khi yêu cầu thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kỹ thuật State Transition Testing, một 'Invalid Transition' được hiểu là gì?",
+    "options": [
+      "A. Một trạng thái không có tên rõ ràng",
+      "B. Việc chuyển đổi từ trạng thái này sang trạng thái kia không được phép theo logic nghiệp vụ",
+      "C. Một lỗi xảy ra khi hệ thống đang chạy",
+      "D. Trạng thái kết thúc của một quy trình"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Invalid Transition là hành động cố gắng chuyển đổi giữa hai trạng thái mà quy trình nghiệp vụ không cho phép, dùng để kiểm tra tính bảo mật và logic của hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho chức năng đăng nhập với yêu cầu: 'Mật khẩu từ 8-16 ký tự'. Phân vùng tương đương (EP) nào là hợp lệ?",
+    "options": [
+      "A. Mật khẩu có 5 ký tự",
+      "B. Mật khẩu có 12 ký tự",
+      "C. Mật khẩu có 20 ký tự",
+      "D. Mật khẩu để trống"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân vùng hợp lệ là tập hợp các giá trị nằm trong khoảng yêu cầu (8 đến 16). 12 ký tự nằm trong khoảng này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một yêu cầu nghiệp vụ thay đổi vào giữa dự án, tester nên làm gì đầu tiên với bộ test suite hiện tại?",
+    "options": [
+      "A. Xóa bỏ toàn bộ các test case cũ và viết lại từ đầu",
+      "B. Tiếp tục kiểm thử theo test case cũ để tiết kiệm thời gian",
+      "C. Sử dụng RTM để xác định các test case bị ảnh hưởng và cập nhật chúng",
+      "D. Chỉ tập trung vào kiểm thử khám phá (Exploratory Testing)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "RTM giúp xác định nhanh chóng các test case liên quan đến yêu cầu thay đổi, giúp việc cập nhật chính xác và hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Thế nào là một 'Expected Result' tốt trong một Test Case?",
+    "options": [
+      "A. Càng ngắn gọn càng tốt, ví dụ: 'Thành công'",
+      "B. Mô tả cụ thể trạng thái hệ thống, dữ liệu thay đổi và phản hồi người dùng sau khi thực hiện bước",
+      "C. Chỉ cần liệt kê mã lỗi nếu có",
+      "D. Để trống để tester tự quan sát khi chạy"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kết quả mong đợi cần chi tiết để bất kỳ tester nào cũng có thể so sánh với thực tế và xác định test case đó Pass hay Fail một cách khách quan.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh Agile, 'Test Scenario' khác với 'Test Case' như thế nào?",
+    "options": [
+      "A. Test Scenario là một bản mô tả cấp cao về những gì cần kiểm thử, còn Test Case chi tiết các bước và dữ liệu",
+      "B. Test Scenario và Test Case là một, chỉ khác tên gọi",
+      "C. Test Scenario chỉ dành cho automation, Test Case dành cho manual",
+      "D. Test Case luôn được viết trước Test Scenario"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Scenario định hướng 'cái gì' cần kiểm thử (ví dụ: Kiểm tra thanh toán), còn Test Case chi tiết 'làm thế nào' để kiểm thử (các bước thực hiện cụ thể).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần kiểm thử một form đăng ký có 20 trường nhập liệu. Kỹ thuật nào giúp giảm số lượng bản ghi dữ liệu nhưng vẫn đảm bảo kiểm tra được sự tương tác giữa các cặp tham số?",
+    "options": [
+      "A. Equivalence Partitioning",
+      "B. Boundary Value Analysis",
+      "C. Pairwise Testing (Orthogonal Array)",
+      "D. State Transition Testing"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Pairwise Testing là kỹ thuật thiết kế tối ưu giúp kiểm tra tất cả các cặp kết hợp của các tham số đầu vào, giảm đáng kể số lượng test case so với thử nghiệm mọi tổ hợp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi viết test case cho một hệ thống xử lý dữ liệu nhạy cảm (như ngân hàng), chiến lược Test Data nào là an toàn nhất?",
+    "options": [
+      "A. Sao chép trực tiếp database production về môi trường test",
+      "B. Sử dụng dữ liệu giả (Synthetic Data) được tạo ra có cấu trúc giống dữ liệu thật",
+      "C. Sử dụng dữ liệu cá nhân của chính tester để kiểm thử",
+      "D. Không cần dùng dữ liệu, chỉ cần kiểm tra giao diện"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để tuân thủ bảo mật và GDPR, việc sử dụng dữ liệu giả lập có cấu trúc tương đương là phương pháp an toàn và chuyên nghiệp nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một bộ test suite có quá nhiều test case trùng lặp và lỗi thời. Hành động nào sau đây là phù hợp nhất để duy trì chất lượng tài liệu?",
+    "options": [
+      "A. Giữ nguyên để tăng số lượng test case báo cáo cho khách hàng",
+      "B. Thực hiện Test Suite Refactoring để gộp các case trùng và xóa các case không còn giá trị",
+      "C. Chỉ chạy những test case mới viết",
+      "D. Chuyển tất cả sang trạng thái 'Deprecated' nhưng không xóa"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Refactoring test suite giúp duy trì tính gọn nhẹ, dễ bảo trì và đảm bảo bộ test case luôn phản ánh đúng logic hiện tại của ứng dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Error Guessing' nên được áp dụng khi nào?",
+    "options": [
+      "A. Khi không có tài liệu yêu cầu",
+      "B. Sau khi đã áp dụng các kỹ thuật thiết kế chính thống, dựa trên kinh nghiệm về các lỗi thường gặp",
+      "C. Là kỹ thuật duy nhất cần dùng để tiết kiệm thời gian",
+      "D. Chỉ dành cho tester mới vào nghề"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Guessing dựa trên kinh nghiệm của tester để dự đoán các lỗi tiềm ẩn mà các kỹ thuật chính thống có thể bỏ sót.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong tài liệu Test Case, mục 'Pre-conditions' (Điều kiện tiên quyết) dùng để làm gì?",
+    "options": [
+      "A. Mô tả các bước thực hiện chính",
+      "B. Xác định trạng thái cần thiết của hệ thống trước khi bắt đầu thực hiện các bước kiểm thử",
+      "C. Liệt kê các lỗi đã tìm thấy trước đó",
+      "D. Đưa ra các kết quả mong đợi"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pre-conditions đảm bảo môi trường và dữ liệu đã sẵn sàng để các bước trong test case có thể thực hiện được một cách chính xác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một chức năng có luồng đi phức tạp qua nhiều màn hình khác nhau dựa trên lựa chọn của người dùng, kỹ thuật nào là hiệu quả nhất để thiết kế test case?",
+    "options": [
+      "A. Boundary Value Analysis",
+      "B. State Transition Testing",
+      "C. Equivalence Partitioning",
+      "D. Syntax Testing"
+    ],
+    "correctAnswer": "B",
+    "explanation": "State Transition Testing tập trung vào việc chuyển đổi giữa các trạng thái hoặc màn hình, rất phù hợp cho các luồng nghiệp vụ phức tạp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào để đảm bảo tính 'Reusable' (tái sử dụng) của test case?",
+    "options": [
+      "A. Viết test case gắn chặt với một bộ dữ liệu cụ thể duy nhất",
+      "B. Thiết kế các test case nhỏ, độc lập và tham số hóa (parameterize) dữ liệu đầu vào",
+      "C. Viết tất cả các bước kiểm thử vào một test case duy nhất dài 50 bước",
+      "D. Không sử dụng Pre-conditions"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc module hóa test case và tham số hóa dữ liệu giúp chúng ta có thể sử dụng lại test case cho nhiều kịch bản hoặc môi trường khác nhau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Yêu cầu: 'Hệ thống phải phản hồi nhanh'. Tại sao yêu cầu này gây khó khăn cho việc thiết kế test case?",
+    "options": [
+      "A. Vì nó quá chi tiết",
+      "B. Vì nó không thể đo lường được (không có con số cụ thể)",
+      "C. Vì nó là yêu cầu về chức năng",
+      "D. Vì nó chỉ dành cho automation"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một yêu cầu tốt để thiết kế test case phải kiểm chứng được (testable). 'Nhanh' là định tính, cần được cụ thể hóa thành 'dưới 2 giây' để thiết kế test case.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế test case cho API, ngoài việc kiểm tra Response Body, yếu tố nào sau đây là quan trọng nhất cần được document?",
+    "options": [
+      "A. Font chữ trên giao diện",
+      "B. HTTP Status Code",
+      "C. Tên của người lập trình API",
+      "D. Màu sắc của icon loading"
+    ],
+    "correctAnswer": "B",
+    "explanation": "HTTP Status Code (200, 400, 404, 500...) là thành phần cốt lõi để xác định kết quả thực hiện API thành công hay thất bại.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bảng quyết định (Decision Table), nếu hai quy tắc có cùng các hành động (actions) và chỉ khác nhau ở một điều kiện không ảnh hưởng đến kết quả, bạn nên làm gì?",
+    "options": [
+      "A. Giữ cả hai để tăng độ bao phủ",
+      "B. Xóa cả hai quy tắc",
+      "C. Hợp nhất (collapse) hai quy tắc đó để làm gọn bảng",
+      "D. Thay đổi hành động của một quy tắc"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc tối ưu hóa (collapsing) bảng quyết định giúp giảm số lượng test case cần thiết mà vẫn giữ nguyên logic kiểm thử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn được giao kiểm thử một tính năng cũ nhưng tài liệu yêu cầu đã bị mất. Cách tiếp cận thiết kế test case nào là hợp lý nhất?",
+    "options": [
+      "A. Từ chối kiểm thử vì không có tài liệu",
+      "B. Sử dụng Exploratory Testing để hiểu hệ thống và viết lại test case dựa trên thực tế (Reverse Engineering)",
+      "C. Chỉ kiểm thử những gì mình nhớ",
+      "D. Đợi đến khi có tài liệu mới bắt đầu"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong thực tế, khi thiếu tài liệu, tester cần kết hợp kinh nghiệm và khám phá trực tiếp trên ứng dụng để xây dựng lại bộ test case.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Độ bao phủ yêu cầu (Requirement Coverage) 100% có nghĩa là gì?",
+    "options": [
+      "A. Tất cả các dòng code đã được chạy qua",
+      "B. Tất cả các yêu cầu trong tài liệu đặc tả đều có ít nhất một test case tương ứng",
+      "C. Hệ thống không còn lỗi",
+      "D. Tất cả các test case đều đã Pass"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Requirement Coverage đo lường việc các yêu cầu nghiệp vụ đã được ánh xạ vào bộ test case hay chưa, không đồng nghĩa với việc code coverage 100% hay hệ thống hết lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc phân loại 'Severity' (Mức độ nghiêm trọng) trong test case/bug report lại quan trọng đối với việc quản lý tài liệu?",
+    "options": [
+      "A. Để tester biết ai là người fix lỗi",
+      "B. Để ưu tiên việc sửa lỗi và lập kế hoạch thực hiện test case quan trọng trước",
+      "C. Để làm cho báo cáo trông đẹp hơn",
+      "D. Để tăng lương cho tester"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Severity giúp các bên liên quan hiểu được tầm ảnh hưởng của lỗi/chức năng đối với hệ thống, từ đó ra quyết định ưu tiên xử lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế test case cho một ứng dụng web trên mobile, yếu tố 'Documentation' nào cần được bổ sung so với web trên desktop?",
+    "options": [
+      "A. Chỉ cần copy nguyên test case desktop",
+      "B. Các kịch bản về xoay màn hình, ngắt kết nối mạng và các cử chỉ (gestures)",
+      "C. Tên của nhà mạng viễn thông",
+      "D. Độ phân giải của camera"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử mobile đòi hỏi các kịch bản đặc thù như sự thay đổi môi trường mạng, tương tác chạm (touch) và hướng thiết bị.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một test case bao gồm các bước: 1. Mở trang chủ, 2. Click Đăng nhập, 3. Nhập user/pass hợp lệ, 4. Nhấn Submit. Kết quả mong đợi là 'User đăng nhập thành công'. Đây là loại test case nào?",
+    "options": [
+      "A. Negative Test Case",
+      "B. Positive Test Case",
+      "C. Boundary Value Test Case",
+      "D. Security Test Case"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Positive Test Case kiểm tra xem hệ thống có hoạt động đúng như mong đợi với các dữ liệu đầu vào hợp lệ hay không.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu thời gian dự án bị rút ngắn, bạn nên làm gì để đảm bảo việc thiết kế test case vẫn có giá trị?",
+    "options": [
+      "A. Viết tất cả test case nhưng không cần review",
+      "B. Tập trung thiết kế test case cho các chức năng có rủi ro cao và luồng nghiệp vụ chính (Critical Path)",
+      "C. Chỉ viết tiêu đề test case, không viết các bước",
+      "D. Bỏ qua bước thiết kế và nhảy vào chạy test ngay"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Risk-based testing giúp tối ưu hóa nguồn lực hạn hẹp vào những nơi có khả năng gây thiệt hại lớn nhất cho dự án.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quy trình review test case, mục tiêu chính của việc 'Peer Review' là gì?",
+    "options": [
+      "A. Để đánh giá năng lực của tester viết case",
+      "B. Để phát hiện các sai sót logic, thiếu kịch bản hoặc hiểu sai yêu cầu từ sớm",
+      "C. Để đếm số lượng test case",
+      "D. Để thay đổi yêu cầu của khách hàng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Peer Review giúp nâng cao chất lượng bộ test case thông qua việc đóng góp ý kiến từ đồng nghiệp, đảm bảo tính khách quan và đầy đủ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi tối ưu hóa một Decision Table có quá nhiều tổ hợp điều kiện dẫn đến bùng nổ số lượng test case, kỹ thuật nào nên được ưu tiên để giảm thiểu kịch bản mà vẫn giữ được logic nghiệp vụ cốt lõi?",
+    "options": [
+      "A. Loại bỏ ngẫu nhiên các cột có kết quả đầu ra trùng lặp.",
+      "B. Áp dụng kỹ thuật 'Rule Collapse' (gộp các cột có giá trị 'Don't Care').",
+      "C. Chỉ kiểm thử các cột có điều kiện đầu vào là giá trị biên.",
+      "D. Chuyển đổi Decision Table sang sơ đồ Cause-Effect Graphing để bỏ qua các ràng buộc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rule Collapse cho phép gộp các quy tắc khi một hoặc nhiều điều kiện đầu vào không làm thay đổi kết quả, giúp giảm số lượng test case mà không mất đi tính toàn vẹn của logic.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong State Transition Testing, khi đối mặt với một hệ thống có quá nhiều trạng thái (State Explosion), chiến lược nào giúp đảm bảo độ bao phủ hợp lý về mặt kỹ thuật?",
+    "options": [
+      "A. Sử dụng N-switch coverage (ví dụ 1-switch) để kiểm tra các chuỗi chuyển đổi thay vì mọi tổ hợp.",
+      "B. Chỉ kiểm tra các trạng thái bắt đầu và trạng thái kết thúc của hệ thống.",
+      "C. Chuyển tất cả các trạng thái sang kỹ thuật Equivalence Partitioning.",
+      "D. Loại bỏ các trạng thái trung gian và chỉ tập trung vào các trạng thái lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "N-switch coverage cho phép kiểm tra các chuỗi chuyển đổi có độ dài N+1, giúp phát hiện lỗi liên quan đến trình tự trạng thái mà không cần thử mọi tổ hợp vô tận.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế dữ liệu kiểm thử (Test Data) cho hệ thống Microservices có tính phụ thuộc cao, phương pháp nào tối ưu nhất để đảm bảo tính độc lập và hiệu năng?",
+    "options": [
+      "A. Sử dụng chung một database tập trung cho tất cả các service để dễ quản lý.",
+      "B. Tạo bản sao dữ liệu từ môi trường Production (Data Masking) cho mọi test case.",
+      "C. Sử dụng Service Virtualization kết hợp với Synthetic Data Generation cho từng service.",
+      "D. Chạy lại toàn bộ script tạo dữ liệu (Seed data) trước mỗi lần thực thi API đơn lẻ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Service Virtualization và Synthetic Data giúp cô lập service cần test, tránh phụ thuộc vào trạng thái của các service khác và đảm bảo tuân thủ bảo mật dữ liệu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một Requirements Traceability Matrix (RTM) ở mức độ nâng cao nên được thiết kế như thế nào để hỗ trợ Impact Analysis tốt nhất?",
+    "options": [
+      "A. Chỉ cần ánh xạ Requirement ID với Test Case ID.",
+      "B. Ánh xạ đa chiều từ Business Requirement xuống System Requirement, Test Case và Defect.",
+      "C. Ánh xạ trực tiếp từ Code Class sang Test Case ID.",
+      "D. Chỉ liệt kê các kịch bản kiểm thử tự động trong ma trận."
+    ],
+    "correctAnswer": "B",
+    "explanation": "RTM đa chiều giúp truy xuất nguồn gốc từ mục tiêu kinh doanh đến thực thi và lỗi, giúp đánh giá nhanh phạm vi ảnh hưởng khi có bất kỳ thay đổi nào ở mọi tầng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Orthogonal Array Testing' (OAT) mang lại giá trị lớn nhất trong tình huống nào sau đây?",
+    "options": [
+      "A. Khi cần kiểm tra các giá trị biên của một trường nhập liệu duy nhất.",
+      "B. Khi hệ thống có rất nhiều tham số cấu hình và cần kiểm tra sự tương tác giữa chúng.",
+      "C. Khi cần mô tả các bước thực hiện kịch bản người dùng (User Journey).",
+      "D. Khi muốn xác định các trạng thái logic của một quy trình phê duyệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OAT là kỹ thuật kiểm thử tổ hợp giúp giảm số lượng test case bằng cách kiểm tra các cặp tương tác giữa các tham số một cách có hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi viết kịch bản kiểm thử theo hướng BDD (Gherkin), sai lầm phổ biến nhất làm tăng chi phí bảo trì ở mức độ đội nhóm là gì?",
+    "options": [
+      "A. Sử dụng quá nhiều tham số trong các Step Definition.",
+      "B. Viết các bước Given-When-Then quá chi tiết về giao diện (UI) thay vì hành vi (Behavior).",
+      "C. Đặt tên file Feature không theo chuẩn CamelCase.",
+      "D. Sử dụng Background để thiết lập dữ liệu ban đầu cho các Scenario."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Viết Gherkin dựa trên UI (ví dụ: click button A, nhập text B) khiến script cực kỳ dễ gãy khi giao diện thay đổi. BDD nên tập trung vào giá trị nghiệp vụ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh Continuous Integration (CI), việc duy trì bộ Test Suite 'khổng lồ' đòi hỏi quyết định kiến trúc nào để tối ưu thời gian phản hồi?",
+    "options": [
+      "A. Thực thi toàn bộ test suite cho mỗi lần commit code.",
+      "B. Phân loại test suite thành Smoke, Sanity và Regression; áp dụng Regression Test Selection (RTS).",
+      "C. Chuyển toàn bộ các test case thủ công sang tự động hóa bằng mọi giá.",
+      "D. Chỉ chạy các test case đã từng bị fail trong quá khứ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân loại và áp dụng RTS dựa trên phân tích vùng thay đổi giúp tối ưu tài nguyên và cung cấp phản hồi nhanh chóng trong pipeline CI/CD.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật '3-point Boundary Value Analysis' khác biệt như thế nào so với '2-point BVA' và tại sao nó quan trọng trong các hệ thống tài chính?",
+    "options": [
+      "A. 3-point BVA kiểm tra thêm giá trị trung bình để đảm bảo tính toán đúng.",
+      "B. 3-point BVA kiểm tra giá trị biên và hai giá trị lân cận (ngay trên và ngay dưới biên).",
+      "C. 3-point BVA chỉ dùng cho các trường dữ liệu kiểu chuỗi (string).",
+      "D. 2-point BVA thực tế đã lỗi thời và không còn được sử dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "3-point BVA (Boundary, Boundary-1, Boundary+1) giúp phát hiện lỗi 'off-by-one' chính xác hơn, đặc biệt quan trọng trong các logic so sánh thuế hoặc lãi suất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế Test Case cho một API có tính năng 'Idempotency', mục tiêu chính của tài liệu kiểm thử cần tập trung vào điều gì?",
+    "options": [
+      "A. Đảm bảo API trả về lỗi 400 khi gửi yêu cầu trùng lặp.",
+      "B. Đảm bảo việc gửi cùng một yêu cầu nhiều lần không làm thay đổi trạng thái hệ thống sau lần đầu tiên.",
+      "C. Kiểm tra xem API có thể xử lý bao nhiêu yêu cầu mỗi giây (Throughput).",
+      "D. Xác định xem API có hỗ trợ định dạng XML hay không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính Idempotency đảm bảo rằng nhiều yêu cầu giống hệt nhau sẽ có tác động tương đương như một yêu cầu duy nhất, điều này cực kỳ quan trọng trong xử lý giao dịch.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án Agile với yêu cầu thay đổi liên tục, cách tiếp cận thiết kế test case nào giúp giảm thiểu 'Technical Debt' cho đội ngũ QA?",
+    "options": [
+      "A. Viết test case chi tiết từng bước ngay từ giai đoạn Sprint Planning.",
+      "B. Sử dụng High-level Test Scenarios kết hợp với Exploratory Testing Charters.",
+      "C. Không viết tài liệu kiểm thử để tập trung toàn bộ thời gian cho việc test.",
+      "D. Chỉ viết test case sau khi tính năng đã được deploy lên môi trường Staging."
+    ],
+    "correctAnswer": "B",
+    "explanation": "High-level scenarios giúp duy trì cái nhìn tổng quát mà ít bị lỗi thời khi UI thay đổi, trong khi Exploratory Charters giúp bao phủ các góc khuất mà không tốn công bảo trì bước thực hiện.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện 'Requirement Ambiguity Analysis' (Phân tích tính mơ hồ của yêu cầu), QA phát hiện một tiêu chí chấp nhận (AC) mâu thuẫn với tài liệu kiến trúc. QA nên làm gì?",
+    "options": [
+      "A. Thiết kế test case theo AC vì đó là mong muốn của Product Owner.",
+      "B. Thiết kế test case theo tài liệu kiến trúc vì đó là giới hạn kỹ thuật.",
+      "C. Tổ chức buổi làm việc giữa PO và Architect để làm rõ và cập nhật lại tài liệu trước khi thiết kế.",
+      "D. Viết hai bộ test case cho cả hai trường hợp và chờ hệ thống code xong để đối chiếu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "QA ở mức độ advanced cần đóng vai trò ngăn ngừa lỗi (bug prevention) bằng cách giải quyết các mâu thuẫn ngay từ khâu thiết kế yêu cầu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Classification Tree Method' (CTM) hỗ trợ việc thiết kế test case như thế nào so với Equivalence Partitioning thông thường?",
+    "options": [
+      "A. CTM chỉ dùng để vẽ sơ đồ tổ chức của đội ngũ QA.",
+      "B. CTM cung cấp cách tiếp cận trực quan để kết hợp các phân vùng tương đương từ nhiều khía cạnh khác nhau.",
+      "C. CTM tự động tạo ra mã nguồn kiểm thử từ các yêu cầu phi chức năng.",
+      "D. CTM thay thế hoàn toàn việc viết test case bằng cách sử dụng AI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CTM là một phương pháp đồ họa giúp xác định các khía cạnh (aspects) và phân vùng, sau đó kết hợp chúng để tạo ra các kịch bản kiểm thử bao phủ các tổ hợp quan trọng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Hard-coded Data' trong Test Scripts/Test Cases được coi là một rủi ro lớn trong kiểm thử hệ thống quy mô lớn?",
+    "options": [
+      "A. Vì nó làm cho test case dễ đọc hơn đối với người mới.",
+      "B. Vì nó gây ra sự phụ thuộc vào trạng thái dữ liệu hiện tại, dẫn đến 'Flaky Tests' khi dữ liệu thay đổi.",
+      "C. Vì nó tăng tốc độ thực thi của các công cụ tự động hóa.",
+      "D. Vì nó giúp tiết kiệm dung lượng lưu trữ của hệ thống quản lý test case."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dữ liệu cứng (hard-coded) khiến bộ test case mất tính linh hoạt và dễ thất bại khi môi trường hoặc dữ liệu nền bị cập nhật, gây tốn chi phí bảo trì.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế chiến lược kiểm thử cho một hệ thống Legacy không có tài liệu yêu cầu, kỹ thuật thiết kế nào là phù hợp nhất để xây dựng bộ Regression Suite?",
+    "options": [
+      "A. Boundary Value Analysis dựa trên phỏng đoán.",
+      "B. Model-Based Testing bằng cách đảo ngược mã nguồn (Reverse Engineering).",
+      "C. Exploratory Testing kết hợp với việc ghi lại các hành vi hiện tại của hệ thống (Baseline).",
+      "D. Chỉ thực hiện Error Guessing dựa trên kinh nghiệm của lập trình viên cũ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong hệ thống Legacy, việc khám phá để hiểu hành vi hiện tại (Baseline) là cách thực tế nhất để tạo ra bộ kịch bản kiểm thử bảo vệ các tính năng đang hoạt động.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chỉ số 'Test Case Effectiveness' nên được đánh giá dựa trên tiêu chí nào để phản ánh đúng chất lượng của quá trình thiết kế?",
+    "options": [
+      "A. Số lượng test case viết được trung bình mỗi ngày của một tester.",
+      "B. Tỷ lệ phần trăm các test case được thực thi thành công (Pass rate).",
+      "C. Tỷ lệ lỗi nghiêm trọng được phát hiện bởi các test case trong bộ kịch bản so với lỗi lọt lưới (Leakage).",
+      "D. Tổng số lượng chữ và hình ảnh minh họa trong tài liệu test case."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hiệu quả của test case nằm ở khả năng phát hiện lỗi quan trọng và giảm thiểu rủi ro lỗi lọt ra môi trường thực tế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi áp dụng 'Risk-Based Testing', việc thiết kế test case sẽ thay đổi như thế nào?",
+    "options": [
+      "A. Mọi yêu cầu đều được thiết kế với số lượng test case bằng nhau.",
+      "B. Các tính năng có rủi ro cao (xác suất lỗi lớn và tác động nặng) sẽ được thiết kế kịch bản chi tiết và sâu hơn.",
+      "C. Chỉ thiết kế test case cho những tính năng khách hàng yêu cầu.",
+      "D. Loại bỏ hoàn toàn các kỹ thuật EP và BVA để tiết kiệm thời gian."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Risk-Based Testing điều tiết nỗ lực thiết kế và thực thi vào những vùng có nguy cơ gây thiệt hại lớn nhất cho doanh nghiệp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiểm thử API, việc thiết kế 'Negative Test Cases' dựa trên mã lỗi (Error Codes) nên ưu tiên kịch bản nào sau đây?",
+    "options": [
+      "A. Chỉ kiểm tra lỗi 404 khi sai URL.",
+      "B. Kiểm tra các ràng buộc về logic nghiệp vụ (ví dụ: 422 Unprocessable Entity) và các lỗ hổng bảo mật (401, 403).",
+      "C. Kiểm tra xem server có trả về lỗi 500 khi tắt database hay không.",
+      "D. Gửi các chuỗi ký tự ngẫu nhiên vào tất cả các trường để làm sập hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Negative testing ở mức độ nâng cao phải tập trung vào việc xử lý sai sót logic và bảo vệ toàn vẹn dữ liệu/truy cập thay vì chỉ các lỗi HTTP cơ bản.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khái niệm 'Test Oracle' trong thiết kế kịch bản kiểm thử nâng cao có ý nghĩa gì?",
+    "options": [
+      "A. Là một công cụ tự động hóa của hãng Oracle.",
+      "B. Là cơ chế hoặc nguồn thông tin dùng để xác định kết quả mong đợi (Expected Result) là đúng hay sai.",
+      "C. Là một loại database dùng để lưu trữ kết quả kiểm thử.",
+      "D. Là người quản lý dự án đưa ra quyết định cuối cùng về việc release."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test Oracle có thể là tài liệu, hệ thống cũ, hoặc kiến thức chuyên gia; nó cực kỳ quan trọng khi thiết kế test case cho các thuật toán phức tạp mà kết quả không hiển nhiên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế bộ dữ liệu kiểm thử cho một hệ thống Global, yếu tố nào thường bị bỏ qua dẫn đến lỗi nghiêm trọng khi triển khai?",
+    "options": [
+      "A. Tốc độ đường truyền internet của người dùng.",
+      "B. Định dạng ngày tháng, tiền tệ và các quy tắc về múi giờ (Timezone offsets).",
+      "C. Màu sắc của giao diện người dùng theo sở thích cá nhân.",
+      "D. Số lượng ký tự tối đa của một trường tên người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các yếu tố Localization/Internationalization (L10n/I18n) như múi giờ và định dạng vùng miền thường gây ra lỗi logic dữ liệu nghiêm trọng trong các hệ thống phân tán toàn cầu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Pairwise Testing' dựa trên nguyên lý thực nghiệm nào?",
+    "options": [
+      "A. Hầu hết các lỗi được phát hiện bởi sự tương tác của tối đa hai tham số đầu vào.",
+      "B. Lỗi luôn nằm ở các giá trị biên của tham số.",
+      "C. Càng nhiều test case thì chất lượng phần mềm càng cao.",
+      "D. Tester và Developer nên làm việc theo cặp để thiết kế test case."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nghiên cứu chỉ ra rằng phần lớn lỗi phát sinh từ sự tương tác đơn lẻ hoặc cặp đôi của các biến, do đó Pairwise giúp giảm đáng kể số test case mà vẫn đạt hiệu quả cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện bảo trì một bộ Test Suite lâu đời, hành động nào giúp tối ưu hóa tài liệu hiệu quả nhất?",
+    "options": [
+      "A. Xóa bỏ tất cả các test case đã pass trong 3 tháng gần nhất.",
+      "B. Thực hiện 'Test Case Refactoring' để loại bỏ các bước trùng lặp và cập nhật các kịch bản lỗi thời.",
+      "C. Gộp tất cả các test case vào một file duy nhất để dễ tìm kiếm.",
+      "D. Yêu cầu lập trình viên viết lại toàn bộ test case từ đầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Refactoring test case giúp giữ cho bộ kịch bản luôn tinh gọn, dễ hiểu và phản ánh đúng trạng thái hiện tại của hệ thống, giảm gánh nặng bảo trì.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiểm thử dựa trên mô hình (Model-Based Testing), lợi ích chính của việc thiết kế test case từ mô hình thay vì văn bản là gì?",
+    "options": [
+      "A. Không cần kỹ năng lập trình để chạy test.",
+      "B. Tự động cập nhật các kịch bản kiểm thử khi mô hình thay đổi và dễ dàng đo lường độ bao phủ logic.",
+      "C. Luôn luôn phát hiện được 100% các lỗi về giao diện.",
+      "D. Giảm bớt sự cần thiết của việc hiểu nghiệp vụ hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MBT cho phép duy trì sự đồng bộ giữa thiết kế và kịch bản thực tế, đồng thời giúp trực quan hóa các đường đi (paths) trong hệ thống để tối ưu độ bao phủ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống yêu cầu kiểm thử 10 trường nhập liệu, mỗi trường có 5 phân vùng tương đương. Nếu dùng kỹ thuật Exhaustive Testing, số lượng test case là bao nhiêu và tại sao nó không khả thi?",
+    "options": [
+      "A. 50 test case; không khả thi vì quá ít.",
+      "B. 5^10 test case; không khả thi vì bùng nổ tổ hợp và tốn quá nhiều thời gian/nguồn lực.",
+      "C. 10^5 test case; không khả thi vì máy tính không xử lý được.",
+      "D. 15 test case; không khả thi vì không đủ độ bao phủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Exhaustive testing yêu cầu thử mọi tổ hợp (5 mũ 10 = 9,765,625 kịch bản), điều này gây lãng phí và không thể thực hiện trong thực tế dự án.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế kịch bản kiểm thử cho tính năng 'Data Migration', trọng tâm của tài liệu nên đặt vào đâu?",
+    "options": [
+      "A. Kiểm tra màu sắc của thanh tiến trình (progress bar).",
+      "B. Kiểm tra tính toàn vẹn của dữ liệu (Data Integrity), ánh xạ đúng trường (Mapping) và không mất mát dữ liệu.",
+      "C. Kiểm tra xem người dùng có thể cancel quá trình migration hay không.",
+      "D. Kiểm tra font chữ của báo cáo sau khi migration."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong migration, việc đảm bảo dữ liệu từ nguồn sang đích không bị sai lệch, mất mát hoặc vi phạm các ràng buộc (constraints) là ưu tiên hàng đầu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa 'Test Scenario' và 'Test Case' trong quy trình chuyên nghiệp là gì?",
+    "options": [
+      "A. Test Scenario là các bước thực hiện, Test Case là mục tiêu kiểm thử.",
+      "B. Test Scenario mô tả 'cái gì' cần kiểm thử ở mức cao, Test Case mô tả chi tiết 'cách thức' kiểm thử với dữ liệu và kết quả mong đợi cụ thể.",
+      "C. Test Scenario chỉ dành cho kiểm thử thủ công, Test Case chỉ dành cho tự động hóa.",
+      "D. Không có sự khác biệt, hai thuật ngữ này có thể dùng thay thế hoàn toàn cho nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scenario cung cấp cái nhìn tổng quát về luồng nghiệp vụ, trong khi Test Case cung cấp các chỉ dẫn chi tiết để thực thi và đối chiếu kết quả một cách chính xác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế Decision Table cho một hệ thống xét duyệt tín dụng phức tạp với 6 điều kiện độc lập (mỗi điều kiện có 2 giá trị Đúng/Sai), số lượng quy tắc (rules) tối đa trong bảng đầy đủ là bao nhiêu và chiến lược của một Expert để tối ưu hóa bảng này là gì?",
+    "options": [
+      "A. 12 quy tắc; thực hiện kiểm thử tất cả các cặp điều kiện.",
+      "B. 36 quy tắc; sử dụng kỹ thuật phân vùng tương đương để giảm số lượng cột.",
+      "C. 64 quy tắc; sử dụng kỹ thuật rút gọn logic (collapsing) cho các cột có cùng kết quả hành động.",
+      "D. 128 quy tắc; chỉ tập trung vào các trường hợp có ít nhất 3 điều kiện Đúng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Số quy tắc tối đa là 2^n (2^6=64). Expert sử dụng kỹ thuật collapsing để gộp các cột có cùng kết quả khi một số điều kiện không ảnh hưởng đến hành động (Don't care), giúp tối ưu hóa số lượng test case mà vẫn đảm bảo logic.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống Microservices, khi tài liệu đặc tả API (Swagger/OpenAPI) thường xuyên thay đổi và không đầy đủ, chiến lược thiết kế test nào sau đây là hiệu quả nhất để đảm bảo tính ổn định của hệ thống?",
+    "options": [
+      "A. Thiết kế Scripted Tests chi tiết dựa trên mã nguồn của từng service.",
+      "B. Áp dụng Consumer-Driven Contract Testing (CDCT) để định nghĩa kỳ vọng giữa các service.",
+      "C. Chỉ thực hiện Manual Exploratory Testing trên môi trường Staging.",
+      "D. Viết Integration Test bao phủ toàn bộ luồng nghiệp vụ từ đầu đến cuối (E2E) cho mỗi thay đổi nhỏ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CDCT cho phép các bên tiêu thụ (consumers) định nghĩa các ràng buộc về dữ liệu và phản hồi, giúp phát hiện sớm các thay đổi phá vỡ (breaking changes) trong kiến trúc microservices mà không cần phụ thuộc hoàn toàn vào tài liệu đặc tả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật State Transition Testing ở mức độ Expert yêu cầu bao phủ 'N-Switch Coverage'. Nếu một hệ thống có 5 trạng thái, '1-Switch Coverage' có nghĩa là gì?",
+    "options": [
+      "A. Kiểm thử tất cả các trạng thái đơn lẻ ít nhất một lần.",
+      "B. Kiểm thử tất cả các chuỗi gồm 2 chuyển đổi trạng thái liên tiếp hợp lệ.",
+      "C. Kiểm thử tất cả các đường đi từ trạng thái bắt đầu đến trạng thái kết thúc.",
+      "D. Kiểm thử việc chuyển đổi qua lại giữa 2 trạng thái bất kỳ trong hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "N-Switch Coverage đo lường độ bao phủ của các chuỗi chuyển đổi. 0-Switch là bao phủ từng chuyển đổi đơn, 1-Switch là bao phủ tất cả các cặp chuyển đổi liên tiếp (chuỗi độ dài 2).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế dữ liệu kiểm thử (Test Data) cho một hệ thống ngân hàng yêu cầu tuân thủ nghiêm ngặt GDPR, chiến lược nào đảm bảo tính thực tế mà vẫn an toàn về bảo mật?",
+    "options": [
+      "A. Sao chép trực tiếp database Production về môi trường Test để đảm bảo tính toàn vẹn dữ liệu.",
+      "B. Sử dụng dữ liệu giả lập hoàn toàn ngẫu nhiên (Random Data Generation) cho tất cả các trường.",
+      "C. Sử dụng kỹ thuật Data Masking hoặc Pseudonymization trên tập dữ liệu Production đã được trích xuất.",
+      "D. Chỉ sử dụng 1 bản ghi mẫu duy nhất cho mỗi loại khách hàng để hạn chế rò rỉ thông tin."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Expert sử dụng Data Masking để ẩn danh các thông tin nhạy cảm (PII) nhưng vẫn giữ được cấu trúc, quan hệ và tính logic của dữ liệu thực tế, đáp ứng yêu cầu GDPR và chất lượng kiểm thử.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Ma trận truy xuất nguồn gốc yêu cầu (RTM) trong một dự án Agile quy mô lớn nên được duy trì như thế nào để tránh trở thành gánh nặng hành chính (overhead)?",
+    "options": [
+      "A. Tạo một file Excel thủ công và cập nhật sau mỗi buổi họp hàng ngày.",
+      "B. Tích hợp RTM trực tiếp vào công cụ quản lý (như Jira/Azure DevOps) thông qua việc liên kết các Work Items.",
+      "C. Chỉ lập RTM vào cuối dự án để phục vụ mục đích kiểm toán (audit).",
+      "D. Loại bỏ hoàn toàn RTM vì Agile không khuyến khích tài liệu hóa chi tiết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở mức độ Expert, việc tự động hóa RTM thông qua các công cụ quản lý dự án giúp duy trì tính minh bạch, hỗ trợ Impact Analysis tức thì mà không tốn công sức cập nhật thủ công.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Orthogonal Array Testing' (OAT) thường được ưu tiên sử dụng trong kịch bản nào sau đây?",
+    "options": [
+      "A. Khi cần kiểm thử logic rẽ nhánh của một hàm xử lý toán học phức tạp.",
+      "B. Khi hệ thống có số lượng lớn các tham số cấu hình đầu vào và cần tối ưu hóa số lượng tổ hợp kiểm thử.",
+      "C. Khi cần xác định các giá trị biên của một trường nhập liệu số thực.",
+      "D. Khi cần mô phỏng hành vi người dùng trên giao diện web (UI)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "OAT là một kỹ thuật kiểm thử tổ hợp giúp giảm đáng kể số lượng test case cần thiết để bao phủ các tương tác giữa các tham số đầu vào bằng cách sử dụng các mảng trực giao.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang đối mặt với một bộ Regression Test Suite khổng lồ (hàng nghìn test cases) chạy quá chậm. Tiêu chí nào là quan trọng nhất để thực hiện 'Test Suite Refactoring'?",
+    "options": [
+      "A. Xóa bỏ tất cả các test case đã từng pass trong 3 tháng gần nhất.",
+      "B. Phân tích độ ưu tiên dựa trên rủi ro (Risk-based) và tần suất thay đổi của code (Code Churn).",
+      "C. Chuyển đổi toàn bộ Manual Test Cases sang Automation mà không cần xem xét nội dung.",
+      "D. Gộp nhiều test case nhỏ thành một test case lớn duy nhất để giảm thời gian setup."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Expert thực hiện refactoring dựa trên phân tích rủi ro và lịch sử thay đổi mã nguồn để giữ lại các test case có khả năng phát hiện lỗi cao nhất, đồng thời loại bỏ các test case dư thừa hoặc lỗi thời.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kỹ thuật Boundary Value Analysis, đối với một biến có kiểu dữ liệu là số thực (Float) và phạm vi hợp lệ là [0.00, 100.00], các giá trị kiểm thử biên tối ưu theo phương pháp 'Robustness Testing' là gì?",
+    "options": [
+      "A. {0.00, 50.00, 100.00}",
+      "B. {-0.01, 0.00, 0.01, 50.00, 99.99, 100.00, 100.01}",
+      "C. {0.00, 100.00}",
+      "D. {-1.00, 0.00, 100.00, 101.00}"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Robustness Testing mở rộng BVA bằng cách kiểm tra cả các giá trị ngay sát biên (trong và ngoài), bao gồm: min-, min, min+, nominal, max-, max, max+.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi viết Test Scenario cho các yêu cầu phi chức năng (Non-functional requirements) như Performance, một Expert nên tích hợp chúng vào tài liệu thiết kế như thế nào?",
+    "options": [
+      "A. Viết riêng một tài liệu Performance Test Plan độc lập và không liên quan đến Functional Test.",
+      "B. Định nghĩa các ngưỡng (thresholds) cụ thể về thời gian phản hồi và tài nguyên trong từng Functional Test Case tương ứng.",
+      "C. Chỉ mô tả chung chung là 'Hệ thống phải chạy nhanh' trong phần kết quả mong đợi.",
+      "D. Đợi đến khi hoàn thành toàn bộ Functional Testing mới bắt đầu thiết kế các kịch bản phi chức năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tích hợp các tiêu chí chấp nhận phi chức năng vào tài liệu thiết kế giúp đảm bảo chất lượng toàn diện và cho phép thực hiện kiểm thử sớm (Shift-left) thay vì coi đó là một công việc tách biệt.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Phân tích rủi ro (Risk Analysis) trong thiết kế kiểm thử ở mức độ Expert chủ yếu dựa trên hai yếu tố nào?",
+    "options": [
+      "A. Số lượng dòng code và số lượng developer tham gia dự án.",
+      "B. Thời gian còn lại của dự án và ngân sách dành cho QA.",
+      "C. Xác suất xảy ra lỗi (Likelihood) và mức độ ảnh hưởng đến kinh doanh (Impact).",
+      "D. Độ phức tạp của giao diện người dùng và số lượng trình duyệt cần hỗ trợ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Product Risk được đánh giá dựa trên khả năng xảy ra sự cố và hậu quả của sự cố đó đối với người dùng hoặc doanh nghiệp, từ đó quyết định mức độ ưu tiên và phạm vi kiểm thử.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một hệ thống Legacy đang được chuyển đổi sang kiến trúc Cloud-native. Tài liệu kiểm thử cũ không còn chính xác. Cách tiếp cận thiết kế test nào là phù hợp nhất?",
+    "options": [
+      "A. Dành 1 tháng để cập nhật toàn bộ tài liệu cũ trước khi bắt đầu test.",
+      "B. Sử dụng 'Exploratory Testing' kết hợp với 'Test Charters' để vừa tìm hiểu hệ thống vừa thiết kế test cases mới.",
+      "C. Bỏ qua việc thiết kế, chỉ tập trung vào việc chạy lại các script automation cũ.",
+      "D. Thuê một đội ngũ riêng chỉ để viết lại tài liệu dựa trên mã nguồn mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong tình huống thiếu tài liệu và hệ thống thay đổi lớn, Exploratory Testing với các Test Charters định hướng giúp Expert nhanh chóng hiểu các rủi ro mới và tạo ra các kịch bản kiểm thử có giá trị thực tế.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Cause-Effect Graphing' mang lại lợi ích gì so với việc chỉ sử dụng Decision Table đơn thuần?",
+    "options": [
+      "A. Giúp vẽ sơ đồ luồng dữ liệu của hệ thống dễ dàng hơn.",
+      "B. Giúp xác định các tổ hợp điều kiện không khả thi (constraints) và giảm số lượng quy tắc dư thừa trước khi lập bảng.",
+      "C. Tự động sinh ra mã nguồn cho các bài test automation.",
+      "D. Thay thế hoàn toàn việc viết test case bằng các hình vẽ đồ họa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cause-Effect Graphing là bước đệm giúp phân tích các mối quan hệ logic phức tạp và các ràng buộc giữa đầu vào, giúp việc xây dựng Decision Table sau đó trở nên chính xác và tối ưu hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết kế chiến lược dữ liệu kiểm thử (Test Data Strategy) cho một hệ thống phân tán (Distributed System), thách thức lớn nhất cần giải quyết trong tài liệu là gì?",
+    "options": [
+      "A. Cách đặt tên cho các file dữ liệu kiểm thử.",
+      "B. Việc đảm bảo tính đồng nhất của dữ liệu (Data Consistency) trên nhiều node và database khác nhau.",
+      "C. Việc lựa chọn công cụ để mở các file CSV chứa dữ liệu.",
+      "D. Cách nén dữ liệu để tiết kiệm dung lượng ổ đĩa môi trường test."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong hệ thống phân tán, dữ liệu thường được nhân bản hoặc phân mảnh. Expert phải thiết kế cách quản lý dữ liệu sao cho trạng thái dữ liệu đồng bộ giữa các thành phần để tránh các lỗi giả (false positives).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một 'Good Test Case' ở cấp độ Expert không chỉ bao gồm các bước thực hiện mà còn phải thể hiện rõ điều gì?",
+    "options": [
+      "A. Tên của người viết và ngày viết.",
+      "B. Toàn bộ mã nguồn liên quan đến chức năng đó.",
+      "C. Mục tiêu kiểm thử (Test Objective) và mối liên hệ với rủi ro nghiệp vụ.",
+      "D. Danh sách tất cả các bug đã từng tìm thấy ở chức năng này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Expert viết test case tập trung vào giá trị. Việc nêu rõ mục tiêu và rủi ro giúp người thực hiện hiểu tại sao test case này quan trọng và cần chú ý điều gì khi nó thất bại.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh Continuous Integration (CI), tài liệu 'Test Design' cần thay đổi như thế nào để thích ứng?",
+    "options": [
+      "A. Chuyển sang dạng 'Living Documentation' (ví dụ: SpecFlow/Cucumber) nơi yêu cầu và test case là một.",
+      "B. Viết tài liệu chi tiết hơn bằng file Word để lưu trữ trong hệ thống quản lý tài liệu tập trung.",
+      "C. Ngừng viết tài liệu thiết kế và chỉ tập trung vào việc comment trong code.",
+      "D. Chỉ viết tài liệu cho các phiên bản phát hành chính thức (Major Releases)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Living Documentation sử dụng các ngôn ngữ như Gherkin giúp thu hẹp khoảng cách giữa Business, Dev và QA, đồng thời luôn cập nhật theo trạng thái thực tế của mã nguồn thông qua automation.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Equivalence Partitioning' (EP) nên được áp dụng như thế nào đối với các hệ thống có các đầu vào phụ thuộc lẫn nhau?",
+    "options": [
+      "A. Chia vùng độc lập cho từng tham số và kiểm thử các giá trị đại diện.",
+      "B. Sử dụng EP kết hợp với Decision Table để xử lý các vùng tương đương của các tổ hợp đầu vào.",
+      "C. Chỉ chia vùng cho tham số quan trọng nhất, các tham số khác giữ cố định.",
+      "D. Kỹ thuật EP không thể áp dụng cho các đầu vào phụ thuộc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi các biến phụ thuộc nhau, việc chia vùng đơn lẻ là không đủ. Expert kết hợp EP để xác định các lớp tương đương và Decision Table để quản lý logic kết hợp giữa các lớp đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc duy trì 'Test Case Readability' (tính dễ đọc) lại quan trọng đối với chiến lược bảo trì dài hạn của doanh nghiệp?",
+    "options": [
+      "A. Để đảm bảo bất kỳ ai (kể cả người không có chuyên môn) cũng có thể chạy test.",
+      "B. Để giảm chi phí đào tạo nhân viên mới và dễ dàng thực hiện Test Audit.",
+      "C. Để tăng tốc độ thực thi của các công cụ Automation.",
+      "D. Vì đó là yêu cầu bắt buộc của các tiêu chuẩn ISO về phần mềm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính dễ đọc giúp việc bảo trì, cập nhật và chuyển giao bộ test suite diễn ra nhanh chóng, giảm thiểu rủi ro hiểu sai kịch bản dẫn đến bỏ lỡ lỗi hoặc báo cáo lỗi giả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần thiết kế test cho một API mới hỗ trợ Versioning (v1, v2). Chiến lược thiết kế test case nào đảm bảo 'Backward Compatibility'?",
+    "options": [
+      "A. Chỉ thiết kế test cho phiên bản mới nhất (v2).",
+      "B. Sao chép bộ test của v1 sang v2 và thay đổi endpoint.",
+      "C. Thiết kế các kịch bản kiểm thử chạy cùng một tập dữ liệu đầu vào cho cả v1 và v2, so sánh kết quả mong đợi của các tính năng không thay đổi.",
+      "D. Yêu cầu Developer đảm bảo code không thay đổi, QA không cần test lại v1."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để đảm bảo tính tương thích ngược, Expert thiết kế các test case kiểm chứng rằng các client đang dùng v1 vẫn hoạt động đúng sau khi v2 được triển khai.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong 'Model-Based Testing' (MBT), tài liệu thiết kế kiểm thử chính là gì?",
+    "options": [
+      "A. Một danh sách các bước thực hiện bằng văn bản.",
+      "B. Một mô hình trừu tượng (như State Machine hoặc UML) mô tả hành vi hệ thống.",
+      "C. Một bộ các kịch bản automation được viết bằng Java/Python.",
+      "D. Các ảnh chụp màn hình giao diện người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong MBT, mô hình (Model) là trung tâm của việc thiết kế. Từ mô hình này, các test case có thể được sinh ra tự động dựa trên các thuật toán bao phủ đường đi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phân tích độ bao phủ yêu cầu (Requirement Coverage), nếu RTM cho thấy 100% yêu cầu đã có test case nhưng tỷ lệ lỗi lọt (Leakage) vẫn cao, Expert nên xem xét điều gì đầu tiên?",
+    "options": [
+      "A. Tăng số lượng test case cho mỗi yêu cầu một cách ngẫu nhiên.",
+      "B. Kiểm tra chất lượng và độ sâu của các test case (Test Design Quality) thay vì chỉ nhìn vào số lượng.",
+      "C. Đổi công cụ quản lý test case sang một công cụ đắt tiền hơn.",
+      "D. Phê bình đội ngũ viết yêu cầu vì viết không rõ ràng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Độ bao phủ 100% về số lượng không có nghĩa là chất lượng kiểm thử tốt. Expert cần đánh giá xem các kịch bản có bao phủ các trường hợp tiêu cực, biên, và các luồng logic phức tạp hay không.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Pairwise Testing' dựa trên giả thuyết (heuristic) nào sau đây?",
+    "options": [
+      "A. Mọi lỗi trong phần mềm đều do sự kết hợp của ít nhất 5 tham số.",
+      "B. Hầu hết các lỗi được phát hiện bởi các tham số đơn lẻ hoặc sự tương tác của hai tham số (2-way interaction).",
+      "C. Càng nhiều test case thì chất lượng phần mềm càng cao.",
+      "D. Lỗi chỉ xuất hiện ở các giá trị biên của dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pairwise Testing dựa trên nghiên cứu thực nghiệm cho thấy phần lớn các lỗi phát sinh từ sự tương tác của cặp tham số, giúp giảm số lượng test case mà vẫn đạt hiệu quả cao.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chiến lược 'Mutation Testing' được sử dụng trong thiết kế kiểm thử nhằm mục đích gì?",
+    "options": [
+      "A. Thay đổi mã nguồn để sửa lỗi tự động.",
+      "B. Đánh giá hiệu quả và độ bao phủ của bộ test case hiện tại bằng cách đưa các lỗi giả (mutants) vào mã nguồn.",
+      "C. Kiểm thử hiệu năng của hệ thống dưới tải trọng cao.",
+      "D. Tự động sinh ra tài liệu hướng dẫn sử dụng cho người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mutation Testing là kỹ thuật kiểm thử các bài kiểm thử (testing the tests). Nếu bộ test case không phát hiện được các thay đổi logic cố ý trong code, chứng tỏ bộ test đó chưa đủ mạnh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống thanh toán yêu cầu xử lý hàng triệu giao dịch mỗi giây. Khi thiết kế Test Data, việc sử dụng 'Golden Data Set' có ý nghĩa gì?",
+    "options": [
+      "A. Là tập dữ liệu chứa các thông tin về khách hàng VIP (Gold members).",
+      "B. Là tập dữ liệu chuẩn, đã được kiểm chứng và làm sạch, dùng để so sánh kết quả đầu ra trong các bài Regression Test.",
+      "C. Là tập dữ liệu được lưu trữ trong các ổ cứng bằng vàng để đảm bảo an toàn.",
+      "D. Là dữ liệu được sinh ra ngẫu nhiên bởi AI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Golden Data Set cung cấp một trạng thái dữ liệu nền tảng ổn định và kết quả mong đợi chính xác, giúp Expert dễ dàng phát hiện các sai lệch nhỏ nhất trong các bản build mới.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế test cho một quy trình nghiệp vụ (Workflow) kéo dài qua nhiều phòng ban, kỹ thuật nào giúp bao phủ các kịch bản 'Happy Path' và 'Exception Path' hiệu quả nhất?",
+    "options": [
+      "A. Boundary Value Analysis.",
+      "B. Use Case Testing kết hợp với Activity Diagrams.",
+      "C. Syntax Testing.",
+      "D. Checklist-based Testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Use Case Testing tập trung vào hành động của các tác nhân và luồng sự kiện, khi kết hợp với Activity Diagrams sẽ giúp Expert hình dung rõ ràng các nhánh rẽ và ngoại lệ trong quy trình nghiệp vụ phức tạp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong tài liệu Test Design, việc xác định 'Test Exit Criteria' (Tiêu chí dừng test) ở mức độ Expert nên dựa trên điều gì để đảm bảo tính chiến lược?",
+    "options": [
+      "A. Khi đã hết thời gian kiểm thử theo kế hoạch.",
+      "B. Khi tất cả các test case đã được chạy ít nhất một lần.",
+      "C. Khi mật độ lỗi còn lại (Defect Density) và rủi ro tồn đọng nằm trong ngưỡng chấp nhận được của doanh nghiệp.",
+      "D. Khi không tìm thêm được bất kỳ lỗi nào trong vòng 2 ngày liên tiếp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Expert không chỉ nhìn vào việc hoàn thành đầu việc mà nhìn vào chất lượng thực tế và rủi ro kinh doanh để đưa ra quyết định dừng kiểm thử một cách khoa học.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Design & Documentation",
+    "category": "ANALYSIS"
+  }
+]

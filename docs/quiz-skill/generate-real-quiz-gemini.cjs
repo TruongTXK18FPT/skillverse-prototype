@@ -241,6 +241,83 @@ const SKILLS = [
     ]
   },
   {
+    role: "QA Tester",
+    skillArea: "Testing Fundamentals",
+    relativePath: "technology/qa-tester/testing-fundamentals.json",
+    focus: [
+      "Core QA principles, SDLC/STLC and quality objectives",
+      "Test levels and test types across functional and non-functional scopes",
+      "Risk-based testing, prioritization and entry/exit criteria",
+      "Validation vs verification and defect prevention mindset"
+    ]
+  },
+  {
+    role: "QA Tester",
+    skillArea: "Test Design & Documentation",
+    relativePath: "technology/qa-tester/test-design-documentation.json",
+    focus: [
+      "Test case design techniques: EP, BVA, decision tables, state transitions",
+      "Writing clear test scenarios, test cases and test data strategies",
+      "Requirement traceability matrix and coverage analysis",
+      "Maintaining test suites with readability and reuse"
+    ]
+  },
+  {
+    role: "QA Tester",
+    skillArea: "Manual Testing",
+    relativePath: "technology/qa-tester/manual-testing.json",
+    focus: [
+      "Exploratory testing, session-based testing and charter planning",
+      "UI/UX validation, cross-browser/device compatibility checks",
+      "Regression, smoke, sanity and UAT support workflows",
+      "Reproducing bugs and documenting reproducible steps"
+    ]
+  },
+  {
+    role: "QA Tester",
+    skillArea: "API & Database Testing",
+    relativePath: "technology/qa-tester/api-database-testing.json",
+    focus: [
+      "REST API validation: status codes, schema, contracts and edge cases",
+      "Auth, rate limit, error handling and data consistency checks",
+      "SQL validation, joins, constraints and transactional integrity",
+      "End-to-end data flow verification between API and persistence"
+    ]
+  },
+  {
+    role: "QA Tester",
+    skillArea: "Automation Testing Basics",
+    relativePath: "technology/qa-tester/automation-testing-basics.json",
+    focus: [
+      "Automation scope selection and ROI considerations",
+      "Framework basics: test structure, fixtures and assertions",
+      "Stable selectors, waits, flakiness control and maintenance",
+      "CI integration and reporting for automated suites"
+    ]
+  },
+  {
+    role: "QA Tester",
+    skillArea: "Bug Reporting Tools",
+    relativePath: "technology/qa-tester/bug-reporting-tools.json",
+    focus: [
+      "Defect lifecycle, severity/priority and triage communication",
+      "Writing high-quality bug reports with evidence and impact",
+      "Using Jira/TestRail/Zephyr style workflows and linking artifacts",
+      "Metrics for defect leakage, reopen rate and quality trends"
+    ]
+  },
+  {
+    role: "QA Tester",
+    skillArea: "Agile QA Process",
+    relativePath: "technology/qa-tester/agile-qa-process.json",
+    focus: [
+      "QA role in Scrum/Kanban ceremonies and sprint workflows",
+      "Shift-left testing, acceptance criteria and BDD collaboration",
+      "Definition of ready/done and quality gates in agile delivery",
+      "Balancing speed, risk and release confidence in iterative teams"
+    ]
+  },
+  {
     role: "B2B Sales",
     skillArea: "Lead Generation",
     relativePath: "business/b2b-sales/lead-generation.json",
