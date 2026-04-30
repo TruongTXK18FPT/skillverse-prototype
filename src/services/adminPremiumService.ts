@@ -78,7 +78,6 @@ export interface AdminPremiumPlan {
   studentPrice?: number;
   features: string[];
   isActive: boolean;
-  maxSubscribers: number | null;
   currentSubscribers: number;
   totalRevenue: number;
   availableForSubscription: boolean;
@@ -99,7 +98,6 @@ export interface CreatePremiumPlanRequest {
   discountPercent?: number;
   studentDiscountPercent?: number;
   features: string; // JSON string array
-  maxSubscribers?: number | null;
   isActive?: boolean;
   featureLimits?: FeatureLimitConfig[];
 }
@@ -112,7 +110,6 @@ export interface UpdatePremiumPlanRequest {
   discountPercent?: number;
   studentDiscountPercent?: number;
   features: string; // JSON string array
-  maxSubscribers?: number | null;
   isActive?: boolean;
   targetRole?: "LEARNER" | "RECRUITER" | "PARENT";
   featureLimits?: FeatureLimitConfig[];

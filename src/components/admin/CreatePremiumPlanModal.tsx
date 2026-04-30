@@ -39,7 +39,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
       | "RECRUITER_PRO",
     targetRole: "LEARNER" as "LEARNER" | "RECRUITER",
     discountPercent: 0,
-    maxSubscribers: null as number | null,
     isActive: true,
   });
 
@@ -62,7 +61,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
           editingPlan.targetRole === "RECRUITER" ? "RECRUITER" : "LEARNER",
         discountPercent:
           editingPlan.discountPercent ?? editingPlan.studentDiscountPercent,
-        maxSubscribers: editingPlan.maxSubscribers,
         isActive: editingPlan.isActive,
       });
       setFeatures(
@@ -249,7 +247,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
               studentDiscountPercent:
                 editingPlan.discountPercent ?? editingPlan.studentDiscountPercent,
               features: JSON.stringify(editingPlan.features), // Convert array to JSON string
-              maxSubscribers: editingPlan.maxSubscribers,
               isActive: editingPlan.isActive,
               targetRole: editingPlan.targetRole as any,
               featureLimits:
@@ -264,7 +261,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
               discountPercent: formData.discountPercent,
               studentDiscountPercent: formData.discountPercent,
               features: featuresJson,
-              maxSubscribers: formData.maxSubscribers,
               isActive: formData.isActive,
               targetRole: formData.targetRole,
               featureLimits:
@@ -286,7 +282,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
           targetRole: formData.targetRole,
           studentDiscountPercent: formData.discountPercent,
           features: featuresJson,
-          maxSubscribers: formData.maxSubscribers,
           isActive: formData.isActive,
           featureLimits: featureLimits.length > 0 ? featureLimits : undefined,
         };
@@ -490,27 +485,6 @@ const CreatePremiumPlanModal: React.FC<CreatePremiumPlanModalProps> = ({
                 disabled={isFreeTier}
               />
               <small>Áp dụng cho nhóm người dùng mà gói này đang nhắm tới</small>
-            </div>
-
-            {/* Max Subscribers */}
-            <div className="admin-form-group">
-              <label htmlFor="maxSubscribers">Số Người Tối Đa</label>
-              <input
-                type="number"
-                id="maxSubscribers"
-                name="maxSubscribers"
-                value={formData.maxSubscribers || ""}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    maxSubscribers:
-                      e.target.value === "" ? null : parseInt(e.target.value),
-                  }))
-                }
-                min="1"
-                placeholder="Không giới hạn"
-              />
-              <small>Để trống nếu không giới hạn</small>
             </div>
 
             {/* Features */}

@@ -351,7 +351,6 @@ const PremiumPlansManagementTab: React.FC = () => {
                   <div className="admin-subscribers">
                     <Users size={14} />
                     {plan.currentSubscribers}
-                    {plan.maxSubscribers && ` / ${plan.maxSubscribers}`}
                   </div>
                 </td>
                 <td>
@@ -541,8 +540,6 @@ const PremiumPlansManagementTab: React.FC = () => {
                         <div className="label">Người Dùng</div>
                         <div className="value">
                           {selectedPlan.currentSubscribers}
-                          {selectedPlan.maxSubscribers &&
-                            ` / ${selectedPlan.maxSubscribers}`}
                         </div>
                       </div>
                     </div>
