@@ -8,6 +8,7 @@ import {
   Clock3,
   Compass,
   GitBranch,
+  TrendingUp,
   X,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -152,6 +153,18 @@ const RoadmapNodeFocusPanel = ({
     () => pickNonEmptyItems(node?.successCriteria, 99),
     [node?.successCriteria],
   );
+  const hasImportanceScoring = useMemo(
+    () => node != null && (node.importanceScore != null || !!node.reason),
+    [node],
+  );
+  const importanceLevelLabel = useMemo(() => {
+    if (node?.importanceScore == null) return null;
+    const s = node.importanceScore;
+    if (s >= 0.8) return "Cốt lõi";
+    if (s >= 0.6) return "Quan trọng";
+    if (s >= 0.4) return "Hữu ích";
+    return "Tùy chọn";
+  }, [node?.importanceScore]);
   const normalizedDescription = useMemo(
     () => normalizeRoadmapMarkdown(node?.description),
     [node?.description],
@@ -328,6 +341,32 @@ const RoadmapNodeFocusPanel = ({
               {learningContext?.objectiveSummary ||
                 "Node này chưa có mô tả chi tiết."}
             </p>
+          )}
+
+          {hasImportanceScoring && (
+            <div className="roadmap-node-focus-panel__scoring">
+              {node.importanceScore != null && (
+                <div className="roadmap-node-focus-panel__scoring-row">
+                  <TrendingUp size={13} />
+                  <span className="roadmap-node-focus-panel__scoring-label">Mức quan trọng</span>
+                  <span
+                    className={`roadmap-node-focus-panel__scoring-status roadmap-node-focus-panel__scoring-status--${
+                      node.importanceScore != null
+                        ? node.importanceScore >= 0.8 ? 'core'
+                          : node.importanceScore >= 0.6 ? 'important'
+                          : node.importanceScore >= 0.4 ? 'useful'
+                          : 'optional'
+                        : 'optional'
+                    }`}
+                  >
+                    {importanceLevelLabel ?? `${Math.round(node.importanceScore * 100)}%`}
+                  </span>
+                </div>
+              )}
+              {node.reason && (
+                <p className="roadmap-node-focus-panel__scoring-reason">{node.reason}</p>
+              )}
+            </div>
           )}
 
           <div className="roadmap-node-focus-panel__meta-grid">

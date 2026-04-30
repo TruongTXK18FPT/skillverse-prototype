@@ -261,6 +261,9 @@ const aiRoadmapService = {
       totalQuests: number;
       completedQuests: number;
       completionPercentage: number;
+      completedWeight?: number;
+      totalWeight?: number;
+      progressMode?: 'WEIGHTED_IMPORTANCE' | 'COUNT_FALLBACK' | string;
     };
   }> => {
     try {

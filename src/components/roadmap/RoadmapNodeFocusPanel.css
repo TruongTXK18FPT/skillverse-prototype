@@ -891,3 +891,46 @@
   border-color: rgba(148, 163, 184, 0.55);
   color: #cbd5e1;
 }
+
+/* Importance scoring section */
+.roadmap-node-focus-panel__scoring {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(34, 211, 238, 0.15);
+  background: rgba(15, 23, 42, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roadmap-node-focus-panel__scoring-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.roadmap-node-focus-panel__scoring-label {
+  flex: 1;
+  color: #94a3b8;
+}
+
+.roadmap-node-focus-panel__scoring-status {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.roadmap-node-focus-panel__scoring-status--core     { color: #22d3ee; }
+.roadmap-node-focus-panel__scoring-status--important { color: #f59e0b; }
+.roadmap-node-focus-panel__scoring-status--useful    { color: #818cf8; }
+.roadmap-node-focus-panel__scoring-status--optional  { color: #64748b; }
+
+.roadmap-node-focus-panel__scoring-reason {
+  font-size: 12px;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.5;
+  font-style: italic;
+}

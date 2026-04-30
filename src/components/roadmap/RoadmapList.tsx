@@ -149,12 +149,12 @@ const RoadmapList = memo(({
             <div className="roadmap-hud-progress-bar">
               <div
                 className="roadmap-hud-progress-fill"
-                style={{ width: `${roadmap.progressPercentage}%` }}
+                style={{ width: `${Math.min(100, roadmap.progressPercentage ?? 0)}%` }}
               />
             </div>
             <div className="roadmap-hud-progress-text">
               <span>TIẾN ĐỘ SỨ MỆNH</span>
-              <span>{roadmap.progressPercentage}%</span>
+              <span>{(roadmap.progressPercentage ?? 0).toFixed(1)}%</span>
             </div>
           </div>
         </div>

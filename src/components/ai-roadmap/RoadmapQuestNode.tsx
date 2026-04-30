@@ -4,6 +4,22 @@ import { CheckCircle, Circle, Clock, PlayCircle, Star, ChevronRight } from 'luci
 import { FlowNodeData } from '../../types/Roadmap';
 import { toRoadmapPlainTextPreview } from '../../utils/roadmapMarkdown';
 
+const importanceLevelLabel = (score?: number | null): string | null => {
+  if (score == null) return null;
+  if (score >= 0.8) return 'Cốt lõi';
+  if (score >= 0.6) return 'Quan trọng';
+  if (score >= 0.4) return 'Hữu ích';
+  return 'Tùy chọn';
+};
+
+const importanceLevelClass = (score?: number | null): string => {
+  if (score == null) return 'optional';
+  if (score >= 0.8) return 'core';
+  if (score >= 0.6) return 'important';
+  if (score >= 0.4) return 'useful';
+  return 'optional';
+};
+
 const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
   const {
     node,
@@ -87,6 +103,16 @@ const RoadmapQuestNode = memo(({ data }: NodeProps<FlowNodeData>) => {
           {node.difficulty && (
             <span className={`sv-roadmap-node__difficulty sv-roadmap-node__difficulty--${node.difficulty}`}>
               {node.difficulty}
+            </span>
+          )}
+
+          {node.importanceScore != null && importanceLevelLabel(node.importanceScore) != null && (
+            <span
+              className={`sv-roadmap-node__importance-badge sv-roadmap-node__importance-badge--${importanceLevelClass(node.importanceScore)}`}
+              title={node.reason ?? undefined}
+            >
+              <span className="sv-roadmap-node__importance-dot" />
+              {importanceLevelLabel(node.importanceScore)}
             </span>
           )}
         </div>

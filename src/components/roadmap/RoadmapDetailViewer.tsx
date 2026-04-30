@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, CheckCircle, Info, BookOpen, ClipboardList, UserCheck, Star, Wallet, Loader2 } from 'lucide-react';
+import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, Info, BookOpen, ClipboardList, UserCheck, Star, Wallet, Loader2 } from 'lucide-react';
 import { RoadmapResponse, QuestProgress } from '../../types/Roadmap';
 import RoadmapFlow from '../ai-roadmap/RoadmapFlow';
 import type { RoadmapNodeFocusPanelProps } from './RoadmapNodeFocusPanel';
@@ -205,15 +205,6 @@ const parseStructuredSpecValue = (value: string): Array<{ key: string; value: st
   return entries;
 };
 
-const hasStructuredSpecValue = (value: string | undefined | null): boolean => {
-  const safeValue = typeof value === 'string' ? value.trim() : '';
-  if (!safeValue) {
-    return false;
-  }
-
-  const structuredEntries = parseStructuredSpecValue(safeValue);
-  return structuredEntries.length > 1 || structuredEntries.some((entry) => entry.key.length > 0);
-};
 
 const renderSpecValue = (value: string | undefined | null) => {
   const safeValue = typeof value === 'string' ? value.trim() : '';
@@ -542,51 +533,38 @@ const RoadmapDetailViewer = memo(({
             <div>
               <span className="rm-label">MỤC TIÊU HỌC TẬP</span>
               <p className="rm-value">{roadmap.metadata.originalGoal}</p>
+              {!isSkillBased && careerBackgroundValue && careerBackgroundValue !== 'N/A' && (
+                <div className="rm-context-tags">
+                  <span className="rm-context-tag">{careerBackgroundValue}</span>
+                  {roadmap.metadata.dailyTime && (
+                    <span className="rm-context-tag">{roadmap.metadata.dailyTime}/ngày</span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
           {/* Dynamic Fields based on Type */}
-          <div className="rm-specs-grid">
-            {isSkillBased ? (
-              <>
-                <div className="rm-spec-item">
-                  <span className="rm-spec-label">Kỹ năng trọng tâm</span>
-                  {renderSpecValue(roadmap.metadata.target || roadmap.metadata.skillMode?.skillName || 'N/A')}
-                </div>
-                <div className="rm-spec-item">
-                  <span className="rm-spec-label">Cấp độ hiện tại</span>
-                  {renderSpecValue(roadmap.metadata.currentLevel || roadmap.metadata.skillMode?.currentSkillLevel || 'Zero')}
-                </div>
-                <div className="rm-spec-item">
-                  <span className="rm-spec-label">Thời gian/ngày</span>
-                  {renderSpecValue(roadmap.metadata.dailyTime || '1h')}
-                </div>
-                <div className="rm-spec-item">
-                  <span className="rm-spec-label">Phong cách học</span>
-                  {renderSpecValue(roadmap.metadata.learningStyle || 'Practice')}
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="rm-spec-item">
-                  <span className="rm-spec-label">Vị trí mục tiêu</span>
-                  {renderSpecValue(roadmap.metadata.target || roadmap.metadata.careerMode?.targetRole || 'N/A')}
-                </div>
-                <div className={`rm-spec-item ${hasStructuredSpecValue(careerBackgroundValue) ? 'rm-spec-item--highlight' : ''}`}>
-                  <span className="rm-spec-label">Background</span>
-                  {renderSpecValue(careerBackgroundValue)}
-                </div>
-                <div className="rm-spec-item">
-                  <span className="rm-spec-label">Thời gian cam kết</span>
-                  {renderSpecValue(roadmap.metadata.careerMode?.timelineToWork || roadmap.metadata.duration || '6M')}
-                </div>
-                <div className="rm-spec-item">
-                  <span className="rm-spec-label">Môi trường</span>
-                  {renderSpecValue(roadmap.metadata.targetEnvironment || roadmap.metadata.careerMode?.companyType || 'Startup')}
-                </div>
-              </>
-            )}
-          </div>
+          {isSkillBased && (
+            <div className="rm-specs-grid">
+              <div className="rm-spec-item">
+                <span className="rm-spec-label">Kỹ năng trọng tâm</span>
+                {renderSpecValue(roadmap.metadata.target || roadmap.metadata.skillMode?.skillName || 'N/A')}
+              </div>
+              <div className="rm-spec-item">
+                <span className="rm-spec-label">Cấp độ hiện tại</span>
+                {renderSpecValue(roadmap.metadata.currentLevel || roadmap.metadata.skillMode?.currentSkillLevel || 'Zero')}
+              </div>
+              <div className="rm-spec-item">
+                <span className="rm-spec-label">Thời gian/ngày</span>
+                {renderSpecValue(roadmap.metadata.dailyTime || '1h')}
+              </div>
+              <div className="rm-spec-item">
+                <span className="rm-spec-label">Phong cách học</span>
+                {renderSpecValue(roadmap.metadata.learningStyle || 'Practice')}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* RIGHT COLUMN: Tactical Stats */}
@@ -597,31 +575,22 @@ const RoadmapDetailViewer = memo(({
             <div className="rm-stat-content">
               <span className="rm-stat-label">THỜI LƯỢNG</span>
               <span className="rm-stat-value">
-                {derivedStats.approxMonths !== null
+                {derivedStats.approxDays !== null && derivedStats.approxDays <= 14
+                  ? `~${derivedStats.approxDays} ngày`
+                  : derivedStats.approxWeeks !== null && derivedStats.approxWeeks <= 8
+                  ? `~${derivedStats.approxWeeks} tuần`
+                  : derivedStats.approxMonths !== null && derivedStats.approxMonths > 0
                   ? `~${derivedStats.approxMonths} tháng`
-                  : roadmap.metadata.duration}
+                  : roadmap.metadata.duration ?? roadmap.metadata.desiredDuration ?? 'N/A'}
               </span>
               <span className="rm-stat-sub">
                 {derivedStats.totalEstimatedHours > 0
                   ? `~${derivedStats.totalEstimatedHours.toFixed(0)}h @ ${derivedStats.dailyMinutes}m/ngày`
-                  : roadmap.metadata.duration}
+                  : ''}
               </span>
             </div>
           </div>
 
-          {/* Effort vs Commitment warning */}
-          {derivedStats.commitmentGapMonths !== null && !derivedStats.commitmentMet && (
-            <div className="rm-warning-inline rm-warning-effort">
-              <AlertTriangle size={14} />
-              <span>Effort vượt cam kết {Math.abs(derivedStats.commitmentGapMonths)} tháng — cân nhắc giảm scope</span>
-            </div>
-          )}
-          {derivedStats.commitmentGapMonths !== null && derivedStats.commitmentMet && derivedStats.commitmentGapMonths > 0 && (
-            <div className="rm-warning-inline rm-warning-ahead">
-              <CheckCircle size={14} />
-              <span>Effort thấp hơn cam kết {derivedStats.commitmentGapMonths} tháng — có thể hoàn thành sớm</span>
-            </div>
-          )}
 
           {/* Stat 2: Steps */}
           <div className="rm-stat-box">
@@ -657,30 +626,11 @@ const RoadmapDetailViewer = memo(({
             </p>
           )}
 
-          {/* Inline warning: time budget exceeded */}
-          {roadmap.warnings?.some(w => w.toLowerCase().includes('10%') || w.toLowerCase().includes('time')) && (
-            <div className="rm-warning-inline">
-              <AlertTriangle size={16} />
-              <span>Lộ trình vượt thời gian cam kết — có thể cần điều chỉnh scope</span>
-            </div>
-          )}
         </div>
       </div>
 
       {/* --- RESTORED SECTIONS --- */}
 
-      {/* Validation Notes (from Metadata) */}
-      {roadmap.metadata.validationNotes && (
-        <div className="rm-section-block">
-          <h3 className="rm-section-title"><CheckCircle size={18} /> Validation Notes</h3>
-          <ul className="rm-list-disc">
-            {Array.isArray(roadmap.metadata.validationNotes) 
-              ? roadmap.metadata.validationNotes.map((note, idx) => <li key={idx}>{note}</li>)
-              : <li>{roadmap.metadata.validationNotes}</li>
-            }
-          </ul>
-        </div>
-      )}
 
       {/* Overview Section - Expanded */}
       {roadmap.overview && (
@@ -911,16 +861,6 @@ const RoadmapDetailViewer = memo(({
     return (
       <div className="rm-footer-briefing rm-footer-briefing--advanced">
 
-        {roadmap.warnings && roadmap.warnings.length > 0 && (
-          <div className="rm-footer-section rm-warning-block">
-            <h3 className="rm-footer-title rm-text-warning"><AlertTriangle size={20} /> Warnings</h3>
-            <ul className="rm-list-disc">
-              {roadmap.warnings.map((warn, idx) => (
-                <li key={idx}>{warn}</li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         {roadmap.structure && Array.isArray(roadmap.structure) && roadmap.structure.length > 0 && (
           <div className="rm-footer-section">
@@ -985,16 +925,18 @@ const RoadmapDetailViewer = memo(({
         )}
 
         {roadmap.nextSteps && (
+          (roadmap.nextSteps.jobs?.length ?? 0) > 0 || (roadmap.nextSteps.nextSkills?.length ?? 0) > 0
+        ) && (
           <div className="rm-footer-section">
             <h3 className="rm-footer-title"><Rocket size={20} /> NEXT STEPS & REAL-WORLD CONNECTION</h3>
             <div className="rm-next-steps-grid">
-              {roadmap.nextSteps.jobs && (
+              {roadmap.nextSteps.jobs && roadmap.nextSteps.jobs.length > 0 && (
                 <div className="rm-next-col">
                   <h4><Briefcase size={16} /> Potential Jobs</h4>
                   <ul>{roadmap.nextSteps.jobs.map((j, i) => <li key={i}>{j}</li>)}</ul>
                 </div>
               )}
-              {roadmap.nextSteps.nextSkills && (
+              {roadmap.nextSteps.nextSkills && roadmap.nextSteps.nextSkills.length > 0 && (
                 <div className="rm-next-col">
                   <h4><GraduationCap size={16} /> Next Skills</h4>
                   <ul>{roadmap.nextSteps.nextSkills.map((s, i) => <li key={i}>{s}</li>)}</ul>

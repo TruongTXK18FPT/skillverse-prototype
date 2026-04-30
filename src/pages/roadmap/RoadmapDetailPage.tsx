@@ -370,16 +370,17 @@ const RoadmapDetailPage = () => {
       }
       setProgressMap(nextProgress);
 
-      const { completedQuests, totalQuests, completionPercentage } = response.stats;
+      const { completedQuests, totalQuests, completionPercentage, progressMode } = response.stats;
+      const progressLabel = progressMode === 'WEIGHTED_IMPORTANCE' ? 'tiến độ lộ trình' : 'tiến độ';
       if (completed) {
         showSuccess(
           'Hoàn thành',
-          `${completedQuests}/${totalQuests} mục tiêu đã hoàn thành (${completionPercentage.toFixed(1)}%)`
+          `${completedQuests}/${totalQuests} mục tiêu đã hoàn thành, ${progressLabel} ${completionPercentage.toFixed(1)}%`
         );
       } else {
         showSuccess(
           'Đã bỏ chọn',
-          `${completedQuests}/${totalQuests} mục tiêu đã hoàn thành (${completionPercentage.toFixed(1)}%)`
+          `${completedQuests}/${totalQuests} mục tiêu đã hoàn thành, ${progressLabel} ${completionPercentage.toFixed(1)}%`
         );
       }
     } catch (updateError) {
