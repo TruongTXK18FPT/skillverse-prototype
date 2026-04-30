@@ -13,6 +13,7 @@ import {
   Clock3,
   Crown,
   Eye,
+  Edit2,
   FileText,
   Inbox,
   Loader2,
@@ -74,6 +75,7 @@ import "./RecruiterTalentWorkspace.css";
 type TalentTab = "applicants";
 type DecisionState = "ACCEPTED" | "REJECTED";
 type ApplicantFilter = "all" | "pending" | "accepted" | "rejected";
+type JobStatusFilter = "all" | "open" | "pending" | "closed";
 
 type CandidateSeed = {
   candidateId: number;
@@ -109,6 +111,7 @@ type WorkspaceJob = {
   isRemote?: boolean;
   budgetLabel: string;
   subLabel: string;
+  createdAt?: string;
   raw: JobPostingResponse | ShortTermJobResponse;
 };
 
@@ -376,6 +379,12 @@ const getShortTermApplicationTone = (
 const getWorkspaceJobKey = (kind: WorkspaceJobKind, id: number): string =>
   `${kind}-${id}`;
 
+const getWorkspaceJobTime = (job: WorkspaceJob): number => {
+  const candidateDate = job.createdAt || job.deadline;
+  const timestamp = candidateDate ? new Date(candidateDate).getTime() : 0;
+  return Number.isFinite(timestamp) ? timestamp : 0;
+};
+
 const toWorkspaceFullTimeJob = (job: JobPostingResponse): WorkspaceJob => ({
   key: getWorkspaceJobKey("fulltime", job.id),
   id: job.id,
@@ -391,6 +400,7 @@ const toWorkspaceFullTimeJob = (job: JobPostingResponse): WorkspaceJob => ({
   isRemote: job.isRemote,
   budgetLabel: `${formatCompactCurrency(job.minBudget)} - ${formatCompactCurrency(job.maxBudget)}`,
   subLabel: job.isRemote ? "Remote" : job.location || "On-site",
+  createdAt: job.createdAt,
   raw: job,
 });
 
@@ -409,6 +419,7 @@ const toWorkspaceShortTermJob = (job: ShortTermJobResponse): WorkspaceJob => ({
   isRemote: job.isRemote,
   budgetLabel: formatCompactCurrency(job.budget),
   subLabel: job.isRemote ? "Remote" : job.location || "On-site",
+  createdAt: job.createdAt || job.publishedAt,
   raw: job,
 });
 
@@ -715,6 +726,9 @@ const RecruiterTalentWorkspace = ({
   const [applicantFilter, setApplicantFilter] =
     useState<ApplicantFilter>("all");
   const [applicantKeyword, setApplicantKeyword] = useState("");
+  const [jobKeyword, setJobKeyword] = useState("");
+  const [jobStatusFilter, setJobStatusFilter] =
+    useState<JobStatusFilter>("all");
 
   const [portfolioProfile, setPortfolioProfile] =
     useState<UserProfileDTO | null>(null);
@@ -744,7 +758,7 @@ const RecruiterTalentWorkspace = ({
   } | null>(null);
 
   // Roster pagination
-  const ROSTER_PAGE_SIZE = 5;
+  const ROSTER_PAGE_SIZE = 3;
   const [rosterPage, setRosterPage] = useState(0);
 
   const [isBootstrapping, setIsBootstrapping] = useState(true);
@@ -762,14 +776,46 @@ const RecruiterTalentWorkspace = ({
   }, [fullTimeJobs, shortTermJobs]);
 
   const orderedJobs = [...jobRoster].sort((left, right) => {
+    const createdDiff = getWorkspaceJobTime(right) - getWorkspaceJobTime(left);
+    if (createdDiff !== 0) return createdDiff;
+
     const leftOpen = isWorkspaceJobOpen(left) ? 1 : 0;
     const rightOpen = isWorkspaceJobOpen(right) ? 1 : 0;
     if (leftOpen !== rightOpen) return rightOpen - leftOpen;
+
     return (right.applicantCount || 0) - (left.applicantCount || 0);
   });
 
-  const totalRosterPages = Math.ceil(orderedJobs.length / ROSTER_PAGE_SIZE);
-  const paginatedRosterJobs = orderedJobs.slice(
+  const filteredRosterJobs = useMemo(() => {
+    const normalizedKeyword = jobKeyword.trim().toLowerCase();
+
+    return orderedJobs.filter((job) =>
+      (jobStatusFilter === "all" ||
+        (jobStatusFilter === "closed"
+          ? job.statusTone === "closed" || job.statusTone === "rejected"
+          : job.statusTone === jobStatusFilter)) &&
+      (!normalizedKeyword ||
+        [
+          job.title,
+          job.statusLabel,
+          job.kind === "fulltime"
+            ? "toan thoi gian fulltime"
+            : "ngan han gig",
+          job.subLabel,
+          job.budgetLabel,
+          ...job.requiredSkills,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(normalizedKeyword)),
+    );
+  }, [jobKeyword, jobStatusFilter, orderedJobs]);
+
+  const totalRosterPages = Math.ceil(
+    filteredRosterJobs.length / ROSTER_PAGE_SIZE,
+  );
+  const paginatedRosterJobs = filteredRosterJobs.slice(
     rosterPage * ROSTER_PAGE_SIZE,
     (rosterPage + 1) * ROSTER_PAGE_SIZE,
   );
@@ -806,19 +852,40 @@ const RecruiterTalentWorkspace = ({
   );
 
   const goToRosterPage = (nextPage: number) => {
-    if (!orderedJobs.length) return;
+    if (!filteredRosterJobs.length) return;
 
     const safePage = Math.min(
       Math.max(nextPage, 0),
       Math.max(totalRosterPages - 1, 0),
     );
-    const firstJobOnPage = orderedJobs[safePage * ROSTER_PAGE_SIZE] || null;
+    const firstJobOnPage =
+      filteredRosterJobs[safePage * ROSTER_PAGE_SIZE] || null;
 
     setRosterPage(safePage);
 
     if (firstJobOnPage && firstJobOnPage.key !== selectedJobKey) {
       setSelectedJobKey(firstJobOnPage.key);
     }
+  };
+
+  const handleJobSelect = (jobKey: string) => {
+    if (!jobKey) return;
+    setSelectedJobKey(jobKey);
+    const nextIndex = filteredRosterJobs.findIndex((job) => job.key === jobKey);
+    if (nextIndex >= 0) {
+      setRosterPage(Math.floor(nextIndex / ROSTER_PAGE_SIZE));
+    }
+  };
+
+  const openSelectedJobEditor = () => {
+    if (!selectedJob) return;
+
+    if (selectedJob.kind === "shortterm") {
+      navigate(`/short-term-jobs/${selectedJob.id}/edit`);
+      return;
+    }
+
+    navigate("/business", { state: { activeSection: "fulltime" } });
   };
 
   const applicantCounts = useMemo(
@@ -1217,7 +1284,7 @@ const RecruiterTalentWorkspace = ({
   // Keep active roster item visible without forcing page-level scroll
   useEffect(() => {
     if (!selectedJobKey || !rosterRef.current) return;
-    const idx = orderedJobs.findIndex((j) => j.key === selectedJobKey);
+    const idx = filteredRosterJobs.findIndex((j) => j.key === selectedJobKey);
     if (idx < 0) return;
 
     // If active job is not on current roster page, jump to its page
@@ -1256,7 +1323,11 @@ const RecruiterTalentWorkspace = ({
     });
 
     return () => window.cancelAnimationFrame(rafId);
-  }, [selectedJobKey, orderedJobs, rosterPage]);
+  }, [selectedJobKey, filteredRosterJobs, rosterPage]);
+
+  useEffect(() => {
+    setRosterPage(0);
+  }, [jobKeyword]);
 
   useEffect(() => {
     let isMounted = true;
@@ -1531,137 +1602,205 @@ const RecruiterTalentWorkspace = ({
 
       {/* JOB BAR — HORIZONTAL SELECTOR */}
       <div className="rtw-job-bar">
-        {/* Selected job summary */}
-        <div className="rtw-job-bar__selected">
-          <div className="rtw-job-bar__selected-icon">
-            <Target size={18} />
-          </div>
-          <div className="rtw-job-bar__selected-info">
-            <h3>{selectedJob?.title || "Chưa chọn job"}</h3>
-            <div className="rtw-job-bar__selected-meta">
+        <div className="rtw-job-bar__top">
+          <div className="rtw-job-bar__selected">
+            <div className="rtw-job-bar__selected-icon">
+              <Target size={18} />
+            </div>
+            <div className="rtw-job-bar__selected-info">
+              <span className="rtw-job-bar__selected-kicker">
+                Job đang xem
+              </span>
+              <h3>{selectedJob?.title || "Chưa chọn job"}</h3>
+              {selectedJob && (
+                <span className="rtw-job-deadline-chip">
+                  <Calendar size={12} />
+                  {formatShortDate(selectedJob.deadline)}
+                </span>
+              )}
+              <div className="rtw-job-bar__selected-meta">
+                {selectedJob && (
+                  <>
+                    <span
+                      className={`rtw-status-pill rtw-status-pill--${selectedJob.statusTone}`}
+                    >
+                      {selectedJob.statusLabel}
+                    </span>
+                    <span
+                      className={`rtw-chip ${selectedJob.kind === "fulltime" ? "rtw-chip--gold" : "rtw-chip--purple"}`}
+                    >
+                      {selectedJob.kind === "fulltime"
+                        ? "Toàn thời gian"
+                        : "Ngắn hạn"}
+                    </span>
+                  </>
+                )}
+              </div>
               {selectedJob && (
                 <>
-                  <span
-                    className={`rtw-status-pill rtw-status-pill--${selectedJob.statusTone}`}
-                  >
-                    {selectedJob.statusLabel}
-                  </span>
-                  <span
-                    className={`rtw-chip ${selectedJob.kind === "fulltime" ? "rtw-chip--gold" : "rtw-chip--purple"}`}
-                  >
-                    {selectedJob.kind === "fulltime"
-                      ? "Toàn thời gian"
-                      : "Ngắn hạn"}
-                  </span>
-                  <span className="rtw-inline-stat">
-                    <Users size={12} />
-                    {selectedJob.applicantCount || 0} ứng tuyển
-                  </span>
-                  <span className="rtw-inline-stat">
-                    <Wallet size={12} />
-                    {selectedJob.budgetLabel}
-                  </span>
-                  <span className="rtw-inline-stat">
-                    <Calendar size={12} />
-                    {formatShortDate(selectedJob.deadline)}
-                  </span>
-                  {selectedJobSkillPreview.length > 0 && (
-                    <span className="rtw-inline-stat">
-                      <Sparkles size={12} />
-                      {selectedJobSkillPreview.join(", ")}
-                      {selectedJobRemainingSkills > 0
-                        ? ` +${selectedJobRemainingSkills}`
-                        : ""}
-                    </span>
+                  <div className="rtw-job-summary-grid">
+                    <div className="rtw-job-summary-stat">
+                      <Users size={15} />
+                      <span>Ứng viên</span>
+                      <strong>{selectedJob.applicantCount || 0}</strong>
+                    </div>
+                    <div className="rtw-job-summary-stat rtw-job-summary-stat--wide">
+                      <Wallet size={15} />
+                      <span>Mức lương</span>
+                      <strong>{selectedJob.budgetLabel}</strong>
+                    </div>
+                  </div>
+
+                  {(selectedJob.requiredSkills || []).length > 0 && (
+                    <div className="rtw-job-skill-strip">
+                      {(selectedJob.requiredSkills || [])
+                        .slice(0, 5)
+                        .map((skill) => (
+                          <span key={skill} className="rtw-job-skill-chip">
+                            <Sparkles size={12} />
+                            {skill}
+                          </span>
+                        ))}
+                      {(selectedJob.requiredSkills || []).length > 5 && (
+                        <span className="rtw-job-skill-chip rtw-job-skill-chip--muted">
+                          +{(selectedJob.requiredSkills || []).length - 5}
+                        </span>
+                      )}
+                    </div>
                   )}
                 </>
               )}
-            </div>
-            {selectedJob && (
-              <div className="rtw-job-bar__selected-actions">
-                {supportsBoost ? (
-                  <details className="rtw-job-bar__boost-details">
-                    <summary>
-                      <Zap size={12} />
-                      Quản lý boost hiển thị
-                      <ChevronDown
-                        size={12}
-                        className="rtw-job-bar__boost-caret"
-                      />
-                    </summary>
-                    <div className="rtw-job-bar__boost">
-                      <JobBoostButton
-                        jobId={selectedJob.id}
-                        jobTitle={selectedJob.title}
-                        onBoostCreated={handleBoostStateChange}
-                        onBoostCancelled={handleBoostStateChange}
-                      />
-                    </div>
-                  </details>
-                ) : (
-                  <p className="rtw-inline-note rtw-inline-note--left">
-                    Boost hiện chỉ hỗ trợ cho job toàn thời gian.
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Job roster */}
-        <div className="rtw-job-bar__roster" ref={rosterRef}>
-          {paginatedRosterJobs.map((job) => (
-            <button
-              key={job.key}
-              data-job-key={job.key}
-              className={`rtw-job-bar__roster-item rtw-job-bar__roster-item--${job.statusTone} ${job.key === selectedJobKey ? "rtw-job-bar__roster-item--active" : ""}`}
-              onClick={() => setSelectedJobKey(job.key)}
-            >
-              <div className="rtw-job-bar__roster-item__header">
-                <span
-                  className={`rtw-job-bar__roster-item__kind-dot rtw-job-bar__roster-item__kind-dot--${job.kind}`}
-                />
-                <span className="rtw-job-bar__roster-item__title">
-                  {job.title}
-                </span>
-              </div>
-              <div className="rtw-job-bar__roster-item__footer">
-                <div className="rtw-job-bar__roster-item__meta">
-                  <Users size={10} />
-                  {job.applicantCount || 0}
+              {selectedJob && (
+                <div className="rtw-job-bar__selected-actions">
+                  <button
+                    type="button"
+                    className="rtw-job-action"
+                    onClick={openSelectedJobEditor}
+                  >
+                    <Edit2 size={13} />
+                    Chỉnh sửa
+                  </button>
+                  {supportsBoost && (
+                    <details className="rtw-job-bar__boost-details rtw-job-bar__boost-details--inline">
+                      <summary>
+                        <Zap size={12} />
+                        Boost
+                        <ChevronDown
+                          size={12}
+                          className="rtw-job-bar__boost-caret"
+                        />
+                      </summary>
+                      <div className="rtw-job-bar__boost">
+                        <JobBoostButton
+                          jobId={selectedJob.id}
+                          jobTitle={selectedJob.title}
+                          onBoostCreated={handleBoostStateChange}
+                          onBoostCancelled={handleBoostStateChange}
+                        />
+                      </div>
+                    </details>
+                  )}
                 </div>
-                <span
-                  className={`rtw-status-pill rtw-status-pill--${job.statusTone}`}
-                  style={{ fontSize: "0.6rem", padding: "0.1rem 0.35rem" }}
-                >
-                  {job.statusLabel}
-                </span>
-              </div>
-            </button>
-          ))}
-
-          {/* Roster pagination */}
-          {totalRosterPages > 1 && (
-            <div className="rtw-job-bar__roster-pagination">
-              <button
-                className="rtw-job-bar__roster-pagination__btn"
-                disabled={rosterPage === 0}
-                onClick={() => goToRosterPage(rosterPage - 1)}
-              >
-                <ChevronLeft size={12} />
-              </button>
-              <span className="rtw-job-bar__roster-pagination__info">
-                {rosterPage + 1}/{totalRosterPages}
-              </span>
-              <button
-                className="rtw-job-bar__roster-pagination__btn"
-                disabled={rosterPage >= totalRosterPages - 1}
-                onClick={() => goToRosterPage(rosterPage + 1)}
-              >
-                <ChevronRight size={12} />
-              </button>
+              )}
             </div>
-          )}
+          </div>
+
+          <div className="rtw-job-bar__tools">
+            <span className="rtw-job-bar__tools-title">Chọn job</span>
+            <div className="rtw-job-bar__controls">
+              <label
+                className="rtw-search-box rtw-search-box--job"
+                aria-label="Tìm job"
+              >
+                <Search size={13} />
+                <input
+                  type="text"
+                  value={jobKeyword}
+                  onChange={(event) => setJobKeyword(event.target.value)}
+                  placeholder="Tìm job, kỹ năng, trạng thái..."
+                />
+              </label>
+              <select
+                className="rtw-select rtw-job-status-select"
+                value={jobStatusFilter}
+                onChange={(event) =>
+                  setJobStatusFilter(event.target.value as JobStatusFilter)
+                }
+                aria-label="Lọc trạng thái job"
+              >
+                <option value="all">Tất cả trạng thái</option>
+                <option value="open">Đang tuyển</option>
+                <option value="pending">Chờ duyệt / nháp</option>
+                <option value="closed">Đã đóng / từ chối</option>
+              </select>
+            </div>
+
+            <div className="rtw-job-list" ref={rosterRef}>
+              {paginatedRosterJobs.length ? (
+                paginatedRosterJobs.map((job) => (
+                  <button
+                    key={job.key}
+                    data-job-key={job.key}
+                    className={`rtw-job-row rtw-job-row--${job.statusTone} ${job.key === selectedJobKey ? "rtw-job-row--active" : ""}`}
+                    onClick={() => handleJobSelect(job.key)}
+                  >
+                    <span
+                      className={`rtw-job-row__dot rtw-job-row__dot--${job.kind}`}
+                    />
+                    <div className="rtw-job-row__main">
+                      <strong>{job.title}</strong>
+                      <span>
+                        {job.kind === "fulltime"
+                          ? "Toàn thời gian"
+                          : "Ngắn hạn"}{" "}
+                        · {formatShortDate(job.deadline)}
+                      </span>
+                    </div>
+                    <div className="rtw-job-row__meta">
+                      <span>
+                        <Users size={11} />
+                        {job.applicantCount || 0}
+                      </span>
+                      <span className="rtw-job-row__budget">
+                        {job.budgetLabel}
+                      </span>
+                    </div>
+                    <span
+                      className={`rtw-status-pill rtw-status-pill--${job.statusTone}`}
+                    >
+                      {job.statusLabel}
+                    </span>
+                  </button>
+                ))
+              ) : (
+                <div className="rtw-job-bar__empty">
+                  Không tìm thấy job phù hợp
+                </div>
+              )}
+
+              {totalRosterPages > 1 && (
+                <div className="rtw-job-bar__roster-pagination">
+                  <button
+                    className="rtw-job-bar__roster-pagination__btn"
+                    disabled={rosterPage === 0}
+                    onClick={() => goToRosterPage(rosterPage - 1)}
+                  >
+                    <ChevronLeft size={12} />
+                  </button>
+                  <span className="rtw-job-bar__roster-pagination__info">
+                    {rosterPage + 1}/{totalRosterPages}
+                  </span>
+                  <button
+                    className="rtw-job-bar__roster-pagination__btn"
+                    disabled={rosterPage >= totalRosterPages - 1}
+                    onClick={() => goToRosterPage(rosterPage + 1)}
+                  >
+                    <ChevronRight size={12} />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 

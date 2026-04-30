@@ -1126,7 +1126,7 @@ const CommandDeck: React.FC = () => {
         {/* ---------- CANDIDATES ---------- */}
         {section === "candidates" && (
           <div
-            className="rh-panel"
+            className="rh-panel rh-panel--candidates"
             style={{ "--rh-item-color": "#a78bfa" } as React.CSSProperties}
           >
             <div className="rh-panel-header">
