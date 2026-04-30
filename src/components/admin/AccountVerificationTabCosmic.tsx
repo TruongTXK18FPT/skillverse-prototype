@@ -4,10 +4,11 @@ import {
   UserCheck, Building2, Clock, CheckCircle, XCircle,
   Search, Filter, Eye, RefreshCw, X, Calendar, Mail,
   FileText, Award, Briefcase, Globe, MapPin, ChevronLeft, ChevronRight,
-  ExternalLink, Download, Maximize2, Phone
+  ExternalLink, Download, Maximize2, Phone, Cpu
 } from 'lucide-react';
 import adminService from '../../services/adminService';
 import axiosInstance, { API_BASE_URL } from '../../services/axiosInstance';
+import { adminApproveCccd, getPendingCccdVerifications, PendingCccdMentor } from '../../services/identityService';
 import { useToast } from '../../hooks/useToast';
 import Toast from '../shared/Toast';
 import {
@@ -46,6 +47,11 @@ const AccountVerificationTabCosmic: React.FC = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const { toast, isVisible, hideToast, showSuccess, showError, showWarning } = useToast();
 
+  // CCCD Pending Verification
+  const [pendingCccdList, setPendingCccdList] = useState<PendingCccdMentor[]>([]);
+  const [cccdLoading, setCccdLoading] = useState(false);
+  const [expandedCccdId, setExpandedCccdId] = useState<number | null>(null);
+
   // Get current user to check for USER_ADMIN permission
   const currentUserStr = getStoredUserRaw();
   const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
@@ -69,6 +75,22 @@ const AccountVerificationTabCosmic: React.FC = () => {
   useEffect(() => {
     fetchApplications();
   }, [fetchApplications]);
+
+  const fetchPendingCccd = useCallback(async () => {
+    try {
+      setCccdLoading(true);
+      const list = await getPendingCccdVerifications();
+      setPendingCccdList(list);
+    } catch (err) {
+      console.error('❌ Error fetching pending CCCD:', err);
+    } finally {
+      setCccdLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPendingCccd();
+  }, [fetchPendingCccd]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -163,6 +185,23 @@ const AccountVerificationTabCosmic: React.FC = () => {
       setActionLoading(false);
     }
   };
+
+  const handleApproveCccd = async (userId: number) => {
+    try {
+      setActionLoading(true);
+      await adminApproveCccd(userId);
+      showSuccess('Xác Thực Thành Công', 'CCCD đã được xác thực. Email thông báo đã gửi cho Mentor.');
+      fetchApplications();
+      fetchPendingCccd();
+      setExpandedCccdId(null);
+      setShowDetailModal(false);
+    } catch (err: any) {
+      showError('Xác Thực Thất Bại', err.message || 'Không thể xác thực CCCD.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
 
   const handleRejectConfirm = async () => {
     if (!selectedApplication || !rejectReason.trim()) {
@@ -300,7 +339,168 @@ const AccountVerificationTabCosmic: React.FC = () => {
             <div className="verification-stat-label">Đã Duyệt</div>
           </div>
         </div>
+        {pendingCccdList.length > 0 && (
+          <div className="verification-stat-card" style={{
+            background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.3)'
+          }}>
+            <div className="verification-stat-icon" style={{ background: 'rgba(245,158,11,0.15)', color: '#f59e0b' }}>
+              <Cpu size={24} />
+            </div>
+            <div className="verification-stat-content">
+              <div className="verification-stat-value" style={{ color: '#f59e0b' }}>{pendingCccdList.length}</div>
+              <div className="verification-stat-label">CCCD Chờ Duyệt</div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* ===== CCCD PENDING VERIFICATION SECTION ===== */}
+      {(pendingCccdList.length > 0 || cccdLoading) && (
+        <div style={{
+          background: 'rgba(245,158,11,0.06)',
+          border: '1px solid rgba(245,158,11,0.2)',
+          borderRadius: '1rem',
+          padding: '1.5rem',
+          marginBottom: '1.5rem'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <Cpu size={22} style={{ color: '#f59e0b' }} />
+              <div>
+                <h3 style={{ margin: 0, color: '#fcd34d', fontSize: '1.1rem' }}>CCCD Chờ Xác Thực Danh Tính</h3>
+                <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.85rem' }}>
+                  Các Mentor đã nộp CCCD, AI đã trích xuất xong, đang chờ Admin duyệt
+                </p>
+              </div>
+            </div>
+            <button
+              className="verification-refresh-btn"
+              onClick={fetchPendingCccd}
+              disabled={cccdLoading}
+              style={{ fontSize: '0.8rem' }}
+            >
+              <RefreshCw size={16} className={cccdLoading ? 'spinning' : ''} />
+              Làm mới
+            </button>
+          </div>
+
+          {cccdLoading ? (
+            <div style={{ textAlign: 'center', padding: '1rem', color: '#94a3b8' }}>
+              <RefreshCw size={20} className="spinning" style={{ marginRight: '0.5rem' }} />
+              Đang tải...
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {pendingCccdList.map((mentor) => {
+                let extractedInfo: any = null;
+                try {
+                  if (mentor.cccdExtractedData) {
+                    const parsed = JSON.parse(mentor.cccdExtractedData);
+                    extractedInfo = parsed?.front?.data?.[0] || null;
+                  }
+                } catch { /* ignore */ }
+
+                return (
+                  <div key={mentor.userId} style={{
+                    background: 'rgba(15,23,42,0.6)',
+                    border: '1px solid rgba(245,158,11,0.15)',
+                    borderRadius: '0.75rem',
+                    overflow: 'hidden'
+                  }}>
+                    {/* Row header */}
+                    <div style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '0.875rem 1.25rem', cursor: 'pointer'
+                    }} onClick={() => setExpandedCccdId(expandedCccdId === mentor.userId ? null : mentor.userId)}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{
+                          width: 40, height: 40, borderRadius: '50%',
+                          background: 'rgba(245,158,11,0.15)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          color: '#f59e0b', fontWeight: 700, fontSize: '1rem', flexShrink: 0
+                        }}>
+                          {mentor.fullName?.charAt(0) || '?'}
+                        </div>
+                        <div>
+                          <div style={{ color: '#e2e8f0', fontWeight: 600 }}>{mentor.fullName}</div>
+                          <div style={{ color: '#64748b', fontSize: '0.8rem' }}>{mentor.email}</div>
+                        </div>
+                        {extractedInfo && (
+                          <span style={{
+                            background: 'rgba(16,185,129,0.12)', color: '#34d399',
+                            border: '1px solid rgba(16,185,129,0.2)',
+                            borderRadius: '0.4rem', padding: '2px 8px', fontSize: '0.75rem'
+                          }}>
+                            ✓ AI đã trích xuất
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <button
+                          className="verification-action-btn approve"
+                          onClick={(e) => { e.stopPropagation(); handleApproveCccd(mentor.userId); }}
+                          disabled={actionLoading}
+                          title="Xác thực CCCD"
+                          style={{ padding: '0.4rem 0.9rem', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                        >
+                          <CheckCircle size={14} />
+                          {actionLoading ? '...' : 'Xác Thực'}
+                        </button>
+                        <Eye size={16} style={{ color: '#64748b' }} />
+                      </div>
+                    </div>
+
+                    {/* Expanded AI data */}
+                    {expandedCccdId === mentor.userId && (
+                      <div style={{
+                        borderTop: '1px solid rgba(245,158,11,0.12)',
+                        padding: '1rem 1.25rem',
+                        background: 'rgba(0,0,0,0.2)'
+                      }}>
+                        {extractedInfo ? (
+                          <div className="verification-ai-grid">
+                            <div className="verification-ai-item">
+                              <span className="verification-ai-label">Số CCCD</span>
+                              <span className="verification-ai-value highlight">{extractedInfo.id || mentor.cccdNumber || 'Không có'}</span>
+                            </div>
+                            <div className="verification-ai-item">
+                              <span className="verification-ai-label">Họ và Tên</span>
+                              <span className="verification-ai-value highlight">{extractedInfo.name || mentor.cccdFullName || 'Không có'}</span>
+                            </div>
+                            <div className="verification-ai-item">
+                              <span className="verification-ai-label">Ngày Sinh</span>
+                              <span className="verification-ai-value">{extractedInfo.dob || mentor.cccdDob || 'Không có'}</span>
+                            </div>
+                            <div className="verification-ai-item">
+                              <span className="verification-ai-label">Giới Tính</span>
+                              <span className="verification-ai-value">{extractedInfo.sex || 'Không có'}</span>
+                            </div>
+                            <div className="verification-ai-item">
+                              <span className="verification-ai-label">Quê Quán</span>
+                              <span className="verification-ai-value">{extractedInfo.home || 'Không có'}</span>
+                            </div>
+                            <div className="verification-ai-item" style={{ gridColumn: '1/-1' }}>
+                              <span className="verification-ai-label">Nơi Thường Trú</span>
+                              <span className="verification-ai-value">{extractedInfo.address || 'Không có'}</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="verification-ai-empty">
+                            AI đang xử lý. Dữ liệu sẽ xuất hiện sau vài giây. Vui lòng làm mới.
+                          </div>
+                        )}
+                        <p style={{ fontSize: '0.78rem', color: '#475569', marginTop: '0.75rem', marginBottom: 0 }}>
+                          Cập nhật lúc: {mentor.updatedAt ? new Date(mentor.updatedAt).toLocaleString('vi-VN') : 'N/A'}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Filters */}
       <div className="verification-filters">
@@ -501,7 +701,11 @@ const AccountVerificationTabCosmic: React.FC = () => {
 
             <div className="verification-modal-body">
               {selectedApplication.type === 'MENTOR' ? (
-                <MentorDetail mentor={selectedApplication.data as MentorApplicationDto} />
+                <MentorDetail
+                  mentor={selectedApplication.data as MentorApplicationDto}
+                  onApproveCccd={handleApproveCccd}
+                  actionLoading={actionLoading}
+                />
               ) : (
                 <RecruiterDetail recruiter={selectedApplication.data as RecruiterApplicationDto} />
               )}
@@ -617,7 +821,11 @@ const AccountVerificationTabCosmic: React.FC = () => {
 };
 
 // Mentor Detail Component
-const MentorDetail: React.FC<{ mentor: MentorApplicationDto }> = ({ mentor }) => {
+const MentorDetail: React.FC<{
+  mentor: MentorApplicationDto;
+  onApproveCccd?: (userId: number) => void;
+  actionLoading?: boolean;
+}> = ({ mentor, onApproveCccd, actionLoading }) => {
   const [cvPreviewUrl, setCvPreviewUrl] = useState<string | null>(null);
   const [certPreviewUrl, setCertPreviewUrl] = useState<string | null>(null);
   const [pdfOverlay, setPdfOverlay] = useState<{ url: string; title: string } | null>(null);
@@ -798,6 +1006,101 @@ const MentorDetail: React.FC<{ mentor: MentorApplicationDto }> = ({ mentor }) =>
         </div>
       </div>
     )}
+
+    {/* CCCD Information Section */}
+    <div className="verification-detail-section">
+      <h5>Xác Thực Danh Tính (CCCD)</h5>
+      <div className="verification-detail-grid">
+        <div className="verification-detail-item">
+          <CheckCircle size={18} style={{ color: mentor.identityVerified ? '#10b981' : '#f59e0b' }} />
+          <div>
+            <label>Trạng thái xác thực</label>
+            <span style={{ color: mentor.identityVerified ? '#10b981' : '#f59e0b', fontWeight: 600 }}>
+              {mentor.identityVerified ? 'Đã xác thực hợp lệ' : 'Chưa xác thực / Đang chờ duyệt'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Admin CCCD Approve Button */}
+      {!mentor.identityVerified && mentor.cccdExtractedData && mentor.cccdExtractedData !== '{}' && mentor.cccdExtractedData !== '{"status":"processing"}' && onApproveCccd && (
+        <div style={{ marginTop: '1rem' }}>
+          <button
+            className="verification-modal-btn approve"
+            onClick={() => onApproveCccd(mentor.userId)}
+            disabled={actionLoading}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: 'auto' }}
+          >
+            <CheckCircle size={16} />
+            {actionLoading ? 'Đang xử lý...' : '\u2705 Xác Thực Danh Tính CCCD'}
+          </button>
+          <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '0.5rem' }}>
+            Nhấn để xác thực CCCD cho Mentor này. Email thông báo sẽ được gửi tự động.
+          </p>
+        </div>
+      )}
+
+      {mentor.cccdExtractedData && (
+        <div className="verification-ai-card">
+          <div className="verification-ai-card-header">
+            <Cpu size={18} />
+            Dữ Liệu Trích Xuất Từ FPT.AI
+          </div>
+          {(() => {
+            try {
+              const data = JSON.parse(mentor.cccdExtractedData);
+              const front = data?.front?.data?.[0];
+              const back = data?.back?.data?.[0];
+              
+              if (!front && !back) return <div className="verification-ai-empty">Không có dữ liệu trích xuất</div>;
+
+              return (
+                <div className="verification-ai-grid">
+                  <div className="verification-ai-item">
+                    <span className="verification-ai-label">Số CCCD</span>
+                    <span className="verification-ai-value highlight">{front?.id || mentor.cccdNumber || 'Không có'}</span>
+                  </div>
+                  <div className="verification-ai-item">
+                    <span className="verification-ai-label">Họ và Tên</span>
+                    <span className="verification-ai-value highlight">{front?.name || mentor.cccdFullName || 'Không có'}</span>
+                  </div>
+                  <div className="verification-ai-item">
+                    <span className="verification-ai-label">Ngày Sinh</span>
+                    <span className="verification-ai-value">{front?.dob || mentor.cccdDob || 'Không có'}</span>
+                  </div>
+                  <div className="verification-ai-item">
+                    <span className="verification-ai-label">Giới Tính</span>
+                    <span className="verification-ai-value">{front?.sex || 'Không có'}</span>
+                  </div>
+                  <div className="verification-ai-item">
+                    <span className="verification-ai-label">Quê Quán</span>
+                    <span className="verification-ai-value">{front?.home || 'Không có'}</span>
+                  </div>
+                  <div className="verification-ai-item">
+                    <span className="verification-ai-label">Nơi Thường Trú</span>
+                    <span className="verification-ai-value">{front?.address || 'Không có'}</span>
+                  </div>
+                  <div className="verification-ai-item">
+                    <span className="verification-ai-label">Đặc Điểm Nhận Dạng</span>
+                    <span className="verification-ai-value">{back?.features || 'Không có'}</span>
+                  </div>
+                  <div className="verification-ai-item">
+                    <span className="verification-ai-label">Ngày Cấp</span>
+                    <span className="verification-ai-value">{back?.issue_date || 'Không có'}</span>
+                  </div>
+                  <div className="verification-ai-item" style={{ gridColumn: '1 / -1' }}>
+                    <span className="verification-ai-label">Nơi Cấp</span>
+                    <span className="verification-ai-value">{back?.issue_loc || 'Không có'}</span>
+                  </div>
+                </div>
+              );
+            } catch (e) {
+              return <div className="verification-ai-empty">Lỗi định dạng dữ liệu ({mentor.cccdNumber})</div>;
+            }
+          })()}
+        </div>
+      )}
+    </div>
 
     {(mentor.cvPortfolioUrl || mentor.certificatesUrl) && (
       <div className="verification-detail-section">

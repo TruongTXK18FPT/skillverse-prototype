@@ -59,7 +59,8 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
     industry: ''
   });
   const [error, setError] = useState<string | null>(null);
-  const [companyDocuments, setCompanyDocuments] = useState<File[]>([]);
+  const [businessLicense, setBusinessLicense] = useState<File | null>(null);
+  const [supplementaryDocuments, setSupplementaryDocuments] = useState<File[]>([]);
   const [domainHint, setDomainHint] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -77,18 +78,29 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
     }
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBusinessLicenseUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.size <= 10 * 1024 * 1024) {
+      setBusinessLicense(file);
+    }
+  };
+
+  const handleSupplementaryUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const validFiles = files.filter(file => {
       const isValidType = file.type.includes('pdf') || file.type.includes('image');
       const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB
       return isValidType && isValidSize;
     });
-    setCompanyDocuments(prev => [...prev, ...validFiles]);
+    setSupplementaryDocuments(prev => [...prev, ...validFiles]);
   };
 
-  const removeDocument = (index: number) => {
-    setCompanyDocuments(prev => prev.filter((_, i) => i !== index));
+  const removeBusinessLicense = () => {
+    setBusinessLicense(null);
+  };
+
+  const removeSupplementaryDocument = (index: number) => {
+    setSupplementaryDocuments(prev => prev.filter((_, i) => i !== index));
   };
 
   useEffect(() => {
@@ -135,8 +147,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
     if (!formData.companyWebsite.includes('.') || formData.companyWebsite.length < 4) return 'Website không hợp lệ (ví dụ: skillverse.vn)';
 
     if (!formData.businessAddress.trim()) return 'Vui lòng nhập địa chỉ doanh nghiệp';
-    if (companyDocuments.length === 0) return 'Vui lòng tải lên tài liệu doanh nghiệp (PDF)';
-    if (!companyDocuments.some(f => f.type === 'application/pdf')) return 'Cần ít nhất một tệp PDF giấy phép kinh doanh';
+    if (!businessLicense) return 'Vui lòng tải lên Giấy phép kinh doanh (ĐKKD)';
     return null;
   };
 
@@ -166,7 +177,7 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
       contactPersonPosition: formData.contactPersonPosition,
       companySize: formData.companySize,
       industry: formData.industry,
-      companyDocuments: companyDocuments.length > 0 ? companyDocuments : undefined
+      companyDocuments: businessLicense ? [businessLicense, ...supplementaryDocuments] : supplementaryDocuments.length > 0 ? supplementaryDocuments : undefined
     };
 
     
@@ -598,56 +609,97 @@ const HologramBusinessRegisterForm: React.FC<HologramBusinessRegisterFormProps> 
           <div className="reg-business-section">
             <h3 className="reg-business-section-title">
               <FileText size={14} />
-              Tài Liệu Công Ty
+              Tài Liệu Doanh Nghiệp
             </h3>
           </div>
 
-          <div className="reg-business-file-upload">
-            <input
-              type="file"
-              id="business-documents"
-              multiple
-              accept=".pdf,image/*"
-              onChange={handleFileUpload}
-              style={{ display: 'none' }}
-            />
-            <label htmlFor="business-documents" className="reg-business-upload-area">
-              <div className="reg-business-upload-icon">
-                <Upload size={24} />
-              </div>
-              <div className="reg-business-upload-text">
-                Tải lên giấy phép kinh doanh, chứng nhận đăng ký doanh nghiệp
-              </div>
-              <div className="reg-business-upload-hint">
-                PDF hoặc hình ảnh, tối đa 10MB mỗi file
-              </div>
-            </label>
-            {companyDocuments.length > 0 && (
-              <div className="reg-business-file-list">
-                {companyDocuments.map((file, index) => (
-                  <div key={index} className="reg-business-file-item">
-                    <span className="reg-business-file-name">{file.name}</span>
+          <div className="reg-business-field reg-business-field-full" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
+            {/* Business License Upload */}
+            <div className="reg-business-file-upload">
+              <input
+                type="file"
+                id="business-license"
+                accept=".pdf,application/pdf,image/*"
+                onChange={handleBusinessLicenseUpload}
+                disabled={isLoading}
+                className="reg-business-file-input"
+                style={{ display: 'none' }}
+              />
+              <label htmlFor="business-license" className="reg-business-upload-area">
+                <div className="reg-business-upload-icon">
+                  <Upload size={24} />
+                </div>
+                <div className="reg-business-upload-text">
+                  Giấy phép kinh doanh (Bắt buộc)
+                </div>
+                <div className="reg-business-upload-hint">
+                  PDF hoặc hình ảnh, tối đa 10MB
+                </div>
+              </label>
+              {businessLicense && (
+                <div className="reg-business-file-list" style={{ marginTop: '12px' }}>
+                  <div className="reg-business-file-item">
+                    <span className="reg-business-file-name">{businessLicense.name}</span>
                     <button
                       type="button"
-                      onClick={() => removeDocument(index)}
+                      onClick={() => removeBusinessLicense()}
                       className="reg-business-file-remove"
                     >
                       <X size={16} />
                     </button>
                   </div>
-                ))}
-                {companyDocuments.map((file, index) => (
-                  <div key={`prev-${index}`} className="reg-business-file-preview">
-                    {file.type.startsWith('image/') && (
-                      <img src={URL.createObjectURL(file)} alt="Preview" style={{ maxWidth: '100%', maxHeight: 120 }} />
+                  <div className="reg-business-file-preview">
+                    {businessLicense.type.startsWith('image/') && (
+                      <img src={URL.createObjectURL(businessLicense)} alt="Preview" style={{ maxWidth: '100%', maxHeight: 120 }} />
                     )}
-                    {file.type === 'application/pdf' && (
-                      <embed src={URL.createObjectURL(file)} type="application/pdf" width="100%" height="120" />
+                    {businessLicense.type === 'application/pdf' && (
+                      <embed src={URL.createObjectURL(businessLicense)} type="application/pdf" width="100%" height="120" />
                     )}
                   </div>
-                ))}
-              </div>
-            )}
+                </div>
+              )}
+            </div>
+
+            {/* Supplementary Documents Upload */}
+            <div className="reg-business-file-upload">
+              <input
+                type="file"
+                id="supplementary-docs"
+                multiple
+                accept=".pdf,application/pdf,image/*"
+                onChange={handleSupplementaryUpload}
+                disabled={isLoading}
+                className="reg-business-file-input"
+                style={{ display: 'none' }}
+              />
+              <label htmlFor="supplementary-docs" className="reg-business-upload-area">
+                <div className="reg-business-upload-icon">
+                  <Upload size={24} />
+                </div>
+                <div className="reg-business-upload-text">
+                  Tài liệu bổ sung (Không bắt buộc)
+                </div>
+                <div className="reg-business-upload-hint">
+                  Hồ sơ năng lực, catalogue... Tối đa 4 file, 10MB/file
+                </div>
+              </label>
+              {supplementaryDocuments.length > 0 && (
+                <div className="reg-business-file-list" style={{ marginTop: '12px' }}>
+                  {supplementaryDocuments.map((file, index) => (
+                    <div key={index} className="reg-business-file-item">
+                      <span className="reg-business-file-name">{file.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeSupplementaryDocument(index)}
+                        className="reg-business-file-remove"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Submit Button */}

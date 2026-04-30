@@ -35,6 +35,7 @@ import {
 } from "../../services/nodeMentoringService";
 import type {
   JourneyOutputAssessmentResponse,
+  NodeAssignmentResponse,
   OutputAssessmentStatus,
   AssessJourneyOutputRequest,
 } from "../../types/NodeMentoring";
@@ -113,6 +114,9 @@ const MentorAssessmentCreator: React.FC<Props> = ({
   // Existing assessment state
   const [assessment, setAssessment] =
     useState<JourneyOutputAssessmentResponse | null>(null);
+  const [currentAssignment, setCurrentAssignment] =
+    useState<NodeAssignmentResponse | null>(null);
+  const [editingRequirements, setEditingRequirements] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // Requirements form
@@ -177,6 +181,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
       // Load Node Assignment if nodeId is present
       if (nodeId) {
         const assignment = await getNodeAssignment(journeyId, nodeId);
+        setCurrentAssignment(assignment);
         if (assignment) {
           setRequirementTitle(assignment.title || "");
           const rawDesc = assignment.description || "";
@@ -185,10 +190,15 @@ const MentorAssessmentCreator: React.FC<Props> = ({
           const { body, rubric } = splitRubricBlock(rawDesc);
           setRequirementDesc(body);
           if (rubric.length > 0) setRubricItems(rubric);
+          setEditingRequirements(assignment.assignmentSource !== "MENTOR_REFINED");
         } else {
           setRequirementTitle("");
           setRequirementDesc("");
+          setEditingRequirements(true);
         }
+      } else {
+        setCurrentAssignment(null);
+        setEditingRequirements(true);
       }
 
       // Load Journey Output Assessment (always load it if no nodeId, or optionally even if nodeId to see final status, but we only show it if !nodeId)
@@ -255,13 +265,16 @@ const MentorAssessmentCreator: React.FC<Props> = ({
       const { body } = splitRubricBlock(requirementDesc);
       const finalDescription = serializeRubric(body + attachmentNote, rubricItems);
 
-      await upsertNodeAssignment(journeyId, nodeId, {
+      const savedAssignment = await upsertNodeAssignment(journeyId, nodeId, {
         title: requirementTitle,
         description: finalDescription,
         assignmentSource: "MENTOR_REFINED",
       });
+      setCurrentAssignment(savedAssignment);
+      setEditingRequirements(false);
       showSuccess("Thành công", "Đã lưu yêu cầu Assessment cho node");
       setAttachmentFile(null);
+      onAssessed?.();
       await loadAssessment();
     } catch (err: any) {
       showError("Lỗi", err.response?.data?.message || "Không thể lưu yêu cầu");
@@ -297,6 +310,10 @@ const MentorAssessmentCreator: React.FC<Props> = ({
     assessment?.assessmentStatus !== "PENDING" &&
     assessment?.assessmentStatus != null;
   const totalWeight = rubricItems.reduce((sum, r) => sum + (r.weight || 0), 0);
+  const hasUploadedNodeAssignment =
+    !!nodeId &&
+    currentAssignment?.assignmentSource === "MENTOR_REFINED" &&
+    !editingRequirements;
 
   return (
     <div className="mac-container">
@@ -333,6 +350,38 @@ const MentorAssessmentCreator: React.FC<Props> = ({
 
         {requirementsExpanded && (
           <div className="mac-section-body">
+            {hasUploadedNodeAssignment && currentAssignment && (
+              <div className="mac-uploaded-assignment">
+                <div className="mac-uploaded-assignment__icon">
+                  <CheckCircle size={18} />
+                </div>
+                <div className="mac-uploaded-assignment__content">
+                  <h4>Đã tải lên yêu cầu node</h4>
+                  <p>
+                    Học viên sẽ thấy yêu cầu đã giao. Khi cần thay đổi nội dung,
+                    hãy mở lại form để cập nhật.
+                  </p>
+                  <div className="mac-uploaded-assignment__meta">
+                    {currentAssignment.title && (
+                      <span>{currentAssignment.title}</span>
+                    )}
+                    <span>
+                      {currentAssignment.updatedAt
+                        ? `Cập nhật ${new Date(currentAssignment.updatedAt).toLocaleString("vi-VN")}`
+                        : `Tạo lúc ${new Date(currentAssignment.createdAt).toLocaleString("vi-VN")}`}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="mac-edit-assignment-btn"
+                  onClick={() => setEditingRequirements(true)}
+                >
+                  Sửa nội dung
+                </button>
+              </div>
+            )}
+            <div style={{ display: hasUploadedNodeAssignment ? "none" : undefined }}>
             <div className="mac-form-group">
               <label className="mac-label">Tiêu đề Assessment</label>
               <input
@@ -347,6 +396,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
             <div className="mac-form-group">
               <label className="mac-label">Mô tả yêu cầu chi tiết</label>
               <RichTextEditor
+                key={`node-requirement-${nodeId ?? "final"}-${currentAssignment?.id ?? "new"}-${editingRequirements ? "edit" : "view"}`}
                 initialContent={requirementDesc}
                 onChange={setRequirementDesc}
                 placeholder="Mô tả chi tiết những gì học viên cần nộp..."
@@ -512,6 +562,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
                 </span>
               </div>
             )}
+            </div>
           </div>
         )}
       </div>

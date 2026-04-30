@@ -8,8 +8,7 @@ import {
   ArrowLeft,
   Sparkles,
   MousePointerClick,
-  Brain,
-  Loader2,
+  Gauge,
 } from "lucide-react";
 import {
   resolveSkill,
@@ -57,7 +56,7 @@ interface SkillAutoResolveProps {
   description?: string;
   /** Called when user clicks the back button */
   onBack?: () => void;
-  /** If true, use AI for resolution (requires backend). Default: true */
+  /** Backward-compatible flag. When true, calls backend smart resolver; no AI is used. */
   useAi?: boolean;
 }
 
@@ -111,7 +110,7 @@ interface MergedResult {
   industry: string;
   jobRole: string;
   confidence: number;
-  source: "ai" | "local";
+  source: "smart" | "local";
   reasoning?: string;
 }
 
@@ -135,12 +134,12 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [confirmed, setConfirmed] = useState(false);
 
-  // AI resolve state
+  // Backend smart resolve state
   const [resolveMode, setResolveMode] = useState<ResolveMode>("idle");
   const [aiResult, setAiResult] = useState<SkillResolveResponse | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
 
-  // Merged results (AI primary + local fallback)
+  // Merged results (backend smart match + local fallback)
   const [mergedResults, setMergedResults] = useState<MergedResult[]>([]);
 
   // Load expert fields on mount (for local fallback + domain labels)
@@ -170,7 +169,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
     return isSkillFuzzyVerified(skillInput, verifiedSkills);
   }, [skillInput, verifiedSkills]);
 
-  // Debounced AI resolution trigger
+  // Debounced smart resolution trigger
   useEffect(() => {
     if (!skillInput.trim() || skillInput.trim().length < 2) {
       setMergedResults([]);
@@ -205,7 +204,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
       );
     }
 
-    // Step 2: Delayed AI call (only if enabled)
+    // Step 2: Delayed backend resolver call (only if enabled)
     if (!useAi) return;
 
     setResolveMode("resolving");
@@ -215,37 +214,37 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
         setAiResult(result);
         setAiError(null);
 
-        // Merge AI result with local results
-        const aiPrimary: MergedResult = {
+        // Merge backend result with local results
+        const smartPrimary: MergedResult = {
           domain: result.domain,
           industry: result.industry,
           jobRole: result.jobRole,
           confidence: result.confidence,
-          source: "ai",
+          source: "smart",
           reasoning: result.reasoning,
         };
 
-        const aiAlternatives: MergedResult[] = (result.alternatives || [])
+        const smartAlternatives: MergedResult[] = (result.alternatives || [])
           .filter((alt) => isDomainAllowed(alt.domain, allowedDomains))
           .map((alt) => ({
             domain: alt.domain,
             industry: alt.industry,
             jobRole: alt.jobRole,
             confidence: alt.confidence,
-            source: "ai" as const,
+            source: "smart" as const,
           }));
 
-        // Combine: AI primary first, then AI alternatives, deduped
+        // Combine: backend primary first, then alternatives, deduped
         const combined: MergedResult[] = [];
         const seen = new Set<string>();
 
-        if (isDomainAllowed(aiPrimary.domain, allowedDomains)) {
-          const key = `${aiPrimary.domain}|${aiPrimary.industry}|${aiPrimary.jobRole}`;
-          combined.push(aiPrimary);
+        if (isDomainAllowed(smartPrimary.domain, allowedDomains)) {
+          const key = `${smartPrimary.domain}|${smartPrimary.industry}|${smartPrimary.jobRole}`;
+          combined.push(smartPrimary);
           seen.add(key);
         }
 
-        for (const alt of aiAlternatives) {
+        for (const alt of smartAlternatives) {
           const key = `${alt.domain}|${alt.industry}|${alt.jobRole}`;
           if (!seen.has(key)) {
             combined.push(alt);
@@ -253,7 +252,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
           }
         }
 
-        // Add local results that aren't in AI results
+        // Add local results that are not in backend results
         if (expertFields.length > 0) {
           const localResults = resolveSkillToCareer(skillInput, expertFields, {
             maxResults: 3,
@@ -280,7 +279,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
         setSelectedIndex(0);
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "AI analysis failed";
+          err instanceof Error ? err.message : "Smart resolver failed";
         setAiError(message);
         setResolveMode("error");
         // Keep local results as fallback
@@ -369,19 +368,18 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
         </div>
       )}
 
-      {/* AI analyzing indicator */}
+      {/* Smart resolver indicator */}
       {resolveMode === "resolving" && (
         <div className="sar-ai-analyzing">
-          <Brain size={16} className="sar-ai-icon" />
-          <span>AI đang phân tích skill...</span>
-          <Loader2 size={14} className="sar-spin-icon" />
+          <Gauge size={16} className="sar-ai-icon" />
+          <span>Đang phân tích skill bằng smart search...</span>
         </div>
       )}
 
-      {/* AI reasoning */}
+      {/* Smart resolver reasoning */}
       {resolveMode === "done" && aiResult?.reasoning && (
         <div className="sar-ai-reasoning">
-          <Brain size={14} />
+          <Gauge size={14} />
           <span>{aiResult.reasoning}</span>
         </div>
       )}
@@ -410,7 +408,7 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
             <Sparkles size={16} />
             <span>
               {resolveMode === "done"
-                ? "AI gợi ý lộ trình phù hợp:"
+                ? "Smart search gợi ý lộ trình phù hợp:"
                 : "Gợi ý lộ trình phù hợp:"}
             </span>
           </div>
@@ -440,9 +438,9 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
                   <span className="sar-result-role">{result.jobRole}</span>
                 </div>
                 <div className="sar-result-meta">
-                  {result.source === "ai" && (
-                    <span className="sar-ai-badge" title="AI-powered">
-                      <Brain size={10} /> AI
+                  {result.source === "smart" && (
+                    <span className="sar-ai-badge" title="Smart match">
+                      <Gauge size={10} /> Match
                     </span>
                   )}
                   <div className="sar-result-score">
@@ -465,11 +463,11 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
         </div>
       )}
 
-      {/* AI Error — show as warning, not blocking (local results still shown) */}
+      {/* Resolver error - show as warning, not blocking (local results still shown) */}
       {resolveMode === "error" && aiError && (
         <div className="sar-ai-error">
           <AlertTriangle size={14} />
-          <span>AI không phản hồi — sử dụng kết quả phân tích cục bộ.</span>
+          <span>Smart resolver không phản hồi - sử dụng kết quả phân tích cục bộ.</span>
         </div>
       )}
 

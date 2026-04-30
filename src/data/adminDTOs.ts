@@ -34,6 +34,13 @@ export interface MentorApplicationDto {
   cvPortfolioUrl?: string;
   certificatesUrl?: string;
   certificateUrls?: string[];
+  cccdNumber?: string;
+  cccdFullName?: string;
+  cccdDob?: string;
+  cccdFrontUrl?: string;
+  cccdBackUrl?: string;
+  cccdExtractedData?: string;
+  identityVerified?: boolean;
   applicationStatus: ApplicationStatus;
   isEmailVerified: boolean;
   userStatus: string;

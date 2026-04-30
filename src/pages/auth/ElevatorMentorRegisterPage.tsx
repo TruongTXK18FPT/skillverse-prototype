@@ -96,6 +96,8 @@ const ElevatorMentorRegisterPage: React.FC = () => {
       personalBio: string;
       cvFile?: File;
       certifications?: File[];
+      cccdFront?: File;
+      cccdBack?: File;
     }
   ): Promise<{ success: boolean; userName?: string; error?: string }> => {
     setIsLoading(true);
@@ -116,7 +118,9 @@ const ElevatorMentorRegisterPage: React.FC = () => {
       // Prepare files
       const files = {
         cv: data.cvFile || undefined,
-        certifications: data.certifications && data.certifications.length > 0 ? data.certifications : undefined
+        certifications: data.certifications && data.certifications.length > 0 ? data.certifications : undefined,
+        cccdFront: data.cccdFront || undefined,
+        cccdBack: data.cccdBack || undefined
       };
 
       

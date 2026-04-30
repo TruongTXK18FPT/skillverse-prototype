@@ -5,14 +5,24 @@ import {
   type ChangeEvent,
   type FormEvent,
 } from "react";
-import { ArrowLeft, ChevronDown, ChevronUp, Sparkles, Upload, Wand2 } from "lucide-react";
+import {
+  ArrowLeft,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  Upload,
+  Wand2,
+  X,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Cropper, { type Area } from "react-easy-crop";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
+import { useToast } from "../../hooks/useToast";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import LoginRequiredModal from "../auth/LoginRequiredModal";
 import SystemAlertModal from "./SystemAlertModal";
+import Toast from "../shared/Toast";
 // MeowlGuide intentionally not imported — hidden on this page
 import portfolioService from "../../services/portfolioService";
 import userService from "../../services/userService";
@@ -23,6 +33,24 @@ import {
   PortfolioWorkExperienceDTO,
   UserProfileDTO,
 } from "../../data/portfolioDTOs";
+import {
+  validateFullName,
+  validateProfessionalTitle,
+  validatePhone,
+  validateCareerGoals,
+  validateLocation,
+  validateWorkExperience,
+  validateEducation,
+  validateSlug,
+  validateSkills,
+  validateLanguages,
+  validateLinkedInUrl,
+  validateGitHubUrl,
+  validatePortfolioUrl,
+  validateBehanceUrl,
+  validateImageFormat,
+  validateVideoFormat,
+} from "../../utils/portfolioValidation";
 import "./dossier-portfolio-styles.css";
 import "./dossier-create-portfolio-styles.css";
 
@@ -35,7 +63,12 @@ const QUICK_SKILL_SUGGESTIONS = [
   "React",
   "Node.js",
 ];
-const QUICK_LANGUAGE_SUGGESTIONS = ["Tiếng Việt", "English", "日本語", "한국어"];
+const QUICK_LANGUAGE_SUGGESTIONS = [
+  "Tiếng Việt",
+  "English",
+  "日本語",
+  "한국어",
+];
 
 // Quick-fill templates
 const QUICK_CAREER_GOALS = [
@@ -60,49 +93,101 @@ const QUICK_PROFESSIONAL_TITLES = [
 ];
 
 const COMMON_LOCATIONS = [
-  "TP.HCM", "Hà Nội", "Đà Nẵng", "Cần Thơ", "Hải Phòng",
-  "Buôn Ma Thuột", "Nha Trang", "Vinh", "Remote / Toàn quốc",
+  "TP.HCM",
+  "Hà Nội",
+  "Đà Nẵng",
+  "Cần Thơ",
+  "Hải Phòng",
+  "Buôn Ma Thuột",
+  "Nha Trang",
+  "Vinh",
+  "Remote / Toàn quốc",
 ];
 
 const CURRENT_YEAR = new Date().getFullYear();
 const MONTHS = [
-  { value: "01", label: "Tháng 1" }, { value: "02", label: "Tháng 2" },
-  { value: "03", label: "Tháng 3" }, { value: "04", label: "Tháng 4" },
-  { value: "05", label: "Tháng 5" }, { value: "06", label: "Tháng 6" },
-  { value: "07", label: "Tháng 7" }, { value: "08", label: "Tháng 8" },
-  { value: "09", label: "Tháng 9" }, { value: "10", label: "Tháng 10" },
-  { value: "11", label: "Tháng 11" }, { value: "12", label: "Tháng 12" },
+  { value: "01", label: "Tháng 1" },
+  { value: "02", label: "Tháng 2" },
+  { value: "03", label: "Tháng 3" },
+  { value: "04", label: "Tháng 4" },
+  { value: "05", label: "Tháng 5" },
+  { value: "06", label: "Tháng 6" },
+  { value: "07", label: "Tháng 7" },
+  { value: "08", label: "Tháng 8" },
+  { value: "09", label: "Tháng 9" },
+  { value: "10", label: "Tháng 10" },
+  { value: "11", label: "Tháng 11" },
+  { value: "12", label: "Tháng 12" },
 ];
 
-const YEAR_OPTIONS = Array.from({ length: CURRENT_YEAR - 1980 + 1 }, (_, i) => CURRENT_YEAR - i);
+const YEAR_OPTIONS = Array.from(
+  { length: CURRENT_YEAR - 1980 + 1 },
+  (_, i) => CURRENT_YEAR - i,
+);
 
 const COMMON_INSTITUTIONS = [
-  "Đại học FPT", "Đại học Bách Khoa TP.HCM", "Đại học KHTN TP.HCM",
-  "Đại học Kinh tế TP.HCM", "Đại học RMIT", "VNU University of Science",
-  "Đại học Bách Khoa Hà Nội", "FPT Polytechnic", "Cao đẳng FPT",
+  "Đại học FPT",
+  "Đại học Bách Khoa TP.HCM",
+  "Đại học KHTN TP.HCM",
+  "Đại học Kinh tế TP.HCM",
+  "Đại học RMIT",
+  "VNU University of Science",
+  "Đại học Bách Khoa Hà Nội",
+  "FPT Polytechnic",
+  "Cao đẳng FPT",
 ];
 
 const COMMON_DEGREES = [
-  "Cử nhân", "Kỹ sư", "Cử nhân Kinh tế", "Thạc sĩ", "Kỹ sư phần mềm",
-  "Cử nhân Quản trị Kinh doanh", "Cử nhân CNTT", "Cử nhân Thiết kế",
+  "Cử nhân",
+  "Kỹ sư",
+  "Cử nhân Kinh tế",
+  "Thạc sĩ",
+  "Kỹ sư phần mềm",
+  "Cử nhân Quản trị Kinh doanh",
+  "Cử nhân CNTT",
+  "Cử nhân Thiết kế",
 ];
 
 const COMMON_FIELD_OF_STUDY = [
-  "Kỹ thuật phần mềm", "Công nghệ thông tin", "Khoa học máy tính",
-  "Thiết kế đồ họa", "Quản trị kinh doanh", "Marketing",
-  "Kinh tế", "Luật", "Ngôn ngữ Anh", "Toán tin",
+  "Kỹ thuật phần mềm",
+  "Công nghệ thông tin",
+  "Khoa học máy tính",
+  "Thiết kế đồ họa",
+  "Quản trị kinh doanh",
+  "Marketing",
+  "Kinh tế",
+  "Luật",
+  "Ngôn ngữ Anh",
+  "Toán tin",
 ];
 
 const COMMON_COMPANIES = [
-  "FPT Software", "Viettel", "VNPT", "CMC Corporation", "NashTech",
-  "Enouvo", "Orient Software", "VNG", "MoMo", "Shopee", "TikTok",
+  "FPT Software",
+  "Viettel",
+  "VNPT",
+  "CMC Corporation",
+  "NashTech",
+  "Enouvo",
+  "Orient Software",
+  "VNG",
+  "MoMo",
+  "Shopee",
+  "TikTok",
 ];
 
 const COMMON_POSITIONS = [
-  "Frontend Developer", "Backend Developer", "Full Stack Developer",
-  "UI/UX Designer", "Mobile Developer", "QA Engineer",
-  "DevOps Engineer", "Data Analyst", "Business Analyst",
-  "Project Manager", "Product Owner", "Tech Lead",
+  "Frontend Developer",
+  "Backend Developer",
+  "Full Stack Developer",
+  "UI/UX Designer",
+  "Mobile Developer",
+  "QA Engineer",
+  "DevOps Engineer",
+  "Data Analyst",
+  "Business Analyst",
+  "Project Manager",
+  "Product Owner",
+  "Tech Lead",
 ];
 
 const parseDateStr = (val?: string) => {
@@ -164,20 +249,29 @@ const applyTimePreset = (
 ): { month: string; year: string } => {
   if (field === "start") {
     const parsed = parseDateStr(startDate);
-    return { month: parsed.month || "01", year: parsed.year || String(CURRENT_YEAR) };
+    return {
+      month: parsed.month || "01",
+      year: parsed.year || String(CURRENT_YEAR),
+    };
   }
   if (currentJob) return { month: "", year: "" };
   const parsed = parseDateStr(endDate);
-  return { month: parsed.month || "", year: parsed.year || String(CURRENT_YEAR) };
+  return {
+    month: parsed.month || "",
+    year: parsed.year || String(CURRENT_YEAR),
+  };
 };
 
 const DossierCreatePortfolioPage = () => {
   const { theme } = useTheme();
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+  const { toast, isVisible, showWarning, hideToast } = useToast();
 
   const [checkingProfile, setCheckingProfile] = useState(true);
-  const [profileCheckError, setProfileCheckError] = useState<string | null>(null);
+  const [profileCheckError, setProfileCheckError] = useState<string | null>(
+    null,
+  );
   const [submitting, setSubmitting] = useState(false);
   const [alertModal, setAlertModal] = useState<{
     show: boolean;
@@ -225,7 +319,9 @@ const DossierCreatePortfolioPage = () => {
   const [videoPreview, setVideoPreview] = useState<string>("");
   const [coverPreview, setCoverPreview] = useState<string>("");
   const [avatarCropOpen, setAvatarCropOpen] = useState(false);
-  const [avatarCropTempUrl, setAvatarCropTempUrl] = useState<string | null>(null);
+  const [avatarCropTempUrl, setAvatarCropTempUrl] = useState<string | null>(
+    null,
+  );
   const [avatarCrop, setAvatarCrop] = useState({ x: 0, y: 0 });
   const [avatarZoom, setAvatarZoom] = useState(1);
   const [avatarCroppedAreaPixels, setAvatarCroppedAreaPixels] =
@@ -257,8 +353,13 @@ const DossierCreatePortfolioPage = () => {
         }
         setProfileCheckError(null);
       } catch (error) {
-        console.error("Failed to check profile state before create page:", error);
-        setProfileCheckError("Không thể kiểm tra trạng thái Portfolio. Vui lòng thử lại.");
+        console.error(
+          "Failed to check profile state before create page:",
+          error,
+        );
+        setProfileCheckError(
+          "Không thể kiểm tra trạng thái Portfolio. Vui lòng thử lại.",
+        );
       } finally {
         setCheckingProfile(false);
       }
@@ -411,7 +512,10 @@ const DossierCreatePortfolioPage = () => {
   const handleAddWorkExperience = () => {
     setFormData((prev) => ({
       ...prev,
-      workExperiences: [...(prev.workExperiences || []), createEmptyWorkExperience()],
+      workExperiences: [
+        ...(prev.workExperiences || []),
+        createEmptyWorkExperience(),
+      ],
     }));
   };
 
@@ -428,11 +532,19 @@ const DossierCreatePortfolioPage = () => {
     }));
   };
 
-  const handleWorkStartTimeChange = (index: number, month: string, year: string) => {
+  const handleWorkStartTimeChange = (
+    index: number,
+    month: string,
+    year: string,
+  ) => {
     handleUpdateWorkExperience(index, "startDate", formatDateVal(month, year));
   };
 
-  const handleWorkEndTimeChange = (index: number, month: string, year: string) => {
+  const handleWorkEndTimeChange = (
+    index: number,
+    month: string,
+    year: string,
+  ) => {
     handleUpdateWorkExperience(index, "endDate", formatDateVal(month, year));
   };
 
@@ -452,7 +564,10 @@ const DossierCreatePortfolioPage = () => {
   const handleAddEducation = () => {
     setFormData((prev) => ({
       ...prev,
-      educationHistory: [...(prev.educationHistory || []), createEmptyEducation()],
+      educationHistory: [
+        ...(prev.educationHistory || []),
+        createEmptyEducation(),
+      ],
     }));
   };
 
@@ -514,19 +629,21 @@ const DossierCreatePortfolioPage = () => {
         userService.getMySkills(),
       ]);
 
-      const profile = profileResult.status === "fulfilled" ? profileResult.value : null;
-      const profileSkills = skillsResult.status === "fulfilled" ? skillsResult.value : [];
+      const profile =
+        profileResult.status === "fulfilled" ? profileResult.value : null;
+      const profileSkills =
+        skillsResult.status === "fulfilled" ? skillsResult.value : [];
 
       setFormData((prev) => ({
         ...prev,
-        fullName: prev.fullName?.trim() ? prev.fullName : profile?.fullName || user?.fullName || "",
+        fullName: prev.fullName?.trim()
+          ? prev.fullName
+          : profile?.fullName || user?.fullName || "",
         phone: prev.phone?.trim() ? prev.phone : profile?.phone || "",
         professionalTitle: prev.professionalTitle?.trim()
           ? prev.professionalTitle
           : "Freelancer",
-        location: prev.location?.trim()
-          ? prev.location
-          : profile?.region || "",
+        location: prev.location?.trim() ? prev.location : profile?.region || "",
         careerGoals: prev.careerGoals?.trim()
           ? prev.careerGoals
           : profile?.bio || "",
@@ -534,14 +651,20 @@ const DossierCreatePortfolioPage = () => {
       }));
 
       if (!avatarPreview) {
-        const avatarUrl = profile?.avatarMediaUrl || user?.avatarMediaUrl || user?.avatarUrl;
+        const avatarUrl =
+          profile?.avatarMediaUrl || user?.avatarMediaUrl || user?.avatarUrl;
         if (avatarUrl) {
           setAvatarPreview(avatarUrl);
         }
       }
 
       if (skills.length === 0 && profileSkills.length > 0) {
-        setSkills(profileSkills.map((item) => item.skillName).filter(Boolean).slice(0, 8));
+        setSkills(
+          profileSkills
+            .map((item) => item.skillName)
+            .filter(Boolean)
+            .slice(0, 8),
+        );
       }
 
       if (languages.length === 0) {
@@ -550,14 +673,16 @@ const DossierCreatePortfolioPage = () => {
 
       setAlertModal({
         show: true,
-        message: "Đã tự điền dữ liệu từ hồ sơ tài khoản. Bạn chỉ cần rà và chỉnh các mục cần thiết.",
+        message:
+          "Đã tự điền dữ liệu từ hồ sơ tài khoản. Bạn chỉ cần rà và chỉnh các mục cần thiết.",
         type: "success",
       });
     } catch (error) {
       console.error("Failed to smart fill portfolio form:", error);
       setAlertModal({
         show: true,
-        message: "Không thể tự điền từ hồ sơ tài khoản. Vui lòng nhập thủ công các mục cần thiết.",
+        message:
+          "Không thể tự điền từ hồ sơ tài khoản. Vui lòng nhập thủ công các mục cần thiết.",
         type: "warning",
       });
     } finally {
@@ -574,7 +699,9 @@ const DossierCreatePortfolioPage = () => {
       return;
     }
     const lower = val.toLowerCase();
-    const matches = COMMON_LOCATIONS.filter((l) => l.toLowerCase().includes(lower));
+    const matches = COMMON_LOCATIONS.filter((l) =>
+      l.toLowerCase().includes(lower),
+    );
     setFilteredLocations(matches.slice(0, 6));
     setLocationDropdownOpen(matches.length > 0);
   };
@@ -628,45 +755,236 @@ const DossierCreatePortfolioPage = () => {
       const maxImageSize = 10 * 1024 * 1024;
       const maxVideoSize = 50 * 1024 * 1024;
 
-      if (avatar && avatar.size > maxImageSize) {
-        setAlertModal({
-          show: true,
-          message: `Ảnh đại diện vượt giới hạn (${(avatar.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`,
-          type: "warning",
-        });
+      // Personal info validation
+      const nameValidation = validateFullName(formData.fullName || "");
+      if (!nameValidation.valid) {
+        showWarning(
+          "Validation Error",
+          nameValidation.error || "Validation failed",
+        );
         setSubmitting(false);
         return;
+      }
+
+      const titleValidation = validateProfessionalTitle(
+        formData.professionalTitle || "",
+      );
+      if (!titleValidation.valid) {
+        showWarning(
+          "Validation Error",
+          titleValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      const phoneValidation = validatePhone(formData.phone || "");
+      if (!phoneValidation.valid) {
+        showWarning(
+          "Validation Error",
+          phoneValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      const locationValidation = validateLocation(formData.location || "");
+      if (!locationValidation.valid) {
+        showWarning(
+          "Validation Error",
+          locationValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      const careerGoalsValidation = validateCareerGoals(
+        formData.careerGoals || "",
+      );
+      if (!careerGoalsValidation.valid) {
+        showWarning(
+          "Validation Error",
+          careerGoalsValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      // Skills and languages validation
+      const skillsValidation = validateSkills(skills);
+      if (!skillsValidation.valid) {
+        showWarning(
+          "Validation Error",
+          skillsValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      const languagesValidation = validateLanguages(languages);
+      if (!languagesValidation.valid) {
+        showWarning(
+          "Validation Error",
+          languagesValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      // Work experience validation
+      if (formData.workExperiences && formData.workExperiences.length > 0) {
+        for (let i = 0; i < formData.workExperiences.length; i++) {
+          const workValidation = validateWorkExperience(
+            formData.workExperiences[i],
+            i,
+          );
+          if (!workValidation.valid) {
+            showWarning(
+              "Validation Error",
+              workValidation.errors.join("\n") || "Validation failed",
+            );
+            setSubmitting(false);
+            return;
+          }
+        }
+      }
+
+      // Education validation
+      if (formData.educationHistory && formData.educationHistory.length > 0) {
+        for (let i = 0; i < formData.educationHistory.length; i++) {
+          const eduValidation = validateEducation(
+            formData.educationHistory[i],
+            i,
+          );
+          if (!eduValidation.valid) {
+            showWarning(
+              "Validation Error",
+              eduValidation.errors.join("\n") || "Validation failed",
+            );
+            setSubmitting(false);
+            return;
+          }
+        }
+      }
+
+      // Slug validation
+      const slugValidation = validateSlug(formData.customUrlSlug || "");
+      if (!slugValidation.valid) {
+        showWarning(
+          "Validation Error",
+          slugValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      // URL validation
+      const linkedinValidation = validateLinkedInUrl(
+        formData.linkedinUrl || "",
+      );
+      if (!linkedinValidation.valid) {
+        showWarning(
+          "Validation Error",
+          linkedinValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      const githubValidation = validateGitHubUrl(formData.githubUrl || "");
+      if (!githubValidation.valid) {
+        showWarning(
+          "Validation Error",
+          githubValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      const portfolioUrlValidation = validatePortfolioUrl(
+        formData.portfolioWebsiteUrl || "",
+      );
+      if (!portfolioUrlValidation.valid) {
+        showWarning(
+          "Validation Error",
+          portfolioUrlValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      const behanceValidation = validateBehanceUrl(formData.behanceUrl || "");
+      if (!behanceValidation.valid) {
+        showWarning(
+          "Validation Error",
+          behanceValidation.error || "Validation failed",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      // File size validation
+      if (avatar && avatar.size > maxImageSize) {
+        showWarning(
+          "File Size Error",
+          `Ảnh đại diện vượt giới hạn (${(avatar.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`,
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      if (avatar) {
+        const imageFormatValidation = validateImageFormat(avatar);
+        if (!imageFormatValidation.valid) {
+          showWarning(
+            "File Format Error",
+            imageFormatValidation.error || "Validation failed",
+          );
+          setSubmitting(false);
+          return;
+        }
       }
 
       if (video && video.size > maxVideoSize) {
-        setAlertModal({
-          show: true,
-          message: `Video vượt giới hạn (${(video.size / 1024 / 1024).toFixed(2)}MB). Tối đa 50MB.`,
-          type: "warning",
-        });
+        showWarning(
+          "File Size Error",
+          `Video vượt giới hạn (${(video.size / 1024 / 1024).toFixed(2)}MB). Tối đa 50MB.`,
+        );
         setSubmitting(false);
         return;
+      }
+
+      if (video) {
+        const videoFormatValidation = validateVideoFormat(video);
+        if (!videoFormatValidation.valid) {
+          showWarning(
+            "File Format Error",
+            videoFormatValidation.error || "Validation failed",
+          );
+          setSubmitting(false);
+          return;
+        }
       }
 
       if (coverImage && coverImage.size > maxImageSize) {
-        setAlertModal({
-          show: true,
-          message: `Ảnh bìa vượt giới hạn (${(coverImage.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`,
-          type: "warning",
-        });
+        showWarning(
+          "File Size Error",
+          `Ảnh bìa vượt giới hạn (${(coverImage.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`,
+        );
         setSubmitting(false);
         return;
       }
 
-      const normalizedSlug = (formData.customUrlSlug || "").trim().toLowerCase();
-      if (normalizedSlug && RESERVED_PORTFOLIO_SLUGS.has(normalizedSlug)) {
-        setAlertModal({
-          show: true,
-          message: `"${normalizedSlug}" là slug hệ thống, vui lòng chọn slug khác.`,
-          type: "warning",
-        });
-        setSubmitting(false);
-        return;
+      if (coverImage) {
+        const imageFormatValidation = validateImageFormat(coverImage);
+        if (!imageFormatValidation.valid) {
+          showWarning(
+            "File Format Error",
+            imageFormatValidation.error || "Validation failed",
+          );
+          setSubmitting(false);
+          return;
+        }
       }
 
       const payload = {
@@ -676,7 +994,12 @@ const DossierCreatePortfolioPage = () => {
         languagesSpoken: JSON.stringify(languages),
       };
 
-      await portfolioService.createExtendedProfile(payload, avatar, video, coverImage);
+      await portfolioService.createExtendedProfile(
+        payload,
+        avatar,
+        video,
+        coverImage,
+      );
       navigate("/portfolio", { replace: true });
     } catch (error) {
       console.error("Error creating portfolio profile:", error);
@@ -720,12 +1043,17 @@ const DossierCreatePortfolioPage = () => {
         />
 
         <div className="dossier-create-auth-panel dossier-panel-frame">
-          <h2 className="dossier-modal-title dossier-create-auth-title">Cần đăng nhập</h2>
+          <h2 className="dossier-modal-title dossier-create-auth-title">
+            Cần đăng nhập
+          </h2>
           <p className="dossier-create-auth-desc">
             Bạn cần đăng nhập để tạo Portfolio.
           </p>
           <div className="dossier-create-auth-actions">
-            <button onClick={() => setShowLoginModal(true)} className="dossier-btn-primary">
+            <button
+              onClick={() => setShowLoginModal(true)}
+              className="dossier-btn-primary"
+            >
               Đăng nhập
             </button>
             <button
@@ -744,13 +1072,18 @@ const DossierCreatePortfolioPage = () => {
     return (
       <div className="dossier-portfolio-container" data-theme={theme}>
         <div className="dossier-create-auth-panel dossier-panel-frame">
-          <h2 className="dossier-modal-title dossier-create-auth-title">Không thể khởi tạo trang</h2>
+          <h2 className="dossier-modal-title dossier-create-auth-title">
+            Không thể khởi tạo trang
+          </h2>
           <p className="dossier-create-auth-desc">{profileCheckError}</p>
           <div className="dossier-create-auth-actions">
             <button onClick={() => navigate(0)} className="dossier-btn-primary">
               Thử lại
             </button>
-            <button onClick={() => navigate("/portfolio")} className="dossier-btn-secondary">
+            <button
+              onClick={() => navigate("/portfolio")}
+              className="dossier-btn-secondary"
+            >
               Quay lại Portfolio
             </button>
           </div>
@@ -760,9 +1093,15 @@ const DossierCreatePortfolioPage = () => {
   }
 
   return (
-    <div className="dossier-portfolio-container dossier-create-shell" data-theme={theme}>
+    <div
+      className="dossier-portfolio-container dossier-create-shell"
+      data-theme={theme}
+    >
       {avatarCropOpen && avatarCropTempUrl && (
-        <div className="dossier-avatar-crop-overlay" onClick={closeAvatarCropModal}>
+        <div
+          className="dossier-avatar-crop-overlay"
+          onClick={closeAvatarCropModal}
+        >
           <div
             className="dossier-avatar-crop-modal"
             onClick={(event) => event.stopPropagation()}
@@ -902,13 +1241,20 @@ const DossierCreatePortfolioPage = () => {
             className="dossier-btn-secondary dossier-create-smart-btn"
             onClick={() => setShowAdvancedFields((prev) => !prev)}
           >
-            {showAdvancedFields ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            {showAdvancedFields ? (
+              <ChevronUp size={16} />
+            ) : (
+              <ChevronDown size={16} />
+            )}
             {showAdvancedFields ? "Ẩn mục nâng cao" : "Hiện mục nâng cao"}
           </button>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="dossier-create-form dossier-panel-frame">
+      <form
+        onSubmit={handleSubmit}
+        className="dossier-create-form dossier-panel-frame"
+      >
         <div className="dossier-form-section">
           <h3 className="dossier-form-section-title">Thông tin cá nhân</h3>
 
@@ -918,7 +1264,9 @@ const DossierCreatePortfolioPage = () => {
               type="text"
               className="dossier-input"
               value={formData.fullName || ""}
-              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, fullName: e.target.value })
+              }
               placeholder="Ví dụ: Nguyễn Văn A"
               required
             />
@@ -942,7 +1290,9 @@ const DossierCreatePortfolioPage = () => {
                   key={t}
                   type="button"
                   className="dossier-create-quick-fill-chip"
-                  onClick={() => setFormData((p) => ({ ...p, professionalTitle: t }))}
+                  onClick={() =>
+                    setFormData((p) => ({ ...p, professionalTitle: t }))
+                  }
                 >
                   + {t}
                 </button>
@@ -956,7 +1306,9 @@ const DossierCreatePortfolioPage = () => {
               type="text"
               className="dossier-input"
               value={formData.tagline || ""}
-              onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, tagline: e.target.value })
+              }
               placeholder="Ví dụ: Xây dựng sản phẩm số thực tế"
               maxLength={100}
             />
@@ -1001,7 +1353,9 @@ const DossierCreatePortfolioPage = () => {
                 value={formData.location || ""}
                 onChange={(e) => handleLocationChange(e.target.value)}
                 onKeyDown={handleLocationKeyDown}
-                onBlur={() => setTimeout(() => setLocationDropdownOpen(false), 150)}
+                onBlur={() =>
+                  setTimeout(() => setLocationDropdownOpen(false), 150)
+                }
                 placeholder="TP.HCM / Remote / Hà Nội..."
               />
               {locationDropdownOpen && filteredLocations.length > 0 && (
@@ -1029,7 +1383,9 @@ const DossierCreatePortfolioPage = () => {
             <textarea
               className="dossier-textarea"
               value={formData.careerGoals || ""}
-              onChange={(e) => setFormData({ ...formData, careerGoals: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, careerGoals: e.target.value })
+              }
               placeholder="Mô tả ngắn gọn mục tiêu nghề nghiệp..."
               rows={4}
             />
@@ -1059,7 +1415,9 @@ const DossierCreatePortfolioPage = () => {
               type="tel"
               className="dossier-input"
               value={formData.phone || ""}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
               placeholder="Ví dụ: 0901234567"
             />
           </div>
@@ -1075,7 +1433,10 @@ const DossierCreatePortfolioPage = () => {
               marginBottom: "1rem",
             }}
           >
-            <h3 className="dossier-form-section-title" style={{ marginBottom: 0 }}>
+            <h3
+              className="dossier-form-section-title"
+              style={{ marginBottom: 0 }}
+            >
               Kinh nghiệm làm việc
             </h3>
             <button
@@ -1124,7 +1485,11 @@ const DossierCreatePortfolioPage = () => {
                     className="dossier-input"
                     value={experience.companyName || ""}
                     onChange={(e) =>
-                      handleUpdateWorkExperience(index, "companyName", e.target.value)
+                      handleUpdateWorkExperience(
+                        index,
+                        "companyName",
+                        e.target.value,
+                      )
                     }
                     placeholder="FPT Software"
                   />
@@ -1134,7 +1499,9 @@ const DossierCreatePortfolioPage = () => {
                         key={c}
                         type="button"
                         className="dossier-create-quick-fill-chip"
-                        onClick={() => handleUpdateWorkExperience(index, "companyName", c)}
+                        onClick={() =>
+                          handleUpdateWorkExperience(index, "companyName", c)
+                        }
                       >
                         + {c}
                       </button>
@@ -1148,7 +1515,11 @@ const DossierCreatePortfolioPage = () => {
                     className="dossier-input"
                     value={experience.position || ""}
                     onChange={(e) =>
-                      handleUpdateWorkExperience(index, "position", e.target.value)
+                      handleUpdateWorkExperience(
+                        index,
+                        "position",
+                        e.target.value,
+                      )
                     }
                     placeholder="Frontend Developer"
                   />
@@ -1158,7 +1529,9 @@ const DossierCreatePortfolioPage = () => {
                         key={p}
                         type="button"
                         className="dossier-create-quick-fill-chip"
-                        onClick={() => handleUpdateWorkExperience(index, "position", p)}
+                        onClick={() =>
+                          handleUpdateWorkExperience(index, "position", p)
+                        }
                       >
                         + {p}
                       </button>
@@ -1175,7 +1548,11 @@ const DossierCreatePortfolioPage = () => {
                     className="dossier-input"
                     value={experience.location || ""}
                     onChange={(e) =>
-                      handleUpdateWorkExperience(index, "location", e.target.value)
+                      handleUpdateWorkExperience(
+                        index,
+                        "location",
+                        e.target.value,
+                      )
                     }
                     placeholder="TP.HCM / Remote"
                   />
@@ -1185,7 +1562,9 @@ const DossierCreatePortfolioPage = () => {
                         key={l}
                         type="button"
                         className="dossier-create-quick-fill-chip"
-                        onClick={() => handleUpdateWorkExperience(index, "location", l)}
+                        onClick={() =>
+                          handleUpdateWorkExperience(index, "location", l)
+                        }
                       >
                         + {l}
                       </button>
@@ -1193,83 +1572,141 @@ const DossierCreatePortfolioPage = () => {
                   </div>
                 </div>
                 <div className="dossier-create-time-card">
-                    <div className="dossier-create-time-group">
-                      <div className="dossier-form-group" style={{ marginBottom: 0, flex: 1 }}>
-                        <label className="dossier-form-label" style={{ fontSize: "0.78rem" }}>Bắt đầu</label>
-                        <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
-                          <select
-                            className="dossier-select dossier-create-month-select"
-                            value={parseDateStr(experience.startDate).month}
-                            onChange={(e) =>
-                              handleWorkStartTimeChange(index, e.target.value, parseDateStr(experience.startDate).year || String(CURRENT_YEAR))
-                            }
-                          >
-                            <option value="">Tháng</option>
-                            {MONTHS.map((m) => (
-                              <option key={m.value} value={m.value}>{m.label}</option>
-                            ))}
-                          </select>
-                          <select
-                            className="dossier-select dossier-create-year-select"
-                            value={parseDateStr(experience.startDate).year}
-                            onChange={(e) =>
-                              handleWorkStartTimeChange(index, parseDateStr(experience.startDate).month || "01", e.target.value)
-                            }
-                          >
-                            <option value="">Năm</option>
-                            {YEAR_OPTIONS.map((y) => (
-                              <option key={y} value={String(y)}>{y}</option>
-                            ))}
-                          </select>
-                          <button
-                            type="button"
-                            className="dossier-create-time-preset-btn"
-                            onClick={() => handleWorkStartNow(index)}
-                            title="Đặt về tháng hiện tại"
-                          >
-                            Nay
-                          </button>
-                        </div>
+                  <div className="dossier-create-time-group">
+                    <div
+                      className="dossier-form-group"
+                      style={{ marginBottom: 0, flex: 1 }}
+                    >
+                      <label
+                        className="dossier-form-label"
+                        style={{ fontSize: "0.78rem" }}
+                      >
+                        Bắt đầu
+                      </label>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "0.4rem",
+                          alignItems: "center",
+                        }}
+                      >
+                        <select
+                          className="dossier-select dossier-create-month-select"
+                          value={parseDateStr(experience.startDate).month}
+                          onChange={(e) =>
+                            handleWorkStartTimeChange(
+                              index,
+                              e.target.value,
+                              parseDateStr(experience.startDate).year ||
+                                String(CURRENT_YEAR),
+                            )
+                          }
+                        >
+                          <option value="">Tháng</option>
+                          {MONTHS.map((m) => (
+                            <option key={m.value} value={m.value}>
+                              {m.label}
+                            </option>
+                          ))}
+                        </select>
+                        <select
+                          className="dossier-select dossier-create-year-select"
+                          value={parseDateStr(experience.startDate).year}
+                          onChange={(e) =>
+                            handleWorkStartTimeChange(
+                              index,
+                              parseDateStr(experience.startDate).month || "01",
+                              e.target.value,
+                            )
+                          }
+                        >
+                          <option value="">Năm</option>
+                          {YEAR_OPTIONS.map((y) => (
+                            <option key={y} value={String(y)}>
+                              {y}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          type="button"
+                          className="dossier-create-time-preset-btn"
+                          onClick={() => handleWorkStartNow(index)}
+                          title="Đặt về tháng hiện tại"
+                        >
+                          Nay
+                        </button>
                       </div>
+                    </div>
 
-                      <span className="dossier-create-time-separator">→</span>
+                    <span className="dossier-create-time-separator">→</span>
 
-                      <div className="dossier-form-group" style={{ marginBottom: 0, flex: 1 }}>
-                        <label className="dossier-form-label" style={{ fontSize: "0.78rem" }}>Kết thúc</label>
-                        <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
-                          <select
-                            className="dossier-select dossier-create-month-select"
-                            value={parseDateStr(experience.endDate).month}
-                            onChange={(e) =>
-                              handleWorkEndTimeChange(index, e.target.value, parseDateStr(experience.endDate).year || String(CURRENT_YEAR))
-                            }
-                            disabled={Boolean(experience.currentJob)}
+                    <div
+                      className="dossier-form-group"
+                      style={{ marginBottom: 0, flex: 1 }}
+                    >
+                      <label
+                        className="dossier-form-label"
+                        style={{ fontSize: "0.78rem" }}
+                      >
+                        Kết thúc
+                      </label>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "0.4rem",
+                          alignItems: "center",
+                        }}
+                      >
+                        <select
+                          className="dossier-select dossier-create-month-select"
+                          value={parseDateStr(experience.endDate).month}
+                          onChange={(e) =>
+                            handleWorkEndTimeChange(
+                              index,
+                              e.target.value,
+                              parseDateStr(experience.endDate).year ||
+                                String(CURRENT_YEAR),
+                            )
+                          }
+                          disabled={Boolean(experience.currentJob)}
+                        >
+                          <option value="">Tháng</option>
+                          {MONTHS.map((m) => (
+                            <option key={m.value} value={m.value}>
+                              {m.label}
+                            </option>
+                          ))}
+                        </select>
+                        <select
+                          className="dossier-select dossier-create-year-select"
+                          value={parseDateStr(experience.endDate).year}
+                          onChange={(e) =>
+                            handleWorkEndTimeChange(
+                              index,
+                              parseDateStr(experience.endDate).month || "01",
+                              e.target.value,
+                            )
+                          }
+                          disabled={Boolean(experience.currentJob)}
+                        >
+                          <option value="">Năm</option>
+                          {YEAR_OPTIONS.map((y) => (
+                            <option key={y} value={String(y)}>
+                              {y}
+                            </option>
+                          ))}
+                        </select>
+                        {experience.currentJob && (
+                          <span
+                            style={{ fontSize: "0.7rem", color: "#22d3ee" }}
                           >
-                            <option value="">Tháng</option>
-                            {MONTHS.map((m) => (
-                              <option key={m.value} value={m.value}>{m.label}</option>
-                            ))}
-                          </select>
-                          <select
-                            className="dossier-select dossier-create-year-select"
-                            value={parseDateStr(experience.endDate).year}
-                            onChange={(e) =>
-                              handleWorkEndTimeChange(index, parseDateStr(experience.endDate).month || "01", e.target.value)
-                            }
-                            disabled={Boolean(experience.currentJob)}
-                          >
-                            <option value="">Năm</option>
-                            {YEAR_OPTIONS.map((y) => (
-                              <option key={y} value={String(y)}>{y}</option>
-                            ))}
-                          </select>
-                          {experience.currentJob && (
-                            <span style={{ fontSize: "0.7rem", color: "#22d3ee" }}>Đang làm</span>
-                          )}
-                        </div>
+                            Đang làm
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
+                </div>
               </div>
 
               <label
@@ -1285,7 +1722,11 @@ const DossierCreatePortfolioPage = () => {
                   type="checkbox"
                   checked={Boolean(experience.currentJob)}
                   onChange={(e) =>
-                    handleUpdateWorkExperience(index, "currentJob", e.target.checked)
+                    handleUpdateWorkExperience(
+                      index,
+                      "currentJob",
+                      e.target.checked,
+                    )
                   }
                 />
                 Đang làm việc tại đây
@@ -1297,7 +1738,11 @@ const DossierCreatePortfolioPage = () => {
                   className="dossier-textarea"
                   value={experience.description || ""}
                   onChange={(e) =>
-                    handleUpdateWorkExperience(index, "description", e.target.value)
+                    handleUpdateWorkExperience(
+                      index,
+                      "description",
+                      e.target.value,
+                    )
                   }
                   rows={3}
                   placeholder="Mô tả vai trò, phạm vi công việc hoặc thành tựu chính"
@@ -1317,7 +1762,10 @@ const DossierCreatePortfolioPage = () => {
               marginBottom: "1rem",
             }}
           >
-            <h3 className="dossier-form-section-title" style={{ marginBottom: 0 }}>
+            <h3
+              className="dossier-form-section-title"
+              style={{ marginBottom: 0 }}
+            >
               Học vấn
             </h3>
             <button
@@ -1360,13 +1808,19 @@ const DossierCreatePortfolioPage = () => {
 
               <div className="dossier-form-row">
                 <div className="dossier-form-group">
-                  <label className="dossier-form-label">Trường / tổ chức đào tạo</label>
+                  <label className="dossier-form-label">
+                    Trường / tổ chức đào tạo
+                  </label>
                   <input
                     type="text"
                     className="dossier-input"
                     value={education.institution || ""}
                     onChange={(e) =>
-                      handleUpdateEducation(index, "institution", e.target.value)
+                      handleUpdateEducation(
+                        index,
+                        "institution",
+                        e.target.value,
+                      )
                     }
                     placeholder="Đại học FPT"
                   />
@@ -1376,7 +1830,9 @@ const DossierCreatePortfolioPage = () => {
                         key={inst}
                         type="button"
                         className="dossier-create-quick-fill-chip"
-                        onClick={() => handleUpdateEducation(index, "institution", inst)}
+                        onClick={() =>
+                          handleUpdateEducation(index, "institution", inst)
+                        }
                       >
                         + {inst}
                       </button>
@@ -1384,7 +1840,9 @@ const DossierCreatePortfolioPage = () => {
                   </div>
                 </div>
                 <div className="dossier-form-group">
-                  <label className="dossier-form-label">Bằng cấp / chương trình</label>
+                  <label className="dossier-form-label">
+                    Bằng cấp / chương trình
+                  </label>
                   <input
                     type="text"
                     className="dossier-input"
@@ -1400,7 +1858,9 @@ const DossierCreatePortfolioPage = () => {
                         key={d}
                         type="button"
                         className="dossier-create-quick-fill-chip"
-                        onClick={() => handleUpdateEducation(index, "degree", d)}
+                        onClick={() =>
+                          handleUpdateEducation(index, "degree", d)
+                        }
                       >
                         + {d}
                       </button>
@@ -1417,7 +1877,11 @@ const DossierCreatePortfolioPage = () => {
                     className="dossier-input"
                     value={education.fieldOfStudy || ""}
                     onChange={(e) =>
-                      handleUpdateEducation(index, "fieldOfStudy", e.target.value)
+                      handleUpdateEducation(
+                        index,
+                        "fieldOfStudy",
+                        e.target.value,
+                      )
                     }
                     placeholder="Kỹ thuật phần mềm"
                   />
@@ -1427,7 +1891,9 @@ const DossierCreatePortfolioPage = () => {
                         key={f}
                         type="button"
                         className="dossier-create-quick-fill-chip"
-                        onClick={() => handleUpdateEducation(index, "fieldOfStudy", f)}
+                        onClick={() =>
+                          handleUpdateEducation(index, "fieldOfStudy", f)
+                        }
                       >
                         + {f}
                       </button>
@@ -1451,7 +1917,9 @@ const DossierCreatePortfolioPage = () => {
                         key={l}
                         type="button"
                         className="dossier-create-quick-fill-chip"
-                        onClick={() => handleUpdateEducation(index, "location", l)}
+                        onClick={() =>
+                          handleUpdateEducation(index, "location", l)
+                        }
                       >
                         + {l}
                       </button>
@@ -1466,12 +1934,16 @@ const DossierCreatePortfolioPage = () => {
                   <select
                     className="dossier-select dossier-create-year-select"
                     value={education.startDate || ""}
-                    onChange={(e) => handleEduStartTimeChange(index, e.target.value)}
+                    onChange={(e) =>
+                      handleEduStartTimeChange(index, e.target.value)
+                    }
                     style={{ width: "100%" }}
                   >
                     <option value="">Chọn năm</option>
                     {YEAR_OPTIONS.map((y) => (
-                      <option key={y} value={String(y)}>{y}</option>
+                      <option key={y} value={String(y)}>
+                        {y}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -1480,12 +1952,16 @@ const DossierCreatePortfolioPage = () => {
                   <select
                     className="dossier-select dossier-create-year-select"
                     value={education.endDate || ""}
-                    onChange={(e) => handleEduEndTimeChange(index, e.target.value)}
+                    onChange={(e) =>
+                      handleEduEndTimeChange(index, e.target.value)
+                    }
                     style={{ width: "100%" }}
                   >
                     <option value="">Chọn năm</option>
                     {YEAR_OPTIONS.map((y) => (
-                      <option key={y} value={String(y)}>{y}</option>
+                      <option key={y} value={String(y)}>
+                        {y}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -1523,142 +1999,153 @@ const DossierCreatePortfolioPage = () => {
         {showAdvancedFields && (
           <>
             <div className="dossier-form-section">
-              <h3 className="dossier-form-section-title">Tài nguyên phương tiện</h3>
+              <h3 className="dossier-form-section-title">
+                Tài nguyên phương tiện
+              </h3>
 
-          <div className="dossier-form-row">
-            <div className="dossier-form-group">
-              <label className="dossier-form-label">Ảnh đại diện</label>
-              <div className="dossier-create-upload-box">
-                {avatarPreview && (
-                  <img
-                    src={avatarPreview}
-                    alt="Xem trước ảnh đại diện"
-                    className="dossier-create-avatar-preview"
-                  />
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleFileChange(e, "avatar")}
-                  id="dossier-create-avatar-upload"
-                  className="dossier-create-file-input"
-                />
-                <label
-                  htmlFor="dossier-create-avatar-upload"
-                  className="dossier-btn-primary dossier-create-upload-btn"
-                >
-                  <Upload size={18} />
-                  Tải ảnh đại diện
-                </label>
+              <div className="dossier-form-row">
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Ảnh đại diện</label>
+                  <div className="dossier-create-upload-box">
+                    {avatarPreview && (
+                      <img
+                        src={avatarPreview}
+                        alt="Xem trước ảnh đại diện"
+                        className="dossier-create-avatar-preview"
+                      />
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileChange(e, "avatar")}
+                      id="dossier-create-avatar-upload"
+                      className="dossier-create-file-input"
+                    />
+                    <label
+                      htmlFor="dossier-create-avatar-upload"
+                      className="dossier-btn-primary dossier-create-upload-btn"
+                    >
+                      <Upload size={18} />
+                      Tải ảnh đại diện
+                    </label>
+                  </div>
+                </div>
+
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Ảnh bìa</label>
+                  <div className="dossier-create-upload-box">
+                    {coverPreview && (
+                      <img
+                        src={coverPreview}
+                        alt="Xem trước ảnh bìa"
+                        className="dossier-create-cover-preview"
+                      />
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileChange(e, "cover")}
+                      id="dossier-create-cover-upload"
+                      className="dossier-create-file-input"
+                    />
+                    <label
+                      htmlFor="dossier-create-cover-upload"
+                      className="dossier-btn-primary dossier-create-upload-btn"
+                    >
+                      <Upload size={18} />
+                      Tải ảnh bìa
+                    </label>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div className="dossier-form-group">
-              <label className="dossier-form-label">Ảnh bìa</label>
-              <div className="dossier-create-upload-box">
-                {coverPreview && (
-                  <img
-                    src={coverPreview}
-                    alt="Xem trước ảnh bìa"
-                    className="dossier-create-cover-preview"
+              <div className="dossier-form-group">
+                <label className="dossier-form-label">Video giới thiệu</label>
+                <div className="dossier-create-upload-box">
+                  {videoPreview && (
+                    <video
+                      src={videoPreview}
+                      controls
+                      className="dossier-create-video-preview"
+                    />
+                  )}
+                  <input
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => handleFileChange(e, "video")}
+                    id="dossier-create-video-upload"
+                    className="dossier-create-file-input"
                   />
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleFileChange(e, "cover")}
-                  id="dossier-create-cover-upload"
-                  className="dossier-create-file-input"
-                />
-                <label
-                  htmlFor="dossier-create-cover-upload"
-                  className="dossier-btn-primary dossier-create-upload-btn"
-                >
-                  <Upload size={18} />
-                  Tải ảnh bìa
-                </label>
+                  <label
+                    htmlFor="dossier-create-video-upload"
+                    className="dossier-btn-primary dossier-create-upload-btn"
+                  >
+                    <Upload size={18} />
+                    Tải video
+                  </label>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div className="dossier-form-group">
-            <label className="dossier-form-label">Video giới thiệu</label>
-            <div className="dossier-create-upload-box">
-              {videoPreview && (
-                <video
-                  src={videoPreview}
-                  controls
-                  className="dossier-create-video-preview"
-                />
-              )}
-              <input
-                type="file"
-                accept="video/*"
-                onChange={(e) => handleFileChange(e, "video")}
-                id="dossier-create-video-upload"
-                className="dossier-create-file-input"
-              />
-              <label
-                htmlFor="dossier-create-video-upload"
-                className="dossier-btn-primary dossier-create-upload-btn"
-              >
-                <Upload size={18} />
-                Tải video
-              </label>
-            </div>
-          </div>
             </div>
 
             <div className="dossier-form-section">
               <h3 className="dossier-form-section-title">Liên kết bên ngoài</h3>
 
-          <div className="dossier-form-group">
-            <label className="dossier-form-label">LinkedIn</label>
-            <input
-              type="url"
-              className="dossier-input"
-              value={formData.linkedinUrl || ""}
-              onChange={(e) => setFormData({ ...formData, linkedinUrl: e.target.value })}
-              placeholder="https://linkedin.com/in/ten-cua-ban"
-            />
-          </div>
+              <div className="dossier-form-group">
+                <label className="dossier-form-label">LinkedIn</label>
+                <input
+                  type="url"
+                  className="dossier-input"
+                  value={formData.linkedinUrl || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, linkedinUrl: e.target.value })
+                  }
+                  placeholder="https://linkedin.com/in/ten-cua-ban"
+                />
+              </div>
 
-          <div className="dossier-form-group">
-            <label className="dossier-form-label">GitHub</label>
-            <input
-              type="url"
-              className="dossier-input"
-              value={formData.githubUrl || ""}
-              onChange={(e) => setFormData({ ...formData, githubUrl: e.target.value })}
-              placeholder="https://github.com/ten-cua-ban"
-            />
-          </div>
+              <div className="dossier-form-group">
+                <label className="dossier-form-label">GitHub</label>
+                <input
+                  type="url"
+                  className="dossier-input"
+                  value={formData.githubUrl || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, githubUrl: e.target.value })
+                  }
+                  placeholder="https://github.com/ten-cua-ban"
+                />
+              </div>
 
-          <div className="dossier-form-row">
-            <div className="dossier-form-group">
-              <label className="dossier-form-label">Website cá nhân</label>
-              <input
-                type="url"
-                className="dossier-input"
-                value={formData.portfolioWebsiteUrl || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, portfolioWebsiteUrl: e.target.value })
-                }
-                placeholder="https://portfolio-cua-ban.com"
-              />
-            </div>
+              <div className="dossier-form-row">
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Website cá nhân</label>
+                  <input
+                    type="url"
+                    className="dossier-input"
+                    value={formData.portfolioWebsiteUrl || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        portfolioWebsiteUrl: e.target.value,
+                      })
+                    }
+                    placeholder="https://portfolio-cua-ban.com"
+                  />
+                </div>
 
-            <div className="dossier-form-group">
-              <label className="dossier-form-label">Behance</label>
-              <input
-                type="url"
-                className="dossier-input"
-                value={formData.behanceUrl || ""}
-                onChange={(e) => setFormData({ ...formData, behanceUrl: e.target.value })}
-                placeholder="https://behance.net/ten-cua-ban"
-              />
-            </div>
-            </div>
+                <div className="dossier-form-group">
+                  <label className="dossier-form-label">Behance</label>
+                  <input
+                    type="url"
+                    className="dossier-input"
+                    value={formData.behanceUrl || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, behanceUrl: e.target.value })
+                    }
+                    placeholder="https://behance.net/ten-cua-ban"
+                  />
+                </div>
+              </div>
             </div>
           </>
         )}
@@ -1785,7 +2272,10 @@ const DossierCreatePortfolioPage = () => {
                 className="dossier-select"
                 value={formData.availabilityStatus || "AVAILABLE"}
                 onChange={(e) =>
-                  setFormData({ ...formData, availabilityStatus: e.target.value })
+                  setFormData({
+                    ...formData,
+                    availabilityStatus: e.target.value,
+                  })
                 }
               >
                 <option value="AVAILABLE">Sẵn sàng</option>
@@ -1804,10 +2294,16 @@ const DossierCreatePortfolioPage = () => {
                     className={`dossier-create-quick-fill-chip${formData.availabilityStatus === s.val ? " active" : ""}`}
                     style={
                       formData.availabilityStatus === s.val
-                        ? { borderColor: "#22d3ee", background: "rgba(6,182,212,0.22)", color: "#ecfeff" }
+                        ? {
+                            borderColor: "#22d3ee",
+                            background: "rgba(6,182,212,0.22)",
+                            color: "#ecfeff",
+                          }
                         : {}
                     }
-                    onClick={() => setFormData((p) => ({ ...p, availabilityStatus: s.val }))}
+                    onClick={() =>
+                      setFormData((p) => ({ ...p, availabilityStatus: s.val }))
+                    }
                   >
                     {s.label}
                   </button>
@@ -1816,7 +2312,9 @@ const DossierCreatePortfolioPage = () => {
             </div>
 
             <div className="dossier-form-group">
-              <label className="dossier-form-label">Mức giá theo giờ (VND)</label>
+              <label className="dossier-form-label">
+                Mức giá theo giờ (VND)
+              </label>
               <input
                 type="number"
                 className="dossier-input"
@@ -1836,7 +2334,9 @@ const DossierCreatePortfolioPage = () => {
                     key={amt}
                     type="button"
                     className="dossier-create-quick-fill-chip"
-                    onClick={() => setFormData((p) => ({ ...p, hourlyRate: amt }))}
+                    onClick={() =>
+                      setFormData((p) => ({ ...p, hourlyRate: amt }))
+                    }
                   >
                     {amt >= 1000 ? `${(amt / 1000).toFixed(0)}K` : amt}/h
                   </button>
@@ -1860,10 +2360,14 @@ const DossierCreatePortfolioPage = () => {
                 type="checkbox"
                 className="dossier-create-checkbox-input"
                 checked={Boolean(formData.isPublic)}
-                onChange={(e) => setFormData({ ...formData, isPublic: e.target.checked })}
+                onChange={(e) =>
+                  setFormData({ ...formData, isPublic: e.target.checked })
+                }
               />
               <div className="dossier-create-checkbox-content">
-                <span className="dossier-create-checkbox-title">Công khai Portfolio</span>
+                <span className="dossier-create-checkbox-title">
+                  Công khai Portfolio
+                </span>
                 <span className="dossier-create-checkbox-desc">
                   Cho phép người khác xem hồ sơ của bạn qua liên kết Portfolio.
                 </span>
@@ -1876,7 +2380,10 @@ const DossierCreatePortfolioPage = () => {
                 className="dossier-create-checkbox-input"
                 checked={Boolean(formData.showContactInfo)}
                 onChange={(e) =>
-                  setFormData({ ...formData, showContactInfo: e.target.checked })
+                  setFormData({
+                    ...formData,
+                    showContactInfo: e.target.checked,
+                  })
                 }
               />
               <div className="dossier-create-checkbox-content">
@@ -1884,7 +2391,8 @@ const DossierCreatePortfolioPage = () => {
                   Hiển thị thông tin liên hệ
                 </span>
                 <span className="dossier-create-checkbox-desc">
-                  Số điện thoại và các liên kết mạng xã hội sẽ được hiển thị công khai.
+                  Số điện thoại và các liên kết mạng xã hội sẽ được hiển thị
+                  công khai.
                 </span>
               </div>
             </label>
@@ -1899,7 +2407,9 @@ const DossierCreatePortfolioPage = () => {
                 }
               />
               <div className="dossier-create-checkbox-content">
-                <span className="dossier-create-checkbox-title">Nhận đề nghị việc làm</span>
+                <span className="dossier-create-checkbox-title">
+                  Nhận đề nghị việc làm
+                </span>
                 <span className="dossier-create-checkbox-desc">
                   Cho phép nhà tuyển dụng gửi lời mời hoặc liên hệ hợp tác.
                 </span>
@@ -1908,26 +2418,27 @@ const DossierCreatePortfolioPage = () => {
           </div>
 
           <div className="dossier-form-group dossier-create-slug-wrap">
-            <label className="dossier-form-label">Đường dẫn tùy chỉnh (slug)</label>
+            <label className="dossier-form-label">
+              Đường dẫn tùy chỉnh (slug)
+            </label>
             <input
               type="text"
               className="dossier-input"
               value={formData.customUrlSlug || ""}
-              onChange={(e) =>
-                {
-                  setManualSlugEdited(true);
-                  setFormData({
-                    ...formData,
-                    customUrlSlug: e.target.value
-                      .toLowerCase()
-                      .replace(/[^a-z0-9-]/g, ""),
-                  });
-                }
-              }
+              onChange={(e) => {
+                setManualSlugEdited(true);
+                setFormData({
+                  ...formData,
+                  customUrlSlug: e.target.value
+                    .toLowerCase()
+                    .replace(/[^a-z0-9-]/g, ""),
+                });
+              }}
               placeholder="vi-du: nguyen-van-a"
             />
             <small className="dossier-create-slug-note">
-              Liên kết: /portfolio/{formData.customUrlSlug || "duong-dan-cua-ban"}
+              Liên kết: /portfolio/
+              {formData.customUrlSlug || "duong-dan-cua-ban"}
             </small>
             <button
               type="button"
@@ -1948,7 +2459,11 @@ const DossierCreatePortfolioPage = () => {
           >
             Hủy
           </button>
-          <button type="submit" className="dossier-btn-primary" disabled={submitting}>
+          <button
+            type="submit"
+            className="dossier-btn-primary"
+            disabled={submitting}
+          >
             {submitting ? (
               <>
                 <MeowlKuruLoader size="tiny" text="" />
@@ -1967,6 +2482,17 @@ const DossierCreatePortfolioPage = () => {
         message={alertModal.message}
         type={alertModal.type}
       />
+      {toast && isVisible && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={toast.showCountdown}
+        />
+      )}
     </div>
   );
 };

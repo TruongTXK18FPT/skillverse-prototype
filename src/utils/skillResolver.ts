@@ -88,6 +88,9 @@ for (const [canonical, aliases] of Object.entries(SKILL_ALIAS_MAP)) {
 const normalizeText = (text: string): string =>
   text
     .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
     .replace(/[_\-/\\]+/g, ' ')
     .replace(/[^a-z0-9\s.#+]/g, '')
     .replace(/\s+/g, ' ')
@@ -129,6 +132,75 @@ const expandWithAliases = (input: string): Set<string> => {
   }
 
   return result;
+};
+
+const getBuiltInRoleHints = (jobRole: string, industry: string): string[] => {
+  const role = normalizeText(jobRole);
+  const sector = normalizeText(industry);
+  const hints: string[] = [];
+
+  if (role.includes('backend')) {
+    hints.push('backend', 'api', 'server', 'java', 'spring', 'spring boot', 'node', 'express', 'nestjs', 'django', 'flask', 'laravel', 'php', 'c#', 'asp.net', 'sql', 'postgresql', 'mysql', 'redis', 'microservices');
+  }
+  if (role.includes('frontend')) {
+    hints.push('frontend', 'react', 'reactjs', 'vue', 'angular', 'nextjs', 'javascript', 'typescript', 'html', 'css', 'tailwind', 'web ui');
+  }
+  if (role.includes('fullstack') || role.includes('full stack')) {
+    hints.push('fullstack', 'full stack', 'mern', 'mean', 'react node', 'nextjs', 'spring react', 'web development');
+  }
+  if (role.includes('mobile')) {
+    hints.push('mobile', 'android', 'ios', 'flutter', 'dart', 'react native', 'kotlin', 'swift');
+  }
+  if (role.includes('devops')) {
+    hints.push('devops', 'ci cd', 'docker', 'kubernetes', 'k8s', 'terraform', 'jenkins', 'github actions');
+  }
+  if (role.includes('cloud')) {
+    hints.push('cloud', 'aws', 'azure', 'gcp', 'google cloud', 'cloud architecture', 'cloud engineer');
+  }
+  if (role.includes('qa') || role.includes('tester')) {
+    hints.push('qa', 'qc', 'testing', 'tester', 'selenium', 'automation test', 'manual test', 'playwright', 'cypress');
+  }
+  if (role.includes('ui') || role.includes('ux') || role.includes('designer')) {
+    hints.push('ui', 'ux', 'ui ux', 'figma', 'wireframe', 'prototype', 'user experience', 'user interface', 'photoshop', 'illustrator');
+  }
+  if (role.includes('data analyst')) {
+    hints.push('data analyst', 'sql', 'excel', 'power bi', 'powerbi', 'tableau', 'dashboard', 'data visualization');
+  }
+  if (role.includes('business intelligence') || role.includes('bi')) {
+    hints.push('bi', 'business intelligence', 'power bi', 'powerbi', 'tableau', 'dashboard', 'data warehouse');
+  }
+  if (role.includes('data engineer')) {
+    hints.push('data engineer', 'etl', 'spark', 'airflow', 'data pipeline', 'warehouse', 'big data');
+  }
+  if (role.includes('machine learning') || role.includes('ai engineer')) {
+    hints.push('machine learning', 'ml', 'ai', 'python', 'tensorflow', 'pytorch', 'llm', 'deep learning', 'generative ai');
+  }
+  if (role.includes('cyber') || role.includes('security') || role.includes('pentester') || role.includes('soc')) {
+    hints.push('security', 'cybersecurity', 'pentest', 'penetration testing', 'ethical hacker', 'soc', 'firewall', 'network security', 'threat');
+  }
+  if (role.includes('marketing') || sector.includes('marketing')) {
+    hints.push('marketing', 'digital marketing', 'seo', 'ads', 'facebook ads', 'google ads', 'content marketing', 'social media', 'email marketing', 'brand');
+  }
+  if (role.includes('sales')) {
+    hints.push('sales', 'ban hang', 'telesales', 'b2b sales', 'closing', 'crm');
+  }
+  if (role.includes('business analyst')) {
+    hints.push('business analyst', 'ba', 'requirements', 'process', 'user story', 'brd');
+  }
+  if (role.includes('project manager')) {
+    hints.push('project manager', 'pm', 'pmp', 'agile', 'scrum', 'kanban');
+  }
+  if (role.includes('hr') || role.includes('recruitment')) {
+    hints.push('hr', 'human resources', 'recruitment', 'talent acquisition', 'headhunter', 'nhan su', 'tuyen dung');
+  }
+  if (role.includes('accounting') || role.includes('finance')) {
+    hints.push('accounting', 'finance', 'ke toan', 'excel', 'financial analysis', 'bookkeeping');
+  }
+  if (role.includes('logistics') || role.includes('supply chain')) {
+    hints.push('logistics', 'supply chain', 'procurement', 'inventory', 'import export', 'customs');
+  }
+
+  return hints;
 };
 
 /**
@@ -226,10 +298,13 @@ export const resolveSkillToCareer = (
   for (const field of expertFields) {
     for (const industry of field.industries) {
       for (const role of industry.roles) {
-        const roleKeywords = (role.keywords || '')
+        const roleKeywords = [
+          ...(role.keywords || '')
           .split(',')
           .map((kw) => normalizeText(kw))
-          .filter(Boolean);
+          .filter(Boolean),
+          ...getBuiltInRoleHints(role.jobRole, industry.industry).map((kw) => normalizeText(kw)),
+        ].filter(Boolean);
 
         const roleNameNormalized = normalizeText(role.jobRole);
 

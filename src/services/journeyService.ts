@@ -155,6 +155,9 @@ const normalizeJourneyStatus = (status: unknown): JourneyStatus => {
     case JourneyStatus.IN_PROGRESS:
     case JourneyStatus.PAUSED:
     case JourneyStatus.COMPLETED:
+    case JourneyStatus.COMPLETED_UNVERIFIED:
+    case JourneyStatus.AWAITING_VERIFICATION:
+    case JourneyStatus.COMPLETED_VERIFIED:
     case JourneyStatus.CANCELLED:
       return value;
     case 'ROADMAP_GENERATED':

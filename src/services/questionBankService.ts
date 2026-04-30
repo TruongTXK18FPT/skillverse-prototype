@@ -191,7 +191,7 @@ export const countPendingQuestionBankSubmissions = async (): Promise<number> => 
 };
 
 // ============================================================
-// AI Skill Resolution
+// Smart Skill Resolution
 // ============================================================
 
 const SKILL_RESOLVE_BASE = '/api/v1/question-banks/skills';
@@ -217,7 +217,7 @@ export interface SkillResolveResponse {
 }
 
 /**
- * Use AI to resolve a skill name → domain / industry / jobRole.
+ * Resolve a skill name to domain / industry / jobRole using backend smart search.
  * Accessible by ADMIN, AI_ADMIN, and MENTOR roles.
  */
 export const resolveSkill = async (skillName: string): Promise<SkillResolveResponse> => {
@@ -229,7 +229,7 @@ export const resolveSkill = async (skillName: string): Promise<SkillResolveRespo
 };
 
 /**
- * Use AI to resolve a skill and auto-create the question bank if it doesn't exist.
+ * Resolve a skill and auto-create the question bank if it doesn't exist.
  * Accessible by ADMIN and AI_ADMIN roles only.
  */
 export const resolveAndCreateQuestionBank = async (skillName: string): Promise<SkillResolveResponse> => {
