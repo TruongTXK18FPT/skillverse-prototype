@@ -4,7 +4,8 @@ import {
   Users, UserCheck, Shield, Search, Filter,
   Eye, Edit, Ban, CheckCircle, XCircle, Key,
   Mail, Phone, Calendar, Activity, Award, BookOpen,
-  RefreshCw, X, Save, ChevronLeft, ChevronRight, Trash2, Download, Gift
+  RefreshCw, X, Save, ChevronLeft, ChevronRight, Trash2, Download, Gift,
+  FileText, Briefcase, Building, Star
 } from 'lucide-react';
 import adminUserService from '../../services/adminUserService';
 import walletService from '../../services/walletService';
@@ -827,6 +828,100 @@ const UserManagementTabCosmic: React.FC = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Mentor Specific Info */}
+              {selectedUser.primaryRole === 'MENTOR' && (
+                <div className="admin-detail-section">
+                  <h4>Thông Tin Mentor</h4>
+                  <div className="admin-detail-grid">
+                    <div className="admin-detail-item">
+                      <Shield size={18} />
+                      <div>
+                        <div className="label">Trạng thái CCCD</div>
+                        <div className="value">
+                          {selectedUser.identityVerified ? (
+                            <span style={{ color: '#10b981' }}>Đã xác thực</span>
+                          ) : selectedUser.cccdExtractedData ? (
+                            <span style={{ color: '#f59e0b' }}>Chờ xác thực</span>
+                          ) : (
+                            <span style={{ color: '#ef4444' }}>Chưa cập nhật</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    {selectedUser.cccdNumber && (
+                      <div className="admin-detail-item">
+                        <FileText size={18} />
+                        <div>
+                          <div className="label">Số CCCD</div>
+                          <div className="value">{selectedUser.cccdNumber}</div>
+                        </div>
+                      </div>
+                    )}
+                    {selectedUser.yearsOfExperience !== undefined && (
+                      <div className="admin-detail-item">
+                        <Briefcase size={18} />
+                        <div>
+                          <div className="label">Kinh nghiệm</div>
+                          <div className="value">{selectedUser.yearsOfExperience} năm</div>
+                        </div>
+                      </div>
+                    )}
+                    {selectedUser.mentorSkills && (
+                      <div className="admin-detail-item" style={{ gridColumn: '1 / -1' }}>
+                        <Star size={18} />
+                        <div>
+                          <div className="label">Kỹ năng</div>
+                          <div className="value">{selectedUser.mentorSkills}</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Recruiter Specific Info */}
+              {selectedUser.primaryRole === 'RECRUITER' && (
+                <div className="admin-detail-section">
+                  <h4>Thông Tin Doanh Nghiệp</h4>
+                  <div className="admin-detail-grid">
+                    <div className="admin-detail-item">
+                      <Building size={18} />
+                      <div>
+                        <div className="label">Tên công ty</div>
+                        <div className="value">{selectedUser.companyName || 'Chưa cập nhật'}</div>
+                      </div>
+                    </div>
+                    <div className="admin-detail-item">
+                      <FileText size={18} />
+                      <div>
+                        <div className="label">Mã số thuế</div>
+                        <div className="value">{selectedUser.taxCode || 'Chưa cập nhật'}</div>
+                      </div>
+                    </div>
+                    <div className="admin-detail-item">
+                      <Briefcase size={18} />
+                      <div>
+                        <div className="label">Lĩnh vực</div>
+                        <div className="value">{selectedUser.industry || 'Chưa cập nhật'}</div>
+                      </div>
+                    </div>
+                    <div className="admin-detail-item">
+                      <Shield size={18} />
+                      <div>
+                        <div className="label">Trạng thái xác thực</div>
+                        <div className="value">
+                          {selectedUser.companyVerified ? (
+                            <span style={{ color: '#10b981' }}>Đã xác thực</span>
+                          ) : (
+                            <span style={{ color: '#f59e0b' }}>Chưa xác thực</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Statistics */}
               <div className="admin-detail-section">

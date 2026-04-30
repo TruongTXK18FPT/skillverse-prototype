@@ -4,7 +4,7 @@ import {
   UserCheck, Building2, Clock, CheckCircle, XCircle,
   Search, Filter, Eye, RefreshCw, X, Calendar, Mail,
   FileText, Award, Briefcase, Globe, MapPin, ChevronLeft, ChevronRight,
-  ExternalLink, Download, Maximize2, Phone, Cpu
+  ExternalLink, Download, Maximize2, Phone, Cpu, AlertTriangle
 } from 'lucide-react';
 import adminService from '../../services/adminService';
 import axiosInstance, { API_BASE_URL } from '../../services/axiosInstance';
@@ -355,14 +355,13 @@ const AccountVerificationTabCosmic: React.FC = () => {
       </div>
 
       {/* ===== CCCD PENDING VERIFICATION SECTION ===== */}
-      {(pendingCccdList.length > 0 || cccdLoading) && (
-        <div style={{
-          background: 'rgba(245,158,11,0.06)',
-          border: '1px solid rgba(245,158,11,0.2)',
-          borderRadius: '1rem',
-          padding: '1.5rem',
-          marginBottom: '1.5rem'
-        }}>
+      <div style={{
+        background: 'rgba(245,158,11,0.06)',
+        border: '1px solid rgba(245,158,11,0.2)',
+        borderRadius: '1rem',
+        padding: '1.5rem',
+        marginBottom: '1.5rem'
+      }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <Cpu size={22} style={{ color: '#f59e0b' }} />
@@ -391,116 +390,187 @@ const AccountVerificationTabCosmic: React.FC = () => {
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {pendingCccdList.map((mentor) => {
-                let extractedInfo: any = null;
-                try {
-                  if (mentor.cccdExtractedData) {
-                    const parsed = JSON.parse(mentor.cccdExtractedData);
-                    extractedInfo = parsed?.front?.data?.[0] || null;
-                  }
-                } catch { /* ignore */ }
+              {pendingCccdList.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '1rem', color: '#94a3b8' }}>
+                  Không có đơn CCCD nào đang chờ duyệt.
+                </div>
+              ) : (
+                pendingCccdList.map((mentor) => {
+                  let extractedInfo: any = null;
+                  let isDuplicate = false;
+                  let duplicateMessage = '';
+                  try {
+                    if (mentor.cccdExtractedData) {
+                      const parsed = JSON.parse(mentor.cccdExtractedData);
+                      // Try multiple paths FPT.AI might return data in
+                      extractedInfo = parsed?.front?.data?.[0]
+                        || parsed?.front?.data
+                        || parsed?.front
+                        || null;
+                      isDuplicate = !!parsed?.isDuplicate;
+                      duplicateMessage = parsed?.duplicateMessage || 'Số CCCD này đã được sử dụng bởi tài khoản khác.';
+                    }
+                  } catch { /* ignore */ }
 
-                return (
-                  <div key={mentor.userId} style={{
-                    background: 'rgba(15,23,42,0.6)',
-                    border: '1px solid rgba(245,158,11,0.15)',
-                    borderRadius: '0.75rem',
-                    overflow: 'hidden'
-                  }}>
-                    {/* Row header */}
-                    <div style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '0.875rem 1.25rem', cursor: 'pointer'
-                    }} onClick={() => setExpandedCccdId(expandedCccdId === mentor.userId ? null : mentor.userId)}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  return (
+                    <div key={mentor.userId} style={{
+                      background: 'rgba(15,23,42,0.6)',
+                      border: isDuplicate
+                        ? '1px solid rgba(239,68,68,0.4)'
+                        : '1px solid rgba(245,158,11,0.15)',
+                      borderRadius: '0.75rem',
+                      overflow: 'hidden'
+                    }}>
+                      {/* Duplicate Banner */}
+                      {isDuplicate && (
                         <div style={{
-                          width: 40, height: 40, borderRadius: '50%',
-                          background: 'rgba(245,158,11,0.15)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          color: '#f59e0b', fontWeight: 700, fontSize: '1rem', flexShrink: 0
+                          background: 'rgba(239,68,68,0.15)',
+                          borderBottom: '1px solid rgba(239,68,68,0.3)',
+                          padding: '0.5rem 1.25rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          color: '#f87171',
+                          fontSize: '0.8rem',
+                          fontWeight: 600
                         }}>
-                          {mentor.fullName?.charAt(0) || '?'}
+                          <XCircle size={14} />
+                          ⚠ CCCD TRÙNG LẶP — {duplicateMessage}
                         </div>
-                        <div>
-                          <div style={{ color: '#e2e8f0', fontWeight: 600 }}>{mentor.fullName}</div>
-                          <div style={{ color: '#64748b', fontSize: '0.8rem' }}>{mentor.email}</div>
-                        </div>
-                        {extractedInfo && (
-                          <span style={{
-                            background: 'rgba(16,185,129,0.12)', color: '#34d399',
-                            border: '1px solid rgba(16,185,129,0.2)',
-                            borderRadius: '0.4rem', padding: '2px 8px', fontSize: '0.75rem'
-                          }}>
-                            ✓ AI đã trích xuất
-                          </span>
-                        )}
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <button
-                          className="verification-action-btn approve"
-                          onClick={(e) => { e.stopPropagation(); handleApproveCccd(mentor.userId); }}
-                          disabled={actionLoading}
-                          title="Xác thực CCCD"
-                          style={{ padding: '0.4rem 0.9rem', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
-                        >
-                          <CheckCircle size={14} />
-                          {actionLoading ? '...' : 'Xác Thực'}
-                        </button>
-                        <Eye size={16} style={{ color: '#64748b' }} />
-                      </div>
-                    </div>
+                      )}
 
-                    {/* Expanded AI data */}
-                    {expandedCccdId === mentor.userId && (
+                      {/* Row header */}
                       <div style={{
-                        borderTop: '1px solid rgba(245,158,11,0.12)',
-                        padding: '1rem 1.25rem',
-                        background: 'rgba(0,0,0,0.2)'
-                      }}>
-                        {extractedInfo ? (
-                          <div className="verification-ai-grid">
-                            <div className="verification-ai-item">
-                              <span className="verification-ai-label">Số CCCD</span>
-                              <span className="verification-ai-value highlight">{extractedInfo.id || mentor.cccdNumber || 'Không có'}</span>
-                            </div>
-                            <div className="verification-ai-item">
-                              <span className="verification-ai-label">Họ và Tên</span>
-                              <span className="verification-ai-value highlight">{extractedInfo.name || mentor.cccdFullName || 'Không có'}</span>
-                            </div>
-                            <div className="verification-ai-item">
-                              <span className="verification-ai-label">Ngày Sinh</span>
-                              <span className="verification-ai-value">{extractedInfo.dob || mentor.cccdDob || 'Không có'}</span>
-                            </div>
-                            <div className="verification-ai-item">
-                              <span className="verification-ai-label">Giới Tính</span>
-                              <span className="verification-ai-value">{extractedInfo.sex || 'Không có'}</span>
-                            </div>
-                            <div className="verification-ai-item">
-                              <span className="verification-ai-label">Quê Quán</span>
-                              <span className="verification-ai-value">{extractedInfo.home || 'Không có'}</span>
-                            </div>
-                            <div className="verification-ai-item" style={{ gridColumn: '1/-1' }}>
-                              <span className="verification-ai-label">Nơi Thường Trú</span>
-                              <span className="verification-ai-value">{extractedInfo.address || 'Không có'}</span>
-                            </div>
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        padding: '0.875rem 1.25rem', cursor: 'pointer'
+                      }} onClick={() => setExpandedCccdId(expandedCccdId === mentor.userId ? null : mentor.userId)}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                          <div style={{
+                            width: 40, height: 40, borderRadius: '50%',
+                            background: isDuplicate ? 'rgba(239,68,68,0.15)' : 'rgba(245,158,11,0.15)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: isDuplicate ? '#f87171' : '#f59e0b',
+                            fontWeight: 700, fontSize: '1rem', flexShrink: 0
+                          }}>
+                            {mentor.fullName?.charAt(0) || '?'}
                           </div>
-                        ) : (
-                          <div className="verification-ai-empty">
-                            AI đang xử lý. Dữ liệu sẽ xuất hiện sau vài giây. Vui lòng làm mới.
+                          <div>
+                            <div style={{ color: '#e2e8f0', fontWeight: 600 }}>{mentor.fullName}</div>
+                            <div style={{ color: '#64748b', fontSize: '0.8rem' }}>{mentor.email}</div>
                           </div>
-                        )}
-                        <p style={{ fontSize: '0.78rem', color: '#475569', marginTop: '0.75rem', marginBottom: 0 }}>
-                          Cập nhật lúc: {mentor.updatedAt ? new Date(mentor.updatedAt).toLocaleString('vi-VN') : 'N/A'}
-                        </p>
+                          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                            {extractedInfo && (
+                              <span style={{
+                                background: 'rgba(16,185,129,0.12)', color: '#34d399',
+                                border: '1px solid rgba(16,185,129,0.2)',
+                                borderRadius: '0.4rem', padding: '2px 8px', fontSize: '0.75rem'
+                              }}>
+                                ✓ AI đã trích xuất
+                              </span>
+                            )}
+                            {isDuplicate && (
+                              <span style={{
+                                background: 'rgba(239,68,68,0.12)', color: '#f87171',
+                                border: '1px solid rgba(239,68,68,0.3)',
+                                borderRadius: '0.4rem', padding: '2px 8px', fontSize: '0.75rem', fontWeight: 700
+                              }}>
+                                ⚠ TRÙNG CCCD
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <button
+                            className="verification-action-btn approve"
+                            onClick={(e) => { e.stopPropagation(); handleApproveCccd(mentor.userId); }}
+                            disabled={actionLoading}
+                            title={isDuplicate ? 'Xác thực dù CCCD trùng (Admin có quyền override)' : 'Xác thực CCCD'}
+                            style={{
+                              padding: '0.4rem 0.9rem', fontSize: '0.82rem',
+                              display: 'flex', alignItems: 'center', gap: '0.4rem',
+                              opacity: isDuplicate ? 0.8 : 1,
+                              border: isDuplicate ? '1px solid rgba(245,158,11,0.6)' : undefined
+                            }}
+                          >
+                            <CheckCircle size={14} />
+                            {actionLoading ? '...' : (isDuplicate ? 'Duyệt (override)' : 'Xác Thực')}
+                          </button>
+                          <Eye size={16} style={{ color: '#64748b' }} />
+                        </div>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
+
+                      {/* Expanded AI data */}
+                      {expandedCccdId === mentor.userId && (
+                        <div style={{
+                          borderTop: isDuplicate ? '1px solid rgba(239,68,68,0.2)' : '1px solid rgba(245,158,11,0.12)',
+                          padding: '1rem 1.25rem',
+                          background: 'rgba(0,0,0,0.2)'
+                        }}>
+                          {isDuplicate && (
+                            <div style={{
+                              background: 'rgba(239,68,68,0.08)',
+                              border: '1px solid rgba(239,68,68,0.25)',
+                              borderRadius: '0.5rem',
+                              padding: '0.75rem 1rem',
+                              marginBottom: '1rem',
+                              color: '#fca5a5',
+                              fontSize: '0.85rem'
+                            }}>
+                              <strong style={{ color: '#f87171', display: 'block', marginBottom: '0.25rem' }}>
+                                ⚠ Cảnh báo trùng lặp CCCD
+                              </strong>
+                              {duplicateMessage}
+                              <br />
+                              <span style={{ color: '#94a3b8', fontSize: '0.78rem' }}>
+                                Admin vẫn có thể duyệt nếu xác nhận đây là trường hợp hợp lệ (ví dụ: cập nhật CCCD chip).
+                              </span>
+                            </div>
+                          )}
+
+                          {extractedInfo ? (
+                            <div className="verification-ai-grid">
+                              <div className="verification-ai-item">
+                                <span className="verification-ai-label">Số CCCD</span>
+                                <span className="verification-ai-value highlight">{extractedInfo.id || mentor.cccdNumber || 'Không có'}</span>
+                              </div>
+                              <div className="verification-ai-item">
+                                <span className="verification-ai-label">Họ và Tên</span>
+                                <span className="verification-ai-value highlight">{extractedInfo.name || mentor.cccdFullName || 'Không có'}</span>
+                              </div>
+                              <div className="verification-ai-item">
+                                <span className="verification-ai-label">Ngày Sinh</span>
+                                <span className="verification-ai-value">{extractedInfo.dob || mentor.cccdDob || 'Không có'}</span>
+                              </div>
+                              <div className="verification-ai-item">
+                                <span className="verification-ai-label">Giới Tính</span>
+                                <span className="verification-ai-value">{extractedInfo.sex || 'Không có'}</span>
+                              </div>
+                              <div className="verification-ai-item">
+                                <span className="verification-ai-label">Quê Quán</span>
+                                <span className="verification-ai-value">{extractedInfo.home || extractedInfo.origin || 'Không có'}</span>
+                              </div>
+                              <div className="verification-ai-item" style={{ gridColumn: '1/-1' }}>
+                                <span className="verification-ai-label">Nơi Thường Trú</span>
+                                <span className="verification-ai-value">{extractedInfo.address || extractedInfo.recent_location || 'Không có'}</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="verification-ai-empty">
+                              Chưa có dữ liệu AI. Vui lòng làm mới sau vài giây.
+                            </div>
+                          )}
+                          <p style={{ fontSize: '0.78rem', color: '#475569', marginTop: '0.75rem', marginBottom: 0 }}>
+                            Cập nhật lúc: {mentor.updatedAt ? new Date(mentor.updatedAt).toLocaleString('vi-VN') : 'N/A'}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              )}
             </div>
           )}
         </div>
-      )}
 
       {/* Filters */}
       <div className="verification-filters">
@@ -1040,6 +1110,27 @@ const MentorDetail: React.FC<{
         </div>
       )}
 
+      {/* CCCD Images */}
+      {(mentor.cccdFrontUrl || mentor.cccdBackUrl) && (
+        <div className="verification-detail-section" style={{ marginTop: '1.5rem' }}>
+          <h5>Hình Ảnh CCCD Tải Lên</h5>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+            {mentor.cccdFrontUrl && (
+              <div>
+                <strong style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0' }}>Mặt Trước</strong>
+                <img src={mentor.cccdFrontUrl} alt="CCCD Front" style={{ width: '100%', borderRadius: '0.5rem', border: '1px solid #334155' }} />
+              </div>
+            )}
+            {mentor.cccdBackUrl && (
+              <div>
+                <strong style={{ display: 'block', marginBottom: '0.5rem', color: '#e2e8f0' }}>Mặt Sau</strong>
+                <img src={mentor.cccdBackUrl} alt="CCCD Back" style={{ width: '100%', borderRadius: '0.5rem', border: '1px solid #334155' }} />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {mentor.cccdExtractedData && (
         <div className="verification-ai-card">
           <div className="verification-ai-card-header">
@@ -1056,6 +1147,14 @@ const MentorDetail: React.FC<{
 
               return (
                 <div className="verification-ai-grid">
+                  {data.isDuplicate && (
+                    <div className="verification-ai-item" style={{ gridColumn: '1 / -1', background: 'rgba(239, 68, 68, 0.1)', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                      <span style={{ color: '#ef4444', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <AlertTriangle size={18} />
+                        {data.duplicateMessage || 'Cảnh báo: Số CCCD này đã được sử dụng bởi một Mentor khác trên hệ thống!'}
+                      </span>
+                    </div>
+                  )}
                   <div className="verification-ai-item">
                     <span className="verification-ai-label">Số CCCD</span>
                     <span className="verification-ai-value highlight">{front?.id || mentor.cccdNumber || 'Không có'}</span>

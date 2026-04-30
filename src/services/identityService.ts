@@ -75,3 +75,17 @@ export const getPendingCccdVerifications = async (): Promise<PendingCccdMentor[]
 };
 
 
+/**
+ * Allows a mentor to cancel their pending CCCD verification request.
+ */
+export const cancelCccdRequest = async (): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await axiosInstance.post('/api/identity/cancel-cccd');
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data.message || 'Lỗi khi hủy yêu cầu CCCD');
+    }
+    throw new Error('Không thể kết nối đến máy chủ.');
+  }
+};
