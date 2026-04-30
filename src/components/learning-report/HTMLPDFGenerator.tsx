@@ -82,7 +82,9 @@ const renderTimelineBars = (report: StudentLearningReportResponse) => {
           );
 
           // Get just the day for the label to save space, e.g. '30/04' -> '30'
-          const label = point.bucketLabel ? point.bucketLabel.split("/")[0] : "";
+          const label = point.bucketLabel
+            ? point.bucketLabel.split("/")[0]
+            : "";
 
           return `
             <div class="pdf-chart__item">
@@ -172,10 +174,27 @@ export function generateReportHTML(
   report: StudentLearningReportResponse,
   avatarUrl?: string,
 ): string {
-  const recommendations =
-    report.overview?.recommendations?.length > 0
-      ? report.overview.recommendations
-      : ["Chưa có khuyến nghị."];
+  const TIER_LABEL: Record<string, string> = {
+    CRITICAL: "Cần xử lý ngay",
+    IMPROVE: "Cải thiện",
+    NEXT_STEP: "Bước tiếp theo",
+    STRENGTH: "Điểm mạnh",
+  };
+  const TIER_COLOR: Record<string, string> = {
+    CRITICAL: "#ef4444",
+    IMPROVE: "#f59e0b",
+    NEXT_STEP: "#06b6d4",
+    STRENGTH: "#10b981",
+  };
+  const recommendations = (report.overview?.recommendations ?? []).map(
+    (rec) => {
+      // Backward-compat: if a legacy string slipped through, wrap it.
+      if (typeof rec === "string") {
+        return { tier: "IMPROVE", title: rec as string } as any;
+      }
+      return rec;
+    },
+  );
 
   return `
     <!DOCTYPE html>
@@ -450,22 +469,54 @@ export function generateReportHTML(
           </section>
 
           <section class="pdf-section">
-          <section class="pdf-section">
-            <h2>Đề xuất AI phân tích</h2>
+            <h2>Phân Tích &amp; Đề Xuất Cá Nhân Hóa</h2>
             <div class="pdf-tips">
-              ${recommendations
-                .map(
-                  (item, index) => {
-                    const cleanItem = item.replace(/✅/g, '').replace(/💰/g, '').trim();
-                    return `
-                      <div class="pdf-tip">
-                        <div class="pdf-tip__index">${index + 1}</div>
-                        <div>${escapeHtml(cleanItem)}</div>
-                      </div>
-                    `;
-                  }
-                )
-                .join("")}
+              ${
+                recommendations.length === 0
+                  ? `<div class="pdf-empty">Chưa có khuyến nghị.</div>`
+                  : recommendations
+                      .map((rec: any, index: number) => {
+                        const tier = (rec.tier || "IMPROVE") as string;
+                        const tierLabel = TIER_LABEL[tier] || tier;
+                        const tierColor = TIER_COLOR[tier] || "#94a3b8";
+                        const metric =
+                          rec.metricValue != null
+                            ? `${rec.metricValue}${rec.metricUnit || ""}` +
+                              (rec.metricTarget != null
+                                ? ` → mục tiêu ${rec.metricTarget}${rec.metricUnit || ""}`
+                                : "")
+                            : "";
+                        return `
+                          <div class="pdf-tip" style="border-left:4px solid ${tierColor};">
+                            <div class="pdf-tip__index" style="background:${tierColor};">${index + 1}</div>
+                            <div>
+                              <div style="font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:${tierColor};margin-bottom:4px;">
+                                ${escapeHtml(tierLabel)}${rec.category ? ` · ${escapeHtml(rec.category)}` : ""}
+                              </div>
+                              <div style="font-weight:700;font-size:13px;color:#0f172a;margin-bottom:4px;">
+                                ${escapeHtml(rec.title || "")}
+                              </div>
+                              ${
+                                rec.analysis
+                                  ? `<div style="font-size:11.5px;color:#334155;margin-bottom:4px;line-height:1.5;">${escapeHtml(rec.analysis)}</div>`
+                                  : ""
+                              }
+                              ${
+                                rec.action
+                                  ? `<div style="font-size:11.5px;color:#0f172a;background:#f1f5f9;padding:6px 8px;border-radius:6px;line-height:1.5;">→ ${escapeHtml(rec.action)}</div>`
+                                  : ""
+                              }
+                              ${
+                                metric
+                                  ? `<div style="font-size:11px;font-weight:700;color:${tierColor};margin-top:6px;">${escapeHtml(metric)}</div>`
+                                  : ""
+                              }
+                            </div>
+                          </div>
+                        `;
+                      })
+                      .join("")
+              }
             </div>
           </section>
 
@@ -498,7 +549,9 @@ export async function generatePDFFromHTML(
   report: StudentLearningReportResponse,
   options: HTMLPDFOptions = {},
 ): Promise<Blob> {
-  throw new Error("generatePDFFromHTML is deprecated. Use downloadVietnamesePDF instead to utilize the browser's native print engine.");
+  throw new Error(
+    "generatePDFFromHTML is deprecated. Use downloadVietnamesePDF instead to utilize the browser's native print engine.",
+  );
 }
 
 export async function downloadVietnamesePDF(

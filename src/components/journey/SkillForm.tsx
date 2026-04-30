@@ -92,7 +92,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
         <div className="gsj-wizard-step__header">
           <h2 className="gsj-wizard-step__title">Nhập kỹ năng muốn học</h2>
           <p className="gsj-wizard-step__subtitle">
-            Nhập tên kỹ năng — AI sẽ tự động xác định lĩnh vực và lộ trình phù
+            Nhập tên kỹ năng — hệ thống sẽ tự động xác định lĩnh vực và lộ trình phù
             hợp.
           </p>
         </div>
@@ -109,7 +109,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
           showManualFallback={false}
           onBack={onBack}
           label="Kỹ năng bạn muốn phát triển"
-          description="Nhập bất kỳ kỹ năng nào — AI sẽ tự động gợi ý lộ trình phù hợp."
+          description="Nhập bất kỳ kỹ năng nào — smart search sẽ tự động gợi ý lộ trình phù hợp."
           placeholder="Ví dụ: React, Java Spring Boot, UI Design, Digital Marketing..."
           useAi={true}
         />

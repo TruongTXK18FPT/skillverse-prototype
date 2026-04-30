@@ -51,6 +51,7 @@ export interface UserDto {
   primaryRole?: string; // Primary role: USER, MENTOR, RECRUITER, PARENT, ADMIN
   authProvider: string; // 'LOCAL' or 'GOOGLE'
   googleLinked: boolean; // Whether user has linked Google account
+  identityVerified?: boolean; // Whether mentor identity is verified
 }
 
 // Google Auth Request DTO

@@ -35,6 +35,7 @@ import {
   Hourglass,
   UserRound,
   Link as LinkIcon,
+  BadgeCheck,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import {
@@ -43,7 +44,10 @@ import {
   RoadmapFollowUpMeetingDTO,
   RoadmapMentorNodeUpsertRequest,
 } from "../../services/mentorRoadmapWorkspaceService";
-import { getNodeAssignment } from "../../services/nodeMentoringService";
+import {
+  getNodeAssignment,
+  getNodeEvidence,
+} from "../../services/nodeMentoringService";
 import { useAppToast } from "../../context/ToastContext";
 import type { NodeAssignmentResponse } from "../../types/NodeMentoring";
 import RoadmapNodeRequirementsCard from "../roadmap/RoadmapNodeRequirementsCard";
@@ -90,8 +94,8 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
 
   // Right panel tab
   const [rightTab, setRightTab] = useState<
-    "MENTORING" | "EDIT_NODE" | "ASSESSMENT" | "REPORT"
-  >("MENTORING");
+    "REPORT" | "EDIT_NODE" | "ASSESSMENT"
+  >("REPORT");
 
   // Overview panel tab (when no node selected)
   const [overviewTab, setOverviewTab] = useState<
@@ -118,6 +122,16 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
   const [selectedNodeAssignment, setSelectedNodeAssignment] =
     useState<NodeAssignmentResponse | null>(null);
 
+  // ── Node verification status map (for sidebar icons) ──
+  type MentorNodeStatus = {
+    selfCompleted: boolean;
+    verified: "NONE" | "VERIFIED" | "REJECTED";
+    submitted: boolean;
+  };
+  const [mentorNodeStatusMap, setMentorNodeStatusMap] = useState<
+    Record<string, MentorNodeStatus>
+  >({});
+
   const loadWorkspace = useCallback(async () => {
     try {
       setLoading(true);
@@ -137,6 +151,42 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
   useEffect(() => {
     loadWorkspace();
   }, [loadWorkspace]);
+
+  // ── Batch load node evidence statuses for sidebar icons ──
+  const loadMentorNodeStatuses = useCallback(async () => {
+    if (!workspace?.journeyId) return;
+    const allNodes = getNodes(workspace);
+    if (!allNodes.length) return;
+    const entries: Record<string, MentorNodeStatus> = {};
+    const results = await Promise.allSettled(
+      allNodes.map((node: any) =>
+        getNodeEvidence(workspace.journeyId!, node.id).then((ev) => ({
+          nodeId: node.id,
+          ev,
+        })),
+      ),
+    );
+    for (const r of results) {
+      if (r.status === "fulfilled" && r.value.ev) {
+        const { nodeId, ev } = r.value;
+        entries[nodeId] = {
+          selfCompleted: ev.learnerMarkedComplete ?? false,
+          verified:
+            ev.latestVerification?.nodeVerificationStatus === "VERIFIED"
+              ? "VERIFIED"
+              : ev.latestVerification?.nodeVerificationStatus === "REJECTED"
+                ? "REJECTED"
+                : "NONE",
+          submitted: ["SUBMITTED", "RESUBMITTED"].includes(ev.submissionStatus),
+        };
+      }
+    }
+    setMentorNodeStatusMap(entries);
+  }, [workspace]);
+
+  useEffect(() => {
+    loadMentorNodeStatuses();
+  }, [loadMentorNodeStatuses]);
 
   const nodes = getNodes(workspace);
   const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
@@ -200,34 +250,27 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
     }
   }, [nodes, selectedNode]);
 
-  useEffect(() => {
-    let cancelled = false;
-
+  const loadSelectedNodeAssignment = useCallback(async () => {
     if (!selectedNodeId || !workspace?.journeyId) {
       setSelectedNodeAssignment(null);
-      return () => {
-        cancelled = true;
-      };
+      return;
     }
 
     setSelectedNodeAssignment(null);
-
-    getNodeAssignment(workspace.journeyId, selectedNodeId)
-      .then((assignment) => {
-        if (!cancelled) {
-          setSelectedNodeAssignment(assignment);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setSelectedNodeAssignment(null);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
+    try {
+      const assignment = await getNodeAssignment(
+        workspace.journeyId,
+        selectedNodeId,
+      );
+      setSelectedNodeAssignment(assignment);
+    } catch {
+      setSelectedNodeAssignment(null);
+    }
   }, [selectedNodeId, workspace?.journeyId]);
+
+  useEffect(() => {
+    loadSelectedNodeAssignment();
+  }, [loadSelectedNodeAssignment]);
 
   const handleInlineListChange = useCallback(
     (field: EditableRequirementField, value: string) => {
@@ -528,13 +571,14 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
               ) : (
                 nodes.map((node: any, i: number) => {
                   const isFinal = node.id === finalNodeId;
+                  const ns = mentorNodeStatusMap[node.id];
                   return (
                     <div
                       key={node.id}
                       className={`mrw-node ${selectedNodeId === node.id ? "mrw-node--active" : ""} ${isFinal ? "mrw-node--final" : ""}`}
                       onClick={() => {
                         setSelectedNodeId(node.id);
-                        setRightTab("MENTORING");
+                        setRightTab("REPORT");
                       }}
                     >
                       <span className="mrw-node-index">{i + 1}</span>
@@ -560,7 +604,30 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
                           {node.difficulty && <span>• {node.difficulty}</span>}
                         </div>
                       </div>
-                      <ChevronRight size={14} className="mrw-node-chevron" />
+                      {/* Node verification status icon */}
+                      {ns?.verified === "VERIFIED" ? (
+                        <BadgeCheck
+                          size={15}
+                          className="mrw-status-icon mrw-status-icon--verified"
+                        />
+                      ) : ns?.verified === "REJECTED" ? (
+                        <XCircle
+                          size={15}
+                          className="mrw-status-icon mrw-status-icon--rejected"
+                        />
+                      ) : ns?.selfCompleted ? (
+                        <CheckCircle2
+                          size={15}
+                          className="mrw-status-icon mrw-status-icon--pending"
+                        />
+                      ) : ns?.submitted ? (
+                        <Clock
+                          size={13}
+                          className="mrw-status-icon mrw-status-icon--submitted"
+                        />
+                      ) : (
+                        <ChevronRight size={14} className="mrw-node-chevron" />
+                      )}
                     </div>
                   );
                 })
@@ -756,13 +823,13 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
         <div className="mrw-main">
           {selectedNodeId ? (
             <>
-              {/* Tab Bar — 4 tabs for selected node */}
+              {/* Tab Bar — 3 tabs for selected node (Report ưu tiên đầu) */}
               <div className="mrw-panel-tabs">
                 <button
-                  className={`mrw-panel-tab ${rightTab === "MENTORING" ? "mrw-panel-tab--active" : ""}`}
-                  onClick={() => setRightTab("MENTORING")}
+                  className={`mrw-panel-tab ${rightTab === "REPORT" ? "mrw-panel-tab--active" : ""}`}
+                  onClick={() => setRightTab("REPORT")}
                 >
-                  <FileText size={15} /> Review
+                  <ShieldCheck size={15} /> Report &amp; Đánh giá
                 </button>
                 <button
                   className={`mrw-panel-tab ${rightTab === "EDIT_NODE" ? "mrw-panel-tab--active" : ""}`}
@@ -774,13 +841,8 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
                   className={`mrw-panel-tab ${rightTab === "ASSESSMENT" ? "mrw-panel-tab--active" : ""}`}
                   onClick={() => setRightTab("ASSESSMENT")}
                 >
-                  <ClipboardList size={15} /> Yêu cầu node
-                </button>
-                <button
-                  className={`mrw-panel-tab ${rightTab === "REPORT" ? "mrw-panel-tab--active" : ""}`}
-                  onClick={() => setRightTab("REPORT")}
-                >
-                  <ShieldCheck size={15} /> Report
+                  <ClipboardList size={15} />{" "}
+                  {selectedNodeAssignment ? "Đã tải lên" : "Yêu cầu node"}
                 </button>
               </div>
 
@@ -842,19 +904,9 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
                       heading="Checklist học viên đang thấy"
                       intro="Khối này gom mô tả node, bài tập, tiêu chí hoàn thành và assignment hiện tại để mentor đối chiếu nhanh trước khi review."
                       emptyMessage="Node này chưa có mô tả hoặc yêu cầu rõ ràng. Hãy bổ sung ở tab Chỉnh sửa hoặc Yêu cầu node."
+                      showMentorAssignment={false}
                     />
                   </div>
-                )}
-
-                {rightTab === "MENTORING" && (
-                  <NodeMentoringWorkspace
-                    booking={{
-                      ...workspace.booking,
-                      journeyId: workspace.journeyId,
-                      nodeId: selectedNodeId,
-                    }}
-                    onActionComplete={loadWorkspace}
-                  />
                 )}
 
                 {rightTab === "EDIT_NODE" && selectedNode && (
@@ -1051,7 +1103,10 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
                     bookingId={bookingId}
                     learnerName={workspace.booking?.learnerName}
                     nodes={nodes}
-                    onAssessed={loadWorkspace}
+                    onAssessed={() => {
+                      loadWorkspace();
+                      loadSelectedNodeAssignment();
+                    }}
                   />
                 )}
 

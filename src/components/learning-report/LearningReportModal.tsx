@@ -86,9 +86,7 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
         setReport(liveSummary);
       } catch (err: unknown) {
         setError(
-          err instanceof Error
-            ? err.message
-            : "Không thể tải learning report.",
+          err instanceof Error ? err.message : "Không thể tải learning report.",
         );
       } finally {
         setIsLoading(false);
@@ -217,7 +215,11 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
                     <CartesianGrid strokeDasharray="3 3" stroke="#d7e2ea" />
                     <XAxis dataKey="bucketLabel" tick={{ fill: "#476074" }} />
                     <YAxis yAxisId="left" allowDecimals={false} />
-                    <YAxis yAxisId="right" orientation="right" allowDecimals={false} />
+                    <YAxis
+                      yAxisId="right"
+                      orientation="right"
+                      allowDecimals={false}
+                    />
                     <Tooltip />
                     <Bar
                       yAxisId="left"
@@ -237,10 +239,16 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
               </div>
 
               <div className="lr-modal-lite__tips">
-                {report.overview.recommendations.map((item, index) => (
-                  <div key={`${item}-${index}`} className="lr-modal-lite__tip">
+                {report.overview.recommendations.map((rec, index) => (
+                  <div
+                    key={rec.id ? `${rec.id}-${index}` : `rec-${index}`}
+                    className="lr-modal-lite__tip"
+                  >
                     <span>{index + 1}</span>
-                    <p>{item}</p>
+                    <p>
+                      <strong>{rec.title}</strong>
+                      {rec.action ? ` — ${rec.action}` : ""}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -252,7 +260,10 @@ const LearningReportModal: React.FC<LearningReportModalProps> = ({
               <ExternalLink size={16} />
               <span>Mở full page</span>
             </button>
-            <button onClick={() => void handleDownload()} disabled={isDownloading}>
+            <button
+              onClick={() => void handleDownload()}
+              disabled={isDownloading}
+            >
               <Download size={16} />
               <span>{isDownloading ? "Đang tải" : "Tải PDF"}</span>
             </button>

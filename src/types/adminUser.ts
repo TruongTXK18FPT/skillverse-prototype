@@ -80,6 +80,22 @@ export interface AdminUserDetailResponse {
   lastActive: string;
   avatarUrl: string | null;
   bio: string | null;
+  
+  // Mentor Specific Fields
+  cccdNumber?: string;
+  cccdExtractedData?: string;
+  identityVerified?: boolean;
+  mentorSkills?: string;
+  mentorExpertise?: string;
+  yearsOfExperience?: number;
+  
+  // Recruiter Specific Fields
+  companyName?: string;
+  taxCode?: string;
+  industry?: string;
+  businessLicenseUrl?: string;
+  companyVerified?: boolean;
+
   coursesCreated: number;
   coursesEnrolled: number;
   certificatesEarned: number;

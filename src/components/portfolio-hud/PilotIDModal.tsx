@@ -12,6 +12,27 @@ import { validateImage } from "../../services/fileUploadService";
 import getCroppedImg from "../../utils/cropImage";
 import { useScrollLock } from "./useScrollLock";
 import SystemAlertModal from "./SystemAlertModal";
+import { useToast } from "../../hooks/useToast";
+import Toast from "../shared/Toast";
+import {
+  validateFullName,
+  validateProfessionalTitle,
+  validatePhone,
+  validateCareerGoals,
+  validateLocation,
+  validateWorkExperience,
+  validateEducation,
+  validateSlug,
+  validateSkills,
+  validateLanguages,
+  validateLinkedInUrl,
+  validateGitHubUrl,
+  validatePortfolioUrl,
+  validateBehanceUrl,
+  validateDribbbleUrl,
+  validateImageFormat,
+  validateVideoFormat,
+} from "../../utils/portfolioValidation";
 import "./dossier-portfolio-styles.css";
 
 const RESERVED_PORTFOLIO_SLUGS = new Set(["create"]);
@@ -167,6 +188,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
 }) => {
   const isInline = layout === "inline";
   useScrollLock(!isInline && isOpen);
+  const { toast, isVisible, showWarning, hideToast } = useToast();
 
   const inputIdPrefix = useMemo(
     () => (isInline ? "pilot-inline" : "pilot-modal"),
@@ -435,47 +457,248 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
       const maxFileSize = 10 * 1024 * 1024;
       const maxVideoSize = 50 * 1024 * 1024;
 
-      if (avatar && avatar.size > maxFileSize) {
-        setAlertModal({
-          show: true,
-          message: `Ảnh đại diện quá lớn (${(avatar.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`,
-          type: "warning",
-        });
+      // Personal info validation
+      const nameValidation = validateFullName(formData.fullName || "");
+      if (!nameValidation.valid) {
+        showWarning(
+          "Validation Error",
+          nameValidation.error || "Validation failed",
+        );
         setLoading(false);
         return;
+      }
+
+      const titleValidation = validateProfessionalTitle(
+        formData.professionalTitle || "",
+      );
+      if (!titleValidation.valid) {
+        showWarning(
+          "Validation Error",
+          titleValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      const phoneValidation = validatePhone(formData.phone || "");
+      if (!phoneValidation.valid) {
+        showWarning(
+          "Validation Error",
+          phoneValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      const locationValidation = validateLocation(formData.location || "");
+      if (!locationValidation.valid) {
+        showWarning(
+          "Validation Error",
+          locationValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      const careerGoalsValidation = validateCareerGoals(
+        formData.careerGoals || "",
+      );
+      if (!careerGoalsValidation.valid) {
+        showWarning(
+          "Validation Error",
+          careerGoalsValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Skills and languages validation
+      const skillsValidation = validateSkills(skills);
+      if (!skillsValidation.valid) {
+        showWarning(
+          "Validation Error",
+          skillsValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      const languagesValidation = validateLanguages(languages);
+      if (!languagesValidation.valid) {
+        showWarning(
+          "Validation Error",
+          languagesValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Work experience validation
+      if (formData.workExperiences && formData.workExperiences.length > 0) {
+        for (let i = 0; i < formData.workExperiences.length; i++) {
+          const workValidation = validateWorkExperience(
+            formData.workExperiences[i],
+            i,
+          );
+          if (!workValidation.valid) {
+            showWarning(
+              "Validation Error",
+              workValidation.errors.join("\n") || "Validation failed",
+            );
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
+      // Education validation
+      if (formData.educationHistory && formData.educationHistory.length > 0) {
+        for (let i = 0; i < formData.educationHistory.length; i++) {
+          const eduValidation = validateEducation(
+            formData.educationHistory[i],
+            i,
+          );
+          if (!eduValidation.valid) {
+            showWarning(
+              "Validation Error",
+              eduValidation.errors.join("\n") || "Validation failed",
+            );
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
+      // Slug validation
+      const slugValidation = validateSlug(formData.customUrlSlug || "");
+      if (!slugValidation.valid) {
+        showWarning(
+          "Validation Error",
+          slugValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      // URL validation
+      const linkedinValidation = validateLinkedInUrl(
+        formData.linkedinUrl || "",
+      );
+      if (!linkedinValidation.valid) {
+        showWarning(
+          "Validation Error",
+          linkedinValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      const githubValidation = validateGitHubUrl(formData.githubUrl || "");
+      if (!githubValidation.valid) {
+        showWarning(
+          "Validation Error",
+          githubValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      const portfolioUrlValidation = validatePortfolioUrl(
+        formData.portfolioWebsiteUrl || "",
+      );
+      if (!portfolioUrlValidation.valid) {
+        showWarning(
+          "Validation Error",
+          portfolioUrlValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      const behanceValidation = validateBehanceUrl(formData.behanceUrl || "");
+      if (!behanceValidation.valid) {
+        showWarning(
+          "Validation Error",
+          behanceValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      const dribbbleValidation = validateDribbbleUrl(
+        formData.dribbbleUrl || "",
+      );
+      if (!dribbbleValidation.valid) {
+        showWarning(
+          "Validation Error",
+          dribbbleValidation.error || "Validation failed",
+        );
+        setLoading(false);
+        return;
+      }
+
+      // File size validation
+      if (avatar && avatar.size > maxFileSize) {
+        showWarning(
+          "File Size Error",
+          `Ảnh đại diện quá lớn (${(avatar.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`,
+        );
+        setLoading(false);
+        return;
+      }
+
+      if (avatar) {
+        const imageFormatValidation = validateImageFormat(avatar);
+        if (!imageFormatValidation.valid) {
+          showWarning(
+            "File Format Error",
+            imageFormatValidation.error || "Validation failed",
+          );
+          setLoading(false);
+          return;
+        }
       }
 
       if (video && video.size > maxVideoSize) {
-        setAlertModal({
-          show: true,
-          message: `Video quá lớn (${(video.size / 1024 / 1024).toFixed(2)}MB). Tối đa 50MB.`,
-          type: "warning",
-        });
+        showWarning(
+          "File Size Error",
+          `Video quá lớn (${(video.size / 1024 / 1024).toFixed(2)}MB). Tối đa 50MB.`,
+        );
         setLoading(false);
         return;
+      }
+
+      if (video) {
+        const videoFormatValidation = validateVideoFormat(video);
+        if (!videoFormatValidation.valid) {
+          showWarning(
+            "File Format Error",
+            videoFormatValidation.error || "Validation failed",
+          );
+          setLoading(false);
+          return;
+        }
       }
 
       if (coverImage && coverImage.size > maxFileSize) {
-        setAlertModal({
-          show: true,
-          message: `Ảnh bìa quá lớn (${(coverImage.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`,
-          type: "warning",
-        });
+        showWarning(
+          "File Size Error",
+          `Ảnh bìa quá lớn (${(coverImage.size / 1024 / 1024).toFixed(2)}MB). Tối đa 10MB.`,
+        );
         setLoading(false);
         return;
       }
 
-      const normalizedSlug = (formData.customUrlSlug || "")
-        .trim()
-        .toLowerCase();
-      if (normalizedSlug && RESERVED_PORTFOLIO_SLUGS.has(normalizedSlug)) {
-        setAlertModal({
-          show: true,
-          message: `"${normalizedSlug}" là slug dự trữ hệ thống. Vui lòng chọn slug khác.`,
-          type: "warning",
-        });
-        setLoading(false);
-        return;
+      if (coverImage) {
+        const imageFormatValidation = validateImageFormat(coverImage);
+        if (!imageFormatValidation.valid) {
+          showWarning(
+            "File Format Error",
+            imageFormatValidation.error || "Validation failed",
+          );
+          setLoading(false);
+          return;
+        }
       }
 
       const workExperiences = (formData.workExperiences || [])
@@ -488,7 +711,7 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
       const profileData: Partial<UserProfileDTO> = {
         ...formData,
         preferredCurrency: "VND",
-        customUrlSlug: normalizedSlug,
+        customUrlSlug: formData.customUrlSlug || "",
         topSkills: JSON.stringify(skills),
         languagesSpoken: JSON.stringify(languages),
         workExperiences,
@@ -1583,6 +1806,17 @@ export const PilotIDModal: React.FC<PilotIDModalProps> = ({
         message={alertModal.message}
         type={alertModal.type}
       />
+      {toast && isVisible && (
+        <Toast
+          type={toast.type}
+          title={toast.title}
+          message={toast.message}
+          isVisible={isVisible}
+          onClose={hideToast}
+          autoCloseDelay={toast.autoCloseDelay}
+          showCountdown={toast.showCountdown}
+        />
+      )}
     </>
   );
 };

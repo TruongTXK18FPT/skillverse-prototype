@@ -24,7 +24,7 @@
   width: 100%;
   max-width: 1200px;
   padding: 2px;
-  font-family:  "Segoe UI", sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 /* Hologram Border */
@@ -122,7 +122,8 @@
   -webkit-backdrop-filter: blur(20px);
   padding: 1.5rem 2rem;
   border: 1px solid var(--reg-mentor-border);
-  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15),
+  box-shadow:
+    0 8px 32px rgba(16, 185, 129, 0.15),
     inset 0 0 30px rgba(16, 185, 129, 0.05);
   display: flex;
   gap: 2rem;
@@ -575,7 +576,7 @@
   );
   border: 2px solid var(--reg-mentor-primary);
   color: var(--reg-mentor-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 3px;
@@ -660,7 +661,7 @@
   background: var(--reg-mentor-bg-light);
   border: 1px solid var(--reg-mentor-border);
   color: var(--reg-mentor-text-dim);
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 0.65rem;
   letter-spacing: 2px;
   cursor: pointer;
@@ -759,7 +760,7 @@
   .reg-mentor-field {
     grid-column: 1 / -1;
   }
-  
+
   .reg-mentor-field-2col,
   .reg-mentor-field-3col {
     grid-column: 1 / -1;
@@ -796,4 +797,238 @@
 .reg-mentor-password-hint li {
   margin-bottom: 0.15rem;
   transition: color 0.3s ease;
+}
+
+/* =====================================================
+   CCCD Upload (Identity Verification) - Redesigned
+   ===================================================== */
+.reg-mentor-cccd-banner {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  margin: 0 0 14px;
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1),
+    rgba(16, 185, 129, 0.02)
+  );
+  border-radius: 6px;
+}
+.reg-mentor-cccd-banner-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  flex-shrink: 0;
+}
+.reg-mentor-cccd-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.7rem;
+  line-height: 1.45;
+  color: rgba(230, 255, 245, 0.78);
+}
+.reg-mentor-cccd-banner-text strong {
+  color: #6ee7b7;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  font-size: 0.72rem;
+}
+.reg-mentor-cccd-banner-text em {
+  color: #fcd34d;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.reg-mentor-cccd-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.reg-mentor-cccd-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reg-mentor-cccd-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.reg-mentor-cccd-badge {
+  color: #10b981;
+  font-weight: 600;
+}
+.reg-mentor-cccd-size {
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: none;
+}
+
+.reg-mentor-cccd-dropzone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1.5px dashed rgba(16, 185, 129, 0.45);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(16, 185, 129, 0)),
+    rgba(10, 20, 15, 0.6);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.reg-mentor-cccd-dropzone:hover {
+  border-color: #34d399;
+  background:
+    linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.02)),
+    rgba(10, 20, 15, 0.7);
+  box-shadow:
+    0 0 0 1px rgba(16, 185, 129, 0.25),
+    0 8px 24px -12px rgba(16, 185, 129, 0.45);
+}
+.reg-mentor-cccd-dropzone.has-image {
+  border-style: solid;
+  border-color: rgba(16, 185, 129, 0.6);
+  cursor: pointer;
+}
+
+.reg-mentor-cccd-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.reg-mentor-cccd-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: rgba(5, 15, 10, 0.55);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.reg-mentor-cccd-dropzone.has-image:hover .reg-mentor-cccd-overlay {
+  opacity: 1;
+}
+
+.reg-mentor-cccd-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.92);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+.reg-mentor-cccd-remove:hover {
+  background: #dc2626;
+  transform: scale(1.08);
+}
+
+.reg-mentor-cccd-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  padding: 12px;
+}
+.reg-mentor-cccd-empty-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.12);
+  color: #6ee7b7;
+}
+.reg-mentor-cccd-empty-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+.reg-mentor-cccd-empty-hint {
+  font-size: 0.63rem;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.3px;
+}
+
+.reg-mentor-cccd-filename {
+  font-size: 0.63rem;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reg-mentor-cccd-tips {
+  grid-column: 1 / -1;
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+.reg-mentor-cccd-tips li {
+  position: relative;
+  padding-left: 14px;
+}
+.reg-mentor-cccd-tips li::before {
+  content: "•";
+  position: absolute;
+  left: 4px;
+  color: #10b981;
+}
+
+@media (max-width: 720px) {
+  .reg-mentor-cccd-grid {
+    grid-template-columns: 1fr;
+  }
 }

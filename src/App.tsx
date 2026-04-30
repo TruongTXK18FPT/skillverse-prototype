@@ -127,6 +127,7 @@ import MeowlSkinShopPage from "./pages/shop/MeowlSkinShopPage";
 import UserGuidePage from "./pages/user-guide/UserGuidePage";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import Certificate from "./components/certificate/Certificate";
+import MentorIdentityGuard from "./components/elevator/MentorIdentityGuard";
 
 const CertificateVerifyPage = lazy(
   () => import("./components/certificate/CertificateVerifyPage"),
@@ -147,6 +148,7 @@ const AppContents = () => {
     <div
       className={`app-container ${isHeaderHidden ? "app-container--no-header-offset" : ""}`}
     >
+      <MentorIdentityGuard />
       <ScrollToTop />
       <HeaderVisibilityWrapper />
       <div className="app__galaxy-bg">

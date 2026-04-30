@@ -17,10 +17,39 @@ export interface ReportSections {
   motivation?: string;
 }
 
+export type RecommendationTier =
+  | "CRITICAL"
+  | "IMPROVE"
+  | "NEXT_STEP"
+  | "STRENGTH";
+
+export type RecommendationCategory =
+  | "STUDY"
+  | "ROADMAP"
+  | "TASK"
+  | "COURSE"
+  | "JOB"
+  | "GROWTH";
+
+export interface Recommendation {
+  id?: string;
+  tier: RecommendationTier;
+  category?: RecommendationCategory;
+  title: string;
+  analysis?: string;
+  action?: string;
+  metricLabel?: string;
+  metricValue?: number;
+  metricTarget?: number;
+  metricUnit?: string;
+  linkPath?: string;
+  linkLabel?: string;
+}
+
 export interface LearningOverview {
   overallProgress: number;
   learningTrend: LearningTrend;
-  recommendations: string[];
+  recommendations: Recommendation[];
 }
 
 export interface StudyStats {
@@ -267,6 +296,70 @@ function createEmptyMetrics(): StudentMetrics {
   };
 }
 
+const VALID_TIERS: ReadonlyArray<RecommendationTier> = [
+  "CRITICAL",
+  "IMPROVE",
+  "NEXT_STEP",
+  "STRENGTH",
+];
+const VALID_CATEGORIES: ReadonlyArray<RecommendationCategory> = [
+  "STUDY",
+  "ROADMAP",
+  "TASK",
+  "COURSE",
+  "JOB",
+  "GROWTH",
+];
+
+function normalizeRecommendation(input: unknown): Recommendation | null {
+  if (input == null) return null;
+  // Backward-compat: legacy string entries.
+  if (typeof input === "string") {
+    const trimmed = input.trim();
+    if (!trimmed) return null;
+    return {
+      id: "legacy",
+      tier: "IMPROVE",
+      category: "GROWTH",
+      title: trimmed,
+    };
+  }
+  if (typeof input !== "object") return null;
+  const obj = input as Record<string, unknown>;
+  const title = typeof obj.title === "string" ? obj.title : "";
+  if (!title) return null;
+  const tierRaw = typeof obj.tier === "string" ? obj.tier.toUpperCase() : "";
+  const tier: RecommendationTier = (
+    VALID_TIERS as ReadonlyArray<string>
+  ).includes(tierRaw)
+    ? (tierRaw as RecommendationTier)
+    : "IMPROVE";
+  const categoryRaw =
+    typeof obj.category === "string" ? obj.category.toUpperCase() : "";
+  const category = (VALID_CATEGORIES as ReadonlyArray<string>).includes(
+    categoryRaw,
+  )
+    ? (categoryRaw as RecommendationCategory)
+    : "GROWTH";
+  return {
+    id: typeof obj.id === "string" ? obj.id : undefined,
+    tier,
+    category,
+    title,
+    analysis: typeof obj.analysis === "string" ? obj.analysis : undefined,
+    action: typeof obj.action === "string" ? obj.action : undefined,
+    metricLabel:
+      typeof obj.metricLabel === "string" ? obj.metricLabel : undefined,
+    metricValue:
+      typeof obj.metricValue === "number" ? obj.metricValue : undefined,
+    metricTarget:
+      typeof obj.metricTarget === "number" ? obj.metricTarget : undefined,
+    metricUnit: typeof obj.metricUnit === "string" ? obj.metricUnit : undefined,
+    linkPath: typeof obj.linkPath === "string" ? obj.linkPath : undefined,
+    linkLabel: typeof obj.linkLabel === "string" ? obj.linkLabel : undefined,
+  };
+}
+
 function normalizeTimelinePoint(point: any): TimelinePoint {
   return {
     bucketLabel: point?.bucketLabel || "",
@@ -363,8 +456,11 @@ function normalizeReportResponse(response: any): StudentLearningReportResponse {
   const roadmapStats = response?.roadmapStats || {};
   const taskStats = response?.taskStats || {};
   const courseStats = response?.courseStats || {};
-  const recommendations = Array.isArray(overview.recommendations)
-    ? overview.recommendations.filter(Boolean)
+  const rawRecs: unknown = overview.recommendations;
+  const recommendations: Recommendation[] = Array.isArray(rawRecs)
+    ? (rawRecs as unknown[])
+        .map((item) => normalizeRecommendation(item))
+        .filter((rec): rec is Recommendation => rec !== null)
     : [];
 
   const normalized: StudentLearningReportResponse = {
@@ -430,7 +526,7 @@ function normalizeReportResponse(response: any): StudentLearningReportResponse {
       overview.learningTrend ?? response?.learningTrend ?? "stable",
     recommendedFocus:
       response?.recommendedFocus ||
-      (recommendations.length > 0 ? recommendations[0] : undefined),
+      (recommendations.length > 0 ? recommendations[0].title : undefined),
   };
 
   if (!response?.metrics) {

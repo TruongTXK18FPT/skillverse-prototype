@@ -1,11 +1,30 @@
-import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, EyeOff, GraduationCap, Lock, Mail, Phone, MapPin, FileText, Award, Briefcase, AlertTriangle, Linkedin, Target, Upload, X } from 'lucide-react';
-import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
-import { useElevator } from './ElevatorAuthLayout';
-import Logo from '../../assets/brand/skillverse.png';
-import './HologramMentorRegisterForm.css';
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Eye,
+  EyeOff,
+  GraduationCap,
+  Lock,
+  Mail,
+  Phone,
+  MapPin,
+  FileText,
+  Award,
+  Briefcase,
+  AlertTriangle,
+  Linkedin,
+  Target,
+  Upload,
+  X,
+  ShieldCheck,
+  ScanLine,
+  RefreshCw,
+} from "lucide-react";
+import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
+import { useElevator } from "./ElevatorAuthLayout";
+import Logo from "../../assets/brand/skillverse.png";
+import "./HologramMentorRegisterForm.css";
 
 interface MentorRegisterData {
   fullName: string;
@@ -18,10 +37,14 @@ interface MentorRegisterData {
   personalBio: string;
   cvFile?: File;
   certifications?: File[];
+  cccdFront?: File;
+  cccdBack?: File;
 }
 
 interface HologramMentorRegisterFormProps {
-  onSubmit: (data: MentorRegisterData) => Promise<{ success: boolean; userName?: string; error?: string }>;
+  onSubmit: (
+    data: MentorRegisterData,
+  ) => Promise<{ success: boolean; userName?: string; error?: string }>;
   onGoogleRegister?: () => void;
   isLoading?: boolean;
   isGoogleLoading?: boolean;
@@ -55,14 +78,14 @@ const normalizeOptionalUrl = (value?: string): string | null => {
 };
 
 const FIELD_NAVIGATION_ORDER = [
-  'fullName',
-  'email',
-  'password',
-  'confirmPassword',
-  'linkedinProfile',
-  'mainExpertise',
-  'yearsOfExperience',
-  'personalBio'
+  "fullName",
+  "email",
+  "password",
+  "confirmPassword",
+  "linkedinProfile",
+  "mainExpertise",
+  "yearsOfExperience",
+  "personalBio",
 ] as const;
 
 const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
@@ -77,36 +100,62 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [formData, setFormData] = useState<MentorRegisterData>({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    linkedinProfile: '',
-    mainExpertise: '',
-    yearsOfExperience: '',
-    personalBio: ''
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    linkedinProfile: "",
+    mainExpertise: "",
+    yearsOfExperience: "",
+    personalBio: "",
   });
   const [error, setError] = useState<string | null>(null);
   const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cccdFrontFile, setCccdFrontFile] = useState<File | null>(null);
+  const [cccdBackFile, setCccdBackFile] = useState<File | null>(null);
+  const [cccdFrontPreview, setCccdFrontPreview] = useState<string | null>(null);
+  const [cccdBackPreview, setCccdBackPreview] = useState<string | null>(null);
   const [certifications, setCertifications] = useState<File[]>([]);
-  const fieldRefs = useRef<Record<string, HTMLInputElement | HTMLTextAreaElement | null>>({});
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  useEffect(() => {
+    return () => {
+      if (cccdFrontPreview) URL.revokeObjectURL(cccdFrontPreview);
+    };
+  }, [cccdFrontPreview]);
+  useEffect(() => {
+    return () => {
+      if (cccdBackPreview) URL.revokeObjectURL(cccdBackPreview);
+    };
+  }, [cccdBackPreview]);
+  const fieldRefs = useRef<
+    Record<string, HTMLInputElement | HTMLTextAreaElement | null>
+  >({});
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     const { name } = e.target;
-    const value = name === 'yearsOfExperience'
-      ? e.target.value.replace(/\D/g, '')
-      : e.target.value;
+    const value =
+      name === "yearsOfExperience"
+        ? e.target.value.replace(/\D/g, "")
+        : e.target.value;
 
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setError(null);
   };
 
-  const registerFieldRef = (fieldName: string) => (element: HTMLInputElement | HTMLTextAreaElement | null) => {
-    fieldRefs.current[fieldName] = element;
-  };
+  const registerFieldRef =
+    (fieldName: string) =>
+    (element: HTMLInputElement | HTMLTextAreaElement | null) => {
+      fieldRefs.current[fieldName] = element;
+    };
 
   const moveFocus = (fieldName: string, direction: -1 | 1) => {
-    const currentIndex = FIELD_NAVIGATION_ORDER.indexOf(fieldName as typeof FIELD_NAVIGATION_ORDER[number]);
+    const currentIndex = FIELD_NAVIGATION_ORDER.indexOf(
+      fieldName as (typeof FIELD_NAVIGATION_ORDER)[number],
+    );
 
     if (currentIndex === -1) {
       return;
@@ -122,14 +171,14 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
 
   const handleFieldNavigation = (
     fieldName: string,
-    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    if (e.key === 'ArrowDown') {
+    if (e.key === "ArrowDown") {
       e.preventDefault();
       moveFocus(fieldName, 1);
     }
 
-    if (e.key === 'ArrowUp') {
+    if (e.key === "ArrowUp") {
       e.preventDefault();
       moveFocus(fieldName, -1);
     }
@@ -140,7 +189,7 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
     const target = e.target as HTMLInputElement;
     const { name, value } = target;
     if (value) {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -148,17 +197,19 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
     const file = e.target.files?.[0];
     if (file) {
       const fileName = file.name.toLowerCase();
-      const isPdfMime = file.type === 'application/pdf';
-      const isPdfExt = fileName.endsWith('.pdf');
+      const isPdfMime = file.type === "application/pdf";
+      const isPdfExt = fileName.endsWith(".pdf");
       const isValidType = isPdfMime || isPdfExt;
       const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB
       if (!isValidType) {
-        setError('CV/Portfolio chỉ hỗ trợ file PDF để hệ thống có thể xem trước và duyệt ổn định.');
+        setError(
+          "CV/Portfolio chỉ hỗ trợ file PDF để hệ thống có thể xem trước và duyệt ổn định.",
+        );
         setCvFile(null);
         return;
       }
       if (!isValidSize) {
-        setError('CV/Portfolio vượt quá 10MB. Vui lòng chọn file nhỏ hơn.');
+        setError("CV/Portfolio vượt quá 10MB. Vui lòng chọn file nhỏ hơn.");
         setCvFile(null);
         return;
       }
@@ -168,41 +219,111 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
     }
   };
 
-  const handleCertificationUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCertificationUpload = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const files = Array.from(e.target.files || []);
-    const validFiles = files.filter(file => {
-      const isValidType = file.type.includes('pdf') || file.type.includes('image');
+    const validFiles = files.filter((file) => {
+      const isValidType =
+        file.type.includes("pdf") || file.type.includes("image");
       const isValidSize = file.size <= 10 * 1024 * 1024;
       return isValidType && isValidSize;
     });
-    setCertifications(prev => [...prev, ...validFiles]);
+    setCertifications((prev) => [...prev, ...validFiles]);
+  };
+
+  const validateCccdFile = (file: File): string | null => {
+    if (!file.type.startsWith("image/")) {
+      return "Chỉ chấp nhận ảnh CCCD định dạng JPG/PNG/WebP";
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      return "Ảnh CCCD vượt quá 5MB. Vui lòng chọn ảnh nhỏ hơn.";
+    }
+    return null;
+  };
+
+  const handleCccdFrontUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const err = validateCccdFile(file);
+    if (err) {
+      setError(err);
+      e.target.value = "";
+      return;
+    }
+    if (cccdFrontPreview) URL.revokeObjectURL(cccdFrontPreview);
+    setCccdFrontFile(file);
+    setCccdFrontPreview(URL.createObjectURL(file));
+    setError(null);
+  };
+
+  const handleCccdBackUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const err = validateCccdFile(file);
+    if (err) {
+      setError(err);
+      e.target.value = "";
+      return;
+    }
+    if (cccdBackPreview) URL.revokeObjectURL(cccdBackPreview);
+    setCccdBackFile(file);
+    setCccdBackPreview(URL.createObjectURL(file));
+    setError(null);
   };
 
   const removeCv = () => {
     setCvFile(null);
   };
 
+  const removeCccdFront = () => {
+    if (cccdFrontPreview) URL.revokeObjectURL(cccdFrontPreview);
+    setCccdFrontPreview(null);
+    setCccdFrontFile(null);
+    const input = document.getElementById(
+      "mentor-cccd-front",
+    ) as HTMLInputElement | null;
+    if (input) input.value = "";
+  };
+
+  const removeCccdBack = () => {
+    if (cccdBackPreview) URL.revokeObjectURL(cccdBackPreview);
+    setCccdBackPreview(null);
+    setCccdBackFile(null);
+    const input = document.getElementById(
+      "mentor-cccd-back",
+    ) as HTMLInputElement | null;
+    if (input) input.value = "";
+  };
+
   const removeCertification = (index: number) => {
-    setCertifications(prev => prev.filter((_, i) => i !== index));
+    setCertifications((prev) => prev.filter((_, i) => i !== index));
   };
 
   const validateForm = (): string | null => {
-    if (!formData.fullName.trim()) return 'Vui lòng nhập họ tên';
-    if (!formData.email.trim()) return 'Vui lòng nhập email';
-    if (!/\S+@\S+\.\S+/.test(formData.email)) return 'Email không hợp lệ';
-    if (!formData.password) return 'Vui lòng nhập mật khẩu';
+    if (!formData.fullName.trim()) return "Vui lòng nhập họ tên";
+    if (!formData.email.trim()) return "Vui lòng nhập email";
+    if (!/\S+@\S+\.\S+/.test(formData.email)) return "Email không hợp lệ";
+    if (!formData.password) return "Vui lòng nhập mật khẩu";
 
     if (!PASSWORD_REGEX.test(formData.password)) {
-      return 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt';
+      return "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt";
     }
 
-    if (formData.password !== formData.confirmPassword) return 'Mật khẩu xác nhận không khớp';
-    if (formData.linkedinProfile?.trim() && !normalizeOptionalUrl(formData.linkedinProfile)) {
-      return 'Liên kết LinkedIn không hợp lệ';
+    if (formData.password !== formData.confirmPassword)
+      return "Mật khẩu xác nhận không khớp";
+    if (
+      formData.linkedinProfile?.trim() &&
+      !normalizeOptionalUrl(formData.linkedinProfile)
+    ) {
+      return "Liên kết LinkedIn không hợp lệ";
     }
-    if (!formData.mainExpertise.trim()) return 'Vui lòng nhập lĩnh vực chuyên môn';
-    if (!formData.yearsOfExperience) return 'Vui lòng nhập số năm kinh nghiệm';
-    if (!cvFile) return 'Vui lòng tải lên CV';
+    if (!formData.mainExpertise.trim())
+      return "Vui lòng nhập lĩnh vực chuyên môn";
+    if (!formData.yearsOfExperience) return "Vui lòng nhập số năm kinh nghiệm";
+    if (!cccdFrontFile) return "Vui lòng tải lên ảnh mặt trước CCCD";
+    if (!cccdBackFile) return "Vui lòng tải lên ảnh mặt sau CCCD";
+    if (!cvFile) return "Vui lòng tải lên CV";
     return null;
   };
 
@@ -216,7 +337,9 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
     }
 
     // Chuyển đổi từ local formData sang format mà Page component mong đợi
-    const normalizedLinkedinProfile = normalizeOptionalUrl(formData.linkedinProfile);
+    const normalizedLinkedinProfile = normalizeOptionalUrl(
+      formData.linkedinProfile,
+    );
     const submitData: MentorRegisterData = {
       fullName: formData.fullName,
       email: formData.email,
@@ -227,13 +350,17 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
       yearsOfExperience: formData.yearsOfExperience,
       personalBio: formData.personalBio,
       cvFile: cvFile || undefined,
-      certifications: certifications.length > 0 ? certifications : undefined
+      certifications: certifications.length > 0 ? certifications : undefined,
+      cccdFront: cccdFrontFile || undefined,
+      cccdBack: cccdBackFile || undefined,
     };
 
     const result = await onSubmit(submitData);
 
     if (result.success) {
-      await triggerLoginSuccess(result.userName || formData.fullName.split(' ')[0]);
+      await triggerLoginSuccess(
+        result.userName || formData.fullName.split(" ")[0],
+      );
     } else if (result.error) {
       setError(result.error);
     }
@@ -318,362 +445,595 @@ const HologramMentorRegisterForm: React.FC<HologramMentorRegisterFormProps> = ({
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="reg-mentor-form" noValidate>
-          {/* Personal Information Section */}
-          <div className="reg-mentor-section">
-            <h3 className="reg-mentor-section-title">
-              <GraduationCap size={14} />
-              Thông Tin Cá Nhân
-            </h3>
-          </div>
-
-          {/* Row 1: Full Name & Email */}
-          <div className="reg-mentor-field">
-            <label className="reg-mentor-label">
-              <GraduationCap size={14} />
-              <span>Họ và tên</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleInputChange}
-                onKeyDown={(e) => handleFieldNavigation('fullName', e)}
-                onAnimationStart={handleAutofill}
-                ref={registerFieldRef('fullName')}
-                disabled={isLoading}
-                className="reg-mentor-input"
-                autoComplete="name"
-              />
+            {/* Personal Information Section */}
+            <div className="reg-mentor-section">
+              <h3 className="reg-mentor-section-title">
+                <GraduationCap size={14} />
+                Thông Tin Cá Nhân
+              </h3>
             </div>
-          </div>
 
-          <div className="reg-mentor-field">
-            <label className="reg-mentor-label">
-              <Mail size={14} />
-              <span>Địa chỉ email</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                onKeyDown={(e) => handleFieldNavigation('email', e)}
-                onAnimationStart={handleAutofill}
-                ref={registerFieldRef('email')}
-                disabled={isLoading}
-                className="reg-mentor-input"
-                autoComplete="email"
-              />
+            {/* Row 1: Full Name & Email */}
+            <div className="reg-mentor-field">
+              <label className="reg-mentor-label">
+                <GraduationCap size={14} />
+                <span>Họ và tên</span>
+              </label>
+              <div className="reg-mentor-input-wrapper">
+                <input
+                  type="text"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => handleFieldNavigation("fullName", e)}
+                  onAnimationStart={handleAutofill}
+                  ref={registerFieldRef("fullName")}
+                  disabled={isLoading}
+                  className="reg-mentor-input"
+                  autoComplete="name"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Row 2: Password & Confirm Password */}
-          <div className="reg-mentor-field">
-            <label className="reg-mentor-label">
-              <Lock size={14} />
-              <span>Mật khẩu</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                onKeyDown={(e) => handleFieldNavigation('password', e)}
-                onAnimationStart={handleAutofill}
-                onFocus={() => setIsPasswordFocused(true)}
-                onBlur={() => setIsPasswordFocused(false)}
-                ref={registerFieldRef('password')}
-                disabled={isLoading}
-                className="reg-mentor-input"
-                autoComplete="new-password"
-              />
-              <button
-                type="button"
-                className="reg-mentor-toggle-btn"
-                onClick={() => setShowPassword(!showPassword)}
-                disabled={isLoading}
-              >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
+            <div className="reg-mentor-field">
+              <label className="reg-mentor-label">
+                <Mail size={14} />
+                <span>Địa chỉ email</span>
+              </label>
+              <div className="reg-mentor-input-wrapper">
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => handleFieldNavigation("email", e)}
+                  onAnimationStart={handleAutofill}
+                  ref={registerFieldRef("email")}
+                  disabled={isLoading}
+                  className="reg-mentor-input"
+                  autoComplete="email"
+                />
+              </div>
             </div>
-            {/* Password Hint */}
-            <AnimatePresence>
-              {(isPasswordFocused || (formData.password && formData.password.length > 0 && !PASSWORD_REGEX.test(formData.password))) && (
-                <motion.div
-                  className="reg-mentor-password-hint"
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginTop: '0.5rem' }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  style={{ overflow: 'hidden' }}
+
+            {/* Row 2: Password & Confirm Password */}
+            <div className="reg-mentor-field">
+              <label className="reg-mentor-label">
+                <Lock size={14} />
+                <span>Mật khẩu</span>
+              </label>
+              <div className="reg-mentor-input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => handleFieldNavigation("password", e)}
+                  onAnimationStart={handleAutofill}
+                  onFocus={() => setIsPasswordFocused(true)}
+                  onBlur={() => setIsPasswordFocused(false)}
+                  ref={registerFieldRef("password")}
+                  disabled={isLoading}
+                  className="reg-mentor-input"
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  className="reg-mentor-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading}
                 >
-                  <p>Mật khẩu cần:</p>
-                  <ul>
-                    <li style={{ color: formData.password.length >= 8 ? '#4ade80' : '#94a3b8' }}>
-                      • Ít nhất 8 ký tự
-                    </li>
-                    <li style={{ color: /[A-Z]/.test(formData.password) ? '#4ade80' : '#94a3b8' }}>
-                      • 1 chữ viết hoa
-                    </li>
-                    <li style={{ color: /[a-z]/.test(formData.password) ? '#4ade80' : '#94a3b8' }}>
-                      • 1 chữ thường
-                    </li>
-                    <li style={{ color: /\d/.test(formData.password) ? '#4ade80' : '#94a3b8' }}>
-                      • 1 số
-                    </li>
-                    <li style={{ color: /[^A-Za-z0-9]/.test(formData.password) ? '#4ade80' : '#94a3b8' }}>
-                      • 1 ký tự đặc biệt
-                    </li>
-                  </ul>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <div className="reg-mentor-field">
-            <label className="reg-mentor-label">
-              <Lock size={14} />
-              <span>Xác nhận mật khẩu</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                onKeyDown={(e) => handleFieldNavigation('confirmPassword', e)}
-                onAnimationStart={handleAutofill}
-                ref={registerFieldRef('confirmPassword')}
-                disabled={isLoading}
-                className="reg-mentor-input"
-                autoComplete="new-password"
-              />
-              <button
-                type="button"
-                className="reg-mentor-toggle-btn"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                disabled={isLoading}
-              >
-                {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
-            </div>
-          </div>
-
-          {/* Professional Information Section */}
-          <div className="reg-mentor-section">
-            <h3 className="reg-mentor-section-title">
-              <Award size={14} />
-              Thông Tin Chuyên Môn
-            </h3>
-          </div>
-
-          {/* Row 3: LinkedIn Profile - Phone field removed */}
-
-          <div className="reg-mentor-field">
-            <label className="reg-mentor-label">
-              <Linkedin size={14} />
-              <span>Hồ sơ LinkedIn</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type="text"
-                name="linkedinProfile"
-                value={formData.linkedinProfile}
-                onChange={handleInputChange}
-                onKeyDown={(e) => handleFieldNavigation('linkedinProfile', e)}
-                onAnimationStart={handleAutofill}
-                ref={registerFieldRef('linkedinProfile')}
-                disabled={isLoading}
-                className="reg-mentor-input"
-                autoComplete="url"
-              />
-            </div>
-          </div>
-
-          <div className="reg-mentor-field">
-            <label className="reg-mentor-label">
-              <Target size={14} />
-              <span>Chuyên môn chính</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type="text"
-                name="mainExpertise"
-                value={formData.mainExpertise}
-                onChange={handleInputChange}
-                onKeyDown={(e) => handleFieldNavigation('mainExpertise', e)}
-                ref={registerFieldRef('mainExpertise')}
-                disabled={isLoading}
-                className="reg-mentor-input"
-              />
-            </div>
-          </div>
-
-          <div className="reg-mentor-field">
-            <label className="reg-mentor-label">
-              <Briefcase size={14} />
-              <span>Số năm kinh nghiệm</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <input
-                type="text"
-                name="yearsOfExperience"
-                value={formData.yearsOfExperience}
-                onChange={handleInputChange}
-                onKeyDown={(e) => handleFieldNavigation('yearsOfExperience', e)}
-                ref={registerFieldRef('yearsOfExperience')}
-                disabled={isLoading}
-                className="reg-mentor-input"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                autoComplete="off"
-              />
-            </div>
-          </div>
-
-          {/* Row 7: Bio (Full Width) */}
-          <div className="reg-mentor-field reg-mentor-field-full">
-            <label className="reg-mentor-label">
-              <FileText size={14} />
-              <span>Giới thiệu chuyên môn (không bắt buộc)</span>
-            </label>
-            <div className="reg-mentor-input-wrapper">
-              <textarea
-                name="personalBio"
-                value={formData.personalBio}
-                onChange={handleInputChange}
-                onKeyDown={(e) => handleFieldNavigation('personalBio', e)}
-                ref={registerFieldRef('personalBio')}
-                disabled={isLoading}
-                className="reg-mentor-input reg-mentor-textarea"
-                rows={2}
-              />
-            </div>
-          </div>
-
-          {/* Documents Section */}
-          <div className="reg-mentor-section">
-            <h3 className="reg-mentor-section-title">
-              <FileText size={14} />
-              Hồ Sơ & Chứng Chỉ
-            </h3>
-          </div>
-
-          {/* CV Upload */}
-          <div className="reg-mentor-file-upload">
-            <input
-              type="file"
-              id="mentor-cv"
-              accept=".pdf,application/pdf"
-              onChange={handleCvUpload}
-              style={{ display: 'none' }}
-            />
-            <label htmlFor="mentor-cv" className="reg-mentor-upload-area">
-              <div className="reg-mentor-upload-icon">
-                <Upload size={24} />
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
               </div>
-              <div className="reg-mentor-upload-text">
-                Tải lên CV/Portfolio (PDF)
-              </div>
-              <div className="reg-mentor-upload-hint">
-                Chỉ hỗ trợ PDF, tối đa 10MB
-              </div>
-            </label>
-            {cvFile && (
-              <div className="reg-mentor-file-list">
-                <div className="reg-mentor-file-item">
-                  <span className="reg-mentor-file-name">{cvFile.name}</span>
-                  <button
-                    type="button"
-                    onClick={removeCv}
-                    className="reg-mentor-file-remove"
+              {/* Password Hint */}
+              <AnimatePresence>
+                {(isPasswordFocused ||
+                  (formData.password &&
+                    formData.password.length > 0 &&
+                    !PASSWORD_REGEX.test(formData.password))) && (
+                  <motion.div
+                    className="reg-mentor-password-hint"
+                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                    animate={{
+                      opacity: 1,
+                      height: "auto",
+                      marginTop: "0.5rem",
+                    }}
+                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    style={{ overflow: "hidden" }}
                   >
-                    <X size={16} />
-                  </button>
+                    <p>Mật khẩu cần:</p>
+                    <ul>
+                      <li
+                        style={{
+                          color:
+                            formData.password.length >= 8
+                              ? "#4ade80"
+                              : "#94a3b8",
+                        }}
+                      >
+                        • Ít nhất 8 ký tự
+                      </li>
+                      <li
+                        style={{
+                          color: /[A-Z]/.test(formData.password)
+                            ? "#4ade80"
+                            : "#94a3b8",
+                        }}
+                      >
+                        • 1 chữ viết hoa
+                      </li>
+                      <li
+                        style={{
+                          color: /[a-z]/.test(formData.password)
+                            ? "#4ade80"
+                            : "#94a3b8",
+                        }}
+                      >
+                        • 1 chữ thường
+                      </li>
+                      <li
+                        style={{
+                          color: /\d/.test(formData.password)
+                            ? "#4ade80"
+                            : "#94a3b8",
+                        }}
+                      >
+                        • 1 số
+                      </li>
+                      <li
+                        style={{
+                          color: /[^A-Za-z0-9]/.test(formData.password)
+                            ? "#4ade80"
+                            : "#94a3b8",
+                        }}
+                      >
+                        • 1 ký tự đặc biệt
+                      </li>
+                    </ul>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <div className="reg-mentor-field">
+              <label className="reg-mentor-label">
+                <Lock size={14} />
+                <span>Xác nhận mật khẩu</span>
+              </label>
+              <div className="reg-mentor-input-wrapper">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => handleFieldNavigation("confirmPassword", e)}
+                  onAnimationStart={handleAutofill}
+                  ref={registerFieldRef("confirmPassword")}
+                  disabled={isLoading}
+                  className="reg-mentor-input"
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  className="reg-mentor-toggle-btn"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  disabled={isLoading}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={16} />
+                  ) : (
+                    <Eye size={16} />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Professional Information Section */}
+            <div className="reg-mentor-section">
+              <h3 className="reg-mentor-section-title">
+                <Award size={14} />
+                Thông Tin Chuyên Môn
+              </h3>
+            </div>
+
+            {/* Row 3: LinkedIn Profile - Phone field removed */}
+
+            <div className="reg-mentor-field">
+              <label className="reg-mentor-label">
+                <Linkedin size={14} />
+                <span>Hồ sơ LinkedIn</span>
+              </label>
+              <div className="reg-mentor-input-wrapper">
+                <input
+                  type="text"
+                  name="linkedinProfile"
+                  value={formData.linkedinProfile}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => handleFieldNavigation("linkedinProfile", e)}
+                  onAnimationStart={handleAutofill}
+                  ref={registerFieldRef("linkedinProfile")}
+                  disabled={isLoading}
+                  className="reg-mentor-input"
+                  autoComplete="url"
+                />
+              </div>
+            </div>
+
+            <div className="reg-mentor-field">
+              <label className="reg-mentor-label">
+                <Target size={14} />
+                <span>Chuyên môn chính</span>
+              </label>
+              <div className="reg-mentor-input-wrapper">
+                <input
+                  type="text"
+                  name="mainExpertise"
+                  value={formData.mainExpertise}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => handleFieldNavigation("mainExpertise", e)}
+                  ref={registerFieldRef("mainExpertise")}
+                  disabled={isLoading}
+                  className="reg-mentor-input"
+                />
+              </div>
+            </div>
+
+            <div className="reg-mentor-field">
+              <label className="reg-mentor-label">
+                <Briefcase size={14} />
+                <span>Số năm kinh nghiệm</span>
+              </label>
+              <div className="reg-mentor-input-wrapper">
+                <input
+                  type="text"
+                  name="yearsOfExperience"
+                  value={formData.yearsOfExperience}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) =>
+                    handleFieldNavigation("yearsOfExperience", e)
+                  }
+                  ref={registerFieldRef("yearsOfExperience")}
+                  disabled={isLoading}
+                  className="reg-mentor-input"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  autoComplete="off"
+                />
+              </div>
+            </div>
+
+            {/* Row 7: Bio (Full Width) */}
+            <div className="reg-mentor-field reg-mentor-field-full">
+              <label className="reg-mentor-label">
+                <FileText size={14} />
+                <span>Giới thiệu chuyên môn (không bắt buộc)</span>
+              </label>
+              <div className="reg-mentor-input-wrapper">
+                <textarea
+                  name="personalBio"
+                  value={formData.personalBio}
+                  onChange={handleInputChange}
+                  onKeyDown={(e) => handleFieldNavigation("personalBio", e)}
+                  ref={registerFieldRef("personalBio")}
+                  disabled={isLoading}
+                  className="reg-mentor-input reg-mentor-textarea"
+                  rows={2}
+                />
+              </div>
+            </div>
+
+            {/* Identity Verification Section */}
+            <div className="reg-mentor-section">
+              <h3 className="reg-mentor-section-title">
+                <ShieldCheck size={14} style={{ color: "#10b981" }} />
+                Xác Thực Danh Tính (Bắt Buộc)
+              </h3>
+            </div>
+
+            <div className="reg-mentor-cccd-banner">
+              <div className="reg-mentor-cccd-banner-icon">
+                <ScanLine size={18} />
+              </div>
+              <div className="reg-mentor-cccd-banner-text">
+                <strong>Bảo mật bởi FPT.AI</strong>
+                <span>
+                  Ảnh CCCD được trích xuất OCR ngay lập tức và gửi tới Quản trị
+                  viên xác minh — <em>SkillVerse không lưu trữ ảnh gốc</em> trên
+                  hệ thống.
+                </span>
+              </div>
+            </div>
+
+            <div className="reg-mentor-cccd-grid">
+              {/* Front CCCD */}
+              <div className="reg-mentor-cccd-card">
+                <div className="reg-mentor-cccd-card-header">
+                  <span className="reg-mentor-cccd-badge">Mặt trước</span>
+                  {cccdFrontFile && (
+                    <span className="reg-mentor-cccd-size">
+                      {(cccdFrontFile.size / (1024 * 1024)).toFixed(2)} MB
+                    </span>
+                  )}
                 </div>
-                {(cvFile.type === 'application/pdf' || cvFile.name.toLowerCase().endsWith('.pdf')) && (
-                  <div className="reg-mentor-file-preview">
-                    <embed src={URL.createObjectURL(cvFile)} type="application/pdf" width="100%" height="180" />
+                <input
+                  type="file"
+                  id="mentor-cccd-front"
+                  accept="image/*"
+                  onChange={handleCccdFrontUpload}
+                  disabled={isLoading}
+                  style={{ display: "none" }}
+                />
+                <label
+                  htmlFor="mentor-cccd-front"
+                  className={`reg-mentor-cccd-dropzone ${cccdFrontPreview ? "has-image" : ""}`}
+                >
+                  {cccdFrontPreview ? (
+                    <>
+                      <img
+                        src={cccdFrontPreview}
+                        alt="CCCD mặt trước"
+                        className="reg-mentor-cccd-image"
+                      />
+                      <div className="reg-mentor-cccd-overlay">
+                        <RefreshCw size={18} />
+                        <span>Đổi ảnh khác</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="reg-mentor-cccd-remove"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          removeCccdFront();
+                        }}
+                        aria-label="Xóa ảnh mặt trước"
+                      >
+                        <X size={14} />
+                      </button>
+                    </>
+                  ) : (
+                    <div className="reg-mentor-cccd-empty">
+                      <div className="reg-mentor-cccd-empty-icon">
+                        <Upload size={26} />
+                      </div>
+                      <div className="reg-mentor-cccd-empty-title">
+                        Tải ảnh mặt trước CCCD
+                      </div>
+                      <div className="reg-mentor-cccd-empty-hint">
+                        JPG / PNG / WebP • Tối đa 5MB
+                      </div>
+                    </div>
+                  )}
+                </label>
+                {cccdFrontFile && (
+                  <div
+                    className="reg-mentor-cccd-filename"
+                    title={cccdFrontFile.name}
+                  >
+                    {cccdFrontFile.name}
                   </div>
                 )}
               </div>
-            )}
-          </div>
 
-          {/* Certifications Upload */}
-          <div className="reg-mentor-file-upload">
-            <input
-              type="file"
-              id="mentor-certifications"
-              multiple
-              accept=".pdf,image/*"
-              onChange={handleCertificationUpload}
-              style={{ display: 'none' }}
-            />
-            <label htmlFor="mentor-certifications" className="reg-mentor-upload-area">
-              <div className="reg-mentor-upload-icon">
-                <Upload size={24} />
+              {/* Back CCCD */}
+              <div className="reg-mentor-cccd-card">
+                <div className="reg-mentor-cccd-card-header">
+                  <span className="reg-mentor-cccd-badge">Mặt sau</span>
+                  {cccdBackFile && (
+                    <span className="reg-mentor-cccd-size">
+                      {(cccdBackFile.size / (1024 * 1024)).toFixed(2)} MB
+                    </span>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  id="mentor-cccd-back"
+                  accept="image/*"
+                  onChange={handleCccdBackUpload}
+                  disabled={isLoading}
+                  style={{ display: "none" }}
+                />
+                <label
+                  htmlFor="mentor-cccd-back"
+                  className={`reg-mentor-cccd-dropzone ${cccdBackPreview ? "has-image" : ""}`}
+                >
+                  {cccdBackPreview ? (
+                    <>
+                      <img
+                        src={cccdBackPreview}
+                        alt="CCCD mặt sau"
+                        className="reg-mentor-cccd-image"
+                      />
+                      <div className="reg-mentor-cccd-overlay">
+                        <RefreshCw size={18} />
+                        <span>Đổi ảnh khác</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="reg-mentor-cccd-remove"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          removeCccdBack();
+                        }}
+                        aria-label="Xóa ảnh mặt sau"
+                      >
+                        <X size={14} />
+                      </button>
+                    </>
+                  ) : (
+                    <div className="reg-mentor-cccd-empty">
+                      <div className="reg-mentor-cccd-empty-icon">
+                        <Upload size={26} />
+                      </div>
+                      <div className="reg-mentor-cccd-empty-title">
+                        Tải ảnh mặt sau CCCD
+                      </div>
+                      <div className="reg-mentor-cccd-empty-hint">
+                        JPG / PNG / WebP • Tối đa 5MB
+                      </div>
+                    </div>
+                  )}
+                </label>
+                {cccdBackFile && (
+                  <div
+                    className="reg-mentor-cccd-filename"
+                    title={cccdBackFile.name}
+                  >
+                    {cccdBackFile.name}
+                  </div>
+                )}
               </div>
-              <div className="reg-mentor-upload-text">
-                Tải lên chứng chỉ (tùy chọn)
-              </div>
-              <div className="reg-mentor-upload-hint">
-                PDF hoặc hình ảnh, tối đa 10MB mỗi file
-              </div>
-            </label>
-            {certifications.length > 0 && (
-              <div className="reg-mentor-file-list">
-                {certifications.map((file, index) => (
-                  <div key={index} className="reg-mentor-file-item">
-                    <span className="reg-mentor-file-name">{file.name}</span>
+            </div>
+
+            <ul className="reg-mentor-cccd-tips">
+              <li>Đặt CCCD trên nền tối, đủ ánh sáng, không chói.</li>
+              <li>Chụp đủ 4 góc, không che hoặc làm mờ thông tin.</li>
+              <li>Ảnh chỉ dùng cho OCR & duyệt — không lưu sau xác thực.</li>
+            </ul>
+
+            {/* Documents Section */}
+            <div className="reg-mentor-section">
+              <h3 className="reg-mentor-section-title">
+                <FileText size={14} />
+                Hồ Sơ & Chứng Chỉ
+              </h3>
+            </div>
+
+            {/* CV Upload */}
+            <div className="reg-mentor-file-upload">
+              <input
+                type="file"
+                id="mentor-cv"
+                accept=".pdf,application/pdf"
+                onChange={handleCvUpload}
+                style={{ display: "none" }}
+              />
+              <label htmlFor="mentor-cv" className="reg-mentor-upload-area">
+                <div className="reg-mentor-upload-icon">
+                  <Upload size={24} />
+                </div>
+                <div className="reg-mentor-upload-text">
+                  Tải lên CV/Portfolio (PDF)
+                </div>
+                <div className="reg-mentor-upload-hint">
+                  Chỉ hỗ trợ PDF, tối đa 10MB
+                </div>
+              </label>
+              {cvFile && (
+                <div className="reg-mentor-file-list">
+                  <div className="reg-mentor-file-item">
+                    <span className="reg-mentor-file-name">{cvFile.name}</span>
                     <button
                       type="button"
-                      onClick={() => removeCertification(index)}
+                      onClick={removeCv}
                       className="reg-mentor-file-remove"
                     >
                       <X size={16} />
                     </button>
                   </div>
-                ))}
-                {certifications.map((file, index) => (
-                  <div key={`prev-${index}`} className="reg-mentor-file-preview">
-                    {file.type.startsWith('image/') && (
-                      <img src={URL.createObjectURL(file)} alt="Preview" style={{ maxWidth: '100%', maxHeight: 120 }} />
-                    )}
-                    {file.type === 'application/pdf' && (
-                      <embed src={URL.createObjectURL(file)} type="application/pdf" width="100%" height="120" />
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+                  {(cvFile.type === "application/pdf" ||
+                    cvFile.name.toLowerCase().endsWith(".pdf")) && (
+                    <div className="reg-mentor-file-preview">
+                      <embed
+                        src={URL.createObjectURL(cvFile)}
+                        type="application/pdf"
+                        width="100%"
+                        height="180"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
-          {/* Submit Button */}
-          <motion.button
-            type="submit"
-            className="reg-mentor-submit-btn"
-            disabled={isLoading}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            {isLoading ? (
-              <>
-                <MeowlKuruLoader size="tiny" text="" />
-                <span>Đang đăng ký...</span>
-              </>
-            ) : (
-              <>
-                <GraduationCap size={18} />
-                <span>Đăng ký làm Cố vấn</span>
-              </>
-            )}
-            <div className="reg-mentor-btn-glow"></div>
-          </motion.button>
-        </form>
+            {/* Certifications Upload */}
+            <div className="reg-mentor-file-upload">
+              <input
+                type="file"
+                id="mentor-certifications"
+                multiple
+                accept=".pdf,image/*"
+                onChange={handleCertificationUpload}
+                style={{ display: "none" }}
+              />
+              <label
+                htmlFor="mentor-certifications"
+                className="reg-mentor-upload-area"
+              >
+                <div className="reg-mentor-upload-icon">
+                  <Upload size={24} />
+                </div>
+                <div className="reg-mentor-upload-text">
+                  Tải lên chứng chỉ (tùy chọn)
+                </div>
+                <div className="reg-mentor-upload-hint">
+                  PDF hoặc hình ảnh, tối đa 10MB mỗi file
+                </div>
+              </label>
+              {certifications.length > 0 && (
+                <div className="reg-mentor-file-list">
+                  {certifications.map((file, index) => (
+                    <div key={index} className="reg-mentor-file-item">
+                      <span className="reg-mentor-file-name">{file.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeCertification(index)}
+                        className="reg-mentor-file-remove"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ))}
+                  {certifications.map((file, index) => (
+                    <div
+                      key={`prev-${index}`}
+                      className="reg-mentor-file-preview"
+                    >
+                      {file.type.startsWith("image/") && (
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt="Preview"
+                          style={{ maxWidth: "100%", maxHeight: 120 }}
+                        />
+                      )}
+                      {file.type === "application/pdf" && (
+                        <embed
+                          src={URL.createObjectURL(file)}
+                          type="application/pdf"
+                          width="100%"
+                          height="120"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <motion.button
+              type="submit"
+              className="reg-mentor-submit-btn"
+              disabled={isLoading}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {isLoading ? (
+                <>
+                  <MeowlKuruLoader size="tiny" text="" />
+                  <span>Đang đăng ký...</span>
+                </>
+              ) : (
+                <>
+                  <GraduationCap size={18} />
+                  <span>Đăng ký làm Cố vấn</span>
+                </>
+              )}
+              <div className="reg-mentor-btn-glow"></div>
+            </motion.button>
+          </form>
         </div>
       </div>
 

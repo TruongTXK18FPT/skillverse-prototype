@@ -12,7 +12,7 @@ type AxiosError = { response?: { data?: { message?: string } } };
 class MentorService {
   
   // Register a new mentor
-  async register(mentorData: MentorRegistrationRequest, files?: { cv?: File; certifications?: File[] }): Promise<MentorRegistrationResponse> {
+  async register(mentorData: MentorRegistrationRequest, files?: { cv?: File; certifications?: File[]; cccdFront?: File; cccdBack?: File }): Promise<MentorRegistrationResponse> {
     try {
       
       
@@ -36,6 +36,14 @@ class MentorService {
       // Add files if provided
       if (files?.cv) {
         formData.append('cvPortfolioFile', files.cv);
+      }
+
+      if (files?.cccdFront) {
+        formData.append('cccdFrontFile', files.cccdFront);
+      }
+
+      if (files?.cccdBack) {
+        formData.append('cccdBackFile', files.cccdBack);
       }
       
       if (files?.certifications && files.certifications.length > 0) {

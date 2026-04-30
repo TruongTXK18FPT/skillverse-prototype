@@ -1187,3 +1187,34 @@
   border-bottom: 1px solid rgba(34, 211, 238, 0.12);
 }
 
+/* ─── Node Status Icons (sidebar tree) ───────────────────── */
+
+.mrw-status-icon {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.mrw-status-icon--verified {
+  color: #10b981;
+  filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.4));
+}
+
+.mrw-status-icon--rejected {
+  color: #ef4444;
+  filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.35));
+}
+
+.mrw-status-icon--pending {
+  color: #f59e0b;
+  filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.3));
+}
+
+.mrw-status-icon--submitted {
+  color: #38bdf8;
+  opacity: 0.75;
+}
+
+.mrw-node:hover .mrw-status-icon {
+  transform: scale(1.15);
+}
+

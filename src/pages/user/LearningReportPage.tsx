@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
+  AlertTriangle,
   ArrowLeft,
+  ArrowRight,
+  Award,
   BarChart3,
   BookOpenCheck,
   Briefcase,
@@ -13,14 +16,13 @@ import {
   Layers,
   LineChart,
   ListTodo,
+  Rocket,
   RefreshCw,
   Save,
+  Sparkles,
   Target,
   TrendingUp,
   Zap,
-  CheckCircle2,
-  BadgeDollarSign,
-  Check,
   Filter,
   Search,
   SlidersHorizontal,
@@ -41,6 +43,8 @@ import {
   YAxis,
 } from "recharts";
 import learningReportService, {
+  Recommendation,
+  RecommendationTier,
   ReportRange,
   StudentLearningReportResponse,
   isValidReportId,
@@ -52,7 +56,11 @@ import "./LearningReportPage.css";
 const RANGE_OPTIONS: ReportRange[] = ["7d", "30d", "90d"];
 const BREAKDOWN_PAGE_SIZE = 5;
 
-type RoadmapBreakdownFilter = "all" | "not-started" | "in-progress" | "complete";
+type RoadmapBreakdownFilter =
+  | "all"
+  | "not-started"
+  | "in-progress"
+  | "complete";
 type RoadmapBreakdownSort =
   | "progress-desc"
   | "progress-asc"
@@ -72,10 +80,18 @@ const statNumber = (value: number | undefined) => value ?? 0;
 const CHART_COLORS = {
   cyan: { primary: "#00f5ff", glow: "rgba(0, 245, 255, 0.5)" },
   blue: { primary: "#00d4ff", glow: "rgba(0, 212, 255, 0.5)" },
-  purple: { primary: "#a855f7", glow: "rgba(168, 85, 247, 0.5)", dark: "#7c3aed" },
+  purple: {
+    primary: "#a855f7",
+    glow: "rgba(168, 85, 247, 0.5)",
+    dark: "#7c3aed",
+  },
   green: { primary: "#10b981", glow: "rgba(16, 185, 129, 0.5)" },
   orange: { primary: "#f97316", glow: "rgba(249, 115, 22, 0.5)" },
-  yellow: { primary: "#eab308", glow: "rgba(234, 179, 8, 0.5)", dark: "#ca8a04" },
+  yellow: {
+    primary: "#eab308",
+    glow: "rgba(234, 179, 8, 0.5)",
+    dark: "#ca8a04",
+  },
 };
 
 // Custom Tooltip for Charts
@@ -83,11 +99,13 @@ const ChartTooltip: React.FC<any> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="lr-tooltip">
-        <p className="lr-tooltip-title">
-          {label}
-        </p>
+        <p className="lr-tooltip-title">{label}</p>
         {payload.map((entry: any, index: number) => (
-          <p key={index} className="lr-tooltip-item" style={{ color: entry.color }}>
+          <p
+            key={index}
+            className="lr-tooltip-item"
+            style={{ color: entry.color }}
+          >
             {entry.name}: {entry.value}
           </p>
         ))}
@@ -96,6 +114,86 @@ const ChartTooltip: React.FC<any> = ({ active, payload, label }) => {
   }
   return null;
 };
+
+// =====================================================================
+// Recommendation card rendering (algorithm-driven, no AI)
+// =====================================================================
+// Using `any` here to avoid friction with lucide-react ForwardRef typing.
+const TIER_META: Record<
+  RecommendationTier,
+  { label: string; className: string; Icon: any }
+> = {
+  CRITICAL: {
+    label: "Cần Xử Lý Ngay",
+    className: "critical",
+    Icon: AlertTriangle,
+  },
+  IMPROVE: { label: "Cải Thiện", className: "improve", Icon: TrendingUp },
+  NEXT_STEP: { label: "Bước Tiếp Theo", className: "next-step", Icon: Rocket },
+  STRENGTH: { label: "Điểm Mạnh", className: "strength", Icon: Award },
+};
+
+function formatMetric(rec: Recommendation): string | null {
+  if (rec.metricValue == null) return null;
+  const unit = rec.metricUnit ?? "";
+  const current = `${rec.metricValue}${unit}`;
+  if (rec.metricTarget != null) {
+    return `${current} → mục tiêu ${rec.metricTarget}${unit}`;
+  }
+  return current;
+}
+
+function renderRecommendationCard(
+  rec: Recommendation,
+  index: number,
+  navigate: ReturnType<typeof useNavigate>,
+) {
+  const meta = TIER_META[rec.tier] ?? TIER_META.IMPROVE;
+  const { Icon } = meta;
+  const metric = formatMetric(rec);
+  return (
+    <div
+      key={rec.id ? `${rec.id}-${index}` : `rec-${index}`}
+      className={`lr-tip lr-tip--card lr-tip--${meta.className}`}
+      data-tier={rec.tier}
+    >
+      <div className={`lr-tip-icon-wrapper ${meta.className}`}>
+        <Icon size={18} />
+      </div>
+      <div className="lr-tip-body">
+        <div className="lr-tip-header">
+          <span className={`lr-tip-badge lr-tip-badge--${meta.className}`}>
+            {meta.label}
+          </span>
+          {rec.category && <span className="lr-tip-chip">{rec.category}</span>}
+        </div>
+        <p className="lr-tip-title">{rec.title}</p>
+        {rec.analysis && <p className="lr-tip-text">{rec.analysis}</p>}
+        {rec.action && (
+          <p className="lr-tip-action">
+            <ArrowRight size={14} />
+            <span>{rec.action}</span>
+          </p>
+        )}
+        {(metric || rec.linkPath) && (
+          <div className="lr-tip-footer">
+            {metric && <span className="lr-tip-metric">{metric}</span>}
+            {rec.linkPath && (
+              <button
+                type="button"
+                className="lr-tip-link"
+                onClick={() => navigate(rec.linkPath as string)}
+              >
+                {rec.linkLabel ?? "Mở"}
+                <ArrowRight size={12} />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 const LearningReportPage: React.FC = () => {
   const navigate = useNavigate();
@@ -108,7 +206,7 @@ const LearningReportPage: React.FC = () => {
 
   const [selectedRange, setSelectedRange] = useState<ReportRange>("30d");
   const [report, setReport] = useState<StudentLearningReportResponse | null>(
-    null
+    null,
   );
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingSnapshot, setIsSavingSnapshot] = useState(false);
@@ -147,13 +245,14 @@ const LearningReportPage: React.FC = () => {
           return;
         }
 
-        const liveSummary = await learningReportService.getSummary(selectedRange);
+        const liveSummary =
+          await learningReportService.getSummary(selectedRange);
         setReport(liveSummary);
       } catch (err: unknown) {
         setError(
           err instanceof Error
             ? err.message
-            : "Không thể tải learning report lúc này."
+            : "Không thể tải learning report lúc này.",
         );
       } finally {
         setIsLoading(false);
@@ -167,14 +266,15 @@ const LearningReportPage: React.FC = () => {
     setIsSavingSnapshot(true);
     setError(null);
     try {
-      const snapshot = await learningReportService.createSnapshot(selectedRange);
+      const snapshot =
+        await learningReportService.createSnapshot(selectedRange);
       setSearchParams({ id: String(snapshot.reportId) });
       setReport(snapshot);
     } catch (err: unknown) {
       setError(
         err instanceof Error
           ? err.message
-          : "Không thể lưu snapshot cho báo cáo."
+          : "Không thể lưu snapshot cho báo cáo.",
       );
     } finally {
       setIsSavingSnapshot(false);
@@ -192,7 +292,7 @@ const LearningReportPage: React.FC = () => {
       });
     } catch (err: unknown) {
       setError(
-        err instanceof Error ? err.message : "Không thể tải PDF lúc này."
+        err instanceof Error ? err.message : "Không thể tải PDF lúc này.",
       );
     } finally {
       setIsDownloadingPdf(false);
@@ -209,8 +309,11 @@ const LearningReportPage: React.FC = () => {
     return report.timeline.map((point) => ({
       ...point,
       // Ensure all values are numbers for the chart
-      studyHours: Math.round((point.studyMinutes || 0) / 60 * 10) / 10,
-      productivity: (point.missionsCompleted || 0) + (point.tasksCompleted || 0) + (point.jobsCompleted || 0),
+      studyHours: Math.round(((point.studyMinutes || 0) / 60) * 10) / 10,
+      productivity:
+        (point.missionsCompleted || 0) +
+        (point.tasksCompleted || 0) +
+        (point.jobsCompleted || 0),
     }));
   }, [report?.timeline]);
 
@@ -369,7 +472,10 @@ const LearningReportPage: React.FC = () => {
   };
 
   // Determine trend for each stat
-  const getTrend = (current: number, threshold: number): "up" | "down" | "stable" => {
+  const getTrend = (
+    current: number,
+    threshold: number,
+  ): "up" | "down" | "stable" => {
     if (current > threshold) return "up";
     if (current < threshold / 2) return "down";
     return "stable";
@@ -407,8 +513,8 @@ const LearningReportPage: React.FC = () => {
               <p className="lr-subtitle">
                 {report
                   ? `${isSnapshotView ? "Snapshot lưu lúc" : "Cập nhật lúc"} ${learningReportService.formatReportDate(
-                    report.generatedAt
-                  )}`
+                      report.generatedAt,
+                    )}`
                   : "Phân tích tiến độ học tập và làm việc theo thời gian thực"}
               </p>
             </div>
@@ -416,10 +522,7 @@ const LearningReportPage: React.FC = () => {
 
           <div className="lr-hero-actions">
             {isSnapshotView && (
-              <button
-                className="lr-btn lr-btn-ghost"
-                onClick={handleViewLive}
-              >
+              <button className="lr-btn lr-btn-ghost" onClick={handleViewLive}>
                 <RefreshCw size={16} />
                 <span>Live View</span>
               </button>
@@ -462,7 +565,11 @@ const LearningReportPage: React.FC = () => {
                   className={`lr-range-btn ${selectedRange === range ? "active" : ""}`}
                   onClick={() => setSelectedRange(range)}
                 >
-                  {range === "7d" ? "7 Ngày" : range === "30d" ? "30 Ngày" : "90 Ngày"}
+                  {range === "7d"
+                    ? "7 Ngày"
+                    : range === "30d"
+                      ? "30 Ngày"
+                      : "90 Ngày"}
                 </button>
               ))}
             </div>
@@ -480,7 +587,9 @@ const LearningReportPage: React.FC = () => {
           <section className="lr-loading">
             <div className="lr-loader" />
             <p>Đang phân tích dữ liệu...</p>
-            <span className="lr-loading-sub">Tổng hợp từ Roadmap, Tasks, Courses & Jobs</span>
+            <span className="lr-loading-sub">
+              Tổng hợp từ Roadmap, Tasks, Courses & Jobs
+            </span>
           </section>
         ) : report ? (
           <>
@@ -492,7 +601,13 @@ const LearningReportPage: React.FC = () => {
                 change={`Xu hướng: ${report.learningTrend}`}
                 color="cyan"
                 icon={Target}
-                trend={report.learningTrend === "improving" ? "up" : report.learningTrend === "declining" ? "down" : "neutral"}
+                trend={
+                  report.learningTrend === "improving"
+                    ? "up"
+                    : report.learningTrend === "declining"
+                      ? "down"
+                      : "neutral"
+                }
               />
               <StatUnit
                 label="Thời Gian Học"
@@ -500,7 +615,11 @@ const LearningReportPage: React.FC = () => {
                 change={`${statNumber(report.studyStats.studyMinutesWeek)} phút / tuần`}
                 color="cyan"
                 icon={Clock3}
-                trend={getTrend(report.studyStats.studyMinutesWeek, 120) === "stable" ? "neutral" : getTrend(report.studyStats.studyMinutesWeek, 120)}
+                trend={
+                  getTrend(report.studyStats.studyMinutesWeek, 120) === "stable"
+                    ? "neutral"
+                    : getTrend(report.studyStats.studyMinutesWeek, 120)
+                }
               />
               <StatUnit
                 label="Chuỗi Liên Tiếp"
@@ -524,7 +643,17 @@ const LearningReportPage: React.FC = () => {
                 change={`${statNumber(report.roadmapStats.pendingMissions)} roadmap node còn lại`}
                 color="purple"
                 icon={BookOpenCheck}
-                trend={getTrend(report.roadmapStats.completedMissions, report.roadmapStats.totalMissions / 2) === "stable" ? "neutral" : getTrend(report.roadmapStats.completedMissions, report.roadmapStats.totalMissions / 2)}
+                trend={
+                  getTrend(
+                    report.roadmapStats.completedMissions,
+                    report.roadmapStats.totalMissions / 2,
+                  ) === "stable"
+                    ? "neutral"
+                    : getTrend(
+                        report.roadmapStats.completedMissions,
+                        report.roadmapStats.totalMissions / 2,
+                      )
+                }
               />
               <StatUnit
                 label="Khóa Học Đang Mở"
@@ -540,7 +669,17 @@ const LearningReportPage: React.FC = () => {
                 change="Trung bình khóa đang học"
                 color="cyan"
                 icon={BarChart3}
-                trend={getTrend(report.courseStats.averageActiveCourseProgress, 50) === "stable" ? "neutral" : getTrend(report.courseStats.averageActiveCourseProgress, 50)}
+                trend={
+                  getTrend(
+                    report.courseStats.averageActiveCourseProgress,
+                    50,
+                  ) === "stable"
+                    ? "neutral"
+                    : getTrend(
+                        report.courseStats.averageActiveCourseProgress,
+                        50,
+                      )
+                }
               />
               <StatUnit
                 label="Job Đã Xong"
@@ -548,7 +687,11 @@ const LearningReportPage: React.FC = () => {
                 change={`${statNumber(report.jobStats?.totalJobsApplied)} apply | ${statNumber(report.jobStats?.onTimeDeliveryRate)}% on-time`}
                 color="green"
                 icon={Briefcase}
-                trend={getTrend(report.jobStats?.completedJobs || 0, 1) === "stable" ? "neutral" : getTrend(report.jobStats?.completedJobs || 0, 1)}
+                trend={
+                  getTrend(report.jobStats?.completedJobs || 0, 1) === "stable"
+                    ? "neutral"
+                    : getTrend(report.jobStats?.completedJobs || 0, 1)
+                }
               />
             </section>
 
@@ -574,9 +717,23 @@ const LearningReportPage: React.FC = () => {
                     <ResponsiveContainer width="100%" height={380}>
                       <ComposedChart data={chartData}>
                         <defs>
-                          <linearGradient id="studyGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor={CHART_COLORS.cyan.primary} stopOpacity={0.3} />
-                            <stop offset="95%" stopColor={CHART_COLORS.cyan.primary} stopOpacity={0} />
+                          <linearGradient
+                            id="studyGradient"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="5%"
+                              stopColor={CHART_COLORS.cyan.primary}
+                              stopOpacity={0.3}
+                            />
+                            <stop
+                              offset="95%"
+                              stopColor={CHART_COLORS.cyan.primary}
+                              stopOpacity={0}
+                            />
                           </linearGradient>
                         </defs>
                         <CartesianGrid
@@ -595,7 +752,12 @@ const LearningReportPage: React.FC = () => {
                           tick={{ fill: "#8b9bb4", fontSize: 11 }}
                           axisLine={{ stroke: "rgba(148, 163, 184, 0.2)" }}
                           tickLine={{ stroke: "rgba(148, 163, 184, 0.2)" }}
-                          label={{ value: 'Thời Gian Học (phút)', angle: -90, position: 'insideLeft', fill: CHART_COLORS.cyan.primary }}
+                          label={{
+                            value: "Thời Gian Học (phút)",
+                            angle: -90,
+                            position: "insideLeft",
+                            fill: CHART_COLORS.cyan.primary,
+                          }}
                         />
                         <YAxis
                           yAxisId="right"
@@ -603,12 +765,15 @@ const LearningReportPage: React.FC = () => {
                           tick={{ fill: "#8b9bb4", fontSize: 11 }}
                           axisLine={{ stroke: "rgba(148, 163, 184, 0.2)" }}
                           tickLine={{ stroke: "rgba(148, 163, 184, 0.2)" }}
-                          label={{ value: 'Đã Hoàn Thành', angle: 90, position: 'insideRight', fill: CHART_COLORS.blue.primary }}
+                          label={{
+                            value: "Đã Hoàn Thành",
+                            angle: 90,
+                            position: "insideRight",
+                            fill: CHART_COLORS.blue.primary,
+                          }}
                         />
                         <Tooltip content={<ChartTooltip />} />
-                        <Legend
-                          wrapperStyle={{ color: "#8b9bb4" }}
-                        />
+                        <Legend wrapperStyle={{ color: "#8b9bb4" }} />
                         <Area
                           yAxisId="left"
                           type="monotone"
@@ -625,7 +790,11 @@ const LearningReportPage: React.FC = () => {
                           dataKey="missionsCompleted"
                           stroke={CHART_COLORS.purple.primary}
                           strokeWidth={3}
-                          dot={{ fill: CHART_COLORS.purple.primary, r: 4, strokeWidth: 0 }}
+                          dot={{
+                            fill: CHART_COLORS.purple.primary,
+                            r: 4,
+                            strokeWidth: 0,
+                          }}
                           activeDot={{ r: 6, fill: CHART_COLORS.purple.glow }}
                           name="Roadmap Node"
                         />
@@ -636,7 +805,11 @@ const LearningReportPage: React.FC = () => {
                           stroke={CHART_COLORS.orange.primary}
                           strokeWidth={2}
                           strokeDasharray="5 5"
-                          dot={{ fill: CHART_COLORS.orange.primary, r: 3, strokeWidth: 0 }}
+                          dot={{
+                            fill: CHART_COLORS.orange.primary,
+                            r: 3,
+                            strokeWidth: 0,
+                          }}
                           name="Jobs"
                         />
                       </ComposedChart>
@@ -645,46 +818,47 @@ const LearningReportPage: React.FC = () => {
                     <div className="lr-empty">
                       <Layers size={48} />
                       <p>Chưa có dữ liệu timeline cho khoảng này.</p>
-                      <span>Bắt đầu học và làm việc để xem phân tích chi tiết</span>
+                      <span>
+                        Bắt đầu học và làm việc để xem phân tích chi tiết
+                      </span>
                     </div>
                   )}
                 </div>
               </HUDCard>
 
-              {/* AI Recommendations Panel */}
+              {/* Personalised Recommendations Panel (algorithm-driven) */}
               <HUDCard variant="chamfer" decorated>
                 <div className="lr-panel-header">
                   <div>
                     <h2 className="lr-panel-title">
-                      <Zap size={20} />
-                      AI Phân Tích & Đề Xuất
+                      <Target size={20} />
+                      Phân Tích & Đề Xuất Cá Nhân Hóa
                     </h2>
                     <p className="lr-panel-subtitle">
                       Đánh giá chi tiết dựa trên thuật toán phân tích dữ liệu
                     </p>
                   </div>
-                  <Target size={24} className="lr-panel-icon" />
+                  <Sparkles size={24} className="lr-panel-icon" />
                 </div>
                 <div className="lr-tips-list">
-                  {report.overview.recommendations.map((tip, index) => {
-                    const isAssessment = tip.includes("Phân tích:") || tip.includes("✅");
-                    const isEarning = tip.includes("💰");
-
-                    // Xóa emoji khỏi text hiển thị
-                    const cleanTip = tip.replace(/✅/g, '').replace(/💰/g, '').trim();
-
-                    return (
-                      <div
-                        key={`${tip}-${index}`}
-                        className="lr-tip"
-                      >
-                        <div className={`lr-tip-icon-wrapper ${isAssessment ? "assessment" : isEarning ? "earning" : "default"}`}>
-                          {isAssessment ? <CheckCircle2 size={18} /> : isEarning ? <BadgeDollarSign size={18} /> : <Check size={18} />}
-                        </div>
-                        <p>{cleanTip}</p>
+                  {report.overview.recommendations.length === 0 ? (
+                    <div className="lr-tip">
+                      <div className="lr-tip-icon-wrapper default">
+                        <Sparkles size={18} />
                       </div>
-                    );
-                  })}
+                      <div className="lr-tip-body">
+                        <p className="lr-tip-title">Đang chờ dữ liệu</p>
+                        <p className="lr-tip-text">
+                          Bắt đầu phiên học hoặc tạo lộ trình để hệ thống phân
+                          tích.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    report.overview.recommendations.map((rec, index) =>
+                      renderRecommendationCard(rec, index, navigate),
+                    )
+                  )}
                 </div>
               </HUDCard>
             </section>
@@ -699,7 +873,8 @@ const LearningReportPage: React.FC = () => {
                       Hiệu Suất Công Việc
                     </h2>
                     <p className="lr-panel-subtitle">
-                      Đánh giá hiệu suất làm việc từ Short-term Jobs đã hoàn thành
+                      Đánh giá hiệu suất làm việc từ Short-term Jobs đã hoàn
+                      thành
                     </p>
                   </div>
                 </div>
@@ -751,7 +926,9 @@ const LearningReportPage: React.FC = () => {
                               <strong>{job.jobTitle}</strong>
                               <span className="lr-job-date">
                                 {job.completedAt
-                                  ? new Date(job.completedAt).toLocaleDateString("vi-VN")
+                                  ? new Date(
+                                      job.completedAt,
+                                    ).toLocaleDateString("vi-VN")
                                   : job.appliedAt
                                     ? `Apply: ${new Date(job.appliedAt).toLocaleDateString("vi-VN")}`
                                     : "Pending"}
@@ -763,18 +940,26 @@ const LearningReportPage: React.FC = () => {
                                 {job.status}
                               </span>
                             </td>
-                            <td>{job.milestonesCompleted}/{job.milestonesTotal}</td>
+                            <td>
+                              {job.milestonesCompleted}/{job.milestonesTotal}
+                            </td>
                             <td className="lr-job-earnings">
                               {job.earnedAmount?.toLocaleString() || 0}đ
                             </td>
                             <td>
                               <div className="lr-job-skills">
                                 {job.primarySkill && (
-                                  <span className="lr-skill primary">{job.primarySkill}</span>
+                                  <span className="lr-skill primary">
+                                    {job.primarySkill}
+                                  </span>
                                 )}
-                                {job.skillsDemonstrated?.slice(0, 2).map((skill, i) => (
-                                  <span key={i} className="lr-skill">{skill}</span>
-                                ))}
+                                {job.skillsDemonstrated
+                                  ?.slice(0, 2)
+                                  .map((skill, i) => (
+                                    <span key={i} className="lr-skill">
+                                      {skill}
+                                    </span>
+                                  ))}
                               </div>
                             </td>
                           </tr>
@@ -796,7 +981,9 @@ const LearningReportPage: React.FC = () => {
                       <BookOpenCheck size={20} />
                       Tiến Độ Lộ Trình
                     </h2>
-                    <p className="lr-panel-subtitle">Chi tiết tiến độ từng roadmap</p>
+                    <p className="lr-panel-subtitle">
+                      Chi tiết tiến độ từng roadmap
+                    </p>
                   </div>
                 </div>
                 <div className="lr-breakdown-tools">
@@ -832,7 +1019,9 @@ const LearningReportPage: React.FC = () => {
                     <select
                       value={roadmapSort}
                       onChange={(event) =>
-                        setRoadmapSort(event.target.value as RoadmapBreakdownSort)
+                        setRoadmapSort(
+                          event.target.value as RoadmapBreakdownSort,
+                        )
                       }
                       aria-label="Sắp xếp lộ trình"
                     >
@@ -844,10 +1033,14 @@ const LearningReportPage: React.FC = () => {
                   </label>
                   <div className="lr-breakdown-summary">
                     <span>
-                      {filteredRoadmaps.length}/{report.roadmapBreakdown.length} roadmap
+                      {filteredRoadmaps.length}/{report.roadmapBreakdown.length}{" "}
+                      roadmap
                     </span>
                     {(roadmapSearch || roadmapFilter !== "all") && (
-                      <button type="button" onClick={resetRoadmapBreakdownTools}>
+                      <button
+                        type="button"
+                        onClick={resetRoadmapBreakdownTools}
+                      >
                         Xóa lọc
                       </button>
                     )}
@@ -889,7 +1082,9 @@ const LearningReportPage: React.FC = () => {
                             <td>
                               {item.completedMissions}/{item.totalMissions}
                             </td>
-                            <td>{item.nextMissionTitle || "✓ Đã hoàn thành"}</td>
+                            <td>
+                              {item.nextMissionTitle || "✓ Đã hoàn thành"}
+                            </td>
                           </tr>
                         ))
                       ) : (
@@ -958,7 +1153,9 @@ const LearningReportPage: React.FC = () => {
                     <select
                       value={courseFilter}
                       onChange={(event) =>
-                        setCourseFilter(event.target.value as CourseBreakdownFilter)
+                        setCourseFilter(
+                          event.target.value as CourseBreakdownFilter,
+                        )
                       }
                       aria-label="Lọc khóa học"
                     >
@@ -981,12 +1178,15 @@ const LearningReportPage: React.FC = () => {
                       <option value="progress-asc">Tiến độ thấp nhất</option>
                       <option value="title-asc">Tên A-Z</option>
                       <option value="status-asc">Status A-Z</option>
-                      <option value="completed-desc">Hoàn thành mới nhất</option>
+                      <option value="completed-desc">
+                        Hoàn thành mới nhất
+                      </option>
                     </select>
                   </label>
                   <div className="lr-breakdown-summary">
                     <span>
-                      {filteredCourses.length}/{report.courseBreakdown.length} khóa học
+                      {filteredCourses.length}/{report.courseBreakdown.length}{" "}
+                      khóa học
                     </span>
                     {(courseSearch || courseFilter !== "all") && (
                       <button type="button" onClick={resetCourseBreakdownTools}>
@@ -1009,7 +1209,9 @@ const LearningReportPage: React.FC = () => {
                       {paginatedCourses.length > 0 ? (
                         paginatedCourses.map((item) => (
                           <tr key={`${item.courseId}-${item.status}`}>
-                            <td><strong>{item.courseTitle}</strong></td>
+                            <td>
+                              <strong>{item.courseTitle}</strong>
+                            </td>
                             <td>
                               <span className={`lr-job-status ${item.status}`}>
                                 {item.status}
@@ -1031,8 +1233,11 @@ const LearningReportPage: React.FC = () => {
                               </div>
                             </td>
                             <td>
-                              {item.completedAt && !item.completedAt.toString().startsWith("0001")
-                                ? learningReportService.formatReportDate(item.completedAt)
+                              {item.completedAt &&
+                              !item.completedAt.toString().startsWith("0001")
+                                ? learningReportService.formatReportDate(
+                                    item.completedAt,
+                                  )
                                 : "—"}
                             </td>
                           </tr>
@@ -1082,8 +1287,8 @@ const LearningReportPage: React.FC = () => {
                 <Layers size={64} />
                 <h3>Chưa có dữ liệu phân tích</h3>
                 <p>
-                  Bắt đầu học tập, hoàn thành tasks, theo dõi roadmap hoặc apply job
-                  để xem phân tích chi tiết về tiến độ của bạn.
+                  Bắt đầu học tập, hoàn thành tasks, theo dõi roadmap hoặc apply
+                  job để xem phân tích chi tiết về tiến độ của bạn.
                 </p>
               </section>
             )}

@@ -23,6 +23,10 @@ import {
   Save,
   Upload,
   AlertCircle,
+  RefreshCw,
+  ShieldCheck,
+  ShieldAlert,
+  BadgeCheck,
 } from "lucide-react";
 import { useAppToast } from "../../context/ToastContext";
 import aiRoadmapService from "../../services/aiRoadmapService";
@@ -60,6 +64,84 @@ import {
   JourneyOutputAssessmentResponse,
 } from "../../types/NodeMentoring";
 import "./StudentRoadmapWorkspacePage.css";
+
+const canSubmitNodeEvidence = (
+  record?: NodeEvidenceRecordResponse | null,
+): boolean => {
+  if (!record) return true;
+  return (
+    record.submissionStatus === "DRAFT" ||
+    record.submissionStatus === "REWORK_REQUESTED" ||
+    record.verificationStatus === "REJECTED" ||
+    record.latestReview?.reviewResult === "REWORK_REQUESTED" ||
+    record.latestReview?.reviewResult === "REJECTED" ||
+    record.latestVerification?.nodeVerificationStatus === "REJECTED"
+  );
+};
+
+const canSubmitFinalAssessment = (
+  assessment?: JourneyOutputAssessmentResponse | null,
+): boolean => !assessment || assessment.assessmentStatus === "REJECTED";
+
+const formatNodeSubmissionStatus = (status?: string) => {
+  switch (status) {
+    case "SUBMITTED":
+      return "Đã nộp";
+    case "RESUBMITTED":
+      return "Đã nộp lại";
+    case "REWORK_REQUESTED":
+      return "Cần làm lại";
+    case "WITHDRAWN":
+      return "Đã rút";
+    case "DRAFT":
+      return "Bản nháp";
+    default:
+      return status || "Chưa nộp";
+  }
+};
+
+const formatNodeVerificationStatus = (status?: string) => {
+  switch (status) {
+    case "VERIFIED":
+      return "Đã xác thực";
+    case "APPROVED":
+      return "Đã duyệt";
+    case "REJECTED":
+      return "Cần nộp lại";
+    case "UNDER_REVIEW":
+      return "Đang xem xét";
+    case "PENDING":
+      return "Chờ đánh giá";
+    default:
+      return status || "Chờ đánh giá";
+  }
+};
+
+const formatNodeReviewResult = (status?: string) => {
+  switch (status) {
+    case "APPROVED":
+      return "Đã duyệt";
+    case "REWORK_REQUESTED":
+      return "Cần làm lại";
+    case "REJECTED":
+      return "Từ chối";
+    default:
+      return status || "Chưa đánh giá";
+  }
+};
+
+const formatFinalAssessmentStatus = (status?: string) => {
+  switch (status) {
+    case "APPROVED":
+      return "Đã duyệt";
+    case "REJECTED":
+      return "Cần nộp lại";
+    case "PENDING":
+      return "Chờ đánh giá";
+    default:
+      return status || "Chưa nộp";
+  }
+};
 
 const StudentRoadmapWorkspacePage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // roadmapSessionId
@@ -118,9 +200,12 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
     null,
   );
 
-  // Submit Form State
-  const [submissionText, setSubmissionText] = useState("");
-  const [evidenceUrl, setEvidenceUrl] = useState("");
+  // ── Separated submit form state for node vs final (fix cross-contamination) ──
+  const [nodeSubmissionText, setNodeSubmissionText] = useState("");
+  const [nodeEvidenceUrl, setNodeEvidenceUrl] = useState("");
+  const [finalSubmissionText, setFinalSubmissionText] = useState("");
+  const [finalEvidenceUrl, setFinalEvidenceUrl] = useState("");
+
   const [attachmentFile, setAttachmentFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -131,6 +216,16 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
   // Final Output State
   const [finalAssessment, setFinalAssessment] =
     useState<JourneyOutputAssessmentResponse | null>(null);
+
+  // ── Node verification status map (for sidebar icons) ──
+  type NodeStatusEntry = {
+    selfCompleted: boolean;
+    verified: "NONE" | "VERIFIED" | "REJECTED";
+    submitted: boolean;
+  };
+  const [nodeStatusMap, setNodeStatusMap] = useState<
+    Record<string, NodeStatusEntry>
+  >({});
 
   const loadRoadmap = useCallback(async () => {
     if (!id) return;
@@ -209,13 +304,29 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
       if (evRes.status === "fulfilled" && evRes.value) {
         setEvidence(evRes.value);
-        setSubmissionText(evRes.value.submissionText || "");
-        setEvidenceUrl(evRes.value.evidenceUrl || "");
-        // If it was already approved/verified, maybe we switch to REPORT tab automatically
+        // Không prefill nội dung đã nộp vào form. Chỉ mở form trống khi mentor yêu cầu nộp lại.
+        setNodeSubmissionText("");
+        setNodeEvidenceUrl("");
+        // Update status map for this node
+        setNodeStatusMap((prev) => ({
+          ...prev,
+          [selectedNodeId]: {
+            selfCompleted: evRes.value!.learnerMarkedComplete ?? false,
+            verified:
+              evRes.value!.latestVerification?.nodeVerificationStatus === "VERIFIED"
+                ? "VERIFIED"
+                : evRes.value!.latestVerification?.nodeVerificationStatus === "REJECTED"
+                  ? "REJECTED"
+                  : "NONE",
+            submitted: ["SUBMITTED", "RESUBMITTED"].includes(
+              evRes.value!.submissionStatus,
+            ),
+          },
+        }));
       } else {
         setEvidence(null);
-        setSubmissionText("");
-        setEvidenceUrl("");
+        setNodeSubmissionText("");
+        setNodeEvidenceUrl("");
       }
     } catch (e) {
       console.error(e);
@@ -227,14 +338,48 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
     try {
       const data = await getLatestOutputAssessment(journeyId);
       setFinalAssessment(data);
-      if (data) {
-        setSubmissionText(data.submissionText || "");
-        setEvidenceUrl(data.evidenceUrl || "");
-      }
+      setFinalSubmissionText("");
+      setFinalEvidenceUrl("");
     } catch (e) {
       // Ignore
     }
   }, [journeyId]);
+
+  // ── Batch load node statuses for sidebar icons ──
+  const loadAllNodeStatuses = useCallback(async () => {
+    if (!journeyId || !roadmap?.roadmap?.length) return;
+    const entries: Record<string, NodeStatusEntry> = {};
+    const results = await Promise.allSettled(
+      roadmap.roadmap.map((node: any) =>
+        getNodeEvidence(journeyId, node.id).then((ev) => ({
+          nodeId: node.id,
+          ev,
+        })),
+      ),
+    );
+    for (const r of results) {
+      if (r.status === "fulfilled" && r.value.ev) {
+        const { nodeId, ev } = r.value;
+        entries[nodeId] = {
+          selfCompleted: ev.learnerMarkedComplete ?? false,
+          verified:
+            ev.latestVerification?.nodeVerificationStatus === "VERIFIED"
+              ? "VERIFIED"
+              : ev.latestVerification?.nodeVerificationStatus === "REJECTED"
+                ? "REJECTED"
+                : "NONE",
+          submitted: ["SUBMITTED", "RESUBMITTED"].includes(
+            ev.submissionStatus,
+          ),
+        };
+      }
+    }
+    setNodeStatusMap(entries);
+  }, [journeyId, roadmap]);
+
+  useEffect(() => {
+    loadAllNodeStatuses();
+  }, [loadAllNodeStatuses]);
 
   // ── Lookup booking + load meetings ───────────────────────────
   useEffect(() => {
@@ -377,10 +522,17 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
     }
   };
 
+  // Reset form + attachment when switching nodes to prevent data bleed
   useEffect(() => {
+    setAttachmentFile(null);
+    setUploadError(null);
     if (selectedNodeId) {
+      setNodeSubmissionText("");
+      setNodeEvidenceUrl("");
       loadNodeData();
     } else {
+      setFinalSubmissionText("");
+      setFinalEvidenceUrl("");
       loadFinalAssessment();
     }
   }, [selectedNodeId, loadNodeData, loadFinalAssessment]);
@@ -427,7 +579,33 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!journeyId) return;
-    if (!submissionText && !evidenceUrl && !attachmentFile) {
+    // Use scoped state depending on whether we're submitting node evidence or final assessment
+    const currentText = selectedNodeId ? nodeSubmissionText : finalSubmissionText;
+    const currentUrl = selectedNodeId ? nodeEvidenceUrl : finalEvidenceUrl;
+
+    if (selectedNodeId && evidence && !canSubmitNodeEvidence(evidence)) {
+      showInfo(
+        "Đã nộp minh chứng",
+        "Bạn chỉ có thể nộp lại khi mentor yêu cầu làm lại hoặc đánh fail node này.",
+      );
+      setRightTab("REPORT");
+      return;
+    }
+
+    if (
+      !selectedNodeId &&
+      finalAssessment &&
+      !canSubmitFinalAssessment(finalAssessment)
+    ) {
+      showInfo(
+        "Đã nộp Final Assessment",
+        "Bạn chỉ có thể nộp lại khi mentor từ chối bài Final Assessment.",
+      );
+      setRightTab("REPORT");
+      return;
+    }
+
+    if (!currentText && !currentUrl && !attachmentFile) {
       showInfo(
         "Thiếu thông tin",
         "Vui lòng nhập nội dung hoặc đính kèm file/link.",
@@ -438,8 +616,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
     try {
       setSubmitting(true);
       setUploadProgress(0);
-      let attachmentUrl =
-        evidence?.attachmentUrl || finalAssessment?.attachmentUrl;
+      let attachmentUrl: string | undefined;
 
       if (attachmentFile) {
         if (isDocFile(attachmentFile) && currentUserId) {
@@ -463,17 +640,18 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
       if (selectedNodeId) {
         await submitNodeEvidence(journeyId, selectedNodeId, {
-          submissionText,
-          evidenceUrl,
+          submissionText: currentText,
+          evidenceUrl: currentUrl,
           attachmentUrl,
         });
         showSuccess("Thành công", "Đã nộp minh chứng cho node.");
         await loadNodeData();
+        await loadAllNodeStatuses();
         setRightTab("REPORT");
       } else {
         await submitOutputAssessment(journeyId, {
-          submissionText,
-          evidenceUrl,
+          submissionText: currentText,
+          evidenceUrl: currentUrl,
           attachmentUrl,
         });
         showSuccess("Thành công", "Đã nộp bài đánh giá cuối kỳ.");
@@ -503,6 +681,181 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
   const nodes = roadmap.roadmap || [];
   const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
+  const nodeSubmissionLocked = !!evidence && !canSubmitNodeEvidence(evidence);
+  const finalSubmissionLocked =
+    !!finalAssessment && !canSubmitFinalAssessment(finalAssessment);
+  const nodeSubmitTabLabel = evidence
+    ? nodeSubmissionLocked
+      ? "Đã nộp"
+      : "Nộp lại minh chứng"
+    : "Nộp minh chứng";
+  const finalSubmitTabLabel = finalAssessment
+    ? finalSubmissionLocked
+      ? "Đã nộp"
+      : "Nộp lại"
+    : "Nộp bài";
+
+  const renderNodeSubmissionStatus = () => {
+    if (!evidence) return null;
+    return (
+      <div className="srwp-submission-status-card srwp-submission-status-card--locked">
+        <div className="srwp-submission-status-card__icon">
+          <ShieldCheck size={22} />
+        </div>
+        <div className="srwp-submission-status-card__content">
+          <h4>Đã nộp minh chứng</h4>
+          <p>
+            Minh chứng của node này đã được gửi cho mentor. Bạn chỉ có thể nộp
+            lại khi mentor yêu cầu làm lại hoặc đánh fail node này.
+          </p>
+          <div className="srwp-submission-status-card__meta">
+            <span>{formatNodeSubmissionStatus(evidence.submissionStatus)}</span>
+            <span>{formatNodeVerificationStatus(evidence.verificationStatus)}</span>
+            {evidence.submittedAt && (
+              <span>
+                Nộp lúc {new Date(evidence.submittedAt).toLocaleString("vi-VN")}
+              </span>
+            )}
+          </div>
+          <div className="srwp-submission-link-list">
+            {evidence.evidenceUrl && (
+              <a href={evidence.evidenceUrl} target="_blank" rel="noreferrer">
+                <LinkIcon size={14} /> Mở link minh chứng
+              </a>
+            )}
+            {evidence.attachmentUrl && (
+              <a
+                href={getForceDownloadUrl(evidence.attachmentUrl)}
+                download
+                rel="noreferrer"
+              >
+                <FileText size={14} /> Tải file đã đính kèm (
+                {getFileExtFromUrl(evidence.attachmentUrl)})
+              </a>
+            )}
+          </div>
+          <button
+            type="button"
+            className="srwp-status-action"
+            onClick={() => setRightTab("REPORT")}
+          >
+            Xem kết quả đánh giá
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderNodeReworkNotice = () => {
+    if (!evidence || !canSubmitNodeEvidence(evidence)) return null;
+    const feedback =
+      evidence.mentorFeedback ||
+      evidence.latestReview?.feedback ||
+      evidence.latestVerification?.verificationNote;
+    return (
+      <div className="srwp-submission-status-card srwp-submission-status-card--rework">
+        <div className="srwp-submission-status-card__icon">
+          <ShieldAlert size={22} />
+        </div>
+        <div className="srwp-submission-status-card__content">
+          <h4>Mentor yêu cầu nộp lại</h4>
+          <p>
+            Hãy nộp minh chứng mới theo yêu cầu bên dưới. Nội dung cũ không được
+            tự động điền lại để tránh gửi nhầm.
+          </p>
+          {feedback && (
+            <div className="srwp-feedback-content">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{feedback}</ReactMarkdown>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const renderFinalSubmissionStatus = () => {
+    if (!finalAssessment) return null;
+    return (
+      <div className="srwp-submission-status-card srwp-submission-status-card--locked">
+        <div className="srwp-submission-status-card__icon">
+          <ShieldCheck size={22} />
+        </div>
+        <div className="srwp-submission-status-card__content">
+          <h4>Đã nộp Final Assessment</h4>
+          <p>
+            Bài Final Assessment đang chờ hoặc đã được mentor đánh giá. Bạn chỉ
+            có thể nộp lại khi mentor từ chối bài này.
+          </p>
+          <div className="srwp-submission-status-card__meta">
+            <span>
+              {formatFinalAssessmentStatus(finalAssessment.assessmentStatus)}
+            </span>
+            {finalAssessment.submittedAt && (
+              <span>
+                Nộp lúc{" "}
+                {new Date(finalAssessment.submittedAt).toLocaleString("vi-VN")}
+              </span>
+            )}
+          </div>
+          <div className="srwp-submission-link-list">
+            {finalAssessment.evidenceUrl && (
+              <a
+                href={finalAssessment.evidenceUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <LinkIcon size={14} /> Mở link bài nộp
+              </a>
+            )}
+            {finalAssessment.attachmentUrl && (
+              <a
+                href={getForceDownloadUrl(finalAssessment.attachmentUrl)}
+                download
+                rel="noreferrer"
+              >
+                <FileText size={14} /> Tải file đã đính kèm (
+                {getFileExtFromUrl(finalAssessment.attachmentUrl)})
+              </a>
+            )}
+          </div>
+          <button
+            type="button"
+            className="srwp-status-action"
+            onClick={() => setRightTab("REPORT")}
+          >
+            Xem kết quả Final Assessment
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderFinalReworkNotice = () => {
+    if (!finalAssessment || finalAssessment.assessmentStatus !== "REJECTED") {
+      return null;
+    }
+    return (
+      <div className="srwp-submission-status-card srwp-submission-status-card--rework">
+        <div className="srwp-submission-status-card__icon">
+          <ShieldAlert size={22} />
+        </div>
+        <div className="srwp-submission-status-card__content">
+          <h4>Mentor yêu cầu nộp lại Final Assessment</h4>
+          <p>
+            Hãy gửi bài mới theo feedback của mentor. Nội dung cũ không được tự
+            động điền lại để tránh gửi nhầm.
+          </p>
+          {finalAssessment.feedback && (
+            <div className="srwp-feedback-content">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {finalAssessment.feedback}
+              </ReactMarkdown>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="srwp-container">
@@ -525,6 +878,19 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
           <h2>Roadmap Workspace</h2>
           <span className="srwp-subtitle">{roadmap.metadata?.title}</span>
         </div>
+        <button
+          className="srwp-refresh-btn"
+          onClick={async () => {
+            await loadRoadmap();
+            await loadAllNodeStatuses();
+            if (selectedNodeId) await loadNodeData();
+            else await loadFinalAssessment();
+            showSuccess("Đã làm mới", "Dữ liệu workspace đã được cập nhật.");
+          }}
+          title="Làm mới dữ liệu từ mentor"
+        >
+          <RefreshCw size={16} /> Làm mới
+        </button>
       </div>
 
       <div className="srwp-body">
@@ -536,7 +902,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
             </h3>
           </div>
           <div className="srwp-node-list">
-            {nodes.map((node: any, idx: number) => (
+            {nodes.map((node: any, idx: number) => {
+              const ns = nodeStatusMap[node.id];
+              return (
               <div
                 key={node.id}
                 className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""}`}
@@ -554,9 +922,21 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                     {node.type === "SIDE" ? "Phụ" : "Chính"}
                   </span>
                 </div>
-                <ChevronRight size={14} className="srwp-node-chevron" />
+                {/* Node verification status icon */}
+                {ns?.verified === "VERIFIED" ? (
+                  <BadgeCheck size={16} className="srwp-status-icon srwp-status-icon--verified" title="Đã xác thực bởi Mentor" />
+                ) : ns?.verified === "REJECTED" ? (
+                  <XCircle size={16} className="srwp-status-icon srwp-status-icon--rejected" title="Mentor từ chối — cần làm lại" />
+                ) : ns?.selfCompleted ? (
+                  <CheckCircle2 size={16} className="srwp-status-icon srwp-status-icon--pending" title="Hoàn thành — chưa xác thực" />
+                ) : ns?.submitted ? (
+                  <Clock size={14} className="srwp-status-icon srwp-status-icon--submitted" title="Đã nộp — chờ đánh giá" />
+                ) : (
+                  <ChevronRight size={14} className="srwp-node-chevron" />
+                )}
               </div>
-            ))}
+              );
+            })}
 
             <div
               className={`srwp-node-item srwp-node-item--final ${!selectedNodeId ? "active" : ""}`}
@@ -764,7 +1144,12 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                   className={`srwp-tab ${rightTab === "SUBMIT" ? "active" : ""}`}
                   onClick={() => setRightTab("SUBMIT")}
                 >
-                  <Send size={16} /> Nộp minh chứng
+                  {nodeSubmissionLocked ? (
+                    <CheckCircle2 size={16} />
+                  ) : (
+                    <Send size={16} />
+                  )}{" "}
+                  {nodeSubmitTabLabel}
                 </button>
                 <button
                   className={`srwp-tab ${rightTab === "REPORT" ? "active" : ""}`}
@@ -786,11 +1171,27 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                       emptyMessage="Node này chưa có mô tả yêu cầu rõ ràng từ roadmap hoặc mentor."
                       footerNote="Nếu mentor đã cập nhật assignment, hãy ưu tiên bám sát assignment đó khi chuẩn bị minh chứng."
                       showNodeDescription={true}
+                      showMentorAssignment={false}
                     />
                     <div className="srwp-assignment-block">
                       <h4>
                         <ClipboardList size={16} /> Nhiệm vụ chi tiết từ Mentor
+                        {assignment?.assignmentSource === "MENTOR_REFINED" && (
+                          <span className="srwp-source-badge srwp-source-badge--mentor" title="Mentor đã cập nhật bài tập này">
+                            <BadgeCheck size={12} /> Mentor đã cập nhật
+                          </span>
+                        )}
+                        {assignment?.assignmentSource === "SYSTEM_GENERATED" && (
+                          <span className="srwp-source-badge srwp-source-badge--ai" title="Nội dung do AI tạo tự động">
+                            AI Generated
+                          </span>
+                        )}
                       </h4>
+                      {assignment?.title && (
+                        <div className="srwp-assignment-title">
+                          <strong>{assignment.title}</strong>
+                        </div>
+                      )}
                       {assignment?.description ? (
                         <div className="srwp-markdown-view">
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -814,24 +1215,35 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
                 {rightTab === "SUBMIT" && (
                   <div className="srwp-content-card">
-                    <div className="srwp-submit-context">
-                      <RoadmapNodeRequirementsCard
-                        node={selectedNode}
-                        allNodes={nodes}
-                        assignment={assignment}
-                        heading="Checklist trước khi nộp"
-                        emptyMessage="Hiện chưa có checklist chi tiết cho node này."
-                        footerNote="Minh chứng nên thể hiện rõ bạn đã hoàn thành bài tập và đáp ứng tiêu chí của node."
-                        showNodeDescription={true}
-                      />
-                    </div>
-                    <h4>Nộp minh chứng học tập</h4>
+                    {!nodeSubmissionLocked && (
+                      <div className="srwp-submit-context">
+                        <RoadmapNodeRequirementsCard
+                          node={selectedNode}
+                          allNodes={nodes}
+                          assignment={assignment}
+                          heading="Checklist trước khi nộp"
+                          emptyMessage="Hiện chưa có checklist chi tiết cho node này."
+                          footerNote="Minh chứng nên thể hiện rõ bạn đã hoàn thành bài tập và đáp ứng tiêu chí của node."
+                          showNodeDescription={true}
+                        />
+                      </div>
+                    )}
+                    <h4>
+                      {nodeSubmissionLocked
+                        ? "Trạng thái minh chứng"
+                        : "Nộp minh chứng học tập"}
+                    </h4>
+                    {nodeSubmissionLocked ? (
+                      renderNodeSubmissionStatus()
+                    ) : (
                     <div className="srwp-form">
+                      {renderNodeReworkNotice()}
                       <div className="srwp-form-group">
                         <label>Nội dung bài làm</label>
                         <RichTextEditor
-                          initialContent={submissionText}
-                          onChange={setSubmissionText}
+                          key={`node-submit-${selectedNodeId}-${evidence?.id ?? "new"}-${evidence?.submissionStatus ?? "empty"}`}
+                          initialContent={nodeSubmissionText}
+                          onChange={setNodeSubmissionText}
                           placeholder="Trình bày bài làm, kết quả hoặc ghi chú của bạn..."
                           userId={currentUserId}
                         />
@@ -842,8 +1254,8 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                         <input
                           type="url"
                           className="srwp-input"
-                          value={evidenceUrl}
-                          onChange={(e) => setEvidenceUrl(e.target.value)}
+                          value={nodeEvidenceUrl}
+                          onChange={(e) => setNodeEvidenceUrl(e.target.value)}
                           placeholder="https://github.com/..."
                         />
                       </div>
@@ -918,14 +1330,6 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                             </div>
                           </div>
                         )}
-                        {evidence?.attachmentUrl && !attachmentFile && (
-                          <div className="srwp-existing-attachment">
-                            <FileText size={14} />
-                            <a href={getForceDownloadUrl(evidence.attachmentUrl)} download rel="noreferrer">
-                              ⬇ Tải file đã đính kèm (.{getFileExtFromUrl(evidence.attachmentUrl)})
-                            </a>
-                          </div>
-                        )}
                       </div>
 
                       <button
@@ -936,6 +1340,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                         {submitting ? "Đang nộp..." : "Gửi minh chứng"}
                       </button>
                     </div>
+                    )}
                   </div>
                 )}
 
@@ -954,7 +1359,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                           <span
                             className={`srwp-badge status-${evidence.submissionStatus}`}
                           >
-                            {evidence.submissionStatus}
+                            {formatNodeSubmissionStatus(evidence.submissionStatus)}
                           </span>
                         </div>
 
@@ -966,7 +1371,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                               <span
                                 className={`srwp-badge result-${evidence.latestReview.reviewResult}`}
                               >
-                                {evidence.latestReview.reviewResult}
+                                {formatNodeReviewResult(evidence.latestReview.reviewResult)}
                               </span>
                             </div>
                             {evidence.latestReview.score != null && (
@@ -996,8 +1401,10 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                                 className={`srwp-badge verify-${evidence.latestVerification.nodeVerificationStatus}`}
                               >
                                 {
-                                  evidence.latestVerification
-                                    .nodeVerificationStatus
+                                  formatNodeVerificationStatus(
+                                    evidence.latestVerification
+                                      .nodeVerificationStatus,
+                                  )
                                 }
                               </span>
                             </div>
@@ -1037,7 +1444,12 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                   className={`srwp-tab ${rightTab === "SUBMIT" ? "active" : ""}`}
                   onClick={() => setRightTab("SUBMIT")}
                 >
-                  <Send size={16} /> Nộp bài
+                  {finalSubmissionLocked ? (
+                    <CheckCircle2 size={16} />
+                  ) : (
+                    <Send size={16} />
+                  )}{" "}
+                  {finalSubmitTabLabel}
                 </button>
                 <button
                   className={`srwp-tab ${rightTab === "REPORT" ? "active" : ""}`}
@@ -1063,13 +1475,22 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
                 {rightTab === "SUBMIT" && (
                   <div className="srwp-content-card">
-                    <h4>Nộp Final Assessment</h4>
+                    <h4>
+                      {finalSubmissionLocked
+                        ? "Trạng thái Final Assessment"
+                        : "Nộp Final Assessment"}
+                    </h4>
+                    {finalSubmissionLocked ? (
+                      renderFinalSubmissionStatus()
+                    ) : (
                     <div className="srwp-form">
+                      {renderFinalReworkNotice()}
                       <div className="srwp-form-group">
                         <label>Nội dung báo cáo / Bài làm</label>
                         <RichTextEditor
-                          initialContent={submissionText}
-                          onChange={setSubmissionText}
+                          key={`final-submit-${finalAssessment?.id ?? "new"}-${finalAssessment?.assessmentStatus ?? "empty"}`}
+                          initialContent={finalSubmissionText}
+                          onChange={setFinalSubmissionText}
                           placeholder="Tổng hợp kết quả học tập của bạn..."
                           userId={currentUserId}
                         />
@@ -1080,8 +1501,8 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                         <input
                           type="url"
                           className="srwp-input"
-                          value={evidenceUrl}
-                          onChange={(e) => setEvidenceUrl(e.target.value)}
+                          value={finalEvidenceUrl}
+                          onChange={(e) => setFinalEvidenceUrl(e.target.value)}
                           placeholder="https://github.com/..."
                         />
                       </div>
@@ -1166,6 +1587,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                         {submitting ? "Đang nộp..." : "Gửi Final Assessment"}
                       </button>
                     </div>
+                    )}
                   </div>
                 )}
 
@@ -1184,7 +1606,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                           <span
                             className={`srwp-badge result-${finalAssessment.assessmentStatus}`}
                           >
-                            {finalAssessment.assessmentStatus}
+                            {formatFinalAssessmentStatus(finalAssessment.assessmentStatus)}
                           </span>
                         </div>
                         {finalAssessment.score != null && (
