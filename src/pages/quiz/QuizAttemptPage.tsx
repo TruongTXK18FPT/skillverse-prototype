@@ -73,6 +73,7 @@ const QuizAttemptPage: React.FC = () => {
   const [latestAttemptResult, setLatestAttemptResult] = useState<QuizAttemptDTO | null>(null);
   const [latestAttemptReview, setLatestAttemptReview] = useState<QuizAttemptReviewDTO | null>(null);
   const [attemptHistory, setAttemptHistory] = useState<QuizAttemptDTO[]>([]);
+  const [showAnswerDetails, setShowAnswerDetails] = useState(false);
   const [attemptsUsed, setAttemptsUsed] = useState(0);
   const [canRetry, setCanRetry] = useState(true);
   const [bestScore, setBestScore] = useState<number | null>(null);
@@ -227,6 +228,10 @@ const QuizAttemptPage: React.FC = () => {
       })
       .finally(() => setLoading(false));
   }, [quizId, user, viewLatestResult]);
+
+  useEffect(() => {
+    setShowAnswerDetails(false);
+  }, [result?.id]);
 
   const handleSelectSingleOption = (questionId: number, optionId: number) => {
     setAnswers(prev => ({
@@ -677,6 +682,18 @@ const QuizAttemptPage: React.FC = () => {
           </div>
 
           {shouldShowLatestReviewDetail && latestAttemptReview && (
+            <div className="hud-quiz-attempt-review-toggle">
+              <button
+                type="button"
+                className="hud-quiz-attempt-btn-secondary"
+                onClick={() => setShowAnswerDetails((current) => !current)}
+              >
+                {showAnswerDetails ? 'Ẩn chi tiết đáp án' : 'Xem chi tiết đáp án'}
+              </button>
+            </div>
+          )}
+
+          {showAnswerDetails && shouldShowLatestReviewDetail && latestAttemptReview && (
             <div className="hud-quiz-attempt-review">
               <div className="hud-quiz-attempt-review-header">
                 <h3>Chi tiết đáp án lần làm mới nhất</h3>
@@ -709,7 +726,7 @@ const QuizAttemptPage: React.FC = () => {
             </div>
           )}
 
-          {!shouldShowLatestReviewDetail && latestAttemptReview && (
+          {showAnswerDetails && !shouldShowLatestReviewDetail && latestAttemptReview && (
             <div className="hud-quiz-attempt-review-empty">
               Chi tiết đáp án hiện chỉ hiển thị cho lần làm mới nhất của bạn.
             </div>

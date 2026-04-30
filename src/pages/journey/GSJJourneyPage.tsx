@@ -303,6 +303,8 @@ const GSJJourneyPage: React.FC = () => {
   const [currentResult, setCurrentResult] = useState<TestResultResponse | null>(
     null,
   );
+  const [showQuestionReviewDetails, setShowQuestionReviewDetails] =
+    useState(false);
   const [showAllQuestionReviews, setShowAllQuestionReviews] = useState(false);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -324,6 +326,7 @@ const GSJJourneyPage: React.FC = () => {
   const [loadingMentors, setLoadingMentors] = useState(false);
 
   useEffect(() => {
+    setShowQuestionReviewDetails(false);
     setShowAllQuestionReviews(false);
   }, [currentResult?.id]);
 
@@ -3106,140 +3109,156 @@ const GSJJourneyPage: React.FC = () => {
 
           {/* ── Quiz Review ── */}
           {currentResult.questionReviews.length > 0 && (
-            <section className="gsj-result-quiz">
-              <div className="gsj-result-quiz__header">
-                <h4 className="gsj-result-quiz__title">
-                  <BookOpen size={16} />
-                  Chi tiết từng câu hỏi
-                </h4>
-                <span className="gsj-result-quiz__counter">
-                  {visibleQuestionReviews.length}/{totalQuestionReviews}
-                </span>
-              </div>
-
-              <div className="gsj-result-quiz__legend">
-                <span>
-                  <span className="gsj-rq-dot gsj-rq-dot--user" />
-                  Bạn chọn
-                </span>
-                <span>
-                  <span className="gsj-rq-dot gsj-rq-dot--correct" />
-                  Đáp án đúng
-                </span>
-              </div>
-
-              <div className="gsj-result-quiz__list">
-                {visibleQuestionReviews.map((question, index) => {
-                  const userKey = extractOptionKey(question.userAnswer);
-                  const correctKey = extractOptionKey(question.correctAnswer);
-                  return (
-                    <article
-                      key={`q-${question.questionId}-${index}`}
-                      className={`gsj-rq-item ${question.isCorrect ? "gsj-rq-item--correct" : "gsj-rq-item--wrong"}`}
-                    >
-                      <div className="gsj-rq-item__head">
-                        <div className="gsj-rq-item__meta">
-                          <span className="gsj-rq-item__num">#{index + 1}</span>
-                          {question.skillArea && (
-                            <span className="gsj-rq-item__tag">
-                              {question.skillArea}
-                            </span>
-                          )}
-                          {question.difficulty && (
-                            <span className="gsj-rq-item__tag">
-                              {question.difficulty}
-                            </span>
-                          )}
-                        </div>
-                        <span
-                          className={`gsj-rq-item__badge ${question.isCorrect ? "gsj-rq-item__badge--correct" : "gsj-rq-item__badge--wrong"}`}
-                        >
-                          {question.isCorrect ? (
-                            <>
-                              <CheckCircle size={12} />
-                              Đúng
-                            </>
-                          ) : (
-                            <>
-                              <X size={12} />
-                              Sai
-                            </>
-                          )}
-                        </span>
-                      </div>
-
-                      <p className="gsj-rq-item__question">
-                        {decodeHtml(question.question)}
-                      </p>
-
-                      {question.options.length > 0 && (
-                        <div className="gsj-rq-item__options">
-                          {question.options.map((option, oi) => {
-                            const key = toOptionLabel(oi);
-                            const isSelected = key === userKey;
-                            const isCorrect = key === correctKey;
-                            return (
-                              <div
-                                key={`opt-${question.questionId}-${key}`}
-                                className={`gsj-rq-option${isCorrect ? " gsj-rq-option--correct" : ""}${isSelected && !isCorrect ? " gsj-rq-option--wrong-pick" : ""}${isSelected && isCorrect ? " gsj-rq-option--correct-pick" : ""}`}
-                              >
-                                <span className="gsj-rq-option__key">
-                                  {key}
-                                </span>
-                                <span className="gsj-rq-option__text">
-                                  {decodeHtml(option)}
-                                </span>
-                                <span className="gsj-rq-option__flags">
-                                  {isSelected && (
-                                    <span className="gsj-rq-flag gsj-rq-flag--user">
-                                      <Target size={10} />
-                                      Bạn chọn
-                                    </span>
-                                  )}
-                                  {isCorrect && (
-                                    <span className="gsj-rq-flag gsj-rq-flag--correct">
-                                      <CheckCircle size={10} />
-                                      Đáp án đúng
-                                    </span>
-                                  )}
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-
-                      {question.explanation && (
-                        <details
-                          className="gsj-rq-item__explain"
-                          open={!question.isCorrect}
-                        >
-                          <summary>Giải thích</summary>
-                          <div className="gsj-rq-item__explain-body">
-                            {renderMarkdownContent(
-                              normalizeMarkdownText(question.explanation, ""),
-                              "gsj-rq-item__markdown",
-                            )}
-                          </div>
-                        </details>
-                      )}
-                    </article>
-                  );
-                })}
-              </div>
-
-              {hasHiddenQuestionReviews && (
+            <>
+              <div className="gsj-result-quiz-toggle">
                 <button
                   type="button"
-                  className="gsj-btn gsj-btn--secondary gsj-result-review-toggle"
-                  onClick={() => setShowAllQuestionReviews((prev) => !prev)}
+                  className="gsj-btn gsj-btn--secondary"
+                  onClick={() => setShowQuestionReviewDetails((prev) => !prev)}
                 >
-                  {showAllQuestionReviews
-                    ? "Thu gọn"
-                    : `Xem tất cả ${totalQuestionReviews} câu`}
+                  <BookOpen size={16} />
+                  {showQuestionReviewDetails
+                    ? "Ẩn chi tiết từng câu hỏi"
+                    : "Xem chi tiết từng câu hỏi"}
                 </button>
+              </div>
+
+              {showQuestionReviewDetails && (
+                <section className="gsj-result-quiz">
+                  <div className="gsj-result-quiz__header">
+                    <h4 className="gsj-result-quiz__title">
+                      <BookOpen size={16} />
+                      Chi tiết từng câu hỏi
+                    </h4>
+                    <span className="gsj-result-quiz__counter">
+                      {visibleQuestionReviews.length}/{totalQuestionReviews}
+                    </span>
+                  </div>
+
+                  <div className="gsj-result-quiz__legend">
+                    <span>
+                      <span className="gsj-rq-dot gsj-rq-dot--user" />
+                      Bạn chọn
+                    </span>
+                    <span>
+                      <span className="gsj-rq-dot gsj-rq-dot--correct" />
+                      Đáp án đúng
+                    </span>
+                  </div>
+
+                  <div className="gsj-result-quiz__list">
+                    {visibleQuestionReviews.map((question, index) => {
+                      const userKey = extractOptionKey(question.userAnswer);
+                      const correctKey = extractOptionKey(question.correctAnswer);
+                      return (
+                        <article
+                          key={`q-${question.questionId}-${index}`}
+                          className={`gsj-rq-item ${question.isCorrect ? "gsj-rq-item--correct" : "gsj-rq-item--wrong"}`}
+                        >
+                          <div className="gsj-rq-item__head">
+                            <div className="gsj-rq-item__meta">
+                              <span className="gsj-rq-item__num">
+                                #{index + 1}
+                              </span>
+                              {question.skillArea && (
+                                <span className="gsj-rq-item__tag">
+                                  {question.skillArea}
+                                </span>
+                              )}
+                              {question.difficulty && (
+                                <span className="gsj-rq-item__tag">
+                                  {question.difficulty}
+                                </span>
+                              )}
+                            </div>
+                            <span
+                              className={`gsj-rq-item__badge ${question.isCorrect ? "gsj-rq-item__badge--correct" : "gsj-rq-item__badge--wrong"}`}
+                            >
+                              {question.isCorrect ? (
+                                <>
+                                  <CheckCircle size={12} />
+                                  Đúng
+                                </>
+                              ) : (
+                                <>
+                                  <X size={12} />
+                                  Sai
+                                </>
+                              )}
+                            </span>
+                          </div>
+
+                          <p className="gsj-rq-item__question">
+                            {decodeHtml(question.question)}
+                          </p>
+
+                          {question.options.length > 0 && (
+                            <div className="gsj-rq-item__options">
+                              {question.options.map((option, oi) => {
+                                const key = toOptionLabel(oi);
+                                const isSelected = key === userKey;
+                                const isCorrect = key === correctKey;
+                                return (
+                                  <div
+                                    key={`opt-${question.questionId}-${key}`}
+                                    className={`gsj-rq-option${isCorrect ? " gsj-rq-option--correct" : ""}${isSelected && !isCorrect ? " gsj-rq-option--wrong-pick" : ""}${isSelected && isCorrect ? " gsj-rq-option--correct-pick" : ""}`}
+                                  >
+                                    <span className="gsj-rq-option__key">
+                                      {key}
+                                    </span>
+                                    <span className="gsj-rq-option__text">
+                                      {decodeHtml(option)}
+                                    </span>
+                                    <span className="gsj-rq-option__flags">
+                                      {isSelected && (
+                                        <span className="gsj-rq-flag gsj-rq-flag--user">
+                                          <Target size={10} />
+                                          Bạn chọn
+                                        </span>
+                                      )}
+                                      {isCorrect && (
+                                        <span className="gsj-rq-flag gsj-rq-flag--correct">
+                                          <CheckCircle size={10} />
+                                          Đáp án đúng
+                                        </span>
+                                      )}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+
+                          {question.explanation && (
+                            <details className="gsj-rq-item__explain">
+                              <summary>Giải thích</summary>
+                              <div className="gsj-rq-item__explain-body">
+                                {renderMarkdownContent(
+                                  normalizeMarkdownText(question.explanation, ""),
+                                  "gsj-rq-item__markdown",
+                                )}
+                              </div>
+                            </details>
+                          )}
+                        </article>
+                      );
+                    })}
+                  </div>
+
+                  {hasHiddenQuestionReviews && (
+                    <button
+                      type="button"
+                      className="gsj-btn gsj-btn--secondary gsj-result-review-toggle"
+                      onClick={() => setShowAllQuestionReviews((prev) => !prev)}
+                    >
+                      {showAllQuestionReviews
+                        ? "Thu gọn"
+                        : `Xem tất cả ${totalQuestionReviews} câu`}
+                    </button>
+                  )}
+                </section>
               )}
-            </section>
+            </>
           )}
 
           {/* ── Actions ── */}
