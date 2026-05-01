@@ -38,6 +38,8 @@ import {
   FiEye,
 } from "react-icons/fi";
 import { HiLightningBolt } from "react-icons/hi";
+import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import {
   ShortTermJobCard,
   ShortTermJobList,
@@ -477,6 +479,7 @@ const ShortTermJobListPage: React.FC = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [savedJobs, setSavedJobs] = useState<string[]>([]);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   // My jobs state
   const [myJobs, setMyJobs] = useState<ShortTermJobResponse[]>([]);
@@ -1122,7 +1125,7 @@ const ShortTermJobListPage: React.FC = () => {
                   <button
                     className="jlab-page-btn"
                     disabled={currentPage === 0}
-                    onClick={() => setCurrentPage((p) => p - 1)}
+                    onClick={withPaginationScroll(() => setCurrentPage((p) => p - 1))}
                   >
                     ← Trước
                   </button>
@@ -1138,7 +1141,7 @@ const ShortTermJobListPage: React.FC = () => {
                       <button
                         key={pageNum}
                         className={`jlab-page-btn${currentPage === pageNum ? " active" : ""}`}
-                        onClick={() => setCurrentPage(pageNum)}
+                        onClick={withPaginationScroll(() => setCurrentPage(pageNum))}
                       >
                         {pageNum + 1}
                       </button>
@@ -1147,7 +1150,7 @@ const ShortTermJobListPage: React.FC = () => {
                   <button
                     className="jlab-page-btn"
                     disabled={currentPage >= totalPages - 1}
-                    onClick={() => setCurrentPage((p) => p + 1)}
+                    onClick={withPaginationScroll(() => setCurrentPage((p) => p + 1))}
                   >
                     Sau →
                   </button>

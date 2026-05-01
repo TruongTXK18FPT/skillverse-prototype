@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PieChart, Activity, BarChart2, Target, CheckCircle, Clock, AlertCircle, RefreshCw, Calendar } from 'lucide-react';
 import { RoadmapSessionSummary } from '../../types/Roadmap';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import './AnalystTrack.css';
 
 interface AnalystTrackProps {
@@ -14,6 +15,7 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
   const navigate = useNavigate();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   // Calculate Stats
   const totalRoadmaps = roadmaps.length;
@@ -224,7 +226,9 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
             <button
               type="button"
               className="arm-pagination-btn"
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              onClick={withPaginationScroll(() =>
+                setCurrentPage((prev) => Math.max(prev - 1, 1))
+              )}
               disabled={currentPage === 1}
             >
               Trang trước
@@ -233,7 +237,9 @@ const AnalystTrack: React.FC<AnalystTrackProps> = ({ roadmaps }) => {
             <button
               type="button"
               className="arm-pagination-btn"
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={withPaginationScroll(() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              )}
               disabled={currentPage === totalPages}
             >
               Trang sau

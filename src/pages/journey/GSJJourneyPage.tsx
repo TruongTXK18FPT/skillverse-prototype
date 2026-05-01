@@ -42,6 +42,7 @@ import {
   type MentorProfile,
 } from "../../services/mentorProfileService";
 import BookingModal from "../../components/mentorship-hud/BookingModal";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import {
   JourneySummaryResponse,
   JourneyDetailResponse,
@@ -311,6 +312,7 @@ const GSJJourneyPage: React.FC = () => {
   const [actionMode, setActionMode] = useState<ActionMode>("idle");
   const [showActionGame, setShowActionGame] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
   const [pendingDelete, setPendingDelete] = useState<DeleteDialogState>(null);
   const [error, setError] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -2304,7 +2306,9 @@ const GSJJourneyPage: React.FC = () => {
               <button
                 type="button"
                 className="gsj-btn gsj-btn--secondary gsj-pagination__nav"
-                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                onClick={withPaginationScroll(() =>
+                  setCurrentPage((prev) => Math.max(1, prev - 1))
+                )}
                 disabled={currentPage === 1}
               >
                 <ArrowLeft size={16} />
@@ -2320,7 +2324,7 @@ const GSJJourneyPage: React.FC = () => {
                     key={pageNumber}
                     type="button"
                     className={`gsj-pagination__page${pageNumber === currentPage ? " gsj-pagination__page--active" : ""}`}
-                    onClick={() => setCurrentPage(pageNumber)}
+                    onClick={withPaginationScroll(() => setCurrentPage(pageNumber))}
                   >
                     {pageNumber}
                   </button>
@@ -2330,11 +2334,11 @@ const GSJJourneyPage: React.FC = () => {
               <button
                 type="button"
                 className="gsj-btn gsj-btn--secondary gsj-pagination__nav"
-                onClick={() =>
+                onClick={withPaginationScroll(() =>
                   setCurrentPage((prev) =>
                     Math.min(totalJourneyPages, prev + 1),
                   )
-                }
+                )}
                 disabled={currentPage === totalJourneyPages}
               >
                 Sau

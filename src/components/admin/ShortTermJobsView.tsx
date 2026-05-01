@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import adminService from "../../services/adminService";
 import { useToast } from "../../hooks/useToast";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import { ShortTermJobStatus } from "../../types/ShortTermJob";
 import Toast from "../shared/Toast";
 import {
@@ -55,6 +56,7 @@ export const ShortTermJobsView: React.FC<ShortTermJobsViewProps> = ({
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
   const [statusFilter, setStatusFilter] = useState<ShortTermFilter>("ALL");
   const [searchKeyword, setSearchKeyword] = useState("");
 
@@ -404,12 +406,12 @@ export const ShortTermJobsView: React.FC<ShortTermJobsViewProps> = ({
           <button
             className="jmt-btn jmt-btn--ghost"
             disabled={page <= 0}
-            onClick={() =>
+            onClick={withPaginationScroll(() =>
               loadJobs(
                 page - 1,
                 statusFilter === "ALL" ? undefined : statusFilter,
               )
-            }
+            )}
           >
             Trước
           </button>
@@ -419,12 +421,12 @@ export const ShortTermJobsView: React.FC<ShortTermJobsViewProps> = ({
           <button
             className="jmt-btn jmt-btn--ghost"
             disabled={page >= totalPages - 1}
-            onClick={() =>
+            onClick={withPaginationScroll(() =>
               loadJobs(
                 page + 1,
                 statusFilter === "ALL" ? undefined : statusFilter,
               )
-            }
+            )}
           >
             Sau
           </button>

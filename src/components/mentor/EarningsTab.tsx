@@ -3,6 +3,7 @@ import { Download } from "lucide-react";
 import walletService from "../../services/walletService";
 import { WalletTransactionResponse } from "../../data/walletDTOs";
 import { useToast } from "../../hooks/useToast";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import "./EarningsTab.css";
 
 const EarningsTab: React.FC = () => {
@@ -18,6 +19,7 @@ const EarningsTab: React.FC = () => {
   const [periodFilter, setPeriodFilter] = useState<"ALL" | "THIS_MONTH" | "LAST_7_DAYS">(
     "ALL",
   );
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   const pageSize = 20;
 
@@ -460,7 +462,9 @@ const EarningsTab: React.FC = () => {
         {filteredTransactions.length > pageSize && (
           <div className="mentor-earnings-pagination">
             <button
-              onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
+              onClick={withPaginationScroll(() =>
+                setCurrentPage(Math.max(0, currentPage - 1))
+              )}
               disabled={currentPage === 0}
               className="pagination-btn"
             >
@@ -470,9 +474,9 @@ const EarningsTab: React.FC = () => {
               Trang {currentPage + 1} / {totalPages}
             </span>
             <button
-              onClick={() =>
+              onClick={withPaginationScroll(() =>
                 setCurrentPage(Math.min(totalPages - 1, currentPage + 1))
-              }
+              )}
               disabled={currentPage === totalPages - 1}
               className="pagination-btn"
             >

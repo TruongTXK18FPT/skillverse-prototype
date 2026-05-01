@@ -1,11 +1,14 @@
 import React from 'react';
 import '../../styles/Pagination.css';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 
 interface PaginationProps {
   totalItems: number;
   itemsPerPage: number;
   currentPage: number;
   onPageChange: (page: number) => void;
+  scrollTargetRef?: React.RefObject<HTMLElement | null>;
+  scrollOffset?: number;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -13,9 +16,16 @@ const Pagination: React.FC<PaginationProps> = ({
   itemsPerPage = 10,
   currentPage,
   onPageChange,
+  scrollTargetRef,
+  scrollOffset,
 }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const maxVisiblePages = 5;
+  const { withPaginationScroll } = useScrollToListTopOnPagination({
+    targetRef: scrollTargetRef,
+    offset: scrollOffset,
+  });
+  const handlePageChange = withPaginationScroll(onPageChange);
 
   const getPageNumbers = () => {
     let pages: (number | string)[] = [];
@@ -45,7 +55,7 @@ const Pagination: React.FC<PaginationProps> = ({
   return (
     <nav className="pagination-container" aria-label="Pagination">
       <button
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className={`pagination-button nav-button ${currentPage === 1 ? 'disabled' : ''}`}
       >
@@ -58,7 +68,7 @@ const Pagination: React.FC<PaginationProps> = ({
           typeof page === 'number' ? (
             <button
               key={index}
-              onClick={() => onPageChange(page)}
+              onClick={() => handlePageChange(page)}
               className={`pagination-button ${page === currentPage ? 'active' : ''}`}
               aria-current={page === currentPage ? 'page' : undefined}
             >
@@ -73,7 +83,7 @@ const Pagination: React.FC<PaginationProps> = ({
       </div>
 
       <button
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         className={`pagination-button nav-button ${currentPage === totalPages ? 'disabled' : ''}`}
       >

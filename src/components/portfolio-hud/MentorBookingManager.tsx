@@ -33,6 +33,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   getMyBookings,
@@ -235,6 +236,7 @@ const MentorBookingManager: React.FC = () => {
     new Set(),
   );
   const [currentPage, setCurrentPage] = useState(1);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
   const PAGE_SIZE = 8;
 
   // ── Node Mentoring Workspace state ─────────────────────────────────────────
@@ -1236,9 +1238,9 @@ const MentorBookingManager: React.FC = () => {
                     <div className="mbm-pagination">
                       <button
                         className="mbm-btn mbm-btn-ghost mbm-btn-sm"
-                        onClick={() =>
+                        onClick={withPaginationScroll(() =>
                           setCurrentPage((p) => Math.max(1, p - 1))
-                        }
+                        )}
                         disabled={safePage === 1}
                       >
                         ← Trước
@@ -1251,7 +1253,7 @@ const MentorBookingManager: React.FC = () => {
                           <button
                             key={p}
                             className={`mbm-pagination-page ${p === safePage ? "active" : ""}`}
-                            onClick={() => setCurrentPage(p)}
+                            onClick={withPaginationScroll(() => setCurrentPage(p))}
                           >
                             {p}
                           </button>
@@ -1259,9 +1261,9 @@ const MentorBookingManager: React.FC = () => {
                       </div>
                       <button
                         className="mbm-btn mbm-btn-ghost mbm-btn-sm"
-                        onClick={() =>
+                        onClick={withPaginationScroll(() =>
                           setCurrentPage((p) => Math.min(totalPages, p + 1))
-                        }
+                        )}
                         disabled={safePage >= totalPages}
                       >
                         Sau →

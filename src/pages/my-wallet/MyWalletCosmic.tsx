@@ -28,6 +28,7 @@ import { PremiumInvoice, useInvoice } from '../../components/invoice';
 import Toast from '../../components/shared/Toast';
 import MeowlGuide from '../../components/meowl/MeowlGuide';
 import LoginRequiredModal from '../../components/auth/LoginRequiredModal';
+import Pagination from '../../components/shared/Pagination';
 import styles from './MyWalletAlien.module.css';
 import './MyWalletCosmic.css';
 
@@ -117,6 +118,11 @@ const MyWalletCosmic: React.FC = () => {
   const [selectedStoreCategory, setSelectedStoreCategory] = useState<string>('all');
   const [storeSearchTerm, setStoreSearchTerm] = useState('');
   
+  // Pagination State
+  const [txCurrentPage, setTxCurrentPage] = useState(1);
+  const [wrCurrentPage, setWrCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+  
   // Toast
   const [toast, setToast] = useState({
     isVisible: false,
@@ -198,6 +204,16 @@ const MyWalletCosmic: React.FC = () => {
                          item.description.toLowerCase().includes(storeSearchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const paginatedTransactions = React.useMemo(() => {
+    const start = (txCurrentPage - 1) * ITEMS_PER_PAGE;
+    return transactions.slice(start, start + ITEMS_PER_PAGE);
+  }, [transactions, txCurrentPage]);
+
+  const paginatedWithdrawals = React.useMemo(() => {
+    const start = (wrCurrentPage - 1) * ITEMS_PER_PAGE;
+    return withdrawalRequests.slice(start, start + ITEMS_PER_PAGE);
+  }, [withdrawalRequests, wrCurrentPage]);
 
   // Fetch wallet data
   const fetchWalletData = async () => {
@@ -688,13 +704,6 @@ const MyWalletCosmic: React.FC = () => {
           Tổng quan
         </button>
         <button 
-          className={`${styles['alien-tab-btn']} ${activeTab === 'store' ? styles['active'] : ''}`}
-          onClick={() => setActiveTab('store')}
-        >
-          <ShoppingBag size={18} />
-          Cửa Hàng
-        </button>
-        <button 
           className={`${styles['alien-tab-btn']} ${activeTab === 'transactions' ? styles['active'] : ''}`}
           onClick={() => setActiveTab('transactions')}
         >
@@ -774,7 +783,7 @@ const MyWalletCosmic: React.FC = () => {
                 Tất cả giao dịch
               </h2>
               <div className={styles['alien-transactions-list']}>
-                {transactions.map((tx) => (
+                {paginatedTransactions.map((tx) => (
                   <div key={tx.transactionId} className={styles['alien-transaction-item']}>
                     <div className={styles['alien-tx-info']}>
                       <div className={styles['alien-tx-icon-wrapper']}>
@@ -811,6 +820,14 @@ const MyWalletCosmic: React.FC = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                <Pagination
+                  totalItems={transactions.length}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                  currentPage={txCurrentPage}
+                  onPageChange={setTxCurrentPage}
+                />
               </div>
             </div>
             
@@ -1076,7 +1093,7 @@ const MyWalletCosmic: React.FC = () => {
               </div>
             ) : (
               <div className={styles['alien-transactions-list']}>
-                {withdrawalRequests.map((request) => (
+                {paginatedWithdrawals.map((request) => (
                   <div key={request.requestId} className={styles['alien-transaction-item']}>
                     <div className={styles['alien-tx-info']}>
                       <div className={styles['alien-tx-icon-wrapper']}>
@@ -1095,6 +1112,17 @@ const MyWalletCosmic: React.FC = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+            
+            {withdrawalRequests.length > 0 && (
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                <Pagination
+                  totalItems={withdrawalRequests.length}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                  currentPage={wrCurrentPage}
+                  onPageChange={setWrCurrentPage}
+                />
               </div>
             )}
           </div>

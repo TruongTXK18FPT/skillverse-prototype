@@ -24,6 +24,7 @@ import { AdminPremiumPlan } from "../../services/adminPremiumService";
 import CreatePremiumPlanModal from "./CreatePremiumPlanModal";
 import Toast from "../shared/Toast";
 import { useToast } from "../../hooks/useToast";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import "./PremiumPlansManagementTab.css";
 
 const PremiumPlansManagementTab: React.FC = () => {
@@ -38,6 +39,7 @@ const PremiumPlansManagementTab: React.FC = () => {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
   const [deletingPlanId, setDeletingPlanId] = useState<number | null>(null);
   const [togglingPlanId, setTogglingPlanId] = useState<number | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<AdminPremiumPlan | null>(
@@ -429,7 +431,7 @@ const PremiumPlansManagementTab: React.FC = () => {
         <div className="admin-pagination">
           <button
             className="admin-pagination-btn"
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            onClick={withPaginationScroll(() => setCurrentPage((p) => Math.max(1, p - 1)))}
             disabled={currentPage === 1}
           >
             <ChevronLeft size={18} />
@@ -445,7 +447,7 @@ const PremiumPlansManagementTab: React.FC = () => {
 
           <button
             className="admin-pagination-btn"
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            onClick={withPaginationScroll(() => setCurrentPage((p) => Math.min(totalPages, p + 1)))}
             disabled={currentPage === totalPages}
           >
             Sau

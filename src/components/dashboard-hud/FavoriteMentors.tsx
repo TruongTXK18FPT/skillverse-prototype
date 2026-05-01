@@ -6,6 +6,7 @@ import HUDCard from "./HUDCard";
 import "./ActiveModules.css";
 import { useAppToast } from "../../context/ToastContext";
 import { getMentorProfile } from "../../services/mentorProfileService";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 
 interface Mentor {
   id: number;
@@ -34,6 +35,7 @@ const FavoriteMentors: React.FC<FavoriteMentorsProps> = ({
   const { showInfo } = useAppToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
   const [resolvingMentorId, setResolvingMentorId] = useState<number | null>(
     null,
   );
@@ -292,9 +294,9 @@ const FavoriteMentors: React.FC<FavoriteMentorsProps> = ({
                 <button
                   type="button"
                   className="active-modules__page-btn"
-                  onClick={() =>
+                  onClick={withPaginationScroll(() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
+                  )}
                   disabled={currentPage === 1}
                 >
                   Trang trước
@@ -305,9 +307,9 @@ const FavoriteMentors: React.FC<FavoriteMentorsProps> = ({
                 <button
                   type="button"
                   className="active-modules__page-btn"
-                  onClick={() =>
+                  onClick={withPaginationScroll(() =>
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
+                  )}
                   disabled={currentPage === totalPages}
                 >
                   Trang sau

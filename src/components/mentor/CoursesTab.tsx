@@ -171,7 +171,7 @@ const CoursesTab: React.FC = () => {
   const [activeCourseId, setActiveCourseId] = useState<number | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [initialModalData, setInitialModalData] = useState({ name: '', avatar: '' });
-  const itemsPerPage = 8;
+  const itemsPerPage = 7;
 
   // Load courses on mount and when filter/page changes
   useEffect(() => {

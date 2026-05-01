@@ -35,6 +35,7 @@ import { getMyStudentReviews } from "../../services/reviewService";
 import { showAppError, showAppSuccess } from "../../context/ToastContext";
 import { confirmAction } from "../../context/ConfirmDialogContext";
 import "../../styles/UserBookings.css";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 
 type ViewTab = "upcoming" | "history";
 const USER_BOOKINGS_PAGE_SIZE = 10;
@@ -115,6 +116,7 @@ const UserBookingsPage: React.FC = () => {
   type SortOption = "nearest" | "latest" | "price-high" | "price-low";
   const [sortBy, setSortBy] = useState<SortOption>("nearest");
   const [filterDate, setFilterDate] = useState<string>("");
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   const sortOptions: { value: SortOption; label: string }[] = [
     { value: "nearest", label: "Gần nhất" },
@@ -931,7 +933,9 @@ const UserBookingsPage: React.FC = () => {
         {totalPages > 1 && (
           <div className="usbk-pagination">
             <button
-              onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
+              onClick={withPaginationScroll(() =>
+                setCurrentPage((p) => Math.max(0, p - 1)),
+              )}
               disabled={currentPage === 0}
               className="usbk-pagination-btn"
             >
@@ -941,9 +945,9 @@ const UserBookingsPage: React.FC = () => {
               Trang {currentPage + 1} / {totalPages}
             </span>
             <button
-              onClick={() =>
+              onClick={withPaginationScroll(() =>
                 setCurrentPage((p) => Math.min(totalPages - 1, p + 1))
-              }
+              )}
               disabled={currentPage >= totalPages - 1}
               className="usbk-pagination-btn"
             >

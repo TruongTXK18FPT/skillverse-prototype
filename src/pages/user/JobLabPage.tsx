@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 import JobLabOffersView from "./JobLabOffersView";
 import JobLabFullTimeInlineView from "./JobLabFullTimeInlineView";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import jobService from "../../services/jobService";
 import shortTermJobService from "../../services/shortTermJobService";
 import { uploadMedia } from "../../services/mediaService";
@@ -544,6 +545,7 @@ const JobLabPage: React.FC = () => {
   const [disputeStatusFilter, setDisputeStatusFilter] =
     useState<DisputeStatusFilter>("ALL");
   const [disputesPage, setDisputesPage] = useState(1);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   const loadApplications = async () => {
     setLoading(true);
@@ -1690,9 +1692,9 @@ const JobLabPage: React.FC = () => {
                         <button
                           type="button"
                           className="jlx-btn jlx-btn--ghost"
-                          onClick={() =>
+                          onClick={withPaginationScroll(() =>
                             setIncomePage((current) => Math.max(1, current - 1))
-                          }
+                          )}
                           disabled={incomePage <= 1}
                         >
                           Trước
@@ -1703,11 +1705,11 @@ const JobLabPage: React.FC = () => {
                         <button
                           type="button"
                           className="jlx-btn jlx-btn--ghost"
-                          onClick={() =>
+                          onClick={withPaginationScroll(() =>
                             setIncomePage((current) =>
                               Math.min(incomeTotalPages, current + 1),
                             )
-                          }
+                          )}
                           disabled={incomePage >= incomeTotalPages}
                         >
                           Sau
@@ -1960,9 +1962,9 @@ const JobLabPage: React.FC = () => {
                       <button
                         type="button"
                         className="jlx-btn jlx-btn--ghost"
-                        onClick={() =>
+                        onClick={withPaginationScroll(() =>
                           setApplicationsPage((page) => Math.max(1, page - 1))
-                        }
+                        )}
                         disabled={applicationsPage === 1}
                       >
                         Trước
@@ -1973,11 +1975,11 @@ const JobLabPage: React.FC = () => {
                       <button
                         type="button"
                         className="jlx-btn jlx-btn--ghost"
-                        onClick={() =>
+                        onClick={withPaginationScroll(() =>
                           setApplicationsPage((page) =>
                             Math.min(applicationsTotalPages, page + 1),
                           )
-                        }
+                        )}
                         disabled={applicationsPage >= applicationsTotalPages}
                       >
                         Sau
@@ -2097,9 +2099,9 @@ const JobLabPage: React.FC = () => {
                         <button
                           type="button"
                           className="jlx-btn jlx-btn--ghost"
-                          onClick={() =>
+                          onClick={withPaginationScroll(() =>
                             setWorkspacePage((page) => Math.max(1, page - 1))
-                          }
+                          )}
                           disabled={workspacePage === 1}
                         >
                           Trước
@@ -2110,11 +2112,11 @@ const JobLabPage: React.FC = () => {
                         <button
                           type="button"
                           className="jlx-btn jlx-btn--ghost"
-                          onClick={() =>
+                          onClick={withPaginationScroll(() =>
                             setWorkspacePage((page) =>
                               Math.min(workspaceTotalPages, page + 1),
                             )
-                          }
+                          )}
                           disabled={workspacePage >= workspaceTotalPages}
                         >
                           Sau
@@ -3062,9 +3064,9 @@ const JobLabPage: React.FC = () => {
                       <button
                         type="button"
                         className="jlx-btn jlx-btn--ghost"
-                        onClick={() =>
+                        onClick={withPaginationScroll(() =>
                           setDisputesPage((page) => Math.max(1, page - 1))
-                        }
+                        )}
                         disabled={disputesPage === 1}
                       >
                         Trước
@@ -3075,11 +3077,11 @@ const JobLabPage: React.FC = () => {
                       <button
                         type="button"
                         className="jlx-btn jlx-btn--ghost"
-                        onClick={() =>
+                        onClick={withPaginationScroll(() =>
                           setDisputesPage((page) =>
                             Math.min(disputesTotalPages, page + 1),
                           )
-                        }
+                        )}
                         disabled={disputesPage >= disputesTotalPages}
                       >
                         Sau

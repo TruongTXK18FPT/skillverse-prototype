@@ -37,6 +37,7 @@ import {
   StudentVerificationResponse
 } from '../../services/studentSkillVerificationService';
 import { useToast } from '../../hooks/useToast';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import './MentorVerificationAdminTab.css';
 
 type FilterType = 'ALL' | 'PENDING' | 'HISTORY';
@@ -73,6 +74,7 @@ const MentorVerificationAdminTab: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
   const PAGE_SIZE = 10;
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
   
   // Modals
   const [selectedReq, setSelectedReq] = useState<UnifiedVerificationResponse | null>(null);
@@ -335,14 +337,14 @@ const MentorVerificationAdminTab: React.FC = () => {
               <button 
                 className="admin-mvt-page-btn"
                 disabled={currentPage === 0 || loading}
-                onClick={() => setCurrentPage(p => p - 1)}
+                onClick={withPaginationScroll(() => setCurrentPage(p => p - 1))}
               >
                 <ChevronLeft size={16} /> Trang trước
               </button>
               <button 
                 className="admin-mvt-page-btn"
                 disabled={currentPage >= totalPages - 1 || loading}
-                onClick={() => setCurrentPage(p => p + 1)}
+                onClick={withPaginationScroll(() => setCurrentPage(p => p + 1))}
               >
                 Trang tiếp <ChevronRight size={16} />
               </button>

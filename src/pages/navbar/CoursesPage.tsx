@@ -185,10 +185,10 @@ const CoursesPage = () => {
   // For rating/popular sort: client-side re-sort (server doesn't support these fields)
   const sortedCourses = (sortBy === 'rating' || sortBy === 'popular')
     ? [...filteredCourses].sort((a, b) =>
-        sortBy === 'rating'
-          ? (b.averageRating ?? 0) - (a.averageRating ?? 0)
-          : (b.enrollmentCount ?? 0) - (a.enrollmentCount ?? 0)
-      )
+      sortBy === 'rating'
+        ? (b.averageRating ?? 0) - (a.averageRating ?? 0)
+        : (b.enrollmentCount ?? 0) - (a.enrollmentCount ?? 0)
+    )
     : filteredCourses;
 
   // Use server-provided totalItems for pagination
@@ -289,12 +289,6 @@ const CoursesPage = () => {
 
   const handleCoursePageChange = useCallback((page: number) => {
     setCurrentPage(page);
-    window.requestAnimationFrame(() => {
-      modulesSectionRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    });
   }, []);
 
   if (loading && !hasLoadedCourses) {
@@ -569,94 +563,94 @@ const CoursesPage = () => {
                   const isEnrolled = enrolledIds.has(course.id);
 
                   return (
-                  <div
-                    key={course.id}
-                    className="cockpit-module-card"
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                    onClick={() => navigateToCourseDetail(course)}
-                  >
-                    {/* Module Header */}
-                    <div className="cockpit-module-header">
-                      <div className="cockpit-module-level-indicator">
-                        <div className="cockpit-level-dot"></div>
-                        <span className="cockpit-level-text">LEVEL</span>
-                      </div>
-                      <div className="cockpit-module-header-meta">
-                        <div className="cockpit-module-id">#{course.id}</div>
-                        {isEnrolled && (
-                          <div className="cockpit-module-enrolled-badge">ĐÃ ĐĂNG KÝ</div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Module Image */}
-                    <div className="cockpit-module-image-container">
-                      <img src={courseImage} alt={course.title} className="cockpit-module-image" />
-                      <div className="cockpit-module-overlay">
-                      </div>
-
-                      {/* Energy Crystal Icon */}
-                      <div className="cockpit-energy-crystal">
-                        <div className="cockpit-crystal-glow"></div>
-                      </div>
-                    </div>
-
-                    {/* Module Info */}
-                    <div className="cockpit-module-info">
-                      <h3 className="cockpit-module-title">{course.title}</h3>
-                      <p className="cockpit-module-instructor">
-                        <span className="cockpit-label">GIẢNG VIÊN:</span> {authorName === 'Unknown' || authorName === 'Unknown Instructor' ? 'Đang cập nhật' : authorName}
-                      </p>
-
-                      <div className="cockpit-module-stats">
-                        <div className="cockpit-stat-item">
-                          <BookOpen className="cockpit-stat-icon" />
-                          <span>{course.moduleCount ?? 0} MODULES</span>
+                    <div
+                      key={course.id}
+                      className="cockpit-module-card"
+                      style={{ animationDelay: `${index * 0.05}s` }}
+                      onClick={() => navigateToCourseDetail(course)}
+                    >
+                      {/* Module Header */}
+                      <div className="cockpit-module-header">
+                        <div className="cockpit-module-level-indicator">
+                          <div className="cockpit-level-dot"></div>
+                          <span className="cockpit-level-text">LEVEL</span>
                         </div>
-                        <div className="cockpit-stat-item">
-                          <Users className="cockpit-stat-icon" />
-                          <span>{(course.enrollmentCount ?? 0) === 0 ? 'MỚI' : `${course.enrollmentCount} HỌC VIÊN`}</span>
-                        </div>
-                      </div>
-
-                      {/* Module Footer */}
-                      <div className="cockpit-module-footer">
-                        <div className="cockpit-price-display">
-                          <span className={`cockpit-price ${isEnrolled ? 'cockpit-price-enrolled' : ''}`}>
-                            {isEnrolled
-                              ? 'ĐÃ ĐĂNG KÝ'
-                              : (price === 0 ? 'MIỄN PHÍ' : price.toLocaleString('vi-VN') + ' ' + getCourseCurrency(course))}
-                          </span>
-                        </div>
-                        <button
-                          className={`cockpit-engage-btn ${isEnrolled ? 'cockpit-engage-btn-enrolled' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (isEnrolled) {
-                              navigateToCourseLearning(course);
-                              return;
-                            }
-                            navigateToCourseDetail(course);
-                          }}
-                        >
-                          {isEnrolled ? (
-                            <Play className="cockpit-btn-icon" />
-                          ) : (
-                            <Zap className="cockpit-btn-icon" />
+                        <div className="cockpit-module-header-meta">
+                          <div className="cockpit-module-id">#{course.id}</div>
+                          {isEnrolled && (
+                            <div className="cockpit-module-enrolled-badge">ĐÃ ĐĂNG KÝ</div>
                           )}
-                          {isEnrolled ? 'TIẾP TỤC HỌC' : 'XEM CHI TIẾT'}
-                        </button>
+                        </div>
+                      </div>
+
+                      {/* Module Image */}
+                      <div className="cockpit-module-image-container">
+                        <img src={courseImage} alt={course.title} className="cockpit-module-image" />
+                        <div className="cockpit-module-overlay">
+                        </div>
+
+                        {/* Energy Crystal Icon */}
+                        <div className="cockpit-energy-crystal">
+                          <div className="cockpit-crystal-glow"></div>
+                        </div>
+                      </div>
+
+                      {/* Module Info */}
+                      <div className="cockpit-module-info">
+                        <h3 className="cockpit-module-title">{course.title}</h3>
+                        <p className="cockpit-module-instructor">
+                          <span className="cockpit-label">GIẢNG VIÊN:</span> {authorName === 'Unknown' || authorName === 'Unknown Instructor' ? 'Đang cập nhật' : authorName}
+                        </p>
+
+                        <div className="cockpit-module-stats">
+                          <div className="cockpit-stat-item">
+                            <BookOpen className="cockpit-stat-icon" />
+                            <span>{course.moduleCount ?? 0} MODULES</span>
+                          </div>
+                          <div className="cockpit-stat-item">
+                            <Users className="cockpit-stat-icon" />
+                            <span>{(course.enrollmentCount ?? 0) === 0 ? 'MỚI' : `${course.enrollmentCount} HỌC VIÊN`}</span>
+                          </div>
+                        </div>
+
+                        {/* Module Footer */}
+                        <div className="cockpit-module-footer">
+                          <div className="cockpit-price-display">
+                            <span className={`cockpit-price ${isEnrolled ? 'cockpit-price-enrolled' : ''}`}>
+                              {isEnrolled
+                                ? 'ĐÃ ĐĂNG KÝ'
+                                : (price === 0 ? 'MIỄN PHÍ' : price.toLocaleString('vi-VN') + ' ' + getCourseCurrency(course))}
+                            </span>
+                          </div>
+                          <button
+                            className={`cockpit-engage-btn ${isEnrolled ? 'cockpit-engage-btn-enrolled' : ''}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (isEnrolled) {
+                                navigateToCourseLearning(course);
+                                return;
+                              }
+                              navigateToCourseDetail(course);
+                            }}
+                          >
+                            {isEnrolled ? (
+                              <Play className="cockpit-btn-icon" />
+                            ) : (
+                              <Zap className="cockpit-btn-icon" />
+                            )}
+                            {isEnrolled ? 'TIẾP TỤC HỌC' : 'XEM CHI TIẾT'}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Card Corner Accents */}
+                      <div className="cockpit-card-corners">
+                        <div className="cockpit-card-corner cockpit-card-corner-tl"></div>
+                        <div className="cockpit-card-corner cockpit-card-corner-tr"></div>
+                        <div className="cockpit-card-corner cockpit-card-corner-bl"></div>
+                        <div className="cockpit-card-corner cockpit-card-corner-br"></div>
                       </div>
                     </div>
-
-                    {/* Card Corner Accents */}
-                    <div className="cockpit-card-corners">
-                      <div className="cockpit-card-corner cockpit-card-corner-tl"></div>
-                      <div className="cockpit-card-corner cockpit-card-corner-tr"></div>
-                      <div className="cockpit-card-corner cockpit-card-corner-bl"></div>
-                      <div className="cockpit-card-corner cockpit-card-corner-br"></div>
-                    </div>
-                  </div>
                   );
                 })}
               </div>
@@ -672,6 +666,8 @@ const CoursesPage = () => {
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
               onPageChange={handleCoursePageChange}
+              scrollTargetRef={modulesSectionRef}
+              scrollOffset={180}
             />
           </div>
         )}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import './uplink-styles.css';
 
 interface HoloPaginationProps {
@@ -16,6 +17,8 @@ const HoloPagination: React.FC<HoloPaginationProps> = ({
   onPageChange
 }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
+  const handlePageChange = withPaginationScroll(onPageChange);
 
   // Don't render if only one page
   if (totalPages <= 1) return null;
@@ -62,7 +65,7 @@ const HoloPagination: React.FC<HoloPaginationProps> = ({
         {/* Previous Button */}
         <button
           className="holo-nav-btn"
-          onClick={() => onPageChange(currentPage - 1)}
+          onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
           aria-label="Previous page"
         >
@@ -87,7 +90,7 @@ const HoloPagination: React.FC<HoloPaginationProps> = ({
               <button
                 key={page}
                 className={`holo-page-node ${isActive ? 'active' : ''}`}
-                onClick={() => onPageChange(page)}
+                onClick={() => handlePageChange(page)}
                 aria-label={`Go to page ${page}`}
                 aria-current={isActive ? 'page' : undefined}
               >
@@ -100,7 +103,7 @@ const HoloPagination: React.FC<HoloPaginationProps> = ({
         {/* Next Button */}
         <button
           className="holo-nav-btn"
-          onClick={() => onPageChange(currentPage + 1)}
+          onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           aria-label="Next page"
         >

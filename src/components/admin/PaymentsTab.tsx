@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import './PaymentsTab.css';
 
 const PaymentsTab: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   const transactions = [
     {
@@ -236,14 +238,14 @@ const PaymentsTab: React.FC = () => {
       <div className="administrator-payments-pagination">
         <button 
           disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
+          onClick={withPaginationScroll(() => setCurrentPage(currentPage - 1))}
         >
           ← Trước
         </button>
         <button className="active">1</button>
-        <button onClick={() => setCurrentPage(2)}>2</button>
-        <button onClick={() => setCurrentPage(3)}>3</button>
-        <button onClick={() => setCurrentPage(currentPage + 1)}>
+        <button onClick={withPaginationScroll(() => setCurrentPage(2))}>2</button>
+        <button onClick={withPaginationScroll(() => setCurrentPage(3))}>3</button>
+        <button onClick={withPaginationScroll(() => setCurrentPage(currentPage + 1))}>
           Sau →
         </button>
       </div>

@@ -51,6 +51,7 @@ import learningReportService, {
   parseReportId,
 } from "../../services/learningReportService";
 import { downloadLearningReportPDF } from "../../components/learning-report/PDFGenerator";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import "./LearningReportPage.css";
 
 const RANGE_OPTIONS: ReportRange[] = ["7d", "30d", "90d"];
@@ -224,6 +225,7 @@ const LearningReportPage: React.FC = () => {
   const [courseSort, setCourseSort] =
     useState<CourseBreakdownSort>("progress-desc");
   const [coursePage, setCoursePage] = useState(1);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   useEffect(() => {
     const loadReport = async () => {
@@ -1101,9 +1103,9 @@ const LearningReportPage: React.FC = () => {
                   <div className="lr-breakdown-pagination">
                     <button
                       type="button"
-                      onClick={() =>
+                      onClick={withPaginationScroll(() =>
                         setRoadmapPage((prev) => Math.max(prev - 1, 1))
-                      }
+                      )}
                       disabled={roadmapPage === 1}
                     >
                       Trang trước
@@ -1113,11 +1115,11 @@ const LearningReportPage: React.FC = () => {
                     </span>
                     <button
                       type="button"
-                      onClick={() =>
+                      onClick={withPaginationScroll(() =>
                         setRoadmapPage((prev) =>
                           Math.min(prev + 1, roadmapTotalPages),
                         )
-                      }
+                      )}
                       disabled={roadmapPage === roadmapTotalPages}
                     >
                       Trang sau
@@ -1256,9 +1258,9 @@ const LearningReportPage: React.FC = () => {
                   <div className="lr-breakdown-pagination">
                     <button
                       type="button"
-                      onClick={() =>
+                      onClick={withPaginationScroll(() =>
                         setCoursePage((prev) => Math.max(prev - 1, 1))
-                      }
+                      )}
                       disabled={coursePage === 1}
                     >
                       Trang trước
@@ -1268,11 +1270,11 @@ const LearningReportPage: React.FC = () => {
                     </span>
                     <button
                       type="button"
-                      onClick={() =>
+                      onClick={withPaginationScroll(() =>
                         setCoursePage((prev) =>
                           Math.min(prev + 1, courseTotalPages),
                         )
-                      }
+                      )}
                       disabled={coursePage === courseTotalPages}
                     >
                       Trang sau

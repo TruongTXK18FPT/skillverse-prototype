@@ -54,6 +54,7 @@ import {
   Trash2,
   Ban as BanIcon,
 } from "lucide-react";
+import { useScrollToListTopOnPagination } from "../hooks/useScrollToListTopOnPagination";
 import {
   notificationService,
   Notification,
@@ -1070,6 +1071,7 @@ const NotificationPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [unreadCount, setUnreadCount] = useState(0);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
   const [selectedNotification, setSelectedNotification] =
     useState<Notification | null>(null);
   const selectedDisplay = selectedNotification
@@ -1511,7 +1513,7 @@ const NotificationPage: React.FC = () => {
           <button
             className="pagination-btn"
             disabled={page === 0}
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
+            onClick={withPaginationScroll(() => setPage((p) => Math.max(0, p - 1)))}
           >
             <ChevronLeft size={20} />
           </button>
@@ -1521,7 +1523,9 @@ const NotificationPage: React.FC = () => {
           <button
             className="pagination-btn"
             disabled={page === totalPages - 1}
-            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+            onClick={withPaginationScroll(() =>
+              setPage((p) => Math.min(totalPages - 1, p + 1))
+            )}
           >
             <ChevronRight size={20} />
           </button>

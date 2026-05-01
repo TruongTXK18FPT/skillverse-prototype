@@ -24,6 +24,7 @@ import {
 import { useToast } from "../../hooks/useToast";
 import Toast from "../shared/Toast";
 import { getStoredUserRaw } from "../../utils/authStorage";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import "./StudentVerificationAdminTab.css";
 
 const STATUS_OPTIONS: Array<{
@@ -111,6 +112,7 @@ const StudentVerificationAdminTab: React.FC = () => {
   const [size] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -477,7 +479,7 @@ const StudentVerificationAdminTab: React.FC = () => {
               <button
                 type="button"
                 className="svr-admin__page-btn"
-                onClick={() => setPage((prev) => Math.max(0, prev - 1))}
+                onClick={withPaginationScroll(() => setPage((prev) => Math.max(0, prev - 1)))}
                 disabled={page === 0}
               >
                 Trước
@@ -491,9 +493,9 @@ const StudentVerificationAdminTab: React.FC = () => {
               <button
                 type="button"
                 className="svr-admin__page-btn"
-                onClick={() =>
+                onClick={withPaginationScroll(() =>
                   setPage((prev) => Math.min(totalPages - 1, prev + 1))
-                }
+                )}
                 disabled={page >= totalPages - 1}
               >
                 Sau

@@ -27,6 +27,7 @@ import {
   AiKnowledgeIngestionStatus,
 } from '../../types/aiKnowledge';
 import { downloadFile } from '../../utils/downloadFile';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import '../../styles/MentorAiKnowledgePage.css';
 
 const PAGE_SIZE = 10;
@@ -68,6 +69,7 @@ const MentorAiKnowledgePage: React.FC = () => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   const [roadmapForm, setRoadmapForm] = useState({
     file: null as File | null,
@@ -573,7 +575,7 @@ const MentorAiKnowledgePage: React.FC = () => {
           </div>
 
           <div className="mentor-ai-knowledge-pagination">
-            <button type="button" onClick={() => setPage((previous) => Math.max(previous - 1, 0))} disabled={page === 0}>
+            <button type="button" onClick={withPaginationScroll(() => setPage((previous) => Math.max(previous - 1, 0)))} disabled={page === 0}>
               Trước
             </button>
             <span>
@@ -581,7 +583,7 @@ const MentorAiKnowledgePage: React.FC = () => {
             </span>
             <button
               type="button"
-              onClick={() => setPage((previous) => Math.min(previous + 1, Math.max(totalPages - 1, 0)))}
+              onClick={withPaginationScroll(() => setPage((previous) => Math.min(previous + 1, Math.max(totalPages - 1, 0))))}
               disabled={page + 1 >= totalPages}
             >
               Sau

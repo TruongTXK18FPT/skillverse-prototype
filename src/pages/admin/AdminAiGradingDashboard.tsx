@@ -37,6 +37,7 @@ import {
   updateGradingStyle,
 } from "../../services/aiGradingService";
 import { useToast } from "../../hooks/useToast";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import "./AdminAiGradingDashboard.css";
 
 type InternalTab = "exceptions" | "config";
@@ -128,6 +129,7 @@ const AdminAiGradingDashboard: React.FC = () => {
   const [configPage, setConfigPage] = useState(0);
   const [configTotalPages, setConfigTotalPages] = useState(0);
   const [configTotalElements, setConfigTotalElements] = useState(0);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
   const [statsLoading, setStatsLoading] = useState(true);
   const [submissionsLoading, setSubmissionsLoading] = useState(true);
   const [assignmentsLoading, setAssignmentsLoading] = useState(true);
@@ -489,9 +491,9 @@ const AdminAiGradingDashboard: React.FC = () => {
           </div>
 
           <div className="admaigrading-pagination">
-            <button onClick={() => setCurrentPage((page) => Math.max(page - 1, 0))} disabled={currentPage === 0}><ChevronLeft size={16} />Trước</button>
+            <button onClick={withPaginationScroll(() => setCurrentPage((page) => Math.max(page - 1, 0)))} disabled={currentPage === 0}><ChevronLeft size={16} />Trước</button>
             <span>Trang {totalPages === 0 ? 0 : currentPage + 1}/{Math.max(totalPages, 1)} • {formatNumber(totalElements)} bài</span>
-            <button onClick={() => setCurrentPage((page) => Math.min(page + 1, Math.max(totalPages - 1, 0)))} disabled={currentPage + 1 >= totalPages}><ChevronRight size={16} />Sau</button>
+            <button onClick={withPaginationScroll(() => setCurrentPage((page) => Math.min(page + 1, Math.max(totalPages - 1, 0))))} disabled={currentPage + 1 >= totalPages}><ChevronRight size={16} />Sau</button>
           </div>
         </section>
       )}
@@ -566,9 +568,9 @@ const AdminAiGradingDashboard: React.FC = () => {
         </div>
 
           <div className="admaigrading-pagination">
-            <button onClick={() => setConfigPage((page) => Math.max(page - 1, 0))} disabled={configPage === 0}><ChevronLeft size={16} />Trước</button>
+            <button onClick={withPaginationScroll(() => setConfigPage((page) => Math.max(page - 1, 0)))} disabled={configPage === 0}><ChevronLeft size={16} />Trước</button>
             <span>Trang {configTotalPages === 0 ? 0 : configPage + 1}/{Math.max(configTotalPages, 1)} • {formatNumber(configTotalElements)} assignment</span>
-            <button onClick={() => setConfigPage((page) => Math.min(page + 1, Math.max(configTotalPages - 1, 0)))} disabled={configPage + 1 >= configTotalPages}><ChevronRight size={16} />Sau</button>
+            <button onClick={withPaginationScroll(() => setConfigPage((page) => Math.min(page + 1, Math.max(configTotalPages - 1, 0))))} disabled={configPage + 1 >= configTotalPages}><ChevronRight size={16} />Sau</button>
           </div>
         </section>
       )}

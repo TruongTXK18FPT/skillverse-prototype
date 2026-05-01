@@ -19,6 +19,7 @@ import {
   showAppSuccess,
   showAppWarning,
 } from '../../context/ToastContext';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import './UserManagementTabCosmic.css';
 
 const UserManagementTabCosmic: React.FC = () => {
@@ -37,6 +38,7 @@ const UserManagementTabCosmic: React.FC = () => {
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   // Modal states
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -751,7 +753,7 @@ const UserManagementTabCosmic: React.FC = () => {
         <div className="admin-pagination">
           <button
             className="admin-pagination-btn"
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            onClick={withPaginationScroll(() => setCurrentPage(p => Math.max(1, p - 1)))}
             disabled={currentPage === 1}
           >
             <ChevronLeft size={18} />
@@ -765,7 +767,7 @@ const UserManagementTabCosmic: React.FC = () => {
 
           <button
             className="admin-pagination-btn"
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            onClick={withPaginationScroll(() => setCurrentPage(p => Math.min(totalPages, p + 1)))}
             disabled={currentPage === totalPages}
           >
             Sau

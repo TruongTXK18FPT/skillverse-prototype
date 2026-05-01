@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Play, Clock } from 'lucide-react';
 import HUDCard from './HUDCard';
 import HoloProgressBar from './HoloProgressBar';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import './ActiveModules.css';
 
 type ActiveCourseSort = 'newest' | 'progress-desc' | 'progress-asc' | 'title-asc';
@@ -47,6 +48,7 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
   const [filterBy, setFilterBy] = useState<ActiveCourseFilter>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   const formatEstimatedTime = (value: string): string => {
     if (!value) return '';
@@ -303,7 +305,9 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
             <button
               type="button"
               className="active-modules__page-btn"
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              onClick={withPaginationScroll(() =>
+                setCurrentPage((prev) => Math.max(prev - 1, 1))
+              )}
               disabled={currentPage === 1}
             >
               Trang trước
@@ -312,7 +316,9 @@ const ActiveModules: React.FC<ActiveModulesProps> = ({
             <button
               type="button"
               className="active-modules__page-btn"
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={withPaginationScroll(() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              )}
               disabled={currentPage === totalPages}
             >
               Trang sau

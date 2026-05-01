@@ -15,6 +15,7 @@ import userService from '../../services/userService';
 import { getMentorProfile } from '../../services/mentorProfileService';
 import { API_BASE_URL } from '../../services/axiosInstance';
 import { showAppError, showAppInfo } from '../../context/ToastContext';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import './TransactionManagementTabCosmic.css';
 
 type TransactionType = 'ALL' | 'WALLET' | 'PAYMENT' | 'WITHDRAWAL' | 'COIN_PURCHASE';
@@ -68,6 +69,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
   const [itemsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [premiumDownloading, setPremiumDownloading] = useState(false);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   // Statistics
   const [stats, setStats] = useState({
@@ -575,7 +577,6 @@ const TransactionManagementTabCosmic: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleViewDetail = (transaction: CombinedTransaction) => {
@@ -1040,7 +1041,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
         <div className="admin-pagination">
           <button
             className="admin-pagination-btn"
-            onClick={() => handlePageChange(currentPage - 1)}
+            onClick={withPaginationScroll(() => handlePageChange(currentPage - 1))}
             disabled={currentPage === 1}
           >
             ← Trước
@@ -1063,7 +1064,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
                 <button
                   key={pageNum}
                   className={`admin-pagination-number ${currentPage === pageNum ? 'active' : ''}`}
-                  onClick={() => handlePageChange(pageNum)}
+                  onClick={withPaginationScroll(() => handlePageChange(pageNum))}
                 >
                   {pageNum}
                 </button>
@@ -1073,7 +1074,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
 
           <button
             className="admin-pagination-btn"
-            onClick={() => handlePageChange(currentPage + 1)}
+            onClick={withPaginationScroll(() => handlePageChange(currentPage + 1))}
             disabled={currentPage === totalPages}
           >
             Sau →

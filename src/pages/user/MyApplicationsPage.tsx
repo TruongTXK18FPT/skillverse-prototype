@@ -8,6 +8,7 @@ import { useToast } from '../../hooks/useToast';
 import { Clock, MapPin, DollarSign, Calendar, CheckCircle, XCircle, Eye, Zap, Briefcase, Video, ExternalLink, Loader2 } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import OdysseyLayout from '../../components/jobs-odyssey/OdysseyLayout';
+import Pagination from '../../components/shared/Pagination';
 import '../../components/jobs-odyssey/odyssey-styles.css';
 
 // Unified application type for display
@@ -50,6 +51,10 @@ const MyApplicationsPage: React.FC = () => {
   const [interviewDetail, setInterviewDetail] = useState<InterviewScheduleResponse | null>(null);
   const [interviewLoading, setInterviewLoading] = useState(false);
   const [showInterviewModal, setShowInterviewModal] = useState(false);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6;
 
   const fetchMyApplications = async () => {
     setLoading(true);
@@ -193,6 +198,15 @@ const MyApplicationsPage: React.FC = () => {
     return app.status === filter;
   });
 
+  const paginatedApplications = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredApplications.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredApplications, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, typeFilter]);
+
   const stats = {
     total: unifiedApplications.length,
     regular: regularApplications.length,
@@ -298,7 +312,7 @@ const MyApplicationsPage: React.FC = () => {
           </div>
         ) : (
           <div className="odyssey-grid">
-            {filteredApplications.map((app) => (
+            {paginatedApplications.map((app) => (
               <div key={`${app.type}-${app.id}`} className="odyssey-card-wrapper">
                 <div className={`odyssey-card odyssey-card--${app.type === 'SHORT_TERM' ? 'gold' : (((app.minBudget + app.maxBudget) / 2) > 5000000 ? 'crimson' : ((app.minBudget + app.maxBudget) / 2) >= 1000000 ? 'gold' : 'blue')}`}>
                   <div className="odyssey-card__corner-indicator odyssey-card__corner-indicator--tl"></div>
@@ -406,6 +420,17 @@ const MyApplicationsPage: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+        
+        {filteredApplications.length > 0 && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            <Pagination
+              totalItems={filteredApplications.length}
+              itemsPerPage={ITEMS_PER_PAGE}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+            />
           </div>
         )}
       </div>

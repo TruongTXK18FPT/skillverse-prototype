@@ -7,6 +7,7 @@ import {
   XCircle, RefreshCw, Inbox, Send, Trash2, MessageSquare, Settings
 } from 'lucide-react';
 import supportService, { TicketResponse, TicketStatsResponse, TicketMessageResponse } from '../../services/supportService';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import './SupportTicketsTab.css';
 
 const SupportTicketsTab: React.FC = () => {
@@ -27,6 +28,7 @@ const SupportTicketsTab: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   // Status form
   const [newStatus, setNewStatus] = useState('');
@@ -341,9 +343,9 @@ const SupportTicketsTab: React.FC = () => {
 
         {totalPages > 1 && (
           <div className="stt-pagination">
-            <button disabled={currentPage === 0} onClick={() => setCurrentPage(p => p - 1)}>Trước</button>
+            <button disabled={currentPage === 0} onClick={withPaginationScroll(() => setCurrentPage(p => p - 1))}>Trước</button>
             <span>Trang {currentPage + 1} / {totalPages}</span>
-            <button disabled={currentPage >= totalPages - 1} onClick={() => setCurrentPage(p => p + 1)}>Sau</button>
+            <button disabled={currentPage >= totalPages - 1} onClick={withPaginationScroll(() => setCurrentPage(p => p + 1))}>Sau</button>
           </div>
         )}
       </div>

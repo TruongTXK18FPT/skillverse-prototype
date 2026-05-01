@@ -18,6 +18,7 @@ import learningReportService, {
   StudentLearningReportResponse,
 } from "../../services/learningReportService";
 import { downloadLearningReportPDF } from "./PDFGenerator";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import "./LearningReportHistory.css";
 
 interface LearningReportHistoryProps {
@@ -54,7 +55,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
   showGenerateButton = true,
   title = "Báo cáo học tập",
 }) => {
-  const REPORTS_PER_PAGE = 5;
+  const REPORTS_PER_PAGE = 2;
   const navigate = useNavigate();
   const [reports, setReports] = useState<StudentLearningReportResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,6 +66,7 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
   const [rangeFilter, setRangeFilter] = useState<ReportRangeFilter>("all");
   const [sortBy, setSortBy] = useState<ReportSortKey>("newest");
   const [currentPage, setCurrentPage] = useState(1);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   useEffect(() => {
     const loadReports = async () => {
@@ -454,7 +456,9 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
             <div className="neon-history__pagination">
               <button
                 type="button"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                onClick={withPaginationScroll(() =>
+                  setCurrentPage((prev) => Math.max(prev - 1, 1))
+                )}
                 disabled={currentPage === 1}
               >
                 Trang trước
@@ -464,9 +468,9 @@ const LearningReportHistory: React.FC<LearningReportHistoryProps> = ({
               </span>
               <button
                 type="button"
-                onClick={() =>
+                onClick={withPaginationScroll(() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
+                )}
                 disabled={currentPage === totalPages}
               >
                 Trang sau

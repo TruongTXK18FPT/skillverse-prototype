@@ -30,6 +30,7 @@ import {
 } from "../../types/Journey";
 import { parseRoadmapTaskLink } from "../study-planner/utils/taskSemantics";
 import { showAppError } from "../../context/ToastContext";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import "../../styles/DashboardJourneyPrompt.css";
 
 const POST_LOGIN_JOURNEY_PROMPT_KEY = "showPostLoginJourneyPrompt";
@@ -82,6 +83,7 @@ const DashboardPage = () => {
   const [journeyPromptSearchTerm, setJourneyPromptSearchTerm] = useState("");
   const [journeyPromptCurrentPage, setJourneyPromptCurrentPage] = useState(1);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -809,11 +811,11 @@ const DashboardPage = () => {
                         <button
                           type="button"
                           className="dashboard-journey-prompt__pagination-btn"
-                          onClick={() =>
+                          onClick={withPaginationScroll(() =>
                             setJourneyPromptCurrentPage((prev) =>
                               Math.max(prev - 1, 1),
                             )
-                          }
+                          )}
                           disabled={journeyPromptCurrentPage === 1}
                         >
                           Trang trước
@@ -824,11 +826,11 @@ const DashboardPage = () => {
                         <button
                           type="button"
                           className="dashboard-journey-prompt__pagination-btn"
-                          onClick={() =>
+                          onClick={withPaginationScroll(() =>
                             setJourneyPromptCurrentPage((prev) =>
                               Math.min(prev + 1, journeyPromptTotalPages),
                             )
-                          }
+                          )}
                           disabled={journeyPromptCurrentPage === journeyPromptTotalPages}
                         >
                           Trang sau

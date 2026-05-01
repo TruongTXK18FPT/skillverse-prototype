@@ -27,6 +27,7 @@ import MeowlKuruLoader from "../kuru-loader/MeowlKuruLoader";
 import { QuestionBankSummary } from "../../data/questionBankDTOs";
 import { getQuestionBanks } from "../../services/questionBankService";
 import adminJourneyService from "../../services/adminJourneyService";
+import { useScrollToListTopOnPagination } from "../../hooks/useScrollToListTopOnPagination";
 import {
   AdminJourneyBreakdownItem,
   AdminJourneyDashboardResponse,
@@ -254,6 +255,8 @@ const PaginationBar = ({
   totalElements?: number;
   onChange: (nextPage: number) => void;
 }) => {
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
+
   if (totalPages <= 0) return null;
 
   return (
@@ -265,14 +268,14 @@ const PaginationBar = ({
         <button
           className="jmt-pagination__button"
           disabled={page <= 0}
-          onClick={() => onChange(page - 1)}
+          onClick={withPaginationScroll(() => onChange(page - 1))}
         >
           Trước
         </button>
         <button
           className="jmt-pagination__button"
           disabled={page + 1 >= totalPages}
-          onClick={() => onChange(page + 1)}
+          onClick={withPaginationScroll(() => onChange(page + 1))}
         >
           Sau
         </button>

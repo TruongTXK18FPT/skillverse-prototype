@@ -6,6 +6,7 @@ import { getMyBookings, BookingResponse } from '../../services/bookingService';
 import { getMentorCoursePurchases, CoursePurchaseDTO } from '../../services/courseService';
 import { showAppError } from '../../context/ToastContext';
 import MeowlKuruLoader from '../kuru-loader/MeowlKuruLoader';
+import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import './MentoringHistoryTab.css';
 
 interface HistoryItem {
@@ -27,6 +28,7 @@ const MentoringHistoryTab: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   const sessionsPerPage = 10;
 
@@ -369,7 +371,9 @@ const MentoringHistoryTab: React.FC = () => {
       {totalPages > 1 && (
         <div className="mentor-history-pagination">
           <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            onClick={withPaginationScroll(() =>
+              setCurrentPage(prev => Math.max(prev - 1, 1))
+            )}
             disabled={currentPage === 1}
             className="mentor-history-page-btn"
           >
@@ -384,7 +388,9 @@ const MentoringHistoryTab: React.FC = () => {
           </div>
           
           <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            onClick={withPaginationScroll(() =>
+              setCurrentPage(prev => Math.min(prev + 1, totalPages))
+            )}
             disabled={currentPage === totalPages}
             className="mentor-history-page-btn"
           >
