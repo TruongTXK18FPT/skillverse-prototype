@@ -350,14 +350,13 @@ const RoadmapNodeFocusPanel = ({
                   <TrendingUp size={13} />
                   <span className="roadmap-node-focus-panel__scoring-label">Mức quan trọng</span>
                   <span
-                    className={`roadmap-node-focus-panel__scoring-status roadmap-node-focus-panel__scoring-status--${
-                      node.importanceScore != null
-                        ? node.importanceScore >= 0.8 ? 'core'
-                          : node.importanceScore >= 0.6 ? 'important'
+                    className={`roadmap-node-focus-panel__scoring-status roadmap-node-focus-panel__scoring-status--${node.importanceScore != null
+                      ? node.importanceScore >= 0.8 ? 'core'
+                        : node.importanceScore >= 0.6 ? 'important'
                           : node.importanceScore >= 0.4 ? 'useful'
-                          : 'optional'
-                        : 'optional'
-                    }`}
+                            : 'optional'
+                      : 'optional'
+                      }`}
                   >
                     {importanceLevelLabel ?? `${Math.round(node.importanceScore * 100)}%`}
                   </span>
@@ -409,112 +408,112 @@ const RoadmapNodeFocusPanel = ({
             (learningContext?.supportingCourses &&
               learningContext.supportingCourses.length > 0) ||
             (node?.suggestedCourseIds && node.suggestedCourseIds.length > 0)) && (
-            <div className="roadmap-node-focus-panel__course-section">
-              <div className="roadmap-node-focus-panel__course-header">
-                <BookOpen size={14} />
-                Khóa học gợi ý
-              </div>
-              <p className="roadmap-node-focus-panel__course-hint">
-                Các khóa học liên quan đến nội dung node này — học là tùy chọn, không bắt buộc
-              </p>
-
-              {/* Error state: failed to load courses */}
-              {!isLoadingCourses && coursesError && (
-                <div className="roadmap-node-focus-panel__course-error">
-                  Không tải được khóa học gợi ý. Vui lòng thử lại.
+              <div className="roadmap-node-focus-panel__course-section">
+                <div className="roadmap-node-focus-panel__course-header">
+                  <BookOpen size={14} />
+                  Khóa học gợi ý
                 </div>
-              )}
+                <p className="roadmap-node-focus-panel__course-hint">
+                  Các khóa học liên quan đến nội dung node này — học tùy chọn, không bắt buộc
+                </p>
 
-              {/* Empty state: no PUBLIC courses available after successful fetch */}
-              {!isLoadingCourses && !coursesError &&
-                !learningContext?.primaryCourse &&
-                (!learningContext?.supportingCourses ||
-                  learningContext.supportingCourses.length === 0) && (
-                  <div className="roadmap-node-focus-panel__course-unavailable">
-                    Khóa học gợi ý hiện chưa khả dụng.
-                  </div>
-              )}
-              <div className="roadmap-node-focus-panel__course-list">
-                {/* PRIMARY COURSE - Best match */}
-                {learningContext?.primaryCourse && (
-                  <div
-                    key={learningContext.primaryCourse.id}
-                    className="roadmap-node-focus-panel__course-item roadmap-node-focus-panel__course-item--primary"
-                    onClick={() =>
-                      onNavigateToCourse(learningContext.primaryCourse!.id)
-                    }
-                    title={learningContext.primaryCourse.description}
-                  >
-                    <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--primary">
-                      Phù hợp nhất
-                    </span>
-                    {((learningContext.primaryCourse.modules?.length || 0) > 0 && (learningContext.primaryCourse.modules?.length || 0) <= 5) && (
-                      <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--compact">
-                        Ngắn gọn
-                      </span>
-                    )}
-                    <div className="roadmap-node-focus-panel__course-info">
-                      <div className="roadmap-node-focus-panel__course-title">
-                        {learningContext.primaryCourse.title}
-                      </div>
-                      <div className="roadmap-node-focus-panel__course-meta">
-                        {learningContext.primaryCourse.level} ·{" "}
-                        {learningContext.primaryCourse.modules?.length || 0}{" "}
-                        modules
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className="roadmap-node-focus-panel__course-action-btn roadmap-node-focus-panel__course-action-btn--primary"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onNavigateToCourse(learningContext.primaryCourse!.id);
-                      }}
-                    >
-                      <BookMarked size={12} /> Xem khóa học
-                    </button>
+                {/* Error state: failed to load courses */}
+                {!isLoadingCourses && coursesError && (
+                  <div className="roadmap-node-focus-panel__course-error">
+                    Không tải được khóa học gợi ý. Vui lòng thử lại.
                   </div>
                 )}
 
-                {/* ALTERNATIVE COURSES - Optional choices */}
-                {learningContext?.supportingCourses?.map((course, index) => (
-                  <div
-                    key={course.id}
-                    className="roadmap-node-focus-panel__course-item roadmap-node-focus-panel__course-item--alternative"
-                    onClick={() => onNavigateToCourse(course.id)}
-                    title={course.description}
-                  >
-                    <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--alternative">
-                      Thay thế {index + 1}
-                    </span>
-                    {((course.modules?.length || 0) > 0 && (course.modules?.length || 0) <= 5) && (
-                      <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--compact">
-                        Ngắn gọn
-                      </span>
-                    )}
-                    <div className="roadmap-node-focus-panel__course-info">
-                      <div className="roadmap-node-focus-panel__course-title">
-                        {course.title}
-                      </div>
-                      <div className="roadmap-node-focus-panel__course-meta">
-                        {course.level} · {course.modules?.length || 0} modules
-                      </div>
+                {/* Empty state: no PUBLIC courses available after successful fetch */}
+                {!isLoadingCourses && !coursesError &&
+                  !learningContext?.primaryCourse &&
+                  (!learningContext?.supportingCourses ||
+                    learningContext.supportingCourses.length === 0) && (
+                    <div className="roadmap-node-focus-panel__course-unavailable">
+                      Khóa học gợi ý hiện chưa khả dụng.
                     </div>
-                    <button
-                      type="button"
-                      className="roadmap-node-focus-panel__course-action-btn roadmap-node-focus-panel__course-action-btn--alternative"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onNavigateToCourse(course.id);
-                      }}
+                  )}
+                <div className="roadmap-node-focus-panel__course-list">
+                  {/* PRIMARY COURSE - Best match */}
+                  {learningContext?.primaryCourse && (
+                    <div
+                      key={learningContext.primaryCourse.id}
+                      className="roadmap-node-focus-panel__course-item roadmap-node-focus-panel__course-item--primary"
+                      onClick={() =>
+                        onNavigateToCourse(learningContext.primaryCourse!.id)
+                      }
+                      title={learningContext.primaryCourse.description}
                     >
-                      <BookMarked size={12} /> Xem chi tiết
-                    </button>
-                  </div>
-                ))}
+                      <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--primary">
+                        Phù hợp nhất
+                      </span>
+                      {((learningContext.primaryCourse.modules?.length || 0) > 0 && (learningContext.primaryCourse.modules?.length || 0) <= 5) && (
+                        <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--compact">
+                          Ngắn gọn
+                        </span>
+                      )}
+                      <div className="roadmap-node-focus-panel__course-info">
+                        <div className="roadmap-node-focus-panel__course-title">
+                          {learningContext.primaryCourse.title}
+                        </div>
+                        <div className="roadmap-node-focus-panel__course-meta">
+                          {learningContext.primaryCourse.level} ·{" "}
+                          {learningContext.primaryCourse.modules?.length || 0}{" "}
+                          modules
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        className="roadmap-node-focus-panel__course-action-btn roadmap-node-focus-panel__course-action-btn--primary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onNavigateToCourse(learningContext.primaryCourse!.id);
+                        }}
+                      >
+                        <BookMarked size={12} /> Xem khóa học
+                      </button>
+                    </div>
+                  )}
+
+                  {/* ALTERNATIVE COURSES - Optional choices */}
+                  {learningContext?.supportingCourses?.map((course, index) => (
+                    <div
+                      key={course.id}
+                      className="roadmap-node-focus-panel__course-item roadmap-node-focus-panel__course-item--alternative"
+                      onClick={() => onNavigateToCourse(course.id)}
+                      title={course.description}
+                    >
+                      <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--alternative">
+                        Thay thế {index + 1}
+                      </span>
+                      {((course.modules?.length || 0) > 0 && (course.modules?.length || 0) <= 5) && (
+                        <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--compact">
+                          Ngắn gọn
+                        </span>
+                      )}
+                      <div className="roadmap-node-focus-panel__course-info">
+                        <div className="roadmap-node-focus-panel__course-title">
+                          {course.title}
+                        </div>
+                        <div className="roadmap-node-focus-panel__course-meta">
+                          {course.level} · {course.modules?.length || 0} modules
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        className="roadmap-node-focus-panel__course-action-btn roadmap-node-focus-panel__course-action-btn--alternative"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onNavigateToCourse(course.id);
+                        }}
+                      >
+                        <BookMarked size={12} /> Xem chi tiết
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {objectiveItems.length > 0 && (
             <div className="roadmap-node-focus-panel__list-group">
@@ -603,7 +602,7 @@ const RoadmapNodeFocusPanel = ({
                 <span>Mở khóa Study Plan</span>
               </button>
             ) : null}
-            
+
             {progress?.status !== "COMPLETED" && (
               <button
                 type="button"

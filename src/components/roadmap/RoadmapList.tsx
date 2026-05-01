@@ -153,7 +153,7 @@ const RoadmapList = memo(({
               />
             </div>
             <div className="roadmap-hud-progress-text">
-              <span>TIẾN ĐỘ SỨ MỆNH</span>
+              <span>TIẾN ĐỘ</span>
               <span>{(roadmap.progressPercentage ?? 0).toFixed(1)}%</span>
             </div>
           </div>
@@ -267,10 +267,10 @@ const RoadmapList = memo(({
           <>
             <h3>Vui lòng đăng nhập</h3>
             <p>Đăng nhập để tạo và quản lý lộ trình học của bạn!</p>
-            <button 
+            <button
               onClick={onLoginRedirect}
               className="roadmap-empty__create-btn"
-              style={{ 
+              style={{
                 background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                 boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
               }}
@@ -283,7 +283,7 @@ const RoadmapList = memo(({
             <h3>{emptyTitle || 'Chưa có lộ trình nào'}</h3>
             <p>{emptyDescription || 'Tạo lộ trình học đầu tiên bằng AI để bắt đầu nhé!'}</p>
             {onCreateRoadmap && !hideEmptyCreateButton && (
-              <button 
+              <button
                 onClick={onCreateRoadmap}
                 className="roadmap-empty__create-btn"
               >

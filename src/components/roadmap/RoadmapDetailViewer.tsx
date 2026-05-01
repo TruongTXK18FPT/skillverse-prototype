@@ -502,211 +502,211 @@ const RoadmapDetailViewer = memo(({
   const metadataSection = useMemo(() => {
     const isSkillBased = roadmap.metadata.roadmapType === 'SKILL_BASED' || roadmap.metadata.roadmapType === 'skill';
     const careerBackgroundValue = roadmap.metadata.currentLevel || roadmap.metadata.background || 'N/A';
-    
-    return (
-    <div className="rm-mission-briefing">
-      {/* Decorative Top Line */}
-      <div className="rm-decor-line"></div>
 
-      <div className="rm-grid">
-        {/* LEFT COLUMN: Core Info */}
-        <div className="rm-core-info">
-          <div className="rm-status-bar">
-            <span className="rm-system-dot"></span>
-            <div className="rm-status-modules">
-              <span className="status-module-rm">Hoạt động</span>
-              <span className="status-module-rm">{isSkillBased ? 'Kỹ năng' : 'Sự nghiệp'}</span>
+    return (
+      <div className="rm-mission-briefing">
+        {/* Decorative Top Line */}
+        <div className="rm-decor-line"></div>
+
+        <div className="rm-grid">
+          {/* LEFT COLUMN: Core Info */}
+          <div className="rm-core-info">
+            <div className="rm-status-bar">
+              <span className="rm-system-dot"></span>
+              <div className="rm-status-modules">
+                <span className="status-module-rm">Hoạt động</span>
+                <span className="status-module-rm">{isSkillBased ? 'Kỹ năng' : 'Sự nghiệp'}</span>
+              </div>
+              {roadmap.metadata.difficultyLevel && (
+                <span className={`rm-badge ${roadmap.metadata.difficultyLevel.toLowerCase()}`}>
+                  {roadmap.metadata.difficultyLevel}
+                </span>
+              )}
             </div>
-            {roadmap.metadata.difficultyLevel && (
-              <span className={`rm-badge ${roadmap.metadata.difficultyLevel.toLowerCase()}`}>
-                {roadmap.metadata.difficultyLevel}
-              </span>
+
+            <h1 className="rm-title">
+              {roadmap.metadata.title}
+            </h1>
+
+            <div className="rm-objective-box">
+              <Target size={18} className="rm-icon-accent" />
+              <div>
+                <span className="rm-label">MỤC TIÊU HỌC TẬP</span>
+                <p className="rm-value">{roadmap.metadata.originalGoal}</p>
+                {!isSkillBased && careerBackgroundValue && careerBackgroundValue !== 'N/A' && (
+                  <div className="rm-context-tags">
+                    <span className="rm-context-tag">{careerBackgroundValue}</span>
+                    {roadmap.metadata.dailyTime && (
+                      <span className="rm-context-tag">{roadmap.metadata.dailyTime}/ngày</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Dynamic Fields based on Type */}
+            {isSkillBased && (
+              <div className="rm-specs-grid">
+                <div className="rm-spec-item">
+                  <span className="rm-spec-label">Kỹ năng trọng tâm</span>
+                  {renderSpecValue(roadmap.metadata.target || roadmap.metadata.skillMode?.skillName || 'N/A')}
+                </div>
+                <div className="rm-spec-item">
+                  <span className="rm-spec-label">Cấp độ hiện tại</span>
+                  {renderSpecValue(roadmap.metadata.currentLevel || roadmap.metadata.skillMode?.currentSkillLevel || 'Zero')}
+                </div>
+                <div className="rm-spec-item">
+                  <span className="rm-spec-label">Thời gian/ngày</span>
+                  {renderSpecValue(roadmap.metadata.dailyTime || '1h')}
+                </div>
+                <div className="rm-spec-item">
+                  <span className="rm-spec-label">Phong cách học</span>
+                  {renderSpecValue(roadmap.metadata.learningStyle || 'Practice')}
+                </div>
+              </div>
             )}
           </div>
 
-          <h1 className="rm-title">
-            {roadmap.metadata.title}
-          </h1>
-
-          <div className="rm-objective-box">
-            <Target size={18} className="rm-icon-accent" />
-            <div>
-              <span className="rm-label">MỤC TIÊU HỌC TẬP</span>
-              <p className="rm-value">{roadmap.metadata.originalGoal}</p>
-              {!isSkillBased && careerBackgroundValue && careerBackgroundValue !== 'N/A' && (
-                <div className="rm-context-tags">
-                  <span className="rm-context-tag">{careerBackgroundValue}</span>
-                  {roadmap.metadata.dailyTime && (
-                    <span className="rm-context-tag">{roadmap.metadata.dailyTime}/ngày</span>
-                  )}
-                </div>
-              )}
+          {/* RIGHT COLUMN: Tactical Stats */}
+          <div className="rm-tactical-stats">
+            {/* Stat 1: Duration + Hours — commitment vs effort */}
+            <div className="rm-stat-box">
+              <div className="rm-stat-icon-wrapper"><Clock size={20} /></div>
+              <div className="rm-stat-content">
+                <span className="rm-stat-label">THỜI LƯỢNG</span>
+                <span className="rm-stat-value">
+                  {derivedStats.approxDays !== null && derivedStats.approxDays <= 14
+                    ? `~${derivedStats.approxDays} ngày`
+                    : derivedStats.approxWeeks !== null && derivedStats.approxWeeks <= 8
+                      ? `~${derivedStats.approxWeeks} tuần`
+                      : derivedStats.approxMonths !== null && derivedStats.approxMonths > 0
+                        ? `~${derivedStats.approxMonths} tháng`
+                        : roadmap.metadata.duration ?? roadmap.metadata.desiredDuration ?? 'N/A'}
+                </span>
+                <span className="rm-stat-sub">
+                  {derivedStats.totalEstimatedHours > 0
+                    ? `~${derivedStats.totalEstimatedHours.toFixed(0)}h @ ${derivedStats.dailyMinutes}m/ngày`
+                    : ''}
+                </span>
+              </div>
             </div>
+
+
+            {/* Stat 2: Steps */}
+            <div className="rm-stat-box">
+              <div className="rm-stat-icon-wrapper"><Layers size={20} /></div>
+              <div className="rm-stat-content">
+                <span className="rm-stat-label">TỔNG BƯỚC</span>
+                <span className="rm-stat-value">{derivedStats.totalNodes}</span>
+                <span className="rm-stat-sub">Modules</span>
+              </div>
+            </div>
+
+            {/* Stat 3: Tasks */}
+            <div className="rm-stat-box">
+              <div className="rm-stat-icon-wrapper"><Trophy size={20} /></div>
+              <div className="rm-stat-content">
+                <span className="rm-stat-label">MỤC TIÊU CHÍNH</span>
+                <span className="rm-stat-value rm-text-accent">{derivedStats.mainNodes}</span>
+              </div>
+            </div>
+
+            {/* Stat 4: Side Quests */}
+            <div className="rm-stat-box">
+              <div className="rm-stat-icon-wrapper"><Hash size={20} /></div>
+              <div className="rm-stat-content">
+                <span className="rm-stat-label">MỤC TIÊU PHỤ</span>
+                <span className="rm-stat-value">{derivedStats.sideNodes}</span>
+              </div>
+            </div>
+
+            {derivedStats.isFallback && (
+              <p className="rm-stats-fallback-note">
+                Số liệu đang được đồng bộ theo node hiện có để tránh thiếu tổng bước/chính/phụ.
+              </p>
+            )}
+
           </div>
-
-          {/* Dynamic Fields based on Type */}
-          {isSkillBased && (
-            <div className="rm-specs-grid">
-              <div className="rm-spec-item">
-                <span className="rm-spec-label">Kỹ năng trọng tâm</span>
-                {renderSpecValue(roadmap.metadata.target || roadmap.metadata.skillMode?.skillName || 'N/A')}
-              </div>
-              <div className="rm-spec-item">
-                <span className="rm-spec-label">Cấp độ hiện tại</span>
-                {renderSpecValue(roadmap.metadata.currentLevel || roadmap.metadata.skillMode?.currentSkillLevel || 'Zero')}
-              </div>
-              <div className="rm-spec-item">
-                <span className="rm-spec-label">Thời gian/ngày</span>
-                {renderSpecValue(roadmap.metadata.dailyTime || '1h')}
-              </div>
-              <div className="rm-spec-item">
-                <span className="rm-spec-label">Phong cách học</span>
-                {renderSpecValue(roadmap.metadata.learningStyle || 'Practice')}
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* RIGHT COLUMN: Tactical Stats */}
-        <div className="rm-tactical-stats">
-          {/* Stat 1: Duration + Hours — commitment vs effort */}
-          <div className="rm-stat-box">
-            <div className="rm-stat-icon-wrapper"><Clock size={20} /></div>
-            <div className="rm-stat-content">
-              <span className="rm-stat-label">THỜI LƯỢNG</span>
-              <span className="rm-stat-value">
-                {derivedStats.approxDays !== null && derivedStats.approxDays <= 14
-                  ? `~${derivedStats.approxDays} ngày`
-                  : derivedStats.approxWeeks !== null && derivedStats.approxWeeks <= 8
-                  ? `~${derivedStats.approxWeeks} tuần`
-                  : derivedStats.approxMonths !== null && derivedStats.approxMonths > 0
-                  ? `~${derivedStats.approxMonths} tháng`
-                  : roadmap.metadata.duration ?? roadmap.metadata.desiredDuration ?? 'N/A'}
-              </span>
-              <span className="rm-stat-sub">
-                {derivedStats.totalEstimatedHours > 0
-                  ? `~${derivedStats.totalEstimatedHours.toFixed(0)}h @ ${derivedStats.dailyMinutes}m/ngày`
-                  : ''}
-              </span>
-            </div>
-          </div>
+        {/* --- RESTORED SECTIONS --- */}
 
 
-          {/* Stat 2: Steps */}
-          <div className="rm-stat-box">
-            <div className="rm-stat-icon-wrapper"><Layers size={20} /></div>
-            <div className="rm-stat-content">
-              <span className="rm-stat-label">TỔNG BƯỚC</span>
-              <span className="rm-stat-value">{derivedStats.totalNodes}</span>
-              <span className="rm-stat-sub">Modules</span>
-            </div>
-          </div>
-
-          {/* Stat 3: Tasks */}
-          <div className="rm-stat-box">
-            <div className="rm-stat-icon-wrapper"><Trophy size={20} /></div>
-            <div className="rm-stat-content">
-              <span className="rm-stat-label">MỤC TIÊU CHÍNH</span>
-              <span className="rm-stat-value rm-text-accent">{derivedStats.mainNodes}</span>
-            </div>
-          </div>
-
-          {/* Stat 4: Side Quests */}
-          <div className="rm-stat-box">
-            <div className="rm-stat-icon-wrapper"><Hash size={20} /></div>
-            <div className="rm-stat-content">
-              <span className="rm-stat-label">MỤC TIÊU PHỤ</span>
-              <span className="rm-stat-value">{derivedStats.sideNodes}</span>
-            </div>
-          </div>
-
-          {derivedStats.isFallback && (
-            <p className="rm-stats-fallback-note">
-              Số liệu đang được đồng bộ theo node hiện có để tránh thiếu tổng bước/chính/phụ.
-            </p>
-          )}
-
-        </div>
-      </div>
-
-      {/* --- RESTORED SECTIONS --- */}
-
-
-      {/* Overview Section - Expanded */}
-      {roadmap.overview && (
-        <div className="rm-overview-section">
-           {roadmap.overview.purpose && (
-             <div className="rm-overview-item">
+        {/* Overview Section - Expanded */}
+        {roadmap.overview && (
+          <div className="rm-overview-section">
+            {roadmap.overview.purpose && (
+              <div className="rm-overview-item">
                 <Brain size={16} className="rm-icon-sub" />
                 <div>
                   <strong>Mục đích:</strong>
                   {renderMarkdownInline(roadmap.overview.purpose)}
                 </div>
-             </div>
-           )}
-           {roadmap.overview.postRoadmapState && (
-             <div className="rm-overview-item">
+              </div>
+            )}
+            {roadmap.overview.postRoadmapState && (
+              <div className="rm-overview-item">
                 <Rocket size={16} className="rm-icon-sub" />
                 <div>
                   <strong>Kết quả:</strong>
                   {renderMarkdownInline(roadmap.overview.postRoadmapState)}
                 </div>
-             </div>
-           )}
-           {roadmap.overview.audience && (
-             <div className="rm-overview-item">
+              </div>
+            )}
+            {roadmap.overview.audience && (
+              <div className="rm-overview-item">
                 <Target size={16} className="rm-icon-sub" />
                 <div>
                   <strong>Đối tượng:</strong>
                   {renderMarkdownInline(roadmap.overview.audience)}
                 </div>
-             </div>
-           )}
-           {/* Prerequisites might be in metadata if not in overview object */}
-           {roadmap.metadata.prerequisites && roadmap.metadata.prerequisites.length > 0 && (
-             <div className="rm-overview-item">
+              </div>
+            )}
+            {/* Prerequisites might be in metadata if not in overview object */}
+            {roadmap.metadata.prerequisites && roadmap.metadata.prerequisites.length > 0 && (
+              <div className="rm-overview-item">
                 <Info size={16} className="rm-icon-sub" />
                 <span><strong>Yêu cầu:</strong> {roadmap.metadata.prerequisites.join(', ')}</span>
-             </div>
-           )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Action Bar inside Mission Briefing */}
+        <div className="rm-action-bar">
+          <button onClick={onBack} className="roadmap-detail-viewer__back-btn roadmap-detail-viewer__back-btn--briefing">
+            <ArrowLeft className="h-4 w-4" />
+            <span>QUAY LẠI</span>
+          </button>
+
+          <button
+            className="rm-workspace-btn"
+            onClick={() => {
+              const nextSearchParams = new URLSearchParams();
+              if (selectedNodeId) {
+                nextSearchParams.set('nodeId', selectedNodeId);
+              }
+              if (workspaceJourneyId) {
+                nextSearchParams.set('journeyId', String(workspaceJourneyId));
+              }
+
+              navigate({
+                pathname: `/roadmap/${roadmap.sessionId}/workspace`,
+                search: nextSearchParams.toString() ? `?${nextSearchParams.toString()}` : '',
+              }, {
+                state: {
+                  journeyId: workspaceJourneyId,
+                  selectedNodeId,
+                },
+              });
+            }}
+          >
+            <ClipboardList size={18} /> Đi đến Workspace
+          </button>
         </div>
-      )}
 
-      {/* Action Bar inside Mission Briefing */}
-      <div className="rm-action-bar">
-        <button onClick={onBack} className="roadmap-detail-viewer__back-btn roadmap-detail-viewer__back-btn--briefing">
-          <ArrowLeft className="h-4 w-4" />
-          <span>QUAY LẠI</span>
-        </button>
-
-        <button 
-          className="rm-workspace-btn" 
-          onClick={() => {
-            const nextSearchParams = new URLSearchParams();
-            if (selectedNodeId) {
-              nextSearchParams.set('nodeId', selectedNodeId);
-            }
-            if (workspaceJourneyId) {
-              nextSearchParams.set('journeyId', String(workspaceJourneyId));
-            }
-
-            navigate({
-              pathname: `/roadmap/${roadmap.sessionId}/workspace`,
-              search: nextSearchParams.toString() ? `?${nextSearchParams.toString()}` : '',
-            }, {
-              state: {
-                journeyId: workspaceJourneyId,
-                selectedNodeId,
-              },
-            });
-          }}
-        >
-          <ClipboardList size={18} /> Đi đến Workspace
-        </button>
       </div>
-
-    </div>
-  );
+    );
   }, [derivedStats, navigate, onBack, roadmap, selectedNodeId, workspaceJourneyId]);
 
   const mentorBookingSection = useMemo(() => {
@@ -895,7 +895,7 @@ const RoadmapDetailViewer = memo(({
 
         {roadmap.thinkingProgression && roadmap.thinkingProgression.length > 0 && (
           <div className="rm-footer-section">
-            <h3 className="rm-footer-title"><Brain size={20} /> Thinking Progression</h3>
+            <h3 className="rm-footer-title"><Brain size={20} /> Sơ lược nội dung</h3>
             <ul className="rm-list-disc">
               {roadmap.thinkingProgression.map((thought, idx) => (
                 <li key={idx}>{thought}</li>
@@ -906,7 +906,7 @@ const RoadmapDetailViewer = memo(({
 
         {roadmap.projectsEvidence && roadmap.projectsEvidence.length > 0 && (
           <div className="rm-footer-section">
-            <h3 className="rm-footer-title"><Briefcase size={20} /> PROJECTS & EVIDENCE (SKILL WALLET)</h3>
+            <h3 className="rm-footer-title"><Briefcase size={20} /> Gợi ý thực hành</h3>
             <div className="rm-projects-grid">
               {roadmap.projectsEvidence.map((proj, idx) => (
                 <div key={idx} className="rm-project-card">
@@ -927,24 +927,23 @@ const RoadmapDetailViewer = memo(({
         {roadmap.nextSteps && (
           (roadmap.nextSteps.jobs?.length ?? 0) > 0 || (roadmap.nextSteps.nextSkills?.length ?? 0) > 0
         ) && (
-          <div className="rm-footer-section">
-            <h3 className="rm-footer-title"><Rocket size={20} /> NEXT STEPS & REAL-WORLD CONNECTION</h3>
-            <div className="rm-next-steps-grid">
-              {roadmap.nextSteps.jobs && roadmap.nextSteps.jobs.length > 0 && (
-                <div className="rm-next-col">
-                  <h4><Briefcase size={16} /> Potential Jobs</h4>
-                  <ul>{roadmap.nextSteps.jobs.map((j, i) => <li key={i}>{j}</li>)}</ul>
-                </div>
-              )}
-              {roadmap.nextSteps.nextSkills && roadmap.nextSteps.nextSkills.length > 0 && (
-                <div className="rm-next-col">
-                  <h4><GraduationCap size={16} /> Next Skills</h4>
-                  <ul>{roadmap.nextSteps.nextSkills.map((s, i) => <li key={i}>{s}</li>)}</ul>
-                </div>
-              )}
+            <div className="rm-footer-section">
+              <h3 className="rm-footer-title"><Rocket size={20} /> Vị trí tiềm năng</h3>
+              <div className="rm-next-steps-grid">
+                {roadmap.nextSteps.jobs && roadmap.nextSteps.jobs.length > 0 && (
+                  <div className="rm-next-col">
+                    <ul>{roadmap.nextSteps.jobs.map((j, i) => <li key={i}>{j}</li>)}</ul>
+                  </div>
+                )}
+                {roadmap.nextSteps.nextSkills && roadmap.nextSteps.nextSkills.length > 0 && (
+                  <div className="rm-next-col">
+                    <h4><GraduationCap size={16} /> Next Skills</h4>
+                    <ul>{roadmap.nextSteps.nextSkills.map((s, i) => <li key={i}>{s}</li>)}</ul>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     );
   }, [roadmap]);
@@ -955,7 +954,7 @@ const RoadmapDetailViewer = memo(({
         {metadataSection}
 
         {mentorBookingSection}
-        
+
         <div className="roadmap-detail-viewer__flow">
           <RoadmapFlow
             roadmap={roadmap.roadmap}
