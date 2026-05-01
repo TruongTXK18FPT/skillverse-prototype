@@ -22,6 +22,7 @@ import MeowlSkinUploadTab from "../../components/admin/MeowlSkinUploadTab";
 import SliderManagementTab from "../../components/admin/SliderManagementTab";
 import AdminAiGradingDashboard from "../admin/AdminAiGradingDashboard";
 import AdminAiKnowledgeDashboard from "../admin/AdminAiKnowledgeDashboard";
+import AdminAiTokenUsageDashboard from "../admin/AdminAiTokenUsageDashboard";
 // import AdminSeminarManager from './AdminSeminarManager';
 import adminUserService from "../../services/adminUserService";
 import adminService from "../../services/adminService";
@@ -157,6 +158,8 @@ const AdminPage: React.FC = () => {
         return <AdminAiGradingDashboard />;
       case "ai-knowledge":
         return <AdminAiKnowledgeDashboard />;
+      case "ai-token-usage":
+        return <AdminAiTokenUsageDashboard />;
       case "question-bank":
         return <QuestionBankTab />;
       case "journey-management":

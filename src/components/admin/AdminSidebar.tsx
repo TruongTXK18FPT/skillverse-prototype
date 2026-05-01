@@ -24,6 +24,7 @@ import {
   ListChecks,
   Route,
   ShieldCheck,
+  Activity,
 } from "lucide-react";
 import "./AdminSidebar.css";
 
@@ -187,6 +188,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           id: "ai-knowledge",
           label: "Tài Liệu AI",
           icon: LibraryBig,
+          allowedRoles: ["AI_ADMIN", "ADMIN"],
+        },
+        {
+          id: "ai-token-usage",
+          label: "Token AI",
+          icon: Activity,
           allowedRoles: ["AI_ADMIN", "ADMIN"],
         },
         {

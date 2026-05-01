@@ -1,0 +1,526 @@
+.admin-token-usage {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #0f172a;
+  min-height: 100vh;
+}
+
+/* Header */
+.admin-token-usage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.admin-token-usage__header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0 0 4px 0;
+}
+
+.admin-token-usage__eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.admin-token-usage__header p {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.admin-token-usage__refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: #1e293b;
+  color: #e2e8f0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-token-usage__refresh-btn:hover:not(:disabled) {
+  background: #334155;
+  border-color: #475569;
+}
+
+.admin-token-usage__refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-token-usage__refresh-btn .spinning {
+  opacity: 0.6;
+}
+
+/* Error */
+.admin-token-usage__error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  border-radius: 8px;
+  color: #f87171;
+  margin-bottom: 24px;
+}
+
+.admin-token-usage__error button {
+  margin-left: auto;
+  padding: 4px 12px;
+  border: 1px solid #dc2626;
+  border-radius: 4px;
+  background: rgba(220, 38, 38, 0.2);
+  color: #f87171;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Filters */
+.admin-token-usage__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.admin-token-usage__filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-token-usage__filter-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.admin-token-usage__filter-group select,
+.admin-token-usage__filter-group input {
+  padding: 6px 12px;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #0f172a;
+  color: #e2e8f0;
+  min-width: 140px;
+}
+
+.admin-token-usage__filter-group select:focus,
+.admin-token-usage__filter-group input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+}
+
+/* KPI Cards */
+.admin-token-usage__kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .admin-token-usage__kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-token-usage__kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-token-usage__kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.admin-token-usage__kpi-card:hover {
+  border-color: #475569;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.admin-token-usage__kpi-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  color: white;
+}
+
+.admin-token-usage__kpi-icon.total { background: #6366f1; }
+.admin-token-usage__kpi-icon.prompt { background: #3b82f6; }
+.admin-token-usage__kpi-icon.completion { background: #10b981; }
+.admin-token-usage__kpi-icon.requests { background: #8b5cf6; }
+.admin-token-usage__kpi-icon.failed { background: #ef4444; }
+.admin-token-usage__kpi-icon.latency { background: #f59e0b; }
+
+.admin-token-usage__kpi-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-token-usage__kpi-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.admin-token-usage__kpi-value.monospace {
+  font-family: 'Roboto Mono', 'SF Mono', 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-token-usage__kpi-label {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Chart */
+.admin-token-usage__chart-section {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.admin-token-usage__chart-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0 0 16px 0;
+}
+
+.admin-token-usage__chart-container {
+  min-height: 300px;
+}
+
+/* Breakdown */
+.admin-token-usage__breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-token-usage__breakdown-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.admin-token-usage__breakdown-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0 0 16px 0;
+}
+
+.admin-token-usage__breakdown-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-token-usage__breakdown-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #334155;
+}
+
+.admin-token-usage__breakdown-list li:last-child {
+  border-bottom: none;
+}
+
+.admin-token-usage__breakdown-label {
+  flex: 1;
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+.admin-token-usage__breakdown-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f8fafc;
+  min-width: 80px;
+  text-align: right;
+}
+
+.admin-token-usage__breakdown-percent {
+  font-size: 12px;
+  color: #94a3b8;
+  min-width: 50px;
+  text-align: right;
+}
+
+/* Logs */
+.admin-token-usage__logs-section {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.admin-token-usage__logs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.admin-token-usage__logs-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.admin-token-usage__export-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  background: #1e293b;
+  color: #e2e8f0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-token-usage__export-btn:hover:not(:disabled) {
+  background: #334155;
+  border-color: #475569;
+}
+
+.admin-token-usage__export-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Table */
+.admin-token-usage__table-container {
+  overflow-x: auto;
+}
+
+.admin-token-usage__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.admin-token-usage__table th {
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 500;
+  font-size: 12px;
+  color: #94a3b8;
+  background: #0f172a;
+  border-bottom: 1px solid #334155;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.admin-token-usage__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #334155;
+  color: #e2e8f0;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.admin-token-usage__table td.numeric {
+  text-align: right;
+  font-family: 'Roboto Mono', 'SF Mono', 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-token-usage__table tr:hover td {
+  background: #334155;
+}
+
+.admin-token-usage__loading-cell,
+.admin-token-usage__empty-cell {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+}
+
+/* Badges */
+.admin-token-usage__flow-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.admin-token-usage__flow-badge.ai_grading { background: #dbeafe; color: #1e40af; }
+.admin-token-usage__flow-badge.chatbot { background: #dcfce7; color: #166534; }
+.admin-token-usage__flow-badge.meowl_chat { background: #fce7f3; color: #9d174d; }
+.admin-token-usage__flow-badge.roadmap_generation { background: #fef3c7; color: #92400e; }
+.admin-token-usage__flow-badge.study_plan { background: #e0e7ff; color: #3730a3; }
+
+.admin-token-usage__status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.admin-token-usage__status-badge.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.admin-token-usage__status-badge.failed {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.admin-token-usage__estimated-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Pagination */
+.admin-token-usage__pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #334155;
+}
+
+.admin-token-usage__pagination button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  background: #1e293b;
+  color: #e2e8f0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-token-usage__pagination button:hover:not(:disabled) {
+  background: #334155;
+  border-color: #475569;
+}
+
+.admin-token-usage__pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-token-usage__pagination span {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* Loading */
+.admin-token-usage__loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.admin-token-usage__loading.small {
+  padding: 20px;
+}
+
+.admin-token-usage__spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #334155;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+}
+
+.admin-token-usage__spinner.small {
+  width: 16px;
+  height: 16px;
+}
+
+/* Empty */
+.admin-token-usage__empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-token-usage {
+    padding: 16px;
+  }
+
+  .admin-token-usage__header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .admin-token-usage__filters {
+    flex-direction: column;
+  }
+
+  .admin-token-usage__table th,
+  .admin-token-usage__table td {
+    padding: 8px;
+    font-size: 12px;
+  }
+}
