@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, LogIn, X, Zap, Rocket, Shield } from "lucide-react";
@@ -64,12 +65,13 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
     onClose();
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
           {/* Backdrop */}
           <motion.div
+            key="lrm-backdrop"
             className="lrm-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -78,7 +80,13 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
           />
 
           {/* Main Container */}
-          <div className="lrm-container" onClick={handleDismiss}>
+          <motion.div
+            key="lrm-container"
+            className="lrm-container"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleDismiss}>
             {/* Modal Card */}
             <motion.div
               className="lrm-modal"
@@ -198,10 +206,11 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
                 </div>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 
