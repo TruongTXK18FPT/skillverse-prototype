@@ -35,6 +35,9 @@ import {
   CircleCheckBig,
   CircleAlert,
   Trash2,
+  Search,
+  History,
+  ChevronDown,
 } from "lucide-react";
 import journeyService from "../../services/journeyService";
 import {
@@ -100,77 +103,15 @@ const HERO_DOMAIN_SHOWCASE = [
   },
   {
     key: "finance-marketing",
-    title: "Tài chính & Marketing",
+    title: "Marketing",
     description:
       "Phù hợp cho các vai trò kinh doanh, tài chính, tăng trưởng và hoạch định thị trường.",
     image: financeMarketingDomainImage,
   },
-  {
-    key: "engineering",
-    title: "Kỹ thuật",
-    description:
-      "Bao quát kỹ thuật ứng dụng, vận hành, sản xuất và tối ưu quy trình trong môi trường công nghiệp.",
-    image: engineeringDomainImage,
-  },
-  {
-    key: "healthcare",
-    title: "Y tế & Sức khỏe",
-    description:
-      "Mô phỏng bối cảnh chăm sóc sức khỏe, vận hành y tế và chuẩn năng lực chuyên môn đặc thù.",
-    image: healthcareDomainImage,
-  },
-  {
-    key: "education",
-    title: "Giáo dục",
-    description:
-      "Đánh giá năng lực sư phạm, thiết kế học liệu, hướng dẫn và phát triển người học.",
-    image: educationDomainImage,
-  },
-  {
-    key: "logistics",
-    title: "Logistics",
-    description:
-      "Tập trung vào chuỗi cung ứng, kho vận, điều phối và kiểm soát dòng hàng hóa.",
-    image: logisticsDomainImage,
-  },
-  {
-    key: "legal-public-administration",
-    title: "Pháp lý & Hành chính công",
-    description:
-      "Phù hợp cho nghiệp vụ pháp lý, tuân thủ, hành chính và phục vụ công.",
-    image: legalPublicAdministrationDomainImage,
-  },
-  {
-    key: "arts-entertainment",
-    title: "Nghệ thuật & Giải trí",
-    description:
-      "Khám phá năng lực sáng tạo nội dung, biểu đạt nghệ thuật và sản xuất truyền thông.",
-    image: artsEntertainmentDomainImage,
-  },
-  {
-    key: "service-hospitality",
-    title: "Dịch vụ & Hospitality",
-    description:
-      "Đo lường tư duy dịch vụ, vận hành khách hàng và tiêu chuẩn trải nghiệm trong ngành dịch vụ.",
-    image: serviceHospitalityDomainImage,
-  },
-  {
-    key: "community",
-    title: "Cộng đồng",
-    description:
-      "Dành cho công tác xã hội, phát triển cộng đồng và điều phối chương trình tác động.",
-    image: communityDomainImage,
-  },
-  {
-    key: "agriculture-environment",
-    title: "Nông nghiệp & Môi trường",
-    description:
-      "Bao quát nông nghiệp, môi trường, phát triển bền vững và các mô hình ứng dụng thực tiễn.",
-    image: agricultureEnvironmentDomainImage,
-  },
 ];
 
 const JOURNEYS_PER_PAGE = 6;
+const HISTORY_PER_PAGE = 4;
 const JOURNEY_FETCH_BATCH_SIZE = 100;
 const JOURNEY_ACTION_GAME_DELAY_MS = 8000;
 
@@ -312,6 +253,9 @@ const GSJJourneyPage: React.FC = () => {
   const [actionMode, setActionMode] = useState<ActionMode>("idle");
   const [showActionGame, setShowActionGame] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [historySearch, setHistorySearch] = useState("");
+  const [historyStatusFilter, setHistoryStatusFilter] = useState<"all" | "completed" | "cancelled" | "paused">("all");
+  const [historyPage, setHistoryPage] = useState(1);
   const { withPaginationScroll } = useScrollToListTopOnPagination();
   const [pendingDelete, setPendingDelete] = useState<DeleteDialogState>(null);
   const [error, setError] = useState<string | null>(null);
@@ -1560,6 +1504,43 @@ const GSJJourneyPage: React.FC = () => {
     currentPage * JOURNEYS_PER_PAGE,
     totalJourneys,
   );
+
+  // Split view B: active journey hero + history list
+  const activeJourney = journeys.find((j) =>
+    activeJourneyStatuses.includes(j.status),
+  ) ?? journeys.find((j) => j.status === JourneyStatus.PAUSED) ?? null;
+
+  const historyJourneys = journeys.filter((j) => {
+    const isTerminal =
+      !activeJourneyStatuses.includes(j.status) &&
+      j.status !== JourneyStatus.PAUSED &&
+      j !== activeJourney;
+    return isTerminal;
+  });
+
+  const filteredHistoryJourneys = historyJourneys.filter((j) => {
+    const searchLower = historySearch.toLowerCase();
+    const matchesSearch =
+      !historySearch ||
+      (j.skillName || "").toLowerCase().includes(searchLower) ||
+      (j.jobRole || "").toLowerCase().includes(searchLower) ||
+      getDomainLabel(j.domain).toLowerCase().includes(searchLower);
+    const matchesFilter =
+      historyStatusFilter === "all" ||
+      (historyStatusFilter === "completed" && isCompletedJourneyStatus(j.status)) ||
+      (historyStatusFilter === "cancelled" && j.status === JourneyStatus.CANCELLED) ||
+      (historyStatusFilter === "paused" && j.status === JourneyStatus.PAUSED);
+    return matchesSearch && matchesFilter;
+  });
+
+  const totalHistoryPages = Math.max(
+    1,
+    Math.ceil(filteredHistoryJourneys.length / HISTORY_PER_PAGE),
+  );
+  const paginatedHistoryJourneys = filteredHistoryJourneys.slice(
+    (historyPage - 1) * HISTORY_PER_PAGE,
+    historyPage * HISTORY_PER_PAGE,
+  );
   const activeJourneys = journeys.filter((journey) =>
     activeJourneyStatuses.includes(journey.status),
   ).length;
@@ -1865,7 +1846,7 @@ const GSJJourneyPage: React.FC = () => {
           <div className="gsj-hero-media">
             <div className="gsj-hero-media__header">
               <span className="gsj-hero-media__eyebrow">
-                12 hình minh họa lĩnh vực
+                3 lĩnh vực trọng tâm
               </span>
               <h2 className="gsj-hero-media__title">
                 Kho lĩnh vực đang hỗ trợ trong Journey
@@ -1888,7 +1869,7 @@ const GSJJourneyPage: React.FC = () => {
                 />
                 <div className="gsj-hero-media__slide-overlay">
                   <div className="gsj-hero-media__slide-badge">
-                    Slide {heroSlide + 1}/12
+                    Slide {heroSlide + 1}/{HERO_DOMAIN_SHOWCASE.length}
                   </div>
                   <h3 className="gsj-hero-media__slide-title">
                     {activeHeroDomain.title}
@@ -2104,252 +2085,422 @@ const GSJJourneyPage: React.FC = () => {
     </div>
   );
 
-  const renderJourneyList = () => (
-    <div className="gsj-journeys-section" id="journeys-section">
-      <div className="gsj-section-header">
-        <div className="gsj-section-header__left">
-          <h2 className="gsj-section-header__title">
-            <Map size={22} />
-            Hành trình của bạn
-          </h2>
-          <p className="gsj-section-header__subtitle">
-            {totalJourneys > 0
-              ? `Bạn đang theo dõi ${totalJourneys} hành trình, ${activeJourneys} hành trình đang hoạt động`
-              : "Bắt đầu hành trình đầu tiên của bạn"}
-          </p>
-        </div>
-        <div className="gsj-section-header__actions">
-          {totalJourneys > 0 && (
-            <span className="gsj-journey-pagination__summary">
-              Hiển thị {currentPageStart}-{currentPageEnd} trên {totalJourneys}{" "}
-              hành trình
-            </span>
-          )}
-          <button
-            className="gsj-btn gsj-btn--primary"
-            onClick={handleCreateJourneyClick}
-          >
-            <Zap size={16} />
-            Tạo mới
-          </button>
-        </div>
-      </div>
+  const renderJourneyList = () => {
+    const activeLabel = activeJourney
+      ? (activeJourney.jobRole
+          ? getJobRoleLabel(activeJourney.jobRole, activeJourney.domain)
+          : getDomainLabel(activeJourney.domain))
+      : "";
 
-      {loading ? (
-        <div className="gsj-loading">
-          <div className="gsj-spinner"></div>
-          <div className="gsj-loading__text">Đang tải hành trình...</div>
-        </div>
-      ) : totalJourneys === 0 ? (
-        <div className="gsj-empty-state">
-          <div className="gsj-empty-state__visual">
-            <div className="gsj-empty-state__icon">
-              <Rocket size={48} />
-            </div>
+    return (
+      <div className="gsj-journeys-section" id="journeys-section">
+        {/* Section header */}
+        <div className="gsj-section-header">
+          <div className="gsj-section-header__left">
+            <h2 className="gsj-section-header__title">
+              <Map size={22} />
+              Hành trình của bạn
+            </h2>
+            <p className="gsj-section-header__subtitle">
+              {totalJourneys > 0
+                ? activeJourney
+                  ? "1 hành trình đang hoạt động"
+                  : `${historyJourneys.length} hành trình đã kết thúc`
+                : "Bắt đầu hành trình đầu tiên của bạn"}
+            </p>
           </div>
-          <h3 className="gsj-empty-state__title">Sẵn sàng bắt đầu?</h3>
-          <p className="gsj-empty-state__description">
-            Tạo hành trình học tập đầu tiên để khám phá tiềm năng của bạn. Chúng
-            tôi sẽ giúp bạn đánh giá kỹ năng và tạo lộ trình phù hợp.
-          </p>
-          <button
-            className="gsj-btn gsj-btn--primary gsj-btn--lg"
-            onClick={handleCreateJourneyClick}
-          >
-            <Sparkles size={18} />
-            Tạo hành trình đầu tiên
-          </button>
+          <div className="gsj-section-header__actions">
+            <button
+              className="gsj-btn gsj-btn--primary"
+              onClick={handleCreateJourneyClick}
+              disabled={!!activeJourney}
+              title={activeJourney ? "Hoàn thành hoặc xóa hành trình hiện tại trước khi tạo mới" : undefined}
+            >
+              <Zap size={16} />
+              Tạo mới
+            </button>
+          </div>
         </div>
-      ) : (
-        <>
-          <div className="gsj-journey-grid">
-            {paginatedJourneys.map((journey) => {
-              const journeyLabel = journey.jobRole
-                ? getJobRoleLabel(journey.jobRole, journey.domain)
-                : getDomainLabel(journey.domain);
 
-              return (
-                <div
-                  key={journey.id}
-                  className="gsj-journey-card"
-                  onClick={() => handleSelectJourney(journey.id)}
-                >
-                  <div className="gsj-journey-card__header">
-                    <div className="gsj-journey-card__domain">
-                      {getDomainImage(journey.domain) ? (
-                        <div className="gsj-journey-card__domain-img">
-                          <img
-                            src={getDomainImage(journey.domain)}
-                            alt={getDomainLabel(journey.domain)}
-                          />
-                        </div>
-                      ) : (
-                        <span className="gsj-journey-card__icon">
-                          {getJourneyMonogram(journey.domain)}
-                        </span>
-                      )}
-                      <div className="gsj-journey-card__info">
-                        <span className="gsj-journey-card__name">
-                          {journey.skillName ||
-                            (journey.skills && journey.skills.length > 0
-                              ? journey.skills[0]
-                              : journeyLabel)}
-                        </span>
-                        <span className="gsj-journey-card__sub">
-                          {journeyLabel}
-                        </span>
-                        <span className="gsj-journey-card__domain-label">
-                          {getDomainLabel(journey.domain)}
-                        </span>
+        {loading ? (
+          <div className="gsj-loading">
+            <div className="gsj-spinner"></div>
+            <div className="gsj-loading__text">Đang tải hành trình...</div>
+          </div>
+        ) : totalJourneys === 0 ? (
+          <div className="gsj-empty-state">
+            <div className="gsj-empty-state__visual">
+              <div className="gsj-empty-state__icon">
+                <Rocket size={48} />
+              </div>
+            </div>
+            <h3 className="gsj-empty-state__title">Sẵn sàng bắt đầu?</h3>
+            <p className="gsj-empty-state__description">
+              Tạo hành trình học tập đầu tiên để khám phá tiềm năng của bạn. Chúng
+              tôi sẽ giúp bạn đánh giá kỹ năng và tạo lộ trình phù hợp.
+            </p>
+            <button
+              className="gsj-btn gsj-btn--primary gsj-btn--lg"
+              onClick={handleCreateJourneyClick}
+            >
+              <Sparkles size={18} />
+              Tạo hành trình đầu tiên
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* ── ACTIVE JOURNEY HERO CARD ── */}
+            <div className="gsj-split__section-label gsj-split__section-label--active">
+              <span className="gsj-split__dot gsj-split__dot--active" />
+              Đang hoạt động
+            </div>
+
+            {activeJourney ? (
+              <div
+                className="gsj-active-card"
+                onClick={() => handleSelectJourney(activeJourney.id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && handleSelectJourney(activeJourney.id)}
+              >
+                <div className="gsj-active-card__body">
+                  {/* Domain image */}
+                  <div className="gsj-active-card__domain-wrap">
+                    {getDomainImage(activeJourney.domain) ? (
+                      <img
+                        className="gsj-active-card__domain-img"
+                        src={getDomainImage(activeJourney.domain)}
+                        alt={getDomainLabel(activeJourney.domain)}
+                      />
+                    ) : (
+                      <div className="gsj-active-card__domain-mono">
+                        {getJourneyMonogram(activeJourney.domain)}
                       </div>
-                    </div>
-                    <div className="gsj-journey-card__header-actions">
-                      <button
-                        type="button"
-                        className="gsj-journey-card__delete"
-                        onClick={(event) => {
-                          if (journey.hasActiveMentorBooking) {
-                            showWarning(
-                              "Không thể xóa",
-                              "Hành trình đã được book mentor. Bạn cần hoàn thành lộ trình học và giải phóng tiền cho mentor trước.",
-                            );
-                            return;
-                          }
-                          handleDeleteJourney(journey.id, {
-                            event,
-                            journeyLabel: `"${journeyLabel}"`,
-                          });
-                        }}
-                        disabled={actionLoading}
-                        title={
-                          journey.hasActiveMentorBooking
-                            ? "Không thể xóa — đã book mentor"
-                            : "Xóa hành trình"
-                        }
-                        aria-label={`Xóa hành trình ${journeyLabel}`}
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
+                    )}
                   </div>
 
-                  {journey.goal && (
-                    <p className="gsj-journey-card__goal">{journey.goal}</p>
-                  )}
+                  {/* Main info */}
+                  <div className="gsj-active-card__info">
+                    <div className="gsj-active-card__top">
+                      <div className="gsj-active-card__identity">
+                        <span className="gsj-active-card__name">
+                          {activeJourney.skillName ||
+                            (activeJourney.skills && activeJourney.skills.length > 0
+                              ? activeJourney.skills[0]
+                              : activeLabel)}
+                        </span>
+                        <span className="gsj-active-card__role">{activeLabel}</span>
+                        <span className="gsj-active-card__domain">
+                          {getDomainLabel(activeJourney.domain)}
+                        </span>
+                      </div>
 
-                  {journey.type === "SKILL" &&
-                    journey.skills &&
-                    journey.skills.length > 0 && (
-                      <div className="gsj-journey-card__skills">
-                        {journey.skills.slice(0, 3).map((skill, idx) => (
-                          <span
-                            key={idx}
-                            className="gsj-journey-card__skill-tag"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                        {journey.skills.length > 3 && (
-                          <span className="gsj-journey-card__skill-more">
-                            +{journey.skills.length - 3}
+                      <div className="gsj-active-card__badges">
+                        <span
+                          className={`gsj-journey-card__status gsj-journey-card__status--${getStatusColor(activeJourney.status)}`}
+                        >
+                          {getStatusLabel(activeJourney.status)}
+                        </span>
+                        {activeJourney.currentLevel && (
+                          <span className="gsj-active-card__level-chip">
+                            <Brain size={12} />
+                            {activeJourney.currentLevel}
                           </span>
                         )}
                       </div>
+                    </div>
+
+                    {activeJourney.goal && (
+                      <p className="gsj-active-card__goal">
+                        <Target size={13} />
+                        {activeJourney.goal}
+                      </p>
                     )}
 
-                  <div className="gsj-journey-card__footer">
-                    <div className="gsj-journey-card__progress">
-                      <div className="gsj-journey-card__progress-info">
+                    {/* Progress bar */}
+                    <div className="gsj-active-card__progress">
+                      <div className="gsj-active-card__progress-info">
                         <span>Tiến độ</span>
-                        <span>{journey.progressPercentage}%</span>
+                        <span>{activeJourney.progressPercentage}%</span>
                       </div>
-                      <div className="gsj-journey-card__progress-bar">
+                      <div className="gsj-active-card__progress-bar">
                         <div
-                          className="gsj-journey-card__progress-fill"
-                          style={{ width: `${journey.progressPercentage}%` }}
-                        ></div>
+                          className="gsj-active-card__progress-fill"
+                          style={{ width: `${activeJourney.progressPercentage}%` }}
+                        />
                       </div>
                     </div>
-                    <div className="gsj-journey-card__meta">
-                      <span
-                        className={`gsj-journey-card__status gsj-journey-card__status--${getStatusColor(journey.status)}`}
-                      >
-                        {getStatusLabel(journey.status)}
-                      </span>
-                      {journey.currentLevel && (
-                        <span className="gsj-journey-card__level">
-                          <Brain size={12} />
-                          {journey.currentLevel}
-                        </span>
-                      )}
-                      {journey.startedAt && (
-                        <span className="gsj-journey-card__date">
-                          <Calendar size={12} />
-                          {new Date(journey.startedAt).toLocaleDateString(
-                            "vi-VN",
-                          )}
-                        </span>
-                      )}
-                    </div>
-                  </div>
 
-                  <div className="gsj-journey-card__arrow">
-                    <ChevronRight size={20} />
+                    {/* Footer row */}
+                    <div className="gsj-active-card__footer">
+                      {activeJourney.startedAt && (
+                        <span className="gsj-active-card__date">
+                          <Calendar size={13} />
+                          {new Date(activeJourney.startedAt).toLocaleDateString("vi-VN")}
+                        </span>
+                      )}
+                      <div className="gsj-active-card__actions">
+                        <button
+                          type="button"
+                          className="gsj-journey-card__delete"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            if (activeJourney.hasActiveMentorBooking) {
+                              showWarning(
+                                "Không thể xóa",
+                                "Hành trình đã được book mentor. Bạn cần hoàn thành lộ trình học và giải phóng tiền cho mentor trước.",
+                              );
+                              return;
+                            }
+                            handleDeleteJourney(activeJourney.id, {
+                              event,
+                              journeyLabel: `"${activeLabel}"`,
+                            });
+                          }}
+                          disabled={actionLoading}
+                          title={
+                            activeJourney.hasActiveMentorBooking
+                              ? "Không thể xóa — đã book mentor"
+                              : "Xóa hành trình"
+                          }
+                          aria-label={`Xóa hành trình ${activeLabel}`}
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                        <button
+                          type="button"
+                          className="gsj-btn gsj-btn--primary gsj-active-card__open-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            void handleSelectJourney(activeJourney.id);
+                          }}
+                        >
+                          Mở hành trình
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-
-          {totalJourneyPages > 1 && (
-            <div className="gsj-pagination">
-              <button
-                type="button"
-                className="gsj-btn gsj-btn--secondary gsj-pagination__nav"
-                onClick={withPaginationScroll(() =>
-                  setCurrentPage((prev) => Math.max(1, prev - 1))
-                )}
-                disabled={currentPage === 1}
-              >
-                <ArrowLeft size={16} />
-                Trước
-              </button>
-
-              <div className="gsj-pagination__pages">
-                {Array.from(
-                  { length: totalJourneyPages },
-                  (_, index) => index + 1,
-                ).map((pageNumber) => (
-                  <button
-                    key={pageNumber}
-                    type="button"
-                    className={`gsj-pagination__page${pageNumber === currentPage ? " gsj-pagination__page--active" : ""}`}
-                    onClick={withPaginationScroll(() => setCurrentPage(pageNumber))}
-                  >
-                    {pageNumber}
-                  </button>
-                ))}
               </div>
+            ) : (
+              <div className="gsj-active-card gsj-active-card--empty">
+                <Rocket size={28} />
+                <span>Không có hành trình nào đang hoạt động.</span>
+                <button
+                  type="button"
+                  className="gsj-btn gsj-btn--primary"
+                  onClick={handleCreateJourneyClick}
+                >
+                  <Sparkles size={15} />
+                  Tạo hành trình mới
+                </button>
+              </div>
+            )}
 
-              <button
-                type="button"
-                className="gsj-btn gsj-btn--secondary gsj-pagination__nav"
-                onClick={withPaginationScroll(() =>
-                  setCurrentPage((prev) =>
-                    Math.min(totalJourneyPages, prev + 1),
-                  )
+            {/* ── HISTORY ── */}
+            {historyJourneys.length > 0 && (
+              <div className="gsj-split__history">
+                <div className="gsj-split__section-label gsj-split__section-label--history">
+                  <span className="gsj-split__dot gsj-split__dot--history" />
+                  Lịch sử ({historyJourneys.length})
+                </div>
+
+                {/* Filter bar */}
+                <div className="gsj-history-toolbar">
+                  <div className="gsj-history-search">
+                    <Search size={14} />
+                    <input
+                      type="text"
+                      className="gsj-history-search__input"
+                      placeholder="Tìm theo tên kỹ năng, vai trò, lĩnh vực..."
+                      value={historySearch}
+                      onChange={(e) => {
+                        setHistorySearch(e.target.value);
+                        setHistoryPage(1);
+                      }}
+                    />
+                    {historySearch && (
+                      <button
+                        type="button"
+                        className="gsj-history-search__clear"
+                        onClick={() => { setHistorySearch(""); setHistoryPage(1); }}
+                        aria-label="Xóa tìm kiếm"
+                      >
+                        <X size={13} />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="gsj-history-filter">
+                    <ChevronDown size={14} />
+                    <select
+                      className="gsj-history-filter__select"
+                      value={historyStatusFilter}
+                      onChange={(e) => {
+                        setHistoryStatusFilter(e.target.value as typeof historyStatusFilter);
+                        setHistoryPage(1);
+                      }}
+                    >
+                      <option value="all">Tất cả trạng thái</option>
+                      <option value="completed">Hoàn thành</option>
+                      <option value="cancelled">Đã hủy</option>
+                      <option value="paused">Tạm dừng</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Rows */}
+                {filteredHistoryJourneys.length === 0 ? (
+                  <div className="gsj-history-empty">
+                    <History size={18} />
+                    Không tìm thấy hành trình nào phù hợp.
+                  </div>
+                ) : (
+                  <div className="gsj-history-list">
+                    {paginatedHistoryJourneys.map((journey) => {
+                      const label = journey.jobRole
+                        ? getJobRoleLabel(journey.jobRole, journey.domain)
+                        : getDomainLabel(journey.domain);
+                      return (
+                        <div
+                          key={journey.id}
+                          className="gsj-history-row"
+                          onClick={() => handleSelectJourney(journey.id)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => e.key === "Enter" && handleSelectJourney(journey.id)}
+                        >
+                          {/* Thumbnail */}
+                          <div className="gsj-history-row__thumb">
+                            {getDomainImage(journey.domain) ? (
+                              <img
+                                src={getDomainImage(journey.domain)}
+                                alt={getDomainLabel(journey.domain)}
+                              />
+                            ) : (
+                              <span>{getJourneyMonogram(journey.domain)}</span>
+                            )}
+                          </div>
+
+                          {/* Name + role */}
+                          <div className="gsj-history-row__info">
+                            <span className="gsj-history-row__name">
+                              {journey.skillName ||
+                                (journey.skills && journey.skills.length > 0
+                                  ? journey.skills[0]
+                                  : label)}
+                            </span>
+                            <span className="gsj-history-row__sub">
+                              {label} · {getDomainLabel(journey.domain)}
+                            </span>
+                          </div>
+
+                          {/* Progress */}
+                          <div className="gsj-history-row__progress">
+                            <div className="gsj-history-row__progress-bar">
+                              <div
+                                className="gsj-history-row__progress-fill"
+                                style={{ width: `${journey.progressPercentage}%` }}
+                              />
+                            </div>
+                            <span className="gsj-history-row__progress-pct">
+                              {journey.progressPercentage}%
+                            </span>
+                          </div>
+
+                          {/* Status */}
+                          <span
+                            className={`gsj-journey-card__status gsj-journey-card__status--${getStatusColor(journey.status)} gsj-history-row__status`}
+                          >
+                            {getStatusLabel(journey.status)}
+                          </span>
+
+                          {/* Date */}
+                          <span className="gsj-history-row__date">
+                            {journey.startedAt
+                              ? new Date(journey.startedAt).toLocaleDateString("vi-VN")
+                              : "—"}
+                          </span>
+
+                          {/* Delete */}
+                          <button
+                            type="button"
+                            className="gsj-journey-card__delete gsj-history-row__delete"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              if (journey.hasActiveMentorBooking) {
+                                showWarning(
+                                  "Không thể xóa",
+                                  "Hành trình đã được book mentor. Bạn cần hoàn thành lộ trình học và giải phóng tiền cho mentor trước.",
+                                );
+                                return;
+                              }
+                              handleDeleteJourney(journey.id, {
+                                event,
+                                journeyLabel: `"${label}"`,
+                              });
+                            }}
+                            disabled={actionLoading}
+                            title={
+                              journey.hasActiveMentorBooking
+                                ? "Không thể xóa — đã book mentor"
+                                : "Xóa hành trình"
+                            }
+                            aria-label={`Xóa hành trình ${label}`}
+                          >
+                            <Trash2 size={13} />
+                          </button>
+
+                          <ChevronRight size={15} className="gsj-history-row__arrow" />
+                        </div>
+                      );
+                    })}
+                  </div>
                 )}
-                disabled={currentPage === totalJourneyPages}
-              >
-                Sau
-                <ChevronRight size={16} />
-              </button>
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  );
+
+                {/* History pagination */}
+                {totalHistoryPages > 1 && (
+                  <div className="gsj-pagination gsj-history-pagination">
+                    <button
+                      type="button"
+                      className="gsj-btn gsj-btn--secondary gsj-pagination__nav"
+                      onClick={() => setHistoryPage((p) => Math.max(1, p - 1))}
+                      disabled={historyPage === 1}
+                    >
+                      <ArrowLeft size={15} />
+                      Trước
+                    </button>
+                    <div className="gsj-pagination__pages">
+                      {Array.from({ length: totalHistoryPages }, (_, i) => i + 1).map((n) => (
+                        <button
+                          key={n}
+                          type="button"
+                          className={`gsj-pagination__page${n === historyPage ? " gsj-pagination__page--active" : ""}`}
+                          onClick={() => setHistoryPage(n)}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      className="gsj-btn gsj-btn--secondary gsj-pagination__nav"
+                      onClick={() => setHistoryPage((p) => Math.min(totalHistoryPages, p + 1))}
+                      disabled={historyPage === totalHistoryPages}
+                    >
+                      Sau
+                      <ChevronRight size={15} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    );
+  };
 
   // Render detail view
   const renderDetailView = () => {
