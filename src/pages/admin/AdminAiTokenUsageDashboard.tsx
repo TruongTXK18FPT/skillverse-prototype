@@ -10,6 +10,7 @@ import {
   MessageSquare,
   RefreshCw,
   Server,
+  Sparkles,
   Zap,
 } from "lucide-react";
 import {
@@ -210,20 +211,14 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
 
   return (
     <div className="admin-token-usage">
-      <header className="admin-token-usage__header">
-        <div>
-          <span className="admin-token-usage__eyebrow">Giám sát hệ thống AI</span>
-          <h1>Luồng Token AI</h1>
-          <p>Theo dõi lượng token sử dụng qua các luồng AI trong hệ thống.</p>
+      {/* Hero - Full Width */}
+      <header className="admin-token-usage__hero">
+        <div className="admin-token-usage__badge">
+          <Sparkles size={14} />
+          Giám sát hệ thống AI
         </div>
-        <button
-          className="admin-token-usage__refresh-btn"
-          onClick={handleRefresh}
-          disabled={Object.values(loading).some(Boolean)}
-        >
-          <RefreshCw size={16} className={Object.values(loading).some(Boolean) ? "spinning" : ""} />
-          Làm mới
-        </button>
+        <h1>Quản lý mức sử dụng AI</h1>
+        <p>Theo dõi lượng token sử dụng qua các luồng AI trong hệ thống.</p>
       </header>
 
       {error && (
@@ -234,141 +229,178 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Filter Bar */}
+      {/* Filters with Refresh Button */}
       <div className="admin-token-usage__filters">
-        <div className="admin-token-usage__filter-group">
-          <label className="admin-token-usage__filter-label">
-            <Calendar size={14} />
-            Khoảng thời gian
-          </label>
-          <select
-            value={filters.preset}
-            onChange={(e) => handlePresetChange(e.target.value as DateRangePreset)}
-          >
-            <option value="today">Hôm nay</option>
-            <option value="last7Days">7 ngày qua</option>
-            <option value="last30Days">30 ngày qua</option>
-            <option value="custom">Tùy chỉnh</option>
-          </select>
-        </div>
-
-        {filters.preset === "custom" && (
-          <>
-            <div className="admin-token-usage__filter-group">
-              <label className="admin-token-usage__filter-label">Từ</label>
-              <input
-                type="datetime-local"
-                value={filters.from.slice(0, 16)}
-                onChange={(e) => setFilters({ ...filters, from: new Date(e.target.value).toISOString() })}
-              />
+        <div className="admin-token-usage__filter-header-bar">
+          <div className="admin-token-usage__filter-header-left">
+            <Filter size={18} />
+            <span>Bộ lọc</span>
+          </div>
+          <div className="admin-token-usage__filter-header-right">
+            <div className="admin-token-usage__range-note">
+              <Calendar size={16} />
+              <span>
+                {new Date(filters.from).toLocaleDateString('vi-VN')} - {new Date(filters.to).toLocaleDateString('vi-VN')}
+              </span>
             </div>
-            <div className="admin-token-usage__filter-group">
-              <label className="admin-token-usage__filter-label">Đến</label>
-              <input
-                type="datetime-local"
-                value={filters.to.slice(0, 16)}
-                onChange={(e) => setFilters({ ...filters, to: new Date(e.target.value).toISOString() })}
-              />
+            <button
+              className="admin-token-usage__refresh-btn"
+              onClick={handleRefresh}
+              disabled={Object.values(loading).some(Boolean)}
+            >
+              <RefreshCw size={16} className={Object.values(loading).some(Boolean) ? "spinning" : ""} />
+              Làm mới
+            </button>
+          </div>
+        </div>
+        <div className="admin-token-usage__filter-row">
+          {/* Date Preset */}
+          <div className="admin-token-usage__filter-item">
+            <label className="admin-token-usage__filter-label">
+              <Calendar size={14} />
+              Thời gian
+            </label>
+            <div className="admin-token-usage__preset-chips">
+              {(['today', 'last7Days', 'last30Days', 'custom'] as DateRangePreset[]).map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  className={`admin-token-usage__preset-chip ${filters.preset === preset ? 'is-active' : ''}`}
+                  onClick={() => handlePresetChange(preset)}
+                >
+                  {preset === 'today' && 'Hôm nay'}
+                  {preset === 'last7Days' && '7 ngày'}
+                  {preset === 'last30Days' && '30 ngày'}
+                  {preset === 'custom' && 'Tùy chỉnh'}
+                </button>
+              ))}
             </div>
-          </>
-        )}
+            {filters.preset === 'custom' && (
+              <div className="admin-token-usage__custom-date">
+                <input
+                  type="date"
+                  className="admin-token-usage__date-input"
+                  value={filters.from.slice(0, 10)}
+                  onChange={(e) => setFilters({ ...filters, from: new Date(e.target.value).toISOString() })}
+                />
+                <span>→</span>
+                <input
+                  type="date"
+                  className="admin-token-usage__date-input"
+                  value={filters.to.slice(0, 10)}
+                  onChange={(e) => setFilters({ ...filters, to: new Date(e.target.value).toISOString() })}
+                />
+              </div>
+            )}
+          </div>
 
-        <div className="admin-token-usage__filter-group">
-          <label className="admin-token-usage__filter-label">
-            <Filter size={14} />
-            Flow
-          </label>
-          <select
-            value={filters.flowType}
-            onChange={(e) => { setFilters({ ...filters, flowType: e.target.value as AiFlowType }); setCurrentPage(0); }}
-          >
-            <option value="">Tất cả</option>
-            <option value="AI_GRADING">Chấm điểm AI</option>
-            <option value="CHATBOT">Chatbot</option>
-            <option value="MEOWL_CHAT">Meowl Chat</option>
-            <option value="ROADMAP_GENERATION">Tạo lộ trình</option>
-            <option value="STUDY_PLAN">Kế hoạch học tập</option>
-            <option value="CV_GENERATION">Tạo CV</option>
-          </select>
-        </div>
+          {/* Flow */}
+          <div className="admin-token-usage__filter-item">
+            <label className="admin-token-usage__filter-label">
+              <Filter size={14} />
+              Flow
+            </label>
+            <select
+              className="admin-token-usage__filter-select"
+              value={filters.flowType}
+              onChange={(e) => { setFilters({ ...filters, flowType: e.target.value as AiFlowType }); setCurrentPage(0); }}
+            >
+              <option value="">Tất cả</option>
+              <option value="AI_GRADING">Chấm điểm AI</option>
+              <option value="CHATBOT">Chatbot</option>
+              <option value="MEOWL_CHAT">Meowl Chat</option>
+              <option value="ROADMAP_GENERATION">Tạo lộ trình</option>
+              <option value="STUDY_PLAN">Kế hoạch học tập</option>
+              <option value="CV_GENERATION">Tạo CV</option>
+            </select>
+          </div>
 
-        <div className="admin-token-usage__filter-group">
-          <label className="admin-token-usage__filter-label">
-            <Server size={14} />
-            Provider
-          </label>
-          <select
-            value={filters.providerType}
-            onChange={(e) => { setFilters({ ...filters, providerType: e.target.value as AiProviderType }); setCurrentPage(0); }}
-          >
-            <option value="">Tất cả</option>
-            <option value="LOCAL_AI">Local AI</option>
-            <option value="GEMINI">Gemini</option>
-            <option value="MISTRAL">Mistral</option>
-          </select>
-        </div>
+          {/* Provider */}
+          <div className="admin-token-usage__filter-item">
+            <label className="admin-token-usage__filter-label">
+              <Server size={14} />
+              Provider
+            </label>
+            <select
+              className="admin-token-usage__filter-select"
+              value={filters.providerType}
+              onChange={(e) => { setFilters({ ...filters, providerType: e.target.value as AiProviderType }); setCurrentPage(0); }}
+            >
+              <option value="">Tất cả</option>
+              <option value="LOCAL_AI">Local AI</option>
+              <option value="GEMINI">Gemini</option>
+              <option value="MISTRAL">Mistral</option>
+            </select>
+          </div>
 
-        <div className="admin-token-usage__filter-group">
-          <label className="admin-token-usage__filter-label">Trạng thái</label>
-          <select
-            value={filters.status}
-            onChange={(e) => { setFilters({ ...filters, status: e.target.value as "SUCCESS" | "FAILED" | "" }); setCurrentPage(0); }}
-          >
-            <option value="">Tất cả</option>
-            <option value="SUCCESS">Thành công</option>
-            <option value="FAILED">Thất bại</option>
-          </select>
+          {/* Status */}
+          <div className="admin-token-usage__filter-item">
+            <label className="admin-token-usage__filter-label">Trạng thái</label>
+            <select
+              className="admin-token-usage__filter-select"
+              value={filters.status}
+              onChange={(e) => { setFilters({ ...filters, status: e.target.value as "SUCCESS" | "FAILED" | "" }); setCurrentPage(0); }}
+            >
+              <option value="">Tất cả</option>
+              <option value="SUCCESS">Thành công</option>
+              <option value="FAILED">Thất bại</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* KPI Cards - Essential 4 metrics only */}
+      {/* KPI Cards - Neon Style */}
       <div className="admin-token-usage__kpi-grid">
-        <div className="admin-token-usage__kpi-card">
-          <div className="admin-token-usage__kpi-icon total">
-            <Zap size={20} />
+        <div className="admin-token-usage__kpi-card total">
+          <div className="admin-token-usage__kpi-icon">
+            <Zap size={24} />
           </div>
           <div className="admin-token-usage__kpi-content">
+            <span className="admin-token-usage__kpi-label">Tổng tokens</span>
             <span className="admin-token-usage__kpi-value monospace">
               {loading.summary ? "-" : formatTokenCount(summary?.totalTokens ?? 0)}
             </span>
-            <span className="admin-token-usage__kpi-label">Tổng tokens</span>
           </div>
+          <div className="admin-token-usage__kpi-glow" />
         </div>
 
-        <div className="admin-token-usage__kpi-card">
-          <div className="admin-token-usage__kpi-icon prompt">
-            <MessageSquare size={20} />
+        <div className="admin-token-usage__kpi-card prompt">
+          <div className="admin-token-usage__kpi-icon">
+            <MessageSquare size={24} />
           </div>
           <div className="admin-token-usage__kpi-content">
+            <span className="admin-token-usage__kpi-label">Input tokens</span>
             <span className="admin-token-usage__kpi-value monospace">
               {loading.summary ? "-" : formatTokenCount(summary?.promptTokens ?? 0)}
             </span>
-            <span className="admin-token-usage__kpi-label">Prompt tokens</span>
           </div>
+          <div className="admin-token-usage__kpi-glow" />
         </div>
 
-        <div className="admin-token-usage__kpi-card">
-          <div className="admin-token-usage__kpi-icon completion">
-            <Activity size={20} />
+        <div className="admin-token-usage__kpi-card completion">
+          <div className="admin-token-usage__kpi-icon">
+            <Activity size={24} />
           </div>
           <div className="admin-token-usage__kpi-content">
+            <span className="admin-token-usage__kpi-label">Output tokens</span>
             <span className="admin-token-usage__kpi-value monospace">
               {loading.summary ? "-" : formatTokenCount(summary?.completionTokens ?? 0)}
             </span>
-            <span className="admin-token-usage__kpi-label">Completion tokens</span>
           </div>
+          <div className="admin-token-usage__kpi-glow" />
         </div>
 
-        <div className="admin-token-usage__kpi-card">
-          <div className="admin-token-usage__kpi-icon requests">
-            <Server size={20} />
+        <div className="admin-token-usage__kpi-card requests">
+          <div className="admin-token-usage__kpi-icon">
+            <Server size={24} />
           </div>
           <div className="admin-token-usage__kpi-content">
+            <span className="admin-token-usage__kpi-label">Số requests</span>
             <span className="admin-token-usage__kpi-value monospace">
               {loading.summary ? "-" : (summary?.requestCount ?? 0).toLocaleString()}
             </span>
-            <span className="admin-token-usage__kpi-label">Số requests</span>
           </div>
+          <div className="admin-token-usage__kpi-glow" />
         </div>
       </div>
 
@@ -396,7 +428,7 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
                 <Line
                   type="monotone"
                   dataKey="promptTokens"
-                  name="Prompt"
+                  name="Input"
                   stroke="#3b82f6"
                   strokeWidth={2}
                   dot={false}
@@ -405,7 +437,7 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
                 <Line
                   type="monotone"
                   dataKey="completionTokens"
-                  name="Completion"
+                  name="Output"
                   stroke="#10b981"
                   strokeWidth={2}
                   dot={false}
@@ -513,7 +545,7 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
                   <td>{log.modelName || "-"}</td>
                   <td>
                     {formatTokenCount(log.totalTokens)}
-                    {log.estimated && <span className="admin-token-usage__estimated-badge">ƯT</span>}
+                    {/* {log.estimated && <span className="admin-token-usage__estimated-badge">ƯT</span>} */}
                   </td>
                   <td>
                     <span className={`admin-token-usage__status-badge ${log.status.toLowerCase()}`}>
