@@ -160,6 +160,23 @@
   cursor: not-allowed;
 }
 
+.nesp-btn--confirm {
+  background: #059669;
+  color: #ffffff;
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.nesp-btn--confirm:hover:not(:disabled) {
+  background: #047857;
+}
+
+.nesp-btn--confirm:disabled {
+  background: #6ee7b7;
+  cursor: not-allowed;
+}
+
 .nesp-btn--ghost {
   background: transparent;
   color: #e2e8f0;

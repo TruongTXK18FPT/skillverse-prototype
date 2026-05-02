@@ -86,6 +86,17 @@ export const submitNodeEvidence = async (
   return response.data;
 };
 
+/** Learner self-confirm node completion after submitting evidence. */
+export const selfConfirmNode = async (
+  journeyId: number,
+  nodeId: string,
+): Promise<NodeEvidenceRecordResponse> => {
+  const response = await axiosInstance.post<NodeEvidenceRecordResponse>(
+    `${nodeBase(journeyId, nodeId)}/self-confirm`,
+  );
+  return response.data;
+};
+
 // ==================== Review / Verify (mentor) ====================
 
 export const reviewNodeSubmission = async (

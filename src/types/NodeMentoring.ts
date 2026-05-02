@@ -102,6 +102,8 @@ export interface NodeEvidenceRecordResponse {
   updatedAt?: string;
   learnerMarkedComplete?: boolean;
   roadmapProgressStatus?: string;
+  /** True when an active mentor booking covers this node. FE uses this to choose UI path. */
+  hasMentorCoverage?: boolean;
   latestReview?: NodeReviewResponse;
   latestVerification?: NodeVerificationResponseDto;
 }

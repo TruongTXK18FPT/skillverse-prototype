@@ -9,9 +9,10 @@
  * Form logic nằm trong NodeEvidenceSubmissionModal.
  */
 import { type FC, useCallback, useEffect, useState } from 'react';
-import { AlertCircle, CheckCircle, Clock, Send, Shield, XCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle, Clock, Send, Shield, UserCheck, XCircle } from 'lucide-react';
 import {
   getNodeEvidence,
+  selfConfirmNode,
   submitNodeEvidence,
 } from '../../services/nodeMentoringService';
 import { uploadEvidence } from '../../services/mentorVerificationService';
@@ -76,6 +77,8 @@ const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -96,6 +99,29 @@ const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
   }, [load]);
 
   const isLocked = current?.verificationStatus === 'VERIFIED';
+  const isNodeAlreadyCompleted =
+    current?.learnerMarkedComplete === true ||
+    current?.roadmapProgressStatus === 'COMPLETED';
+  const canSelfConfirm =
+    !isLocked &&
+    !isNodeAlreadyCompleted &&
+    (current?.submissionStatus === 'SUBMITTED' || current?.submissionStatus === 'RESUBMITTED') &&
+    current?.verificationStatus !== 'APPROVED';
+
+  const handleSelfConfirm = useCallback(async () => {
+    setConfirming(true);
+    setConfirmError(null);
+    try {
+      const saved = await selfConfirmNode(journeyId, nodeId);
+      setCurrent(saved);
+      onSubmitted?.(saved);
+    } catch (err) {
+      const axiosErr = err as { response?: { data?: { message?: string } } };
+      setConfirmError(axiosErr.response?.data?.message || 'Không thể xác nhận hoàn thành node.');
+    } finally {
+      setConfirming(false);
+    }
+  }, [journeyId, nodeId, onSubmitted]);
 
   const handleUploadFile = useCallback(async (file: File): Promise<string> => {
     return uploadEvidence(file);
@@ -147,6 +173,30 @@ const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
         <div className="nesp-alert nesp-alert--error">
           <XCircle size={15} /> {loadError}
         </div>
+      )}
+
+      {confirmError && (
+        <div className="nesp-alert nesp-alert--error">
+          <XCircle size={15} /> {confirmError}
+        </div>
+      )}
+
+      {current?.hasMentorCoverage && isNodeAlreadyCompleted && (
+        <div className="nesp-alert nesp-alert--info">
+          <CheckCircle size={15} /> Đã hoàn thành, chờ mentor xác thực.
+        </div>
+      )}
+
+      {canSelfConfirm && (
+        <button
+          type="button"
+          className="nesp-btn nesp-btn--confirm"
+          onClick={handleSelfConfirm}
+          disabled={confirming}
+        >
+          <UserCheck size={14} />
+          {confirming ? 'Đang xác nhận…' : 'Xác nhận hoàn thành node'}
+        </button>
       )}
 
       {current?.mentorFeedback && (
