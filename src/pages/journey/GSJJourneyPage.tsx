@@ -74,15 +74,6 @@ import { getDomainImage } from "../../utils/domainImageMap";
 import technologyDomainImage from "../../assets/domain/Technology.png";
 import designDomainImage from "../../assets/domain/Design.png";
 import financeMarketingDomainImage from "../../assets/domain/Finance_Marketing.png";
-import engineeringDomainImage from "../../assets/domain/Ky_thuat.png";
-import healthcareDomainImage from "../../assets/domain/Healthcare.png";
-import educationDomainImage from "../../assets/domain/Education.png";
-import logisticsDomainImage from "../../assets/domain/Logistics.png";
-import legalPublicAdministrationDomainImage from "../../assets/domain/Legal_Public Administration.png";
-import artsEntertainmentDomainImage from "../../assets/domain/Arts&Entertainment.png";
-import serviceHospitalityDomainImage from "../../assets/domain/Service_Hospitality.png";
-import communityDomainImage from "../../assets/domain/Community.png";
-import agricultureEnvironmentDomainImage from "../../assets/domain/Nongnghiep.png";
 import meowlAcwyImage from "../../assets/meowl-skin/meowl-acwy.png";
 import "./../../styles/GSJJourney.css";
 
@@ -103,7 +94,7 @@ const HERO_DOMAIN_SHOWCASE = [
   },
   {
     key: "finance-marketing",
-    title: "Marketing",
+    title: "Kinh doanh và Marketing",
     description:
       "Phù hợp cho các vai trò kinh doanh, tài chính, tăng trưởng và hoạch định thị trường.",
     image: financeMarketingDomainImage,
@@ -1558,11 +1549,11 @@ const GSJJourneyPage: React.FC = () => {
     totalJourneys === 0
       ? 0
       : Math.round(
-          journeys.reduce(
-            (total, journey) => total + (journey.progressPercentage || 0),
-            0,
-          ) / totalJourneys,
-        );
+        journeys.reduce(
+          (total, journey) => total + (journey.progressPercentage || 0),
+          0,
+        ) / totalJourneys,
+      );
 
   const completionRate =
     totalJourneys === 0
@@ -1598,8 +1589,8 @@ const GSJJourneyPage: React.FC = () => {
 
   const selectedJourneyActivityAt = selectedJourney
     ? selectedJourney.lastActivityAt ||
-      selectedJourney.startedAt ||
-      selectedJourney.createdAt
+    selectedJourney.startedAt ||
+    selectedJourney.createdAt
     : null;
 
   const selectedJourneyActivityLabel = selectedJourneyActivityAt
@@ -1621,12 +1612,12 @@ const GSJJourneyPage: React.FC = () => {
     selectedJourneyHasRoadmap && selectedJourneyProgress >= 100;
   const selectedJourneyStepLabel = selectedJourney
     ? [
-        "Đánh giá ban đầu",
-        "Phân tích kỹ năng",
-        "Lộ trình học tập",
-        "Học & Thực hành",
-        "Thành tựu",
-      ][getCurrentStepIndex(selectedJourney)]
+      "Đánh giá ban đầu",
+      "Phân tích kỹ năng",
+      "Lộ trình học tập",
+      "Học & Thực hành",
+      "Thành tựu",
+    ][getCurrentStepIndex(selectedJourney)]
     : "";
 
   const overviewMetrics = [
@@ -1652,89 +1643,89 @@ const GSJJourneyPage: React.FC = () => {
 
   const overviewSummaryItems = selectedJourney
     ? [
-        {
-          key: "selected-domain",
-          label: "Lĩnh vực đang xem",
-          value: getDomainLabel(selectedJourney.domain),
-        },
-        {
-          key: "selected-last-activity",
-          label: "Hoạt động gần nhất",
-          value: selectedJourneyActivityLabel,
-        },
-      ]
+      {
+        key: "selected-domain",
+        label: "Lĩnh vực đang xem",
+        value: getDomainLabel(selectedJourney.domain),
+      },
+      {
+        key: "selected-last-activity",
+        label: "Hoạt động gần nhất",
+        value: selectedJourneyActivityLabel,
+      },
+    ]
     : [
-        {
-          key: "dominant-domain",
-          label: "Lĩnh vực trọng tâm",
-          value: dominantDomainLabel,
-        },
-        {
-          key: "latest-activity",
-          label: "Hoạt động gần nhất",
-          value: latestActivityLabel,
-        },
-      ];
+      {
+        key: "dominant-domain",
+        label: "Lĩnh vực trọng tâm",
+        value: dominantDomainLabel,
+      },
+      {
+        key: "latest-activity",
+        label: "Hoạt động gần nhất",
+        value: latestActivityLabel,
+      },
+    ];
 
   const overviewRows = selectedJourney
     ? [
-        {
-          key: "selected-progress",
-          label: "Tiến độ hành trình",
-          displayValue: `${selectedJourneyProgress}%`,
-          ratio: selectedJourneyProgress,
-          colorClass: "gsj-overview__bar--active",
-          caption: `Bước hiện tại: ${selectedJourneyStepLabel}`,
-        },
-        {
-          key: "selected-assessment",
-          label: "Đánh giá đầu vào",
-          displayValue: selectedJourneyHasResult
-            ? "Đã hoàn thành"
-            : selectedJourneyHasTest
-              ? "Đang làm bài"
-              : "Chưa làm",
-          ratio: selectedJourneyHasResult
-            ? 100
-            : selectedJourneyHasTest
-              ? 50
-              : 0,
-          colorClass: selectedJourneyHasResult
-            ? "gsj-overview__bar--completed"
-            : "gsj-overview__bar--active",
-          caption: selectedJourneyHasResult
-            ? "Đã có kết quả đánh giá."
-            : selectedJourneyHasTest
-              ? "Đang có bài test chưa nộp."
-              : "Chưa tạo/hoàn thành bài test.",
-        },
-        {
-          key: "selected-roadmap",
-          label: "Roadmap học tập",
-          displayValue: selectedJourneyHasRoadmap ? "Sẵn sàng" : "Chưa tạo",
-          ratio: selectedJourneyHasRoadmap ? 100 : 0,
-          colorClass: selectedJourneyHasRoadmap
-            ? "gsj-overview__bar--completed"
-            : "gsj-overview__bar--neutral",
-          caption: selectedJourneyHasRoadmap
-            ? "Có thể mở roadmap ngay."
-            : "Tạo roadmap sau khi có kết quả đánh giá.",
-        },
-      ]
+      {
+        key: "selected-progress",
+        label: "Tiến độ hành trình",
+        displayValue: `${selectedJourneyProgress}%`,
+        ratio: selectedJourneyProgress,
+        colorClass: "gsj-overview__bar--active",
+        caption: `Bước hiện tại: ${selectedJourneyStepLabel}`,
+      },
+      {
+        key: "selected-assessment",
+        label: "Đánh giá đầu vào",
+        displayValue: selectedJourneyHasResult
+          ? "Đã hoàn thành"
+          : selectedJourneyHasTest
+            ? "Đang làm bài"
+            : "Chưa làm",
+        ratio: selectedJourneyHasResult
+          ? 100
+          : selectedJourneyHasTest
+            ? 50
+            : 0,
+        colorClass: selectedJourneyHasResult
+          ? "gsj-overview__bar--completed"
+          : "gsj-overview__bar--active",
+        caption: selectedJourneyHasResult
+          ? "Đã có kết quả đánh giá."
+          : selectedJourneyHasTest
+            ? "Đang có bài test chưa nộp."
+            : "Chưa tạo/hoàn thành bài test.",
+      },
+      {
+        key: "selected-roadmap",
+        label: "Roadmap học tập",
+        displayValue: selectedJourneyHasRoadmap ? "Sẵn sàng" : "Chưa tạo",
+        ratio: selectedJourneyHasRoadmap ? 100 : 0,
+        colorClass: selectedJourneyHasRoadmap
+          ? "gsj-overview__bar--completed"
+          : "gsj-overview__bar--neutral",
+        caption: selectedJourneyHasRoadmap
+          ? "Có thể mở roadmap ngay."
+          : "Tạo roadmap sau khi có kết quả đánh giá.",
+      },
+    ]
     : overviewMetrics.map((item) => {
-        const ratio =
-          totalJourneys === 0
-            ? 0
-            : Math.round((item.value / totalJourneys) * 100);
-        return {
-          key: item.key,
-          label: item.label,
-          displayValue: `${item.value}`,
-          ratio,
-          colorClass: item.colorClass,
-          caption: `${ratio}% trên tổng số hành trình`,
-        };
-      });
+      const ratio =
+        totalJourneys === 0
+          ? 0
+          : Math.round((item.value / totalJourneys) * 100);
+      return {
+        key: item.key,
+        label: item.label,
+        displayValue: `${item.value}`,
+        ratio,
+        colorClass: item.colorClass,
+        caption: `${ratio}% trên tổng số hành trình`,
+      };
+    });
 
   const overviewNote = selectedJourney
     ? selectedJourneyHasResult
@@ -1812,12 +1803,11 @@ const GSJJourneyPage: React.FC = () => {
             Hành trình học tập cá nhân hóa
           </div>
           <h1 className="gsj-hero__title">
-            Đánh giá năng lực &amp; lộ trình phát triển chuyên môn
+            Đánh giá kỹ năng <br /> & lộ trình học tập
           </h1>
           <p className="gsj-hero__description">
-            Khám phá trình độ hiện tại qua bài đánh giá thông minh, nhận lộ
-            trình học tập được cá nhân hoá phù hợp với mục tiêu nghề nghiệp và
-            kỹ năng bạn đang theo đuổi.
+            Làm bài đánh giá để xác định trình độ hiện tại và 
+            nhận lộ trình học tập cá nhân hóa theo các kỹ năng bạn cần phát triển.
           </p>
           <div className="gsj-hero__actions">
             <button
@@ -2088,8 +2078,8 @@ const GSJJourneyPage: React.FC = () => {
   const renderJourneyList = () => {
     const activeLabel = activeJourney
       ? (activeJourney.jobRole
-          ? getJobRoleLabel(activeJourney.jobRole, activeJourney.domain)
-          : getDomainLabel(activeJourney.domain))
+        ? getJobRoleLabel(activeJourney.jobRole, activeJourney.domain)
+        : getDomainLabel(activeJourney.domain))
       : "";
 
     return (
@@ -2704,14 +2694,14 @@ const GSJJourneyPage: React.FC = () => {
 
             {(selectedJourney.status === JourneyStatus.COMPLETED_VERIFIED ||
               selectedJourney.status ===
-                JourneyStatus.COMPLETED_UNVERIFIED) && (
-              <div className="gsj-mb-16">
-                <JourneyVerificationDossier
-                  journeyId={selectedJourney.id}
-                  journeyTitle={selectedJourney.goal}
-                />
-              </div>
-            )}
+              JourneyStatus.COMPLETED_UNVERIFIED) && (
+                <div className="gsj-mb-16">
+                  <JourneyVerificationDossier
+                    journeyId={selectedJourney.id}
+                    journeyTitle={selectedJourney.goal}
+                  />
+                </div>
+              )}
 
             {/* Mentor suggestion: button-triggered, lazy fetch */}
 
@@ -2823,24 +2813,24 @@ const GSJJourneyPage: React.FC = () => {
               selectedJourney.status === JourneyStatus.ROADMAP_READY ||
               selectedJourney.status === JourneyStatus.STUDY_PLANS_READY ||
               selectedJourney.status === JourneyStatus.PAUSED) && (
-              <button
-                className="gsj-btn gsj-btn--secondary gsj-btn--full gsj-mb-16"
-                onClick={handleTogglePause}
-                disabled={actionLoading}
-              >
-                {isPaused ? (
-                  <>
-                    <Play size={16} />
-                    Tiếp tục hành trình
-                  </>
-                ) : (
-                  <>
-                    <Pause size={16} />
-                    Tạm dừng
-                  </>
-                )}
-              </button>
-            )}
+                <button
+                  className="gsj-btn gsj-btn--secondary gsj-btn--full gsj-mb-16"
+                  onClick={handleTogglePause}
+                  disabled={actionLoading}
+                >
+                  {isPaused ? (
+                    <>
+                      <Play size={16} />
+                      Tiếp tục hành trình
+                    </>
+                  ) : (
+                    <>
+                      <Pause size={16} />
+                      Tạm dừng
+                    </>
+                  )}
+                </button>
+              )}
 
             {selectedJourney.roadmapSessionId && (
               <button
@@ -3024,13 +3014,12 @@ const GSJJourneyPage: React.FC = () => {
                     {skill.skillName}
                   </span>
                   <span
-                    className={`gsj-skill-item__level gsj-skill-item__level--${
-                      skill.currentLevel === SkillLevel.BEGINNER
+                    className={`gsj-skill-item__level gsj-skill-item__level--${skill.currentLevel === SkillLevel.BEGINNER
                         ? "beginner"
                         : skill.currentLevel === SkillLevel.ELEMENTARY
                           ? "intermediate"
                           : "advanced"
-                    }`}
+                      }`}
                   >
                     {skill.currentLevel}
                   </span>
@@ -3099,8 +3088,8 @@ const GSJJourneyPage: React.FC = () => {
     const correctRate =
       currentResult.totalQuestions > 0
         ? Math.round(
-            (currentResult.correctAnswers / currentResult.totalQuestions) * 100,
-          )
+          (currentResult.correctAnswers / currentResult.totalQuestions) * 100,
+        )
         : 0;
 
     const latestResultAt =
