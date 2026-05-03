@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "BPMN là viết tắt của cụm từ nào sau đây?",
+    "options": [
+      "A. Business Process Management Notation",
+      "B. Business Process Model and Notation",
+      "C. Business Protocol Model Network",
+      "D. Basic Process Modeling Node"
+    ],
+    "correctAnswer": "B",
+    "explanation": "BPMN là tiêu chuẩn quốc tế cho việc mô hình hóa quy trình nghiệp vụ, tên đầy đủ là Business Process Model and Notation.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong BPMN, biểu tượng hình tròn nét mảnh dùng để biểu diễn thành phần nào?",
+    "options": [
+      "A. Start Event (Sự kiện bắt đầu)",
+      "B. End Event (Sự kiện kết thúc)",
+      "C. Task (Công việc)",
+      "D. Gateway (Cổng quyết định)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Start Event được ký hiệu bằng một hình tròn nét đơn (mảnh). Hình tròn nét đậm là End Event.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ký hiệu hình thoi có dấu 'X' bên trong (Exclusive Gateway) có ý nghĩa gì?",
+    "options": [
+      "A. Cho phép thực hiện đồng thời tất cả các nhánh",
+      "B. Chỉ cho phép đi vào duy nhất một nhánh dựa trên điều kiện",
+      "C. Đợi tất cả các luồng dữ liệu hội tụ lại",
+      "D. Đại diện cho một công việc cần thực hiện"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Exclusive Gateway (XOR) dùng để rẽ nhánh quy trình, trong đó chỉ có duy nhất một điều kiện thỏa mãn được chọn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong sơ đồ Swimlane, 'Pool' thường đại diện cho đối tượng nào?",
+    "options": [
+      "A. Một bước cụ thể trong quy trình",
+      "B. Một cá nhân cụ thể trong phòng ban",
+      "C. Một tổ chức hoặc một thực thể kinh doanh độc lập",
+      "D. Một hệ thống phần mềm duy nhất"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Pool thường đại diện cho một tổ chức (Organization) hoặc một thực thể tham gia vào quy trình (Participant).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Sequence Flow và Message Flow trong BPMN là gì?",
+    "options": [
+      "A. Sequence Flow dùng giữa các Pool, Message Flow dùng trong nội bộ Pool",
+      "B. Sequence Flow chỉ thứ tự thực hiện, Message Flow chỉ sự trao đổi thông tin giữa các Pool",
+      "C. Sequence Flow dùng cho dữ liệu, Message Flow dùng cho con người",
+      "D. Hai loại luồng này hoàn toàn giống nhau về ý nghĩa"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sequence Flow (mũi tên nét liền) dùng để chỉ trình tự hoạt động trong một Pool. Message Flow (mũi tên nét đứt) dùng để chỉ sự giao tiếp giữa các Pool khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Biểu đồ nào trong UML thường được dùng để xác định phạm vi hệ thống và các tác nhân tương tác?",
+    "options": [
+      "A. Class Diagram",
+      "B. Sequence Diagram",
+      "C. Use Case Diagram",
+      "D. State Machine Diagram"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Use Case Diagram giúp xác định các chức năng của hệ thống (Use Cases) và các tác nhân (Actors) bên ngoài tương tác với hệ thống đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Use Case Diagram, mối quan hệ <<include>> được dùng khi nào?",
+    "options": [
+      "A. Khi một Use Case là tùy chọn (optional) của Use Case khác",
+      "B. Khi một Use Case bắt buộc phải thực hiện như một phần của Use Case chính",
+      "C. Khi một Actor muốn thực hiện nhiều hành động cùng lúc",
+      "D. Khi muốn mô tả sự kế thừa giữa các Actor"
+    ],
+    "correctAnswer": "B",
+    "explanation": "<<include>> biểu thị một hành vi bắt buộc phải xảy ra khi Use Case cơ sở được thực hiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thành phần 'Lifeline' trong Sequence Diagram đại diện cho yếu tố nào?",
+    "options": [
+      "A. Thời gian hoàn thành một công việc",
+      "B. Sự tồn tại của một đối tượng theo thời gian trong kịch bản",
+      "C. Một điều kiện rẽ nhánh",
+      "D. Một hành động lặp đi lặp lại"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lifeline (đường đời) biểu diễn sự tham gia của một đối tượng (Object/Actor) trong suốt quá trình tương tác của Sequence Diagram.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của việc vẽ sơ đồ quy trình 'AS-IS' là gì?",
+    "options": [
+      "A. Để thiết kế giao diện người dùng mới",
+      "B. Để mô tả trạng thái lý tưởng của quy trình trong tương lai",
+      "C. Để hiểu và phân tích hiện trạng thực tế của quy trình",
+      "D. Để lập trình các tính năng của hệ thống"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sơ đồ AS-IS phản ánh thực tế quy trình đang vận hành hiện tại để tìm ra các điểm nghẽn hoặc vấn đề cần cải thiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong UML Activity Diagram, biểu tượng 'Join Node' (thanh ngang đậm đón nhiều mũi tên vào) dùng để làm gì?",
+    "options": [
+      "A. Kết thúc toàn bộ quy trình",
+      "B. Chia một luồng thành nhiều luồng song song",
+      "C. Đồng bộ hóa, đợi tất cả các luồng song song hoàn thành trước khi tiếp tục",
+      "D. Lựa chọn một trong các nhánh để đi tiếp"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Join Node dùng để kết hợp các luồng song song được tạo ra bởi Fork Node, đảm bảo mọi nhánh phải xong mới đi tiếp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi vẽ quy trình 'TO-BE', BA nên tập trung vào điều gì?",
+    "options": [
+      "A. Giữ nguyên mọi bước cũ để tránh thay đổi",
+      "B. Tối ưu hóa, khắc phục các vấn đề của quy trình hiện tại",
+      "C. Chỉ tập trung vào các lỗi kỹ thuật của phần mềm",
+      "D. Liệt kê tên của tất cả nhân viên tham gia"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quy trình TO-BE là trạng thái mong muốn sau khi đã cải tiến hoặc áp dụng giải pháp mới để giải quyết vấn đề của AS-IS.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong BPMN, ký hiệu hình chữ nhật bo góc đại diện cho thành phần nào?",
+    "options": [
+      "A. Event",
+      "B. Gateway",
+      "C. Task/Activity",
+      "D. Data Object"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hình chữ nhật bo góc đại diện cho một Activity (hoạt động) hoặc Task (nhiệm vụ) trong quy trình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một 'Actor' trong Use Case Diagram có thể là đối tượng nào?",
+    "options": [
+      "A. Chỉ có thể là con người sử dụng hệ thống",
+      "B. Một chức năng bên trong hệ thống",
+      "C. Một người dùng, một hệ thống khác hoặc một thiết bị ngoại vi",
+      "D. Một bảng dữ liệu trong cơ sở dữ liệu"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Actor là bất kỳ thực thể bên ngoài nào tương tác với hệ thống, bao gồm con người, hệ thống khác hoặc phần cứng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng Swimlane (Lanes) trong sơ đồ quy trình là gì?",
+    "options": [
+      "A. Làm cho sơ đồ trông đẹp mắt hơn",
+      "B. Xác định rõ trách nhiệm của từng vai trò/phòng ban trong quy trình",
+      "C. Giảm số lượng các bước trong quy trình",
+      "D. Thay thế hoàn toàn cho tài liệu văn bản"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Swimlane giúp phân định rõ ai (vai trò nào, phòng ban nào) chịu trách nhiệm thực hiện hoạt động nào.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong UML Class Diagram, một ô chữ nhật thường được chia làm 3 phần. Phần thứ hai (ở giữa) chứa thông tin gì?",
+    "options": [
+      "A. Tên của Class",
+      "B. Các phương thức (Methods/Operations)",
+      "C. Các thuộc tính (Attributes)",
+      "D. Các mối quan hệ (Relationships)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cấu trúc Class: Phần trên cùng là tên Class, phần giữa là các thuộc tính (Attributes), phần dưới cùng là các phương thức (Methods).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong BPMN, ký hiệu hình thoi có dấu cộng (+) bên trong được gọi là gì?",
+    "options": [
+      "A. Exclusive Gateway",
+      "B. Parallel Gateway",
+      "C. Inclusive Gateway",
+      "D. Event-based Gateway"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dấu '+' đại diện cho Parallel Gateway, dùng để tạo ra các luồng công việc chạy song song đồng thời.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một BA vẽ sơ đồ quy trình mà thấy có quá nhiều mũi tên chồng chéo phức tạp, bước đầu tiên nên làm là gì?",
+    "options": [
+      "A. Xóa bớt các bước quan trọng để sơ đồ thoáng hơn",
+      "B. Sử dụng các Sub-process để đóng gói các nhóm hoạt động chi tiết",
+      "C. Chuyển sang viết văn bản thay vì vẽ sơ đồ",
+      "D. Gộp tất cả các phòng ban vào một Lane duy nhất"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Sub-process (quy trình con) giúp phân rã quy trình phức tạp thành các cấp độ dễ quản lý và theo dõi hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Sequence Diagram, mũi tên nét đứt có đầu mũi tên hở (mảnh) thường biểu diễn điều gì?",
+    "options": [
+      "A. Một thông điệp gọi hàm (Sync Message)",
+      "B. Một thông điệp phản hồi (Return Message)",
+      "C. Một hành động tự tương tác",
+      "D. Một thông điệp không đồng bộ (Async Message)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mũi tên nét đứt hướng ngược lại thường được dùng để biểu diễn giá trị trả về hoặc phản hồi từ một đối tượng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ký hiệu 'Timer Event' (hình tròn có hình đồng hồ bên trong) trong BPMN thường dùng để mô tả trường hợp nào?",
+    "options": [
+      "A. Khi quy trình kết thúc thành công",
+      "B. Khi quy trình cần chờ đợi một khoảng thời gian hoặc đến một mốc giờ cụ thể",
+      "C. Khi có lỗi xảy ra trong hệ thống",
+      "D. Khi người dùng nhấn nút 'Hủy'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Timer Event dùng để biểu thị các điều kiện về thời gian (ví dụ: đợi 2 ngày, hoặc đúng 8h sáng hàng ngày).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Use Case Diagram, 'System Boundary' (biên hệ thống) được vẽ bằng hình gì?",
+    "options": [
+      "A. Hình tròn bao quanh các Actor",
+      "B. Hình chữ nhật bao quanh các Use Case",
+      "C. Đường kẻ nối giữa Actor và Use Case",
+      "D. Hình thoi nằm ở giữa sơ đồ"
+    ],
+    "correctAnswer": "B",
+    "explanation": "System Boundary là một hình chữ nhật bao quanh các Use Case để xác định phạm vi của hệ thống đang được xem xét.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một quy trình kinh doanh có nhiều ngoại lệ (exceptions), BA nên sử dụng thành phần nào trong BPMN để xử lý?",
+    "options": [
+      "A. Chỉ dùng Sequence Flow",
+      "B. Boundary Events (Sự kiện biên đính kèm vào Task)",
+      "C. Start Event",
+      "D. Data Object"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Boundary Events đính kèm vào biên của một Activity được dùng để bắt các ngoại lệ hoặc ngắt quãng (như lỗi, hết thời gian) khi Activity đó đang thực hiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao không nên bắt đầu vẽ TO-BE ngay lập tức mà không xem xét AS-IS?",
+    "options": [
+      "A. Vì vẽ AS-IS là quy định bắt buộc của mọi công ty",
+      "B. Vì nếu không hiểu AS-IS, giải pháp TO-BE có thể bỏ sót các ràng buộc hoặc vấn đề cốt lõi",
+      "C. Vì AS-IS luôn tốt hơn TO-BE",
+      "D. Vì khách hàng chỉ muốn xem sơ đồ AS-IS"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hiểu rõ AS-IS giúp BA xác định đúng vấn đề cần giải quyết, tránh việc thiết kế quy trình mới nhưng vẫn lặp lại sai lầm cũ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong UML Activity Diagram, ký hiệu hình thoi dùng để làm gì?",
+    "options": [
+      "A. Chỉ dùng để bắt đầu quy trình",
+      "B. Biểu diễn cả điểm quyết định (Decision) và điểm hội tụ (Merge)",
+      "C. Biểu diễn một hành động của người dùng",
+      "D. Biểu diễn dữ liệu đầu vào"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Activity Diagram, hình thoi có thể là Decision (một vào nhiều ra) hoặc Merge (nhiều vào một ra).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi vẽ sơ đồ Swimlane, nếu một hoạt động do hệ thống tự động thực hiện, BA nên đặt nó ở đâu?",
+    "options": [
+      "A. Trong Lane của người dùng",
+      "B. Trong một Lane riêng dành cho 'Hệ thống' (System)",
+      "C. Không cần vẽ vào sơ đồ",
+      "D. Đặt ở giữa ranh giới của hai Lane"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để rõ ràng về trách nhiệm thực thi, các bước tự động nên được đặt trong một Lane đại diện cho hệ thống phần mềm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thành phần nào sau đây KHÔNG thuộc nhóm Flow Objects trong BPMN?",
+    "options": [
+      "A. Events",
+      "B. Activities",
+      "C. Gateways",
+      "D. Data Store"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Flow Objects gồm Events, Activities và Gateways. Data Store thuộc nhóm Data (Artifacts/Objects).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong BPMN, khi một quy trình cần rẽ nhánh mà tất cả các nhánh đều có thể được thực thi đồng thời và không cần điều kiện cụ thể để kích hoạt, loại Gateway nào là phù hợp nhất?",
+    "options": [
+      "A. Exclusive Gateway (XOR)",
+      "B. Inclusive Gateway (OR)",
+      "C. Parallel Gateway (AND)",
+      "D. Event-Based Gateway"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Parallel Gateway (AND) được sử dụng khi tất cả các luồng công việc nhánh cần được thực thi đồng thời mà không có điều kiện rẽ nhánh nào. Nó chia luồng thành nhiều luồng song song và sau đó đồng bộ hóa chúng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một Business Analyst đang mô hình hóa một quy trình xử lý đơn hàng. Nếu đơn hàng không được thanh toán trong vòng 24 giờ, quy trình cần tự động gửi email nhắc nhở cho khách hàng. Loại Event nào nên được sử dụng để kích hoạt hành động gửi email nhắc nhở này?",
+    "options": [
+      "A. Message Intermediate Catching Event",
+      "B. Timer Intermediate Catching Event",
+      "C. Error Intermediate Catching Event",
+      "D. Conditional Intermediate Catching Event"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Timer Intermediate Catching Event được sử dụng để tạm dừng một quy trình cho đến khi một khoảng thời gian nhất định trôi qua hoặc một thời điểm cụ thể được đạt đến, rất phù hợp cho các kịch bản hẹn giờ như nhắc nhở sau 24 giờ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong BPMN, sự khác biệt chính giữa Sequence Flow và Message Flow là gì?",
+    "options": [
+      "A. Sequence Flow chỉ dùng trong một Pool, Message Flow dùng giữa các Pool.",
+      "B. Sequence Flow biểu thị luồng dữ liệu, Message Flow biểu thị luồng điều khiển.",
+      "C. Sequence Flow có thể bỏ qua Gateways, Message Flow thì không.",
+      "D. Sequence Flow luôn là đường liền nét, Message Flow luôn là đường đứt nét."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sequence Flow (luồng tuần tự) biểu thị thứ tự thực hiện các hoạt động trong cùng một Pool (tổ chức/hệ thống). Message Flow (luồng thông điệp) biểu thị sự trao đổi thông tin giữa các Pool hoặc các đối tượng trong các Pool khác nhau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng Swimlanes (Pools và Lanes) trong BPMN, mục đích chính là gì?",
+    "options": [
+      "A. Để phân loại các loại sự kiện (Events) khác nhau trong quy trình.",
+      "B. Để nhóm các Task có cùng điều kiện thực thi.",
+      "C. Để phân định trách nhiệm và vai trò của các bên liên quan trong quy trình.",
+      "D. Để biểu thị các luồng dữ liệu giữa các hệ thống bên ngoài."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Pools và Lanes (Swimlanes) được sử dụng để phân chia quy trình thành các khu vực chịu trách nhiệm, giúp làm rõ ai (vai trò, phòng ban, hệ thống) chịu trách nhiệm cho các hoạt động cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một Business Analyst đang tạo một Use Case Diagram cho một hệ thống quản lý thư viện. Use Case 'Mượn Sách' yêu cầu người dùng phải 'Đăng nhập' trước. Mối quan hệ nào nên được sử dụng để biểu thị sự phụ thuộc này?",
+    "options": [
+      "A. Extend",
+      "B. Include",
+      "C. Generalization",
+      "D. Association"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mối quan hệ 'Include' được sử dụng khi một Use Case (base Use Case) luôn cần hoặc sử dụng chức năng của một Use Case khác (inclusion Use Case) để hoàn thành. Trong trường hợp này, 'Mượn Sách' luôn 'Include' 'Đăng nhập'.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của Sequence Diagram trong UML là gì?",
+    "options": [
+      "A. Mô tả cấu trúc tĩnh của hệ thống, bao gồm các lớp và mối quan hệ của chúng.",
+      "B. Biểu diễn luồng công việc tuần tự và các điểm rẽ nhánh trong một quy trình.",
+      "C. Mô tả sự tương tác giữa các đối tượng theo thứ tự thời gian, bao gồm việc gọi phương thức và truyền thông điệp.",
+      "D. Xác định các chức năng mà hệ thống cung cấp cho người dùng (Actors)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sequence Diagram tập trung vào việc hiển thị cách các đối tượng tương tác với nhau và thứ tự thời gian của các thông điệp được trao đổi giữa chúng. Nó rất hữu ích để hiểu hành vi động của hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Class Diagram của UML, mối quan hệ 'Aggregation' (tập hợp) khác 'Composition' (kết hợp) ở điểm nào?",
+    "options": [
+      "A. Aggregation biểu thị mối quan hệ 'is-a', Composition biểu thị mối quan hệ 'has-a'.",
+      "B. Aggregation là mối quan hệ yếu hơn, các đối tượng có thể tồn tại độc lập; Composition là mối quan hệ mạnh hơn, đối tượng con không thể tồn tại nếu không có đối tượng cha.",
+      "C. Aggregation chỉ áp dụng cho các lớp trừu tượng, Composition cho các lớp cụ thể.",
+      "D. Aggregation không có tính đa hình, Composition thì có."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Aggregation là một dạng 'has-a' yếu hơn, nơi các đối tượng thành phần có thể tồn tại độc lập với đối tượng chứa (ví dụ: một thư viện có nhiều sách, sách có thể tồn tại mà không cần thư viện). Composition là một dạng 'has-a' mạnh hơn, nơi đối tượng thành phần không thể tồn tại nếu không có đối tượng chứa (ví dụ: một căn phòng là một phần của ngôi nhà, căn phòng không tồn tại nếu không có ngôi nhà).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một Business Analyst cần mô tả chi tiết luồng công việc của quy trình phê duyệt yêu cầu nghỉ phép, bao gồm các điểm quyết định và các hoạt động song song. Loại UML Diagram nào phù hợp nhất để thể hiện điều này?",
+    "options": [
+      "A. Use Case Diagram",
+      "B. Class Diagram",
+      "C. Activity Diagram",
+      "D. State Machine Diagram"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Activity Diagram rất phù hợp để mô tả luồng công việc, các bước xử lý, điểm quyết định (decision points), và các hoạt động song song trong một quy trình kinh doanh hoặc một hoạt động cụ thể của hệ thống. Nó tương tự như một biểu đồ lưu đồ nhưng mạnh mẽ hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục tiêu chính của việc lập bản đồ quy trình hiện tại (Current State Process Mapping hay As-Is Process) là gì?",
+    "options": [
+      "A. Để thiết kế các giải pháp công nghệ mới cho quy trình.",
+      "B. Để xác định các điểm yếu, tắc nghẽn, lãng phí và cơ hội cải tiến trong quy trình hiện có.",
+      "C. Để dự đoán chi phí và lợi ích của việc triển khai quy trình mới.",
+      "D. Để đào tạo nhân viên về quy trình tương lai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lập bản đồ quy trình hiện tại giúp Business Analyst có cái nhìn toàn diện về cách mọi thứ đang diễn ra, từ đó dễ dàng phát hiện ra các vấn đề, các bước không hiệu quả và các khu vực cần cải thiện.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi lập bản đồ quy trình tương lai (Future State Process hay To-Be Process), điều gì là quan trọng nhất để đảm bảo sự thành công?",
+    "options": [
+      "A. Đảm bảo quy trình mới hoàn toàn tự động hóa mọi tác vụ.",
+      "B. Tập trung vào việc loại bỏ mọi bước thủ công, bất kể chi phí.",
+      "C. Cân bằng giữa các mục tiêu kinh doanh, khả năng kỹ thuật và sự chấp nhận của người dùng, đồng thời đảm bảo giải quyết các vấn đề đã xác định trong quy trình hiện tại.",
+      "D. Chỉ sử dụng các công nghệ mới nhất có sẵn trên thị trường."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quy trình To-Be cần phải thực tế và khả thi. Điều này đòi hỏi sự cân bằng giữa việc giải quyết các vấn đề hiện tại, đạt được các mục tiêu kinh doanh, khả năng triển khai về mặt kỹ thuật và sự chấp nhận của các bên liên quan.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án mô hình hóa quy trình, một vấn đề phổ biến khi sử dụng Swimlanes là gì?",
+    "options": [
+      "A. Việc xác định quá nhiều Pool và Lane khiến biểu đồ trở nên phức tạp và khó đọc.",
+      "B. Các hoạt động trong một Lane không được kết nối bằng Sequence Flow.",
+      "C. Thông điệp giữa các Pool không được biểu diễn bằng Message Flow.",
+      "D. Thiếu sự rõ ràng về trách nhiệm giữa các Lane, dẫn đến các hoạt động bị chồng chéo hoặc không được phân công rõ ràng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Mặc dù Swimlanes giúp làm rõ trách nhiệm, nhưng nếu không được định nghĩa cẩn thận, chúng có thể dẫn đến sự không rõ ràng hoặc chồng chéo trách nhiệm, gây nhầm lẫn về việc ai là người thực hiện một hoạt động cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một quy trình đăng ký tài khoản trực tuyến yêu cầu xác minh email. Nếu người dùng không xác minh email trong 3 ngày, tài khoản sẽ bị khóa. Trong BPMN, làm thế nào để mô hình hóa việc xử lý lỗi hoặc ngoại lệ này?",
+    "options": [
+      "A. Sử dụng một End Event loại Error để kết thúc quy trình.",
+      "B. Sử dụng một Boundary Intermediate Event loại Timer gắn vào Task 'Chờ xác minh email' để kích hoạt hành động khóa tài khoản.",
+      "C. Sử dụng một Exclusive Gateway để kiểm tra điều kiện 'đã xác minh email'.",
+      "D. Sử dụng một Message Intermediate Catching Event để nhận thông báo xác minh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Boundary Intermediate Event loại Timer được gắn vào một Task biểu thị một sự kiện xảy ra trong khi Task đó đang thực thi. Nếu thời gian chờ (3 ngày) hết trước khi Task hoàn thành (xác minh email), luồng sẽ chuyển sang nhánh xử lý ngoại lệ (khóa tài khoản).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi cần mô tả các bước chi tiết của một Use Case đã được xác định, bao gồm các tương tác giữa người dùng và hệ thống cũng như các đối tượng hệ thống nội bộ, loại UML Diagram nào là phù hợp nhất?",
+    "options": [
+      "A. Use Case Diagram",
+      "B. Class Diagram",
+      "C. Sequence Diagram",
+      "D. Component Diagram"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sequence Diagram mô tả chi tiết các tương tác giữa các đối tượng theo thứ tự thời gian, rất hữu ích để làm rõ cách một Use Case cụ thể được thực hiện thông qua các cuộc gọi phương thức và trao đổi thông điệp giữa các thành phần hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong BPMN, khi nào nên sử dụng một Sub-process thay vì một Task thông thường?",
+    "options": [
+      "A. Khi hoạt động có thể được hoàn thành trong một bước duy nhất.",
+      "B. Khi hoạt động cần được ẩn đi khỏi các bên liên quan bên ngoài.",
+      "C. Khi hoạt động bao gồm một chuỗi các hoạt động con phức tạp có thể được mô tả chi tiết hơn trong một biểu đồ riêng.",
+      "D. Khi hoạt động được thực hiện bởi một hệ thống tự động."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sub-process được sử dụng để nhóm các hoạt động liên quan thành một đơn vị logic, cho phép trừu tượng hóa và quản lý độ phức tạp. Nếu một hoạt động có thể được chia nhỏ thành nhiều bước con và cần chi tiết hóa, Sub-process là lựa chọn phù hợp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một thách thức phổ biến khi lập bản đồ quy trình hiện tại (As-Is Process) là gì?",
+    "options": [
+      "A. Khó khăn trong việc tìm kiếm các công cụ mô hình hóa phù hợp.",
+      "B. Các bên liên quan có thể có những hiểu biết khác nhau hoặc mâu thuẫn về cách quy trình thực sự hoạt động.",
+      "C. Công nghệ hiện tại quá tiên tiến để mô hình hóa.",
+      "D. Quy trình hiện tại quá đơn giản để cần lập bản đồ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một trong những thách thức lớn nhất là thu thập thông tin chính xác. Các bên liên quan khác nhau có thể có quan điểm, kinh nghiệm và hiểu biết khác nhau về cùng một quy trình, dẫn đến sự không nhất quán trong mô tả As-Is.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một Business Analyst cần mô hình hóa một quy trình mà tại một điểm rẽ nhánh, có thể thực hiện MỘT HOẶC NHIỀU nhánh tiếp theo tùy thuộc vào các điều kiện khác nhau, nhưng không nhất thiết phải tất cả các nhánh. Loại Gateway nào trong BPMN sẽ được sử dụng?",
+    "options": [
+      "A. Exclusive Gateway",
+      "B. Inclusive Gateway",
+      "C. Parallel Gateway",
+      "D. Complex Gateway"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Inclusive Gateway (OR) cho phép một hoặc nhiều nhánh được kích hoạt dựa trên các điều kiện. Nếu nhiều điều kiện đúng, nhiều nhánh có thể được thực thi song song. Nó linh hoạt hơn Exclusive Gateway nhưng không bắt buộc tất cả như Parallel Gateway.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Use Case Diagram, mối quan hệ 'Extend' được sử dụng khi nào?",
+    "options": [
+      "A. Khi một Use Case cơ bản luôn bao gồm chức năng của một Use Case khác.",
+      "B. Khi một Use Case mở rộng thêm chức năng cho một Use Case cơ bản trong những điều kiện cụ thể.",
+      "C. Khi một Actor kế thừa các vai trò từ một Actor khác.",
+      "D. Khi hai Use Case có thể được thực hiện song song."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mối quan hệ 'Extend' biểu thị rằng một Use Case mở rộng chức năng của một Use Case cơ bản trong một số trường hợp nhất định (điều kiện mở rộng). Ví dụ: 'Xử lý hoàn tiền' có thể 'Extend' 'Mua hàng' khi có lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sau khi phân tích quy trình hiện tại (As-Is) và thiết kế quy trình tương lai (To-Be), bước tiếp theo quan trọng nhất để đảm bảo cải tiến là gì?",
+    "options": [
+      "A. Bắt đầu ngay lập tức triển khai quy trình To-Be.",
+      "B. So sánh As-Is và To-Be để xác định các khoảng trống (gaps) và những thay đổi cần thiết, đồng thời đánh giá tác động.",
+      "C. Chỉ tập trung vào việc tự động hóa các bước thủ công.",
+      "D. Lưu trữ các tài liệu quy trình và chuyển sang dự án tiếp theo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc so sánh As-Is và To-Be giúp xác định rõ ràng những gì cần thay đổi, mức độ thay đổi, các rủi ro tiềm ẩn và tác động lên các bên liên quan, là cơ sở để lập kế hoạch triển khai hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong BPMN, một Message Flow thường được sử dụng để làm gì?",
+    "options": [
+      "A. Chỉ ra trình tự các hoạt động trong cùng một bộ phận.",
+      "B. Biểu thị sự trao đổi thông tin hoặc dữ liệu giữa các Pool (bên tham gia) khác nhau.",
+      "C. Định nghĩa các điểm quyết định trong một quy trình.",
+      "D. Kết nối một sự kiện với một hoạt động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Message Flow được dùng để biểu thị việc gửi và nhận thông điệp (thông tin, dữ liệu) giữa các Pool khác nhau, đại diện cho các tổ chức, hệ thống hoặc vai trò riêng biệt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điểm tập trung chính của một Sequence Diagram là gì?",
+    "options": [
+      "A. Cấu trúc tĩnh của các lớp và mối quan hệ của chúng.",
+      "B. Luồng điều khiển của các hoạt động trong một quy trình.",
+      "C. Thứ tự thời gian của các thông điệp được trao đổi giữa các đối tượng.",
+      "D. Các trạng thái khác nhau mà một đối tượng có thể có trong vòng đời của nó."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sequence Diagram đặc biệt hữu ích để minh họa cách các đối tượng tương tác theo một trình tự thời gian cụ thể, hiển thị các cuộc gọi phương thức và phản hồi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để thu thập thông tin về quy trình hiện tại (As-Is) một cách hiệu quả, Business Analyst nên sử dụng kỹ thuật nào sau đây?",
+    "options": [
+      "A. Chỉ dựa vào tài liệu quy trình có sẵn.",
+      "B. Thực hiện phỏng vấn sâu với các bên liên quan chính, quan sát trực tiếp quy trình và phân tích tài liệu hiện có.",
+      "C. Chỉ hỏi ý kiến của quản lý cấp cao.",
+      "D. Thiết kế quy trình To-Be trước rồi sau đó so sánh ngược lại với As-Is."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng kết hợp nhiều kỹ thuật như phỏng vấn, quan sát và phân tích tài liệu giúp thu thập thông tin toàn diện và chính xác nhất về quy trình hiện tại, giảm thiểu rủi ro bỏ sót hoặc hiểu sai.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế Swimlanes cho một quy trình, nguyên tắc tốt nhất để đảm bảo sự rõ ràng và tránh nhầm lẫn là gì?",
+    "options": [
+      "A. Gán một Lane cho mỗi cá nhân tham gia vào quy trình.",
+      "B. Đặt tên Swimlanes dựa trên các vai trò hoặc bộ phận chức năng rõ ràng, không trùng lặp.",
+      "C. Chỉ sử dụng một Pool duy nhất cho toàn bộ quy trình.",
+      "D. Thay đổi tên Swimlanes thường xuyên để phản ánh sự thay đổi nhân sự."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc đặt tên Swimlanes theo vai trò hoặc bộ phận chức năng giúp làm rõ trách nhiệm một cách nhất quán, không phụ thuộc vào cá nhân cụ thể và dễ dàng thích ứng với sự thay đổi nhân sự.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong BPMN, một Event-Based Gateway được sử dụng khi nào?",
+    "options": [
+      "A. Khi cần rẽ nhánh dựa trên các điều kiện dữ liệu.",
+      "B. Khi cần thực hiện nhiều luồng song song cùng một lúc.",
+      "C. Khi luồng công việc tiếp theo được xác định bởi một sự kiện cụ thể xảy ra đầu tiên trong số một tập hợp các sự kiện có thể xảy ra.",
+      "D. Khi cần đồng bộ hóa nhiều luồng công việc thành một."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Event-Based Gateway được sử dụng khi quy trình cần chờ một trong nhiều sự kiện có thể xảy ra. Sự kiện nào xảy ra đầu tiên sẽ xác định nhánh tiếp theo mà quy trình sẽ đi theo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc lặp lại và xác thực mô hình quy trình với các bên liên quan là rất quan trọng?",
+    "options": [
+      "A. Để đảm bảo mô hình sử dụng tất cả các ký hiệu BPMN/UML có thể.",
+      "B. Để phát hiện sớm các sai sót, hiểu lầm và đảm bảo mô hình phản ánh chính xác thực tế và đáp ứng yêu cầu kinh doanh.",
+      "C. Để làm cho tài liệu trở nên lớn hơn và chi tiết hơn.",
+      "D. Để trì hoãn việc triển khai quy trình mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xác thực liên tục giúp đảm bảo rằng mô hình quy trình được xây dựng chính xác, phù hợp với mong đợi của người dùng và các bên liên quan, từ đó giảm thiểu rủi ro thay đổi tốn kém sau này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Class Diagram, mối quan hệ nào biểu thị rằng một lớp là một loại cụ thể của một lớp khác (ví dụ: 'Dog' là một loại 'Animal')?",
+    "options": [
+      "A. Association",
+      "B. Aggregation",
+      "C. Composition",
+      "D. Generalization (Inheritance)"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Generalization (Kế thừa) biểu thị mối quan hệ 'is-a' giữa các lớp, nơi một lớp con (subclass) kế thừa các thuộc tính và hành vi từ một lớp cha (superclass).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong mô hình BPMN, khi một quy trình yêu cầu xử lý song song nhiều nhánh độc lập nhưng tất cả các nhánh đó phải hoàn thành trước khi quy trình tiếp tục, loại Gateway nào là phù hợp nhất để đảm bảo tính đồng bộ và tránh deadlock?",
+    "options": [
+      "A. Exclusive Gateway (XOR)",
+      "B. Inclusive Gateway (OR)",
+      "C. Parallel Gateway (AND)",
+      "D. Event-Based Gateway"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Parallel Gateway (AND) được sử dụng để tạo hoặc đồng bộ hóa các luồng công việc song song. Khi được sử dụng làm join, nó đợi tất cả các luồng đầu vào hoàn thành trước khi kích hoạt luồng đầu ra, đảm bảo tính đồng bộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một quy trình xử lý đơn hàng cần phải tự động hủy nếu khách hàng không xác nhận trong vòng 24 giờ. Tuy nhiên, nếu khách hàng xác nhận, quy trình hủy sẽ bị hủy bỏ. Trong BPMN, sự kiện nào nên được sử dụng làm Boundary Event để xử lý tình huống này một cách hiệu quả nhất?",
+    "options": [
+      "A. Message Intermediate Catching Event",
+      "B. Timer Intermediate Catching Event",
+      "C. Error Boundary Event",
+      "D. Conditional Boundary Event"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Timer Intermediate Catching Event gắn vào một Activity cho phép định nghĩa một khoảng thời gian chờ. Nếu thời gian chờ hết, luồng ngoại lệ được kích hoạt. Nếu Activity hoàn thành trước, Timer Event sẽ bị hủy bỏ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi mô hình hóa một tương tác phức tạp giữa nhiều đối tượng trong đó có các bước lặp lại hoặc có điều kiện, Fragment nào trong Sequence Diagram (UML) sẽ được ưu tiên sử dụng để tăng cường khả năng đọc và độ chính xác của mô hình?",
+    "options": [
+      "A. ref (Reference) Fragment",
+      "B. opt (Optional) Fragment",
+      "C. loop (Loop) Fragment",
+      "D. alt (Alternative) Fragment"
+    ],
+    "correctAnswer": "C",
+    "explanation": "loop Fragment được sử dụng để mô tả các hành động lặp lại nhiều lần. alt dùng cho các lựa chọn thay thế, opt cho hành động tùy chọn, và ref để tham chiếu đến một Sequence Diagram khác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong BPMN, sự khác biệt cơ bản về luồng thông tin (flow) giữa các Lane trong cùng một Pool và giữa các Pool khác nhau là gì?",
+    "options": [
+      "A. Các Lane sử dụng Sequence Flow, trong khi các Pool sử dụng Message Flow.",
+      "B. Cả Lane và Pool đều sử dụng Message Flow.",
+      "C. Cả Lane và Pool đều sử dụng Sequence Flow.",
+      "D. Các Lane sử dụng Message Flow, trong khi các Pool sử dụng Sequence Flow."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sequence Flow thể hiện thứ tự các hoạt động trong cùng một quy trình (trong cùng một Pool hoặc giữa các Lane trong cùng Pool). Message Flow thể hiện sự trao đổi thông tin giữa các Pool khác nhau (các bên tham gia độc lập).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào thì việc sử dụng Activity Diagram (UML) được ưu tiên hơn so với BPMN để mô hình hóa một quy trình kinh doanh?",
+    "options": [
+      "A. Khi cần mô tả chi tiết các tương tác giữa các hệ thống và đối tượng.",
+      "B. Khi trọng tâm là luồng điều khiển và luồng dữ liệu bên trong một hoạt động hoặc một trường hợp sử dụng.",
+      "C. Khi cần thể hiện sự phối hợp giữa nhiều bên tham gia độc lập.",
+      "D. Khi mục tiêu chính là tối ưu hóa hiệu suất quy trình ở cấp độ doanh nghiệp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Activity Diagram mạnh trong việc mô tả luồng điều khiển và luồng dữ liệu chi tiết bên trong một hoạt động cụ thể hoặc một Use Case, tập trung vào các bước và điều kiện nội bộ. BPMN mạnh hơn trong việc mô tả quy trình kinh doanh tổng thể và sự phối hợp giữa các bên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phân tích quy trình hiện tại (As-Is) để xác định các điểm cần cải thiện, kỹ thuật nào sau đây ít hiệu quả nhất trong việc khám phá các \"pain points\" và tắc nghẽn không rõ ràng?",
+    "options": [
+      "A. Phỏng vấn sâu với các bên liên quan trực tiếp.",
+      "B. Quan sát trực tiếp quy trình tại chỗ.",
+      "C. Phân tích dữ liệu hiệu suất và KPI của quy trình.",
+      "D. Dựa vào mô tả quy trình từ tài liệu cũ mà không xác minh."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Dựa vào tài liệu cũ mà không xác minh có thể bỏ sót các thay đổi thực tế, \"workarounds\" và các vấn đề không được ghi nhận, dẫn đến phân tích không chính xác. Các phương pháp khác đều giúp khám phá thông tin thực tế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một quy trình xử lý khiếu nại, sau khi khiếu nại được tiếp nhận, có một nhiệm vụ \"Điều tra\". Nếu trong quá trình điều tra, một bằng chứng quan trọng mới xuất hiện từ bên ngoài, quy trình cần ngay lập tức chuyển sang nhiệm vụ \"Xác minh bằng chứng\". Loại sự kiện nào trong BPMN nên được sử dụng để mô hình hóa việc \"bằng chứng mới xuất hiện\" và thay đổi luồng quy trình đang diễn ra?",
+    "options": [
+      "A. Message Intermediate Catching Event (gắn vào Activity \"Điều tra\")",
+      "B. Signal Intermediate Catching Event (gắn vào Activity \"Điều tra\")",
+      "C. Conditional Intermediate Catching Event (gắn vào Activity \"Điều tra\")",
+      "D. Non-Interrupting Message Boundary Event (gắn vào Activity \"Điều tra\")"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Signal Event được sử dụng để truyền tín hiệu toàn cục, không nhắm mục tiêu cụ thể. Khi một Signal được phát ra, tất cả các Signal Catching Event đang chờ (có cùng tên Signal) sẽ được kích hoạt. Trong trường hợp này, bằng chứng mới là một \"tín hiệu\" toàn cục có thể ảnh hưởng đến nhiều quy trình khác nhau hoặc các phiên bản khác nhau của cùng một quy trình. Message Event thường nhắm mục tiêu cụ thể hơn (từ một bên gửi đến một bên nhận).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Class Diagram (UML), mối quan hệ nào thể hiện rằng một đối tượng \"là một phần của\" đối tượng khác, và nếu đối tượng chứa bị hủy, các đối tượng thành phần cũng sẽ bị hủy theo?",
+    "options": [
+      "A. Association",
+      "B. Aggregation",
+      "C. Composition",
+      "D. Generalization"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Composition là một dạng mạnh của Aggregation, nơi đối tượng thành phần không thể tồn tại độc lập với đối tượng chứa. Nếu đối tượng chứa bị hủy, các đối tượng thành phần cũng bị hủy theo. Aggregation là \"part-of\" nhưng các thành phần có thể tồn tại độc lập.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một quy trình liên phòng ban phức tạp sử dụng Swimlane Diagram, một thách thức phổ biến là các hoạt động có thể liên quan đến nhiều phòng ban cùng lúc hoặc không rõ ràng thuộc về ai. Phương pháp nào sau đây là tốt nhất để giải quyết vấn đề này và duy trì sự rõ ràng về trách nhiệm?",
+    "options": [
+      "A. Tạo một \"Lane chung\" cho các hoạt động không rõ ràng.",
+      "B. Chia nhỏ hoạt động thành các nhiệm vụ nhỏ hơn và gán cho từng Lane cụ thể.",
+      "C. Sử dụng chú thích (annotations) để giải thích trách nhiệm thay vì gán vào Lane.",
+      "D. Gộp các phòng ban liên quan vào một Lane duy nhất để đơn giản hóa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chia nhỏ hoạt động và gán cho Lane cụ thể giúp làm rõ trách nhiệm từng bước, tránh sự mơ hồ. \"Lane chung\" hoặc gộp các phòng ban làm mất đi mục đích của Swimlane là phân định trách nhiệm. Chú thích chỉ là bổ sung, không thay thế việc gán trách nhiệm rõ ràng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế quy trình tương lai (To-Be), một Business Analyst cần cân nhắc giữa việc áp dụng các công nghệ mới nhất để đạt hiệu quả tối đa và khả năng chấp nhận thay đổi của tổ chức. Đây là một ví dụ về trade-off nào?",
+    "options": [
+      "A. Trade-off giữa chi phí đầu tư và ROI.",
+      "B. Trade-off giữa hiệu suất quy trình và khả năng quản lý thay đổi.",
+      "C. Trade-off giữa tự động hóa hoàn toàn và sự tham gia của con người.",
+      "D. Trade-off giữa độ phức tạp của giải pháp và thời gian triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc áp dụng công nghệ mới có thể mang lại hiệu suất cao nhưng đòi hỏi tổ chức phải thay đổi cách làm việc, văn hóa, và kỹ năng, đây chính là khía cạnh quản lý thay đổi (change management).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt chính về hành vi giữa Inclusive Gateway (OR) và Event-Based Gateway khi được sử dụng làm Split Gateway trong BPMN là gì?",
+    "options": [
+      "A. Inclusive Gateway kích hoạt tất cả các luồng đầu ra đúng điều kiện, trong khi Event-Based Gateway chỉ đợi một sự kiện xảy ra và kích hoạt luồng tương ứng.",
+      "B. Inclusive Gateway chỉ kích hoạt một luồng đầu ra, trong khi Event-Based Gateway kích hoạt tất cả các luồng đúng điều kiện.",
+      "C. Cả hai đều kích hoạt nhiều luồng dựa trên điều kiện, nhưng Event-Based Gateway yêu cầu một sự kiện rõ ràng.",
+      "D. Event-Based Gateway có thể có điều kiện trên các luồng đầu ra, còn Inclusive Gateway thì không."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Inclusive Gateway (OR) có thể kích hoạt một hoặc nhiều luồng đầu ra tùy thuộc vào việc các điều kiện trên các luồng đó đúng. Event-Based Gateway không có điều kiện trên luồng mà đợi một trong các sự kiện được định nghĩa trên các luồng đầu ra xảy ra, và chỉ kích hoạt luồng tương ứng với sự kiện đầu tiên đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi mô hình hóa một hệ thống lớn, phức tạp, việc sử dụng mối quan hệ <<include>> trong Use Case Diagram (UML) nên được ưu tiên khi nào?",
+    "options": [
+      "A. Khi một Use Case mở rộng chức năng của một Use Case khác trong các tình huống cụ thể.",
+      "B. Khi một chức năng chung được sử dụng bởi nhiều Use Case khác nhau và cần được tái sử dụng.",
+      "C. Khi một Use Case kế thừa hành vi từ một Use Case tổng quát hơn.",
+      "D. Khi cần chỉ ra rằng một Use Case là tùy chọn và không phải lúc nào cũng được thực hiện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mối quan hệ <<include>> được sử dụng để thể hiện rằng một Use Case bắt buộc phải bao gồm hành vi của một Use Case khác. Nó thường dùng để trích xuất các chức năng chung, tái sử dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quá trình lập bản đồ quy trình hiện tại (As-Is) cho một phòng ban có nhiều \"workarounds\" không chính thức và các bước thủ công không được ghi nhận, kỹ thuật nào sau đây sẽ hiệu quả nhất để thu thập thông tin đầy đủ và chính xác?",
+    "options": [
+      "A. Tổ chức các buổi hội thảo (workshops) với quản lý cấp cao.",
+      "B. Phân tích tài liệu quy trình chuẩn (SOPs) hiện có.",
+      "C. Thực hiện Shadowing (quan sát trực tiếp) và phỏng vấn người thực hiện công việc.",
+      "D. Gửi bảng khảo sát qua email cho tất cả nhân viên."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Shadowing và phỏng vấn trực tiếp người thực hiện công việc là cách tốt nhất để khám phá các \"workarounds\" và các bước không chính thức mà không được ghi lại trong tài liệu hoặc không được quản lý cấp cao biết đến.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một quy trình xử lý thanh toán tự động cần có khả năng xử lý lỗi khi hệ thống thanh toán bên ngoài không phản hồi. Nếu lỗi này xảy ra, quy trình cần thử lại 3 lần trước khi gửi thông báo cho nhân viên xử lý thủ công. Cách tiếp cận nào trong BPMN là tối ưu nhất để mô hình hóa logic này?",
+    "options": [
+      "A. Sử dụng Error Boundary Event trên nhiệm vụ thanh toán, sau đó là một vòng lặp và một Exclusive Gateway để kiểm tra số lần thử lại.",
+      "B. Sử dụng Conditional Intermediate Catching Event sau nhiệm vụ thanh toán để đợi phản hồi.",
+      "C. Sử dụng Timer Boundary Event để giới hạn thời gian phản hồi và một luồng ngoại lệ.",
+      "D. Sử dụng một Pool riêng biệt cho việc xử lý lỗi và Message Flow để giao tiếp."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Error Boundary Event là cách chuẩn để bắt lỗi xảy ra trong một Activity. Kết hợp với một vòng lặp và Exclusive Gateway, nó cho phép thực hiện logic thử lại nhiều lần trước khi chuyển sang xử lý thủ công.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi mô hình hóa một quy trình trong đó một số hoạt động có thể được thực hiện đồng thời, và tất cả chúng phải hoàn thành trước khi quy trình tiếp tục, yếu tố nào trong Activity Diagram (UML) sẽ được sử dụng để thể hiện sự đồng bộ này?",
+    "options": [
+      "A. Decision Node",
+      "B. Fork Node",
+      "C. Join Node",
+      "D. Merge Node"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Fork Node được sử dụng để chia một luồng thành nhiều luồng song song. Join Node được sử dụng để đồng bộ hóa các luồng song song, đảm bảo tất cả các luồng đầu vào đã hoàn thành trước khi luồng đầu ra được kích hoạt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong BPMN, khi hai Pool khác nhau cần trao đổi thông tin để phối hợp các hoạt động của họ, loại kết nối nào là bắt buộc để thể hiện sự giao tiếp này?",
+    "options": [
+      "A. Sequence Flow",
+      "B. Association",
+      "C. Message Flow",
+      "D. Data Association"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Message Flow được sử dụng để thể hiện sự trao đổi thông tin giữa các bên tham gia khác nhau (được biểu diễn bằng các Pool). Sequence Flow chỉ tồn tại trong cùng một Pool.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một Business Analyst đang thiết kế quy trình To-Be cho việc phê duyệt khoản vay. Mục tiêu là giảm thời gian phê duyệt từ 5 ngày xuống còn 1 ngày. Sau khi phân tích, phát hiện ra rằng bước \"thu thập tài liệu bổ sung\" là nguyên nhân chính gây chậm trễ. Giải pháp tối ưu nhất để giải quyết vấn đề này ở cấp độ quy trình là gì?",
+    "options": [
+      "A. Thêm một nhiệm vụ tự động để gửi email nhắc nhở khách hàng hàng ngày.",
+      "B. Thiết kế lại quy trình để yêu cầu tất cả tài liệu cần thiết ngay từ đầu hoặc sử dụng các nguồn dữ liệu bên ngoài để tự động thu thập.",
+      "C. Giao nhiệm vụ thu thập tài liệu cho một nhân viên khác để tăng tốc độ.",
+      "D. Đặt thời hạn nghiêm ngặt hơn cho khách hàng để nộp tài liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp tối ưu nhất là loại bỏ hoặc giảm thiểu nhu cầu thu thập tài liệu bổ sung bằng cách yêu cầu đầy đủ từ đầu hoặc tự động hóa việc thu thập, thay vì chỉ quản lý tốt hơn một bước vốn đã không hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một tổ chức đang triển khai một quy trình kinh doanh mới liên quan đến ba phòng ban (Sales, Operations, Finance) và một hệ thống CNTT. Khi mô hình hóa quy trình này bằng Swimlane Diagram, Business Analyst nhận thấy một số hoạt động có thể được thực hiện bởi cả Sales và Operations tùy thuộc vào từng trường hợp cụ thể. Để duy trì sự rõ ràng và linh hoạt, cách tiếp cận nào là tốt nhất?",
+    "options": [
+      "A. Tạo một Lane riêng biệt cho \"Sales/Operations\" để gộp chung các hoạt động.",
+      "B. Sử dụng Decision Gateway để phân tách luồng vào Lane của Sales hoặc Operations dựa trên điều kiện.",
+      "C. Gán hoạt động đó cho Lane của phòng ban nào thực hiện nó thường xuyên hơn.",
+      "D. Sử dụng chú thích để giải thích rằng hoạt động có thể được thực hiện bởi một trong hai phòng ban."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Decision Gateway cho phép mô hình hóa rõ ràng logic kinh doanh về việc phòng ban nào chịu trách nhiệm trong từng trường hợp cụ thể, giúp quy trình minh bạch và dễ hiểu hơn. Gộp chung Lane hoặc gán tùy tiện sẽ làm mất đi sự rõ ràng về trách nhiệm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi mô hình hóa một hệ thống vi dịch vụ (microservices) sử dụng Sequence Diagram, thách thức chính là làm thế nào để biểu diễn sự giao tiếp không đồng bộ (asynchronous communication) và các sự kiện (events) một cách rõ ràng. Kỹ thuật nào sau đây là phù hợp nhất cho mục đích này?",
+    "options": [
+      "A. Chỉ sử dụng Message (gọi đồng bộ) và bỏ qua các tương tác không đồng bộ.",
+      "B. Sử dụng Async Message (nét đứt) để biểu diễn các lệnh hoặc sự kiện được gửi mà không đợi phản hồi ngay lập tức.",
+      "C. Tạo một Lifeline riêng cho mỗi hàng đợi tin nhắn (message queue) hoặc bus sự kiện.",
+      "D. Sử dụng các loop và alt fragment để mô tả các phản hồi không đồng bộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Async Message (được biểu diễn bằng mũi tên nét đứt) là cách tiêu chuẩn trong Sequence Diagram để mô tả các tương tác không đồng bộ, nơi người gửi không đợi phản hồi ngay lập tức. Kết hợp với việc mô hình hóa các hàng đợi (nếu cần thiết) sẽ cung cấp một cái nhìn toàn diện.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một quy trình kinh doanh lớn có một phần lặp đi lặp lại và có thể được tái sử dụng trong các quy trình khác. Để quản lý độ phức tạp và thúc đẩy tái sử dụng trong BPMN, loại hoạt động nào nên được sử dụng?",
+    "options": [
+      "A. Task",
+      "B. Call Activity",
+      "C. Event Sub-process",
+      "D. Ad-hoc Sub-process"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Call Activity được sử dụng để gọi một quy trình con (Sub-process) có thể tái sử dụng, được định nghĩa độc lập. Nó giúp quản lý độ phức tạp và thúc đẩy mô-đun hóa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi chuyển từ quy trình As-Is sang To-Be, một Business Analyst đề xuất tự động hóa một bước thủ công tốn thời gian. Tuy nhiên, việc tự động hóa đòi hỏi đầu tư đáng kể và có nguy cơ lỗi cao trong giai đoạn đầu. Đây là một trade-off giữa yếu tố nào?",
+    "options": [
+      "A. Tối ưu hóa chi phí vận hành và rủi ro triển khai.",
+      "B. Tăng cường trải nghiệm khách hàng và giảm thiểu sự tham gia của con người.",
+      "C. Đơn giản hóa quy trình và tăng cường bảo mật dữ liệu.",
+      "D. Tăng tốc độ thực hiện và giảm yêu cầu về kỹ năng nhân sự."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tự động hóa có thể giảm chi phí vận hành về lâu dài, nhưng đòi hỏi chi phí đầu tư ban đầu và tiềm ẩn rủi ro trong quá trình triển khai (lỗi, sự cố).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa một Non-Interrupting Boundary Event và một Interrupting Boundary Event trong BPMN là gì?",
+    "options": [
+      "A. Non-Interrupting Event chỉ có thể là Timer Event, còn Interrupting Event có thể là bất kỳ loại Event nào.",
+      "B. Non-Interrupting Event cho phép Activity chính tiếp tục chạy song song với luồng ngoại lệ, trong khi Interrupting Event dừng ngay lập tức Activity chính.",
+      "C. Non-Interrupting Event không thể có luồng đầu ra, còn Interrupting Event thì có.",
+      "D. Non-Interrupting Event chỉ được sử dụng cho Sub-processes, còn Interrupting Event cho Tasks."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Interrupting Boundary Event (viền liền) sẽ hủy bỏ Activity mà nó gắn vào khi được kích hoạt. Non-Interrupting Boundary Event (viền nét đứt) cho phép Activity đó tiếp tục chạy trong khi luồng ngoại lệ cũng được kích hoạt song song.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế một hệ thống quản lý thư viện, một cuốn sách có thể có nhiều tác giả, và một tác giả có thể viết nhiều cuốn sách. Mối quan hệ nào trong Class Diagram (UML) thể hiện tốt nhất kịch bản này?",
+    "options": [
+      "A. Generalization (Kế thừa)",
+      "B. Aggregation (Tập hợp)",
+      "C. Composition (Thành phần)",
+      "D. Association (Kết hợp) với đa số (multiplicity) phù hợp"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Mối quan hệ Association với đa số phù hợp (ví dụ: Book * -- * Author) là cách chuẩn để mô hình hóa mối quan hệ nhiều-nhiều (many-to-many) giữa hai lớp, nơi các đối tượng có thể tồn tại độc lập.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án cải tiến quy trình, Business Analyst phát hiện ra rằng có sự chồng chéo trách nhiệm đáng kể giữa hai phòng ban A và B trong một số bước của quy trình. Điều này dẫn đến sự chậm trễ và nhầm lẫn. Để giải quyết vấn đề này khi mô hình hóa quy trình To-Be bằng Swimlane Diagram, hành động nào là phù hợp nhất?",
+    "options": [
+      "A. Gộp hai phòng ban A và B vào cùng một Lane để đơn giản hóa.",
+      "B. Sử dụng Decision Gateway để phân công rõ ràng trách nhiệm cho A hoặc B dựa trên các tiêu chí cụ thể.",
+      "C. Thêm một Lane thứ ba là \"Phối hợp\" để xử lý các hoạt động chồng chéo.",
+      "D. Loại bỏ các hoạt động chồng chéo khỏi quy trình To-Be."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Decision Gateway để phân công rõ ràng trách nhiệm dựa trên tiêu chí cụ thể là cách hiệu quả nhất để loại bỏ sự chồng chéo và nhầm lẫn, đảm bảo mỗi hoạt động có một chủ sở hữu rõ ràng trong quy trình To-Be.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong BPMN, Data Object được sử dụng để làm gì?",
+    "options": [
+      "A. Biểu diễn một kho lưu trữ dữ liệu vĩnh viễn (ví dụ: cơ sở dữ liệu).",
+      "B. Thể hiện thông tin hoặc dữ liệu cần thiết cho một hoạt động hoặc được tạo ra bởi một hoạt động.",
+      "C. Mô hình hóa luồng dữ liệu giữa các hệ thống bên ngoài.",
+      "D. Định nghĩa các thuộc tính của một đối tượng kinh doanh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data Object trong BPMN là một cách để hiển thị dữ liệu được yêu cầu hoặc được tạo ra bởi một Activity. Nó đại diện cho thông tin ở một trạng thái cụ thể trong quy trình, không phải là kho lưu trữ vĩnh viễn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong mô hình BPMN cấp độ doanh nghiệp, một quy trình kinh doanh phức tạp bao gồm các tương tác với nhiều hệ thống bên ngoài và đối tác. Để đảm bảo khả năng mở rộng, khả năng phục hồi và giảm thiểu rủi ro khi một hệ thống bên ngoài gặp sự cố, Business Analyst nên ưu tiên sử dụng loại Event nào để xử lý các phản hồi không mong muốn từ các hệ thống đó?",
+    "options": [
+      "A. Message Intermediate Catching Event",
+      "B. Error Intermediate Catching Event",
+      "C. Compensation Intermediate Catching Event",
+      "D. Conditional Intermediate Catching Event"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Error Intermediate Catching Event được sử dụng để bắt và xử lý các lỗi hoặc ngoại lệ xảy ra trong quá trình thực thi một hoạt động, đặc biệt là khi tương tác với các hệ thống bên ngoài. Điều này giúp thiết kế các luồng xử lý lỗi rõ ràng và đảm bảo quy trình có khả năng phục hồi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một tập đoàn đa quốc gia đang tái cấu trúc quy trình onboarding nhân viên toàn cầu. Quy trình này bao gồm các bước yêu cầu phê duyệt từ nhiều phòng ban (HR, IT, Legal, Finance) ở các quốc gia khác nhau, với các quy định và thời hạn riêng biệt. Để mô hình hóa sự đồng bộ và chờ đợi các phê duyệt này một cách hiệu quả nhất, Business Analyst nên sử dụng loại Gateway nào trong BPMN?",
+    "options": [
+      "A. Exclusive Gateway",
+      "B. Inclusive Gateway",
+      "C. Parallel Gateway",
+      "D. Event-Based Gateway"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Parallel Gateway được sử dụng để tạo ra các luồng song song (fork) và đồng bộ hóa chúng (join). Trong trường hợp này, các phê duyệt từ nhiều phòng ban có thể diễn ra đồng thời và quy trình chỉ tiếp tục khi tất cả các phê duyệt đã hoàn tất, phù hợp với chức năng của Parallel Gateway.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích quy trình 'as-is' (hiện tại) của một hệ thống kế thừa phức tạp, Business Analyst phát hiện nhiều điểm nghẽn (bottlenecks) và các bước thừa. Để chuẩn bị cho việc thiết kế quy trình 'to-be' (tương lai) nhằm tối ưu hóa, yếu tố nào sau đây là quan trọng nhất cần được ưu tiên xác định và ghi lại trong giai đoạn 'as-is'?",
+    "options": [
+      "A. Tất cả các hệ thống phần mềm hiện có đang được sử dụng.",
+      "B. Chi tiết về cấu trúc tổ chức và sơ đồ báo cáo.",
+      "C. Các điểm đau (pain points), nguyên nhân gốc rễ (root causes) và tác động của chúng.",
+      "D. Tổng chi phí vận hành hàng năm của quy trình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để thiết kế quy trình 'to-be' hiệu quả, việc hiểu rõ các điểm đau và nguyên nhân gốc rễ của chúng trong quy trình 'as-is' là cực kỳ quan trọng. Điều này giúp Business Analyst tập trung vào việc giải quyết các vấn đề cốt lõi thay vì chỉ cải thiện các triệu chứng bề mặt.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ngân hàng đang phát triển một hệ thống cho vay mới. Quy trình này yêu cầu tương tác phức tạp giữa khách hàng, nhân viên tín dụng, hệ thống kiểm tra tín dụng tự động và hệ thống phê duyệt cuối cùng. Để mô tả rõ ràng trình tự các thông điệp và tương tác giữa các đối tượng này theo thời gian, biểu đồ UML nào là phù hợp nhất?",
+    "options": [
+      "A. Use Case Diagram",
+      "B. Class Diagram",
+      "C. Sequence Diagram",
+      "D. Activity Diagram"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sequence Diagram (Biểu đồ trình tự) chuyên dùng để mô tả trình tự các tương tác giữa các đối tượng theo thời gian, thể hiện rõ ràng các thông điệp được gửi và nhận giữa chúng. Nó rất hữu ích để hiểu luồng điều khiển và dữ liệu trong một kịch bản cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một dự án chuyển đổi số lớn, Business Analyst cần mô hình hóa một quy trình nghiệp vụ có tính chất lặp đi lặp lại và không có cấu trúc cố định, nơi thứ tự các hoạt động có thể thay đổi tùy thuộc vào quyết định của người thực hiện tại thời điểm đó. Loại Sub-process nào trong BPMN sẽ phù hợp nhất để thể hiện tính linh hoạt này?",
+    "options": [
+      "A. Embedded Sub-process",
+      "B. Reusable Sub-process (Call Activity)",
+      "C. Ad-Hoc Sub-process",
+      "D. Event Sub-process"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ad-Hoc Sub-process được sử dụng để mô hình hóa các quy trình có tính chất linh hoạt, nơi các hoạt động có thể được thực hiện theo bất kỳ thứ tự nào, lặp lại hoặc bỏ qua, tùy thuộc vào người thực hiện. Quy trình hoàn thành khi tất cả các hoạt động bắt buộc đã được hoàn thành.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế một quy trình kinh doanh 'to-be' cho một hệ thống quản lý chuỗi cung ứng, Business Analyst đề xuất một cơ chế tự động hóa mới để xử lý các đơn hàng bị lỗi. Nếu việc tự động hóa này thất bại, quy trình cần quay trở lại một trạng thái trước đó và thực hiện các bước khắc phục thủ công. Cơ chế nào trong BPMN cho phép hoàn tác các hoạt động đã hoàn thành và thực hiện các bước bù trừ?",
+    "options": [
+      "A. Error Event",
+      "B. Timer Event",
+      "C. Compensation Event",
+      "D. Conditional Event"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Compensation Event được sử dụng để mô hình hóa việc hoàn tác các hoạt động đã hoàn thành khi có một sự kiện bù trừ được kích hoạt. Nó cho phép định nghĩa các bước 'hoàn tác' hoặc 'bù trừ' để đưa hệ thống về trạng thái nhất quán sau một lỗi hoặc thay đổi quyết định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một dự án xây dựng hệ thống quản lý tài sản doanh nghiệp, Business Analyst cần thiết kế một Class Diagram để mô hình hóa cấu trúc dữ liệu. Khi mô hình hóa mối quan hệ giữa 'Asset' (Tài sản) và 'MaintenanceRecord' (Hồ sơ bảo trì), trong đó mỗi Asset có thể có nhiều MaintenanceRecord và MaintenanceRecord không thể tồn tại độc lập nếu Asset bị xóa. Loại mối quan hệ nào trong UML phù hợp nhất?",
+    "options": [
+      "A. Association",
+      "B. Aggregation",
+      "C. Composition",
+      "D. Dependency"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Composition (Hợp thành) là một dạng mạnh của Aggregation, thể hiện mối quan hệ 'part-of' mạnh mẽ, trong đó đối tượng con (MaintenanceRecord) không thể tồn tại nếu đối tượng cha (Asset) bị xóa. Đây là mối quan hệ sở hữu độc quyền và vòng đời phụ thuộc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một công ty viễn thông đang tối ưu hóa quy trình xử lý khiếu nại của khách hàng. Quy trình này liên quan đến nhiều phòng ban (Chăm sóc khách hàng, Kỹ thuật, Kế toán) và thường xuyên bị chậm trễ do thiếu sự phối hợp. Để làm rõ trách nhiệm của từng phòng ban và các điểm chuyển giao công việc, biểu đồ nào trong BPMN là hiệu quả nhất?",
+    "options": [
+      "A. Process Diagram",
+      "B. Collaboration Diagram",
+      "C. Choreography Diagram",
+      "D. Conversation Diagram"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Collaboration Diagram (Biểu đồ cộng tác) sử dụng Pools và Lanes (Swimlanes) để mô tả sự tương tác giữa các bên tham gia (phòng ban, vai trò) trong một quy trình kinh doanh. Nó làm rõ trách nhiệm và các điểm chuyển giao giữa các bên, rất phù hợp cho việc tối ưu hóa phối hợp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích một quy trình nghiệp vụ cấp cao trong một tổ chức lớn, Business Analyst cần xác định các tác nhân chính (actors) và các mục tiêu chức năng (goals) mà họ muốn đạt được thông qua hệ thống. Biểu đồ UML nào cung cấp cái nhìn tổng quan tốt nhất về phạm vi hệ thống và các tương tác chính từ góc độ người dùng?",
+    "options": [
+      "A. Activity Diagram",
+      "B. State Machine Diagram",
+      "C. Use Case Diagram",
+      "D. Component Diagram"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Use Case Diagram (Biểu đồ trường hợp sử dụng) được thiết kế để mô tả các chức năng mà hệ thống cung cấp từ góc độ của người dùng (actors) và các mục tiêu (use cases) mà họ muốn đạt được. Nó rất hiệu quả để xác định phạm vi và yêu cầu chức năng cấp cao.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một công ty sản xuất đang triển khai hệ thống ERP mới. Quy trình sản xuất bao gồm nhiều bước có thể được thực hiện song song nhưng cần được đồng bộ hóa tại các điểm nhất định. Ngoài ra, có các quyết định phức tạp dựa trên điều kiện đầu vào. Để mô tả chi tiết luồng công việc, các điểm quyết định, các hoạt động song song và luồng dữ liệu giữa các hoạt động, biểu đồ UML nào là thích hợp nhất?",
+    "options": [
+      "A. Sequence Diagram",
+      "B. Class Diagram",
+      "C. Activity Diagram",
+      "D. Deployment Diagram"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Activity Diagram (Biểu đồ hoạt động) rất mạnh mẽ trong việc mô hình hóa luồng công việc, các hoạt động tuần tự và song song, các điểm quyết định (decision nodes) và các luồng đối tượng (object flows) giữa các hoạt động. Nó tương tự như BPMN nhưng tập trung vào luồng điều khiển và dữ liệu trong một hệ thống hoặc quy trình.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một quy trình xử lý yêu cầu thay đổi (Change Request) cấp doanh nghiệp, có nhiều giai đoạn phê duyệt liên tiếp từ các cấp quản lý khác nhau. Nếu một yêu cầu bị từ chối ở bất kỳ giai đoạn nào, quy trình phải dừng lại và thông báo cho người yêu cầu. Để mô hình hóa việc dừng quy trình ngay lập tức khi có sự từ chối, loại End Event nào trong BPMN nên được sử dụng?",
+    "options": [
+      "A. Terminate End Event",
+      "B. Message End Event",
+      "C. Error End Event",
+      "D. Cancel End Event"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Terminate End Event được sử dụng để kết thúc ngay lập tức tất cả các luồng đang hoạt động trong một quy trình hoặc Sub-process. Nó đảm bảo rằng không có hoạt động nào khác trong phạm vi của nó sẽ tiếp tục, phù hợp với việc dừng quy trình hoàn toàn khi bị từ chối.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một Business Analyst đang phân tích quy trình xử lý đơn hàng của một công ty thương mại điện tử. Họ nhận thấy rằng sau khi khách hàng đặt hàng, có hai luồng công việc có thể xảy ra: 'Xử lý thanh toán' và 'Kiểm tra kho hàng'. Cả hai luồng này đều phải được hoàn thành trước khi đơn hàng được 'Đóng gói'. Để mô hình hóa điều này trong BPMN, loại Gateway nào nên được sử dụng để tách và sau đó hợp nhất các luồng này?",
+    "options": [
+      "A. Exclusive Gateway (XOR)",
+      "B. Inclusive Gateway (OR)",
+      "C. Parallel Gateway (AND)",
+      "D. Complex Gateway"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Parallel Gateway (AND) được sử dụng để tạo ra các luồng song song (fork) và sau đó đồng bộ hóa chúng (join). Trong trường hợp này, cả 'Xử lý thanh toán' và 'Kiểm tra kho hàng' đều phải diễn ra và hoàn thành trước khi quy trình tiếp tục, điều này được thể hiện chính xác bằng Parallel Gateway.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết kế quy trình 'to-be' cho một hệ thống quản lý hồ sơ y tế, Business Analyst cần đảm bảo tính bảo mật và tuân thủ các quy định pháp luật nghiêm ngặt. Việc sử dụng Swimlanes trong BPMN có thể hỗ trợ điều này như thế nào?",
+    "options": [
+      "A. Giảm số lượng các hoạt động trong quy trình.",
+      "B. Xác định rõ ràng vai trò và trách nhiệm của từng bên liên quan, giúp kiểm soát quyền truy cập.",
+      "C. Tăng tốc độ thực hiện quy trình bằng cách loại bỏ các bước không cần thiết.",
+      "D. Tự động hóa hoàn toàn việc tạo hồ sơ bảo mật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Swimlanes (Lanes trong Pool) được sử dụng để phân chia các hoạt động theo vai trò, bộ phận hoặc hệ thống. Việc này giúp làm rõ ai chịu trách nhiệm cho hoạt động nào, từ đó hỗ trợ việc thiết lập và kiểm soát quyền truy cập, đảm bảo tuân thủ các quy định bảo mật và pháp luật.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một công ty dịch vụ tài chính đang xem xét triển khai một quy trình phê duyệt khoản vay mới. Quy trình này có thể được bắt đầu bởi hai sự kiện độc lập: 'Khách hàng nộp đơn online' hoặc 'Nhân viên bán hàng nhập đơn thủ công'. Để mô hình hóa việc quy trình có thể bắt đầu từ một trong hai sự kiện này mà không cần cả hai, loại Start Event nào trong BPMN là phù hợp nhất?",
+    "options": [
+      "A. Message Start Event",
+      "B. Timer Start Event",
+      "C. Multiple Start Event",
+      "D. Conditional Start Event"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Multiple Start Event được sử dụng khi một quy trình có thể được bắt đầu bởi nhiều loại sự kiện khác nhau, và bất kỳ sự kiện nào trong số đó xảy ra đều có thể khởi động quy trình. Trong trường hợp này, cả 'Message Start Event' (cho online submission) và 'Manual Start Event' (cho nhân viên nhập) có thể được đại diện bởi Multiple Start Event.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một hệ thống quản lý dự án, Business Analyst cần mô hình hóa vòng đời của một 'Task' (Nhiệm vụ), từ khi được tạo, gán, thực hiện, đến khi hoàn thành hoặc bị hủy. Biểu đồ UML nào hiệu quả nhất để thể hiện các trạng thái khác nhau mà một đối tượng có thể trải qua và các sự kiện gây ra sự chuyển đổi giữa các trạng thái đó?",
+    "options": [
+      "A. Object Diagram",
+      "B. State Machine Diagram",
+      "C. Component Diagram",
+      "D. Package Diagram"
+    ],
+    "correctAnswer": "B",
+    "explanation": "State Machine Diagram (Biểu đồ máy trạng thái) được sử dụng để mô tả các trạng thái khác nhau mà một đối tượng có thể có trong vòng đời của nó, các sự kiện gây ra sự chuyển đổi giữa các trạng thái, và các hành động được thực hiện trong quá trình chuyển đổi. Nó rất phù hợp để mô hình hóa vòng đời của một đối tượng như 'Task'.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một công ty logistics đang tối ưu hóa quy trình giao hàng. Quy trình này bao gồm việc 'Lập kế hoạch tuyến đường', 'Giao hàng', và 'Cập nhật trạng thái giao hàng'. Nếu khách hàng hủy đơn hàng sau khi 'Lập kế hoạch tuyến đường' nhưng trước khi 'Giao hàng', quy trình cần được hủy bỏ và một thông báo hủy được gửi. Loại Event nào trong BPMN có thể được đặt ở cấp độ Sub-process để xử lý việc hủy bỏ này một cách hiệu quả?",
+    "options": [
+      "A. Boundary Non-Interrupting Timer Event",
+      "B. Boundary Interrupting Cancel Event",
+      "C. Intermediate Message Throwing Event",
+      "D. Event Sub-process with a Cancel Start Event"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Event Sub-process với Cancel Start Event được sử dụng để xử lý các sự kiện hủy bỏ mà có thể xảy ra bất cứ lúc nào trong phạm vi của Sub-process cha. Khi Cancel Event được kích hoạt, nó sẽ hủy bỏ tất cả các hoạt động đang chạy trong Sub-process cha và thực thi luồng của Event Sub-process.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quá trình phân tích và thiết kế quy trình 'to-be' cho một hệ thống quản lý kho hàng tự động, Business Analyst cần đảm bảo rằng các rủi ro liên quan đến tồn kho quá mức hoặc thiếu hụt được giảm thiểu. Yếu tố nào sau đây trong việc mô hình hóa quy trình 'to-be' là quan trọng nhất để đạt được mục tiêu này?",
+    "options": [
+      "A. Xác định tất cả các vai trò tham gia vào quy trình.",
+      "B. Tích hợp các điểm kiểm soát và cảnh báo tự động về mức tồn kho.",
+      "C. Liệt kê chi tiết các loại sản phẩm trong kho.",
+      "D. Ưu tiên các bước thủ công để tăng tính linh hoạt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để giảm thiểu rủi ro tồn kho, quy trình 'to-be' cần được thiết kế để bao gồm các điểm kiểm soát tự động và cơ chế cảnh báo khi mức tồn kho đạt ngưỡng nhất định. Điều này giúp phát hiện và xử lý sớm các vấn đề tiềm ẩn, đảm bảo quản lý tồn kho hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi mô hình hóa một quy trình BPMN phức tạp liên quan đến nhiều tổ chức hoặc hệ thống độc lập, mỗi tổ chức/hệ thống có quy trình nội bộ riêng nhưng cần trao đổi thông điệp với nhau. Cách tiếp cận nào trong BPMN giúp duy trì sự độc lập của từng quy trình trong khi vẫn thể hiện được sự giao tiếp?",
+    "options": [
+      "A. Sử dụng nhiều Lanes trong cùng một Pool.",
+      "B. Sử dụng các Pools riêng biệt cho mỗi tổ chức/hệ thống và kết nối bằng Message Flows.",
+      "C. Gộp tất cả các hoạt động vào một Sub-process duy nhất.",
+      "D. Chỉ sử dụng Sequence Flows để kết nối các hoạt động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng các Pools riêng biệt cho mỗi tổ chức hoặc hệ thống cho phép mô hình hóa các quy trình nội bộ của từng bên một cách độc lập. Message Flows được sử dụng để thể hiện sự trao đổi thông điệp giữa các Pools, qua đó mô tả sự giao tiếp mà không làm mất đi tính độc lập của từng quy trình.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một Business Analyst đang thiết kế một Class Diagram cho hệ thống quản lý sách thư viện. Họ cần mô tả rằng một 'Book' (Sách) có thể có nhiều 'Author' (Tác giả) và một Author có thể viết nhiều Book. Ngoài ra, mỗi Book phải có ít nhất một Author. Kiểu multiplicity nào nên được sử dụng để thể hiện mối quan hệ 'Book' và 'Author'?",
+    "options": [
+      "A. Book (1) - Author (1)",
+      "B. Book (1..*) - Author (1..*)",
+      "C. Book (*) - Author (*)",
+      "D. Book (1) - Author (1..*)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Multiplicity '1..*' (một hoặc nhiều) ở cả hai phía của mối quan hệ thể hiện rằng một Book có thể có một hoặc nhiều Author, và một Author có thể viết một hoặc nhiều Book. Điều này phản ánh chính xác yêu cầu 'mỗi Book phải có ít nhất một Author' và 'một Author có thể viết nhiều Book'.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện phân tích 'gap' giữa quy trình 'as-is' và 'to-be' cho một dự án chuyển đổi nghiệp vụ, Business Analyst phát hiện ra một sự khác biệt lớn về yêu cầu dữ liệu và tích hợp hệ thống. Điều này cho thấy cần phải có một cái nhìn sâu sắc hơn về cấu trúc dữ liệu và mối quan hệ giữa các thực thể. Biểu đồ UML nào sẽ hỗ trợ tốt nhất cho việc này?",
+    "options": [
+      "A. Use Case Diagram",
+      "B. Sequence Diagram",
+      "C. Class Diagram",
+      "D. Deployment Diagram"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Class Diagram (Biểu đồ lớp) là công cụ chính để mô hình hóa cấu trúc dữ liệu của hệ thống, bao gồm các lớp (thực thể), thuộc tính của chúng, và mối quan hệ giữa các lớp. Nó rất quan trọng để hiểu và thiết kế kiến trúc dữ liệu, đặc biệt khi có sự khác biệt lớn về yêu cầu dữ liệu giữa 'as-is' và 'to-be'.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một công ty công nghệ đang phát triển một dịch vụ đám mây mới. Quy trình triển khai dịch vụ này cần được giám sát liên tục. Nếu thời gian triển khai vượt quá một ngưỡng nhất định, một cảnh báo cần được gửi đến đội vận hành nhưng quy trình triển khai không bị gián đoạn. Loại Event nào trong BPMN phù hợp nhất để mô hình hóa việc gửi cảnh báo này?",
+    "options": [
+      "A. Boundary Interrupting Timer Event",
+      "B. Boundary Non-Interrupting Timer Event",
+      "C. Intermediate Throwing Error Event",
+      "D. Intermediate Catching Signal Event"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Boundary Non-Interrupting Timer Event được gắn vào ranh giới của một hoạt động và được kích hoạt khi một khoảng thời gian nhất định trôi qua. Nó tạo ra một luồng mới để xử lý sự kiện (ví dụ: gửi cảnh báo) mà không làm gián đoạn hoạt động chính đang diễn ra.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án tích hợp hệ thống lớn, Business Analyst cần mô tả cách một giao dịch tài chính được xử lý qua nhiều hệ thống con khác nhau (ví dụ: hệ thống xác thực, hệ thống xử lý giao dịch, hệ thống ghi sổ kế toán). Mỗi hệ thống con này có thể gửi và nhận các thông điệp khác nhau. Biểu đồ UML nào sẽ cung cấp cái nhìn chi tiết nhất về trình tự các cuộc gọi phương thức và thông điệp giữa các đối tượng hệ thống?",
+    "options": [
+      "A. Use Case Diagram",
+      "B. Activity Diagram",
+      "C. Sequence Diagram",
+      "D. Component Diagram"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sequence Diagram (Biểu đồ trình tự) là lý tưởng để mô tả trình tự các tương tác (cuộc gọi phương thức, thông điệp) giữa các đối tượng trong một kịch bản cụ thể. Nó hiển thị rõ ràng thứ tự thời gian của các sự kiện và luồng thông tin giữa các hệ thống con.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phân tích rủi ro trong một quy trình 'to-be' được đề xuất cho một hệ thống quản lý đơn hàng mới, Business Analyst xác định rằng việc phê duyệt đơn hàng có thể bị trì hoãn vô thời hạn nếu người quản lý không có mặt. Để giảm thiểu rủi ro này và đảm bảo quy trình không bị tắc nghẽn, cơ chế nào sau đây nên được tích hợp vào mô hình BPMN?",
+    "options": [
+      "A. Sử dụng Exclusive Gateway để chuyển hướng đơn hàng.",
+      "B. Thêm một Boundary Timer Event vào hoạt động phê duyệt để tự động leo thang (escalate) sau một thời gian nhất định.",
+      "C. Tạo một Sub-process riêng cho việc phê duyệt.",
+      "D. Sử dụng Message Event để gửi thông báo cho người quản lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Boundary Timer Event (Non-Interrupting hoặc Interrupting tùy ngữ cảnh) được gắn vào hoạt động 'Phê duyệt đơn hàng'. Nếu hoạt động này không hoàn thành trong một khoảng thời gian nhất định, Timer Event sẽ kích hoạt một luồng ngoại lệ (ví dụ: gửi cảnh báo, tự động leo thang đến cấp trên) để xử lý tình huống trì hoãn, giảm thiểu rủi ro tắc nghẽn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một công ty bảo hiểm đang thiết kế quy trình xử lý yêu cầu bồi thường. Quy trình này bao gồm các bước kiểm tra ban đầu, đánh giá hồ sơ, và phê duyệt cuối cùng. Tại bước 'Đánh giá hồ sơ', có thể có hai kết quả: 'Hồ sơ hợp lệ' hoặc 'Yêu cầu thêm thông tin'. Nếu 'Yêu cầu thêm thông tin', quy trình cần quay lại bước 'Kiểm tra ban đầu'. Để mô hình hóa việc quay lại một bước trước đó trong BPMN, kỹ thuật nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Sử dụng Sequence Flow ngược chiều.",
+      "B. Sử dụng Compensation Event.",
+      "C. Sử dụng Loop Activity.",
+      "D. Sử dụng Event-Based Gateway để xử lý các sự kiện lặp lại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sử dụng Sequence Flow ngược chiều (back-loop) là cách đơn giản và phổ biến nhất để mô hình hóa việc quay lại một bước trước đó trong BPMN, thường kết hợp với một Gateway (ví dụ: Exclusive Gateway) để quyết định khi nào thì quay lại và khi nào thì tiếp tục luồng chính.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một Business Analyst cần so sánh hiệu suất và chi phí của quy trình 'as-is' với quy trình 'to-be' để trình bày cho ban lãnh đạo, yếu tố nào sau đây là quan trọng nhất cần được định lượng và phân tích?",
+    "options": [
+      "A. Số lượng người tham gia vào mỗi quy trình.",
+      "B. Tổng số bước trong mỗi quy trình.",
+      "C. Thời gian chu kỳ (cycle time), chi phí hoạt động, và tỷ lệ lỗi/tái xử lý.",
+      "D. Mức độ hài lòng của nhân viên với quy trình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để đánh giá hiệu quả và chi phí, các chỉ số định lượng như thời gian chu kỳ (cycle time), chi phí hoạt động (operational cost), và tỷ lệ lỗi/tái xử lý (error/rework rate) là cực kỳ quan trọng. Chúng cung cấp dữ liệu cụ thể để so sánh và chứng minh giá trị của quy trình 'to-be' so với 'as-is'.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Modeling (BPMN/UML)",
+    "category": "ANALYSIS"
+  }
+]

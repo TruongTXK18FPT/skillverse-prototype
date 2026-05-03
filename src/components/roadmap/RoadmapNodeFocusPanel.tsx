@@ -7,6 +7,7 @@ import {
   Circle,
   Clock3,
   Compass,
+  ExternalLink,
   GitBranch,
   TrendingUp,
   X,
@@ -46,6 +47,8 @@ export type RoadmapNodeFocusPanelProps = {
   allNodes?: RoadmapNode[];
   /** Called when user confirms "Mark Done" — to mark the node complete */
   onMarkNodeDone?: (nodeId: string) => Promise<void>;
+  /** Called when user clicks "Đến Workspace" — navigate to workspace tab for this node */
+  onOpenWorkspace?: (nodeId: string) => void;
   /** Number of tasks linked to this node — drives ConfirmDialog visibility */
   linkedTaskCount?: number;
   /** Whether courses are being loaded — used to prevent empty state flash */
@@ -121,6 +124,7 @@ const RoadmapNodeFocusPanel = ({
   placement = "right",
   allNodes,
   onMarkNodeDone,
+  onOpenWorkspace,
   linkedTaskCount = 0,
   isLoadingCourses = false,
   coursesError = null,
@@ -578,6 +582,17 @@ const RoadmapNodeFocusPanel = ({
 
         <section className="roadmap-node-focus-panel__footer-actions">
           <div className="roadmap-node-focus-panel__primary-actions">
+            {onOpenWorkspace && (
+              <button
+                type="button"
+                className="roadmap-node-focus-panel__workspace-btn"
+                onClick={() => onOpenWorkspace(node.id)}
+              >
+                <ExternalLink size={14} />
+                <span>Đến Workspace</span>
+              </button>
+            )}
+
             {hasStudyTask || canCreateStudyTask ? (
               <button
                 type="button"

@@ -9,9 +9,11 @@ import {
   AlertTriangle,
   Clock,
   CheckCircle,
+  Map,
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import aiRoadmapService from '../../services/aiRoadmapService';
+import journeyService from '../../services/journeyService';
 import { taskBoardService } from '../../services/taskBoardService';
 import {
   TaskResponse,
@@ -80,6 +82,27 @@ const StudyPlannerPage: React.FC = () => {
     const parsed = Number(roadmapSessionId);
     return Number.isFinite(parsed) ? parsed : null;
   }, [roadmapSessionId]);
+
+  // Get active roadmap from journeys (same logic as Journey page)
+  const [activeRoadmapId, setActiveRoadmapId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const loadActiveRoadmap = async () => {
+      try {
+        const journeys = await journeyService.getUserJourneys(0, 100);
+        const activeStatuses = ['IN_PROGRESS', 'ROADMAP_READY', 'STUDY_PLANS_READY'];
+        const activeJourney = journeys.content.find((j) =>
+          activeStatuses.includes(j.status)
+        );
+        if (activeJourney?.roadmapSessionId) {
+          setActiveRoadmapId(activeJourney.roadmapSessionId);
+        }
+      } catch {
+        // Silently ignore - button won't show if can't determine active roadmap
+      }
+    };
+    void loadActiveRoadmap();
+  }, []);
   const [viewMode, setViewMode] = useState<'calendar' | 'board'>(() => {
     if (requestedView === 'board') {
       return 'board';
@@ -209,7 +232,7 @@ const StudyPlannerPage: React.FC = () => {
     }
     return (
       roadmapNodesBySessionId[selectedTaskLink.roadmapSessionId]?.[
-        selectedTaskLink.nodeId
+      selectedTaskLink.nodeId
       ] ?? null
     );
   }, [roadmapNodesBySessionId, selectedTaskLink]);
@@ -784,6 +807,20 @@ const StudyPlannerPage: React.FC = () => {
                     <span>Về bảng điều khiển</span>
                   </button>
 
+                  {activeRoadmapId && (
+                    <button
+                      className="study-plan-hero-hud__btn study-plan-hero-hud__btn--roadmap"
+                      onClick={() =>
+                        navigate(`/roadmap/${activeRoadmapId}`, {
+                          state: { from: 'study-planner' },
+                        })
+                      }
+                    >
+                      <Map size={16} />
+                      <span>Đến roadmap hiện tại</span>
+                    </button>
+                  )}
+
                   <button
                     className="study-plan-hero-hud__btn study-plan-hero-hud__btn--premium"
                     onClick={() => setIsAIModalOpen(true)}
@@ -882,64 +919,64 @@ const StudyPlannerPage: React.FC = () => {
           <div className="study-plan-board-area">
             <div className="study-plan-content-grid">
               <div className="study-plan-content-grid__main">
-            {viewMode === 'calendar' && (
-              <div className="study-plan-calendar-toolbar">
-                <button
-                  className="study-plan-btn study-plan-calendar-toolbar__nav"
-                  onClick={() => navigateWeek('prev')}
-                >
-                  <ChevronLeft size={20} />
-                </button>
+                {viewMode === 'calendar' && (
+                  <div className="study-plan-calendar-toolbar">
+                    <button
+                      className="study-plan-btn study-plan-calendar-toolbar__nav"
+                      onClick={() => navigateWeek('prev')}
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
 
-                <h2 className="study-plan-calendar-toolbar__title">
-                  {calendarHeading}
-                </h2>
+                    <h2 className="study-plan-calendar-toolbar__title">
+                      {calendarHeading}
+                    </h2>
 
-                <button
-                  className="study-plan-btn study-plan-calendar-toolbar__nav"
-                  onClick={() => navigateWeek('next')}
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-            )}
-
-            {loading && viewMode === 'calendar' ? (
-              <div className="study-plan-loading-state">Đang tải dữ liệu...</div>
-            ) : (
-              <>
-                {viewMode === 'calendar' ? (
-                  <CalendarView
-                    sessions={tasks}
-                    currentDate={currentDate}
-                    onSessionClick={handleTaskClick}
-                    onDateClick={handleDateClick}
-                    onSessionComplete={handleTaskComplete}
-                    focusNodeId={nodeId}
-                    focusRoadmapSessionId={focusRoadmapSessionId}
-                    focusMode={calendarFocusMode}
-                    onFocusModeChange={setCalendarFocusMode}
-                    preferredFocusDate={preferredFocusDate}
-                    resolveTaskNodeLabel={resolveTaskNodeLabel}
-                  />
-                ) : (
-                  <TaskBoard
-                    columns={columns}
-                    onTaskClick={handleTaskClick}
-                    onAddTask={handleAddTask}
-                    onColumnsChange={setColumns}
-                    onRefresh={fetchData}
-                    onClearColumnOverdue={handleClearOverdueTasks}
-                    overdueDaysThreshold={OVERDUE_CLEAR_DAYS}
-                    isClearingOverdue={isClearingOverdue}
-                    filterOptions={filterOptions}
-                    selectedFilter={activeRoadmapFilter}
-                    onFilterChange={setActiveRoadmapFilter}
-                    roadmapSessionId={roadmapSessionId ? Number(roadmapSessionId) : undefined}
-                  />
+                    <button
+                      className="study-plan-btn study-plan-calendar-toolbar__nav"
+                      onClick={() => navigateWeek('next')}
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
                 )}
-              </>
-            )}
+
+                {loading && viewMode === 'calendar' ? (
+                  <div className="study-plan-loading-state">Đang tải dữ liệu...</div>
+                ) : (
+                  <>
+                    {viewMode === 'calendar' ? (
+                      <CalendarView
+                        sessions={tasks}
+                        currentDate={currentDate}
+                        onSessionClick={handleTaskClick}
+                        onDateClick={handleDateClick}
+                        onSessionComplete={handleTaskComplete}
+                        focusNodeId={nodeId}
+                        focusRoadmapSessionId={focusRoadmapSessionId}
+                        focusMode={calendarFocusMode}
+                        onFocusModeChange={setCalendarFocusMode}
+                        preferredFocusDate={preferredFocusDate}
+                        resolveTaskNodeLabel={resolveTaskNodeLabel}
+                      />
+                    ) : (
+                      <TaskBoard
+                        columns={columns}
+                        onTaskClick={handleTaskClick}
+                        onAddTask={handleAddTask}
+                        onColumnsChange={setColumns}
+                        onRefresh={fetchData}
+                        onClearColumnOverdue={handleClearOverdueTasks}
+                        overdueDaysThreshold={OVERDUE_CLEAR_DAYS}
+                        isClearingOverdue={isClearingOverdue}
+                        filterOptions={filterOptions}
+                        selectedFilter={activeRoadmapFilter}
+                        onFilterChange={setActiveRoadmapFilter}
+                        roadmapSessionId={roadmapSessionId ? Number(roadmapSessionId) : undefined}
+                      />
+                    )}
+                  </>
+                )}
               </div>
 
               {/* Today panel disabled */}

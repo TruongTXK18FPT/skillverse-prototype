@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục tiêu cốt lõi của một chiến lược Digital Strategy là gì?",
+    "options": [
+      "A. Tăng tối đa số lượng bài đăng trên mạng xã hội hàng ngày",
+      "B. Xây dựng lộ trình sử dụng các công cụ số để đạt được mục tiêu kinh doanh",
+      "C. Chỉ tập trung vào việc chạy quảng cáo Google Ads với ngân sách lớn",
+      "D. Thiết kế giao diện website sao cho đẹp mắt nhất có thể"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược Digital Strategy là bản kế hoạch tổng thể định hướng cách doanh nghiệp sử dụng các kênh kỹ thuật số để đạt được mục tiêu kinh doanh cụ thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Customer Journey (Hành trình khách hàng), giai đoạn 'Awareness' (Nhận thức) tập trung vào điều gì?",
+    "options": [
+      "A. Thúc đẩy khách hàng thanh toán đơn hàng ngay lập tức",
+      "B. Khuyến khích khách hàng cũ quay lại mua lần thứ hai",
+      "C. Giới thiệu thương hiệu và giải pháp đến những khách hàng tiềm năng mới",
+      "D. So sánh giá sản phẩm của mình với các đối thủ cạnh tranh trực tiếp"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giai đoạn Awareness là lúc khách hàng bắt đầu nhận ra vấn đề của họ và biết đến sự tồn tại của thương hiệu hoặc sản phẩm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Touchpoint' (Điểm chạm) trong Digital Marketing được hiểu là gì?",
+    "options": [
+      "A. Bất kỳ sự tương tác nào giữa khách hàng và thương hiệu trên các kênh số",
+      "B. Chỉ những lần khách hàng đến trực tiếp cửa hàng vật lý",
+      "C. Một loại phần mềm dùng để theo dõi hành vi người dùng",
+      "D. Số lần khách hàng nhấp vào nút 'Mua ngay' trên website"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Touchpoint là mọi điểm tiếp xúc (quảng cáo, email, website, mạng xã hội...) nơi khách hàng tương tác với thương hiệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Điểm khác biệt quan trọng nhất giữa Omnichannel và Multichannel là gì?",
+    "options": [
+      "A. Omnichannel sử dụng nhiều kênh quảng cáo hơn Multichannel",
+      "B. Multichannel tập trung vào trải nghiệm người dùng, Omnichannel tập trung vào doanh số",
+      "C. Omnichannel tạo ra sự trải nghiệm liền mạch và nhất quán dữ liệu giữa các kênh",
+      "D. Multichannel chỉ dùng các kênh truyền thống, Omnichannel chỉ dùng kênh số"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Omnichannel (đa kênh hợp nhất) tập trung vào việc kết nối dữ liệu để khách hàng có trải nghiệm đồng nhất dù họ ở bất kỳ kênh nào.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Mô hình 'Last-click Attribution' ghi nhận 100% giá trị chuyển đổi cho kênh nào?",
+    "options": [
+      "A. Kênh đầu tiên mà khách hàng tương tác",
+      "B. Kênh có chi phí quảng cáo thấp nhất trong chiến dịch",
+      "C. Kênh cuối cùng khách hàng tương tác trước khi thực hiện chuyển đổi",
+      "D. Kênh mạng xã hội có lượt tương tác cao nhất"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Last-click Attribution là mô hình ghi nhận toàn bộ công lao cho kênh cuối cùng mà khách hàng nhấp vào trước khi mua hàng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi lập kế hoạch ngân sách, chỉ số ROI (Return on Investment) được dùng để đo lường điều gì?",
+    "options": [
+      "A. Tổng số lượng người theo dõi mới trên Fanpage",
+      "B. Hiệu quả lợi nhuận thu được so với chi phí đầu tư đã bỏ ra",
+      "C. Tốc độ tải trang của website bán hàng",
+      "D. Số lượng email gửi đi thành công trong một tháng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "ROI là tỷ lệ lợi nhuận ròng trên tổng chi phí đầu tư, giúp đánh giá hiệu quả kinh tế của chiến dịch.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong mô hình SWOT, việc đối thủ cạnh tranh ra mắt sản phẩm mới với giá rẻ hơn được xếp vào mục nào?",
+    "options": [
+      "A. Strengths (Điểm mạnh)",
+      "B. Weaknesses (Điểm yếu)",
+      "C. Opportunities (Cơ hội)",
+      "D. Threats (Thách thức)"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Các yếu tố tiêu cực từ bên ngoài có thể gây hại cho doanh nghiệp được xếp vào nhóm Threats (Thách thức).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của việc xây dựng 'Customer Persona' (Chân dung khách hàng) là gì?",
+    "options": [
+      "A. Để lưu trữ thông tin cá nhân khách hàng vào cơ sở dữ liệu bảo mật",
+      "B. Để hiểu rõ hành vi, nhu cầu và đặc điểm của nhóm khách hàng mục tiêu",
+      "C. Để thay thế hoàn toàn cho việc chạy quảng cáo tự động",
+      "D. Để báo cáo số lượng khách hàng đã mua hàng cho ban giám đốc"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Customer Persona giúp người làm marketing hình dung rõ đối tượng mình đang phục vụ để tối ưu hóa thông điệp và kênh tiếp cận.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mô hình phân bổ 'First-click Attribution' thường phù hợp nhất cho mục tiêu nào?",
+    "options": [
+      "A. Tăng tỷ lệ chốt đơn hàng ngay lập tức",
+      "B. Tối ưu hóa chi phí vận chuyển sản phẩm",
+      "C. Đo lường hiệu quả của các chiến dịch tăng nhận diện thương hiệu",
+      "D. Đánh giá chất lượng dịch vụ chăm sóc khách hàng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "First-click ghi nhận công lao cho kênh đầu tiên giúp khách hàng biết đến thương hiệu, nên rất hữu ích cho các chiến dịch Awareness.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Competitive Analysis' (Phân tích đối thủ) trong Digital Strategy giúp bạn điều gì?",
+    "options": [
+      "A. Sao chép hoàn toàn nội dung của đối thủ để tiết kiệm thời gian",
+      "B. Tìm ra khoảng trống thị trường và điểm yếu của đối thủ để khai thác",
+      "C. Tự động giảm giá sản phẩm mỗi khi đối thủ giảm giá",
+      "D. Ngăn chặn đối thủ không được chạy quảng cáo trên Facebook"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân tích đối thủ giúp hiểu vị thế của mình trên thị trường và tìm ra các cơ hội cạnh tranh dựa trên điểm yếu của họ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Marketing Mix Modeling (MMM) chủ yếu giúp nhà quản lý đưa ra quyết định về vấn đề gì?",
+    "options": [
+      "A. Chọn màu sắc cho logo thương hiệu",
+      "B. Phân bổ ngân sách tối ưu giữa các kênh marketing khác nhau",
+      "C. Thuê nhân sự cho phòng marketing",
+      "D. Viết nội dung cho bài đăng blog"
+    ],
+    "correctAnswer": "B",
+    "explanation": "MMM sử dụng dữ liệu lịch sử để phân tích tác động của các hoạt động marketing lên doanh số, từ đó tối ưu hóa việc phân bổ ngân sách.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Yếu tố 'S' trong mô hình mục tiêu SMART (Specific) có ý nghĩa là gì?",
+    "options": [
+      "A. Mục tiêu phải thật sự sang trọng",
+      "B. Mục tiêu phải cụ thể và dễ hiểu",
+      "C. Mục tiêu phải đạt được doanh số cao",
+      "D. Mục tiêu phải được thực hiện nhanh chóng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Specific (Cụ thể) nghĩa là mục tiêu phải rõ ràng, không mơ hồ để có thể tập trung nguồn lực thực hiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Digital Marketing, 'Owned Media' bao gồm những kênh nào?",
+    "options": [
+      "A. Quảng cáo Google Search và Facebook Ads",
+      "B. Các bài báo PR được mua trên các trang tin tức",
+      "C. Website, Blog và Fanpage chính thức của doanh nghiệp",
+      "D. Các bài đánh giá tự nhiên của khách hàng trên diễn đàn"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Owned Media là các kênh truyền thông mà doanh nghiệp hoàn toàn sở hữu và kiểm soát nội dung.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thấy tỷ lệ thoát (Bounce Rate) trên website quá cao, bước đầu tiên trong chiến lược tối ưu hóa nên là gì?",
+    "options": [
+      "A. Tăng gấp đôi ngân sách quảng cáo để kéo thêm người vào",
+      "B. Xóa bỏ hoàn toàn website và xây dựng lại từ đầu",
+      "C. Kiểm tra nội dung trang đích và tốc độ tải trang",
+      "D. Ngừng kinh doanh sản phẩm hiện tại"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bounce Rate cao thường do trang đích không phù hợp với kỳ vọng người dùng hoặc trải nghiệm kỹ thuật (tốc độ) kém.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Hoạt động 'Trend Forecasting' (Dự báo xu hướng) giúp ích gì cho lập kế hoạch dài hạn?",
+    "options": [
+      "A. Biết chính xác doanh số của ngày mai",
+      "B. Giúp doanh nghiệp đón đầu các thay đổi về công nghệ và hành vi người dùng",
+      "C. Loại bỏ hoàn toàn mọi rủi ro trong kinh doanh",
+      "D. Giảm chi phí nhân sự xuống mức tối thiểu"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dự báo xu hướng giúp doanh nghiệp chủ động điều chỉnh chiến lược để thích nghi với những thay đổi sắp tới của thị trường.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một chiến dịch Remarketing (Tiếp thị lại) thường nhắm vào đối tượng nào?",
+    "options": [
+      "A. Những người chưa bao giờ nghe nói đến thương hiệu",
+      "B. Những người đã từng tương tác hoặc truy cập website của doanh nghiệp",
+      "C. Những người đang theo dõi đối thủ cạnh tranh",
+      "D. Những người không sử dụng internet"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Remarketing là chiến lược tiếp cận lại những người đã từng thể hiện sự quan tâm đến sản phẩm/dịch vụ trước đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc xác định 'Unique Selling Proposition' (USP) lại quan trọng trong chiến lược?",
+    "options": [
+      "A. Để sản phẩm có giá bán cao nhất thị trường",
+      "B. Để khách hàng phân biệt được điểm khác biệt và lợi ích duy nhất của bạn so với đối thủ",
+      "C. Để đăng ký bản quyền thương hiệu dễ dàng hơn",
+      "D. Để không phải thực hiện các hoạt động quảng cáo khác"
+    ],
+    "correctAnswer": "B",
+    "explanation": "USP là điểm bán hàng độc nhất, giúp doanh nghiệp nổi bật và thuyết phục khách hàng chọn mình thay vì đối thủ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong phễu marketing (Marketing Funnel), giai đoạn nào nằm ngay sau 'Awareness'?",
+    "options": [
+      "A. Purchase (Mua hàng)",
+      "B. Loyalty (Trung thành)",
+      "C. Consideration (Cân nhắc/Xem xét)",
+      "D. Advocacy (Ủng hộ)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sau khi nhận biết (Awareness), khách hàng sẽ chuyển sang giai đoạn tìm hiểu sâu hơn và cân nhắc (Consideration) sản phẩm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu mục tiêu là tăng ROI, bạn nên làm gì với các kênh có chi phí chuyển đổi (CPA) cao vượt mức lợi nhuận?",
+    "options": [
+      "A. Tiếp tục giữ nguyên ngân sách để chờ đợi",
+      "B. Tăng thêm ngân sách để hy vọng CPA giảm xuống",
+      "C. Tạm dừng hoặc tối ưu lại để giảm chi phí/tăng hiệu quả",
+      "D. Chuyển toàn bộ ngân sách sang các kênh chưa bao giờ thử"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để tối ưu ROI, cần loại bỏ hoặc cải thiện những kênh đang tiêu tốn chi phí mà không mang lại lợi nhuận tương xứng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kênh 'Earned Media' được hiểu là gì?",
+    "options": [
+      "A. Các kênh quảng cáo trả tiền như Facebook Ads",
+      "B. Các kênh truyền thông tự nhiên có được nhờ sự lan tỏa, đánh giá của khách hàng",
+      "C. Website do doanh nghiệp tự xây dựng",
+      "D. Hệ thống gửi email tự động của doanh nghiệp"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Earned Media là 'truyền thông lan tỏa', có được khi khách hàng tự nguyện chia sẻ, thảo luận về thương hiệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Việc phân bổ ngân sách theo 'Historical Data' (Dữ liệu lịch sử) có ưu điểm gì?",
+    "options": [
+      "A. Luôn đảm bảo chiến dịch mới sẽ thành công 100%",
+      "B. Giúp đưa ra quyết định dựa trên những gì đã thực sự hiệu quả trong quá khứ",
+      "C. Không cần phải theo dõi kết quả của chiến dịch hiện tại",
+      "D. Giúp doanh nghiệp không cần quan tâm đến đối thủ cạnh tranh"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng dữ liệu lịch sử giúp giảm thiểu rủi ro bằng cách lặp lại hoặc phát triển dựa trên các mẫu hình thành công trước đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chỉ số KPI nào phù hợp nhất để đánh giá chiến dịch 'Brand Awareness' trên mạng xã hội?",
+    "options": [
+      "A. Tổng doanh thu bán hàng trong ngày",
+      "B. Số lượng yêu cầu hoàn tiền sản phẩm",
+      "C. Lượt hiển thị (Impressions) và Lượt tiếp cận (Reach)",
+      "D. Tỷ lệ chuyển đổi đơn hàng thành công"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với nhận diện thương hiệu, các chỉ số đo lường độ phủ như Impressions và Reach là quan trọng nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong chiến lược nội dung, việc duy trì 'Brand Voice' (Giọng văn thương hiệu) nhất quán giúp ích gì?",
+    "options": [
+      "A. Giúp tiết kiệm chi phí thuê người viết bài",
+      "B. Giúp khách hàng dễ dàng nhận diện và tin tưởng thương hiệu trên mọi kênh",
+      "C. Để thuật toán của Google ưu tiên website hơn",
+      "D. Để nội dung bài viết luôn ngắn gọn nhất có thể"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự nhất quán về giọng điệu giúp xây dựng tính cách thương hiệu rõ nét và tạo sự tin cậy trong lòng khách hàng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện 'Competitive Benchmarking', bạn đang làm gì?",
+    "options": [
+      "A. So sánh hiệu số thực hiện của mình với các tiêu chuẩn của đối thủ hàng đầu",
+      "B. Mua lại cổ phần của công ty đối thủ",
+      "C. Gửi email mời nhân viên đối thủ sang làm việc",
+      "D. Báo cáo các vi phạm của đối thủ cho cơ quan chức năng"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Benchmarking là quá trình so sánh các chỉ số vận hành của mình với các đối thủ xuất sắc nhất để tìm hướng cải thiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây là quan trọng nhất khi bắt đầu lập kế hoạch Digital Strategy?",
+    "options": [
+      "A. Chọn công cụ tự động hóa đắt tiền nhất",
+      "B. Xác định rõ mục tiêu kinh doanh và đối tượng khách hàng mục tiêu",
+      "C. Thuê thật nhiều cộng tác viên viết bài",
+      "D. Đăng ký tất cả các mạng xã hội hiện có trên thị trường"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mục tiêu và đối tượng khách hàng là nền tảng của mọi quyết định trong chiến lược Digital Marketing.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một chiến dịch quảng cáo Google Ads đạt mức ngân sách tối ưu nhưng tỷ lệ chuyển đổi bắt đầu đi ngang trong khi chi phí cho mỗi chuyển đổi (CPA) tăng lên, chiến lược nào là hợp lý nhất?",
+    "options": [
+      "A. Tiếp tục tăng ngân sách để ép hệ thống tìm thêm khách hàng mới.",
+      "B. Phân tích điểm bão hòa và dịch chuyển ngân sách sang các kênh hỗ trợ khác trong hành trình khách hàng.",
+      "C. Cắt giảm 50% ngân sách ngay lập tức để bảo toàn ROI.",
+      "D. Thay đổi toàn bộ nội dung quảng cáo hàng ngày để làm mới tệp khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là hiện tượng hiệu suất giảm dần (diminishing returns). Khi một kênh đạt điểm bão hòa, việc dồn thêm tiền chỉ làm tăng CPA. Cần tối ưu hóa các điểm chạm khác để hỗ trợ chuyển đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong mô hình Attribution (Ghi nhận chuyển đổi), mô hình 'Time Decay' phù hợp nhất với loại chiến dịch nào?",
+    "options": [
+      "A. Chiến dịch ra mắt sản phẩm mới hoàn toàn để tạo độ nhận diện.",
+      "B. Chiến dịch bán hàng có chu kỳ cân nhắc ngắn và thúc đẩy mua hàng ngay lập tức.",
+      "C. Chiến dịch có chu kỳ bán hàng dài, nơi các tương tác gần thời điểm mua hàng có ý nghĩa quyết định.",
+      "D. Chiến dịch chỉ tập trung vào việc thu thập dữ liệu khách hàng tiềm năng (Lead Gen)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mô hình Time Decay ưu tiên giá trị cho các điểm chạm gần thời điểm chuyển đổi nhất, phù hợp với các chu kỳ mua sắm cần sự thúc đẩy mạnh mẽ ở giai đoạn cuối.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng Customer Journey Map, mục đích chính của việc xác định 'Pain Points' tại mỗi điểm chạm là gì?",
+    "options": [
+      "A. Để liệt kê các tính năng của sản phẩm mà khách hàng chưa biết.",
+      "B. Để tìm ra các rào cản khiến khách hàng rời bỏ phễu và tối ưu hóa trải nghiệm.",
+      "C. Để xác định đối thủ cạnh tranh đang quảng cáo ở đâu.",
+      "D. Để tính toán tổng chi phí quảng cáo cho mỗi giai đoạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pain points (điểm đau) giúp nhà chiến lược hiểu tại sao khách hàng không chuyển đổi, từ đó đưa ra giải pháp kỹ thuật hoặc nội dung để khắc phục.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chỉ số 'Share of Voice' (SOV) trong Digital Strategy thường được sử dụng để đo lường điều gì?",
+    "options": [
+      "A. Tỷ lệ phần trăm doanh thu của doanh nghiệp so với tổng thị trường.",
+      "B. Mức độ hiển thị và sự hiện diện của thương hiệu so với các đối thủ trên các kênh truyền thông.",
+      "C. Tốc độ phản hồi tin nhắn của đội ngũ chăm sóc khách hàng.",
+      "D. Số lượng từ khóa mà doanh nghiệp đang chạy quảng cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SOV đo lường sự thống trị của thương hiệu trong các cuộc thảo luận hoặc không gian quảng cáo so với đối thủ cạnh tranh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một doanh nghiệp Ecommerce muốn tối ưu hóa ngân sách dựa trên Customer Lifetime Value (CLV). Cách tiếp cận nào là đúng đắn?",
+    "options": [
+      "A. Chỉ tập trung ngân sách vào việc tìm kiếm khách hàng mới với chi phí thấp nhất.",
+      "B. Phân bổ ngân sách để giữ chân khách hàng có CLV cao và chấp nhận chi phí thu hút (CAC) cao hơn cho nhóm này.",
+      "C. Cắt giảm toàn bộ chi phí quảng cáo cho khách hàng cũ để tiết kiệm.",
+      "D. Đặt một mức CAC cố định cho tất cả các nhóm khách hàng bất kể giá trị họ mang lại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược dựa trên CLV cho phép doanh nghiệp chi tiêu thông minh hơn bằng cách đầu tư nhiều hơn vào những phân khúc khách hàng mang lại lợi nhuận dài hạn lớn nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong mô hình Omnichannel, sự khác biệt cốt lõi so với Multichannel là gì?",
+    "options": [
+      "A. Omnichannel sử dụng nhiều kênh quảng cáo hơn Multichannel.",
+      "B. Omnichannel tập trung vào việc kết nối dữ liệu và trải nghiệm liền mạch giữa các kênh.",
+      "C. Omnichannel chỉ tập trung vào các kênh trực tuyến (online).",
+      "D. Multichannel có chi phí vận hành cao hơn Omnichannel."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Omnichannel tạo ra một trải nghiệm thống nhất cho khách hàng dù họ tương tác qua bất kỳ kênh nào, dựa trên việc đồng bộ hóa dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ nào sau đây hữu ích nhất để dự báo xu hướng tìm kiếm của người dùng và lập kế hoạch từ khóa theo mùa vụ?",
+    "options": [
+      "A. Facebook Ad Library.",
+      "B. Google Trends.",
+      "C. Screaming Frog.",
+      "D. Canva."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Google Trends cung cấp dữ liệu về xu hướng tìm kiếm theo thời gian và địa lý, giúp nhà chiến lược dự báo nhu cầu thị trường.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện Marketing Mix Modeling (MMM), yếu tố 'External Factors' thường bao gồm những gì?",
+    "options": [
+      "A. Giá bán sản phẩm và ngân sách quảng cáo.",
+      "B. Các chỉ số kinh tế vĩ mô, thời tiết, và hoạt động của đối thủ cạnh tranh.",
+      "C. Tỷ lệ nhấp chuột (CTR) của các chiến dịch Facebook.",
+      "D. Danh sách email đăng ký nhận bản tin."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MMM xem xét tác động của cả yếu tố nội bộ và ngoại lực (kinh tế, đối thủ, môi trường) để đánh giá hiệu quả marketing tổng thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để giảm thiểu xung đột kênh (Channel Conflict) trong chiến lược phân phối kỹ thuật số, doanh nghiệp nên làm gì?",
+    "options": [
+      "A. Bán sản phẩm trên website của mình rẻ hơn nhiều so với trên sàn TMĐT.",
+      "B. Xây dựng chính sách giá thống nhất và phân loại danh mục sản phẩm riêng biệt cho từng kênh.",
+      "C. Ngừng cung cấp hàng cho các đại lý bán lẻ trực tuyến.",
+      "D. Chỉ tập trung quảng cáo cho một kênh duy nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thống nhất giá và phân khúc sản phẩm giúp các kênh bổ trợ cho nhau thay vì cạnh tranh trực tiếp về giá, gây hại cho thương hiệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mô hình Data-Driven Attribution (DDA) sử dụng yếu tố nào để phân bổ giá trị chuyển đổi?",
+    "options": [
+      "A. Quy tắc cố định do người dùng tự thiết lập.",
+      "B. Thuật toán máy học phân tích dữ liệu lịch sử để xác định đóng góp thực tế của mỗi điểm chạm.",
+      "C. Chỉ tính giá trị cho lần nhấp chuột đầu tiên.",
+      "D. Chia đều giá trị cho tất cả các kênh có trong hành trình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DDA sử dụng thuật toán để phân tích cách các tương tác khác nhau kết hợp với nhau để tạo ra chuyển đổi, thay vì dùng quy tắc cứng nhắc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Zero Moment of Truth' (ZMOT) ám chỉ giai đoạn nào trong hành trình khách hàng?",
+    "options": [
+      "A. Khi khách hàng nhìn thấy quảng cáo trên TV.",
+      "B. Khi khách hàng bắt đầu tìm kiếm thông tin và đánh giá sản phẩm trực tuyến trước khi mua.",
+      "C. Khi khách hàng thanh toán tại quầy thu ngân.",
+      "D. Khi khách hàng trải nghiệm sản phẩm tại nhà."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ZMOT là thời điểm người tiêu dùng nghiên cứu sản phẩm trên mạng, đây là điểm chạm quan trọng quyết định ý định mua hàng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong chiến lược phân bổ ngân sách 70/20/10, 10% ngân sách thường được dành cho việc gì?",
+    "options": [
+      "A. Các kênh quảng cáo đã chứng minh được hiệu quả ổn định.",
+      "B. Các thử nghiệm mới, công nghệ mới hoặc các kênh chưa từng triển khai.",
+      "C. Chi phí nhân sự và vận hành bộ máy marketing.",
+      "D. Tối ưu hóa các chiến dịch hiện tại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quy tắc 70/20/10 dành 10% cho các thử nghiệm mang tính đột phá và rủi ro cao để tìm kiếm cơ hội tăng trưởng mới.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi tỷ lệ bỏ giỏ hàng (Cart Abandonment Rate) tăng cao, hành động chiến lược nào cần ưu tiên?",
+    "options": [
+      "A. Tăng ngân sách quảng cáo hiển thị để kéo thêm người truy cập mới.",
+      "B. Phân tích phễu thanh toán để tìm lỗi kỹ thuật hoặc rào cản về phí vận chuyển/phương thức thanh toán.",
+      "C. Thay đổi màu sắc logo thương hiệu.",
+      "D. Xóa bỏ hoàn toàn chức năng giỏ hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tỷ lệ bỏ giỏ hàng cao thường do vấn đề ở giai đoạn cuối của phễu. Cần tối ưu hóa trải nghiệm người dùng (UX) và chính sách bán hàng tại bước này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một báo cáo cho thấy ROAS của kênh Facebook giảm, nhưng tổng doanh thu toàn công ty tăng khi tăng ngân sách Facebook. Điều này có thể giải thích bởi hiệu ứng nào?",
+    "options": [
+      "A. Hiệu ứng Halo (Halo Effect) - Facebook đóng góp vào việc hỗ trợ các kênh khác chuyển đổi.",
+      "B. Sai số trong việc tính toán của kế toán.",
+      "C. Khách hàng đang mua hàng vì họ thích đối thủ cạnh tranh hơn.",
+      "D. Quảng cáo Facebook không có tác dụng gì."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Facebook thường đóng vai trò hỗ trợ (Assisted conversion). Dù ROAS trực tiếp thấp, nó tạo ra nhu cầu khiến khách hàng tìm kiếm và mua hàng qua các kênh khác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để thực hiện 'Competitive Gap Analysis' trong SEO, bạn cần so sánh điều gì?",
+    "options": [
+      "A. Số lượng nhân viên của hai công ty.",
+      "B. Các từ khóa mà đối thủ đang xếp hạng cao nhưng website của bạn chưa có hoặc xếp hạng thấp.",
+      "C. Giá cổ phiếu của đối thủ trên thị trường.",
+      "D. Tổng số bài đăng trên mạng xã hội hàng tháng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Gap Analysis giúp xác định các cơ hội về nội dung và từ khóa mà đối thủ đang khai thác tốt hơn để điều chỉnh chiến lược nội dung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng First-party data ngày càng trở nên quan trọng trong chiến lược Digital Marketing hiện nay?",
+    "options": [
+      "A. Vì nó rẻ hơn so với việc mua dữ liệu từ bên thứ ba.",
+      "B. Do các thay đổi về quyền riêng tư (như iOS 14+) và việc loại bỏ Third-party cookies.",
+      "C. Vì First-party data luôn có số lượng lớn hơn dữ liệu của Google.",
+      "D. Vì nó không yêu cầu bất kỳ công cụ kỹ thuật nào để thu thập."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi các rào cản về quyền riêng tư tăng lên, dữ liệu tự thân (First-party) là nguồn đáng tin cậy duy nhất để cá nhân hóa và đo lường chính xác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong phễu Marketing (Marketing Funnel), giai đoạn 'Consideration' nên tập trung vào loại nội dung nào?",
+    "options": [
+      "A. Quảng cáo bán hàng trực tiếp với mã giảm giá sốc.",
+      "B. Nội dung so sánh sản phẩm, đánh giá chi tiết (reviews) và case studies.",
+      "C. Các video viral không liên quan đến sản phẩm để lấy tương tác.",
+      "D. Chỉ hiển thị logo thương hiệu để khách hàng ghi nhớ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giai đoạn cân nhắc là lúc khách hàng so sánh các lựa chọn. Nội dung cung cấp thông tin chuyên sâu giúp họ tin tưởng vào giải pháp của bạn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một chiến dịch Marketing Mix Modeling (MMM) giúp nhà quản lý quyết định điều gì?",
+    "options": [
+      "A. Nên viết tiêu đề quảng cáo như thế nào cho hấp dẫn.",
+      "B. Cách phân bổ ngân sách tối ưu giữa các kênh online và offline dựa trên dữ liệu lịch sử.",
+      "C. Chọn màu sắc nào cho nút 'Mua ngay' trên website.",
+      "D. Xác định danh sách khách hàng cụ thể để gửi email."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MMM là phương pháp phân tích thống kê giúp hiểu tác động của các hoạt động marketing khác nhau lên doanh số, từ đó tối ưu hóa ngân sách tổng thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện 'Scenario Planning' (Lập kế hoạch kịch bản) cho năm tới, yếu tố nào là quan trọng nhất?",
+    "options": [
+      "A. Chỉ dựa trên kết quả tốt nhất của năm trước.",
+      "B. Xây dựng các phương án dựa trên các biến số thị trường khác nhau (Tốt, Trung bình, Xấu).",
+      "C. Sao chép hoàn toàn kế hoạch của đối thủ dẫn đầu thị trường.",
+      "D. Luôn giả định rằng ngân sách sẽ tăng gấp đôi mỗi năm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lập kế hoạch kịch bản giúp doanh nghiệp chủ động ứng phó với các biến động không lường trước của thị trường.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số nào phản ánh hiệu quả thực tế của lợi nhuận sau khi trừ đi tất cả chi phí quảng cáo và chi phí hàng bán (COGS)?",
+    "options": [
+      "A. ROAS (Return on Ad Spend).",
+      "B. POAS (Profit on Ad Spend).",
+      "C. CTR (Click-through Rate).",
+      "D. CPM (Cost per Mille)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "POAS tính toán dựa trên lợi nhuận gộp thay vì doanh thu, giúp đánh giá chính xác hơn hiệu quả kinh doanh thực tế của quảng cáo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong chiến lược Omnichannel, vai trò của Customer Data Platform (CDP) là gì?",
+    "options": [
+      "A. Là một công cụ để thiết kế hình ảnh quảng cáo.",
+      "B. Hợp nhất dữ liệu khách hàng từ nhiều nguồn để tạo ra cái nhìn 360 độ về khách hàng.",
+      "C. Thay thế hoàn toàn cho các nền tảng quảng cáo như Facebook Ads.",
+      "D. Chỉ dùng để gửi tin nhắn SMS hàng loạt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CDP giúp thu thập và thống nhất dữ liệu từ nhiều điểm chạm, cho phép triển khai các chiến dịch cá nhân hóa nhất quán trên mọi kênh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu mục tiêu chiến lược là 'Brand Awareness', KPI nào sau đây là phù hợp nhất để theo dõi?",
+    "options": [
+      "A. Tỷ lệ chuyển đổi (Conversion Rate).",
+      "B. Số lượng hiển thị (Impressions) và Tỷ lệ ghi nhớ quảng cáo (Ad Recall Lift).",
+      "C. Doanh thu trung bình trên mỗi đơn hàng (AOV).",
+      "D. Tỷ lệ thoát (Bounce Rate) trên trang thanh toán."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nhận diện thương hiệu tập trung vào mức độ lan tỏa và khả năng ghi nhớ của khách hàng về thương hiệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một doanh nghiệp thấy rằng khách hàng thường xem sản phẩm trên điện thoại nhưng lại hoàn tất mua hàng trên máy tính. Chiến lược nào giúp tối ưu hóa trường hợp này?",
+    "options": [
+      "A. Chặn quảng cáo trên điện thoại để tiết kiệm chi phí.",
+      "B. Triển khai Cross-device tracking và chiến dịch Remarketing đa thiết bị.",
+      "C. Chỉ chạy quảng cáo vào khung giờ người dùng thường dùng máy tính.",
+      "D. Giảm giá mạnh cho những người mua hàng trên điện thoại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cần hiểu hành vi liên thiết bị của khách hàng để duy trì sự hiện diện xuyên suốt hành trình mua sắm của họ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Incrementality Testing' trong Marketing được dùng để làm gì?",
+    "options": [
+      "A. Để kiểm tra xem quảng cáo có thực sự tạo ra thêm chuyển đổi hay khách hàng vẫn mua dù không có quảng cáo.",
+      "B. Để tăng số lượng từ khóa trong chiến dịch SEO.",
+      "C. Để so sánh tốc độ tải trang giữa hai phiên bản website.",
+      "D. Để tính tổng số lượt thích trên trang Facebook."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Incrementality giúp xác định giá trị gia tăng thực sự của một kênh marketing, loại bỏ những chuyển đổi tự nhiên (organic) mà doanh nghiệp vốn dĩ sẽ có.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một đối thủ cạnh tranh lớn bất ngờ giảm giá sâu và tăng mạnh ngân sách quảng cáo, phản ứng chiến lược nào là khôn ngoan nhất cho một thương hiệu tầm trung?",
+    "options": [
+      "A. Chạy đua giảm giá sâu hơn đối thủ bằng mọi giá.",
+      "B. Tập trung vào giá trị độc nhất (USP), cải thiện dịch vụ khách hàng và nhắm mục tiêu vào phân khúc ngách.",
+      "C. Ngừng toàn bộ hoạt động marketing cho đến khi đối thủ dừng khuyến mãi.",
+      "D. Sao chép y hệt các mẫu quảng cáo của đối thủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong cuộc chiến về giá và ngân sách với đối thủ lớn, các thương hiệu tầm trung nên tập trung vào sự khác biệt và hiệu quả phân khúc để bảo vệ biên lợi nhuận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi so sánh giữa Multi-Touch Attribution (MTA) và Marketing Mix Modeling (MMM), yếu tố nào là điểm yếu lớn nhất của MTA mà MMM có thể khắc phục trong một chiến lược Omnichannel?",
+    "options": [
+      "A. MTA không thể đo lường chính xác hiệu quả của các kênh Digital trả phí.",
+      "B. MTA gặp khó khăn trong việc ghi nhận tác động từ các kênh Offline và các yếu tố ngoại cảnh như kinh tế vĩ mô.",
+      "C. MTA yêu cầu dữ liệu lịch sử ít nhất 2-3 năm để có kết quả chính xác.",
+      "D. MTA không thể tối ưu hóa ngân sách ở mức độ chiến dịch (campaign level)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MTA dựa trên dữ liệu user-level (cookie/ID), do đó khó kết nối với các kênh offline hoặc yếu tố ngoại cảnh. MMM sử dụng dữ liệu tổng hợp (aggregate data) và phân tích hồi quy, cho phép tính toán tác động của cả kênh offline, khuyến mãi và biến động thị trường.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh suy giảm dữ liệu do chính sách quyền riêng tư (iOS14+, loại bỏ Third-party cookies), chiến lược nào sau đây là bền vững nhất để duy trì hiệu quả nhắm mục tiêu (targeting)?",
+    "options": [
+      "A. Chuyển toàn bộ ngân sách sang các kênh quảng cáo ngữ cảnh (Contextual Advertising).",
+      "B. Tăng cường sử dụng Lookalike Audiences dựa trên dữ liệu Pixel của bên thứ ba.",
+      "C. Xây dựng hệ thống First-party Data thông qua Customer Data Platform (CDP) và triển khai Server-side Tracking.",
+      "D. Sử dụng nhiều tài khoản quảng cáo dự phòng để tránh việc bị hạn chế theo dõi dữ liệu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "First-party data là tài sản sở hữu trực tiếp, không phụ thuộc vào bên thứ ba. Kết hợp với Server-side tracking giúp vượt qua các rào cản từ trình duyệt và hệ điều hành, đảm bảo dữ liệu chính xác và bảo mật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một doanh nghiệp E-commerce nhận thấy ROAS đang giảm dần khi tăng ngân sách quảng cáo. Theo nguyên lý 'Diminishing Returns', chiến lược tối ưu hóa ngân sách tiếp theo nên là gì?",
+    "options": [
+      "A. Tiếp tục tăng ngân sách cho đến khi đạt mục tiêu doanh thu bất kể chi phí.",
+      "B. Phân tích Marginal ROI (ROI biên) để tìm điểm bão hòa và dịch chuyển ngân sách sang các kênh/phân khúc khách hàng mới.",
+      "C. Cắt giảm 50% ngân sách ở tất cả các kênh để bảo toàn lợi nhuận.",
+      "D. Giữ nguyên ngân sách và chỉ tập trung vào việc thay đổi nội dung sáng tạo (creatives)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi đạt điểm bão hòa, mỗi đồng chi thêm mang lại lợi nhuận thấp hơn đồng trước đó. Phân tích Marginal ROI giúp xác định thời điểm nên dừng tăng ngân sách ở kênh hiện tại và chuyển sang các cơ hội khác có hiệu suất biên cao hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng mô hình 'Last-Click Attribution' thường dẫn đến việc phân bổ ngân sách sai lệch trong một chiến dịch Full-funnel?",
+    "options": [
+      "A. Nó đánh giá quá cao các kênh ở giai đoạn Awareness (nhận diện).",
+      "B. Nó bỏ qua hoàn toàn đóng góp của các kênh hỗ trợ (assisting channels) và giai đoạn giữa phễu.",
+      "C. Nó khiến chi phí trên mỗi chuyển đổi (CPA) tăng cao một cách giả tạo.",
+      "D. Nó chỉ hoạt động hiệu quả trên các nền tảng của Google."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Last-click chỉ ghi nhận công sức cho điểm chạm cuối cùng trước khi chuyển đổi, làm lu mờ vai trò của các kênh dẫn dắt hoặc nuôi dưỡng khách hàng, dẫn đến việc cắt giảm ngân sách ở các kênh đầu phễu cần thiết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng Customer Journey Map cho sản phẩm B2B có chu kỳ mua hàng dài, điểm mấu chốt để tối ưu hóa tỷ lệ chuyển đổi (CR) là gì?",
+    "options": [
+      "A. Tối đa hóa số lượng quảng cáo hiển thị đến người quyết định (Decision Maker).",
+      "B. Xác định các 'Micro-moments' và cung cấp nội dung giải quyết rào cản cụ thể tại từng giai đoạn cân nhắc.",
+      "C. Tập trung toàn bộ ngân sách vào kênh Search để bắt trọn nhu cầu khi khách hàng tìm kiếm.",
+      "D. Giảm số lượng touchpoints để rút ngắn thời gian mua hàng của khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong B2B, hành trình khách hàng phức tạp với nhiều rào cản về kỹ thuật, tài chính và niềm tin. Việc tối ưu hóa dựa trên Micro-moments giúp doanh nghiệp hiện diện đúng lúc với giải pháp phù hợp, thúc đẩy khách hàng tiến xa hơn trong phễu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chỉ số 'Incrementality Lift' (Mức độ tăng trưởng thuần) có ý nghĩa gì quan trọng nhất đối với một Digital Strategist?",
+    "options": [
+      "A. Tổng số lượng chuyển đổi ghi nhận được trên Dashboard của Facebook Ads.",
+      "B. Tỷ lệ phần trăm khách hàng quay lại mua hàng sau 30 ngày.",
+      "C. Xác định số lượng chuyển đổi thực sự do quảng cáo mang lại mà nếu không có quảng cáo chúng sẽ không xảy ra.",
+      "D. Sự chênh lệch giữa doanh thu dự báo và doanh thu thực tế."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Incrementality giúp loại bỏ các chuyển đổi 'organic' (khách hàng vốn dĩ sẽ mua dù không thấy quảng cáo), từ đó đánh giá chính xác giá trị gia tăng thực sự của ngân sách marketing.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong mô hình Marketing Mix Modeling (MMM), biến 'Adstock' được sử dụng để đại diện cho hiện tượng nào?",
+    "options": [
+      "A. Tác động cộng dồn và sự suy giảm dần theo thời gian của hiệu ứng quảng cáo đối với hành vi khách hàng.",
+      "B. Số lượng hàng tồn kho còn lại sau mỗi chiến dịch khuyến mãi lớn.",
+      "C. Tỷ lệ khách hàng rời bỏ thương hiệu sau khi xem quảng cáo quá nhiều lần.",
+      "D. Tổng ngân sách dự phòng cho các kênh quảng cáo mới."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Adstock thừa nhận rằng quảng cáo không chỉ có tác dụng tức thì mà còn lưu lại trong tâm trí khách hàng và ảnh hưởng đến hành vi mua hàng trong tương lai, nhưng hiệu ứng này sẽ mờ nhạt dần (decay) nếu không được nhắc lại.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Competitive Analysis, một thương hiệu có Share of Voice (SOV) cao hơn Share of Market (SOM) thường được dự báo sẽ có xu hướng gì?",
+    "options": [
+      "A. Thị phần (Market Share) sẽ có xu hướng tăng trưởng trong tương lai gần.",
+      "B. Lợi nhuận ròng sẽ giảm ngay lập tức do chi phí marketing quá cao.",
+      "C. Đối thủ cạnh tranh sẽ sớm rời bỏ thị trường.",
+      "D. Thương hiệu đang bị bão hòa và cần tái định vị hình ảnh."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mối quan hệ giữa SOV và SOM là chỉ báo cho sự tăng trưởng. Nếu Excess SOV (ESOV = SOV - SOM) dương, thương hiệu thường sẽ chiếm thêm thị phần nhờ sự hiện diện vượt trội so với vị thế hiện tại.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chiến lược 'Customer Lifetime Value (LTV) based Bidding' giúp giải quyết vấn đề gì mà cách tối ưu hóa theo CPA thông thường không làm được?",
+    "options": [
+      "A. Giảm thiểu chi phí quảng cáo trên mỗi lượt click (CPC).",
+      "B. Phân biệt và ưu tiên ngân sách để thu hút những khách hàng có giá trị cao dài hạn thay vì chỉ tập trung vào giao dịch đơn lẻ.",
+      "C. Tăng tốc độ hiển thị quảng cáo vào các khung giờ vàng trong ngày.",
+      "D. Tự động hóa việc viết nội dung quảng cáo dựa trên hành vi người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CPA bidding đối xử với mọi khách hàng mới như nhau miễn là họ chuyển đổi. LTV-based bidding sử dụng dữ liệu dự đoán để trả giá cao hơn cho những khách hàng có tiềm năng mang lại lợi nhuận lớn trong tương lai, tối ưu hóa lợi nhuận tổng thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một chiến dịch Omnichannel, việc 'Data Silos' (dữ liệu bị phân mảnh) gây ra hậu quả nghiêm trọng nhất là gì?",
+    "options": [
+      "A. Làm tăng chi phí lưu trữ dữ liệu trên Cloud.",
+      "B. Khiến báo cáo doanh thu giữa các bộ phận không khớp nhau.",
+      "C. Gây ra sự rời rạc trong trải nghiệm khách hàng và sai lệch trong việc phân bổ đóng góp (attribution).",
+      "D. Làm chậm quá trình phê duyệt ngân sách của ban giám đốc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi dữ liệu không được kết nối, doanh nghiệp không thể nhận diện một khách hàng duy nhất qua các kênh khác nhau, dẫn đến việc gửi thông điệp lặp lại, không phù hợp và không thể đánh giá chính xác kênh nào thực sự thúc đẩy mua hàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc tối ưu hóa theo POAS (Profit on Ad Spend) lại quan trọng hơn ROAS đối với các doanh nghiệp bán lẻ có biên lợi nhuận sản phẩm khác biệt lớn?",
+    "options": [
+      "A. POAS dễ tính toán hơn ROAS trong các công cụ báo cáo tiêu chuẩn.",
+      "B. ROAS chỉ tập trung vào doanh thu, có thể dẫn đến việc quảng cáo quá mức cho các sản phẩm doanh thu cao nhưng lợi nhuận thấp hoặc âm.",
+      "C. POAS giúp tăng điểm chất lượng của quảng cáo trên Google và Facebook.",
+      "D. ROAS không tính đến chi phí vận chuyển của đơn hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ROAS (Doanh thu/Chi phí) có thể gây đánh lừa nếu sản phẩm bán chạy có biên lợi nhuận quá mỏng. POAS (Lợi nhuận/Chi phí) đảm bảo rằng các chiến dịch marketing thực sự mang lại giá trị ròng cho doanh nghiệp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để dự báo xu hướng (Trend Forecasting) trong lập kế hoạch Digital Strategy năm tới, phương pháp nào sau đây mang tính chiến lược nhất?",
+    "options": [
+      "A. Theo dõi các từ khóa đang hot trên Google Trends trong 30 ngày qua.",
+      "B. Sử dụng Predictive Analytics dựa trên dữ liệu lịch sử kết hợp với phân tích tín hiệu thị trường và thay đổi công nghệ.",
+      "C. Sao chép hoàn toàn chiến lược của đối thủ dẫn đầu thị trường.",
+      "D. Dựa vào trực giác của đội ngũ sáng tạo để dự đoán thị hiếu người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dự báo chiến lược đòi hỏi sự kết hợp giữa dữ liệu nội bộ (lịch sử) và các biến số bên ngoài (thị trường, công nghệ) thông qua các mô hình dự đoán để giảm thiểu rủi ro và tận dụng cơ hội sớm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một nhãn hàng muốn đo lường hiệu quả của quảng cáo Digital đối với doanh số bán hàng tại cửa hàng vật lý (Offline Sales). Giải pháp kỹ thuật nào là tối ưu nhất?",
+    "options": [
+      "A. Yêu cầu khách hàng chụp ảnh hóa đơn gửi lên Fanpage.",
+      "B. Sử dụng Offline Conversions API để upload dữ liệu CRM (đã hash) lên nền tảng quảng cáo để đối soát (match) với người dùng đã xem quảng cáo.",
+      "C. Chỉ chạy quảng cáo tại các khu vực địa lý xung quanh cửa hàng.",
+      "D. Tăng giá bán online để khuyến khích khách hàng đến mua tại cửa hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Offline Conversions API cho phép kết nối dữ liệu giao dịch thực tế từ hệ thống POS/CRM với dữ liệu quảng cáo một cách bảo mật, giúp đo lường chính xác tác động 'Research Online, Purchase Offline' (ROPO).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân bổ ngân sách theo quy tắc 70/20/10 trong Digital Marketing, phần 10% nên được dành cho mục tiêu nào?",
+    "options": [
+      "A. Các kênh quảng cáo cốt lõi đã chứng minh được hiệu quả (Proven channels).",
+      "B. Các kênh đang trong giai đoạn tăng trưởng và cần tối ưu hóa thêm.",
+      "C. Các thử nghiệm mang tính đột phá, công nghệ mới hoặc các kênh chưa từng triển khai (Experimental).",
+      "D. Chi phí quản lý và vận hành đội ngũ marketing."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quy tắc 70/20/10 phân bổ: 70% cho các hoạt động an toàn/hiệu quả cao, 20% cho các hoạt động tiềm năng, và 10% cho thử nghiệm rủi ro cao nhưng có thể mang lại đột phá, giúp doanh nghiệp luôn đổi mới.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong phân tích Cohort, nếu tỷ lệ Retention của các Cohort gần đây thấp hơn các Cohort cũ dù chi phí thu mua khách hàng (CAC) không đổi, điều này ám chỉ vấn đề gì?",
+    "options": [
+      "A. Chất lượng sản phẩm hoặc trải nghiệm khách hàng đang đi xuống, hoặc tệp khách hàng mới không phù hợp.",
+      "B. Quảng cáo đang hiển thị quá thường xuyên đến khách hàng cũ.",
+      "C. Thị trường đang bước vào giai đoạn thấp điểm về nhu cầu.",
+      "D. Đối thủ cạnh tranh đang giảm giá sâu để giành giật khách hàng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cohort analysis giúp theo dõi hành vi của các nhóm khách hàng theo thời gian. Nếu các nhóm mới rời bỏ nhanh hơn, đó là tín hiệu cho thấy sự không phù hợp giữa sản phẩm và kỳ vọng của tệp khách hàng mới được thu hút.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chiến lược 'Dynamic Creative Optimization' (DCO) giải quyết bài toán nào trong việc tối ưu hóa Touchpoints?",
+    "options": [
+      "A. Giảm chi phí sản xuất video quảng cáo.",
+      "B. Tự động cá nhân hóa nội dung quảng cáo theo thời gian thực dựa trên dữ liệu người dùng tại mỗi điểm chạm.",
+      "C. Tăng tốc độ tải trang đích (Landing Page).",
+      "D. Tự động chọn kênh quảng cáo có giá thầu rẻ nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DCO sử dụng dữ liệu (vị trí, hành vi, sở thích) để lắp ghép các thành phần quảng cáo khác nhau thành một nội dung cá nhân hóa hoàn chỉnh cho từng người dùng, giúp tăng mức độ liên quan và tỷ lệ chuyển đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một doanh nghiệp muốn thâm nhập vào một thị trường ngách (niche market) với ngân sách hạn chế. Chiến lược tiếp cận nào là hợp lý nhất?",
+    "options": [
+      "A. Chạy quảng cáo hiển thị (Display) diện rộng để tăng nhận diện thương hiệu nhanh nhất có thể.",
+      "B. Tập trung vào 'Search Intent' ngách và xây dựng chiến lược Content Marketing chuyên sâu để thiết lập uy tín (Authority).",
+      "C. Thuê các KOL nổi tiếng nhất để quảng bá sản phẩm.",
+      "D. Giảm giá sản phẩm xuống mức thấp nhất thị trường để thu hút người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với ngân sách hạn chế trong thị trường ngách, việc tập trung vào những người đã có nhu cầu (Search Intent) và cung cấp giá trị chuyên sâu giúp tối ưu hóa tỷ lệ chuyển đổi và xây dựng vị thế bền vững mà không cần chi phí media khổng lồ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi triển khai Data Clean Rooms (như Ads Data Hub), lợi ích chính mà doanh nghiệp nhận được là gì?",
+    "options": [
+      "A. Khả năng truy cập vào dữ liệu cá nhân (PII) của khách hàng từ đối thủ.",
+      "B. Phân tích dữ liệu quảng cáo chi tiết ở mức độ user-level mà vẫn tuân thủ các quy định về bảo mật quyền riêng tư.",
+      "C. Tự động xóa các dữ liệu rác trong hệ thống CRM.",
+      "D. Giảm 50% chi phí quảng cáo trên tất cả các nền tảng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data Clean Rooms là môi trường an toàn nơi các bên (như Advertiser và Google/Amazon) có thể kết hợp dữ liệu để phân tích mà không bên nào nhìn thấy thông tin định danh cá nhân của khách hàng bên kia, giải quyết bài toán đo lường trong kỷ nguyên bảo mật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao một chiến lược Digital Marketing thành công cần phải xem xét đến 'Halo Effect' (Hiệu ứng hào quang)?",
+    "options": [
+      "A. Để hiểu cách một kênh quảng cáo (ví dụ TV hoặc Brand Ads) thúc đẩy hiệu suất của các kênh khác (như Search hoặc Direct).",
+      "B. Để đảm bảo logo thương hiệu luôn tỏa sáng trong các banner quảng cáo.",
+      "C. Để loại bỏ các click ảo từ bot.",
+      "D. Để tính toán chính xác thuế giá trị gia tăng cho các chiến dịch quốc tế."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Halo Effect mô tả việc đầu tư vào một kênh (thường là Brand Awareness) tạo ra sự tin tưởng và nhận diện, từ đó làm tăng tỷ lệ click và chuyển đổi ở các kênh Performance khác, dù các kênh đó không trực tiếp được tăng ngân sách.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh cạnh tranh gay gắt, việc 'Brand Bidding' (đấu thầu từ khóa thương hiệu của chính mình) mang lại giá trị chiến lược nào?",
+    "options": [
+      "A. Đây là hành động lãng phí vì khách hàng vốn dĩ sẽ click vào kết quả tự nhiên (SEO).",
+      "B. Bảo vệ không gian hiển thị trên trang kết quả tìm kiếm, ngăn chặn đối thủ chiếm mất vị trí đầu và tiếp cận khách hàng của mình.",
+      "C. Chỉ để tăng điểm chất lượng cho toàn bộ tài khoản Google Ads.",
+      "D. Để giảm bớt nỗ lực làm SEO cho thương hiệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dù thương hiệu đứng đầu SEO, đối thủ vẫn có thể chạy quảng cáo vào từ khóa thương hiệu của bạn để thu hút người dùng. Brand Bidding giúp kiểm soát thông điệp và bảo vệ tệp khách hàng có ý định mua hàng cao nhất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi đánh giá hiệu quả của một mô hình Attribution mới, phương pháp 'A/B Testing' (hoặc Incrementality Testing) nên được thực hiện như thế nào?",
+    "options": [
+      "A. Chạy hai mô hình attribution song song trên cùng một tập khách hàng.",
+      "B. Chia đối tượng thành nhóm thử nghiệm (xem quảng cáo) và nhóm đối chứng (không xem quảng cáo) để đo lường sự chênh lệch chuyển đổi thực tế.",
+      "C. So sánh báo cáo của tháng này với báo cáo của tháng trước.",
+      "D. Thay đổi toàn bộ cài đặt attribution và quan sát doanh thu tổng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là cách duy nhất để xác minh tính chính xác của mô hình attribution. Bằng cách so sánh với nhóm đối chứng (Control Group), nhà chiến lược có thể biết chắc chắn quảng cáo đóng góp bao nhiêu vào sự tăng trưởng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây là rào cản lớn nhất khi chuyển đổi từ mô hình Marketing tập trung vào sản phẩm (Product-centric) sang tập trung vào khách hàng (Customer-centric)?",
+    "options": [
+      "A. Chi phí mua phần mềm quản lý bán hàng mới.",
+      "B. Cấu trúc tổ chức bị phân mảnh và thiếu sự thống nhất về dữ liệu khách hàng giữa các phòng ban.",
+      "C. Việc thiếu các kênh quảng cáo mạng xã hội.",
+      "D. Khách hàng không muốn cung cấp thông tin cá nhân."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược Customer-centric đòi hỏi cái nhìn 360 độ về khách hàng. Nếu dữ liệu bị chia cắt (Silos) giữa Sales, Marketing và Customer Service, doanh nghiệp không thể tạo ra trải nghiệm nhất quán và cá nhân hóa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong lập kế hoạch ngân sách, phương pháp 'Objective and Task' khác biệt thế nào so với phương pháp 'Percentage of Sales'?",
+    "options": [
+      "A. Nó dựa trên ngân sách của năm trước cộng thêm 10%.",
+      "B. Nó xác định mục tiêu cụ thể trước, sau đó tính toán các nhiệm vụ và chi phí cần thiết để đạt mục tiêu đó, thay vì bị giới hạn bởi doanh thu quá khứ.",
+      "C. Nó ưu tiên cắt giảm chi phí để tối đa hóa lợi nhuận ngắn hạn.",
+      "D. Nó chỉ áp dụng cho các doanh nghiệp Startup chưa có doanh thu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Objective and Task là phương pháp lập ngân sách chủ động và chiến lược nhất, giúp đảm bảo nguồn lực được cấp đủ để đạt được các mục tiêu tăng trưởng thay vì dựa vào các con số lịch sử có thể không còn phù hợp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một chiến dịch Marketing Automation hiệu quả nhất khi nó dựa trên 'Trigger' nào sau đây?",
+    "options": [
+      "A. Gửi email hàng loạt vào mỗi sáng thứ Hai.",
+      "B. Dựa trên sự thay đổi trong hành vi hoặc trạng thái của khách hàng (ví dụ: bỏ quên giỏ hàng, đạt ngưỡng chi tiêu).",
+      "C. Khi nhân viên marketing có thời gian rảnh để thiết lập chiến dịch.",
+      "D. Dựa trên các ngày lễ lớn trong năm như Tết hay Noel."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Automation thực sự mạnh mẽ khi nó phản ứng theo ngữ cảnh (Contextual). Việc gửi thông điệp đúng thời điểm dựa trên hành vi cụ thể của người dùng mang lại tỷ lệ chuyển đổi cao hơn nhiều so với việc gửi theo lịch cố định.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi đối mặt với tình trạng bão hòa thị trường, một Digital Strategist nên ưu tiên chỉ số nào để duy trì sự tăng trưởng bền vững?",
+    "options": [
+      "A. New Customer Acquisition Rate (Tỷ lệ thu mua khách hàng mới).",
+      "B. Customer Retention Rate và LTV (Tỷ lệ giữ chân và Giá trị vòng đời khách hàng).",
+      "C. Tổng số lượt Impression (Hiển thị) trên toàn quốc.",
+      "D. Số lượng người theo dõi (Followers) trên các mạng xã hội."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong thị trường bão hòa, chi phí thu mua khách hàng mới (CAC) thường rất cao. Việc tập trung vào khai thác giá trị từ tệp khách hàng hiện tại thông qua Retention và Upsell/Cross-sell là chiến lược mang lại lợi nhuận bền vững hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi xây dựng Marketing Mix Modeling (MMM) cho một doanh nghiệp đa quốc gia, yếu tố nào sau đây là thách thức lớn nhất trong việc xác định tác động biên (marginal impact) của các kênh digital?",
+    "options": [
+      "A. Sự thiếu hụt dữ liệu lịch sử về chi phí quảng cáo trên các nền tảng xã hội.",
+      "B. Hiệu ứng cộng hưởng (synergy effect) và độ trễ (time lag) giữa các điểm chạm online và offline.",
+      "C. Các quy định về quyền riêng tư dữ liệu (GDPR/CCPA) làm mất dấu người dùng hoàn toàn.",
+      "D. Tốc độ thay đổi thuật toán của các nền tảng quảng cáo như Google và Meta."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MMM tập trung vào phân tích hồi quy để xác định đóng góp của từng kênh. Thách thức lớn nhất là bóc tách hiệu ứng cộng hưởng (khi kênh này hỗ trợ kênh kia) và xác định chính xác khoảng thời gian từ lúc tiếp cận đến lúc chuyển đổi (time lag).",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một doanh nghiệp E-commerce đang đối mặt với tình trạng chi phí quảng cáo tăng cao nhưng doanh thu không tăng tương ứng. Chiến lược nào tối ưu nhất để xử lý vấn đề 'Diminishing Returns' (lợi nhuận giảm dần) trên các kênh trả phí?",
+    "options": [
+      "A. Tăng ngân sách cho các chiến dịch Remarketing để tận dụng tệp khách hàng cũ.",
+      "B. Thực hiện Incrementality Testing (thử nghiệm tính gia tăng) để xác định ngưỡng ngân sách tối ưu trước khi hiệu suất bắt đầu giảm.",
+      "C. Chuyển toàn bộ ngân sách từ các kênh có CPA cao sang các kênh có CPA thấp nhất.",
+      "D. Tập trung tối ưu hóa tỷ lệ chuyển đổi (CRO) trên trang thanh toán để bù đắp chi phí quảng cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Incrementality Testing giúp xác định số lượng chuyển đổi thực sự do quảng cáo mang lại (mà nếu không có quảng cáo sẽ không xảy ra), từ đó tìm ra điểm bão hòa của ngân sách.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh 'Cookie-less future', một chiến lược First-party Data bền vững cho doanh nghiệp lớn nên ưu tiên thành phần nào sau đây?",
+    "options": [
+      "A. Mua dữ liệu từ các bên thứ ba để làm giàu (enrichment) tệp khách hàng hiện tại.",
+      "B. Triển khai hệ thống Customer Data Platform (CDP) để hợp nhất dữ liệu từ tất cả các điểm chạm thực tế và kỹ thuật số.",
+      "C. Tăng cường sử dụng các kỹ thuật Fingerprinting để theo dõi người dùng mà không cần cookie.",
+      "D. Chỉ tập trung vào quảng cáo theo ngữ cảnh (Contextual Advertising) để tránh phụ thuộc vào dữ liệu người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CDP cho phép doanh nghiệp sở hữu và kiểm soát dữ liệu chính chủ, tạo ra cái nhìn 360 độ về khách hàng một cách hợp quy, thay thế cho sự phụ thuộc vào cookie bên thứ ba.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích mô hình ghi nhận (Attribution Modeling) cho sản phẩm B2B có chu kỳ bán hàng dài (6-12 tháng), mô hình nào thường mang lại cái nhìn chiến lược nhất về vai trò của nội dung ở giai đoạn đầu?",
+    "options": [
+      "A. Last-click Attribution vì nó xác định trực tiếp nguồn mang lại lead cuối cùng.",
+      "B. First-click Attribution vì nó ghi nhận công sức của các chiến dịch nhận diện thương hiệu.",
+      "C. Data-driven Attribution tích hợp với CRM để phân tích toàn bộ hành trình từ lead đến deal.",
+      "D. Linear Attribution để chia đều giá trị cho tất cả các bài viết blog khách hàng đã đọc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Data-driven Attribution sử dụng thuật toán để gán giá trị dựa trên xác suất đóng góp thực tế của mỗi điểm chạm, khi kết hợp với CRM sẽ phản ánh đúng giá trị kinh tế của các hoạt động marketing B2B.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chỉ số LTV/CAC (Lifetime Value / Customer Acquisition Cost) của một startup SaaS hiện là 1.5:1. Với tư cách là Giám đốc chiến lược, hành động nào sau đây là cấp thiết nhất?",
+    "options": [
+      "A. Tiếp tục tăng ngân sách quảng cáo để chiếm lĩnh thị phần nhanh chóng.",
+      "B. Cắt giảm đội ngũ nội dung để giảm chi phí vận hành (OpEx).",
+      "C. Phân tích churn rate và tối ưu hóa mô hình giá để tăng LTV hoặc giảm CAC thông qua các kênh organic.",
+      "D. Chuyển từ mô hình trả phí hàng tháng sang trả phí hàng năm để thu tiền nhanh hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tỷ lệ LTV/CAC lý tưởng thường là 3:1. Nếu tỷ lệ là 1.5:1, doanh nghiệp đang chi quá nhiều để có khách hàng hoặc giá trị vòng đời khách hàng quá thấp, đe dọa khả năng tái đầu tư.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Yếu tố nào là quan trọng nhất khi thiết kế một chiến lược Omnichannel Marketing nhằm đảm bảo trải nghiệm khách hàng không bị đứt gãy?",
+    "options": [
+      "A. Đảm bảo tất cả các kênh đều có cùng một thông điệp quảng cáo (Creative consistency).",
+      "B. Sự đồng bộ hóa dữ liệu thời gian thực (Real-time data synchronization) giữa các nền tảng bán hàng và chăm sóc khách hàng.",
+      "C. Sử dụng cùng một ngân sách cho tất cả các kênh để duy trì sự hiện diện tối đa.",
+      "D. Ưu tiên phát triển ứng dụng di động (Mobile App) như là trung tâm của mọi hoạt động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Omnichannel đòi hỏi sự liền mạch. Nếu dữ liệu không đồng bộ thời gian thực (ví dụ: khách mua online nhưng cửa hàng offline không biết), trải nghiệm sẽ bị rời rạc và gây thất vọng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quy trình lập kế hoạch chiến lược Digital, bước 'Scenario Planning' (Lập kế hoạch kịch bản) giúp doanh nghiệp giải quyết vấn đề gì?",
+    "options": [
+      "A. Xác định chính xác ngân sách cho từng từ khóa trên Google Search.",
+      "B. Chuẩn bị các phương án ứng phó trước những biến động bất ngờ của thị trường hoặc hành động của đối thủ.",
+      "C. Tối ưu hóa quy trình làm việc nội bộ giữa team Marketing và Sales.",
+      "D. Lựa chọn màu sắc chủ đạo cho bộ nhận diện thương hiệu kỹ thuật số."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scenario Planning là kỹ thuật dự báo các tương lai có thể xảy ra (tốt, xấu, trung bình) để doanh nghiệp không bị động trước các biến số vĩ mô hoặc cạnh tranh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một thương hiệu bán lẻ muốn sử dụng 'Share of Search' (SOS) như một chỉ số KPI chiến lược. SOS phản ánh điều gì về sức khỏe thương hiệu?",
+    "options": [
+      "A. Hiệu quả trực tiếp của các chiến dịch quảng cáo hiển thị (Display Ads).",
+      "B. Tỷ lệ phần trăm lượt tìm kiếm thương hiệu so với tổng lượt tìm kiếm của tất cả các thương hiệu trong cùng ngành hàng.",
+      "C. Số lượng từ khóa mà thương hiệu đang đứng top 1 trên kết quả tìm kiếm tự nhiên.",
+      "D. Tỷ lệ nhấp chuột (CTR) trung bình của các chiến dịch tìm kiếm có trả phí."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Share of Search được chứng minh là có mối tương quan chặt chẽ với thị phần (Market Share). Nó đo lường nhu cầu chủ động của người dùng đối với thương hiệu so với đối thủ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để tối ưu hóa 'Customer Journey' cho một sản phẩm cao cấp (Luxury), chiến lược touchpoint nào sau đây thường mang lại hiệu quả chuyển đổi cao nhất?",
+    "options": [
+      "A. Sử dụng quảng cáo đeo bám (Retargeting) với tần suất cao để nhắc nhở khách hàng.",
+      "B. Tập trung vào các điểm chạm mang tính cá nhân hóa cao và trải nghiệm độc quyền (Exclusivity).",
+      "C. Giảm giá sâu tại các điểm chạm cuối cùng để thúc đẩy quyết định mua hàng nhanh.",
+      "D. Mở rộng độ phủ trên tất cả các mạng xã hội phổ biến để tăng nhận diện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khách hàng phân khúc Luxury coi trọng giá trị cảm xúc và sự độc bản. Việc cá nhân hóa và tạo ra trải nghiệm đặc biệt tại các điểm chạm quan trọng có tác động mạnh hơn là quảng cáo đại trà.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện 'Competitive Analysis' trên môi trường số, việc phân tích 'Ad Overlap' (độ trùng lặp quảng cáo) với đối thủ giúp chiến lược gia xác định điều gì?",
+    "options": [
+      "A. Tổng số tiền đối thủ đã chi tiêu cho quảng cáo trong tháng.",
+      "B. Những phân khúc khách hàng mà cả bạn và đối thủ đều đang đấu thầu quyết liệt.",
+      "C. Danh sách các từ khóa phủ định mà đối thủ đang sử dụng.",
+      "D. Tỷ lệ chuyển đổi trung bình của các chiến dịch quảng cáo của đối thủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ad Overlap cho thấy mức độ cạnh tranh trực tiếp trên cùng tệp đối tượng. Nếu độ trùng lặp quá cao, chi phí quảng cáo (CPM/CPC) sẽ bị đẩy lên rất lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình 'Zero-based Budgeting' cho Digital Marketing, ngân sách được phân bổ dựa trên yếu tố nào?",
+    "options": [
+      "A. Tăng hoặc giảm một tỷ lệ phần trăm dựa trên ngân sách của năm trước.",
+      "B. Hiệu suất dự kiến và nhu cầu thực tế của từng hoạt động, bắt đầu từ con số 0.",
+      "C. Mức chi tiêu trung bình của các đối thủ cạnh tranh trong ngành.",
+      "D. Tổng doanh thu mục tiêu trừ đi các chi phí cố định của doanh nghiệp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Zero-based Budgeting yêu cầu mọi khoản chi phải được chứng minh tính hiệu quả từ đầu cho mỗi kỳ lập kế hoạch, thay vì dựa vào lịch sử chi tiêu, giúp tối ưu hóa nguồn vốn vào các kênh thực sự hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một doanh nghiệp muốn đo lường ảnh hưởng của quảng cáo Digital đối với doanh số tại cửa hàng vật lý (Offline Sales). Phương pháp nào sau đây là chính xác nhất ở cấp độ chiến lược?",
+    "options": [
+      "A. Yêu cầu khách hàng xuất trình mã giảm giá từ Facebook khi mua hàng tại quầy.",
+      "B. Sử dụng mô hình 'Store Visit Conversions' của Google/Meta kết hợp với dữ liệu CRM qua Matching API.",
+      "C. So sánh tổng doanh thu cửa hàng trước và sau khi chạy chiến dịch Digital.",
+      "D. Tăng số lượng nhân viên tư vấn tại cửa hàng trong thời gian chạy quảng cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng các giải pháp kỹ thuật như Offline Conversions API cho phép khớp dữ liệu giao dịch thực tế (từ CRM) với dữ liệu người dùng đã xem/click quảng cáo, mang lại độ chính xác cao nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi xây dựng một 'Digital Roadmap' cho 3 năm tới, yếu tố nào nên được ưu tiên hàng đầu để đảm bảo tính linh hoạt (Agility)?",
+    "options": [
+      "A. Cam kết sử dụng một nền tảng công nghệ duy nhất để tránh thay đổi.",
+      "B. Xây dựng một kiến trúc dữ liệu mở và đội ngũ có khả năng thích ứng nhanh với công nghệ mới.",
+      "C. Lập kế hoạch chi tiết cho từng bài đăng mạng xã hội trong 3 năm.",
+      "D. Tập trung toàn bộ nguồn lực vào một kênh marketing duy nhất đang có hiệu quả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Công nghệ và hành vi người dùng thay đổi rất nhanh. Một lộ trình chiến lược bền vững cần ưu tiên nền tảng dữ liệu và năng lực con người hơn là các công cụ cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong phân tích 'Customer Lifetime Value' (CLV), việc áp dụng 'Discount Rate' (tỷ lệ chiết khấu) nhằm mục đích gì?",
+    "options": [
+      "A. Để tính toán các chương trình khuyến mãi cho khách hàng trung thành.",
+      "B. Để quy đổi giá trị dòng tiền dự kiến trong tương lai về giá trị hiện tại.",
+      "C. Để giảm giá thành sản phẩm nhằm cạnh tranh với đối thủ.",
+      "D. Để xác định tỷ lệ khách hàng sẽ rời bỏ thương hiệu trong năm tới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CLV là một chỉ số tài chính. Discount rate giúp nhà chiến lược hiểu được giá trị thực tế của một khách hàng ở thời điểm hiện tại dựa trên những đóng góp tài chính của họ trong tương lai.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chiến lược 'Brand-led Performance' (Hiệu suất dẫn dắt bởi thương hiệu) giải quyết mâu thuẫn nào sau đây trong Digital Marketing?",
+    "options": [
+      "A. Mâu thuẫn giữa việc chọn Agency hay tự vận hành (In-house).",
+      "B. Mâu thuẫn giữa mục tiêu tăng trưởng ngắn hạn (Sales) và xây dựng tài sản thương hiệu dài hạn.",
+      "C. Mâu thuẫn giữa các phòng ban Marketing và phòng ban IT.",
+      "D. Mâu thuẫn giữa việc sử dụng hình ảnh hay video trong quảng cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược này kết hợp sức mạnh của thương hiệu để tăng hiệu quả cho các chiến dịch chuyển đổi, giúp giảm CAC bền vững thay vì chỉ dựa vào chạy quảng cáo trực tiếp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống 'Marketing Automation' bị coi là thất bại nếu gặp phải tình trạng nào sau đây?",
+    "options": [
+      "A. Gửi quá nhiều email cho khách hàng trong một tuần.",
+      "B. Không thể phân đoạn (segment) khách hàng dựa trên hành vi thực tế và ngữ cảnh.",
+      "C. Chi phí vận hành phần mềm cao hơn chi phí thuê nhân viên thủ công.",
+      "D. Tỷ lệ mở email (Open rate) thấp hơn mức trung bình của ngành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cốt lõi của Automation là cá nhân hóa theo quy mô lớn. Nếu không phân đoạn được khách hàng dựa trên hành vi, hệ thống chỉ là một công cụ spam tự động, không mang tính chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi đánh giá rủi ro của chiến lược Digital, yếu tố 'Platform Dependency' (phụ thuộc nền tảng) được hiểu là gì?",
+    "options": [
+      "A. Việc doanh nghiệp sử dụng quá nhiều nền tảng quảng cáo cùng lúc.",
+      "B. Rủi ro khi doanh nghiệp quá phụ thuộc vào một kênh (như Facebook) và bị ảnh hưởng nặng nề khi kênh đó thay đổi chính sách hoặc thuật toán.",
+      "C. Việc khách hàng chỉ sử dụng thiết bị di động để truy cập website.",
+      "D. Sự phụ thuộc của đội ngũ nhân sự vào các công cụ AI để viết nội dung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự phụ thuộc quá lớn vào một bên thứ ba khiến doanh nghiệp mất quyền kiểm soát. Chiến lược gia cần đa dạng hóa kênh để giảm thiểu rủi ro này.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chỉ số 'Net Promoter Score' (NPS) khi được tích hợp vào chiến lược Digital Marketing sẽ giúp tối ưu hóa giai đoạn nào trong phễu marketing?",
+    "options": [
+      "A. Awareness (Nhận biết).",
+      "B. Consideration (Cân nhắc).",
+      "C. Retention & Advocacy (Giữ chân và Ủng hộ).",
+      "D. Conversion (Chuyển đổi)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "NPS đo lường sự hài lòng và mức độ sẵn lòng giới thiệu của khách hàng, là chìa khóa để xây dựng chiến lược tăng trưởng dựa trên sự truyền miệng và lòng trung thành.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Media Mix Optimization' dựa trên trí tuệ nhân tạo (AI) khác gì so với cách phân bổ ngân sách truyền thống?",
+    "options": [
+      "A. AI chỉ tập trung vào việc giảm chi phí quảng cáo xuống mức thấp nhất.",
+      "B. AI có khả năng xử lý hàng triệu biến số và mô phỏng hàng ngàn kịch bản phân bổ để tìm ra ROI tối ưu trong thời gian thực.",
+      "C. AI luôn ưu tiên các kênh video vì chúng có lượng tương tác cao hơn.",
+      "D. AI loại bỏ hoàn toàn vai trò của con người trong việc ra quyết định chiến lược."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sức mạnh của AI trong tối ưu hóa Media Mix là khả năng phân tích dữ liệu lớn và dự báo kết quả của các phương án phân bổ ngân sách phức tạp mà con người không thể tính toán thủ công.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao 'Customer Journey Mapping' cần phải bao gồm cả các điểm chạm 'Non-digital'?",
+    "options": [
+      "A. Để tăng thêm số trang cho bản báo cáo chiến lược.",
+      "B. Vì hành trình khách hàng là một trải nghiệm hợp nhất, các điểm chạm offline ảnh hưởng trực tiếp đến quyết định online và ngược lại.",
+      "C. Để bộ phận Marketing có thể can thiệp vào công việc của bộ phận Logistic.",
+      "D. Vì quảng cáo ngoài trời (OOH) hiện nay rẻ hơn quảng cáo Facebook."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khách hàng không phân biệt online hay offline. Một chiến lược gia xuất sắc phải hiểu toàn bộ hệ sinh thái các điểm chạm để tối ưu hóa trải nghiệm tổng thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khái niệm 'Content Authority' trong chiến lược SEO bền vững cấp doanh nghiệp được xây dựng dựa trên yếu tố nào?",
+    "options": [
+      "A. Số lượng bài viết xuất bản mỗi ngày trên website.",
+      "B. Việc mua thật nhiều backlink từ các trang web có chỉ số DA cao.",
+      "C. Sự chuyên sâu, tin cậy và bao phủ toàn diện các chủ đề (Topic Clusters) liên quan đến ngành hàng.",
+      "D. Việc sử dụng các từ khóa có lượng tìm kiếm cao nhất trong mọi bài viết."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Content Authority (hoặc Topical Authority) đạt được khi doanh nghiệp chứng minh được chuyên môn sâu thông qua hệ thống nội dung liên kết chặt chẽ, đáp ứng đầy đủ ý định tìm kiếm của người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thâm nhập vào một thị trường kỹ thuật số mới (International Expansion), sai lầm chiến lược nào là phổ biến nhất?",
+    "options": [
+      "A. Sử dụng ngôn ngữ bản địa để viết nội dung quảng cáo.",
+      "B. Áp dụng nguyên xi mô hình thành công và thông điệp từ thị trường cũ mà không tính đến sự khác biệt về văn hóa và hành vi số tại địa phương.",
+      "C. Thuê các chuyên gia tư vấn tại thị trường mục tiêu.",
+      "D. Dành quá nhiều thời gian để nghiên cứu đối thủ cạnh tranh nội địa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bối cảnh văn hóa và hạ tầng kỹ thuật số (ví dụ: phương thức thanh toán, mạng xã hội phổ biến) thay đổi theo từng quốc gia. Sự rập khuôn thường dẫn đến thất bại.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong mô hình 'Growth Hacking', vai trò của 'North Star Metric' là gì?",
+    "options": [
+      "A. Là chỉ số dùng để báo cáo cho các nhà đầu tư hàng tháng.",
+      "B. Là một chỉ số duy nhất phản ánh chính xác giá trị cốt lõi mà sản phẩm mang lại cho khách hàng và sự tăng trưởng bền vững.",
+      "C. Là tổng số lượt tải ứng dụng hoặc lượt truy cập website.",
+      "D. Là chỉ số về mức độ nhận diện thương hiệu trên các phương tiện truyền thông."
+    ],
+    "correctAnswer": "B",
+    "explanation": "North Star Metric giúp toàn bộ đội ngũ tập trung vào một mục tiêu chung mang lại giá trị thực, tránh bị xao nhãng bởi các chỉ số ảo (vanity metrics).",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một doanh nghiệp lớn muốn thực hiện 'In-housing' (tự vận hành) toàn bộ hoạt động Digital Marketing. Rủi ro lớn nhất về mặt chiến lược là gì?",
+    "options": [
+      "A. Tiết kiệm được chi phí phí dịch vụ (agency fee).",
+      "B. Sự thiếu hụt góc nhìn khách quan từ bên ngoài và nguy cơ tụt hậu về xu hướng/công nghệ so với các Agency chuyên biệt.",
+      "C. Nhân viên nội bộ sẽ làm việc chăm chỉ hơn nhân viên Agency.",
+      "D. Dễ dàng kiểm soát dữ liệu nhạy cảm của doanh nghiệp hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong khi In-housing giúp kiểm soát dữ liệu và văn hóa, nó thường dẫn đến sự 'tự mãn' và thiếu sự cọ xát với các xu hướng mới nhất mà các Agency thường xuyên cập nhật từ nhiều khách hàng khác nhau.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Việc sử dụng 'Predictive Analytics' (phân tích dự báo) trong Digital Strategy cho phép doanh nghiệp thực hiện điều gì?",
+    "options": [
+      "A. Xem lại các báo cáo doanh thu của năm ngoái một cách chi tiết.",
+      "B. Tự động trả lời tin nhắn của khách hàng thông qua chatbot.",
+      "C. Dự đoán hành vi tương lai của khách hàng (như khả năng rời bỏ hoặc mua lại) để đưa ra các biện pháp can thiệp chủ động.",
+      "D. Thiết kế lại giao diện website dựa trên sở thích của giám đốc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Phân tích dự báo sử dụng dữ liệu lịch sử và thuật toán máy học để xác định các mẫu hành vi, giúp doanh nghiệp tối ưu hóa nguồn lực vào những nhóm khách hàng có giá trị cao nhất trong tương lai.",
+    "difficulty": "EXPERT",
+    "skillArea": "Digital Strategy",
+    "category": "SKILL"
+  }
+]

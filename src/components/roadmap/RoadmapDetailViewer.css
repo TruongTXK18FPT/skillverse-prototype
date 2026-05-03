@@ -987,6 +987,12 @@
   gap: 1rem;
 }
 
+.rm-action-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .rm-workspace-btn {
   display: flex;
   align-items: center;
@@ -1004,6 +1010,26 @@
 .rm-workspace-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 0 18px rgba(34, 211, 238, 0.32);
+}
+
+.rm-planner-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rm-planner-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(56, 189, 248, 0.25);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.25);
 }
 
 .rm-text-block {
@@ -1418,6 +1444,7 @@
   }
 
   .rm-workspace-btn,
+  .rm-planner-btn,
   .roadmap-detail-viewer__back-btn--briefing {
     justify-content: center;
   }

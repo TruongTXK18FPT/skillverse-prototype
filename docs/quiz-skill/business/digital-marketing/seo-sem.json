@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "SEO là viết tắt của cụm từ nào sau đây?",
+    "options": [
+      "A. Search Engine Optimization",
+      "B. Search Engine Operation",
+      "C. Social Engine Optimization",
+      "D. Search Editorial Optimization"
+    ],
+    "correctAnswer": "A",
+    "explanation": "SEO (Search Engine Optimization) là quá trình tối ưu hóa website để cải thiện thứ hạng trên các công cụ tìm kiếm tự nhiên.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Google Ads, 'PPC' có nghĩa là gì?",
+    "options": [
+      "A. Price Per Click",
+      "B. Pay Per Click",
+      "C. Pay Per Cost",
+      "D. Personal Page Click"
+    ],
+    "correctAnswer": "B",
+    "explanation": "PPC (Pay Per Click) là mô hình quảng cáo mà nhà quảng cáo trả tiền mỗi khi có người dùng nhấp vào quảng cáo của họ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Từ khóa 'Mua giày chạy bộ Nike chính hãng' thuộc loại từ khóa nào?",
+    "options": [
+      "A. Từ khóa ngắn (Short-tail keyword)",
+      "B. Từ khóa thương hiệu (Branded keyword)",
+      "C. Từ khóa dài (Long-tail keyword)",
+      "D. Từ khóa chung chung (Generic keyword)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Từ khóa dài (Long-tail) thường có từ 3-4 từ trở lên, mang tính cụ thể cao và có tỷ lệ chuyển đổi tốt hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thẻ tiêu đề (Title Tag) tối ưu cho SEO thường nên có độ dài khoảng bao nhiêu ký tự?",
+    "options": [
+      "A. 10 - 20 ký tự",
+      "B. 50 - 60 ký tự",
+      "C. 100 - 120 ký tự",
+      "D. Không giới hạn ký tự"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khoảng 50-60 ký tự là độ dài lý tưởng để tiêu đề hiển thị đầy đủ trên kết quả tìm kiếm của Google mà không bị cắt bớt.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của tệp robots.txt là gì?",
+    "options": [
+      "A. Tăng tốc độ tải trang cho website",
+      "B. Chứa danh sách các từ khóa cần SEO",
+      "C. Hướng dẫn các bot tìm kiếm về các trang được phép hoặc không được phép thu thập dữ liệu",
+      "D. Tạo sơ đồ trang web cho người dùng dễ theo dõi"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Robots.txt là tệp văn bản dùng để điều hướng các bot của công cụ tìm kiếm (như Googlebot) về các khu vực cần hoặc không cần quét dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thẻ mô tả (Meta Description) có vai trò chính là gì trong SEO?",
+    "options": [
+      "A. Giúp tăng thứ hạng trực tiếp trên Google",
+      "B. Thu hút người dùng nhấp vào liên kết từ trang kết quả tìm kiếm (SERP)",
+      "C. Thay thế cho nội dung chính của bài viết",
+      "D. Chứa các mã lập trình để website chạy nhanh hơn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Meta Description không phải là yếu tố xếp hạng trực tiếp nhưng đóng vai trò quan trọng trong việc tăng tỷ lệ nhấp (CTR).",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi người dùng tìm kiếm 'Cách làm bánh mì tại nhà', ý định tìm kiếm (Search Intent) của họ là gì?",
+    "options": [
+      "A. Ý định giao dịch (Transactional)",
+      "B. Ý định điều hướng (Navigational)",
+      "C. Ý định thông tin (Informational)",
+      "D. Ý định thương mại (Commercial)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Người dùng đang tìm kiếm kiến thức hoặc hướng dẫn thực hiện một việc gì đó, đây là ý định thông tin.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Điểm chất lượng (Quality Score) trong Google Ads KHÔNG phụ thuộc vào yếu tố nào sau đây?",
+    "options": [
+      "A. Tỷ lệ nhấp dự kiến (CTR)",
+      "B. Mức độ liên quan của quảng cáo",
+      "C. Trải nghiệm trang đích",
+      "D. Ngân sách hàng ngày của chiến dịch"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Ngân sách không ảnh hưởng đến Điểm chất lượng; điểm này dựa trên sự liên quan và trải nghiệm người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công thức tính Tỷ lệ nhấp (CTR) là gì?",
+    "options": [
+      "A. (Số lần nhấp / Số lần hiển thị) x 100",
+      "B. (Số lần hiển thị / Số lần nhấp) x 100",
+      "C. (Số chuyển đổi / Số lần nhấp) x 100",
+      "D. (Số lần nhấp / Tổng chi phí) x 100"
+    ],
+    "correctAnswer": "A",
+    "explanation": "CTR (Click-Through Rate) được tính bằng số lượt nhấp chia cho số lượt hiển thị, nhân với 100 để ra tỷ lệ phần trăm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Internal Link (Liên kết nội bộ) là gì?",
+    "options": [
+      "A. Liên kết từ website khác trỏ về website của bạn",
+      "B. Liên kết từ website của bạn trỏ ra một website khác",
+      "C. Liên kết giữa các trang trong cùng một tên miền (domain)",
+      "D. Liên kết từ mạng xã hội về website"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Internal Link là các liên kết điều hướng người dùng và bot tìm kiếm di chuyển giữa các trang trong cùng một website.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "SERP là viết tắt của cụm từ nào?",
+    "options": [
+      "A. Search Engine Result Page",
+      "B. Search Engine Ranking Process",
+      "C. Site Efficiency Rating Page",
+      "D. Social Engine Result Page"
+    ],
+    "correctAnswer": "A",
+    "explanation": "SERP là trang hiển thị kết quả tìm kiếm sau khi người dùng nhập một truy vấn vào công cụ tìm kiếm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ nào sau đây thường được dùng để nghiên cứu từ khóa miễn phí từ Google?",
+    "options": [
+      "A. Google Search Console",
+      "B. Google Keyword Planner",
+      "C. Google PageSpeed Insights",
+      "D. Google My Business"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Google Keyword Planner là công cụ nằm trong Google Ads giúp tìm kiếm ý tưởng từ khóa và ước tính lượng tìm kiếm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích của việc thêm thẻ Alt vào hình ảnh là gì?",
+    "options": [
+      "A. Làm cho hình ảnh hiển thị đẹp hơn",
+      "B. Giúp Google hiểu nội dung hình ảnh và hỗ trợ người khiếm thị",
+      "C. Tăng dung lượng của tệp hình ảnh",
+      "D. Tự động thay đổi kích thước hình ảnh"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thẻ Alt (Alternative Text) cung cấp mô tả văn bản cho hình ảnh, giúp bot tìm kiếm lập chỉ mục và hỗ trợ các trình đọc màn hình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sitemap.xml có vai trò gì trong Technical SEO?",
+    "options": [
+      "A. Giúp người dùng dễ dàng tìm thấy các bài viết",
+      "B. Cung cấp một bản đồ các URL của website để Google thu thập dữ liệu hiệu quả hơn",
+      "C. Chặn các trang không quan trọng khỏi kết quả tìm kiếm",
+      "D. Tự động tạo nội dung mới cho website"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sitemap.xml là tệp liệt kê các URL quan trọng của website, giúp công cụ tìm kiếm không bỏ sót nội dung khi quét web.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Google Ads, 'Negative Keywords' (Từ khóa phủ định) dùng để làm gì?",
+    "options": [
+      "A. Để quảng cáo hiển thị nhiều hơn cho người dùng",
+      "B. Để ngăn quảng cáo hiển thị khi người dùng tìm kiếm các cụm từ không liên quan",
+      "C. Để giảm chi phí mỗi lần nhấp xuống mức thấp nhất",
+      "D. Để tăng điểm chất lượng cho toàn bộ tài khoản"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Từ khóa phủ định giúp loại trừ những truy vấn không mang lại giá trị hoặc không liên quan đến sản phẩm/dịch vụ đang quảng cáo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thứ hạng quảng cáo (Ad Rank) trong Google Ads được xác định chủ yếu bởi:",
+    "options": [
+      "A. Chỉ dựa vào số tiền giá thầu (Bid)",
+      "B. Chỉ dựa vào điểm chất lượng (Quality Score)",
+      "C. Kết hợp giữa giá thầu, điểm chất lượng và tác động dự kiến của các tiện ích mở rộng",
+      "D. Thời gian tài khoản quảng cáo đã hoạt động"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ad Rank là sự kết hợp của nhiều yếu tố để quyết định vị trí hiển thị của quảng cáo trên trang tìm kiếm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bounce Rate (Tỷ lệ thoát) trong Analytics được hiểu là:",
+    "options": [
+      "A. Tỷ lệ người dùng ở lại trang web trên 10 phút",
+      "B. Tỷ lệ người dùng rời khỏi trang web ngay từ trang đầu tiên mà không thực hiện tương tác nào",
+      "C. Tỷ lệ người dùng mua hàng ngay lần đầu truy cập",
+      "D. Tỷ lệ người dùng quay lại trang web lần thứ hai"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bounce Rate đo lường tỷ lệ các phiên truy cập chỉ xem một trang duy nhất rồi rời đi mà không gửi thêm yêu cầu nào đến máy chủ Analytics.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hành động lặp đi lặp lại một từ khóa quá nhiều lần trong bài viết nhằm thao túng thứ hạng được gọi là gì?",
+    "options": [
+      "A. Keyword Research",
+      "B. Keyword Stuffing",
+      "C. Keyword Mapping",
+      "D. Keyword Density"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Keyword Stuffing (nhồi nhét từ khóa) là một kỹ thuật SEO 'mũ đen' và có thể bị Google xử phạt.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Thẻ Canonical được sử dụng để làm gì?",
+    "options": [
+      "A. Để tăng tốc độ tải trang",
+      "B. Để thông báo cho Google trang nào là phiên bản gốc khi có nhiều nội dung trùng lặp",
+      "C. Để tạo liên kết ra ngoài website",
+      "D. Để mã hóa dữ liệu người dùng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thẻ Canonical giúp giải quyết vấn đề trùng lặp nội dung bằng cách chỉ định URL ưu tiên cho công cụ tìm kiếm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện A/B Testing cho mẫu quảng cáo SEM, bạn nên thay đổi điều gì?",
+    "options": [
+      "A. Thay đổi tất cả các yếu tố cùng một lúc để xem kết quả nhanh hơn",
+      "B. Chỉ thay đổi một yếu tố duy nhất (như tiêu đề hoặc lời kêu gọi hành động) để đo lường hiệu quả",
+      "C. Giữ nguyên quảng cáo cũ và chỉ tăng ngân sách",
+      "D. Thay đổi toàn bộ từ khóa trong nhóm quảng cáo"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong A/B testing, việc chỉ thay đổi một biến số giúp xác định chính xác yếu tố nào tạo ra sự khác biệt về hiệu suất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong SEO, cấu trúc URL nào sau đây được coi là thân thiện (SEO-friendly)?",
+    "options": [
+      "A. domain.com/p=123",
+      "B. domain.com/category/bai-viet-seo-la-gi",
+      "C. domain.com/2023/index.php?id=99",
+      "D. domain.com/search/result/query/xyz"
+    ],
+    "correctAnswer": "B",
+    "explanation": "URL chứa từ khóa, ngắn gọn và dễ đọc giúp cả người dùng và công cụ tìm kiếm hiểu nội dung trang tốt hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Công cụ Google Search Console chủ yếu giúp nhà quản trị website làm gì?",
+    "options": [
+      "A. Chạy quảng cáo hiển thị",
+      "B. Theo dõi hiệu suất hiển thị tự nhiên, lỗi lập chỉ mục và bảo mật của website",
+      "C. Thiết kế giao diện website",
+      "D. Quản lý các bài đăng trên mạng xã hội"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Google Search Console là công cụ miễn phí giúp theo dõi, duy trì và khắc phục sự cố liên quan đến sự hiện diện của website trong kết quả tìm kiếm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chỉ số 'Impression' (Số lượt hiển thị) trong SEM có nghĩa là gì?",
+    "options": [
+      "A. Số lần người dùng nhấp vào quảng cáo",
+      "B. Số lần quảng cáo được xuất hiện trên trang kết quả tìm kiếm",
+      "C. Số tiền bạn phải trả cho một lượt hiển thị",
+      "D. Số lần người dùng mua hàng sau khi thấy quảng cáo"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Impression đếm mỗi lần quảng cáo được hiển thị cho người dùng, bất kể họ có nhấp vào hay không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một trang web tải quá chậm, điều này ảnh hưởng như thế nào đến SEO?",
+    "options": [
+      "A. Không ảnh hưởng vì Google chỉ quan tâm đến nội dung chữ",
+      "B. Làm tăng trải nghiệm người dùng và tăng thứ hạng",
+      "C. Làm giảm trải nghiệm người dùng và có thể bị Google xếp hạng thấp hơn",
+      "D. Chỉ ảnh hưởng đến quảng cáo trả phí (SEM)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tốc độ trang (Page Speed) là một yếu tố xếp hạng quan trọng của Google vì nó ảnh hưởng trực tiếp đến trải nghiệm người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn nên làm gì nếu muốn một trang cụ thể trên website không xuất hiện trên kết quả tìm kiếm của Google?",
+    "options": [
+      "A. Xóa toàn bộ nội dung trang đó",
+      "B. Sử dụng thẻ meta 'noindex'",
+      "C. Đổi tên tiêu đề trang thành 'Không tìm kiếm'",
+      "D. Không làm gì cả, Google sẽ tự động biết"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thẻ meta 'noindex' là cách tiêu chuẩn để yêu cầu các công cụ tìm kiếm không đưa trang đó vào chỉ mục kết quả tìm kiếm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện Keyword Research, tại sao một chuyên gia SEO nên ưu tiên các từ khóa 'Long-tail' dù chúng có lượng tìm kiếm thấp hơn từ khóa ngắn?",
+    "options": [
+      "A. Vì từ khóa long-tail luôn dễ lên Top 1 hơn bất kể độ cạnh tranh.",
+      "B. Vì chúng thường phản ánh ý định tìm kiếm cụ thể hơn và có tỷ lệ chuyển đổi cao hơn.",
+      "C. Vì từ khóa long-tail giúp tiết kiệm ngân sách hosting cho website.",
+      "D. Vì Google chỉ ưu tiên xếp hạng cho những bài viết chứa từ khóa trên 5 chữ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Từ khóa long-tail (từ khóa dài) có tính cụ thể cao, giúp nhắm đúng đối tượng khách hàng ở giai đoạn sau của phễu mua hàng, dẫn đến tỷ lệ chuyển đổi thường cao hơn từ khóa ngắn (head terms).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trang web của bạn có nhiều phiên bản URL cho cùng một nội dung (do tham số lọc sản phẩm). Bạn nên làm gì để tránh lỗi trùng lặp nội dung (Duplicate Content)?",
+    "options": [
+      "A. Sử dụng thẻ rel='canonical' trỏ về URL gốc duy nhất của sản phẩm đó.",
+      "B. Chặn tất cả các URL có tham số trong file robots.txt.",
+      "C. Xóa bỏ hoàn toàn các trang có tham số lọc để làm sạch sitemap.",
+      "D. Sử dụng thẻ Noindex cho trang gốc và để Index các trang tham số."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thẻ Canonical giúp thông báo cho công cụ tìm kiếm biết đâu là phiên bản chuẩn (master copy) của một trang, giúp tập trung sức mạnh xếp hạng và tránh án phạt trùng lặp nội dung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Google Ads, yếu tố nào sau đây KHÔNG ảnh hưởng trực tiếp đến Điểm chất lượng (Quality Score) của một từ khóa?",
+    "options": [
+      "A. Tỷ lệ nhấp dự kiến (Expected CTR).",
+      "B. Trải nghiệm trang đích (Landing page experience).",
+      "C. Ngân sách hàng ngày của chiến dịch (Daily Budget).",
+      "D. Độ liên quan của quảng cáo (Ad relevance)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Điểm chất lượng được tính dựa trên CTR dự kiến, độ liên quan và trải nghiệm trang đích. Ngân sách chỉ ảnh hưởng đến tần suất hiển thị, không ảnh hưởng đến chất lượng kỹ thuật của quảng cáo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn nhận thấy một từ khóa SEO đang ở vị trí Top 4 nhưng có tỷ lệ nhấp (CTR) rất thấp so với trung bình. Giải pháp nào là hợp lý nhất để cải thiện tình hình?",
+    "options": [
+      "A. Tăng mật độ từ khóa trong bài viết lên trên 5%.",
+      "B. Tối ưu lại Title và Meta Description để thu hút và đánh đúng tâm lý người dùng.",
+      "C. Mua thêm backlink số lượng lớn trỏ về trang đó ngay lập tức.",
+      "D. Đổi URL của trang để Google index lại từ đầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Title và Meta Description là những gì người dùng thấy trên SERP. Tối ưu hóa chúng với thông điệp hấp dẫn sẽ trực tiếp cải thiện tỷ lệ nhấp (CTR) mà không cần thay đổi thứ hạng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một chiến dịch Google Search Ads có tỷ lệ hiển thị (Impression Share) thấp do 'Ngân sách', hành động nào sau đây là tối ưu nhất?",
+    "options": [
+      "A. Tăng giá thầu từ khóa để chiếm vị trí cao hơn.",
+      "B. Mở rộng thêm nhiều từ khóa đối sánh rộng (Broad match).",
+      "C. Giảm giá thầu hoặc thu hẹp đối tượng mục tiêu để ngân sách dàn trải hiệu quả hơn.",
+      "D. Chuyển toàn bộ ngân sách sang chiến dịch hiển thị (Display Network)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi mất hiển thị do ngân sách, việc giảm giá thầu giúp bạn nhận được nhiều nhấp chuột hơn với cùng một số tiền, hoặc thu hẹp mục tiêu giúp tập trung ngân sách vào những phiên đấu thầu giá trị nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cấu trúc 'Topic Cluster' (Cụm chủ đề) trong SEO mang lại lợi ích chính nào cho website?",
+    "options": [
+      "A. Giúp website tải trang nhanh hơn nhờ giảm dung lượng ảnh.",
+      "B. Xây dựng thẩm quyền (Authority) cho một chủ đề cụ thể thông qua liên kết nội bộ chặt chẽ.",
+      "C. Tự động tạo ra các backlink tự nhiên từ các trang báo lớn.",
+      "D. Giảm thiểu số lượng trang cần viết trên một website."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Topic Cluster bao gồm một Pillar Page và các Cluster Content liên kết với nhau, giúp Google hiểu website là chuyên gia trong lĩnh vực đó, từ đó cải thiện thứ hạng cho cả cụm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Google Ads, chiến lược giá thầu 'Target ROAS' (Lợi nhuận mục tiêu trên chi tiêu quảng cáo) phù hợp nhất với loại hình doanh nghiệp nào?",
+    "options": [
+      "A. Doanh nghiệp mới thành lập muốn tăng nhận diện thương hiệu.",
+      "B. Các trang tin tức muốn tối đa hóa lượt đọc bài viết.",
+      "C. Các trang thương mại điện tử có dữ liệu chuyển đổi và giá trị đơn hàng rõ ràng.",
+      "D. Các công ty B2B chỉ cần thu thập thông tin khách hàng tiềm năng (Leads)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Target ROAS yêu cầu hệ thống biết được giá trị chuyển đổi (doanh thu) để tối ưu hóa. Điều này phổ biến nhất ở các trang E-commerce có theo dõi doanh thu trên mỗi đơn hàng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chỉ số 'Largest Contentful Paint' (LCP) trong Core Web Vitals đo lường yếu tố gì?",
+    "options": [
+      "A. Thời gian phản hồi của máy chủ khi nhận yêu cầu đầu tiên.",
+      "B. Thời gian để phần tử nội dung lớn nhất (thường là ảnh hoặc khối văn bản) hiển thị trên màn hình.",
+      "C. Tổng thời gian các phần tử trên trang thay đổi vị trí gây mất ổn định bố cục.",
+      "D. Thời gian từ khi người dùng nhấp chuột đến khi trình duyệt xử lý xong sự kiện đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "LCP đo lường hiệu suất tải cảm nhận của người dùng bằng cách xác định thời điểm phần tử chính của trang được hiển thị xong.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Negative Keywords' (Từ khóa phủ định) lại quan trọng trong chiến dịch SEM?",
+    "options": [
+      "A. Để tăng giá thầu của đối thủ cạnh tranh.",
+      "B. Để ngăn quảng cáo hiển thị cho các truy vấn không liên quan, giúp tiết kiệm ngân sách.",
+      "C. Để giúp quảng cáo hiển thị ở nhiều vị trí hơn trên mạng hiển thị.",
+      "D. Để tự động dịch quảng cáo sang các ngôn ngữ khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Từ khóa phủ định giúp loại bỏ những lượt tìm kiếm không mang lại giá trị (ví dụ: người dùng tìm 'miễn phí' khi bạn bán dịch vụ cao cấp), từ đó cải thiện CTR và ROI.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn thấy trang web của mình bị sụt giảm thứ hạng nghiêm trọng sau một bản cập nhật thuật toán lõi (Core Update) của Google. Bước đầu tiên bạn nên làm là gì?",
+    "options": [
+      "A. Gỡ bỏ toàn bộ website và xây dựng lại trên một tên miền mới.",
+      "B. Chờ đợi 1-2 tuần để dữ liệu ổn định, sau đó phân tích xem nhóm nội dung nào bị ảnh hưởng nhất.",
+      "C. Ngay lập tức thay đổi toàn bộ thẻ Title của tất cả các bài viết.",
+      "D. Chặn Googlebot truy cập website để tránh bị phạt nặng hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các đợt cập nhật thuật toán cần thời gian để hoàn tất. Việc phân tích kỹ lưỡng dữ liệu từ Search Console giúp xác định đúng nguyên nhân (nội dung, kỹ thuật hay uy tín) trước khi hành động.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Google Search Console, báo cáo 'Crawl Stats' (Số liệu thống kê thu thập dữ liệu) giúp bạn phát hiện vấn đề gì?",
+    "options": [
+      "A. Những từ khóa nào đang mang lại nhiều chuyển đổi nhất.",
+      "B. Tốc độ phản hồi của máy chủ và tần suất Googlebot ghé thăm website.",
+      "C. Thứ hạng trung bình của website trên thiết bị di động.",
+      "D. Danh sách các đối thủ đang chạy quảng cáo cùng từ khóa với bạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Crawl Stats cung cấp thông tin về việc Googlebot có gặp khó khăn khi truy cập máy chủ của bạn không và ngân sách thu thập dữ liệu (crawl budget) đang được sử dụng ra sao.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đối sánh từ khóa 'Phrase Match' (Đối sánh cụm từ) trong Google Ads hoạt động như thế nào sau các cập nhật gần đây?",
+    "options": [
+      "A. Chỉ hiển thị khi truy vấn tìm kiếm khớp chính xác từng chữ với từ khóa.",
+      "B. Hiển thị khi truy vấn có chứa ý nghĩa của từ khóa, bao gồm cả các từ bổ sung phía trước hoặc sau.",
+      "C. Hiển thị cho mọi truy vấn mà Google cho là có liên quan từ xa đến từ khóa.",
+      "D. Chỉ hiển thị khi người dùng gõ từ khóa kèm theo dấu ngoặc vuông []."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối sánh cụm từ hiện nay đã bao gồm cả các biến thể có cùng ý nghĩa, cho phép quảng cáo hiển thị trên các tìm kiếm bao gồm ý nghĩa của từ khóa của bạn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa thuộc tính 'nofollow' và 'sponsored' trong thẻ liên kết là gì?",
+    "options": [
+      "A. Không có sự khác biệt, Google xử lý chúng hoàn toàn giống nhau.",
+      "B. 'nofollow' dùng cho các liên kết không muốn truyền sức mạnh, 'sponsored' dùng để đánh dấu các liên kết quảng cáo hoặc trả phí.",
+      "C. 'sponsored' giúp website nhận được nhiều sức mạnh SEO hơn từ trang nguồn.",
+      "D. 'nofollow' chỉ dùng cho liên kết nội bộ, 'sponsored' dùng cho liên kết ngoại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Google khuyến nghị dùng 'sponsored' cho các liên kết có sự trao đổi tiền bạc/quảng cáo để giúp máy học phân loại web tốt hơn, trong khi 'nofollow' là cách dùng chung khi bạn không muốn bảo chứng cho trang đích.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu một trang web có tỷ lệ thoát (Bounce Rate) rất cao nhưng thời gian trung bình trên trang (Avg. Time on Page) cũng rất cao, điều này thường ám chỉ điều gì?",
+    "options": [
+      "A. Trang web bị lỗi kỹ thuật không thể tải được nội dung.",
+      "B. Người dùng tìm thấy thông tin họ cần ngay trên trang đó và không cần xem thêm trang khác.",
+      "C. Nội dung trang quá ngắn và không có giá trị.",
+      "D. Robot đang tấn công website của bạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong nhiều trường hợp (như bài viết blog hướng dẫn), người dùng đọc rất kỹ (thời gian trên trang cao) rồi rời đi sau khi đã thỏa mãn nhu cầu, dẫn đến tỷ lệ thoát cao nhưng chất lượng vẫn tốt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi tối ưu hóa cho 'Featured Snippets' (Đoạn trích nổi bật), cấu trúc nội dung nào thường hiệu quả nhất?",
+    "options": [
+      "A. Viết một đoạn văn dài 500 chữ không có ngắt nghỉ.",
+      "B. Sử dụng các thẻ Heading (H2, H3) rõ ràng kèm theo câu trả lời ngắn gọn, súc tích ngay sau đó.",
+      "C. Giấu nội dung quan trọng vào trong các file hình ảnh.",
+      "D. Chỉ sử dụng video mà không có văn bản đi kèm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Google thường trích xuất các đoạn văn ngắn, danh sách (list) hoặc bảng (table) phản hồi trực tiếp cho câu hỏi của người dùng để đưa vào Featured Snippets.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một chiến dịch Google Ads, bạn nhận thấy CTR cao nhưng tỷ lệ chuyển đổi (Conversion Rate) cực thấp. Bạn nên kiểm tra yếu tố nào đầu tiên?",
+    "options": [
+      "A. Kiểm tra xem giá thầu có đang quá thấp không.",
+      "B. Kiểm tra sự tương quan giữa thông điệp quảng cáo và nội dung trang đích.",
+      "C. Tăng thêm số lượng từ khóa đối sánh rộng.",
+      "D. Thay đổi màu sắc logo của công ty."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CTR cao nghĩa là quảng cáo hấp dẫn, nhưng chuyển đổi thấp thường do trang đích không đáp ứng được kỳ vọng mà quảng cáo đã hứa hẹn hoặc trải nghiệm mua hàng trên trang quá kém.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Thẻ 'hreflang' được sử dụng trong trường hợp nào là đúng nhất?",
+    "options": [
+      "A. Khi bạn muốn chặn người dùng từ một quốc gia cụ thể.",
+      "B. Khi website có nhiều phiên bản ngôn ngữ hoặc nhắm đến các thị trường địa phương khác nhau.",
+      "C. Khi bạn muốn thông báo cho Google về tác giả của bài viết.",
+      "D. Khi bạn muốn tăng tốc độ tải trang cho người dùng ở xa máy chủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thẻ hreflang giúp công cụ tìm kiếm hiểu được mối quan hệ giữa các trang web có ngôn ngữ khác nhau, giúp hiển thị phiên bản URL phù hợp nhất cho người dùng tại từng khu vực.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng quá nhiều chuyển hướng (Redirect Chains) như A -> B -> C?",
+    "options": [
+      "A. Vì Google sẽ không bao giờ index các trang được chuyển hướng.",
+      "B. Vì nó làm chậm tốc độ tải trang và làm hao hụt ngân sách thu thập dữ liệu (Crawl Budget).",
+      "C. Vì nó làm tăng dung lượng file database của website.",
+      "D. Vì người dùng sẽ bị trình duyệt cảnh báo là trang web lừa đảo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi bước chuyển hướng làm tăng thời gian chờ của người dùng và khiến bot của công cụ tìm kiếm mất nhiều công sức hơn để tìm thấy trang đích cuối cùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thiết lập theo dõi chuyển đổi (Conversion Tracking) qua GA4 cho chiến dịch SEM, 'Enhanced Measurement' (Đo lường nâng cao) tự động theo dõi hành động nào?",
+    "options": [
+      "A. Hoàn tất thanh toán thẻ tín dụng.",
+      "B. Các lượt cuộn trang (scroll), nhấp vào liên kết ngoài (outbound clicks) và tìm kiếm trên trang.",
+      "C. Doanh thu chính xác từ các chiến dịch email marketing.",
+      "D. Địa chỉ nhà riêng của người truy cập."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GA4 cung cấp tính năng đo lường nâng cao giúp theo dõi các tương tác cơ bản mà không cần cấu hình code bổ sung, bao gồm scroll, outbound clicks, file downloads, v.v.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Internal Linking' (Liên kết nội bộ) có vai trò gì quan trọng nhất trong cấu trúc site?",
+    "options": [
+      "A. Giảm chi phí thuê server hàng tháng.",
+      "B. Giúp phân bổ dòng chảy sức mạnh (Link Equity) và giúp bot lập chỉ mục các trang sâu dễ dàng hơn.",
+      "C. Giúp thay thế hoàn toàn nhu cầu về Backlink từ bên ngoài.",
+      "D. Làm cho menu của website trông đẹp mắt hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Liên kết nội bộ tạo ra một mạng lưới giúp bot Google khám phá toàn bộ website và giúp truyền sức mạnh từ các trang uy tín (như trang chủ) đến các trang con.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang chạy quảng cáo Search Ads cho một dịch vụ khẩn cấp (ví dụ: Sửa ống nước 24h). Chiến lược đặt giá thầu nào thường hiệu quả nhất để đảm bảo khách hàng thấy bạn ngay lập tức?",
+    "options": [
+      "A. Maximize Conversions (Tối đa hóa lượt chuyển đổi).",
+      "B. Target Impression Share (Tỷ lệ hiển thị mục tiêu) ở vị trí đầu trang.",
+      "C. Manual CPC ở mức giá cực thấp để tiết kiệm.",
+      "D. Enhanced CPC nhắm vào đối tượng thích xem video."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với các dịch vụ khẩn cấp, việc xuất hiện ở các vị trí đầu tiên là yếu tố quyết định vì người dùng thường nhấp vào kết quả đầu tiên họ thấy để giải quyết vấn đề ngay.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi phân tích đối thủ cạnh tranh trong SEM, chỉ số 'Auction Insights' (Thông tin chi tiết về phiên đấu thầu) cho bạn biết điều gì?",
+    "options": [
+      "A. Số tiền chính xác đối thủ đã chi tiêu mỗi ngày.",
+      "B. Danh sách các từ khóa phủ định mà đối thủ đang dùng.",
+      "C. Tỷ lệ hiển thị của bạn so với các đối thủ đang đấu thầu cùng nhóm từ khóa.",
+      "D. Điểm chất lượng của các mẫu quảng cáo của đối thủ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Auction Insights cho phép bạn so sánh hiệu suất của mình với các nhà quảng cáo khác tham gia vào cùng một phiên đấu thầu, bao gồm tỷ lệ hiển thị, tỷ lệ chồng chéo, v.v.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Việc tối ưu hóa 'Alt Text' cho hình ảnh có tác dụng chính là gì trong SEO?",
+    "options": [
+      "A. Giúp hình ảnh hiển thị sắc nét hơn trên màn hình Retina.",
+      "B. Giúp công cụ tìm kiếm hiểu nội dung hình ảnh và hỗ trợ khả năng truy cập (accessibility) cho người khiếm thị.",
+      "C. Tự động nén dung lượng ảnh xuống mức thấp nhất.",
+      "D. Ngăn chặn người khác tải ảnh từ website của bạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Alt text cung cấp mô tả bằng văn bản cho hình ảnh, giúp Google Index hình ảnh vào Google Images và giúp các trình đọc màn hình phục vụ người dùng khiếm thị.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một trang web có file robots.txt chứa dòng lệnh: 'Disallow: /'. Điều này có nghĩa là gì?",
+    "options": [
+      "A. Cho phép tất cả các công cụ tìm kiếm truy cập toàn bộ website.",
+      "B. Ngăn chặn tất cả các công cụ tìm kiếm thu thập dữ liệu toàn bộ website.",
+      "C. Chỉ cho phép Googlebot truy cập vào trang chủ.",
+      "D. Yêu cầu Googlebot ưu tiên index website nhanh hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dấu '/' đại diện cho thư mục gốc. Lệnh Disallow: / yêu cầu bot không được phép thu thập dữ liệu bất kỳ trang nào thuộc tên miền đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng Schema Markup (Dữ liệu cấu trúc) lại quan trọng đối với SEO hiện đại?",
+    "options": [
+      "A. Nó là yếu tố xếp hạng trực tiếp quan trọng nhất của Google.",
+      "B. Nó giúp tạo ra các Rich Snippets (kết quả giàu thông tin) như xếp hạng sao, giá sản phẩm, giúp tăng CTR.",
+      "C. Nó giúp website tự động dịch sang 100 ngôn ngữ khác nhau.",
+      "D. Nó thay thế hoàn toàn cho việc viết Meta Description."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Schema giúp công cụ tìm kiếm hiểu ngữ cảnh dữ liệu tốt hơn và hiển thị các thông tin bổ sung bắt mắt trên SERP, từ đó thu hút người dùng nhấp vào kết quả hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi triển khai Faceted Navigation cho một website thương mại điện tử lớn với hàng triệu URL, giải pháp nào tối ưu nhất để quản lý crawl budget mà vẫn đảm bảo trải nghiệm người dùng?",
+    "options": [
+      "A. Sử dụng thuộc tính rel='nofollow' cho tất cả các liên kết lọc để ngăn bot truy cập.",
+      "B. Sử dụng AJAX để tải kết quả lọc mà không thay đổi URL, kết hợp với Canonical về danh mục gốc.",
+      "C. Cấu hình tham số URL trong Google Search Console để Googlebot bỏ qua các tham số lọc không quan trọng.",
+      "D. Sử dụng Robots.txt để chặn hoàn toàn các đường dẫn chứa tham số lọc ngay từ đầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng AJAX giúp tránh tạo ra vô số URL rác cho bot (tiết kiệm crawl budget) trong khi vẫn giữ trải nghiệm mượt mà. Canonical giúp tập trung sức mạnh SEO về trang chính.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một chiến dịch Google Ads sử dụng Smart Bidding (tCPA), nếu bạn đột ngột tăng ngân sách lên 300% trong một ngày, hệ thống sẽ phản ứng như thế nào?",
+    "options": [
+      "A. Hệ thống sẽ ngay lập tức tối ưu hóa để đạt được số lượng chuyển đổi gấp 3 lần với CPA mục tiêu cũ.",
+      "B. Chiến dịch có khả năng rơi vào trạng thái 'Learning' lại từ đầu, làm biến động hiệu suất và tăng CPA thực tế.",
+      "C. Google Ads sẽ tự động phân bổ ngân sách sang các từ khóa Broad Match để tiêu hết tiền nhanh nhất.",
+      "D. Hiệu suất không thay đổi vì Smart Bidding chỉ quan tâm đến tỷ lệ chuyển đổi, không quan tâm đến ngân sách."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thay đổi ngân sách quá lớn (>20%) đột ngột sẽ kích hoạt lại giai đoạn máy học (Learning Phase), khiến thuật toán mất ổn định và thường dẫn đến hiệu suất kém trong ngắn hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi tối ưu hóa Core Web Vitals cho một trang Single Page Application (SPA), chỉ số LCP (Largest Contentful Paint) thường bị ảnh hưởng tiêu cực bởi yếu tố nào nhất?",
+    "options": [
+      "A. Kích thước file CSS quá lớn gây chặn hiển thị (render-blocking).",
+      "B. Thời gian chờ đợi API phản hồi dữ liệu trước khi render các phần tử quan trọng bằng JavaScript.",
+      "C. Việc thiếu thuộc tính 'alt' cho các hình ảnh nằm dưới màn hình đầu tiên (below the fold).",
+      "D. Sử dụng quá nhiều font chữ từ bên thứ ba (Google Fonts)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong SPA, nội dung chính thường được render sau khi JS tải xong và gọi API thành công. Sự phụ thuộc vào Client-side Rendering (CSR) làm chậm thời điểm phần tử lớn nhất xuất hiện.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chiến lược xử lý 'Keyword Cannibalization' hiệu quả nhất khi hai trang web trên cùng một domain đang cạnh tranh cho cùng một từ khóa có mục đích tìm kiếm (intent) giống nhau là gì?",
+    "options": [
+      "A. Xóa trang có thứ hạng thấp hơn và Redirect 301 về trang có thứ hạng cao hơn.",
+      "B. Đổi từ khóa mục tiêu của trang yếu hơn sang một từ khóa ngách (long-tail) khác.",
+      "C. Hợp nhất nội dung của hai trang thành một thực thể toàn diện hơn và thực hiện Redirect 301.",
+      "D. Sử dụng thẻ Canonical từ trang yếu hơn trỏ về trang mạnh hơn để giữ lại cả hai nội dung."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hợp nhất nội dung (Consolidation) là giải pháp bền vững nhất để tập trung tín hiệu xếp hạng (link equity) và giải quyết triệt để vấn đề phân mảnh nội dung.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng Broad Match kết hợp với Smart Bidding lại được Google khuyến nghị trong các tài khoản có dữ liệu chuyển đổi lớn (Data-driven)?",
+    "options": [
+      "A. Để mở rộng quy mô tiếp cận và cho phép AI sử dụng các tín hiệu ngữ cảnh (contextual signals) để đấu thầu dựa trên ý định thực sự.",
+      "B. Vì Broad Match luôn có giá CPC rẻ nhất so với Phrase Match và Exact Match.",
+      "C. Để đảm bảo quảng cáo luôn xuất hiện ở vị trí đầu tiên (Top 1) cho mọi truy vấn liên quan.",
+      "D. Vì Broad Match giúp loại bỏ hoàn toàn nhu cầu phải quản lý danh sách từ khóa phủ định."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Smart Bidding có thể xử lý hàng triệu tín hiệu (vị trí, thiết bị, lịch sử) mà Broad Match cung cấp để tìm ra những chuyển đổi tiềm năng mà Exact Match có thể bỏ lỡ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong cấu trúc Hreflang, nếu trang A (tiếng Việt) trỏ đến trang B (tiếng Anh), nhưng trang B không trỏ ngược lại trang A, điều gì sẽ xảy ra?",
+    "options": [
+      "A. Google vẫn hiểu và hiển thị đúng phiên bản ngôn ngữ dựa trên vị trí địa lý của người dùng.",
+      "B. Thẻ Hreflang sẽ bị Google Search Console báo lỗi 'Return tag' và có thể bị bỏ qua hoàn toàn.",
+      "C. Trang B sẽ được ưu tiên xếp hạng cao hơn trang A tại thị trường Việt Nam.",
+      "D. Toàn bộ website sẽ bị phạt vì lỗi kỹ thuật thao túng kết quả tìm kiếm quốc tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hreflang yêu cầu tính xác nhận hai chiều (reciprocal). Nếu thiếu liên kết ngược lại, Google sẽ coi đó là lỗi cấu trúc và không tin tưởng các chỉ dẫn ngôn ngữ này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn nhận thấy tỷ lệ Impression Share bị mất do Rank (Lost IS (rank)) của một chiến dịch tìm kiếm rất cao. Hành động nào sau đây là ưu tiên nhất để khắc phục?",
+    "options": [
+      "A. Tăng ngân sách hàng ngày của chiến dịch lên gấp đôi.",
+      "B. Cải thiện Ad Relevance và trải nghiệm trang đích để tăng Quality Score.",
+      "C. Chuyển tất cả từ khóa sang dạng Exact Match để thu hẹp đối tượng.",
+      "D. Tắt tất cả các tiện ích mở rộng quảng cáo để giảm diện tích hiển thị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lost IS (rank) do Ad Rank thấp (Ad Rank = Bid x Quality Score). Khi ngân sách không phải là rào cản, việc tối ưu chất lượng (Relevance/LDP) là cách hiệu quả nhất để tăng khả năng hiển thị.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phân tích Log Files của server, bạn phát hiện Googlebot dành 80% thời gian để crawl các trang đã cũ và không còn giá trị SEO. Đây là vấn đề thuộc về:",
+    "options": [
+      "A. Thiếu hụt Backlink chất lượng cao trỏ về các trang mới.",
+      "B. Cấu trúc liên kết nội bộ (Internal Linking) đang ưu tiên các trang cũ quá mức.",
+      "C. Tốc độ phản hồi của server (TTFB) quá chậm cho các trang mới.",
+      "D. File Sitemap.xml chứa quá nhiều URL không tồn tại (404)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Crawl budget bị lãng phí thường do cấu trúc site. Googlebot ưu tiên crawl các trang có nhiều liên kết nội bộ hoặc nằm gần trang chủ (depth thấp).",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một website tin tức muốn tối ưu hóa cho Google Discover. Yếu tố kỹ thuật/nội dung nào sau đây là quan trọng nhất?",
+    "options": [
+      "A. Sử dụng Schema Markup loại 'Article' và có hình ảnh chất lượng cao rộng tối thiểu 1200px.",
+      "B. Tăng mật độ từ khóa chính trong 100 chữ đầu tiên của bài viết.",
+      "C. Đảm bảo tất cả các URL đều có đuôi .html để Google dễ nhận diện.",
+      "D. Chỉ đăng tải các nội dung có độ dài trên 3000 chữ để tăng thời gian on-page."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Google Discover ưu tiên trải nghiệm thị giác. Hình ảnh lớn (min-width 1200px) và cấu trúc dữ liệu chuẩn là điều kiện tiên quyết để được hiển thị hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa Attribution Model 'Data-driven' và 'Last-click' trong Google Ads là gì?",
+    "options": [
+      "A. Data-driven chỉ tính chuyển đổi cho các quảng cáo video, còn Last-click tính cho tìm kiếm.",
+      "B. Data-driven sử dụng thuật toán để phân bổ giá trị cho mọi điểm chạm dựa trên đóng góp thực tế, thay vì chỉ điểm chạm cuối.",
+      "C. Last-click giúp giảm chi phí CPC trung bình, trong khi Data-driven làm tăng CPC.",
+      "D. Data-driven yêu cầu phải cài đặt Google Analytics 4, còn Last-click thì không cần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data-driven attribution (DDA) sử dụng dữ liệu lịch sử để đánh giá tầm quan trọng của từng tương tác trong hành trình khách hàng, giúp tối ưu hóa bidding chính xác hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai Dynamic Search Ads (DSA), làm thế nào để ngăn chặn quảng cáo hiển thị cho các trang 'Chính sách bảo mật' hoặc 'Điều khoản sử dụng'?",
+    "options": [
+      "A. Sử dụng thuộc tính noindex trên các trang đó.",
+      "B. Thiết lập 'Negative Dynamic Ad Targets' dựa trên URL hoặc tiêu đề trang.",
+      "C. Xóa các trang đó khỏi Sitemap.xml.",
+      "D. Giảm giá thầu cho các truy vấn không liên quan trong báo cáo Search Terms."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Negative Dynamic Ad Targets là công cụ chuyên biệt của DSA để loại trừ các trang không có giá trị thương mại khỏi việc tự động tạo quảng cáo.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Đối với một website YMYL (Your Money Your Life), yếu tố nào sau đây ảnh hưởng mạnh nhất đến khả năng phục hồi sau một bản cập nhật Core Update của Google?",
+    "options": [
+      "A. Tốc độ tải trang đạt điểm 100/100 trên PageSpeed Insights.",
+      "B. Số lượng Backlink từ các trang báo chí lớn trong vòng 30 ngày.",
+      "C. Chứng minh được chuyên môn của tác giả (Author Bio) và sự minh bạch của tổ chức (E-E-A-T).",
+      "D. Chuyển đổi toàn bộ định dạng ảnh sang WebP để tối ưu dung lượng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các trang YMYL bị soi xét rất kỹ về tính chuyên gia và độ tin cậy. Thiếu thông tin tác giả hoặc nguồn kiểm chứng là lý do phổ biến khiến các trang này rớt hạng sau Core Update.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Google Ads, chiến lược giá thầu 'Target ROAS' sẽ hoạt động kém hiệu quả nhất trong điều kiện nào?",
+    "options": [
+      "A. Khi tài khoản có quá nhiều dữ liệu chuyển đổi (trên 1000 chuyển đổi/tháng).",
+      "B. Khi giá trị chuyển đổi (conversion value) được báo cáo không ổn định hoặc bị sai lệch lớn.",
+      "C. Khi sử dụng kết hợp với danh sách khách hàng (Customer Match).",
+      "D. Khi chạy chiến dịch trên mạng hiển thị (Display Network)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "tROAS dựa hoàn toàn vào giá trị đơn hàng để tối ưu. Nếu dữ liệu giá trị đầu vào bị nhiễu hoặc sai, thuật toán sẽ đưa ra các quyết định đấu thầu sai lầm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Content Pruning' (cắt tỉa nội dung) nên được thực hiện dựa trên tiêu chí chính nào để cải thiện SEO tổng thể?",
+    "options": [
+      "A. Xóa tất cả các bài viết có độ dài dưới 500 chữ.",
+      "B. Xóa hoặc hợp nhất các trang có traffic thấp, không có backlink và không có chuyển đổi trong thời gian dài.",
+      "C. Xóa các trang có tỷ lệ thoát (Bounce Rate) trên 90%.",
+      "D. Chỉ giữ lại các trang nằm trong Top 10 kết quả tìm kiếm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Content Pruning nhằm loại bỏ 'thin content' hoặc nội dung lỗi thời không mang lại giá trị, giúp tập trung crawl budget và sức mạnh domain vào các trang chất lượng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi chạy Performance Max (PMax), làm thế nào để đảm bảo ngân sách được ưu tiên cho việc tìm kiếm khách hàng mới thay vì remarketing cho khách cũ?",
+    "options": [
+      "A. Tắt hoàn toàn tín hiệu đối tượng (Audience Signals).",
+      "B. Sử dụng cài đặt 'Customer Acquisition' và chọn 'Bid higher for new customers' hoặc 'Only bid for new customers'.",
+      "C. Loại trừ tất cả các địa chỉ IP của văn phòng công ty.",
+      "D. Chỉ cung cấp hình ảnh sản phẩm, không cung cấp video."
+    ],
+    "correctAnswer": "B",
+    "explanation": "PMax có tính năng chuyên biệt để tối ưu hóa việc thu hút khách hàng mới (New Customer Acquisition goals), cho phép kiểm soát việc phân bổ ngân sách giữa khách cũ và khách mới.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc triển khai Server-side Tagging (thay vì Client-side) cho Google Analytics 4 là gì?",
+    "options": [
+      "A. Giúp giao diện báo cáo của GA4 load nhanh hơn.",
+      "B. Cải thiện độ chính xác của dữ liệu bằng cách vượt qua các trình chặn quảng cáo (Ad-blockers) và kéo dài thời hạn cookie.",
+      "C. Tự động hóa việc tạo các sự kiện (events) mà không cần code.",
+      "D. Giảm chi phí duy trì server hàng tháng cho doanh nghiệp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Server-side tagging cho phép doanh nghiệp sở hữu dòng dữ liệu, giảm tải cho trình duyệt người dùng và hạn chế tác động của các cơ chế chặn theo dõi phía client.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao một trang web có chỉ số 'Total Blocking Time' (TBT) cao lại thường có điểm số 'Cumulative Layout Shift' (CLS) thấp (tốt)?",
+    "options": [
+      "A. Vì TBT và CLS là hai chỉ số tỷ lệ thuận với nhau trong mọi trường hợp.",
+      "B. TBT liên quan đến khả năng phản hồi của JS, trong khi CLS liên quan đến sự ổn định về thị giác; chúng đo lường hai khía cạnh độc lập.",
+      "C. Vì khi trình duyệt bị block bởi JS (TBT cao), nó không thể render các thành phần gây nhảy khung hình (CLS).",
+      "D. Đây là một lỗi phổ biến trong công cụ Lighthouse và không phản ánh thực tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "TBT đo lường tính tương tác (responsiveness), CLS đo lường độ ổn định giao diện. Một trang có thể phản hồi chậm nhưng các thành phần đứng yên, hoặc ngược lại.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong chiến lược 'Bidding on Competitor Keywords', yếu tố nào thường là rào cản lớn nhất khiến lợi nhuận (ROI) thấp?",
+    "options": [
+      "A. Google cấm việc sử dụng tên đối thủ trong từ khóa đấu thầu.",
+      "B. Điểm chất lượng (Quality Score) thấp dẫn đến CPC thực tế rất cao.",
+      "C. Đối thủ có thể kiện bạn vì vi phạm bản quyền hình ảnh trong quảng cáo.",
+      "D. Hệ thống Google Ads sẽ tự động giảm thứ hạng của bạn nếu bạn đấu thầu tên đối thủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Do trang đích và mẫu quảng cáo của bạn không liên quan trực tiếp đến thương hiệu đối thủ, Quality Score sẽ rất thấp, buộc bạn phải trả giá thầu cao hơn nhiều để hiển thị.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi một trang web chuyển đổi từ HTTP sang HTTPS, bước nào sau đây thường bị bỏ sót dẫn đến mất traffic nghiêm trọng?",
+    "options": [
+      "A. Cập nhật lại thẻ Canonical trỏ về phiên bản HTTPS.",
+      "B. Cài đặt chứng chỉ SSL mới trên server.",
+      "C. Thay đổi logo website sang phiên bản có màu xanh bảo mật.",
+      "D. Khai báo lại website trong Google Search Console như một 'Property' mới (nếu không dùng Domain Property)."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Google coi HTTP và HTTPS là hai giao thức khác nhau. Nếu không khai báo Property mới hoặc dùng Domain Property, bạn sẽ không theo dõi được dữ liệu và quá trình chuyển đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc lạm dụng 'Internal Links' với cùng một Anchor Text chính xác (Exact Match) trên toàn bộ website có thể dẫn đến hậu quả gì?",
+    "options": [
+      "A. Giúp trang đích lên top nhanh hơn cho từ khóa đó.",
+      "B. Không có ảnh hưởng gì vì Google không phạt liên kết nội bộ.",
+      "C. Có thể bị coi là thao túng thuật toán (Over-optimization) và làm giảm hiệu quả SEO của trang đích.",
+      "D. Làm tăng tốc độ crawl của Googlebot đối với trang đích đó."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dù ít bị phạt nặng như backlink từ ngoài, nhưng việc lạm dụng anchor text nội bộ quá mức khiến hồ sơ liên kết thiếu tự nhiên và có thể kích hoạt các bộ lọc spam của Google.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Google Ads, 'Enhanced Conversions' giúp giải quyết vấn đề gì?",
+    "options": [
+      "A. Tự động tăng giá thầu khi thấy khách hàng có khả năng mua hàng cao.",
+      "B. Khôi phục các chuyển đổi bị mất do người dùng từ chối cookie hoặc do các hạn chế về quyền riêng tư của trình duyệt.",
+      "C. Tạo ra nhiều chuyển đổi ảo để máy học nhanh hơn.",
+      "D. Tự động dịch mẫu quảng cáo sang ngôn ngữ của người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Enhanced Conversions sử dụng dữ liệu bên thứ nhất (như email băm) để khớp nối người dùng với quảng cáo ngay cả khi cookie không khả dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một trang web có cấu trúc 'Flat Hierarchy' (phẳng) khác gì với 'Deep Hierarchy' về mặt phân bổ Authority?",
+    "options": [
+      "A. Flat Hierarchy giúp Authority từ trang chủ truyền đến các trang con nhanh hơn và đồng đều hơn.",
+      "B. Deep Hierarchy giúp Google hiểu nội dung chuyên sâu hơn và ưu tiên xếp hạng cao hơn.",
+      "C. Flat Hierarchy làm tăng số lượng click cần thiết để người dùng tìm thấy thông tin.",
+      "D. Không có sự khác biệt, Google chỉ quan tâm đến chất lượng nội dung từng trang."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cấu trúc phẳng (ít cấp độ click) giúp link equity truyền đi hiệu quả hơn và giúp bot dễ dàng tìm thấy tất cả nội dung quan trọng nhanh hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao chỉ số 'Search Lost IS (budget)' lại là một tín hiệu cho thấy chiến dịch PPC đang hoạt động dưới mức tiềm năng?",
+    "options": [
+      "A. Vì nó cho thấy quảng cáo có chất lượng quá thấp.",
+      "B. Vì nó cho thấy bạn đang bỏ lỡ các chuyển đổi có lợi nhuận chỉ vì giới hạn ngân sách hàng ngày.",
+      "C. Vì nó cho thấy từ khóa bạn chọn quá cạnh tranh và không nên tiếp tục.",
+      "D. Vì nó cho thấy đối thủ đang đấu thầu cao hơn bạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Search Lost IS (budget) cao nghĩa là chiến dịch đang hiệu quả nhưng bị 'đứt quãng' giữa ngày do hết tiền. Tăng ngân sách ở đây thường mang lại ROI ổn định.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi tối ưu hóa cho 'Voice Search', chiến lược từ khóa nào là phù hợp nhất?",
+    "options": [
+      "A. Tập trung vào các từ khóa ngắn (short-tail) có volume cực lớn.",
+      "B. Sử dụng các cụm từ mang tính đàm thoại (conversational) và các câu hỏi dạng 5W1H.",
+      "C. Tối ưu hóa mật độ từ khóa trong các thẻ Meta Keywords.",
+      "D. Chỉ tập trung vào các từ khóa tiếng Anh vì tìm kiếm giọng nói tiếng Việt chưa phổ biến."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tìm kiếm giọng nói thường dài hơn và có cấu trúc như một câu hỏi tự nhiên. Việc tối ưu theo dạng câu hỏi giúp khớp với hành vi thực tế của người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong báo cáo Search Console, nếu 'Average Position' tăng (tốt hơn) nhưng 'CTR' lại giảm, nguyên nhân khả dĩ nhất là gì?",
+    "options": [
+      "A. Website bị đối thủ click tặc quá nhiều.",
+      "B. Trang web mới xuất hiện thêm các SERP Features (như Ads, Local Pack) đẩy kết quả tự nhiên xuống dưới dù thứ hạng vẫn cao.",
+      "C. Google đang thử nghiệm hiển thị trang web của bạn ở các thị trường mới có tỷ lệ click thấp.",
+      "D. Nội dung trang web đã trở nên lỗi thời và không còn hấp dẫn người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự xuất hiện của các yếu tố gây nhiễu trên SERP (như quảng cáo dày đặc hoặc Featured Snippets) có thể làm giảm CTR của các vị trí top đầu vì người dùng bị thu hút bởi các thành phần khác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện chuyển đổi hệ thống (Migration) cho một website thương mại điện tử có hơn 1 triệu URL từ nền tảng cũ sang nền tảng mới, chiến lược nào là tối ưu nhất để bảo toàn thứ hạng và ngân sách thu thập dữ liệu (Crawl Budget)?",
+    "options": [
+      "A. Thực hiện chuyển hướng 301 toàn bộ URL cũ về trang chủ của website mới để tập trung sức mạnh domain.",
+      "B. Ưu tiên lập bản đồ chuyển hướng 301 (Mapping) cho các trang có Traffic và Backlink cao, các trang còn lại để lỗi 404.",
+      "C. Thực hiện chuyển hướng 301 theo tỷ lệ 1:1 cho tất cả các URL tương ứng và cập nhật lại toàn bộ Internal Link, Sitemap.",
+      "D. Sử dụng thẻ Canonical từ URL cũ trỏ sang URL mới trong vòng 6 tháng trước khi thực hiện chuyển hướng 301."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để bảo toàn SEO Equity và Crawl Budget ở quy mô lớn, việc mapping 1:1 và cập nhật hạ tầng link nội bộ là bắt buộc để Googlebot nhận diện cấu trúc mới nhanh nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh Google đẩy mạnh 'Broad Match' kết hợp với 'Smart Bidding', một chuyên gia SEM nên làm gì để kiểm soát chi phí mà vẫn tối ưu hóa được chuyển đổi?",
+    "options": [
+      "A. Chỉ sử dụng Exact Match để kiểm soát hoàn toàn các truy vấn tìm kiếm của người dùng.",
+      "B. Sử dụng Broad Match kết hợp với danh sách từ khóa phủ định (Negative Keywords) chuyên sâu và tín hiệu dữ liệu chuyển đổi (First-party data).",
+      "C. Tắt hoàn toàn Smart Bidding và chuyển sang Manual CPC để tránh việc Google tự động đấu thầu quá cao.",
+      "D. Tăng ngân sách hàng ngày lên gấp đôi để thuật toán học nhanh hơn mà không cần quan tâm đến loại đối sánh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Broad Match phát huy hiệu quả nhất khi đi kèm với Smart Bidding và dữ liệu chuyển đổi chất lượng, nhưng cần Negative Keywords để loại bỏ rác và tối ưu hóa chi phí.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một website gặp tình trạng 'Keyword Cannibalization' (Ăn thịt từ khóa) giữa trang danh mục sản phẩm và một bài viết Blog chuyên sâu. Cách xử lý nào là chuyên nghiệp nhất?",
+    "options": [
+      "A. Xóa bài viết Blog để tập trung sức mạnh cho trang danh mục.",
+      "B. Chuyển hướng 301 bài viết Blog về trang danh mục sản phẩm.",
+      "C. Tối ưu lại Search Intent: Chỉnh sửa bài Blog theo hướng thông tin (Informational) và trang danh mục theo hướng giao dịch (Transactional), điều chỉnh Internal Link.",
+      "D. Đặt thẻ Noindex cho bài viết Blog để Google chỉ lập chỉ mục trang danh mục."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Xử lý xung đột từ khóa ở cấp độ Expert yêu cầu phân tách Search Intent rõ ràng để phục vụ người dùng ở các giai đoạn khác nhau của phễu marketing thay vì xóa bỏ nội dung.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi phân tích Log File của máy chủ, bạn phát hiện Googlebot dành 50% ngân sách thu thập dữ liệu cho các URL có tham số (Faceted Navigation) không có giá trị SEO. Giải pháp kỹ thuật nào triệt để nhất?",
+    "options": [
+      "A. Sử dụng thuộc tính rel='nofollow' cho tất cả các liên kết bộ lọc trên giao diện.",
+      "B. Cấu hình trong Google Search Console phần URL Parameters để Google bỏ qua các tham số này.",
+      "C. Kết hợp tệp Robots.txt để chặn truy cập vào các tham số và sử dụng thuộc tính 'noindex' cho các trang đó.",
+      "D. Triển khai Ajax cho bộ lọc hoặc sử dụng Fragment Identifiers (#) để các URL tham số không thể thu thập dữ liệu bởi bot."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Sử dụng Ajax hoặc Fragment Identifiers ngăn chặn việc tạo ra các URL mới mà bot có thể quét, giúp bảo vệ Crawl Budget một cách triệt để nhất ở cấp độ kiến trúc.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong chiến dịch Google Ads, chỉ số 'Impression Share Lost (Rank)' tăng cao đột biến trong khi giá thầu không thay đổi. Nguyên nhân sâu xa nhất có thể là gì?",
+    "options": [
+      "A. Ngân sách hàng ngày của chiến dịch bị giới hạn.",
+      "B. Điểm chất lượng (Quality Score) của từ khóa bị sụt giảm nghiêm trọng do trải nghiệm trang đích hoặc CTR giảm.",
+      "C. Đối thủ cạnh tranh mới gia nhập thị trường với ngân sách lớn hơn.",
+      "D. Google thay đổi thuật toán hiển thị quảng cáo trên thiết bị di động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lost Share do Rank phụ thuộc vào Ad Rank (Bid x Quality Score). Nếu Bid không đổi, nguyên nhân chính là Quality Score hoặc các yếu tố liên quan đến chất lượng quảng cáo đi xuống.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để tối ưu hóa cho 'Zero-click Searches' trên SERP, chiến lược nội dung nào sau đây là hiệu quả nhất?",
+    "options": [
+      "A. Viết nội dung thật dài để người dùng buộc phải click vào trang web mới đọc hết.",
+      "B. Cấu trúc dữ liệu (Schema Markup) chuyên sâu và tối ưu nội dung theo dạng danh mục/bảng để chiếm lĩnh Featured Snippet.",
+      "C. Tăng cường chạy quảng cáo Search Ads để bù đắp lượng click tự nhiên bị mất.",
+      "D. Sử dụng các tiêu đề gây tò mò (Clickbait) để kích thích người dùng click thay vì đọc thông tin trên SERP."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tối ưu hóa Featured Snippets và Schema giúp thương hiệu xuất hiện ở vị trí số 0, tăng uy tín và nhận diện thương hiệu ngay cả khi người dùng không click.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi triển khai International SEO cho một tập đoàn đa quốc gia sử dụng cùng một ngôn ngữ (ví dụ: Tiếng Anh cho cả Mỹ và Anh), yếu tố nào quan trọng nhất để tránh trùng lặp nội dung?",
+    "options": [
+      "A. Sử dụng các tên miền quốc gia (ccTLD) riêng biệt như .us và .uk.",
+      "B. Triển khai thẻ Hreflang chính xác trong Header hoặc Sitemap để chỉ định vùng địa lý và ngôn ngữ.",
+      "C. Viết lại 100% nội dung cho từng thị trường để đảm bảo tính độc nhất.",
+      "D. Sử dụng thẻ Canonical trỏ về phiên bản gốc tại Mỹ cho tất cả các quốc gia khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thẻ Hreflang là tín hiệu chuẩn xác nhất để Google hiểu và hiển thị đúng phiên bản ngôn ngữ/vùng lãnh thổ cho người dùng mà không phạt lỗi trùng lặp nội dung.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong mô hình Attribution (Ghi nhận chuyển đổi), tại sao một chuyên gia SEM nên ưu tiên 'Data-driven Attribution' thay vì 'Last Click' cho các sản phẩm có hành trình khách hàng dài?",
+    "options": [
+      "A. Vì Data-driven Attribution luôn báo cáo số lượng chuyển đổi cao hơn.",
+      "B. Vì nó giúp đánh giá đúng vai trò của các từ khóa ở giai đoạn nhận thức (Awareness) và cân nhắc (Consideration).",
+      "C. Vì Last Click yêu cầu chi phí đấu thầu cao hơn cho các từ khóa thương hiệu.",
+      "D. Vì Google Ads sẽ tự động giảm giá thầu cho các từ khóa không dẫn đến chuyển đổi cuối cùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data-driven Attribution sử dụng thuật toán để phân bổ giá trị cho mọi điểm chạm, giúp nhà quảng cáo tối ưu hóa toàn bộ phễu thay vì chỉ tập trung vào bước cuối cùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một trang web tin tức lớn bị sụt giảm Traffic nghiêm trọng sau một bản cập nhật Core Update của Google tập trung vào E-E-A-T. Hành động nào nên được ưu tiên xử lý?",
+    "options": [
+      "A. Mua thêm Backlink từ các trang báo lớn để tăng Authority.",
+      "B. Kiểm tra và bổ sung thông tin tác giả, trích dẫn nguồn uy tín và cập nhật nội dung cũ để đảm bảo tính chính xác, minh bạch.",
+      "C. Thay đổi toàn bộ cấu trúc URL của website để Google index lại từ đầu.",
+      "D. Tăng mật độ từ khóa trong các bài viết để lấy lại thứ hạng nhanh chóng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness) tập trung vào độ tin cậy và chuyên môn. Việc minh bạch thông tin tác giả và nguồn gốc là cốt lõi của sự phục hồi.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chiến lược 'Bidding Strategy' nào phù hợp nhất cho một doanh nghiệp muốn tối đa hóa giá trị doanh thu nhưng có giới hạn về tỷ lệ chi phí quảng cáo trên doanh thu (Efficiency)?",
+    "options": [
+      "A. Maximize Conversions.",
+      "B. Target CPA (Cost Per Acquisition).",
+      "C. Target ROAS (Return on Ad Spend).",
+      "D. Enhanced CPC (eCPC)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Target ROAS cho phép hệ thống tự động đấu thầu để đạt được giá trị chuyển đổi mục tiêu dựa trên tỷ lệ doanh thu/chi phí mà nhà quảng cáo thiết lập.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc lạm dụng 'Client-side Rendering' (CSR) lại là một rủi ro lớn đối với SEO của các trang web quy mô lớn?",
+    "options": [
+      "A. Vì nó làm tăng kích thước tệp HTML ban đầu.",
+      "B. Vì Googlebot có thể không chờ đợi JavaScript thực thi xong để thấy nội dung, dẫn đến việc lập chỉ mục không đầy đủ.",
+      "C. Vì CSR khiến website không thể chạy được trên các trình duyệt cũ.",
+      "D. Vì CSR làm giảm tốc độ tải trang trên máy chủ (Server Response Time)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc dù Google có thể render JS, nhưng với quy mô lớn, việc phụ thuộc hoàn toàn vào CSR gây áp lực lên tài nguyên render của bot, dễ dẫn đến tình trạng nội dung không được index kịp thời.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Google Ads, làm thế nào để tối ưu hóa hiệu quả của chiến dịch Performance Max (PMax) khi hệ thống báo cáo 'Limited by budget'?",
+    "options": [
+      "A. Giảm giá thầu mục tiêu (ROAS) để hệ thống tìm kiếm các phiên đấu thầu rẻ hơn.",
+      "B. Loại bỏ các tín hiệu đối tượng (Audience Signals) để mở rộng tệp khách hàng.",
+      "C. Nhóm các sản phẩm có hiệu suất tương đồng vào các chiến dịch riêng biệt và phân bổ lại ngân sách dựa trên hiệu quả thực tế.",
+      "D. Chuyển toàn bộ ngân sách từ các chiến dịch Search sang PMax."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc phân nhóm sản phẩm giúp kiểm soát ngân sách tốt hơn cho các nhóm mang lại giá trị cao thay vì để thuật toán phân bổ dàn trải cho tất cả sản phẩm trong một chiến dịch bị giới hạn.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một doanh nghiệp B2B có chu kỳ bán hàng dài (6-12 tháng). Chỉ số nào trong Google Ads là quan trọng nhất để đánh giá hiệu quả chiến dịch ở cấp độ chiến lược?",
+    "options": [
+      "A. Click-through Rate (CTR).",
+      "B. Cost Per Lead (CPL).",
+      "C. Offline Conversion Tracking (OCT) và giá trị vòng đời khách hàng (LTV).",
+      "D. Số lượng hiển thị (Impressions)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Với chu kỳ dài, các chuyển đổi online (Lead) chưa phản ánh đúng doanh thu. Theo dõi chuyển đổi ngoại tuyến (Offline) giúp đo lường chính xác ROI thực tế từ quảng cáo.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện Audit Technical SEO, bạn phát hiện trang web có hàng nghìn trang 'Crawled - currently not indexed'. Nguyên nhân nào sau đây thường gặp nhất ở các site lớn?",
+    "options": [
+      "A. Do tệp Robots.txt đang chặn các trang này.",
+      "B. Do chất lượng nội dung thấp (Thin content) hoặc trùng lặp, không mang lại giá trị gia tăng cho chỉ mục của Google.",
+      "C. Do trang web chưa có chứng chỉ bảo mật SSL.",
+      "D. Do máy chủ phản hồi quá chậm khiến bot không thể đọc được nội dung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trạng thái này nghĩa là Google đã quét qua nhưng quyết định không đưa vào index. Lý do phổ biến nhất là nội dung không đủ chất lượng hoặc quá giống với các trang đã có.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc triển khai 'Server-side GTM' đối với các chiến dịch SEM là gì?",
+    "options": [
+      "A. Giúp giảm chi phí quảng cáo trực tiếp trên mỗi click.",
+      "B. Cải thiện độ chính xác của dữ liệu bằng cách vượt qua các rào cản từ trình chặn quảng cáo (Ad-blockers) và cơ chế ITP của trình duyệt.",
+      "C. Tự động viết lại mẫu quảng cáo dựa trên hành vi người dùng.",
+      "D. Thay thế hoàn toàn nhu cầu sử dụng Google Analytics."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Server-side tracking giúp dữ liệu gửi đi từ server thay vì trình duyệt, giúp bảo toàn dữ liệu chuyển đổi trước các cơ chế bảo mật và chặn quảng cáo ngày càng thắt chặt.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chiến thuật 'Negative Keyword Sculpting' trong tài khoản Google Ads đa chiến dịch nhằm mục đích gì?",
+    "options": [
+      "A. Để giảm tổng chi phí của toàn bộ tài khoản.",
+      "B. Để ngăn chặn các chiến dịch dẫm chân lên nhau và điều hướng truy vấn đến quảng cáo phù hợp nhất.",
+      "C. Để loại bỏ các từ khóa có điểm chất lượng thấp.",
+      "D. Để tăng điểm tối ưu hóa (Optimization Score) của tài khoản."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sculpting giúp kiểm soát việc truy vấn nào kích hoạt quảng cáo nào, đảm bảo tính liên quan cao nhất và tối ưu hóa trải nghiệm người dùng cũng như chi phí.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số 'LCP' (Largest Contentful Paint) trong Core Web Vitals bị ảnh hưởng nhiều nhất bởi yếu tố nào?",
+    "options": [
+      "A. Kích thước của các tệp JavaScript và CSS không sử dụng.",
+      "B. Thời gian phản hồi của máy chủ và việc tối ưu hóa các tài nguyên hình ảnh/video lớn ở màn hình đầu tiên.",
+      "C. Tổng số lượng liên kết ngoài (Outbound Links) trên trang.",
+      "D. Việc thiếu các thẻ Meta Description."
+    ],
+    "correctAnswer": "B",
+    "explanation": "LCP đo lường tốc độ tải phần tử lớn nhất hiển thị trong khung hình. Tốc độ server và kích thước tài nguyên đồ họa là hai yếu tố then chốt ảnh hưởng đến chỉ số này.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một thị trường có tính cạnh tranh cực cao, việc sử dụng 'Portfolio Bidding Strategy' mang lại lợi thế gì so với chiến dịch riêng lẻ?",
+    "options": [
+      "A. Giúp Google tự động tạo ra nhiều mẫu quảng cáo hơn.",
+      "B. Cho phép chia sẻ dữ liệu học máy giữa các chiến dịch và áp dụng giới hạn giá thầu (Bid Caps) để kiểm soát ngân sách hiệu quả hơn.",
+      "C. Loại bỏ hoàn toàn sự cần thiết của việc nghiên cứu từ khóa.",
+      "D. Tự động tăng điểm chất lượng cho tất cả các từ khóa trong Portfolio."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược danh mục giúp gộp dữ liệu để thuật toán học nhanh hơn và cho phép đặt ngưỡng giá thầu tối đa, bảo vệ biên lợi nhuận trong môi trường đấu thầu khốc liệt.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao 'Internal Link' lại đóng vai trò quan trọng trong việc phân phối 'Link Juice' cho các trang quan trọng trên một website lớn?",
+    "options": [
+      "A. Vì nó giúp người dùng ở lại trang lâu hơn.",
+      "B. Vì nó giúp Googlebot tìm thấy các trang mới nhanh hơn.",
+      "C. Vì nó thiết lập cấu trúc phân cấp và truyền sức mạnh từ các trang có Authority cao (như trang chủ) đến các trang mục tiêu sâu hơn.",
+      "D. Vì nó thay thế được nhu cầu xây dựng Backlink từ bên ngoài."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Internal link không chỉ để điều hướng mà còn là công cụ chiến lược để điều phối sức mạnh SEO (PageRank) đến các trang chuyển đổi quan trọng trong hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi chạy quảng cáo Search Ads cho một thương hiệu cao cấp, việc sử dụng 'Ad Extensions' (Tiện ích mở rộng) ảnh hưởng như thế nào đến Ad Rank?",
+    "options": [
+      "A. Không ảnh hưởng, chúng chỉ làm quảng cáo trông to hơn.",
+      "B. Ảnh hưởng gián tiếp thông qua việc tăng tỷ lệ nhấp (CTR) dự kiến.",
+      "C. Là một thành phần trực tiếp trong công thức tính Ad Rank của Google (Expected impact of extensions).",
+      "D. Chỉ ảnh hưởng nếu đối thủ cạnh tranh không sử dụng chúng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Google tính toán Ad Rank dựa trên Bid, chất lượng quảng cáo và tác động dự kiến của các tiện ích mở rộng cũng như định dạng quảng cáo khác.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một chiến dịch SEO đang đứng Top 1 cho từ khóa chính nhưng CTR lại thấp hơn mức trung bình ngành. Giải pháp nào là ưu tiên?",
+    "options": [
+      "A. Tiếp tục xây dựng thêm Backlink để củng cố vị trí.",
+      "B. Thử nghiệm thay đổi thẻ Title và Meta Description (A/B Testing) để tăng tính hấp dẫn và phù hợp với Search Intent.",
+      "C. Tăng mật độ từ khóa trong bài viết để Google hiểu rõ hơn nội dung.",
+      "D. Chạy thêm quảng cáo Google Ads cho chính từ khóa đó để chiếm lĩnh không gian."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi vị trí đã tốt mà CTR thấp, vấn đề nằm ở cách hiển thị trên SERP. Tối ưu hóa Snippet là cách trực tiếp nhất để cải thiện lượng truy cập mà không cần thay đổi thứ hạng.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong phân tích đối thủ cạnh tranh trên SEM, chỉ số 'Overlap Rate' cho bạn biết điều gì?",
+    "options": [
+      "A. Tỷ lệ phần trăm số lần quảng cáo của đối thủ hiển thị ở vị trí cao hơn bạn.",
+      "B. Tỷ lệ phần trăm số lần quảng cáo của bạn và đối thủ cùng hiển thị đồng thời cho một truy vấn.",
+      "C. Tỷ lệ phần trăm ngân sách đối thủ đang chi tiêu so với bạn.",
+      "D. Tỷ lệ phần trăm từ khóa mà đối thủ đang mua trùng với danh sách của bạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Overlap Rate trong Auction Insights cho biết tần suất hai nhà quảng cáo cùng xuất hiện trong một phiên đấu thầu, giúp đánh giá mức độ đối đầu trực tiếp.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chiến lược 'Topic Cluster' (Cụm chủ đề) giúp ích gì cho SEO bền vững so với việc tối ưu hóa từ khóa đơn lẻ?",
+    "options": [
+      "A. Giúp trang web lên top nhanh hơn trong ngắn hạn.",
+      "B. Xây dựng 'Topical Authority' (Uy tín chủ đề) và giúp Google hiểu sâu về chuyên môn của website thông qua mạng lưới nội dung liên kết chặt chẽ.",
+      "C. Giảm thiểu chi phí viết bài vì chỉ cần viết một bài lớn.",
+      "D. Tự động tạo ra các Backlink tự nhiên từ các trang báo lớn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Topic Cluster tập trung vào việc bao phủ toàn diện một chủ đề, tạo ra cấu trúc nội dung logic giúp công cụ tìm kiếm đánh giá cao chuyên môn của trang web.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi một tài khoản Google Ads bị rơi vào tình trạng 'Learning' (Đang học) quá lâu, hành động nào thường gây hại nhất cho quá trình này?",
+    "options": [
+      "A. Để yên tài khoản và không tác động gì trong 7 ngày.",
+      "B. Thay đổi liên tục giá thầu, ngân sách hoặc cấu trúc nhóm quảng cáo với biên độ lớn.",
+      "C. Thêm các từ khóa phủ định mới dựa trên báo cáo Search Terms.",
+      "D. Cập nhật lại mẫu quảng cáo để tăng CTR."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các thay đổi lớn (Significant changes) sẽ reset quá trình học máy của thuật toán, khiến chiến dịch không bao giờ thoát khỏi giai đoạn tối ưu hóa ban đầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây là rủi ro lớn nhất khi sử dụng AI để tạo nội dung SEO hàng loạt mà không có sự kiểm soát của con người?",
+    "options": [
+      "A. Tốc độ xuất bản nội dung quá nhanh khiến Google nghi ngờ.",
+      "B. Nội dung thiếu tính xác thực, có thể chứa thông tin sai lệch (Hallucinations) và vi phạm các tiêu chí về chất lượng nội dung hữu ích của Google.",
+      "C. AI không thể chèn được các từ khóa mục tiêu vào bài viết.",
+      "D. Chi phí sử dụng các công cụ AI quá cao so với thuê người viết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Google không cấm AI, nhưng ưu tiên nội dung 'Helpful' và có giá trị thực. Nội dung AI thuần túy thường thiếu trải nghiệm thực tế và dễ sai sót thông tin, vi phạm nguyên tắc E-E-A-T.",
+    "difficulty": "EXPERT",
+    "skillArea": "SEO/SEM",
+    "category": "SITUATION"
+  }
+]

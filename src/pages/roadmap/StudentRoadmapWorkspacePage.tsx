@@ -27,6 +27,7 @@ import {
   ShieldCheck,
   ShieldAlert,
   BadgeCheck,
+  Lock,
 } from "lucide-react";
 import { useAppToast } from "../../context/ToastContext";
 import aiRoadmapService from "../../services/aiRoadmapService";
@@ -681,6 +682,14 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
   const nodes = roadmap.roadmap || [];
   const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
+
+  // Sequential lock: a node is accessible only if the previous node is VERIFIED by mentor
+  const isNodeLocked = (idx: number): boolean => {
+    if (idx === 0) return false;
+    const prevNode = nodes[idx - 1];
+    const prevStatus = nodeStatusMap[prevNode?.id];
+    return !prevStatus?.verified || prevStatus.verified === "NONE";
+  };
   const nodeSubmissionLocked = !!evidence && !canSubmitNodeEvidence(evidence);
   const finalSubmissionLocked =
     !!finalAssessment && !canSubmitFinalAssessment(finalAssessment);
@@ -904,14 +913,17 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
           <div className="srwp-node-list">
             {nodes.map((node: any, idx: number) => {
               const ns = nodeStatusMap[node.id];
+              const locked = isNodeLocked(idx);
               return (
               <div
                 key={node.id}
-                className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""}`}
+                className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""} ${locked ? "srwp-node-item--locked" : ""}`}
                 onClick={() => {
+                  if (locked) return;
                   setSelectedNodeId(node.id);
                   setRightTab("ASSIGNMENT");
                 }}
+                title={locked ? "Hoàn thành node trước để mở khóa" : undefined}
               >
                 <span className="srwp-node-index">{idx + 1}</span>
                 <div className="srwp-node-info">
@@ -923,14 +935,16 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                   </span>
                 </div>
                 {/* Node verification status icon */}
-                {ns?.verified === "VERIFIED" ? (
-                  <BadgeCheck size={16} className="srwp-status-icon srwp-status-icon--verified" title="Đã xác thực bởi Mentor" />
+                {locked ? (
+                  <Lock size={13} className="srwp-status-icon srwp-status-icon--locked" />
+                ) : ns?.verified === "VERIFIED" ? (
+                  <BadgeCheck size={16} className="srwp-status-icon srwp-status-icon--verified" />
                 ) : ns?.verified === "REJECTED" ? (
-                  <XCircle size={16} className="srwp-status-icon srwp-status-icon--rejected" title="Mentor từ chối — cần làm lại" />
+                  <XCircle size={16} className="srwp-status-icon srwp-status-icon--rejected" />
                 ) : ns?.selfCompleted ? (
-                  <CheckCircle2 size={16} className="srwp-status-icon srwp-status-icon--pending" title="Hoàn thành — chưa xác thực" />
+                  <CheckCircle2 size={16} className="srwp-status-icon srwp-status-icon--pending" />
                 ) : ns?.submitted ? (
-                  <Clock size={14} className="srwp-status-icon srwp-status-icon--submitted" title="Đã nộp — chờ đánh giá" />
+                  <Clock size={14} className="srwp-status-icon srwp-status-icon--submitted" />
                 ) : (
                   <ChevronRight size={14} className="srwp-node-chevron" />
                 )}

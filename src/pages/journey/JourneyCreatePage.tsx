@@ -5,20 +5,16 @@ import {
   Briefcase,
   Check,
   ChevronRight,
-  Lightbulb,
-  Search,
-  X,
 } from "lucide-react";
 import {
   GOAL_OPTIONS,
   JourneyType,
+  GoalType,
   LEVEL_OPTIONS,
-  LANGUAGE_OPTIONS,
-  DURATION_OPTIONS,
+  LevelType,
   StartJourneyRequest,
 } from "../../types/Journey";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
-import CareerForm from "../../components/journey/CareerForm";
 import SkillForm from "../../components/journey/SkillForm";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import TicTacToeGame from "../../components/game/tic-tac-toe/TicTacToeGame";
@@ -26,94 +22,96 @@ import journeyService from "../../services/journeyService";
 import { getExpertDomainMeta } from "../../utils/expertFieldPresentation";
 import "./../../styles/GSJJourney.css";
 
-const parseRoleKeywords = (keywords?: string): string[] => {
-  if (!keywords) return [];
-  return keywords
-    .split(",")
-    .map((k) => k.trim())
-    .filter((k) => k.length > 0)
-    .filter((k, idx, arr) => arr.indexOf(k) === idx);
-};
-
-const SKILL_SUGGESTIONS_BY_DOMAIN: Record<string, string[]> = {
-  "Information Technology": [
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Node.js",
-    "SQL",
-    "Git",
-  ],
-  "Thiết kế – Sáng tạo – Nội dung": [
-    "Figma",
-    "UI Design",
-    "UX Research",
-    "Design Systems",
-    "Prototyping",
-  ],
-  "Kinh doanh – Marketing – Quản trị": [
-    "Digital Marketing",
-    "Sales",
-    "Project Management",
-    "Analytics",
-  ],
-  "Kỹ thuật – Công nghiệp – Sản xuất": [
-    "AutoCAD",
-    "SolidWorks",
-    "MATLAB",
-    "Production Planning",
-  ],
-  Healthcare: ["Patient Care", "Medical Terminology", "Clinical Procedures"],
-  "Education – Đào tạo – EdTech": [
-    "Instructional Design",
-    "Curriculum Development",
-    "Teaching",
-  ],
-  "Logistics – Chuỗi cung ứng – Xuất nhập khẩu": [
-    "Supply Chain Management",
-    "Warehouse Operations",
-    "Inventory Management",
-  ],
-  "Legal & Public Administration": [
-    "Contract Drafting",
-    "Legal Research",
-    "Compliance",
-  ],
-  "Arts & Entertainment": [
-    "Photography",
-    "Video Editing",
-    "Illustration",
-    "3D Modeling",
-  ],
-  "Service & Hospitality": [
-    "Customer Service",
-    "Event Planning",
-    "Hospitality Management",
-  ],
-  "Công tác xã hội – Dịch vụ cộng đồng – Tổ chức phi lợi nhuận": [
-    "Community Management",
-    "Fundraising",
-    "Volunteer Coordination",
-  ],
-  "Agriculture – Environment": [
-    "Sustainable Agriculture",
-    "Environmental Assessment",
-    "Water Management",
-  ],
-};
-
-const getDomainSkillSuggestions = (domain?: string) => {
-  if (!domain) return [];
-  return SKILL_SUGGESTIONS_BY_DOMAIN[domain] || [];
-};
-
-const mergeUniqueSkills = (a: string[], b: string[]) => {
-  const merged = [...a, ...b];
-  return merged.filter((s, idx) => merged.indexOf(s) === idx);
-};
-
 const TOTAL_STEPS = 2;
 const JOURNEY_CREATE_GAME_DELAY_MS = 8000;
+
+type JourneyCompatibilityWarning = {
+  title: string;
+  lines: string[];
+  cta?: {
+    label: string;
+    goal: GoalType;
+  };
+};
+
+const getJourneyCompatibilityWarning = (
+  goal?: GoalType,
+  level?: LevelType,
+): JourneyCompatibilityWarning | null => {
+  if (!goal || !level) {
+    return null;
+  }
+
+  if (goal === "REVIEW" && level === "BEGINNER") {
+    return {
+      title: "Có vẻ bạn chưa có nền tảng với kỹ năng này",
+      lines: [
+        "Bạn có thể bắt đầu với lộ trình học từ đầu để đạt hiệu quả tốt hơn.",
+        "Bạn vẫn có thể tiếp tục.",
+      ],
+      cta: {
+        label: 'Chuyển sang "Học từ đầu"',
+        goal: "FROM_SCRATCH",
+      },
+    };
+  }
+
+  if (goal === "INTERNSHIP" && level === "BEGINNER") {
+    return {
+      title: "Mục tiêu này thường cần thêm nền tảng",
+      lines: [
+        "Bạn có thể bắt đầu từ cơ bản và dần hướng tới internship.",
+        "Bạn vẫn có thể tiếp tục.",
+      ],
+    };
+  }
+
+  if (goal === "FROM_SCRATCH" && level === "INTERMEDIATE") {
+    return {
+      title: "Bạn đã làm được dự án thực tế",
+      lines: [
+        "Lộ trình 'Học từ đầu' lúc này có thể dài hơn mức cần thiết.",
+        "Bạn có thể tiết kiệm thời gian nếu chuyển sang lộ trình phù hợp hơn.",
+        "Bạn vẫn có thể tiếp tục.",
+      ],
+      cta: {
+        label: 'Chuyển sang "Tăng tốc lên cấp độ tiếp theo"',
+        goal: "LEVEL_UP",
+      },
+    };
+  }
+
+  if (goal === "FROM_SCRATCH" && level === "ADVANCED") {
+    return {
+      title: "Bạn đã có thể xử lý công việc phức tạp",
+      lines: [
+        "Lộ trình 'Học từ đầu' lúc này có thể không còn tối ưu về thời gian.",
+        "Bạn có thể tiết kiệm thời gian nếu chọn một lộ trình phù hợp hơn.",
+        "Bạn vẫn có thể tiếp tục.",
+      ],
+      cta: {
+        label: 'Chuyển sang "Tăng tốc lên cấp độ tiếp theo"',
+        goal: "LEVEL_UP",
+      },
+    };
+  }
+
+  if (goal === "CAREER_CHANGE" && (level === "INTERMEDIATE" || level === "ADVANCED")) {
+    return {
+      title: "Bạn đã có nền tảng thực tế với kỹ năng này",
+      lines: [
+        "Bạn có thể phù hợp hơn với mục tiêu nâng cao hoặc phát triển chuyên sâu.",
+        "Bạn vẫn có thể tiếp tục.",
+      ],
+      cta: {
+        label: 'Chuyển sang "Tăng tốc lên cấp độ tiếp theo"',
+        goal: "LEVEL_UP",
+      },
+    };
+  }
+
+  return null;
+};
 
 const JourneyCreatePage: React.FC = () => {
   const navigate = useNavigate();
@@ -178,14 +176,7 @@ const JourneyCreatePage: React.FC = () => {
     existingSkills: [],
   });
 
-  const [skillInput, setSkillInput] = useState("");
-
   // Available skill suggestions from selected career role keywords + domain fallback
-  const skillSuggestions = (() => {
-    const fromRole = parseRoleKeywords(formData.roleKeywords);
-    const fromDomain = getDomainSkillSuggestions(formData.domain);
-    return mergeUniqueSkills(fromRole, fromDomain);
-  })();
 
   const selectedGoal = GOAL_OPTIONS.find(
     (option) => option.value === formData.goal,
@@ -193,14 +184,11 @@ const JourneyCreatePage: React.FC = () => {
   const selectedLevel = LEVEL_OPTIONS.find(
     (option) => option.value === formData.level,
   );
-  const selectedLanguage = LANGUAGE_OPTIONS.find(
-    (option) => option.value === formData.language,
-  );
-  const selectedDuration = DURATION_OPTIONS.find(
-    (option) => option.value === formData.duration,
-  );
   const selectedTargetSkills = formData.skills || [];
-  const selectedExistingSkills = formData.existingSkills || [];
+  const journeyCompatibilityWarning = getJourneyCompatibilityWarning(
+    selectedGoal?.value,
+    selectedLevel?.value,
+  );
   const targetSkillSummary =
     selectedTargetSkills.length === 0
       ? "Chưa chọn"
@@ -244,64 +232,14 @@ const JourneyCreatePage: React.FC = () => {
     setFormData((prev) => ({ ...prev, level }));
   };
 
-  const handleLanguageSelect = (language: string) => {
-    setFormData((prev) => ({ ...prev, language }));
-  };
-
-  const handleDurationSelect = (duration: string) => {
-    setFormData((prev) => ({ ...prev, duration }));
-  };
-
-  const handleAddSkill = () => {
-    const trimmed = skillInput.trim();
-    if (!trimmed) {
-      return;
-    }
-
-    // [Nghiệp vụ] Kỹ năng mục tiêu đang học không được trùng với kỹ năng người dùng tự khai báo là đã có.
-    if (selectedTargetSkills.includes(trimmed)) {
-      setError(`"${trimmed}" đang là kỹ năng mục tiêu cần học. Vui lòng chọn kỹ năng đã có khác.`);
-      return;
-    }
-
-    if (!selectedExistingSkills.includes(trimmed)) {
-      setFormData((prev) => ({
-        ...prev,
-        existingSkills: [...(prev.existingSkills || []), trimmed],
-      }));
-      setSkillInput("");
-      setError(null);
-    }
-  };
-
-  const handleRemoveSkill = (skill: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      existingSkills: (prev.existingSkills || []).filter((s) => s !== skill),
-    }));
-  };
-
-  const handleAddSuggestedSkill = (skill: string) => {
-    if (selectedTargetSkills.includes(skill)) {
-      setError(`"${skill}" là kỹ năng mục tiêu cần học, không thể thêm vào kỹ năng đã có.`);
-      return;
-    }
-
-    if (!selectedExistingSkills.includes(skill)) {
-      setFormData((prev) => ({
-        ...prev,
-        existingSkills: [...(prev.existingSkills || []), skill],
-      }));
-      setError(null);
-    }
+  const handleWarningCtaClick = (goal: GoalType) => {
+    setFormData((prev) => ({ ...prev, goal }));
   };
 
   const canSubmit = () => {
     return Boolean(
       formData.goal &&
         formData.level &&
-        formData.language &&
-        formData.duration &&
         selectedTargetSkills.length > 0,
     );
   };
@@ -342,7 +280,7 @@ const JourneyCreatePage: React.FC = () => {
 
 
 
-  // Step 2: Goal + Level + Skills + Language + Duration — all in one page
+  // Step 2: Goal + Level + Skills — all in one page
   const renderStep2 = () => (
     <div className="gsj-wizard-step">
       {/* Mục tiêu */}
@@ -355,7 +293,7 @@ const JourneyCreatePage: React.FC = () => {
       </div>
 
       <div className="gsj-wizard-section">
-        <h3 className="gsj-wizard-section__title">Mục tiêu chính</h3>
+        <h3 className="gsj-wizard-section__title">Bạn muốn làm gì với kỹ năng này?</h3>
         <div className="gsj-card-grid gsj-card-grid--2col gsj-card-grid--goal">
           {GOAL_OPTIONS.map((option, index) => (
             <button
@@ -381,7 +319,7 @@ const JourneyCreatePage: React.FC = () => {
 
       {/* Trình độ hiện tại */}
       <div className="gsj-wizard-section">
-        <h3 className="gsj-wizard-section__title">Trình độ hiện tại</h3>
+        <h3 className="gsj-wizard-section__title">Bạn đã có kinh nghiệm ở mức nào?</h3>
         <div className="gsj-segmented-control">
           {LEVEL_OPTIONS.map((option) => (
             <button
@@ -399,138 +337,65 @@ const JourneyCreatePage: React.FC = () => {
             </button>
           ))}
         </div>
-      </div>
 
-      {/* Ngôn ngữ */}
-      <div className="gsj-wizard-section">
-        <h3 className="gsj-wizard-section__title">Ngôn ngữ bài test</h3>
-        <div className="gsj-language-options">
-          {LANGUAGE_OPTIONS.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              className={`gsj-language-btn ${formData.language === option.value ? "gsj-language-btn--active" : ""}`}
-              onClick={() => handleLanguageSelect(option.value)}
-            >
-              {option.label}
-              {formData.language === option.value && <Check size={14} />}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Thời lượng */}
-      <div className="gsj-wizard-section">
-        <h3 className="gsj-wizard-section__title">Thời lượng bài test</h3>
-        <div className="gsj-duration-options">
-          {DURATION_OPTIONS.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              className={`gsj-duration-btn ${formData.duration === option.value ? "gsj-duration-btn--active" : ""}`}
-              onClick={() => handleDurationSelect(option.value)}
-            >
-              <span className="gsj-duration-btn__icon">{option.icon}</span>
-              <span className="gsj-duration-btn__label">{option.label}</span>
-              <span className="gsj-duration-btn__desc">
-                {option.description}
-              </span>
-              {formData.duration === option.value && (
-                <span className="gsj-duration-btn__check">
-                  <Check size={14} />
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="gsj-wizard-section">
-        <h3 className="gsj-wizard-section__title">Kỹ năng mục tiêu đang học</h3>
-        <p className="gsj-hint-text gsj-hint-text--sm">
-          Đây là kỹ năng bạn đã chọn ở bước trước và sẽ là trọng tâm của bài test.
-        </p>
-        <div className="gsj-chip-list gsj-chip-list--wrap">
-          {selectedTargetSkills.map((skill) => (
-            <span key={skill} className="gsj-chip gsj-chip--selected">
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Kỹ năng đã có */}
-      <div className="gsj-wizard-section">
-        <h3 className="gsj-wizard-section__title">
-          Kỹ năng bạn đã có (tùy chọn)
-        </h3>
-        <p className="gsj-hint-text gsj-hint-text--sm">
-          Thêm kỹ năng bạn đã nắm vững để AI đánh giá chính xác hơn.
-        </p>
-
-        {selectedExistingSkills.length > 0 && (
-          <div className="gsj-chip-list">
-            {selectedExistingSkills.map((skill) => (
-              <span key={skill} className="gsj-chip gsj-chip--removable">
-                {skill}
-                <button type="button" onClick={() => handleRemoveSkill(skill)}>
-                  <X size={14} />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
-
-        <div className="gsj-skill-input-wrapper">
-          <div className="gsj-search-input">
-            <Search size={18} />
-            <input
-              type="text"
-              placeholder="Nhập kỹ năng bạn đã biết..."
-              value={skillInput}
-              onChange={(e) => setSkillInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleAddSkill();
-                }
-              }}
-            />
-            {skillInput && (
-              <button type="button" onClick={() => setSkillInput("")}>
-                <X size={16} />
+        {journeyCompatibilityWarning && (
+          <div className="gsj-journey-warning" role="status" aria-live="polite">
+            <div className="gsj-journey-warning__icon">⚠️</div>
+            <div className="gsj-journey-warning__body">
+              <div className="gsj-journey-warning__title">
+                {journeyCompatibilityWarning.title}
+              </div>
+              <div className="gsj-journey-warning__text">
+                {journeyCompatibilityWarning.lines.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+              </div>
+            </div>
+            {journeyCompatibilityWarning.cta && (
+              <button
+                type="button"
+                className="gsj-journey-warning__cta"
+                onClick={() => handleWarningCtaClick(journeyCompatibilityWarning.cta!.goal)}
+              >
+                {journeyCompatibilityWarning.cta.label}
               </button>
             )}
           </div>
-          <button
-            type="button"
-            className="gsj-btn gsj-btn--primary gsj-btn--sm"
-            onClick={handleAddSkill}
-            disabled={!skillInput.trim()}
-          >
-            Thêm
-          </button>
-        </div>
-
-        {skillSuggestions.length > 0 && (
-          <div className="gsj-skill-grid">
-            {skillSuggestions
-              .filter((skill) => !selectedExistingSkills.includes(skill))
-              .filter((skill) => !selectedTargetSkills.includes(skill))
-              .slice(0, 12)
-              .map((skill) => (
-                <button
-                  key={skill}
-                  type="button"
-                  className="gsj-skill-chip"
-                  onClick={() => handleAddSuggestedSkill(skill)}
-                >
-                  + {skill}
-                </button>
-              ))}
-          </div>
         )}
       </div>
+
+      <div className="gsj-wizard-section gsj-target-summary">
+        <div className="gsj-target-summary__title">Bạn đã chọn:</div>
+
+        <div className="gsj-target-summary__content">
+          {/* Left: Skill */}
+          <div className="gsj-target-summary__group">
+            <span className="gsj-target-summary__label">Kỹ năng:</span>
+            {selectedTargetSkills.map((skill) => (
+              <span
+                key={skill}
+                className="gsj-chip gsj-chip--selected gsj-target-summary__chip"
+              >
+                <Check size={14} />
+                {skill}
+              </span>
+            ))}
+          </div>
+
+          {/* Right: Career Path */}
+          <div className="gsj-target-summary__group">
+            <span className="gsj-target-summary__label">Ngành:</span>
+            <div className="gsj-target-summary__path">
+              <span>{formData.domain}</span>
+              <ChevronRight size={12} className="gsj-target-summary__path-separator" />
+              <span>{formData.subCategory}</span>
+              <ChevronRight size={12} className="gsj-target-summary__path-separator" />
+              <strong className="gsj-target-summary__role">{formData.jobRole}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 
@@ -766,16 +631,6 @@ const JourneyCreatePage: React.FC = () => {
                 </strong>
               </div>
               <div className="gsj-create-summary-item">
-                <span className="gsj-create-summary-item__label">
-                  Kỹ năng đã có
-                </span>
-                <strong>
-                  {selectedExistingSkills.length > 0
-                    ? `${selectedExistingSkills.length} kỹ năng`
-                    : "Chưa khai báo"}
-                </strong>
-              </div>
-              <div className="gsj-create-summary-item">
                 <span className="gsj-create-summary-item__label">Mục tiêu</span>
                 <strong>{selectedGoal?.label || "Chưa chọn"}</strong>
               </div>
@@ -787,13 +642,9 @@ const JourneyCreatePage: React.FC = () => {
               </div>
               <div className="gsj-create-summary-item">
                 <span className="gsj-create-summary-item__label">
-                  Ngôn ngữ / thời lượng
+                  Thời lượng
                 </span>
-                <strong>
-                  {selectedLanguage?.label || "Chưa chọn"}
-                  {" · "}
-                  {selectedDuration?.label || "Chưa chọn"}
-                </strong>
+                <strong>15 phút / 25 câu (Tiêu chuẩn)</strong>
               </div>
             </div>
           </section>
@@ -816,8 +667,8 @@ const JourneyCreatePage: React.FC = () => {
                 <div>
                   <strong>Thiết lập đề đầu vào</strong>
                   <p>
-                    Chọn mục tiêu, trình độ, thời lượng và số lượng câu hỏi để
-                    hệ thống tạo đúng khung đề.
+                    Chọn mục tiêu và trình độ để hệ thống tạo đúng khung đề
+                    (15 phút / 25 câu).
                   </p>
                 </div>
               </div>

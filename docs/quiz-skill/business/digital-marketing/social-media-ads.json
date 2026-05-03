@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong hệ thống quảng cáo của Meta (Facebook/Instagram), 'Pixel' được sử dụng chủ yếu để làm gì?",
+    "options": [
+      "A. Thiết kế hình ảnh quảng cáo đẹp hơn",
+      "B. Theo dõi hành vi người dùng trên trang web và đo lường chuyển đổi",
+      "C. Tăng số lượng người theo dõi (Follower) cho Fanpage",
+      "D. Tự động viết nội dung quảng cáo bằng AI"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Meta Pixel là một đoạn mã đặt trên website giúp ghi lại hành động của khách hàng để nhà quảng cáo đo lường hiệu quả và tối ưu hóa chiến dịch.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đối tượng 'Custom Audience' (Đối tượng tùy chỉnh) dựa trên nguồn danh sách khách hàng có sẵn thường được tạo từ thông tin nào?",
+    "options": [
+      "A. Sở thích cá nhân của người dùng",
+      "B. Địa chỉ IP của mạng gia đình",
+      "C. Email hoặc số điện thoại của khách hàng",
+      "D. Tên đăng nhập ngân hàng của khách hàng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Custom Audience cho phép nhà quảng cáo tải lên danh sách thông tin nhận dạng như Email hoặc Số điện thoại để khớp với người dùng trên nền tảng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Định dạng quảng cáo 'Carousel' (Quảng cáo quay vòng) trên Facebook cho phép hiển thị tối đa bao nhiêu thẻ hình ảnh/video trong một mẫu quảng cáo?",
+    "options": [
+      "A. 2 thẻ",
+      "B. 5 thẻ",
+      "C. 10 thẻ",
+      "D. 20 thẻ"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Định dạng Carousel của Meta hiện hỗ trợ tối đa 10 thẻ hình ảnh hoặc video trong một quảng cáo duy nhất, mỗi thẻ có liên kết riêng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết lập chiến dịch trên TikTok Ads, cấp độ nào là nơi bạn chọn mục tiêu chiến dịch (Campaign Objective)?",
+    "options": [
+      "A. Cấp độ Chiến dịch (Campaign)",
+      "B. Cấp độ Nhóm quảng cáo (Ad Group)",
+      "C. Cấp độ Quảng cáo (Ad)",
+      "D. Cấp độ Tài khoản (Account)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giống như hầu hết các nền tảng, mục tiêu chiến dịch (như Traffic, Conversions) luôn được thiết lập ở cấp độ cao nhất là Campaign.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số CTR (Click-Through Rate) được tính theo công thức nào?",
+    "options": [
+      "A. (Số lượt nhấp / Số lượt hiển thị) x 100",
+      "B. (Số lượt hiển thị / Số lượt nhấp) x 100",
+      "C. (Số chuyển đổi / Số lượt nhấp) x 100",
+      "D. Tổng chi phí / Số lượt nhấp"
+    ],
+    "correctAnswer": "A",
+    "explanation": "CTR là tỷ lệ nhấp chuột, đo lường tỷ lệ giữa số lần người dùng nhấp vào quảng cáo trên tổng số lần quảng cáo đó được nhìn thấy.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Loại đối tượng 'Lookalike Audience' (Đối tượng tương đồng) có ý nghĩa gì trong quảng cáo Social Media?",
+    "options": [
+      "A. Những người đã từng mua hàng của đối thủ cạnh tranh",
+      "B. Những người có đặc điểm và hành vi giống với nhóm khách hàng hiện tại của bạn",
+      "C. Những người sống trong cùng một khu vực địa lý với bạn",
+      "D. Những người đã nhấn nút 'Thích' trang của bạn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lookalike Audience là thuật toán tìm kiếm những người dùng mới có hành vi, sở thích tương đồng với tệp khách hàng gốc (Source Audience).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trên LinkedIn Ads, định dạng nào phù hợp nhất để thu thập thông tin khách hàng tiềm năng ngay trên nền tảng mà không cần họ rời đi?",
+    "options": [
+      "A. Text Ads",
+      "B. Lead Gen Forms",
+      "C. Message Ads",
+      "D. Spotlight Ads"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lead Gen Forms cho phép người dùng điền thông tin vào biểu mẫu đã được điền sẵn dữ liệu từ hồ sơ LinkedIn, giúp tăng tỷ lệ chuyển đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong giai đoạn 'Learning Phase' (Giai đoạn máy học) của Facebook Ads, bạn nên tránh làm điều gì nhất?",
+    "options": [
+      "A. Theo dõi chỉ số hàng ngày",
+      "B. Thay đổi ngân sách hoặc nội dung quảng cáo liên tục",
+      "C. Trả lời bình luận của khách hàng",
+      "D. Kiểm tra trang đích (Landing Page)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc thay đổi đáng kể (ngân sách, nội dung, mục tiêu) trong giai đoạn máy học sẽ khiến hệ thống phải bắt đầu quá trình học lại từ đầu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tỷ lệ khung hình (Aspect Ratio) chuẩn nhất cho quảng cáo TikTok và Facebook Reels là bao nhiêu?",
+    "options": [
+      "A. 16:9 (Nằm ngang)",
+      "B. 1:1 (Hình vuông)",
+      "C. 9:16 (Thẳng đứng)",
+      "D. 4:3 (Hình chữ nhật đứng ngắn)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Định dạng video ngắn trên di động như TikTok và Reels yêu cầu tỷ lệ 9:16 để hiển thị toàn màn hình và mang lại trải nghiệm tốt nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Nếu mục tiêu của bạn là tối đa hóa số lượng người nhìn thấy quảng cáo ít nhất một lần, bạn nên chọn phương thức tối ưu hóa nào?",
+    "options": [
+      "A. Reach (Số người tiếp cận)",
+      "B. Conversions (Chuyển đổi)",
+      "C. Link Clicks (Lượt nhấp vào liên kết)",
+      "D. Engagement (Tương tác)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mục tiêu Reach tập trung vào việc hiển thị quảng cáo cho càng nhiều người duy nhất (unique users) càng tốt trong phạm vi ngân sách.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chỉ số CPM (Cost Per Mille) đại diện cho chi phí của cái gì?",
+    "options": [
+      "A. Chi phí cho mỗi 1.000 lượt nhấp chuột",
+      "B. Chi phí cho mỗi 1.000 lượt hiển thị",
+      "C. Chi phí cho mỗi 1.000 khách hàng tiềm năng",
+      "D. Chi phí cho mỗi 1.000 đơn hàng thành công"
+    ],
+    "correctAnswer": "B",
+    "explanation": "CPM là viết tắt của Cost Per Mille, trong đó 'Mille' tiếng Latin nghĩa là nghìn. Đây là chi phí cho mỗi 1.000 lần quảng cáo hiển thị.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi chạy A/B Testing cho quảng cáo, nguyên tắc quan trọng nhất là gì?",
+    "options": [
+      "A. Thay đổi tất cả các yếu tố cùng một lúc để tiết kiệm thời gian",
+      "B. Chỉ thay đổi một biến duy nhất tại một thời điểm để so sánh",
+      "C. Sử dụng ngân sách thấp nhất có thể cho cả hai nhóm",
+      "D. Luôn chọn hình ảnh có màu đỏ để thu hút sự chú ý"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để biết chính xác yếu tố nào tác động đến hiệu quả (ví dụ: tiêu đề hay hình ảnh), bạn chỉ nên thay đổi một biến duy nhất giữa hai nhóm thử nghiệm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Meta Ads, 'Campaign Budget Optimization' (CBO) có nghĩa là gì?",
+    "options": [
+      "A. Bạn tự đặt ngân sách riêng cho từng mẫu quảng cáo",
+      "B. Hệ thống tự động phân bổ ngân sách chiến dịch cho các nhóm quảng cáo hiệu quả nhất",
+      "C. Facebook sẽ hoàn tiền nếu quảng cáo không ra đơn hàng",
+      "D. Ngân sách chỉ được chi tiêu vào khung giờ vàng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "CBO (hiện gọi là Advantage campaign budget) cho phép Meta tự động phân phối ngân sách tổng của chiến dịch vào các nhóm quảng cáo có tiềm năng nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chỉ số 'Frequency' (Tần suất) trong báo cáo quảng cáo cho biết điều gì?",
+    "options": [
+      "A. Tốc độ tải trang đích của bạn",
+      "B. Số lần trung bình mỗi người nhìn thấy quảng cáo của bạn",
+      "C. Số lượng bình luận tiêu cực trên bài viết",
+      "D. Tỷ lệ người dùng gỡ cài đặt ứng dụng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tần suất (Frequency) được tính bằng Số lượt hiển thị chia cho Số người tiếp cận, cho biết trung bình một người thấy quảng cáo bao nhiêu lần.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Mục tiêu 'Traffic' (Lưu lượng truy cập) thường được sử dụng khi nhà quảng cáo muốn khách hàng làm gì?",
+    "options": [
+      "A. Nhấn nút 'Like' trang Fanpage",
+      "B. Truy cập vào một trang web hoặc ứng dụng bên ngoài",
+      "C. Xem hết video quảng cáo",
+      "D. Chia sẻ bài viết về trang cá nhân"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mục tiêu Traffic tập trung vào việc điều hướng người dùng từ nền tảng mạng xã hội đến một đích đến cụ thể như Website, Landing Page hoặc Blog.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "TikTok Spark Ads là loại hình quảng cáo cho phép bạn làm gì?",
+    "options": [
+      "A. Tạo quảng cáo mà không cần tài khoản TikTok",
+      "B. Sử dụng các bài đăng tự nhiên (Organic) có sẵn để chạy quảng cáo",
+      "C. Tự động xóa các bình luận của đối thủ cạnh tranh",
+      "D. Chỉ hiển thị quảng cáo cho những người dùng đã xác minh"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spark Ads cho phép thương hiệu quảng bá các video từ tài khoản TikTok của chính mình hoặc từ các nhà sáng tạo nội dung khác (khi được cho phép).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nhắm mục tiêu theo 'Interest' (Sở thích) trên Facebook, hệ thống dựa vào dữ liệu nào?",
+    "options": [
+      "A. Số dư tài khoản ngân hàng của người dùng",
+      "B. Các trang họ đã thích, các quảng cáo họ đã nhấp và hoạt động trên nền tảng",
+      "C. Nội dung các cuộc gọi điện thoại riêng tư",
+      "D. Trình độ học vấn thực tế được xác minh bởi cơ quan chức năng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Facebook xác định sở thích dựa trên hành vi tương tác của người dùng như Like, Share, Click và các thông tin họ khai báo trong hồ sơ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chỉ số ROAS (Return on Ad Spend) được tính bằng cách nào?",
+    "options": [
+      "A. Tổng doanh thu / Tổng chi phí quảng cáo",
+      "B. Tổng chi phí quảng cáo / Tổng doanh thu",
+      "C. (Doanh thu - Chi phí) / Chi phí",
+      "D. Tổng số đơn hàng / Tổng số lượt nhấp"
+    ],
+    "correctAnswer": "A",
+    "explanation": "ROAS là tỷ lệ doanh thu trên chi phí quảng cáo, giúp nhà quảng cáo biết được mỗi đồng chi ra thu về được bao nhiêu đồng doanh thu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Điều gì xảy ra nếu bạn đặt ngân sách hàng ngày (Daily Budget) quá thấp so với giá thầu thị trường?",
+    "options": [
+      "A. Quảng cáo sẽ hiển thị nhiều hơn để hỗ trợ bạn",
+      "B. Quảng cáo có thể không được hiển thị hoặc không tiêu hết tiền",
+      "C. Facebook sẽ tự động tăng ngân sách của bạn lên",
+      "D. Tài khoản quảng cáo sẽ bị khóa ngay lập tức"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu ngân sách quá thấp, quảng cáo của bạn không đủ sức cạnh tranh trong phiên đấu giá, dẫn đến việc không thể tiếp cận người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Yếu tố nào thường được coi là 'Hook' (Điểm dừng chân) trong một video quảng cáo ngắn?",
+    "options": [
+      "A. Phần thông tin liên hệ ở cuối video",
+      "B. 3 giây đầu tiên của video",
+      "C. Đoạn nhạc nền ở giữa video",
+      "D. Phần mô tả văn bản bên dưới video"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trên mạng xã hội, người dùng lướt tin rất nhanh, vì vậy 3 giây đầu tiên là cực kỳ quan trọng để thu hút sự chú ý và giữ chân họ xem tiếp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong LinkedIn Ads, 'Matched Audiences' tương đương với khái niệm nào của Facebook Ads?",
+    "options": [
+      "A. Core Audiences (Đối tượng cốt lõi)",
+      "B. Custom Audiences (Đối tượng tùy chỉnh)",
+      "C. Broad Targeting (Nhắm mục tiêu rộng)",
+      "D. Detailed Targeting (Nhắm mục tiêu chi tiết)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Matched Audiences của LinkedIn cho phép sử dụng dữ liệu website hoặc danh sách email để nhắm mục tiêu, tương tự Custom Audiences của Facebook.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc kiểm tra 'Landing Page' (Trang đích) lại quan trọng đối với chiến dịch quảng cáo?",
+    "options": [
+      "A. Để đảm bảo trang web có màu sắc giống với quảng cáo",
+      "B. Để đảm bảo trải nghiệm người dùng liền mạch và tăng tỷ lệ chuyển đổi",
+      "C. Vì Facebook yêu cầu trang đích phải có ít nhất 10 bài viết",
+      "D. Để trang web được xếp hạng cao hơn trên Google Search"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dù quảng cáo tốt nhưng trang đích chậm, lỗi hoặc không liên quan sẽ khiến khách hàng rời đi, làm lãng phí ngân sách quảng cáo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi nào bạn nên bắt đầu 'Scaling' (Mở rộng) quy mô ngân sách chiến dịch?",
+    "options": [
+      "A. Ngay khi vừa tạo chiến dịch xong",
+      "B. Khi chiến dịch đã ổn định và mang lại hiệu quả (ROI/ROAS) tốt",
+      "C. Khi quảng cáo bị từ chối phê duyệt",
+      "D. Khi đối thủ cạnh tranh bắt đầu chạy quảng cáo"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chỉ nên tăng ngân sách khi chiến dịch đã vượt qua giai đoạn máy học và chứng minh được hiệu quả về mặt kinh doanh.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "'Retargeting' (Tiếp thị lại) là kỹ thuật nhắm mục tiêu đến nhóm đối tượng nào?",
+    "options": [
+      "A. Những người chưa bao giờ nghe nói về thương hiệu của bạn",
+      "B. Những người đã từng tương tác với quảng cáo hoặc website của bạn trước đó",
+      "C. Những người sống ở nước ngoài",
+      "D. Những người sử dụng thiết bị Android"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Retargeting giúp nhắc nhớ và thúc đẩy những người đã biết đến thương hiệu thực hiện hành vi chuyển đổi cuối cùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong trình quản lý quảng cáo, nút 'Call to Action' (CTA) có tác dụng gì?",
+    "options": [
+      "A. Dùng để gọi điện trực tiếp cho nhân viên hỗ trợ của Facebook",
+      "B. Là nút bấm hướng dẫn người dùng thực hiện một hành động cụ thể (ví dụ: Mua ngay, Đăng ký)",
+      "C. Dùng để tắt quảng cáo khi hết ngân sách",
+      "D. Dùng để báo cáo các vi phạm của đối thủ"
+    ],
+    "correctAnswer": "B",
+    "explanation": "CTA là các nút như 'Learn More', 'Shop Now', 'Sign Up' giúp định hướng người dùng biết họ cần làm gì tiếp theo sau khi xem quảng cáo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc triển khai Conversions API (CAPI) cùng với Meta Pixel lại cực kỳ quan trọng trong bối cảnh quảng cáo hiện nay?",
+    "options": [
+      "A. Để giảm trực tiếp giá thầu (bid) xuống 50% ngay lập tức.",
+      "B. Để khắc phục tình trạng mất dữ liệu do các hạn chế về cookie bên thứ ba và cập nhật iOS 14+.",
+      "C. Để thay thế hoàn toàn việc cài đặt mã Pixel trên website.",
+      "D. Để tự động tạo ra các mẫu quảng cáo sáng tạo dựa trên dữ liệu server."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CAPI gửi dữ liệu trực tiếp từ máy chủ đến Meta, giúp ghi nhận các chuyển đổi mà Pixel (dựa trên trình duyệt) có thể bỏ lỡ do các trình chặn quảng cáo hoặc chính sách quyền riêng tư.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi chạy quảng cáo TikTok Ads, chỉ số 'Hook Rate' (thường tính bằng 2s/3s Video View chia cho Impressions) thấp cho thấy vấn đề gì?",
+    "options": [
+      "A. Trang đích (Landing Page) tải quá chậm.",
+      "B. Giá thầu đang đặt quá thấp so với đối thủ.",
+      "C. Nội dung những giây đầu tiên của video chưa đủ hấp dẫn để giữ chân người xem.",
+      "D. Đối tượng mục tiêu quá hẹp nên không có người xem."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hook Rate đo lường khả năng thu hút sự chú ý ngay lập tức. Nếu thấp, nghĩa là người dùng lướt qua video mà không dừng lại xem, cần tối ưu lại 3 giây đầu của sáng tạo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang chạy chiến dịch LinkedIn Ads để tiếp cận các Giám đốc Marketing (CMO). Loại hình mục tiêu (Targeting) nào sau đây mang lại độ chính xác cao nhất?",
+    "options": [
+      "A. Targeting theo sở thích (Interests) về Marketing.",
+      "B. Targeting theo Job Title (Chức danh công việc) kết hợp với Company Size.",
+      "C. Targeting theo nhóm tuổi từ 35-55.",
+      "D. Targeting theo vị trí địa lý tại các thành phố lớn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thế mạnh của LinkedIn là dữ liệu nghề nghiệp chính xác. Kết hợp Job Title và Company Size giúp tiếp cận đúng cấp bậc quyết định trong các doanh nghiệp phù hợp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Meta Ads, khi nào bạn nên ưu tiên sử dụng chiến dịch 'Advantage+ Shopping Campaign' thay vì chiến dịch thủ công (Manual)?",
+    "options": [
+      "A. Khi bạn muốn kiểm soát chi tiết từng vị trí hiển thị và đối tượng mục tiêu.",
+      "B. Khi bạn có danh mục sản phẩm lớn và muốn thuật toán tự động tối ưu hóa việc phân phối đến khách hàng tiềm năng.",
+      "C. Khi bạn có ngân sách rất nhỏ và chỉ muốn chạy quảng cáo tại một khu vực địa lý hẹp.",
+      "D. Khi bạn muốn chạy quảng cáo Lead Form để thu thập thông tin khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Advantage+ Shopping tận dụng AI để tự động hóa việc nhắm mục tiêu và sáng tạo, hiệu quả nhất cho các doanh nghiệp E-commerce có nhiều SKU sản phẩm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn nhận thấy quảng cáo Meta Ads có tần suất (Frequency) lên tới 5.0 trong vòng 7 ngày và hiệu quả (ROAS) đang giảm mạnh. Bạn nên làm gì?",
+    "options": [
+      "A. Tăng ngân sách gấp đôi để tiếp cận thêm người mới.",
+      "B. Giữ nguyên quảng cáo vì tần suất cao giúp tăng nhận diện thương hiệu.",
+      "C. Thay đổi nội dung sáng tạo (Creative) mới hoặc mở rộng tệp đối tượng.",
+      "D. Chuyển sang mục tiêu chiến dịch là Nhận diện (Awareness)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tần suất cao kèm ROAS giảm là dấu hiệu của 'Ad Fatigue' (nhàm chán quảng cáo). Cần làm mới nội dung hoặc tìm tệp khách hàng mới để tránh lãng phí ngân sách.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chiến lược 'Cost Cap' (Giới hạn chi phí) trong đấu thầu quảng cáo phù hợp nhất với mục tiêu nào?",
+    "options": [
+      "A. Chi tiêu hết ngân sách bằng mọi giá để lấy lượt hiển thị.",
+      "B. Duy trì mức chi phí trên mỗi kết quả (CPA) ổn định trong khoảng ngân sách cho phép.",
+      "C. Tăng tối đa CTR (tỷ lệ nhấp) cho quảng cáo.",
+      "D. Thử nghiệm các tệp đối tượng mới với ngân sách thấp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cost Cap cho phép bạn kiểm soát mức phí trung bình cho mỗi chuyển đổi, giúp đảm bảo hiệu quả lợi nhuận nhưng có thể khiến quảng cáo không cắn tiền nếu đặt quá thấp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện A/B Testing cho quảng cáo, nguyên tắc quan trọng nhất để có kết quả chính xác là gì?",
+    "options": [
+      "A. Thay đổi ít nhất 3 yếu tố cùng lúc để xem yếu tố nào hiệu quả nhất.",
+      "B. Chạy hai phiên bản trên hai tài khoản quảng cáo khác nhau.",
+      "C. Chỉ thay đổi một biến duy nhất (ví dụ: hình ảnh hoặc tiêu đề) giữa hai phiên bản.",
+      "D. Chọn hai tệp đối tượng hoàn toàn khác nhau về sở thích và hành vi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để biết chính xác yếu tố nào tạo ra sự khác biệt về hiệu suất, bạn phải giữ nguyên các biến khác và chỉ thay đổi một biến duy nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong TikTok Ads, 'Spark Ads' khác gì so với quảng cáo In-Feed thông thường?",
+    "options": [
+      "A. Spark Ads chỉ hiển thị trên trang Discovery.",
+      "B. Spark Ads cho phép sử dụng các bài đăng từ tài khoản TikTok thực tế để chạy quảng cáo.",
+      "C. Spark Ads không cho phép người dùng bình luận hoặc thả tim.",
+      "D. Spark Ads có chi phí CPM luôn rẻ hơn quảng cáo thông thường 2 lần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spark Ads tận dụng các bài đăng tự nhiên (Organic posts), giúp tăng tính chân thực và cho phép tích lũy lượt tương tác vào tài khoản chính thức.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một tệp đối tượng Lookalike (LAL) 1% tại Việt Nam thường có quy mô khoảng bao nhiêu trên Meta?",
+    "options": [
+      "A. Khoảng 10.000 - 50.000 người.",
+      "B. Khoảng 800.000 - 1.000.000 người.",
+      "C. Khoảng 5.000.000 - 7.000.000 người.",
+      "D. Toàn bộ người dùng Facebook tại Việt Nam."
+    ],
+    "correctAnswer": "B",
+    "explanation": "LAL 1% là 1% dân số sử dụng Facebook tại quốc gia đó. Tại Việt Nam, con số này thường dao động quanh mức 800k - 1 triệu người tùy thời điểm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu chiến dịch Meta Ads của bạn đang ở trạng thái 'Learning Phase' (Giai đoạn máy học), hành động nào sau đây sẽ làm giai đoạn này bị reset lại từ đầu?",
+    "options": [
+      "A. Thay đổi tên chiến dịch cho dễ quản lý.",
+      "B. Tăng ngân sách nhóm quảng cáo thêm 5%.",
+      "C. Thay đổi đáng kể về nội dung sáng tạo hoặc tệp đối tượng nhắm mục tiêu.",
+      "D. Xem báo cáo quảng cáo hàng ngày."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các thay đổi mang tính cốt lõi như Creative, Targeting, hoặc thay đổi ngân sách quá lớn (>20%) sẽ khiến thuật toán phải học lại từ đầu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao một nhà quảng cáo nên sử dụng 'Custom Audience' từ danh sách email khách hàng cũ?",
+    "options": [
+      "A. Để Facebook tự động gửi email marketing cho họ.",
+      "B. Để chạy quảng cáo Remarketing (tiếp thị lại) hoặc loại trừ họ khỏi chiến dịch tìm kiếm khách hàng mới.",
+      "C. Để tăng điểm chất lượng của trang Fanpage.",
+      "D. Để lấy được số điện thoại cá nhân của những người trong danh sách."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Custom Audience từ dữ liệu CRM là cách tốt nhất để chăm sóc khách hàng cũ hoặc tối ưu ngân sách bằng cách không hiển thị quảng cáo cho người đã mua hàng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong LinkedIn Ads, 'Lead Gen Forms' thường mang lại kết quả như thế nào so với việc dẫn khách về Landing Page?",
+    "options": [
+      "A. Tỷ lệ chuyển đổi (Conversion Rate) thường thấp hơn.",
+      "B. Chi phí trên mỗi Lead (CPL) thường thấp hơn nhờ trải nghiệm ngay trên nền tảng.",
+      "C. Chất lượng Lead luôn cao hơn vì khách hàng phải gõ tay thông tin.",
+      "D. Không thể tích hợp được với các hệ thống CRM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lead Gen Forms tự động điền thông tin từ profile người dùng, giảm ma sát nên thường có tỷ lệ hoàn thành form cao hơn và CPL rẻ hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chỉ số CPM (Cost Per Mille) tăng đột biến trong khi không thay đổi đối tượng mục tiêu có thể do nguyên nhân nào?",
+    "options": [
+      "A. Do bài viết có quá nhiều lượt chia sẻ tự nhiên.",
+      "B. Do tính cạnh tranh trên thị trường quảng cáo tăng cao (ví dụ: mùa lễ Tết).",
+      "C. Do bạn vừa giảm ngân sách hàng ngày xuống.",
+      "D. Do Landing Page của bạn bị lỗi không truy cập được."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CPM phụ thuộc vào cung và cầu trên thị trường đấu thầu. Vào các dịp cao điểm, nhiều nhà quảng cáo cùng chi tiền khiến giá hiển thị bị đẩy lên cao.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn muốn tăng ngân sách cho một chiến dịch đang hiệu quả (Scaling). Phương pháp 'Scaling ngang' (Horizontal Scaling) nghĩa là gì?",
+    "options": [
+      "A. Tăng ngân sách trực tiếp vào nhóm quảng cáo hiện tại.",
+      "B. Nhân bản nhóm quảng cáo sang các tệp đối tượng mới hoặc các tài khoản khác.",
+      "C. Giảm giá thầu để tiếp cận nhiều người hơn với cùng số tiền.",
+      "D. Thay đổi định dạng quảng cáo từ hình ảnh sang video."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scaling ngang là việc mở rộng quy mô bằng cách tìm thêm các tệp đối tượng tương đồng hoặc thị trường mới thay vì chỉ dồn thêm tiền vào một nhóm duy nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thiết lập quảng cáo TikTok, vị trí hiển thị 'Pangle' là gì?",
+    "options": [
+      "A. Hiển thị ngay trên trang chủ (For You Page) của TikTok.",
+      "B. Hiển thị trên các ứng dụng đối tác thuộc mạng lưới quảng cáo của TikTok.",
+      "C. Hiển thị trong phần tin nhắn của người dùng.",
+      "D. Hiển thị khi người dùng tìm kiếm từ khóa trên TikTok."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pangle là mạng lưới đối tác video (Audience Network) của TikTok, cho phép quảng cáo hiển thị trên các ứng dụng bên thứ ba.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để tối ưu hóa chiến dịch Meta Ads theo mô hình 'Phễu' (Funnel), trình tự nhắm mục tiêu nào là hợp lý nhất?",
+    "options": [
+      "A. Conversion -> Awareness -> Traffic.",
+      "B. Traffic -> Conversion -> Awareness.",
+      "C. Awareness -> Traffic -> Conversion.",
+      "D. Awareness -> Conversion -> Traffic."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trình tự chuẩn là đi từ Nhận diện (Awareness) để giáo dục khách hàng, sau đó điều hướng truy cập (Traffic) và cuối cùng là thúc đẩy hành động mua hàng (Conversion).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số 'ThruPlay' trong quảng cáo video của Meta được tính khi nào?",
+    "options": [
+      "A. Người dùng xem video ít nhất 2 giây.",
+      "B. Người dùng xem video ít nhất 15 giây hoặc xem hết video nếu video ngắn hơn 15 giây.",
+      "C. Người dùng nhấn vào nút 'Xem thêm' dưới video.",
+      "D. Người dùng xem video và nhấn nút chia sẻ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ThruPlay là chỉ số tối ưu hóa cho lượt xem video chất lượng, tính cho các lượt xem từ 15 giây trở lên hoặc xem trọn vẹn video ngắn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu bạn muốn chạy quảng cáo để thu thập tin nhắn từ khách hàng trên cả Messenger và Instagram, bạn nên chọn mục tiêu chiến dịch nào trong Meta Ads Manager?",
+    "options": [
+      "A. Awareness (Nhận thức).",
+      "B. Engagement (Lượt tương tác).",
+      "C. App Promotion (Quảng bá ứng dụng).",
+      "D. Sales (Doanh số) với đích đến là Messenger/Instagram."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong giao diện mới của Meta, mục tiêu Engagement hoặc Sales đều có thể dùng để thu hút tin nhắn, nhưng Engagement thường được dùng phổ biến cho mục đích bắt đầu cuộc hội thoại.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lỗi 'Audience Overlap' (Chồng chéo đối tượng) gây ra hậu quả gì cho chiến dịch quảng cáo?",
+    "options": [
+      "A. Giúp quảng cáo hiển thị nhiều lần hơn cho cùng một người.",
+      "B. Làm tăng giá thầu do các nhóm quảng cáo trong cùng một tài khoản tự đấu thầu lẫn nhau.",
+      "C. Giảm tỷ lệ nhấp (CTR) của toàn bộ tài khoản.",
+      "D. Khiến quảng cáo bị từ chối phê duyệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi các nhóm quảng cáo nhắm vào cùng một tệp khách hàng, chúng sẽ cạnh tranh với nhau trong phiên đấu thầu, dẫn đến lãng phí ngân sách và tăng chi phí.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong TikTok Ads, chiến lược 'Lowest Cost' (Chi phí thấp nhất) hoạt động như thế nào?",
+    "options": [
+      "A. Hệ thống sẽ cố gắng đạt được nhiều kết quả nhất có thể trong phạm vi ngân sách mà không quan tâm đến giá mỗi kết quả.",
+      "B. Hệ thống sẽ dừng quảng cáo nếu chi phí vượt quá một ngưỡng nhất định.",
+      "C. Bạn phải nhập thủ công số tiền tối đa muốn trả cho mỗi lượt click.",
+      "D. Chỉ hiển thị quảng cáo vào những khung giờ có giá rẻ nhất trong ngày."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lowest Cost là chiến lược đặt thầu tự động, ưu tiên tiêu hết ngân sách và mang lại số lượng kết quả tối đa, phù hợp khi bạn muốn scale nhanh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phân tích báo cáo, bạn thấy CTR cao nhưng tỷ lệ chuyển đổi (Conversion Rate) trên website rất thấp. Vấn đề có khả năng cao nhất nằm ở đâu?",
+    "options": [
+      "A. Hình ảnh quảng cáo quá xấu.",
+      "B. Tệp đối tượng nhắm mục tiêu quá rộng.",
+      "C. Nội dung quảng cáo gây hiểu lầm hoặc trang đích (Landing Page) có trải nghiệm kém.",
+      "D. Ngân sách hàng ngày đang đặt quá cao."
+    ],
+    "correctAnswer": "C",
+    "explanation": "CTR cao nghĩa là quảng cáo thu hút, nhưng không chuyển đổi được thì thường do sự đứt gãy kỳ vọng giữa quảng cáo và trang đích hoặc trang đích không thuyết phục.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cấu trúc chiến dịch 'CBO' (Campaign Budget Optimization) của Meta Ads khác gì so với 'ABO' (Ad Set Budget Optimization)?",
+    "options": [
+      "A. CBO đặt ngân sách ở cấp độ từng nhóm quảng cáo.",
+      "B. CBO tự động phân bổ ngân sách cho những nhóm quảng cáo hoạt động hiệu quả nhất trong chiến dịch.",
+      "C. CBO chỉ áp dụng được cho các chiến dịch Video.",
+      "D. CBO yêu cầu tất cả các nhóm quảng cáo phải có cùng một tệp đối tượng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CBO (hiện gọi là Advantage Campaign Budget) cho phép thuật toán Meta tự tìm ra nhóm quảng cáo tiềm năng nhất để dồn ngân sách, giúp tối ưu hiệu quả tổng thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao nội dung UGC (User Generated Content) thường hiệu quả hơn nội dung quảng cáo bóng bẩy trên TikTok?",
+    "options": [
+      "A. Vì UGC có độ phân giải video cao hơn.",
+      "B. Vì UGC trông giống như một bài đăng tự nhiên, tạo sự tin tưởng và giảm cảm giác bị làm phiền bởi quảng cáo.",
+      "C. Vì TikTok ưu tiên hiển thị video của người dùng bình thường hơn doanh nghiệp.",
+      "D. Vì UGC không tốn chi phí sản xuất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "TikTok là nền tảng giải trí, người dùng có xu hướng lướt qua các quảng cáo quá 'công nghiệp'. UGC mang lại cảm giác gần gũi và chân thực hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn nên làm gì nếu quảng cáo LinkedIn của bạn có lượt hiển thị (Impressions) cao nhưng không có lượt nhấp (Clicks)?",
+    "options": [
+      "A. Tăng giá thầu CPM.",
+      "B. Kiểm tra lại lời kêu gọi hành động (CTA) và giá trị cốt lõi (Value Proposition) trong mẫu quảng cáo.",
+      "C. Đổi sang chạy quảng cáo vào cuối tuần.",
+      "D. Thu hẹp tệp đối tượng mục tiêu xuống dưới 1.000 người."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Impressions cao nhưng Clicks thấp nghĩa là thông điệp chưa đủ sức hút hoặc không liên quan đến đối tượng mục tiêu. Cần tối ưu lại nội dung và CTA.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Meta Ads, cài đặt 'Attribution Setting' mặc định hiện nay là gì?",
+    "options": [
+      "A. 1-day click.",
+      "B. 28-day click and 1-day view.",
+      "C. 7-day click and 1-day view.",
+      "D. 30-day view."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sau cập nhật iOS 14, Meta chuyển sang mô hình ghi nhận chuyển đổi trong vòng 7 ngày sau khi nhấp hoặc 1 ngày sau khi xem quảng cáo làm tiêu chuẩn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai Meta Conversions API (CAPI) song song với Pixel, giải pháp nào là tối ưu nhất để tránh tình trạng ghi nhận trùng lặp (deduplication) dữ liệu sự kiện?",
+    "options": [
+      "A. Chỉ gửi sự kiện từ Server và tắt hoàn toàn trình duyệt Pixel.",
+      "B. Sử dụng cùng một 'event_name' và 'event_id' cho cả hai nguồn dữ liệu.",
+      "C. Cài đặt thời gian trễ (delay) cho dữ liệu gửi từ Server.",
+      "D. Sử dụng các 'external_id' khác nhau cho mỗi nguồn để Meta tự phân loại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Meta sử dụng tổ hợp 'event_name' và 'event_id' để so khớp và loại bỏ các sự kiện trùng lặp được gửi từ cả trình duyệt và máy chủ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong chiến dịch Meta Ads sử dụng Advantage+ Shopping Campaigns (ASC), hạn chế lớn nhất về mặt kiểm soát đối tượng (targeting control) là gì?",
+    "options": [
+      "A. Không thể loại trừ những khách hàng đã mua hàng trong quá khứ.",
+      "B. Không thể chọn vị trí hiển thị (Placements) thủ công.",
+      "C. Không thể thiết lập ngân sách riêng cho từng nhóm quảng cáo.",
+      "D. Không thể nhắm mục tiêu chi tiết theo sở thích và hành vi."
+    ],
+    "correctAnswer": "D",
+    "explanation": "ASC dựa hoàn toàn vào AI để tìm kiếm đối tượng, hệ thống loại bỏ các tùy chọn nhắm mục tiêu chi tiết (Interests/Behaviors) để tối ưu hóa tự động.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi tỷ lệ 'Thumbstop Rate' (3s video view / Impressions) cao nhưng 'Conversion Rate' lại rất thấp, hành động tối ưu nhất cho đội ngũ Creative là gì?",
+    "options": [
+      "A. Thay đổi hoàn toàn 3 giây đầu tiên của video để thu hút hơn.",
+      "B. Giữ nguyên Hook, tập trung chỉnh sửa phần thân video và lời kêu gọi hành động (CTA).",
+      "C. Tăng ngân sách cho nhóm quảng cáo vì nội dung đang thu hút thị giác tốt.",
+      "D. Chuyển sang định dạng hình ảnh tĩnh để giảm chi phí sản xuất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thumbstop Rate cao chứng tỏ Hook (3s đầu) hiệu quả, nhưng Conversion thấp chứng tỏ nội dung sau đó hoặc ưu đãi không đủ thuyết phục khách hàng hành động.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Bid Cap' (Giới hạn giá thầu) thường đòi hỏi ngân sách lớn và kinh nghiệm vận hành cao hơn so với 'Lowest Cost'?",
+    "options": [
+      "A. Vì Bid Cap sẽ tự động dừng quảng cáo nếu CPM thị trường tăng nhẹ.",
+      "B. Vì nếu đặt thầu quá thấp, quảng cáo sẽ không thể cắn tiền và mất cơ hội học hỏi dữ liệu.",
+      "C. Vì Bid Cap yêu cầu phải thanh toán trước cho nền tảng quảng cáo.",
+      "D. Vì Bid Cap chỉ dành cho các tài khoản quảng cáo đã được xác minh doanh nghiệp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bid Cap kiểm soát chi phí chặt chẽ nhưng nếu không hiểu giá thầu thị trường, quảng cáo sẽ không được phân phối, gây gián đoạn quá trình thu thập dữ liệu máy học.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong TikTok Ads, sự khác biệt cốt lõi về hiệu năng giữa 'Spark Ads' và 'Non-Spark Ads' là gì?",
+    "options": [
+      "A. Spark Ads luôn có chi phí CPM thấp hơn 50% so với Non-Spark Ads.",
+      "B. Spark Ads cho phép tận dụng tương tác tự nhiên (likes, comments) vào bài đăng gốc trên profile.",
+      "C. Non-Spark Ads cho phép gắn link Landing Page còn Spark Ads thì không.",
+      "D. Spark Ads chỉ hiển thị cho những người đã theo dõi kênh TikTok của thương hiệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spark Ads sử dụng bài đăng thực tế từ tài khoản TikTok, giúp tích lũy các chỉ số tương tác thực tế và tăng uy tín thương hiệu (social proof) bền vững hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Scaling ngang (Horizontal Scaling) cho một chiến dịch đang hiệu quả, phương pháp nào giảm thiểu rủi ro 'Auction Overlap' (Chồng chéo đấu thầu) nhất?",
+    "options": [
+      "A. Sao chép nhóm quảng cáo và giữ nguyên đối tượng mục tiêu.",
+      "B. Sao chép nhóm quảng cáo và thay đổi tệp đối tượng (ví dụ: LAL 1% sang LAL 3-5%).",
+      "C. Tăng ngân sách trực tiếp 200% vào nhóm quảng cáo đang chạy.",
+      "D. Chạy cùng một nội dung trên nhiều tài khoản quảng cáo khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scaling ngang bằng cách mở rộng tệp đối tượng giúp giảm sự cạnh tranh nội bộ giữa các nhóm quảng cáo trong cùng một tài khoản.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chiến lược 'Broad Targeting' (không nhắm mục tiêu sở thích/hành vi) trên Facebook Ads hiện nay hoạt động hiệu quả nhất dựa trên yếu tố nào?",
+    "options": [
+      "A. Sự đa dạng của các vị trí hiển thị (Placements).",
+      "B. Khả năng phân tích hình ảnh và ngôn ngữ tự nhiên của AI thông qua Creative nội dung.",
+      "C. Việc đặt ngân sách ở mức tối thiểu để hệ thống dò tìm khách hàng.",
+      "D. Việc sử dụng danh sách khách hàng cũ để loại trừ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với Broad Targeting, 'Creative is the targeting'. AI của Meta phân tích nội dung quảng cáo để hiểu nó dành cho ai và phân phối đến những người có khả năng quan tâm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trên LinkedIn Ads, định dạng 'Conversation Ads' thường có trade-off (sự đánh đổi) nào so với 'Single Image Ads'?",
+    "options": [
+      "A. CTR cao hơn nhưng giá mỗi Lead (CPL) thường đắt hơn rất nhiều.",
+      "B. Tỷ lệ chuyển đổi cao hơn nhưng khả năng tiếp cận (Reach) thấp và cá nhân hóa phức tạp.",
+      "C. Chỉ hiển thị trên Desktop và không hỗ trợ thiết bị di động.",
+      "D. Không thể tích hợp Lead Gen Form của LinkedIn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Conversation Ads mang tính cá nhân hóa cao trong Inbox, dẫn đến tỷ lệ chuyển đổi tốt, nhưng quy mô tiếp cận bị giới hạn bởi tần suất nhận tin nhắn của người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng Campaign Budget Optimization (CBO), nếu một nhóm quảng cáo (Ad Set) không được phân phối ngân sách, nguyên nhân kỹ thuật sâu xa nhất thường là gì?",
+    "options": [
+      "A. Do ngân sách chiến dịch quá thấp không đủ chia cho các nhóm.",
+      "B. Do thuật toán dự báo nhóm đó có 'Estimated Action Rates' thấp hơn đáng kể so với các nhóm còn lại.",
+      "C. Do nhóm quảng cáo đó chứa quá nhiều nội dung video nặng.",
+      "D. Do tài khoản quảng cáo đang bị giới hạn chi tiêu hàng ngày (Daily Spending Limit)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CBO ưu tiên ngân sách cho nhóm có xác suất tạo ra kết quả cao nhất dựa trên giá thầu và tỷ lệ hành động ước tính (Estimated Action Rates).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để đo lường hiệu quả thực tế của quảng cáo (Incrementality) thay vì chỉ dựa vào Attribution Model, phương pháp nào là chuẩn xác nhất?",
+    "options": [
+      "A. Sử dụng báo cáo Google Analytics 4 (GA4) với mô hình Data-driven.",
+      "B. Triển khai Conversion Lift Study (Thử nghiệm tăng trưởng chuyển đổi).",
+      "C. So sánh trực tiếp doanh thu trên Dashboard với doanh thu thực tế.",
+      "D. Sử dụng mã UTM để theo dõi hành trình khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Conversion Lift Study chia đối tượng thành nhóm thử nghiệm (xem quảng cáo) và nhóm đối chứng (không xem) để đo lường giá trị thực tế mà quảng cáo mang lại.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong TikTok Ads, chỉ số 'Retention Rate' của video quảng cáo sụt giảm mạnh ở giây thứ 5. Bạn nên đề xuất đội ngũ sản xuất video thực hiện thay đổi gì?",
+    "options": [
+      "A. Đưa lời kêu gọi hành động (CTA) lên giây thứ 4.",
+      "B. Thay đổi nhạc nền sôi động hơn từ giây thứ nhất.",
+      "C. Thêm một 'Pattern Interrupt' (yếu tố gây bất ngờ/thay đổi nhịp độ) tại giây thứ 4 hoặc 5.",
+      "D. Cắt ngắn video xuống chỉ còn đúng 5 giây."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự sụt giảm ở giây thứ 5 cho thấy người dùng mất hứng thú. Một yếu tố gây bất ngờ hoặc thay đổi góc quay giúp duy trì sự chú ý của người xem lâu hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Việc lạm dụng 'Lookalike Audience' (LAL) dựa trên tệp khách hàng có kích thước quá nhỏ (dưới 500 người) thường dẫn đến hệ quả gì?",
+    "options": [
+      "A. Giá CPM sẽ rẻ hơn do tệp đối tượng được thu hẹp.",
+      "B. Thuật toán không có đủ tín hiệu để tìm điểm chung, dẫn đến tệp LAL bị loãng và kém chất lượng.",
+      "C. Quảng cáo sẽ bị từ chối phê duyệt do vi phạm chính sách quyền riêng tư.",
+      "D. Tỷ lệ CTR sẽ tăng đột biến nhưng không tạo ra chuyển đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tệp nguồn (Seed Audience) quá nhỏ không cung cấp đủ dữ liệu đặc trưng để AI có thể xây dựng mô hình đối tượng tương tự một cách chính xác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi chạy quảng cáo Lead Generation trên LinkedIn cho đối tượng B2B cao cấp, chiến lược nào thường mang lại chất lượng Lead (MQL) tốt nhất?",
+    "options": [
+      "A. Sử dụng 'Lead Gen Form' với các câu hỏi tùy chỉnh (Custom Questions) để sàng lọc.",
+      "B. Chạy quảng cáo 'Website Visits' để khách hàng tự tìm hiểu thông tin trên web.",
+      "C. Giảm số lượng trường thông tin trong form xuống mức tối thiểu (chỉ lấy Email).",
+      "D. Sử dụng hình ảnh người nổi tiếng để tăng độ tin cậy cho thương hiệu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các câu hỏi tùy chỉnh buộc người dùng phải tương tác và cung cấp thông tin cụ thể, giúp loại bỏ những người không thực sự quan tâm hoặc không đủ tiêu chuẩn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao 'Cost Cap' (Giới hạn chi phí) đôi khi khiến chiến dịch không thể tiêu hết ngân sách hàng ngày?",
+    "options": [
+      "A. Do hệ thống ưu tiên phân phối cho các đối thủ đặt giá thầu cao hơn trong phiên đấu giá.",
+      "B. Do nội dung quảng cáo bị đánh giá điểm chất lượng thấp (Relevance Score).",
+      "C. Do tài khoản quảng cáo chưa đạt đủ ngưỡng chi tiêu tối thiểu.",
+      "D. Do người dùng mục tiêu không hoạt động vào khung giờ cài đặt."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cost Cap yêu cầu hệ thống giữ CPA trung bình ở mức nhất định. Nếu thị trường cạnh tranh đẩy giá thầu lên cao hơn mức Cap, hệ thống sẽ ngừng đấu thầu để bảo vệ mục tiêu chi phí.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh iOS14+, giải pháp nào giúp Meta Ads tối ưu hóa tốt nhất cho các sự kiện chuyển đổi trên trang web?",
+    "options": [
+      "A. Chuyển sang chạy chiến dịch 'Traffic' thay vì 'Conversions'.",
+      "B. Cấu hình 'Aggregated Event Measurement' (AEM) và ưu tiên các sự kiện quan trọng nhất.",
+      "C. Chỉ chạy quảng cáo nhắm mục tiêu đến người dùng Android.",
+      "D. Tăng số lượng nhóm quảng cáo để phủ rộng nhiều đối tượng hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "AEM là giao thức của Meta để xử lý các sự kiện chuyển đổi từ thiết bị iOS14+, giúp báo cáo và tối ưu hóa hiệu quả hơn trong điều kiện dữ liệu bị hạn chế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một chiến dịch đang có ROAS ổn định nhưng tần suất (Frequency) trong 7 ngày đã chạm mức 4.0. Bạn nên xử lý như thế nào để tránh 'Ad Fatigue'?",
+    "options": [
+      "A. Tắt chiến dịch ngay lập tức và tạo chiến dịch mới.",
+      "B. Giảm ngân sách xuống 50% để giảm tần suất hiển thị.",
+      "C. Làm mới nội dung sáng tạo (Creative Refresh) hoặc mở rộng tệp đối tượng mục tiêu.",
+      "D. Giữ nguyên vì ROAS vẫn đang tốt, không cần can thiệp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tần suất cao cho thấy đối tượng đã xem quảng cáo quá nhiều lần. Làm mới nội dung hoặc mở rộng tệp giúp duy trì hiệu quả và ngăn chặn sự sụt giảm ROAS trong tương lai gần.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi so sánh kết quả giữa A/B Testing thủ công và Dynamic Creative Optimization (DCO), ưu điểm lớn nhất của DCO là gì?",
+    "options": [
+      "A. DCO cho phép kiểm soát chính xác ngân sách cho từng tổ hợp hình ảnh/văn bản.",
+      "B. DCO tự động hóa việc tìm ra tổ hợp chiến thắng cho từng phân khúc người dùng khác nhau trong thời gian thực.",
+      "C. DCO giúp báo cáo chi tiết hiệu quả của từng thành phần (asset) một cách minh bạch.",
+      "D. DCO không cần thời gian học (Learning Phase) như quảng cáo thông thường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DCO sử dụng máy học để cá nhân hóa tổ hợp nội dung cho từng cá nhân, thay vì chỉ tìm ra một tổ hợp duy nhất tốt nhất cho toàn bộ tệp như A/B Testing.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chỉ số 'Hook Rate' trên TikTok được tính toán dựa trên công thức nào?",
+    "options": [
+      "A. (Số lần nhấp vào hồ sơ / Impressions) * 100",
+      "B. (Số lượt xem video 2 giây hoặc 3 giây / Impressions) * 100",
+      "C. (Số lượt xem hết video / Tổng số lượt xem) * 100",
+      "D. (Số lượt chia sẻ / Số lượt xem) * 100"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hook Rate (tỷ lệ giữ chân ban đầu) đo lường khả năng thu hút sự chú ý của video trong những giây đầu tiên so với tổng lượt hiển thị.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu bạn muốn tăng quy mô (Scale) ngân sách lên gấp 5 lần trong 1 ngày mà không làm hỏng máy học (Learning Phase), kỹ thuật nào là tối ưu?",
+    "options": [
+      "A. Chỉnh sửa ngân sách trực tiếp trên nhóm quảng cáo đang chạy.",
+      "B. Sử dụng chiến lược 'Surfing' - tăng ngân sách mạnh khi hiệu quả cao và giảm khi hiệu quả thấp.",
+      "C. Nhân bản nhóm quảng cáo sang một chiến dịch CBO mới với ngân sách mục tiêu.",
+      "D. Chuyển tất cả quảng cáo sang chế độ đặt thầu thủ công (Manual Bidding)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc tăng ngân sách quá lớn (>20%) trên nhóm đang chạy sẽ kích hoạt lại Learning Phase. Nhân bản sang chiến dịch mới giúp giữ nguyên nhóm cũ và thử nghiệm quy mô mới độc lập.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong mô hình 'Full Funnel' trên Social Media, mục tiêu của giai đoạn 'Consideration' (Cân nhắc) nên tập trung vào chỉ số nào để chuyển đổi sang giai đoạn sau tốt nhất?",
+    "options": [
+      "A. Tỷ lệ CPM thấp nhất có thể.",
+      "B. Tỷ lệ xem video sâu (Video Views 50-75%) hoặc lượt truy cập Landing Page chất lượng.",
+      "C. Số lượng lượt Like trang và Follow tài khoản.",
+      "D. Tổng số lượt hiển thị (Impressions) đạt được."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giai đoạn Consideration cần đo lường mức độ quan tâm thực sự. Xem video sâu hoặc truy cập web cho thấy khách hàng đã bắt đầu tìm hiểu kỹ về giải pháp/sản phẩm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Offline Conversions' lại cực kỳ quan trọng đối với các doanh nghiệp B2B hoặc High-ticket (giá trị cao)?",
+    "options": [
+      "A. Để giảm chi phí quảng cáo trên mỗi click chuột.",
+      "B. Để đồng bộ dữ liệu từ CRM, giúp thuật toán tối ưu cho những Lead thực sự chuyển đổi thành doanh thu thay vì chỉ lấy Lead ảo.",
+      "C. Để quảng cáo hiển thị cho những người không sử dụng internet thường xuyên.",
+      "D. Để tự động gửi email marketing cho khách hàng ngay sau khi họ thấy quảng cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Offline Conversions cho phép nền tảng hiểu được Lead nào là 'chất lượng' dựa trên kết quả bán hàng thực tế từ CRM, từ đó tối ưu hóa việc tìm kiếm các đối tượng tương tự.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi chạy chiến dịch 'Catalog Sales' (DPA) trên Meta, yếu tố nào ảnh hưởng lớn nhất đến hiệu suất phân phối tự động?",
+    "options": [
+      "A. Màu sắc chủ đạo của Logo thương hiệu.",
+      "B. Chất lượng dữ liệu Product Feed (hình ảnh, mô tả, giá cả) và việc cài đặt Pixel chuẩn xác.",
+      "C. Số lượng bài viết trên Fanpage trong 30 ngày gần nhất.",
+      "D. Việc lựa chọn phông chữ trong phần văn bản quảng cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DPA dựa hoàn toàn vào Product Feed để hiển thị sản phẩm và Pixel để biết khách hàng đã xem sản phẩm nào, từ đó thực hiện Retargeting hoặc tìm kiếm khách hàng mới hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong TikTok Ads, tính năng 'Search Ads Toggle' cho phép quảng cáo hiển thị ở đâu?",
+    "options": [
+      "A. Trong mục tin nhắn trực tiếp của người dùng.",
+      "B. Trên trang kết quả tìm kiếm khi người dùng nhập các từ khóa liên quan.",
+      "C. Chỉ hiển thị trong phần bình luận của các video xu hướng.",
+      "D. Trên trang cá nhân của các Influencer nổi tiếng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Search Ads Toggle mở rộng phạm vi tiếp cận của quảng cáo In-feed vào trang kết quả tìm kiếm của TikTok, giúp tiếp cận người dùng có ý định (intent) cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một tài khoản quảng cáo có 'Auction Overlap Rate' cao (>30%). Giải pháp cấu trúc tài khoản nào là hợp lý nhất?",
+    "options": [
+      "A. Chia nhỏ ngân sách ra nhiều chiến dịch hơn nữa.",
+      "B. Hợp nhất các nhóm quảng cáo có đối tượng tương tự nhau (Consolidation).",
+      "C. Thay đổi toàn bộ nội dung sáng tạo sang định dạng mới.",
+      "D. Tăng giá thầu thủ công cho tất cả các nhóm quảng cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tỷ lệ chồng chéo cao nghĩa là các nhóm quảng cáo đang tự đấu đá lẫn nhau. Hợp nhất chúng giúp tập trung dữ liệu và ngân sách, giảm cạnh tranh nội bộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi phân tích báo cáo 'Attribution' trên Meta, sự khác biệt giữa '7-day click' và '1-day view' là gì?",
+    "options": [
+      "A. '7-day click' chỉ tính chuyển đổi nếu khách hàng mua hàng ngay lập tức.",
+      "B. '1-day view' ghi nhận chuyển đổi nếu khách hàng thấy quảng cáo và mua hàng trong vòng 24h mà không cần click.",
+      "C. '7-day click' luôn mang lại số lượng chuyển đổi thấp hơn '1-day view'.",
+      "D. '1-day view' chỉ áp dụng cho các chiến dịch chạy trên Instagram Stories."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mô hình này cho phép ghi nhận giá trị của quảng cáo ngay cả khi khách hàng không nhấp vào, miễn là họ đã xem và thực hiện hành động trong vòng 1 ngày.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong bối cảnh suy giảm dữ liệu do iOS 14+, một doanh nghiệp E-commerce lớn nhận thấy sự chênh lệch 40% giữa báo cáo chuyển đổi trên Meta Ads Manager và CRM. Hành động nào sau đây thể hiện tư duy cấp Expert để giải quyết vấn đề thuộc tính (attribution)?",
+    "options": [
+      "A. Chuyển hoàn toàn sang mô hình Last Click trên Google Analytics để thống nhất dữ liệu.",
+      "B. Triển khai Conversion API (CAPI) kết hợp với mô hình Marketing Mix Modeling (MMM) để đánh giá tác động tổng thể.",
+      "C. Tăng ngân sách cho các chiến dịch Broad Targeting để thuật toán tự tối ưu hóa mà không cần tracking chính xác.",
+      "D. Chỉ sử dụng báo cáo 1-day click để đảm bảo dữ liệu khớp nhất với hành vi người dùng thực tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Expert cần nhìn nhận bài toán dữ liệu đa kênh. CAPI giúp khôi phục dữ liệu bị mất, trong khi MMM giúp đánh giá hiệu quả ở cấp độ chiến lược mà không phụ thuộc hoàn toàn vào cookie.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi quản lý ngân sách 5 tỷ VNĐ/tháng trên TikTok Ads, bạn phát hiện chỉ số CPM tăng đột biến 200% trong khi Creative Fatigue (suy kiệt sáng tạo) chưa xảy ra. Yếu tố hệ thống nào có khả năng nhất gây ra tình trạng này?",
+    "options": [
+      "A. Doanh nghiệp đang đặt giá thầu (Bid) quá thấp so với đối thủ cạnh tranh.",
+      "B. Tần suất (Frequency) quảng cáo đạt ngưỡng 3.0 trong vòng 7 ngày.",
+      "C. Sự thay đổi trong thuật toán phân phối ưu tiên các nội dung Search Ads Toggle.",
+      "D. Sự gia tăng cạnh tranh trong phiên đấu giá (Auction Overlap) giữa các tài khoản quảng cáo cùng sở hữu (Internal Competition)."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Ở quy mô ngân sách lớn, việc các nhóm quảng cáo hoặc tài khoản trong cùng một doanh nghiệp đấu giá lẫn nhau là nguyên nhân phổ biến khiến CPM tăng cao bất thường.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một chiến dịch LinkedIn Ads hướng tới đối tượng C-suite (Giám đốc điều hành) có CTR cao nhưng tỷ lệ Lead-to-MQL (Marketing Qualified Lead) rất thấp. Chiến lược tối ưu hóa nào là hợp lý nhất?",
+    "options": [
+      "A. Thay đổi hình thức từ Lead Gen Form sang Website Visit để lọc người dùng.",
+      "B. Thêm các câu hỏi sàng lọc (Qualifying Questions) về quy mô ngân sách hoặc thẩm quyền quyết định vào Lead Form.",
+      "C. Mở rộng tệp đối tượng sang cấp Manager để tăng số lượng chuyển đổi đầu vào.",
+      "D. Giảm giá thầu để ưu tiên hiển thị cho những người dùng có chi phí rẻ hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với đối tượng C-suite, chất lượng quan trọng hơn số lượng. Việc thêm rào cản kỹ thuật (sàng lọc) giúp loại bỏ rác và đảm bảo chỉ những lead thực sự tiềm năng mới đi tiếp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Cost Cap' (Giới hạn chi phí) lại được ưu tiên hơn 'Lowest Cost' (Chi phí thấp nhất) khi scaling ngân sách gấp 10 lần trong thời gian ngắn?",
+    "options": [
+      "A. Cost Cap đảm bảo quảng cáo luôn được hiển thị bất kể mức độ cạnh tranh.",
+      "B. Cost Cap giúp kiểm soát biên lợi nhuận (Margin) và ngăn chặn việc hệ thống tiêu tiền vào các phiên đấu giá đắt đỏ khi scale.",
+      "C. Lowest Cost thường khiến tài khoản bị khóa khi tăng ngân sách đột ngột.",
+      "D. Cost Cap giúp rút ngắn giai đoạn máy học (Learning Phase) nhanh hơn 50%."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi scale mạnh, Lowest Cost có xu hướng đẩy giá thầu lên cao để tiêu hết tiền. Cost Cap đóng vai trò là van an toàn, chỉ chi tiền khi tìm thấy cơ hội chuyển đổi trong mức giá mục tiêu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Doanh nghiệp B2B muốn sử dụng Custom Audience từ danh sách email khách hàng cũ để chạy chiến dịch Upsell trên Meta. Rủi ro lớn nhất về mặt kỹ thuật/pháp lý cần xem xét là gì?",
+    "options": [
+      "A. Tỷ lệ khớp (Match rate) email thường thấp hơn 20%.",
+      "B. Vi phạm chính sách về dữ liệu bên thứ ba nếu không có sự đồng ý tường minh (Explicit Consent) theo GDPR/Nghị định 13.",
+      "C. Meta sẽ tự động chia sẻ danh sách này cho các đối thủ cạnh tranh để tối ưu hóa tệp đối tượng chung.",
+      "D. Việc tải lên danh sách email sẽ làm vô hiệu hóa thuật toán Lookalike dựa trên Pixel."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Expert phải nắm rõ tính pháp lý của dữ liệu. Việc sử dụng PII (Thông tin định danh cá nhân) mà không có sự đồng ý của người dùng là rủi ro lớn về tuân thủ (compliance).",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong cấu trúc chiến dịch 'Advantage+ Shopping Campaign' (ASC) của Meta, làm thế nào để kiểm soát tỷ lệ ngân sách dành cho khách hàng mới so với khách hàng hiện tại?",
+    "options": [
+      "A. Tạo hai chiến dịch ASC riêng biệt cho khách cũ và khách mới.",
+      "B. Sử dụng tính năng 'Existing Customer Budget Cap' trong phần thiết lập tài khoản quảng cáo.",
+      "C. Loại trừ (Exclude) tệp Custom Audience khách hàng cũ trực tiếp trong nhóm quảng cáo ASC.",
+      "D. Điều chỉnh giá thầu thủ công cho từng nhóm đối tượng bên trong ASC."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ASC không cho phép loại trừ đối tượng theo cách truyền thống ở cấp Ad Set. Người dùng phải định nghĩa khách hàng cũ ở cấp Account Settings và đặt giới hạn chi tiêu (Cap) cho họ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một nhãn hàng thời trang cao cấp muốn tối ưu hóa chiến dịch dựa trên LTV (Lifetime Value). Phương pháp nào hiệu quả nhất để xây dựng tệp Lookalike?",
+    "options": [
+      "A. Tạo Lookalike 1% từ những người đã mua hàng trong 30 ngày qua.",
+      "B. Tạo Value-based Lookalike từ danh sách khách hàng có kèm giá trị đơn hàng thực tế của họ.",
+      "C. Tạo Lookalike từ những người đã tương tác với Fanpage trong 365 ngày.",
+      "D. Tạo Lookalike từ tệp những người đã thêm hàng vào giỏ nhưng chưa mua."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Value-based Lookalike cho phép thuật toán tìm kiếm những người có đặc điểm giống với nhóm khách hàng mang lại doanh thu cao nhất, thay vì chỉ tìm những người có khả năng mua hàng đơn thuần.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi chạy quảng cáo TikTok Ads cho ứng dụng di động, chỉ số 'Day 7 Retention' thấp mặc dù chi phí CPI (Cost per Install) rất rẻ. Bạn nên điều chỉnh chiến lược như thế nào?",
+    "options": [
+      "A. Tiếp tục giảm giá thầu để lấy thêm nhiều install hơn nhằm bù đắp tỷ lệ rơi rụng.",
+      "B. Chuyển mục tiêu tối ưu hóa từ 'Install' sang 'In-app Event' (ví dụ: hoàn thành level hoặc đăng ký gói).",
+      "C. Thay đổi toàn bộ Creative sang dạng click-bait để thu hút người dùng nhanh chóng.",
+      "D. Tắt chiến dịch vì TikTok không phải là nền tảng phù hợp để giữ chân người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CPI rẻ nhưng retention thấp chứng tỏ người dùng không chất lượng. Tối ưu hóa sâu (Deep Event Optimization) giúp thuật toán tìm những người thực sự có nhu cầu sử dụng ứng dụng lâu dài.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khái niệm 'Incrementality' (Tính gia tăng) trong đo lường quảng cáo Social Media có ý nghĩa gì đối với một chuyên gia?",
+    "options": [
+      "A. Tổng số chuyển đổi ghi nhận được trên Dashboard của nền tảng.",
+      "B. Số lượng chuyển đổi thực sự xảy ra nhờ có quảng cáo mà nếu không có quảng cáo chúng sẽ không xuất hiện.",
+      "C. Tỷ lệ tăng trưởng ngân sách hàng tháng của tài khoản quảng cáo.",
+      "D. Tỷ lệ nhấp chuột tăng dần theo thời gian của một mẫu quảng cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Expert quan tâm đến giá trị thực (Lift). Incrementality giúp phân biệt giữa những người chắc chắn sẽ mua hàng (organic) và những người mua hàng do tác động của quảng cáo.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Chiến lược 'Broad Targeting' (không nhắm mục tiêu sở thích/hành vi) trên Meta Ads hoạt động hiệu quả nhất trong điều kiện nào?",
+    "options": [
+      "A. Ngân sách nhỏ và sản phẩm cực kỳ ngách.",
+      "B. Tài khoản quảng cáo mới chưa có dữ liệu Pixel.",
+      "C. Tài khoản có dữ liệu lịch sử dày đặc và Creative đủ mạnh để tự phân loại đối tượng.",
+      "D. Khi muốn tiết kiệm chi phí sản xuất nội dung quảng cáo."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Broad Targeting dựa vào nội dung (Creative) và dữ liệu Pixel để tìm khách hàng. Nếu Pixel có dữ liệu tốt, thuật toán sẽ tự tìm đúng người hiệu quả hơn việc con người tự setup sở thích.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang chạy chiến dịch LinkedIn Video Ads cho một giải pháp SaaS doanh nghiệp. Video dài 2 phút có tỷ lệ xem hết (Completion Rate) chỉ 5%. Hành động nào là đúng đắn nhất?",
+    "options": [
+      "A. Tăng ngân sách để tiếp cận nhiều người hơn nhằm tăng số người xem hết.",
+      "B. Phân tích biểu đồ 'Audience Retention' để tìm điểm rơi và cắt ngắn video hoặc đưa thông điệp quan trọng lên 5 giây đầu.",
+      "C. Chuyển sang định dạng Single Image vì video không hiệu quả trên LinkedIn.",
+      "D. Đổi đối tượng mục tiêu sang nhóm trẻ tuổi hơn vì họ có xu hướng xem video nhiều hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân tích Retention Curve là kỹ năng Expert để hiểu hành vi người dùng. Việc tối ưu hóa nội dung dựa trên điểm rơi dữ liệu là cách giải quyết triệt để vấn đề hiệu suất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Meta Ads, 'Auction Overlap' (Trùng lặp đấu giá) ảnh hưởng tiêu cực nhất đến yếu tố nào sau đây?",
+    "options": [
+      "A. Làm giảm điểm chất lượng của Fanpage.",
+      "B. Gây lãng phí ngân sách và làm tăng CPM do các nhóm quảng cáo tự đấu giá lẫn nhau.",
+      "C. Khiến quảng cáo bị từ chối phê duyệt do vi phạm chính sách spam.",
+      "D. Làm giảm tốc độ tải trang đích (Landing Page)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi nhiều Ad Set trong cùng một tài khoản nhắm đến cùng một đối tượng, Meta sẽ chọn một cái và dừng các cái còn lại hoặc đẩy giá thầu lên cao, dẫn đến kém hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để kiểm tra tính hiệu quả của một kênh Social Ads mới (ví dụ: Pinterest Ads) đối với tổng doanh thu, phương pháp thử nghiệm nào là chuẩn xác nhất?",
+    "options": [
+      "A. Chạy thử 1 tuần và so sánh doanh thu với tuần trước đó.",
+      "B. Sử dụng mã giảm giá riêng cho kênh Pinterest để theo dõi.",
+      "C. Thực hiện kiểm tra 'Geo-lift' (So sánh các vùng địa lý có quảng cáo và không có quảng cáo).",
+      "D. Dựa hoàn toàn vào báo cáo Last-click trong Google Analytics."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Geo-lift là tiêu chuẩn vàng để đo lường tính gia tăng (incrementality) của một kênh mới mà không bị phụ thuộc vào vấn đề tracking cookie hay thuộc tính đa kênh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một chiến dịch TikTok Spark Ads sử dụng video của Influencer đang có hiệu quả rất tốt. Bạn nên làm gì để duy trì hiệu suất này lâu dài?",
+    "options": [
+      "A. Giữ nguyên chiến dịch và không thay đổi gì cho đến khi nó tự hết hiệu quả.",
+      "B. Nhân bản chiến dịch đó ra nhiều lần để chiếm lĩnh không gian hiển thị.",
+      "C. Yêu cầu Influencer tạo thêm các biến thể nội dung (Iterative Creatives) dựa trên concept thành công và thay thế định kỳ.",
+      "D. Chuyển ngân sách từ Spark Ads sang quảng cáo In-feed thông thường để tiết kiệm chi phí hoa hồng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trên TikTok, nội dung thoái hóa rất nhanh. Expert cần có chiến lược 'Iteration' - tạo ra các biến thể mới từ lõi nội dung thành công để chống lại hiện tượng Fatigue.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Thuật toán của Meta ưu tiên phân phối quảng cáo dựa trên 'Total Value'. Công thức của Total Value bao gồm những yếu tố nào?",
+    "options": [
+      "A. Bid x Estimated Action Rates + User Quality.",
+      "B. Budget x CTR x Conversion Rate.",
+      "C. Bid x Reach x Frequency.",
+      "D. Creative Score x Landing Page Speed x Budget."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đây là công thức cốt lõi của phiên đấu giá Meta. Nó cân bằng giữa lợi ích kinh tế (Bid), khả năng xảy ra hành động (Estimated Action Rates) và trải nghiệm người dùng (User Quality).",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai chiến dịch Dynamic Product Ads (DPA), lỗi 'Product Catalog không khớp với Pixel' thường dẫn đến hậu quả gì?",
+    "options": [
+      "A. Quảng cáo không thể hiển thị giá sản phẩm.",
+      "B. Hệ thống không thể Retarget chính xác sản phẩm người dùng đã xem.",
+      "C. Tài khoản quảng cáo sẽ bị khóa vĩnh viễn.",
+      "D. Chi phí CPM sẽ tăng gấp 10 lần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DPA dựa trên ID sản phẩm được truyền từ Pixel về Catalog. Nếu ID không khớp, hệ thống không biết người dùng đã xem sản phẩm nào để hiển thị lại quảng cáo tương ứng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao một chuyên gia cần quan tâm đến 'Marketing Efficiency Ratio' (MER) thay vì chỉ nhìn vào ROAS của từng kênh Social?",
+    "options": [
+      "A. MER giúp tính toán chính xác tiền thuế phải nộp.",
+      "B. ROAS trên dashboard thường bị thổi phồng hoặc trùng lặp giữa các kênh; MER cung cấp cái nhìn thực tế về hiệu quả trên tổng doanh thu.",
+      "C. MER là chỉ số duy nhất mà TikTok Ads sử dụng để tối ưu hóa.",
+      "D. Sử dụng MER giúp quảng cáo vượt qua được các vòng kiểm duyệt nội dung khó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MER (Total Revenue / Total Ad Spend) là chỉ số vĩ mô giúp Expert đánh giá hiệu quả thực sự của chiến lược đa kênh, loại bỏ các nhiễu loạn do sai lệch thuộc tính (attribution).",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Chiến lược 'Bid Cap' (Giới hạn giá thầu) phù hợp nhất với mục tiêu nào sau đây?",
+    "options": [
+      "A. Chi tiêu hết ngân sách bằng mọi giá trong ngày cuối khuyến mãi.",
+      "B. Kiểm soát chặt chẽ chi phí trên mỗi kết quả (CPA) và sẵn sàng không tiêu hết tiền nếu thị trường quá đắt.",
+      "C. Tăng tối đa lượng tiếp cận (Reach) cho chiến dịch nhận diện thương hiệu.",
+      "D. Tự động hóa hoàn toàn việc quản lý chiến dịch mà không cần can thiệp thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bid Cap là công cụ dành cho Expert để kiểm soát giá thầu tối đa trong phiên đấu giá. Nếu giá thị trường cao hơn Bid Cap, quảng cáo sẽ dừng phân phối, giúp bảo vệ hiệu quả chi phí.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một thử nghiệm A/B Testing cho Creative, yếu tố nào đảm bảo kết quả có ý nghĩa thống kê (Statistical Significance)?",
+    "options": [
+      "A. Thời gian chạy thử nghiệm phải ít nhất là 30 ngày.",
+      "B. Số lượng chuyển đổi ở mỗi nhóm phải đủ lớn và sự khác biệt vượt qua ngưỡng sai số ngẫu nhiên.",
+      "C. Cả hai mẫu quảng cáo phải có cùng một màu sắc chủ đạo.",
+      "D. Ngân sách cho hai mẫu quảng cáo phải khác nhau để so sánh hiệu quả chi phí."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ý nghĩa thống kê không chỉ dựa vào thời gian mà dựa vào cỡ mẫu (sample size) và độ tin cậy của dữ liệu để đảm bảo kết quả không phải do ngẫu nhiên.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một doanh nghiệp sử dụng ngân sách lớn trên Social Ads gặp tình trạng 'Brand Safety' (An toàn thương hiệu) khi quảng cáo hiển thị cạnh các nội dung tiêu cực trên TikTok. Giải pháp Expert là gì?",
+    "options": [
+      "A. Tắt hoàn toàn quảng cáo trên TikTok.",
+      "B. Sử dụng 'Inventory Filter' và thiết lập 'Negative Keyword List' hoặc 'PMP' (Private Marketplace).",
+      "C. Chỉ chạy quảng cáo vào ban đêm khi các nội dung tiêu cực ít xuất hiện.",
+      "D. Chuyển sang chạy quảng cáo chỉ bằng hình ảnh tĩnh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Expert sử dụng các công cụ kiểm soát nâng cao của nền tảng như bộ lọc danh mục nội dung và danh sách loại trừ để bảo vệ hình ảnh thương hiệu mà vẫn duy trì được quy mô tiếp cận.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi cấu trúc tài khoản theo mô hình 'Power5' của Meta, tại sao việc gom nhóm các Ad Set (Ad Set Consolidation) lại quan trọng?",
+    "options": [
+      "A. Để dễ dàng quản lý tên chiến dịch hơn.",
+      "B. Để tối đa hóa dữ liệu cho mỗi Ad Set, giúp hệ thống thoát khỏi giai đoạn máy học (Learning Phase) nhanh nhất.",
+      "C. Để tránh việc Facebook đánh giá tài khoản là spam.",
+      "D. Để giảm thiểu số lượng Creative cần phải sản xuất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Máy học cần khoảng 50 chuyển đổi mỗi tuần trên mỗi Ad Set. Việc chia nhỏ đối tượng làm loãng dữ liệu, khiến Ad Set kẹt trong giai đoạn máy học và hoạt động kém ổn định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa 'Standard Lookalike' và 'Multi-country Lookalike' trên Meta Ads là gì?",
+    "options": [
+      "A. Multi-country Lookalike chỉ dành cho các tập đoàn đa quốc gia có ngân sách trên 1 triệu USD.",
+      "B. Multi-country Lookalike cho phép tìm kiếm những người có hành vi tương đồng trên phạm vi nhiều quốc gia từ một tệp nguồn duy nhất.",
+      "C. Standard Lookalike có độ chính xác cao hơn gấp 10 lần.",
+      "D. Multi-country Lookalike không yêu cầu Pixel để hoạt động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Multi-country LAL là công cụ mạnh mẽ để scale ra thị trường quốc tế, giúp thuật toán tìm kiếm khách hàng tiềm năng ở các thị trường mới dựa trên đặc điểm của khách hàng hiện tại ở thị trường gốc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện tần suất (Frequency) của chiến dịch Retargeting trên Facebook đạt mức 8.0 trong 7 ngày và ROAS bắt đầu giảm mạnh. Hành động nào thể hiện trình độ Expert?",
+    "options": [
+      "A. Tăng thêm ngân sách để ép người dùng phải mua hàng.",
+      "B. Mở rộng cửa sổ thời gian (ví dụ từ 30 ngày lên 180 ngày) hoặc thêm các loại trừ để làm mới tệp đối tượng.",
+      "C. Đổi màu nút kêu gọi hành động (CTA) từ đỏ sang xanh.",
+      "D. Xóa chiến dịch và chạy lại từ đầu với cùng nội dung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tần suất quá cao gây ra sự khó chịu và bão hòa. Việc mở rộng tệp hoặc thay đổi logic loại trừ giúp giảm áp lực hiển thị lên một nhóm người nhỏ, từ đó cải thiện ROAS.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc triển khai 'First-party data' (dữ liệu bên thứ nhất) trở thành ưu tiên hàng đầu trong chiến lược Social Ads hiện nay?",
+    "options": [
+      "A. Vì dữ liệu này rẻ hơn việc mua từ các bên môi giới.",
+      "B. Để đối phó với việc loại bỏ third-party cookies và tăng cường độ chính xác cho việc định danh khách hàng (Identity Resolution).",
+      "C. Vì các nền tảng Social bắt buộc phải có dữ liệu này mới cho phép chạy quảng cáo.",
+      "D. First-party data giúp quảng cáo tự động hiển thị ở vị trí đầu tiên trên Newsfeed."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong kỷ nguyên quyền riêng tư, dữ liệu tự thân (email, số điện thoại, hành vi web) là tài sản duy nhất giúp doanh nghiệp duy trì khả năng nhắm mục tiêu và đo lường chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một chiến dịch TikTok Ads đang có CTR rất cao (3%) nhưng tỷ lệ thoát (Bounce Rate) trên Landing Page lên tới 95%. Vấn đề nằm ở đâu?",
+    "options": [
+      "A. Tốc độ tải trang Landing Page quá chậm hoặc có sự đứt gãy về thông điệp (Message Mismatch) giữa video và trang đích.",
+      "B. TikTok đang phân phối quảng cáo cho robot thay vì người thật.",
+      "C. Giá sản phẩm trên trang đích quá rẻ khiến người dùng nghi ngờ.",
+      "D. Do người dùng TikTok không có thói quen mua hàng trên website."
+    ],
+    "correctAnswer": "A",
+    "explanation": "CTR cao nghĩa là quảng cáo hấp dẫn, nhưng Bounce Rate cao chứng tỏ trải nghiệm sau click có vấn đề. Expert cần kiểm tra kỹ thuật (tốc độ) và nội dung (sự đồng nhất) để tối ưu hóa phễu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Social Media Ads",
+    "category": "SITUATION"
+  }
+]

@@ -418,7 +418,10 @@ const SkillAutoResolve: React.FC<SkillAutoResolveProps> = ({
                 key={`${result.domain}-${result.industry}-${result.jobRole}`}
                 type="button"
                 className={`sar-result-item ${selectedIndex === index ? "selected" : ""} ${confirmed && selectedIndex === index ? "confirmed" : ""}`}
-                onClick={() => setSelectedIndex(index)}
+                onClick={() => {
+                  setSelectedIndex(index);
+                  if (confirmed) setConfirmed(false);
+                }}
                 onDoubleClick={handleConfirm}
               >
                 <div className="sar-result-radio">

@@ -14,8 +14,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
   Map,
-  Play,
-  Pause,
   CheckCircle,
   Target,
   Brain,
@@ -245,7 +243,7 @@ const GSJJourneyPage: React.FC = () => {
   const [showActionGame, setShowActionGame] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [historySearch, setHistorySearch] = useState("");
-  const [historyStatusFilter, setHistoryStatusFilter] = useState<"all" | "completed" | "cancelled" | "paused">("all");
+  const [historyStatusFilter, setHistoryStatusFilter] = useState<"all" | "completed" | "cancelled">("all");
   const [historyPage, setHistoryPage] = useState(1);
   const { withPaginationScroll } = useScrollToListTopOnPagination();
   const [pendingDelete, setPendingDelete] = useState<DeleteDialogState>(null);
@@ -493,29 +491,6 @@ const GSJJourneyPage: React.FC = () => {
     [],
   );
 
-  // Generate assessment test
-  const handleGenerateTest = async () => {
-    if (!selectedJourney) return;
-    try {
-      setActionLoading(true);
-      setActionMode("generating-test");
-      const result = await journeyService.generateAssessmentTest(
-        selectedJourney.id,
-      );
-      setCurrentTest(result.test);
-      setCurrentResult(null);
-      setViewMode("test");
-      syncSelectedJourneyTest(result.test);
-      setError(null);
-    } catch (err: any) {
-      console.error("Failed to generate test:", err);
-      setError(err.message || "Failed to generate assessment test");
-    } finally {
-      setActionLoading(false);
-      setActionMode("idle");
-    }
-  };
-
   const handleStartAssessment = async () => {
     if (!selectedJourney) return;
 
@@ -657,30 +632,6 @@ const GSJJourneyPage: React.FC = () => {
     }
   };
 
-  // Pause/Resume journey
-  const handleTogglePause = async () => {
-    if (!selectedJourney) return;
-    try {
-      setActionLoading(true);
-      setActionMode("toggling-status");
-      let updated: JourneySummaryResponse;
-      if (selectedJourney.status === JourneyStatus.PAUSED) {
-        updated = await journeyService.resumeJourney(selectedJourney.id);
-      } else {
-        updated = await journeyService.pauseJourney(selectedJourney.id);
-      }
-      const detail = await journeyService.getJourneyById(updated.id);
-      setSelectedJourney(detail);
-      await loadJourneys();
-      setError(null);
-    } catch (err: any) {
-      console.error("Failed to toggle pause:", err);
-      setError(err.message || "Failed to update journey status");
-    } finally {
-      setActionLoading(false);
-      setActionMode("idle");
-    }
-  };
 
   const handleCompleteJourney = useCallback(async () => {
     if (!selectedJourney) return;
@@ -935,9 +886,6 @@ const GSJJourneyPage: React.FC = () => {
     if (
       journey.status === JourneyStatus.IN_PROGRESS ||
       journey.status === JourneyStatus.STUDY_PLANS_READY ||
-      (journey.status === JourneyStatus.PAUSED &&
-        hasRoadmap &&
-        progress > 30) ||
       (hasRoadmap && progress > 30)
     ) {
       return 3;
@@ -946,8 +894,7 @@ const GSJJourneyPage: React.FC = () => {
     if (
       hasRoadmap ||
       journey.status === JourneyStatus.ROADMAP_READY ||
-      journey.status === JourneyStatus.ROADMAP_GENERATING ||
-      (journey.status === JourneyStatus.PAUSED && hasRoadmap)
+      journey.status === JourneyStatus.ROADMAP_GENERATING
     ) {
       return 2;
     }
@@ -1499,12 +1446,11 @@ const GSJJourneyPage: React.FC = () => {
   // Split view B: active journey hero + history list
   const activeJourney = journeys.find((j) =>
     activeJourneyStatuses.includes(j.status),
-  ) ?? journeys.find((j) => j.status === JourneyStatus.PAUSED) ?? null;
+  ) ?? null;
 
   const historyJourneys = journeys.filter((j) => {
     const isTerminal =
       !activeJourneyStatuses.includes(j.status) &&
-      j.status !== JourneyStatus.PAUSED &&
       j !== activeJourney;
     return isTerminal;
   });
@@ -1519,8 +1465,7 @@ const GSJJourneyPage: React.FC = () => {
     const matchesFilter =
       historyStatusFilter === "all" ||
       (historyStatusFilter === "completed" && isCompletedJourneyStatus(j.status)) ||
-      (historyStatusFilter === "cancelled" && j.status === JourneyStatus.CANCELLED) ||
-      (historyStatusFilter === "paused" && j.status === JourneyStatus.PAUSED);
+      (historyStatusFilter === "cancelled" && j.status === JourneyStatus.CANCELLED);
     return matchesSearch && matchesFilter;
   });
 
@@ -1534,9 +1479,6 @@ const GSJJourneyPage: React.FC = () => {
   );
   const activeJourneys = journeys.filter((journey) =>
     activeJourneyStatuses.includes(journey.status),
-  ).length;
-  const pausedJourneys = journeys.filter(
-    (journey) => journey.status === JourneyStatus.PAUSED,
   ).length;
   const completedJourneys = journeys.filter((journey) =>
     isCompletedJourneyStatus(journey.status),
@@ -1632,12 +1574,6 @@ const GSJJourneyPage: React.FC = () => {
       label: "Hoàn thành",
       value: completedJourneys,
       colorClass: "gsj-overview__bar--completed",
-    },
-    {
-      key: "paused",
-      label: "Tạm dừng",
-      value: pausedJourneys,
-      colorClass: "gsj-overview__bar--paused",
     },
   ];
 
@@ -2335,7 +2271,6 @@ const GSJJourneyPage: React.FC = () => {
                       <option value="all">Tất cả trạng thái</option>
                       <option value="completed">Hoàn thành</option>
                       <option value="cancelled">Đã hủy</option>
-                      <option value="paused">Tạm dừng</option>
                     </select>
                   </div>
                 </div>
@@ -2531,13 +2466,8 @@ const GSJJourneyPage: React.FC = () => {
         hasGeneratedTest ||
         hasTestInProgress);
     const canViewLatestResult = Boolean(latestResultId);
-    const canRetakeQuiz =
-      hasAssessmentResult &&
-      !hasTestInProgress &&
-      remainingAssessmentRetakes > 0;
     const canGenerateRoadmap =
       hasAssessmentResult && !selectedJourney.roadmapSessionId;
-    const isPaused = selectedJourney.status === JourneyStatus.PAUSED;
     const roleTitle = getJobRoleLabel(
       selectedJourney.jobRole,
       selectedJourney.domain,
@@ -2769,26 +2699,6 @@ const GSJJourneyPage: React.FC = () => {
               </button>
             )}
 
-            {canRetakeQuiz && (
-              <button
-                className="gsj-btn gsj-btn--secondary gsj-btn--full gsj-mb-16"
-                onClick={handleGenerateTest}
-                disabled={actionLoading}
-              >
-                {actionLoading ? (
-                  <>
-                    <RefreshCw size={16} className="gsj-spin" />
-                    Đang tạo bài quiz mới...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw size={16} />
-                    Tạo lại quiz ({remainingAssessmentRetakes} lượt còn lại)
-                  </>
-                )}
-              </button>
-            )}
-
             {canGenerateRoadmap && (
               <button
                 className="gsj-btn gsj-btn--primary gsj-btn--full gsj-mb-16"
@@ -2809,28 +2719,6 @@ const GSJJourneyPage: React.FC = () => {
               </button>
             )}
 
-            {(selectedJourney.status === JourneyStatus.IN_PROGRESS ||
-              selectedJourney.status === JourneyStatus.ROADMAP_READY ||
-              selectedJourney.status === JourneyStatus.STUDY_PLANS_READY ||
-              selectedJourney.status === JourneyStatus.PAUSED) && (
-                <button
-                  className="gsj-btn gsj-btn--secondary gsj-btn--full gsj-mb-16"
-                  onClick={handleTogglePause}
-                  disabled={actionLoading}
-                >
-                  {isPaused ? (
-                    <>
-                      <Play size={16} />
-                      Tiếp tục hành trình
-                    </>
-                  ) : (
-                    <>
-                      <Pause size={16} />
-                      Tạm dừng
-                    </>
-                  )}
-                </button>
-              )}
 
             {selectedJourney.roadmapSessionId && (
               <button
@@ -3094,11 +2982,7 @@ const GSJJourneyPage: React.FC = () => {
 
     const latestResultAt =
       selectedJourney?.latestTestResult?.evaluatedAt || currentResult.createdAt;
-    const remainingRetakes = selectedJourney?.remainingAssessmentRetakes ?? 0;
     const hasRoadmap = Boolean(selectedJourney?.roadmapSessionId);
-    const canRetakeQuiz =
-      remainingRetakes > 0 &&
-      selectedJourney?.assessmentTestStatus?.toUpperCase() !== "IN_PROGRESS";
     const activeScoreBandFramework = resolveScoreBandFrameworkItem(
       currentResult.scoreBand,
       currentResult.score,
@@ -3430,16 +3314,6 @@ const GSJJourneyPage: React.FC = () => {
               >
                 <Map size={16} />
                 Xem lộ trình hiện tại
-              </button>
-            )}
-            {canRetakeQuiz && (
-              <button
-                className="gsj-btn gsj-btn--secondary"
-                onClick={handleGenerateTest}
-                disabled={actionLoading}
-              >
-                <RefreshCw size={16} />
-                Tạo lại quiz ({remainingRetakes} lượt)
               </button>
             )}
             <button

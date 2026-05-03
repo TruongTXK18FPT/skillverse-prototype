@@ -482,6 +482,11 @@ const RoadmapDetailPage = () => {
     });
   }, [courseMap, location.hash, location.pathname, location.search, navigate, selectedNodeId]);
 
+  const handleOpenWorkspace = useCallback((nodeId: string) => {
+    if (!roadmap) return;
+    navigate(`/roadmap/${roadmap.sessionId}/workspace?nodeId=${encodeURIComponent(nodeId)}`);
+  }, [navigate, roadmap]);
+
   const handleOpenStudyPlannerForNode = useCallback((nodeId: string, taskId?: string | null) => {
     if (!roadmap) {
       return;
@@ -823,6 +828,7 @@ const RoadmapDetailPage = () => {
             onNavigateToCourse: handleNavigateToCourse,
             allNodes: roadmapNodes,
             onMarkNodeDone: handleMarkNodeDone,
+            onOpenWorkspace: handleOpenWorkspace,
             linkedTaskCount: selectedNodePlanSummary?.totalLinkedTasks ?? 0,
             isLoadingCourses,
             coursesError,

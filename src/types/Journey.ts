@@ -2345,7 +2345,7 @@ export const GOAL_OPTIONS = [
   },
   {
     value: "INTERNSHIP",
-    label: "Chuẩn bị internship / fresher job",
+    label: "Chuẩn bị cho internship / fresher job",
     description:
       "Tập trung vào các kỹ năng cốt lõi để sẵn sàng ứng tuyển vị trí đầu sự nghiệp.",
   },

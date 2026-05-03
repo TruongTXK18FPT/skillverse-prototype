@@ -749,7 +749,7 @@ body.modal-open {
 
 .study-plan-hero-hud__left {
   flex: 0 0 auto;
-  max-width: 520px;
+  max-width: 700px;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -828,7 +828,7 @@ body.modal-open {
 /* Actions */
 .study-plan-hero-hud__actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.6rem;
   margin-top: 0.5rem;
 }
@@ -858,6 +858,19 @@ body.modal-open {
   background: rgba(6, 182, 212, 0.12);
   border-color: rgba(6, 182, 212, 0.4);
   color: #06b6d4;
+  transform: translateY(-1px);
+}
+
+.study-plan-hero-hud__btn--roadmap {
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+}
+
+.study-plan-hero-hud__btn--roadmap:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.55);
+  color: #7dd3fc;
   transform: translateY(-1px);
 }
 

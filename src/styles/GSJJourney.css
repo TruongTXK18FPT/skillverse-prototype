@@ -3901,6 +3901,90 @@
   color: var(--gsj-text-secondary);
 }
 
+/* Journey Compatibility Warning */
+.gsj-journey-warning {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: var(--gsj-radius-lg);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.12) 0%,
+    rgba(13, 30, 51, 0.98) 72%
+  );
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.gsj-journey-warning__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  background: rgba(245, 158, 11, 0.16);
+  color: var(--gsj-warning);
+  font-size: 14px;
+}
+
+.gsj-journey-warning__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.gsj-journey-warning__title {
+  color: #fde68a;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+.gsj-journey-warning__text {
+  display: grid;
+  gap: 4px;
+  color: var(--gsj-text-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.gsj-journey-warning__text p {
+  margin: 0;
+}
+
+.gsj-journey-warning__cta {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 158, 11, 0.34);
+  background: rgba(245, 158, 11, 0.12);
+  color: #fde68a;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--gsj-transition);
+}
+
+.gsj-journey-warning__cta:hover {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.48);
+}
+
+@media (max-width: 640px) {
+  .gsj-journey-warning {
+    flex-direction: column;
+  }
+
+  .gsj-journey-warning__cta {
+    width: 100%;
+  }
+}
+
 /* Button Group */
 .gsj-button-group {
   display: flex;
@@ -8817,4 +8901,66 @@
   .gsj-result-kpi-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* ==================== Target Skill Summary Card ==================== */
+.gsj-target-summary {
+  padding: 16px 20px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 10px;
+}
+
+.gsj-target-summary__title {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gsj-target-summary__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.gsj-target-summary__group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gsj-target-summary__label {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.gsj-target-summary__chip {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  font-weight: 600;
+}
+
+.gsj-target-summary__chip svg {
+  margin-right: 4px;
+}
+
+.gsj-target-summary__path {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gsj-target-summary__path-separator {
+  color: #64748b;
+}
+
+.gsj-target-summary__role {
+  color: #e2e8f0;
+  font-weight: 600;
 }

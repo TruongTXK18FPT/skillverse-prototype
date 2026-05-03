@@ -581,7 +581,8 @@
 }
 
 .roadmap-node-focus-panel__planner-cta,
-.roadmap-node-focus-panel__mark-done-btn {
+.roadmap-node-focus-panel__mark-done-btn,
+.roadmap-node-focus-panel__workspace-btn {
   flex: 1;
   padding: 8px 12px;
   display: inline-flex;
@@ -593,6 +594,18 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.roadmap-node-focus-panel__workspace-btn {
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  background: rgba(99, 102, 241, 0.1);
+  color: #a5b4fc;
+}
+
+.roadmap-node-focus-panel__workspace-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.75);
+  color: #c7d2fe;
 }
 
 .roadmap-node-focus-panel__planner-cta {

@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Sự khác biệt cốt lõi về mô hình dữ liệu giữa Google Analytics 4 (GA4) và Universal Analytics (UA) là gì?",
+    "options": [
+      "A. UA dựa trên phiên (Session-based), GA4 dựa trên sự kiện (Event-based)",
+      "B. UA dựa trên sự kiện (Event-based), GA4 dựa trên phiên (Session-based)",
+      "C. UA chỉ theo dõi website, GA4 chỉ theo dõi ứng dụng di động",
+      "D. Cả hai đều sử dụng chung một mô hình dữ liệu giống hệt nhau"
+    ],
+    "correctAnswer": "A",
+    "explanation": "GA4 chuyển dịch hoàn toàn sang mô hình Event-based, nơi mọi tương tác (kể cả page view) đều được coi là một sự kiện, thay vì tập trung vào Session như UA.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong GA4, 'page_view' được phân loại là loại sự kiện nào?",
+    "options": [
+      "A. Custom Event (Sự kiện tùy chỉnh)",
+      "B. Recommended Event (Sự kiện được đề xuất)",
+      "C. Automatically Collected Event (Sự kiện thu thập tự động)",
+      "D. Enhanced Measurement Event (Sự kiện đo lường nâng cao)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "page_view là sự kiện cơ bản nhất được GA4 tự động thu thập ngay khi mã theo dõi được cài đặt thành công.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tính năng 'Enhanced Measurement' (Đo lường nâng cao) cho phép theo dõi hành động nào mà không cần thay đổi code website?",
+    "options": [
+      "A. Hoàn tất thanh toán đơn hàng",
+      "B. Cuộn trang (Scroll), Click vào link ngoài (Outbound clicks), Tìm kiếm trên trang",
+      "C. Đăng nhập của người dùng",
+      "D. Thời gian thực hiện cuộc gọi từ website"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Enhanced Measurement tự động theo dõi các tương tác phổ biến như scroll, outbound clicks, video engagement và file downloads.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để theo dõi giá trị của một đơn hàng cụ thể trong một sự kiện 'purchase', bạn cần sử dụng thành phần nào?",
+    "options": [
+      "A. Event Name",
+      "B. User ID",
+      "C. Event Parameter",
+      "D. Property ID"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Event Parameters (Tham số sự kiện) được dùng để cung cấp thêm thông tin chi tiết cho sự kiện, ví dụ như value, currency hoặc transaction_id.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để đánh dấu một sự kiện quan trọng (ví dụ: đăng ký thành công) là một chuyển đổi trong GA4?",
+    "options": [
+      "A. Viết code JavaScript mới trên website",
+      "B. Vào mục Admin > Events và gạt nút 'Mark as conversion'",
+      "C. Xóa sự kiện đó đi và tạo lại",
+      "D. Đợi GA4 tự động nhận diện sau 30 ngày"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong GA4, bạn chỉ cần chọn một sự kiện hiện có và đánh dấu nó là conversion trong giao diện quản trị.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chỉ số 'Engagement Rate' (Tỷ lệ tương tác) trong GA4 được tính như thế nào?",
+    "options": [
+      "A. Số phiên tương tác chia cho tổng số phiên",
+      "B. Số lượt xem trang chia cho số người dùng",
+      "C. Số chuyển đổi chia cho số lượt nhấp",
+      "D. Tổng thời gian trên trang chia cho số phiên"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Engagement Rate là phần trăm các phiên có tương tác (Engaged sessions) trên tổng số phiên (Sessions).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một phiên được coi là 'Engaged session' (Phiên có tương tác) khi thỏa mãn điều kiện nào sau đây?",
+    "options": [
+      "A. Kéo dài ít nhất 10 giây",
+      "B. Có ít nhất 5 lượt xem trang",
+      "C. Người dùng phải di chuyển chuột liên tục",
+      "D. Người dùng phải đến từ nguồn Google Search"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một Engaged session là phiên kéo dài hơn 10 giây, hoặc có ít nhất 1 sự kiện chuyển đổi, hoặc có ít nhất 2 lượt xem trang/màn hình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn xem dữ liệu người dùng đang truy cập website ngay tại thời điểm hiện tại, bạn nên sử dụng báo cáo nào?",
+    "options": [
+      "A. Acquisition report",
+      "B. Retention report",
+      "C. Real-time report",
+      "D. Tech report"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Báo cáo Real-time (Thời gian thực) cho phép theo dõi hoạt động trên website/app trong vòng 30 phút gần nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Công cụ nào trong GA4 giúp kiểm tra xem các sự kiện có đang được gửi đi chính xác từ website trong quá trình cài đặt không?",
+    "options": [
+      "A. Data Filters",
+      "B. DebugView",
+      "C. Audiences",
+      "D. Custom Definitions"
+    ],
+    "correctAnswer": "B",
+    "explanation": "DebugView là công cụ chuyên dụng để kiểm tra và xác thực dữ liệu sự kiện được gửi từ thiết bị của bạn theo thời gian thực.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi muốn phân tích sâu hơn về hành trình người dùng qua các bước cụ thể (ví dụ: Thêm giỏ hàng -> Thanh toán -> Thành công), bạn nên dùng tính năng nào?",
+    "options": [
+      "A. Standard Reports",
+      "B. Funnel Exploration",
+      "C. Real-time report",
+      "D. Data Streams"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Funnel Exploration (Khám phá phễu) trong mục Explore là công cụ tốt nhất để trực quan hóa các bước trong hành trình khách hàng và tỷ lệ rơi rụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tham số 'Measurement ID' của GA4 thường có định dạng như thế nào?",
+    "options": [
+      "A. UA-XXXXX-Y",
+      "B. G-XXXXXXXXXX",
+      "C. GT-XXXXXX",
+      "D. AW-XXXXXXXXX"
+    ],
+    "correctAnswer": "B",
+    "explanation": "GA4 sử dụng Measurement ID bắt đầu bằng chữ 'G-' để định danh luồng dữ liệu web.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn tạo một nhóm người dùng đã từng mua hàng để chạy quảng cáo Remarketing. Bạn sẽ sử dụng tính năng nào?",
+    "options": [
+      "A. Custom Dimensions",
+      "B. Audiences",
+      "C. Data Streams",
+      "D. Property Settings"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Audiences (Đối tượng) cho phép bạn nhóm người dùng dựa trên các hành vi hoặc thuộc tính chung để phân tích hoặc quảng cáo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong GA4, thời gian lưu trữ dữ liệu sự kiện (Data Retention) mặc định cho các báo cáo khám phá (Exploration) là bao lâu nếu không thay đổi cài đặt?",
+    "options": [
+      "A. 1 tháng",
+      "B. 2 tháng",
+      "C. 14 tháng",
+      "D. Vĩnh viễn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc định GA4 thiết lập thời gian lưu trữ dữ liệu cấp người dùng và sự kiện là 2 tháng. Bạn nên chỉnh lên 14 tháng trong phần cài đặt.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để xem người dùng đến từ nguồn nào (Google, Facebook, Direct...), bạn cần kiểm tra báo cáo nào?",
+    "options": [
+      "A. Engagement report",
+      "B. Monetization report",
+      "C. Acquisition report",
+      "D. Retention report"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Acquisition (Thu nạp) là nơi chứa các báo cáo về nguồn lưu lượng truy cập (Traffic acquisition) và nguồn người dùng mới (User acquisition).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt giữa 'User acquisition' và 'Traffic acquisition' trong GA4 là gì?",
+    "options": [
+      "A. Không có sự khác biệt nào",
+      "B. User acquisition dựa trên phiên đầu tiên của người dùng, Traffic acquisition dựa trên phiên mới nhất",
+      "C. User acquisition chỉ tính người dùng từ quảng cáo, Traffic acquisition tính tất cả",
+      "D. User acquisition chỉ dành cho Mobile App, Traffic acquisition chỉ dành cho Web"
+    ],
+    "correctAnswer": "B",
+    "explanation": "User acquisition báo cáo về cách người dùng tìm thấy trang web lần đầu tiên, trong khi Traffic acquisition báo cáo về nguồn gốc của các phiên truy cập mới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Nếu bạn muốn theo dõi một thông tin tùy chỉnh như 'Chuyên mục bài viết' mà GA4 không có sẵn, bạn nên dùng gì?",
+    "options": [
+      "A. Custom Dimension",
+      "B. Custom Metric",
+      "C. User ID",
+      "D. Enhanced Measurement"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Custom Dimension (Thành phần tùy chỉnh) được dùng để ghi lại các thuộc tính mang tính mô tả về sự kiện hoặc người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao GA4 lại quan trọng việc sử dụng 'User ID'?",
+    "options": [
+      "A. Để thay thế hoàn toàn cho Cookie",
+      "B. Để nhận diện cùng một người dùng khi họ sử dụng các thiết bị và trình duyệt khác nhau",
+      "C. Để tăng tốc độ tải trang web",
+      "D. Để ẩn danh hoàn toàn thông tin khách hàng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "User ID giúp GA4 kết nối dữ liệu của cùng một người dùng trên nhiều thiết bị (Cross-device tracking), giúp báo cáo chính xác hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mô hình phân bổ (Attribution model) mặc định trong báo cáo của GA4 hiện nay là gì?",
+    "options": [
+      "A. Last Click (Nhấp cuối cùng)",
+      "B. First Click (Nhấp đầu tiên)",
+      "C. Data-driven (Dựa trên dữ liệu)",
+      "D. Linear (Tuyến tính)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "GA4 sử dụng Data-driven attribution làm mô hình mặc định, sử dụng thuật toán để phân bổ giá trị cho các điểm chạm dựa trên dữ liệu lịch sử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn thấy một sự kiện có tên 'click' trong báo cáo. Đây thường là kết quả của tính năng nào?",
+    "options": [
+      "A. Cài đặt thủ công bằng code",
+      "B. Enhanced Measurement (Đo lường nâng cao)",
+      "C. Google Ads tự động gửi sang",
+      "D. Mặc định GA4 luôn có cho mọi nút bấm"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự kiện 'click' (cụ thể là outbound clicks) là một phần của tính năng Enhanced Measurement, tự động ghi lại khi người dùng click vào link dẫn ra ngoài website.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để loại bỏ dữ liệu truy cập từ nhân viên trong công ty nhằm làm sạch báo cáo, bạn cần cấu hình gì?",
+    "options": [
+      "A. Audience Trigger",
+      "B. Internal Traffic Filter",
+      "C. Custom Metric",
+      "D. User ID"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Internal Traffic Filter giúp loại bỏ các địa chỉ IP nội bộ để tránh làm sai lệch dữ liệu phân tích từ người dùng thực tế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong phần 'Explore', kỹ thuật nào cho phép bạn xem các trang mà người dùng đã xem sau khi truy cập vào trang chủ?",
+    "options": [
+      "A. Funnel exploration",
+      "B. Path exploration",
+      "C. Segment overlap",
+      "D. Cohort exploration"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Path exploration (Khám phá đường dẫn) giúp trực quan hóa luồng đi của người dùng qua các sự kiện hoặc trang web theo trình tự thời gian.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi đặt tên cho một Custom Event trong GA4, quy tắc nào sau đây là đúng?",
+    "options": [
+      "A. Tên sự kiện nên có dấu cách",
+      "B. Tên sự kiện phân biệt chữ hoa và chữ thường (case-sensitive)",
+      "C. Có thể bắt đầu tên bằng chữ số",
+      "D. Không giới hạn độ dài tên sự kiện"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong GA4, 'Purchase' và 'purchase' được coi là hai sự kiện khác nhau vì hệ thống phân biệt chữ hoa/thường.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Báo cáo 'Monetization' (Kiếm tiền) trong GA4 chủ yếu cung cấp thông tin về lĩnh vực nào?",
+    "options": [
+      "A. Tốc độ tải trang",
+      "B. Hiệu quả của SEO",
+      "C. Doanh thu từ thương mại điện tử và quảng cáo",
+      "D. Số lượng người dùng mới"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Monetization tập trung vào các dữ liệu về doanh thu, đơn hàng, và giá trị vòng đời khách hàng từ E-commerce hoặc In-app purchases.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nếu bạn muốn so sánh hành vi của người dùng sử dụng Mobile và người dùng sử dụng Desktop, bạn nên dùng tính năng nào?",
+    "options": [
+      "A. Comparisons (So sánh)",
+      "B. Data Streams",
+      "C. Measurement ID",
+      "D. DebugView"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tính năng Comparisons trong các báo cáo chuẩn cho phép bạn lọc và so sánh nhanh các phân khúc dữ liệu khác nhau (như Device Category).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Data Stream (Luồng dữ liệu) trong GA4 đóng vai trò gì?",
+    "options": [
+      "A. Là nơi lưu trữ các báo cáo đã xuất ra file Excel",
+      "B. Là kết nối giữa một nguồn dữ liệu (Web/App) và thuộc tính GA4",
+      "C. Là một loại quảng cáo mới của Google",
+      "D. Là công cụ để xóa dữ liệu người dùng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data Stream là 'đường ống' dẫn dữ liệu từ website hoặc ứng dụng di động vào trong Property của GA4 để xử lý.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong GA4, bạn muốn theo dõi tên tác giả của mỗi bài viết trên blog. Bạn nên cấu hình loại dimension nào để tối ưu nhất?",
+    "options": [
+      "A. User-scoped custom dimension",
+      "B. Event-scoped custom dimension",
+      "C. Item-scoped custom dimension",
+      "D. Session-scoped custom dimension"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tên tác giả gắn liền với hành động xem bài viết (page_view), do đó Event-scoped custom dimension là lựa chọn phù hợp nhất để ghi nhận thông tin đi kèm với sự kiện cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Báo cáo của bạn xuất hiện thông báo 'Data Thresholding applied'. Nguyên nhân chính thường là do đâu?",
+    "options": [
+      "A. Bạn đang sử dụng quá nhiều Custom Dimensions trong một báo cáo",
+      "B. Google Signals đang bật và số lượng người dùng trong báo cáo quá thấp",
+      "C. Tài khoản của bạn đã vượt quá giới hạn thu thập dữ liệu hàng tháng",
+      "D. Bạn chưa kết nối GA4 với tài khoản BigQuery"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi bật Google Signals, GA4 sẽ ẩn dữ liệu (ngưỡng dữ liệu) nếu số lượng người dùng quá ít để bảo vệ quyền riêng tư cá nhân, tránh việc định danh người dùng cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa 'First user source' và 'Session source' trong các báo cáo Traffic của GA4 là gì?",
+    "options": [
+      "A. First user source chỉ nguồn đầu tiên người dùng truy cập trang web; Session source là nguồn của phiên hiện tại.",
+      "B. First user source dành cho ứng dụng di động; Session source dành cho website.",
+      "C. Cả hai đều giống nhau nhưng First user source có độ chính xác cao hơn.",
+      "D. Session source chỉ tính các nguồn từ quảng cáo trả phí (Paid Search)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "First user source (User acquisition) giúp hiểu cách người dùng mới tìm thấy bạn lần đầu, trong khi Session source (Traffic acquisition) giúp hiểu nguồn mang lại các phiên truy cập cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn muốn phân tích hành trình người dùng từ trang chủ đến khi mua hàng và muốn biết họ có thể bỏ qua các bước trung gian hay không. Bạn nên dùng loại Exploration nào?",
+    "options": [
+      "A. Path exploration",
+      "B. Free form exploration",
+      "C. Funnel exploration với chế độ 'Open funnel'",
+      "D. Funnel exploration với chế độ 'Closed funnel'"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Funnel exploration, 'Open funnel' cho phép người dùng bắt đầu phễu ở bất kỳ bước nào, không nhất thiết phải bắt đầu từ bước 1, giúp phân tích linh hoạt hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mặc định, thời gian lưu giữ dữ liệu người dùng (Data Retention) cho các báo cáo Exploration trong GA4 là bao lâu nếu không thay đổi cài đặt?",
+    "options": [
+      "A. 14 tháng",
+      "B. 2 tháng",
+      "C. 26 tháng",
+      "D. Vĩnh viễn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc định GA4 thiết lập thời gian lưu giữ dữ liệu sự kiện và người dùng là 2 tháng. Bạn cần nâng lên 14 tháng trong phần Admin để giữ dữ liệu lâu hơn cho các báo cáo tùy chỉnh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cài đặt một Conversion mới nhưng khi kiểm tra DebugView, bạn không thấy sự kiện đó xuất hiện. Bước kiểm tra nào là hợp lý nhất?",
+    "options": [
+      "A. Chờ 24 giờ vì GA4 cần thời gian để xử lý dữ liệu conversion.",
+      "B. Kiểm tra xem IP của bạn có đang bị bộ lọc 'Internal Traffic' loại bỏ hay không.",
+      "C. Xóa cache trình duyệt và thử lại trên tab ẩn danh.",
+      "D. Đổi Reporting Identity sang 'Device-based' ngay lập tức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu bạn đã thiết lập lọc truy cập nội bộ (Internal Traffic) dựa trên IP, các hành động của bạn sẽ không hiển thị trong DebugView nếu bạn đang dùng IP đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Chỉ số 'Engagement Rate' trong GA4 được tính toán như thế nào?",
+    "options": [
+      "A. (Engaged sessions) / (Total sessions)",
+      "B. (Engaged sessions) / (Active users)",
+      "C. (Total sessions) / (Bounce rate)",
+      "D. (Users who clicked) / (Total users)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Engagement Rate là tỷ lệ giữa số phiên có tương tác chia cho tổng số phiên. Một phiên được coi là tương tác nếu kéo dài hơn 10 giây, có 1 conversion, hoặc có từ 2 pageviews trở lên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi cấu hình Cross-domain tracking trong GA4, bạn cần thực hiện thao tác nào chính yếu nhất?",
+    "options": [
+      "A. Cài đặt mã tracking khác nhau cho mỗi domain.",
+      "B. Thêm các domain vào phần 'Configure your domains' trong Data Stream web.",
+      "C. Sử dụng GTM để gửi cookie thủ công giữa các domain.",
+      "D. Tạo các Data Stream riêng biệt cho mỗi domain phụ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong GA4, cross-domain tracking được cấu hình trực tiếp trong giao diện Admin -> Data Streams -> Web stream details -> Configure tag settings -> Configure your domains.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn muốn so sánh hiệu quả của các chiến dịch Marketing dựa trên mô hình gán công lao (Attribution) mà Google tự động phân bổ trọng số dựa trên dữ liệu lịch sử. Bạn chọn mô hình nào?",
+    "options": [
+      "A. Last click",
+      "B. First click",
+      "C. Data-driven",
+      "D. Linear"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mô hình Data-driven sử dụng thuật toán máy học để phân bổ giá trị chuyển đổi cho mỗi điểm chạm dựa trên dữ liệu thực tế của tài khoản.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong báo cáo 'Traffic acquisition', nguồn truy cập hiển thị là 'Unassigned'. Điều này thường có nghĩa là gì?",
+    "options": [
+      "A. Người dùng truy cập trực tiếp bằng cách gõ URL.",
+      "B. Dữ liệu bị lỗi do người dùng chặn cookie.",
+      "C. Các tham số UTM không khớp với bất kỳ quy tắc phân loại kênh (Default Channel Group) nào của GA4.",
+      "D. Nguồn truy cập đến từ các mạng xã hội chưa được Google định danh."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi GA4 nhận được các tham số UTM (source/medium) mà không nằm trong quy tắc định nghĩa kênh mặc định, nó sẽ phân loại vào nhóm 'Unassigned'.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để theo dõi giá trị đơn hàng từ một sự kiện 'purchase', bạn phải gửi kèm parameter nào bắt buộc để GA4 ghi nhận doanh thu chính xác?",
+    "options": [
+      "A. transaction_id và value",
+      "B. currency và value",
+      "C. item_id và price",
+      "D. shipping và tax"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để các báo cáo doanh thu hoạt động, sự kiện purchase tối thiểu phải có 'currency' và 'value' (mặc dù transaction_id cũng rất quan trọng để tránh trùng lặp).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn muốn tạo một tệp đối tượng (Audience) bao gồm những người đã thêm sản phẩm vào giỏ hàng nhưng chưa mua hàng trong 7 ngày qua. Công cụ nào trong GA4 hỗ trợ tốt nhất?",
+    "options": [
+      "A. Audience Builder với điều kiện loại trừ (Exclude)",
+      "B. Segment Overlap Exploration",
+      "C. User Explorer",
+      "D. Custom Dimensions"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Audience Builder cho phép tạo danh sách người dùng dựa trên việc thực hiện sự kiện A (add_to_cart) và loại trừ những người thực hiện sự kiện B (purchase) trong một khoảng thời gian.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt giữa 'Reporting Identity' là 'Blended' và 'Observed' là gì?",
+    "options": [
+      "A. Blended bao gồm dữ liệu mô hình hóa (modeling) khi không có sự đồng ý về cookie, còn Observed thì không.",
+      "B. Blended chỉ dùng cho App; Observed chỉ dùng cho Web.",
+      "C. Observed sử dụng User ID; Blended chỉ sử dụng Device ID.",
+      "D. Không có sự khác biệt về mặt kỹ thuật."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Blended identity sử dụng User ID, Google Signals, Device ID và cả dữ liệu mô hình hóa (behavioral modeling) để lấp đầy khoảng trống khi thiếu dữ liệu cookie.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao bạn nên kết nối GA4 với BigQuery?",
+    "options": [
+      "A. Để tăng tốc độ tải trang của website.",
+      "B. Để truy cập vào dữ liệu thô (raw data) và tránh các giới hạn về lấy mẫu (sampling) hoặc ngưỡng (thresholding).",
+      "C. Để tự động tạo các quảng cáo Google Ads hiệu quả hơn.",
+      "D. Để thay thế hoàn toàn giao diện báo cáo của GA4."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BigQuery cho phép xuất dữ liệu cấp sự kiện thô, giúp nhà phân tích thực hiện các truy vấn phức tạp mà không bị ảnh hưởng bởi giới hạn giao diện GA4.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn thấy rằng số lượng 'Key Events' (Conversions) trong GA4 cao hơn nhiều so với số lượng đơn hàng thực tế trong CRM. Lý do có thể là gì?",
+    "options": [
+      "A. GA4 luôn đếm mỗi phiên là một conversion.",
+      "B. Cài đặt đếm (Counting method) đang để là 'Once per event' thay vì 'Once per session'.",
+      "C. Google Signals đang tự động nhân đôi dữ liệu.",
+      "D. Bạn chưa bật Enhanced Measurement."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu cài đặt là 'Once per event', mỗi lần người dùng thực hiện hành động (ví dụ reload trang cảm ơn) sẽ tính là 1 conversion. 'Once per session' sẽ giới hạn 1 conversion mỗi phiên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Path Exploration, tính năng 'Start over' cho phép bạn làm gì?",
+    "options": [
+      "A. Xóa toàn bộ dữ liệu lịch sử của tài khoản.",
+      "B. Bắt đầu phân tích từ một điểm kết thúc (Ending point) để đi ngược về các bước trước đó.",
+      "C. Đặt lại giới hạn thời gian báo cáo về mặc định.",
+      "D. Chỉ xem dữ liệu của những người dùng mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GA4 hỗ trợ phân tích ngược (backward pathing), cho phép bạn chọn một sự kiện cuối cùng (như purchase) và xem người dùng đã làm gì trước đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tính năng 'Enhanced Measurement' (Đo lường nâng cao) trong GA4 tự động theo dõi hành động nào sau đây mà không cần code thêm?",
+    "options": [
+      "A. Hoàn tất thanh toán (Purchase)",
+      "B. Cuộn trang (Scroll) tới 90% chiều dài trang",
+      "C. Điền thông tin vào form liên hệ (Form submission) của bên thứ 3",
+      "D. Click vào nút 'Thêm vào giỏ hàng'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Enhanced Measurement tự động theo dõi các sự kiện như page views, scrolls (đến 90%), outbound clicks, site search, video engagement, và file downloads.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn chia sẻ một báo cáo Exploration bạn vừa tạo cho các đồng nghiệp khác cùng xem trong cùng một Property. Bạn phải làm gì?",
+    "options": [
+      "A. Gửi cho họ đường link URL của trình duyệt.",
+      "B. Xuất báo cáo ra file PDF và gửi qua email.",
+      "C. Nhấn vào biểu tượng 'Share' ở góc trên bên phải để chuyển trạng thái sang Read-only cho mọi người.",
+      "D. Họ tự động thấy báo cáo đó trong danh sách Exploration của họ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mặc định Exploration là riêng tư. Bạn cần nhấn Share để người khác có quyền truy cập vào Property đó có thể xem (nhưng không thể sửa trực tiếp trên bản gốc của bạn).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi nào bạn nên sử dụng 'Measurement Protocol' cho GA4?",
+    "options": [
+      "A. Khi muốn theo dõi hành vi người dùng trên website WordPress.",
+      "B. Khi muốn gửi dữ liệu từ các hệ thống offline (như máy POS hoặc CRM) về GA4.",
+      "C. Khi muốn cài đặt GA4 thông qua Google Tag Manager.",
+      "D. Khi muốn tự động hóa việc tạo các báo cáo định kỳ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Measurement Protocol cho phép gửi các sự kiện trực tiếp tới máy chủ GA4 thông qua HTTP requests, thường dùng cho các tương tác không xảy ra trực tiếp trên trình duyệt/app.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong báo cáo GA4, 'Active Users' được định nghĩa là gì?",
+    "options": [
+      "A. Tổng số người dùng đã truy cập trang web.",
+      "B. Người dùng có ít nhất một 'engaged session' hoặc khi GA4 thu thập thông tin first_visit/engagement_time.",
+      "C. Người dùng đã thực hiện ít nhất một chuyển đổi (conversion).",
+      "D. Người dùng đang online trên trang web ngay tại thời điểm xem báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GA4 tập trung vào 'Active Users' (người dùng hoạt động) thay vì 'Total Users'. Một người dùng được coi là hoạt động nếu họ có phiên tương tác hoặc là người dùng mới.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn theo dõi xem có bao nhiêu người dùng thực hiện cả hai hành động 'Xem video' VÀ 'Đăng ký newsletter'. Kỹ thuật nào là phù hợp nhất?",
+    "options": [
+      "A. Sử dụng 'Segment Overlap' trong Exploration.",
+      "B. Xem báo cáo 'Events' và cộng tổng hai sự kiện.",
+      "C. Tạo một Custom Metric mới.",
+      "D. Sử dụng báo cáo 'Realtime'."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Segment Overlap cho phép bạn trực quan hóa sự giao thoa giữa các nhóm người dùng khác nhau dựa trên các tiêu chí cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào để loại bỏ dữ liệu truy cập từ nhân viên công ty để không làm sai lệch báo cáo?",
+    "options": [
+      "A. Xóa mã tracking trên máy tính của nhân viên.",
+      "B. Cấu hình 'Internal Traffic' trong Data Stream bằng IP và kích hoạt bộ lọc trong Data Settings.",
+      "C. Tạo một Property riêng cho nhân viên.",
+      "D. Sử dụng UTM parameter 'internal' cho mọi link nhân viên click."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quy trình chuẩn là định nghĩa IP nội bộ trong 'Configure tag settings' và sau đó vào 'Data Filters' để chuyển trạng thái bộ lọc từ Testing sang Active.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự kiện 'session_start' được kích hoạt khi nào?",
+    "options": [
+      "A. Khi người dùng mở trình duyệt.",
+      "B. Khi người dùng truy cập trang web và không có phiên nào đang hoạt động trước đó.",
+      "C. Mỗi khi người dùng tải lại (reload) một trang.",
+      "D. Chỉ khi người dùng đăng nhập vào tài khoản."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GA4 kích hoạt session_start khi người dùng tương tác với web/app sau một thời gian không hoạt động (mặc định là 30 phút).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn muốn thay đổi các báo cáo xuất hiện ở thanh menu bên trái của GA4 để phù hợp với nhu cầu riêng của doanh nghiệp. Bạn sử dụng tính năng nào?",
+    "options": [
+      "A. Custom Dimensions",
+      "B. Library (Thư viện)",
+      "C. Explorations",
+      "D. Insights"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính năng Library trong GA4 cho phép bạn tùy chỉnh các Collection và Topic, từ đó thay đổi cấu trúc menu báo cáo tiêu chuẩn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một sự kiện tùy chỉnh (Custom Event) bạn gửi lên có parameter là 'member_level'. Để xem được parameter này trong các báo cáo tiêu chuẩn, bạn phải làm gì?",
+    "options": [
+      "A. Không cần làm gì, GA4 tự hiển thị.",
+      "B. Đăng ký parameter này dưới dạng một Custom Dimension trong giao diện GA4.",
+      "C. Gửi parameter này thông qua Google Ads.",
+      "D. Chuyển parameter này thành một Conversion."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dữ liệu parameter gửi kèm sự kiện sẽ không xuất hiện trong các báo cáo chính trừ khi bạn đăng ký nó dưới dạng Custom Dimension (hoặc Metric).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong cấu trúc dữ liệu GA4 xuất sang BigQuery, làm thế nào để truy vấn giá trị của một 'event_parameter' cụ thể (ví dụ: 'page_location') khi mỗi hàng đại diện cho một sự kiện?",
+    "options": [
+      "A. Sử dụng phép JOIN với bảng tham số sự kiện riêng biệt.",
+      "B. Sử dụng hàm UNNEST trên mảng 'event_params' kết hợp với câu lệnh WHERE.",
+      "C. Truy cập trực tiếp qua cú pháp 'event_params.page_location'.",
+      "D. Sử dụng hàm EXTRACT_VALUE từ chuỗi JSON của cột 'event_params'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong BigQuery, 'event_params' là một REPEATED RECORD (mảng). Để lấy giá trị của một key cụ thể, ta phải UNNEST mảng này ra các hàng phẳng để lọc theo key và lấy value tương ứng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi triển khai 'Advanced Consent Mode', GA4 sẽ xử lý dữ liệu như thế nào đối với những người dùng từ chối cookie quảng cáo và phân tích?",
+    "options": [
+      "A. Không gửi bất kỳ dữ liệu nào về máy chủ Google để đảm bảo quyền riêng tư tuyệt đối.",
+      "B. Chỉ gửi dữ liệu khi người dùng thực hiện hành động chuyển đổi (Conversion).",
+      "C. Gửi các 'cookieless pings' không chứa thông tin định danh để dùng cho mô hình hóa dữ liệu (Behavioral Modeling).",
+      "D. Lưu trữ dữ liệu tạm thời trong Local Storage cho đến khi người dùng đồng ý."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Advanced Consent Mode cho phép gửi các ping không dùng cookie khi bị từ chối, giúp GA4 sử dụng Machine Learning để lấp đầy khoảng trống dữ liệu thông qua Behavioral Modeling.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi về việc tính toán 'Session' giữa Universal Analytics (UA) và GA4 khi nguồn chiến dịch (Campaign Source) thay đổi giữa chừng là gì?",
+    "options": [
+      "A. GA4 sẽ kết thúc phiên cũ và bắt đầu phiên mới ngay lập tức giống như UA.",
+      "B. GA4 không bắt đầu phiên mới khi nguồn chiến dịch thay đổi trong cùng một phiên hoạt động.",
+      "C. GA4 chỉ bắt đầu phiên mới nếu nguồn chiến dịch thay đổi từ 'Organic' sang 'Paid'.",
+      "D. GA4 sẽ gộp tất cả các nguồn vào một tham số mảng trong cùng một phiên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khác với UA, GA4 không khởi tạo phiên mới khi Campaign Source thay đổi giữa phiên. Điều này dẫn đến số lượng Session trong GA4 thường thấp hơn UA.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao một số báo cáo trong giao diện GA4 lại xuất hiện biểu tượng cảnh báo hình tam giác chấm than và dữ liệu bị ẩn đi (Thresholding)?",
+    "options": [
+      "A. Do kết nối với BigQuery bị gián đoạn hoặc độ trễ dữ liệu quá 48 giờ.",
+      "B. Do báo cáo đang áp dụng bộ lọc quá phức tạp vượt quá khả năng xử lý của Standard property.",
+      "C. Do Google Signals được bật và số lượng người dùng trong hàng quá thấp, có nguy cơ lộ danh tính người dùng.",
+      "D. Do sự kiện 'purchase' chưa được cấu hình đúng tham số 'currency'."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Data Thresholding xảy ra khi báo cáo có chứa Google Signals và số lượng user định danh quá ít, Google sẽ ẩn dữ liệu để bảo vệ quyền riêng tư cá nhân.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Reporting Identity, tùy chọn 'Blended' ưu tiên các phương pháp định danh theo thứ tự nào?",
+    "options": [
+      "A. Device ID > Google Signals > User ID.",
+      "B. User ID > Device ID > Modeling.",
+      "C. User ID > Google Signals > Device ID > Modeling.",
+      "D. Google Signals > User ID > Modeling > Device ID."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Blended Identity ưu tiên User ID (nếu có), sau đó đến Google Signals, tiếp theo là Device ID (Client ID) và cuối cùng là Modeling nếu các phương thức trên không khả dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích kỹ thuật lớn nhất của việc triển khai GA4 thông qua Server-side Google Tag Manager (sGTM) là gì?",
+    "options": [
+      "A. Tự động sửa lỗi sai lệch dữ liệu giữa GA4 và Google Ads.",
+      "B. Giảm tải JavaScript thực thi trên trình duyệt và kéo dài thời gian tồn tại của cookie bên thứ nhất (First-party cookie).",
+      "C. Cho phép theo dõi người dùng ngay cả khi họ không có kết nối Internet.",
+      "D. Tăng số lượng Custom Dimensions vượt quá giới hạn 50 của GA4 Standard."
+    ],
+    "correctAnswer": "B",
+    "explanation": "sGTM cho phép chuyển việc xử lý dữ liệu từ trình duyệt sang máy chủ, giúp tối ưu hiệu năng trang web và quan trọng nhất là thiết lập cookie ở ngữ cảnh First-party (Server-to-Server), tránh bị các trình duyệt chặn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Measurement Protocol để gửi sự kiện từ hệ thống CRM vào GA4, tham số nào là bắt buộc để liên kết sự kiện đó với một người dùng hiện tại trên website?",
+    "options": [
+      "A. user_id hoặc client_id.",
+      "B. session_id và page_location.",
+      "C. gclid và campaign_id.",
+      "D. event_name và timestamp_micros."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Để GA4 có thể gán sự kiện từ Measurement Protocol vào đúng profile người dùng, bạn phải cung cấp ít nhất client_id (định danh thiết bị) hoặc user_id (định danh hệ thống của bạn).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn muốn phân tích tỷ lệ người dùng thực hiện bước 'Thêm vào giỏ hàng' nhưng KHÔNG thực hiện 'Thanh toán' trong vòng 7 ngày kể từ khi xem sản phẩm. Kỹ thuật nào trong Exploration là tối ưu nhất?",
+    "options": [
+      "A. Path Exploration với bộ lọc loại trừ.",
+      "B. Funnel Exploration với tùy chọn 'Trended funnel'.",
+      "C. Funnel Exploration với điều kiện 'Is not followed by' trong các bước.",
+      "D. Segment Overlap kết hợp với User Lifetime."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Funnel Exploration trong GA4 cho phép tạo các bước phễu và thiết lập điều kiện loại trừ hoặc giới hạn thời gian giữa các bước để phân tích hành vi bỏ dở.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Điều gì xảy ra với dữ liệu trong phần 'Exploration' nếu bạn đặt 'Data Retention' cho User-level data là 2 tháng và dữ liệu đã cũ hơn thời gian đó?",
+    "options": [
+      "A. Toàn bộ báo cáo tiêu chuẩn (Standard Reports) sẽ bị xóa dữ liệu.",
+      "B. Bạn không thể sử dụng các phân đoạn (Segments) hoặc thực hiện truy vấn tùy chỉnh trên dữ liệu đó trong Exploration.",
+      "C. Dữ liệu sẽ được tự động nén lại và chỉ hiển thị tổng số (Aggregated).",
+      "D. Dữ liệu vẫn tồn tại nếu bạn đã liên kết với BigQuery."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data Retention chỉ ảnh hưởng đến dữ liệu cấp người dùng và sự kiện trong phần Exploration. Sau thời gian quy định, dữ liệu chi tiết này bị xóa, khiến việc tạo báo cáo tùy chỉnh hoặc Segment trên dữ liệu cũ không khả thi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình Data-driven Attribution của GA4, thuật toán sử dụng yếu tố nào để gán giá trị chuyển đổi cho các kênh?",
+    "options": [
+      "A. Chỉ dựa trên vị trí của tương tác trong hành trình (đầu, giữa, cuối).",
+      "B. Sử dụng lý thuyết trò chơi (Shapley Value) để so sánh xác suất chuyển đổi khi có và không có sự hiện diện của một kênh.",
+      "C. Gán 100% giá trị cho kênh cuối cùng mà người dùng nhấp vào trước khi chuyển đổi.",
+      "D. Ưu tiên các kênh trả phí (Paid Media) hơn các kênh tự nhiên (Organic)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data-driven Attribution của Google sử dụng thuật toán dựa trên Shapley Value để phân tích sự đóng góp thực sự của từng điểm chạm bằng cách mô phỏng các kịch bản hành trình khác nhau.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để theo dõi chính xác hành trình người dùng xuyên suốt giữa một tên miền chính (example.com) và một tên miền phụ khác (payment.com), cấu hình nào là quan trọng nhất?",
+    "options": [
+      "A. Tạo hai Data Stream riêng biệt cho mỗi tên miền.",
+      "B. Cấu hình 'Configure your domains' trong phần Data Stream và liệt kê cả hai tên miền.",
+      "C. Sử dụng cùng một User ID cho cả hai tên miền.",
+      "D. Thiết lập 'Internal Traffic' để loại trừ lượt truy cập giữa hai trang."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cross-domain tracking trong GA4 yêu cầu bạn khai báo các tên miền liên quan trong phần 'Configure your domains' để GA4 tự động gắn tham số liên kết (_gl) vào URL khi chuyển trang, duy trì Client ID.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một 'Predictive Audience' (ví dụ: Likely 7-day purchasers) yêu cầu điều kiện tối thiểu nào để có thể hoạt động trong GA4?",
+    "options": [
+      "A. Phải có ít nhất 10,000 sự kiện mỗi ngày.",
+      "B. Phải có ít nhất 1,000 người dùng thực hiện chuyển đổi và 1,000 người dùng không thực hiện chuyển đổi trong 28 ngày qua.",
+      "C. Phải liên kết với tài khoản Google Ads và chi tiêu trên 5,000 USD.",
+      "D. Phải bật tính năng User ID cho tất cả người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dự đoán của GA4 dựa trên Machine Learning, yêu cầu một lượng mẫu đủ lớn (thường là 1,000 mẫu dương tính và 1,000 mẫu âm tính) trong khoảng thời gian 28 ngày để huấn luyện mô hình.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi tạo một 'Custom Metric' trong GA4, tham số 'Scope' duy nhất khả dụng là gì?",
+    "options": [
+      "A. User",
+      "B. Session",
+      "C. Event",
+      "D. Item"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hiện tại, GA4 chỉ hỗ trợ 'Event scope' cho Custom Metrics. Các chỉ số này được tính toán dựa trên các giá trị số đi kèm với sự kiện.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong báo cáo 'Path Exploration', tính năng 'Reverse Pathing' (điểm bắt đầu là một sự kiện kết thúc) hữu ích nhất cho mục đích nào?",
+    "options": [
+      "A. Xác định trang đầu tiên người dùng truy cập vào website.",
+      "B. Tìm hiểu các hành động dẫn đến một lỗi (error) hoặc một hành động chuyển đổi cụ thể.",
+      "C. Tính toán giá trị trung bình của mỗi đơn hàng.",
+      "D. So sánh hiệu quả giữa các chiến dịch email marketing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Reverse Pathing cho phép bạn chọn một sự kiện đích (như 'app_exception' hoặc 'purchase') và truy ngược lại các bước trước đó để hiểu nguyên nhân hoặc hành trình dẫn đến kết quả đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn nhận thấy số lượng 'Key Events' (Conversions) trong GA4 cao hơn nhiều so với số lượng đơn hàng thực tế trong CRM. Nguyên nhân kỹ thuật nào thường gặp nhất?",
+    "options": [
+      "A. GA4 mặc định đếm mỗi sự kiện là một chuyển đổi mỗi khi nó xảy ra (Once per event).",
+      "B. Do Google Signals tự động nhân đôi số liệu.",
+      "C. Do độ trễ của việc đồng bộ hóa BigQuery.",
+      "D. Do người dùng thường xuyên xóa cookie trình duyệt."
+    ],
+    "correctAnswer": "A",
+    "explanation": "GA4 cho phép chọn phương thức đếm chuyển đổi: 'Once per event' (mỗi lần xảy ra) hoặc 'Once per session' (một lần mỗi phiên). Nếu để mặc định, mỗi lần user load lại trang cảm ơn, một chuyển đổi mới lại được ghi nhận.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'User ID' lại quan trọng hơn 'Client ID' trong việc phân tích Customer Lifetime Value (CLV)?",
+    "options": [
+      "A. User ID giúp theo dõi người dùng ẩn danh tốt hơn.",
+      "B. User ID cho phép hợp nhất dữ liệu của cùng một người dùng trên nhiều thiết bị và trình duyệt khác nhau.",
+      "C. Client ID thường xuyên bị thay đổi bởi các trình chặn quảng cáo.",
+      "D. User ID tự động tính toán doanh thu dự kiến cho tương lai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Client ID gắn liền với trình duyệt/thiết bị. User ID gắn với danh tính người dùng trong hệ thống của bạn, giúp kết nối hành trình của họ dù họ dùng điện thoại hay máy tính, từ đó tính CLV chính xác hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong GA4, tham số 'ignore_referrer' được sử dụng trong trường hợp nào để đảm bảo tính chính xác của dữ liệu nguồn truy cập?",
+    "options": [
+      "A. Khi muốn chặn các trang web rác (Spam Referral).",
+      "B. Khi người dùng quay lại trang web từ một cổng thanh toán bên thứ ba để không làm ghi đè nguồn gốc ban đầu.",
+      "C. Khi muốn ẩn thông tin trang web gốc vì lý do bảo mật.",
+      "D. Khi triển khai theo dõi trên các ứng dụng di động (iOS/Android)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi người dùng chuyển sang trang thanh toán (ví dụ: PayPal) rồi quay lại, referrer sẽ là PayPal. Sử dụng 'ignore_referrer' giúp GA4 giữ nguyên nguồn gốc ban đầu (như Google Search) thay vì ghi nhận là Referral từ PayPal.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tính năng 'Audience Trigger' trong GA4 có mục đích chính là gì?",
+    "options": [
+      "A. Tự động gửi email cho khách hàng khi họ rời khỏi trang web.",
+      "B. Tạo ra một sự kiện mới (Event) ngay khi một người dùng thỏa mãn các điều kiện của một đối tượng (Audience).",
+      "C. Kích hoạt các chiến dịch quảng cáo trên Google Ads.",
+      "D. Xóa người dùng khỏi danh sách tiếp thị lại sau một khoảng thời gian."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Audience Trigger cho phép bạn ghi nhận một sự kiện khi người dùng lọt vào một phân khúc (ví dụ: 'High Value User'). Sự kiện này sau đó có thể được dùng làm Key Event để tối ưu hóa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để xử lý dữ liệu PII (Personally Identifiable Information) trước khi gửi về GA4 để tuân thủ chính sách của Google?",
+    "options": [
+      "A. Mã hóa dữ liệu bằng Base64.",
+      "B. Sử dụng hàm băm SHA256 để băm các thông tin như Email trước khi gửi.",
+      "C. Chỉ gửi dữ liệu PII qua Measurement Protocol.",
+      "D. Google tự động ẩn PII nên không cần xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Google nghiêm cấm gửi PII ở dạng rõ ràng. Sử dụng hàm băm một chiều như SHA256 là tiêu chuẩn kỹ thuật để gửi thông tin (như email cho tính năng User-provided data) mà vẫn đảm bảo tính bảo mật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi so sánh dữ liệu giữa 'Explore' và 'Standard Reports', tại sao đôi khi có sự chênh lệch nhỏ về con số?",
+    "options": [
+      "A. Standard Reports sử dụng dữ liệu thô, còn Explore sử dụng dữ liệu đã lấy mẫu (Sampling).",
+      "B. Explore có thể áp dụng lấy mẫu (Sampling) nếu lượng dữ liệu lớn, trong khi Standard Reports thường dựa trên các bảng đã tính toán sẵn (Pre-aggregated).",
+      "C. Explore luôn chính xác hơn vì nó cập nhật theo thời gian thực.",
+      "D. Do múi giờ thiết lập trong hai phần này khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các báo cáo tiêu chuẩn thường được xử lý trước để truy xuất nhanh. Phần Exploration truy vấn trực tiếp trên dữ liệu chi tiết, và nếu tập dữ liệu vượt quá giới hạn, nó sẽ áp dụng lấy mẫu để đảm bảo tốc độ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong cấu hình 'Data Stream', việc tắt 'Enhanced Measurement' (Đo lường nâng cao) có lợi ích gì trong một số kịch bản triển khai phức tạp?",
+    "options": [
+      "A. Giúp tiết kiệm chi phí lưu trữ dữ liệu.",
+      "B. Tránh việc ghi nhận trùng lặp sự kiện khi bạn đã tự cấu hình các sự kiện đó thủ công qua GTM.",
+      "C. Tăng tốc độ tải trang web lên đáng kể.",
+      "D. Cho phép theo dõi các sự kiện trên ứng dụng di động tốt hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu bạn đã tự cài đặt theo dõi cuộn trang (scroll) hoặc click link ngoài qua GTM một cách chi tiết, việc bật Enhanced Measurement có thể gây ra tình trạng bắn 2 sự kiện tương tự nhau về GA4.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tham số 'engagement_time_msec' được GA4 sử dụng để tính toán chỉ số nào sau đây?",
+    "options": [
+      "A. Page Load Time.",
+      "B. Average Engagement Time per Session.",
+      "C. Server Response Time.",
+      "D. Total User Count."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GA4 theo dõi thời gian thực tế mà ứng dụng/trang web ở trạng thái foreground (đang được xem) thông qua tham số này để tính toán mức độ tương tác thực sự của người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một 'Custom Dimension' cấp độ Item (Item-scoped) thường được sử dụng trong trường hợp nào?",
+    "options": [
+      "A. Theo dõi màu sắc hoặc kích thước của một sản phẩm cụ thể trong sự kiện thương mại điện tử.",
+      "B. Theo dõi hạng thành viên của người dùng.",
+      "C. Theo dõi loại trang (Page Type) mà người dùng đang xem.",
+      "D. Theo dõi phương thức đăng nhập của người dùng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Item-scoped Custom Dimensions dùng để lưu trữ các thuộc tính của sản phẩm (như size, color, brand) trong mảng 'items' của các sự kiện Ecommerce.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tính năng 'Data Import' trong GA4 cho phép bạn làm gì để làm giàu dữ liệu báo cáo?",
+    "options": [
+      "A. Tải lên dữ liệu lịch sử từ Universal Analytics.",
+      "B. Tải lên metadata của sản phẩm hoặc dữ liệu chi phí từ các nguồn quảng cáo ngoài Google.",
+      "C. Nhập danh sách email khách hàng để gửi quảng cáo trực tiếp.",
+      "D. Sửa đổi các sự kiện đã được ghi nhận trong quá khứ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data Import cho phép bạn kết hợp dữ liệu bên ngoài (như giá vốn hàng bán, thông tin sản phẩm chi tiết, hoặc chi phí quảng cáo từ Facebook/Bing) với dữ liệu GA4 thông qua các key chung.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ 'DebugView' trong GA4 hoạt động dựa trên tham số nào được gửi kèm trong mỗi sự kiện?",
+    "options": [
+      "A. user_id=debug",
+      "B. debug_mode=true hoặc sử dụng GTM Preview mode.",
+      "C. traffic_type=internal",
+      "D. test_event=1"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để dữ liệu xuất hiện trong DebugView, các sự kiện phải mang tham số 'debug_mode': true. Điều này thường được kích hoạt tự động khi bạn dùng chế độ Preview của GTM hoặc cài đặt tiện ích Google Analytics Debugger.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh triển khai GA4 cho một tập đoàn đa quốc gia với nhiều domain khác nhau, thách thức lớn nhất khi cấu trúc 'Cross-domain tracking' để đảm bảo tính nhất quán của User ID là gì?",
+    "options": [
+      "A. Giới hạn về số lượng domain tối đa có thể cấu trúc trong phần 'Configure your domains' của Data Stream.",
+      "B. Việc duy trì tính nhất quán của _ga cookie khi trình duyệt chặn Third-party cookies và sự phụ thuộc vào URL parameters.",
+      "C. Sự xung đột giữa các luồng dữ liệu (Data Streams) khác nhau khi cùng gửi về một Property duy nhất.",
+      "D. Việc không thể tự động hóa quá trình gắn tag trên các nền tảng CMS khác nhau của các công ty con."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GA4 dựa vào việc chuyển tiếp linker parameter qua URL để duy trì Session và Client ID giữa các domain. Khi trình duyệt chặn cookie hoặc người dùng di chuyển qua các môi trường không hỗ trợ URL parameters, tính nhất quán của User ID bị đe dọa nghiêm trọng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi phân tích dữ liệu GA4 trong BigQuery, bạn nhận thấy số lượng 'user_pseudo_id' cao hơn đáng kể so với 'user_id' được thu thập. Điều này phản ánh rủi ro chiến lược nào trong việc đánh giá hiệu quả Marketing?",
+    "options": [
+      "A. Hệ thống đang ghi nhận quá nhiều dữ liệu rác (Bot traffic) mà GA4 chưa kịp lọc bỏ.",
+      "B. Chiến lược định danh người dùng (Identity Resolution) đang bị phân mảnh, dẫn đến việc đánh giá sai lệch về tỷ lệ giữ chân và giá trị vòng đời khách hàng.",
+      "C. Cấu hình BigQuery Export đang bị lỗi khiến dữ liệu bị nhân đôi trong quá trình streaming.",
+      "D. Người dùng chủ yếu sử dụng trình duyệt ẩn danh khiến GA4 không thể ghi nhận user_id."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự chênh lệch lớn cho thấy phần lớn người dùng chưa được định danh (logged-in). Điều này làm suy yếu khả năng phân tích hành trình xuyên thiết bị và dẫn đến việc tính toán LTV hoặc Retention bị sai lệch do một người dùng thực tế bị coi là nhiều người dùng ẩn danh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao một chuyên gia GA4 nên ưu tiên sử dụng 'Consent Mode v2' (Advanced Mode) thay vì 'Basic Mode' đối với các chiến dịch chạy tại thị trường EU?",
+    "options": [
+      "A. Để tránh bị Google Ads khóa tài khoản do vi phạm chính sách quyền riêng tư mới nhất.",
+      "B. Để kích hoạt tính năng 'Behavioral Modeling', giúp lấp đầy khoảng trống dữ liệu từ những người dùng từ chối cookie thông qua học máy.",
+      "C. Vì Basic Mode không cho phép truyền tải các tín hiệu chuyển đổi (Conversion signals) về phía máy chủ Google.",
+      "D. Để tự động hóa việc xóa dữ liệu PII (Personally Identifiable Information) trước khi gửi về máy chủ GA4."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Advanced Consent Mode cho phép gửi các 'pings' không chứa cookie khi người dùng từ chối. GA4 sử dụng dữ liệu này kết hợp với AI để mô hình hóa hành vi (Behavioral Modeling), giúp báo cáo đầy đủ hơn thay vì mất hoàn toàn dữ liệu như Basic Mode.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong báo cáo 'Exploration', khi áp dụng 'Data-driven attribution', bạn phát hiện tổng số chuyển đổi không phải là số nguyên (ví dụ: 10.5). Nguyên nhân kỹ thuật đứng sau hiện tượng này là gì?",
+    "options": [
+      "A. Do lỗi làm tròn số của hệ thống GA4 khi xử lý lượng dữ liệu lớn (Sampling).",
+      "B. Do mô hình Data-driven phân bổ giá trị đóng góp (fractional credit) cho từng điểm chạm trong hành trình khách hàng.",
+      "C. Do có sự xung đột giữa múi giờ của tài khoản GA4 và múi giờ của hệ thống CRM tích hợp.",
+      "D. Do người dùng thực hiện chuyển đổi trên nhiều thiết bị cùng một lúc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khác với Last-click, mô hình Data-driven sử dụng thuật toán để chia nhỏ giá trị của một chuyển đổi cho nhiều kênh dựa trên tầm quan trọng của chúng, dẫn đến các giá trị thập phân (fractional credits).",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một doanh nghiệp TMĐT nhận thấy sự sụt giảm lớn trong báo cáo 'Checkout Journey' tại bước 'Add to Cart' nhưng tỷ lệ 'Purchase' cuối cùng vẫn ổn định. Bạn sẽ kiểm tra yếu tố kỹ thuật nào đầu tiên trong GA4?",
+    "options": [
+      "A. Kiểm tra xem sự kiện 'view_cart' có đang được kích hoạt trước 'add_to_cart' hay không.",
+      "B. Kiểm tra tính nhất quán của 'transaction_id' để đảm bảo không có sự kiện trùng lặp (duplicate events).",
+      "C. Kiểm tra xem các sự kiện trong phễu có đang sử dụng các 'parameter' không đồng nhất (ví dụ: item_id vs product_id).",
+      "D. Kiểm tra xem 'Measurement Protocol' có đang gửi dữ liệu mua hàng offline chèn vào dữ liệu online hay không."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong GA4, để phễu (funnel) hoạt động chính xác, các tham số đi kèm sự kiện phải nhất quán. Nếu 'add_to_cart' dùng một định danh sản phẩm khác với 'purchase', hệ thống có thể không kết nối được hành trình, gây ra sự sụt giảm ảo trong báo cáo.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi cấu hình 'Reporting Identity', việc chọn 'Blended' thay vì 'Device-based' có tác động gì quan trọng nhất đến báo cáo?",
+    "options": [
+      "A. Nó làm tăng tốc độ xử lý báo cáo đối với các tập dữ liệu lớn.",
+      "B. Nó ưu tiên sử dụng User ID và Google Signals để hợp nhất hành trình người dùng, nhưng có thể dẫn đến hiện tượng 'Thresholding' (ngưỡng dữ liệu).",
+      "C. Nó giúp loại bỏ hoàn toàn các truy cập từ Bot và các trình duyệt không hỗ trợ Javascript.",
+      "D. Nó cho phép xem báo cáo thời gian thực (Real-time) với độ trễ thấp hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Blended identity sử dụng mọi phương thức định danh có sẵn (User ID, Google Signals, Device ID). Tuy nhiên, khi sử dụng Google Signals, Google áp dụng 'Thresholding' để bảo vệ quyền riêng tư, khiến một số dữ liệu bị ẩn nếu số lượng người dùng quá ít.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang debug một sự kiện custom 'file_download' qua GTM nhưng không thấy nó xuất hiện trong 'DebugView' của GA4. Bước xử lý nào sau đây thể hiện tư duy Expert?",
+    "options": [
+      "A. Xóa và tạo lại thẻ GA4 Event trong GTM vì có thể thẻ bị lỗi cache.",
+      "B. Kiểm tra xem 'debug_mode' parameter có được set là true và kiểm tra các bộ lọc (Filters) loại trừ IP nội bộ trong GA4 Property.",
+      "C. Chờ 24-48 giờ để dữ liệu được xử lý hoàn toàn trong hệ thống GA4.",
+      "D. Thay đổi tên sự kiện thành một trong các sự kiện 'Enhanced Measurement' có sẵn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Expert sẽ kiểm tra hai phía: phía gửi (parameter debug_mode trong GTM) và phía nhận (Data Filters trong GA4). Nếu IP của bạn bị lọc bởi bộ lọc 'Internal Traffic', dữ liệu sẽ không xuất hiện ngay cả trong DebugView.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Đối với các ứng dụng Single Page Application (SPA), tại sao việc chỉ dựa vào 'Enhanced Measurement' cho 'Page views' là chưa đủ để phân tích sâu hành vi?",
+    "options": [
+      "A. Vì Enhanced Measurement không thể bắt được sự kiện thay đổi URL dựa trên History API.",
+      "B. Vì nó không tự động thu thập các metadata quan trọng như 'page_type' hoặc 'user_status' vốn cần thiết cho phân khúc khách hàng.",
+      "C. Vì nó gây ra hiện tượng nhân đôi số lượt xem trang khi người dùng nhấn nút 'Back'.",
+      "D. Vì nó làm giảm tốc độ tải trang do phải thực hiện nhiều script kiểm tra DOM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc dù GA4 có thể bắt sự kiện thay đổi lịch sử trình duyệt (History change), nhưng nó chỉ thu thập các tham số mặc định. Với Expert, việc phân tích SPA cần các Custom Dimensions (như loại trang, trạng thái đăng nhập) được đẩy qua Data Layer để có cái nhìn sâu sắc hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lợi ích chiến lược của việc sử dụng 'Server-side Tagging' cho GA4 trong bối cảnh các quy định về quyền riêng tư thắt chặt là gì?",
+    "options": [
+      "A. Tăng tốc độ load trang bằng cách chuyển toàn bộ script của bên thứ ba sang phía client.",
+      "B. Cho phép kiểm soát hoàn toàn dữ liệu trước khi gửi tới Google, bao gồm việc loại bỏ PII và kéo dài thời hạn của First-party cookies.",
+      "C. Giảm chi phí vận hành hệ thống do không cần sử dụng Google Cloud Platform.",
+      "D. Tự động chuyển đổi tất cả các sự kiện thành chuyển đổi (Conversions) mà không cần cấu hình thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Server-side GTM đóng vai trò là một proxy. Nó cho phép doanh nghiệp làm sạch dữ liệu (PII redaction) và ghi đè các thiết lập cookie để chúng trở thành First-party thực thụ, giúp dữ liệu bền vững hơn trước các cơ chế chặn của trình duyệt (như ITP của Safari).",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong báo cáo 'Path Exploration', bạn thấy một lượng lớn 'Direct' traffic bắt đầu ở giữa hành trình (không phải trang chủ). Giải thích nào sau đây hợp lý nhất về mặt kỹ thuật?",
+    "options": [
+      "A. Người dùng đã bookmark trang đó và quay lại sau.",
+      "B. Sự cố 'Session timeout' hoặc mất 'Referrer' khi chuyển hướng giữa các trang (ví dụ: từ HTTP sang HTTPS).",
+      "C. Do GA4 tự động gán nhãn 'Direct' cho tất cả các truy cập từ mạng xã hội.",
+      "D. Do người dùng sử dụng trình duyệt Brave hoặc các tiện ích chặn quảng cáo mạnh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi một session bị hết hạn (mặc định 30p) hoặc khi mất thông tin referrer trong quá trình chuyển hướng (redirect), GA4 sẽ khởi tạo một session mới và nếu không có thông tin nguồn, nó sẽ mặc định là Direct.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng 'Predictive Audiences' trong GA4 (như 'Likely 7-day churners'), điều kiện tiên quyết về mặt dữ liệu mà doanh nghiệp phải đáp ứng là gì?",
+    "options": [
+      "A. Phải có ít nhất 100,000 người dùng hoạt động hàng tháng (MAU).",
+      "B. Phải tích hợp thành công dữ liệu từ Firebase và BigQuery.",
+      "C. Phải có một lượng mẫu đủ lớn về người dùng thực hiện và không thực hiện hành động mục tiêu trong 28 ngày qua để huấn luyện mô hình.",
+      "D. Phải sử dụng mô hình phân bổ 'Last non-direct click' cho tất cả các báo cáo."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Các mô hình dự đoán của GA4 yêu cầu một ngưỡng dữ liệu tối thiểu (thường là 1000 mẫu thành công và 1000 mẫu thất bại trong một khoảng thời gian nhất định) để AI có thể học và đưa ra dự báo chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một thuộc tính (Property) GA4 đạt đến giới hạn 'Cardinality' cao trong các Custom Dimensions. Hệ quả trực tiếp nào sẽ xảy ra trong các báo cáo tiêu chuẩn?",
+    "options": [
+      "A. GA4 sẽ tự động xóa các dữ liệu cũ nhất để nhường chỗ cho dữ liệu mới.",
+      "B. Các giá trị ít phổ biến sẽ được nhóm vào một hàng duy nhất có tên là '(other)'.",
+      "C. Hệ thống sẽ tạm dừng thu thập dữ liệu cho đến khi người dùng nâng cấp lên GA4 360.",
+      "D. Toàn bộ dữ liệu của Property đó sẽ bị sai lệch khoảng 20% do lấy mẫu (sampling)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cardinality cao xảy ra khi một dimension có quá nhiều giá trị duy nhất. Để đảm bảo hiệu suất, GA4 sẽ nhóm các giá trị vượt quá giới hạn vào dòng '(other)', gây khó khăn cho việc phân tích chi tiết.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc thiết lập 'Conversion Counting Method' thành 'Once per session' thay vì 'Once per event' lại quan trọng đối với các doanh nghiệp B2B Lead Generation?",
+    "options": [
+      "A. Để tăng số lượng chuyển đổi trong báo cáo nhằm làm đẹp KPI.",
+      "B. Để phản ánh chính xác số lượng khách hàng tiềm năng thực tế, tránh việc một người gửi form nhiều lần trong một phiên làm nhiễu dữ liệu.",
+      "C. Vì Google Ads chỉ chấp nhận phương thức 'Once per session' khi tối ưu hóa chiến dịch.",
+      "D. Để giảm thiểu chi phí lưu trữ dữ liệu trong BigQuery."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong B2B, một người dùng gửi form 5 lần trong 1 session vẫn chỉ là 1 lead. Việc đếm 'Once per session' giúp dữ liệu chuyển đổi sát với thực tế kinh doanh hơn là đếm mọi hành động click gửi form.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa 'User-scoped' và 'Event-scoped' Custom Dimensions khi phân tích hành vi người dùng là gì?",
+    "options": [
+      "A. User-scoped chỉ có thể áp dụng cho người dùng đã đăng nhập, còn Event-scoped cho tất cả mọi người.",
+      "B. User-scoped mô tả đặc điểm tồn tại xuyên suốt các phiên của người dùng, trong khi Event-scoped chỉ mô tả bối cảnh tại thời điểm sự kiện xảy ra.",
+      "C. Event-scoped có giới hạn số lượng dimension cao hơn so với User-scoped.",
+      "D. User-scoped không thể sử dụng trong các báo cáo Exploration."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User-scoped dimensions (như membership_level) áp dụng cho mọi sự kiện của người dùng đó từ thời điểm nó được thiết lập. Event-scoped (như search_term) chỉ có ý nghĩa đối với sự kiện cụ thể đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn phát hiện dữ liệu Revenue trong GA4 thấp hơn 30% so với hệ thống Backend. Sau khi kiểm tra, bạn thấy nhiều đơn hàng thành công nhưng người dùng không quay lại trang 'Thank-you'. Giải pháp Expert nào tối ưu nhất?",
+    "options": [
+      "A. Tăng thời gian lưu trữ cookie lên 24 tháng để bắt được các phiên quay lại.",
+      "B. Triển khai 'Measurement Protocol' để gửi sự kiện purchase trực tiếp từ Server khi đơn hàng được ghi nhận thành công trong database.",
+      "C. Sử dụng GTM để bắt sự kiện click vào nút 'Thanh toán' và coi đó là Revenue.",
+      "D. Yêu cầu bộ phận IT sửa lỗi redirect của cổng thanh toán để 100% người dùng phải quay lại trang cảm ơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Measurement Protocol cho phép gửi dữ liệu từ phía server, loại bỏ sự phụ thuộc vào trình duyệt người dùng. Đây là cách chính xác nhất để đảm bảo dữ liệu tài chính trong GA4 khớp với Backend.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi phân tích 'Cohort Exploration', chỉ số 'Retention' kiểu 'Rolling Retention' khác gì so với 'Standard Retention'?",
+    "options": [
+      "A. Rolling Retention tính toán dựa trên số tiền người dùng chi tiêu thay vì số lượng người dùng.",
+      "B. Rolling Retention coi một người dùng là được giữ chân nếu họ quay lại vào bất kỳ thời điểm nào sau khoảng thời gian bắt đầu, thay vì chỉ đúng vào khoảng thời gian đó.",
+      "C. Standard Retention chỉ áp dụng cho các ứng dụng di động, không áp dụng cho website.",
+      "D. Không có sự khác biệt về mặt toán học, chỉ khác nhau về cách hiển thị biểu đồ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Standard Retention yêu cầu người dùng quay lại chính xác vào N-th day/week. Rolling Retention linh hoạt hơn, ghi nhận người dùng miễn là họ có hoạt động từ ngày N trở đi, giúp đánh giá độ trung thành dài hạn tốt hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để xử lý tình huống dữ liệu PII (như email khách hàng) lỡ bị gửi vào GA4 qua URL parameters nhằm tuân thủ GDPR và tránh bị xóa toàn bộ Property?",
+    "options": [
+      "A. Xóa toàn bộ tài khoản GA4 và tạo lại từ đầu.",
+      "B. Sử dụng tính năng 'Data Deletion Requests' trong GA4 để chọn lọc và xóa các tham số cụ thể trong khoảng thời gian bị ảnh hưởng.",
+      "C. Chỉ cần cấu hình lại GTM để chặn email, dữ liệu cũ sẽ tự động biến mất sau 30 ngày.",
+      "D. Viết một script trong BigQuery để xóa các dòng chứa email."
+    ],
+    "correctAnswer": "B",
+    "explanation": "GA4 cung cấp công cụ 'Data Deletion Requests' cho phép admin yêu cầu xóa dữ liệu theo các tiêu chí như: xóa toàn bộ sự kiện, xóa các tham số cụ thể hoặc xóa các user-scoped dimensions để khắc phục sự cố rò rỉ PII.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong 'Funnel Exploration', tùy chọn 'Make funnel open' có ý nghĩa chiến lược gì khi phân tích hành trình khách hàng?",
+    "options": [
+      "A. Nó cho phép người dùng bắt đầu hành trình từ bất kỳ bước nào trong phễu thay vì bắt buộc phải từ bước 1.",
+      "B. Nó cho phép các sự kiện bên ngoài hệ thống (như Offline data) tự động được đưa vào phễu.",
+      "C. Nó giúp loại bỏ các bước không quan trọng để làm phễu trông ngắn gọn hơn.",
+      "D. Nó tự động gán giá trị chuyển đổi cho tất cả các bước trong phễu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một 'Open Funnel' phản ánh đúng thực tế rằng người dùng có thể vào website từ nhiều điểm khác nhau (ví dụ: vào thẳng trang sản phẩm thay vì trang chủ). Điều này giúp chuyên gia đánh giá hiệu quả của từng giai đoạn một cách độc lập.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi kết nối GA4 với BigQuery, sự khác biệt giữa 'Daily export' và 'Streaming export' về mặt chi phí và ứng dụng là gì?",
+    "options": [
+      "A. Streaming export miễn phí hoàn toàn nhưng dữ liệu có độ trễ 24h.",
+      "B. Daily export phù hợp cho báo cáo lịch sử, trong khi Streaming export tốn phí thêm (trên mỗi GB) nhưng cung cấp dữ liệu gần như thời gian thực để phản ứng nhanh.",
+      "C. Streaming export chỉ khả dụng cho phiên bản GA4 360.",
+      "D. Daily export chứa nhiều tham số hơn so với Streaming export."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Google Cloud tính phí cho việc streaming dữ liệu vào BigQuery. Streaming export cực kỳ hữu ích cho các bài toán Real-time Dashboard hoặc kích hoạt các automation marketing ngay lập tức dựa trên hành vi người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao chỉ số 'Bounce Rate' trong GA4 lại mang ý nghĩa ngược lại so với 'Engagement Rate', và chuyên gia nên ưu tiên chỉ số nào?",
+    "options": [
+      "A. Bounce Rate trong GA4 là tỷ lệ phiên không có tương tác; Expert ưu tiên Engagement Rate vì nó tập trung vào giá trị tích cực thay vì tiêu cực.",
+      "B. Bounce Rate trong GA4 giống hệt UA, Expert nên bỏ qua vì nó không còn chính xác.",
+      "C. Engagement Rate chỉ tính các phiên trên 10 giây, còn Bounce Rate tính tất cả các phiên.",
+      "D. Bounce Rate chỉ dùng cho SEO, còn Engagement Rate dùng cho Performance Marketing."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong GA4, Bounce Rate = 1 - Engagement Rate. Engagement Rate cung cấp cái nhìn sâu sắc hơn về việc người dùng thực sự có tương tác (ở lại lâu, xem nhiều trang hoặc có chuyển đổi) thay vì chỉ đơn thuần là vào rồi ra.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần so sánh hiệu quả của 2 chiến dịch Marketing dựa trên 'First User Source/Medium'. Tại sao báo cáo này lại quan trọng hơn 'Session Source/Medium' trong việc đánh giá chiến lược Acquisition?",
+    "options": [
+      "A. Vì nó cho biết kênh nào thực sự mang người dùng mới đến hệ sinh thái lần đầu tiên, giúp đánh giá hiệu quả Top-of-funnel.",
+      "B. Vì nó tự động loại bỏ các nguồn Direct không mong muốn.",
+      "C. Vì nó luôn khớp với dữ liệu trong Google Search Console.",
+      "D. Vì nó là chỉ số duy nhất có thể sử dụng trong mô hình Data-driven attribution."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'First User' dimensions gắn liền với người dùng trọn đời (User-scoped). Điều này giúp nhà quản lý hiểu rõ nguồn gốc thực sự của khách hàng, thay vì chỉ biết nguồn của phiên truy cập hiện tại (Session-scoped).",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một thuộc tính GA4 có 'Data Retention' được thiết lập là 2 tháng. Điều này sẽ ảnh hưởng trực tiếp đến loại báo cáo nào sau đây?",
+    "options": [
+      "A. Các báo cáo tiêu chuẩn (Standard Reports) như 'Acquisition Overview'.",
+      "B. Các báo cáo tùy chỉnh trong phần 'Explorations' khi xem dữ liệu xa hơn 2 tháng.",
+      "C. Toàn bộ dữ liệu lịch sử trong BigQuery Export.",
+      "D. Khả năng kết nối dữ liệu với Google Ads."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiết lập Data Retention trong GA4 (2 tháng hoặc 14 tháng) chỉ áp dụng cho dữ liệu cấp sự kiện và người dùng trong phần Explorations. Các báo cáo tiêu chuẩn tổng hợp vẫn lưu trữ dữ liệu lâu hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phân tích 'Segment Overlap', bạn thấy sự giao thoa giữa nhóm 'Mobile Users' và 'Purchasers' rất thấp. Hành động chiến lược nào là hợp lý nhất?",
+    "options": [
+      "A. Ngừng chạy quảng cáo trên thiết bị di động để tiết kiệm ngân sách.",
+      "B. Kiểm tra UX/UI của quy trình thanh toán trên di động và tính ổn định của việc gắn tag GA4 trên môi trường mobile web.",
+      "C. Chuyển toàn bộ ngân sách sang quảng cáo Desktop.",
+      "D. Xóa bỏ segment 'Mobile Users' vì nó không mang lại giá trị phân tích."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự giao thoa thấp giữa người dùng mobile và người mua hàng thường là tín hiệu của rào cản kỹ thuật hoặc trải nghiệm người dùng kém trên di động. Expert cần điều tra nguyên nhân gốc rễ thay vì cắt bỏ kênh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong GA4, 'Session' được định nghĩa là kết thúc khi nào, và điểm này khác biệt gì quan trọng so với Universal Analytics (UA)?",
+    "options": [
+      "A. Kết thúc sau 30 phút không hoạt động; khác ở chỗ GA4 không khởi tạo session mới khi nguồn chiến dịch thay đổi giữa chừng.",
+      "B. Kết thúc vào lúc nửa đêm; GA4 tính toán session dựa trên múi giờ của người dùng thay vì Property.",
+      "C. Kết thúc ngay khi người dùng đóng trình duyệt; UA thì giữ session trong 30 phút.",
+      "D. Kết thúc sau 24 giờ liên tục hoạt động; UA không có giới hạn này."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đây là thay đổi lớn: Trong UA, nếu người dùng đang trong session mà click vào một link có UTM khác, session cũ kết thúc và session mới bắt đầu. GA4 thì không, nó giữ nguyên session đó, giúp giảm bớt việc thổi phồng số lượng session.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để xác định 'Dark Traffic' (truy cập không rõ nguồn gốc nhưng không phải Direct thực thụ) trong GA4 một cách hiệu quả nhất?",
+    "options": [
+      "A. Kiểm tra các truy cập thuộc nhóm 'Unassigned' trong báo cáo 'Session default channel group' và phân tích sâu 'Landing page'.",
+      "B. Tăng số lượng sự kiện Enhanced Measurement.",
+      "C. Sử dụng Google Signals để định danh tất cả người dùng ẩn danh.",
+      "D. Chặn tất cả IP từ các nước không nằm trong thị trường mục tiêu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nhóm 'Unassigned' thường chứa các truy cập mà GA4 không thể phân loại do thiếu UTM hoặc tham số không hợp lệ. Phân tích Landing page của nhóm này giúp nhận diện traffic từ các ứng dụng chat hoặc email không được gắn tag đúng cách.",
+    "difficulty": "EXPERT",
+    "skillArea": "Web Analytics (GA4)",
+    "category": "SKILL"
+  }
+]

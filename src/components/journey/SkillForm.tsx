@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ArrowLeft, Search, Plus, X, Check } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight } from "lucide-react";
 import SkillAutoResolve from "../shared/SkillAutoResolve";
 
 interface SkillFormProps {
@@ -44,7 +44,6 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
     industry: string;
     jobRole: string;
   } | null>(null);
-  const [customSkillInput, setCustomSkillInput] = useState("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [confirmed, setConfirmed] = useState(false);
 
@@ -66,13 +65,6 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
     },
     [skillInput],
   );
-
-  const handleAddCustomSkill = () => {
-    const trimmed = customSkillInput.trim();
-    if (!trimmed) return;
-    setSelectedSkills([trimmed]);
-    setCustomSkillInput("");
-  };
 
   const canSubmit = resolvedCareer && selectedSkills.length > 0;
 
@@ -115,75 +107,31 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
         />
 
         {confirmed && resolvedCareer && (
-          <div className="gsj-wizard-section" style={{ marginTop: 24 }}>
-            <h3 className="gsj-wizard-section__title">
-              Kỹ năng mục tiêu sẽ học
-            </h3>
-            <p className="gsj-hint-text gsj-hint-text--sm">
-              Xác nhận kỹ năng chính bạn muốn học. Bạn có thể nhập tên khác nếu
-              muốn.
-            </p>
+          <div className="gsj-wizard-section gsj-target-summary" style={{ marginTop: 24 }}>
+            <div className="gsj-target-summary__title">Bạn đã chọn:</div>
 
-            {selectedSkills.length > 0 && (
-              <div
-                className="gsj-chip-list gsj-chip-list--wrap"
-                style={{ marginBottom: 12 }}
-              >
-                {selectedSkills.map((skill) => (
-                  <span key={skill} className="gsj-chip gsj-chip--selected">
-                    <Check size={14} style={{ marginRight: 4 }} />
-                    {skill}
-                    <button
-                      type="button"
-                      onClick={() => setSelectedSkills([])}
-                      style={{ marginLeft: 4 }}
-                    >
-                      <X size={13} />
-                    </button>
-                  </span>
-                ))}
+            <div className="gsj-target-summary__content">
+              {/* Left: Skill */}
+              <div className="gsj-target-summary__group">
+                <span className="gsj-target-summary__label">Kỹ năng:</span>
+                <span className="gsj-chip gsj-chip--selected gsj-target-summary__chip">
+                  <Check size={14} />
+                  {selectedSkills[0] || "Chưa chọn"}
+                </span>
               </div>
-            )}
 
-            <div className="gsj-skill-input-wrapper">
-              <div className="gsj-search-input">
-                <Search size={18} />
-                <input
-                  type="text"
-                  placeholder="Hoặc nhập tên kỹ năng khác..."
-                  value={customSkillInput}
-                  onChange={(e) => setCustomSkillInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleAddCustomSkill();
-                    }
-                  }}
-                />
-                {customSkillInput && (
-                  <button type="button" onClick={() => setCustomSkillInput("")}>
-                    <X size={16} />
-                  </button>
-                )}
+              {/* Right: Career Path */}
+              <div className="gsj-target-summary__group">
+                <span className="gsj-target-summary__label">Ngành:</span>
+                <div className="gsj-target-summary__path">
+                  <span>{resolvedCareer.domain}</span>
+                  <ChevronRight size={12} className="gsj-target-summary__path-separator" />
+                  <span>{resolvedCareer.industry}</span>
+                  <ChevronRight size={12} className="gsj-target-summary__path-separator" />
+                  <strong className="gsj-target-summary__role">{resolvedCareer.jobRole}</strong>
+                </div>
               </div>
-              <button
-                type="button"
-                className="gsj-btn gsj-btn--primary gsj-btn--sm"
-                onClick={handleAddCustomSkill}
-                disabled={!customSkillInput.trim()}
-              >
-                <Plus size={16} />
-                Dùng kỹ năng này
-              </button>
             </div>
-
-            <p
-              className="gsj-hint-text gsj-hint-text--sm"
-              style={{ marginTop: 8 }}
-            >
-              Lộ trình: <strong>{resolvedCareer.domain}</strong> &rsaquo;{" "}
-              {resolvedCareer.industry} &rsaquo; {resolvedCareer.jobRole}
-            </p>
           </div>
         )}
       </div>

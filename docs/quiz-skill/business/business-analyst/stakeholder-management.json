@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục đích chính của việc lập kế hoạch truyền thông (Communication Plan) là gì?",
+    "options": [
+      "A. Để tạo ra một tài liệu dự án dài dòng.",
+      "B. Để đảm bảo thông tin được truyền đạt hiệu quả đến đúng người, đúng thời điểm và đúng cách.",
+      "C. Để giảm bớt trách nhiệm của Business Analyst.",
+      "D. Để tránh phải giao tiếp trực tiếp với các bên liên quan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kế hoạch truyền thông giúp hệ thống hóa cách thức, tần suất và nội dung giao tiếp, đảm bảo mọi bên liên quan nhận được thông tin cần thiết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong ngữ cảnh quản lý dự án, \"stakeholder\" (bên liên quan) là gì?",
+    "options": [
+      "A. Chỉ những người tài trợ cho dự án.",
+      "B. Bất kỳ cá nhân hoặc tổ chức nào có thể bị ảnh hưởng hoặc có thể gây ảnh hưởng đến dự án.",
+      "C. Chỉ các thành viên trong nhóm phát triển.",
+      "D. Chỉ người dùng cuối của sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bên liên quan bao gồm một phạm vi rộng các cá nhân, nhóm hoặc tổ chức có lợi ích, quyền lợi hoặc sự ảnh hưởng đến dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ma trận Power/Interest (Quyền lực/Mức độ quan tâm) được sử dụng chủ yếu để làm gì?",
+    "options": [
+      "A. Để đánh giá hiệu suất của nhóm dự án.",
+      "B. Để phân loại các bên liên quan dựa trên quyền lực và mức độ quan tâm của họ.",
+      "C. Để theo dõi tiến độ công việc hàng ngày.",
+      "D. Để quản lý rủi ro dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ma trận Power/Interest là công cụ hữu ích để phân loại các bên liên quan, giúp BA xác định chiến lược giao tiếp và quản lý phù hợp cho từng nhóm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc thu thập và kết hợp phản hồi từ các bên liên quan lại quan trọng đối với một Business Analyst?",
+    "options": [
+      "A. Để kéo dài thời gian dự án.",
+      "B. Để đảm bảo giải pháp đáp ứng đúng nhu cầu và nhận được sự chấp thuận.",
+      "C. Để tạo thêm công việc cho nhóm phát triển.",
+      "D. Để chỉ ra lỗi của người khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phản hồi giúp xác nhận yêu cầu, phát hiện sai sót, và đảm bảo sản phẩm cuối cùng phù hợp với mong đợi, tăng khả năng thành công của dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "\"Consensus\" (sự đồng thuận) trong quản lý các bên liên quan nghĩa là gì?",
+    "options": [
+      "A. Mọi người đều phải hoàn toàn đồng ý với mọi chi tiết.",
+      "B. Các bên liên quan chấp nhận một quyết định hoặc giải pháp, ngay cả khi đó không phải là lựa chọn ưu tiên của họ, vì lợi ích chung.",
+      "C. Quyết định được đưa ra bởi người có quyền lực cao nhất.",
+      "D. Chỉ cần đa số phiếu bầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đồng thuận không nhất thiết là sự đồng ý tuyệt đối, mà là sự chấp nhận và ủng hộ một giải pháp vì lợi ích chung, cho phép dự án tiến lên.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Quản lý kỳ vọng của các bên liên quan là gì?",
+    "options": [
+      "A. Đảm bảo mọi người luôn hài lòng với mọi thứ.",
+      "B. Thiết lập và duy trì sự hiểu biết thực tế về những gì dự án sẽ mang lại.",
+      "C. Hứa hẹn mọi thứ mà các bên liên quan yêu cầu.",
+      "D. Bỏ qua các yêu cầu không thực tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quản lý kỳ vọng là việc truyền đạt rõ ràng về phạm vi, thời gian, chi phí và chất lượng của dự án để tránh những kỳ vọng không thực tế có thể dẫn đến thất vọng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "\"Change Management Readiness\" (Sự sẵn sàng cho quản lý thay đổi) đề cập đến điều gì?",
+    "options": [
+      "A. Khả năng của BA để thay đổi yêu cầu bất cứ lúc nào.",
+      "B. Mức độ mà các cá nhân và tổ chức sẵn sàng và có khả năng chấp nhận một sự thay đổi.",
+      "C. Sự sẵn sàng của công nghệ mới để được triển khai.",
+      "D. Khả năng của nhóm dự án để làm việc ngoài giờ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự sẵn sàng cho thay đổi đánh giá mức độ mà các bên liên quan và tổ chức có thể thích nghi và chấp nhận những thay đổi do dự án mang lại.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đối với các bên liên quan có \"Quyền lực cao và Mức độ quan tâm cao\" (High Power, High Interest) theo ma trận Power/Interest, chiến lược quản lý nào là phù hợp nhất?",
+    "options": [
+      "A. Chỉ thông báo cho họ khi có vấn đề lớn.",
+      "B. Giữ cho họ hài lòng và được tham gia tích cực (Manage Closely).",
+      "C. Cung cấp thông tin tối thiểu.",
+      "D. Bỏ qua yêu cầu của họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là nhóm quan trọng nhất, cần được quản lý chặt chẽ, tham gia tích cực và giữ cho họ hài lòng để đảm bảo sự ủng hộ cho dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Đối với các bên liên quan có \"Quyền lực thấp và Mức độ quan tâm thấp\" (Low Power, Low Interest), chiến lược quản lý nào là phù hợp nhất?",
+    "options": [
+      "A. Tham gia tích cực vào mọi quyết định.",
+      "B. Giữ cho họ hài lòng.",
+      "C. Theo dõi họ và cung cấp thông tin tối thiểu (Monitor).",
+      "D. Thường xuyên tổ chức các cuộc họp riêng với họ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nhóm này cần được theo dõi để đảm bảo không có thay đổi bất ngờ về quyền lực hoặc lợi ích, nhưng không cần mức độ tương tác cao.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để đảm bảo giao tiếp hiệu quả với các bên liên quan, Business Analyst nên làm gì đầu tiên?",
+    "options": [
+      "A. Gửi email hàng loạt cho tất cả mọi người.",
+      "B. Xác định nhu cầu thông tin và phương thức giao tiếp ưa thích của từng bên liên quan.",
+      "C. Chỉ nói chuyện với quản lý cấp cao.",
+      "D. Sử dụng thuật ngữ kỹ thuật phức tạp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hiểu rõ đối tượng và cách họ muốn nhận thông tin là chìa khóa để xây dựng một kế hoạch truyền thông hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Phương pháp phổ biến nhất để thu thập phản hồi về các yêu cầu từ nhiều bên liên quan là gì?",
+    "options": [
+      "A. Chỉ đọc tài liệu và phỏng đoán.",
+      "B. Tổ chức các buổi họp review, phỏng vấn, khảo sát, hoặc workshop.",
+      "C. Yêu cầu họ tự tìm hiểu.",
+      "D. Bỏ qua các ý kiến trái chiều."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các buổi họp review, phỏng vấn, khảo sát và workshop là những cách hiệu quả để thu thập phản hồi đa dạng và chi tiết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi đối mặt với một xung đột giữa hai bên liên quan về một yêu cầu, bước đầu tiên mà Business Analyst nên làm là gì?",
+    "options": [
+      "A. Chọn phe của một bên.",
+      "B. Lập tức báo cáo lên cấp quản lý cao hơn.",
+      "C. Lắng nghe cẩn thận quan điểm của cả hai bên để hiểu rõ nguyên nhân gốc rễ.",
+      "D. Yêu cầu họ tự giải quyết."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hiểu rõ các quan điểm và nguyên nhân của xung đột là bước đầu tiên và quan trọng nhất để tìm ra giải pháp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để xây dựng sự đồng thuận giữa các bên liên quan có quan điểm khác nhau, Business Analyst nên sử dụng kỹ thuật nào?",
+    "options": [
+      "A. Ép buộc mọi người phải đồng ý.",
+      "B. Tạo điều kiện cho các cuộc thảo luận mở, tìm kiếm điểm chung và giải pháp đôi bên cùng có lợi.",
+      "C. Bỏ qua những ý kiến thiểu số.",
+      "D. Chỉ tập trung vào những người ủng hộ dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thúc đẩy đối thoại cởi mở, tìm kiếm giải pháp sáng tạo và tập trung vào lợi ích chung là cách hiệu quả để xây dựng đồng thuận.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để quản lý kỳ vọng của các bên liên quan một cách hiệu quả, Business Analyst nên làm gì?",
+    "options": [
+      "A. Hứa hẹn mọi tính năng có thể.",
+      "B. Thường xuyên truyền đạt rõ ràng về phạm vi, tiến độ, rủi ro và hạn chế của dự án.",
+      "C. Tránh thảo luận về bất kỳ hạn chế nào của dự án.",
+      "D. Chỉ giao tiếp khi có vấn đề nghiêm trọng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giao tiếp minh bạch và thường xuyên về các khía cạnh quan trọng của dự án giúp duy trì kỳ vọng thực tế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một bên liên quan bày tỏ sự phản đối mạnh mẽ với một thay đổi đã được thống nhất, Business Analyst nên làm gì đầu tiên?",
+    "options": [
+      "A. Phớt lờ sự phản đối của họ.",
+      "B. Cố gắng hiểu lý do đằng sau sự phản đối và giải quyết những mối lo ngại của họ.",
+      "C. Bắt buộc họ phải chấp nhận thay đổi.",
+      "D. Báo cáo họ với cấp trên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hiểu rõ nguyên nhân của sự phản đối là bước đầu tiên để có thể giải quyết chúng một cách hiệu quả, thông qua giải thích, đào tạo hoặc điều chỉnh nhỏ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án, bạn nhận thấy hai bên liên quan chính có yêu cầu mâu thuẫn trực tiếp với nhau. Là một Business Analyst, hành động đầu tiên của bạn là gì?",
+    "options": [
+      "A. Tự mình quyết định yêu cầu nào là quan trọng hơn.",
+      "B. Tổ chức một cuộc họp chung để thảo luận công khai và tìm kiếm điểm chung hoặc giải pháp thay thế.",
+      "C. Bỏ qua cả hai yêu cầu và tìm một giải pháp mới hoàn toàn.",
+      "D. Chỉ làm việc với bên liên quan có quyền lực cao hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thảo luận trực tiếp và mở giúp làm rõ vấn đề, hiểu các ưu tiên và cùng nhau tìm kiếm giải pháp có thể chấp nhận được cho cả hai bên.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một bên liên quan cấp cao bày tỏ kỳ vọng không thực tế về thời gian hoàn thành một tính năng phức tạp. Bạn nên làm gì?",
+    "options": [
+      "A. Đồng ý với họ để tránh xung đột.",
+      "B. Cung cấp thông tin thực tế về độ phức tạp và ước tính thời gian, giải thích lý do một cách rõ ràng và lịch sự.",
+      "C. Báo cáo cho quản lý dự án và để họ giải quyết.",
+      "D. Cố gắng hoàn thành tính năng đó trong thời gian họ mong muốn, dù biết là không thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giao tiếp minh bạch và cung cấp thông tin dựa trên thực tế là cách tốt nhất để quản lý kỳ vọng và tránh những hiểu lầm sau này.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn nhận thấy một bên liên quan quan trọng ít tham gia vào các buổi họp và không cung cấp phản hồi kịp thời. Bạn nên làm gì để cải thiện tình hình?",
+    "options": [
+      "A. Loại bỏ họ khỏi danh sách các bên liên quan.",
+      "B. Tiếp cận riêng với họ để hiểu nguyên nhân, hỏi về phương thức giao tiếp ưa thích và cố gắng điều chỉnh.",
+      "C. Tiếp tục gửi email cho họ như bình thường.",
+      "D. Tự mình đưa ra quyết định thay cho họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hiểu rõ lý do của sự thiếu tham gia giúp BA tìm ra cách tiếp cận phù hợp, có thể là do lịch trình bận rộn, không hiểu rõ tầm quan trọng, hoặc phương thức giao tiếp không phù hợp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn nhận được phản hồi tiêu cực về một phần của giải pháp từ một nhóm người dùng. Phản hồi này có vẻ hợp lý. Bạn nên làm gì?",
+    "options": [
+      "A. Phớt lờ phản hồi vì nó tiêu cực.",
+      "B. Ghi nhận phản hồi, đánh giá tác động và thảo luận với nhóm dự án về các lựa chọn giải quyết.",
+      "C. Cố gắng bảo vệ giải pháp hiện tại bằng mọi giá.",
+      "D. Yêu cầu người dùng tự đưa ra giải pháp thay thế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phản hồi, dù tiêu cực, là cơ hội để cải thiện. Ghi nhận, đánh giá và thảo luận là các bước quan trọng để xử lý phản hồi một cách xây dựng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một bên liên quan mới được thêm vào dự án giữa chừng. Bạn nên làm gì đầu tiên?",
+    "options": [
+      "A. Giả định rằng họ sẽ tự tìm hiểu thông tin dự án.",
+      "B. Thực hiện phân tích bên liên quan cho người mới này và giới thiệu họ với dự án.",
+      "C. Chỉ gửi cho họ tất cả các tài liệu dự án cũ.",
+      "D. Yêu cầu họ tham gia vào các cuộc họp tiếp theo mà không cần giải thích."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cần phải tích hợp bên liên quan mới vào quy trình quản lý bằng cách hiểu vai trò, quyền hạn, lợi ích của họ và cung cấp thông tin cần thiết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Nếu một bên liên quan được đặt vào góc \"High Power, Low Interest\" (Quyền lực cao, Quan tâm thấp) trong ma trận Power/Interest, điều này ngụ ý gì về chiến lược quản lý của bạn?",
+    "options": [
+      "A. Bạn nên liên tục tham vấn họ về mọi chi tiết.",
+      "B. Bạn nên giữ cho họ hài lòng (Keep Satisfied) bằng cách cung cấp thông tin định kỳ và đảm bảo họ không có lý do để can thiệp tiêu cực.",
+      "C. Bạn có thể bỏ qua họ vì họ không quan tâm nhiều.",
+      "D. Bạn nên cố gắng tăng mức độ quan tâm của họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Những bên liên quan này có khả năng ảnh hưởng lớn nhưng không chủ động tham gia. Cần giữ họ hài lòng để tránh họ sử dụng quyền lực gây cản trở khi không được thông tin đầy đủ hoặc không hài lòng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Hai phòng ban đang tranh cãi về việc ai sẽ chịu trách nhiệm cho một tính năng mới. Là BA, bạn phân tích và nhận ra rằng cả hai phòng ban đều có lý do chính đáng dựa trên mô tả công việc hiện tại. Điều này cho thấy nguyên nhân gốc rễ của xung đột có thể là gì?",
+    "options": [
+      "A. Một trong hai phòng ban không muốn làm việc.",
+      "B. Thiếu sự rõ ràng trong phân công trách nhiệm hoặc định nghĩa vai trò mới.",
+      "C. Mâu thuẫn cá nhân giữa các thành viên.",
+      "D. Thiếu ngân sách cho tính năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi cả hai bên đều có lý do chính đáng, thường là do sự không rõ ràng trong phân công nhiệm vụ, trùng lặp vai trò, hoặc thiếu định nghĩa rõ ràng cho các vai trò mới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Nếu một Business Analyst không có kế hoạch truyền thông rõ ràng và không thường xuyên cập nhật cho các bên liên quan, hậu quả có thể là gì?",
+    "options": [
+      "A. Dự án sẽ hoàn thành nhanh hơn vì ít cuộc họp hơn.",
+      "B. Các bên liên quan có thể có những kỳ vọng sai lệch, dẫn đến sự không hài lòng và thiếu ủng hộ.",
+      "C. Nhóm phát triển sẽ có nhiều thời gian hơn để làm việc.",
+      "D. Không có ảnh hưởng đáng kể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thiếu giao tiếp dẫn đến thiếu thông tin, gây ra hiểu lầm, kỳ vọng sai lệch và có thể làm giảm sự tin tưởng và ủng hộ của các bên liên quan đối với dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn nhận được nhiều phản hồi từ người dùng rằng một quy trình mới trong hệ thống quá phức tạp và mất thời gian. Phân tích này cho thấy điều gì?",
+    "options": [
+      "A. Người dùng không muốn học cái mới.",
+      "B. Quy trình hiện tại có thể không tối ưu hoặc không thân thiện với người dùng, cần được xem xét lại.",
+      "C. Phản hồi này không quan trọng vì đó chỉ là ý kiến cá nhân.",
+      "D. Cần thêm tính năng mới để giải quyết sự phức tạp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phản hồi nhất quán về sự phức tạp của quy trình là một dấu hiệu rõ ràng rằng quy trình cần được đơn giản hóa hoặc thiết kế lại để cải thiện trải nghiệm người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đâu là mục đích chính của việc tiến hành phân tích các bên liên quan (Stakeholder Analysis)?",
+    "options": [
+      "A. Để xác định ngân sách dự án.",
+      "B. Để hiểu rõ các bên liên quan, nhu cầu và mức độ ảnh hưởng của họ đến dự án.",
+      "C. Để lập kế hoạch kiểm thử phần mềm.",
+      "D. Để thiết kế giao diện người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân tích các bên liên quan giúp BA hiểu rõ ai là người bị ảnh hưởng hoặc có thể ảnh hưởng đến dự án, từ đó có chiến lược quản lý phù hợp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một dự án có một stakeholder có quyền lực cao nhưng ít quan tâm đến chi tiết. Một BA nên tương tác chủ yếu với họ như thế nào?",
+    "options": [
+      "A. Cung cấp tất cả các chi tiết kỹ thuật và yêu cầu phản hồi thường xuyên.",
+      "B. Chỉ thông báo những thông tin quan trọng, tổng quan và đảm bảo họ hài lòng.",
+      "C. Yêu cầu họ tham gia vào mọi cuộc họp và quyết định.",
+      "D. Bỏ qua họ vì họ ít quan tâm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với stakeholder có quyền lực cao, ít quan tâm, BA cần 'Keep Satisfied' (Giữ cho họ hài lòng) bằng cách cung cấp thông tin tổng quan, quan trọng mà không làm họ quá tải.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục đích chính của việc thực hiện Phân tích Stakeholder (Stakeholder Analysis) là gì?",
+    "options": [
+      "A. Để tạo ra một danh sách liên hệ cho dự án.",
+      "B. Để hiểu rõ ảnh hưởng, lợi ích và mức độ tác động của từng stakeholder đến dự án.",
+      "C. Để xác định ngân sách dành cho việc giao tiếp với stakeholder.",
+      "D. Để phân công vai trò và trách nhiệm cho tất cả các thành viên dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân tích Stakeholder giúp BA hiểu rõ hơn về các bên liên quan, từ đó xây dựng chiến lược tương tác phù hợp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng Kế hoạch Tương tác Stakeholder (Stakeholder Engagement Plan), yếu tố nào *quan trọng nhất* cần xem xét cho mỗi nhóm stakeholder?",
+    "options": [
+      "A. Vị trí của họ trong sơ đồ tổ chức.",
+      "B. Nhu cầu cụ thể của họ và mức độ tham gia mong muốn vào dự án.",
+      "C. Số lượng cuộc họp mà họ có thể tham dự.",
+      "D. Ngân sách dành cho việc giao tiếp với họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kế hoạch tương tác hiệu quả cần được điều chỉnh theo nhu cầu và mong muốn riêng của từng nhóm stakeholder để tối đa hóa sự hợp tác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đã xác định một stakeholder chủ chốt rất phản đối sự thay đổi và có ảnh hưởng đáng kể. Chiến lược ban đầu *tốt nhất* là gì?",
+    "options": [
+      "A. Gạt bỏ ý kiến của họ vì họ phản đối thay đổi.",
+      "B. Cố gắng thuyết phục họ chấp nhận thay đổi bằng mọi giá.",
+      "C. Tìm hiểu sâu về những lo ngại của họ và cố gắng thu hút họ tham gia sớm vào quá trình.",
+      "D. Báo cáo lên quản lý cấp cao để họ can thiệp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Với stakeholder có ảnh hưởng và phản đối, việc hiểu rõ nguyên nhân và thu hút họ tham gia sớm là cách hiệu quả nhất để giảm thiểu rủi ro và xây dựng sự đồng thuận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quá trình dự án, một stakeholder ban đầu được xác định là ít quan tâm đột nhiên thể hiện sự quan tâm cao do những ý nghĩa kinh doanh mới. BA nên làm gì?",
+    "options": [
+      "A. Tiếp tục tương tác với họ như trước vì phân tích ban đầu đã được thực hiện.",
+      "B. Đánh giá lại vị trí của họ trong ma trận quyền lực/lợi ích (power/interest matrix) và điều chỉnh chiến lược tương tác.",
+      "C. Báo cáo cho Project Manager và chờ hướng dẫn.",
+      "D. Yêu cầu họ tham gia vào tất cả các cuộc họp từ thời điểm đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Stakeholder analysis là một quá trình lặp lại. Sự thay đổi trong lợi ích hoặc quyền lực yêu cầu BA phải điều chỉnh cách tiếp cận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Ma trận Quyền lực/Lợi ích (Power/Interest Grid), góc phần tư nào thường đòi hỏi nỗ lực 'Quản lý Chặt chẽ' (Manage Closely) nhất?",
+    "options": [
+      "A. Quyền lực thấp, Lợi ích thấp.",
+      "B. Quyền lực cao, Lợi ích thấp.",
+      "C. Quyền lực thấp, Lợi ích cao.",
+      "D. Quyền lực cao, Lợi ích cao."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Stakeholder ở góc này có khả năng tác động lớn đến dự án và rất quan tâm, do đó cần được quản lý và tương tác chặt chẽ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phát triển một kế hoạch truyền thông cho một dự án phức tạp, điều *quan trọng nhất* mà một Business Analyst cần xem xét là gì?",
+    "options": [
+      "A. Sử dụng một phương pháp truyền thông duy nhất cho tất cả các stakeholder.",
+      "B. Điều chỉnh phương pháp và tần suất truyền thông cho từng nhóm stakeholder.",
+      "C. Đảm bảo tất cả các cuộc họp đều được ghi lại và phân phát.",
+      "D. Chỉ truyền thông khi có vấn đề lớn phát sinh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mỗi nhóm stakeholder có nhu cầu và sở thích truyền thông khác nhau. Kế hoạch hiệu quả cần được cá nhân hóa.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một người dùng kinh doanh chủ chốt cung cấp phản hồi mâu thuẫn với các yêu cầu đã thu thập từ một bộ phận khác. BA nên xử lý như thế nào?",
+    "options": [
+      "A. Chọn yêu cầu của người dùng kinh doanh vì họ là người dùng cuối.",
+      "B. Ghi lại cả hai yêu cầu và để Project Manager quyết định.",
+      "C. Tổ chức một cuộc họp giữa các stakeholder liên quan để giải quyết mâu thuẫn và đạt được sự đồng thuận.",
+      "D. Bỏ qua phản hồi mâu thuẫn và tiếp tục với các yêu cầu đã có."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA đóng vai trò trung gian, cần tạo điều kiện cho các bên liên quan thảo luận và đạt được sự đồng thuận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích chính của việc thiết lập các kênh truyền thông rõ ràng ngay từ đầu dự án là gì?",
+    "options": [
+      "A. Giảm thiểu chi phí truyền thông.",
+      "B. Đảm bảo mọi người đều có quyền truy cập vào tất cả thông tin.",
+      "C. Giảm thiểu hiểu lầm và đảm bảo luồng thông tin kịp thời, chính xác.",
+      "D. Rút ngắn thời gian họp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kênh truyền thông rõ ràng giúp mọi người biết cách thức, khi nào và ai sẽ nhận thông tin, từ đó tránh hiểu lầm và đảm bảo hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn nhận thấy một nhóm stakeholder liên tục bỏ lỡ các cuộc họp cập nhật dự án. Bước tiếp theo *hiệu quả nhất* là gì?",
+    "options": [
+      "A. Ngừng gửi lời mời họp cho họ.",
+      "B. Gửi email nhắc nhở cứng rắn hơn.",
+      "C. Trực tiếp liên hệ với họ để hiểu phương pháp truyền thông và lịch trình ưa thích của họ.",
+      "D. Báo cáo sự thiếu tham gia của họ lên quản lý cấp cao."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc tìm hiểu nguyên nhân và điều chỉnh phương pháp là cách tiếp cận chủ động và hiệu quả để cải thiện sự tham gia.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào một BA có thể đảm bảo phản hồi được tích hợp hiệu quả vào thiết kế giải pháp?",
+    "options": [
+      "A. Chỉ ghi lại phản hồi mà BA tin là quan trọng.",
+      "B. Ghi lại phản hồi, theo dõi việc giải quyết, và thông báo cập nhật lại cho các stakeholder.",
+      "C. Chuyển tiếp tất cả phản hồi trực tiếp cho đội phát triển mà không cần xem xét.",
+      "D. Chỉ chấp nhận phản hồi từ các stakeholder có quyền lực cao."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quy trình quản lý phản hồi cần minh bạch, có trách nhiệm và có vòng lặp thông tin để đảm bảo stakeholder biết ý kiến của họ được xử lý như thế nào.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một stakeholder thường xuyên gửi email dài, không có cấu trúc với nhiều phản hồi. Cách *tốt nhất* để quản lý tình huống này là gì?",
+    "options": [
+      "A. Yêu cầu họ ngừng gửi email dài.",
+      "B. Bỏ qua các email đó vì chúng khó xử lý.",
+      "C. Lên lịch các buổi phản hồi có cấu trúc, định kỳ để hướng dẫn họ đưa ra ý kiến.",
+      "D. Chuyển tiếp các email đó cho Project Manager để họ giải quyết."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thay vì từ chối, BA nên chủ động tạo ra một kênh thu thập phản hồi hiệu quả hơn, giúp stakeholder đưa ra thông tin có giá trị.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Hai stakeholder có ảnh hưởng cao có quan điểm khác biệt cơ bản về một tính năng hệ thống quan trọng. Bước *đầu tiên* mà một BA nên thực hiện là gì?",
+    "options": [
+      "A. Yêu cầu một trong hai người nhượng bộ.",
+      "B. Hiểu rõ nhu cầu và mối quan tâm cơ bản của từng stakeholder.",
+      "C. Báo cáo mâu thuẫn lên cấp quản lý cao hơn để họ ra quyết định.",
+      "D. Thực hiện bỏ phiếu để quyết định tính năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc hiểu rõ gốc rễ của vấn đề là bước đầu tiên và quan trọng nhất để giải quyết xung đột hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật nào *hiệu quả nhất* để xây dựng sự đồng thuận giữa một nhóm stakeholder đa dạng với các ưu tiên xung đột?",
+    "options": [
+      "A. Tổ chức một cuộc họp lớn và yêu cầu mọi người bỏ phiếu.",
+      "B. Thúc đẩy các buổi workshop để khám phá các lựa chọn và xác định điểm chung.",
+      "C. Yêu cầu Project Manager đưa ra quyết định cuối cùng.",
+      "D. Chia nhỏ nhóm thành các nhóm nhỏ hơn để họ tự giải quyết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Workshop là môi trường tốt để thảo luận, phân tích và tìm kiếm giải pháp chung, giúp xây dựng sự đồng thuận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục tiêu chính của việc giải quyết xung đột trong vai trò của BA là gì?",
+    "options": [
+      "A. Để chứng minh rằng BA luôn đúng.",
+      "B. Để đạt được một giải pháp được cả hai bên chấp nhận, hỗ trợ mục tiêu dự án.",
+      "C. Để loại bỏ các stakeholder gây xung đột khỏi dự án.",
+      "D. Để đảm bảo rằng chỉ có một quan điểm được ưu tiên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải quyết xung đột nhằm tìm ra giải pháp tối ưu cho dự án, không phải để thắng thua.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một dự án bị đình trệ do những bất đồng chưa được giải quyết giữa các phòng ban. Với tư cách là BA, bạn sẽ đề xuất cách tiếp cận nào cho Project Manager?",
+    "options": [
+      "A. Yêu cầu Project Manager ra lệnh cho các phòng ban phải hợp tác.",
+      "B. Triển khai một quy trình giải quyết xung đột có cấu trúc, có thể bao gồm hòa giải.",
+      "C. Tạm dừng dự án cho đến khi các phòng ban tự giải quyết.",
+      "D. Chuyển trách nhiệm giải quyết xung đột cho các trưởng phòng ban."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một quy trình có cấu trúc giúp quản lý xung đột một cách công bằng và hiệu quả, đặc biệt khi có sự tham gia của hòa giải viên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một buổi họp thu thập yêu cầu, một stakeholder trở nên rõ ràng là khó chịu và phòng thủ. BA nên phản ứng như thế nào?",
+    "options": [
+      "A. Yêu cầu họ giữ bình tĩnh và tiếp tục cuộc họp.",
+      "B. Phớt lờ phản ứng của họ và tiếp tục cuộc thảo luận.",
+      "C. Ghi nhận cảm xúc của họ, xoa dịu căng thẳng và đề nghị thảo luận riêng về mối quan tâm của họ sau đó.",
+      "D. Kết thúc cuộc họp ngay lập tức."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Xử lý cảm xúc của stakeholder một cách chuyên nghiệp giúp duy trì môi trường hợp tác và giải quyết vấn đề hiệu quả hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi điều phối một cuộc họp ra quyết định với các stakeholder có xung đột, trách nhiệm chính của BA là gì?",
+    "options": [
+      "A. Đảm bảo quan điểm của BA được ưu tiên.",
+      "B. Đảm bảo tất cả các ý kiến đều được lắng nghe, ghi lại và hướng dẫn nhóm đi đến quyết định.",
+      "C. Chỉ cho phép các stakeholder có ảnh hưởng cao phát biểu.",
+      "D. Ghi lại quyết định và gửi đi mà không cần thảo luận thêm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA là người điều phối công bằng, đảm bảo mọi người có cơ hội đóng góp và giúp nhóm đạt được quyết định chung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Làm thế nào một Business Analyst có thể quản lý hiệu quả kỳ vọng của stakeholder về phạm vi và sản phẩm bàn giao của dự án?",
+    "options": [
+      "A. Chỉ thảo luận về phạm vi khi có yêu cầu.",
+      "B. Liên tục hứa hẹn mọi yêu cầu sẽ được đáp ứng để giữ cho stakeholder hài lòng.",
+      "C. Tài liệu hóa và truyền đạt rõ ràng phạm vi, giả định và giới hạn ngay từ đầu.",
+      "D. Để Project Manager chịu trách nhiệm hoàn toàn về việc quản lý kỳ vọng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự rõ ràng và minh bạch ngay từ đầu là chìa khóa để quản lý kỳ vọng và tránh hiểu lầm sau này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một stakeholder liên tục yêu cầu các tính năng 'nice-to-have' nằm ngoài phạm vi dự án đã thỏa thuận. Cách *tốt nhất* để xử lý tình huống này là gì?",
+    "options": [
+      "A. Từ chối thẳng thừng các yêu cầu đó.",
+      "B. Thêm tất cả các yêu cầu vào phạm vi dự án để tránh xung đột.",
+      "C. Ghi nhận các yêu cầu, giải thích các giới hạn phạm vi hiện tại và đề xuất thêm chúng vào giai đoạn sau hoặc backlog.",
+      "D. Yêu cầu Project Manager xử lý vấn đề này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc ghi nhận nhưng quản lý kỳ vọng một cách thực tế, đưa ra các lựa chọn thay thế là cách tiếp cận chuyên nghiệp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục đích chính của việc đánh giá sự sẵn sàng quản lý thay đổi (change management readiness) của một tổ chức là gì?",
+    "options": [
+      "A. Để xác định những cá nhân sẽ bị sa thải do thay đổi.",
+      "B. Để tìm hiểu xem liệu tổ chức có đủ ngân sách cho thay đổi hay không.",
+      "C. Để xác định các điểm kháng cự tiềm ẩn và lập kế hoạch chiến lược để giảm thiểu chúng.",
+      "D. Để quyết định liệu có nên tiến hành thay đổi hay không."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đánh giá sự sẵn sàng giúp dự đoán và chuẩn bị cho các phản ứng của con người đối với thay đổi, từ đó lập kế hoạch hỗ trợ và giảm thiểu rủi ro.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn nhận thấy một nhóm người dùng chủ chốt đang thể hiện sự kháng cự cao đối với việc áp dụng một hệ thống mới, mặc dù lợi ích rõ ràng. Trọng tâm *ngay lập tức* của bạn nên là gì?",
+    "options": [
+      "A. Báo cáo sự kháng cự này lên quản lý cấp cao để họ đưa ra chỉ thị.",
+      "B. Tổ chức thêm các buổi đào tạo về cách sử dụng hệ thống.",
+      "C. Tìm hiểu nguyên nhân gốc rễ của sự kháng cự của họ và giải quyết các mối quan tâm cụ thể của họ.",
+      "D. Tiếp tục triển khai như kế hoạch, hy vọng họ sẽ chấp nhận theo thời gian."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kháng cự thường xuất phát từ những lo ngại hoặc hiểu lầm. Việc tìm hiểu và giải quyết chúng là bước quan trọng nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào một BA có thể đóng góp vào việc cải thiện sự sẵn sàng quản lý thay đổi trong một tổ chức?",
+    "options": [
+      "A. Chỉ tập trung vào việc tài liệu hóa các yêu cầu.",
+      "B. Yêu cầu tất cả người dùng cuối tham gia vào mọi cuộc họp dự án.",
+      "C. Thu hút người dùng cuối tham gia sớm vào các giai đoạn thiết kế và thử nghiệm để thúc đẩy quyền sở hữu.",
+      "D. Hạn chế thông tin về thay đổi để tránh gây hoang mang."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự tham gia sớm giúp người dùng cảm thấy là một phần của giải pháp, tăng cường sự chấp nhận và giảm kháng cự.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một dự án gặp phải sự chậm trễ đáng kể, ảnh hưởng đến ngày ra mắt quan trọng. BA nên truyền đạt điều này cho stakeholder như thế nào?",
+    "options": [
+      "A. Chỉ thông báo cho Project Manager và để họ xử lý.",
+      "B. Chờ đến phút cuối để thông báo, hy vọng vấn đề sẽ tự giải quyết.",
+      "C. Thông báo kịp thời, minh bạch, giải thích lý do và phác thảo các mốc thời gian và tác động đã sửa đổi.",
+      "D. Chỉ thông báo cho các stakeholder có quyền lực cao nhất."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Truyền thông kịp thời, minh bạch và chủ động là rất quan trọng để duy trì niềm tin và quản lý kỳ vọng trong tình huống khó khăn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một cạm bẫy phổ biến khi quản lý kỳ vọng của stakeholder là gì?",
+    "options": [
+      "A. Giao tiếp quá thường xuyên.",
+      "B. Quá thận trọng với các cam kết.",
+      "C. Hứa hẹn quá nhiều về sản phẩm bàn giao hoặc thời gian mà không có sự xác nhận thích hợp.",
+      "D. Không cung cấp đủ chi tiết kỹ thuật."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc over-promising (hứa hẹn quá mức) là nguyên nhân hàng đầu gây ra sự thất vọng và mất niềm tin của stakeholder.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một dự án liên quan đến việc di chuyển một hệ thống kế thừa sang kiến trúc cloud-native. Người dùng cốt lõi của hệ thống kế thừa rất phản đối thay đổi, lo sợ gián đoạn quy trình làm việc, trong khi ban lãnh đạo IT thúc đẩy di chuyển vì tiết kiệm chi phí và khả năng mở rộng. Với vai trò Business Analyst, chiến lược ưu tiên nào bạn sẽ áp dụng để quản lý nhóm người dùng cốt lõi (highly resistant users) trong tình huống này?",
+    "options": [
+      "A. Tăng cường giao tiếp một chiều để thông báo về lợi ích của hệ thống mới, nhấn mạnh các cải tiến kỹ thuật.",
+      "B. Tổ chức các buổi workshop chi tiết, tập trung vào việc thu thập các yêu cầu nghiệp vụ hiện tại và đảm bảo chúng được tích hợp hoặc cải thiện trong hệ thống mới, đồng thời chỉ ra các rủi ro nếu không chuyển đổi.",
+      "C. Phớt lờ sự phản kháng ban đầu và tập trung vào việc đào tạo sau khi hệ thống mới đã được triển khai.",
+      "D. Đề xuất trì hoãn dự án di chuyển cho đến khi có sự đồng thuận hoàn toàn từ tất cả các bên liên quan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược hiệu quả nhất là chủ động thu hút người dùng, hiểu rõ mối quan tâm của họ và chứng minh cách hệ thống mới sẽ giải quyết hoặc cải thiện các vấn đề hiện tại, đồng thời chỉ ra hậu quả của việc không thay đổi. Điều này giúp xây dựng sự tin tưởng và giảm thiểu phản kháng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một dự án phát triển sản phẩm mới, đội ngũ kỹ thuật muốn ưu tiên tối ưu hiệu năng bằng cách sử dụng một công nghệ mới chưa quen thuộc, trong khi đội ngũ kinh doanh yêu cầu tính năng phải ra mắt nhanh chóng để đáp ứng thị trường. Hai bên đang có xung đột lớn về ưu tiên. Với vai trò BA, bạn sẽ đề xuất phương pháp nào để giải quyết xung đột và xây dựng sự đồng thuận về kiến trúc kỹ thuật trong tình huống này?",
+    "options": [
+      "A. Yêu cầu đội ngũ kinh doanh nhượng bộ để đội kỹ thuật có thể thử nghiệm công nghệ mới.",
+      "B. Tổ chức một buổi họp chung để các bên trình bày quan điểm, sau đó BA sẽ đưa ra quyết định cuối cùng dựa trên phân tích rủi ro và lợi ích của từng phương án (trade-off analysis).",
+      "C. Đề xuất một giải pháp MVP (Minimum Viable Product) với các tính năng cốt lõi sử dụng công nghệ quen thuộc để ra mắt nhanh, đồng thời lên kế hoạch cho giai đoạn sau để tích hợp công nghệ mới và tối ưu hiệu năng.",
+      "D. Phân tích kỹ thuật sâu về công nghệ mới và trình bày cho đội kinh doanh về những lợi ích dài hạn mà nó mang lại, yêu cầu họ chấp nhận sự chậm trễ ban đầu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp MVP cho phép đáp ứng yêu cầu thị trường nhanh chóng, đồng thời vẫn có lộ trình để áp dụng công nghệ mới và tối ưu hiệu năng. Điều này giúp tìm ra điểm cân bằng giữa tốc độ và chất lượng/kiến trúc, giảm thiểu xung đột giữa hai bên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng ma trận Power/Interest để phân tích các bên liên quan trong một dự án phức tạp liên quan đến thay đổi kiến trúc hệ thống, nhóm \"High Power, Low Interest\" nên được quản lý bằng chiến lược nào?",
+    "options": [
+      "A. Keep Informed (Giữ thông tin).",
+      "B. Keep Satisfied (Giữ hài lòng).",
+      "C. Manage Closely (Quản lý chặt chẽ).",
+      "D. Monitor (Giám sát)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nhóm \"High Power, Low Interest\" có khả năng ảnh hưởng lớn nhưng ít quan tâm đến chi tiết. Chiến lược \"Keep Satisfied\" tập trung vào việc đảm bảo họ hài lòng với kết quả tổng thể và không gây cản trở, thường thông qua các báo cáo tổng quan và cập nhật định kỳ, không đi sâu vào chi tiết kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn là BA trong một dự án di chuyển dữ liệu lớn sang nền tảng mới. Các bên liên quan bao gồm CEO, Trưởng phòng Kỹ thuật, Trưởng phòng Vận hành và các nhân viên nhập liệu. Để truyền đạt rủi ro và lợi ích của việc di chuyển dữ liệu một cách hiệu quả đến các nhóm đối tượng này, bạn sẽ điều chỉnh kế hoạch truyền thông như thế nào?",
+    "options": [
+      "A. Gửi cùng một email chi tiết kỹ thuật cho tất cả các bên liên quan để đảm bảo tính nhất quán thông tin.",
+      "B. Tổ chức các buổi họp riêng biệt: với CEO tập trung vào lợi ích chiến lược và ROI, với Trưởng phòng Kỹ thuật tập trung vào thách thức và giải pháp kỹ thuật, với Trưởng phòng Vận hành về tác động đến quy trình, và với nhân viên nhập liệu về thay đổi công việc hàng ngày và đào tạo.",
+      "C. Chỉ tập trung vào việc giao tiếp với CEO và Trưởng phòng Kỹ thuật vì họ là những người ra quyết định chính.",
+      "D. Sử dụng bảng điều khiển (dashboard) với các chỉ số kỹ thuật phức tạp để tất cả các bên liên quan tự tìm hiểu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giao tiếp hiệu quả đòi hỏi phải điều chỉnh nội dung, hình thức và tần suất thông tin phù hợp với nhu cầu, mức độ quan tâm và chuyên môn của từng nhóm đối tượng, giúp họ hiểu rõ tác động liên quan đến vai trò của mình.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quá trình phát triển một tính năng mới, đội kỹ thuật phát hiện ra một rào cản kỹ thuật lớn, có thể làm chậm tiến độ 2 tháng hoặc yêu cầu một sự thay đổi kiến trúc đáng kể, ảnh hưởng đến hiệu năng dài hạn nếu không được giải quyết triệt để. Khách hàng đang mong đợi tính năng này ra mắt trong 1 tháng tới. Với vai trò BA, bạn sẽ làm gì đầu tiên để quản lý kỳ vọng và rủi ro trong tình huống này?",
+    "options": [
+      "A. Đề xuất đội kỹ thuật cố gắng hoàn thành trong 1 tháng, chấp nhận rủi ro về hiệu năng.",
+      "B. Thông báo ngay cho khách hàng về sự chậm trễ và giải thích lý do kỹ thuật một cách chi tiết.",
+      "C. Làm việc với đội kỹ thuật để hiểu rõ các lựa chọn, rủi ro, lợi ích của từng phương án (ví dụ: chấp nhận chậm trễ để có giải pháp bền vững vs. ra mắt nhanh với rủi ro hiệu năng), sau đó chuẩn bị thông tin để thảo luận với các bên liên quan chính.",
+      "D. Chỉ báo cáo cho Project Manager và để họ quyết định cách xử lý."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần đóng vai trò cầu nối, hiểu sâu vấn đề từ phía kỹ thuật và các lựa chọn khả thi, sau đó biến thông tin phức tạp thành các phương án rõ ràng với trade-off cụ thể để các bên liên quan có thể đưa ra quyết định sáng suốt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi các nhóm kỹ thuật khác nhau trong cùng một dự án có xung đột về lựa chọn công nghệ cho các module tích hợp, dẫn đến nguy cơ chậm trễ và vấn đề về khả năng mở rộng, phương pháp giải quyết xung đột nào là phù hợp nhất cho BA ở cấp độ nâng cao?",
+    "options": [
+      "A. Yêu cầu Project Manager đưa ra quyết định cuối cùng để tránh làm mất lòng các bên.",
+      "B. Tổ chức một buổi \"Architectural Review Board\" hoặc \"Technical Design Authority\" với sự tham gia của các kiến trúc sư cấp cao và đại diện các nhóm để đánh giá các phương án, phân tích trade-off và đưa ra khuyến nghị dựa trên mục tiêu kiến trúc tổng thể.",
+      "C. Khuyến khích các nhóm tự giải quyết, chỉ can thiệp khi xung đột leo thang nghiêm trọng.",
+      "D. Chọn công nghệ của nhóm có kinh nghiệm hơn để đẩy nhanh tiến độ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ nâng cao, BA cần thúc đẩy các cơ chế ra quyết định kỹ thuật có cấu trúc, minh bạch và dựa trên nguyên tắc để giải quyết xung đột, đảm bảo các quyết định kiến trúc phục vụ mục tiêu chung của dự án và tổ chức.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một dự án nâng cấp nền tảng backend quan trọng đang gặp phải sự thờ ơ từ các bên liên quan cấp cao (High Power, Low Interest), mặc dù dự án có tác động lớn đến hiệu năng và bảo mật hệ thống. Bạn, với vai trò BA, sẽ sử dụng chiến lược nào để thu hút sự quan tâm và hỗ trợ của họ một cách hiệu quả?",
+    "options": [
+      "A. Gửi các báo cáo kỹ thuật chi tiết hàng tuần để họ nắm bắt thông tin.",
+      "B. Tổ chức các buổi họp kéo dài để trình bày toàn bộ quá trình và thách thức của dự án.",
+      "C. Chuẩn bị các bản tóm tắt ngắn gọn, tập trung vào tác động kinh doanh (Business Impact), ROI, rủi ro nếu không thực hiện và các chỉ số hiệu suất cấp cao, sau đó tìm kiếm cơ hội để trình bày trực tiếp một cách ngắn gọn.",
+      "D. Yêu cầu Project Manager thay mặt bạn liên hệ với họ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với nhóm \"High Power, Low Interest\", việc giao tiếp cần ngắn gọn, tập trung vào bức tranh lớn, lợi ích chiến lược và tác động kinh doanh để thu hút sự chú ý và giữ họ hài lòng mà không làm họ quá tải thông tin kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án triển khai hệ thống ERP mới, BA nhận thấy có sự phản kháng đáng kể từ một bộ phận người dùng cuối do lo ngại về việc thay đổi quy trình làm việc và mất quyền kiểm soát. Để đánh giá mức độ sẵn sàng cho thay đổi và đề xuất các biện pháp giảm thiểu, BA nên ưu tiên hoạt động nào?",
+    "options": [
+      "A. Chỉ tập trung vào việc đào tạo kỹ thuật sau khi hệ thống đã sẵn sàng.",
+      "B. Thực hiện khảo sát định lượng về mức độ hài lòng với hệ thống hiện tại.",
+      "C. Tiến hành phân tích tác động (Impact Analysis) chi tiết, bao gồm cả tác động đến quy trình làm việc, vai trò, kỹ năng, và tổ chức các buổi phỏng vấn/workshop với người dùng cuối để thu thập phản hồi, xác định các \"change agent\" tiềm năng.",
+      "D. Yêu cầu quản lý cấp cao ra quyết định triển khai bắt buộc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Phân tích tác động toàn diện và thu hút người dùng cuối vào quá trình thay đổi là chìa khóa để hiểu rõ nguyên nhân phản kháng, đánh giá sự sẵn sàng và xây dựng các chiến lược quản lý thay đổi hiệu quả, biến họ thành người ủng hộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sau khi triển khai một module mới, bạn nhận được nhiều phản hồi mâu thuẫn từ các bên liên quan khác nhau: đội Marketing muốn thay đổi giao diện để thu hút hơn, đội Vận hành muốn tối ưu quy trình backend để giảm tải, và người dùng cuối báo cáo một số lỗi nhỏ. Với vai trò BA, bạn sẽ xử lý và tích hợp các phản hồi này như thế nào để đảm bảo chất lượng và hiệu quả của sản phẩm?",
+    "options": [
+      "A. Ưu tiên phản hồi từ đội Marketing vì họ là người trực tiếp mang lại doanh thu.",
+      "B. Tổng hợp tất cả phản hồi, phân loại theo mức độ ưu tiên (dựa trên tác động kinh doanh, độ phức tạp kỹ thuật, rủi ro), sau đó tổ chức buổi họp chung với các bên liên quan để thảo luận và thống nhất lộ trình (roadmap) điều chỉnh.",
+      "C. Chuyển tất cả phản hồi trực tiếp cho đội kỹ thuật để họ tự xử lý.",
+      "D. Chỉ tập trung vào việc sửa các lỗi nhỏ mà người dùng cuối báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần có khả năng tổng hợp, phân tích và ưu tiên các phản hồi đa dạng, sau đó điều phối các bên liên quan để đạt được sự đồng thuận về các thay đổi cần thiết, cân bằng giữa các mục tiêu khác nhau (kinh doanh, vận hành, chất lượng).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án phát triển hệ thống AI để tự động hóa một quy trình nghiệp vụ quan trọng, BA xác định được một nhóm các chuyên gia nghiệp vụ (Subject Matter Experts - SMEs) có kiến thức sâu rộng nhưng lại không có quyền quyết định chính thức và e ngại việc mất việc làm do tự động hóa. Vị trí của họ trên ma trận Power/Interest là \"Low Power, High Interest\". Chiến lược phù hợp nhất để quản lý nhóm này là gì?",
+    "options": [
+      "A. Keep Informed, cung cấp thông tin định kỳ nhưng không cần tham vấn ý kiến.",
+      "B. Manage Closely, chủ động thu hút họ tham gia vào quá trình định nghĩa yêu cầu, thiết kế giải pháp, và đảm bảo những lo ngại của họ được lắng nghe và giải quyết.",
+      "C. Keep Satisfied, đảm bảo họ không phản đối dự án bằng cách hạn chế thông tin chi tiết.",
+      "D. Monitor, chỉ theo dõi phản ứng của họ từ xa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nhóm \"Low Power, High Interest\" là nguồn kiến thức quý giá và có thể trở thành người ủng hộ hoặc phản đối mạnh mẽ. Chiến lược \"Manage Closely\" giúp khai thác kiến thức của họ, xây dựng sự tin tưởng và giảm thiểu phản kháng bằng cách cho họ cảm thấy được tham gia và đóng góp vào giải pháp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đội ngũ phát triển đang tranh luận về việc sử dụng một công nghệ microservices mới cho dự án, một số ủng hộ vì tính mở rộng và độc lập, số khác lo ngại về độ phức tạp và chi phí vận hành. Project Manager yêu cầu BA giúp đạt được sự đồng thuận. BA nên thực hiện hành động nào để xây dựng sự đồng thuận về lựa chọn kiến trúc này?",
+    "options": [
+      "A. Đề nghị Project Manager đưa ra quyết định cuối cùng để giải quyết bế tắc.",
+      "B. Tổ chức một buổi \"Proof of Concept\" (PoC) nhỏ để minh chứng lợi ích và thách thức của microservices trong ngữ cảnh cụ thể của dự án, sau đó tổ chức thảo luận dựa trên kết quả PoC và phân tích chi phí/lợi ích.",
+      "C. Yêu cầu các bên tự nghiên cứu và đưa ra một lựa chọn duy nhất.",
+      "D. Phân tích các dự án tương tự đã thành công với microservices và dùng đó làm bằng chứng thuyết phục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với các quyết định kiến trúc phức tạp, việc thực hiện PoC giúp biến tranh luận lý thuyết thành bằng chứng thực nghiệm, cung cấp cơ sở dữ liệu vững chắc để các bên cùng đánh giá, thảo luận và đạt được sự đồng thuận dựa trên thực tế và các trade-off cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi một yêu cầu mới từ khách hàng có khả năng gây ra \"scope creep\" và ảnh hưởng đến tiến độ, BA cần làm gì để quản lý kỳ vọng và duy trì sự ổn định của dự án ở cấp độ ADVANCED?",
+    "options": [
+      "A. Từ chối yêu cầu ngay lập tức để bảo vệ scope ban đầu.",
+      "B. Chấp nhận yêu cầu và tìm cách đưa vào dự án mà không thông báo cho các bên liên quan khác.",
+      "C. Phân tích tác động của yêu cầu mới (Impact Analysis) lên scope, thời gian, chi phí, tài nguyên và rủi ro, sau đó trình bày các trade-off rõ ràng cho các bên liên quan chính để cùng đưa ra quyết định về việc có nên đưa vào, hoãn lại, hoặc thay thế bằng một yêu cầu khác.",
+      "D. Yêu cầu đội kỹ thuật đánh giá xem yêu cầu có dễ thực hiện hay không trước khi trao đổi với khách hàng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quản lý kỳ vọng ở cấp độ nâng cao đòi hỏi BA phải chủ động, phân tích toàn diện tác động của thay đổi và trình bày các trade-off một cách minh bạch để các bên liên quan có thể đưa ra quyết định sáng suốt và đồng thuận, bảo vệ mục tiêu dự án.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một dự án có các bên liên quan phân tán địa lý trên nhiều múi giờ khác nhau. Để đảm bảo thông tin quan trọng về các quyết định kiến trúc và tiến độ được truyền đạt hiệu quả và thu thập phản hồi kịp thời, BA nên ưu tiên chiến lược truyền thông nào?",
+    "options": [
+      "A. Chỉ sử dụng email để truyền đạt thông tin, tránh các cuộc họp trực tuyến.",
+      "B. Tổ chức các cuộc họp trực tuyến vào một giờ cố định, bất kể múi giờ của các bên.",
+      "C. Kết hợp nhiều kênh: sử dụng nền tảng cộng tác chung (wiki, Jira/Confluence) để ghi lại các quyết định và tài liệu kỹ thuật, gửi bản tóm tắt qua email, và tổ chức các buổi họp trực tuyến luân phiên vào các múi giờ khác nhau hoặc ghi lại để xem lại.",
+      "D. Giảm thiểu các cuộc họp và chỉ tập trung vào việc hoàn thành công việc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong môi trường phân tán, việc kết hợp nhiều kênh và phương pháp truyền thông linh hoạt là cần thiết để đảm bảo thông tin được tiếp cận bởi tất cả các bên liên quan, bất kể vị trí địa lý hay múi giờ, đồng thời tạo cơ hội cho phản hồi và thảo luận.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án phát triển phần mềm, đội QA và đội Dev thường xuyên xung đột về chất lượng code và thời gian fix bug. Đội Dev cho rằng QA quá khắt khe, trong khi QA cho rằng Dev không đủ chú trọng chất lượng ngay từ đầu. Với vai trò BA, bạn sẽ làm gì để giải quyết xung đột này và cải thiện quy trình làm việc giữa hai đội?",
+    "options": [
+      "A. Yêu cầu Project Manager can thiệp và áp đặt quy tắc.",
+      "B. Tổ chức các buổi họp riêng với từng đội để lắng nghe phàn nàn của họ.",
+      "C. Thúc đẩy việc thiết lập các tiêu chuẩn chất lượng code rõ ràng, quy trình review code chung, và các buổi \"Defect Triage\" định kỳ với sự tham gia của cả hai đội để cùng phân tích, ưu tiên và thống nhất cách xử lý các vấn đề chất lượng, đồng thời khuyến khích văn hóa \"shift-left\" (kiểm thử sớm).",
+      "D. Đề xuất tách biệt hoàn toàn hai đội để tránh xung đột."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải quyết xung đột giữa Dev và QA đòi hỏi việc thiết lập các quy trình và tiêu chuẩn chung, cùng với việc tạo cơ hội cho hai đội hợp tác và hiểu rõ quan điểm của nhau, thay vì chỉ tập trung vào việc đổ lỗi, nhằm cải thiện chất lượng tổng thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi một Business Analyst cần xác định các \"change agent\" tiềm năng trong tổ chức để hỗ trợ một dự án chuyển đổi quy trình nghiệp vụ lớn, họ nên tìm kiếm những đặc điểm nào ở các cá nhân này?",
+    "options": [
+      "A. Những người có quyền lực chính thức cao nhất trong tổ chức.",
+      "B. Những người phản đối mạnh mẽ nhất dự án để chuyển đổi họ.",
+      "C. Những người có ảnh hưởng không chính thức lớn, được đồng nghiệp tin tưởng, hiểu rõ văn hóa và quy trình nội bộ, và có thái độ tích cực với sự thay đổi.",
+      "D. Những người ít kinh nghiệm nhất để họ dễ dàng tiếp thu cái mới."
+    ],
+    "correctAnswer": "C",
+    "explanation": "\"Change agent\" hiệu quả thường là những người có ảnh hưởng không chính thức, được tin tưởng và có khả năng thuyết phục đồng nghiệp, giúp lan tỏa thông điệp và giảm thiểu sự phản kháng từ bên trong tổ chức.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một công ty đang chuẩn bị triển khai một hệ thống quản lý khách hàng (CRM) mới, đòi hỏi nhân viên bán hàng phải thay đổi cách thức ghi nhận thông tin và tương tác với khách hàng. BA nhận thấy một số nhân viên có thái độ hoài nghi về lợi ích của hệ thống mới. Để tăng cường sự sẵn sàng cho thay đổi và giảm thiểu sự hoài nghi, BA nên thực hiện hành động nào?",
+    "options": [
+      "A. Buộc tất cả nhân viên phải tham gia các buổi đào tạo bắt buộc.",
+      "B. Tổ chức các buổi \"roadshow\" giới thiệu hệ thống mới, tập trung vào việc trình bày các lợi ích cụ thể mà hệ thống mang lại cho công việc hàng ngày của nhân viên bán hàng (ví dụ: giảm thao tác thủ công, truy cập thông tin khách hàng nhanh hơn), và tạo cơ hội cho họ trải nghiệm thử (hands-on) hệ thống.",
+      "C. Chỉ giao tiếp với quản lý đội bán hàng và để họ truyền đạt thông tin xuống dưới.",
+      "D. Cung cấp một tài liệu hướng dẫn sử dụng chi tiết và yêu cầu nhân viên tự học."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để tăng cường sự sẵn sàng cho thay đổi, BA cần chủ động chứng minh lợi ích thực tế của hệ thống mới, giúp người dùng hình dung được sự cải thiện trong công việc của họ và tạo cơ hội để họ làm quen với hệ thống một cách chủ động và tích cực.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thu thập phản hồi về một bản thiết kế giao diện người dùng (UI) từ nhiều bên liên quan khác nhau (người dùng cuối, đội marketing, đội kỹ thuật), BA nhận được các ý kiến trái chiều về tính thẩm mỹ và khả năng sử dụng. Phương pháp nào giúp BA tổng hợp và ưu tiên phản hồi một cách khách quan?",
+    "options": [
+      "A. Ưu tiên ý kiến của đội marketing vì họ hiểu thị trường.",
+      "B. Tổ chức một buổi \"User Acceptance Testing\" (UAT) với người dùng cuối để thu thập dữ liệu hành vi thực tế, kết hợp với việc sử dụng các tiêu chuẩn thiết kế UI/UX đã được công nhận và các nguyên tắc khả năng sử dụng để đánh giá các phản hồi.",
+      "C. Yêu cầu đội kỹ thuật đưa ra quyết định cuối cùng dựa trên khả năng triển khai.",
+      "D. Bỏ qua các phản hồi về tính thẩm mỹ và chỉ tập trung vào chức năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để ưu tiên phản hồi về UI/UX một cách khách quan, BA cần kết hợp dữ liệu định lượng từ UAT hoặc thử nghiệm người dùng với các nguyên tắc thiết kế đã được chứng minh, thay vì chỉ dựa vào ý kiến chủ quan hoặc ưu tiên một nhóm cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một dự án phát triển sản phẩm mới đang bị trì hoãn do một Trưởng phòng Nghiên cứu & Phát triển (R&D) có ảnh hưởng lớn nhưng lại có quan điểm bảo thủ, không muốn thay đổi công nghệ hiện tại mặc dù công nghệ mới hứa hẹn hiệu năng vượt trội. Vị trí của Trưởng phòng R&D này trên ma trận Power/Interest có thể được xếp vào nhóm nào và BA nên áp dụng chiến lược nào?",
+    "options": [
+      "A. High Power, Low Interest - Keep Satisfied.",
+      "B. Low Power, High Interest - Manage Closely.",
+      "C. High Power, High Interest - Manage Closely.",
+      "D. Low Power, Low Interest - Monitor."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trưởng phòng R&D có ảnh hưởng lớn (High Power) và có quan điểm mạnh mẽ về công nghệ (High Interest), do đó thuộc nhóm \"High Power, High Interest\". Chiến lược \"Manage Closely\" là cần thiết để chủ động thu hút, lắng nghe và giải quyết các mối quan ngại của họ, đồng thời tìm cách thuyết phục bằng dữ liệu và lợi ích.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi dự án đang tiến gần đến giai đoạn triển khai, BA phát hiện ra rằng một số tính năng chủ chốt không thể đạt được hiệu năng như kỳ vọng ban đầu do hạn chế về hạ tầng kỹ thuật hiện có. Làm thế nào BA nên quản lý kỳ vọng của các bên liên quan về hiệu năng sản phẩm?",
+    "options": [
+      "A. Giảm nhẹ vấn đề và hy vọng người dùng không nhận ra.",
+      "B. Thông báo cho các bên liên quan rằng hiệu năng sẽ thấp hơn, nhưng không giải thích chi tiết.",
+      "C. Chuẩn bị một báo cáo phân tích chi tiết về nguyên nhân kỹ thuật, các lựa chọn để cải thiện (ví dụ: nâng cấp hạ tầng, tối ưu code), chi phí và thời gian cho mỗi lựa chọn, sau đó tổ chức buổi thảo luận để các bên liên quan cùng đưa ra quyết định về trade-off giữa hiệu năng và chi phí/thời gian.",
+      "D. Yêu cầu đội kỹ thuật tìm cách \"hack\" để đạt được hiệu năng mong muốn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quản lý kỳ vọng ở cấp độ nâng cao đòi hỏi sự minh bạch, phân tích sâu sắc các trade-off kỹ thuật và kinh doanh, và sự tham gia của các bên liên quan vào quá trình ra quyết định để đạt được sự đồng thuận về giải pháp tối ưu, ngay cả khi điều đó có nghĩa là chấp nhận một số hạn chế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án Agile, Product Owner và Scrum Master có xung đột về cách ưu tiên các User Story. Product Owner muốn ưu tiên các tính năng mới để tăng doanh thu, trong khi Scrum Master muốn ưu tiên các User Story liên quan đến \"technical debt\" để cải thiện chất lượng và hiệu năng. Với vai trò BA, bạn sẽ làm gì để giúp họ đạt được sự đồng thuận và tối ưu hóa backlog?",
+    "options": [
+      "A. Đứng về phía Product Owner vì mục tiêu doanh thu là quan trọng nhất.",
+      "B. Đứng về phía Scrum Master vì chất lượng kỹ thuật là nền tảng.",
+      "C. Tổ chức một buổi \"Backlog Refinement\" hoặc \"Product Strategy Workshop\" với sự tham gia của cả hai bên, trình bày dữ liệu về tác động kinh doanh của các tính năng mới so với rủi ro và chi phí dài hạn của technical debt, sử dụng các kỹ thuật ước lượng giá trị và rủi ro để giúp họ đưa ra quyết định cân bằng.",
+      "D. Yêu cầu họ tự giải quyết vấn đề này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần đóng vai trò điều phối, cung cấp dữ liệu và các công cụ phân tích để giúp các bên liên quan hiểu rõ các trade-off và cùng nhau đưa ra quyết định ưu tiên backlog một cách cân bằng giữa giá trị kinh doanh và sức khỏe kỹ thuật của sản phẩm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một dự án phát triển hệ thống bảo mật mới đang gặp khó khăn trong việc thu hút sự tham gia của các chuyên gia bảo mật cấp cao, những người có kiến thức chuyên sâu nhưng lịch trình bận rộn. Bạn đã xác định họ là \"High Power, High Interest\" nhưng khó tiếp cận. Phương pháp nào hiệu quả nhất để thu hút họ?",
+    "options": [
+      "A. Gửi email yêu cầu họ đóng góp khi có thời gian.",
+      "B. Tổ chức các buổi họp dài để họ trình bày tất cả các mối quan ngại.",
+      "C. Chuẩn bị các tài liệu tóm tắt ngắn gọn các vấn đề cần ý kiến chuyên môn của họ, kèm theo các câu hỏi cụ thể, và đề xuất các cuộc họp ngắn gọn, tập trung vào các điểm cần quyết định, hoặc tìm kiếm cơ hội trao đổi trực tiếp không chính thức.",
+      "D. Bỏ qua họ và dựa vào các chuyên gia bảo mật cấp thấp hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với các bên liên quan quan trọng nhưng bận rộn, BA cần tối ưu hóa thời gian của họ bằng cách chuẩn bị kỹ lưỡng, tập trung vào những gì cần thiết và linh hoạt trong cách thức tiếp cận, đảm bảo sự đóng góp của họ được khai thác hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Công ty đang chuyển đổi sang mô hình làm việc Agile/Scrum. Một số quản lý cấp trung có thói quen làm việc theo kiểu thác nước (waterfall) truyền thống đang gặp khó khăn trong việc thích nghi và có thái độ tiêu cực. Để hỗ trợ các quản lý này thích nghi và trở thành người ủng hộ Agile, BA nên làm gì?",
+    "options": [
+      "A. Yêu cầu họ phải tuân thủ hoặc bị thay thế.",
+      "B. Tổ chức các buổi đào tạo lý thuyết về Agile.",
+      "C. Làm việc trực tiếp với họ, giải thích rõ vai trò và lợi ích của họ trong môi trường Agile, cung cấp các tài liệu, workshop thực hành về cách các công cụ và quy trình Agile hỗ trợ họ quản lý hiệu quả hơn, và tìm kiếm các \"Agile coach\" để hỗ trợ cá nhân.",
+      "D. Phớt lờ sự phản đối của họ và tập trung vào các thành viên đội ngũ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để quản lý sự thay đổi thành công, đặc biệt với những người có kinh nghiệm từ mô hình cũ, BA cần cá nhân hóa sự hỗ trợ, giúp họ hiểu rõ vai trò mới, lợi ích và cách thức hoạt động trong môi trường mới, biến họ từ người phản kháng thành người ủng hộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi truyền đạt các \"technical trade-off\" (đánh đổi kỹ thuật) phức tạp (ví dụ: giữa tốc độ phát triển và khả năng mở rộng, hoặc giữa hiệu năng và chi phí) cho các bên liên quan không có nền tảng kỹ thuật, BA nên tập trung vào khía cạnh nào trong thông điệp của mình?",
+    "options": [
+      "A. Giải thích chi tiết các thuật ngữ kỹ thuật và kiến trúc hệ thống.",
+      "B. Tập trung vào tác động kinh doanh (Business Impact), rủi ro, lợi ích, và chi phí liên quan đến mỗi lựa chọn, sử dụng ngôn ngữ dễ hiểu và các ví dụ thực tế.",
+      "C. Chỉ trình bày lựa chọn mà đội kỹ thuật ưu tiên.",
+      "D. Yêu cầu họ tự tìm hiểu về các khái niệm kỹ thuật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giao tiếp hiệu quả về technical trade-off với đối tượng không kỹ thuật đòi hỏi BA phải dịch các khái niệm kỹ thuật thành các tác động kinh doanh rõ ràng, giúp họ hiểu được ý nghĩa và đưa ra quyết định dựa trên bức tranh tổng thể, không bị sa lầy vào chi tiết kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một dự án tích hợp hệ thống, hai nhà cung cấp phần mềm bên thứ ba có các yêu cầu kỹ thuật và giao thức API không tương thích, gây ra xung đột và chậm trễ. Mỗi nhà cung cấp đều khẳng định giải pháp của mình là tối ưu. Với vai trò BA, bạn sẽ giải quyết xung đột kỹ thuật này như thế nào để đảm bảo dự án tiếp tục?",
+    "options": [
+      "A. Yêu cầu Project Manager chọn một nhà cung cấp và loại bỏ nhà cung cấp kia.",
+      "B. Tổ chức một buổi họp kỹ thuật giữa đại diện của cả hai nhà cung cấp và đội kỹ thuật nội bộ, phân tích sâu các yêu cầu, giao thức API, và đề xuất các giải pháp trung gian (ví dụ: sử dụng một lớp adapter, middleware, hoặc định nghĩa một giao thức chung mới) để đạt được khả năng tương thích, đồng thời phân tích chi phí và lợi ích của từng giải pháp.",
+      "C. Yêu cầu đội kỹ thuật nội bộ tự phát triển một giải pháp tích hợp từ đầu.",
+      "D. Chấp nhận rằng tích hợp sẽ không hoàn hảo và tiếp tục với các vấn đề."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải quyết xung đột kỹ thuật giữa các bên thứ ba đòi hỏi BA phải chủ động điều phối, tạo điều kiện cho đối thoại kỹ thuật sâu sắc và tìm kiếm các giải pháp sáng tạo, cân bằng để đạt được mục tiêu tích hợp, giảm thiểu rủi ro và chậm trễ cho dự án.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện phân tích các bên liên quan cho một dự án chuyển đổi số lớn, BA phát hiện một nhóm \"hidden stakeholders\" (các bên liên quan ẩn danh) có ảnh hưởng đáng kể đến thành công của dự án nhưng không được liệt kê trong danh sách ban đầu (ví dụ: nhân viên cấp thấp có kinh nghiệm vận hành hệ thống cũ, người dùng cuối không chính thức). Làm thế nào BA nên tiếp cận và quản lý nhóm này?",
+    "options": [
+      "A. Bỏ qua họ vì họ không có quyền lực chính thức.",
+      "B. Chỉ thu thập thông tin gián tiếp về họ thông qua các bên liên quan khác.",
+      "C. Chủ động tìm cách tiếp cận, phỏng vấn hoặc tổ chức các buổi thảo luận không chính thức để hiểu rõ mối quan tâm, nhu cầu và tiềm năng phản kháng của họ, sau đó đưa họ vào kế hoạch quản lý các bên liên quan một cách phù hợp.",
+      "D. Thông báo cho Project Manager và để Project Manager xử lý."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc xác định và chủ động thu hút các \"hidden stakeholders\" là rất quan trọng ở cấp độ nâng cao, vì họ có thể nắm giữ thông tin quan trọng hoặc có khả năng gây ảnh hưởng lớn đến sự thành công của dự án nếu không được quản lý đúng cách.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Là một BA cấp cao đang dẫn dắt một dự án chuyển đổi số quy mô lớn, ảnh hưởng đến nhiều phòng ban với các ưu tiên xung đột và lịch sử các sáng kiến thất bại. Bạn sẽ ưu tiên phương pháp nào để xác định và phân tích các bên liên quan chính trong bối cảnh này?",
+    "options": [
+      "A. Sử dụng ma trận Power/Interest truyền thống để phân loại nhanh các bên liên quan.",
+      "B. Tiến hành phỏng vấn sâu với lãnh đạo cấp cao và các trưởng phòng ban để hiểu rõ quyền lực và lợi ích tiềm ẩn.",
+      "C. Tổ chức các buổi workshop tập trung với đại diện các phòng ban để lập danh sách và thảo luận về sự ảnh hưởng của họ.",
+      "D. Xây dựng một bản đồ Stakeholder (Stakeholder Map) chi tiết, bao gồm mối quan hệ, mức độ ảnh hưởng, và lịch sử tương tác."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Trong bối cảnh phức tạp và có lịch sử thất bại, việc xây dựng bản đồ Stakeholder chi tiết giúp BA không chỉ nhận diện mà còn hiểu sâu sắc về động lực, mối quan hệ và lịch sử, từ đó phát triển chiến lược quản lý hiệu quả hơn. Các phương án khác đều hữu ích nhưng không toàn diện bằng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang dẫn dắt một dự án tích hợp hệ thống xuyên biên giới, và có một nhóm stakeholder quan trọng ở một quốc gia khác thể hiện sự kháng cự thụ động do lo ngại về việc mất quyền tự chủ. Chiến lược engagement nào hiệu quả nhất để giải quyết tình huống này và xây dựng sự đồng thuận?",
+    "options": [
+      "A. Cung cấp thông tin chi tiết về lợi ích kỹ thuật của hệ thống mới để thuyết phục họ.",
+      "B. Tổ chức các buổi làm việc chung (joint working sessions) để họ tham gia vào việc thiết kế giải pháp, điều chỉnh để phù hợp với bối cảnh địa phương.",
+      "C. Yêu cầu quản lý cấp cao từ trụ sở chính can thiệp và chỉ đạo thực hiện.",
+      "D. Tập trung vào việc đào tạo và hướng dẫn sử dụng hệ thống mới để giảm bớt lo ngại về kỹ năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kháng cự thụ động thường xuất phát từ cảm giác mất kiểm soát hoặc không được lắng nghe. Việc cho phép họ tham gia vào quá trình thiết kế và điều chỉnh giải pháp không chỉ giúp giải quyết lo ngại về quyền tự chủ mà còn tạo ra sự cam kết từ họ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một dự án chiến lược có nhiều stakeholder với các cấp độ hiểu biết kỹ thuật và mức độ quan tâm khác nhau. Bạn cần đảm bảo tất cả đều được thông báo đầy đủ và kịp thời. Kỹ năng nào là quan trọng nhất đối với một Business Analyst để xây dựng một kế hoạch truyền thông hiệu quả trong trường hợp này?",
+    "options": [
+      "A. Kỹ năng phân tích dữ liệu để xác định kênh truyền thông được ưa chuộng nhất.",
+      "B. Kỹ năng lắng nghe chủ động để hiểu rõ nhu cầu thông tin của từng nhóm stakeholder.",
+      "C. Kỹ năng thuyết trình để truyền đạt thông điệp một cách rõ ràng và hấp dẫn.",
+      "D. Kỹ năng đàm phán để đạt được sự đồng thuận về tần suất và hình thức truyền thông."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để kế hoạch truyền thông hiệu quả, BA cần hiểu rõ 'ai cần biết gì, khi nào, và dưới hình thức nào'. Kỹ năng lắng nghe chủ động giúp BA thu thập thông tin này từ các stakeholder, từ đó tùy chỉnh nội dung, kênh và tần suất truyền thông phù hợp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án chuyển đổi quy trình kinh doanh, hai giám đốc phòng ban có xung đột sâu sắc về quyền sở hữu một quy trình quan trọng, điều này đang cản trở tiến độ. Với vai trò BA, bạn sẽ áp dụng cách tiếp cận nào để giải quyết xung đột này một cách hiệu quả và bền vững?",
+    "options": [
+      "A. Tổ chức một cuộc họp chung, yêu cầu mỗi bên trình bày quan điểm và tìm kiếm một giải pháp thỏa hiệp.",
+      "B. Thực hiện phân tích chi tiết quy trình hiện tại và đề xuất một cấu trúc quyền sở hữu mới dựa trên hiệu quả hoạt động tốt nhất cho doanh nghiệp.",
+      "C. Đề xuất đưa vấn đề lên cấp quản lý cao hơn để họ ra quyết định cuối cùng.",
+      "D. Đóng vai trò trung gian, thảo luận riêng với từng giám đốc để hiểu rõ gốc rễ xung đột và tìm điểm chung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một BA cấp cao không chỉ hòa giải mà còn đưa ra giải pháp dựa trên dữ liệu và lợi ích tổng thể của doanh nghiệp. Phân tích quy trình và đề xuất cấu trúc quyền sở hữu tối ưu sẽ giải quyết gốc rễ vấn đề và mang lại giá trị chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Dự án phát triển sản phẩm mới đang đối mặt với sự kỳ vọng không thực tế từ ban lãnh đạo về thời gian hoàn thành và phạm vi tính năng. Làm thế nào một Business Analyst có thể quản lý hiệu quả những kỳ vọng này mà không làm giảm sự ủng hộ của ban lãnh đạo?",
+    "options": [
+      "A. Cung cấp một báo cáo chi tiết về rủi ro và thách thức kỹ thuật, yêu cầu điều chỉnh phạm vi hoặc thời gian.",
+      "B. Tổ chức một buổi làm việc với ban lãnh đạo để trình bày các kịch bản khác nhau (ví dụ: tối ưu hóa phạm vi, thêm tài nguyên, kéo dài thời gian) và cùng nhau đưa ra quyết định.",
+      "C. Chỉ tập trung vào việc hoàn thành các tính năng ưu tiên cao nhất, trì hoãn các tính năng khác để đáp ứng thời hạn.",
+      "D. Giao tiếp thường xuyên về tiến độ, nhưng không trực tiếp thách thức các kỳ vọng ban đầu để tránh xung đột."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thay vì chỉ trình bày vấn đề, một BA cấp cao sẽ trình bày các lựa chọn và hậu quả của chúng, giúp ban lãnh đạo tham gia vào quá trình ra quyết định và hiểu rõ các đánh đổi, từ đó quản lý kỳ vọng một cách chủ động và có sự đồng thuận.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống ERP mới sẽ thay đổi đáng kể cách làm việc của hàng trăm nhân viên. Có dấu hiệu kháng cự từ một số phòng ban chủ chốt. Kỹ năng nào của BA là then chốt để đánh giá và nâng cao sự sẵn sàng thay đổi (change readiness) của các stakeholder?",
+    "options": [
+      "A. Kỹ năng lập kế hoạch dự án để đảm bảo các hoạt động thay đổi được tích hợp vào lịch trình.",
+      "B. Kỹ năng phân tích nghiệp vụ để xác định tác động của thay đổi lên quy trình.",
+      "C. Kỹ năng giao tiếp và xây dựng mối quan hệ để thiết lập niềm tin và thu thập phản hồi trung thực.",
+      "D. Kỹ năng quản lý rủi ro để dự đoán và giảm thiểu các vấn đề phát sinh từ sự kháng cự."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để đánh giá sự sẵn sàng thay đổi và giảm kháng cự, BA cần xây dựng niềm tin với các stakeholder để họ cởi mở chia sẻ lo ngại. Kỹ năng giao tiếp và xây dựng mối quan hệ là nền tảng để thu thập thông tin chân thực và thuyết phục họ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong ma trận Power/Interest, các stakeholder có 'High Power, High Interest' nên được quản lý bằng chiến lược nào?",
+    "options": [
+      "A. Keep Satisfied (Giữ hài lòng).",
+      "B. Manage Closely (Quản lý chặt chẽ).",
+      "C. Keep Informed (Giữ thông báo).",
+      "D. Monitor (Giám sát)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các stakeholder có quyền lực và sự quan tâm cao là những người có ảnh hưởng lớn nhất đến dự án. Họ cần được quản lý chặt chẽ, tham gia tích cực vào quá trình ra quyết định và được thông báo liên tục.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sau khi trình bày bản nháp đầu tiên của giải pháp, bạn nhận được nhiều phản hồi mâu thuẫn từ các stakeholder chính. Một số muốn thêm tính năng, trong khi số khác muốn đơn giản hóa. Bạn sẽ làm gì để tổng hợp và xử lý hiệu quả các phản hồi mâu thuẫn này?",
+    "options": [
+      "A. Ưu tiên phản hồi từ các stakeholder có quyền lực cao nhất để đảm bảo sự chấp thuận.",
+      "B. Tổ chức một buổi làm việc để các stakeholder cùng nhau thảo luận, trình bày luận điểm và tìm kiếm điểm chung hoặc sự đánh đổi.",
+      "C. Tự mình phân tích và đưa ra quyết định dựa trên kinh nghiệm và các mục tiêu dự án ban đầu.",
+      "D. Yêu cầu từng stakeholder cung cấp bằng chứng hoặc dữ liệu để hỗ trợ phản hồi của họ trước khi xem xét."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong tình huống có nhiều phản hồi mâu thuẫn, việc đưa các stakeholder lại với nhau để thảo luận trực tiếp, hiểu quan điểm của nhau và cùng tìm giải pháp là cách hiệu quả nhất để đạt được sự đồng thuận và đưa ra quyết định tối ưu cho dự án.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một dự án nâng cấp hệ thống kế toán đang gặp phải sự phản đối từ phòng tài chính do lo ngại về việc mất quyền kiểm soát dữ liệu và tuân thủ quy định. Phòng IT muốn triển khai nhanh chóng để tối ưu hóa chi phí. Để giải quyết xung đột này, BA cần tập trung vào việc gì?",
+    "options": [
+      "A. Thuyết phục phòng tài chính về lợi ích dài hạn của việc nâng cấp hệ thống.",
+      "B. Phân tích chi tiết các yêu cầu về bảo mật và tuân thủ của phòng tài chính, sau đó đề xuất các giải pháp kỹ thuật để giải quyết các lo ngại đó.",
+      "C. Đàm phán với phòng IT để kéo dài thời gian triển khai, cho phép phòng tài chính có thêm thời gian thích nghi.",
+      "D. Xây dựng một kế hoạch truyền thông mạnh mẽ để làm rõ các lợi ích của dự án cho cả hai phòng ban."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xung đột này xuất phát từ những lo ngại cụ thể của phòng tài chính. Một BA cấp cao sẽ đi sâu vào phân tích các yêu cầu đó và đề xuất giải pháp kỹ thuật cụ thể để đảm bảo an toàn dữ liệu và tuân thủ, từ đó giải quyết gốc rễ vấn đề.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Yếu tố nào là quan trọng nhất khi quản lý kỳ vọng của stakeholder trong suốt vòng đời dự án?",
+    "options": [
+      "A. Đảm bảo mọi yêu cầu của stakeholder đều được đáp ứng.",
+      "B. Thiết lập các mục tiêu dự án tham vọng để thúc đẩy nhóm làm việc.",
+      "C. Giao tiếp minh bạch, thường xuyên và thực tế về tiến độ, rủi ro và các đánh đổi.",
+      "D. Tránh thảo luận về những thách thức tiềm ẩn để duy trì tinh thần tích cực."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quản lý kỳ vọng không phải là đáp ứng mọi yêu cầu mà là đảm bảo các stakeholder hiểu rõ những gì có thể và không thể đạt được, các rủi ro và các đánh đổi thông qua giao tiếp trung thực và thường xuyên.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang chuẩn bị cho một đợt triển khai lớn một công nghệ mới yêu cầu thay đổi đáng kể trong văn hóa làm việc. Có một nhóm 'những người có ảnh hưởng ngầm' (informal leaders) trong tổ chức đang tỏ ra hoài nghi. Cách tiếp cận nào hiệu quả nhất để thu hút và chuyển hóa sự hoài nghi của nhóm này thành sự ủng hộ?",
+    "options": [
+      "A. Tổ chức các buổi đào tạo bắt buộc cho tất cả nhân viên, bao gồm cả nhóm này, để họ hiểu rõ công nghệ mới.",
+      "B. Xác định và tiếp cận riêng từng cá nhân trong nhóm, lắng nghe các lo ngại của họ và mời họ tham gia vào một nhóm 'đại sứ thay đổi' (change champions).",
+      "C. Phớt lờ sự hoài nghi của họ và tập trung vào việc có được sự ủng hộ từ ban lãnh đạo chính thức.",
+      "D. Cung cấp các ưu đãi tài chính hoặc phần thưởng cho những người chấp nhận thay đổi sớm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Những người có ảnh hưởng ngầm có thể là rào cản hoặc cầu nối cho sự thay đổi. Việc lắng nghe họ, giải quyết lo ngại và biến họ thành 'đại sứ thay đổi' sẽ tận dụng ảnh hưởng của họ để thúc đẩy sự chấp nhận từ những người khác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi phân tích stakeholder cho một dự án có tầm ảnh hưởng rộng, kỹ năng nào giúp BA xác định được các mối quan hệ phức tạp và phụ thuộc lẫn nhau giữa các nhóm stakeholder?",
+    "options": [
+      "A. Kỹ năng phỏng vấn để thu thập thông tin trực tiếp.",
+      "B. Kỹ năng lập biểu đồ (mapping) và mô hình hóa để trực quan hóa các mối quan hệ.",
+      "C. Kỹ năng đàm phán để giải quyết các xung đột lợi ích ban đầu.",
+      "D. Kỹ năng phân tích tài chính để đánh giá tác động kinh tế của từng stakeholder."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các dự án lớn thường có mạng lưới stakeholder phức tạp. Kỹ năng lập biểu đồ hoặc mô hình hóa (ví dụ: bản đồ Stakeholder, sơ đồ mối quan hệ) giúp BA trực quan hóa và hiểu rõ các mối quan hệ, quyền lực và sự phụ thuộc lẫn nhau, từ đó xây dựng chiến lược quản lý phù hợp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Dự án của bạn đang gặp phải vấn đề về truyền thông: các stakeholder không đọc email, bỏ lỡ các cuộc họp quan trọng, và thường xuyên yêu cầu thông tin đã được cung cấp. Bạn sẽ phân tích nguyên nhân gốc rễ và điều chỉnh kế hoạch truyền thông như thế nào?",
+    "options": [
+      "A. Tăng tần suất gửi email và tổ chức nhiều cuộc họp hơn để đảm bảo thông tin được truyền đạt.",
+      "B. Tiến hành khảo sát hoặc phỏng vấn nhóm stakeholder để hiểu rõ kênh truyền thông ưa thích, tần suất và định dạng thông tin họ mong muốn.",
+      "C. Yêu cầu quản lý dự án can thiệp để nhắc nhở các stakeholder về trách nhiệm của họ trong việc theo dõi thông tin.",
+      "D. Đơn giản hóa các báo cáo và chỉ gửi thông tin tóm tắt để giảm tải thông tin."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vấn đề truyền thông thường xuất phát từ việc không phù hợp với nhu cầu và thói quen của người nhận. Phân tích gốc rễ bằng cách thu thập phản hồi trực tiếp từ stakeholder sẽ giúp BA điều chỉnh kế hoạch truyền thông một cách hiệu quả, chọn đúng kênh, định dạng và tần suất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một cuộc họp quan trọng, hai stakeholder cấp cao có tầm nhìn hoàn toàn khác nhau về hướng đi chiến lược của sản phẩm, dẫn đến bế tắc. Với vai trò là BA, bạn sẽ can thiệp như thế nào để phá vỡ sự bế tắc này và thúc đẩy tiến độ?",
+    "options": [
+      "A. Đề xuất tạm dừng cuộc họp để mỗi bên có thời gian suy nghĩ lại và trình bày lại quan điểm trong một cuộc họp khác.",
+      "B. Tập trung vào các mục tiêu kinh doanh tổng thể đã được thống nhất, sau đó yêu cầu mỗi bên trình bày cách đề xuất của họ hỗ trợ các mục tiêu đó, tìm kiếm điểm chung.",
+      "C. Ghi nhận sự bất đồng và đưa vấn đề lên cấp trên để họ đưa ra quyết định cuối cùng.",
+      "D. Cố gắng thuyết phục một bên nhượng bộ dựa trên các phân tích kỹ thuật của bạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi có xung đột về tầm nhìn chiến lược, việc đưa cuộc thảo luận trở lại các mục tiêu kinh doanh đã được thống nhất sẽ giúp các bên nhìn nhận vấn đề từ góc độ rộng hơn, tìm kiếm các giải pháp có lợi nhất cho doanh nghiệp thay vì bảo vệ quan điểm cá nhân.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ năng giao tiếp nào là quan trọng nhất để một BA quản lý thành công kỳ vọng của các stakeholder cấp cao, đặc biệt khi phải truyền đạt tin tức xấu hoặc các rủi ro lớn?",
+    "options": [
+      "A. Kỹ năng viết báo cáo chi tiết và chính xác.",
+      "B. Kỹ năng lắng nghe chủ động để hiểu rõ các mối quan tâm tiềm ẩn của họ.",
+      "C. Kỹ năng trình bày dữ liệu phức tạp một cách đơn giản và dễ hiểu.",
+      "D. Kỹ năng đàm phán và thuyết phục để đạt được sự đồng thuận về các bước tiếp theo."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Khi truyền đạt tin tức xấu hoặc rủi ro lớn, BA không chỉ cần thông báo mà còn cần đạt được sự đồng thuận về cách xử lý hoặc các bước tiếp theo. Kỹ năng đàm phán và thuyết phục là then chốt để các stakeholder cấp cao chấp nhận thực tế và cùng đưa ra quyết định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một dự án tái cấu trúc lớn đang được triển khai, và bạn nhận thấy có sự khác biệt đáng kể về mức độ sẵn sàng thay đổi giữa các chi nhánh khu vực. Để phát triển một chiến lược quản lý thay đổi phù hợp, bạn sẽ phân tích những yếu tố nào là chủ yếu?",
+    "options": [
+      "A. Phân tích lịch sử các dự án thay đổi trước đây và tỷ lệ thành công của chúng ở mỗi chi nhánh.",
+      "B. Đánh giá văn hóa tổ chức, khả năng lãnh đạo địa phương, và mức độ tin tưởng vào ban quản lý trung ương ở từng chi nhánh.",
+      "C. So sánh số lượng nhân viên ở mỗi chi nhánh để xác định quy mô của nỗ lực thay đổi.",
+      "D. Phân tích ngân sách và nguồn lực sẵn có ở mỗi chi nhánh để hỗ trợ các hoạt động thay đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự sẵn sàng thay đổi không chỉ là về quy trình hay kỹ thuật mà còn sâu sắc hơn về văn hóa, khả năng lãnh đạo và mức độ tin tưởng. Phân tích các yếu tố này giúp BA điều chỉnh chiến lược quản lý thay đổi để phù hợp với từng bối cảnh khu vực.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một dự án tích hợp hệ thống mới có khả năng ảnh hưởng đến một nhóm stakeholder bên ngoài (ví dụ: nhà cung cấp, đối tác chiến lược) mà không có quyền lực trực tiếp nhưng có thể gây ra rủi ro đáng kể nếu không được quản lý. Phương pháp nào hiệu quả nhất để đảm bảo nhóm stakeholder này được quản lý đúng mức?",
+    "options": [
+      "A. Giữ họ được thông báo định kỳ về tiến độ dự án thông qua các bản tin.",
+      "B. Thực hiện phân tích rủi ro chi tiết về tác động tiềm tàng của họ và phát triển các chiến lược giảm thiểu rủi ro cụ thể.",
+      "C. Mời họ tham gia vào các buổi đánh giá giải pháp để thu thập phản hồi của họ.",
+      "D. Chỉ liên hệ với họ khi có vấn đề phát sinh trực tiếp ảnh hưởng đến họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với các stakeholder bên ngoài có thể gây ra rủi ro đáng kể, việc chỉ thông báo hoặc mời tham gia là chưa đủ. BA cần chủ động phân tích rủi ro và phát triển các chiến lược cụ thể để giảm thiểu các tác động tiêu cực tiềm tàng, đảm bảo sự liên tục trong hoạt động.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh dự án chiến lược, mục tiêu chính của một kế hoạch truyền thông Stakeholder là gì?",
+    "options": [
+      "A. Đảm bảo tất cả các stakeholder đều nhận được mọi thông tin liên quan đến dự án.",
+      "B. Xây dựng sự hiểu biết chung, quản lý kỳ vọng và duy trì sự ủng hộ của các stakeholder đối với các mục tiêu dự án.",
+      "C. Cung cấp một kênh chính thức để các stakeholder có thể gửi yêu cầu và khiếu nại.",
+      "D. Ghi lại tất cả các quyết định và thông báo quan trọng của dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kế hoạch truyền thông Stakeholder không chỉ là việc truyền tải thông tin mà còn là một công cụ chiến lược để đảm bảo sự hiểu biết, quản lý kỳ vọng, giải quyết xung đột và duy trì sự ủng hộ cần thiết cho sự thành công của dự án.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi đối mặt với xung đột lợi ích giữa các stakeholder cấp cao, kỹ năng nào giúp BA định hướng cuộc thảo luận theo hướng xây dựng và đạt được sự đồng thuận chiến lược?",
+    "options": [
+      "A. Kỹ năng thuyết trình để trình bày các dữ liệu hỗ trợ quan điểm của mình.",
+      "B. Kỹ năng phân tích để chỉ ra lỗi trong lập luận của các bên.",
+      "C. Kỹ năng điều phối (facilitation) để giữ cho cuộc thảo luận tập trung vào mục tiêu chung và khám phá các giải pháp cùng có lợi.",
+      "D. Kỹ năng viết để ghi lại biên bản cuộc họp một cách chi tiết."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kỹ năng điều phối là cực kỳ quan trọng trong giải quyết xung đột. Nó giúp BA giữ cho cuộc thảo luận đi đúng hướng, khuyến khích các bên lắng nghe nhau, khám phá các lựa chọn và cùng nhau xây dựng giải pháp có lợi cho tất cả, thay vì chỉ tập trung vào việc thắng thua.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một tính năng quan trọng của sản phẩm mới bị trì hoãn do phát sinh vấn đề kỹ thuật phức tạp. Stakeholder chính, một giám đốc kinh doanh, đã cam kết tính năng này với khách hàng tiềm năng. Bạn sẽ quản lý tình huống này và kỳ vọng của giám đốc kinh doanh như thế nào?",
+    "options": [
+      "A. Thông báo ngay lập tức về sự trì hoãn và hy vọng giám đốc sẽ hiểu.",
+      "B. Gặp riêng giám đốc kinh doanh, trình bày rõ ràng nguyên nhân kỹ thuật, các lựa chọn khả thi (ví dụ: giải pháp thay thế, thời gian trì hoãn ước tính) và cùng thảo luận về cách truyền đạt thông tin này cho khách hàng.",
+      "C. Tìm cách giải quyết vấn đề kỹ thuật một mình trước khi thông báo bất kỳ điều gì để tránh gây hoảng loạn.",
+      "D. Đẩy trách nhiệm thông báo cho quản lý dự án hoặc cấp trên của giám đốc kinh doanh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong tình huống nhạy cảm này, BA cần chủ động, minh bạch và hợp tác. Việc trình bày rõ ràng vấn đề, các lựa chọn và cùng thảo luận về chiến lược truyền thông cho khách hàng sẽ giúp quản lý kỳ vọng, duy trì niềm tin và giảm thiểu tác động tiêu cực.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Yếu tố nào sau đây là chỉ báo mạnh mẽ nhất về mức độ sẵn sàng thay đổi thấp trong một tổ chức?",
+    "options": [
+      "A. Sự thiếu hụt ngân sách cho các hoạt động đào tạo.",
+      "B. Lịch sử các dự án thay đổi thất bại và sự thờ ơ từ nhân viên.",
+      "C. Thiếu công cụ và công nghệ hiện đại.",
+      "D. Tỷ lệ luân chuyển nhân sự cao trong các phòng ban khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lịch sử các dự án thất bại và sự thờ ơ của nhân viên là dấu hiệu rõ ràng nhất của sự mệt mỏi với thay đổi (change fatigue) và thiếu niềm tin vào khả năng thành công của các sáng kiến mới, cho thấy mức độ sẵn sàng thay đổi rất thấp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang phân tích các stakeholder cho một dự án tích hợp dữ liệu toàn doanh nghiệp. Bạn nhận thấy một số phòng ban có quyền lực cao nhưng có vẻ không quan tâm đến dự án. Để chuyển hóa sự thờ ơ này thành sự ủng hộ, bạn sẽ phân tích điều gì là quan trọng nhất?",
+    "options": [
+      "A. Mức độ hiểu biết kỹ thuật của họ về hệ thống tích hợp dữ liệu.",
+      "B. Các mục tiêu chiến lược của phòng ban đó và cách dự án có thể hỗ trợ hoặc cản trở các mục tiêu đó.",
+      "C. Lịch sử tương tác của họ với phòng IT trong các dự án trước đây.",
+      "D. Ngân sách mà phòng ban đó có thể đóng góp cho dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với các stakeholder quyền lực nhưng thờ ơ, cách hiệu quả nhất để thu hút họ là chỉ ra cách dự án tích hợp dữ liệu có thể trực tiếp hỗ trợ các mục tiêu chiến lược của chính phòng ban họ, mang lại lợi ích rõ ràng cho họ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một dự án có nhiều stakeholder phân tán về mặt địa lý và múi giờ, mỗi người có phong cách giao tiếp và kênh ưa thích riêng. Để xây dựng một kế hoạch truyền thông linh hoạt và hiệu quả, bạn sẽ ưu tiên phương pháp nào?",
+    "options": [
+      "A. Chọn một kênh truyền thông duy nhất (ví dụ: email) và yêu cầu tất cả stakeholder tuân thủ.",
+      "B. Phát triển một ma trận truyền thông chi tiết, xác định rõ từng nhóm stakeholder, nhu cầu thông tin, kênh ưa thích, tần suất và định dạng phù hợp.",
+      "C. Tổ chức các cuộc họp trực tuyến thường xuyên vào thời gian thuận tiện nhất cho đa số stakeholder.",
+      "D. Giao trách nhiệm truyền thông cho từng trưởng nhóm địa phương để họ tự quản lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với sự đa dạng về địa lý và phong cách, một kế hoạch truyền thông 'một kích thước phù hợp cho tất cả' sẽ không hiệu quả. Việc xây dựng một ma trận chi tiết giúp BA tùy chỉnh chiến lược truyền thông cho từng nhóm, đảm bảo thông tin được truyền đạt hiệu quả nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một dự án phát triển phần mềm đang bị đình trệ do một stakeholder chủ chốt liên tục đưa ra các yêu cầu thay đổi (change requests) vào phút chót, làm tăng phạm vi và trì hoãn tiến độ. Để giải quyết vấn đề này một cách chiến lược, BA cần phân tích điều gì là quan trọng nhất?",
+    "options": [
+      "A. Mức độ ảnh hưởng của stakeholder này đối với dự án và tổ chức.",
+      "B. Gốc rễ của các yêu cầu thay đổi liên tục: liệu có phải do thiếu rõ ràng yêu cầu ban đầu, thay đổi ưu tiên kinh doanh, hay thiếu hiểu biết về tác động của thay đổi.",
+      "C. Khả năng kỹ thuật của nhóm phát triển để đáp ứng các yêu cầu thay đổi.",
+      "D. Chi phí phát sinh từ mỗi yêu cầu thay đổi và so sánh với ngân sách dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để giải quyết vấn đề này một cách bền vững, BA cần đi sâu vào gốc rễ của các yêu cầu thay đổi. Việc hiểu nguyên nhân (ví dụ: yêu cầu ban đầu chưa rõ, thay đổi chiến lược, thiếu hiểu biết về quy trình) sẽ giúp BA đưa ra các biện pháp khắc phục phù hợp, từ việc cải thiện quy trình thu thập yêu cầu đến việc quản lý kỳ vọng tốt hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong bối cảnh quản lý thay đổi ở cấp độ doanh nghiệp, vai trò của Business Analyst trong việc 'quản lý kỳ vọng' và 'xây dựng sự sẵn sàng thay đổi' có mối liên hệ chặt chẽ như thế nào?",
+    "options": [
+      "A. Quản lý kỳ vọng chỉ tập trung vào phạm vi dự án, trong khi sẵn sàng thay đổi tập trung vào yếu tố con người.",
+      "B. Quản lý kỳ vọng là một phần của việc xây dựng sự sẵn sàng thay đổi, giúp các stakeholder hiểu rõ những gì sẽ xảy ra và tại sao.",
+      "C. Hai khái niệm này độc lập và được quản lý bởi các nhóm riêng biệt trong tổ chức.",
+      "D. Xây dựng sự sẵn sàng thay đổi là kết quả của việc quản lý kỳ vọng thành công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quản lý kỳ vọng là một yếu tố then chốt trong việc xây dựng sự sẵn sàng thay đổi. Khi các stakeholder có kỳ vọng thực tế về những gì sẽ thay đổi, lợi ích, thách thức và lộ trình, họ sẽ dễ dàng chấp nhận và thích nghi với sự thay đổi hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Stakeholder Management",
+    "category": "KNOWLEDGE"
+  }
+]

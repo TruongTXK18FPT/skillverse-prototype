@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục đích chính của quá trình Requirement Elicitation (Khơi gợi yêu cầu) là gì?",
+    "options": [
+      "A. Lập trình các tính năng dựa trên tài liệu thiết kế.",
+      "B. Tìm kiếm, khám phá và thu thập yêu cầu từ các bên liên quan.",
+      "C. Kiểm thử phần mềm để tìm lỗi trước khi bàn giao.",
+      "D. Viết mã nguồn cho các hàm xử lý dữ liệu phức tạp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Elicitation là giai đoạn BA tương tác với Stakeholders để tìm hiểu mong muốn, nhu cầu và các vấn đề cần giải quyết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật nào thường được sử dụng khi BA muốn thu thập ý kiến từ một số lượng lớn người dùng ở nhiều vị trí địa lý khác nhau?",
+    "options": [
+      "A. Interview (Phỏng vấn trực tiếp).",
+      "B. Observation (Quan sát công việc).",
+      "C. Survey/Questionnaire (Khảo sát/Bảng câu hỏi).",
+      "D. Prototyping (Làm mẫu thử)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Survey cho phép thu thập dữ liệu từ tập khách hàng lớn một cách nhanh chóng và tiết kiệm chi phí.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một buổi Workshop, vai trò của người điều phối (Facilitator) là gì?",
+    "options": [
+      "A. Ghi chép lại toàn bộ biên bản cuộc họp.",
+      "B. Ra quyết định cuối cùng cho mọi yêu cầu được đưa ra.",
+      "C. Dẫn dắt cuộc thảo luận đi đúng trọng tâm và đạt mục tiêu.",
+      "D. Thực hiện việc demo sản phẩm cho khách hàng xem."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Facilitator giúp buổi Workshop diễn ra hiệu quả, đảm bảo mọi người đều có cơ hội đóng góp và bám sát chương trình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Yêu cầu: 'Hệ thống phải cho phép người dùng khôi phục mật khẩu qua email' thuộc loại yêu cầu nào?",
+    "options": [
+      "A. Non-functional Requirement (Yêu cầu phi chức năng).",
+      "B. Business Constraint (Ràng buộc kinh doanh).",
+      "C. Functional Requirement (Yêu cầu chức năng).",
+      "D. Quality of Service (Chất lượng dịch vụ)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Yêu cầu chức năng mô tả những gì hệ thống phải làm (hành vi của hệ thống).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Yêu cầu: 'Trang web phải tải xong nội dung trong vòng dưới 2 giây' thuộc loại yêu cầu nào?",
+    "options": [
+      "A. Functional Requirement (Yêu cầu chức năng).",
+      "B. Non-functional Requirement (Yêu cầu phi chức năng).",
+      "C. User Interface Requirement (Yêu cầu giao diện).",
+      "D. Business Rule (Quy tắc kinh doanh)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu phi chức năng mô tả các tiêu chuẩn chất lượng hoặc đặc tính vận hành như hiệu năng, bảo mật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Job Shadowing' trong Elicitation có nghĩa là gì?",
+    "options": [
+      "A. BA ngồi quan sát người dùng thực hiện công việc hằng ngày của họ.",
+      "B. BA phỏng vấn cấp quản lý về quy trình làm việc của nhân viên.",
+      "C. BA tự mình thực hiện công việc của người dùng để trải nghiệm.",
+      "D. BA gửi tài liệu hướng dẫn cho người dùng tự học."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Job Shadowing là một dạng quan sát (Observation) giúp BA hiểu thực tế quy trình làm việc mà không làm gián đoạn người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi bắt đầu một dự án mới mà chưa có nhiều thông tin, BA nên thực hiện hoạt động nào đầu tiên?",
+    "options": [
+      "A. Viết tài liệu đặc tả chi tiết (SRS).",
+      "B. Phân tích các tài liệu hiện có (Document Analysis).",
+      "C. Thiết kế cơ sở dữ liệu cho hệ thống.",
+      "D. Tổ chức buổi nghiệm thu sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Document Analysis giúp BA nắm bắt bối cảnh và những thông tin đã có sẵn trước khi bắt đầu phỏng vấn trực tiếp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Câu hỏi 'Bạn có thích giao diện này không?' thuộc loại câu hỏi nào?",
+    "options": [
+      "A. Open-ended question (Câu hỏi mở).",
+      "B. Closed-ended question (Câu hỏi đóng).",
+      "C. Probing question (Câu hỏi đào sâu).",
+      "D. Clarification question (Câu hỏi làm rõ)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu hỏi đóng thường chỉ yêu cầu câu trả lời Có/Không hoặc một lựa chọn ngắn gọn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao BA cần ghi lại các 'Assumptions' (Giả định) trong quá trình khơi gợi yêu cầu?",
+    "options": [
+      "A. Để đổ lỗi cho khách hàng nếu dự án thất bại.",
+      "B. Để xác định các yếu tố được coi là đúng nhưng chưa có bằng chứng xác thực.",
+      "C. Để làm cho tài liệu trông chuyên nghiệp và dài hơn.",
+      "D. Để thay thế cho các yêu cầu chức năng chưa rõ ràng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giả định là những yếu tố được tin là đúng; nếu giả định sai, nó có thể ảnh hưởng lớn đến giải pháp và kế hoạch.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Acceptance Criteria (Tiêu chí chấp nhận) thường được dùng để làm gì?",
+    "options": [
+      "A. Để ước lượng thời gian lập trình của Developer.",
+      "B. Để xác định điều kiện cần thỏa mãn để một yêu cầu được coi là hoàn thành.",
+      "C. Để liệt kê danh sách các thành viên tham gia dự án.",
+      "D. Để mô tả cấu trúc bảng trong cơ sở dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Acceptance Criteria cung cấp các tiêu chuẩn cụ thể để kiểm tra xem tính năng đã đáp ứng đúng yêu cầu hay chưa.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong buổi phỏng vấn, nếu Stakeholder đưa ra một yêu cầu quá mơ hồ, BA nên làm gì?",
+    "options": [
+      "A. Bỏ qua yêu cầu đó và chuyển sang câu hỏi khác.",
+      "B. Tự suy diễn ý nghĩa theo kinh nghiệm cá nhân.",
+      "C. Sử dụng các câu hỏi đào sâu (Probing questions) để làm rõ ý định.",
+      "D. Ghi lại nguyên văn và không cần hỏi thêm gì."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần đặt thêm câu hỏi như 'Tại sao?', 'Ví dụ cụ thể là gì?' để hiểu rõ bản chất yêu cầu mơ hồ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Brainstorming' hiệu quả nhất khi nào?",
+    "options": [
+      "A. Khi cần đưa ra quyết định phê duyệt ngân sách dự án.",
+      "B. Khi cần tạo ra nhiều ý tưởng sáng tạo trong thời gian ngắn.",
+      "C. Khi cần viết tài liệu hướng dẫn sử dụng chi tiết.",
+      "D. Khi cần kiểm tra lỗi logic trong mã nguồn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Brainstorming tập trung vào việc thu thập tối đa số lượng ý tưởng từ nhóm mà không bị phán xét ngay lập tức.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hoạt động 'Confirm Elicitation Results' nhằm mục đích gì?",
+    "options": [
+      "A. Để yêu cầu Stakeholder thanh toán chi phí dự án.",
+      "B. Để đảm bảo thông tin BA ghi nhận khớp với ý hiểu của Stakeholder.",
+      "C. Để bắt đầu giai đoạn lập trình ngay lập tức.",
+      "D. Để thay đổi toàn bộ phạm vi dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xác nhận kết quả giúp tránh hiểu lầm và đảm bảo tính chính xác của thông tin đã thu thập.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi quan sát người dùng làm việc (Observation), BA nên làm gì để có kết quả khách quan nhất?",
+    "options": [
+      "A. Liên tục ngắt lời để hỏi tại sao họ làm như vậy.",
+      "B. Yêu cầu người dùng làm theo cách BA cho là đúng.",
+      "C. Ghi chép lại các bước thực hiện và các điểm gây khó khăn cho họ.",
+      "D. Chỉ quan sát những người dùng giỏi nhất trong phòng ban."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quan sát khách quan giúp BA nhận ra các 'nỗi đau' (pain points) thực tế mà người dùng đôi khi không tự nhận ra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một 'Stakeholder' trong dự án phần mềm được hiểu là:",
+    "options": [
+      "A. Chỉ bao gồm những người trực tiếp viết code cho dự án.",
+      "B. Chỉ bao gồm khách hàng trả tiền cho dự án.",
+      "C. Bất kỳ cá nhân hoặc tổ chức nào có ảnh hưởng hoặc bị ảnh hưởng bởi dự án.",
+      "D. Những người làm công tác kiểm thử phần mềm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Stakeholder là bên liên quan, bao gồm người dùng, khách hàng, quản lý, đội dự án, v.v.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Interface Analysis' tập trung vào điều gì?",
+    "options": [
+      "A. Phân tích tâm lý của người dùng cuối.",
+      "B. Xác định cách hệ thống tương tác với các hệ thống khác hoặc người dùng.",
+      "C. Thiết kế màu sắc và font chữ cho ứng dụng di động.",
+      "D. Kiểm tra hiệu suất của máy chủ cơ sở dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Interface Analysis giúp xác định các điểm kết nối (giao tiếp) giữa các thành phần hoặc hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đâu là một ví dụ về 'Business Rule' (Quy tắc kinh doanh)?",
+    "options": [
+      "A. Hệ thống phải chạy trên trình duyệt Chrome.",
+      "B. Khách hàng thân thiết được giảm giá 10% cho mọi đơn hàng.",
+      "C. Nút 'Thanh toán' phải có màu xanh lá cây.",
+      "D. Cơ sở dữ liệu phải được sao lưu hằng ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Rule là các chính sách hoặc quy định hướng dẫn hoạt động của tổ chức.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quá trình Elicitation, nếu hai Stakeholder đưa ra yêu cầu mâu thuẫn nhau, BA nên làm gì?",
+    "options": [
+      "A. Chọn yêu cầu của người có chức vụ cao hơn mà không cần thảo luận.",
+      "B. Tự ý kết hợp cả hai yêu cầu thành một tính năng phức tạp.",
+      "C. Tổ chức họp để các bên thảo luận và thống nhất phương án tối ưu.",
+      "D. Loại bỏ cả hai yêu cầu để tránh gây tranh cãi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA đóng vai trò trung gian giúp các bên đạt được sự đồng thuận thông qua phân tích và thảo luận.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Việc sử dụng 'Prototyping' (Mẫu thử) trong Elicitation giúp ích gì nhất?",
+    "options": [
+      "A. Giúp Stakeholder hình dung rõ hơn về giải pháp và phản hồi sớm.",
+      "B. Thay thế hoàn toàn cho việc viết tài liệu đặc tả.",
+      "C. Giảm bớt thời gian lập trình thực tế của dự án.",
+      "D. Đảm bảo hệ thống không bao giờ có lỗi sau này."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mẫu thử là công cụ trực quan tuyệt vời để xác nhận yêu cầu khi Stakeholder khó diễn đạt bằng lời.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trước khi tổ chức một buổi Interview, BA cần chuẩn bị điều gì quan trọng nhất?",
+    "options": [
+      "A. Một bộ code mẫu để trình diễn.",
+      "B. Danh sách các câu hỏi và mục tiêu cần đạt được.",
+      "C. Hợp đồng pháp lý giữa hai bên.",
+      "D. Sơ đồ kiến trúc hạ tầng mạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuẩn bị câu hỏi và mục tiêu giúp buổi phỏng vấn đi đúng hướng và không lãng phí thời gian.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Yêu cầu nào sau đây được coi là 'Measurable' (Có thể đo lường được)?",
+    "options": [
+      "A. Hệ thống phải rất nhanh.",
+      "B. Giao diện phải đẹp và thân thiện.",
+      "C. Hệ thống phải hỗ trợ tối đa 500 người dùng truy cập đồng thời.",
+      "D. Phần mềm phải dễ sử dụng cho người mới."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Yêu cầu tốt cần định lượng được (ví dụ: số lượng người dùng) để có thể kiểm chứng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Hoạt động nào sau đây thuộc về 'Requirement Validation'?",
+    "options": [
+      "A. Viết code cho các module giao diện.",
+      "B. Stakeholder kiểm tra và ký xác nhận tài liệu yêu cầu.",
+      "C. Cài đặt máy chủ cho môi trường thử nghiệm.",
+      "D. Thiết kế logo cho sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Validation là quá trình đảm bảo các yêu cầu đã thu thập đúng với nhu cầu thực tế của khách hàng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Focus Group' khác với 'Workshop' ở điểm cơ bản nào?",
+    "options": [
+      "A. Focus Group chỉ dành cho Developer.",
+      "B. Focus Group tập trung vào việc thu thập thái độ và cảm nhận của người dùng.",
+      "C. Workshop không bao giờ có người điều phối.",
+      "D. Focus Group luôn kéo dài hơn Workshop."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Focus Group thường dùng để lấy ý kiến, cảm nhận về một sản phẩm/ý tưởng từ một nhóm đối tượng cụ thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một Stakeholder yêu cầu một tính năng nằm ngoài phạm vi (Out of scope) ban đầu, BA nên làm gì?",
+    "options": [
+      "A. Từ chối thẳng thừng và không ghi nhận lại.",
+      "B. Đồng ý ngay lập tức để làm hài lòng khách hàng.",
+      "C. Ghi nhận lại và phân tích tác động (Impact Analysis) trước khi báo cáo quản lý.",
+      "D. Âm thầm nhờ Developer làm thêm tính năng đó."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần quản lý thay đổi bằng cách ghi nhận và đánh giá ảnh hưởng đến nguồn lực, thời gian của dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc xác định 'Constraint' (Ràng buộc) lại quan trọng trong Elicitation?",
+    "options": [
+      "A. Để BA có lý do kéo dài thời gian dự án.",
+      "B. Để giới hạn các lựa chọn giải pháp phù hợp với thực tế ngân sách, thời gian hoặc công nghệ.",
+      "C. Để ép buộc người dùng phải sử dụng hệ thống cũ.",
+      "D. Để tăng độ phức tạp của tài liệu kỹ thuật."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ràng buộc giúp định hướng giải pháp đi đúng trong khuôn khổ cho phép của dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án có nhiều nhóm Stakeholder có quyền lợi đối nghịch nhau về quy trình phê duyệt, kỹ thuật khơi gợi yêu cầu nào là hiệu quả nhất để đạt được sự đồng thuận nhanh chóng?",
+    "options": [
+      "A. Phỏng vấn cá nhân (Interviews) từng người một.",
+      "B. Tổ chức Workshop tập trung với sự tham gia của các bên.",
+      "C. Gửi khảo sát (Surveys) để thu thập ý kiến ẩn danh.",
+      "D. Quan sát (Observation) cách họ làm việc thực tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Workshop cho phép các bên thảo luận trực tiếp, giải quyết mâu thuẫn ngay lập tức dưới sự điều phối của BA để đạt được sự đồng thuận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thực hiện kỹ thuật Quan sát (Observation), BA nhận thấy người dùng thực hiện các bước khác hẳn so với quy trình nghiệp vụ đã được tài liệu hóa. BA nên làm gì tiếp theo?",
+    "options": [
+      "A. Yêu cầu người dùng tuân thủ đúng quy trình trong tài liệu.",
+      "B. Bỏ qua các bước quan sát được và viết yêu cầu theo tài liệu cũ.",
+      "C. Ghi nhận các bước thực tế và đặt câu hỏi 'Tại sao' để hiểu lý do của sự khác biệt.",
+      "D. Cập nhật ngay lập tức quy trình mới vào tài liệu mà không cần hỏi lại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sự khác biệt giữa lý thuyết và thực tế thường chứa đựng các yêu cầu ngầm định hoặc các vấn đề của quy trình cũ cần được làm rõ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Yêu cầu nào sau đây được phân loại là Yêu cầu phi chức năng (Non-functional Requirement)?",
+    "options": [
+      "A. Hệ thống cho phép người dùng xuất báo cáo dưới định dạng PDF.",
+      "B. Hệ thống phải xử lý tối thiểu 1000 giao dịch mỗi giây trong giờ cao điểm.",
+      "C. Người quản trị có quyền khóa tài khoản của nhân viên cấp dưới.",
+      "D. Chức năng thanh toán phải hỗ trợ các loại thẻ tín dụng quốc tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hiệu năng (performance) là một thuộc tính chất lượng của hệ thống, thuộc nhóm yêu cầu phi chức năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quá trình khơi gợi yêu cầu, BA gặp một Stakeholder rất bận rộn và khó sắp xếp lịch họp. Phương pháp nào là tối ưu để thu thập thông tin từ người này?",
+    "options": [
+      "A. Gửi một bảng câu hỏi khảo sát (Survey) chi tiết với 50 câu hỏi.",
+      "B. Chờ đợi cho đến khi Stakeholder đó có thời gian rảnh để họp trực tiếp.",
+      "C. Gửi email tóm tắt các điểm mấu chốt và yêu cầu phản hồi bằng văn bản ngắn gọn.",
+      "D. Tự đưa ra giả định về yêu cầu của họ để tránh làm phiền."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với Stakeholder bận rộn, việc giao tiếp tập trung vào các điểm cốt lõi qua email giúp họ linh hoạt thời gian phản hồi mà vẫn đảm bảo thông tin.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục đích chính của việc xác định 'Giả định' (Assumptions) trong tài liệu yêu cầu là gì?",
+    "options": [
+      "A. Để đổ lỗi cho Stakeholder nếu dự án thất bại.",
+      "B. Để giới hạn phạm vi công việc của đội ngũ phát triển.",
+      "C. Để làm rõ các yếu tố được tin là đúng nhưng chưa có bằng chứng xác thực tại thời điểm đó.",
+      "D. Để thay thế cho việc khơi gợi yêu cầu từ người dùng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giả định giúp định hướng thiết kế và lập kế hoạch khi thông tin chưa đầy đủ, đồng thời cảnh báo rủi ro nếu giả định đó sai.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi viết Tiêu chí chấp nhận (Acceptance Criteria) cho một User Story, tiêu chuẩn nào là quan trọng nhất?",
+    "options": [
+      "A. Phải mô tả chi tiết cách lập trình viên viết code.",
+      "B. Phải có thể kiểm thử được (Testable) và rõ ràng về kết quả mong đợi.",
+      "C. Càng dài và chi tiết càng tốt để không bỏ sót ý.",
+      "D. Chỉ cần Stakeholder đồng ý là đủ, không cần quan tâm đến đội kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tiêu chí chấp nhận phải đo lường được để xác định xem yêu cầu đã được hoàn thành đúng hay chưa.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một buổi Workshop, một Stakeholder cấp cao liên tục đưa ra các yêu cầu ngoài phạm vi (out of scope). Là BA điều phối, bạn nên xử lý thế nào?",
+    "options": [
+      "A. Ngắt lời ngay lập tức và yêu cầu họ chỉ nói về các mục trong chương trình.",
+      "B. Ghi nhận các yêu cầu đó vào 'Parking Lot' và hẹn thảo luận sau để tập trung vào mục tiêu hiện tại.",
+      "C. Chiều theo ý họ và thay đổi phạm vi dự án ngay trong buổi họp.",
+      "D. Im lặng và để họ tiếp tục nói vì họ là Stakeholder quan trọng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kỹ thuật 'Parking Lot' giúp ghi nhận ý kiến Stakeholder để họ cảm thấy được tôn trọng, đồng thời giữ cho buổi họp đi đúng trọng tâm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật '5 Whys' thường được sử dụng trong khơi gợi yêu cầu nhằm mục đích gì?",
+    "options": [
+      "A. Để kiểm tra xem Stakeholder có đang nói dối hay không.",
+      "B. Để kéo dài thời gian buổi phỏng vấn.",
+      "C. Để tìm ra nguyên nhân gốc rễ (Root cause) và nhu cầu thực sự đằng sau một yêu cầu bề nổi.",
+      "D. Để liệt kê 5 giải pháp khác nhau cho cùng một vấn đề."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hỏi 'Tại sao' nhiều lần giúp BA đào sâu vào bản chất vấn đề thay vì chỉ ghi nhận những gì Stakeholder yêu cầu ở mức giải pháp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa Phỏng vấn (Interview) và Nhóm tập trung (Focus Groups) là gì?",
+    "options": [
+      "A. Phỏng vấn chỉ dành cho quản lý, Focus Groups dành cho nhân viên.",
+      "B. Phỏng vấn thu thập ý kiến cá nhân sâu sắc, Focus Groups thu thập thái độ và phản ứng của một nhóm người.",
+      "C. Phỏng vấn luôn tốn ít thời gian hơn Focus Groups.",
+      "D. Focus Groups không cần người điều phối (Facilitator) như Phỏng vấn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Focus Groups tận dụng sự tương tác nhóm để tìm ra các quan điểm chung hoặc sự khác biệt về thái độ đối với sản phẩm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "BA nên làm gì nếu Stakeholder đưa ra một yêu cầu mâu thuẫn trực tiếp với mục tiêu kinh doanh (Business Objectives) của dự án?",
+    "options": [
+      "A. Từ chối ngay lập tức vì nó sai mục tiêu.",
+      "B. Chấp nhận yêu cầu đó vì Stakeholder luôn đúng.",
+      "C. Phân tích tác động và giải thích sự mâu thuẫn cho Stakeholder để thảo luận lại.",
+      "D. Ghi lại yêu cầu đó và để đội phát triển tự quyết định có làm hay không."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA có vai trò tư vấn, cần chỉ ra sự không nhất quán giữa yêu cầu chi tiết và mục tiêu chiến lược để Stakeholder đưa ra quyết định đúng đắn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kỹ thuật Phân tích tài liệu (Document Analysis), nguồn nào sau đây cung cấp thông tin tốt nhất về các quy tắc nghiệp vụ (Business Rules) hiện tại?",
+    "options": [
+      "A. Sơ đồ tổ chức công ty.",
+      "B. Quy trình vận hành tiêu chuẩn (SOP) và các thông tư hướng dẫn.",
+      "C. Biên bản họp của ban giám đốc.",
+      "D. Email trao đổi cá nhân giữa các nhân viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SOP và các văn bản hướng dẫn nghiệp vụ là nguồn chính thống chứa đựng các quy tắc áp dụng cho hoạt động hàng ngày.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc xác nhận (Confirmation) kết quả khơi gợi yêu cầu sau mỗi buổi họp có ý nghĩa gì?",
+    "options": [
+      "A. Để đảm bảo BA đã hiểu đúng và Stakeholder đồng ý với những gì đã trao đổi.",
+      "B. Để hoàn thành thủ tục hành chính của dự án.",
+      "C. Để ngăn chặn Stakeholder thay đổi ý kiến trong tương lai.",
+      "D. Để bắt đầu giai đoạn lập trình ngay lập tức."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Xác nhận giúp loại bỏ sự hiểu lầm ngay từ đầu, tránh việc xây dựng sai tính năng dựa trên thông tin không chính xác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi khơi gợi yêu cầu cho một hệ thống thay thế hệ thống cũ (Legacy System), BA nên ưu tiên thực hiện hoạt động nào?",
+    "options": [
+      "A. Chỉ tập trung vào các tính năng mới mà hệ thống cũ chưa có.",
+      "B. Phân tích hệ thống cũ để hiểu các chức năng cốt lõi và dữ liệu hiện tại.",
+      "C. Yêu cầu người dùng quên hết hệ thống cũ để tư duy mới hoàn toàn.",
+      "D. Thuê một đội ngũ mới để xây dựng yêu cầu từ đầu mà không cần tham khảo cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hiểu hệ thống cũ giúp đảm bảo tính liên tục của nghiệp vụ và không bỏ sót các quy tắc ngầm định quan trọng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Yêu cầu: 'Hệ thống phải dễ sử dụng' là một yêu cầu tồi vì vi phạm nguyên tắc nào?",
+    "options": [
+      "A. Tính khả thi (Feasible).",
+      "B. Tính cần thiết (Necessary).",
+      "C. Tính đo lường được (Measurable/Verifiable).",
+      "D. Tính nhất quán (Consistent)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "'Dễ sử dụng' là một khái niệm chủ quan, không thể đo lường hoặc kiểm thử chính xác nếu không có tiêu chí cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong mô hình Agile, việc khơi gợi yêu cầu diễn ra khi nào?",
+    "options": [
+      "A. Chỉ diễn ra một lần duy nhất ở đầu dự án.",
+      "B. Diễn ra liên tục trong suốt các Sprint thông qua hoạt động làm mịn Backlog.",
+      "C. Chỉ diễn ra khi có yêu cầu thay đổi từ khách hàng.",
+      "D. Sau khi đội phát triển đã hoàn thành việc viết code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Agile, yêu cầu được khơi gợi và làm rõ dần dần (Just-in-time) để thích ứng với sự thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'Interface Analysis' giúp khơi gợi yêu cầu tập trung vào điều gì?",
+    "options": [
+      "A. Giao diện người dùng (UI) trông như thế nào.",
+      "B. Cách các hệ thống hoặc thành phần tương tác và trao đổi dữ liệu với nhau.",
+      "C. Cảm xúc của người dùng khi sử dụng phần mềm.",
+      "D. Cấu trúc bảng dữ liệu trong cơ sở dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Interface Analysis tập trung vào các điểm tiếp xúc giữa hệ thống đang xây dựng với các hệ thống bên ngoài hoặc giữa các module.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi Stakeholder yêu cầu một tính năng rất phức tạp nhưng ngân sách và thời gian có hạn, BA nên làm gì?",
+    "options": [
+      "A. Từ chối yêu cầu đó để bảo vệ đội phát triển.",
+      "B. Chấp nhận và yêu cầu đội phát triển làm thêm giờ.",
+      "C. Phân tích giá trị kinh doanh và đề xuất giải pháp thay thế đơn giản hơn (MVP).",
+      "D. Ghi nhận yêu cầu và hy vọng Stakeholder sẽ quên nó đi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần cân đối giữa mong muốn và nguồn lực bằng cách đề xuất giải pháp mang lại giá trị cao nhất với chi phí tối ưu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc xác định 'Stakeholder Sign-off' lại quan trọng trong khơi gợi yêu cầu?",
+    "options": [
+      "A. Để kết thúc vai trò của BA trong dự án.",
+      "B. Để xác nhận sự cam kết và đồng thuận của Stakeholder đối với tập hợp yêu cầu đã thu thập.",
+      "C. Để đảm bảo rằng yêu cầu sẽ không bao giờ thay đổi nữa.",
+      "D. Để có căn cứ phạt Stakeholder nếu họ đổi ý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sign-off thiết lập một nền tảng (baseline) để các giai đoạn tiếp theo (thiết kế, phát triển) có thể bắt đầu với sự tin cậy.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một câu hỏi 'đóng' (Closed-ended question) trong phỏng vấn phù hợp nhất khi nào?",
+    "options": [
+      "A. Khi muốn khuyến khích Stakeholder chia sẻ ý tưởng mới.",
+      "B. Khi muốn tìm hiểu quy trình nghiệp vụ phức tạp.",
+      "C. Khi cần xác nhận một thông tin cụ thể hoặc lấy sự đồng ý Có/Không.",
+      "D. Khi bắt đầu buổi phỏng vấn để tạo không khí thoải mái."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Câu hỏi đóng dùng để chốt thông tin hoặc xác nhận sự kiện, không dùng để khai thác thông tin mới.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kỹ thuật 'Mind Mapping' hỗ trợ gì cho BA trong giai đoạn khơi gợi yêu cầu?",
+    "options": [
+      "A. Dùng để vẽ sơ đồ cơ sở dữ liệu.",
+      "B. Giúp tổ chức và liên kết các ý tưởng, yêu cầu rời rạc một cách trực quan.",
+      "C. Dùng để quản lý tiến độ công việc của các thành viên.",
+      "D. Dùng để thay thế tài liệu đặc tả yêu cầu phần mềm (SRS)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mind Mapping là công cụ tư duy giúp BA kết nối các mảng thông tin thu thập được từ nhiều nguồn khác nhau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện 'Active Observation' (Quan sát chủ động), BA nên làm gì?",
+    "options": [
+      "A. Ngồi im lặng một góc và ghi chép mọi thứ.",
+      "B. Vừa quan sát vừa đặt câu hỏi cho người dùng về các hành động họ đang thực hiện.",
+      "C. Trực tiếp thực hiện công việc thay cho người dùng.",
+      "D. Chỉ xem video quay lại quá trình làm việc của người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quan sát chủ động cho phép BA tương tác để hiểu ngay lập tức lý do đằng sau các thao tác của người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để BA phát hiện ra các 'Yêu cầu ngầm định' (Implicit Requirements) mà Stakeholder không nói ra?",
+    "options": [
+      "A. Chỉ dựa vào những gì Stakeholder viết trong email.",
+      "B. Sử dụng kỹ thuật quan sát và so sánh với các tiêu chuẩn ngành hoặc hệ thống tương tự.",
+      "C. Đợi đến khi bàn giao sản phẩm và khách hàng phàn nàn.",
+      "D. Giả định rằng không có yêu cầu nào khác ngoài những gì đã nói."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu ngầm định thường là những thứ Stakeholder coi là hiển nhiên. BA cần dùng kỹ năng quan sát và kiến thức nền tảng để khơi gợi chúng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án xây dựng ứng dụng di động, việc tạo 'Mockup' hoặc 'Prototype' sớm có tác dụng gì trong khơi gợi yêu cầu?",
+    "options": [
+      "A. Để lập trình viên bắt đầu cắt HTML/CSS.",
+      "B. Để giúp Stakeholder hình dung rõ hơn về giải pháp và phản hồi các yêu cầu còn thiếu.",
+      "C. Để làm đẹp hồ sơ dự thầu.",
+      "D. Để thay thế hoàn toàn cho việc viết tài liệu văn bản."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mô hình hóa trực quan giúp giảm bớt sự mơ hồ và kích thích Stakeholder đưa ra các yêu cầu chi tiết hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Yếu tố nào là quan trọng nhất khi chuẩn bị cho một buổi Phỏng vấn khơi gợi yêu cầu?",
+    "options": [
+      "A. Chuẩn bị sẵn một danh sách các câu hỏi cứng nhắc và không thay đổi.",
+      "B. Tìm hiểu trước về vai trò của Stakeholder và bối cảnh nghiệp vụ của họ.",
+      "C. Đặt phòng họp lớn nhất có thể.",
+      "D. Mời tất cả mọi người trong công ty tham gia."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hiểu về đối tượng phỏng vấn giúp BA đặt câu hỏi đúng trọng tâm và xây dựng niềm tin với Stakeholder.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Nếu sau buổi khơi gợi yêu cầu, BA nhận thấy có hai Stakeholder đưa ra hai quy trình nghiệp vụ hoàn toàn khác nhau cho cùng một vấn đề, BA nên làm gì?",
+    "options": [
+      "A. Chọn quy trình của người có chức vụ cao hơn.",
+      "B. Tự tạo ra một quy trình thứ ba kết hợp cả hai.",
+      "C. Tổ chức một buổi họp chung giữa hai người để làm rõ và thống nhất quy trình chuẩn.",
+      "D. Ghi cả hai quy trình vào tài liệu và để lập trình viên chọn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mâu thuẫn về quy trình cần được giải quyết triệt để thông qua thảo luận trực tiếp giữa các bên liên quan để đảm bảo tính nhất quán của hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một workshop khơi gợi yêu cầu cho hệ thống ERP, Trưởng phòng Tài chính và Trưởng phòng Kho vận đưa ra hai quy trình xử lý đơn hàng mâu thuẫn nhau. Là một Senior BA, hành động nào sau đây là tối ưu nhất để giải quyết xung đột này?",
+    "options": [
+      "A. Ghi nhận cả hai quy trình và chuyển cho đội ngũ kiến trúc phần mềm đưa ra quyết định dựa trên tính khả thi kỹ thuật.",
+      "B. Tổ chức một buổi làm việc riêng với cả hai bên để phân tích tác động (Impact Analysis) của từng phương án đối với mục tiêu kinh doanh cốt lõi.",
+      "C. Ưu tiên quy trình của phòng Tài chính vì họ là bên kiểm soát ngân sách và phê duyệt dự án.",
+      "D. Đề xuất một quy trình trung gian kết hợp cả hai ý kiến mà không cần phân tích sâu để giữ tiến độ dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở mức độ Advanced, BA phải đóng vai trò điều phối dựa trên giá trị kinh doanh. Việc phân tích tác động giúp các stakeholder nhìn thấy bức tranh lớn và tự thống nhất dựa trên dữ liệu thay vì cảm tính hoặc quyền lực.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi khơi gợi yêu cầu phi chức năng (NFR) cho một hệ thống giao dịch chứng khoán trực tuyến, yêu cầu nào sau đây thể hiện sự đánh đổi (trade-off) kỹ thuật quan trọng nhất mà BA cần làm rõ với Stakeholder?",
+    "options": [
+      "A. Hệ thống phải hỗ trợ ít nhất 10.000 người dùng truy cập đồng thời vào giờ cao điểm.",
+      "B. Đảm bảo tính nhất quán dữ liệu tức thời (Strong Consistency) trên toàn bộ các cụm server phân tán toàn cầu với độ trễ dưới 10ms.",
+      "C. Giao diện người dùng phải tuân thủ tiêu chuẩn Accessibility WCAG 2.1 mức độ AA.",
+      "D. Hệ thống cần có khả năng tự động sao lưu dữ liệu mỗi 24 giờ vào lúc thấp điểm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là bài toán định lý CAP. Việc yêu cầu cả Strong Consistency và Low Latency trong một hệ thống phân tán là một thách thức cực lớn về kiến trúc, đòi hỏi BA phải làm rõ chi phí và khả năng thực thi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang thực hiện khơi gợi yêu cầu cho một dự án di chuyển hệ thống (Migration) từ Monolith sang Microservices. Kỹ thuật nào sau đây hiệu quả nhất để xác định các 'hidden requirements' mà tài liệu cũ không đề cập?",
+    "options": [
+      "A. Gửi bảng khảo sát (Surveys) cho toàn bộ nhân viên vận hành hệ thống hiện tại.",
+      "B. Thực hiện kỹ thuật 'Job Shadowing' (Quan sát công việc) đối với các chuyên gia nghiệp vụ đang sử dụng hệ thống cũ.",
+      "C. Chỉ tập trung vào việc reverse-engineer mã nguồn của hệ thống cũ để trích xuất logic.",
+      "D. Tổ chức một buổi demo hệ thống mới dựa trên giả định để xem phản ứng của người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Job Shadowing giúp BA phát hiện ra những quy trình 'ngoại luồng' hoặc các thao tác đặc thù mà người dùng thực hiện theo thói quen nhưng không bao giờ được ghi chép lại trong tài liệu kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh phát triển phần mềm Agile, một Stakeholder cấp cao yêu cầu thêm một tính năng phức tạp ngay giữa Sprint. Cách tiếp cận nào thể hiện năng lực quản lý yêu cầu chuyên sâu?",
+    "options": [
+      "A. Từ chối ngay lập tức vì nó vi phạm nguyên tắc Agile về việc không thay đổi Scope trong Sprint.",
+      "B. Chấp nhận yêu cầu và yêu cầu đội Dev làm thêm giờ để kịp tiến độ đã cam kết.",
+      "C. Đánh giá giá trị kinh doanh của tính năng mới so với Product Backlog hiện tại và thảo luận với Product Owner về việc ưu tiên lại (Reprioritization).",
+      "D. Ghi lại yêu cầu vào tài liệu và hứa sẽ triển khai trong giai đoạn bảo trì sau khi dự án kết thúc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cao cấp cần nhìn nhận yêu cầu dưới góc độ giá trị. Việc thảo luận với PO để reprioritize đảm bảo dự án luôn tập trung vào thứ quan trọng nhất mà vẫn duy trì được tính linh hoạt của Agile.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi xác định tiêu chí chấp nhận (Acceptance Criteria - AC) cho một API tích hợp thanh toán, yếu tố nào sau đây là quan trọng nhất để đảm bảo chất lượng ở mức hệ thống?",
+    "options": [
+      "A. API phải trả về mã lỗi 200 khi giao dịch thành công.",
+      "B. Mô tả chi tiết các tham số đầu vào và kiểu dữ liệu của chúng.",
+      "C. Các kịch bản xử lý ngoại lệ (Exception Handling) như timeout, mất kết nối giữa chừng và cơ chế đối soát dữ liệu.",
+      "D. Tên của API phải tuân thủ quy chuẩn đặt tên CamelCase của đội phát triển."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở mức độ Advanced, AC không chỉ là 'Happy Path'. Việc xác định cách hệ thống ứng phó với lỗi và đảm bảo toàn vẹn dữ liệu (đối soát) là then chốt cho các hệ thống tài chính.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một dự án có sự tham gia của nhiều bên liên quan với lợi ích đối nghịch. BA nên sử dụng công cụ nào để phân loại và quyết định chiến lược khơi gợi yêu cầu phù hợp cho từng nhóm?",
+    "options": [
+      "A. RACI Matrix.",
+      "B. Stakeholder Power/Interest Grid.",
+      "C. Business Process Model and Notation (BPMN).",
+      "D. SWOT Analysis."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ma trận Power/Interest giúp BA xác định ai là người cần 'Manage Closely' (quyền lực cao, quan tâm cao) để tập trung nguồn lực khơi gợi và lấy xác nhận, tránh rủi ro bị bác bỏ sau này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi khơi gợi yêu cầu cho một hệ thống AI/Machine Learning, thách thức lớn nhất mà BA thường gặp phải là gì?",
+    "options": [
+      "A. Stakeholder không biết cách sử dụng giao diện web.",
+      "B. Khó khăn trong việc định nghĩa các quy tắc nghiệp vụ (Business Rules) cố định vì kết quả của AI mang tính xác suất.",
+      "C. Việc lựa chọn ngôn ngữ lập trình Python hay R.",
+      "D. Thiếu tài liệu hướng dẫn sử dụng từ các nhà cung cấp cloud."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khác với phần mềm truyền thống, AI dựa trên mô hình xác suất. BA cần khơi gợi các yêu cầu về độ chính xác (Accuracy), độ phủ (Recall) và các ngưỡng chấp nhận thay vì các logic If-Else cứng nhắc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong quá trình Clarification, bạn nhận thấy một yêu cầu nghiệp vụ sẽ làm tăng đáng kể Technical Debt của hệ thống hiện tại. Bạn nên xử lý như thế nào?",
+    "options": [
+      "A. Bỏ qua vấn đề này vì Technical Debt là trách nhiệm của Technical Lead.",
+      "B. Tài liệu hóa yêu cầu như bình thường nhưng thêm một ghi chú nhỏ ở phần phụ lục.",
+      "C. Trình bày rõ ràng cho Stakeholder về chi phí bảo trì dài hạn và đề xuất các phương án thay thế tối ưu hơn về mặt kiến trúc.",
+      "D. Tự ý thay đổi yêu cầu nghiệp vụ để phù hợp với kiến trúc tốt nhất mà không cần báo cáo."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cao cấp phải có khả năng kết nối giữa Business và Technical. Việc cảnh báo về nợ kỹ thuật giúp doanh nghiệp đưa ra quyết định đầu tư đúng đắn hơn trong dài hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Interface Analysis' trong khơi gợi yêu cầu tập trung chủ yếu vào điều gì?",
+    "options": [
+      "A. Thiết kế màu sắc và bố cục của giao diện người dùng (UI).",
+      "B. Xác định các điểm tương tác giữa hệ thống mới với các hệ thống khác, thiết bị phần cứng và người dùng.",
+      "C. Kiểm thử tính năng của các API đã được phát triển xong.",
+      "D. Phân tích tâm lý người dùng khi thao tác trên màn hình cảm ứng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Interface Analysis giúp xác định phạm vi (scope) thông qua việc hiểu rõ các luồng dữ liệu vào/ra và các ràng buộc kết nối, điều này cực kỳ quan trọng trong các hệ thống phức tạp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc xác định 'Business Constraints' lại quan trọng ngay trong giai đoạn đầu của Elicitation?",
+    "options": [
+      "A. Để giới hạn sự sáng tạo của đội ngũ thiết kế UI/UX.",
+      "B. Để đảm bảo các giải pháp được đề xuất nằm trong phạm vi ngân sách, thời gian và tuân thủ pháp lý của tổ chức.",
+      "C. Để giảm bớt số lượng Stakeholder cần tham gia vào dự án.",
+      "D. Để có lý do từ chối mọi yêu cầu thay đổi từ phía người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mọi yêu cầu dù hay đến đâu cũng vô nghĩa nếu vi phạm ràng buộc (ví dụ: luật bảo mật dữ liệu hoặc ngân sách cạn kiệt). BA cần xác định sớm để định hướng khơi gợi yêu cầu thực tế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một buổi Workshop, một chuyên gia nghiệp vụ (SME) liên tục đưa ra các giải pháp kỹ thuật thay vì nêu yêu cầu nghiệp vụ. Cách xử lý nào là chuyên nghiệp nhất?",
+    "options": [
+      "A. Yêu cầu SME rời khỏi buổi họp vì họ đang làm sai vai trò.",
+      "B. Ghi nhận giải pháp đó và yêu cầu đội Dev thực hiện chính xác như vậy.",
+      "C. Sử dụng kỹ thuật 'Five Whys' hoặc đặt câu hỏi mở để tìm hiểu mục đích thực sự đằng sau giải pháp đó là gì.",
+      "D. Phớt lờ các ý kiến đó và tiếp tục theo kịch bản Workshop đã chuẩn bị."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Người dùng thường nghĩ về giải pháp dựa trên những gì họ biết. BA cần đào sâu để tìm ra 'Root Need', từ đó có thể tìm ra những giải pháp kỹ thuật tối ưu hơn mà người dùng chưa nghĩ tới.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Document Analysis' thường gặp khó khăn gì nhất khi thực hiện trên các hệ thống cũ (Legacy Systems)?",
+    "options": [
+      "A. Tài liệu quá nhiều khiến BA không có thời gian đọc hết.",
+      "B. Tài liệu không còn phản ánh đúng logic thực tế đang chạy trong code (Outdated).",
+      "C. Tài liệu được viết bằng ngôn ngữ quá dễ hiểu, thiếu thuật ngữ chuyên môn.",
+      "D. Tài liệu chỉ tập trung vào hướng dẫn sử dụng cho người cuối."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với hệ thống cũ, qua nhiều năm bảo trì 'nóng', code thường đi xa so với tài liệu thiết kế ban đầu. BA cần kết hợp phân tích tài liệu với các kỹ thuật khác như phỏng vấn hoặc quan sát.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi khơi gợi yêu cầu về 'Scalability' cho một nền tảng E-commerce, câu hỏi nào sau đây mang tính chiến lược nhất?",
+    "options": [
+      "A. Bạn muốn trang web có màu chủ đạo là gì?",
+      "B. Hệ thống cần xử lý bao nhiêu đơn hàng mỗi giây trong ngày Black Friday và dự kiến tăng trưởng bao nhiêu trong 3 năm tới?",
+      "C. Người dùng sẽ sử dụng trình duyệt Chrome hay Safari để mua hàng?",
+      "D. Bạn có muốn tích hợp thêm cổng thanh toán MoMo không?"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scalability liên quan đến khả năng mở rộng. BA cần dữ liệu về tải đỉnh (peak load) và dự báo tăng trưởng để đội kiến trúc thiết kế hạ tầng phù hợp (Auto-scaling, Load balancing).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc 'Sign-off' yêu cầu nên được hiểu như thế nào là đúng đắn nhất trong quản trị dự án hiện đại?",
+    "options": [
+      "A. Là một nghi thức pháp lý để đổ lỗi cho Stakeholder nếu sau này họ muốn thay đổi.",
+      "B. Là sự xác nhận rằng các yêu cầu đã được hiểu đúng, đầy đủ tại thời điểm đó và sẵn sàng để chuyển sang giai đoạn tiếp theo.",
+      "C. Là cam kết rằng yêu cầu sẽ không bao giờ được thay đổi cho đến khi dự án kết thúc.",
+      "D. Là bước để BA kết thúc trách nhiệm của mình và chuyển toàn bộ việc cho đội Dev."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sign-off là sự đồng thuận về mặt nhận thức. Nó không ngăn cản sự thay đổi (đặc biệt trong Agile) nhưng nó tạo ra một baseline để quản lý các thay đổi đó một cách có kiểm soát.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kỹ thuật 'Observation', sự khác biệt giữa 'Active Observation' và 'Passive Observation' là gì?",
+    "options": [
+      "A. Active là quan sát qua camera, Passive là quan sát trực tiếp.",
+      "B. Active là vừa quan sát vừa đặt câu hỏi, Passive là chỉ quan sát mà không làm gián đoạn quy trình công việc.",
+      "C. Active chỉ dành cho BA mới vào nghề, Passive dành cho Senior BA.",
+      "D. Active tập trung vào phần mềm, Passive tập trung vào phần cứng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Active Observation giúp làm rõ ngay lập tức các hành động lạ, trong khi Passive Observation giúp thấy được luồng công việc tự nhiên nhất của người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang khơi gợi yêu cầu cho một tính năng báo cáo dữ liệu lớn (Big Data). Stakeholder yêu cầu báo cáo phải hiển thị 'Real-time'. Bạn nên làm gì tiếp theo?",
+    "options": [
+      "A. Chấp nhận yêu cầu vì Real-time là tiêu chuẩn của công nghệ hiện nay.",
+      "B. Giải thích rằng Real-time là không thể đối với Big Data và đề xuất báo cáo hàng tháng.",
+      "C. Khơi gợi cụ thể định nghĩa 'Real-time' của họ (là vài giây, vài phút hay 24 giờ) và phân tích chi phí hạ tầng tương ứng.",
+      "D. Thiết kế một hệ thống cache để đánh lừa người dùng rằng dữ liệu là Real-time."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khái niệm 'Real-time' rất mơ hồ. BA cần định lượng nó để đội kỹ thuật chọn kiến trúc (ví dụ: Lambda vs Kappa architecture) vì chi phí cho độ trễ thấp là rất cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc ghi chép 'Assumptions' (Giả định) lại quan trọng trong tài liệu khơi gợi yêu cầu?",
+    "options": [
+      "A. Để làm dày thêm bộ tài liệu, giúp tăng tính chuyên nghiệp.",
+      "B. Để bảo vệ đội dự án khi các yếu tố nằm ngoài tầm kiểm soát (như API bên thứ ba) không hoạt động như dự kiến.",
+      "C. Để thay thế cho các yêu cầu chức năng mà BA chưa kịp tìm hiểu.",
+      "D. Để hướng dẫn người dùng cách sử dụng hệ thống sau này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giả định là những yếu tố được tin là đúng nhưng chưa có bằng chứng xác thực. Nếu giả định sai, toàn bộ yêu cầu liên quan có thể thay đổi, nên cần được minh bạch để quản trị rủi ro.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi thực hiện phỏng vấn (Interview) một Stakeholder có tính cách áp đặt và luôn muốn kiểm soát buổi họp, kỹ thuật nào giúp BA lấy được thông tin khách quan nhất?",
+    "options": [
+      "A. Chỉ đặt các câu hỏi Đóng (Yes/No) để kết thúc buổi họp nhanh chóng.",
+      "B. Sử dụng các câu hỏi 'Dẫn dắt' (Leading questions) để họ đồng ý với ý kiến của BA.",
+      "C. Chuẩn bị một danh sách câu hỏi tập trung vào 'Data-driven' và sử dụng kỹ thuật lắng nghe chủ động để điều hướng về mục tiêu nghiệp vụ.",
+      "D. Để họ nói tự do và không ghi chép gì vì thông tin đó thường mang tính chủ quan."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với stakeholder khó tính, việc dựa vào dữ liệu và giữ cấu trúc buổi họp giúp BA duy trì sự khách quan và chuyên nghiệp, tránh bị cuốn theo cảm xúc cá nhân của họ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Yêu cầu nào sau đây là một yêu cầu phi chức năng (Non-functional Requirement) về độ tin cậy (Reliability)?",
+    "options": [
+      "A. Hệ thống phải cho phép người dùng đổi mật khẩu sau mỗi 90 ngày.",
+      "B. Thời gian hoạt động liên tục (Uptime) của hệ thống phải đạt 99.99% trong một năm.",
+      "C. Hệ thống phải xử lý được 500 giao dịch mỗi giây.",
+      "D. Màu sắc của nút 'Thanh toán' phải là màu xanh lá cây."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Uptime là chỉ số điển hình của Reliability. Lựa chọn A là Security, C là Performance/Throughput, D là UI/UX.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một dự án phát triển sản phẩm mới hoàn toàn (Greenfield), Stakeholder không thể mô tả rõ ràng họ muốn gì. Kỹ thuật khơi gợi nào là phù hợp nhất?",
+    "options": [
+      "A. Phân tích tài liệu (Document Analysis).",
+      "B. Tạo mẫu nhanh (Prototyping) và thực hiện các vòng lặp phản hồi (Feedback loops).",
+      "C. Gửi bảng câu hỏi chi tiết về các tính năng mong muốn.",
+      "D. Đọc mã nguồn của các đối thủ cạnh tranh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với sản phẩm mới, Prototyping giúp cụ thể hóa ý tưởng trừu tượng, giúp stakeholder 'thấy' được giải pháp và từ đó nảy sinh các yêu cầu thực tế hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Việc xác định 'System Context Diagram' trong giai đoạn Elicitation nhằm mục đích chính là gì?",
+    "options": [
+      "A. Để vẽ sơ đồ tổ chức của công ty khách hàng.",
+      "B. Để xác định ranh giới (Boundary) của hệ thống và các thực thể bên ngoài tương tác với nó.",
+      "C. Để mô tả chi tiết cấu trúc bảng trong cơ sở dữ liệu.",
+      "D. Để liệt kê tất cả các tính năng mà hệ thống sẽ có."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Context Diagram giúp BA và Stakeholder thống nhất về phạm vi: cái gì nằm trong hệ thống (in-scope) và cái gì thuộc về bên ngoài (out-of-scope/external system).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi khơi gợi yêu cầu cho một ứng dụng di động, Stakeholder yêu cầu ứng dụng phải 'Dễ sử dụng'. Là một BA, bạn nên làm gì để cụ thể hóa yêu cầu này?",
+    "options": [
+      "A. Ghi nguyên văn vào tài liệu vì đây là yêu cầu của khách hàng.",
+      "B. Định nghĩa các chỉ số đo lường được như: thời gian hoàn thành một tác vụ, số bước tối đa để đạt mục tiêu, hoặc tỷ lệ lỗi của người dùng.",
+      "C. Tự quyết định tiêu chuẩn 'Dễ sử dụng' dựa trên sở thích cá nhân.",
+      "D. Bỏ qua yêu cầu này vì nó quá cảm tính và không thể lập trình được."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu phi chức năng cần phải đo lường được (measurable). Việc định lượng 'Usability' giúp đội UX và QA có căn cứ để thiết kế và kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một yêu cầu nghiệp vụ quan trọng bị bỏ sót và chỉ được phát hiện khi dự án đã đi được 80% chặng đường. BA nên làm gì đầu tiên?",
+    "options": [
+      "A. Cố gắng giấu kín và hy vọng người dùng không nhận ra khi bàn giao.",
+      "B. Thực hiện phân tích tác động (Impact Analysis) về thời gian, chi phí và rủi ro nếu thêm yêu cầu này vào thời điểm hiện tại.",
+      "C. Đổ lỗi cho Stakeholder vì đã không cung cấp yêu cầu này trong các buổi workshop trước đó.",
+      "D. Yêu cầu đội Dev dừng tất cả các việc khác để tập trung làm yêu cầu mới này ngay lập tức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân tích tác động là bước đầu tiên cần thiết để cung cấp dữ liệu cho Ban quản lý dự án và Stakeholder đưa ra quyết định: làm ngay, làm sau hay chấp nhận rủi ro bỏ qua.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Focus Groups' khác với 'Workshops' ở điểm căn bản nào?",
+    "options": [
+      "A. Focus Groups luôn đông người hơn Workshops.",
+      "B. Workshops nhằm mục đích đạt được sự đồng thuận hoặc tạo ra sản phẩm cụ thể, trong khi Focus Groups nhằm lấy ý kiến và cảm nhận của người dùng về một chủ đề.",
+      "C. Focus Groups chỉ dành cho nội bộ, Workshops dành cho khách hàng.",
+      "D. Không có sự khác biệt, hai thuật ngữ này có thể dùng thay thế cho nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Focus Groups mang tính chất nghiên cứu thị trường/người dùng để thu thập thái độ, trong khi Workshops mang tính chất hợp tác để giải quyết vấn đề hoặc xây dựng yêu cầu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi khơi gợi yêu cầu cho một hệ thống ngân hàng lõi (Core Banking), yếu tố nào sau đây thường được ưu tiên cao nhất trong các cuộc thảo luận về NFR?",
+    "options": [
+      "A. Tính thẩm mỹ của giao diện quản trị nội bộ.",
+      "B. Tính toàn vẹn dữ liệu và khả năng truy vết (Audit Trail).",
+      "C. Tốc độ tải trang của các banner quảng cáo trên ứng dụng.",
+      "D. Khả năng tích hợp với các mạng xã hội như Facebook hay TikTok."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong ngành tài chính, tính chính xác và khả năng kiểm toán là sống còn. Mọi giao dịch phải được ghi vết và đảm bảo không sai lệch, đây là ưu tiên hàng đầu của BA khi khơi gợi yêu cầu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một dự án thay thế hệ thống lõi (Legacy System) của ngân hàng, bạn phát hiện các Stakeholder chủ chốt có những kỳ vọng mâu thuẫn trực tiếp về quy trình xử lý giao dịch. Với vai trò BA Expert, hành động nào là tối ưu nhất để giải quyết xung đột này trong giai đoạn Elicitation?",
+    "options": [
+      "A. Ghi nhận tất cả các yêu cầu và chuyển cho ban quản lý dự án quyết định ưu tiên.",
+      "B. Tổ chức một buổi Facilitated Workshop tập trung vào phân tích Value Stream và mục tiêu chiến lược của tổ chức để tìm điểm chung.",
+      "C. Lựa chọn yêu cầu của bộ phận mang lại doanh thu cao nhất cho ngân hàng để đảm bảo ROI.",
+      "D. Thực hiện khảo sát ẩn danh để thu thập ý kiến khách quan từ tất cả nhân viên vận hành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ Expert, BA cần đóng vai trò điều phối (facilitator) để căn chỉnh các yêu cầu dựa trên giá trị kinh doanh và mục tiêu chiến lược, thay vì chỉ ghi nhận hoặc đẩy trách nhiệm ra quyết định cho bên khác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi khơi gợi yêu cầu phi chức năng (Non-functional requirements) cho một hệ thống thương mại điện tử toàn cầu, bạn gặp khó khăn khi Stakeholder yêu cầu 'Hệ thống phải luôn sẵn sàng'. Bạn nên làm gì để cụ thể hóa yêu cầu này?",
+    "options": [
+      "A. Áp dụng kỹ thuật Document Analysis để xem lại các chỉ số SLA của hệ thống cũ.",
+      "B. Sử dụng kỹ thuật phỏng vấn sâu để xác định chỉ số RTO (Recovery Time Objective) và RPO (Recovery Point Objective) cụ thể.",
+      "C. Thiết lập một Workshop về thuộc tính chất lượng (Quality Attribute Workshop) để định nghĩa kịch bản đo lường tính sẵn sàng và chi phí đánh đổi.",
+      "D. Tự đưa ra chỉ số 99.99% dựa trên tiêu chuẩn ngành và yêu cầu Stakeholder phê duyệt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Quality Attribute Workshop (QAW) là kỹ thuật Expert giúp các bên liên quan hiểu rõ sự đánh đổi (trade-offs) giữa hiệu năng, chi phí và tính sẵn sàng để đưa ra các chỉ số có thể đo lường được.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quá trình quan sát (Observation) một quy trình vận hành kho phức tạp, bạn nhận thấy nhân viên thực tế thực hiện khác xa so với quy trình chuẩn trong tài liệu. Bạn nên xử lý thông tin này như thế nào?",
+    "options": [
+      "A. Báo cáo với quản lý kho về việc nhân viên không tuân thủ quy trình chuẩn.",
+      "B. Sử dụng kỹ thuật 'Contextual Inquiry' để hiểu lý do tại sao họ thực hiện khác biệt và xác định các 'Workarounds' có giá trị.",
+      "C. Bỏ qua các quan sát đó và bám sát tài liệu quy trình chuẩn để đảm bảo tính pháp lý.",
+      "D. Yêu cầu nhân viên thực hiện lại đúng theo tài liệu để bạn ghi chép chính xác yêu cầu hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Expert BA hiểu rằng các 'workarounds' thường phản ánh những lỗ hổng trong quy trình hiện tại hoặc các nhu cầu thực tế chưa được đáp ứng, từ đó tìm ra cơ hội cải tiến quy trình thực sự.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật nào là hiệu quả nhất để khơi gợi yêu cầu cho một sản phẩm phần mềm hoàn toàn mới (Innovation project) khi người dùng chưa hề có khái niệm về sản phẩm?",
+    "options": [
+      "A. Structured Interviews với các câu hỏi đóng để định hướng người dùng.",
+      "B. Benchmarking với các đối thủ cạnh tranh trực tiếp trên thị trường.",
+      "C. Collaborative Games và Prototyping để kích thích tư duy sáng tạo và phản hồi trực quan.",
+      "D. Gửi khảo sát (Surveys) diện rộng để thu thập nhu cầu thị trường."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Với các dự án mang tính đổi mới, kỹ thuật sáng tạo và mô phỏng trực quan giúp Stakeholder hình dung được giá trị và đưa ra các yêu cầu mà họ chưa từng nghĩ tới.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thực hiện khơi gợi yêu cầu cho một hệ thống ERP tích hợp. Một nhóm Stakeholder từ chối tham gia các buổi phỏng vấn vì cho rằng họ quá bận. Cách tiếp cận nào thể hiện trình độ Expert?",
+    "options": [
+      "A. Gửi email thông báo rằng dự án sẽ bị chậm tiến độ nếu họ không tham gia.",
+      "B. Phân tích lại Stakeholder Map, tìm ra 'WIIFM' (What's In It For Me) cho họ và điều chỉnh phương pháp khơi gợi phù hợp với lịch trình của họ.",
+      "C. Sử dụng tài liệu cũ để tự suy luận yêu cầu của họ nhằm duy trì tiến độ dự án.",
+      "D. Đề nghị cấp trên của họ bắt buộc họ phải tham gia các buổi họp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quản lý sự tham gia của Stakeholder là kỹ năng quan trọng của Expert BA. Việc tìm ra giá trị mà dự án mang lại cho từng nhóm sẽ giúp tăng cường sự hợp tự nguyện của họ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi xác định các giả định (Assumptions) trong quá trình khơi gợi yêu cầu, tại sao BA Expert cần phải đặc biệt chú trọng vào việc tài liệu hóa chúng?",
+    "options": [
+      "A. Để giảm bớt khối lượng công việc phân tích chi tiết.",
+      "B. Để có căn cứ đổ lỗi nếu dự án thất bại do các yếu tố bên ngoài.",
+      "C. Vì giả định không được kiểm chứng có thể trở thành rủi ro lớn gây sai lệch kiến trúc hệ thống và ước tính nguồn lực.",
+      "D. Để tuân thủ đúng quy trình quản lý dự án theo chuẩn ISO."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giả định là những điều được coi là đúng nhưng chưa có bằng chứng. Nếu giả định sai, toàn bộ giải pháp dựa trên nó có thể sụp đổ, do đó cần được theo dõi như một rủi ro.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một buổi Workshop, các bên liên quan không thể thống nhất về tiêu chí chấp nhận (Acceptance Criteria) cho một tính năng thanh toán phức tạp. Bạn nên làm gì?",
+    "options": [
+      "A. Tự soạn thảo tiêu chí dựa trên kinh nghiệm cá nhân và gửi họ ký duyệt.",
+      "B. Sử dụng kỹ thuật 'Decision Analysis' với các tiêu chí trọng số để đánh giá các phương án AC khác nhau.",
+      "C. Hoãn buổi họp và yêu cầu các bên tự thảo luận riêng trước khi quay lại.",
+      "D. Chọn phương án đơn giản nhất để đảm bảo khả năng code của đội phát triển."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Decision Analysis giúp đưa ra quyết định dựa trên dữ liệu và tiêu chí khách quan, giúp giải quyết bế tắc trong các cuộc thảo luận mang tính cảm tính hoặc xung đột lợi ích.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một yêu cầu chức năng có vẻ rất quan trọng nhưng lại vi phạm một ràng buộc về bảo mật dữ liệu (Non-functional requirement) của tổ chức. Bạn sẽ xử lý như thế nào trong giai đoạn xác nhận yêu cầu?",
+    "options": [
+      "A. Ưu tiên yêu cầu chức năng vì nó trực tiếp phục vụ người dùng.",
+      "B. Loại bỏ yêu cầu chức năng đó ngay lập tức mà không cần thông báo.",
+      "C. Tổ chức phân tích rủi ro và tác động, sau đó trình bày các phương án thay thế cho các bên liên quan để tìm giải pháp trung hòa.",
+      "D. Yêu cầu đội bảo mật thay đổi chính sách để phù hợp với yêu cầu chức năng mới."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Expert BA phải nhìn nhận hệ thống một cách tổng thể, phân tích sự đánh đổi giữa các yêu cầu mâu thuẫn và đề xuất giải pháp tối ưu hóa lợi ích mà vẫn đảm bảo an toàn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Interface Analysis' đóng vai trò gì quan trọng nhất trong việc khơi gợi yêu cầu cho một hệ thống Microservices?",
+    "options": [
+      "A. Thiết kế giao diện người dùng (UI) sao cho bắt mắt.",
+      "B. Xác định các điểm chạm, luồng dữ liệu và quy tắc giao tiếp giữa các dịch vụ để đảm bảo tính toàn vẹn của hệ thống.",
+      "C. Kiểm tra xem mã nguồn của các dịch vụ có tuân thủ chuẩn coding không.",
+      "D. Xác định số lượng máy chủ cần thiết để triển khai các dịch vụ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong kiến trúc Microservices, việc hiểu rõ cách các thành phần tương tác (interfaces) là cốt lõi để xác định yêu cầu về dữ liệu và chức năng của từng dịch vụ đơn lẻ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn đang thực hiện khơi gợi yêu cầu cho một dự án AI/Machine Learning. Stakeholder yêu cầu 'Hệ thống phải dự báo chính xác kết quả kinh doanh'. Là BA Expert, bạn sẽ làm rõ yêu cầu này như thế nào?",
+    "options": [
+      "A. Chấp nhận yêu cầu và đưa vào tài liệu SRS.",
+      "B. Yêu cầu Stakeholder định nghĩa 'chính xác' là bao nhiêu phần trăm và xác định các biến số đầu vào (data features) cần thiết.",
+      "C. Giải thích rằng AI không thể chính xác 100% và yêu cầu họ bỏ yêu cầu này.",
+      "D. Tự thiết lập mô hình toán học để chứng minh tính khả thi của yêu cầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu cho AI cần được định lượng hóa bằng các chỉ số đo lường (như Precision/Recall) và làm rõ các điều kiện dữ liệu cần thiết để mô hình có thể hoạt động.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quá trình Validation yêu cầu, một Stakeholder cấp cao bất ngờ phủ nhận một yêu cầu đã được thống nhất trước đó bởi các SME. Bạn nên ứng phó ra sao?",
+    "options": [
+      "A. Cập nhật tài liệu theo ý của Stakeholder cấp cao đó ngay lập tức.",
+      "B. Sử dụng ma trận truy xuất nguồn gốc (Traceability Matrix) để chỉ ra nguồn gốc, lý do của yêu cầu cũ và tổ chức buổi họp làm rõ sự thay đổi.",
+      "C. Phớt lờ ý kiến đó vì yêu cầu đã được ký duyệt bởi các chuyên gia (SME).",
+      "D. Yêu cầu các SME tự đi thuyết phục Stakeholder cấp cao đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Traceability giúp BA Expert bảo vệ tính logic của hệ thống và giúp các bên liên quan hiểu rõ tác động của việc thay đổi yêu cầu đối với mục tiêu ban đầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Document Analysis' thường bị bỏ qua hoặc thực hiện sơ sài. Một BA Expert sẽ sử dụng kỹ thuật này như thế nào để tối ưu hóa quá trình khơi gợi?",
+    "options": [
+      "A. Chỉ đọc các tài liệu hướng dẫn sử dụng của hệ thống hiện tại.",
+      "B. Phân tích các báo cáo lỗi, yêu cầu thay đổi trong quá khứ và các quy định pháp lý liên quan để tìm ra các yêu cầu ngầm định (Implicit requirements).",
+      "C. Copy các yêu cầu từ dự án tương tự để tiết kiệm thời gian.",
+      "D. Yêu cầu khách hàng tự tóm tắt các tài liệu quan trọng cho mình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân tích tài liệu sâu giúp BA tìm ra những yêu cầu mà Stakeholder có thể quên không nhắc tới hoặc những ràng buộc pháp lý bắt buộc mà hệ thống phải tuân thủ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi tổ chức một buổi Focus Group để thu thập phản hồi về một tính năng mới, bạn nhận thấy có một cá nhân quá áp đảo, khiến các thành viên khác không dám phát biểu. Bạn nên làm gì?",
+    "options": [
+      "A. Yêu cầu cá nhân đó rời khỏi buổi họp.",
+      "B. Chuyển sang sử dụng kỹ thuật 'Nominal Group Technique' để đảm bảo mọi người đều có cơ hội đóng góp ý kiến công bằng.",
+      "C. Chỉ ghi nhận ý kiến của cá nhân áp đảo đó vì họ có vẻ am hiểu nhất.",
+      "D. Kết thúc buổi họp sớm và chuyển sang phỏng vấn cá nhân."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nominal Group Technique là kỹ thuật Expert giúp thu thập ý kiến độc lập từ các thành viên trước khi thảo luận chung, giúp loại bỏ sự ảnh hưởng của các cá nhân quá áp đảo.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Việc xác định 'Negative Requirements' (Những gì hệ thống KHÔNG làm) trong giai đoạn Elicitation có ý nghĩa gì quan trọng nhất đối với một dự án lớn?",
+    "options": [
+      "A. Giúp giảm bớt khối lượng kiểm thử.",
+      "B. Giúp quản lý phạm vi (Scope Management) chặt chẽ và tránh kỳ vọng sai lệch từ phía khách hàng.",
+      "C. Để đội phát triển có thêm thời gian nghỉ ngơi.",
+      "D. Để giảm chi phí bản quyền phần mềm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xác định những gì nằm ngoài phạm vi (Out of Scope) rõ ràng ngay từ đầu giúp ngăn chặn tình trạng 'Scope Creep' và đảm bảo sự đồng thuận về biên giới của giải pháp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong dự án Agile, việc khơi gợi yêu cầu diễn ra liên tục. Làm thế nào để một BA Expert đảm bảo tính nhất quán của toàn bộ hệ thống?",
+    "options": [
+      "A. Yêu cầu dừng phát triển để hoàn thiện tài liệu đặc tả chi tiết 100%.",
+      "B. Duy trì một 'Living Document' và sử dụng 'Modeling' (như UML, BPMN) để nhìn nhận bức tranh tổng thể sau mỗi lần cập nhật User Story.",
+      "C. Chỉ quan tâm đến các User Story trong Sprint hiện tại.",
+      "D. Để Product Owner chịu trách nhiệm hoàn toàn về tính nhất quán."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Agile, BA Expert cần cân bằng giữa sự linh hoạt và tính hệ thống. Việc sử dụng các mô hình hóa giúp duy trì cái nhìn tổng thể (Big Picture) mà không làm chậm tốc độ phát triển.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một Stakeholder yêu cầu một tính năng rất phức tạp nhưng không giải thích được giá trị kinh doanh thực tế. Bạn nên đặt câu hỏi như thế nào để khơi gợi bản chất vấn đề?",
+    "options": [
+      "A. 'Anh/chị muốn tính năng này hoạt động như thế nào?'",
+      "B. 'Tại sao anh/chị lại muốn tính năng này?' (Hỏi lặp lại 5 lần - 5 Whys).",
+      "C. 'Nếu không có tính năng này, quy trình hiện tại sẽ gặp khó khăn cụ thể gì và thiệt hại ra sao?'",
+      "D. 'Chi phí cho tính năng này rất cao, anh/chị có chắc chắn muốn làm không?'"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Câu hỏi tập trung vào 'nỗi đau' (pain points) và tác động kinh doanh giúp bộc lộ nhu cầu thực sự (Need) thay vì chỉ là mong muốn bề nổi (Want).",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi thực hiện khơi gợi yêu cầu cho một hệ thống báo cáo quản trị (BI), yếu tố nào thường bị BA bỏ sót nhất nhưng lại cực kỳ quan trọng ở cấp độ Expert?",
+    "options": [
+      "A. Màu sắc của các biểu đồ trên Dashboard.",
+      "B. Nguồn gốc dữ liệu (Data Lineage), độ tin cậy và tần suất cập nhật dữ liệu.",
+      "C. Tên của các cột trong báo cáo.",
+      "D. Số lượng người dùng sẽ xem báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với hệ thống BI, dữ liệu là cốt lõi. Nếu không làm rõ nguồn gốc và chất lượng dữ liệu ngay từ khâu khơi gợi, báo cáo tạo ra sẽ không có giá trị tin cậy để ra quyết định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn phát hiện ra một quy định pháp luật mới sắp được ban hành có thể làm thay đổi hoàn toàn logic tính thuế trong dự án bạn đang thực hiện. Bạn nên làm gì?",
+    "options": [
+      "A. Chờ khi nào luật chính thức ban hành mới cập nhật yêu cầu.",
+      "B. Chủ động tổ chức buổi khơi gợi yêu cầu bổ sung với bộ phận pháp chế để phân tích tác động và thiết kế giải pháp có tính tùy biến cao.",
+      "C. Tiếp tục làm theo yêu cầu cũ để đảm bảo deadline.",
+      "D. Yêu cầu khách hàng tự chịu trách nhiệm về các thay đổi pháp lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Expert BA cần có tư duy đón đầu (proactive). Việc thiết kế giải pháp linh hoạt (configurable) giúp hệ thống thích ứng nhanh với các thay đổi ngoại cảnh mà không cần sửa đổi mã nguồn lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Kỹ thuật 'Survey' thường gặp rủi ro là tỷ lệ phản hồi thấp hoặc thông tin hời hợt. Để khắc phục điều này khi khơi gợi yêu cầu Expert, bạn nên làm gì?",
+    "options": [
+      "A. Gửi khảo sát cho càng nhiều người càng tốt.",
+      "B. Thiết kế câu hỏi kết hợp giữa định lượng và định tính, đồng thời thực hiện 'Pilot test' bảng hỏi trước khi gửi chính thức.",
+      "C. Treo thưởng quà tặng cho tất cả những người trả lời.",
+      "D. Chỉ sử dụng câu hỏi trắc nghiệm Có/Không để người dùng trả lời nhanh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pilot test giúp đảm bảo câu hỏi dễ hiểu và không gây nhầm lẫn, trong khi sự kết hợp định tính/định lượng giúp thu thập cả dữ liệu thống kê và những góc nhìn sâu sắc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án Outsourcing, khách hàng cung cấp một bản yêu cầu (BRD) rất sơ sài và yêu cầu báo giá cố định. Là BA của bên triển khai, bạn sẽ làm gì?",
+    "options": [
+      "A. Báo giá dựa trên những gì ghi trong BRD.",
+      "B. Từ chối dự án vì rủi ro quá cao.",
+      "C. Thực hiện một giai đoạn 'Discovery' ngắn để khơi gợi các yêu cầu cốt lõi và làm rõ các vùng không chắc chắn trước khi chốt phạm vi.",
+      "D. Tự giả định các chi tiết còn thiếu để hoàn thiện bản báo giá."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Expert BA hiểu rằng rủi ro lớn nhất là sự mơ hồ. Giai đoạn Discovery giúp làm giảm sự không chắc chắn (Uncertainty) và bảo vệ cả nhà thầu lẫn khách hàng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi khơi gợi yêu cầu cho một quy trình nghiệp vụ xuyên suốt nhiều phòng ban (Cross-functional process), rủi ro lớn nhất là gì?",
+    "options": [
+      "A. Các phòng ban không dùng chung một thuật ngữ (Vocabulary).",
+      "B. Quy trình bị đứt gãy tại các điểm bàn giao (Hand-off) giữa các phòng ban.",
+      "C. Mỗi phòng ban chỉ quan tâm đến lợi ích cục bộ của mình.",
+      "D. Cả ba phương án trên đều là những rủi ro trọng yếu mà BA Expert phải xử lý."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Trong quy trình liên phòng ban, BA Expert phải đóng vai trò 'người kết nối' để giải quyết sự không đồng nhất về ngôn ngữ, tối ưu điểm bàn giao và cân bằng lợi ích tổng thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào để xác nhận (Validate) rằng các yêu cầu đã khơi gợi thực sự đáp ứng được mục tiêu kinh doanh ban đầu?",
+    "options": [
+      "A. Kiểm tra xem tất cả Stakeholder đã ký duyệt tài liệu chưa.",
+      "B. Thực hiện kỹ thuật 'Acceptance Criteria Mapping' để đối chiếu từng yêu cầu với các chỉ số KPI trong Business Case.",
+      "C. Đếm số lượng yêu cầu đã được thu thập.",
+      "D. Hỏi trực tiếp Giám đốc dự án xem họ có hài lòng không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Validation không chỉ là việc ký duyệt mà là đảm bảo giải pháp thực sự giải quyết được vấn đề kinh doanh. Việc ánh xạ yêu cầu với KPI là cách tiếp cận khoa học của Expert.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Kỹ thuật 'Brainstorming' cấp độ Expert khác biệt như thế nào so với thông thường?",
+    "options": [
+      "A. Cho phép mọi người nói tự do không giới hạn thời gian.",
+      "B. Có sự chuẩn bị kỹ lưỡng về chủ đề, sử dụng kỹ thuật 'Brainwriting' để tránh tư duy bầy đàn và có tiêu chí đánh giá ý tưởng rõ ràng sau buổi họp.",
+      "C. Chỉ mời những người có chức vụ cao tham gia.",
+      "D. Ghi lại tất cả ý tưởng và thực hiện tất cả chúng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Expert BA biết cách điều phối để thu được nhiều ý tưởng chất lượng nhất mà không bị ảnh hưởng bởi áp lực nhóm hay các ý kiến áp đặt, đồng thời phải có bước sàng lọc ý tưởng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi khơi gợi yêu cầu từ các chuyên gia kỹ thuật (System Architects) về việc nâng cấp hệ thống, BA cần lưu ý điều gì nhất?",
+    "options": [
+      "A. Ghi lại chính xác các thuật ngữ kỹ thuật họ dùng.",
+      "B. Chuyển đổi các giải pháp kỹ thuật họ đề xuất ngược trở lại thành các nhu cầu kinh doanh (Business Needs) để kiểm chứng tính cần thiết.",
+      "C. Yêu cầu họ vẽ sơ đồ kiến trúc ngay lập tức.",
+      "D. Để họ tự quyết định các yêu cầu chức năng vì họ am hiểu hệ thống nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chuyên gia kỹ thuật thường đưa ra giải pháp (Solution) thay vì nhu cầu (Need). BA Expert phải đào sâu để hiểu mục đích kinh doanh đằng sau những đề xuất kỹ thuật đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án có quá nhiều Stakeholder (trên 50 người), chiến lược khơi gợi yêu cầu nào là phù hợp nhất cho một BA Expert?",
+    "options": [
+      "A. Phỏng vấn cá nhân tất cả mọi người để đảm bảo không bỏ sót yêu cầu.",
+      "B. Phân nhóm Stakeholder dựa trên mức độ ảnh hưởng/quan tâm, sau đó kết hợp Survey cho nhóm đông và Workshop/Interview cho nhóm chủ chốt.",
+      "C. Chỉ làm việc với 5 người đứng đầu các bộ phận.",
+      "D. Gửi một bản dự thảo yêu cầu và yêu cầu mọi người cho ý kiến qua email."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quản lý Stakeholder hiệu quả là chìa khóa. Việc kết hợp các kỹ thuật khác nhau cho các nhóm đối tượng khác nhau giúp tối ưu hóa thời gian và chất lượng thông tin thu thập.",
+    "difficulty": "EXPERT",
+    "skillArea": "Requirement Elicitation",
+    "category": "SITUATION"
+  }
+]

@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, Info, BookOpen, ClipboardList, UserCheck, Star, Wallet, Loader2 } from 'lucide-react';
+import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, Info, BookOpen, ClipboardList, UserCheck, Star, Wallet, Loader2, CalendarDays } from 'lucide-react';
 import { RoadmapResponse, QuestProgress } from '../../types/Roadmap';
 import RoadmapFlow from '../ai-roadmap/RoadmapFlow';
 import type { RoadmapNodeFocusPanelProps } from './RoadmapNodeFocusPanel';
@@ -679,30 +679,49 @@ const RoadmapDetailViewer = memo(({
             <span>QUAY LẠI</span>
           </button>
 
-          <button
-            className="rm-workspace-btn"
-            onClick={() => {
-              const nextSearchParams = new URLSearchParams();
-              if (selectedNodeId) {
-                nextSearchParams.set('nodeId', selectedNodeId);
-              }
-              if (workspaceJourneyId) {
-                nextSearchParams.set('journeyId', String(workspaceJourneyId));
-              }
+          <div className="rm-action-group">
+            <button
+              className="rm-workspace-btn"
+              onClick={() => {
+                const nextSearchParams = new URLSearchParams();
+                if (selectedNodeId) {
+                  nextSearchParams.set('nodeId', selectedNodeId);
+                }
+                if (workspaceJourneyId) {
+                  nextSearchParams.set('journeyId', String(workspaceJourneyId));
+                }
 
-              navigate({
-                pathname: `/roadmap/${roadmap.sessionId}/workspace`,
-                search: nextSearchParams.toString() ? `?${nextSearchParams.toString()}` : '',
-              }, {
-                state: {
-                  journeyId: workspaceJourneyId,
-                  selectedNodeId,
-                },
-              });
-            }}
-          >
-            <ClipboardList size={18} /> Đi đến Workspace
-          </button>
+                navigate({
+                  pathname: `/roadmap/${roadmap.sessionId}/workspace`,
+                  search: nextSearchParams.toString() ? `?${nextSearchParams.toString()}` : '',
+                }, {
+                  state: {
+                    journeyId: workspaceJourneyId,
+                    selectedNodeId,
+                  },
+                });
+              }}
+            >
+              <ClipboardList size={18} /> Đi đến Workspace
+            </button>
+
+            <button
+              className="rm-planner-btn"
+              onClick={() => {
+                const params = new URLSearchParams({
+                  source: 'roadmap',
+                  roadmapSessionId: String(roadmap.sessionId),
+                  view: 'calendar',
+                });
+                if (selectedNodeId) {
+                  params.set('nodeId', selectedNodeId);
+                }
+                navigate(`/study-planner?${params.toString()}`);
+              }}
+            >
+              <CalendarDays size={18} /> Đi tới Study Planner
+            </button>
+          </div>
         </div>
 
       </div>

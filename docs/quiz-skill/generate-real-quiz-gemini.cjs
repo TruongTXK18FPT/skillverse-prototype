@@ -362,6 +362,94 @@ const SKILLS = [
     ]
   },
   {
+    role: "Digital Marketing",
+    skillArea: "SEO/SEM",
+    relativePath: "business/digital-marketing/seo-sem.json",
+    focus: [
+      "Keyword research, on-page/technical SEO and site architecture",
+      "Search intent, content strategy and SERP optimization",
+      "PPC fundamentals, bidding strategies, ad copy testing",
+      "Analytics integration, ranking tracking and performance optimization"
+    ]
+  },
+  {
+    role: "Digital Marketing",
+    skillArea: "Social Media Ads",
+    relativePath: "business/digital-marketing/social-media-ads.json",
+    focus: [
+      "Platform fundamentals (Meta, LinkedIn, TikTok) and ad formats",
+      "Audience targeting, lookalike/custom audiences and segmentation",
+      "Campaign setup, budgeting, bid management and scaling strategies",
+      "Creative testing, A/B testing and performance optimization"
+    ]
+  },
+  {
+    role: "Digital Marketing",
+    skillArea: "Web Analytics (GA4)",
+    relativePath: "business/digital-marketing/web-analytics-ga4.json",
+    focus: [
+      "GA4 data model, events, parameters and user ID tracking",
+      "Conversion setup, funnel analysis and audience segmentation",
+      "Custom reports, dashboards and data exploration",
+      "Debugging, implementation validation and data accuracy"
+    ]
+  },
+  {
+    role: "Digital Marketing",
+    skillArea: "Digital Strategy",
+    relativePath: "business/digital-marketing/digital-strategy.json",
+    focus: [
+      "Omnichannel marketing planning and attribution modeling",
+      "Customer journey mapping and touchpoint optimization",
+      "Budget allocation, ROI modeling and marketing mix modeling",
+      "Competitive analysis, trend forecasting and strategic planning"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Requirement Elicitation",
+    relativePath: "business/business-analyst/requirement-elicitation.json",
+    focus: [
+      "Discovery techniques: interviews, workshops, surveys, observation",
+      "Requirement gathering, clarification and assumption documentation",
+      "Functional vs non-functional requirements and acceptance criteria",
+      "Requirements validation and stakeholder sign-off"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Process Modeling (BPMN/UML)",
+    relativePath: "business/business-analyst/process-modeling-bpmn-uml.json",
+    focus: [
+      "BPMN notation: flows, events, gateways and swimlanes",
+      "UML diagrams: use cases, sequence, class and activity diagrams",
+      "Current state and future state process mapping",
+      "Swimlane diagrams for stakeholder responsibility clarity"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Stakeholder Management",
+    relativePath: "business/business-analyst/stakeholder-management.json",
+    focus: [
+      "Stakeholder analysis, power/interest matrix and engagement strategies",
+      "Communication planning and feedback incorporation",
+      "Conflict resolution and consensus building",
+      "Managing expectations and change management readiness"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Agile/Scrum",
+    relativePath: "business/business-analyst/agile-scrum.json",
+    focus: [
+      "Agile principles and Scrum framework roles and ceremonies",
+      "User story writing, estimation and backlog refinement",
+      "Sprint planning, execution and retrospectives",
+      "Working in cross-functional teams and iterative delivery"
+    ]
+  },
+  {
     role: "Brand Designer",
     skillArea: "Logo Design",
     relativePath: "design/brand-designer/logo-design.json",

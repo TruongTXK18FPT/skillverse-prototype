@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Mục tiêu chính của Agile Manifesto là gì?",
+    "options": [
+      "A. Ưu tiên quy trình và công cụ hơn cá nhân và tương tác.",
+      "B. Tuân thủ kế hoạch chi tiết hơn phản ứng với thay đổi.",
+      "C. Hợp tác với khách hàng hơn đàm phán hợp đồng.",
+      "D. Tập trung vào tài liệu toàn diện hơn phần mềm hoạt động."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Một trong bốn giá trị cốt lõi của Agile Manifesto là 'Hợp tác với khách hàng hơn đàm phán hợp đồng', nhấn mạnh tầm quan trọng của sự hợp tác liên tục.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Scrum, ai là người chịu trách nhiệm tối đa hóa giá trị của sản phẩm bằng cách quản lý Product Backlog?",
+    "options": [
+      "A. Scrum Master",
+      "B. Development Team",
+      "C. Product Owner",
+      "D. Stakeholder"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Product Owner là người đại diện cho các bên liên quan, chịu trách nhiệm tối đa hóa giá trị của sản phẩm thông qua việc quản lý Product Backlog.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Vai trò nào trong Scrum có trách nhiệm loại bỏ các trở ngại (impediments) và đảm bảo nhóm tuân thủ các nguyên tắc và thực hành Scrum?",
+    "options": [
+      "A. Product Owner",
+      "B. Scrum Master",
+      "C. Development Team",
+      "D. Business Analyst"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scrum Master là người phục vụ nhóm, giúp nhóm hiểu và tuân thủ Scrum, đồng thời loại bỏ các trở ngại làm chậm tiến độ của nhóm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một nhóm Scrum, ai là người chịu trách nhiệm thực hiện công việc để tạo ra Increment có khả năng phát hành (potentially releasable Increment) vào cuối mỗi Sprint?",
+    "options": [
+      "A. Product Owner",
+      "B. Scrum Master",
+      "C. Development Team",
+      "D. Quality Assurance Engineer"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Development Team là nhóm tự quản lý, chịu trách nhiệm thiết kế, xây dựng, kiểm thử và bàn giao sản phẩm trong mỗi Sprint.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của Daily Scrum (Stand-up Meeting) là gì?",
+    "options": [
+      "A. Báo cáo tiến độ cho Product Owner.",
+      "B. Lập kế hoạch chi tiết cho các nhiệm vụ của ngày hôm sau.",
+      "C. Đồng bộ hóa hoạt động và lập kế hoạch cho 24 giờ tới của Development Team.",
+      "D. Giải quyết tất cả các vấn đề kỹ thuật phức tạp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Daily Scrum là cuộc họp ngắn gọn hàng ngày để Development Team kiểm tra tiến độ đạt được Sprint Goal và điều chỉnh kế hoạch cho 24 giờ tới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự kiện nào trong Scrum diễn ra vào cuối mỗi Sprint để kiểm tra Increment và điều chỉnh Product Backlog nếu cần?",
+    "options": [
+      "A. Sprint Planning",
+      "B. Daily Scrum",
+      "C. Sprint Review",
+      "D. Sprint Retrospective"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sprint Review là sự kiện để nhóm trình bày Increment đã hoàn thành, nhận phản hồi từ các bên liên quan và cùng nhau điều chỉnh Product Backlog.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích của Sprint Retrospective là gì?",
+    "options": [
+      "A. Để lên kế hoạch cho Sprint tiếp theo.",
+      "B. Để kiểm tra sản phẩm đã hoàn thành.",
+      "C. Để kiểm tra cách nhóm đã làm việc và tìm cách cải thiện.",
+      "D. Để phân công nhiệm vụ cho các thành viên trong nhóm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sprint Retrospective là cơ hội để nhóm Scrum tự kiểm tra và tạo ra một kế hoạch cải tiến cho Sprint tiếp theo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kết quả chính (output) của Sprint Planning là gì?",
+    "options": [
+      "A. Một danh sách các User Story đã hoàn thành.",
+      "B. Một Product Backlog được sắp xếp lại.",
+      "C. Sprint Goal và Sprint Backlog.",
+      "D. Một bản báo cáo về các trở ngại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Sprint Planning, nhóm cùng với Product Owner xác định Sprint Goal và chọn các hạng mục từ Product Backlog để tạo thành Sprint Backlog.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một User Story thường được viết theo định dạng nào?",
+    "options": [
+      "A. AS A [type of user], I WANT TO [goal], SO THAT [reason/benefit].",
+      "B. THE SYSTEM SHALL [function], WITH [details].",
+      "C. IF [condition], THEN [action].",
+      "D. REQUIREMENT ID: [ID], DESCRIPTION: [details]."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Định dạng 'As a [role], I want [capability], so that [reason]' là cách phổ biến để viết User Story, tập trung vào người dùng và giá trị.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một Business Analyst viết User Story, điều quan trọng nhất là phải tập trung vào khía cạnh nào?",
+    "options": [
+      "A. Chi tiết kỹ thuật của giải pháp.",
+      "B. Người dùng cuối và giá trị mà họ nhận được.",
+      "C. Lịch trình phát triển và chi phí.",
+      "D. Tên của các thành viên trong nhóm sẽ thực hiện công việc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User Story được thiết kế để tập trung vào nhu cầu của người dùng và lợi ích kinh doanh, chứ không phải chi tiết kỹ thuật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Agile, 'Story Points' được sử dụng để làm gì?",
+    "options": [
+      "A. Đo lường thời gian chính xác để hoàn thành một nhiệm vụ.",
+      "B. Ước lượng độ phức tạp, rủi ro và khối lượng công việc tương đối của một User Story.",
+      "C. Đánh giá hiệu suất cá nhân của từng thành viên trong nhóm.",
+      "D. Tính toán chi phí dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Story Points là một đơn vị ước lượng trừu tượng được sử dụng để so sánh tương đối các User Story dựa trên độ phức tạp, rủi ro và khối lượng công việc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hoạt động 'Backlog Refinement' (trước đây là Backlog Grooming) có mục đích gì?",
+    "options": [
+      "A. Phân công nhiệm vụ cho Development Team.",
+      "B. Thêm chi tiết, ước lượng và sắp xếp lại các hạng mục trong Product Backlog.",
+      "C. Thảo luận về những gì đã hoàn thành trong Sprint trước.",
+      "D. Lên kế hoạch cho Sprint tiếp theo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Backlog Refinement là hoạt động liên tục để đảm bảo Product Backlog luôn được cập nhật, chi tiết, ước lượng và sắp xếp hợp lý.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong buổi Sprint Planning, Business Analyst (với vai trò hỗ trợ Product Owner hoặc là một phần của Development Team) cần làm gì để đảm bảo các User Story được hiểu rõ?",
+    "options": [
+      "A. Đưa ra các giải pháp kỹ thuật cụ thể.",
+      "B. Trình bày chi tiết về các yêu cầu kinh doanh và trả lời câu hỏi của nhóm.",
+      "C. Chỉ định người thực hiện từng User Story.",
+      "D. Ước lượng Story Points cho tất cả các User Story."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Analyst đóng vai trò quan trọng trong việc làm rõ các yêu cầu, đảm bảo Development Team hiểu rõ User Story để có thể lên kế hoạch và thực hiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "'Definition of Done' (DoD) là gì trong Scrum?",
+    "options": [
+      "A. Một danh sách các nhiệm vụ cần hoàn thành trước khi Sprint bắt đầu.",
+      "B. Một tập hợp các tiêu chí mà một Increment phải đáp ứng để được coi là 'hoàn thành' và có thể phát hành.",
+      "C. Một tài liệu mô tả các yêu cầu chức năng của sản phẩm.",
+      "D. Một bản kế hoạch chi tiết cho việc kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DoD là một thỏa thuận chung trong nhóm Scrum về các tiêu chí mà một hạng mục Product Backlog phải đáp ứng để được coi là 'Done' và sẵn sàng để phát hành.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quá trình thực hiện Sprint, nếu Development Team gặp phải một trở ngại (impediment) không thể tự giải quyết, họ nên làm gì?",
+    "options": [
+      "A. Bỏ qua trở ngại và tiếp tục với nhiệm vụ khác.",
+      "B. Chờ đến Sprint Retrospective để thảo luận.",
+      "C. Thông báo cho Scrum Master để được hỗ trợ loại bỏ trở ngại.",
+      "D. Tự mình tìm giải pháp mà không cần sự giúp đỡ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Một trong những vai trò chính của Scrum Master là loại bỏ các trở ngại để Development Team có thể làm việc hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một 'nhóm đa chức năng' (cross-functional team) trong Agile có nghĩa là gì?",
+    "options": [
+      "A. Một nhóm có nhiều thành viên đảm nhận cùng một vai trò.",
+      "B. Một nhóm mà mỗi thành viên chỉ có một kỹ năng chuyên biệt.",
+      "C. Một nhóm có tất cả các kỹ năng cần thiết để hoàn thành công việc mà không phụ thuộc vào bên ngoài.",
+      "D. Một nhóm được quản lý bởi nhiều người quản lý khác nhau."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nhóm đa chức năng có đủ các kỹ năng cần thiết (phân tích, phát triển, kiểm thử, v.v.) để hoàn thành công việc từ đầu đến cuối một cách độc lập.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích chính của việc phân phối sản phẩm theo từng vòng lặp (iterative delivery) trong Agile là gì?",
+    "options": [
+      "A. Giảm thiểu nhu cầu về phản hồi của khách hàng.",
+      "B. Cho phép điều chỉnh hướng đi dựa trên phản hồi sớm và liên tục.",
+      "C. Đảm bảo rằng tất cả các tính năng được phát triển cùng một lúc.",
+      "D. Loại bỏ hoàn toàn rủi ro dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phát triển lặp đi lặp lại cho phép thu thập phản hồi sớm, giảm rủi ro và điều chỉnh sản phẩm để phù hợp hơn với nhu cầu thực tế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Agile, việc thu thập phản hồi từ khách hàng và các bên liên quan là rất quan trọng. Business Analyst nên làm gì để đảm bảo phản hồi được tích hợp vào sản phẩm?",
+    "options": [
+      "A. Ghi lại phản hồi và lưu trữ để tham khảo sau này.",
+      "B. Phân tích phản hồi, thảo luận với Product Owner và nhóm để cập nhật Product Backlog.",
+      "C. Chỉ lắng nghe phản hồi tích cực.",
+      "D. Bỏ qua phản hồi nếu nó mâu thuẫn với kế hoạch ban đầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Analyst cần chủ động phân tích phản hồi, làm việc với Product Owner và nhóm để chuyển đổi phản hồi thành các hạng mục Product Backlog có thể thực hiện được.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "'Sprint Goal' là gì?",
+    "options": [
+      "A. Một danh sách các nhiệm vụ cá nhân của từng thành viên.",
+      "B. Một mục tiêu kinh doanh tổng thể cho toàn bộ dự án.",
+      "C. Một mục tiêu duy nhất, có thể đạt được trong Sprint, cung cấp hướng dẫn cho Development Team.",
+      "D. Số lượng User Story tối đa có thể hoàn thành trong Sprint."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sprint Goal là một mục tiêu ngắn gọn, cụ thể mà Development Team cố gắng đạt được trong một Sprint, giúp định hướng và tạo sự gắn kết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Nguyên tắc Agile nào nhấn mạnh việc 'phần mềm hoạt động tốt hơn tài liệu toàn diện'?",
+    "options": [
+      "A. Cá nhân và tương tác hơn quy trình và công cụ.",
+      "B. Phần mềm hoạt động hơn tài liệu toàn diện.",
+      "C. Hợp tác với khách hàng hơn đàm phán hợp đồng.",
+      "D. Phản ứng với thay đổi hơn tuân thủ một kế hoạch."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đây là một trong bốn giá trị cốt lõi của Agile Manifesto, nhấn mạnh việc tạo ra sản phẩm có giá trị thực tế hơn là chỉ tập trung vào tài liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một User Story được ước lượng bằng Story Points, yếu tố nào KHÔNG được xem xét trực tiếp?",
+    "options": [
+      "A. Độ phức tạp của công việc.",
+      "B. Rủi ro liên quan đến việc thực hiện.",
+      "C. Thời gian chính xác (ví dụ: số giờ) để hoàn thành.",
+      "D. Khối lượng công việc tương đối."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Story Points là ước lượng tương đối, không phải là đơn vị thời gian tuyệt đối. Nó bao gồm phức tạp, rủi ro, và khối lượng công việc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong buổi Sprint Retrospective, nhóm Scrum thảo luận về những gì đã làm tốt, những gì có thể cải thiện và các hành động cụ thể để cải tiến. Business Analyst nên đóng góp như thế nào?",
+    "options": [
+      "A. Chỉ lắng nghe và không đưa ra ý kiến.",
+      "B. Đề xuất các cải tiến về quy trình làm việc, giao tiếp hoặc công cụ dựa trên quan sát của mình.",
+      "C. Tập trung vào việc đổ lỗi cho các thành viên khác về những vấn đề đã xảy ra.",
+      "D. Yêu cầu nhóm cam kết tăng tốc độ làm việc trong Sprint tiếp theo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Analyst là một thành viên của nhóm Scrum (thường trong Development Team hoặc hỗ trợ PO), cần đóng góp vào quá trình cải tiến liên tục bằng cách chia sẻ quan sát và đề xuất giải pháp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Product Backlog là gì?",
+    "options": [
+      "A. Một danh sách các nhiệm vụ được gán cho từng thành viên trong nhóm.",
+      "B. Một danh sách ưu tiên động của các tính năng, chức năng, yêu cầu, cải tiến và sửa lỗi cấu thành sản phẩm.",
+      "C. Một tài liệu mô tả kiến trúc kỹ thuật của sản phẩm.",
+      "D. Một bản kế hoạch chi tiết cho một Sprint cụ thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Product Backlog là nguồn duy nhất chứa tất cả các yêu cầu công việc cho sản phẩm, được sắp xếp ưu tiên và liên tục được tinh chỉnh.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Sprint Review, Product Owner trình bày Increment đã hoàn thành cho các bên liên quan. Vai trò của Business Analyst trong sự kiện này là gì?",
+    "options": [
+      "A. Đảm bảo rằng tất cả các lỗi đã được tìm thấy.",
+      "B. Hỗ trợ Product Owner trong việc trình bày, làm rõ các yêu cầu kinh doanh và thu thập phản hồi.",
+      "C. Lập kế hoạch cho Sprint tiếp theo.",
+      "D. Chỉ quan sát và không tham gia."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Analyst thường hỗ trợ Product Owner trong việc làm rõ giá trị kinh doanh của Increment và thu thập phản hồi từ các stakeholder.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Giả sử bạn là một Business Analyst trong một dự án Agile và có một yêu cầu mới, quan trọng xuất hiện giữa Sprint. Bạn nên làm gì đầu tiên?",
+    "options": [
+      "A. Yêu cầu Development Team dừng công việc hiện tại để thực hiện yêu cầu mới ngay lập tức.",
+      "B. Thêm yêu cầu đó vào cuối Product Backlog.",
+      "C. Thảo luận với Product Owner để đánh giá mức độ ưu tiên và tác động, sau đó xem xét việc đưa vào Product Backlog và tinh chỉnh.",
+      "D. Tự mình quyết định liệu yêu cầu có nên được thực hiện trong Sprint hiện tại hay không."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Agile, các yêu cầu mới được quản lý thông qua Product Owner và Product Backlog. Việc đánh giá ưu tiên và tác động là bước cần thiết trước khi quyết định đưa vào Sprint hiện tại hay các Sprint sau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh Agile, giá trị nào sau đây được ưu tiên hơn \"quy trình và công cụ toàn diện\"?",
+    "options": [
+      "A. Phần mềm hoạt động được",
+      "B. Tài liệu chi tiết",
+      "C. Đàm phán hợp đồng",
+      "D. Tuân thủ kế hoạch"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một trong bốn giá trị cốt lõi của Tuyên ngôn Agile là 'Phần mềm hoạt động được hơn tài liệu toàn diện'.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Với vai trò Business Analyst trong một nhóm Scrum, công việc nào sau đây là quan trọng nhất để đảm bảo nhóm phát triển hiểu rõ yêu cầu?",
+    "options": [
+      "A. Viết tài liệu đặc tả yêu cầu chi tiết (SRS) trước mỗi Sprint.",
+      "B. Hỗ trợ Product Owner trong việc làm rõ User Story và Acceptance Criteria.",
+      "C. Đảm bảo nhóm tuân thủ nghiêm ngặt các quy tắc của Scrum Master.",
+      "D. Thực hiện kiểm thử toàn diện sau mỗi Sprint."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Analyst thường đóng vai trò hỗ trợ Product Owner trong việc làm rõ các yêu cầu, đặc biệt là User Story và Acceptance Criteria, để nhóm phát triển có thể hiểu và triển khai chính xác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mục đích chính của Daily Scrum (Daily Stand-up) là gì?",
+    "options": [
+      "A. Báo cáo tiến độ cho Product Owner và các bên liên quan.",
+      "B. Lập kế hoạch chi tiết cho các nhiệm vụ trong ngày tiếp theo.",
+      "C. Đồng bộ hóa hoạt động và xác định các trở ngại (impediments) trong nhóm phát triển.",
+      "D. Đánh giá lại các User Story đã hoàn thành trong ngày."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Daily Scrum là cuộc họp nội bộ của Development Team để đồng bộ hóa công việc, chia sẻ tiến độ, và xác định các vấn đề hoặc trở ngại cần được giải quyết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi viết một User Story, tiêu chí \"INVEST\" nào sau đây giúp đảm bảo User Story đủ nhỏ để có thể hoàn thành trong một Sprint?",
+    "options": [
+      "A. Independent (Độc lập)",
+      "B. Negotiable (Có thể đàm phán)",
+      "C. Small (Nhỏ)",
+      "D. Testable (Có thể kiểm thử)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Chữ 'S' trong INVEST là Small, có nghĩa là User Story nên đủ nhỏ để có thể ước tính và hoàn thành trong một Sprint.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phương pháp ước lượng nào sau đây thường được sử dụng trong Scrum để ước lượng độ phức tạp tương đối của User Story?",
+    "options": [
+      "A. Person-days (Số ngày công)",
+      "B. Story Points",
+      "C. Ideal hours (Số giờ lý tưởng)",
+      "D. Gantt Chart"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Story Points là một đơn vị đo lường trừu tượng, tương đối, được sử dụng để ước lượng nỗ lực cần thiết để triển khai một User Story, bao gồm độ phức tạp, rủi ro và khối lượng công việc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hoạt động Backlog Refinement (hay Grooming) được thực hiện với mục đích chính là gì?",
+    "options": [
+      "A. Quyết định các nhiệm vụ cụ thể cho Sprint tiếp theo.",
+      "B. Đảm bảo Product Backlog luôn được cập nhật, ưu tiên và có đủ chi tiết cho các Sprint sắp tới.",
+      "C. Đánh giá hiệu suất của nhóm trong Sprint trước.",
+      "D. Báo cáo tiến độ cho các bên liên quan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Backlog Refinement là hoạt động liên tục để thêm chi tiết, ước lượng và sắp xếp thứ tự các hạng mục trong Product Backlog, đảm bảo chúng sẵn sàng cho Sprint Planning.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kết quả chính của Sprint Planning là gì?",
+    "options": [
+      "A. Một danh sách các lỗi cần sửa.",
+      "B. Một Sprint Goal và một Sprint Backlog.",
+      "C. Một báo cáo tiến độ chi tiết cho Product Owner.",
+      "D. Một đánh giá về hiệu suất của nhóm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Sprint Planning, nhóm phát triển cùng với Product Owner xác định Sprint Goal (mục tiêu của Sprint) và chọn các User Story từ Product Backlog để tạo thành Sprint Backlog (danh sách công việc cho Sprint).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Ai là người tham gia chính và có trách nhiệm trình bày sản phẩm đã hoàn thành trong Sprint Review?",
+    "options": [
+      "A. Product Owner",
+      "B. Scrum Master",
+      "C. Development Team",
+      "D. Các bên liên quan (Stakeholders)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong Sprint Review, Development Team trình bày các hạng mục Product Backlog đã 'Done' trong Sprint, và thảo luận về những gì đã diễn ra trong Sprint. Product Owner sau đó thảo luận về Product Backlog dựa trên phản hồi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục tiêu chính của Sprint Retrospective là gì?",
+    "options": [
+      "A. Kiểm tra và thích nghi Product Backlog.",
+      "B. Kiểm tra và thích nghi quy trình làm việc của nhóm.",
+      "C. Kiểm tra và thích nghi Sprint Goal.",
+      "D. Kiểm tra và thích nghi các yêu cầu của khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sprint Retrospective là cơ hội để Development Team, Product Owner và Scrum Master kiểm tra cách họ làm việc cùng nhau và tìm kiếm các cải tiến cho quy trình, công cụ, mối quan hệ trong Sprint tiếp theo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một nhóm phát triển tự tổ chức (self-organizing) và đa chức năng (cross-functional) trong Scrum có ý nghĩa gì đối với vai trò Business Analyst?",
+    "options": [
+      "A. Business Analyst cần phải là người quản lý vi mô (micromanage) các thành viên trong nhóm.",
+      "B. Business Analyst không cần tham gia vào các cuộc họp của nhóm.",
+      "C. Business Analyst cần hợp tác chặt chẽ với nhóm, cung cấp sự rõ ràng về yêu cầu và hỗ trợ nhóm tự đưa ra quyết định kỹ thuật.",
+      "D. Business Analyst chỉ cần bàn giao tài liệu và chờ kết quả."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong một nhóm tự tổ chức, đa chức năng, BA đóng vai trò là cầu nối thông tin, làm rõ yêu cầu và hỗ trợ nhóm, không phải là người ra lệnh hay quản lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích chính của việc phân phối lặp đi lặp lại (iterative delivery) trong Agile là gì?",
+    "options": [
+      "A. Giảm thiểu hoàn toàn rủi ro dự án.",
+      "B. Cung cấp sản phẩm hoàn chỉnh sớm hơn cho khách hàng.",
+      "C. Thu thập phản hồi sớm và thường xuyên, cho phép điều chỉnh hướng đi của sản phẩm.",
+      "D. Loại bỏ nhu cầu về tài liệu."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Phân phối lặp đi lặp lại giúp đưa các phần nhỏ, hoạt động được của sản phẩm đến tay người dùng hoặc stakeholder sớm, từ đó thu thập phản hồi và điều chỉnh kịp thời.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một trong những nguyên tắc cốt lõi của Agile là \"Phản hồi với thay đổi hơn là tuân thủ kế hoạch\". Điều này có ý nghĩa gì đối với một Business Analyst?",
+    "options": [
+      "A. BA nên tránh mọi thay đổi sau khi yêu cầu đã được xác định.",
+      "B. BA nên sẵn sàng thích nghi với các yêu cầu thay đổi, ưu tiên giá trị kinh doanh hơn việc tuân thủ một kế hoạch cứng nhắc ban đầu.",
+      "C. BA nên luôn yêu cầu khách hàng ký xác nhận mỗi khi có thay đổi.",
+      "D. BA nên từ chối các thay đổi nếu chúng ảnh hưởng đến lịch trình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc Agile khuyến khích đón nhận và thích nghi với sự thay đổi, vì vậy BA cần linh hoạt trong việc quản lý và làm rõ các yêu cầu thay đổi để mang lại giá trị tốt nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi viết Acceptance Criteria cho User Story, việc sử dụng định dạng Gherkin (Given-When-Then) mang lại lợi ích gì?",
+    "options": [
+      "A. Chỉ để tài liệu hóa các trường hợp kiểm thử tự động.",
+      "B. Giúp làm rõ hành vi mong muốn của hệ thống một cách dễ hiểu cho cả kinh doanh và kỹ thuật, đồng thời dễ dàng chuyển đổi thành các trường hợp kiểm thử.",
+      "C. Chỉ để Product Owner phê duyệt nhanh chóng.",
+      "D. Giảm thiểu nhu cầu giao tiếp giữa các thành viên trong nhóm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Gherkin giúp mô tả các kịch bản hành vi một cách rõ ràng, có cấu trúc, dễ đọc cho cả người không chuyên kỹ thuật và người phát triển, đồng thời là cơ sở tốt cho kiểm thử tự động.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Với vai trò là Business Analyst, bạn có thể hỗ trợ Product Owner tốt nhất trong việc quản lý Product Backlog bằng cách nào?",
+    "options": [
+      "A. Tự động sắp xếp thứ tự ưu tiên các User Story mà không cần thảo luận với Product Owner.",
+      "B. Thực hiện tất cả các cuộc họp với các bên liên quan thay cho Product Owner.",
+      "C. Đảm bảo Product Backlog minh bạch, được làm rõ và ước lượng đầy đủ, giúp Product Owner đưa ra quyết định ưu tiên.",
+      "D. Chỉ tập trung vào việc viết tài liệu kỹ thuật chi tiết."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA là cánh tay phải của PO, giúp PO duy trì Product Backlog ở trạng thái tốt nhất: rõ ràng, được ước lượng và ưu tiên, để PO có thể đưa ra quyết định đúng đắn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một Daily Scrum, một thành viên trong nhóm phát triển nêu ra một trở ngại (impediment) mà họ đang gặp phải. Vai trò của Business Analyst trong tình huống này là gì?",
+    "options": [
+      "A. Ghi lại trở ngại và yêu cầu thành viên đó tự giải quyết.",
+      "B. Ngay lập tức ngừng cuộc họp để tìm cách giải quyết trở ngại đó.",
+      "C. Đảm bảo Scrum Master đã ghi nhận và sẽ hỗ trợ giải quyết, đồng thời BA có thể hỗ trợ nếu trở ngại liên quan đến làm rõ yêu cầu.",
+      "D. Báo cáo trực tiếp cho quản lý cấp cao về trở ngại này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Scrum Master có trách nhiệm chính trong việc loại bỏ trở ngại. BA, với kiến thức về nghiệp vụ, có thể hỗ trợ làm rõ nếu trở ngại liên quan đến yêu cầu, nhưng không phải là người chịu trách nhiệm chính giải quyết mọi trở ngại.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "\"Definition of Done\" (DoD) trong Scrum là gì và tại sao nó quan trọng?",
+    "options": [
+      "A. Là danh sách các nhiệm vụ cần làm trong Sprint Planning.",
+      "B. Là một bộ tiêu chí chung được nhóm thống nhất, mô tả khi nào một hạng mục Product Backlog được coi là hoàn thành và có chất lượng, đảm bảo tính minh bạch và chất lượng sản phẩm.",
+      "C. Là tài liệu mô tả chi tiết tất cả các yêu cầu của khách hàng.",
+      "D. Là một bản kế hoạch kiểm thử toàn diện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "DoD đảm bảo mọi người trong nhóm có cùng một sự hiểu biết về trạng thái 'hoàn thành' của một hạng mục, giúp duy trì chất lượng và tính minh bạch.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sprint Goal đóng vai trò như thế nào trong một Sprint?",
+    "options": [
+      "A. Là một danh sách dài các tính năng cần được phát triển.",
+      "B. Là một mục tiêu duy nhất, có ý nghĩa kinh doanh mà nhóm cam kết đạt được trong Sprint, cung cấp hướng đi và sự linh hoạt.",
+      "C. Là một bản kế hoạch chi tiết từng giờ cho Development Team.",
+      "D. Là một bản báo cáo tiến độ hàng ngày."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sprint Goal là mục tiêu bao quát cho Sprint, giúp nhóm tập trung và có thể linh hoạt điều chỉnh cách đạt được mục tiêu đó trong suốt Sprint.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Giữa Sprint, Product Owner yêu cầu thêm một tính năng mới rất quan trọng vào Sprint hiện tại. Với vai trò Business Analyst, bạn sẽ làm gì?",
+    "options": [
+      "A. Đồng ý ngay lập tức và thêm tính năng đó vào Sprint Backlog.",
+      "B. Giải thích cho Product Owner rằng Sprint Backlog đã được cam kết và thay đổi có thể ảnh hưởng đến Sprint Goal, đề xuất thảo luận lại với nhóm để đánh giá tác động và có thể đưa vào Sprint sau.",
+      "C. Yêu cầu nhóm làm thêm giờ để hoàn thành tính năng mới mà không ảnh hưởng đến các hạng mục khác.",
+      "D. Báo cáo vấn đề này cho quản lý cấp cao để họ đưa ra quyết định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sprint Backlog là một cam kết của nhóm cho Sprint Goal. Bất kỳ thay đổi lớn nào giữa Sprint đều cần được thảo luận kỹ lưỡng với nhóm và Product Owner để đánh giá tác động và đưa ra quyết định phù hợp, thường là ưu tiên lại cho Sprint sau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi một User Story quá lớn để hoàn thành trong một Sprint, Business Analyst nên làm gì?",
+    "options": [
+      "A. Bỏ qua User Story đó và chuyển sang User Story khác.",
+      "B. Chia nhỏ User Story đó thành các User Story nhỏ hơn, độc lập và có giá trị riêng, để có thể ước lượng và triển khai trong các Sprint sau.",
+      "C. Yêu cầu tăng thời lượng Sprint để chứa User Story lớn.",
+      "D. Giao User Story đó cho một thành viên duy nhất trong nhóm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc chia nhỏ User Story là một kỹ năng quan trọng của BA trong Agile để đảm bảo các hạng mục có thể được hoàn thành trong một Sprint và mang lại giá trị gia tăng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Scrum, cơ hội chính để Product Owner và các bên liên quan cung cấp phản hồi trực tiếp về sản phẩm đang phát triển là ở buổi lễ nào?",
+    "options": [
+      "A. Daily Scrum",
+      "B. Sprint Planning",
+      "C. Sprint Review",
+      "D. Sprint Retrospective"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sprint Review là buổi trình diễn sản phẩm và thu thập phản hồi từ Product Owner và các bên liên quan, giúp định hướng cho các Sprint tiếp theo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong buổi Backlog Refinement, vai trò của Business Analyst thường bao gồm những gì?",
+    "options": [
+      "A. Chỉ ghi lại các quyết định của Product Owner.",
+      "B. Dẫn dắt thảo luận để làm rõ yêu cầu, bổ sung Acceptance Criteria, hỗ trợ ước lượng và đảm bảo các User Story đủ \"ready\" cho Sprint Planning.",
+      "C. Thực hiện kiểm thử các User Story đã được làm rõ.",
+      "D. Quyết định thứ tự ưu tiên cuối cùng của Product Backlog."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA đóng vai trò tích cực trong Backlog Refinement, giúp làm rõ yêu cầu, đảm bảo chất lượng của User Story và hỗ trợ nhóm trong việc ước lượng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Nhóm phát triển báo cáo rằng họ đang gặp phải Technical Debt ngày càng tăng, điều này ảnh hưởng đến tốc độ phát triển. Với vai trò Business Analyst, bạn sẽ làm gì để giải quyết vấn đề này?",
+    "options": [
+      "A. Yêu cầu nhóm bỏ qua Technical Debt và tập trung vào các tính năng mới.",
+      "B. Ghi lại Technical Debt như một loại lỗi và yêu cầu Product Owner ưu tiên sửa chữa ngay lập tức.",
+      "C. Thảo luận với Product Owner và nhóm phát triển để hiểu tác động của Technical Debt, sau đó đề xuất Product Owner cân nhắc đưa các hạng mục xử lý Technical Debt vào Product Backlog và ưu tiên chúng.",
+      "D. Tự mình tìm cách sửa chữa Technical Debt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Technical Debt là một vấn đề kỹ thuật nhưng có tác động kinh doanh. BA cần giúp PO hiểu được tác động này để PO có thể đưa ra quyết định ưu tiên việc xử lý Technical Debt như các hạng mục khác trong Product Backlog.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi ước lượng User Story bằng Story Points, nếu một User Story được ước lượng là 13 Story Points (theo dãy Fibonacci), điều này thường gợi ý điều gì?",
+    "options": [
+      "A. User Story đó rất đơn giản và có thể hoàn thành nhanh chóng.",
+      "B. User Story đó quá lớn hoặc quá phức tạp, cần được chia nhỏ hoặc làm rõ thêm trước khi đưa vào Sprint.",
+      "C. User Story đó sẽ mất chính xác 13 ngày để hoàn thành.",
+      "D. User Story đó cần được giao cho thành viên có kinh nghiệm nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong ước lượng Story Points, các con số lớn (như 8, 13, 20...) thường chỉ ra rằng User Story đó chưa đủ rõ ràng, quá phức tạp hoặc quá lớn, cần được chia nhỏ hoặc làm rõ thêm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một buổi Backlog Refinement, có sự bất đồng quan điểm giữa Product Owner và Development Team về độ phức tạp của một User Story. Vai trò của Business Analyst trong việc giải quyết xung đột này là gì?",
+    "options": [
+      "A. Đứng về phía Product Owner vì họ là người đưa ra yêu cầu.",
+      "B. Đứng về phía Development Team vì họ là người thực hiện.",
+      "C. Tạo điều kiện cho cuộc thảo luận, làm rõ thêm các yêu cầu, rủi ro và giả định, giúp các bên hiểu quan điểm của nhau để đi đến một sự đồng thuận hoặc quyết định hợp lý.",
+      "D. Yêu cầu Scrum Master quyết định."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA thường đóng vai trò là người điều phối, làm rõ thông tin và giúp các bên liên quan đạt được sự hiểu biết chung và quyết định dựa trên thông tin đầy đủ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Nguyên tắc \"Cải tiến liên tục\" (Continuous Improvement) trong Agile được thể hiện rõ nhất qua buổi lễ nào trong Scrum?",
+    "options": [
+      "A. Sprint Planning",
+      "B. Daily Scrum",
+      "C. Sprint Review",
+      "D. Sprint Retrospective"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Sprint Retrospective là buổi lễ tập trung vào việc kiểm tra cách nhóm làm việc và xác định các hành động cải tiến để nâng cao hiệu suất và chất lượng trong các Sprint tiếp theo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một dự án Agile quy mô lớn, Business Analyst (BA) nhận thấy đội phát triển đang gặp khó khăn trong việc duy trì chất lượng mã và kiến trúc hệ thống do áp lực deliver nhanh. Với vai trò là BA, bạn sẽ đề xuất hành động nào để giải quyết vấn đề này trong các Sprint tiếp theo?",
+    "options": [
+      "A. Yêu cầu Product Owner ưu tiên các user story liên quan đến refactoring và cải thiện kiến trúc trong Product Backlog.",
+      "B. Đề nghị đội phát triển tăng tốc độ để hoàn thành các tính năng đã cam kết, sau đó mới xem xét cải thiện kỹ thuật.",
+      "C. Chấp nhận chất lượng mã thấp hơn tạm thời để đạt được mục tiêu giao hàng, với kế hoạch khắc phục sau này.",
+      "D. Chuyển giao các yêu cầu chi tiết hơn cho đội phát triển để giảm thiểu sự không chắc chắn và lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ở cấp độ Advanced, BA cần hiểu rõ tầm quan trọng của chất lượng kỹ thuật và kiến trúc đối với tính bền vững của sản phẩm. Đề xuất ưu tiên refactoring và cải thiện kiến trúc trong Product Backlog là cách tiếp cận chủ động để cân bằng giữa việc giao giá trị kinh doanh và duy trì sức khỏe kỹ thuật của hệ thống, tránh nợ kỹ thuật tích tụ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quá trình Backlog Refinement cho một Epic phức tạp, đội phát triển bày tỏ lo ngại về rủi ro kỹ thuật cao và sự không chắc chắn trong ước tính. Với vai trò BA, bạn sẽ làm gì để giúp đội giải quyết vấn đề này và đưa ra ước tính đáng tin cậy hơn?",
+    "options": [
+      "A. Yêu cầu đội phát triển đưa ra một ước tính sơ bộ dựa trên kinh nghiệm, sau đó cam kết với ước tính đó.",
+      "B. Đề xuất chia Epic thành các Spike (Spike kỹ thuật hoặc khám phá) để giảm thiểu rủi ro và thu thập thông tin cần thiết trước khi ước tính chính thức.",
+      "C. Chuyển Epic thành một task lớn và giao cho một thành viên giàu kinh nghiệm nhất trong đội.",
+      "D. Loại bỏ Epic khỏi Backlog cho đến khi có đủ thông tin chi tiết từ các bên liên quan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spike là một công cụ quan trọng trong Agile để giảm thiểu rủi ro và sự không chắc chắn bằng cách thực hiện nghiên cứu, khám phá kỹ thuật hoặc tạo prototype. BA Advanced cần nhận diện khi nào cần Spike và hỗ trợ đội đề xuất, lập kế hoạch cho Spike để có thể ước tính tốt hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một nhóm Scrum liên tục gặp phải tình trạng các user story được 'Done' về mặt chức năng nhưng lại phát sinh nhiều lỗi nghiêm trọng sau khi triển khai lên môi trường sản phẩm. Trong buổi Sprint Retrospective, BA nên tập trung vào khía cạnh nào để giúp nhóm cải thiện tình hình?",
+    "options": [
+      "A. Thúc đẩy nhóm thảo luận về việc tăng cường số lượng tính năng được giao trong mỗi Sprint.",
+      "B. Phân tích quy trình Definition of Done (DoD) hiện tại và đề xuất bổ sung các tiêu chí liên quan đến chất lượng kỹ thuật và thử nghiệm.",
+      "C. Đề xuất Product Owner ưu tiên các user story dễ hơn để nhóm có thể hoàn thành nhiều hơn.",
+      "D. Tập trung vào việc cải thiện kỹ năng lập trình của từng thành viên trong nhóm thông qua đào tạo cá nhân."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vấn đề về chất lượng sản phẩm thường bắt nguồn từ DoD chưa đủ chặt chẽ hoặc chưa được tuân thủ. BA Advanced cần có khả năng phân tích và đề xuất cải tiến DoD, đảm bảo nó bao gồm các tiêu chí về chất lượng kỹ thuật và thử nghiệm để tránh các lỗi phát sinh sau này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Sprint Planning, đội phát triển nhận thấy một số user story có dependencies kỹ thuật phức tạp với các hệ thống bên ngoài, đòi hỏi phải có sự phối hợp chặt chẽ với các đội khác. BA nên làm gì để đảm bảo Sprint Goal vẫn khả thi và các dependencies được quản lý hiệu quả?",
+    "options": [
+      "A. Yêu cầu đội phát triển tự giải quyết các dependencies mà không cần sự can thiệp từ bên ngoài.",
+      "B. Giúp đội xác định rõ các dependencies, ước lượng tác động, và phối hợp với Scrum Master để tạo điều kiện giao tiếp với các đội liên quan hoặc điều chỉnh Sprint Scope nếu cần.",
+      "C. Loại bỏ các user story có dependencies ra khỏi Sprint ngay lập tức để tránh rủi ro.",
+      "D. Chuyển giao trách nhiệm quản lý dependencies cho Product Owner vì họ là người chịu trách nhiệm về giá trị sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quản lý dependencies là một kỹ năng quan trọng ở cấp độ Advanced. BA cần chủ động xác định, phân tích tác động của dependencies và hợp tác với Scrum Master để tạo điều kiện giao tiếp và phối hợp giữa các đội, đảm bảo Sprint Goal vẫn đạt được hoặc được điều chỉnh hợp lý.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một nhóm Agile đang làm việc trên một sản phẩm có kiến trúc microservices. BA cần tạo các user story cho một tính năng mới liên quan đến nhiều service. Cách tiếp cận nào là tốt nhất để viết user story nhằm thúc đẩy sự hiểu biết chung và giảm thiểu rủi ro kỹ thuật?",
+    "options": [
+      "A. Viết một user story duy nhất bao gồm toàn bộ tính năng và tất cả các service liên quan, sau đó chia nhỏ thành các technical task.",
+      "B. Tập trung vào việc viết user story theo quan điểm người dùng cuối, và để đội phát triển tự phân tích các tác động đến từng service.",
+      "C. Viết user story theo từng service riêng lẻ, mỗi story mô tả một phần của tính năng trong một service cụ thể.",
+      "D. Viết user story theo chiều ngang (vertical slice), mỗi story cung cấp một giá trị hoàn chỉnh từ giao diện người dùng đến các service backend liên quan, dù chỉ là một phần nhỏ của tính năng tổng thể."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Viết user story theo chiều ngang (vertical slice) là cách tiếp cận tối ưu trong môi trường microservices và các hệ thống phức tạp. Nó giúp đội tập trung vào việc cung cấp giá trị end-to-end, giảm thiểu rủi ro tích hợp, và cho phép phản hồi sớm từ người dùng, đồng thời thúc đẩy sự hiểu biết chung về kiến trúc hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quá trình làm việc với một đội cross-functional, BA nhận thấy có sự thiếu nhất quán trong cách hiểu về 'Done' giữa các thành viên, đặc biệt là giữa developer và tester, dẫn đến các vấn đề chất lượng cuối Sprint. BA nên hành động như thế nào để giải quyết vấn đề này?",
+    "options": [
+      "A. Tổ chức một buổi workshop để định nghĩa lại Definition of Done (DoD) với sự tham gia của toàn bộ đội, đảm bảo mọi người đều hiểu và đồng thuận.",
+      "B. Yêu cầu Scrum Master chịu trách nhiệm chính trong việc thực thi DoD và kiểm tra chất lượng.",
+      "C. Giao nhiệm vụ cho Product Owner quyết định DoD cuối cùng để đảm bảo sự nhất quán.",
+      "D. Bỏ qua vấn đề này và tập trung vào các user story mới để đẩy nhanh tốc độ phát triển."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sự thiếu nhất quán trong DoD là nguyên nhân gốc rễ của nhiều vấn đề chất lượng. BA Advanced cần chủ động tạo điều kiện cho đội cùng nhau định nghĩa và thống nhất DoD, đảm bảo sự hiểu biết chung và cam kết từ tất cả các thành viên, đặc biệt trong đội cross-functional.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một nhóm Scrum đang gặp khó khăn trong việc duy trì tốc độ (velocity) ổn định do thường xuyên phải giải quyết các bug phát sinh từ các Sprint trước. Với vai trò BA, bạn sẽ đề xuất chiến lược nào để cân bằng giữa việc phát triển tính năng mới và xử lý nợ kỹ thuật/bug?",
+    "options": [
+      "A. Yêu cầu Product Owner ưu tiên các tính năng mới hoàn toàn, trì hoãn việc sửa bug đến khi có thời gian.",
+      "B. Đề xuất dành một phần nhỏ dung lượng Sprint (ví dụ: 10-20%) cho việc xử lý bug và nợ kỹ thuật một cách định kỳ.",
+      "C. Chỉ tập trung vào việc sửa các bug nghiêm trọng nhất, bỏ qua các bug nhỏ hơn để tiết kiệm thời gian.",
+      "D. Chuyển giao toàn bộ trách nhiệm sửa bug cho một nhóm hỗ trợ riêng biệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc liên tục phát sinh bug ảnh hưởng nghiêm trọng đến velocity và chất lượng sản phẩm. BA Advanced cần hiểu rằng việc dành một phần dung lượng Sprint cho việc xử lý bug và nợ kỹ thuật là một chiến lược bền vững để duy trì chất lượng và tốc độ phát triển ổn định về lâu dài.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một môi trường Agile, BA cần làm gì để đảm bảo các quyết định kiến trúc quan trọng được đưa ra một cách hiệu quả và phản ánh đúng nhu cầu kinh doanh, đồng thời vẫn giữ được tính linh hoạt của hệ thống?",
+    "options": [
+      "A. Tự mình đưa ra các quyết định kiến trúc dựa trên hiểu biết về kinh doanh và truyền đạt cho đội phát triển.",
+      "B. Thúc đẩy các cuộc thảo luận kiến trúc liên tục giữa đội phát triển, kiến trúc sư (nếu có) và Product Owner, đảm bảo các trade-off được hiểu rõ và cân nhắc dựa trên giá trị kinh doanh và khả năng thực thi.",
+      "C. Chuyển giao hoàn toàn trách nhiệm đưa ra quyết định kiến trúc cho kiến trúc sư hoặc trưởng nhóm kỹ thuật.",
+      "D. Yêu cầu đội phát triển chỉ tập trung vào việc triển khai các tính năng mà không cần quan tâm đến kiến trúc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA Advanced đóng vai trò quan trọng trong việc bắc cầu giữa kinh doanh và kỹ thuật. Việc thúc đẩy thảo luận đa chiều về kiến trúc, đảm bảo các trade-off được hiểu rõ và cân nhắc dựa trên giá trị kinh doanh là cần thiết để đưa ra các quyết định kiến trúc hiệu quả và linh hoạt trong Agile.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một Product Owner muốn thêm một tính năng 'must-have' vào giữa Sprint đang diễn ra, tính năng này có thể phá vỡ Sprint Goal hiện tại và yêu cầu thay đổi đáng kể về kỹ thuật. Với vai trò BA, bạn sẽ tư vấn cho Product Owner như thế nào?",
+    "options": [
+      "A. Khuyến khích Product Owner thêm tính năng này ngay lập tức để đáp ứng nhu cầu thị trường.",
+      "B. Phân tích tác động của việc thêm tính năng mới đến Sprint Goal, các user story hiện có và khả năng hoàn thành của đội, sau đó đề xuất thảo luận với đội để đưa ra quyết định chung (có thể là hủy Sprint hoặc đàm phán lại scope).",
+      "C. Tự mình thêm tính năng đó vào Sprint Backlog và thông báo cho đội phát triển.",
+      "D. Từ chối yêu cầu của Product Owner mà không giải thích lý do."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thay đổi giữa Sprint là một vấn đề nhạy cảm. BA Advanced cần có khả năng phân tích tác động, tư vấn cho Product Owner về hậu quả tiềm tàng và tạo điều kiện cho cuộc đối thoại với đội phát triển để đưa ra quyết định sáng suốt, có thể bao gồm việc hủy Sprint hoặc đàm phán lại scope một cách minh bạch.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Theo nguyên tắc Agile, 'technical excellence and good design enhance agility'. Với vai trò BA, bạn sẽ áp dụng nguyên tắc này vào việc thu thập và quản lý yêu cầu như thế nào để tối ưu hiệu năng và chất lượng sản phẩm về lâu dài?",
+    "options": [
+      "A. Chỉ tập trung vào các yêu cầu chức năng và để đội phát triển tự quyết định về thiết kế kỹ thuật.",
+      "B. Đảm bảo các yêu cầu phi chức năng (non-functional requirements - NFRs) như hiệu năng, khả năng mở rộng, bảo mật được xác định rõ ràng, ưu tiên và tích hợp vào Product Backlog như các user story hoặc tiêu chí chấp nhận.",
+      "C. Hạn chế các cuộc thảo luận về thiết kế kỹ thuật để không làm chậm quá trình thu thập yêu cầu.",
+      "D. Ưu tiên các yêu cầu dễ triển khai nhất để đạt được tốc độ giao hàng nhanh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc 'technical excellence and good design enhance agility' nhấn mạnh tầm quan trọng của chất lượng kỹ thuật. BA Advanced cần chủ động xác định NFRs, biến chúng thành các yêu cầu có thể kiểm thử và đưa vào Product Backlog, đảm bảo rằng các khía cạnh về hiệu năng, khả năng mở rộng được xem xét ngay từ đầu, góp phần vào thiết kế tốt và chất lượng sản phẩm bền vững.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi làm việc với một đội cross-functional, BA nhận thấy có sự thiếu hụt trong việc chia sẻ kiến thức kỹ thuật giữa các thành viên, dẫn đến một số user story bị tắc nghẽn khi một thành viên vắng mặt. BA nên làm gì để cải thiện tình hình này?",
+    "options": [
+      "A. Yêu cầu từng thành viên tự nghiên cứu và ghi lại kiến thức của mình.",
+      "B. Đề xuất tổ chức các buổi 'knowledge sharing' định kỳ, pairing programming hoặc mob programming để tăng cường chia sẻ kiến thức và xây dựng kỹ năng đa nhiệm cho đội.",
+      "C. Giao nhiệm vụ cho Scrum Master tìm kiếm các khóa đào tạo kỹ thuật bên ngoài cho đội.",
+      "D. Phân công các user story theo chuyên môn cứng của từng thành viên để tối ưu hiệu suất cá nhân."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong đội cross-functional, chia sẻ kiến thức là chìa khóa để đạt được tính linh hoạt và khả năng phục hồi. BA Advanced nên thúc đẩy các hoạt động như knowledge sharing, pairing/mob programming để xây dựng kỹ năng đa nhiệm (T-shaped skills) và giảm thiểu sự phụ thuộc vào cá nhân.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một buổi Sprint Review, các stakeholder bày tỏ sự thất vọng về hiệu năng của một tính năng mới, mặc dù nó đã đáp ứng tất cả các yêu cầu chức năng. Với vai trò BA, bạn sẽ làm gì để giải quyết phản hồi này và đảm bảo chất lượng sản phẩm trong tương lai?",
+    "options": [
+      "A. Giải thích rằng hiệu năng không phải là ưu tiên hàng đầu trong Sprint này và sẽ được cải thiện sau.",
+      "B. Ghi nhận phản hồi, sau đó làm việc với Product Owner và đội phát triển để xác định các yêu cầu phi chức năng (NFRs) liên quan đến hiệu năng, biến chúng thành các user story hoặc tiêu chí chấp nhận cụ thể để ưu tiên trong Backlog.",
+      "C. Yêu cầu đội phát triển ngay lập tức dừng công việc hiện tại để tối ưu hiệu năng của tính năng đó.",
+      "D. Đổ lỗi cho đội phát triển vì đã không tối ưu hiệu năng ngay từ đầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phản hồi về hiệu năng là một dấu hiệu cho thấy NFRs có thể chưa được xác định hoặc ưu tiên đúng mức. BA Advanced cần chủ động chuyển phản hồi này thành các yêu cầu cụ thể, có thể đo lường và đưa vào Backlog, đảm bảo rằng các khía cạnh chất lượng được quản lý một cách có hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi ước tính các user story có độ phức tạp kỹ thuật cao, đội phát triển thường xuyên đưa ra các ước tính rất khác nhau. Với vai trò BA, bạn sẽ làm gì để tạo điều kiện cho một buổi ước tính hiệu quả và đạt được sự đồng thuận tốt hơn?",
+    "options": [
+      "A. Yêu cầu các thành viên đưa ra ước tính cá nhân và sau đó chọn ước tính trung bình.",
+      "B. Thúc đẩy thảo luận sâu hơn về các giả định kỹ thuật, rủi ro tiềm ẩn và các phương án giải pháp có thể có cho từng user story trước khi ước tính, sử dụng các kỹ thuật như Story Mapping hoặc Spike.",
+      "C. Mời các chuyên gia kỹ thuật bên ngoài để đưa ra ước tính độc lập cho đội.",
+      "D. Yêu cầu Product Owner chia nhỏ user story thành các phần nhỏ hơn cho đến khi chúng dễ ước tính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự khác biệt lớn trong ước tính thường do thiếu hiểu biết chung về độ phức tạp kỹ thuật. BA Advanced cần tạo điều kiện cho các cuộc thảo luận sâu sắc, tập trung vào các giả định và rủi ro, sử dụng các kỹ thuật như Spike để giảm sự không chắc chắn, từ đó giúp đội đạt được sự đồng thuận và ước tính chính xác hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một buổi Backlog Refinement, Product Owner muốn ưu tiên một tính năng mới rất lớn và phức tạp, nhưng đội phát triển lo ngại về việc tích hợp với hệ thống legacy và tác động đến hiệu năng. Với vai trò BA, bạn sẽ giúp đội và PO cân bằng giữa giá trị kinh doanh và khả năng thực thi như thế nào?",
+    "options": [
+      "A. Đề xuất Product Owner trì hoãn tính năng này cho đến khi hệ thống legacy được thay thế hoàn toàn.",
+      "B. Phân tích tính năng thành các MVP (Minimum Viable Product) hoặc các 'walking skeleton' nhỏ hơn, tập trung vào việc cung cấp giá trị sớm nhất có thể, đồng thời xác định các Spike kỹ thuật để đánh giá rủi ro tích hợp và hiệu năng.",
+      "C. Yêu cầu đội phát triển tìm cách triển khai tính năng này mà không cần tích hợp với hệ thống legacy.",
+      "D. Chấp nhận rủi ro và ưu tiên tính năng này theo yêu cầu của Product Owner."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi đối mặt với các tính năng lớn và phức tạp, BA Advanced cần có khả năng phân tích và đề xuất chia nhỏ thành các MVP hoặc 'walking skeleton' để cung cấp giá trị sớm. Đồng thời, việc xác định các Spike kỹ thuật giúp đánh giá rủi ro và tác động đến hệ thống legacy, cân bằng giữa giá trị kinh doanh và khả năng thực thi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một nhóm Scrum thường xuyên gặp phải tình trạng 'rework' đáng kể sau khi một user story được đánh dấu là 'Done' do các yêu cầu bị hiểu sai hoặc thiếu sót. Trong buổi Sprint Retrospective, BA sẽ đề xuất cải tiến quy trình nào để giải quyết vấn đề này?",
+    "options": [
+      "A. Yêu cầu Product Owner viết các user story chi tiết hơn với tất cả các trường hợp biên.",
+      "B. Thúc đẩy việc tăng cường các buổi 'Three Amigos' (PO, Dev, QA) hoặc các buổi 'story grooming' tập trung để đảm bảo sự hiểu biết chung về yêu cầu và tiêu chí chấp nhận trước khi bắt đầu triển khai.",
+      "C. Giao trách nhiệm kiểm thử cuối cùng cho một nhóm QA độc lập để phát hiện lỗi sớm hơn.",
+      "D. Giới hạn số lượng user story trong mỗi Sprint để đội có nhiều thời gian hơn để làm việc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rework do hiểu sai yêu cầu là một vấn đề phổ biến. BA Advanced cần thúc đẩy các hoạt động cộng tác như 'Three Amigos' hoặc 'story grooming' sớm trong vòng đời Sprint để đảm bảo tất cả các bên (Product Owner, Developer, QA) có cùng một sự hiểu biết về yêu cầu và tiêu chí chấp nhận, từ đó giảm thiểu rework.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một môi trường Agile, vai trò của BA trong việc quản lý các yêu cầu phi chức năng (NFRs) như hiệu năng, bảo mật, khả năng mở rộng là gì?",
+    "options": [
+      "A. NFRs là trách nhiệm của đội phát triển, BA chỉ tập trung vào yêu cầu chức năng.",
+      "B. BA cần xác định, phân tích, ưu tiên NFRs, đảm bảo chúng được thể hiện rõ ràng trong Product Backlog và được kiểm thử như một phần của Definition of Done.",
+      "C. NFRs chỉ nên được xem xét ở giai đoạn thiết kế kiến trúc ban đầu và không cần cập nhật thường xuyên.",
+      "D. BA nên chuyển giao toàn bộ NFRs cho một chuyên gia bảo mật hoặc hiệu năng bên ngoài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA Advanced hiểu rằng NFRs là yếu tố quan trọng ảnh hưởng đến chất lượng và tính bền vững của sản phẩm. BA phải chủ động quản lý NFRs, đảm bảo chúng được xác định, ưu tiên và tích hợp vào quy trình phát triển, chứ không chỉ là trách nhiệm của đội kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong buổi Daily Scrum, một thành viên trong đội phát triển liên tục báo cáo các trở ngại kỹ thuật phức tạp mà không có giải pháp rõ ràng, gây ảnh hưởng đến tiến độ của nhiều user story. Với vai trò BA, bạn sẽ làm gì để hỗ trợ giải quyết vấn đề này?",
+    "options": [
+      "A. Yêu cầu thành viên đó tự mình tìm kiếm giải pháp và không làm ảnh hưởng đến Daily Scrum.",
+      "B. Sau Daily Scrum, phối hợp với Scrum Master để tạo điều kiện cho một buổi thảo luận kỹ thuật tập trung (ví dụ: một 'huddle' hoặc 'pairing session') để giúp đội cùng nhau tìm ra giải pháp hoặc đề xuất Spike.",
+      "C. Ghi nhận trở ngại và chờ đợi đến Sprint Retrospective để thảo luận.",
+      "D. Đề xuất loại bỏ các user story có liên quan đến trở ngại đó ra khỏi Sprint."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Daily Scrum không phải là nơi để giải quyết vấn đề chi tiết. BA Advanced cần nhận diện các trở ngại kỹ thuật và phối hợp với Scrum Master để tạo điều kiện cho các buổi thảo luận sâu hơn sau Daily Scrum, giúp đội giải quyết vấn đề một cách hiệu quả và duy trì tiến độ Sprint.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một đội Scrum đang trong giai đoạn 'storming' (hình thành xung đột) do các quan điểm khác nhau về giải pháp kỹ thuật cho một tính năng quan trọng, BA nên đóng vai trò gì để giúp đội vượt qua giai đoạn này?",
+    "options": [
+      "A. Tránh xa các cuộc thảo luận kỹ thuật để không làm phức tạp thêm tình hình.",
+      "B. Với vai trò là người trung gian, BA cần tạo điều kiện cho một cuộc thảo luận mở, tập trung vào việc hiểu các quan điểm khác nhau, các trade-off kỹ thuật và tác động đến giá trị kinh doanh, giúp đội tìm ra giải pháp tối ưu.",
+      "C. Hỗ trợ Product Owner đưa ra quyết định cuối cùng về giải pháp kỹ thuật.",
+      "D. Đề xuất Scrum Master áp đặt một giải pháp kỹ thuật để chấm dứt xung đột."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong giai đoạn 'storming', BA Advanced có thể đóng vai trò là người điều phối, giúp đội tập trung vào việc hiểu các quan điểm kỹ thuật, phân tích trade-off và tác động kinh doanh, từ đó thúc đẩy sự đồng thuận và tìm ra giải pháp tốt nhất cho sản phẩm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một dự án phát triển sản phẩm Agile, BA nhận thấy Product Owner thường xuyên thay đổi ưu tiên các user story trong Backlog một cách đột ngột, gây khó khăn cho việc lập kế hoạch và duy trì kiến trúc nhất quán. BA nên làm gì để hỗ trợ Product Owner và đội?",
+    "options": [
+      "A. Yêu cầu Product Owner không thay đổi ưu tiên quá thường xuyên.",
+      "B. Làm việc với Product Owner để phân tích tác động của các thay đổi ưu tiên, giúp họ hiểu tầm quan trọng của việc duy trì một tầm nhìn sản phẩm ổn định và cân bằng giữa tính linh hoạt và sự ổn định của kiến trúc.",
+      "C. Chấp nhận mọi thay đổi ưu tiên của Product Owner vì họ là người chịu trách nhiệm về sản phẩm.",
+      "D. Đề xuất đội phát triển bỏ qua các thay đổi ưu tiên và tập trung vào các user story đã được cam kết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA Advanced cần chủ động làm việc với Product Owner để giúp họ hiểu rõ tác động của việc thay đổi ưu tiên liên tục, không chỉ về mặt tiến độ mà còn về mặt kiến trúc và nợ kỹ thuật. Mục tiêu là giúp PO đưa ra các quyết định ưu tiên có cân nhắc hơn, duy trì một tầm nhìn sản phẩm ổn định hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một nhóm Scrum đang gặp khó khăn trong việc giao tiếp và cộng tác hiệu quả với một nhóm khác phụ trách một module kỹ thuật quan trọng mà họ có dependency. Với vai trò BA, bạn sẽ làm gì để cải thiện tình hình?",
+    "options": [
+      "A. Yêu cầu Scrum Master của cả hai nhóm tổ chức các cuộc họp hàng tuần để cập nhật tiến độ.",
+      "B. Đề xuất các buổi 'sync-up' kỹ thuật định kỳ giữa các thành viên liên quan từ cả hai nhóm, sử dụng các công cụ trực quan hóa dependency và thúc đẩy việc chia sẻ thông tin chủ động.",
+      "C. Chuyển giao toàn bộ trách nhiệm giao tiếp cho Product Owner của từng nhóm.",
+      "D. Giảm thiểu các dependency bằng cách thiết kế lại toàn bộ hệ thống để mỗi nhóm hoạt động độc lập."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giao tiếp và cộng tác hiệu quả giữa các nhóm có dependency là rất quan trọng. BA Advanced cần thúc đẩy các buổi 'sync-up' kỹ thuật, sử dụng các công cụ quản lý dependency và khuyến khích chia sẻ thông tin chủ động để đảm bảo sự phối hợp nhịp nhàng và giảm thiểu rủi ro.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi viết các tiêu chí chấp nhận (Acceptance Criteria) cho một user story, BA cần lưu ý điều gì để đảm bảo chúng không chỉ đáp ứng yêu cầu kinh doanh mà còn hỗ trợ đội phát triển trong việc đưa ra các quyết định kiến trúc và kiểm thử hiệu quả?",
+    "options": [
+      "A. Chỉ tập trung vào các kết quả hành vi của người dùng, bỏ qua các chi tiết kỹ thuật.",
+      "B. Viết các tiêu chí chấp nhận càng chi tiết càng tốt, bao gồm cả các giải pháp kỹ thuật cụ thể.",
+      "C. Đảm bảo các tiêu chí chấp nhận là rõ ràng, có thể kiểm thử, và đôi khi bao gồm các yêu cầu phi chức năng (NFRs) hoặc các ràng buộc kỹ thuật quan trọng ảnh hưởng đến kiến trúc, được thảo luận và đồng thuận với đội.",
+      "D. Để đội phát triển tự viết các tiêu chí chấp nhận cho các user story kỹ thuật."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tiêu chí chấp nhận không chỉ là về kinh doanh mà còn là cầu nối với kỹ thuật. BA Advanced cần viết ACs rõ ràng, kiểm thử được, và nếu cần, tích hợp các NFRs hoặc ràng buộc kỹ thuật quan trọng sau khi thảo luận với đội, giúp đội hiểu rõ hơn về kỳ vọng chất lượng và đưa ra quyết định thiết kế phù hợp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một buổi Sprint Review, các stakeholder bày tỏ mong muốn về một tính năng đột phá, nhưng việc triển khai tính năng này đòi hỏi một sự thay đổi lớn về kiến trúc và có thể làm chậm tiến độ đáng kể. Với vai trò BA, bạn sẽ làm gì để quản lý kỳ vọng và đưa ra hướng đi phù hợp?",
+    "options": [
+      "A. Hứa với stakeholder rằng tính năng sẽ được triển khai trong các Sprint tiếp theo.",
+      "B. Thúc đẩy một cuộc thảo luận mở với stakeholder, Product Owner và đội phát triển để phân tích giá trị kinh doanh so với chi phí và rủi ro kỹ thuật, đề xuất các MVP hoặc cách tiếp cận từng bước để kiểm tra giả định và giảm thiểu rủi ro.",
+      "C. Từ chối yêu cầu của stakeholder vì nó quá phức tạp và rủi ro.",
+      "D. Yêu cầu đội phát triển ngay lập tức bắt đầu nghiên cứu giải pháp cho tính năng đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA Advanced cần có khả năng quản lý kỳ vọng của stakeholder khi đối mặt với các yêu cầu đột phá nhưng rủi ro cao. Việc tạo điều kiện cho cuộc thảo luận đa chiều để phân tích trade-off, đề xuất các MVP hoặc cách tiếp cận từng bước là chìa khóa để đưa ra quyết định sáng suốt, cân bằng giữa đổi mới và khả năng thực thi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một nhóm Scrum đang gặp khó khăn trong việc hiểu rõ tầm nhìn sản phẩm dài hạn và cách các user story hiện tại đóng góp vào tầm nhìn đó, dẫn đến việc thiếu động lực và các quyết định kỹ thuật không nhất quán. Với vai trò BA, bạn sẽ làm gì để cải thiện tình hình?",
+    "options": [
+      "A. Yêu cầu Product Owner trình bày lại tầm nhìn sản phẩm một cách chi tiết hơn trong mỗi Sprint Planning.",
+      "B. Tổ chức các buổi workshop định kỳ (ví dụ: Story Mapping, Product Vision Board) với sự tham gia của toàn đội và Product Owner để trực quan hóa tầm nhìn, liên kết các user story với mục tiêu kinh doanh và kiến trúc tổng thể.",
+      "C. Đề xuất Scrum Master tăng cường các hoạt động gắn kết đội để nâng cao tinh thần.",
+      "D. Tập trung vào việc viết các user story chi tiết hơn để đội không cần phải hiểu tầm nhìn tổng thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sự thiếu hiểu biết về tầm nhìn sản phẩm có thể ảnh hưởng đến động lực và các quyết định kỹ thuật. BA Advanced cần chủ động sử dụng các kỹ thuật như Story Mapping để trực quan hóa tầm nhìn, giúp đội hiểu rõ hơn về bức tranh lớn và cách công việc của họ đóng góp vào mục tiêu chung, từ đó đưa ra các quyết định kỹ thuật nhất quán hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một buổi Sprint Retrospective, đội phát triển bày tỏ sự không hài lòng với việc các user story thường xuyên thay đổi yêu cầu sau khi Sprint đã bắt đầu, dẫn đến việc phải làm lại nhiều. BA nên làm gì để giải quyết vấn đề này?",
+    "options": [
+      "A. Yêu cầu đội phát triển chấp nhận sự thay đổi là một phần của Agile.",
+      "B. Phân tích nguyên nhân gốc rễ của các thay đổi yêu cầu (ví dụ: thiếu refinement, thiếu sự tham gia của stakeholder). Sau đó, đề xuất các cải tiến quy trình như tăng cường Backlog Refinement, cải thiện giao tiếp với stakeholder, hoặc xem xét lại cách quản lý kỳ vọng.",
+      "C. Đề xuất Product Owner khóa các user story ngay khi Sprint Planning kết thúc.",
+      "D. Giảm số lượng user story trong mỗi Sprint để đội có nhiều thời gian hơn để xử lý thay đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thay đổi yêu cầu giữa Sprint là một vấn đề nghiêm trọng. BA Advanced cần phân tích nguyên nhân gốc rễ, không chỉ chấp nhận nó. Đề xuất cải tiến quy trình như tăng cường refinement và giao tiếp là cách tiếp cận chủ động để giảm thiểu sự thay đổi không mong muốn và cải thiện sự ổn định của Sprint.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Theo nguyên tắc Agile, 'The best architectures, requirements, and designs emerge from self-organizing teams'. Với vai trò BA, bạn sẽ thúc đẩy nguyên tắc này trong đội ngũ như thế nào để tối ưu hóa kết quả?",
+    "options": [
+      "A. Tự mình đưa ra các yêu cầu chi tiết và thiết kế kiến trúc, sau đó trình bày cho đội.",
+      "B. Tạo điều kiện cho các cuộc thảo luận mở và cộng tác sâu sắc giữa các thành viên trong đội (bao gồm cả các vai trò kỹ thuật) để họ tự khám phá, phân tích và đưa ra các giải pháp kiến trúc và thiết kế tốt nhất cho các yêu cầu, đồng thời cung cấp thông tin kinh doanh cần thiết.",
+      "C. Chỉ tập trung vào việc thu thập yêu cầu từ Product Owner và chuyển giao cho đội.",
+      "D. Yêu cầu Scrum Master chịu trách nhiệm chính trong việc định hình kiến trúc và thiết kế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc này nhấn mạnh sức mạnh của đội tự tổ chức. BA Advanced không chỉ là người truyền đạt yêu cầu mà còn là người tạo điều kiện (facilitator) cho đội tự khám phá và đưa ra các quyết định tốt nhất về kiến trúc và thiết kế, bằng cách cung cấp bối cảnh kinh doanh và hỗ trợ các cuộc thảo luận kỹ thuật sâu sắc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một môi trường doanh nghiệp lớn đang áp dụng SAFe (Scaled Agile Framework), vai trò Business Analyst (BA) cần làm gì để đảm bảo sự liên kết chiến lược (strategic alignment) giữa các nhóm phát triển và tầm nhìn tổng thể của tổ chức?",
+    "options": [
+      "A. Tập trung vào việc viết User Story chi tiết cho từng nhóm, đảm bảo chúng được hiểu rõ và thực hiện đúng.",
+      "B. Tham gia tích cực vào các buổi PI Planning (Program Increment Planning), làm việc với Product Management và Solution Management để phân rã Epics thành Features, đảm bảo Features phản ánh mục tiêu kinh doanh cấp cao và giá trị khách hàng.",
+      "C. Đảm bảo rằng mỗi Sprint Backlog của từng nhóm đều được ưu tiên dựa trên nỗ lực ước tính và khả năng của nhóm.",
+      "D. Tổ chức các buổi Daily Scrum cho nhiều nhóm để đồng bộ hóa tiến độ và giải quyết các vấn đề kỹ thuật chung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong SAFe, BA cấp độ Expert cần có khả năng tư duy hệ thống và chiến lược. Việc tham gia PI Planning và phân rã Epics/Features giúp BA đảm bảo các yêu cầu cấp thấp hơn luôn được liên kết với tầm nhìn và mục tiêu chiến lược của doanh nghiệp, là cầu nối giữa chiến lược và thực thi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một BA được giao nhiệm vụ phân tích một Epic lớn, phức tạp liên quan đến việc tái cấu trúc kiến trúc hệ thống cốt lõi để cải thiện hiệu suất và khả năng mở rộng. Epic này không mang lại giá trị kinh doanh trực tiếp ngay lập tức mà chủ yếu giải quyết Technical Debt. BA nên tiếp cận việc phân rã và ưu tiên Epic này như thế nào trong Product Backlog?",
+    "options": [
+      "A. Phân rã Epic thành các User Story nhỏ hơn tập trung vào việc tạo ra tính năng mới có thể thấy được bởi người dùng cuối, để đảm bảo giá trị kinh doanh rõ ràng.",
+      "B. Ưu tiên Epic này thấp hơn các tính năng mang lại doanh thu trực tiếp, chờ đến khi có thời gian và nguồn lực dư thừa để xử lý Technical Debt.",
+      "C. Làm việc với Kiến trúc sư (Architect) và các bên liên quan để định lượng rủi ro kinh doanh và chi phí cơ hội của việc trì hoãn xử lý Technical Debt. Sau đó, phân rã Epic thành các Enabler Story hoặc Spike để khám phá giải pháp và tích hợp chúng vào Product Backlog cùng với các tính năng kinh doanh, trình bày rõ ràng giá trị dài hạn và rủi ro nếu không thực hiện.",
+      "D. Báo cáo cho Product Owner rằng Epic này quá lớn và mơ hồ, yêu cầu họ cung cấp một Epic rõ ràng hơn với giá trị kinh doanh cụ thể."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert cần hiểu rõ tầm quan trọng của Technical Debt và cách định lượng tác động của nó. Việc phân rã thành Enabler Story/Spike và làm rõ giá trị dài hạn, rủi ro nếu không thực hiện, là cách tiếp cận chiến lược để quản lý Technical Debt và tích hợp nó vào luồng giá trị tổng thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong quá trình Sprint Execution, BA phát hiện ra một sự phụ thuộc (dependency) nghiêm trọng giữa tính năng mà nhóm của mình đang phát triển và một dịch vụ cốt lõi đang được phát triển bởi một nhóm khác. Nhóm kia đang gặp phải sự chậm trễ đáng kể, đe dọa đến mục tiêu Sprint của cả hai nhóm và lịch trình phát hành tổng thể. BA nên hành động như thế nào?",
+    "options": [
+      "A. Báo cáo vấn đề cho Scrum Master của nhóm mình và chờ đợi Scrum Master giải quyết.",
+      "B. Trực tiếp liên hệ với các thành viên phát triển của nhóm phụ thuộc để thúc giục họ hoàn thành công việc nhanh hơn.",
+      "C. Chủ động làm việc với Scrum Master và Product Owner của cả hai nhóm để đánh giá tác động, khám phá các giải pháp thay thế (ví dụ: thay đổi phạm vi, tìm giải pháp tạm thời, điều chỉnh lịch trình) và leo thang vấn đề lên cấp quản lý nếu cần thiết, đồng thời đảm bảo thông tin được minh bạch đến các bên liên quan.",
+      "D. Ưu tiên lại các User Story trong Sprint Backlog của nhóm mình để tránh sự phụ thuộc đó, bỏ qua tính năng bị ảnh hưởng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert không chỉ nhận diện vấn đề mà còn chủ động trong việc giải quyết các phụ thuộc phức tạp, đặc biệt là khi chúng ảnh hưởng đến nhiều nhóm và mục tiêu chiến lược. Việc phối hợp với các Scrum Master, Product Owner và leo thang khi cần thiết, cùng với việc truyền thông minh bạch, là cần thiết để quản lý rủi ro hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Hai Product Owner (PO) từ các sản phẩm khác nhau trong cùng một tổ chức đều yêu cầu nhóm phát triển của bạn xây dựng một thành phần chung. Tuy nhiên, ưu tiên và yêu cầu chi tiết của họ cho thành phần này lại mâu thuẫn. Là một BA, bạn sẽ làm gì để giải quyết tình huống này và đảm bảo nhóm có thể tiến lên?",
+    "options": [
+      "A. Yêu cầu nhóm phát triển tự quyết định xem nên ưu tiên yêu cầu của PO nào trước.",
+      "B. Phân tích sâu hơn các yêu cầu của cả hai PO, xác định các điểm chung và khác biệt, sau đó tổ chức một buổi làm việc chung (facilitated workshop) với cả hai PO và các bên liên quan cấp cao để làm rõ tầm nhìn, ưu tiên kinh doanh tổng thể và tìm kiếm giải pháp dung hòa hoặc một lộ trình phát triển theo giai đoạn.",
+      "C. Báo cáo tình hình lên quản lý cấp cao và chờ đợi quyết định từ họ.",
+      "D. Chọn yêu cầu của PO có ảnh hưởng lớn hơn trong tổ chức và bỏ qua yêu cầu của PO còn lại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cấp độ Expert cần có kỹ năng điều phối, đàm phán và phân tích xung đột ở cấp độ chiến lược. Việc chủ động phân tích, tổ chức buổi làm việc và tìm kiếm giải pháp dung hòa dựa trên giá trị kinh doanh tổng thể là cách tiếp cận hiệu quả, tránh việc leo thang không cần thiết và đảm bảo sự hợp tác giữa các PO.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh Agile, nguyên tắc 'Optimize the whole' (Tối ưu hóa toàn bộ) từ Lean Thinking có ý nghĩa đặc biệt quan trọng đối với BA cấp độ Expert. Điều này thể hiện rõ nhất qua hành động nào của BA?",
+    "options": [
+      "A. Đảm bảo mỗi User Story được viết rõ ràng, súc tích và có thể kiểm thử được.",
+      "B. Tập trung vào việc loại bỏ lãng phí (waste) trong toàn bộ chuỗi giá trị từ ý tưởng đến phân phối sản phẩm, bao gồm cả các quy trình liên phòng ban và các hệ thống phụ thuộc, để tối đa hóa dòng chảy giá trị cho khách hàng cuối.",
+      "C. Ưu tiên các tính năng mang lại lợi nhuận cao nhất cho doanh nghiệp trong ngắn hạn.",
+      "D. Đảm bảo rằng các cuộc họp Daily Scrum diễn ra đúng giờ và hiệu quả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc 'Optimize the whole' trong Lean Thinking yêu cầu BA nhìn xa hơn phạm vi nhóm hoặc sản phẩm cụ thể, tập trung vào việc tối ưu hóa toàn bộ chuỗi giá trị (value stream) của tổ chức. Điều này bao gồm việc nhận diện và loại bỏ các nút thắt cổ chai, lãng phí và sự kém hiệu quả xuyên suốt các phòng ban và quy trình để mang lại giá trị tối đa cho khách hàng cuối.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một BA được yêu cầu ưu tiên một Product Backlog chứa cả các tính năng mới mang lại doanh thu trực tiếp và các cải tiến hạ tầng quan trọng (ví dụ: nâng cấp bảo mật, tối ưu hóa cơ sở dữ liệu) không thấy được bởi người dùng cuối nhưng cần thiết cho sự ổn định và hiệu suất dài hạn. Nguồn lực có hạn. BA nên tiếp cận việc ưu tiên này như thế nào để tối đa hóa giá trị chiến lược?",
+    "options": [
+      "A. Luôn ưu tiên các tính năng mới mang lại doanh thu trực tiếp để chứng minh giá trị kinh doanh nhanh chóng.",
+      "B. Ưu tiên các cải tiến hạ tầng trước để đảm bảo nền tảng ổn định, sau đó mới phát triển tính năng mới.",
+      "C. Phân tích rủi ro của việc trì hoãn các cải tiến hạ tầng (ví dụ: rủi ro bảo mật, giảm hiệu suất, chi phí khắc phục trong tương lai) và so sánh chúng với lợi ích của các tính năng mới. Làm việc với Product Owner và các bên liên quan để tìm ra sự cân bằng, có thể bằng cách xen kẽ các Enabler Story với các Feature Story hoặc tách chúng thành một luồng công việc riêng nếu cần, đảm bảo sự liên kết với mục tiêu chiến lược dài hạn.",
+      "D. Để Product Owner tự quyết định hoàn toàn vì đây là trách nhiệm của họ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert cần có khả năng phân tích rủi ro và lợi ích ở cấp độ chiến lược, không chỉ tập trung vào giá trị ngắn hạn. Việc đánh giá tác động của Technical Debt và cải tiến hạ tầng, sau đó làm việc với Product Owner để đạt được sự cân bằng và liên kết với mục tiêu dài hạn, là chìa khóa để tối ưu hóa giá trị tổng thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong giữa Sprint, một sự kiện thị trường lớn (ví dụ: thay đổi quy định pháp luật đột ngột, đối thủ ra mắt sản phẩm đột phá) khiến một tính năng quan trọng đang được phát triển trở nên lỗi thời hoặc không còn phù hợp với chiến lược kinh doanh. Là một BA, bạn sẽ làm gì?",
+    "options": [
+      "A. Tiếp tục phát triển tính năng đó theo kế hoạch Sprint ban đầu để tránh làm gián đoạn nhóm.",
+      "B. Ngay lập tức ngừng tất cả công việc của nhóm và chờ đợi hướng dẫn mới từ Product Owner.",
+      "C. Phối hợp chặt chẽ với Product Owner và các bên liên quan chính để đánh giá tác động chiến lược, xác định các lựa chọn thay thế (ví dụ: điều chỉnh tính năng, loại bỏ khỏi Sprint, thay thế bằng tính năng ưu tiên cao hơn) và đề xuất một kế hoạch hành động khẩn cấp cho nhóm, đảm bảo sự minh bạch và thích ứng nhanh chóng.",
+      "D. Đề xuất nhóm tự điều chỉnh tính năng để phù hợp với tình hình mới mà không cần sự can thiệp của Product Owner."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert cần có khả năng phản ứng nhanh và linh hoạt trước các thay đổi lớn từ thị trường, đánh giá tác động chiến lược và phối hợp với các bên liên quan để đưa ra quyết định kịp thời. Việc đề xuất kế hoạch hành động và đảm bảo sự thích ứng là rất quan trọng trong môi trường Agile.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tổ chức của bạn đang khởi động một sáng kiến chuyển đổi số quy mô lớn, liên quan đến nhiều phòng ban và sản phẩm khác nhau. Với vai trò BA cấp độ Expert, bạn sẽ đề xuất phương pháp nào để đo lường thành công và giá trị của sáng kiến này, vượt ra ngoài các chỉ số hoàn thành Sprint thông thường?",
+    "options": [
+      "A. Tập trung vào số lượng User Story được hoàn thành mỗi Sprint và tốc độ (velocity) của các nhóm.",
+      "B. Xác định và theo dõi các chỉ số kinh doanh chiến lược (ví dụ: tăng trưởng doanh thu, giảm chi phí vận hành, cải thiện sự hài lòng của khách hàng, thời gian đưa ra thị trường) thông qua các Khóa kết quả (Key Results) của OKRs (Objectives and Key Results) hoặc KPIs (Key Performance Indicators) được liên kết trực tiếp với mục tiêu tổng thể của sáng kiến, đồng thời thiết lập các vòng lặp phản hồi định kỳ với các bên liên quan cấp cao.",
+      "C. Đảm bảo rằng tất cả các tài liệu yêu cầu được phê duyệt bởi tất cả các bên liên quan trước khi bắt đầu phát triển.",
+      "D. Đo lường mức độ tuân thủ quy trình Agile của các nhóm thông qua các cuộc khảo sát nội bộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cấp độ Expert cần có khả năng tư duy chiến lược và đo lường giá trị ở cấp độ doanh nghiệp. Việc sử dụng OKRs/KPIs liên kết với mục tiêu chiến lược và thiết lập vòng lặp phản hồi giúp đánh giá tác động thực sự của sáng kiến chuyển đổi số, vượt ra ngoài các chỉ số hoạt động của nhóm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một tổ chức truyền thống đang cố gắng áp dụng Agile, BA nhận thấy rằng một số quản lý cấp cao vẫn yêu cầu các kế hoạch dự án chi tiết với phạm vi và thời gian cố định cho 12 tháng tới, mâu thuẫn trực tiếp với nguyên tắc Agile về tính thích ứng và phản hồi. BA nên làm gì để thúc đẩy sự thay đổi tư duy này?",
+    "options": [
+      "A. Từ chối yêu cầu của quản lý cấp cao và khẳng định rằng Agile không hoạt động theo cách đó.",
+      "B. Cung cấp cho họ một kế hoạch dự án chi tiết như yêu cầu, sau đó âm thầm làm việc theo Agile.",
+      "C. Tổ chức các buổi đào tạo và coaching cho quản lý cấp cao về các nguyên tắc và lợi ích của Agile, đặc biệt là cách Agile quản lý rủi ro và thích ứng với sự thay đổi để tối đa hóa giá trị. Đề xuất các phương pháp lập kế hoạch linh hoạt hơn như Product Roadmapping, Release Planning dựa trên giá trị và minh bạch hóa tiến độ thông qua các chỉ số Agile.",
+      "D. Báo cáo cho Scrum Master hoặc Agile Coach để họ giải quyết vấn đề này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert đóng vai trò quan trọng trong việc thúc đẩy thay đổi văn hóa và tư duy. Thay vì đối đầu, việc giáo dục, coaching và đề xuất các giải pháp thay thế phù hợp với Agile nhưng vẫn đáp ứng nhu cầu thông tin của quản lý là cách tiếp cận hiệu quả để quản lý sự thay đổi và xây dựng sự đồng thuận.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi làm việc với các tính năng phức tạp, có nhiều phụ thuộc và yêu cầu chất lượng cao, BA cấp độ Expert nên sử dụng kỹ thuật nào để đảm bảo các tiêu chí chấp nhận (acceptance criteria) được xác định rõ ràng, có thể kiểm thử được và phản ánh đúng hành vi mong muốn của hệ thống?",
+    "options": [
+      "A. Chỉ viết các tiêu chí chấp nhận dưới dạng danh sách gạch đầu dòng đơn giản để dễ hiểu.",
+      "B. Sử dụng kỹ thuật Behavior-Driven Development (BDD) với cú pháp Gherkin (Given-When-Then) để mô tả các kịch bản hành vi mong muốn. Làm việc chặt chẽ với nhóm phát triển và QA để tinh chỉnh các kịch bản này, đảm bảo chúng bao quát các trường hợp biên và ngoại lệ, đồng thời có thể tự động hóa kiểm thử.",
+      "C. Để nhóm QA tự mình định nghĩa các tiêu chí chấp nhận dựa trên User Story.",
+      "D. Đính kèm các tài liệu thiết kế chi tiết (ví dụ: UML diagrams) vào User Story và coi đó là tiêu chí chấp nhận."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BDD với cú pháp Gherkin là một kỹ thuật mạnh mẽ giúp BA, Developers và QA cộng tác để định nghĩa các yêu cầu dưới dạng hành vi có thể kiểm thử được. Đối với BA cấp độ Expert, việc sử dụng BDD không chỉ giúp làm rõ yêu cầu mà còn thúc đẩy sự hiểu biết chung và hỗ trợ tự động hóa kiểm thử, giảm thiểu lỗi và tăng chất lượng sản phẩm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một tổ chức lớn với nhiều nhóm Scrum làm việc trên các sản phẩm phụ thuộc lẫn nhau, BA cấp độ Expert cần đóng góp như thế nào để cải thiện hiệu quả của các buổi Retrospective ở cấp độ chương trình/dự án (program/portfolio level)?",
+    "options": [
+      "A. Đảm bảo rằng mỗi nhóm Scrum tổ chức Retrospective của riêng mình một cách đều đặn và hiệu quả.",
+      "B. Tập trung vào việc thu thập các vấn đề kỹ thuật từ các nhóm và trình bày chúng tại buổi Retrospective chung.",
+      "C. Phối hợp với các Scrum Master và Agile Coach để thiết kế và điều phối các buổi Retrospective liên nhóm (cross-team retrospectives) hoặc Retrospective cấp độ chương trình. Tập trung vào việc xác định các rào cản hệ thống, các phụ thuộc chưa được giải quyết và các cơ hội cải tiến quy trình làm việc giữa các nhóm, sau đó đề xuất các hành động cụ thể và theo dõi việc thực hiện.",
+      "D. Chỉ tham gia Retrospective của nhóm mình và cung cấp phản hồi về các User Story."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert cần có khả năng nhìn nhận vấn đề ở cấp độ hệ thống và tổ chức. Việc thiết kế và điều phối các Retrospective liên nhóm giúp xác định các vấn đề gốc rễ vượt ra ngoài phạm vi một nhóm, thúc đẩy cải tiến quy trình làm việc và sự hợp tác giữa các nhóm để tối ưu hóa dòng chảy giá trị tổng thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn là BA cho một dự án phức tạp với các nhóm phát triển được phân bổ trên nhiều múi giờ và nền văn hóa khác nhau. Làm thế nào bạn có thể đảm bảo rằng các yêu cầu được hiểu rõ ràng và giảm thiểu rủi ro hiểu lầm do rào cản địa lý và văn hóa?",
+    "options": [
+      "A. Gửi email tài liệu yêu cầu chi tiết và chờ đợi các câu hỏi.",
+      "B. Tổ chức các cuộc họp trực tuyến cố định vào một thời điểm thuận tiện cho tất cả mọi người, sử dụng các công cụ cộng tác trực quan (ví dụ: bảng trắng điện tử, công cụ mô hình hóa) và thường xuyên xác nhận sự hiểu biết thông qua các ví dụ cụ thể, BDD, và các buổi 'Show & Tell' sớm. Đồng thời, nhận thức và tôn trọng sự khác biệt văn hóa trong giao tiếp.",
+      "C. Chỉ làm việc với các trưởng nhóm (team leads) ở mỗi địa điểm để họ truyền đạt yêu cầu đến nhóm của mình.",
+      "D. Yêu cầu tất cả các thành viên nhóm phải có mặt tại cùng một địa điểm trong giai đoạn khởi động dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cấp độ Expert cần có kỹ năng giao tiếp và điều phối trong môi trường phân tán. Việc sử dụng kết hợp các công cụ, phương pháp trực quan, xác nhận liên tục và nhạy cảm với văn hóa là chìa khóa để đảm bảo sự hiểu biết chung về yêu cầu và giảm thiểu rủi ro hiểu lầm trong các nhóm toàn cầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một BA cấp độ Expert nhận thấy rằng Product Backlog của tổ chức đang ngày càng chứa nhiều 'Technical Debt' (nợ kỹ thuật) khiến việc phát triển tính năng mới trở nên chậm chạp và tốn kém hơn. Làm thế nào BA có thể thuyết phục Product Owner và các bên liên quan cấp cao đầu tư vào việc giải quyết Technical Debt?",
+    "options": [
+      "A. Đơn giản là thêm các User Story về Technical Debt vào Backlog và chờ Product Owner ưu tiên chúng.",
+      "B. Trình bày một phân tích định lượng về tác động của Technical Debt lên chi phí phát triển, thời gian đưa ra thị trường, rủi ro bảo mật và sự hài lòng của khách hàng. Đề xuất các lựa chọn chiến lược để giảm Technical Debt, ví dụ: phân bổ một tỷ lệ phần trăm Sprint cho Enabler Story, hoặc lập kế hoạch refactoring như một phần của tính năng mới, và làm rõ lợi ích dài hạn của việc đầu tư này.",
+      "C. Yêu cầu nhóm phát triển tự giải quyết Technical Debt trong thời gian rảnh rỗi của họ.",
+      "D. Đề xuất một Sprint hoàn toàn dành cho việc giải quyết Technical Debt mà không có tính năng mới nào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cấp độ Expert cần có khả năng định lượng tác động kinh doanh của các vấn đề kỹ thuật. Bằng cách trình bày phân tích định lượng về chi phí và rủi ro của Technical Debt, BA có thể xây dựng một trường hợp kinh doanh mạnh mẽ để thuyết phục các bên liên quan đầu tư vào việc giải quyết nó, liên kết với các mục tiêu chiến lược dài hạn của tổ chức.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Product Backlog của bạn đang trở nên quá lớn, khó quản lý và dường như đã mất đi sự liên kết rõ ràng với tầm nhìn và mục tiêu sản phẩm ban đầu. Là một BA, bạn sẽ làm gì để khắc phục tình trạng này?",
+    "options": [
+      "A. Tiếp tục thêm các yêu cầu mới vào Backlog và hy vọng Product Owner sẽ xử lý việc ưu tiên.",
+      "B. Tổ chức một buổi làm việc 'Backlog Grooming' hoặc 'Story Mapping' với Product Owner và các bên liên quan chính để xem xét lại tầm nhìn sản phẩm, xác định lại các Epic và Feature quan trọng nhất, loại bỏ các mục không còn phù hợp, gộp các mục tương tự và sắp xếp lại Backlog dựa trên giá trị kinh doanh và chiến lược sản phẩm.",
+      "C. Yêu cầu nhóm phát triển tự dọn dẹp Backlog và loại bỏ các User Story cũ.",
+      "D. Chia Backlog thành nhiều Backlog nhỏ hơn cho từng nhóm để dễ quản lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cấp độ Expert cần chủ động trong việc quản lý và tinh chỉnh Product Backlog ở cấp độ chiến lược. Việc tổ chức các buổi làm việc như Story Mapping giúp tái thiết lập tầm nhìn, sắp xếp lại các yêu cầu theo giá trị, và loại bỏ các mục không còn phù hợp, đảm bảo Backlog luôn là một công cụ sống động và có ý nghĩa.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một BA cấp độ Expert được yêu cầu cung cấp một dự báo đáng tin cậy về thời điểm một bộ tính năng phức tạp có thể được phát hành, mặc dù yêu cầu chi tiết vẫn đang phát triển và có nhiều sự không chắc chắn. BA nên sử dụng phương pháp nào để đưa ra dự báo và quản lý kỳ vọng của các bên liên quan?",
+    "options": [
+      "A. Đưa ra một ngày phát hành cố định dựa trên ước tính ban đầu của nhóm.",
+      "B. Sử dụng các kỹ thuật dự báo dựa trên dữ liệu lịch sử của nhóm (ví dụ: Monte Carlo simulation, Throughput charts) để cung cấp một dải ngày phát hành có xác suất. Thường xuyên cập nhật dự báo khi có thông tin mới và minh bạch hóa các giả định và rủi ro liên quan đến dự báo với các bên liên quan.",
+      "C. Yêu cầu nhóm phát triển làm việc thêm giờ để đảm bảo đạt được một ngày phát hành sớm nhất có thể.",
+      "D. Từ chối đưa ra dự báo vì yêu cầu chưa rõ ràng và mọi thứ có thể thay đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cấp độ Expert cần có khả năng xử lý sự không chắc chắn và đưa ra dự báo dựa trên bằng chứng thực nghiệm. Các kỹ thuật dự báo xác suất như Monte Carlo simulation giúp cung cấp một cái nhìn thực tế hơn về các kịch bản phát hành có thể xảy ra, đồng thời việc minh bạch hóa các giả định và rủi ro là chìa khóa để quản lý kỳ vọng của các bên liên quan.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Là một BA cấp độ Expert, bạn nhận thấy rằng có những nút thắt cổ chai (bottlenecks) và sự kém hiệu quả lặp đi lặp lại trong quy trình từ ý tưởng đến phân phối sản phẩm, ảnh hưởng đến nhiều nhóm và sản phẩm khác nhau. Bạn sẽ làm gì để xác định và giải quyết các vấn đề hệ thống này?",
+    "options": [
+      "A. Chỉ tập trung vào việc tối ưu hóa quy trình của nhóm mình.",
+      "B. Tổ chức các cuộc họp riêng với từng nhóm để thu thập vấn đề và sau đó trình bày chúng cho Product Owner.",
+      "C. Tiến hành phân tích chuỗi giá trị (Value Stream Mapping) với sự tham gia của các bên liên quan từ các phòng ban khác nhau (ví dụ: kinh doanh, phát triển, vận hành, pháp lý) để trực quan hóa toàn bộ quy trình, xác định các điểm lãng phí, chậm trễ và các nút thắt. Sau đó, đề xuất các cải tiến quy trình ở cấp độ hệ thống và hỗ trợ triển khai chúng.",
+      "D. Đề nghị thuê một chuyên gia tư vấn bên ngoài để giải quyết các vấn đề quy trình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert cần có khả năng phân tích và tối ưu hóa quy trình ở cấp độ doanh nghiệp. Value Stream Mapping là một công cụ mạnh mẽ để trực quan hóa toàn bộ chuỗi giá trị, nhận diện lãng phí và nút thắt, từ đó đề xuất các cải tiến hệ thống giúp tăng hiệu quả và dòng chảy giá trị tổng thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Các khung làm việc Agile mở rộng (Scaled Agile Frameworks) như SAFe, LeSS, Nexus, Scrum@Scale đều chia sẻ một số nguyên tắc cốt lõi để quản lý sự phức tạp của việc phát triển sản phẩm ở quy mô lớn. Nguyên tắc nào sau đây là quan trọng nhất mà BA cấp độ Expert cần hiểu rõ khi làm việc trong môi trường này?",
+    "options": [
+      "A. Mỗi nhóm Scrum phải hoàn toàn tự trị và không có sự phụ thuộc nào vào các nhóm khác.",
+      "B. Các khung làm việc này đều tập trung vào việc tạo ra một Product Backlog duy nhất, được ưu tiên rõ ràng và liên kết với tầm nhìn sản phẩm tổng thể, đồng thời tối ưu hóa sự phối hợp và dòng chảy giá trị giữa các nhóm phụ thuộc.",
+      "C. Yêu cầu tất cả các nhóm phải sử dụng cùng một bộ công cụ quản lý dự án.",
+      "D. Chỉ áp dụng cho các tổ chức có quy mô nhỏ và trung bình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc dù mỗi khung làm việc có những điểm khác biệt, nhưng một điểm chung cốt lõi của tất cả các Scaled Agile Frameworks là tập trung vào việc quản lý một Product Backlog thống nhất, được ưu tiên dựa trên giá trị kinh doanh và đảm bảo sự phối hợp hiệu quả giữa các nhóm để tối ưu hóa dòng chảy giá trị tổng thể. BA cấp độ Expert cần hiểu rõ cách thức này để đóng góp vào sự thành công ở quy mô lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một tính năng mới được đề xuất cho sản phẩm của bạn, nhưng nó liên quan đến việc xử lý dữ liệu nhạy cảm và phải tuân thủ nhiều quy định pháp lý phức tạp từ các phòng ban khác nhau (ví dụ: pháp lý, bảo mật, tài chính). Yêu cầu từ các phòng ban này có thể mâu thuẫn hoặc khó thực hiện đồng thời. Là một BA, bạn sẽ làm gì để quản lý các yêu cầu này?",
+    "options": [
+      "A. Yêu cầu Product Owner lựa chọn một bộ quy định để tuân thủ và bỏ qua những bộ quy định khác.",
+      "B. Phân tích kỹ lưỡng các yêu cầu từ mỗi phòng ban, xác định các điểm giao thoa và mâu thuẫn. Tổ chức các buổi làm việc 'Regulatory Requirements Workshop' với tất cả các bên liên quan để làm rõ các ràng buộc, đánh giá rủi ro pháp lý và kinh doanh, và cùng nhau tìm ra giải pháp kiến trúc hoặc quy trình để đáp ứng tất cả các yêu cầu tuân thủ một cách hiệu quả nhất.",
+      "C. Đẩy trách nhiệm tuân thủ quy định cho nhóm phát triển và QA.",
+      "D. Viết các User Story chung chung và hy vọng rằng nhóm sẽ giải quyết được các vấn đề tuân thủ trong quá trình phát triển."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cấp độ Expert cần có khả năng giải quyết các yêu cầu phức tạp, đặc biệt là liên quan đến tuân thủ quy định và pháp lý. Việc phân tích sâu, tổ chức buổi làm việc đa chức năng và tìm kiếm giải pháp dung hòa là chìa khóa để đảm bảo sản phẩm đáp ứng tất cả các yêu cầu cần thiết mà không tạo ra xung đột hoặc rủi ro pháp lý.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sau một loạt các Sprint, BA nhận thấy rằng các vấn đề tương tự (ví dụ: lỗi lặp lại trong quá trình triển khai, khó khăn trong việc tích hợp với hệ thống cũ) liên tục xuất hiện trong các buổi Retrospective của nhiều nhóm. BA nên làm gì để giải quyết tận gốc các vấn đề tái diễn này?",
+    "options": [
+      "A. Đề xuất các nhóm tập trung hơn vào việc khắc phục lỗi trong Sprint tiếp theo.",
+      "B. Bỏ qua các vấn đề này vì chúng là một phần tự nhiên của quá trình phát triển.",
+      "C. Phân tích dữ liệu từ các Retrospective trước đó, sử dụng các kỹ thuật phân tích nguyên nhân gốc (Root Cause Analysis) như 5 Whys hoặc Fishbone Diagram để xác định các nguyên nhân hệ thống hoặc tổ chức gây ra các vấn đề lặp lại. Sau đó, làm việc với các bên liên quan cấp cao để đề xuất các thay đổi quy trình, công cụ hoặc cấu trúc tổ chức để giải quyết các nguyên nhân gốc đó.",
+      "D. Yêu cầu Scrum Master của mỗi nhóm tự giải quyết vấn đề của nhóm mình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert cần có khả năng phân tích vấn đề ở cấp độ hệ thống và tổ chức, không chỉ dừng lại ở việc khắc phục triệu chứng. Việc sử dụng Root Cause Analysis và làm việc với các bên liên quan cấp cao để đề xuất thay đổi hệ thống là cần thiết để giải quyết các vấn đề tái diễn và thúc đẩy cải tiến liên tục ở quy mô lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một tính năng mới quan trọng yêu cầu tích hợp sâu với ba hệ thống kế thừa (legacy systems) khác nhau, mỗi hệ thống được sở hữu và duy trì bởi một nhóm riêng biệt với các công nghệ và quy trình khác nhau. Là một BA cấp độ Expert, bạn sẽ làm gì để đảm bảo sự phối hợp và tích hợp thành công?",
+    "options": [
+      "A. Chỉ tập trung vào việc viết User Story cho nhóm của mình và giả định các nhóm khác sẽ tự tìm cách tích hợp.",
+      "B. Tổ chức các buổi làm việc 'Integration Workshop' với đại diện từ tất cả các nhóm liên quan, bao gồm kiến trúc sư và kỹ sư. Xác định các giao diện (APIs), định dạng dữ liệu, luồng thông tin và các điểm phụ thuộc chính. Cùng nhau lập kế hoạch tích hợp theo từng giai đoạn, sử dụng các Spike để khám phá rủi ro kỹ thuật và thiết lập các kênh giao tiếp liên tục giữa các nhóm.",
+      "C. Yêu cầu quản lý cấp cao ra lệnh cho các nhóm khác phải hợp tác.",
+      "D. Đề xuất phát triển một giải pháp tích hợp hoàn toàn mới để tránh làm việc với các hệ thống kế thừa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cấp độ Expert cần có khả năng quản lý các phụ thuộc phức tạp và thúc đẩy sự hợp tác giữa các nhóm khác nhau. Việc tổ chức Integration Workshop, xác định rõ các giao diện và luồng thông tin, cùng với việc lập kế hoạch tích hợp theo từng giai đoạn và sử dụng Spike, là cách tiếp cận hiệu quả để đảm bảo tích hợp thành công với các hệ thống kế thừa.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tổ chức của bạn đang làm việc với một nhà cung cấp bên ngoài để phát triển một thành phần quan trọng của sản phẩm. Hợp đồng hiện tại là cố định giá (fixed-price), nhưng yêu cầu cho thành phần này đang liên tục thay đổi do phản hồi của thị trường. Là một BA, bạn sẽ làm gì để quản lý mối quan hệ này một cách linh hoạt theo tinh thần Agile?",
+    "options": [
+      "A. Yêu cầu nhà cung cấp tuân thủ nghiêm ngặt các yêu cầu ban đầu của hợp đồng, bất kể sự thay đổi của thị trường.",
+      "B. Chấp nhận tất cả các thay đổi yêu cầu mà không có sự điều chỉnh hợp đồng, gây rủi ro về chi phí và thời gian.",
+      "C. Làm việc với Legal và Procurement để đánh giá khả năng chuyển đổi sang mô hình hợp đồng linh hoạt hơn (ví dụ: Time & Material với giới hạn, hoặc hợp đồng dựa trên giá trị). Đồng thời, thiết lập một quy trình quản lý thay đổi rõ ràng với nhà cung cấp, tập trung vào việc ưu tiên các yêu cầu quan trọng nhất và thường xuyên xem xét giá trị mang lại để tối ưu hóa đầu tư.",
+      "D. Cắt đứt quan hệ với nhà cung cấp và tìm một nhà cung cấp mới linh hoạt hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert cần có hiểu biết về quản lý hợp đồng Agile và khả năng đàm phán với nhà cung cấp. Trong bối cảnh yêu cầu thay đổi, việc tìm cách chuyển đổi sang mô hình hợp đồng linh hoạt hơn và thiết lập quy trình quản lý thay đổi rõ ràng là cần thiết để duy trì mối quan hệ hợp tác và đảm bảo giá trị sản phẩm, đồng thời quản lý rủi ro tài chính.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một đề xuất thay đổi đối với một dịch vụ cốt lõi trong hệ thống của bạn được đưa ra. Dịch vụ này được sử dụng bởi nhiều sản phẩm và nhóm khác nhau trong toàn doanh nghiệp. Là một BA cấp độ Expert, bạn sẽ thực hiện phân tích tác động (impact analysis) như thế nào để đảm bảo không có rủi ro lớn nào bị bỏ qua?",
+    "options": [
+      "A. Chỉ tập trung vào các tác động trực tiếp đến sản phẩm mà nhóm bạn đang làm việc.",
+      "B. Tiến hành một phân tích tác động toàn diện, bao gồm việc xác định tất cả các sản phẩm, dịch vụ và nhóm phụ thuộc. Đánh giá tác động tiềm tàng lên hiệu suất, bảo mật, tuân thủ, trải nghiệm người dùng, chi phí vận hành và các phụ thuộc kỹ thuật. Phối hợp với các Kiến trúc sư, Product Owner và các bên liên quan từ các nhóm bị ảnh hưởng để thu thập thông tin, đánh giá rủi ro và đề xuất các biện pháp giảm thiểu.",
+      "C. Yêu cầu nhóm phát triển tự thực hiện phân tích tác động kỹ thuật.",
+      "D. Giả định rằng nếu thay đổi có lợi cho một sản phẩm, nó sẽ có lợi cho tất cả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cấp độ Expert cần có khả năng tư duy hệ thống và thực hiện phân tích tác động ở cấp độ doanh nghiệp. Việc xác định tất cả các bên phụ thuộc và đánh giá tác động đa chiều (kinh doanh, kỹ thuật, vận hành, rủi ro) là rất quan trọng để đưa ra quyết định sáng suốt và giảm thiểu rủi ro khi thực hiện thay đổi trên các dịch vụ cốt lõi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong buổi Sprint Review, các giám đốc điều hành cấp cao thể hiện sự không hài lòng đáng kể với hướng đi hiện tại của sản phẩm và chất lượng của các tính năng đã được phát triển, mặc dù nhóm đã hoàn thành tất cả các User Story theo kế hoạch. Là một BA, bạn sẽ phản ứng và hành động như thế nào?",
+    "options": [
+      "A. Bảo vệ nhóm bằng cách giải thích rằng nhóm đã hoàn thành tất cả các mục đã cam kết.",
+      "B. Ghi nhận phản hồi và chuyển tiếp cho Product Owner để họ tự giải quyết.",
+      "C. Lắng nghe cẩn thận phản hồi, làm rõ các mối quan ngại của giám đốc điều hành. Sau đó, phối hợp ngay lập tức với Product Owner, Scrum Master và nhóm để đánh giá lại tầm nhìn, mục tiêu sản phẩm và Product Backlog. Đề xuất các điều chỉnh chiến lược, ưu tiên lại các Epic/Feature và thiết lập các vòng lặp phản hồi thường xuyên hơn với các bên liên quan cấp cao để đảm bảo sự liên kết liên tục.",
+      "D. Yêu cầu giám đốc điều hành cung cấp các yêu cầu chi tiết hơn cho Sprint tiếp theo."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert cần có khả năng quản lý phản hồi tiêu cực từ cấp cao và dẫn dắt sự điều chỉnh chiến lược. Việc lắng nghe, làm rõ, đánh giá lại tầm nhìn và Product Backlog, sau đó đề xuất các điều chỉnh chiến lược và thiết lập các vòng lặp phản hồi liên tục là cần thiết để đảm bảo sản phẩm đi đúng hướng và đáp ứng kỳ vọng của các bên liên quan quan trọng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong bối cảnh DevOps, vai trò của Business Analyst cấp độ Expert được mở rộng để không chỉ tập trung vào giai đoạn 'Develop' mà còn cả 'Operate' và 'Measure'. Điều này có ý nghĩa gì đối với BA?",
+    "options": [
+      "A. BA chỉ cần đảm bảo các User Story được viết để hỗ trợ triển khai tự động (automated deployment).",
+      "B. BA cần hiểu toàn bộ chuỗi giá trị từ ý tưởng đến hoạt động sản phẩm trong môi trường sản xuất. Điều này bao gồm việc xác định các yêu cầu về khả năng quan sát (observability), khả năng phục hồi (resilience), hiệu suất và an ninh. BA cũng cần cộng tác với các nhóm Operations và Site Reliability Engineering (SRE) để thu thập phản hồi từ môi trường sản xuất nhằm liên tục cải thiện sản phẩm và quy trình.",
+      "C. BA phải học cách viết mã và triển khai phần mềm lên môi trường sản xuất.",
+      "D. BA chỉ cần tập trung vào việc thu thập yêu cầu từ người dùng cuối và không cần quan tâm đến cách sản phẩm hoạt động sau khi triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong DevOps, BA cấp độ Expert cần có cái nhìn toàn diện về vòng đời sản phẩm, từ ý tưởng đến vận hành. Điều này có nghĩa là BA không chỉ tập trung vào tính năng mà còn vào các yêu cầu phi chức năng (NFRs) quan trọng cho hoạt động ổn định và hiệu quả của sản phẩm, cũng như việc học hỏi từ dữ liệu sản xuất để thúc đẩy cải tiến liên tục.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sau một thời gian áp dụng Agile, BA nhận thấy rằng các nhóm đang dần quay trở lại các thói quen làm việc theo kiểu Waterfall cũ (ví dụ: tài liệu hóa quá mức, thiếu sự cộng tác, lập kế hoạch cứng nhắc) do thiếu sự hỗ trợ và hiểu biết liên tục từ các cấp quản lý và các phòng ban khác. BA nên làm gì để duy trì và củng cố quá trình chuyển đổi Agile?",
+    "options": [
+      "A. Báo cáo tình hình cho Scrum Master và yêu cầu họ xử lý các nhóm.",
+      "B. Tổ chức các buổi huấn luyện bắt buộc về Agile cho tất cả nhân viên để nhắc nhở họ về các nguyên tắc.",
+      "C. Đóng vai trò là người ủng hộ và cố vấn (advocate and coach) cho các nguyên tắc Agile, liên tục truyền đạt giá trị của Agile cho các bên liên quan ở mọi cấp độ. Làm việc với quản lý cấp cao để xây dựng một lộ trình chuyển đổi văn hóa dài hạn, thiết lập các chỉ số thành công ở cấp độ tổ chức và tạo ra các cơ hội để các nhóm chia sẻ kinh nghiệm và bài học thành công, thúc đẩy sự thay đổi từ bên trong.",
+      "D. Chấp nhận rằng các tổ chức lớn không thể duy trì Agile một cách nhất quán."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cấp độ Expert đóng vai trò quan trọng trong việc thúc đẩy và duy trì văn hóa Agile. Việc trở thành người ủng hộ, cố vấn, làm việc với lãnh đạo để xây dựng lộ trình chuyển đổi văn hóa dài hạn và tạo ra các cơ hội học hỏi là chìa khóa để củng cố Agile và chống lại xu hướng quay trở lại các phương pháp cũ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Agile/Scrum",
+    "category": "ANALYSIS"
+  }
+]
