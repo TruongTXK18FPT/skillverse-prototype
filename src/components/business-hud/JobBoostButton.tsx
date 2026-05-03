@@ -302,7 +302,7 @@ const JobBoostButton: React.FC<JobBoostButtonProps> = ({
         onClick={handleCreateBoost}
         disabled={isLoading || (subscription?.jobBoostRemaining ?? 0) <= 0}
       >
-        <Zap size={16} />
+        <Zap size={14} />
         <span>Boost job</span>
         {(subscription?.jobBoostRemaining ?? 0) > 0 && (
           <span className="jb-quota-badge">

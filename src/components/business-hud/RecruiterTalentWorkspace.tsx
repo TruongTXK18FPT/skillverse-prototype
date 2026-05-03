@@ -6,7 +6,6 @@ import {
   Briefcase,
   Calendar,
   CheckCircle2,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronUp,
@@ -1672,33 +1671,13 @@ const RecruiterTalentWorkspace = ({
               )}
               {selectedJob && (
                 <div className="rtw-job-bar__selected-actions">
-                  <button
-                    type="button"
-                    className="rtw-job-action"
-                    onClick={openSelectedJobEditor}
-                  >
-                    <Edit2 size={13} />
-                    Chỉnh sửa
-                  </button>
                   {supportsBoost && (
-                    <details className="rtw-job-bar__boost-details rtw-job-bar__boost-details--inline">
-                      <summary>
-                        <Zap size={12} />
-                        Boost
-                        <ChevronDown
-                          size={12}
-                          className="rtw-job-bar__boost-caret"
-                        />
-                      </summary>
-                      <div className="rtw-job-bar__boost">
-                        <JobBoostButton
-                          jobId={selectedJob.id}
-                          jobTitle={selectedJob.title}
-                          onBoostCreated={handleBoostStateChange}
-                          onBoostCancelled={handleBoostStateChange}
-                        />
-                      </div>
-                    </details>
+                    <JobBoostButton
+                      jobId={selectedJob.id}
+                      jobTitle={selectedJob.title}
+                      onBoostCreated={handleBoostStateChange}
+                      onBoostCancelled={handleBoostStateChange}
+                    />
                   )}
                 </div>
               )}
