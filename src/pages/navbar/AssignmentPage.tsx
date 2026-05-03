@@ -63,6 +63,16 @@ const formatRubricPoints = (value?: number | null) => {
   return numeric.toFixed(2).replace(/\.?0+$/, '');
 };
 
+const getFriendlyAssignmentError = (message?: string) => {
+  switch (message) {
+    case 'USER_NOT_ENROLLED': return 'Bạn chưa có quyền nộp bài cho khóa học này.';
+    case 'SUBMISSION_PENDING_GRADING': return 'Bài nộp gần nhất đang chờ mentor chấm. Bạn chưa thể nộp tiếp lúc này.';
+    case 'ASSIGNMENT_ALREADY_PASSED': return 'Bạn đã đạt yêu cầu ở bài tập này.';
+    case 'MEDIA_NOT_FOUND': return 'Không tìm thấy tệp đã tải lên. Hãy thử chọn lại tệp.';
+    default: return message || 'Đã xảy ra lỗi khi xử lý bài nộp.';
+  }
+};
+
 const AssignmentPage: React.FC = () => {
   const { assignmentId } = useParams<{ assignmentId: string }>();
   const navigate = useNavigate();
@@ -89,7 +99,28 @@ const AssignmentPage: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  // Load draft from localStorage
+  const loadData = useCallback(async () => {
+    if (!assignmentId || !user?.id) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const [assignmentData, submissionsData] = await Promise.all([
+        getAssignmentById(parseInt(assignmentId)),
+        getMySubmissions(parseInt(assignmentId))
+      ]);
+      setAssignment(assignmentData);
+      setSubmissions(submissionsData);
+    } catch (err: any) {
+      setError(getFriendlyAssignmentError(err?.response?.data?.message || 'Failed to load assignment'));
+    } finally {
+      setLoading(false);
+    }
+  }, [assignmentId, user?.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
   useEffect(() => {
     if (assignmentId && user?.id) {
       const draftKey = `assignment_draft_${assignmentId}_${user.id}`;
@@ -108,37 +139,15 @@ const AssignmentPage: React.FC = () => {
     }
   }, [assignmentId, user?.id]);
 
-  useEffect(() => {
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assignmentId, user?.id]);
-
-  const loadData = async () => {
-    if (!assignmentId || !user?.id) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const [assignmentData, submissionsData] = await Promise.all([
-        getAssignmentById(parseInt(assignmentId)),
-        getMySubmissions(parseInt(assignmentId))
-      ]);
-      setAssignment(assignmentData);
-      setSubmissions(submissionsData);
-    } catch (err: any) {
-      setError(getFriendlyAssignmentError(err?.response?.data?.message || 'Failed to load assignment'));
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (
-      newestSubmission &&
-      (newestSubmission.status === SubmissionStatus.PENDING ||
-        newestSubmission.status === SubmissionStatus.LATE_PENDING)
-    ) {
+    // Block submission when pending grading (including AI grading)
+    if (newestSubmission?.status === SubmissionStatus.PENDING) {
       setError('Bài nộp gần nhất đang chờ mentor chấm. Bạn chưa thể nộp lại lúc này.');
+      return;
+    }
+    if (newestSubmission?.status === SubmissionStatus.AI_PENDING) {
+      setError('Bài nộp đang được AI chấm điểm. Vui lòng chờ kết quả trước khi nộp lại.');
       return;
     }
     if (newestSubmission?.isPassed === true) {
@@ -276,16 +285,6 @@ const AssignmentPage: React.FC = () => {
     setSuccess('Đã lưu nháp.');
   };
 
-  const getFriendlyAssignmentError = (message?: string) => {
-    switch (message) {
-      case 'USER_NOT_ENROLLED': return 'Bạn chưa có quyền nộp bài cho khóa học này.';
-      case 'SUBMISSION_PENDING_GRADING': return 'Bài nộp gần nhất đang chờ mentor chấm. Bạn chưa thể nộp tiếp lúc này.';
-      case 'ASSIGNMENT_ALREADY_PASSED': return 'Bạn đã đạt yêu cầu ở bài tập này.';
-      case 'MEDIA_NOT_FOUND': return 'Không tìm thấy tệp đã tải lên. Hãy thử chọn lại tệp.';
-      default: return message || 'Đã xảy ra lỗi khi xử lý bài nộp.';
-    }
-  };
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString('vi-VN', {
@@ -297,9 +296,6 @@ const AssignmentPage: React.FC = () => {
   const hasMeaningfulCriteriaThreshold = (passingPoints?: number | null) =>
     passingPoints != null && Number(passingPoints) > 0;
 
-  // DEADCODE: deadline/late feature removed 2026-04-15 — no deadline input in mentor form
-  // const hasDueDate = hasAssignmentDueDate(assignment?.dueAt);
-  // const isDueDatePassed = isAssignmentPastDue(assignment?.dueAt);
   const newestSubmission = submissions.find(s => s.isNewest);
   const supportsDraftSave = assignment?.submissionType === SubmissionType.TEXT || assignment?.submissionType === SubmissionType.LINK;
   const submissionBlockedByPending =
@@ -327,15 +323,19 @@ const AssignmentPage: React.FC = () => {
     return { text: 'Đã nộp', icon: <Clock size={14} />, tone: 'pending' };
   };
 
-  // Stable ref for polling state — avoids stale closure from `newestSubmission`
-  const pollingRef = useRef<{ targetId: number | null; intervalId: ReturnType<typeof setInterval> | null }>({
+  // Smart AI grading polling with in-flight guard and immediate reload
+  const pollingRef = useRef<{
+    targetId: number | null;
+    intervalId: ReturnType<typeof setInterval> | null;
+    isPolling: boolean;
+  }>({
     targetId: null,
     intervalId: null,
+    isPolling: false,
   });
 
-  // Poll for AI grading result — runs whenever `submissions` changes
+  // Poll for AI grading result — smart polling with event-driven reload
   useEffect(() => {
-    // Only poll if this assignment has AI grading enabled
     if (!assignment?.aiGradingEnabled) return;
 
     const latest = submissions.find(s => s.isNewest);
@@ -344,7 +344,7 @@ const AssignmentPage: React.FC = () => {
     if (!isAiPending) {
       if (pollingRef.current.intervalId) {
         clearInterval(pollingRef.current.intervalId);
-        pollingRef.current = { targetId: null, intervalId: null };
+        pollingRef.current = { targetId: null, intervalId: null, isPolling: false };
       }
       return;
     }
@@ -355,30 +355,68 @@ const AssignmentPage: React.FC = () => {
       clearInterval(pollingRef.current.intervalId);
     }
     const targetId = latest.id;
-    pollingRef.current = { targetId, intervalId: null };
+    pollingRef.current = { targetId, intervalId: null, isPolling: false };
 
-    pollingRef.current.intervalId = setInterval(async () => {
-      if (pollingRef.current.targetId === null) return;
+    // Smart polling with in-flight guard to prevent overlapping requests
+    const runPoll = async () => {
+      if (pollingRef.current.targetId === null || pollingRef.current.isPolling) return;
+      pollingRef.current.isPolling = true;
       try {
-        const result = await getAiGradeResult(pollingRef.current.targetId);
-        if (result.isAiGraded) {
+        // Check AI grading status by fetching latest submission data
+        await getAiGradeResult(pollingRef.current.targetId);
+        const submissionsData = await getMySubmissions(parseInt(assignmentId!));
+        const latest = submissionsData.find(s => s.isNewest);
+        if (latest?.isAiGraded) {
+          // AI grading complete — stop polling and reload page to show full results
           clearInterval(pollingRef.current.intervalId!);
-          pollingRef.current = { targetId: null, intervalId: null };
-          const submissionsData = await getMySubmissions(parseInt(assignmentId!));
-          setSubmissions(submissionsData);
+          pollingRef.current = { targetId: null, intervalId: null, isPolling: false };
+          // Show success toast before reload
+          setSuccess('Bài tập đã được AI chấm xong! Tải lại trang...');
+          // Reload page after short delay to show updated results with criteria scores
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+          return;
         }
       } catch {
-        // silently ignore polling errors
+        // Silently ignore polling errors — will retry on next interval
+      } finally {
+        pollingRef.current.isPolling = false;
       }
-    }, 10000);
+    };
+
+    // Initial poll immediately, then set up interval
+    runPoll();
+    const baseInterval = 10000; // 10 seconds base — balances UX with server load
+    pollingRef.current.intervalId = setInterval(() => {
+      runPoll();
+    }, baseInterval);
 
     return () => {
       if (pollingRef.current.intervalId) {
         clearInterval(pollingRef.current.intervalId);
-        pollingRef.current = { targetId: null, intervalId: null };
+        pollingRef.current = { targetId: null, intervalId: null, isPolling: false };
       }
     };
   }, [submissions, assignment?.aiGradingEnabled, assignmentId]);
+
+  // Visibility change listener — refresh data when user returns to tab
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        // User returned to tab — reload to get latest AI grading results
+        const latest = submissions.find(s => s.isNewest);
+        if (latest?.status === SubmissionStatus.AI_PENDING || latest?.isAiGraded) {
+          loadData();
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [submissions, loadData]);
 
   const handleBackToCourse = useCallback(() => {
     const returnContext = locationState?.courseId
@@ -853,7 +891,7 @@ const AssignmentPage: React.FC = () => {
                             onClick={async () => {
                               if (!confirm('Bạn có chắc muốn yêu cầu mentor xem xét lại bài này?')) return;
                               try {
-                                await requestMentorReview(newestSubmission.id, null);
+                                await requestMentorReview(newestSubmission.id);
                                 setSuccess('Đã gửi yêu cầu. Mentor sẽ xem xét lại.');
                                 await loadData();
                               } catch (err: any) {

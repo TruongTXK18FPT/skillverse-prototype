@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   FileText,
   Link as LinkIcon,
@@ -24,6 +24,7 @@ import {
   submitAssignment,
   getMySubmissions
 } from '../../services/assignmentService';
+import { getAiGradeResult } from '../../services/aiGradingService';
 import { uploadMedia } from '../../services/mediaService';
 import { useAuth } from '../../context/AuthContext';
 import { downloadFile } from '../../utils/downloadFile';
@@ -48,6 +49,7 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
   const [showHistory, setShowHistory] = useState(false);
   const [selectedHistorySubmissionId, setSelectedHistorySubmissionId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   // Form state
   const [submissionText, setSubmissionText] = useState('');
@@ -80,9 +82,115 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
     loadData();
   }, [loadData]);
 
+  // Smart AI grading polling with in-flight guard
+  const pollingRef = useRef<{
+    targetId: number | null;
+    intervalId: ReturnType<typeof setInterval> | null;
+    isPolling: boolean;
+  }>({
+    targetId: null,
+    intervalId: null,
+    isPolling: false,
+  });
+
+  useEffect(() => {
+    if (readOnly || !assignment?.aiGradingEnabled) return;
+
+    const latest = submissions.find(s => s.isNewest);
+    const isAiPending = latest?.status === SubmissionStatus.AI_PENDING && !latest?.isAiGraded;
+
+    if (!isAiPending) {
+      if (pollingRef.current.intervalId) {
+        clearInterval(pollingRef.current.intervalId);
+        pollingRef.current = { targetId: null, intervalId: null, isPolling: false };
+      }
+      return;
+    }
+
+    if (pollingRef.current.targetId === latest.id) return;
+
+    if (pollingRef.current.intervalId) {
+      clearInterval(pollingRef.current.intervalId);
+    }
+    const targetId = latest.id;
+    pollingRef.current = { targetId, intervalId: null, isPolling: false };
+
+    // Smart polling with in-flight guard — only check for completion, don't update UI until done
+    const runPoll = async () => {
+      if (pollingRef.current.targetId === null || pollingRef.current.isPolling) return;
+      pollingRef.current.isPolling = true;
+      try {
+        // Check AI grading status by fetching fresh submission data (read-only check)
+        await getAiGradeResult(pollingRef.current.targetId);
+        const freshSubmissions = await getMySubmissions(assignmentId);
+        const latestFresh = freshSubmissions.find(s => s.isNewest);
+        if (latestFresh?.isAiGraded) {
+          // AI grading complete — stop polling and reload to show full results
+          clearInterval(pollingRef.current.intervalId!);
+          pollingRef.current = { targetId: null, intervalId: null, isPolling: false };
+          // Show success feedback before reload
+          setSuccess('Bài tập đã được AI chấm xong! Đang tải kết quả...');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+          return;
+        }
+        // Not done yet — do NOT setSubmissions here to avoid triggering effect cleanup/restart
+      } catch {
+        // Silently retry
+      } finally {
+        pollingRef.current.isPolling = false;
+      }
+    };
+
+    runPoll();
+    pollingRef.current.intervalId = setInterval(() => {
+      runPoll();
+    }, 10000); // 10 seconds — balances UX with server load
+
+    return () => {
+      if (pollingRef.current.intervalId) {
+        clearInterval(pollingRef.current.intervalId);
+        pollingRef.current = { targetId: null, intervalId: null, isPolling: false };
+      }
+    };
+  }, [submissions, assignment?.aiGradingEnabled, readOnly, assignmentId]);
+
+  // Visibility change — refresh when user returns to tab
+  useEffect(() => {
+    if (readOnly) return;
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        const latest = submissions.find(s => s.isNewest);
+        if (latest?.status === SubmissionStatus.AI_PENDING || latest?.isAiGraded) {
+          loadData();
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [submissions, readOnly, loadData]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!assignment || !user?.id) return;
+
+    // Guard against submitting while grading is pending (defense in depth with UI gate)
+    if (newestSubmission?.status === SubmissionStatus.PENDING) {
+      setError('Bài nộp đang chờ mentor chấm. Không thể nộp lại lúc này.');
+      return;
+    }
+    if (newestSubmission?.status === SubmissionStatus.AI_PENDING) {
+      setError('Bài nộp đang được AI chấm. Vui lòng chờ kết quả.');
+      return;
+    }
+    if (newestSubmission?.isPassed === true) {
+      setError('Bạn đã đạt bài tập này. Không cần nộp lại.');
+      return;
+    }
 
     setSubmitting(true);
     setError(null);
@@ -141,7 +249,11 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
   };
 
   const getStatusBadge = (submission: AssignmentSubmissionDetailDTO) => {
-    if (submission.status === SubmissionStatus.GRADED) {
+    // Show graded result for: GRADED, AI_COMPLETED, or AI-graded with confirmation
+    const isGraded = submission.status === SubmissionStatus.GRADED ||
+                     submission.status === SubmissionStatus.AI_COMPLETED ||
+                     (submission.isAiGraded && submission.score != null);
+    if (isGraded) {
       const isPassed = submission.isPassed === true;
       return (
         <span className={`learning-hud-submission-badge ${isPassed ? 'passed' : 'failed'}`}>
@@ -167,10 +279,6 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
       minute: '2-digit'
     });
   };
-
-  // DEADCODE: deadline/late feature removed 2026-04-15 — no deadline input in mentor form
-  // const hasDueDate = hasAssignmentDueDate(assignment?.dueAt);
-  // const isDueDatePassed = isAssignmentPastDue(assignment?.dueAt);
 
   const newestSubmission = submissions.find(s => s.isNewest);
   const previousSubmissions = submissions.filter(s => !s.isNewest);
@@ -214,17 +322,6 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
         )}
         <div className="learning-hud-submission-meta">
           <span>Nộp lúc: {formatDate(submission.submittedAt)}</span>
-          {(() => {
-            const timingInfo = getSubmissionTimingInfo(assignment?.dueAt, submission.isLate);
-            if (!timingInfo) {
-              return null;
-            }
-            return (
-              <span className={`learning-hud-timing-badge ${timingInfo.tone}`}>
-                {timingInfo.text}
-              </span>
-            );
-          })()}
           {submission.gradedAt && (
             <span>Chấm lúc: {formatDate(submission.gradedAt)}</span>
           )}
@@ -239,7 +336,9 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
           </span>
         </div>
       )}
-      {submission.criteriaScores && submission.criteriaScores.length > 0 && submission.status === SubmissionStatus.GRADED && (
+      {/* Show criteria for graded submissions (GRADED or AI_COMPLETED) */}
+      {submission.criteriaScores && submission.criteriaScores.length > 0 &&
+       (submission.status === SubmissionStatus.GRADED || submission.status === SubmissionStatus.AI_COMPLETED || submission.isAiGraded) && (
         <div className="learning-hud-criteria-breakdown">
           <h4>Chi Tiết Tiêu Chí</h4>
           {submission.criteriaScores.map((cs) => {
@@ -318,6 +417,14 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
           </span>
         </div>
       </div>
+
+      {/* Global feedback messages */}
+      {success && (
+        <div className="learning-hud-form-success">
+          <CheckCircle size={16} />
+          {success}
+        </div>
+      )}
 
       {/* Description */}
       <div className="learning-hud-assignment-description">
@@ -417,8 +524,6 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
         // Gate logic: determine if student can submit
         if (newestSubmission) {
           // PENDING: waiting for grading — block resubmission
-          // DEADCODE: LATE_PENDING removed 2026-04-15 — no deadline in mentor form
-          // if (newestSubmission.status === SubmissionStatus.PENDING || newestSubmission.status === SubmissionStatus.LATE_PENDING) {
           if (newestSubmission.status === SubmissionStatus.PENDING) {
             return (
               <div className="learning-hud-submission-gate">
@@ -426,6 +531,18 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
                 <p>Đang chờ mentor chấm điểm...</p>
                 <span className="learning-hud-gate-hint">
                   Bạn sẽ có thể nộp lại sau khi bài được chấm (nếu chưa đạt).
+                </span>
+              </div>
+            );
+          }
+          // AI_PENDING: waiting for AI grading — block resubmission
+          if (newestSubmission.status === SubmissionStatus.AI_PENDING) {
+            return (
+              <div className="learning-hud-submission-gate">
+                <Clock size={24} />
+                <p>Đang chờ AI chấm điểm...</p>
+                <span className="learning-hud-gate-hint">
+                  Bạn sẽ có thể nộp lại sau khi AI chấm xong (nếu chưa đạt).
                 </span>
               </div>
             );
@@ -450,12 +567,6 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
           <h3>
             {newestSubmission ? 'Nộp Lại Bài Tập' : 'Nộp Bài Tập'}
           </h3>
-          {hasDueDate && isDueDatePassed && (
-            <div className="learning-hud-late-warning">
-              <AlertCircle size={16} />
-              Bài tập đã quá hạn. Nếu nộp lúc này, hệ thống sẽ ghi nhận là nộp muộn.
-            </div>
-          )}
 
           {error && (
             <div className="learning-hud-form-error">
