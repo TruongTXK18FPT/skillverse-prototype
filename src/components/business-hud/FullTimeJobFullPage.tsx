@@ -19,6 +19,7 @@ import {
   Plus,
   SearchCheck,
   Send,
+  ShieldCheck,
   Sparkles,
   Trash2,
   UserCheck,
@@ -33,7 +34,7 @@ import {
 } from "../../data/jobDTOs";
 import { RecruitmentJobContextType } from "../../data/portfolioDTOs";
 import jobService from "../../services/jobService";
-import contractService from "../../services/contractService";
+import contractService, { OnboardingInfoResponse } from "../../services/contractService";
 import recruitmentChatService from "../../services/recruitmentChatService";
 import interviewService, {
   InterviewScheduleResponse,
@@ -56,8 +57,18 @@ import {
   resolveRecruitmentAssetUrl,
 } from "../../utils/recruitmentUi";
 import FullTimeJobOffersTab from "./FullTimeJobOffersTab";
+import RecruiterContractUpload from "./RecruiterContractUpload";
 import "./FullTimeJobFullPage.css";
 import { MeetingType } from "../../services/interviewService";
+
+export interface JobFlowBlockingItem {
+  type: string;
+  id: number;
+  candidateName: string;
+  candidateEmail: string;
+  status: string;
+  reason: string;
+}
 
 type FullPageTab =
   | "overview"
@@ -113,6 +124,8 @@ const APP_STATUS_COLORS: Record<string, string> = {
   OFFER_SENT: "#aa55ff",
   OFFER_ACCEPTED: "#34d399",
   OFFER_REJECTED: "#fb7185",
+  AWAITING_ONBOARDING_INFO: "#06b6d4",
+  HIRED: "#10b981",
   CONTRACT_SIGNED: "#8b5cf6",
   REJECTED: "#fb7185",
   // Short-term cross-statuses
@@ -140,6 +153,8 @@ const APP_STATUS_LABELS: Record<string, string> = {
   OFFER_SENT: "Đã gửi đề nghị",
   OFFER_ACCEPTED: "Nhận đề nghị",
   OFFER_REJECTED: "Từ chối đề nghị",
+  AWAITING_ONBOARDING_INFO: "Đang cung cấp thông tin",
+  HIRED: "Đã tuyển dụng",
   CONTRACT_SIGNED: "Đã ký hợp đồng",
   REJECTED: "Từ chối",
   // Short-term cross-statuses
@@ -182,9 +197,12 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isActionBusy, setIsActionBusy] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [decisionModal, setDecisionModal] = useState<DecisionModalState | null>(
-    null,
-  );
+  const [closeBlockers, setCloseBlockers] = useState<JobFlowBlockingItem[] | null>(null);
+  const [decisionModal, setDecisionModal] = useState<DecisionModalState | null>(null);
+  const [onboardingModalCandidate, setOnboardingModalCandidate] = useState<JobApplicationResponse | null>(null);
+  const [onboardingInfo, setOnboardingInfo] = useState<OnboardingInfoResponse | null>(null);
+  const [isOnboardingLoading, setIsOnboardingLoading] = useState(false);
+  const [isReminding, setIsReminding] = useState(false);
   const [decisionNote, setDecisionNote] = useState("");
   const [decisionSalary, setDecisionSalary] = useState("");
   const [decisionAdditionalReqs, setDecisionAdditionalReqs] = useState("");
@@ -198,6 +216,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
     application: JobApplicationResponse;
     interview: InterviewScheduleResponse;
   } | null>(null);
+  const [contractMode, setContractMode] = useState<'choose' | 'create' | 'upload'>('choose');
   const latestLoadRequestRef = useRef(0);
 
   useEffect(() => {
@@ -287,6 +306,32 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       minute: "2-digit",
       timeZone: "Asia/Ho_Chi_Minh",
     });
+  };
+
+  const handleOpenOnboardingInfo = async (app: JobApplicationResponse) => {
+    setOnboardingModalCandidate(app);
+    setIsOnboardingLoading(true);
+    setOnboardingInfo(null);
+    try {
+      const data = await contractService.getOnboardingInfo(app.id);
+      setOnboardingInfo(data || null);
+    } catch (error) {
+      // Ignored, likely not found
+    } finally {
+      setIsOnboardingLoading(false);
+    }
+  };
+
+  const handleRemindOnboarding = async (appId: number) => {
+    setIsReminding(true);
+    try {
+      await contractService.remindOnboardingInfo(appId);
+      showToastSuccess("Đã gửi nhắc nhở", "Hệ thống đã gửi email và thông báo cho ứng viên.");
+    } catch (error) {
+      showToastError("Lỗi", "Không thể gửi nhắc nhở.");
+    } finally {
+      setIsReminding(false);
+    }
   };
 
   const formatBudget = (amount: number) =>
@@ -389,11 +434,15 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
       const updated = await jobService.changeJobStatus(jobId, JobStatus.CLOSED);
       setJob(updated);
       showToastSuccess("Đã đóng tin", "Tin tuyển dụng đã ngừng nhận hồ sơ.");
-    } catch (error: unknown) {
-      showToastError(
-        "Không thể đóng tin",
-        error instanceof Error ? error.message : "Vui lòng thử lại.",
-      );
+    } catch (error: any) {
+      if (error.code === 'JOB_CLOSE_BLOCKED' && error.details?.blockingItems) {
+        setCloseBlockers(error.details.blockingItems);
+      } else {
+        showToastError(
+          "Không thể đóng tin",
+          error.message || "Vui lòng thử lại.",
+        );
+      }
     } finally {
       setIsActionBusy(false);
     }
@@ -713,8 +762,9 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
   const completedInterviewCount = applications.filter(
     (a) => a.status === JobApplicationStatus.INTERVIEWED,
   ).length;
-  // Hiring is complete only when signed contracts reach target.
-  const isHiringCompleted = completedContractsCount >= hiringTarget;
+  // Hiring is complete only when signed contracts reach target or job is explicitly closed.
+  const isJobClosed = job?.status === JobStatus.CLOSED;
+  const isHiringCompleted = completedContractsCount >= hiringTarget || isJobClosed;
   const completionReferenceContract = signedContracts[0] || null;
 
   const getInterviewEndTime = (interview: InterviewScheduleResponse) => {
@@ -848,9 +898,9 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
             {formatDate(job.deadline)}
           </span>
           {isHiringCompleted && (
-            <span className="ftj-fullpage__meta-pill ftj-fullpage__meta-pill--success">
-              <CheckCircle2 size={13} />
-              Đã tuyển đủ {completedContractsCount}/{hiringTarget}
+            <span className={`ftj-fullpage__meta-pill ${isJobClosed ? 'ftj-fullpage__meta-pill--ghost' : 'ftj-fullpage__meta-pill--success'}`}>
+              {isJobClosed ? <XCircle size={13} /> : <CheckCircle2 size={13} />}
+              {isJobClosed ? "Tin đã đóng" : `Đã tuyển đủ ${completedContractsCount}/${hiringTarget}`}
             </span>
           )}
 
@@ -1053,17 +1103,17 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
               <article className="ftj-fullpage__signal-card">
                 <span className="ftj-fullpage__signal-label">
                   {isHiringCompleted
-                    ? "Hiring completed"
+                    ? (isJobClosed ? "Job Closed" : "Hiring completed")
                     : "Recruitment progress"}
                 </span>
                 <strong>
                   {isHiringCompleted
-                    ? `Đã tuyển đủ ${hiringTarget} vị trí`
+                    ? (isJobClosed ? "Đã dừng nhận hồ sơ" : `Đã tuyển đủ ${hiringTarget} vị trí`)
                     : `${scheduledInterviewCount + completedInterviewCount}/${hiringTarget} lịch phỏng vấn`}
                 </strong>
                 <p>
                   {isHiringCompleted
-                    ? "Job đã đạt chỉ tiêu: đủ hợp đồng hoặc đủ lịch phỏng vấn. Luồng tạo mới đã khóa."
+                    ? (isJobClosed ? "Job này đã được đóng lại. Không thể tiếp tục tương tác với ứng viên hay tạo hợp đồng mới." : "Job đã đạt chỉ tiêu: đủ hợp đồng hoặc đủ lịch phỏng vấn. Luồng tạo mới đã khóa.")
                     : `${completedContractsCount} hợp đồng ký hoàn tất, ${contractReadyApplications.length} ứng viên sẵn sàng tạo hợp đồng.`}
                 </p>
               </article>
@@ -1127,14 +1177,14 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
             {isHiringCompleted && job?.isRemote && (
               <div className="ftj-contracts__completion-banner">
                 <div>
-                  <span className="ftj-applicants__eyebrow ftj-applicants__eyebrow--glow">
-                    JOB COMPLETED
+                  <span className={`ftj-applicants__eyebrow ${isJobClosed ? '' : 'ftj-applicants__eyebrow--glow'}`}>
+                    {isJobClosed ? "JOB CLOSED" : "JOB COMPLETED"}
                   </span>
-                  <h4>Đợt tuyển đã hoàn thành</h4>
+                  <h4>{isJobClosed ? "Tin tuyển dụng đã đóng" : "Đợt tuyển đã hoàn thành"}</h4>
                   <p>
-                    Đã có đủ hợp đồng ký hoàn tất để đạt chỉ tiêu tuyển dụng.
-                    Các thao tác duyệt thêm ứng viên hoặc tạo hợp đồng mới đã
-                    được khóa.
+                    {isJobClosed 
+                      ? "Bạn đã đóng tin tuyển dụng này. Mọi thao tác cập nhật trạng thái ứng viên hoặc hợp đồng đều đã bị khóa."
+                      : "Đã có đủ hợp đồng ký hoàn tất để đạt chỉ tiêu tuyển dụng. Các thao tác duyệt thêm ứng viên hoặc tạo hợp đồng mới đã được khóa."}
                   </p>
                 </div>
                 {completionReferenceContract && (
@@ -1261,6 +1311,22 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                           <MessageSquare size={13} />
                           Liên hệ
                         </button>
+
+                        {(application.status === JobApplicationStatus.OFFER_ACCEPTED ||
+                          application.status === JobApplicationStatus.AWAITING_ONBOARDING_INFO ||
+                          application.status === JobApplicationStatus.CONTRACT_SIGNED ||
+                          application.status === JobApplicationStatus.HIRED ||
+                          application.status === JobApplicationStatus.INTERVIEWED ||
+                          application.status === JobApplicationStatus.ACCEPTED) && (
+                          <button
+                            type="button"
+                            className="ftj-btn ftj-btn--secondary"
+                            onClick={() => handleOpenOnboardingInfo(application)}
+                          >
+                            <ShieldCheck size={13} />
+                            Xem thông tin pháp lý
+                          </button>
+                        )}
 
                         {!isHiringCompleted &&
                           (application.status ===
@@ -2002,14 +2068,14 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
             {isHiringCompleted && job?.isRemote && (
               <div className="ftj-contracts__completion-banner">
                 <div>
-                  <span className="ftj-applicants__eyebrow ftj-applicants__eyebrow--glow">
-                    SIGNED MILESTONE
+                  <span className={`ftj-applicants__eyebrow ${isJobClosed ? '' : 'ftj-applicants__eyebrow--glow'}`}>
+                    {isJobClosed ? "JOB CLOSED" : "SIGNED MILESTONE"}
                   </span>
-                  <h4>Job đã hoàn thành theo hợp đồng đã ký</h4>
+                  <h4>{isJobClosed ? "Job đã đóng" : "Job đã hoàn thành theo hợp đồng đã ký"}</h4>
                   <p>
-                    Hệ thống đã ghi nhận đủ {completedContractsCount}/
-                    {hiringTarget} vị trí có hợp đồng được hai bên ký hoàn tất.
-                    Không thể tạo thêm hợp đồng mới cho job này ở frontend.
+                    {isJobClosed
+                      ? "Bạn đã đóng tin tuyển dụng này. Không thể tạo thêm hợp đồng mới cho job này ở frontend."
+                      : `Hệ thống đã ghi nhận đủ ${completedContractsCount}/${hiringTarget} vị trí có hợp đồng được hai bên ký hoàn tất. Không thể tạo thêm hợp đồng mới cho job này ở frontend.`}
                   </p>
                 </div>
                 {completionReferenceContract && (
@@ -2159,7 +2225,7 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                   <button
                     type="button"
                     className="ftj-btn ftj-btn--ghost"
-                    onClick={() => setContractApplication(null)}
+                    onClick={() => { setContractApplication(null); setContractMode('choose'); }}
                   >
                     <XCircle size={14} />
                     Bỏ chọn ứng viên
@@ -2238,23 +2304,116 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                   </div>
 
                   <div className="ftj-contract-composer__panel">
-                    <ContractForm
-                      applicationId={contractApplication.id}
-                      initialApplication={contractApplication}
-                      availableApplications={contractReadyApplications}
-                      defaultWorkingLocation={
-                        job.location || (job.isRemote ? "Remote" : "")
-                      }
-                      onSuccess={(contract) => {
-                        showToastSuccess(
-                          "Đã tạo hợp đồng",
-                          `Hợp đồng #${contract.contractNumber} đã được tạo và gửi ký.`,
-                        );
-                        setContractApplication(null);
-                        void loadData();
-                      }}
-                      onCancel={() => setContractApplication(null)}
-                    />
+                    {contractMode === 'choose' ? (
+                      <div className="ftj-contract-mode-picker">
+                        <p style={{
+                          fontSize: '0.88rem', color: '#94a3b8', margin: '0 0 16px',
+                        }}>
+                          Chọn cách tạo hợp đồng cho ứng viên này:
+                        </p>
+                        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                          <button
+                            type="button"
+                            className="ftj-btn ftj-btn--primary"
+                            style={{
+                              flex: 1, minWidth: 200, padding: '18px 24px',
+                              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+                              background: 'rgba(0,240,255,0.06)', border: '1px solid rgba(0,240,255,0.2)',
+                              borderRadius: 12, color: '#00f0ff', cursor: 'pointer',
+                              transition: 'all 0.2s ease',
+                            }}
+                            onClick={() => setContractMode('create')}
+                            onMouseEnter={(e) => {
+                              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,240,255,0.12)';
+                              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(0,240,255,0.35)';
+                            }}
+                            onMouseLeave={(e) => {
+                              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,240,255,0.06)';
+                              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(0,240,255,0.2)';
+                            }}
+                          >
+                            <FileSignature size={28} />
+                            <strong style={{ fontSize: '0.95rem' }}>Soạn hợp đồng</strong>
+                            <span style={{ fontSize: '0.78rem', color: '#64748b', textAlign: 'center' }}>
+                              Tạo hợp đồng trực tiếp từ form của SkillVerse với đầy đủ điều khoản lương, quyền lợi.
+                            </span>
+                          </button>
+                          <button
+                            type="button"
+                            className="ftj-btn ftj-btn--primary"
+                            style={{
+                              flex: 1, minWidth: 200, padding: '18px 24px',
+                              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+                              background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.2)',
+                              borderRadius: 12, color: '#8b5cf6', cursor: 'pointer',
+                              transition: 'all 0.2s ease',
+                            }}
+                            onClick={() => setContractMode('upload')}
+                            onMouseEnter={(e) => {
+                              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(139,92,246,0.12)';
+                              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(139,92,246,0.35)';
+                            }}
+                            onMouseLeave={(e) => {
+                              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(139,92,246,0.06)';
+                              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(139,92,246,0.2)';
+                            }}
+                          >
+                            <FileText size={28} />
+                            <strong style={{ fontSize: '0.95rem' }}>Upload hợp đồng PDF</strong>
+                            <span style={{ fontSize: '0.78rem', color: '#64748b', textAlign: 'center' }}>
+                              Upload file PDF hợp đồng của công ty và gửi trực tiếp cho ứng viên ký.
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    ) : contractMode === 'upload' ? (
+                      <RecruiterContractUpload
+                        applicationId={contractApplication.id}
+                        onSuccess={() => {
+                          showToastSuccess(
+                            "Đã upload & gửi hợp đồng",
+                            "Hợp đồng PDF đã được gửi cho ứng viên.",
+                          );
+                          setContractApplication(null);
+                          setContractMode('choose');
+                          void loadData();
+                        }}
+                        onCancel={() => setContractMode('choose')}
+                      />
+                    ) : (
+                      <>
+                        <div style={{ marginBottom: 12 }}>
+                          <button
+                            type="button"
+                            className="ftj-btn ftj-btn--ghost"
+                            onClick={() => setContractMode('choose')}
+                            style={{ fontSize: '0.82rem' }}
+                          >
+                            ← Quay lại chọn loại
+                          </button>
+                        </div>
+                        <ContractForm
+                          applicationId={contractApplication.id}
+                          initialApplication={contractApplication}
+                          availableApplications={contractReadyApplications}
+                          defaultWorkingLocation={
+                            job.location || (job.isRemote ? "Remote" : "")
+                          }
+                          onSuccess={(contract) => {
+                            showToastSuccess(
+                              "Đã tạo hợp đồng",
+                              `Hợp đồng #${contract.contractNumber} đã được tạo và gửi ký.`,
+                            );
+                            setContractApplication(null);
+                            setContractMode('choose');
+                            void loadData();
+                          }}
+                          onCancel={() => {
+                            setContractMode('choose');
+                          }}
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -2552,6 +2711,148 @@ const FullTimeJobFullPage = ({ jobId, onBack }: FullTimeJobFullPageProps) => {
                   <Trash2 size={14} />
                 )}
                 Xóa vĩnh viễn
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Blockers Modal */}
+      {closeBlockers && (
+        <div className="ftj-modal-backdrop" onClick={() => setCloseBlockers(null)}>
+          <div className="ftj-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 600 }}>
+            <span className="ftj-modal__eyebrow" style={{ color: '#f43f5e' }}>
+              <AlertTriangle size={14} style={{ marginRight: 6 }} />
+              Không thể đóng tin
+            </span>
+            <h3>Còn {closeBlockers.length} tác vụ chưa hoàn tất</h3>
+            <p style={{ marginBottom: 16 }}>
+              Vui lòng xử lý dứt điểm các hồ sơ ứng viên và hợp đồng sau trước khi đóng job:
+            </p>
+            <div style={{ maxHeight: 300, overflowY: 'auto', background: 'rgba(15, 23, 42, 0.4)', borderRadius: 8, border: '1px solid #334155' }}>
+              {closeBlockers.map((blocker, idx) => (
+                <div key={idx} style={{ padding: 12, borderBottom: idx < closeBlockers.length - 1 ? '1px solid #334155' : 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <strong style={{ fontSize: '0.9rem', color: '#e2e8f0' }}>
+                      {blocker.type === 'APPLICATION' ? `Hồ sơ ứng viên #${blocker.id}` : `Hợp đồng #${blocker.id}`}
+                    </strong>
+                    <span style={{ fontSize: '0.75rem', padding: '2px 8px', borderRadius: 4, background: '#1e293b', border: '1px solid #334155', color: '#94a3b8' }}>
+                      {blocker.status}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
+                    Ứng viên: <span style={{ color: '#cbd5e1' }}>{blocker.candidateName} ({blocker.candidateEmail})</span>
+                  </div>
+                  <div style={{ fontSize: '0.85rem', color: '#f87171', marginTop: 4 }}>
+                    Lý do: {blocker.reason}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="ftj-modal__actions" style={{ marginTop: 24 }}>
+              <button
+                className="ftj-btn ftj-btn--primary"
+                onClick={() => setCloseBlockers(null)}
+              >
+                Đã hiểu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Onboarding Info Modal */}
+      {onboardingModalCandidate && (
+        <div className="ftj-modal-backdrop" onClick={() => setOnboardingModalCandidate(null)}>
+          <div className="ftj-onboarding-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="ftj-onboarding-modal__header">
+              <ShieldCheck size={24} className="ftj-onboarding-modal__icon" />
+              <div>
+                <h2>Thông tin pháp lý & Onboarding</h2>
+                <p>Ứng viên: {onboardingModalCandidate.userFullName || onboardingModalCandidate.userEmail}</p>
+              </div>
+            </div>
+
+            <div className="ftj-onboarding-modal__content">
+              {isOnboardingLoading ? (
+                <div className="ftj-onboarding-modal__loading">
+                  <Loader2 size={24} className="ftj-spin" />
+                  <p>Đang tải dữ liệu...</p>
+                </div>
+              ) : onboardingInfo ? (
+                <div className="ftj-onboarding-grid">
+                  <div className="ftj-onboarding-section">
+                    <h3>Thông tin định danh</h3>
+                    <div className="ftj-onboarding-item">
+                      <span className="label">Họ và tên</span>
+                      <span className="value">{onboardingInfo.fullName}</span>
+                    </div>
+                    <div className="ftj-onboarding-item">
+                      <span className="label">Số CCCD/CMND</span>
+                      <span className="value">{onboardingInfo.idCardNumber}</span>
+                    </div>
+                    {onboardingInfo.dateOfBirth && (
+                      <div className="ftj-onboarding-item">
+                        <span className="label">Ngày sinh</span>
+                        <span className="value">{onboardingInfo.dateOfBirth}</span>
+                      </div>
+                    )}
+                    {onboardingInfo.idCardDate && (
+                      <div className="ftj-onboarding-item">
+                        <span className="label">Ngày cấp</span>
+                        <span className="value">{onboardingInfo.idCardDate}</span>
+                      </div>
+                    )}
+                    <div className="ftj-onboarding-item">
+                      <span className="label">Nơi cấp</span>
+                      <span className="value">{onboardingInfo.idCardPlace}</span>
+                    </div>
+                    {onboardingInfo.address && (
+                      <div className="ftj-onboarding-item">
+                        <span className="label">Địa chỉ liên hệ</span>
+                        <span className="value">{onboardingInfo.address}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="ftj-onboarding-section">
+                    <h3>Thông tin tài khoản ngân hàng</h3>
+                    <div className="ftj-onboarding-item">
+                      <span className="label">Tên ngân hàng</span>
+                      <span className="value">{onboardingInfo.bankName}</span>
+                    </div>
+                    <div className="ftj-onboarding-item">
+                      <span className="label">Chủ tài khoản</span>
+                      <span className="value">{onboardingInfo.bankAccountHolder}</span>
+                    </div>
+                    <div className="ftj-onboarding-item">
+                      <span className="label">Số tài khoản</span>
+                      <span className="value">{onboardingInfo.bankAccountNumber}</span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="ftj-onboarding-modal__empty">
+                  <AlertTriangle size={32} />
+                  <h3>Chưa có thông tin pháp lý</h3>
+                  <p>Ứng viên chưa cập nhật thông tin định danh và tài khoản ngân hàng. Bạn có thể gửi nhắc nhở để yêu cầu họ bổ sung.</p>
+                </div>
+              )}
+            </div>
+
+            <div className="ftj-onboarding-modal__actions">
+              <button
+                className="ftj-btn ftj-btn--ghost"
+                onClick={() => setOnboardingModalCandidate(null)}
+              >
+                Đóng
+              </button>
+              <button
+                className="ftj-btn ftj-btn--primary ftj-btn--cyan"
+                disabled={isReminding || isOnboardingLoading}
+                onClick={() => handleRemindOnboarding(onboardingModalCandidate.id)}
+              >
+                {isReminding ? <Loader2 size={14} className="ftj-spin" /> : <Send size={14} />}
+                Nhắc nhở nộp
               </button>
             </div>
           </div>

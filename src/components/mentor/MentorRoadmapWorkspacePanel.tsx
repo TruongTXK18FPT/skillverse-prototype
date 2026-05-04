@@ -55,7 +55,7 @@ import NodeMentoringWorkspace from "./NodeMentoringWorkspace";
 import MentorAssessmentCreator from "./MentorAssessmentCreator";
 import MentorCompletionReportForm from "./MentorCompletionReportForm";
 import MentorNodeReportTab from "./MentorNodeReportTab";
-import RichTextEditor from "../shared/RichTextEditor";
+
 import {
   EditableRequirementField,
   listToMultilineText,
@@ -933,14 +933,22 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
                       </div>
                       <div className="mrw-form-group">
                         <label className="mrw-form-label">Mô tả ngắn</label>
-                        <RichTextEditor
-                          initialContent={inlineEdit.description || ""}
-                          onChange={(val) =>
-                            setInlineEdit({ ...inlineEdit, description: val })
+                        <textarea
+                          className="mrw-form-textarea mrw-form-textarea--md"
+                          value={inlineEdit.description || ""}
+                          onChange={(e) =>
+                            setInlineEdit({
+                              ...inlineEdit,
+                              description: e.target.value,
+                            })
                           }
-                          placeholder="Mô tả nội dung node..."
-                          userId={user?.id}
+                          placeholder="Mô tả nội dung node... (hỗ trợ Markdown)"
+                          rows={8}
                         />
+                        <p className="mrw-md-hint">
+                          Hỗ trợ Markdown: **in đậm**, *in nghiêng*, `code`, -
+                          danh sách, # tiêu đề, [link](url)
+                        </p>
                       </div>
                       <div className="mrw-form-row">
                         <div className="mrw-form-group">
@@ -1171,6 +1179,11 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
                 {overviewTab === "ASSESSMENT" && (
                   <MentorAssessmentCreator
                     journeyId={workspace.journeyId}
+                    /* Final assessment cho toàn roadmap được lưu vào node MAIN cuối
+                       cùng (đã được parent định nghĩa là Final Assessment node).
+                       Trước đây tab này không truyền nodeId nên form yêu cầu mentor
+                       chọn node — sai về nghiệp vụ. */
+                    nodeId={finalNodeId ?? undefined}
                     bookingId={bookingId}
                     learnerName={workspace.booking?.learnerName}
                     nodes={nodes}

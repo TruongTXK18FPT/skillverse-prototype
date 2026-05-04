@@ -39,7 +39,7 @@ import {
 } from "../../services/mentorRoadmapWorkspaceService";
 import { useAuth } from "../../context/AuthContext";
 import { RoadmapResponse } from "../../types/Roadmap";
-import RichTextEditor from "../../components/shared/RichTextEditor";
+
 import RoadmapNodeRequirementsCard from "../../components/roadmap/RoadmapNodeRequirementsCard";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -47,6 +47,7 @@ import {
   getNodeAssignment,
   getNodeEvidence,
   submitNodeEvidence,
+  selfConfirmNode,
   getLatestOutputAssessment,
   submitOutputAssessment,
 } from "../../services/nodeMentoringService";
@@ -209,6 +210,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
   const [attachmentFile, setAttachmentFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [markingComplete, setMarkingComplete] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -220,9 +222,11 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
   // ── Node verification status map (for sidebar icons) ──
   type NodeStatusEntry = {
-    selfCompleted: boolean;
+    learnerMarkedComplete: boolean;
+    progressCompleted: boolean;
     verified: "NONE" | "VERIFIED" | "REJECTED";
     submitted: boolean;
+    hasMentorCoverage: boolean;
   };
   const [nodeStatusMap, setNodeStatusMap] = useState<
     Record<string, NodeStatusEntry>
@@ -312,16 +316,21 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
         setNodeStatusMap((prev) => ({
           ...prev,
           [selectedNodeId]: {
-            selfCompleted: evRes.value!.learnerMarkedComplete ?? false,
+            learnerMarkedComplete: evRes.value!.learnerMarkedComplete ?? false,
+            progressCompleted:
+              evRes.value!.roadmapProgressStatus === "COMPLETED",
             verified:
-              evRes.value!.latestVerification?.nodeVerificationStatus === "VERIFIED"
+              evRes.value!.latestVerification?.nodeVerificationStatus ===
+              "VERIFIED"
                 ? "VERIFIED"
-                : evRes.value!.latestVerification?.nodeVerificationStatus === "REJECTED"
+                : evRes.value!.latestVerification?.nodeVerificationStatus ===
+                    "REJECTED"
                   ? "REJECTED"
                   : "NONE",
             submitted: ["SUBMITTED", "RESUBMITTED"].includes(
               evRes.value!.submissionStatus,
             ),
+            hasMentorCoverage: evRes.value!.hasMentorCoverage ?? false,
           },
         }));
       } else {
@@ -362,16 +371,16 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
       if (r.status === "fulfilled" && r.value.ev) {
         const { nodeId, ev } = r.value;
         entries[nodeId] = {
-          selfCompleted: ev.learnerMarkedComplete ?? false,
+          learnerMarkedComplete: ev.learnerMarkedComplete ?? false,
+          progressCompleted: ev.roadmapProgressStatus === "COMPLETED",
           verified:
             ev.latestVerification?.nodeVerificationStatus === "VERIFIED"
               ? "VERIFIED"
               : ev.latestVerification?.nodeVerificationStatus === "REJECTED"
                 ? "REJECTED"
                 : "NONE",
-          submitted: ["SUBMITTED", "RESUBMITTED"].includes(
-            ev.submissionStatus,
-          ),
+          submitted: ["SUBMITTED", "RESUBMITTED"].includes(ev.submissionStatus),
+          hasMentorCoverage: ev.hasMentorCoverage ?? false,
         };
       }
     }
@@ -544,8 +553,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
     file.type ===
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-  const isImageFile = (file: File) =>
-    file.type.startsWith("image/");
+  const isImageFile = (file: File) => file.type.startsWith("image/");
 
   const getFileExt = (file: File) => {
     if (file.type === "application/pdf") return "pdf";
@@ -581,7 +589,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
   const handleSubmit = async () => {
     if (!journeyId) return;
     // Use scoped state depending on whether we're submitting node evidence or final assessment
-    const currentText = selectedNodeId ? nodeSubmissionText : finalSubmissionText;
+    const currentText = selectedNodeId
+      ? nodeSubmissionText
+      : finalSubmissionText;
     const currentUrl = selectedNodeId ? nodeEvidenceUrl : finalEvidenceUrl;
 
     if (selectedNodeId && evidence && !canSubmitNodeEvidence(evidence)) {
@@ -628,10 +638,8 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
           );
           attachmentUrl = result.url;
         } else if (isImageFile(attachmentFile) && currentUserId) {
-          const result = await uploadImage(
-            attachmentFile,
-            currentUserId,
-            (p) => setUploadProgress(p.percentage),
+          const result = await uploadImage(attachmentFile, currentUserId, (p) =>
+            setUploadProgress(p.percentage),
           );
           attachmentUrl = result.url;
         } else {
@@ -648,7 +656,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
         showSuccess("Thành công", "Đã nộp minh chứng cho node.");
         await loadNodeData();
         await loadAllNodeStatuses();
-        setRightTab("REPORT");
+        setRightTab("SUBMIT");
       } else {
         await submitOutputAssessment(journeyId, {
           submissionText: currentText,
@@ -668,6 +676,50 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
     }
   };
 
+  const handleMarkNodeComplete = async () => {
+    if (!journeyId || !selectedNodeId || !evidence) return;
+    try {
+      setMarkingComplete(true);
+      const updated = await selfConfirmNode(journeyId, selectedNodeId);
+      setEvidence(updated);
+      setNodeStatusMap((prev) => ({
+        ...prev,
+        [selectedNodeId]: {
+          learnerMarkedComplete: updated.learnerMarkedComplete ?? false,
+          progressCompleted: updated.roadmapProgressStatus === "COMPLETED",
+          verified:
+            updated.latestVerification?.nodeVerificationStatus === "VERIFIED"
+              ? "VERIFIED"
+              : updated.latestVerification?.nodeVerificationStatus ===
+                  "REJECTED"
+                ? "REJECTED"
+                : "NONE",
+          submitted: ["SUBMITTED", "RESUBMITTED"].includes(
+            updated.submissionStatus,
+          ),
+          hasMentorCoverage: updated.hasMentorCoverage ?? false,
+        },
+      }));
+      await loadRoadmap();
+      await loadAllNodeStatuses();
+      if (updated.hasMentorCoverage) {
+        showSuccess(
+          "Đã đánh dấu hoàn thành",
+          "Node đang chờ mentor review và verify trước khi mở node tiếp theo.",
+        );
+      } else {
+        showSuccess("Đã hoàn thành node", "Node tiếp theo đã được mở khóa.");
+      }
+    } catch (err: any) {
+      showError(
+        "Không thể đánh dấu hoàn thành",
+        err.response?.data?.message || "Vui lòng thử lại.",
+      );
+    } finally {
+      setMarkingComplete(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="srwp-loading">
@@ -683,14 +735,33 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
   const nodes = roadmap.roadmap || [];
   const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
 
-  // Sequential lock: a node is accessible only if the previous node is VERIFIED by mentor
+  const isNodeCompleteForUnlock = (status?: NodeStatusEntry): boolean => {
+    if (!status?.submitted) return false;
+    return status.hasMentorCoverage
+      ? status.verified === "VERIFIED" && status.progressCompleted
+      : status.progressCompleted;
+  };
+
+  // Sequential lock: a node opens when the previous node has evidence and is completed.
   const isNodeLocked = (idx: number): boolean => {
     if (idx === 0) return false;
     const prevNode = nodes[idx - 1];
     const prevStatus = nodeStatusMap[prevNode?.id];
-    return !prevStatus?.verified || prevStatus.verified === "NONE";
+    return !isNodeCompleteForUnlock(prevStatus);
   };
   const nodeSubmissionLocked = !!evidence && !canSubmitNodeEvidence(evidence);
+  const nodeEvidenceSubmitted =
+    !!evidence &&
+    ["SUBMITTED", "RESUBMITTED"].includes(evidence.submissionStatus);
+  const nodeProgressCompleted = evidence?.roadmapProgressStatus === "COMPLETED";
+  const nodeAwaitingMentor =
+    !!evidence?.hasMentorCoverage &&
+    !!evidence?.learnerMarkedComplete &&
+    !nodeProgressCompleted;
+  const canMarkNodeComplete =
+    nodeEvidenceSubmitted &&
+    !evidence?.learnerMarkedComplete &&
+    !nodeProgressCompleted;
   const finalSubmissionLocked =
     !!finalAssessment && !canSubmitFinalAssessment(finalAssessment);
   const nodeSubmitTabLabel = evidence
@@ -719,7 +790,14 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
           </p>
           <div className="srwp-submission-status-card__meta">
             <span>{formatNodeSubmissionStatus(evidence.submissionStatus)}</span>
-            <span>{formatNodeVerificationStatus(evidence.verificationStatus)}</span>
+            <span>
+              {formatNodeVerificationStatus(evidence.verificationStatus)}
+            </span>
+            {nodeProgressCompleted ? (
+              <span>Node da hoan thanh</span>
+            ) : nodeAwaitingMentor ? (
+              <span>Cho mentor verify</span>
+            ) : null}
             {evidence.submittedAt && (
               <span>
                 Nộp lúc {new Date(evidence.submittedAt).toLocaleString("vi-VN")}
@@ -750,6 +828,17 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
           >
             Xem kết quả đánh giá
           </button>
+          {canMarkNodeComplete && (
+            <button
+              type="button"
+              className="srwp-status-action srwp-status-action--primary"
+              onClick={handleMarkNodeComplete}
+              disabled={markingComplete}
+            >
+              <CheckCircle2 size={15} />
+              {markingComplete ? "Đang đánh dấu..." : "Đánh dấu hoàn thành"}
+            </button>
+          )}
         </div>
       </div>
     );
@@ -774,7 +863,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
           </p>
           {feedback && (
             <div className="srwp-feedback-content">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{feedback}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {feedback}
+              </ReactMarkdown>
             </div>
           )}
         </div>
@@ -915,40 +1006,62 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
               const ns = nodeStatusMap[node.id];
               const locked = isNodeLocked(idx);
               return (
-              <div
-                key={node.id}
-                className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""} ${locked ? "srwp-node-item--locked" : ""}`}
-                onClick={() => {
-                  if (locked) return;
-                  setSelectedNodeId(node.id);
-                  setRightTab("ASSIGNMENT");
-                }}
-                title={locked ? "Hoàn thành node trước để mở khóa" : undefined}
-              >
-                <span className="srwp-node-index">{idx + 1}</span>
-                <div className="srwp-node-info">
-                  <span className="srwp-node-title">{node.title}</span>
-                  <span
-                    className={`srwp-node-type srwp-node-type--${node.type || "MAIN"}`}
-                  >
-                    {node.type === "SIDE" ? "Phụ" : "Chính"}
-                  </span>
+                <div
+                  key={node.id}
+                  className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""} ${locked ? "srwp-node-item--locked" : ""}`}
+                  onClick={() => {
+                    if (locked) return;
+                    setSelectedNodeId(node.id);
+                    setRightTab("ASSIGNMENT");
+                  }}
+                  title={
+                    locked ? "Hoàn thành node trước để mở khóa" : undefined
+                  }
+                >
+                  <span className="srwp-node-index">{idx + 1}</span>
+                  <div className="srwp-node-info">
+                    <span className="srwp-node-title">{node.title}</span>
+                    <span
+                      className={`srwp-node-type srwp-node-type--${node.type || "MAIN"}`}
+                    >
+                      {node.type === "SIDE" ? "Phụ" : "Chính"}
+                    </span>
+                  </div>
+                  {/* Node verification status icon */}
+                  {locked ? (
+                    <Lock
+                      size={13}
+                      className="srwp-status-icon srwp-status-icon--locked"
+                    />
+                  ) : ns?.verified === "VERIFIED" ? (
+                    <BadgeCheck
+                      size={16}
+                      className="srwp-status-icon srwp-status-icon--verified"
+                    />
+                  ) : ns?.verified === "REJECTED" ? (
+                    <XCircle
+                      size={16}
+                      className="srwp-status-icon srwp-status-icon--rejected"
+                    />
+                  ) : isNodeCompleteForUnlock(ns) ? (
+                    <CheckCircle2
+                      size={16}
+                      className="srwp-status-icon srwp-status-icon--completed"
+                    />
+                  ) : ns?.learnerMarkedComplete ? (
+                    <CheckCircle2
+                      size={16}
+                      className="srwp-status-icon srwp-status-icon--pending"
+                    />
+                  ) : ns?.submitted ? (
+                    <Clock
+                      size={14}
+                      className="srwp-status-icon srwp-status-icon--submitted"
+                    />
+                  ) : (
+                    <ChevronRight size={14} className="srwp-node-chevron" />
+                  )}
                 </div>
-                {/* Node verification status icon */}
-                {locked ? (
-                  <Lock size={13} className="srwp-status-icon srwp-status-icon--locked" />
-                ) : ns?.verified === "VERIFIED" ? (
-                  <BadgeCheck size={16} className="srwp-status-icon srwp-status-icon--verified" />
-                ) : ns?.verified === "REJECTED" ? (
-                  <XCircle size={16} className="srwp-status-icon srwp-status-icon--rejected" />
-                ) : ns?.selfCompleted ? (
-                  <CheckCircle2 size={16} className="srwp-status-icon srwp-status-icon--pending" />
-                ) : ns?.submitted ? (
-                  <Clock size={14} className="srwp-status-icon srwp-status-icon--submitted" />
-                ) : (
-                  <ChevronRight size={14} className="srwp-node-chevron" />
-                )}
-              </div>
               );
             })}
 
@@ -1191,12 +1304,19 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                       <h4>
                         <ClipboardList size={16} /> Nhiệm vụ chi tiết từ Mentor
                         {assignment?.assignmentSource === "MENTOR_REFINED" && (
-                          <span className="srwp-source-badge srwp-source-badge--mentor" title="Mentor đã cập nhật bài tập này">
+                          <span
+                            className="srwp-source-badge srwp-source-badge--mentor"
+                            title="Mentor đã cập nhật bài tập này"
+                          >
                             <BadgeCheck size={12} /> Mentor đã cập nhật
                           </span>
                         )}
-                        {assignment?.assignmentSource === "SYSTEM_GENERATED" && (
-                          <span className="srwp-source-badge srwp-source-badge--ai" title="Nội dung do AI tạo tự động">
+                        {assignment?.assignmentSource ===
+                          "SYSTEM_GENERATED" && (
+                          <span
+                            className="srwp-source-badge srwp-source-badge--ai"
+                            title="Nội dung do AI tạo tự động"
+                          >
                             AI Generated
                           </span>
                         )}
@@ -1250,110 +1370,146 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                     {nodeSubmissionLocked ? (
                       renderNodeSubmissionStatus()
                     ) : (
-                    <div className="srwp-form">
-                      {renderNodeReworkNotice()}
-                      <div className="srwp-form-group">
-                        <label>Nội dung bài làm</label>
-                        <RichTextEditor
-                          key={`node-submit-${selectedNodeId}-${evidence?.id ?? "new"}-${evidence?.submissionStatus ?? "empty"}`}
-                          initialContent={nodeSubmissionText}
-                          onChange={setNodeSubmissionText}
-                          placeholder="Trình bày bài làm, kết quả hoặc ghi chú của bạn..."
-                          userId={currentUserId}
-                        />
-                      </div>
+                      <div className="srwp-form">
+                        {renderNodeReworkNotice()}
+                        <div className="srwp-form-group">
+                          <label>Nội dung bài làm</label>
+                          <textarea
+                            className="srwp-input srwp-textarea--md"
+                            value={nodeSubmissionText}
+                            onChange={(e) =>
+                              setNodeSubmissionText(e.target.value)
+                            }
+                            placeholder="Trình bày bài làm, kết quả hoặc ghi chú của bạn... (hỗ trợ Markdown)"
+                            rows={10}
+                          />
+                          <p className="srwp-md-hint">
+                            Hỗ trợ Markdown: **in đậm**, *in nghiêng*, `code`, -
+                            danh sách, # tiêu đề, [link](url)
+                          </p>
+                        </div>
 
-                      <div className="srwp-form-group">
-                        <label>Link tài liệu / Source code (Tùy chọn)</label>
-                        <input
-                          type="url"
-                          className="srwp-input"
-                          value={nodeEvidenceUrl}
-                          onChange={(e) => setNodeEvidenceUrl(e.target.value)}
-                          placeholder="https://github.com/..."
-                        />
-                      </div>
+                        <div className="srwp-form-group">
+                          <label>Link tài liệu / Source code (Tùy chọn)</label>
+                          <input
+                            type="url"
+                            className="srwp-input"
+                            value={nodeEvidenceUrl}
+                            onChange={(e) => setNodeEvidenceUrl(e.target.value)}
+                            placeholder="https://github.com/..."
+                          />
+                        </div>
 
-                      <div className="srwp-form-group">
-                        <label>File đính kèm — PDF / DOCX / Ảnh (Tùy chọn)</label>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept=".pdf,.docx,image/jpeg,image/png,image/gif,image/webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                          style={{ display: "none" }}
-                          onChange={(e) => {
-                            const f = e.target.files?.[0];
-                            if (f) handleFileSelect(f);
-                            if (fileInputRef.current) fileInputRef.current.value = "";
-                          }}
-                        />
-                        <div
-                          className={`srwp-upload-zone ${isDragging ? "srwp-upload-zone--dragging" : ""} ${attachmentFile ? "srwp-upload-zone--has-file" : ""}`}
-                          onClick={() => !attachmentFile && fileInputRef.current?.click()}
-                          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                          onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
-                          onDrop={handleDropFile}
-                        >
-                          {attachmentFile ? (
-                            <div className="srwp-file-preview">
-                              <div className={`srwp-file-preview__icon srwp-file-preview__icon--${getFileExt(attachmentFile)}`}>
-                                {getFileExt(attachmentFile).toUpperCase()}
+                        <div className="srwp-form-group">
+                          <label>
+                            File đính kèm — PDF / DOCX / Ảnh (Tùy chọn)
+                          </label>
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept=".pdf,.docx,image/jpeg,image/png,image/gif,image/webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            style={{ display: "none" }}
+                            onChange={(e) => {
+                              const f = e.target.files?.[0];
+                              if (f) handleFileSelect(f);
+                              if (fileInputRef.current)
+                                fileInputRef.current.value = "";
+                            }}
+                          />
+                          <div
+                            className={`srwp-upload-zone ${isDragging ? "srwp-upload-zone--dragging" : ""} ${attachmentFile ? "srwp-upload-zone--has-file" : ""}`}
+                            onClick={() =>
+                              !attachmentFile && fileInputRef.current?.click()
+                            }
+                            onDragOver={(e) => {
+                              e.preventDefault();
+                              setIsDragging(true);
+                            }}
+                            onDragLeave={(e) => {
+                              e.preventDefault();
+                              setIsDragging(false);
+                            }}
+                            onDrop={handleDropFile}
+                          >
+                            {attachmentFile ? (
+                              <div className="srwp-file-preview">
+                                <div
+                                  className={`srwp-file-preview__icon srwp-file-preview__icon--${getFileExt(attachmentFile)}`}
+                                >
+                                  {getFileExt(attachmentFile).toUpperCase()}
+                                </div>
+                                <div className="srwp-file-preview__info">
+                                  <div className="srwp-file-preview__name">
+                                    {attachmentFile.name}
+                                  </div>
+                                  <div className="srwp-file-preview__size">
+                                    {formatFileSize(attachmentFile.size)}
+                                  </div>
+                                </div>
+                                <button
+                                  type="button"
+                                  className="srwp-file-preview__remove"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setAttachmentFile(null);
+                                    setUploadError(null);
+                                  }}
+                                >
+                                  <X size={14} />
+                                </button>
                               </div>
-                              <div className="srwp-file-preview__info">
-                                <div className="srwp-file-preview__name">{attachmentFile.name}</div>
-                                <div className="srwp-file-preview__size">{formatFileSize(attachmentFile.size)}</div>
-                              </div>
-                              <button
-                                type="button"
-                                className="srwp-file-preview__remove"
-                                onClick={(e) => { e.stopPropagation(); setAttachmentFile(null); setUploadError(null); }}
-                              >
-                                <X size={14} />
-                              </button>
+                            ) : (
+                              <>
+                                <div className="srwp-upload-zone__icon">
+                                  <Upload size={22} />
+                                </div>
+                                <div className="srwp-upload-zone__text">
+                                  <p>Kéo thả hoặc click để chọn file</p>
+                                  <span>Tối đa 10MB</span>
+                                </div>
+                                <div className="srwp-upload-zone__accept">
+                                  <span className="srwp-upload-zone__badge srwp-upload-zone__badge--pdf">
+                                    PDF
+                                  </span>
+                                  <span className="srwp-upload-zone__badge srwp-upload-zone__badge--docx">
+                                    DOCX
+                                  </span>
+                                  <span className="srwp-upload-zone__badge srwp-upload-zone__badge--img">
+                                    IMG
+                                  </span>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                          {uploadError && (
+                            <div className="srwp-upload-error">
+                              <AlertCircle size={14} /> {uploadError}
                             </div>
-                          ) : (
-                            <>
-                              <div className="srwp-upload-zone__icon">
-                                <Upload size={22} />
+                          )}
+                          {submitting && uploadProgress > 0 && (
+                            <div className="srwp-upload-progress">
+                              <div className="srwp-upload-progress__bar">
+                                <div
+                                  className="srwp-upload-progress__fill"
+                                  style={{ width: `${uploadProgress}%` }}
+                                />
                               </div>
-                              <div className="srwp-upload-zone__text">
-                                <p>Kéo thả hoặc click để chọn file</p>
-                                <span>Tối đa 10MB</span>
+                              <div className="srwp-upload-progress__text">
+                                <span>Đang tải lên...</span>
+                                <span>{uploadProgress}%</span>
                               </div>
-                              <div className="srwp-upload-zone__accept">
-                                <span className="srwp-upload-zone__badge srwp-upload-zone__badge--pdf">PDF</span>
-                                <span className="srwp-upload-zone__badge srwp-upload-zone__badge--docx">DOCX</span>
-                                <span className="srwp-upload-zone__badge srwp-upload-zone__badge--img">IMG</span>
-                              </div>
-                            </>
+                            </div>
                           )}
                         </div>
-                        {uploadError && (
-                          <div className="srwp-upload-error">
-                            <AlertCircle size={14} /> {uploadError}
-                          </div>
-                        )}
-                        {submitting && uploadProgress > 0 && (
-                          <div className="srwp-upload-progress">
-                            <div className="srwp-upload-progress__bar">
-                              <div className="srwp-upload-progress__fill" style={{ width: `${uploadProgress}%` }} />
-                            </div>
-                            <div className="srwp-upload-progress__text">
-                              <span>Đang tải lên...</span>
-                              <span>{uploadProgress}%</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
 
-                      <button
-                        className="srwp-submit-btn"
-                        onClick={handleSubmit}
-                        disabled={submitting}
-                      >
-                        {submitting ? "Đang nộp..." : "Gửi minh chứng"}
-                      </button>
-                    </div>
+                        <button
+                          className="srwp-submit-btn"
+                          onClick={handleSubmit}
+                          disabled={submitting}
+                        >
+                          {submitting ? "Đang nộp..." : "Gửi minh chứng"}
+                        </button>
+                      </div>
                     )}
                   </div>
                 )}
@@ -1373,7 +1529,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                           <span
                             className={`srwp-badge status-${evidence.submissionStatus}`}
                           >
-                            {formatNodeSubmissionStatus(evidence.submissionStatus)}
+                            {formatNodeSubmissionStatus(
+                              evidence.submissionStatus,
+                            )}
                           </span>
                         </div>
 
@@ -1385,7 +1543,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                               <span
                                 className={`srwp-badge result-${evidence.latestReview.reviewResult}`}
                               >
-                                {formatNodeReviewResult(evidence.latestReview.reviewResult)}
+                                {formatNodeReviewResult(
+                                  evidence.latestReview.reviewResult,
+                                )}
                               </span>
                             </div>
                             {evidence.latestReview.score != null && (
@@ -1414,12 +1574,10 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                               <span
                                 className={`srwp-badge verify-${evidence.latestVerification.nodeVerificationStatus}`}
                               >
-                                {
-                                  formatNodeVerificationStatus(
-                                    evidence.latestVerification
-                                      .nodeVerificationStatus,
-                                  )
-                                }
+                                {formatNodeVerificationStatus(
+                                  evidence.latestVerification
+                                    .nodeVerificationStatus,
+                                )}
                               </span>
                             </div>
                             {evidence.latestVerification.verificationNote && (
@@ -1497,110 +1655,148 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                     {finalSubmissionLocked ? (
                       renderFinalSubmissionStatus()
                     ) : (
-                    <div className="srwp-form">
-                      {renderFinalReworkNotice()}
-                      <div className="srwp-form-group">
-                        <label>Nội dung báo cáo / Bài làm</label>
-                        <RichTextEditor
-                          key={`final-submit-${finalAssessment?.id ?? "new"}-${finalAssessment?.assessmentStatus ?? "empty"}`}
-                          initialContent={finalSubmissionText}
-                          onChange={setFinalSubmissionText}
-                          placeholder="Tổng hợp kết quả học tập của bạn..."
-                          userId={currentUserId}
-                        />
-                      </div>
+                      <div className="srwp-form">
+                        {renderFinalReworkNotice()}
+                        <div className="srwp-form-group">
+                          <label>Nội dung báo cáo / Bài làm</label>
+                          <textarea
+                            className="srwp-input srwp-textarea--md"
+                            value={finalSubmissionText}
+                            onChange={(e) =>
+                              setFinalSubmissionText(e.target.value)
+                            }
+                            placeholder="Tổng hợp kết quả học tập của bạn... (hỗ trợ Markdown)"
+                            rows={10}
+                          />
+                          <p className="srwp-md-hint">
+                            Hỗ trợ Markdown: **in đậm**, *in nghiêng*, `code`, -
+                            danh sách, # tiêu đề, [link](url)
+                          </p>
+                        </div>
 
-                      <div className="srwp-form-group">
-                        <label>Link (Tùy chọn)</label>
-                        <input
-                          type="url"
-                          className="srwp-input"
-                          value={finalEvidenceUrl}
-                          onChange={(e) => setFinalEvidenceUrl(e.target.value)}
-                          placeholder="https://github.com/..."
-                        />
-                      </div>
+                        <div className="srwp-form-group">
+                          <label>Link (Tùy chọn)</label>
+                          <input
+                            type="url"
+                            className="srwp-input"
+                            value={finalEvidenceUrl}
+                            onChange={(e) =>
+                              setFinalEvidenceUrl(e.target.value)
+                            }
+                            placeholder="https://github.com/..."
+                          />
+                        </div>
 
-                      <div className="srwp-form-group">
-                        <label>File đính kèm — PDF / DOCX / Ảnh (Tùy chọn)</label>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept=".pdf,.docx,image/jpeg,image/png,image/gif,image/webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                          style={{ display: "none" }}
-                          onChange={(e) => {
-                            const f = e.target.files?.[0];
-                            if (f) handleFileSelect(f);
-                            if (fileInputRef.current) fileInputRef.current.value = "";
-                          }}
-                        />
-                        <div
-                          className={`srwp-upload-zone ${isDragging ? "srwp-upload-zone--dragging" : ""} ${attachmentFile ? "srwp-upload-zone--has-file" : ""}`}
-                          onClick={() => !attachmentFile && fileInputRef.current?.click()}
-                          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                          onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
-                          onDrop={handleDropFile}
-                        >
-                          {attachmentFile ? (
-                            <div className="srwp-file-preview">
-                              <div className={`srwp-file-preview__icon srwp-file-preview__icon--${getFileExt(attachmentFile)}`}>
-                                {getFileExt(attachmentFile).toUpperCase()}
+                        <div className="srwp-form-group">
+                          <label>
+                            File đính kèm — PDF / DOCX / Ảnh (Tùy chọn)
+                          </label>
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept=".pdf,.docx,image/jpeg,image/png,image/gif,image/webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            style={{ display: "none" }}
+                            onChange={(e) => {
+                              const f = e.target.files?.[0];
+                              if (f) handleFileSelect(f);
+                              if (fileInputRef.current)
+                                fileInputRef.current.value = "";
+                            }}
+                          />
+                          <div
+                            className={`srwp-upload-zone ${isDragging ? "srwp-upload-zone--dragging" : ""} ${attachmentFile ? "srwp-upload-zone--has-file" : ""}`}
+                            onClick={() =>
+                              !attachmentFile && fileInputRef.current?.click()
+                            }
+                            onDragOver={(e) => {
+                              e.preventDefault();
+                              setIsDragging(true);
+                            }}
+                            onDragLeave={(e) => {
+                              e.preventDefault();
+                              setIsDragging(false);
+                            }}
+                            onDrop={handleDropFile}
+                          >
+                            {attachmentFile ? (
+                              <div className="srwp-file-preview">
+                                <div
+                                  className={`srwp-file-preview__icon srwp-file-preview__icon--${getFileExt(attachmentFile)}`}
+                                >
+                                  {getFileExt(attachmentFile).toUpperCase()}
+                                </div>
+                                <div className="srwp-file-preview__info">
+                                  <div className="srwp-file-preview__name">
+                                    {attachmentFile.name}
+                                  </div>
+                                  <div className="srwp-file-preview__size">
+                                    {formatFileSize(attachmentFile.size)}
+                                  </div>
+                                </div>
+                                <button
+                                  type="button"
+                                  className="srwp-file-preview__remove"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setAttachmentFile(null);
+                                    setUploadError(null);
+                                  }}
+                                >
+                                  <X size={14} />
+                                </button>
                               </div>
-                              <div className="srwp-file-preview__info">
-                                <div className="srwp-file-preview__name">{attachmentFile.name}</div>
-                                <div className="srwp-file-preview__size">{formatFileSize(attachmentFile.size)}</div>
-                              </div>
-                              <button
-                                type="button"
-                                className="srwp-file-preview__remove"
-                                onClick={(e) => { e.stopPropagation(); setAttachmentFile(null); setUploadError(null); }}
-                              >
-                                <X size={14} />
-                              </button>
+                            ) : (
+                              <>
+                                <div className="srwp-upload-zone__icon">
+                                  <Upload size={22} />
+                                </div>
+                                <div className="srwp-upload-zone__text">
+                                  <p>Kéo thả hoặc click để chọn file</p>
+                                  <span>Tối đa 10MB</span>
+                                </div>
+                                <div className="srwp-upload-zone__accept">
+                                  <span className="srwp-upload-zone__badge srwp-upload-zone__badge--pdf">
+                                    PDF
+                                  </span>
+                                  <span className="srwp-upload-zone__badge srwp-upload-zone__badge--docx">
+                                    DOCX
+                                  </span>
+                                  <span className="srwp-upload-zone__badge srwp-upload-zone__badge--img">
+                                    IMG
+                                  </span>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                          {uploadError && (
+                            <div className="srwp-upload-error">
+                              <AlertCircle size={14} /> {uploadError}
                             </div>
-                          ) : (
-                            <>
-                              <div className="srwp-upload-zone__icon">
-                                <Upload size={22} />
+                          )}
+                          {submitting && uploadProgress > 0 && (
+                            <div className="srwp-upload-progress">
+                              <div className="srwp-upload-progress__bar">
+                                <div
+                                  className="srwp-upload-progress__fill"
+                                  style={{ width: `${uploadProgress}%` }}
+                                />
                               </div>
-                              <div className="srwp-upload-zone__text">
-                                <p>Kéo thả hoặc click để chọn file</p>
-                                <span>Tối đa 10MB</span>
+                              <div className="srwp-upload-progress__text">
+                                <span>Đang tải lên...</span>
+                                <span>{uploadProgress}%</span>
                               </div>
-                              <div className="srwp-upload-zone__accept">
-                                <span className="srwp-upload-zone__badge srwp-upload-zone__badge--pdf">PDF</span>
-                                <span className="srwp-upload-zone__badge srwp-upload-zone__badge--docx">DOCX</span>
-                                <span className="srwp-upload-zone__badge srwp-upload-zone__badge--img">IMG</span>
-                              </div>
-                            </>
+                            </div>
                           )}
                         </div>
-                        {uploadError && (
-                          <div className="srwp-upload-error">
-                            <AlertCircle size={14} /> {uploadError}
-                          </div>
-                        )}
-                        {submitting && uploadProgress > 0 && (
-                          <div className="srwp-upload-progress">
-                            <div className="srwp-upload-progress__bar">
-                              <div className="srwp-upload-progress__fill" style={{ width: `${uploadProgress}%` }} />
-                            </div>
-                            <div className="srwp-upload-progress__text">
-                              <span>Đang tải lên...</span>
-                              <span>{uploadProgress}%</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
 
-                      <button
-                        className="srwp-submit-btn"
-                        onClick={handleSubmit}
-                        disabled={submitting}
-                      >
-                        {submitting ? "Đang nộp..." : "Gửi Final Assessment"}
-                      </button>
-                    </div>
+                        <button
+                          className="srwp-submit-btn"
+                          onClick={handleSubmit}
+                          disabled={submitting}
+                        >
+                          {submitting ? "Đang nộp..." : "Gửi Final Assessment"}
+                        </button>
+                      </div>
                     )}
                   </div>
                 )}
@@ -1620,7 +1816,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                           <span
                             className={`srwp-badge result-${finalAssessment.assessmentStatus}`}
                           >
-                            {formatFinalAssessmentStatus(finalAssessment.assessmentStatus)}
+                            {formatFinalAssessmentStatus(
+                              finalAssessment.assessmentStatus,
+                            )}
                           </span>
                         </div>
                         {finalAssessment.score != null && (

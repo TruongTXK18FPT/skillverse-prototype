@@ -2458,3 +2458,189 @@
   font-size: 0.7rem;
   color: #64748b;
 }
+
+/* ===== Onboarding Info Modal (Dark Cyan Blue Neon Tech) ===== */
+.ftj-onboarding-modal {
+  width: min(720px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.75rem 2rem 2rem;
+  border-radius: 20px;
+  background:
+    linear-gradient(160deg, rgba(3, 16, 36, 0.98), rgba(4, 11, 26, 0.98)),
+    radial-gradient(
+      circle at top left,
+      rgba(34, 211, 238, 0.08),
+      transparent 35%
+    );
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  color: #e0f2fe;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.08),
+    0 0 45px rgba(34, 211, 238, 0.06),
+    0 25px 60px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.ftj-onboarding-modal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(34, 211, 238, 0.015) 2px,
+    rgba(34, 211, 238, 0.015) 3px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ftj-onboarding-modal > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ftj-onboarding-modal__header {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.15);
+}
+
+.ftj-onboarding-modal__icon {
+  color: #22d3ee;
+  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.4));
+}
+
+.ftj-onboarding-modal__header h2 {
+  margin: 0 0 0.2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #cffafe;
+  letter-spacing: 0.02em;
+}
+
+.ftj-onboarding-modal__header p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #67e8f9;
+}
+
+.ftj-onboarding-modal__content {
+  margin-bottom: 1.5rem;
+  min-height: 200px;
+}
+
+.ftj-onboarding-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .ftj-onboarding-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ftj-onboarding-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1.25rem;
+  border-radius: 14px;
+  background: rgba(14, 116, 144, 0.06);
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+.ftj-onboarding-section h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ftj-onboarding-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px dashed rgba(34, 211, 238, 0.1);
+}
+
+.ftj-onboarding-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.ftj-onboarding-item .label {
+  font-size: 0.75rem;
+  color: #7dd3fc;
+  font-weight: 500;
+}
+
+.ftj-onboarding-item .value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f8fafc;
+  word-break: break-word;
+}
+
+.ftj-onboarding-modal__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px dashed rgba(239, 68, 68, 0.3);
+  border-radius: 14px;
+  color: #fca5a5;
+}
+
+.ftj-onboarding-modal__empty svg {
+  color: #f87171;
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.3));
+}
+
+.ftj-onboarding-modal__empty h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #fef2f2;
+}
+
+.ftj-onboarding-modal__empty p {
+  margin: 0;
+  font-size: 0.85rem;
+  max-width: 380px;
+}
+
+.ftj-onboarding-modal__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 4rem 1rem;
+  color: #22d3ee;
+}
+
+.ftj-onboarding-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(34, 211, 238, 0.15);
+}

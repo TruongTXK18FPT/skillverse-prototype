@@ -1,4 +1,4 @@
-﻿/* ==================== ODYSSEY JOB BOARD STYLES - TECH TERMINAL ==================== */
+/* ==================== ODYSSEY JOB BOARD STYLES - TECH TERMINAL ==================== */
 /* All classes prefixed with "odyssey-" for CSS isolation */
 
 /* ==================== FONT FACE ==================== */
@@ -2758,15 +2758,16 @@
 .fate-card--premium {
   border: 2px solid transparent;
   background:
-    radial-gradient(ellipse at 20% 20%, rgba(255, 215, 0, 0.12) 0%, transparent 50%),
-    linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+    radial-gradient(ellipse at 50% 0%, rgba(255, 215, 0, 0.25) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(20, 20, 40, 0.95) 0%, rgba(10, 15, 30, 0.98) 100%);
   box-shadow:
-    0 0 40px rgba(255, 215, 0, 0.2),
-    0 0 80px rgba(255, 215, 0, 0.08),
-    0 8px 32px rgba(0, 0, 0, 0.6),
-    inset 0 0 50px rgba(255, 215, 0, 0.04);
-  animation: fate-premium-glow 4s ease-in-out infinite;
+    0 0 50px rgba(255, 215, 0, 0.35),
+    0 0 100px rgba(255, 215, 0, 0.15),
+    0 12px 40px rgba(0, 0, 0, 0.8),
+    inset 0 0 60px rgba(255, 215, 0, 0.08);
+  animation: fate-premium-glow-intense 3s ease-in-out infinite;
   position: relative;
+  overflow: hidden;
 }
 
 .fate-card--premium::before {
@@ -2790,20 +2791,20 @@
   50% { background-position: 100% 50%; }
 }
 
-@keyframes fate-premium-glow {
+@keyframes fate-premium-glow-intense {
   0%, 100% {
     box-shadow:
-      0 0 40px rgba(255, 215, 0, 0.2),
-      0 0 80px rgba(255, 215, 0, 0.08),
-      0 8px 32px rgba(0, 0, 0, 0.6),
-      inset 0 0 50px rgba(255, 215, 0, 0.04);
+      0 0 50px rgba(255, 215, 0, 0.35),
+      0 0 100px rgba(255, 215, 0, 0.15),
+      0 12px 40px rgba(0, 0, 0, 0.8),
+      inset 0 0 60px rgba(255, 215, 0, 0.08);
   }
   50% {
     box-shadow:
-      0 0 50px rgba(255, 215, 0, 0.3),
-      0 0 100px rgba(255, 215, 0, 0.12),
-      0 8px 32px rgba(0, 0, 0, 0.6),
-      inset 0 0 70px rgba(255, 215, 0, 0.06);
+      0 0 70px rgba(255, 215, 0, 0.5),
+      0 0 130px rgba(255, 215, 0, 0.25),
+      0 15px 50px rgba(0, 0, 0, 0.9),
+      inset 0 0 90px rgba(255, 215, 0, 0.15);
   }
 }
 
@@ -2819,7 +2820,41 @@
 /* --- Top section --- */
 .fate-card__top {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+}
+
+.fate-card__boost-ribbon {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  background: linear-gradient(135deg, #ffea00, #ffb300);
+  color: #1a1a2e;
+  padding: 6px 14px 6px 20px;
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  border-bottom-left-radius: 16px;
+  border-top-right-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: -4px 4px 15px rgba(255, 215, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.6);
+  z-index: 10;
+  animation: boost-ribbon-glow 2s infinite alternate;
+}
+
+.fate-card__boost-icon {
+  font-size: 1rem;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+}
+
+@keyframes boost-ribbon-glow {
+  from {
+    box-shadow: -4px 4px 15px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.5);
+  }
+  to {
+    box-shadow: -4px 4px 20px rgba(255, 215, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.8);
+  }
 }
 
 /* Boost badge */

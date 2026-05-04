@@ -437,6 +437,25 @@
   border-color: var(--mr-accent);
 }
 
+.srwp-textarea--md {
+  min-height: 200px;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  tab-size: 2;
+  letter-spacing: -0.01em;
+  resize: vertical;
+}
+
+.srwp-md-hint {
+  margin: 6px 0 0;
+  font-size: 0.7rem;
+  color: rgba(148, 163, 184, 0.6);
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
 .srwp-file-input {
   color: #94a3b8;
   font-size: 0.9rem;
@@ -580,7 +599,12 @@
 }
 
 .srwp-status-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
   margin-top: 1rem;
+  margin-right: 0.5rem;
   padding: 0.55rem 0.8rem;
   border-radius: 8px;
   border: 1px solid rgba(34, 211, 238, 0.28);
@@ -594,6 +618,21 @@
 
 .srwp-status-action:hover {
   background: rgba(34, 211, 238, 0.14);
+}
+
+.srwp-status-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.srwp-status-action--primary {
+  border-color: rgba(16, 185, 129, 0.45);
+  background: rgba(16, 185, 129, 0.14);
+  color: #86efac;
+}
+
+.srwp-status-action--primary:hover:not(:disabled) {
+  background: rgba(16, 185, 129, 0.22);
 }
 
 /* Report View */
@@ -1465,6 +1504,11 @@
 .srwp-status-icon--verified {
   color: #10b981;
   filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.4));
+}
+
+.srwp-status-icon--completed {
+  color: #22c55e;
+  filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.35));
 }
 
 .srwp-status-icon--rejected {

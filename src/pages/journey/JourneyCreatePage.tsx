@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  Briefcase,
-  Check,
-  ChevronRight,
-} from "lucide-react";
+import { ArrowLeft, Briefcase, Check, ChevronRight, X } from "lucide-react";
 import {
   GOAL_OPTIONS,
   JourneyType,
@@ -96,7 +91,10 @@ const getJourneyCompatibilityWarning = (
     };
   }
 
-  if (goal === "CAREER_CHANGE" && (level === "INTERMEDIATE" || level === "ADVANCED")) {
+  if (
+    goal === "CAREER_CHANGE" &&
+    (level === "INTERMEDIATE" || level === "ADVANCED")
+  ) {
     return {
       title: "Bạn đã có nền tảng thực tế với kỹ năng này",
       lines: [
@@ -130,7 +128,10 @@ const JourneyCreatePage: React.FC = () => {
         const activeJourneys = await journeyService.getActiveJourneys();
         if (!cancelled && activeJourneys.length > 0) {
           navigate("/journey", {
-            state: { blockReason: "Bạn đang có một hành trình chưa hoàn thành. Hãy hoàn thành hoặc xóa hành trình cũ trước khi tạo mới." },
+            state: {
+              blockReason:
+                "Bạn đang có một hành trình chưa hoàn thành. Hãy hoàn thành hoặc xóa hành trình cũ trước khi tạo mới.",
+            },
           });
           return;
         }
@@ -142,7 +143,9 @@ const JourneyCreatePage: React.FC = () => {
       }
     };
     void checkActiveJourney();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [navigate]);
 
   useEffect(() => {
@@ -200,8 +203,6 @@ const JourneyCreatePage: React.FC = () => {
     : null;
   const journeyTypeLabel = "Học kỹ năng mới";
 
-
-
   const handleSkillComplete = (data: {
     domain: string;
     subCategory: string;
@@ -238,9 +239,7 @@ const JourneyCreatePage: React.FC = () => {
 
   const canSubmit = () => {
     return Boolean(
-      formData.goal &&
-        formData.level &&
-        selectedTargetSkills.length > 0,
+      formData.goal && formData.level && selectedTargetSkills.length > 0,
     );
   };
 
@@ -260,7 +259,9 @@ const JourneyCreatePage: React.FC = () => {
     }
 
     if (selectedTargetSkills.length === 0) {
-      setError("Vui lòng chọn ít nhất 1 kỹ năng mục tiêu trước khi tạo bài test.");
+      setError(
+        "Vui lòng chọn ít nhất 1 kỹ năng mục tiêu trước khi tạo bài test.",
+      );
       return;
     }
 
@@ -278,8 +279,6 @@ const JourneyCreatePage: React.FC = () => {
     }
   };
 
-
-
   // Step 2: Goal + Level + Skills — all in one page
   const renderStep2 = () => (
     <div className="gsj-wizard-step">
@@ -293,7 +292,9 @@ const JourneyCreatePage: React.FC = () => {
       </div>
 
       <div className="gsj-wizard-section">
-        <h3 className="gsj-wizard-section__title">Bạn muốn làm gì với kỹ năng này?</h3>
+        <h3 className="gsj-wizard-section__title">
+          Bạn muốn làm gì với kỹ năng này?
+        </h3>
         <div className="gsj-card-grid gsj-card-grid--2col gsj-card-grid--goal">
           {GOAL_OPTIONS.map((option, index) => (
             <button
@@ -319,7 +320,9 @@ const JourneyCreatePage: React.FC = () => {
 
       {/* Trình độ hiện tại */}
       <div className="gsj-wizard-section">
-        <h3 className="gsj-wizard-section__title">Bạn đã có kinh nghiệm ở mức nào?</h3>
+        <h3 className="gsj-wizard-section__title">
+          Bạn đã có kinh nghiệm ở mức nào?
+        </h3>
         <div className="gsj-segmented-control">
           {LEVEL_OPTIONS.map((option) => (
             <button
@@ -355,7 +358,9 @@ const JourneyCreatePage: React.FC = () => {
               <button
                 type="button"
                 className="gsj-journey-warning__cta"
-                onClick={() => handleWarningCtaClick(journeyCompatibilityWarning.cta!.goal)}
+                onClick={() =>
+                  handleWarningCtaClick(journeyCompatibilityWarning.cta!.goal)
+                }
               >
                 {journeyCompatibilityWarning.cta.label}
               </button>
@@ -387,22 +392,42 @@ const JourneyCreatePage: React.FC = () => {
             <span className="gsj-target-summary__label">Ngành:</span>
             <div className="gsj-target-summary__path">
               <span>{formData.domain}</span>
-              <ChevronRight size={12} className="gsj-target-summary__path-separator" />
+              <ChevronRight
+                size={12}
+                className="gsj-target-summary__path-separator"
+              />
               <span>{formData.subCategory}</span>
-              <ChevronRight size={12} className="gsj-target-summary__path-separator" />
-              <strong className="gsj-target-summary__role">{formData.jobRole}</strong>
+              <ChevronRight
+                size={12}
+                className="gsj-target-summary__path-separator"
+              />
+              <strong className="gsj-target-summary__role">
+                {formData.jobRole}
+              </strong>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   );
 
   if (activeJourneyCheck) {
     return (
-      <div className="gsj-page gsj-create-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <div style={{ textAlign: 'center', color: 'var(--gsj-text-secondary, #9ca3af)' }}>
+      <div
+        className="gsj-page gsj-create-page"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "60vh",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            color: "var(--gsj-text-secondary, #9ca3af)",
+          }}
+        >
           <p>Đang kiểm tra hành trình hiện tại...</p>
         </div>
       </div>
@@ -667,8 +692,8 @@ const JourneyCreatePage: React.FC = () => {
                 <div>
                   <strong>Thiết lập đề đầu vào</strong>
                   <p>
-                    Chọn mục tiêu và trình độ để hệ thống tạo đúng khung đề
-                    (15 phút / 25 câu).
+                    Chọn mục tiêu và trình độ để hệ thống tạo đúng khung đề (15
+                    phút / 25 câu).
                   </p>
                 </div>
               </div>

@@ -111,6 +111,12 @@ export interface Contract {
   candidateDateOfBirth?: string;
   candidateIdCardNumber?: string;
   candidateIdCardPlace?: string;
+  candidateIdCardDate?: string;
+
+  // Bank info
+  candidateBankAccountNumber?: string;
+  candidateBankName?: string;
+  candidateBankAccountHolder?: string;
 
   // Signatures
   employerSignature?: ContractSignature;
@@ -123,6 +129,7 @@ export interface Contract {
   // PDF
   signedPdfUrl?: string;
   pdfUrl?: string;
+  customContractPdfUrl?: string;
   monthlySalary?: number;
 
   // Metadata

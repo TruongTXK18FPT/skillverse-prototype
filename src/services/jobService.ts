@@ -17,10 +17,19 @@ class JobService {
   // ==================== PRIVATE HELPER ====================
   
   private handleError(error: unknown, defaultMessage: string): never {
-    const axiosError = error as AxiosError;
-    const errorMessage = axiosError.response?.data?.message || defaultMessage;
+    const axiosError = error as any;
+    const errorData = axiosError.response?.data;
+    const errorMessage = errorData?.message || defaultMessage;
     console.error(`${defaultMessage}:`, errorMessage);
-    throw new Error(errorMessage);
+    
+    const err: any = new Error(errorMessage);
+    if (errorData?.details) {
+      err.details = errorData.details;
+    }
+    if (errorData?.code) {
+      err.code = errorData.code;
+    }
+    throw err;
   }
 
   // ==================== JOB POSTING ENDPOINTS (RECRUITER) ====================

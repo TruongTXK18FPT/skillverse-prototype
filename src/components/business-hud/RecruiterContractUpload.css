@@ -1,0 +1,296 @@
+/* ====================================================================
+   RecruiterContractUpload.css — Technology Cyan Blue / Neon Tech
+   BEM naming with "sv-contract-upload" prefix
+   ==================================================================== */
+
+.sv-contract-upload {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(11, 15, 25, 0.98));
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.05);
+  backdrop-filter: blur(12px);
+  position: relative;
+}
+
+.sv-contract-upload::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #0891b2, #00f0ff, transparent);
+}
+
+.sv-contract-upload__header {
+  margin-bottom: 24px;
+}
+
+.sv-contract-upload__title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0 0 4px;
+}
+
+.sv-contract-upload__subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Onboarding info review (read-only) */
+.sv-contract-upload__info-review {
+  padding: 16px;
+  background: rgba(0, 240, 255, 0.02);
+  border: 1px solid rgba(0, 240, 255, 0.08);
+  border-radius: 10px;
+  margin-bottom: 24px;
+}
+
+.sv-contract-upload__info-review-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #00f0ff;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin: 0 0 12px;
+}
+
+.sv-contract-upload__info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.sv-contract-upload__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sv-contract-upload__info-label {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sv-contract-upload__info-value {
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+/* Upload area */
+.sv-contract-upload__dropzone {
+  border: 2px dashed rgba(0, 240, 255, 0.2);
+  border-radius: 12px;
+  padding: 36px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(0, 240, 255, 0.02);
+  margin-bottom: 16px;
+}
+
+.sv-contract-upload__dropzone:hover {
+  border-color: rgba(0, 240, 255, 0.45);
+  background: rgba(0, 240, 255, 0.04);
+}
+
+.sv-contract-upload__dropzone--active {
+  border-color: #00f0ff;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+}
+
+.sv-contract-upload__dropzone-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.sv-contract-upload__dropzone-text {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.sv-contract-upload__dropzone-text--highlight {
+  color: #00f0ff;
+  font-weight: 600;
+}
+
+.sv-contract-upload__dropzone-hint {
+  font-size: 0.75rem;
+  color: #475569;
+  margin: 6px 0 0;
+}
+
+/* Uploaded file preview */
+.sv-contract-upload__file-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.sv-contract-upload__file-icon {
+  font-size: 1.5rem;
+}
+
+.sv-contract-upload__file-info {
+  flex: 1;
+}
+
+.sv-contract-upload__file-name {
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.sv-contract-upload__file-size {
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.sv-contract-upload__file-remove {
+  background: none;
+  border: none;
+  color: #f43f5e;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.sv-contract-upload__file-remove:hover {
+  background: rgba(244, 63, 94, 0.1);
+}
+
+/* PDF Preview link */
+.sv-contract-upload__pdf-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(0, 240, 255, 0.04);
+  border: 1px solid rgba(0, 240, 255, 0.1);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.sv-contract-upload__pdf-link {
+  color: #00f0ff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.sv-contract-upload__pdf-link:hover {
+  text-decoration: underline;
+}
+
+/* Actions */
+.sv-contract-upload__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.sv-contract-upload__btn--ghost {
+  background: none;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  color: #94a3b8;
+  padding: 11px 20px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sv-contract-upload__btn--ghost:hover {
+  border-color: rgba(100, 116, 139, 0.4);
+  color: #e2e8f0;
+}
+
+.sv-contract-upload__btn {
+  padding: 11px 24px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sv-contract-upload__btn--primary {
+  background: linear-gradient(135deg, #0891b2, #00f0ff);
+  color: #0f172a;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+}
+
+.sv-contract-upload__btn--primary:hover:not(:disabled) {
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.sv-contract-upload__btn--primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sv-contract-upload__btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: sv-contract-upload-spin 0.6s linear infinite;
+}
+
+@keyframes sv-contract-upload-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Progress bar */
+.sv-contract-upload__progress {
+  margin-top: 12px;
+}
+
+.sv-contract-upload__progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 240, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.sv-contract-upload__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0891b2, #00f0ff);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+@media (max-width: 640px) {
+  .sv-contract-upload {
+    padding: 18px;
+    margin: 12px;
+  }
+  .sv-contract-upload__info-grid {
+    grid-template-columns: 1fr;
+  }
+}

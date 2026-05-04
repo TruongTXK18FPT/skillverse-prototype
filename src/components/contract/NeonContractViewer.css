@@ -1,0 +1,297 @@
+/* ====================================================================
+   NeonContractViewer.css — Technology Cyan Blue / Neon Tech
+   BEM naming with "sv-neon-viewer" prefix
+   ==================================================================== */
+
+.sv-neon-viewer {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(11, 15, 25, 0.98));
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.05);
+  backdrop-filter: blur(12px);
+  position: relative;
+}
+
+.sv-neon-viewer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00f0ff, #0891b2, #00f0ff, transparent);
+}
+
+/* Header */
+.sv-neon-viewer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sv-neon-viewer__title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.sv-neon-viewer__actions-top {
+  display: flex;
+  gap: 8px;
+}
+
+.sv-neon-viewer__download-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  background: rgba(0, 240, 255, 0.06);
+  color: #00f0ff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sv-neon-viewer__download-btn:hover {
+  background: rgba(0, 240, 255, 0.12);
+  border-color: rgba(0, 240, 255, 0.35);
+}
+
+/* PDF Frame */
+.sv-neon-viewer__pdf-container {
+  border: 1px solid rgba(0, 240, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: #0f172a;
+  position: relative;
+}
+
+.sv-neon-viewer__pdf-frame {
+  width: 100%;
+  min-height: 600px;
+  border: none;
+  display: block;
+}
+
+.sv-neon-viewer__pdf-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: #64748b;
+  gap: 12px;
+}
+
+.sv-neon-viewer__pdf-placeholder-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.sv-neon-viewer__pdf-placeholder-text {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Signature Section */
+.sv-neon-viewer__sign-section {
+  padding: 20px;
+  background: rgba(0, 240, 255, 0.03);
+  border: 1px solid rgba(0, 240, 255, 0.1);
+  border-radius: 12px;
+}
+
+.sv-neon-viewer__sign-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #00f0ff;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sv-neon-viewer__sign-title::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 16px;
+  background: #00f0ff;
+  border-radius: 2px;
+}
+
+/* Signature Canvas placeholder */
+.sv-neon-viewer__signature-area {
+  border: 2px solid rgba(0, 240, 255, 0.15);
+  border-radius: 10px;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.6);
+  margin-bottom: 16px;
+  color: #475569;
+  font-size: 0.85rem;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sv-neon-viewer__signature-area:hover {
+  border-color: rgba(0, 240, 255, 0.3);
+  background: rgba(0, 240, 255, 0.02);
+}
+
+.sv-neon-viewer__signature-area--signed {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.03);
+}
+
+.sv-neon-viewer__signature-img {
+  max-height: 120px;
+  max-width: 280px;
+  object-fit: contain;
+}
+
+/* Sign actions */
+.sv-neon-viewer__sign-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.sv-neon-viewer__sign-btn {
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sv-neon-viewer__sign-btn--confirm {
+  background: linear-gradient(135deg, #0891b2, #00f0ff);
+  color: #0f172a;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.sv-neon-viewer__sign-btn--confirm:hover:not(:disabled) {
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Pulse glow effect */
+.sv-neon-viewer__sign-btn--confirm::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0891b2, #00f0ff);
+  opacity: 0;
+  z-index: -1;
+  animation: sv-neon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes sv-neon-pulse {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.15; transform: scale(1.03); }
+}
+
+.sv-neon-viewer__sign-btn--confirm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sv-neon-viewer__sign-btn--reject {
+  background: rgba(244, 63, 94, 0.08);
+  color: #f43f5e;
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+.sv-neon-viewer__sign-btn--reject:hover {
+  background: rgba(244, 63, 94, 0.15);
+}
+
+.sv-neon-viewer__sign-btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: sv-neon-spin 0.6s linear infinite;
+}
+
+@keyframes sv-neon-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Contract status badge */
+.sv-neon-viewer__status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.sv-neon-viewer__status-badge--signed {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.sv-neon-viewer__status-badge--pending {
+  background: rgba(0, 240, 255, 0.08);
+  color: #00f0ff;
+  border: 1px solid rgba(0, 240, 255, 0.15);
+}
+
+.sv-neon-viewer__status-badge--rejected {
+  background: rgba(244, 63, 94, 0.1);
+  color: #f43f5e;
+  border: 1px solid rgba(244, 63, 94, 0.15);
+}
+
+@media (max-width: 768px) {
+  .sv-neon-viewer {
+    padding: 18px;
+    margin: 12px;
+  }
+
+  .sv-neon-viewer__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sv-neon-viewer__pdf-frame {
+    min-height: 400px;
+  }
+
+  .sv-neon-viewer__sign-actions {
+    flex-direction: column;
+  }
+}

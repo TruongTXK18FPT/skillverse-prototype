@@ -40,6 +40,11 @@ type BackendGenerateTestResponse = {
   questionCount?: number;
   timeLimitMinutes?: number;
   difficultyLevel?: string;
+  assessmentPhase?: string;
+  baseLevel?: string;
+  testedLevel?: string;
+  parentTestId?: number;
+  questionSource?: string;
   questionsJson?: string;
   message?: string;
 };
@@ -53,6 +58,11 @@ type BackendAssessmentTestResponse = {
   questionCount?: number;
   timeLimitMinutes?: number;
   difficultyLevel?: string;
+  assessmentPhase?: string;
+  baseLevel?: string;
+  testedLevel?: string;
+  parentTestId?: number;
+  questionSource?: string;
   questionsJson?: string;
   createdAt?: string;
   completedAt?: string;
@@ -65,6 +75,13 @@ type BackendTestResultResponse = {
   assessmentTestId?: number;
   scorePercentage?: number;
   evaluatedLevel?: string;
+  assessmentPhase?: string;
+  baseLevel?: string;
+  testedLevel?: string;
+  provisional?: boolean;
+  challengeRequired?: boolean;
+  challengeAvailable?: boolean;
+  challengeTestId?: number;
   scoreBand?: string;
   recommendationMode?: string;
   assessmentConfidence?: number;
@@ -260,6 +277,11 @@ const mapJourneySummary = (payload: unknown): JourneySummaryResponse => {
           resultId: latestTestResultRaw.resultId == null ? undefined : toNumber(latestTestResultRaw.resultId),
           scorePercentage: toNumber(latestTestResultRaw.scorePercentage),
           evaluatedLevel: normalizeSkillLevel(latestTestResultRaw.evaluatedLevel) ?? SkillLevel.BEGINNER,
+          baseLevel: normalizeSkillLevel(latestTestResultRaw.baseLevel),
+          testedLevel: normalizeSkillLevel(latestTestResultRaw.testedLevel),
+          provisional: toBoolean(latestTestResultRaw.provisional),
+          challengeRequired: toBoolean(latestTestResultRaw.challengeRequired),
+          challengeAvailable: toBoolean(latestTestResultRaw.challengeAvailable),
           skillGapsCount: toNumber(latestTestResultRaw.skillGapsCount),
           strengthsCount: toNumber(latestTestResultRaw.strengthsCount),
           evaluatedAt: typeof latestTestResultRaw.evaluatedAt === 'string' ? latestTestResultRaw.evaluatedAt : undefined
@@ -302,6 +324,12 @@ const mapAssessmentTest = (payload: BackendAssessmentTestResponse, journeyId: nu
     status: normalizeTestStatus(payload.status),
     totalQuestions,
     passingScore: DEFAULT_PASSING_SCORE,
+    difficultyLevel: payload.difficultyLevel,
+    assessmentPhase: payload.assessmentPhase,
+    baseLevel: normalizeSkillLevel(payload.baseLevel),
+    testedLevel: normalizeSkillLevel(payload.testedLevel),
+    parentTestId: payload.parentTestId == null ? undefined : toNumber(payload.parentTestId),
+    questionSource: payload.questionSource,
     createdAt: toStringValue(payload.createdAt, new Date().toISOString()),
     completedAt: payload.completedAt,
     expiresAt: payload.expiresAt
@@ -319,6 +347,11 @@ const mapGenerateTestResponse = (payload: BackendGenerateTestResponse, journeyId
       questionCount: payload.questionCount,
       timeLimitMinutes: payload.timeLimitMinutes,
       difficultyLevel: payload.difficultyLevel,
+      assessmentPhase: payload.assessmentPhase,
+      baseLevel: payload.baseLevel,
+      testedLevel: payload.testedLevel,
+      parentTestId: payload.parentTestId,
+      questionSource: payload.questionSource,
       questionsJson: payload.questionsJson,
       createdAt: new Date().toISOString()
     },
@@ -519,6 +552,8 @@ const mapTestResult = (payload: BackendTestResultResponse): TestResultResponse =
   const incorrectAnswers = toNumber(payload.incorrectAnswers, Math.max(0, totalQuestions - correctAnswers));
   const answeredQuestions = toNumber(payload.answeredQuestions, Math.min(totalQuestions, correctAnswers + incorrectAnswers));
   const evaluatedLevel = normalizeSkillLevel(payload.evaluatedLevel) ?? SkillLevel.BEGINNER;
+  const baseLevel = normalizeSkillLevel(payload.baseLevel);
+  const testedLevel = normalizeSkillLevel(payload.testedLevel);
   const scoreBand = toStringValue(payload.scoreBand);
   const recommendationMode = toStringValue(payload.recommendationMode);
   const assessmentConfidence = toNumber(payload.assessmentConfidence, 60);
@@ -615,6 +650,13 @@ const mapTestResult = (payload: BackendTestResultResponse): TestResultResponse =
     scoreBandLabel,
     recommendationMode,
     recommendationLabel,
+    assessmentPhase: payload.assessmentPhase,
+    baseLevel,
+    testedLevel,
+    provisional: toBoolean(payload.provisional),
+    challengeRequired: toBoolean(payload.challengeRequired),
+    challengeAvailable: toBoolean(payload.challengeAvailable),
+    challengeTestId: payload.challengeTestId == null ? undefined : toNumber(payload.challengeTestId),
     assessmentConfidence,
     reassessmentRecommended,
     totalQuestions,

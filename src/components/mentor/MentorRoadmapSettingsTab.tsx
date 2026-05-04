@@ -380,8 +380,9 @@ const MentorRoadmapSettingsTab: React.FC = () => {
                   <Info size={16} />
                   <span>
                     Học viên sẽ thanh toán một lần. Tiền sẽ được hệ thống tạm
-                    giữ (Escrow) và chỉ giải ngân cho Mentor sau khi học viên
-                    PASS buổi bảo vệ lộ trình cuối cùng.
+                    giữ (Escrow) và chỉ giải ngân sau khi học viên PASS buổi
+                    bảo vệ lộ trình cuối cùng: Mentor nhận 80%, nền tảng giữ
+                    20%.
                   </span>
                 </div>
               </div>
@@ -441,8 +442,8 @@ const MentorRoadmapSettingsTab: React.FC = () => {
                   <h4>Bảo vệ & Giải ngân</h4>
                   <p>
                     Sau khi hoàn thành Roadmap, tiến hành xác thực (verify). Nếu
-                    Pass, hệ thống giải ngân chi phí từ ví Escrow sang ví khả
-                    dụng của Mentor.
+                    Pass, hệ thống giải ngân 80% chi phí từ ví Escrow sang ví khả
+                    dụng của Mentor và ghi nhận 20% là phí nền tảng.
                   </p>
                 </div>
               </div>

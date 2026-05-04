@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   Clock3,
   DollarSign,
+  FileCheck,
   FileSignature,
   FileText,
   Globe,
@@ -29,6 +30,7 @@ import type { AppItem } from "./JobLabPage";
 import jobService from "../../services/jobService";
 import { showAppError, showAppSuccess } from "../../context/ToastContext";
 import "../../styles/JobLabWorkspace.css";
+import CandidateOnboardingPanel from "../../components/business-hud/CandidateOnboardingPanel";
 
 interface JobLabFullTimeInlineViewProps {
   app: AppItem;
@@ -36,7 +38,7 @@ interface JobLabFullTimeInlineViewProps {
   onRefresh: () => void;
 }
 
-type FullTimeTab = "overview" | "interviews" | "contracts" | "offers";
+type FullTimeTab = "overview" | "interviews" | "contracts" | "offers" | "onboarding";
 
 const APP_STATUS_LABELS: Record<string, string> = {
   PENDING: "Mới nộp",
@@ -47,6 +49,8 @@ const APP_STATUS_LABELS: Record<string, string> = {
   OFFER_SENT: "Đã gửi đề nghị",
   OFFER_ACCEPTED: "Nhận đề nghị",
   OFFER_REJECTED: "Từ chối đề nghị",
+  AWAITING_ONBOARDING_INFO: "Đang cung cấp thông tin",
+  HIRED: "Đã tuyển dụng",
   CONTRACT_SIGNED: "Đã ký hợp đồng",
   REJECTED: "Từ chối",
 };
@@ -58,6 +62,7 @@ const TIMELINE_STEPS = [
   { status: "INTERVIEWED", label: "Đã phỏng vấn" },
   { status: "OFFER_SENT", label: "Đề nghị" },
   { status: "OFFER_ACCEPTED", label: "Nhận đề nghị" },
+  { status: "AWAITING_ONBOARDING_INFO", label: "Cung cấp thông tin" },
 ];
 
 const STATUS_ORDER = [
@@ -67,6 +72,7 @@ const STATUS_ORDER = [
   "INTERVIEWED",
   "OFFER_SENT",
   "OFFER_ACCEPTED",
+  "AWAITING_ONBOARDING_INFO",
 ];
 
 export default function JobLabFullTimeInlineView({
@@ -156,6 +162,14 @@ const showToastSuccess = (title: string, message: string, autoCloseDelay?: numbe
   const isRemote = app.isRemote;
   const showContracts = isRemote;
   const showOffers = isRemote && isNegotiable;
+  // Show onboarding tab for Remote jobs when status is right
+  const showOnboarding =
+    isRemote &&
+    [
+      "OFFER_ACCEPTED",
+      "INTERVIEWED", // non-negotiable remote → goes directly to onboarding
+      "AWAITING_ONBOARDING_INFO",
+    ].includes(app.status);
 
   const tabs: Array<{
     key: FullTimeTab;
@@ -164,6 +178,15 @@ const showToastSuccess = (title: string, message: string, autoCloseDelay?: numbe
   }> = [
     { key: "overview", label: "Tổng quan", icon: <FileText size={13} /> },
     { key: "interviews", label: "Phỏng vấn", icon: <Calendar size={13} /> },
+    ...(showOnboarding
+      ? [
+          {
+            key: "onboarding" as FullTimeTab,
+            label: "Thông tin nhân sự",
+            icon: <FileCheck size={13} />,
+          },
+        ]
+      : []),
     ...(showContracts
       ? [
           {
@@ -518,6 +541,19 @@ const showToastSuccess = (title: string, message: string, autoCloseDelay?: numbe
                 onDeclineInterview={handleDeclineInterview}
               />
             )}
+          </div>
+        )}
+
+        {activeTab === "onboarding" && (
+          <div className="jlx-ft-onboarding">
+            <CandidateOnboardingPanel
+              applicationId={app.applicationId}
+              onComplete={() => {
+                onRefresh();
+                setActiveTab("contracts");
+              }}
+              onCancel={() => setActiveTab("overview")}
+            />
           </div>
         )}
 

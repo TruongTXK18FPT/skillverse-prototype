@@ -296,6 +296,151 @@ class ContractService {
     });
     return formatter.format(amount);
   }
+
+  // ==================== ONBOARDING & OCR ====================
+
+  /**
+   * Extract CCCD info via FPT AI OCR.
+   * Image is NOT stored — only text data is returned.
+   */
+  async ocrIdCard(applicationId: number, imageFile: File): Promise<IdCardExtractionResult> {
+    try {
+      const formData = new FormData();
+      formData.append('image', imageFile);
+      const response = await axiosInstance.post<IdCardExtractionResult>(
+        `/contracts/applications/${applicationId}/ocr-id-card`,
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+      );
+      return response.data;
+    } catch (error) {
+      this.handleError(error, 'Failed to extract CCCD info');
+    }
+  }
+
+  /**
+   * Submit onboarding info (CCCD text + bank account).
+   */
+  async submitOnboardingInfo(applicationId: number, data: OnboardingInfoRequest): Promise<OnboardingInfoResponse> {
+    try {
+      const response = await axiosInstance.post<OnboardingInfoResponse>(
+        `/contracts/applications/${applicationId}/onboarding`,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      this.handleError(error, 'Failed to submit onboarding info');
+    }
+  }
+
+  /**
+   * Get onboarding info for an application.
+   */
+  async getOnboardingInfo(applicationId: number): Promise<OnboardingInfoResponse | null> {
+    try {
+      const response = await axiosInstance.get<OnboardingInfoResponse>(
+        `/contracts/applications/${applicationId}/onboarding`
+      );
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.data?.message?.includes('No onboarding data found')) {
+        return null; // Not found is an expected state before submission
+      }
+      this.handleError(error, 'Failed to get onboarding info');
+    }
+  }
+
+  /**
+   * Get the most recently submitted onboarding info for the candidate to reuse.
+   */
+  async getLatestOnboardingInfo(): Promise<OnboardingInfoResponse | null> {
+    try {
+      const response = await axiosInstance.get<OnboardingInfoResponse>('/contracts/onboarding-info/me');
+      return response.data || null;
+    } catch (error) {
+      // 204 No Content is normally handled by axios returning null/empty, but just in case
+      const axiosError = error as any;
+      if (axiosError.response?.status === 204 || axiosError.response?.status === 404) {
+        return null;
+      }
+      this.handleError(error, 'Failed to get latest onboarding info');
+    }
+  }
+
+  /**
+   * Remind candidate to submit their onboarding info.
+   */
+  async remindOnboardingInfo(applicationId: number): Promise<void> {
+    try {
+      await axiosInstance.post(`/contracts/applications/${applicationId}/onboarding/remind`);
+    } catch (error) {
+      this.handleError(error, 'Failed to remind onboarding info');
+    }
+  }
+  /**
+   * Upload a custom contract PDF to Cloudinary.
+   */
+  async uploadContractPdf(contractId: number, file: File, startDate?: string, endDate?: string): Promise<ContractResponse> {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      if (startDate) formData.append('startDate', startDate);
+      if (endDate) formData.append('endDate', endDate);
+      const response = await axiosInstance.post<ContractApiResponse>(
+        `/contracts/${contractId}/upload-pdf`,
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+      );
+      return this.normalizeContract(response.data);
+    } catch (error) {
+      this.handleError(error, 'Failed to upload contract PDF');
+    }
+  }
+}
+
+// ==================== TYPES ====================
+
+export interface IdCardExtractionResult {
+  idNumber: string | null;
+  fullName: string | null;
+  dob: string | null;
+  sex: string | null;
+  nationality: string | null;
+  placeOfOrigin: string | null;
+  placeOfResidence: string | null;
+  expiryDate: string | null;
+  issueDate: string | null;
+  issueLoc: string | null;
+  cardType: string | null;
+  success: boolean;
+  errorMessage: string | null;
+}
+
+export interface OnboardingInfoRequest {
+  idCardNumber: string;
+  fullName: string;
+  dateOfBirth?: string;
+  idCardDate: string; // yyyy-MM-dd
+  idCardPlace: string;
+  address?: string;
+  bankAccountNumber: string;
+  bankName: string;
+  bankAccountHolder: string;
+}
+
+export interface OnboardingInfoResponse {
+  applicationId: number;
+  status: string;
+  idCardNumber: string;
+  fullName: string;
+  dateOfBirth?: string;
+  idCardDate?: string;
+  idCardPlace: string;
+  address?: string;
+  bankAccountNumber: string;
+  bankName: string;
+  bankAccountHolder: string;
 }
 
 export default new ContractService();

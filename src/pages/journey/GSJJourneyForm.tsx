@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Zap, ChevronDown, ChevronUp } from 'lucide-react';
-import { StartJourneyRequest, JobLevel, CompanySize, WorkStyle, LearningFormat, StudyTime, EnglishLevel } from '../../types/Journey';
+import { StartJourneyRequest, JobLevel, CompanySize, WorkStyle, LearningFormat, StudyTime } from '../../types/Journey';
 
 interface GSJJourneyFormProps {
   onSubmit: (request: StartJourneyRequest) => void;
@@ -45,9 +45,6 @@ interface FormData {
   // Challenges
   currentChallenges: string[];
   biggestFrustration: string;
-  // Language
-  languages: string[];
-  englishLevel: string;
 }
 
 const GSJJourneyForm: React.FC<GSJJourneyFormProps> = ({ onSubmit, onClose, loading }) => {
@@ -79,9 +76,7 @@ const GSJJourneyForm: React.FC<GSJJourneyFormProps> = ({ onSubmit, onClose, load
     midTermGoal: '',
     longTermGoal: '',
     currentChallenges: [],
-    biggestFrustration: '',
-    languages: [],
-    englishLevel: 'CONVERSATIONAL'
+    biggestFrustration: ''
   });
 
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
@@ -91,13 +86,11 @@ const GSJJourneyForm: React.FC<GSJJourneyFormProps> = ({ onSubmit, onClose, load
     experience: false,
     background: false,
     learning: false,
-    challenges: false,
-    language: false
+    challenges: false
   });
 
   const [newSkill, setNewSkill] = useState('');
   const [newTool, setNewTool] = useState('');
-  const [newLanguage, setNewLanguage] = useState('');
   const [newChallenge, setNewChallenge] = useState('');
   const [newProject, setNewProject] = useState('');
 
@@ -158,8 +151,7 @@ const GSJJourneyForm: React.FC<GSJJourneyFormProps> = ({ onSubmit, onClose, load
       longTermGoal: formData.longTermGoal || undefined,
       currentChallenges: formData.currentChallenges.length > 0 ? formData.currentChallenges : undefined,
       biggestFrustration: formData.biggestFrustration || undefined,
-      languages: formData.languages.length > 0 ? formData.languages : undefined,
-      englishLevel: formData.englishLevel as EnglishLevel || undefined
+      language: 'VI'
     };
 
     onSubmit(request);
@@ -604,37 +596,6 @@ const GSJJourneyForm: React.FC<GSJJourneyFormProps> = ({ onSubmit, onClose, load
               )}
             </div>
 
-            {/* Language */}
-            <div className="gsj-form-section">
-              {renderSectionHeader('language', 'Language Skills', <Zap size={16} />)}
-              {expandedSections.language && (
-                <div className="gsj-form-section__content">
-                  {renderTagInput(
-                    'Languages',
-                    newLanguage,
-                    setNewLanguage,
-                    () => addToArray('languages', newLanguage, setNewLanguage),
-                    formData.languages,
-                    (i) => removeFromArray('languages', i)
-                  )}
-                  <div className="gsj-form-group">
-                    <label className="gsj-form-label">English Level</label>
-                    <select
-                      className="gsj-form-select"
-                      value={formData.englishLevel}
-                      onChange={(e) => handleChange('englishLevel', e.target.value)}
-                    >
-                      <option value="NONE">None</option>
-                      <option value="BASIC">Basic</option>
-                      <option value="CONVERSATIONAL">Conversational</option>
-                      <option value="PROFESSIONAL">Professional</option>
-                      <option value="NATIVE">Native</option>
-                    </select>
-                  </div>
-                </div>
-              )}
-            </div>
-
           </div>
 
           <div className="gsj-modal__footer">
@@ -662,4 +623,3 @@ const GSJJourneyForm: React.FC<GSJJourneyFormProps> = ({ onSubmit, onClose, load
 };
 
 export default GSJJourneyForm;
-

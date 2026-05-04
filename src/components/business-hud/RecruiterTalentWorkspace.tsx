@@ -629,7 +629,7 @@ const summarizeCompletedMissions = (
     if (missionRatings.length) {
       ratingValues.push(
         missionRatings.reduce((total, value) => total + value, 0) /
-          missionRatings.length,
+        missionRatings.length,
       );
     }
 
@@ -659,7 +659,7 @@ const summarizeCompletedMissions = (
   const paidRate = paidMissions / totalMissions;
   const averageRating = ratingValues.length
     ? ratingValues.reduce((total, value) => total + value, 0) /
-      ratingValues.length
+    ratingValues.length
     : null;
   const qualityScore =
     averageRating != null ? clamp01(averageRating / 5) : 0.58;
@@ -674,9 +674,9 @@ const summarizeCompletedMissions = (
 
   const evidenceScore = clamp01(
     completionScore * 0.35 +
-      paidRate * 0.2 +
-      qualityScore * 0.25 +
-      relevanceScore * 0.2,
+    paidRate * 0.2 +
+    qualityScore * 0.25 +
+    relevanceScore * 0.2,
   );
 
   return {
@@ -979,10 +979,10 @@ const RecruiterTalentWorkspace = ({
     const linkedSession =
       preferredSession === undefined
         ? sessions.find(
-            (session) =>
-              session.candidateId === seed.candidateId &&
-              (!selectedJob || matchesSessionToJob(session, selectedJob)),
-          ) || null
+          (session) =>
+            session.candidateId === seed.candidateId &&
+            (!selectedJob || matchesSessionToJob(session, selectedJob)),
+        ) || null
         : preferredSession;
 
     setSelectedSession(linkedSession);
@@ -1019,11 +1019,11 @@ const RecruiterTalentWorkspace = ({
       const mappedApplicants =
         job.kind === "shortterm"
           ? (
-              await shortTermJobService.getJobApplicants(job.id, 0, 20)
-            ).content.map(toWorkspaceShortTermApplicant)
+            await shortTermJobService.getJobApplicants(job.id, 0, 20)
+          ).content.map(toWorkspaceShortTermApplicant)
           : (await jobService.getJobApplicants(job.id, 0, 20)).content.map(
-              toWorkspaceFullTimeApplicant,
-            );
+            toWorkspaceFullTimeApplicant,
+          );
 
       setApplicants(mappedApplicants || []);
 
@@ -1209,7 +1209,7 @@ const RecruiterTalentWorkspace = ({
   const openRecruitmentMessenger = () => {
     const targetSession = selectedSession
       ? sessions.find((session) => session.id === selectedSession.id) ||
-        sessions[0]
+      sessions[0]
       : sessions[0];
 
     if (!targetSession) {
@@ -1247,13 +1247,13 @@ const RecruiterTalentWorkspace = ({
       const result =
         selectedJob.kind === "shortterm"
           ? await candidateSearchService.getShortTermJobMatchExplanation(
-              selectedJob.id,
-              target.candidateId,
-            )
+            selectedJob.id,
+            target.candidateId,
+          )
           : await candidateSearchService.getAIMatchExplanation(
-              selectedJob.id,
-              target.candidateId,
-            );
+            selectedJob.id,
+            target.candidateId,
+          );
 
       setAiInsight(result);
     } catch (error: any) {
@@ -2037,43 +2037,43 @@ const RecruiterTalentWorkspace = ({
 
                             {(application.canAccept ||
                               application.canReject) && (
-                              <div className="rtw-applicant-secondary-actions">
-                                {application.canAccept && (
-                                  <button
-                                    className="rtw-chip-btn rtw-chip-btn--success"
-                                    title="Duyệt ứng viên"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setDecisionModal({
-                                        application,
-                                        status: "ACCEPTED",
-                                      });
-                                      setDecisionNote("");
-                                    }}
-                                  >
-                                    <CheckCircle2 size={14} />
-                                    Duyệt
-                                  </button>
-                                )}
-                                {application.canReject && (
-                                  <button
-                                    className="rtw-chip-btn rtw-chip-btn--danger"
-                                    title="Loại ứng viên"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setDecisionModal({
-                                        application,
-                                        status: "REJECTED",
-                                      });
-                                      setDecisionNote("");
-                                    }}
-                                  >
-                                    <XCircle size={14} />
-                                    Từ chối
-                                  </button>
-                                )}
-                              </div>
-                            )}
+                                <div className="rtw-applicant-secondary-actions">
+                                  {application.canAccept && (
+                                    <button
+                                      className="rtw-chip-btn rtw-chip-btn--success"
+                                      title="Duyệt ứng viên"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setDecisionModal({
+                                          application,
+                                          status: "ACCEPTED",
+                                        });
+                                        setDecisionNote("");
+                                      }}
+                                    >
+                                      <CheckCircle2 size={14} />
+                                      Duyệt
+                                    </button>
+                                  )}
+                                  {application.canReject && (
+                                    <button
+                                      className="rtw-chip-btn rtw-chip-btn--danger"
+                                      title="Loại ứng viên"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setDecisionModal({
+                                          application,
+                                          status: "REJECTED",
+                                        });
+                                        setDecisionNote("");
+                                      }}
+                                    >
+                                      <XCircle size={14} />
+                                      Từ chối
+                                    </button>
+                                  )}
+                                </div>
+                              )}
                           </div>
                         </article>
                       );
@@ -2153,8 +2153,8 @@ const RecruiterTalentWorkspace = ({
                         <img
                           src={resolveAssetUrl(
                             portfolioProfile.portfolioAvatarUrl ||
-                              portfolioProfile.basicAvatarUrl ||
-                              selectedCandidate.avatarUrl,
+                            portfolioProfile.basicAvatarUrl ||
+                            selectedCandidate.avatarUrl,
                           )}
                           alt=""
                           className="rtw-dossier-avatar"
@@ -2268,13 +2268,13 @@ const RecruiterTalentWorkspace = ({
                                 const result =
                                   selectedJob.kind === "shortterm"
                                     ? await candidateSearchService.getShortTermJobMatchExplanation(
-                                        selectedJob.id,
-                                        selectedCandidate.candidateId,
-                                      )
+                                      selectedJob.id,
+                                      selectedCandidate.candidateId,
+                                    )
                                     : await candidateSearchService.getAIMatchExplanation(
-                                        selectedJob.id,
-                                        selectedCandidate.candidateId,
-                                      );
+                                      selectedJob.id,
+                                      selectedCandidate.candidateId,
+                                    );
                                 setAiInsight(result);
                               } catch (e: any) {
                                 showToastError(
@@ -2355,7 +2355,7 @@ const RecruiterTalentWorkspace = ({
                               const weighted =
                                 component.weightedScore ??
                                 (component.score || 0) *
-                                  (component.weight || 0);
+                                (component.weight || 0);
                               return (
                                 <div
                                   key={component.key}
@@ -2432,122 +2432,122 @@ const RecruiterTalentWorkspace = ({
 
                         {(aiInsight.fitAnalysis.skillBreakdown?.length ?? 0) >
                           0 && (
-                          <div
-                            style={{
-                              marginTop: "1rem",
-                              display: "grid",
-                              gridTemplateColumns:
-                                "repeat(auto-fit, minmax(180px, 1fr))",
-                              gap: "0.75rem",
-                            }}
-                          >
-                            <div>
-                              <strong
-                                style={{
-                                  display: "block",
-                                  fontSize: "0.74rem",
-                                  color: "#86efac",
-                                  marginBottom: "0.4rem",
-                                }}
-                              >
-                                Matched skills
-                              </strong>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  gap: "0.3rem",
-                                }}
-                              >
-                                {aiInsight.fitAnalysis
-                                  .skillBreakdown!.filter(
-                                    (skill) => skill.matched,
-                                  )
-                                  .slice(0, 10)
-                                  .map((skill) => (
-                                    <span
-                                      key={skill.skill}
-                                      style={{
-                                        padding: "2px 8px",
-                                        borderRadius: "4px",
-                                        fontSize: "0.72rem",
-                                        color: "#86efac",
-                                        border:
-                                          "1px solid rgba(134, 239, 172, 0.25)",
-                                        background: "rgba(34, 197, 94, 0.1)",
-                                      }}
-                                    >
-                                      {skill.skill}
-                                    </span>
-                                  ))}
+                            <div
+                              style={{
+                                marginTop: "1rem",
+                                display: "grid",
+                                gridTemplateColumns:
+                                  "repeat(auto-fit, minmax(180px, 1fr))",
+                                gap: "0.75rem",
+                              }}
+                            >
+                              <div>
+                                <strong
+                                  style={{
+                                    display: "block",
+                                    fontSize: "0.74rem",
+                                    color: "#86efac",
+                                    marginBottom: "0.4rem",
+                                  }}
+                                >
+                                  Matched skills
+                                </strong>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: "0.3rem",
+                                  }}
+                                >
+                                  {aiInsight.fitAnalysis
+                                    .skillBreakdown!.filter(
+                                      (skill) => skill.matched,
+                                    )
+                                    .slice(0, 10)
+                                    .map((skill) => (
+                                      <span
+                                        key={skill.skill}
+                                        style={{
+                                          padding: "2px 8px",
+                                          borderRadius: "4px",
+                                          fontSize: "0.72rem",
+                                          color: "#86efac",
+                                          border:
+                                            "1px solid rgba(134, 239, 172, 0.25)",
+                                          background: "rgba(34, 197, 94, 0.1)",
+                                        }}
+                                      >
+                                        {skill.skill}
+                                      </span>
+                                    ))}
+                                </div>
+                              </div>
+                              <div>
+                                <strong
+                                  style={{
+                                    display: "block",
+                                    fontSize: "0.74rem",
+                                    color: "#fca5a5",
+                                    marginBottom: "0.4rem",
+                                  }}
+                                >
+                                  Missing skills
+                                </strong>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: "0.3rem",
+                                  }}
+                                >
+                                  {aiInsight.fitAnalysis
+                                    .skillBreakdown!.filter(
+                                      (skill) => !skill.matched,
+                                    )
+                                    .slice(0, 10)
+                                    .map((skill) => (
+                                      <span
+                                        key={skill.skill}
+                                        style={{
+                                          padding: "2px 8px",
+                                          borderRadius: "4px",
+                                          fontSize: "0.72rem",
+                                          color: "#fca5a5",
+                                          border:
+                                            "1px solid rgba(252, 165, 165, 0.25)",
+                                          background: "rgba(239, 68, 68, 0.08)",
+                                        }}
+                                      >
+                                        {skill.skill}
+                                      </span>
+                                    ))}
+                                </div>
                               </div>
                             </div>
-                            <div>
-                              <strong
-                                style={{
-                                  display: "block",
-                                  fontSize: "0.74rem",
-                                  color: "#fca5a5",
-                                  marginBottom: "0.4rem",
-                                }}
-                              >
-                                Missing skills
-                              </strong>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  gap: "0.3rem",
-                                }}
-                              >
-                                {aiInsight.fitAnalysis
-                                  .skillBreakdown!.filter(
-                                    (skill) => !skill.matched,
-                                  )
-                                  .slice(0, 10)
-                                  .map((skill) => (
-                                    <span
-                                      key={skill.skill}
-                                      style={{
-                                        padding: "2px 8px",
-                                        borderRadius: "4px",
-                                        fontSize: "0.72rem",
-                                        color: "#fca5a5",
-                                        border:
-                                          "1px solid rgba(252, 165, 165, 0.25)",
-                                        background: "rgba(239, 68, 68, 0.08)",
-                                      }}
-                                    >
-                                      {skill.skill}
-                                    </span>
-                                  ))}
-                              </div>
-                            </div>
-                          </div>
-                        )}
+                          )}
 
                         {(aiInsight.fitAnalysis.evidenceHighlights?.length ??
                           0) > 0 && (
-                          <div
-                            style={{
-                              marginTop: "1rem",
-                              padding: "0.85rem",
-                              borderRadius: "10px",
-                              background: "rgba(255,255,255,0.04)",
-                              color: "rgba(255,255,255,0.68)",
-                              fontSize: "0.76rem",
-                              lineHeight: 1.55,
-                            }}
-                          >
-                            <strong style={{ color: "#c4b5fd" }}>
-                              Evidence:
-                            </strong>{" "}
-                            {aiInsight.fitAnalysis
-                              .evidenceHighlights!.slice(0, 4)
-                              .map((item) => item.title)
-                              .join(" | ")}
-                          </div>
-                        )}
+                            <div
+                              style={{
+                                marginTop: "1rem",
+                                padding: "0.85rem",
+                                borderRadius: "10px",
+                                background: "rgba(255,255,255,0.04)",
+                                color: "rgba(255,255,255,0.68)",
+                                fontSize: "0.76rem",
+                                lineHeight: 1.55,
+                              }}
+                            >
+                              <strong style={{ color: "#c4b5fd" }}>
+                                Evidence:
+                              </strong>{" "}
+                              {aiInsight.fitAnalysis
+                                .evidenceHighlights!.slice(0, 4)
+                                .map((item) => item.title)
+                                .join(" | ")}
+                            </div>
+                          )}
 
                         {(aiInsight.fitAnalysis.riskFlags?.length ?? 0) > 0 && (
                           <div
@@ -2627,8 +2627,8 @@ const RecruiterTalentWorkspace = ({
                         const skillPct =
                           totalRequired > 0
                             ? Math.round(
-                                (matchedSkills.length / totalRequired) * 100,
-                              )
+                              (matchedSkills.length / totalRequired) * 100,
+                            )
                             : 0;
 
                         return (
@@ -3212,7 +3212,7 @@ const RecruiterTalentWorkspace = ({
                             marginBottom: "1rem",
                             background:
                               aiEnhancedResult.verdict === "STRONG_ACCEPT" ||
-                              aiEnhancedResult.verdict === "ACCEPT"
+                                aiEnhancedResult.verdict === "ACCEPT"
                                 ? "rgba(74, 222, 128, 0.1)"
                                 : aiEnhancedResult.verdict === "REJECT"
                                   ? "rgba(239, 68, 68, 0.1)"
@@ -3249,55 +3249,55 @@ const RecruiterTalentWorkspace = ({
                         {/* AI Skill Signals */}
                         {(aiEnhancedResult.aiAnalysis?.skillSignals?.length ??
                           0) > 0 && (
-                          <div style={{ marginBottom: "0.75rem" }}>
-                            <p
-                              style={{
-                                fontSize: "0.76rem",
-                                color: "#c4b5fd",
-                                fontWeight: 600,
-                                marginBottom: "0.5rem",
-                              }}
-                            >
-                              Tín hiệu kỹ năng từ AI:
-                            </p>
-                            <div
-                              style={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: "0.3rem",
-                              }}
-                            >
-                              {aiEnhancedResult
-                                .aiAnalysis!.skillSignals!.slice(0, 8)
-                                .map((sig, i) => (
-                                  <span
-                                    key={i}
-                                    style={{
-                                      padding: "3px 8px",
-                                      borderRadius: "4px",
-                                      fontSize: "0.72rem",
-                                      background:
-                                        sig.relevanceScore >= 0.7
-                                          ? "rgba(74, 222, 128, 0.1)"
-                                          : sig.relevanceScore >= 0.4
-                                            ? "rgba(251, 191, 36, 0.1)"
-                                            : "rgba(239, 68, 68, 0.08)",
-                                      border: `1px solid ${sig.relevanceScore >= 0.7 ? "rgba(74, 222, 128, 0.3)" : sig.relevanceScore >= 0.4 ? "rgba(251, 191, 36, 0.3)" : "rgba(239, 68, 68, 0.25)"}`,
-                                      color:
-                                        sig.relevanceScore >= 0.7
-                                          ? "#4ade80"
-                                          : sig.relevanceScore >= 0.4
-                                            ? "#fbbf24"
-                                            : "#f87171",
-                                    }}
-                                  >
-                                    {sig.skill} (
-                                    {Math.round(sig.relevanceScore * 100)}%)
-                                  </span>
-                                ))}
+                            <div style={{ marginBottom: "0.75rem" }}>
+                              <p
+                                style={{
+                                  fontSize: "0.76rem",
+                                  color: "#c4b5fd",
+                                  fontWeight: 600,
+                                  marginBottom: "0.5rem",
+                                }}
+                              >
+                                Tín hiệu kỹ năng từ AI:
+                              </p>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  gap: "0.3rem",
+                                }}
+                              >
+                                {aiEnhancedResult
+                                  .aiAnalysis!.skillSignals!.slice(0, 8)
+                                  .map((sig, i) => (
+                                    <span
+                                      key={i}
+                                      style={{
+                                        padding: "3px 8px",
+                                        borderRadius: "4px",
+                                        fontSize: "0.72rem",
+                                        background:
+                                          sig.relevanceScore >= 0.7
+                                            ? "rgba(74, 222, 128, 0.1)"
+                                            : sig.relevanceScore >= 0.4
+                                              ? "rgba(251, 191, 36, 0.1)"
+                                              : "rgba(239, 68, 68, 0.08)",
+                                        border: `1px solid ${sig.relevanceScore >= 0.7 ? "rgba(74, 222, 128, 0.3)" : sig.relevanceScore >= 0.4 ? "rgba(251, 191, 36, 0.3)" : "rgba(239, 68, 68, 0.25)"}`,
+                                        color:
+                                          sig.relevanceScore >= 0.7
+                                            ? "#4ade80"
+                                            : sig.relevanceScore >= 0.4
+                                              ? "#fbbf24"
+                                              : "#f87171",
+                                      }}
+                                    >
+                                      {sig.skill} (
+                                      {Math.round(sig.relevanceScore * 100)}%)
+                                    </span>
+                                  ))}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
 
                         {aiEnhancedResult.aiError && (
                           <p

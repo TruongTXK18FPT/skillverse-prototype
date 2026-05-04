@@ -24,7 +24,7 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
 
   const getDifficultyClass = (difficulty?: string): string => {
     const value = (difficulty || '').toUpperCase();
-    if (value === 'BEGINNER' || value === 'EASY') return 'gsj-test__question-difficulty--easy';
+    if (value === 'BEGINNER' || value === 'ELEMENTARY' || value === 'EASY') return 'gsj-test__question-difficulty--easy';
     if (value === 'INTERMEDIATE' || value === 'MEDIUM') return 'gsj-test__question-difficulty--medium';
     if (value === 'ADVANCED' || value === 'HARD' || value === 'EXPERT') return 'gsj-test__question-difficulty--hard';
     return '';
@@ -33,8 +33,10 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
   const getDifficultyLabel = (difficulty?: string): string => {
     const value = (difficulty || '').toUpperCase();
     if (value === 'BEGINNER' || value === 'EASY') return 'Cơ bản';
+    if (value === 'ELEMENTARY') return 'Sơ cấp';
     if (value === 'INTERMEDIATE' || value === 'MEDIUM') return 'Trung cấp';
-    if (value === 'ADVANCED' || value === 'HARD' || value === 'EXPERT') return 'Nâng cao';
+    if (value === 'ADVANCED' || value === 'HARD') return 'Nâng cao';
+    if (value === 'EXPERT') return 'Chuyên gia';
     return difficulty || 'Không xác định';
   };
 

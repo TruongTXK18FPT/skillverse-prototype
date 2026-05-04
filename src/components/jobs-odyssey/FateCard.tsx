@@ -132,6 +132,12 @@ const LongTermJobCard: React.FC<LongTermJobCardProps> = ({
       role="button"
       tabIndex={0}
     >
+      {isBoosted && (
+        <div className="fate-card__boost-ribbon">
+          <span className="fate-card__boost-icon">🚀</span>
+          <span className="fate-card__boost-text">TIN ƯU TIÊN</span>
+        </div>
+      )}
       <div className="fate-card__top fate-card__top--space-between">
         <div
           className={`fate-card__salary-tier fate-card__salary-tier--${isBoosted ? "premium" : salaryTier}`}

@@ -261,10 +261,11 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
       nodeFailed,
       hasApprovedReview,
       hasGateDecision,
+      // Mentor can review as soon as learner has submitted evidence
+      // No need to wait for learner to separately click "mark complete"
       canReview:
-        hasSubmitted && learnerCompleted && !nodeVerified && !hasGateDecision,
+        hasSubmitted && !nodeVerified && !hasGateDecision,
       canVerify:
-        learnerCompleted &&
         hasApprovedReview &&
         !nodeVerified &&
         !hasGateDecision,
@@ -576,11 +577,9 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
                 ? "Node đã xác thực nên không thể chấm lại."
                 : state.hasGateDecision
                   ? "Gate đã có quyết định. Học viên cần nộp lại nếu node bị fail."
-                  : !state.learnerCompleted
-                    ? "Học viên chưa đánh dấu hoàn thành node."
-                    : !state.hasSubmitted
-                      ? "Chưa có bài nộp hợp lệ để chấm."
-                      : "Bài nộp hiện không ở trạng thái có thể chấm."}
+                  : !state.hasSubmitted
+                    ? "Chưa có bài nộp hợp lệ để chấm."
+                    : "Bài nộp hiện không ở trạng thái có thể chấm."}
             </div>
           )}
 

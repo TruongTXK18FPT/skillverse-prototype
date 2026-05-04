@@ -485,7 +485,8 @@
 /* ─── Node Edit Form ─────────────────────────────────────────── */
 
 .mrw-edit-form {
-  max-width: 640px;
+  max-width: 860px;
+  margin: 0 auto;
 }
 
 .mrw-selected-node-summary {
@@ -572,6 +573,25 @@
 .mrw-form-textarea {
   min-height: 100px;
   resize: vertical;
+}
+
+.mrw-form-textarea--md {
+  min-height: 180px;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  tab-size: 2;
+  letter-spacing: -0.01em;
+  resize: vertical;
+}
+
+.mrw-md-hint {
+  margin: 6px 0 0;
+  font-size: 0.7rem;
+  color: rgba(148, 163, 184, 0.6);
+  font-style: italic;
+  letter-spacing: 0.01em;
 }
 
 .mrw-form-grid {
@@ -1168,24 +1188,7 @@
   line-height: 1.4;
 }
 
-/* ─── RichTextEditor overrides ──────────────────────────────── */
 
-.mrw-edit-form .rich-text-editor-container {
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid var(--mr-border, rgba(34, 211, 238, 0.18));
-}
-
-.mrw-edit-form .rte-content {
-  min-height: 180px;
-  background: rgba(6, 19, 29, 0.5);
-  color: #e2e8f0;
-}
-
-.mrw-edit-form .rte-toolbar {
-  background: rgba(11, 31, 46, 0.6);
-  border-bottom: 1px solid rgba(34, 211, 238, 0.12);
-}
 
 /* ─── Node Status Icons (sidebar tree) ───────────────────── */
 

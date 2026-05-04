@@ -24,6 +24,7 @@ import {
   TrendingUp,
   Wallet,
   FileSignature,
+  Rocket,
 } from "lucide-react";
 import OperationLog from "./OperationLog";
 import MissionLaunchPad from "./MissionLaunchPad";
@@ -33,6 +34,7 @@ import RecruiterTalentWorkspace from "./RecruiterTalentWorkspace";
 import SubscriptionWidget from "./SubscriptionWidget";
 import RegulationsTab from "./RegulationsTab";
 import ContractsHubPanel from "./ContractsHubPanel";
+import JobBoostAnalyticsPanel from "./JobBoostAnalyticsPanel";
 import LineChart from "./stats/LineChart";
 import recruiterStatsService, {
   SpendingDataPoint,
@@ -67,7 +69,8 @@ type RecruiterSection =
   | "candidates"
   | "contracts"
   | "regulations"
-  | "seminar";
+  | "seminar"
+  | "boost";
 
 interface Stats {
   ftTotal: number;
@@ -350,7 +353,7 @@ const CommandDeck: React.FC = () => {
 
     if (
       requestedSection &&
-      ["overview", "fulltime", "shortterm", "candidates", "seminar"].includes(
+      ["overview", "fulltime", "shortterm", "candidates", "seminar", "boost"].includes(
         requestedSection,
       )
     ) {
@@ -499,6 +502,13 @@ const CommandDeck: React.FC = () => {
       badge: stats.ctTotal || undefined,
       color: "#8b5cf6",
       rgb: "139,92,246",
+    },
+    {
+      id: "boost",
+      icon: <Rocket size={18} />,
+      label: "Thống Kê Job Boost",
+      color: "#ffd700",
+      rgb: "255,215,0",
     },
   ];
 
@@ -1157,6 +1167,7 @@ const CommandDeck: React.FC = () => {
             <RegulationsTab />
           </div>
         )}
+        {section === "boost" && <JobBoostAnalyticsPanel />}
 
         {/* ---------- CONTRACTS ---------- */}
         {section === "contracts" && (

@@ -55,6 +55,7 @@ import {
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import ContractListPage from "../../components/contract/ContractListPage";
 import InterviewListPanel from "../../components/business-hud/InterviewListPanel";
+import CandidateOnboardingPanel from "../../components/business-hud/CandidateOnboardingPanel";
 import "../../styles/JobLabWorkspace.css";
 
 type JobType = "ALL" | "REGULAR" | "SHORT_TERM";
@@ -65,7 +66,8 @@ type ViewMode =
   | "contracts"
   | "interviews"
   | "offers"
-  | "disputes";
+  | "disputes"
+  | "onboarding";
 type ApplicationTimeFilter = "ALL" | "THIS_WEEK" | "THIS_MONTH" | "CUSTOM";
 type IncomeStatusFilter = "ALL" | "PAID" | "COMPLETED";
 type DisputeStatusFilter = "ALL" | DisputeStatus;
@@ -241,6 +243,16 @@ const STATUS_META: Record<
     label: "Đã ký hợp đồng",
     tone: "fuchsia",
     hint: "Hợp đồng đã được ký, chờ bắt đầu công việc.",
+  },
+  AWAITING_ONBOARDING_INFO: {
+    label: "Đang cung cấp thông tin",
+    tone: "cyan",
+    hint: "Cần cung cấp CCCD và thông tin ngân hàng để hoàn tất onboarding.",
+  },
+  HIRED: {
+    label: "Đã tuyển dụng",
+    tone: "green",
+    hint: "Đã được tuyển chính thức (Onsite).",
   },
 };
 
@@ -932,6 +944,29 @@ const JobLabPage: React.FC = () => {
     [applications],
   );
 
+  const onboardingApps = useMemo(
+    () =>
+      applications.filter(
+        (app) =>
+          app.type === "REGULAR" &&
+          app.isRemote &&
+          [
+            "OFFER_ACCEPTED",
+            "AWAITING_ONBOARDING_INFO",
+            "INTERVIEWED",
+          ].includes(app.status),
+      ),
+    [applications],
+  );
+
+  const [selectedOnboardingAppId, setSelectedOnboardingAppId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (viewMode === "onboarding" && onboardingApps.length > 0 && !selectedOnboardingAppId) {
+      setSelectedOnboardingAppId(onboardingApps[0].id);
+    }
+  }, [viewMode, onboardingApps, selectedOnboardingAppId]);
+
   const filteredSubmittedDisputes = useMemo(() => {
     const normalizedQuery = disputeSearchTerm.trim().toLowerCase();
 
@@ -1310,6 +1345,12 @@ const JobLabPage: React.FC = () => {
                 icon: AlertTriangle,
                 count: unresolvedSubmittedDisputesCount,
               },
+              {
+                id: "onboarding" as const,
+                label: "Onboarding",
+                icon: Shield,
+                count: onboardingApps.length || undefined,
+              },
             ].map((item) => (
               <button
                 key={item.id}
@@ -1353,6 +1394,7 @@ const JobLabPage: React.FC = () => {
               {viewMode === "interviews" && "Lịch phỏng vấn"}
               {viewMode === "offers" && "Các đề nghị đã nhận"}
               {viewMode === "disputes" && "Dispute đã gửi"}
+              {viewMode === "onboarding" && "Thông tin nhân sự"}
             </h1>
             <p>
               {viewMode === "dashboard" &&
@@ -1368,6 +1410,8 @@ const JobLabPage: React.FC = () => {
               {viewMode === "offers" && "Xem và phản hồi đề nghị tuyển dụng."}
               {viewMode === "disputes" &&
                 "Theo dõi toàn bộ tranh chấp bạn đã gửi theo trạng thái xử lý."}
+              {viewMode === "onboarding" &&
+                "Cung cấp CCCD và thông tin ngân hàng cho các job Remote đang chờ."}
             </p>
           </div>
           <div className="jlx-header__actions">
@@ -2900,6 +2944,83 @@ const JobLabPage: React.FC = () => {
               applications={applications}
               onRefresh={loadApplications}
             />
+          </section>
+        )}
+
+        {viewMode === "onboarding" && (
+          <section className="jlx-onboarding-section">
+            {onboardingApps.length === 0 ? (
+              <div className="jlx-empty-state">
+                <Shield size={42} />
+                <h3>Không có job nào cần onboarding</h3>
+                <p>Các job Remote đang chờ bạn cung cấp thông tin sẽ xuất hiện tại đây.</p>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, width: '100%' }}>
+                {/* Horizontal Pill Selector for Multiple Jobs */}
+                {onboardingApps.length > 1 && (
+                  <div style={{
+                    display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center',
+                    background: 'rgba(30,41,59,0.5)', padding: '8px', borderRadius: 999, border: '1px solid rgba(100,116,139,0.2)'
+                  }}>
+                    {onboardingApps.map((app) => (
+                      <button
+                        key={app.id}
+                        type="button"
+                        onClick={() => setSelectedOnboardingAppId(app.id)}
+                        style={{
+                          padding: '8px 16px', borderRadius: 999, cursor: 'pointer',
+                          background: selectedOnboardingAppId === app.id ? 'rgba(0,240,255,0.15)' : 'transparent',
+                          color: selectedOnboardingAppId === app.id ? '#00f0ff' : '#94a3b8',
+                          border: 'none', transition: 'all 0.2s', fontSize: '0.88rem',
+                          fontWeight: selectedOnboardingAppId === app.id ? 600 : 400
+                        }}
+                      >
+                        {app.title}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Centered Focus Panel */}
+                <div style={{ width: '100%', maxWidth: 800, margin: '0 auto' }}>
+                  {selectedOnboardingAppId && onboardingApps.find(a => a.id === selectedOnboardingAppId) && (
+                    <div style={{ 
+                      marginBottom: 24, textAlign: 'center', 
+                      background: 'linear-gradient(90deg, rgba(0,240,255,0) 0%, rgba(0,240,255,0.05) 50%, rgba(0,240,255,0) 100%)',
+                      padding: '16px 0', borderBottom: '1px solid rgba(0,240,255,0.2)'
+                    }}>
+                      <span style={{ color: '#00f0ff', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1.5px', fontWeight: 600 }}>
+                        ONBOARDING CHO VỊ TRÍ
+                      </span>
+                      <h2 style={{ margin: '6px 0 0', fontSize: '1.5rem', color: '#fff', fontWeight: 600 }}>
+                        {onboardingApps.find(a => a.id === selectedOnboardingAppId)?.title}
+                      </h2>
+                      <p style={{ margin: '4px 0 0', color: '#cbd5e1', fontSize: '0.95rem' }}>
+                        {onboardingApps.find(a => a.id === selectedOnboardingAppId)?.company}
+                      </p>
+                    </div>
+                  )}
+
+                  {selectedOnboardingAppId && onboardingApps.find(a => a.id === selectedOnboardingAppId) ? (
+                    <CandidateOnboardingPanel
+                      applicationId={onboardingApps.find(a => a.id === selectedOnboardingAppId)!.applicationId}
+                      onComplete={() => {
+                        setSelectedOnboardingAppId(null);
+                        void loadApplications();
+                      }}
+                      onCancel={onboardingApps.length > 1 ? () => setSelectedOnboardingAppId(null) : undefined}
+                    />
+                  ) : (
+                    <div className="jlx-empty-state" style={{ minHeight: 300 }}>
+                      <Shield size={32} />
+                      <h3>Chọn một job để bắt đầu</h3>
+                      <p>Vui lòng chọn job cần cung cấp thông tin.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </section>
         )}
 

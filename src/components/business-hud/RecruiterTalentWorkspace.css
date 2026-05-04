@@ -109,6 +109,7 @@
   color: var(--rtw-cyan);
   filter: drop-shadow(0 0 6px var(--rtw-cyan-glow));
 }
+
 @keyframes rtw-spin {
   to {
     transform: rotate(360deg);
@@ -236,12 +237,14 @@
   text-shadow: 0 0 12px var(--rtw-cyan-glow);
   font-variant-numeric: tabular-nums;
 }
+
 .rtw-metric__label {
   font-size: 0.7rem;
   color: var(--rtw-muted);
   font-weight: 500;
   letter-spacing: 0.02em;
 }
+
 .rtw-metric__hint {
   font-size: 0.66rem;
   color: rgba(106, 112, 128, 0.5);
@@ -565,7 +568,6 @@
   background: rgba(6, 8, 16, 0.96);
 }
 
-
 .rtw-job-bar__roster {
   display: flex;
   align-items: stretch;
@@ -578,12 +580,15 @@
   border-top: 1px solid rgba(0, 240, 255, 0.06);
   position: relative;
 }
+
 .rtw-job-bar__roster::-webkit-scrollbar {
   height: 3px;
 }
+
 .rtw-job-bar__roster::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .rtw-job-bar__roster::-webkit-scrollbar-thumb {
   background: rgba(0, 240, 255, 0.15);
   border-radius: 4px;
@@ -624,9 +629,11 @@
 .rtw-job-bar__roster-item--open::before {
   background: var(--rtw-green);
 }
+
 .rtw-job-bar__roster-item--pending::before {
   background: var(--rtw-orange);
 }
+
 .rtw-job-bar__roster-item--closed::before,
 .rtw-job-bar__roster-item--rejected::before {
   background: var(--rtw-red);
@@ -645,10 +652,12 @@
   border-radius: 50%;
   flex-shrink: 0;
 }
+
 .rtw-job-bar__roster-item__kind-dot--fulltime {
   background: var(--rtw-cyan);
   box-shadow: 0 0 4px var(--rtw-cyan-glow);
 }
+
 .rtw-job-bar__roster-item__kind-dot--shortterm {
   background: var(--rtw-purple);
   box-shadow: 0 0 4px var(--rtw-purple-glow);
@@ -1689,12 +1698,15 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 240, 255, 0.15) transparent;
 }
+
 .rtw-legacy-job-list::-webkit-scrollbar {
   width: 4px;
 }
+
 .rtw-legacy-job-list::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .rtw-legacy-job-list::-webkit-scrollbar-thumb {
   background: rgba(0, 240, 255, 0.15);
   border-radius: 4px;
@@ -2249,9 +2261,11 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 240, 255, 0.12) transparent;
 }
+
 .rtw-chat-messages::-webkit-scrollbar {
   width: 4px;
 }
+
 .rtw-chat-messages::-webkit-scrollbar-thumb {
   background: rgba(0, 240, 255, 0.12);
   border-radius: 4px;
@@ -2263,19 +2277,23 @@
   align-items: flex-end;
   animation: rtw-msg-in 0.22s ease;
 }
+
 @keyframes rtw-msg-in {
   from {
     opacity: 0;
     transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 .rtw-msg--ai {
   align-self: flex-start;
 }
+
 .rtw-msg--user {
   align-self: flex-end;
   flex-direction: row-reverse;
@@ -2486,6 +2504,7 @@
     opacity: 0.15;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.25;
     transform: scale(1.02);
@@ -2772,9 +2791,11 @@
 .ai-md-section {
   padding: 0.6rem 1rem 0.4rem;
 }
+
 .ai-md-section + .ai-md-section {
   border-top: 1px solid rgba(212, 175, 55, 0.06);
 }
+
 .ai-md-section:first-child {
   padding-top: 0.4rem;
 }
@@ -3032,6 +3053,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -3061,6 +3083,7 @@
     opacity: 0;
     transform: scale(0.95) translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -3293,6 +3316,7 @@
   .rtw-dossier-hero-compact {
     grid-template-columns: auto 1fr;
   }
+
   .rtw-dossier-actions-col {
     grid-column: 1 / -1;
     flex-direction: row;
@@ -3300,10 +3324,12 @@
     flex-wrap: wrap;
     min-width: unset;
   }
+
   .rtw-dossier-cta {
     flex-direction: row;
     width: auto;
   }
+
   .rtw-dossier-cta .rtw-primary-btn,
   .rtw-dossier-cta .rtw-secondary-btn {
     width: auto;
@@ -3314,15 +3340,19 @@
   .rtw-hero {
     grid-template-columns: 1fr;
   }
+
   .rtw-metric-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .rtw-grid {
     grid-template-columns: 1fr;
   }
+
   .rtw-job-bar__top {
     grid-template-columns: 1fr;
   }
+
   .rtw-job-bar__tools {
     min-width: 0;
     width: 100%;
@@ -3331,42 +3361,53 @@
     border-left: 0;
     border-top: 1px solid rgba(0, 240, 255, 0.07);
   }
+
   .rtw-job-bar__controls {
     grid-template-columns: 1fr 180px;
   }
+
   .rtw-job-row {
     grid-template-columns: 10px minmax(0, 1fr) auto;
   }
+
   .rtw-job-row__meta {
     display: none;
   }
+
   .rtw-job-summary-grid {
     grid-template-columns: 1fr;
   }
+
   .rtw-dossier-hero-compact {
     grid-template-columns: 1fr;
   }
+
   .rtw-dossier-identity {
     flex-direction: row;
     align-items: center;
     min-width: unset;
   }
+
   .rtw-dossier-identity__stats {
     flex-direction: row;
     align-items: center;
     gap: 0.45rem;
   }
+
   .rtw-dossier-actions-col {
     flex-direction: column;
     align-items: stretch;
   }
+
   .rtw-dossier-cta {
     flex-direction: column;
   }
+
   .rtw-dossier-cta .rtw-primary-btn,
   .rtw-dossier-cta .rtw-secondary-btn {
     width: 100%;
   }
+
   .rtw-dossier-bottom-row {
     grid-template-columns: 1fr;
   }
@@ -3403,39 +3444,49 @@
     padding: 0.75rem;
     border-radius: 1rem;
   }
+
   .rtw-metric-grid {
     grid-template-columns: 1fr 1fr;
   }
+
   .rtw-metric strong {
     font-size: 1.3rem;
   }
+
   .rtw-job-bar__selected {
     gap: 0.65rem;
     padding: 0.85rem;
   }
+
   .rtw-job-bar__selected-icon {
     width: 36px;
     height: 36px;
   }
+
   .rtw-job-bar__tools {
     flex-direction: column;
   }
+
   .rtw-job-bar__controls {
     grid-template-columns: 1fr;
   }
+
   .rtw-search-box--job,
   .rtw-job-status-select,
   .rtw-job-row {
     grid-template-columns: 9px minmax(0, 1fr);
     gap: 0.5rem;
   }
+
   .rtw-job-row > .rtw-status-pill {
     grid-column: 2;
     justify-self: flex-start;
   }
+
   .rtw-tabs {
     gap: 0.2rem;
   }
+
   .rtw-tab {
     min-width: 80px;
     padding: 0.4rem 0.65rem;

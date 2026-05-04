@@ -6084,53 +6084,6 @@
   justify-content: center;
 }
 
-/* ==================== Language Options ==================== */
-.gsj-language-options {
-  display: flex;
-  gap: 12px;
-}
-
-@media (max-width: 480px) {
-  .gsj-language-options {
-    flex-direction: column;
-  }
-}
-
-.gsj-language-btn {
-  flex: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 20px;
-  background: var(--gsj-bg-card);
-  border: 2px solid var(--gsj-border);
-  border-radius: var(--gsj-radius-md);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--gsj-text-secondary);
-  cursor: pointer;
-  transition: var(--gsj-transition);
-  text-align: center;
-}
-
-.gsj-language-btn:hover {
-  border-color: var(--gsj-border-hover);
-  color: var(--gsj-text-primary);
-  background: var(--gsj-bg-elevated);
-}
-
-.gsj-language-btn--active {
-  border-color: var(--gsj-primary);
-  background: rgba(0, 245, 255, 0.08);
-  color: var(--gsj-primary);
-  box-shadow: 0 0 16px rgba(0, 245, 255, 0.2);
-}
-
-.gsj-language-btn--active svg {
-  color: var(--gsj-primary);
-}
-
 /* ==================== Duration Options ==================== */
 .gsj-duration-options {
   display: grid;

@@ -2416,16 +2416,6 @@ export const FOCUS_AREA_OPTIONS = [
 
 export type FocusAreaType = (typeof FOCUS_AREA_OPTIONS)[number]["value"];
 
-// ==================== Language Options ====================
-
-export const LANGUAGE_OPTIONS = [
-  { value: "VI", label: "Tiếng Việt" },
-  { value: "EN", label: "English" },
-  { value: "BILINGUAL", label: "Song ngữ" },
-] as const;
-
-export type LanguageType = (typeof LANGUAGE_OPTIONS)[number]["value"];
-
 // ==================== Duration Options ====================
 
 export const DURATION_OPTIONS = [
@@ -3836,6 +3826,11 @@ export interface JourneySummaryResponse {
     resultId?: number;
     scorePercentage: number;
     evaluatedLevel: SkillLevel;
+    baseLevel?: SkillLevel;
+    testedLevel?: SkillLevel;
+    provisional?: boolean;
+    challengeRequired?: boolean;
+    challengeAvailable?: boolean;
     skillGapsCount: number;
     strengthsCount: number;
     evaluatedAt?: string;
@@ -3893,6 +3888,12 @@ export interface AssessmentTestResponse {
   status: TestStatus;
   totalQuestions: number;
   passingScore: number;
+  difficultyLevel?: string;
+  assessmentPhase?: string;
+  baseLevel?: SkillLevel;
+  testedLevel?: SkillLevel;
+  parentTestId?: number;
+  questionSource?: string;
   createdAt: string;
   completedAt?: string;
   expiresAt?: string;
@@ -3945,6 +3946,13 @@ export interface TestResultResponse {
   scoreBandLabel: string;
   recommendationMode: string;
   recommendationLabel: string;
+  assessmentPhase?: string;
+  baseLevel?: SkillLevel;
+  testedLevel?: SkillLevel;
+  provisional: boolean;
+  challengeRequired: boolean;
+  challengeAvailable: boolean;
+  challengeTestId?: number;
   assessmentConfidence: number;
   reassessmentRecommended: boolean;
   totalQuestions: number;

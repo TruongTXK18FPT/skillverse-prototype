@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import MeowlKuruLoader from "../components/kuru-loader/MeowlKuruLoader";
 import {
   Bell,
@@ -53,6 +53,8 @@ import {
   PenLine,
   Trash2,
   Ban as BanIcon,
+  Calendar as CalendarIcon,
+  Layers,
 } from "lucide-react";
 import { useScrollToListTopOnPagination } from "../hooks/useScrollToListTopOnPagination";
 import {
@@ -916,7 +918,8 @@ const getTypeDescription = (type: string, message: string): string => {
     FULLTIME_APPLICATION_REJECTED:
       "Rất tiếc, đơn ứng tuyển không được chấp nhận.",
     INTERVIEW_SCHEDULED: "Bạn đã nhận lịch phỏng vấn mới.",
-    INTERVIEW_COMPLETED: "Buổi phỏng vấn đã hoàn thành. Hãy chờ kết quả tiếp theo.",
+    INTERVIEW_COMPLETED:
+      "Buổi phỏng vấn đã hoàn thành. Hãy chờ kết quả tiếp theo.",
     OFFER_SENT: "Nhà tuyển dụng đã gửi đề nghị cho hồ sơ của bạn.",
     OFFER_ACCEPTED: "Bạn đã chấp nhận đề nghị tuyển dụng.",
     OFFER_REJECTED: "Đề nghị tuyển dụng đã bị từ chối.",
@@ -1062,11 +1065,134 @@ const getTypeBannerColor = (type: string): string => {
   }
 };
 
+// ==================== CATEGORY FILTER METADATA ====================
+type CategoryKey =
+  | "all"
+  | "social"
+  | "booking"
+  | "mentor"
+  | "course"
+  | "job"
+  | "contract"
+  | "premium"
+  | "wallet"
+  | "escrow"
+  | "dispute"
+  | "system";
+
+const CATEGORY_FILTERS: Array<{
+  key: CategoryKey;
+  label: string;
+  icon: React.ReactNode;
+  accent: string;
+}> = [
+  {
+    key: "all",
+    label: "Tất cả",
+    icon: <Layers size={16} />,
+    accent: "#00d4ff",
+  },
+  {
+    key: "social",
+    label: "Mạng xã hội",
+    icon: <Heart size={16} />,
+    accent: "#ff6b9d",
+  },
+  {
+    key: "booking",
+    label: "Booking",
+    icon: <CalendarCheck size={16} />,
+    accent: "#6366f1",
+  },
+  {
+    key: "mentor",
+    label: "Mentor",
+    icon: <BadgeCheck size={16} />,
+    accent: "#f59e0b",
+  },
+  {
+    key: "course",
+    label: "Khóa học",
+    icon: <BookOpen size={16} />,
+    accent: "#8b5cf6",
+  },
+  {
+    key: "job",
+    label: "Việc làm",
+    icon: <Briefcase size={16} />,
+    accent: "#22d3ee",
+  },
+  {
+    key: "contract",
+    label: "Hợp đồng",
+    icon: <FileText size={16} />,
+    accent: "#a855f7",
+  },
+  {
+    key: "premium",
+    label: "Premium",
+    icon: <Star size={16} />,
+    accent: "#f093fb",
+  },
+  {
+    key: "wallet",
+    label: "Ví",
+    icon: <DollarSign size={16} />,
+    accent: "#10b981",
+  },
+  {
+    key: "escrow",
+    label: "Escrow",
+    icon: <Shield size={16} />,
+    accent: "#06b6d4",
+  },
+  {
+    key: "dispute",
+    label: "Khiếu nại",
+    icon: <Scale size={16} />,
+    accent: "#ef4444",
+  },
+  {
+    key: "system",
+    label: "Hệ thống",
+    icon: <Info size={16} />,
+    accent: "#3b82f6",
+  },
+];
+
+// ==================== DATE BUCKET ====================
+type DateBucketKey = "today" | "yesterday" | "thisWeek" | "older";
+
+const DATE_BUCKETS: Array<{ key: DateBucketKey; label: string }> = [
+  { key: "today", label: "Hôm nay" },
+  { key: "yesterday", label: "Hôm qua" },
+  { key: "thisWeek", label: "Tuần này" },
+  { key: "older", label: "Cũ hơn" },
+];
+
+const getDateBucket = (dateString: string): DateBucketKey => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+  ).getTime();
+  const startOfYesterday = startOfToday - 86400000;
+  const startOfWeek = startOfToday - 6 * 86400000;
+  const ts = date.getTime();
+  if (ts >= startOfToday) return "today";
+  if (ts >= startOfYesterday) return "yesterday";
+  if (ts >= startOfWeek) return "thisWeek";
+  return "older";
+};
+
 // ==================== COMPONENT ====================
 const NotificationPage: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<"all" | "unread" | "read">("all");
+  const [category, setCategory] = useState<string>("all");
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
@@ -1201,6 +1327,16 @@ const NotificationPage: React.FC = () => {
     }
 
     switch (type) {
+      // Social / Community
+      case "LIKE":
+      case "COMMENT":
+        return "Xem bài viết";
+      case "PRECHAT_MESSAGE":
+      case "PRECHAT_NEW_MESSAGE":
+      case "RECRUITMENT_MESSAGE":
+        return "Mở chat";
+
+      // Contract
       case "CONTRACT_SENT_FOR_SIGNATURE":
         return "Ký ngay";
       case "CONTRACT_SIGNED":
@@ -1208,37 +1344,98 @@ const NotificationPage: React.FC = () => {
       case "CONTRACT_REJECTED":
       case "CONTRACT_CANCELLED":
       case "CONTRACT_EXPIRED":
-        return "Xem chi tiết";
+        return "Xem hợp đồng";
+
+      // Booking
       case "BOOKING_CREATED":
       case "BOOKING_CONFIRMED":
       case "BOOKING_REMINDER":
+      case "BOOKING_STARTED":
+      case "BOOKING_COMPLETED":
+      case "BOOKING_MENTOR_COMPLETED":
+      case "BOOKING_REFUND":
         return "Xem booking";
       case "BOOKING_REJECTED":
       case "BOOKING_CANCELLED":
-        return "Xem chi tiết";
+        return "Xem booking";
+
+      // Mentor
+      case "MENTOR_REVIEW_RECEIVED":
+        return "Xem đánh giá";
+      case "MENTOR_LEVEL_UP":
+      case "MENTOR_BADGE_AWARDED":
+        return "Xem thành tích";
+
+      // Premium
       case "PREMIUM_PURCHASE":
         return "Kiểm tra Premium";
       case "PREMIUM_EXPIRATION":
         return "Gia hạn ngay";
+      case "PREMIUM_CANCEL":
+        return "Xem Premium";
+
+      // Wallet / Escrow
       case "WALLET_DEPOSIT":
       case "COIN_PURCHASE":
-        return "Xem ví";
       case "WITHDRAWAL_APPROVED":
       case "WITHDRAWAL_REJECTED":
-        return "Xem ví";
       case "ESCROW_FUNDED":
       case "ESCROW_RELEASED":
       case "ESCROW_REFUNDED":
         return "Xem ví";
+
+      // Course / Assignment
+      case "TASK_DEADLINE":
+      case "TASK_OVERDUE":
+      case "TASK_REVIEW":
+        return "Mở Study Planner";
+      case "ASSIGNMENT_SUBMITTED":
+      case "ASSIGNMENT_GRADED":
+      case "ASSIGNMENT_LATE":
+        return "Xem bài nộp";
+      case "COURSE_REJECTED":
+      case "COURSE_SUSPENDED":
+      case "COURSE_RESTORED":
+        return "Xem khóa học";
+
+      // Dispute
       case "DISPUTE_OPENED":
       case "DISPUTE_RESOLVED":
         return "Xem khiếu nại";
+      case "ADMIN_DISPUTE_ESCALATED":
+        return "Mở Admin";
+      case "DISPUTE_ELIGIBILITY_UNLOCKED":
+        return "Mở dispute";
+      case "REVIEW_WINDOW_EXPIRING":
+        return "Kiểm tra ngay";
       case "WORKER_CANCELLATION_REQUESTED":
-        return "Mở Dispute";
+        return "Mở dispute";
       case "WORKER_AUTO_CANCELLED":
       case "ADMIN_CANCELLATION_REJECTED":
       case "WORKER_CANCELLATION_REJECTED":
         return "Mở Job Lab";
+
+      // Jobs (recruiter view)
+      case "JOB_APPROVED":
+      case "JOB_REJECTED":
+      case "JOB_DELETED":
+      case "JOB_BANNED":
+      case "JOB_UNBANNED":
+        return "Xem job";
+      case "RECRUITER_AUTO_APPROVED_WARNING":
+        return "Kiểm tra ngay";
+      case "SHORT_TERM_APPLICATION_SUBMITTED":
+      case "FULLTIME_APPLICATION_REVIEWED":
+        return "Xem ứng tuyển";
+      case "SHORT_TERM_APPLICATION_REJECTED":
+      case "FULLTIME_APPLICATION_REJECTED":
+        return "Xem ứng tuyển";
+      case "SHORT_TERM_WORK_SUBMITTED":
+        return "Xem bài nộp";
+      case "WORKER_AUTO_APPROVED":
+        return "Mở Job Lab";
+
+      // Interview / Offer
       case "INTERVIEW_SCHEDULED":
       case "INTERVIEW_COMPLETED":
         return "Xem lịch phỏng vấn";
@@ -1251,21 +1448,53 @@ const NotificationPage: React.FC = () => {
         return "Xem hợp đồng";
       case "SHORT_TERM_WORK_APPROVED":
         return "Xem thanh toán";
+
+      // System
       case "WELCOME":
         return "Khám phá ngay";
       case "VIOLATION_REPORT":
         return "Xem báo cáo";
-      case "MENTOR_LEVEL_UP":
-      case "MENTOR_BADGE_AWARDED":
-        return "Xem thành tích";
-      case "COURSE_REJECTED":
-      case "COURSE_SUSPENDED":
-      case "COURSE_RESTORED":
-        return "Xem khóa học";
+      case "WARNING":
+      case "SYSTEM":
+        return "Đã hiểu";
+
       default:
         return "Xem chi tiết";
     }
   };
+
+  // Client-side category filtering on the current page
+  const filteredNotifications = useMemo(
+    () =>
+      category === "all"
+        ? notifications
+        : notifications.filter((n) => getTypeCategory(n.type) === category),
+    [notifications, category],
+  );
+
+  // Counts per category (within current page)
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: notifications.length };
+    for (const n of notifications) {
+      const cat = getTypeCategory(n.type);
+      counts[cat] = (counts[cat] || 0) + 1;
+    }
+    return counts;
+  }, [notifications]);
+
+  // Group filtered notifications by date bucket, preserving order
+  const groupedByDate = useMemo(() => {
+    const map: Record<DateBucketKey, Notification[]> = {
+      today: [],
+      yesterday: [],
+      thisWeek: [],
+      older: [],
+    };
+    for (const n of filteredNotifications) {
+      map[getDateBucket(n.createdAt)].push(n);
+    }
+    return map;
+  }, [filteredNotifications]);
 
   return (
     <div className="notification-page">
@@ -1382,6 +1611,60 @@ const NotificationPage: React.FC = () => {
         </button>
       </motion.div>
 
+      {/* Category Filter Chips */}
+      <motion.div
+        className="notif-category-filters"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.35 }}
+      >
+        <div className="notif-category-track">
+          {CATEGORY_FILTERS.map((cat) => {
+            const count = categoryCounts[cat.key] || 0;
+            const isActive = category === cat.key;
+            return (
+              <button
+                key={cat.key}
+                className={`notif-category-chip ${isActive ? "active" : ""}`}
+                onClick={() => setCategory(cat.key)}
+                style={
+                  isActive
+                    ? {
+                        background: `${cat.accent}1A`,
+                        borderColor: cat.accent,
+                        color: cat.accent,
+                        boxShadow: `0 0 18px ${cat.accent}33`,
+                      }
+                    : undefined
+                }
+                title={cat.label}
+              >
+                <span
+                  className="notif-category-icon"
+                  style={{ color: isActive ? cat.accent : undefined }}
+                >
+                  {cat.icon}
+                </span>
+                <span className="notif-category-label">{cat.label}</span>
+                {cat.key !== "all" && count > 0 && (
+                  <span
+                    className="notif-category-count"
+                    style={{
+                      background: isActive
+                        ? cat.accent
+                        : "rgba(255,255,255,0.08)",
+                      color: isActive ? "#0a0a14" : "var(--notif-text-dim)",
+                    }}
+                  >
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </motion.div>
+
       {/* Notification List */}
       <div className="notif-list-container">
         {loading ? (
@@ -1394,7 +1677,7 @@ const NotificationPage: React.FC = () => {
           >
             <MeowlKuruLoader text="Đang tải thông báo..." size="small" />
           </div>
-        ) : notifications.length === 0 ? (
+        ) : filteredNotifications.length === 0 ? (
           <div
             style={{
               padding: 60,
@@ -1403,105 +1686,129 @@ const NotificationPage: React.FC = () => {
             }}
           >
             <Bell size={48} style={{ opacity: 0.3, marginBottom: 16 }} />
-            <p>Không có thông báo nào</p>
+            <p>
+              {category === "all"
+                ? "Không có thông báo nào"
+                : `Không có thông báo trong nhóm "${
+                    CATEGORY_FILTERS.find((c) => c.key === category)?.label ||
+                    category
+                  }"`}
+            </p>
           </div>
         ) : (
           <AnimatePresence mode="wait">
-            {notifications.map((notification, index) => {
-              const display = formatNotificationDisplay(notification);
-
-              return (
-                <motion.div
-                  key={notification.id}
-                  className={`notif-item ${!notification.isRead ? "unread" : ""}`}
-                  onClick={() => handleNotificationClick(notification)}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  whileHover={{ scale: 1.01 }}
+            {DATE_BUCKETS.flatMap((bucket) => {
+              const items = groupedByDate[bucket.key];
+              if (!items || items.length === 0) return [];
+              return [
+                <div
+                  key={`bucket-${bucket.key}`}
+                  className="notif-date-divider"
                 >
-                  <div
-                    className="notif-icon-wrapper"
-                    style={{
-                      background: `rgba(${notification.type === "CONTRACT_SIGNED" || notification.type === "CONTRACT_SENT_FOR_SIGNATURE" ? "99, 102, 241" : "0, 212, 255"}, 0.1)`,
-                      color: getIconColor(notification.type),
-                      border: `1px solid ${getIconColor(notification.type)}40`,
-                    }}
-                  >
-                    {notification.senderAvatar ? (
-                      <img
-                        src={notification.senderAvatar}
-                        alt={notification.senderName || "User"}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          borderRadius: "12px",
-                          objectFit: "cover",
-                        }}
-                      />
-                    ) : (
-                      <div style={{ color: getIconColor(notification.type) }}>
-                        {getIcon(notification.type)}
-                      </div>
-                    )}
-                  </div>
-                  <div className="notif-content">
-                    <div className="notif-header-row">
+                  <CalendarIcon size={14} />
+                  <span>{bucket.label}</span>
+                  <span className="notif-date-divider-count">
+                    {items.length}
+                  </span>
+                </div>,
+                ...items.map((notification, index) => {
+                  const display = formatNotificationDisplay(notification);
+                  return (
+                    <motion.div
+                      key={notification.id}
+                      className={`notif-item ${!notification.isRead ? "unread" : ""}`}
+                      onClick={() => handleNotificationClick(notification)}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      whileHover={{ scale: 1.01 }}
+                    >
                       <div
+                        className="notif-icon-wrapper"
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                          flexWrap: "wrap",
+                          background: `rgba(${notification.type === "CONTRACT_SIGNED" || notification.type === "CONTRACT_SENT_FOR_SIGNATURE" ? "99, 102, 241" : "0, 212, 255"}, 0.1)`,
+                          color: getIconColor(notification.type),
+                          border: `1px solid ${getIconColor(notification.type)}40`,
                         }}
                       >
-                        <h4 className="notif-title">{display.title}</h4>
-                        <span
-                          className="notif-type-badge"
-                          style={{
-                            background: `${getIconColor(notification.type)}20`,
-                            color: getIconColor(notification.type),
-                            border: `1px solid ${getIconColor(notification.type)}40`,
-                            padding: "2px 8px",
-                            borderRadius: "6px",
-                            fontSize: "0.7rem",
-                            fontWeight: 600,
-                            textTransform: "uppercase",
-                            letterSpacing: "0.5px",
-                          }}
-                        >
-                          {getTypeLabel(notification.type)}
-                        </span>
-                        {display.disputeOutcomeLabel && (
-                          <span
-                            className={`notif-dispute-pill notif-dispute-pill--${display.disputeOutcomeTone || "neutral"}`}
+                        {notification.senderAvatar ? (
+                          <img
+                            src={notification.senderAvatar}
+                            alt={notification.senderName || "User"}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              borderRadius: "12px",
+                              objectFit: "cover",
+                            }}
+                          />
+                        ) : (
+                          <div
+                            style={{ color: getIconColor(notification.type) }}
                           >
-                            {display.disputeOutcomeLabel}
-                          </span>
+                            {getIcon(notification.type)}
+                          </div>
                         )}
                       </div>
-                      <span className="notif-time">
-                        <Clock size={14} />
-                        {formatTime(notification.createdAt)}
-                      </span>
-                    </div>
-                    <p className="notif-message">
-                      {notification.senderName && (
-                        <span
-                          style={{
-                            fontWeight: "bold",
-                            color: getIconColor(notification.type),
-                            marginRight: "6px",
-                          }}
-                        >
-                          {notification.senderName}
-                        </span>
-                      )}
-                      {display.message}
-                    </p>
-                  </div>
-                </motion.div>
-              );
+                      <div className="notif-content">
+                        <div className="notif-header-row">
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "8px",
+                              flexWrap: "wrap",
+                            }}
+                          >
+                            <h4 className="notif-title">{display.title}</h4>
+                            <span
+                              className="notif-type-badge"
+                              style={{
+                                background: `${getIconColor(notification.type)}20`,
+                                color: getIconColor(notification.type),
+                                border: `1px solid ${getIconColor(notification.type)}40`,
+                                padding: "2px 8px",
+                                borderRadius: "6px",
+                                fontSize: "0.7rem",
+                                fontWeight: 600,
+                                textTransform: "uppercase",
+                                letterSpacing: "0.5px",
+                              }}
+                            >
+                              {getTypeLabel(notification.type)}
+                            </span>
+                            {display.disputeOutcomeLabel && (
+                              <span
+                                className={`notif-dispute-pill notif-dispute-pill--${display.disputeOutcomeTone || "neutral"}`}
+                              >
+                                {display.disputeOutcomeLabel}
+                              </span>
+                            )}
+                          </div>
+                          <span className="notif-time">
+                            <Clock size={14} />
+                            {formatTime(notification.createdAt)}
+                          </span>
+                        </div>
+                        <p className="notif-message">
+                          {notification.senderName && (
+                            <span
+                              style={{
+                                fontWeight: "bold",
+                                color: getIconColor(notification.type),
+                                marginRight: "6px",
+                              }}
+                            >
+                              {notification.senderName}
+                            </span>
+                          )}
+                          {display.message}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                }),
+              ];
             })}
           </AnimatePresence>
         )}
@@ -1513,7 +1820,9 @@ const NotificationPage: React.FC = () => {
           <button
             className="pagination-btn"
             disabled={page === 0}
-            onClick={withPaginationScroll(() => setPage((p) => Math.max(0, p - 1)))}
+            onClick={withPaginationScroll(() =>
+              setPage((p) => Math.max(0, p - 1)),
+            )}
           >
             <ChevronLeft size={20} />
           </button>
@@ -1524,7 +1833,7 @@ const NotificationPage: React.FC = () => {
             className="pagination-btn"
             disabled={page === totalPages - 1}
             onClick={withPaginationScroll(() =>
-              setPage((p) => Math.min(totalPages - 1, p + 1))
+              setPage((p) => Math.min(totalPages - 1, p + 1)),
             )}
           >
             <ChevronRight size={20} />

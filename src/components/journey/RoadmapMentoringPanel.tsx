@@ -9,7 +9,7 @@
  * 3. Verification history timeline
  * 4. Verified skills portfolio grid
  */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Video,
   Shield,
@@ -25,22 +25,22 @@ import {
   User,
   Zap,
   Check,
-} from 'lucide-react';
-import { useToast } from '../../hooks/useToast';
+} from "lucide-react";
+import { useToast } from "../../hooks/useToast";
 import type {
   VerificationEvidenceReportResponse,
   UserVerifiedSkillDTO,
   SubmitEvidenceReportRequest,
   GateDecision,
-} from '../../types/NodeMentoring';
+} from "../../types/NodeMentoring";
 import {
   createFinalMeetingLink,
   submitEvidenceReportAndVerdict,
   getVerificationHistory,
   getVerifiedSkills,
-} from '../../services/nodeMentoringService';
-import type { BookingResponse } from '../../services/bookingService';
-import './RoadmapMentoringPanel.css';
+} from "../../services/nodeMentoringService";
+import type { BookingResponse } from "../../services/bookingService";
+import "./RoadmapMentoringPanel.css";
 
 // ─── Types ────────────────────────────────────────────────
 interface RoadmapMentoringPanelProps {
@@ -51,7 +51,7 @@ interface RoadmapMentoringPanelProps {
   onRefresh?: () => void;
 }
 
-type TabId = 'meeting' | 'history' | 'skills';
+type TabId = "meeting" | "history" | "skills";
 
 // ─── Component ────────────────────────────────────────────
 const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
@@ -62,23 +62,25 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
   onRefresh,
 }) => {
   const { showSuccess, showError } = useToast();
-  const [activeTab, setActiveTab] = useState<TabId>('meeting');
+  const [activeTab, setActiveTab] = useState<TabId>("meeting");
   const [loading, setLoading] = useState(false);
 
   // Meeting tab
-  const [meetingLink, setMeetingLink] = useState(booking.meetingLink || '');
+  const [meetingLink, setMeetingLink] = useState(booking.meetingLink || "");
   const [creatingLink, setCreatingLink] = useState(false);
 
   // Verdict form
-  const [gateDecision, setGateDecision] = useState<GateDecision | ''>('');
-  const [summaryReport, setSummaryReport] = useState('');
-  const [failReason, setFailReason] = useState('');
+  const [gateDecision, setGateDecision] = useState<GateDecision | "">("");
+  const [summaryReport, setSummaryReport] = useState("");
+  const [failReason, setFailReason] = useState("");
   const [weakNodeIds, setWeakNodeIds] = useState<string[]>([]);
   const [meetingDuration, setMeetingDuration] = useState<number>(30);
   const [submitting, setSubmitting] = useState(false);
 
   // History tab
-  const [history, setHistory] = useState<VerificationEvidenceReportResponse[]>([]);
+  const [history, setHistory] = useState<VerificationEvidenceReportResponse[]>(
+    [],
+  );
   const [historyLoaded, setHistoryLoaded] = useState(false);
 
   // Skills tab
@@ -94,9 +96,9 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
   const cooldownDate = booking.nextVerifyAllowedAt
     ? new Date(booking.nextVerifyAllowedAt)
     : null;
-  const isActive = booking.status === 'MENTORING_ACTIVE';
-  const isCompleted = booking.status === 'COMPLETED';
-  const isCancelled = booking.status === 'CANCELLED';
+  const isActive = booking.status === "MENTORING_ACTIVE";
+  const isCompleted = booking.status === "COMPLETED";
+  const isCancelled = booking.status === "CANCELLED";
 
   // ─── Data loaders ───────────────────────────────────────
   const loadHistory = useCallback(async () => {
@@ -107,7 +109,7 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
       setHistory(data);
       setHistoryLoaded(true);
     } catch (err: any) {
-      showError('Lỗi', err.response?.data?.message || 'Không thể tải lịch sử');
+      showError("Lỗi", err.response?.data?.message || "Không thể tải lịch sử");
     } finally {
       setLoading(false);
     }
@@ -121,15 +123,15 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
       setSkills(data);
       setSkillsLoaded(true);
     } catch (err: any) {
-      showError('Lỗi', err.response?.data?.message || 'Không thể tải skills');
+      showError("Lỗi", err.response?.data?.message || "Không thể tải skills");
     } finally {
       setLoading(false);
     }
   }, [skillsLoaded, showError]);
 
   useEffect(() => {
-    if (activeTab === 'history') loadHistory();
-    if (activeTab === 'skills') loadSkills();
+    if (activeTab === "history") loadHistory();
+    if (activeTab === "skills") loadSkills();
   }, [activeTab, loadHistory, loadSkills]);
 
   // ─── Handlers ───────────────────────────────────────────
@@ -138,9 +140,9 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
       setCreatingLink(true);
       const link = await createFinalMeetingLink(journeyId);
       setMeetingLink(link);
-      showSuccess('Đã tạo phòng họp', 'Link Jitsi đã sẵn sàng');
+      showSuccess("Đã tạo phòng họp", "Link Jitsi đã sẵn sàng");
     } catch (err: any) {
-      showError('Lỗi', err.response?.data?.message || 'Không thể tạo link');
+      showError("Lỗi", err.response?.data?.message || "Không thể tạo link");
     } finally {
       setCreatingLink(false);
     }
@@ -148,19 +150,19 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
 
   const handleSubmitVerdict = async () => {
     if (!gateDecision) {
-      showError('Thiếu thông tin', 'Vui lòng chọn PASS hoặc FAIL');
+      showError("Thiếu thông tin", "Vui lòng chọn PASS hoặc FAIL");
       return;
     }
     if (!summaryReport.trim()) {
-      showError('Thiếu thông tin', 'Vui lòng nhập báo cáo tổng kết');
+      showError("Thiếu thông tin", "Vui lòng nhập báo cáo tổng kết");
       return;
     }
-    if (gateDecision === 'FAIL' && weakNodeIds.length === 0) {
-      showError('Thiếu thông tin', 'Vui lòng chọn ít nhất 1 node yếu khi FAIL');
+    if (gateDecision === "FAIL" && weakNodeIds.length === 0) {
+      showError("Thiếu thông tin", "Vui lòng chọn ít nhất 1 node yếu khi FAIL");
       return;
     }
-    if (gateDecision === 'FAIL' && !failReason.trim()) {
-      showError('Thiếu thông tin', 'Vui lòng nhập lý do FAIL');
+    if (gateDecision === "FAIL" && !failReason.trim()) {
+      showError("Thiếu thông tin", "Vui lòng nhập lý do FAIL");
       return;
     }
 
@@ -170,25 +172,30 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
         summaryReport: summaryReport.trim(),
         gateDecision: gateDecision as GateDecision,
         meetingDurationMinutes: meetingDuration,
-        weakNodeIds: gateDecision === 'FAIL' ? weakNodeIds : undefined,
-        failReason: gateDecision === 'FAIL' ? failReason.trim() : undefined,
+        weakNodeIds: gateDecision === "FAIL" ? weakNodeIds : undefined,
+        failReason: gateDecision === "FAIL" ? failReason.trim() : undefined,
       };
       await submitEvidenceReportAndVerdict(journeyId, request);
       showSuccess(
-        gateDecision === 'PASS' ? '🎉 Xác thực thành công!' : '❌ Đã ghi nhận FAIL',
-        gateDecision === 'PASS'
-          ? 'Skill đã được thêm vào portfolio học viên'
+        gateDecision === "PASS"
+          ? "🎉 Xác thực thành công!"
+          : "❌ Đã ghi nhận FAIL",
+        gateDecision === "PASS"
+          ? "Skill đã được thêm vào portfolio học viên. Tiền booking 80% đã được release vào ví của bạn."
           : `Lần ${attempts + 1}/${maxAttempts}. Học viên cần học lại.`,
       );
       // Reset form
-      setGateDecision('');
-      setSummaryReport('');
-      setFailReason('');
+      setGateDecision("");
+      setSummaryReport("");
+      setFailReason("");
       setWeakNodeIds([]);
       setHistoryLoaded(false);
+      // Force history reload to display the new attempt and switch tab so the
+      // mentor sees the verdict immediately instead of the (now-stale) form.
+      setActiveTab("history");
       onRefresh?.();
     } catch (err: any) {
-      showError('Lỗi', err.response?.data?.message || 'Không thể gửi verdict');
+      showError("Lỗi", err.response?.data?.message || "Không thể gửi verdict");
     } finally {
       setSubmitting(false);
     }
@@ -196,17 +203,19 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
 
   const toggleWeakNode = (nodeId: string) => {
     setWeakNodeIds((prev) =>
-      prev.includes(nodeId) ? prev.filter((n) => n !== nodeId) : [...prev, nodeId],
+      prev.includes(nodeId)
+        ? prev.filter((n) => n !== nodeId)
+        : [...prev, nodeId],
     );
   };
 
   const formatDate = (iso: string) => {
-    return new Date(iso).toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(iso).toLocaleDateString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -253,7 +262,7 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
         <div className="rmp-cooldown-banner">
           <Timer size={20} />
           <div>
-            <strong>Đang trong thời gian chờ.</strong> Bạn có thể verify lại sau{' '}
+            <strong>Đang trong thời gian chờ.</strong> Bạn có thể verify lại sau{" "}
             <strong>{formatDate(cooldownDate.toISOString())}</strong>
           </div>
         </div>
@@ -262,34 +271,40 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
       {/* Tabs */}
       <div className="rmp-tabs">
         <button
-          className={`rmp-tab ${activeTab === 'meeting' ? 'active' : ''}`}
-          onClick={() => setActiveTab('meeting')}
+          className={`rmp-tab ${activeTab === "meeting" ? "active" : ""}`}
+          onClick={() => setActiveTab("meeting")}
         >
           <Video size={16} /> Meeting & Verdict
         </button>
         <button
-          className={`rmp-tab ${activeTab === 'history' ? 'active' : ''}`}
-          onClick={() => setActiveTab('history')}
+          className={`rmp-tab ${activeTab === "history" ? "active" : ""}`}
+          onClick={() => setActiveTab("history")}
         >
           <History size={16} /> Lịch sử
-          {history.length > 0 && <span className="rmp-tab-count">{history.length}</span>}
+          {history.length > 0 && (
+            <span className="rmp-tab-count">{history.length}</span>
+          )}
         </button>
         <button
-          className={`rmp-tab ${activeTab === 'skills' ? 'active' : ''}`}
-          onClick={() => setActiveTab('skills')}
+          className={`rmp-tab ${activeTab === "skills" ? "active" : ""}`}
+          onClick={() => setActiveTab("skills")}
         >
           <Award size={16} /> Verified Skills
-          {skills.length > 0 && <span className="rmp-tab-count">{skills.length}</span>}
+          {skills.length > 0 && (
+            <span className="rmp-tab-count">{skills.length}</span>
+          )}
         </button>
       </div>
 
       {/* ═══ Tab: Meeting & Verdict ═══ */}
-      {activeTab === 'meeting' && (
+      {activeTab === "meeting" && (
         <>
           {/* Jitsi Meeting Card */}
           <div className="rmp-card">
             <div className="rmp-card-header">
-              <h3><Video size={18} /> Phòng họp xác thực (Jitsi)</h3>
+              <h3>
+                <Video size={18} /> Phòng họp xác thực (Jitsi)
+              </h3>
             </div>
             <div className="rmp-meeting-section">
               {meetingLink ? (
@@ -313,7 +328,10 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
                 >
                   {creatingLink ? (
                     <>
-                      <div className="rmp-spinner" style={{ width: 18, height: 18, borderWidth: 2 }} />
+                      <div
+                        className="rmp-spinner"
+                        style={{ width: 18, height: 18, borderWidth: 2 }}
+                      />
                       Đang tạo...
                     </>
                   ) : (
@@ -330,24 +348,28 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
           {isMentor && isActive && !isInCooldown && (
             <div className="rmp-card">
               <div className="rmp-card-header">
-                <h3><Shield size={18} /> Gửi kết quả xác thực</h3>
+                <h3>
+                  <Shield size={18} /> Gửi kết quả xác thực
+                </h3>
               </div>
               <div className="rmp-verdict-form">
                 {/* Decision */}
                 <div className="rmp-form-group">
-                  <label>Quyết định <span className="required">*</span></label>
+                  <label>
+                    Quyết định <span className="required">*</span>
+                  </label>
                   <div className="rmp-decision-chips">
                     <button
                       type="button"
-                      className={`rmp-decision-chip pass ${gateDecision === 'PASS' ? 'selected' : ''}`}
-                      onClick={() => setGateDecision('PASS')}
+                      className={`rmp-decision-chip pass ${gateDecision === "PASS" ? "selected" : ""}`}
+                      onClick={() => setGateDecision("PASS")}
                     >
                       <CheckCircle size={20} /> PASS — Đạt
                     </button>
                     <button
                       type="button"
-                      className={`rmp-decision-chip fail ${gateDecision === 'FAIL' ? 'selected' : ''}`}
-                      onClick={() => setGateDecision('FAIL')}
+                      className={`rmp-decision-chip fail ${gateDecision === "FAIL" ? "selected" : ""}`}
+                      onClick={() => setGateDecision("FAIL")}
                     >
                       <XCircle size={20} /> FAIL — Chưa đạt
                     </button>
@@ -356,7 +378,9 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
 
                 {/* Summary */}
                 <div className="rmp-form-group">
-                  <label>Báo cáo tổng kết <span className="required">*</span></label>
+                  <label>
+                    Báo cáo tổng kết <span className="required">*</span>
+                  </label>
                   <textarea
                     className="rmp-textarea"
                     placeholder="Nhập tổng kết buổi verify (điểm mạnh, điểm yếu, nhận xét chung)..."
@@ -372,18 +396,27 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
                     type="number"
                     className="rmp-input"
                     value={meetingDuration}
-                    onChange={(e) => setMeetingDuration(parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      setMeetingDuration(parseInt(e.target.value) || 0)
+                    }
                     min={1}
                     max={300}
                   />
                 </div>
 
                 {/* FAIL-specific: Weak Nodes */}
-                {gateDecision === 'FAIL' && nodeIds.length > 0 && (
+                {gateDecision === "FAIL" && nodeIds.length > 0 && (
                   <div className="rmp-form-group">
                     <label>
                       Chọn node cần học lại <span className="required">*</span>
-                      <span style={{ fontWeight: 400, textTransform: 'none', marginLeft: 8, fontSize: 11 }}>
+                      <span
+                        style={{
+                          fontWeight: 400,
+                          textTransform: "none",
+                          marginLeft: 8,
+                          fontSize: 11,
+                        }}
+                      >
                         ({weakNodeIds.length} đã chọn)
                       </span>
                     </label>
@@ -392,11 +425,13 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
                         <button
                           key={nodeId}
                           type="button"
-                          className={`rmp-node-chip ${weakNodeIds.includes(nodeId) ? 'selected' : ''}`}
+                          className={`rmp-node-chip ${weakNodeIds.includes(nodeId) ? "selected" : ""}`}
                           onClick={() => toggleWeakNode(nodeId)}
                         >
                           <span className="rmp-node-checkbox">
-                            {weakNodeIds.includes(nodeId) && <Check size={10} />}
+                            {weakNodeIds.includes(nodeId) && (
+                              <Check size={10} />
+                            )}
                           </span>
                           {nodeId}
                         </button>
@@ -406,9 +441,11 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
                 )}
 
                 {/* FAIL reason */}
-                {gateDecision === 'FAIL' && (
+                {gateDecision === "FAIL" && (
                   <div className="rmp-form-group">
-                    <label>Lý do FAIL <span className="required">*</span></label>
+                    <label>
+                      Lý do FAIL <span className="required">*</span>
+                    </label>
                     <textarea
                       className="rmp-textarea"
                       placeholder="Giải thích lý do chưa đạt..."
@@ -420,30 +457,40 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
 
                 {/* Submit */}
                 <button
-                  className={`rmp-submit-btn ${gateDecision === 'PASS' ? 'pass-btn' : gateDecision === 'FAIL' ? 'fail-btn' : 'pass-btn'}`}
-                  disabled={submitting || !gateDecision || !summaryReport.trim()}
+                  className={`rmp-submit-btn ${gateDecision === "PASS" ? "pass-btn" : gateDecision === "FAIL" ? "fail-btn" : "pass-btn"}`}
+                  disabled={
+                    submitting || !gateDecision || !summaryReport.trim()
+                  }
                   onClick={handleSubmitVerdict}
                 >
                   {submitting ? (
                     <>
-                      <div className="rmp-spinner" style={{ width: 18, height: 18, borderWidth: 2 }} />
+                      <div
+                        className="rmp-spinner"
+                        style={{ width: 18, height: 18, borderWidth: 2 }}
+                      />
                       Đang gửi...
                     </>
                   ) : (
                     <>
                       <Send size={18} />
-                      {gateDecision === 'PASS' ? 'Xác nhận PASS & Cấp chứng chỉ' : gateDecision === 'FAIL' ? 'Xác nhận FAIL' : 'Gửi kết quả'}
+                      {gateDecision === "PASS"
+                        ? "Xác nhận PASS & Cấp chứng chỉ"
+                        : gateDecision === "FAIL"
+                          ? "Xác nhận FAIL"
+                          : "Gửi kết quả"}
                     </>
                   )}
                 </button>
 
                 {/* Attempt warning */}
-                {attempts >= 2 && gateDecision === 'FAIL' && (
+                {attempts >= 2 && gateDecision === "FAIL" && (
                   <div className="rmp-cooldown-banner" style={{ margin: 0 }}>
                     <AlertTriangle size={20} />
                     <div>
-                      <strong>Cảnh báo:</strong> Đây là lần FAIL thứ {attempts + 1}/{maxAttempts}.
-                      Nếu FAIL, booking sẽ <strong>tự động hủy</strong> và hoàn tiền cho học viên.
+                      <strong>Cảnh báo:</strong> Đây là lần FAIL thứ{" "}
+                      {attempts + 1}/{maxAttempts}. Nếu FAIL, booking sẽ{" "}
+                      <strong>tự động hủy</strong> và hoàn tiền cho học viên.
                     </div>
                   </div>
                 )}
@@ -459,12 +506,18 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
                   {isCompleted ? (
                     <>
                       <CheckCircle size={40} />
-                      <p>🎉 Journey đã được xác thực thành công! Skill đã được thêm vào portfolio.</p>
+                      <p>
+                        🎉 Journey đã được xác thực thành công! Skill đã được
+                        thêm vào portfolio.
+                      </p>
                     </>
                   ) : (
                     <>
                       <XCircle size={40} />
-                      <p>Booking đã bị hủy sau {maxAttempts} lần fail. Tiền đã được hoàn lại.</p>
+                      <p>
+                        Booking đã bị hủy sau {maxAttempts} lần fail. Tiền đã
+                        được hoàn lại.
+                      </p>
                     </>
                   )}
                 </div>
@@ -475,10 +528,12 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
       )}
 
       {/* ═══ Tab: History ═══ */}
-      {activeTab === 'history' && (
+      {activeTab === "history" && (
         <div className="rmp-card">
           <div className="rmp-card-header">
-            <h3><History size={18} /> Lịch sử xác thực</h3>
+            <h3>
+              <History size={18} /> Lịch sử xác thực
+            </h3>
           </div>
           {loading ? (
             <div className="rmp-loading">
@@ -494,20 +549,32 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
             <div className="rmp-timeline">
               {history.map((item) => (
                 <div key={item.id} className="rmp-timeline-item">
-                  <div className={`rmp-timeline-dot ${item.gateDecision.toLowerCase()}`}>
-                    {item.gateDecision === 'PASS' ? <Check size={14} /> : <XCircle size={14} />}
+                  <div
+                    className={`rmp-timeline-dot ${item.gateDecision.toLowerCase()}`}
+                  >
+                    {item.gateDecision === "PASS" ? (
+                      <Check size={14} />
+                    ) : (
+                      <XCircle size={14} />
+                    )}
                   </div>
                   <div className="rmp-timeline-content">
                     <div className="rmp-timeline-header">
                       <span className="rmp-timeline-title">
-                        Lần {item.attemptNumber} — {item.gateDecision === 'PASS' ? '✅ PASS' : '❌ FAIL'}
+                        Lần {item.attemptNumber} —{" "}
+                        {item.gateDecision === "PASS" ? "✅ PASS" : "❌ FAIL"}
                       </span>
-                      <span className="rmp-timeline-date">{formatDate(item.submittedAt)}</span>
+                      <span className="rmp-timeline-date">
+                        {formatDate(item.submittedAt)}
+                      </span>
                     </div>
                     <p className="rmp-timeline-summary">{item.summaryReport}</p>
 
                     {item.failReason && (
-                      <p className="rmp-timeline-summary" style={{ color: '#fca5a5', marginTop: 6 }}>
+                      <p
+                        className="rmp-timeline-summary"
+                        style={{ color: "#fca5a5", marginTop: 6 }}
+                      >
                         Lý do: {item.failReason}
                       </p>
                     )}
@@ -524,7 +591,7 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
                           target="_blank"
                           rel="noopener noreferrer"
                           className="rmp-timeline-tag"
-                          style={{ textDecoration: 'none' }}
+                          style={{ textDecoration: "none" }}
                         >
                           <ExternalLink size={10} /> Jitsi
                         </a>
@@ -544,10 +611,12 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
       )}
 
       {/* ═══ Tab: Verified Skills ═══ */}
-      {activeTab === 'skills' && (
+      {activeTab === "skills" && (
         <div className="rmp-card">
           <div className="rmp-card-header">
-            <h3><Award size={18} /> Verified Skills Portfolio</h3>
+            <h3>
+              <Award size={18} /> Verified Skills Portfolio
+            </h3>
           </div>
           {loading ? (
             <div className="rmp-loading">
@@ -557,7 +626,10 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
           ) : skills.length === 0 ? (
             <div className="rmp-empty">
               <Award size={40} />
-              <p>Chưa có skill nào được xác thực. Hãy hoàn thành roadmap và vượt qua verify!</p>
+              <p>
+                Chưa có skill nào được xác thực. Hãy hoàn thành roadmap và vượt
+                qua verify!
+              </p>
             </div>
           ) : (
             <div className="rmp-verified-skills">
@@ -567,18 +639,24 @@ const RoadmapMentoringPanel: React.FC<RoadmapMentoringPanelProps> = ({
                     <span className="rmp-skill-verified-icon">
                       <CheckCircle size={12} />
                     </span>
-                    {skill.skillName.replace(/_/g, ' ')}
+                    {skill.skillName.replace(/_/g, " ")}
                   </div>
                   {skill.skillLevel && (
                     <span className="rmp-skill-level">{skill.skillLevel}</span>
                   )}
                   <div className="rmp-skill-mentor">
                     <User size={12} />
-                    Verified by: {skill.verifiedByMentorName || `Mentor #${skill.verifiedByMentorId}`}
+                    Verified by:{" "}
+                    {skill.verifiedByMentorName ||
+                      `Mentor #${skill.verifiedByMentorId}`}
                   </div>
-                  <div className="rmp-skill-date">{formatDate(skill.verifiedAt)}</div>
+                  <div className="rmp-skill-date">
+                    {formatDate(skill.verifiedAt)}
+                  </div>
                   {skill.verificationNote && (
-                    <div className="rmp-skill-note">"{skill.verificationNote}"</div>
+                    <div className="rmp-skill-note">
+                      "{skill.verificationNote}"
+                    </div>
                   )}
                 </div>
               ))}
