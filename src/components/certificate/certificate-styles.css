@@ -30,8 +30,8 @@
 
 .sv-cert-template-paper {
   width: min(1040px, 100%);
-  aspect-ratio: 11 / 8;
   height: auto;
+  min-height: fit-content;
   background: var(--c-paper);
   display: flex;
   box-shadow: 0 0 40px rgba(0,0,0,0.5);
@@ -124,27 +124,45 @@
   font-family: var(--font-sans);
   font-size: 17px;
   color: var(--c-text-main);
-  margin-bottom: 18px;
-  max-width: 74%;
+  margin-bottom: 14px;
+  max-width: 80%;
   line-height: 1.5;
 }
 
 .sv-cert-template-course-name {
   font-family: var(--font-sans);
-  font-size: clamp(23px, 2.2vw, 30px);
+  font-size: clamp(20px, 2vw, 28px);
   font-weight: 700;
   color: #000;
   margin-bottom: 18px;
-  line-height: 1.3;
-  max-width: 76%;
+  line-height: 1.35;
+  max-width: 85%;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 .sv-cert-template-description {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 15px;
   color: var(--c-text-main);
-  max-width: 80%;
+  max-width: 85%;
   line-height: 1.5;
+}
+
+/* Only clamp lines when printing PDF */
+@media print {
+  .sv-cert-template-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 
 /* FOOTER */
@@ -152,7 +170,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 32px;
+  margin-top: auto;
+  padding-top: 24px;
   position: relative;
   z-index: 2;
   gap: 24px;
@@ -301,8 +320,25 @@
     outline: none;
     width: 100%;
     height: 100vh;
+    min-height: 0;
+    max-width: 100%;
+    aspect-ratio: 11 / 8;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+  .sv-cert-template-left-content {
+    padding: 48px 60px;
+  }
+  .sv-cert-template-course-name {
+    font-size: 22px;
+    max-width: 90%;
+  }
+  .sv-cert-template-recipient {
+    font-size: 32px;
+  }
+  .sv-cert-template-footer {
+    margin-top: auto;
+    padding-top: 20px;
   }
 }
 

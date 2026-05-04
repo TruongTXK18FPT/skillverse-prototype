@@ -696,17 +696,6 @@ const CourseDetailPage = () => {
               {/* Stats Grid */}
               <div className="cockpit-detail-stats-grid">
                 <div className="cockpit-detail-stat-card">
-                  <Star className="cockpit-detail-stat-icon" />
-                  <div className="cockpit-detail-stat-content">
-                    <span className="cockpit-detail-stat-value">
-                      {course.averageRating?.toFixed(1) ?? "0.0"}
-                    </span>
-                    <span className="cockpit-detail-stat-label">
-                      ĐIỂM ĐÁNH GIÁ
-                    </span>
-                  </div>
-                </div>
-                <div className="cockpit-detail-stat-card">
                   <Users className="cockpit-detail-stat-icon" />
                   <div className="cockpit-detail-stat-content">
                     <span className="cockpit-detail-stat-value">
@@ -970,41 +959,52 @@ const CourseDetailPage = () => {
                   </div>
                 </div>
 
-                {Boolean(course.learningObjectives?.length || course.courseSkills?.length) && (
-                  <div className="cockpit-detail-section-panel">
-                    <div className="cockpit-detail-section-header">
-                      <div className="cockpit-detail-section-marker"></div>
-                      <h2 className="cockpit-detail-section-title">
-                        BẠN SẼ HỌC ĐƯỢC
-                      </h2>
-                    </div>
-                    
-                    {Boolean(course.learningObjectives?.length) && (
-                      <div className="cockpit-detail-outcomes-grid" style={{ marginBottom: course.courseSkills?.length ? '1.5rem' : 0 }}>
-                        {(course.learningObjectives || []).map(
-                          (objective, idx) => (
-                            <div
-                              key={`${objective}-${idx}`}
-                              className="cockpit-detail-outcome-card"
-                            >
-                              <span>{objective}</span>
-                            </div>
-                          ),
-                        )}
+                {(() => {
+                  // Filter out empty, null, undefined, or "EMPTY" skills
+                  const validSkills = (course.courseSkills || []).filter(
+                    (skill): skill is string => Boolean(skill) && skill.trim() !== '' && skill.trim().toUpperCase() !== 'EMPTY'
+                  );
+                  const hasObjectives = Boolean(course.learningObjectives?.length);
+                  const hasSkills = validSkills.length > 0;
+                  
+                  if (!hasObjectives && !hasSkills) return null;
+                  
+                  return (
+                    <div className="cockpit-detail-section-panel">
+                      <div className="cockpit-detail-section-header">
+                        <div className="cockpit-detail-section-marker"></div>
+                        <h2 className="cockpit-detail-section-title">
+                          BẠN SẼ HỌC ĐƯỢC
+                        </h2>
                       </div>
-                    )}
+                      
+                      {hasObjectives && (
+                        <div className="cockpit-detail-outcomes-grid" style={{ marginBottom: hasSkills ? '1.5rem' : 0 }}>
+                          {(course.learningObjectives || []).map(
+                            (objective, idx) => (
+                              <div
+                                key={`${objective}-${idx}`}
+                                className="cockpit-detail-outcome-card"
+                              >
+                                <span>{objective}</span>
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      )}
 
-                    {Boolean(course.courseSkills?.length) && (
-                      <div className="cockpit-detail-skills-grid">
-                        {course.courseSkills!.map((skill, idx) => (
-                          <span key={`${skill}-${idx}`} className="cockpit-detail-skill-tag">
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
+                      {hasSkills && (
+                        <div className="cockpit-detail-skills-grid">
+                          {validSkills.map((skill, idx) => (
+                            <span key={`${skill}-${idx}`} className="cockpit-detail-skill-tag">
+                              {skill.trim()}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
 
                 {Boolean(course.requirements?.length) && (
                   <div className="cockpit-detail-section-panel">
