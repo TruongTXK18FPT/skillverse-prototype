@@ -53,7 +53,6 @@ import { PilotIDModal } from "./PilotIDModal";
 import { MissionLogModal } from "./MissionLogModal";
 import { CommendationModal } from "./CommendationModal";
 import { DataCompilerModal } from "./DataCompilerModal";
-import { AchievementsModal } from "./AchievementsModal";
 import SystemAlertModal from "./SystemAlertModal";
 import DossierInitScreen from "./DossierInitScreen";
 import MissionDetailModal from "./MissionDetailModal";
@@ -161,8 +160,6 @@ const TacticalDossierPortfolio = () => {
   const [reviews, setReviews] = useState<MentorReviewDTO[]>([]);
   const [cvs, setCvs] = useState<GeneratedCVDTO[]>([]);
   const [isOwner, setIsOwner] = useState(false);
-  const [achievements, setAchievements] = useState<string[]>([]);
-  const [achievementsModalOpen, setAchievementsModalOpen] = useState(false);
   const [verifiedSkills, setVerifiedSkills] = useState<UserVerifiedSkillDTO[]>([]);
   const [selectedVerifiedSkill, setSelectedVerifiedSkill] = useState<UserVerifiedSkillDTO | null>(null);
 
@@ -386,17 +383,6 @@ const TacticalDossierPortfolio = () => {
           setCompletedMissions(missionsData);
           setVerifiedSkills(allVerifiedSkills);
 
-          // Parse achievements for mentor accounts
-          if (
-            profileData.achievements &&
-            typeof profileData.achievements === "string"
-          ) {
-            try {
-              setAchievements(JSON.parse(profileData.achievements));
-            } catch {
-              setAchievements([]);
-            }
-          }
         }
       }
     } catch (err: any) {
@@ -424,40 +410,6 @@ const TacticalDossierPortfolio = () => {
       coverImage,
     );
     await loadPortfolioData();
-  };
-
-  // Handler: Update achievements for mentor accounts
-  const handleUpdateAchievements = async (updatedAchievements: string[]) => {
-    if (!profile) {
-      setAlertModal({
-        show: true,
-        message: "Không tìm thấy hồ sơ portfolio. Vui lòng tạo hồ sơ trước.",
-        type: "error",
-      });
-      return;
-    }
-    try {
-      const updatedProfile: Partial<UserProfileDTO> = {
-        ...profile,
-        achievements: JSON.stringify(updatedAchievements),
-      };
-      await portfolioService.updateExtendedProfile(updatedProfile);
-      setAchievements(updatedAchievements);
-      setAlertModal({
-        show: true,
-        message: "Đã cập nhật thành tựu!",
-        type: "success",
-      });
-    } catch (err: any) {
-      setAlertModal({
-        show: true,
-        message:
-          err?.response?.data?.message ||
-          err?.message ||
-          "Không thể cập nhật thành tựu.",
-        type: "error",
-      });
-    }
   };
 
   const handleQuickAvatarUpdate = async (
@@ -1000,15 +952,6 @@ const TacticalDossierPortfolio = () => {
                 ]
               : []),
             { id: "certificates", label: "Chứng chỉ", icon: Award },
-            ...(isMentorAccount
-              ? [
-                  {
-                    id: "achievements",
-                    label: "Thành tựu",
-                    icon: Target,
-                  },
-                ]
-              : []),
             ...(isOwner
               ? [
                   {
@@ -2394,90 +2337,6 @@ const TacticalDossierPortfolio = () => {
                   })
                 )}
               </div>
-            </motion.div>
-          )}
-
-          {/* Achievements Section - Mentor only */}
-          {activeSection === "achievements" && isMentorAccount && (
-            <motion.div
-              key="achievements"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              {/* Header */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  marginBottom: "1.5rem",
-                  gap: "1rem",
-                }}
-              >
-                <div>
-                  <h2 className="dossier-modal-title">Thành Tựu</h2>
-                  <p
-                    style={{
-                      color: "var(--dossier-silver-dark)",
-                      fontSize: "0.875rem",
-                      marginTop: "0.25rem",
-                    }}
-                  >
-                    Thành tựu và giải thưởng của bạn với tư cách Mentor
-                  </p>
-                </div>
-                <button
-                  className="dossier-btn-neon"
-                  onClick={() => setAchievementsModalOpen(true)}
-                >
-                  <Plus size={16} />
-                  Thêm Thành Tựu
-                </button>
-              </div>
-
-              {/* Achievements Grid */}
-              {achievements.length > 0 ? (
-                <div className="dossier-achievements-grid">
-                  {achievements.map((achievement, index) => (
-                    <div key={index} className="dossier-achievement-card">
-                      <div className="dossier-achievement-card-icon">
-                        <Award size={20} />
-                      </div>
-                      <div className="dossier-achievement-card-content">
-                        <p className="dossier-achievement-card-text">
-                          {achievement}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="dossier-achievements-section-empty">
-                  <div className="dossier-achievements-section-empty-icon">
-                    <Award size={28} />
-                  </div>
-                  <p>
-                    Chưa có thành tựu nào. Nhấn "Thêm Thành Tựu" để bắt đầu xây
-                    dựng danh sách giải thưởng của bạn.
-                  </p>
-                  <button
-                    className="dossier-btn-neon"
-                    onClick={() => setAchievementsModalOpen(true)}
-                  >
-                    <Plus size={16} />
-                    Thêm Thành Tựu Đầu Tiên
-                  </button>
-                </div>
-              )}
-
-              {/* Achievements Modal */}
-              <AchievementsModal
-                isOpen={achievementsModalOpen}
-                onClose={() => setAchievementsModalOpen(false)}
-                achievements={achievements}
-                onSave={handleUpdateAchievements}
-              />
             </motion.div>
           )}
 
