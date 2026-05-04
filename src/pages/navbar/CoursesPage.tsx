@@ -667,7 +667,7 @@ const CoursesPage = () => {
               currentPage={currentPage}
               onPageChange={handleCoursePageChange}
               scrollTargetRef={modulesSectionRef}
-              scrollOffset={180}
+              scrollOffset={200}
             />
           </div>
         )}

@@ -66,7 +66,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
   const [premiumDownloading, setPremiumDownloading] = useState(false);
   const { withPaginationScroll } = useScrollToListTopOnPagination();

@@ -242,6 +242,7 @@ const JobsOdysseyPage = () => {
           itemsPerPage={PAGE_SIZE}
           currentPage={currentPage + 1}
           onPageChange={(page) => onPageChange(page - 1)}
+          scrollOffset={1600}
         />
       </div>
     );

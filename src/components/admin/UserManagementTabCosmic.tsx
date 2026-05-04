@@ -53,7 +53,7 @@ const UserManagementTabCosmic: React.FC = () => {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(5);
   const { withPaginationScroll } = useScrollToListTopOnPagination();
 
   // Modal states

@@ -338,7 +338,7 @@ export const AdminCourseHub: React.FC = () => {
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(5);
   const [totalElements, setTotalElements] = useState(0);
 
   // Filters

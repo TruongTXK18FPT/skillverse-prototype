@@ -58,7 +58,6 @@ import ChangePasswordPage from "./pages/settings/ChangePasswordPage";
 import Transactional from "./pages/payment/Transactional";
 import PremiumPageCosmic from "./pages/payment/PremiumPageCosmic";
 import StudentVerificationPage from "./pages/payment/StudentVerificationPage";
-import ManagerPage from "./pages/main/ManagerPage";
 // import CoinWallet from './pages/main/CoinWallet'; // Replaced by MyWalletCosmic
 import MyWalletCosmic from "./pages/my-wallet/MyWalletCosmic";
 import NotFoundPage from "./pages/notfound/NotFoundPage";
@@ -128,6 +127,7 @@ import UserGuidePage from "./pages/user-guide/UserGuidePage";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import Certificate from "./components/certificate/Certificate";
 import MentorIdentityGuard from "./components/elevator/MentorIdentityGuard";
+import { useDisableNumberInputWheel } from "./hooks/useDisableNumberInputWheel";
 
 const CertificateVerifyPage = lazy(
   () => import("./components/certificate/CertificateVerifyPage"),
@@ -445,7 +445,6 @@ const AppContents = () => {
                 </AuthenticatedRoute>
               }
             />
-            <Route path="/manager" element={<ManagerPage />} />
             <Route
               path="/wallet"
               element={
@@ -677,6 +676,8 @@ const AppContents = () => {
 };
 
 const App = () => {
+  useDisableNumberInputWheel();
+
   return (
     <ChakraProvider value={defaultSystem}>
       <LanguageProvider>

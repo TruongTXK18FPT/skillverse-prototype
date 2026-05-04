@@ -1106,6 +1106,7 @@ const CoursesTab: React.FC = () => {
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
               onPageChange={setCurrentPage}
+              scrollOffset={1600}
             />
           )}
         </>
