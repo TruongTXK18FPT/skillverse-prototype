@@ -51,10 +51,10 @@ import {
 import { useAppToast } from "../../context/ToastContext";
 import type { NodeAssignmentResponse } from "../../types/NodeMentoring";
 import RoadmapNodeRequirementsCard from "../roadmap/RoadmapNodeRequirementsCard";
-import NodeMentoringWorkspace from "./NodeMentoringWorkspace";
 import MentorAssessmentCreator from "./MentorAssessmentCreator";
 import MentorCompletionReportForm from "./MentorCompletionReportForm";
 import MentorNodeReportTab from "./MentorNodeReportTab";
+import MentorGateOverviewPanel from "./MentorGateOverviewPanel";
 
 import {
   EditableRequirementField,
@@ -1155,25 +1155,18 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
               </div>
               <div className="mrw-panel-content">
                 {overviewTab === "GATE" && (
-                  <>
-                    <div className="mrw-node-detail-header">
-                      <Target size={20} />
-                      <h3>Thông tin chung & Hành trình</h3>
-                    </div>
-                    <div className="mrw-overview-info">
-                      <p>
-                        Xem tổng quan, review bằng chứng học tập, và quyết định
-                        xác nhận hoàn thành Roadmap cho học viên tại đây.
-                      </p>
-                    </div>
-                    <NodeMentoringWorkspace
-                      booking={{
-                        ...workspace.booking,
-                        journeyId: workspace.journeyId,
-                      }}
-                      onActionComplete={loadWorkspace}
-                    />
-                  </>
+                  <MentorGateOverviewPanel
+                    journeyId={workspace.journeyId}
+                    finalNodeId={finalNodeId}
+                    nodes={nodes}
+                    nodeStatusMap={mentorNodeStatusMap}
+                    learnerName={workspace.booking?.learnerName}
+                    onJumpToAssessment={() => setOverviewTab("ASSESSMENT")}
+                    onSelectNode={(id) => {
+                      setSelectedNodeId(id);
+                      setRightTab("REPORT");
+                    }}
+                  />
                 )}
 
                 {overviewTab === "ASSESSMENT" && (
@@ -1181,9 +1174,10 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
                     journeyId={workspace.journeyId}
                     /* Final assessment cho toàn roadmap được lưu vào node MAIN cuối
                        cùng (đã được parent định nghĩa là Final Assessment node).
-                       Trước đây tab này không truyền nodeId nên form yêu cầu mentor
-                       chọn node — sai về nghiệp vụ. */
+                       `isFinalAssessment` bật label/UX ở cấp journey, không còn
+                       hiển thị title của node cuối ra ngoài. */
                     nodeId={finalNodeId ?? undefined}
+                    isFinalAssessment
                     bookingId={bookingId}
                     learnerName={workspace.booking?.learnerName}
                     nodes={nodes}

@@ -54,6 +54,8 @@ interface Props {
   learnerName?: string;
   /** Roadmap nodes for context */
   nodes?: any[];
+  /** Khi true: component đại diện cho Final Assessment toàn journey (ẩn chi tiết node cuối, relabel). */
+  isFinalAssessment?: boolean;
   onAssessed?: () => void;
 }
 
@@ -106,6 +108,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
   learnerName,
   nodes = [],
   nodeId,
+  isFinalAssessment = false,
   onAssessed,
 }) => {
   const { showSuccess, showError } = useToast();
@@ -183,14 +186,19 @@ const MentorAssessmentCreator: React.FC<Props> = ({
         const assignment = await getNodeAssignment(journeyId, nodeId);
         setCurrentAssignment(assignment);
         if (assignment) {
-          setRequirementTitle(assignment.title || "");
+          setRequirementTitle(
+            assignment.title ||
+              (isFinalAssessment ? "Final Assessment — Tổng kết lộ trình" : ""),
+          );
           const rawDesc = assignment.description || "";
           // Split existing rubric block so the markdown editor only shows the
           // prose and the rubric editor stays in sync with the stored criteria.
           const { body, rubric } = splitRubricBlock(rawDesc);
           setRequirementDesc(body);
           if (rubric.length > 0) setRubricItems(rubric);
-          setEditingRequirements(assignment.assignmentSource !== "MENTOR_REFINED");
+          setEditingRequirements(
+            assignment.assignmentSource !== "MENTOR_REFINED",
+          );
         } else {
           setRequirementTitle("");
           setRequirementDesc("");
@@ -202,7 +210,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
       }
 
       // Load Journey Output Assessment (always load it if no nodeId, or optionally even if nodeId to see final status, but we only show it if !nodeId)
-      if (!nodeId) {
+      if (!nodeId || isFinalAssessment) {
         const data = await getLatestOutputAssessment(journeyId);
         setAssessment(data);
         if (data) {
@@ -216,7 +224,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
     } finally {
       setLoading(false);
     }
-  }, [journeyId, nodeId]);
+  }, [journeyId, nodeId, isFinalAssessment]);
 
   useEffect(() => {
     loadAssessment();
@@ -263,7 +271,10 @@ const MentorAssessmentCreator: React.FC<Props> = ({
       }
 
       const { body } = splitRubricBlock(requirementDesc);
-      const finalDescription = serializeRubric(body + attachmentNote, rubricItems);
+      const finalDescription = serializeRubric(
+        body + attachmentNote,
+        rubricItems,
+      );
 
       const savedAssignment = await upsertNodeAssignment(journeyId, nodeId, {
         title: requirementTitle,
@@ -323,11 +334,19 @@ const MentorAssessmentCreator: React.FC<Props> = ({
           <ClipboardList size={20} />
         </div>
         <div>
-          <h3 className="mac-title">Assessment & Đánh giá</h3>
+          <h3 className="mac-title">
+            {isFinalAssessment
+              ? "Final Assessment — Yêu cầu tổng kết"
+              : "Assessment & Đánh giá"}
+          </h3>
           <p className="mac-subtitle">
-            {learnerName
-              ? `Đánh giá kết quả học tập của ${learnerName}`
-              : "Quản lý yêu cầu đầu ra"}
+            {isFinalAssessment
+              ? learnerName
+                ? `Đặt yêu cầu đầu ra cho cả lộ trình của ${learnerName}`
+                : "Đặt yêu cầu đầu ra cho cả lộ trình"
+              : learnerName
+                ? `Đánh giá kết quả học tập của ${learnerName}`
+                : "Quản lý yêu cầu đầu ra"}
           </p>
         </div>
       </div>
@@ -356,14 +375,21 @@ const MentorAssessmentCreator: React.FC<Props> = ({
                   <CheckCircle size={18} />
                 </div>
                 <div className="mac-uploaded-assignment__content">
-                  <h4>Đã tải lên yêu cầu node</h4>
+                  <h4>
+                    {isFinalAssessment
+                      ? "Đã đặt yêu cầu Final Assessment"
+                      : "Đã tải lên yêu cầu node"}
+                  </h4>
                   <p>
                     Học viên sẽ thấy yêu cầu đã giao. Khi cần thay đổi nội dung,
                     hãy mở lại form để cập nhật.
                   </p>
                   <div className="mac-uploaded-assignment__meta">
-                    {currentAssignment.title && (
+                    {currentAssignment.title && !isFinalAssessment && (
                       <span>{currentAssignment.title}</span>
+                    )}
+                    {isFinalAssessment && (
+                      <span>Final Assessment (toàn lộ trình)</span>
                     )}
                     <span>
                       {currentAssignment.updatedAt
@@ -381,194 +407,222 @@ const MentorAssessmentCreator: React.FC<Props> = ({
                 </button>
               </div>
             )}
-            <div style={{ display: hasUploadedNodeAssignment ? "none" : undefined }}>
-            <div className="mac-form-group">
-              <label className="mac-label">Tiêu đề Assessment</label>
-              <input
-                type="text"
-                className="mac-input"
-                value={requirementTitle}
-                onChange={(e) => setRequirementTitle(e.target.value)}
-                placeholder="VD: Final Project — Xây dựng REST API"
-              />
-            </div>
+            <div
+              style={{
+                display: hasUploadedNodeAssignment ? "none" : undefined,
+              }}
+            >
+              <div className="mac-form-group">
+                <label className="mac-label">Tiêu đề Assessment</label>
+                <input
+                  type="text"
+                  className="mac-input"
+                  value={requirementTitle}
+                  onChange={(e) => setRequirementTitle(e.target.value)}
+                  placeholder="VD: Final Project — Xây dựng REST API"
+                />
+              </div>
 
-            <div className="mac-form-group">
-              <label className="mac-label">Mô tả yêu cầu chi tiết</label>
-              <RichTextEditor
-                key={`node-requirement-${nodeId ?? "final"}-${currentAssignment?.id ?? "new"}-${editingRequirements ? "edit" : "view"}`}
-                initialContent={requirementDesc}
-                onChange={setRequirementDesc}
-                placeholder="Mô tả chi tiết những gì học viên cần nộp..."
-                userId={user?.id}
-              />
-            </div>
+              <div className="mac-form-group">
+                <label className="mac-label">Mô tả yêu cầu chi tiết</label>
+                <RichTextEditor
+                  key={`node-requirement-${nodeId ?? "final"}-${currentAssignment?.id ?? "new"}-${editingRequirements ? "edit" : "view"}`}
+                  initialContent={requirementDesc}
+                  onChange={setRequirementDesc}
+                  placeholder="Mô tả chi tiết những gì học viên cần nộp..."
+                  userId={user?.id}
+                />
+              </div>
 
-            <div className="mac-form-group">
-              <label className="mac-label">File đề bài / Tài liệu đính kèm (Tùy chọn)</label>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                style={{ display: "none" }}
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) handleFileSelect(f);
-                  if (fileInputRef.current) fileInputRef.current.value = "";
-                }}
-              />
-              <div
-                className={`mac-upload-zone ${isDragging ? "mac-upload-zone--dragging" : ""} ${attachmentFile ? "mac-upload-zone--has-file" : ""}`}
-                onClick={() => !attachmentFile && fileInputRef.current?.click()}
-                onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
-                onDrop={handleDropFile}
-              >
-                {attachmentFile ? (
-                  <div className="mac-file-preview">
-                    <div className={`mac-file-preview__icon mac-file-preview__icon--${getFileExt(attachmentFile)}`}>
-                      {getFileExt(attachmentFile).toUpperCase()}
+              <div className="mac-form-group">
+                <label className="mac-label">
+                  File đề bài / Tài liệu đính kèm (Tùy chọn)
+                </label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) handleFileSelect(f);
+                    if (fileInputRef.current) fileInputRef.current.value = "";
+                  }}
+                />
+                <div
+                  className={`mac-upload-zone ${isDragging ? "mac-upload-zone--dragging" : ""} ${attachmentFile ? "mac-upload-zone--has-file" : ""}`}
+                  onClick={() =>
+                    !attachmentFile && fileInputRef.current?.click()
+                  }
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDragging(true);
+                  }}
+                  onDragLeave={(e) => {
+                    e.preventDefault();
+                    setIsDragging(false);
+                  }}
+                  onDrop={handleDropFile}
+                >
+                  {attachmentFile ? (
+                    <div className="mac-file-preview">
+                      <div
+                        className={`mac-file-preview__icon mac-file-preview__icon--${getFileExt(attachmentFile)}`}
+                      >
+                        {getFileExt(attachmentFile).toUpperCase()}
+                      </div>
+                      <div className="mac-file-preview__info">
+                        <div className="mac-file-preview__name">
+                          {attachmentFile.name}
+                        </div>
+                        <div className="mac-file-preview__size">
+                          {formatFileSize(attachmentFile.size)}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        className="mac-file-preview__remove"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setAttachmentFile(null);
+                          setUploadError(null);
+                        }}
+                      >
+                        <X size={13} />
+                      </button>
                     </div>
-                    <div className="mac-file-preview__info">
-                      <div className="mac-file-preview__name">{attachmentFile.name}</div>
-                      <div className="mac-file-preview__size">{formatFileSize(attachmentFile.size)}</div>
-                    </div>
-                    <button
-                      type="button"
-                      className="mac-file-preview__remove"
-                      onClick={(e) => { e.stopPropagation(); setAttachmentFile(null); setUploadError(null); }}
-                    >
-                      <X size={13} />
-                    </button>
+                  ) : (
+                    <>
+                      <div className="mac-upload-zone__icon">
+                        <Upload size={18} />
+                      </div>
+                      <div className="mac-upload-zone__text">
+                        <p>Kéo thả hoặc click để chọn file</p>
+                        <span>Tối đa 10MB</span>
+                      </div>
+                      <div className="mac-upload-zone__accept">
+                        <span className="mac-upload-zone__badge mac-upload-zone__badge--pdf">
+                          PDF
+                        </span>
+                        <span className="mac-upload-zone__badge mac-upload-zone__badge--docx">
+                          DOCX
+                        </span>
+                      </div>
+                    </>
+                  )}
+                </div>
+                {uploadError && (
+                  <div className="mac-upload-error">
+                    <AlertCircle size={13} /> {uploadError}
                   </div>
-                ) : (
-                  <>
-                    <div className="mac-upload-zone__icon">
-                      <Upload size={18} />
-                    </div>
-                    <div className="mac-upload-zone__text">
-                      <p>Kéo thả hoặc click để chọn file</p>
-                      <span>Tối đa 10MB</span>
-                    </div>
-                    <div className="mac-upload-zone__accept">
-                      <span className="mac-upload-zone__badge mac-upload-zone__badge--pdf">PDF</span>
-                      <span className="mac-upload-zone__badge mac-upload-zone__badge--docx">DOCX</span>
-                    </div>
-                  </>
                 )}
               </div>
-              {uploadError && (
-                <div className="mac-upload-error">
-                  <AlertCircle size={13} /> {uploadError}
+
+              <div className="mac-form-group">
+                <label className="mac-label">Loại evidence yêu cầu</label>
+                <div className="mac-evidence-types">
+                  {(["text", "link", "file", "mixed"] as const).map((t) => (
+                    <button
+                      key={t}
+                      className={`mac-type-btn ${evidenceType === t ? "active" : ""}`}
+                      onClick={() => setEvidenceType(t)}
+                    >
+                      {t === "text" && "📝 Văn bản"}
+                      {t === "link" && "🔗 Link"}
+                      {t === "file" && "📎 File"}
+                      {t === "mixed" && "📦 Tất cả"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rubric Items */}
+              <div className="mac-rubric">
+                <div className="mac-rubric-header">
+                  <span className="mac-label">
+                    Rubric ({rubricItems.length} tiêu chí)
+                  </span>
+                  <span
+                    className="mac-weight-total"
+                    style={{
+                      color:
+                        totalWeight === 100 ? "var(--mr-success)" : "#f59e0b",
+                    }}
+                  >
+                    Tổng: {totalWeight}%
+                  </span>
+                </div>
+
+                {rubricItems.map((item, idx) => (
+                  <div key={item.id} className="mac-rubric-item">
+                    <span className="mac-rubric-num">{idx + 1}</span>
+                    <input
+                      type="text"
+                      className="mac-input mac-rubric-criterion"
+                      value={item.criterion}
+                      onChange={(e) =>
+                        updateRubricItem(item.id, "criterion", e.target.value)
+                      }
+                      placeholder="Tiêu chí đánh giá..."
+                    />
+                    <div className="mac-rubric-weight">
+                      <input
+                        type="number"
+                        min={0}
+                        max={100}
+                        className="mac-input mac-rubric-weight-input"
+                        value={item.weight}
+                        onChange={(e) =>
+                          updateRubricItem(
+                            item.id,
+                            "weight",
+                            Number(e.target.value),
+                          )
+                        }
+                      />
+                      <span>%</span>
+                    </div>
+                    <button
+                      className="mac-rubric-remove"
+                      onClick={() => removeRubricItem(item.id)}
+                      title="Xóa"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                ))}
+
+                <button className="mac-add-rubric" onClick={addRubricItem}>
+                  <Plus size={14} /> Thêm tiêu chí
+                </button>
+              </div>
+
+              <button
+                className="mac-submit-btn"
+                onClick={handleSaveRequirements}
+                disabled={savingRequirements || !nodeId}
+                style={{ marginTop: "1rem" }}
+              >
+                <Save size={16} />{" "}
+                {savingRequirements ? "Đang lưu..." : "Lưu yêu cầu Assessment"}
+              </button>
+
+              {nodes.length > 0 && !nodeId && (
+                <div className="mac-context-hint">
+                  <AlertCircle size={14} />
+                  <span>
+                    Roadmap có {nodes.length} node. Vui lòng chọn một node để
+                    lưu assignment.
+                  </span>
                 </div>
               )}
-            </div>
-
-            <div className="mac-form-group">
-              <label className="mac-label">Loại evidence yêu cầu</label>
-              <div className="mac-evidence-types">
-                {(["text", "link", "file", "mixed"] as const).map((t) => (
-                  <button
-                    key={t}
-                    className={`mac-type-btn ${evidenceType === t ? "active" : ""}`}
-                    onClick={() => setEvidenceType(t)}
-                  >
-                    {t === "text" && "📝 Văn bản"}
-                    {t === "link" && "🔗 Link"}
-                    {t === "file" && "📎 File"}
-                    {t === "mixed" && "📦 Tất cả"}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Rubric Items */}
-            <div className="mac-rubric">
-              <div className="mac-rubric-header">
-                <span className="mac-label">
-                  Rubric ({rubricItems.length} tiêu chí)
-                </span>
-                <span
-                  className="mac-weight-total"
-                  style={{
-                    color:
-                      totalWeight === 100 ? "var(--mr-success)" : "#f59e0b",
-                  }}
-                >
-                  Tổng: {totalWeight}%
-                </span>
-              </div>
-
-              {rubricItems.map((item, idx) => (
-                <div key={item.id} className="mac-rubric-item">
-                  <span className="mac-rubric-num">{idx + 1}</span>
-                  <input
-                    type="text"
-                    className="mac-input mac-rubric-criterion"
-                    value={item.criterion}
-                    onChange={(e) =>
-                      updateRubricItem(item.id, "criterion", e.target.value)
-                    }
-                    placeholder="Tiêu chí đánh giá..."
-                  />
-                  <div className="mac-rubric-weight">
-                    <input
-                      type="number"
-                      min={0}
-                      max={100}
-                      className="mac-input mac-rubric-weight-input"
-                      value={item.weight}
-                      onChange={(e) =>
-                        updateRubricItem(
-                          item.id,
-                          "weight",
-                          Number(e.target.value),
-                        )
-                      }
-                    />
-                    <span>%</span>
-                  </div>
-                  <button
-                    className="mac-rubric-remove"
-                    onClick={() => removeRubricItem(item.id)}
-                    title="Xóa"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              ))}
-
-              <button className="mac-add-rubric" onClick={addRubricItem}>
-                <Plus size={14} /> Thêm tiêu chí
-              </button>
-            </div>
-
-            <button
-              className="mac-submit-btn"
-              onClick={handleSaveRequirements}
-              disabled={savingRequirements || !nodeId}
-              style={{ marginTop: "1rem" }}
-            >
-              <Save size={16} />{" "}
-              {savingRequirements ? "Đang lưu..." : "Lưu yêu cầu Assessment"}
-            </button>
-
-            {nodes.length > 0 && !nodeId && (
-              <div className="mac-context-hint">
-                <AlertCircle size={14} />
-                <span>
-                  Roadmap có {nodes.length} node. Vui lòng chọn một node để lưu
-                  assignment.
-                </span>
-              </div>
-            )}
             </div>
           </div>
         )}
       </div>
 
       {/* Existing Assessment Review (Only show at Journey level) */}
-      {!nodeId && (
+      {(!nodeId || isFinalAssessment) && (
         <div className="mac-section">
           <div
             className="mac-section-label"

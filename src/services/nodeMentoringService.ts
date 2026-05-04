@@ -12,7 +12,7 @@
  * `uploadEvidence(file)` from `mentorVerificationService.ts` — do not
  * re-implement here.
  */
-import axiosInstance from './axiosInstance';
+import axiosInstance from "./axiosInstance";
 import {
   AssessJourneyOutputRequest,
   ConfirmJourneyCompletionRequest,
@@ -28,7 +28,7 @@ import {
   SubmitNodeEvidenceRequest,
   UpsertNodeAssignmentRequest,
   VerifyNodeRequest,
-} from '../types/NodeMentoring';
+} from "../types/NodeMentoring";
 
 const nodeBase = (journeyId: number, nodeId: string) =>
   `/api/v1/journeys/${journeyId}/nodes/${encodeURIComponent(nodeId)}`;
@@ -146,14 +146,29 @@ export const submitCompletionReport = async (
   return response.data;
 };
 
+/**
+ * Read the latest completion report (any gate decision).
+ * Accessible by journey owner or assigned mentor. Returns null when none.
+ */
+export const getLatestCompletionReport = async (
+  journeyId: number,
+): Promise<JourneyCompletionReportResponse | null> => {
+  const response =
+    await axiosInstance.get<JourneyCompletionReportResponse | null>(
+      `${journeyBase(journeyId)}/completion-report/latest`,
+    );
+  return response.data ?? null;
+};
+
 // ==================== Output assessment ====================
 
 export const getLatestOutputAssessment = async (
   journeyId: number,
 ): Promise<JourneyOutputAssessmentResponse | null> => {
-  const response = await axiosInstance.get<JourneyOutputAssessmentResponse | null>(
-    `${journeyBase(journeyId)}/output-assessment`,
-  );
+  const response =
+    await axiosInstance.get<JourneyOutputAssessmentResponse | null>(
+      `${journeyBase(journeyId)}/output-assessment`,
+    );
   return response.data ?? null;
 };
 
@@ -185,7 +200,7 @@ import type {
   SubmitEvidenceReportRequest,
   VerificationEvidenceReportResponse,
   UserVerifiedSkillDTO,
-} from '../types/NodeMentoring';
+} from "../types/NodeMentoring";
 
 /** Create a Jitsi meeting link for final verification. */
 export const createFinalMeetingLink = async (
@@ -213,17 +228,18 @@ export const submitEvidenceReportAndVerdict = async (
 export const getVerificationHistory = async (
   journeyId: number,
 ): Promise<VerificationEvidenceReportResponse[]> => {
-  const response = await axiosInstance.get<VerificationEvidenceReportResponse[]>(
-    `${journeyBase(journeyId)}/verification-history`,
-  );
+  const response = await axiosInstance.get<
+    VerificationEvidenceReportResponse[]
+  >(`${journeyBase(journeyId)}/verification-history`);
   return response.data;
 };
 
 /** Get verified skills for own portfolio. */
 export const getVerifiedSkills = async (): Promise<UserVerifiedSkillDTO[]> => {
-  const response = await axiosInstance.get<{ success: boolean; data: UserVerifiedSkillDTO[] }>(
-    '/api/portfolio/verified-skills',
-  );
+  const response = await axiosInstance.get<{
+    success: boolean;
+    data: UserVerifiedSkillDTO[];
+  }>("/api/portfolio/verified-skills");
   return response.data.data;
 };
 
@@ -231,8 +247,9 @@ export const getVerifiedSkills = async (): Promise<UserVerifiedSkillDTO[]> => {
 export const getPublicVerifiedSkills = async (
   userId: number,
 ): Promise<UserVerifiedSkillDTO[]> => {
-  const response = await axiosInstance.get<{ success: boolean; data: UserVerifiedSkillDTO[] }>(
-    `/api/portfolio/public/${userId}/verified-skills`,
-  );
+  const response = await axiosInstance.get<{
+    success: boolean;
+    data: UserVerifiedSkillDTO[];
+  }>(`/api/portfolio/public/${userId}/verified-skills`);
   return response.data.data;
 };

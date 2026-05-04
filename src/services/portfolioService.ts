@@ -693,6 +693,7 @@ export interface PortfolioVerifiedSkillDetail {
   reviewerId?: number;
   reviewerName?: string;
   reviewerRole?: string;
+  reviewerSlug?: string;
   reviewNote?: string;
   journeyId?: number;
   bookingId?: number;
@@ -704,10 +705,14 @@ export interface PortfolioVerifiedSkillDetail {
  * Get verified skill details for the authenticated user
  */
 export const getVerifiedSkillDetails = async (): Promise<PortfolioVerifiedSkillDetail[]> => {
-  const response = await api.get<PortfolioVerifiedSkillDetail[]>(
+  const response = await api.get<any>(
     "/portfolio/verified-skill-details",
   );
-  return response.data;
+  // Backend wraps in { success, data }
+  if (response.data && response.data.data) {
+    return response.data.data;
+  }
+  return Array.isArray(response.data) ? response.data : [];
 };
 
 /**
@@ -716,9 +721,62 @@ export const getVerifiedSkillDetails = async (): Promise<PortfolioVerifiedSkillD
 export const getPublicVerifiedSkillDetails = async (
   userId: number,
 ): Promise<PortfolioVerifiedSkillDetail[]> => {
-  const response = await api.get<PortfolioVerifiedSkillDetail[]>(
+  const response = await api.get<any>(
     `/portfolio/public/${userId}/verified-skill-details`,
   );
+  // Backend wraps in { success, data }
+  if (response.data && response.data.data) {
+    return response.data.data;
+  }
+  return Array.isArray(response.data) ? response.data : [];
+};
+
+export interface NodeSubmissionDetail {
+  nodeId: string;
+  nodeTitle: string;
+  submissionText: string;
+  evidenceUrl: string;
+  mentorFeedback: string;
+  submittedAt: string;
+  verifiedAt: string;
+}
+
+export interface OutputAssessmentDetail {
+  submissionText: string;
+  evidenceUrl: string;
+  feedback: string;
+  score: number;
+  assessmentStatus: string;
+  assessedAt: string;
+}
+
+export interface JourneyVerificationDetailResponse {
+  journeyId: number;
+  skillName: string;
+  completedAt: string;
+  mentorId: number;
+  mentorName: string;
+  mentorAvatarUrl: string;
+  mentorTitle: string;
+  mentorProfileSlug?: string;
+  gateCompletionNote: string;
+  nodes: NodeSubmissionDetail[];
+  finalAssessment: OutputAssessmentDetail;
+}
+
+/**
+ * Get detailed roadmap/journey verification information for a public journey
+ */
+export const getPublicJourneyVerificationDetails = async (
+  journeyId: number,
+): Promise<JourneyVerificationDetailResponse> => {
+  const response = await api.get<any>(
+    `/v1/public/journeys/${journeyId}/verification-details`,
+  );
+  // Backend may wrap in { success, data } or return directly
+  if (response.data && response.data.data) {
+    return response.data.data;
+  }
   return response.data;
 };
 
@@ -733,6 +791,9 @@ export const portfolioService = {
   createExtendedProfile,
   updateExtendedProfile,
   deleteExtendedProfile,
+
+  // Journey Details
+  getPublicJourneyVerificationDetails,
 
   // Recruiter - Candidate Search
   getCandidates: async (

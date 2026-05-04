@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   ArrowLeft,
@@ -50,6 +56,8 @@ import {
   selfConfirmNode,
   getLatestOutputAssessment,
   submitOutputAssessment,
+  getCompletionGate,
+  getLatestCompletionReport,
 } from "../../services/nodeMentoringService";
 import { uploadEvidence } from "../../services/mentorVerificationService";
 import {
@@ -64,6 +72,8 @@ import {
   NodeAssignmentResponse,
   NodeEvidenceRecordResponse,
   JourneyOutputAssessmentResponse,
+  JourneyCompletionGateResponse,
+  JourneyCompletionReportResponse,
 } from "../../types/NodeMentoring";
 import "./StudentRoadmapWorkspacePage.css";
 
@@ -220,6 +230,17 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
   const [finalAssessment, setFinalAssessment] =
     useState<JourneyOutputAssessmentResponse | null>(null);
 
+  // Final Assessment requirement (saved by mentor on the FINAL node assignment)
+  const [finalAssignment, setFinalAssignment] =
+    useState<NodeAssignmentResponse | null>(null);
+
+  // Gate + completion report — needed so student sees PASS/FAIL result after
+  // mentor submits completion report (even without a graded output assessment).
+  const [completionGate, setCompletionGate] =
+    useState<JourneyCompletionGateResponse | null>(null);
+  const [completionReport, setCompletionReport] =
+    useState<JourneyCompletionReportResponse | null>(null);
+
   // ── Node verification status map (for sidebar icons) ──
   type NodeStatusEntry = {
     learnerMarkedComplete: boolean;
@@ -346,14 +367,46 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
   const loadFinalAssessment = useCallback(async () => {
     if (!journeyId) return;
     try {
-      const data = await getLatestOutputAssessment(journeyId);
-      setFinalAssessment(data);
+      // Parallel fetch: latest assessment + gate state + latest completion report.
+      // Gate + report drive the "Kết quả" banner when mentor submits PASS via
+      // Report tab without grading the output assessment.
+      const [asmRes, gateRes, reportRes] = await Promise.allSettled([
+        getLatestOutputAssessment(journeyId),
+        getCompletionGate(journeyId),
+        getLatestCompletionReport(journeyId),
+      ]);
+      if (asmRes.status === "fulfilled") setFinalAssessment(asmRes.value);
+      if (gateRes.status === "fulfilled") setCompletionGate(gateRes.value);
+      if (reportRes.status === "fulfilled")
+        setCompletionReport(reportRes.value);
       setFinalSubmissionText("");
       setFinalEvidenceUrl("");
     } catch (e) {
       // Ignore
     }
   }, [journeyId]);
+
+  // Final Assessment node = node MAIN cuối roadmap (mentor lưu yêu cầu vào đây).
+  const finalNodeId: string | null = useMemo(() => {
+    const all = roadmap?.roadmap || [];
+    if (!all.length) return null;
+    const mainOnly = all.filter((n: any) => n.type !== "SIDE");
+    const last = (mainOnly.length > 0 ? mainOnly : all).slice(-1)[0];
+    return last?.id ?? null;
+  }, [roadmap]);
+
+  const loadFinalAssignment = useCallback(async () => {
+    if (!journeyId || !finalNodeId) {
+      setFinalAssignment(null);
+      return;
+    }
+    try {
+      const data = await getNodeAssignment(journeyId, finalNodeId);
+      setFinalAssignment(data);
+    } catch (e) {
+      setFinalAssignment(null);
+    }
+  }, [journeyId, finalNodeId]);
 
   // ── Batch load node statuses for sidebar icons ──
   const loadAllNodeStatuses = useCallback(async () => {
@@ -544,8 +597,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
       setFinalSubmissionText("");
       setFinalEvidenceUrl("");
       loadFinalAssessment();
+      loadFinalAssignment();
     }
-  }, [selectedNodeId, loadNodeData, loadFinalAssessment]);
+  }, [selectedNodeId, loadNodeData, loadFinalAssessment, loadFinalAssignment]);
 
   // ── File helpers ──────────────────────────────────────────────
   const isDocFile = (file: File) =>
@@ -984,7 +1038,10 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
             await loadRoadmap();
             await loadAllNodeStatuses();
             if (selectedNodeId) await loadNodeData();
-            else await loadFinalAssessment();
+            else {
+              await loadFinalAssessment();
+              await loadFinalAssignment();
+            }
             showSuccess("Đã làm mới", "Dữ liệu workspace đã được cập nhật.");
           }}
           title="Làm mới dữ liệu từ mentor"
@@ -1634,14 +1691,38 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
               <div className="srwp-tab-content">
                 {rightTab === "ASSIGNMENT" && (
                   <div className="srwp-content-card">
-                    <h4>Yêu cầu Final Assessment</h4>
-                    <div className="srwp-empty-state">
-                      <Target size={32} />
-                      <p>
-                        Yêu cầu đầu ra sẽ được mentor trao đổi trực tiếp hoặc
-                        cập nhật sau.
-                      </p>
-                    </div>
+                    <h4>
+                      {finalAssignment?.title || "Yêu cầu Final Assessment"}
+                    </h4>
+                    {!finalAssignment?.description ? (
+                      <div className="srwp-empty-state">
+                        <Target size={32} />
+                        <p>
+                          Mentor chưa cập nhật yêu cầu Final Assessment. Vui
+                          lòng quay lại sau hoặc trao đổi trực tiếp.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="srwp-feedback-content">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {finalAssignment.description}
+                        </ReactMarkdown>
+                        {finalAssignment.updatedAt && (
+                          <div
+                            style={{
+                              marginTop: 12,
+                              fontSize: 12,
+                              color: "#94a3b8",
+                            }}
+                          >
+                            Cập nhật:{" "}
+                            {new Date(finalAssignment.updatedAt).toLocaleString(
+                              "vi-VN",
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -1804,15 +1885,99 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                 {rightTab === "REPORT" && (
                   <div className="srwp-content-card">
                     <h4>Kết quả Final Assessment</h4>
-                    {!finalAssessment ? (
+
+                    {/* Gate banner — surfaces mentor's PASS/FAIL decision from the
+                        completion report. This is the ONLY signal the student
+                        gets when the mentor verifies via the Report tab without
+                        also grading the output assessment. */}
+                    {completionGate?.finalGateStatus === "PASSED" && (
+                      <div
+                        className="srwp-review-box"
+                        style={{
+                          borderColor: "rgba(34,197,94,0.5)",
+                          background: "rgba(2,22,16,0.5)",
+                          marginBottom: 12,
+                        }}
+                      >
+                        <div className="srwp-status-row">
+                          <span className="srwp-label">Xác nhận mentor:</span>
+                          <span
+                            className="srwp-badge result-APPROVED"
+                            style={{ fontWeight: 700 }}
+                          >
+                            🎉 Lộ trình đã hoàn thành (PASS)
+                          </span>
+                        </div>
+                        {completionReport?.completionNote && (
+                          <>
+                            <div
+                              className="srwp-label"
+                              style={{ marginTop: 8 }}
+                            >
+                              Nhận xét tổng kết của mentor:
+                            </div>
+                            <div className="srwp-feedback-content">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {completionReport.completionNote}
+                              </ReactMarkdown>
+                            </div>
+                          </>
+                        )}
+                        {completionReport?.confirmedAt && (
+                          <div
+                            style={{
+                              marginTop: 6,
+                              fontSize: 12,
+                              color: "#94a3b8",
+                            }}
+                          >
+                            Xác nhận lúc{" "}
+                            {new Date(
+                              completionReport.confirmedAt,
+                            ).toLocaleString("vi-VN")}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {completionReport?.gateDecision === "FAIL" && (
+                      <div
+                        className="srwp-review-box"
+                        style={{
+                          borderColor: "rgba(239,68,68,0.5)",
+                          background: "rgba(40,10,10,0.4)",
+                          marginBottom: 12,
+                        }}
+                      >
+                        <div className="srwp-status-row">
+                          <span className="srwp-label">Xác nhận mentor:</span>
+                          <span className="srwp-badge result-REJECTED">
+                            ❌ Chưa đạt (FAIL)
+                          </span>
+                        </div>
+                        {completionReport.completionNote && (
+                          <div className="srwp-feedback-content">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {completionReport.completionNote}
+                            </ReactMarkdown>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {!finalAssessment && !completionReport && (
                       <div className="srwp-empty-state">
                         <Clock size={32} />
                         <p>Chưa có kết quả đánh giá cuối kỳ.</p>
                       </div>
-                    ) : (
+                    )}
+
+                    {finalAssessment && (
                       <div className="srwp-report-view srwp-review-box">
                         <div className="srwp-status-row">
-                          <span className="srwp-label">Trạng thái:</span>
+                          <span className="srwp-label">
+                            Chấm điểm Final Assessment:
+                          </span>
                           <span
                             className={`srwp-badge result-${finalAssessment.assessmentStatus}`}
                           >

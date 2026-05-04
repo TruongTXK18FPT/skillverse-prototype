@@ -1,0 +1,345 @@
+/* MentorGateOverviewPanel — Cyan Blue Neon Tech tone */
+
+.mgop-root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 2px;
+}
+
+.mgop-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(8, 23, 42, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 10px;
+}
+
+.mgop-toolbar-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #e0f2fe;
+}
+
+.mgop-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #7dd3fc;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+.mgop-refresh-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.2);
+}
+.mgop-refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.mgop-spin {
+  animation: mgop-spin 1s linear infinite;
+}
+@keyframes mgop-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Card ──────────────────────────────────────── */
+.mgop-card {
+  background: linear-gradient(
+    180deg,
+    rgba(8, 23, 42, 0.7),
+    rgba(2, 13, 30, 0.7)
+  );
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.06);
+}
+
+.mgop-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.mgop-card-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #e0f2fe;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mgop-subtle {
+  color: #94a3b8;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+/* ── Badge ─────────────────────────────────────── */
+.mgop-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border: 1px solid transparent;
+}
+.mgop-badge--sm {
+  padding: 2px 8px;
+  font-size: 10px;
+}
+.mgop-badge--pass {
+  background: rgba(34, 197, 94, 0.14);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.4);
+}
+.mgop-badge--block {
+  background: rgba(239, 68, 68, 0.14);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+.mgop-badge--pending {
+  background: rgba(234, 179, 8, 0.14);
+  color: #facc15;
+  border-color: rgba(234, 179, 8, 0.4);
+}
+.mgop-badge--neutral {
+  background: rgba(148, 163, 184, 0.14);
+  color: #cbd5e1;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+/* ── Flag grid (gate flags) ────────────────────── */
+.mgop-flag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.mgop-flag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(2, 13, 30, 0.65);
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  border-radius: 8px;
+  font-size: 12px;
+}
+.mgop-flag-label {
+  color: #94a3b8;
+}
+.mgop-flag-value {
+  font-weight: 600;
+}
+.mgop-flag-value.ok {
+  color: #4ade80;
+}
+.mgop-flag-value.warn {
+  color: #facc15;
+}
+.mgop-flag-value.off {
+  color: #94a3b8;
+}
+
+/* ── Blocking reasons ──────────────────────────── */
+.mgop-blocking {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #fecaca;
+  font-size: 12px;
+}
+.mgop-blocking-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.mgop-blocking ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* ── Submission card ───────────────────────────── */
+.mgop-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+.mgop-meta-row strong {
+  color: #e0f2fe;
+}
+
+.mgop-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #7dd3fc;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+.mgop-content {
+  background: rgba(2, 13, 30, 0.65);
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #e2e8f0;
+  font-size: 13px;
+  line-height: 1.6;
+  max-height: 320px;
+  overflow: auto;
+}
+.mgop-content p:first-child {
+  margin-top: 0;
+}
+.mgop-content p:last-child {
+  margin-bottom: 0;
+}
+.mgop-content--feedback {
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(2, 22, 16, 0.5);
+}
+
+.mgop-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.mgop-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 8px;
+  color: #7dd3fc;
+  text-decoration: none;
+  font-size: 12px;
+}
+.mgop-link:hover {
+  background: rgba(56, 189, 248, 0.18);
+}
+
+.mgop-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #0891b2, #0284c7);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.mgop-action-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* ── Empty state ───────────────────────────────── */
+.mgop-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 8px;
+  color: #64748b;
+  font-size: 13px;
+  text-align: center;
+}
+.mgop-empty svg {
+  opacity: 0.6;
+}
+
+/* ── Node summary list ─────────────────────────── */
+.mgop-node-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 360px;
+  overflow: auto;
+}
+.mgop-node-row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(2, 13, 30, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  border-radius: 8px;
+  color: #cbd5e1;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.mgop-node-row:hover {
+  background: rgba(56, 189, 248, 0.08);
+}
+.mgop-node-row--final {
+  border-color: rgba(168, 85, 247, 0.45);
+  background: rgba(45, 13, 60, 0.45);
+}
+.mgop-node-idx {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.15);
+  color: #7dd3fc;
+  font-weight: 600;
+  font-size: 11px;
+}
+.mgop-node-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mgop-final-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  border-radius: 4px;
+  color: #d8b4fe;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}

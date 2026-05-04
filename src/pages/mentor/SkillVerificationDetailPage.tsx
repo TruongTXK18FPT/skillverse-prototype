@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import {
   ArrowLeft,
   ShieldCheck,
@@ -16,6 +17,8 @@ import {
   Image as ImageIcon,
   AlertCircle,
   LucideIcon,
+  Map,
+  MessageSquare
 } from "lucide-react";
 import {
   getPublicMentorVerifiedSkillDetails,
@@ -27,6 +30,10 @@ import {
   getPublicStudentVerifiedSkillDetails,
   StudentVerificationResponse,
 } from "../../services/studentSkillVerificationService";
+import {
+  portfolioService,
+  JourneyVerificationDetailResponse
+} from "../../services/portfolioService";
 import "./SkillVerificationDetailPage.css";
 
 const EVIDENCE_META: Record<EvidenceType, { label: string; icon: LucideIcon }> =
@@ -53,7 +60,16 @@ const formatDate = (iso: string) =>
     day: "numeric",
   });
 
-// ── Evidence card ──────────────────────────────────────────────────────────────
+// ── Markdown Link Renderer ───────────────────────────────────────────────────
+const MarkdownLinkRender = (props: any) => {
+  return (
+    <a href={props.href} target="_blank" rel="noopener noreferrer">
+      {props.children}
+    </a>
+  );
+};
+
+// ── Evidence card (Admin) ────────────────────────────────────────────────────
 
 const EvidenceCard: React.FC<{ evidence: EvidenceResponse; index: number }> = ({
   evidence,
@@ -131,9 +147,9 @@ const EvidenceCard: React.FC<{ evidence: EvidenceResponse; index: number }> = ({
   );
 };
 
-// ── Skill verification block ───────────────────────────────────────────────────
+// ── Admin Verification Block ───────────────────────────────────────────────────
 
-const SkillVerificationBlock: React.FC<{
+const AdminVerificationBlock: React.FC<{
   verification: MentorVerificationResponse;
 }> = ({ verification }) => (
   <div className="svd-skill-block">
@@ -145,7 +161,7 @@ const SkillVerificationBlock: React.FC<{
         </h2>
         <span className="svd-skill-block__approved-badge">
           <CheckCircle2 size={13} />
-          Đã xác thực
+          Xác thực bởi Admin
         </span>
       </div>
 
@@ -161,7 +177,7 @@ const SkillVerificationBlock: React.FC<{
           <div className="svd-skill-block__timeline-item">
             <Clock size={13} />
             <span>
-              Admin xác thực:&nbsp;
+              Xác thực lúc:&nbsp;
               <strong>{formatDateTime(verification.reviewedAt)}</strong>
             </span>
           </div>
@@ -170,7 +186,7 @@ const SkillVerificationBlock: React.FC<{
           <div className="svd-skill-block__timeline-item">
             <User size={13} />
             <span>
-              Xác thực bởi:&nbsp;
+              Người xác nhận:&nbsp;
               <strong>{verification.reviewedByName}</strong>
             </span>
           </div>
@@ -213,9 +229,11 @@ const SkillVerificationBlock: React.FC<{
           <FileText size={13} />
           Mô tả kinh nghiệm
         </p>
-        <p className="svd-skill-block__notes-text">
-          {verification.additionalNotes}
-        </p>
+        <div className="svd-evidence-markdown">
+           <ReactMarkdown components={{ a: MarkdownLinkRender }}>
+              {verification.additionalNotes}
+           </ReactMarkdown>
+        </div>
       </div>
     )}
 
@@ -252,6 +270,144 @@ const SkillVerificationBlock: React.FC<{
   </div>
 );
 
+// ── Journey Verification Block ─────────────────────────────────────────────────
+
+const JourneyVerificationBlock: React.FC<{
+  data: JourneyVerificationDetailResponse;
+}> = ({ data }) => {
+  return (
+    <div className="svd-journey-view">
+      {data.mentorId && (
+        <div className="svd-journey-header">
+          <div className="svd-journey-header-info">
+            {data.mentorAvatarUrl ? (
+              <img src={data.mentorAvatarUrl} alt={data.mentorName} className="svd-journey-mentor-avatar" />
+            ) : (
+              <div className="svd-page__mentor-avatar-placeholder" style={{ width: 48, height: 48 }}>
+                <User size={24} />
+              </div>
+            )}
+            <div className="svd-journey-mentor-details">
+              <small>Mentor Đồng hành</small>
+              <strong>{data.mentorName}</strong>
+              {(data.mentorProfileSlug || data.mentorId) && (
+                <a
+                  href={data.mentorProfileSlug
+                    ? `/portfolio/${data.mentorProfileSlug}`
+                    : `/portfolio/user/${data.mentorId}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="svd-mentor-portfolio-btn"
+                >
+                  <ExternalLink size={13} />
+                  Xem hồ sơ Mentor
+                </a>
+              )}
+            </div>
+          </div>
+          <div className="svd-journey-verified-stamp">
+            <CheckCircle2 size={18} />
+            Đã duyệt bởi Mentor
+          </div>
+        </div>
+      )}
+
+      {/* Nodes Timeline */}
+      {data.nodes && data.nodes.length > 0 && (
+        <div className="svd-timeline">
+          {data.nodes.map((node, index) => (
+            <div key={node.nodeId || index} className="svd-timeline-item">
+              <div className="svd-timeline-marker">
+                <CheckCircle2 size={12} />
+              </div>
+              <div className="svd-timeline-content">
+                <div className="svd-timeline-header">
+                  <h3 className="svd-timeline-title">{node.nodeTitle}</h3>
+                  <div className="svd-timeline-date">
+                    <Clock size={12} />
+                    {formatDate(node.verifiedAt || node.submittedAt)}
+                  </div>
+                </div>
+
+                <div className="svd-evidence-markdown">
+                  {node.submissionText && (
+                    <ReactMarkdown components={{ a: MarkdownLinkRender }}>
+                      {node.submissionText}
+                    </ReactMarkdown>
+                  )}
+                  {node.evidenceUrl && (
+                     <div style={{marginTop: '10px'}}>
+                        <a href={node.evidenceUrl} target="_blank" rel="noopener noreferrer" className="svd-skill-block__link-chip svd-skill-block__link-chip--portfolio" style={{display: 'inline-flex'}}>
+                          <ExternalLink size={14} /> Xem tệp đính kèm
+                        </a>
+                     </div>
+                  )}
+                </div>
+
+                {node.mentorFeedback && (
+                  <div className="svd-mentor-feedback">
+                    <MessageSquare size={16} className="svd-mentor-feedback-icon" />
+                    <div className="svd-mentor-feedback-content">
+                      <h4>Nhận xét của Mentor</h4>
+                      <p>{node.mentorFeedback}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Final Assessment */}
+      {data.finalAssessment && (
+        <div className="svd-final-assessment">
+          <h3>
+            <Award size={20} />
+            Bài thi cuối khóa (Final Assessment)
+          </h3>
+          <div className="svd-evidence-markdown">
+            {data.finalAssessment.submissionText && (
+              <ReactMarkdown components={{ a: MarkdownLinkRender }}>
+                {data.finalAssessment.submissionText}
+              </ReactMarkdown>
+            )}
+            {data.finalAssessment.evidenceUrl && (
+              <div style={{marginTop: '10px'}}>
+                <a href={data.finalAssessment.evidenceUrl} target="_blank" rel="noopener noreferrer" className="svd-skill-block__link-chip svd-skill-block__link-chip--portfolio" style={{display: 'inline-flex'}}>
+                  <ExternalLink size={14} /> Xem tệp đính kèm
+                </a>
+              </div>
+            )}
+          </div>
+          {data.finalAssessment.feedback && (
+            <div className="svd-mentor-feedback" style={{ marginTop: '1rem' }}>
+              <MessageSquare size={16} className="svd-mentor-feedback-icon" />
+              <div className="svd-mentor-feedback-content">
+                <h4>Tổng kết từ Mentor</h4>
+                <p>{data.finalAssessment.feedback}</p>
+              </div>
+            </div>
+          )}
+          {data.gateCompletionNote && (
+            <div className="svd-skill-block__review-note" style={{ marginTop: '1rem', borderRadius: '8px' }}>
+              <p className="svd-skill-block__review-note-label">
+                <CheckCircle2 size={13} />
+                Đánh giá Gate cuối
+              </p>
+              <p className="svd-skill-block__review-note-text">
+                {data.gateCompletionNote}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 const SkillVerificationDetailPage: React.FC = () => {
@@ -263,57 +419,128 @@ const SkillVerificationDetailPage: React.FC = () => {
   const navigate = useNavigate();
 
   // Detect context: student or mentor
+  // Mentor context is when `mentorId` is present in the route.
   const isStudentContext = !!userId && !mentorId;
   const targetId = mentorId || userId;
 
-  const [verifications, setVerifications] = useState<
-    MentorVerificationResponse[]
-  >([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
   const decodedSkill = skillName ? decodeURIComponent(skillName) : null;
 
+  const [adminVerifications, setAdminVerifications] = useState<MentorVerificationResponse[]>([]);
+  const [journeyVerification, setJourneyVerification] = useState<JourneyVerificationDetailResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'journey' | 'admin'>(isStudentContext ? 'journey' : 'admin');
+
+  const [ownerProfile, setOwnerProfile] = useState<{ name: string; avatar?: string } | null>(null);
+
   useEffect(() => {
-    if (!targetId) return;
+    if (!targetId || !decodedSkill) return;
 
     const load = async () => {
       try {
         setLoading(true);
-        let data: MentorVerificationResponse[];
 
-        if (isStudentContext) {
-          // Fetch student verified skills and map to MentorVerificationResponse shape
-          const studentData = await getPublicStudentVerifiedSkillDetails(Number(targetId));
-          data = studentData.map((s: StudentVerificationResponse) => ({
-            id: s.id,
-            mentorId: s.userId,
-            mentorName: s.userName,
-            mentorEmail: s.userEmail,
-            mentorAvatarUrl: s.userAvatarUrl,
-            skillName: s.skillName,
-            status: s.status,
-            githubUrl: s.githubUrl,
-            portfolioUrl: s.portfolioUrl,
-            additionalNotes: s.additionalNotes,
-            reviewNote: s.reviewNote,
-            reviewedById: s.reviewedById,
-            reviewedByName: s.reviewedByName,
-            requestedAt: s.requestedAt,
-            reviewedAt: s.reviewedAt,
-            evidences: s.evidences,
-          }));
-        } else {
-          data = await getPublicMentorVerifiedSkillDetails(Number(targetId));
+        // 1. Fetch Admin Verifications (independently, don't let failure block journey)
+        let adminData: MentorVerificationResponse[] = [];
+        try {
+          if (isStudentContext) {
+            const studentData = await getPublicStudentVerifiedSkillDetails(Number(targetId));
+            adminData = (studentData || []).map((s: StudentVerificationResponse) => ({
+              id: s.id,
+              mentorId: s.userId,
+              mentorName: s.userName,
+              mentorEmail: s.userEmail,
+              mentorAvatarUrl: s.userAvatarUrl,
+              skillName: s.skillName,
+              status: s.status,
+              githubUrl: s.githubUrl,
+              portfolioUrl: s.portfolioUrl,
+              additionalNotes: s.additionalNotes,
+              reviewNote: s.reviewNote,
+              reviewedById: s.reviewedById,
+              reviewedByName: s.reviewedByName,
+              requestedAt: s.requestedAt,
+              reviewedAt: s.reviewedAt,
+              evidences: s.evidences,
+            }));
+          } else {
+            adminData = await getPublicMentorVerifiedSkillDetails(Number(targetId));
+          }
+        } catch (e) {
+          console.warn("Admin verification data not available:", e);
         }
 
-        // Filter to the specific skill if provided
-        const filtered = decodedSkill
-          ? data.filter(
-              (v) => v.skillName.toLowerCase() === decodedSkill.toLowerCase(),
-            )
-          : data;
-        setVerifications(filtered);
+        const filteredAdmin = adminData.filter(
+          (v) => v.skillName.toLowerCase() === decodedSkill.toLowerCase()
+        );
+        setAdminVerifications(filteredAdmin);
+
+        // 2. Fetch Journey Verification (Only for Student context)
+        let journeyFound = false;
+        if (isStudentContext) {
+          try {
+            // Try portfolio verified-skill-details first (has journeyId)
+            const allVerifiedSkills = await portfolioService.getPublicVerifiedSkillDetails(Number(targetId));
+            console.log("All verified skills from portfolio:", allVerifiedSkills);
+
+            const matchedSkill = (allVerifiedSkills || []).find(
+              (s) => s.skillName.toLowerCase() === decodedSkill.toLowerCase() && s.journeyId
+            );
+            console.log("Matched skill with journeyId:", matchedSkill);
+
+            if (matchedSkill && matchedSkill.journeyId) {
+              const jDetails = await portfolioService.getPublicJourneyVerificationDetails(matchedSkill.journeyId);
+              console.log("Journey verification details:", jDetails);
+              setJourneyVerification(jDetails);
+              journeyFound = true;
+            }
+          } catch (e) {
+            console.error("Failed to load journey details:", e);
+          }
+        }
+
+        // 3. Fetch owner profile info
+        try {
+          const profile = await portfolioService.getPublicProfile(Number(targetId));
+          if (profile && profile.fullName) {
+            setOwnerProfile({
+              name: profile.fullName,
+              avatar: profile.basicAvatarUrl || profile.portfolioAvatarUrl,
+            });
+          } else {
+             // Fallback: If admin verifications have user info, use that
+            if (filteredAdmin.length > 0) {
+              setOwnerProfile({
+                name: filteredAdmin[0].mentorName,
+                avatar: filteredAdmin[0].mentorAvatarUrl,
+              });
+            } else if (isStudentContext && journeyVerification) {
+               // We don't have the student name in journeyVerification directly (it has mentor name)
+               // but we can at least keep "Học viên" or what we found earlier.
+            }
+          }
+        } catch (e) {
+          console.warn("Public profile not found, using fallbacks");
+          // Fallback: If admin verifications have user info, use that
+          if (filteredAdmin.length > 0) {
+            setOwnerProfile({
+              name: filteredAdmin[0].mentorName,
+              avatar: filteredAdmin[0].mentorAvatarUrl,
+            });
+          }
+        }
+
+        // Set default tab based on what's available and context
+        if (isStudentContext) {
+          if (journeyFound) {
+            setActiveTab('journey');
+          } else if (filteredAdmin.length > 0) {
+            setActiveTab('admin');
+          }
+        } else {
+          setActiveTab('admin');
+        }
+
       } catch {
         setError("Không thể tải thông tin xác thực. Vui lòng thử lại sau.");
       } finally {
@@ -324,8 +551,11 @@ const SkillVerificationDetailPage: React.FC = () => {
     load();
   }, [targetId, decodedSkill, isStudentContext]);
 
-  const ownerName = verifications[0]?.mentorName ?? (isStudentContext ? "Student" : "Mentor");
-  const ownerAvatar = verifications[0]?.mentorAvatarUrl;
+  // Determine Owner Info
+  const ownerName = ownerProfile?.name || (isStudentContext ? "Học viên" : "Mentor");
+  const ownerAvatar = ownerProfile?.avatar;
+
+  const hasData = journeyVerification !== null || adminVerifications.length > 0;
 
   return (
     <div className="svd-page">
@@ -355,7 +585,7 @@ const SkillVerificationDetailPage: React.FC = () => {
             )}
             <div>
               <p className="svd-page__mentor-label">
-                Hồ sơ xác thực kỹ năng của
+                Hồ sơ xác thực kỹ năng của {isStudentContext ? "học viên" : "mentor"}
               </p>
               <h1 className="svd-page__mentor-name">{ownerName}</h1>
             </div>
@@ -371,11 +601,34 @@ const SkillVerificationDetailPage: React.FC = () => {
           )}
 
           <p className="svd-page__hero-sub">
-            Tất cả bằng chứng dưới đây đã được ban quản trị SkillVerse xem xét
-            và xác thực.
+            {isStudentContext 
+              ? "Chi tiết quá trình học tập và bằng chứng năng lực đã được xác thực."
+              : "Tất cả bằng chứng dưới đây đã được ban quản trị xem xét và xác thực chuyên môn."}
           </p>
         </div>
       </div>
+
+      {/* ── Tabs ── */}
+      {!loading && !error && hasData && isStudentContext && (
+        <div className="svd-tabs">
+           {journeyVerification && (
+             <button 
+                className={`svd-tab-btn ${activeTab === 'journey' ? 'active' : ''}`}
+                onClick={() => setActiveTab('journey')}
+             >
+                <Map size={16}/> Hành trình xác thực (Journey)
+             </button>
+           )}
+           {adminVerifications.length > 0 && (
+             <button 
+                className={`svd-tab-btn ${activeTab === 'admin' ? 'active' : ''}`}
+                onClick={() => setActiveTab('admin')}
+             >
+                <ShieldCheck size={16}/> Đánh giá bởi Admin
+             </button>
+           )}
+        </div>
+      )}
 
       {/* ── Content ── */}
       <div className="svd-page__content">
@@ -393,34 +646,50 @@ const SkillVerificationDetailPage: React.FC = () => {
           </div>
         )}
 
-        {!loading && !error && verifications.length === 0 && (
+        {!loading && !error && !hasData && (
           <div className="svd-page__empty">
             <ShieldCheck size={40} />
             <p>Không tìm thấy thông tin xác thực cho kỹ năng này.</p>
           </div>
         )}
 
-        {!loading && !error && verifications.length > 0 && (
-          <div className="svd-page__verifications">
-            {verifications.map((v) => (
-              <SkillVerificationBlock key={v.id} verification={v} />
-            ))}
-          </div>
+        {!loading && !error && hasData && (
+          <>
+            {activeTab === 'journey' && journeyVerification && (
+               <JourneyVerificationBlock data={journeyVerification} />
+            )}
+
+            {activeTab === 'admin' && adminVerifications.length > 0 && (
+               <div className="svd-page__verifications">
+                 {adminVerifications.map((v) => (
+                   <AdminVerificationBlock key={v.id} verification={v} />
+                 ))}
+               </div>
+            )}
+          </>
         )}
 
         {/* Verified timestamp footer */}
-        {!loading &&
-          verifications.length > 0 &&
-          verifications[0].reviewedAt && (
+        {!loading && activeTab === 'admin' && adminVerifications.length > 0 && adminVerifications[0].reviewedAt && (
             <div className="svd-page__footer-note">
               <CheckCircle2 size={14} />
               <span>
                 Thông tin này được xác thực lần cuối vào{" "}
-                <strong>{formatDate(verifications[0].reviewedAt)}</strong> bởi
-                đội ngũ SkillVerse.
+                <strong>{formatDate(adminVerifications[0].reviewedAt)}</strong> bởi
+                đội ngũ Admin.
               </span>
             </div>
-          )}
+        )}
+        {!loading && activeTab === 'journey' && journeyVerification && journeyVerification.completedAt && (
+            <div className="svd-page__footer-note" style={{ background: 'rgba(168, 85, 247, 0.07)', borderColor: 'rgba(168, 85, 247, 0.25)', color: '#d8b4fe' }}>
+              <CheckCircle2 size={14} />
+              <span>
+                Hành trình này được hoàn thành và xác thực vào{" "}
+                <strong>{formatDate(journeyVerification.completedAt)}</strong> bởi
+                Mentor {journeyVerification.mentorName}.
+              </span>
+            </div>
+        )}
       </div>
     </div>
   );

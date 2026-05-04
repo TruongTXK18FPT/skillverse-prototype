@@ -214,6 +214,9 @@ const PUBLIC_ENDPOINTS = [
   "/v1/expert-fields", // Public expert field catalog
   "/gamification/leaderboard", // Public gamification leaderboard
   "/gamification/badges/definitions", // Public badge definitions
+  "/v1/public/journeys", // Public journey verification details
+  "/v1/public/students", // Public student verified skills
+  "/v1/public/mentors", // Public mentor verified skills
 ];
 
 // Check if the URL matches any public endpoint

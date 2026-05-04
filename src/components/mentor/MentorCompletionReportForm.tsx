@@ -10,26 +10,29 @@
  *
  * Replaces the minimal PASS/FAIL form with a comprehensive report builder.
  */
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   ShieldCheck,
   CheckCircle,
   XCircle,
-  Send,
-  Award,
   Layers,
   Calendar,
   FileText,
   Star,
   TrendingUp,
   AlertTriangle,
+  Award,
+  Send,
 } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
 import {
-  ConfirmJourneyCompletionRequest,
+  submitCompletionReport,
+  getCompletionGate,
+} from "../../services/nodeMentoringService";
+import type {
   GateDecision,
+  ConfirmJourneyCompletionRequest,
 } from "../../types/NodeMentoring";
-import { submitCompletionReport } from "../../services/nodeMentoringService";
 import "./MentorCompletionReportForm.css";
 
 interface WorkspaceSummary {
@@ -76,6 +79,8 @@ const MentorCompletionReportForm: React.FC<MentorCompletionReportFormProps> = ({
   const [strengths, setStrengths] = useState("");
   const [improvements, setImprovements] = useState("");
   const [nextSteps, setNextSteps] = useState("");
+
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const canSubmit = !loading;
 
@@ -131,6 +136,25 @@ const MentorCompletionReportForm: React.FC<MentorCompletionReportFormProps> = ({
     workspaceSummary,
   ]);
 
+  // Load gate status on mount to check if report was already submitted
+  useEffect(() => {
+    const loadGateStatus = async () => {
+      try {
+        const gate = await getCompletionGate(journeyId);
+        if (gate.hasPassCompletionReport) {
+          setSubmittedDecision("PASS");
+          setSubmittedAt(new Date());
+        }
+      } catch (e) {
+        // Ignore errors - if we can't load gate status, show the form
+        console.error("Failed to load gate status:", e);
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+    loadGateStatus();
+  }, [journeyId]);
+
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
@@ -159,6 +183,29 @@ const MentorCompletionReportForm: React.FC<MentorCompletionReportFormProps> = ({
       setLoading(false);
     }
   };
+
+  // Show loading state while checking if report was already submitted
+  if (initialLoading) {
+    return (
+      <div className="mcrf-container">
+        <div className="mcrf-header">
+          <div className="mcrf-header-icon">
+            <ShieldCheck size={22} />
+          </div>
+          <div>
+            <h3>Xác nhận hoàn thành Journey</h3>
+            {journeyTitle && <p className="mcrf-subtitle">{journeyTitle}</p>}
+          </div>
+        </div>
+        <div
+          className="mcrf-content"
+          style={{ textAlign: "center", padding: "2rem" }}
+        >
+          Đang tải...
+        </div>
+      </div>
+    );
+  }
 
   if (submittedDecision) {
     return (
