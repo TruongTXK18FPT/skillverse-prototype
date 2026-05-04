@@ -39,7 +39,7 @@ import {
   submitAssignment,
   getMySubmissions
 } from '../../services/assignmentService';
-import { requestMentorReview, getAiGradeResult } from '../../services/aiGradingService';
+import { requestMentorReview } from '../../services/aiGradingService';
 import { downloadFile } from '../../utils/downloadFile';
 import { sanitizeHtml } from '../../utils/sanitizeHtml';
 import { uploadMedia } from '../../services/mediaService';
@@ -357,16 +357,15 @@ const AssignmentPage: React.FC = () => {
     const targetId = latest.id;
     pollingRef.current = { targetId, intervalId: null, isPolling: false };
 
-    // Smart polling with in-flight guard to prevent overlapping requests
+    // Smart polling — single API call to avoid race condition between APIs
     const runPoll = async () => {
       if (pollingRef.current.targetId === null || pollingRef.current.isPolling) return;
       pollingRef.current.isPolling = true;
       try {
-        // Check AI grading status by fetching latest submission data
-        await getAiGradeResult(pollingRef.current.targetId);
+        // Single source of truth: fetch submissions and check isAiGraded directly
         const submissionsData = await getMySubmissions(parseInt(assignmentId!));
         const latest = submissionsData.find(s => s.isNewest);
-        if (latest?.isAiGraded) {
+        if (latest?.isAiGraded || latest?.status === 'GRADED') {
           // AI grading complete — stop polling and reload page to show full results
           clearInterval(pollingRef.current.intervalId!);
           pollingRef.current = { targetId: null, intervalId: null, isPolling: false };
