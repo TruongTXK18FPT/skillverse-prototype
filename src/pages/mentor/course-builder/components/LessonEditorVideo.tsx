@@ -22,6 +22,7 @@ const LessonEditorVideo: React.FC<LessonEditorVideoProps> = ({
     if (lesson.videoMediaId === undefined) {
       onUpdateLessonField(moduleId, lesson.id, {
         videoMediaId: 0,
+        youtubeUrl: undefined, // Clear YouTube URL when switching to upload
       });
     }
   };
@@ -37,6 +38,7 @@ const LessonEditorVideo: React.FC<LessonEditorVideoProps> = ({
           onClick={() =>
             onUpdateLessonField(moduleId, lesson.id, {
               videoMediaId: undefined,
+              youtubeUrl: lesson.youtubeUrl || "", // Preserve or init empty
             })
           }
         >

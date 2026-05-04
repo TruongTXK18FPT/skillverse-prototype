@@ -45,7 +45,7 @@ export const STUDY_WINDOW_PRESETS: Record<
     latestEndLocalTime: "22:30",
   },
   flexible: {
-    preferredTimeWindows: ["08:00-10:30", "19:00-21:30"],
+    preferredTimeWindows: ["08:00-10:30", "13:30-17:30", "19:00-21:30"],
     earliestStartLocalTime: "07:00",
     latestEndLocalTime: "22:30",
   },

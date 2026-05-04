@@ -1101,11 +1101,21 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
   }, []);
 
   const deleteModule = useCallback(async (moduleId: string): Promise<void> => {
+    const moduleService = await import('../../services/moduleService');
+    const numericModuleId = Number(moduleId);
+    if (isNaN(numericModuleId)) {
+      throw new Error('Invalid module ID');
+    }
+
+    // Call API to delete from backend
+    await moduleService.deleteModule(numericModuleId, user?.id || 0);
+
+    // Update local state after successful API call
     setState(prev => ({
       ...prev,
       modules: prev.modules.filter((m: ModuleWithLessons) => m.id.toString() !== moduleId)
     }));
-  }, []);
+  }, [user?.id]);
 
   const reorderModules = useCallback(async (newOrder: string[]): Promise<void> => {
     setState(prev => {
@@ -1171,6 +1181,16 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
   }, []);
 
   const deleteLesson = useCallback(async (moduleId: string, lessonId: string): Promise<void> => {
+    const lessonService = await import('../../services/lessonService');
+    const numericLessonId = Number(lessonId);
+    if (isNaN(numericLessonId)) {
+      throw new Error('Invalid lesson ID');
+    }
+
+    // Call API to delete from backend
+    await lessonService.deleteLesson(numericLessonId, user?.id || 0);
+
+    // Update local state after successful API call
     setState(prev => ({
       ...prev,
       modules: prev.modules.map((m: ModuleWithLessons) =>
@@ -1179,7 +1199,7 @@ export const CourseManagementProvider: React.FC<CourseManagementProviderProps> =
           : m
       )
     }));
-  }, []);
+  }, [user?.id]);
 
   // ============================================================================
   // UTILITY

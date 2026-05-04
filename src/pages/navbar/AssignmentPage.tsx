@@ -336,29 +336,12 @@ const AssignmentPage: React.FC = () => {
 
   // Poll for AI grading result — smart polling with event-driven reload
   useEffect(() => {
-    console.log('[AI Debug] AssignmentPage effect triggered:', {
-      aiGradingEnabled: assignment?.aiGradingEnabled,
-      submissionsCount: submissions.length,
-      assignmentId: assignmentId
-    });
-
-    if (!assignment?.aiGradingEnabled) {
-      console.log('[AI Debug] Polling skipped - aiGradingEnabled is false');
-      return;
-    }
+    if (!assignment?.aiGradingEnabled) return;
 
     const latest = submissions.find(s => s.isNewest);
     const isAiPending = latest?.status === SubmissionStatus.AI_PENDING && !latest?.isAiGraded;
 
-    console.log('[AI Debug] Polling check:', {
-      latestId: latest?.id,
-      latestStatus: latest?.status,
-      isAiGraded: latest?.isAiGraded,
-      isAiPending: isAiPending
-    });
-
     if (!isAiPending) {
-      console.log('[AI Debug] Not AI_PENDING, clearing interval');
       if (pollingRef.current.intervalId) {
         clearInterval(pollingRef.current.intervalId);
         pollingRef.current = { targetId: null, intervalId: null, isPolling: false };
@@ -376,26 +359,13 @@ const AssignmentPage: React.FC = () => {
 
     // Smart polling — single API call to avoid race condition between APIs
     const runPoll = async () => {
-      console.log('[AI Poll] runPoll called, targetId:', pollingRef.current.targetId, 'isPolling:', pollingRef.current.isPolling);
-      if (pollingRef.current.targetId === null || pollingRef.current.isPolling) {
-        console.log('[AI Poll] Skipped - already polling or no target');
-        return;
-      }
+      if (pollingRef.current.targetId === null || pollingRef.current.isPolling) return;
       pollingRef.current.isPolling = true;
       try {
         // Single source of truth: fetch submissions and check isAiGraded directly
-        console.log('[AI Poll] Calling getMySubmissions for assignment:', assignmentId);
         const submissionsData = await getMySubmissions(parseInt(assignmentId!));
-        console.log('[AI Poll] API returned', submissionsData.length, 'submissions');
         const latest = submissionsData.find(s => s.isNewest);
-        console.log('[AI Poll] latest submission:', {
-          id: latest?.id,
-          status: latest?.status,
-          isAiGraded: latest?.isAiGraded,
-          score: latest?.score
-        });
         if (latest?.isAiGraded || latest?.status === 'GRADED') {
-          console.log('[AI Poll] ✓ Grading complete detected! Reloading...');
           // AI grading complete — stop polling and reload page to show full results
           clearInterval(pollingRef.current.intervalId!);
           pollingRef.current = { targetId: null, intervalId: null, isPolling: false };
@@ -407,9 +377,7 @@ const AssignmentPage: React.FC = () => {
           }, 1500);
           return;
         }
-        console.log('[AI Poll] Still pending, will retry in 10s');
-      } catch (err) {
-        console.log('[AI Poll] Error during poll:', err);
+      } catch {
         // Silently ignore polling errors — will retry on next interval
       } finally {
         pollingRef.current.isPolling = false;

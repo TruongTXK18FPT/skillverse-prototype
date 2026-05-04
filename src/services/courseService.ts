@@ -118,8 +118,12 @@ export const updateCourse = async (
     if (courseData.requirements?.length) {
       courseData.requirements.forEach((item) => formData.append('requirements', item));
     }
-    if (courseData.courseSkills?.length) {
-      courseData.courseSkills.forEach((item) => formData.append('courseSkills', item));
+    if (courseData.courseSkills !== undefined) {
+      if (courseData.courseSkills.length > 0) {
+        courseData.courseSkills.forEach((item) => formData.append('courseSkills', item));
+      } else {
+        formData.append('courseSkills', '__EMPTY__');
+      }
     }
     if (thumbnailFile) formData.append('thumbnailFile', thumbnailFile);
     if (courseData.price !== undefined && courseData.price !== null) {
@@ -359,11 +363,12 @@ export const listCoursesByAuthorWithStatus = async (
     const params: Record<string, unknown> = { page, size, sort: `${sortBy},${sortOrder}` };
     if (status) {
       params.status = status;
-    } else if (excludeArchived) {
-      params.excludeArchived = true;
+    } else {
+      // Always send excludeArchived param to control archived inclusion
+      // true = exclude archived (default for 'ALL' tab should be false to show all)
+      params.excludeArchived = excludeArchived;
     }
-    // If excludeArchived=false and no status, backend defaults to non-archived
-    // To get archived only, frontend should call with status=ARCHIVED
+    // When status is undefined and excludeArchived=false, backend returns ALL including archived
 
     const response = await axiosInstance.get<PageResponse<CourseSummaryDTO>>(
       `/courses/by-author/${authorId}`,

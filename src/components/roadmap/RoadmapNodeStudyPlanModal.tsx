@@ -9,8 +9,6 @@ import {
   getMaxDeadlineDate,
   getTodayDate,
   inferRoadmapStudyPlanDeadline,
-  resolvePreferredStudyDays,
-  resolvePreferredTimeWindows,
   resolveRoadmapWorkloadMinutes,
   STUDY_WINDOW_PRESETS,
   type StudyPlanIntensityId,
@@ -18,34 +16,6 @@ import {
 } from './roadmapStudyPlanPolicy';
 import './RoadmapNodeStudyPlanModal.css';
 
-/**
- * When studyWindow is 'flexible', compute earliestStartLocalTime dynamically:
- * current time + 30 min buffer, rounded up to next 15-min mark.
- * For fixed windows (morning/afternoon/evening), use the preset default.
- */
-const resolveEarliestStartTime = (
-  studyWindow: StudyWindowId,
-  presetDefault: string,
-): string => {
-  if (studyWindow !== 'flexible') {
-    return presetDefault;
-  }
-
-  const now = new Date();
-  // Add 30 minutes
-  const withBuffer = new Date(now.getTime() + 30 * 60 * 1000);
-  // Round up to next 15-minute mark
-  const minutes = withBuffer.getMinutes();
-  const roundedMinutes = Math.ceil(minutes / 15) * 15;
-  withBuffer.setMinutes(roundedMinutes);
-  withBuffer.setSeconds(0);
-  withBuffer.setMilliseconds(0);
-
-  // Format as HH:MM
-  const h = String(withBuffer.getHours()).padStart(2, '0');
-  const m = String(withBuffer.getMinutes()).padStart(2, '0');
-  return `${h}:${m}`;
-};
 
 interface RoadmapNodeStudyPlanModalProps {
   isOpen: boolean;
@@ -67,15 +37,6 @@ interface RoadmapNodeStudyPlanModalProps {
 
 const NODE_PLAN_GAME_DELAY_MS = 7000;
 
-const DAY_OPTIONS = [
-  { value: 'MONDAY', label: 'T2' },
-  { value: 'TUESDAY', label: 'T3' },
-  { value: 'WEDNESDAY', label: 'T4' },
-  { value: 'THURSDAY', label: 'T5' },
-  { value: 'FRIDAY', label: 'T6' },
-  { value: 'SATURDAY', label: 'T7' },
-  { value: 'SUNDAY', label: 'CN' }
-] as const;
 
 const INTENSITY_OPTIONS: Array<{
   id: StudyPlanIntensityId;
@@ -107,20 +68,6 @@ const INTENSITY_OPTIONS: Array<{
   }
 ];
 
-const STUDY_WINDOWS: Record<StudyWindowId, { label: string }> = {
-  morning: {
-    label: 'Buổi sáng',
-  },
-  afternoon: {
-    label: 'Buổi chiều',
-  },
-  evening: {
-    label: 'Buổi tối',
-  },
-  flexible: {
-    label: 'Linh hoạt',
-  },
-};
 
 const RoadmapNodeStudyPlanModal = ({
   isOpen,
@@ -136,10 +83,7 @@ const RoadmapNodeStudyPlanModal = ({
   const [deadline, setDeadline] = useState<string>('');
   const [deadlineError, setDeadlineError] = useState<string>('');
   const [intensity, setIntensity] = useState<StudyPlanIntensityId>('balanced');
-  const [studyWindow, setStudyWindow] = useState<StudyWindowId>('flexible');
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [desiredOutcome, setDesiredOutcome] = useState<string>('');
-  const [freeTimeDescription, setFreeTimeDescription] = useState<string>('');
   const [showSubmittingGame, setShowSubmittingGame] = useState(false);
 
   const intensityMeta = useMemo(
@@ -150,22 +94,17 @@ const RoadmapNodeStudyPlanModal = ({
     () => resolveRoadmapWorkloadMinutes(node, learningContext?.primaryCourse),
     [learningContext?.primaryCourse, node],
   );
-  const inferredPreferredDays = useMemo(
-    () => resolvePreferredStudyDays(selectedDays, studyWindow),
-    [selectedDays, studyWindow],
-  );
   const inferredDeadline = useMemo(
     () => inferRoadmapStudyPlanDeadline({
       startDate,
       intensity,
-      preferredDays: inferredPreferredDays,
+      preferredDays: [],
       workloadMinutes,
       durationMinutes: intensityMeta.durationMinutes,
       maxSessionsPerDay: intensityMeta.maxSessionsPerDay,
       childBranchCount: 0,
     }),
     [
-      inferredPreferredDays,
       intensity,
       intensityMeta.durationMinutes,
       intensityMeta.maxSessionsPerDay,
@@ -196,19 +135,15 @@ const RoadmapNodeStudyPlanModal = ({
     setDeadline('');
     setDeadlineError('');
     setIntensity('balanced');
-    setStudyWindow('flexible');
-    setSelectedDays([]);
     setDesiredOutcome('');
-    setFreeTimeDescription('');
   }, [isOpen, node?.id]);
 
-  // Apply AI-prefilled params when they change
+  // Apply AI-prefilled params when they change (ignore schedule preferences - always use flexible)
   useEffect(() => {
     if (!aiPrefilledParams) return;
     if (aiPrefilledParams.deadline) setDeadline(aiPrefilledParams.deadline);
     if (aiPrefilledParams.intensity) setIntensity(aiPrefilledParams.intensity);
-    if (aiPrefilledParams.studyWindow) setStudyWindow(aiPrefilledParams.studyWindow);
-    if (aiPrefilledParams.selectedDays.length > 0) setSelectedDays(aiPrefilledParams.selectedDays);
+    // Ignore aiPrefilledParams.studyWindow and selectedDays - always use flexible
   }, [aiPrefilledParams]);
 
   useEffect(() => {
@@ -239,14 +174,6 @@ const RoadmapNodeStudyPlanModal = ({
     return null;
   }
 
-  const toggleDay = (dayValue: string) => {
-    setSelectedDays((previous) => {
-      if (previous.includes(dayValue)) {
-        return previous.filter((value) => value !== dayValue);
-      }
-      return [...previous, dayValue];
-    });
-  };
 
   const handleSubmit = async () => {
     if (!startDate) {
@@ -254,13 +181,11 @@ const RoadmapNodeStudyPlanModal = ({
     }
 
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Ho_Chi_Minh';
-    const windowPreset = STUDY_WINDOW_PRESETS[studyWindow];
-    const normalizedDays = inferredPreferredDays;
+    const windowPreset = STUDY_WINDOW_PRESETS.flexible;
     const mergedDesiredOutcome = [
       learningContext?.objectiveSummary,
       desiredOutcome.trim(),
     ].filter(Boolean).join(' ');
-    const mergedFreeTimeDescription = [freeTimeDescription.trim()].filter(Boolean).join(' ');
     const plannerTopics = Array.from(
       new Set([
         ...(node.learningObjectives ?? []),
@@ -276,10 +201,9 @@ const RoadmapNodeStudyPlanModal = ({
       startDate,
       timezone,
       deadline: deadline || inferredDeadline,
-      preferredDays: normalizedDays,
-      preferredTimeWindows: resolvePreferredTimeWindows(studyWindow),
+      preferredDays: [],
+      preferredTimeWindows: windowPreset.preferredTimeWindows,
       desiredOutcome: mergedDesiredOutcome || undefined,
-      freeTimeDescription: mergedFreeTimeDescription || undefined,
       intensityLevel: intensity,
       durationMinutes: intensityMeta.durationMinutes,
       maxSessionsPerDay: intensityMeta.maxSessionsPerDay,
@@ -287,12 +211,12 @@ const RoadmapNodeStudyPlanModal = ({
       maxDailyStudyMinutes: intensityMeta.durationMinutes * intensityMeta.maxSessionsPerDay,
       studyMethod: 'Active Recall + Practical Exercise',
       resourcesPreference: 'mixed resources',
-      studyPreference: studyWindow,
-      earliestStartLocalTime: resolveEarliestStartTime(studyWindow, windowPreset.earliestStartLocalTime),
+      studyPreference: 'flexible',
+      earliestStartLocalTime: undefined,
       latestEndLocalTime: windowPreset.latestEndLocalTime,
-      avoidLateNight: studyWindow !== 'evening',
-      allowLateNight: studyWindow === 'evening',
-      confirmLateNight: studyWindow === 'evening',
+      avoidLateNight: true,
+      allowLateNight: false,
+      confirmLateNight: false,
       topics: plannerTopics,
     };
 
@@ -422,57 +346,6 @@ const RoadmapNodeStudyPlanModal = ({
             </div>
           </section>
 
-          <section className="roadmap-node-plan-modal__section">
-            <label className="roadmap-node-plan-modal__label">
-              <Clock3 size={14} />
-              Khung giờ ưu tiên
-            </label>
-            <p className="roadmap-node-plan-modal__hint">
-              Đây là preference. Nếu bạn không tinh chỉnh thêm, plan sẽ dùng preset khung giờ đã chọn.
-            </p>
-            <div className="roadmap-node-plan-modal__chip-list">
-              {(Object.keys(STUDY_WINDOWS) as StudyWindowId[]).map((key) => (
-                <button
-                  key={key}
-                  type="button"
-                  className={`roadmap-node-plan-modal__chip ${studyWindow === key ? 'is-active' : ''}`}
-                  onClick={() => setStudyWindow(key)}
-                >
-                  {STUDY_WINDOWS[key].label}
-                </button>
-              ))}
-            </div>
-          </section>
-
-          <section className="roadmap-node-plan-modal__section">
-            <label className="roadmap-node-plan-modal__label">Ngày học trong tuần (tuỳ chọn)</label>
-            <p className="roadmap-node-plan-modal__hint">
-              Bạn có thể để trống để hệ thống tự chọn lịch mặc định phù hợp với khung giờ ưu tiên.
-            </p>
-            <div className="roadmap-node-plan-modal__chip-list">
-              {DAY_OPTIONS.map((day) => (
-                <button
-                  key={day.value}
-                  type="button"
-                  className={`roadmap-node-plan-modal__chip ${selectedDays.includes(day.value) ? 'is-active' : ''}`}
-                  onClick={() => toggleDay(day.value)}
-                >
-                  {day.label}
-                </button>
-              ))}
-            </div>
-          </section>
-
-          <section className="roadmap-node-plan-modal__section">
-            <label className="roadmap-node-plan-modal__label">Thời gian rảnh / ghi chú thêm (tuỳ chọn)</label>
-            <textarea
-              className="roadmap-node-plan-modal__textarea"
-              placeholder="Ví dụ: Tối T2-T6 rảnh sau 20:00, cuối tuần có thể học 2 block."
-              value={freeTimeDescription}
-              onChange={(event) => setFreeTimeDescription(event.target.value)}
-              rows={2}
-            />
-          </section>
         </div>
 
         <div className="roadmap-node-plan-modal__footer">
