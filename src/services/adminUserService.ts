@@ -223,21 +223,21 @@ class AdminUserService {
   }
 
   /**
-   * Add roles to user
+   * Set (replace) sub-admin roles for user
    * @param userId - User ID
-   * @param roles - List of roles to add
+   * @param roles - List of sub-admin roles to set (replaces existing sub-admin roles)
    * @returns Promise<AdminUserResponse>
    */
-  async addRolesToUser(userId: number, roles: string[]): Promise<AdminUserResponse> {
+  async setSubAdminRoles(userId: number, roles: string[]): Promise<AdminUserResponse> {
     try {
       const response = await axiosInstance.put<AdminUserResponse>(
-        `${this.BASE_URL}/roles/add`,
+        `${this.BASE_URL}/roles`,
         { userId, roles }
       );
       
       return response.data;
     } catch (error) {
-      console.error(`❌ Error adding roles to user ${userId}:`, error);
+      console.error(`❌ Error setting sub-admin roles for user ${userId}:`, error);
       throw error;
     }
   }

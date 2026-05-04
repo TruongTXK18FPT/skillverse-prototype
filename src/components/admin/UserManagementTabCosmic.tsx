@@ -22,6 +22,22 @@ import {
 import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOnPagination';
 import './UserManagementTabCosmic.css';
 
+// Sub-admin role whitelist (same as BE) - defined outside component to avoid recreating on every render
+const SUB_ADMIN_ROLES: readonly string[] = ['USER_ADMIN', 'CONTENT_ADMIN', 'COMMUNITY_ADMIN', 
+                           'FINANCE_ADMIN', 'PREMIUM_ADMIN', 'AI_ADMIN', 
+                           'SUPPORT_ADMIN', 'SYSTEM_ADMIN'];
+
+const availableAdminRoles = [
+  { value: 'USER_ADMIN', label: 'User Admin (Quản lý User)' },
+  { value: 'CONTENT_ADMIN', label: 'Content Admin (Duyệt Content)' },
+  { value: 'COMMUNITY_ADMIN', label: 'Community Admin (Cộng đồng)' },
+  { value: 'FINANCE_ADMIN', label: 'Finance Admin (Tài chính)' },
+  { value: 'PREMIUM_ADMIN', label: 'Premium Admin (Gói cước)' },
+  { value: 'AI_ADMIN', label: 'AI Admin (AI Experts)' },
+  { value: 'SUPPORT_ADMIN', label: 'Support Admin (Hỗ trợ)' },
+  { value: 'SYSTEM_ADMIN', label: 'System Admin (Hệ thống)' }
+];
+
 const UserManagementTabCosmic: React.FC = () => {
   const [users, setUsers] = useState<AdminUserResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,17 +101,7 @@ const UserManagementTabCosmic: React.FC = () => {
   const currentUserStr = getStoredUserRaw();
   const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
   const isSuperAdmin = currentUser?.roles?.includes('ADMIN');
-
-  const availableAdminRoles = [
-    { value: 'USER_ADMIN', label: 'User Admin (Quản lý User)' },
-    { value: 'CONTENT_ADMIN', label: 'Content Admin (Duyệt Content)' },
-    { value: 'COMMUNITY_ADMIN', label: 'Community Admin (Cộng đồng)' },
-    { value: 'FINANCE_ADMIN', label: 'Finance Admin (Tài chính)' },
-    { value: 'PREMIUM_ADMIN', label: 'Premium Admin (Gói cước)' },
-    { value: 'AI_ADMIN', label: 'AI Admin (AI Experts)' },
-    { value: 'SUPPORT_ADMIN', label: 'Support Admin (Hỗ trợ)' },
-    { value: 'SYSTEM_ADMIN', label: 'System Admin (Hệ thống)' }
-  ];
+  const currentUserId = currentUser?.id;
 
   useEffect(() => {
     fetchUsers();
@@ -202,10 +208,10 @@ const UserManagementTabCosmic: React.FC = () => {
       const detail = await adminUserService.getUserDetailById(user.id);
       setUserToAssignRole({ id: user.id, name: user.fullName });
       
-      // Pre-select existing roles
-      // Note: primaryRole might be one of them, but we want all roles
+      // Pre-select existing sub-admin roles only (filter out USER, MENTOR, RECRUITER, ADMIN, PARENT)
       if (detail.roles) {
-        setSelectedRoles(detail.roles);
+        const subAdminRolesOnly = detail.roles.filter((role: string) => SUB_ADMIN_ROLES.includes(role));
+        setSelectedRoles(subAdminRolesOnly);
       } else {
         setSelectedRoles([]);
       }
@@ -220,24 +226,24 @@ const UserManagementTabCosmic: React.FC = () => {
   };
 
   const handleSubmitRoles = async () => {
-    if (!userToAssignRole || selectedRoles.length === 0) {
-      showAppWarning('Thiếu quyền hạn', 'Vui lòng chọn ít nhất một role.');
+    if (!userToAssignRole) {
+      showAppWarning('Lỗi', 'Không có người dùng được chọn.');
       return;
     }
 
     try {
       setActionLoading(true);
-      await adminUserService.addRolesToUser(userToAssignRole.id, selectedRoles);
+      await adminUserService.setSubAdminRoles(userToAssignRole.id, selectedRoles);
       setShowRoleModal(false);
       setSuccessModal({
         show: true,
         title: 'Phân Quyền Thành Công',
-        message: `Đã thêm các quyền admin cho người dùng ${userToAssignRole.name}.`
+        message: `Đã cập nhật quyền admin cho ${userToAssignRole.name}. Người dùng cần đăng nhập lại để áp dụng quyền mới.`
       });
       fetchUsers(); // Refresh list
     } catch (error: any) {
       console.error('Failed to assign roles:', error);
-      showAppError('Thêm quyền thất bại', error.message || 'Lỗi không xác định');
+      showAppError('Cập nhật quyền thất bại', error.message || 'Lỗi không xác định');
     } finally {
       setActionLoading(false);
     }
@@ -712,7 +718,7 @@ const UserManagementTabCosmic: React.FC = () => {
                               <CheckCircle size={16} /> Kích hoạt
                             </button>
                           )}
-                          {isSuperAdmin && (
+                          {isSuperAdmin && user.id !== currentUserId && (
                             <button
                               className="admin-action-btn edit"
                               onClick={() => handleOpenRoleModal(user)}
@@ -1222,11 +1228,12 @@ const UserManagementTabCosmic: React.FC = () => {
                       type="checkbox"
                       checked={selectedRoles.includes(role.value)}
                       onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedRoles([...selectedRoles, role.value]);
-                        } else {
-                          setSelectedRoles(selectedRoles.filter(r => r !== role.value));
-                        }
+                        const roleValue = role.value;
+                        setSelectedRoles(prev => 
+                          e.target.checked 
+                            ? [...prev, roleValue]
+                            : prev.filter(r => r !== roleValue)
+                        );
                       }}
                       style={{ marginRight: '10px', width: '18px', height: '18px' }}
                     />
