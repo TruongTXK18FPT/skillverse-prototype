@@ -24,7 +24,6 @@ import {
   submitAssignment,
   getMySubmissions
 } from '../../services/assignmentService';
-import { getAiGradeResult } from '../../services/aiGradingService';
 import { uploadMedia } from '../../services/mediaService';
 import { useAuth } from '../../context/AuthContext';
 import { downloadFile } from '../../utils/downloadFile';
@@ -93,6 +92,18 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
     isPolling: false,
   });
 
+  // DEBUG: Log polling effect trigger conditions
+  useEffect(() => {
+    const latest = submissions.find(s => s.isNewest);
+    console.log('[AI Debug] Effect check:', {
+      readOnly,
+      aiEnabled: assignment?.aiGradingEnabled,
+      latestStatus: latest?.status,
+      isAiGraded: latest?.isAiGraded,
+      willPoll: !readOnly && assignment?.aiGradingEnabled && latest?.status === 'AI_PENDING' && !latest?.isAiGraded
+    });
+  }, [submissions, assignment?.aiGradingEnabled, readOnly]);
+
   useEffect(() => {
     if (readOnly || !assignment?.aiGradingEnabled) return;
 
@@ -115,16 +126,22 @@ const AssignmentViewer: React.FC<AssignmentViewerProps> = ({ assignmentId, onClo
     const targetId = latest.id;
     pollingRef.current = { targetId, intervalId: null, isPolling: false };
 
-    // Smart polling with in-flight guard — only check for completion, don't update UI until done
+    // Smart polling — single API call to check completion (avoid race condition between APIs)
     const runPoll = async () => {
-      if (pollingRef.current.targetId === null || pollingRef.current.isPolling) return;
+      if (pollingRef.current.targetId === null || pollingRef.current.isPolling) {
+        console.log('[AI Poll] Skipped - targetId:', pollingRef.current.targetId, 'isPolling:', pollingRef.current.isPolling);
+        return;
+      }
       pollingRef.current.isPolling = true;
+      console.log('[AI Poll] Polling submission:', pollingRef.current.targetId);
       try {
-        // Check AI grading status by fetching fresh submission data (read-only check)
-        await getAiGradeResult(pollingRef.current.targetId);
+        // Single source of truth: fetch submissions and check status directly
         const freshSubmissions = await getMySubmissions(assignmentId);
+        console.log('[AI Poll] API returned', freshSubmissions.length, 'submissions');
         const latestFresh = freshSubmissions.find(s => s.isNewest);
-        if (latestFresh?.isAiGraded) {
+        console.log('[AI Poll] latestFresh:', { id: latestFresh?.id, status: latestFresh?.status, isAiGraded: latestFresh?.isAiGraded, score: latestFresh?.score });
+        if (latestFresh?.isAiGraded || latestFresh?.status === 'GRADED') {
+          console.log('[AI Poll] ✓ Detected grading complete! Reloading...');
           // AI grading complete — stop polling and reload to show full results
           clearInterval(pollingRef.current.intervalId!);
           pollingRef.current = { targetId: null, intervalId: null, isPolling: false };
