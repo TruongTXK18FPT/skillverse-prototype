@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Sparkles, Plus, Trash2, Code, Menu, X, ChevronDown, Bot, Lock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Send, Sparkles, Plus, Trash2, Code, Menu, X, Lock, ChevronLeft, ChevronRight } from 'lucide-react';
 import MeowlKuruLoader from '../../components/kuru-loader/MeowlKuruLoader';
 import meowlDefault from '../../assets/meowl-skin/meowl_default.png';
 import userService from '../../services/userService';
@@ -44,8 +44,6 @@ const ExpertChatPage = () => {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(true);
   const [expertContext, setExpertContext] = useState<ExpertContext | null>(null);
-  const [aiAgentMode, setAiAgentMode] = useState<'NORMAL' | 'DEEP_RESEARCH'>('NORMAL');
-  const [showModelDropdown, setShowModelDropdown] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [userAvatar, setUserAvatar] = useState<string | null>(user?.avatarUrl || null);
@@ -438,7 +436,6 @@ Tôi có thể tư vấn chuyên sâu về:
   // Access Control Check
   const hasActiveSubscription = subscription && subscription.isActive;
   const isFreeTier = subscription?.plan?.planType === 'FREE_TIER';
-  const isPremiumPlus = subscription?.plan?.planType === 'PREMIUM_PLUS';
 
   if (!hasActiveSubscription || isFreeTier) {
     return (
@@ -548,7 +545,6 @@ Tôi có thể tư vấn chuyên sâu về:
         message: userMessage.content,
         sessionId: sessionId || undefined,
         chatMode: ChatMode.EXPERT_MODE,
-        aiAgentMode: aiAgentMode === 'DEEP_RESEARCH' ? 'deep-research-pro-preview-12-2025' : undefined,
         domain: expertContext.domain,
         industry: expertContext.industry,
         jobRole: expertContext.jobRole
@@ -579,46 +575,6 @@ Tôi có thể tư vấn chuyên sâu về:
         speakText(assistantMsg.content);
       }
     } catch (error: any) {
-      // Handle Premium Restriction (403) for Deep Research
-      if (error?.response?.status === 403 && aiAgentMode === 'DEEP_RESEARCH') {
-        showError(
-          'Yêu cầu Premium',
-          'Chế độ Nghiên cứu sâu chỉ dành cho tài khoản Premium. Hệ thống sẽ tự động chuyển về chế độ Tiêu chuẩn.',
-          6
-        );
-        
-        // Retry with Normal Agent
-        try {
-          const retryResponse = await careerChatService.sendMessage({
-            message: userMessage.content,
-            sessionId: sessionId || undefined,
-            chatMode: ChatMode.EXPERT_MODE,
-            aiAgentMode: 'NORMAL',
-            domain: expertContext.domain,
-            industry: expertContext.industry,
-            jobRole: expertContext.jobRole
-          });
-
-          if (!sessionId) {
-            setSessionId(retryResponse.sessionId);
-            loadSessions();
-          }
-
-          const assistantMsg = {
-            id: (Date.now() + 1).toString(),
-            role: 'assistant',
-            content: retryResponse.aiResponse,
-            timestamp: new Date(retryResponse.timestamp),
-            expertContext: retryResponse.expertContext,
-            isStreaming: true
-          } as UIMessage;
-          setMessages(prev => [...prev, assistantMsg]);
-          return;
-        } catch (retryError) {
-          console.error('Retry failed:', retryError);
-        }
-      }
-
       showError('Lỗi', error.message || 'Không thể gửi tin nhắn');
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
@@ -694,73 +650,6 @@ Tôi có thể tư vấn chuyên sâu về:
           <div className="chat-hud-title">
               <Sparkles size={16} style={{ color: 'var(--chat-hud-accent)' }} />
               {expertContext?.jobRole || 'Chuyên gia'}
-          </div>
-
-          {/* Model Selector */}
-          <div className="chat-model-selector">
-            <button 
-              className={`chat-model-btn ${aiAgentMode === 'DEEP_RESEARCH' ? 'premium' : ''}`}
-              onClick={() => setShowModelDropdown(!showModelDropdown)}
-            >
-              {aiAgentMode === 'NORMAL' ? (
-                <>
-                  <Bot size={16} />
-                  <span>Chế độ Tiêu chuẩn</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles size={16} />
-                  <span>Nghiên cứu sâu</span>
-                </>
-              )}
-              <ChevronDown size={14} />
-            </button>
-
-            {showModelDropdown && (
-              <div className="chat-model-dropdown">
-                <div 
-                  className={`chat-model-option ${aiAgentMode === 'NORMAL' ? 'active' : ''}`}
-                  onClick={() => {
-                    setAiAgentMode('NORMAL');
-                    setShowModelDropdown(false);
-                  }}
-                >
-                  <div className="model-icon">
-                    <Bot size={18} />
-                  </div>
-                  <div className="model-info">
-                    <span className="model-name">Chế độ Tiêu chuẩn</span>
-                    <span className="model-desc">Phản hồi nhanh, phù hợp tư vấn nhanh</span>
-                  </div>
-                </div>
-
-                <div 
-                  className={`chat-model-option premium-opt ${aiAgentMode === 'DEEP_RESEARCH' ? 'active' : ''} ${!isPremiumPlus ? 'disabled' : ''}`}
-                  onClick={() => {
-                    if (isPremiumPlus) {
-                      setAiAgentMode('DEEP_RESEARCH');
-                      setShowModelDropdown(false);
-                    } else {
-                      showError('Yêu cầu Premium Plus', 'Chế độ Nghiên cứu sâu chỉ dành cho gói Premium Plus (Mentor Pro).');
-                    }
-                  }}
-                  style={{ opacity: isPremiumPlus ? 1 : 0.6, cursor: isPremiumPlus ? 'pointer' : 'not-allowed' }}
-                >
-                  <div className="model-icon">
-                    {isPremiumPlus ? <Sparkles size={18} /> : <Lock size={18} />}
-                  </div>
-                  <div className="model-info">
-                    <span className="model-name">
-                      Nghiên cứu sâu
-                      <span className="premium-badge-mini">PLUS</span>
-                    </span>
-                    <span className="model-desc">
-                      {isPremiumPlus ? 'Phân tích sâu hơn, ưu tiên dữ liệu chi tiết' : 'Yêu cầu gói Premium Plus'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           <div className="chat-hud-status">
