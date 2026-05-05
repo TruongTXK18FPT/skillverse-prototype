@@ -48,7 +48,7 @@ import { UserVerifiedSkillDTO } from "../../types/NodeMentoring";
 import { getVerifiedSkills, getPublicVerifiedSkills } from "../../services/nodeMentoringService";
 import { getPublicStudentVerifiedSkillDetails, StudentVerificationResponse } from "../../services/studentSkillVerificationService";
 import { getPublicMentorVerifiedSkillDetails, MentorVerificationResponse } from "../../services/mentorVerificationService";
-import { isSkillFuzzyVerified } from "../../utils/skillResolver";
+import { normalizeText } from "../../utils/skillResolver";
 import { PilotIDModal } from "./PilotIDModal";
 import { MissionLogModal } from "./MissionLogModal";
 import { CommendationModal } from "./CommendationModal";
@@ -1466,10 +1466,10 @@ const TacticalDossierPortfolio = () => {
                       </h3>
                       <div className="dossier-module-tags">
                         {getSkills().map((skill: string, idx: number) => {
-                          const vs = verifiedSkills.find(s => isSkillFuzzyVerified(skill, [s.skillName]));
+                          const vs = verifiedSkills.find(s => normalizeText(skill) === normalizeText(s.skillName));
                           return (
-                            <span 
-                              key={idx} 
+                            <span
+                              key={idx}
                               className={`dossier-module-tag ${vs ? 'verified-skill-tag' : 'unverified-skill-tag'}`}
                               onClick={vs ? () => {
                                 if (profile?.userId) {
@@ -1481,16 +1481,16 @@ const TacticalDossierPortfolio = () => {
                                   }
                                 }
                               } : undefined}
-                              style={{ 
-                                display: 'inline-flex', 
-                                alignItems: 'center', 
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
                                 padding: '6px 6px 6px 12px',
                                 gap: '8px',
-                                ...(vs 
-                                  ? { cursor: 'pointer', borderColor: 'rgba(16, 185, 129, 0.5)', background: 'rgba(16, 185, 129, 0.05)' } 
+                                ...(vs
+                                  ? { cursor: 'pointer', borderColor: 'rgba(16, 185, 129, 0.5)', background: 'rgba(16, 185, 129, 0.05)' }
                                   : { borderColor: 'rgba(148, 163, 184, 0.2)', background: 'transparent' })
                               }}
-                              title={vs ? "Kỹ năng đã được hệ thống xác thực" : "Kỹ năng tự thêm (Chưa xác thực)"}
+                              title={vs ? "Kỹ năng đã được mentor/admin xác thực" : "Kỹ năng chưa được xác thực"}
                             >
                               <span style={{ fontWeight: vs ? 600 : 400, color: vs ? '#fff' : 'var(--dossier-silver)' }}>{skill}</span>
                               {vs ? (
