@@ -61,6 +61,7 @@ import {
 } from "../../services/nodeMentoringService";
 import { uploadEvidence } from "../../services/mentorVerificationService";
 import { taskBoardService } from "../../services/taskBoardService";
+import { orderRoadmapNodesForWorkspace } from "../../utils/roadmapNodeOrdering";
 import {
   uploadDocument,
   uploadImage,
@@ -719,7 +720,16 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
           evidenceUrl: currentUrl,
           attachmentUrl,
         });
-        showSuccess("Thành công", "Đã nộp bài đánh giá cuối kỳ.");
+        if (bookingId) {
+          showSuccess("Thành công", "Đã nộp bài đánh giá cuối kỳ.");
+        } else {
+          await journeyService.completeJourney(journeyId);
+          showSuccess(
+            "Hoàn thành journey",
+            "Bạn đã hoàn thành roadmap. Skill hiện ở trạng thái chưa xác thực cho đến khi mentor review.",
+          );
+          await loadRoadmap();
+        }
         await loadFinalAssessment();
         setRightTab("REPORT");
       }
@@ -812,6 +822,10 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
   };
 
   const nodes = roadmap?.roadmap || [];
+  const orderedNodes = useMemo(
+    () => orderRoadmapNodesForWorkspace(nodes),
+    [nodes],
+  );
   const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
 
   if (loading) {
@@ -1100,9 +1114,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
             </h3>
           </div>
           <div className="srwp-node-list">
-            {nodes.map((node: any, idx: number) => {
+            {orderedNodes.map((node: any, idx: number) => {
               const ns = nodeStatusMap[node.id];
-              const prevNode = idx > 0 ? nodes[idx - 1] : null;
+              const prevNode = idx > 0 ? orderedNodes[idx - 1] : null;
               const locked = isNodeLocked(prevNode?.id);
               return (
                 <div

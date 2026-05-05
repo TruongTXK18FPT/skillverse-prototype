@@ -64,6 +64,7 @@ import {
   resolvePrerequisiteIds,
   resolvePrerequisiteLabels,
 } from "../../utils/roadmapNodeRequirements";
+import { orderRoadmapNodesForWorkspace } from "../../utils/roadmapNodeOrdering";
 import "./MentorRoadmapWorkspace.css";
 
 interface Props {
@@ -189,6 +190,10 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
   }, [loadMentorNodeStatuses]);
 
   const nodes = getNodes(workspace);
+  const orderedNodes = useMemo(
+    () => orderRoadmapNodesForWorkspace(nodes),
+    [nodes],
+  );
   const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
   const stats = workspace?.roadmap?.statistics;
   const hasRoadmap = workspace?.roadmapSessionId != null;
@@ -569,7 +574,7 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
                   </p>
                 </div>
               ) : (
-                nodes.map((node: any, i: number) => {
+                orderedNodes.map((node: any, i: number) => {
                   const isFinal = node.id === finalNodeId;
                   const ns = mentorNodeStatusMap[node.id];
                   return (
