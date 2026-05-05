@@ -85,7 +85,7 @@ for (const [canonical, aliases] of Object.entries(SKILL_ALIAS_MAP)) {
 // ============================================================
 
 /** Lowercase, collapse whitespace, strip leading/trailing junk */
-const normalizeText = (text: string): string =>
+export const normalizeText = (text: string): string =>
   text
     .toLowerCase()
     .normalize('NFD')
