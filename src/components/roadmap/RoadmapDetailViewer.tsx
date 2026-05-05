@@ -727,8 +727,8 @@ const RoadmapDetailViewer = memo(({
       return (
         <section className="rdmv-mentor-match" aria-label="Đồng hành mentor">
           <div className="rdmv-mentor-match__copy">
-            <span className="rdmv-mentor-match__eyebrow">Mentor Companion</span>
-            <h2>Gắn hành trình trước khi book mentor</h2>
+            <span className="rdmv-mentor-match__eyebrow">Mentor đồng hành</span>
+            <h2>Gắn hành trình trước khi đặt lịch mentor</h2>
             <p>Roadmap này chưa có journey id nên chưa thể tạo booking đồng hành.</p>
           </div>
         </section>
@@ -737,10 +737,10 @@ const RoadmapDetailViewer = memo(({
 
     if (!journeyContextResolved) {
       return (
-        <section className="rdmv-mentor-match" aria-label="Book mentor đồng hành">
+        <section className="rdmv-mentor-match" aria-label="Đặt lịch mentor đồng hành">
           <div className="rdmv-mentor-match__copy">
-            <span className="rdmv-mentor-match__eyebrow">Mentor Match</span>
-            <h2>Book mentor đồng hành journey</h2>
+            <span className="rdmv-mentor-match__eyebrow">Tìm mentor phù hợp</span>
+            <h2>Đặt lịch mentor đồng hành</h2>
             <p>SkillVerse đang đọc journey gắn với roadmap để lấy skill trọng tâm.</p>
           </div>
 
@@ -784,14 +784,14 @@ const RoadmapDetailViewer = memo(({
     }
 
     return (
-      <section className="rdmv-mentor-match" aria-label="Book mentor đồng hành">
+      <section className="rdmv-mentor-match" aria-label="Đặt lịch mentor đồng hành">
         <div className="rdmv-mentor-match__copy">
-          <span className="rdmv-mentor-match__eyebrow">Mentor Match</span>
-          <h2>Book mentor đồng hành journey</h2>
+          <span className="rdmv-mentor-match__eyebrow">Tìm mentor phù hợp</span>
+          <h2>Đặt lịch mentor đồng hành</h2>
           <p>
             SkillVerse tìm mentor đã xác thực theo skill trọng tâm
             {roadmapMentorSkillLabel ? <strong> {roadmapMentorSkillLabel}</strong> : null}
-            . Book xong bạn thanh toán ngay bằng ví và mentor sẽ nhận yêu cầu đồng hành.
+            . Sau khi đặt lịch, bạn thanh toán ngay bằng ví và mentor sẽ nhận yêu cầu đồng hành.
           </p>
         </div>
 
@@ -849,7 +849,7 @@ const RoadmapDetailViewer = memo(({
                       onClick={() => setBookingMentor(mentor)}
                     >
                       <Wallet size={15} />
-                      Book ngay
+                      Đặt lịch ngay
                     </button>
                   </div>
                 </article>

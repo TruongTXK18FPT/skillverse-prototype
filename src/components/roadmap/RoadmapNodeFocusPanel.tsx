@@ -559,8 +559,11 @@ const RoadmapNodeFocusPanel = ({
             {onOpenWorkspace && (
               <button
                 type="button"
-                className="roadmap-node-focus-panel__workspace-btn"
+                className={`roadmap-node-focus-panel__workspace-btn ${node.nodeStatus === "LOCKED" ? "roadmap-node-focus-panel__workspace-btn--locked" : ""}`}
                 onClick={() => onOpenWorkspace(node.id)}
+                disabled={node.nodeStatus === "LOCKED"}
+                title={node.nodeStatus === "LOCKED" ? "Node đang khóa — hoàn thành node trước đó để mở khóa" : undefined}
+                style={node.nodeStatus === "LOCKED" ? { opacity: 0.35, cursor: "not-allowed" } : undefined}
               >
                 <ExternalLink size={14} />
                 <span>Đến Workspace</span>
@@ -613,7 +616,7 @@ const RoadmapNodeFocusPanel = ({
             )}
             {!hasStudyTask && !canCreateStudyTask && !studyPlanLockedReason && progress?.status !== "COMPLETED" && (
               <p className="roadmap-node-focus-panel__action-note">
-                Hoàn thành node hiện tại trước để mở kế hoạch.
+                Hoàn thành node hiện tại trước để mở kế hoạch và workspace.
               </p>
             )}
             {progress?.status !== "COMPLETED" && node.nodeStatus === "LOCKED" && (

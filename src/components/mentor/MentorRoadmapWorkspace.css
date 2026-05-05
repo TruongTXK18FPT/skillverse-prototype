@@ -773,6 +773,7 @@
 }
 
 .mrw-modal {
+  margin-top: 4rem;
   background: #0d1f30;
   border: 1px solid var(--mr-border);
   border-radius: 14px;
@@ -1021,9 +1022,6 @@
   font-size: 0.76rem;
 }
 
-.mrw-selected-node-summary--final {
-  border: 1px solid rgba(251, 191, 36, 0.35);
-}
 
 /* Meeting card — purpose + creator + actions */
 

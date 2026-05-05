@@ -2514,7 +2514,8 @@ const GSJJourneyPage: React.FC = () => {
     const canRetakeQuiz =
       hasAssessmentResult &&
       (remainingAssessmentRetakes > 0 || shouldDoChallenge) &&
-      selectedJourney.assessmentTestStatus?.toUpperCase() !== "IN_PROGRESS";
+      selectedJourney.assessmentTestStatus?.toUpperCase() !== "IN_PROGRESS" &&
+      !selectedJourney.roadmapSessionId;
     const roleTitle = getJobRoleLabel(
       selectedJourney.jobRole,
       selectedJourney.domain,
@@ -3075,7 +3076,8 @@ const GSJJourneyPage: React.FC = () => {
     
     const canRetakeQuiz =
       (remainingRetakes > 0 || shouldDoChallenge) &&
-      selectedJourney?.assessmentTestStatus?.toUpperCase() !== "IN_PROGRESS";
+      selectedJourney?.assessmentTestStatus?.toUpperCase() !== "IN_PROGRESS" &&
+      !hasRoadmap;
     const canGenerateRoadmapFromResult = !hasRoadmap && !shouldDoChallenge;
     const adaptiveStatusMessage = challengeRequired
       ? challengeAvailable

@@ -793,10 +793,10 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
       }));
       await loadRoadmap();
       await loadAllNodeStatuses();
-      if (updated.hasMentorCoverage) {
+      if (updated.hasMentorCoverage && bookingId) {
         showSuccess(
-          "Đã đánh dấu hoàn thành",
-          "Node đang chờ mentor review và verify trước khi mở node tiếp theo.",
+          "Đã đánh dấu hoàn thành",
+          "Node đang chờ mentor đánh giá và xác nhận trước khi mở node tiếp theo.",
         );
       } else {
         showSuccess("Đã hoàn thành node", "Node tiếp theo đã được mở khóa.");
@@ -870,10 +870,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
   };
 
   // Sequential lock: a node opens when the previous node has evidence and is completed.
-  const isNodeLocked = (idx: number): boolean => {
-    if (idx === 0) return false;
-    const prevNode = nodes[idx - 1];
-    const prevStatus = nodeStatusMap[prevNode?.id];
+  const isNodeLocked = (prevNodeId?: string): boolean => {
+    if (!prevNodeId) return false;
+    const prevStatus = nodeStatusMap[prevNodeId];
     return !isNodeCompleteForUnlock(prevStatus);
   };
   const nodeSubmissionLocked = !!evidence && !canSubmitNodeEvidence(evidence);
@@ -882,6 +881,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
     ["SUBMITTED", "RESUBMITTED"].includes(evidence.submissionStatus);
   const nodeProgressCompleted = evidence?.roadmapProgressStatus === "COMPLETED";
   const nodeAwaitingMentor =
+    !!bookingId &&
     !!evidence?.hasMentorCoverage &&
     !!evidence?.learnerMarkedComplete &&
     !nodeProgressCompleted;
@@ -912,8 +912,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
         <div className="srwp-submission-status-card__content">
           <h4>Đã nộp minh chứng</h4>
           <p>
-            Minh chứng của node này đã được gửi cho mentor. Bạn chỉ có thể nộp
-            lại khi mentor yêu cầu làm lại hoặc đánh fail node này.
+            {bookingId
+              ? "Minh chứng của node này đã được gửi cho mentor. Bạn chỉ có thể nộp lại khi mentor yêu cầu làm lại hoặc từ chối node này."
+              : "Minh chứng của node này đã được gửi. Bạn chỉ có thể nộp lại khi yêu cầu làm lại hoặc bị từ chối."}
           </p>
           <div className="srwp-submission-status-card__meta">
             <span>{formatNodeSubmissionStatus(evidence.submissionStatus)}</span>
@@ -921,9 +922,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
               {formatNodeVerificationStatus(evidence.verificationStatus)}
             </span>
             {nodeProgressCompleted ? (
-              <span>Node da hoan thanh</span>
+              <span>Node đã hoàn thành</span>
             ) : nodeAwaitingMentor ? (
-              <span>Cho mentor verify</span>
+              <span>Chờ mentor xác nhận</span>
             ) : null}
             {evidence.submittedAt && (
               <span>
@@ -963,7 +964,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
               disabled={markingComplete}
             >
               <CheckCircle2 size={15} />
-              {markingComplete ? "Đang đánh dấu..." : "Đánh dấu hoàn thành"}
+              {markingComplete ? "Đang đánh dấu..." : "Đánh dấu hoàn thành"}
             </button>
           )}
         </div>
@@ -1134,8 +1135,11 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
           <div className="srwp-node-list">
             {sortedNodes.map((node: any, idx: number) => {
               const ns = nodeStatusMap[node.id];
-              const locked = isNodeLocked(idx);
+              const prevNode = idx > 0 ? sortedNodes[idx - 1] : null;
+              const locked = isNodeLocked(prevNode?.id);
               const isChild = !!node.parentId;
+              const parentIndex = sortedNodes.slice(0, idx).filter((n) => !n.parentId).length;
+              const displayNumber = isChild ? "" : parentIndex + 1;
               return (
                 <div
                   key={node.id}
@@ -1148,7 +1152,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                   }}
                   title={locked ? "Hoàn thành node trước để mở khóa" : undefined}
                 >
-                  <span className="srwp-node-index">{isChild ? "" : idx + 1}</span>
+                  <span className="srwp-node-index">{displayNumber}</span>
                   <div className="srwp-node-info">
                     <span className="srwp-node-title">{node.title}</span>
                     <span

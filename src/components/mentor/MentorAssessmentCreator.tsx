@@ -742,11 +742,18 @@ const MentorAssessmentCreator: React.FC<Props> = ({
                       max={100}
                       className="mac-input"
                       value={assessScore || ""}
-                      onChange={(e) =>
-                        setAssessScore(
-                          e.target.value ? parseInt(e.target.value) : undefined,
-                        )
-                      }
+                      onChange={(e) => {
+                        const raw = e.target.value;
+                        if (!raw) {
+                          setAssessScore(undefined);
+                          return;
+                        }
+                        let val = parseInt(raw, 10);
+                        if (Number.isNaN(val)) val = 0;
+                        if (val < 0) val = 0;
+                        if (val > 100) val = 100;
+                        setAssessScore(val);
+                      }}
                       placeholder="0-100"
                       style={{ maxWidth: "120px" }}
                     />
