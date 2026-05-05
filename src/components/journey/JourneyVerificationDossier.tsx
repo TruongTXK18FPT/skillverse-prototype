@@ -175,16 +175,20 @@ const JourneyVerificationDossier: React.FC<JourneyVerificationDossierProps> = ({
             )}
             <span>Output Assessment đã duyệt</span>
           </div>
-          <div className={`jvd-check-item ${gate.finalVerificationRequired ? 'required' : ''}`}>
-            {gate.finalVerificationRequired ? (
+          <div className={`jvd-check-item ${gate.finalGateStatus === 'PASSED' ? 'passed' : gate.finalVerificationRequired ? 'required' : ''}`}>
+            {gate.finalGateStatus === 'PASSED' ? (
+              <CheckCircle size={18} />
+            ) : gate.finalVerificationRequired ? (
               <ShieldCheck size={18} />
             ) : (
               <CheckCircle size={18} />
             )}
             <span>
-              {gate.finalVerificationRequired
-                ? 'Yêu cầu final verification'
-                : 'Không yêu cầu final verification'}
+              {gate.finalGateStatus === 'PASSED'
+                ? 'Final verification đã hoàn tất'
+                : gate.finalVerificationRequired
+                  ? 'Yêu cầu final verification'
+                  : 'Không yêu cầu final verification'}
             </span>
           </div>
         </div>
