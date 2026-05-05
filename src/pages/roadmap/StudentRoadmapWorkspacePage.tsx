@@ -1011,12 +1011,15 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
         <div className="srwp-submission-status-card__content">
           <h4>Đã nộp Final Assessment</h4>
           <p>
-            Bài Final Assessment đang chờ hoặc đã được mentor đánh giá. Bạn chỉ
-            có thể nộp lại khi mentor từ chối bài này.
+            {bookingId
+              ? "Bài Final Assessment đang chờ hoặc đã được mentor đánh giá. Bạn chỉ có thể nộp lại khi mentor từ chối bài này."
+              : "Bạn đã nộp bài Final Assessment. Vì không có mentor đồng hành, bài này sẽ được đánh dấu 'Chưa xác thực'. Bạn vẫn có thể hoàn thành journey khi đã xong 100% roadmap."}
           </p>
           <div className="srwp-submission-status-card__meta">
             <span>
-              {formatFinalAssessmentStatus(finalAssessment.assessmentStatus)}
+              {bookingId
+                ? formatFinalAssessmentStatus(finalAssessment.assessmentStatus)
+                : "Chưa xác thực"}
             </span>
             {finalAssessment.submittedAt && (
               <span>
@@ -1747,7 +1750,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                     <h4>Chưa có mentor đồng hành</h4>
                     <p>
                       Bạn đang học không có mentor. Final assessment sẽ được đánh dấu{" "}
-                      <strong>"Chưa xác thực"</strong> cho đến khi mentor review.
+                      <strong>"Chưa xác thực"</strong>. Bạn vẫn có thể hoàn thành journey khi đã xong 100% roadmap.
                     </p>
                     <div className="srwp-mentor-cta-card__actions">
                       <button
