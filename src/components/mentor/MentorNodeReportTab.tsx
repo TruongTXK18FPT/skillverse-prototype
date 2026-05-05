@@ -24,7 +24,6 @@ import {
   Sparkles,
   Target,
   UserRound,
-  XCircle,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -36,7 +35,6 @@ import {
 } from "../../services/nodeMentoringService";
 import {
   NodeEvidenceRecordResponse,
-  NodeFinalVerificationStatus,
   NodeReviewResult,
 } from "../../types/NodeMentoring";
 import {
@@ -79,7 +77,7 @@ const reviewLabel = (status?: string) => {
     case "REWORK_REQUESTED":
       return "Cần làm lại";
     case "REJECTED":
-      return "Từ chối";
+      return "Cần làm lại";
     default:
       return status || "Chưa đánh giá";
   }
@@ -90,7 +88,7 @@ const verificationLabel = (status?: string) => {
     case "VERIFIED":
       return "Đã xác thực";
     case "REJECTED":
-      return "Fail node";
+      return "Cần làm lại";
     case "APPROVED":
       return "Đã duyệt";
     case "UNDER_REVIEW":
@@ -193,8 +191,6 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
   const [feedback, setFeedback] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
 
-  const [verifyStatus, setVerifyStatus] =
-    useState<NodeFinalVerificationStatus>("VERIFIED");
   const [verifyNote, setVerifyNote] = useState("");
   const [submittingVerify, setSubmittingVerify] = useState(false);
 
@@ -207,7 +203,11 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
       const data = await getNodeEvidence(journeyId, nodeId);
       setEvidence(data);
       if (data?.latestReview) {
-        setReviewResult(data.latestReview.reviewResult);
+        setReviewResult(
+          data.latestReview.reviewResult === "REJECTED"
+            ? "REWORK_REQUESTED"
+            : data.latestReview.reviewResult,
+        );
         setScore(data.latestReview.score);
         setFeedback(data.latestReview.feedback || "");
       } else {
@@ -216,10 +216,8 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
         setFeedback("");
       }
       if (data?.latestVerification) {
-        setVerifyStatus(data.latestVerification.nodeVerificationStatus);
         setVerifyNote(data.latestVerification.verificationNote || "");
       } else {
-        setVerifyStatus("VERIFIED");
         setVerifyNote("");
       }
     } catch (err: any) {
@@ -243,16 +241,21 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
     const hasSubmitted =
       !!evidence &&
       ["SUBMITTED", "RESUBMITTED"].includes(evidence.submissionStatus);
+    const currentVerificationStatus = evidence?.verificationStatus;
     const nodeVerified =
       evidence?.latestVerification?.nodeVerificationStatus === "VERIFIED" ||
-      evidence?.verificationStatus === "VERIFIED";
+      currentVerificationStatus === "VERIFIED";
     const nodeFailed =
       evidence?.latestVerification?.nodeVerificationStatus === "REJECTED" ||
-      evidence?.verificationStatus === "REJECTED";
+      currentVerificationStatus === "REJECTED";
     const learnerCompleted = evidence?.learnerMarkedComplete === true;
     const hasApprovedReview =
-      evidence?.latestReview?.reviewResult === "APPROVED";
-    const hasGateDecision = !!evidence?.latestVerification;
+      evidence?.latestReview?.reviewResult === "APPROVED" &&
+      currentVerificationStatus === "APPROVED";
+    const hasGateDecision =
+      currentVerificationStatus === "VERIFIED" ||
+      currentVerificationStatus === "REJECTED";
+    const scoreAllowed = reviewResult === "APPROVED";
 
     return {
       hasSubmitted,
@@ -261,6 +264,7 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
       nodeFailed,
       hasApprovedReview,
       hasGateDecision,
+      scoreAllowed,
       // Mentor can review as soon as learner has submitted evidence
       // No need to wait for learner to separately click "mark complete"
       canReview:
@@ -270,14 +274,14 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
         !nodeVerified &&
         !hasGateDecision,
     };
-  }, [evidence]);
+  }, [evidence, reviewResult]);
 
   const handleReview = async () => {
     if (!evidence || !state.canReview) return;
     if (reviewResult !== "APPROVED" && feedback.trim().length < 10) {
       showError(
         "Thiếu phản hồi",
-        "Khi yêu cầu làm lại hoặc từ chối, vui lòng ghi rõ lý do để học viên sửa đúng.",
+        "Khi yêu cầu làm lại, vui lòng ghi rõ lý do để học viên sửa đúng.",
       );
       return;
     }
@@ -286,7 +290,7 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
       setSubmittingReview(true);
       await reviewNodeSubmission(journeyId, nodeId, {
         reviewResult,
-        score,
+        score: reviewResult === "APPROVED" ? score : undefined,
         feedback: feedback.trim() || undefined,
         bookingId,
       });
@@ -305,27 +309,15 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
 
   const handleVerify = async () => {
     if (!evidence || !state.canVerify) return;
-    if (verifyStatus === "REJECTED" && verifyNote.trim().length < 10) {
-      showError(
-        "Thiếu ghi chú",
-        "Khi fail node, vui lòng ghi rõ yêu cầu nộp lại cho học viên.",
-      );
-      return;
-    }
 
     try {
       setSubmittingVerify(true);
       await verifyNode(journeyId, nodeId, {
-        nodeVerificationStatus: verifyStatus,
+        nodeVerificationStatus: "VERIFIED",
         verificationNote: verifyNote.trim() || undefined,
         bookingId,
       });
-      showSuccess(
-        "Thành công",
-        verifyStatus === "VERIFIED"
-          ? "Node đã được xác thực."
-          : "Node đã được đánh fail và mở lại cho học viên.",
-      );
+      showSuccess("Thành công", "Node đã được xác thực.");
       await loadEvidence();
       onReportSubmitted?.();
     } catch (err: any) {
@@ -576,7 +568,7 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
               {state.nodeVerified
                 ? "Node đã xác thực nên không thể chấm lại."
                 : state.hasGateDecision
-                  ? "Gate đã có quyết định. Học viên cần nộp lại nếu node bị fail."
+                  ? "Gate đã có quyết định cho lần nộp hiện tại."
                   : !state.hasSubmitted
                     ? "Chưa có bài nộp hợp lệ để chấm."
                     : "Bài nộp hiện không ở trạng thái có thể chấm."}
@@ -601,20 +593,13 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
                 className={`mnrt-decision-btn mnrt-decision-btn--warn ${
                   reviewResult === "REWORK_REQUESTED" ? "active" : ""
                 }`}
-                onClick={() => setReviewResult("REWORK_REQUESTED")}
+                onClick={() => {
+                  setReviewResult("REWORK_REQUESTED");
+                  setScore(undefined);
+                }}
                 disabled={!state.canReview}
               >
                 <AlertTriangle size={16} /> Làm lại
-              </button>
-              <button
-                type="button"
-                className={`mnrt-decision-btn mnrt-decision-btn--reject ${
-                  reviewResult === "REJECTED" ? "active" : ""
-                }`}
-                onClick={() => setReviewResult("REJECTED")}
-                disabled={!state.canReview}
-              >
-                <XCircle size={16} /> Từ chối
               </button>
             </div>
           </div>
@@ -640,7 +625,7 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
                 onChange={(e) =>
                   setScore(e.target.value ? Number(e.target.value) : undefined)
                 }
-                disabled={!state.canReview}
+                disabled={!state.canReview || !state.scoreAllowed}
                 placeholder="0-100"
               />
               <input
@@ -651,7 +636,7 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
                 className="mnrt-score-slider"
                 value={score ?? 0}
                 onChange={(e) => setScore(Number(e.target.value))}
-                disabled={!state.canReview}
+                disabled={!state.canReview || !state.scoreAllowed}
               />
             </div>
             <div
@@ -670,7 +655,7 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
                     score === p.value ? "mnrt-score-preset--active" : ""
                   }`}
                   onClick={() => setScore(p.value)}
-                  disabled={!state.canReview}
+                  disabled={!state.canReview || !state.scoreAllowed}
                 >
                   <Sparkles size={11} /> {p.value} · {p.label}
                 </button>
@@ -735,23 +720,10 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
             <div className="mnrt-decision-group">
               <button
                 type="button"
-                className={`mnrt-decision-btn mnrt-decision-btn--approve ${
-                  verifyStatus === "VERIFIED" ? "active" : ""
-                }`}
-                onClick={() => setVerifyStatus("VERIFIED")}
+                className="mnrt-decision-btn mnrt-decision-btn--approve active"
                 disabled={!state.canVerify}
               >
                 <CheckCircle2 size={16} /> Xác thực
-              </button>
-              <button
-                type="button"
-                className={`mnrt-decision-btn mnrt-decision-btn--reject ${
-                  verifyStatus === "REJECTED" ? "active" : ""
-                }`}
-                onClick={() => setVerifyStatus("REJECTED")}
-                disabled={!state.canVerify}
-              >
-                <XCircle size={16} /> Fail node
               </button>
             </div>
           </div>
@@ -762,7 +734,7 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
               value={verifyNote}
               onChange={(e) => setVerifyNote(e.target.value)}
               disabled={!state.canVerify}
-              placeholder="Ghi chú lý do xác thực hoặc yêu cầu nộp lại..."
+              placeholder="Ghi chú xác thực node..."
               rows={4}
             />
           </div>
