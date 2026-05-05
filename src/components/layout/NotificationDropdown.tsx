@@ -189,6 +189,7 @@ const NotificationDropdown: React.FC<Props> = ({ inline, collapsible }) => {
       case "BOOKING_REFUND":
       case "BOOKING_STARTED":
       case "BOOKING_MENTOR_COMPLETED":
+      case "ROADMAP_FOLLOW_UP_MEETING_CREATED":
         return notification.relatedId
           ? { pathname: `/bookings/${notification.relatedId}` }
           : isMentorUser()

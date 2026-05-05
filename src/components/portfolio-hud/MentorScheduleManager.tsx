@@ -89,9 +89,10 @@ const MentorScheduleManager: React.FC = () => {
         });
       });
 
-      // Map Bookings
+      // Map Bookings — exclude ROADMAP_MENTORING since it has no fixed time slot
+      // and its sentinel endTime (2099-12-31) would render a huge block on the calendar
       bookingsPage.content.forEach(b => {
-        if (b.status !== 'CANCELLED' && b.status !== 'REJECTED') {
+        if (b.status !== 'CANCELLED' && b.status !== 'REJECTED' && b.bookingType !== 'ROADMAP_MENTORING') {
           // Treat as VN wall-clock time — append +07:00 so JS displays correctly in VN
           const startStr = b.startTime.endsWith('Z') || b.startTime.includes('+07:00')
             ? b.startTime

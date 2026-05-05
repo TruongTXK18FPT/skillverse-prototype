@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, Info, BookOpen, ClipboardList, UserCheck, Star, Wallet, Loader2, CalendarDays } from 'lucide-react';
+import { ArrowLeft, Clock, Target, Layers, Trophy, Hash, AlertTriangle, Brain, Briefcase, GraduationCap, Rocket, Info, BookOpen, ClipboardList, UserCheck, Star, Wallet, Loader2, CalendarDays, MessageSquare } from 'lucide-react';
 import { RoadmapResponse, QuestProgress } from '../../types/Roadmap';
 import RoadmapFlow from '../ai-roadmap/RoadmapFlow';
 import type { RoadmapNodeFocusPanelProps } from './RoadmapNodeFocusPanel';
@@ -778,6 +778,28 @@ const RoadmapDetailViewer = memo(({
             <div className="rdmv-current-mentor-card__price">
               {formatVnd(currentRoadmapBooking.priceVnd)}
             </div>
+            <button
+              type="button"
+              className="rdmv-current-mentor-card__chat-btn"
+              onClick={() => navigate('/messages', {
+                state: {
+                  openChatWith: currentRoadmapBooking.id,
+                  bookingId: currentRoadmapBooking.id,
+                  counterpartId: currentRoadmapBooking.mentorId,
+                  name: currentRoadmapBooking.mentorName,
+                  avatar: currentRoadmapBooking.mentorAvatar,
+                  type: 'MENTOR',
+                  chatEnabled: currentRoadmapBooking.chatAllowed ?? true,
+                  bookingStatus: currentRoadmapBooking.status,
+                  bookingStartTime: currentRoadmapBooking.startTime,
+                  bookingEndTime: currentRoadmapBooking.endTime,
+                },
+              })}
+              title="Mở chat với mentor đồng hành"
+            >
+              <MessageSquare size={15} />
+              Nhắn tin
+            </button>
           </div>
         </section>
       );
@@ -865,6 +887,7 @@ const RoadmapDetailViewer = memo(({
     mentorMatchError,
     mentorMatchLoading,
     journeyContextResolved,
+    navigate,
     roadmapMentorSkillLabel,
     workspaceJourneyId,
   ]);

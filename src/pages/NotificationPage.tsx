@@ -119,6 +119,8 @@ const getIcon = (type: string) => {
       return <Zap size={24} />;
     case "BOOKING_MENTOR_COMPLETED":
       return <Check size={24} />;
+    case "ROADMAP_FOLLOW_UP_MEETING_CREATED":
+      return <CalendarIcon size={24} />;
     case "MENTOR_REVIEW_RECEIVED":
       return <Star size={24} />;
     case "MENTOR_LEVEL_UP":
@@ -274,6 +276,7 @@ const getIconColor = (type: string): string => {
     case "BOOKING_REFUND":
     case "BOOKING_STARTED":
     case "BOOKING_MENTOR_COMPLETED":
+    case "ROADMAP_FOLLOW_UP_MEETING_CREATED":
     case "MENTOR_REVIEW_RECEIVED":
       return "var(--notif-booking)";
     case "MENTOR_LEVEL_UP":
@@ -366,6 +369,7 @@ const getTypeCategory = (type: string): string => {
       "BOOKING_REFUND",
       "BOOKING_STARTED",
       "BOOKING_MENTOR_COMPLETED",
+      "ROADMAP_FOLLOW_UP_MEETING_CREATED",
       "MENTOR_REVIEW_RECEIVED",
     ],
     mentor: ["MENTOR_LEVEL_UP", "MENTOR_BADGE_AWARDED"],
@@ -592,6 +596,7 @@ const getNotificationTarget = (
     case "BOOKING_REFUND":
     case "BOOKING_STARTED":
     case "BOOKING_MENTOR_COMPLETED":
+    case "ROADMAP_FOLLOW_UP_MEETING_CREATED":
       return relatedId
         ? { pathname: `/bookings/${relatedId}` }
         : isMentorUser(user)
@@ -802,6 +807,7 @@ const getTypeLabel = (type: string): string => {
     BOOKING_REFUND: "Hoàn tiền Booking",
     BOOKING_STARTED: "Booking bắt đầu",
     BOOKING_MENTOR_COMPLETED: "Mentor hoàn thành session",
+    ROADMAP_FOLLOW_UP_MEETING_CREATED: "Meeting roadmap mới",
     MENTOR_REVIEW_RECEIVED: "Nhận đánh giá Mentor",
     MENTOR_LEVEL_UP: "Level lên Mentor",
     MENTOR_BADGE_AWARDED: "Nhận huy hiệu",
@@ -884,6 +890,8 @@ const getTypeDescription = (type: string, message: string): string => {
     BOOKING_REFUND: "Tiền booking đã được hoàn cho bạn.",
     BOOKING_STARTED: "Buổi mentor đã bắt đầu!",
     BOOKING_MENTOR_COMPLETED: "Mentor đã hoàn thành session.",
+    ROADMAP_FOLLOW_UP_MEETING_CREATED:
+      "Một buổi họp follow-up roadmap mới đã được tạo. Hãy mở booking để xem thời gian, agenda, link meeting và phản hồi.",
     MENTOR_REVIEW_RECEIVED: "Bạn đã nhận được đánh giá từ học viên.",
     MENTOR_LEVEL_UP: "Chúc mừng! Bạn đã lên level Mentor mới!",
     MENTOR_BADGE_AWARDED: "Bạn đã nhận được một huy hiệu mới!",
@@ -974,6 +982,7 @@ const getTypeBannerColor = (type: string): string => {
     case "BOOKING_STARTED":
     case "BOOKING_COMPLETED":
     case "BOOKING_MENTOR_COMPLETED":
+    case "ROADMAP_FOLLOW_UP_MEETING_CREATED":
       return "linear-gradient(135deg, #6366f1, #8b5cf6)";
     case "BOOKING_REJECTED":
     case "BOOKING_CANCELLED":
@@ -1354,6 +1363,7 @@ const NotificationPage: React.FC = () => {
       case "BOOKING_COMPLETED":
       case "BOOKING_MENTOR_COMPLETED":
       case "BOOKING_REFUND":
+      case "ROADMAP_FOLLOW_UP_MEETING_CREATED":
         return "Xem booking";
       case "BOOKING_REJECTED":
       case "BOOKING_CANCELLED":

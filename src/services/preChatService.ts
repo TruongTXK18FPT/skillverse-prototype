@@ -24,7 +24,7 @@ export interface PreChatThreadSummary {
   isMyRoleMentor: boolean;
   bookingStartTime: string;
   bookingEndTime: string;
-  bookingStatus: 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED' | 'ONGOING' | 'PENDING_COMPLETION' | 'DISPUTED' | 'REFUNDED';
+  bookingStatus: 'PENDING' | 'CONFIRMED' | 'REJECTED' | 'COMPLETED' | 'CANCELLED' | 'ONGOING' | 'MENTORING_ACTIVE' | 'PENDING_COMPLETION' | 'DISPUTED' | 'REFUNDED';
   chatEnabled: boolean;
 }
 

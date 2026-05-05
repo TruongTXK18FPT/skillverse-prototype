@@ -1404,6 +1404,28 @@
   box-shadow: 0 0 18px rgba(34, 211, 238, 0.34);
 }
 
+.rdmv-current-mentor-card__chat-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.58rem 0.86rem;
+  border: 1px solid rgba(34, 211, 238, 0.36);
+  border-radius: 10px;
+  color: #cffafe;
+  background: rgba(8, 145, 178, 0.2);
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
+}
+
+.rdmv-current-mentor-card__chat-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(103, 232, 249, 0.72);
+  background: rgba(8, 145, 178, 0.32);
+}
+
 .rdmv-current-mentor-card {
   border-color: rgba(34, 197, 94, 0.24);
   background: rgba(6, 78, 59, 0.18);
