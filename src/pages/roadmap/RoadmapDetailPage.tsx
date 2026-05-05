@@ -73,6 +73,21 @@ const RoadmapDetailPage = () => {
     selectedDays: string[];
   } | null>(null);
 
+  const loadRoadmapBySessionId = useCallback(async (sessionId: number): Promise<RoadmapResponse> => {
+    try {
+      return await aiRoadmapService.getRoadmapById(sessionId);
+    } catch (loadError) {
+      const errorData = loadError as any;
+      const statusCode = errorData?.response?.status;
+      const errorMessage = errorData?.response?.data?.message || (loadError as Error).message;
+      if (statusCode === 403 || errorMessage.includes('tạm dừng') || errorMessage.includes('FORBIDDEN')) {
+        await aiRoadmapService.activateRoadmap(sessionId);
+        return await aiRoadmapService.getRoadmapById(sessionId);
+      }
+      throw loadError;
+    }
+  }, []);
+
   const roadmapNodes = roadmap?.roadmap ?? [];
   const { courseMap, isLoading: isLoadingCourses, error: coursesError } = useRoadmapMappedCourses(roadmapNodes, Boolean(roadmap), enrollmentRefreshKey);
 
@@ -209,7 +224,7 @@ const RoadmapDetailPage = () => {
       setIsLoading(true);
       setError(null);
 
-      const roadmapData = await aiRoadmapService.getRoadmapById(parseInt(id, 10));
+      const roadmapData = await loadRoadmapBySessionId(parseInt(id, 10));
       setRoadmap(roadmapData);
 
       // Build progress map first so we can find the first non-completed node
@@ -273,7 +288,7 @@ const RoadmapDetailPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [authLoading, id, isAuthenticated, preferredSelectedNodeId, showError]);
+  }, [authLoading, id, isAuthenticated, loadRoadmapBySessionId, preferredSelectedNodeId, showError]);
 
   useEffect(() => {
     if (!authLoading) {
