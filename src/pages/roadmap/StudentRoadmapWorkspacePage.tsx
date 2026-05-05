@@ -813,42 +813,6 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
   const nodes = roadmap?.roadmap || [];
   const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
-  
-  // Sort nodes to place children immediately after their parents
-  const sortedNodes = useMemo(() => {
-    const nodeMap = new Map<string, any>();
-    nodes.forEach(node => nodeMap.set(node.id, node));
-    
-    const sorted: any[] = [];
-    const processed = new Set<string>();
-    
-    nodes.forEach(node => {
-      if (processed.has(node.id)) return;
-      
-      // Add parent first
-      sorted.push(node);
-      processed.add(node.id);
-      
-      // Add children immediately after parent
-      if (node.children && Array.isArray(node.children)) {
-        node.children.forEach((childId: string) => {
-          if (!processed.has(childId) && nodeMap.has(childId)) {
-            sorted.push(nodeMap.get(childId));
-            processed.add(childId);
-          }
-        });
-      }
-    });
-    
-    // Add any remaining nodes that weren't processed
-    nodes.forEach(node => {
-      if (!processed.has(node.id)) {
-        sorted.push(node);
-      }
-    });
-    
-    return sorted;
-  }, [nodes]);
 
   if (loading) {
     return (
@@ -1133,18 +1097,14 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
             </h3>
           </div>
           <div className="srwp-node-list">
-            {sortedNodes.map((node: any, idx: number) => {
+            {nodes.map((node: any, idx: number) => {
               const ns = nodeStatusMap[node.id];
-              const prevNode = idx > 0 ? sortedNodes[idx - 1] : null;
+              const prevNode = idx > 0 ? nodes[idx - 1] : null;
               const locked = isNodeLocked(prevNode?.id);
-              const isChild = !!node.parentId;
-              const parentIndex = sortedNodes.slice(0, idx).filter((n) => !n.parentId).length;
-              const displayNumber = isChild ? "" : parentIndex + 1;
               return (
                 <div
                   key={node.id}
-                  className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""} ${locked ? "srwp-node-item--locked" : ""} ${isChild ? "srwp-node-item--child" : ""}`}
-                  style={{ paddingLeft: isChild ? "32px" : "12px" }}
+                  className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""} ${locked ? "srwp-node-item--locked" : ""}`}
                   onClick={() => {
                     if (locked) return;
                     setSelectedNodeId(node.id);
@@ -1152,7 +1112,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                   }}
                   title={locked ? "Hoàn thành node trước để mở khóa" : undefined}
                 >
-                  <span className="srwp-node-index">{displayNumber}</span>
+                  <span className="srwp-node-index">{idx + 1}</span>
                   <div className="srwp-node-info">
                     <span className="srwp-node-title">{node.title}</span>
                     <span
