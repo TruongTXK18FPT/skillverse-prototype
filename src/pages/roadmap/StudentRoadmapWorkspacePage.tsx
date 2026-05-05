@@ -84,6 +84,9 @@ const canSubmitNodeEvidence = (
   record?: NodeEvidenceRecordResponse | null,
 ): boolean => {
   if (!record) return true;
+  if (["SUBMITTED", "RESUBMITTED"].includes(record.submissionStatus)) {
+    return false;
+  }
   return (
     record.submissionStatus === "DRAFT" ||
     record.submissionStatus === "REWORK_REQUESTED" ||
@@ -705,11 +708,15 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
       }
 
       if (selectedNodeId) {
-        await submitNodeEvidence(journeyId, selectedNodeId, {
+        const savedEvidence = await submitNodeEvidence(journeyId, selectedNodeId, {
           submissionText: currentText,
           evidenceUrl: currentUrl,
           attachmentUrl,
         });
+        setEvidence(savedEvidence);
+        setNodeSubmissionText("");
+        setNodeEvidenceUrl("");
+        setAttachmentFile(null);
         showSuccess("Thành công", "Đã nộp minh chứng cho node.");
         await loadNodeData();
         await loadAllNodeStatuses();

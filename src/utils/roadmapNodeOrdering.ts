@@ -73,7 +73,9 @@ export const orderRoadmapNodesForWorkspace = <T extends RoadmapListNode>(nodes: 
 
     ordered.push(mainNode);
     used.add(mainNode.id);
+  });
 
+  mainNodes.forEach((mainNode) => {
     const childIds = new Set(mainNode.children ?? []);
     const children = nodes
       .filter((candidate) => candidate.id && !used.has(candidate.id) && belongsToParent(candidate, mainNode, childIds))
