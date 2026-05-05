@@ -157,28 +157,6 @@ const formatFinalAssessmentStatus = (status?: string) => {
   }
 };
 
-const buildNodeTree = (nodes: any[]): any[] => {
-  const nodeMap = new Map<string, any>();
-  const rootNodes: any[] = [];
-
-  nodes.forEach(node => {
-    nodeMap.set(node.id, { ...node, children: [] });
-  });
-
-  nodes.forEach(node => {
-    const nodeWithChildren = nodeMap.get(node.id);
-    const parentId = node.parentId;
-    
-    if (parentId && nodeMap.has(parentId)) {
-      nodeMap.get(parentId).children.push(nodeWithChildren);
-    } else {
-      rootNodes.push(nodeWithChildren);
-    }
-  });
-
-  return rootNodes;
-};
-
 const StudentRoadmapWorkspacePage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // roadmapSessionId
   const navigate = useNavigate();
@@ -835,7 +813,42 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
   const nodes = roadmap?.roadmap || [];
   const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
-  const nodeTree = useMemo(() => buildNodeTree(nodes), [nodes]);
+  
+  // Sort nodes to place children immediately after their parents
+  const sortedNodes = useMemo(() => {
+    const nodeMap = new Map<string, any>();
+    nodes.forEach(node => nodeMap.set(node.id, node));
+    
+    const sorted: any[] = [];
+    const processed = new Set<string>();
+    
+    nodes.forEach(node => {
+      if (processed.has(node.id)) return;
+      
+      // Add parent first
+      sorted.push(node);
+      processed.add(node.id);
+      
+      // Add children immediately after parent
+      if (node.children && Array.isArray(node.children)) {
+        node.children.forEach((childId: string) => {
+          if (!processed.has(childId) && nodeMap.has(childId)) {
+            sorted.push(nodeMap.get(childId));
+            processed.add(childId);
+          }
+        });
+      }
+    });
+    
+    // Add any remaining nodes that weren't processed
+    nodes.forEach(node => {
+      if (!processed.has(node.id)) {
+        sorted.push(node);
+      }
+    });
+    
+    return sorted;
+  }, [nodes]);
 
   if (loading) {
     return (
@@ -888,74 +901,6 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
       ? "Đã nộp"
       : "Nộp lại"
     : "Nộp bài";
-
-  const renderNodeItem = (node: any, depth: number = 0, parentIdx: number = 0) => {
-    const ns = nodeStatusMap[node.id];
-    const isChild = depth > 0;
-    const flatIdx = nodes.findIndex((n: any) => n.id === node.id);
-    const locked = isNodeLocked(flatIdx);
-    
-    return (
-      <React.Fragment key={node.id}>
-        <div
-          className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""} ${locked ? "srwp-node-item--locked" : ""} ${isChild ? "srwp-node-item--child" : ""}`}
-          style={{ paddingLeft: `${depth * 20 + 12}px` }}
-          onClick={() => {
-            if (locked) return;
-            setSelectedNodeId(node.id);
-            setRightTab("ASSIGNMENT");
-          }}
-          title={locked ? "Hoàn thành node trước để mở khóa" : undefined}
-        >
-          <span className="srwp-node-index">{isChild ? "" : parentIdx + 1}</span>
-          <div className="srwp-node-info">
-            <span className="srwp-node-title">{node.title}</span>
-            <span
-              className={`srwp-node-type srwp-node-type--${node.type || "MAIN"}`}
-            >
-              {node.type === "SIDE" ? "Phụ" : "Chính"}
-            </span>
-          </div>
-          {locked ? (
-            <Lock
-              size={13}
-              className="srwp-status-icon srwp-status-icon--locked"
-            />
-          ) : ns?.verified === "VERIFIED" ? (
-            <BadgeCheck
-              size={16}
-              className="srwp-status-icon srwp-status-icon--verified"
-            />
-          ) : ns?.verified === "REJECTED" ? (
-            <XCircle
-              size={16}
-              className="srwp-status-icon srwp-status-icon--rejected"
-            />
-          ) : isNodeCompleteForUnlock(ns) ? (
-            <CheckCircle2
-              size={16}
-              className="srwp-status-icon srwp-status-icon--completed"
-            />
-          ) : ns?.learnerMarkedComplete ? (
-            <CheckCircle2
-              size={16}
-              className="srwp-status-icon srwp-status-icon--pending"
-            />
-          ) : ns?.submitted ? (
-            <Clock
-              size={14}
-              className="srwp-status-icon srwp-status-icon--submitted"
-            />
-          ) : (
-            <ChevronRight size={14} className="srwp-node-chevron" />
-          )}
-        </div>
-        {node.children && node.children.map((child: any) => 
-          renderNodeItem(child, depth + 1, parentIdx)
-        )}
-      </React.Fragment>
-    );
-  };
 
   const renderNodeSubmissionStatus = () => {
     if (!evidence) return null;
@@ -1187,7 +1132,67 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
             </h3>
           </div>
           <div className="srwp-node-list">
-            {nodeTree.map((node, idx) => renderNodeItem(node, 0, idx))}
+            {sortedNodes.map((node: any, idx: number) => {
+              const ns = nodeStatusMap[node.id];
+              const locked = isNodeLocked(idx);
+              const isChild = !!node.parentId;
+              return (
+                <div
+                  key={node.id}
+                  className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""} ${locked ? "srwp-node-item--locked" : ""} ${isChild ? "srwp-node-item--child" : ""}`}
+                  style={{ paddingLeft: isChild ? "32px" : "12px" }}
+                  onClick={() => {
+                    if (locked) return;
+                    setSelectedNodeId(node.id);
+                    setRightTab("ASSIGNMENT");
+                  }}
+                  title={locked ? "Hoàn thành node trước để mở khóa" : undefined}
+                >
+                  <span className="srwp-node-index">{isChild ? "" : idx + 1}</span>
+                  <div className="srwp-node-info">
+                    <span className="srwp-node-title">{node.title}</span>
+                    <span
+                      className={`srwp-node-type srwp-node-type--${node.type || "MAIN"}`}
+                    >
+                      {node.type === "SIDE" ? "Phụ" : "Chính"}
+                    </span>
+                  </div>
+                  {locked ? (
+                    <Lock
+                      size={13}
+                      className="srwp-status-icon srwp-status-icon--locked"
+                    />
+                  ) : ns?.verified === "VERIFIED" ? (
+                    <BadgeCheck
+                      size={16}
+                      className="srwp-status-icon srwp-status-icon--verified"
+                    />
+                  ) : ns?.verified === "REJECTED" ? (
+                    <XCircle
+                      size={16}
+                      className="srwp-status-icon srwp-status-icon--rejected"
+                    />
+                  ) : isNodeCompleteForUnlock(ns) ? (
+                    <CheckCircle2
+                      size={16}
+                      className="srwp-status-icon srwp-status-icon--completed"
+                    />
+                  ) : ns?.learnerMarkedComplete ? (
+                    <CheckCircle2
+                      size={16}
+                      className="srwp-status-icon srwp-status-icon--pending"
+                    />
+                  ) : ns?.submitted ? (
+                    <Clock
+                      size={14}
+                      className="srwp-status-icon srwp-status-icon--submitted"
+                    />
+                  ) : (
+                    <ChevronRight size={14} className="srwp-node-chevron" />
+                  )}
+                </div>
+              );
+            })}
 
             <div
               className={`srwp-node-item srwp-node-item--final ${!selectedNodeId ? "active" : ""}`}
