@@ -60,6 +60,7 @@ import {
   getLatestCompletionReport,
 } from "../../services/nodeMentoringService";
 import { uploadEvidence } from "../../services/mentorVerificationService";
+import { taskBoardService } from "../../services/taskBoardService";
 import {
   uploadDocument,
   uploadImage,
@@ -68,6 +69,7 @@ import {
   getForceDownloadUrl,
   getFileExtFromUrl,
 } from "../../services/fileUploadService";
+import { confirmAction } from "../../context/ConfirmDialogContext";
 import {
   NodeAssignmentResponse,
   NodeEvidenceRecordResponse,
@@ -153,6 +155,28 @@ const formatFinalAssessmentStatus = (status?: string) => {
     default:
       return status || "Chưa nộp";
   }
+};
+
+const buildNodeTree = (nodes: any[]): any[] => {
+  const nodeMap = new Map<string, any>();
+  const rootNodes: any[] = [];
+
+  nodes.forEach(node => {
+    nodeMap.set(node.id, { ...node, children: [] });
+  });
+
+  nodes.forEach(node => {
+    const nodeWithChildren = nodeMap.get(node.id);
+    const parentId = node.parentId;
+    
+    if (parentId && nodeMap.has(parentId)) {
+      nodeMap.get(parentId).children.push(nodeWithChildren);
+    } else {
+      rootNodes.push(nodeWithChildren);
+    }
+  });
+
+  return rootNodes;
 };
 
 const StudentRoadmapWorkspacePage: React.FC = () => {
@@ -734,6 +758,41 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
     if (!journeyId || !selectedNodeId || !evidence) return;
     try {
       setMarkingComplete(true);
+
+      // Check task status before marking complete
+      const board = await taskBoardService.getBoard(roadmap?.sessionId);
+      const allTasks = board.flatMap(column => column.tasks || []);
+      const nodeTasks = allTasks.filter(task =>
+        task.userNotes?.includes(`[ROADMAP_NODE_LINK]${selectedNodeId}`)
+      );
+      const pendingTasks = nodeTasks.filter(task => task.status !== 'done');
+
+      let confirmed = false;
+      if (pendingTasks.length > 0) {
+        // Case A: Tasks chưa done hết
+        confirmed = await confirmAction({
+          title: "Xác nhận hoàn thành",
+          message: `Có ${pendingTasks.length} tasks chưa done. Bạn muốn hoàn thành node và done các tasks này?`,
+          confirmLabel: "Xác nhận",
+          cancelLabel: "Hủy",
+          variant: "default",
+        });
+      } else {
+        // Case B: Tasks đã done hết
+        confirmed = await confirmAction({
+          title: "Xác nhận hoàn thành",
+          message: "Bạn có chắc chắn muốn hoàn thành node này?",
+          confirmLabel: "Xác nhận",
+          cancelLabel: "Hủy",
+          variant: "default",
+        });
+      }
+
+      if (!confirmed) {
+        setMarkingComplete(false);
+        return;
+      }
+
       const updated = await selfConfirmNode(journeyId, selectedNodeId);
       setEvidence(updated);
       setNodeStatusMap((prev) => ({
@@ -774,6 +833,10 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
     }
   };
 
+  const nodes = roadmap?.roadmap || [];
+  const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
+  const nodeTree = useMemo(() => buildNodeTree(nodes), [nodes]);
+
   if (loading) {
     return (
       <div className="srwp-loading">
@@ -785,9 +848,6 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
   if (!roadmap) {
     return <div className="srwp-error">Không tìm thấy dữ liệu Roadmap.</div>;
   }
-
-  const nodes = roadmap.roadmap || [];
-  const selectedNode = nodes.find((n: any) => n.id === selectedNodeId);
 
   const isNodeCompleteForUnlock = (status?: NodeStatusEntry): boolean => {
     if (!status?.submitted) return false;
@@ -828,6 +888,74 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
       ? "Đã nộp"
       : "Nộp lại"
     : "Nộp bài";
+
+  const renderNodeItem = (node: any, depth: number = 0, parentIdx: number = 0) => {
+    const ns = nodeStatusMap[node.id];
+    const isChild = depth > 0;
+    const flatIdx = nodes.findIndex((n: any) => n.id === node.id);
+    const locked = isNodeLocked(flatIdx);
+    
+    return (
+      <React.Fragment key={node.id}>
+        <div
+          className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""} ${locked ? "srwp-node-item--locked" : ""} ${isChild ? "srwp-node-item--child" : ""}`}
+          style={{ paddingLeft: `${depth * 20 + 12}px` }}
+          onClick={() => {
+            if (locked) return;
+            setSelectedNodeId(node.id);
+            setRightTab("ASSIGNMENT");
+          }}
+          title={locked ? "Hoàn thành node trước để mở khóa" : undefined}
+        >
+          <span className="srwp-node-index">{isChild ? "" : parentIdx + 1}</span>
+          <div className="srwp-node-info">
+            <span className="srwp-node-title">{node.title}</span>
+            <span
+              className={`srwp-node-type srwp-node-type--${node.type || "MAIN"}`}
+            >
+              {node.type === "SIDE" ? "Phụ" : "Chính"}
+            </span>
+          </div>
+          {locked ? (
+            <Lock
+              size={13}
+              className="srwp-status-icon srwp-status-icon--locked"
+            />
+          ) : ns?.verified === "VERIFIED" ? (
+            <BadgeCheck
+              size={16}
+              className="srwp-status-icon srwp-status-icon--verified"
+            />
+          ) : ns?.verified === "REJECTED" ? (
+            <XCircle
+              size={16}
+              className="srwp-status-icon srwp-status-icon--rejected"
+            />
+          ) : isNodeCompleteForUnlock(ns) ? (
+            <CheckCircle2
+              size={16}
+              className="srwp-status-icon srwp-status-icon--completed"
+            />
+          ) : ns?.learnerMarkedComplete ? (
+            <CheckCircle2
+              size={16}
+              className="srwp-status-icon srwp-status-icon--pending"
+            />
+          ) : ns?.submitted ? (
+            <Clock
+              size={14}
+              className="srwp-status-icon srwp-status-icon--submitted"
+            />
+          ) : (
+            <ChevronRight size={14} className="srwp-node-chevron" />
+          )}
+        </div>
+        {node.children && node.children.map((child: any) => 
+          renderNodeItem(child, depth + 1, parentIdx)
+        )}
+      </React.Fragment>
+    );
+  };
 
   const renderNodeSubmissionStatus = () => {
     if (!evidence) return null;
@@ -1059,68 +1187,7 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
             </h3>
           </div>
           <div className="srwp-node-list">
-            {nodes.map((node: any, idx: number) => {
-              const ns = nodeStatusMap[node.id];
-              const locked = isNodeLocked(idx);
-              return (
-                <div
-                  key={node.id}
-                  className={`srwp-node-item ${selectedNodeId === node.id ? "active" : ""} ${locked ? "srwp-node-item--locked" : ""}`}
-                  onClick={() => {
-                    if (locked) return;
-                    setSelectedNodeId(node.id);
-                    setRightTab("ASSIGNMENT");
-                  }}
-                  title={
-                    locked ? "Hoàn thành node trước để mở khóa" : undefined
-                  }
-                >
-                  <span className="srwp-node-index">{idx + 1}</span>
-                  <div className="srwp-node-info">
-                    <span className="srwp-node-title">{node.title}</span>
-                    <span
-                      className={`srwp-node-type srwp-node-type--${node.type || "MAIN"}`}
-                    >
-                      {node.type === "SIDE" ? "Phụ" : "Chính"}
-                    </span>
-                  </div>
-                  {/* Node verification status icon */}
-                  {locked ? (
-                    <Lock
-                      size={13}
-                      className="srwp-status-icon srwp-status-icon--locked"
-                    />
-                  ) : ns?.verified === "VERIFIED" ? (
-                    <BadgeCheck
-                      size={16}
-                      className="srwp-status-icon srwp-status-icon--verified"
-                    />
-                  ) : ns?.verified === "REJECTED" ? (
-                    <XCircle
-                      size={16}
-                      className="srwp-status-icon srwp-status-icon--rejected"
-                    />
-                  ) : isNodeCompleteForUnlock(ns) ? (
-                    <CheckCircle2
-                      size={16}
-                      className="srwp-status-icon srwp-status-icon--completed"
-                    />
-                  ) : ns?.learnerMarkedComplete ? (
-                    <CheckCircle2
-                      size={16}
-                      className="srwp-status-icon srwp-status-icon--pending"
-                    />
-                  ) : ns?.submitted ? (
-                    <Clock
-                      size={14}
-                      className="srwp-status-icon srwp-status-icon--submitted"
-                    />
-                  ) : (
-                    <ChevronRight size={14} className="srwp-node-chevron" />
-                  )}
-                </div>
-              );
-            })}
+            {nodeTree.map((node, idx) => renderNodeItem(node, 0, idx))}
 
             <div
               className={`srwp-node-item srwp-node-item--final ${!selectedNodeId ? "active" : ""}`}
@@ -1661,6 +1728,30 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                   Nộp bài kiểm tra cuối kỳ và xem đánh giá tổng thể từ Mentor.
                 </p>
               </div>
+
+              {!bookingId && (
+                <div className="srwp-mentor-cta-card">
+                  <div className="srwp-mentor-cta-card__icon">
+                    <AlertCircle size={24} />
+                  </div>
+                  <div className="srwp-mentor-cta-card__content">
+                    <h4>Chưa có mentor đồng hành</h4>
+                    <p>
+                      Bạn đang học không có mentor. Final assessment sẽ được đánh dấu{" "}
+                      <strong>"Chưa xác thực"</strong> cho đến khi mentor review.
+                    </p>
+                    <div className="srwp-mentor-cta-card__actions">
+                      <button
+                        type="button"
+                        className="srwp-cta-button srwp-cta-button--primary"
+                        onClick={() => navigate(`/mentorship?journeyId=${journeyId}`)}
+                      >
+                        <Plus size={16} /> Đặt lịch mentor verify
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="srwp-tabs">
                 <button

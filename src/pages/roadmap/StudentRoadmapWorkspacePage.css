@@ -218,6 +218,11 @@
   background: rgba(255, 255, 255, 0.02);
 }
 
+.srwp-node-item--child {
+  font-size: 0.9em;
+  opacity: 0.85;
+}
+
 .srwp-status-icon--locked {
   color: #475569;
   flex-shrink: 0;
@@ -1566,4 +1571,80 @@
   border-radius: 4px;
   font-size: 0.95rem;
   color: #f8fafc;
+}
+
+/* ─── Mentor CTA Card ───────────────────────────────────── */
+.srwp-mentor-cta-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 12px;
+  align-items: flex-start;
+}
+
+.srwp-mentor-cta-card__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 158, 11, 0.15);
+  border-radius: 10px;
+  color: #f59e0b;
+}
+
+.srwp-mentor-cta-card__content {
+  flex: 1;
+}
+
+.srwp-mentor-cta-card__content h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fef3c7;
+}
+
+.srwp-mentor-cta-card__content p {
+  margin: 0 0 1rem 0;
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.srwp-mentor-cta-card__content strong {
+  color: #f59e0b;
+}
+
+.srwp-mentor-cta-card__actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.srwp-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  white-space: nowrap;
+}
+
+.srwp-cta-button--primary {
+  background: #f59e0b;
+  color: #020617;
+}
+
+.srwp-cta-button--primary:hover {
+  background: #fbbf24;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }

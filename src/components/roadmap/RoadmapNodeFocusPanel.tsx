@@ -20,7 +20,6 @@ import {
   resolveRoadmapNodeTimeEstimate,
 } from "./nodeLearningContext";
 import { normalizeRoadmapMarkdown } from "../../utils/roadmapMarkdown";
-import { confirmAction } from "../../context/ConfirmDialogContext";
 import "./RoadmapNodeFocusPanel.css";
 
 export type RoadmapNodeFocusPanelPlacement = "left" | "right";
@@ -49,8 +48,6 @@ export type RoadmapNodeFocusPanelProps = {
   onMarkNodeDone?: (nodeId: string) => Promise<void>;
   /** Called when user clicks "Đến Workspace" — navigate to workspace tab for this node */
   onOpenWorkspace?: (nodeId: string) => void;
-  /** Number of tasks linked to this node — drives ConfirmDialog visibility */
-  linkedTaskCount?: number;
   /** Whether courses are being loaded — used to prevent empty state flash */
   isLoadingCourses?: boolean;
   /** Error from loading courses — used to show error state */
@@ -125,7 +122,6 @@ const RoadmapNodeFocusPanel = ({
   allNodes,
   onMarkNodeDone,
   onOpenWorkspace,
-  linkedTaskCount = 0,
   isLoadingCourses = false,
   coursesError = null,
 }: RoadmapNodeFocusPanelProps) => {
@@ -212,33 +208,11 @@ const RoadmapNodeFocusPanel = ({
   };
 
   const handleMarkDone = async () => {
-    if (!node || !onMarkNodeDone || node.nodeStatus === "LOCKED") return;
+    if (!node || node.nodeStatus === "LOCKED") return;
 
-    // Case A: no linked tasks → done immediately
-    if (linkedTaskCount === 0) {
-      try {
-        await onMarkNodeDone(node.id);
-      } catch (err) {
-        console.error("Mark node done failed:", err);
-      }
-      return;
-    }
-
-    // Case B: has linked tasks → show ConfirmDialog
-    const confirmed = await confirmAction({
-      title: "Xác nhận đánh dấu hoàn thành",
-      message: `Có ${linkedTaskCount} tasks trong node này. Đánh dấu hoàn thành node sẽ đồng thời hoàn thành toàn bộ ${linkedTaskCount} tasks. Bạn có muốn tiếp tục?`,
-      confirmLabel: "Xác nhận",
-      cancelLabel: "Hủy",
-      variant: "default",
-    });
-
-    if (!confirmed) return;
-
-    try {
-      await onMarkNodeDone(node.id);
-    } catch (err) {
-      console.error("Mark node done failed:", err);
+    // Route to workspace for evidence submission and completion
+    if (onOpenWorkspace) {
+      onOpenWorkspace(node.id);
     }
   };
 

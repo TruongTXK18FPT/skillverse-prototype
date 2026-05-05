@@ -575,13 +575,7 @@ const RoadmapDetailViewer = memo(({
               <div className="rm-stat-content">
                 <span className="rm-stat-label">THỜI LƯỢNG</span>
                 <span className="rm-stat-value">
-                  {derivedStats.approxDays !== null && derivedStats.approxDays <= 14
-                    ? `~${derivedStats.approxDays} ngày`
-                    : derivedStats.approxWeeks !== null && derivedStats.approxWeeks <= 8
-                      ? `~${derivedStats.approxWeeks} tuần`
-                      : derivedStats.approxMonths !== null && derivedStats.approxMonths > 0
-                        ? `~${derivedStats.approxMonths} tháng`
-                        : roadmap.metadata.duration ?? roadmap.metadata.desiredDuration ?? 'N/A'}
+                  {roadmap.metadata.duration ?? roadmap.metadata.desiredDuration ?? 'N/A'}
                 </span>
                 <span className="rm-stat-sub">
                   {derivedStats.totalEstimatedHours > 0
