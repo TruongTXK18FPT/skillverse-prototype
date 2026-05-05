@@ -395,6 +395,25 @@
   line-height: 1.55;
 }
 
+.mnrt-validation-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  margin: 0.6rem 1rem 0;
+  padding: 0.58rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid rgba(245, 158, 11, 0.32);
+  background: rgba(245, 158, 11, 0.08);
+  color: #fbbf24;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.mnrt-validation-note svg {
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
 .mnrt-submit-btn {
   display: inline-flex;
   align-items: center;

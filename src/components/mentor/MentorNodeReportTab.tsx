@@ -355,6 +355,8 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
   const submissionLength = evidence.submissionText?.length ?? 0;
   const isLongSubmission = submissionLength > 800;
   const currentScoreTone = scoreTone(score);
+  const isReworkReview = reviewResult === "REWORK_REQUESTED";
+  const reworkFeedbackValid = !isReworkReview || feedback.trim().length >= 10;
   const handleCopySubmission = async () => {
     if (!evidence.submissionText) return;
     try {
@@ -664,14 +666,30 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
           </div>
 
           {state.canReview ? (
-            <MarkdownEditorField
-              label="Phản hồi cho học viên"
-              value={feedback}
-              onChange={setFeedback}
-              placeholder="Ghi rõ điểm mạnh, phần cần sửa và yêu cầu nộp lại nếu có..."
-              rows={5}
-              className="mnrt-editor"
-            />
+            <>
+              <MarkdownEditorField
+                label={
+                  isReworkReview
+                    ? "Phản hồi cho học viên *"
+                    : "Phản hồi cho học viên"
+                }
+                value={feedback}
+                onChange={setFeedback}
+                placeholder={
+                  isReworkReview
+                    ? "Bắt buộc: ghi rõ lý do làm lại và yêu cầu học viên cần sửa gì..."
+                    : "Ghi rõ điểm mạnh, phần cần sửa và yêu cầu nộp lại nếu có..."
+                }
+                rows={5}
+                className="mnrt-editor"
+              />
+              {isReworkReview && !reworkFeedbackValid && (
+                <div className="mnrt-validation-note">
+                  <AlertTriangle size={14} />
+                  Cần nhập phản hồi tối thiểu 10 ký tự trước khi yêu cầu học viên làm lại.
+                </div>
+              )}
+            </>
           ) : latestReview?.feedback ? (
             <div className="mnrt-readonly-feedback">
               <span>Phản hồi mới nhất</span>
@@ -684,7 +702,7 @@ const MentorNodeReportTab: React.FC<MentorNodeReportTabProps> = ({
           <button
             className="mnrt-submit-btn"
             onClick={handleReview}
-            disabled={!state.canReview || submittingReview}
+            disabled={!state.canReview || submittingReview || !reworkFeedbackValid}
           >
             <Send size={15} />{" "}
             {submittingReview ? "Đang lưu..." : "Lưu đánh giá"}
