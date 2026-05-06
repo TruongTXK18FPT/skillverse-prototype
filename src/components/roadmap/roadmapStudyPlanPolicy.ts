@@ -54,7 +54,12 @@ export const STUDY_WINDOW_PRESETS: Record<
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
 
-const toIsoDate = (value: Date): string => value.toISOString().slice(0, 10);
+const toIsoDate = (value: Date): string => {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, '0');
+  const day = String(value.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
 const addDays = (value: Date, days: number): Date => {
   const next = new Date(value);
@@ -148,7 +153,9 @@ const getNextMatchingStudyDate = (
 
 export const DEADLINE_BEFORE_START_ERROR = 'Deadline phải lớn hơn hoặc bằng ngày bắt đầu';
 
-export const getTodayDate = (): string => new Date().toISOString().slice(0, 10);
+export const getTodayDate = (): string => toIsoDate(new Date());
+
+export const getTomorrowDate = (): string => toIsoDate(addDays(new Date(), 1));
 
 export const getMaxDeadlineDate = (startDateStr: string): string => {
   const start = new Date(`${startDateStr}T00:00:00`);

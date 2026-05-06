@@ -500,12 +500,12 @@ const MentorBookingManager: React.FC = () => {
           : activeTab === "upcoming"
             ? ["CONFIRMED", "ONGOING", "PENDING_COMPLETION"].includes(s)
             : [
-                "COMPLETED",
-                "CANCELLED",
-                "REJECTED",
-                "REFUNDED",
-                "DISPUTED",
-              ].includes(s);
+              "COMPLETED",
+              "CANCELLED",
+              "REJECTED",
+              "REFUNDED",
+              "DISPUTED",
+            ].includes(s);
       if (!tabCond) return false;
       if (!term) return true;
       return (

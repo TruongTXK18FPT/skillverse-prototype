@@ -7,7 +7,7 @@ import { NodeLearningContext } from './nodeLearningContext';
 import {
   DEADLINE_BEFORE_START_ERROR,
   getMaxDeadlineDate,
-  getTodayDate,
+  getTomorrowDate,
   inferRoadmapStudyPlanDeadline,
   resolveRoadmapWorkloadMinutes,
   STUDY_WINDOW_PRESETS,
@@ -79,7 +79,7 @@ const RoadmapNodeStudyPlanModal = ({
   aiPrefilledParams,
   roadmapMode,
 }: RoadmapNodeStudyPlanModalProps) => {
-  const [startDate, setStartDate] = useState<string>(getTodayDate());
+  const [startDate, setStartDate] = useState<string>(getTomorrowDate());
   const [deadline, setDeadline] = useState<string>('');
   const [deadlineError, setDeadlineError] = useState<string>('');
   const [intensity, setIntensity] = useState<StudyPlanIntensityId>('balanced');
@@ -131,7 +131,7 @@ const RoadmapNodeStudyPlanModal = ({
 
   useEffect(() => {
     if (!isOpen) return;
-    setStartDate(getTodayDate());
+    setStartDate(getTomorrowDate());
     setDeadline('');
     setDeadlineError('');
     setIntensity('balanced');
@@ -285,7 +285,7 @@ const RoadmapNodeStudyPlanModal = ({
                     setDeadlineError('');
                   }
                 }}
-                min={getTodayDate()}
+                min={getTomorrowDate()}
               />
             </label>
 
@@ -305,8 +305,8 @@ const RoadmapNodeStudyPlanModal = ({
                     setDeadlineError('');
                   }
                 }}
-                min={startDate || getTodayDate()}
-                max={startDate ? getMaxDeadlineDate(startDate) : getMaxDeadlineDate(getTodayDate())}
+                min={startDate || getTomorrowDate()}
+                max={startDate ? getMaxDeadlineDate(startDate) : getMaxDeadlineDate(getTomorrowDate())}
               />
               {deadlineError && (
                 <span className="deadline-warning">{deadlineError}</span>

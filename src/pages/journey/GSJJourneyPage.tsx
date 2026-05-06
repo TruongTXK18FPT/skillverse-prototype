@@ -3239,7 +3239,6 @@ const GSJJourneyPage: React.FC = () => {
                     <div className="gsj-result-level-row__dot" />
                     <div className="gsj-result-level-row__info">
                       <strong>{getSkillLevelLabel(item.key)}</strong>
-                      <span>{item.range}</span>
                     </div>
                     {isActive && (
                       <span className="gsj-result-level-row__you">Bạn</span>
