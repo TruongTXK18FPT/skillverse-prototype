@@ -87,6 +87,7 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
 
   const presets = useMemo(() => getPresetDateRanges(), []);
   const [currentPage, setCurrentPage] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchData = async () => {
     setError(null);
@@ -98,6 +99,7 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
       flowType: filters.flowType || undefined,
       providerType: filters.providerType || undefined,
       status: filters.status || undefined,
+      _t: Date.now(),
     };
 
     try {
@@ -124,7 +126,7 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
 
   useEffect(() => {
     void fetchData();
-  }, [filters.from, filters.to, filters.flowType, filters.providerType, filters.status, currentPage]);
+  }, [filters.from, filters.to, filters.flowType, filters.providerType, filters.status, currentPage, refreshKey]);
 
   const handlePresetChange = (preset: DateRangePreset) => {
     if (preset === "custom") {
@@ -141,7 +143,16 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
   };
 
   const handleRefresh = () => {
-    void fetchData();
+    if (filters.preset !== "custom") {
+      const currentPresets = getPresetDateRanges();
+      const currentRange = currentPresets[filters.preset];
+      setFilters((prev) => ({
+        ...prev,
+        from: currentRange.from,
+        to: currentRange.to,
+      }));
+    }
+    setRefreshKey((prev) => prev + 1);
   };
 
   const handleExportCSV = () => {

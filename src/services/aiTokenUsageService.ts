@@ -90,6 +90,7 @@ export interface AiTokenUsageQueryParams {
   modelName?: string;
   page?: number;
   size?: number;
+  _t?: number;
 }
 
 const BASE_URL = "/api/admin/ai-token-usage";
