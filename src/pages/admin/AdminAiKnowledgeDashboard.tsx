@@ -283,7 +283,16 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
         : null;
 
     setSelectedId(nextId);
-  }, [fetchList]);
+
+    // Always force re-fetch detail to pick up async state changes (e.g. ingestion
+    // status updated by AFTER_COMMIT listener). Without this, React skips the
+    // useEffect when selectedId stays the same, leaving the detail panel stale.
+    if (nextId != null) {
+      await fetchDetail(nextId);
+    } else {
+      setDetail(null);
+    }
+  }, [fetchList, fetchDetail]);
 
   return (
     <div className="adminaiknowledge-wrapper">
