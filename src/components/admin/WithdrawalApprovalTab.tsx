@@ -117,6 +117,10 @@ const WithdrawalApprovalTab: React.FC = () => {
     return new Date(dateString).toLocaleString('vi-VN');
   };
 
+  const getDisplayName = (request: WithdrawalRequestResponse) => {
+    return request.userFullName || request.bankAccountName || request.userEmail || 'N/A';
+  };
+
   const getStatusBadge = (status: string) => {
     const badges = {
       PENDING: { icon: <Clock size={14} />, label: 'Chờ duyệt', class: 'pending' },
@@ -254,7 +258,7 @@ const WithdrawalApprovalTab: React.FC = () => {
                   <td className="admin-code-cell">{request.requestCode}</td>
                   <td>
                     <div className="admin-user-info">
-                      <div className="admin-user-name">{request.userFullName || 'N/A'}</div>
+                      <div className="admin-user-name" title={getDisplayName(request)}>{getDisplayName(request)}</div>
                       <div className="admin-user-email">{request.userEmail}</div>
                     </div>
                   </td>
@@ -316,7 +320,7 @@ const WithdrawalApprovalTab: React.FC = () => {
                   <div className="admin-detail-item">
                     <User size={16} />
                     <span className="label">Tên:</span>
-                    <span className="value">{selectedRequest.userFullName || 'N/A'}</span>
+                    <span className="value">{getDisplayName(selectedRequest)}</span>
                   </div>
                   <div className="admin-detail-item">
                     <span className="label">Email:</span>

@@ -153,10 +153,7 @@ const aiRoadmapService = {
   getAllRoadmaps: async (): Promise<RoadmapSessionSummary[]> => {
     try {
       const response = await axiosInstance.get<RoadmapSessionSummary[]>(
-        '/api/v1/ai/roadmap',
-        {
-          params: { includeDeleted: false }
-        }
+        '/api/v1/admin/roadmaps'
       );
       return response.data;
     } catch (error) {

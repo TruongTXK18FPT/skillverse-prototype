@@ -317,13 +317,61 @@
 .admin-transactions-table {
   background: rgba(15, 23, 42, 0.6);
   border-radius: 16px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   border: 2px solid rgba(139, 92, 246, 0.3);
 }
 
 .admin-transactions-table table {
   width: 100%;
+  min-width: 1440px;
+  table-layout: fixed;
   border-collapse: collapse;
+}
+
+.admin-transactions-table th:nth-child(1),
+.admin-transactions-table td:nth-child(1) {
+  width: 120px;
+}
+
+.admin-transactions-table th:nth-child(2),
+.admin-transactions-table td:nth-child(2) {
+  width: 220px;
+}
+
+.admin-transactions-table th:nth-child(3),
+.admin-transactions-table td:nth-child(3) {
+  width: 140px;
+}
+
+.admin-transactions-table th:nth-child(4),
+.admin-transactions-table td:nth-child(4) {
+  width: 240px;
+}
+
+.admin-transactions-table th:nth-child(5),
+.admin-transactions-table td:nth-child(5) {
+  width: 150px;
+}
+
+.admin-transactions-table th:nth-child(6),
+.admin-transactions-table td:nth-child(6) {
+  width: 120px;
+}
+
+.admin-transactions-table th:nth-child(7),
+.admin-transactions-table td:nth-child(7) {
+  width: 140px;
+}
+
+.admin-transactions-table th:nth-child(8),
+.admin-transactions-table td:nth-child(8) {
+  width: 140px;
+}
+
+.admin-transactions-table th:nth-child(9),
+.admin-transactions-table td:nth-child(9) {
+  width: 150px;
 }
 
 .admin-transactions-table th {
@@ -363,6 +411,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
 }
 
 .admin-user-avatar {
@@ -390,6 +439,10 @@
   font-weight: 600;
   color: #e0e7ff;
   font-size: 0.95rem;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .admin-user-email {
@@ -531,7 +584,17 @@
   background: rgba(167, 139, 250, 0.2);
   color: #a78bfa;
   border: 1px solid rgba(167, 139, 250, 0.3);
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 0.75rem;
+  min-width: 32px;
+  height: 32px;
+}
+
+.admin-actions-cell {
+  white-space: nowrap;
+}
+
+.admin-actions-cell .admin-action-btn + .admin-action-btn {
+  margin-left: 0.5rem;
 }
 
 .admin-action-btn.download:hover {

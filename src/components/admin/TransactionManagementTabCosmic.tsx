@@ -37,6 +37,19 @@ interface CombinedTransaction {
   originalData: any;
 }
 
+const truncateDisplayName = (name?: string, maxLength = 18) => {
+  const trimmed = name?.trim();
+  if (!trimmed) {
+    return 'Unknown';
+  }
+
+  if (trimmed.length <= maxLength) {
+    return trimmed;
+  }
+
+  return `${trimmed.slice(0, maxLength).trimEnd()}...`;
+};
+
 const formatPaymentMethodLabel = (paymentMethod?: string, paymentType?: string): string => {
   const method = String(paymentMethod || '').toUpperCase();
   const type = String(paymentType || '').toUpperCase();
@@ -181,7 +194,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
         const rawDesc = (tx.description || tx.transactionTypeName || 'Wallet transaction');
         const description = isMentorPayout ? rawDesc.replace('(80%)', '(20%)') : rawDesc;
 
-        let userName = tx.userName || `User ${tx.userId}`;
+        let userName = tx.userName || tx.userEmail || `User ${tx.userId}`;
         let userAvatarUrl = resolveAvatarUrl(tx.userAvatarUrl);
         try {
           if (isMentorPayout && typeof tx.userId === 'number') {
@@ -234,7 +247,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
         const amount = (isCoursePurchase || isBookingPurchase) ? Math.abs(rawAmount) * 0.20 : rawAmount;
         const description = (payment.description || 'Payment transaction');
 
-        let userName = payment.userName || `User ${payment.userId}`;
+        let userName = payment.userName || payment.userEmail || `User ${payment.userId}`;
         let userAvatarUrl = resolveAvatarUrl(payment.userAvatarUrl);
         try {
           if (typeof payment.userId === 'number') {
@@ -278,7 +291,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
         id: `WD-${withdrawal.requestCode}`,
         type: 'WITHDRAWAL' as TransactionType,
         userId: withdrawal.userId,
-        userName: withdrawal.userFullName || `User ${withdrawal.userId}`,
+        userName: withdrawal.userFullName || withdrawal.bankAccountName || withdrawal.userEmail || `User ${withdrawal.userId}`,
         userEmail: withdrawal.userEmail || '-',
         userAvatarUrl: withdrawal.userAvatarUrl,
         amount: -withdrawal.amount, // Negative for withdrawals
@@ -975,7 +988,9 @@ const TransactionManagementTabCosmic: React.FC = () => {
                       )}
                     </div>
                     <div>
-                      <div className="admin-user-name">{tx.userName || 'Unknown'}</div>
+                      <div className="admin-user-name" title={tx.userName || 'Unknown'}>
+                        {truncateDisplayName(tx.userName)}
+                      </div>
                       <div className="admin-user-email">{tx.userEmail || '-'}</div>
                     </div>
                   </div>
@@ -992,15 +1007,12 @@ const TransactionManagementTabCosmic: React.FC = () => {
                     <span className={`admin-amount ${tx.amount >= 0 ? 'positive' : 'negative'}`}>
                       {tx.amount >= 0 ? '+' : ''}{formatCurrency(tx.amount)}
                     </span>
-                    {typeof tx.originalAmount === 'number' && (
-                      <div className="admin-original-amount">Giá gốc: {formatCurrency(tx.originalAmount)}</div>
-                    )}
                   </div>
                 </td>
                 <td>{getStatusBadge(tx.status)}</td>
                 <td>{tx.method || '-'}</td>
                 <td className="admin-date-cell">{formatDate(tx.createdAt)}</td>
-                <td>
+                <td className="admin-actions-cell">
                   <button
                     className="admin-action-btn view"
                     onClick={() => handleViewDetail(tx)}

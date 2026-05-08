@@ -257,7 +257,8 @@
 .admin-requests-table {
   background: rgba(15, 23, 42, 0.6);
   border-radius: 16px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   border: 2px solid rgba(139, 92, 246, 0.3);
 }
 
@@ -302,11 +303,16 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-width: 0;
 }
 
 .admin-user-name {
   font-weight: 600;
   color: #e0e7ff;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .admin-user-email {
