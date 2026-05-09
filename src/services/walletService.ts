@@ -611,6 +611,41 @@ class WalletService {
       throw new Error(errorMessage);
     }
   }
+
+  /**
+   * Admin: Get global statistics overview
+   * GET /api/admin/wallet/statistics/overview
+   */
+  async adminGetGlobalStatistics(): Promise<any> {
+    try {
+      const response = await axiosInstance.get(
+        "/admin/wallet/statistics/overview",
+      );
+      return response.data;
+    } catch (error: unknown) {
+      console.error("❌ [Admin] Get global statistics error:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Admin: Get daily statistics
+   * GET /api/admin/wallet/statistics/daily
+   */
+  async adminGetDailyStatistics(
+    startDate?: string,
+    endDate?: string,
+  ): Promise<any> {
+    try {
+      const response = await axiosInstance.get("/admin/wallet/statistics/daily", {
+        params: { startDate, endDate },
+      });
+      return response.data;
+    } catch (error: unknown) {
+      console.error("❌ [Admin] Get daily statistics error:", error);
+      throw error;
+    }
+  }
 }
 
 export default new WalletService();

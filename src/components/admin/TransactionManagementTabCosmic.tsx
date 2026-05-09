@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
-import {
-  DollarSign, TrendingUp, TrendingDown, Wallet, CreditCard,
-  Search, Filter, Eye, Download, RefreshCw, X, Calendar,
-  User, ArrowUpRight, ArrowDownLeft, Coins
-} from 'lucide-react';
+import { DollarSign, TrendingUp, Search, Eye, Download, RefreshCw, X, Calendar, User, ArrowUpRight, ArrowDownLeft, Coins, CreditCard, Wallet, BarChart3, List, Filter } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
 import walletService from '../../services/walletService';
 import { paymentService } from '../../services/paymentService';
-// import { premiumService } from '../../services/premiumService';
 import adminService from '../../services/adminService';
 import userService from '../../services/userService';
 import { getMentorProfile } from '../../services/mentorProfileService';
@@ -19,1193 +13,825 @@ import { useScrollToListTopOnPagination } from '../../hooks/useScrollToListTopOn
 import './TransactionManagementTabCosmic.css';
 
 type TransactionType = 'ALL' | 'WALLET' | 'PAYMENT' | 'WITHDRAWAL' | 'COIN_PURCHASE';
+type TabKey = 'overview' | 'deposits' | 'adminRevenue' | 'mentorRevenue' | 'withdrawals' | 'refunds' | 'all';
 
 interface CombinedTransaction {
-  id: string;
-  type: TransactionType;
-  userId?: number;
-  userName?: string;
-  userEmail?: string;
-  userAvatarUrl?: string;
-  amount: number;
-  originalAmount?: number;
-  status: string;
-  description: string;
-  createdAt: string;
-  method?: string;
-  reference?: string;
-  originalData: any;
+  id: string; type: TransactionType; userId?: number; userName?: string; userEmail?: string;
+  userAvatarUrl?: string; amount: number; originalAmount?: number; status: string;
+  description: string; createdAt: string; method?: string; reference?: string; originalData: any;
 }
 
-const truncateDisplayName = (name?: string, maxLength = 18) => {
-  const trimmed = name?.trim();
-  if (!trimmed) {
-    return 'Unknown';
-  }
-
-  if (trimmed.length <= maxLength) {
-    return trimmed;
-  }
-
-  return `${trimmed.slice(0, maxLength).trimEnd()}...`;
-};
-
-const formatPaymentMethodLabel = (paymentMethod?: string, paymentType?: string): string => {
-  const method = String(paymentMethod || '').toUpperCase();
-  const type = String(paymentType || '').toUpperCase();
-
-  if (method === 'PAYOS' && type === 'WALLET_TOPUP') {
-    return 'Nạp ví qua PayOS';
-  }
-
-  if (method === 'WALLET_CASH' || method === 'WALLET') {
-    return 'Ví nội bộ';
-  }
-
-  return paymentMethod || '-';
-};
+const fmt = (n: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Math.abs(n));
+const truncName = (s?: string, m = 18) => { const t = s?.trim(); if (!t) return 'Unknown'; return t.length <= m ? t : t.slice(0, m) + '...'; };
 
 const TransactionManagementTabCosmic: React.FC = () => {
   const [transactions, setTransactions] = useState<CombinedTransaction[]>([]);
-  const [filteredTransactions, setFilteredTransactions] = useState<CombinedTransaction[]>([]);
+  const [filteredTx, setFilteredTx] = useState<CombinedTransaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [typeFilter, setTypeFilter] = useState<TransactionType>('ALL');
-  const [statusFilter, setStatusFilter] = useState<string>('ALL');
-  const [selectedTransaction, setSelectedTransaction] = useState<CombinedTransaction | null>(null);
-  const [showDetailModal, setShowDetailModal] = useState(false);
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
-  
-  // Pagination
+  const [statusFilter, setStatusFilter] = useState('ALL');
+  const [selectedTx, setSelectedTx] = useState<CombinedTransaction | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabKey>('overview');
+  const [chartFilter, setChartFilter] = useState<'7d' | '30d' | '1y'>('7d');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
-  const [totalPages, setTotalPages] = useState(1);
-  const [premiumDownloading, setPremiumDownloading] = useState(false);
+  const [itemsPerPage] = useState(8);
   const { withPaginationScroll } = useScrollToListTopOnPagination();
 
-  // Statistics
   const [stats, setStats] = useState({
-    totalRevenue: 0,
-    totalWithdrawals: 0,
-    totalTransactions: 0,
-    pendingCount: 0,
-    todayRevenue: 0,
-    coinPurchases: 0
+    totalDeposits: 0, totalWithdrawals: 0, totalBookingPayments: 0,
+    totalMentorEarnings: 0, totalStudentEarnings: 0, totalPlatformFees: 0,
+    totalPurchaseRevenue: 0, todayPlatformFees: 0, todayPurchaseRevenue: 0,
+    totalRefunds: 0, totalEscrowFunds: 0, totalFrozenCash: 0,
   });
 
-  useEffect(() => {
-    fetchAllTransactions();
-  }, []);
-
-  const resolveAvatarUrl = (raw?: string): string | undefined => {
+  const resolveAvatar = (raw?: string): string | undefined => {
     if (!raw) return undefined;
-    const trimmed = raw.trim();
-    if (/^https?:\/\//i.test(trimmed)) return trimmed;
-    const apiRoot = API_BASE_URL.replace(/\/api$/i, '');
-    if (trimmed.startsWith('/')) return `${apiRoot}${trimmed}`;
-    return `${apiRoot}/${trimmed}`;
+    const t = raw.trim();
+    if (/^https?:\/\//i.test(t)) return t;
+    const r = API_BASE_URL.replace(/\/api$/i, '');
+    return t.startsWith('/') ? `${r}${t}` : `${r}/${t}`;
   };
 
-  // Apply filters when search/filter changes
-  useEffect(() => {
-    if (transactions.length > 0) {
-      const delayDebounceFn = setTimeout(() => {
-        applyFilters();
-      }, 300);
-      return () => clearTimeout(delayDebounceFn);
-    }
-  }, [searchTerm, typeFilter, statusFilter, transactions]);
+  useEffect(() => { fetchAll(); }, []);
+  useEffect(() => { if (showModal) document.body.style.overflow = 'hidden'; else document.body.style.overflow = 'unset'; return () => { document.body.style.overflow = 'unset'; }; }, [showModal]);
+  useEffect(() => { const t = setTimeout(() => applyFilters(), 200); return () => clearTimeout(t); }, [searchTerm, statusFilter, transactions, activeTab]);
 
-  // Scroll lock for modal
-  useEffect(() => {
-    if (showDetailModal) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [showDetailModal]);
-
-  const fetchAllTransactions = async () => {
+  const fetchAll = async () => {
     try {
       setLoading(true);
-      
-      
-      // Fetch all transaction types (we'll combine them)
-      // Using size=1000 to get all transactions
-      const [walletTxs, paymentTxs, withdrawals] = await Promise.all([
-        fetchWalletTransactions(),
-        fetchPaymentTransactions(),
-        fetchWithdrawals()
+      const [wTx, pTx, wdTx, gStats, dStats] = await Promise.all([
+        fetchWalletTx(), fetchPaymentTx(), fetchWithdrawals(),
+        walletService.adminGetGlobalStatistics(), walletService.adminGetDailyStatistics()
       ]);
-
-
-      const combined = [...walletTxs, ...paymentTxs, ...withdrawals];
-      combined.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      
-      
+      const combined = [...wTx, ...pTx, ...wdTx].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       setTransactions(combined);
-      calculateStats(combined);
-      
-      // Apply filters immediately after setting transactions
-      setFilteredTransactions(combined);
-      setTotalPages(Math.ceil(combined.length / itemsPerPage));
-    } catch (error: any) {
-      console.error('❌ Error fetching transactions:', error);
-      console.error('Error details:', error.response?.data || error.message);
-    } finally {
-      setLoading(false);
-    }
+      setStats({
+        totalDeposits: gStats.totalDeposits || 0, totalWithdrawals: gStats.totalWithdrawals || 0,
+        totalBookingPayments: gStats.totalBookingPayments || 0,
+        totalMentorEarnings: gStats.totalMentorEarnings || 0, totalStudentEarnings: gStats.totalStudentEarnings || 0,
+        totalPlatformFees: gStats.totalPlatformFees || 0, totalPurchaseRevenue: gStats.totalPurchaseRevenue || 0,
+        todayPlatformFees: dStats.totalPlatformFees || 0, todayPurchaseRevenue: dStats.totalPurchaseRevenue || 0,
+        totalRefunds: gStats.totalRefunds || 0, totalEscrowFunds: gStats.totalEscrowFunds || 0,
+        totalFrozenCash: gStats.totalFrozenCash || 0,
+      });
+      setFilteredTx(combined);
+    } catch (e: any) { console.error('Fetch error:', e); } finally { setLoading(false); }
   };
 
-  const fetchWalletTransactions = async (): Promise<CombinedTransaction[]> => {
+  const fetchWalletTx = async (): Promise<CombinedTransaction[]> => {
     try {
-      
-      const response = await walletService.adminGetAllWalletTransactions(0, 1000);
-      
-      const mapped = await Promise.all(response.content.map(async (tx) => {
+      const r = await walletService.adminGetAllWalletTransactions(0, 1000);
+      return await Promise.all(r.content.map(async (tx: any) => {
         const t = (tx.transactionType || '').toUpperCase();
-        const refType = (tx.referenceType || '').toUpperCase();
-        const descLower = (tx.description || '').toLowerCase();
         const mappedType: TransactionType =
           (t.includes('PURCHASE_COINS') || t === 'COIN_PURCHASE') ? 'COIN_PURCHASE' :
-          (t.includes('PURCHASE_PREMIUM') || t.includes('PREMIUM_SUBSCRIPTION')) ? 'PAYMENT' :
-          'WALLET';
-        const isFreeze = t.includes('FREEZE') || descLower.includes('đóng băng');
-        const isMentorPayout = !isFreeze &&
-          (t.includes('WITHDRAWAL_CASH') || t.includes('PAYOUT')) &&
-          (refType === 'BOOKING' || refType === 'COURSE');
-
-        const rawAmount = typeof tx.cashAmount === 'number'
-          ? tx.cashAmount
-          : (typeof tx.coinAmount === 'number' ? tx.coinAmount : 0);
-
-        const originalAmount = isMentorPayout
-          ? Math.abs(rawAmount) / 0.80
-          : Math.abs(rawAmount);
-
-        const amount = isMentorPayout
-          ? (Math.abs(rawAmount) / 0.80) * 0.20
-          : (isFreeze ? Math.abs(rawAmount) : rawAmount);
-
-        const rawDesc = (tx.description || tx.transactionTypeName || 'Wallet transaction');
-        const description = isMentorPayout ? rawDesc.replace('(80%)', '(20%)') : rawDesc;
-
-        let userName = tx.userName || tx.userEmail || `User ${tx.userId}`;
-        let userAvatarUrl = resolveAvatarUrl(tx.userAvatarUrl);
+          (t.includes('PURCHASE_PREMIUM') || t.includes('PREMIUM_SUBSCRIPTION')) ? 'PAYMENT' : 'WALLET';
+        const raw = typeof tx.cashAmount === 'number' ? tx.cashAmount : (typeof tx.coinAmount === 'number' ? tx.coinAmount : 0);
+        let uName = tx.userName || tx.userEmail || `User ${tx.userId}`;
+        let uAvatar = resolveAvatar(tx.userAvatarUrl);
         try {
-          if (isMentorPayout && typeof tx.userId === 'number') {
-            const prof = await getMentorProfile(tx.userId);
-            const first = prof.firstName || '';
-            const last = prof.lastName || '';
-            const full = `${first} ${last}`.trim();
-            userName = full || prof.email || userName;
-            userAvatarUrl = resolveAvatarUrl(prof.avatar) || userAvatarUrl;
-          } else if (typeof tx.userId === 'number') {
+          if (typeof tx.userId === 'number') {
             const prof = await userService.getUserProfile(tx.userId);
-            userName = prof.fullName || userName;
-            userAvatarUrl = resolveAvatarUrl(prof.avatarMediaUrl) || userAvatarUrl;
+            uName = prof.fullName || uName;
+            uAvatar = resolveAvatar(prof.avatarMediaUrl) || uAvatar;
           }
-        } catch (_e) { void 0; }
-
+        } catch (_) { /* ignore */ }
         return {
-          id: `WAL-${tx.transactionId}`,
-          type: mappedType as TransactionType,
-          userId: tx.userId,
-          userName,
-          userEmail: tx.userEmail || '-',
-          userAvatarUrl,
-          amount,
-          originalAmount,
-          status: tx.status,
-          description,
-          createdAt: tx.createdAt,
-          method: tx.currencyType === 'COIN' ? 'Coin' : 'Cash',
-          reference: tx.referenceId,
-          originalData: tx
+          id: `WAL-${tx.transactionId}`, type: mappedType, userId: tx.userId,
+          userName: uName, userEmail: tx.userEmail || '-', userAvatarUrl: uAvatar,
+          amount: raw, originalAmount: Math.abs(raw), status: tx.status,
+          description: tx.description || tx.transactionTypeName || 'Wallet transaction',
+          createdAt: tx.createdAt, method: tx.currencyType === 'COIN' ? 'Coin' : 'Cash',
+          reference: tx.referenceId, originalData: tx
         };
       }));
-      return mapped;
-    } catch (error) {
-      console.error('Error fetching wallet transactions:', error);
-      return [];
-    }
+    } catch (e) { console.error(e); return []; }
   };
 
-  const fetchPaymentTransactions = async (): Promise<CombinedTransaction[]> => {
+  const fetchPaymentTx = async (): Promise<CombinedTransaction[]> => {
     try {
-      
-      const response = await paymentService.adminGetAllTransactions(0, 1000);
-      
-      const mapped = await Promise.all(response.content.map(async (payment) => {
-        const rawAmount = typeof payment.amount === 'string' ? parseFloat(payment.amount) : payment.amount;
-        const isCoursePurchase = payment.type === 'COURSE_PURCHASE';
-        const isBookingPurchase = payment.type === 'MENTOR_BOOKING';
-        const amount = (isCoursePurchase || isBookingPurchase) ? Math.abs(rawAmount) * 0.20 : rawAmount;
-        const description = (payment.description || 'Payment transaction');
-
-        let userName = payment.userName || payment.userEmail || `User ${payment.userId}`;
-        let userAvatarUrl = resolveAvatarUrl(payment.userAvatarUrl);
+      const r = await paymentService.adminGetAllTransactions(0, 1000);
+      return await Promise.all(r.content.map(async (p: any) => {
+        const raw = typeof p.amount === 'string' ? parseFloat(p.amount) : p.amount;
+        let uName = p.userName || p.userEmail || `User ${p.userId}`;
+        let uAvatar = resolveAvatar(p.userAvatarUrl);
         try {
-          if (typeof payment.userId === 'number') {
-            const prof = await userService.getUserProfile(payment.userId);
-            userName = prof.fullName || userName;
-            userAvatarUrl = resolveAvatarUrl(prof.avatarMediaUrl) || userAvatarUrl;
+          if (typeof p.userId === 'number') {
+            const prof = await userService.getUserProfile(p.userId);
+            uName = prof.fullName || uName; uAvatar = resolveAvatar(prof.avatarMediaUrl) || uAvatar;
           }
-        } catch (_e) { void 0; }
-
+        } catch (_) { /* ignore */ }
         return {
-          id: `PAY-${payment.id}`,
-          type: 'PAYMENT' as TransactionType,
-          userId: payment.userId,
-          userName,
-          userEmail: payment.userEmail || '-',
-          userAvatarUrl,
-          amount,
-          originalAmount: Math.abs(rawAmount),
-          status: payment.status,
-          description,
-          createdAt: payment.createdAt,
-          method: formatPaymentMethodLabel(payment.paymentMethod, payment.type),
-          reference: payment.internalReference,
-          originalData: payment
+          id: `PAY-${p.id}`, type: 'PAYMENT' as TransactionType, userId: p.userId,
+          userName: uName, userEmail: p.userEmail || '-', userAvatarUrl: uAvatar,
+          amount: raw, originalAmount: Math.abs(raw), status: p.status,
+          description: p.description || 'Payment', createdAt: p.createdAt,
+          method: p.paymentMethod || '-', reference: p.internalReference, originalData: p
         };
       }));
-      return mapped;
-    } catch (error: any) {
-      console.error('❌ Error fetching payment transactions:', error);
-      console.error('Payment error details:', error.response?.data || error.message);
-      return [];
-    }
+    } catch (e) { console.error(e); return []; }
   };
 
   const fetchWithdrawals = async (): Promise<CombinedTransaction[]> => {
     try {
-      
-      const response = await walletService.adminGetWithdrawalRequests(0, 1000);
-      
-      return response.content.map(withdrawal => ({
-        id: `WD-${withdrawal.requestCode}`,
-        type: 'WITHDRAWAL' as TransactionType,
-        userId: withdrawal.userId,
-        userName: withdrawal.userFullName || withdrawal.bankAccountName || withdrawal.userEmail || `User ${withdrawal.userId}`,
-        userEmail: withdrawal.userEmail || '-',
-        userAvatarUrl: withdrawal.userAvatarUrl,
-        amount: -withdrawal.amount, // Negative for withdrawals
-        status: withdrawal.status,
-        description: `Rút tiền về ${withdrawal.bankName}`,
-        createdAt: withdrawal.createdAt,
-        method: withdrawal.bankName,
-        reference: withdrawal.requestCode,
-        originalData: withdrawal
+      const r = await walletService.adminGetWithdrawalRequests(0, 1000);
+      return r.content.map((w: any) => ({
+        id: `WD-${w.requestCode}`, type: 'WITHDRAWAL' as TransactionType, userId: w.userId,
+        userName: w.userFullName || w.bankAccountName || w.userEmail || `User ${w.userId}`,
+        userEmail: w.userEmail || '-', userAvatarUrl: w.userAvatarUrl,
+        amount: -w.amount, status: w.status, description: `Rút tiền về ${w.bankName}`,
+        createdAt: w.createdAt, method: w.bankName, reference: w.requestCode, originalData: w
       }));
-    } catch (error: any) {
-      console.error('❌ Error fetching withdrawals:', error);
-      console.error('Withdrawal error details:', error.response?.data || error.message);
-      return [];
-    }
+    } catch (e) { console.error(e); return []; }
   };
 
-  // Premium subscriptions are excluded from this Transactions tab to avoid duplication
-
-  const calculateStats = (txs: CombinedTransaction[]) => {
-    const bookingCommission = txs
-      .filter(tx => {
-        const od: any = tx.originalData;
-        const refType = od?.referenceType || '';
-        const txType = (od?.transactionType || '').toUpperCase();
-        return tx.amount > 0 &&
-          (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
-          tx.type === 'WALLET' &&
-          refType === 'BOOKING' &&
-          txType.includes('WITHDRAWAL_CASH');
-      })
-      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-    const courseCommission = txs
-      .filter(tx => {
-        const od: any = tx.originalData;
-        const pType = od?.type || '';
-        return tx.amount > 0 &&
-          (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
-          tx.type === 'PAYMENT' &&
-          pType === 'COURSE_PURCHASE';
-      })
-      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-    const premiumRevenue = txs
-      .filter(tx => {
-        const od: any = tx.originalData;
-        const pType = od?.type || '';
-        const wType = (od?.transactionType || '').toUpperCase();
-        return tx.amount > 0 &&
-          (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
-          tx.type === 'PAYMENT' &&
-          (pType === 'PREMIUM_SUBSCRIPTION' || wType.includes('PURCHASE_PREMIUM') || wType.includes('PREMIUM_SUBSCRIPTION'));
-      })
-      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-    const coinRevenue = txs
-      .filter(tx => {
-        const od: any = tx.originalData;
-        return tx.amount > 0 &&
-          (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
-          tx.type === 'COIN_PURCHASE' &&
-          (od?.currencyType === 'CASH');
-      })
-      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-    const revenue = bookingCommission + courseCommission + premiumRevenue + coinRevenue;
-
-    const withdrawals = txs
-      .filter(tx => tx.amount < 0)
-      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-    const pending = txs.filter(tx => 
-      tx.status === 'PENDING' || tx.status === 'APPROVED'
-    ).length;
-
-    // Today's revenue - only from purchases
-    const today = new Date();
-    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const todayRevenue = (() => {
-      const bookings = txs
-        .filter(tx => {
-          const od: any = tx.originalData;
-          const refType = od?.referenceType || '';
-          const txType = (od?.transactionType || '').toUpperCase();
-          const txDate = new Date(tx.createdAt);
-          return txDate >= todayStart &&
-            tx.amount > 0 &&
-            (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
-            tx.type === 'WALLET' &&
-            refType === 'BOOKING' &&
-            txType.includes('WITHDRAWAL_CASH');
-        })
-        .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-      const courses = txs
-        .filter(tx => {
-          const od: any = tx.originalData;
-          const pType = od?.type || '';
-          const txDate = new Date(tx.createdAt);
-          return txDate >= todayStart &&
-            tx.amount > 0 &&
-            (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
-            tx.type === 'PAYMENT' &&
-            pType === 'COURSE_PURCHASE';
-        })
-        .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-      const premiums = txs
-        .filter(tx => {
-          const od: any = tx.originalData;
-          const pType = od?.type || '';
-          const wType = (od?.transactionType || '').toUpperCase();
-          const txDate = new Date(tx.createdAt);
-          return txDate >= todayStart &&
-            tx.amount > 0 &&
-            (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
-            tx.type === 'PAYMENT' &&
-            (pType === 'PREMIUM_SUBSCRIPTION' || wType.includes('PURCHASE_PREMIUM') || wType.includes('PREMIUM_SUBSCRIPTION'));
-        })
-        .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-      const coins = txs
-        .filter(tx => {
-          const od: any = tx.originalData;
-          const txDate = new Date(tx.createdAt);
-          return txDate >= todayStart &&
-            tx.amount > 0 &&
-            (tx.status === 'COMPLETED' || tx.status === 'PAID') &&
-            tx.type === 'COIN_PURCHASE' &&
-            (od?.currencyType === 'CASH');
-        })
-        .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-      return bookings + courses + premiums + coins;
-    })();
-
-    const coinPurchases = txs.filter(tx => 
-      tx.type === 'COIN_PURCHASE' || tx.description?.includes('xu') || tx.description?.includes('PURCHASE_COINS')
-    ).length;
-
-    setStats({
-      totalRevenue: revenue,
-      totalWithdrawals: withdrawals,
-      totalTransactions: txs.length,
-      pendingCount: pending,
-      todayRevenue,
-      coinPurchases
-    });
+  // Helper: get raw backend transactionType from originalData
+  const getRawType = (tx: CombinedTransaction): string => {
+    return (tx.originalData?.transactionType || '').toUpperCase();
   };
 
-  const generatePremiumSummaryPdf = async (premiums: CombinedTransaction[]) => {
-    const parseDate = (dateStr: string) => {
-      let input = String(dateStr);
-      if (input.includes(' ') && !input.includes('T')) {
-        input = input.replace(' ', 'T');
-      }
-      if (!input.endsWith('Z') && !/[+-]\d{2}:?\d{2}/.test(input)) {
-        input += 'Z';
-      }
-      return new Date(input);
-    };
+  // Coin reward types to EXCLUDE from revenue
+  const EXCLUDED_COIN_TYPES = [
+    'DAILY_LOGIN_BONUS', 'BONUS_COINS', 'EARN_COINS', 'REWARD_ACHIEVEMENT',
+    'RECEIVE_TIP', 'TIP_MENTOR', 'SPEND_COINS',
+  ];
 
-    const container = document.createElement('div');
-    container.style.position = 'fixed';
-    container.style.left = '-9999px';
-    container.style.top = '0';
-    container.style.width = '900px';
-    container.style.padding = '16px';
-    container.style.background = '#ffffff';
-    container.style.color = '#111827';
-    container.style.fontFamily = 'Arial, Helvetica, sans-serif';
+  // Refund types
+  const REFUND_TYPES = ['REFUND_CASH', 'ESCROW_REFUND', 'REFUND_COINS'];
 
-    const createdDates = premiums.map(p => parseDate(p.createdAt).getTime());
-    const start = createdDates.length ? new Date(Math.min(...createdDates)) : new Date();
-    const end = createdDates.length ? new Date(Math.max(...createdDates)) : new Date();
-    const formatDate = (d: Date) => `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
-    const formatCurrency = (v: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(v);
-    const totalAmount = premiums.reduce((sum, p) => sum + Math.abs(p.originalAmount || p.amount || 0), 0);
+  // Escrow / frozen types
+  const ESCROW_TYPES = ['ESCROW_FUND'];
 
-    const headerHtml = `
-      <div style="margin-bottom:20px; border-bottom: 2px solid #e5e7eb; padding-bottom: 16px;">
-        <h2 style="margin:0 0 12px 0; font-size:22px; color: #111827; text-transform: uppercase; letter-spacing: 0.5px;">Báo Cáo Tổng Hợp Giao Dịch Premium</h2>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; font-size:13px; color: #374151;">
-          <div>
-            <div style="color: #6b7280; margin-bottom: 4px;">Khoảng thời gian</div>
-            <div style="font-weight: 600;">${formatDate(start)} - ${formatDate(end)}</div>
-          </div>
-          <div>
-            <div style="color: #6b7280; margin-bottom: 4px;">Số giao dịch</div>
-            <div style="font-weight: 600;">${premiums.length}</div>
-          </div>
-          <div>
-            <div style="color: #6b7280; margin-bottom: 4px;">Tổng doanh thu</div>
-            <div style="font-weight: 700; color: #059669; font-size: 15px;">${formatCurrency(totalAmount)}</div>
-          </div>
-        </div>
-      </div>
-    `;
+  // Deposit types
+  const DEPOSIT_TYPES = ['DEPOSIT_CASH'];
 
-    const rowsHtml = premiums.map(p => {
-      const id = p.id;
-      const dateStr = formatDate(parseDate(p.createdAt));
-      const name = p.userName || '-';
-      const email = p.userEmail || '-';
-      const amount = formatCurrency(Math.abs(p.originalAmount || p.amount || 0));
-      return `<tr>
-        <td style="padding:8px; border:1px solid #e5e7eb;">${id}</td>
-        <td style="padding:8px; border:1px solid #e5e7eb;">${dateStr}</td>
-        <td style="padding:8px; border:1px solid #e5e7eb;">${name}</td>
-        <td style="padding:8px; border:1px solid #e5e7eb;">${email}</td>
-        <td style="padding:8px; border:1px solid #e5e7eb; text-align:right;">${amount}</td>
-      </tr>`;
-    }).join('');
+  // Admin Revenue types (Platform fees, Premium/Course purchases)
+  const ADMIN_REVENUE_TYPES = ['PLATFORM_FEE', 'PURCHASE_PREMIUM', 'PURCHASE_COURSE', 'PURCHASE_COINS'];
 
-    const tableHtml = `
-      <table style="width:100%; border-collapse:collapse; font-size:12px;">
-        <thead>
-          <tr style="background:#f3f4f6;">
-            <th style="padding:8px; border:1px solid #e5e7eb; text-align:left;">Mã</th>
-            <th style="padding:8px; border:1px solid #e5e7eb; text-align:left;">Ngày</th>
-            <th style="padding:8px; border:1px solid #e5e7eb; text-align:left;">Khách hàng</th>
-            <th style="padding:8px; border:1px solid #e5e7eb; text-align:left;">Email</th>
-            <th style="padding:8px; border:1px solid #e5e7eb; text-align:right;">Số tiền</th>
-          </tr>
-        </thead>
-        <tbody>${rowsHtml}</tbody>
-      </table>
-    `;
+  // Mentor Revenue types
+  const MENTOR_REVENUE_TYPES = ['MENTOR_BOOKING', 'COURSE_SALE'];
 
-    container.innerHTML = headerHtml + tableHtml;
-    document.body.appendChild(container);
-
-    const canvas = await html2canvas(container, { scale: 2, useCORS: true });
-    document.body.removeChild(container);
-
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 10;
-    const imgWidth = pageWidth - margin * 2;
-    const imgHeight = (imgWidth / canvas.width) * canvas.height;
-
-    let heightLeft = imgHeight;
-    let position = margin;
-    const pageContentHeight = pageHeight - margin * 2;
-
-    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-    heightLeft -= pageContentHeight;
-
-    while (heightLeft > 0) {
-      position -= pageContentHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-      heightLeft -= pageContentHeight;
+  const getTabTx = (): CombinedTransaction[] => {
+    switch (activeTab) {
+      case 'deposits':
+        return transactions.filter(tx => {
+          const raw = getRawType(tx);
+          return DEPOSIT_TYPES.includes(raw) || (tx.id.startsWith('PAY-') && tx.amount > 0);
+        });
+      case 'adminRevenue':
+        return transactions.filter(tx => {
+          const raw = getRawType(tx);
+          return ADMIN_REVENUE_TYPES.includes(raw) || (tx.type === 'PAYMENT' && tx.amount > 0) || (tx.type === 'COIN_PURCHASE');
+        });
+      case 'mentorRevenue':
+        return transactions.filter(tx => MENTOR_REVENUE_TYPES.includes(getRawType(tx)));
+      case 'withdrawals':
+        return transactions.filter(tx => tx.type === 'WITHDRAWAL');
+      case 'refunds':
+        return transactions.filter(tx => REFUND_TYPES.includes(getRawType(tx)));
+      default:
+        return transactions;
     }
-
-    pdf.save(`premium-summary-${Date.now()}.pdf`);
   };
 
   const applyFilters = () => {
-    
-    let filtered = transactions;
-
-    if (typeFilter !== 'ALL') {
-      filtered = filtered.filter(tx => tx.type === typeFilter);
-    }
-
-    if (statusFilter !== 'ALL') {
-      filtered = filtered.filter(tx => tx.status === statusFilter);
-    }
-
+    let list = activeTab === 'overview' ? transactions : getTabTx();
+    if (statusFilter !== 'ALL') list = list.filter(tx => tx.status === statusFilter);
     if (searchTerm.trim()) {
-      const search = searchTerm.toLowerCase();
-      filtered = filtered.filter(tx =>
-        tx.userName?.toLowerCase().includes(search) ||
-        tx.userEmail?.toLowerCase().includes(search) ||
-        tx.reference?.toLowerCase().includes(search) ||
-        tx.description.toLowerCase().includes(search)
-      );
+      const s = searchTerm.toLowerCase();
+      list = list.filter(tx => tx.userName?.toLowerCase().includes(s) || tx.userEmail?.toLowerCase().includes(s) || tx.reference?.toLowerCase().includes(s) || tx.description.toLowerCase().includes(s));
     }
-
-    
-    setFilteredTransactions(filtered);
-    setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-    setCurrentPage(1); // Reset to first page when filters change
+    setFilteredTx(list); setCurrentPage(1);
   };
 
-  // Get current page transactions
-  const getCurrentPageTransactions = () => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return filteredTransactions.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(filteredTx.length / itemsPerPage);
+  const pageTx = filteredTx.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const fmtDate = (d: string) => {
+    if (!d) return '';
+    let s = String(d); if (s.includes(' ') && !s.includes('T')) s = s.replace(' ', 'T');
+    if (!s.endsWith('Z') && !/[+-]\d{2}:?\d{2}/.test(s)) s += 'Z';
+    return new Date(s).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handleViewDetail = (transaction: CombinedTransaction) => {
-    setSelectedTransaction(transaction);
-    setShowDetailModal(true);
-  };
-
-  const handleDownloadInvoice = async (transaction: CombinedTransaction) => {
-    try {
-      let blob: Blob;
-      let filename: string;
-      
-      if (transaction.id.startsWith('WAL-')) {
-        const txId = parseInt(transaction.id.replace('WAL-', ''));
-        blob = await paymentService.adminDownloadWalletInvoice(txId);
-        filename = `wallet-invoice-${txId}.pdf`;
-      } else if (transaction.id.startsWith('PAY-')) {
-        const paymentId = parseInt(transaction.id.replace('PAY-', ''));
-        blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
-        filename = `invoice-${paymentId}.pdf`;
-      } else if (transaction.id.startsWith('PREMIUM-')) {
-        const paymentId = transaction.originalData?.paymentTransactionId;
-        if (typeof paymentId === 'number') {
-          blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
-          filename = `invoice-${paymentId}.pdf`;
-        } else {
-          return;
-        }
-      } else {
-        return;
-      }
-
-      if (!blob || (blob.type && blob.type !== 'application/pdf')) {
-        try {
-          const text = await blob.text();
-          console.error('Invoice response is not PDF:', text);
-        } catch (_e) {
-          void 0;
-        }
-        throw new Error('Invalid invoice response');
-      }
-      
-      // Create download link
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-      
-      
-    } catch (error) {
-      console.error('❌ Error downloading invoice:', error);
-      showAppError('Không thể tải hóa đơn', 'Vui lòng thử lại sau.');
-    }
-  };
-
-  const handleDownloadPremiumInvoice = async (transaction: CombinedTransaction) => {
-    try {
-      const isPremiumPayment = transaction.type === 'PAYMENT' && transaction.id.startsWith('PAY-') && (transaction.originalData?.type === 'PREMIUM_SUBSCRIPTION');
-      if (!isPremiumPayment) return;
-
-      const paymentId = parseInt(transaction.id.replace('PAY-', ''));
-      const blob = await paymentService.adminDownloadPaymentInvoice(paymentId);
-      const filename = `invoice-${paymentId}.pdf`;
-
-      if (!blob || (blob.type && blob.type !== 'application/pdf')) {
-        try { const text = await blob.text(); console.error('Invoice response is not PDF:', text); } catch (_e) { void 0; }
-        throw new Error('Invalid invoice response');
-      }
-
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('❌ Error downloading premium invoice:', error);
-      showAppError('Không thể tải hóa đơn Premium', 'Vui lòng thử lại sau.');
-    }
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('vi-VN', { 
-      style: 'currency', 
-      currency: 'VND' 
-    }).format(Math.abs(amount));
-  };
-
-  const formatDate = (dateString: string) => {
-    if (!dateString) return '';
-    let input = String(dateString);
-    if (input.includes(' ') && !input.includes('T')) {
-      input = input.replace(' ', 'T');
-    }
-    if (!input.endsWith('Z') && !/[+-]\d{2}:?\d{2}/.test(input)) {
-      input += 'Z';
-    }
-    return new Date(input).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
-  };
-
-  const getTypeIcon = (type: TransactionType) => {
-    switch (type) {
-      case 'WALLET': return <Wallet size={18} />;
-      case 'PAYMENT': return <CreditCard size={18} />;
-      case 'WITHDRAWAL': return <ArrowDownLeft size={18} />;
-      case 'COIN_PURCHASE': return <Coins size={18} />;
-      default: return <DollarSign size={18} />;
-    }
-  };
-
-  const getTypeLabel = (type: TransactionType) => {
-    switch (type) {
-      case 'WALLET': return 'Ví';
-      case 'PAYMENT': return 'Thanh toán';
-      case 'WITHDRAWAL': return 'Rút tiền';
-      case 'COIN_PURCHASE': return 'Mua xu';
-      default: return type;
-    }
-  };
-
-  const getStatusBadge = (status: string) => {
-    const statusMap: Record<string, { label: string; className: string }> = {
-      'COMPLETED': { label: 'Hoàn thành', className: 'completed' },
-      'PAID': { label: 'Đã thanh toán', className: 'completed' },
-      'PENDING': { label: 'Chờ xử lý', className: 'pending' },
-      'APPROVED': { label: 'Đã duyệt', className: 'approved' },
-      'REJECTED': { label: 'Từ chối', className: 'rejected' },
-      'CANCELLED': { label: 'Đã hủy', className: 'cancelled' },
-      'FAILED': { label: 'Thất bại', className: 'failed' },
-      'EXPIRED': { label: 'Hết hạn', className: 'expired' }
+  const statusBadge = (st: string) => {
+    const m: Record<string, [string, string]> = {
+      COMPLETED: ['Hoàn thành', 'completed'], PAID: ['Đã thanh toán', 'completed'],
+      PENDING: ['Chờ xử lý', 'pending'], APPROVED: ['Đã duyệt', 'approved'],
+      REJECTED: ['Từ chối', 'rejected'], CANCELLED: ['Đã hủy', 'cancelled'],
+      FAILED: ['Thất bại', 'failed'], EXPIRED: ['Hết hạn', 'expired'],
     };
-
-    const statusInfo = statusMap[status] || { label: status, className: 'default' };
-
-    return (
-      <span className={`admin-status-badge ${statusInfo.className}`}>
-        {statusInfo.label}
-      </span>
-    );
+    const [l, c] = m[st] || [st, 'default'];
+    return <span className={`admin-status-badge ${c}`}>{l}</span>;
   };
 
-  if (loading) {
-    return (
-      <div className="admin-transaction-management-cosmic">
-        <div className="admin-loading-state">
-          <RefreshCw size={48} className="spinning" />
-          <p>Đang tải dữ liệu giao dịch...</p>
-        </div>
+  const typeIcon = (t: TransactionType) => {
+    const m: Record<string, React.ReactNode> = {
+      WALLET: <Wallet size={16} />,
+      PAYMENT: <CreditCard size={16} />,
+      WITHDRAWAL: <ArrowDownLeft size={16} />,
+      COIN_PURCHASE: <Coins size={16} />,
+    };
+    return m[t] || <DollarSign size={16} />;
+  };
+
+  const typeLabel = (t: TransactionType) => {
+    const m: Record<string, string> = {
+      WALLET: 'Ví',
+      PAYMENT: 'Thanh toán',
+      WITHDRAWAL: 'Rút tiền',
+      COIN_PURCHASE: 'Mua xu',
+    };
+    return m[t] || t;
+  };
+
+  const handleDownload = async (tx: CombinedTransaction) => {
+    try {
+      let blob: Blob; let fn: string;
+      if (tx.id.startsWith('WAL-')) { const id = parseInt(tx.id.replace('WAL-', '')); blob = await paymentService.adminDownloadWalletInvoice(id); fn = `wallet-${id}.pdf`; }
+      else if (tx.id.startsWith('PAY-')) { const id = parseInt(tx.id.replace('PAY-', '')); blob = await paymentService.adminDownloadPaymentInvoice(id); fn = `invoice-${id}.pdf`; }
+      else return;
+      const url = window.URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = fn; document.body.appendChild(a); a.click(); document.body.removeChild(a); window.URL.revokeObjectURL(url);
+    } catch (e) { showAppError('Không thể tải hóa đơn', 'Vui lòng thử lại sau.'); }
+  };
+
+  const pendingCount = transactions.filter(tx => tx.status === 'PENDING').length;
+  const adminRevenue = stats.totalPlatformFees + stats.totalPurchaseRevenue;
+  const todayRevenue = stats.todayPlatformFees + stats.todayPurchaseRevenue;
+
+  // Chart Data Preparation
+  const processChartData = () => {
+    // 1. Revenue Trend (Area Chart)
+    let revenueTrend: any[] = [];
+    if (chartFilter === '7d' || chartFilter === '30d') {
+      const days = chartFilter === '7d' ? 7 : 30;
+      const dateList = [...Array(days)].map((_, i) => {
+        const d = new Date(); d.setDate(d.getDate() - (days - 1 - i));
+        return d.toISOString().split('T')[0];
+      });
+      revenueTrend = dateList.map(date => {
+        const dayTx = transactions.filter(tx => tx.createdAt.startsWith(date) && tx.status === 'COMPLETED');
+        let adminRev = 0; let mentorRev = 0;
+        dayTx.forEach(tx => {
+          const raw = getRawType(tx);
+          if (ADMIN_REVENUE_TYPES.includes(raw)) adminRev += Math.abs(tx.amount);
+          if (MENTOR_REVENUE_TYPES.includes(raw)) mentorRev += Math.abs(tx.amount);
+        });
+        return { date: date.slice(5).replace('-', '/'), admin: adminRev, mentor: mentorRev };
+      });
+    } else if (chartFilter === '1y') {
+      const months = [...Array(12)].map((_, i) => {
+        const d = new Date(); d.setMonth(d.getMonth() - (11 - i));
+        return d.toISOString().slice(0, 7); // YYYY-MM
+      });
+      revenueTrend = months.map(month => {
+        const monthTx = transactions.filter(tx => tx.createdAt.startsWith(month) && tx.status === 'COMPLETED');
+        let adminRev = 0; let mentorRev = 0;
+        monthTx.forEach(tx => {
+          const raw = getRawType(tx);
+          if (ADMIN_REVENUE_TYPES.includes(raw)) adminRev += Math.abs(tx.amount);
+          if (MENTOR_REVENUE_TYPES.includes(raw)) mentorRev += Math.abs(tx.amount);
+        });
+        return { date: month.slice(5).replace('-', '/'), admin: adminRev, mentor: mentorRev };
+      });
+    }
+
+    // 2. Monthly Admin Revenue (Bar Chart) - Fixed 6 months
+    const last6Months = [...Array(6)].map((_, i) => {
+      const d = new Date(); d.setMonth(d.getMonth() - (5 - i));
+      return d.toISOString().slice(0, 7);
+    });
+    const monthlyAdminRev = last6Months.map(month => {
+      const monthTx = transactions.filter(tx => tx.createdAt.startsWith(month) && tx.status === 'COMPLETED');
+      let rev = 0;
+      monthTx.forEach(tx => {
+        if (ADMIN_REVENUE_TYPES.includes(getRawType(tx))) rev += Math.abs(tx.amount);
+      });
+      return { month: month.slice(5).replace('-', '/'), revenue: rev };
+    });
+
+    // 3. Revenue Distribution (Pie)
+    const distributionData = [
+      { name: 'Doanh Thu Admin', value: adminRevenue, color: '#00e5ff' },
+      { name: 'Thu Nhập Mentor', value: stats.totalMentorEarnings, color: '#34d399' },
+      { name: 'Thu Nhập Student (Job)', value: stats.totalStudentEarnings, color: '#facc15' },
+    ].filter(d => d.value > 0);
+
+    return { revenueTrend, monthlyAdminRev, distributionData };
+  };
+
+  const { revenueTrend, monthlyAdminRev, distributionData } = processChartData();
+
+  if (loading) return (
+    <div className="admin-tx-cosmic"><div className="admin-loading-state"><RefreshCw size={40} className="spinning" /><p>Đang tải dữ liệu...</p></div></div>
+  );
+
+  const renderTable = (rows: CombinedTransaction[]) => (
+    <div className="admin-tx-table">
+      <table>
+        <thead><tr>
+          <th>Mã GD</th><th>Người dùng</th><th>Loại</th><th>Mô tả</th><th>Số tiền</th><th>Trạng thái</th><th>Thời gian</th><th>Hành động</th>
+        </tr></thead>
+        <tbody>
+          {rows.map(tx => (
+            <tr key={tx.id}>
+              <td><span className="admin-tx-code">{tx.reference || tx.id}</span></td>
+              <td><div className="admin-user-info">
+                <div className="admin-user-avatar">{tx.userAvatarUrl ? <img src={tx.userAvatarUrl} alt="" /> : (tx.userName?.charAt(0).toUpperCase() || 'U')}</div>
+                <div className="admin-user-name" title={tx.userName}>{truncName(tx.userName)}</div>
+              </div></td>
+              <td><span className={`admin-type-badge ${tx.type.toLowerCase()}`}>{typeIcon(tx.type)} {typeLabel(tx.type)}</span></td>
+              <td className="admin-desc-cell">{tx.description}</td>
+              <td>
+                <span className={`admin-amount ${tx.amount >= 0 ? 'positive' : 'negative'}`}>
+                  {tx.amount >= 0 ? '+' : '-'}{fmt(tx.amount)}
+                </span>
+              </td>
+              <td>{statusBadge(tx.status)}</td>
+              <td className="admin-date-cell">{fmtDate(tx.createdAt)}</td>
+              <td className="admin-actions-cell">
+                <button className="admin-action-btn view" onClick={() => { setSelectedTx(tx); setShowModal(true); }}><Eye size={14} /></button>
+                {tx.status === 'COMPLETED' && (tx.id.startsWith('PAY-') || (tx.id.startsWith('WAL-') && tx.originalData?.currencyType === 'CASH')) && (
+                  <button className="admin-action-btn download" onClick={() => handleDownload(tx)}><Download size={14} /></button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const renderPagination = () => totalPages > 1 && (
+    <div className="admin-pagination">
+      <button className="admin-pagination-btn" onClick={withPaginationScroll(() => setCurrentPage(p => p - 1))} disabled={currentPage === 1}>← Trước</button>
+      <div className="admin-pagination-numbers">
+        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+          let p; if (totalPages <= 5) p = i + 1; else if (currentPage <= 3) p = i + 1; else if (currentPage >= totalPages - 2) p = totalPages - 4 + i; else p = currentPage - 2 + i;
+          return <button key={p} className={`admin-pagination-number ${currentPage === p ? 'active' : ''}`} onClick={withPaginationScroll(() => setCurrentPage(p))}>{p}</button>;
+        })}
       </div>
-    );
-  }
+      <button className="admin-pagination-btn" onClick={withPaginationScroll(() => setCurrentPage(p => p + 1))} disabled={currentPage === totalPages}>Sau →</button>
+      <div className="admin-pagination-info">Trang {currentPage}/{totalPages} ({filteredTx.length} giao dịch)</div>
+    </div>
+  );
+
+  // Pre-compute tab counts
+  const depositsTx = transactions.filter(tx => DEPOSIT_TYPES.includes(getRawType(tx)) || (tx.id.startsWith('PAY-') && tx.amount > 0));
+  const adminRevenueTx = transactions.filter(tx => ADMIN_REVENUE_TYPES.includes(getRawType(tx)) || (tx.type === 'PAYMENT' && tx.amount > 0) || (tx.type === 'COIN_PURCHASE'));
+  const mentorRevenueTx = transactions.filter(tx => MENTOR_REVENUE_TYPES.includes(getRawType(tx)));
+  const withdrawalsTx = transactions.filter(tx => tx.type === 'WITHDRAWAL');
+  const refundsTx = transactions.filter(tx => REFUND_TYPES.includes(getRawType(tx)));
+
+  const tabs: { key: TabKey; icon: React.ReactNode; label: string; count?: number }[] = [
+    { key: 'overview', icon: <BarChart3 size={18} />, label: 'Tổng Quan' },
+    { key: 'deposits', icon: <ArrowUpRight size={18} />, label: 'Nạp Tiền', count: depositsTx.length },
+    { key: 'adminRevenue', icon: <TrendingUp size={18} />, label: 'Doanh Thu', count: adminRevenueTx.length },
+    { key: 'mentorRevenue', icon: <User size={18} />, label: 'Thu Nhập Mentor', count: mentorRevenueTx.length },
+    { key: 'withdrawals', icon: <ArrowDownLeft size={18} />, label: 'Rút Tiền', count: withdrawalsTx.length },
+    { key: 'refunds', icon: <RefreshCw size={18} />, label: 'Hoàn Tiền', count: refundsTx.length },
+    { key: 'all', icon: <List size={18} />, label: 'Tất Cả GD', count: transactions.length },
+  ];
 
   return (
-    <div className="admin-transaction-management-cosmic">
-      {/* Header */}
-      <div className="admin-transaction-header">
+    <div className="admin-tx-cosmic">
+      {/* ===== Header ===== */}
+      <div className="admin-tx-header">
         <div>
-          <h2>Quản Lý Giao Dịch</h2>
-          <p>Theo dõi tất cả giao dịch: Thanh toán, Rút tiền, Mua xu, Premium</p>
+          <h2>Quản Lý Doanh Thu & Giao Dịch</h2>
+          <p>Phân tích tài chính nền tảng SkillVerse — Dữ liệu realtime từ hệ thống</p>
         </div>
         <div className="admin-header-actions">
-          <button className="admin-refresh-btn" onClick={fetchAllTransactions} disabled={loading}>
-            <RefreshCw size={18} className={loading ? 'spinning' : ''} />
+          <button className="admin-btn-refresh" onClick={fetchAll} disabled={loading}>
+            <RefreshCw size={16} className={loading ? 'spinning' : ''} />
             Làm mới
           </button>
           <button
-            className="admin-download-btn"
+            className="admin-btn-export"
             onClick={() => {
-              const params: any = {};
-              if (statusFilter !== 'ALL') params.status = statusFilter;
-              // No user filter UI here; export all currently filtered by status/type
-              if (typeFilter === 'COIN_PURCHASE') params.walletType = 'PURCHASE_COINS';
-              if (startDate) params.startDate = `${startDate}T00:00:00`;
-              if (endDate) params.endDate = `${endDate}T23:59:59`;
-              adminService.downloadTransactionsReport(params);
+              const p: any = {};
+              if (statusFilter !== 'ALL') p.status = statusFilter;
+              adminService.downloadTransactionsReport(p);
             }}
-            disabled={loading}
-            title="Tải báo cáo giao dịch (CSV)"
           >
-            <Download size={18} />
-            Xuất báo cáo
+            <Download size={16} /> Xuất CSV
           </button>
           <button
-            className="admin-download-btn"
+            className="admin-btn-export"
             onClick={() => {
-              const params: any = {};
-              if (statusFilter !== 'ALL') params.status = statusFilter;
-              if (typeFilter === 'COIN_PURCHASE') params.walletType = 'PURCHASE_COINS';
-              if (startDate) params.startDate = `${startDate}T00:00:00`;
-              if (endDate) params.endDate = `${endDate}T23:59:59`;
-              adminService.downloadTransactionsReportPdf(params);
+              const p: any = {};
+              if (statusFilter !== 'ALL') p.status = statusFilter;
+              adminService.downloadTransactionsReportPdf(p);
             }}
-            disabled={loading}
-            title="Tải báo cáo giao dịch (PDF)"
           >
-            <Download size={18} />
-            Xuất PDF
-          </button>
-          <button
-            className="admin-download-btn"
-            onClick={async () => {
-              try {
-                setPremiumDownloading(true);
-                const premiums = transactions.filter(tx => {
-                  if (tx.type !== 'PAYMENT') return false;
-                  const statusOk = tx.status === 'COMPLETED' || tx.status === 'PAID';
-                  if (!statusOk) return false;
-                  const od: any = tx.originalData;
-                  const isPaymentPremium = tx.id.startsWith('PAY-') && (od?.type === 'PREMIUM_SUBSCRIPTION');
-                  const walletType = String(od?.transactionType || '').toUpperCase();
-                  const isWalletPremium = tx.id.startsWith('WAL-') && (walletType.includes('PURCHASE_PREMIUM') || walletType.includes('PREMIUM_SUBSCRIPTION'));
-                  return isPaymentPremium || isWalletPremium;
-                });
-                if (premiums.length === 0) {
-                  showAppInfo('Không có dữ liệu', 'Không có giao dịch Premium để tạo báo cáo.');
-                } else {
-                  await generatePremiumSummaryPdf(premiums);
-                }
-              } catch (_e) {
-                showAppError('Không thể tạo PDF Premium', 'Vui lòng thử lại sau.');
-              } finally {
-                setPremiumDownloading(false);
-              }
-            }}
-            disabled={loading || premiumDownloading}
-            title="Tải PDF tổng hợp Premium"
-          >
-            <Download size={18} />
-            Tải HĐ Premium
+            <Download size={16} /> Xuất PDF
           </button>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="admin-transaction-stats">
-        <div className="admin-stat-card revenue">
-          <TrendingUp size={32} />
-          <div>
-            <div className="admin-stat-number">{formatCurrency(stats.totalRevenue)}</div>
-            <div className="admin-stat-label">Tổng Doanh Thu</div>
-          </div>
-        </div>
-        <div className="admin-stat-card withdrawals">
-          <TrendingDown size={32} />
-          <div>
-            <div className="admin-stat-number">{formatCurrency(stats.totalWithdrawals)}</div>
-            <div className="admin-stat-label">Tổng Rút Tiền</div>
-          </div>
-        </div>
-        <div className="admin-stat-card transactions">
-          <DollarSign size={32} />
-          <div>
-            <div className="admin-stat-number">{stats.totalTransactions}</div>
-            <div className="admin-stat-label">Tổng Giao Dịch</div>
-          </div>
-        </div>
-        <div className="admin-stat-card pending">
-          <Calendar size={32} />
-          <div>
-            <div className="admin-stat-number">{stats.pendingCount}</div>
-            <div className="admin-stat-label">Chờ Xử Lý</div>
-          </div>
-        </div>
-        <div className="admin-stat-card today">
-          <ArrowUpRight size={32} />
-          <div>
-            <div className="admin-stat-number">{formatCurrency(stats.todayRevenue)}</div>
-            <div className="admin-stat-label">Doanh Thu Hôm Nay</div>
-          </div>
-        </div>
-        <div className="admin-stat-card coins">
-          <Coins size={32} />
-          <div>
-            <div className="admin-stat-number">{stats.coinPurchases}</div>
-            <div className="admin-stat-label">Giao Dịch Xu</div>
-          </div>
-        </div>
+      {/* ===== Tab Bar ===== */}
+      <div className="admin-tab-bar">
+        {tabs.map(tab => (
+          <button
+            key={tab.key}
+            className={`admin-tab-item ${activeTab === tab.key ? 'active' : ''}`}
+            onClick={() => setActiveTab(tab.key)}
+          >
+            {tab.icon}
+            {tab.label}
+            {tab.count !== undefined && (
+              <span className="tab-count">{tab.count}</span>
+            )}
+          </button>
+        ))}
       </div>
 
-      {/* Filters */}
-      <div className="admin-transaction-filters">
-        <div className="admin-search-box">
-          <Search size={20} />
-          <input
-            type="text"
-            placeholder="Tìm kiếm theo tên, email, mã giao dịch..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+      {/* ===== OVERVIEW TAB ===== */}
+      {activeTab === 'overview' && (
+        <>
+          {/* Row 1: Primary Financial Flow */}
+          <div className="admin-stats-grid">
+            <div className="admin-stat-card deposits">
+              <ArrowUpRight size={28} />
+              <div>
+                <div className="admin-stat-number">{fmt(stats.totalDeposits)}</div>
+                <div className="admin-stat-label">Tiền Nạp Vào Hệ Thống</div>
+              </div>
+            </div>
 
-        <div className="admin-date-range">
-          <label>
-            Từ ngày
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </label>
-          <label>
-            Đến ngày
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </label>
-        </div>
+            <div className="admin-stat-card withdrawals">
+              <ArrowDownLeft size={28} />
+              <div>
+                <div className="admin-stat-number">{fmt(stats.totalWithdrawals)}</div>
+                <div className="admin-stat-label">Rút Tiền (Ngân Hàng)</div>
+              </div>
+            </div>
 
-        <div className="admin-status-filters">
-          <Filter size={20} />
-          <button
-            className={`admin-filter-btn ${typeFilter === 'ALL' ? 'active' : ''}`}
-            onClick={() => setTypeFilter('ALL')}
-          >
-            Tất cả loại
-          </button>
-          <button
-            className={`admin-filter-btn ${typeFilter === 'PAYMENT' ? 'active' : ''}`}
-            onClick={() => setTypeFilter('PAYMENT')}
-          >
-            <CreditCard size={16} /> Thanh toán
-          </button>
-          <button
-            className={`admin-filter-btn ${typeFilter === 'WITHDRAWAL' ? 'active' : ''}`}
-            onClick={() => setTypeFilter('WITHDRAWAL')}
-          >
-            <ArrowDownLeft size={16} /> Rút tiền
-          </button>
-          <button
-            className={`admin-filter-btn ${typeFilter === 'COIN_PURCHASE' ? 'active' : ''}`}
-            onClick={() => setTypeFilter('COIN_PURCHASE')}
-          >
-            <Coins size={16} /> Mua xu
-          </button>
-        </div>
+            <div className="admin-stat-card revenue">
+              <TrendingUp size={28} />
+              <div>
+                <div className="admin-stat-number">{fmt(adminRevenue)}</div>
+                <div className="admin-stat-label">Tổng Doanh Thu Admin</div>
+              </div>
+            </div>
 
-        <div className="admin-status-filters">
-          <button
-            className={`admin-filter-btn ${statusFilter === 'ALL' ? 'active' : ''}`}
-            onClick={() => setStatusFilter('ALL')}
-          >
-            Tất cả trạng thái
-          </button>
-          <button
-            className={`admin-filter-btn ${statusFilter === 'COMPLETED' ? 'active' : ''}`}
-            onClick={() => setStatusFilter('COMPLETED')}
-          >
-            Hoàn thành
-          </button>
-          <button
-            className={`admin-filter-btn ${statusFilter === 'PENDING' ? 'active' : ''}`}
-            onClick={() => setStatusFilter('PENDING')}
-          >
-            Chờ xử lý
-          </button>
-        </div>
-      </div>
+            <div className="admin-stat-card info">
+              <Calendar size={28} />
+              <div>
+                <div className="admin-stat-number">{fmt(todayRevenue)}</div>
+                <div className="admin-stat-label">Doanh Thu Hôm Nay</div>
+              </div>
+            </div>
+          </div>
 
-      {/* Table */}
-      <div className="admin-transactions-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Mã GD</th>
-              <th>Người dùng</th>
-              <th>Loại</th>
-              <th>Mô tả</th>
-              <th>Số tiền</th>
-              <th>Trạng thái</th>
-              <th>Phương thức</th>
-              <th>Thời gian</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            {getCurrentPageTransactions().map((tx) => (
-              <tr key={tx.id}>
-                <td>
-                  <span className="admin-transaction-code">{tx.reference || tx.id}</span>
-                </td>
-                <td>
-                  <div className="admin-user-info">
-                    <div className="admin-user-avatar">
-                      {tx.userAvatarUrl ? (
-                        <img src={tx.userAvatarUrl} alt={tx.userName || 'User'} />
-                      ) : (
-                        tx.userName?.charAt(0).toUpperCase() || 'U'
-                      )}
-                    </div>
-                    <div>
-                      <div className="admin-user-name" title={tx.userName || 'Unknown'}>
-                        {truncateDisplayName(tx.userName)}
-                      </div>
-                      <div className="admin-user-email">{tx.userEmail || '-'}</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span className={`admin-type-badge ${tx.type.toLowerCase()}`}>
-                    {getTypeIcon(tx.type)}
-                    {getTypeLabel(tx.type)}
-                  </span>
-                </td>
-                <td className="admin-description">{tx.description}</td>
-                <td>
-                  <div className="admin-amount-wrapper">
-                    <span className={`admin-amount ${tx.amount >= 0 ? 'positive' : 'negative'}`}>
-                      {tx.amount >= 0 ? '+' : ''}{formatCurrency(tx.amount)}
-                    </span>
-                  </div>
-                </td>
-                <td>{getStatusBadge(tx.status)}</td>
-                <td>{tx.method || '-'}</td>
-                <td className="admin-date-cell">{formatDate(tx.createdAt)}</td>
-                <td className="admin-actions-cell">
-                  <button
-                    className="admin-action-btn view"
-                    onClick={() => handleViewDetail(tx)}
-                    title="Xem chi tiết"
-                  >
-                    <Eye size={16} />
-                  </button>
-                  {(() => {
-                    const isWalletCash = tx.id.startsWith('WAL-') && tx.originalData?.currencyType === 'CASH';
-                    const isPayment = tx.type === 'PAYMENT' && tx.id.startsWith('PAY-');
-                    return (isPayment || isWalletCash) && tx.status === 'COMPLETED';
-                  })() && (
-                    <button
-                      className="admin-action-btn download"
-                      onClick={() => handleDownloadInvoice(tx)}
-                      title="Tải hóa đơn PDF"
-                    >
-                      <Download size={16} />
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          {/* Row 2: Earnings Split — 20% Admin vs 80% Mentor */}
+          <div className="admin-stats-grid secondary">
+            <div className="admin-stat-card platform">
+              <DollarSign size={22} />
+              <div>
+                <div className="admin-stat-number sm">{fmt(stats.totalPlatformFees)}</div>
+                <div className="admin-stat-label sm">Hoa Hồng Admin (20%)</div>
+              </div>
+            </div>
 
-      {filteredTransactions.length === 0 && !loading && (
-        <div className="admin-empty-state">
-          <DollarSign size={64} />
-          <h3>Không có giao dịch</h3>
-          <p>Chưa có giao dịch nào phù hợp với bộ lọc</p>
-        </div>
+            <div className="admin-stat-card mentor">
+              <User size={22} />
+              <div>
+                <div className="admin-stat-number sm">{fmt(stats.totalMentorEarnings)}</div>
+                <div className="admin-stat-label sm">Mentor Nhận (80%)</div>
+              </div>
+            </div>
+
+            <div className="admin-stat-card student">
+              <Coins size={22} />
+              <div>
+                <div className="admin-stat-number sm">{fmt(stats.totalStudentEarnings)}</div>
+                <div className="admin-stat-label sm">Student Nhận (Job)</div>
+              </div>
+            </div>
+
+            <div className="admin-stat-card booking">
+              <CreditCard size={22} />
+              <div>
+                <div className="admin-stat-number sm">{fmt(stats.totalBookingPayments)}</div>
+                <div className="admin-stat-label sm">Thanh Toán Booking</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 3: Refunds, Escrow, Frozen, Purchases */}
+          <div className="admin-stats-grid secondary">
+            <div className="admin-stat-card warn">
+              <RefreshCw size={22} />
+              <div>
+                <div className="admin-stat-number sm">{fmt(stats.totalRefunds)}</div>
+                <div className="admin-stat-label sm">Hoàn Tiền / Hoàn Ký Quỹ</div>
+              </div>
+            </div>
+
+            <div className="admin-stat-card info">
+              <Filter size={22} />
+              <div>
+                <div className="admin-stat-number sm">{fmt(stats.totalEscrowFunds)}</div>
+                <div className="admin-stat-label sm">Ký Quỹ (Đóng Băng)</div>
+              </div>
+            </div>
+
+            <div className="admin-stat-card info">
+              <Wallet size={22} />
+              <div>
+                <div className="admin-stat-number sm">{fmt(stats.totalFrozenCash)}</div>
+                <div className="admin-stat-label sm">Đang Đóng Băng (Ví)</div>
+              </div>
+            </div>
+
+            <div className="admin-stat-card info">
+              <DollarSign size={22} />
+              <div>
+                <div className="admin-stat-number sm">{fmt(stats.totalPurchaseRevenue)}</div>
+                <div className="admin-stat-label sm">Premium / Khóa Học</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 4: System Counters */}
+          <div className="admin-stats-grid secondary">
+            <div className="admin-stat-card info">
+              <BarChart3 size={22} />
+              <div>
+                <div className="admin-stat-number sm">{transactions.length}</div>
+                <div className="admin-stat-label sm">Tổng Giao Dịch</div>
+              </div>
+            </div>
+
+            <div className="admin-stat-card warn">
+              <RefreshCw size={22} />
+              <div>
+                <div className="admin-stat-number sm">{pendingCount}</div>
+                <div className="admin-stat-label sm">Đang Chờ Xử Lý</div>
+              </div>
+            </div>
+
+            <div className="admin-stat-card info">
+              <ArrowDownLeft size={22} />
+              <div>
+                <div className="admin-stat-number sm">{withdrawalsTx.length}</div>
+                <div className="admin-stat-label sm">Lệnh Rút Tiền</div>
+              </div>
+            </div>
+
+            <div className="admin-stat-card info">
+              <RefreshCw size={22} />
+              <div>
+                <div className="admin-stat-number sm">{refundsTx.length}</div>
+                <div className="admin-stat-label sm">Lệnh Hoàn Tiền</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 5: Charts */}
+          <div className="admin-charts-section top-charts">
+            <div className="admin-chart-card full-width">
+              <div className="admin-chart-header">
+                <h4><TrendingUp size={18} /> Xu Hướng Doanh Thu</h4>
+                <div className="admin-chart-filters">
+                  <button className={chartFilter === '7d' ? 'active' : ''} onClick={() => setChartFilter('7d')}>7 Ngày</button>
+                  <button className={chartFilter === '30d' ? 'active' : ''} onClick={() => setChartFilter('30d')}>30 Ngày</button>
+                  <button className={chartFilter === '1y' ? 'active' : ''} onClick={() => setChartFilter('1y')}>1 Năm</button>
+                </div>
+              </div>
+              <div style={{ height: 320, marginTop: '1rem' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={revenueTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorAdmin" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#00e5ff" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#00e5ff" stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="colorMentor" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#34d399" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#34d399" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis dataKey="date" stroke="#64748b" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <YAxis stroke="#64748b" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={v => (v / 1000).toString() + 'k'} />
+                    <RechartsTooltip contentStyle={{ backgroundColor: '#0a0e1a', borderColor: 'rgba(0,229,255,0.2)', borderRadius: '8px', color: '#fff' }} formatter={(v: any) => fmt(Number(v))} />
+                    <Legend iconType="circle" wrapperStyle={{ fontSize: '13px' }} />
+                    <Area type="monotone" dataKey="admin" name="Doanh Thu Admin" stroke="#00e5ff" strokeWidth={2} fillOpacity={1} fill="url(#colorAdmin)" />
+                    <Area type="monotone" dataKey="mentor" name="Thu Nhập Mentor" stroke="#34d399" strokeWidth={2} fillOpacity={1} fill="url(#colorMentor)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
+          <div className="admin-charts-section bottom-charts">
+            <div className="admin-chart-card">
+              <h4><BarChart3 size={18} /> Doanh Thu Admin (6 Tháng)</h4>
+              <div style={{ height: 300, marginTop: '1rem' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={monthlyAdminRev}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                    <XAxis dataKey="month" stroke="#64748b" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <YAxis stroke="#64748b" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={v => (v / 1000).toString() + 'k'} />
+                    <RechartsTooltip contentStyle={{ backgroundColor: '#0a0e1a', borderColor: 'rgba(0,229,255,0.2)', borderRadius: '8px', color: '#fff' }} formatter={(v: any) => fmt(Number(v))} cursor={{ fill: 'rgba(0, 229, 255, 0.05)' }} />
+                    <Bar dataKey="revenue" name="Doanh Thu" fill="#00e5ff" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="admin-chart-card">
+              <h4><BarChart3 size={18} /> Cơ Cấu Dòng Tiền Toàn Hệ Thống</h4>
+              <div style={{ height: 300, marginTop: '1rem' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={distributionData} cx="50%" cy="50%" innerRadius={70} outerRadius={100} paddingAngle={5} dataKey="value" stroke="none">
+                      {distributionData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
+                    </Pie>
+                    <RechartsTooltip contentStyle={{ backgroundColor: '#0a0e1a', borderColor: 'rgba(0,229,255,0.2)', borderRadius: '8px', color: '#fff' }} formatter={(v: any) => fmt(Number(v))} />
+                    <Legend layout="vertical" verticalAlign="middle" align="right" wrapperStyle={{ fontSize: '13px' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        </>
       )}
 
-      {/* Pagination */}
-      {filteredTransactions.length > 0 && totalPages > 1 && (
-        <div className="admin-pagination">
-          <button
-            className="admin-pagination-btn"
-            onClick={withPaginationScroll(() => handlePageChange(currentPage - 1))}
-            disabled={currentPage === 1}
-          >
-            ← Trước
-          </button>
-          
-          <div className="admin-pagination-numbers">
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              let pageNum;
-              if (totalPages <= 5) {
-                pageNum = i + 1;
-              } else if (currentPage <= 3) {
-                pageNum = i + 1;
-              } else if (currentPage >= totalPages - 2) {
-                pageNum = totalPages - 4 + i;
-              } else {
-                pageNum = currentPage - 2 + i;
-              }
-              
-              return (
-                <button
-                  key={pageNum}
-                  className={`admin-pagination-number ${currentPage === pageNum ? 'active' : ''}`}
-                  onClick={withPaginationScroll(() => handlePageChange(pageNum))}
-                >
-                  {pageNum}
-                </button>
-              );
-            })}
+      {/* ===== REVENUE / WITHDRAWALS / ALL TABS ===== */}
+      {activeTab !== 'overview' && (
+        <>
+          {/* Filters */}
+          <div className="admin-tx-filters">
+            <div className="admin-search-box">
+              <Search size={18} />
+              <input
+                type="text"
+                placeholder="Tìm kiếm theo tên, email, mã giao dịch..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <select
+              className="admin-filter-select"
+              value={statusFilter}
+              onChange={e => setStatusFilter(e.target.value)}
+            >
+              <option value="ALL">Tất cả trạng thái</option>
+              <option value="COMPLETED">Hoàn thành</option>
+              <option value="PENDING">Chờ xử lý</option>
+              <option value="APPROVED">Đã duyệt</option>
+              <option value="REJECTED">Từ chối</option>
+              <option value="CANCELLED">Đã hủy</option>
+            </select>
           </div>
 
-          <button
-            className="admin-pagination-btn"
-            onClick={withPaginationScroll(() => handlePageChange(currentPage + 1))}
-            disabled={currentPage === totalPages}
-          >
-            Sau →
-          </button>
+          {/* Transaction Table */}
+          {pageTx.length > 0 ? renderTable(pageTx) : (
+            <div className="admin-empty-state">
+              <DollarSign size={48} />
+              <h3>Không có giao dịch</h3>
+              <p>Không có giao dịch nào phù hợp với bộ lọc hiện tại</p>
+            </div>
+          )}
 
-          <div className="admin-pagination-info">
-            Trang {currentPage} / {totalPages} ({filteredTransactions.length} giao dịch)
-          </div>
-        </div>
+          {/* Pagination */}
+          {renderPagination()}
+        </>
       )}
 
-      {/* Detail Modal */}
-      {showDetailModal && selectedTransaction && ReactDOM.createPortal(
-        <div className="admin-modal-overlay" onClick={() => setShowDetailModal(false)}>
-          <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
+      {/* ===== DETAIL MODAL ===== */}
+      {showModal && selectedTx && ReactDOM.createPortal(
+        <div className="admin-modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="admin-detail-modal" onClick={e => e.stopPropagation()}>
+            {/* Modal Header */}
             <div className="admin-modal-header">
               <h3>Chi Tiết Giao Dịch</h3>
-              <button className="admin-close-btn" onClick={() => setShowDetailModal(false)}>
-                <X size={24} />
+              <button className="admin-close-btn" onClick={() => setShowModal(false)}>
+                <X size={20} />
               </button>
             </div>
 
+            {/* Modal Body */}
             <div className="admin-modal-body">
+              {/* Transaction Info */}
               <div className="admin-detail-section">
                 <h4>Thông Tin Giao Dịch</h4>
                 <div className="admin-detail-grid">
                   <div className="admin-detail-item">
-                    <DollarSign size={18} />
+                    <DollarSign size={16} />
                     <div>
                       <div className="label">Mã giao dịch</div>
-                      <div className="value code">{selectedTransaction.reference || selectedTransaction.id}</div>
+                      <div className="value code">{selectedTx.reference || selectedTx.id}</div>
                     </div>
                   </div>
                   <div className="admin-detail-item">
-                    {getTypeIcon(selectedTransaction.type)}
+                    {typeIcon(selectedTx.type)}
                     <div>
                       <div className="label">Loại giao dịch</div>
-                      <div className="value">{getTypeLabel(selectedTransaction.type)}</div>
+                      <div className="value">{typeLabel(selectedTx.type)}</div>
                     </div>
                   </div>
                   <div className="admin-detail-item">
-                    <TrendingUp size={18} />
+                    <TrendingUp size={16} />
                     <div>
                       <div className="label">Số tiền</div>
-                      <div className={`value amount ${selectedTransaction.amount >= 0 ? 'positive' : 'negative'}`}>
-                        {formatCurrency(selectedTransaction.amount)}
+                      <div className={`value amount ${selectedTx.amount >= 0 ? 'positive' : 'negative'}`}>
+                        {selectedTx.amount >= 0 ? '+' : '-'}{fmt(selectedTx.amount)}
                       </div>
                     </div>
                   </div>
-                  {typeof selectedTransaction.originalAmount === 'number' && (
+                  {typeof selectedTx.originalAmount === 'number' && selectedTx.originalAmount !== Math.abs(selectedTx.amount) && (
                     <div className="admin-detail-item">
-                      <TrendingUp size={18} />
+                      <TrendingUp size={16} />
                       <div>
                         <div className="label">Giá gốc</div>
-                        <div className="value">{formatCurrency(selectedTransaction.originalAmount)}</div>
+                        <div className="value">{fmt(selectedTx.originalAmount)}</div>
                       </div>
                     </div>
                   )}
                   <div className="admin-detail-item">
-                    <Calendar size={18} />
+                    <Calendar size={16} />
                     <div>
                       <div className="label">Thời gian</div>
-                      <div className="value">{formatDate(selectedTransaction.createdAt)}</div>
+                      <div className="value">{fmtDate(selectedTx.createdAt)}</div>
                     </div>
                   </div>
                 </div>
               </div>
 
+              {/* User Info */}
               <div className="admin-detail-section">
                 <h4>Thông Tin Người Dùng</h4>
                 <div className="admin-detail-grid">
                   <div className="admin-detail-item">
-                    <User size={18} />
+                    <User size={16} />
                     <div>
                       <div className="label">Tên người dùng</div>
-                      <div className="value">{selectedTransaction.userName || 'Unknown'}</div>
+                      <div className="value">{selectedTx.userName || 'Unknown'}</div>
                     </div>
                   </div>
                   <div className="admin-detail-item">
-                    <User size={18} />
+                    <User size={16} />
                     <div>
                       <div className="label">Email</div>
-                      <div className="value">{selectedTransaction.userEmail || '-'}</div>
+                      <div className="value">{selectedTx.userEmail || '-'}</div>
                     </div>
                   </div>
                 </div>
               </div>
 
+              {/* Details */}
               <div className="admin-detail-section">
-                <h4>Chi Tiết</h4>
+                <h4>Chi Tiết Bổ Sung</h4>
                 <div className="admin-detail-item full">
-                  <div className="label">Mô tả</div>
-                  <div className="value">{selectedTransaction.description}</div>
+                  <div>
+                    <div className="label">Mô tả</div>
+                    <div className="value">{selectedTx.description}</div>
+                  </div>
                 </div>
-                {selectedTransaction.method && (
+                {selectedTx.method && (
                   <div className="admin-detail-item full">
-                    <div className="label">Phương thức</div>
-                    <div className="value">{selectedTransaction.method}</div>
+                    <div>
+                      <div className="label">Phương thức thanh toán</div>
+                      <div className="value">{selectedTx.method}</div>
+                    </div>
                   </div>
                 )}
                 <div className="admin-detail-item full">
-                  <div className="label">Trạng thái</div>
-                  <div className="value">{getStatusBadge(selectedTransaction.status)}</div>
+                  <div>
+                    <div className="label">Trạng thái</div>
+                    <div className="value">{statusBadge(selectedTx.status)}</div>
+                  </div>
                 </div>
               </div>
             </div>
 
+            {/* Modal Footer */}
             <div className="admin-modal-footer">
-              <button className="admin-action-btn close" onClick={() => setShowDetailModal(false)}>
+              {selectedTx.status === 'COMPLETED' && (
+                selectedTx.id.startsWith('PAY-') ||
+                (selectedTx.id.startsWith('WAL-') && selectedTx.originalData?.currencyType === 'CASH')
+              ) && (
+                <button
+                  className="admin-action-btn download"
+                  onClick={() => handleDownload(selectedTx)}
+                  style={{ padding: '0.6rem 1.2rem', height: 'auto', minWidth: 'auto' }}
+                >
+                  <Download size={16} /> Tải hóa đơn
+                </button>
+              )}
+              <button className="admin-action-btn close" onClick={() => setShowModal(false)}>
                 Đóng
-              </button>
-              <button className="admin-action-btn download">
-                <Download size={16} />
-                Xuất PDF
               </button>
             </div>
           </div>
-        </div>
-      , document.body)}
+        </div>,
+        document.body
+      )}
     </div>
   );
 };
