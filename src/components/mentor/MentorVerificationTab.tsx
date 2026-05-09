@@ -4,11 +4,12 @@
  * Mentor có thể:
  * 1. Xem danh sách skill đã verified (badge xanh)
  * 2. Xem trạng thái các request (PENDING/APPROVED/REJECTED)
- * 3. Tạo request mới: chọn skill → attach chứng chỉ/github/experience → submit
+ * 3. Tạo request mới: tìm kiếm skill (Server-side Autocomplete) → attach bằng chứng → submit
+ * 4. Gợi ý skill mới nếu hệ thống chưa có.
  * 
- * Request sẽ được gửi đến admin để duyệt.
+ * Flow: Autocomplete Search (Best Practice cho dữ liệu lớn)
  */
-import { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Shield,
   Plus,
@@ -24,6 +25,9 @@ import {
   ChevronUp,
   Award,
   AlertCircle,
+  Lightbulb,
+  Search,
+  Loader2,
 } from 'lucide-react';
 import {
   submitVerification,
@@ -34,6 +38,9 @@ import {
   EvidenceItem,
   uploadEvidence,
 } from '../../services/mentorVerificationService';
+import { skillService } from '../../services/skillService';
+import { skillSuggestionService } from '../../services/skillSuggestionService';
+import { SkillDto } from '../../data/skillDTOs';
 import './MentorVerificationTab.css';
 
 interface LocalEvidenceItem extends EvidenceItem {
@@ -42,22 +49,137 @@ interface LocalEvidenceItem extends EvidenceItem {
   detailDescription?: string;
 }
 
+/**
+ * [Component] SkillAutocomplete
+ * Best Practice: Server-side search with Debounce.
+ */
+function SkillAutocomplete({ 
+  onSelect, 
+  placeholder,
+  disabled 
+}: { 
+  onSelect: (skill: SkillDto | null) => void, 
+  placeholder: string,
+  disabled?: boolean 
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<SkillDto[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedSkill, setSelectedSkill] = useState<SkillDto | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSearch = (val: string) => {
+    setQuery(val);
+    if (selectedSkill) {
+      setSelectedSkill(null);
+      onSelect(null);
+    }
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    if (val.trim().length < 1) {
+      setResults([]);
+      setIsOpen(false);
+      return;
+    }
+
+    setLoading(true);
+    timeoutRef.current = setTimeout(async () => {
+      try {
+        const data = await skillService.suggestByPrefix(val);
+        setResults(data);
+        setIsOpen(true);
+      } catch (err) {
+        console.error('Autocomplete error:', err);
+      } finally {
+        setLoading(false);
+      }
+    }, 300); // Debounce 300ms
+  };
+
+  const handleSelect = (s: SkillDto) => {
+    setSelectedSkill(s);
+    setQuery(s.name);
+    setIsOpen(false);
+    onSelect(s);
+  };
+
+  return (
+    <div ref={wrapperRef} className="mvt-autocomplete">
+      <div className={`mvt-autocomplete__input-wrapper ${disabled ? 'disabled' : ''}`}>
+        <Search className="mvt-autocomplete__icon" size={18} />
+        <input
+          type="text"
+          className="mvt-autocomplete__input"
+          placeholder={placeholder}
+          value={query}
+          onChange={e => handleSearch(e.target.value)}
+          onFocus={() => { if (results.length > 0) setIsOpen(true); }}
+          disabled={disabled}
+        />
+        {loading && <Loader2 className="mvt-autocomplete__spinner animate-spin" size={18} />}
+        {selectedSkill && !loading && (
+          <CheckCircle className="mvt-autocomplete__check text-green-500" size={18} />
+        )}
+      </div>
+
+      {isOpen && (
+        <div className="mvt-autocomplete__dropdown">
+          {results.length === 0 ? (
+            <div className="mvt-autocomplete__empty">Không tìm thấy Skill nào khớp</div>
+          ) : (
+            results.map(s => (
+              <div
+                key={s.id}
+                className="mvt-autocomplete__option"
+                onClick={() => handleSelect(s)}
+              >
+                <div className="mvt-autocomplete__option-name">{s.name}</div>
+                <div className="mvt-autocomplete__option-meta">ID: {s.id}</div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 const MentorVerificationTab: React.FC = () => {
   const [verifications, setVerifications] = useState<MentorVerificationResponse[]>([]);
   const [verifiedSkills, setVerifiedSkills] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Verification Form State
   const [submitting, setSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // Form state
-  const [skillName, setSkillName] = useState('');
+  const [selectedSkill, setSelectedSkill] = useState<SkillDto | null>(null);
   const [githubUrl, setGithubUrl] = useState('');
   const [portfolioUrl, setPortfolioUrl] = useState('');
   const [additionalNotes, setAdditionalNotes] = useState('');
   const [evidences, setEvidences] = useState<LocalEvidenceItem[]>([]);
+
+  // Suggest Form State
+  const [showSuggestForm, setShowSuggestForm] = useState(false);
+  const [suggestName, setSuggestName] = useState('');
+  const [suggestReason, setSuggestReason] = useState('');
+  const [suggesting, setSuggesting] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
@@ -80,11 +202,17 @@ const MentorVerificationTab: React.FC = () => {
   }, [loadData]);
 
   const resetForm = () => {
-    setSkillName('');
+    setSelectedSkill(null);
     setGithubUrl('');
     setPortfolioUrl('');
     setAdditionalNotes('');
     setEvidences([]);
+    setError(null);
+  };
+
+  const resetSuggestForm = () => {
+    setSuggestName('');
+    setSuggestReason('');
     setError(null);
   };
 
@@ -107,7 +235,6 @@ const MentorVerificationTab: React.FC = () => {
     if (!file) return;
 
     try {
-      // Show uploading state by updating description or somehow notifying (optional, keeping it simple)
       const url = await uploadEvidence(file);
       updateEvidence(index, 'evidenceUrl', url);
     } catch (err: unknown) {
@@ -134,8 +261,8 @@ const MentorVerificationTab: React.FC = () => {
     setError(null);
     setSuccessMsg(null);
 
-    if (!skillName.trim()) {
-      setError('Vui lòng nhập tên skill.');
+    if (!selectedSkill) {
+      setError('Vui lòng tìm và chọn một Skill hợp lệ.');
       return;
     }
 
@@ -144,7 +271,6 @@ const MentorVerificationTab: React.FC = () => {
       return;
     }
 
-    // Auto-add github and portfolio as evidence if provided
     const allEvidences: LocalEvidenceItem[] = [...evidences];
     if (githubUrl.trim()) {
       allEvidences.push({
@@ -162,7 +288,7 @@ const MentorVerificationTab: React.FC = () => {
     }
 
     const request: CreateVerificationRequest = {
-      skillName: skillName.trim(),
+      skillName: selectedSkill.name,
       githubUrl: formatUrl(githubUrl) || undefined,
       portfolioUrl: formatUrl(portfolioUrl) || undefined,
       additionalNotes: additionalNotes.trim() || undefined,
@@ -183,7 +309,7 @@ const MentorVerificationTab: React.FC = () => {
     try {
       setSubmitting(true);
       await submitVerification(request);
-      setSuccessMsg(`Yêu cầu xác thực skill "${skillName}" đã được gửi thành công!`);
+      setSuccessMsg(`Yêu cầu xác thực skill "${selectedSkill.name}" đã được gửi thành công!`);
       resetForm();
       setShowForm(false);
       await loadData();
@@ -193,6 +319,34 @@ const MentorVerificationTab: React.FC = () => {
       setError(axiosErr.response?.data?.message || message);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleSuggestSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccessMsg(null);
+
+    if (!suggestName.trim()) {
+      setError('Vui lòng nhập tên Skill muốn gợi ý.');
+      return;
+    }
+
+    try {
+      setSuggesting(true);
+      await skillSuggestionService.suggestSkill({
+        suggestedName: suggestName.trim(),
+        reason: suggestReason.trim() || undefined
+      });
+      setSuccessMsg(`Gợi ý skill "${suggestName}" đã được gửi tới Admin thành công!`);
+      resetSuggestForm();
+      setShowSuggestForm(false);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Có lỗi xảy ra';
+      const axiosErr = err as { response?: { data?: { message?: string } } };
+      setError(axiosErr.response?.data?.message || message);
+    } finally {
+      setSuggesting(false);
     }
   };
 
@@ -249,12 +403,12 @@ const MentorVerificationTab: React.FC = () => {
             <Shield size={24} /> Xác thực Skill
           </h2>
           <p className="mvt-header__subtitle">
-            Gửi yêu cầu xác thực kỹ năng kèm chứng chỉ, bằng cấp hoặc kinh nghiệm để được công nhận.
+            Gửi yêu cầu xác thực kỹ năng kèm bằng chứng để được công nhận.
           </p>
         </div>
         <button
           className="mvt-btn mvt-btn--primary"
-          onClick={() => { setShowForm(!showForm); setError(null); setSuccessMsg(null); }}
+          onClick={() => { setShowForm(!showForm); setShowSuggestForm(false); setError(null); setSuccessMsg(null); }}
         >
           <Plus size={16} />
           {showForm ? 'Đóng form' : 'Xác thực skill mới'}
@@ -282,8 +436,59 @@ const MentorVerificationTab: React.FC = () => {
         </div>
       )}
 
-      {/* Submit Form */}
-      {showForm && (
+      {/* Suggest Form */}
+      {showSuggestForm && (
+        <form className="mvt-form" onSubmit={handleSuggestSubmit} style={{ border: '1px solid var(--admin-primary)', background: '#1e293b' }}>
+          <h3 className="mvt-form__title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--admin-primary)' }}>
+            <Lightbulb size={20} /> Gợi ý Skill mới
+          </h3>
+          <p className="mvt-form__hint">Kỹ năng bạn muốn xác thực chưa có trong hệ thống? Hãy gửi gợi ý để Admin xem xét thêm vào.</p>
+
+          {error && (
+            <div className="mvt-alert mvt-alert--error">
+              <AlertCircle size={16} /> {error}
+            </div>
+          )}
+
+          <div className="mvt-form__group">
+            <label className="mvt-form__label">Tên Skill đề xuất *</label>
+            <input
+              type="text"
+              className="mvt-form__input"
+              value={suggestName}
+              onChange={e => setSuggestName(e.target.value)}
+              placeholder="Ví dụ: React Native, Docker, GraphQL..."
+              maxLength={100}
+              required
+            />
+          </div>
+
+          <div className="mvt-form__group">
+            <label className="mvt-form__label">Lý do / Mô tả (Tùy chọn)</label>
+            <textarea
+              className="mvt-form__textarea"
+              value={suggestReason}
+              onChange={e => setSuggestReason(e.target.value)}
+              placeholder="Giải thích ngắn gọn tại sao hệ thống nên có skill này..."
+              rows={3}
+              maxLength={500}
+            />
+          </div>
+
+          <div className="mvt-form__actions">
+            <button type="button" className="mvt-btn mvt-btn--secondary" onClick={() => { setShowSuggestForm(false); resetSuggestForm(); }}>
+              Hủy
+            </button>
+            <button type="submit" className="mvt-btn mvt-btn--primary" disabled={suggesting}>
+              <Send size={16} />
+              {suggesting ? 'Đang gửi...' : 'Gửi gợi ý'}
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Submit Verification Form */}
+      {showForm && !showSuggestForm && (
         <form className="mvt-form" onSubmit={handleSubmit}>
           <h3 className="mvt-form__title">Gửi yêu cầu xác thực skill mới</h3>
 
@@ -294,16 +499,24 @@ const MentorVerificationTab: React.FC = () => {
           )}
 
           <div className="mvt-form__group">
-            <label className="mvt-form__label">Tên Skill *</label>
-            <input
-              type="text"
-              className="mvt-form__input"
-              value={skillName}
-              onChange={e => setSkillName(e.target.value)}
-              placeholder="Ví dụ: React, Java Spring Boot, UI Design..."
-              maxLength={100}
-              required
-            />
+            <label className="mvt-form__label">Tìm kiếm Skill *</label>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+               <div style={{ flex: 1, minWidth: '300px' }}>
+                  <SkillAutocomplete
+                    onSelect={s => setSelectedSkill(s)}
+                    placeholder="Gõ tên skill để tìm (ví dụ: Java, React...)"
+                  />
+               </div>
+               <button 
+                  type="button" 
+                  className="mvt-btn"
+                  style={{ backgroundColor: '#475569', color: 'white', height: '42px' }}
+                  onClick={() => { setShowSuggestForm(true); setShowForm(false); setError(null); }}
+               >
+                 <Lightbulb size={16} style={{ marginRight: '0.25rem' }} /> Không tìm thấy? Gợi ý
+               </button>
+            </div>
+            <p className="mvt-form__hint">Gõ ít nhất 1 ký tự để xem gợi ý từ hệ thống.</p>
           </div>
 
           <div className="mvt-form__row">

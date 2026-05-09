@@ -49,6 +49,15 @@ export const skillService = {
   },
 
   /**
+   * GET /api/skills/active
+   * Get all active skills.
+   */
+  getActiveSkills: async (): Promise<SkillDto[]> => {
+    const { data } = await axiosInstance.get<SkillDto[]>(`${API_BASE}/active`);
+    return data;
+  },
+
+  /**
    * Normalize a skill tag input value to the canonical storage format.
    * ALL non-alphanumeric chars → underscore. Then collapse consecutive underscores.
    * "java core" / "java-core" / "java_core" / "JAVA  CORE" → "JAVA_CORE"
