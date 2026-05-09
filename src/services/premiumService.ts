@@ -98,12 +98,12 @@ const normalizeSubscription = (
     subscription.isStudentSubscription ?? subscription.isDiscountedSubscription,
   renewalPrice:
     subscription.renewalPrice !== undefined &&
-    subscription.renewalPrice !== null
+      subscription.renewalPrice !== null
       ? String(subscription.renewalPrice)
       : undefined,
   scheduledChangeRenewalPrice:
     subscription.scheduledChangeRenewalPrice !== undefined &&
-    subscription.scheduledChangeRenewalPrice !== null
+      subscription.scheduledChangeRenewalPrice !== null
       ? String(subscription.scheduledChangeRenewalPrice)
       : undefined,
   plan: normalizePlan(subscription.plan),

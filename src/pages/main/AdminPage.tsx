@@ -23,6 +23,12 @@ import SliderManagementTab from "../../components/admin/SliderManagementTab";
 import AdminAiGradingDashboard from "../admin/AdminAiGradingDashboard";
 import AdminAiKnowledgeDashboard from "../admin/AdminAiKnowledgeDashboard";
 import AdminAiTokenUsageDashboard from "../admin/AdminAiTokenUsageDashboard";
+// ROADMAP imports
+import SkillRegistryTab from "../../components/admin/roadmap/SkillRegistryTab";
+import SkillSuggestionReviewTab from "../../components/admin/roadmap/SkillSuggestionReviewTab";
+import CareerTaxonomyTab from "../../components/admin/roadmap/CareerTaxonomyTab";
+import JobPositionTrackSkillTab from "../../components/admin/roadmap/JobPositionTrackSkillTab";
+
 // import AdminSeminarManager from './AdminSeminarManager';
 import adminUserService from "../../services/adminUserService";
 import adminService from "../../services/adminService";
@@ -169,6 +175,15 @@ const AdminPage: React.FC = () => {
         return <MeowlSkinUploadTab />;
       case "sliders":
         return <SliderManagementTab />;
+      // ROADMAP tabs
+      case "skill-registry":
+        return <SkillRegistryTab />;
+      case "skill-suggestions":
+        return <SkillSuggestionReviewTab />;
+      case "career-taxonomy":
+        return <CareerTaxonomyTab />;
+      case "track-skills":
+        return <JobPositionTrackSkillTab />;
       default:
         return <AnalyticsTab />;
     }

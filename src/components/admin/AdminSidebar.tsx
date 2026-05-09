@@ -209,6 +209,35 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         },
       ],
     },
+    {
+      label: "ROADMAP",
+      items: [
+        {
+          id: "skill-registry",
+          label: "Skill Registry",
+          icon: ShieldCheck,
+          allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
+        },
+        {
+          id: "skill-suggestions",
+          label: "Duyệt Skill Suggestion",
+          icon: UserCheck,
+          allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
+        },
+        {
+          id: "career-taxonomy",
+          label: "Career Taxonomy",
+          icon: Route,
+          allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
+        },
+        {
+          id: "track-skills",
+          label: "Track Skill Mapping",
+          icon: ListChecks,
+          allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
+        },
+      ],
+    },
   ];
 
   const filteredGroups = allGroups
