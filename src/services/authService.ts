@@ -535,8 +535,6 @@ class AuthService {
       return `${baseUrl}/mentor`;
     } else if (roles.includes("RECRUITER")) {
       return `${baseUrl}/business`;
-    } else if (roles.includes("PARENT")) {
-      return `${baseUrl}/parent-dashboard`;
     } else {
       return `${baseUrl}/dashboard`;
     }

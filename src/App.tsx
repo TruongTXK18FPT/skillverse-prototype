@@ -26,7 +26,6 @@ import Footer from "./components/layout/Footer";
 import HomePage from "./pages/main/HomePage";
 import DashboardPage from "./pages/navbar/DashboardPage";
 import CoursesPage from "./pages/navbar/CoursesPage";
-import LearningReportPage from "./pages/user/LearningReportPage";
 import MentorshipPage from "./pages/navbar/MentorshipPage";
 import CommunityHUD from "./components/community-hud/CommunityHUD";
 import PostDetailPage from "./pages/community/PostDetailPage";
@@ -47,7 +46,6 @@ import ElevatorLoginPage from "./pages/auth/ElevatorLoginPage";
 import ElevatorPersonalRegisterPage from "./pages/auth/ElevatorPersonalRegisterPage";
 import ElevatorBusinessRegisterPage from "./pages/auth/ElevatorBusinessRegisterPage";
 import ElevatorMentorRegisterPage from "./pages/auth/ElevatorMentorRegisterPage";
-import ElevatorParentRegisterPage from "./pages/auth/ElevatorParentRegisterPage";
 import ChooseRolePage from "./pages/auth/ChooseRolePage";
 import VerifyPage from "./pages/auth/VerifyPage";
 import AlreadyAuthenticatedWarning from "./pages/auth/AlreadyAuthenticatedWarning";
@@ -66,8 +64,6 @@ import { ReportUserPage, MyReportsPage } from "./components/report";
 import TermOfService from "./pages/footer/TermOfService";
 import PrivacyPolicy from "./pages/footer/Privacy&Policy";
 import HelpCenter from "./pages/footer/HelpCenter";
-// import SeminarPage from "./pages/navbar/SeminarPage";
-// import SeminarDetailPage from "./pages/navbar/SeminarDetailPage";
 import BusinessPage from "./pages/main/BusinessPage";
 // Mentor pages - organized in /pages/mentor/
 import MentorDashboard from "./pages/mentor/MentorDashboard";
@@ -101,6 +97,7 @@ import MentorProfilePage from "./pages/mentor/MentorProfilePage";
 import RecruiterProfilePage from "./pages/business/RecruiterProfilePage";
 import RecruiterPublicProfilePage from "./pages/business/RecruiterPublicProfilePage";
 import ProfileRouter from "./components/shared/ProfileRouter";
+import LearningReportPage from "./pages/user/LearningReportPage";
 import JobLabPage from "./pages/user/JobLabPage";
 import ExploreMapPage from "./pages/ExploreMapPage";
 import AboutPage from "./pages/about/AboutPage";
@@ -113,8 +110,6 @@ import MeowlPetWrapper from "./components/meowl-pet/MeowlPetWrapper";
 import TicTacToeGame from "./components/game/tic-tac-toe/TicTacToeGame";
 import MeowlAdventure from "./components/game/meowl-adventure/MeowlAdventure";
 
-// import AdminSeminarManager from "./pages/main/AdminSeminarManager";
-// import RecruiterSeminarManager from "./pages/main/RecruiterSeminarManager";
 import ContractDetailPage from "./components/contract/ContractDetailPage";
 import ContractForm from "./components/contract/ContractForm";
 import ContractSignPage from "./components/contract/ContractSignPage";
@@ -208,14 +203,6 @@ const AppContents = () => {
                 </StudentOnlyRoute>
               }
             />
-            <Route
-              path="/learning-report"
-              element={
-                <StudentOnlyRoute>
-                  <LearningReportPage />
-                </StudentOnlyRoute>
-              }
-            />
             <Route path="/courses" element={<CoursesPage />} />
             <Route
               path="/roadmap"
@@ -248,6 +235,14 @@ const AppContents = () => {
               element={
                 <StudentOnlyRoute>
                   <StudyPlannerPage />
+                </StudentOnlyRoute>
+              }
+            />
+            <Route
+              path="/learning-report"
+              element={
+                <StudentOnlyRoute>
+                  <LearningReportPage />
                 </StudentOnlyRoute>
               }
             />
@@ -378,10 +373,6 @@ const AppContents = () => {
             <Route
               path="/register/mentor"
               element={<ElevatorMentorRegisterPage />}
-            />
-            <Route
-              path="/register/parent"
-              element={<ElevatorParentRegisterPage />}
             />
             <Route path="/verify-otp" element={<VerifyPage />} />
             <Route
@@ -709,7 +700,6 @@ const fullScreenRoutes = new Set<string>([
   "/register",
   "/register/business",
   "/register/mentor",
-  "/register/parent",
   "/verify-otp",
   "/forgot-password",
   "/reset-password",
@@ -725,7 +715,6 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/chatbot/general",
   "/chatbot/expert",
   "/roadmap",
-  "/learning-report",
   "/admin-security",
   "/course-learning",
   "/notifications",
@@ -752,6 +741,7 @@ const hideFooterOnlyRoutes = new Set<string>([
   "/portfolio",
   "/my-bookings",
   "/my-skill-verification",
+  "/learning-report",
 ]);
 
 // Check if path matches quiz attempt pattern
@@ -872,7 +862,6 @@ const hideMeowlBubbleRoutes = new Set<string>([
   "/register",
   "/register/business",
   "/register/mentor",
-  "/register/parent",
   "/verify-otp",
   "/forgot-password",
   "/reset-password",

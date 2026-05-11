@@ -60,7 +60,6 @@ export interface SubscriptionCheckoutPreviewResponse {
   samePlan: boolean;
   downgrade: boolean;
   buyerUserId: number;
-  targetUserId: number;
   currentSubscriptionId?: number | null;
   currentPlan?: PremiumPlan | null;
   targetPlan: PremiumPlan;

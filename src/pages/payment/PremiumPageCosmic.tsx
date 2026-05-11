@@ -23,7 +23,6 @@ import LoginRequiredModal from "../../components/auth/LoginRequiredModal";
 import { PremiumInvoice, useInvoice } from "../../components/invoice";
 import ClearanceLevelPage from "../../components/premium-hud/ClearanceLevelPage";
 import PremiumFAQ from "../../components/premium-hud/PremiumFAQ";
-import parentService, { StudentDetail } from "../../services/parentService";
 import { showAppInfo } from "../../context/ToastContext";
 
 const PremiumPageCosmic = () => {
@@ -33,14 +32,8 @@ const PremiumPageCosmic = () => {
   const [premiumPlans, setPremiumPlans] = useState<PremiumPlan[]>([]);
 
   const roles = (user?.roles || []).map((role) => String(role).toUpperCase());
-  const isParent = roles.includes("PARENT");
   const isBusinessRole =
     roles.includes("RECRUITER") || roles.includes("BUSINESS");
-
-  const [students, setStudents] = useState<StudentDetail[]>([]);
-  const [selectedStudentId, setSelectedStudentId] = useState<number | null>(
-    location.state?.forStudent || null,
-  );
 
   const [processing] = useState(false);
   const [currentSub, setCurrentSub] = useState<UserSubscriptionResponse | null>(
@@ -94,21 +87,17 @@ const PremiumPageCosmic = () => {
       loadCurrentSubscription();
       loadWalletData();
       loadUserProfile();
-
-      if (isParent) {
-        loadStudents();
-      }
     }
-  }, [isAuthenticated, isParent, user]);
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
-    if (!isAuthenticated || isBusinessRole || Boolean(selectedStudentId)) {
+    if (!isAuthenticated || isBusinessRole) {
       setStudentVerificationApproved(false);
       return;
     }
 
     void loadStudentVerificationEligibility();
-  }, [isAuthenticated, isBusinessRole, selectedStudentId, user?.id]);
+  }, [isAuthenticated, isBusinessRole, user?.id]);
 
   // [Nghiep vu] Frontend canh bao som trang thai xac thuc de chan thanh toan Student Pack truoc khi goi API mua.
   const loadStudentVerificationEligibility = async () => {
@@ -132,21 +121,6 @@ const PremiumPageCosmic = () => {
     navigate("/student-verification", { state: { from: "/premium" } });
   };
 
-  const loadStudents = async () => {
-    try {
-      const dashboard = await parentService.getDashboard();
-      setStudents(dashboard.students);
-      // If forStudent was passed, ensure it's valid
-      if (location.state?.forStudent) {
-        const exists = dashboard.students.find(
-          (s) => s.id === location.state.forStudent,
-        );
-        if (exists) setSelectedStudentId(exists.id);
-      }
-    } catch (error) {
-      console.error("Failed to load students", error);
-    }
-  };
 
   const loadPremiumPlans = async () => {
     try {
@@ -199,7 +173,7 @@ const PremiumPageCosmic = () => {
     const selectedPlan = premiumPlans.find((p) => p.name === planName);
     if (!selectedPlan) return null;
 
-    const cacheKey = `${selectedPlan.id}:${isStudentEligible}:${selectedStudentId ?? "self"}`;
+    const cacheKey = `${selectedPlan.id}:${isStudentEligible}:self`;
     const cachedPreview = previewCacheRef.current.get(cacheKey);
     if (cachedPreview) {
       return cachedPreview;
@@ -214,7 +188,6 @@ const PremiumPageCosmic = () => {
       .getCheckoutPreview(
         selectedPlan.id,
         isStudentEligible,
-        selectedStudentId || undefined,
       )
       .then((preview) => {
         previewCacheRef.current.set(cacheKey, preview);
@@ -231,7 +204,7 @@ const PremiumPageCosmic = () => {
   };
 
   const handlePlanPreview = (planName: string) => {
-    if (!isAuthenticated || selectedStudentId) return;
+    if (!isAuthenticated) return;
 
     void fetchCheckoutPreview(planName).catch((error) => {
       console.error("Failed to preload checkout preview:", error);
@@ -252,14 +225,6 @@ const PremiumPageCosmic = () => {
     if (!selectedPlan) return;
 
     if (selectedPlan.planType === "STUDENT_PACK") {
-      if (selectedStudentId) {
-        showAppInfo(
-          "Chưa thể tiếp tục",
-          "Tài khoản được mua cần tự đăng nhập và xác thực sinh viên trước khi mua Student Pack.",
-        );
-        return;
-      }
-
       if (isCheckingStudentVerification) {
         showAppInfo(
           "Đang kiểm tra xác thực",
@@ -304,17 +269,11 @@ const PremiumPageCosmic = () => {
       await premiumService.purchaseWithWallet(
         selectedPlanForWallet.id,
         isStudentEligible,
-        selectedStudentId || undefined,
       );
 
       // Reload wallet data after successful purchase
       await loadWalletData();
       await loadCurrentSubscription();
-
-      // Reload students to refresh their premium status
-      if (isParent) {
-        await loadStudents();
-      }
     } catch (error: any) {
       // Extract error message from response
       const errorMessage =
@@ -335,15 +294,6 @@ const PremiumPageCosmic = () => {
     );
   };
 
-  const selectedStudent = selectedStudentId
-    ? students.find((st) => st.id === selectedStudentId) || null
-    : null;
-
-  const selectedStudentActivePlanName =
-    selectedStudent?.progress?.premiumPlan &&
-    !selectedStudent.progress.premiumPlan.toLowerCase().includes("free")
-      ? selectedStudent.progress.premiumPlan
-      : null;
 
   const fallbackFreePlan =
     premiumPlans.find((plan) => plan.planType === "FREE_TIER") || null;
@@ -357,9 +307,9 @@ const PremiumPageCosmic = () => {
   );
 
   const displayCurrentSub =
-    !selectedStudentId && currentSub
+    currentSub
       ? currentSub
-      : !selectedStudentId && fallbackFreePlan
+      : fallbackFreePlan
         ? ({
             id: 0,
             userId: user?.id || 0,
@@ -382,15 +332,12 @@ const PremiumPageCosmic = () => {
           } satisfies UserSubscriptionResponse)
         : null;
 
-  const activePlanId = !selectedStudentId
-    ? displayCurrentSub?.plan?.id || null
-    : null;
+  const activePlanId = displayCurrentSub?.plan?.id || null;
 
-  const activePlanName = selectedStudentId
-    ? selectedStudentActivePlanName
-    : displayCurrentSub?.plan?.displayName ||
-      displayCurrentSub?.plan?.name ||
-      null;
+  const activePlanName =
+    displayCurrentSub?.plan?.displayName ||
+    displayCurrentSub?.plan?.name ||
+    null;
 
   const isCancellationLimitMessage = (message?: string) =>
     !!message &&
@@ -435,65 +382,6 @@ const PremiumPageCosmic = () => {
         feature="Premium Subscription"
       />
 
-      {isParent && (
-        <div
-          style={{
-            background: "rgba(20, 20, 30, 0.9)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-            padding: "1rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "1rem",
-            position: "sticky",
-            top: 0,
-            zIndex: 100,
-            backdropFilter: "blur(10px)",
-          }}
-        >
-          <span style={{ color: "#cbd5e1" }}>Mua gói cho:</span>
-          <select
-            value={selectedStudentId || ""}
-            onChange={(e) =>
-              setSelectedStudentId(Number(e.target.value) || null)
-            }
-            style={{
-              padding: "0.5rem 1rem",
-              borderRadius: "8px",
-              background: "#1e293b",
-              color: "white",
-              border: "1px solid #475569",
-              outline: "none",
-            }}
-          >
-            <option value="">Chính tôi ({user?.fullName || "Tôi"})</option>
-            {students.map((s) => (
-              <option key={s.id} value={s.id}>
-                Con: {s.firstName} {s.lastName}{" "}
-                {s.progress?.premiumPlan && s.progress.premiumPlan !== "Free"
-                  ? "(Đã có Premium)"
-                  : ""}
-              </option>
-            ))}
-          </select>
-          {selectedStudentId &&
-            (() => {
-              const s = students.find((st) => st.id === selectedStudentId);
-              if (
-                s?.progress?.premiumPlan &&
-                s.progress.premiumPlan !== "Free"
-              ) {
-                return (
-                  <span style={{ color: "#f59e0b", fontSize: "0.9rem" }}>
-                    Tài khoản này đang có Premium. Hệ thống sẽ tự động tính giá
-                    nâng cấp nếu bạn chọn gói cao hơn.
-                  </span>
-                );
-              }
-              return null;
-            })()}
-        </div>
-      )}
       <ClearanceLevelPage
         premiumPlans={visiblePremiumPlans}
         currentSub={displayCurrentSub}
@@ -507,36 +395,17 @@ const PremiumPageCosmic = () => {
         onWalletPayment={handleWalletPayment}
         onRequireLogin={handleLoginRequired}
         onPlanPreview={handlePlanPreview}
-        onViewInvoice={!selectedStudentId ? handleViewInvoice : undefined}
-        onEnableAutoRenew={
-          !selectedStudentId
-            ? () => setShowEnableAutoRenewalModal(true)
-            : undefined
-        }
-        onCancelAutoRenew={
-          !selectedStudentId
-            ? () => setShowCancelAutoRenewalModal(true)
-            : undefined
-        }
-        onCancelSubscription={
-          !selectedStudentId ? handleOpenCancelSubscription : undefined
-        }
+        onViewInvoice={handleViewInvoice}
+        onEnableAutoRenew={() => setShowEnableAutoRenewalModal(true)}
+        onCancelAutoRenew={() => setShowCancelAutoRenewalModal(true)}
+        onCancelSubscription={handleOpenCancelSubscription}
         needsStudentVerification={
           isAuthenticated &&
-          !selectedStudentId &&
           !isBusinessRole &&
           !studentVerificationApproved
         }
         onStudentVerify={handleOpenStudentVerification}
-        targetLabel={
-          selectedStudentId
-            ? selectedStudentActivePlanName
-              ? "NÂNG CẤP CHO CON"
-              : "MUA CHO CON"
-            : hasActive
-              ? "NÂNG CẤP NGAY"
-              : "Mở Khóa Ngay"
-        }
+        targetLabel={hasActive ? "NÂNG CẤP NGAY" : "Mở Khóa Ngay"}
       />
 
       {/* FAQ Section */}
@@ -604,7 +473,7 @@ const PremiumPageCosmic = () => {
           walletBalance={walletData.cashBalance}
           isStudentPrice={isStudentEligible}
           checkoutPreview={walletCheckoutPreview}
-          currentSubscription={!selectedStudentId ? currentSub : null}
+          currentSubscription={currentSub}
           onConfirm={confirmWalletPayment}
         />
       )}

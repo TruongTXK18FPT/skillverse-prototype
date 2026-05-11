@@ -373,7 +373,7 @@ const CourseLearningPage = () => {
   const [activeLessonDetail, setActiveLessonDetail] = useState<LessonDetailDTO | null>(null);
   const [loadingLessonDetail, setLoadingLessonDetail] = useState(false);
   const [activeQuizDetail, setActiveQuizDetail] = useState<QuizWithAttemptStatus | null>(null);
-  const { hasPremiumAccess, planName } = usePremiumAccess();
+  usePremiumAccess();
 
   // Countdown timer state cho quiz retry
   const [retryCountdown, setRetryCountdown] = useState<number>(0);
@@ -1113,52 +1113,7 @@ const CourseLearningPage = () => {
 
   const meowlPanelMode: MeowlContextMode = "MODE_COURSE_LEARNING";
 
-  const meowlPanelSummary = useMemo(() => {
-    const summary: string[] = [];
 
-    if (course?.title) {
-      summary.push(`Khóa học: ${course.title}`);
-    }
-
-    if (activeCurriculumItem?.moduleTitle) {
-      summary.push(`Chương: ${activeCurriculumItem.moduleTitle}`);
-    }
-
-    if (activeLessonTitle) {
-      summary.push(`Nội dung hiện tại: ${activeLessonTitle}`);
-    }
-
-    if (activeItemType === "quiz" && activeQuizDetail) {
-      summary.push(`Điểm đạt quiz: ${activeQuizDetail.passScore}%`);
-      summary.push(`Số lượt đã dùng: ${quizAttemptsCount}/${activeQuizDetail.maxAttempts}`);
-    }
-
-    if (activeItemType === "assignment" && activeAssignmentSummary) {
-      summary.push(`Loại bài tập: ${activeAssignmentSummary.submissionType}`);
-      if (activeAssignmentSummary.dueAt) {
-        summary.push(`Hạn nộp: ${formatShortDate(activeAssignmentSummary.dueAt)}`);
-      }
-    }
-
-    if (activeLessonDetail?.type === "READING") {
-      summary.push("Bài đọc: ưu tiên câu hỏi gợi mở, không tóm tắt thay toàn bộ.");
-    }
-
-    if (activeLessonDetail?.type === "VIDEO") {
-      summary.push("Bài video: không giả vờ biết transcript ẩn hoặc nội dung chưa được cung cấp.");
-    }
-
-    return summary;
-  }, [
-    activeAssignmentSummary,
-    activeCurriculumItem?.moduleTitle,
-    activeItemType,
-    activeLessonDetail?.type,
-    activeLessonTitle,
-    activeQuizDetail,
-    course?.title,
-    quizAttemptsCount,
-  ]);
 
   if (loading) {
     return (
@@ -1748,45 +1703,34 @@ const CourseLearningPage = () => {
       <MeowlGuide
         currentPage="courses"
         autoOpenChat
+        hideMascot={!(activeLessonDetail?.type === "READING")}
         panelMode={meowlPanelMode}
         panelTheme="cyan"
         panelAllowedModes={["MODE_COURSE_LEARNING", "MODE_GENERAL_FAQ"]}
         roadmapContext={null}
         courseContext={
-          course && modulesWithContent.length > 0
+          course && modulesWithContent.length > 0 && activeLessonDetail?.type === "READING"
             ? {
               courseTitle: course.title,
               moduleTitle: activeCurriculumItem?.moduleTitle || "",
               lessonTitle: activeCurriculumItem?.title || "",
-              lessonType: activeCurriculumItem?.itemType === "quiz"
-                ? "QUIZ"
-                : activeCurriculumItem?.itemType === "assignment"
-                  ? "ASSIGNMENT"
-                  : (activeLessonDetail?.type || "LESSON"),
+              lessonType: "READING",
               modules: modulesWithContent.map((mod) => ({
                 moduleId: mod.id,
                 moduleTitle: mod.title,
-                lessons: (mod.lessons ?? []).map((l) => ({
-                  lessonId: l.id,
-                  lessonTitle: l.title,
-                  lessonType: l.type,
-                })),
-                quizzes: (mod.quizzes ?? []).map((q) => ({
-                  lessonId: q.id,
-                  lessonTitle: q.title,
-                  lessonType: "QUIZ",
-                })),
-                assignments: (mod.assignments ?? []).map((a) => ({
-                  lessonId: a.id,
-                  lessonTitle: a.title,
-                  lessonType: "ASSIGNMENT",
-                })),
+                lessons: (mod.lessons ?? [])
+                  .filter((l) => l.type === "READING")
+                  .map((l) => ({
+                    lessonId: l.id,
+                    lessonTitle: l.title,
+                    lessonType: l.type,
+                  })),
               })),
               activeModuleId: activeLesson?.moduleId ?? null,
               activeLessonId: activeLesson?.lessonId ?? null,
               activeLessonTitle: activeLessonTitle || undefined,
-              activeLessonType: activeLessonDetail?.type || undefined,
-              activeLessonDescription: activeLessonDetail?.description || undefined,
+              activeLessonType: "READING",
+              activeLessonDescription: activeLessonDetail?.contentText || undefined,
             }
             : null
         }

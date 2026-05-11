@@ -191,14 +191,12 @@ export const premiumService = {
   async getCheckoutPreview(
     planId: number,
     _applyStudentDiscount: boolean = false,
-    targetUserId?: number,
   ): Promise<SubscriptionCheckoutPreviewResponse> {
     const { data } = await api.get<SubscriptionCheckoutPreviewApiResponse>(
       "/api/premium/subscription/checkout-preview",
       {
         params: {
           planId,
-          targetUserId,
         },
       },
     );
@@ -278,17 +276,12 @@ export const premiumService = {
   async purchaseWithWallet(
     planId: number,
     _applyStudentDiscount: boolean = false,
-    targetUserId?: number,
   ): Promise<UserSubscriptionResponse> {
-    const params: Record<string, any> = { planId };
-    if (targetUserId) {
-      params.targetUserId = targetUserId;
-    }
     const { data } = await api.post<UserSubscriptionApiResponse>(
       "/api/premium/purchase-with-wallet",
       null,
       {
-        params,
+        params: { planId },
       },
     );
     const normalized = normalizeSubscription(data);

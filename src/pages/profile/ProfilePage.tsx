@@ -11,7 +11,6 @@ import { validateImage } from '../../services/fileUploadService';
 import getCroppedImg from '../../utils/cropImage';
 import { UserProfileResponse } from '../../data/userDTOs';
 import StudentReviews from '../../components/student/StudentReviews';
-import ParentConnectionSection from '../../components/profile/ParentConnectionSection';
 import '../../styles/ProfilePage.css';
 import '../../styles/ProfileSecuritySection.css';
 
@@ -552,11 +551,6 @@ const ProfilePage = () => {
 
           {/* Student Reviews Section */}
           <StudentReviews />
-
-          {/* Parent Connection Section - Show for regular users (students) */}
-          {user?.roles?.some(r => r.toLowerCase() === 'user') && (
-            <ParentConnectionSection />
-          )}
 
           {/* Security Section */}
           <div className="profile-section">

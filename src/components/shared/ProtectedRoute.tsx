@@ -108,15 +108,6 @@ export const AuthenticatedRoute: React.FC<{ children: React.ReactNode }> = ({ ch
   );
 };
 
-// Convenience wrapper for PARENT-only routes
-export const ParentRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <ProtectedRoute allowedRoles={['PARENT']}>
-      {children}
-    </ProtectedRoute>
-  );
-};
-
 // Convenience wrapper for STUDENT-only routes
 // Allows learner-style roles but excludes elevated and specialized roles.
 export const StudentOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -156,8 +147,7 @@ export const StudentOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ chil
   const hasBlockedRole =
     // MENTOR and RECRUITER have their own separate career dashboards
     roles.includes('MENTOR') ||
-    roles.includes('RECRUITER') ||
-    roles.includes('PARENT');
+    roles.includes('RECRUITER');
 
   if (!hasStudentRole || hasBlockedRole) {
     return <Navigate to="/unauthorized" replace />;

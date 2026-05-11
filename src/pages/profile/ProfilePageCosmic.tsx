@@ -17,7 +17,6 @@ import PilotHeader from "../../components/profile-hud/user/PilotHeader";
 import PilotIdentityForm from "../../components/profile-hud/user/PilotIdentityForm";
 import CompanionPod from "../../components/profile-hud/user/CompanionPod";
 import PilotSkinSelector from "../../components/profile-hud/user/PilotSkinSelector";
-import ParentRequests from "../../components/profile-hud/user/ParentRequests";
 import GoogleUserOnboardingBanner from "../../components/auth/GoogleUserOnboardingBanner";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
 import "../../components/profile-hud/user/pilot-styles.css";
@@ -496,8 +495,6 @@ const ProfilePageCosmic = () => {
             </div>
           </div>
 
-          {/* Parent Requests */}
-          <ParentRequests />
 
           {/* Skin Selection */}
           <PilotSkinSelector

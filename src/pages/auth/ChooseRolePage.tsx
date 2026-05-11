@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, GraduationCap, Briefcase, Check, Users } from 'lucide-react';
+import { User, GraduationCap, Briefcase, Check } from 'lucide-react';
 import '../../styles/ChooseRolePage.css';
 
 // Import Meowl images
 import meowlUser from '../../assets/space-role/meowl-user.png';
 import meowlMentor from '../../assets/space-role/meowl-mentor.png';
 import meowlBusiness from '../../assets/space-role/meowl-business.png';
-import meowlParent from '../../assets/space-role/meowl-parent.png';
 import backgroundSpace from '../../assets/space-role/background-space.png';
 
 interface RoleOption {

@@ -44,7 +44,7 @@ interface GuideFeature {
 }
 
 interface RoleGuide {
-  id: 'student' | 'parent' | 'mentor' | 'business' | 'guest' | 'proposal';
+  id: 'student' | 'mentor' | 'business' | 'guest' | 'proposal';
   title: string;
   description: string;
   icon: React.ReactNode;
@@ -58,7 +58,6 @@ const UserGuidePage: React.FC = () => {
   // Determine the initial role based on auth state to prevent flicker
   const getInitialRole = () => {
     if (isAuthenticated && user) {
-      if (user.roles.includes('PARENT')) return 'parent';
       if (user.roles.includes('MENTOR')) return 'mentor';
       if (user.roles.includes('RECRUITER')) return 'business';
       return 'student';
@@ -66,7 +65,7 @@ const UserGuidePage: React.FC = () => {
     return 'guest';
   };
 
-  const [activeRole, setActiveRole] = useState<'student' | 'parent' | 'mentor' | 'business' | 'guest'>(getInitialRole());
+  const [activeRole, setActiveRole] = useState<'student' | 'mentor' | 'business' | 'guest'>(getInitialRole());
 
   useEffect(() => {
     setActiveRole(getInitialRole());
@@ -84,7 +83,7 @@ const UserGuidePage: React.FC = () => {
           description: 'Nền tảng hướng nghiệp và phát triển kỹ năng toàn diện dựa trên AI.',
           icon: <Globe />,
           steps: [
-            'Kết nối 4 đối tượng: Học sinh, Phụ huynh, Mentor, Doanh nghiệp.',
+            'Kết nối 3 nhóm chính: Học sinh, Mentor, Doanh nghiệp.',
             'Cá nhân hóa lộ trình học tập với AI Roadmap.',
             'Hệ thống Gamification tăng cường động lực học tập.',
             'Tích hợp thị trường việc làm và kết nối chuyên gia.'
@@ -110,17 +109,6 @@ const UserGuidePage: React.FC = () => {
             'Study Planner: Lên lịch học thông minh.',
             'Expert Chat: Tư vấn nghề nghiệp 1-1 với AI chuyên gia.',
             'Portfolio Builder: Tự động tạo CV từ kết quả học tập.'
-          ]
-        },
-        {
-          title: 'Chức Năng Chính: Parent',
-          description: 'Công cụ giám sát và đồng hành cùng con.',
-          icon: <Users />,
-          steps: [
-            'Parent Dashboard: Theo dõi tiến độ, điểm số, thời gian học.',
-            'Wallet Management: Quản lý ngân sách, nạp tiền học.',
-            'Student Linking: Liên kết và quản lý nhiều tài khoản con.',
-            'Alert System: Nhận thông báo về tình hình học tập.'
           ]
         },
         {
@@ -159,7 +147,6 @@ const UserGuidePage: React.FC = () => {
           icon: <Users />,
           steps: [
             'Student: Người học muốn phát triển kỹ năng.',
-            'Parent: Phụ huynh muốn đồng hành cùng con.',
             'Mentor: Chuyên gia muốn chia sẻ kiến thức.',
             'Business: Doanh nghiệp tìm kiếm nhân tài.'
           ],
@@ -286,53 +273,6 @@ const UserGuidePage: React.FC = () => {
       ]
     },
     {
-      id: 'parent',
-      title: 'Parent',
-      description: 'Đồng hành cùng con trên con đường học tập và phát triển.',
-      icon: <Users />,
-      features: [
-        {
-          title: 'Liên Kết Tài Khoản Con',
-          description: 'Kết nối để theo dõi quá trình học tập.',
-          icon: <UserPlus />,
-          steps: [
-            'Yêu cầu con gửi Mã Mời (Invite Code) từ tài khoản Student.',
-            'Vào trang Profile hoặc Dashboard.',
-            'Nhập mã mời để xác nhận liên kết.',
-            'Một phụ huynh có thể liên kết nhiều con.'
-          ],
-          link: '/profile',
-          linkText: 'Liên Kết Ngay'
-        },
-        {
-          title: 'Parent Dashboard',
-          description: 'Trung tâm theo dõi và giám sát.',
-          icon: <LayoutDashboard />,
-          steps: [
-            'Xem tổng quan tiến độ học tập của các con.',
-            'Kiểm tra điểm số, kỹ năng đã đạt được.',
-            'Xem thời gian học tập hàng tuần (Streak).',
-            'Nhận cảnh báo nếu con xao nhãng.'
-          ],
-          link: '/parent-dashboard',
-          linkText: 'Xem Dashboard'
-        },
-        {
-          title: 'Quản Lý Tài Chính (Wallet)',
-          description: 'Đầu tư cho giáo dục an toàn và minh bạch.',
-          icon: <Wallet />,
-          steps: [
-            'Nạp tiền vào ví Skillverse qua ngân hàng/thẻ.',
-            'Mua gói Premium hoặc khóa học cho con.',
-            'Xem lịch sử giao dịch chi tiết.',
-            'Kiểm soát ngân sách học tập.'
-          ],
-          link: '/my-wallet',
-          linkText: 'Ví Của Tôi'
-        }
-      ]
-    },
-    {
       id: 'mentor',
       title: 'Mentor',
       description: 'Chia sẻ kiến thức và dẫn dắt thế hệ trẻ.',
@@ -431,8 +371,7 @@ const UserGuidePage: React.FC = () => {
       return roles.filter(r => r.id === 'guest');
     }
 
-    const userRole: RoleGuide['id'] = user.roles.includes('PARENT') ? 'parent'
-      : user.roles.includes('MENTOR') ? 'mentor'
+    const userRole: RoleGuide['id'] = user.roles.includes('MENTOR') ? 'mentor'
       : user.roles.includes('RECRUITER') ? 'business'
       : 'student';
 

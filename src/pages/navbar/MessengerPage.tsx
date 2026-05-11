@@ -16,7 +16,6 @@ import { useAuth } from '../../context/AuthContext';
 import {
   GroupChatWindow,
   MentorChatWindow,
-  FamilyChatWindow,
   RecruiterChatWindow,
 } from '../../components/chat';
 import MessengerWelcome from '../../components/chat/MessengerWelcome';
@@ -25,8 +24,6 @@ import { getThreads } from '../../services/preChatService';
 import recruitmentChatService from '../../services/recruitmentChatService';
 import userService from '../../services/userService';
 import { getMentorProfile } from '../../services/mentorProfileService';
-import parentService from '../../services/parentService';
-import studentLinkService from '../../services/studentLinkService';
 import { API_BASE_URL } from '../../services/axiosInstance';
 import { RecruitmentSessionResponse } from '../../data/portfolioDTOs';
 import { useChatSettings } from '../../context/ChatSettingsContext';
@@ -40,13 +37,12 @@ interface ChatContact {
   lastMessage: string;
   timestamp: string;
   unread: number;
-  type: 'MENTOR' | 'FAMILY' | 'GROUP' | 'RECRUITMENT';
+  type: 'MENTOR' | 'GROUP' | 'RECRUITMENT';
   isOnline?: boolean;
   isPinned?: boolean;
   memberCount?: number;
   mentorName?: string;
   isMyRoleMentor?: boolean;
-  isParent?: boolean;
   recruitmentSession?: RecruitmentSessionResponse;
   bookingId?: number;
   counterpartId?: number;
@@ -67,7 +63,7 @@ const MessengerPage: React.FC = () => {
   // Synthetic contact created from booking navigation (when no thread exists yet)
   const [syntheticContact, setSyntheticContact] = useState<ChatContact | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'ALL' | 'MENTOR' | 'FAMILY' | 'GROUP' | 'RECRUITMENT'>('ALL');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'MENTOR' | 'GROUP' | 'RECRUITMENT'>('ALL');
   const [showSettings, setShowSettings] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showCreateNew, setShowCreateNew] = useState(false);
@@ -293,8 +289,6 @@ const MessengerPage: React.FC = () => {
 
     if (type === 'GROUP') {
       setActiveTab('GROUP');
-    } else if (type === 'FAMILY') {
-      setActiveTab('FAMILY');
     } else if (type === 'RECRUITMENT') {
       setActiveTab('RECRUITMENT');
     } else {
@@ -385,50 +379,6 @@ const MessengerPage: React.FC = () => {
         allContacts = [...allContacts, ...mentorContacts];
       }
 
-      if (activeTab === 'FAMILY' || activeTab === 'ALL') {
-        if (user.roles.includes('PARENT')) {
-          try {
-            const dashboard = await parentService.getDashboard();
-            const familyContacts: ChatContact[] = dashboard.students.map((student) => ({
-              id: student.id.toString(),
-              name: student.displayName || student.fullName || `${student.firstName} ${student.lastName}`.trim(),
-              avatar: resolveAvatarUrl(student.avatarUrl),
-              lastMessage: 'Trò chuyện với con',
-              timestamp: new Date().toISOString(),
-              unread: 0,
-              type: 'FAMILY',
-              isOnline: false,
-              isParent: true,
-            }));
-            allContacts = [...allContacts, ...familyContacts];
-          } catch (error) {
-            console.error('Failed to load family contacts:', error);
-          }
-        }
-
-        if (user.roles.includes('USER') && !user.roles.includes('PARENT')) {
-          try {
-            const links = await studentLinkService.getStudentLinks();
-            const activeParentLinks = links.filter(
-              (link) => link.status === 'ACTIVE' && link.student.id === user.id
-            );
-            const parentContacts: ChatContact[] = activeParentLinks.map((link) => ({
-              id: link.parent.id.toString(),
-              name: link.parent.fullName || 'Phụ huynh',
-              avatar: resolveAvatarUrl(link.parent.avatarUrl),
-              lastMessage: 'Trò chuyện với phụ huynh',
-              timestamp: link.updatedAt || new Date().toISOString(),
-              unread: 0,
-              type: 'FAMILY',
-              isOnline: false,
-              isParent: false,
-            }));
-            allContacts = [...allContacts, ...parentContacts];
-          } catch (error) {
-            console.log('Parent links not available:', error);
-          }
-        }
-      }
 
       if (canAccessRecruitmentMessages && (activeTab === 'RECRUITMENT' || activeTab === 'ALL')) {
         const sessions = await loadRecruitmentSessions();
@@ -641,19 +591,6 @@ const MessengerPage: React.FC = () => {
                   <h3>Nhắn tin với Mentor</h3>
                   <p>Bắt đầu cuộc trò chuyện 1-1</p>
                 </button>
-                {user && user.roles.includes('PARENT') && (
-                  <button
-                    className="create-option"
-                    onClick={() => {
-                      setShowCreateNew(false);
-                      setActiveTab('FAMILY');
-                    }}
-                  >
-                    <MessageCircle size={32} />
-                    <h3>Chat với con</h3>
-                    <p>Trò chuyện với con em</p>
-                  </button>
-                )}
               </div>
             </div>
           </div>
@@ -818,16 +755,6 @@ const MessengerPage: React.FC = () => {
               bookingStatus={selectedContact.bookingStatus}
               bookingStartTime={selectedContact.bookingStartTime}
               bookingEndTime={selectedContact.bookingEndTime}
-              onBack={() => setSelectedContactId(null)}
-            />
-          ) : selectedContact.type === 'FAMILY' ? (
-            <FamilyChatWindow
-              familyMemberId={parseInt(selectedContact.id, 10)}
-              familyMemberName={selectedContact.name}
-              familyMemberAvatar={selectedContact.avatar}
-              currentUserId={user!.id}
-              currentUserName={currentIdentity.name}
-              isParent={selectedContact.isParent || false}
               onBack={() => setSelectedContactId(null)}
             />
           ) : selectedContact.type === 'RECRUITMENT' && selectedContact.recruitmentSession ? (
