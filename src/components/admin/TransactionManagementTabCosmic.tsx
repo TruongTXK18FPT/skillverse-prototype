@@ -394,6 +394,74 @@ const TransactionManagementTabCosmic: React.FC = () => {
     { key: 'all', icon: <List size={18} />, label: 'Tất Cả GD', count: transactions.length },
   ];
 
+  const overviewGroups: Array<{
+    title: string;
+    description: string;
+    className: string;
+    items: Array<{
+      icon: React.ReactNode;
+      value: string | number;
+      label: string;
+      variant: string;
+      emphasis?: boolean;
+    }>;
+  }> = [
+    {
+      title: 'Dòng tiền chính',
+      description: 'Các con số cần nhìn đầu tiên khi kiểm tra sức khỏe tài chính.',
+      className: 'primary',
+      items: [
+        { icon: <ArrowUpRight size={24} />, value: fmt(stats.totalDeposits), label: 'Tiền nạp vào hệ thống', variant: 'deposits', emphasis: true },
+        { icon: <ArrowDownLeft size={24} />, value: fmt(stats.totalWithdrawals), label: 'Rút tiền ngân hàng', variant: 'withdrawals', emphasis: true },
+        { icon: <TrendingUp size={24} />, value: fmt(adminRevenue), label: 'Doanh thu admin', variant: 'revenue', emphasis: true },
+        { icon: <Calendar size={24} />, value: fmt(todayRevenue), label: 'Doanh thu hôm nay', variant: 'info', emphasis: true },
+      ],
+    },
+    {
+      title: 'Phân bổ doanh thu',
+      description: 'Tách phần nền tảng, mentor, student và booking.',
+      className: 'revenue-split',
+      items: [
+        { icon: <DollarSign size={20} />, value: fmt(stats.totalPlatformFees), label: 'Hoa hồng admin 20%', variant: 'platform' },
+        { icon: <User size={20} />, value: fmt(stats.totalMentorEarnings), label: 'Mentor nhận 80%', variant: 'mentor' },
+        { icon: <Coins size={20} />, value: fmt(stats.totalStudentEarnings), label: 'Student nhận từ job', variant: 'student' },
+        { icon: <CreditCard size={20} />, value: fmt(stats.totalBookingPayments), label: 'Thanh toán booking', variant: 'booking' },
+      ],
+    },
+    {
+      title: 'Đối soát & đóng băng',
+      description: 'Các khoản cần theo dõi để hạn chế sai lệch dòng tiền.',
+      className: 'risk',
+      items: [
+        { icon: <RefreshCw size={20} />, value: fmt(stats.totalRefunds), label: 'Hoàn tiền / hoàn ký quỹ', variant: 'warn' },
+        { icon: <Filter size={20} />, value: fmt(stats.totalEscrowFunds), label: 'Ký quỹ đang đóng băng', variant: 'info' },
+        { icon: <Wallet size={20} />, value: fmt(stats.totalFrozenCash), label: 'Ví đang đóng băng', variant: 'info' },
+        { icon: <DollarSign size={20} />, value: fmt(stats.totalPurchaseRevenue), label: 'Premium / khóa học', variant: 'info' },
+      ],
+    },
+    {
+      title: 'Vận hành giao dịch',
+      description: 'Khối lượng xử lý và các hàng đợi thao tác.',
+      className: 'ops',
+      items: [
+        { icon: <BarChart3 size={20} />, value: transactions.length, label: 'Tổng giao dịch', variant: 'info' },
+        { icon: <RefreshCw size={20} />, value: pendingCount, label: 'Đang chờ xử lý', variant: 'warn' },
+        { icon: <ArrowDownLeft size={20} />, value: withdrawalsTx.length, label: 'Lệnh rút tiền', variant: 'info' },
+        { icon: <RefreshCw size={20} />, value: refundsTx.length, label: 'Lệnh hoàn tiền', variant: 'info' },
+      ],
+    },
+  ];
+
+  const renderOverviewCard = (item: typeof overviewGroups[number]['items'][number]) => (
+    <div className={`admin-stat-card ${item.variant} ${item.emphasis ? 'admin-stat-card--emphasis' : ''}`} key={item.label}>
+      {item.icon}
+      <div className="admin-stat-copy">
+        <div className={`admin-stat-number ${item.emphasis ? '' : 'sm'}`}>{item.value}</div>
+        <div className={`admin-stat-label ${item.emphasis ? '' : 'sm'}`}>{item.label}</div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="admin-tx-cosmic">
       {/* ===== Header ===== */}
@@ -450,147 +518,20 @@ const TransactionManagementTabCosmic: React.FC = () => {
       {/* ===== OVERVIEW TAB ===== */}
       {activeTab === 'overview' && (
         <>
-          {/* Row 1: Primary Financial Flow */}
-          <div className="admin-stats-grid">
-            <div className="admin-stat-card deposits">
-              <ArrowUpRight size={28} />
-              <div>
-                <div className="admin-stat-number">{fmt(stats.totalDeposits)}</div>
-                <div className="admin-stat-label">Tiền Nạp Vào Hệ Thống</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card withdrawals">
-              <ArrowDownLeft size={28} />
-              <div>
-                <div className="admin-stat-number">{fmt(stats.totalWithdrawals)}</div>
-                <div className="admin-stat-label">Rút Tiền (Ngân Hàng)</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card revenue">
-              <TrendingUp size={28} />
-              <div>
-                <div className="admin-stat-number">{fmt(adminRevenue)}</div>
-                <div className="admin-stat-label">Tổng Doanh Thu Admin</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card info">
-              <Calendar size={28} />
-              <div>
-                <div className="admin-stat-number">{fmt(todayRevenue)}</div>
-                <div className="admin-stat-label">Doanh Thu Hôm Nay</div>
-              </div>
-            </div>
+          <div className="admin-overview-groups">
+            {overviewGroups.map(group => (
+              <section key={group.title} className={`admin-overview-group admin-overview-group--${group.className}`}>
+                <div className="admin-overview-group__header">
+                  <h3>{group.title}</h3>
+                  <p>{group.description}</p>
+                </div>
+                <div className="admin-stats-grid admin-stats-grid--grouped">
+                  {group.items.map(renderOverviewCard)}
+                </div>
+              </section>
+            ))}
           </div>
 
-          {/* Row 2: Earnings Split — 20% Admin vs 80% Mentor */}
-          <div className="admin-stats-grid secondary">
-            <div className="admin-stat-card platform">
-              <DollarSign size={22} />
-              <div>
-                <div className="admin-stat-number sm">{fmt(stats.totalPlatformFees)}</div>
-                <div className="admin-stat-label sm">Hoa Hồng Admin (20%)</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card mentor">
-              <User size={22} />
-              <div>
-                <div className="admin-stat-number sm">{fmt(stats.totalMentorEarnings)}</div>
-                <div className="admin-stat-label sm">Mentor Nhận (80%)</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card student">
-              <Coins size={22} />
-              <div>
-                <div className="admin-stat-number sm">{fmt(stats.totalStudentEarnings)}</div>
-                <div className="admin-stat-label sm">Student Nhận (Job)</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card booking">
-              <CreditCard size={22} />
-              <div>
-                <div className="admin-stat-number sm">{fmt(stats.totalBookingPayments)}</div>
-                <div className="admin-stat-label sm">Thanh Toán Booking</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Row 3: Refunds, Escrow, Frozen, Purchases */}
-          <div className="admin-stats-grid secondary">
-            <div className="admin-stat-card warn">
-              <RefreshCw size={22} />
-              <div>
-                <div className="admin-stat-number sm">{fmt(stats.totalRefunds)}</div>
-                <div className="admin-stat-label sm">Hoàn Tiền / Hoàn Ký Quỹ</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card info">
-              <Filter size={22} />
-              <div>
-                <div className="admin-stat-number sm">{fmt(stats.totalEscrowFunds)}</div>
-                <div className="admin-stat-label sm">Ký Quỹ (Đóng Băng)</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card info">
-              <Wallet size={22} />
-              <div>
-                <div className="admin-stat-number sm">{fmt(stats.totalFrozenCash)}</div>
-                <div className="admin-stat-label sm">Đang Đóng Băng (Ví)</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card info">
-              <DollarSign size={22} />
-              <div>
-                <div className="admin-stat-number sm">{fmt(stats.totalPurchaseRevenue)}</div>
-                <div className="admin-stat-label sm">Premium / Khóa Học</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Row 4: System Counters */}
-          <div className="admin-stats-grid secondary">
-            <div className="admin-stat-card info">
-              <BarChart3 size={22} />
-              <div>
-                <div className="admin-stat-number sm">{transactions.length}</div>
-                <div className="admin-stat-label sm">Tổng Giao Dịch</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card warn">
-              <RefreshCw size={22} />
-              <div>
-                <div className="admin-stat-number sm">{pendingCount}</div>
-                <div className="admin-stat-label sm">Đang Chờ Xử Lý</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card info">
-              <ArrowDownLeft size={22} />
-              <div>
-                <div className="admin-stat-number sm">{withdrawalsTx.length}</div>
-                <div className="admin-stat-label sm">Lệnh Rút Tiền</div>
-              </div>
-            </div>
-
-            <div className="admin-stat-card info">
-              <RefreshCw size={22} />
-              <div>
-                <div className="admin-stat-number sm">{refundsTx.length}</div>
-                <div className="admin-stat-label sm">Lệnh Hoàn Tiền</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Row 5: Charts */}
           <div className="admin-charts-section top-charts">
             <div className="admin-chart-card full-width">
               <div className="admin-chart-header">
@@ -601,7 +542,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
                   <button className={chartFilter === '1y' ? 'active' : ''} onClick={() => setChartFilter('1y')}>1 Năm</button>
                 </div>
               </div>
-              <div style={{ height: 320, marginTop: '1rem' }}>
+              <div className="admin-chart-body admin-chart-body--large">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={revenueTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
@@ -630,7 +571,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
           <div className="admin-charts-section bottom-charts">
             <div className="admin-chart-card">
               <h4><BarChart3 size={18} /> Doanh Thu Admin (6 Tháng)</h4>
-              <div style={{ height: 300, marginTop: '1rem' }}>
+              <div className="admin-chart-body">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={monthlyAdminRev}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
@@ -645,7 +586,7 @@ const TransactionManagementTabCosmic: React.FC = () => {
 
             <div className="admin-chart-card">
               <h4><BarChart3 size={18} /> Cơ Cấu Dòng Tiền Toàn Hệ Thống</h4>
-              <div style={{ height: 300, marginTop: '1rem' }}>
+              <div className="admin-chart-body">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie data={distributionData} cx="50%" cy="50%" innerRadius={70} outerRadius={100} paddingAngle={5} dataKey="value" stroke="none">
@@ -817,9 +758,8 @@ const TransactionManagementTabCosmic: React.FC = () => {
                 (selectedTx.id.startsWith('WAL-') && selectedTx.originalData?.currencyType === 'CASH')
               ) && (
                 <button
-                  className="admin-action-btn download"
+                  className="admin-action-btn download admin-action-btn--invoice"
                   onClick={() => handleDownload(selectedTx)}
-                  style={{ padding: '0.6rem 1.2rem', height: 'auto', minWidth: 'auto' }}
                 >
                   <Download size={16} /> Tải hóa đơn
                 </button>

@@ -1,0 +1,452 @@
+.admin-roadmap-catalog {
+  --roadmap-admin-bg: rgba(8, 18, 36, 0.94);
+  --roadmap-admin-panel: rgba(15, 28, 49, 0.92);
+  --roadmap-admin-panel-soft: rgba(19, 35, 60, 0.72);
+  --roadmap-admin-border: rgba(148, 163, 184, 0.18);
+  --roadmap-admin-border-strong: rgba(96, 165, 250, 0.42);
+  --roadmap-admin-text: #eef6ff;
+  --roadmap-admin-muted: #9fb5d1;
+  --roadmap-admin-faint: #7487a3;
+  --roadmap-admin-primary: #5b7cfa;
+  --roadmap-admin-cyan: #22d3ee;
+  --roadmap-admin-green: #34d399;
+  --roadmap-admin-red: #fb4b5a;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: var(--roadmap-admin-text);
+}
+
+.admin-roadmap-catalog__hero {
+  border: 1px solid var(--roadmap-admin-border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  background:
+    linear-gradient(135deg, rgba(59, 130, 246, 0.12), transparent 42%),
+    linear-gradient(160deg, var(--roadmap-admin-panel), var(--roadmap-admin-bg));
+  box-shadow: 0 18px 50px rgba(2, 8, 23, 0.24);
+}
+
+.admin-roadmap-catalog__hero-main {
+  max-width: 760px;
+}
+
+.admin-roadmap-catalog__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: #a9c4ff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.admin-roadmap-catalog__hero h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.admin-roadmap-catalog__hero p {
+  margin: 8px 0 0;
+  color: var(--roadmap-admin-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.admin-roadmap-catalog__tabbar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid var(--roadmap-admin-border);
+  border-radius: 8px;
+  background: rgba(7, 16, 32, 0.72);
+}
+
+.admin-roadmap-catalog__tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 62px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--roadmap-admin-muted);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.admin-roadmap-catalog__tab:hover {
+  border-color: rgba(148, 163, 184, 0.28);
+  background: rgba(30, 45, 72, 0.7);
+  color: #d9e8ff;
+}
+
+.admin-roadmap-catalog__tab--active {
+  border-color: var(--roadmap-admin-border-strong);
+  background: linear-gradient(135deg, rgba(91, 124, 250, 0.28), rgba(34, 211, 238, 0.1));
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.admin-roadmap-catalog__tab-icon {
+  flex: 0 0 auto;
+  color: #9fb5d1;
+}
+
+.admin-roadmap-catalog__tab--active .admin-roadmap-catalog__tab-icon {
+  color: var(--roadmap-admin-cyan);
+}
+
+.admin-roadmap-catalog__tab-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-roadmap-catalog__tab-copy strong {
+  color: inherit;
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-roadmap-catalog__tab-copy small {
+  margin-top: 3px;
+  color: var(--roadmap-admin-faint);
+  font-size: 0.74rem;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-roadmap-catalog__tab--active .admin-roadmap-catalog__tab-copy small {
+  color: #b9d0ee;
+}
+
+.admin-roadmap-catalog__panel {
+  min-width: 0;
+}
+
+.admin-roadmap-catalog__actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-roadmap-catalog__inline-input {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.admin-roadmap-catalog__inline-input--code {
+  min-width: 92px;
+}
+
+.admin-roadmap-catalog__inline-input--name {
+  min-width: 150px;
+}
+
+.admin-roadmap-catalog__inline-input--description {
+  min-width: 220px;
+}
+
+.admin-roadmap-catalog__toolbar {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) repeat(auto-fit, minmax(170px, 220px));
+  gap: 10px;
+  margin: 0 0 14px;
+  padding: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 8px;
+  background: rgba(7, 16, 32, 0.42);
+}
+
+.admin-roadmap-catalog__toolbar-search,
+.admin-roadmap-catalog__toolbar-select {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.admin-roadmap-catalog .admin-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0;
+  background: transparent;
+}
+
+.admin-roadmap-catalog .admin-tab-header,
+.admin-roadmap-catalog .skill-registry-tab__header,
+.admin-roadmap-catalog .career-taxonomy-tab__header,
+.admin-roadmap-catalog .job-track-skill-tab__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+}
+
+.admin-roadmap-catalog .admin-tab-header h2,
+.admin-roadmap-catalog .skill-registry-tab__title,
+.admin-roadmap-catalog .career-taxonomy-tab__title,
+.admin-roadmap-catalog .job-track-skill-tab__title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.16rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.admin-roadmap-catalog .admin-tab-header p,
+.admin-roadmap-catalog .skill-registry-tab__header p,
+.admin-roadmap-catalog .career-taxonomy-tab__header p,
+.admin-roadmap-catalog .job-track-skill-tab__header p {
+  margin: 5px 0 0;
+  color: var(--roadmap-admin-muted);
+  font-size: 0.9rem;
+}
+
+.admin-roadmap-catalog .skill-registry-tab__card,
+.admin-roadmap-catalog .skill-review-tab__card,
+.admin-roadmap-catalog .career-taxonomy-tab__card,
+.admin-roadmap-catalog .job-track-skill-tab__card {
+  border: 1px solid var(--roadmap-admin-border);
+  border-radius: 8px;
+  background: linear-gradient(160deg, var(--roadmap-admin-panel), rgba(12, 25, 45, 0.92));
+  box-shadow: 0 14px 36px rgba(2, 8, 23, 0.22);
+}
+
+.admin-roadmap-catalog .skill-registry-tab__form-container {
+  margin-bottom: 0;
+}
+
+.admin-roadmap-catalog .skill-registry-tab__input,
+.admin-roadmap-catalog .skill-review-tab__search-input,
+.admin-roadmap-catalog .career-taxonomy-tab__input,
+.admin-roadmap-catalog .career-taxonomy-tab__select,
+.admin-roadmap-catalog .job-track-skill-tab__input,
+.admin-roadmap-catalog .job-track-skill-tab__select {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 7px;
+  background: rgba(7, 16, 32, 0.78);
+  color: var(--roadmap-admin-text);
+  box-shadow: none;
+}
+
+.admin-roadmap-catalog .skill-registry-tab__input::placeholder,
+.admin-roadmap-catalog .skill-review-tab__search-input::placeholder,
+.admin-roadmap-catalog .career-taxonomy-tab__input::placeholder,
+.admin-roadmap-catalog .job-track-skill-tab__input::placeholder {
+  color: #71829e;
+}
+
+.admin-roadmap-catalog .skill-registry-tab__input:focus,
+.admin-roadmap-catalog .skill-review-tab__search-input:focus,
+.admin-roadmap-catalog .career-taxonomy-tab__input:focus,
+.admin-roadmap-catalog .career-taxonomy-tab__select:focus,
+.admin-roadmap-catalog .job-track-skill-tab__input:focus,
+.admin-roadmap-catalog .job-track-skill-tab__select:focus {
+  border-color: var(--roadmap-admin-border-strong);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
+}
+
+.admin-roadmap-catalog .skill-registry-tab__btn,
+.admin-roadmap-catalog .skill-review-tab__btn,
+.admin-roadmap-catalog .career-taxonomy-tab__btn,
+.admin-roadmap-catalog .job-track-skill-tab__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  font-weight: 800;
+  line-height: 1.15;
+  white-space: nowrap;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.admin-roadmap-catalog .skill-registry-tab__btn--primary,
+.admin-roadmap-catalog .career-taxonomy-tab__btn--primary,
+.admin-roadmap-catalog .job-track-skill-tab__btn--primary,
+.admin-roadmap-catalog .skill-review-tab__btn--merge {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.95), rgba(34, 211, 238, 0.76));
+  border-color: rgba(34, 211, 238, 0.36);
+  color: #ecfeff;
+  box-shadow: 0 8px 22px rgba(14, 165, 233, 0.18);
+}
+
+.admin-roadmap-catalog .skill-registry-tab__btn--success,
+.admin-roadmap-catalog .career-taxonomy-tab__btn--success,
+.admin-roadmap-catalog .job-track-skill-tab__btn--success,
+.admin-roadmap-catalog .skill-review-tab__btn--approve {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(52, 211, 153, 0.36);
+  color: #bbf7d0;
+}
+
+.admin-roadmap-catalog .skill-registry-tab__btn--danger,
+.admin-roadmap-catalog .career-taxonomy-tab__btn--danger,
+.admin-roadmap-catalog .job-track-skill-tab__btn--danger,
+.admin-roadmap-catalog .skill-review-tab__btn--reject {
+  background: rgba(251, 75, 90, 0.18);
+  border-color: rgba(251, 75, 90, 0.34);
+  color: #fecdd3;
+}
+
+.admin-roadmap-catalog .admin-roadmap-catalog__btn--neutral {
+  background: rgba(100, 116, 139, 0.18);
+  border-color: rgba(148, 163, 184, 0.28);
+  color: #dbe7f6;
+}
+
+.admin-roadmap-catalog .admin-roadmap-catalog__btn--delete {
+  background: rgba(220, 38, 38, 0.2);
+  border-color: rgba(248, 113, 113, 0.36);
+  color: #fecaca;
+}
+
+.admin-roadmap-catalog .skill-registry-tab__btn:hover:not(:disabled),
+.admin-roadmap-catalog .skill-review-tab__btn:hover:not(:disabled),
+.admin-roadmap-catalog .career-taxonomy-tab__btn:hover:not(:disabled),
+.admin-roadmap-catalog .job-track-skill-tab__btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.admin-roadmap-catalog .skill-registry-tab__table,
+.admin-roadmap-catalog .skill-review-tab__table,
+.admin-roadmap-catalog .career-taxonomy-tab__table,
+.admin-roadmap-catalog .job-track-skill-tab__table {
+  color: var(--roadmap-admin-text);
+}
+
+.admin-roadmap-catalog .skill-registry-tab__table th,
+.admin-roadmap-catalog .skill-review-tab__table th,
+.admin-roadmap-catalog .career-taxonomy-tab__table th,
+.admin-roadmap-catalog .job-track-skill-tab__table th {
+  height: 58px;
+  background: rgba(7, 16, 32, 0.88);
+  color: #c8d8ed;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+}
+
+.admin-roadmap-catalog .skill-registry-tab__table td,
+.admin-roadmap-catalog .skill-review-tab__table td,
+.admin-roadmap-catalog .career-taxonomy-tab__table td,
+.admin-roadmap-catalog .job-track-skill-tab__table td {
+  border-bottom-color: rgba(148, 163, 184, 0.16);
+  height: 64px;
+}
+
+.admin-roadmap-catalog .skill-registry-tab__table tbody tr:hover,
+.admin-roadmap-catalog .skill-review-tab__table tbody tr:hover,
+.admin-roadmap-catalog .career-taxonomy-tab__table tbody tr:hover,
+.admin-roadmap-catalog .job-track-skill-tab__table tbody tr:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.admin-roadmap-catalog .skill-registry-tab__table-cell-code,
+.admin-roadmap-catalog .career-taxonomy-tab__table-cell-code,
+.admin-roadmap-catalog .job-track-skill-tab__table-cell-code,
+.admin-roadmap-catalog .skill-review-tab__table code {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 6px;
+  background: rgba(7, 16, 32, 0.74);
+  color: #bfdbfe;
+}
+
+.admin-roadmap-catalog .skill-registry-tab__table-cell-desc,
+.admin-roadmap-catalog .career-taxonomy-tab__table-cell-desc,
+.admin-roadmap-catalog .job-track-skill-tab__table-cell-desc {
+  color: var(--roadmap-admin-muted);
+}
+
+.admin-roadmap-catalog .skill-review-tab__dropdown,
+.admin-roadmap-catalog .lss__dropdown {
+  border-color: var(--roadmap-admin-border-strong);
+  background: #0b1628;
+  box-shadow: 0 20px 50px rgba(2, 8, 23, 0.42);
+}
+
+.admin-roadmap-catalog .skill-review-tab__dropdown-item,
+.admin-roadmap-catalog .lss__option {
+  color: var(--roadmap-admin-text);
+}
+
+.admin-roadmap-catalog .skill-review-tab__dropdown-item:hover,
+.admin-roadmap-catalog .lss__option:hover,
+.admin-roadmap-catalog .lss__option--selected {
+  background: rgba(59, 130, 246, 0.14);
+}
+
+.admin-roadmap-catalog .status-badge {
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.admin-roadmap-catalog .status-badge.active {
+  background: rgba(52, 211, 153, 0.14);
+  color: #bbf7d0;
+}
+
+.admin-roadmap-catalog .status-badge.inactive {
+  background: rgba(148, 163, 184, 0.16);
+  color: #cbd5e1;
+}
+
+@media (max-width: 1100px) {
+  .admin-roadmap-catalog__tabbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-roadmap-catalog__hero {
+    padding: 18px;
+  }
+
+  .admin-roadmap-catalog__tabbar {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-roadmap-catalog .admin-tab-header,
+  .admin-roadmap-catalog .skill-registry-tab__header,
+  .admin-roadmap-catalog .career-taxonomy-tab__header,
+  .admin-roadmap-catalog .job-track-skill-tab__header {
+    flex-direction: column;
+  }
+
+  .admin-roadmap-catalog__toolbar {
+    grid-template-columns: 1fr;
+  }
+}

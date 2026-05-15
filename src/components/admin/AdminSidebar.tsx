@@ -177,7 +177,13 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           icon: Brain,
           allowedRoles: ["AI_ADMIN", "ADMIN"],
         },
-                {
+        {
+          id: "roadmap-catalog",
+          label: "Danh Mục Roadmap",
+          icon: Route,
+          allowedRoles: ["CONTENT_ADMIN", "AI_ADMIN", "ADMIN"],
+        },
+        {
           id: "ai-knowledge",
           label: "Tài Liệu AI",
           icon: LibraryBig,
@@ -206,35 +212,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           label: "Quản lý Skin",
           icon: Shirt,
           allowedRoles: ["AI_ADMIN", "ADMIN"],
-        },
-      ],
-    },
-    {
-      label: "ROADMAP",
-      items: [
-        {
-          id: "skill-registry",
-          label: "Skill Registry",
-          icon: ShieldCheck,
-          allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
-        },
-        {
-          id: "skill-suggestions",
-          label: "Duyệt Skill Suggestion",
-          icon: UserCheck,
-          allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
-        },
-        {
-          id: "career-taxonomy",
-          label: "Career Taxonomy",
-          icon: Route,
-          allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
-        },
-        {
-          id: "track-skills",
-          label: "Track Skill Mapping",
-          icon: ListChecks,
-          allowedRoles: ["CONTENT_ADMIN", "ADMIN"],
         },
       ],
     },
@@ -277,7 +254,15 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <div className="admin-sidebar-items">
               {group.items.map((item) => {
                 const Icon = item.icon;
-                const isActive = activeTab === item.id;
+                const isActive =
+                  activeTab === item.id ||
+                  (item.id === "roadmap-catalog" &&
+                    [
+                      "skill-registry",
+                      "skill-suggestions",
+                      "career-taxonomy",
+                      "track-skills",
+                    ].includes(activeTab));
 
                 return (
                   <button

@@ -82,11 +82,11 @@
 }
 
 .skill-registry-tab__btn--primary {
-  background-color: #6366f1;
+  background-color: #0ea5e9;
 }
 
 .skill-registry-tab__btn--primary:hover:not(:disabled) {
-  background-color: #4f46e5;
+  background-color: #0284c7;
 }
 
 .skill-registry-tab__btn--success {

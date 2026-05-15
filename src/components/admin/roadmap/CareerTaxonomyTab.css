@@ -95,11 +95,11 @@
 }
 
 .career-taxonomy-tab__btn--primary {
-  background-color: #6366f1;
+  background-color: #0ea5e9;
 }
 
 .career-taxonomy-tab__btn--primary:hover:not(:disabled) {
-  background-color: #4f46e5;
+  background-color: #0284c7;
 }
 
 .career-taxonomy-tab__btn--success {
@@ -143,6 +143,10 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   border: 1px solid var(--border-color, #e5e7eb);
   overflow: auto;
+}
+
+.career-taxonomy-tab__card--spaced {
+  margin-bottom: 20px;
 }
 
 [data-theme='dark'] .career-taxonomy-tab__card {

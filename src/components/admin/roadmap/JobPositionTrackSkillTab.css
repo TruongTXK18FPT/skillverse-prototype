@@ -169,6 +169,19 @@
   margin-bottom: 1rem;
 }
 
+.job-track-skill-tab__filter-bar {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(190px, 250px) minmax(190px, 250px);
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.job-track-skill-tab__filter-search,
+.job-track-skill-tab__filter-select {
+  margin: 0;
+}
+
 .job-track-skill-tab__filter-item {
   flex: 1;
   min-width: 180px;
@@ -267,11 +280,11 @@
 }
 
 .job-track-skill-tab__btn--primary {
-  background-color: #6366f1;
+  background-color: #0ea5e9;
 }
 
 .job-track-skill-tab__btn--primary:hover:not(:disabled) {
-  background-color: #4f46e5;
+  background-color: #0284c7;
 }
 
 .job-track-skill-tab__btn--success {
@@ -295,6 +308,15 @@
 .job-track-skill-tab__btn--small {
   padding: 0.3125rem 0.75rem;
   font-size: 0.8125rem;
+}
+
+.job-track-skill-tab__btn--wide {
+  grid-column: 1 / -1;
+}
+
+.job-track-skill-tab__btn--add {
+  align-self: flex-end;
+  min-width: 84px;
 }
 
 .job-track-skill-tab__table-row--selected {
@@ -350,8 +372,52 @@
   overflow: visible;
 }
 
+.job-track-skill-tab__card--spaced {
+  margin-bottom: 20px;
+}
+
+.job-track-skill-tab__card--highlight {
+  margin-bottom: 20px;
+  border-color: var(--roadmap-admin-border-strong, rgba(96, 165, 250, 0.42));
+}
+
 .job-track-skill-tab__table-wrapper {
   overflow: auto;
+}
+
+.job-track-skill-tab__table-wrapper--scroll {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.job-track-skill-tab__table-head--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.job-track-skill-tab__row--editing {
+  cursor: default;
+}
+
+.job-track-skill-tab__domain-name {
+  color: #94a3b8;
+  font-size: 0.85em;
+}
+
+.job-track-skill-tab__selection-hint {
+  margin: 1rem 0 0;
+  color: #7d8ba3;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.job-track-skill-tab__section-title--spaced {
+  margin-bottom: 0.875rem;
+}
+
+.job-track-skill-tab__selected-track-name {
+  color: var(--roadmap-admin-cyan, #22d3ee);
 }
 
 [data-theme='dark'] .job-track-skill-tab__card {
@@ -435,3 +501,9 @@
 [data-theme='dark'] .job-track-skill-tab__badge--importance-high { background-color: #431407; color: #fb923c; }
 [data-theme='dark'] .job-track-skill-tab__badge--importance-critical { background-color: #450a0a; color: #fca5a5; }
 [data-theme='dark'] .job-track-skill-tab__badge--order { background-color: #2e1065; color: #c4b5fd; }
+
+@media (max-width: 980px) {
+  .job-track-skill-tab__filter-bar {
+    grid-template-columns: 1fr;
+  }
+}
