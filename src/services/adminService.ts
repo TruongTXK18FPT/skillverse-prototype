@@ -23,6 +23,18 @@ import {
 } from "../types/ShortTermJob";
 import { JobPostingResponse, JobStatus } from "../data/jobDTOs";
 
+export interface RagProviderSettingsResponse {
+  aiRagServiceConfigured: boolean;
+  localAiGenerationConfigured: boolean;
+  localAiGenerationRuntimeEnabled: boolean;
+  aiRagServiceRuntimeEnabled: boolean;
+  localAiBaseUrlPresent: boolean;
+  javaRagEnvEnabled: boolean;
+  javaRagRuntimeEnabled: boolean;
+  mistralEmbeddingKeyPresent: boolean;
+  effectiveMode: string;
+}
+
 function normalizeAuditLogs(data: unknown): JobStatusAuditLog[] {
   if (Array.isArray(data)) {
     return data as JobStatusAuditLog[];
@@ -618,6 +630,39 @@ class AdminService {
       request,
     );
 
+    return response.data;
+  }
+
+  // --- RAG Provider Settings ---
+  
+  async getRagProviderSettings(): Promise<RagProviderSettingsResponse> {
+    const response = await axiosInstance.get<RagProviderSettingsResponse>(
+      `${this.BASE_URL}/rag-provider-settings`
+    );
+    return response.data;
+  }
+
+  async updateAiRagServiceEnabled(enabled: boolean): Promise<RagProviderSettingsResponse> {
+    const response = await axiosInstance.patch<RagProviderSettingsResponse>(
+      `${this.BASE_URL}/rag-provider-settings/ai-rag-service`,
+      { enabled }
+    );
+    return response.data;
+  }
+
+  async updateLocalAiGenerationEnabled(enabled: boolean): Promise<RagProviderSettingsResponse> {
+    const response = await axiosInstance.patch<RagProviderSettingsResponse>(
+      `${this.BASE_URL}/rag-provider-settings/local-ai-generation`,
+      { enabled }
+    );
+    return response.data;
+  }
+
+  async updateJavaRagFallbackEnabled(enabled: boolean): Promise<RagProviderSettingsResponse> {
+    const response = await axiosInstance.patch<RagProviderSettingsResponse>(
+      `${this.BASE_URL}/rag-provider-settings/java-rag-fallback`,
+      { enabled }
+    );
     return response.data;
   }
 }

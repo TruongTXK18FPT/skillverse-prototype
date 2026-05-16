@@ -23,6 +23,7 @@ import SliderManagementTab from "../../components/admin/SliderManagementTab";
 import AdminAiGradingDashboard from "../admin/AdminAiGradingDashboard";
 import AdminAiKnowledgeDashboard from "../admin/AdminAiKnowledgeDashboard";
 import AdminAiTokenUsageDashboard from "../admin/AdminAiTokenUsageDashboard";
+import AdminRagProviderPage from "../admin/AdminRagProviderPage";
 import AdminRoadmapCatalogTab from "../../components/admin/roadmap/AdminRoadmapCatalogTab";
 
 // import AdminSeminarManager from './AdminSeminarManager';
@@ -162,6 +163,8 @@ const AdminPage: React.FC = () => {
         return <AdminAiKnowledgeDashboard />;
       case "ai-token-usage":
         return <AdminAiTokenUsageDashboard />;
+      case "rag-providers":
+        return <AdminRagProviderPage />;
       case "question-bank":
         return <QuestionBankTab />;
       case "journey-management":

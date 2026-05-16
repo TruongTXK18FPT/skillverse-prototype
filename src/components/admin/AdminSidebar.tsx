@@ -24,6 +24,7 @@ import {
   Route,
   ShieldCheck,
   Activity,
+  Cpu,
 } from "lucide-react";
 import "./AdminSidebar.css";
 
@@ -187,6 +188,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           id: "ai-knowledge",
           label: "Tài Liệu AI",
           icon: LibraryBig,
+          allowedRoles: ["AI_ADMIN", "ADMIN"],
+        },
+        {
+          id: "rag-providers",
+          label: "RAG Providers",
+          icon: Cpu,
           allowedRoles: ["AI_ADMIN", "ADMIN"],
         },
         {
