@@ -3771,6 +3771,10 @@ export interface StartJourneyRequest {
   // For career type: specific job role
   jobRole?: string;
 
+  // Canonical taxonomy IDs for job-position based journeys
+  jobPositionId?: number;
+  jobPositionTrackId?: number;
+
   // Optional helper field from CareerForm (not sent to backend payload)
   roleKeywords?: string;
 
@@ -3807,6 +3811,8 @@ export interface JourneySummaryResponse {
   industry?: string;
   subCategory?: string;
   jobRole?: string;
+  jobPositionTrackId?: number;
+  targetLevel?: string;
   type?: string;
   skills?: string[];
   goal: string;
@@ -3856,7 +3862,7 @@ export interface JourneySummaryResponse {
   maxAssessmentAttempts?: number;
   remainingAssessmentRetakes?: number;
 
-  // V3 Phase 3 — single-journey enforcement
+  // V3 Phase 3 — journey lifecycle metadata
   hasActiveMentorBooking?: boolean;
 }
 

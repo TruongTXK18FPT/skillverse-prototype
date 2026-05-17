@@ -1,30 +1,31 @@
 import React from "react";
 import {
-  Users,
-  UserCheck,
-  BookOpen,
+  Activity,
+  AlertTriangle,
+  Banknote,
   BarChart3,
   Bell,
-  AlertTriangle,
-  CreditCard,
-  Banknote,
-  Crown,
-  Ticket,
+  BookOpen,
   Brain,
-  LibraryBig,
-  MessageSquare,
   Briefcase,
-  Shirt,
-  Image,
   Calendar,
   ChevronLeft,
   ChevronRight,
-  Shield,
+  CreditCard,
+  Crown,
+  FileStack,
+  Image,
+  LibraryBig,
   ListChecks,
+  MessageSquare,
   Route,
+  Shield,
   ShieldCheck,
-  Activity,
   Cpu,
+  Shirt,
+  Ticket,
+  UserCheck,
+  Users,
 } from "lucide-react";
 import "./AdminSidebar.css";
 
@@ -36,6 +37,19 @@ interface AdminSidebarProps {
   setIsCollapsed: (collapsed: boolean) => void;
 }
 
+type SidebarItem = {
+  id: string;
+  label: string;
+  icon: React.ElementType;
+  allowedRoles: string[];
+  activeAliases?: string[];
+};
+
+type SidebarGroup = {
+  label: string;
+  items: SidebarItem[];
+};
+
 const AdminSidebar: React.FC<AdminSidebarProps> = ({
   activeTab,
   setActiveTab,
@@ -43,7 +57,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   isCollapsed,
   setIsCollapsed,
 }) => {
-  const allGroups = [
+  const allGroups: SidebarGroup[] = [
     {
       label: "HỆ THỐNG",
       items: [
@@ -179,6 +193,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           allowedRoles: ["AI_ADMIN", "ADMIN"],
         },
         {
+          id: "roadmap-templates",
+          label: "Mẫu Lộ Trình",
+          icon: FileStack,
+          allowedRoles: ["CONTENT_ADMIN", "AI_ADMIN", "ADMIN"],
+        },
+        {
           id: "roadmap-catalog",
           label: "Danh Mục Roadmap",
           icon: Route,
@@ -253,8 +273,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       </div>
 
       <div className="admin-sidebar-nav">
-        {filteredGroups.map((group, idx) => (
-          <div key={idx} className="admin-sidebar-group">
+        {filteredGroups.map((group) => (
+          <div key={group.label} className="admin-sidebar-group">
             {!isCollapsed && (
               <h4 className="admin-sidebar-group-label">{group.label}</h4>
             )}
@@ -263,13 +283,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                 const Icon = item.icon;
                 const isActive =
                   activeTab === item.id ||
-                  (item.id === "roadmap-catalog" &&
-                    [
-                      "skill-registry",
-                      "skill-suggestions",
-                      "career-taxonomy",
-                      "track-skills",
-                    ].includes(activeTab));
+                  Boolean(item.activeAliases?.includes(activeTab));
 
                 return (
                   <button

@@ -448,14 +448,14 @@ const GSJJourneyPage: React.FC = () => {
     }
   }, [location.pathname, location.state, navigate, showWarning]);
 
-  // V3 Phase 3: Compute whether user has any active (non-terminal) journey
-  const hasActiveJourney = journeys.some(
+  const activeJourneyCount = journeys.filter(
     (j) =>
       j.status !== JourneyStatus.COMPLETED &&
+      j.status !== JourneyStatus.PAUSED &&
       j.status !== JourneyStatus.CANCELLED &&
       j.status !== JourneyStatus.COMPLETED_UNVERIFIED &&
       j.status !== JourneyStatus.COMPLETED_VERIFIED,
-  );
+  ).length;
 
   const handleCreateJourneyClick = useCallback(() => {
     if (!user) {
@@ -463,16 +463,16 @@ const GSJJourneyPage: React.FC = () => {
       return;
     }
 
-    if (hasActiveJourney) {
+    if (activeJourneyCount >= 5) {
       showWarning(
         "Không thể tạo hành trình mới",
-        "Bạn đang có một hành trình chưa hoàn thành. Hãy hoàn thành hoặc xóa hành trình cũ trước khi tạo mới.",
+        "Bạn đang học tối đa 5 hành trình cùng lúc. Hãy hoàn thành, tạm dừng hoặc xóa một hành trình trước khi tạo mới.",
       );
       return;
     }
 
     navigate("/journey/create");
-  }, [navigate, user, hasActiveJourney, showWarning]);
+  }, [navigate, user, activeJourneyCount, showWarning]);
 
   const syncSelectedJourneyTest = useCallback(
     (test: AssessmentTestResponse) => {
@@ -1444,14 +1444,11 @@ const GSJJourneyPage: React.FC = () => {
     totalJourneys,
   );
 
-  // Split view B: active journey hero + history list
-  const activeJourney =
-    journeys.find((j) => activeJourneyStatuses.includes(j.status)) ?? null;
+  // Split view B: active journey list + history list
+  const activeJourneyList = journeys.filter((j) => activeJourneyStatuses.includes(j.status));
 
   const historyJourneys = journeys.filter((j) => {
-    const isTerminal =
-      !activeJourneyStatuses.includes(j.status) && j !== activeJourney;
-    return isTerminal;
+    return !activeJourneyStatuses.includes(j.status);
   });
 
   const filteredHistoryJourneys = historyJourneys.filter((j) => {
@@ -2013,12 +2010,6 @@ const GSJJourneyPage: React.FC = () => {
   );
 
   const renderJourneyList = () => {
-    const activeLabel = activeJourney
-      ? activeJourney.jobRole
-        ? getJobRoleLabel(activeJourney.jobRole, activeJourney.domain)
-        : getDomainLabel(activeJourney.domain)
-      : "";
-
     return (
       <div className="gsj-journeys-section" id="journeys-section">
         {/* Section header */}
@@ -2030,8 +2021,8 @@ const GSJJourneyPage: React.FC = () => {
             </h2>
             <p className="gsj-section-header__subtitle">
               {totalJourneys > 0
-                ? activeJourney
-                  ? "1 hành trình đang hoạt động"
+                ? activeJourneyCount > 0
+                  ? `${activeJourneyCount} hành trình đang hoạt động`
                   : `${historyJourneys.length} hành trình đã kết thúc`
                 : "Bắt đầu hành trình đầu tiên của bạn"}
             </p>
@@ -2040,10 +2031,10 @@ const GSJJourneyPage: React.FC = () => {
             <button
               className="gsj-btn gsj-btn--primary"
               onClick={handleCreateJourneyClick}
-              disabled={!!activeJourney}
+              disabled={activeJourneyCount >= 5}
               title={
-                activeJourney
-                  ? "Hoàn thành hoặc xóa hành trình hiện tại trước khi tạo mới"
+                activeJourneyCount >= 5
+                  ? "Bạn đang học tối đa 5 hành trình cùng lúc"
                   : undefined
               }
             >
@@ -2080,13 +2071,19 @@ const GSJJourneyPage: React.FC = () => {
           </div>
         ) : (
           <>
-            {/* ── ACTIVE JOURNEY HERO CARD ── */}
+            {/* ── ACTIVE JOURNEY HERO CARDS ── */}
             <div className="gsj-split__section-label gsj-split__section-label--active">
               <span className="gsj-split__dot gsj-split__dot--active" />
-              Đang hoạt động
+              Đang hoạt động ({activeJourneyList.length}/5)
             </div>
 
-            {activeJourney ? (
+            {activeJourneyList.length > 0 ? (
+              <div className="gsj-active-journeys-grid">
+                {activeJourneyList.map((activeJourney) => {
+                  const activeLabel = activeJourney.jobRole
+                    ? getJobRoleLabel(activeJourney.jobRole, activeJourney.domain)
+                    : getDomainLabel(activeJourney.domain);
+                  return (
               <div
                 className="gsj-active-card"
                 onClick={() => handleSelectJourney(activeJourney.id)}
@@ -2222,6 +2219,8 @@ const GSJJourneyPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              )})}
               </div>
             ) : (
               <div className="gsj-active-card gsj-active-card--empty">

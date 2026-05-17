@@ -744,8 +744,8 @@ const AiRoadmapPage = () => {
           <div>
             <strong>Lộ trình được tạo qua Hành trình (Journey)</strong>
             <p style={{ margin: "4px 0 0 0", fontSize: "14px", opacity: 0.9 }}>
-              Mỗi người dùng chỉ có một hành trình học tập duy nhất. Để tạo lộ
-              trình mới, hãy hoàn thành hoặc xóa hành trình hiện tại tại{" "}
+              Mỗi người dùng có thể học tối đa 5 lộ trình cùng lúc. Để tạo thêm
+              khi đã đạt giới hạn, hãy hoàn thành, tạm dừng hoặc xóa một lộ trình tại{" "}
               <button
                 onClick={() => navigate("/journey")}
                 style={{

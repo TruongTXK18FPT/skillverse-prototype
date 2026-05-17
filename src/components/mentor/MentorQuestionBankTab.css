@@ -901,4 +901,153 @@
   .mentor-qb-detailTop {
     flex-direction: column;
   }
+
+  .mentor-qb-skillChips {
+    justify-content: center;
+  }
+
+  .mentor-qb-jobCards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================================
+   Mentor Skill Chip Selection — Neon Tech Theme
+   ========================================================================== */
+.mentor-qb-skillSelection,
+.mentor-qb-jobSelection {
+  padding: 1.5rem;
+  border-radius: 18px;
+  border: 1px solid rgba(52, 211, 153, 0.15);
+  background: rgba(6, 20, 38, 0.5);
+}
+
+.mentor-qb-skillSelection h4,
+.mentor-qb-jobSelection h4 {
+  margin: 0;
+  color: #86efac;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mentor-qb-skillChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.mentor-qb-skillChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  border: 2px solid rgba(52, 211, 153, 0.2);
+  background: rgba(2, 24, 28, 0.7);
+  color: #d6fdf1;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mentor-qb-skillChip:hover {
+  border-color: rgba(52, 211, 153, 0.5);
+  background: rgba(52, 211, 153, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.12);
+}
+
+.mentor-qb-skillChip.active {
+  border-color: #34d399;
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(56, 189, 248, 0.1));
+  color: #ecfdf5;
+  box-shadow:
+    0 0 0 1px rgba(52, 211, 153, 0.25),
+    0 0 30px rgba(52, 211, 153, 0.15);
+}
+
+.mentor-qb-skillChip.active svg {
+  color: #4ade80;
+  filter: drop-shadow(0 0 4px rgba(74, 222, 128, 0.6));
+}
+
+.mentor-qb-skillChip svg {
+  color: #86efac;
+  flex-shrink: 0;
+}
+
+/* ============================================================================
+   Mentor Job Position Cards — Neon Tech Theme
+   ========================================================================== */
+.mentor-qb-jobCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.mentor-qb-jobCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border-radius: 16px;
+  border: 2px solid rgba(56, 189, 248, 0.18);
+  background: rgba(5, 18, 31, 0.75);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.mentor-qb-jobCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.1), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mentor-qb-jobCard:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(56, 189, 248, 0.12);
+}
+
+.mentor-qb-jobCard:hover::before {
+  opacity: 1;
+}
+
+.mentor-qb-jobCard:active {
+  transform: translateY(-1px);
+}
+
+.jobCard-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #e8f7ff;
+  position: relative;
+  z-index: 1;
+}
+
+.jobCard-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.jobCard-meta span {
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  background: rgba(2, 12, 27, 0.6);
+  color: #7dd3fc;
 }

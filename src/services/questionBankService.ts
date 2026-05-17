@@ -31,10 +31,14 @@ export const createQuestionBank = async (data: CreateQuestionBank): Promise<Ques
 };
 
 export const getQuestionBanks = async (
-  params?: { domain?: string; industry?: string; jobRole?: string; skillName?: string; page?: number; size?: number }
+  params?: { domainId?: number; jobPositionId?: number; skillId?: number; page?: number; size?: number }
 ): Promise<PaginatedResponse<QuestionBankSummary>> => {
   const res = await axiosInstance.get<PaginatedResponse<QuestionBankSummary>>(BASE, { params });
   return res.data;
+};
+
+export const syncJobPositionBanks = async (): Promise<void> => {
+  await axiosInstance.post(`${BASE}/sync-job-positions`);
 };
 
 export const getQuestionBank = async (id: number): Promise<QuestionBankDetail> => {

@@ -179,7 +179,7 @@ const aiRoadmapService = {
   },
 
   /**
-   * Activate a roadmap and automatically pause other active roadmaps of the user.
+   * Activate a roadmap when the user has fewer than 5 active roadmaps.
    */
   activateRoadmap: async (sessionId: number): Promise<void> => {
     try {

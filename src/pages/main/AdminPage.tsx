@@ -25,6 +25,7 @@ import AdminAiKnowledgeDashboard from "../admin/AdminAiKnowledgeDashboard";
 import AdminAiTokenUsageDashboard from "../admin/AdminAiTokenUsageDashboard";
 import AdminRagProviderPage from "../admin/AdminRagProviderPage";
 import AdminRoadmapCatalogTab from "../../components/admin/roadmap/AdminRoadmapCatalogTab";
+import AdminRoadmapTemplateManager from "../../components/admin/AdminRoadmapTemplateManager";
 
 // import AdminSeminarManager from './AdminSeminarManager';
 import adminUserService from "../../services/adminUserService";
@@ -181,6 +182,8 @@ const AdminPage: React.FC = () => {
       case "career-taxonomy":
       case "track-skills":
         return <AdminRoadmapCatalogTab initialSubTab={activeTab} />;
+      case "roadmap-templates":
+        return <AdminRoadmapTemplateManager />;
       default:
         return <AnalyticsTab />;
     }

@@ -38,6 +38,10 @@ import {
 import { getMyVerifiedSkills } from "../../services/mentorVerificationService";
 import { getExpertDomainLabel } from "../../utils/expertFieldPresentation";
 import { isSkillFuzzyVerified } from "../../utils/skillResolver";
+import { careerTaxonomyService } from "../../services/careerTaxonomyService";
+import { skillService } from "../../services/skillService";
+import { Domain, JobPosition } from "../../types/careerTaxonomy";
+import { SkillDto } from "../../data/skillDTOs";
 import "./MentorQuestionBankTab.css";
 
 type ComposerMode = "MANUAL" | "JSON_IMPORT";
@@ -54,8 +58,6 @@ const DIFFICULTIES = [
   "EXPERT",
 ] as const;
 const CATEGORIES = ["KNOWLEDGE", "SKILL", "SITUATION", "ANALYSIS"] as const;
-const MENTOR_ALLOWED_DOMAINS = ["IT", "BUSINESS", "DESIGN"] as const;
-
 const difficultyLabels: Record<string, string> = {
   BEGINNER: "Cơ bản",
   INTERMEDIATE: "Trung bình",
@@ -128,17 +130,22 @@ const MentorQuestionBankTab: React.FC = () => {
   >(null);
   const [historySearch, setHistorySearch] = useState("");
   const [skillInput, setSkillInput] = useState("");
+  const [taxonomyDomains, setTaxonomyDomains] = useState<Domain[]>([]);
+  const [taxonomyJobPositions, setTaxonomyJobPositions] = useState<JobPosition[]>([]);
+  const [activeSkills, setActiveSkills] = useState<SkillDto[]>([]);
   const [importedFileName, setImportedFileName] = useState("");
   const [form, setForm] = useState<{
+    domainId: number | "";
+    jobPositionId: number | "";
+    skillId: number | "";
     domain: string;
-    industry: string;
-    jobRole: string;
     title: string;
     description: string;
   }>({
+    domainId: "",
+    jobPositionId: "",
+    skillId: "",
     domain: "",
-    industry: "",
-    jobRole: "",
     title: "",
     description: "",
   });
@@ -164,12 +171,18 @@ const MentorQuestionBankTab: React.FC = () => {
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
-      const [skills, mySubmissions] = await Promise.all([
+      const [skills, mySubmissions, domains, jobPositions, allSkills] = await Promise.all([
         getMyVerifiedSkills(),
         getMyQuestionBankSubmissions(),
+        careerTaxonomyService.getActiveDomains(),
+        careerTaxonomyService.getActiveJobPositions(),
+        skillService.getActiveSkills(),
       ]);
       setVerifiedSkills(skills || []);
       setSubmissions(mySubmissions || []);
+      setTaxonomyDomains(domains || []);
+      setTaxonomyJobPositions(jobPositions || []);
+      setActiveSkills(allSkills || []);
     } catch {
       showError("Lỗi", "Không thể tải dữ liệu đóng góp ngân hàng câu hỏi.");
     } finally {
@@ -199,12 +212,73 @@ const MentorQuestionBankTab: React.FC = () => {
     [normalizedSkill, verifiedSkillSet, skillInput, verifiedSkills],
   );
 
+  const selectedDomain = useMemo(
+    () => taxonomyDomains.find((domain) => domain.id === form.domainId),
+    [taxonomyDomains, form.domainId],
+  );
+
+  const filteredJobPositions = useMemo(
+    () =>
+      taxonomyJobPositions.filter(
+        (position) => !form.domainId || position.domainId === form.domainId,
+      ),
+    [taxonomyJobPositions, form.domainId],
+  );
+
+  const selectedJobPosition = useMemo(
+    () => taxonomyJobPositions.find((position) => position.id === form.jobPositionId),
+    [taxonomyJobPositions, form.jobPositionId],
+  );
+
+  const selectedSkill = useMemo(
+    () =>
+      activeSkills.find((skill) => skill.id === form.skillId) ||
+      activeSkills.find((skill) => normalizeSkillValue(skill.name) === normalizedSkill),
+    [activeSkills, form.skillId, normalizedSkill],
+  );
+
   const pendingCount = useMemo(
     () =>
       submissions.filter((submission) => submission.status === "PENDING")
         .length,
     [submissions],
   );
+
+  const [suggestedJobPositions, setSuggestedJobPositions] = useState<JobPosition[]>([]);
+  const [selectedSkillForSearch, setSelectedSkillForSearch] = useState<SkillDto | null>(null);
+  const [isSearchingJobs, setIsSearchingJobs] = useState(false);
+
+  const handleSelectVerifiedSkill = async (skillName: string) => {
+    setSkillInput(skillName);
+    const skill = activeSkills.find((s) => normalizeSkillValue(s.name) === normalizeSkillValue(skillName));
+    if (!skill) {
+       showWarning("Lỗi", "Skill này chưa được liên kết với hệ thống Career Taxonomy.");
+       return;
+    }
+    setSelectedSkillForSearch(skill);
+    
+    try {
+      setIsSearchingJobs(true);
+      const jobs = await careerTaxonomyService.searchJobPositionsBySkill(skill.id);
+      setSuggestedJobPositions(jobs);
+    } catch {
+      showError("Lỗi", "Không thể tìm kiếm lộ trình nghề nghiệp cho skill này.");
+    } finally {
+      setIsSearchingJobs(false);
+    }
+  };
+
+  const handleSelectJobPosition = (jobPosition: JobPosition) => {
+     setForm({
+        domainId: jobPosition.domainId || "",
+        jobPositionId: jobPosition.id || "",
+        skillId: selectedSkillForSearch?.id || "",
+        domain: taxonomyDomains.find(d => d.id === jobPosition.domainId)?.code || "",
+        title: `Bộ câu hỏi mentor - ${formatSkillLabel(selectedSkillForSearch?.name)}`,
+        description: `Bộ câu hỏi do mentor đóng góp cho skill ${formatSkillLabel(selectedSkillForSearch?.name)} thuộc vị trí ${jobPosition.name}.`,
+     });
+     setStep("compose");
+  };
 
   const filteredSubmissions = useMemo(() => {
     const normalizedSearch = historySearch.trim().toLowerCase();
@@ -213,8 +287,8 @@ const MentorQuestionBankTab: React.FC = () => {
       [
         submission.title,
         submission.skillName,
-        submission.jobRole,
-        submission.industry,
+        submission.jobPositionName,
+        submission.domainName,
         submission.status,
       ]
         .filter(Boolean)
@@ -222,61 +296,20 @@ const MentorQuestionBankTab: React.FC = () => {
     );
   }, [historySearch, submissions]);
 
-  const mapDomainToEnum = (domain: string): string => {
-    const upper = domain.toUpperCase();
-    if (
-      upper === "IT" ||
-      upper.includes("INFORMATION TECHNOLOGY") ||
-      upper.includes("CÔNG NGHỆ THÔNG TIN")
-    )
-      return "IT";
-    if (
-      upper === "BUSINESS" ||
-      upper.includes("BUSINESS") ||
-      upper.includes("KINH DOANH") ||
-      upper.includes("MARKETING")
-    )
-      return "BUSINESS";
-    if (
-      upper === "DESIGN" ||
-      upper.includes("DESIGN") ||
-      upper.includes("THIẾT KẾ") ||
-      upper.includes("SÁNG TẠO")
-    )
-      return "DESIGN";
-    return upper;
-  };
 
-  // [Skill Auto-Resolve] Callback from SkillAutoResolve when user confirms a resolved career path.
-  const handleAutoResolve = useCallback(
-    (data: {
-      domain: string;
-      industry: string;
-      jobRole: string;
-      keywords?: string;
-    }) => {
-      const mappedDomain = mapDomainToEnum(data.domain);
-      setForm({
-        domain: mappedDomain,
-        industry: data.industry,
-        jobRole: data.jobRole,
-        title: `Bộ câu hỏi mentor - ${formatSkillLabel(normalizedSkill)} / ${data.jobRole}`,
-        description: `Bộ câu hỏi do mentor đóng góp cho skill ${formatSkillLabel(normalizedSkill)} thuộc lộ trình ${data.jobRole}.`,
-      });
-      setStep("compose");
-    },
-    [normalizedSkill],
-  );
 
   const resetComposer = () => {
     setStep("career");
     setMode("MANUAL");
     setSkillInput("");
     setImportedFileName("");
+    setSelectedSkillForSearch(null);
+    setSuggestedJobPositions([]);
     setForm({
+      domainId: "",
+      jobPositionId: "",
+      skillId: "",
       domain: "",
-      industry: "",
-      jobRole: "",
       title: "",
       description: "",
     });
@@ -414,10 +447,10 @@ const MentorQuestionBankTab: React.FC = () => {
 
   // [Question Bank Contribution] Payload gửi đi dùng chung cho nhập tay và import JSON, chỉ khác trường source.
   const handleSubmit = async () => {
-    if (!form.domain || !form.industry || !form.jobRole) {
+    if (!form.domainId || !form.jobPositionId) {
       showWarning(
         "Thiếu lộ trình",
-        "Hãy chọn đầy đủ domain, ngành và job role.",
+        "Hãy chọn đầy đủ domain và job position.",
       );
       return;
     }
@@ -433,13 +466,14 @@ const MentorQuestionBankTab: React.FC = () => {
     }
 
     const payload: CreateQuestionBankSubmission = {
-      domain: form.domain,
-      industry: form.industry,
-      jobRole: form.jobRole,
+      domainId: form.domainId,
+      jobPositionId: form.jobPositionId,
+      skillId: selectedSkill?.id || form.skillId || null,
+      domain: selectedDomain?.code || form.domain,
       skillName: normalizedSkill,
       title:
         form.title.trim() ||
-        `Bộ câu hỏi mentor - ${formatSkillLabel(normalizedSkill)} / ${form.jobRole}`,
+        `Bộ câu hỏi mentor - ${formatSkillLabel(normalizedSkill)}`,
       description: form.description.trim() || undefined,
       source: mode,
       questions: questions.map(({ id, ...question }) => ({
@@ -554,27 +588,70 @@ const MentorQuestionBankTab: React.FC = () => {
 
           {step === "career" ? (
             <div className="mentor-qb-careerShell">
-              <SkillAutoResolve
-                skillInput={skillInput}
-                onSkillChange={setSkillInput}
-                onResolve={handleAutoResolve}
-                allowedDomains={[...MENTOR_ALLOWED_DOMAINS]}
-                verifiedSkills={verifiedSkills}
-                onSkillChipClick={(skill) => setSkillInput(skill)}
-                showManualFallback={false}
-                onBack={resetComposer}
-                label="Nhập skill để tự động xác định lộ trình"
-                description="Hệ thống sẽ tự động xác định domain, ngành và nghề phù hợp với skill bạn nhập."
-                placeholder="Ví dụ: React, Java Spring Boot, UI Design..."
-              />
+                <div className="mentor-qb-skillSelection">
+                  <h4 style={{ marginBottom: "1rem" }}>1. Chọn kỹ năng đã được xác thực</h4>
+                  {verifiedSkills.length === 0 ? (
+                    <div className="mentor-qb-emptyState">
+                      Bạn chưa có kỹ năng nào được xác thực. Vui lòng xác thực kỹ năng trước khi đóng góp bộ câu hỏi.
+                    </div>
+                  ) : (
+                    <div className="mentor-qb-skillChips">
+                      {verifiedSkills.map((skillName) => (
+                        <button
+                          key={skillName}
+                          type="button"
+                          className={`mentor-qb-skillChip ${normalizeSkillValue(skillName) === normalizeSkillValue(skillInput) ? "active" : ""}`}
+                          onClick={() => handleSelectVerifiedSkill(skillName)}
+                        >
+                          <CheckCircle2 size={16} />
+                          {formatSkillLabel(skillName)}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {selectedSkillForSearch && (
+                  <div className="mentor-qb-jobSelection" style={{ marginTop: "2rem" }}>
+                    <h4 style={{ marginBottom: "1rem" }}>2. Chọn Job Position gợi ý</h4>
+                    {isSearchingJobs ? (
+                      <div className="mentor-qb-loading">
+                        <RefreshCw size={18} className="mentor-qb-spin" />
+                        <span>Đang tìm kiếm Job Position phù hợp...</span>
+                      </div>
+                    ) : suggestedJobPositions.length === 0 ? (
+                      <div className="mentor-qb-emptyState">
+                        <XCircle size={20} color="#f87171" />
+                        Không tìm thấy Job Position nào yêu cầu kỹ năng này trong hệ thống.
+                      </div>
+                    ) : (
+                      <div className="mentor-qb-jobCards">
+                        {suggestedJobPositions.map((job) => {
+                          const domain = taxonomyDomains.find(d => d.id === job.domainId);
+                          return (
+                            <div 
+                              key={job.id} 
+                              className="mentor-qb-jobCard"
+                              onClick={() => handleSelectJobPosition(job)}
+                            >
+                              <div className="jobCard-title">{job.name}</div>
+                              <div className="jobCard-meta">
+                                <span>{domain?.name || domain?.code}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
             </div>
           ) : (
             <div className="mentor-qb-composeShell">
               <div className="mentor-qb-selectionBar">
                 <div className="mentor-qb-selectionMeta">
-                  <span>{getExpertDomainLabel(form.domain)}</span>
-                  <span>{form.industry}</span>
-                  <span>{form.jobRole}</span>
+                  <span>{selectedDomain?.name || getExpertDomainLabel(form.domain)}</span>
+                  <span>{selectedJobPosition?.name || "Chưa chọn Job Position"}</span>
                   <span className={isVerifiedSkill ? "active" : ""}>
                     {formatSkillLabel(normalizedSkill)}
                   </span>
@@ -601,6 +678,50 @@ const MentorQuestionBankTab: React.FC = () => {
                     Skill được khóa theo bước chọn lộ trình. Muốn đổi skill,
                     hãy bấm "Chọn lại lộ trình".
                   </small>
+                </label>
+                <label className="mentor-qb-field">
+                  <span>Domain</span>
+                  <select
+                    value={form.domainId}
+                    onChange={(event) => {
+                      const domainId = event.target.value ? Number(event.target.value) : "";
+                      const domain = taxonomyDomains.find((item) => item.id === domainId);
+                      setForm((prev) => ({
+                        ...prev,
+                        domainId,
+                        jobPositionId: "",
+                        domain: domain?.code || "",
+                      }));
+                    }}
+                  >
+                    <option value="">Chọn domain</option>
+                    {taxonomyDomains.map((domain) => (
+                      <option key={domain.id} value={domain.id}>
+                        {domain.name || domain.code}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="mentor-qb-field">
+                  <span>Job position</span>
+                  <select
+                    value={form.jobPositionId}
+                    onChange={(event) => {
+                      const jobPositionId = event.target.value ? Number(event.target.value) : "";
+                      const jobPosition = taxonomyJobPositions.find((item) => item.id === jobPositionId);
+                      setForm((prev) => ({
+                        ...prev,
+                        jobPositionId,
+                      }));
+                    }}
+                  >
+                    <option value="">Chọn job position</option>
+                    {filteredJobPositions.map((position) => (
+                      <option key={position.id} value={position.id}>
+                        {position.name}
+                      </option>
+                    ))}
+                  </select>
                 </label>
                 <label className="mentor-qb-field">
                   <span>Tên bộ câu hỏi</span>
@@ -1034,9 +1155,8 @@ const MentorQuestionBankTab: React.FC = () => {
                       {expanded && (
                         <div className="mentor-qb-historyDetail">
                           <div className="mentor-qb-detailFacts">
-                            <span>{getExpertDomainLabel(submission.domain)}</span>
-                            <span>{submission.industry}</span>
-                            <span>{submission.jobRole}</span>
+                            <span>{submission.domainName || getExpertDomainLabel(submission.domain)}</span>
+                            <span>{submission.jobPositionName || "Chưa chọn"}</span>
                           </div>
                           <p>{submission.description || "Không có mô tả."}</p>
                           <div className="mentor-qb-detailMetrics">
@@ -1089,9 +1209,8 @@ const MentorQuestionBankTab: React.FC = () => {
                 </div>
 
                 <div className="mentor-qb-detailFacts large">
-                  <span>{getExpertDomainLabel(selectedSubmission.domain)}</span>
-                  <span>{selectedSubmission.industry}</span>
-                  <span>{selectedSubmission.jobRole}</span>
+                  <span>{selectedSubmission.domainName || getExpertDomainLabel(selectedSubmission.domain)}</span>
+                  <span>{selectedSubmission.jobPositionName || "Chưa chọn"}</span>
                   <span>{formatSkillLabel(selectedSubmission.skillName)}</span>
                   <span>
                     {statusLabelMap[selectedSubmission.status] ||

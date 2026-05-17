@@ -23,6 +23,27 @@ export const careerTaxonomyService = {
     return data;
   },
 
+  // Read APIs for mentors/users
+  getActiveDomains: async (): Promise<Domain[]> => {
+    const { data } = await api.get('/domains');
+    return data;
+  },
+
+  getActiveJobPositions: async (domainId?: number): Promise<JobPosition[]> => {
+    const { data } = await api.get('/job-positions', { params: { domainId } });
+    return data;
+  },
+
+  getActiveTracks: async (jobPositionId: number): Promise<JobPositionTrack[]> => {
+    const { data } = await api.get(`/job-positions/${jobPositionId}/tracks`);
+    return data;
+  },
+
+  searchJobPositionsBySkill: async (skillId: number): Promise<JobPosition[]> => {
+    const { data } = await api.get('/job-positions/search-by-skill', { params: { skillId } });
+    return data;
+  },
+
   // Write APIs (Admin)
   createDomain: async (domain: Partial<Domain>): Promise<Domain> => {
     const { data } = await api.post('/admin/domains', domain);

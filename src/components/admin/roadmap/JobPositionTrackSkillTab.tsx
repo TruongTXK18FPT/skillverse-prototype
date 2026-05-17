@@ -139,12 +139,12 @@ const JobPositionTrackSkillTab: React.FC = () => {
   // Add skill to track
   const [addSkillId, setAddSkillId] = useState('');
   const [addRequirementType, setAddRequirementType] = useState<JobPositionTrackSkill['requirementType']>('REQUIRED');
-  const [addImportanceLevel, setAddImportanceLevel] = useState<JobPositionTrackSkill['importanceLevel']>('MEDIUM');
+  const [addWeight, setAddWeight] = useState<number>(1);
   const [addSkillSubmitting, setAddSkillSubmitting] = useState(false);
 
   // Edit mapped skill state
   const [editingSkillMappingId, setEditingSkillMappingId] = useState<number | null>(null);
-  const [editMappingForm, setEditMappingForm] = useState({ requirementType: 'REQUIRED', importanceLevel: 'MEDIUM' });
+  const [editMappingForm, setEditMappingForm] = useState({ requirementType: 'REQUIRED', weight: 1 });
   const [trackSkillsSaveState, setTrackSkillsSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const saveStateTimerRef = React.useRef<number | null>(null);
 
@@ -347,12 +347,13 @@ const JobPositionTrackSkillTab: React.FC = () => {
     setTrackSkillsSaveState('saving');
     setError(null);
     try {
-      const existing: Partial<JobPositionTrackSkill>[] = trackSkills.map(ts => ({ skillId: ts.skillId, requirementType: ts.requirementType, importanceLevel: ts.importanceLevel, sortOrder: ts.sortOrder }));
-      const next: Partial<JobPositionTrackSkill>[] = [...existing, { skillId, requirementType: addRequirementType, importanceLevel: addImportanceLevel, sortOrder: existing.length + 1 }];
+      const clampedWeight = Math.max(1, Math.min(10, addWeight));
+      const existing: Partial<JobPositionTrackSkill>[] = trackSkills.map(ts => ({ skillId: ts.skillId, requirementType: ts.requirementType, weight: ts.weight, sortOrder: ts.sortOrder }));
+      const next: Partial<JobPositionTrackSkill>[] = [...existing, { skillId, requirementType: addRequirementType, weight: clampedWeight, sortOrder: existing.length + 1 }];
       await careerTaxonomyService.updateTrackSkills(selectedTrackId, next);
       setAddSkillId('');
       setAddRequirementType('REQUIRED');
-      setAddImportanceLevel('MEDIUM');
+      setAddWeight(1);
       await refreshTrackSkills(selectedTrackId);
       setTrackSkillsSaved(`Đã thêm kỹ năng mới vào track và lưu đầy đủ ${next.length} mapping.`);
     } catch (e: any) {
@@ -370,7 +371,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
 
   const startEditMapping = (ts: JobPositionTrackSkill) => {
     setEditingSkillMappingId(ts.skillId);
-    setEditMappingForm({ requirementType: ts.requirementType, importanceLevel: ts.importanceLevel });
+    setEditMappingForm({ requirementType: ts.requirementType, weight: ts.weight ?? 1 });
   };
   const cancelEditMapping = () => setEditingSkillMappingId(null);
 
@@ -379,16 +380,17 @@ const JobPositionTrackSkillTab: React.FC = () => {
     setTrackSkillsSaveState('saving');
     setError(null);
     try {
+      const clampedWeight = Math.max(1, Math.min(10, editMappingForm.weight));
       const next: Partial<JobPositionTrackSkill>[] = trackSkills.map(ts => {
         if (ts.skillId === skillId) {
-          return { skillId: ts.skillId, requirementType: editMappingForm.requirementType as any, importanceLevel: editMappingForm.importanceLevel as any, sortOrder: ts.sortOrder };
+          return { skillId: ts.skillId, requirementType: editMappingForm.requirementType as any, weight: clampedWeight, sortOrder: ts.sortOrder };
         }
-        return { skillId: ts.skillId, requirementType: ts.requirementType, importanceLevel: ts.importanceLevel, sortOrder: ts.sortOrder };
+        return { skillId: ts.skillId, requirementType: ts.requirementType, weight: ts.weight, sortOrder: ts.sortOrder };
       });
       await careerTaxonomyService.updateTrackSkills(selectedTrackId, next);
       setEditingSkillMappingId(null);
       await refreshTrackSkills(selectedTrackId);
-      setTrackSkillsSaved('Đã cập nhật yêu cầu / mức độ và lưu lại toàn bộ mapping của track.');
+      setTrackSkillsSaved('Đã cập nhật yêu cầu / trọng số và lưu lại toàn bộ mapping của track.');
     } catch (e: any) {
       const message = 'Lưu thất bại: ' + (e?.response?.data?.message || e?.message);
       setTrackSkillsSaveState('idle');
@@ -406,7 +408,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
     try {
       const next: Partial<JobPositionTrackSkill>[] = trackSkills
         .filter(ts => ts.skillId !== skillId)
-        .map(ts => ({ skillId: ts.skillId, requirementType: ts.requirementType, importanceLevel: ts.importanceLevel, sortOrder: ts.sortOrder }));
+        .map(ts => ({ skillId: ts.skillId, requirementType: ts.requirementType, weight: ts.weight, sortOrder: ts.sortOrder }));
       await careerTaxonomyService.updateTrackSkills(selectedTrackId, next);
       await refreshTrackSkills(selectedTrackId);
       setTrackSkillsSaved('Đã gỡ skill khỏi track và lưu lại thứ tự mới.');
@@ -433,7 +435,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
     const payload: Partial<JobPositionTrackSkill>[] = newSkills.map((ts, i) => ({
       skillId: ts.skillId,
       requirementType: ts.requirementType,
-      importanceLevel: ts.importanceLevel,
+      weight: ts.weight,
       sortOrder: i + 1
     }));
 
@@ -507,11 +509,11 @@ const JobPositionTrackSkillTab: React.FC = () => {
         <div className="job-track-skill-tab__card job-track-skill-tab__card--highlight">
           <h3 className="job-track-skill-tab__section-title">Tạo track mới</h3>
           <div className="job-track-skill-tab__form-grid job-track-skill-tab__form-grid--job">
-            <select value={trackForm.domainId} onChange={e => setTrackForm(p => ({ ...p, domainId: e.target.value, jobPositionId: '' }))} className="job-track-skill-tab__select">
+            <select value={trackForm.domainId} onChange={e => setTrackForm(p => ({ ...p, domainId: e.target.value ? Number(e.target.value) : '', jobPositionId: '' as number | '' }))} className="job-track-skill-tab__select">
               <option value="">-- Lọc theo domain --</option>
               {domains.filter(d => d.status === 'ACTIVE').map(d => <option key={d.id} value={d.id}>{d.name} ({d.code})</option>)}
             </select>
-            <select value={trackForm.jobPositionId} onChange={e => setTrackForm(p => ({ ...p, jobPositionId: e.target.value }))} className="job-track-skill-tab__select">
+            <select value={trackForm.jobPositionId} onChange={e => setTrackForm(p => ({ ...p, jobPositionId: e.target.value ? Number(e.target.value) : '' }))} className="job-track-skill-tab__select">
               <option value="">-- Chọn vị trí công việc * --</option>
               {jobPositions.filter(jp => jp.status === 'ACTIVE' && (!trackForm.domainId || jp.domainId === Number(trackForm.domainId))).map(jp => <option key={jp.id} value={jp.id}>{jp.name}</option>)}
             </select>
@@ -549,7 +551,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
                     <td><input value={editTrackForm.code} onChange={e => setEditTrackForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="job-track-skill-tab__input admin-roadmap-catalog__inline-input admin-roadmap-catalog__inline-input--code" autoFocus /></td>
                     <td><input value={editTrackForm.name} onChange={e => setEditTrackForm(p => ({ ...p, name: e.target.value }))} className="job-track-skill-tab__input admin-roadmap-catalog__inline-input admin-roadmap-catalog__inline-input--name" /></td>
                     <td>
-                      <select value={editTrackForm.jobPositionId} onChange={e => setEditTrackForm(p => ({ ...p, jobPositionId: e.target.value }))} className="job-track-skill-tab__select admin-roadmap-catalog__inline-input">
+                      <select value={editTrackForm.jobPositionId} onChange={e => setEditTrackForm(p => ({ ...p, jobPositionId: e.target.value ? Number(e.target.value) : '' }))} className="job-track-skill-tab__select admin-roadmap-catalog__inline-input">
                         {jobPositions.filter(jp => jp.status === 'ACTIVE' || jp.id === t.jobPositionId).map(jp => <option key={jp.id} value={jp.id}>{jp.name}</option>)}
                       </select>
                     </td>
@@ -637,17 +639,20 @@ const JobPositionTrackSkillTab: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="job-track-skill-tab__label">Mức độ</label>
-              <select
-                value={addImportanceLevel}
-                onChange={e => setAddImportanceLevel(e.target.value as JobPositionTrackSkill['importanceLevel'])}
-                className="job-track-skill-tab__select"
-              >
-                <option value="LOW">Thấp (LOW)</option>
-                <option value="MEDIUM">Trung bình (MEDIUM)</option>
-                <option value="HIGH">Cao (HIGH)</option>
-                <option value="CRITICAL">Cực kỳ quan trọng (CRITICAL)</option>
-              </select>
+              <label className="job-track-skill-tab__label">Trọng số (1-10)</label>
+              <input
+                type="number"
+                min={1}
+                max={10}
+                value={addWeight}
+                onChange={e => {
+                  const v = parseInt(e.target.value);
+                  if (!isNaN(v)) setAddWeight(Math.max(1, Math.min(10, v)));
+                }}
+                className="job-track-skill-tab__input"
+                style={{ width: '80px', padding: '0.5rem' }}
+                title="Trọng số (1-10) quyết định tỷ lệ câu hỏi trong bài quiz đánh giá. Giá trị cao = nhiều câu hỏi hơn."
+              />
             </div>
             <button
               onClick={handleAddSkillToTrack}
@@ -665,7 +670,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
                 <th>Tên kỹ năng</th>
                 <th>Khóa chuẩn</th>
                 <th>Yêu cầu</th>
-                <th>Mức độ</th>
+                <th>Trọng số (1-10)</th>
                 <th>Thứ tự gợi ý</th>
                 <th>Thao tác</th>
               </tr>
@@ -687,10 +692,20 @@ const JobPositionTrackSkillTab: React.FC = () => {
                     </td>
                     <td>
                       {isEditing ? (
-                        <select value={editMappingForm.importanceLevel} onChange={e => setEditMappingForm(p => ({ ...p, importanceLevel: e.target.value }))} className="job-track-skill-tab__select admin-roadmap-catalog__inline-input">
-                          <option value="LOW">LOW</option><option value="MEDIUM">MEDIUM</option><option value="HIGH">HIGH</option><option value="CRITICAL">CRITICAL</option>
-                        </select>
-                      ) : ts.importanceLevel}
+                        <input
+                          type="number"
+                          min={1}
+                          max={10}
+                          value={editMappingForm.weight}
+                          onChange={e => {
+                            const v = parseInt(e.target.value);
+                            if (!isNaN(v)) setEditMappingForm(p => ({ ...p, weight: Math.max(1, Math.min(10, v)) }));
+                          }}
+                          className="job-track-skill-tab__input admin-roadmap-catalog__inline-input"
+                          style={{ width: '70px', padding: '0.25rem' }}
+                          title="Trọng số (1-10)"
+                        />
+                      ) : (ts.weight ?? 1)}
                     </td>
                     <td>
                       <div className="job-track-skill-tab__order-controls">
@@ -715,7 +730,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
                   </tr>
                 );
               })}
-              {trackSkills.length === 0 && <tr><td colSpan={6} className="job-track-skill-tab__empty-state">Chưa có kỹ năng nào được gán.</td></tr>}
+              {trackSkills.length === 0 && <tr><td colSpan={6} className="job-track-skill-tab__empty-state">Chưa có kỹ năng nào được gán. Thêm kỹ năng và đặt trọng số (1-10) để phân bổ câu hỏi quiz.</td></tr>}
             </tbody>
           </table>
         </div>

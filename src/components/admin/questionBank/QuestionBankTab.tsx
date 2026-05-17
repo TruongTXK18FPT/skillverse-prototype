@@ -39,6 +39,7 @@ import {
   previewImport,
   confirmImport,
   generateAiDraft,
+  syncJobPositionBanks,
 } from "../../../services/questionBankService";
 import {
   QuestionBankSummary,
@@ -53,9 +54,10 @@ import {
   AiDraftQuestion,
 } from "../../../data/questionBankDTOs";
 import { useToast } from "../../../hooks/useToast";
-import SkillAutoResolve from "../../shared/SkillAutoResolve";
-import { getAllDomains } from "../../../services/expertPromptService";
-import { getExpertDomainLabel } from "../../../utils/expertFieldPresentation";
+import { careerTaxonomyService } from "../../../services/careerTaxonomyService";
+import { skillService } from "../../../services/skillService";
+import { Domain, JobPosition, JobPositionTrackSkill } from "../../../types/careerTaxonomy";
+import { SkillDto } from "../../../data/skillDTOs";
 import MeowlKuruLoader from "../../kuru-loader/MeowlKuruLoader";
 import QuestionBankSubmissionReviewPanel from "./QuestionBankSubmissionReviewPanel";
 import "../../../styles/GSJJourney.css";
@@ -194,8 +196,12 @@ const QuestionBankTab: React.FC = () => {
   const [banks, setBanks] = useState<QuestionBankSummary[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [domainFilter, setDomainFilter] = useState("");
-  const [expertDomains, setExpertDomains] = useState<string[]>([]);
+  const [domainFilter, setDomainFilter] = useState<number | "">("");
+  const [jobPositionFilter, setJobPositionFilter] = useState<number | "">("");
+  const [skillFilter, setSkillFilter] = useState<number | "">("");
+  const [taxonomyDomains, setTaxonomyDomains] = useState<Domain[]>([]);
+  const [taxonomyJobPositions, setTaxonomyJobPositions] = useState<JobPosition[]>([]);
+  const [activeSkills, setActiveSkills] = useState<SkillDto[]>([]);
 
   // Pagination
   const [bankPage, setBankPage] = useState(0);
@@ -208,6 +214,7 @@ const QuestionBankTab: React.FC = () => {
   const [questionPage, setQuestionPage] = useState(0);
   const [questionTotalPages, setQuestionTotalPages] = useState(0);
   const [questionDifficultyFilter, setQuestionDifficultyFilter] = useState("");
+  const [selectedSkillContext, setSelectedSkillContext] = useState<string>("");
 
   // Modal types
   type ModalType =
@@ -235,16 +242,18 @@ const QuestionBankTab: React.FC = () => {
   // Form State
   // ============================================================
   const [bankForm, setBankForm] = useState<{
+    domainId: number | "";
+    jobPositionId: number | "";
+    skillId: number | "";
     domain: string;
-    industry: string;
-    jobRole: string;
     title: string;
     description: string;
     distribution: Record<string, number>;
   }>({
+    domainId: "",
+    jobPositionId: "",
+    skillId: "",
     domain: "",
-    industry: "",
-    jobRole: "",
     title: "",
     description: "",
     distribution: { ...DEFAULT_DISTRIBUTION },
@@ -298,7 +307,9 @@ const QuestionBankTab: React.FC = () => {
       try {
         setLoading(true);
         const data = await getQuestionBanks({
-          domain: domainFilter || undefined,
+          domainId: domainFilter || undefined,
+          jobPositionId: jobPositionFilter || undefined,
+          skillId: skillFilter || undefined,
           page,
           size: PAGE_SIZE,
         });
@@ -312,7 +323,7 @@ const QuestionBankTab: React.FC = () => {
         setLoading(false);
       }
     },
-    [domainFilter, showError],
+    [domainFilter, jobPositionFilter, skillFilter, showError],
   );
 
   const loadQuestions = useCallback(
@@ -321,6 +332,7 @@ const QuestionBankTab: React.FC = () => {
         setQuestionsLoading(true);
         const data = await getQuestions(bankId, {
           difficulty: questionDifficultyFilter || undefined,
+          skillArea: selectedSkillContext || undefined,
           page,
           size: PAGE_SIZE,
         });
@@ -333,7 +345,7 @@ const QuestionBankTab: React.FC = () => {
         setQuestionsLoading(false);
       }
     },
-    [questionDifficultyFilter, showError],
+    [questionDifficultyFilter, selectedSkillContext, showError],
   );
 
   useEffect(() => {
@@ -341,16 +353,24 @@ const QuestionBankTab: React.FC = () => {
   }, [loadBanks]);
 
   useEffect(() => {
-    const loadExpertDomains = async () => {
+    const loadTaxonomyOptions = async () => {
       try {
-        const domains = await getAllDomains();
-        setExpertDomains(domains || []);
+        const [domains, jobPositions, skills] = await Promise.all([
+          careerTaxonomyService.getDomains(),
+          careerTaxonomyService.getJobPositions(),
+          skillService.getActiveSkills(),
+        ]);
+        setTaxonomyDomains(domains || []);
+        setTaxonomyJobPositions(jobPositions || []);
+        setActiveSkills(skills || []);
       } catch {
-        setExpertDomains([]);
+        setTaxonomyDomains([]);
+        setTaxonomyJobPositions([]);
+        setActiveSkills([]);
       }
     };
 
-    loadExpertDomains();
+    loadTaxonomyOptions();
   }, []);
 
   // Load questions when entering detail view or changing filters
@@ -358,7 +378,7 @@ const QuestionBankTab: React.FC = () => {
     if (view === "detail" && selectedBank) {
       loadQuestions(selectedBank.id, 0);
     }
-  }, [view, selectedBank, questionDifficultyFilter, loadQuestions]);
+  }, [view, selectedBank, questionDifficultyFilter, selectedSkillContext, loadQuestions]);
 
   // ============================================================
   // Computed
@@ -370,8 +390,8 @@ const QuestionBankTab: React.FC = () => {
       (b) =>
         b.title?.toLowerCase().includes(term) ||
         b.domain?.toLowerCase().includes(term) ||
-        b.industry?.toLowerCase().includes(term) ||
-        b.jobRole?.toLowerCase().includes(term) ||
+        b.domainName?.toLowerCase().includes(term) ||
+        b.jobPositionName?.toLowerCase().includes(term) ||
         b.skillName?.toLowerCase().includes(term),
     );
   }, [banks, searchTerm]);
@@ -380,21 +400,49 @@ const QuestionBankTab: React.FC = () => {
     () => ({
       totalBanks: bankTotal,
       totalQuestions: banks.reduce((sum, b) => sum + b.activeQuestionCount, 0),
-      domains: [...new Set(banks.map((b) => b.domain))].length,
+      domains: [...new Set(banks.map((b) => b.domainId || b.domain))].length,
       activeBanks: banks.filter((b) => b.isActive).length,
     }),
     [banks, bankTotal],
   );
 
-  const availableDomains = useMemo(() => {
-    if (expertDomains.length > 0) {
-      return expertDomains;
-    }
+  const filteredFilterJobPositions = useMemo(
+    () =>
+      taxonomyJobPositions.filter(
+        (position) => !domainFilter || position.domainId === domainFilter,
+      ),
+    [taxonomyJobPositions, domainFilter],
+  );
 
-    return [...new Set(banks.map((bank) => bank.domain).filter(Boolean))].sort(
-      (a, b) => a.localeCompare(b),
-    );
-  }, [banks, expertDomains]);
+  const filteredFormJobPositions = useMemo(
+    () =>
+      taxonomyJobPositions.filter(
+        (position) => !bankForm.domainId || position.domainId === bankForm.domainId,
+      ),
+    [taxonomyJobPositions, bankForm.domainId],
+  );
+
+  const getBankDomainLabel = (bank?: Pick<QuestionBankSummary, "domain" | "domainName"> | null): string =>
+    bank?.domainName || (bank?.domain ? getExpertDomainLabel(bank.domain) : "Chưa chọn");
+
+  const getBankJobPositionLabel = (
+    bank?: Pick<QuestionBankSummary, "jobPositionName"> | null,
+  ): string => bank?.jobPositionName || "Chưa chọn";
+
+  const selectedFormDomain = useMemo(
+    () => taxonomyDomains.find((domain) => domain.id === bankForm.domainId),
+    [taxonomyDomains, bankForm.domainId],
+  );
+
+  const selectedFormJobPosition = useMemo(
+    () => taxonomyJobPositions.find((position) => position.id === bankForm.jobPositionId),
+    [taxonomyJobPositions, bankForm.jobPositionId],
+  );
+
+  const selectedFormSkill = useMemo(
+    () => activeSkills.find((skill) => skill.id === bankForm.skillId),
+    [activeSkills, bankForm.skillId],
+  );
 
   const selectedDistribution = useMemo(() => {
     if (!selectedBank) return null;
@@ -425,6 +473,8 @@ const QuestionBankTab: React.FC = () => {
     [importPreview],
   );
 
+  const [jobPositionSkills, setJobPositionSkills] = useState<JobPositionTrackSkill[]>([]);
+
   // ============================================================
   // Handlers
   // ============================================================
@@ -434,6 +484,20 @@ const QuestionBankTab: React.FC = () => {
       const detail = await getQuestionBank(bank.id);
       setSelectedBank(detail);
       setView("detail");
+      setQuestionPage(0);
+      
+      // Load skills for this job position
+      if (detail.jobPositionId) {
+         const tracks = await careerTaxonomyService.getActiveTracks(detail.jobPositionId);
+         const skillsPromises = tracks.map(t => careerTaxonomyService.getTrackSkills(t.id));
+         const skillsArrays = await Promise.all(skillsPromises);
+         const allSkills = skillsArrays.flat();
+         // remove duplicates
+         const uniqueSkills = Array.from(new Map(allSkills.map(s => [s.skillId, s])).values());
+         setJobPositionSkills(uniqueSkills);
+      } else {
+         setJobPositionSkills([]);
+      }
     } catch {
       showError("Lỗi", "Không thể tải chi tiết");
     } finally {
@@ -459,18 +523,20 @@ const QuestionBankTab: React.FC = () => {
         /* use default */
       }
       setBankForm({
+        domainId: selectedBank.domainId || "",
+        jobPositionId: selectedBank.jobPositionId || "",
+        skillId: selectedBank.skillId || "",
         domain: selectedBank.domain,
-        industry: selectedBank.industry || "",
-        jobRole: selectedBank.jobRole || "",
         title: selectedBank.title,
         description: selectedBank.description || "",
         distribution: dist,
       });
     } else {
       setBankForm({
+        domainId: "",
+        jobPositionId: "",
+        skillId: "",
         domain: "",
-        industry: "",
-        jobRole: "",
         title: "",
         description: "",
         distribution: { ...DEFAULT_DISTRIBUTION },
@@ -515,7 +581,7 @@ const QuestionBankTab: React.FC = () => {
     setAiDrafts([]);
     setSelectedDraftIds(new Set());
     setEditedDraftIds(new Set());
-    setCreateBankStep("skillResolve");
+    setCreateBankStep("config");
     setCreateBankMode("MANUAL");
     setAiQuestionCount(10);
     setAiDistribution({ ...DEFAULT_DISTRIBUTION });
@@ -523,9 +589,14 @@ const QuestionBankTab: React.FC = () => {
     setAdminSkillInput("");
   };
 
-  const openAddQuestionWorkspace = () => {
+  const openAddQuestionWorkspace = (prefilledSkill?: string) => {
     setSelectedQuestion(null);
     fillQuestionForm(null);
+    if (prefilledSkill) {
+      setQuestionForm((p) => ({ ...p, skillArea: prefilledSkill }));
+    } else if (selectedSkillContext) {
+      setQuestionForm((p) => ({ ...p, skillArea: selectedSkillContext }));
+    }
     setActiveModal("addQuestion");
   };
 
@@ -566,7 +637,7 @@ const QuestionBankTab: React.FC = () => {
     setImportStep(1);
     setAiQuestionCount(10);
     setAiDistribution(normalizeDistribution(selectedDistribution));
-    setAiFocusSkills("");
+    setAiFocusSkills(selectedSkillContext || "");
     setAiDrafts([]);
     setSelectedDraftIds(new Set());
     setEditedDraftIds(new Set());
@@ -577,61 +648,17 @@ const QuestionBankTab: React.FC = () => {
     resetBankForm();
     setCreateBankStep("skillResolve");
     setCreateBankMode(mode);
-    setAdminSkillInput("");
     setActiveModal("createBank");
-  };
-
-  const mapDomainToEnum = (domain: string): string => {
-    const upper = domain.toUpperCase();
-    if (
-      upper === "IT" ||
-      upper.includes("INFORMATION TECHNOLOGY") ||
-      upper.includes("CÔNG NGHỆ THÔNG TIN")
-    )
-      return "IT";
-    if (
-      upper === "BUSINESS" ||
-      upper.includes("BUSINESS") ||
-      upper.includes("KINH DOANH") ||
-      upper.includes("MARKETING")
-    )
-      return "BUSINESS";
-    if (
-      upper === "DESIGN" ||
-      upper.includes("DESIGN") ||
-      upper.includes("THIẾT KẾ") ||
-      upper.includes("SÁNG TẠO")
-    )
-      return "DESIGN";
-    return upper;
-  };
-
-  // [Skill Auto-Resolve] Admin auto-resolve handler
-  const handleSkillAutoResolve = (data: {
-    domain: string;
-    industry: string;
-    jobRole: string;
-    keywords?: string;
-  }) => {
-    const mappedDomain = mapDomainToEnum(data.domain);
-    setBankForm((prev) => ({
-      ...prev,
-      domain: mappedDomain,
-      industry: data.industry,
-      jobRole: data.jobRole,
-      title:
-        prev.title || `Bộ câu hỏi đầu vào — ${adminSkillInput || data.jobRole}`,
-      description:
-        prev.description ||
-        `Bộ câu hỏi đánh giá kỹ năng ${adminSkillInput || data.jobRole} thuộc lĩnh vực ${mappedDomain}.`,
-    }));
-    setCreateBankStep("config");
   };
 
   // Bank CRUD
   const handleCreateBank = async () => {
     if (!bankForm.title) {
       showWarning("Cảnh báo", "Vui lòng nhập tên ngân hàng câu hỏi");
+      return;
+    }
+    if (!bankForm.domainId || !bankForm.jobPositionId) {
+      showWarning("Cảnh báo", "Vui lòng chọn domain và job position");
       return;
     }
     try {
@@ -645,9 +672,11 @@ const QuestionBankTab: React.FC = () => {
         return;
       }
       const data: CreateQuestionBank = {
-        domain: bankForm.domain,
-        industry: bankForm.industry || undefined,
-        jobRole: bankForm.jobRole || undefined,
+        domainId: bankForm.domainId,
+        jobPositionId: bankForm.jobPositionId,
+        skillId: bankForm.skillId || null,
+        domain: selectedFormDomain?.code || bankForm.domain || undefined,
+        skillName: selectedFormSkill?.name || undefined,
         title: bankForm.title,
         description: bankForm.description || undefined,
         difficultyDistribution: JSON.stringify(bankForm.distribution),
@@ -712,8 +741,10 @@ const QuestionBankTab: React.FC = () => {
       const data: UpdateQuestionBank = {
         title: bankForm.title,
         description: bankForm.description || undefined,
-        industry: bankForm.industry || undefined,
-        jobRole: bankForm.jobRole || undefined,
+        domainId: bankForm.domainId || undefined,
+        jobPositionId: bankForm.jobPositionId || undefined,
+        skillId: bankForm.skillId || null,
+        skillName: selectedFormSkill?.name || undefined,
         difficultyDistribution: JSON.stringify(bankForm.distribution),
       };
       const updated = await updateQuestionBank(selectedBank.id, data);
@@ -853,7 +884,7 @@ const QuestionBankTab: React.FC = () => {
             correctAnswer: q.correctAnswer || "",
             explanation: q.explanation,
             difficulty: q.difficulty || "INTERMEDIATE",
-            skillArea: q.skillArea,
+            skillArea: selectedSkillContext || q.skillArea,
             category: q.category,
           }) as CreateQuestion,
       );
@@ -1067,6 +1098,19 @@ const QuestionBankTab: React.FC = () => {
     <span className={sourceBadgeClass(s)}>{getSourceLabel(s)}</span>
   );
 
+  const handleSyncBanks = async () => {
+    try {
+      setLoading(true);
+      await syncJobPositionBanks();
+      showSuccess("Thành công", "Đã đồng bộ ngân hàng câu hỏi cho Job Position");
+      loadBanks(0);
+    } catch (err: any) {
+      showError("Lỗi", "Không thể đồng bộ ngân hàng câu hỏi");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // ============================================================
   // Render
   // ============================================================
@@ -1080,6 +1124,14 @@ const QuestionBankTab: React.FC = () => {
         {adminSection === "library" &&
           view === "detail" ? null : adminSection === "library" ? (
             <div className="qb-header-actions">
+              <button
+                className="qb-btn secondary"
+                onClick={handleSyncBanks}
+                disabled={loading}
+                title="Đồng bộ ngân hàng cho các Job Position chưa có"
+              >
+                <RefreshCw size={18} /> Đồng bộ Job Position
+              </button>
               <button
                 className="qb-btn secondary"
                 onClick={() => loadBanks(bankPage)}
@@ -1197,13 +1249,38 @@ const QuestionBankTab: React.FC = () => {
                   className="qb-filter-select"
                   value={domainFilter}
                   onChange={(e) => {
-                    setDomainFilter(e.target.value);
+                    setDomainFilter(e.target.value ? Number(e.target.value) : "");
+                    setJobPositionFilter("");
                   }}
                 >
                   <option value="">Tất cả lĩnh vực</option>
-                  {availableDomains.map((d) => (
-                    <option key={d} value={d}>
-                      {getExpertDomainLabel(d)}
+                  {taxonomyDomains.map((domain) => (
+                    <option key={domain.id} value={domain.id}>
+                      {domain.name || getExpertDomainLabel(domain.code)}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="qb-filter-select"
+                  value={jobPositionFilter}
+                  onChange={(e) => setJobPositionFilter(e.target.value ? Number(e.target.value) : "")}
+                >
+                  <option value="">Tất cả job position</option>
+                  {filteredFilterJobPositions.map((position) => (
+                    <option key={position.id} value={position.id}>
+                      {position.name}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="qb-filter-select"
+                  value={skillFilter}
+                  onChange={(e) => setSkillFilter(e.target.value ? Number(e.target.value) : "")}
+                >
+                  <option value="">Tất cả skill</option>
+                  {activeSkills.map((skill) => (
+                    <option key={skill.id} value={skill.id}>
+                      {skill.name}
                     </option>
                   ))}
                 </select>
@@ -1272,12 +1349,9 @@ const QuestionBankTab: React.FC = () => {
                                 </div>
                                 <div className="qb-card-meta">
                                   <span>
-                                    {getExpertDomainLabel(bank.domain)}
+                                    {getBankDomainLabel(bank)}
                                   </span>
-                                  {bank.industry && (
-                                    <span>{bank.industry}</span>
-                                  )}
-                                  {bank.jobRole && <span>{bank.jobRole}</span>}
+                                  <span>{getBankJobPositionLabel(bank)}</span>
                                   {bank.skillName && (
                                     <span>{bank.skillName}</span>
                                   )}
@@ -1336,13 +1410,8 @@ const QuestionBankTab: React.FC = () => {
                   <h2>{selectedBank.title}</h2>
                   <p>{selectedBank.description || "Không có mô tả"}</p>
                   <div className="qb-detail-meta">
-                    <span>{getExpertDomainLabel(selectedBank.domain)}</span>
-                    {selectedBank.industry && (
-                      <span>{selectedBank.industry}</span>
-                    )}
-                    {selectedBank.jobRole && (
-                      <span>{selectedBank.jobRole}</span>
-                    )}
+                    <span>{getBankDomainLabel(selectedBank)}</span>
+                    <span>{getBankJobPositionLabel(selectedBank)}</span>
                     {selectedBank.skillName && (
                       <span>{selectedBank.skillName}</span>
                     )}
@@ -1382,36 +1451,87 @@ const QuestionBankTab: React.FC = () => {
                 ))}
               </div>
 
-              {/* Action Bar */}
-              <div className="qb-action-bar">
-                <button
-                  className="qb-btn success"
-                  onClick={openAddQuestionWorkspace}
-                >
-                  <Plus size={18} /> Thêm Câu hỏi
-                </button>
-                <button
-                  className="qb-btn primary"
-                  onClick={openImportWorkspace}
-                >
-                  <Upload size={18} /> Nhập file
-                </button>
-                <button className="qb-btn primary" onClick={openAiWorkspace}>
-                  <Brain size={18} /> Tạo nháp bằng AI
-                </button>
-                <button
-                  className="qb-btn secondary"
-                  onClick={openEditBankWorkspace}
-                >
-                  <Edit3 size={18} /> Sửa ngân hàng
-                </button>
-                <button
-                  className="qb-btn danger"
-                  onClick={() => setActiveModal("deleteBank")}
-                >
-                  <Trash2 size={18} /> Xóa ngân hàng
-                </button>
-              </div>
+              {/* Skills Panel */}
+              {jobPositionSkills.length > 0 && (
+                <div className="qb-skills-panel">
+                  <div className="qb-skills-panel-header">
+                    <h4>
+                      <Sparkles size={16} /> Kỹ năng thuộc Job Position
+                    </h4>
+                    <span className="qb-skills-panel-count">
+                      {jobPositionSkills.length} kỹ năng
+                    </span>
+                  </div>
+                  <p className="qb-skills-panel-desc">
+                    Click vào một kỹ năng để xem câu hỏi theo skill đó và thêm câu hỏi đúng phân loại.
+                    {selectedSkillContext && (
+                      <button
+                        className="qb-skills-panel-clear"
+                        onClick={() => setSelectedSkillContext("")}
+                      >
+                        ✕ Bỏ lọc
+                      </button>
+                    )}
+                  </p>
+                  <div className="qb-skills-panel-chips">
+                    {jobPositionSkills.map((s) => {
+                      const count = selectedBank?.skillBreakdown?.[s.skillName || ""] || 0;
+                      const isActive = selectedSkillContext.toLowerCase() === s.skillName?.toLowerCase();
+                      return (
+                        <button
+                          key={s.skillId}
+                          type="button"
+                          className={`qb-skill-chip-item ${isActive ? "active" : ""}`}
+                          onClick={() => setSelectedSkillContext(isActive ? "" : s.skillName || "")}
+                        >
+                          <span className="qb-skill-chip-name">{s.skillName}</span>
+                          <span className="qb-skill-chip-count">{count}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {selectedSkillContext && (
+                    <div className="qb-skills-panel-actions">
+                      <button
+                        className="qb-btn success small"
+                        onClick={() => openAddQuestionWorkspace(selectedSkillContext)}
+                      >
+                        <Plus size={16} /> Nhập tay
+                      </button>
+                      <button
+                        className="qb-btn primary small"
+                        onClick={openImportWorkspace}
+                      >
+                        <Upload size={16} /> Nhập file
+                      </button>
+                      <button 
+                        className="qb-btn primary small" 
+                        onClick={openAiWorkspace}
+                      >
+                        <Brain size={16} /> Tạo bằng AI
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Global Action Bar (only visible when no skill is selected) */}
+              {!selectedSkillContext && (
+                <div className="qb-action-bar">
+                  <button
+                    className="qb-btn secondary"
+                    onClick={openEditBankWorkspace}
+                  >
+                    <Edit3 size={18} /> Sửa ngân hàng
+                  </button>
+                  <button
+                    className="qb-btn danger"
+                    onClick={() => setActiveModal("deleteBank")}
+                  >
+                    <Trash2 size={18} /> Xóa ngân hàng
+                  </button>
+                </div>
+              )}
 
               {!activeModal && (
                 <>
@@ -1438,6 +1558,20 @@ const QuestionBankTab: React.FC = () => {
                         </option>
                       ))}
                     </select>
+                    {jobPositionSkills.length > 0 && (
+                      <select
+                        className="qb-filter-select"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      >
+                        <option value="">Tất cả kỹ năng</option>
+                        {jobPositionSkills.map((s) => (
+                          <option key={s.skillId} value={s.skillName}>
+                            {s.skillName}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                   </div>
 
                   {questionsLoading ? (
@@ -1476,6 +1610,8 @@ const QuestionBankTab: React.FC = () => {
                                 q.skillArea
                                   ?.toLowerCase()
                                   .includes(searchLower);
+                              
+                              // We no longer need matchesSkillContext because backend filters it.
                               if (!matchesSearch) return null;
                               return (
                                 <tr key={q.id}>
@@ -1545,42 +1681,135 @@ const QuestionBankTab: React.FC = () => {
                   </button>
                 </div>
                 <div className="qb-modal-body">
+                  {/* Step indicator */}
+                  <div className="qb-wizard-steps">
+                    <div className={`qb-wizard-step ${createBankStep === "skillResolve" ? "active" : "completed"}`}>
+                      <div className="qb-wizard-step-num">
+                        {createBankStep !== "skillResolve" ? <Check size={16} /> : "1"}
+                      </div>
+                      <span className="qb-wizard-step-label">Chọn lộ trình</span>
+                    </div>
+                    <div className="qb-wizard-step-line" />
+                    <div className={`qb-wizard-step ${createBankStep === "config" ? "active" : ""}`}>
+                      <div className="qb-wizard-step-num">2</div>
+                      <span className="qb-wizard-step-label">Cấu hình Bank</span>
+                    </div>
+                  </div>
+
                   {createBankStep === "skillResolve" ? (
-                    <div className="qb-journey-selector-shell">
-                      <SkillAutoResolve
-                        skillInput={adminSkillInput}
-                        onSkillChange={setAdminSkillInput}
-                        onResolve={handleSkillAutoResolve}
-                        showManualFallback={false}
-                        onBack={closeModal}
-                        label="Nhập skill để tạo ngân hàng câu hỏi"
-                        description="AI sẽ tự động xác định lĩnh vực và lộ trình phù hợp — bạn chỉ cần nhập tên kỹ năng."
-                        placeholder="Ví dụ: React, Java Spring Boot, UI Design, Data Analyst..."
-                        useAi={true}
-                      />
+                    <div className="qb-taxonomy-wizard">
+                      {/* Domain selection */}
+                      <div className="qb-wizard-section">
+                        <h4 className="qb-wizard-section-title">
+                          <Sparkles size={18} /> Bước 1 — Chọn Domain
+                        </h4>
+                        <p className="qb-wizard-section-desc">
+                          Chọn lĩnh vực chuyên môn cho ngân hàng câu hỏi.
+                        </p>
+                        <div className="qb-wizard-card-grid">
+                          {taxonomyDomains.map((domain) => (
+                            <button
+                              key={domain.id}
+                              type="button"
+                              className={`qb-wizard-card ${bankForm.domainId === domain.id ? "active" : ""}`}
+                              onClick={() => {
+                                setBankForm((p) => ({
+                                  ...p,
+                                  domainId: domain.id,
+                                  jobPositionId: "",
+                                  skillId: "",
+                                  domain: domain.code || "",
+                                }));
+                              }}
+                            >
+                              <div className="qb-wizard-card-icon">
+                                <ListChecks size={20} />
+                              </div>
+                              <strong>{domain.name || domain.code}</strong>
+                              {domain.description && (
+                                <span>{domain.description.substring(0, 60)}{domain.description.length > 60 ? "..." : ""}</span>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Job Position selection */}
+                      {bankForm.domainId && (
+                        <div className="qb-wizard-section" style={{ marginTop: "2rem" }}>
+                          <h4 className="qb-wizard-section-title">
+                            <Sparkles size={18} /> Bước 2 — Chọn Job Position
+                          </h4>
+                          <p className="qb-wizard-section-desc">
+                            Chọn vị trí công việc cụ thể trong lĩnh vực{" "}
+                            <strong>{selectedFormDomain?.name}</strong>.
+                          </p>
+                          {filteredFormJobPositions.length === 0 ? (
+                            <div className="qb-wizard-empty">
+                              <AlertTriangle size={20} />
+                              <span>Chưa có Job Position nào trong domain này. Vui lòng tạo trong Career Taxonomy trước.</span>
+                            </div>
+                          ) : (
+                            <div className="qb-wizard-card-grid">
+                              {filteredFormJobPositions.map((position) => (
+                                <button
+                                  key={position.id}
+                                  type="button"
+                                  className={`qb-wizard-card ${bankForm.jobPositionId === position.id ? "active" : ""}`}
+                                  onClick={() => {
+                                    setBankForm((p) => ({
+                                      ...p,
+                                      jobPositionId: position.id,
+                                      title: `Ngân hàng câu hỏi — ${position.name}`,
+                                      description: `Bộ câu hỏi đánh giá cho vị trí ${position.name} thuộc ${selectedFormDomain?.name || ""}.`,
+                                    }));
+                                  }}
+                                >
+                                  <div className="qb-wizard-card-icon">
+                                    <CheckCircle2 size={20} />
+                                  </div>
+                                  <strong>{position.name}</strong>
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Proceed to config */}
+                      {bankForm.domainId && bankForm.jobPositionId && (
+                        <div className="qb-wizard-proceed" style={{ marginTop: "2rem" }}>
+                          <div className="qb-wizard-summary">
+                            <h4>Tóm tắt lộ trình đã chọn</h4>
+                            <div className="qb-role-tags">
+                              <span>{selectedFormDomain?.name || bankForm.domain}</span>
+                              <span>{selectedFormJobPosition?.name || "Job Position"}</span>
+                            </div>
+                          </div>
+                          <button
+                            className="qb-btn primary"
+                            onClick={() => setCreateBankStep("config")}
+                          >
+                            Tiếp tục cấu hình <ChevronRight size={16} />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="qb-create-bank-config">
                       <div className="qb-selected-role-card">
                         <div>
-                          <h3>Kỹ năng đã xác định</h3>
+                          <h3>Lộ trình đã chọn</h3>
                           <p>
-                            Ngân hàng câu hỏi sẽ được tạo theo kỹ năng này. Câu
+                            Ngân hàng câu hỏi sẽ được gắn với lộ trình này. Câu
                             hỏi sẽ phân bổ theo 4 mức độ khó bên dưới.
                           </p>
                           <div className="qb-role-tags">
-                            {adminSkillInput && (
-                              <span className="skill-tag">
-                                🎯 {adminSkillInput}
-                              </span>
+                            {selectedFormDomain && (
+                              <span>{selectedFormDomain.name}</span>
                             )}
-                            {bankForm.domain && (
-                              <span>
-                                {getExpertDomainLabel(bankForm.domain)}
-                              </span>
-                            )}
-                            {bankForm.jobRole && (
-                              <span>{bankForm.jobRole}</span>
+                            {selectedFormJobPosition && (
+                              <span>{selectedFormJobPosition.name}</span>
                             )}
                           </div>
                         </div>
@@ -1588,11 +1817,28 @@ const QuestionBankTab: React.FC = () => {
                           className="qb-btn secondary small"
                           onClick={() => setCreateBankStep("skillResolve")}
                         >
-                          Đổi skill
+                          Đổi lộ trình
                         </button>
                       </div>
 
                       <div className="qb-form-grid">
+                        <div className="qb-form-group">
+                          <label>
+                            Skill (tuỳ chọn)
+                          </label>
+                          <select
+                            className="qb-input"
+                            value={bankForm.skillId}
+                            onChange={(e) => setBankForm((p) => ({ ...p, skillId: e.target.value ? Number(e.target.value) : "" }))}
+                          >
+                            <option value="">Role-level bank (tất cả skills)</option>
+                            {activeSkills.map((skill) => (
+                              <option key={skill.id} value={skill.id}>
+                                {skill.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
                         <div className="qb-form-group">
                           <label>
                             Tên ngân hàng câu hỏi{" "}
@@ -1779,9 +2025,9 @@ const QuestionBankTab: React.FC = () => {
                         đang được giữ theo ngân hàng hiện có.
                       </p>
                       <div className="qb-role-tags">
-                        <span>{getExpertDomainLabel(bankForm.domain)}</span>
-                        <span>{bankForm.industry}</span>
-                        <span>{bankForm.jobRole}</span>
+                        <span>{selectedFormDomain?.name || getExpertDomainLabel(bankForm.domain)}</span>
+                        <span>{selectedFormJobPosition?.name || "Chưa chọn"}</span>
+                        <span>{selectedFormSkill?.name || "Role-level bank"}</span>
                       </div>
                     </div>
                   </div>
@@ -1910,7 +2156,7 @@ const QuestionBankTab: React.FC = () => {
                   <div className="qb-delete-warning">
                     <strong>{selectedBank.title}</strong>
                     <p>
-                      {getExpertDomainLabel(selectedBank.domain)} —{" "}
+                      {getBankDomainLabel(selectedBank)} —{" "}
                       {selectedBank.activeQuestionCount} câu hỏi
                     </p>
                   </div>
@@ -2064,18 +2310,38 @@ const QuestionBankTab: React.FC = () => {
                       </div>
 
                       <div className="qb-form-group">
-                        <label>Kỹ năng</label>
-                        <input
-                          className="qb-input"
-                          placeholder="VD: JavaScript, Cấu trúc dữ liệu..."
-                          value={questionForm.skillArea}
-                          onChange={(e) =>
-                            setQuestionForm((p) => ({
-                              ...p,
-                              skillArea: e.target.value,
-                            }))
-                          }
-                        />
+                        <label>Kỹ năng (Skill)</label>
+                        {jobPositionSkills && jobPositionSkills.length > 0 ? (
+                          <select
+                            className="qb-input"
+                            value={questionForm.skillArea}
+                            onChange={(e) =>
+                              setQuestionForm((p) => ({
+                                ...p,
+                                skillArea: e.target.value,
+                              }))
+                            }
+                          >
+                            <option value="">-- Chọn kỹ năng --</option>
+                            {jobPositionSkills.map((s) => (
+                              <option key={s.skillId} value={s.skillName}>
+                                {s.skillName}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input
+                            className="qb-input"
+                            placeholder="VD: JavaScript, Cấu trúc dữ liệu..."
+                            value={questionForm.skillArea}
+                            onChange={(e) =>
+                              setQuestionForm((p) => ({
+                                ...p,
+                                skillArea: e.target.value,
+                              }))
+                            }
+                          />
+                        )}
                       </div>
 
                       <div className="qb-form-group">
@@ -2365,7 +2631,7 @@ const QuestionBankTab: React.FC = () => {
                           </p>
                           <div className="qb-role-tags">
                             <span>
-                              {getExpertDomainLabel(selectedBank.domain)}
+                              {getBankDomainLabel(selectedBank)}
                             </span>
                             {selectedBank.industry && (
                               <span>{selectedBank.industry}</span>
@@ -2515,7 +2781,7 @@ const QuestionBankTab: React.FC = () => {
                             )}
                             {selectedBank.domain && (
                               <span>
-                                {getExpertDomainLabel(selectedBank.domain)}
+                                {getBankDomainLabel(selectedBank)}
                               </span>
                             )}
                             {selectedBank.jobRole && (

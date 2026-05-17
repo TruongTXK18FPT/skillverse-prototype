@@ -15,9 +15,14 @@ export interface PaginatedResponse<T> {
 
 export interface QuestionBankSummary {
   id: number;
+  domainId?: number;
+  jobPositionId?: number;
+  skillId?: number;
   domain: string;
+  domainName?: string;
   industry?: string;
   jobRole?: string;
+  jobPositionName?: string;
   skillName?: string;
   title: string;
   activeQuestionCount: number;
@@ -30,10 +35,14 @@ export interface QuestionBankDetail extends QuestionBankSummary {
   difficultyDistribution: string;
   updatedAt: string;
   difficultyBreakdown: Record<string, number>;
+  skillBreakdown?: Record<string, number>;
 }
 
 export interface CreateQuestionBank {
-  domain: string;
+  domainId: number;
+  jobPositionId: number;
+  skillId?: number | null;
+  domain?: string;
   industry?: string;
   jobRole?: string;
   skillName?: string;
@@ -45,8 +54,9 @@ export interface CreateQuestionBank {
 export interface UpdateQuestionBank {
   title?: string;
   description?: string;
-  industry?: string;
-  jobRole?: string;
+  domainId?: number;
+  jobPositionId?: number;
+  skillId?: number | null;
   skillName?: string;
   difficultyDistribution?: string;
   isActive?: boolean;
@@ -160,9 +170,10 @@ export interface QuestionBankSubmissionQuestion {
 }
 
 export interface CreateQuestionBankSubmission {
+  domainId?: number;
+  jobPositionId?: number;
+  skillId?: number | null;
   domain: string;
-  industry: string;
-  jobRole: string;
   skillName: string;
   title?: string;
   description?: string;
@@ -183,9 +194,12 @@ export interface QuestionBankSubmission {
   mentorEmail: string;
   mentorAvatarUrl?: string;
   mentorPortfolioSlug?: string;
+  domainId?: number;
+  jobPositionId?: number;
+  skillId?: number | null;
   domain: string;
-  industry: string;
-  jobRole: string;
+  domainName?: string;
+  jobPositionName?: string;
   skillName: string;
   title: string;
   description?: string;

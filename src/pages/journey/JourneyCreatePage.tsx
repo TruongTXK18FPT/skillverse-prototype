@@ -7,6 +7,7 @@ import {
   GoalType,
   LEVEL_OPTIONS,
   LevelType,
+  JourneyStatus,
   StartJourneyRequest,
 } from "../../types/Journey";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
@@ -120,17 +121,20 @@ const JourneyCreatePage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [activeJourneyCheck, setActiveJourneyCheck] = useState(true);
 
-  // V3 Phase 3: Block journey creation if user already has an active journey
+  // V3 Phase 3: Block journey creation after the concurrent journey limit.
   useEffect(() => {
     let cancelled = false;
     const checkActiveJourney = async () => {
       try {
         const activeJourneys = await journeyService.getActiveJourneys();
-        if (!cancelled && activeJourneys.length > 0) {
+        const currentLearningJourneys = activeJourneys.filter(
+          (journey) => journey.status !== JourneyStatus.PAUSED,
+        );
+        if (!cancelled && currentLearningJourneys.length >= 5) {
           navigate("/journey", {
             state: {
               blockReason:
-                "Bạn đang có một hành trình chưa hoàn thành. Hãy hoàn thành hoặc xóa hành trình cũ trước khi tạo mới.",
+                "Bạn đang học tối đa 5 hành trình cùng lúc. Hãy hoàn thành, tạm dừng hoặc xóa một hành trình trước khi tạo mới.",
             },
           });
           return;
@@ -169,12 +173,13 @@ const JourneyCreatePage: React.FC = () => {
   }, [loading]);
 
   const [formData, setFormData] = useState<StartJourneyRequest>({
-    type: JourneyType.SKILL,
+    type: JourneyType.CAREER,
     domain: "",
     goal: "",
     level: "BEGINNER",
     language: "VI",
     duration: "STANDARD",
+    questionCount: 50,
     skills: [],
     existingSkills: [],
   });
@@ -201,21 +206,29 @@ const JourneyCreatePage: React.FC = () => {
   const domainMeta = formData.domain
     ? getExpertDomainMeta(formData.domain)
     : null;
-  const journeyTypeLabel = "Học kỹ năng mới";
+  const journeyTypeLabel = "Job position";
 
   const handleSkillComplete = (data: {
     domain: string;
     subCategory: string;
     jobRole: string;
+    jobPositionId: number;
+    jobPositionTrackId: number;
+    targetLevel?: string;
     skills: string[];
   }) => {
     setFormData((prev) => ({
       ...prev,
+      type: JourneyType.CAREER,
       domain: data.domain,
       subCategory: data.subCategory,
       industry: data.subCategory,
       jobRole: data.jobRole,
+      jobPositionId: data.jobPositionId,
+      jobPositionTrackId: data.jobPositionTrackId,
       roleKeywords: undefined,
+      questionCount: 50,
+      duration: "STANDARD",
       skills: data.skills,
       existingSkills: (prev.existingSkills || []).filter(
         (skill) => !data.skills.includes(skill),
@@ -239,7 +252,10 @@ const JourneyCreatePage: React.FC = () => {
 
   const canSubmit = () => {
     return Boolean(
-      formData.goal && formData.level && selectedTargetSkills.length > 0,
+      formData.goal &&
+        formData.level &&
+        formData.jobPositionTrackId &&
+        selectedTargetSkills.length > 0,
     );
   };
 
@@ -260,7 +276,7 @@ const JourneyCreatePage: React.FC = () => {
 
     if (selectedTargetSkills.length === 0) {
       setError(
-        "Vui lòng chọn ít nhất 1 kỹ năng mục tiêu trước khi tạo bài test.",
+        "Vui lòng chọn track có đầy đủ kỹ năng trước khi tạo bài test.",
       );
       return;
     }
@@ -293,7 +309,7 @@ const JourneyCreatePage: React.FC = () => {
 
       <div className="gsj-wizard-section">
         <h3 className="gsj-wizard-section__title">
-          Bạn muốn làm gì với kỹ năng này?
+          Bạn muốn đạt mục tiêu gì với job position này?
         </h3>
         <div className="gsj-card-grid gsj-card-grid--2col gsj-card-grid--goal">
           {GOAL_OPTIONS.map((option, index) => (
@@ -375,7 +391,7 @@ const JourneyCreatePage: React.FC = () => {
         <div className="gsj-target-summary__content">
           {/* Left: Skill */}
           <div className="gsj-target-summary__group">
-            <span className="gsj-target-summary__label">Kỹ năng:</span>
+            <span className="gsj-target-summary__label">Skill trong track:</span>
             {selectedTargetSkills.map((skill) => (
               <span
                 key={skill}
@@ -555,7 +571,7 @@ const JourneyCreatePage: React.FC = () => {
                   {currentStep > step ? <Check size={14} /> : step}
                 </div>
                 <span className="gsj-progress__step-label">
-                  {step === 1 && "Chọn Kỹ năng"}
+                  {step === 1 && "Chọn job position"}
                   {step === 2 && "Cấu hình test"}
                 </span>
               </div>
@@ -669,7 +685,7 @@ const JourneyCreatePage: React.FC = () => {
                 <span className="gsj-create-summary-item__label">
                   Thời lượng
                 </span>
-                <strong>15 phút / 25 câu (Tiêu chuẩn)</strong>
+                <strong>50 phút / 50 câu</strong>
               </div>
             </div>
           </section>
@@ -692,8 +708,8 @@ const JourneyCreatePage: React.FC = () => {
                 <div>
                   <strong>Thiết lập đề đầu vào</strong>
                   <p>
-                    Chọn mục tiêu và trình độ để hệ thống tạo đúng khung đề (15
-                    phút / 25 câu).
+                    Chọn mục tiêu và trình độ để hệ thống tạo đúng khung đề 50
+                    câu theo skill của job position.
                   </p>
                 </div>
               </div>

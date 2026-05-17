@@ -1,9 +1,14 @@
+export type TaxonomyStatus = 'ACTIVE' | 'INACTIVE';
+export type TargetLevel = 'INTERNSHIP' | 'FRESHER' | 'JUNIOR' | 'MIDDLE' | 'SENIOR';
+export type RequirementType = 'REQUIRED' | 'OPTIONAL';
+export type ImportanceLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+
 export interface Domain {
   id: number;
   code: string;
   name: string;
   description: string;
-  status: 'ACTIVE' | 'INACTIVE';
+  status: TaxonomyStatus;
 }
 
 export interface JobPosition {
@@ -12,7 +17,7 @@ export interface JobPosition {
   name: string;
   description: string;
   domainId: number;
-  status: 'ACTIVE' | 'INACTIVE';
+  status: TaxonomyStatus;
 }
 
 export interface JobPositionTrack {
@@ -21,8 +26,8 @@ export interface JobPositionTrack {
   name: string;
   description: string;
   jobPositionId: number;
-  targetLevel: 'INTERNSHIP' | 'FRESHER' | 'JUNIOR' | 'MIDDLE' | 'SENIOR';
-  status: 'ACTIVE' | 'INACTIVE';
+  targetLevel: TargetLevel;
+  status: TaxonomyStatus;
 }
 
 export interface JobPositionTrackSkill {
@@ -31,7 +36,7 @@ export interface JobPositionTrackSkill {
   skillId: number;
   skillName: string;
   canonicalKey: string;
-  requirementType: 'REQUIRED' | 'OPTIONAL';
-  importanceLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  requirementType: RequirementType;
+  weight: number;
   sortOrder: number;
 }
