@@ -462,6 +462,8 @@ const CourseCreationPage = () => {
         }
         if (revision.language !== undefined)
           revisionFormData.language = revision.language;
+        if (revision.thumbnailUrl !== undefined)
+          revisionFormData.thumbnailUrl = revision.thumbnailUrl || "";
         if (Object.keys(revisionFormData).length > 0) {
           updateCourseForm(revisionFormData);
         }

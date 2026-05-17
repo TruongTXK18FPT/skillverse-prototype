@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "../../styles/PremiumPageCosmic.css";
 import MeowGuide from "../../components/meowl/MeowlGuide";
@@ -27,7 +27,6 @@ import { showAppInfo } from "../../context/ToastContext";
 
 const PremiumPageCosmic = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { user, isAuthenticated } = useAuth();
   const [premiumPlans, setPremiumPlans] = useState<PremiumPlan[]>([]);
 
@@ -131,23 +130,28 @@ const PremiumPageCosmic = () => {
     }
   };
 
+  const applyCurrentSubscription = (
+    subscription: UserSubscriptionResponse | null,
+  ) => {
+    setCurrentSub(subscription);
+
+    const isActivePremium = Boolean(
+      subscription &&
+      subscription.isActive &&
+      subscription.status === "ACTIVE" &&
+      subscription.plan?.planType !== "FREE_TIER",
+    );
+
+    setHasActive(isActivePremium);
+  };
+
   const loadCurrentSubscription = async () => {
     try {
       const subscription = await premiumService.getCurrentSubscription();
-      setCurrentSub(subscription);
-
-      const isActivePremium = Boolean(
-        subscription &&
-        subscription.isActive &&
-        subscription.status === "ACTIVE" &&
-        subscription.plan?.planType !== "FREE_TIER",
-      );
-
-      setHasActive(isActivePremium);
+      applyCurrentSubscription(subscription);
     } catch (error) {
       console.error("Failed to load current subscription:", error);
-      setCurrentSub(null);
-      setHasActive(false);
+      applyCurrentSubscription(null);
     }
   };
 
@@ -266,14 +270,17 @@ const PremiumPageCosmic = () => {
     if (!selectedPlanForWallet) return;
 
     try {
-      await premiumService.purchaseWithWallet(
+      const subscription = await premiumService.purchaseWithWallet(
         selectedPlanForWallet.id,
         isStudentEligible,
       );
 
-      // Reload wallet data after successful purchase
-      await loadWalletData();
-      await loadCurrentSubscription();
+      applyCurrentSubscription(subscription);
+      previewCacheRef.current.clear();
+      await Promise.all([
+        loadWalletData(),
+        loadPremiumPlans(),
+      ]);
     } catch (error: any) {
       // Extract error message from response
       const errorMessage =
