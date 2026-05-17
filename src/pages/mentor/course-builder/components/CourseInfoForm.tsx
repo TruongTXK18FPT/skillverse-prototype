@@ -5,18 +5,25 @@ import { LANGUAGES } from "../courseBuilderConstants";
 import { skillService } from "../../../../services/skillService";
 import { SkillDto } from "../../../../data/skillDTOs";
 import useClickOutside from "../../../../hooks/useClickOutside";
+
+type ToastType = "success" | "error" | "info" | "warning";
+
+interface CourseInfoFormData {
+  title?: string;
+  summary?: string;
+  description?: string;
+  category?: string;
+  level?: CourseLevel;
+  price?: number;
+  estimatedDuration?: number;
+  thumbnailUrl?: string;
+  language?: string;
+  learningObjectives?: string[];
+  requirements?: string[];
+}
+
 interface CourseInfoFormProps {
-  courseForm: {
-    title?: string;
-    summary?: string;
-    description?: string;
-    category?: string;
-    level?: CourseLevel;
-    price?: number;
-    estimatedDuration?: number;
-    thumbnailUrl?: string;
-    language?: string;
-  };
+  courseForm: CourseInfoFormData;
   isRevisionMode: boolean;
   isEditable: boolean;
   changedCourseInfoFields: string[];
@@ -25,21 +32,12 @@ interface CourseInfoFormProps {
   courseSkills: string[];
   CATEGORIES: string[];
   LEVELS: { value: CourseLevel; label: string }[];
-  onUpdateCourseForm: (update: Partial<{
-    title?: string;
-    summary?: string;
-    description?: string;
-    category?: string;
-    level?: CourseLevel;
-    price?: number;
-    estimatedDuration?: number;
-    language?: string;
-  }>) => void;
+  onUpdateCourseForm: (update: Partial<CourseInfoFormData>) => void;
   onSetLearningObjectives: (objs: string[]) => void;
   onSetRequirements: (reqs: string[]) => void;
   onSetCourseSkills: (skills: string[]) => void;
   onThumbnailChange: (file: File) => void;
-  onShowToast: (type: "success" | "error" | "info" | "warning", message: string) => void;
+  onShowToast: (type: ToastType, message: string) => void;
   onBlurOnWheel: (e: React.WheelEvent<HTMLInputElement>) => void;
   thumbnailFile: File | null;
   onOpenThumbnailUpload: () => void;
@@ -48,7 +46,7 @@ interface CourseInfoFormProps {
 // ---------- Skill Autocomplete Sub-Component ----------
 interface SkillAutocompleteProps {
   onAddSkill: (skillName: string) => void;
-  onShowToast: (type: "success" | "error" | "info" | "warning", message: string) => void;
+  onShowToast: (type: ToastType, message: string) => void;
 }
 
 const SkillAutocomplete: React.FC<SkillAutocompleteProps> = ({
@@ -86,11 +84,7 @@ const SkillAutocomplete: React.FC<SkillAutocompleteProps> = ({
       const normalized = skillService.normalize(rawInput);
       const results = await skillService.suggestByPrefix(normalized, 0, 10);
       setSuggestions(results);
-      // Show panel if suggestions exist OR if typed value doesn't exactly match any
-      const alreadyAdded = results.some(
-        (s) => s.name.toUpperCase() === normalized,
-      );
-      setIsPanelOpen(results.length > 0 || !alreadyAdded);
+      setIsPanelOpen(results.length > 0);
       setHighlightedIndex(-1);
     } catch {
       setSuggestions([]);
@@ -128,8 +122,7 @@ const SkillAutocomplete: React.FC<SkillAutocompleteProps> = ({
         // Keyboard-navigated selection
         addSkillFromSuggestion(suggestions[highlightedIndex].name);
       } else if (inputValue.trim()) {
-        // Custom text → normalize and add
-        addSkillFromSuggestion(inputValue);
+        onShowToast("warning", "Vui lòng chọn kỹ năng có sẵn trong hệ thống");
       }
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -152,9 +145,9 @@ const SkillAutocomplete: React.FC<SkillAutocompleteProps> = ({
     };
   }, []);
 
-  // Show panel if input has value and either: loading, results, or user is typing
+  // Keep the panel limited to existing system skills; free-text tags are not allowed here.
   const showPanel = isPanelOpen && (
-    isInputFocused || suggestions.length > 0 || (inputValue.trim().length > 0 && !isLoading)
+    isInputFocused || suggestions.length > 0
   );
 
   return (
@@ -180,7 +173,11 @@ const SkillAutocomplete: React.FC<SkillAutocompleteProps> = ({
           type="button"
           className="cb-button cb-button--ghost cb-button--sm"
           onClick={() => {
-            if (inputValue.trim()) addSkillFromSuggestion(inputValue);
+            if (suggestions.length > 0) {
+              addSkillFromSuggestion(suggestions[0].name);
+            } else if (inputValue.trim()) {
+              onShowToast("warning", "Vui lòng chọn kỹ năng có sẵn trong hệ thống");
+            }
           }}
           disabled={!inputValue.trim()}
         >
@@ -214,11 +211,6 @@ const SkillAutocomplete: React.FC<SkillAutocompleteProps> = ({
                   <span className="cb-skill-autocomplete__name">
                     {skill.name}
                   </span>
-                  {skill.category && (
-                    <span className="cb-skill-autocomplete__category">
-                      {skill.category}
-                    </span>
-                  )}
                 </div>
               ))}
               <div className="cb-skill-autocomplete__empty">
@@ -228,7 +220,7 @@ const SkillAutocomplete: React.FC<SkillAutocompleteProps> = ({
                   <kbd className="cb-skill-autocomplete__kbd">Esc</kbd> đóng
                 </span>
                 <span className="cb-skill-autocomplete__empty-hint">
-                  Nhấn Enter để tạo mới
+                  Chỉ chọn kỹ năng đã có trong hệ thống
                 </span>
               </div>
             </>
@@ -240,7 +232,7 @@ const SkillAutocomplete: React.FC<SkillAutocompleteProps> = ({
                 onMouseDown={(e) => e.preventDefault()}
                 style={{ cursor: "default" }}
               >
-                Nhấn Enter để tạo mới
+                Chỉ chọn kỹ năng đã có trong hệ thống
               </span>
             </div>
           ) : null}

@@ -1,4 +1,4 @@
-import { SubmissionType } from '../../../data/assignmentDTOs';
+import { GradingStyle, SubmissionType } from '../../../data/assignmentDTOs';
 import { QuestionType } from '../../../data/quizDTOs';
 
 export type LessonKind = 'video' | 'reading' | 'quiz' | 'assignment';
@@ -59,7 +59,8 @@ export interface LessonDraft {
   quizDescription?: string;
   gradingMethod?: string;
   aiGradingEnabled?: boolean;
-  gradingStyle?: 'STANDARD' | 'STRICT' | 'LENIENT';
+  aiGradingPrompt?: string;
+  gradingStyle?: GradingStyle;
   trustAiEnabled?: boolean;
   questions?: QuizQuestionDraft[];
   // Assignment fields

@@ -186,3 +186,24 @@
   background-color: var(--hover-color, rgba(59, 130, 246, 0.05));
 }
 
+.skill-registry-tab__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1rem;
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.875rem;
+}
+
+.skill-registry-tab__pagination .pagination-container {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .skill-registry-tab__pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+

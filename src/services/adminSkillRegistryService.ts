@@ -7,6 +7,19 @@ export const adminSkillRegistryService = {
     const { data } = await api.get('/skills/all');
     return data;
   },
+
+  getSkills: async (
+    params: {
+      page?: number;
+      size?: number;
+      q?: string;
+      status?: Skill['status'];
+      sort?: string;
+    } = {},
+  ): Promise<PageResponse<Skill>> => {
+    const { data } = await api.get('/skills/all-paged', { params });
+    return data;
+  },
   
   createSkill: async (skill: Partial<Skill>): Promise<Skill> => {
     const { data } = await api.post('/skills', skill);

@@ -1,12 +1,21 @@
 import React from "react";
 import { FiCpu, FiPlus, FiTrash2, FiAlertTriangle, FiInfo } from "react-icons/fi";
 import { LessonDraft, AssignmentCriteriaDraft } from "../courseBuilderTypes";
-import { SubmissionType } from "../../../../data/assignmentDTOs";
+import { GradingStyle, SubmissionType } from "../../../../data/assignmentDTOs";
 import {
   AssignmentCriteriaItemErrors,
   AssignmentFieldErrors,
 } from "../courseBuilderValidation";
 import RichTextEditor from "../../../../components/shared/RichTextEditor";
+
+const GRADING_STYLES: Array<{ value: GradingStyle; label: string }> = [
+  { value: "STANDARD", label: "Cân bằng" },
+  { value: "STRICT", label: "Nghiêm ngặt" },
+  { value: "LENIENT", label: "Linh hoạt" },
+];
+
+const isGradingStyle = (value: string): value is GradingStyle =>
+  GRADING_STYLES.some((style) => style.value === value);
 
 interface LessonEditorAssignmentProps {
   lesson: LessonDraft;
@@ -306,14 +315,18 @@ const LessonEditorAssignment: React.FC<LessonEditorAssignmentProps> = ({
                   className="cb-input cb-select"
                   value={lesson.gradingStyle || "STANDARD"}
                   onChange={(e) => {
+                    const nextStyle = e.target.value;
+                    if (!isGradingStyle(nextStyle)) return;
                     onUpdateLessonField(moduleId, lesson.id, {
-                      gradingStyle: e.target.value,
+                      gradingStyle: nextStyle,
                     });
                   }}
                 >
-                  <option value="STANDARD">Cân bằng</option>
-                  <option value="STRICT">Nghiêm ngặt</option>
-                  <option value="LENIENT">Linh hoạt</option>
+                  {GRADING_STYLES.map((style) => (
+                    <option key={style.value} value={style.value}>
+                      {style.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

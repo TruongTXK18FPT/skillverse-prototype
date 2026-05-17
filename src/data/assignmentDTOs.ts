@@ -6,6 +6,8 @@ export enum SubmissionType {
   LINK = 'LINK'
 }
 
+export type GradingStyle = 'STANDARD' | 'STRICT' | 'LENIENT';
+
 // DEADCODE: LATE_PENDING never used — no deadline input in mentor form (as of 2026-04-15).
 // mentor form (LessonEditorAssignment.tsx) has no dueAt field → assignment.dueAt always null
 // → isLate is always false → LATE_PENDING never triggered.
@@ -61,7 +63,7 @@ export interface AssignmentDetailDTO {
   // AI Grading fields
   aiGradingEnabled?: boolean;
   aiGradingPrompt?: string;
-  gradingStyle?: 'STANDARD' | 'STRICT' | 'LENIENT';
+  gradingStyle?: GradingStyle;
   trustAiEnabled?: boolean;
 }
 
@@ -89,7 +91,8 @@ export interface AssignmentCreateDTO {
   // AI Grading fields
   aiGradingEnabled?: boolean;
   aiGradingPrompt?: string;
-  gradingStyle?: 'STANDARD' | 'STRICT' | 'LENIENT';
+  gradingStyle?: GradingStyle;
+  trustAiEnabled?: boolean;
 }
 
 // Assignment Update DTO
@@ -107,7 +110,8 @@ export interface AssignmentUpdateDTO {
   // AI Grading fields
   aiGradingEnabled?: boolean;
   aiGradingPrompt?: string;
-  gradingStyle?: 'STANDARD' | 'STRICT' | 'LENIENT';
+  gradingStyle?: GradingStyle;
+  trustAiEnabled?: boolean;
 }
 
 // Assignment Submission Detail DTO - Updated with version tracking
