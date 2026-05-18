@@ -676,7 +676,7 @@ export const getAllPublicPortfolios = async (): Promise<UserProfileDTO[]> => {
 
 export interface PortfolioVerifiedSkillEvidence {
   id?: number;
-  type: 'CERTIFICATE' | 'GITHUB' | 'PORTFOLIO_LINK' | 'WORK_EXPERIENCE' | 'OUTPUT_ASSESSMENT' | 'NODE_SUBMISSION';
+  type: 'CERTIFICATE' | 'GITHUB' | 'PORTFOLIO_LINK' | 'WORK_EXPERIENCE' | 'CV' | 'OUTPUT_ASSESSMENT' | 'NODE_SUBMISSION';
   title?: string;
   url?: string;
   imageUrl?: string;
@@ -887,4 +887,3 @@ export const portfolioService = {
 };
 
 export default portfolioService;
-

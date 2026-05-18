@@ -21,6 +21,7 @@ interface MasterProfileCardProps {
   isFavorite: boolean;
   preChatEnabled?: boolean;
   verifiedSkills?: string[];
+  slug?: string;
   onEstablishLink: () => void;
   onBookRoadmap?: () => void;
   onToggleFavorite?: () => void;
@@ -43,6 +44,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
   isFavorite,
   preChatEnabled = true,
   verifiedSkills = [],
+  slug,
   onEstablishLink,
   onBookRoadmap,
   onToggleFavorite,
@@ -72,6 +74,18 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
     e.stopPropagation();
     navigate(`/mentors/${id}/verified-skills/${encodeURIComponent(skillName)}`);
   };
+
+  const handleMoreVerifiedSkillsClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (slug) {
+      navigate(`/portfolio/${slug}`);
+      return;
+    }
+    onViewProfile?.();
+  };
+
+  const visibleVerifiedSkills = verifiedSkills.slice(0, 5);
+  const hiddenVerifiedSkillCount = Math.max(0, verifiedSkills.length - visibleVerifiedSkills.length);
 
   return (
     <div className="uplink-card">
@@ -199,7 +213,7 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
               </span>
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
-              {verifiedSkills.map((skill, idx) => (
+              {visibleVerifiedSkills.map((skill, idx) => (
                 <button
                   key={idx}
                   onClick={(e) => handleVerifiedSkillClick(skill, e)}
@@ -236,6 +250,28 @@ const MasterProfileCard: React.FC<MasterProfileCardProps> = ({
                   {skill}
                 </button>
               ))}
+              {hiddenVerifiedSkillCount > 0 && (
+                <button
+                  type="button"
+                  onClick={handleMoreVerifiedSkillsClick}
+                  title="Xem toàn bộ kỹ năng đã xác thực trong portfolio"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    background: "rgba(14, 165, 233, 0.14)",
+                    border: "1px solid rgba(14, 165, 233, 0.5)",
+                    borderRadius: "6px",
+                    padding: "3px 8px",
+                    fontSize: "0.7rem",
+                    color: "#67e8f9",
+                    cursor: "pointer",
+                    fontWeight: 700,
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  +{hiddenVerifiedSkillCount}
+                </button>
+              )}
             </div>
           </div>
         )}

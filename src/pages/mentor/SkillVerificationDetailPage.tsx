@@ -40,9 +40,16 @@ const EVIDENCE_META: Record<EvidenceType, { label: string; icon: LucideIcon }> =
   {
     CERTIFICATE: { label: "Chứng chỉ", icon: Award },
     GITHUB: { label: "GitHub Repository", icon: Github },
+    CV: { label: "CV / Resume", icon: FileText },
     PORTFOLIO_LINK: { label: "Portfolio / Website", icon: Globe },
     WORK_EXPERIENCE: { label: "Kinh nghiệm làm việc", icon: Briefcase },
   };
+
+const isImageUrl = (url?: string) =>
+  Boolean(url && (/\.(jpeg|jpg|gif|png|webp|svg)($|\?)/i.test(url) || url.includes("cloudinary.com")));
+
+const isPdfUrl = (url?: string) =>
+  Boolean(url && /\.pdf($|\?)/i.test(url));
 
 const formatDateTime = (iso: string) =>
   new Date(iso).toLocaleString("vi-VN", {
@@ -113,6 +120,23 @@ const EvidenceCard: React.FC<{ evidence: EvidenceResponse; index: number }> = ({
             <span>Không tải được ảnh</span>
           </div>
         )}
+      {evidence.evidenceUrl && evidence.evidenceType !== "CERTIFICATE" && isImageUrl(evidence.evidenceUrl) && !imgError && (
+        <div className="svd-evidence-card__image-wrapper">
+          <img
+            src={evidence.evidenceUrl}
+            alt={meta.label}
+            className="svd-evidence-card__image"
+            onError={() => setImgError(true)}
+          />
+        </div>
+      )}
+      {evidence.evidenceUrl && isPdfUrl(evidence.evidenceUrl) && (
+        <iframe
+          src={evidence.evidenceUrl}
+          className="svd-evidence-card__pdf"
+          title={`${meta.label} preview`}
+        />
+      )}
 
       <div className="svd-evidence-card__body">
         {evidence.certificateTitle && (
@@ -132,15 +156,25 @@ const EvidenceCard: React.FC<{ evidence: EvidenceResponse; index: number }> = ({
           </p>
         )}
         {evidence.evidenceUrl && (
-          <a
-            href={evidence.evidenceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="svd-evidence-card__link"
-          >
-            <ExternalLink size={13} />
-            Xem bằng chứng
-          </a>
+          <div className="svd-evidence-card__url-block">
+            <a
+              href={evidence.evidenceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="svd-evidence-card__url"
+            >
+              {evidence.evidenceUrl}
+            </a>
+            <a
+              href={evidence.evidenceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="svd-evidence-card__link"
+            >
+              <ExternalLink size={13} />
+              Mở minh chứng
+            </a>
+          </div>
         )}
       </div>
     </div>
@@ -205,7 +239,10 @@ const AdminVerificationBlock: React.FC<{
             className="svd-skill-block__link-chip svd-skill-block__link-chip--github"
           >
             <Github size={14} />
-            GitHub Profile / Repository
+            <span>
+              GitHub
+              <small>{verification.githubUrl}</small>
+            </span>
           </a>
         )}
         {verification.portfolioUrl && (
@@ -216,7 +253,10 @@ const AdminVerificationBlock: React.FC<{
             className="svd-skill-block__link-chip svd-skill-block__link-chip--portfolio"
           >
             <Globe size={14} />
-            Portfolio Website
+            <span>
+              Portfolio
+              <small>{verification.portfolioUrl}</small>
+            </span>
           </a>
         )}
       </div>

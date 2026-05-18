@@ -8,10 +8,11 @@ import axiosInstance from "./axiosInstance";
 
 // ==================== Types ====================
 
-export type VerificationStatus = "PENDING" | "APPROVED" | "REJECTED";
+export type VerificationStatus = "PENDING" | "APPROVED" | "REJECTED" | "REVOKED";
 export type EvidenceType =
   | "CERTIFICATE"
   | "GITHUB"
+  | "CV"
   | "PORTFOLIO_LINK"
   | "WORK_EXPERIENCE";
 
@@ -65,6 +66,44 @@ export interface MentorVerificationResponse {
   evidences: EvidenceResponse[];
 }
 
+export interface CreateBatchVerificationRequest {
+  skillNames: string[];
+  githubUrl?: string;
+  portfolioUrl?: string;
+  additionalNotes?: string;
+  certificateIds: number[];
+  evidences: EvidenceItem[];
+}
+
+export interface BatchVerificationResponse {
+  id: number;
+  mentorId: number;
+  mentorName: string;
+  mentorEmail: string;
+  mentorAvatarUrl?: string;
+  status: "PENDING" | "PARTIAL_APPROVED" | "COMPLETED" | "REJECTED" | "REVOKED";
+  githubUrl?: string;
+  portfolioUrl?: string;
+  additionalNotes?: string;
+  generalReviewNote?: string;
+  reviewedById?: number;
+  reviewedByName?: string;
+  submittedAt: string;
+  reviewedAt?: string;
+  evidences: EvidenceResponse[];
+  skills: MentorVerificationResponse[]; // Individual skills in this batch
+}
+
+export interface ReviewBatchVerificationRequest {
+  generalReviewNote?: string;
+  skillsReview: Array<{
+    skillVerificationId: number;
+    approved: boolean;
+    reviewNote?: string;
+  }>;
+}
+
+
 export interface PageResponse<T> {
   content: T[];
   totalPages: number;
@@ -101,6 +140,33 @@ export const getMyVerifiedSkills = async (): Promise<string[]> => {
   );
   return response.data;
 };
+
+/** Mentor: gỡ một skill đã được công nhận khỏi hồ sơ */
+export const revokeVerifiedSkill = async (skillName: string): Promise<void> => {
+  await axiosInstance.delete(
+    `/api/v1/mentor/verifications/verified-skills/${encodeURIComponent(skillName)}`,
+  );
+};
+
+/** Mentor: gửi yêu cầu gom lô (Batch) */
+export const submitBatchVerification = async (
+  request: CreateBatchVerificationRequest,
+): Promise<BatchVerificationResponse> => {
+  const response = await axiosInstance.post(
+    "/api/v1/mentor/verifications/batch",
+    request,
+  );
+  return response.data;
+};
+
+/** Mentor: xem tất cả Lô (Batch) của mình */
+export const getMyBatchVerifications = async (): Promise<
+  BatchVerificationResponse[]
+> => {
+  const response = await axiosInstance.get("/api/v1/mentor/verifications/batch");
+  return response.data;
+};
+
 
 // ==================== Admin APIs ====================
 
@@ -162,6 +228,47 @@ export const countPendingVerifications = async (): Promise<number> => {
   );
   return response.data.count;
 };
+
+/** Admin: lấy danh sách Batch chờ duyệt */
+export const getPendingBatchVerifications = async (
+  page = 0,
+  size = 20,
+): Promise<PageResponse<BatchVerificationResponse>> => {
+  const response = await axiosInstance.get(
+    "/api/v1/admin/mentor-verifications/batch/pending",
+    {
+      params: { page, size },
+    },
+  );
+  return response.data;
+};
+
+/** Admin: lấy tất cả Batch (có filter status) */
+export const getAllBatchVerifications = async (
+  statuses?: string[],
+  page = 0,
+  size = 20,
+): Promise<PageResponse<BatchVerificationResponse>> => {
+  const response = await axiosInstance.get(
+    "/api/v1/admin/mentor-verifications/batch",
+    {
+      params: { statuses, page, size },
+    },
+  );
+  return response.data;
+};
+
+/** Admin: duyệt một phần các skills trong Batch */
+export const reviewBatchVerification = async (
+  batchId: number,
+  request: ReviewBatchVerificationRequest,
+): Promise<BatchVerificationResponse> => {
+  const response = await axiosInstance.put(
+    `/api/v1/admin/mentor-verifications/batch/${batchId}/review`,
+    request,
+  );
+  return response.data;
+};
 // ==================== Public APIs ====================
 
 /** Public: lấy danh sách skill APPROVED kèm evidence của 1 mentor (không cần auth) */
@@ -197,4 +304,21 @@ export const uploadEvidence = async (file: File): Promise<string> => {
     return response.data.url;
   }
   throw new Error("Upload failed or missing secure_url");
+};
+
+export const uploadEvidenceFile = async (file: File): Promise<string> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("folder", "mentor-verification/evidence");
+
+  const response = await axiosInstance.post("/media/upload/file", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  if (response.data && response.data.url) {
+    return response.data.url;
+  }
+  throw new Error("Upload failed or missing url");
 };

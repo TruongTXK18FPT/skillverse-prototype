@@ -253,3 +253,14 @@ export const getPublicVerifiedSkills = async (
   }>(`/api/portfolio/public/${userId}/verified-skills`);
   return response.data.data;
 };
+
+/** Set the first featured verified skills for public cards. */
+export const updateVerifiedSkillFeaturedOrder = async (
+  skillNames: string[],
+): Promise<UserVerifiedSkillDTO[]> => {
+  const response = await axiosInstance.put<{
+    success: boolean;
+    data: UserVerifiedSkillDTO[];
+  }>("/api/portfolio/verified-skills/featured-order", skillNames);
+  return response.data.data;
+};

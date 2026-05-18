@@ -491,6 +491,7 @@ const MentorshipPage = () => {
               isFavorite={mentor.isFavorite}
               preChatEnabled={mentor.preChatEnabled}
               verifiedSkills={mentor.verifiedSkills}
+              slug={mentor.slug}
               onEstablishLink={() => handleBookSession(mentor)}
               onBookRoadmap={() => handleBookRoadmap(mentor)}
               onToggleFavorite={() => handleToggleFavoriteWrapper(mentor.id)}

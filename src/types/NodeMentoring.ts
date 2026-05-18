@@ -216,5 +216,6 @@ export interface UserVerifiedSkillDTO {
   journeyId?: number;
   bookingId?: number;
   verificationNote?: string;
+  featuredOrder?: number;
   verifiedAt: string;
 }
