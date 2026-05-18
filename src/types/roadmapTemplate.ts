@@ -1,5 +1,6 @@
 import type { ImportanceLevel, RequirementType } from "./careerTaxonomy";
 import type { SkillLevel } from "./Journey";
+import type { RoadmapNodeSkillRequirement } from "./Roadmap";
 
 export type RoadmapTemplateStatus =
   | "DRAFT"
@@ -61,6 +62,8 @@ export interface RoadmapTemplateActivityRequest {
   estimatedHours?: number | null;
   prerequisiteHint?: string;
   aiPromptHint?: string;
+  skillRequirements?: RoadmapNodeSkillRequirement[];
+  skillRequirementsJson?: string;
   orderIndex: number;
 }
 

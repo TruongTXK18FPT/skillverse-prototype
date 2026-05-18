@@ -32,6 +32,7 @@ import type {
   JobPositionTrack,
   JobPositionTrackSkill,
 } from "../../types/careerTaxonomy";
+import type { RoadmapNodeSkillRequirement } from "../../types/Roadmap";
 import { SkillLevel } from "../../types/Journey";
 import type {
   RoadmapTemplateActivityRequest,
@@ -344,6 +345,7 @@ const toSummaryCourseOption = (course: CourseSummaryDTO): CourseOption => ({
 const defaultActivity = (
   skillName: string,
   orderIndex = 1,
+  skill?: JobPositionTrackSkill,
 ): RoadmapTemplateActivityRequest => ({
   title: `Lesson ${orderIndex}: Thực hành trọng tâm ${skillName}`,
   description: `Luyện tập quy trình chính và tạo minh chứng có thể đánh giá cho ${skillName}.`,
@@ -356,8 +358,45 @@ const defaultActivity = (
   estimatedHours: 4,
   prerequisiteHint: "",
   aiPromptHint: "",
+  skillRequirements: skill
+    ? [{
+        skillId: skill.skillId,
+        skillName: skill.skillName,
+        canonicalKey: skill.canonicalKey,
+        requirementType: skill.requirementType === "REQUIRED" || skill.requirementType === "IMPORTANT"
+          ? skill.requirementType
+          : "NICE_TO_HAVE",
+      }]
+    : [],
+  skillRequirementsJson: skill
+    ? JSON.stringify([{
+        skillId: skill.skillId,
+        skillName: skill.skillName,
+        canonicalKey: skill.canonicalKey,
+        requirementType: skill.requirementType === "REQUIRED" || skill.requirementType === "IMPORTANT"
+          ? skill.requirementType
+          : "NICE_TO_HAVE",
+      }])
+    : "[]",
   orderIndex,
 });
+
+const parseActivitySkillRequirements = (
+  activity: RoadmapTemplateActivityRequest,
+): RoadmapNodeSkillRequirement[] => {
+  if (Array.isArray(activity.skillRequirements)) {
+    return activity.skillRequirements;
+  }
+  if (!activity.skillRequirementsJson) {
+    return [];
+  }
+  try {
+    const parsed = JSON.parse(activity.skillRequirementsJson);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
 
 const buildSkillBlockFromTrackSkill = (
   skill: JobPositionTrackSkill,
@@ -380,7 +419,7 @@ const buildSkillBlockFromTrackSkill = (
   courseLinkPolicy: "AUTO_HYBRID",
   autoCourseLimit: 2,
   ragEnabled: true,
-  activities: [defaultActivity(skill.skillName)],
+  activities: [defaultActivity(skill.skillName, 1, skill)],
   selectedCourseIds: [],
 });
 
@@ -398,6 +437,8 @@ const normalizeBlock = (
   ragEnabled: block.ragEnabled ?? true,
   activities: (block.activities || []).map((activity, index) => ({
     ...activity,
+    skillRequirements: parseActivitySkillRequirements(activity),
+    skillRequirementsJson: JSON.stringify(parseActivitySkillRequirements(activity)),
     minLevel: activity.minLevel ?? SkillLevel.BEGINNER,
     maxLevel: activity.maxLevel ?? null,
     orderIndex: activity.orderIndex || index + 1,
@@ -629,6 +670,7 @@ const AdminRoadmapTemplateManager = () => {
           estimatedHours: activity.estimatedHours ?? null,
           prerequisiteHint: activity.prerequisiteHint?.trim(),
           aiPromptHint: activity.aiPromptHint?.trim(),
+          skillRequirementsJson: JSON.stringify(parseActivitySkillRequirements(activity)),
           orderIndex: index + 1,
         })),
       })),

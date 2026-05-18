@@ -21,6 +21,9 @@ import { usePaymentToast } from "../../utils/useToast";
 import Toast from "../shared/Toast";
 import journeyService from "../../services/journeyService";
 import { JourneySummaryResponse } from "../../types/Journey";
+import { mentorEligibilityService } from "../../services/mentorEligibilityService";
+import type { MentorTeachingEligibilityResponse } from "../../types/mentorEligibility";
+import { getEligibilityDisplayInfo, getMissingSkillsText } from "../../utils/mentorEligibilityHelper";
 import "./uplink-styles.css";
 
 interface JourneyContext {
@@ -97,11 +100,20 @@ const BookingModal: React.FC<BookingModalProps> = ({
     null,
   );
   const [loadingJourneys, setLoadingJourneys] = useState(false);
+  const [eligibility, setEligibility] =
+    useState<MentorTeachingEligibilityResponse | null>(null);
+  const [eligibilityLoading, setEligibilityLoading] = useState(false);
+  const [eligibilityError, setEligibilityError] = useState<string | null>(null);
 
   // Calendar state
   const [calendarStartDate, setCalendarStartDate] = useState(new Date());
 
   const selectedJourney = userJourneys.find((j) => j.id === selectedJourneyId);
+  const effectiveEligibilityJourneyId =
+    selectedJourneyId ?? journeyContext?.journeyId ?? null;
+  const eligibilityBlocking =
+    eligibility?.summaryStatus === "NOT_ELIGIBLE" ||
+    eligibility?.nodes?.some((node) => node.status === "NOT_ELIGIBLE");
 
   const priceVND =
     isRoadmapMentoring && roadmapMentoringPrice
@@ -131,6 +143,8 @@ const BookingModal: React.FC<BookingModalProps> = ({
       setStep(getInitialStep());
       setSelectedSlot(null);
       setSelectedJourneyId(null);
+      setEligibility(null);
+      setEligibilityError(null);
       // Payment always WALLET - no PayOS option
       setCloseModalOnToastDismiss(false);
       fetchWalletBalance();
@@ -149,6 +163,60 @@ const BookingModal: React.FC<BookingModalProps> = ({
       document.body.classList.remove("uplink-scroll-lock");
     };
   }, [isOpen, mentorId]);
+
+  useEffect(() => {
+    const shouldCheck =
+      isOpen &&
+      step === "payment" &&
+      effectiveEligibilityJourneyId &&
+      journeyContext?.bookingType &&
+      journeyContext.bookingType !== "GENERAL";
+
+    if (!shouldCheck) {
+      setEligibility(null);
+      setEligibilityError(null);
+      return;
+    }
+
+    let cancelled = false;
+    setEligibilityLoading(true);
+    setEligibilityError(null);
+    mentorEligibilityService
+      .evaluateJourney(
+        effectiveEligibilityJourneyId,
+        Number(mentorId),
+        journeyContext?.nodeId,
+      )
+      .then((result) => {
+        if (!cancelled) {
+          setEligibility(result);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setEligibility(null);
+          setEligibilityError(
+            error?.response?.data?.message || "Khong the kiem tra dieu kien mentor.",
+          );
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setEligibilityLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    effectiveEligibilityJourneyId,
+    isOpen,
+    journeyContext?.bookingType,
+    journeyContext?.nodeId,
+    mentorId,
+    step,
+  ]);
 
   const fetchWalletBalance = async () => {
     try {
@@ -331,6 +399,15 @@ const BookingModal: React.FC<BookingModalProps> = ({
     if (walletBalance < priceVND) {
       setCloseModalOnToastDismiss(false);
       showError("Số dư không đủ", "Vui lòng nạp thêm tiền vào ví.");
+      return;
+    }
+
+    if (eligibilityBlocking) {
+      setCloseModalOnToastDismiss(false);
+      showError(
+        "Mentor chua du dieu kien",
+        "Mentor dang thieu verified skill bat buoc cho node/roadmap nay.",
+      );
       return;
     }
 
@@ -741,6 +818,43 @@ const BookingModal: React.FC<BookingModalProps> = ({
 
               <h4 className="booking-method-heading">Thanh toán qua ví</h4>
 
+              {(eligibilityLoading || eligibility || eligibilityError) && (
+                <div className="booking-order-summary">
+                  <div className="booking-order-row">
+                    <span>Mức độ phù hợp:</span>
+                    <span>
+                      {eligibilityLoading ? (
+                        <span style={{ color: '#94a3b8' }}>Đang kiểm tra...</span>
+                      ) : eligibilityError ? (
+                        <span style={{ color: '#ef4444' }}>Lỗi kiểm tra</span>
+                      ) : eligibility ? (
+                        <span className={getEligibilityDisplayInfo(eligibility.summaryStatus).badgeClass} style={{ padding: 0, background: 'transparent', boxShadow: 'none' }}>
+                          {getEligibilityDisplayInfo(eligibility.summaryStatus).label} ({eligibility.overallMatchPercent}%)
+                        </span>
+                      ) : null}
+                    </span>
+                  </div>
+                  {eligibilityError && (
+                    <div className="booking-order-detail">
+                      <span style={{ color: '#ef4444' }}>Lưu ý:</span>
+                      <span style={{ color: '#ef4444' }}>{eligibilityError}</span>
+                    </div>
+                  )}
+                  {eligibility?.nodes?.slice(0, 3).map((node) => {
+                    const missingText = getMissingSkillsText(node);
+                    return (
+                      <div className="booking-order-detail" key={node.nodeId || node.title || node.status}>
+                        <span>{node.title || node.nodeId || "Node"}:</span>
+                        <span>
+                          {node.matchPercent}%
+                          {missingText ? ` | Thiếu: ${missingText}` : ""}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
               <div className="payment-method-card selected">
                 <Wallet size={24} color="#22d3ee" />
                 <div className="payment-method-body">
@@ -803,7 +917,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               <button
                 className={`uplink-establish-btn booking-action-pay ${isProcessing ? "booking-action-pay--processing" : ""}`}
                 onClick={handlePayment}
-                disabled={isProcessing}
+                disabled={isProcessing || eligibilityLoading || Boolean(eligibilityBlocking)}
               >
                 {isProcessing
                   ? "Đang xử lý..."

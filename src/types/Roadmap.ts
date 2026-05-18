@@ -1,6 +1,7 @@
 /**
  * TypeScript types for AI Roadmap feature
  */
+import type { RequirementType } from './careerTaxonomy';
 
 /**
  * Node type in the roadmap tree
@@ -83,6 +84,7 @@ export interface RoadmapNode {
   practicalExercises?: string[];
   suggestedResources?: string[];
   successCriteria?: string[];
+  skills?: RoadmapNodeSkillRequirement[];
   prerequisites?: string[];
   estimatedCompletionRate?: number;
   importanceScore?: number | null;          // 0.0–1.0, how critical relative to goal
@@ -90,6 +92,13 @@ export interface RoadmapNode {
   reason?: string | null;                   // 1-sentence explanation
   evidence?: string[];                      // signals used to derive the score
   importanceValidationStatus?: 'ACCEPTED' | 'ADJUSTED' | 'LOW_CONFIDENCE' | 'FALLBACK' | null;
+}
+
+export interface RoadmapNodeSkillRequirement {
+  skillId?: number | null;
+  skillName?: string | null;
+  canonicalKey?: string | null;
+  requirementType: RequirementType;
 }
 
 /**

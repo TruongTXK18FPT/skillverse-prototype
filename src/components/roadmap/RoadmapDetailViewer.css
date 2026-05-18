@@ -1475,3 +1475,81 @@
     align-items: stretch;
   }
 }
+
+/* Eligibility Badges - Neon Tech */
+.rdmv-eligibility-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-family: var(--hud-font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+  box-shadow: 0 0 10px transparent;
+}
+
+.rdmv-eligibility-badge--eligible {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+.rdmv-eligibility-badge--partial {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+}
+
+.rdmv-eligibility-badge--review {
+  color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.2);
+}
+
+.rdmv-eligibility-badge--not-eligible {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.2);
+}
+
+.rdmv-mentor-card__eligibility-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  background: rgba(2, 6, 23, 0.4);
+  border: 1px dashed rgba(34, 211, 238, 0.2);
+  border-radius: 8px;
+}
+
+.rdmv-eligibility-top-node {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+}
+
+.rdmv-eligibility-top-node strong {
+  color: #67e8f9;
+}
+
+.rdmv-eligibility-missing, .rdmv-eligibility-warning {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.rdmv-eligibility-missing {
+  color: #fbbf24;
+}
+
+.rdmv-eligibility-warning {
+  color: #a78bfa;
+}

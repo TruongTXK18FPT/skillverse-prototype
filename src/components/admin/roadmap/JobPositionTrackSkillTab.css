@@ -507,3 +507,152 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== Neon Tech Aesthetic ===== */
+.job-track-skill-tab__skill-filter-neon {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 20px;
+  background: rgba(15, 23, 42, 0.4);
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.1) inset;
+  backdrop-filter: blur(8px);
+}
+
+.job-track-skill-tab__input--neon,
+.job-track-skill-tab__select--neon {
+  background-color: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #e0f2fe;
+  transition: all 0.3s ease;
+}
+
+.job-track-skill-tab__input--neon:focus,
+.job-track-skill-tab__select--neon:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  outline: none;
+}
+
+.job-track-skill-tab__input--neon::placeholder {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.job-track-skill-tab__neon-row {
+  transition: all 0.3s ease;
+}
+
+.job-track-skill-tab__neon-row:hover {
+  background: rgba(14, 165, 233, 0.05) !important;
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.1) inset;
+}
+
+.job-track-skill-tab__neon-text {
+  font-weight: 600;
+  color: #38bdf8;
+  text-shadow: 0 0 5px rgba(56, 189, 248, 0.3);
+}
+
+.job-track-skill-tab__table-cell-code--neon {
+  background: rgba(236, 72, 153, 0.1);
+  color: #f472b6;
+  border: 1px solid rgba(244, 114, 182, 0.3);
+  box-shadow: 0 0 5px rgba(244, 114, 182, 0.2);
+}
+
+.job-track-skill-tab__neon-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  backdrop-filter: blur(4px);
+}
+
+.job-track-skill-tab__neon-badge--required {
+  color: #22d3ee;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.4);
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.3);
+}
+
+.job-track-skill-tab__neon-badge--important {
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.3);
+}
+
+.job-track-skill-tab__neon-badge--nice_to_have {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.3);
+}
+
+.job-track-skill-tab__neon-weight {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fcd34d;
+  text-shadow: 0 0 8px rgba(252, 211, 77, 0.6);
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  background: rgba(252, 211, 77, 0.1);
+  border-radius: 0.375rem;
+  border: 1px solid rgba(252, 211, 77, 0.3);
+}
+
+.job-track-skill-tab__neon-order {
+  font-weight: bold;
+  color: #94a3b8;
+  padding: 0 0.5rem;
+}
+
+.job-track-skill-tab__btn--neon {
+  background: transparent !important;
+  color: #38bdf8 !important;
+  border: 1px solid #38bdf8 !important;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.job-track-skill-tab__btn--neon:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.1) !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+  text-shadow: 0 0 5px rgba(56, 189, 248, 0.5);
+}
+
+.job-track-skill-tab__btn--neon-danger {
+  background: transparent !important;
+  color: #f43f5e !important;
+  border: 1px solid #f43f5e !important;
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.3);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.job-track-skill-tab__btn--neon-danger:hover:not(:disabled) {
+  background: rgba(244, 63, 94, 0.1) !important;
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.5);
+  text-shadow: 0 0 5px rgba(244, 63, 94, 0.5);
+}
+
+@media (max-width: 1200px) {
+  .job-track-skill-tab__skill-filter-neon {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .job-track-skill-tab__skill-filter-neon {
+    grid-template-columns: 1fr;
+  }
+}

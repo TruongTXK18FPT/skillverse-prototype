@@ -13,7 +13,14 @@ import { getMyBookings, type BookingResponse } from '../../services/bookingServi
 import journeyService from '../../services/journeyService';
 import { isSkillFuzzyVerified } from '../../utils/skillResolver';
 import type { JourneyDetailResponse } from '../../types/Journey';
+import { getEligibilityDisplayInfo, getMissingSkillsText } from '../../utils/mentorEligibilityHelper';
+import { mentorEligibilityService } from '../../services/mentorEligibilityService';
+import type { MentorTeachingEligibilityResponse } from '../../types/mentorEligibility';
 import './RoadmapDetailViewer.css';
+
+type MentorProfileWithEligibility = MentorProfile & {
+  eligibility?: MentorTeachingEligibilityResponse;
+};
 import '../../styles/RoadmapHUD.css';
 
 interface RoadmapDetailViewerProps {
@@ -263,7 +270,7 @@ const RoadmapDetailViewer = memo(({
 }: RoadmapDetailViewerProps) => {
   const navigate = useNavigate();
   const showAdvancedSections = true;
-  const [matchedMentors, setMatchedMentors] = useState<MentorProfile[]>([]);
+  const [matchedMentors, setMatchedMentors] = useState<MentorProfileWithEligibility[]>([]);
   const [mentorMatchLoading, setMentorMatchLoading] = useState(false);
   const [mentorMatchError, setMentorMatchError] = useState<string | null>(null);
   const [currentRoadmapBooking, setCurrentRoadmapBooking] = useState<BookingResponse | null>(null);
@@ -462,18 +469,59 @@ const RoadmapDetailViewer = memo(({
 
         if (cancelled) return;
         const mentorsById = new Map(mentors.map((mentor) => [mentor.id, mentor]));
-        const verifiedSkillMatches = Array.from(mentorsById.values())
-          .filter((mentor) => (mentor.roadmapMentoringPrice ?? 0) > 0)
-          .slice(0, 3);
+        let candidates = Array.from(mentorsById.values())
+          .filter((mentor) => (mentor.roadmapMentoringPrice ?? 0) > 0);
 
-        if (verifiedSkillMatches.length > 0) {
-          setMatchedMentors(verifiedSkillMatches);
-          return;
+        if (candidates.length === 0) {
+          const allMentors = await getAllMentors();
+          if (cancelled) return;
+          candidates = getRoadmapMentoringMentors(allMentors, roadmapMentorSkills);
         }
 
-        const allMentors = await getAllMentors();
+        candidates = candidates.slice(0, 5);
+
+        const mentorsWithEligibility = await Promise.all(
+          candidates.map(async (mentor) => {
+            let eligibility: MentorTeachingEligibilityResponse | undefined;
+            try {
+              if (workspaceJourneyId) {
+                eligibility = await mentorEligibilityService.evaluateJourney(workspaceJourneyId, mentor.id, null);
+              } else if (roadmap.sessionId) {
+                eligibility = await mentorEligibilityService.evaluateRoadmap(roadmap.sessionId, mentor.id, null);
+              }
+            } catch (eligibilityError) {
+              console.warn(`Eligibility check failed for mentor ${mentor.id}:`, eligibilityError);
+            }
+            return { ...mentor, eligibility };
+          })
+        );
         if (cancelled) return;
-        setMatchedMentors(getRoadmapMentoringMentors(allMentors, roadmapMentorSkills));
+
+        const eligibleMentors = mentorsWithEligibility.filter(
+          (m) => m.eligibility?.summaryStatus !== 'NOT_ELIGIBLE'
+        );
+
+        const statusWeight: Record<string, number> = {
+          'ELIGIBLE': 3,
+          'PARTIALLY_ELIGIBLE': 2,
+          'NEEDS_REVIEW': 1,
+          'NOT_ELIGIBLE': 0,
+        };
+
+        eligibleMentors.sort((a, b) => {
+          const statusA = a.eligibility?.summaryStatus || 'NEEDS_REVIEW';
+          const statusB = b.eligibility?.summaryStatus || 'NEEDS_REVIEW';
+          
+          if (statusWeight[statusA] !== statusWeight[statusB]) {
+            return statusWeight[statusB] - statusWeight[statusA];
+          }
+          
+          const matchA = a.eligibility?.overallMatchPercent || 0;
+          const matchB = b.eligibility?.overallMatchPercent || 0;
+          return matchB - matchA;
+        });
+
+        setMatchedMentors(eligibleMentors.slice(0, 3));
       } catch (error) {
         if (cancelled) return;
         console.error('Failed to load matched roadmap mentors:', error);
@@ -835,7 +883,12 @@ const RoadmapDetailViewer = memo(({
             </div>
           ) : (
             <div className="rdmv-mentor-list">
-              {matchedMentors.map((mentor) => (
+              {matchedMentors.map((mentor) => {
+                const eligibilityInfo = mentor.eligibility ? getEligibilityDisplayInfo(mentor.eligibility.summaryStatus) : null;
+                const topNode = mentor.eligibility?.nodes?.[0];
+                const missingText = topNode ? getMissingSkillsText(topNode) : '';
+
+                return (
                 <article key={mentor.id} className="rdmv-mentor-card">
                   <div className="rdmv-mentor-card__avatar">
                     {mentor.avatar ? (
@@ -853,8 +906,34 @@ const RoadmapDetailViewer = memo(({
                           {mentor.ratingAverage?.toFixed(1)}
                         </span>
                       )}
+                      {eligibilityInfo && (
+                        <span className={`rdmv-eligibility-badge ${eligibilityInfo.badgeClass}`}>
+                          {eligibilityInfo.label} {mentor.eligibility?.overallMatchPercent != null ? `(${mentor.eligibility.overallMatchPercent}%)` : ''}
+                        </span>
+                      )}
                     </div>
                     <p>{mentor.specialization || mentor.bio || 'Mentor đã xác thực skill phù hợp với roadmap này.'}</p>
+                    
+                    {topNode && (
+                      <div className="rdmv-mentor-card__eligibility-detail">
+                        <span className="rdmv-eligibility-top-node">
+                          Dạy tốt nhất: <strong>{topNode.title || topNode.nodeId || 'Node'} ({topNode.matchPercent}%)</strong>
+                        </span>
+                        {missingText && (
+                          <span className="rdmv-eligibility-missing">
+                            <AlertTriangle size={12} />
+                            Thiếu skill phụ: {missingText}
+                          </span>
+                        )}
+                        {mentor.eligibility?.summaryStatus === 'NEEDS_REVIEW' && (
+                          <span className="rdmv-eligibility-warning">
+                            <Info size={12} />
+                            Chưa đủ dữ liệu map skill, cần trao đổi thêm.
+                          </span>
+                        )}
+                      </div>
+                    )}
+
                     <div className="rdmv-mentor-card__skills">
                       {getMatchedMentorSkills(mentor, roadmapMentorSkills).map((skill) => (
                         <span key={`${mentor.id}-${skill}`}>{skill}</span>
@@ -871,11 +950,12 @@ const RoadmapDetailViewer = memo(({
                       onClick={() => setBookingMentor(mentor)}
                     >
                       <Wallet size={15} />
-                      Đặt lịch ngay
+                      {eligibilityInfo?.label === 'Cần xem xét' ? 'Book (Cần review)' : 'Đặt lịch ngay'}
                     </button>
                   </div>
                 </article>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

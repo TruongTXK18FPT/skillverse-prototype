@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { careerTaxonomyService } from '../../../services/careerTaxonomyService';
-import { Domain, JobPosition, JobPositionTrack, JobPositionTrackSkill } from '../../../types/careerTaxonomy';
+import { Domain, JobPosition, JobPositionTrack, JobPositionTrackSkill, RequirementType } from '../../../types/careerTaxonomy';
 import { adminSkillRegistryService } from '../../../services/adminSkillRegistryService';
 import { Skill } from '../../../types/skillRegistry';
 import { normalizeTaxonomyCode } from '../../../utils/taxonomyNormalize';
@@ -116,6 +116,12 @@ const JobPositionTrackSkillTab: React.FC = () => {
   const [sortKey, setSortKey] = useState<TrackSortKey>('code');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Skill Filters
+  const [skillSearchQuery, setSkillSearchQuery] = useState('');
+  const [skillReqTypeFilter, setSkillReqTypeFilter] = useState<'ALL' | RequirementType>('ALL');
+  const [skillWeightFilter, setSkillWeightFilter] = useState<'ALL' | 'HIGH' | 'MEDIUM' | 'LOW'>('ALL');
+  const [skillSortKey, setSkillSortKey] = useState<'order' | 'name' | 'requirementType' | 'weight'>('order');
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -144,9 +150,24 @@ const JobPositionTrackSkillTab: React.FC = () => {
 
   // Edit mapped skill state
   const [editingSkillMappingId, setEditingSkillMappingId] = useState<number | null>(null);
-  const [editMappingForm, setEditMappingForm] = useState({ requirementType: 'REQUIRED', weight: 1 });
+  const [editMappingForm, setEditMappingForm] = useState<{ requirementType: RequirementType; weight: number }>({ requirementType: 'REQUIRED', weight: 1 });
   const [trackSkillsSaveState, setTrackSkillsSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const saveStateTimerRef = React.useRef<number | null>(null);
+
+  const requirementSummary = useMemo(() => {
+    const initial: Record<RequirementType, number> = {
+      REQUIRED: 0,
+      IMPORTANT: 0,
+      NICE_TO_HAVE: 0,
+    };
+    return trackSkills.reduce((acc, item) => {
+      const type = item.requirementType === 'REQUIRED' || item.requirementType === 'IMPORTANT'
+        ? item.requirementType
+        : 'NICE_TO_HAVE';
+      acc[type] += 1;
+      return acc;
+    }, initial);
+  }, [trackSkills]);
 
   const clearTrackSkillsSaveStateTimer = () => {
     if (saveStateTimerRef.current) {
@@ -248,6 +269,38 @@ const JobPositionTrackSkillTab: React.FC = () => {
       return (a[sortKey] || '').localeCompare(b[sortKey] || '', 'vi');
     });
   }, [tracks, filterDomainId, filterJpId, filterStatus, searchQuery, sortKey, jobPositions, domains]);
+
+  const filteredTrackSkills = useMemo(() => {
+    return trackSkills.filter(ts => {
+      if (skillReqTypeFilter !== 'ALL' && ts.requirementType !== skillReqTypeFilter) return false;
+      
+      if (skillWeightFilter !== 'ALL') {
+        const w = ts.weight ?? 1;
+        if (skillWeightFilter === 'HIGH' && w < 8) return false;
+        if (skillWeightFilter === 'MEDIUM' && (w < 4 || w > 7)) return false;
+        if (skillWeightFilter === 'LOW' && w > 3) return false;
+      }
+
+      if (skillSearchQuery) {
+        const q = skillSearchQuery.toLowerCase();
+        const skill = allSkills.find(s => s.id === ts.skillId);
+        if (!skill) return false;
+        return skill.name.toLowerCase().includes(q) || skill.canonicalKey.toLowerCase().includes(q);
+      }
+
+      return true;
+    }).sort((a, b) => {
+      if (skillSortKey === 'order') return a.sortOrder - b.sortOrder;
+      if (skillSortKey === 'weight') return (b.weight ?? 1) - (a.weight ?? 1);
+      if (skillSortKey === 'requirementType') return a.requirementType.localeCompare(b.requirementType);
+      if (skillSortKey === 'name') {
+        const nameA = allSkills.find(s => s.id === a.skillId)?.name || '';
+        const nameB = allSkills.find(s => s.id === b.skillId)?.name || '';
+        return nameA.localeCompare(nameB, 'vi');
+      }
+      return 0;
+    });
+  }, [trackSkills, skillReqTypeFilter, skillWeightFilter, skillSearchQuery, skillSortKey, allSkills]);
 
   // Actions: Track
   const handleCreateTrack = async () => {
@@ -615,6 +668,55 @@ const JobPositionTrackSkillTab: React.FC = () => {
             {trackSkillsSaveState === 'saved' && 'Đã lưu xong, có thể rời màn hình an toàn.'}
           </div>
 
+          <div className="job-track-skill-tab__summary">
+            <span>Tổng: {trackSkills.length}</span>
+            <span>REQUIRED: {requirementSummary.REQUIRED}</span>
+            <span>IMPORTANT: {requirementSummary.IMPORTANT}</span>
+            <span>NICE_TO_HAVE: {requirementSummary.NICE_TO_HAVE}</span>
+            {trackSkills.length > 0 && requirementSummary.REQUIRED === 0 && (
+              <strong>Track chưa có skill bắt buộc.</strong>
+            )}
+          </div>
+
+          <div className="job-track-skill-tab__skill-filter-neon">
+            <input 
+              placeholder="Tìm tên hoặc mã kỹ năng..." 
+              value={skillSearchQuery} 
+              onChange={e => setSkillSearchQuery(e.target.value)} 
+              className="job-track-skill-tab__input job-track-skill-tab__input--neon" 
+            />
+            <select 
+              value={skillReqTypeFilter} 
+              onChange={e => setSkillReqTypeFilter(e.target.value as any)} 
+              className="job-track-skill-tab__select job-track-skill-tab__select--neon"
+            >
+              <option value="ALL">Tất cả yêu cầu</option>
+              <option value="REQUIRED">Bắt buộc (REQUIRED)</option>
+              <option value="IMPORTANT">Quan trọng (IMPORTANT)</option>
+              <option value="NICE_TO_HAVE">Nên có (NICE_TO_HAVE)</option>
+            </select>
+            <select 
+              value={skillWeightFilter} 
+              onChange={e => setSkillWeightFilter(e.target.value as any)} 
+              className="job-track-skill-tab__select job-track-skill-tab__select--neon"
+            >
+              <option value="ALL">Tất cả trọng số</option>
+              <option value="HIGH">Cao (8-10)</option>
+              <option value="MEDIUM">Trung bình (4-7)</option>
+              <option value="LOW">Thấp (1-3)</option>
+            </select>
+            <select 
+              value={skillSortKey} 
+              onChange={e => setSkillSortKey(e.target.value as any)} 
+              className="job-track-skill-tab__select job-track-skill-tab__select--neon"
+            >
+              <option value="order">Sắp xếp theo gợi ý (Thứ tự gốc)</option>
+              <option value="name">Sắp xếp theo tên kỹ năng</option>
+              <option value="requirementType">Sắp xếp theo yêu cầu</option>
+              <option value="weight">Sắp xếp theo trọng số (Giảm dần)</option>
+            </select>
+          </div>
+
           {/* Add skill row */}
           <div className="job-track-skill-tab__add-skill-bar">
             <div className="job-track-skill-tab__add-skill-select">
@@ -634,8 +736,8 @@ const JobPositionTrackSkillTab: React.FC = () => {
                 className="job-track-skill-tab__select"
               >
                 <option value="REQUIRED">Bắt buộc (REQUIRED)</option>
-                <option value="OPTIONAL">Không bắt buộc (OPTIONAL)</option>
-                <option value="RECOMMENDED">Nên có (RECOMMENDED)</option>
+                <option value="IMPORTANT">Important (IMPORTANT)</option>
+                <option value="NICE_TO_HAVE">Nice to have (NICE_TO_HAVE)</option>
               </select>
             </div>
             <div>
@@ -676,19 +778,24 @@ const JobPositionTrackSkillTab: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {trackSkills.map((ts, idx) => {
+              {filteredTrackSkills.map((ts, idx) => {
                 const skill = allSkills.find(s => s.id === ts.skillId);
                 const isEditing = editingSkillMappingId === ts.skillId;
+                const originalIdx = trackSkills.findIndex(o => o.skillId === ts.skillId);
                 return (
-                  <tr key={ts.skillId}>
-                    <td>{skill?.name || `Kỹ năng ID: ${ts.skillId}`}</td>
-                    <td><code className="job-track-skill-tab__table-cell-code">{skill?.canonicalKey || 'N/A'}</code></td>
+                  <tr key={ts.skillId} className="job-track-skill-tab__neon-row">
+                    <td><span className="job-track-skill-tab__neon-text">{skill?.name || `Kỹ năng ID: ${ts.skillId}`}</span></td>
+                    <td><code className="job-track-skill-tab__table-cell-code job-track-skill-tab__table-cell-code--neon">{skill?.canonicalKey || 'N/A'}</code></td>
                     <td>
                       {isEditing ? (
-                        <select value={editMappingForm.requirementType} onChange={e => setEditMappingForm(p => ({ ...p, requirementType: e.target.value }))} className="job-track-skill-tab__select admin-roadmap-catalog__inline-input">
-                          <option value="REQUIRED">REQUIRED</option><option value="OPTIONAL">OPTIONAL</option><option value="RECOMMENDED">RECOMMENDED</option>
+                        <select value={editMappingForm.requirementType} onChange={e => setEditMappingForm(p => ({ ...p, requirementType: e.target.value as RequirementType }))} className="job-track-skill-tab__select admin-roadmap-catalog__inline-input job-track-skill-tab__select--neon">
+                          <option value="REQUIRED">REQUIRED</option><option value="IMPORTANT">IMPORTANT</option><option value="NICE_TO_HAVE">NICE_TO_HAVE</option>
                         </select>
-                      ) : ts.requirementType}
+                      ) : (
+                        <span className={`job-track-skill-tab__neon-badge job-track-skill-tab__neon-badge--${ts.requirementType.toLowerCase()}`}>
+                          {ts.requirementType}
+                        </span>
+                      )}
                     </td>
                     <td>
                       {isEditing ? (
@@ -701,29 +808,33 @@ const JobPositionTrackSkillTab: React.FC = () => {
                             const v = parseInt(e.target.value);
                             if (!isNaN(v)) setEditMappingForm(p => ({ ...p, weight: Math.max(1, Math.min(10, v)) }));
                           }}
-                          className="job-track-skill-tab__input admin-roadmap-catalog__inline-input"
+                          className="job-track-skill-tab__input admin-roadmap-catalog__inline-input job-track-skill-tab__input--neon"
                           style={{ width: '70px', padding: '0.25rem' }}
                           title="Trọng số (1-10)"
                         />
-                      ) : (ts.weight ?? 1)}
+                      ) : (
+                        <span className="job-track-skill-tab__neon-weight">
+                          {ts.weight ?? 1}
+                        </span>
+                      )}
                     </td>
                     <td>
                       <div className="job-track-skill-tab__order-controls">
-                        <button onClick={() => moveSkill(ts.skillId, 'up')} disabled={idx === 0 || trackSkillsSaveState === 'saving'} title="Đưa lên">▲</button>
-                        <span>{ts.sortOrder}</span>
-                        <button onClick={() => moveSkill(ts.skillId, 'down')} disabled={idx === trackSkills.length - 1 || trackSkillsSaveState === 'saving'} title="Đưa xuống">▼</button>
+                        <button onClick={() => moveSkill(ts.skillId, 'up')} disabled={originalIdx <= 0 || trackSkillsSaveState === 'saving' || skillSortKey !== 'order'} title={skillSortKey === 'order' ? 'Đưa lên' : 'Vui lòng chọn Sắp xếp theo gợi ý để đổi thứ tự'}>▲</button>
+                        <span className="job-track-skill-tab__neon-order">{ts.sortOrder}</span>
+                        <button onClick={() => moveSkill(ts.skillId, 'down')} disabled={originalIdx >= trackSkills.length - 1 || trackSkillsSaveState === 'saving' || skillSortKey !== 'order'} title={skillSortKey === 'order' ? 'Đưa xuống' : 'Vui lòng chọn Sắp xếp theo gợi ý để đổi thứ tự'}>▼</button>
                       </div>
                     </td>
                     <td>
                       {isEditing ? (
                         <div className="admin-roadmap-catalog__actions">
-                          <button onClick={() => saveEditMapping(ts.skillId)} disabled={trackSkillsSaveState === 'saving'} className="job-track-skill-tab__btn job-track-skill-tab__btn--success">Lưu</button>
+                          <button onClick={() => saveEditMapping(ts.skillId)} disabled={trackSkillsSaveState === 'saving'} className="job-track-skill-tab__btn job-track-skill-tab__btn--success job-track-skill-tab__btn--neon">Lưu</button>
                           <button onClick={cancelEditMapping} className="job-track-skill-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
                         </div>
                       ) : (
                         <div className="admin-roadmap-catalog__actions">
-                          <button onClick={() => startEditMapping(ts)} className="job-track-skill-tab__btn job-track-skill-tab__btn--primary">Sửa</button>
-                          <button onClick={() => removeSkillFromTrack(ts.skillId)} className="job-track-skill-tab__btn job-track-skill-tab__btn--danger">Xóa</button>
+                          <button onClick={() => startEditMapping(ts)} className="job-track-skill-tab__btn job-track-skill-tab__btn--primary job-track-skill-tab__btn--neon">Sửa</button>
+                          <button onClick={() => removeSkillFromTrack(ts.skillId)} className="job-track-skill-tab__btn job-track-skill-tab__btn--danger job-track-skill-tab__btn--neon-danger">Xóa</button>
                         </div>
                       )}
                     </td>

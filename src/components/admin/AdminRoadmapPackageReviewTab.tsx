@@ -45,7 +45,9 @@ const templateStatusLabel: Record<RoadmapTemplateStatus, string> = {
 
 const requirementLabel: Record<string, string> = {
   REQUIRED: "Bắt buộc",
-  OPTIONAL: "Tùy chọn",
+  IMPORTANT: "Quan trọng",
+  NICE_TO_HAVE: "Bổ trợ",
+  OPTIONAL: "Bổ trợ",
 };
 
 const importanceLabel: Record<string, string> = {
