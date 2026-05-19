@@ -228,9 +228,8 @@ const SkillAutocomplete: React.FC<SkillAutocompleteProps> = ({
             <div className="cb-skill-autocomplete__empty">
               <span>Không tìm thấy "{inputValue.trim()}"</span>
               <span
-                className="cb-skill-autocomplete__empty-hint"
+                className="cb-skill-autocomplete__empty-hint cb-skill-autocomplete__empty-hint--static"
                 onMouseDown={(e) => e.preventDefault()}
-                style={{ cursor: "default" }}
               >
                 Chỉ chọn kỹ năng đã có trong hệ thống
               </span>
@@ -280,7 +279,7 @@ const CourseInfoForm: React.FC<CourseInfoFormProps> = ({
 
   return (
     <div className="cb-main-content">
-      <div className="cb-panel">
+      <div className="cb-panel cb-panel--course-info">
         <div className="cb-panel__header">
           <div className="cb-panel__title">
             <FiInfo /> Thông tin cơ bản

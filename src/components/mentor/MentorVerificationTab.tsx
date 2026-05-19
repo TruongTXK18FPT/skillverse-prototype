@@ -366,7 +366,7 @@ const MentorVerificationTab: React.FC = () => {
     }
 
     if (evidences.length === 0 && !githubUrl.trim() && !cvUrl.trim() && !portfolioUrl.trim()) {
-      setError('Vui lòng cung cấp ít nhất 1 bằng chứng (chứng chỉ, GitHub, kinh nghiệm) cho lô kỹ năng này.');
+      setError('Vui lòng cung cấp ít nhất 1 bằng chứng (chứng chỉ, GitHub, kinh nghiệm) cho danh sách kỹ năng này.');
       return;
     }
 
@@ -415,7 +415,7 @@ const MentorVerificationTab: React.FC = () => {
     try {
       setSubmitting(true);
       await submitBatchVerification(request);
-      setSuccessMsg(`Yêu cầu xác thực Lô (${selectedSkills.length} kỹ năng) đã được gửi thành công!`);
+      setSuccessMsg(`Yêu cầu xác thực Danh Sách (${selectedSkills.length} kỹ năng) đã được gửi thành công!`);
       resetForm();
       setShowForm(false);
       await loadData();
@@ -562,7 +562,7 @@ const MentorVerificationTab: React.FC = () => {
           onClick={() => { setShowForm(!showForm); setShowSuggestForm(false); setError(null); setSuccessMsg(null); }}
         >
           <Plus size={16} />
-          {showForm ? 'Đóng form' : 'Gom lô xác thực mới'}
+          {showForm ? 'Đóng form' : 'Xác thực kỹ năng mới'}
         </button>
       </div>
 
@@ -809,7 +809,6 @@ const MentorVerificationTab: React.FC = () => {
                       className="mvt-evidence-select"
                     >
                       <option value="CERTIFICATE">Chứng chỉ / Bằng cấp</option>
-                      <option value="CV">CV / Resume</option>
                       <option value="WORK_EXPERIENCE">Kinh nghiệm công tác</option>
                       <option value="PORTFOLIO_LINK">Dự án / Sản phẩm</option>
                       <option value="GITHUB">GitHub / Mã nguồn</option>
@@ -923,7 +922,7 @@ const MentorVerificationTab: React.FC = () => {
             </button>
             <button type="submit" className="mvt-btn mvt-btn--glow" disabled={submitting}>
               <Send size={16} />
-              {submitting ? 'Đang gửi...' : 'Gửi Yêu Cầu Lô'}
+              {submitting ? 'Đang gửi...' : 'Gửi Yêu Cầu Xác Thực'}
             </button>
           </div>
         </form>
@@ -931,12 +930,12 @@ const MentorVerificationTab: React.FC = () => {
 
       {/* Verification Requests List */}
       <div className="mvt-requests">
-        <h3 className="mvt-section-title">Lịch sử Lô Yêu Cầu</h3>
+        <h3 className="mvt-section-title">Lịch sử Danh Sách Xác Thực</h3>
         {batchVerifications.length === 0 ? (
           <div className="mvt-empty">
             <Package size={48} />
-            <p>Chưa có lô xác thực nào.</p>
-            <p className="mvt-empty__hint">Gom nhiều kỹ năng và gửi lô đầu tiên của bạn!</p>
+            <p>Chưa có danh sách xác thực nào.</p>
+            <p className="mvt-empty__hint">Gom nhiều kỹ năng và xác thực!</p>
           </div>
         ) : (
           <div className="mvt-request-list">
@@ -946,7 +945,7 @@ const MentorVerificationTab: React.FC = () => {
                   onClick={() => setExpandedId(expandedId === batch.id ? null : batch.id)}>
                   <div className="mvt-request-card__info">
                     <span className="mvt-request-card__skill">
-                      Lô Xác Thực #{batch.id} <span className="mvt-batch-count">({batch.skills?.length || 0} kỹ năng)</span>
+                      Danh Sách Xác Thực #{batch.id} <span className="mvt-batch-count">({batch.skills?.length || 0} kỹ năng)</span>
                     </span>
                     {getStatusBadge(batch.status)}
                   </div>

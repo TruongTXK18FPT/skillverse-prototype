@@ -91,7 +91,7 @@
 
 .admin-rag-provider-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   margin-bottom: 32px;
 }
@@ -272,7 +272,7 @@
   padding: 24px;
 }
 
-.summary-icon {
+.rag-summary-icon {
   background-color: rgba(59, 130, 246, 0.12);
   color: var(--hud-primary);
   width: 64px;

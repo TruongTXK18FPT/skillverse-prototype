@@ -216,20 +216,10 @@ const CareerTaxonomyTab: React.FC = () => {
       <div className="career-taxonomy-tab__card career-taxonomy-tab__card--spaced">
         <div className="career-taxonomy-tab__section-header">
           <h3 className="career-taxonomy-tab__section-title">Domain nghề nghiệp</h3>
-          <button onClick={() => setShowDomainForm(f => !f)} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--primary">
-            {showDomainForm ? '✕ Hủy' : '+ Domain'}
+          <button onClick={() => setShowDomainForm(true)} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--primary">
+            + Domain
           </button>
         </div>
-        {showDomainForm && (
-          <div className="career-taxonomy-tab__form-grid career-taxonomy-tab__form-grid--domain">
-            <input placeholder="Mã domain * (vd: SE, DATA, QA, BA, DEVOPS)" value={domainForm.code} onChange={e => setDomainForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="career-taxonomy-tab__input" />
-            <input placeholder="Tên hiển thị * (vd: Software Engineering, Data, Quality Assurance)" value={domainForm.name} onChange={e => setDomainForm(p => ({ ...p, name: e.target.value }))} className="career-taxonomy-tab__input" />
-            <input placeholder="Mô tả ngắn gọn (không bắt buộc)" value={domainForm.description} onChange={e => setDomainForm(p => ({ ...p, description: e.target.value }))} className="career-taxonomy-tab__input" />
-            <button onClick={handleCreateDomain} disabled={domainSubmitting || !domainForm.code || !domainForm.name} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--success">
-              {domainSubmitting ? '...' : 'Tạo'}
-            </button>
-          </div>
-        )}
         <div className="admin-roadmap-catalog__toolbar">
           <input
             className="career-taxonomy-tab__input admin-roadmap-catalog__toolbar-search"
@@ -292,24 +282,10 @@ const CareerTaxonomyTab: React.FC = () => {
       <div className="career-taxonomy-tab__card">
         <div className="career-taxonomy-tab__section-header">
           <h3 className="career-taxonomy-tab__section-title">Vị trí công việc</h3>
-          <button onClick={() => setShowJpForm(f => !f)} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--primary">
-            {showJpForm ? '✕ Hủy' : '+ Vị trí công việc'}
+          <button onClick={() => setShowJpForm(true)} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--primary">
+            + Vị trí công việc
           </button>
         </div>
-        {showJpForm && (
-          <div className="career-taxonomy-tab__form-grid career-taxonomy-tab__form-grid--job">
-            <input placeholder="Mã vị trí * (vd: BACKEND_DEV, FRONTEND_DEV, QA_ENGINEER, BUSINESS_ANALYST)" value={jpForm.code} onChange={e => setJpForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="career-taxonomy-tab__input" />
-            <input placeholder="Tên hiển thị * (vd: Backend Developer, QA Engineer, Business Analyst)" value={jpForm.name} onChange={e => setJpForm(p => ({ ...p, name: e.target.value }))} className="career-taxonomy-tab__input" />
-            <input placeholder="Mô tả ngắn gọn (không bắt buộc)" value={jpForm.description} onChange={e => setJpForm(p => ({ ...p, description: e.target.value }))} className="career-taxonomy-tab__input" />
-            <select value={jpForm.domainId} onChange={e => setJpForm(p => ({ ...p, domainId: e.target.value }))} className="career-taxonomy-tab__select">
-              <option value="">-- Chọn domain * --</option>
-              {domains.filter(d => d.status === 'ACTIVE').map(d => <option key={d.id} value={d.id}>{d.name} ({d.code})</option>)}
-            </select>
-            <button onClick={handleCreateJobPosition} disabled={jpSubmitting || !jpForm.code || !jpForm.name || !jpForm.domainId} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--success">
-              {jpSubmitting ? '...' : 'Tạo'}
-            </button>
-          </div>
-        )}
         <div className="admin-roadmap-catalog__toolbar">
           <input
             className="career-taxonomy-tab__input admin-roadmap-catalog__toolbar-search"
@@ -378,6 +354,81 @@ const CareerTaxonomyTab: React.FC = () => {
           </table>
         )}
       </div>
+
+      {showDomainForm && (
+        <div className="admin-roadmap-catalog__modal-overlay" role="dialog" aria-modal="true" aria-labelledby="domain-create-title" onMouseDown={() => setShowDomainForm(false)}>
+          <div className="admin-roadmap-catalog__modal" onMouseDown={(e) => e.stopPropagation()}>
+            <div className="admin-roadmap-catalog__modal-header">
+              <div>
+                <h3 id="domain-create-title">Tạo domain nghề nghiệp</h3>
+                <p>Domain dùng để nhóm các vị trí công việc và track roadmap.</p>
+              </div>
+              <button type="button" className="admin-roadmap-catalog__modal-close" onClick={() => setShowDomainForm(false)}>✕</button>
+            </div>
+            <div className="admin-roadmap-catalog__modal-body">
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="domain-create-code">
+                <span>Mã domain *</span>
+                <input id="domain-create-code" placeholder="VD: SE, DATA, QA" value={domainForm.code} onChange={e => setDomainForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="career-taxonomy-tab__input" autoFocus />
+              </label>
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="domain-create-name">
+                <span>Tên hiển thị *</span>
+                <input id="domain-create-name" placeholder="VD: Software Engineering" value={domainForm.name} onChange={e => setDomainForm(p => ({ ...p, name: e.target.value }))} className="career-taxonomy-tab__input" />
+              </label>
+              <label className="admin-roadmap-catalog__modal-field admin-roadmap-catalog__modal-field--full" htmlFor="domain-create-description">
+                <span>Mô tả</span>
+                <input id="domain-create-description" placeholder="Mô tả ngắn gọn, không bắt buộc" value={domainForm.description} onChange={e => setDomainForm(p => ({ ...p, description: e.target.value }))} className="career-taxonomy-tab__input" />
+              </label>
+            </div>
+            <div className="admin-roadmap-catalog__modal-actions">
+              <button type="button" onClick={() => setShowDomainForm(false)} className="career-taxonomy-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
+              <button onClick={handleCreateDomain} disabled={domainSubmitting || !domainForm.code || !domainForm.name} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--success">
+                {domainSubmitting ? 'Đang tạo...' : 'Tạo domain'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showJpForm && (
+        <div className="admin-roadmap-catalog__modal-overlay" role="dialog" aria-modal="true" aria-labelledby="job-position-create-title" onMouseDown={() => setShowJpForm(false)}>
+          <div className="admin-roadmap-catalog__modal" onMouseDown={(e) => e.stopPropagation()}>
+            <div className="admin-roadmap-catalog__modal-header">
+              <div>
+                <h3 id="job-position-create-title">Tạo vị trí công việc</h3>
+                <p>Vị trí công việc sẽ được dùng để xây track và mapping kỹ năng.</p>
+              </div>
+              <button type="button" className="admin-roadmap-catalog__modal-close" onClick={() => setShowJpForm(false)}>✕</button>
+            </div>
+            <div className="admin-roadmap-catalog__modal-body">
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="job-position-create-code">
+                <span>Mã vị trí *</span>
+                <input id="job-position-create-code" placeholder="VD: BACKEND_DEV" value={jpForm.code} onChange={e => setJpForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="career-taxonomy-tab__input" autoFocus />
+              </label>
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="job-position-create-name">
+                <span>Tên hiển thị *</span>
+                <input id="job-position-create-name" placeholder="VD: Backend Developer" value={jpForm.name} onChange={e => setJpForm(p => ({ ...p, name: e.target.value }))} className="career-taxonomy-tab__input" />
+              </label>
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="job-position-create-domain">
+                <span>Domain nghề nghiệp *</span>
+                <select id="job-position-create-domain" value={jpForm.domainId} onChange={e => setJpForm(p => ({ ...p, domainId: e.target.value }))} className="career-taxonomy-tab__select">
+                  <option value="">Chọn domain</option>
+                  {domains.filter(d => d.status === 'ACTIVE').map(d => <option key={d.id} value={d.id}>{d.name} ({d.code})</option>)}
+                </select>
+              </label>
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="job-position-create-description">
+                <span>Mô tả</span>
+                <input id="job-position-create-description" placeholder="Mô tả ngắn gọn, không bắt buộc" value={jpForm.description} onChange={e => setJpForm(p => ({ ...p, description: e.target.value }))} className="career-taxonomy-tab__input" />
+              </label>
+            </div>
+            <div className="admin-roadmap-catalog__modal-actions">
+              <button type="button" onClick={() => setShowJpForm(false)} className="career-taxonomy-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
+              <button onClick={handleCreateJobPosition} disabled={jpSubmitting || !jpForm.code || !jpForm.name || !jpForm.domainId} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--success">
+                {jpSubmitting ? 'Đang tạo...' : 'Tạo vị trí'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

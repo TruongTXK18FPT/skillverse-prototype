@@ -389,6 +389,11 @@
   position: relative;
 }
 
+.cb-panel--course-info {
+  clip-path: none;
+  overflow: visible;
+}
+
 .cb-panel::before {
   content: "";
   position: absolute;
@@ -3277,11 +3282,17 @@
 }
 
 .cb-info-group {
+  position: relative;
   border: 1px solid rgba(6, 182, 212, 0.22);
   background: rgba(12, 24, 38, 0.62);
   padding: var(--cb-spacing-md);
   border-radius: var(--cb-radius-md);
   box-shadow: inset 0 0 0 1px rgba(6, 182, 212, 0.05);
+}
+
+.cb-info-group--commercial {
+  z-index: 5;
+  overflow: visible;
 }
 
 .cb-info-hero-grid {

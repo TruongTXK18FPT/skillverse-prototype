@@ -6,6 +6,7 @@ import { Skill } from '../../../types/skillRegistry';
 import { normalizeTaxonomyCode } from '../../../utils/taxonomyNormalize';
 import { confirmAction } from '../../../context/ConfirmDialogContext';
 import { showAppError, showAppSuccess } from '../../../context/ToastContext';
+import Pagination from '../../shared/Pagination';
 import './JobPositionTrackSkillTab.css';
 
 type TrackSortKey = 'code' | 'name' | 'jobPosition' | 'targetLevel' | 'status';
@@ -115,6 +116,8 @@ const JobPositionTrackSkillTab: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<'ALL' | JobPositionTrack['status']>('ALL');
   const [sortKey, setSortKey] = useState<TrackSortKey>('code');
   const [searchQuery, setSearchQuery] = useState('');
+  const [trackPage, setTrackPage] = useState(0);
+  const trackPageSize = 8;
 
   // Skill Filters
   const [skillSearchQuery, setSkillSearchQuery] = useState('');
@@ -270,6 +273,70 @@ const JobPositionTrackSkillTab: React.FC = () => {
     });
   }, [tracks, filterDomainId, filterJpId, filterStatus, searchQuery, sortKey, jobPositions, domains]);
 
+  const paginatedTracks = useMemo(() => {
+    const start = trackPage * trackPageSize;
+    return filteredTracks.slice(start, start + trackPageSize);
+  }, [filteredTracks, trackPage]);
+
+  const selectedTrack = useMemo(
+    () => tracks.find(t => t.id === selectedTrackId) || null,
+    [tracks, selectedTrackId]
+  );
+
+  const selectedJobPosition = useMemo(
+    () => selectedTrack ? jobPositions.find(jp => jp.id === selectedTrack.jobPositionId) || null : null,
+    [jobPositions, selectedTrack]
+  );
+
+  const selectedDomain = useMemo(
+    () => selectedJobPosition ? domains.find(d => d.id === selectedJobPosition.domainId) || null : null,
+    [domains, selectedJobPosition]
+  );
+
+  const untrackedJobPositions = useMemo(() => {
+    const trackedJobPositionIds = new Set(tracks.map(t => t.jobPositionId));
+    return jobPositions
+      .filter(jp => jp.status === 'ACTIVE' && !trackedJobPositionIds.has(jp.id))
+      .filter(jp => {
+        if (filterDomainId && jp.domainId !== Number(filterDomainId)) return false;
+        if (filterJpId && jp.id !== Number(filterJpId)) return false;
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          const domain = domains.find(d => d.id === jp.domainId);
+          return [jp.name, jp.code, jp.description, domain?.name].some(value => (value || '').toLowerCase().includes(q));
+        }
+        return true;
+      });
+  }, [domains, filterDomainId, filterJpId, jobPositions, searchQuery, tracks]);
+
+  const openCreateTrackForJobPosition = (jobPosition: JobPosition) => {
+    const domain = domains.find(d => d.id === jobPosition.domainId);
+    setTrackForm({
+      domainId: jobPosition.domainId,
+      jobPositionId: jobPosition.id,
+      code: normalizeTaxonomyCode(`${domain?.code || 'TRACK'}_${jobPosition.code}_${trackForm.targetLevel || 'FRESHER'}`),
+      name: `${jobPosition.name} ${trackForm.targetLevel || 'Fresher'}`,
+      description: jobPosition.description || '',
+      targetLevel: 'FRESHER',
+    });
+    setShowTrackForm(true);
+  };
+
+  useEffect(() => {
+    setTrackPage(0);
+  }, [filterDomainId, filterJpId, filterStatus, searchQuery, sortKey]);
+
+  useEffect(() => {
+    if (filteredTracks.length === 0) {
+      if (selectedTrackId !== null) setSelectedTrackId(null);
+      return;
+    }
+
+    if (!selectedTrackId || !filteredTracks.some(t => t.id === selectedTrackId)) {
+      setSelectedTrackId(filteredTracks[0].id);
+    }
+  }, [filteredTracks, selectedTrackId]);
+
   const filteredTrackSkills = useMemo(() => {
     return trackSkills.filter(ts => {
       if (skillReqTypeFilter !== 'ALL' && ts.requirementType !== skillReqTypeFilter) return false;
@@ -326,19 +393,19 @@ const JobPositionTrackSkillTab: React.FC = () => {
     } finally { setTrackSubmitting(false); }
   };
 
-  const startEditTrack = (t: JobPositionTrack, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const startEditTrack = (t: JobPositionTrack, e?: React.MouseEvent) => {
+    e?.stopPropagation();
     setEditingTrackId(t.id);
     setEditTrackForm({ code: t.code, name: t.name, description: t.description || '', targetLevel: t.targetLevel, jobPositionId: t.jobPositionId });
   };
   
-  const cancelEditTrack = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const cancelEditTrack = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     setEditingTrackId(null);
   };
 
-  const handleEditTrack = async (id: number, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleEditTrack = async (id: number, e?: React.MouseEvent) => {
+    e?.stopPropagation();
     if (!editTrackForm.code || !editTrackForm.name || !editTrackForm.jobPositionId) return;
     setEditTrackSubmitting(true); setError(null);
     try {
@@ -514,14 +581,14 @@ const JobPositionTrackSkillTab: React.FC = () => {
     <div className="admin-tab-content job-track-skill-tab">
       <div className="job-track-skill-tab__header">
         <div>
-          <h2 className="job-track-skill-tab__title">Mapping kỹ năng theo track</h2>
-          <p>Quản lý danh sách track và gán kỹ năng cho từng track</p>
+          <h2 className="job-track-skill-tab__title">Track nghề nghiệp & kỹ năng yêu cầu</h2>
+          <p>Chọn một track để xem chi tiết, sửa thông tin và gắn bộ kỹ năng cần thiết cho vị trí nghề nghiệp.</p>
         </div>
         <button 
-          onClick={() => setShowTrackForm(!showTrackForm)} 
+          onClick={() => setShowTrackForm(true)} 
           className="job-track-skill-tab__btn job-track-skill-tab__btn--primary"
         >
-          {showTrackForm ? '✕ Hủy' : '+ Thêm track'}
+          + Tạo track
         </button>
       </div>
 
@@ -557,126 +624,157 @@ const JobPositionTrackSkillTab: React.FC = () => {
         </select>
       </div>
 
-      {/* Create Form */}
-      {showTrackForm && (
-        <div className="job-track-skill-tab__card job-track-skill-tab__card--highlight">
-          <h3 className="job-track-skill-tab__section-title">Tạo track mới</h3>
-          <div className="job-track-skill-tab__form-grid job-track-skill-tab__form-grid--job">
-            <select value={trackForm.domainId} onChange={e => setTrackForm(p => ({ ...p, domainId: e.target.value ? Number(e.target.value) : '', jobPositionId: '' as number | '' }))} className="job-track-skill-tab__select">
-              <option value="">-- Lọc theo domain --</option>
-              {domains.filter(d => d.status === 'ACTIVE').map(d => <option key={d.id} value={d.id}>{d.name} ({d.code})</option>)}
-            </select>
-            <select value={trackForm.jobPositionId} onChange={e => setTrackForm(p => ({ ...p, jobPositionId: e.target.value ? Number(e.target.value) : '' }))} className="job-track-skill-tab__select">
-              <option value="">-- Chọn vị trí công việc * --</option>
-              {jobPositions.filter(jp => jp.status === 'ACTIVE' && (!trackForm.domainId || jp.domainId === Number(trackForm.domainId))).map(jp => <option key={jp.id} value={jp.id}>{jp.name}</option>)}
-            </select>
-            <input placeholder="Mã track * (vd: BACKEND_JAVA_SPRING)" value={trackForm.code} onChange={e => setTrackForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="job-track-skill-tab__input" />
-            <input placeholder="Tên track * (vd: Backend Java Spring Boot)" value={trackForm.name} onChange={e => setTrackForm(p => ({ ...p, name: e.target.value }))} className="job-track-skill-tab__input" />
-            <input placeholder="Mô tả" value={trackForm.description} onChange={e => setTrackForm(p => ({ ...p, description: e.target.value }))} className="job-track-skill-tab__input" />
-            <select value={trackForm.targetLevel} onChange={e => setTrackForm(p => ({ ...p, targetLevel: e.target.value }))} className="job-track-skill-tab__select">
-              {['INTERNSHIP', 'FRESHER', 'JUNIOR', 'MIDDLE', 'SENIOR'].map(l => <option key={l} value={l}>{l}</option>)}
-            </select>
-            <button onClick={handleCreateTrack} disabled={trackSubmitting || !trackForm.code || !trackForm.name || !trackForm.jobPositionId} className="job-track-skill-tab__btn job-track-skill-tab__btn--success job-track-skill-tab__btn--wide">
-              {trackSubmitting ? '...' : 'Tạo track'}
-            </button>
+      <div className="job-track-skill-tab__workspace">
+        <section className="job-track-skill-tab__card job-track-skill-tab__list-panel">
+          <div className="job-track-skill-tab__panel-heading">
+            <div>
+              <h3>Danh sách track</h3>
+              <p>{filteredTracks.length} track phù hợp bộ lọc</p>
+            </div>
           </div>
-        </div>
-      )}
-
-      {/* Flat Table */}
-      <div className="job-track-skill-tab__card job-track-skill-tab__card--spaced">
-        <div className="job-track-skill-tab__table-wrapper job-track-skill-tab__table-wrapper--scroll">
-          <table className="job-track-skill-tab__table">
-            <thead className="job-track-skill-tab__table-head--sticky">
-              <tr>
-                <th>Mã</th>
-                <th>Tên</th>
-                <th>Vị trí công việc</th>
-                <th>Level</th>
-                <th>Trạng thái</th>
-                <th>Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTracks.map(t => (
-                editingTrackId === t.id ? (
-                  <tr key={t.id} className="job-track-skill-tab__row--editing">
-                    <td><input value={editTrackForm.code} onChange={e => setEditTrackForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="job-track-skill-tab__input admin-roadmap-catalog__inline-input admin-roadmap-catalog__inline-input--code" autoFocus /></td>
-                    <td><input value={editTrackForm.name} onChange={e => setEditTrackForm(p => ({ ...p, name: e.target.value }))} className="job-track-skill-tab__input admin-roadmap-catalog__inline-input admin-roadmap-catalog__inline-input--name" /></td>
-                    <td>
-                      <select value={editTrackForm.jobPositionId} onChange={e => setEditTrackForm(p => ({ ...p, jobPositionId: e.target.value ? Number(e.target.value) : '' }))} className="job-track-skill-tab__select admin-roadmap-catalog__inline-input">
-                        {jobPositions.filter(jp => jp.status === 'ACTIVE' || jp.id === t.jobPositionId).map(jp => <option key={jp.id} value={jp.id}>{jp.name}</option>)}
-                      </select>
-                    </td>
-                    <td>
-                      <select value={editTrackForm.targetLevel} onChange={e => setEditTrackForm(p => ({ ...p, targetLevel: e.target.value }))} className="job-track-skill-tab__select admin-roadmap-catalog__inline-input">
-                        {['INTERNSHIP', 'FRESHER', 'JUNIOR', 'MIDDLE', 'SENIOR'].map(l => <option key={l} value={l}>{l}</option>)}
-                      </select>
-                    </td>
-                    <td><span className={`status-badge ${t.status.toLowerCase()}`}>{t.status}</span></td>
-                    <td>
-                      <div className="admin-roadmap-catalog__actions">
-                        <button onClick={(e) => handleEditTrack(t.id, e)} disabled={editTrackSubmitting || !editTrackForm.code || !editTrackForm.name || !editTrackForm.jobPositionId} className="job-track-skill-tab__btn job-track-skill-tab__btn--success">Lưu</button>
-                        <button onClick={cancelEditTrack} className="job-track-skill-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
-                      </div>
-                    </td>
-                  </tr>
-                ) : (
-                  <tr 
-                    key={t.id} 
-                    className={selectedTrackId === t.id ? 'job-track-skill-tab__table-row--selected' : ''} 
-                    onClick={() => setSelectedTrackId(t.id)}
-                  >
-                    <td>{t.code}</td>
-                    <td>{t.name}</td>
-                    <td>
-                      <div className="job-track-skill-tab__domain-name">{getDomainName(jobPositions.find(j => j.id === t.jobPositionId)?.domainId || 0)}</div>
-                      <div>{getJpName(t.jobPositionId)}</div>
-                    </td>
-                    <td>{t.targetLevel}</td>
-                    <td><span className={`status-badge ${t.status.toLowerCase()}`}>{t.status}</span></td>
-                    <td>
-                      <div className="admin-roadmap-catalog__actions">
-                        {t.status === 'ACTIVE' && <button onClick={(e) => startEditTrack(t, e)} className="job-track-skill-tab__btn job-track-skill-tab__btn--primary">Sửa</button>}
-                        {t.status === 'ACTIVE' && <button onClick={(e) => { e.stopPropagation(); handleDeactivateTrack(t.id, t.name); }} className="job-track-skill-tab__btn job-track-skill-tab__btn--danger">Ngừng kích hoạt</button>}
-                        {t.status === 'INACTIVE' && <button onClick={(e) => { e.stopPropagation(); handleReactivateTrack(t.id, t.name); }} className="job-track-skill-tab__btn job-track-skill-tab__btn--success">Kích hoạt lại</button>}
-                        {t.status === 'INACTIVE' && <button onClick={(e) => { e.stopPropagation(); handleHardDeleteTrack(t.id, t.name); }} className="job-track-skill-tab__btn admin-roadmap-catalog__btn--delete">Xóa vĩnh viễn</button>}
-                      </div>
-                    </td>
-                  </tr>
-                )
-              ))}
-              {filteredTracks.length === 0 && <tr><td colSpan={6} className="job-track-skill-tab__empty-state">Không có track nào phù hợp.</td></tr>}
-            </tbody>
-          </table>
-        </div>
-        {!selectedTrackId && tracks.length > 0 && (
-          <p className="job-track-skill-tab__selection-hint">
-            Chọn một track trong bảng để quản lý kỹ năng.
-          </p>
-        )}
-      </div>
-
-      {/* Track skills Detail Section */}
-      {selectedTrackId && (
-        <div className="job-track-skill-tab__card job-track-skill-tab__card--highlight">
-          <h3 className="job-track-skill-tab__section-title job-track-skill-tab__section-title--spaced">
-            Kỹ năng trong track: <span className="job-track-skill-tab__selected-track-name">{tracks.find(t => t.id === selectedTrackId)?.name}</span>
-          </h3>
-          <div className={`job-track-skill-tab__save-state job-track-skill-tab__save-state--${trackSkillsSaveState}`}>
-            {trackSkillsSaveState === 'saving' && 'Đang lưu thay đổi...'}
-            {trackSkillsSaveState === 'saved' && 'Đã lưu xong, có thể rời màn hình an toàn.'}
-          </div>
-
-          <div className="job-track-skill-tab__summary">
-            <span>Tổng: {trackSkills.length}</span>
-            <span>REQUIRED: {requirementSummary.REQUIRED}</span>
-            <span>IMPORTANT: {requirementSummary.IMPORTANT}</span>
-            <span>NICE_TO_HAVE: {requirementSummary.NICE_TO_HAVE}</span>
-            {trackSkills.length > 0 && requirementSummary.REQUIRED === 0 && (
-              <strong>Track chưa có skill bắt buộc.</strong>
+          <div className="job-track-skill-tab__track-list">
+            {paginatedTracks.map(t => (
+              <button
+                key={t.id}
+                type="button"
+                className={`job-track-skill-tab__track-card ${selectedTrackId === t.id ? 'job-track-skill-tab__track-card--selected' : ''}`}
+                onClick={() => setSelectedTrackId(t.id)}
+              >
+                <span className="job-track-skill-tab__track-card-title">{t.name}</span>
+                <code className="job-track-skill-tab__table-cell-code">{t.code}</code>
+                <span className="job-track-skill-tab__track-card-meta">
+                  {getDomainName(jobPositions.find(j => j.id === t.jobPositionId)?.domainId || 0)}
+                </span>
+                <span className="job-track-skill-tab__track-card-meta">
+                  {getJpName(t.jobPositionId)}
+                </span>
+                <span className="job-track-skill-tab__track-card-footer">
+                  <span className="job-track-skill-tab__track-chip">{t.targetLevel}</span>
+                  <span className={`status-badge ${t.status.toLowerCase()}`}>{t.status}</span>
+                </span>
+              </button>
+            ))}
+            {filteredTracks.length === 0 && (
+              <div className="job-track-skill-tab__empty-state">Không có track nào phù hợp.</div>
             )}
           </div>
+          {untrackedJobPositions.length > 0 && (
+            <div className="job-track-skill-tab__untracked">
+              <div className="job-track-skill-tab__untracked-title">Vị trí chưa có track</div>
+              {untrackedJobPositions.slice(0, 8).map(jp => (
+                <button
+                  key={jp.id}
+                  type="button"
+                  className="job-track-skill-tab__untracked-card"
+                  onClick={() => openCreateTrackForJobPosition(jp)}
+                >
+                  <span>
+                    <strong>{jp.name}</strong>
+                    <small>{getDomainName(jp.domainId)} / {jp.code}</small>
+                  </span>
+                  <em>Tạo track</em>
+                </button>
+              ))}
+            </div>
+          )}
+          {filteredTracks.length > trackPageSize && (
+            <div className="job-track-skill-tab__pagination">
+              <Pagination
+                totalItems={filteredTracks.length}
+                itemsPerPage={trackPageSize}
+                currentPage={trackPage + 1}
+                onPageChange={(nextPage) => setTrackPage(Math.max(0, nextPage - 1))}
+              />
+            </div>
+          )}
+        </section>
+
+        <section className="job-track-skill-tab__card job-track-skill-tab__detail-panel">
+          {!selectedTrack ? (
+            <div className="job-track-skill-tab__empty-detail">
+              Chọn một track ở danh sách bên trái để xem chi tiết và quản lý kỹ năng yêu cầu.
+            </div>
+          ) : (
+            <>
+              <div className="job-track-skill-tab__detail-header">
+                <div>
+                  <h3>{selectedTrack.name}</h3>
+                  <code className="job-track-skill-tab__table-cell-code">{selectedTrack.code}</code>
+                </div>
+                <div className="admin-roadmap-catalog__actions">
+                  {editingTrackId === selectedTrack.id ? (
+                    <>
+                      <button onClick={() => handleEditTrack(selectedTrack.id)} disabled={editTrackSubmitting || !editTrackForm.code || !editTrackForm.name || !editTrackForm.jobPositionId} className="job-track-skill-tab__btn job-track-skill-tab__btn--success">Lưu thông tin</button>
+                      <button onClick={() => cancelEditTrack()} className="job-track-skill-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={() => startEditTrack(selectedTrack)} className="job-track-skill-tab__btn job-track-skill-tab__btn--primary">Sửa thông tin track</button>
+                      {selectedTrack.status === 'ACTIVE' && <button onClick={() => handleDeactivateTrack(selectedTrack.id, selectedTrack.name)} className="job-track-skill-tab__btn job-track-skill-tab__btn--danger">Ngừng kích hoạt</button>}
+                      {selectedTrack.status === 'INACTIVE' && <button onClick={() => handleReactivateTrack(selectedTrack.id, selectedTrack.name)} className="job-track-skill-tab__btn job-track-skill-tab__btn--success">Kích hoạt lại</button>}
+                      {selectedTrack.status === 'INACTIVE' && <button onClick={() => handleHardDeleteTrack(selectedTrack.id, selectedTrack.name)} className="job-track-skill-tab__btn admin-roadmap-catalog__btn--delete">Xóa vĩnh viễn</button>}
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {editingTrackId === selectedTrack.id ? (
+                <div className="job-track-skill-tab__edit-panel">
+                  <label className="job-track-skill-tab__field">
+                    <span>Mã track *</span>
+                    <input value={editTrackForm.code} onChange={e => setEditTrackForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="job-track-skill-tab__input" autoFocus />
+                  </label>
+                  <label className="job-track-skill-tab__field">
+                    <span>Tên track *</span>
+                    <input value={editTrackForm.name} onChange={e => setEditTrackForm(p => ({ ...p, name: e.target.value }))} className="job-track-skill-tab__input" />
+                  </label>
+                  <label className="job-track-skill-tab__field">
+                    <span>Vị trí công việc *</span>
+                    <select value={editTrackForm.jobPositionId} onChange={e => setEditTrackForm(p => ({ ...p, jobPositionId: e.target.value ? Number(e.target.value) : '' }))} className="job-track-skill-tab__select">
+                      {jobPositions.filter(jp => jp.status === 'ACTIVE' || jp.id === selectedTrack.jobPositionId).map(jp => <option key={jp.id} value={jp.id}>{jp.name}</option>)}
+                    </select>
+                  </label>
+                  <label className="job-track-skill-tab__field">
+                    <span>Level mục tiêu *</span>
+                    <select value={editTrackForm.targetLevel} onChange={e => setEditTrackForm(p => ({ ...p, targetLevel: e.target.value }))} className="job-track-skill-tab__select">
+                      {['INTERNSHIP', 'FRESHER', 'JUNIOR', 'MIDDLE', 'SENIOR'].map(l => <option key={l} value={l}>{l}</option>)}
+                    </select>
+                  </label>
+                  <label className="job-track-skill-tab__field job-track-skill-tab__field--full">
+                    <span>Mô tả</span>
+                    <input value={editTrackForm.description} onChange={e => setEditTrackForm(p => ({ ...p, description: e.target.value }))} className="job-track-skill-tab__input" placeholder="Mô tả ngắn gọn, không bắt buộc" />
+                  </label>
+                </div>
+              ) : (
+                <div className="job-track-skill-tab__detail-grid">
+                  <div><span>Domain</span><strong>{selectedDomain?.name || 'Không rõ'}</strong></div>
+                  <div><span>Vị trí công việc</span><strong>{selectedJobPosition?.name || 'Không rõ'}</strong></div>
+                  <div><span>Level mục tiêu</span><strong>{selectedTrack.targetLevel}</strong></div>
+                  <div><span>Trạng thái</span><strong>{selectedTrack.status}</strong></div>
+                  <div className="job-track-skill-tab__detail-grid-full"><span>Mô tả</span><strong>{selectedTrack.description || 'Chưa có mô tả'}</strong></div>
+                </div>
+              )}
+
+              <div className="job-track-skill-tab__mapping-header">
+                <div>
+                  <h3>Kỹ năng yêu cầu cho track</h3>
+                  <p>Thêm, gỡ, chỉnh mức độ yêu cầu và thứ tự gợi ý cho lộ trình này.</p>
+                </div>
+                <div className={`job-track-skill-tab__save-state job-track-skill-tab__save-state--${trackSkillsSaveState}`}>
+                  {trackSkillsSaveState === 'saving' && 'Đang lưu thay đổi...'}
+                  {trackSkillsSaveState === 'saved' && 'Đã lưu xong.'}
+                </div>
+              </div>
+
+              <div className="job-track-skill-tab__summary">
+                <span className="job-track-skill-tab__summary-chip"><small>Tổng kỹ năng</small><strong>{trackSkills.length}</strong></span>
+                <span className="job-track-skill-tab__summary-chip"><small>Bắt buộc</small><strong>{requirementSummary.REQUIRED}</strong></span>
+                <span className="job-track-skill-tab__summary-chip"><small>Quan trọng</small><strong>{requirementSummary.IMPORTANT}</strong></span>
+                <span className="job-track-skill-tab__summary-chip"><small>Nên có</small><strong>{requirementSummary.NICE_TO_HAVE}</strong></span>
+                {trackSkills.length > 0 && requirementSummary.REQUIRED === 0 && (
+                  <strong>Track chưa có skill bắt buộc.</strong>
+                )}
+              </div>
 
           <div className="job-track-skill-tab__skill-filter-neon">
             <input 
@@ -710,7 +808,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
               onChange={e => setSkillSortKey(e.target.value as any)} 
               className="job-track-skill-tab__select job-track-skill-tab__select--neon"
             >
-              <option value="order">Sắp xếp theo gợi ý (Thứ tự gốc)</option>
+              <option value="order">Sắp xếp theo thứ tự gợi ý</option>
               <option value="name">Sắp xếp theo tên kỹ năng</option>
               <option value="requirementType">Sắp xếp theo yêu cầu</option>
               <option value="weight">Sắp xếp theo trọng số (Giảm dần)</option>
@@ -720,11 +818,12 @@ const JobPositionTrackSkillTab: React.FC = () => {
           {/* Add skill row */}
           <div className="job-track-skill-tab__add-skill-bar">
             <div className="job-track-skill-tab__add-skill-select">
+              <label className="job-track-skill-tab__label">Kỹ năng</label>
               <LocalSearchSelect
                 options={allSkills.filter(sk => !trackSkills.some(ts => ts.skillId === sk.id)).map(sk => ({ id: sk.id, label: `${sk.name} (${sk.canonicalKey})` }))}
                 value={addSkillId ? parseInt(addSkillId, 10) : ''}
                 onChange={val => setAddSkillId(val.toString())}
-                placeholder="-- Chọn kỹ năng để thêm --"
+                placeholder="Chọn kỹ năng để thêm"
                 disabled={addSkillSubmitting || trackSkillsSaveState === 'saving'}
               />
             </div>
@@ -736,8 +835,8 @@ const JobPositionTrackSkillTab: React.FC = () => {
                 className="job-track-skill-tab__select"
               >
                 <option value="REQUIRED">Bắt buộc (REQUIRED)</option>
-                <option value="IMPORTANT">Important (IMPORTANT)</option>
-                <option value="NICE_TO_HAVE">Nice to have (NICE_TO_HAVE)</option>
+                <option value="IMPORTANT">Quan trọng (IMPORTANT)</option>
+                <option value="NICE_TO_HAVE">Nên có (NICE_TO_HAVE)</option>
               </select>
             </div>
             <div>
@@ -751,8 +850,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
                   const v = parseInt(e.target.value);
                   if (!isNaN(v)) setAddWeight(Math.max(1, Math.min(10, v)));
                 }}
-                className="job-track-skill-tab__input"
-                style={{ width: '80px', padding: '0.5rem' }}
+                className="job-track-skill-tab__input job-track-skill-tab__weight-input"
                 title="Trọng số (1-10) quyết định tỷ lệ câu hỏi trong bài quiz đánh giá. Giá trị cao = nhiều câu hỏi hơn."
               />
             </div>
@@ -766,18 +864,19 @@ const JobPositionTrackSkillTab: React.FC = () => {
           </div>
 
           {/* Track skills table */}
-          <table className="job-track-skill-tab__table">
-            <thead>
-              <tr>
-                <th>Tên kỹ năng</th>
-                <th>Khóa chuẩn</th>
-                <th>Yêu cầu</th>
-                <th>Trọng số (1-10)</th>
-                <th>Thứ tự gợi ý</th>
-                <th>Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
+          <div className="job-track-skill-tab__table-wrapper job-track-skill-tab__mapping-table-wrapper">
+            <table className="job-track-skill-tab__table job-track-skill-tab__mapping-table">
+              <thead>
+                <tr>
+                  <th>Tên kỹ năng</th>
+                  <th>Khóa chuẩn</th>
+                  <th>Yêu cầu</th>
+                  <th>Trọng số</th>
+                  <th>Thứ tự</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
               {filteredTrackSkills.map((ts, idx) => {
                 const skill = allSkills.find(s => s.id === ts.skillId);
                 const isEditing = editingSkillMappingId === ts.skillId;
@@ -789,7 +888,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
                     <td>
                       {isEditing ? (
                         <select value={editMappingForm.requirementType} onChange={e => setEditMappingForm(p => ({ ...p, requirementType: e.target.value as RequirementType }))} className="job-track-skill-tab__select admin-roadmap-catalog__inline-input job-track-skill-tab__select--neon">
-                          <option value="REQUIRED">REQUIRED</option><option value="IMPORTANT">IMPORTANT</option><option value="NICE_TO_HAVE">NICE_TO_HAVE</option>
+                          <option value="REQUIRED">Bắt buộc</option><option value="IMPORTANT">Quan trọng</option><option value="NICE_TO_HAVE">Nên có</option>
                         </select>
                       ) : (
                         <span className={`job-track-skill-tab__neon-badge job-track-skill-tab__neon-badge--${ts.requirementType.toLowerCase()}`}>
@@ -808,8 +907,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
                             const v = parseInt(e.target.value);
                             if (!isNaN(v)) setEditMappingForm(p => ({ ...p, weight: Math.max(1, Math.min(10, v)) }));
                           }}
-                          className="job-track-skill-tab__input admin-roadmap-catalog__inline-input job-track-skill-tab__input--neon"
-                          style={{ width: '70px', padding: '0.25rem' }}
+                          className="job-track-skill-tab__input admin-roadmap-catalog__inline-input job-track-skill-tab__input--neon job-track-skill-tab__weight-input job-track-skill-tab__weight-input--compact"
                           title="Trọng số (1-10)"
                         />
                       ) : (
@@ -842,8 +940,65 @@ const JobPositionTrackSkillTab: React.FC = () => {
                 );
               })}
               {trackSkills.length === 0 && <tr><td colSpan={6} className="job-track-skill-tab__empty-state">Chưa có kỹ năng nào được gán. Thêm kỹ năng và đặt trọng số (1-10) để phân bổ câu hỏi quiz.</td></tr>}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
+            </>
+          )}
+        </section>
+      </div>
+
+      {showTrackForm && (
+        <div className="admin-roadmap-catalog__modal-overlay" role="dialog" aria-modal="true" aria-labelledby="track-create-title" onMouseDown={() => setShowTrackForm(false)}>
+          <div className="admin-roadmap-catalog__modal" onMouseDown={(e) => e.stopPropagation()}>
+            <div className="admin-roadmap-catalog__modal-header">
+              <div>
+                <h3 id="track-create-title">Tạo track mới</h3>
+                <p>Track liên kết vị trí công việc với lộ trình kỹ năng cần học.</p>
+              </div>
+              <button type="button" className="admin-roadmap-catalog__modal-close" onClick={() => setShowTrackForm(false)}>✕</button>
+            </div>
+            <div className="admin-roadmap-catalog__modal-body">
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-domain">
+                <span>Domain nghề nghiệp</span>
+                <select id="track-create-domain" value={trackForm.domainId} onChange={e => setTrackForm(p => ({ ...p, domainId: e.target.value ? Number(e.target.value) : '', jobPositionId: '' as number | '' }))} className="job-track-skill-tab__select">
+                  <option value="">Tất cả domain</option>
+                  {domains.filter(d => d.status === 'ACTIVE').map(d => <option key={d.id} value={d.id}>{d.name} ({d.code})</option>)}
+                </select>
+              </label>
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-job-position">
+                <span>Vị trí công việc *</span>
+                <select id="track-create-job-position" value={trackForm.jobPositionId} onChange={e => setTrackForm(p => ({ ...p, jobPositionId: e.target.value ? Number(e.target.value) : '' }))} className="job-track-skill-tab__select">
+                  <option value="">Chọn vị trí công việc</option>
+                  {jobPositions.filter(jp => jp.status === 'ACTIVE' && (!trackForm.domainId || jp.domainId === Number(trackForm.domainId))).map(jp => <option key={jp.id} value={jp.id}>{jp.name}</option>)}
+                </select>
+              </label>
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-code">
+                <span>Mã track *</span>
+                <input id="track-create-code" placeholder="VD: BACKEND_JAVA_SPRING" value={trackForm.code} onChange={e => setTrackForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="job-track-skill-tab__input" autoFocus />
+              </label>
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-name">
+                <span>Tên track *</span>
+                <input id="track-create-name" placeholder="VD: Backend Java Spring Boot" value={trackForm.name} onChange={e => setTrackForm(p => ({ ...p, name: e.target.value }))} className="job-track-skill-tab__input" />
+              </label>
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-target-level">
+                <span>Level mục tiêu *</span>
+                <select id="track-create-target-level" value={trackForm.targetLevel} onChange={e => setTrackForm(p => ({ ...p, targetLevel: e.target.value }))} className="job-track-skill-tab__select">
+                  {['INTERNSHIP', 'FRESHER', 'JUNIOR', 'MIDDLE', 'SENIOR'].map(l => <option key={l} value={l}>{l}</option>)}
+                </select>
+              </label>
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-description">
+                <span>Mô tả</span>
+                <input id="track-create-description" placeholder="Mô tả ngắn gọn, không bắt buộc" value={trackForm.description} onChange={e => setTrackForm(p => ({ ...p, description: e.target.value }))} className="job-track-skill-tab__input" />
+              </label>
+            </div>
+            <div className="admin-roadmap-catalog__modal-actions">
+              <button type="button" onClick={() => setShowTrackForm(false)} className="job-track-skill-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
+              <button onClick={handleCreateTrack} disabled={trackSubmitting || !trackForm.code || !trackForm.name || !trackForm.jobPositionId} className="job-track-skill-tab__btn job-track-skill-tab__btn--success">
+                {trackSubmitting ? 'Đang tạo...' : 'Tạo track'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

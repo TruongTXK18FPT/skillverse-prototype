@@ -213,10 +213,10 @@ const SkillRegistryTab: React.FC = () => {
           <p>Quản lý danh sách kỹ năng chuẩn của hệ thống</p>
         </div>
         <button
-          onClick={() => setShowForm(f => !f)}
+          onClick={() => setShowForm(true)}
           className="skill-registry-tab__btn skill-registry-tab__btn--primary"
         >
-          {showForm ? '✕ Hủy' : '+ Tạo kỹ năng'}
+          + Tạo kỹ năng
         </button>
       </div>
 
@@ -246,19 +246,6 @@ const SkillRegistryTab: React.FC = () => {
           <option value={50}>50 dòng / trang</option>
         </select>
       </div>
-
-      {showForm && (
-        <div className="skill-registry-tab__card skill-registry-tab__form-container">
-          <h3 className="skill-registry-tab__form-title">Tạo kỹ năng mới</h3>
-          <div className="skill-registry-tab__form">
-            <input placeholder="Tên kỹ năng *" value={formName} onChange={e => setFormName(e.target.value)} className="skill-registry-tab__input" />
-            <input placeholder="Mô tả (tuỳ chọn)" value={formDesc} onChange={e => setFormDesc(e.target.value)} className="skill-registry-tab__input" />
-            <button onClick={handleCreate} disabled={submitting || !formName.trim()} className="skill-registry-tab__btn skill-registry-tab__btn--success">
-              {submitting ? 'Đang tạo...' : 'Tạo'}
-            </button>
-          </div>
-        </div>
-      )}
 
       <div className="skill-registry-tab__card">
         {loading ? <p>Đang tải...</p> : (
@@ -331,6 +318,36 @@ const SkillRegistryTab: React.FC = () => {
           </div>
         )}
       </div>
+
+      {showForm && (
+        <div className="admin-roadmap-catalog__modal-overlay" role="dialog" aria-modal="true" aria-labelledby="skill-create-title" onMouseDown={() => setShowForm(false)}>
+          <div className="admin-roadmap-catalog__modal" onMouseDown={(e) => e.stopPropagation()}>
+            <div className="admin-roadmap-catalog__modal-header">
+              <div>
+                <h3 id="skill-create-title">Tạo kỹ năng mới</h3>
+                <p>Thêm kỹ năng chuẩn vào kho dùng chung cho roadmap và khóa học.</p>
+              </div>
+              <button type="button" className="admin-roadmap-catalog__modal-close" onClick={() => setShowForm(false)}>✕</button>
+            </div>
+            <div className="admin-roadmap-catalog__modal-body admin-roadmap-catalog__modal-body--single">
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="skill-create-name">
+                <span>Tên kỹ năng *</span>
+                <input id="skill-create-name" placeholder="VD: Java Spring Boot" value={formName} onChange={e => setFormName(e.target.value)} className="skill-registry-tab__input" autoFocus />
+              </label>
+              <label className="admin-roadmap-catalog__modal-field" htmlFor="skill-create-description">
+                <span>Mô tả</span>
+                <input id="skill-create-description" placeholder="Mô tả ngắn về kỹ năng" value={formDesc} onChange={e => setFormDesc(e.target.value)} className="skill-registry-tab__input" />
+              </label>
+            </div>
+            <div className="admin-roadmap-catalog__modal-actions">
+              <button type="button" onClick={() => setShowForm(false)} className="skill-registry-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
+              <button onClick={handleCreate} disabled={submitting || !formName.trim()} className="skill-registry-tab__btn skill-registry-tab__btn--success">
+                {submitting ? 'Đang tạo...' : 'Tạo kỹ năng'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

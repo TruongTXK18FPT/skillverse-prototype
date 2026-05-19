@@ -1138,24 +1138,6 @@ const QuestionBankTab: React.FC = () => {
               >
                 <RefreshCw size={18} />
               </button>
-              <button
-                className="qb-btn secondary"
-                onClick={() => openCreateBankModal("IMPORT")}
-              >
-                <Upload size={18} /> Tạo nhanh từ file
-              </button>
-              <button
-                className="qb-btn primary"
-                onClick={() => openCreateBankModal("AI")}
-              >
-                <Brain size={18} /> Tạo nhanh bằng AI
-              </button>
-              <button
-                className="qb-btn success"
-                onClick={() => openCreateBankModal("MANUAL")}
-              >
-                <Plus size={18} /> Tạo ngân hàng câu hỏi
-              </button>
             </div>
           ) : null}
       </div>

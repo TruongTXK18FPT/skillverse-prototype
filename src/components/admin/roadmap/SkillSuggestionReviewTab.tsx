@@ -3,9 +3,11 @@ import { adminSkillRegistryService } from '../../../services/adminSkillRegistryS
 import { SkillSuggestion, Skill } from '../../../types/skillRegistry';
 import { confirmAction } from '../../../context/ConfirmDialogContext';
 import { showAppError, showAppSuccess, showAppWarning } from '../../../context/ToastContext';
+import MentorVerificationAdminTab from '../MentorVerificationAdminTab';
 import './SkillSuggestionReviewTab.css';
 
 type SuggestionSortKey = 'id' | 'suggestedName' | 'suggestedCanonicalKey' | 'createdAt';
+type SkillReviewSubTab = 'mentor-verifications' | 'platform-suggestions';
 
 const SearchSkillInput: React.FC<{ onSelect: (id: number | null) => void }> = ({ onSelect }) => {
   const [query, setQuery] = useState('');
@@ -93,6 +95,7 @@ const SearchSkillInput: React.FC<{ onSelect: (id: number | null) => void }> = ({
 };
 
 const SkillSuggestionReviewTab: React.FC = () => {
+  const [activeReviewSubTab, setActiveReviewSubTab] = useState<SkillReviewSubTab>('mentor-verifications');
   const [suggestions, setSuggestions] = useState<SkillSuggestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -212,68 +215,99 @@ const SkillSuggestionReviewTab: React.FC = () => {
   return (
     <div className="admin-tab-content skill-review-tab">
       <div className="admin-tab-header">
-        <h2>Duyệt đề xuất kỹ năng</h2>
-        <p>Xem xét và duyệt các kỹ năng được đề xuất từ Mentor</p>
+        <h2>Kiểm duyệt kỹ năng</h2>
+        <p>Duyệt xác thực kỹ năng của mentor và đề xuất thêm kỹ năng mới cho nền tảng</p>
       </div>
 
-      {error && <div className="skill-review-tab__error">{error}</div>}
+      <div className="skill-review-tab__subtabs" role="tablist" aria-label="Luồng kiểm duyệt kỹ năng">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeReviewSubTab === 'mentor-verifications'}
+          className={`skill-review-tab__subtab ${activeReviewSubTab === 'mentor-verifications' ? 'skill-review-tab__subtab--active' : ''}`}
+          onClick={() => setActiveReviewSubTab('mentor-verifications')}
+        >
+          <strong>Xác thực kỹ năng mentor</strong>
+          <span>Duyệt hồ sơ chứng minh năng lực</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeReviewSubTab === 'platform-suggestions'}
+          className={`skill-review-tab__subtab ${activeReviewSubTab === 'platform-suggestions' ? 'skill-review-tab__subtab--active' : ''}`}
+          onClick={() => setActiveReviewSubTab('platform-suggestions')}
+        >
+          <strong>Đề xuất kỹ năng nền tảng</strong>
+          <span>Duyệt skill mentor muốn bổ sung</span>
+        </button>
+      </div>
 
-      <div className="skill-review-tab__card">
-        <div className="admin-roadmap-catalog__toolbar">
-          <input
-            className="skill-review-tab__search-input admin-roadmap-catalog__toolbar-search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Tìm theo tên, khóa chuẩn, ID..."
-          />
-          <select className="skill-review-tab__search-input admin-roadmap-catalog__toolbar-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as 'ALL' | SkillSuggestion['status'])}>
-            <option value="ALL">Tất cả trạng thái</option>
-            <option value="PENDING">Đang chờ duyệt</option>
-            <option value="APPROVED_CREATED">Đã tạo mới</option>
-            <option value="MERGED_TO_EXISTING">Đã gộp</option>
-            <option value="REJECTED">Đã từ chối</option>
-          </select>
-          <select className="skill-review-tab__search-input admin-roadmap-catalog__toolbar-select" value={sortKey} onChange={(e) => setSortKey(e.target.value as SuggestionSortKey)}>
-            <option value="createdAt">Mới nhất</option>
-            <option value="id">ID tăng dần</option>
-            <option value="suggestedName">Tên A-Z</option>
-            <option value="suggestedCanonicalKey">Khóa chuẩn A-Z</option>
-          </select>
+      {activeReviewSubTab === 'mentor-verifications' ? (
+        <div className="skill-review-tab__embedded-panel">
+          <MentorVerificationAdminTab initialRequesterRole="MENTOR" lockRequesterRole />
         </div>
-        {loading ? <p>Đang tải...</p> : (
-          <table className="skill-review-tab__table skill-review-tab__table--dropdown-safe">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Tên đề xuất</th>
-                <th>Khóa chuẩn</th>
-                <th>Gộp vào kỹ năng</th>
-                <th>Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredSuggestions.map(s => (
-                <tr key={s.id}>
-                  <td>{s.id}</td>
-                  <td>{s.suggestedName}</td>
-                  <td><code className="skill-review-tab__code">{s.suggestedCanonicalKey}</code></td>
-                  <td className="skill-review-tab__merge-cell">
-                    <SearchSkillInput 
-                      onSelect={(skillId) => setMergeTargetId(prev => ({ ...prev, [s.id]: skillId }))} 
-                    />
-                  </td>
-                  <td className="skill-review-tab__actions">
-                    <button onClick={() => handleApprove(s.id)} className="skill-review-tab__btn skill-review-tab__btn--approve">Duyệt</button>
-                    <button onClick={() => handleMerge(s.id)} className="skill-review-tab__btn skill-review-tab__btn--merge">Gộp</button>
-                    <button onClick={() => handleReject(s.id)} className="skill-review-tab__btn skill-review-tab__btn--reject">Từ chối</button>
-                  </td>
-                </tr>
-              ))}
-              {filteredSuggestions.length === 0 && <tr><td colSpan={5} className="skill-review-tab__empty-state">Không có đề xuất nào phù hợp.</td></tr>}
-            </tbody>
-          </table>
-        )}
-      </div>
+      ) : (
+        <>
+          {error && <div className="skill-review-tab__error">{error}</div>}
+
+          <div className="skill-review-tab__card">
+            <div className="admin-roadmap-catalog__toolbar">
+              <input
+                className="skill-review-tab__search-input admin-roadmap-catalog__toolbar-search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Tìm theo tên, khóa chuẩn, ID..."
+              />
+              <select className="skill-review-tab__search-input admin-roadmap-catalog__toolbar-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as 'ALL' | SkillSuggestion['status'])}>
+                <option value="ALL">Tất cả trạng thái</option>
+                <option value="PENDING">Đang chờ duyệt</option>
+                <option value="APPROVED_CREATED">Đã tạo mới</option>
+                <option value="MERGED_TO_EXISTING">Đã gộp</option>
+                <option value="REJECTED">Đã từ chối</option>
+              </select>
+              <select className="skill-review-tab__search-input admin-roadmap-catalog__toolbar-select" value={sortKey} onChange={(e) => setSortKey(e.target.value as SuggestionSortKey)}>
+                <option value="createdAt">Mới nhất</option>
+                <option value="id">ID tăng dần</option>
+                <option value="suggestedName">Tên A-Z</option>
+                <option value="suggestedCanonicalKey">Khóa chuẩn A-Z</option>
+              </select>
+            </div>
+            {loading ? <p>Đang tải...</p> : (
+              <table className="skill-review-tab__table skill-review-tab__table--dropdown-safe">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên đề xuất</th>
+                    <th>Khóa chuẩn</th>
+                    <th>Gộp vào kỹ năng</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredSuggestions.map(s => (
+                    <tr key={s.id}>
+                      <td>{s.id}</td>
+                      <td>{s.suggestedName}</td>
+                      <td><code className="skill-review-tab__code">{s.suggestedCanonicalKey}</code></td>
+                      <td className="skill-review-tab__merge-cell">
+                        <SearchSkillInput 
+                          onSelect={(skillId) => setMergeTargetId(prev => ({ ...prev, [s.id]: skillId }))} 
+                        />
+                      </td>
+                      <td className="skill-review-tab__actions">
+                        <button onClick={() => handleApprove(s.id)} className="skill-review-tab__btn skill-review-tab__btn--approve">Duyệt</button>
+                        <button onClick={() => handleMerge(s.id)} className="skill-review-tab__btn skill-review-tab__btn--merge">Gộp</button>
+                        <button onClick={() => handleReject(s.id)} className="skill-review-tab__btn skill-review-tab__btn--reject">Từ chối</button>
+                      </td>
+                    </tr>
+                  ))}
+                  {filteredSuggestions.length === 0 && <tr><td colSpan={5} className="skill-review-tab__empty-state">Không có đề xuất nào phù hợp.</td></tr>}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

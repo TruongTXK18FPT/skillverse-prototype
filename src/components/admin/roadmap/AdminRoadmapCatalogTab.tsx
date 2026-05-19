@@ -37,8 +37,8 @@ const ROADMAP_CATALOG_TABS: Array<{
   },
   {
     key: "skill-suggestions",
-    label: "Duyệt đề xuất",
-    description: "Kỹ năng do mentor đề xuất",
+    label: "Kiểm duyệt kỹ năng",
+    description: "Xác thực mentor & đề xuất skill",
     icon: UserCheck,
   },
   {
@@ -88,19 +88,19 @@ const AdminRoadmapCatalogTab: React.FC<AdminRoadmapCatalogTabProps> = ({
         <div className="admin-roadmap-catalog__hero-main">
           <span className="admin-roadmap-catalog__eyebrow">
             <Map size={15} />
-            Danh mục roadmap
+            Nghề nghiệp & kỹ năng
           </span>
-          <h2>Quản trị dữ liệu nền cho roadmap</h2>
+          <h2>Quản trị dữ liệu nền cho nghề nghiệp và kỹ năng trên nền tảng</h2>
           <p>
-            Kho kỹ năng, đề xuất từ mentor, taxonomy nghề nghiệp và mapping
-            track.
+            Kho kỹ năng, kiểm duyệt năng lực mentor, đề xuất skill mới,
+            phân loại nghề nghiệp và mapping track.
           </p>
         </div>
       </header>
 
       <nav
         className="admin-roadmap-catalog__tabbar"
-        aria-label="Danh mục roadmap"
+        aria-label="Nghề nghiệp & kỹ năng"
       >
         {ROADMAP_CATALOG_TABS.map((tab) => {
           const Icon = tab.icon;

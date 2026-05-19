@@ -352,15 +352,30 @@
 }
 
 .job-track-skill-tab__add-skill-bar {
-  display: flex;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: minmax(240px, 1.4fr) minmax(170px, 0.8fr) 90px auto;
+  gap: 10px;
   margin-bottom: 0.875rem;
   align-items: flex-end;
-  flex-wrap: wrap;
+  padding: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 8px;
+  background: rgba(2, 8, 23, 0.22);
 }
 
 .job-track-skill-tab__add-skill-select {
-  width: 280px;
+  min-width: 0;
+  width: 100%;
+}
+
+.job-track-skill-tab__weight-input {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.job-track-skill-tab__weight-input--compact {
+  width: 70px;
+  padding: 0.25rem;
 }
 
 .job-track-skill-tab__card {
@@ -381,6 +396,324 @@
   border-color: var(--roadmap-admin-border-strong, rgba(96, 165, 250, 0.42));
 }
 
+.job-track-skill-tab__workspace {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.9fr) minmax(0, 1.7fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.job-track-skill-tab__list-panel,
+.job-track-skill-tab__detail-panel {
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.job-track-skill-tab__list-panel {
+  position: sticky;
+  top: 12px;
+}
+
+.job-track-skill-tab__panel-heading,
+.job-track-skill-tab__detail-header,
+.job-track-skill-tab__mapping-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.job-track-skill-tab__panel-heading h3,
+.job-track-skill-tab__detail-header h3,
+.job-track-skill-tab__mapping-header h3 {
+  margin: 0;
+  color: #f8fbff;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.job-track-skill-tab__panel-heading p,
+.job-track-skill-tab__mapping-header p {
+  margin: 4px 0 0;
+  color: var(--roadmap-admin-muted, #9fb7d8);
+  font-size: 0.82rem;
+}
+
+.job-track-skill-tab__detail-header {
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.job-track-skill-tab__detail-header .admin-roadmap-catalog__actions {
+  justify-content: flex-end;
+}
+
+.job-track-skill-tab__track-name {
+  margin-bottom: 6px;
+  color: #f8fbff;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.job-track-skill-tab__track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.job-track-skill-tab__track-card {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 13px 14px;
+  border: 1px solid rgba(59, 130, 246, 0.22);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.42);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.job-track-skill-tab__track-card:hover {
+  border-color: rgba(34, 211, 238, 0.42);
+  background: rgba(14, 165, 233, 0.1);
+}
+
+.job-track-skill-tab__track-card--selected {
+  border-color: rgba(34, 211, 238, 0.7);
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.22), rgba(15, 23, 42, 0.56));
+  box-shadow: inset 3px 0 0 #22d3ee, 0 12px 28px rgba(8, 145, 178, 0.12);
+}
+
+.job-track-skill-tab__track-card-title {
+  width: 100%;
+  color: #f8fbff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.job-track-skill-tab__track-card-meta {
+  width: 100%;
+  color: var(--roadmap-admin-muted, #9fb7d8);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.job-track-skill-tab__track-card-footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.job-track-skill-tab__track-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border: 1px solid rgba(96, 165, 250, 0.28);
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.12);
+  color: #bfdbfe;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.job-track-skill-tab__untracked {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.job-track-skill-tab__untracked-title {
+  margin-bottom: 10px;
+  color: var(--roadmap-admin-muted, #9fb7d8);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.job-track-skill-tab__untracked-card {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px dashed rgba(34, 211, 238, 0.3);
+  border-radius: 8px;
+  background: rgba(2, 8, 23, 0.24);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.job-track-skill-tab__untracked-card:hover {
+  border-color: rgba(34, 211, 238, 0.58);
+  background: rgba(8, 145, 178, 0.12);
+}
+
+.job-track-skill-tab__untracked-card span {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.job-track-skill-tab__untracked-card strong,
+.job-track-skill-tab__untracked-card small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.job-track-skill-tab__untracked-card strong {
+  color: #e0f2fe;
+  font-size: 0.86rem;
+}
+
+.job-track-skill-tab__untracked-card small {
+  color: var(--roadmap-admin-muted, #9fb7d8);
+  font-size: 0.74rem;
+}
+
+.job-track-skill-tab__untracked-card em {
+  flex: 0 0 auto;
+  color: #22d3ee;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.job-track-skill-tab__table--compact {
+  text-align: left;
+}
+
+.job-track-skill-tab__table--compact th,
+.job-track-skill-tab__table--compact td {
+  padding: 0.9rem 0.65rem;
+}
+
+.job-track-skill-tab__table--compact tbody tr {
+  cursor: pointer;
+}
+
+.job-track-skill-tab__pagination {
+  display: flex;
+  justify-content: center;
+  padding-top: 14px;
+}
+
+.job-track-skill-tab__empty-detail {
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+  color: var(--roadmap-admin-muted, #9fb7d8);
+  text-align: center;
+}
+
+.job-track-skill-tab__detail-grid,
+.job-track-skill-tab__edit-panel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.22);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.34);
+}
+
+.job-track-skill-tab__detail-grid div,
+.job-track-skill-tab__field {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.job-track-skill-tab__detail-grid span,
+.job-track-skill-tab__field span {
+  color: var(--roadmap-admin-muted, #9fb7d8);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.job-track-skill-tab__detail-grid strong {
+  min-width: 0;
+  color: #f8fbff;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.job-track-skill-tab__detail-grid-full,
+.job-track-skill-tab__field--full {
+  grid-column: 1 / -1;
+}
+
+.job-track-skill-tab__mapping-header {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.job-track-skill-tab__summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.job-track-skill-tab__summary-chip {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.job-track-skill-tab__summary-chip small {
+  color: var(--roadmap-admin-muted, #9fb7d8);
+  font-size: 0.73rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.job-track-skill-tab__summary-chip strong {
+  color: #e0f2fe;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.job-track-skill-tab__summary > strong {
+  grid-column: 1 / -1;
+  color: #facc15;
+  font-size: 0.82rem;
+}
+
 .job-track-skill-tab__table-wrapper {
   overflow: auto;
 }
@@ -388,6 +721,15 @@
 .job-track-skill-tab__table-wrapper--scroll {
   max-height: 400px;
   overflow-y: auto;
+}
+
+.job-track-skill-tab__mapping-table-wrapper {
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  border-radius: 8px;
+}
+
+.job-track-skill-tab__mapping-table {
+  min-width: 760px;
 }
 
 .job-track-skill-tab__table-head--sticky {
@@ -506,16 +848,29 @@
   .job-track-skill-tab__filter-bar {
     grid-template-columns: 1fr;
   }
+
+  .job-track-skill-tab__workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .job-track-skill-tab__list-panel {
+    position: static;
+  }
+
+  .job-track-skill-tab__detail-header,
+  .job-track-skill-tab__mapping-header {
+    flex-direction: column;
+  }
 }
 
 /* ===== Neon Tech Aesthetic ===== */
 .job-track-skill-tab__skill-filter-neon {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) 1fr 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 20px;
+  grid-template-columns: minmax(220px, 1.2fr) repeat(3, minmax(150px, 0.8fr));
+  gap: 10px;
+  margin-bottom: 12px;
   background: rgba(15, 23, 42, 0.4);
-  padding: 1.25rem;
+  padding: 12px;
   border-radius: 0.75rem;
   border: 1px solid rgba(34, 211, 238, 0.3);
   box-shadow: 0 0 15px rgba(34, 211, 238, 0.1) inset;
@@ -649,10 +1004,30 @@
   .job-track-skill-tab__skill-filter-neon {
     grid-template-columns: 1fr 1fr;
   }
+
+  .job-track-skill-tab__summary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .job-track-skill-tab__add-skill-bar {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 640px) {
   .job-track-skill-tab__skill-filter-neon {
     grid-template-columns: 1fr;
+  }
+
+  .job-track-skill-tab__summary,
+  .job-track-skill-tab__add-skill-bar,
+  .job-track-skill-tab__detail-grid,
+  .job-track-skill-tab__edit-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .job-track-skill-tab__detail-grid-full,
+  .job-track-skill-tab__field--full {
+    grid-column: auto;
   }
 }

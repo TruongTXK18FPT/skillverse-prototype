@@ -252,7 +252,7 @@ const AdminRagProviderPage: React.FC = () => {
           
           {/* Effective Mode Indicator */}
           <div className="admin-rag-provider-summary">
-            <div className="summary-icon">
+            <div className="rag-summary-icon">
               <Cpu size={32} />
             </div>
             <div className="summary-info">

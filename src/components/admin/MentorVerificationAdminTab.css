@@ -103,6 +103,7 @@
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s;
+  display: inline-flex;
 }
 
 .admin-mvt-filter-btn:hover {
@@ -420,7 +421,8 @@
 .admin-split-modal {
   width: 100%;
   max-width: 1400px;
-  height: min(92dvh, 920px);
+  height: min(85dvh, 920px);
+  margin-top: 3rem;
   background: #0f172a;
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 16px;

@@ -45,6 +45,11 @@ import './MentorVerificationAdminTab.css';
 type FilterType = 'ALL' | 'PENDING' | 'HISTORY';
 type RequesterRole = 'MENTOR' | 'STUDENT';
 
+interface MentorVerificationAdminTabProps {
+  initialRequesterRole?: RequesterRole;
+  lockRequesterRole?: boolean;
+}
+
 // For UI convenience
 type UnifiedVerificationItem = {
   isBatch: boolean;
@@ -61,12 +66,15 @@ type UnifiedVerificationItem = {
   originalStudent?: StudentVerificationResponse;
 };
 
-const MentorVerificationAdminTab: React.FC = () => {
+const MentorVerificationAdminTab: React.FC<MentorVerificationAdminTabProps> = ({
+  initialRequesterRole = 'MENTOR',
+  lockRequesterRole = false,
+}) => {
   const [items, setItems] = useState<UnifiedVerificationItem[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Filters & Pagination
-  const [requesterRole, setRequesterRole] = useState<RequesterRole>('MENTOR');
+  const [requesterRole, setRequesterRole] = useState<RequesterRole>(initialRequesterRole);
   const [filterType, setFilterType] = useState<FilterType>('PENDING');
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -88,6 +96,11 @@ const MentorVerificationAdminTab: React.FC = () => {
   // Action State
   const [actionLoading, setActionLoading] = useState(false);
   const { showError, showSuccess } = useToast();
+
+  useEffect(() => {
+    setRequesterRole(initialRequesterRole);
+    setCurrentPage(0);
+  }, [initialRequesterRole]);
 
   const loadData = useCallback(async () => {
     try {
@@ -281,20 +294,22 @@ const MentorVerificationAdminTab: React.FC = () => {
         <h2 className="admin-mvt-title">
           <ShieldCheck size={28} /> Quản lý Xác thực Kỹ Năng
         </h2>
-        <div className="admin-mvt-role-toggle">
-          <button 
-            className={`admin-role-btn ${requesterRole === 'MENTOR' ? 'active' : ''}`}
-            onClick={() => { setRequesterRole('MENTOR'); setCurrentPage(0); }}
-          >
-            Giảng Viên (Mentor - Batch)
-          </button>
-          <button 
-            className={`admin-role-btn ${requesterRole === 'STUDENT' ? 'active' : ''}`}
-            onClick={() => { setRequesterRole('STUDENT'); setCurrentPage(0); }}
-          >
-            Học Viên (Student - Single)
-          </button>
-        </div>
+        {!lockRequesterRole && (
+          <div className="admin-mvt-role-toggle">
+            <button 
+              className={`admin-role-btn ${requesterRole === 'MENTOR' ? 'active' : ''}`}
+              onClick={() => { setRequesterRole('MENTOR'); setCurrentPage(0); }}
+            >
+              Giảng Viên (Mentor - Batch)
+            </button>
+            <button 
+              className={`admin-role-btn ${requesterRole === 'STUDENT' ? 'active' : ''}`}
+              onClick={() => { setRequesterRole('STUDENT'); setCurrentPage(0); }}
+            >
+              Học Viên (Student - Single)
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Filters */}
