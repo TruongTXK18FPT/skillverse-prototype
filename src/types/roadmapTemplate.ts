@@ -88,6 +88,34 @@ export interface RoadmapTemplateSkillBlockRequest {
   activities: RoadmapTemplateActivityRequest[];
 }
 
+export interface RoadmapTemplateNodeGroupSkillRequest {
+  id?: number;
+  skillId: number;
+  skillNameSnapshot?: string;
+  skillCanonicalKeySnapshot?: string;
+  requirementType?: RequirementType;
+  weightInNode?: number | null;
+  orderIndex?: number | null;
+}
+
+export interface RoadmapTemplateNodeGroupRequest {
+  id?: number;
+  nodeKey?: string;
+  title: string;
+  description?: string;
+  learningObjectives?: string;
+  lessonsJson?: string;
+  exercisesJson?: string;
+  completionCriteria?: string;
+  expectedOutput?: string;
+  rubric?: string;
+  difficulty?: string;
+  estimatedHours?: number | null;
+  aiPromptHint?: string;
+  orderIndex: number;
+  skills: RoadmapTemplateNodeGroupSkillRequest[];
+}
+
 export interface RoadmapTemplateRequest {
   domainId?: number | null;
   jobPositionId?: number | null;
@@ -110,6 +138,7 @@ export interface RoadmapTemplateRequest {
   nodes: RoadmapTemplateNodeRequest[];
   courses?: RoadmapTemplateCourseRequest[];
   skillBlocks?: RoadmapTemplateSkillBlockRequest[];
+  nodeGroups?: RoadmapTemplateNodeGroupRequest[];
 }
 
 export interface RoadmapTemplateNodeResponse
@@ -162,7 +191,40 @@ export interface RoadmapTemplateAllocationPreviewResponse {
 export interface RoadmapTemplateValidationResponse {
   valid: boolean;
   errors: string[];
+  warnings?: string[];
   allocation?: RoadmapTemplateAllocationPreviewResponse;
+}
+
+export interface RoadmapTemplateNodeGroupSkill {
+  id?: number;
+  nodeGroupId?: number;
+  skillId: number;
+  skillName?: string;
+  canonicalKey?: string;
+  skillNameSnapshot?: string;
+  skillCanonicalKeySnapshot?: string;
+  requirementType?: RequirementType;
+  weightInNode?: number | null;
+  orderIndex?: number | null;
+}
+
+export interface RoadmapTemplateNodeGroupResponse {
+  id?: number;
+  templateId?: number;
+  nodeKey?: string;
+  title: string;
+  description?: string;
+  learningObjectives?: string;
+  lessonsJson?: string;
+  exercisesJson?: string;
+  completionCriteria?: string;
+  difficulty?: string;
+  estimatedHours?: number | null;
+  expectedOutput?: string;
+  rubric?: string;
+  aiPromptHint?: string;
+  orderIndex?: number | null;
+  skills: RoadmapTemplateNodeGroupSkill[];
 }
 
 export interface RoadmapTemplateCourseCandidateResponse {
@@ -203,5 +265,6 @@ export interface RoadmapTemplateResponse {
   nodes: RoadmapTemplateNodeResponse[];
   courses: RoadmapTemplateCourseResponse[];
   skillBlocks?: RoadmapTemplateSkillBlockResponse[];
+  nodeGroups?: RoadmapTemplateNodeGroupResponse[];
   allocationPreview?: RoadmapTemplateAllocationPreviewResponse;
 }

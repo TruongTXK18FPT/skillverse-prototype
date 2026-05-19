@@ -3,6 +3,7 @@ import type {
   RoadmapTemplateAllocationPreviewResponse,
   RoadmapTemplateCourseCandidateResponse,
   RoadmapTemplateCourseLinkPolicy,
+  RoadmapTemplateNodeGroupResponse,
   RoadmapTemplateRequest,
   RoadmapTemplateResponse,
   RoadmapTemplateStatus,
@@ -69,6 +70,18 @@ export const roadmapTemplateService = {
   ): Promise<RoadmapTemplateValidationResponse> => {
     const { data } = await axiosInstance.post<RoadmapTemplateValidationResponse>(
       `${ADMIN_TEMPLATE_URL}/validate`,
+      payload,
+    );
+    return data;
+  },
+
+  autoGroup: async (payload: {
+    jobPositionTrackId: number;
+    totalNodeCount: number;
+    skillBlocks: RoadmapTemplateRequest["skillBlocks"];
+  }): Promise<RoadmapTemplateNodeGroupResponse[]> => {
+    const { data } = await axiosInstance.post<RoadmapTemplateNodeGroupResponse[]>(
+      `${ADMIN_TEMPLATE_URL}/auto-group`,
       payload,
     );
     return data;

@@ -525,6 +525,18 @@
   gap: 10px;
 }
 
+.artm-module-editor {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.artm-module-editor h4 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
 .artm-activity-grid {
   display: grid;
   grid-template-columns: minmax(180px, 1fr) 150px 110px 90px 40px;

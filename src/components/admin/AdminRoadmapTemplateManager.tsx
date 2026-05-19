@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  AlertTriangle,
   Archive,
   ArrowLeft,
   BookOpen,
@@ -39,6 +40,9 @@ import type {
   RoadmapTemplateAllocationPreviewResponse,
   RoadmapTemplateCourseCandidateResponse,
   RoadmapTemplateCourseLinkPolicy,
+  RoadmapTemplateNodeGroupRequest,
+  RoadmapTemplateNodeGroupResponse,
+  RoadmapTemplateNodeGroupSkillRequest,
   RoadmapTemplateRequest,
   RoadmapTemplateResponse,
   RoadmapTemplateSkillBlockRequest,
@@ -48,11 +52,30 @@ import type {
 import "./AdminRoadmapTemplateManager.css";
 
 type ViewMode = "library" | "builder";
-type BuilderTab = "overview" | "allocation" | "activities" | "courses" | "preview";
+type BuilderTab = "overview" | "allocation" | "grouping" | "activities" | "courses" | "preview";
 
 type SkillBlockDraft = RoadmapTemplateSkillBlockRequest & {
   localId: string;
   selectedCourseIds: number[];
+};
+
+type NodeGroupDraft = RoadmapTemplateNodeGroupRequest & {
+  localId: string;
+};
+
+type ModuleLessonDraft = {
+  title: string;
+  description: string;
+  learningObjective: string;
+  estimatedMinutes: number | null;
+};
+
+type ModuleExerciseDraft = {
+  title: string;
+  instruction: string;
+  expectedOutput: string;
+  rubric: string;
+  required: boolean;
 };
 
 type CourseOption = {
@@ -93,6 +116,7 @@ type TemplateForm = {
   topicGenerationType: string;
   timeBudgetPolicy: string;
   skillBlocks: SkillBlockDraft[];
+  nodeGroups: NodeGroupDraft[];
 };
 
 const statusLabel: Record<RoadmapTemplateStatus, string> = {
@@ -104,12 +128,13 @@ const statusLabel: Record<RoadmapTemplateStatus, string> = {
   REJECTED: "Từ chối",
 };
 
-const builderTabs: Array<{ key: BuilderTab; label: string }> = [
+const moduleBuilderTabs: Array<{ key: BuilderTab; label: string }> = [
   { key: "overview", label: "Thông tin" },
-  { key: "allocation", label: "Phân bổ kỹ năng" },
-  { key: "activities", label: "Nội dung bài học" },
+  { key: "allocation", label: "Ưu tiên kỹ năng" },
+  { key: "grouping", label: "Gom kỹ năng vào module" },
+  { key: "activities", label: "Nội dung module" },
   { key: "courses", label: "Khóa học & tài liệu" },
-  { key: "preview", label: "Xem trước" },
+  { key: "preview", label: "Kiểm tra độ phủ" },
 ];
 
 const levelOptions: SkillLevel[] = [
@@ -209,7 +234,8 @@ const emptyForm = (): TemplateForm => ({
   exerciseRequirement: "REQUIRED_EVERY_NODE",
   topicGenerationType: "LEVEL_BAND_AND_ASSESSMENT_GAP",
   timeBudgetPolicy: "DIFFICULTY_AND_COMPLEXITY",
-  skillBlocks: [], 
+  skillBlocks: [],
+  nodeGroups: [],
 });
 
 const getApiErrorMessage = (error: unknown, fallback: string) =>
@@ -398,6 +424,187 @@ const parseActivitySkillRequirements = (
   }
 };
 
+const readJsonArray = <T,>(value: string | undefined, fallback: T[]): T[] => {
+  if (!value?.trim()) return fallback;
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed as T[] : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const serializeModuleLessons = (lessons: ModuleLessonDraft[]) =>
+  JSON.stringify(
+    lessons
+      .map((lesson) => ({
+        title: lesson.title.trim(),
+        description: lesson.description.trim(),
+        learningObjective: lesson.learningObjective.trim(),
+        estimatedMinutes: lesson.estimatedMinutes ?? null,
+      }))
+      .filter((lesson) => lesson.title || lesson.description || lesson.learningObjective),
+  );
+
+const serializeModuleExercises = (exercises: ModuleExerciseDraft[]) =>
+  JSON.stringify(
+    exercises
+      .map((exercise) => ({
+        title: exercise.title.trim(),
+        instruction: exercise.instruction.trim(),
+        expectedOutput: exercise.expectedOutput.trim(),
+        rubric: exercise.rubric.trim(),
+        required: exercise.required,
+      }))
+      .filter((exercise) =>
+        exercise.title || exercise.instruction || exercise.expectedOutput || exercise.rubric,
+      ),
+  );
+
+const getModuleLessons = (group: NodeGroupDraft): ModuleLessonDraft[] =>
+  readJsonArray<Partial<ModuleLessonDraft>>(group.lessonsJson, []).map((lesson, index) => ({
+    title: lesson.title || `Bài học ${index + 1}`,
+    description: lesson.description || "",
+    learningObjective: lesson.learningObjective || "",
+    estimatedMinutes: typeof lesson.estimatedMinutes === "number" ? lesson.estimatedMinutes : null,
+  }));
+
+const getModuleExercises = (group: NodeGroupDraft): ModuleExerciseDraft[] =>
+  readJsonArray<Partial<ModuleExerciseDraft>>(group.exercisesJson, []).map((exercise, index) => ({
+    title: exercise.title || `Bài tập ${index + 1}`,
+    instruction: exercise.instruction || "",
+    expectedOutput: exercise.expectedOutput || "",
+    rubric: exercise.rubric || "",
+    required: exercise.required !== false,
+  }));
+
+const defaultModuleLesson = (orderIndex: number, moduleTitle = "module"): ModuleLessonDraft => ({
+  title: `Bài học ${orderIndex}`,
+  description: `Nội dung hướng dẫn chính của ${moduleTitle}.`,
+  learningObjective: "Người học hiểu và áp dụng được các kỹ năng trong module.",
+  estimatedMinutes: 60,
+});
+
+const defaultModuleExercise = (orderIndex: number, moduleTitle = "module"): ModuleExerciseDraft => ({
+  title: `Bài tập ${orderIndex}`,
+  instruction: `Thực hành tích hợp các kỹ năng trong ${moduleTitle}.`,
+  expectedOutput: "Sản phẩm hoặc minh chứng học tập có thể đánh giá.",
+  rubric: "Hoàn thành đúng yêu cầu, giải thích được cách làm và liên kết được với kỹ năng trong module.",
+  required: true,
+});
+
+const buildSkillRequirement = (skill: JobPositionTrackSkill): RoadmapNodeSkillRequirement => ({
+  skillId: skill.skillId,
+  skillName: skill.skillName,
+  canonicalKey: skill.canonicalKey,
+  requirementType: skill.requirementType === "REQUIRED" || skill.requirementType === "IMPORTANT"
+    ? skill.requirementType
+    : "NICE_TO_HAVE",
+});
+
+const getModuleSkillRequirements = (
+  activity: RoadmapTemplateActivityRequest,
+  block: SkillBlockDraft,
+): RoadmapNodeSkillRequirement[] => {
+  const parsed = parseActivitySkillRequirements(activity);
+  if (parsed.length > 0) return parsed;
+  return [{
+    skillId: block.skillId,
+    skillName: block.skillNameSnapshot,
+    canonicalKey: block.skillCanonicalKeySnapshot,
+    requirementType: "REQUIRED",
+  }];
+};
+
+const makeActivityFromNodeGroup = (
+  group: RoadmapTemplateNodeGroupResponse,
+  orderIndex: number,
+): RoadmapTemplateActivityRequest => {
+  const skills = (group.skills || []).map((skill) => ({
+    skillId: skill.skillId,
+    skillName: skill.skillName,
+    canonicalKey: skill.canonicalKey,
+    requirementType: skill.requirementType === "REQUIRED" || skill.requirementType === "IMPORTANT"
+      ? skill.requirementType
+      : "NICE_TO_HAVE",
+  }));
+  return {
+    title: group.title || `Module ${orderIndex}`,
+    description: group.description || "",
+    exerciseType: "Dự án thực hành",
+    expectedOutput: group.expectedOutput || `Hoàn thành sản phẩm thực hành cho ${group.title}.`,
+    rubric: group.rubric || "Bài nộp kết hợp được các kỹ năng trong module và có minh chứng rõ ràng.",
+    difficulty: group.difficulty || "medium",
+    minLevel: SkillLevel.BEGINNER,
+    maxLevel: null,
+    estimatedHours: group.estimatedHours ?? 4,
+    prerequisiteHint: "",
+    aiPromptHint: "Module node: combine related skills into one practical learning topic.",
+    skillRequirements: skills,
+    skillRequirementsJson: JSON.stringify(skills),
+    orderIndex,
+  };
+};
+
+const makeNodeGroupSkill = (
+  skill: JobPositionTrackSkill | RoadmapTemplateNodeGroupResponse["skills"][number],
+  orderIndex = 1,
+): RoadmapTemplateNodeGroupSkillRequest => ({
+  id: "id" in skill ? skill.id : undefined,
+  skillId: skill.skillId,
+  skillNameSnapshot: "skillName" in skill
+    ? skill.skillName
+    : skill.skillNameSnapshot || skill.skillName,
+  skillCanonicalKeySnapshot: "canonicalKey" in skill
+    ? skill.canonicalKey
+    : skill.skillCanonicalKeySnapshot || skill.canonicalKey,
+  requirementType: skill.requirementType === "REQUIRED" || skill.requirementType === "IMPORTANT"
+    ? skill.requirementType
+    : "NICE_TO_HAVE",
+  weightInNode: "weightInNode" in skill ? skill.weightInNode ?? null : null,
+  orderIndex,
+});
+
+const makeNodeGroupFromResponse = (
+  group: RoadmapTemplateNodeGroupResponse,
+  orderIndex: number,
+): NodeGroupDraft => ({
+  localId: `node-group-${group.id || orderIndex}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+  id: group.id,
+  nodeKey: group.nodeKey || `module-${orderIndex}`,
+  title: group.title || `Module ${orderIndex}`,
+  description: group.description || "",
+  learningObjectives: group.learningObjectives || "",
+  lessonsJson: group.lessonsJson || serializeModuleLessons([defaultModuleLesson(1, group.title || `Module ${orderIndex}`)]),
+  exercisesJson: group.exercisesJson || serializeModuleExercises([defaultModuleExercise(1, group.title || `Module ${orderIndex}`)]),
+  completionCriteria: group.completionCriteria || group.rubric || "",
+  expectedOutput: group.expectedOutput || "",
+  rubric: group.rubric || "",
+  difficulty: group.difficulty || "medium",
+  estimatedHours: group.estimatedHours ?? 4,
+  aiPromptHint: group.aiPromptHint || "",
+  orderIndex: group.orderIndex ?? orderIndex,
+  skills: (group.skills || []).map((skill, index) => makeNodeGroupSkill(skill, index + 1)),
+});
+
+const defaultNodeGroup = (orderIndex: number): NodeGroupDraft => ({
+  localId: `node-group-new-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+  nodeKey: `module-${orderIndex}`,
+  title: `Module ${orderIndex}`,
+  description: "",
+  learningObjectives: "",
+  lessonsJson: serializeModuleLessons([defaultModuleLesson(1, `Module ${orderIndex}`)]),
+  exercisesJson: serializeModuleExercises([defaultModuleExercise(1, `Module ${orderIndex}`)]),
+  completionCriteria: "",
+  expectedOutput: "",
+  rubric: "",
+  difficulty: "medium",
+  estimatedHours: 4,
+  aiPromptHint: "",
+  orderIndex,
+  skills: [],
+});
+
 const buildSkillBlockFromTrackSkill = (
   skill: JobPositionTrackSkill,
   weight: number,
@@ -556,6 +763,70 @@ const AdminRoadmapTemplateManager = () => {
     return result;
   }, [courseCandidates, courseSearchResults, form.skillBlocks]);
 
+  const moduleItems = useMemo(
+    () => form.nodeGroups
+      .slice()
+      .sort((a, b) => Number(a.orderIndex || 0) - Number(b.orderIndex || 0))
+      .map((group, groupIndex) => ({
+        group,
+        groupIndex,
+        activity: {
+          title: group.title,
+          description: group.description,
+          expectedOutput: group.expectedOutput,
+          rubric: group.rubric,
+          difficulty: group.difficulty,
+          estimatedHours: group.estimatedHours,
+          aiPromptHint: group.aiPromptHint,
+          skillRequirements: group.skills.map((skill) => ({
+            skillId: skill.skillId,
+            skillName: skill.skillNameSnapshot,
+            canonicalKey: skill.skillCanonicalKeySnapshot,
+            requirementType: skill.requirementType === "REQUIRED" || skill.requirementType === "IMPORTANT"
+              ? skill.requirementType
+              : "NICE_TO_HAVE",
+          })),
+          orderIndex: group.orderIndex,
+        } as RoadmapTemplateActivityRequest,
+        skills: group.skills.map((skill) => ({
+          skillId: skill.skillId,
+          skillName: skill.skillNameSnapshot,
+          canonicalKey: skill.skillCanonicalKeySnapshot,
+          requirementType: skill.requirementType === "REQUIRED" || skill.requirementType === "IMPORTANT"
+            ? skill.requirementType
+            : "NICE_TO_HAVE",
+        })),
+      })),
+    [form.nodeGroups],
+  );
+
+  const assignedSkillIds = useMemo(() => new Set(
+    moduleItems.flatMap((item) => item.skills.map((skill) => skill.skillId).filter(Boolean) as number[]),
+  ), [moduleItems]);
+
+  const coverageWarnings = useMemo(() => {
+    const warnings: string[] = [];
+    moduleItems.forEach((item) => {
+      if (item.skills.length === 1 && !item.activity.title.toLowerCase().includes("testing basics")) {
+        warnings.push(`${item.activity.title}: module chỉ có 1 skill, nên gom thêm skill liên quan.`);
+      }
+      if (item.skills.length > 7) {
+        warnings.push(`${item.activity.title}: module có quá 7 skills, nên tách node.`);
+      }
+    });
+    trackSkills.forEach((skill) => {
+      if (skill.requirementType === "NICE_TO_HAVE" && !assignedSkillIds.has(skill.skillId)) {
+        warnings.push(`${skill.skillName}: nice-to-have chưa được cover, có thể bỏ nếu roadmap quá dài.`);
+      }
+    });
+    const singleSkillCount = moduleItems.filter((item) => item.skills.length === 1).length;
+    if (moduleItems.length >= 3 && singleSkillCount >= Math.ceil(moduleItems.length * 0.7)) {
+      warnings.push("Roadmap đang giống checklist skill. Hãy gom skill liên quan thành module học thực tế.");
+    }
+    if (validation?.warnings?.length) warnings.push(...validation.warnings);
+    return Array.from(new Set(warnings));
+  }, [assignedSkillIds, moduleItems, trackSkills, validation]);
+
   const shouldShowSkillSelector = activeTab === "activities" || activeTab === "courses";
 
   const readinessErrors = useMemo(() => {
@@ -572,34 +843,32 @@ const AdminRoadmapTemplateManager = () => {
     if (!form.topicGenerationType) errors.push("Cần chọn kiểu sinh chủ đề.");
     if (!form.timeBudgetPolicy) errors.push("Cần chọn chính sách thời lượng nút học.");
     if (form.skillBlocks.length === 0) errors.push("Cần có ít nhất một khối kỹ năng.");
+    if (moduleItems.length !== Number(form.totalNodeCount || 0)) {
+      errors.push(`Số module phải bằng tổng số node: cần ${form.totalNodeCount}, hiện có ${moduleItems.length}.`);
+    }
+    trackSkills.forEach((skill) => {
+      if (skill.requirementType === "REQUIRED" && !assignedSkillIds.has(skill.skillId)) {
+        errors.push(`Required skill chưa được cover: ${skill.skillName}.`);
+      }
+    });
+    moduleItems.forEach((item) => {
+      if (item.skills.length === 0) {
+        errors.push(`${item.activity.title || "Module"} cần có ít nhất một skill.`);
+      }
+      if (item.skills.length > 7) {
+        errors.push(`${item.activity.title || "Module"} có quá nhiều skill, cần tách node.`);
+      }
+    });
     form.skillBlocks.forEach((block) => {
-      const allocatedNodes = getAllocatedNodes(block);
       if (!block.weightPercent || block.weightPercent <= 0) {
         errors.push(`${block.skillNameSnapshot || "Kỹ năng"} cần có trọng số lớn hơn 0.`);
       }
-      if (block.activities.length === 0) {
-        errors.push(`${block.skillNameSnapshot || "Kỹ năng"} cần có ít nhất một bài học.`);
-      }
-      if (allocatedNodes > 0 && block.activities.length !== allocatedNodes) {
-        errors.push(
-          `${block.skillNameSnapshot || "Kỹ năng"} cần đúng ${allocatedNodes} bài học theo số node đã phân bổ; hiện có ${block.activities.length}.`,
-        );
-      }
-      block.activities.forEach((activity) => {
-        if (!activity.expectedOutput?.trim() || !activity.rubric?.trim()) {
-          errors.push(`${activity.title || "Bài học"} cần có đầu ra mong đợi và tiêu chí đánh giá.`);
-        }
-        if (!activity.minLevel) {
-          errors.push(`${activity.title || "Bài học"} cần chọn cấp độ tối thiểu.`);
-        }
-        if (
-          activity.minLevel &&
-          activity.maxLevel &&
-          levelRank(activity.minLevel) > levelRank(activity.maxLevel)
-        ) {
-          errors.push(`${activity.title || "Bài học"} có dải cấp độ không hợp lệ.`);
-        }
-      });
+    });
+    form.nodeGroups.forEach((group) => {
+      if (!group.title.trim()) errors.push("Module cần có tên.");
+      if (!group.expectedOutput?.trim()) errors.push(`${group.title || "Module"} cần có đầu ra mong đợi.`);
+      if (!group.completionCriteria?.trim()) errors.push(`${group.title || "Module"} cần có tiêu chí hoàn thành.`);
+      if (group.skills.length === 0) errors.push(`${group.title || "Module"} cần có ít nhất một skill.`);
     });
     if (backendPreview?.errors?.length) {
       errors.push(...backendPreview.errors.map(localizeTemplateMessage));
@@ -608,7 +877,7 @@ const AdminRoadmapTemplateManager = () => {
       errors.push(...validation.errors.map(localizeTemplateMessage));
     }
     return Array.from(new Set(errors));
-  }, [backendPreview, form, getAllocatedNodes, validation]);
+  }, [assignedSkillIds, backendPreview, form, moduleItems, trackSkills, validation]);
 
   const buildPayload = useCallback((): RoadmapTemplateRequest => {
     const domainId = toNumberOrNull(form.domainId);
@@ -657,7 +926,8 @@ const AdminRoadmapTemplateManager = () => {
         courseLinkPolicy: block.courseLinkPolicy,
         autoCourseLimit: block.autoCourseLimit ?? 2,
         ragEnabled: block.ragEnabled,
-        activities: block.activities.map((activity, index) => ({
+        activities: [],
+        legacyActivitiesIgnored: block.activities.map((activity, index) => ({
           id: activity.id,
           title: activity.title.trim(),
           description: activity.description?.trim(),
@@ -672,6 +942,31 @@ const AdminRoadmapTemplateManager = () => {
           aiPromptHint: activity.aiPromptHint?.trim(),
           skillRequirementsJson: JSON.stringify(parseActivitySkillRequirements(activity)),
           orderIndex: index + 1,
+        })),
+      })),
+      nodeGroups: form.nodeGroups.map((group, index) => ({
+        id: group.id,
+        nodeKey: group.nodeKey || `module-${index + 1}`,
+        title: group.title.trim(),
+        description: group.description?.trim(),
+        learningObjectives: group.learningObjectives?.trim(),
+        lessonsJson: group.lessonsJson || "[]",
+        exercisesJson: group.exercisesJson || "[]",
+        completionCriteria: group.completionCriteria?.trim(),
+        expectedOutput: group.expectedOutput?.trim(),
+        rubric: group.rubric?.trim(),
+        difficulty: group.difficulty || "medium",
+        estimatedHours: group.estimatedHours ?? null,
+        aiPromptHint: group.aiPromptHint?.trim(),
+        orderIndex: index + 1,
+        skills: group.skills.map((skill, skillIndex) => ({
+          id: skill.id,
+          skillId: skill.skillId,
+          skillNameSnapshot: skill.skillNameSnapshot,
+          skillCanonicalKeySnapshot: skill.skillCanonicalKeySnapshot,
+          requirementType: skill.requirementType,
+          weightInNode: skill.weightInNode ?? null,
+          orderIndex: skillIndex + 1,
         })),
       })),
     };
@@ -741,6 +1036,7 @@ const AdminRoadmapTemplateManager = () => {
           return {
             ...current,
             skillBlocks: sorted.map((skill) => buildSkillBlockFromTrackSkill(skill, weight)),
+            nodeGroups: [],
           };
         });
       })
@@ -755,26 +1051,6 @@ const AdminRoadmapTemplateManager = () => {
       return form.skillBlocks[0]?.localId ?? null;
     });
   }, [form.skillBlocks]);
-
-  useEffect(() => {
-    setForm((current) => {
-      const allocation = computeLocalAllocation(current.skillBlocks, current.totalNodeCount);
-      let changed = false;
-      const skillBlocks = current.skillBlocks.map((block) => {
-        const allocatedNodes = allocation.get(block.localId) || 0;
-        if (allocatedNodes <= block.activities.length) return block;
-        changed = true;
-        const activities = [...block.activities];
-        for (let index = activities.length; index < allocatedNodes; index += 1) {
-          activities.push(
-            defaultActivity(block.skillNameSnapshot || "Kỹ năng", index + 1),
-          );
-        }
-        return { ...block, activities };
-      });
-      return changed ? { ...current, skillBlocks } : current;
-    });
-  }, [form.skillBlocks, form.totalNodeCount]);
 
   const openLibrary = () => {
     setViewMode("library");
@@ -833,6 +1109,9 @@ const AdminRoadmapTemplateManager = () => {
       ),
       skillBlocks: (template.skillBlocks || []).map((block) =>
         normalizeBlock(block, template.courses),
+      ),
+      nodeGroups: (template.nodeGroups || []).map((group, index) =>
+        makeNodeGroupFromResponse(group, index + 1),
       ),
     });
     setActiveTab("overview");
@@ -957,7 +1236,7 @@ const AdminRoadmapTemplateManager = () => {
     try {
       const preview = await roadmapTemplateService.previewAllocation(buildPayload());
       setBackendPreview(preview);
-      showSuccess("Đã làm mới xem trước phân bổ", `Đã phân bổ ${preview.allocatedNodeCount} nút học.`);
+      showSuccess("Đã làm mới coverage preview", `Coverage target hiện là ${preview.allocatedNodeCount} node.`);
     } catch (error) {
       showError("Không thể xem trước phân bổ", getApiErrorMessage(error, "Vui lòng kiểm tra các trường bắt buộc."));
     }
@@ -1054,6 +1333,125 @@ const AdminRoadmapTemplateManager = () => {
         ? block.selectedCourseIds.filter((id) => id !== courseId)
         : [...block.selectedCourseIds, courseId],
     });
+  };
+
+  const applyNodeGroups = (groups: RoadmapTemplateNodeGroupResponse[]) => {
+    setForm((current) => {
+      const nodeGroups = groups.map((group, index) => makeNodeGroupFromResponse(group, index + 1));
+      return { ...current, nodeGroups };
+    });
+  };
+
+  const runAutoGroup = async () => {
+    const trackId = toNumberOrNull(form.jobPositionTrackId);
+    if (!trackId) {
+      showError("Chưa chọn track", "Cần chọn nhánh lộ trình trước khi auto-group.");
+      return;
+    }
+    try {
+      const groups = await roadmapTemplateService.autoGroup({
+        jobPositionTrackId: trackId,
+        totalNodeCount: Number(form.totalNodeCount) || 1,
+        skillBlocks: buildPayload().skillBlocks || [],
+      });
+      applyNodeGroups(groups);
+      showSuccess("Đã auto-group skill", `Đã tạo ${groups.length} module học từ skill pool.`);
+    } catch (error) {
+      showError("Không thể auto-group skill", getApiErrorMessage(error, "Vui lòng kiểm tra skill pool và track."));
+    }
+  };
+
+  const toggleModuleSkill = (
+    groupLocalId: string,
+    skill: JobPositionTrackSkill,
+  ) => {
+    setForm((current) => ({
+      ...current,
+      nodeGroups: current.nodeGroups.map((group) => {
+        if (group.localId !== groupLocalId) return group;
+        const exists = group.skills.some((item) => item.skillId === skill.skillId);
+        const next = exists
+          ? group.skills.filter((item) => item.skillId !== skill.skillId)
+          : [...group.skills, makeNodeGroupSkill(skill, group.skills.length + 1)];
+        return {
+          ...group,
+          skills: next.map((item, index) => ({ ...item, orderIndex: index + 1 })),
+        };
+      }),
+    }));
+  };
+
+  const updateNodeGroup = (localId: string, patch: Partial<NodeGroupDraft>) => {
+    setForm((current) => ({
+      ...current,
+      nodeGroups: current.nodeGroups.map((group) =>
+        group.localId === localId ? { ...group, ...patch } : group,
+      ),
+    }));
+  };
+
+  const updateModuleLesson = (group: NodeGroupDraft, lessonIndex: number, patch: Partial<ModuleLessonDraft>) => {
+    const lessons = getModuleLessons(group).map((lesson, index) =>
+      index === lessonIndex ? { ...lesson, ...patch } : lesson,
+    );
+    updateNodeGroup(group.localId, { lessonsJson: serializeModuleLessons(lessons) });
+  };
+
+  const addModuleLesson = (group: NodeGroupDraft) => {
+    const lessons = getModuleLessons(group);
+    updateNodeGroup(group.localId, {
+      lessonsJson: serializeModuleLessons([
+        ...lessons,
+        defaultModuleLesson(lessons.length + 1, group.title || "module"),
+      ]),
+    });
+  };
+
+  const removeModuleLesson = (group: NodeGroupDraft, lessonIndex: number) => {
+    const lessons = getModuleLessons(group).filter((_, index) => index !== lessonIndex);
+    updateNodeGroup(group.localId, { lessonsJson: serializeModuleLessons(lessons) });
+  };
+
+  const updateModuleExercise = (
+    group: NodeGroupDraft,
+    exerciseIndex: number,
+    patch: Partial<ModuleExerciseDraft>,
+  ) => {
+    const exercises = getModuleExercises(group).map((exercise, index) =>
+      index === exerciseIndex ? { ...exercise, ...patch } : exercise,
+    );
+    updateNodeGroup(group.localId, { exercisesJson: serializeModuleExercises(exercises) });
+  };
+
+  const addModuleExercise = (group: NodeGroupDraft) => {
+    const exercises = getModuleExercises(group);
+    updateNodeGroup(group.localId, {
+      exercisesJson: serializeModuleExercises([
+        ...exercises,
+        defaultModuleExercise(exercises.length + 1, group.title || "module"),
+      ]),
+    });
+  };
+
+  const removeModuleExercise = (group: NodeGroupDraft, exerciseIndex: number) => {
+    const exercises = getModuleExercises(group).filter((_, index) => index !== exerciseIndex);
+    updateNodeGroup(group.localId, { exercisesJson: serializeModuleExercises(exercises) });
+  };
+
+  const addNodeGroup = () => {
+    setForm((current) => ({
+      ...current,
+      nodeGroups: [...current.nodeGroups, defaultNodeGroup(current.nodeGroups.length + 1)],
+    }));
+  };
+
+  const removeNodeGroup = (localId: string) => {
+    setForm((current) => ({
+      ...current,
+      nodeGroups: current.nodeGroups
+        .filter((group) => group.localId !== localId)
+        .map((group, index) => ({ ...group, orderIndex: index + 1, nodeKey: group.nodeKey || `module-${index + 1}` })),
+    }));
   };
 
   const renderLibrary = () => (
@@ -1166,21 +1564,21 @@ const AdminRoadmapTemplateManager = () => {
       </label>
       <label>
         <span>Lĩnh vực</span>
-        <select value={form.domainId} onChange={(e) => setForm({ ...form, domainId: e.target.value, jobPositionId: "", jobPositionTrackId: "", skillBlocks: [] })}>
+        <select value={form.domainId} onChange={(e) => setForm({ ...form, domainId: e.target.value, jobPositionId: "", jobPositionTrackId: "", skillBlocks: [], nodeGroups: [] })}>
           <option value="">Chọn lĩnh vực</option>
           {domains.map((domain) => <option key={domain.id} value={domain.id}>{domain.name}</option>)}
         </select>
       </label>
       <label>
         <span>Vị trí công việc</span>
-        <select value={form.jobPositionId} onChange={(e) => setForm({ ...form, jobPositionId: e.target.value, jobPositionTrackId: "", skillBlocks: [] })}>
+        <select value={form.jobPositionId} onChange={(e) => setForm({ ...form, jobPositionId: e.target.value, jobPositionTrackId: "", skillBlocks: [], nodeGroups: [] })}>
           <option value="">Chọn vị trí công việc</option>
           {jobPositions.map((position) => <option key={position.id} value={position.id}>{position.name}</option>)}
         </select>
       </label>
       <label>
         <span>Nhánh lộ trình</span>
-        <select value={form.jobPositionTrackId} onChange={(e) => setForm({ ...form, jobPositionTrackId: e.target.value, skillBlocks: [] })}>
+        <select value={form.jobPositionTrackId} onChange={(e) => setForm({ ...form, jobPositionTrackId: e.target.value, skillBlocks: [], nodeGroups: [] })}>
           <option value="">Chọn nhánh lộ trình</option>
           {tracks.map((track) => <option key={track.id} value={track.id}>{track.name}</option>)}
         </select>
@@ -1205,7 +1603,7 @@ const AdminRoadmapTemplateManager = () => {
         <div className="artm-section-head">
           <div>
             <h3>Ràng buộc sinh lộ trình</h3>
-            <p>Admin chọn bằng form, hệ thống tự đóng gói thành JSON chuẩn cho backend. Ngôn ngữ và bài tập là bắt buộc; thời lượng từng nút phụ thuộc độ khó và độ phức tạp của node.</p>
+            <p>Admin chọn bằng form, hệ thống tự đóng gói dữ liệu chuẩn cho backend. Ngôn ngữ và bài tập là bắt buộc; thời lượng từng nút phụ thuộc độ khó và độ phức tạp của node.</p>
           </div>
         </div>
         <div className="artm-panel-grid artm-panel-grid--tight">
@@ -1242,15 +1640,22 @@ const AdminRoadmapTemplateManager = () => {
     </div>
   );
 
-  const renderAllocation = () => (
-    <div className="artm-table-panel">
-      <div className="artm-section-head">
-        <div>
-          <h3>Trọng số kỹ năng</h3>
-          <p>{trackSkills.length} kỹ năng trong nhánh đã chọn. Nút học được chia theo trọng số và số lượng ghi đè.</p>
+  const renderAllocation = () => {
+    const totalWeight = form.skillBlocks.reduce((sum, block) => sum + (Number(block.weightPercent) || 0), 0);
+    return (
+      <div className="artm-table-panel">
+        <div className="artm-section-head">
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h3>Ưu tiên kỹ năng</h3>
+              <span className={Math.abs(totalWeight - 100) > 0.01 ? "artm-chip-warn" : "artm-chip-ok"}>
+                Tổng: {totalWeight.toFixed(2).replace(/\.00$/, '')}%
+              </span>
+            </div>
+            <p>{trackSkills.length} kỹ năng trong nhánh đã chọn. Trọng số và độ phủ tối thiểu/tối đa chỉ dùng để ưu tiên, không ép mỗi skill sinh node riêng.</p>
+          </div>
+          <button type="button" onClick={addSkillBlock}><Plus size={16} /> Thêm kỹ năng</button>
         </div>
-        <button type="button" onClick={addSkillBlock}><Plus size={16} /> Thêm kỹ năng</button>
-      </div>
       <div className="artm-allocation-list">
         {form.skillBlocks.map((block) => (
           <article className={`artm-allocation-row ${activeSkillBlockId === block.localId ? "artm-allocation-row--active" : ""}`} key={block.localId}>
@@ -1259,14 +1664,195 @@ const AdminRoadmapTemplateManager = () => {
               <span>{block.skillCanonicalKeySnapshot || `kỹ năng:${block.skillId}`}</span>
             </div>
             <label><span>Trọng số %</span><input type="number" min={0} value={block.weightPercent} onChange={(e) => updateBlock(block.localId, { weightPercent: Number(e.target.value) })} /></label>
-            <label><span>Tối thiểu</span><input type="number" min={0} value={block.minNodes ?? ""} onChange={(e) => updateBlock(block.localId, { minNodes: e.target.value ? Number(e.target.value) : null })} /></label>
-            <label><span>Tối đa</span><input type="number" min={0} value={block.maxNodes ?? ""} onChange={(e) => updateBlock(block.localId, { maxNodes: e.target.value ? Number(e.target.value) : null })} /></label>
-            <label><span>Ghi đè</span><input type="number" min={0} value={block.nodeCountOverride ?? ""} onChange={(e) => updateBlock(block.localId, { nodeCountOverride: e.target.value ? Number(e.target.value) : null })} /></label>
-            <button type="button" className="artm-node-chip" onClick={() => setActiveSkillBlockId(block.localId)}>{getAllocatedNodes(block)} nút</button>
+            <label><span>Độ phủ tối thiểu</span><input type="number" min={0} value={block.minNodes ?? ""} onChange={(e) => updateBlock(block.localId, { minNodes: e.target.value ? Number(e.target.value) : null })} /></label>
+            <label><span>Độ phủ tối đa</span><input type="number" min={0} value={block.maxNodes ?? ""} onChange={(e) => updateBlock(block.localId, { maxNodes: e.target.value ? Number(e.target.value) : null })} /></label>
+            <label><span>Ghi đè độ phủ</span><input type="number" min={0} value={block.nodeCountOverride ?? ""} onChange={(e) => updateBlock(block.localId, { nodeCountOverride: e.target.value ? Number(e.target.value) : null })} /></label>
+            <button type="button" className="artm-node-chip" onClick={() => setActiveSkillBlockId(block.localId)}>Đã gán vào {getAllocatedNodes(block)} module</button>
             <button type="button" title="Xóa kỹ năng" onClick={() => removeSkillBlock(block.localId)}><Trash2 size={16} /></button>
           </article>
         ))}
       </div>
+    </div>
+    );
+  };
+
+  const renderGrouping = () => {
+    const unassignedSkills = trackSkills.filter((skill) => !assignedSkillIds.has(skill.skillId));
+    return (
+      <div className="artm-publish-grid">
+        <section className="artm-table-panel">
+          <div className="artm-section-head">
+            <div>
+              <h3>Skill chưa gán</h3>
+              <p>Skill pool chỉ là nguồn kỹ năng. Hãy gán skill vào module học, không tạo 1 skill = 1 node.</p>
+            </div>
+            <button type="button" onClick={() => void runAutoGroup()}><RefreshCw size={16} /> Tự gom module</button>
+          </div>
+          <div className="artm-preview-list">
+            {unassignedSkills.length === 0 ? (
+              <div className="artm-ready"><CheckCircle2 size={18} /> Tất cả skill đã được gán vào module.</div>
+            ) : unassignedSkills.map((skill) => (
+              <div className="artm-preview-row" key={skill.skillId}>
+                <span>{skill.skillName}</span>
+                <strong>{skill.requirementType}</strong>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="artm-table-panel">
+          <div className="artm-section-head">
+            <div>
+              <h3>Module học của lộ trình</h3>
+              <p>{moduleItems.length} module. Mỗi module nên có 2-5 kỹ năng liên quan.</p>
+            </div>
+            <button
+              type="button"
+              onClick={addNodeGroup}
+            >
+              <Plus size={16} /> Thêm module
+            </button>
+          </div>
+          <div className="artm-skill-stack">
+            {moduleItems.map((item, moduleIndex) => (
+              <article className="artm-activity-card" key={item.group.localId}>
+                <div className="artm-activity-head">
+                  <div>
+                    <strong>Node {moduleIndex + 1}: {item.group.title}</strong>
+                    <span>Đang chứa {item.skills.length} kỹ năng</span>
+                  </div>
+                  <button type="button" title="Xóa module" onClick={() => removeNodeGroup(item.group.localId)}>
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+                <div className="artm-panel-grid">
+                  <label className="artm-wide"><span>Tên module</span><input value={item.group.title} onChange={(e) => updateNodeGroup(item.group.localId, { title: e.target.value })} /></label>
+                  <label className="artm-wide"><span>Mô tả</span><textarea rows={2} value={item.group.description || ""} onChange={(e) => updateNodeGroup(item.group.localId, { description: e.target.value })} /></label>
+                  <label><span>Độ khó</span><input value={item.group.difficulty || "medium"} onChange={(e) => updateNodeGroup(item.group.localId, { difficulty: e.target.value })} /></label>
+                  <label><span>Giờ học</span><input type="number" min={0} value={item.group.estimatedHours ?? ""} onChange={(e) => updateNodeGroup(item.group.localId, { estimatedHours: e.target.value ? Number(e.target.value) : null })} /></label>
+                </div>
+                <div className="artm-panel-grid">
+                  {trackSkills.map((skill) => {
+                    const checked = item.skills.some((moduleSkill) => moduleSkill.skillId === skill.skillId);
+                    return (
+                      <label key={skill.skillId}>
+                        <span>{skill.skillName}</span>
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggleModuleSkill(item.group.localId, skill)}
+                        />
+                      </label>
+                    );
+                  })}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
+    );
+  };
+
+  const renderNodeGroupActivities = () => (
+    <div className="artm-skill-stack">
+      {form.nodeGroups.length === 0 ? (
+        <section className="artm-table-panel">
+          <div className="artm-ready"><AlertTriangle size={18} /> Chưa có module. Hãy auto-group hoặc thêm module ở tab gom kỹ năng.</div>
+        </section>
+      ) : form.nodeGroups.map((group, index) => {
+        const lessons = getModuleLessons(group);
+        const exercises = getModuleExercises(group);
+        return (
+          <section className="artm-skill-card" key={group.localId}>
+            <div className="artm-section-head">
+              <div>
+                <h3>Module {index + 1}: {group.title}</h3>
+                <p>Bài học, bài tập và tiêu chí hoàn thành thuộc module này, không thuộc từng skill riêng lẻ.</p>
+              </div>
+              <button type="button" onClick={() => setActiveTab("grouping")}>Chỉnh kỹ năng</button>
+            </div>
+            <div className="artm-course-selected-strip">
+              {group.skills.map((skill) => (
+                <span key={skill.skillId}>{skill.skillNameSnapshot || `Skill ${skill.skillId}`} · {skill.requirementType || "REQUIRED"}</span>
+              ))}
+            </div>
+            <div className="artm-activity-form">
+              <label className="artm-wide"><span>Tên module</span><input value={group.title} onChange={(e) => updateNodeGroup(group.localId, { title: e.target.value })} /></label>
+              <label className="artm-wide"><span>Mô tả module</span><textarea rows={2} value={group.description || ""} onChange={(e) => updateNodeGroup(group.localId, { description: e.target.value })} /></label>
+              <label className="artm-wide"><span>Mục tiêu học tập tổng quát</span><textarea rows={3} value={group.learningObjectives || ""} onChange={(e) => updateNodeGroup(group.localId, { learningObjectives: e.target.value })} /></label>
+              <label><span>Độ khó</span><input value={group.difficulty || "medium"} onChange={(e) => updateNodeGroup(group.localId, { difficulty: e.target.value })} /></label>
+              <label><span>Số giờ học ước tính</span><input type="number" min={0} value={group.estimatedHours ?? ""} onChange={(e) => updateNodeGroup(group.localId, { estimatedHours: e.target.value ? Number(e.target.value) : null })} /></label>
+            </div>
+            <div className="artm-module-editor">
+              <div className="artm-section-head">
+                <div>
+                  <h4>Bài học trong module</h4>
+                  <p>Nhập từng bài học cụ thể để dạy phối hợp các kỹ năng đã gán vào module.</p>
+                </div>
+                <button type="button" onClick={() => addModuleLesson(group)}><Plus size={16} /> Thêm bài học</button>
+              </div>
+              {lessons.length === 0 ? (
+                <div className="artm-ready"><AlertTriangle size={16} /> Chưa có bài học. Hãy thêm ít nhất một bài học cho module.</div>
+              ) : lessons.map((lesson, lessonIndex) => (
+                <article className="artm-activity-card" key={`${group.localId}-lesson-${lessonIndex}`}>
+                  <div className="artm-activity-head">
+                    <div>
+                      <strong>Bài học {lessonIndex + 1}</strong>
+                      <span>{lesson.title || "Chưa đặt tên"}</span>
+                    </div>
+                    <button type="button" title="Xóa bài học" onClick={() => removeModuleLesson(group, lessonIndex)}><Trash2 size={16} /></button>
+                  </div>
+                  <div className="artm-activity-form">
+                    <label className="artm-wide"><span>Tên bài học</span><input value={lesson.title} onChange={(e) => updateModuleLesson(group, lessonIndex, { title: e.target.value })} /></label>
+                    <label className="artm-wide"><span>Nội dung bài học</span><textarea rows={2} value={lesson.description} onChange={(e) => updateModuleLesson(group, lessonIndex, { description: e.target.value })} /></label>
+                    <label className="artm-wide"><span>Mục tiêu của bài học</span><textarea rows={2} value={lesson.learningObjective} onChange={(e) => updateModuleLesson(group, lessonIndex, { learningObjective: e.target.value })} /></label>
+                    <label><span>Thời lượng phút</span><input type="number" min={0} value={lesson.estimatedMinutes ?? ""} onChange={(e) => updateModuleLesson(group, lessonIndex, { estimatedMinutes: e.target.value ? Number(e.target.value) : null })} /></label>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="artm-module-editor">
+              <div className="artm-section-head">
+                <div>
+                  <h4>Bài tập bắt buộc</h4>
+                  <p>Bài tập phải yêu cầu người học vận dụng nhiều skill trong module, không kiểm tra từng skill rời rạc.</p>
+                </div>
+                <button type="button" onClick={() => addModuleExercise(group)}><Plus size={16} /> Thêm bài tập</button>
+              </div>
+              {exercises.length === 0 ? (
+                <div className="artm-ready"><AlertTriangle size={16} /> Chưa có bài tập. Module cần bài tập hoặc minh chứng để đánh giá.</div>
+              ) : exercises.map((exercise, exerciseIndex) => (
+                <article className="artm-activity-card" key={`${group.localId}-exercise-${exerciseIndex}`}>
+                  <div className="artm-activity-head">
+                    <div>
+                      <strong>Bài tập {exerciseIndex + 1}</strong>
+                      <span>{exercise.title || "Chưa đặt tên"}</span>
+                    </div>
+                    <button type="button" title="Xóa bài tập" onClick={() => removeModuleExercise(group, exerciseIndex)}><Trash2 size={16} /></button>
+                  </div>
+                  <div className="artm-activity-form">
+                    <label className="artm-wide"><span>Tên bài tập</span><input value={exercise.title} onChange={(e) => updateModuleExercise(group, exerciseIndex, { title: e.target.value })} /></label>
+                    <label className="artm-wide"><span>Yêu cầu thực hiện</span><textarea rows={2} value={exercise.instruction} onChange={(e) => updateModuleExercise(group, exerciseIndex, { instruction: e.target.value })} /></label>
+                    <label className="artm-wide"><span>Đầu ra cần nộp</span><textarea rows={2} value={exercise.expectedOutput} onChange={(e) => updateModuleExercise(group, exerciseIndex, { expectedOutput: e.target.value })} /></label>
+                    <label className="artm-wide"><span>Rubric chấm điểm</span><textarea rows={2} value={exercise.rubric} onChange={(e) => updateModuleExercise(group, exerciseIndex, { rubric: e.target.value })} /></label>
+                    <label><span>Bắt buộc</span><select value={exercise.required ? "true" : "false"} onChange={(e) => updateModuleExercise(group, exerciseIndex, { required: e.target.value === "true" })}>
+                      <option value="true">Bắt buộc</option>
+                      <option value="false">Khuyến nghị</option>
+                    </select></label>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="artm-activity-form">
+              <label className="artm-wide"><span>Đầu ra mong đợi của module</span><textarea rows={3} value={group.expectedOutput || ""} onChange={(e) => updateNodeGroup(group.localId, { expectedOutput: e.target.value })} /></label>
+              <label className="artm-wide"><span>Tiêu chí hoàn thành module</span><textarea rows={3} value={group.completionCriteria || ""} onChange={(e) => updateNodeGroup(group.localId, { completionCriteria: e.target.value })} /></label>
+              <label className="artm-wide"><span>Rubric tổng của module</span><textarea rows={3} value={group.rubric || ""} onChange={(e) => updateNodeGroup(group.localId, { rubric: e.target.value })} /></label>
+              <label className="artm-wide"><span>Gợi ý cho AI khi sinh nội dung</span><textarea rows={2} value={group.aiPromptHint || ""} onChange={(e) => updateNodeGroup(group.localId, { aiPromptHint: e.target.value })} /></label>
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 
@@ -1277,7 +1863,7 @@ const AdminRoadmapTemplateManager = () => {
           <div className="artm-section-head">
             <div>
               <h3>{block.skillNameSnapshot}</h3>
-              <p>{getAllocatedNodes(block)} nút học dự kiến. Mỗi node cần một lesson blueprint riêng để runtime không phải lặp lại nội dung.</p>
+              <p>Module blueprint cho skill pool này. Mỗi module có thể chứa nhiều skill liên quan.</p>
             </div>
             <button type="button" onClick={() => addActivity(block)}><Plus size={16} /> Thêm bài học</button>
           </div>
@@ -1290,7 +1876,7 @@ const AdminRoadmapTemplateManager = () => {
             <article className="artm-activity-card" key={`${block.localId}-${index}`}>
               <div className="artm-activity-head">
                 <div>
-                  <strong>Lesson {index + 1} / {getAllocatedNodes(block)} node</strong>
+                  <strong>Module {index + 1}</strong>
                   <span>{block.skillNameSnapshot}</span>
                 </div>
                 <button type="button" title="Xóa bài học" onClick={() => removeActivity(block, index)}><Trash2 size={16} /></button>
@@ -1426,7 +2012,7 @@ const AdminRoadmapTemplateManager = () => {
       <section className="artm-table-panel">
         <div className="artm-section-head">
           <div>
-            <h3>Xem trước phân bổ</h3>
+            <h3>Coverage target</h3>
             <p>{backendPreview ? "Kết quả từ máy chủ" : "Tính nhanh tại trình duyệt"}</p>
           </div>
           <button type="button" onClick={() => void runPreview()}><SlidersHorizontal size={16} /> Xem trước từ máy chủ</button>
@@ -1437,7 +2023,7 @@ const AdminRoadmapTemplateManager = () => {
             return (
               <div className="artm-preview-row" key={block.localId}>
                 <span>{block.skillNameSnapshot}</span>
-                <strong>{backendItem?.allocatedNodes ?? getAllocatedNodes(block)} nút</strong>
+                <strong>Đã gán vào {backendItem?.allocatedNodes ?? getAllocatedNodes(block)} module</strong>
               </div>
             );
           })}
@@ -1452,6 +2038,7 @@ const AdminRoadmapTemplateManager = () => {
           <button type="button" onClick={() => void runValidation()}><ClipboardCheck size={16} /> Kiểm tra</button>
         </div>
         <div className="artm-error-list">
+          {coverageWarnings.map((warning) => <div key={warning}>{warning}</div>)}
           {readinessErrors.length === 0 ? (
             <div className="artm-ready"><CheckCircle2 size={18} /> Cấu trúc mẫu đã sẵn sàng.</div>
           ) : readinessErrors.map((error) => <div key={error}>{error}</div>)}
@@ -1483,7 +2070,7 @@ const AdminRoadmapTemplateManager = () => {
       <section className={`artm-builder-shell ${shouldShowSkillSelector ? "" : "artm-builder-shell--single"}`}>
         <main className="artm-builder-main">
           <nav className="artm-tabs">
-            {builderTabs.map((tab) => (
+            {moduleBuilderTabs.map((tab) => (
               <button key={tab.key} type="button" className={activeTab === tab.key ? "active" : ""} onClick={() => setActiveTab(tab.key)}>
                 {tab.label}
               </button>
@@ -1492,7 +2079,8 @@ const AdminRoadmapTemplateManager = () => {
           <section className="artm-workspace">
             {activeTab === "overview" && renderOverview()}
             {activeTab === "allocation" && renderAllocation()}
-            {activeTab === "activities" && renderActivities()}
+            {activeTab === "grouping" && renderGrouping()}
+            {activeTab === "activities" && renderNodeGroupActivities()}
             {activeTab === "courses" && renderCourses()}
             {activeTab === "preview" && renderPreview()}
           </section>
