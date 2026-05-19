@@ -279,12 +279,21 @@ const MentorVerificationAdminTab: React.FC<MentorVerificationAdminTabProps> = ({
 
   const isImageUrl = (url: string | undefined) => {
     if (!url) return false;
+    if (isPdfUrl(url)) return false; // Không coi PDF là ảnh dù link từ Cloudinary
     return /\.(jpeg|jpg|gif|png|webp|svg)($|\?)/i.test(url) || url.includes("cloudinary.com");
   };
 
   const isPdfUrl = (url: string | undefined) => {
     if (!url) return false;
     return /\.pdf($|\?)/i.test(url);
+  };
+
+  const getPdfPreviewAsImage = (url: string) => {
+    if (url.includes('cloudinary.com')) {
+      // Ép kiểu render thành ảnh (JPG) để lách luật 401 của Cloudinary
+      return url.replace(/\.pdf($|\?)/i, '.jpg$1');
+    }
+    return url;
   };
 
   return (
@@ -517,7 +526,20 @@ const MentorVerificationAdminTab: React.FC<MentorVerificationAdminTabProps> = ({
                         </div>
                       )}
                       {isPdfUrl(ev.evidenceUrl) && (
-                        <iframe src={ev.evidenceUrl} className="admin-pdf-preview" title="PDF Preview"></iframe>
+                        <div className="admin-pdf-image-fallback">
+                          <img 
+                            src={getPdfPreviewAsImage(ev.evidenceUrl)} 
+                            alt="PDF Preview (Trang 1)" 
+                            className="admin-pdf-preview" 
+                            style={{objectFit: 'contain', background: '#0f172a'}} 
+                          />
+                          <p style={{textAlign: 'center', padding: '1rem', color: '#64748b', fontSize: '0.9rem'}}>
+                            (Hệ thống tự động trích xuất Trang 1 làm bản xem trước vì Cloudinary chưa kịp cập nhật quyền truy cập PDF)<br/>
+                            <a href={ev.evidenceUrl} target="_blank" rel="noopener noreferrer" style={{color: '#38bdf8', marginTop: '0.5rem', display: 'inline-block'}}>
+                              Mở File Gốc (Có thể mất 1 tiếng để Cloudinary mở khóa hoàn toàn)
+                            </a>
+                          </p>
+                        </div>
                       )}
                     </div>
                   ))}
