@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Client, IMessage } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 import {
   Send,
   Smile,
@@ -15,6 +17,7 @@ import {
 } from '../../services/preChatService';
 import { API_BASE_URL } from '../../services/axiosInstance';
 import { showAppError } from '../../context/ToastContext';
+import { getAccessToken } from '../../utils/authStorage';
 import EmojiPicker from './EmojiPicker';
 import GifPicker from './GifPicker';
 import './MentorChatWindow.css';
@@ -60,7 +63,9 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
   const [showGifPicker, setShowGifPicker] = useState(false);
   const [resolvedCounterpartName, setResolvedCounterpartName] = useState(counterpartName);
   const [resolvedCounterpartAvatar, setResolvedCounterpartAvatar] = useState(counterpartAvatar || '');
+  const [localChatEnabled, setLocalChatEnabled] = useState(chatEnabled);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const stompClientRef = useRef<Client | null>(null);
 
   const sortMessagesByTimeAsc = (items: Message[]): Message[] => {
     return [...items].sort(
@@ -88,11 +93,85 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
   }, [counterpartAvatar, counterpartName, isMyRoleMentor]);
 
   useEffect(() => {
+    setLocalChatEnabled(chatEnabled);
+  }, [chatEnabled]);
+
+  useEffect(() => {
     void loadMessages();
     markRead(bookingId).catch((err) =>
       console.error('Mark read failed:', err),
     );
+    setupWebSocket();
+
+    return () => {
+      if (stompClientRef.current) {
+        stompClientRef.current.deactivate();
+      }
+    };
   }, [bookingId]);
+
+  const setupWebSocket = () => {
+    if (stompClientRef.current) {
+      stompClientRef.current.deactivate();
+    }
+
+    const socketUrl = API_BASE_URL.replace(/\/api\/?$/i, '/ws');
+    const token = getAccessToken();
+    const urlWithToken = token ? `${socketUrl}?token=${encodeURIComponent(token)}` : socketUrl;
+    const socket = new SockJS(urlWithToken);
+    
+    const client = new Client({
+      webSocketFactory: () => socket as any,
+      connectHeaders: token ? {
+        Authorization: `Bearer ${token}`
+      } : {},
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    client.onConnect = () => {
+      console.log('STOMP connected for mentor prechat');
+      client.subscribe('/user/queue/prechat', (message: IMessage) => {
+        try {
+          const payload: PreChatMessageResponse = JSON.parse(message.body);
+          if (payload.bookingId === bookingId) {
+            const newMsg: Message = {
+              id: payload.id,
+              senderId: payload.senderId,
+              content: payload.content,
+              timestamp: payload.createdAt,
+            };
+
+            setMessages((prev) => {
+              const isDuplicate = prev.some(
+                (m) =>
+                  m.id === newMsg.id ||
+                  (m.senderId === newMsg.senderId &&
+                    m.content === newMsg.content &&
+                    Math.abs(new Date(m.timestamp).getTime() - new Date(newMsg.timestamp).getTime()) < 1000)
+              );
+              if (isDuplicate) return prev;
+              return sortMessagesByTimeAsc([...prev, newMsg]);
+            });
+
+            if (payload.chatEnabled !== undefined) {
+              setLocalChatEnabled(payload.chatEnabled);
+            }
+          }
+        } catch (err) {
+          console.error('Failed to parse incoming prechat message:', err);
+        }
+      });
+    };
+
+    client.onStompError = (frame) => {
+      console.error('STOMP error:', frame);
+    };
+
+    client.activate();
+    stompClientRef.current = client;
+  };
 
   const loadMessages = async () => {
     try {
@@ -116,7 +195,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (!chatEnabled || !inputText.trim() || isSending) return;
+    if (!localChatEnabled || !inputText.trim() || isSending) return;
 
     const messageText = inputText.trim();
     setInputText('');
@@ -130,7 +209,11 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
         content: response.content,
         timestamp: response.createdAt,
       };
-      setMessages((prev) => sortMessagesByTimeAsc([...prev, newMessage]));
+      setMessages((prev) => {
+        const isDuplicate = prev.some((m) => m.id === newMessage.id);
+        if (isDuplicate) return prev;
+        return sortMessagesByTimeAsc([...prev, newMessage]);
+      });
     } catch (error) {
       console.error('Failed to send message:', error);
       showAppError('Gửi tin nhắn thất bại', 'Không thể gửi tin nhắn. Vui lòng thử lại.');
@@ -153,7 +236,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
 
   const handleGifSelect = async (gifUrl: string) => {
     setShowGifPicker(false);
-    if (!chatEnabled) return;
+    if (!localChatEnabled) return;
 
     setIsSending(true);
     try {
@@ -164,7 +247,11 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
         content: response.content,
         timestamp: response.createdAt,
       };
-      setMessages((prev) => sortMessagesByTimeAsc([...prev, newMessage]));
+      setMessages((prev) => {
+        const isDuplicate = prev.some((m) => m.id === newMessage.id);
+        if (isDuplicate) return prev;
+        return sortMessagesByTimeAsc([...prev, newMessage]);
+      });
     } catch (error) {
       console.error('Failed to send GIF:', error);
       showAppError('Gửi GIF thất bại', 'Không thể gửi GIF. Vui lòng thử lại.');
@@ -245,7 +332,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
       <div className="mcw-msg__time" style={{ padding: '0 16px 8px', display: 'block' }}>
         {bookingStatus ? `Booking ${bookingStatus}` : `Mentor booking #${bookingId}`}
         {bookingWindowLabel ? ` • ${bookingWindowLabel}` : ''}
-        {!chatEnabled ? ' • Chat đã đóng' : ''}
+        {!localChatEnabled ? ' • Chat đã đóng' : ''}
       </div>
 
       <div className="mcw-messages">
@@ -253,7 +340,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
           <div className="mcw-empty">
             <p className="mcw-empty__title">Chưa có tin nhắn nào</p>
             <p className="mcw-empty__desc">
-              {chatEnabled
+              {localChatEnabled
                 ? 'Hãy bắt đầu cuộc trò chuyện cho booking này ngay bên dưới.'
                 : 'Booking này đã đóng chat.'}
             </p>
@@ -308,7 +395,7 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
             setShowGifPicker(false);
           }}
           title="Biểu tượng cảm xúc"
-          disabled={!chatEnabled}
+          disabled={!localChatEnabled}
         >
           <Smile size={20} />
         </button>
@@ -320,25 +407,25 @@ const MentorChatWindow: React.FC<MentorChatWindowProps> = ({
             setShowEmojiPicker(false);
           }}
           title="GIF"
-          disabled={!chatEnabled}
+          disabled={!localChatEnabled}
         >
           <ImageIcon size={20} />
         </button>
 
         <textarea
           className="mcw-input__textarea"
-          placeholder={chatEnabled ? 'Nhập tin nhắn...' : 'Session chat đã đóng'}
+          placeholder={localChatEnabled ? 'Nhập tin nhắn...' : 'Session chat đã đóng'}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyPress={handleKeyPress}
           rows={1}
-          disabled={!chatEnabled}
+          disabled={!localChatEnabled}
         />
 
         <button
           className="mcw-send-btn"
           onClick={() => void handleSendMessage()}
-          disabled={!chatEnabled || isSending || !inputText.trim()}
+          disabled={!localChatEnabled || isSending || !inputText.trim()}
           title="Gửi"
         >
           <Send size={18} />

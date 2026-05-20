@@ -61,6 +61,7 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
 
   // Request notification permission
   useEffect(() => {
+    console.warn("FamilyChatWindow is deprecated and marked as legacy.");
     if ('Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission();
     }
@@ -313,6 +314,22 @@ const FamilyChatWindow: React.FC<FamilyChatWindowProps> = ({
 
   return (
     <div className="family-chat-window">
+      {/* Legacy Warning Banner */}
+      <div style={{
+        background: '#7f1d1d',
+        color: '#fca5a5',
+        padding: '8px 16px',
+        fontSize: '13px',
+        textAlign: 'center',
+        borderBottom: '1px solid #991b1b',
+        fontWeight: 'bold',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px'
+      }}>
+        <span>⚠️ Cuộc trò chuyện này thuộc tính năng cũ (Legacy) và không còn được hỗ trợ chính thức.</span>
+      </div>
       {/* Header */}
       <div className="family-chat-header">
         <button className="back-btn" onClick={onBack}>

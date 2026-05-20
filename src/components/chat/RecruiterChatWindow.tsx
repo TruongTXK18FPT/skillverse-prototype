@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Client, IMessage } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 import {
   ArrowLeft,
   Send,
@@ -26,6 +28,7 @@ import {
 } from '../../data/portfolioDTOs';
 import { useToast } from '../../hooks/useToast';
 import { API_BASE_URL } from '../../services/axiosInstance';
+import { getAccessToken } from '../../utils/authStorage';
 import EmojiPicker from './EmojiPicker';
 import GifPicker from './GifPicker';
 import './RecruiterChatWindow.css';
@@ -58,6 +61,7 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
   const [counterpartAvatar, setCounterpartAvatar] = useState('');
   const [counterpartSubtitle, setCounterpartSubtitle] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const stompClientRef = useRef<Client | null>(null);
 
   const isRecruiter = currentUserId === sessionState.recruiterId;
   const chatBlocked = sessionState.isChatAvailable === false;
@@ -66,6 +70,74 @@ const RecruiterChatWindow: React.FC<RecruiterChatWindowProps> = ({
   useEffect(() => {
     setSessionState(session);
   }, [session]);
+
+  const setupWebSocket = useCallback(() => {
+    if (stompClientRef.current) {
+      stompClientRef.current.deactivate();
+    }
+
+    const socketUrl = API_BASE_URL.replace(/\/api\/?$/i, '/ws');
+    const token = getAccessToken();
+    const urlWithToken = token ? `${socketUrl}?token=${encodeURIComponent(token)}` : socketUrl;
+    const socket = new SockJS(urlWithToken);
+
+    const client = new Client({
+      webSocketFactory: () => socket as any,
+      connectHeaders: token ? {
+        Authorization: `Bearer ${token}`
+      } : {},
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    client.onConnect = () => {
+      console.log('STOMP connected for recruitment chat');
+      client.subscribe(`/topic/recruitment.${sessionState.id}`, (message: IMessage) => {
+        try {
+          const payload: RecruitmentMessageResponse = JSON.parse(message.body);
+          if (payload.sessionId === sessionState.id) {
+            setMessages((prev) => {
+              const isDuplicate = prev.some(
+                (m) =>
+                  m.id === payload.id ||
+                  (m.senderId === payload.senderId &&
+                    m.content === payload.content &&
+                    Math.abs(new Date(m.createdAt).getTime() - new Date(payload.createdAt).getTime()) < 1000)
+              );
+              if (isDuplicate) return prev;
+              return [...prev, payload];
+            });
+
+            if (payload.senderId !== currentUserId) {
+              recruitmentChatService.markMessagesAsRead(sessionState.id).catch(console.error);
+            }
+
+            void refreshSession();
+          }
+        } catch (err) {
+          console.error('Failed to parse incoming recruitment message:', err);
+        }
+      });
+    };
+
+    client.onStompError = (frame) => {
+      console.error('STOMP error in recruitment chat:', frame);
+    };
+
+    client.activate();
+    stompClientRef.current = client;
+  }, [sessionState.id, currentUserId, refreshSession]);
+
+  useEffect(() => {
+    setupWebSocket();
+
+    return () => {
+      if (stompClientRef.current) {
+        stompClientRef.current.deactivate();
+      }
+    };
+  }, [setupWebSocket]);
 
   const resolveAvatarUrl = (raw?: string): string => {
     if (!raw) return '/images/meowl.jpg';
