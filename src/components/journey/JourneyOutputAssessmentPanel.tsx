@@ -11,7 +11,7 @@
  * Mirror pattern từ NodeEvidenceSubmissionPanel, trim cho journey-level.
  */
 import { type FC, type FormEvent, useCallback, useEffect, useState } from 'react';
-import { AlertCircle, CheckCircle, Clock, FileText, Link2, Send, XCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle, Clock, FileText, Link2, Send, XCircle, Cpu } from 'lucide-react';
 import {
   getLatestOutputAssessment,
   submitOutputAssessment,
@@ -42,13 +42,44 @@ const statusBadge = (status: OutputAssessmentStatus) => {
           <XCircle size={14} /> Bị từ chối
         </span>
       );
-    case 'PENDING':
     default:
       return (
         <span className="joap-badge joap-badge--pending">
           <Clock size={14} /> Chờ mentor đánh giá
         </span>
       );
+  }
+};
+
+const aiStatusBadge = (status?: string) => {
+  if (!status) return null;
+  switch (status) {
+    case 'PASSED':
+      return (
+        <span className="joap-badge joap-badge--ai-passed">
+          <Cpu size={14} /> Hệ thống: Đạt
+        </span>
+      );
+    case 'FAILED':
+      return (
+        <span className="joap-badge joap-badge--ai-failed">
+          <Cpu size={14} /> Hệ thống: Cần nộp lại
+        </span>
+      );
+    case 'NEEDS_ADMIN_REVIEW':
+      return (
+        <span className="joap-badge joap-badge--ai-needs-admin">
+          <Cpu size={14} /> Hệ thống: Đang chờ đánh giá
+        </span>
+      );
+    case 'PENDING':
+      return (
+        <span className="joap-badge joap-badge--ai-pending">
+          <Cpu size={14} /> Hệ thống: Đang chờ đánh giá
+        </span>
+      );
+    default:
+      return null;
   }
 };
 
@@ -155,7 +186,10 @@ const JourneyOutputAssessmentPanel: FC<JourneyOutputAssessmentPanelProps> = ({
           <FileText size={18} />
           <h3>Output Assessment — Kết quả đầu ra journey</h3>
         </div>
-        {current && statusBadge(current.assessmentStatus)}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          {current?.latestAiReviewStatus && aiStatusBadge(current.latestAiReviewStatus)}
+          {current && statusBadge(current.assessmentStatus)}
+        </div>
       </div>
 
       {current?.feedback && (

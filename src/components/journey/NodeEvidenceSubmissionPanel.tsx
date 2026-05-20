@@ -8,8 +8,17 @@
  * Panel chỉ hiển thị status preview + nút trigger mở modal.
  * Form logic nằm trong NodeEvidenceSubmissionModal.
  */
-import { type FC, useCallback, useEffect, useState } from 'react';
-import { AlertCircle, CheckCircle, Clock, Send, Shield, UserCheck, XCircle } from 'lucide-react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
+import {
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Send,
+  Shield,
+  UserCheck,
+  XCircle,
+  Cpu,
+} from 'lucide-react';
 import {
   getNodeEvidence,
   selfConfirmNode,
@@ -67,6 +76,38 @@ const statusBadge = (status: NodeVerificationStatus) => {
   }
 };
 
+const aiStatusBadge = (status?: string) => {
+  if (!status) return null;
+  switch (status) {
+    case 'PASSED':
+      return (
+        <span className="nesp-badge nesp-badge--ai-passed">
+          <Cpu size={14} /> Hệ thống: Đạt
+        </span>
+      );
+    case 'FAILED':
+      return (
+        <span className="nesp-badge nesp-badge--ai-failed">
+          <Cpu size={14} /> Hệ thống: Cần nộp lại
+        </span>
+      );
+    case 'NEEDS_ADMIN_REVIEW':
+      return (
+        <span className="nesp-badge nesp-badge--ai-needs-admin">
+          <Cpu size={14} /> Hệ thống: Đang chờ đánh giá
+        </span>
+      );
+    case 'PENDING':
+      return (
+        <span className="nesp-badge nesp-badge--ai-pending">
+          <Cpu size={14} /> Hệ thống: Đang chờ đánh giá
+        </span>
+      );
+    default:
+      return null;
+  }
+};
+
 const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
   journeyId,
   nodeId,
@@ -102,7 +143,13 @@ const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
   const isNodeAlreadyCompleted =
     current?.learnerMarkedComplete === true ||
     current?.roadmapProgressStatus === 'COMPLETED';
+  const isAiReviewBlocking =
+    !current?.hasMentorCoverage &&
+    current?.latestAiReviewStatus !== 'PASSED' &&
+    current?.verificationStatus !== 'VERIFIED';
+
   const canSelfConfirm =
+    !isAiReviewBlocking &&
     !isLocked &&
     !isNodeAlreadyCompleted &&
     (current?.submissionStatus === 'SUBMITTED' || current?.submissionStatus === 'RESUBMITTED') &&
@@ -155,6 +202,7 @@ const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
           <h3>Minh chứng node</h3>
         </div>
         <div className="nesp-header__actions">
+          {current?.latestAiReviewStatus && aiStatusBadge(current.latestAiReviewStatus)}
           {current && statusBadge(current.verificationStatus)}
           {!isLocked && (
             <button

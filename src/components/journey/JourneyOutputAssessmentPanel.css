@@ -190,3 +190,24 @@
 .joap-btn--primary:hover:not(:disabled) {
   background: #4f46e5;
 }
+
+/* AI Review Badges */
+.joap-badge--ai-passed {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.joap-badge--ai-failed {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.joap-badge--ai-needs-admin {
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+.joap-badge--ai-pending {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}

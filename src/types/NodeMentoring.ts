@@ -106,6 +106,8 @@ export interface NodeEvidenceRecordResponse {
   hasMentorCoverage?: boolean;
   latestReview?: NodeReviewResponse;
   latestVerification?: NodeVerificationResponseDto;
+  latestAiReviewId?: number;
+  latestAiReviewStatus?: 'PENDING' | 'PASSED' | 'FAILED' | 'NEEDS_ADMIN_REVIEW';
 }
 
 // ==================== Review / Verify (mentor) ====================
@@ -176,6 +178,8 @@ export interface JourneyOutputAssessmentResponse {
   assessmentStatus: OutputAssessmentStatus;
   submittedAt: string;
   assessedAt?: string;
+  latestAiReviewId?: number;
+  latestAiReviewStatus?: 'PENDING' | 'PASSED' | 'FAILED' | 'NEEDS_ADMIN_REVIEW';
 }
 
 // ==================== V3 Phase 2: ROADMAP_MENTORING ====================

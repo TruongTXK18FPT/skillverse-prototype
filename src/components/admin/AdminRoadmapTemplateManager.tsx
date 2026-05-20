@@ -49,6 +49,7 @@ import type {
   RoadmapTemplateStatus,
   RoadmapTemplateValidationResponse,
 } from "../../types/roadmapTemplate";
+import { ROADMAP_EVIDENCE_AI_REVIEW_DEFAULTS, DEFAULT_AI_EVIDENCE_PROMPT } from "../../types/roadmapEvidenceReviewDefaults";
 import "./AdminRoadmapTemplateManager.css";
 
 type ViewMode = "library" | "builder";
@@ -115,6 +116,14 @@ type TemplateForm = {
   exerciseRequirement: string;
   topicGenerationType: string;
   timeBudgetPolicy: string;
+  aiEvidenceReviewEnabled: boolean;
+  aiAutoPassEnabled: boolean;
+  aiAutoPassMinScorePercent: number;
+  aiAutoPassMinConfidence: number;
+  aiManualReviewBelowConfidence: number;
+  aiEvidencePrompt: string;
+  finalAssignmentInstructions: string;
+  finalAssignmentRubric: string;
   skillBlocks: SkillBlockDraft[];
   nodeGroups: NodeGroupDraft[];
 };
@@ -234,6 +243,14 @@ const emptyForm = (): TemplateForm => ({
   exerciseRequirement: "REQUIRED_EVERY_NODE",
   topicGenerationType: "LEVEL_BAND_AND_ASSESSMENT_GAP",
   timeBudgetPolicy: "DIFFICULTY_AND_COMPLEXITY",
+  aiEvidenceReviewEnabled: true,
+  aiAutoPassEnabled: false,
+  aiAutoPassMinScorePercent: ROADMAP_EVIDENCE_AI_REVIEW_DEFAULTS.AI_AUTO_PASS_MIN_SCORE_PERCENT,
+  aiAutoPassMinConfidence: ROADMAP_EVIDENCE_AI_REVIEW_DEFAULTS.AI_AUTO_PASS_MIN_CONFIDENCE,
+  aiManualReviewBelowConfidence: ROADMAP_EVIDENCE_AI_REVIEW_DEFAULTS.AI_MANUAL_REVIEW_BELOW_CONFIDENCE,
+  aiEvidencePrompt: DEFAULT_AI_EVIDENCE_PROMPT,
+  finalAssignmentInstructions: "",
+  finalAssignmentRubric: "",
   skillBlocks: [],
   nodeGroups: [],
 });
@@ -899,6 +916,14 @@ const AdminRoadmapTemplateManager = () => {
       assessmentPolicy: form.assessmentPolicy.trim(),
       templateInstructions: form.templateInstructions.trim(),
       constraintsJson: JSON.stringify(buildStructuredConstraints(form), null, 2),
+      aiEvidenceReviewEnabled: form.aiEvidenceReviewEnabled,
+      aiAutoPassEnabled: form.aiAutoPassEnabled,
+      aiAutoPassMinScorePercent: form.aiAutoPassMinScorePercent,
+      aiAutoPassMinConfidence: form.aiAutoPassMinConfidence,
+      aiManualReviewBelowConfidence: form.aiManualReviewBelowConfidence,
+      aiEvidencePrompt: form.aiEvidencePrompt,
+      finalAssignmentInstructions: form.finalAssignmentInstructions,
+      finalAssignmentRubric: form.finalAssignmentRubric,
       nodes: [],
       courses: form.skillBlocks.flatMap((block) =>
         block.selectedCourseIds.map((courseId, index) => ({
@@ -1107,6 +1132,14 @@ const AdminRoadmapTemplateManager = () => {
         "timeBudgetPolicy",
         "DIFFICULTY_AND_COMPLEXITY",
       ),
+      aiEvidenceReviewEnabled: template.aiEvidenceReviewEnabled ?? false,
+      aiAutoPassEnabled: template.aiAutoPassEnabled ?? false,
+      aiAutoPassMinScorePercent: template.aiAutoPassMinScorePercent ?? ROADMAP_EVIDENCE_AI_REVIEW_DEFAULTS.AI_AUTO_PASS_MIN_SCORE_PERCENT,
+      aiAutoPassMinConfidence: template.aiAutoPassMinConfidence ?? ROADMAP_EVIDENCE_AI_REVIEW_DEFAULTS.AI_AUTO_PASS_MIN_CONFIDENCE,
+      aiManualReviewBelowConfidence: template.aiManualReviewBelowConfidence ?? ROADMAP_EVIDENCE_AI_REVIEW_DEFAULTS.AI_MANUAL_REVIEW_BELOW_CONFIDENCE,
+      aiEvidencePrompt: template.aiEvidencePrompt || "",
+      finalAssignmentInstructions: template.finalAssignmentInstructions || "",
+      finalAssignmentRubric: template.finalAssignmentRubric || "",
       skillBlocks: (template.skillBlocks || []).map((block) =>
         normalizeBlock(block, template.courses),
       ),
@@ -1632,6 +1665,67 @@ const AdminRoadmapTemplateManager = () => {
             </select>
           </label>
         </div>
+      </section>
+      <section className="artm-wide artm-constraint-builder">
+        <div className="artm-section-head">
+          <div>
+            <h3>Đánh giá Final & AI Review</h3>
+            <p>Thiết lập đề bài cuối lộ trình (bắt buộc) và cấu hình kiểm duyệt tự động bằng AI.</p>
+          </div>
+        </div>
+
+        {/* Thiết lập bài nộp cuối lộ trình luôn hiển thị độc lập */}
+        <div className="artm-ai-final-stack">
+          <label className="artm-wide">
+            <span>Hướng dẫn bài Final Assignment</span>
+            <textarea rows={3} value={form.finalAssignmentInstructions} onChange={(e) => setForm({ ...form, finalAssignmentInstructions: e.target.value })} placeholder="Đề bài, yêu cầu cho phần output assessment..." />
+          </label>
+          <label className="artm-wide">
+            <span>Rubric đánh giá Final Assignment</span>
+            <textarea rows={3} value={form.finalAssignmentRubric} onChange={(e) => setForm({ ...form, finalAssignmentRubric: e.target.value })} placeholder="Các tiêu chí đánh giá final assignment..." />
+          </label>
+        </div>
+
+        <div className="artm-panel-grid artm-panel-grid--tight artm-ai-section-divider">
+          <label className="artm-wide artm-ai-toggle-row">
+            <input type="checkbox" checked={form.aiEvidenceReviewEnabled} onChange={(e) => setForm({ ...form, aiEvidenceReviewEnabled: e.target.checked })} />
+            <span className="artm-ai-toggle-label">Chấm tự động bằng AI</span>
+          </label>
+          <p className="artm-ai-toggle-copy">
+            Nếu tắt, các bài nộp của học viên không có mentor sẽ tự động chuyển vào hàng chờ để Admin đánh giá thủ công.
+          </p>
+        </div>
+        
+        {form.aiEvidenceReviewEnabled && (
+          <>
+            <div className="artm-panel-grid artm-panel-grid--tight artm-ai-field-spacer">
+              <label className="artm-wide artm-ai-toggle-row">
+                <input type="checkbox" checked={form.aiAutoPassEnabled} onChange={(e) => setForm({ ...form, aiAutoPassEnabled: e.target.checked })} />
+                <span className="artm-ai-toggle-label">Cho phép AI tự động xác nhận qua bài (Auto Pass) nếu đạt ngưỡng</span>
+              </label>
+            </div>
+            
+            <div className="artm-panel-grid artm-panel-grid--tight artm-ai-field-spacer">
+              <label>
+                <span>% Điểm tối thiểu (Auto Pass)</span>
+                <input type="number" min={0} max={100} value={form.aiAutoPassMinScorePercent} onChange={(e) => setForm({ ...form, aiAutoPassMinScorePercent: Number(e.target.value) })} />
+              </label>
+              <label>
+                <span>Confidence tối thiểu (Auto Pass)</span>
+                <input type="number" min={0} max={1} step={0.01} value={form.aiAutoPassMinConfidence} onChange={(e) => setForm({ ...form, aiAutoPassMinConfidence: Number(e.target.value) })} />
+              </label>
+              <label>
+                <span>Confidence dưới ngưỡng này vào Admin Queue</span>
+                <input type="number" min={0} max={1} step={0.01} value={form.aiManualReviewBelowConfidence} onChange={(e) => setForm({ ...form, aiManualReviewBelowConfidence: Number(e.target.value) })} />
+              </label>
+            </div>
+            
+            <label className="artm-wide artm-ai-field-spacer">
+              <span>Prompt hệ thống AI Review (Evidence)</span>
+              <textarea rows={3} value={form.aiEvidencePrompt} onChange={(e) => setForm({ ...form, aiEvidencePrompt: e.target.value })} placeholder="Hướng dẫn AI cách chấm điểm node evidence..." />
+            </label>
+          </>
+        )}
       </section>
       <label className="artm-wide">
         <span>Mô tả</span>

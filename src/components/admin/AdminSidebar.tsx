@@ -229,6 +229,12 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           allowedRoles: ["CONTENT_ADMIN", "AI_ADMIN", "ADMIN"],
         },
         {
+          id: "roadmap-ai-reviews",
+          label: "Duyệt AI Review",
+          icon: FileStack,
+          allowedRoles: ["CONTENT_ADMIN", "AI_ADMIN", "ADMIN"],
+        },
+        {
           id: "skin-upload",
           label: "Quản lý Skin",
           icon: Shirt,

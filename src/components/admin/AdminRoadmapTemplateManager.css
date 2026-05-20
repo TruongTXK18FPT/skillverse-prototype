@@ -1080,3 +1080,39 @@
     flex: 1 1 140px;
   }
 }
+
+/* Đánh giá Final & AI Review styles */
+.admin-roadmap-template-studio .artm-ai-final-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-roadmap-template-studio .artm-ai-section-divider {
+  padding-top: 16px;
+  border-top: 1px solid rgba(43, 214, 255, 0.24);
+}
+
+.admin-roadmap-template-studio .artm-ai-toggle-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-roadmap-template-studio .artm-ai-toggle-label {
+  margin: 0;
+  font-weight: bold;
+}
+
+.admin-roadmap-template-studio .artm-ai-toggle-copy {
+  margin: 4px 0 0 28px;
+  font-size: 13px;
+  color: var(--artm-muted);
+  line-height: 1.4;
+}
+
+.admin-roadmap-template-studio .artm-ai-field-spacer {
+  margin-top: 12px;
+}

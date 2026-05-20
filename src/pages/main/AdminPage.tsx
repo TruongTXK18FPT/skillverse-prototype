@@ -25,6 +25,7 @@ import AdminAiTokenUsageDashboard from "../admin/AdminAiTokenUsageDashboard";
 import AdminRagProviderPage from "../admin/AdminRagProviderPage";
 import AdminRoadmapCatalogTab from "../../components/admin/roadmap/AdminRoadmapCatalogTab";
 import AdminRoadmapTemplateManager from "../../components/admin/AdminRoadmapTemplateManager";
+import AdminRoadmapEvidenceReviewTab from "../../components/admin/AdminRoadmapEvidenceReviewTab";
 
 // import AdminSeminarManager from './AdminSeminarManager';
 import adminUserService from "../../services/adminUserService";
@@ -183,6 +184,8 @@ const AdminPage: React.FC = () => {
         return <AdminRoadmapCatalogTab initialSubTab={activeTab} />;
       case "roadmap-templates":
         return <AdminRoadmapTemplateManager />;
+      case "roadmap-ai-reviews":
+        return <AdminRoadmapEvidenceReviewTab />;
       default:
         return <AnalyticsTab />;
     }
