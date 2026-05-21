@@ -1246,11 +1246,11 @@ const RecruiterTalentWorkspace = ({
 
       const result =
         selectedJob.kind === "shortterm"
-          ? await candidateSearchService.getShortTermJobMatchExplanation(
+          ? await candidateSearchService.getShortTermDeterministicMatchAnalysis(
             selectedJob.id,
             target.candidateId,
           )
-          : await candidateSearchService.getAIMatchExplanation(
+          : await candidateSearchService.getDeterministicMatchAnalysis(
             selectedJob.id,
             target.candidateId,
           );
@@ -1258,7 +1258,7 @@ const RecruiterTalentWorkspace = ({
       setAiInsight(result);
     } catch (error: any) {
       showToastError(
-        "Không thể phân tích AI",
+        "Không thể phân tích ứng viên",
         error.message || "Vui lòng kiểm tra gói recruiter.",
       );
     } finally {
@@ -1395,7 +1395,7 @@ const RecruiterTalentWorkspace = ({
 
             <p className="rtw-hero__desc">
               Khu vực nâng cao giúp bạn quản lý toàn bộ luồng tìm kiếm ứng viên
-              — từ pipeline đơn ứng tuyển, khu vực nâng cao, phân tích AI cho
+              — từ pipeline đơn ứng tuyển, khu vực nâng cao, phân tích bằng thuật toán cho
               đến chat trực tiếp theo từng candidate, tất cả trong một màn hình
               duy nhất.
             </p>
@@ -1418,9 +1418,9 @@ const RecruiterTalentWorkspace = ({
                   <Sparkles size={18} />
                 </div>
                 <div className="rtw-feature-text">
-                  <strong>Phân tích AI</strong>
+                  <strong>Phân tích bằng thuật toán</strong>
                   <span>
-                    AI phân tích mức độ phù hợp ứng viên với job — dẫn chứng cụ
+                    Thuật toán phân tích mức độ phù hợp ứng viên với job — dẫn chứng cụ
                     thể
                   </span>
                 </div>
@@ -1482,7 +1482,7 @@ const RecruiterTalentWorkspace = ({
                 </div>
                 <div className="rtw-perk-item">
                   <CheckCircle2 size={13} />
-                  <span>AI phân tích matching</span>
+                  <span>Phân tích matching bằng thuật toán</span>
                 </div>
                 <div className="rtw-perk-item">
                   <CheckCircle2 size={13} />
@@ -1563,8 +1563,8 @@ const RecruiterTalentWorkspace = ({
             <span className="rtw-chip rtw-chip--purple">
               <Sparkles size={13} />
               {subscription?.canUseAICandidateSuggestion
-                ? "AI phân tích bật"
-                : "AI phân tích khóa"}
+                ? "Thuật toán phân tích bật"
+                : "Thuật toán phân tích khóa"}
             </span>
             <span className="rtw-chip rtw-chip--muted">
               <ShieldCheck size={13} />
@@ -2267,11 +2267,11 @@ const RecruiterTalentWorkspace = ({
                               try {
                                 const result =
                                   selectedJob.kind === "shortterm"
-                                    ? await candidateSearchService.getShortTermJobMatchExplanation(
+                                    ? await candidateSearchService.getShortTermDeterministicMatchAnalysis(
                                       selectedJob.id,
                                       selectedCandidate.candidateId,
                                     )
-                                    : await candidateSearchService.getAIMatchExplanation(
+                                    : await candidateSearchService.getDeterministicMatchAnalysis(
                                       selectedJob.id,
                                       selectedCandidate.candidateId,
                                     );
@@ -2349,6 +2349,120 @@ const RecruiterTalentWorkspace = ({
                           </p>
                         )}
 
+                        <div style={{
+                          display: "grid",
+                          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+                          gap: "0.6rem",
+                          marginBottom: "1rem",
+                        }}>
+                          {[
+                            ["Verified", aiInsight.fitAnalysis.verifiedSkillMatchPercent],
+                            ["Evidence", aiInsight.fitAnalysis.evidenceBackedSkillPercent],
+                            ["Tự khai", aiInsight.fitAnalysis.declaredOnlySkillPercent],
+                            ["Thiếu", aiInsight.fitAnalysis.missingSkillPercent],
+                          ].map(([label, value]) => (
+                            <div key={label as string} style={{
+                              padding: "0.65rem",
+                              borderRadius: "8px",
+                              background: "rgba(255,255,255,0.05)",
+                              border: "1px solid rgba(255,255,255,0.1)",
+                            }}>
+                              <strong style={{ display: "block", color: "#e2e8f0", fontSize: "0.78rem" }}>
+                                {Math.round(((value as number | undefined) || 0) * 100)}%
+                              </strong>
+                              <span style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.68rem" }}>{label as string}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {(aiInsight.fitAnalysis.requiredSkillSignals?.length ?? 0) > 0 && (
+                          <div style={{ display: "grid", gap: "0.65rem", marginBottom: "1rem" }}>
+                            {aiInsight.fitAnalysis.requiredSkillSignals!.map((signal) => (
+                              <div
+                                key={signal.skill}
+                                style={{
+                                  display: "grid",
+                                  gridTemplateColumns: "minmax(0, 1fr) auto",
+                                  gap: "0.75rem",
+                                  padding: "0.85rem",
+                                  borderRadius: "10px",
+                                  background: "rgba(6, 182, 212, 0.05)",
+                                  border: "1px solid rgba(6, 182, 212, 0.12)",
+                                }}
+                              >
+                                <div>
+                                  <strong style={{ color: "rgba(255,255,255,0.9)", fontSize: "0.82rem" }}>
+                                    {signal.skill}{signal.primary ? " (primary)" : ""}
+                                  </strong>
+                                  {signal.businessMeaning && (
+                                    <p style={{ margin: "0.35rem 0 0", color: "rgba(255,255,255,0.62)", fontSize: "0.74rem", lineHeight: 1.5 }}>
+                                      {signal.businessMeaning}
+                                    </p>
+                                  )}
+                                  {(signal.sources?.length ?? 0) > 0 && (
+                                    <p style={{ margin: "0.35rem 0 0", color: "rgba(255,255,255,0.42)", fontSize: "0.7rem", lineHeight: 1.5 }}>
+                                      {signal.sources!.slice(0, 3).join(" | ")}
+                                    </p>
+                                  )}
+                                </div>
+                                <span style={{
+                                  alignSelf: "start",
+                                  borderRadius: "999px",
+                                  padding: "3px 8px",
+                                  fontSize: "0.68rem",
+                                  fontWeight: 700,
+                                  color: signal.status === "VERIFIED" ? "#86efac" : signal.status === "EVIDENCE_BACKED" ? "#67e8f9" : signal.status === "POSSIBLE_EVIDENCE" ? "#fcd34d" : signal.status === "DECLARED_ONLY" ? "#fde68a" : "#fca5a5",
+                                  background: "rgba(255,255,255,0.06)",
+                                  border: "1px solid rgba(255,255,255,0.12)",
+                                }}>
+                                  {signal.status === "VERIFIED" ? "Đã xác thực" : signal.status === "EVIDENCE_BACKED" ? "Có bằng chứng" : signal.status === "POSSIBLE_EVIDENCE" ? "Cần kiểm tra" : signal.status === "DECLARED_ONLY" ? "Tự khai" : "Thiếu"}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {(aiInsight.fitAnalysis.unverifiedSkillWarnings?.length ?? 0) > 0 && (
+                          <div style={{
+                            marginBottom: "1rem",
+                            padding: "0.85rem",
+                            borderRadius: "10px",
+                            background: "rgba(245, 158, 11, 0.08)",
+                            border: "1px solid rgba(245, 158, 11, 0.22)",
+                            color: "rgba(255,255,255,0.68)",
+                            fontSize: "0.74rem",
+                            lineHeight: 1.5,
+                          }}>
+                            {aiInsight.fitAnalysis.unverifiedSkillWarnings!.slice(0, 3).join(" ")}
+                          </div>
+                        )}
+
+                        {(aiInsight.fitAnalysis.senioritySummary || aiInsight.fitAnalysis.requiredSeniority) && (
+                          <div style={{
+                            marginBottom: "1rem",
+                            padding: "0.85rem",
+                            borderRadius: "10px",
+                            background: aiInsight.fitAnalysis.seniorityPass === false ? "rgba(239, 68, 68, 0.08)" : "rgba(34, 197, 94, 0.08)",
+                            border: aiInsight.fitAnalysis.seniorityPass === false ? "1px solid rgba(239, 68, 68, 0.22)" : "1px solid rgba(34, 197, 94, 0.18)",
+                          }}>
+                            <strong style={{ color: "#bae6fd", fontSize: "0.8rem" }}>Phân tích seniority full-time</strong>
+                            <p style={{ margin: "0.4rem 0 0", color: "rgba(255,255,255,0.68)", fontSize: "0.76rem", lineHeight: 1.5 }}>
+                              {aiInsight.fitAnalysis.senioritySummary}
+                            </p>
+                            {aiInsight.fitAnalysis.seniorityDecision && (
+                              <p style={{ margin: "0.35rem 0 0", color: "#e2e8f0", fontSize: "0.72rem", fontWeight: 700 }}>
+                                Decision: {aiInsight.fitAnalysis.seniorityDecision} / Risk: {aiInsight.fitAnalysis.seniorityRiskLevel || "-"}
+                              </p>
+                            )}
+                            {(aiInsight.fitAnalysis.seniorityEvidence?.length ?? 0) > 0 && (
+                              <p style={{ margin: "0.4rem 0 0", color: "rgba(255,255,255,0.42)", fontSize: "0.7rem", lineHeight: 1.5 }}>
+                                {aiInsight.fitAnalysis.seniorityEvidence!.slice(0, 3).join(" | ")}
+                              </p>
+                            )}
+                          </div>
+                        )}
+
+                        {(aiInsight.fitAnalysis.requiredSkillSignals?.length ?? 0) === 0 && (
                         <div style={{ display: "grid", gap: "0.75rem" }}>
                           {aiInsight.fitAnalysis.components!.map(
                             (component) => {
@@ -2429,6 +2543,7 @@ const RecruiterTalentWorkspace = ({
                             },
                           )}
                         </div>
+                        )}
 
                         {(aiInsight.fitAnalysis.skillBreakdown?.length ?? 0) >
                           0 && (
@@ -3158,7 +3273,7 @@ const RecruiterTalentWorkspace = ({
                         );
                       })()}
 
-                    {/* ── AI ENHANCED ANALYSIS (Optional) ── */}
+                    {/* ── ENHANCED ANALYSIS (Optional) ── */}
                     {aiEnhancedResult && (
                       <div
                         style={{
@@ -3185,7 +3300,7 @@ const RecruiterTalentWorkspace = ({
                               fontSize: "0.9rem",
                             }}
                           >
-                            AI Phân tích nâng cao
+                            Phân tích nâng cao
                           </span>
                           {aiEnhancedResult.aiAnalysis?.modelUsed && (
                             <span
@@ -3240,7 +3355,7 @@ const RecruiterTalentWorkspace = ({
                             }}
                           >
                             <strong style={{ color: "#c4b5fd" }}>
-                              Tóm tắt AI:
+                              Tóm tắt:
                             </strong>{" "}
                             {aiEnhancedResult.aiAnalysis.fitSummary}
                           </div>
@@ -3258,7 +3373,7 @@ const RecruiterTalentWorkspace = ({
                                   marginBottom: "0.5rem",
                                 }}
                               >
-                                Tín hiệu kỹ năng từ AI:
+                                Tín hiệu kỹ năng:
                               </p>
                               <div
                                 style={{

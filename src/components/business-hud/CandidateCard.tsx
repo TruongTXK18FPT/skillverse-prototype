@@ -104,6 +104,44 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
     weightedScore ?? ((score || 0) * (weight || 0));
   const matchedSkillDetails = fitAnalysis?.skillBreakdown?.filter(skill => skill.matched) || [];
   const missingSkillDetails = fitAnalysis?.skillBreakdown?.filter(skill => !skill.matched) || [];
+  const requiredSkillSignals = fitAnalysis?.requiredSkillSignals || [];
+  const missingSkillPercent = fitAnalysis?.missingSkillPercent ?? (
+    requiredSkillSignals.length > 0
+      ? requiredSkillSignals.filter(signal => signal.status === 'MISSING').length / requiredSkillSignals.length
+      : 0
+  );
+  const signalCounts = requiredSkillSignals.reduce(
+    (acc, signal) => {
+      if (signal.status === 'VERIFIED') acc.verified += 1;
+      else if (signal.status === 'EVIDENCE_BACKED') acc.evidence += 1;
+      else if (signal.status === 'POSSIBLE_EVIDENCE') acc.possible += 1;
+      else if (signal.status === 'DECLARED_ONLY') acc.declared += 1;
+      else acc.missing += 1;
+      return acc;
+    },
+    { verified: 0, evidence: 0, possible: 0, declared: 0, missing: 0 }
+  );
+  const statusLabel = (status?: string) => {
+    switch (status) {
+      case 'VERIFIED': return 'Đã xác thực';
+      case 'EVIDENCE_BACKED': return 'Có bằng chứng';
+      case 'POSSIBLE_EVIDENCE': return 'Cần kiểm tra';
+      case 'DECLARED_ONLY': return 'Tự khai';
+      case 'MISSING': return 'Thiếu';
+      default: return status || 'Chưa rõ';
+    }
+  };
+  const verdictLabel = (verdict?: string) => {
+    switch (verdict) {
+      case 'STRONG_VERIFIED_FIT': return 'Verified fit tốt';
+      case 'PARTIAL_EVIDENCE_FIT': return 'Evidence only';
+      case 'UNVERIFIED_CLAIM_ONLY': return 'Declared only risk';
+      case 'SENIORITY_RISK': return 'Seniority risk';
+      case 'NEEDS_REVIEW': return 'Needs review';
+      case 'MISSING_CRITICAL_SKILLS': return 'Verified fit low';
+      default: return verdict;
+    }
+  };
 
   return (
     <div className={`candidate-card ${candidate.isPremium ? 'candidate-card--premium' : ''} ${candidate.isHighlighted ? 'candidate-card--highlighted' : ''}`}>
@@ -187,7 +225,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
             </span>
           </div>
           <span className="candidate-card__match-label">
-            {getMatchQualityLabel(candidate.matchQuality)}
+            Overall fit
           </span>
         </div>
       </div>
@@ -209,9 +247,10 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
       {hasDetailedFitAnalysis && fitAnalysis && (
         <div className="candidate-card__fit-analysis">
           <div className="candidate-card__ranking-header">
-            <Sparkles size={14} className="neon-icon" />
-            <span>Fit analysis</span>
+            <CheckCircle size={14} className="neon-icon" />
+            <span>Độ phù hợp có chứng cứ</span>
             {fitAnalysis.band && <span className="candidate-card__fit-band">{fitAnalysis.band}</span>}
+            {fitAnalysis.fitVerdict && <span className="candidate-card__fit-band">{verdictLabel(fitAnalysis.fitVerdict)}</span>}
           </div>
 
           {(fitAnalysis.recommendation || candidate.fitExplanation) && (
@@ -221,15 +260,39 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
           )}
 
           <div className="candidate-card__fit-stats">
-            <span>{candidate.totalVerifiedSkillsCount ?? 0} verified skills</span>
-            <span>{candidate.relevantProjectsCount ?? 0} relevant projects</span>
-            <span>{candidate.completedMissionsCount ?? 0} completed missions</span>
+            <span>Verified skill match: {formatPercent(fitAnalysis.verifiedSkillMatchPercent)}</span>
+            <span>Portfolio evidence: {formatPercent(fitAnalysis.evidenceBackedSkillPercent)}</span>
+            {signalCounts.possible > 0 && <span>Possible evidence: {signalCounts.possible}</span>}
+            <span>Declared only: {formatPercent(fitAnalysis.declaredOnlySkillPercent)}</span>
+            <span>Missing: {formatPercent(missingSkillPercent)}</span>
             {candidate.averageMissionRating !== undefined && (
               <span>{candidate.averageMissionRating.toFixed(1)}/5 rating</span>
             )}
           </div>
 
-          {(fitAnalysis.components?.length ?? 0) > 0 && (
+          {requiredSkillSignals.length > 0 && (
+            <div className="candidate-card__skill-evidence-list">
+              {requiredSkillSignals.slice(0, 6).map((signal) => (
+                <div className={`candidate-card__skill-evidence candidate-card__skill-evidence--${signal.status?.toLowerCase()}`} key={signal.skill}>
+                  <div>
+                    <strong>{signal.skill}{signal.primary ? ' (primary)' : ''}</strong>
+                    {signal.businessMeaning && <p>{signal.businessMeaning}</p>}
+                  </div>
+                  <span>{statusLabel(signal.status)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {(fitAnalysis.senioritySummary || fitAnalysis.requiredSeniority) && (
+            <div className={`candidate-card__seniority ${fitAnalysis.seniorityPass === false ? 'candidate-card__seniority--risk' : ''}`}>
+              <strong>Seniority full-time</strong>
+              <p>{fitAnalysis.senioritySummary || `Job: ${fitAnalysis.requiredSeniority || '-'} / Candidate: ${fitAnalysis.inferredSeniority || '-'}`}</p>
+              {fitAnalysis.seniorityDecision && <span className="candidate-card__seniority-decision">{fitAnalysis.seniorityDecision}</span>}
+            </div>
+          )}
+
+          {requiredSkillSignals.length === 0 && (fitAnalysis.components?.length ?? 0) > 0 && (
             <div className="candidate-card__ranking-grid">
               {fitAnalysis.components!.map((component) => {
                 const weighted = getComponentWeightedScore(component.score, component.weight, component.weightedScore);

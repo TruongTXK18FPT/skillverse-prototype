@@ -73,7 +73,7 @@ const CandidateSearchPage: React.FC<CandidateSearchPageProps> = ({
 
   // Auth & Subscription state
   const [isPremium, setIsPremium] = useState(false);
-  const [canUseAI, setCanUseAI] = useState(false);
+  const [canUseAlgorithmAnalysis, setCanUseAlgorithmAnalysis] = useState(false);
 
   // Job list state (both long-term and short-term)
   const [longTermJobs, setLongTermJobs] = useState<JobPostingResponse[]>([]);
@@ -146,7 +146,7 @@ const CandidateSearchPage: React.FC<CandidateSearchPageProps> = ({
     try {
       const sub = await recruiterSubscriptionService.getSubscriptionInfo();
       setIsPremium(sub.hasSubscription);
-      setCanUseAI(sub.canUseAICandidateSuggestion);
+      setCanUseAlgorithmAnalysis(sub.canUseAICandidateSuggestion);
     } catch {
       // Non-recruiter or no subscription — silently handle
     }
@@ -390,10 +390,10 @@ const CandidateSearchPage: React.FC<CandidateSearchPageProps> = ({
             </div>
           </div>
           <div className="csp-page-header__badges">
-            {canUseAI && (
+            {canUseAlgorithmAnalysis && (
               <span className="csp-badge csp-badge--ai">
                 <Sparkles size={13} />
-                AI Matching
+                Phân tích bằng thuật toán
               </span>
             )}
             {!isPremium && (

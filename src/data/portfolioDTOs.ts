@@ -367,9 +367,20 @@ export interface CandidateSkillBreakdown {
   required?: boolean;
   matched?: boolean;
   matchType?: string;
+  verificationStatus?: 'VERIFIED' | 'EVIDENCE_BACKED' | 'DECLARED_ONLY' | 'MISSING' | string;
   relevanceScore?: number;
   confidenceScore?: number;
+  businessMeaning?: string;
   evidenceSources?: string[];
+}
+
+export interface CandidateRequiredSkillSignal {
+  skill: string;
+  primary?: boolean;
+  status: 'VERIFIED' | 'EVIDENCE_BACKED' | 'DECLARED_ONLY' | 'MISSING' | string;
+  confidenceScore?: number;
+  businessMeaning?: string;
+  sources?: string[];
 }
 
 export interface CandidateEvidenceHighlight {
@@ -391,6 +402,22 @@ export interface CandidateFitAnalysis {
   recommendation?: string;
   confidenceScore?: number;
   riskPenalty?: number;
+  verifiedSkillMatchPercent?: number;
+  evidenceBackedSkillPercent?: number;
+  declaredOnlySkillPercent?: number;
+  missingSkillPercent?: number;
+  requiredSkillSignals?: CandidateRequiredSkillSignal[];
+  unverifiedSkillWarnings?: string[];
+  requiredSeniority?: string;
+  inferredSeniority?: string;
+  seniorityPass?: boolean;
+  overqualified?: boolean;
+  seniorityConfidence?: number;
+  senioritySummary?: string;
+  seniorityDecision?: string;
+  seniorityRiskLevel?: string;
+  fitVerdict?: string;
+  seniorityEvidence?: string[];
   components?: CandidateFitComponentScore[];
   skillBreakdown?: CandidateSkillBreakdown[];
   evidenceHighlights?: CandidateEvidenceHighlight[];

@@ -3,7 +3,6 @@ import {
   CandidateSearchFilters,
   CandidateSearchResult,
   CandidateSearchResponse,
-  AICandidateMatchResponse,
   AiEnhancedAnalysisResponse,
   RecruitmentSessionResponse
 } from '../data/portfolioDTOs';
@@ -270,7 +269,7 @@ class CandidateSearchService {
    * Get deterministic match breakdown for a candidate-job pair
    * @requires RECRUITER role with premium subscription
    */
-  async getAIMatchExplanation(jobId: number, candidateId: number): Promise<CandidateSearchResult> {
+  async getDeterministicMatchAnalysis(jobId: number, candidateId: number): Promise<CandidateSearchResult> {
     try {
       const response = await axiosInstance.get<{success: boolean; data: CandidateSearchApiItem}>(
         `/api/v1/recruiter/candidates/${candidateId}/match?jobId=${jobId}`
@@ -285,7 +284,7 @@ class CandidateSearchService {
    * Get deterministic match breakdown for a candidate-shortTermJob pair
    * @requires RECRUITER role with premium subscription
    */
-  async getShortTermJobMatchExplanation(shortTermJobId: number, candidateId: number): Promise<CandidateSearchResult> {
+  async getShortTermDeterministicMatchAnalysis(shortTermJobId: number, candidateId: number): Promise<CandidateSearchResult> {
     try {
       const response = await axiosInstance.get<{success: boolean; data: CandidateSearchApiItem}>(
         `/api/v1/recruiter/candidates/${candidateId}/shortterm-match?shortTermJobId=${shortTermJobId}`
