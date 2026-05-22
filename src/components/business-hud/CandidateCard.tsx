@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import {
   User,
   MapPin,
@@ -55,7 +55,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
 
     if (diffHours < 1) return 'Vừa hoạt động';
     if (diffHours < 24) return `${diffHours}h trước`;
-    if (diffDays < 7) return `${diffDays}ng trước`;
+    if (diffDays < 7) return `${diffDays} ngày trước`;
     return date.toLocaleDateString('vi-VN');
   };
 
@@ -123,22 +123,43 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
   );
   const statusLabel = (status?: string) => {
     switch (status) {
-      case 'VERIFIED': return 'Đã xác thực';
-      case 'EVIDENCE_BACKED': return 'Có bằng chứng';
-      case 'POSSIBLE_EVIDENCE': return 'Cần kiểm tra';
-      case 'DECLARED_ONLY': return 'Tự khai';
-      case 'MISSING': return 'Thiếu';
-      default: return status || 'Chưa rõ';
+      case 'VERIFIED': return 'ÄĂ£ xĂ¡c thá»±c';
+      case 'EVIDENCE_BACKED': return 'CĂ³ báº±ng chá»©ng';
+      case 'POSSIBLE_EVIDENCE': return 'Cáº§n kiá»ƒm tra';
+      case 'DECLARED_ONLY': return 'Tá»± khai';
+      case 'MISSING': return 'Thiáº¿u';
+      default: return status || 'ChÆ°a rĂµ';
     }
   };
   const verdictLabel = (verdict?: string) => {
     switch (verdict) {
-      case 'STRONG_VERIFIED_FIT': return 'Verified fit tốt';
+      case 'STRONG_VERIFIED_FIT': return 'Verified fit tá»‘t';
       case 'PARTIAL_EVIDENCE_FIT': return 'Evidence only';
       case 'UNVERIFIED_CLAIM_ONLY': return 'Declared only risk';
       case 'SENIORITY_RISK': return 'Seniority risk';
       case 'NEEDS_REVIEW': return 'Needs review';
       case 'MISSING_CRITICAL_SKILLS': return 'Verified fit low';
+      default: return verdict;
+    }
+  };
+  const statusLabelVi = (status?: string) => {
+    switch (status) {
+      case 'VERIFIED': return '\u0110\u00e3 x\u00e1c th\u1ef1c';
+      case 'EVIDENCE_BACKED': return 'C\u00f3 b\u1eb1ng ch\u1ee9ng';
+      case 'POSSIBLE_EVIDENCE': return 'C\u1ea7n ki\u1ec3m tra';
+      case 'DECLARED_ONLY': return 'Ch\u1ec9 t\u1ef1 khai';
+      case 'MISSING': return 'C\u00f2n thi\u1ebfu';
+      default: return status || 'Ch\u01b0a r\u00f5';
+    }
+  };
+  const verdictLabelVi = (verdict?: string) => {
+    switch (verdict) {
+      case 'STRONG_VERIFIED_FIT': return 'Ph\u00f9 h\u1ee3p m\u1ea1nh';
+      case 'PARTIAL_EVIDENCE_FIT': return 'C\u00f3 b\u1eb1ng ch\u1ee9ng m\u1ed9t ph\u1ea7n';
+      case 'UNVERIFIED_CLAIM_ONLY': return 'Ch\u1ec9 t\u1ef1 khai';
+      case 'SENIORITY_RISK': return 'R\u1ee7i ro seniority';
+      case 'NEEDS_REVIEW': return 'C\u1ea7n ki\u1ec3m tra th\u00eam';
+      case 'MISSING_CRITICAL_SKILLS': return 'Thi\u1ebfu k\u1ef9 n\u0103ng quan tr\u1ecdng';
       default: return verdict;
     }
   };
@@ -188,7 +209,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
             {candidate.totalProjects !== undefined && (
               <span className="candidate-card__projects">
                 <Award size={12} />
-                {candidate.totalProjects} dự án
+                {candidate.totalProjects} dá»± Ă¡n
               </span>
             )}
             {candidate.yearsOfExperience !== undefined && (
@@ -225,7 +246,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
             </span>
           </div>
           <span className="candidate-card__match-label">
-            Overall fit
+            Tá»•ng phĂ¹ há»£p
           </span>
         </div>
       </div>
@@ -250,7 +271,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
             <CheckCircle size={14} className="neon-icon" />
             <span>Độ phù hợp có chứng cứ</span>
             {fitAnalysis.band && <span className="candidate-card__fit-band">{fitAnalysis.band}</span>}
-            {fitAnalysis.fitVerdict && <span className="candidate-card__fit-band">{verdictLabel(fitAnalysis.fitVerdict)}</span>}
+            {fitAnalysis.fitVerdict && <span className="candidate-card__fit-band">{verdictLabelVi(fitAnalysis.fitVerdict)}</span>}
           </div>
 
           {(fitAnalysis.recommendation || candidate.fitExplanation) && (
@@ -260,11 +281,11 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
           )}
 
           <div className="candidate-card__fit-stats">
-            <span>Verified skill match: {formatPercent(fitAnalysis.verifiedSkillMatchPercent)}</span>
-            <span>Portfolio evidence: {formatPercent(fitAnalysis.evidenceBackedSkillPercent)}</span>
-            {signalCounts.possible > 0 && <span>Possible evidence: {signalCounts.possible}</span>}
-            <span>Declared only: {formatPercent(fitAnalysis.declaredOnlySkillPercent)}</span>
-            <span>Missing: {formatPercent(missingSkillPercent)}</span>
+            <span>Skill đã xác thực: {formatPercent(fitAnalysis.verifiedSkillMatchPercent)}</span>
+            <span>Bằng chứng portfolio: {formatPercent(fitAnalysis.evidenceBackedSkillPercent)}</span>
+            {signalCounts.possible > 0 && <span>Cần kiểm tra: {signalCounts.possible}</span>}
+            <span>Chỉ tự khai: {formatPercent(fitAnalysis.declaredOnlySkillPercent)}</span>
+            <span>Còn thiếu: {formatPercent(missingSkillPercent)}</span>
             {candidate.averageMissionRating !== undefined && (
               <span>{candidate.averageMissionRating.toFixed(1)}/5 rating</span>
             )}
@@ -275,10 +296,10 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
               {requiredSkillSignals.slice(0, 6).map((signal) => (
                 <div className={`candidate-card__skill-evidence candidate-card__skill-evidence--${signal.status?.toLowerCase()}`} key={signal.skill}>
                   <div>
-                    <strong>{signal.skill}{signal.primary ? ' (primary)' : ''}</strong>
+                    <strong>{signal.skill}{signal.primary ? <span className="candidate-card__primary-chip">Kỹ năng chính</span> : null}</strong>
                     {signal.businessMeaning && <p>{signal.businessMeaning}</p>}
                   </div>
-                  <span>{statusLabel(signal.status)}</span>
+                  <span>{statusLabelVi(signal.status)}</span>
                 </div>
               ))}
             </div>
@@ -404,13 +425,13 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
         <div className="candidate-card__ranking-breakdown">
           <div className="candidate-card__ranking-header">
             <Sparkles size={14} className="neon-icon" />
-            <span>Phân tích Độ phù hợp (Thuật toán)</span>
+            <span>Độ phù hợp có chứng cứ</span>
           </div>
           <div className="candidate-card__ranking-grid">
             <div className="ranking-item">
               <div className="ranking-label-row">
-                <span className="ranking-label">Kỹ năng (40%)</span>
-                {candidate.primarySkillMatch && <span className="neon-badge">⭐ Primary Match</span>}
+                <span className="ranking-label">Ká»¹ nÄƒng (40%)</span>
+                {candidate.primarySkillMatch && <span className="neon-badge">â­ Primary Match</span>}
               </div>
               <div className="ranking-bar-wrapper">
                 <div className="ranking-bar-bg"><div className="ranking-bar-fill cyan-glow" style={{width: `${Math.min(100, (candidate.skillMatchScore || 0) / 0.4 * 100)}%`}}></div></div>
@@ -419,7 +440,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
             </div>
             <div className="ranking-item">
               <div className="ranking-label-row">
-                <span className="ranking-label">Dự án (20%)</span>
+                <span className="ranking-label">Dá»± Ă¡n (20%)</span>
               </div>
               <div className="ranking-bar-wrapper">
                 <div className="ranking-bar-bg"><div className="ranking-bar-fill blue-glow" style={{width: `${Math.min(100, (candidate.projectMatchScore || 0) / 0.2 * 100)}%`}}></div></div>
@@ -428,7 +449,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
             </div>
             <div className="ranking-item">
               <div className="ranking-label-row">
-                <span className="ranking-label">Chứng chỉ (20%)</span>
+                <span className="ranking-label">Chá»©ng chá»‰ (20%)</span>
               </div>
               <div className="ranking-bar-wrapper">
                 <div className="ranking-bar-bg"><div className="ranking-bar-fill cyan-glow" style={{width: `${Math.min(100, (candidate.certMatchScore || 0) / 0.2 * 100)}%`}}></div></div>
@@ -453,7 +474,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
         <div className="candidate-card__ai-summary">
           <div className="candidate-card__ai-header">
             <Sparkles size={14} />
-            <span>AI Đánh giá thêm</span>
+            <span>AI ÄĂ¡nh giĂ¡ thĂªm</span>
           </div>
           <p className="candidate-card__ai-text">
             {isExpanded ? (candidate.fitExplanation || candidate.aiSummary) : (candidate.fitExplanation || candidate.aiSummary)?.slice(0, 120) + '...'}
@@ -464,7 +485,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
               onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
             >
               {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-              {isExpanded ? 'Thu gọn' : 'Xem thêm'}
+              {isExpanded ? 'Thu gá»n' : 'Xem thĂªm'}
             </button>
           )}
         </div>
@@ -499,7 +520,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
           onClick={() => onViewProfile(candidate.userId)}
         >
           <ExternalLink size={14} />
-          Xem Hồ Sơ
+          Xem Há»“ SÆ¡
         </button>
 
         {onShortlist && (
@@ -508,7 +529,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
             onClick={() => onShortlist(candidate.userId)}
           >
             <BookmarkPlus size={14} />
-            Lưu
+            LÆ°u
           </button>
         )}
 
@@ -518,7 +539,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
             onClick={() => onStartChat(candidate.userId)}
           >
             <MessageCircle size={14} />
-            Nhắn Tin
+            Nháº¯n Tin
           </button>
         )}
 
@@ -528,7 +549,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
             onClick={() => onConnectToJob(candidate.userId)}
           >
             <Briefcase size={14} />
-            Mời Ứng Tuyển
+            Má»i á»¨ng Tuyá»ƒn
           </button>
         )}
       </div>

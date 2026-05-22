@@ -417,6 +417,8 @@ export interface CandidateFitAnalysis {
   seniorityDecision?: string;
   seniorityRiskLevel?: string;
   fitVerdict?: string;
+  fitSummaryTitle?: string;
+  fitSummaryReason?: string;
   seniorityEvidence?: string[];
   components?: CandidateFitComponentScore[];
   skillBreakdown?: CandidateSkillBreakdown[];

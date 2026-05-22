@@ -53,6 +53,7 @@ import recruiterSubscriptionService, {
   RecruiterSubscriptionInfoResponse,
 } from "../../services/recruiterSubscriptionService";
 import recruitmentChatService from "../../services/recruitmentChatService";
+import CandidateEvidenceAnalysisPanel from "./CandidateEvidenceAnalysisPanel";
 import JobBoostButton from "./JobBoostButton";
 import {
   ShortTermApplicationResponse,
@@ -2298,6 +2299,10 @@ const RecruiterTalentWorkspace = ({
                     </div>
 
                     {aiInsight?.fitAnalysis?.components?.length && (
+                      <CandidateEvidenceAnalysisPanel analysis={aiInsight.fitAnalysis} />
+                    )}
+
+                    {false && aiInsight?.fitAnalysis?.components?.length && (
                       <div
                         style={{
                           marginTop: "1.5rem",
