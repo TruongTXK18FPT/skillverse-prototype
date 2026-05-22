@@ -94,6 +94,67 @@ const AdminRoadmapEvidenceReviewTab: React.FC = () => {
     } finally {
       setSubmitting(false);
     }
+  const renderRubricBreakdown = (jsonStr: string) => {
+    try {
+      const parsed = JSON.parse(jsonStr);
+      let items: any[] = [];
+      if (Array.isArray(parsed)) {
+        items = parsed;
+      } else if (parsed && typeof parsed === 'object') {
+        // Fallback for object format { "Criteria 1": { score: 8, maxPoints: 10, feedback: "..." } }
+        items = Object.entries(parsed).map(([key, val]: [string, any]) => {
+          if (typeof val === 'object' && val !== null) {
+            return {
+              name: key,
+              score: val.score ?? val.points,
+              maxPoints: val.maxPoints ?? val.max,
+              feedback: val.feedback ?? val.comment
+            };
+          }
+          return {
+            name: key,
+            feedback: String(val)
+          };
+        });
+      }
+
+      if (items.length === 0) return null;
+
+      return (
+        <div className="arer-rubric-breakdown-list">
+          {items.map((item, idx) => {
+            const name = item.name ?? item.criteria ?? `Tiêu chí ${idx + 1}`;
+            const score = item.score ?? item.points;
+            const maxPoints = item.maxPoints ?? item.max;
+            const feedback = item.feedback ?? item.comment ?? item.feedback;
+            
+            return (
+              <div key={idx} className="arer-rubric-breakdown-card">
+                <div className="arer-rubric-card-header">
+                  <span className="arer-rubric-card-title">{name}</span>
+                  {score !== undefined && (
+                    <span className="arer-rubric-card-score">
+                      {score} {maxPoints !== undefined ? `/ ${maxPoints}` : 'điểm'}
+                    </span>
+                  )}
+                </div>
+                {score !== undefined && maxPoints !== undefined && (
+                  <div className="arer-rubric-progress-bar">
+                    <div 
+                      className="arer-rubric-progress-fill" 
+                      style={{ width: `${Math.min(100, Math.max(0, (score / maxPoints) * 100))}%` }}
+                    />
+                  </div>
+                )}
+                {feedback && <p className="arer-rubric-card-feedback">{feedback}</p>}
+              </div>
+            );
+          })}
+        </div>
+      );
+    } catch (e) {
+      return null;
+    }
   };
 
   return (
@@ -258,8 +319,11 @@ const AdminRoadmapEvidenceReviewTab: React.FC = () => {
 
               {selectedReview.aiRubricBreakdownJson && (
                 <div className="arer-rubric-group">
-                  <details className="arer-rubric-details">
-                    <summary className="arer-rubric-summary">Xem chi tiết barem điểm AI (JSON Breakdown)</summary>
+                  <span>Chi tiết điểm theo tiêu chí (Rubric Breakdown):</span>
+                  {renderRubricBreakdown(selectedReview.aiRubricBreakdownJson)}
+                  
+                  <details className="arer-rubric-details" style={{ marginTop: '8px' }}>
+                    <summary className="arer-rubric-summary">Xem chi tiết barem điểm AI (JSON gốc)</summary>
                     <pre className="arer-json-block">
                       {(() => {
                         try {

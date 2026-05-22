@@ -2,6 +2,12 @@ import type { ImportanceLevel, RequirementType } from "./careerTaxonomy";
 import type { SkillLevel } from "./Journey";
 import type { RoadmapNodeSkillRequirement } from "./Roadmap";
 
+export interface RoadmapRubric {
+  name: string;
+  description: string;
+  maxPoints?: number;
+}
+
 export type RoadmapTemplateStatus =
   | "DRAFT"
   | "PUBLISHED"

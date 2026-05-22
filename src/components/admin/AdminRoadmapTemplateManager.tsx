@@ -51,7 +51,9 @@ import type {
   RoadmapTemplateValidationResponse,
 } from "../../types/roadmapTemplate";
 import { ROADMAP_EVIDENCE_AI_REVIEW_DEFAULTS, DEFAULT_AI_EVIDENCE_PROMPT } from "../../types/roadmapEvidenceReviewDefaults";
+import { RubricListEditor } from "./RubricListEditor";
 import "./AdminRoadmapTemplateManager.css";
+
 
 type ViewMode = "library" | "builder";
 type BuilderTab = "overview" | "allocation" | "grouping" | "activities" | "courses" | "preview";
@@ -1799,10 +1801,9 @@ const AdminRoadmapTemplateManager = () => {
             <span>Hướng dẫn bài Final Assignment</span>
             <textarea rows={3} value={form.finalAssignmentInstructions} onChange={(e) => setForm({ ...form, finalAssignmentInstructions: e.target.value })} placeholder="Đề bài, yêu cầu cho phần output assessment..." />
           </label>
-          <label className="artm-wide">
-            <span>Rubric đánh giá Final Assignment</span>
-            <textarea rows={3} value={form.finalAssignmentRubric} onChange={(e) => setForm({ ...form, finalAssignmentRubric: e.target.value })} placeholder="Các tiêu chí đánh giá final assignment..." />
-          </label>
+          <div className="artm-wide">
+            <RubricListEditor value={form.finalAssignmentRubric} onChange={(val) => setForm({ ...form, finalAssignmentRubric: val })} label="Rubric đánh giá Final Assignment (N Rubrics)" />
+          </div>
         </div>
 
         <div className="artm-panel-grid artm-panel-grid--tight artm-ai-section-divider">
@@ -2054,7 +2055,7 @@ const AdminRoadmapTemplateManager = () => {
                     <label className="artm-wide"><span>Tên bài tập</span><input value={exercise.title} onChange={(e) => updateModuleExercise(group, exerciseIndex, { title: e.target.value })} /></label>
                     <label className="artm-wide"><span>Yêu cầu thực hiện</span><textarea rows={2} value={exercise.instruction} onChange={(e) => updateModuleExercise(group, exerciseIndex, { instruction: e.target.value })} /></label>
                     <label className="artm-wide"><span>Đầu ra cần nộp</span><textarea rows={2} value={exercise.expectedOutput} onChange={(e) => updateModuleExercise(group, exerciseIndex, { expectedOutput: e.target.value })} /></label>
-                    <label className="artm-wide"><span>Rubric chấm điểm</span><textarea rows={2} value={exercise.rubric} onChange={(e) => updateModuleExercise(group, exerciseIndex, { rubric: e.target.value })} /></label>
+                    <div className="artm-wide"><RubricListEditor value={exercise.rubric} onChange={(val) => updateModuleExercise(group, exerciseIndex, { rubric: val })} label="Rubric chấm điểm (N Rubrics)" /></div>
                     <label><span>Bắt buộc</span><select value={exercise.required ? "true" : "false"} onChange={(e) => updateModuleExercise(group, exerciseIndex, { required: e.target.value === "true" })}>
                       <option value="true">Bắt buộc</option>
                       <option value="false">Khuyến nghị</option>
@@ -2066,7 +2067,7 @@ const AdminRoadmapTemplateManager = () => {
             <div className="artm-activity-form">
               <label className="artm-wide"><span>Đầu ra mong đợi của module</span><textarea rows={3} value={group.expectedOutput || ""} onChange={(e) => updateNodeGroup(group.localId, { expectedOutput: e.target.value })} /></label>
               <label className="artm-wide"><span>Tiêu chí hoàn thành module</span><textarea rows={3} value={group.completionCriteria || ""} onChange={(e) => updateNodeGroup(group.localId, { completionCriteria: e.target.value })} /></label>
-              <label className="artm-wide"><span>Rubric tổng của module</span><textarea rows={3} value={group.rubric || ""} onChange={(e) => updateNodeGroup(group.localId, { rubric: e.target.value })} /></label>
+              <div className="artm-wide"><RubricListEditor value={group.rubric || ""} onChange={(val) => updateNodeGroup(group.localId, { rubric: val })} label="Rubric tổng của module (N Rubrics)" /></div>
               <label className="artm-wide"><span>Gợi ý cho AI khi sinh nội dung</span><textarea rows={2} value={group.aiPromptHint || ""} onChange={(e) => updateNodeGroup(group.localId, { aiPromptHint: e.target.value })} /></label>
             </div>
           </section>
@@ -2116,7 +2117,7 @@ const AdminRoadmapTemplateManager = () => {
                 <label><span>Giờ học</span><input type="number" min={0} value={activity.estimatedHours ?? ""} onChange={(e) => updateActivity(block.localId, index, { estimatedHours: e.target.value ? Number(e.target.value) : null })} /></label>
                 <label className="artm-wide"><span>Mô tả bài học</span><textarea rows={2} value={activity.description || ""} onChange={(e) => updateActivity(block.localId, index, { description: e.target.value })} /></label>
                 <label className="artm-wide"><span>Đầu ra mong đợi</span><textarea rows={3} value={activity.expectedOutput || ""} onChange={(e) => updateActivity(block.localId, index, { expectedOutput: e.target.value })} /></label>
-                <label className="artm-wide"><span>Rubric / tiêu chí hoàn thành</span><textarea rows={3} value={activity.rubric || ""} onChange={(e) => updateActivity(block.localId, index, { rubric: e.target.value })} /></label>
+                <div className="artm-wide"><RubricListEditor value={activity.rubric || ""} onChange={(val) => updateActivity(block.localId, index, { rubric: val })} label="Rubric / tiêu chí hoàn thành (N Rubrics)" /></div>
                 <label><span>Kiến thức cần có</span><textarea rows={2} value={activity.prerequisiteHint || ""} onChange={(e) => updateActivity(block.localId, index, { prerequisiteHint: e.target.value })} /></label>
                 <label><span>Gợi ý cho AI</span><textarea rows={2} value={activity.aiPromptHint || ""} onChange={(e) => updateActivity(block.localId, index, { aiPromptHint: e.target.value })} /></label>
               </div>
