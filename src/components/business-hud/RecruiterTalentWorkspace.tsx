@@ -2302,7 +2302,7 @@ const RecruiterTalentWorkspace = ({
                       <CandidateEvidenceAnalysisPanel analysis={aiInsight.fitAnalysis} />
                     )}
 
-                    {false && aiInsight?.fitAnalysis?.components?.length && (
+                    {aiInsight === null && aiInsight?.fitAnalysis?.components?.length && (
                       <div
                         style={{
                           marginTop: "1.5rem",

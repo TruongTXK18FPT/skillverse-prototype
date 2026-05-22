@@ -1022,8 +1022,7 @@ const AdminRoadmapTemplateManager = () => {
         courseLinkPolicy: block.courseLinkPolicy,
         autoCourseLimit: block.autoCourseLimit ?? 2,
         ragEnabled: block.ragEnabled,
-        activities: [],
-        legacyActivitiesIgnored: block.activities.map((activity, index) => ({
+        activities: block.activities.map((activity, index) => ({
           id: activity.id,
           title: activity.title.trim(),
           description: activity.description?.trim(),
@@ -1347,7 +1346,22 @@ const AdminRoadmapTemplateManager = () => {
           courseLinkPolicy: block.courseLinkPolicy,
           autoCourseLimit: block.autoCourseLimit ?? 2,
           ragEnabled: block.ragEnabled,
-          activities: [],
+          activities: block.activities.map((activity, index) => ({
+            id: activity.id,
+            title: activity.title.trim(),
+            description: activity.description?.trim(),
+            exerciseType: activity.exerciseType?.trim(),
+            expectedOutput: activity.expectedOutput?.trim(),
+            rubric: activity.rubric?.trim(),
+            difficulty: activity.difficulty || "trung bình",
+            minLevel: activity.minLevel ?? SkillLevel.BEGINNER,
+            maxLevel: activity.maxLevel ?? null,
+            estimatedHours: activity.estimatedHours ?? null,
+            prerequisiteHint: activity.prerequisiteHint?.trim(),
+            aiPromptHint: activity.aiPromptHint?.trim(),
+            skillRequirementsJson: JSON.stringify(parseActivitySkillRequirements(activity)),
+            orderIndex: index + 1,
+          })),
         })),
       });
       setBackendPreview(preview);

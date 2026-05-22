@@ -94,6 +94,8 @@ const AdminRoadmapEvidenceReviewTab: React.FC = () => {
     } finally {
       setSubmitting(false);
     }
+  };
+
   const renderRubricBreakdown = (jsonStr: string) => {
     try {
       const parsed = JSON.parse(jsonStr);

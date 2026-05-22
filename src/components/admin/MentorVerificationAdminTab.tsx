@@ -528,7 +528,7 @@ const MentorVerificationAdminTab: React.FC<MentorVerificationAdminTabProps> = ({
                       {isPdfUrl(ev.evidenceUrl) && (
                         <div className="admin-pdf-image-fallback">
                           <img 
-                            src={getPdfPreviewAsImage(ev.evidenceUrl)} 
+                            src={getPdfPreviewAsImage(ev.evidenceUrl || '')} 
                             alt="PDF Preview (Trang 1)" 
                             className="admin-pdf-preview" 
                             style={{objectFit: 'contain', background: '#0f172a'}} 
