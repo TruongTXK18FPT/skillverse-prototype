@@ -417,6 +417,13 @@
   font-size: 1rem;
 }
 
+.artm-section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .artm-allocation-list {
   display: grid;
   gap: 10px;

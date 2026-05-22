@@ -5,6 +5,7 @@ import {
   Archive,
   ArrowLeft,
   BookOpen,
+  Calculator,
   CheckCircle2,
   ClipboardCheck,
   Copy,
@@ -647,6 +648,73 @@ const buildSkillBlockFromTrackSkill = (
   selectedCourseIds: [],
 });
 
+const skillRequirementMultiplier = (requirementType?: JobPositionTrackSkill["requirementType"]) => {
+  if (requirementType === "IMPORTANT") return 2;
+  if (requirementType === "NICE_TO_HAVE") return 1;
+  return 3;
+};
+
+const normalizeTrackSkillWeight = (weight?: number | null) => {
+  const value = Number(weight);
+  return Number.isFinite(value) && value > 0 ? value : 1;
+};
+
+const calculateTrackSkillWeightPercents = (skills: JobPositionTrackSkill[]) => {
+  const items = skills.map((skill) => ({
+    skill,
+    effectiveWeight: normalizeTrackSkillWeight(skill.weight) * skillRequirementMultiplier(skill.requirementType),
+  }));
+  const totalEffectiveWeight = items.reduce((sum, item) => sum + item.effectiveWeight, 0);
+  if (totalEffectiveWeight <= 0) return new Map<number, number>();
+
+  const result = new Map<number, number>();
+  let roundedTotal = 0;
+  items.forEach((item) => {
+    const percent = Math.round((item.effectiveWeight / totalEffectiveWeight) * 10000) / 100;
+    result.set(item.skill.skillId, percent);
+    roundedTotal += percent;
+  });
+
+  const delta = Math.round((100 - roundedTotal) * 100) / 100;
+  if (Math.abs(delta) >= 0.01) {
+    const target = [...items].sort((a, b) => {
+      if (b.effectiveWeight !== a.effectiveWeight) return b.effectiveWeight - a.effectiveWeight;
+      return a.skill.sortOrder - b.skill.sortOrder;
+    })[0];
+    if (target) {
+      const current = result.get(target.skill.skillId) || 0;
+      result.set(target.skill.skillId, Math.round((current + delta) * 100) / 100);
+    }
+  }
+
+  return result;
+};
+
+const applyTrackSkillPriorityToBlocks = (
+  currentBlocks: SkillBlockDraft[],
+  trackSkills: JobPositionTrackSkill[],
+) => {
+  const percentBySkill = calculateTrackSkillWeightPercents(trackSkills);
+  const existingBySkill = new Map(currentBlocks.map((block) => [block.skillId, block]));
+  return trackSkills.map((skill) => {
+    const existing = existingBySkill.get(skill.skillId);
+    const weightPercent = percentBySkill.get(skill.skillId) ?? 0;
+    if (existing) {
+      return {
+        ...existing,
+        skillNameSnapshot: existing.skillNameSnapshot || skill.skillName,
+        skillCanonicalKeySnapshot: existing.skillCanonicalKeySnapshot || skill.canonicalKey,
+        weightPercent,
+        minNodes: existing.minNodes ?? (skill.requirementType === "REQUIRED" ? 1 : 0),
+      };
+    }
+    return {
+      ...buildSkillBlockFromTrackSkill(skill, weightPercent),
+      minNodes: skill.requirementType === "REQUIRED" ? 1 : 0,
+    };
+  });
+};
+
 const normalizeBlock = (
   block: RoadmapTemplateSkillBlockRequest,
   courses: RoadmapTemplateResponse["courses"] = [],
@@ -693,6 +761,7 @@ const AdminRoadmapTemplateManager = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [actionId, setActionId] = useState<number | null>(null);
+  const [calculatingSkillPriority, setCalculatingSkillPriority] = useState(false);
   const [validation, setValidation] = useState<RoadmapTemplateValidationResponse | null>(null);
   const [backendPreview, setBackendPreview] =
     useState<RoadmapTemplateAllocationPreviewResponse | null>(null);
@@ -1057,10 +1126,9 @@ const AdminRoadmapTemplateManager = () => {
         setTrackSkills(sorted);
         setForm((current) => {
           if (current.editingId || current.skillBlocks.length > 0) return current;
-          const weight = sorted.length > 0 ? Math.round((100 / sorted.length) * 100) / 100 : 0;
           return {
             ...current,
-            skillBlocks: sorted.map((skill) => buildSkillBlockFromTrackSkill(skill, weight)),
+            skillBlocks: applyTrackSkillPriorityToBlocks([], sorted),
             nodeGroups: [],
           };
         });
@@ -1237,6 +1305,57 @@ const AdminRoadmapTemplateManager = () => {
       ...current,
       skillBlocks: current.skillBlocks.filter((block) => block.localId !== localId),
     }));
+  };
+
+  const calculateSkillPriority = async () => {
+    if (!toNumberOrNull(form.jobPositionTrackId)) {
+      showError("Chưa chọn nhánh lộ trình", "Hãy chọn job position track trước khi tính % kỹ năng.");
+      return;
+    }
+    if (trackSkills.length === 0) {
+      showError("Chưa có kỹ năng trong nhánh", "Hãy cấu hình track skills trước khi tính % ưu tiên.");
+      return;
+    }
+    setCalculatingSkillPriority(true);
+    const nextBlocks = applyTrackSkillPriorityToBlocks(form.skillBlocks, trackSkills);
+    setForm((current) => ({
+      ...current,
+      skillBlocks: applyTrackSkillPriorityToBlocks(current.skillBlocks, trackSkills),
+    }));
+    setActiveSkillBlockId(nextBlocks[0]?.localId ?? null);
+    setValidation(null);
+    try {
+      const preview = await roadmapTemplateService.previewAllocation({
+        ...buildPayload(),
+        skillBlocks: nextBlocks.map((block) => ({
+          id: block.id,
+          skillId: block.skillId,
+          skillNameSnapshot: block.skillNameSnapshot,
+          skillCanonicalKeySnapshot: block.skillCanonicalKeySnapshot,
+          weightPercent: Number(block.weightPercent) || 0,
+          minNodes: block.minNodes ?? null,
+          maxNodes: block.maxNodes ?? null,
+          nodeCountOverride: block.nodeCountOverride ?? null,
+          learningGoals: block.learningGoals?.trim(),
+          requiredTopics: block.requiredTopics?.trim(),
+          activityInstructions: block.activityInstructions?.trim(),
+          exerciseTypes: block.exerciseTypes?.trim(),
+          successCriteria: block.successCriteria?.trim(),
+          ragQueryHint: block.ragQueryHint?.trim(),
+          courseLinkPolicy: block.courseLinkPolicy,
+          autoCourseLimit: block.autoCourseLimit ?? 2,
+          ragEnabled: block.ragEnabled,
+          activities: [],
+        })),
+      });
+      setBackendPreview(preview);
+      showSuccess("Đã tính % ưu tiên kỹ năng", "Tỷ lệ đã được chuẩn hóa theo requirement type và trọng số của track.");
+    } catch (error) {
+      setBackendPreview(null);
+      showError("Đã tính local nhưng chưa xem được preview", getApiErrorMessage(error, "Có thể cần điền đủ thông tin tổng quan trước."));
+    } finally {
+      setCalculatingSkillPriority(false);
+    }
   };
 
   const saveTemplate = async () => {
@@ -1748,7 +1867,13 @@ const AdminRoadmapTemplateManager = () => {
             </div>
             <p>{trackSkills.length} kỹ năng trong nhánh đã chọn. Trọng số và độ phủ tối thiểu/tối đa chỉ dùng để ưu tiên, không ép mỗi skill sinh node riêng.</p>
           </div>
-          <button type="button" onClick={addSkillBlock}><Plus size={16} /> Thêm kỹ năng</button>
+          <div className="artm-section-actions">
+            <button type="button" onClick={() => void calculateSkillPriority()} disabled={calculatingSkillPriority || trackSkills.length === 0}>
+              {calculatingSkillPriority ? <Loader2 size={16} className="artm-spin" /> : <Calculator size={16} />}
+              Tính % nhanh
+            </button>
+            <button type="button" onClick={addSkillBlock}><Plus size={16} /> Thêm kỹ năng</button>
+          </div>
         </div>
       <div className="artm-allocation-list">
         {form.skillBlocks.map((block) => (

@@ -181,6 +181,11 @@ export interface RoadmapTemplateAllocationItem {
   skillId: number;
   skillName?: string;
   weightPercent?: number;
+  requirementType?: RequirementType;
+  trackWeight?: number;
+  requirementMultiplier?: number;
+  effectiveWeight?: number;
+  normalizedWeightPercent?: number;
   minNodes?: number | null;
   maxNodes?: number | null;
   nodeCountOverride?: number | null;
