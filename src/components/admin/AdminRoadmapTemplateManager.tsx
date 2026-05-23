@@ -11,8 +11,6 @@ import {
   Copy,
   Edit3,
   Eye,
-  FileStack,
-  Layers3,
   Loader2,
   Plus,
   RefreshCw,
@@ -91,17 +89,6 @@ type CourseOption = {
   thumbnailUrl?: string;
 };
 
-const exerciseTypeOptions = [
-  { value: "Dự án thực hành", label: "Dự án thực hành" },
-  { value: "Bài code lab", label: "Bài code lab" },
-  { value: "Trắc nghiệm", label: "Trắc nghiệm" },
-  { value: "Bài viết phân tích", label: "Bài viết phân tích" },
-  { value: "Case study", label: "Case study" },
-  { value: "Portfolio evidence", label: "Portfolio evidence" },
-  { value: "Phỏng vấn kỹ thuật", label: "Phỏng vấn kỹ thuật" },
-  { value: "Ôn tập có hướng dẫn", label: "Ôn tập có hướng dẫn" },
-];
-
 type TemplateForm = {
   editingId?: number;
   title: string;
@@ -147,28 +134,6 @@ const moduleBuilderTabs: Array<{ key: BuilderTab; label: string }> = [
   { key: "activities", label: "Nội dung module" },
   { key: "courses", label: "Khóa học & tài liệu" },
   { key: "preview", label: "Kiểm tra độ phủ" },
-];
-
-const levelOptions: SkillLevel[] = [
-  SkillLevel.BEGINNER,
-  SkillLevel.ELEMENTARY,
-  SkillLevel.INTERMEDIATE,
-  SkillLevel.ADVANCED,
-  SkillLevel.EXPERT,
-];
-
-const levelLabel: Record<SkillLevel, string> = {
-  [SkillLevel.BEGINNER]: "Nhập môn",
-  [SkillLevel.ELEMENTARY]: "Cơ bản",
-  [SkillLevel.INTERMEDIATE]: "Trung cấp",
-  [SkillLevel.ADVANCED]: "Nâng cao",
-  [SkillLevel.EXPERT]: "Chuyên gia",
-};
-
-const outputLanguageOptions = [
-  { value: "vi", label: "Tiếng Việt" },
-  { value: "en", label: "Tiếng Anh" },
-  { value: "vi-en", label: "Tiếng Việt kèm thuật ngữ tiếng Anh" },
 ];
 
 const exerciseRequirementOptions = [
@@ -320,9 +285,6 @@ const toNumberOrNull = (value: string) => {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
 };
-
-const levelRank = (level?: SkillLevel | null) =>
-  level ? levelOptions.indexOf(level) : -1;
 
 const computeLocalAllocation = (
   blocks: SkillBlockDraft[],
@@ -512,59 +474,6 @@ const defaultModuleExercise = (orderIndex: number, moduleTitle = "module"): Modu
   rubric: "Hoàn thành đúng yêu cầu, giải thích được cách làm và liên kết được với kỹ năng trong module.",
   required: true,
 });
-
-const buildSkillRequirement = (skill: JobPositionTrackSkill): RoadmapNodeSkillRequirement => ({
-  skillId: skill.skillId,
-  skillName: skill.skillName,
-  canonicalKey: skill.canonicalKey,
-  requirementType: skill.requirementType === "REQUIRED" || skill.requirementType === "IMPORTANT"
-    ? skill.requirementType
-    : "NICE_TO_HAVE",
-});
-
-const getModuleSkillRequirements = (
-  activity: RoadmapTemplateActivityRequest,
-  block: SkillBlockDraft,
-): RoadmapNodeSkillRequirement[] => {
-  const parsed = parseActivitySkillRequirements(activity);
-  if (parsed.length > 0) return parsed;
-  return [{
-    skillId: block.skillId,
-    skillName: block.skillNameSnapshot,
-    canonicalKey: block.skillCanonicalKeySnapshot,
-    requirementType: "REQUIRED",
-  }];
-};
-
-const makeActivityFromNodeGroup = (
-  group: RoadmapTemplateNodeGroupResponse,
-  orderIndex: number,
-): RoadmapTemplateActivityRequest => {
-  const skills = (group.skills || []).map((skill) => ({
-    skillId: skill.skillId,
-    skillName: skill.skillName,
-    canonicalKey: skill.canonicalKey,
-    requirementType: skill.requirementType === "REQUIRED" || skill.requirementType === "IMPORTANT"
-      ? skill.requirementType
-      : "NICE_TO_HAVE",
-  }));
-  return {
-    title: group.title || `Module ${orderIndex}`,
-    description: group.description || "",
-    exerciseType: "Dự án thực hành",
-    expectedOutput: group.expectedOutput || `Hoàn thành sản phẩm thực hành cho ${group.title}.`,
-    rubric: group.rubric || "Bài nộp kết hợp được các kỹ năng trong module và có minh chứng rõ ràng.",
-    difficulty: group.difficulty || "medium",
-    minLevel: SkillLevel.BEGINNER,
-    maxLevel: null,
-    estimatedHours: group.estimatedHours ?? 4,
-    prerequisiteHint: "",
-    aiPromptHint: "Module node: combine related skills into one practical learning topic.",
-    skillRequirements: skills,
-    skillRequirementsJson: JSON.stringify(skills),
-    orderIndex,
-  };
-};
 
 const makeNodeGroupSkill = (
   skill: JobPositionTrackSkill | RoadmapTemplateNodeGroupResponse["skills"][number],
@@ -775,11 +684,6 @@ const AdminRoadmapTemplateManager = () => {
     Record<number, CourseOption[]>
   >({});
   const [searchingCourseSkillId, setSearchingCourseSkillId] = useState<number | null>(null);
-
-  const selectedTrack = useMemo(
-    () => tracks.find((track) => String(track.id) === form.jobPositionTrackId),
-    [form.jobPositionTrackId, tracks],
-  );
 
   const domainNameById = useMemo(
     () => new Map(domains.map((domain) => [domain.id, domain.name])),
@@ -1251,40 +1155,6 @@ const AdminRoadmapTemplateManager = () => {
         block.localId === localId ? { ...block, ...patch } : block,
       ),
     }));
-  };
-
-  const updateActivity = (
-    blockId: string,
-    activityIndex: number,
-    patch: Partial<RoadmapTemplateActivityRequest>,
-  ) => {
-    setForm((current) => ({
-      ...current,
-      skillBlocks: current.skillBlocks.map((block) => {
-        if (block.localId !== blockId) return block;
-        return {
-          ...block,
-          activities: block.activities.map((activity, index) =>
-            index === activityIndex ? { ...activity, ...patch } : activity,
-          ),
-        };
-      }),
-    }));
-  };
-
-  const addActivity = (block: SkillBlockDraft) => {
-    updateBlock(block.localId, {
-      activities: [
-        ...block.activities,
-        defaultActivity(block.skillNameSnapshot || "Kỹ năng", block.activities.length + 1),
-      ],
-    });
-  };
-
-  const removeActivity = (block: SkillBlockDraft, index: number) => {
-    updateBlock(block.localId, {
-      activities: block.activities.filter((_, activityIndex) => activityIndex !== index),
-    });
   };
 
   const addSkillBlock = () => {
@@ -1771,16 +1641,10 @@ const AdminRoadmapTemplateManager = () => {
         <div className="artm-section-head">
           <div>
             <h3>Ràng buộc sinh lộ trình</h3>
-            <p>Admin chọn bằng form, hệ thống tự đóng gói dữ liệu chuẩn cho backend. Ngôn ngữ và bài tập là bắt buộc; thời lượng từng nút phụ thuộc độ khó và độ phức tạp của node.</p>
+            <p>Admin chọn bằng form, hệ thống tự đóng gói dữ liệu chuẩn cho backend. Bài tập là bắt buộc; thời lượng từng nút phụ thuộc độ khó và độ phức tạp của node.</p>
           </div>
         </div>
         <div className="artm-panel-grid artm-panel-grid--tight">
-          <label>
-            <span>Ngôn ngữ đầu ra</span>
-            <select value={form.outputLanguage} onChange={(e) => setForm({ ...form, outputLanguage: e.target.value })}>
-              {outputLanguageOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-            </select>
-          </label>
           <label>
             <span>Bài tập bắt buộc</span>
             <select value={form.exerciseRequirement} onChange={(e) => setForm({ ...form, exerciseRequirement: e.target.value })}>
@@ -2089,59 +1953,6 @@ const AdminRoadmapTemplateManager = () => {
       })}
     </div>
   );
-
-  const renderActivities = () => (
-    <div className="artm-skill-stack">
-      {visibleSkillBlocks.map((block) => (
-        <section className="artm-skill-card" key={block.localId}>
-          <div className="artm-section-head">
-            <div>
-              <h3>{block.skillNameSnapshot}</h3>
-              <p>Module blueprint cho skill pool này. Mỗi module có thể chứa nhiều skill liên quan.</p>
-            </div>
-            <button type="button" onClick={() => addActivity(block)}><Plus size={16} /> Thêm bài học</button>
-          </div>
-          <div className="artm-panel-grid">
-            <label className="artm-wide"><span>Mục tiêu học tập</span><textarea rows={2} value={block.learningGoals || ""} onChange={(e) => updateBlock(block.localId, { learningGoals: e.target.value })} /></label>
-            <label className="artm-wide"><span>Chủ đề bắt buộc</span><textarea rows={2} value={block.requiredTopics || ""} onChange={(e) => updateBlock(block.localId, { requiredTopics: e.target.value })} placeholder="REST API; kiến trúc microservice; kiến trúc monolith; bảo mật" /></label>
-            <label className="artm-wide"><span>Hướng dẫn hoạt động</span><textarea rows={2} value={block.activityInstructions || ""} onChange={(e) => updateBlock(block.localId, { activityInstructions: e.target.value })} /></label>
-          </div>
-          {block.activities.map((activity, index) => (
-            <article className="artm-activity-card" key={`${block.localId}-${index}`}>
-              <div className="artm-activity-head">
-                <div>
-                  <strong>Module {index + 1}</strong>
-                  <span>{block.skillNameSnapshot}</span>
-                </div>
-                <button type="button" title="Xóa bài học" onClick={() => removeActivity(block, index)}><Trash2 size={16} /></button>
-              </div>
-              <div className="artm-activity-form">
-                <label className="artm-wide"><span>Tên bài học</span><input value={activity.title} onChange={(e) => updateActivity(block.localId, index, { title: e.target.value })} /></label>
-                <label><span>Loại bài tập / bài học</span><select value={activity.exerciseType || exerciseTypeOptions[0].value} onChange={(e) => updateActivity(block.localId, index, { exerciseType: e.target.value })}>
-                  {exerciseTypeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-                </select></label>
-                <label><span>Cấp độ tối thiểu</span><select value={activity.minLevel || SkillLevel.BEGINNER} onChange={(e) => updateActivity(block.localId, index, { minLevel: e.target.value as SkillLevel })}>
-                  {levelOptions.map((level) => <option key={level} value={level}>{levelLabel[level]}</option>)}
-                </select></label>
-                <label><span>Cấp độ tối đa</span><select value={activity.maxLevel || ""} onChange={(e) => updateActivity(block.localId, index, { maxLevel: e.target.value ? e.target.value as SkillLevel : null })}>
-                  <option value="">Không giới hạn</option>
-                  {levelOptions.map((level) => <option key={level} value={level}>{levelLabel[level]}</option>)}
-                </select></label>
-                <label><span>Độ khó</span><input value={activity.difficulty || "trung bình"} onChange={(e) => updateActivity(block.localId, index, { difficulty: e.target.value })} /></label>
-                <label><span>Giờ học</span><input type="number" min={0} value={activity.estimatedHours ?? ""} onChange={(e) => updateActivity(block.localId, index, { estimatedHours: e.target.value ? Number(e.target.value) : null })} /></label>
-                <label className="artm-wide"><span>Mô tả bài học</span><textarea rows={2} value={activity.description || ""} onChange={(e) => updateActivity(block.localId, index, { description: e.target.value })} /></label>
-                <label className="artm-wide"><span>Đầu ra mong đợi</span><textarea rows={3} value={activity.expectedOutput || ""} onChange={(e) => updateActivity(block.localId, index, { expectedOutput: e.target.value })} /></label>
-                <div className="artm-wide"><RubricListEditor value={activity.rubric || ""} onChange={(val) => updateActivity(block.localId, index, { rubric: val })} label="Rubric / tiêu chí hoàn thành (N Rubrics)" /></div>
-                <label><span>Kiến thức cần có</span><textarea rows={2} value={activity.prerequisiteHint || ""} onChange={(e) => updateActivity(block.localId, index, { prerequisiteHint: e.target.value })} /></label>
-                <label><span>Gợi ý cho AI</span><textarea rows={2} value={activity.aiPromptHint || ""} onChange={(e) => updateActivity(block.localId, index, { aiPromptHint: e.target.value })} /></label>
-              </div>
-            </article>
-          ))}
-        </section>
-      ))}
-    </div>
-  );
-
   const renderCourses = () => (
     <div className="artm-skill-stack">
       {visibleSkillBlocks.map((block) => (

@@ -4,11 +4,9 @@ import {
   BriefcaseBusiness,
   Check,
   ChevronRight,
-  GraduationCap,
   Layers3,
   Loader2,
   Sparkles,
-  Target,
 } from "lucide-react";
 import { careerTaxonomyService } from "../../services/careerTaxonomyService";
 import type {
@@ -16,7 +14,6 @@ import type {
   JobPosition,
   JobPositionTrack,
   JobPositionTrackSkill,
-  TargetLevel,
 } from "../../types/careerTaxonomy";
 
 interface SkillFormProps {
@@ -33,14 +30,6 @@ interface SkillFormProps {
 }
 
 type SkillStep = "domain" | "job" | "track";
-
-const TARGET_LEVEL_LABELS: Record<TargetLevel, string> = {
-  INTERNSHIP: "Thực tập",
-  FRESHER: "Fresher",
-  JUNIOR: "Junior",
-  MIDDLE: "Middle",
-  SENIOR: "Senior",
-};
 
 const DOMAIN_LABEL_OVERRIDES: Record<string, string> = {
   it: "Công nghệ thông tin",
@@ -102,11 +91,6 @@ const getJobLabel = (job?: JobPosition | null) => {
 
 const getTrackLabel = (track?: JobPositionTrack | null) =>
   track ? humanizeFallback(track.name || track.code) : "";
-
-const getTargetLevelLabel = (level?: string | null) =>
-  level && level in TARGET_LEVEL_LABELS
-    ? TARGET_LEVEL_LABELS[level as TargetLevel]
-    : humanizeFallback(level) || "Chưa xác định";
 
 const getTrackSkillName = (skill: JobPositionTrackSkill): string =>
   humanizeFallback(skill.skillName || skill.canonicalKey || `Kỹ năng #${skill.skillId}`);
@@ -280,7 +264,6 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
       jobRole: selectedJobPosition.name,
       jobPositionId: selectedJobPosition.id,
       jobPositionTrackId: selectedTrack.id,
-      targetLevel: selectedTrack.targetLevel,
       skills: selectedSkillNames,
     });
   };
@@ -447,10 +430,6 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
                       className={`gsj-skill-track-card ${selected ? "gsj-skill-track-card--selected" : ""}`}
                       onClick={() => selectTrack(track.id)}
                     >
-                      <span className="gsj-skill-track-card__level">
-                        <GraduationCap size={16} />
-                        {getTargetLevelLabel(track.targetLevel)}
-                      </span>
                       <strong>{getTrackLabel(track)}</strong>
                       <small>
                         {track.description ||
@@ -479,14 +458,6 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
                     {getTrackLabel(selectedTrack)}
                   </strong>
                 </div>
-              </div>
-
-              <div className="gsj-target-summary__group">
-                <span className="gsj-target-summary__label">Cấp độ mục tiêu</span>
-                <span className="gsj-chip gsj-chip--selected gsj-target-summary__chip">
-                  <Target size={14} />
-                  {getTargetLevelLabel(selectedTrack.targetLevel)}
-                </span>
               </div>
 
               <div className="gsj-target-summary__group gsj-target-summary__group--skills">

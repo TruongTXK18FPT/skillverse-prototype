@@ -1,5 +1,4 @@
 export type TaxonomyStatus = 'ACTIVE' | 'INACTIVE';
-export type TargetLevel = 'INTERNSHIP' | 'FRESHER' | 'JUNIOR' | 'MIDDLE' | 'SENIOR';
 export type RequirementType = 'REQUIRED' | 'IMPORTANT' | 'NICE_TO_HAVE';
 export type ImportanceLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
@@ -26,7 +25,6 @@ export interface JobPositionTrack {
   name: string;
   description: string;
   jobPositionId: number;
-  targetLevel: TargetLevel;
   status: TaxonomyStatus;
 }
 

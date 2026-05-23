@@ -9,7 +9,7 @@ import { showAppError, showAppSuccess } from '../../../context/ToastContext';
 import Pagination from '../../shared/Pagination';
 import './JobPositionTrackSkillTab.css';
 
-type TrackSortKey = 'code' | 'name' | 'jobPosition' | 'targetLevel' | 'status';
+type TrackSortKey = 'code' | 'name' | 'jobPosition' | 'status';
 
 function LocalSearchSelect({ 
   options, 
@@ -135,14 +135,13 @@ const JobPositionTrackSkillTab: React.FC = () => {
     jobPositionId: '' as number | '',
     code: '', 
     name: '', 
-    description: '', 
-    targetLevel: 'FRESHER' 
+    description: ''
   });
   const [trackSubmitting, setTrackSubmitting] = useState(false);
 
   // Edit track state
   const [editingTrackId, setEditingTrackId] = useState<number | null>(null);
-  const [editTrackForm, setEditTrackForm] = useState({ code: '', name: '', description: '', targetLevel: 'FRESHER', jobPositionId: '' as number | '' });
+  const [editTrackForm, setEditTrackForm] = useState({ code: '', name: '', description: '', jobPositionId: '' as number | '' });
   const [editTrackSubmitting, setEditTrackSubmitting] = useState(false);
 
   // Add skill to track
@@ -314,10 +313,9 @@ const JobPositionTrackSkillTab: React.FC = () => {
     setTrackForm({
       domainId: jobPosition.domainId,
       jobPositionId: jobPosition.id,
-      code: normalizeTaxonomyCode(`${domain?.code || 'TRACK'}_${jobPosition.code}_${trackForm.targetLevel || 'FRESHER'}`),
-      name: `${jobPosition.name} ${trackForm.targetLevel || 'Fresher'}`,
+      code: normalizeTaxonomyCode(`${domain?.code || 'TRACK'}_${jobPosition.code}`),
+      name: `${jobPosition.name}`,
       description: jobPosition.description || '',
-      targetLevel: 'FRESHER',
     });
     setShowTrackForm(true);
   };
@@ -378,10 +376,9 @@ const JobPositionTrackSkillTab: React.FC = () => {
         code: trackForm.code.trim(), 
         name: trackForm.name.trim(), 
         description: trackForm.description.trim() || undefined, 
-        jobPositionId: Number(trackForm.jobPositionId), 
-        targetLevel: trackForm.targetLevel as JobPositionTrack['targetLevel'] 
+        jobPositionId: Number(trackForm.jobPositionId)
       });
-      setTrackForm({ domainId: '', jobPositionId: '', code: '', name: '', description: '', targetLevel: 'FRESHER' });
+      setTrackForm({ domainId: '', jobPositionId: '', code: '', name: '', description: '' });
       setShowTrackForm(false);
       await fetchGlobalData();
       showAppSuccess('Đã tạo track', `Track "${trackForm.name.trim()}" đã được tạo.`);
@@ -396,7 +393,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
   const startEditTrack = (t: JobPositionTrack, e?: React.MouseEvent) => {
     e?.stopPropagation();
     setEditingTrackId(t.id);
-    setEditTrackForm({ code: t.code, name: t.name, description: t.description || '', targetLevel: t.targetLevel, jobPositionId: t.jobPositionId });
+    setEditTrackForm({ code: t.code, name: t.name, description: t.description || '', jobPositionId: t.jobPositionId });
   };
   
   const cancelEditTrack = (e?: React.MouseEvent) => {
@@ -413,8 +410,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
         code: editTrackForm.code.trim(), 
         name: editTrackForm.name.trim(), 
         description: editTrackForm.description.trim() || undefined, 
-        jobPositionId: Number(editTrackForm.jobPositionId), 
-        targetLevel: editTrackForm.targetLevel as JobPositionTrack['targetLevel'] 
+        jobPositionId: Number(editTrackForm.jobPositionId)
       });
       setEditingTrackId(null);
       await fetchGlobalData();
@@ -619,7 +615,6 @@ const JobPositionTrackSkillTab: React.FC = () => {
           <option value="code">Sắp xếp theo mã</option>
           <option value="name">Sắp xếp theo tên</option>
           <option value="jobPosition">Sắp xếp theo vị trí</option>
-          <option value="targetLevel">Sắp xếp theo level</option>
           <option value="status">Sắp xếp theo trạng thái</option>
         </select>
       </div>
@@ -649,7 +644,6 @@ const JobPositionTrackSkillTab: React.FC = () => {
                   {getJpName(t.jobPositionId)}
                 </span>
                 <span className="job-track-skill-tab__track-card-footer">
-                  <span className="job-track-skill-tab__track-chip">{t.targetLevel}</span>
                   <span className={`status-badge ${t.status.toLowerCase()}`}>{t.status}</span>
                 </span>
               </button>
@@ -734,12 +728,6 @@ const JobPositionTrackSkillTab: React.FC = () => {
                       {jobPositions.filter(jp => jp.status === 'ACTIVE' || jp.id === selectedTrack.jobPositionId).map(jp => <option key={jp.id} value={jp.id}>{jp.name}</option>)}
                     </select>
                   </label>
-                  <label className="job-track-skill-tab__field">
-                    <span>Level mục tiêu *</span>
-                    <select value={editTrackForm.targetLevel} onChange={e => setEditTrackForm(p => ({ ...p, targetLevel: e.target.value }))} className="job-track-skill-tab__select">
-                      {['INTERNSHIP', 'FRESHER', 'JUNIOR', 'MIDDLE', 'SENIOR'].map(l => <option key={l} value={l}>{l}</option>)}
-                    </select>
-                  </label>
                   <label className="job-track-skill-tab__field job-track-skill-tab__field--full">
                     <span>Mô tả</span>
                     <input value={editTrackForm.description} onChange={e => setEditTrackForm(p => ({ ...p, description: e.target.value }))} className="job-track-skill-tab__input" placeholder="Mô tả ngắn gọn, không bắt buộc" />
@@ -749,7 +737,6 @@ const JobPositionTrackSkillTab: React.FC = () => {
                 <div className="job-track-skill-tab__detail-grid">
                   <div><span>Domain</span><strong>{selectedDomain?.name || 'Không rõ'}</strong></div>
                   <div><span>Vị trí công việc</span><strong>{selectedJobPosition?.name || 'Không rõ'}</strong></div>
-                  <div><span>Level mục tiêu</span><strong>{selectedTrack.targetLevel}</strong></div>
                   <div><span>Trạng thái</span><strong>{selectedTrack.status}</strong></div>
                   <div className="job-track-skill-tab__detail-grid-full"><span>Mô tả</span><strong>{selectedTrack.description || 'Chưa có mô tả'}</strong></div>
                 </div>
@@ -980,12 +967,6 @@ const JobPositionTrackSkillTab: React.FC = () => {
               <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-name">
                 <span>Tên track *</span>
                 <input id="track-create-name" placeholder="VD: Backend Java Spring Boot" value={trackForm.name} onChange={e => setTrackForm(p => ({ ...p, name: e.target.value }))} className="job-track-skill-tab__input" />
-              </label>
-              <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-target-level">
-                <span>Level mục tiêu *</span>
-                <select id="track-create-target-level" value={trackForm.targetLevel} onChange={e => setTrackForm(p => ({ ...p, targetLevel: e.target.value }))} className="job-track-skill-tab__select">
-                  {['INTERNSHIP', 'FRESHER', 'JUNIOR', 'MIDDLE', 'SENIOR'].map(l => <option key={l} value={l}>{l}</option>)}
-                </select>
               </label>
               <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-description">
                 <span>Mô tả</span>
