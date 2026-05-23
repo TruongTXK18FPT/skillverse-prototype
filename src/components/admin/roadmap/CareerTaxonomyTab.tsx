@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { careerTaxonomyService } from '../../../services/careerTaxonomyService';
+import { roadmapTemplateService } from '../../../services/roadmapTemplateService';
 import { Domain, JobPosition } from '../../../types/careerTaxonomy';
 import { confirmAction } from '../../../context/ConfirmDialogContext';
 import { showAppError, showAppSuccess } from '../../../context/ToastContext';
@@ -94,32 +95,34 @@ const CareerTaxonomyTab: React.FC = () => {
   }, [jobPositions, domains, jpSearch, jpStatusFilter, jpDomainFilter, jpSortKey]);
 
   const handleCreateDomain = async () => {
-    if (!domainForm.code.trim() || !domainForm.name.trim()) return;
+    if (!domainForm.name.trim()) return;
     setDomainSubmitting(true); setError(null);
+    const code = normalizeTaxonomyCode(domainForm.name);
     try {
-      await careerTaxonomyService.createDomain({ code: domainForm.code.trim(), name: domainForm.name.trim(), description: domainForm.description.trim() || undefined });
+      await careerTaxonomyService.createDomain({ code, name: domainForm.name.trim(), description: domainForm.description.trim() || undefined });
       setDomainForm({ code: '', name: '', description: '' }); setShowDomainForm(false);
       await fetchData();
       showAppSuccess('Đã tạo domain', `Domain "${domainForm.name.trim()}" đã được tạo.`);
     } catch (e: any) {
       const msg = e?.response?.data?.message || e?.message || '';
-      const message = msg.includes('DOMAIN_CODE_EXISTS') ? `Mã "${domainForm.code}" đã tồn tại.` : 'Tạo domain thất bại: ' + msg;
+      const message = msg.includes('DOMAIN_CODE_EXISTS') ? `Mã "${code}" đã tồn tại.` : 'Tạo domain thất bại: ' + msg;
       setError(message);
       showAppError('Tạo domain thất bại', message);
     } finally { setDomainSubmitting(false); }
   };
 
   const handleCreateJobPosition = async () => {
-    if (!jpForm.code.trim() || !jpForm.name.trim() || !jpForm.domainId) return;
+    if (!jpForm.name.trim() || !jpForm.domainId) return;
     setJpSubmitting(true); setError(null);
+    const code = normalizeTaxonomyCode(jpForm.name);
     try {
-      await careerTaxonomyService.createJobPosition({ code: jpForm.code.trim(), name: jpForm.name.trim(), description: jpForm.description.trim() || undefined, domainId: Number(jpForm.domainId) });
+      await careerTaxonomyService.createJobPosition({ code, name: jpForm.name.trim(), description: jpForm.description.trim() || undefined, domainId: Number(jpForm.domainId) });
       setJpForm({ code: '', name: '', description: '', domainId: '' }); setShowJpForm(false);
       await fetchData();
       showAppSuccess('Đã tạo vị trí', `Vị trí "${jpForm.name.trim()}" đã được tạo.`);
     } catch (e: any) {
       const msg = e?.response?.data?.message || e?.message || '';
-      const message = msg.includes('JOB_POSITION_CODE_EXISTS') ? `Mã "${jpForm.code}" đã tồn tại.` : msg.includes('INACTIVE') ? 'Domain đó đang ngừng kích hoạt.' : 'Tạo vị trí công việc thất bại: ' + msg;
+      const message = msg.includes('JOB_POSITION_CODE_EXISTS') ? `Mã "${code}" đã tồn tại.` : msg.includes('INACTIVE') ? 'Domain đó đang ngừng kích hoạt.' : 'Tạo vị trí công việc thất bại: ' + msg;
       setError(message);
       showAppError('Tạo vị trí thất bại', message);
     } finally { setJpSubmitting(false); }
@@ -183,10 +186,29 @@ const CareerTaxonomyTab: React.FC = () => {
   };
 
   const handleHardDeleteDomain = async (id: number, name: string) => {
-    if (!(await confirmAction({ title: 'Xóa vĩnh viễn domain', message: `Xóa vĩnh viễn domain "${name}"? Hành động này không thể hoàn tác.`, confirmLabel: 'Xóa vĩnh viễn', variant: 'danger' }))) return;
     setError(null);
-    try { await careerTaxonomyService.hardDeleteDomain(id); await fetchData(); showAppSuccess('Đã xóa domain', `Domain "${name}" đã được xóa.`); }
-    catch (e: any) { const message = 'Xóa thất bại: ' + (e?.response?.data?.message || e?.message); setError(message); showAppError('Xóa domain thất bại', message); }
+    try {
+      const dependentJps = await careerTaxonomyService.getJobPositions(id);
+      if (dependentJps && dependentJps.length > 0) {
+        const jpsNames = dependentJps.map(jp => `"${jp.name}"`).join(', ');
+        await confirmAction({
+          title: 'Không thể xóa domain',
+          message: `Không thể xóa domain "${name}" vì đang có ${dependentJps.length} vị trí công việc thuộc domain này: [ ${jpsNames} ]. Vui lòng xóa các vị trí công việc này trước.`,
+          confirmLabel: 'Đã hiểu',
+          variant: 'primary'
+        });
+        return;
+      }
+
+      if (!(await confirmAction({ title: 'Xóa vĩnh viễn domain', message: `Xóa vĩnh viễn domain "${name}"? Hành động này không thể hoàn tác.`, confirmLabel: 'Xóa vĩnh viễn', variant: 'danger' }))) return;
+      await careerTaxonomyService.hardDeleteDomain(id);
+      await fetchData();
+      showAppSuccess('Đã xóa domain', `Domain "${name}" đã được xóa.`);
+    } catch (e: any) {
+      const message = 'Xóa thất bại: ' + (e?.response?.data?.message || e?.message);
+      setError(message);
+      showAppError('Xóa domain thất bại', message);
+    }
   };
 
   const handleReactivateJp = async (id: number, name: string) => {
@@ -197,10 +219,43 @@ const CareerTaxonomyTab: React.FC = () => {
   };
 
   const handleHardDeleteJp = async (id: number, name: string) => {
-    if (!(await confirmAction({ title: 'Xóa vĩnh viễn vị trí', message: `Xóa vĩnh viễn vị trí công việc "${name}"? Hành động này không thể hoàn tác.`, confirmLabel: 'Xóa vĩnh viễn', variant: 'danger' }))) return;
     setError(null);
-    try { await careerTaxonomyService.hardDeleteJobPosition(id); await fetchData(); showAppSuccess('Đã xóa vị trí', `Vị trí "${name}" đã được xóa.`); }
-    catch (e: any) { const message = 'Xóa thất bại: ' + (e?.response?.data?.message || e?.message); setError(message); showAppError('Xóa vị trí thất bại', message); }
+    try {
+      const [dependentTracks, dependentTemplates] = await Promise.all([
+        careerTaxonomyService.getTracks(id),
+        roadmapTemplateService.listAdminTemplates({ jobPositionId: id })
+      ]);
+
+      if ((dependentTracks && dependentTracks.length > 0) || (dependentTemplates && dependentTemplates.length > 0)) {
+        let blockMsg = `Không thể xóa vị trí công việc "${name}" do đang có các liên kết hoạt động:\n`;
+        if (dependentTracks && dependentTracks.length > 0) {
+          const trackNames = dependentTracks.map(t => `"${t.name}"`).join(', ');
+          blockMsg += `• ${dependentTracks.length} track nghề nghiệp: [ ${trackNames} ]\n`;
+        }
+        if (dependentTemplates && dependentTemplates.length > 0) {
+          const templateNames = dependentTemplates.map(t => `"${t.title}"`).join(', ');
+          blockMsg += `• ${dependentTemplates.length} mẫu lộ trình: [ ${templateNames} ]\n`;
+        }
+        blockMsg += `Vui lòng gỡ hoặc xóa các liên kết này trước khi xóa vĩnh viễn vị trí này.`;
+
+        await confirmAction({
+          title: 'Không thể xóa vị trí công việc',
+          message: blockMsg,
+          confirmLabel: 'Đã hiểu',
+          variant: 'primary'
+        });
+        return;
+      }
+
+      if (!(await confirmAction({ title: 'Xóa vĩnh viễn vị trí', message: `Xóa vĩnh viễn vị trí công việc "${name}"? Hành động này không thể hoàn tác.`, confirmLabel: 'Xóa vĩnh viễn', variant: 'danger' }))) return;
+      await careerTaxonomyService.hardDeleteJobPosition(id);
+      await fetchData();
+      showAppSuccess('Đã xóa vị trí', `Vị trí "${name}" đã được xóa.`);
+    } catch (e: any) {
+      const message = 'Xóa thất bại: ' + (e?.response?.data?.message || e?.message);
+      setError(message);
+      showAppError('Xóa vị trí thất bại', message);
+    }
   };
 
   return (
@@ -366,13 +421,17 @@ const CareerTaxonomyTab: React.FC = () => {
               <button type="button" className="admin-roadmap-catalog__modal-close" onClick={() => setShowDomainForm(false)}>✕</button>
             </div>
             <div className="admin-roadmap-catalog__modal-body">
-              <label className="admin-roadmap-catalog__modal-field" htmlFor="domain-create-code">
-                <span>Mã domain *</span>
-                <input id="domain-create-code" placeholder="VD: SE, DATA, QA" value={domainForm.code} onChange={e => setDomainForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="career-taxonomy-tab__input" autoFocus />
-              </label>
-              <label className="admin-roadmap-catalog__modal-field" htmlFor="domain-create-name">
+              <label className="admin-roadmap-catalog__modal-field admin-roadmap-catalog__modal-field--full" htmlFor="domain-create-name">
                 <span>Tên hiển thị *</span>
-                <input id="domain-create-name" placeholder="VD: Software Engineering" value={domainForm.name} onChange={e => setDomainForm(p => ({ ...p, name: e.target.value }))} className="career-taxonomy-tab__input" />
+                <input
+                  id="domain-create-name"
+                  placeholder="VD: Software Engineering"
+                  value={domainForm.name}
+                  onChange={e => setDomainForm(p => ({ ...p, name: e.target.value }))}
+                  className="career-taxonomy-tab__input"
+                  maxLength={255}
+                  autoFocus
+                />
               </label>
               <label className="admin-roadmap-catalog__modal-field admin-roadmap-catalog__modal-field--full" htmlFor="domain-create-description">
                 <span>Mô tả</span>
@@ -381,7 +440,7 @@ const CareerTaxonomyTab: React.FC = () => {
             </div>
             <div className="admin-roadmap-catalog__modal-actions">
               <button type="button" onClick={() => setShowDomainForm(false)} className="career-taxonomy-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
-              <button onClick={handleCreateDomain} disabled={domainSubmitting || !domainForm.code || !domainForm.name} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--success">
+              <button onClick={handleCreateDomain} disabled={domainSubmitting || !domainForm.name.trim()} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--success">
                 {domainSubmitting ? 'Đang tạo...' : 'Tạo domain'}
               </button>
             </div>
@@ -400,29 +459,33 @@ const CareerTaxonomyTab: React.FC = () => {
               <button type="button" className="admin-roadmap-catalog__modal-close" onClick={() => setShowJpForm(false)}>✕</button>
             </div>
             <div className="admin-roadmap-catalog__modal-body">
-              <label className="admin-roadmap-catalog__modal-field" htmlFor="job-position-create-code">
-                <span>Mã vị trí *</span>
-                <input id="job-position-create-code" placeholder="VD: BACKEND_DEV" value={jpForm.code} onChange={e => setJpForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="career-taxonomy-tab__input" autoFocus />
-              </label>
-              <label className="admin-roadmap-catalog__modal-field" htmlFor="job-position-create-name">
+              <label className="admin-roadmap-catalog__modal-field admin-roadmap-catalog__modal-field--full" htmlFor="job-position-create-name">
                 <span>Tên hiển thị *</span>
-                <input id="job-position-create-name" placeholder="VD: Backend Developer" value={jpForm.name} onChange={e => setJpForm(p => ({ ...p, name: e.target.value }))} className="career-taxonomy-tab__input" />
+                <input
+                  id="job-position-create-name"
+                  placeholder="VD: Backend Developer"
+                  value={jpForm.name}
+                  onChange={e => setJpForm(p => ({ ...p, name: e.target.value }))}
+                  className="career-taxonomy-tab__input"
+                  maxLength={255}
+                  autoFocus
+                />
               </label>
-              <label className="admin-roadmap-catalog__modal-field" htmlFor="job-position-create-domain">
+              <label className="admin-roadmap-catalog__modal-field admin-roadmap-catalog__modal-field--full" htmlFor="job-position-create-domain">
                 <span>Domain nghề nghiệp *</span>
                 <select id="job-position-create-domain" value={jpForm.domainId} onChange={e => setJpForm(p => ({ ...p, domainId: e.target.value }))} className="career-taxonomy-tab__select">
                   <option value="">Chọn domain</option>
                   {domains.filter(d => d.status === 'ACTIVE').map(d => <option key={d.id} value={d.id}>{d.name} ({d.code})</option>)}
                 </select>
               </label>
-              <label className="admin-roadmap-catalog__modal-field" htmlFor="job-position-create-description">
+              <label className="admin-roadmap-catalog__modal-field admin-roadmap-catalog__modal-field--full" htmlFor="job-position-create-description">
                 <span>Mô tả</span>
                 <input id="job-position-create-description" placeholder="Mô tả ngắn gọn, không bắt buộc" value={jpForm.description} onChange={e => setJpForm(p => ({ ...p, description: e.target.value }))} className="career-taxonomy-tab__input" />
               </label>
             </div>
             <div className="admin-roadmap-catalog__modal-actions">
               <button type="button" onClick={() => setShowJpForm(false)} className="career-taxonomy-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
-              <button onClick={handleCreateJobPosition} disabled={jpSubmitting || !jpForm.code || !jpForm.name || !jpForm.domainId} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--success">
+              <button onClick={handleCreateJobPosition} disabled={jpSubmitting || !jpForm.name.trim() || !jpForm.domainId} className="career-taxonomy-tab__btn career-taxonomy-tab__btn--success">
                 {jpSubmitting ? 'Đang tạo...' : 'Tạo vị trí'}
               </button>
             </div>

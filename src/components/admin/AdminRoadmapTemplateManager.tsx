@@ -727,6 +727,15 @@ const AdminRoadmapTemplateManager = () => {
     return selected ? [selected] : form.skillBlocks;
   }, [activeSkillBlockId, form.skillBlocks]);
 
+  const visibleNodeGroups = useMemo(() => {
+    if (!activeSkillBlockId) return form.nodeGroups;
+    const selectedBlock = form.skillBlocks.find((b) => b.localId === activeSkillBlockId);
+    if (!selectedBlock) return form.nodeGroups;
+    return form.nodeGroups.filter((group) =>
+      group.skills.some((skill) => skill.skillId === selectedBlock.skillId)
+    );
+  }, [activeSkillBlockId, form.nodeGroups, form.skillBlocks]);
+
   const getAllocatedNodes = useCallback(
     (block: SkillBlockDraft) =>
       backendPreview?.items?.find((item) => item.skillId === block.skillId)?.allocatedNodes ??
@@ -1852,24 +1861,38 @@ const AdminRoadmapTemplateManager = () => {
     );
   };
 
-  const renderNodeGroupActivities = () => (
-    <div className="artm-skill-stack">
-      {form.nodeGroups.length === 0 ? (
+  const renderNodeGroupActivities = () => {
+    if (form.nodeGroups.length === 0) {
+      return (
         <section className="artm-table-panel">
           <div className="artm-ready"><AlertTriangle size={18} /> Chưa có module. Hãy auto-group hoặc thêm module ở tab gom kỹ năng.</div>
         </section>
-      ) : form.nodeGroups.map((group, index) => {
-        const lessons = getModuleLessons(group);
-        const exercises = getModuleExercises(group);
-        return (
-          <section className="artm-skill-card" key={group.localId}>
-            <div className="artm-section-head">
-              <div>
-                <h3>Module {index + 1}: {group.title}</h3>
-                <p>Bài học, bài tập và tiêu chí hoàn thành thuộc module này, không thuộc từng skill riêng lẻ.</p>
+      );
+    }
+
+    if (visibleNodeGroups.length === 0) {
+      return (
+        <section className="artm-table-panel">
+          <div className="artm-ready"><AlertTriangle size={18} /> Không có module nào chứa kỹ năng này. Hãy gán kỹ năng vào module ở tab "Gom kỹ năng vào module".</div>
+        </section>
+      );
+    }
+
+    return (
+      <div className="artm-skill-stack">
+        {visibleNodeGroups.map((group) => {
+          const originalIndex = form.nodeGroups.findIndex((g) => g.localId === group.localId);
+          const lessons = getModuleLessons(group);
+          const exercises = getModuleExercises(group);
+          return (
+            <section className="artm-skill-card" key={group.localId}>
+              <div className="artm-section-head">
+                <div>
+                  <h3>Module {originalIndex + 1}: {group.title}</h3>
+                  <p>Bài học, bài tập và tiêu chí hoàn thành thuộc module này, không thuộc từng skill riêng lẻ.</p>
+                </div>
+                <button type="button" onClick={() => setActiveTab("grouping")}>Chỉnh kỹ năng</button>
               </div>
-              <button type="button" onClick={() => setActiveTab("grouping")}>Chỉnh kỹ năng</button>
-            </div>
             <div className="artm-course-selected-strip">
               {group.skills.map((skill) => (
                 <span key={skill.skillId}>{skill.skillNameSnapshot || `Skill ${skill.skillId}`} · {skill.requirementType || "REQUIRED"}</span>
@@ -1953,6 +1976,8 @@ const AdminRoadmapTemplateManager = () => {
       })}
     </div>
   );
+  };
+
   const renderCourses = () => (
     <div className="artm-skill-stack">
       {visibleSkillBlocks.map((block) => (

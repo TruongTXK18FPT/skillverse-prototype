@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { careerTaxonomyService } from '../../../services/careerTaxonomyService';
+import { roadmapTemplateService } from '../../../services/roadmapTemplateService';
 import { Domain, JobPosition, JobPositionTrack, JobPositionTrackSkill, RequirementType } from '../../../types/careerTaxonomy';
 import { adminSkillRegistryService } from '../../../services/adminSkillRegistryService';
 import { Skill } from '../../../types/skillRegistry';
@@ -367,13 +368,13 @@ const JobPositionTrackSkillTab: React.FC = () => {
     });
   }, [trackSkills, skillReqTypeFilter, skillWeightFilter, skillSearchQuery, skillSortKey, allSkills]);
 
-  // Actions: Track
   const handleCreateTrack = async () => {
-    if (!trackForm.code || !trackForm.name || !trackForm.jobPositionId) return;
+    if (!trackForm.name || !trackForm.jobPositionId) return;
     setTrackSubmitting(true); setError(null);
+    const code = trackForm.code.trim() || normalizeTaxonomyCode(trackForm.name);
     try {
       await careerTaxonomyService.createTrack({ 
-        code: trackForm.code.trim(), 
+        code, 
         name: trackForm.name.trim(), 
         description: trackForm.description.trim() || undefined, 
         jobPositionId: Number(trackForm.jobPositionId)
@@ -384,7 +385,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
       showAppSuccess('Đã tạo track', `Track "${trackForm.name.trim()}" đã được tạo.`);
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || '';
-      const message = msg.includes('TRACK_CODE_EXISTS') || msg.includes('DUPLICATE') ? `Mã "${trackForm.code}" đã tồn tại.` : 'Tạo track thất bại: ' + msg;
+      const message = msg.includes('TRACK_CODE_EXISTS') || msg.includes('DUPLICATE') ? `Mã "${code}" đã tồn tại.` : 'Tạo track thất bại: ' + msg;
       setError(message);
       showAppError('Tạo track thất bại', message);
     } finally { setTrackSubmitting(false); }
@@ -445,14 +446,30 @@ const JobPositionTrackSkillTab: React.FC = () => {
   };
 
   const handleHardDeleteTrack = async (id: number, name: string) => {
-    if (!(await confirmAction({ title: 'Xóa vĩnh viễn track', message: `Xóa vĩnh viễn track "${name}"? Hành động này sẽ xóa cả mapping kỹ năng và không thể hoàn tác.`, confirmLabel: 'Xóa vĩnh viễn', variant: 'danger' }))) return;
     setError(null);
     try {
+      const dependentTemplates = await roadmapTemplateService.listAdminTemplates({ jobPositionTrackId: id });
+      if (dependentTemplates && dependentTemplates.length > 0) {
+        const templateNames = dependentTemplates.map(t => `"${t.title}"`).join(', ');
+        await confirmAction({
+          title: 'Không thể xóa track',
+          message: `Không thể xóa track "${name}" vì đang có ${dependentTemplates.length} mẫu lộ trình liên kết: [ ${templateNames} ]. Vui lòng gỡ hoặc xóa các mẫu lộ trình này trước.`,
+          confirmLabel: 'Đã hiểu',
+          variant: 'primary'
+        });
+        return;
+      }
+
+      if (!(await confirmAction({ title: 'Xóa vĩnh viễn track', message: `Xóa vĩnh viễn track "${name}"? Hành động này sẽ xóa cả mapping kỹ năng và không thể hoàn tác.`, confirmLabel: 'Xóa vĩnh viễn', variant: 'danger' }))) return;
       await careerTaxonomyService.hardDeleteTrack(id);
       await fetchGlobalData();
       if (selectedTrackId === id) setSelectedTrackId(null);
       showAppSuccess('Đã xóa track', `Track "${name}" đã được xóa.`);
-    } catch (e: any) { const message = 'Xóa thất bại: ' + (e?.response?.data?.message || e?.message); setError(message); showAppError('Xóa track thất bại', message); }
+    } catch (e: any) {
+      const message = 'Xóa thất bại: ' + (e?.response?.data?.message || e?.message);
+      setError(message);
+      showAppError('Xóa track thất bại', message);
+    }
   };
 
   // Actions: Skills in Track
@@ -948,7 +965,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
             <div className="admin-roadmap-catalog__modal-body">
               <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-domain">
                 <span>Domain nghề nghiệp</span>
-                <select id="track-create-domain" value={trackForm.domainId} onChange={e => setTrackForm(p => ({ ...p, domainId: e.target.value ? Number(e.target.value) : '', jobPositionId: '' as number | '' }))} className="job-track-skill-tab__select">
+                <select id="track-create-domain" value={trackForm.domainId} onChange={e => setTrackForm(p => ({ ...p, domainId: e.target.value ? Number(e.target.value) : '', jobPositionId: '' as number | '' }))} className="job-track-skill-tab__select" autoFocus>
                   <option value="">Tất cả domain</option>
                   {domains.filter(d => d.status === 'ACTIVE').map(d => <option key={d.id} value={d.id}>{d.name} ({d.code})</option>)}
                 </select>
@@ -960,22 +977,26 @@ const JobPositionTrackSkillTab: React.FC = () => {
                   {jobPositions.filter(jp => jp.status === 'ACTIVE' && (!trackForm.domainId || jp.domainId === Number(trackForm.domainId))).map(jp => <option key={jp.id} value={jp.id}>{jp.name}</option>)}
                 </select>
               </label>
-              <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-code">
-                <span>Mã track *</span>
-                <input id="track-create-code" placeholder="VD: BACKEND_JAVA_SPRING" value={trackForm.code} onChange={e => setTrackForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="job-track-skill-tab__input" autoFocus />
-              </label>
-              <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-name">
+              <label className="admin-roadmap-catalog__modal-field admin-roadmap-catalog__modal-field--full" htmlFor="track-create-name">
                 <span>Tên track *</span>
-                <input id="track-create-name" placeholder="VD: Backend Java Spring Boot" value={trackForm.name} onChange={e => setTrackForm(p => ({ ...p, name: e.target.value }))} className="job-track-skill-tab__input" />
+                <input
+                  id="track-create-name"
+                  placeholder="VD: Backend Java Spring Boot"
+                  value={trackForm.name}
+                  onChange={e => setTrackForm(p => ({ ...p, name: e.target.value }))}
+                  className="job-track-skill-tab__input"
+                  maxLength={255}
+                />
               </label>
-              <label className="admin-roadmap-catalog__modal-field" htmlFor="track-create-description">
+
+              <label className="admin-roadmap-catalog__modal-field admin-roadmap-catalog__modal-field--full" htmlFor="track-create-description">
                 <span>Mô tả</span>
                 <input id="track-create-description" placeholder="Mô tả ngắn gọn, không bắt buộc" value={trackForm.description} onChange={e => setTrackForm(p => ({ ...p, description: e.target.value }))} className="job-track-skill-tab__input" />
               </label>
             </div>
             <div className="admin-roadmap-catalog__modal-actions">
               <button type="button" onClick={() => setShowTrackForm(false)} className="job-track-skill-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
-              <button onClick={handleCreateTrack} disabled={trackSubmitting || !trackForm.code || !trackForm.name || !trackForm.jobPositionId} className="job-track-skill-tab__btn job-track-skill-tab__btn--success">
+              <button onClick={handleCreateTrack} disabled={trackSubmitting || !trackForm.name.trim() || !trackForm.jobPositionId} className="job-track-skill-tab__btn job-track-skill-tab__btn--success">
                 {trackSubmitting ? 'Đang tạo...' : 'Tạo track'}
               </button>
             </div>
