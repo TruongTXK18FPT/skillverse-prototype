@@ -7,7 +7,7 @@
 
 // ==================== Union literals ====================
 
-export type AssignmentSource = 'SYSTEM_GENERATED' | 'MENTOR_REFINED';
+export type AssignmentSource = 'SYSTEM_GENERATED' | 'MENTOR_REFINED' | 'TEMPLATE';
 
 export type NodeSubmissionStatus =
   | 'DRAFT'
@@ -44,6 +44,8 @@ export interface NodeAssignmentResponse {
   assignmentSource: AssignmentSource;
   title?: string;
   description?: string;
+  expectedOutput?: string;
+  rubric?: string;
   createdBy?: number;
   createdAt: string;
   updatedAt?: string;
@@ -134,6 +136,8 @@ export interface JourneyCompletionGateResponse {
   journeyOutputVerificationRequired: boolean;
   hasPassCompletionReport: boolean;
   outputAssessmentApproved: boolean;
+  finalAssignmentInstructions?: string;
+  finalAssignmentRubric?: string;
   blockingReasons: string[];
 }
 

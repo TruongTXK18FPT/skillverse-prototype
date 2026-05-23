@@ -31,6 +31,7 @@ interface RoadmapNodeRequirementsCardProps {
   className?: string;
   showMentorAssignment?: boolean;
   showNodeDescription?: boolean;
+  onlyShowAssignment?: boolean;
 }
 
 const SECTION_ICONS: Record<string, LucideIcon> = {
@@ -48,7 +49,7 @@ const resolveAssignmentSourceLabel = (
     return 'Mentor cập nhật';
   }
 
-  if (assignment?.assignmentSource === 'SYSTEM_GENERATED') {
+  if (assignment?.assignmentSource === 'SYSTEM_GENERATED' || assignment?.assignmentSource === 'TEMPLATE') {
     return 'Hệ thống gợi ý';
   }
 
@@ -66,6 +67,7 @@ const RoadmapNodeRequirementsCard: React.FC<RoadmapNodeRequirementsCardProps> = 
   className = '',
   showMentorAssignment = true,
   showNodeDescription = true,
+  onlyShowAssignment = false,
 }) => {
   const nodeDescription = useMemo(
     () => normalizeRoadmapMarkdown(node?.description),
@@ -81,10 +83,11 @@ const RoadmapNodeRequirementsCard: React.FC<RoadmapNodeRequirementsCardProps> = 
   );
 
   const hasAssignment = hasMentorAssignmentContent(assignment);
-  const hasContent =
-    (showMentorAssignment && hasAssignment) ||
-    (showNodeDescription && hasRoadmapNodeRequirementContent(node)) ||
-    sections.length > 0;
+  const hasContent = onlyShowAssignment
+    ? hasAssignment || Boolean(assignment?.expectedOutput?.trim() || assignment?.rubric?.trim())
+    : (showMentorAssignment && hasAssignment) ||
+      (showNodeDescription && hasRoadmapNodeRequirementContent(node)) ||
+      sections.length > 0;
 
   return (
     <section className={`roadmap-node-requirements-card ${className}`.trim()}>
@@ -108,6 +111,68 @@ const RoadmapNodeRequirementsCard: React.FC<RoadmapNodeRequirementsCardProps> = 
         <div className="roadmap-node-requirements-card__empty">
           <ClipboardList size={18} />
           <p>{emptyMessage}</p>
+        </div>
+      ) : onlyShowAssignment ? (
+        <div className="roadmap-node-requirements-card__body">
+          {hasAssignment && (
+            <article className="roadmap-node-requirements-card__section roadmap-node-requirements-card__section--assignment">
+              <div className="roadmap-node-requirements-card__section-head">
+                <span className="roadmap-node-requirements-card__section-title">
+                  <ClipboardList size={15} />
+                  Bài tập cần thực hiện
+                </span>
+                <span className="roadmap-node-requirements-card__source-badge">
+                  {resolveAssignmentSourceLabel(assignment)}
+                </span>
+              </div>
+
+              {assignment?.title?.trim() && (
+                <h4 className="roadmap-node-requirements-card__assignment-title">
+                  {assignment.title}
+                </h4>
+              )}
+
+              {assignmentDescription && (
+                <div className="roadmap-node-requirements-card__markdown">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {assignmentDescription}
+                  </ReactMarkdown>
+                </div>
+              )}
+            </article>
+          )}
+
+          {assignment?.expectedOutput?.trim() && (
+            <article className="roadmap-node-requirements-card__section">
+              <div className="roadmap-node-requirements-card__section-head">
+                <span className="roadmap-node-requirements-card__section-title">
+                  <BookOpen size={15} />
+                  Đầu ra cần nộp (Evidence)
+                </span>
+              </div>
+              <div className="roadmap-node-requirements-card__markdown">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {assignment.expectedOutput}
+                </ReactMarkdown>
+              </div>
+            </article>
+          )}
+
+          {assignment?.rubric?.trim() && (
+            <article className="roadmap-node-requirements-card__section">
+              <div className="roadmap-node-requirements-card__section-head">
+                <span className="roadmap-node-requirements-card__section-title">
+                  <CheckCircle2 size={15} />
+                  Tiêu chí chấm điểm (Rubric)
+                </span>
+              </div>
+              <div className="roadmap-node-requirements-card__markdown">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {assignment.rubric}
+                </ReactMarkdown>
+              </div>
+            </article>
+          )}
         </div>
       ) : (
         <div className="roadmap-node-requirements-card__body">

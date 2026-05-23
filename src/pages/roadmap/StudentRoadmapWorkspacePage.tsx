@@ -1366,15 +1366,29 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
               {/* Node View */}
               <div className="srwp-panel-header">
                 <h3>{selectedNode.title}</h3>
-                {selectedNode.description ? (
-                  <div className="srwp-panel-header-desc srwp-markdown-view-inline">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {selectedNode.description}
-                    </ReactMarkdown>
-                  </div>
-                ) : (
-                  <p>Không có mô tả.</p>
-                )}
+                <div className="srwp-panel-header-meta">
+                  {selectedNode.skills?.[0]?.skillName && (
+                    <span className="srwp-meta-item">
+                      <strong>Kỹ năng trọng tâm:</strong> {selectedNode.skills[0].skillName}
+                    </span>
+                  )}
+                  {selectedNode.difficulty && (
+                    <>
+                      {selectedNode.skills?.[0]?.skillName && <span className="srwp-meta-divider">•</span>}
+                      <span className="srwp-meta-item">
+                        <strong>Độ khó:</strong> <span className={`srwp-difficulty-badge srwp-difficulty-badge--${selectedNode.difficulty.toLowerCase()}`}>{selectedNode.difficulty}</span>
+                      </span>
+                    </>
+                  )}
+                  {selectedNode.estimatedTimeMinutes && (
+                    <>
+                      {(selectedNode.skills?.[0]?.skillName || selectedNode.difficulty) && <span className="srwp-meta-divider">•</span>}
+                      <span className="srwp-meta-item">
+                        <strong>Thời lượng gợi ý:</strong> {selectedNode.estimatedTimeMinutes} phút
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
 
               <div className="srwp-tabs">
@@ -1417,50 +1431,51 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                       showNodeDescription={true}
                       showMentorAssignment={false}
                     />
-                    <div className="srwp-assignment-block">
-                      <h4>
-                        <ClipboardList size={16} /> Nhiệm vụ chi tiết từ Mentor
-                        {assignment?.assignmentSource === "MENTOR_REFINED" && (
-                          <span
-                            className="srwp-source-badge srwp-source-badge--mentor"
-                            title="Mentor đã cập nhật bài tập này"
-                          >
-                            <BadgeCheck size={12} /> Mentor đã cập nhật
-                          </span>
+                    {(selectedNodeId && nodeStatusMap[selectedNodeId]?.hasMentorCoverage || assignment?.assignmentSource === "MENTOR_REFINED") && (
+                      <div className="srwp-assignment-block">
+                        <h4>
+                          <ClipboardList size={16} /> Nhiệm vụ chi tiết từ Mentor
+                          {assignment?.assignmentSource === "MENTOR_REFINED" && (
+                            <span
+                              className="srwp-source-badge srwp-source-badge--mentor"
+                              title="Mentor đã cập nhật bài tập này"
+                            >
+                              <BadgeCheck size={12} /> Mentor đã cập nhật
+                            </span>
+                          )}
+                          {(assignment?.assignmentSource === "SYSTEM_GENERATED" || assignment?.assignmentSource === "TEMPLATE") && (
+                            <span
+                              className="srwp-source-badge srwp-source-badge--ai"
+                              title="Nội dung do AI tạo tự động"
+                            >
+                              AI Generated
+                            </span>
+                          )}
+                        </h4>
+                        {assignment?.title && (
+                          <div className="srwp-assignment-title">
+                            <strong>{assignment.title}</strong>
+                          </div>
                         )}
-                        {assignment?.assignmentSource ===
-                          "SYSTEM_GENERATED" && (
-                          <span
-                            className="srwp-source-badge srwp-source-badge--ai"
-                            title="Nội dung do AI tạo tự động"
-                          >
-                            AI Generated
-                          </span>
+                        {assignment?.description ? (
+                          <div className="srwp-markdown-view">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {assignment.description}
+                            </ReactMarkdown>
+                          </div>
+                        ) : (
+                          <div className="srwp-empty-state">
+                            <FileText size={32} />
+                            <p>Mentor chưa giao bài tập cụ thể cho node này.</p>
+                            <span>
+                              Bạn vẫn có thể bắt đầu dựa vào mô tả node và
+                              checklist phía trên, sau đó trao đổi với mentor khi
+                              có lịch hẹn.
+                            </span>
+                          </div>
                         )}
-                      </h4>
-                      {assignment?.title && (
-                        <div className="srwp-assignment-title">
-                          <strong>{assignment.title}</strong>
-                        </div>
-                      )}
-                      {assignment?.description ? (
-                        <div className="srwp-markdown-view">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {assignment.description}
-                          </ReactMarkdown>
-                        </div>
-                      ) : (
-                        <div className="srwp-empty-state">
-                          <FileText size={32} />
-                          <p>Mentor chưa giao bài tập cụ thể cho node này.</p>
-                          <span>
-                            Bạn vẫn có thể bắt đầu dựa vào mô tả node và
-                            checklist phía trên, sau đó trao đổi với mentor khi
-                            có lịch hẹn.
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -1473,9 +1488,9 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                           allNodes={nodes}
                           assignment={assignment}
                           heading="Checklist trước khi nộp"
-                          emptyMessage="Hiện chưa có checklist chi tiết cho node này."
-                          footerNote="Minh chứng nên thể hiện rõ bạn đã hoàn thành bài tập và đáp ứng tiêu chí của node."
-                          showNodeDescription={true}
+                          emptyMessage="Hiện chưa có bài tập chi tiết từ template cho node này."
+                          footerNote="Minh chứng nên thể hiện rõ bạn đã hoàn thành bài tập và đáp ứng tiêu chí chấm bài."
+                          onlyShowAssignment={true}
                         />
                       </div>
                     )}
@@ -1775,34 +1790,31 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
               <div className="srwp-tab-content">
                 {rightTab === "ASSIGNMENT" && (
                   <div className="srwp-content-card">
-                    <h4>
-                      {finalAssignment?.title || "Yêu cầu Final Assessment"}
-                    </h4>
-                    {!finalAssignment?.description ? (
+                    <h4>Hướng dẫn bài thực hành cuối</h4>
+                    {!completionGate?.finalAssignmentInstructions ? (
                       <div className="srwp-empty-state">
                         <Target size={32} />
                         <p>
-                          Mentor chưa cập nhật yêu cầu Final Assessment. Vui
-                          lòng quay lại sau hoặc trao đổi trực tiếp.
+                          Yêu cầu bài thực hành cuối chưa được cập nhật trong template.
+                          Học viên tự học có thể trực tiếp hoàn thành 100% roadmap để kết thúc.
                         </p>
                       </div>
                     ) : (
                       <div className="srwp-feedback-content">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                          {finalAssignment.description}
+                          {completionGate.finalAssignmentInstructions}
                         </ReactMarkdown>
-                        {finalAssignment.updatedAt && (
-                          <div
-                            style={{
-                              marginTop: 12,
-                              fontSize: 12,
-                              color: "#94a3b8",
-                            }}
-                          >
-                            Cập nhật:{" "}
-                            {new Date(finalAssignment.updatedAt).toLocaleString(
-                              "vi-VN",
-                            )}
+
+                        {completionGate.finalAssignmentRubric && (
+                          <div className="srwp-assignment-block" style={{ marginTop: 24, paddingTop: 16, borderTop: "1px solid #1e293b" }}>
+                            <h4 style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.95rem", color: "#38bdf8", marginBottom: 12, borderBottom: "none", paddingBottom: 0 }}>
+                              <CheckCircle2 size={16} /> Tiêu chí chấm điểm (Rubric)
+                            </h4>
+                            <div className="srwp-markdown-view">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {completionGate.finalAssignmentRubric}
+                              </ReactMarkdown>
+                            </div>
                           </div>
                         )}
                       </div>

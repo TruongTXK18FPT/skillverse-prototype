@@ -439,7 +439,7 @@ const serializeModuleExercises = (exercises: ModuleExerciseDraft[]) =>
         instruction: exercise.instruction.trim(),
         expectedOutput: exercise.expectedOutput.trim(),
         rubric: exercise.rubric.trim(),
-        required: exercise.required,
+        required: true,
       }))
       .filter((exercise) =>
         exercise.title || exercise.instruction || exercise.expectedOutput || exercise.rubric,
@@ -1441,7 +1441,19 @@ const AdminRoadmapTemplateManager = () => {
     const exercises = getModuleExercises(group).map((exercise, index) =>
       index === exerciseIndex ? { ...exercise, ...patch } : exercise,
     );
-    updateNodeGroup(group.localId, { exercisesJson: serializeModuleExercises(exercises) });
+    const extraUpdates: Partial<NodeGroupDraft> = {
+      exercisesJson: serializeModuleExercises(exercises),
+    };
+    if (exerciseIndex === 0) {
+      if (patch.expectedOutput !== undefined) {
+        extraUpdates.expectedOutput = patch.expectedOutput;
+      }
+      if (patch.rubric !== undefined) {
+        extraUpdates.rubric = patch.rubric;
+        extraUpdates.completionCriteria = patch.rubric;
+      }
+    }
+    updateNodeGroup(group.localId, extraUpdates);
   };
 
   const addModuleExercise = (group: NodeGroupDraft) => {
@@ -1745,12 +1757,7 @@ const AdminRoadmapTemplateManager = () => {
           </div>
         </div>
         <div className="artm-panel-grid artm-panel-grid--tight artm-route-constraints">
-          <label className="artm-wide">
-            <span>Bài tập bắt buộc</span>
-            <select value={form.exerciseRequirement} onChange={(e) => setForm({ ...form, exerciseRequirement: e.target.value })}>
-              {exerciseRequirementOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-            </select>
-          </label>
+
           <label className="artm-wide">
             <span>Cách AI chọn chủ đề học</span>
             <select value={form.topicGenerationType} onChange={(e) => setForm({ ...form, topicGenerationType: e.target.value })}>
@@ -2076,18 +2083,12 @@ const AdminRoadmapTemplateManager = () => {
                     <label className="artm-wide"><span>Yêu cầu thực hiện</span><textarea data-required-field rows={2} value={exercise.instruction} onChange={(e) => updateModuleExercise(currentGroup, exerciseIndex, { instruction: e.target.value })} /></label>
                     <label className="artm-wide"><span>Đầu ra cần nộp</span><textarea data-required-field rows={2} value={exercise.expectedOutput} onChange={(e) => updateModuleExercise(currentGroup, exerciseIndex, { expectedOutput: e.target.value })} /></label>
                     <div data-required-field className="artm-wide"><RubricListEditor value={exercise.rubric} onChange={(val) => updateModuleExercise(currentGroup, exerciseIndex, { rubric: val })} label="Tiêu chí chấm bài tập" /></div>
-                    <label><span>Bắt buộc</span><select value={exercise.required ? "true" : "false"} onChange={(e) => updateModuleExercise(currentGroup, exerciseIndex, { required: e.target.value === "true" })}>
-                      <option value="true">Bắt buộc</option>
-                      <option value="false">Khuyến nghị</option>
-                    </select></label>
+
                   </div>
                 </article>
               ))}
             </div>
             <div className="artm-activity-form">
-              <label className="artm-wide"><span>Đầu ra mong đợi của node</span><textarea data-required-field rows={3} value={currentGroup.expectedOutput || ""} onChange={(e) => updateNodeGroup(currentGroup.localId, { expectedOutput: e.target.value })} /></label>
-              <label className="artm-wide"><span>Tiêu chí hoàn thành node</span><textarea data-required-field rows={3} value={currentGroup.completionCriteria || ""} onChange={(e) => updateNodeGroup(currentGroup.localId, { completionCriteria: e.target.value })} /></label>
-              <div data-required-field className="artm-wide"><RubricListEditor value={currentGroup.rubric || ""} onChange={(val) => updateNodeGroup(currentGroup.localId, { rubric: val })} label="Tiêu chí chấm điểm của node" /></div>
               <label className="artm-wide"><span>Gợi ý cho AI khi sinh nội dung</span><textarea rows={2} value={currentGroup.aiPromptHint || ""} onChange={(e) => updateNodeGroup(currentGroup.localId, { aiPromptHint: e.target.value })} /></label>
             </div>
           </section>

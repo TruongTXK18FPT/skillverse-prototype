@@ -2085,6 +2085,7 @@ const GSJJourneyPage: React.FC = () => {
                     : getDomainLabel(activeJourney.domain);
                   return (
               <div
+                key={activeJourney.id}
                 className="gsj-active-card"
                 onClick={() => handleSelectJourney(activeJourney.id)}
                 role="button"

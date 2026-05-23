@@ -269,6 +269,50 @@
   color: #f8fafc;
 }
 
+/* Premium Workspace Header Meta */
+.srwp-panel-header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+.srwp-meta-item strong {
+  color: #cbd5e1;
+}
+
+.srwp-meta-divider {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.srwp-difficulty-badge {
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.srwp-difficulty-badge--easy {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.srwp-difficulty-badge--medium,
+.srwp-difficulty-badge--normal {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.srwp-difficulty-badge--hard {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
 /* Tabs */
 .srwp-tabs {
   display: flex;
@@ -307,7 +351,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  max-width: 900px;
+  max-width: 100%;
 }
 
 .srwp-content-card {
