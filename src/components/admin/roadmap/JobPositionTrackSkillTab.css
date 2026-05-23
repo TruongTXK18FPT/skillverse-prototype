@@ -726,10 +726,43 @@
 .job-track-skill-tab__mapping-table-wrapper {
   border: 1px solid rgba(59, 130, 246, 0.18);
   border-radius: 8px;
+  overflow-x: hidden;
 }
 
 .job-track-skill-tab__mapping-table {
-  min-width: 760px;
+  min-width: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.job-track-skill-tab__mapping-table th:nth-child(1),
+.job-track-skill-tab__mapping-table td:nth-child(1) {
+  width: 22%;
+}
+
+.job-track-skill-tab__mapping-table th:nth-child(2),
+.job-track-skill-tab__mapping-table td:nth-child(2) {
+  width: 18%;
+}
+
+.job-track-skill-tab__mapping-table th:nth-child(3),
+.job-track-skill-tab__mapping-table td:nth-child(3) {
+  width: 17%;
+}
+
+.job-track-skill-tab__mapping-table th:nth-child(4),
+.job-track-skill-tab__mapping-table td:nth-child(4) {
+  width: 10%;
+}
+
+.job-track-skill-tab__mapping-table th:nth-child(5),
+.job-track-skill-tab__mapping-table td:nth-child(5) {
+  width: 12%;
+}
+
+.job-track-skill-tab__mapping-table th:nth-child(6),
+.job-track-skill-tab__mapping-table td:nth-child(6) {
+  width: 21%;
 }
 
 .job-track-skill-tab__table-head--sticky {
@@ -776,9 +809,10 @@
 
 .job-track-skill-tab__table th,
 .job-track-skill-tab__table td {
-  padding: 1rem 0.75rem;
+  padding: 0.85rem 0.5rem;
   border-bottom: 1px solid var(--border-color, #e5e7eb);
   vertical-align: middle;
+  overflow-wrap: anywhere;
 }
 
 [data-theme='dark'] .job-track-skill-tab__table th,
@@ -906,16 +940,23 @@
 }
 
 .job-track-skill-tab__neon-text {
+  display: inline-block;
+  max-width: 100%;
   font-weight: 600;
   color: #38bdf8;
   text-shadow: 0 0 5px rgba(56, 189, 248, 0.3);
+  overflow-wrap: anywhere;
 }
 
 .job-track-skill-tab__table-cell-code--neon {
+  display: inline-block;
+  max-width: 100%;
   background: rgba(236, 72, 153, 0.1);
   color: #f472b6;
   border: 1px solid rgba(244, 114, 182, 0.3);
   box-shadow: 0 0 5px rgba(244, 114, 182, 0.2);
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .job-track-skill-tab__neon-badge {
@@ -927,6 +968,9 @@
   letter-spacing: 0.05em;
   display: inline-block;
   backdrop-filter: blur(4px);
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .job-track-skill-tab__neon-badge--required {
@@ -951,12 +995,12 @@
 }
 
 .job-track-skill-tab__neon-weight {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 800;
   color: #fcd34d;
   text-shadow: 0 0 8px rgba(252, 211, 77, 0.6);
   display: inline-block;
-  padding: 0.2rem 0.5rem;
+  padding: 0.16rem 0.45rem;
   background: rgba(252, 211, 77, 0.1);
   border-radius: 0.375rem;
   border: 1px solid rgba(252, 211, 77, 0.3);
@@ -965,7 +1009,21 @@
 .job-track-skill-tab__neon-order {
   font-weight: bold;
   color: #94a3b8;
-  padding: 0 0.5rem;
+  padding: 0 0.3rem;
+}
+
+.job-track-skill-tab__order-controls {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.job-track-skill-tab__order-controls button {
+  width: 18px;
+  min-width: 18px;
+  padding: 0;
 }
 
 .job-track-skill-tab__btn--neon {
@@ -974,8 +1032,10 @@
   border: 1px solid #38bdf8 !important;
   box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
   text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
+  min-height: 34px;
+  padding: 0.3rem 0.62rem;
+  font-size: 0.7rem;
+  letter-spacing: 0;
 }
 
 .job-track-skill-tab__btn--neon:hover:not(:disabled) {
@@ -990,8 +1050,10 @@
   border: 1px solid #f43f5e !important;
   box-shadow: 0 0 8px rgba(244, 63, 94, 0.3);
   text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
+  min-height: 34px;
+  padding: 0.3rem 0.62rem;
+  font-size: 0.7rem;
+  letter-spacing: 0;
 }
 
 .job-track-skill-tab__btn--neon-danger:hover:not(:disabled) {
