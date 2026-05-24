@@ -20,11 +20,21 @@ import {
   Cpu,
 } from 'lucide-react';
 import {
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+} from 'recharts';
+import {
   getNodeEvidence,
   selfConfirmNode,
   submitNodeEvidence,
 } from '../../services/nodeMentoringService';
 import { uploadEvidence } from '../../services/mentorVerificationService';
+import { useAuth } from '../../context/AuthContext';
+import { uploadDocument, uploadImage } from '../../services/fileUploadService';
 import type {
   NodeEvidenceRecordResponse,
   NodeVerificationStatus,
@@ -114,6 +124,7 @@ const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
   onSubmitted,
   compact = false,
 }) => {
+  const { user } = useAuth();
   const [current, setCurrent] = useState<NodeEvidenceRecordResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -171,8 +182,31 @@ const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
   }, [journeyId, nodeId, onSubmitted]);
 
   const handleUploadFile = useCallback(async (file: File): Promise<string> => {
-    return uploadEvidence(file);
-  }, []);
+    const isDocFile = (f: File) => {
+      const ext = f.name.split('.').pop()?.toLowerCase();
+      return f.type === 'application/pdf' ||
+        f.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+        ext === 'pdf' ||
+        ext === 'docx' ||
+        ext === 'doc';
+    };
+
+    const isImageFile = (f: File) => {
+      const ext = f.name.split('.').pop()?.toLowerCase();
+      return f.type.startsWith('image/') ||
+        ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(ext || '');
+    };
+
+    if (isDocFile(file) && user?.id) {
+      const result = await uploadDocument(file, user.id);
+      return result.url;
+    } else if (isImageFile(file) && user?.id) {
+      const result = await uploadImage(file, user.id);
+      return result.url;
+    } else {
+      return uploadEvidence(file);
+    }
+  }, [user]);
 
   const handleSubmit = useCallback(
     async (data: { submissionText: string; attachmentUrl?: string }) => {
@@ -245,6 +279,51 @@ const NodeEvidenceSubmissionPanel: FC<NodeEvidenceSubmissionPanelProps> = ({
           <UserCheck size={14} />
           {confirming ? 'Đang xác nhận…' : 'Xác nhận hoàn thành node'}
         </button>
+      )}
+
+      {current?.latestReview?.criteriaScores && current.latestReview.criteriaScores.length > 0 && (
+        <div className="nesp-radar-section" style={{ marginTop: '16px', marginBottom: '16px', background: 'rgba(10, 15, 30, 0.6)', border: '1px solid rgba(0, 229, 255, 0.15)', borderRadius: '12px', padding: '16px', backdropFilter: 'blur(8px)', boxShadow: '0 8px 32px 0 rgba(0, 229, 255, 0.05)' }}>
+          <h4 style={{ margin: '0 0 12px 0', fontSize: '0.95rem', color: '#00e5ff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Cpu size={16} /> Đánh giá năng lực Node
+          </h4>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Left side: Radar chart */}
+            <div style={{ width: '220px', height: '220px', position: 'relative' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="75%" data={current.latestReview.criteriaScores.map(cs => ({
+                  subject: cs.title,
+                  A: cs.score,
+                  fullMark: cs.maxScore || 10
+                }))}>
+                  <PolarGrid stroke="rgba(0, 229, 255, 0.15)" />
+                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                  <PolarRadiusAxis angle={30} domain={[0, 'dataMax']} tick={{ fill: '#64748b', fontSize: 9 }} />
+                  <Radar name="Học viên" dataKey="A" stroke="#00e5ff" fill="#00e5ff" fillOpacity={0.25} />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+            
+            {/* Right side: Detailed scores list */}
+            <div style={{ flex: 1, minWidth: '200px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {current.latestReview.criteriaScores.map(cs => (
+                  <div key={cs.criterionId} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '6px' }}>
+                    <span style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>{cs.title}</span>
+                    <span style={{ fontSize: '0.88rem', fontWeight: 'bold', color: '#00e5ff' }}>
+                      {cs.score} <span style={{ fontSize: '0.75rem', color: '#64748b' }}>/ {cs.maxScore || 10}</span>
+                    </span>
+                  </div>
+                ))}
+                {current.latestReview.score !== undefined && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', paddingTop: '8px', borderTop: '1px solid rgba(0, 229, 255, 0.2)' }}>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#fff' }}>Điểm tổng kết quy đổi:</span>
+                    <span style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#00e5ff' }}>{current.latestReview.score}%</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {current?.mentorFeedback && (

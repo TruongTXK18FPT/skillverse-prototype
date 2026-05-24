@@ -17,8 +17,10 @@ import {
   NodeEvidenceRecordResponse,
   NodeReviewResult,
   ReviewNodeSubmissionRequest,
+  GradingCriterion,
+  GradingCriterionScore,
 } from '../../types/NodeMentoring';
-import { reviewNodeSubmission } from '../../services/nodeMentoringService';
+import { reviewNodeSubmission, getNodeAssignment } from '../../services/nodeMentoringService';
 import './MentorNodeReviewPanel.css';
 
 interface MentorNodeReviewPanelProps {
@@ -40,24 +42,67 @@ const MentorNodeReviewPanel: React.FC<MentorNodeReviewPanelProps> = ({
 }) => {
   const { showSuccess, showError } = useToast();
   const [loading, setLoading] = useState(false);
-
-  // Form state - NodeReviewResult: 'APPROVED' | 'REWORK_REQUESTED' | 'REJECTED'
   const [reviewResult, setReviewResult] = useState<NodeReviewResult>('APPROVED');
   const [feedback, setFeedback] = useState('');
   const [score, setScore] = useState<number | undefined>(undefined);
 
-  const canSubmit = !loading;
+  const [criteria, setCriteria] = useState<GradingCriterion[]>([]);
+  const [criteriaScores, setCriteriaScores] = useState<Record<string, number>>({});
+  const [loadingAssignment, setLoadingAssignment] = useState(false);
+
+  React.useEffect(() => {
+    const fetchAssignment = async () => {
+      try {
+        setLoadingAssignment(true);
+        const data = await getNodeAssignment(journeyId, nodeId);
+        if (data && data.criteria && data.criteria.length > 0) {
+          setCriteria(data.criteria);
+          const initialScores: Record<string, number> = {};
+          data.criteria.forEach(c => {
+            initialScores[c.id] = c.maxScore || 10;
+          });
+          setCriteriaScores(initialScores);
+        }
+      } catch (err) {
+        console.error("Failed to load assignment criteria", err);
+      } finally {
+        setLoadingAssignment(false);
+      }
+    };
+    fetchAssignment();
+  }, [journeyId, nodeId]);
+
+  const computedScore = React.useMemo(() => {
+    if (criteria.length === 0) return score;
+    let earned = 0;
+    let max = 0;
+    criteria.forEach(c => {
+      earned += criteriaScores[c.id] || 0;
+      max += c.maxScore || 10;
+    });
+    return max > 0 ? Math.round((earned / max) * 100) : 0;
+  }, [criteria, criteriaScores, score]);
+
+  const canSubmit = !loading && !loadingAssignment;
 
   const handleSubmit = async () => {
     if (!canSubmit) return;
 
     try {
       setLoading(true);
+      const formattedScores: GradingCriterionScore[] = criteria.map(c => ({
+        criterionId: c.id,
+        title: c.title,
+        score: criteriaScores[c.id] || 0,
+        maxScore: c.maxScore
+      }));
+
       const request: ReviewNodeSubmissionRequest = {
         reviewResult,
         feedback: feedback.trim() || undefined,
-        score,
+        score: criteria.length > 0 ? computedScore : score,
         bookingId,
+        criteriaScores: criteria.length > 0 ? formattedScores : undefined,
       };
 
       await reviewNodeSubmission(journeyId, nodeId, request);
@@ -168,18 +213,53 @@ const MentorNodeReviewPanel: React.FC<MentorNodeReviewPanelProps> = ({
             </div>
           </div>
 
-          <div className="mnrp-form-group">
-            <label>Điểm (tùy chọn):</label>
-            <input
-              type="number"
-              min={0}
-              max={100}
-              value={score || ''}
-              onChange={(e) => setScore(e.target.value ? parseInt(e.target.value) : undefined)}
-              className="mnrp-input"
-              placeholder="0-100"
-            />
-          </div>
+          {criteria.length > 0 ? (
+            <div className="mnrp-criteria-grading" style={{ marginBottom: '16px' }}>
+              <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>
+                Chấm điểm theo tiêu chí:
+              </label>
+              {criteria.map((c) => (
+                <div key={c.id} className="mnrp-criterion-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '0.9rem', color: '#cbd5e1' }}>{c.title}:</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <input
+                      type="number"
+                      min={0}
+                      max={c.maxScore}
+                      value={criteriaScores[c.id] !== undefined ? criteriaScores[c.id] : ''}
+                      onChange={(e) => {
+                        const val = e.target.value ? parseFloat(e.target.value) : 0;
+                        setCriteriaScores(prev => ({
+                          ...prev,
+                          [c.id]: Math.min(c.maxScore, Math.max(0, val))
+                        }));
+                      }}
+                      className="mnrp-input"
+                      style={{ width: '80px', textAlign: 'center' }}
+                    />
+                    <span style={{ fontSize: '0.85rem', color: '#64748b' }}>/ {c.maxScore}</span>
+                  </div>
+                </div>
+              ))}
+              <div style={{ marginTop: '12px', padding: '10px', background: 'rgba(6, 182, 212, 0.1)', borderRadius: '6px', border: '1px solid rgba(6, 182, 212, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontWeight: 'bold', color: '#06b6d4' }}>Tổng điểm tạm tính:</span>
+                <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#06b6d4' }}>{computedScore}%</span>
+              </div>
+            </div>
+          ) : (
+            <div className="mnrp-form-group">
+              <label>Điểm (tùy chọn):</label>
+              <input
+                type="number"
+                min={0}
+                max={100}
+                value={score || ''}
+                onChange={(e) => setScore(e.target.value ? parseInt(e.target.value) : undefined)}
+                className="mnrp-input"
+                placeholder="0-100"
+              />
+            </div>
+          )}
 
           <div className="mnrp-form-group">
             <label>Feedback cho learner:</label>

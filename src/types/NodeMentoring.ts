@@ -35,6 +35,12 @@ export type OutputAssessmentStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
 // ==================== Assignment ====================
 
+export interface GradingCriterion {
+  id: string;
+  title: string;
+  maxScore: number;
+}
+
 export interface NodeAssignmentResponse {
   id: number;
   journeyId: number;
@@ -49,6 +55,7 @@ export interface NodeAssignmentResponse {
   createdBy?: number;
   createdAt: string;
   updatedAt?: string;
+  criteria?: GradingCriterion[];
 }
 
 export interface UpsertNodeAssignmentRequest {
@@ -56,6 +63,7 @@ export interface UpsertNodeAssignmentRequest {
   description?: string;
   nodeSkillId?: number;
   assignmentSource?: AssignmentSource;
+  criteria?: GradingCriterion[];
 }
 
 // ==================== Evidence ====================
@@ -64,6 +72,13 @@ export interface SubmitNodeEvidenceRequest {
   submissionText: string;
   evidenceUrl?: string;
   attachmentUrl?: string;
+}
+
+export interface GradingCriterionScore {
+  criterionId: string;
+  title: string;
+  score: number;
+  maxScore: number;
 }
 
 export interface NodeReviewResponse {
@@ -75,6 +90,7 @@ export interface NodeReviewResponse {
   feedback?: string;
   reviewResult: NodeReviewResult;
   reviewedAt: string;
+  criteriaScores?: GradingCriterionScore[];
 }
 
 export interface NodeVerificationResponseDto {
@@ -119,6 +135,7 @@ export interface ReviewNodeSubmissionRequest {
   feedback?: string;
   score?: number;
   bookingId?: number;
+  criteriaScores?: GradingCriterionScore[];
 }
 
 export interface VerifyNodeRequest {

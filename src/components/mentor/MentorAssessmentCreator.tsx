@@ -38,6 +38,7 @@ import type {
   NodeAssignmentResponse,
   OutputAssessmentStatus,
   AssessJourneyOutputRequest,
+  GradingCriterion,
 } from "../../types/NodeMentoring";
 import {
   uploadDocument,
@@ -59,13 +60,13 @@ interface Props {
   onAssessed?: () => void;
 }
 
+const RUBRIC_HEADING = "### Tiêu chí đánh giá (Rubric)";
+
 interface RubricItem {
   id: string;
   criterion: string;
   weight: number;
 }
-
-const RUBRIC_HEADING = "### Tiêu chí đánh giá (Rubric)";
 
 /**
  * Split a saved assignment description into prose body + rubric list.
@@ -91,15 +92,6 @@ const splitRubricBlock = (
     });
   }
   return { body, rubric };
-};
-
-/** Serialize rubric back into markdown, appended after the prose body. */
-const serializeRubric = (body: string, rubric: RubricItem[]): string => {
-  const cleanBody = body.replace(/\s+$/, "");
-  const valid = rubric.filter((r) => r.criterion.trim().length > 0);
-  if (valid.length === 0) return cleanBody;
-  const lines = valid.map((r) => `- **${r.weight}%**: ${r.criterion.trim()}`);
-  return `${cleanBody}\n\n${RUBRIC_HEADING}\n${lines.join("\n")}`;
 };
 
 const MentorAssessmentCreator: React.FC<Props> = ({
@@ -129,10 +121,10 @@ const MentorAssessmentCreator: React.FC<Props> = ({
   const [evidenceType, setEvidenceType] = useState<
     "text" | "link" | "file" | "mixed"
   >("mixed");
-  const [rubricItems, setRubricItems] = useState<RubricItem[]>([
-    { id: "1", criterion: "Hoàn thành đầy đủ yêu cầu", weight: 30 },
-    { id: "2", criterion: "Chất lượng code / output", weight: 40 },
-    { id: "3", criterion: "Khả năng giải thích", weight: 30 },
+  const [rubricItems, setRubricItems] = useState<GradingCriterion[]>([
+    { id: "c1", title: "Completeness (Hoàn thành bài tập)", maxScore: 10 },
+    { id: "c2", title: "Accuracy (Độ chính xác kỹ thuật)", maxScore: 10 },
+    { id: "c3", title: "Quality (Chất lượng giải trình)", maxScore: 10 },
   ]);
 
   // Assess form
@@ -190,12 +182,22 @@ const MentorAssessmentCreator: React.FC<Props> = ({
             assignment.title ||
               (isFinalAssessment ? "Final Assessment — Tổng kết lộ trình" : ""),
           );
-          const rawDesc = assignment.description || "";
-          // Split existing rubric block so the markdown editor only shows the
-          // prose and the rubric editor stays in sync with the stored criteria.
-          const { body, rubric } = splitRubricBlock(rawDesc);
-          setRequirementDesc(body);
-          if (rubric.length > 0) setRubricItems(rubric);
+          
+          if (assignment.criteria && assignment.criteria.length > 0) {
+            setRequirementDesc(assignment.description || "");
+            setRubricItems(assignment.criteria);
+          } else {
+            const rawDesc = assignment.description || "";
+            const { body, rubric } = splitRubricBlock(rawDesc);
+            setRequirementDesc(body);
+            if (rubric.length > 0) {
+              setRubricItems(rubric.map((r, idx) => ({
+                id: `c${idx + 1}`,
+                title: r.criterion,
+                maxScore: 10
+              })));
+            }
+          }
           setEditingRequirements(
             assignment.assignmentSource !== "MENTOR_REFINED",
           );
@@ -233,7 +235,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
   const addRubricItem = () => {
     setRubricItems([
       ...rubricItems,
-      { id: Date.now().toString(), criterion: "", weight: 10 },
+      { id: `c-${Date.now()}`, title: "", maxScore: 10 },
     ]);
   };
 
@@ -243,7 +245,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
 
   const updateRubricItem = (
     id: string,
-    field: keyof RubricItem,
+    field: keyof GradingCriterion,
     value: any,
   ) => {
     setRubricItems(
@@ -270,16 +272,13 @@ const MentorAssessmentCreator: React.FC<Props> = ({
         attachmentNote = `\n\n---\n📎 **File đính kèm:** [${attachmentFile.name}](${result.url})`;
       }
 
-      const { body } = splitRubricBlock(requirementDesc);
-      const finalDescription = serializeRubric(
-        body + attachmentNote,
-        rubricItems,
-      );
+      const finalDescription = requirementDesc + attachmentNote;
 
       const savedAssignment = await upsertNodeAssignment(journeyId, nodeId, {
         title: requirementTitle,
         description: finalDescription,
         assignmentSource: "MENTOR_REFINED",
+        criteria: rubricItems,
       });
       setCurrentAssignment(savedAssignment);
       setEditingRequirements(false);
@@ -320,7 +319,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
   const alreadyAssessed =
     assessment?.assessmentStatus !== "PENDING" &&
     assessment?.assessmentStatus != null;
-  const totalWeight = rubricItems.reduce((sum, r) => sum + (r.weight || 0), 0);
+  const totalMaxScore = rubricItems.reduce((sum, r) => sum + (r.maxScore || 0), 0);
   const hasUploadedNodeAssignment =
     !!nodeId &&
     currentAssignment?.assignmentSource === "MENTOR_REFINED" &&
@@ -546,10 +545,10 @@ const MentorAssessmentCreator: React.FC<Props> = ({
                     className="mac-weight-total"
                     style={{
                       color:
-                        totalWeight === 100 ? "var(--mr-success)" : "#f59e0b",
+                        totalMaxScore > 0 ? "var(--mr-success)" : "#f59e0b",
                     }}
                   >
-                    Tổng: {totalWeight}%
+                    Tổng điểm tối đa: {totalMaxScore}
                   </span>
                 </div>
 
@@ -559,28 +558,28 @@ const MentorAssessmentCreator: React.FC<Props> = ({
                     <input
                       type="text"
                       className="mac-input mac-rubric-criterion"
-                      value={item.criterion}
+                      value={item.title}
                       onChange={(e) =>
-                        updateRubricItem(item.id, "criterion", e.target.value)
+                        updateRubricItem(item.id, "title", e.target.value)
                       }
                       placeholder="Tiêu chí đánh giá..."
                     />
                     <div className="mac-rubric-weight">
                       <input
                         type="number"
-                        min={0}
+                        min={1}
                         max={100}
                         className="mac-input mac-rubric-weight-input"
-                        value={item.weight}
+                        value={item.maxScore}
                         onChange={(e) =>
                           updateRubricItem(
                             item.id,
-                            "weight",
+                            "maxScore",
                             Number(e.target.value),
                           )
                         }
                       />
-                      <span>%</span>
+                      <span>điểm</span>
                     </div>
                     <button
                       className="mac-rubric-remove"

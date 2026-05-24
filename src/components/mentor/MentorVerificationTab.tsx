@@ -41,6 +41,8 @@ import {
   uploadEvidence,
   uploadEvidenceFile,
 } from '../../services/mentorVerificationService';
+import { useAuth } from '../../context/AuthContext';
+import { uploadDocument, uploadImage } from '../../services/fileUploadService';
 import { skillService } from '../../services/skillService';
 import { skillSuggestionService } from '../../services/skillSuggestionService';
 import { getVerifiedSkills as getPortfolioVerifiedSkills, updateVerifiedSkillFeaturedOrder } from '../../services/nodeMentoringService';
@@ -170,6 +172,7 @@ function MultiSkillAutocomplete({
 }
 
 const MentorVerificationTab: React.FC = () => {
+  const { user } = useAuth();
   const [batchVerifications, setBatchVerifications] = useState<BatchVerificationResponse[]>([]);
   const [verifiedSkills, setVerifiedSkills] = useState<string[]>([]);
   const [featuredSkillNames, setFeaturedSkillNames] = useState<string[]>([]);
@@ -321,11 +324,29 @@ const MentorVerificationTab: React.FC = () => {
     if (!file) return;
 
     try {
-      const url = await uploadEvidence(file);
+      const ext = file.name.split('.').pop()?.toLowerCase();
+      const isDocFile = file.type === 'application/pdf' ||
+        file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+        ext === 'pdf' ||
+        ext === 'docx' ||
+        ext === 'doc';
+      const isImageFile = file.type.startsWith('image/') ||
+        ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(ext || '');
+
+      let url = '';
+      if (isDocFile && user?.id) {
+        const result = await uploadDocument(file, user.id);
+        url = result.url;
+      } else if (isImageFile && user?.id) {
+        const result = await uploadImage(file, user.id);
+        url = result.url;
+      } else {
+        url = await uploadEvidence(file);
+      }
       updateEvidence(index, 'evidenceUrl', url);
     } catch (err: unknown) {
       console.error(err);
-      setError('Upload ảnh thất bại. Vui lòng thử lại.');
+      setError('Upload minh chứng thất bại. Vui lòng thử lại.');
     }
   };
 
@@ -334,7 +355,25 @@ const MentorVerificationTab: React.FC = () => {
     if (!file) return;
 
     try {
-      const url = await uploadEvidenceFile(file);
+      const ext = file.name.split('.').pop()?.toLowerCase();
+      const isDocFile = file.type === 'application/pdf' ||
+        file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+        ext === 'pdf' ||
+        ext === 'docx' ||
+        ext === 'doc';
+      const isImageFile = file.type.startsWith('image/') ||
+        ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(ext || '');
+
+      let url = '';
+      if (isDocFile && user?.id) {
+        const result = await uploadDocument(file, user.id);
+        url = result.url;
+      } else if (isImageFile && user?.id) {
+        const result = await uploadImage(file, user.id);
+        url = result.url;
+      } else {
+        url = await uploadEvidenceFile(file);
+      }
       setCvUrl(url);
     } catch (err: unknown) {
       console.error(err);
@@ -839,11 +878,11 @@ const MentorVerificationTab: React.FC = () => {
                       <label className="mvt-file-upload-btn">
                         <input
                           type="file"
-                          accept="image/*"
+                          accept="image/*,.pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                           className="mvt-file-input"
                           onChange={(e) => handleUploadImage(idx, e)}
                         />
-                        Upload Ảnh
+                        Upload File
                       </label>
                     </div>
                     {isImageUrl(ev.evidenceUrl) && (

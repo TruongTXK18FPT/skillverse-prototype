@@ -206,9 +206,17 @@ export const getFileExtFromUrl = (url: string): string => {
  */
 export const getForceDownloadUrl = (url: string): string => {
   if (!url) return url;
+  // Cloudinary raw resources (/raw/upload/) do not support transformations like fl_attachment.
+  if (url.includes('/raw/upload/')) {
+    return url;
+  }
   // Cloudinary URLs follow pattern: .../upload/v1234/path/file.ext
   // We insert fl_attachment after /upload/
   if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+    // Prevent duplicate fl_attachment if it's already in the URL
+    if (url.includes('/upload/fl_attachment/')) {
+      return url;
+    }
     return url.replace('/upload/', '/upload/fl_attachment/');
   }
   return url;
