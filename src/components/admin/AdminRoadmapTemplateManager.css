@@ -1698,3 +1698,82 @@
   color: #bfeeff;
   background: rgba(43, 231, 255, 0.08);
 }
+
+/* Pinned Documents Styling V3 */
+.admin-roadmap-template-studio .artm-pinned-doc-btn {
+  width: auto !important;
+  min-width: auto !important;
+  padding: 6px 14px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(0, 198, 255, 0.1) !important;
+  border: 1px solid rgba(0, 198, 255, 0.28);
+  color: #00c6ff !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-roadmap-template-studio .artm-pinned-doc-btn:hover:not(:disabled) {
+  background-color: rgba(0, 198, 255, 0.18) !important;
+  border-color: rgba(0, 198, 255, 0.45);
+  box-shadow: 0 0 10px rgba(0, 198, 255, 0.15);
+}
+
+.admin-roadmap-template-studio .artm-pinned-docs-section {
+  margin: 12px 24px;
+  padding: 12px;
+  background: rgba(0, 198, 255, 0.04);
+  border: 1px solid rgba(0, 198, 255, 0.12);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-roadmap-template-studio .artm-pinned-docs-section span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-roadmap-template-studio .artm-pinned-docs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-roadmap-template-studio .artm-pinned-doc-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: rgba(10, 18, 32, 0.6);
+  border: 1px solid rgba(120, 141, 180, 0.16);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+.admin-roadmap-template-studio .artm-unpin-btn {
+  background: none !important;
+  border: none !important;
+  color: #ef4444 !important;
+  cursor: pointer;
+  padding: 2px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-width: auto !important;
+}
+
+.admin-roadmap-template-studio .artm-unpin-btn:hover {
+  color: #fca5a5 !important;
+}

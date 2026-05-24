@@ -19,6 +19,7 @@ import {
   Save,
   Search,
   Trash2,
+  X,
 } from "lucide-react";
 import { useAppToast } from "../../context/ToastContext";
 import { careerTaxonomyService } from "../../services/careerTaxonomyService";
@@ -50,6 +51,8 @@ import type {
 } from "../../types/roadmapTemplate";
 import { ROADMAP_EVIDENCE_AI_REVIEW_DEFAULTS, DEFAULT_AI_EVIDENCE_PROMPT } from "../../types/roadmapEvidenceReviewDefaults";
 import { RubricListEditor } from "./RubricListEditor";
+import { PinnedDocSelectModal } from "./ai-knowledge/PinnedDocSelectModal";
+import { getAdminAiKnowledgeDocumentDetail } from "../../services/aiKnowledgeService";
 import "./AdminRoadmapTemplateManager.css";
 
 
@@ -517,6 +520,7 @@ const makeNodeGroupFromResponse = (
   aiPromptHint: group.aiPromptHint || "",
   orderIndex: group.orderIndex ?? orderIndex,
   skills: (group.skills || []).map((skill, index) => makeNodeGroupSkill(skill, index + 1)),
+  pinnedDocumentIds: group.pinnedDocumentIds || null,
 });
 
 const defaultNodeGroup = (orderIndex: number): NodeGroupDraft => ({
@@ -535,6 +539,7 @@ const defaultNodeGroup = (orderIndex: number): NodeGroupDraft => ({
   aiPromptHint: "",
   orderIndex,
   skills: [],
+  pinnedDocumentIds: null,
 });
 
 const buildSkillBlockFromTrackSkill = (
@@ -689,6 +694,11 @@ const AdminRoadmapTemplateManager = () => {
     Record<number, CourseOption[]>
   >({});
   const [searchingCourseSkillId, setSearchingCourseSkillId] = useState<number | null>(null);
+
+  // States for Pinned Documents Selection
+  const [pinnedDocModalOpen, setPinnedDocModalOpen] = useState(false);
+  const [pinnedDocModalNodeLocalId, setPinnedDocModalNodeLocalId] = useState<string | null>(null);
+  const [documentNamesCache, setDocumentNamesCache] = useState<Record<number, string>>({});
 
   const domainNameById = useMemo(
     () => new Map(domains.map((domain) => [domain.id, domain.name])),
@@ -992,6 +1002,7 @@ const AdminRoadmapTemplateManager = () => {
         difficulty: group.difficulty || "medium",
         estimatedHours: group.estimatedHours ?? null,
         aiPromptHint: group.aiPromptHint?.trim(),
+        pinnedDocumentIds: group.pinnedDocumentIds || null,
         orderIndex: index + 1,
         skills: group.skills.map((skill, skillIndex) => ({
           id: skill.id,
@@ -1097,6 +1108,106 @@ const AdminRoadmapTemplateManager = () => {
       return form.nodeGroups[0]?.localId ?? null;
     });
   }, [form.nodeGroups]);
+
+  // Prefetch document titles for any pinned document IDs that are missing from cache
+  useEffect(() => {
+    const allPinnedIds = Array.from(
+      new Set(
+        form.nodeGroups.flatMap((group) => {
+          if (!group.pinnedDocumentIds) return [];
+          try {
+            const parsed = JSON.parse(group.pinnedDocumentIds);
+            return Array.isArray(parsed) ? parsed.map(Number) : [];
+          } catch {
+            return [];
+          }
+        })
+      )
+    );
+
+    const missingIds = allPinnedIds.filter((id) => !documentNamesCache[id]);
+
+    if (missingIds.length === 0) return;
+
+    missingIds.forEach((id) => {
+      void getAdminAiKnowledgeDocumentDetail(id)
+        .then((doc) => {
+          if (doc && doc.title) {
+            setDocumentNamesCache((prev) => ({
+              ...prev,
+              [id]: doc.title,
+            }));
+          }
+        })
+        .catch((err) => {
+          console.error(`Failed to fetch title for document #${id}`, err);
+          // Prevent infinite refetches by writing a placeholder in cache
+          setDocumentNamesCache((prev) => ({
+            ...prev,
+            [id]: `Tài liệu #${id}`,
+          }));
+        });
+    });
+  }, [form.nodeGroups, documentNamesCache]);
+
+  const parsePinnedDocIds = (jsonStr: string | undefined | null): number[] => {
+    if (!jsonStr || !jsonStr.trim()) return [];
+    try {
+      const parsed = JSON.parse(jsonStr);
+      return Array.isArray(parsed) ? parsed.map(Number) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const serializePinnedDocIds = (ids: number[]): string | null => {
+    return ids.length > 0 ? JSON.stringify(ids) : null;
+  };
+
+  const handleOpenPinnedDocSelect = (group: NodeGroupDraft) => {
+    setPinnedDocModalNodeLocalId(group.localId);
+    setPinnedDocModalOpen(true);
+  };
+
+  const handleApplyPinnedDocs = (ids: number[], docMap?: Record<number, string>) => {
+    if (!pinnedDocModalNodeLocalId) return;
+    
+    // Update name cache
+    if (docMap) {
+      setDocumentNamesCache((prev) => ({
+        ...prev,
+        ...docMap,
+      }));
+    }
+
+    clearServerChecks();
+    setForm((current) => ({
+      ...current,
+      nodeGroups: current.nodeGroups.map((group) => {
+        if (group.localId !== pinnedDocModalNodeLocalId) return group;
+        return {
+          ...group,
+          pinnedDocumentIds: serializePinnedDocIds(ids),
+        };
+      }),
+    }));
+  };
+
+  const handleUnpinDocument = (groupLocalId: string, docId: number) => {
+    clearServerChecks();
+    setForm((current) => ({
+      ...current,
+      nodeGroups: current.nodeGroups.map((group) => {
+        if (group.localId !== groupLocalId) return group;
+        const currentIds = parsePinnedDocIds(group.pinnedDocumentIds);
+        const nextIds = currentIds.filter((id) => id !== docId);
+        return {
+          ...group,
+          pinnedDocumentIds: serializePinnedDocIds(nextIds),
+        };
+      }),
+    }));
+  };
 
   const openLibrary = () => {
     setViewMode("library");
@@ -1912,45 +2023,84 @@ const AdminRoadmapTemplateManager = () => {
             <div className="artm-ready"><CheckCircle2 size={18} /> Tất cả kỹ năng đã được gán vào node học.</div>
           )}
           <div className="artm-skill-stack">
-            {moduleItems.map((item, moduleIndex) => (
-              <article
-                className={`artm-activity-card ${highlightNodeGroupId === item.group.localId ? "artm-activity-card--highlight" : ""}`}
-                data-node-group-id={item.group.localId}
-                key={item.group.localId}
-              >
-                <div className="artm-activity-head">
-                  <div>
-                    <strong>Node học {moduleIndex + 1}: {item.group.title}</strong>
-                    <span>Đang chứa {item.skills.length} kỹ năng</span>
+            {moduleItems.map((item, moduleIndex) => {
+              const pinnedDocIds = parsePinnedDocIds(item.group.pinnedDocumentIds);
+              return (
+                <article
+                  className={`artm-activity-card ${highlightNodeGroupId === item.group.localId ? "artm-activity-card--highlight" : ""}`}
+                  data-node-group-id={item.group.localId}
+                  key={item.group.localId}
+                >
+                  <div className="artm-activity-head">
+                    <div>
+                      <strong>Node học {moduleIndex + 1}: {item.group.title}</strong>
+                      <span>Đang chứa {item.skills.length} kỹ năng</span>
+                    </div>
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                      <button
+                        type="button"
+                        className="artm-pinned-doc-btn"
+                        title="Ràng buộc tài liệu chuyên môn"
+                        onClick={() => handleOpenPinnedDocSelect(item.group)}
+                        disabled={autoGrouping}
+                      >
+                        📌 Ràng buộc tài liệu
+                      </button>
+                      <button type="button" title="Xóa node học" onClick={() => removeNodeGroup(item.group.localId)} disabled={autoGrouping}>
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </div>
-                  <button type="button" title="Xóa node học" onClick={() => removeNodeGroup(item.group.localId)} disabled={autoGrouping}>
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-                <div className="artm-panel-grid">
-                  <label className="artm-wide"><span>Tên node học</span><input data-required-field value={item.group.title} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { title: e.target.value })} /></label>
-                  <label className="artm-wide"><span>Mô tả</span><textarea rows={2} value={item.group.description || ""} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { description: e.target.value })} /></label>
-                  <label><span>Độ khó</span><input value={item.group.difficulty || "medium"} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { difficulty: e.target.value })} /></label>
-                  <label><span>Giờ học</span><input type="number" min={0} value={item.group.estimatedHours ?? ""} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { estimatedHours: e.target.value ? Number(e.target.value) : null })} /></label>
-                </div>
-                <div className="artm-panel-grid">
-                  {trackSkills.map((skill) => {
-                    const checked = item.skills.some((moduleSkill) => moduleSkill.skillId === skill.skillId);
-                    return (
-                      <label key={skill.skillId}>
-                        <span>{skill.skillName}</span>
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          disabled={autoGrouping}
-                          onChange={() => toggleModuleSkill(item.group.localId, skill)}
-                        />
-                      </label>
-                    );
-                  })}
-                </div>
-              </article>
-            ))}
+                  <div className="artm-panel-grid">
+                    <label className="artm-wide"><span>Tên node học</span><input data-required-field value={item.group.title} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { title: e.target.value })} /></label>
+                    <label className="artm-wide"><span>Mô tả</span><textarea rows={2} value={item.group.description || ""} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { description: e.target.value })} /></label>
+                    <label><span>Độ khó</span><input value={item.group.difficulty || "medium"} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { difficulty: e.target.value })} /></label>
+                    <label><span>Giờ học</span><input type="number" min={0} value={item.group.estimatedHours ?? ""} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { estimatedHours: e.target.value ? Number(e.target.value) : null })} /></label>
+                  </div>
+                  {pinnedDocIds.length > 0 && (
+                    <div className="artm-pinned-docs-section">
+                      <span>
+                        📌 Tài liệu chuyên môn đã ràng buộc ({pinnedDocIds.length}):
+                      </span>
+                      <div className="artm-pinned-docs-list">
+                        {pinnedDocIds.map((docId) => {
+                          const title = documentNamesCache[docId] || `Đang tải tài liệu #${docId}...`;
+                          return (
+                            <div key={docId} className="artm-pinned-doc-chip">
+                              <span>{title}</span>
+                              <button
+                                type="button"
+                                className="artm-unpin-btn"
+                                onClick={() => handleUnpinDocument(item.group.localId, docId)}
+                                title="Hủy ràng buộc"
+                              >
+                                <X size={14} />
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  <div className="artm-panel-grid">
+                    {trackSkills.map((skill) => {
+                      const checked = item.skills.some((moduleSkill) => moduleSkill.skillId === skill.skillId);
+                      return (
+                        <label key={skill.skillId}>
+                          <span>{skill.skillName}</span>
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            disabled={autoGrouping}
+                            onChange={() => toggleModuleSkill(item.group.localId, skill)}
+                          />
+                        </label>
+                      );
+                    })}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
       </div>
@@ -2523,6 +2673,25 @@ const AdminRoadmapTemplateManager = () => {
             </div>
           </div>
         </div>
+      )}
+      {pinnedDocModalOpen && (
+        <PinnedDocSelectModal
+          isOpen={pinnedDocModalOpen}
+          onClose={() => setPinnedDocModalOpen(false)}
+          skills={
+            form.nodeGroups.find((g) => g.localId === pinnedDocModalNodeLocalId)?.skills.map((s) => ({
+              skillId: s.skillId,
+              skillNameSnapshot: s.skillNameSnapshot || "",
+              skillCanonicalKeySnapshot: s.skillCanonicalKeySnapshot || "",
+            })) || []
+          }
+          selectedDocIds={
+            parsePinnedDocIds(
+              form.nodeGroups.find((g) => g.localId === pinnedDocModalNodeLocalId)?.pinnedDocumentIds
+            )
+          }
+          onApply={handleApplyPinnedDocs}
+        />
       )}
     </div>
   );

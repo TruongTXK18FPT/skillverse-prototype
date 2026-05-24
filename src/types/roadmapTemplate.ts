@@ -120,6 +120,7 @@ export interface RoadmapTemplateNodeGroupRequest {
   aiPromptHint?: string;
   orderIndex: number;
   skills: RoadmapTemplateNodeGroupSkillRequest[];
+  pinnedDocumentIds?: string | null;
 }
 
 export interface RoadmapTemplateRequest {
@@ -244,6 +245,7 @@ export interface RoadmapTemplateNodeGroupResponse {
   aiPromptHint?: string;
   orderIndex?: number | null;
   skills: RoadmapTemplateNodeGroupSkill[];
+  pinnedDocumentIds?: string | null;
 }
 
 export interface RoadmapTemplateCourseCandidateResponse {
