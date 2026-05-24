@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { FileUp, FileText, Layers3 } from 'lucide-react';
 import {
   AI_KNOWLEDGE_INDUSTRY_OPTIONS,
@@ -6,6 +6,9 @@ import {
   AdminChatbotKnowledgeUploadRequest,
   AdminRoadmapKnowledgeUploadRequest,
 } from '../../../types/aiKnowledge';
+import { LocalSearchSelect } from '../roadmap/JobPositionTrackSkillTab';
+import { adminSkillRegistryService } from '../../../services/adminSkillRegistryService';
+import { Skill } from '../../../types/skillRegistry';
 
 type UploadTab = 'chatbot' | 'roadmap';
 
@@ -23,6 +26,10 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
   const chatbotFileRef = useRef<HTMLInputElement>(null);
   const roadmapFileRef = useRef<HTMLInputElement>(null);
   const [activeTab, setActiveTab] = useState<UploadTab>('chatbot');
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [skillsLoading, setSkillsLoading] = useState(true);
+  const [skillsError, setSkillsError] = useState<string | null>(null);
+
   const [chatbotForm, setChatbotForm] = useState({
     file: null as File | null,
     title: '',
@@ -30,6 +37,7 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
     industry: '',
     level: '',
   });
+
   const [roadmapForm, setRoadmapForm] = useState({
     file: null as File | null,
     title: '',
@@ -38,6 +46,31 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
     industry: '',
     level: '',
   });
+
+  const loadSkills = () => {
+    setSkillsLoading(true);
+    setSkillsError(null);
+    adminSkillRegistryService.getActiveSkills()
+      .then((data) => {
+        setSkills(data);
+        setSkillsError(null);
+      })
+      .catch((err) => {
+        console.error("Failed to load skills for upload panel:", err);
+        setSkillsError("Không thể tải danh sách kỹ năng");
+      })
+      .finally(() => {
+        setSkillsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    loadSkills();
+  }, []);
+
+  const skillOptions = useMemo(() => {
+    return skills.map((s) => ({ id: s.name, label: s.name }));
+  }, [skills]);
 
   const handleChatbotSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -217,7 +250,7 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
             <button
               type="submit"
               className="adminaiknowledge-primary-btn"
-              disabled={uploadingKind === 'chatbot'}
+              disabled={uploadingKind === 'chatbot' || !chatbotForm.file || !chatbotForm.title.trim()}
             >
               <FileUp size={16} />
               {uploadingKind === 'chatbot' ? 'Đang tải lên...' : 'Tải tài liệu chatbot'}
@@ -260,38 +293,33 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
           </label>
 
           <label className="adminaiknowledge-field">
-            <span>Skill name</span>
-            <input
-              type="text"
+            <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              Skill name
+              {skillsError && (
+                <button 
+                  type="button" 
+                  onClick={loadSkills}
+                  style={{ background: 'none', border: 'none', color: '#ff6b6b', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+                >
+                  Thử lại
+                </button>
+              )}
+            </span>
+            <LocalSearchSelect
+              options={skillOptions}
               value={roadmapForm.skillName}
-              required
-              onChange={(event) =>
+              placeholder={skillsLoading ? "Đang tải kỹ năng..." : skillsError ? "Lỗi tải kỹ năng" : "Chọn kỹ năng..."}
+              onChange={(val) =>
                 setRoadmapForm((previous) => ({
                   ...previous,
-                  skillName: event.target.value,
+                  skillName: val as string,
                 }))
               }
+              disabled={skillsLoading || !!skillsError}
             />
           </label>
 
-          <label className="adminaiknowledge-field">
-            <span>Industry</span>
-            <select
-              value={roadmapForm.industry}
-              onChange={(event) =>
-                setRoadmapForm((previous) => ({
-                  ...previous,
-                  industry: event.target.value,
-                }))
-              }
-            >
-              {AI_KNOWLEDGE_INDUSTRY_OPTIONS.map((option) => (
-                <option key={option.value || 'general'} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+
 
           <label className="adminaiknowledge-field">
             <span>Level</span>
@@ -330,7 +358,14 @@ const AdminAiKnowledgeUploadPanel: React.FC<AdminAiKnowledgeUploadPanelProps> = 
             <button
               type="submit"
               className="adminaiknowledge-primary-btn"
-              disabled={uploadingKind === 'roadmap'}
+              disabled={
+                uploadingKind === 'roadmap' || 
+                skillsLoading || 
+                !!skillsError || 
+                !roadmapForm.skillName || 
+                !roadmapForm.file || 
+                !roadmapForm.title.trim()
+              }
             >
               <FileUp size={16} />
               {uploadingKind === 'roadmap' ? 'Đang tải lên...' : 'Tải tài liệu roadmap'}

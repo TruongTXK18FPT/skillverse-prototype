@@ -9,6 +9,8 @@ import {
   Trash2,
   XCircle,
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { getVerifiedSkillsByMentorId } from '../../services/mentorProfileService';
 import Toast from '../../components/shared/Toast';
 import ConfirmDialog from '../../components/shared/ConfirmDialog';
 import { useToast } from '../../hooks/useToast';
@@ -19,7 +21,6 @@ import {
   submitMentorRoadmapDocument,
 } from '../../services/aiKnowledgeService';
 import {
-  AI_KNOWLEDGE_INDUSTRY_OPTIONS,
   AI_KNOWLEDGE_LEVEL_OPTIONS,
   AiKnowledgeApprovalStatus,
   AiKnowledgeDocumentDetailResponse,
@@ -55,6 +56,7 @@ const getApiErrorMessage = (error: unknown, fallback: string) => {
 
 const MentorAiKnowledgePage: React.FC = () => {
   const { toast, isVisible, hideToast, showError, showInfo, showSuccess } = useToast();
+  const { user } = useAuth();
 
   const [documents, setDocuments] = useState<AiKnowledgeDocumentListItemResponse[]>([]);
   const [detail, setDetail] = useState<AiKnowledgeDocumentDetailResponse | null>(null);
@@ -71,6 +73,10 @@ const MentorAiKnowledgePage: React.FC = () => {
   const [totalElements, setTotalElements] = useState(0);
   const { withPaginationScroll } = useScrollToListTopOnPagination();
 
+  const [verifiedSkills, setVerifiedSkills] = useState<string[]>([]);
+  const [skillsLoading, setSkillsLoading] = useState(true);
+  const [skillsError, setSkillsError] = useState<string | null>(null);
+
   const [roadmapForm, setRoadmapForm] = useState({
     file: null as File | null,
     title: '',
@@ -81,6 +87,42 @@ const MentorAiKnowledgePage: React.FC = () => {
   });
 
   const roadmapFileRef = useRef<HTMLInputElement>(null);
+
+  const loadMentorSkills = () => {
+    if (!user?.id) return;
+    setSkillsLoading(true);
+    setSkillsError(null);
+    getVerifiedSkillsByMentorId(user.id)
+      .then((skillsList) => {
+        setVerifiedSkills(skillsList);
+        setSkillsError(null);
+        if (skillsList.length > 0) {
+          setRoadmapForm((previous) => ({
+            ...previous,
+            skillName: skillsList[0],
+          }));
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load mentor verified skills:", err);
+        setSkillsError("Không thể tải danh sách kỹ năng đã verify");
+      })
+      .finally(() => {
+        setSkillsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    loadMentorSkills();
+  }, [user?.id]);
+
+  const formatSkillDisplay = (skill: string) => {
+    if (!skill) return '';
+    return skill
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
 
   const loadDocuments = async (showRefreshing = false) => {
     if (showRefreshing) {
@@ -294,9 +336,19 @@ const MentorAiKnowledgePage: React.FC = () => {
             </label>
 
             <label className="mentor-ai-knowledge-field">
-              <span>Skill name</span>
-              <input
-                type="text"
+              <span style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                Skill name
+                {skillsError && (
+                  <button 
+                    type="button" 
+                    onClick={loadMentorSkills}
+                    style={{ background: 'none', border: 'none', color: '#ff6b6b', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+                  >
+                    Thử lại
+                  </button>
+                )}
+              </span>
+              <select
                 required
                 value={roadmapForm.skillName}
                 onChange={(event) =>
@@ -305,27 +357,25 @@ const MentorAiKnowledgePage: React.FC = () => {
                     skillName: event.target.value,
                   }))
                 }
-              />
-            </label>
-
-            <label className="mentor-ai-knowledge-field">
-              <span>Industry</span>
-              <select
-                value={roadmapForm.industry}
-                onChange={(event) =>
-                  setRoadmapForm((previous) => ({
-                    ...previous,
-                    industry: event.target.value,
-                  }))
-                }
+                disabled={skillsLoading || !!skillsError}
               >
-                {AI_KNOWLEDGE_INDUSTRY_OPTIONS.map((option) => (
-                  <option key={option.value || 'general'} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
+                {skillsLoading ? (
+                  <option value="">Đang tải kỹ năng...</option>
+                ) : skillsError ? (
+                  <option value="">Lỗi tải danh sách kỹ năng</option>
+                ) : verifiedSkills.length === 0 ? (
+                  <option value="">Không có kỹ năng đã verify</option>
+                ) : (
+                  verifiedSkills.map((skill) => (
+                    <option key={skill} value={skill}>
+                      {formatSkillDisplay(skill)}
+                    </option>
+                  ))
+                )}
               </select>
             </label>
+
+
 
             <label className="mentor-ai-knowledge-field">
               <span>Level</span>
@@ -362,7 +412,18 @@ const MentorAiKnowledgePage: React.FC = () => {
           </div>
 
           <div className="mentor-ai-knowledge-form__actions">
-            <button type="submit" className="mentor-ai-knowledge-primary-btn" disabled={submitting}>
+            <button 
+              type="submit" 
+              className="mentor-ai-knowledge-primary-btn" 
+              disabled={
+                submitting || 
+                skillsLoading || 
+                !!skillsError || 
+                !roadmapForm.skillName || 
+                !roadmapForm.file || 
+                !roadmapForm.title.trim()
+              }
+            >
               <FileText size={16} />
               {submitting ? 'Đang gửi...' : 'Gửi roadmap doc'}
             </button>

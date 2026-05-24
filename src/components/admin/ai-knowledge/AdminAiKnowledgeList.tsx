@@ -29,6 +29,7 @@ interface AdminAiKnowledgeListProps {
   onNextPage: () => void;
   onRefresh: () => void;
   refreshing: boolean;
+  activeUseCase?: string;
 
   // Accordion Detail Props
   detail: AiKnowledgeDocumentDetailResponse | null;
@@ -73,6 +74,7 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
   onNextPage,
   onRefresh,
   refreshing,
+  activeUseCase,
 
   detail,
   detailLoading,
@@ -86,6 +88,9 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
   reviewNote,
   onReviewNoteChange,
 }) => {
+  const isChatbotOnly = activeUseCase === 'CHATBOT_GLOBAL';
+  const columnCount = isChatbotOnly ? 5 : 6;
+
   return (
     <section className="adminaiknowledge-card adminaiknowledge-list-panel">
       <div className="adminaiknowledge-section-header adminaiknowledge-section-header--compact">
@@ -111,6 +116,7 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
             <tr>
               <th>Tiêu đề</th>
               <th>Use case</th>
+              {!isChatbotOnly && <th>Kỹ năng</th>}
               <th>Trạng thái</th>
               <th>Thời gian</th>
               <th>Thao tác</th>
@@ -119,7 +125,7 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
           <tbody>
             {loading && (
               <tr>
-                <td colSpan={6} className="adminaiknowledge-empty-cell">
+                <td colSpan={columnCount} className="adminaiknowledge-empty-cell">
                   Đang tải tài liệu...
                 </td>
               </tr>
@@ -127,7 +133,7 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
 
             {!loading && documents.length === 0 && (
               <tr>
-                <td colSpan={6} className="adminaiknowledge-empty-cell">
+                <td colSpan={columnCount} className="adminaiknowledge-empty-cell">
                   Không có tài liệu phù hợp với bộ lọc hiện tại.
                 </td>
               </tr>
@@ -157,6 +163,14 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
                           {document.docType || 'Không rõ docType'}
                         </div>
                       </td>
+                      {!isChatbotOnly && (
+                        <td>
+                          <strong>{document.skillName || '—'}</strong>
+                          <div className="adminaiknowledge-cell-sub">
+                            {document.skillSlug || '—'}
+                          </div>
+                        </td>
+                      )}
                       <td>
                         <div className="adminaiknowledge-badge-group">
                           <span
@@ -194,7 +208,7 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
 
                     {isSelected && (
                       <tr className="adminaiknowledge-detail-row">
-                        <td colSpan={6}>
+                        <td colSpan={columnCount}>
                           <div className="adminaiknowledge-accordion-content">
                             {detailLoading && (
                               <div className="adminaiknowledge-detail-loading">
@@ -209,6 +223,9 @@ const AdminAiKnowledgeList: React.FC<AdminAiKnowledgeListProps> = ({
                                   <div className="adminaiknowledge-detail-main">
                                     <div className="adminaiknowledge-detail-meta">
                                       <div><strong>Mô tả:</strong><span>{detail.description || '—'}</span></div>
+                                      {detail.useCase === 'ROADMAP_SKILL' && (
+                                        <div><strong>Kỹ năng:</strong><span>{detail.skillName || '—'} ({detail.skillSlug || '—'})</span></div>
+                                      )}
                                       <div><strong>Industry / Level:</strong><span>{detail.industry || '—'} / {detail.level || '—'}</span></div>
                                       <div><strong>Doc type / MIME:</strong><span>{detail.docType || '—'} / {detail.mimeType || '—'}</span></div>
                                       <div><strong>Size:</strong><span>{detail.fileSizeBytes?.toLocaleString('vi-VN') || 0} bytes</span></div>

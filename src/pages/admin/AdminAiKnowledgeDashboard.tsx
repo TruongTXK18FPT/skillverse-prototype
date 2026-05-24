@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import ConfirmDialog from '../../components/shared/ConfirmDialog';
 import Toast from '../../components/shared/Toast';
 import AdminAiKnowledgeUploadPanel from '../../components/admin/ai-knowledge/AdminAiKnowledgeUploadPanel';
@@ -20,6 +20,7 @@ import {
   AiKnowledgeDocumentDetailResponse,
   AiKnowledgeDocumentListItemResponse,
   ListAdminAiKnowledgeDocumentsParams,
+  AiKnowledgeUseCase,
 } from '../../types/aiKnowledge';
 import { useToast } from '../../hooks/useToast';
 import { downloadFile } from '../../utils/downloadFile';
@@ -302,15 +303,7 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
           <h1>Quản lý tài liệu AI</h1>
           <p>Admin tải tài liệu chatbot/roadmap, theo dõi danh sách, xem chi tiết và thực hiện review, reindex, archive trong cùng một màn hình.</p>
         </div>
-        <button
-          type="button"
-          className="adminaiknowledge-refresh-btn"
-          onClick={() => void handleRefreshAll()}
-          disabled={listRefreshing || listLoading || detailLoading || actionLoading != null}
-        >
-          <RefreshCw size={16} className={listRefreshing ? 'adminaiknowledge-spinning' : ''} />
-          Làm mới
-        </button>
+
       </header>
 
       {error && (
@@ -333,6 +326,45 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
           onReset={handleResetFilters}
         />
 
+        <div className="adminaiknowledge-tabs-container">
+          <button
+            type="button"
+            className={`adminaiknowledge-tab-btn ${!filters.useCase ? 'active' : ''}`}
+            onClick={() => {
+              setFilters((prev) => {
+                const next = { ...prev, page: 0 };
+                delete next.useCase;
+                delete next.skillSlug;
+                return next;
+              });
+            }}
+          >
+            Tất cả tài liệu
+          </button>
+          <button
+            type="button"
+            className={`adminaiknowledge-tab-btn ${filters.useCase === AiKnowledgeUseCase.CHATBOT_GLOBAL ? 'active' : ''}`}
+            onClick={() => {
+              setFilters((prev) => {
+                const next = { ...prev, useCase: AiKnowledgeUseCase.CHATBOT_GLOBAL, page: 0 };
+                delete next.skillSlug;
+                return next;
+              });
+            }}
+          >
+            Tài liệu Chatbot
+          </button>
+          <button
+            type="button"
+            className={`adminaiknowledge-tab-btn ${filters.useCase === AiKnowledgeUseCase.ROADMAP_SKILL ? 'active' : ''}`}
+            onClick={() => {
+              setFilters((prev) => ({ ...prev, useCase: AiKnowledgeUseCase.ROADMAP_SKILL, page: 0 }));
+            }}
+          >
+            Tài liệu Roadmap
+          </button>
+        </div>
+
         <AdminAiKnowledgeList
           documents={documents}
           loading={listLoading}
@@ -348,8 +380,9 @@ const AdminAiKnowledgeDashboard: React.FC = () => {
               page: Math.min((previous.page ?? 0) + 1, Math.max(pageMeta.totalPages - 1, 0)),
             }))
           }
-          onRefresh={() => void fetchList(true)}
+          onRefresh={() => void handleRefreshAll()}
           refreshing={listRefreshing}
+          activeUseCase={filters.useCase}
           // Accordion Detail Props
           detail={detail}
           detailLoading={detailLoading}

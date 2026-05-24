@@ -12,7 +12,7 @@ import './JobPositionTrackSkillTab.css';
 
 type TrackSortKey = 'code' | 'name' | 'jobPosition' | 'status';
 
-function LocalSearchSelect({ 
+export function LocalSearchSelect({ 
   options, 
   value, 
   onChange, 
