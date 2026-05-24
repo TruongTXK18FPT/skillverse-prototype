@@ -608,12 +608,20 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
   }, [selectedNodeId, loadNodeData, loadFinalAssessment, loadFinalAssignment]);
 
   // ── File helpers ──────────────────────────────────────────────
-  const isDocFile = (file: File) =>
-    file.type === "application/pdf" ||
-    file.type ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+  const isDocFile = (file: File) => {
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    return file.type === "application/pdf" ||
+      file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+      ext === 'pdf' ||
+      ext === 'docx' ||
+      ext === 'doc';
+  };
 
-  const isImageFile = (file: File) => file.type.startsWith("image/");
+  const isImageFile = (file: File) => {
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    return file.type.startsWith("image/") ||
+      ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(ext || '');
+  };
 
   const getFileExt = (file: File) => {
     if (file.type === "application/pdf") return "pdf";
