@@ -481,6 +481,16 @@ const QuestionBankTab: React.FC = () => {
   // ============================================================
   // Handlers
   // ============================================================
+  const reloadSelectedBankDetail = async () => {
+    if (!selectedBank) return;
+    try {
+      const detail = await getQuestionBank(selectedBank.id);
+      setSelectedBank(detail);
+    } catch (e) {
+      console.error("Failed to reload bank detail", e);
+    }
+  };
+
   const openDetail = async (bank: QuestionBankSummary) => {
     try {
       setLoading(true);
@@ -832,6 +842,7 @@ const QuestionBankTab: React.FC = () => {
       fillQuestionForm(null);
       loadQuestions(selectedBank.id, questionPage);
       loadBanks(bankPage);
+      reloadSelectedBankDetail();
     } catch (err: any) {
       showError("Lỗi", err.response?.data?.message || "Không thể thêm");
     } finally {
@@ -861,6 +872,7 @@ const QuestionBankTab: React.FC = () => {
       closeModal();
       setSelectedQuestion(null);
       loadQuestions(selectedBank.id, questionPage);
+      reloadSelectedBankDetail();
     } catch (err: any) {
       showError("Lỗi", err.response?.data?.message || "Không thể cập nhật");
     } finally {
@@ -878,6 +890,7 @@ const QuestionBankTab: React.FC = () => {
       setSelectedQuestion(null);
       loadQuestions(selectedBank.id, questionPage);
       loadBanks(bankPage);
+      reloadSelectedBankDetail();
     } catch {
       showError("Lỗi", "Không thể xóa");
     } finally {
@@ -937,6 +950,7 @@ const QuestionBankTab: React.FC = () => {
       closeModal();
       loadQuestions(selectedBank.id, questionPage);
       loadBanks(bankPage);
+      reloadSelectedBankDetail();
     } catch (err: any) {
       showError("Lỗi", err.response?.data?.message || "Nhập file thất bại");
     } finally {
@@ -1009,6 +1023,7 @@ const QuestionBankTab: React.FC = () => {
       closeModal();
       loadQuestions(selectedBank.id, questionPage);
       loadBanks(bankPage);
+      reloadSelectedBankDetail();
     } catch (err: any) {
       showError("Lỗi", err.response?.data?.message || "Không thể lưu");
     } finally {
