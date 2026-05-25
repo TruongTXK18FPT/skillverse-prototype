@@ -49,8 +49,8 @@ const ROADMAP_CATALOG_TABS: Array<{
   },
   {
     key: "track-skills",
-    label: "Mapping track",
-    description: "Track và kỹ năng liên quan",
+    label: "Phân nhánh chuyên sâu",
+    description: "Nhánh chuyên sâu và kỹ năng liên quan",
     icon: ListChecks,
   },
 ];
@@ -93,7 +93,7 @@ const AdminRoadmapCatalogTab: React.FC<AdminRoadmapCatalogTabProps> = ({
           <h2>Quản trị dữ liệu nền cho nghề nghiệp và kỹ năng trên nền tảng</h2>
           <p>
             Kho kỹ năng, kiểm duyệt năng lực mentor, đề xuất skill mới,
-            phân loại nghề nghiệp và mapping track.
+            phân loại nghề nghiệp và phân nhánh chuyên sâu.
           </p>
         </div>
       </header>

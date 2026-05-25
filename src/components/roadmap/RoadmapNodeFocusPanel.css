@@ -957,3 +957,53 @@
   line-height: 1.5;
   font-style: italic;
 }
+
+/* Skills requirements in Focus Panel */
+.roadmap-node-focus-panel__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.roadmap-node-focus-panel__skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  color: #22d3ee;
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.1);
+  transition: all 0.2s ease;
+}
+
+.roadmap-node-focus-panel__skill-tag:hover {
+  background: rgba(34, 211, 238, 0.14);
+  border-color: rgba(34, 211, 238, 0.48);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.22);
+}
+
+.roadmap-node-focus-panel__skill-tag--required {
+  background: rgba(34, 211, 238, 0.08);
+  border-color: rgba(34, 211, 238, 0.38);
+  color: #22d3ee;
+}
+
+.roadmap-node-focus-panel__skill-tag--important {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.08);
+}
+
+.roadmap-node-focus-panel__skill-tag--nice_to_have {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
+}

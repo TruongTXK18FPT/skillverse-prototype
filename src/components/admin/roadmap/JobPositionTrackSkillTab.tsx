@@ -382,12 +382,12 @@ const JobPositionTrackSkillTab: React.FC = () => {
       setTrackForm({ domainId: '', jobPositionId: '', code: '', name: '', description: '' });
       setShowTrackForm(false);
       await fetchGlobalData();
-      showAppSuccess('Đã tạo track', `Track "${trackForm.name.trim()}" đã được tạo.`);
+      showAppSuccess('Đã tạo nhánh chuyên sâu', `Nhánh chuyên sâu "${trackForm.name.trim()}" đã được tạo.`);
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || '';
-      const message = msg.includes('TRACK_CODE_EXISTS') || msg.includes('DUPLICATE') ? `Mã "${code}" đã tồn tại.` : 'Tạo track thất bại: ' + msg;
+      const message = msg.includes('TRACK_CODE_EXISTS') || msg.includes('DUPLICATE') ? `Mã "${code}" đã tồn tại.` : 'Tạo nhánh chuyên sâu thất bại: ' + msg;
       setError(message);
-      showAppError('Tạo track thất bại', message);
+      showAppError('Tạo nhánh chuyên sâu thất bại', message);
     } finally { setTrackSubmitting(false); }
   };
 
@@ -415,33 +415,33 @@ const JobPositionTrackSkillTab: React.FC = () => {
       });
       setEditingTrackId(null);
       await fetchGlobalData();
-      showAppSuccess('Đã cập nhật track', `Track "${editTrackForm.name.trim()}" đã được lưu.`);
+      showAppSuccess('Đã cập nhật nhánh chuyên sâu', `Nhánh chuyên sâu "${editTrackForm.name.trim()}" đã được lưu.`);
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || '';
-      const message = msg.includes('TRACK_CODE_EXISTS') || msg.includes('DUPLICATE') ? `Mã "${editTrackForm.code}" đã tồn tại.` : 'Cập nhật track thất bại: ' + msg;
+      const message = msg.includes('TRACK_CODE_EXISTS') || msg.includes('DUPLICATE') ? `Mã "${editTrackForm.code}" đã tồn tại.` : 'Cập nhật nhánh chuyên sâu thất bại: ' + msg;
       setError(message);
-      showAppError('Cập nhật track thất bại', message);
+      showAppError('Cập nhật nhánh chuyên sâu thất bại', message);
     } finally { setEditTrackSubmitting(false); }
   };
 
   const handleDeactivateTrack = async (id: number, name: string) => {
-    if (!(await confirmAction({ title: 'Ngừng kích hoạt track', message: `Ngừng kích hoạt track "${name}"?`, confirmLabel: 'Ngừng kích hoạt', variant: 'danger' }))) return;
+    if (!(await confirmAction({ title: 'Ngừng kích hoạt nhánh chuyên sâu', message: `Ngừng kích hoạt nhánh chuyên sâu "${name}"?`, confirmLabel: 'Ngừng kích hoạt', variant: 'danger' }))) return;
     setError(null);
     try {
       await careerTaxonomyService.deactivateTrack(id);
       await fetchGlobalData();
       if (selectedTrackId === id) setSelectedTrackId(null);
-      showAppSuccess('Đã ngừng kích hoạt', `Track "${name}" đã được cập nhật.`);
+      showAppSuccess('Đã ngừng kích hoạt', `Nhánh chuyên sâu "${name}" đã được cập nhật.`);
     } catch (e: any) { const message = 'Ngừng kích hoạt thất bại: ' + (e?.response?.data?.message || e?.message); setError(message); showAppError('Ngừng kích hoạt thất bại', message); }
   };
 
   const handleReactivateTrack = async (id: number, name: string) => {
-    if (!(await confirmAction({ title: 'Kích hoạt lại track', message: `Kích hoạt lại track "${name}"?`, confirmLabel: 'Kích hoạt lại', variant: 'primary' }))) return;
+    if (!(await confirmAction({ title: 'Kích hoạt lại nhánh chuyên sâu', message: `Kích hoạt lại nhánh chuyên sâu "${name}"?`, confirmLabel: 'Kích hoạt lại', variant: 'primary' }))) return;
     setError(null);
     try {
       await careerTaxonomyService.reactivateTrack(id);
       await fetchGlobalData();
-      showAppSuccess('Đã kích hoạt lại', `Track "${name}" đã hoạt động lại.`);
+      showAppSuccess('Đã kích hoạt lại', `Nhánh chuyên sâu "${name}" đã hoạt động lại.`);
     } catch (e: any) { const message = 'Kích hoạt lại thất bại: ' + (e?.response?.data?.message || e?.message); setError(message); showAppError('Kích hoạt lại thất bại', message); }
   };
 
@@ -452,23 +452,23 @@ const JobPositionTrackSkillTab: React.FC = () => {
       if (dependentTemplates && dependentTemplates.length > 0) {
         const templateNames = dependentTemplates.map(t => `"${t.title}"`).join(', ');
         await confirmAction({
-          title: 'Không thể xóa track',
-          message: `Không thể xóa track "${name}" vì đang có ${dependentTemplates.length} mẫu lộ trình liên kết: [ ${templateNames} ]. Vui lòng gỡ hoặc xóa các mẫu lộ trình này trước.`,
+          title: 'Không thể xóa nhánh chuyên sâu',
+          message: `Không thể xóa nhánh chuyên sâu "${name}" vì đang có ${dependentTemplates.length} mẫu lộ trình liên kết: [ ${templateNames} ]. Vui lòng gỡ hoặc xóa các mẫu lộ trình này trước.`,
           confirmLabel: 'Đã hiểu',
           variant: 'primary'
         });
         return;
       }
 
-      if (!(await confirmAction({ title: 'Xóa vĩnh viễn track', message: `Xóa vĩnh viễn track "${name}"? Hành động này sẽ xóa cả mapping kỹ năng và không thể hoàn tác.`, confirmLabel: 'Xóa vĩnh viễn', variant: 'danger' }))) return;
+      if (!(await confirmAction({ title: 'Xóa vĩnh viễn nhánh chuyên sâu', message: `Xóa vĩnh viễn nhánh chuyên sâu "${name}"? Hành động này sẽ xóa cả mapping kỹ năng và không thể hoàn tác.`, confirmLabel: 'Xóa vĩnh viễn', variant: 'danger' }))) return;
       await careerTaxonomyService.hardDeleteTrack(id);
       await fetchGlobalData();
       if (selectedTrackId === id) setSelectedTrackId(null);
-      showAppSuccess('Đã xóa track', `Track "${name}" đã được xóa.`);
+      showAppSuccess('Đã xóa nhánh chuyên sâu', `Nhánh chuyên sâu "${name}" đã được xóa.`);
     } catch (e: any) {
       const message = 'Xóa thất bại: ' + (e?.response?.data?.message || e?.message);
       setError(message);
-      showAppError('Xóa track thất bại', message);
+      showAppError('Xóa nhánh chuyên sâu thất bại', message);
     }
   };
 
@@ -594,14 +594,14 @@ const JobPositionTrackSkillTab: React.FC = () => {
     <div className="admin-tab-content job-track-skill-tab">
       <div className="job-track-skill-tab__header">
         <div>
-          <h2 className="job-track-skill-tab__title">Track nghề nghiệp & kỹ năng yêu cầu</h2>
-          <p>Chọn một track để xem chi tiết, sửa thông tin và gắn bộ kỹ năng cần thiết cho vị trí nghề nghiệp.</p>
+          <h2 className="job-track-skill-tab__title">Nhánh chuyên môn & Kỹ năng yêu cầu</h2>
+          <p>Chọn một nhánh chuyên môn để xem chi tiết, sửa thông tin và gắn bộ kỹ năng cần thiết cho vị trí nghề nghiệp.</p>
         </div>
         <button 
           onClick={() => setShowTrackForm(true)} 
           className="job-track-skill-tab__btn job-track-skill-tab__btn--primary"
         >
-          + Tạo track
+          + Tạo nhánh chuyên sâu
         </button>
       </div>
 
@@ -610,7 +610,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
       {/* Filter Bar */}
       <div className="job-track-skill-tab__card job-track-skill-tab__filter-bar">
         <input 
-          placeholder="Tìm mã hoặc tên track..." 
+          placeholder="Tìm mã hoặc tên nhánh chuyên sâu..." 
           value={searchQuery} 
           onChange={e => setSearchQuery(e.target.value)} 
           className="job-track-skill-tab__input job-track-skill-tab__filter-search" 
@@ -640,8 +640,8 @@ const JobPositionTrackSkillTab: React.FC = () => {
         <section className="job-track-skill-tab__card job-track-skill-tab__list-panel">
           <div className="job-track-skill-tab__panel-heading">
             <div>
-              <h3>Danh sách track</h3>
-              <p>{filteredTracks.length} track phù hợp bộ lọc</p>
+              <h3>Danh sách nhánh chuyên sâu</h3>
+              <p>{filteredTracks.length} nhánh phù hợp bộ lọc</p>
             </div>
           </div>
           <div className="job-track-skill-tab__track-list">
@@ -666,15 +666,15 @@ const JobPositionTrackSkillTab: React.FC = () => {
               </button>
             ))}
             {filteredTracks.length === 0 && (
-              <div className="job-track-skill-tab__empty-state">Không có track nào phù hợp.</div>
+              <div className="job-track-skill-tab__empty-state">Không có nhánh chuyên sâu nào phù hợp.</div>
             )}
           </div>
           {untrackedJobPositions.length > 0 && (
             <div className="job-track-skill-tab__untracked">
-              <div className="job-track-skill-tab__untracked-title">Vị trí chưa có track</div>
+              <div className="job-track-skill-tab__untracked-title">Vị trí chưa phân nhánh</div>
               {untrackedJobPositions.slice(0, 8).map(jp => (
                 <button
-                  key={jp.id}
+                   key={jp.id}
                   type="button"
                   className="job-track-skill-tab__untracked-card"
                   onClick={() => openCreateTrackForJobPosition(jp)}
@@ -683,7 +683,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
                     <strong>{jp.name}</strong>
                     <small>{getDomainName(jp.domainId)} / {jp.code}</small>
                   </span>
-                  <em>Tạo track</em>
+                  <em>Phân nhánh</em>
                 </button>
               ))}
             </div>
@@ -703,7 +703,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
         <section className="job-track-skill-tab__card job-track-skill-tab__detail-panel">
           {!selectedTrack ? (
             <div className="job-track-skill-tab__empty-detail">
-              Chọn một track ở danh sách bên trái để xem chi tiết và quản lý kỹ năng yêu cầu.
+              Chọn một nhánh chuyên môn ở danh sách bên trái để xem chi tiết và quản lý kỹ năng yêu cầu.
             </div>
           ) : (
             <>
@@ -720,7 +720,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <button onClick={() => startEditTrack(selectedTrack)} className="job-track-skill-tab__btn job-track-skill-tab__btn--primary">Sửa thông tin track</button>
+                      <button onClick={() => startEditTrack(selectedTrack)} className="job-track-skill-tab__btn job-track-skill-tab__btn--primary">Sửa thông tin nhánh</button>
                       {selectedTrack.status === 'ACTIVE' && <button onClick={() => handleDeactivateTrack(selectedTrack.id, selectedTrack.name)} className="job-track-skill-tab__btn job-track-skill-tab__btn--danger">Ngừng kích hoạt</button>}
                       {selectedTrack.status === 'INACTIVE' && <button onClick={() => handleReactivateTrack(selectedTrack.id, selectedTrack.name)} className="job-track-skill-tab__btn job-track-skill-tab__btn--success">Kích hoạt lại</button>}
                       {selectedTrack.status === 'INACTIVE' && <button onClick={() => handleHardDeleteTrack(selectedTrack.id, selectedTrack.name)} className="job-track-skill-tab__btn admin-roadmap-catalog__btn--delete">Xóa vĩnh viễn</button>}
@@ -732,11 +732,11 @@ const JobPositionTrackSkillTab: React.FC = () => {
               {editingTrackId === selectedTrack.id ? (
                 <div className="job-track-skill-tab__edit-panel">
                   <label className="job-track-skill-tab__field">
-                    <span>Mã track *</span>
+                    <span>Mã nhánh chuyên sâu *</span>
                     <input value={editTrackForm.code} onChange={e => setEditTrackForm(p => ({ ...p, code: normalizeTaxonomyCode(e.target.value) }))} className="job-track-skill-tab__input" autoFocus />
                   </label>
                   <label className="job-track-skill-tab__field">
-                    <span>Tên track *</span>
+                    <span>Tên nhánh chuyên sâu *</span>
                     <input value={editTrackForm.name} onChange={e => setEditTrackForm(p => ({ ...p, name: e.target.value }))} className="job-track-skill-tab__input" />
                   </label>
                   <label className="job-track-skill-tab__field">
@@ -761,8 +761,8 @@ const JobPositionTrackSkillTab: React.FC = () => {
 
               <div className="job-track-skill-tab__mapping-header">
                 <div>
-                  <h3>Kỹ năng yêu cầu cho track</h3>
-                  <p>Thêm, gỡ, chỉnh mức độ yêu cầu và thứ tự gợi ý cho lộ trình này.</p>
+                  <h3>Kỹ năng yêu cầu cho nhánh chuyên sâu</h3>
+                  <p>Thêm, gỡ, chỉnh mức độ yêu cầu và thứ tự gợi ý cho nhánh này.</p>
                 </div>
                 <div className={`job-track-skill-tab__save-state job-track-skill-tab__save-state--${trackSkillsSaveState}`}>
                   {trackSkillsSaveState === 'saving' && 'Đang lưu thay đổi...'}
@@ -776,7 +776,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
                 <span className="job-track-skill-tab__summary-chip"><small>Quan trọng</small><strong>{requirementSummary.IMPORTANT}</strong></span>
                 <span className="job-track-skill-tab__summary-chip"><small>Nên có</small><strong>{requirementSummary.NICE_TO_HAVE}</strong></span>
                 {trackSkills.length > 0 && requirementSummary.REQUIRED === 0 && (
-                  <strong>Track chưa có skill bắt buộc.</strong>
+                  <strong>Nhánh chưa có skill bắt buộc.</strong>
                 )}
               </div>
 
@@ -957,8 +957,8 @@ const JobPositionTrackSkillTab: React.FC = () => {
           <div className="admin-roadmap-catalog__modal" onMouseDown={(e) => e.stopPropagation()}>
             <div className="admin-roadmap-catalog__modal-header">
               <div>
-                <h3 id="track-create-title">Tạo track mới</h3>
-                <p>Track liên kết vị trí công việc với lộ trình kỹ năng cần học.</p>
+                <h3 id="track-create-title">Tạo nhánh chuyên sâu mới</h3>
+                <p>Nhánh chuyên sâu liên kết vị trí công việc với lộ trình kỹ năng cần học.</p>
               </div>
               <button type="button" className="admin-roadmap-catalog__modal-close" onClick={() => setShowTrackForm(false)}>✕</button>
             </div>
@@ -978,7 +978,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
                 </select>
               </label>
               <label className="admin-roadmap-catalog__modal-field admin-roadmap-catalog__modal-field--full" htmlFor="track-create-name">
-                <span>Tên track *</span>
+                <span>Tên nhánh chuyên sâu *</span>
                 <input
                   id="track-create-name"
                   placeholder="VD: Backend Java Spring Boot"
@@ -997,7 +997,7 @@ const JobPositionTrackSkillTab: React.FC = () => {
             <div className="admin-roadmap-catalog__modal-actions">
               <button type="button" onClick={() => setShowTrackForm(false)} className="job-track-skill-tab__btn admin-roadmap-catalog__btn--neutral">Hủy</button>
               <button onClick={handleCreateTrack} disabled={trackSubmitting || !trackForm.name.trim() || !trackForm.jobPositionId} className="job-track-skill-tab__btn job-track-skill-tab__btn--success">
-                {trackSubmitting ? 'Đang tạo...' : 'Tạo track'}
+                {trackSubmitting ? 'Đang tạo...' : 'Tạo nhánh chuyên sâu'}
               </button>
             </div>
           </div>

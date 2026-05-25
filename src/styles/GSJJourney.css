@@ -9278,3 +9278,104 @@
   width: 100%;
 }
 
+/* ==================== Assessment Test Skills & Question Tags ==================== */
+.gsj-test-nav__skills {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gsj-border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gsj-test-nav__skills-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gsj-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.gsj-test-nav__skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.gsj-test-nav__skill-badge {
+  display: inline-flex;
+  padding: 4px 8px;
+  background: rgba(0, 245, 255, 0.08);
+  border: 1px solid rgba(0, 245, 255, 0.28);
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--gsj-primary);
+  font-weight: 500;
+  box-shadow: 0 0 6px rgba(0, 245, 255, 0.08);
+  transition: all 0.2s ease;
+}
+
+.gsj-test-nav__skill-badge:hover {
+  background: rgba(0, 245, 255, 0.15);
+  border-color: rgba(0, 245, 255, 0.45);
+  box-shadow: 0 0 8px rgba(0, 245, 255, 0.2);
+}
+
+.gsj-test__question-meta-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.gsj-test__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.gsj-test__tag svg {
+  opacity: 0.85;
+}
+
+.gsj-test__tag--domain {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.28);
+  color: #38bdf8;
+}
+
+.gsj-test__tag--skill {
+  background: rgba(0, 245, 255, 0.08);
+  border-color: rgba(0, 245, 255, 0.28);
+  color: var(--gsj-primary);
+}
+
+.gsj-test__tag--difficulty {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+}
+
+.gsj-test__tag--difficulty.gsj-test__question-difficulty--easy {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--gsj-success);
+}
+
+.gsj-test__tag--difficulty.gsj-test__question-difficulty--medium {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: var(--gsj-warning);
+}
+
+.gsj-test__tag--difficulty.gsj-test__question-difficulty--hard {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--gsj-danger);
+}
+

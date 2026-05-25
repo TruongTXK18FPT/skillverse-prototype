@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { ArrowLeft, CheckCircle, ChevronRight, Clock, RefreshCw } from 'lucide-react';
+import { useEffect, useState, useMemo } from 'react';
+import { ArrowLeft, CheckCircle, ChevronRight, Clock, RefreshCw, Globe, Cpu } from 'lucide-react';
 import { AssessmentTestResponse } from '../../types/Journey';
 import { confirmAction } from '../../context/ConfirmDialogContext';
 import { decodeHtml } from '../../utils/htmlDecoder';
@@ -16,6 +16,10 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const uniqueSkills = useMemo(() => {
+    return Array.from(new Set(test.questions.map(q => q.skillArea).filter(Boolean)));
+  }, [test.questions]);
 
   const currentQuestion = test.questions[currentIndex];
   const totalQuestions = test.questions.length;
@@ -113,6 +117,19 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
       <div className="gsj-test-nav__hint">
         Đã trả lời: {answeredCount}/{totalQuestions}
       </div>
+
+      {uniqueSkills.length > 0 && (
+        <div className="gsj-test-nav__skills">
+          <div className="gsj-test-nav__skills-title">Kỹ năng đánh giá</div>
+          <div className="gsj-test-nav__skills-list">
+            {uniqueSkills.map((skill) => (
+              <span key={skill} className="gsj-test-nav__skill-badge" title={skill}>
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 
@@ -183,9 +200,23 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
               <span className="gsj-question__number">{currentIndex + 1}</span>
               <span className="gsj-test__question-total">/ {totalQuestions}</span>
             </span>
-            <span className={`gsj-test__question-difficulty ${getDifficultyClass(currentQuestion.difficulty)}`}>
-              {getDifficultyLabel(currentQuestion.difficulty)}
-            </span>
+            <div className="gsj-test__question-meta-tags">
+              {(test.domain || test.targetField) && (
+                <span className="gsj-test__tag gsj-test__tag--domain" title="Lĩnh vực đánh giá">
+                  <Globe size={11} />
+                  <span>{test.domain || test.targetField}</span>
+                </span>
+              )}
+              {currentQuestion.skillArea && (
+                <span className="gsj-test__tag gsj-test__tag--skill" title="Kỹ năng câu hỏi">
+                  <Cpu size={11} />
+                  <span>{currentQuestion.skillArea}</span>
+                </span>
+              )}
+              <span className={`gsj-test__tag gsj-test__tag--difficulty ${getDifficultyClass(currentQuestion.difficulty)}`}>
+                {getDifficultyLabel(currentQuestion.difficulty)}
+              </span>
+            </div>
           </div>
 
           <div className="gsj-test__question-text">{decodeHtml(currentQuestion.question)}</div>

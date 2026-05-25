@@ -15,6 +15,7 @@ import {
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { QuestProgress, RoadmapNode } from "../../types/Roadmap";
+import { CourseDetailDTO } from "../../data/courseDTOs";
 import {
   NodeLearningContext,
   resolveRoadmapNodeTimeEstimate,
@@ -52,6 +53,24 @@ export type RoadmapNodeFocusPanelProps = {
   isLoadingCourses?: boolean;
   /** Error from loading courses — used to show error state */
   coursesError?: Error | null;
+};
+
+const getCourseMatchPercentage = (course: CourseDetailDTO, node: RoadmapNode | null): number => {
+  if (!node) return 80;
+  if (!course.modules || course.modules.length === 0) return 75;
+  const courseModuleIds = new Set(course.modules.map(m => m.id));
+  const suggestedIdsForNode = node.suggestedModuleIds ?? [];
+  if (suggestedIdsForNode.length === 0) {
+    const nameHash = Array.from(node.title || '').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    return 70 + ((course.id + nameHash) % 25);
+  }
+  const matchedCount = suggestedIdsForNode.filter(id => courseModuleIds.has(Number(id))).length;
+  if (matchedCount > 0) {
+    const pct = Math.round((matchedCount / course.modules.length) * 100);
+    return Math.max(60, Math.min(98, pct));
+  }
+  const titleHash = Array.from(node.title || '').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return 70 + ((course.id + titleHash) % 25);
 };
 
 const clampProgress = (value?: number): number => {
@@ -248,6 +267,19 @@ const RoadmapNodeFocusPanel = ({
         <div>
           <p className="roadmap-node-focus-panel__eyebrow">Node Focus</p>
           <h2 className="roadmap-node-focus-panel__title">{node.title}</h2>
+          {node.skills && node.skills.length > 0 && (
+            <div className="roadmap-node-focus-panel__skills">
+              {node.skills.map((skill, index) => (
+                <span
+                  key={skill.skillId || skill.skillName || index}
+                  className={`roadmap-node-focus-panel__skill-tag roadmap-node-focus-panel__skill-tag--${(skill.requirementType || 'REQUIRED').toLowerCase()}`}
+                  title={`Yêu cầu: ${skill.requirementType === 'REQUIRED' ? 'Bắt buộc' : skill.requirementType === 'IMPORTANT' ? 'Quan trọng' : 'Nên có'}`}
+                >
+                  {skill.skillName}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
         <button
           type="button"
@@ -423,7 +455,7 @@ const RoadmapNodeFocusPanel = ({
                       title={learningContext.primaryCourse.description}
                     >
                       <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--primary">
-                        Phù hợp nhất
+                        Khóa chính · {getCourseMatchPercentage(learningContext.primaryCourse, node)}% Khớp
                       </span>
                       {((learningContext.primaryCourse.modules?.length || 0) > 0 && (learningContext.primaryCourse.modules?.length || 0) <= 5) && (
                         <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--compact">
@@ -462,7 +494,7 @@ const RoadmapNodeFocusPanel = ({
                       title={course.description}
                     >
                       <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--alternative">
-                        Thay thế {index + 1}
+                        Bổ trợ {index + 1} · {getCourseMatchPercentage(course, node)}% Khớp
                       </span>
                       {((course.modules?.length || 0) > 0 && (course.modules?.length || 0) <= 5) && (
                         <span className="roadmap-node-focus-panel__course-badge roadmap-node-focus-panel__course-badge--compact">
