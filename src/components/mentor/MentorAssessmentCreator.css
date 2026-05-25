@@ -464,3 +464,77 @@
   border-radius: 6px; color: #fca5a5;
   font-size: 0.75rem; margin-top: 0.4rem;
 }
+
+/* ─── Verification Status Banner ────────────────────────────── */
+
+.mac-verification-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.mac-verification-banner > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.mac-verification-banner strong {
+  display: block;
+  font-size: 0.88rem;
+  margin-bottom: 2px;
+}
+
+.mac-verification-banner span {
+  font-size: 0.78rem;
+  opacity: 0.85;
+}
+
+.mac-verification-banner--pending {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.06));
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fde68a;
+}
+
+.mac-verification-banner--pending > svg {
+  color: #f59e0b;
+}
+
+.mac-verification-banner--approved {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(52, 211, 153, 0.06));
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #a7f3d0;
+}
+
+.mac-verification-banner--approved > svg {
+  color: #10b981;
+}
+
+.mac-approve-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #6ee7b7;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.mac-approve-btn:hover {
+  background: rgba(16, 185, 129, 0.28);
+  color: #a7f3d0;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+

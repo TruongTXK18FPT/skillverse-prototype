@@ -61,6 +61,17 @@ export const upsertNodeAssignment = async (
   return response.data;
 };
 
+/** Mentor: approve an existing assignment (e.g. SYSTEM_GENERATED) without editing. */
+export const approveNodeAssignment = async (
+  journeyId: number,
+  nodeId: string,
+): Promise<NodeAssignmentResponse> => {
+  const response = await axiosInstance.post<NodeAssignmentResponse>(
+    `${nodeBase(journeyId, nodeId)}/assignment/approve`,
+  );
+  return response.data;
+};
+
 // ==================== Evidence (learner) ====================
 
 export const getNodeEvidence = async (

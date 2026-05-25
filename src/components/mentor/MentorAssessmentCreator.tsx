@@ -350,6 +350,49 @@ const MentorAssessmentCreator: React.FC<Props> = ({
         </div>
       </div>
 
+      {/* Verification Status Banner */}
+      {!!nodeId && currentAssignment && !loading && (() => {
+        const vs = currentAssignment.verificationStatus;
+        if (vs === "PENDING_REVIEW") {
+          return (
+            <div className="mac-verification-banner mac-verification-banner--pending">
+              <Clock size={16} />
+              <div>
+                <strong>Assessment chờ duyệt</strong>
+                <span>Assessment này do hệ thống tự tạo. Bạn cần duyệt hoặc chỉnh sửa trước khi học viên có thể nộp bài.</span>
+              </div>
+              <button
+                className="mac-approve-btn"
+                onClick={async () => {
+                  try {
+                    const { approveNodeAssignment } = await import("../../services/nodeMentoringService");
+                    await approveNodeAssignment(journeyId, nodeId!);
+                    showSuccess("Đã duyệt", "Assessment đã được duyệt. Học viên có thể bắt đầu nộp minh chứng.");
+                    await loadAssessment();
+                  } catch (err: any) {
+                    showError("Lỗi", err.response?.data?.message || "Không thể duyệt assessment.");
+                  }
+                }}
+              >
+                <CheckCircle size={14} /> Duyệt Assessment
+              </button>
+            </div>
+          );
+        }
+        if (vs === "APPROVED") {
+          return (
+            <div className="mac-verification-banner mac-verification-banner--approved">
+              <CheckCircle size={16} />
+              <div>
+                <strong>Assessment đã được duyệt</strong>
+                <span>Học viên có thể nộp minh chứng cho bài tập này.</span>
+              </div>
+            </div>
+          );
+        }
+        return null;
+      })()}
+
       {/* Requirements Section (Mentor defines rubric) */}
       <div className="mac-section">
         <button

@@ -512,6 +512,16 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
       );
       return;
     }
+    // FE time validation: scheduledAt >= now + 30 minutes
+    const scheduledTime = new Date(meetingDraft.scheduledAt).getTime();
+    const minTime = Date.now() + 30 * 60 * 1000;
+    if (scheduledTime < minTime) {
+      showError(
+        "Thời gian không hợp lệ",
+        "Thời gian meeting phải cách ít nhất 30 phút kể từ bây giờ.",
+      );
+      return;
+    }
     try {
       setMeetingSaving(true);
       await mentorRoadmapWorkspaceService.createFollowUp(bookingId, {
@@ -1459,6 +1469,22 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
                               AI Generated
                             </span>
                           )}
+                          {assignment?.verificationStatus && (
+                            <span
+                              className={`srwp-source-badge srwp-source-badge--${assignment.verificationStatus === "APPROVED" ? "approved" : "pending"}`}
+                              title={
+                                assignment.verificationStatus === "APPROVED"
+                                  ? "Mentor đã duyệt — bạn có thể nộp bài"
+                                  : "Chờ mentor duyệt assessment"
+                              }
+                            >
+                              {assignment.verificationStatus === "APPROVED" ? (
+                                <><ShieldCheck size={12} /> Sẵn sàng</>
+                              ) : (
+                                <><Clock size={12} /> Chờ Mentor Duyệt</>
+                              )}
+                            </span>
+                          )}
                         </h4>
                         {assignment?.title && (
                           <div className="srwp-assignment-title">
@@ -1489,6 +1515,23 @@ const StudentRoadmapWorkspacePage: React.FC = () => {
 
                 {rightTab === "SUBMIT" && (
                   <div className="srwp-content-card">
+                    {/* Verification Block: prevent submission when assignment not approved */}
+                    {selectedNodeId &&
+                      assignment?.verificationStatus &&
+                      assignment.verificationStatus !== "APPROVED" &&
+                      !!bookingId && (
+                        <div className="srwp-verification-block">
+                          <ShieldAlert size={20} />
+                          <div>
+                            <strong>Assessment chưa được mentor duyệt</strong>
+                            <p>
+                              Mentor cần duyệt hoặc cập nhật bài tập trước khi
+                              bạn nộp minh chứng. Bạn sẽ nhận thông báo khi
+                              assessment được duyệt.
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     {!nodeSubmissionLocked && (
                       <div className="srwp-submit-context">
                         <RoadmapNodeRequirementsCard

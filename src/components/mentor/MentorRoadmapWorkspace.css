@@ -1166,6 +1166,32 @@
   color: #ecfeff;
 }
 
+.mrw-complete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 9px;
+  border-radius: 7px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #6ee7b7;
+}
+
+.mrw-complete-btn:hover {
+  background: rgba(16, 185, 129, 0.28);
+  color: #a7f3d0;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.25);
+}
+
+.mrw-meeting-card--COMPLETED {
+  opacity: 0.7;
+  border-color: rgba(129, 140, 248, 0.3);
+}
+
 .mrw-meeting-hint,
 .mrw-meeting-link-preview {
   display: inline-flex;

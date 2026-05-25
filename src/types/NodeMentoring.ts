@@ -41,6 +41,8 @@ export interface GradingCriterion {
   maxScore: number;
 }
 
+export type AssignmentVerificationStatus = 'PENDING_REVIEW' | 'APPROVED' | 'REVISION_REQUESTED';
+
 export interface NodeAssignmentResponse {
   id: number;
   journeyId: number;
@@ -56,6 +58,7 @@ export interface NodeAssignmentResponse {
   createdAt: string;
   updatedAt?: string;
   criteria?: GradingCriterion[];
+  verificationStatus?: AssignmentVerificationStatus;
 }
 
 export interface UpsertNodeAssignmentRequest {

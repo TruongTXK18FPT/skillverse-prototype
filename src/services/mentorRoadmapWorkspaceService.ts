@@ -204,6 +204,17 @@ export const rejectFollowUp = async (
   return res.data;
 };
 
+/** Mentor kết thúc buổi họp sau khi đã diễn ra */
+export const completeFollowUp = async (
+  bookingId: number,
+  meetingId: number,
+): Promise<RoadmapFollowUpMeetingDTO> => {
+  const res = await axiosInstance.post<RoadmapFollowUpMeetingDTO>(
+    `${BASE}/${bookingId}/follow-ups/${meetingId}/complete`,
+  );
+  return res.data;
+};
+
 // ─── Export as namespace-like object ─────────────────────────────────────────
 
 export const mentorRoadmapWorkspaceService = {
@@ -219,4 +230,5 @@ export const mentorRoadmapWorkspaceService = {
   deleteFollowUp,
   acceptFollowUp,
   rejectFollowUp,
+  completeFollowUp,
 };

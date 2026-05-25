@@ -298,6 +298,16 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
       showError("Lỗi", "Vui lòng điền tiêu đề và thời gian.");
       return;
     }
+    // FE time validation: scheduledAt >= now + 30 minutes
+    const scheduledTime = new Date(editingMeeting.scheduledAt).getTime();
+    const minTime = Date.now() + 30 * 60 * 1000;
+    if (scheduledTime < minTime) {
+      showError(
+        "Thời gian không hợp lệ",
+        "Thời gian meeting phải cách ít nhất 30 phút kể từ bây giờ.",
+      );
+      return;
+    }
     if (!editingMeeting.purpose || !editingMeeting.purpose.trim()) {
       showError(
         "Thiếu mục đích",
@@ -383,6 +393,31 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
       loadWorkspace();
     } catch (err: any) {
       showError("Lỗi", err.response?.data?.message || "Không thể xóa meeting.");
+    }
+  };
+
+  const handleCompleteMeeting = async (meetingId: number) => {
+    if (
+      !window.confirm(
+        "Bạn xác nhận buổi họp đã diễn ra và muốn kết thúc meeting này?",
+      )
+    )
+      return;
+    try {
+      await mentorRoadmapWorkspaceService.completeFollowUp(
+        bookingId,
+        meetingId,
+      );
+      showSuccess(
+        "Đã kết thúc",
+        "Meeting đã được đánh dấu hoàn tất. Học viên sẽ nhận thông báo.",
+      );
+      loadWorkspace();
+    } catch (err: any) {
+      showError(
+        "Không thể kết thúc",
+        err?.response?.data?.message || "Vui lòng thử lại.",
+      );
     }
   };
 
@@ -795,7 +830,16 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
                             <Video size={13} /> Tham gia
                           </a>
                         )}
-                        {!canJoin && m.meetingLink && status !== "REJECTED" && (
+                        {status === "ACCEPTED" && (
+                          <button
+                            className="mrw-complete-btn"
+                            onClick={() => handleCompleteMeeting(m.id!)}
+                            title="Kết thúc buổi họp"
+                          >
+                            <CheckCircle2 size={13} /> Kết thúc
+                          </button>
+                        )}
+                        {!canJoin && m.meetingLink && status !== "REJECTED" && status !== "COMPLETED" && (
                           <span
                             className="mrw-meeting-link-preview"
                             title={m.meetingLink}
