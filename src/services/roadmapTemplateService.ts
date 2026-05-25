@@ -116,6 +116,10 @@ export const roadmapTemplateService = {
     );
     return data;
   },
+
+  deleteTemplate: async (templateId: number): Promise<void> => {
+    await axiosInstance.delete(`${ADMIN_TEMPLATE_URL}/${templateId}`);
+  },
 };
 
 export default roadmapTemplateService;

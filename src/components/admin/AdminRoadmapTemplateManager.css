@@ -1777,3 +1777,16 @@
 .admin-roadmap-template-studio .artm-unpin-btn:hover {
   color: #fca5a5 !important;
 }
+
+.admin-roadmap-template-studio .artm-danger-btn {
+  border-color: rgba(255, 95, 125, 0.45) !important;
+  color: #ffd0d8 !important;
+  background: rgba(255, 95, 125, 0.08) !important;
+}
+
+.admin-roadmap-template-studio .artm-danger-btn:hover:not(:disabled) {
+  border-color: var(--artm-red) !important;
+  color: #ffffff !important;
+  background: rgba(255, 95, 125, 0.18) !important;
+  box-shadow: 0 0 18px rgba(255, 95, 125, 0.22) !important;
+}

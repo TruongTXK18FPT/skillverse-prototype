@@ -1490,6 +1490,22 @@ const AdminRoadmapTemplateManager = () => {
     }
   };
 
+  const deleteTemplate = async (templateId: number) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xóa vĩnh viễn mẫu lộ trình này? Thao tác này không thể hoàn tác.")) {
+      return;
+    }
+    setActionId(templateId);
+    try {
+      await roadmapTemplateService.deleteTemplate(templateId);
+      showSuccess("Đã xóa vĩnh viễn mẫu", "Mẫu lộ trình và tất cả dữ liệu liên quan đã bị xóa.");
+      await loadTemplates();
+    } catch (error) {
+      showError("Không thể xóa mẫu", getApiErrorMessage(error, "Vui lòng thử lại."));
+    } finally {
+      setActionId(null);
+    }
+  };
+
   const loadCourseCandidates = async (block: SkillBlockDraft) => {
     try {
       const candidates = await roadmapTemplateService.getCourseCandidates(
@@ -1874,13 +1890,24 @@ const AdminRoadmapTemplateManager = () => {
                 >
                   <Rocket size={15} /> Xuất bản
                 </button>
-                <button
-                  type="button"
-                  onClick={() => void archiveTemplate(template)}
-                  disabled={actionId === template.id || template.status === "ARCHIVED"}
-                >
-                  <Archive size={15} /> Lưu trữ
-                </button>
+                {template.status === "ARCHIVED" ? (
+                  <button
+                    type="button"
+                    className="artm-danger-btn"
+                    onClick={() => void deleteTemplate(template.id)}
+                    disabled={actionId === template.id}
+                  >
+                    <Trash2 size={15} /> Xóa vĩnh viễn
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => void archiveTemplate(template)}
+                    disabled={actionId === template.id}
+                  >
+                    <Archive size={15} /> Lưu trữ
+                  </button>
+                )}
               </div>
             </article>
           );
