@@ -137,32 +137,32 @@ const statusLabel: Record<RoadmapTemplateStatus, string> = {
 };
 
 const moduleBuilderTabs: BuilderStep[] = [
-  { key: "overview", title: "Thông tin cơ bản", description: "Tên mẫu, nhánh lộ trình và chính sách sinh nội dung" },
-  { key: "allocation", title: "Trọng số kỹ năng", description: "Chỉnh trọng số và số node cần phủ" },
-  { key: "grouping", title: "Node học & kỹ năng", description: "Tạo node học và gắn kỹ năng vào từng node" },
-  { key: "activities", title: "Nội dung node", description: "Bài học, bài tập, đầu ra và tiêu chí chấm" },
-  { key: "courses", title: "Khóa học & tài liệu", description: "Tùy chọn khóa học, tài liệu nội bộ và RAG" },
-  { key: "finalAssessment", title: "Bài thực hành cuối", description: "Đề bài cuối lộ trình và AI review" },
-  { key: "preview", title: "Kiểm tra & xuất bản", description: "Rà soát toàn bộ trước khi lưu hoặc xuất bản" },
+  { key: "overview", title: "Thông tin cơ bản", description: "Tên mẫu, định hướng lộ trình học tập và chính sách sinh học liệu" },
+  { key: "allocation", title: "Phân bổ Trọng số Năng lực", description: "Cấu hình tỷ trọng kỹ năng và phân bổ số Node cần bao phủ" },
+  { key: "grouping", title: "Cấu trúc Node & Kỹ năng", description: "Thiết kế các Node học tập tích hợp và ánh xạ kỹ năng chuẩn đầu ra" },
+  { key: "activities", title: "Nội dung Node Chi tiết", description: "Thiết kế bài học thành phần, nhiệm vụ thực hành và tiêu chí nghiệm thu" },
+  { key: "courses", title: "Học liệu & Khóa học liên kết", description: "Liên kết khóa học tiêu chuẩn, cấu hình RAG và tài liệu ghim" },
+  { key: "finalAssessment", title: "Đánh giá Năng lực Tổng hợp", description: "Xây dựng đề án tốt nghiệp lộ trình và AI chấm minh chứng tự động" },
+  { key: "preview", title: "Thẩm định & Xuất bản", description: "Rà soát mức độ hoàn thiện lộ trình đào tạo và phê duyệt xuất bản" },
 ];
 
 const exerciseRequirementOptions = [
-  { value: "REQUIRED_EVERY_NODE", label: "Bắt buộc mỗi nút có bài tập và minh chứng" },
-  { value: "REQUIRED_MAIN_NODE", label: "Bắt buộc ở nút chính, tùy chọn ở nút phụ" },
+  { value: "REQUIRED_EVERY_NODE", label: "Bắt buộc mỗi Node có dự án thực hành & minh chứng đánh giá" },
+  { value: "REQUIRED_MAIN_NODE", label: "Chỉ bắt buộc tại các Node năng lực cốt lõi" },
 ];
 
 const topicGenerationTypeOptions = [
-  { value: "LEVEL_BAND_AND_ASSESSMENT_GAP", label: "Theo cấp độ người học và khoảng thiếu kỹ năng" },
-  { value: "GOAL_DRIVEN_JOB_READY", label: "Theo mục tiêu nghề nghiệp và sản phẩm nộp được" },
-  { value: "FOUNDATION_FIRST", label: "Từ nền tảng đến thực hành" },
-  { value: "REVIEW_AND_INTERVIEW", label: "Ôn tập, củng cố và phỏng vấn" },
-  { value: "NEXT_LEVEL_COMPLEXITY", label: "Tăng dần độ khó để lên cấp độ tiếp theo" },
+  { value: "LEVEL_BAND_AND_ASSESSMENT_GAP", label: "Tối ưu hóa theo Cấp độ năng lực & Khoảng trống kỹ năng chuẩn chẩn đoán" },
+  { value: "GOAL_DRIVEN_JOB_READY", label: "Theo Mục tiêu nghề nghiệp & Bộ sản phẩm đầu ra hoàn chỉnh" },
+  { value: "FOUNDATION_FIRST", label: "Nâng cao tuần tự từ Khái niệm nền tảng đến Thực chiến chuyên sâu" },
+  { value: "REVIEW_AND_INTERVIEW", label: "Hệ thống hóa kiến thức tổng hợp & Luyện phản xạ phỏng vấn tuyển dụng" },
+  { value: "NEXT_LEVEL_COMPLEXITY", label: "Tăng dần độ phức tạp kỹ thuật để nâng cấp trình độ chuyên môn" },
 ];
 
 const timeBudgetPolicyOptions = [
-  { value: "DIFFICULTY_AND_COMPLEXITY", label: "Tự tính theo độ khó và độ phức tạp của từng nút" },
-  { value: "COMPACT_PRACTICE", label: "Ưu tiên ngắn gọn, nhiều bài thực hành nhỏ" },
-  { value: "DEEP_PROJECT", label: "Ưu tiên project sâu, chấp nhận thời lượng dài hơn" },
+  { value: "DIFFICULTY_AND_COMPLEXITY", label: "Tự động phân bổ thời lượng theo độ khó & độ phức tạp của bài học" },
+  { value: "COMPACT_PRACTICE", label: "Tối ưu hóa thời lượng, tập trung bài tập thực tế nhỏ gọn" },
+  { value: "DEEP_PROJECT", label: "Tập trung vào Đề án lớn, chấp nhận thời gian học sâu rộng" },
 ];
 
 const requirementTypeLabels: Record<string, string> = {
@@ -745,6 +745,82 @@ const AdminRoadmapTemplateManager = () => {
     });
     return result;
   }, [form.nodeGroups]);
+
+  const nodeWeightsAndPercentages = useMemo(() => {
+    if (form.nodeGroups.length === 0) return { weights: new Map<string, number>(), percentages: new Map<string, number>() };
+
+    const getRequirementFactor = (difficulty: string, type: string) => {
+      const diff = (difficulty || "medium").trim().toLowerCase();
+      const req = type || "REQUIRED";
+      
+      if (diff === "advanced") {
+        if (req === "REQUIRED") return 1.5;
+        if (req === "IMPORTANT") return 0.8;
+        return 0.3;
+      } else if (diff === "beginner") {
+        if (req === "REQUIRED") return 1.0;
+        if (req === "IMPORTANT") return 0.8;
+        return 0.5;
+      } else {
+        // medium / intermediate
+        if (req === "REQUIRED") return 1.2;
+        if (req === "IMPORTANT") return 0.7;
+        return 0.4;
+      }
+    };
+
+    const skillBlockMap = new Map(form.skillBlocks.map(b => [b.skillId, b]));
+    
+    // 1. Calculate raw weight for each node group
+    const rawWeights = form.nodeGroups.map(group => {
+      if (group.skills.length === 0) {
+        return { localId: group.localId, rawWeight: 1.0 }; // Baseline for empty node
+      }
+      
+      let sum = 0;
+      group.skills.forEach(s => {
+        const block = skillBlockMap.get(s.skillId);
+        const globalWeight = block?.weightPercent || 10.0;
+        const factor = getRequirementFactor(group.difficulty || "medium", s.requirementType || "REQUIRED");
+        sum += globalWeight * factor;
+      });
+      
+      return { localId: group.localId, rawWeight: Math.max(0.1, sum) };
+    });
+
+    const totalRawWeight = rawWeights.reduce((sum, item) => sum + item.rawWeight, 0);
+    
+    const weightsMap = new Map<string, number>();
+    const percentagesMap = new Map<string, number>();
+    
+    if (totalRawWeight <= 0) {
+      const equalShare = 100 / form.nodeGroups.length;
+      form.nodeGroups.forEach(g => {
+        weightsMap.set(g.localId, 1.0);
+        percentagesMap.set(g.localId, equalShare);
+      });
+    } else {
+      let sumPercentages = 0;
+      const sortedRawWeights = [...rawWeights].sort((a, b) => b.rawWeight - a.rawWeight);
+      
+      rawWeights.forEach(item => {
+        const percent = Math.round((item.rawWeight / totalRawWeight) * 10000) / 100;
+        weightsMap.set(item.localId, item.rawWeight);
+        percentagesMap.set(item.localId, percent);
+        sumPercentages += percent;
+      });
+
+      // Rounding delta correction
+      const delta = Math.round((100 - sumPercentages) * 100) / 100;
+      if (Math.abs(delta) >= 0.01 && sortedRawWeights.length > 0) {
+        const maxItem = sortedRawWeights[0];
+        const currentVal = percentagesMap.get(maxItem.localId) || 0;
+        percentagesMap.set(maxItem.localId, Math.round((currentVal + delta) * 100) / 100);
+      }
+    }
+
+    return { weights: weightsMap, percentages: percentagesMap };
+  }, [form.nodeGroups, form.skillBlocks]);
 
   const getAllocatedNodes = useCallback(
     (block: SkillBlockDraft) => actualNodeAllocation.get(block.skillId) ?? 0,
@@ -1898,15 +1974,15 @@ const AdminRoadmapTemplateManager = () => {
         <div className="artm-section-head">
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h3>Ưu tiên kỹ năng</h3>
+              <h3>Định chuẩn Tỷ trọng Năng lực</h3>
               <span className={Math.abs(totalWeight - 100) > 0.01 ? "artm-chip-warn" : "artm-chip-ok"}>
                 Tổng: {totalWeight.toFixed(2).replace(/\.00$/, '')}%
               </span>
             </div>
-            <p>{trackSkills.length} kỹ năng trong nhánh đã chọn. Trọng số lấy từ tracking và bị khóa; tại mẫu này chỉ chỉnh số node tối thiểu/tối đa cần có kỹ năng.</p>
+            <p>{trackSkills.length} kỹ năng trong nhánh chuyên môn đã chọn. Trọng số năng lực được định chuẩn tự động từ Khung nghề nghiệp gốc; tại mẫu này Admin thiết lập số lượng Node tối thiểu/tối đa cần bao phủ kỹ năng.</p>
           </div>
           <div className="artm-section-actions">
-            <button type="button" onClick={() => setShowTrackSkillRedirect(true)}><Edit3 size={16} /> Chỉnh danh sách kỹ năng</button>
+            <button type="button" onClick={() => setShowTrackSkillRedirect(true)}><Edit3 size={16} /> Hiệu chỉnh Khung kỹ năng</button>
           </div>
         </div>
       <div className="artm-allocation-list">
@@ -1925,9 +2001,9 @@ const AdminRoadmapTemplateManager = () => {
                 </div>
                 <span>{block.skillCanonicalKeySnapshot || `kỹ năng:${block.skillId}`}</span>
               </div>
-              <label><span>Trọng số từ tracking</span><input type="number" min={0} value={block.weightPercent} disabled readOnly /></label>
+              <label><span>Trọng số định chuẩn</span><input type="number" min={0} value={block.weightPercent} disabled readOnly /></label>
               <label>
-                <span>Số node tối thiểu</span>
+                <span>Số Node tối thiểu</span>
                 <input
                   type="number"
                   min={isRequired ? 1 : 0}
@@ -1942,10 +2018,10 @@ const AdminRoadmapTemplateManager = () => {
                   }}
                 />
               </label>
-              <label><span>Số node tối đa</span><input type="number" min={0} value={block.maxNodes ?? ""} onChange={(e) => updateBlock(block.localId, { maxNodes: e.target.value ? Number(e.target.value) : null })} /></label>
+              <label><span>Số Node tối đa</span><input type="number" min={0} value={block.maxNodes ?? ""} onChange={(e) => updateBlock(block.localId, { maxNodes: e.target.value ? Number(e.target.value) : null })} /></label>
               <div className="artm-node-chip">
-                <span>Đã gán</span>
-                <strong>{getAllocatedNodes(block)} node</strong>
+                <span>Đã phân bổ</span>
+                <strong>{getAllocatedNodes(block)} Node</strong>
               </div>
             </article>
           );
@@ -1963,17 +2039,17 @@ const AdminRoadmapTemplateManager = () => {
         <section className="artm-table-panel artm-node-definition-panel">
           <div className="artm-section-head">
             <div>
-              <h3>Định nghĩa node học</h3>
-              <p>Chọn số node muốn tạo rồi để AI gợi ý cách gom kỹ năng. Có thể chỉnh lại node và kỹ năng sau khi AI tạo xong.</p>
+              <h3>Thiết lập cấu trúc Node</h3>
+              <p>Xác định số lượng Node học tập mong muốn và sử dụng AI để tự động tối ưu hóa việc phân nhóm kỹ năng tích hợp.</p>
             </div>
             <button type="button" onClick={() => void runAutoGroup()} disabled={autoGrouping || form.skillBlocks.length === 0}>
               {autoGrouping ? <Loader2 size={16} className="artm-spin" /> : <RefreshCw size={16} />}
-              {autoGrouping ? "Đang gợi ý..." : "Gợi ý node bằng AI"}
+              {autoGrouping ? "Đang xử lý..." : "AI gợi ý lập Node"}
             </button>
           </div>
           <div className="artm-node-definition-controls">
             <label>
-              <span>Số node muốn tạo</span>
+              <span>Số lượng Node dự kiến</span>
               <input
                 type="number"
                 min={1}
@@ -1984,14 +2060,14 @@ const AdminRoadmapTemplateManager = () => {
               />
             </label>
             <div className="artm-derived-node-count">
-              <span>Số node hiện có</span>
-              <strong>{computedNodeCount} node học</strong>
+              <span>Số Node hiện tại</span>
+              <strong>{computedNodeCount} Node học tập</strong>
             </div>
           </div>
           {autoGrouping && (
             <div className="artm-ai-loading">
               <Loader2 size={18} className="artm-spin" />
-              AI đang tạo node và phân bổ kỹ năng. Vui lòng chờ trước khi chỉnh form.
+              Hệ thống AI đang lập cấu trúc Node học tập và phân bổ kỹ năng chuẩn đầu ra. Vui lòng không thao tác trong quá trình xử lý...
             </div>
           )}
         </section>
@@ -1999,8 +2075,8 @@ const AdminRoadmapTemplateManager = () => {
         <section className="artm-table-panel">
           <div className="artm-section-head">
             <div>
-              <h3>Node học của lộ trình</h3>
-              <p>{moduleItems.length} node học. Mỗi node nên có 2-5 kỹ năng liên quan.</p>
+              <h3>Node học tập của lộ trình</h3>
+              <p>{moduleItems.length} Node tích hợp kỹ năng chuẩn đầu ra.</p>
             </div>
             <button
               type="button"
@@ -2008,19 +2084,19 @@ const AdminRoadmapTemplateManager = () => {
               onClick={addNodeGroup}
               disabled={autoGrouping}
             >
-              <Plus size={16} /> Thêm node học
+              <Plus size={16} /> Thêm Node học tập
             </button>
           </div>
           {unassignedSkills.length > 0 ? (
             <div data-required-field className="artm-warning-note">
               <AlertTriangle size={18} />
               <div>
-                <strong>Còn {unassignedSkills.length} kỹ năng chưa được gắn vào node học.</strong>
+                <strong>Còn {unassignedSkills.length} kỹ năng chuẩn đầu ra chưa được phân bổ vào các Node học tập.</strong>
                 <span>{unassignedSkills.map((skill) => skill.skillNameSnapshot).join(", ")}</span>
               </div>
             </div>
           ) : (
-            <div className="artm-ready"><CheckCircle2 size={18} /> Tất cả kỹ năng đã được gán vào node học.</div>
+            <div className="artm-ready"><CheckCircle2 size={18} /> Tất cả kỹ năng chuẩn đầu ra đã được phân bổ đầy đủ vào các Node học tập.</div>
           )}
           <div className="artm-skill-stack">
             {moduleItems.map((item, moduleIndex) => {
@@ -2033,8 +2109,16 @@ const AdminRoadmapTemplateManager = () => {
                 >
                   <div className="artm-activity-head">
                     <div>
-                      <strong>Node học {moduleIndex + 1}: {item.group.title}</strong>
-                      <span>Đang chứa {item.skills.length} kỹ năng</span>
+                      <strong>Node học tập {moduleIndex + 1}: {item.group.title || "Chưa đặt tên"}</strong>
+                      <div style={{ display: "flex", gap: "10px", alignItems: "center", marginTop: "4px", flexWrap: "wrap" }}>
+                        <span style={{ fontSize: "12px", color: "#a0aec0" }}>Tích hợp {item.skills.length} kỹ năng chuẩn đầu ra</span>
+                        <span style={{ background: "rgba(109, 233, 255, 0.1)", border: "1px solid rgba(109, 233, 255, 0.3)", padding: "2px 8px", borderRadius: "999px", fontSize: "12px", color: "#6de9ff", fontWeight: 700 }}>
+                          Weight thô: {(nodeWeightsAndPercentages.weights.get(item.group.localId) || 0).toFixed(1)}
+                        </span>
+                        <span style={{ background: "rgba(34, 197, 94, 0.1)", border: "1px solid rgba(34, 197, 94, 0.3)", padding: "2px 8px", borderRadius: "999px", fontSize: "12px", color: "#22c55e", fontWeight: 700 }}>
+                          Chiếm: {(nodeWeightsAndPercentages.percentages.get(item.group.localId) || 0).toFixed(2).replace(/\.00$/, '')}%
+                        </span>
+                      </div>
                     </div>
                     <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                       <button
@@ -2046,16 +2130,28 @@ const AdminRoadmapTemplateManager = () => {
                       >
                         📌 Ràng buộc tài liệu
                       </button>
-                      <button type="button" title="Xóa node học" onClick={() => removeNodeGroup(item.group.localId)} disabled={autoGrouping}>
+                      <button type="button" className="artm-danger-btn-trash" title="Xóa Node học tập" onClick={() => removeNodeGroup(item.group.localId)} disabled={autoGrouping}>
                         <Trash2 size={16} />
                       </button>
                     </div>
                   </div>
                   <div className="artm-panel-grid">
-                    <label className="artm-wide"><span>Tên node học</span><input data-required-field value={item.group.title} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { title: e.target.value })} /></label>
-                    <label className="artm-wide"><span>Mô tả</span><textarea rows={2} value={item.group.description || ""} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { description: e.target.value })} /></label>
-                    <label><span>Độ khó</span><input value={item.group.difficulty || "medium"} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { difficulty: e.target.value })} /></label>
-                    <label><span>Giờ học</span><input type="number" min={0} value={item.group.estimatedHours ?? ""} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { estimatedHours: e.target.value ? Number(e.target.value) : null })} /></label>
+                    <label className="artm-wide"><span>Tên Node học tập</span><input data-required-field value={item.group.title} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { title: e.target.value })} /></label>
+                    <label className="artm-wide"><span>Mô tả Node</span><textarea rows={2} value={item.group.description || ""} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { description: e.target.value })} /></label>
+                    <label>
+                      <span>Độ khó</span>
+                      <select
+                        value={item.group.difficulty || "medium"}
+                        disabled={autoGrouping}
+                        onChange={(e) => updateNodeGroup(item.group.localId, { difficulty: e.target.value })}
+                        style={{ background: "#061322", color: "#6de9ff", border: "1px solid #1e3a5f", borderRadius: "8px", height: "42px", padding: "0 12px", width: "100%", outline: "none", cursor: "pointer" }}
+                      >
+                        <option value="beginner">Cơ bản (Beginner)</option>
+                        <option value="medium">Trung bình (Medium)</option>
+                        <option value="advanced">Nâng cao (Advanced)</option>
+                      </select>
+                    </label>
+                    <label><span>Thời lượng học ước tính (Giờ)</span><input type="number" min={0} value={item.group.estimatedHours ?? ""} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { estimatedHours: e.target.value ? Number(e.target.value) : null })} /></label>
                   </div>
                   {pinnedDocIds.length > 0 && (
                     <div className="artm-pinned-docs-section">
@@ -2484,8 +2580,8 @@ const AdminRoadmapTemplateManager = () => {
       <section className="artm-table-panel">
         <div className="artm-section-head">
           <div>
-            <h3>Độ phủ kỹ năng</h3>
-            <p>Theo node hiện tại của mẫu</p>
+            <h3>Mức độ bao phủ Kỹ năng</h3>
+            <p>Phân bổ kỹ năng theo cấu trúc các Node học tập</p>
           </div>
         </div>
         <div className="artm-preview-list">
@@ -2494,12 +2590,13 @@ const AdminRoadmapTemplateManager = () => {
             return (
               <div className={`artm-preview-row ${allocatedNodes === 0 ? "artm-preview-row--error" : ""}`} key={block.localId}>
                 <span>{block.skillNameSnapshot}</span>
-                <strong>{allocatedNodes === 0 ? "Chưa gắn node" : `Đã gán vào ${allocatedNodes} node`}</strong>
+                <strong>{allocatedNodes === 0 ? "Chưa phân bổ vào Node" : `Đã phân bổ vào ${allocatedNodes} Node`}</strong>
               </div>
             );
           })}
         </div>
       </section>
+
       <section className="artm-table-panel">
         <div className="artm-section-head">
           <div>
@@ -2510,7 +2607,7 @@ const AdminRoadmapTemplateManager = () => {
         </div>
         <div className="artm-review-stack">
           {readinessErrors.length === 0 ? (
-            <div className="artm-ready"><CheckCircle2 size={18} /> Có thể xuất bản. Hoặc có thể xem xét các gợi ý cải thiện.</div>
+            <div className="artm-ready"><CheckCircle2 size={18} /> Lộ trình hoàn thiện. Sẵn sàng xuất bản lên hệ thống.</div>
           ) : (
             <div className="artm-error-list">
               {readinessErrors.map((error) => <div key={error}>{error}</div>)}
@@ -2518,7 +2615,7 @@ const AdminRoadmapTemplateManager = () => {
           )}
           {coverageWarnings.length > 0 && (
             <div className="artm-suggestion-list">
-              <strong>Gợi ý cải thiện</strong>
+              <strong>Gợi ý cải thiện cấu trúc</strong>
               {coverageWarnings.map((warning) => {
                 const targetStep = getSuggestionTargetStep(warning);
                 const targetLabel = moduleBuilderTabs.find((step) => step.key === targetStep)?.title || "Bước liên quan";
@@ -2535,6 +2632,50 @@ const AdminRoadmapTemplateManager = () => {
               })}
             </div>
           )}
+        </div>
+      </section>
+
+      <section className="artm-table-panel" style={{ gridColumn: "1 / -1", marginTop: "24px" }}>
+        <div className="artm-section-head">
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <h3>Bản đồ Phân bổ Tỷ trọng Lộ trình</h3>
+              <span style={{ background: "rgba(34, 197, 94, 0.15)", color: "#22c55e", border: "1px solid rgba(34, 197, 94, 0.3)", padding: "2px 8px", borderRadius: "999px", fontSize: "12px", fontWeight: "bold" }}>
+                Tổng Trọng số: 100%
+              </span>
+            </div>
+            <p>Trọng số và phần trăm đóng góp của mỗi bài học (Node) trong lộ trình cuối cùng được tính toán tự động dựa trên độ khó và các kỹ năng đi kèm.</p>
+          </div>
+        </div>
+        <div style={{ padding: "20px", background: "#061322", borderRadius: "12px", border: "1px solid #1e3a5f" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
+            {form.nodeGroups.map((group, index) => {
+              const rawWeight = nodeWeightsAndPercentages.weights.get(group.localId) || 0;
+              const percent = nodeWeightsAndPercentages.percentages.get(group.localId) || 0;
+              return (
+                <div key={group.localId} style={{ background: "#0b1a2d", border: "1px solid #1e3a5f", borderRadius: "10px", padding: "18px", display: "flex", flexDirection: "column", gap: "10px", boxShadow: "0 4px 12px rgba(0,0,0,0.2)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <strong style={{ color: "#ffffff", fontSize: "14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "160px" }}>
+                      Node {index + 1}: {group.title || "Chưa đặt tên"}
+                    </strong>
+                    <span style={{ fontSize: "10px", background: "#0c2138", color: "#6de9ff", border: "1px solid #24c8f5", padding: "2px 8px", borderRadius: "4px", textTransform: "uppercase", fontWeight: "bold" }}>
+                      {group.difficulty || "medium"}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#a0aec0" }}>
+                    Tích hợp {group.skills.length} kỹ năng
+                  </div>
+                  <div style={{ display: "flex", gap: "12px", marginTop: "4px", fontSize: "13px" }}>
+                    <span style={{ color: "#6de9ff" }}>Trọng số thô: <strong>{rawWeight.toFixed(1)}</strong></span>
+                    <span style={{ color: "#22c55e" }}>Tỷ trọng: <strong>{percent.toFixed(2).replace(/\.00$/, '')}%</strong></span>
+                  </div>
+                  <div style={{ width: "100%", background: "#163352", height: "8px", borderRadius: "999px", overflow: "hidden", marginTop: "4px" }}>
+                    <div style={{ width: `${percent}%`, background: "#22c55e", height: "100%", borderRadius: "999px" }}></div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
     </div>
