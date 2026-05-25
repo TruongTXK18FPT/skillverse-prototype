@@ -56,7 +56,7 @@ import {
 import { useToast } from "../../../hooks/useToast";
 import { careerTaxonomyService } from "../../../services/careerTaxonomyService";
 import { skillService } from "../../../services/skillService";
-import { Domain, JobPosition, JobPositionTrackSkill } from "../../../types/careerTaxonomy";
+import { Domain, JobPosition, JobPositionTrack, JobPositionTrackSkill } from "../../../types/careerTaxonomy";
 import { SkillDto } from "../../../data/skillDTOs";
 import MeowlKuruLoader from "../../kuru-loader/MeowlKuruLoader";
 import QuestionBankSubmissionReviewPanel from "./QuestionBankSubmissionReviewPanel";
@@ -202,6 +202,9 @@ const QuestionBankTab: React.FC = () => {
   const [taxonomyDomains, setTaxonomyDomains] = useState<Domain[]>([]);
   const [taxonomyJobPositions, setTaxonomyJobPositions] = useState<JobPosition[]>([]);
   const [activeSkills, setActiveSkills] = useState<SkillDto[]>([]);
+  const [jobPositionTracks, setJobPositionTracks] = useState<JobPositionTrack[]>([]);
+  const [selectedTrackId, setSelectedTrackId] = useState<number | "">("");
+  const [tracksLoading, setTracksLoading] = useState(false);
 
   // Pagination
   const [bankPage, setBankPage] = useState(0);
@@ -486,22 +489,44 @@ const QuestionBankTab: React.FC = () => {
       setView("detail");
       setQuestionPage(0);
       
-      // Load skills for this job position
+      setJobPositionSkills([]);
+      setSelectedTrackId("");
+      
+      // Load active tracks for this job position
       if (detail.jobPositionId) {
          const tracks = await careerTaxonomyService.getActiveTracks(detail.jobPositionId);
-         const skillsPromises = tracks.map(t => careerTaxonomyService.getTrackSkills(t.id));
-         const skillsArrays = await Promise.all(skillsPromises);
-         const allSkills = skillsArrays.flat();
-         // remove duplicates
-         const uniqueSkills = Array.from(new Map(allSkills.map(s => [s.skillId, s])).values());
-         setJobPositionSkills(uniqueSkills);
+         setJobPositionTracks(tracks || []);
+         if (!tracks || tracks.length === 0) {
+            // Fallback: if no active tracks exist, load all skills of all tracks directly
+            const allTracks = await careerTaxonomyService.getTracks(detail.jobPositionId);
+            const skillsPromises = allTracks.map(t => careerTaxonomyService.getTrackSkills(t.id));
+            const skillsArrays = await Promise.all(skillsPromises);
+            const allSkills = skillsArrays.flat();
+            const uniqueSkills = Array.from(new Map(allSkills.map(s => [s.skillId, s])).values());
+            setJobPositionSkills(uniqueSkills);
+         }
       } else {
-         setJobPositionSkills([]);
+         setJobPositionTracks([]);
       }
     } catch {
       showError("Lỗi", "Không thể tải chi tiết");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSelectTrack = async (trackId: number) => {
+    try {
+      setTracksLoading(true);
+      setSelectedTrackId(trackId);
+      setSelectedSkillContext(""); // Clear skill filter context
+      const skills = await careerTaxonomyService.getTrackSkills(trackId);
+      setJobPositionSkills(skills || []);
+    } catch {
+      showError("Lỗi", "Không thể tải kỹ năng của nhánh chuyên sâu");
+      setJobPositionSkills([]);
+    } finally {
+      setTracksLoading(false);
     }
   };
 
@@ -511,6 +536,10 @@ const QuestionBankTab: React.FC = () => {
     setQuestions([]);
     setQuestionPage(0);
     setQuestionDifficultyFilter("");
+    setJobPositionTracks([]);
+    setSelectedTrackId("");
+    setJobPositionSkills([]);
+    setSelectedSkillContext("");
     closeModal();
   };
 
@@ -1433,8 +1462,109 @@ const QuestionBankTab: React.FC = () => {
                 ))}
               </div>
 
+              {/* Track Selection Panel */}
+              {selectedBank?.jobPositionId && jobPositionTracks.length > 0 && (
+                <div className="qb-tracks-panel">
+                  <div className="qb-tracks-panel-header">
+                    <h4>
+                      <Sparkles size={16} /> Nhánh chuyên sâu (Track) của {getBankJobPositionLabel(selectedBank)}
+                    </h4>
+                  </div>
+                  <p className="qb-tracks-panel-desc">
+                    Chọn một nhánh để tải danh sách các kỹ năng chuẩn đầu ra của nhánh đó:
+                  </p>
+                  <div className="qb-tracks-list">
+                    {jobPositionTracks.map((track) => {
+                      const isActive = selectedTrackId === track.id;
+                      return (
+                        <button
+                          key={track.id}
+                          type="button"
+                          className={`qb-track-button-item ${isActive ? "active" : ""}`}
+                          onClick={() => handleSelectTrack(track.id)}
+                          disabled={tracksLoading}
+                        >
+                          {track.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {/* Skills Panel */}
-              {jobPositionSkills.length > 0 && (
+              {tracksLoading ? (
+                <div className="qb-loading-state" style={{ padding: "2rem" }}>
+                  <MeowlKuruLoader size="small" text="" />
+                  <p>Đang tải danh sách kỹ năng...</p>
+                </div>
+              ) : selectedTrackId && jobPositionSkills.length > 0 ? (
+                <div className="qb-skills-panel">
+                  <div className="qb-skills-panel-header">
+                    <h4>
+                      <Sparkles size={16} /> Kỹ năng thuộc nhánh {jobPositionTracks.find(t => t.id === selectedTrackId)?.name}
+                    </h4>
+                    <span className="qb-skills-panel-count">
+                      {jobPositionSkills.length} kỹ năng
+                    </span>
+                  </div>
+                  <p className="qb-skills-panel-desc">
+                    Click vào một kỹ năng để xem câu hỏi theo skill đó và thêm câu hỏi đúng phân loại.
+                    {selectedSkillContext && (
+                      <button
+                        className="qb-skills-panel-clear"
+                        onClick={() => setSelectedSkillContext("")}
+                      >
+                        ✕ Bỏ lọc
+                      </button>
+                    )}
+                  </p>
+                  <div className="qb-skills-panel-chips">
+                    {jobPositionSkills.map((s) => {
+                      const count = selectedBank?.skillBreakdown?.[s.skillName || ""] || 0;
+                      const isActive = selectedSkillContext.toLowerCase() === s.skillName?.toLowerCase();
+                      return (
+                        <button
+                          key={s.skillId}
+                          type="button"
+                          className={`qb-skill-chip-item ${isActive ? "active" : ""}`}
+                          onClick={() => setSelectedSkillContext(isActive ? "" : s.skillName || "")}
+                        >
+                          <span className="qb-skill-chip-name">{s.skillName}</span>
+                          <span className="qb-skill-chip-count">{count}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {selectedSkillContext && (
+                    <div className="qb-skills-panel-actions">
+                      <button
+                        className="qb-btn success small"
+                        onClick={() => openAddQuestionWorkspace(selectedSkillContext)}
+                      >
+                        <Plus size={16} /> Nhập tay
+                      </button>
+                      <button
+                        className="qb-btn primary small"
+                        onClick={openImportWorkspace}
+                      >
+                        <Upload size={16} /> Nhập file
+                      </button>
+                      <button 
+                        className="qb-btn primary small" 
+                        onClick={openAiWorkspace}
+                      >
+                        <Brain size={16} /> Tạo bằng AI
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : selectedBank?.jobPositionId && jobPositionTracks.length > 0 && !selectedTrackId ? (
+                <div className="qb-empty-state-simple">
+                  <p>Vui lòng chọn một nhánh chuyên sâu ở trên để hiển thị danh sách kỹ năng.</p>
+                </div>
+              ) : jobPositionSkills.length > 0 ? (
+                /* Fallback behavior if jobPositionId is null or no tracks are present */
                 <div className="qb-skills-panel">
                   <div className="qb-skills-panel-header">
                     <h4>
@@ -1495,7 +1625,7 @@ const QuestionBankTab: React.FC = () => {
                     </div>
                   )}
                 </div>
-              )}
+              ) : null}
 
               {/* Global Action Bar (only visible when no skill is selected) */}
               {!selectedSkillContext && (
