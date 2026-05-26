@@ -2870,6 +2870,7 @@
 /* Question Container */
 .gsj-test__question-container {
   padding: 32px;
+  align-self: start;
 }
 
 .gsj-test__question-header {
