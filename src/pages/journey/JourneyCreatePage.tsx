@@ -10,6 +10,7 @@ import {
   JourneyStatus,
   StartJourneyRequest,
 } from "../../types/Journey";
+import type { JobPositionTrackSkill } from "../../types/careerTaxonomy";
 import MeowlGuide from "../../components/meowl/MeowlGuide";
 import SkillForm from "../../components/journey/SkillForm";
 import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
@@ -117,6 +118,7 @@ const JourneyCreatePage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [showLoadingGame, setShowLoadingGame] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [selectedTrackSkills, setSelectedTrackSkills] = useState<JobPositionTrackSkill[]>([]);
   const journeyType = JourneyType.SKILL;
   const [error, setError] = useState<string | null>(null);
   const [activeJourneyCheck, setActiveJourneyCheck] = useState(true);
@@ -216,6 +218,7 @@ const JourneyCreatePage: React.FC = () => {
     jobPositionTrackId: number;
     targetLevel?: string;
     skills: string[];
+    trackSkills: JobPositionTrackSkill[];
   }) => {
     setFormData((prev) => ({
       ...prev,
@@ -234,6 +237,7 @@ const JourneyCreatePage: React.FC = () => {
         (skill) => !data.skills.includes(skill),
       ),
     }));
+    setSelectedTrackSkills(data.trackSkills);
     setCurrentStep(2);
     setError(null);
   };
@@ -390,17 +394,48 @@ const JourneyCreatePage: React.FC = () => {
 
         <div className="gsj-target-summary__content">
           {/* Left: Skill */}
-          <div className="gsj-target-summary__group">
+          <div className="gsj-target-summary__group gsj-target-summary__group--skills">
             <span className="gsj-target-summary__label">Skill trong track:</span>
-            {selectedTargetSkills.map((skill) => (
-              <span
-                key={skill}
-                className="gsj-chip gsj-chip--selected gsj-target-summary__chip"
-              >
-                <Check size={14} />
-                {skill}
-              </span>
-            ))}
+            <div className="gsj-target-summary__skills-list">
+              {selectedTrackSkills.length > 0 ? (
+                selectedTrackSkills.map((skillObj) => {
+                  const name = skillObj.skillName || skillObj.canonicalKey;
+                  if (!name) return null;
+
+                  let reqClass = "gsj-chip--nice-to-have";
+                  let reqText = "Khuyến khích";
+                  if (skillObj.requirementType === "REQUIRED") {
+                    reqClass = "gsj-chip--required";
+                    reqText = "Bắt buộc";
+                  } else if (skillObj.requirementType === "IMPORTANT") {
+                    reqClass = "gsj-chip--important";
+                    reqText = "Quan trọng";
+                  }
+
+                  return (
+                    <span
+                      key={skillObj.id}
+                      className={`gsj-chip gsj-chip--selected gsj-target-summary__chip ${reqClass}`}
+                      title={`Kỹ năng ${reqText}`}
+                    >
+                      <Check size={14} />
+                      {name}
+                      <span className="gsj-chip__badge-indicator">{reqText}</span>
+                    </span>
+                  );
+                })
+              ) : (
+                selectedTargetSkills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="gsj-chip gsj-chip--selected gsj-target-summary__chip"
+                  >
+                    <Check size={14} />
+                    {skill}
+                  </span>
+                ))
+              )}
+            </div>
           </div>
 
           {/* Right: Career Path */}

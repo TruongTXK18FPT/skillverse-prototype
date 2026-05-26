@@ -9202,6 +9202,11 @@
   font-size: 13px;
   line-height: 1.45;
   overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .gsj-skill-card__arrow {
@@ -9378,4 +9383,78 @@
   border-color: rgba(239, 68, 68, 0.3);
   color: var(--gsj-danger);
 }
+
+/* ==================== Standardized Chip Wrapping & Requirement Classification ==================== */
+.gsj-target-summary__skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.gsj-target-summary__group--skills {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.gsj-target-summary__group--skills .gsj-target-summary__label {
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+/* Requirement-based indicator inside badge */
+.gsj-chip__badge-indicator {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* REQUIRED - RED */
+.gsj-chip--required {
+  background: rgba(239, 68, 68, 0.14) !important;
+  border-color: rgba(239, 68, 68, 0.55) !important;
+  color: #fca5a5 !important;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.12) !important;
+}
+.gsj-chip--required .gsj-chip__badge-indicator {
+  background: rgba(239, 68, 68, 0.28);
+  color: #ffe4e4;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* IMPORTANT - YELLOW */
+.gsj-chip--important {
+  background: rgba(245, 158, 11, 0.14) !important;
+  border-color: rgba(245, 158, 11, 0.55) !important;
+  color: #fcd34d !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.12) !important;
+}
+.gsj-chip--important .gsj-chip__badge-indicator {
+  background: rgba(245, 158, 11, 0.28);
+  color: #fef3c7;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+/* NICE TO HAVE - GREEN */
+.gsj-chip--nice-to-have {
+  background: rgba(16, 185, 129, 0.11) !important;
+  border-color: rgba(16, 185, 129, 0.48) !important;
+  color: #a7f3d0 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.09) !important;
+}
+.gsj-chip--nice-to-have .gsj-chip__badge-indicator {
+  background: rgba(16, 185, 129, 0.24);
+  color: #ecfdf5;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
 

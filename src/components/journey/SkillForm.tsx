@@ -25,6 +25,7 @@ interface SkillFormProps {
     jobPositionTrackId: number;
     targetLevel?: string;
     skills: string[];
+    trackSkills: JobPositionTrackSkill[];
   }) => void;
   onBack: () => void;
 }
@@ -265,6 +266,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
       jobPositionId: selectedJobPosition.id,
       jobPositionTrackId: selectedTrack.id,
       skills: selectedSkillNames,
+      trackSkills: trackSkills,
     });
   };
 
@@ -379,22 +381,21 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
               <div className="gsj-skill-job-grid">
                 {jobPositions.map((jobPosition) => {
                   const selected = selectedJobPositionId === jobPosition.id;
+                  const descText = jobPosition.description || "Chọn vị trí này để xem các track mục tiêu phù hợp.";
                   return (
                     <button
                       type="button"
                       key={jobPosition.id}
                       className={`gsj-skill-job-card ${selected ? "gsj-skill-job-card--selected" : ""}`}
                       onClick={() => selectJobPosition(jobPosition.id)}
+                      title={descText}
                     >
                       <span className="gsj-skill-card__icon">
                         <BriefcaseBusiness size={21} />
                       </span>
                       <span className="gsj-skill-card__body">
                         <strong>{getJobLabel(jobPosition)}</strong>
-                        <small>
-                          {jobPosition.description ||
-                            "Chọn vị trí này để xem các track mục tiêu phù hợp."}
-                        </small>
+                        <small>{descText}</small>
                       </span>
                       <ChevronRight size={18} className="gsj-skill-card__arrow" />
                     </button>
@@ -423,18 +424,17 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
               <div className="gsj-skill-track-grid">
                 {tracks.map((track) => {
                   const selected = selectedTrackId === track.id;
+                  const descText = track.description || "Track này sẽ tự động kéo danh sách kỹ năng cần đánh giá.";
                   return (
                     <button
                       type="button"
                       key={track.id}
                       className={`gsj-skill-track-card ${selected ? "gsj-skill-track-card--selected" : ""}`}
                       onClick={() => selectTrack(track.id)}
+                      title={descText}
                     >
                       <strong>{getTrackLabel(track)}</strong>
-                      <small>
-                        {track.description ||
-                          "Track này sẽ tự động kéo danh sách kỹ năng cần đánh giá."}
-                      </small>
+                      <small>{descText}</small>
                     </button>
                   );
                 })}
@@ -462,18 +462,37 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
 
               <div className="gsj-target-summary__group gsj-target-summary__group--skills">
                 <span className="gsj-target-summary__label">Kỹ năng tự động track</span>
-                {selectedSkillNames.length === 0 ? (
+                {trackSkills.length === 0 ? (
                   <span className="gsj-chip">Đang tải kỹ năng</span>
                 ) : (
-                  selectedSkillNames.map((skill) => (
-                    <span
-                      key={skill}
-                      className="gsj-chip gsj-chip--selected gsj-target-summary__chip"
-                    >
-                      <Check size={14} />
-                      {skill}
-                    </span>
-                  ))
+                  <div className="gsj-target-summary__skills-list">
+                    {trackSkills.map((skillObj) => {
+                      const name = getTrackSkillName(skillObj);
+                      if (!name) return null;
+
+                      let reqClass = "gsj-chip--nice-to-have";
+                      let reqText = "Khuyến khích";
+                      if (skillObj.requirementType === "REQUIRED") {
+                        reqClass = "gsj-chip--required";
+                        reqText = "Bắt buộc";
+                      } else if (skillObj.requirementType === "IMPORTANT") {
+                        reqClass = "gsj-chip--important";
+                        reqText = "Quan trọng";
+                      }
+
+                      return (
+                        <span
+                          key={skillObj.id}
+                          className={`gsj-chip gsj-chip--selected gsj-target-summary__chip ${reqClass}`}
+                          title={`Kỹ năng ${reqText}`}
+                        >
+                          <Check size={14} />
+                          {name}
+                          <span className="gsj-chip__badge-indicator">{reqText}</span>
+                        </span>
+                      );
+                    })}
+                  </div>
                 )}
               </div>
             </div>
