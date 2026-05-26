@@ -521,6 +521,8 @@ const makeNodeGroupFromResponse = (
   orderIndex: group.orderIndex ?? orderIndex,
   skills: (group.skills || []).map((skill, index) => makeNodeGroupSkill(skill, index + 1)),
   pinnedDocumentIds: group.pinnedDocumentIds || null,
+  nodeType: group.nodeType || "MAIN",
+  parentNodeKey: group.parentNodeKey || null,
 });
 
 const defaultNodeGroup = (orderIndex: number): NodeGroupDraft => ({
@@ -540,6 +542,8 @@ const defaultNodeGroup = (orderIndex: number): NodeGroupDraft => ({
   orderIndex,
   skills: [],
   pinnedDocumentIds: null,
+  nodeType: "MAIN",
+  parentNodeKey: null,
 });
 
 const buildSkillBlockFromTrackSkill = (
@@ -1080,6 +1084,8 @@ const AdminRoadmapTemplateManager = () => {
         aiPromptHint: group.aiPromptHint?.trim(),
         pinnedDocumentIds: group.pinnedDocumentIds || null,
         orderIndex: index + 1,
+        nodeType: group.nodeType || "MAIN",
+        parentNodeKey: group.parentNodeKey || null,
         skills: group.skills.map((skill, skillIndex) => ({
           id: skill.id,
           skillId: skill.skillId,
@@ -1225,6 +1231,36 @@ const AdminRoadmapTemplateManager = () => {
         });
     });
   }, [form.nodeGroups, documentNamesCache]);
+
+  // Tự động tải khóa học gợi ý và tìm khóa học PUBLIC khi vào tab "courses"
+  useEffect(() => {
+    if (activeTab === "courses") {
+      const activeBlock = form.skillBlocks.find((block) => block.localId === activeSkillBlockId) || form.skillBlocks[0] || null;
+      if (activeBlock) {
+        const skillId = activeBlock.skillId;
+        if (!courseCandidates[skillId]) {
+          void loadCourseCandidates(activeBlock);
+        }
+        if (!courseSearchResults[skillId]) {
+          // Kích hoạt tìm kiếm mặc định cho các khóa học PUBLIC
+          setSearchingCourseSkillId(skillId);
+          listCourses(0, 20, undefined, CourseStatus.PUBLIC, "", "createdAt", "desc")
+            .then((response) => {
+              setCourseSearchResults((current) => ({
+                ...current,
+                [skillId]: response.content.map(toSummaryCourseOption),
+              }));
+            })
+            .catch((err) => {
+              console.error("Auto load public courses failed", err);
+            })
+            .finally(() => {
+              setSearchingCourseSkillId(null);
+            });
+        }
+      }
+    }
+  }, [activeTab, activeSkillBlockId, form.skillBlocks]);
 
   const parsePinnedDocIds = (jsonStr: string | undefined | null): number[] => {
     if (!jsonStr || !jsonStr.trim()) return [];
@@ -2179,6 +2215,39 @@ const AdminRoadmapTemplateManager = () => {
                       </select>
                     </label>
                     <label><span>Thời lượng học ước tính (Giờ)</span><input type="number" min={0} value={item.group.estimatedHours ?? ""} disabled={autoGrouping} onChange={(e) => updateNodeGroup(item.group.localId, { estimatedHours: e.target.value ? Number(e.target.value) : null })} /></label>
+                    
+                    <label>
+                      <span>Loại nhánh</span>
+                      <select
+                        value={item.group.nodeType || "MAIN"}
+                        disabled={autoGrouping}
+                        onChange={(e) => updateNodeGroup(item.group.localId, { nodeType: e.target.value })}
+                        style={{ background: "#061322", color: "#6de9ff", border: "1px solid #1e3a5f", borderRadius: "8px", height: "42px", padding: "0 12px", width: "100%", outline: "none", cursor: "pointer" }}
+                      >
+                        <option value="MAIN">Nhánh chính (MAIN)</option>
+                        <option value="SIDE">Nhánh phụ (SIDE)</option>
+                      </select>
+                    </label>
+
+                    <label>
+                      <span>Nút cha</span>
+                      <select
+                        value={item.group.parentNodeKey || ""}
+                        disabled={autoGrouping}
+                        onChange={(e) => updateNodeGroup(item.group.localId, { parentNodeKey: e.target.value || null })}
+                        style={{ background: "#061322", color: "#6de9ff", border: "1px solid #1e3a5f", borderRadius: "8px", height: "42px", padding: "0 12px", width: "100%", outline: "none", cursor: "pointer" }}
+                      >
+                        <option value="">Không có (Mặc định liên kết tuần tự)</option>
+                        {form.nodeGroups
+                          .filter((g) => g.localId !== item.group.localId)
+                          .map((g, idx) => (
+                            <option key={g.localId} value={g.nodeKey}>
+                              Node {idx + 1}: {g.title || "Chưa đặt tên"} ({g.nodeKey})
+                            </option>
+                          ))
+                        }
+                      </select>
+                    </label>
                   </div>
                   {pinnedDocIds.length > 0 && (
                     <div className="artm-pinned-docs-section">

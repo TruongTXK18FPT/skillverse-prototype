@@ -121,6 +121,8 @@ export interface RoadmapTemplateNodeGroupRequest {
   orderIndex: number;
   skills: RoadmapTemplateNodeGroupSkillRequest[];
   pinnedDocumentIds?: string | null;
+  nodeType?: string;
+  parentNodeKey?: string | null;
 }
 
 export interface RoadmapTemplateRequest {
@@ -246,6 +248,8 @@ export interface RoadmapTemplateNodeGroupResponse {
   orderIndex?: number | null;
   skills: RoadmapTemplateNodeGroupSkill[];
   pinnedDocumentIds?: string | null;
+  nodeType?: string;
+  parentNodeKey?: string | null;
 }
 
 export interface RoadmapTemplateCourseCandidateResponse {

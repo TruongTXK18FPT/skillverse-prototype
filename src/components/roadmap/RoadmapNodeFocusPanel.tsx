@@ -525,6 +525,34 @@ const RoadmapNodeFocusPanel = ({
               </div>
             )}
 
+          {node.lessons && node.lessons.length > 0 && (
+            <div className="roadmap-node-focus-panel__list-group roadmap-node-focus-panel__list-group--lessons">
+              <span>Nội dung bài học ({node.lessons.length})</span>
+              <div className="roadmap-node-focus-panel__lessons-list">
+                {node.lessons.map((lesson, index) => (
+                  <div key={`les-${index}`} className="roadmap-node-focus-panel__lesson-card">
+                    <div className="roadmap-node-focus-panel__lesson-header">
+                      <strong>Bài {index + 1}: {lesson.title}</strong>
+                      {lesson.estimatedMinutes && (
+                        <span className="roadmap-node-focus-panel__lesson-duration">
+                          {lesson.estimatedMinutes} phút
+                        </span>
+                      )}
+                    </div>
+                    {lesson.description && (
+                      <p className="roadmap-node-focus-panel__lesson-desc">{lesson.description}</p>
+                    )}
+                    {lesson.learningObjective && (
+                      <div className="roadmap-node-focus-panel__lesson-objective">
+                        <em>Mục tiêu: {lesson.learningObjective}</em>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {objectiveItems.length > 0 && (
             <div className="roadmap-node-focus-panel__list-group">
               <span>Mục tiêu học tập ({objectiveItems.length})</span>
