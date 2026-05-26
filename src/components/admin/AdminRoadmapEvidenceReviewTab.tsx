@@ -12,8 +12,10 @@ import {
   Clock,
   Eye,
   RefreshCw,
-  Filter
+  Filter,
+  X
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import './AdminRoadmapEvidenceReviewTab.css';
 
 const statusConfig: Record<AiReviewStatus, { label: string; icon: React.ElementType; color: string }> = {
@@ -189,7 +191,7 @@ const AdminRoadmapEvidenceReviewTab: React.FC = () => {
         </div>
       </div>
 
-      <div className="arer-content">
+      <div className="arer-content full-width">
         <div className="arer-list-section">
           {loading ? (
             <div className="arer-empty">Đang tải dữ liệu...</div>
@@ -252,153 +254,205 @@ const AdminRoadmapEvidenceReviewTab: React.FC = () => {
             </div>
           )}
         </div>
+      </div>
 
-        {selectedReview && (
-          <div className="arer-detail-section">
-            <h3>Chi tiết AI Review #{selectedReview.id}</h3>
-            <div className="arer-detail-card">
-              <div className="arer-detail-row">
-                <span>Loại bài nộp:</span>
-                <strong>{selectedReview.journeyOutputAssessmentId ? 'Bài nộp cuối lộ trình' : 'Minh chứng node'}</strong>
-              </div>
-              <div className="arer-detail-row">
-                <span>Trạng thái hiện tại:</span>
-                <strong className={`arer-status-text ${selectedReview.status.toLowerCase()}`}>
-                  {statusConfig[selectedReview.status].label}
-                </strong>
-              </div>
-              <div className="arer-detail-row">
-                <span>Mã lộ trình (Journey ID):</span>
-                <strong>#{selectedReview.journeyId}</strong>
-              </div>
-              <div className="arer-detail-row">
-                <span>Mã học viên (Learner ID):</span>
-                <strong>#{selectedReview.learnerId}</strong>
-              </div>
-              {!selectedReview.journeyOutputAssessmentId && selectedReview.nodeId && (
-                <div className="arer-detail-row">
-                  <span>Mã Node học (Node ID):</span>
-                  <strong>{selectedReview.nodeId}</strong>
-                </div>
-              )}
-              <div className="arer-detail-row">
-                <span>Lần nộp (Attempt Number):</span>
-                <strong>Lần {selectedReview.attemptNumber}</strong>
-              </div>
-              {(selectedReview.aiProvider || selectedReview.aiModelName) && (
-                <div className="arer-detail-row">
-                  <span>AI Engine:</span>
-                  <strong>{selectedReview.aiProvider || 'unknown'} ({selectedReview.aiModelName || 'unknown'})</strong>
-                </div>
-              )}
-              <div className="arer-detail-row">
-                <span>Điểm AI chấm:</span>
-                <strong>{selectedReview.aiScorePercent != null ? `${selectedReview.aiScorePercent}%` : 'Chưa có'}</strong>
-              </div>
-              <div className="arer-detail-row">
-                <span>Độ tự tin (Confidence):</span>
-                <strong>{selectedReview.aiConfidence != null ? `${(selectedReview.aiConfidence * 100).toFixed(0)}%` : 'Chưa có'}</strong>
-              </div>
-
-              {selectedReview.errorMessage && (
-                isAiDisabledReview(selectedReview) ? (
-                  <div className="arer-info-box">
-                    <strong>Thông tin đánh giá:</strong>
-                    <p className="arer-box-desc">Lộ trình hiện đang tắt chức năng chấm tự động bằng AI. Quản trị viên cần đánh giá thủ công bài nộp này.</p>
-                  </div>
-                ) : (
-                  <div className="arer-error-box">
-                    <strong>Lỗi thực thi AI:</strong>
-                    <p className="arer-box-desc">{selectedReview.errorMessage}</p>
-                  </div>
-                )
-              )}
-
-              <div className="arer-detail-group">
-                <span>Phản hồi từ AI:</span>
-                <div className="arer-ai-feedback">{selectedReview.aiFeedback || 'Không có phản hồi.'}</div>
-              </div>
-
-              {selectedReview.aiRubricBreakdownJson && (
-                <div className="arer-rubric-group">
-                  <span>Chi tiết điểm theo tiêu chí (Rubric Breakdown):</span>
-                  {renderRubricBreakdown(selectedReview.aiRubricBreakdownJson)}
-                  
-                  <details className="arer-rubric-details" style={{ marginTop: '8px' }}>
-                    <summary className="arer-rubric-summary">Xem chi tiết barem điểm AI (JSON gốc)</summary>
-                    <pre className="arer-json-block">
-                      {(() => {
-                        try {
-                          return JSON.stringify(JSON.parse(selectedReview.aiRubricBreakdownJson), null, 2);
-                        } catch (e) {
-                          return selectedReview.aiRubricBreakdownJson;
-                        }
-                      })()}
-                    </pre>
-                  </details>
-                </div>
-              )}
-
-              {(selectedReview.status === 'NEEDS_ADMIN_REVIEW' || selectedReview.status === 'PENDING' || selectedReview.status === 'PASSED' || selectedReview.status === 'FAILED') && (
-                <div className="arer-action-box">
+      {/* Modern, Beautiful Modal Overlay for Selected AI Review Details */}
+      {selectedReview && (
+        <div className="arer-modal-backdrop" onClick={() => setSelectedReview(null)}>
+          <div className="arer-modal-container" onClick={(e) => e.stopPropagation()}>
+            <button className="arer-modal-close" onClick={() => setSelectedReview(null)} aria-label="Close modal">
+              <X size={20} />
+            </button>
+            
+            <header className="arer-modal-header">
+              <div className="arer-modal-title-group">
+                <h3>Chi tiết AI Evidence Review #{selectedReview.id}</h3>
+                <span className={`arer-status-badge ${selectedReview.status.toLowerCase()}`}>
                   {(() => {
-                    const isOverride = selectedReview.status === 'PASSED' || selectedReview.status === 'FAILED';
-                    return (
-                      <>
-                        <h4 className="arer-action-title">
-                          {isOverride ? 'Đánh giá lại thủ công' : 'Quyết định của Admin'}
-                        </h4>
-                        
-                        {isOverride && (
-                          <div className="arer-override-warning">
-                            <AlertCircle size={16} className="arer-override-warning-icon" />
-                            <div>
-                              <strong>Bạn đang ghi đè kết quả đã được hệ thống chấm.</strong> Quyết định này sẽ cập nhật trạng thái bài nộp và tiến trình học tập.
-                            </div>
-                          </div>
-                        )}
-
-                        <textarea
-                          placeholder={isOverride ? "Lý do đánh giá thủ công (bắt buộc)..." : "Nhập lý do duyệt hoặc từ chối..."}
-                          value={adminReason}
-                          onChange={(e) => setAdminReason(e.target.value)}
-                          rows={4}
-                        />
-
-                        <div className="arer-action-buttons">
-                          <button
-                            className="arer-reject-btn"
-                            disabled={submitting}
-                            onClick={() => handleDecision('REJECT')}
-                          >
-                            Yêu cầu nộp lại
-                          </button>
-                          <button
-                            className="arer-approve-btn"
-                            disabled={submitting}
-                            onClick={() => handleDecision('APPROVE')}
-                          >
-                            Duyệt đạt
-                          </button>
-                        </div>
-                      </>
-                    );
+                    const StatusIcon = statusConfig[selectedReview.status].icon;
+                    return <StatusIcon size={14} />;
                   })()}
-                </div>
-              )}
+                  {statusConfig[selectedReview.status].label}
+                </span>
+              </div>
+              <div className="arer-modal-meta-header">
+                <span>Attempt #{selectedReview.attemptNumber}</span>
+                <span className="arer-bullet">•</span>
+                <span>Ngày tạo: {new Date(selectedReview.createdAt).toLocaleDateString()}</span>
+              </div>
+            </header>
 
-              {selectedReview.adminDecision && (
-                <div className="arer-detail-group arer-admin-decision-note-group">
-                  <span>Quyết định Admin trước đó:</span>
-                  <div className="arer-ai-feedback arer-admin-decision-note">
-                    <strong>{selectedReview.adminDecision === 'APPROVE' ? 'Đã duyệt đạt' : 'Yêu cầu nộp lại'}:</strong> {selectedReview.adminReviewReason || 'Không có lý do.'}
-                  </div>
+            <div className="arer-modal-body">
+              <div className="arer-modal-grid">
+                
+                {/* Column Left: Submission Info & Actions */}
+                <div className="arer-modal-col-left">
+                  <section className="arer-section-card">
+                    <h4 className="arer-section-title-sm">Thông Tin Bài Nộp</h4>
+                    <div className="arer-detail-grid-info">
+                      <div className="arer-info-item">
+                        <span>Loại bài nộp:</span>
+                        <strong>{selectedReview.journeyOutputAssessmentId ? 'Bài nộp cuối lộ trình' : 'Minh chứng node'}</strong>
+                      </div>
+                      <div className="arer-info-item">
+                        <span>Mã lộ trình (Journey ID):</span>
+                        <strong>#{selectedReview.journeyId}</strong>
+                      </div>
+                      <div className="arer-info-item">
+                        <span>Mã học viên (Learner ID):</span>
+                        <strong>#{selectedReview.learnerId}</strong>
+                      </div>
+                      {!selectedReview.journeyOutputAssessmentId && selectedReview.nodeId && (
+                        <div className="arer-info-item">
+                          <span>Mã Node học (Node ID):</span>
+                          <strong>{selectedReview.nodeId}</strong>
+                        </div>
+                      )}
+                      {(selectedReview.aiProvider || selectedReview.aiModelName) && (
+                        <div className="arer-info-item">
+                          <span>AI Engine:</span>
+                          <strong>{selectedReview.aiProvider || 'unknown'} ({selectedReview.aiModelName || 'unknown'})</strong>
+                        </div>
+                      )}
+                      <div className="arer-info-item">
+                        <span>Điểm AI chấm:</span>
+                        <strong className="score-highlight">{selectedReview.aiScorePercent != null ? `${selectedReview.aiScorePercent}%` : 'Chưa có'}</strong>
+                      </div>
+                      <div className="arer-info-item">
+                        <span>Độ tự tin (Confidence):</span>
+                        <strong>{selectedReview.aiConfidence != null ? `${(selectedReview.aiConfidence * 100).toFixed(0)}%` : 'Chưa có'}</strong>
+                      </div>
+                    </div>
+                  </section>
+
+                  {selectedReview.errorMessage && (
+                    <section className="arer-section-card-warning">
+                      {isAiDisabledReview(selectedReview) ? (
+                        <div className="arer-info-box-modal">
+                          <AlertCircle size={18} className="arer-box-icon text-purple" />
+                          <div className="arer-box-content">
+                            <strong>Lộ trình tắt chấm tự động</strong>
+                            <p>Lộ trình hiện đang tắt chức năng chấm tự động bằng AI. Quản trị viên cần đánh giá thủ công bài nộp này.</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="arer-error-box-modal">
+                          <XCircle size={18} className="arer-box-icon text-red" />
+                          <div className="arer-box-content">
+                            <strong>Lỗi thực thi AI</strong>
+                            <p>{selectedReview.errorMessage}</p>
+                          </div>
+                        </div>
+                      )}
+                    </section>
+                  )}
+
+                  {/* Actions for Admin Decision */}
+                  {(selectedReview.status === 'NEEDS_ADMIN_REVIEW' || selectedReview.status === 'PENDING' || selectedReview.status === 'PASSED' || selectedReview.status === 'FAILED') && (
+                    <section className="arer-section-card highlight">
+                      <div className="arer-action-box-modal">
+                        {(() => {
+                          const isOverride = selectedReview.status === 'PASSED' || selectedReview.status === 'FAILED';
+                          return (
+                            <>
+                              <h4 className="arer-action-title">
+                                {isOverride ? 'Đánh giá lại thủ công (Ghi đè kết quả)' : 'Đưa ra quyết định phê duyệt'}
+                              </h4>
+                              
+                              {isOverride && (
+                                <div className="arer-override-warning">
+                                  <AlertCircle size={16} className="arer-override-warning-icon" />
+                                  <div>
+                                    <strong>Bạn đang ghi đè kết quả đã chấm của AI.</strong> Quyết định này sẽ cập nhật trực tiếp tiến trình và trạng thái kỹ năng của học viên.
+                                  </div>
+                                </div>
+                              )}
+
+                              <textarea
+                                placeholder={isOverride ? "Nhập lý do đánh giá lại thủ công (bắt buộc)..." : "Nhập phản hồi chi tiết cho học viên..."}
+                                value={adminReason}
+                                onChange={(e) => setAdminReason(e.target.value)}
+                                rows={5}
+                              />
+
+                              <div className="arer-action-buttons-modal">
+                                <button
+                                  className="arer-reject-btn-modal"
+                                  disabled={submitting}
+                                  onClick={() => handleDecision('REJECT')}
+                                >
+                                  Yêu cầu nộp lại
+                                </button>
+                                <button
+                                  className="arer-approve-btn-modal"
+                                  disabled={submitting}
+                                  onClick={() => handleDecision('APPROVE')}
+                                >
+                                  Duyệt đạt
+                                </button>
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </section>
+                  )}
+
+                  {selectedReview.adminDecision && (
+                    <section className="arer-section-card">
+                      <h4 className="arer-section-title-sm">Lịch Sử Quyết Định Admin</h4>
+                      <div className="arer-admin-note-modal">
+                        <div className="arer-admin-note-header">
+                          <CheckCircle size={14} className={selectedReview.adminDecision === 'APPROVE' ? 'text-green' : 'text-red'} />
+                          <strong>{selectedReview.adminDecision === 'APPROVE' ? 'Đã duyệt đạt' : 'Yêu cầu nộp lại'}</strong>
+                        </div>
+                        <p className="arer-admin-note-reason">{selectedReview.adminReviewReason || 'Không để lại lý do.'}</p>
+                      </div>
+                    </section>
+                  )}
                 </div>
-              )}
+
+                {/* Column Right: AI Feedback & Rubric Breakdown */}
+                <div className="arer-modal-col-right">
+                  <section className="arer-section-card">
+                    <h4 className="arer-section-title-sm">Nhận Xét Chi Tiết Từ AI</h4>
+                    <div className="arer-ai-feedback-modal">
+                      {selectedReview.aiFeedback ? (
+                        <div className="arer-markdown-content">
+                          <ReactMarkdown>{selectedReview.aiFeedback}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        <p className="arer-feedback-empty">Không có phản hồi từ AI.</p>
+                      )}
+                    </div>
+                  </section>
+
+                  {selectedReview.aiRubricBreakdownJson && (
+                    <section className="arer-section-card">
+                      <h4 className="arer-section-title-sm">Điểm số theo tiêu chí (Rubric)</h4>
+                      {renderRubricBreakdown(selectedReview.aiRubricBreakdownJson)}
+                      
+                      <details className="arer-rubric-details-modal">
+                        <summary className="arer-rubric-summary-modal">Xem JSON kết quả gốc từ AI</summary>
+                        <pre className="arer-json-block-modal">
+                          {(() => {
+                            try {
+                              return JSON.stringify(JSON.parse(selectedReview.aiRubricBreakdownJson), null, 2);
+                            } catch (e) {
+                              return selectedReview.aiRubricBreakdownJson;
+                            }
+                          })()}
+                        </pre>
+                      </details>
+                    </section>
+                  )}
+                </div>
+
+              </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
