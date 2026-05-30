@@ -64,6 +64,7 @@ type BackendAssessmentTestResponse = {
   parentTestId?: number;
   questionSource?: string;
   questionsJson?: string;
+  userAnswersJson?: string;
   createdAt?: string;
   completedAt?: string;
   expiresAt?: string;
@@ -332,7 +333,8 @@ const mapAssessmentTest = (payload: BackendAssessmentTestResponse, journeyId: nu
     questionSource: payload.questionSource,
     createdAt: toStringValue(payload.createdAt, new Date().toISOString()),
     completedAt: payload.completedAt,
-    expiresAt: payload.expiresAt
+    expiresAt: payload.expiresAt,
+    userAnswersJson: typeof payload.userAnswersJson === 'string' ? payload.userAnswersJson : undefined
   };
 };
 
@@ -952,6 +954,21 @@ const journeyService = {
     } catch (error) {
       console.error('Failed to submit test:', error);
       throw new Error(getErrorMessage(error, 'Failed to submit test. Please try again.'));
+    }
+  },
+
+  /**
+   * Save temporary test progress
+   */
+  saveTestProgress: async (journeyId: number, testId: number, answers: Record<number, string>): Promise<void> => {
+    try {
+      await axiosInstance.post(
+        `/v1/journey/${journeyId}/test/${testId}/progress`,
+        { answers }
+      );
+    } catch (error) {
+      console.error('Failed to save test progress:', error);
+      throw new Error(getErrorMessage(error, 'Failed to save test progress.'));
     }
   },
 

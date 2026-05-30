@@ -1,8 +1,9 @@
 import { useEffect, useState, useMemo } from 'react';
-import { ArrowLeft, CheckCircle, ChevronRight, Clock, RefreshCw, Globe, Cpu } from 'lucide-react';
+import { ArrowLeft, CheckCircle, ChevronRight, Clock, RefreshCw, Globe, Cpu, Bookmark } from 'lucide-react';
 import { AssessmentTestResponse } from '../../types/Journey';
 import { confirmAction } from '../../context/ConfirmDialogContext';
 import { decodeHtml } from '../../utils/htmlDecoder';
+import journeyService from '../../services/journeyService';
 
 interface GSJTestTakingProps {
   test: AssessmentTestResponse;
@@ -12,8 +13,50 @@ interface GSJTestTakingProps {
 }
 
 const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, loading }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [answers, setAnswers] = useState<Record<number, string>>(() => {
+    if (test.userAnswersJson) {
+      try {
+        const parsed = JSON.parse(test.userAnswersJson);
+        const answersObj: Record<number, string> = {};
+        Object.entries(parsed).forEach(([key, val]) => {
+          const numKey = Number(key);
+          if (!isNaN(numKey) && typeof val === 'string') {
+            answersObj[numKey] = val;
+          }
+        });
+        return answersObj;
+      } catch (err) {
+        console.error('Failed to parse userAnswersJson:', err);
+      }
+    }
+    return {};
+  });
+
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    if (test.userAnswersJson) {
+      try {
+        const parsed = JSON.parse(test.userAnswersJson);
+        // Find the first question index that is NOT answered
+        const firstUnanswered = test.questions.findIndex(
+          (q) => !parsed[q.questionId] && !parsed[String(q.questionId)]
+        );
+        return firstUnanswered !== -1 ? firstUnanswered : 0;
+      } catch (err) {
+        console.error('Failed to calculate initial question index:', err);
+      }
+    }
+    return 0;
+  });
+
+  const [bookmarks, setBookmarks] = useState<Record<number, boolean>>(() => {
+    try {
+      const stored = localStorage.getItem(`assessment_bookmarks_${test.id}`);
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  });
+
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -62,11 +105,29 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleAnswer = (answer: string) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [currentQuestion.questionId]: answer
-    }));
+  const handleAnswer = (optionText: string) => {
+    const updatedAnswers = {
+      ...answers,
+      [currentQuestion.questionId]: optionText
+    };
+    setAnswers(updatedAnswers);
+
+    // Save temporary progress to the backend asynchronously
+    journeyService.saveTestProgress(test.journeyId, test.id, updatedAnswers)
+      .catch((err) => {
+        console.error('Failed to auto-save test progress:', err);
+      });
+  };
+
+  const toggleBookmark = (questionId: number) => {
+    setBookmarks((prev) => {
+      const updated = {
+        ...prev,
+        [questionId]: !prev[questionId]
+      };
+      localStorage.setItem(`assessment_bookmarks_${test.id}`, JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const goToQuestion = (index: number) => {
@@ -107,7 +168,9 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
             key={q.questionId}
             className={`gsj-test-nav__dot ${
               index === currentIndex ? 'gsj-test-nav__dot--active' : ''
-            } ${answers[q.questionId] ? 'gsj-test-nav__dot--answered' : ''}`}
+            } ${answers[q.questionId] ? 'gsj-test-nav__dot--answered' : ''} ${
+              bookmarks[q.questionId] ? 'gsj-test-nav__dot--bookmarked' : ''
+            }`}
             onClick={() => goToQuestion(index)}
           >
             {index + 1}
@@ -216,6 +279,17 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
               <span className={`gsj-test__tag gsj-test__tag--difficulty ${getDifficultyClass(currentQuestion.difficulty)}`}>
                 {getDifficultyLabel(currentQuestion.difficulty)}
               </span>
+
+              <button
+                className={`gsj-test__tag gsj-test__tag--bookmark ${
+                  bookmarks[currentQuestion.questionId] ? 'gsj-test__tag--bookmark-active' : ''
+                }`}
+                onClick={() => toggleBookmark(currentQuestion.questionId)}
+                title={bookmarks[currentQuestion.questionId] ? 'Bỏ đánh dấu câu hỏi' : 'Đánh dấu câu hỏi này'}
+              >
+                <Bookmark size={11} fill={bookmarks[currentQuestion.questionId] ? '#ffffff' : 'none'} />
+                <span>{bookmarks[currentQuestion.questionId] ? 'Đã lưu' : 'Đánh dấu'}</span>
+              </button>
             </div>
           </div>
 
@@ -268,6 +342,21 @@ const GSJTestTaking: React.FC<GSJTestTakingProps> = ({ test, onSubmit, onBack, l
                 )}
               </button>
             )}
+          </div>
+
+          {/* Dynamic Meowl Tip Block to fill empty space and provide helpful onboarding */}
+          <div className="gsj-test__meowl-tip">
+            <div className="gsj-test__meowl-tip-avatar">
+              <span className="gsj-test__meowl-tip-emoji">🐱</span>
+            </div>
+            <div className="gsj-test__meowl-tip-content">
+              <span className="gsj-test__meowl-tip-title">Mẹo nhỏ từ Meowl:</span>
+              <p className="gsj-test__meowl-tip-text">
+                {currentIndex % 3 === 0 && "Hệ thống tự động lưu tiến trình làm bài. Bạn có thể yên tâm quay lại sau mà không sợ mất câu trả lời cũ!"}
+                {currentIndex % 3 === 1 && "Nhấp vào nút 'Đánh dấu' phía trên để lưu câu hỏi khó. Điểm chấm trên dot câu hỏi giúp bạn quay lại nhanh."}
+                {currentIndex % 3 === 2 && "Đánh giá này nhằm đo lường cấp độ phù hợp để AI thiết kế lộ trình chuẩn nhất cho bạn. Cố lên nhé!"}
+              </p>
+            </div>
           </div>
         </div>
       </div>

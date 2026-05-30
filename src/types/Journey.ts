@@ -3903,6 +3903,7 @@ export interface AssessmentTestResponse {
   createdAt: string;
   completedAt?: string;
   expiresAt?: string;
+  userAnswersJson?: string;
 }
 
 /**
