@@ -21,7 +21,9 @@ import {
   getCourseRevision,
   getLatestApprovedRevision,
   approveCourse,
+  approveCourseRevision,
   rejectCourse,
+  rejectCourseRevision,
   suspendCourse,
   restoreCourse,
   CourseRevisionDTO
@@ -1241,16 +1243,19 @@ const AssignmentDetailView: React.FC<AssignmentDetailProps> = ({
 const ActionModal: React.FC<{
   actionType: 'approve' | 'reject' | 'suspend' | 'restore';
   courseTitle: string;
+  isRevision?: boolean;
   onConfirm: (reason: string) => void;
   onCancel: () => void;
   loading: boolean;
-}> = ({ actionType, courseTitle, onConfirm, onCancel, loading }) => {
+}> = ({ actionType, courseTitle, isRevision = false, onConfirm, onCancel, loading }) => {
   const [reason, setReason] = useState('');
   const needsReason = actionType === 'reject' || actionType === 'suspend';
+  const targetLabel = isRevision ? 'revision' : 'khóa học';
+  const titleSuffix = isRevision ? 'Revision' : 'Khóa Học';
 
   const labels: Record<string, { title: string; prompt: string; btn: string; btnClass: string }> = {
-    approve:  { title: 'Duyệt Khóa Học',      prompt: `Bạn có chắc chắn muốn duyệt khóa học "${courseTitle}"?`,                    btn: 'Xác nhận duyệt',      btnClass: 'acp-btn-approve' },
-    reject:   { title: 'Từ Chối Khóa Học',     prompt: `Vui lòng nhập lý do từ chối khóa học "${courseTitle}"`,                      btn: 'Xác nhận từ chối',     btnClass: 'acp-btn-reject' },
+    approve:  { title: `Duyệt ${titleSuffix}`,      prompt: `Bạn có chắc chắn muốn duyệt ${targetLabel} "${courseTitle}"?`,                    btn: 'Xác nhận duyệt',      btnClass: 'acp-btn-approve' },
+    reject:   { title: `Từ Chối ${titleSuffix}`,     prompt: `Vui lòng nhập lý do từ chối ${targetLabel} "${courseTitle}"`,                      btn: 'Xác nhận từ chối',     btnClass: 'acp-btn-reject' },
     suspend:  { title: 'Tạm Khóa Khóa Học',    prompt: `Vui lòng nhập lý do tạm khóa khóa học "${courseTitle}"`,                    btn: 'Xác nhận tạm khóa',   btnClass: 'acp-btn-suspend' },
     restore:  { title: 'Khôi Phục Khóa Học',    prompt: `Bạn có chắc chắn muốn khôi phục khóa học "${courseTitle}" về trạng thái Công Khai?`, btn: 'Xác nhận khôi phục',   btnClass: 'acp-btn-restore' },
   };
@@ -1426,12 +1431,22 @@ const AdminCoursePreviewPage: React.FC = () => {
       let successMessage = '';
       switch (actionModal.type) {
         case 'approve':
-          await approveCourse(course.id, user.id);
-          successMessage = `Đã duyệt khóa học "${course.title}".`;
+          if (selectedRevision) {
+            await approveCourseRevision(selectedRevision.id);
+            successMessage = `Đã duyệt revision #${selectedRevision.revisionNumber} của khóa học "${course.title}".`;
+          } else {
+            await approveCourse(course.id, user.id);
+            successMessage = `Đã duyệt khóa học "${course.title}".`;
+          }
           break;
         case 'reject':
-          await rejectCourse(course.id, user.id, reason);
-          successMessage = `Đã từ chối khóa học "${course.title}".`;
+          if (selectedRevision) {
+            await rejectCourseRevision(selectedRevision.id, reason);
+            successMessage = `Đã từ chối revision #${selectedRevision.revisionNumber} của khóa học "${course.title}".`;
+          } else {
+            await rejectCourse(course.id, user.id, reason);
+            successMessage = `Đã từ chối khóa học "${course.title}".`;
+          }
           break;
         case 'suspend':
           await suspendCourse(course.id, user.id, reason);
@@ -1676,6 +1691,16 @@ const AdminCoursePreviewPage: React.FC = () => {
           <span>Quay lại quản lý</span>
         </button>
         <div className="acp-topbar-actions">
+          {selectedRevision?.status === 'PENDING' && (
+            <>
+              <button className="acp-btn-approve" onClick={() => setActionModal({ type: 'approve' })}>
+                <CheckCircle size={18} /> Duyệt revision
+              </button>
+              <button className="acp-btn-reject" onClick={() => setActionModal({ type: 'reject' })}>
+                <XCircle size={18} /> Từ chối revision
+              </button>
+            </>
+          )}
           {!selectedRevision && course.status === CourseStatus.PENDING && (
             <>
               <button className="acp-btn-approve" onClick={() => setActionModal({ type: 'approve' })}>
@@ -1928,13 +1953,23 @@ const AdminCoursePreviewPage: React.FC = () => {
       )}
 
       {/* Bottom Action Bar (sticky) */}
-      {!selectedRevision && (course.status === CourseStatus.PENDING || course.status === CourseStatus.PUBLIC || course.status === CourseStatus.SUSPENDED) && (
+      {(selectedRevision?.status === 'PENDING' || (!selectedRevision && (course.status === CourseStatus.PENDING || course.status === CourseStatus.PUBLIC || course.status === CourseStatus.SUSPENDED))) && (
         <div className="acp-bottom-bar">
           <button className="acp-btn-secondary" onClick={() => navigate(returnTo)}>
             <ArrowLeft size={18} /> Quay lại
           </button>
           <div className="acp-bottom-actions">
-            {course.status === CourseStatus.PENDING && (
+            {selectedRevision?.status === 'PENDING' && (
+              <>
+                <button className="acp-btn-reject" onClick={() => setActionModal({ type: 'reject' })}>
+                  <XCircle size={18} /> Từ chối revision
+                </button>
+                <button className="acp-btn-approve" onClick={() => setActionModal({ type: 'approve' })}>
+                  <CheckCircle size={18} /> Duyệt revision
+                </button>
+              </>
+            )}
+            {!selectedRevision && course.status === CourseStatus.PENDING && (
               <>
                 <button className="acp-btn-reject" onClick={() => setActionModal({ type: 'reject' })}>
                   <XCircle size={18} /> Từ chối
@@ -1944,12 +1979,12 @@ const AdminCoursePreviewPage: React.FC = () => {
                 </button>
               </>
             )}
-            {course.status === CourseStatus.PUBLIC && (
+            {!selectedRevision && course.status === CourseStatus.PUBLIC && (
               <button className="acp-btn-suspend" onClick={() => setActionModal({ type: 'suspend' })}>
                 <ShieldOff size={18} /> Tạm khóa
               </button>
             )}
-            {course.status === CourseStatus.SUSPENDED && (
+            {!selectedRevision && course.status === CourseStatus.SUSPENDED && (
               <button className="acp-btn-restore" onClick={() => setActionModal({ type: 'restore' })}>
                 <ShieldCheck size={18} /> Khôi phục
               </button>
@@ -1962,7 +1997,8 @@ const AdminCoursePreviewPage: React.FC = () => {
       {actionModal && course && (
         <ActionModal
           actionType={actionModal.type}
-          courseTitle={course.title}
+          courseTitle={selectedRevision ? `revision #${selectedRevision.revisionNumber} - ${course.title}` : course.title}
+          isRevision={Boolean(selectedRevision)}
           onConfirm={handleConfirmAction}
           onCancel={() => setActionModal(null)}
           loading={actionLoading}

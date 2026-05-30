@@ -12,6 +12,7 @@ import useRoadmapCourseEnrollments from '../../hooks/useRoadmapCourseEnrollments
 import useRoadmapMappedModules from '../../hooks/useRoadmapMappedModules';
 import { buildNodeLearningContext } from '../../components/roadmap/nodeLearningContext';
 import { buildCourseDetailPath } from '../../utils/courseRoute';
+import { buildStudyPlannerPath } from '../../utils/plannerNavigation';
 import {
   extractNodeStudyPlanSummaries,
   NodeStudyPlanSummary,
@@ -320,14 +321,14 @@ const RoadmapDetailPage = () => {
       // If node already has a study plan task, navigate to planner
       if (studyTaskNodeIds.has(node.id)) {
         const taskId = nodePlanSummaryMap[node.id]?.linkedTaskIds?.[0];
-        const params = new URLSearchParams({
+        const plannerPath = buildStudyPlannerPath({
           source: 'roadmap-node',
           roadmapSessionId: String(roadmap.sessionId),
           nodeId: node.id,
           view: 'calendar',
+          taskId,
         });
-        if (taskId) params.set('taskId', taskId);
-        navigate(`/study-planner?${params.toString()}`);
+        navigate(plannerPath);
         return;
       }
 
@@ -415,16 +416,14 @@ const RoadmapDetailPage = () => {
 
     if (studyTaskNodeIds.has(normalizedNodeId)) {
       const taskId = nodePlanSummaryMap[normalizedNodeId]?.linkedTaskIds?.[0];
-      const params = new URLSearchParams({
+      const plannerPath = buildStudyPlannerPath({
         source: 'roadmap-node',
         roadmapSessionId: String(roadmap.sessionId),
         nodeId: normalizedNodeId,
         view: 'calendar',
+        taskId,
       });
-      if (taskId) {
-        params.set('taskId', taskId);
-      }
-      navigate(`/study-planner?${params.toString()}`);
+      navigate(plannerPath);
       return;
     }
 
@@ -445,7 +444,7 @@ const RoadmapDetailPage = () => {
 
     setPlanModalNode(node);
     setIsPlanModalOpen(true);
-    setSelectedNodeId(null);
+    setSelectedNodeId(normalizedNodeId);
   }, [
     roadmap,
     eligibleNodeId,
@@ -507,18 +506,14 @@ const RoadmapDetailPage = () => {
       return;
     }
 
-    const params = new URLSearchParams({
+    const plannerPath = buildStudyPlannerPath({
       source: 'roadmap-node',
       roadmapSessionId: String(roadmap.sessionId),
       nodeId,
       view: 'calendar',
+      taskId,
     });
-
-    if (taskId) {
-      params.set('taskId', taskId);
-    }
-
-    navigate(`/study-planner?${params.toString()}`);
+    navigate(plannerPath);
   }, [navigate, roadmap]);
 
   const handleClosePlanModal = useCallback(() => {
@@ -605,6 +600,13 @@ const RoadmapDetailPage = () => {
         responseMeta.id;
       const normalizedTaskId =
         linkedTaskId !== undefined && linkedTaskId !== null ? String(linkedTaskId) : '';
+      const plannerPath = buildStudyPlannerPath({
+        source: 'roadmap-node',
+        roadmapSessionId: roadmap.sessionId,
+        nodeId: planModalNode.id,
+        view: 'calendar',
+        taskId: normalizedTaskId || undefined,
+      });
       const hasTaskPayload =
         taskCount > 0 ||
         Boolean((response as { task?: unknown }).task) ||
@@ -657,16 +659,7 @@ const RoadmapDetailPage = () => {
           text: 'Xem ngay',
           onClick: () => {
             hideToast();
-            const params = new URLSearchParams({
-              source: 'roadmap-node',
-              roadmapSessionId: String(roadmap.sessionId),
-              nodeId: planModalNode.id,
-              view: 'calendar',
-            });
-            if (normalizedTaskId) {
-              params.set('taskId', normalizedTaskId);
-            }
-            navigate(`/study-planner?${params.toString()}`);
+            navigate(plannerPath);
           }
         }
       });
@@ -674,6 +667,7 @@ const RoadmapDetailPage = () => {
       setIsPlanModalOpen(false);
       setPlanModalNode(null);
       setAiPrefilledParams(null);
+      navigate(plannerPath);
     } catch (submitError) {
       showError('Không thể tạo task', (submitError as Error).message);
     } finally {

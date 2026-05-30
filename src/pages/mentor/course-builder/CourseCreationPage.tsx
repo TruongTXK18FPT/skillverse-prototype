@@ -1219,6 +1219,9 @@ const CourseCreationPage = () => {
           }
 
           const contentSnapshotJson = JSON.stringify(normalizedSnapshotPayload);
+          const uploadedThumbnail = thumbnailFile
+            ? await uploadMedia(thumbnailFile, user?.id || 0)
+            : null;
           const updatedRevision = await updateCourseRevision(
             activeRevision.id,
             {
@@ -1235,10 +1238,11 @@ const CourseCreationPage = () => {
               requirements,
               courseSkills,
               contentSnapshotJson,
+              thumbnailMediaId: uploadedThumbnail?.id,
             },
-            thumbnailFile || undefined,
           );
           setActiveRevision(updatedRevision);
+          setThumbnailFile(null);
           if (!options?.silentSuccess) {
             showToast(
               "success",

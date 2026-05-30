@@ -13,7 +13,6 @@ export const uploadMedia = async (file: File, actorId: number): Promise<MediaDTO
   form.append('file', file);
   form.append('actorId', String(actorId));
   const res = await axiosInstance.post<MediaDTO>('/media/upload', form, {
-    headers: { 'Content-Type': 'multipart/form-data' },
     timeout: 360000 // 2 minutes timeout for large video uploads
   });
   return res.data;

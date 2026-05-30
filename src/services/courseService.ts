@@ -814,8 +814,7 @@ export const updateCourseRevision = async (
 
   const response = await axiosInstance.put<CourseRevisionDTO>(
     `/course-revisions/${revisionId}`,
-    formData,
-    { headers: { 'Content-Type': 'multipart/form-data' } }
+    formData
   );
   return response.data;
 };
