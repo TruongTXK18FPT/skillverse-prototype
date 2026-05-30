@@ -287,7 +287,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onComplete, onBack }) => {
           </h2>
           <p className="gsj-skill-hero__subtitle">
             Hệ thống sẽ tự động lấy kỹ năng từ taxonomy đang hoạt động và tạo bài
-            assessment 50 câu theo track bạn chọn.
+            assessment 40 câu theo track bạn chọn.
           </p>
         </div>
 

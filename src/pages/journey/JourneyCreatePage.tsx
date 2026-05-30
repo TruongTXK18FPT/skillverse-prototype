@@ -181,7 +181,7 @@ const JourneyCreatePage: React.FC = () => {
     level: "BEGINNER",
     language: "VI",
     duration: "STANDARD",
-    questionCount: 50,
+    questionCount: 40,
     skills: [],
     existingSkills: [],
   });
@@ -230,7 +230,7 @@ const JourneyCreatePage: React.FC = () => {
       jobPositionId: data.jobPositionId,
       jobPositionTrackId: data.jobPositionTrackId,
       roleKeywords: undefined,
-      questionCount: 50,
+      questionCount: 40,
       duration: "STANDARD",
       skills: data.skills,
       existingSkills: (prev.existingSkills || []).filter(
@@ -720,7 +720,7 @@ const JourneyCreatePage: React.FC = () => {
                 <span className="gsj-create-summary-item__label">
                   Thời lượng
                 </span>
-                <strong>50 phút / 50 câu</strong>
+                <strong>40 phút / 40 câu</strong>
               </div>
             </div>
           </section>
@@ -743,7 +743,7 @@ const JourneyCreatePage: React.FC = () => {
                 <div>
                   <strong>Thiết lập đề đầu vào</strong>
                   <p>
-                    Chọn mục tiêu và trình độ để hệ thống tạo đúng khung đề 50
+                    Chọn mục tiêu và trình độ để hệ thống tạo đúng khung đề 40
                     câu theo skill của job position.
                   </p>
                 </div>

@@ -3582,7 +3582,7 @@ const GSJJourneyPage: React.FC = () => {
 
         {/* Main Content */}
         <div
-          className={`gsj-content ${viewMode === "result" ? "gsj-content--result" : ""}`}
+          className={`gsj-content ${viewMode === "result" ? "gsj-content--result" : ""} ${viewMode === "test" ? "gsj-content--test" : ""}`}
         >
           {viewMode === "list" && renderJourneyList()}
           {viewMode === "detail" && renderDetailView()}
@@ -3590,7 +3590,7 @@ const GSJJourneyPage: React.FC = () => {
           {viewMode === "result" && renderResultView()}
 
           {/* Sidebar - Quick Actions */}
-          {viewMode !== "result" && (
+          {viewMode !== "result" && viewMode !== "test" && (
             <div className="gsj-sidebar">
               <div className="gsj-card">
                 <div className="gsj-card__header">
