@@ -3786,6 +3786,7 @@ const GSJJourneyPage: React.FC = () => {
           journeyId={selectedJourney.id}
           journeyTitle={selectedJourney.goal}
           learnerName={user?.fullName || "Học viên"}
+          learnerAvatar={user?.avatarMediaUrl || user?.avatarUrl}
         />
       )}
 

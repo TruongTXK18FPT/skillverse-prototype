@@ -11,6 +11,7 @@ interface GSJCompletionModalProps {
   journeyId: number;
   journeyTitle?: string;
   learnerName?: string;
+  learnerAvatar?: string;
 }
 
 const GSJCompletionModal: React.FC<GSJCompletionModalProps> = ({
@@ -19,6 +20,7 @@ const GSJCompletionModal: React.FC<GSJCompletionModalProps> = ({
   journeyId,
   journeyTitle,
   learnerName,
+  learnerAvatar,
 }) => {
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -123,6 +125,7 @@ const GSJCompletionModal: React.FC<GSJCompletionModalProps> = ({
                   journeyId={journeyId}
                   journeyTitle={journeyTitle}
                   learnerName={learnerName}
+                  learnerAvatar={learnerAvatar}
                   readonly={true}
                 />
               </div>
