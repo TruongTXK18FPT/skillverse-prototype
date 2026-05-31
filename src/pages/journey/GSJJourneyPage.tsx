@@ -61,6 +61,7 @@ import MeowlKuruLoader from "../../components/kuru-loader/MeowlKuruLoader";
 import NodeVerificationGate from "../../components/journey/NodeVerificationGate";
 import JourneyVerificationDossier from "../../components/journey/JourneyVerificationDossier";
 import JourneyOutputAssessmentPanel from "../../components/journey/JourneyOutputAssessmentPanel";
+import GSJCompletionModal from "../../components/journey/GSJCompletionModal";
 import Toast from "../../components/shared/Toast";
 import { decodeHtml } from "../../utils/htmlDecoder";
 import TicTacToeGame from "../../components/game/tic-tac-toe/TicTacToeGame";
@@ -243,6 +244,7 @@ const GSJJourneyPage: React.FC = () => {
   const [showActionGame, setShowActionGame] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [historySearch, setHistorySearch] = useState("");
+  const [isCompletedModalOpen, setIsCompletedModalOpen] = useState(false);
   const [historyStatusFilter, setHistoryStatusFilter] = useState<
     "all" | "completed" | "cancelled"
   >("all");
@@ -867,7 +869,7 @@ const GSJJourneyPage: React.FC = () => {
   // Get current step index from real journey artifacts (test/result/roadmap), not only status flag
   const getCurrentStepIndex = (journey: JourneyDetailResponse): number => {
     if (isCompletedJourneyStatus(journey.status)) {
-      return 4;
+      return 5;
     }
 
     const hasRoadmap = Boolean(journey.roadmapSessionId);
@@ -1557,7 +1559,8 @@ const GSJJourneyPage: React.FC = () => {
         "Lộ trình học tập",
         "Học & Thực hành",
         "Thành tựu",
-      ][getCurrentStepIndex(selectedJourney)]
+        "Đã hoàn thành",
+      ][Math.min(5, getCurrentStepIndex(selectedJourney))]
     : "";
 
   const overviewMetrics = [
@@ -1673,6 +1676,7 @@ const GSJJourneyPage: React.FC = () => {
 
   // Render steps
   const renderSteps = () => {
+    const isCompleted = selectedJourney && isCompletedJourneyStatus(selectedJourney.status);
     const steps = [
       {
         icon: FileText,
@@ -1694,7 +1698,11 @@ const GSJJourneyPage: React.FC = () => {
         title: "Học & Thực hành",
         description: "Theo kế hoạch cá nhân",
       },
-      { icon: Award, title: "Thành tựu", description: "Chinh phục mục tiêu" },
+      { 
+        icon: Award, 
+        title: isCompleted ? "Lộ trình hoàn thành! 🎉" : "Thành tựu", 
+        description: isCompleted ? "Chúc mừng bạn đã chinh phục mục tiêu xuất sắc!" : "Chinh phục mục tiêu" 
+      },
     ];
 
     const currentIndex = selectedJourney
@@ -2679,13 +2687,38 @@ const GSJJourneyPage: React.FC = () => {
             )}
 
             {(selectedJourney.status === JourneyStatus.COMPLETED_VERIFIED ||
-              selectedJourney.status ===
-                JourneyStatus.COMPLETED_UNVERIFIED) && (
+              selectedJourney.status === JourneyStatus.COMPLETED_UNVERIFIED ||
+              selectedJourney.status === JourneyStatus.COMPLETED) && (
               <div className="gsj-mb-16">
-                <JourneyVerificationDossier
-                  journeyId={selectedJourney.id}
-                  journeyTitle={selectedJourney.goal}
-                />
+                <div 
+                  className="gsj-completion-badge-card"
+                  onClick={() => setIsCompletedModalOpen(true)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setIsCompletedModalOpen(true);
+                    }
+                  }}
+                  aria-label="Xem báo cáo tốt nghiệp và chứng nhận"
+                >
+                  <div className="gsj-cbc-glow" />
+                  <div className="gsj-cbc-content">
+                    <div className="gsj-cbc-icon-wrap">
+                      <Award size={32} className="gsj-cbc-icon-glow" />
+                    </div>
+                    <div className="gsj-cbc-text">
+                      <h4 className="gsj-cbc-title">Hành trình đã hoàn thành xuất sắc! 🏆</h4>
+                      <p className="gsj-cbc-desc">
+                        Hồ sơ xác thực & báo cáo chi tiết (Journey Verification Dossier) đã sẵn sàng.
+                      </p>
+                      <span className="gsj-cbc-action-link">
+                        Nhấp để xem báo cáo tốt nghiệp & chứng nhận ⚡
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -3744,6 +3777,16 @@ const GSJJourneyPage: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {selectedJourney && (
+        <GSJCompletionModal
+          isOpen={isCompletedModalOpen}
+          onClose={() => setIsCompletedModalOpen(false)}
+          journeyId={selectedJourney.id}
+          journeyTitle={selectedJourney.goal}
+          learnerName={user?.fullName || "Học viên"}
+        />
       )}
 
       {/* Meowl Guide */}

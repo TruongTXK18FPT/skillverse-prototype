@@ -9586,5 +9586,144 @@
   color: var(--gsj-text-secondary);
 }
 
+/* ==================== GSJ Completion Badge Card ==================== */
+.gsj-completion-badge-card {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 28px;
+  border-radius: var(--gsj-radius-xl, 16px);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.04) 0%,
+    rgba(139, 92, 246, 0.08) 50%,
+    rgba(7, 13, 25, 0.8) 100%
+  );
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gsj-completion-badge-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 215, 0, 0.5);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.5),
+    0 0 25px rgba(255, 215, 0, 0.15),
+    inset 0 1px 2px rgba(255, 255, 255, 0.05);
+}
+
+.gsj-completion-badge-card:active {
+  transform: translateY(0);
+}
+
+/* Floating neon ambient glow */
+.gsj-cbc-glow {
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle, 
+    rgba(255, 215, 0, 0.28) 0%, 
+    rgba(139, 92, 246, 0.15) 70%, 
+    transparent 100%
+  );
+  filter: blur(40px);
+  opacity: 0.7;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.gsj-completion-badge-card:hover .gsj-cbc-glow {
+  opacity: 1;
+}
+
+.gsj-cbc-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 580px) {
+  .gsj-cbc-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+}
+
+/* Glowing gold icon container */
+.gsj-cbc-icon-wrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(139, 92, 246, 0.25) 100%);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.gsj-completion-badge-card:hover .gsj-cbc-icon-wrap {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(139, 92, 246, 0.35) 100%);
+  border-color: rgba(255, 215, 0, 0.6);
+  box-shadow: 0 0 22px rgba(255, 215, 0, 0.25);
+  transform: rotate(6deg) scale(1.05);
+}
+
+.gsj-cbc-icon-glow {
+  color: #ffd700;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
+}
+
+.gsj-cbc-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gsj-cbc-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(90deg, #ffd700 0%, #ffffff 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gsj-cbc-desc {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+.gsj-cbc-action-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: #00f5ff;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-shadow: 0 0 8px rgba(0, 245, 255, 0.3);
+  transition: transform 0.25s ease;
+}
+
+.gsj-completion-badge-card:hover .gsj-cbc-action-link {
+  transform: translateX(4px);
+}
+
 
 
