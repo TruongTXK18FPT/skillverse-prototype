@@ -16,6 +16,8 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
+  ChevronDown,
   FileText,
   Sparkles,
   Check,
@@ -74,6 +76,7 @@ const DIFFICULTIES = [
 ] as const;
 
 const SOURCE_OPTIONS = ["MANUAL", "IMPORT", "AI_GENERATED"] as const;
+const CATEGORIES = ["KNOWLEDGE", "SKILL", "SITUATION", "ANALYSIS"] as const;
 
 const DEFAULT_DISTRIBUTION: Record<string, number> = {
   BEGINNER: 0.2,
@@ -95,7 +98,18 @@ const SOURCE_LABELS: Record<string, string> = {
   AI_GENERATED: "AI tạo nháp",
 };
 
+const CATEGORY_LABELS: Record<string, string> = {
+  KNOWLEDGE: "Kiến thức",
+  SKILL: "Thực hành",
+  SITUATION: "Tình huống",
+  ANALYSIS: "Phân tích",
+};
+
 const PAGE_SIZE = 20;
+
+interface LocalQuestionItem extends CreateQuestion {
+  id: string;
+}
 
 // ============================================================
 // Helpers
@@ -178,6 +192,17 @@ const localizeImportError = (error: string): string => {
   return normalized;
 };
 
+const createEmptyComposerQuestion = (): LocalQuestionItem => ({
+  id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+  questionText: "",
+  options: ["", "", "", ""],
+  correctAnswer: "A",
+  explanation: "",
+  difficulty: "INTERMEDIATE",
+  skillArea: "",
+  category: "KNOWLEDGE",
+});
+
 // ============================================================
 // Component
 // ============================================================
@@ -240,6 +265,10 @@ const QuestionBankTab: React.FC = () => {
   const [createBankMode, setCreateBankMode] =
     useState<CreateBankMode>("MANUAL");
   const [adminSkillInput, setAdminSkillInput] = useState("");
+  const [composerQuestions, setComposerQuestions] = useState<
+    LocalQuestionItem[]
+  >([createEmptyComposerQuestion()]);
+  const [composerImportedFileName, setComposerImportedFileName] = useState("");
 
   // ============================================================
   // Form State
@@ -287,6 +316,7 @@ const QuestionBankTab: React.FC = () => {
     null,
   );
   const importFileInputRef = useRef<HTMLInputElement>(null);
+  const composerListRef = useRef<HTMLDivElement>(null);
 
   // AI Generate state
   const [aiQuestionCount, setAiQuestionCount] = useState(10);
@@ -467,8 +497,11 @@ const QuestionBankTab: React.FC = () => {
   );
 
   const validImportCount = useMemo(
-    () => validImportQuestions.length,
-    [validImportQuestions],
+    () =>
+      activeModal === "import" && importPreview
+        ? composerQuestions.length
+        : validImportQuestions.length,
+    [activeModal, composerQuestions.length, importPreview, validImportQuestions],
   );
 
   const invalidImportCount = useMemo(
@@ -626,16 +659,22 @@ const QuestionBankTab: React.FC = () => {
     setAiDistribution({ ...DEFAULT_DISTRIBUTION });
     setAiFocusSkills("");
     setAdminSkillInput("");
+    setComposerQuestions([createEmptyComposerQuestion()]);
+    setComposerImportedFileName("");
   };
 
   const openAddQuestionWorkspace = (prefilledSkill?: string) => {
     setSelectedQuestion(null);
     fillQuestionForm(null);
-    if (prefilledSkill) {
-      setQuestionForm((p) => ({ ...p, skillArea: prefilledSkill }));
-    } else if (selectedSkillContext) {
-      setQuestionForm((p) => ({ ...p, skillArea: selectedSkillContext }));
-    }
+    const initialSkill =
+      prefilledSkill || selectedSkillContext || selectedBank?.skillName || "";
+    setQuestionForm((p) => ({ ...p, skillArea: initialSkill }));
+    setComposerQuestions([
+      {
+        ...createEmptyComposerQuestion(),
+        skillArea: initialSkill,
+      },
+    ]);
     setActiveModal("addQuestion");
   };
 
@@ -669,6 +708,8 @@ const QuestionBankTab: React.FC = () => {
     setImportStep(1);
     setImportFile(null);
     setImportPreview(null);
+    setComposerQuestions([]);
+    setComposerImportedFileName("");
     setActiveModal("import");
   };
 
@@ -687,7 +728,149 @@ const QuestionBankTab: React.FC = () => {
     resetBankForm();
     setCreateBankStep("skillResolve");
     setCreateBankMode(mode);
+    setComposerQuestions([createEmptyComposerQuestion()]);
+    setComposerImportedFileName("");
     setActiveModal("createBank");
+  };
+
+  const addComposerQuestion = () => {
+    setComposerQuestions((prev) => [
+      ...prev,
+      {
+        ...createEmptyComposerQuestion(),
+        skillArea:
+          selectedFormSkill?.name ||
+          selectedSkillContext ||
+          selectedBank?.skillName ||
+          "",
+      },
+    ]);
+  };
+
+  const scrollComposerToTop = () => {
+    composerListRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const scrollComposerToBottom = () => {
+    const node = composerListRef.current;
+    if (!node) return;
+    node.scrollTo({ top: node.scrollHeight, behavior: "smooth" });
+  };
+
+  const removeComposerQuestion = (id: string) => {
+    setComposerQuestions((prev) =>
+      prev.length === 1 ? prev : prev.filter((question) => question.id !== id),
+    );
+  };
+
+  const updateComposerQuestion = (
+    id: string,
+    patch: Partial<LocalQuestionItem>,
+  ) => {
+    setComposerQuestions((prev) =>
+      prev.map((question) =>
+        question.id === id ? { ...question, ...patch } : question,
+      ),
+    );
+  };
+
+  const updateComposerOption = (
+    id: string,
+    optionIndex: number,
+    value: string,
+  ) => {
+    setComposerQuestions((prev) =>
+      prev.map((question) => {
+        if (question.id !== id) return question;
+        const nextOptions = [...question.options];
+        nextOptions[optionIndex] = value;
+        return { ...question, options: nextOptions };
+      }),
+    );
+  };
+
+  const validateComposerQuestions = (force = false): boolean => {
+    if (!force && !["MANUAL", "IMPORT"].includes(createBankMode)) return true;
+
+    if (composerQuestions.length === 0) {
+      showWarning("Thiếu câu hỏi", "Cần ít nhất 1 câu hỏi trong bộ quiz.");
+      return false;
+    }
+
+    for (const question of composerQuestions) {
+      if (!question.questionText.trim()) {
+        showWarning("Thiếu câu hỏi", "Mọi câu hỏi đều phải có nội dung.");
+        return false;
+      }
+      if (question.options.length !== 4 || question.options.some((option) => !option.trim())) {
+        showWarning("Thiếu đáp án", "Mỗi câu hỏi cần đủ 4 đáp án.");
+        return false;
+      }
+      if (!["A", "B", "C", "D"].includes(question.correctAnswer)) {
+        showWarning("Thiếu đáp án đúng", "Hãy chọn đáp án đúng A, B, C hoặc D.");
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleComposerImportJson = async (file: File) => {
+    try {
+      const rawText = await file.text();
+      const payload = JSON.parse(rawText);
+
+      if (!Array.isArray(payload)) {
+        showWarning("Sai định dạng", "File JSON phải là một mảng câu hỏi.");
+        return;
+      }
+
+      const importedQuestions: LocalQuestionItem[] = payload.map(
+        (item, index) => {
+          if (
+            !item ||
+            typeof item !== "object" ||
+            !Array.isArray(item.options) ||
+            item.options.length !== 4
+          ) {
+            throw new Error(`Mục số ${index + 1} không đúng cấu trúc câu hỏi.`);
+          }
+
+          return {
+            id: `${Date.now()}-${index}-${Math.random().toString(36).slice(2, 8)}`,
+            questionText: String(item.questionText || ""),
+            options: item.options.map((option: unknown) =>
+              String(option || ""),
+            ),
+            correctAnswer: String(item.correctAnswer || "A")
+              .toUpperCase()
+              .slice(0, 1),
+            explanation: String(item.explanation || ""),
+            difficulty: String(item.difficulty || "INTERMEDIATE").toUpperCase(),
+            skillArea: String(
+              item.skillArea || selectedFormSkill?.name || "",
+            ),
+            category: String(item.category || "KNOWLEDGE").toUpperCase(),
+          };
+        },
+      );
+
+      setComposerQuestions(
+        importedQuestions.length > 0
+          ? importedQuestions
+          : [createEmptyComposerQuestion()],
+      );
+      setComposerImportedFileName(file.name);
+      setCreateBankMode("IMPORT");
+      showSuccess(
+        "Đã nạp file",
+        `Đã đọc ${importedQuestions.length} câu hỏi từ ${file.name}.`,
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Không thể đọc file JSON.";
+      showError("Không thể nhập file", message);
+    }
   };
 
   // Bank CRUD
@@ -710,6 +893,9 @@ const QuestionBankTab: React.FC = () => {
         showWarning("Cảnh báo", "Tổng phân bổ độ khó phải bằng 100%");
         return;
       }
+      if (!validateComposerQuestions()) {
+        return;
+      }
       const data: CreateQuestionBank = {
         domainId: bankForm.domainId,
         jobPositionId: bankForm.jobPositionId,
@@ -722,13 +908,46 @@ const QuestionBankTab: React.FC = () => {
       };
       const createdBank = await createQuestionBank(data);
       const nextMode = createBankMode;
-      showSuccess("Thành công", "Đã tạo ngân hàng câu hỏi");
-      closeModal();
 
-      if (nextMode === "MANUAL") {
+      if (nextMode === "MANUAL" || nextMode === "IMPORT") {
+        const questionsToSave: CreateQuestion[] = composerQuestions.map(
+          ({ id, ...question }) => ({
+            ...question,
+            questionText: question.questionText.trim(),
+            options: question.options.map((option) => option.trim()),
+            explanation: question.explanation?.trim() || undefined,
+            skillArea:
+              question.skillArea?.trim() ||
+              selectedFormSkill?.name ||
+              undefined,
+            category: question.category?.trim() || undefined,
+          }),
+        );
+
+        const result = await bulkAddQuestions(
+          createdBank.id,
+          questionsToSave,
+          nextMode === "IMPORT" ? "IMPORT" : "MANUAL",
+        );
+        const detail = await getQuestionBank(createdBank.id);
+        setSelectedBank(detail);
+        setView("detail");
+        setQuestions([]);
+        setQuestionPage(0);
+        setQuestionDifficultyFilter("");
+        setSearchTerm("");
+        closeModal();
+        showSuccess(
+          "Thành công",
+          `Đã tạo ngân hàng và lưu ${result.savedCount} câu hỏi`,
+        );
         loadBanks(0);
+        loadQuestions(createdBank.id, 0);
         return;
       }
+
+      showSuccess("Thành công", "Đã tạo ngân hàng câu hỏi");
+      closeModal();
 
       setSelectedBank(createdBank);
       setView("detail");
@@ -817,27 +1036,27 @@ const QuestionBankTab: React.FC = () => {
   // Question CRUD
   const handleAddQuestion = async () => {
     if (!selectedBank) return;
-    if (
-      !questionForm.questionText ||
-      !questionForm.correctAnswer ||
-      questionForm.options.filter((o) => o.trim()).length < 2
-    ) {
-      showWarning("Cảnh báo", "Vui lòng nhập đầy đủ thông tin câu hỏi");
+    if (!validateComposerQuestions(true)) {
       return;
     }
     try {
       setFormLoading(true);
-      const data: CreateQuestion = {
-        questionText: questionForm.questionText,
-        options: questionForm.options.filter((o) => o.trim()),
-        correctAnswer: questionForm.correctAnswer,
-        explanation: questionForm.explanation || undefined,
-        difficulty: questionForm.difficulty,
-        skillArea: questionForm.skillArea || undefined,
-        category: questionForm.category || undefined,
-      };
-      await addQuestion(selectedBank.id, data);
-      showSuccess("Thành công", "Đã thêm câu hỏi");
+      const data: CreateQuestion[] = composerQuestions.map(
+        ({ id, ...question }) => ({
+          ...question,
+          questionText: question.questionText.trim(),
+          options: question.options.map((option) => option.trim()),
+          explanation: question.explanation?.trim() || undefined,
+          skillArea:
+            question.skillArea?.trim() ||
+            selectedSkillContext ||
+            selectedBank.skillName ||
+            undefined,
+          category: question.category?.trim() || undefined,
+        }),
+      );
+      const result = await bulkAddQuestions(selectedBank.id, data, "MANUAL");
+      showSuccess("Thành công", `Đã thêm ${result.savedCount} câu hỏi`);
       closeModal();
       fillQuestionForm(null);
       loadQuestions(selectedBank.id, questionPage);
@@ -906,6 +1125,28 @@ const QuestionBankTab: React.FC = () => {
       setFormLoading(true);
       const preview = await previewImport(selectedBank.id, file);
       setImportPreview(preview);
+      setComposerQuestions(
+        preview.questions
+          .filter((q) => q.valid)
+          .map((q, index) => ({
+            id: `${Date.now()}-import-${index}-${Math.random().toString(36).slice(2, 8)}`,
+            questionText: q.questionText || "",
+            options: Array.from(
+              { length: 4 },
+              (_, optionIndex) => q.options?.[optionIndex] || "",
+            ),
+            correctAnswer: q.correctAnswer || "A",
+            explanation: q.explanation || "",
+            difficulty: q.difficulty || "INTERMEDIATE",
+            skillArea:
+              selectedSkillContext ||
+              q.skillArea ||
+              selectedBank.skillName ||
+              "",
+            category: q.category || "KNOWLEDGE",
+          })),
+      );
+      setComposerImportedFileName(file.name);
       setImportStep(2);
     } catch {
       showError("Lỗi", "Không thể đọc file");
@@ -916,20 +1157,27 @@ const QuestionBankTab: React.FC = () => {
 
   const handleConfirmImport = async () => {
     if (!selectedBank || !importPreview) return;
-    const validQuestions = importPreview.questions
-      .filter((q) => q.valid)
-      .map(
-        (q) =>
-          ({
-            questionText: q.questionText || "",
-            options: q.options || [],
-            correctAnswer: q.correctAnswer || "",
-            explanation: q.explanation,
-            difficulty: q.difficulty || "INTERMEDIATE",
-            skillArea: selectedSkillContext || q.skillArea,
-            category: q.category,
-          }) as CreateQuestion,
-      );
+    if (!validateComposerQuestions(true)) {
+      return;
+    }
+
+    const validQuestions = composerQuestions.map(
+      ({ id, ...question }) =>
+        ({
+          ...question,
+          questionText: question.questionText.trim(),
+          options: question.options.map((option) => option.trim()),
+          correctAnswer: question.correctAnswer,
+          explanation: question.explanation?.trim() || undefined,
+          difficulty: question.difficulty || "INTERMEDIATE",
+          skillArea:
+            selectedSkillContext ||
+            question.skillArea?.trim() ||
+            selectedBank.skillName ||
+            undefined,
+          category: question.category?.trim() || undefined,
+        }) as CreateQuestion,
+    );
 
     if (validQuestions.length === 0) {
       showWarning("Cảnh báo", "Không có câu hỏi hợp lệ để import");
@@ -1956,7 +2204,28 @@ const QuestionBankTab: React.FC = () => {
                           <select
                             className="qb-input"
                             value={bankForm.skillId}
-                            onChange={(e) => setBankForm((p) => ({ ...p, skillId: e.target.value ? Number(e.target.value) : "" }))}
+                            onChange={(e) => {
+                              const skillId = e.target.value ? Number(e.target.value) : "";
+                              const skill = activeSkills.find((item) => item.id === skillId);
+                              setBankForm((p) => ({
+                                ...p,
+                                skillId,
+                                title: skill
+                                  ? `Bộ quiz ${skill.name} — ${selectedFormJobPosition?.name || "Skill"}`
+                                  : p.title,
+                                description: skill
+                                  ? `Bộ câu hỏi đánh giá skill ${skill.name} thuộc vị trí ${selectedFormJobPosition?.name || ""}.`
+                                  : p.description,
+                              }));
+                              if (skill) {
+                                setComposerQuestions((prev) =>
+                                  prev.map((question) => ({
+                                    ...question,
+                                    skillArea: question.skillArea || skill.name,
+                                  })),
+                                );
+                              }
+                            }}
                           >
                             <option value="">Role-level bank (tất cả skills)</option>
                             {activeSkills.map((skill) => (
@@ -1983,7 +2252,7 @@ const QuestionBankTab: React.FC = () => {
                             }
                           />
                         </div>
-                        <div className="qb-form-group">
+                        <div className="qb-form-group full-width">
                           <label>Khởi tạo nhanh</label>
                           <div className="qb-create-mode-grid">
                             <button
@@ -1992,8 +2261,8 @@ const QuestionBankTab: React.FC = () => {
                               onClick={() => setCreateBankMode("MANUAL")}
                             >
                               <ListChecks size={18} />
-                              <strong>Tạo ngân hàng trống</strong>
-                              <span>Thêm câu hỏi thủ công sau khi tạo.</span>
+                              <strong>Nhập tay bộ quiz</strong>
+                              <span>Soạn và kiểm tra từng câu hỏi ngay bên dưới.</span>
                             </button>
                             <button
                               type="button"
@@ -2001,10 +2270,9 @@ const QuestionBankTab: React.FC = () => {
                               onClick={() => setCreateBankMode("IMPORT")}
                             >
                               <Upload size={18} />
-                              <strong>Tạo rồi nhập file</strong>
+                              <strong>Import JSON bộ quiz</strong>
                               <span>
-                                Đi tiếp sang khu vực nhập file CSV hoặc JSON
-                                ngay sau khi tạo.
+                                Nạp file rồi xem/sửa từng câu trước khi lưu.
                               </span>
                             </button>
                             <button
@@ -2093,10 +2361,237 @@ const QuestionBankTab: React.FC = () => {
                                 >
                                   Phải bằng 100%
                                 </span>
-                              )}
+                            )}
                           </div>
                         </div>
                       </div>
+
+                      {(createBankMode === "MANUAL" || createBankMode === "IMPORT") && (
+                        <div className="qb-composer-shell">
+                          <div className="qb-composer-header">
+                            <div>
+                              <h3>
+                                <ListChecks size={18} />
+                                Bộ câu hỏi sẽ lưu vào ngân hàng này
+                              </h3>
+                              <p>
+                                Manual và import đều dùng cùng một danh sách câu hỏi.
+                                Admin có thể kiểm tra đầy đủ nội dung, 4 đáp án,
+                                đáp án đúng, độ khó, skill và nhóm câu hỏi trước khi lưu.
+                              </p>
+                            </div>
+                            <div className="qb-composer-actions">
+                              {createBankMode === "IMPORT" && (
+                                <>
+                                  <button
+                                    type="button"
+                                    className="qb-btn secondary small"
+                                    onClick={() => importFileInputRef.current?.click()}
+                                  >
+                                    <Upload size={16} /> Nạp JSON
+                                  </button>
+                                  <input
+                                    ref={importFileInputRef}
+                                    type="file"
+                                    accept=".json"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file) handleComposerImportJson(file);
+                                    }}
+                                  />
+                                </>
+                              )}
+                              <button
+                                type="button"
+                                className="qb-btn secondary small"
+                                onClick={scrollComposerToTop}
+                              >
+                                <ChevronUp size={16} /> Đầu
+                              </button>
+                              <button
+                                type="button"
+                                className="qb-btn secondary small"
+                                onClick={scrollComposerToBottom}
+                              >
+                                Cuối <ChevronDown size={16} />
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="qb-composer-summary">
+                            <span>
+                              <strong>{composerQuestions.length}</strong> câu hỏi
+                            </span>
+                            <span>
+                              Nguồn: {createBankMode === "IMPORT" ? "Import JSON" : "Nhập tay"}
+                            </span>
+                            {composerImportedFileName && (
+                              <span>File: {composerImportedFileName}</span>
+                            )}
+                            {selectedFormSkill && (
+                              <span>Skill chính: {selectedFormSkill.name}</span>
+                            )}
+                          </div>
+
+                          <div className="qb-composer-list" ref={composerListRef}>
+                            {composerQuestions.map((question, questionIndex) => (
+                              <article key={question.id} className="qb-composer-question-card">
+                                <div className="qb-composer-question-header">
+                                  <div>
+                                    <span>Câu {questionIndex + 1}</span>
+                                    {!question.questionText.trim() && (
+                                      <strong>Chưa hoàn thiện</strong>
+                                    )}
+                                  </div>
+                                  <button
+                                    type="button"
+                                    className="qb-icon-btn danger"
+                                    onClick={() => removeComposerQuestion(question.id)}
+                                    disabled={composerQuestions.length === 1}
+                                    title="Xóa câu hỏi"
+                                  >
+                                    <Trash2 size={16} />
+                                  </button>
+                                </div>
+
+                                <div className="qb-form-grid">
+                                  <div className="qb-form-group full-width">
+                                    <label>Nội dung câu hỏi</label>
+                                    <textarea
+                                      className="qb-textarea"
+                                      rows={3}
+                                      value={question.questionText}
+                                      onChange={(event) =>
+                                        updateComposerQuestion(question.id, {
+                                          questionText: event.target.value,
+                                        })
+                                      }
+                                      placeholder="Nhập nội dung câu hỏi..."
+                                    />
+                                  </div>
+
+                                  <div className="qb-form-group full-width">
+                                    <label>4 đáp án</label>
+                                    <div className="qb-options-grid">
+                                      {question.options.map((option, optionIndex) => {
+                                        const letter = String.fromCharCode(65 + optionIndex);
+                                        return (
+                                          <div
+                                            key={`${question.id}-${letter}`}
+                                            className="qb-option-item"
+                                          >
+                                            <button
+                                              type="button"
+                                              className={`qb-option-letter ${question.correctAnswer === letter ? "selected" : ""}`}
+                                              onClick={() =>
+                                                updateComposerQuestion(question.id, {
+                                                  correctAnswer: letter,
+                                                })
+                                              }
+                                              title="Chọn làm đáp án đúng"
+                                            >
+                                              {letter}
+                                            </button>
+                                            <input
+                                              className="qb-input"
+                                              value={option}
+                                              onChange={(event) =>
+                                                updateComposerOption(
+                                                  question.id,
+                                                  optionIndex,
+                                                  event.target.value,
+                                                )
+                                              }
+                                              placeholder={`Đáp án ${letter}`}
+                                            />
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+
+                                  <div className="qb-form-group">
+                                    <label>Độ khó</label>
+                                    <select
+                                      className="qb-select"
+                                      value={question.difficulty}
+                                      onChange={(event) =>
+                                        updateComposerQuestion(question.id, {
+                                          difficulty: event.target.value,
+                                        })
+                                      }
+                                    >
+                                      {DIFFICULTIES.map((difficulty) => (
+                                        <option key={difficulty} value={difficulty}>
+                                          {getDifficultyLabel(difficulty)}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+
+                                  <div className="qb-form-group">
+                                    <label>Phạm vi kỹ năng</label>
+                                    <input
+                                      className="qb-input"
+                                      value={question.skillArea || ""}
+                                      onChange={(event) =>
+                                        updateComposerQuestion(question.id, {
+                                          skillArea: event.target.value,
+                                        })
+                                      }
+                                      placeholder={selectedFormSkill?.name || "VD: React Hooks"}
+                                    />
+                                  </div>
+
+                                  <div className="qb-form-group">
+                                    <label>Nhóm câu hỏi</label>
+                                    <select
+                                      className="qb-select"
+                                      value={question.category || "KNOWLEDGE"}
+                                      onChange={(event) =>
+                                        updateComposerQuestion(question.id, {
+                                          category: event.target.value,
+                                        })
+                                      }
+                                    >
+                                      {CATEGORIES.map((category) => (
+                                        <option key={category} value={category}>
+                                          {CATEGORY_LABELS[category]}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+
+                                  <div className="qb-form-group full-width">
+                                    <label>Giải thích</label>
+                                    <textarea
+                                      className="qb-textarea"
+                                      rows={2}
+                                      value={question.explanation || ""}
+                                      onChange={(event) =>
+                                        updateComposerQuestion(question.id, {
+                                          explanation: event.target.value,
+                                        })
+                                      }
+                                      placeholder="Giải thích ngắn vì sao đáp án đúng..."
+                                    />
+                                  </div>
+                                </div>
+                              </article>
+                            ))}
+                            <div className="qb-composer-list-footer">
+                              <button
+                                type="button"
+                                className="qb-btn primary"
+                                onClick={addComposerQuestion}
+                              >
+                                <Plus size={18} /> Thêm câu hỏi mới
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -2328,6 +2823,197 @@ const QuestionBankTab: React.FC = () => {
                     </button>
                   </div>
                   <div className="qb-modal-body">
+                    {activeModal === "addQuestion" ? (
+                      <div className="qb-composer-shell qb-composer-shell--flush">
+                        <div className="qb-composer-header">
+                          <div>
+                            <h3>
+                              <ListChecks size={18} />
+                              Danh sách câu hỏi
+                            </h3>
+                            <p>
+                              Thêm nhiều câu hỏi vào bank hiện tại. Mỗi câu đều
+                              có thể sửa đầy đủ nội dung, đáp án, độ khó, skill
+                              và giải thích trước khi lưu.
+                            </p>
+                          </div>
+                          <div className="qb-composer-actions">
+                            <button
+                              type="button"
+                              className="qb-btn secondary small"
+                              onClick={scrollComposerToTop}
+                            >
+                              <ChevronUp size={16} /> Đầu
+                            </button>
+                            <button
+                              type="button"
+                              className="qb-btn secondary small"
+                              onClick={scrollComposerToBottom}
+                            >
+                              Cuối <ChevronDown size={16} />
+                            </button>
+                          </div>
+                        </div>
+                        <div className="qb-composer-summary">
+                          <span>
+                            <strong>{composerQuestions.length}</strong> câu hỏi
+                          </span>
+                          <span>Nguồn: Nhập tay</span>
+                          {(selectedSkillContext || selectedBank?.skillName) && (
+                            <span>
+                              Skill: {selectedSkillContext || selectedBank?.skillName}
+                            </span>
+                          )}
+                        </div>
+                        <div className="qb-composer-list" ref={composerListRef}>
+                          {composerQuestions.map((question, questionIndex) => (
+                            <article key={question.id} className="qb-composer-question-card">
+                              <div className="qb-composer-question-header">
+                                <div>
+                                  <span>Câu {questionIndex + 1}</span>
+                                  {!question.questionText.trim() && (
+                                    <strong>Chưa hoàn thiện</strong>
+                                  )}
+                                </div>
+                                <button
+                                  type="button"
+                                  className="qb-icon-btn danger"
+                                  onClick={() => removeComposerQuestion(question.id)}
+                                  disabled={composerQuestions.length === 1}
+                                  title="Xóa câu hỏi"
+                                >
+                                  <Trash2 size={16} />
+                                </button>
+                              </div>
+                              <div className="qb-form-grid">
+                                <div className="qb-form-group full-width">
+                                  <label>Nội dung câu hỏi</label>
+                                  <textarea
+                                    className="qb-textarea"
+                                    rows={3}
+                                    value={question.questionText}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        questionText: event.target.value,
+                                      })
+                                    }
+                                    placeholder="Nhập nội dung câu hỏi..."
+                                  />
+                                </div>
+                                <div className="qb-form-group full-width">
+                                  <label>4 đáp án</label>
+                                  <div className="qb-options-grid">
+                                    {question.options.map((option, optionIndex) => {
+                                      const letter = String.fromCharCode(65 + optionIndex);
+                                      return (
+                                        <div key={`${question.id}-${letter}`} className="qb-option-item">
+                                          <button
+                                            type="button"
+                                            className={`qb-option-letter ${question.correctAnswer === letter ? "selected" : ""}`}
+                                            onClick={() =>
+                                              updateComposerQuestion(question.id, {
+                                                correctAnswer: letter,
+                                              })
+                                            }
+                                            title="Chọn làm đáp án đúng"
+                                          >
+                                            {letter}
+                                          </button>
+                                          <input
+                                            className="qb-input"
+                                            value={option}
+                                            onChange={(event) =>
+                                              updateComposerOption(
+                                                question.id,
+                                                optionIndex,
+                                                event.target.value,
+                                              )
+                                            }
+                                            placeholder={`Đáp án ${letter}`}
+                                          />
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                                <div className="qb-form-group">
+                                  <label>Độ khó</label>
+                                  <select
+                                    className="qb-select"
+                                    value={question.difficulty}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        difficulty: event.target.value,
+                                      })
+                                    }
+                                  >
+                                    {DIFFICULTIES.map((difficulty) => (
+                                      <option key={difficulty} value={difficulty}>
+                                        {getDifficultyLabel(difficulty)}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div className="qb-form-group">
+                                  <label>Kỹ năng</label>
+                                  <input
+                                    className="qb-input"
+                                    value={question.skillArea || ""}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        skillArea: event.target.value,
+                                      })
+                                    }
+                                    placeholder={selectedSkillContext || selectedBank?.skillName || "VD: React Hooks"}
+                                  />
+                                </div>
+                                <div className="qb-form-group">
+                                  <label>Nhóm câu hỏi</label>
+                                  <select
+                                    className="qb-select"
+                                    value={question.category || "KNOWLEDGE"}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        category: event.target.value,
+                                      })
+                                    }
+                                  >
+                                    {CATEGORIES.map((category) => (
+                                      <option key={category} value={category}>
+                                        {CATEGORY_LABELS[category]}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div className="qb-form-group full-width">
+                                  <label>Giải thích</label>
+                                  <textarea
+                                    className="qb-textarea"
+                                    rows={2}
+                                    value={question.explanation || ""}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        explanation: event.target.value,
+                                      })
+                                    }
+                                    placeholder="Giải thích ngắn vì sao đáp án đúng..."
+                                  />
+                                </div>
+                              </div>
+                            </article>
+                          ))}
+                          <div className="qb-composer-list-footer">
+                            <button
+                              type="button"
+                              className="qb-btn primary"
+                              onClick={addComposerQuestion}
+                            >
+                              <Plus size={18} /> Thêm câu hỏi mới
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
                     <div className="qb-form-grid">
                       <div className="qb-form-group full-width">
                         <label>
@@ -2502,6 +3188,7 @@ const QuestionBankTab: React.FC = () => {
                         />
                       </div>
                     </div>
+                    )}
                   </div>
                   <div className="qb-modal-footer">
                     <button className="qb-btn secondary" onClick={closeModal}>
@@ -2519,7 +3206,7 @@ const QuestionBankTab: React.FC = () => {
                       {formLoading
                         ? "Đang xử lý..."
                         : activeModal === "addQuestion"
-                          ? "Thêm"
+                          ? `Thêm ${composerQuestions.length} câu hỏi`
                           : "Lưu"}
                     </button>
                   </div>
@@ -2681,67 +3368,211 @@ const QuestionBankTab: React.FC = () => {
                           <span className="label">Không hợp lệ</span>
                         </div>
                       </div>
-                      <div
-                        className="qb-preview-table-wrapper"
-                        style={{ marginTop: "1rem" }}
-                      >
-                        <table className="qb-preview-table">
-                          <thead>
-                            <tr>
-                              <th style={{ width: "40px" }}>Trạng thái</th>
-                              <th>#</th>
-                              <th>Câu hỏi</th>
-                              <th>Đáp án</th>
-                              <th>Độ khó</th>
-                              <th>Lỗi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {importPreview.questions.map((q, idx) => (
-                              <tr
-                                key={idx}
-                                className={!q.valid ? "invalid" : ""}
-                              >
-                                <td>
-                                  <div className="qb-preview-status">
-                                    {q.valid ? (
-                                      <CheckCircle2
-                                        size={16}
-                                        className="valid-icon"
-                                      />
-                                    ) : (
-                                      <AlertTriangle
-                                        size={16}
-                                        className="invalid-icon"
-                                      />
-                                    )}
-                                  </div>
-                                </td>
-                                <td>{idx + 1}</td>
-                                <td title={q.questionText}>
-                                  {q.questionText?.substring(0, 60)}
-                                  {q.questionText && q.questionText.length > 60
-                                    ? "..."
-                                    : ""}
-                                </td>
-                                <td>{q.correctAnswer}</td>
-                                <td>
-                                  {getDifficultyLabel(q.difficulty || "")}
-                                </td>
-                                <td
-                                  style={{
-                                    color: "#f87171",
-                                    fontSize: "0.8rem",
-                                  }}
-                                >
-                                  {(q.errors || [])
-                                    .map(localizeImportError)
-                                    .join(", ")}
-                                </td>
-                              </tr>
+
+                      {invalidImportCount > 0 && (
+                        <div className="qb-import-invalid-list">
+                          <strong>
+                            <AlertTriangle size={16} /> Câu bị loại
+                          </strong>
+                          {importPreview.questions
+                            .filter((q) => !q.valid)
+                            .map((q, idx) => (
+                              <div key={`${q.lineNumber || idx}-${q.questionText || "invalid"}`}>
+                                <span>#{q.lineNumber || idx + 1}</span>
+                                <p>
+                                  {q.questionText || "Câu hỏi không có nội dung"} -{" "}
+                                  {(q.errors || []).map(localizeImportError).join(", ")}
+                                </p>
+                              </div>
                             ))}
-                          </tbody>
-                        </table>
+                        </div>
+                      )}
+
+                      <div className="qb-composer-shell">
+                        <div className="qb-composer-header">
+                          <div>
+                            <h3>
+                              <ListChecks size={18} />
+                              Danh sách câu hỏi import
+                            </h3>
+                            <p>
+                              Đây là dữ liệu sẽ được lưu. Bạn có thể sửa trực
+                              tiếp từng câu, đáp án, độ khó, skill, nhóm câu hỏi
+                              và giải thích trước khi xác nhận.
+                            </p>
+                          </div>
+                          <div className="qb-composer-actions">
+                            <button
+                              type="button"
+                              className="qb-btn secondary small"
+                              onClick={scrollComposerToTop}
+                            >
+                              <ChevronUp size={16} /> Đầu
+                            </button>
+                            <button
+                              type="button"
+                              className="qb-btn secondary small"
+                              onClick={scrollComposerToBottom}
+                            >
+                              Cuối <ChevronDown size={16} />
+                            </button>
+                          </div>
+                        </div>
+                        <div className="qb-composer-summary">
+                          <span>
+                            <strong>{composerQuestions.length}</strong> câu sẽ import
+                          </span>
+                          {composerImportedFileName && (
+                            <span>File: {composerImportedFileName}</span>
+                          )}
+                          <span>Bank: {selectedBank.title}</span>
+                        </div>
+                        <div className="qb-composer-list" ref={composerListRef}>
+                          {composerQuestions.map((question, questionIndex) => (
+                            <article key={question.id} className="qb-composer-question-card">
+                              <div className="qb-composer-question-header">
+                                <div>
+                                  <span>Câu {questionIndex + 1}</span>
+                                  {!question.questionText.trim() && (
+                                    <strong>Chưa hoàn thiện</strong>
+                                  )}
+                                </div>
+                                <button
+                                  type="button"
+                                  className="qb-icon-btn danger"
+                                  onClick={() => removeComposerQuestion(question.id)}
+                                  disabled={composerQuestions.length === 1}
+                                  title="Xóa câu hỏi"
+                                >
+                                  <Trash2 size={16} />
+                                </button>
+                              </div>
+                              <div className="qb-form-grid">
+                                <div className="qb-form-group full-width">
+                                  <label>Nội dung câu hỏi</label>
+                                  <textarea
+                                    className="qb-textarea"
+                                    rows={3}
+                                    value={question.questionText}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        questionText: event.target.value,
+                                      })
+                                    }
+                                  />
+                                </div>
+                                <div className="qb-form-group full-width">
+                                  <label>4 đáp án</label>
+                                  <div className="qb-options-grid">
+                                    {question.options.map((option, optionIndex) => {
+                                      const letter = String.fromCharCode(65 + optionIndex);
+                                      return (
+                                        <div key={`${question.id}-${letter}`} className="qb-option-item">
+                                          <button
+                                            type="button"
+                                            className={`qb-option-letter ${question.correctAnswer === letter ? "selected" : ""}`}
+                                            onClick={() =>
+                                              updateComposerQuestion(question.id, {
+                                                correctAnswer: letter,
+                                              })
+                                            }
+                                            title="Chọn làm đáp án đúng"
+                                          >
+                                            {letter}
+                                          </button>
+                                          <input
+                                            className="qb-input"
+                                            value={option}
+                                            onChange={(event) =>
+                                              updateComposerOption(
+                                                question.id,
+                                                optionIndex,
+                                                event.target.value,
+                                              )
+                                            }
+                                            placeholder={`Đáp án ${letter}`}
+                                          />
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                                <div className="qb-form-group">
+                                  <label>Độ khó</label>
+                                  <select
+                                    className="qb-select"
+                                    value={question.difficulty}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        difficulty: event.target.value,
+                                      })
+                                    }
+                                  >
+                                    {DIFFICULTIES.map((difficulty) => (
+                                      <option key={difficulty} value={difficulty}>
+                                        {getDifficultyLabel(difficulty)}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div className="qb-form-group">
+                                  <label>Kỹ năng</label>
+                                  <input
+                                    className="qb-input"
+                                    value={question.skillArea || ""}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        skillArea: event.target.value,
+                                      })
+                                    }
+                                    placeholder={selectedSkillContext || selectedBank.skillName || "VD: Agile/Scrum"}
+                                  />
+                                </div>
+                                <div className="qb-form-group">
+                                  <label>Nhóm câu hỏi</label>
+                                  <select
+                                    className="qb-select"
+                                    value={question.category || "KNOWLEDGE"}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        category: event.target.value,
+                                      })
+                                    }
+                                  >
+                                    {CATEGORIES.map((category) => (
+                                      <option key={category} value={category}>
+                                        {CATEGORY_LABELS[category]}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div className="qb-form-group full-width">
+                                  <label>Giải thích</label>
+                                  <textarea
+                                    className="qb-textarea"
+                                    rows={2}
+                                    value={question.explanation || ""}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        explanation: event.target.value,
+                                      })
+                                    }
+                                    placeholder="Giải thích ngắn vì sao đáp án đúng..."
+                                  />
+                                </div>
+                              </div>
+                            </article>
+                          ))}
+                          <div className="qb-composer-list-footer">
+                            <button
+                              type="button"
+                              className="qb-btn primary"
+                              onClick={addComposerQuestion}
+                            >
+                              <Plus size={18} /> Thêm câu hỏi mới
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </>
                   )}
@@ -2770,54 +3601,185 @@ const QuestionBankTab: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="qb-import-summary">
-                        <div className="qb-import-summary-item">
-                          <span className="count valid">
-                            {validImportCount}
-                          </span>
-                          <span className="label">Sẽ import</span>
+                      <div className="qb-composer-shell">
+                        <div className="qb-composer-header">
+                          <div>
+                            <h3>
+                              <CheckCircle2 size={18} />
+                              Kiểm tra lần cuối
+                            </h3>
+                            <p>
+                              Danh sách dưới đây vẫn có thể sửa trực tiếp. Khi
+                              bấm nhập, hệ thống lưu đúng nội dung đang hiển thị
+                              trong các form này.
+                            </p>
+                          </div>
+                          <div className="qb-composer-actions">
+                            <button
+                              type="button"
+                              className="qb-btn secondary small"
+                              onClick={scrollComposerToTop}
+                            >
+                              <ChevronUp size={16} /> Đầu
+                            </button>
+                            <button
+                              type="button"
+                              className="qb-btn secondary small"
+                              onClick={scrollComposerToBottom}
+                            >
+                              Cuối <ChevronDown size={16} />
+                            </button>
+                          </div>
                         </div>
-                        <div className="qb-import-summary-item">
-                          <span className="count invalid">
-                            {invalidImportCount}
+                        <div className="qb-composer-summary">
+                          <span>
+                            <strong>{composerQuestions.length}</strong> câu sẽ import
                           </span>
-                          <span className="label">Bị loại</span>
+                          <span>{invalidImportCount} câu bị loại từ file</span>
                         </div>
-                      </div>
-
-                      <div
-                        className="qb-preview-table-wrapper"
-                        style={{ marginTop: "1rem" }}
-                      >
-                        <table className="qb-preview-table">
-                          <thead>
-                            <tr>
-                              <th>#</th>
-                              <th>Câu hỏi</th>
-                              <th>Đáp án đúng</th>
-                              <th>Độ khó</th>
-                              <th>Kỹ năng</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {validImportQuestions.map((q, idx) => (
-                              <tr key={`${q.questionText}-${idx}`}>
-                                <td>{idx + 1}</td>
-                                <td title={q.questionText}>
-                                  {q.questionText?.substring(0, 90)}
-                                  {q.questionText && q.questionText.length > 90
-                                    ? "..."
-                                    : ""}
-                                </td>
-                                <td>{q.correctAnswer}</td>
-                                <td>
-                                  {getDifficultyLabel(q.difficulty || "")}
-                                </td>
-                                <td>{q.skillArea || "-"}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                        <div className="qb-composer-list" ref={composerListRef}>
+                          {composerQuestions.map((question, questionIndex) => (
+                            <article key={question.id} className="qb-composer-question-card">
+                              <div className="qb-composer-question-header">
+                                <div>
+                                  <span>Câu {questionIndex + 1}</span>
+                                  {!question.questionText.trim() && (
+                                    <strong>Chưa hoàn thiện</strong>
+                                  )}
+                                </div>
+                                <button
+                                  type="button"
+                                  className="qb-icon-btn danger"
+                                  onClick={() => removeComposerQuestion(question.id)}
+                                  disabled={composerQuestions.length === 1}
+                                  title="Xóa câu hỏi"
+                                >
+                                  <Trash2 size={16} />
+                                </button>
+                              </div>
+                              <div className="qb-form-grid">
+                                <div className="qb-form-group full-width">
+                                  <label>Nội dung câu hỏi</label>
+                                  <textarea
+                                    className="qb-textarea"
+                                    rows={3}
+                                    value={question.questionText}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        questionText: event.target.value,
+                                      })
+                                    }
+                                  />
+                                </div>
+                                <div className="qb-form-group full-width">
+                                  <label>4 đáp án</label>
+                                  <div className="qb-options-grid">
+                                    {question.options.map((option, optionIndex) => {
+                                      const letter = String.fromCharCode(65 + optionIndex);
+                                      return (
+                                        <div key={`${question.id}-${letter}`} className="qb-option-item">
+                                          <button
+                                            type="button"
+                                            className={`qb-option-letter ${question.correctAnswer === letter ? "selected" : ""}`}
+                                            onClick={() =>
+                                              updateComposerQuestion(question.id, {
+                                                correctAnswer: letter,
+                                              })
+                                            }
+                                            title="Chọn làm đáp án đúng"
+                                          >
+                                            {letter}
+                                          </button>
+                                          <input
+                                            className="qb-input"
+                                            value={option}
+                                            onChange={(event) =>
+                                              updateComposerOption(
+                                                question.id,
+                                                optionIndex,
+                                                event.target.value,
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                                <div className="qb-form-group">
+                                  <label>Độ khó</label>
+                                  <select
+                                    className="qb-select"
+                                    value={question.difficulty}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        difficulty: event.target.value,
+                                      })
+                                    }
+                                  >
+                                    {DIFFICULTIES.map((difficulty) => (
+                                      <option key={difficulty} value={difficulty}>
+                                        {getDifficultyLabel(difficulty)}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div className="qb-form-group">
+                                  <label>Kỹ năng</label>
+                                  <input
+                                    className="qb-input"
+                                    value={question.skillArea || ""}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        skillArea: event.target.value,
+                                      })
+                                    }
+                                  />
+                                </div>
+                                <div className="qb-form-group">
+                                  <label>Nhóm câu hỏi</label>
+                                  <select
+                                    className="qb-select"
+                                    value={question.category || "KNOWLEDGE"}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        category: event.target.value,
+                                      })
+                                    }
+                                  >
+                                    {CATEGORIES.map((category) => (
+                                      <option key={category} value={category}>
+                                        {CATEGORY_LABELS[category]}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div className="qb-form-group full-width">
+                                  <label>Giải thích</label>
+                                  <textarea
+                                    className="qb-textarea"
+                                    rows={2}
+                                    value={question.explanation || ""}
+                                    onChange={(event) =>
+                                      updateComposerQuestion(question.id, {
+                                        explanation: event.target.value,
+                                      })
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            </article>
+                          ))}
+                          <div className="qb-composer-list-footer">
+                            <button
+                              type="button"
+                              className="qb-btn primary"
+                              onClick={addComposerQuestion}
+                            >
+                              <Plus size={18} /> Thêm câu hỏi mới
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </>
                   )}
