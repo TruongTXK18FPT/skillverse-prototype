@@ -1,0 +1,797 @@
+[
+  {
+    "questionText": "Trong dự án phát triển phần mềm cho ngân hàng tại Việt Nam, 'scope creep' được hiểu là gì?",
+    "options": [
+      "A. Việc mở rộng phạm vi dự án một cách không kiểm soát, vượt quá yêu cầu ban đầu đã được phê duyệt.",
+      "B. Quá trình tối ưu hóa mã nguồn để tăng hiệu suất hệ thống.",
+      "C. Việc thay đổi công nghệ sử dụng trong dự án mà không cần thông báo.",
+      "D. Sự chậm trễ trong việc bàn giao sản phẩm do thiếu tài nguyên."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Scope creep xảy ra khi phạm vi dự án tăng lên mà không được kiểm soát, dẫn đến vượt quá yêu cầu ban đầu đã thống nhất. Điều này thường gây ra chi phí phát sinh và chậm tiến độ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502096285_BEGINNER_0_7jls"
+  },
+  {
+    "questionText": "Một Business Analyst nhận được yêu cầu thay đổi từ khách hàng sau khi phạm vi dự án đã được phê duyệt. Bước đầu tiên BA nên làm là gì?",
+    "options": [
+      "A. Tiến hành thay đổi ngay lập tức để đáp ứng yêu cầu khách hàng.",
+      "B. Đánh giá tác động của yêu cầu thay đổi đến phạm vi, thời gian, chi phí và chất lượng dự án.",
+      "C. Từ chối yêu cầu thay đổi vì phạm vi đã được phê duyệt.",
+      "D. Báo cáo với quản lý dự án và yêu cầu khách hàng tự xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trước khi thực hiện bất kỳ thay đổi nào, BA cần đánh giá tác động để đảm bảo không ảnh hưởng tiêu cực đến dự án. Đây là bước quan trọng trong quản lý scope creep.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502096285_BEGINNER_1_n6i9"
+  },
+  {
+    "questionText": "Tại sao việc duy trì 'requirement baseline' lại quan trọng trong quản lý dự án?",
+    "options": [
+      "A. Để đảm bảo tất cả các yêu cầu đều được thay đổi liên tục theo ý khách hàng.",
+      "B. Để làm cơ sở so sánh và kiểm soát các thay đổi trong suốt vòng đời dự án.",
+      "C. Để loại bỏ hoàn toàn các yêu cầu không cần thiết.",
+      "D. Để tăng tốc độ phát triển sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Requirement baseline là phiên bản chính thức của các yêu cầu đã được phê duyệt, dùng để so sánh và kiểm soát các thay đổi trong dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502096285_BEGINNER_2_xmae"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho doanh nghiệp sản xuất, làm thế nào để đảm bảo 'requirement traceability'?",
+    "options": [
+      "A. Ghi chép tất cả yêu cầu vào một tài liệu duy nhất mà không cần theo dõi liên kết.",
+      "B. Liên kết mỗi yêu cầu với các thành phần thiết kế, mã nguồn, trường hợp kiểm thử và tài liệu phát hành.",
+      "C. Chỉ theo dõi yêu cầu ở giai đoạn đầu của dự án.",
+      "D. Yêu cầu khách hàng tự theo dõi và cập nhật yêu cầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Requirement traceability đảm bảo mỗi yêu cầu được theo dõi từ đầu đến cuối, liên kết với thiết kế, mã nguồn, kiểm thử và phát hành để đảm bảo tính nhất quán.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502096285_BEGINNER_3_bu4v"
+  },
+  {
+    "questionText": "Một dự án phần mềm tại công ty FPT Software đang trong giai đoạn triển khai. Khách hàng yêu cầu thêm tính năng mới không có trong phạm vi ban đầu. BA nên làm gì?",
+    "options": [
+      "A. Thêm tính năng ngay lập tức để làm hài lòng khách hàng.",
+      "B. Yêu cầu khách hàng tạo 'change request' chính thức và đánh giá tác động trước khi thực hiện.",
+      "C. Bỏ qua yêu cầu vì không nằm trong phạm vi ban đầu.",
+      "D. Thông báo với nhóm phát triển để tự xử lý mà không cần báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mọi thay đổi yêu cầu đều phải được xử lý thông qua quy trình change request chính thức để đảm bảo kiểm soát phạm vi và tác động.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502096285_BEGINNER_4_58jd"
+  },
+  {
+    "questionText": "Trong quy trình quản lý yêu cầu, 'version control' được sử dụng để làm gì?",
+    "options": [
+      "A. Để lưu trữ nhiều phiên bản tài liệu yêu cầu và theo dõi lịch sử thay đổi.",
+      "B. Để xóa bỏ các phiên bản cũ của tài liệu yêu cầu.",
+      "C. Để tăng tốc độ truy cập tài liệu yêu cầu.",
+      "D. Để tự động phê duyệt các thay đổi yêu cầu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Version control giúp theo dõi lịch sử thay đổi của tài liệu yêu cầu, đảm bảo có thể khôi phục hoặc so sánh các phiên bản khi cần thiết.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502096285_BEGINNER_5_pqx3"
+  },
+  {
+    "questionText": "Một Business Analyst phát hiện có một yêu cầu trong tài liệu không được liên kết với bất kỳ trường hợp kiểm thử nào. Điều này có thể dẫn đến vấn đề gì?",
+    "options": [
+      "A. Không ảnh hưởng gì đến dự án vì yêu cầu không quan trọng.",
+      "B. Yêu cầu đó có thể bị bỏ sót trong quá trình kiểm thử và phát hành, dẫn đến lỗi sản phẩm.",
+      "C. Nhóm phát triển sẽ tự động xử lý yêu cầu này.",
+      "D. Khách hàng sẽ tự kiểm tra yêu cầu này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu yêu cầu không được liên kết với trường hợp kiểm thử, nó có thể bị bỏ sót, dẫn đến lỗi hoặc thiếu sót trong sản phẩm cuối cùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502096285_BEGINNER_6_bvex"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý kho cho công ty logistics, làm thế nào để phát hiện sớm các yêu cầu bị thiếu coverage?",
+    "options": [
+      "A. Chờ đến giai đoạn kiểm thử mới phát hiện thiếu sót.",
+      "B. Sử dụng ma trận truy vết yêu cầu (requirement traceability matrix) để kiểm tra liên kết giữa yêu cầu, thiết kế, mã nguồn và kiểm thử.",
+      "C. Yêu cầu khách hàng tự kiểm tra và báo cáo.",
+      "D. Bỏ qua các yêu cầu không rõ ràng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Requirement traceability matrix giúp phát hiện sớm các yêu cầu thiếu coverage bằng cách kiểm tra liên kết giữa các thành phần trong dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502096285_BEGINNER_7_f9tf"
+  },
+  {
+    "questionText": "Tại sao cần phải có sự phê duyệt chính thức cho các thay đổi yêu cầu trong dự án?",
+    "options": [
+      "A. Để đảm bảo mọi thay đổi đều được ghi nhận, đánh giá tác động và kiểm soát trước khi thực hiện.",
+      "B. Để làm chậm tiến độ dự án.",
+      "C. Để tăng chi phí dự án.",
+      "D. Để khách hàng không thể thay đổi yêu cầu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phê duyệt chính thức giúp đảm bảo mọi thay đổi đều được kiểm soát, đánh giá tác động và ghi nhận để tránh scope creep.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502096285_BEGINNER_8_n19x"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng di động cho ngân hàng, một yêu cầu mới được đề xuất sau khi baseline đã được phê duyệt. BA nên làm gì đầu tiên?",
+    "options": [
+      "A. Thêm yêu cầu mới vào tài liệu mà không cần thông báo.",
+      "B. Tạo change request và đánh giá tác động của yêu cầu mới đến phạm vi, thời gian, chi phí và chất lượng.",
+      "C. Từ chối yêu cầu vì đã quá muộn.",
+      "D. Yêu cầu nhóm phát triển tự xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mọi yêu cầu mới sau khi baseline được phê duyệt đều phải được xử lý thông qua change request và đánh giá tác động để kiểm soát phạm vi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502096285_BEGINNER_9_e64v"
+  },
+  {
+    "questionText": "Requirement traceability matrix thường bao gồm những thông tin gì?",
+    "options": [
+      "A. Chỉ bao gồm danh sách các yêu cầu và mô tả ngắn gọn.",
+      "B. Liên kết giữa yêu cầu, thiết kế, mã nguồn, trường hợp kiểm thử và tài liệu phát hành.",
+      "C. Thông tin về chi phí và thời gian của dự án.",
+      "D. Danh sách các thành viên trong nhóm dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Requirement traceability matrix liên kết các yêu cầu với thiết kế, mã nguồn, kiểm thử và phát hành để đảm bảo truy vết đầy đủ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502096285_BEGINNER_10_gp52"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống CRM cho doanh nghiệp bán lẻ, làm thế nào để đảm bảo các yêu cầu đã được phê duyệt không bị thay đổi mà không có sự kiểm soát?",
+    "options": [
+      "A. Không cần làm gì vì khách hàng có quyền thay đổi bất cứ lúc nào.",
+      "B. Sử dụng requirement baseline và quy trình change request để kiểm soát mọi thay đổi.",
+      "C. Yêu cầu khách hàng ký cam kết không thay đổi yêu cầu.",
+      "D. Chỉ cho phép thay đổi trong giai đoạn đầu của dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Requirement baseline và quy trình change request giúp kiểm soát mọi thay đổi, đảm bảo các yêu cầu đã phê duyệt không bị thay đổi tùy tiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502096285_BEGINNER_11_muro"
+  },
+  {
+    "questionText": "Một Business Analyst phát hiện có sự không nhất quán giữa tài liệu yêu cầu và tài liệu thiết kế. BA nên làm gì?",
+    "options": [
+      "A. Bỏ qua vì không phải trách nhiệm của BA.",
+      "B. Báo cáo với quản lý dự án và yêu cầu làm rõ hoặc điều chỉnh để đảm bảo nhất quán.",
+      "C. Tự sửa tài liệu thiết kế mà không thông báo.",
+      "D. Yêu cầu khách hàng quyết định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần đảm bảo tính nhất quán giữa các tài liệu. Khi phát hiện không nhất quán, BA phải báo cáo và yêu cầu điều chỉnh để tránh lỗi trong triển khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502096285_BEGINNER_12_osbt"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho công ty sản xuất tại Việt Nam, sau khi phê duyệt baseline yêu cầu, khách hàng gửi yêu cầu bổ sung chức năng 'tích hợp với hệ thống quản lý kho của đối tác nước ngoài'. Business Analyst nên làm gì ĐẦU TIÊN để kiểm soát scope?",
+    "options": [
+      "A. Từ chối yêu cầu vì đã vượt quá scope baseline đã phê duyệt.",
+      "B. Tạo Change Request, đánh giá tác động đến timeline, chi phí và yêu cầu khách hàng phê duyệt chính thức.",
+      "C. Bổ sung yêu cầu vào tài liệu SRS mà không thông báo cho các bên liên quan.",
+      "D. Yêu cầu khách hàng tự triển khai tích hợp sau khi dự án hoàn thành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ INTERMEDIATE, BA cần áp dụng quy trình quản lý thay đổi chính thức: tạo Change Request, đánh giá tác động (scope, timeline, chi phí) và yêu cầu phê duyệt để đảm bảo scope được kiểm soát mà vẫn linh hoạt đáp ứng nhu cầu kinh doanh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502170794_INTERMEDIATE_0_9hoe"
+  },
+  {
+    "questionText": "Khi theo dõi traceability matrix cho dự án phát triển ứng dụng ngân hàng số, BA phát hiện một yêu cầu chức năng 'Xác thực OTP qua SMS' chưa được liên kết với bất kỳ test case nào. Hành động nào là phù hợp nhất?",
+    "options": [
+      "A. Bỏ qua vì chức năng này đơn giản và ít rủi ro.",
+      "B. Thông báo cho QA Lead để bổ sung test case và cập nhật traceability matrix.",
+      "C. Tự viết test case cho chức năng này và cập nhật vào tài liệu.",
+      "D. Đánh dấu yêu cầu này là 'không cần test' trong tài liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Traceability matrix giúp phát hiện sớm các lỗ hổng coverage. BA cần phối hợp với QA để đảm bảo mọi yêu cầu đều được test, tránh rủi ro thiếu sót trong triển khai.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502170794_INTERMEDIATE_1_7pr9"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống CRM cho doanh nghiệp bán lẻ, BA nhận được email từ Product Owner yêu cầu thay đổi luồng phê duyệt đơn hàng. BA nên cập nhật tài liệu nào ĐẦU TIÊN để duy trì traceability?",
+    "options": [
+      "A. Tài liệu Business Requirements Document (BRD) và thông báo cho đội phát triển.",
+      "B. Tài liệu Software Requirements Specification (SRS) và cập nhật traceability matrix.",
+      "C. Tài liệu User Manual để phản ánh thay đổi cho người dùng cuối.",
+      "D. Tài liệu Test Plan để QA biết thay đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SRS là tài liệu chính chứa yêu cầu kỹ thuật, và traceability matrix cần được cập nhật để duy trì liên kết giữa yêu cầu, thiết kế, và test artifacts. BRD có thể được cập nhật sau nếu cần.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502170794_INTERMEDIATE_2_wfes"
+  },
+  {
+    "questionText": "Dự án triển khai phần mềm quản lý chuỗi cung ứng cho công ty logistics gặp tình trạng scope creep do khách hàng liên tục yêu cầu bổ sung báo cáo mới. BA nên đề xuất giải pháp nào để kiểm soát tình hình?",
+    "options": [
+      "A. Đồng ý triển khai tất cả yêu cầu báo cáo mới để duy trì mối quan hệ tốt với khách hàng.",
+      "B. Đề xuất khách hàng ưu tiên các báo cáo quan trọng và lên kế hoạch triển khai theo giai đoạn, kết hợp với quy trình Change Request chính thức.",
+      "C. Từ chối tất cả yêu cầu báo cáo mới cho đến khi dự án hoàn thành phase hiện tại.",
+      "D. Giao toàn bộ trách nhiệm quản lý scope cho Project Manager."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp cân bằng giữa nhu cầu khách hàng và kiểm soát scope: ưu tiên yêu cầu, triển khai theo giai đoạn, và áp dụng quy trình Change Request để đảm bảo tính minh bạch và kiểm soát chi phí/thời gian.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502170794_INTERMEDIATE_3_9a6a"
+  },
+  {
+    "questionText": "Khi rà soát traceability matrix cho dự án phát triển ứng dụng di động, BA phát hiện một test case không liên kết với bất kỳ yêu cầu nào. Điều này có thể dẫn đến hậu quả gì?",
+    "options": [
+      "A. Không ảnh hưởng gì vì test case có thể kiểm tra các chức năng không có trong yêu cầu.",
+      "B. Gây lãng phí tài nguyên vì test case này kiểm tra chức năng không cần thiết hoặc đã bị loại bỏ.",
+      "C. Giúp phát hiện thêm lỗi tiềm ẩn trong hệ thống.",
+      "D. Là dấu hiệu tốt cho thấy QA đã mở rộng phạm vi kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test case không liên kết với yêu cầu thường là dấu hiệu của 'gold plating' (thêm chức năng không cần thiết) hoặc yêu cầu đã bị loại bỏ nhưng test case chưa được cập nhật. Điều này gây lãng phí tài nguyên và làm mờ phạm vi dự án.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502170794_INTERMEDIATE_4_rhni"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống HRM cho tập đoàn đa quốc gia, BA cần đảm bảo rằng mọi thay đổi yêu cầu đều được phản ánh nhất quán trên các tài liệu: SRS, thiết kế hệ thống, và test cases. Công cụ nào sau đây hỗ trợ tốt nhất cho việc này?",
+    "options": [
+      "A. Microsoft Excel với traceability matrix thủ công.",
+      "B. JIRA kết hợp với plugin Requirements and Test Management (như Xray hoặc Zephyr).",
+      "C. Google Docs để chia sẻ tài liệu với các bên liên quan.",
+      "D. Email để thông báo thay đổi cho các bên liên quan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "JIRA kết hợp với plugin như Xray hoặc Zephyr cho phép quản lý traceability tự động, liên kết yêu cầu với thiết kế và test cases, đồng thời theo dõi trạng thái thay đổi trong thời gian thực. Excel thủ công dễ sai sót và khó bảo trì.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502170794_INTERMEDIATE_5_x6ls"
+  },
+  {
+    "questionText": "Dự án phát triển phần mềm cho ngân hàng gặp vấn đề khi một số yêu cầu trong baseline đã được phê duyệt nhưng sau đó bị thay đổi mà không thông qua quy trình Change Request. BA nên làm gì để khắc phục tình trạng này?",
+    "options": [
+      "A. Chấp nhận các thay đổi và cập nhật tài liệu mà không cần phê duyệt lại.",
+      "B. Tổ chức họp với các bên liên quan để nhắc lại quy trình Change Request và yêu cầu phê duyệt lại các thay đổi đã thực hiện.",
+      "C. Báo cáo lên ban lãnh đạo dự án để xử lý kỷ luật các bên vi phạm.",
+      "D. Tạo baseline mới mà không cần thông báo cho khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần đảm bảo tính minh bạch và kiểm soát scope bằng cách nhắc lại quy trình Change Request, yêu cầu phê duyệt lại các thay đổi, và cập nhật baseline chính thức. Việc này giúp tránh xung đột và rủi ro về sau.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502170794_INTERMEDIATE_6_dvum"
+  },
+  {
+    "questionText": "Khi xây dựng traceability matrix cho dự án phát triển ứng dụng thương mại điện tử, BA nên liên kết yêu cầu 'Tích hợp cổng thanh toán VNPay' với các artifacts nào sau đây?",
+    "options": [
+      "A. Chỉ liên kết với test case kiểm thử tích hợp VNPay.",
+      "B. Liên kết với thiết kế hệ thống (API specs), test case, và tài liệu triển khai (deployment guide).",
+      "C. Liên kết với tài liệu Business Requirements Document (BRD) và User Manual.",
+      "D. Không cần liên kết vì đây là yêu cầu bên thứ ba."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Traceability matrix cần liên kết yêu cầu với tất cả các artifacts liên quan: thiết kế hệ thống (để đảm bảo yêu cầu được triển khai đúng), test case (để đảm bảo kiểm thử đầy đủ), và tài liệu triển khai (để hỗ trợ vận hành).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502170795_INTERMEDIATE_7_1seq"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý dự án cho công ty xây dựng, khách hàng yêu cầu bổ sung chức năng 'theo dõi tiến độ thi công bằng hình ảnh 360 độ'. BA đã tạo Change Request và đánh giá tác động. Bước tiếp theo BA nên làm gì?",
+    "options": [
+      "A. Triển khai ngay chức năng này vì khách hàng là người trả tiền.",
+      "B. Trình Change Request lên Change Control Board (CCB) để phê duyệt chính thức trước khi triển khai.",
+      "C. Yêu cầu đội phát triển ước tính thời gian và chi phí, sau đó tự quyết định triển khai.",
+      "D. Từ chối yêu cầu vì không nằm trong scope baseline."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sau khi tạo Change Request và đánh giá tác động, BA cần trình lên CCB (Change Control Board) để phê duyệt chính thức. Quy trình này đảm bảo tính minh bạch và kiểm soát scope, tránh rủi ro về timeline/chi phí.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502170795_INTERMEDIATE_8_yafl"
+  },
+  {
+    "questionText": "BA phát hiện một yêu cầu trong SRS không có test case tương ứng, nhưng khi kiểm tra lại, yêu cầu này đã được triển khai và hoạt động ổn định. BA nên làm gì?",
+    "options": [
+      "A. Bỏ qua vì chức năng đã hoạt động tốt.",
+      "B. Bổ sung test case và cập nhật traceability matrix để đảm bảo coverage đầy đủ.",
+      "C. Đánh dấu yêu cầu này là 'không cần test' trong tài liệu.",
+      "D. Xóa yêu cầu khỏi SRS vì đã triển khai thành công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dù chức năng hoạt động tốt, việc thiếu test case có thể gây rủi ro trong tương lai (ví dụ: khi có thay đổi hoặc bảo trì). BA cần bổ sung test case và cập nhật traceability matrix để đảm bảo coverage đầy đủ và duy trì tính nhất quán.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502170795_INTERMEDIATE_9_koxi"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng, BA cần theo dõi phiên bản của tài liệu SRS để đảm bảo mọi thay đổi đều được kiểm soát. Phương pháp nào sau đây là hiệu quả nhất?",
+    "options": [
+      "A. Đặt tên file theo định dạng 'SRS_v1.0', 'SRS_v2.0' và lưu trữ trên Google Drive.",
+      "B. Sử dụng hệ thống quản lý phiên bản như Git hoặc SVN để kiểm soát thay đổi.",
+      "C. Gửi email thông báo cho các bên liên quan mỗi khi có thay đổi.",
+      "D. Lưu trữ tất cả phiên bản trong một file Excel và cập nhật thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hệ thống quản lý phiên bản như Git hoặc SVN cho phép theo dõi lịch sử thay đổi, so sánh giữa các phiên bản, và khôi phục phiên bản cũ nếu cần. Đây là phương pháp hiệu quả và chuyên nghiệp để kiểm soát phiên bản tài liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502170795_INTERMEDIATE_10_dahe"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý bán hàng cho chuỗi siêu thị gặp tình trạng khách hàng yêu cầu thay đổi liên tục về giao diện báo cáo. BA nên đề xuất giải pháp nào để giảm thiểu tác động đến dự án?",
+    "options": [
+      "A. Đề xuất khách hàng sử dụng công cụ Business Intelligence (BI) để tự tùy chỉnh báo cáo sau khi dự án hoàn thành.",
+      "B. Đồng ý triển khai tất cả yêu cầu thay đổi để đảm bảo sự hài lòng của khách hàng.",
+      "C. Từ chối tất cả yêu cầu thay đổi cho đến khi dự án hoàn thành phase hiện tại.",
+      "D. Yêu cầu khách hàng chờ đến phase tiếp theo để triển khai các thay đổi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp tối ưu là đề xuất khách hàng sử dụng công cụ BI để tự tùy chỉnh báo cáo, giảm thiểu tác động đến scope và timeline dự án. Điều này giúp khách hàng linh hoạt mà không làm tăng rủi ro cho dự án.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502170795_INTERMEDIATE_11_6zkb"
+  },
+  {
+    "questionText": "Khi rà soát traceability matrix, BA phát hiện một yêu cầu đã được đánh dấu là 'đã triển khai' nhưng không có liên kết với bất kỳ test case nào. BA nên làm gì?",
+    "options": [
+      "A. Đánh dấu yêu cầu này là 'không cần test' vì đã triển khai thành công.",
+      "B. Bổ sung test case và cập nhật traceability matrix để đảm bảo coverage đầy đủ.",
+      "C. Xóa yêu cầu khỏi SRS vì không cần thiết.",
+      "D. Thông báo cho đội phát triển để họ tự viết test case."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc thiếu test case cho yêu cầu đã triển khai có thể dẫn đến rủi ro trong tương lai (ví dụ: khi có thay đổi hoặc bảo trì). BA cần bổ sung test case và cập nhật traceability matrix để đảm bảo coverage đầy đủ và duy trì tính nhất quán.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502170796_INTERMEDIATE_12_fgo0"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý kho cho nhà máy sản xuất, BA nhận được yêu cầu thay đổi từ khách hàng sau khi baseline đã được phê duyệt. BA nên thực hiện các bước nào theo thứ tự ĐÚNG?",
+    "options": [
+      "A. Tạo Change Request → Đánh giá tác động → Trình lên Change Control Board (CCB) → Cập nhật tài liệu nếu được phê duyệt.",
+      "B. Cập nhật tài liệu ngay lập tức → Thông báo cho đội phát triển → Đánh giá tác động sau.",
+      "C. Từ chối yêu cầu vì đã vượt quá scope baseline.",
+      "D. Đánh giá tác động → Cập nhật tài liệu → Trình lên CCB để phê duyệt."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Quy trình quản lý thay đổi chính thức bao gồm: (1) Tạo Change Request, (2) Đánh giá tác động (scope, timeline, chi phí), (3) Trình lên CCB để phê duyệt, (4) Cập nhật tài liệu và baseline nếu được phê duyệt. Việc này đảm bảo tính minh bạch và kiểm soát scope.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502170796_INTERMEDIATE_13_wnt5"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho một tập đoàn bán lẻ tại Việt Nam, sau khi baseline yêu cầu đã được phê duyệt, khách hàng gửi yêu cầu bổ sung tính năng 'tích hợp với hệ thống quản lý kho của đối tác nước ngoài' mà không có trong scope ban đầu. Business Analyst nên làm gì ĐẦU TIÊN để kiểm soát scope creep?",
+    "options": [
+      "A. Từ chối ngay yêu cầu vì nằm ngoài scope baseline đã phê duyệt.",
+      "B. Tạo Change Request (CR) chính thức, đánh giá tác động tới timeline, chi phí và rủi ro trước khi trình phê duyệt.",
+      "C. Bổ sung yêu cầu vào tài liệu yêu cầu (BRD) mà không thông báo để tránh xung đột với khách hàng.",
+      "D. Thảo luận riêng với đội phát triển để ước lượng nhanh công sức và báo cáo khách hàng sau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ ADVANCED, BA cần tuân thủ quy trình quản lý thay đổi chính thức (Change Request) để đảm bảo minh bạch, đánh giá tác động toàn diện (timeline, chi phí, rủi ro) và có cơ sở phê duyệt từ các bên liên quan. Từ chối ngay (A) hoặc làm ngầm (C, D) đều thiếu chuyên nghiệp và tiềm ẩn rủi ro pháp lý/kinh doanh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502255796_ADVANCED_0_55ai"
+  },
+  {
+    "questionText": "Một dự án phần mềm ngân hàng tại Việt Nam sử dụng JIRA để quản lý yêu cầu. Sau khi triển khai sprint 3, BA phát hiện 3 yêu cầu trong sprint 2 chưa được liên kết với test case nào trong Zephyr. Hành động nào dưới đây là ƯU TIÊN CAO NHẤT để đảm bảo traceability?",
+    "options": [
+      "A. Báo cáo lỗi cho đội QA để họ bổ sung test case sau khi sprint kết thúc.",
+      "B. Tạm dừng sprint hiện tại, yêu cầu đội QA tạo test case ngay cho các yêu cầu còn thiếu.",
+      "C. Tạo task trong JIRA để theo dõi việc bổ sung test case, gán cho QA Lead và đặt deadline trước khi sprint 4 bắt đầu.",
+      "D. Ghi chú vào tài liệu traceability matrix và chờ đến giai đoạn UAT để kiểm tra lại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Traceability phải được duy trì liên tục. BA cần chủ động tạo task theo dõi (C) để đảm bảo vấn đề được giải quyết kịp thời mà không làm gián đoạn sprint hiện tại. Các lựa chọn khác đều trì hoãn hoặc thiếu trách nhiệm chủ động.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502255796_ADVANCED_1_gz69"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống core banking cho một ngân hàng Việt Nam, BA nhận được phản hồi từ đội phát triển rằng 'yêu cầu FR-123 (xử lý giao dịch ngoại tệ) không thể triển khai do xung đột với quy định mới của Ngân hàng Nhà nước'. BA nên làm gì để đảm bảo traceability và kiểm soát scope?",
+    "options": [
+      "A. Cập nhật trạng thái FR-123 thành 'Rejected' trong JIRA và thông báo cho các bên liên quan.",
+      "B. Tạo Change Request mới để điều chỉnh FR-123, đồng thời cập nhật traceability matrix để phản ánh sự thay đổi này.",
+      "C. Yêu cầu đội pháp lý xác nhận lại quy định và giữ nguyên FR-123 cho đến khi có kết luận chính thức.",
+      "D. Xóa FR-123 khỏi tài liệu yêu cầu để tránh nhầm lẫn, sau đó thông báo cho khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần quản lý thay đổi chính thức (Change Request) và cập nhật traceability matrix để duy trì tính nhất quán. Việc reject (A) hoặc xóa (D) không phản ánh đúng quy trình và có thể gây mất traceability. Giữ nguyên (C) mà không hành động có thể dẫn đến lãng phí nguồn lực.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502255797_ADVANCED_2_q0uv"
+  },
+  {
+    "questionText": "Một dự án triển khai CRM cho công ty bảo hiểm đa quốc gia có văn phòng tại Việt Nam. Sau khi baseline yêu cầu, BA phát hiện rằng 'yêu cầu về tích hợp với hệ thống đánh giá rủi ro của bên thứ ba' chưa được liên kết với bất kỳ tài liệu thiết kế (HLD/LLD) nào. BA nên làm gì để phát hiện sớm lỗ hổng coverage?",
+    "options": [
+      "A. Tạo task trong JIRA yêu cầu Solution Architect bổ sung thiết kế chi tiết cho yêu cầu này trước khi sprint tiếp theo bắt đầu.",
+      "B. Báo cáo cho Product Owner và chờ họ quyết định có nên bổ sung thiết kế hay không.",
+      "C. Tự viết tài liệu thiết kế tạm thời để lấp lỗ hổng và trình phê duyệt sau.",
+      "D. Ghi chú vào tài liệu traceability matrix và chờ đến giai đoạn kiểm thử mới xử lý."
+    ],
+    "correctAnswer": "A",
+    "explanation": "BA cần chủ động yêu cầu Solution Architect bổ sung thiết kế (A) để đảm bảo traceability từ yêu cầu đến thiết kế. Việc chờ đợi (B) hoặc tự viết thiết kế (C) không phải trách nhiệm của BA. Ghi chú mà không hành động (D) không giải quyết vấn đề gốc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502255797_ADVANCED_3_qpqx"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng di động cho ngân hàng, BA nhận được yêu cầu thay đổi từ khách hàng: 'Thêm tính năng xác thực sinh trắc học (face ID) cho giao dịch trên 10 triệu đồng'. BA đã đánh giá tác động và thấy rằng yêu cầu này làm tăng 20% chi phí và kéo dài timeline 1 tháng. Cách tiếp cận nào dưới đây là HIỆU QUẢ NHẤT để quản lý scope?",
+    "options": [
+      "A. Từ chối yêu cầu vì vượt quá ngân sách và timeline đã được phê duyệt.",
+      "B. Trình Change Request lên Change Control Board (CCB) với đánh giá tác động chi tiết và đề xuất phương án tài trợ (ví dụ: khách hàng tự chi trả phần chi phí phát sinh).",
+      "C. Chấp nhận yêu cầu và điều chỉnh timeline/ngân sách mà không cần phê duyệt chính thức để giữ mối quan hệ với khách hàng.",
+      "D. Đề xuất khách hàng chia nhỏ yêu cầu thành các phase để giảm tác động, sau đó trình phê duyệt từng phase."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần tuân thủ quy trình quản lý thay đổi chính thức (Change Request + CCB) và đề xuất phương án tài trợ rõ ràng (B). Từ chối (A) hoặc chấp nhận không chính thức (C) đều thiếu chuyên nghiệp. Chia phase (D) có thể là giải pháp nhưng cần được phê duyệt chính thức trước.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502255798_ADVANCED_4_z07c"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống quản lý chuỗi cung ứng (SCM) cho doanh nghiệp sản xuất tại Việt Nam. BA phát hiện rằng 'yêu cầu về báo cáo tuân thủ ESG (Environmental, Social, Governance)' chưa được liên kết với bất kỳ test case nào trong TestRail. Hành động nào dưới đây là PHÙ HỢP NHẤT để đảm bảo traceability?",
+    "options": [
+      "A. Báo cáo cho QA Lead và yêu cầu họ bổ sung test case ngay lập tức.",
+      "B. Tạo task trong JIRA cho QA Lead, gán deadline trước khi giai đoạn UAT bắt đầu, và cập nhật traceability matrix.",
+      "C. Tự viết test case cho yêu cầu này để đảm bảo tiến độ.",
+      "D. Ghi chú vào tài liệu yêu cầu và chờ đến khi khách hàng phản hồi trong UAT."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần chủ động tạo task theo dõi (B) và cập nhật traceability matrix để đảm bảo vấn đề được giải quyết kịp thời. Việc yêu cầu QA làm ngay (A) hoặc tự viết test case (C) không phải trách nhiệm của BA. Ghi chú mà không hành động (D) không giải quyết lỗ hổng coverage.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502255798_ADVANCED_5_sre9"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống eKYC cho một fintech startup, sau khi baseline yêu cầu, BA nhận được phản hồi từ đội pháp lý rằng 'yêu cầu về lưu trữ dữ liệu sinh trắc học phải tuân thủ Nghị định 13/2023/NĐ-CP' nhưng tài liệu yêu cầu hiện tại chưa đề cập. BA nên làm gì để kiểm soát scope và đảm bảo tuân thủ?",
+    "options": [
+      "A. Cập nhật tài liệu yêu cầu ngay lập tức để phản ánh yêu cầu mới và thông báo cho các bên liên quan.",
+      "B. Tạo Change Request để điều chỉnh yêu cầu, đánh giá tác động và trình phê duyệt từ các bên liên quan.",
+      "C. Báo cáo cho Product Owner và chờ họ quyết định có nên điều chỉnh yêu cầu hay không.",
+      "D. Ghi chú vào tài liệu yêu cầu và chờ đến khi khách hàng yêu cầu thay đổi chính thức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần quản lý thay đổi chính thức (Change Request) để đảm bảo tuân thủ quy trình và có cơ sở phê duyệt. Cập nhật ngay (A) hoặc chờ đợi (C, D) đều thiếu chuyên nghiệp và có thể dẫn đến rủi ro pháp lý.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502255799_ADVANCED_6_1dvn"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống quản lý nhân sự (HRM) cho công ty đa quốc gia có chi nhánh tại Việt Nam. BA phát hiện rằng 'yêu cầu về tích hợp với hệ thống chấm công của đối tác' đã được phê duyệt nhưng chưa có tài liệu thiết kế chi tiết (LLD). Hành động nào dưới đây là HIỆU QUẢ NHẤT để phát hiện sớm lỗ hổng coverage?",
+    "options": [
+      "A. Tạo task trong JIRA yêu cầu Solution Architect bổ sung LLD trước khi sprint tiếp theo bắt đầu.",
+      "B. Báo cáo cho Project Manager và chờ họ sắp xếp nguồn lực để viết LLD.",
+      "C. Tự viết một bản phác thảo LLD và gửi cho Solution Architect để hoàn thiện.",
+      "D. Ghi chú vào traceability matrix và chờ đến giai đoạn kiểm thử mới xử lý."
+    ],
+    "correctAnswer": "A",
+    "explanation": "BA cần chủ động yêu cầu Solution Architect bổ sung LLD (A) để đảm bảo traceability từ yêu cầu đến thiết kế. Việc chờ đợi (B) hoặc tự viết thiết kế (C) không phải trách nhiệm của BA. Ghi chú mà không hành động (D) không giải quyết vấn đề gốc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502255800_ADVANCED_7_012m"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống thanh toán trực tuyến cho một sàn thương mại điện tử, BA nhận được yêu cầu thay đổi từ khách hàng: 'Thêm phương thức thanh toán qua ví điện tử ZaloPay' sau khi baseline đã được phê duyệt. BA đã đánh giá và thấy rằng yêu cầu này làm tăng 15% chi phí và kéo dài timeline 2 tuần. Cách tiếp cận nào dưới đây là CHUYÊN NGHIỆP NHẤT?",
+    "options": [
+      "A. Từ chối yêu cầu vì nằm ngoài scope baseline và không có ngân sách dự phòng.",
+      "B. Chấp nhận yêu cầu và điều chỉnh timeline/ngân sách mà không cần phê duyệt chính thức để giữ khách hàng.",
+      "C. Trình Change Request lên Change Control Board (CCB) với đánh giá tác động chi tiết và đề xuất phương án tài trợ (ví dụ: khách hàng tự chi trả phần chi phí phát sinh).",
+      "D. Đề xuất khách hàng triển khai tính năng này trong phase 2 của dự án để giảm tác động."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần tuân thủ quy trình quản lý thay đổi chính thức (Change Request + CCB) và đề xuất phương án tài trợ rõ ràng (C). Từ chối (A) hoặc chấp nhận không chính thức (B) đều thiếu chuyên nghiệp. Đề xuất phase 2 (D) có thể là giải pháp nhưng cần được phê duyệt chính thức trước.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502255800_ADVANCED_8_t3dy"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống quản lý kho cho doanh nghiệp logistics tại Việt Nam. BA phát hiện rằng 'yêu cầu về cảnh báo tự động khi hàng hóa sắp hết hạn' chưa được liên kết với bất kỳ test case nào trong TestRail. Hành động nào dưới đây là PHÙ HỢP NHẤT để đảm bảo traceability?",
+    "options": [
+      "A. Báo cáo cho QA Lead và yêu cầu họ bổ sung test case ngay lập tức.",
+      "B. Tạo task trong JIRA cho QA Lead, gán deadline trước khi giai đoạn kiểm thử hệ thống (ST) bắt đầu, và cập nhật traceability matrix.",
+      "C. Tự viết test case cho yêu cầu này để đảm bảo tiến độ.",
+      "D. Ghi chú vào tài liệu yêu cầu và chờ đến khi khách hàng phản hồi trong UAT."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần chủ động tạo task theo dõi (B) và cập nhật traceability matrix để đảm bảo vấn đề được giải quyết kịp thời. Việc yêu cầu QA làm ngay (A) hoặc tự viết test case (C) không phải trách nhiệm của BA. Ghi chú mà không hành động (D) không giải quyết lỗ hổng coverage.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502255801_ADVANCED_9_72jb"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng số, BA nhận được phản hồi từ đội bảo mật rằng 'yêu cầu về mã hóa dữ liệu giao dịch phải tuân thủ tiêu chuẩn PCI DSS' nhưng tài liệu yêu cầu hiện tại chưa đề cập. BA nên làm gì để kiểm soát scope và đảm bảo tuân thủ?",
+    "options": [
+      "A. Cập nhật tài liệu yêu cầu ngay lập tức để phản ánh yêu cầu mới và thông báo cho các bên liên quan.",
+      "B. Tạo Change Request để điều chỉnh yêu cầu, đánh giá tác động và trình phê duyệt từ các bên liên quan.",
+      "C. Báo cáo cho Product Owner và chờ họ quyết định có nên điều chỉnh yêu cầu hay không.",
+      "D. Ghi chú vào tài liệu yêu cầu và chờ đến khi có yêu cầu thay đổi chính thức từ khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần quản lý thay đổi chính thức (Change Request) để đảm bảo tuân thủ quy trình và có cơ sở phê duyệt. Cập nhật ngay (A) hoặc chờ đợi (C, D) đều thiếu chuyên nghiệp và có thể dẫn đến rủi ro bảo mật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502255801_ADVANCED_10_j01w"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống quản lý dự án (PMIS) cho công ty xây dựng đa quốc gia. BA phát hiện rằng 'yêu cầu về tích hợp với phần mềm kế toán SAP' đã được phê duyệt nhưng chưa có tài liệu thiết kế chi tiết (LLD). Hành động nào dưới đây là HIỆU QUẢ NHẤT để phát hiện sớm lỗ hổng coverage?",
+    "options": [
+      "A. Tạo task trong JIRA yêu cầu Solution Architect bổ sung LLD trước khi sprint tích hợp bắt đầu.",
+      "B. Báo cáo cho Project Manager và chờ họ sắp xếp nguồn lực để viết LLD.",
+      "C. Tự viết một bản phác thảo LLD và gửi cho Solution Architect để hoàn thiện.",
+      "D. Ghi chú vào traceability matrix và chờ đến giai đoạn kiểm thử mới xử lý."
+    ],
+    "correctAnswer": "A",
+    "explanation": "BA cần chủ động yêu cầu Solution Architect bổ sung LLD (A) để đảm bảo traceability từ yêu cầu đến thiết kế. Việc chờ đợi (B) hoặc tự viết thiết kế (C) không phải trách nhiệm của BA. Ghi chú mà không hành động (D) không giải quyết vấn đề gốc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502255801_ADVANCED_11_ylqr"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống quản lý quan hệ khách hàng (CRM) cho một ngân hàng, BA nhận được yêu cầu thay đổi từ khách hàng: 'Thêm tính năng phân tích hành vi khách hàng bằng AI' sau khi baseline đã được phê duyệt. BA đã đánh giá và thấy rằng yêu cầu này làm tăng 30% chi phí và kéo dài timeline 2 tháng. Cách tiếp cận nào dưới đây là CHUYÊN NGHIỆP NHẤT?",
+    "options": [
+      "A. Từ chối yêu cầu vì vượt quá ngân sách và timeline đã được phê duyệt.",
+      "B. Chấp nhận yêu cầu và điều chỉnh timeline/ngân sách mà không cần phê duyệt chính thức để giữ khách hàng.",
+      "C. Trình Change Request lên Change Control Board (CCB) với đánh giá tác động chi tiết và đề xuất phương án tài trợ (ví dụ: khách hàng tự chi trả phần chi phí phát sinh hoặc chia thành các phase triển khai).",
+      "D. Đề xuất khách hàng triển khai tính năng này trong một dự án riêng biệt để giảm tác động."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần tuân thủ quy trình quản lý thay đổi chính thức (Change Request + CCB) và đề xuất phương án tài trợ rõ ràng (C). Từ chối (A) hoặc chấp nhận không chính thức (B) đều thiếu chuyên nghiệp. Đề xuất dự án riêng (D) có thể là giải pháp nhưng cần được phê duyệt chính thức trước.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502255802_ADVANCED_12_9x7p"
+  },
+  {
+    "questionText": "Trong một dự án chuyển đổi số quy mô lớn tại ngân hàng Việt Nam, sau khi baseline yêu cầu đã được phê duyệt, khách hàng liên tục đề xuất thêm tính năng 'tích hợp với ví điện tử ZaloPay' mà không có tài liệu thay đổi chính thức. Là Business Analyst cấp chuyên gia, hành động nào sau đây là tối ưu để kiểm soát scope creep mà vẫn duy trì mối quan hệ hợp tác với khách hàng?",
+    "options": [
+      "A. Từ chối ngay lập tức vì tính năng này không nằm trong baseline đã phê duyệt, tránh tạo tiền lệ xấu.",
+      "B. Tạo một Change Request (CR) chính thức, đánh giá tác động lên timeline, chi phí và nguồn lực, sau đó trình lên Change Control Board (CCB) để phê duyệt hoặc từ chối dựa trên dữ liệu khách quan.",
+      "C. Chấp nhận yêu cầu miệng của khách hàng để giữ mối quan hệ, sau đó điều chỉnh lại baseline một cách không chính thức.",
+      "D. Đề xuất khách hàng chờ đến phase 2 của dự án, khi đó sẽ xem xét lại yêu cầu mà không cần làm CR."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ EXPERT, cần duy trì tính chuyên nghiệp và minh bạch trong quản lý scope. Việc tạo CR chính thức giúp đánh giá tác động toàn diện (cost, time, resource) và trình CCB để ra quyết định dựa trên dữ liệu, tránh rủi ro scope creep không kiểm soát. Đồng thời, quy trình này vẫn giữ được mối quan hệ hợp tác với khách hàng bằng cách thể hiện sự tôn trọng và chuyên nghiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502359760_EXPERT_0_276e"
+  },
+  {
+    "questionText": "Bạn đang dẫn dắt một dự án triển khai core banking system cho một ngân hàng khu vực Đông Nam Á. Trong quá trình thiết kế, bạn phát hiện một nhóm yêu cầu chức năng về 'quản lý hạn mức tín dụng' không được ánh xạ tới bất kỳ test case nào trong tài liệu kiểm thử. Là BA cấp chuyên gia, bước tiếp theo quan trọng nhất để đảm bảo traceability là gì?",
+    "options": [
+      "A. Báo cáo ngay cho QA Lead để bổ sung test case, vì đây là trách nhiệm của đội kiểm thử.",
+      "B. Tạo một traceability matrix cập nhật, đánh dấu các yêu cầu thiếu coverage, sau đó tổ chức cuộc họp với Product Owner và QA để phân tích nguyên nhân và lập kế hoạch khắc phục (ví dụ: bổ sung test case hoặc loại bỏ yêu cầu nếu không còn phù hợp).",
+      "C. Ghi chú lại vấn đề trong tài liệu thiết kế và chờ đến giai đoạn UAT để xác nhận với khách hàng.",
+      "D. Đề xuất loại bỏ các yêu cầu này khỏi baseline vì không có test case đồng nghĩa với việc không cần triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Traceability matrix là công cụ then chốt để phát hiện sớm các lỗ hổng coverage. Ở cấp EXPERT, BA không chỉ ghi nhận vấn đề mà còn phải chủ động phân tích nguyên nhân (ví dụ: yêu cầu mới thêm nhưng chưa được QA cập nhật, hoặc yêu cầu không còn phù hợp) và phối hợp với các bên liên quan để đưa ra giải pháp kịp thời, tránh rủi ro phát sinh ở giai đoạn sau.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502359761_EXPERT_1_4diy"
+  },
+  {
+    "questionText": "Trong một dự án Agile triển khai hệ thống eKYC cho công ty fintech, Product Owner liên tục thay đổi ưu tiên của các user story mà không cập nhật lại baseline hoặc thông báo cho đội ngũ phát triển. Điều này dẫn đến việc nhiều user story bị bỏ sót trong sprint planning. Là BA cấp chuyên gia, giải pháp dài hạn nào sau đây hiệu quả nhất để kiểm soát scope và duy trì traceability?",
+    "options": [
+      "A. Yêu cầu Product Owner ký cam kết không thay đổi ưu tiên user story trong suốt sprint để đảm bảo ổn định scope.",
+      "B. Triển khai một công cụ quản lý yêu cầu (ví dụ: JIRA + Confluence) kết hợp với quy trình tự động cập nhật baseline mỗi khi có thay đổi ưu tiên, đồng thời tổ chức buổi refinement hàng tuần để đồng bộ hóa với PO và đội ngũ.",
+      "C. Ghi nhận tất cả thay đổi của PO vào một tài liệu riêng và chỉ cập nhật baseline vào cuối mỗi sprint.",
+      "D. Đề xuất chuyển sang mô hình Waterfall để kiểm soát scope chặt chẽ hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp EXPERT, giải pháp cần vừa đảm bảo tính linh hoạt của Agile vừa kiểm soát được scope. Việc sử dụng công cụ quản lý yêu cầu kết hợp quy trình tự động cập nhật baseline giúp duy trì traceability thời gian thực. Đồng thời, refinement hàng tuần tạo cơ hội để đồng bộ hóa với PO và đội ngũ, giảm thiểu rủi ro bỏ sót yêu cầu. Giải pháp này mang tính chiến lược và bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502359762_EXPERT_2_7kpy"
+  },
+  {
+    "questionText": "Bạn đang làm BA cho dự án triển khai hệ thống ERP tại một tập đoàn sản xuất đa quốc gia. Sau khi baseline yêu cầu được phê duyệt, khách hàng yêu cầu thêm module 'quản lý chuỗi cung ứng toàn cầu' nhưng không cung cấp đủ chi tiết về yêu cầu nghiệp vụ. Là BA cấp chuyên gia, cách tiếp cận nào sau đây tối ưu để quản lý scope và đảm bảo traceability?",
+    "options": [
+      "A. Chấp nhận yêu cầu ngay lập tức để không làm chậm tiến độ, sau đó yêu cầu khách hàng bổ sung chi tiết sau.",
+      "B. Từ chối yêu cầu vì thiếu thông tin, yêu cầu khách hàng cung cấp đầy đủ tài liệu trước khi xem xét.",
+      "C. Tạo một Change Request (CR) chính thức, đồng thời đề xuất tổ chức workshop với các bên liên quan (khách hàng, nhà cung cấp, đội ngũ nội bộ) để làm rõ yêu cầu, đánh giá tác động và xây dựng traceability matrix cho module mới trước khi trình CCB phê duyệt.",
+      "D. Đề xuất khách hàng triển khai module này trong một dự án riêng để tránh ảnh hưởng đến scope hiện tại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở cấp EXPERT, BA cần chủ động giải quyết vấn đề thiếu thông tin bằng cách tổ chức workshop để làm rõ yêu cầu, đồng thời sử dụng CR để quản lý scope chính thức. Việc xây dựng traceability matrix ngay từ đầu cho module mới giúp đảm bảo tất cả yêu cầu đều được theo dõi và kiểm soát, tránh rủi ro phát sinh sau này. Giải pháp này kết hợp giữa quản lý scope và traceability một cách chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502359763_EXPERT_3_gp1x"
+  },
+  {
+    "questionText": "Trong một dự án triển khai hệ thống quản lý rủi ro tín dụng cho ngân hàng, bạn phát hiện rằng một số yêu cầu phi chức năng (NFR) về 'hiệu suất hệ thống' không được ánh xạ tới bất kỳ thiết kế kỹ thuật hoặc test case nào. Là BA cấp chuyên gia, phân tích nào sau đây là chính xác và cần ưu tiên thực hiện?",
+    "options": [
+      "A. Bỏ qua NFR vì đây là trách nhiệm của đội kỹ thuật, BA chỉ cần tập trung vào yêu cầu chức năng.",
+      "B. Cập nhật traceability matrix để đánh dấu các NFR thiếu coverage, sau đó phối hợp với Solution Architect và QA Lead để đánh giá tác động lên kiến trúc hệ thống và xây dựng test case phù hợp, đồng thời cập nhật lại baseline nếu cần.",
+      "C. Đề xuất loại bỏ các NFR này vì chúng không trực tiếp liên quan đến nghiệp vụ của ngân hàng.",
+      "D. Ghi chú vấn đề vào tài liệu dự án và chờ đến giai đoạn kiểm thử hiệu suất để xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "NFR (Non-Functional Requirements) đóng vai trò quan trọng trong việc đảm bảo hệ thống hoạt động ổn định và hiệu quả. Ở cấp EXPERT, BA cần chủ động phối hợp với các bên liên quan (Solution Architect, QA) để đánh giá tác động và xây dựng coverage cho NFR. Việc cập nhật traceability matrix và baseline giúp đảm bảo traceability toàn diện, tránh rủi ro phát sinh ở giai đoạn sau.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502359763_EXPERT_4_digg"
+  },
+  {
+    "questionText": "Bạn là BA dẫn dắt dự án triển khai hệ thống core banking cho một ngân hàng tại Việt Nam. Trong quá trình UAT, khách hàng phát hiện một số chức năng không hoạt động như mong đợi và yêu cầu sửa đổi. Tuy nhiên, khi kiểm tra traceability matrix, bạn nhận thấy các yêu cầu này đã được phê duyệt trong baseline và được triển khai đúng theo thiết kế. Là BA cấp chuyên gia, bước tiếp theo quan trọng nhất là gì?",
+    "options": [
+      "A. Từ chối yêu cầu sửa đổi vì chức năng đã được triển khai đúng theo baseline đã phê duyệt.",
+      "B. Tạo một Change Request (CR) mới, đánh giá tác động của yêu cầu sửa đổi lên scope, timeline và chi phí, sau đó trình CCB để phê duyệt hoặc từ chối.",
+      "C. Chấp nhận yêu cầu sửa đổi ngay lập tức để đảm bảo tiến độ UAT, sau đó cập nhật lại baseline sau.",
+      "D. Đề xuất khách hàng chấp nhận chức năng hiện tại và lên kế hoạch triển khai sửa đổi trong phase 2."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dù chức năng đã được triển khai đúng theo baseline, nhưng yêu cầu sửa đổi từ khách hàng trong UAT có thể xuất phát từ sự thay đổi trong nghiệp vụ hoặc hiểu lầm ban đầu. Ở cấp EXPERT, BA cần sử dụng CR để quản lý scope chính thức, đánh giá tác động toàn diện và trình CCB để ra quyết định khách quan. Điều này đảm bảo tính minh bạch và kiểm soát scope hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502359764_EXPERT_5_fbwm"
+  },
+  {
+    "questionText": "Trong một dự án Agile triển khai hệ thống quản lý khách hàng (CRM) cho công ty bảo hiểm, Product Owner thường xuyên thêm user story mới vào backlog mà không đánh giá tác động lên sprint goal hoặc baseline. Điều này dẫn đến việc đội ngũ phát triển bị quá tải và không hoàn thành sprint goal. Là BA cấp chuyên gia, giải pháp nào sau đây hiệu quả nhất để kiểm soát scope và duy trì traceability trong dài hạn?",
+    "options": [
+      "A. Đề xuất Product Owner ngừng thêm user story mới vào backlog trong suốt sprint để đảm bảo ổn định scope.",
+      "B. Triển khai quy trình 'Definition of Ready' (DoR) chặt chẽ, yêu cầu tất cả user story phải được làm rõ, đánh giá tác động và phê duyệt bởi BA và PO trước khi đưa vào backlog, đồng thời sử dụng traceability matrix để theo dõi các thay đổi.",
+      "C. Chấp nhận tất cả user story mới từ PO, sau đó yêu cầu đội ngũ phát triển làm thêm giờ để hoàn thành sprint goal.",
+      "D. Đề xuất chuyển sang mô hình Waterfall để kiểm soát scope chặt chẽ hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp 'Definition of Ready' (DoR) giúp đảm bảo tất cả user story đều được làm rõ và đánh giá tác động trước khi đưa vào backlog, từ đó kiểm soát scope hiệu quả. Kết hợp với traceability matrix, BA có thể theo dõi các thay đổi và đảm bảo traceability trong suốt dự án. Đây là giải pháp chiến lược và bền vững, phù hợp với cấp độ EXPERT.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502359765_EXPERT_6_ukle"
+  },
+  {
+    "questionText": "Bạn đang làm BA cho dự án triển khai hệ thống thanh toán xuyên biên giới cho một ngân hàng quốc tế. Sau khi baseline yêu cầu được phê duyệt, khách hàng yêu cầu thêm tính năng 'hỗ trợ thanh toán bằng tiền ảo' nhưng không cung cấp đủ thông tin về quy định pháp lý và yêu cầu kỹ thuật. Là BA cấp chuyên gia, cách tiếp cận nào sau đây là tối ưu để quản lý scope và đảm bảo traceability?",
+    "options": [
+      "A. Chấp nhận yêu cầu ngay lập tức và yêu cầu khách hàng bổ sung thông tin sau.",
+      "B. Từ chối yêu cầu vì thiếu thông tin và yêu cầu khách hàng cung cấp đầy đủ tài liệu trước khi xem xét.",
+      "C. Tạo một Change Request (CR) chính thức, đồng thời đề xuất tổ chức một loạt workshop với các bên liên quan (khách hàng, đội pháp lý, đội kỹ thuật) để làm rõ yêu cầu, đánh giá tác động và xây dựng traceability matrix trước khi trình CCB phê duyệt.",
+      "D. Đề xuất khách hàng triển khai tính năng này trong một dự án riêng để tránh ảnh hưởng đến scope hiện tại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Yêu cầu về tiền ảo liên quan đến nhiều yếu tố pháp lý và kỹ thuật phức tạp. Ở cấp EXPERT, BA cần chủ động tổ chức workshop để làm rõ yêu cầu và đánh giá tác động, đồng thời sử dụng CR để quản lý scope chính thức. Việc xây dựng traceability matrix ngay từ đầu giúp đảm bảo tất cả yêu cầu đều được theo dõi và kiểm soát, tránh rủi ro phát sinh sau này.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502359765_EXPERT_7_cqb2"
+  },
+  {
+    "questionText": "Trong một dự án triển khai hệ thống quản lý tài sản cho công ty chứng khoán, bạn phát hiện rằng một số yêu cầu về 'báo cáo tuân thủ quy định' không được ánh xạ tới bất kỳ tài liệu thiết kế hoặc test case nào. Là BA cấp chuyên gia, phân tích nào sau đây là chính xác và cần ưu tiên thực hiện?",
+    "options": [
+      "A. Bỏ qua các yêu cầu này vì chúng không trực tiếp liên quan đến nghiệp vụ chính của hệ thống.",
+      "B. Cập nhật traceability matrix để đánh dấu các yêu cầu thiếu coverage, sau đó phối hợp với Compliance Officer và QA Lead để đánh giá tác động và xây dựng test case phù hợp, đồng thời cập nhật lại baseline nếu cần.",
+      "C. Đề xuất loại bỏ các yêu cầu này vì chúng quá phức tạp và tốn kém để triển khai.",
+      "D. Ghi chú vấn đề vào tài liệu dự án và chờ đến giai đoạn kiểm thử tuân thủ để xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu về báo cáo tuân thủ là bắt buộc đối với các công ty chứng khoán. Ở cấp EXPERT, BA cần chủ động phối hợp với Compliance Officer và QA để đánh giá tác động và xây dựng coverage cho các yêu cầu này. Việc cập nhật traceability matrix và baseline giúp đảm bảo traceability toàn diện, tránh rủi ro pháp lý và phát sinh chi phí không đáng có.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502359766_EXPERT_8_y4oi"
+  },
+  {
+    "questionText": "Bạn đang dẫn dắt dự án triển khai hệ thống quản lý quan hệ đối tác (PRM) cho một tập đoàn bán lẻ. Trong quá trình triển khai, đối tác chiến lược yêu cầu thêm tính năng 'tích hợp với hệ thống quản lý kho của bên thứ ba' mà không có trong baseline ban đầu. Là BA cấp chuyên gia, hành động nào sau đây là tối ưu để kiểm soát scope và duy trì traceability?",
+    "options": [
+      "A. Từ chối yêu cầu vì tính năng này không nằm trong baseline đã phê duyệt.",
+      "B. Chấp nhận yêu cầu miệng của đối tác để duy trì mối quan hệ, sau đó điều chỉnh lại baseline không chính thức.",
+      "C. Tạo một Change Request (CR) chính thức, đánh giá tác động lên timeline, chi phí và nguồn lực, đồng thời xây dựng traceability matrix cho tính năng mới trước khi trình CCB phê duyệt.",
+      "D. Đề xuất đối tác chờ đến phase 2 của dự án để triển khai tính năng này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở cấp EXPERT, BA cần duy trì tính chuyên nghiệp và minh bạch trong quản lý scope. Việc tạo CR chính thức giúp đánh giá tác động toàn diện và xây dựng traceability matrix cho tính năng mới, đảm bảo tất cả yêu cầu đều được theo dõi và kiểm soát. Quy trình này cũng giúp duy trì mối quan hệ hợp tác với đối tác bằng cách thể hiện sự tôn trọng và chuyên nghiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SITUATION",
+    "id": "q_1780502359767_EXPERT_9_nzty"
+  },
+  {
+    "questionText": "Trong một dự án triển khai hệ thống quản lý dự án (PPM) cho công ty xây dựng, bạn phát hiện rằng một số yêu cầu về 'tích hợp với phần mềm kế toán' không được cập nhật trong baseline mới nhất, mặc dù đã có thay đổi thiết kế. Là BA cấp chuyên gia, bước tiếp theo quan trọng nhất để đảm bảo traceability là gì?",
+    "options": [
+      "A. Bỏ qua sự không nhất quán này vì baseline sẽ được cập nhật ở giai đoạn cuối của dự án.",
+      "B. Cập nhật ngay lập tức baseline và traceability matrix để phản ánh các thay đổi thiết kế, sau đó thông báo cho tất cả các bên liên quan (PO, đội phát triển, QA) về sự thay đổi này.",
+      "C. Ghi chú sự không nhất quán vào tài liệu dự án và chờ đến cuộc họp retrospective để thảo luận.",
+      "D. Đề xuất loại bỏ các yêu cầu tích hợp này vì chúng quá phức tạp và tốn kém."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Traceability và baseline phải luôn được cập nhật kịp thời để phản ánh trạng thái thực tế của dự án. Ở cấp EXPERT, BA cần chủ động cập nhật baseline và traceability matrix, đồng thời thông báo cho các bên liên quan để đảm bảo sự đồng bộ và tránh rủi ro phát sinh do thông tin không nhất quán.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502359767_EXPERT_10_bzl2"
+  },
+  {
+    "questionText": "Bạn là BA dẫn dắt dự án triển khai hệ thống quản lý chuỗi cung ứng (SCM) cho một tập đoàn sản xuất. Trong quá trình kiểm thử hệ thống, khách hàng phát hiện một số chức năng không đáp ứng đúng yêu cầu nghiệp vụ và yêu cầu sửa đổi. Tuy nhiên, khi kiểm tra traceability matrix, bạn nhận thấy các yêu cầu này đã được triển khai đúng theo baseline đã phê duyệt. Là BA cấp chuyên gia, phân tích nào sau đây là chính xác và cần thực hiện?",
+    "options": [
+      "A. Khách hàng đã hiểu sai yêu cầu, do đó không cần sửa đổi hệ thống.",
+      "B. Yêu cầu sửa đổi là hợp lý vì có thể baseline ban đầu không phản ánh đúng nhu cầu thực tế của khách hàng. Cần tạo Change Request (CR) để đánh giá tác động và trình CCB phê duyệt, đồng thời cập nhật lại traceability matrix nếu CR được chấp thuận.",
+      "C. Chấp nhận yêu cầu sửa đổi ngay lập tức để đảm bảo tiến độ kiểm thử, sau đó cập nhật lại baseline sau.",
+      "D. Đề xuất khách hàng sử dụng hệ thống như hiện tại và lên kế hoạch sửa đổi trong phase 2."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dù baseline đã được phê duyệt, nhưng yêu cầu sửa đổi từ khách hàng có thể xuất phát từ sự thay đổi trong nghiệp vụ hoặc hiểu lầm ban đầu. Ở cấp EXPERT, BA cần sử dụng CR để quản lý scope chính thức, đánh giá tác động toàn diện và trình CCB để ra quyết định khách quan. Việc cập nhật traceability matrix nếu CR được chấp thuận giúp đảm bảo traceability và kiểm soát scope hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "ANALYSIS",
+    "id": "q_1780502359768_EXPERT_11_81kp"
+  },
+  {
+    "questionText": "Trong một dự án triển khai hệ thống quản lý nhân sự (HRM) cho công ty đa quốc gia, bạn nhận thấy rằng các yêu cầu về 'tuân thủ quy định lao động địa phương' thay đổi liên tục do sự khác biệt về pháp luật giữa các quốc gia. Là BA cấp chuyên gia, giải pháp dài hạn nào sau đây hiệu quả nhất để kiểm soát scope và duy trì traceability?",
+    "options": [
+      "A. Đề xuất khách hàng chấp nhận một bộ yêu cầu chung cho tất cả các quốc gia để đơn giản hóa scope.",
+      "B. Tạo một traceability matrix riêng cho từng quốc gia, đồng thời triển khai quy trình đánh giá tác động và cập nhật baseline mỗi khi có thay đổi quy định, kết hợp với việc sử dụng công cụ quản lý yêu cầu để tự động hóa theo dõi.",
+      "C. Ghi nhận tất cả thay đổi vào một tài liệu chung và cập nhật baseline vào cuối mỗi quý.",
+      "D. Đề xuất khách hàng triển khai hệ thống riêng cho từng quốc gia để tránh xung đột yêu cầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp EXPERT, giải pháp cần đảm bảo tính linh hoạt và kiểm soát scope hiệu quả trong môi trường đa quốc gia. Việc tạo traceability matrix riêng cho từng quốc gia và triển khai quy trình đánh giá tác động giúp duy trì traceability chính xác. Kết hợp với công cụ quản lý yêu cầu, giải pháp này mang tính chiến lược và bền vững, phù hợp với dự án quy mô lớn và phức tạp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Scope Control & Requirement Traceability",
+    "category": "SKILL",
+    "id": "q_1780502359768_EXPERT_12_faij"
+  }
+]

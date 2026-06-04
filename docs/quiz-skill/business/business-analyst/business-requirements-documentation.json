@@ -1,0 +1,782 @@
+[
+  {
+    "questionText": "Tài liệu nào sau đây MÔ TẢ CHI TIẾT các yêu cầu nghiệp vụ từ góc nhìn của khách hàng và tập trung vào mục tiêu kinh doanh?",
+    "options": [
+      "A. System Requirements Specification (SRS)",
+      "B. Business Requirements Document (BRD)",
+      "C. Functional Requirements Document (FRD)",
+      "D. Technical Design Document (TDD)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "BRD tập trung vào mục tiêu kinh doanh và mô tả yêu cầu nghiệp vụ từ góc nhìn của khách hàng, không đi sâu vào chi tiết kỹ thuật như SRS hay FRD.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780500425943_BEGINNER_0_itfe"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý đơn hàng cho công ty bán lẻ tại Việt Nam, yêu cầu nào sau đây ĐƯỢC COI LÀ 'business rule'?",
+    "options": [
+      "A. Hệ thống phải xử lý 1000 đơn hàng mỗi giờ",
+      "B. Khách hàng chỉ được phép hủy đơn hàng trong vòng 24 giờ sau khi đặt",
+      "C. Giao diện người dùng phải sử dụng framework React",
+      "D. Database phải được triển khai trên AWS RDS"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business rule là quy tắc nghiệp vụ định nghĩa cách thức hoạt động của doanh nghiệp, như quy định về hủy đơn hàng. Các lựa chọn khác là yêu cầu kỹ thuật hoặc hiệu năng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500425943_BEGINNER_1_bwmi"
+  },
+  {
+    "questionText": "Khi viết yêu cầu nghiệp vụ cho dự án ngân hàng số tại Việt Nam, câu nào sau đây ĐƯỢC VIẾT RÕ RÀNG và phù hợp cho cả nhóm phát triển (dev) và kiểm thử (QA)?",
+    "options": [
+      "A. Hệ thống cần xử lý giao dịch nhanh chóng",
+      "B. Hệ thống phải xác thực OTP trong vòng 30 giây sau khi khách hàng nhập mã",
+      "C. Giao diện cần thân thiện với người dùng",
+      "D. Hệ thống phải tốt"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu rõ ràng cần có tiêu chí đo lường cụ thể (30 giây) và mô tả hành động xác định (xác thực OTP). Các lựa chọn khác mơ hồ hoặc không đo lường được.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500425943_BEGINNER_2_y2sd"
+  },
+  {
+    "questionText": "Mục đích chính của việc xác định 'scope' trong tài liệu yêu cầu nghiệp vụ là gì?",
+    "options": [
+      "A. Để liệt kê tất cả các chức năng kỹ thuật cần triển khai",
+      "B. Để xác định rõ ranh giới của dự án, những gì được bao gồm và không được bao gồm",
+      "C. Để mô tả chi tiết giao diện người dùng",
+      "D. Để định nghĩa cấu trúc database"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scope xác định ranh giới dự án, giúp tránh hiểu lầm về những gì dự án sẽ và không sẽ triển khai. Đây là bước quan trọng để quản lý kỳ vọng của các bên liên quan.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780500425943_BEGINNER_3_m80r"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống CRM cho công ty bảo hiểm, giả định (assumption) nào sau đây CÓ THỂ ĐƯỢC GHI NHẬN trong tài liệu yêu cầu?",
+    "options": [
+      "A. Khách hàng sẽ sử dụng hệ thống CRM trên trình duyệt Chrome",
+      "B. Hệ thống phải xử lý 5000 yêu cầu mỗi giây",
+      "C. Database sẽ sử dụng PostgreSQL",
+      "D. Nhóm phát triển sẽ hoàn thành dự án trong 6 tháng"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giả định (assumption) là điều kiện được cho là đúng tại thời điểm viết tài liệu nhưng chưa được xác nhận chắc chắn. Việc khách hàng sử dụng Chrome là một ví dụ điển hình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500425943_BEGINNER_4_wypj"
+  },
+  {
+    "questionText": "Khi viết tài liệu yêu cầu cho dự án hệ thống quản lý kho hàng, hạn chế (constraint) nào sau đây THƯỜNG ĐƯỢC ĐỀ CẬP?",
+    "options": [
+      "A. Hệ thống phải tích hợp với phần mềm kế toán hiện tại của công ty",
+      "B. Giao diện phải thân thiện với người dùng",
+      "C. Hệ thống phải xử lý dữ liệu nhanh chóng",
+      "D. Yêu cầu nghiệp vụ phải rõ ràng"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Hạn chế (constraint) là các ràng buộc không thể thay đổi, như yêu cầu tích hợp với hệ thống hiện tại. Các lựa chọn khác là yêu cầu chức năng hoặc không phải ràng buộc cứng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500425943_BEGINNER_5_owl1"
+  },
+  {
+    "questionText": "Trong tài liệu BRD, mục nào sau đây THƯỜNG ĐƯỢC SỬ DỤNG để theo dõi mối liên hệ giữa mục tiêu kinh doanh và các yêu cầu cụ thể?",
+    "options": [
+      "A. Business Rules",
+      "B. Traceability Matrix",
+      "C. Scope Statement",
+      "D. Technical Specifications"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Traceability Matrix là công cụ theo dõi mối liên hệ giữa mục tiêu kinh doanh và các yêu cầu cụ thể, đảm bảo mọi yêu cầu đều phục vụ mục tiêu đã đề ra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780500425943_BEGINNER_6_9oyv"
+  },
+  {
+    "questionText": "Khi viết yêu cầu nghiệp vụ cho dự án hệ thống đặt vé máy bay, câu nào sau đây ĐƯỢC VIẾT SAI vì không rõ ràng hoặc không đo lường được?",
+    "options": [
+      "A. Hệ thống phải hiển thị thông tin chuyến bay trong vòng 2 giây sau khi khách hàng nhập điểm đi và đến",
+      "B. Hệ thống cần xử lý đặt vé nhanh chóng",
+      "C. Hệ thống phải hỗ trợ thanh toán qua thẻ tín dụng và ví điện tử",
+      "D. Hệ thống phải gửi email xác nhận vé cho khách hàng trong vòng 5 phút sau khi đặt vé thành công"
+    ],
+    "correctAnswer": "B",
+    "explanation": "'Xử lý đặt vé nhanh chóng' là yêu cầu mơ hồ vì không có tiêu chí đo lường cụ thể. Các lựa chọn khác đều có thời gian hoặc chức năng xác định rõ ràng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500425943_BEGINNER_7_j0u8"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý nhân sự cho công ty đa quốc gia, yêu cầu nào sau đây THUỘC VỀ 'functional requirement'?",
+    "options": [
+      "A. Hệ thống phải tuân thủ quy định bảo mật dữ liệu GDPR",
+      "B. Hệ thống phải cho phép nhân viên cập nhật thông tin cá nhân",
+      "C. Hệ thống phải chạy trên nền tảng đám mây AWS",
+      "D. Hệ thống phải có thời gian hoạt động 99.9%"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Functional requirement mô tả chức năng cụ thể mà hệ thống phải thực hiện, như cho phép nhân viên cập nhật thông tin cá nhân. Các lựa chọn khác là yêu cầu phi chức năng hoặc ràng buộc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500425943_BEGINNER_8_4nfb"
+  },
+  {
+    "questionText": "Khi viết tài liệu yêu cầu cho dự án ngân hàng, câu nào sau đây THỂ HIỆN 'business rule' một cách chính xác?",
+    "options": [
+      "A. Khách hàng phải nhập mật khẩu mạnh ít nhất 8 ký tự",
+      "B. Hệ thống phải xử lý giao dịch chuyển khoản trong vòng 5 giây",
+      "C. Khách hàng chỉ được phép rút tối đa 20 triệu VND mỗi ngày từ tài khoản tiết kiệm",
+      "D. Giao diện phải hỗ trợ tiếng Việt và tiếng Anh"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Business rule là quy tắc nghiệp vụ định nghĩa giới hạn hoặc điều kiện hoạt động của doanh nghiệp, như giới hạn rút tiền. Các lựa chọn khác là yêu cầu kỹ thuật hoặc chức năng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500425943_BEGINNER_9_7tdi"
+  },
+  {
+    "questionText": "Trong tài liệu BRD, mục 'assumptions' CÓ VAI TRÒ GÌ?",
+    "options": [
+      "A. Để liệt kê các ràng buộc kỹ thuật của dự án",
+      "B. Để ghi nhận những điều kiện được cho là đúng tại thời điểm viết tài liệu nhưng chưa được xác nhận chắc chắn",
+      "C. Để mô tả chi tiết các chức năng hệ thống",
+      "D. Để định nghĩa cấu trúc database"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Assumptions ghi nhận các giả định được coi là đúng tại thời điểm viết tài liệu, giúp quản lý rủi ro nếu giả định không còn đúng trong tương lai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780500425943_BEGINNER_10_uoty"
+  },
+  {
+    "questionText": "Khi viết yêu cầu nghiệp vụ cho dự án hệ thống quản lý bán hàng, câu nào sau đây ĐƯỢC VIẾT ĐÚNG và phù hợp cho nhóm phát triển?",
+    "options": [
+      "A. Hệ thống cần đẹp và hiện đại",
+      "B. Hệ thống phải cho phép nhân viên bán hàng tạo đơn hàng mới với đầy đủ thông tin khách hàng, sản phẩm và số lượng",
+      "C. Hệ thống phải nhanh",
+      "D. Hệ thống cần tốt cho người dùng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu phải mô tả rõ ràng chức năng cụ thể mà hệ thống cần thực hiện. Các lựa chọn khác mơ hồ và không cung cấp thông tin hữu ích cho nhóm phát triển.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500425943_BEGINNER_11_vi8c"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống thanh toán trực tuyến, hạn chế (constraint) nào sau đây THƯỜNG ĐƯỢC ĐỀ CẬP trong tài liệu yêu cầu?",
+    "options": [
+      "A. Hệ thống phải hỗ trợ thanh toán qua thẻ tín dụng và ví điện tử",
+      "B. Hệ thống phải tuân thủ tiêu chuẩn bảo mật PCI DSS",
+      "C. Giao diện phải thân thiện với người dùng",
+      "D. Hệ thống phải xử lý giao dịch nhanh chóng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hạn chế (constraint) là các ràng buộc không thể thay đổi, như yêu cầu tuân thủ tiêu chuẩn bảo mật PCI DSS. Các lựa chọn khác là yêu cầu chức năng hoặc không phải ràng buộc cứng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500425943_BEGINNER_12_vb6u"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý đơn hàng cho một công ty bán lẻ tại Việt Nam, bạn được yêu cầu viết tài liệu Business Requirements Document (BRD). Mục đích chính của BRD trong trường hợp này là gì?",
+    "options": [
+      "A. Đưa ra thiết kế chi tiết về giao diện người dùng và cơ sở dữ liệu cho đội phát triển.",
+      "B. Xác định rõ nhu cầu kinh doanh, mục tiêu và phạm vi dự án để các bên liên quan thống nhất trước khi triển khai.",
+      "C. Liệt kê các test case cụ thể để đội QA kiểm thử hệ thống sau khi hoàn thành.",
+      "D. Cung cấp hướng dẫn sử dụng hệ thống cho nhân viên công ty sau khi triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BRD tập trung vào việc xác định nhu cầu kinh doanh, mục tiêu và phạm vi dự án để đảm bảo tất cả các bên liên quan (stakeholders) hiểu và thống nhất trước khi bắt đầu triển khai. Các tài liệu khác như FRD/SRS sẽ đi sâu vào chi tiết kỹ thuật, còn test case và hướng dẫn sử dụng không phải là nội dung của BRD.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780500503978_INTERMEDIATE_0_ptlj"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án nâng cấp hệ thống CRM cho một ngân hàng tại Việt Nam. Khi định nghĩa phạm vi (scope) trong BRD, điều nào sau đây KHÔNG nên đưa vào?",
+    "options": [
+      "A. Các tính năng cốt lõi cần triển khai như quản lý khách hàng, báo cáo doanh số.",
+      "B. Chi tiết kỹ thuật về cách tích hợp hệ thống CRM với hệ thống core banking.",
+      "C. Các quy trình nghiệp vụ cụ thể mà hệ thống sẽ hỗ trợ, như quy trình chăm sóc khách hàng.",
+      "D. Các hệ thống hoặc bộ phận bên ngoài sẽ tương tác với hệ thống CRM mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phạm vi (scope) trong BRD tập trung vào các tính năng, quy trình nghiệp vụ và các hệ thống tương tác, nhưng không đi sâu vào chi tiết kỹ thuật (ví dụ: cách tích hợp). Chi tiết kỹ thuật sẽ được mô tả trong FRD hoặc SRS.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500503979_INTERMEDIATE_1_z0px"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống e-commerce cho một doanh nghiệp Việt Nam, bạn cần ghi nhận giả định (assumption) trong BRD. Giả định nào sau đây là hợp lý và cần thiết?",
+    "options": [
+      "A. 'Hệ thống sẽ được triển khai trên nền tảng AWS với chi phí tối đa 50 triệu VND/tháng.'",
+      "B. 'Khách hàng sẽ sử dụng hệ thống 24/7 mà không gặp lỗi kỹ thuật.'",
+      "C. 'Đội phát triển sẽ hoàn thành dự án trong vòng 3 tháng kể từ ngày bắt đầu.'",
+      "D. 'Người dùng cuối sẽ được đào tạo đầy đủ về cách sử dụng hệ thống trước khi triển khai chính thức.'"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Giả định (assumption) là các điều kiện được coi là đúng để dự án có thể triển khai, nhưng không thể kiểm soát hoàn toàn. Việc đào tạo người dùng là một giả định hợp lý vì nó ảnh hưởng đến thành công của dự án nhưng không phải là trách nhiệm trực tiếp của đội phát triển. Các lựa chọn khác hoặc là ràng buộc (constraint) hoặc là kỳ vọng không thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500503979_INTERMEDIATE_2_dszg"
+  },
+  {
+    "questionText": "Bạn đang viết tài liệu yêu cầu cho dự án triển khai hệ thống quản lý kho cho một nhà máy sản xuất tại Việt Nam. Quy tắc nghiệp vụ (business rule) nào sau đây cần được ghi nhận trong BRD?",
+    "options": [
+      "A. 'Hệ thống sẽ tự động gửi email cảnh báo khi số lượng hàng tồn kho dưới 10 đơn vị.'",
+      "B. 'Giao diện người dùng sẽ được thiết kế theo chuẩn Material Design của Google.'",
+      "C. 'Hệ thống sẽ sử dụng cơ sở dữ liệu PostgreSQL để lưu trữ dữ liệu.'",
+      "D. 'Đội phát triển sẽ viết unit test cho tất cả các API trước khi bàn giao.'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Quy tắc nghiệp vụ (business rule) là các quy định hoặc chính sách của doanh nghiệp ảnh hưởng đến cách hệ thống hoạt động. Ví dụ về cảnh báo tồn kho là một quy tắc nghiệp vụ cần được ghi nhận. Các lựa chọn khác liên quan đến thiết kế kỹ thuật, công nghệ hoặc quy trình phát triển, không phải là quy tắc nghiệp vụ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500503979_INTERMEDIATE_3_8paj"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý dự án cho một công ty công nghệ, bạn cần viết yêu cầu cho tính năng 'Báo cáo tiến độ dự án'. Cách diễn đạt nào sau đây là rõ ràng và phù hợp cho cả đội phát triển (dev) và đội kiểm thử (QA)?",
+    "options": [
+      "A. 'Hệ thống cần cung cấp báo cáo tiến độ dự án đẹp và dễ hiểu.'",
+      "B. 'Hệ thống phải cho phép người dùng xuất báo cáo tiến độ dự án dưới định dạng PDF và Excel, bao gồm các thông tin: tên dự án, tiến độ (%), thời gian hoàn thành dự kiến, và tên người phụ trách.'",
+      "C. 'Báo cáo tiến độ dự án phải được thiết kế theo mẫu của công ty và hiển thị trên giao diện dashboard.'",
+      "D. 'Đội phát triển cần đảm bảo báo cáo tiến độ dự án chạy nhanh và không bị lỗi.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu cần cụ thể, đo lường được và không mơ hồ. Lựa chọn B cung cấp thông tin rõ ràng về định dạng xuất, nội dung báo cáo và đối tượng sử dụng, giúp cả dev và QA hiểu và triển khai chính xác. Các lựa chọn khác hoặc quá chung chung hoặc thiếu chi tiết cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500503979_INTERMEDIATE_4_ej79"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án triển khai hệ thống quản lý nhân sự cho một tập đoàn đa quốc gia. Khi viết yêu cầu cho tính năng 'Xét duyệt đơn xin nghỉ phép', điều nào sau đây là ràng buộc (constraint) cần ghi nhận trong BRD?",
+    "options": [
+      "A. 'Hệ thống phải tuân thủ quy định của Luật Lao động Việt Nam về số ngày nghỉ phép tối thiểu cho nhân viên.'",
+      "B. 'Đơn xin nghỉ phép phải được xét duyệt bởi quản lý trực tiếp trước khi gửi lên cấp cao hơn.'",
+      "C. 'Giao diện xét duyệt đơn nghỉ phép cần thân thiện và dễ sử dụng.'",
+      "D. 'Hệ thống sẽ gửi thông báo tự động đến nhân viên sau khi đơn nghỉ phép được xét duyệt.'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ràng buộc (constraint) là các giới hạn hoặc điều kiện bắt buộc mà hệ thống phải tuân thủ, thường liên quan đến luật pháp, công nghệ hoặc chính sách của tổ chức. Luật Lao động Việt Nam là một ràng buộc pháp lý. Các lựa chọn khác là quy tắc nghiệp vụ hoặc yêu cầu chức năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500503979_INTERMEDIATE_5_t6s3"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý bán hàng cho một chuỗi cửa hàng tại Việt Nam, bạn cần đảm bảo tính truy xuất nguồn gốc (traceability) giữa mục tiêu kinh doanh và yêu cầu. Mục tiêu kinh doanh nào sau đây có thể ánh xạ trực tiếp đến yêu cầu 'Hệ thống phải hỗ trợ tính năng báo cáo doanh số theo khu vực'?",
+    "options": [
+      "A. 'Tăng cường trải nghiệm khách hàng tại các cửa hàng.'",
+      "B. 'Giảm 20% thời gian xử lý đơn hàng trong năm 2024.'",
+      "C. 'Cải thiện khả năng giám sát hiệu suất bán hàng của các khu vực để tối ưu hóa phân bổ nguồn lực.'",
+      "D. 'Đào tạo nhân viên sử dụng hệ thống mới trong vòng 1 tháng.'"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tính năng báo cáo doanh số theo khu vực trực tiếp hỗ trợ mục tiêu giám sát hiệu suất bán hàng và tối ưu hóa phân bổ nguồn lực. Các mục tiêu khác không liên quan trực tiếp đến yêu cầu này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500503980_INTERMEDIATE_6_shfo"
+  },
+  {
+    "questionText": "Bạn đang viết tài liệu yêu cầu cho dự án triển khai hệ thống quản lý hợp đồng cho một công ty luật. Khi mô tả yêu cầu cho tính năng 'Tìm kiếm hợp đồng', cách diễn đạt nào sau đây là rõ ràng và tránh hiểu nhầm cho đội phát triển?",
+    "options": [
+      "A. 'Hệ thống cần có chức năng tìm kiếm hợp đồng nhanh chóng và chính xác.'",
+      "B. 'Hệ thống phải cho phép người dùng tìm kiếm hợp đồng theo các tiêu chí: số hợp đồng, tên khách hàng, loại hợp đồng, ngày ký, và trạng thái (đang hiệu lực/chấm dứt).'",
+      "C. 'Chức năng tìm kiếm hợp đồng phải được thiết kế đơn giản và dễ sử dụng.'",
+      "D. 'Đội phát triển cần đảm bảo tìm kiếm hợp đồng không bị lỗi và trả kết quả trong vòng 2 giây.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu cần cụ thể về các tiêu chí tìm kiếm để đội phát triển hiểu rõ và triển khai chính xác. Các lựa chọn khác quá chung chung hoặc tập trung vào hiệu suất mà không mô tả rõ chức năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500503980_INTERMEDIATE_7_qvjk"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý tài chính cho một doanh nghiệp sản xuất, bạn cần phân biệt giữa BRD và FRD. Điều nào sau đây KHÔNG thuộc phạm vi của BRD?",
+    "options": [
+      "A. Mô tả quy trình nghiệp vụ hiện tại và các vấn đề cần giải quyết.",
+      "B. Xác định các bên liên quan (stakeholders) và nhu cầu của họ.",
+      "C. Chi tiết về cấu trúc cơ sở dữ liệu và các bảng sẽ được tạo trong hệ thống.",
+      "D. Định nghĩa phạm vi dự án và các giả định, ràng buộc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BRD tập trung vào nhu cầu kinh doanh, quy trình nghiệp vụ, phạm vi và các bên liên quan. Chi tiết kỹ thuật như cấu trúc cơ sở dữ liệu thuộc phạm vi của FRD hoặc SRS.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780500503980_INTERMEDIATE_8_qyjv"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án triển khai hệ thống quản lý chuỗi cung ứng cho một công ty logistics. Khi viết yêu cầu cho tính năng 'Theo dõi tình trạng đơn hàng', điều nào sau đây là quy tắc nghiệp vụ (business rule) cần ghi nhận?",
+    "options": [
+      "A. 'Hệ thống sẽ sử dụng API của đối tác vận chuyển để cập nhật tình trạng đơn hàng.'",
+      "B. 'Đơn hàng sẽ được đánh dấu là 'Đã giao' khi nhân viên xác nhận giao hàng thành công trên ứng dụng di động.'",
+      "C. 'Giao diện theo dõi đơn hàng sẽ được thiết kế theo mẫu của công ty.'",
+      "D. 'Đội phát triển cần đảm bảo tính năng theo dõi đơn hàng hoạt động ổn định 24/7.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quy tắc nghiệp vụ xác định cách thức hoạt động của hệ thống dựa trên chính sách của doanh nghiệp. Việc xác nhận giao hàng thành công là một quy tắc nghiệp vụ. Các lựa chọn khác liên quan đến kỹ thuật hoặc yêu cầu phi chức năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500503981_INTERMEDIATE_9_gdpx"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý khách hàng cho một công ty bảo hiểm, bạn cần viết yêu cầu cho tính năng 'Tính toán phí bảo hiểm'. Cách diễn đạt nào sau đây là phù hợp cho cả đội phát triển và đội kiểm thử?",
+    "options": [
+      "A. 'Hệ thống cần tính toán phí bảo hiểm một cách chính xác và nhanh chóng.'",
+      "B. 'Hệ thống phải tính toán phí bảo hiểm dựa trên các yếu tố: tuổi khách hàng, loại bảo hiểm, thời hạn bảo hiểm, và các điều khoản bổ sung (nếu có), theo công thức được cung cấp bởi phòng Actuary.'",
+      "C. 'Giao diện tính toán phí bảo hiểm cần thân thiện và dễ sử dụng.'",
+      "D. 'Đội phát triển cần đảm bảo tính năng tính toán phí bảo hiểm không bị lỗi khi nhập liệu.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu cần cụ thể về các yếu tố đầu vào và nguồn tham chiếu (công thức từ phòng Actuary) để đội phát triển và kiểm thử hiểu rõ cách triển khai và kiểm tra. Các lựa chọn khác quá chung chung hoặc thiếu chi tiết cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500503981_INTERMEDIATE_10_0lki"
+  },
+  {
+    "questionText": "Bạn đang viết tài liệu yêu cầu cho dự án triển khai hệ thống quản lý đào tạo nội bộ cho một tập đoàn. Khi định nghĩa phạm vi (scope), điều nào sau đây nên được đưa vào?",
+    "options": [
+      "A. 'Hệ thống sẽ sử dụng framework ReactJS để phát triển giao diện người dùng.'",
+      "B. 'Hệ thống sẽ hỗ trợ quản lý các khóa đào tạo, đăng ký tham gia, và theo dõi tiến độ hoàn thành của nhân viên.'",
+      "C. 'Đội phát triển sẽ viết tài liệu hướng dẫn sử dụng hệ thống sau khi hoàn thành.'",
+      "D. 'Hệ thống sẽ được triển khai trên máy chủ nội bộ của công ty với cấu hình tối thiểu 16GB RAM.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phạm vi (scope) cần xác định rõ các chức năng và quy trình nghiệp vụ mà hệ thống sẽ hỗ trợ. Các lựa chọn khác liên quan đến kỹ thuật, triển khai hoặc tài liệu, không thuộc phạm vi của BRD.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500503981_INTERMEDIATE_11_q9wu"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý quan hệ khách hàng (CRM) cho một công ty viễn thông, bạn cần đảm bảo tính truy xuất nguồn gốc (traceability) giữa yêu cầu và mục tiêu kinh doanh. Yêu cầu nào sau đây có thể ánh xạ trực tiếp đến mục tiêu 'Tăng tỷ lệ giữ chân khách hàng lên 15% trong năm 2024'?",
+    "options": [
+      "A. 'Hệ thống phải hỗ trợ tính năng gửi email tự động chúc mừng sinh nhật khách hàng.'",
+      "B. 'Hệ thống sẽ tích hợp với hệ thống core billing để lấy thông tin khách hàng.'",
+      "C. 'Giao diện quản lý khách hàng cần được thiết kế đơn giản và dễ sử dụng.'",
+      "D. 'Hệ thống sẽ sử dụng cơ sở dữ liệu Oracle để lưu trữ dữ liệu khách hàng.'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tính năng gửi email chúc mừng sinh nhật khách hàng trực tiếp hỗ trợ mục tiêu tăng tỷ lệ giữ chân khách hàng bằng cách cải thiện trải nghiệm và sự gắn kết của khách hàng. Các lựa chọn khác không liên quan trực tiếp đến mục tiêu này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500503982_INTERMEDIATE_12_t322"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho một tập đoàn bán lẻ Việt Nam, bạn phát hiện yêu cầu từ phòng Kinh doanh và phòng Tài chính về cách tính chiết khấu cho khách hàng VIP mâu thuẫn nhau. Phòng Kinh doanh muốn chiết khấu linh hoạt theo từng chiến dịch, trong khi phòng Tài chính yêu cầu chiết khấu cố định để đảm bảo kiểm soát dòng tiền. Là Business Analyst, bước tiếp theo bạn nên làm gì để giải quyết mâu thuẫn này trong BRD?",
+    "options": [
+      "A. Ghi nhận cả hai yêu cầu trong BRD và để các bên tự thỏa thuận sau khi hệ thống triển khai.",
+      "B. Tổ chức workshop với đại diện cả hai phòng, sử dụng kỹ thuật '5 Whys' để xác định nguyên nhân gốc rễ của mâu thuẫn, sau đó đề xuất giải pháp cân bằng dựa trên mục tiêu kinh doanh chung của tập đoàn.",
+      "C. Chọn yêu cầu của phòng Tài chính vì họ chịu trách nhiệm về dòng tiền, sau đó cập nhật BRD và thông báo cho phòng Kinh doanh.",
+      "D. Yêu cầu phòng Kinh doanh và Tài chính viết văn bản chính thức về yêu cầu của họ, sau đó trình lên Ban Giám đốc để quyết định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B thể hiện kỹ năng phân tích nâng cao bằng cách xác định nguyên nhân gốc rễ (root cause) của mâu thuẫn thay vì chỉ ghi nhận yêu cầu. Việc sử dụng '5 Whys' giúp tìm ra giải pháp cân bằng dựa trên mục tiêu kinh doanh chung, đảm bảo tính khả thi và sự đồng thuận từ các bên liên quan. Các lựa chọn khác không giải quyết triệt để vấn đề hoặc tạo ra rủi ro về sau.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500603730_ADVANCED_0_rtlm"
+  },
+  {
+    "questionText": "Khi viết BRD cho dự án tự động hóa quy trình phê duyệt đơn hàng tại một công ty logistics, bạn cần mô tả ràng buộc về thời gian xử lý tối đa là 2 giờ cho các đơn hàng nội địa. Cách diễn đạt nào dưới đây là rõ ràng và có thể kiểm chứng nhất cho cả đội Dev và QA?",
+    "options": [
+      "A. 'Hệ thống phải xử lý đơn hàng nội địa nhanh chóng để đáp ứng nhu cầu khách hàng.'",
+      "B. 'Thời gian xử lý đơn hàng nội địa không được vượt quá 2 giờ làm việc kể từ khi đơn hàng được tạo, tính theo múi giờ Việt Nam (GMT+7), không bao gồm thời gian chờ phê duyệt thủ công.'",
+      "C. 'Đơn hàng nội địa cần được xử lý trong vòng 2 giờ để đảm bảo SLA với khách hàng.'",
+      "D. 'Hệ thống nên tối ưu thời gian xử lý đơn hàng nội địa, lý tưởng là dưới 2 giờ.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu B cung cấp thông tin cụ thể về thời gian, múi giờ, và điều kiện loại trừ (thời gian chờ phê duyệt thủ công), giúp Dev và QA dễ dàng triển khai và kiểm thử. Các lựa chọn khác mơ hồ, không đo lường được hoặc thiếu chi tiết quan trọng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500603730_ADVANCED_1_dm35"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống Core Banking cho một ngân hàng tại Việt Nam, bạn nhận thấy yêu cầu về 'tích hợp với hệ thống thanh toán liên ngân hàng' trong BRD chưa rõ ràng. Đội Dev yêu cầu làm rõ về giao thức kết nối (ISO 8583 hay API REST), trong khi phòng Risk lo ngại về bảo mật dữ liệu. Là BA, bạn sẽ xử lý tình huống này như thế nào để đảm bảo BRD đầy đủ và chính xác?",
+    "options": [
+      "A. Thêm mục 'Giao thức kết nối: ISO 8583 hoặc API REST' vào BRD và để đội Dev quyết định.",
+      "B. Tổ chức cuộc họp với đội Dev, phòng Risk, và đối tác cung cấp hệ thống thanh toán để thống nhất giao thức, sau đó cập nhật BRD với chi tiết kỹ thuật, ràng buộc bảo mật, và tài liệu tham khảo (ví dụ: tài liệu API của đối tác).",
+      "C. Ghi chú trong BRD rằng 'Giao thức kết nối sẽ được xác định sau khi hệ thống triển khai.'",
+      "D. Yêu cầu phòng Risk và đội Dev viết tài liệu kỹ thuật riêng, sau đó đính kèm vào BRD như phụ lục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B đảm bảo BRD đầy đủ và chính xác bằng cách làm rõ yêu cầu thông qua sự đồng thuận của các bên liên quan, bao gồm cả chi tiết kỹ thuật và ràng buộc bảo mật. Các lựa chọn khác không giải quyết triệt để vấn đề hoặc tạo ra sự mơ hồ trong tài liệu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500603731_ADVANCED_2_uua7"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống CRM cho công ty bảo hiểm có yêu cầu: 'Hệ thống phải hỗ trợ gửi email tự động cho khách hàng khi hợp đồng sắp hết hạn.' Tuy nhiên, sau khi phân tích, bạn phát hiện rằng yêu cầu này không phù hợp với quy định mới của Ngân hàng Nhà nước về bảo mật thông tin khách hàng. Là BA, bạn sẽ xử lý như thế nào trong BRD?",
+    "options": [
+      "A. Ghi nhận yêu cầu trong BRD nhưng thêm ghi chú rằng 'Tính năng này có thể bị loại bỏ nếu vi phạm quy định pháp luật.'",
+      "B. Thay thế yêu cầu bằng 'Hệ thống phải hỗ trợ thông báo cho khách hàng qua kênh đã đăng ký (email/SMS) khi hợp đồng sắp hết hạn, tuân thủ quy định về bảo mật thông tin của Ngân hàng Nhà nước.' và giải thích rõ ràng trong mục 'Assumptions' và 'Constraints'.",
+      "C. Xóa yêu cầu khỏi BRD vì vi phạm quy định pháp luật.",
+      "D. Đề xuất thay đổi quy định của Ngân hàng Nhà nước để phù hợp với yêu cầu của dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B đảm bảo yêu cầu vẫn đáp ứng mục tiêu kinh doanh nhưng tuân thủ quy định pháp luật, đồng thời làm rõ giả định và ràng buộc trong BRD. Các lựa chọn khác không giải quyết vấn đề hoặc tạo ra rủi ro pháp lý cho dự án.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500603731_ADVANCED_3_zwsl"
+  },
+  {
+    "questionText": "Khi xây dựng ma trận truy vết (traceability matrix) cho dự án số hóa quy trình cho vay tiêu dùng tại một ngân hàng, bạn cần liên kết yêu cầu 'Hệ thống phải tự động tính lãi suất cho vay dựa trên xếp hạng tín dụng của khách hàng' với mục tiêu kinh doanh nào dưới đây?",
+    "options": [
+      "A. 'Tăng doanh số cho vay tiêu dùng lên 20% trong năm 2024.'",
+      "B. 'Giảm thời gian phê duyệt hồ sơ vay từ 3 ngày xuống còn 1 ngày.'",
+      "C. 'Tối ưu hóa rủi ro tín dụng bằng cách áp dụng lãi suất linh hoạt theo xếp hạng khách hàng, giảm tỷ lệ nợ xấu xuống dưới 2%.'",
+      "D. 'Nâng cao trải nghiệm khách hàng thông qua quy trình cho vay đơn giản.'"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Yêu cầu về tính lãi suất tự động dựa trên xếp hạng tín dụng trực tiếp liên quan đến mục tiêu quản lý rủi ro tín dụng và giảm tỷ lệ nợ xấu. Các lựa chọn khác không phản ánh đúng bản chất của yêu cầu này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500603732_ADVANCED_4_w7s7"
+  },
+  {
+    "questionText": "Trong BRD của dự án triển khai hệ thống quản lý kho cho một nhà máy sản xuất, bạn cần mô tả quy tắc kinh doanh: 'Hệ thống phải tự động cảnh báo khi tồn kho của nguyên liệu chính giảm xuống dưới 10% định mức an toàn.' Cách diễn đạt nào dưới đây là chính xác và đủ chi tiết cho đội Dev và QA?",
+    "options": [
+      "A. 'Hệ thống cần cảnh báo khi tồn kho thấp.'",
+      "B. 'Hệ thống phải gửi cảnh báo qua email cho quản lý kho khi số lượng tồn kho của nguyên liệu chính thấp hơn 10% so với định mức an toàn đã thiết lập trong hệ thống, định mức an toàn được cập nhật định kỳ hàng tháng.'",
+      "C. 'Quản lý kho sẽ nhận được thông báo khi tồn kho sắp hết.'",
+      "D. 'Hệ thống nên có tính năng cảnh báo tồn kho để tránh thiếu hụt nguyên liệu.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu B cung cấp đầy đủ chi tiết về điều kiện kích hoạt cảnh báo, kênh thông báo, và tần suất cập nhật định mức an toàn, giúp Dev và QA triển khai và kiểm thử chính xác. Các lựa chọn khác quá mơ hồ hoặc thiếu thông tin cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500603733_ADVANCED_5_qq70"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống eKYC cho một ngân hàng gặp vấn đề khi phòng Pháp chế yêu cầu tuân thủ Nghị định 130/2020/NĐ-CP về xác thực điện tử, trong khi đội Dev đề xuất sử dụng công nghệ nhận diện khuôn mặt (face recognition) chưa được quy định rõ trong nghị định. Là BA, bạn sẽ xử lý như thế nào trong BRD để đảm bảo tính tuân thủ và khả thi?",
+    "options": [
+      "A. Ghi nhận yêu cầu sử dụng face recognition trong BRD và để phòng Pháp chế tự xử lý vấn đề tuân thủ.",
+      "B. Thêm mục 'Assumptions' trong BRD với nội dung: 'Công nghệ nhận diện khuôn mặt được sử dụng phải tuân thủ Nghị định 130/2020/NĐ-CP và các quy định pháp luật liên quan, hoặc được cơ quan có thẩm quyền phê duyệt.' và yêu cầu phòng Pháp chế xác nhận bằng văn bản.",
+      "C. Loại bỏ hoàn toàn yêu cầu sử dụng face recognition khỏi BRD vì không tuân thủ nghị định.",
+      "D. Đề xuất sửa đổi Nghị định 130/2020/NĐ-CP để phù hợp với công nghệ face recognition."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B đảm bảo tính tuân thủ pháp luật bằng cách ghi nhận giả định rõ ràng và yêu cầu xác nhận từ phòng Pháp chế, đồng thời giữ lại yêu cầu kỹ thuật để đội Dev có cơ sở triển khai. Các lựa chọn khác không giải quyết vấn đề hoặc tạo ra rủi ro pháp lý.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500603733_ADVANCED_6_wu8q"
+  },
+  {
+    "questionText": "Khi viết FRD cho tính năng 'Tích hợp hệ thống ERP với sàn thương mại điện tử Shopee', bạn cần mô tả chi tiết về luồng dữ liệu giữa hai hệ thống. Cách tiếp cận nào dưới đây là hiệu quả nhất để đảm bảo tính rõ ràng và đầy đủ cho đội Dev?",
+    "options": [
+      "A. Mô tả chung chung: 'Hệ thống ERP sẽ đồng bộ dữ liệu đơn hàng với Shopee.'",
+      "B. Sử dụng sơ đồ luồng dữ liệu (Data Flow Diagram) kết hợp với mô tả chi tiết từng bước, bao gồm: định dạng dữ liệu (JSON/XML), tần suất đồng bộ (real-time/hàng giờ), và xử lý lỗi (ví dụ: retry mechanism).",
+      "C. Chỉ cung cấp tài liệu API của Shopee và yêu cầu đội Dev tự nghiên cứu.",
+      "D. Mô tả: 'Đội Dev cần đảm bảo dữ liệu đơn hàng từ Shopee được cập nhật vào ERP.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B cung cấp đầy đủ thông tin cần thiết cho đội Dev thông qua kết hợp giữa sơ đồ trực quan và mô tả chi tiết, bao gồm định dạng dữ liệu, tần suất đồng bộ, và xử lý lỗi. Các lựa chọn khác thiếu chi tiết hoặc không đảm bảo tính rõ ràng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500603733_ADVANCED_7_0htm"
+  },
+  {
+    "questionText": "Trong dự án số hóa quy trình mua sắm cho một tập đoàn đa quốc gia, bạn nhận thấy yêu cầu từ các chi nhánh tại Việt Nam, Thái Lan và Indonesia về quy trình phê duyệt mua hàng không thống nhất. Chi nhánh Việt Nam yêu cầu phê duyệt 3 cấp (Trưởng phòng, Giám đốc, Tổng giám đốc), trong khi chi nhánh Thái Lan chỉ yêu cầu 2 cấp. Là BA, bạn sẽ xử lý tình huống này như thế nào trong BRD?",
+    "options": [
+      "A. Chọn quy trình phê duyệt của chi nhánh Việt Nam vì đây là thị trường chính và áp dụng cho tất cả các chi nhánh.",
+      "B. Ghi nhận cả hai quy trình trong BRD và để các chi nhánh tự quyết định sau khi hệ thống triển khai.",
+      "C. Thiết kế quy trình linh hoạt trong BRD với cấu hình động số cấp phê duyệt, đồng thời xác định rõ ràng trong mục 'Business Rules' về điều kiện áp dụng cho từng quốc gia (ví dụ: dựa trên ngưỡng giá trị đơn hàng hoặc loại hàng hóa).",
+      "D. Yêu cầu các chi nhánh thống nhất quy trình trước khi viết BRD."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C đảm bảo tính linh hoạt và khả thi bằng cách thiết kế quy trình có thể cấu hình động, đồng thời làm rõ điều kiện áp dụng trong 'Business Rules'. Các lựa chọn khác không giải quyết triệt để vấn đề hoặc tạo ra sự cứng nhắc trong triển khai.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500603734_ADVANCED_8_syya"
+  },
+  {
+    "questionText": "Khi viết BRD cho tính năng 'Báo cáo doanh thu theo khu vực' trong hệ thống quản lý bán hàng, bạn cần đảm bảo yêu cầu có thể kiểm chứng bởi đội QA. Cách diễn đạt nào dưới đây là phù hợp nhất?",
+    "options": [
+      "A. 'Hệ thống cần cung cấp báo cáo doanh thu theo khu vực để hỗ trợ phân tích kinh doanh.'",
+      "B. 'Hệ thống phải cho phép người dùng xem và xuất báo cáo doanh thu theo khu vực (miền Bắc, miền Trung, miền Nam) với các tiêu chí: doanh thu theo tháng, quý, năm, và so sánh với cùng kỳ năm trước. Báo cáo phải chính xác 100% so với dữ liệu nguồn và có thể xuất ra định dạng Excel/PDF.'",
+      "C. 'Báo cáo doanh thu cần được cập nhật hàng ngày.'",
+      "D. 'Người dùng có thể xem báo cáo doanh thu theo khu vực.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu B cung cấp đầy đủ chi tiết về nội dung báo cáo, tiêu chí lọc, độ chính xác, và định dạng xuất, giúp đội QA dễ dàng kiểm chứng. Các lựa chọn khác quá chung chung hoặc thiếu thông tin cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500603734_ADVANCED_9_4lz8"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý nhân sự (HRM) cho một công ty sản xuất, bạn phát hiện yêu cầu về 'tính lương làm thêm giờ' trong BRD mâu thuẫn với Bộ luật Lao động Việt Nam. Cụ thể, BRD quy định trả lương làm thêm giờ vào ngày nghỉ là 150% lương cơ bản, trong khi luật quy định là 200%. Là BA, bạn sẽ xử lý như thế nào?",
+    "options": [
+      "A. Ghi nhận yêu cầu trong BRD với ghi chú: 'Tính lương làm thêm giờ theo quy định của công ty.'",
+      "B. Sửa yêu cầu trong BRD thành: 'Hệ thống phải tính lương làm thêm giờ theo quy định của Bộ luật Lao động Việt Nam, cụ thể: 150% lương cơ bản cho giờ làm thêm ngày thường, 200% cho ngày nghỉ, và 300% cho ngày lễ.' và cập nhật mục 'Constraints' với tham chiếu đến điều khoản pháp luật liên quan.",
+      "C. Đề xuất công ty sửa đổi chính sách lương để phù hợp với BRD.",
+      "D. Bỏ qua yêu cầu này vì không quan trọng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B đảm bảo tính tuân thủ pháp luật bằng cách điều chỉnh yêu cầu theo quy định của Bộ luật Lao động, đồng thời làm rõ ràng trong BRD và mục 'Constraints'. Các lựa chọn khác vi phạm pháp luật hoặc không giải quyết vấn đề.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500603735_ADVANCED_10_2wqu"
+  },
+  {
+    "questionText": "Khi xây dựng ma trận truy vết cho dự án triển khai hệ thống quản lý chuỗi cung ứng, bạn cần liên kết yêu cầu 'Hệ thống phải tự động đặt hàng bổ sung khi tồn kho dưới mức an toàn' với quy tắc kinh doanh nào dưới đây?",
+    "options": [
+      "A. 'Tối ưu hóa chi phí vận hành kho hàng.'",
+      "B. 'Định mức tồn kho an toàn cho nguyên liệu X là 100 đơn vị, khi tồn kho giảm xuống dưới mức này, hệ thống phải tự động tạo đơn đặt hàng bổ sung với số lượng bằng 150% định mức an toàn.'",
+      "C. 'Giảm thời gian xử lý đơn hàng.'",
+      "D. 'Nâng cao trải nghiệm khách hàng.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu về tự động đặt hàng bổ sung trực tiếp liên quan đến quy tắc kinh doanh về định mức tồn kho an toàn và số lượng đặt hàng. Các lựa chọn khác không phản ánh đúng bản chất của yêu cầu này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500603735_ADVANCED_11_ubpd"
+  },
+  {
+    "questionText": "Trong BRD của dự án triển khai hệ thống quản lý dự án cho một công ty tư vấn, bạn cần mô tả rõ ràng phạm vi (scope) của dự án. Cách tiếp cận nào dưới đây là hiệu quả nhất để tránh hiểu lầm giữa các bên liên quan?",
+    "options": [
+      "A. Liệt kê các tính năng chính mà hệ thống sẽ có, ví dụ: 'Quản lý dự án, theo dõi tiến độ, báo cáo.'",
+      "B. Sử dụng sơ đồ Use Case kết hợp với mô tả chi tiết về những gì nằm trong và ngoài phạm vi (In-Scope và Out-of-Scope), bao gồm ví dụ cụ thể (ví dụ: 'Trong phạm vi: Tích hợp với Microsoft Project; Ngoài phạm vi: Tích hợp với Jira.').",
+      "C. Ghi chú chung chung: 'Hệ thống sẽ đáp ứng nhu cầu quản lý dự án của công ty.'",
+      "D. Để trống mục scope và cập nhật sau khi hệ thống triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B đảm bảo tính rõ ràng và tránh hiểu lầm bằng cách kết hợp sơ đồ trực quan và mô tả chi tiết về phạm vi, bao gồm cả ví dụ cụ thể. Các lựa chọn khác quá chung chung hoặc không đủ thông tin để xác định phạm vi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500603735_ADVANCED_12_855e"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho một tập đoàn bán lẻ đa quốc gia tại Việt Nam, bạn nhận thấy BRD (Business Requirements Document) hiện tại thiếu sự liên kết rõ ràng giữa mục tiêu chiến lược của công ty (tăng trưởng doanh thu 20% trong 3 năm) và các yêu cầu chức năng cụ thể. Cách tiếp cận nào dưới đây là hiệu quả nhất để khắc phục vấn đề này ở cấp độ EXPERT?",
+    "options": [
+      "A. Thêm một phụ lục vào BRD liệt kê tất cả các mục tiêu chiến lược của công ty mà không cần giải thích mối liên hệ với yêu cầu chức năng.",
+      "B. Tạo một ma trận traceability matrix riêng biệt, ánh xạ từng mục tiêu chiến lược với các yêu cầu chức năng, quy trình nghiệp vụ và KPI đo lường, đồng thời tổ chức workshop với lãnh đạo để xác nhận tính nhất quán.",
+      "C. Yêu cầu đội ngũ phát triển (dev) tự suy luận mối liên hệ giữa mục tiêu chiến lược và yêu cầu chức năng trong quá trình coding.",
+      "D. Bỏ qua việc liên kết này vì BRD chỉ cần mô tả yêu cầu chức năng chi tiết, không cần quan tâm đến mục tiêu chiến lược."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Traceability matrix là công cụ quan trọng để đảm bảo mọi yêu cầu chức năng đều xuất phát từ mục tiêu chiến lược, giúp tránh lãng phí tài nguyên và đảm bảo dự án đóng góp vào mục tiêu dài hạn. Workshop với lãnh đạo đảm bảo sự đồng thuận và tính khả thi của giải pháp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500693087_EXPERT_0_w5gl"
+  },
+  {
+    "questionText": "Khi xây dựng BRD cho dự án chuyển đổi số quy trình quản lý chuỗi cung ứng của một doanh nghiệp sản xuất tại Việt Nam, bạn cần xác định rõ ràng các ràng buộc (constraints) của dự án. Ràng buộc nào dưới đây KHÔNG phải là ràng buộc hợp lệ cần đưa vào BRD?",
+    "options": [
+      "A. Ngân sách dự án bị giới hạn ở mức 5 tỷ VND và phải hoàn thành trong 12 tháng.",
+      "B. Hệ thống phải tích hợp với phần mềm kế toán hiện tại của công ty (SAP) mà không làm gián đoạn hoạt động kinh doanh.",
+      "C. Đội ngũ phát triển (dev) phải sử dụng framework .NET Core vì đó là công nghệ yêu thích của trưởng nhóm kỹ thuật.",
+      "D. Dự án phải tuân thủ các quy định về bảo mật dữ liệu theo Nghị định 13/2023/NĐ-CP của Chính phủ Việt Nam."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ràng buộc phải liên quan đến yếu tố khách quan ảnh hưởng đến dự án (ngân sách, thời gian, pháp lý, tích hợp hệ thống). Lựa chọn công nghệ cụ thể là quyết định kỹ thuật, không phải ràng buộc nghiệp vụ cần đưa vào BRD.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780500693088_EXPERT_1_wkc9"
+  },
+  {
+    "questionText": "Trong quá trình viết BRD cho dự án tối ưu hóa quy trình đặt hàng trực tuyến của một sàn thương mại điện tử, bạn nhận thấy yêu cầu sau đây không đủ rõ ràng: 'Hệ thống phải xử lý đơn hàng nhanh chóng'. Cách diễn đạt nào dưới đây là CHUẨN XÁC và phù hợp cho cả đối tượng business, dev và QA?",
+    "options": [
+      "A. 'Hệ thống phải xử lý đơn hàng trong vòng 2 giây cho 95% các trường hợp, đo lường từ thời điểm khách hàng nhấn nút 'Đặt hàng' đến khi hệ thống trả về thông báo xác nhận thành công.'",
+      "B. 'Hệ thống phải xử lý đơn hàng nhanh nhất có thể, tùy thuộc vào điều kiện mạng và tài nguyên hệ thống.'",
+      "C. 'Hệ thống phải xử lý đơn hàng nhanh chóng, với thời gian phản hồi tối đa không quá 10 giây.'",
+      "D. 'Hệ thống phải xử lý đơn hàng nhanh hơn so với hệ thống hiện tại.'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Yêu cầu phải đo lường được (measurable) và cụ thể (specific), bao gồm ngưỡng chấp nhận (2 giây) và tỷ lệ thành công (95%). Điều này giúp dev và QA hiểu rõ tiêu chí để triển khai và kiểm thử.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500693091_EXPERT_2_zpda"
+  },
+  {
+    "questionText": "Một công ty logistics tại Việt Nam đang triển khai dự án số hóa quy trình quản lý kho hàng. Trong BRD, bạn cần định nghĩa phạm vi (scope) của dự án. Cách tiếp cận nào dưới đây là ĐÚNG NHẤT để xác định scope ở cấp độ EXPERT, tránh tình trạng 'scope creep'?",
+    "options": [
+      "A. Liệt kê tất cả các tính năng mà đội ngũ kinh doanh mong muốn, sau đó để dev quyết định cái nào nên làm trước.",
+      "B. Xác định rõ các quy trình nghiệp vụ sẽ được số hóa (ví dụ: nhập/xuất kho, kiểm kê, báo cáo tồn kho), loại trừ các quy trình không thuộc phạm vi (ví dụ: quản lý nhân sự kho), và thiết lập cơ chế quản lý thay đổi (change control) để xử lý các yêu cầu ngoài scope.",
+      "C. Ghi chú chung chung trong BRD rằng 'Dự án sẽ số hóa tất cả các quy trình quản lý kho hàng' mà không cần chi tiết.",
+      "D. Để scope mở và linh hoạt, cho phép bổ sung yêu cầu bất cứ lúc nào để đáp ứng nhu cầu kinh doanh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Scope phải được định nghĩa rõ ràng và loại trừ các yếu tố không liên quan. Cơ chế quản lý thay đổi (change control) giúp kiểm soát scope creep và đảm bảo dự án tập trung vào mục tiêu cốt lõi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500693092_EXPERT_3_v8os"
+  },
+  {
+    "questionText": "Khi viết BRD cho dự án triển khai hệ thống CRM cho một ngân hàng tại Việt Nam, bạn cần mô tả một quy tắc nghiệp vụ (business rule) liên quan đến việc xác thực khách hàng. Cách diễn đạt nào dưới đây là CHÍNH XÁC và tuân thủ nguyên tắc viết yêu cầu rõ ràng?",
+    "options": [
+      "A. 'Hệ thống phải xác thực khách hàng theo quy định của ngân hàng.'",
+      "B. 'Hệ thống phải xác thực khách hàng bằng cách kiểm tra số CMND/CCCD và mã OTP gửi đến số điện thoại đăng ký, với thời gian hiệu lực của OTP là 5 phút. Quy trình này phải tuân thủ Thông tư 23/2014/TT-NHNN của Ngân hàng Nhà nước Việt Nam.'",
+      "C. 'Hệ thống phải có tính năng xác thực khách hàng.'",
+      "D. 'Khách hàng phải được xác thực trước khi thực hiện giao dịch.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business rule phải cụ thể, bao gồm phương pháp xác thực (CMND/CCCD + OTP), thời gian hiệu lực (5 phút) và cơ sở pháp lý (Thông tư 23/2014/TT-NHNN). Điều này giúp dev và QA triển khai và kiểm thử chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500693093_EXPERT_4_togz"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý quan hệ khách hàng (CRM) cho một công ty bảo hiểm, bạn cần phân tích khoảng cách (gap analysis) giữa quy trình nghiệp vụ hiện tại và quy trình mục tiêu. Kết quả phân tích cho thấy quy trình hiện tại thiếu bước 'phân loại khách hàng theo mức độ tiềm năng' để tối ưu hóa chiến lược chăm sóc. Giải pháp nào dưới đây là phù hợp nhất ở cấp độ EXPERT?",
+    "options": [
+      "A. Đề xuất bổ sung bước 'phân loại khách hàng' vào quy trình mục tiêu mà không cần đánh giá tác động hoặc chi phí.",
+      "B. Đề xuất bổ sung bước 'phân loại khách hàng' vào quy trình mục tiêu, đồng thời xây dựng business case để đánh giá lợi ích (tăng doanh thu), chi phí (phát triển tính năng, đào tạo nhân viên) và rủi ro (thay đổi quy trình có thể gây gián đoạn), sau đó trình lãnh đạo phê duyệt.",
+      "C. Bỏ qua bước phân loại khách hàng vì nó không phải là yêu cầu bắt buộc từ phía business.",
+      "D. Yêu cầu đội ngũ dev tự động thêm tính năng phân loại khách hàng mà không cần thông báo cho business."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Gap analysis ở cấp độ EXPERT đòi hỏi không chỉ xác định khoảng cách mà còn đánh giá tác động, chi phí và rủi ro để đưa ra giải pháp khả thi. Business case giúp lãnh đạo ra quyết định dựa trên dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500693095_EXPERT_5_zhdl"
+  },
+  {
+    "questionText": "Khi viết FRD (Functional Requirements Document) cho dự án triển khai hệ thống quản lý đơn hàng cho một công ty thương mại điện tử, bạn cần mô tả yêu cầu về tính năng 'tìm kiếm đơn hàng'. Cách diễn đạt nào dưới đây là ĐÚNG và phù hợp cho đối tượng dev và QA?",
+    "options": [
+      "A. 'Hệ thống phải cho phép tìm kiếm đơn hàng theo nhiều tiêu chí.'",
+      "B. 'Hệ thống phải cung cấp tính năng tìm kiếm đơn hàng với các tiêu chí: mã đơn hàng, tên khách hàng, số điện thoại, trạng thái đơn hàng (đã xử lý/chưa xử lý/hủy), và khoảng thời gian đặt hàng (từ ngày - đến ngày). Kết quả tìm kiếm phải trả về trong vòng 3 giây với tối đa 1000 đơn hàng.'",
+      "C. 'Tính năng tìm kiếm đơn hàng phải nhanh và chính xác.'",
+      "D. 'Người dùng phải có thể tìm kiếm đơn hàng dễ dàng.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu phải cụ thể, bao gồm các tiêu chí tìm kiếm, thời gian phản hồi và giới hạn dữ liệu. Điều này giúp dev triển khai và QA kiểm thử chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500693097_EXPERT_6_0bi1"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý tài sản cho một công ty sản xuất, bạn nhận thấy BRD hiện tại thiếu thông tin về các giả định (assumptions) của dự án. Giả định nào dưới đây là HỢP LỆ và cần đưa vào BRD?",
+    "options": [
+      "A. 'Đội ngũ dev sẽ tự động hiểu và triển khai tất cả các yêu cầu mà không cần giải thích thêm.'",
+      "B. 'Khách hàng sẽ cung cấp đầy đủ dữ liệu tài sản hiện có để nhập liệu vào hệ thống trước ngày 15/10/2024.'",
+      "C. 'Hệ thống sẽ hoạt động ổn định mà không cần kiểm thử.'",
+      "D. 'Ngân sách dự án sẽ không bao giờ vượt quá số tiền đã phê duyệt.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giả định phải là yếu tố cần thiết để dự án thành công nhưng nằm ngoài tầm kiểm soát của đội dự án. Việc khách hàng cung cấp dữ liệu đúng hạn là giả định hợp lệ vì nó ảnh hưởng trực tiếp đến tiến độ dự án.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780500693098_EXPERT_7_0bj1"
+  },
+  {
+    "questionText": "Bạn đang viết BRD cho dự án số hóa quy trình phê duyệt hồ sơ vay vốn tại một ngân hàng. Yêu cầu sau đây cần được diễn đạt lại cho rõ ràng: 'Hệ thống phải hỗ trợ phê duyệt hồ sơ vay vốn nhanh chóng'. Cách diễn đạt nào dưới đây là CHUẨN XÁC và phù hợp cho cả business, dev và QA?",
+    "options": [
+      "A. 'Hệ thống phải hỗ trợ quy trình phê duyệt hồ sơ vay vốn với thời gian xử lý tối đa 2 giờ làm việc cho mỗi hồ sơ, từ khi nhân viên nộp hồ sơ đến khi hệ thống gửi thông báo kết quả phê duyệt cho khách hàng.'",
+      "B. 'Hệ thống phải hỗ trợ phê duyệt hồ sơ vay vốn nhanh nhất có thể.'",
+      "C. 'Hệ thống phải có tính năng phê duyệt hồ sơ vay vốn.'",
+      "D. 'Thời gian phê duyệt hồ sơ vay vốn phải ngắn hơn so với quy trình hiện tại.'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Yêu cầu phải cụ thể, đo lường được (2 giờ làm việc) và xác định rõ điểm bắt đầu/kết thúc của quy trình. Điều này giúp dev và QA triển khai và kiểm thử chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500693100_EXPERT_8_we49"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý dự án cho một công ty xây dựng, bạn cần phân tích khoảng cách (gap analysis) giữa hệ thống hiện tại và hệ thống mục tiêu. Khoảng cách nào dưới đây là quan trọng nhất cần ưu tiên giải quyết ở cấp độ EXPERT?",
+    "options": [
+      "A. Hệ thống hiện tại không có tính năng gửi email thông báo tự động khi dự án có thay đổi.",
+      "B. Hệ thống hiện tại không hỗ trợ tích hợp với phần mềm kế toán, dẫn đến việc nhập liệu thủ công và sai sót trong báo cáo tài chính, ảnh hưởng trực tiếp đến quyết định chiến lược của lãnh đạo.",
+      "C. Giao diện hệ thống hiện tại không thân thiện với người dùng.",
+      "D. Hệ thống hiện tại không có tính năng chat nội bộ giữa các thành viên dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khoảng cách về tích hợp hệ thống với phần mềm kế toán ảnh hưởng trực tiếp đến hiệu quả hoạt động và quyết định chiến lược của doanh nghiệp, do đó cần được ưu tiên giải quyết ở cấp độ EXPERT.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "ANALYSIS",
+    "id": "q_1780500693101_EXPERT_9_fjju"
+  },
+  {
+    "questionText": "Khi viết SRS (Software Requirements Specification) cho dự án triển khai hệ thống quản lý kho hàng, bạn cần mô tả yêu cầu phi chức năng (non-functional requirement) về hiệu suất. Cách diễn đạt nào dưới đây là ĐÚNG và phù hợp cho đối tượng dev và QA?",
+    "options": [
+      "A. 'Hệ thống phải hoạt động nhanh.'",
+      "B. 'Hệ thống phải xử lý tối thiểu 1000 giao dịch nhập/xuất kho mỗi giờ, với thời gian phản hồi trung bình dưới 2 giây cho mỗi giao dịch, trong điều kiện tải bình thường (50 người dùng đồng thời).'",
+      "C. 'Hệ thống phải có hiệu suất tốt.'",
+      "D. 'Hiệu suất hệ thống phải đáp ứng nhu cầu của người dùng.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu phi chức năng phải cụ thể, đo lường được (1000 giao dịch/giờ, thời gian phản hồi 2 giây) và xác định rõ điều kiện tải (50 người dùng đồng thời). Điều này giúp dev và QA triển khai và kiểm thử chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500693103_EXPERT_10_9lgg"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý nhân sự cho một tập đoàn đa quốc gia, bạn cần xác định các bên liên quan (stakeholders) để thu thập yêu cầu. Bên liên quan nào dưới đây KHÔNG phải là nguồn thu thập yêu cầu chính cho BRD?",
+    "options": [
+      "A. Giám đốc nhân sự (CHRO) của tập đoàn.",
+      "B. Trưởng phòng IT của công ty đối tác cung cấp giải pháp phần mềm.",
+      "C. Nhân viên hành chính - nhân sự tại các chi nhánh.",
+      "D. Giám đốc tài chính (CFO) của tập đoàn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trưởng phòng IT của công ty đối tác không phải là bên liên quan trực tiếp đến nghiệp vụ của dự án. Các bên liên quan chính bao gồm lãnh đạo (CHRO, CFO) và người dùng cuối (nhân viên hành chính - nhân sự).",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SITUATION",
+    "id": "q_1780500693104_EXPERT_11_cmfq"
+  },
+  {
+    "questionText": "Bạn đang viết BRD cho dự án triển khai hệ thống quản lý chuỗi cung ứng cho một công ty sản xuất. Yêu cầu sau đây cần được diễn đạt lại cho rõ ràng: 'Hệ thống phải quản lý hàng tồn kho hiệu quả'. Cách diễn đạt nào dưới đây là CHUẨN XÁC và phù hợp cho cả business, dev và QA?",
+    "options": [
+      "A. 'Hệ thống phải cung cấp tính năng quản lý hàng tồn kho với khả năng theo dõi số lượng tồn kho theo thời gian thực, cảnh báo khi tồn kho dưới mức tối thiểu (được cấu hình bởi người dùng), và tự động tạo yêu cầu mua hàng khi cần thiết.'",
+      "B. 'Hệ thống phải quản lý hàng tồn kho tốt hơn so với hệ thống hiện tại.'",
+      "C. 'Hệ thống phải có tính năng quản lý hàng tồn kho.'",
+      "D. 'Hệ thống phải giúp người dùng quản lý hàng tồn kho dễ dàng.'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Yêu cầu phải cụ thể, bao gồm các tính năng chi tiết (theo dõi thời gian thực, cảnh báo tồn kho, tự động tạo yêu cầu mua hàng) và cho phép cấu hình linh hoạt. Điều này giúp dev và QA triển khai và kiểm thử chính xác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Business Requirements Documentation",
+    "category": "SKILL",
+    "id": "q_1780500693106_EXPERT_12_pt1n"
+  }
+]

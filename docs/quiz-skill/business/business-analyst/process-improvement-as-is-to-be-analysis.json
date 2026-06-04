@@ -1,0 +1,767 @@
+[
+  {
+    "questionText": "Trong phân tích quy trình nghiệp vụ hiện tại (As-Is), bước nào KHÔNG phải là một phần của việc lập bản đồ quy trình (process mapping)?",
+    "options": [
+      "A. Xác định các bước thực hiện công việc theo trình tự thời gian",
+      "B. Thu thập dữ liệu về thời gian xử lý và lỗi phát sinh tại từng bước",
+      "C. Đề xuất công nghệ mới để thay thế hoàn toàn quy trình hiện tại",
+      "D. Phỏng vấn nhân viên để hiểu rõ cách họ thực hiện công việc"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc đề xuất công nghệ mới thuộc giai đoạn thiết kế quy trình tương lai (To-Be), không phải là bước trong lập bản đồ quy trình hiện tại (As-Is).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503488642_BEGINNER_0_08mh"
+  },
+  {
+    "questionText": "Một Business Analyst (BA) tại công ty sản xuất thực phẩm Việt Nam phát hiện quy trình nhập kho nguyên liệu mất trung bình 4 giờ do phải kiểm tra thủ công giấy tờ. Đâu là ví dụ về bottleneck (điểm nghẽn) trong tình huống này?",
+    "options": [
+      "A. Thời gian chờ phê duyệt từ quản lý kho",
+      "B. Bước kiểm tra thủ công giấy tờ nhập kho",
+      "C. Số lượng nhân viên kho không đủ",
+      "D. Thiết bị quét mã vạch bị hỏng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bottleneck là bước cụ thể gây chậm trễ trong quy trình. Ở đây, việc kiểm tra thủ công giấy tờ là nguyên nhân chính khiến quy trình mất nhiều thời gian.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503488642_BEGINNER_1_kvbv"
+  },
+  {
+    "questionText": "Khi thiết kế quy trình tương lai (To-Be) cho phòng hành chính nhân sự của một ngân hàng, BA nên ưu tiên tiêu chí nào sau đây?",
+    "options": [
+      "A. Giảm số lượng nhân viên tham gia quy trình",
+      "B. Loại bỏ các bước không tạo giá trị gia tăng (non-value-added steps)",
+      "C. Áp dụng công nghệ AI cho tất cả các bước",
+      "D. Tăng thời gian xử lý để đảm bảo độ chính xác"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mục tiêu chính của To-Be là tối ưu hóa quy trình bằng cách loại bỏ các bước không cần thiết, giảm lãng phí mà vẫn đảm bảo hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SKILL",
+    "id": "q_1780503488642_BEGINNER_2_vb1j"
+  },
+  {
+    "questionText": "Công ty logistics Việt Nam muốn cải tiến quy trình giao hàng. BA đề xuất tự động hóa bước nào sau đây để giảm thời gian xử lý đơn hàng?",
+    "options": [
+      "A. Phân công tài xế giao hàng",
+      "B. Xác nhận thông tin khách hàng qua điện thoại",
+      "C. Tạo mã vận đơn tự động từ dữ liệu đơn hàng",
+      "D. Kiểm tra chất lượng hàng hóa trước khi giao"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tạo mã vận đơn tự động là bước có thể tự động hóa dễ dàng bằng hệ thống, giảm thời gian và lỗi do nhập liệu thủ công.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503488642_BEGINNER_3_umnb"
+  },
+  {
+    "questionText": "KPI nào sau đây phù hợp để đo lường hiệu quả cải tiến quy trình xử lý khiếu nại khách hàng tại một công ty viễn thông?",
+    "options": [
+      "A. Số lượng nhân viên xử lý khiếu nại",
+      "B. Thời gian trung bình giải quyết một khiếu nại (tính bằng giờ)",
+      "C. Chi phí đầu tư cho hệ thống CRM mới",
+      "D. Số lượng khiếu nại nhận được hàng tháng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thời gian giải quyết khiếu nại trực tiếp phản ánh hiệu quả của quy trình. Các lựa chọn khác không đo lường được cải tiến quy trình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503488642_BEGINNER_4_bz0g"
+  },
+  {
+    "questionText": "Trong quy trình As-Is của một bệnh viện, BA phát hiện bước 'Nhập liệu thông tin bệnh nhân từ giấy vào hệ thống' gây chậm trễ. Giải pháp To-Be nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Yêu cầu bệnh nhân tự nhập thông tin qua ứng dụng di động",
+      "B. Tăng số lượng nhân viên nhập liệu",
+      "C. Loại bỏ hoàn toàn bước nhập liệu",
+      "D. Sử dụng công nghệ OCR để quét thông tin từ giấy tờ"
+    ],
+    "correctAnswer": "D",
+    "explanation": "OCR (Optical Character Recognition) giúp tự động hóa việc nhập liệu từ giấy tờ, giảm thời gian và lỗi do nhập thủ công.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503488642_BEGINNER_5_xo43"
+  },
+  {
+    "questionText": "Đâu là định nghĩa chính xác về 'waste' (lãng phí) trong cải tiến quy trình theo phương pháp Lean?",
+    "options": [
+      "A. Bất kỳ hoạt động nào không tạo ra giá trị cho khách hàng",
+      "B. Chỉ các hoạt động gây tốn kém chi phí",
+      "C. Các bước phải thực hiện do yêu cầu của luật pháp",
+      "D. Hoạt động cần thiết để duy trì quy trình"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Waste trong Lean là các hoạt động không tạo giá trị trực tiếp cho khách hàng, dù có thể không tốn kém chi phí.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503488642_BEGINNER_6_jjy8"
+  },
+  {
+    "questionText": "Công ty bán lẻ muốn cải tiến quy trình đặt hàng online. BA nên sử dụng công cụ nào sau đây để trực quan hóa quy trình As-Is?",
+    "options": [
+      "A. Biểu đồ Gantt",
+      "B. Flowchart (lưu đồ quy trình)",
+      "C. Bảng tính Excel",
+      "D. Biểu đồ Pareto"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Flowchart là công cụ phổ biến nhất để mô tả quy trình theo trình tự các bước, giúp dễ dàng xác định điểm nghẽn và lãng phí.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SKILL",
+    "id": "q_1780503488642_BEGINNER_7_lp3c"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình tại một nhà máy sản xuất, BA phát hiện bước 'Kiểm tra thủ công chất lượng sản phẩm' chiếm 30% thời gian sản xuất. Giải pháp nào sau đây KHÔNG phù hợp để cải tiến bước này?",
+    "options": [
+      "A. Áp dụng máy quét tự động để kiểm tra chất lượng",
+      "B. Loại bỏ hoàn toàn bước kiểm tra chất lượng",
+      "C. Đào tạo nhân viên kiểm tra nhanh hơn",
+      "D. Sử dụng mẫu kiểm tra tiêu chuẩn hóa"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Loại bỏ hoàn toàn bước kiểm tra chất lượng có thể dẫn đến sản phẩm lỗi, gây rủi ro cho doanh nghiệp. Các giải pháp khác giúp tối ưu hóa mà vẫn đảm bảo chất lượng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503488642_BEGINNER_8_po2w"
+  },
+  {
+    "questionText": "Khi phân tích quy trình As-Is của phòng kế toán tại một công ty xuất nhập khẩu, BA nên thu thập thông tin từ đối tượng nào sau đây?",
+    "options": [
+      "A. Chỉ từ trưởng phòng kế toán",
+      "B. Từ tất cả nhân viên kế toán và các bộ phận liên quan như kho, bán hàng",
+      "C. Từ khách hàng của công ty",
+      "D. Từ nhà cung cấp phần mềm kế toán"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để hiểu rõ quy trình As-Is, BA cần thu thập thông tin từ tất cả các bên liên quan trực tiếp thực hiện quy trình, không chỉ từ lãnh đạo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SKILL",
+    "id": "q_1780503488642_BEGINNER_9_eymd"
+  },
+  {
+    "questionText": "Một công ty thương mại điện tử muốn giảm tỷ lệ đơn hàng bị hủy do khách hàng không nhận hàng. BA nên tập trung cải tiến bước nào trong quy trình To-Be?",
+    "options": [
+      "A. Tăng cường quảng cáo để thu hút khách hàng mới",
+      "B. Cải thiện quy trình xác nhận thông tin giao hàng và nhắc nhở khách hàng",
+      "C. Giảm giá sản phẩm để tăng số lượng đơn hàng",
+      "D. Mở rộng kho hàng để lưu trữ nhiều sản phẩm hơn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xác nhận thông tin giao hàng và nhắc nhở khách hàng giúp giảm tỷ lệ đơn hàng bị hủy do khách không nhận, trực tiếp giải quyết vấn đề.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503488642_BEGINNER_10_qng4"
+  },
+  {
+    "questionText": "Đâu là ví dụ về 'control' (kiểm soát) trong quy trình To-Be của phòng nhân sự khi xử lý đơn xin nghỉ phép?",
+    "options": [
+      "A. Cho phép nhân viên tự nhập số ngày nghỉ vào hệ thống",
+      "B. Yêu cầu quản lý trực tiếp phê duyệt đơn nghỉ phép qua hệ thống",
+      "C. Tăng số ngày nghỉ phép cho nhân viên",
+      "D. Loại bỏ hoàn toàn quy trình xin nghỉ phép"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Control trong quy trình là các bước đảm bảo quy trình được thực hiện đúng quy định. Việc yêu cầu phê duyệt của quản lý là một hình thức kiểm soát.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503488642_BEGINNER_11_zug7"
+  },
+  {
+    "questionText": "Công ty bảo hiểm muốn cải tiến quy trình xử lý hồ sơ bồi thường. BA đề xuất sử dụng KPI nào sau đây để đo lường hiệu quả cải tiến?",
+    "options": [
+      "A. Số lượng hồ sơ bồi thường nhận được hàng tháng",
+      "B. Tỷ lệ hồ sơ bồi thường được xử lý đúng hạn (ví dụ: trong vòng 7 ngày)",
+      "C. Chi phí đầu tư cho hệ thống quản lý hồ sơ mới",
+      "D. Số lượng nhân viên xử lý hồ sơ bồi thường"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tỷ lệ hồ sơ xử lý đúng hạn trực tiếp phản ánh hiệu quả của quy trình cải tiến, giúp đánh giá mức độ thành công của dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503488642_BEGINNER_12_oy46"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình xử lý đơn hàng tại một công ty logistics Việt Nam, bạn nhận thấy bước 'Xác nhận thông tin khách hàng' thường bị chậm trễ do nhân viên phải kiểm tra thủ công trên nhiều hệ thống khác nhau. Đâu là cách tiếp cận hợp lý nhất để mô hình hóa trạng thái hiện tại (As-Is) của vấn đề này?",
+    "options": [
+      "A. Vẽ sơ đồ quy trình tổng thể từ khi nhận đơn đến khi giao hàng, bỏ qua chi tiết bước 'Xác nhận thông tin khách hàng' vì nó không phải là bước chính.",
+      "B. Lập bảng thống kê số lượng đơn hàng bị delay tại bước này trong 3 tháng gần nhất, không cần mô tả quy trình chi tiết.",
+      "C. Phỏng vấn nhân viên phụ trách, ghi lại từng thao tác cụ thể họ thực hiện (ví dụ: mở hệ thống CRM, tra cứu trên Excel, gọi điện xác minh), sau đó vẽ lại quy trình bằng flowchart hoặc swimlane diagram.",
+      "D. Yêu cầu IT cung cấp log truy cập hệ thống để phân tích thời gian thực hiện, không cần trao đổi với nhân viên vì dữ liệu đã đủ chính xác."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để mô hình hóa As-Is chính xác, cần hiểu rõ các thao tác thực tế của nhân viên và công cụ họ sử dụng. Flowchart/swimlane giúp trực quan hóa quy trình và xác định điểm tắc nghẽn (ví dụ: chuyển đổi giữa các hệ thống). Các phương án khác bỏ qua yếu tố con người hoặc thiếu chi tiết cần thiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503582183_INTERMEDIATE_0_062b"
+  },
+  {
+    "questionText": "Khi phân tích quy trình 'Xử lý yêu cầu bảo hành' tại một nhà máy sản xuất thiết bị điện tử, bạn phát hiện 30% yêu cầu bị từ chối do thiếu thông tin chứng từ. Đâu là nguyên nhân gốc rễ (root cause) hợp lý nhất cần tập trung cải tiến?",
+    "options": [
+      "A. Nhân viên kinh doanh không hướng dẫn khách hàng đầy đủ về các giấy tờ cần thiết khi mua hàng.",
+      "B. Hệ thống ERP không tự động kiểm tra tính hợp lệ của chứng từ trước khi tiếp nhận yêu cầu.",
+      "C. Bộ phận bảo hành thiếu nhân sự nên không thể xử lý kịp thời các yêu cầu hợp lệ.",
+      "D. Khách hàng cố tình gửi thiếu chứng từ để được bảo hành miễn phí."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nguyên nhân gốc rễ thường nằm ở khâu đầu tiên của quy trình. Việc thiếu hướng dẫn cho khách hàng (do nhân viên kinh doanh) dẫn đến lỗi hệ thống và lãng phí thời gian xử lý sau này. Các phương án khác là hệ quả hoặc giả định chưa được kiểm chứng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503582183_INTERMEDIATE_1_yvt1"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình 'Đăng ký học phần' tại một trường đại học, bạn muốn thiết kế quy trình tương lai (To-Be) để giảm thời gian xử lý từ 5 ngày xuống còn 2 ngày. Giải pháp nào sau đây KHÔNG phù hợp với nguyên tắc 'Loại bỏ lãng phí' (Eliminate Waste) trong Lean?",
+    "options": [
+      "A. Tự động hóa bước kiểm tra điều kiện tiên quyết (prerequisites) bằng hệ thống đăng ký trực tuyến.",
+      "B. Yêu cầu sinh viên nộp đơn đăng ký trực tiếp tại phòng đào tạo thay vì qua email để đảm bảo tính chính xác.",
+      "C. Loại bỏ bước phê duyệt thủ công của cố vấn học tập cho các học phần không có giới hạn số lượng sinh viên.",
+      "D. Gộp các bước kiểm tra hồ sơ và xác nhận đăng ký vào một màn hình duy nhất cho nhân viên xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu sinh viên nộp đơn trực tiếp tạo ra lãng phí 'vận chuyển' (transportation waste) và 'chờ đợi' (waiting waste). Các phương án khác tập trung vào tự động hóa, đơn giản hóa hoặc loại bỏ các bước không cần thiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SKILL",
+    "id": "q_1780503582183_INTERMEDIATE_2_o480"
+  },
+  {
+    "questionText": "Công ty FMCG đang cải tiến quy trình 'Quản lý tồn kho nguyên liệu' tại nhà máy. Bạn đề xuất tự động hóa bước 'Kiểm kê hàng ngày' bằng cách sử dụng IoT sensors. Để thuyết phục lãnh đạo, KPI nào sau đây là phù hợp nhất để đo lường hiệu quả cải tiến?",
+    "options": [
+      "A. Số lượng nhân viên giảm được trong bộ phận quản lý kho.",
+      "B. Tỷ lệ sai lệch giữa số liệu tồn kho thực tế và hệ thống giảm từ 5% xuống dưới 1%.",
+      "C. Thời gian hoàn thành báo cáo tồn kho cuối tháng giảm từ 2 ngày xuống còn 1 ngày.",
+      "D. Chi phí đầu tư cho hệ thống IoT sensors."
+    ],
+    "correctAnswer": "B",
+    "explanation": "KPI cần phản ánh trực tiếp mục tiêu cải tiến: độ chính xác của tồn kho. Tỷ lệ sai lệch giảm chứng minh hiệu quả của tự động hóa trong việc loại bỏ lỗi thủ công. Các phương án khác là hệ quả gián tiếp hoặc chỉ số tài chính.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503582183_INTERMEDIATE_3_oegx"
+  },
+  {
+    "questionText": "Khi thiết kế quy trình To-Be cho 'Xử lý khiếu nại khách hàng' tại một ngân hàng, bạn muốn đảm bảo quy trình mới tuân thủ nguyên tắc 'Single Point of Contact' (SPOC). Giải pháp nào sau đây thể hiện đúng nguyên tắc này?",
+    "options": [
+      "A. Chỉ định một nhân viên duy nhất xử lý tất cả các khiếu nại của khách hàng từ đầu đến cuối.",
+      "B. Tạo một đầu mối tiếp nhận khiếu nại (ví dụ: hotline hoặc email chung), sau đó phân bổ cho nhân viên xử lý theo chuyên môn.",
+      "C. Yêu cầu khách hàng tự phân loại khiếu nại (ví dụ: thẻ tín dụng, khoản vay) trước khi gửi để hệ thống tự động chuyển đến bộ phận liên quan.",
+      "D. Thiết kế quy trình sao cho khách hàng chỉ cần liên hệ một đầu mối duy nhất (ví dụ: nhân viên chăm sóc khách hàng) để theo dõi tiến độ và nhận kết quả, bất kể khiếu nại được xử lý bởi bộ phận nào."
+    ],
+    "correctAnswer": "D",
+    "explanation": "SPOC không có nghĩa là một người xử lý tất cả, mà là khách hàng chỉ cần tương tác với một đầu mối duy nhất để theo dõi toàn bộ quy trình. Phương án D đảm bảo trải nghiệm liền mạch cho khách hàng trong khi vẫn tận dụng chuyên môn của các bộ phận khác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SKILL",
+    "id": "q_1780503582183_INTERMEDIATE_4_g48t"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình 'Phê duyệt đề xuất chi phí marketing' tại một công ty đa quốc gia, bạn phát hiện quy trình hiện tại có 7 bước phê duyệt và mất trung bình 10 ngày làm việc. Đâu là giải pháp To-Be hiệu quả nhất để giảm thời gian xử lý?",
+    "options": [
+      "A. Loại bỏ hoàn toàn bước phê duyệt của Giám đốc Marketing để đẩy nhanh quy trình.",
+      "B. Thiết lập ngưỡng phê duyệt tự động cho các đề xuất dưới 50 triệu VND, chỉ yêu cầu phê duyệt thủ công cho các đề xuất lớn hơn.",
+      "C. Yêu cầu tất cả các bộ phận liên quan họp hàng tuần để phê duyệt đồng loạt tất cả các đề xuất trong tuần đó.",
+      "D. Chuyển toàn bộ quy trình sang hệ thống phê duyệt điện tử (e-approval) mà không thay đổi cấu trúc phê duyệt hiện tại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp này áp dụng nguyên tắc 'Standard Work' và 'Exception Management': tự động hóa các trường hợp đơn giản (dưới ngưỡng) và chỉ xử lý thủ công các trường hợp phức tạp. Phương án D chỉ cải thiện tốc độ mà không giảm số bước, trong khi A và C có thể gây rủi ro hoặc không hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503582184_INTERMEDIATE_5_9645"
+  },
+  {
+    "questionText": "Khi phân tích quy trình 'Xuất hóa đơn cho khách hàng doanh nghiệp' tại một công ty viễn thông, bạn nhận thấy 40% hóa đơn bị trả lại do sai thông tin thuế. Đâu là bước đầu tiên hợp lý nhất để xác định nguyên nhân gốc rễ?",
+    "options": [
+      "A. Phỏng vấn bộ phận kế toán để hiểu cách họ nhập liệu thông tin thuế.",
+      "B. Kiểm tra log hệ thống để xem dữ liệu thuế được lấy từ nguồn nào (CRM, ERP, hoặc nhập thủ công).",
+      "C. Tiến hành phân tích Pareto để xác định loại lỗi thông tin thuế nào chiếm tỷ lệ cao nhất.",
+      "D. Yêu cầu khách hàng cung cấp lại thông tin thuế để đối chiếu với dữ liệu công ty."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Phân tích Pareto giúp xác định 20% nguyên nhân gây ra 80% vấn đề, từ đó tập trung nguồn lực vào cải tiến hiệu quả nhất. Các phương án khác có thể cần thiết sau khi đã xác định được loại lỗi chính.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503582184_INTERMEDIATE_6_2jrs"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình 'Tuyển dụng nhân sự' tại một công ty công nghệ, bạn muốn thiết kế quy trình To-Be để giảm thời gian tuyển dụng từ 30 ngày xuống còn 15 ngày. Giải pháp nào sau đây KHÔNG phù hợp với mục tiêu này?",
+    "options": [
+      "A. Tự động hóa bước sàng lọc hồ sơ ứng viên bằng AI dựa trên các tiêu chí định trước.",
+      "B. Loại bỏ bước phỏng vấn trực tiếp với Trưởng bộ phận cho các vị trí không quản lý.",
+      "C. Yêu cầu ứng viên phải hoàn thành bài test kỹ năng trực tuyến trước khi được xem xét phỏng vấn.",
+      "D. Thiết lập quy trình phê duyệt song song (parallel approval) cho các vị trí cấp cao thay vì tuần tự."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Yêu cầu ứng viên hoàn thành bài test trước khi phỏng vấn có thể kéo dài thời gian tuyển dụng (do ứng viên cần thời gian chuẩn bị) và không đảm bảo chất lượng ứng viên. Các phương án khác tập trung vào tự động hóa, đơn giản hóa hoặc song song hóa quy trình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SKILL",
+    "id": "q_1780503582184_INTERMEDIATE_7_gz0u"
+  },
+  {
+    "questionText": "Công ty sản xuất thực phẩm muốn cải tiến quy trình 'Kiểm soát chất lượng sản phẩm' để giảm tỷ lệ sản phẩm lỗi từ 3% xuống dưới 1%. Bạn đề xuất sử dụng công cụ Statistical Process Control (SPC). KPI nào sau đây là phù hợp nhất để đo lường hiệu quả của SPC?",
+    "options": [
+      "A. Số lượng nhân viên được đào tạo về SPC.",
+      "B. Tỷ lệ sản phẩm lỗi nằm ngoài giới hạn kiểm soát (Upper/Lower Control Limits) giảm từ 3% xuống dưới 1%.",
+      "C. Thời gian hoàn thành báo cáo kiểm soát chất lượng hàng tuần.",
+      "D. Chi phí đầu tư cho phần mềm SPC."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SPC tập trung vào việc giám sát và kiểm soát quy trình để giảm biến động. KPI phản ánh trực tiếp mục tiêu này là tỷ lệ sản phẩm nằm ngoài giới hạn kiểm soát. Các phương án khác không đo lường được hiệu quả cải tiến quy trình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503582184_INTERMEDIATE_8_ft31"
+  },
+  {
+    "questionText": "Khi thiết kế quy trình To-Be cho 'Xử lý đơn hàng thương mại điện tử', bạn muốn áp dụng nguyên tắc 'Pull System' (hệ thống kéo) để giảm tồn kho. Giải pháp nào sau đây thể hiện đúng nguyên tắc này?",
+    "options": [
+      "A. Dự báo nhu cầu hàng tháng và sản xuất theo kế hoạch để đảm bảo đủ hàng tồn kho.",
+      "B. Chỉ bắt đầu sản xuất hoặc lấy hàng từ kho khi có đơn hàng thực tế từ khách hàng.",
+      "C. Tăng cường quảng cáo để kích cầu và giảm lượng hàng tồn kho dư thừa.",
+      "D. Yêu cầu khách hàng đặt cọc 50% giá trị đơn hàng trước khi bắt đầu xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pull System là nguyên tắc sản xuất hoặc cung ứng dựa trên nhu cầu thực tế (đơn hàng) thay vì dự báo. Phương án B thể hiện đúng nguyên tắc này, trong khi A là Push System (hệ thống đẩy). C và D không liên quan đến cải tiến quy trình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SKILL",
+    "id": "q_1780503582184_INTERMEDIATE_9_1h0w"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình 'Quản lý dự án phần mềm' tại một công ty outsourcing, bạn phát hiện 60% dự án bị delay do chậm trễ trong bước 'Phê duyệt yêu cầu thay đổi' (Change Request). Đâu là giải pháp To-Be hiệu quả nhất để giải quyết vấn đề này?",
+    "options": [
+      "A. Loại bỏ hoàn toàn bước phê duyệt yêu cầu thay đổi để đẩy nhanh tiến độ.",
+      "B. Thiết lập ngưỡng tự động phê duyệt cho các yêu cầu thay đổi có tác động thấp (ví dụ: dưới 20 giờ công) và chỉ yêu cầu phê duyệt thủ công cho các yêu cầu lớn hơn.",
+      "C. Yêu cầu khách hàng ký xác nhận tất cả các yêu cầu thay đổi ngay từ đầu dự án để tránh thay đổi sau này.",
+      "D. Tăng cường nhân sự cho bộ phận phê duyệt để xử lý nhanh hơn các yêu cầu thay đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp này áp dụng nguyên tắc 'Exception Management': tự động hóa các trường hợp đơn giản và chỉ xử lý thủ công các trường hợp phức tạp. Phương án A gây rủi ro, C không thực tế, D chỉ giải quyết triệu chứng mà không cải tiến quy trình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503582184_INTERMEDIATE_10_709j"
+  },
+  {
+    "questionText": "Khi phân tích quy trình 'Thanh toán cho nhà cung cấp' tại một công ty sản xuất, bạn nhận thấy thời gian xử lý trung bình là 15 ngày do nhiều bước phê duyệt thủ công. Để thiết kế quy trình To-Be, bạn cần ưu tiên cải tiến bước nào sau đây?",
+    "options": [
+      "A. Bước 'Kiểm tra hóa đơn' do kế toán thực hiện, chiếm 30% thời gian xử lý.",
+      "B. Bước 'Phê duyệt của Giám đốc tài chính' cho các khoản thanh toán trên 500 triệu VND, chiếm 20% thời gian xử lý.",
+      "C. Bước 'Đối chiếu đơn hàng và hóa đơn' do nhân viên mua hàng thực hiện, chiếm 40% thời gian xử lý.",
+      "D. Bước 'Chuyển khoản ngân hàng' do ngân hàng xử lý, chiếm 10% thời gian xử lý."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bước 'Đối chiếu đơn hàng và hóa đơn' chiếm tỷ lệ thời gian cao nhất (40%) và thường có nhiều cơ hội cải tiến (ví dụ: tự động hóa bằng RPA hoặc tích hợp hệ thống). Phương án A và B cũng quan trọng nhưng không phải ưu tiên hàng đầu, còn D nằm ngoài tầm kiểm soát của công ty.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503582185_INTERMEDIATE_11_o78k"
+  },
+  {
+    "questionText": "Công ty bảo hiểm muốn cải tiến quy trình 'Xử lý bồi thường' để giảm thời gian xử lý từ 20 ngày xuống còn 7 ngày. Bạn đề xuất áp dụng RPA (Robotic Process Automation) cho bước 'Xác minh thông tin khách hàng'. KPI nào sau đây là phù hợp nhất để đo lường hiệu quả của RPA?",
+    "options": [
+      "A. Số lượng robot RPA được triển khai.",
+      "B. Tỷ lệ hồ sơ bồi thường được xử lý tự động bởi RPA mà không cần can thiệp thủ công.",
+      "C. Thời gian hoàn thành bước 'Xác minh thông tin khách hàng' giảm từ 3 ngày xuống còn 1 giờ.",
+      "D. Chi phí triển khai và duy trì hệ thống RPA."
+    ],
+    "correctAnswer": "C",
+    "explanation": "KPI cần đo lường trực tiếp tác động của RPA lên quy trình: thời gian xử lý bước cụ thể. Phương án B chỉ đo mức độ tự động hóa, không phản ánh hiệu quả cải tiến. A và D là chỉ số tài nguyên, không phải kết quả đầu ra.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503582185_INTERMEDIATE_12_e38x"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình xử lý đơn hàng tại một công ty logistics Việt Nam, bạn phát hiện rằng bước 'Xác nhận thanh toán' đang gây tắc nghẽn do yêu cầu phê duyệt thủ công từ bộ phận Tài chính. Tuy nhiên, bộ phận Tài chính khẳng định cần kiểm soát chặt chẽ để tránh rủi ro gian lận. Giải pháp nào dưới đây là tối ưu nhất để cân bằng giữa cải thiện tốc độ và kiểm soát rủi ro?",
+    "options": [
+      "A. Loại bỏ hoàn toàn bước phê duyệt thủ công và thay thế bằng hệ thống tự động cảnh báo khi phát hiện giao dịch bất thường.",
+      "B. Thiết kế quy trình mới với ngưỡng tự động phê duyệt cho các đơn hàng có giá trị thấp (dưới 10 triệu VND) và giữ phê duyệt thủ công cho đơn hàng lớn, đồng thời tích hợp công cụ phân tích rủi ro tự động.",
+      "C. Yêu cầu bộ phận Tài chính tăng cường nhân sự để xử lý nhanh hơn bước phê duyệt thủ công.",
+      "D. Đề xuất chuyển toàn bộ quy trình xác nhận thanh toán sang bộ phận Kinh doanh để giảm tải cho Tài chính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B giải quyết được cả hai vấn đề: cải thiện tốc độ xử lý cho đơn hàng nhỏ (giảm bottleneck) và duy trì kiểm soát rủi ro cho đơn hàng lớn. Việc tích hợp công cụ phân tích rủi ro tự động cũng giúp giảm phụ thuộc vào phê duyệt thủ công mà vẫn đảm bảo an toàn. Các lựa chọn khác không cân bằng được hai mục tiêu này hoặc tạo ra rủi ro mới.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503677375_ADVANCED_0_ypp4"
+  },
+  {
+    "questionText": "Khi phân tích quy trình 'Quản lý kho hàng' tại một nhà máy sản xuất điện tử, bạn nhận thấy tỷ lệ lỗi nhập kho (mismatch giữa số lượng thực tế và hệ thống) là 8%, cao hơn nhiều so với tiêu chuẩn ngành (dưới 2%). Sau khi mapping quy trình As-Is, bạn xác định nguyên nhân chính là do nhân viên kho nhập liệu thủ công và thiếu cơ chế kiểm tra chéo. Giải pháp nào dưới đây là hiệu quả nhất để thiết kế quy trình To-Be?",
+    "options": [
+      "A. Áp dụng hệ thống quét mã vạch/QR code cho tất cả các thao tác nhập/xuất kho, kết hợp với cơ chế xác nhận kép (2 nhân viên) cho các lô hàng có giá trị cao.",
+      "B. Tăng cường đào tạo nhân viên kho về quy trình nhập liệu và áp dụng hình thức kỷ luật nghiêm khắc khi phát hiện lỗi.",
+      "C. Chuyển toàn bộ quy trình nhập kho sang bộ phận Kế toán để đảm bảo tính chính xác.",
+      "D. Sử dụng phần mềm ERP mới mà không thay đổi quy trình hiện tại, kỳ vọng phần mềm sẽ tự động giảm lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A giải quyết gốc rễ vấn đề bằng cách loại bỏ nhập liệu thủ công (nguyên nhân chính gây lỗi) và bổ sung cơ chế kiểm tra chéo cho các trường hợp quan trọng. Các lựa chọn khác không trực tiếp giải quyết nguyên nhân hoặc tạo ra rủi ro mới (ví dụ: chuyển trách nhiệm sang bộ phận khác không giải quyết được vấn đề thiếu kiểm soát).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503677376_ADVANCED_1_zhi7"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình 'Xử lý khiếu nại khách hàng' cho một ngân hàng, bạn phát hiện rằng thời gian xử lý trung bình là 12 ngày (cao hơn mục tiêu 5 ngày) do quy trình yêu cầu phê duyệt từ nhiều cấp quản lý. Tuy nhiên, các bên liên quan lo ngại rằng giảm cấp phê duyệt sẽ tăng rủi ro gian lận. Bạn sẽ đề xuất giải pháp nào để thiết kế quy trình To-Be?",
+    "options": [
+      "A. Loại bỏ tất cả các bước phê duyệt và giao toàn quyền xử lý cho nhân viên tuyến đầu để tăng tốc độ.",
+      "B. Thiết kế ma trận phê duyệt động dựa trên giá trị khiếu nại và mức độ rủi ro, kết hợp với công cụ tự động cảnh báo gian lận.",
+      "C. Giảm số cấp phê duyệt từ 4 xuống còn 2, nhưng không thay đổi các điều kiện phê duyệt khác.",
+      "D. Chuyển toàn bộ quy trình xử lý khiếu nại sang bộ phận Kiểm toán nội bộ để đảm bảo tính minh bạch."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng ma trận phê duyệt động để tối ưu hóa số lượng cấp phê duyệt dựa trên giá trị và rủi ro, đồng thời tích hợp công cụ tự động để giảm thiểu rủi ro gian lận. Điều này cân bằng được tốc độ xử lý và kiểm soát rủi ro. Các lựa chọn khác không giải quyết được cả hai mục tiêu hoặc tạo ra rủi ro mới.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503677376_ADVANCED_2_n4q3"
+  },
+  {
+    "questionText": "Một công ty sản xuất thực phẩm muốn cải tiến quy trình 'Kiểm soát chất lượng sản phẩm' để giảm tỷ lệ sản phẩm lỗi từ 5% xuống dưới 1%. Sau khi phân tích quy trình As-Is, bạn nhận thấy nguyên nhân chính là do kiểm tra thủ công và thiếu dữ liệu thời gian thực. Giải pháp nào dưới đây là tối ưu nhất cho quy trình To-Be?",
+    "options": [
+      "A. Áp dụng hệ thống IoT để giám sát các thông số sản xuất thời gian thực và tự động cảnh báo khi phát hiện bất thường, kết hợp với kiểm tra mẫu ngẫu nhiên thủ công.",
+      "B. Tăng cường số lượng nhân viên kiểm tra chất lượng để đảm bảo 100% sản phẩm được kiểm tra thủ công.",
+      "C. Chuyển toàn bộ quy trình kiểm tra sang bộ phận Nghiên cứu & Phát triển để đảm bảo tính chính xác.",
+      "D. Sử dụng phần mềm quản lý chất lượng mới mà không thay đổi quy trình kiểm tra hiện tại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A kết hợp công nghệ IoT để giám sát thời gian thực (giải quyết gốc rễ vấn đề) và vẫn duy trì kiểm tra thủ công cho một số trường hợp để đảm bảo tính linh hoạt. Các lựa chọn khác không giải quyết được vấn đề thiếu dữ liệu thời gian thực hoặc không khả thi về mặt chi phí và hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503677377_ADVANCED_3_6rd8"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình 'Đặt hàng nguyên vật liệu' cho một nhà máy dệt may, bạn phát hiện rằng thời gian xử lý đơn hàng trung bình là 7 ngày do quy trình yêu cầu phê duyệt từ nhiều bộ phận. Tuy nhiên, bộ phận Mua hàng lo ngại rằng giảm cấp phê duyệt sẽ dẫn đến mua hàng không đúng tiêu chuẩn. Giải pháp nào dưới đây là tối ưu nhất?",
+    "options": [
+      "A. Loại bỏ tất cả các bước phê duyệt và cho phép nhân viên Mua hàng tự quyết định để tăng tốc độ.",
+      "B. Thiết kế quy trình phê duyệt tự động dựa trên ngưỡng giá trị và loại nguyên vật liệu, kết hợp với danh sách nhà cung cấp đã được phê duyệt trước.",
+      "C. Giảm số cấp phê duyệt từ 5 xuống còn 2 nhưng giữ nguyên các điều kiện phê duyệt khác.",
+      "D. Chuyển toàn bộ quy trình đặt hàng sang bộ phận Kế hoạch sản xuất để giảm tải cho bộ phận Mua hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng quy trình phê duyệt tự động dựa trên ngưỡng giá trị và loại nguyên vật liệu, đồng thời đảm bảo tính tuân thủ bằng cách giới hạn nhà cung cấp đã được phê duyệt. Điều này giải quyết được cả vấn đề tốc độ và kiểm soát rủi ro. Các lựa chọn khác không cân bằng được hai mục tiêu này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503677378_ADVANCED_4_8dt6"
+  },
+  {
+    "questionText": "Khi phân tích quy trình 'Xử lý đơn bảo hiểm' tại một công ty bảo hiểm, bạn nhận thấy tỷ lệ từ chối đơn do thiếu thông tin khách hàng là 15%, cao hơn nhiều so với tiêu chuẩn ngành (dưới 5%). Sau khi mapping quy trình As-Is, bạn xác định nguyên nhân là do nhân viên nhập liệu thủ công và thiếu cơ chế xác thực thông tin. Giải pháp nào dưới đây là hiệu quả nhất cho quy trình To-Be?",
+    "options": [
+      "A. Áp dụng hệ thống tự động xác thực thông tin khách hàng từ cơ sở dữ liệu quốc gia (ví dụ: CMND/CCCD) và tích hợp cảnh báo khi phát hiện thiếu thông tin.",
+      "B. Tăng cường đào tạo nhân viên về quy trình nhập liệu và áp dụng hình thức kỷ luật khi phát hiện lỗi.",
+      "C. Chuyển toàn bộ quy trình nhập liệu sang bộ phận Chăm sóc khách hàng để đảm bảo tính chính xác.",
+      "D. Sử dụng phần mềm quản lý đơn bảo hiểm mới mà không thay đổi quy trình nhập liệu hiện tại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A giải quyết gốc rễ vấn đề bằng cách tự động xác thực thông tin khách hàng (loại bỏ nhập liệu thủ công) và tích hợp cảnh báo để giảm thiểu lỗi. Các lựa chọn khác không trực tiếp giải quyết nguyên nhân hoặc không khả thi về mặt hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503677378_ADVANCED_5_ivoj"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình 'Quản lý dự án' tại một công ty tư vấn, bạn phát hiện rằng 30% dự án bị trễ tiến độ do thiếu sự phối hợp giữa các bộ phận. Sau khi phân tích, bạn nhận thấy nguyên nhân là do quy trình hiện tại không có cơ chế theo dõi thời gian thực và thiếu trách nhiệm rõ ràng. Giải pháp nào dưới đây là tối ưu nhất cho quy trình To-Be?",
+    "options": [
+      "A. Áp dụng công cụ quản lý dự án trực tuyến (ví dụ: Jira, Trello) với bảng theo dõi thời gian thực và phân công trách nhiệm cụ thể cho từng nhiệm vụ.",
+      "B. Tăng cường số lượng cuộc họp hàng tuần để theo dõi tiến độ dự án.",
+      "C. Chuyển toàn bộ trách nhiệm quản lý dự án sang một bộ phận chuyên trách mới.",
+      "D. Sử dụng phần mềm quản lý dự án mới mà không thay đổi quy trình hiện tại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A giải quyết được cả hai vấn đề: thiếu theo dõi thời gian thực và thiếu trách nhiệm rõ ràng bằng cách sử dụng công cụ trực tuyến và phân công nhiệm vụ cụ thể. Các lựa chọn khác không giải quyết được gốc rễ vấn đề hoặc không khả thi về mặt hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503677379_ADVANCED_6_2y9f"
+  },
+  {
+    "questionText": "Một công ty thương mại điện tử muốn cải tiến quy trình 'Xử lý đơn hàng' để giảm thời gian giao hàng từ 3 ngày xuống còn 1 ngày. Sau khi phân tích quy trình As-Is, bạn nhận thấy nguyên nhân chính là do quy trình xử lý thủ công và thiếu tích hợp giữa hệ thống kho hàng và vận chuyển. Giải pháp nào dưới đây là hiệu quả nhất cho quy trình To-Be?",
+    "options": [
+      "A. Áp dụng hệ thống tự động tích hợp giữa kho hàng và đối tác vận chuyển, kết hợp với quy trình xử lý đơn hàng tự động cho các đơn hàng tiêu chuẩn.",
+      "B. Tăng cường nhân sự để xử lý đơn hàng nhanh hơn.",
+      "C. Chuyển toàn bộ quy trình xử lý đơn hàng sang bộ phận Vận chuyển để giảm thời gian chuyển giao.",
+      "D. Sử dụng phần mềm quản lý đơn hàng mới mà không thay đổi quy trình hiện tại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A giải quyết gốc rễ vấn đề bằng cách tích hợp hệ thống và tự động hóa quy trình xử lý đơn hàng, giúp giảm thời gian giao hàng. Các lựa chọn khác không giải quyết được vấn đề thiếu tích hợp hoặc không khả thi về mặt hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503677379_ADVANCED_7_0cas"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình 'Tuyển dụng nhân sự' tại một công ty công nghệ, bạn phát hiện rằng thời gian tuyển dụng trung bình là 45 ngày (cao hơn mục tiêu 30 ngày) do quy trình yêu cầu phê duyệt từ nhiều cấp quản lý. Tuy nhiên, bộ phận Nhân sự lo ngại rằng giảm cấp phê duyệt sẽ dẫn đến tuyển dụng không đúng tiêu chuẩn. Giải pháp nào dưới đây là tối ưu nhất?",
+    "options": [
+      "A. Loại bỏ tất cả các bước phê duyệt và cho phép bộ phận Tuyển dụng tự quyết định để tăng tốc độ.",
+      "B. Thiết kế quy trình phê duyệt tự động dựa trên cấp bậc vị trí và mức lương, kết hợp với danh sách ứng viên đã được sàng lọc trước.",
+      "C. Giảm số cấp phê duyệt từ 4 xuống còn 2 nhưng giữ nguyên các điều kiện phê duyệt khác.",
+      "D. Chuyển toàn bộ quy trình tuyển dụng sang bộ phận Kinh doanh để giảm tải cho Nhân sự."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng quy trình phê duyệt tự động dựa trên cấp bậc và mức lương, đồng thời đảm bảo tính tuân thủ bằng cách sàng lọc ứng viên trước. Điều này cân bằng được tốc độ tuyển dụng và kiểm soát chất lượng. Các lựa chọn khác không giải quyết được cả hai mục tiêu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503677380_ADVANCED_8_o2as"
+  },
+  {
+    "questionText": "Khi phân tích quy trình 'Quản lý công nợ' tại một công ty xây dựng, bạn nhận thấy tỷ lệ công nợ quá hạn là 20%, cao hơn nhiều so với tiêu chuẩn ngành (dưới 5%). Sau khi mapping quy trình As-Is, bạn xác định nguyên nhân chính là do thiếu cơ chế nhắc nhở tự động và quy trình thu hồi nợ không rõ ràng. Giải pháp nào dưới đây là hiệu quả nhất cho quy trình To-Be?",
+    "options": [
+      "A. Áp dụng hệ thống tự động gửi email/SMS nhắc nhở khách hàng trước ngày đến hạn thanh toán, kết hợp với quy trình thu hồi nợ theo từng giai đoạn rõ ràng.",
+      "B. Tăng cường nhân sự bộ phận Công nợ để theo dõi và nhắc nhở thủ công.",
+      "C. Chuyển toàn bộ trách nhiệm quản lý công nợ sang bộ phận Kế toán để đảm bảo tính chính xác.",
+      "D. Sử dụng phần mềm quản lý công nợ mới mà không thay đổi quy trình hiện tại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A giải quyết gốc rễ vấn đề bằng cách tự động hóa nhắc nhở và thiết lập quy trình thu hồi nợ rõ ràng, giúp giảm tỷ lệ công nợ quá hạn. Các lựa chọn khác không trực tiếp giải quyết nguyên nhân hoặc không khả thi về mặt hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503677381_ADVANCED_9_lj91"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình 'Quản lý bảo trì thiết bị' tại một nhà máy sản xuất, bạn phát hiện rằng thời gian dừng máy trung bình là 8 giờ/tháng (cao hơn mục tiêu 2 giờ/tháng) do quy trình báo hỏng và xử lý thủ công. Giải pháp nào dưới đây là tối ưu nhất cho quy trình To-Be?",
+    "options": [
+      "A. Áp dụng hệ thống giám sát tình trạng thiết bị thời gian thực (Condition Monitoring) và tự động tạo yêu cầu bảo trì khi phát hiện bất thường.",
+      "B. Tăng cường nhân sự bộ phận Bảo trì để xử lý nhanh hơn các yêu cầu báo hỏng.",
+      "C. Chuyển toàn bộ trách nhiệm quản lý bảo trì sang bộ phận Sản xuất để giảm thời gian chuyển giao.",
+      "D. Sử dụng phần mềm quản lý bảo trì mới mà không thay đổi quy trình hiện tại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A giải quyết gốc rễ vấn đề bằng cách giám sát thời gian thực và tự động hóa quy trình báo hỏng, giúp giảm thời gian dừng máy. Các lựa chọn khác không giải quyết được vấn đề thiếu tự động hóa hoặc không khả thi về mặt hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503677381_ADVANCED_10_apff"
+  },
+  {
+    "questionText": "Một công ty bán lẻ muốn cải tiến quy trình 'Quản lý tồn kho' để giảm tỷ lệ hết hàng từ 10% xuống dưới 2%. Sau khi phân tích quy trình As-Is, bạn nhận thấy nguyên nhân chính là do dự báo nhu cầu thủ công và thiếu tích hợp giữa hệ thống bán hàng và kho hàng. Giải pháp nào dưới đây là hiệu quả nhất cho quy trình To-Be?",
+    "options": [
+      "A. Áp dụng hệ thống dự báo nhu cầu tự động dựa trên dữ liệu bán hàng lịch sử và tích hợp thời gian thực giữa hệ thống bán hàng và kho hàng.",
+      "B. Tăng cường nhân sự bộ phận Kho để theo dõi và bổ sung hàng thủ công.",
+      "C. Chuyển toàn bộ trách nhiệm quản lý tồn kho sang bộ phận Kinh doanh để đảm bảo tính chính xác.",
+      "D. Sử dụng phần mềm quản lý kho mới mà không thay đổi quy trình hiện tại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A giải quyết gốc rễ vấn đề bằng cách tự động hóa dự báo nhu cầu và tích hợp hệ thống, giúp giảm tỷ lệ hết hàng. Các lựa chọn khác không giải quyết được vấn đề thiếu tích hợp hoặc không khả thi về mặt hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503677382_ADVANCED_11_87qv"
+  },
+  {
+    "questionText": "Trong dự án cải tiến quy trình 'Xử lý yêu cầu thay đổi dự án' tại một công ty phần mềm, bạn phát hiện rằng thời gian xử lý trung bình là 10 ngày (cao hơn mục tiêu 3 ngày) do quy trình yêu cầu phê duyệt từ nhiều cấp quản lý. Tuy nhiên, bộ phận Kỹ thuật lo ngại rằng giảm cấp phê duyệt sẽ dẫn đến thay đổi không kiểm soát. Giải pháp nào dưới đây là tối ưu nhất?",
+    "options": [
+      "A. Loại bỏ tất cả các bước phê duyệt và cho phép đội dự án tự quyết định để tăng tốc độ.",
+      "B. Thiết kế quy trình phê duyệt tự động dựa trên tác động của thay đổi (ví dụ: chi phí, thời gian, rủi ro) và tích hợp công cụ phân tích tác động tự động.",
+      "C. Giảm số cấp phê duyệt từ 5 xuống còn 2 nhưng giữ nguyên các điều kiện phê duyệt khác.",
+      "D. Chuyển toàn bộ quy trình xử lý yêu cầu thay đổi sang bộ phận Quản lý dự án để giảm tải cho các bên liên quan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng quy trình phê duyệt tự động dựa trên tác động của thay đổi, đồng thời tích hợp công cụ phân tích để đảm bảo kiểm soát rủi ro. Điều này cân bằng được tốc độ xử lý và kiểm soát chất lượng. Các lựa chọn khác không giải quyết được cả hai mục tiêu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503677382_ADVANCED_12_tu58"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi quy trình đặt hàng toàn cầu cho một tập đoàn bán lẻ Việt Nam, bạn phát hiện rằng quy trình As-Is yêu cầu 7 bước phê duyệt thủ công từ nhiều phòng ban, dẫn đến thời gian xử lý trung bình 12 ngày. Khi thiết kế quy trình To-Be, chiến lược nào sau đây thể hiện tư duy chiến lược dài hạn và khả năng lãnh đạo chuyển đổi số hiệu quả nhất?",
+    "options": [
+      "A. Thay thế toàn bộ quy trình phê duyệt thủ công bằng hệ thống AI tự động phê duyệt dựa trên ngưỡng giá trị đơn hàng, loại bỏ hoàn toàn vai trò của con người trong quy trình.",
+      "B. Áp dụng mô hình hybrid: tự động hóa phê duyệt cho đơn hàng dưới ngưỡng rủi ro xác định trước, đồng thời thiết kế lại luồng phê duyệt cấp cao với quy tắc rõ ràng và công cụ hỗ trợ ra quyết định cho các trường hợp đặc biệt.",
+      "C. Giảm số bước phê duyệt từ 7 xuống còn 3 bước bằng cách gộp các phòng ban có chức năng tương tự, nhưng vẫn giữ nguyên quy trình thủ công để đảm bảo kiểm soát.",
+      "D. Triển khai hệ thống workflow tự động nhưng giữ nguyên 7 bước phê duyệt để đảm bảo không làm gián đoạn hoạt động kinh doanh trong giai đoạn chuyển đổi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược hybrid kết hợp tự động hóa với kiểm soát thủ công cho các trường hợp phức tạp thể hiện tư duy chiến lược dài hạn: giảm lãng phí mà vẫn duy trì khả năng quản lý rủi ro. Giải pháp này cũng tạo nền tảng cho chuyển đổi số bền vững, cho phép mở rộng tự động hóa khi doanh nghiệp sẵn sàng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503776434_EXPERT_0_pqtm"
+  },
+  {
+    "questionText": "Khi phân tích quy trình As-Is của hệ thống logistics tại một công ty sản xuất đa quốc gia ở Việt Nam, bạn nhận thấy thời gian xử lý đơn hàng xuất khẩu bị kéo dài do phải chờ xác nhận thủ công từ 3 bộ phận: Kế hoạch, Kho vận và Hải quan. KPI nào sau đây sẽ phản ánh chính xác nhất tác động của cải tiến quy trình To-Be lên hiệu suất kinh doanh?",
+    "options": [
+      "A. Số lượng đơn hàng xử lý được trong một giờ.",
+      "B. Thời gian trung bình từ khi tiếp nhận đơn hàng đến khi hoàn tất thủ tục xuất khẩu (Lead Time), phân tách theo từng bộ phận đóng góp.",
+      "C. Tỷ lệ lỗi trong quá trình xử lý đơn hàng.",
+      "D. Chi phí vận hành trung bình cho mỗi đơn hàng xuất khẩu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lead Time phân tách theo bộ phận cho phép đo lường chính xác hiệu quả cải tiến tại từng điểm nghẽn, đồng thời phản ánh tác động trực tiếp lên trải nghiệm khách hàng và dòng tiền. Đây là KPI chiến lược giúp lãnh đạo ra quyết định đầu tư cho các giai đoạn tiếp theo của chuyển đổi số.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503776435_EXPERT_1_ehwp"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa quy trình sản xuất tại một nhà máy dệt may ở Đồng Nai, bạn phát hiện quy trình As-Is có bước kiểm tra chất lượng thủ công sau mỗi công đoạn, gây ra lãng phí thời gian và nhân lực. Khi thiết kế quy trình To-Be, giải pháp nào sau đây kết hợp hiệu quả giữa cải tiến quy trình và ứng dụng công nghệ, đồng thời phù hợp với chiến lược chuyển đổi số dài hạn của doanh nghiệp?",
+    "options": [
+      "A. Loại bỏ hoàn toàn bước kiểm tra chất lượng thủ công, thay thế bằng hệ thống camera AI tự động phát hiện lỗi tại cuối dây chuyền sản xuất.",
+      "B. Giữ nguyên bước kiểm tra thủ công nhưng tăng cường đào tạo nhân viên để nâng cao tốc độ và độ chính xác.",
+      "C. Thiết kế lại quy trình với hệ thống kiểm tra chất lượng tự động tại từng công đoạn quan trọng, kết hợp với kiểm tra thủ công định kỳ để đảm bảo độ tin cậy của hệ thống AI.",
+      "D. Chuyển đổi toàn bộ quy trình sang mô hình sản xuất tinh gọn (Lean Manufacturing) mà không áp dụng bất kỳ công nghệ tự động hóa nào."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp kết hợp kiểm tra tự động tại các điểm nghẽn với kiểm tra thủ công định kỳ tạo ra sự cân bằng giữa hiệu quả và độ tin cậy. Nó cho phép doanh nghiệp dần chuyển đổi số mà không làm gián đoạn hoạt động, đồng thời xây dựng nền tảng dữ liệu cho các cải tiến tiếp theo.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503776437_EXPERT_2_bnbz"
+  },
+  {
+    "questionText": "Bạn đang thực hiện phân tích gap giữa quy trình As-Is và To-Be cho hệ thống quản lý kho tại một chuỗi siêu thị ở Việt Nam. Phát hiện nào sau đây đòi hỏi tư duy chiến lược ở cấp độ vĩ mô (macro-level) thay vì chỉ tập trung vào cải tiến vi mô (micro-level)?",
+    "options": [
+      "A. Thời gian tìm kiếm sản phẩm trong kho trung bình là 15 phút do thiếu hệ thống định vị tự động.",
+      "B. Quy trình nhập/xuất kho yêu cầu 3 chữ ký phê duyệt thủ công, gây chậm trễ trong giờ cao điểm.",
+      "C. Hệ thống kho hiện tại không tích hợp với hệ thống ERP và CRM, dẫn đến dữ liệu tồn kho không đồng bộ giữa các kênh bán hàng online và offline.",
+      "D. Nhân viên kho thường xuyên phải di chuyển xa do bố trí khu vực lưu trữ không hợp lý."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Vấn đề tích hợp hệ thống ERP/CRM ảnh hưởng đến toàn bộ chuỗi giá trị của doanh nghiệp, đòi hỏi tư duy chiến lược vĩ mô. Nó liên quan đến kiến trúc hệ thống tổng thể, chiến lược dữ liệu và khả năng mở rộng trong tương lai, không chỉ là cải tiến quy trình đơn lẻ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503776437_EXPERT_3_c1tr"
+  },
+  {
+    "questionText": "Trong dự án tái thiết kế quy trình chăm sóc khách hàng cho một ngân hàng số tại Việt Nam, bạn phát hiện quy trình As-Is xử lý khiếu nại yêu cầu khách hàng phải cung cấp thông tin nhiều lần tại các kênh khác nhau. Khi thiết kế quy trình To-Be, yếu tố nào sau đây là quan trọng nhất để đảm bảo giải pháp có tính bền vững và khả năng mở rộng trong tương lai?",
+    "options": [
+      "A. Triển khai chatbot AI để tự động trả lời 80% các câu hỏi thường gặp, giảm tải cho nhân viên.",
+      "B. Thiết kế hệ thống quản lý danh tính khách hàng (Customer Identity Management) tập trung, cho phép chia sẻ dữ liệu an toàn giữa các kênh và bộ phận.",
+      "C. Đào tạo nhân viên chăm sóc khách hàng để nâng cao kỹ năng giải quyết vấn đề.",
+      "D. Tạo ra quy trình xử lý khiếu nại nhanh với thời gian phản hồi tối đa 2 giờ cho tất cả các trường hợp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hệ thống quản lý danh tính khách hàng tập trung là nền tảng chiến lược cho chuyển đổi số bền vững. Nó giải quyết gốc rễ vấn đề (dữ liệu phân tán), tạo điều kiện cho tự động hóa và cá nhân hóa ở quy mô lớn, đồng thời đảm bảo tuân thủ các quy định về bảo mật dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503776438_EXPERT_4_xbzj"
+  },
+  {
+    "questionText": "Khi phân tích quy trình As-Is của hệ thống đặt vé trực tuyến cho một hãng hàng không Việt Nam, bạn nhận thấy tỷ lệ hủy vé cao (30%) do khách hàng không nhận được xác nhận đặt chỗ kịp thời. Giải pháp To-Be nào sau đây thể hiện tư duy cải tiến quy trình kết hợp với ứng dụng công nghệ để giải quyết vấn đề một cách toàn diện?",
+    "options": [
+      "A. Gửi email xác nhận tự động ngay sau khi khách hàng hoàn tất đặt vé, với nội dung rõ ràng và liên kết để quản lý đặt chỗ.",
+      "B. Triển khai hệ thống thông báo đa kênh (email, SMS, push notification) với quy trình xử lý lỗi tự động khi không gửi được xác nhận.",
+      "C. Tăng cường nhân viên hỗ trợ khách hàng để gọi điện xác nhận thủ công cho tất cả các đặt vé.",
+      "D. Giảm thời gian xử lý đặt vé từ 5 phút xuống còn 2 phút bằng cách tối ưu hóa cơ sở dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp thông báo đa kênh với quy trình xử lý lỗi tự động giải quyết vấn đề một cách toàn diện: đảm bảo khách hàng nhận được xác nhận qua kênh ưu tiên của họ, đồng thời duy trì tính liên tục của dịch vụ ngay cả khi có sự cố kỹ thuật. Đây là cách tiếp cận kết hợp cải tiến quy trình với công nghệ một cách chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SKILL",
+    "id": "q_1780503776439_EXPERT_5_oar4"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa quy trình quản lý dự án tại một công ty tư vấn công nghệ ở TP.HCM, bạn phát hiện quy trình As-Is yêu cầu họp đánh giá tiến độ hàng tuần với tất cả thành viên dự án, gây lãng phí thời gian. Khi thiết kế quy trình To-Be, chiến lược nào sau đây thể hiện tư duy lãnh đạo chuyển đổi số và cải tiến quy trình hiệu quả nhất?",
+    "options": [
+      "A. Thay thế tất cả các cuộc họp đánh giá tiến độ bằng báo cáo tự động từ hệ thống quản lý dự án (Project Management System).",
+      "B. Giữ nguyên tần suất họp nhưng rút ngắn thời gian họp từ 1 giờ xuống còn 30 phút bằng cách chuẩn bị trước tài liệu.",
+      "C. Thiết kế hệ thống báo cáo tiến độ tự động với các ngưỡng cảnh báo, chỉ tổ chức họp khi có vấn đề vượt ngưỡng hoặc yêu cầu từ thành viên dự án.",
+      "D. Chuyển sang mô hình họp đánh giá tiến độ hàng tháng thay vì hàng tuần để giảm tải cho nhân viên."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Chiến lược này kết hợp tự động hóa với quản lý ngoại lệ (management by exception), tối ưu hóa thời gian của cả nhóm dự án. Nó thể hiện tư duy lãnh đạo chuyển đổi số bằng cách tận dụng công nghệ để loại bỏ lãng phí, đồng thời duy trì sự linh hoạt và kiểm soát cần thiết cho các tình huống phức tạp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503776440_EXPERT_6_cly8"
+  },
+  {
+    "questionText": "Khi phân tích gap giữa quy trình As-Is và To-Be cho hệ thống quản lý chuỗi cung ứng của một công ty FMCG tại Việt Nam, bạn nhận thấy tồn kho cao do thiếu dự báo nhu cầu chính xác. Giải pháp nào sau đây thể hiện tư duy cải tiến quy trình ở cấp độ chiến lược, kết hợp với ứng dụng công nghệ để giải quyết vấn đề dài hạn?",
+    "options": [
+      "A. Áp dụng mô hình dự báo nhu cầu dựa trên AI, tích hợp dữ liệu bán hàng thời gian thực từ tất cả các kênh phân phối và yếu tố mùa vụ.",
+      "B. Tăng cường đào tạo nhân viên phòng kế hoạch để nâng cao kỹ năng dự báo thủ công.",
+      "C. Giảm mức tồn kho an toàn xuống 20% để giảm chi phí lưu kho.",
+      "D. Triển khai hệ thống quản lý kho tự động (WMS) để tối ưu hóa không gian lưu trữ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp AI tích hợp dữ liệu đa nguồn thể hiện tư duy chiến lược dài hạn: nó giải quyết gốc rễ vấn đề (dự báo không chính xác) bằng cách tận dụng dữ liệu lớn và học máy, đồng thời tạo nền tảng cho các cải tiến tiếp theo trong quản lý chuỗi cung ứng. Đây là cách tiếp cận toàn diện kết hợp cải tiến quy trình với chuyển đổi số.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503776440_EXPERT_7_v63l"
+  },
+  {
+    "questionText": "Trong dự án tái thiết kế quy trình tuyển dụng cho một tập đoàn công nghệ đa quốc gia tại Việt Nam, bạn phát hiện quy trình As-Is yêu cầu ứng viên phải trải qua 5 vòng phỏng vấn riêng lẻ, gây mất thời gian cho cả ứng viên và nhân viên công ty. Khi thiết kế quy trình To-Be, yếu tố nào sau đây là quan trọng nhất để đảm bảo giải pháp vừa cải thiện hiệu quả vừa duy trì chất lượng tuyển dụng?",
+    "options": [
+      "A. Giảm số vòng phỏng vấn xuống còn 2 vòng: phỏng vấn kỹ thuật và phỏng vấn văn hóa.",
+      "B. Thiết kế quy trình tuyển dụng dựa trên dữ liệu với hệ thống đánh giá tự động (như coding test tự động) kết hợp với phỏng vấn tập trung (panel interview) cho các vị trí quan trọng.",
+      "C. Chuyển toàn bộ quy trình tuyển dụng sang hình thức online để tiết kiệm thời gian di chuyển.",
+      "D. Áp dụng chính sách tuyển dụng nhanh: đưa ra quyết định tuyển dụng trong vòng 24 giờ sau khi nhận hồ sơ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp kết hợp đánh giá tự động với phỏng vấn tập trung thể hiện tư duy cải tiến quy trình chiến lược: nó duy trì chất lượng tuyển dụng (thông qua đánh giá đa chiều) đồng thời cải thiện hiệu quả (bằng tự động hóa và tối ưu hóa quy trình). Đây là cách tiếp cận cân bằng giữa tốc độ và chất lượng, phù hợp với chiến lược nhân sự dài hạn của doanh nghiệp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SKILL",
+    "id": "q_1780503776441_EXPERT_8_qoom"
+  },
+  {
+    "questionText": "Bạn đang thực hiện phân tích quy trình As-Is cho hệ thống thanh toán tại một chuỗi nhà hàng cao cấp ở Việt Nam. Phát hiện nào sau đây cho thấy cần áp dụng tư duy cải tiến quy trình ở cấp độ vĩ mô (macro-level) thay vì chỉ tập trung vào cải tiến vi mô (micro-level)?",
+    "options": [
+      "A. Khách hàng phải chờ trung bình 5 phút để nhận hóa đơn do nhân viên phải di chuyển từ khu vực phục vụ đến quầy thanh toán.",
+      "B. Hệ thống POS hiện tại không tích hợp với hệ thống quản lý kho và CRM, dẫn đến dữ liệu bán hàng không được cập nhật kịp thời cho các bộ phận liên quan.",
+      "C. Nhân viên phục vụ thường xuyên nhập sai thông tin đơn hàng do giao diện hệ thống POS không thân thiện.",
+      "D. Quy trình thanh toán yêu cầu khách hàng ký hóa đơn hai lần: một lần khi nhận hóa đơn tạm tính và một lần khi nhận hóa đơn chính thức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vấn đề tích hợp hệ thống POS với kho và CRM ảnh hưởng đến toàn bộ hoạt động kinh doanh của chuỗi nhà hàng, đòi hỏi tư duy chiến lược vĩ mô. Nó liên quan đến kiến trúc hệ thống tổng thể, chiến lược dữ liệu và khả năng mở rộng trong tương lai, không chỉ là cải tiến quy trình thanh toán đơn lẻ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503776441_EXPERT_9_39ey"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa quy trình quản lý tài sản cho một công ty bất động sản tại Việt Nam, bạn phát hiện quy trình As-Is yêu cầu kiểm kê tài sản thủ công hàng năm, gây gián đoạn hoạt động và tốn nhiều nhân lực. Khi thiết kế quy trình To-Be, giải pháp nào sau đây thể hiện tư duy lãnh đạo chuyển đổi số và cải tiến quy trình bền vững?",
+    "options": [
+      "A. Triển khai hệ thống quản lý tài sản sử dụng công nghệ RFID để tự động theo dõi vị trí và tình trạng tài sản trong thời gian thực.",
+      "B. Giảm tần suất kiểm kê tài sản từ hàng năm xuống còn 2 năm một lần để tiết kiệm chi phí.",
+      "C. Thuê ngoài dịch vụ kiểm kê tài sản cho một công ty chuyên nghiệp để đảm bảo độ chính xác.",
+      "D. Tăng cường đào tạo nhân viên để nâng cao tốc độ và độ chính xác của quy trình kiểm kê thủ công."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp RFID thể hiện tư duy lãnh đạo chuyển đổi số: nó không chỉ giải quyết vấn đề kiểm kê thủ công mà còn tạo nền tảng cho quản lý tài sản thông minh, cung cấp dữ liệu thời gian thực cho các quyết định chiến lược. Đây là cách tiếp cận bền vững, cho phép mở rộng và tích hợp với các hệ thống khác trong tương lai.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "SITUATION",
+    "id": "q_1780503776442_EXPERT_10_42li"
+  },
+  {
+    "questionText": "Khi phân tích gap giữa quy trình As-Is và To-Be cho hệ thống quản lý quan hệ khách hàng (CRM) của một công ty viễn thông tại Việt Nam, bạn nhận thấy tỷ lệ chuyển đổi từ khách hàng tiềm năng sang khách hàng thực tế thấp do quy trình follow-up không hiệu quả. KPI nào sau đây sẽ phản ánh chính xác nhất tác động của cải tiến quy trình To-Be lên hiệu suất kinh doanh?",
+    "options": [
+      "A. Số lượng khách hàng tiềm năng được follow-up trong vòng 24 giờ.",
+      "B. Tỷ lệ chuyển đổi từ khách hàng tiềm năng sang khách hàng thực tế, phân tách theo kênh tiếp cận và thời gian phản hồi.",
+      "C. Thời gian trung bình để hoàn thành một chu kỳ bán hàng (Sales Cycle Time).",
+      "D. Số lượng cuộc gọi follow-up trung bình cho mỗi khách hàng tiềm năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tỷ lệ chuyển đổi phân tách theo kênh và thời gian phản hồi là KPI chiến lược vì nó trực tiếp đo lường hiệu quả của quy trình follow-up và tác động lên doanh thu. Nó cung cấp thông tin chi tiết để tối ưu hóa chiến lược tiếp cận khách hàng, đồng thời phản ánh rõ ràng giá trị kinh doanh của cải tiến quy trình.",
+    "difficulty": "EXPERT",
+    "skillArea": "Process Improvement / As-Is To-Be Analysis",
+    "category": "ANALYSIS",
+    "id": "q_1780503776443_EXPERT_11_yp1m"
+  }
+]

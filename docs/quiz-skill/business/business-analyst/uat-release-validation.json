@@ -1,0 +1,797 @@
+[
+  {
+    "questionText": "Trong quy trình UAT (User Acceptance Testing), mục đích chính của giai đoạn này là gì?",
+    "options": [
+      "A. Kiểm thử hiệu năng của hệ thống dưới tải cao",
+      "B. Xác nhận hệ thống đáp ứng yêu cầu nghiệp vụ và sẵn sàng cho triển khai chính thức",
+      "C. Tối ưu hóa mã nguồn để cải thiện tốc độ xử lý",
+      "D. Đào tạo người dùng cuối cách sử dụng hệ thống"
+    ],
+    "correctAnswer": "B",
+    "explanation": "UAT tập trung vào việc xác nhận hệ thống đáp ứng đúng yêu cầu nghiệp vụ từ góc độ người dùng cuối, đảm bảo sẵn sàng cho triển khai (go-live). Các mục đích khác như kiểm thử hiệu năng hay tối ưu mã nguồn thuộc về giai đoạn kiểm thử kỹ thuật (QA).",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501744826_BEGINNER_0_03e6"
+  },
+  {
+    "questionText": "Khi lập kế hoạch UAT cho dự án ngân hàng triển khai hệ thống core banking mới, ai là người CHỦ YẾU chịu trách nhiệm phê duyệt kịch bản kiểm thử (test scenarios) và ký xác nhận (sign-off)?",
+    "options": [
+      "A. Business Analyst (BA)",
+      "B. Người dùng nghiệp vụ (Business User) hoặc đại diện được ủy quyền",
+      "C. Quản lý dự án (Project Manager)",
+      "D. Kỹ sư kiểm thử (QA Engineer)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Người dùng nghiệp vụ hoặc đại diện được ủy quyền (ví dụ: Trưởng phòng nghiệp vụ) là người chịu trách nhiệm chính phê duyệt kịch bản UAT và ký xác nhận, vì họ hiểu rõ yêu cầu nghiệp vụ và có thẩm quyền quyết định hệ thống có đáp ứng đủ điều kiện triển khai hay không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501744826_BEGINNER_1_pgvz"
+  },
+  {
+    "questionText": "Trong giai đoạn UAT, Business Analyst (BA) phát hiện một tính năng trong hệ thống không khớp với tài liệu yêu cầu đã được phê duyệt. BA nên làm gì ĐẦU TIÊN?",
+    "options": [
+      "A. Tự sửa tài liệu yêu cầu cho khớp với hệ thống",
+      "B. Báo cáo lỗi (defect) cho đội phát triển để sửa ngay lập tức",
+      "C. Xác minh lại với người dùng nghiệp vụ xem yêu cầu ban đầu có còn đúng không hoặc có thay đổi nào không",
+      "D. Bỏ qua vì UAT chỉ tập trung vào trải nghiệm người dùng, không phải yêu cầu kỹ thuật"
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần xác minh lại với người dùng nghiệp vụ để đảm bảo yêu cầu ban đầu có còn chính xác hay không, hoặc có sự thay đổi nào được phê duyệt mà chưa cập nhật vào tài liệu. Việc này tránh sửa lỗi sai hướng hoặc bỏ sót yêu cầu quan trọng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501744826_BEGINNER_2_7gr3"
+  },
+  {
+    "questionText": "Khi chuẩn bị danh sách các tính năng cho đợt phát hành (release), tiêu chí nào sau đây QUAN TRỌNG NHẤT để xác định phạm vi phát hành (release scope)?",
+    "options": [
+      "A. Độ ưu tiên của tính năng theo yêu cầu từ ban lãnh đạo",
+      "B. Mức độ phức tạp kỹ thuật của tính năng",
+      "C. Sự sẵn sàng của tài liệu hướng dẫn sử dụng",
+      "D. Độ dài của danh sách tính năng yêu cầu"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Độ ưu tiên của tính năng (thường được xác định bởi ban lãnh đạo hoặc người dùng nghiệp vụ) là tiêu chí quan trọng nhất để quyết định phạm vi phát hành, đảm bảo các tính năng có giá trị cao được triển khai trước.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501744826_BEGINNER_3_e8ij"
+  },
+  {
+    "questionText": "Trong một dự án triển khai hệ thống ERP cho công ty sản xuất, BA nhận thấy một số lỗi nghiêm trọng (critical defects) chưa được sửa trong phiên bản UAT cuối cùng. Tiêu chí nào sau đây KHÔNG phải là lý do hợp lệ để trì hoãn triển khai (go-live)?",
+    "options": [
+      "A. Lỗi ảnh hưởng trực tiếp đến nghiệp vụ cốt lõi (ví dụ: không thể tạo đơn hàng)",
+      "B. Lỗi liên quan đến bảo mật dữ liệu khách hàng",
+      "C. Lỗi giao diện hiển thị không đẹp mắt (ví dụ: màu sắc không đồng nhất)",
+      "D. Lỗi gây mất dữ liệu hoặc sai lệch dữ liệu nghiệp vụ quan trọng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi giao diện không đẹp mắt (ví dụ: màu sắc) không ảnh hưởng đến chức năng cốt lõi hoặc dữ liệu, do đó không phải là lý do hợp lệ để trì hoãn triển khai. Các lỗi nghiêm trọng như ảnh hưởng nghiệp vụ cốt lõi, bảo mật hoặc mất dữ liệu cần được ưu tiên sửa trước khi go-live.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501744826_BEGINNER_4_yati"
+  },
+  {
+    "questionText": "Khi phối hợp với các bên liên quan (stakeholders) trong giai đoạn UAT, BA nên ưu tiên giao tiếp với nhóm nào để đảm bảo tiến độ và chất lượng kiểm thử?",
+    "options": [
+      "A. Đội phát triển (Development Team) để yêu cầu sửa lỗi nhanh chóng",
+      "B. Người dùng nghiệp vụ (Business Users) để thu thập phản hồi và xác nhận kịch bản kiểm thử",
+      "C. Đội vận hành (Operations Team) để chuẩn bị môi trường triển khai",
+      "D. Ban lãnh đạo (Management) để báo cáo tiến độ hàng ngày"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong UAT, người dùng nghiệp vụ là nhóm quan trọng nhất vì họ trực tiếp tham gia kiểm thử và xác nhận hệ thống đáp ứng yêu cầu nghiệp vụ. BA cần phối hợp chặt chẽ với họ để thu thập phản hồi, điều chỉnh kịch bản kiểm thử và đảm bảo sign-off.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "SKILL",
+    "id": "q_1780501744826_BEGINNER_5_z54e"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống quản lý kho cho doanh nghiệp bán lẻ tại Việt Nam đang trong giai đoạn UAT. BA nhận được phản hồi từ người dùng rằng một quy trình nghiệp vụ không hoạt động như mong đợi. BA nên làm gì TRƯỚC TIÊN để xử lý tình huống này?",
+    "options": [
+      "A. Yêu cầu đội phát triển sửa lỗi ngay lập tức mà không cần xác minh",
+      "B. Ghi nhận phản hồi, xác minh lại yêu cầu nghiệp vụ và kịch bản kiểm thử với người dùng",
+      "C. Báo cáo lên quản lý dự án để trì hoãn triển khai",
+      "D. Đề xuất bỏ qua lỗi vì không ảnh hưởng đến nghiệp vụ chính"
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần ghi nhận phản hồi và xác minh lại yêu cầu nghiệp vụ cũng như kịch bản kiểm thử với người dùng để đảm bảo hiểu đúng vấn đề. Việc này giúp tránh sửa lỗi sai hướng hoặc bỏ sót yêu cầu quan trọng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501744826_BEGINNER_6_622i"
+  },
+  {
+    "questionText": "Trong quy trình UAT, tài liệu nào sau đây QUAN TRỌNG NHẤT để đảm bảo người dùng nghiệp vụ hiểu rõ cách thực hiện kiểm thử?",
+    "options": [
+      "A. Tài liệu thiết kế kỹ thuật (Technical Design Document)",
+      "B. Kịch bản kiểm thử (Test Scenarios) và hướng dẫn thực hiện UAT",
+      "C. Báo cáo tiến độ dự án (Project Status Report)",
+      "D. Tài liệu đào tạo người dùng (User Training Manual)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kịch bản kiểm thử (Test Scenarios) và hướng dẫn thực hiện UAT là tài liệu quan trọng nhất để người dùng nghiệp vụ hiểu rõ cách thực hiện kiểm thử, bao gồm các bước cụ thể và tiêu chí chấp nhận (acceptance criteria).",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501744826_BEGINNER_7_z74x"
+  },
+  {
+    "questionText": "Khi xác nhận phạm vi phát hành (release scope) cho một dự án ngân hàng, BA phát hiện một tính năng quan trọng bị thiếu so với tài liệu yêu cầu đã phê duyệt. BA nên làm gì?",
+    "options": [
+      "A. Bỏ qua vì tính năng đó không ảnh hưởng đến nghiệp vụ chính",
+      "B. Thông báo cho quản lý dự án và yêu cầu điều chỉnh phạm vi phát hành hoặc trì hoãn triển khai",
+      "C. Tự thêm tính năng đó vào phạm vi phát hành mà không thông báo",
+      "D. Yêu cầu đội phát triển bổ sung tính năng đó sau khi triển khai chính thức"
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần thông báo cho quản lý dự án và yêu cầu điều chỉnh phạm vi phát hành hoặc trì hoãn triển khai nếu tính năng quan trọng bị thiếu. Việc này đảm bảo hệ thống đáp ứng đầy đủ yêu cầu nghiệp vụ trước khi go-live.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501744826_BEGINNER_8_7j6y"
+  },
+  {
+    "questionText": "Trong giai đoạn chuẩn bị triển khai (go-live), tiêu chí nào sau đây KHÔNG phải là một phần của tiêu chí sẵn sàng triển khai (go-live readiness)?",
+    "options": [
+      "A. Tất cả lỗi nghiêm trọng (critical defects) đã được sửa và xác nhận",
+      "B. Người dùng nghiệp vụ đã được đào tạo và sẵn sàng sử dụng hệ thống",
+      "C. Đội phát triển đã hoàn thành 100% mã nguồn dự kiến",
+      "D. Kế hoạch rollback (quay lại phiên bản cũ) đã được chuẩn bị và kiểm tra"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc hoàn thành 100% mã nguồn không phải là tiêu chí sẵn sàng triển khai, vì có thể có tính năng không thuộc phạm vi phát hành hoặc được triển khai sau. Các tiêu chí quan trọng bao gồm sửa lỗi nghiêm trọng, đào tạo người dùng và chuẩn bị kế hoạch rollback.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501744826_BEGINNER_9_zugl"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống CRM cho công ty bảo hiểm đang trong giai đoạn UAT. BA nhận thấy một số lỗi nhỏ (minor defects) chưa được sửa nhưng không ảnh hưởng đến nghiệp vụ chính. BA nên làm gì?",
+    "options": [
+      "A. Yêu cầu đội phát triển sửa tất cả lỗi nhỏ trước khi triển khai",
+      "B. Ghi nhận các lỗi nhỏ và đề xuất sửa trong các bản vá (patches) sau khi triển khai",
+      "C. Bỏ qua các lỗi nhỏ vì không ảnh hưởng đến nghiệp vụ chính",
+      "D. Trì hoãn triển khai cho đến khi tất cả lỗi được sửa"
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA nên ghi nhận các lỗi nhỏ và đề xuất sửa trong các bản vá sau khi triển khai, vì chúng không ảnh hưởng nghiêm trọng đến nghiệp vụ chính. Việc này giúp đảm bảo tiến độ triển khai mà không làm gián đoạn hoạt động kinh doanh.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501744826_BEGINNER_10_87lh"
+  },
+  {
+    "questionText": "Trong quy trình UAT, việc ký xác nhận (sign-off) từ người dùng nghiệp vụ có ý nghĩa gì?",
+    "options": [
+      "A. Xác nhận hệ thống đã vượt qua tất cả các bài kiểm thử kỹ thuật (QA)",
+      "B. Xác nhận hệ thống đáp ứng yêu cầu nghiệp vụ và sẵn sàng cho triển khai chính thức",
+      "C. Xác nhận đội phát triển đã hoàn thành 100% công việc",
+      "D. Xác nhận dự án đã hoàn thành trong ngân sách và tiến độ"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sign-off từ người dùng nghiệp vụ xác nhận hệ thống đáp ứng đầy đủ yêu cầu nghiệp vụ và sẵn sàng cho triển khai chính thức (go-live). Đây là bước quan trọng để đảm bảo sự chấp thuận từ phía nghiệp vụ trước khi triển khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501744826_BEGINNER_11_6guf"
+  },
+  {
+    "questionText": "Khi chuẩn bị kế hoạch rollback (quay lại phiên bản cũ) cho một dự án triển khai hệ thống thanh toán trực tuyến, yếu tố nào sau đây QUAN TRỌNG NHẤT cần được xem xét?",
+    "options": [
+      "A. Thời gian tối đa cho phép hệ thống ngừng hoạt động (downtime)",
+      "B. Số lượng người dùng truy cập hệ thống trong giờ cao điểm",
+      "C. Màu sắc giao diện của phiên bản cũ",
+      "D. Ngân sách còn lại của dự án"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thời gian tối đa cho phép hệ thống ngừng hoạt động (downtime) là yếu tố quan trọng nhất khi chuẩn bị kế hoạch rollback, vì nó ảnh hưởng trực tiếp đến trải nghiệm người dùng và hoạt động kinh doanh. Các yếu tố khác như số lượng người dùng hay ngân sách không liên quan trực tiếp đến kế hoạch rollback.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501744826_BEGINNER_12_2i1b"
+  },
+  {
+    "questionText": "Trong một dự án triển khai hệ thống quản lý nhân sự (HRM) cho công ty đa quốc gia, BA cần phối hợp với ai để đảm bảo UAT diễn ra suôn sẻ và hiệu quả?",
+    "options": [
+      "A. Chỉ đội phát triển để yêu cầu sửa lỗi nhanh chóng",
+      "B. Người dùng nghiệp vụ từ các chi nhánh và đội dự án để thu thập phản hồi, điều chỉnh kịch bản kiểm thử và đảm bảo sign-off",
+      "C. Chỉ ban lãnh đạo để báo cáo tiến độ",
+      "D. Đội vận hành để chuẩn bị môi trường triển khai"
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần phối hợp với người dùng nghiệp vụ từ các chi nhánh và đội dự án để thu thập phản hồi, điều chỉnh kịch bản kiểm thử và đảm bảo sign-off. Sự phối hợp này giúp đảm bảo hệ thống đáp ứng yêu cầu nghiệp vụ từ nhiều bên liên quan và triển khai thành công.",
+    "difficulty": "BEGINNER",
+    "skillArea": "UAT & Release Validation",
+    "category": "SKILL",
+    "id": "q_1780501744826_BEGINNER_13_ijtw"
+  },
+  {
+    "questionText": "Trong quá trình lập kế hoạch UAT cho dự án triển khai hệ thống ERP tại một công ty sản xuất, Business Analyst nên ưu tiên tiêu chí nào sau đây để xác định phạm vi kiểm thử UAT?",
+    "options": [
+      "A. Số lượng test case mà đội phát triển đã chuẩn bị sẵn.",
+      "B. Các quy trình nghiệp vụ cốt lõi và rủi ro cao nhất đối với hoạt động kinh doanh.",
+      "C. Thời gian còn lại trước ngày dự kiến release.",
+      "D. Yêu cầu kỹ thuật của hệ thống từ phía đội phát triển."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phạm vi UAT cần tập trung vào các quy trình nghiệp vụ quan trọng và có rủi ro cao để đảm bảo hệ thống đáp ứng đúng nhu cầu kinh doanh. Các yếu tố kỹ thuật hoặc thời gian không quyết định phạm vi UAT.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501813101_INTERMEDIATE_0_v616"
+  },
+  {
+    "questionText": "Một Business Analyst đang chuẩn bị tài liệu kịch bản kiểm thử UAT cho dự án nâng cấp hệ thống quản lý kho tại công ty bán lẻ. Đâu là cách tiếp cận hiệu quả nhất để xây dựng các kịch bản kiểm thử?",
+    "options": [
+      "A. Sao chép toàn bộ các test case từ giai đoạn kiểm thử hệ thống (System Testing).",
+      "B. Lấy mẫu các quy trình nghiệp vụ thực tế từ người dùng cuối và chuyển thành kịch bản kiểm thử.",
+      "C. Yêu cầu đội phát triển viết sẵn kịch bản kiểm thử dựa trên tài liệu kỹ thuật.",
+      "D. Sử dụng các kịch bản kiểm thử từ dự án tương tự trước đây mà không điều chỉnh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kịch bản UAT cần phản ánh đúng các tình huống nghiệp vụ thực tế mà người dùng cuối sẽ gặp phải. Sao chép từ kiểm thử hệ thống hoặc dự án khác không đảm bảo tính phù hợp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "SKILL",
+    "id": "q_1780501813101_INTERMEDIATE_1_rvkc"
+  },
+  {
+    "questionText": "Trong quá trình UAT cho dự án triển khai hệ thống thanh toán trực tuyến tại ngân hàng, một số lỗi nghiêm trọng (critical defects) được phát hiện nhưng không thuộc phạm vi release hiện tại. Business Analyst nên xử lý như thế nào?",
+    "options": [
+      "A. Ghi nhận lỗi vào hệ thống quản lý lỗi và đề xuất đưa vào phạm vi release tiếp theo.",
+      "B. Báo cáo ngay cho lãnh đạo để yêu cầu dừng release và sửa tất cả lỗi.",
+      "C. Bỏ qua lỗi vì không thuộc phạm vi release hiện tại.",
+      "D. Yêu cầu đội phát triển sửa ngay lập tức mà không cần thông báo cho các bên liên quan."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lỗi nghiêm trọng cần được ghi nhận và quản lý để xử lý trong các phiên bản sau, trừ khi ảnh hưởng trực tiếp đến phạm vi release hiện tại. Việc dừng release hoặc sửa ngay có thể gây gián đoạn không cần thiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501813101_INTERMEDIATE_2_aozs"
+  },
+  {
+    "questionText": "Một Business Analyst đang phối hợp với các bên liên quan để xác nhận phạm vi release cho dự án triển khai hệ thống CRM tại công ty bảo hiểm. Đâu là tiêu chí quan trọng nhất để xác nhận phạm vi này?",
+    "options": [
+      "A. Tài liệu yêu cầu nghiệp vụ (Business Requirements Document) đã được phê duyệt.",
+      "B. Số lượng tính năng mà đội phát triển đã hoàn thành.",
+      "C. Thời gian còn lại trước ngày release.",
+      "D. Ý kiến của lãnh đạo cấp cao về tính năng ưu tiên."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phạm vi release phải dựa trên tài liệu yêu cầu nghiệp vụ đã được phê duyệt để đảm bảo tính nhất quán và đáp ứng đúng nhu cầu kinh doanh. Các yếu tố khác như thời gian hoặc ý kiến lãnh đạo không thay thế được tài liệu chính thức.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501813101_INTERMEDIATE_3_b3cv"
+  },
+  {
+    "questionText": "Trong quá trình UAT cho dự án triển khai hệ thống quản lý đơn hàng tại công ty logistics, một số lỗi nhỏ (minor defects) được phát hiện nhưng không ảnh hưởng đến nghiệp vụ chính. Business Analyst nên đề xuất giải pháp nào?",
+    "options": [
+      "A. Yêu cầu đội phát triển sửa tất cả lỗi trước khi release.",
+      "B. Ghi nhận lỗi và lên kế hoạch sửa trong các bản vá (patch) sau release.",
+      "C. Bỏ qua lỗi vì không ảnh hưởng đến nghiệp vụ chính.",
+      "D. Đề xuất dừng release cho đến khi tất cả lỗi được sửa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi nhỏ không ảnh hưởng đến nghiệp vụ chính có thể được xử lý sau release để tránh trì hoãn tiến độ. Việc dừng release hoặc sửa tất cả lỗi ngay lập tức có thể không hiệu quả về mặt thời gian và chi phí.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501813102_INTERMEDIATE_4_9dk8"
+  },
+  {
+    "questionText": "Một Business Analyst đang chuẩn bị tiêu chí rollback cho dự án triển khai hệ thống quản lý nhân sự tại công ty đa quốc gia. Đâu là tiêu chí hợp lý nhất để kích hoạt rollback?",
+    "options": [
+      "A. Khi có bất kỳ lỗi nào được phát hiện trong quá trình UAT.",
+      "B. Khi hệ thống không thể xử lý được 10% số lượng giao dịch dự kiến.",
+      "C. Khi lỗi nghiêm trọng ảnh hưởng đến quy trình nghiệp vụ cốt lõi và không thể khắc phục trong vòng 2 giờ.",
+      "D. Khi đội phát triển đề xuất rollback để đảm bảo chất lượng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tiêu chí rollback cần cụ thể và tập trung vào các lỗi nghiêm trọng ảnh hưởng đến nghiệp vụ chính, đồng thời có thời gian khắc phục hợp lý. Các tiêu chí quá chung chung hoặc không liên quan đến nghiệp vụ không phù hợp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501813102_INTERMEDIATE_5_bsf2"
+  },
+  {
+    "questionText": "Trong quá trình UAT cho dự án triển khai hệ thống quản lý tài chính tại công ty chứng khoán, Business Analyst nhận thấy một số kịch bản kiểm thử không được người dùng cuối thực hiện đầy đủ. Hành động nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Bỏ qua các kịch bản đó vì người dùng cuối không quan tâm.",
+      "B. Yêu cầu đội phát triển thực hiện thay người dùng cuối.",
+      "C. Phân tích nguyên nhân và phối hợp với người dùng cuối để hoàn thành kiểm thử, đồng thời ghi nhận rủi ro.",
+      "D. Đề xuất dừng UAT và yêu cầu người dùng cuối tham gia đầy đủ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Business Analyst cần chủ động phân tích nguyên nhân và phối hợp với người dùng cuối để hoàn thành kiểm thử, đồng thời ghi nhận rủi ro nếu có. Việc bỏ qua hoặc yêu cầu đội phát triển thực hiện không đảm bảo chất lượng UAT.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501813102_INTERMEDIATE_6_ctky"
+  },
+  {
+    "questionText": "Một Business Analyst đang chuẩn bị checklist để đánh giá sự sẵn sàng cho go-live của dự án triển khai hệ thống quản lý chuỗi cung ứng. Yếu tố nào sau đây KHÔNG nên đưa vào checklist?",
+    "options": [
+      "A. Tài liệu hướng dẫn người dùng đã được phê duyệt và phân phối.",
+      "B. Tất cả các lỗi nghiêm trọng đã được sửa và xác nhận.",
+      "C. Số lượng test case đã thực hiện trong giai đoạn kiểm thử hệ thống.",
+      "D. Kế hoạch hỗ trợ sau go-live đã được phê duyệt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Checklist go-live cần tập trung vào các yếu tố đảm bảo hệ thống sẵn sàng cho người dùng cuối, như tài liệu hướng dẫn, lỗi nghiêm trọng và kế hoạch hỗ trợ. Số lượng test case trong kiểm thử hệ thống không phản ánh trực tiếp sự sẵn sàng cho go-live.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501813102_INTERMEDIATE_7_vs49"
+  },
+  {
+    "questionText": "Trong quá trình UAT cho dự án triển khai hệ thống quản lý khách hàng tại ngân hàng, Business Analyst nhận được phản hồi từ người dùng cuối rằng một số tính năng không hoạt động như mong đợi. Hành động nào sau đây là ưu tiên hàng đầu?",
+    "options": [
+      "A. Yêu cầu đội phát triển sửa ngay lập tức mà không cần phân tích.",
+      "B. Phân tích phản hồi, xác định mức độ nghiêm trọng và ghi nhận lỗi vào hệ thống quản lý lỗi.",
+      "C. Báo cáo ngay cho lãnh đạo để yêu cầu dừng UAT.",
+      "D. Đề xuất bỏ qua phản hồi vì không thuộc phạm vi release hiện tại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Analyst cần phân tích phản hồi để xác định mức độ nghiêm trọng và ghi nhận lỗi một cách hệ thống. Việc yêu cầu sửa ngay hoặc báo cáo lãnh đạo mà không phân tích có thể dẫn đến xử lý không hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501813102_INTERMEDIATE_8_7dgi"
+  },
+  {
+    "questionText": "Một Business Analyst đang phối hợp với các bên liên quan để xác nhận phạm vi release cho dự án triển khai hệ thống quản lý dự án tại công ty xây dựng. Đâu là tài liệu quan trọng nhất để tham chiếu trong quá trình này?",
+    "options": [
+      "A. Tài liệu thiết kế kỹ thuật (Technical Design Document).",
+      "B. Tài liệu yêu cầu nghiệp vụ (Business Requirements Document) đã được phê duyệt.",
+      "C. Báo cáo tiến độ từ đội phát triển.",
+      "D. Phản hồi từ người dùng cuối trong quá trình UAT."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tài liệu yêu cầu nghiệp vụ đã được phê duyệt là cơ sở chính để xác nhận phạm vi release, đảm bảo hệ thống đáp ứng đúng nhu cầu kinh doanh. Các tài liệu khác như thiết kế kỹ thuật hoặc báo cáo tiến độ không thay thế được tài liệu yêu cầu nghiệp vụ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501813103_INTERMEDIATE_9_0xqy"
+  },
+  {
+    "questionText": "Trong quá trình UAT cho dự án triển khai hệ thống quản lý bán hàng tại công ty thương mại điện tử, Business Analyst phát hiện một lỗi nghiêm trọng có thể ảnh hưởng đến doanh thu. Hành động nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Ghi nhận lỗi và tiếp tục UAT mà không thông báo cho các bên liên quan.",
+      "B. Thông báo ngay cho đội phát triển và lãnh đạo dự án để đánh giá tác động và quyết định biện pháp xử lý.",
+      "C. Đề xuất dừng UAT và yêu cầu đội phát triển sửa lỗi ngay lập tức.",
+      "D. Bỏ qua lỗi vì không thuộc phạm vi release hiện tại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi nghiêm trọng ảnh hưởng đến doanh thu cần được thông báo ngay cho các bên liên quan để đánh giá tác động và quyết định biện pháp xử lý phù hợp. Việc bỏ qua hoặc yêu cầu sửa ngay mà không đánh giá có thể gây ra rủi ro không cần thiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501813104_INTERMEDIATE_10_6yn2"
+  },
+  {
+    "questionText": "Một Business Analyst đang chuẩn bị kế hoạch UAT cho dự án triển khai hệ thống quản lý tài sản tại công ty năng lượng. Yếu tố nào sau đây nên được ưu tiên trong kế hoạch này?",
+    "options": [
+      "A. Số lượng test case cần thực hiện.",
+      "B. Danh sách các bên liên quan và vai trò của họ trong UAT.",
+      "C. Thời gian dự kiến để hoàn thành UAT.",
+      "D. Các quy trình nghiệp vụ cốt lõi và rủi ro cao nhất cần được kiểm thử."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Kế hoạch UAT cần ưu tiên các quy trình nghiệp vụ cốt lõi và rủi ro cao để đảm bảo hệ thống đáp ứng đúng nhu cầu kinh doanh. Các yếu tố như số lượng test case hoặc thời gian chỉ là chi tiết hỗ trợ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501813104_INTERMEDIATE_11_b59p"
+  },
+  {
+    "questionText": "Trong quá trình UAT cho dự án triển khai hệ thống quản lý quan hệ khách hàng tại công ty viễn thông, Business Analyst nhận thấy một số người dùng cuối không tham gia đầy đủ vào quá trình kiểm thử. Hành động nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Bỏ qua và tiếp tục UAT với những người dùng đã tham gia.",
+      "B. Phân tích nguyên nhân, phối hợp với quản lý người dùng để đảm bảo sự tham gia đầy đủ và ghi nhận rủi ro.",
+      "C. Yêu cầu đội phát triển thực hiện kiểm thử thay người dùng cuối.",
+      "D. Đề xuất dừng UAT cho đến khi tất cả người dùng cuối tham gia."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Analyst cần phân tích nguyên nhân và phối hợp với quản lý người dùng để đảm bảo sự tham gia đầy đủ, đồng thời ghi nhận rủi ro nếu có. Việc bỏ qua hoặc yêu cầu đội phát triển thực hiện không đảm bảo chất lượng UAT.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501813104_INTERMEDIATE_12_81mv"
+  },
+  {
+    "questionText": "Một Business Analyst đang chuẩn bị tiêu chí để xác nhận sự sẵn sàng go-live cho dự án triển khai hệ thống quản lý chuỗi cung ứng. Tiêu chí nào sau đây là KHÔNG phù hợp?",
+    "options": [
+      "A. Tất cả các lỗi nghiêm trọng đã được sửa và xác nhận.",
+      "B. Tài liệu hướng dẫn người dùng đã được phê duyệt và phân phối.",
+      "C. Số lượng test case đã thực hiện đạt 100% kế hoạch.",
+      "D. Kế hoạch hỗ trợ sau go-live đã được phê duyệt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tiêu chí go-live cần tập trung vào chất lượng hệ thống và sự sẵn sàng của người dùng, không phải số lượng test case đã thực hiện. Số lượng test case không phản ánh trực tiếp sự sẵn sàng cho go-live.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501813104_INTERMEDIATE_13_mp9n"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ngân hàng lõi tại Việt Nam, sau khi UAT hoàn tất, nhóm BA phát hiện một số yêu cầu nghiệp vụ từ phòng Tín dụng và phòng Rủi ro mâu thuẫn về cách tính lãi suất cho vay ngắn hạn. Cách tiếp cận nào sau đây là hiệu quả nhất để xử lý tình huống này?",
+    "options": [
+      "A. Đề xuất sử dụng giải pháp trung gian (ví dụ: áp dụng mức lãi suất cao nhất) để đảm bảo tiến độ go-live, sau đó điều chỉnh sau.",
+      "B. Tổ chức cuộc họp khẩn với lãnh đạo hai phòng để làm rõ yêu cầu, xác định bên nào có thẩm quyền quyết định và cập nhật tài liệu BRD/SRS trước khi ký sign-off.",
+      "C. Ghi nhận mâu thuẫn vào báo cáo UAT và chuyển cho PM quyết định, vì đây không phải trách nhiệm của BA.",
+      "D. Yêu cầu hai phòng tự thương lượng và báo cáo kết quả, BA chỉ ghi nhận kết quả cuối cùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ ADVANCED, BA cần chủ động giải quyết xung đột nghiệp vụ bằng cách làm rõ yêu cầu với các bên liên quan có thẩm quyền, đảm bảo tài liệu chính thức (BRD/SRS) được cập nhật trước khi ký sign-off. Việc này tránh rủi ro pháp lý và đảm bảo tính nhất quán của hệ thống sau go-live.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501909320_ADVANCED_0_wmwp"
+  },
+  {
+    "questionText": "Trong quá trình UAT cho dự án nâng cấp hệ thống thanh toán quốc tế (SWIFT), nhóm BA nhận được phản hồi từ phòng Thanh toán rằng một số trường dữ liệu bắt buộc trong giao dịch không khớp với quy trình nghiệp vụ hiện tại. Tuy nhiên, yêu cầu này đã được phòng IT triển khai theo tài liệu BRD đã ký. BA nên làm gì?",
+    "options": [
+      "A. Yêu cầu phòng IT điều chỉnh hệ thống theo phản hồi của phòng Thanh toán mà không cần cập nhật BRD, để đảm bảo tiến độ.",
+      "B. Phân tích nguyên nhân: liệu có phải BRD thiếu sót, hay phòng Thanh toán hiểu sai yêu cầu. Sau đó tổ chức họp 3 bên (BA, IT, Thanh toán) để thống nhất giải pháp và cập nhật tài liệu nếu cần.",
+      "C. Chuyển phản hồi cho PM để quyết định, vì BA không có quyền can thiệp vào yêu cầu đã ký.",
+      "D. Ghi nhận lỗi vào báo cáo UAT và đề xuất khắc phục sau go-live để tránh chậm tiến độ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần phân tích sâu nguyên nhân mâu thuẫn (lỗi tài liệu hay hiểu sai yêu cầu) và điều phối các bên để thống nhất giải pháp. Việc cập nhật tài liệu (nếu cần) là bắt buộc để tránh rủi ro pháp lý và đảm bảo hệ thống hoạt động đúng nghiệp vụ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501909321_ADVANCED_1_pqbx"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý khách hàng (CRM) cho một ngân hàng tại Việt Nam sắp đến ngày go-live. Trong buổi họp đánh giá readiness, phòng Kinh doanh yêu cầu bổ sung một tính năng mới (tích hợp với Zalo Official Account) chưa có trong scope ban đầu. BA nên xử lý như thế nào?",
+    "options": [
+      "A. Đồng ý bổ sung nếu phòng Kinh doanh cam kết không ảnh hưởng tiến độ, vì đây là yêu cầu quan trọng cho hoạt động kinh doanh.",
+      "B. Từ chối yêu cầu vì đã quá giai đoạn thay đổi scope, đề xuất đưa vào phase tiếp theo để tránh rủi ro cho go-live.",
+      "C. Đánh giá tác động (effort, timeline, rủi ro) của yêu cầu mới, trình lên Change Control Board (CCB) để quyết định dựa trên tiêu chí ưu tiên và khả năng thực hiện trước go-live.",
+      "D. Chuyển yêu cầu cho PM quyết định, vì BA không có quyền phê duyệt thay đổi scope."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở cấp độ ADVANCED, BA cần đánh giá tác động toàn diện của yêu cầu mới và tuân thủ quy trình quản lý thay đổi (CCB) để đảm bảo quyết định được đưa ra dựa trên dữ liệu và sự đồng thuận của các bên liên quan, tránh rủi ro cho go-live.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501909321_ADVANCED_2_hiko"
+  },
+  {
+    "questionText": "Trong UAT cho dự án số hóa quy trình cho vay tiêu dùng, nhóm BA phát hiện một lỗi nghiêm trọng: hệ thống không tính phí phạt trễ hạn theo quy định của Ngân hàng Nhà nước. Tuy nhiên, phòng Kinh doanh cho rằng đây là lỗi nhỏ và yêu cầu go-live theo kế hoạch. BA nên làm gì?",
+    "options": [
+      "A. Tuân theo yêu cầu của phòng Kinh doanh để đảm bảo tiến độ, ghi nhận lỗi vào backlog để fix sau.",
+      "B. Phân tích mức độ nghiêm trọng của lỗi (ví dụ: ảnh hưởng đến tuân thủ pháp luật, rủi ro tài chính) và đề xuất hoãn go-live nếu cần, đồng thời báo cáo lên lãnh đạo dự án.",
+      "C. Yêu cầu phòng IT fix lỗi ngay lập tức mà không cần thông báo cho các bên khác để tránh chậm tiến độ.",
+      "D. Chuyển vấn đề cho PM quyết định, vì BA không có thẩm quyền hoãn go-live."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần đánh giá mức độ nghiêm trọng của lỗi dựa trên rủi ro pháp lý và tài chính, sau đó đề xuất giải pháp phù hợp (hoãn go-live nếu cần) và báo cáo lên lãnh đạo. Việc này đảm bảo hệ thống tuân thủ quy định và tránh tổn thất cho ngân hàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501909322_ADVANCED_3_5m1z"
+  },
+  {
+    "questionText": "Trong buổi họp ký sign-off UAT cho dự án triển khai hệ thống core banking mới, trưởng phòng Rủi ro từ chối ký vì cho rằng một số báo cáo quản trị không đáp ứng nhu cầu phân tích rủi ro. BA đã giải thích rằng các báo cáo này đã được phòng Rủi ro phê duyệt trong tài liệu BRD. Cách xử lý nào sau đây là hợp lý nhất?",
+    "options": [
+      "A. Yêu cầu trưởng phòng Rủi ro ký sign-off với ghi chú rằng báo cáo sẽ được cải thiện sau go-live.",
+      "B. Tổ chức cuộc họp với phòng Rủi ro để làm rõ lý do từ chối, so sánh với tài liệu BRD đã ký, và đề xuất giải pháp (ví dụ: bổ sung báo cáo tạm thời hoặc điều chỉnh scope phase tiếp theo).",
+      "C. Báo cáo lên lãnh đạo dự án để buộc trưởng phòng Rủi ro ký sign-off, vì yêu cầu đã được phê duyệt trước đó.",
+      "D. Chấp nhận từ chối và hoãn go-live cho đến khi phòng Rủi ro đồng ý ký."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần làm rõ nguyên nhân từ chối (ví dụ: thay đổi nhu cầu hay hiểu sai tài liệu) và đề xuất giải pháp linh hoạt (bổ sung báo cáo tạm thời hoặc điều chỉnh phase tiếp theo). Việc này đảm bảo sự đồng thuận của các bên mà không ảnh hưởng nghiêm trọng đến tiến độ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501909322_ADVANCED_4_k0y8"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý tài sản (Wealth Management) cho một ngân hàng đa quốc gia sắp đến ngày go-live. Trong buổi kiểm tra readiness, BA phát hiện một lỗi: hệ thống không hỗ trợ tính năng multi-currency cho một số sản phẩm đầu tư, trong khi yêu cầu này đã được nêu rõ trong BRD. Nguyên nhân là do phòng IT hiểu sai yêu cầu. BA nên làm gì?",
+    "options": [
+      "A. Ghi nhận lỗi vào báo cáo UAT và đề xuất fix sau go-live để tránh chậm tiến độ.",
+      "B. Yêu cầu phòng IT fix lỗi ngay lập tức, bất kể ảnh hưởng đến tiến độ go-live.",
+      "C. Đánh giá tác động của lỗi (ví dụ: ảnh hưởng đến khách hàng quốc tế, rủi ro pháp lý) và đề xuất hoãn go-live nếu lỗi không thể fix kịp thời, đồng thời báo cáo lên lãnh đạo dự án.",
+      "D. Chuyển vấn đề cho PM quyết định, vì BA không có thẩm quyền yêu cầu hoãn go-live."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần đánh giá tác động của lỗi đến nghiệp vụ và rủi ro pháp lý, sau đó đề xuất giải pháp phù hợp (hoãn go-live nếu cần). Việc này đảm bảo hệ thống hoạt động đúng yêu cầu và tránh tổn thất cho ngân hàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501909323_ADVANCED_5_30zc"
+  },
+  {
+    "questionText": "Trong quá trình UAT cho dự án số hóa quy trình mở tài khoản tiết kiệm online, nhóm BA nhận được phản hồi từ phòng Khách hàng cá nhân rằng quy trình hiện tại yêu cầu khách hàng phải đến chi nhánh để ký hợp đồng, trong khi yêu cầu ban đầu là hoàn toàn online. BA đã kiểm tra và phát hiện rằng yêu cầu này bị thay đổi trong quá trình triển khai mà không thông báo. BA nên xử lý như thế nào?",
+    "options": [
+      "A. Ghi nhận lỗi vào báo cáo UAT và đề xuất fix sau go-live để tránh chậm tiến độ.",
+      "B. Tổ chức cuộc họp với phòng Khách hàng cá nhân và phòng IT để làm rõ lý do thay đổi, đánh giá tác động và đề xuất giải pháp (ví dụ: quay lại quy trình online hoặc bổ sung giải pháp tạm thời).",
+      "C. Yêu cầu phòng IT quay lại triển khai theo yêu cầu ban đầu mà không cần thông báo cho các bên khác.",
+      "D. Chuyển vấn đề cho PM quyết định, vì BA không có trách nhiệm xử lý thay đổi yêu cầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần làm rõ nguyên nhân thay đổi yêu cầu và đánh giá tác động để đề xuất giải pháp phù hợp. Việc này đảm bảo hệ thống đáp ứng nhu cầu nghiệp vụ và tránh rủi ro pháp lý.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501909324_ADVANCED_6_rlz4"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống thanh toán điện tử (e-wallet) cho một ngân hàng tại Việt Nam sắp đến ngày go-live. Trong buổi họp đánh giá rollback criteria, BA phát hiện rằng tiêu chí rollback hiện tại chỉ dựa trên số lượng lỗi nghiêm trọng, mà không xem xét đến tác động nghiệp vụ (ví dụ: lỗi ảnh hưởng đến giao dịch có giá trị lớn). BA nên làm gì?",
+    "options": [
+      "A. Chấp nhận tiêu chí hiện tại để đảm bảo tiến độ go-live, vì đây là tiêu chí đã được phê duyệt.",
+      "B. Đề xuất bổ sung tiêu chí rollback dựa trên tác động nghiệp vụ (ví dụ: lỗi ảnh hưởng đến giao dịch trên 1 tỷ đồng) và trình lên lãnh đạo dự án để phê duyệt.",
+      "C. Yêu cầu phòng IT bổ sung tiêu chí mới mà không cần thông báo cho các bên liên quan.",
+      "D. Chuyển vấn đề cho PM quyết định, vì BA không có trách nhiệm điều chỉnh tiêu chí rollback."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần đề xuất bổ sung tiêu chí rollback dựa trên tác động nghiệp vụ để đảm bảo quyết định rollback được đưa ra dựa trên rủi ro thực tế, tránh tổn thất cho ngân hàng và khách hàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501909324_ADVANCED_7_8vgc"
+  },
+  {
+    "questionText": "Trong UAT cho dự án triển khai hệ thống quản lý rủi ro tín dụng, nhóm BA phát hiện rằng một số quy tắc đánh giá rủi ro không tuân thủ theo quy định của Ngân hàng Nhà nước. Tuy nhiên, phòng Rủi ro cho rằng quy tắc hiện tại đã được điều chỉnh để phù hợp với chiến lược kinh doanh của ngân hàng. BA nên làm gì?",
+    "options": [
+      "A. Chấp nhận yêu cầu của phòng Rủi ro để đảm bảo tiến độ go-live, vì đây là quyết định của phòng nghiệp vụ.",
+      "B. Phân tích mức độ tuân thủ quy định và rủi ro pháp lý, sau đó đề xuất giải pháp (ví dụ: điều chỉnh quy tắc hoặc bổ sung giải pháp tạm thời) và báo cáo lên lãnh đạo dự án.",
+      "C. Yêu cầu phòng IT điều chỉnh hệ thống theo quy định của Ngân hàng Nhà nước mà không cần thông báo cho phòng Rủi ro.",
+      "D. Chuyển vấn đề cho PM quyết định, vì BA không có thẩm quyền xử lý mâu thuẫn giữa quy định và chiến lược kinh doanh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần phân tích mức độ tuân thủ và rủi ro pháp lý để đề xuất giải pháp phù hợp. Việc này đảm bảo hệ thống hoạt động đúng quy định và tránh rủi ro pháp lý cho ngân hàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501909325_ADVANCED_8_lwc0"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý quan hệ khách hàng (CRM) cho một ngân hàng đa quốc gia sắp đến ngày go-live. Trong buổi họp ký sign-off UAT, trưởng phòng Kinh doanh yêu cầu bổ sung một tính năng mới (tích hợp với hệ thống bên thứ ba) chưa có trong scope. BA đã đánh giá và thấy rằng tính năng này có thể triển khai trong 2 tuần, nhưng sẽ ảnh hưởng đến tiến độ go-live. BA nên làm gì?",
+    "options": [
+      "A. Đồng ý triển khai tính năng mới và điều chỉnh tiến độ go-live để phù hợp.",
+      "B. Từ chối yêu cầu vì đã quá giai đoạn thay đổi scope, đề xuất đưa vào phase tiếp theo.",
+      "C. Đánh giá tác động của tính năng mới (effort, timeline, rủi ro) và trình lên Change Control Board (CCB) để quyết định dựa trên tiêu chí ưu tiên và khả năng thực hiện trước go-live.",
+      "D. Chuyển yêu cầu cho PM quyết định, vì BA không có quyền phê duyệt thay đổi scope."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần đánh giá tác động của yêu cầu mới và tuân thủ quy trình quản lý thay đổi (CCB) để đảm bảo quyết định được đưa ra dựa trên dữ liệu và sự đồng thuận của các bên liên quan, tránh rủi ro cho go-live.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501909325_ADVANCED_9_shfq"
+  },
+  {
+    "questionText": "Trong quá trình UAT cho dự án nâng cấp hệ thống core banking, nhóm BA phát hiện rằng một số quy trình nghiệp vụ mới không được đào tạo đầy đủ cho nhân viên. Tuy nhiên, phòng Đào tạo cho rằng việc đào tạo đã hoàn tất theo kế hoạch. BA nên làm gì?",
+    "options": [
+      "A. Chấp nhận tình trạng hiện tại để đảm bảo tiến độ go-live, vì đào tạo là trách nhiệm của phòng Đào tạo.",
+      "B. Tổ chức cuộc họp với phòng Đào tạo để làm rõ nguyên nhân (ví dụ: tài liệu đào tạo thiếu sót, nhân viên chưa tham gia đầy đủ) và đề xuất giải pháp (ví dụ: tổ chức đào tạo bổ sung hoặc cung cấp tài liệu hỗ trợ).",
+      "C. Yêu cầu phòng IT tạm dừng triển khai cho đến khi đào tạo hoàn tất.",
+      "D. Chuyển vấn đề cho PM quyết định, vì BA không có trách nhiệm xử lý vấn đề đào tạo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần làm rõ nguyên nhân và đề xuất giải pháp để đảm bảo nhân viên được đào tạo đầy đủ trước go-live. Việc này tránh rủi ro nghiệp vụ và đảm bảo hệ thống hoạt động hiệu quả sau triển khai.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501909326_ADVANCED_10_483b"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống thanh toán quốc tế (SWIFT) cho một ngân hàng tại Việt Nam sắp đến ngày go-live. Trong buổi kiểm tra readiness, BA phát hiện rằng hệ thống không hỗ trợ định dạng báo cáo theo yêu cầu của Ngân hàng Nhà nước, trong khi yêu cầu này đã được nêu rõ trong BRD. Nguyên nhân là do phòng IT hiểu sai yêu cầu. BA nên làm gì?",
+    "options": [
+      "A. Ghi nhận lỗi vào báo cáo UAT và đề xuất fix sau go-live để tránh chậm tiến độ.",
+      "B. Yêu cầu phòng IT fix lỗi ngay lập tức, bất kể ảnh hưởng đến tiến độ go-live.",
+      "C. Đánh giá tác động của lỗi (ví dụ: ảnh hưởng đến tuân thủ pháp luật, rủi ro pháp lý) và đề xuất hoãn go-live nếu lỗi không thể fix kịp thời, đồng thời báo cáo lên lãnh đạo dự án.",
+      "D. Chuyển vấn đề cho PM quyết định, vì BA không có thẩm quyền yêu cầu hoãn go-live."
+    ],
+    "correctAnswer": "C",
+    "explanation": "BA cần đánh giá tác động của lỗi đến tuân thủ pháp luật và rủi ro pháp lý, sau đó đề xuất giải pháp phù hợp (hoãn go-live nếu cần). Việc này đảm bảo hệ thống hoạt động đúng quy định và tránh tổn thất cho ngân hàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780501909327_ADVANCED_11_fifb"
+  },
+  {
+    "questionText": "Trong UAT cho dự án triển khai hệ thống quản lý tài sản (Wealth Management), nhóm BA nhận được phản hồi từ phòng Kinh doanh rằng một số tính năng mới không đáp ứng nhu cầu của khách hàng cao cấp. Tuy nhiên, các tính năng này đã được phòng Kinh doanh phê duyệt trong tài liệu BRD. BA nên làm gì?",
+    "options": [
+      "A. Yêu cầu phòng IT điều chỉnh hệ thống theo phản hồi của phòng Kinh doanh mà không cần cập nhật BRD.",
+      "B. Tổ chức cuộc họp với phòng Kinh doanh để làm rõ lý do phản hồi, so sánh với tài liệu BRD đã ký, và đề xuất giải pháp (ví dụ: điều chỉnh tính năng hoặc bổ sung giải pháp tạm thời).",
+      "C. Chấp nhận phản hồi và ghi nhận vào báo cáo UAT để xử lý sau go-live.",
+      "D. Chuyển vấn đề cho PM quyết định, vì BA không có trách nhiệm xử lý mâu thuẫn giữa phản hồi và BRD."
+    ],
+    "correctAnswer": "B",
+    "explanation": "BA cần làm rõ nguyên nhân phản hồi (ví dụ: thay đổi nhu cầu hay hiểu sai tài liệu) và đề xuất giải pháp phù hợp. Việc này đảm bảo hệ thống đáp ứng nhu cầu nghiệp vụ và tránh rủi ro cho go-live.",
+    "difficulty": "ADVANCED",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780501909327_ADVANCED_12_128e"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho tập đoàn bán lẻ đa quốc gia tại Việt Nam, bạn là Business Analyst phụ trách UAT. Sau khi hoàn thành UAT phase 1, đội dự án phát hiện 30% test case failed do lỗi phân quyền truy cập dữ liệu giữa các chi nhánh. Bạn nhận thấy lỗi này xuất phát từ việc thiếu đồng bộ giữa business process của công ty mẹ (áp dụng toàn cầu) và quy trình thực tế tại Việt Nam (có yêu cầu đặc thù về bảo mật dữ liệu chi nhánh). Chiến lược nào dưới đây là tối ưu nhất để xử lý tình huống này trong ngắn hạn và dài hạn?",
+    "options": [
+      "A. Đề xuất tạm dừng UAT phase 2, yêu cầu đội phát triển fix lỗi phân quyền theo yêu cầu hiện tại của Việt Nam để đảm bảo tiến độ release, sau đó báo cáo lên công ty mẹ để cập nhật global process trong quý tiếp theo.",
+      "B. Lập tức tổ chức workshop với công ty mẹ để điều chỉnh global business process, đồng thời yêu cầu đội phát triển thiết kế lại module phân quyền theo quy trình mới trước khi tiếp tục UAT phase 2.",
+      "C. Tạo temporary workaround bằng cách hardcode phân quyền theo yêu cầu Việt Nam để hoàn thành UAT phase 2, sau đó ghi nhận lỗi này vào backlog để xử lý trong sprint tiếp theo sau khi hệ thống go-live.",
+      "D. Phân tích gap giữa global process và local process, đề xuất giải pháp hybrid (kết hợp cả hai) với roadmap triển khai 3 giai đoạn: (1) Áp dụng temporary fix cho UAT phase 2; (2) Thiết kế module phân quyền linh hoạt cho phép tùy chỉnh theo quốc gia; (3) Đề xuất điều chỉnh global process dựa trên dữ liệu thực tế từ Việt Nam và các thị trường tương tự."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Giải pháp D giải quyết cả ngắn hạn (đảm bảo tiến độ UAT) và dài hạn (thiết kế hệ thống linh hoạt, đề xuất cải tiến quy trình toàn cầu dựa trên dữ liệu thực tế). Nó thể hiện tư duy chiến lược, phân tích gap ở cả vi mô (module phân quyền) và vĩ mô (global process), đồng thời đảm bảo sự đồng bộ giữa yêu cầu kỹ thuật và business process trong dài hạn.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780502045566_EXPERT_0_tjix"
+  },
+  {
+    "questionText": "Bạn là Business Analyst trong dự án nâng cấp hệ thống core banking cho ngân hàng thương mại cổ phần tại Việt Nam. Trong giai đoạn UAT, nhóm kiểm thử phát hiện 12 defects nghiêm trọng liên quan đến tính toán lãi suất kép cho sản phẩm tiết kiệm có kỳ hạn. Trong đó, 5 defects có thể gây sai lệch số liệu lên đến 500 triệu VND/ngày nếu không được xử lý. Tuy nhiên, đội phát triển ước tính cần 3 tuần để fix và retest toàn bộ. Ban lãnh đạo yêu cầu release đúng tiến độ (còn 10 ngày) để đáp ứng chiến dịch marketing đã lên kế hoạch. Bạn sẽ làm gì?",
+    "options": [
+      "A. Đề xuất release hệ thống với tính năng lãi suất kép bị vô hiệu hóa tạm thời, đồng thời cung cấp công cụ tính toán offline để nhân viên ngân hàng sử dụng thủ công cho đến khi fix xong.",
+      "B. Chấp nhận release đúng tiến độ với rủi ro về sai lệch số liệu, đồng thời chuẩn bị kịch bản bồi hoàn thiệt hại cho khách hàng nếu lỗi xảy ra sau go-live.",
+      "C. Phân tích tác động của từng defect, đề xuất release với 7 defects đã được fix (bao gồm 5 defects nghiêm trọng nhất), đồng thời xây dựng quy trình kiểm soát thủ công cho 5 defects còn lại và lên kế hoạch hotfix trong vòng 1 tuần sau go-live.",
+      "D. Yêu cầu đội phát triển ưu tiên fix 5 defects nghiêm trọng nhất trong 5 ngày, sau đó tiến hành UAT lại toàn bộ module lãi suất trước khi release, chấp nhận delay tiến độ để đảm bảo chất lượng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C cân bằng giữa tiến độ và rủi ro, thể hiện tư duy phân tích tác động (impact analysis) và quản lý rủi ro ở cấp độ chuyên gia. Nó cho phép release đúng hạn với mức độ rủi ro có thể kiểm soát, đồng thời đảm bảo các lỗi nghiêm trọng nhất được xử lý, kết hợp với biện pháp giảm thiểu thủ công tạm thời.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780502045567_EXPERT_1_jbih"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý chuỗi cung ứng (SCM) cho doanh nghiệp sản xuất hàng tiêu dùng, bạn phụ trách UAT. Sau khi hoàn thành UAT, bạn nhận thấy có sự khác biệt đáng kể giữa số liệu tồn kho thực tế và số liệu trên hệ thống (lệch ~15%). Khi điều tra, bạn phát hiện nguyên nhân chính là do quy trình kiểm kê thủ công tại kho không được đồng bộ với quy trình nhập/xuất kho trên hệ thống. Chiến lược nào sau đây là hiệu quả nhất để giải quyết vấn đề này trong dài hạn?",
+    "options": [
+      "A. Đề xuất đào tạo lại toàn bộ nhân viên kho về quy trình nhập/xuất kho mới trên hệ thống, đồng thời tăng cường giám sát trong 3 tháng đầu sau go-live để đảm bảo tuân thủ.",
+      "B. Thiết kế lại quy trình kiểm kê để tích hợp hoàn toàn với hệ thống, bao gồm việc triển khai công nghệ RFID hoặc barcode scanning để tự động hóa việc cập nhật tồn kho, loại bỏ hoàn toàn quy trình thủ công.",
+      "C. Phân tích gap giữa quy trình hiện tại và quy trình trên hệ thống, đề xuất giải pháp kết hợp: (1) Tối ưu hóa quy trình kiểm kê thủ công để giảm thiểu sai sót; (2) Triển khai công nghệ hỗ trợ (ví dụ: barcode scanning) cho các mặt hàng có giá trị cao; (3) Thiết kế báo cáo reconciliation tự động để phát hiện và cảnh báo sai lệch tồn kho hàng ngày.",
+      "D. Chấp nhận mức độ sai lệch 15% như một rủi ro chấp nhận được, tập trung vào việc cải thiện quy trình dự báo nhu cầu để giảm thiểu tác động của sai lệch tồn kho lên kế hoạch sản xuất."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C thể hiện tư duy chiến lược và phân tích tổng thể. Nó kết hợp cải tiến quy trình, ứng dụng công nghệ và giám sát liên tục để giải quyết gốc rễ vấn đề (root cause) thay vì chỉ xử lý triệu chứng. Giải pháp này có tính khả thi cao, cân bằng giữa chi phí đầu tư và hiệu quả, đồng thời có thể triển khai theo giai đoạn.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780502045569_EXPERT_2_zme9"
+  },
+  {
+    "questionText": "Bạn là Business Analyst trong dự án triển khai hệ thống CRM cho công ty bảo hiểm nhân thọ. Trong giai đoạn UAT, nhóm kinh doanh phản ánh rằng quy trình xử lý yêu cầu bồi thường trên hệ thống mới mất nhiều thời gian hơn so với quy trình cũ do phải nhập liệu nhiều lần cho cùng một thông tin khách hàng. Khi phân tích, bạn phát hiện vấn đề xuất phát từ việc thiếu tích hợp giữa hệ thống CRM và hệ thống quản lý hợp đồng. Giải pháp nào sau đây là tối ưu nhất để giải quyết vấn đề này?",
+    "options": [
+      "A. Đề xuất tạm dừng triển khai hệ thống CRM, yêu cầu đội phát triển tích hợp với hệ thống quản lý hợp đồng trước khi tiếp tục UAT.",
+      "B. Thiết kế lại quy trình xử lý yêu cầu bồi thường trên hệ thống CRM để tối ưu hóa việc nhập liệu, đồng thời đề xuất giải pháp tích hợp với hệ thống quản lý hợp đồng trong giai đoạn tiếp theo của dự án.",
+      "C. Phân tích dữ liệu để xác định các thông tin khách hàng thường xuyên được sử dụng, đề xuất giải pháp: (1) Tích hợp real-time cho các thông tin khách hàng cơ bản; (2) Thiết kế tính năng tự động điền thông tin (auto-fill) cho các thông tin còn lại; (3) Xây dựng API để tích hợp toàn diện trong vòng 6 tháng sau go-live.",
+      "D. Chấp nhận quy trình hiện tại trên hệ thống CRM, tập trung đào tạo nhân viên để họ quen với việc nhập liệu nhiều lần, đồng thời ghi nhận yêu cầu tích hợp vào backlog để xử lý trong tương lai."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C giải quyết vấn đề một cách toàn diện và có chiến lược. Nó kết hợp giải pháp ngắn hạn (tích hợp real-time và auto-fill) để cải thiện trải nghiệm người dùng ngay lập tức, đồng thời lên kế hoạch tích hợp toàn diện trong dài hạn. Giải pháp này thể hiện tư duy phân tích hệ thống và khả năng lãnh đạo chuyển đổi số.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780502045570_EXPERT_3_qnq9"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống thanh toán trực tuyến cho ngân hàng, bạn phụ trách UAT. Sau khi hoàn thành UAT, bạn phát hiện rằng thời gian xử lý giao dịch trung bình tăng từ 2 giây lên 5 giây, vượt quá ngưỡng chấp nhận được (SLA: <3 giây). Khi điều tra, bạn nhận thấy nguyên nhân là do hệ thống mới thực hiện nhiều bước kiểm tra bảo mật hơn. Giải pháp nào sau đây là tối ưu nhất để giải quyết vấn đề này trước khi go-live?",
+    "options": [
+      "A. Đề xuất giảm bớt các bước kiểm tra bảo mật để đảm bảo thời gian xử lý giao dịch đáp ứng SLA, chấp nhận rủi ro bảo mật tăng lên.",
+      "B. Phân tích chi tiết từng bước kiểm tra bảo mật, đề xuất giải pháp: (1) Tối ưu hóa thuật toán cho các bước kiểm tra quan trọng; (2) Chuyển một số bước kiểm tra sang chế độ asynchronous để không ảnh hưởng đến thời gian phản hồi; (3) Thực hiện load testing để xác định ngưỡng tối ưu giữa bảo mật và hiệu suất.",
+      "C. Chấp nhận thời gian xử lý 5 giây như một hạn chế tạm thời, tập trung vào việc thông báo cho khách hàng về sự thay đổi này trước khi go-live.",
+      "D. Yêu cầu đội phát triển viết lại toàn bộ module kiểm tra bảo mật để đảm bảo thời gian xử lý dưới 3 giây, chấp nhận delay tiến độ dự án để đảm bảo chất lượng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B thể hiện tư duy phân tích chuyên sâu và khả năng cân bằng giữa các yêu cầu đối lập (bảo mật vs. hiệu suất). Nó đề xuất các biện pháp cụ thể để tối ưu hóa hệ thống mà không làm giảm mức độ bảo mật, đồng thời đảm bảo tính khả thi và tiến độ dự án.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780502045571_EXPERT_4_siq0"
+  },
+  {
+    "questionText": "Bạn là Business Analyst trong dự án triển khai hệ thống quản lý quan hệ đối tác (PRM) cho công ty viễn thông. Trong giai đoạn UAT, các đối tác phản ánh rằng quy trình đăng ký và phê duyệt hợp đồng trên hệ thống mới quá phức tạp, mất trung bình 7 ngày so với 3 ngày trước đây. Khi phân tích, bạn phát hiện nguyên nhân là do hệ thống yêu cầu nhiều bước phê duyệt hơn để đáp ứng chính sách tuân thủ mới. Chiến lược nào sau đây là tối ưu nhất để giải quyết vấn đề này?",
+    "options": [
+      "A. Đề xuất đơn giản hóa quy trình phê duyệt trên hệ thống để khôi phục thời gian xử lý như trước, đồng thời ghi nhận yêu cầu cải thiện chính sách tuân thủ vào backlog để xử lý sau.",
+      "B. Phân tích quy trình phê duyệt hiện tại, đề xuất giải pháp: (1) Áp dụng quy tắc phê duyệt động (dynamic approval) để giảm số bước phê duyệt không cần thiết; (2) Tích hợp chữ ký số để tăng tốc độ xử lý; (3) Thiết kế dashboard giám sát thời gian xử lý để liên tục tối ưu hóa quy trình.",
+      "C. Chấp nhận quy trình mới với thời gian xử lý dài hơn, tập trung đào tạo đối tác về tầm quan trọng của chính sách tuân thủ và cách sử dụng hệ thống hiệu quả.",
+      "D. Yêu cầu đội phát triển thiết kế lại toàn bộ quy trình phê duyệt trên hệ thống để đảm bảo thời gian xử lý dưới 3 ngày, chấp nhận delay tiến độ dự án để đảm bảo sự hài lòng của đối tác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B thể hiện tư duy chiến lược và khả năng phân tích quy trình ở cấp độ chuyên gia. Nó đề xuất các cải tiến cụ thể để tối ưu hóa quy trình mà không làm giảm mức độ tuân thủ, đồng thời đảm bảo tính linh hoạt và khả năng giám sát liên tục.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780502045571_EXPERT_5_426y"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý kho thông minh cho doanh nghiệp logistics, bạn phụ trách UAT. Sau khi hoàn thành UAT, bạn nhận thấy rằng hệ thống mới không hỗ trợ tốt cho quy trình xuất kho theo lô (batch picking) - một yêu cầu quan trọng của khách hàng. Khi điều tra, bạn phát hiện rằng yêu cầu này đã bị bỏ sót trong giai đoạn thu thập yêu cầu. Giải pháp nào sau đây là tối ưu nhất để xử lý tình huống này trước khi go-live?",
+    "options": [
+      "A. Đề xuất delay go-live để đội phát triển bổ sung tính năng batch picking, chấp nhận ảnh hưởng đến tiến độ dự án và chi phí phát sinh.",
+      "B. Thiết kế quy trình xuất kho thủ công tạm thời cho batch picking, đồng thời đề xuất giải pháp: (1) Bổ sung tính năng batch picking trong sprint tiếp theo sau go-live; (2) Tích hợp với hệ thống WMS hiện tại của khách hàng để tận dụng tính năng batch picking có sẵn.",
+      "C. Chấp nhận hệ thống mới mà không có tính năng batch picking, yêu cầu khách hàng thay đổi quy trình xuất kho để phù hợp với hệ thống.",
+      "D. Phân tích tác động của việc thiếu tính năng batch picking, đề xuất giải pháp hybrid: (1) Sử dụng tính năng wave picking có sẵn trên hệ thống như một giải pháp tạm thời; (2) Thiết kế API để tích hợp với hệ thống WMS của khách hàng cho batch picking; (3) Lên kế hoạch phát triển tính năng batch picking native trong vòng 3 tháng sau go-live."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Giải pháp D giải quyết vấn đề một cách toàn diện và có chiến lược. Nó kết hợp giải pháp ngắn hạn (wave picking), trung hạn (tích hợp API) và dài hạn (phát triển tính năng native) để đảm bảo tính liên tục của hoạt động kinh doanh, đồng thời thể hiện tư duy phân tích tác động và quản lý rủi ro ở cấp độ chuyên gia.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780502045572_EXPERT_6_4sl0"
+  },
+  {
+    "questionText": "Bạn là Business Analyst trong dự án triển khai hệ thống quản lý dự án cho công ty tư vấn quản lý. Trong giai đoạn UAT, nhóm dự án phản ánh rằng báo cáo tiến độ dự án trên hệ thống mới thiếu nhiều thông tin quan trọng so với báo cáo cũ, đặc biệt là các chỉ số về hiệu suất tài chính của dự án. Khi phân tích, bạn phát hiện rằng hệ thống mới không được thiết kế để tích hợp với hệ thống kế toán của công ty. Giải pháp nào sau đây là tối ưu nhất để giải quyết vấn đề này?",
+    "options": [
+      "A. Đề xuất sử dụng báo cáo thủ công từ hệ thống kế toán và hệ thống quản lý dự án, sau đó tổng hợp bằng Excel để tạo báo cáo đầy đủ cho đến khi tích hợp được thực hiện.",
+      "B. Phân tích yêu cầu báo cáo chi tiết, đề xuất giải pháp: (1) Thiết kế báo cáo động trên hệ thống quản lý dự án với khả năng import dữ liệu từ Excel; (2) Xây dựng API để tích hợp với hệ thống kế toán trong vòng 6 tháng; (3) Đánh giá và triển khai giải pháp BI để tạo báo cáo tổng hợp tự động trong dài hạn.",
+      "C. Yêu cầu đội phát triển bổ sung các trường dữ liệu cần thiết vào hệ thống quản lý dự án để lưu trữ thông tin tài chính, chấp nhận delay tiến độ dự án để đảm bảo chất lượng báo cáo.",
+      "D. Chấp nhận báo cáo hiện tại trên hệ thống quản lý dự án, yêu cầu nhóm dự án sử dụng hệ thống kế toán song song để theo dõi hiệu suất tài chính cho đến khi tích hợp được thực hiện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B thể hiện tư duy chiến lược và khả năng phân tích yêu cầu ở cấp độ chuyên gia. Nó đề xuất các giải pháp cụ thể để giải quyết vấn đề ngay lập tức (báo cáo động với import Excel), trung hạn (tích hợp API) và dài hạn (giải pháp BI), đảm bảo tính khả thi và tiến độ dự án.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780502045573_EXPERT_7_pc78"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống e-learning cho trường đại học, bạn phụ trách UAT. Sau khi hoàn thành UAT, bạn nhận thấy rằng hệ thống mới không hỗ trợ tốt cho việc quản lý và theo dõi các khóa học tín chỉ tự chọn - một yêu cầu quan trọng của nhà trường. Khi điều tra, bạn phát hiện rằng yêu cầu này đã được ghi nhận nhưng không được triển khai do hạn chế về thời gian. Chiến lược nào sau đây là tối ưu nhất để xử lý tình huống này trước khi go-live?",
+    "options": [
+      "A. Đề xuất delay go-live để đội phát triển bổ sung tính năng quản lý khóa học tín chỉ tự chọn, chấp nhận ảnh hưởng đến tiến độ dự án và chi phí phát sinh.",
+      "B. Thiết kế quy trình thủ công tạm thời cho quản lý khóa học tín chỉ tự chọn, đồng thời đề xuất giải pháp: (1) Bổ sung tính năng này trong sprint tiếp theo sau go-live; (2) Tích hợp với hệ thống quản lý học vụ hiện tại của trường để tận dụng tính năng có sẵn.",
+      "C. Phân tích yêu cầu quản lý khóa học tín chỉ tự chọn, đề xuất giải pháp: (1) Sử dụng tính năng quản lý khóa học thông thường trên hệ thống như một giải pháp tạm thời; (2) Thiết kế module quản lý khóa học tín chỉ tự chọn với các tính năng cốt lõi trước go-live; (3) Lên kế hoạch phát triển đầy đủ tính năng trong vòng 2 tháng sau go-live.",
+      "D. Chấp nhận hệ thống mới mà không có tính năng quản lý khóa học tín chỉ tự chọn, yêu cầu nhà trường thay đổi quy trình để phù hợp với hệ thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C giải quyết vấn đề một cách toàn diện và có chiến lược. Nó đề xuất triển khai tính năng cốt lõi trước go-live để đảm bảo hoạt động cơ bản, đồng thời lên kế hoạch phát triển đầy đủ tính năng trong ngắn hạn. Giải pháp này thể hiện tư duy phân tích yêu cầu và quản lý rủi ro ở cấp độ chuyên gia.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780502045574_EXPERT_8_4es6"
+  },
+  {
+    "questionText": "Bạn là Business Analyst trong dự án triển khai hệ thống quản lý chuỗi cửa hàng bán lẻ. Trong giai đoạn UAT, bạn phát hiện rằng hệ thống mới không hỗ trợ tốt cho quy trình khuyến mãi đa cấp (multi-level promotions) - một chiến lược quan trọng của công ty. Khi điều tra, bạn nhận thấy rằng yêu cầu này đã được ghi nhận nhưng không được triển khai đầy đủ do phức tạp về mặt kỹ thuật. Giải pháp nào sau đây là tối ưu nhất để xử lý tình huống này trước khi go-live?",
+    "options": [
+      "A. Đề xuất delay go-live để đội phát triển bổ sung đầy đủ tính năng khuyến mãi đa cấp, chấp nhận ảnh hưởng đến tiến độ dự án và chi phí phát sinh.",
+      "B. Thiết kế quy trình khuyến mãi thủ công tạm thời, đồng thời đề xuất giải pháp: (1) Phát triển tính năng khuyến mãi đơn cấp trước go-live; (2) Lên kế hoạch phát triển tính năng khuyến mãi đa cấp trong vòng 3 tháng sau go-live; (3) Tích hợp với hệ thống POS hiện tại để tận dụng tính năng khuyến mãi đa cấp có sẵn.",
+      "C. Chấp nhận hệ thống mới mà không có tính năng khuyến mãi đa cấp, yêu cầu bộ phận marketing thay đổi chiến lược khuyến mãi để phù hợp với hệ thống.",
+      "D. Phân tích yêu cầu khuyến mãi đa cấp, đề xuất giải pháp: (1) Phát triển tính năng khuyến mãi đa cấp cơ bản (áp dụng cho 2 cấp) trước go-live; (2) Thiết kế module khuyến mãi linh hoạt cho phép tùy chỉnh số cấp sau go-live; (3) Đánh giá và triển khai giải pháp khuyến mãi động (dynamic promotions) trong dài hạn."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Giải pháp D giải quyết vấn đề một cách toàn diện và có chiến lược. Nó đề xuất triển khai tính năng cơ bản trước go-live để đảm bảo hoạt động kinh doanh, đồng thời thiết kế module linh hoạt cho phép mở rộng trong tương lai. Giải pháp này thể hiện tư duy phân tích yêu cầu và khả năng lãnh đạo chuyển đổi số ở cấp độ chuyên gia.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "ANALYSIS",
+    "id": "q_1780502045575_EXPERT_9_i29u"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý quan hệ khách hàng (CRM) cho công ty bất động sản, bạn phụ trách UAT. Sau khi hoàn thành UAT, bạn nhận thấy rằng hệ thống mới không hỗ trợ tốt cho quy trình theo dõi và chăm sóc khách hàng tiềm năng (lead nurturing) - một hoạt động quan trọng của công ty. Khi điều tra, bạn phát hiện rằng yêu cầu này đã được ghi nhận nhưng không được triển khai do hạn chế về nguồn lực. Chiến lược nào sau đây là tối ưu nhất để xử lý tình huống này trước khi go-live?",
+    "options": [
+      "A. Đề xuất delay go-live để đội phát triển bổ sung tính năng lead nurturing, chấp nhận ảnh hưởng đến tiến độ dự án và chi phí phát sinh.",
+      "B. Thiết kế quy trình theo dõi và chăm sóc khách hàng tiềm năng thủ công tạm thời, đồng thời đề xuất giải pháp: (1) Bổ sung tính năng cơ bản về lead nurturing trong sprint tiếp theo sau go-live; (2) Tích hợp với hệ thống email marketing hiện tại để tự động hóa một phần quy trình.",
+      "C. Phân tích yêu cầu lead nurturing, đề xuất giải pháp: (1) Phát triển tính năng theo dõi tương tác cơ bản (basic interaction tracking) trước go-live; (2) Thiết kế workflow tự động cho các chiến dịch chăm sóc khách hàng đơn giản; (3) Lên kế hoạch phát triển đầy đủ tính năng lead nurturing trong vòng 2 tháng sau go-live, bao gồm tích hợp với hệ thống email marketing và SMS gateway.",
+      "D. Chấp nhận hệ thống mới mà không có tính năng lead nurturing, yêu cầu bộ phận kinh doanh thay đổi quy trình để phù hợp với hệ thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C giải quyết vấn đề một cách toàn diện và có chiến lược. Nó đề xuất triển khai các tính năng cốt lõi trước go-live để đảm bảo hoạt động cơ bản, đồng thời lên kế hoạch phát triển đầy đủ tính năng trong ngắn hạn. Giải pháp này thể hiện tư duy phân tích yêu cầu và khả năng lãnh đạo chuyển đổi số ở cấp độ chuyên gia.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780502045576_EXPERT_10_qr9c"
+  },
+  {
+    "questionText": "Bạn là Business Analyst trong dự án triển khai hệ thống quản lý tài sản CNTT cho ngân hàng. Trong giai đoạn UAT, bạn phát hiện rằng hệ thống mới không hỗ trợ tốt cho quy trình kiểm kê tài sản theo chu kỳ - một yêu cầu bắt buộc theo quy định của Ngân hàng Nhà nước. Khi điều tra, bạn nhận thấy rằng yêu cầu này đã được ghi nhận nhưng không được triển khai đầy đủ do thiếu nguồn lực. Giải pháp nào sau đây là tối ưu nhất để xử lý tình huống này trước khi go-live?",
+    "options": [
+      "A. Đề xuất delay go-live để đội phát triển bổ sung đầy đủ tính năng kiểm kê tài sản theo chu kỳ, chấp nhận ảnh hưởng đến tiến độ dự án và chi phí phát sinh.",
+      "B. Thiết kế quy trình kiểm kê tài sản thủ công tạm thời, đồng thời đề xuất giải pháp: (1) Bổ sung tính năng kiểm kê cơ bản trong sprint tiếp theo sau go-live; (2) Tích hợp với hệ thống quản lý tài sản hiện tại để tận dụng tính năng kiểm kê có sẵn.",
+      "C. Phân tích yêu cầu kiểm kê tài sản, đề xuất giải pháp: (1) Phát triển tính năng kiểm kê một lần (one-time inventory) trước go-live để đáp ứng yêu cầu tức thời; (2) Thiết kế module kiểm kê theo chu kỳ với các tính năng cốt lõi (lập kế hoạch, ghi nhận kết quả, cảnh báo); (3) Lên kế hoạch phát triển đầy đủ tính năng trong vòng 1 tháng sau go-live, bao gồm tích hợp với hệ thống quản lý tài sản hiện tại.",
+      "D. Chấp nhận hệ thống mới mà không có tính năng kiểm kê tài sản theo chu kỳ, yêu cầu bộ phận CNTT thay đổi quy trình để phù hợp với hệ thống và báo cáo thủ công cho cơ quan quản lý."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C giải quyết vấn đề một cách toàn diện và tuân thủ quy định. Nó đề xuất triển khai tính năng cơ bản trước go-live để đáp ứng yêu cầu tức thời, đồng thời lên kế hoạch phát triển đầy đủ tính năng trong ngắn hạn. Giải pháp này thể hiện tư duy phân tích yêu cầu, quản lý rủi ro và tuân thủ quy định ở cấp độ chuyên gia.",
+    "difficulty": "EXPERT",
+    "skillArea": "UAT & Release Validation",
+    "category": "SITUATION",
+    "id": "q_1780502045577_EXPERT_11_mxd9"
+  }
+]

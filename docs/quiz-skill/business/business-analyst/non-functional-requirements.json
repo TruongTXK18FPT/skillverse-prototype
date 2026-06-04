@@ -1,0 +1,782 @@
+[
+  {
+    "questionText": "Trong dự án phát triển hệ thống ngân hàng số tại Việt Nam, yêu cầu nào sau đây được coi là một yêu cầu phi chức năng (Non-functional Requirement)?",
+    "options": [
+      "A. Hệ thống phải cho phép khách hàng chuyển tiền giữa các tài khoản.",
+      "B. Hệ thống phải xử lý tối thiểu 10.000 giao dịch chuyển tiền mỗi giây trong giờ cao điểm.",
+      "C. Hệ thống phải có chức năng xác thực OTP qua SMS.",
+      "D. Hệ thống phải cho phép quản trị viên xem lịch sử giao dịch của khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu về số lượng giao dịch xử lý mỗi giây là yêu cầu phi chức năng liên quan đến hiệu năng (performance), không phải chức năng cụ thể của hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504238954_BEGINNER_0_594v"
+  },
+  {
+    "questionText": "Khi xây dựng hệ thống thương mại điện tử cho một doanh nghiệp bán lẻ tại Việt Nam, yếu tố nào sau đây thuộc về tính khả dụng (availability) của hệ thống?",
+    "options": [
+      "A. Hệ thống phải có giao diện thân thiện với người dùng.",
+      "B. Hệ thống phải hoạt động liên tục 99,9% thời gian trong năm.",
+      "C. Hệ thống phải bảo mật thông tin khách hàng theo tiêu chuẩn PCI-DSS.",
+      "D. Hệ thống phải xử lý đơn hàng trong vòng 2 giây."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính khả dụng (availability) đo lường thời gian hệ thống hoạt động liên tục mà không bị gián đoạn, thường được biểu thị bằng tỷ lệ phần trăm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504238954_BEGINNER_1_c3cu"
+  },
+  {
+    "questionText": "Một dự án phát triển ứng dụng di động cho khách hàng quốc tế yêu cầu hệ thống phải 'dễ sử dụng'. Làm thế nào để chuyển yêu cầu trừu tượng này thành tiêu chí đo lường được?",
+    "options": [
+      "A. Hệ thống phải có ít nhất 10.000 người dùng hoạt động hàng ngày.",
+      "B. 90% người dùng mới phải hoàn thành quy trình đăng ký trong vòng 2 phút mà không cần hỗ trợ.",
+      "C. Hệ thống phải hỗ trợ ít nhất 5 ngôn ngữ khác nhau.",
+      "D. Hệ thống phải có ít nhất 5 tính năng chính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu 'dễ sử dụng' có thể đo lường được thông qua tỷ lệ hoàn thành tác vụ của người dùng mới trong thời gian nhất định mà không cần hỗ trợ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504238954_BEGINNER_2_izng"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho một công ty sản xuất tại Việt Nam, yêu cầu nào sau đây là một ràng buộc (constraint) ảnh hưởng đến thiết kế và triển khai hệ thống?",
+    "options": [
+      "A. Hệ thống phải tích hợp với phần mềm kế toán hiện có của công ty.",
+      "B. Hệ thống phải có khả năng xử lý 500 đơn hàng mỗi ngày.",
+      "C. Hệ thống phải có giao diện tiếng Việt và tiếng Anh.",
+      "D. Hệ thống phải cho phép người dùng xuất báo cáo dưới định dạng Excel."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ràng buộc (constraint) là các giới hạn bắt buộc phải tuân thủ, như việc tích hợp với hệ thống hiện có, ảnh hưởng trực tiếp đến thiết kế và triển khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504238954_BEGINNER_3_s6fp"
+  },
+  {
+    "questionText": "Khi phân tích yêu cầu phi chức năng cho hệ thống ngân hàng trực tuyến, yếu tố nào sau đây liên quan đến bảo mật (security)?",
+    "options": [
+      "A. Hệ thống phải phản hồi yêu cầu của người dùng trong vòng 1 giây.",
+      "B. Hệ thống phải mã hóa dữ liệu giao dịch theo tiêu chuẩn AES-256.",
+      "C. Hệ thống phải có khả năng phục hồi dữ liệu trong vòng 1 giờ sau sự cố.",
+      "D. Hệ thống phải hỗ trợ truy cập từ trình duyệt Chrome và Firefox."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mã hóa dữ liệu giao dịch là yêu cầu liên quan đến bảo mật (security), đảm bảo thông tin không bị truy cập trái phép.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504238954_BEGINNER_4_eiia"
+  },
+  {
+    "questionText": "Một công ty logistics tại Việt Nam muốn xây dựng hệ thống quản lý vận chuyển. Yêu cầu nào sau đây thể hiện sự cân bằng giữa kỳ vọng kinh doanh và khả thi kỹ thuật?",
+    "options": [
+      "A. Hệ thống phải xử lý 1 triệu đơn hàng mỗi ngày ngay từ khi triển khai.",
+      "B. Hệ thống phải có khả năng mở rộng để xử lý 10.000 đơn hàng mỗi ngày trong năm đầu tiên và tăng dần theo nhu cầu.",
+      "C. Hệ thống phải có giao diện giống hệt hệ thống hiện tại của công ty.",
+      "D. Hệ thống phải được triển khai trong vòng 1 tháng với ngân sách 50 triệu đồng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu này thể hiện sự cân bằng giữa kỳ vọng kinh doanh (xử lý số lượng đơn hàng tăng dần) và khả thi kỹ thuật (mở rộng hệ thống theo nhu cầu).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504238954_BEGINNER_5_tlsq"
+  },
+  {
+    "questionText": "Trong tài liệu yêu cầu hệ thống, yêu cầu nào sau đây cần được ghi nhận là yêu cầu phi chức năng liên quan đến hiệu năng (performance)?",
+    "options": [
+      "A. Hệ thống phải cho phép người dùng đăng nhập bằng tên đăng nhập và mật khẩu.",
+      "B. Hệ thống phải xử lý truy vấn báo cáo trong vòng tối đa 5 giây với bộ dữ liệu 1 triệu bản ghi.",
+      "C. Hệ thống phải có chức năng thông báo qua email khi đơn hàng được xử lý.",
+      "D. Hệ thống phải hỗ trợ người dùng xuất báo cáo dưới định dạng PDF."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu về thời gian xử lý truy vấn với bộ dữ liệu lớn là yêu cầu phi chức năng liên quan đến hiệu năng (performance).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504238954_BEGINNER_6_qqwa"
+  },
+  {
+    "questionText": "Khi triển khai hệ thống quản lý nhân sự cho một tập đoàn đa quốc gia, yêu cầu nào sau đây là yêu cầu phi chức năng liên quan đến khả năng sử dụng (usability)?",
+    "options": [
+      "A. Hệ thống phải hỗ trợ đồng thời 5.000 người dùng truy cập.",
+      "B. Hệ thống phải có giao diện thân thiện, cho phép nhân viên mới hoàn thành quy trình đăng ký thông tin cá nhân trong vòng 3 phút.",
+      "C. Hệ thống phải sao lưu dữ liệu tự động mỗi ngày vào lúc 2 giờ sáng.",
+      "D. Hệ thống phải tích hợp với hệ thống chấm công hiện có của công ty."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu về giao diện thân thiện và thời gian hoàn thành tác vụ của người dùng mới là yêu cầu phi chức năng liên quan đến khả năng sử dụng (usability).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504238954_BEGINNER_7_7a8v"
+  },
+  {
+    "questionText": "Một dự án phát triển ứng dụng y tế tại Việt Nam yêu cầu hệ thống phải 'đảm bảo an toàn dữ liệu bệnh nhân'. Làm thế nào để chuyển yêu cầu này thành tiêu chí đo lường được?",
+    "options": [
+      "A. Hệ thống phải có ít nhất 1.000 người dùng đăng ký trong tháng đầu tiên.",
+      "B. Dữ liệu bệnh nhân phải được mã hóa theo tiêu chuẩn HL7 và tuân thủ quy định bảo vệ dữ liệu cá nhân của Việt Nam.",
+      "C. Hệ thống phải có khả năng xử lý 500 yêu cầu truy cập đồng thời.",
+      "D. Hệ thống phải có giao diện hỗ trợ tiếng Việt và tiếng Anh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu 'đảm bảo an toàn dữ liệu bệnh nhân' có thể đo lường được thông qua tiêu chuẩn mã hóa và tuân thủ quy định pháp luật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504238954_BEGINNER_8_o3dz"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống thanh toán trực tuyến cho siêu thị, yêu cầu nào sau đây là ràng buộc (constraint) ảnh hưởng đến thiết kế hệ thống?",
+    "options": [
+      "A. Hệ thống phải xử lý tối thiểu 200 giao dịch mỗi phút.",
+      "B. Hệ thống phải tích hợp với hệ thống quản lý kho hiện có của siêu thị.",
+      "C. Hệ thống phải có giao diện thân thiện với người dùng.",
+      "D. Hệ thống phải hỗ trợ thanh toán bằng thẻ tín dụng và ví điện tử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ràng buộc về tích hợp với hệ thống hiện có là giới hạn bắt buộc phải tuân thủ, ảnh hưởng trực tiếp đến thiết kế hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504238954_BEGINNER_9_q89i"
+  },
+  {
+    "questionText": "Khi phân tích yêu cầu phi chức năng cho hệ thống quản lý dự án, yếu tố nào sau đây liên quan đến tính khả dụng (availability)?",
+    "options": [
+      "A. Hệ thống phải cho phép người dùng tạo và quản lý nhiệm vụ dự án.",
+      "B. Hệ thống phải đảm bảo thời gian hoạt động liên tục 99,5% trong giờ làm việc.",
+      "C. Hệ thống phải có khả năng xuất báo cáo dưới định dạng Excel và PDF.",
+      "D. Hệ thống phải hỗ trợ tối thiểu 100 người dùng truy cập đồng thời."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính khả dụng (availability) đo lường thời gian hệ thống hoạt động liên tục mà không bị gián đoạn, thường được biểu thị bằng tỷ lệ phần trăm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504238954_BEGINNER_10_6xzz"
+  },
+  {
+    "questionText": "Một công ty thương mại điện tử muốn xây dựng hệ thống khuyến nghị sản phẩm. Yêu cầu nào sau đây thể hiện sự cân bằng giữa kỳ vọng kinh doanh và khả thi kỹ thuật?",
+    "options": [
+      "A. Hệ thống phải khuyến nghị sản phẩm chính xác 100% cho mọi khách hàng.",
+      "B. Hệ thống phải khuyến nghị sản phẩm dựa trên lịch sử mua hàng của khách hàng với độ chính xác tối thiểu 70% trong 6 tháng đầu triển khai.",
+      "C. Hệ thống phải có giao diện giống hệt các nền tảng thương mại điện tử lớn như Amazon.",
+      "D. Hệ thống phải được triển khai trong vòng 2 tuần với ngân sách 20 triệu đồng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu này thể hiện sự cân bằng giữa kỳ vọng kinh doanh (độ chính xác khuyến nghị) và khả thi kỹ thuật (mục tiêu thực tế trong thời gian triển khai).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504238954_BEGINNER_11_bhwi"
+  },
+  {
+    "questionText": "Trong tài liệu yêu cầu hệ thống cho ứng dụng ngân hàng di động, yêu cầu nào sau đây cần được ghi nhận là yêu cầu phi chức năng liên quan đến bảo mật (security)?",
+    "options": [
+      "A. Ứng dụng phải cho phép người dùng chuyển tiền giữa các tài khoản.",
+      "B. Ứng dụng phải xác thực người dùng bằng sinh trắc học (vân tay/khuôn mặt) và mã PIN.",
+      "C. Ứng dụng phải có giao diện hỗ trợ tiếng Việt và tiếng Anh.",
+      "D. Ứng dụng phải phản hồi yêu cầu của người dùng trong vòng 3 giây."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Xác thực người dùng bằng sinh trắc học và mã PIN là yêu cầu phi chức năng liên quan đến bảo mật (security), đảm bảo truy cập an toàn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504238954_BEGINNER_12_pu80"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống ngân hàng số tại Việt Nam, khách hàng yêu cầu hệ thống phải xử lý được 10.000 giao dịch đồng thời trong giờ cao điểm. Đây là yêu cầu thuộc loại nào sau đây?",
+    "options": [
+      "A. Functional requirement (Yêu cầu chức năng)",
+      "B. Non-functional requirement về Performance (Hiệu năng)",
+      "C. Non-functional requirement về Security (Bảo mật)",
+      "D. Business rule (Quy tắc nghiệp vụ)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu về số lượng giao dịch đồng thời thuộc về hiệu năng (performance), một loại non-functional requirement. Nó xác định khả năng hệ thống xử lý tải công việc trong điều kiện cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504300174_INTERMEDIATE_0_2gyu"
+  },
+  {
+    "questionText": "Một hệ thống quản lý đơn hàng thương mại điện tử cần đảm bảo thời gian phản hồi trung bình dưới 2 giây cho 95% các yêu cầu truy vấn. Tiêu chí này thuộc loại nào dưới đây?",
+    "options": [
+      "A. Chỉ số đo lường (metric) cho Availability (Tính sẵn sàng)",
+      "B. Chỉ số đo lường (metric) cho Performance (Hiệu năng)",
+      "C. Ràng buộc thiết kế (design constraint)",
+      "D. Yêu cầu chức năng (functional requirement)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thời gian phản hồi là chỉ số đo lường trực tiếp hiệu năng (performance) của hệ thống, giúp định lượng yêu cầu non-functional một cách cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "SKILL",
+    "id": "q_1780504300174_INTERMEDIATE_1_i47u"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho doanh nghiệp sản xuất, khách hàng yêu cầu hệ thống phải hoạt động liên tục 24/7 với thời gian downtime tối đa 5 phút/tháng. Yêu cầu này thuộc loại nào?",
+    "options": [
+      "A. Non-functional requirement về Usability (Tính dễ sử dụng)",
+      "B. Non-functional requirement về Availability (Tính sẵn sàng)",
+      "C. Business rule (Quy tắc nghiệp vụ)",
+      "D. Functional requirement (Yêu cầu chức năng)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu về thời gian hoạt động liên tục và downtime tối đa là đặc trưng của tính sẵn sàng (availability), một loại non-functional requirement quan trọng trong hệ thống doanh nghiệp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504300174_INTERMEDIATE_2_9ni6"
+  },
+  {
+    "questionText": "Để đảm bảo an toàn dữ liệu khách hàng trong hệ thống ngân hàng, yêu cầu nào sau đây là non-functional requirement về Security?",
+    "options": [
+      "A. Hệ thống phải mã hóa dữ liệu nhạy cảm theo chuẩn AES-256",
+      "B. Khách hàng phải nhập OTP để xác nhận giao dịch trên 10 triệu đồng",
+      "C. Hệ thống phải cho phép khách hàng xem lịch sử giao dịch 6 tháng gần nhất",
+      "D. Nhân viên ngân hàng phải được đào tạo về quy trình xử lý khiếu nại"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mã hóa dữ liệu theo chuẩn cụ thể là yêu cầu về bảo mật (security), thuộc non-functional requirement. Các lựa chọn khác là quy tắc nghiệp vụ hoặc yêu cầu chức năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504300174_INTERMEDIATE_3_f40d"
+  },
+  {
+    "questionText": "Một hệ thống bán vé máy bay trực tuyến cần đảm bảo 99.9% thời gian hoạt động trong mùa cao điểm Tết Nguyên Đán. Cách diễn đạt nào sau đây là phù hợp nhất để ghi nhận yêu cầu này?",
+    "options": [
+      "A. 'Hệ thống phải hoạt động tốt trong mùa Tết'",
+      "B. 'Hệ thống phải có availability 99.9% trong khoảng thời gian từ 20/12 đến 5/1 âm lịch hàng năm'",
+      "C. 'Hệ thống phải xử lý được 5.000 giao dịch/phút'",
+      "D. 'Hệ thống cần có giao diện thân thiện với người dùng'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Yêu cầu về availability cần được định lượng cụ thể về tỷ lệ phần trăm và khoảng thời gian áp dụng, giúp kỹ thuật có cơ sở để thiết kế và kiểm thử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "SKILL",
+    "id": "q_1780504300174_INTERMEDIATE_4_5rmo"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng mobile banking, khách hàng yêu cầu ứng dụng phải có giao diện dễ sử dụng cho cả người trẻ và người cao tuổi. Cách tiếp cận nào sau đây hiệu quả nhất để biến yêu cầu này thành tiêu chí đo lường được?",
+    "options": [
+      "A. Yêu cầu thiết kế giao diện theo phong cách hiện đại",
+      "B. Đặt mục tiêu 90% người dùng thử nghiệm hoàn thành tác vụ chuyển tiền trong dưới 30 giây",
+      "C. Yêu cầu sử dụng màu sắc tươi sáng trong thiết kế",
+      "D. Đề xuất sử dụng công nghệ React Native để phát triển ứng dụng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để đo lường tính dễ sử dụng (usability), cần chuyển yêu cầu định tính thành chỉ số định lượng như thời gian hoàn thành tác vụ, tỷ lệ thành công của người dùng thử nghiệm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504300174_INTERMEDIATE_5_4j94"
+  },
+  {
+    "questionText": "Hệ thống quản lý kho hàng của một doanh nghiệp bán lẻ yêu cầu thời gian phản hồi tối đa 1 giây cho các truy vấn tìm kiếm sản phẩm. Tuy nhiên, đội phát triển cho biết để đạt được điều này cần đầu tư thêm 30% chi phí phần cứng. Cách xử lý nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Chấp nhận tăng chi phí để đáp ứng yêu cầu của khách hàng",
+      "B. Đề xuất giảm yêu cầu thời gian phản hồi xuống 3 giây để cân bằng chi phí",
+      "C. Phân tích tác động kinh doanh của thời gian phản hồi, thương lượng với khách hàng về trade-off giữa hiệu năng và chi phí",
+      "D. Bỏ qua yêu cầu này vì không khả thi về mặt kỹ thuật"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Business Analyst cần phân tích trade-off giữa yêu cầu non-functional và ràng buộc thực tế (chi phí, thời gian), sau đó thương lượng với khách hàng để tìm giải pháp tối ưu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "SITUATION",
+    "id": "q_1780504300174_INTERMEDIATE_6_yyfc"
+  },
+  {
+    "questionText": "Một hệ thống thanh toán trực tuyến yêu cầu xác thực hai yếu tố (2FA) cho mọi giao dịch trên 5 triệu đồng. Đây là ví dụ về sự kết hợp giữa loại yêu cầu nào?",
+    "options": [
+      "A. Functional requirement và Security non-functional requirement",
+      "B. Business rule và Usability non-functional requirement",
+      "C. Performance non-functional requirement và Functional requirement",
+      "D. Availability non-functional requirement và Business rule"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Yêu cầu xác thực 2FA cho giao dịch trên 5 triệu đồng là functional requirement (chức năng hệ thống cần thực hiện), đồng thời phản ánh yêu cầu bảo mật (security) non-functional.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504300174_INTERMEDIATE_7_d35d"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống CRM cho công ty bảo hiểm, khách hàng yêu cầu hệ thống phải hỗ trợ tối thiểu 5.000 người dùng đồng thời. Tuy nhiên, đội phát triển cho biết cơ sở hạ tầng hiện tại chỉ hỗ trợ tối đa 3.000 người dùng. Cách ghi nhận nào sau đây là phù hợp nhất trong tài liệu yêu cầu?",
+    "options": [
+      "A. 'Hệ thống phải hỗ trợ 5.000 người dùng đồng thời'",
+      "B. 'Hệ thống phải hỗ trợ tối thiểu 3.000 người dùng đồng thời do ràng buộc hạ tầng hiện tại'",
+      "C. 'Hệ thống cần hỗ trợ 5.000 người dùng đồng thời (performance requirement), tuy nhiên hiện tại chỉ đáp ứng được 3.000 do ràng buộc hạ tầng (constraint)'",
+      "D. 'Hệ thống cần được nâng cấp hạ tầng để hỗ trợ 5.000 người dùng'"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cần ghi nhận rõ cả yêu cầu non-functional (performance) và ràng buộc kỹ thuật (constraint) để đảm bảo tính minh bạch và làm cơ sở cho các quyết định thiết kế sau này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "SKILL",
+    "id": "q_1780504300174_INTERMEDIATE_8_bct9"
+  },
+  {
+    "questionText": "Một ứng dụng thương mại điện tử yêu cầu thời gian tải trang chủ dưới 1.5 giây khi có 1.000 người dùng truy cập đồng thời. Đây là ví dụ về yêu cầu thuộc loại nào?",
+    "options": [
+      "A. Scalability requirement (Yêu cầu về khả năng mở rộng)",
+      "B. Performance requirement (Yêu cầu về hiệu năng)",
+      "C. Usability requirement (Yêu cầu về tính dễ sử dụng)",
+      "D. Compatibility requirement (Yêu cầu về tính tương thích)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thời gian tải trang dưới điều kiện tải cụ thể là yêu cầu về hiệu năng (performance), đo lường khả năng hệ thống xử lý trong điều kiện vận hành thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504300175_INTERMEDIATE_9_osc0"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống core banking, khách hàng yêu cầu hệ thống phải tuân thủ tiêu chuẩn bảo mật PCI DSS. Đây là ví dụ về loại yêu cầu nào?",
+    "options": [
+      "A. Functional requirement (Yêu cầu chức năng)",
+      "B. Non-functional requirement về Security (Bảo mật)",
+      "C. Business rule (Quy tắc nghiệp vụ)",
+      "D. Design constraint (Ràng buộc thiết kế)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tuân thủ tiêu chuẩn bảo mật PCI DSS là yêu cầu non-functional về security, đảm bảo hệ thống đáp ứng các tiêu chí bảo mật trong ngành thanh toán.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504300175_INTERMEDIATE_10_3s6a"
+  },
+  {
+    "questionText": "Một hệ thống quản lý học tập trực tuyến yêu cầu 95% các thao tác của giảng viên (như đăng bài giảng, chấm điểm) phải hoàn thành trong dưới 2 giây. Đây là cách diễn đạt yêu cầu về:",
+    "options": [
+      "A. Tính sẵn sàng (Availability)",
+      "B. Tính dễ sử dụng (Usability)",
+      "C. Hiệu năng (Performance)",
+      "D. Tính mở rộng (Scalability)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Thời gian hoàn thành tác vụ cụ thể là chỉ số đo lường hiệu năng (performance), giúp định lượng yêu cầu non-functional một cách rõ ràng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "SKILL",
+    "id": "q_1780504300176_INTERMEDIATE_11_uapk"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống POS cho chuỗi cửa hàng tiện lợi, khách hàng yêu cầu hệ thống phải hoạt động được ngay cả khi mất kết nối internet. Yêu cầu này thuộc loại nào?",
+    "options": [
+      "A. Non-functional requirement về Availability (Tính sẵn sàng)",
+      "B. Non-functional requirement về Reliability (Độ tin cậy)",
+      "C. Functional requirement (Yêu cầu chức năng)",
+      "D. Business rule (Quy tắc nghiệp vụ)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khả năng hoạt động trong điều kiện mất kết nối là yêu cầu về độ tin cậy (reliability), đảm bảo hệ thống duy trì chức năng trong các tình huống bất thường.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504300176_INTERMEDIATE_12_xxdv"
+  },
+  {
+    "questionText": "Để đảm bảo hệ thống thương mại điện tử có thể phục vụ khách hàng toàn cầu, yêu cầu nào sau đây là non-functional requirement về Performance?",
+    "options": [
+      "A. Hệ thống phải hỗ trợ đa ngôn ngữ (tiếng Việt, tiếng Anh, tiếng Trung)",
+      "B. Thời gian phản hồi trung bình của hệ thống không quá 1 giây cho 90% các yêu cầu từ bất kỳ khu vực nào trên thế giới",
+      "C. Hệ thống phải tuân thủ quy định bảo vệ dữ liệu GDPR của EU",
+      "D. Giao diện người dùng phải thân thiện với thiết bị di động"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thời gian phản hồi đồng nhất trên phạm vi toàn cầu là yêu cầu về hiệu năng (performance), đảm bảo trải nghiệm người dùng nhất quán bất kể vị trí địa lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504300176_INTERMEDIATE_13_axjn"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ngân hàng lõi tại Việt Nam, bên kinh doanh yêu cầu hệ thống phải 'phản hồi tức thì' cho tất cả giao dịch. Nhóm kỹ thuật cho rằng yêu cầu này không khả thi do hạn chế về hạ tầng hiện tại. Là Business Analyst, bạn sẽ làm gì để biến yêu cầu trừu tượng này thành tiêu chí đo lường được mà cả hai bên đều chấp nhận?",
+    "options": [
+      "A. Đề xuất sử dụng thuật ngữ 'phản hồi tức thì' trong tài liệu yêu cầu và để nhóm kỹ thuật tự xử lý.",
+      "B. Tham khảo tiêu chuẩn ISO 25010 về hiệu năng hệ thống, sau đó đề xuất định nghĩa 'phản hồi tức thì' là thời gian phản hồi dưới 2 giây cho 95% giao dịch trong giờ cao điểm, với điều kiện hạ tầng hiện tại.",
+      "C. Chấp nhận yêu cầu của bên kinh doanh và yêu cầu nhóm kỹ thuật tìm giải pháp kỹ thuật phù hợp.",
+      "D. Bỏ qua yêu cầu này vì không thể đo lường được."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó biến yêu cầu trừu tượng thành tiêu chí cụ thể, đo lường được (dưới 2 giây cho 95% giao dịch) và cân nhắc khả năng kỹ thuật hiện tại. ISO 25010 cung cấp khung chuẩn để đảm bảo tính khách quan và chuyên nghiệp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504388842_ADVANCED_0_6uhf"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống e-commerce cho thị trường Đông Nam Á yêu cầu tính khả dụng (availability) 99.99%. Tuy nhiên, ngân sách dự án không đủ để đầu tư hạ tầng dự phòng toàn diện. Là Business Analyst, bạn sẽ đề xuất giải pháp nào để cân bằng giữa yêu cầu kinh doanh và khả năng kỹ thuật?",
+    "options": [
+      "A. Chấp nhận yêu cầu 99.99% và yêu cầu tăng ngân sách để đầu tư hạ tầng.",
+      "B. Đề xuất giảm yêu cầu xuống 99.9% và tập trung đầu tư vào các thành phần hệ thống quan trọng nhất (ví dụ: cổng thanh toán), đồng thời xây dựng kế hoạch nâng cấp dần dần.",
+      "C. Bỏ qua yêu cầu về availability vì không thể đạt được.",
+      "D. Đề xuất sử dụng dịch vụ đám mây với SLA 99.99% mà không cần đánh giá chi phí và rủi ro."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó cân bằng giữa yêu cầu kinh doanh và khả năng kỹ thuật, tập trung vào các thành phần quan trọng và có kế hoạch cải thiện dần. Giải pháp này thực tế và khả thi trong bối cảnh ngân sách hạn chế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "SITUATION",
+    "id": "q_1780504388843_ADVANCED_1_vy2z"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng di động cho ngân hàng, bên kinh doanh yêu cầu ứng dụng phải 'dễ sử dụng' cho tất cả người dùng, kể cả người cao tuổi. Là Business Analyst, bạn sẽ làm gì để biến yêu cầu này thành tiêu chí đo lường được?",
+    "options": [
+      "A. Ghi nhận yêu cầu 'dễ sử dụng' trong tài liệu và để nhóm thiết kế tự xử lý.",
+      "B. Đề xuất tổ chức thử nghiệm khả năng sử dụng (usability testing) với nhóm người dùng đại diện (bao gồm người cao tuổi) và đo lường tỷ lệ thành công hoàn thành tác vụ, thời gian hoàn thành, và mức độ hài lòng theo thang đo SUS (System Usability Scale).",
+      "C. Yêu cầu bên kinh doanh cung cấp định nghĩa cụ thể về 'dễ sử dụng'.",
+      "D. Đề xuất sử dụng các tiêu chuẩn thiết kế chung mà không cần kiểm chứng với người dùng thực tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó biến yêu cầu trừu tượng thành tiêu chí đo lường được thông qua thử nghiệm thực tế với người dùng, sử dụng các chỉ số khách quan như tỷ lệ thành công và SUS. Điều này đảm bảo tính ứng dụng và hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "SKILL",
+    "id": "q_1780504388843_ADVANCED_2_sg20"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý kho hàng cho doanh nghiệp bán lẻ yêu cầu hệ thống phải 'bảo mật cao' để ngăn chặn gian lận. Tuy nhiên, bên kinh doanh không muốn đầu tư thêm vào các giải pháp bảo mật phức tạp do lo ngại về chi phí. Là Business Analyst, bạn sẽ làm gì để giải quyết mâu thuẫn này?",
+    "options": [
+      "A. Chấp nhận yêu cầu 'bảo mật cao' và yêu cầu bên kinh doanh chấp nhận chi phí phát sinh.",
+      "B. Đề xuất phân tích rủi ro bảo mật (security risk assessment) để xác định các mối đe dọa cụ thể và đề xuất các biện pháp bảo mật phù hợp với mức độ rủi ro, đồng thời ước tính chi phí và lợi ích của từng giải pháp.",
+      "C. Bỏ qua yêu cầu bảo mật vì bên kinh doanh không muốn đầu tư thêm.",
+      "D. Đề xuất sử dụng các giải pháp bảo mật miễn phí mà không đánh giá hiệu quả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó giải quyết mâu thuẫn bằng cách phân tích rủi ro cụ thể và đề xuất các giải pháp bảo mật phù hợp với mức độ rủi ro, giúp cân bằng giữa yêu cầu bảo mật và hạn chế ngân sách.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504388844_ADVANCED_3_hqc5"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống CRM cho công ty viễn thông, bên kinh doanh yêu cầu hệ thống phải xử lý được 10,000 yêu cầu đồng thời trong giờ cao điểm. Tuy nhiên, nhóm kỹ thuật cho rằng yêu cầu này vượt quá khả năng của hạ tầng hiện tại. Là Business Analyst, bạn sẽ làm gì để xác định tiêu chí hiệu năng hợp lý?",
+    "options": [
+      "A. Chấp nhận yêu cầu 10,000 yêu cầu đồng thời và yêu cầu nhóm kỹ thuật tìm giải pháp.",
+      "B. Đề xuất phân tích lưu lượng truy cập thực tế trong 3 tháng gần nhất, sau đó đề xuất ngưỡng hiệu năng dựa trên dữ liệu thực tế (ví dụ: 90% lưu lượng cao điểm hiện tại) và kế hoạch nâng cấp hạ tầng dần dần.",
+      "C. Bỏ qua yêu cầu này vì không thể đạt được.",
+      "D. Đề xuất giảm yêu cầu xuống mức thấp nhất có thể mà không cần phân tích dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó sử dụng dữ liệu thực tế để xác định tiêu chí hiệu năng hợp lý, đồng thời đề xuất kế hoạch cải thiện dần. Điều này đảm bảo tính khả thi và hiệu quả của giải pháp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "SITUATION",
+    "id": "q_1780504388845_ADVANCED_4_5jea"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống thanh toán trực tuyến cho ngân hàng yêu cầu hệ thống phải tuân thủ tiêu chuẩn bảo mật PCI DSS. Tuy nhiên, nhóm phát triển cho rằng việc tuân thủ đầy đủ tiêu chuẩn này sẽ làm tăng đáng kể thời gian và chi phí dự án. Là Business Analyst, bạn sẽ làm gì để đảm bảo hệ thống đáp ứng yêu cầu bảo mật mà không vượt quá ngân sách?",
+    "options": [
+      "A. Yêu cầu nhóm phát triển tuân thủ đầy đủ PCI DSS bất kể chi phí.",
+      "B. Đề xuất phân tích các yêu cầu cụ thể của PCI DSS và xác định các biện pháp bảo mật tối thiểu cần thiết để đáp ứng mức độ rủi ro chấp nhận được, đồng thời đề xuất lộ trình triển khai các biện pháp bổ sung trong tương lai.",
+      "C. Bỏ qua yêu cầu PCI DSS vì chi phí quá cao.",
+      "D. Đề xuất sử dụng giải pháp thay thế không tuân thủ PCI DSS nhưng có chi phí thấp hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó đảm bảo hệ thống đáp ứng yêu cầu bảo mật cơ bản mà không vượt quá ngân sách, đồng thời có kế hoạch cải thiện dần. Điều này cân bằng giữa yêu cầu bảo mật và hạn chế tài chính.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504388845_ADVANCED_5_k1k2"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng số, bên kinh doanh yêu cầu ứng dụng phải 'tương thích với tất cả thiết bị di động'. Nhóm kỹ thuật cho rằng yêu cầu này không khả thi do sự đa dạng của thiết bị và hệ điều hành. Là Business Analyst, bạn sẽ làm gì để biến yêu cầu này thành tiêu chí cụ thể và khả thi?",
+    "options": [
+      "A. Chấp nhận yêu cầu 'tương thích với tất cả thiết bị di động' và để nhóm kỹ thuật tự xử lý.",
+      "B. Đề xuất phân tích thị phần thiết bị di động tại thị trường mục tiêu, sau đó xác định danh sách các thiết bị và hệ điều hành phổ biến nhất (ví dụ: top 80% thị phần) để tập trung hỗ trợ, đồng thời xây dựng lộ trình hỗ trợ mở rộng trong tương lai.",
+      "C. Bỏ qua yêu cầu này vì không thể đạt được.",
+      "D. Đề xuất hỗ trợ chỉ một số ít thiết bị phổ biến mà không cần phân tích dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó biến yêu cầu trừu tượng thành tiêu chí cụ thể và khả thi bằng cách phân tích dữ liệu thị trường và tập trung vào các thiết bị phổ biến nhất. Điều này đảm bảo tính ứng dụng và hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "SKILL",
+    "id": "q_1780504388846_ADVANCED_6_ll3e"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý nhân sự cho tập đoàn đa quốc gia yêu cầu hệ thống phải 'linh hoạt' để thích ứng với các quy định lao động khác nhau tại các quốc gia. Nhóm phát triển cho rằng yêu cầu này quá mơ hồ và khó triển khai. Là Business Analyst, bạn sẽ làm gì để làm rõ yêu cầu này?",
+    "options": [
+      "A. Ghi nhận yêu cầu 'linh hoạt' trong tài liệu và để nhóm phát triển tự xử lý.",
+      "B. Đề xuất tổ chức workshop với đại diện từ các quốc gia để xác định các quy định lao động cụ thể cần hỗ trợ, sau đó xây dựng danh sách các tính năng linh hoạt cần thiết (ví dụ: cấu hình quy tắc tính lương, thời gian làm việc) và ưu tiên triển khai theo mức độ quan trọng.",
+      "C. Bỏ qua yêu cầu này vì quá mơ hồ.",
+      "D. Đề xuất xây dựng hệ thống chỉ hỗ trợ quy định lao động của một quốc gia và bỏ qua các quốc gia khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó làm rõ yêu cầu 'linh hoạt' bằng cách xác định các quy định cụ thể và xây dựng danh sách tính năng cần thiết. Điều này đảm bảo tính khả thi và hiệu quả của giải pháp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "SITUATION",
+    "id": "q_1780504388847_ADVANCED_7_vp04"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống core banking, bên kinh doanh yêu cầu hệ thống phải 'không bao giờ gián đoạn' trong giờ làm việc. Nhóm kỹ thuật cho rằng yêu cầu này không khả thi do cần thời gian bảo trì. Là Business Analyst, bạn sẽ làm gì để giải quyết mâu thuẫn này?",
+    "options": [
+      "A. Chấp nhận yêu cầu 'không bao giờ gián đoạn' và yêu cầu nhóm kỹ thuật tìm giải pháp.",
+      "B. Đề xuất phân tích lịch sử sự cố và thời gian bảo trì, sau đó đề xuất SLA cụ thể (ví dụ: thời gian hoạt động 99.95% trong giờ làm việc, với thời gian bảo trì tối đa 1 giờ mỗi tháng vào khung giờ thấp điểm) và xây dựng kế hoạch bảo trì linh hoạt.",
+      "C. Bỏ qua yêu cầu này vì không thể đạt được.",
+      "D. Đề xuất giảm yêu cầu xuống mức thấp nhất có thể mà không cần phân tích dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó biến yêu cầu trừu tượng thành SLA cụ thể và khả thi, đồng thời xây dựng kế hoạch bảo trì linh hoạt. Điều này cân bằng giữa yêu cầu kinh doanh và khả năng kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504388847_ADVANCED_8_xzpt"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý chuỗi cung ứng cho doanh nghiệp sản xuất yêu cầu hệ thống phải 'dễ dàng tích hợp' với các hệ thống hiện có. Nhóm phát triển cho rằng yêu cầu này quá chung chung và khó triển khai. Là Business Analyst, bạn sẽ làm gì để làm rõ yêu cầu này?",
+    "options": [
+      "A. Ghi nhận yêu cầu 'dễ dàng tích hợp' trong tài liệu và để nhóm phát triển tự xử lý.",
+      "B. Đề xuất lập danh sách các hệ thống hiện có cần tích hợp, xác định các giao thức và định dạng dữ liệu hỗ trợ (ví dụ: REST API, SOAP, CSV), sau đó xây dựng lộ trình tích hợp theo mức độ ưu tiên và đánh giá khả năng kỹ thuật.",
+      "C. Bỏ qua yêu cầu này vì quá chung chung.",
+      "D. Đề xuất tích hợp chỉ với một hệ thống quan trọng nhất mà không cần phân tích chi tiết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó làm rõ yêu cầu 'dễ dàng tích hợp' bằng cách xác định các hệ thống cụ thể, giao thức và định dạng dữ liệu cần hỗ trợ. Điều này đảm bảo tính khả thi và hiệu quả của giải pháp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "SKILL",
+    "id": "q_1780504388848_ADVANCED_9_tmym"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng số, bên kinh doanh yêu cầu ứng dụng phải 'đảm bảo an toàn tuyệt đối' cho dữ liệu khách hàng. Nhóm phát triển cho rằng yêu cầu này không khả thi do luôn tồn tại rủi ro bảo mật. Là Business Analyst, bạn sẽ làm gì để giải quyết yêu cầu này?",
+    "options": [
+      "A. Chấp nhận yêu cầu 'an toàn tuyệt đối' và yêu cầu nhóm phát triển tìm giải pháp.",
+      "B. Đề xuất phân tích rủi ro bảo mật cụ thể (ví dụ: rò rỉ dữ liệu, tấn công mạng) và xây dựng các biện pháp bảo mật tương ứng (ví dụ: mã hóa dữ liệu, xác thực đa yếu tố, giám sát xâm nhập), đồng thời xác định mức độ rủi ro chấp nhận được cho từng loại dữ liệu.",
+      "C. Bỏ qua yêu cầu này vì không thể đạt được.",
+      "D. Đề xuất sử dụng các biện pháp bảo mật cơ bản mà không cần phân tích rủi ro."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó giải quyết yêu cầu 'an toàn tuyệt đối' bằng cách phân tích rủi ro cụ thể và xây dựng các biện pháp bảo mật tương ứng, đồng thời xác định mức độ rủi ro chấp nhận được. Điều này đảm bảo tính khả thi và hiệu quả.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504388849_ADVANCED_10_vqvx"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống e-learning cho trường đại học yêu cầu hệ thống phải 'hỗ trợ số lượng lớn người dùng truy cập đồng thời' trong các kỳ thi trực tuyến. Nhóm kỹ thuật cho rằng yêu cầu này quá chung chung và khó ước lượng tài nguyên cần thiết. Là Business Analyst, bạn sẽ làm gì để làm rõ yêu cầu này?",
+    "options": [
+      "A. Chấp nhận yêu cầu 'hỗ trợ số lượng lớn người dùng' và để nhóm kỹ thuật tự xử lý.",
+      "B. Đề xuất thu thập dữ liệu về số lượng sinh viên tham gia kỳ thi trực tuyến trong các kỳ trước, sau đó ước lượng số lượng người dùng đồng thời tối đa (ví dụ: 10,000 người dùng trong 1 giờ) và xác định yêu cầu hiệu năng cụ thể (ví dụ: thời gian phản hồi dưới 3 giây cho 95% yêu cầu).",
+      "C. Bỏ qua yêu cầu này vì quá chung chung.",
+      "D. Đề xuất xây dựng hệ thống chỉ hỗ trợ số lượng người dùng tối thiểu mà không cần phân tích dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó làm rõ yêu cầu bằng cách sử dụng dữ liệu thực tế để ước lượng số lượng người dùng và xác định yêu cầu hiệu năng cụ thể. Điều này đảm bảo tính khả thi và hiệu quả của giải pháp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "SITUATION",
+    "id": "q_1780504388850_ADVANCED_11_4aky"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng di động cho ngân hàng, bên kinh doanh yêu cầu ứng dụng phải 'tương thích với tất cả các phiên bản hệ điều hành Android'. Nhóm phát triển cho rằng yêu cầu này không khả thi do sự phân mảnh của hệ điều hành Android. Là Business Analyst, bạn sẽ làm gì để giải quyết yêu cầu này?",
+    "options": [
+      "A. Chấp nhận yêu cầu 'tương thích với tất cả phiên bản Android' và yêu cầu nhóm phát triển tìm giải pháp.",
+      "B. Đề xuất phân tích thị phần các phiên bản Android tại thị trường mục tiêu, sau đó xác định danh sách các phiên bản phổ biến nhất (ví dụ: top 90% thị phần) để hỗ trợ, đồng thời xây dựng kế hoạch kiểm thử và cập nhật ứng dụng cho các phiên bản mới.",
+      "C. Bỏ qua yêu cầu này vì không thể đạt được.",
+      "D. Đề xuất hỗ trợ chỉ phiên bản Android mới nhất mà không cần phân tích dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó giải quyết yêu cầu bằng cách phân tích dữ liệu thị trường và tập trung hỗ trợ các phiên bản phổ biến nhất. Điều này đảm bảo tính khả thi và hiệu quả của giải pháp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Non-functional Requirements",
+    "category": "SKILL",
+    "id": "q_1780504388850_ADVANCED_12_qwo4"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi số ngân hàng tại Việt Nam, lãnh đạo yêu cầu hệ thống mới phải 'đảm bảo trải nghiệm người dùng liền mạch'. Là Business Analyst cấp độ chuyên gia, bước đầu tiên bạn sẽ làm gì để biến yêu cầu trừu tượng này thành tiêu chí đo lường được?",
+    "options": [
+      "A. Đề xuất sử dụng công cụ Google Analytics để đo lường thời gian tải trang trung bình, vì đây là tiêu chí phổ biến trong ngành.",
+      "B. Tổ chức workshop với các bên liên quan để xác định các kịch bản sử dụng (user journey) quan trọng nhất, sau đó phân tích các điểm chạm (touchpoints) có thể gây gián đoạn trải nghiệm.",
+      "C. Áp dụng tiêu chuẩn ISO 25010 về chất lượng phần mềm, tập trung vào các thuộc tính như 'learnability' và 'operability' để định lượng yêu cầu.",
+      "D. Yêu cầu đội phát triển xây dựng prototype và tiến hành thử nghiệm A/B testing với 100 người dùng để thu thập dữ liệu thực tế."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để biến yêu cầu trừu tượng thành tiêu chí đo lường, cần hiểu rõ bối cảnh kinh doanh và hành vi người dùng. Workshop với các bên liên quan giúp xác định các kịch bản sử dụng cốt lõi và điểm chạm quan trọng, từ đó mới có thể định lượng được các chỉ số như 'tỷ lệ hoàn thành tác vụ không lỗi' hay 'thời gian trung bình để hoàn thành một giao dịch'. Các phương án khác thiếu bước phân tích chiến lược hoặc phụ thuộc quá sớm vào công cụ/dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504504060_EXPERT_0_wd3x"
+  },
+  {
+    "questionText": "Một tập đoàn bán lẻ đa quốc gia yêu cầu hệ thống ERP mới phải 'đáp ứng nhu cầu mở rộng quy mô toàn cầu'. Là Business Analyst, bạn nhận diện rằng yêu cầu này ẩn chứa rủi ro về tính khả thi kỹ thuật. Chiến lược nào sau đây thể hiện tư duy lãnh đạo chuyển đổi số hiệu quả nhất?",
+    "options": [
+      "A. Đề xuất sử dụng kiến trúc microservices kết hợp với công nghệ containerization (như Docker, Kubernetes) để đảm bảo khả năng mở rộng linh hoạt, đồng thời xây dựng lộ trình triển khai theo từng giai đoạn dựa trên mức độ ưu tiên của thị trường.",
+      "B. Yêu cầu đội kỹ thuật cung cấp báo cáo đánh giá khả năng mở rộng của các giải pháp ERP hiện có trên thị trường (SAP, Oracle) và chọn giải pháp có điểm số cao nhất về scalability.",
+      "C. Đưa ra yêu cầu kỹ thuật chi tiết về số lượng người dùng đồng thời tối đa (concurrent users) và dung lượng dữ liệu dự kiến trong 5 năm tới để đội phát triển có cơ sở thiết kế hệ thống.",
+      "D. Tổ chức hội thảo với các chuyên gia công nghệ để xác định công nghệ mới nhất có thể hỗ trợ mở rộng quy mô, sau đó đề xuất thay đổi toàn bộ kiến trúc hệ thống hiện tại."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tư duy lãnh đạo chuyển đổi số đòi hỏi cân bằng giữa tầm nhìn chiến lược và khả năng thực thi. Phương án A không chỉ đề xuất giải pháp kỹ thuật phù hợp (microservices + containerization) mà còn kết hợp với lộ trình triển khai thực tế, giúp giảm thiểu rủi ro và đảm bảo tính khả thi. Các phương án khác thiếu sự kết nối giữa chiến lược kinh doanh và giải pháp kỹ thuật hoặc quá tập trung vào công nghệ mà không xem xét bối cảnh triển khai.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "SITUATION",
+    "id": "q_1780504504061_EXPERT_1_rib1"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống core banking cho một ngân hàng Việt Nam, yêu cầu về 'availability' được đặt ra là 99.99% (tương đương 52.56 phút downtime/năm). Tuy nhiên, đội kỹ thuật báo cáo rằng chi phí để đạt được mức này sẽ vượt quá ngân sách dự án 30%. Là Business Analyst, bạn sẽ làm gì để giải quyết mâu thuẫn này?",
+    "options": [
+      "A. Đề xuất giảm yêu cầu availability xuống 99.9% (8.76 giờ downtime/năm) để phù hợp với ngân sách, đồng thời giải thích rõ ràng cho lãnh đạo về sự đánh đổi giữa chi phí và rủi ro.",
+      "B. Phân tích tác động kinh doanh của downtime đối với các dịch vụ cốt lõi (ví dụ: giao dịch liên ngân hàng, thanh toán quốc tế) và đề xuất áp dụng availability 99.99% cho các dịch vụ quan trọng nhất, 99.9% cho các dịch vụ ít quan trọng hơn.",
+      "C. Yêu cầu đội kỹ thuật tìm kiếm giải pháp công nghệ thay thế có chi phí thấp hơn nhưng vẫn đảm bảo availability 99.99%, chẳng hạn như sử dụng multi-cloud hoặc hybrid cloud.",
+      "D. Tiến hành phân tích chi phí-lợi ích (cost-benefit analysis) để chứng minh rằng chi phí đầu tư ban đầu cao sẽ mang lại lợi ích dài hạn, từ đó thuyết phục lãnh đạo chấp nhận ngân sách bổ sung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tư duy chiến lược đòi hỏi phân tích sâu về tác động kinh doanh và ưu tiên nguồn lực. Phương án B thể hiện khả năng phân tích vi mô (từng dịch vụ cụ thể) và vĩ mô (toàn bộ hệ thống), đồng thời đưa ra giải pháp linh hoạt phù hợp với ngân sách. Các phương án khác thiếu sự phân tích chi tiết về tác động kinh doanh hoặc không giải quyết triệt để mâu thuẫn giữa yêu cầu và khả năng thực thi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504504062_EXPERT_2_3wwf"
+  },
+  {
+    "questionText": "Một công ty logistics tại Việt Nam muốn triển khai hệ thống quản lý kho thông minh với yêu cầu 'hệ thống phải đảm bảo tính bảo mật cao'. Là Business Analyst, bạn nhận thấy yêu cầu này quá chung chung và có thể dẫn đến rủi ro về chi phí và thời gian triển khai. Bước tiếp theo quan trọng nhất bạn cần thực hiện là gì?",
+    "options": [
+      "A. Áp dụng framework bảo mật tiêu chuẩn như ISO 27001 để xây dựng bộ yêu cầu bảo mật chi tiết, bao gồm các biện pháp như mã hóa dữ liệu, xác thực đa yếu tố (MFA), và kiểm toán bảo mật định kỳ.",
+      "B. Tổ chức buổi làm việc với lãnh đạo và đội bảo mật để xác định các tài sản dữ liệu quan trọng nhất (ví dụ: thông tin khách hàng, lộ trình vận chuyển) và các mối đe dọa tiềm ẩn (ví dụ: tấn công ransomware, rò rỉ dữ liệu).",
+      "C. Yêu cầu đội phát triển cung cấp danh sách các biện pháp bảo mật kỹ thuật có thể triển khai (như firewall, IDS/IPS) và lựa chọn các biện pháp phù hợp với ngân sách dự án.",
+      "D. Đề xuất thuê một công ty tư vấn bảo mật độc lập để đánh giá rủi ro và đưa ra khuyến nghị về các biện pháp bảo mật cần thiết cho hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để biến yêu cầu trừu tượng thành tiêu chí cụ thể, cần hiểu rõ bối cảnh kinh doanh và rủi ro thực tế. Phương án B tập trung vào việc xác định tài sản quan trọng và mối đe dọa tiềm ẩn, từ đó mới có thể xây dựng các yêu cầu bảo mật có ý nghĩa và khả thi. Các phương án khác thiếu bước phân tích chiến lược hoặc phụ thuộc quá nhiều vào các tiêu chuẩn/giải pháp kỹ thuật mà không xem xét bối cảnh cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "SKILL",
+    "id": "q_1780504504063_EXPERT_3_xzsb"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống e-commerce cho một chuỗi siêu thị tại Việt Nam, yêu cầu về 'performance' được đặt ra là 'hệ thống phải xử lý 10,000 giao dịch đồng thời trong giờ cao điểm'. Tuy nhiên, đội phát triển báo cáo rằng hệ thống hiện tại chỉ có thể xử lý tối đa 5,000 giao dịch đồng thời. Là Business Analyst, bạn sẽ đề xuất giải pháp nào sau đây để cân bằng giữa kỳ vọng kinh doanh và khả năng kỹ thuật?",
+    "options": [
+      "A. Đề xuất triển khai hệ thống theo kiến trúc microservices và sử dụng công nghệ caching (như Redis) để cải thiện hiệu năng, đồng thời xây dựng lộ trình nâng cấp phần cứng theo từng giai đoạn.",
+      "B. Yêu cầu đội phát triển tối ưu hóa mã nguồn và cơ sở dữ liệu để đạt được mục tiêu 10,000 giao dịch đồng thời mà không cần thay đổi kiến trúc hệ thống.",
+      "C. Đề xuất giảm yêu cầu xuống 5,000 giao dịch đồng thời và giải thích cho lãnh đạo rằng đây là giới hạn kỹ thuật hiện tại, đồng thời cam kết cải thiện trong các phiên bản sau.",
+      "D. Phân tích dữ liệu lịch sử để xác định thời gian cao điểm thực tế và đề xuất áp dụng cơ chế giới hạn giao dịch (rate limiting) hoặc xếp hàng (queueing) trong các khung giờ này."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Giải pháp hiệu quả nhất cần dựa trên dữ liệu thực tế và cân bằng giữa yêu cầu kinh doanh với khả năng kỹ thuật. Phương án D thể hiện tư duy phân tích dữ liệu và giải pháp linh hoạt, giúp giảm tải cho hệ thống trong giờ cao điểm mà không yêu cầu thay đổi kiến trúc lớn. Các phương án khác thiếu sự phân tích dựa trên dữ liệu hoặc không giải quyết triệt để vấn đề.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "SITUATION",
+    "id": "q_1780504504064_EXPERT_4_fc7e"
+  },
+  {
+    "questionText": "Một ngân hàng tại Việt Nam đang triển khai hệ thống ngân hàng số mới với yêu cầu 'hệ thống phải đảm bảo tính khả dụng (usability) cao cho người dùng cuối'. Là Business Analyst, bạn cần xác định các tiêu chí đo lường cụ thể cho yêu cầu này. Tiêu chí nào sau đây KHÔNG phù hợp để đo lường tính khả dụng của hệ thống?",
+    "options": [
+      "A. Tỷ lệ hoàn thành tác vụ (task completion rate) của người dùng khi thực hiện các kịch bản sử dụng chính (ví dụ: chuyển tiền, thanh toán hóa đơn).",
+      "B. Số lượng lỗi hệ thống (system errors) trung bình trên mỗi 1,000 giao dịch trong điều kiện tải cao.",
+      "C. Thời gian trung bình để người dùng mới hoàn thành một tác vụ lần đầu tiên (ví dụ: đăng ký tài khoản) mà không cần hỗ trợ.",
+      "D. Mức độ hài lòng của người dùng (user satisfaction score) thông qua khảo sát sau khi sử dụng hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Số lượng lỗi hệ thống phản ánh tính ổn định (reliability) và hiệu năng (performance) của hệ thống, không phải tính khả dụng (usability). Tính khả dụng tập trung vào trải nghiệm người dùng, vì vậy các tiêu chí như tỷ lệ hoàn thành tác vụ, thời gian hoàn thành tác vụ, và mức độ hài lòng của người dùng mới là phù hợp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504504065_EXPERT_5_q1e1"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý chuỗi cung ứng cho một tập đoàn sản xuất đa quốc gia, yêu cầu về 'security' được đặt ra là 'hệ thống phải tuân thủ các tiêu chuẩn bảo mật quốc tế'. Là Business Analyst, bạn cần xác định các tiêu chuẩn cụ thể để làm rõ yêu cầu này. Tiêu chuẩn nào sau đây KHÔNG trực tiếp liên quan đến bảo mật hệ thống thông tin?",
+    "options": [
+      "A. ISO 27001 (Information Security Management Systems)",
+      "B. PCI DSS (Payment Card Industry Data Security Standard)",
+      "C. GDPR (General Data Protection Regulation)",
+      "D. ITIL (Information Technology Infrastructure Library)"
+    ],
+    "correctAnswer": "D",
+    "explanation": "ITIL là khung quản lý dịch vụ CNTT (IT Service Management), không phải tiêu chuẩn bảo mật. ISO 27001, PCI DSS và GDPR đều là các tiêu chuẩn/quy định liên quan trực tiếp đến bảo mật hệ thống thông tin.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504504065_EXPERT_6_r5ca"
+  },
+  {
+    "questionText": "Một công ty viễn thông tại Việt Nam yêu cầu hệ thống quản lý khách hàng mới phải 'đảm bảo thời gian phản hồi (response time) dưới 2 giây cho 95% các yêu cầu'. Tuy nhiên, đội phát triển báo cáo rằng yêu cầu này khó đạt được do cơ sở dữ liệu hiện tại có cấu trúc phức tạp. Là Business Analyst, bạn sẽ đề xuất giải pháp nào sau đây để giải quyết vấn đề này mà không làm giảm chất lượng dịch vụ?",
+    "options": [
+      "A. Đề xuất sử dụng công nghệ caching (như Redis) để lưu trữ tạm thời dữ liệu thường xuyên truy cập, giảm tải cho cơ sở dữ liệu chính.",
+      "B. Yêu cầu đội phát triển tối ưu hóa truy vấn cơ sở dữ liệu và tái cấu trúc dữ liệu để đạt được thời gian phản hồi dưới 2 giây.",
+      "C. Đề xuất giảm yêu cầu xuống 'thời gian phản hồi dưới 3 giây cho 90% các yêu cầu' để phù hợp với khả năng kỹ thuật hiện tại.",
+      "D. Phân tích dữ liệu lịch sử để xác định các loại yêu cầu chiếm phần lớn lưu lượng và đề xuất áp dụng thời gian phản hồi khác nhau cho từng loại yêu cầu (ví dụ: 2 giây cho yêu cầu đơn giản, 5 giây cho yêu cầu phức tạp)."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Giải pháp hiệu quả cần dựa trên phân tích dữ liệu và linh hoạt trong việc áp dụng yêu cầu. Phương án D thể hiện tư duy phân tích vi mô (từng loại yêu cầu) và đưa ra giải pháp thực tế, giúp cân bằng giữa kỳ vọng kinh doanh và khả năng kỹ thuật. Các phương án khác thiếu sự phân tích chi tiết hoặc không giải quyết triệt để vấn đề.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "SITUATION",
+    "id": "q_1780504504066_EXPERT_7_rjwm"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống thanh toán điện tử cho một ngân hàng, yêu cầu về 'availability' được đặt ra là 99.95%. Tuy nhiên, đội phát triển báo cáo rằng chi phí để đạt được mức này sẽ rất cao do yêu cầu về hạ tầng dự phòng. Là Business Analyst, bạn cần đánh giá tác động kinh doanh của downtime để đưa ra quyết định. Yếu tố nào sau đây KHÔNG phải là tác động trực tiếp của downtime đối với ngân hàng?",
+    "options": [
+      "A. Mất doanh thu từ các giao dịch không thể thực hiện trong thời gian hệ thống ngừng hoạt động.",
+      "B. Giảm uy tín và lòng tin của khách hàng đối với ngân hàng, dẫn đến mất khách hàng.",
+      "C. Tăng chi phí vận hành do phải triển khai các biện pháp khắc phục sự cố và bồi thường cho khách hàng.",
+      "D. Giảm hiệu suất làm việc của nhân viên ngân hàng do phải sử dụng các quy trình thủ công thay thế."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Giảm hiệu suất làm việc của nhân viên là tác động gián tiếp và không phải là yếu tố kinh doanh cốt lõi như mất doanh thu, giảm uy tín, hay tăng chi phí vận hành. Các tác động này thường được ưu tiên xem xét khi đánh giá yêu cầu về availability.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "ANALYSIS",
+    "id": "q_1780504504067_EXPERT_8_12ig"
+  },
+  {
+    "questionText": "Một công ty thương mại điện tử tại Việt Nam yêu cầu hệ thống mới phải 'đảm bảo tính bảo mật cao cho dữ liệu khách hàng'. Là Business Analyst, bạn cần xác định các biện pháp bảo mật cụ thể để đáp ứng yêu cầu này. Biện pháp nào sau đây KHÔNG trực tiếp liên quan đến bảo mật dữ liệu khách hàng?",
+    "options": [
+      "A. Mã hóa dữ liệu (data encryption) khi lưu trữ và truyền tải.",
+      "B. Xác thực đa yếu tố (Multi-Factor Authentication - MFA) cho người dùng.",
+      "C. Kiểm toán bảo mật (security audit) định kỳ để phát hiện và khắc phục lỗ hổng.",
+      "D. Tối ưu hóa truy vấn cơ sở dữ liệu để cải thiện hiệu năng hệ thống."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Tối ưu hóa truy vấn cơ sở dữ liệu liên quan đến hiệu năng (performance) của hệ thống, không phải bảo mật dữ liệu. Các biện pháp như mã hóa dữ liệu, xác thực đa yếu tố, và kiểm toán bảo mật mới là các biện pháp trực tiếp bảo vệ dữ liệu khách hàng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504504067_EXPERT_9_vbba"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống CRM cho một công ty bảo hiểm, yêu cầu về 'usability' được đặt ra là 'hệ thống phải dễ sử dụng cho cả nhân viên văn phòng và đại lý bán hàng'. Là Business Analyst, bạn cần xác định các tiêu chí đo lường cụ thể cho yêu cầu này. Tiêu chí nào sau đây phù hợp nhất để đo lường tính khả dụng cho cả hai nhóm người dùng?",
+    "options": [
+      "A. Thời gian đào tạo trung bình để nhân viên và đại lý có thể sử dụng thành thạo hệ thống.",
+      "B. Số lượng tính năng (features) mà hệ thống cung cấp cho từng nhóm người dùng.",
+      "C. Tỷ lệ hoàn thành tác vụ (task completion rate) cho các kịch bản sử dụng chính của từng nhóm người dùng (ví dụ: tạo hợp đồng bảo hiểm cho nhân viên, tra cứu thông tin khách hàng cho đại lý).",
+      "D. Mức độ hài lòng của người dùng (user satisfaction score) thông qua khảo sát chung cho cả hai nhóm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tỷ lệ hoàn thành tác vụ là tiêu chí khách quan và có thể đo lường được cho từng nhóm người dùng cụ thể, phản ánh trực tiếp tính khả dụng của hệ thống. Các tiêu chí khác như thời gian đào tạo hay mức độ hài lòng có thể bị ảnh hưởng bởi nhiều yếu tố khác ngoài tính khả dụng, hoặc không phân biệt được sự khác biệt giữa các nhóm người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "SKILL",
+    "id": "q_1780504504068_EXPERT_10_2q69"
+  },
+  {
+    "questionText": "Một tập đoàn sản xuất tại Việt Nam yêu cầu hệ thống ERP mới phải 'đảm bảo khả năng mở rộng (scalability) để hỗ trợ tăng trưởng kinh doanh trong 5 năm tới'. Là Business Analyst, bạn cần xác định các yếu tố kỹ thuật ảnh hưởng đến khả năng mở rộng. Yếu tố nào sau đây KHÔNG trực tiếp ảnh hưởng đến scalability của hệ thống?",
+    "options": [
+      "A. Kiến trúc hệ thống (ví dụ: monolithic vs. microservices).",
+      "B. Công nghệ cơ sở dữ liệu (ví dụ: SQL vs. NoSQL).",
+      "C. Giao diện người dùng (user interface) của hệ thống.",
+      "D. Cơ chế quản lý phiên làm việc (session management) của hệ thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giao diện người dùng ảnh hưởng đến tính khả dụng (usability) của hệ thống, không phải khả năng mở rộng (scalability). Các yếu tố như kiến trúc hệ thống, công nghệ cơ sở dữ liệu, và cơ chế quản lý phiên làm việc mới là các yếu tố kỹ thuật trực tiếp ảnh hưởng đến khả năng mở rộng của hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Non-functional Requirements",
+    "category": "KNOWLEDGE",
+    "id": "q_1780504504069_EXPERT_11_5phc"
+  }
+]

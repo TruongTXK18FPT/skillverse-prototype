@@ -1,0 +1,798 @@
+[
+  {
+    "questionText": "Trong vai trò Business Analyst, mục đích chính của việc tổ chức một workshop khám phá (discovery workshop) là gì?",
+    "options": [
+      "A. Để trình bày giải pháp công nghệ mới nhất cho khách hàng",
+      "B. Để thu thập, làm rõ và thống nhất các yêu cầu nghiệp vụ từ các bên liên quan",
+      "C. Để đào tạo nhân viên về quy trình làm việc của công ty",
+      "D. Để ký kết hợp đồng với khách hàng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Discovery workshop giúp Business Analyst hiểu rõ nhu cầu, vấn đề và mục tiêu của các bên liên quan, từ đó thống nhất yêu cầu nghiệp vụ trước khi triển khai dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503148388_BEGINNER_0_srns"
+  },
+  {
+    "questionText": "Khi lên kế hoạch cho một workshop, yếu tố nào sau đây KHÔNG phải là trách nhiệm chính của Business Analyst?",
+    "options": [
+      "A. Xác định mục tiêu và phạm vi của workshop",
+      "B. Lập danh sách các bên liên quan cần tham gia",
+      "C. Quyết định chi tiết kỹ thuật của giải pháp phần mềm",
+      "D. Chuẩn bị agenda và tài liệu hỗ trợ"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Business Analyst tập trung vào nghiệp vụ và yêu cầu, không quyết định chi tiết kỹ thuật phần mềm (đây là trách nhiệm của đội kỹ thuật).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503148388_BEGINNER_1_1s7v"
+  },
+  {
+    "questionText": "Trong một workshop, một bên liên quan liên tục ngắt lời người khác và không cho phép thảo luận theo agenda. Business Analyst nên làm gì?",
+    "options": [
+      "A. Bỏ qua và tiếp tục theo agenda đã định",
+      "B. Nhắc nhở lịch sự về quy tắc thảo luận và mời các bên khác đóng góp ý kiến",
+      "C. Yêu cầu bên liên quan đó rời khỏi phòng họp",
+      "D. Đổi chủ đề để tránh xung đột"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Analyst cần duy trì trật tự và đảm bảo mọi người đều có cơ hội đóng góp, đồng thời giữ không khí tích cực cho workshop.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "SITUATION",
+    "id": "q_1780503148388_BEGINNER_2_1rbf"
+  },
+  {
+    "questionText": "Kỹ thuật nào sau đây thường được sử dụng để thu thập yêu cầu ẩn (hidden requirements) trong workshop?",
+    "options": [
+      "A. Brainstorming",
+      "B. Trình chiếu slide dài về quy trình",
+      "C. Yêu cầu các bên liên quan viết báo cáo chi tiết",
+      "D. Đặt câu hỏi đóng (yes/no questions) cho tất cả các bên"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Brainstorming khuyến khích mọi người đóng góp ý tưởng tự do, giúp phát hiện các yêu cầu ẩn mà không dễ dàng nhận ra trong thảo luận thông thường.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503148388_BEGINNER_3_lu3l"
+  },
+  {
+    "questionText": "Sau khi kết thúc workshop, Business Analyst cần làm gì để đảm bảo các kết quả được triển khai hiệu quả?",
+    "options": [
+      "A. Gửi email cảm ơn đến tất cả người tham dự",
+      "B. Ghi lại các quyết định, hành động cụ thể (action items) và người chịu trách nhiệm (owner)",
+      "C. Đợi khách hàng tự triển khai mà không cần theo dõi",
+      "D. Chỉnh sửa lại tài liệu workshop mà không thông báo cho các bên liên quan"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc ghi lại action items và owner giúp đảm bảo các kết quả workshop được thực hiện đúng thời hạn và trách nhiệm rõ ràng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503148388_BEGINNER_4_g3ov"
+  },
+  {
+    "questionText": "Trong một workshop, hai bên liên quan có quan điểm trái ngược về một yêu cầu nghiệp vụ. Business Analyst nên làm gì đầu tiên?",
+    "options": [
+      "A. Chọn bên có cấp bậc cao hơn để quyết định",
+      "B. Tạm dừng thảo luận và chuyển sang chủ đề khác",
+      "C. Yêu cầu cả hai bên trình bày rõ lý do và lợi ích của quan điểm mình",
+      "D. Đưa ra quyết định thay cho họ"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Business Analyst cần tạo điều kiện để các bên hiểu quan điểm của nhau, từ đó tìm ra giải pháp thống nhất dựa trên dữ liệu và mục tiêu chung.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "SITUATION",
+    "id": "q_1780503148388_BEGINNER_5_jsc4"
+  },
+  {
+    "questionText": "Đâu là cách hiệu quả nhất để Business Analyst đảm bảo mọi người tham gia đóng góp ý kiến trong workshop?",
+    "options": [
+      "A. Chỉ mời những người có kinh nghiệm tham gia",
+      "B. Sử dụng các câu hỏi mở và kỹ thuật như round-robin để khuyến khích đóng góp",
+      "C. Đọc to agenda và yêu cầu mọi người im lặng lắng nghe",
+      "D. Giới hạn thời gian phát biểu của mỗi người dưới 30 giây"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu hỏi mở và kỹ thuật như round-robin giúp mọi người cảm thấy thoải mái và có cơ hội đóng góp, tránh tình trạng chỉ một số người phát biểu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503148388_BEGINNER_6_8dpc"
+  },
+  {
+    "questionText": "Trong quá trình workshop, Business Analyst nhận thấy một số bên liên quan không hiểu rõ thuật ngữ nghiệp vụ. Hành động nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Tiếp tục thảo luận mà không giải thích để tiết kiệm thời gian",
+      "B. Giải thích lại thuật ngữ một cách đơn giản và kiểm tra sự hiểu biết của mọi người",
+      "C. Yêu cầu họ tự tìm hiểu sau workshop",
+      "D. Bỏ qua thuật ngữ đó và sử dụng từ khác mà không thông báo"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Analyst cần đảm bảo mọi người hiểu rõ thuật ngữ để tránh hiểu nhầm và đưa ra quyết định sai lệch.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "SITUATION",
+    "id": "q_1780503148388_BEGINNER_7_stzd"
+  },
+  {
+    "questionText": "Khi lên agenda cho workshop, Business Analyst nên ưu tiên điều nào sau đây?",
+    "options": [
+      "A. Bao gồm càng nhiều chủ đề càng tốt để tận dụng thời gian",
+      "B. Chỉ tập trung vào các chủ đề kỹ thuật phức tạp",
+      "C. Xác định rõ mục tiêu, thời gian cho từng chủ đề và ưu tiên các vấn đề quan trọng nhất",
+      "D. Để agenda mở và linh hoạt, không cần chuẩn bị trước"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Agenda cần rõ ràng, có mục tiêu cụ thể và thời gian hợp lý để đảm bảo workshop hiệu quả và không bị lạc hướng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503148388_BEGINNER_8_3goy"
+  },
+  {
+    "questionText": "Trong một workshop tại dự án ngân hàng, một bên liên quan đề xuất tính năng mới nhưng không phù hợp với mục tiêu dự án. Business Analyst nên làm gì?",
+    "options": [
+      "A. Ghi nhận ý kiến nhưng giải thích rõ lý do không thể triển khai trong phạm vi hiện tại",
+      "B. Bỏ qua ý kiến đó mà không phản hồi",
+      "C. Đồng ý triển khai ngay để tránh xung đột",
+      "D. Yêu cầu bên liên quan đó rời khỏi workshop"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Business Analyst cần ghi nhận ý kiến nhưng phải giải thích rõ ràng về phạm vi dự án để tránh hiểu lầm và duy trì sự minh bạch.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "SITUATION",
+    "id": "q_1780503148388_BEGINNER_9_3aom"
+  },
+  {
+    "questionText": "Kỹ thuật 'Parking Lot' trong workshop được sử dụng để làm gì?",
+    "options": [
+      "A. Để ghi lại các vấn đề hoặc ý tưởng không liên quan trực tiếp đến chủ đề hiện tại nhưng cần xem xét sau",
+      "B. Để quyết định người tham gia workshop",
+      "C. Để phân bổ thời gian cho từng chủ đề",
+      "D. Để trình bày giải pháp kỹ thuật"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Parking Lot giúp Business Analyst ghi lại các vấn đề ngoài phạm vi hiện tại để không làm gián đoạn workshop, đồng thời đảm bảo các ý tưởng đó không bị bỏ sót.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503148388_BEGINNER_10_bj1g"
+  },
+  {
+    "questionText": "Sau khi workshop kết thúc, Business Analyst cần gửi tài liệu gì cho các bên liên quan?",
+    "options": [
+      "A. Chỉ gửi biên bản họp (minutes) ghi lại các quyết định và action items",
+      "B. Gửi toàn bộ slide trình chiếu trong workshop",
+      "C. Gửi biên bản họp kèm theo tài liệu tham khảo và lịch trình tiếp theo",
+      "D. Không cần gửi tài liệu vì đã thảo luận trực tiếp"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Biên bản họp kèm tài liệu tham khảo và lịch trình tiếp theo giúp các bên liên quan nắm rõ kết quả và bước tiếp theo, đảm bảo tính minh bạch và trách nhiệm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503148388_BEGINNER_11_bhy8"
+  },
+  {
+    "questionText": "Trong workshop, Business Analyst sử dụng câu hỏi nào sau đây để khuyến khích thảo luận sâu hơn về một vấn đề?",
+    "options": [
+      "A. 'Bạn có đồng ý với giải pháp này không?'",
+      "B. 'Tại sao bạn nghĩ giải pháp này sẽ hiệu quả?'",
+      "C. 'Chúng ta nên kết thúc chủ đề này ở đây đúng không?'",
+      "D. 'Ai là người chịu trách nhiệm cho vấn đề này?'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu hỏi 'Tại sao' khuyến khích các bên giải thích lý do và suy nghĩ sâu hơn, giúp làm rõ yêu cầu và quan điểm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503148388_BEGINNER_12_k7xf"
+  },
+  {
+    "questionText": "Trong buổi workshop phát hiện yêu cầu cho dự án triển khai hệ thống ERP tại một công ty sản xuất Việt Nam, bạn nhận thấy các phòng ban tranh cãi về thứ tự ưu tiên các module. Kỹ thuật nào sau đây phù hợp nhất để giúp nhóm đạt được đồng thuận về thứ tự ưu tiên mà không thiên vị phòng ban nào?",
+    "options": [
+      "A. Sử dụng kỹ thuật Dot Voting để mỗi thành viên bỏ phiếu cho các module quan trọng nhất theo quan điểm cá nhân.",
+      "B. Yêu cầu lãnh đạo công ty quyết định và thông báo kết quả cho các phòng ban.",
+      "C. Chia nhóm theo phòng ban và để mỗi nhóm trình bày lý do ưu tiên module của mình, sau đó tổng hợp ý kiến.",
+      "D. Áp dụng kỹ thuật MoSCoW (Must have, Should have, Could have, Won’t have) nhưng chỉ dựa trên ý kiến của phòng IT."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Dot Voting là kỹ thuật hiệu quả để thu thập ý kiến đa chiều và đảm bảo tính dân chủ, tránh thiên vị. Nó cho phép tất cả thành viên tham gia đóng góp và kết quả phản ánh được sự đồng thuận chung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "SITUATION",
+    "id": "q_1780503222277_INTERMEDIATE_0_rkk2"
+  },
+  {
+    "questionText": "Bạn đang điều phối workshop để xác định quy trình xử lý đơn hàng cho một sàn thương mại điện tử. Nhóm thảo luận lan man và không tập trung vào vấn đề chính. Bạn nên làm gì để đưa cuộc thảo luận trở lại đúng trọng tâm?",
+    "options": [
+      "A. Lập tức ngắt lời và yêu cầu nhóm tập trung vào chủ đề đã định trước.",
+      "B. Sử dụng kỹ thuật Parking Lot để ghi lại các ý tưởng ngoài lề, sau đó quay lại chủ đề chính.",
+      "C. Đề nghị nhóm bầu ra một người phát ngôn duy nhất để tránh lan man.",
+      "D. Kết thúc workshop sớm và yêu cầu nhóm chuẩn bị lại nội dung trước khi họp tiếp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Parking Lot là kỹ thuật giúp ghi lại các ý tưởng không liên quan trực tiếp để xử lý sau, đồng thời giữ cho cuộc thảo luận tập trung vào chủ đề chính mà không làm gián đoạn tư duy của nhóm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503222277_INTERMEDIATE_1_hp9q"
+  },
+  {
+    "questionText": "Trong buổi workshop thiết kế quy trình phê duyệt ngân sách cho một tập đoàn đa quốc gia, bạn nhận thấy hai trưởng phòng tài chính và kinh doanh có quan điểm trái ngược về ngưỡng phê duyệt. Bạn nên làm gì để giải quyết xung đột này?",
+    "options": [
+      "A. Đề nghị cả hai trình bày dữ liệu và lập luận của mình, sau đó sử dụng kỹ thuật Decision Matrix để đánh giá khách quan.",
+      "B. Yêu cầu lãnh đạo cấp cao can thiệp và đưa ra quyết định cuối cùng.",
+      "C. Đề xuất tạm dừng workshop và tiếp tục thảo luận riêng với từng bên.",
+      "D. Bỏ phiếu kín để xác định quan điểm nào được đa số ủng hộ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Decision Matrix giúp đánh giá các lựa chọn dựa trên các tiêu chí khách quan, giảm thiểu ảnh hưởng của cảm xúc cá nhân và thúc đẩy sự đồng thuận dựa trên dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "SITUATION",
+    "id": "q_1780503222277_INTERMEDIATE_2_2bbz"
+  },
+  {
+    "questionText": "Bạn đang tổ chức workshop để thu thập yêu cầu cho dự án số hóa quy trình tuyển dụng tại một công ty Việt Nam. Làm thế nào để đảm bảo các yêu cầu ẩn (hidden requirements) được làm rõ?",
+    "options": [
+      "A. Yêu cầu tất cả thành viên viết ra yêu cầu của mình trên giấy note và dán lên bảng, sau đó phân loại.",
+      "B. Sử dụng kỹ thuật 5 Whys để đào sâu vào từng yêu cầu được nêu ra, tìm hiểu nguyên nhân gốc rễ.",
+      "C. Chỉ tập trung vào các yêu cầu được lãnh đạo phòng nhân sự nêu ra.",
+      "D. Tạo bảng khảo sát và gửi cho tất cả nhân viên sau workshop để thu thập thêm ý kiến."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kỹ thuật 5 Whys giúp khai thác các yêu cầu ẩn bằng cách đặt câu hỏi liên tục để tìm ra nguyên nhân gốc rễ, từ đó làm rõ các nhu cầu thực sự của người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503222277_INTERMEDIATE_3_m6gd"
+  },
+  {
+    "questionText": "Trong buổi workshop cải tiến quy trình chăm sóc khách hàng cho một ngân hàng, bạn muốn đảm bảo các hành động tiếp theo và trách nhiệm được ghi nhận rõ ràng. Cách nào sau đây hiệu quả nhất?",
+    "options": [
+      "A. Ghi chú lại trên bảng và chụp ảnh gửi cho nhóm sau workshop.",
+      "B. Sử dụng mẫu RACI (Responsible, Accountable, Consulted, Informed) để phân công trách nhiệm cho từng hành động.",
+      "C. Yêu cầu trưởng nhóm tự phân công nhiệm vụ cho các thành viên sau workshop.",
+      "D. Đề nghị mỗi thành viên tự ghi nhớ các hành động của mình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mẫu RACI giúp phân định rõ ràng trách nhiệm và vai trò của từng cá nhân đối với các hành động, đảm bảo không có sự chồng chéo hoặc bỏ sót.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503222277_INTERMEDIATE_4_1lnf"
+  },
+  {
+    "questionText": "Bạn đang chuẩn bị workshop để xác định yêu cầu cho hệ thống quản lý kho hàng tại một công ty logistics. Đâu là cách hiệu quả nhất để đảm bảo workshop đạt được mục tiêu đã đề ra?",
+    "options": [
+      "A. Gửi trước tài liệu chuẩn bị cho tất cả thành viên và yêu cầu họ đọc trước.",
+      "B. Xây dựng agenda chi tiết với thời gian cụ thể cho từng hoạt động và chia sẻ trước với nhóm.",
+      "C. Mời tất cả các phòng ban liên quan tham gia mà không cần chuẩn bị trước.",
+      "D. Chỉ mời những người có thẩm quyền quyết định để tránh lãng phí thời gian."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Agenda chi tiết giúp định hướng cuộc thảo luận, đảm bảo thời gian được sử dụng hiệu quả và tất cả các mục tiêu của workshop đều được đề cập.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503222277_INTERMEDIATE_5_yw52"
+  },
+  {
+    "questionText": "Trong workshop thiết kế quy trình xử lý khiếu nại khách hàng cho một công ty viễn thông, bạn nhận thấy nhóm có xu hướng tập trung vào các trường hợp đặc biệt hiếm gặp. Bạn nên làm gì để đưa cuộc thảo luận về các trường hợp phổ biến?",
+    "options": [
+      "A. Yêu cầu nhóm bỏ qua các trường hợp đặc biệt và chỉ tập trung vào quy trình chính.",
+      "B. Sử dụng kỹ thuật Pareto (80/20) để xác định 20% trường hợp gây ra 80% vấn đề và tập trung vào đó.",
+      "C. Đề nghị mỗi thành viên chỉ nêu ra một trường hợp đặc biệt để tránh lan man.",
+      "D. Kết thúc phần thảo luận và chuyển sang chủ đề khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kỹ thuật Pareto giúp nhóm tập trung vào các vấn đề có tác động lớn nhất, tối ưu hóa thời gian và nguồn lực trong việc thiết kế quy trình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503222278_INTERMEDIATE_6_nnfi"
+  },
+  {
+    "questionText": "Bạn đang điều phối workshop để xác định yêu cầu cho hệ thống quản lý dự án tại một công ty công nghệ. Một thành viên liên tục ngắt lời người khác và chi phối cuộc thảo luận. Bạn nên xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Nhắc nhở trực tiếp trước nhóm rằng mọi người cần tôn trọng lượt lời của nhau.",
+      "B. Sử dụng kỹ thuật Round Robin để đảm bảo mọi người đều có cơ hội phát biểu.",
+      "C. Yêu cầu thành viên đó rời khỏi phòng để tránh ảnh hưởng đến nhóm.",
+      "D. Bỏ qua và để cuộc thảo luận tiếp tục theo hướng tự nhiên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Round Robin là kỹ thuật giúp đảm bảo tất cả thành viên đều có cơ hội đóng góp ý kiến, ngăn chặn tình trạng một người chi phối cuộc thảo luận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503222278_INTERMEDIATE_7_3rpg"
+  },
+  {
+    "questionText": "Trong buổi workshop cải tiến quy trình đặt hàng cho một chuỗi siêu thị, bạn muốn đảm bảo các bước của quy trình được mô tả chính xác và dễ hiểu. Kỹ thuật nào sau đây phù hợp nhất?",
+    "options": [
+      "A. Yêu cầu nhóm viết ra các bước dưới dạng văn bản và đọc lại cho cả nhóm.",
+      "B. Sử dụng kỹ thuật Process Mapping (lập bản đồ quy trình) với các ký hiệu chuẩn để mô tả quy trình.",
+      "C. Đề nghị mỗi thành viên tự vẽ quy trình theo cách hiểu của mình và trình bày.",
+      "D. Chỉ tập trung vào các bước chính và bỏ qua các ngoại lệ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Process Mapping giúp trực quan hóa quy trình, làm rõ các bước, đầu vào, đầu ra và trách nhiệm, đồng thời dễ dàng phát hiện các điểm chưa hợp lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503222278_INTERMEDIATE_8_o05x"
+  },
+  {
+    "questionText": "Bạn đang tổ chức workshop để thu thập yêu cầu cho hệ thống quản lý nhân sự tại một công ty sản xuất. Làm thế nào để đảm bảo các yêu cầu từ nhiều phòng ban khác nhau không bị mâu thuẫn?",
+    "options": [
+      "A. Yêu cầu mỗi phòng ban gửi yêu cầu riêng và tổng hợp sau.",
+      "B. Sử dụng kỹ thuật Impact Mapping để xác định mối liên hệ giữa các yêu cầu và mục tiêu chung của dự án.",
+      "C. Chỉ tập trung vào yêu cầu của phòng nhân sự vì họ là người sử dụng chính.",
+      "D. Đề nghị lãnh đạo công ty quyết định yêu cầu nào được ưu tiên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Impact Mapping giúp làm rõ mối liên hệ giữa các yêu cầu và mục tiêu dự án, từ đó giảm thiểu mâu thuẫn và đảm bảo sự thống nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503222279_INTERMEDIATE_9_2pi3"
+  },
+  {
+    "questionText": "Trong workshop thiết kế quy trình phê duyệt tài liệu cho một công ty dược phẩm, bạn muốn đảm bảo các quyết định được đưa ra dựa trên dữ liệu và tiêu chí khách quan. Kỹ thuật nào sau đây phù hợp nhất?",
+    "options": [
+      "A. Sử dụng kỹ thuật Brainstorming để thu thập ý kiến từ tất cả thành viên.",
+      "B. Áp dụng kỹ thuật Weighted Scoring để đánh giá các lựa chọn dựa trên các tiêu chí đã thống nhất.",
+      "C. Đề nghị trưởng phòng quyết định dựa trên kinh nghiệm của mình.",
+      "D. Bỏ phiếu kín để chọn ra phương án được đa số ủng hộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Weighted Scoring giúp đánh giá các lựa chọn dựa trên các tiêu chí và trọng số đã thống nhất, đảm bảo quyết định được đưa ra một cách khách quan và minh bạch.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503222279_INTERMEDIATE_10_p5at"
+  },
+  {
+    "questionText": "Bạn đang chuẩn bị workshop để xác định yêu cầu cho hệ thống quản lý quan hệ khách hàng (CRM) tại một công ty bảo hiểm. Đâu là cách hiệu quả nhất để thu hút sự tham gia tích cực của các thành viên?",
+    "options": [
+      "A. Gửi email thông báo về workshop và yêu cầu mọi người tham gia.",
+      "B. Thiết kế các hoạt động tương tác như chia nhóm thảo luận, sử dụng sticky notes và trò chơi đóng vai (role-playing).",
+      "C. Yêu cầu mỗi thành viên chuẩn bị bài thuyết trình về yêu cầu của mình.",
+      "D. Chỉ mời những người có kinh nghiệm về CRM để đảm bảo chất lượng thảo luận."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các hoạt động tương tác giúp tăng cường sự tham gia và thu thập ý kiến đa dạng từ các thành viên, đồng thời tạo không khí thoải mái cho cuộc thảo luận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503222279_INTERMEDIATE_11_oimw"
+  },
+  {
+    "questionText": "Trong workshop cải tiến quy trình xử lý đơn hàng cho một công ty thương mại điện tử, bạn nhận thấy nhóm đang tập trung quá nhiều vào các vấn đề kỹ thuật mà bỏ qua trải nghiệm người dùng. Bạn nên làm gì để điều chỉnh hướng thảo luận?",
+    "options": [
+      "A. Yêu cầu nhóm ngừng thảo luận về kỹ thuật và chỉ tập trung vào trải nghiệm người dùng.",
+      "B. Sử dụng kỹ thuật User Story Mapping để trực quan hóa hành trình người dùng và xác định các điểm cần cải thiện.",
+      "C. Đề nghị nhóm bỏ qua trải nghiệm người dùng vì đây là vấn đề của phòng marketing.",
+      "D. Kết thúc phần thảo luận và chuyển sang chủ đề khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User Story Mapping giúp nhóm tập trung vào hành trình và trải nghiệm của người dùng, từ đó xác định các yêu cầu và cải tiến phù hợp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503222279_INTERMEDIATE_12_vbi1"
+  },
+  {
+    "questionText": "Bạn đang điều phối workshop để xác định yêu cầu cho hệ thống quản lý kho tại một công ty logistics. Làm thế nào để đảm bảo các kết quả của workshop được ghi nhận đầy đủ và chính xác?",
+    "options": [
+      "A. Ghi âm cuộc thảo luận và gửi cho nhóm sau workshop.",
+      "B. Sử dụng kỹ thuật Visual Facilitation để ghi lại các ý chính trên bảng hoặc flipchart trong suốt buổi workshop.",
+      "C. Yêu cầu một thành viên ghi chép và gửi lại cho nhóm sau workshop.",
+      "D. Chỉ ghi lại các quyết định cuối cùng và bỏ qua các ý kiến thảo luận."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Visual Facilitation giúp ghi lại các ý chính một cách trực quan và dễ hiểu, đồng thời khuyến khích sự tham gia của nhóm trong suốt quá trình thảo luận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503222279_INTERMEDIATE_13_6kzt"
+  },
+  {
+    "questionText": "Trong một workshop phát hiện yêu cầu cho dự án chuyển đổi số tại ngân hàng Việt Nam, các bên liên quan từ phòng Kinh doanh, CNTT và Tuân thủ có quan điểm trái ngược về mức độ ưu tiên của tính năng 'Xác thực sinh trắc học'. Bạn sẽ áp dụng kỹ thuật nào sau đây để làm rõ nguyên nhân gốc rễ của mâu thuẫn và đạt được đồng thuận?",
+    "options": [
+      "A. Brainstorming: Yêu cầu mỗi bên liệt kê tất cả các rủi ro và lợi ích của tính năng, sau đó bỏ phiếu chọn phương án tối ưu.",
+      "B. Root Cause Analysis (5 Whys): Đặt câu hỏi 'Tại sao' liên tục cho mỗi quan điểm để tìm ra nguyên nhân sâu xa của sự bất đồng, sau đó đề xuất giải pháp giải quyết gốc rễ.",
+      "C. Dot Voting: Phân bổ số phiếu giới hạn cho các bên và yêu cầu họ bầu chọn tính năng quan trọng nhất, sau đó công bố kết quả ngay lập tức.",
+      "D. SWOT Analysis: Phân tích ưu, nhược, cơ hội và thách thức của tính năng, sau đó yêu cầu nhóm thống nhất dựa trên ma trận SWOT."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kỹ thuật 5 Whys giúp làm rõ nguyên nhân gốc rễ của mâu thuẫn (ví dụ: phòng Kinh doanh lo ngại ảnh hưởng đến trải nghiệm khách hàng, CNTT lo ngại về chi phí triển khai, Tuân thủ lo ngại về rủi ro pháp lý) thay vì chỉ giải quyết bề nổi. Điều này giúp nhóm đạt được đồng thuận bền vững hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "SITUATION",
+    "id": "q_1780503319752_ADVANCED_0_cic8"
+  },
+  {
+    "questionText": "Bạn đang dẫn dắt workshop thiết kế quy trình cho dự án tối ưu hóa chuỗi cung ứng tại công ty sản xuất đa quốc gia. Nhóm thảo luận bị sa đà vào chi tiết kỹ thuật của hệ thống ERP mà bỏ qua việc xác định các điểm nghẽn chính trong quy trình hiện tại. Bạn sẽ làm gì để đưa nhóm trở lại trọng tâm?",
+    " ": "options",
+    "options": [
+      "A. Tạm dừng thảo luận, yêu cầu nhóm liệt kê lại tất cả các vấn đề đã nêu và phân loại theo mức độ ảnh hưởng đến mục tiêu dự án.",
+      "B. Đặt câu hỏi: 'Nếu chúng ta không thay đổi quy trình hiện tại, đâu sẽ là rủi ro lớn nhất ảnh hưởng đến mục tiêu giảm 20% thời gian giao hàng?' để chuyển hướng tập trung.",
+      "C. Chia nhóm thành các tiểu nhóm nhỏ, mỗi nhóm tập trung vào một phần của quy trình và trình bày lại sau 15 phút.",
+      "D. Ghi lại tất cả các ý kiến lên bảng trắng, sau đó yêu cầu nhóm bỏ phiếu chọn ra 3 vấn đề quan trọng nhất để ưu tiên giải quyết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu hỏi này sử dụng kỹ thuật 'Focusing Question' để buộc nhóm suy nghĩ về tác động của vấn đề đối với mục tiêu dự án, từ đó đưa họ trở lại trọng tâm chính là xác định điểm nghẽn quy trình thay vì sa đà vào chi tiết kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503319753_ADVANCED_1_fe66"
+  },
+  {
+    "questionText": "Trong workshop phát hiện yêu cầu cho dự án triển khai hệ thống CRM tại công ty bảo hiểm, một số thành viên từ phòng Kinh doanh tỏ ra miễn cưỡng chia sẻ ý kiến vì lo ngại ý tưởng của họ sẽ bị bác bỏ. Bạn sẽ sử dụng kỹ thuật nào để khuyến khích sự tham gia tích cực?",
+    "options": [
+      "A. Round Robin: Yêu cầu mỗi người lần lượt phát biểu ý kiến, không bỏ qua ai.",
+      "B. Silent Brainstorming: Yêu cầu mọi người viết ý tưởng lên giấy dán trong 5 phút trước khi trình bày, sau đó nhóm thảo luận chung.",
+      "C. Fishbowl Discussion: Chọn 3-4 người đại diện từ các phòng ban để thảo luận sâu, những người còn lại quan sát và đặt câu hỏi.",
+      "D. Role Playing: Phân công vai trò cụ thể (khách hàng, nhân viên kinh doanh, quản lý) để mọi người trải nghiệm góc nhìn khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Silent Brainstorming giúp loại bỏ áp lực phải phát biểu trước đám đông và đảm bảo mọi người đều có cơ hội đóng góp ý tưởng mà không lo bị đánh giá. Điều này đặc biệt hiệu quả với những người ngại chia sẻ trong nhóm lớn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503319753_ADVANCED_2_1obv"
+  },
+  {
+    "questionText": "Sau khi workshop kết thúc, bạn nhận thấy các action items được ghi lại một cách chung chung (ví dụ: 'Cải thiện quy trình phê duyệt') và thiếu thông tin về người chịu trách nhiệm cũng như thời hạn hoàn thành. Bạn sẽ làm gì để đảm bảo các action items rõ ràng và khả thi?",
+    "options": [
+      "A. Yêu cầu nhóm xác định lại action items theo nguyên tắc SMART (Specific, Measurable, Achievable, Relevant, Time-bound) ngay trong buổi workshop.",
+      "B. Gửi email sau workshop yêu cầu mỗi người tự xác định action items của mình và báo cáo lại trong vòng 24 giờ.",
+      "C. Sử dụng mẫu bảng RACI (Responsible, Accountable, Consulted, Informed) để phân công trách nhiệm cho từng action item và trình bày lại cho nhóm xác nhận.",
+      "D. Chọn ra 3 action items quan trọng nhất và yêu cầu trưởng nhóm của từng phòng ban chịu trách nhiệm triển khai."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mẫu RACI giúp làm rõ vai trò và trách nhiệm cho từng action item, đảm bảo không có sự chồng chéo hoặc bỏ sót. Việc trình bày lại cho nhóm xác nhận cũng giúp tăng cam kết thực hiện.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503319754_ADVANCED_3_97ge"
+  },
+  {
+    "questionText": "Trong workshop thiết kế giải pháp cho dự án số hóa quy trình tại công ty logistics, bạn phát hiện một số yêu cầu tiềm ẩn (hidden requirements) liên quan đến tích hợp với hệ thống của đối tác bên ngoài. Bạn sẽ sử dụng kỹ thuật nào để làm rõ những yêu cầu này?",
+    "options": [
+      "A. Process Mapping: Vẽ lại toàn bộ quy trình hiện tại và yêu cầu nhóm xác định các điểm giao tiếp với hệ thống đối tác.",
+      "B. Use Case Analysis: Phân tích các tình huống sử dụng cụ thể liên quan đến đối tác để làm rõ yêu cầu tích hợp.",
+      "C. Context Diagramming: Vẽ sơ đồ ngữ cảnh (context diagram) để xác định tất cả các bên liên quan bên ngoài và luồng dữ liệu trao đổi với họ.",
+      "D. Force Field Analysis: Phân tích các yếu tố thúc đẩy và cản trở việc tích hợp với hệ thống đối tác để xác định yêu cầu kỹ thuật."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Context Diagramming giúp trực quan hóa tất cả các bên liên quan bên ngoài và luồng dữ liệu trao đổi, từ đó làm rõ các yêu cầu tích hợp tiềm ẩn mà nhóm có thể bỏ sót. Đây là kỹ thuật hiệu quả để xác định phạm vi hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503319755_ADVANCED_4_t04b"
+  },
+  {
+    "questionText": "Bạn đang dẫn dắt workshop phát hiện yêu cầu cho dự án triển khai hệ thống quản lý kho tại công ty bán lẻ. Nhóm thảo luận bị chia rẽ giữa hai giải pháp: (1) Tích hợp với hệ thống ERP hiện tại hoặc (2) Triển khai hệ thống quản lý kho độc lập. Bạn sẽ làm gì để giúp nhóm đưa ra quyết định?",
+    "options": [
+      "A. Yêu cầu mỗi bên trình bày ưu và nhược điểm của giải pháp họ đề xuất, sau đó bỏ phiếu chọn giải pháp được đa số ủng hộ.",
+      "B. Sử dụng kỹ thuật Decision Matrix: Xác định các tiêu chí đánh giá (chi phí, thời gian triển khai, khả năng tích hợp,...) và cho điểm từng giải pháp theo các tiêu chí này.",
+      "C. Đề xuất một giải pháp trung gian (ví dụ: tích hợp một phần với ERP) và yêu cầu nhóm thảo luận xem có khả thi không.",
+      "D. Tạm dừng thảo luận và đề nghị nhóm thu thập thêm dữ liệu về chi phí và rủi ro của từng giải pháp trước khi quyết định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Decision Matrix giúp nhóm đưa ra quyết định dựa trên dữ liệu khách quan thay vì cảm tính. Việc xác định các tiêu chí đánh giá và cho điểm giúp làm rõ ưu nhược điểm của từng giải pháp, từ đó đưa ra lựa chọn tối ưu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "SITUATION",
+    "id": "q_1780503319756_ADVANCED_5_0lfm"
+  },
+  {
+    "questionText": "Trong workshop thiết kế quy trình cho dự án tối ưu hóa dịch vụ khách hàng tại ngân hàng, bạn nhận thấy một số thành viên từ phòng Dịch vụ khách hàng liên tục ngắt lời và chi phối cuộc thảo luận. Bạn sẽ làm gì để đảm bảo sự tham gia cân bằng của tất cả các bên?",
+    "options": [
+      "A. Áp dụng quy tắc 'No Interruption': Yêu cầu mọi người không được ngắt lời khi người khác đang phát biểu.",
+      "B. Sử dụng kỹ thuật Parking Lot: Ghi lại các ý kiến của người chi phối lên bảng 'Parking Lot' và yêu cầu nhóm quay lại thảo luận sau.",
+      "C. Chia nhóm thành các cặp (pair discussion) để thảo luận trước khi trình bày ý kiến trước toàn nhóm, giúp giảm sự chi phối của cá nhân.",
+      "D. Đặt câu hỏi trực tiếp cho những người ít phát biểu: 'Anh/Chị có ý kiến gì về vấn đề này không?' để khuyến khích họ tham gia."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kỹ thuật pair discussion giúp giảm sự chi phối của cá nhân trong nhóm lớn, đồng thời tạo cơ hội cho những người ít phát biểu được đóng góp ý kiến trong môi trường thoải mái hơn. Điều này đảm bảo sự tham gia cân bằng hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503319757_ADVANCED_6_i8ar"
+  },
+  {
+    "questionText": "Bạn đang chuẩn bị workshop phát hiện yêu cầu cho dự án triển khai hệ thống quản lý dự án tại công ty xây dựng. Để đảm bảo workshop hiệu quả, bạn cần làm gì để thu hút sự tham gia của các bên liên quan từ phòng Kỹ thuật, Dự án và Tài chính?",
+    "options": [
+      "A. Gửi email mời tham dự kèm theo agenda chi tiết và yêu cầu xác nhận tham gia trước 3 ngày.",
+      "B. Tổ chức một buổi giới thiệu ngắn (pre-workshop briefing) để giải thích mục tiêu, lợi ích và vai trò của từng bên trong workshop.",
+      "C. Yêu cầu trưởng phòng của từng bộ phận chỉ định người tham dự và đảm bảo họ có đủ thẩm quyền để đưa ra quyết định.",
+      "D. Chuẩn bị các câu hỏi cụ thể liên quan đến từng bộ phận và gửi trước cho họ để họ có thời gian chuẩn bị ý kiến."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pre-workshop briefing giúp các bên liên quan hiểu rõ mục tiêu, lợi ích và vai trò của họ trong workshop, từ đó tăng cam kết tham gia. Điều này đặc biệt quan trọng với các bên có lịch trình bận rộn hoặc ít quan tâm đến dự án.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503319757_ADVANCED_7_h73b"
+  },
+  {
+    "questionText": "Trong workshop thiết kế giải pháp cho dự án số hóa quy trình tại công ty sản xuất, bạn phát hiện một số yêu cầu mâu thuẫn giữa phòng Sản xuất và phòng Chất lượng. Bạn sẽ làm gì để giải quyết mâu thuẫn này mà không làm chậm tiến độ workshop?",
+    "options": [
+      "A. Đề xuất tạm dừng thảo luận về các yêu cầu mâu thuẫn và chuyển sang các chủ đề khác, sau đó quay lại sau khi thu thập thêm thông tin.",
+      "B. Sử dụng kỹ thuật 'Agree to Disagree': Ghi nhận sự bất đồng và đề xuất thành lập tiểu nhóm để giải quyết sau workshop.",
+      "C. Áp dụng kỹ thuật 'Trade-off Analysis': Yêu cầu mỗi bên trình bày tác động của yêu cầu của họ đến mục tiêu dự án, sau đó tìm giải pháp dung hòa.",
+      "D. Đề xuất bỏ phiếu để chọn ra yêu cầu được đa số ủng hộ, sau đó yêu cầu bên còn lại chấp nhận kết quả."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trade-off Analysis giúp các bên hiểu rõ tác động của yêu cầu của mình đến mục tiêu chung, từ đó tìm ra giải pháp dung hòa mà không làm chậm tiến độ workshop. Kỹ thuật này khuyến khích sự hợp tác thay vì đối đầu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "SITUATION",
+    "id": "q_1780503319759_ADVANCED_8_8kzz"
+  },
+  {
+    "questionText": "Sau workshop phát hiện yêu cầu cho dự án triển khai hệ thống ERP, bạn nhận thấy một số action items liên quan đến tích hợp với hệ thống của đối tác bên ngoài thiếu thông tin về rủi ro kỹ thuật. Bạn sẽ làm gì để đảm bảo action items đầy đủ và khả thi?",
+    "options": [
+      "A. Yêu cầu nhóm kỹ thuật bổ sung thông tin về rủi ro kỹ thuật và gửi lại cho bạn trong vòng 2 ngày.",
+      "B. Tổ chức một buổi họp ngắn với nhóm kỹ thuật và đối tác để xác định rõ rủi ro và điều chỉnh action items.",
+      "C. Sử dụng kỹ thuật Risk Assessment: Yêu cầu nhóm xác định rủi ro, xác suất xảy ra, tác động và biện pháp giảm thiểu cho từng action item liên quan đến tích hợp.",
+      "D. Ghi chú lại các rủi ro tiềm ẩn và đề xuất thành lập một nhóm chuyên trách để theo dõi và giải quyết các vấn đề tích hợp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kỹ thuật Risk Assessment giúp làm rõ rủi ro kỹ thuật, xác suất và tác động, từ đó điều chỉnh action items để bao gồm cả biện pháp giảm thiểu. Điều này đảm bảo action items đầy đủ và khả thi hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503319760_ADVANCED_9_jwez"
+  },
+  {
+    "questionText": "Bạn đang dẫn dắt workshop thiết kế quy trình cho dự án tối ưu hóa dịch vụ khách hàng tại công ty viễn thông. Nhóm thảo luận bị sa đà vào việc tranh luận về chi tiết kỹ thuật của hệ thống CRM mà bỏ qua việc xác định các điểm đau chính của khách hàng. Bạn sẽ làm gì để đưa nhóm trở lại trọng tâm?",
+    "options": [
+      "A. Tạm dừng thảo luận và yêu cầu nhóm liệt kê lại tất cả các vấn đề đã nêu, sau đó phân loại theo mức độ ảnh hưởng đến trải nghiệm khách hàng.",
+      "B. Đặt câu hỏi: 'Nếu chúng ta không giải quyết được 3 vấn đề lớn nhất của khách hàng trong 3 tháng tới, đâu sẽ là hậu quả nghiêm trọng nhất?' để chuyển hướng tập trung.",
+      "C. Chia nhóm thành các tiểu nhóm nhỏ, mỗi nhóm tập trung vào một phần của quy trình và trình bày lại sau 15 phút.",
+      "D. Ghi lại tất cả các ý kiến lên bảng trắng, sau đó yêu cầu nhóm bỏ phiếu chọn ra 3 vấn đề quan trọng nhất để ưu tiên giải quyết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu hỏi này sử dụng kỹ thuật 'Focusing Question' để buộc nhóm suy nghĩ về tác động của vấn đề đối với mục tiêu chính của dự án (trải nghiệm khách hàng), từ đó đưa họ trở lại trọng tâm thay vì sa đà vào chi tiết kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503319761_ADVANCED_10_kcz2"
+  },
+  {
+    "questionText": "Trong workshop phát hiện yêu cầu cho dự án triển khai hệ thống quản lý kho tại công ty bán lẻ, bạn nhận thấy một số thành viên từ phòng Kinh doanh liên tục đưa ra các yêu cầu mới mà không có cơ sở dữ liệu hoặc phân tích. Bạn sẽ làm gì để quản lý các yêu cầu này hiệu quả?",
+    "options": [
+      "A. Ghi nhận tất cả các yêu cầu mới và yêu cầu nhóm thảo luận để xác định mức độ ưu tiên sau workshop.",
+      "B. Sử dụng kỹ thuật MoSCoW (Must have, Should have, Could have, Won't have) để phân loại các yêu cầu và yêu cầu nhóm cung cấp cơ sở dữ liệu cho từng loại.",
+      "C. Đề xuất tạm dừng thảo luận về các yêu cầu mới và yêu cầu nhóm tập trung vào các yêu cầu đã được xác định từ trước.",
+      "D. Yêu cầu mỗi người đưa ra yêu cầu mới phải trình bày cơ sở dữ liệu và tác động của yêu cầu đó đến mục tiêu dự án."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Yêu cầu mỗi người trình bày cơ sở dữ liệu và tác động của yêu cầu mới giúp đảm bảo các yêu cầu được đưa ra dựa trên phân tích chứ không phải cảm tính. Điều này cũng giúp nhóm đánh giá tính khả thi và mức độ ưu tiên của từng yêu cầu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "SITUATION",
+    "id": "q_1780503319761_ADVANCED_11_curf"
+  },
+  {
+    "questionText": "Bạn đang chuẩn bị agenda cho workshop phát hiện yêu cầu cho dự án triển khai hệ thống quản lý nhân sự tại công ty công nghệ. Để đảm bảo workshop hiệu quả, bạn cần bao gồm những nội dung nào sau đây?",
+    "options": [
+      "A. Mục tiêu workshop, danh sách người tham dự, thời gian và địa điểm, các chủ đề thảo luận, và tài liệu tham khảo.",
+      "B. Mục tiêu workshop, các kỹ thuật facilitation sẽ sử dụng, thời gian cho từng chủ đề, vai trò của người tham dự, và các action items dự kiến.",
+      "C. Mục tiêu workshop, agenda chi tiết với thời gian cụ thể cho từng hoạt động, vai trò và trách nhiệm của người tham dự, và các quy tắc cơ bản (ground rules).",
+      "D. Mục tiêu workshop, danh sách câu hỏi thảo luận, tài liệu chuẩn bị cho người tham dự, và kế hoạch theo dõi sau workshop."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Agenda hiệu quả cần bao gồm mục tiêu rõ ràng, thời gian cụ thể cho từng hoạt động, vai trò và trách nhiệm của người tham dự, và các quy tắc cơ bản để đảm bảo workshop diễn ra suôn sẻ và đạt được mục tiêu đề ra.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Workshop Facilitation",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503319761_ADVANCED_12_kexv"
+  },
+  {
+    "questionText": "Trong một workshop phát hiện yêu cầu cho dự án chuyển đổi số tại một ngân hàng Việt Nam, các bên liên quan (stakeholders) từ bộ phận Kinh doanh, IT và Tuân thủ (Compliance) có quan điểm trái chiều về việc ưu tiên tích hợp hệ thống legacy với nền tảng đám mây mới. Là Business Analyst cấp chuyên gia, bạn sẽ áp dụng kỹ thuật nào để **định hướng chiến lược** và **giải quyết xung đột** trong khi vẫn đảm bảo lộ trình dài hạn của dự án?",
+    "options": [
+      "A. Sử dụng kỹ thuật 'Impact Mapping' để trực quan hóa tác động của từng quan điểm lên mục tiêu chiến lược của ngân hàng, sau đó dẫn dắt thảo luận dựa trên dữ liệu về chi phí, rủi ro và lợi ích dài hạn.",
+      "B. Áp dụng 'Five Whys' để truy vết nguyên nhân gốc rễ của xung đột, sau đó đề xuất giải pháp kỹ thuật cụ thể cho từng bộ phận.",
+      "C. Tổ chức bỏ phiếu ẩn danh để xác định giải pháp được đa số ủng hộ, nhằm tránh xung đột kéo dài.",
+      "D. Chia nhóm nhỏ theo bộ phận để thảo luận riêng, sau đó tổng hợp ý kiến và trình bày lại cho toàn thể workshop."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Impact Mapping giúp liên kết các quan điểm với mục tiêu chiến lược của tổ chức, tạo cơ sở khách quan để giải quyết xung đột. Kỹ thuật này phù hợp với tư duy chiến lược ở cấp độ EXPERT, tập trung vào tầm vĩ mô (lộ trình dài hạn) và vi mô (tác động cụ thể đến từng bộ phận). Các lựa chọn khác không giải quyết được gốc rễ chiến lược hoặc thiếu tính hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503434517_EXPERT_0_95z7"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống ERP cho một tập đoàn sản xuất đa quốc gia tại Việt Nam gặp khó khăn khi các phòng ban (Sản xuất, Tài chính, Chuỗi cung ứng) không thống nhất về quy trình nghiệp vụ cốt lõi. Trong workshop alignment, bạn nhận thấy các bên liên quan chỉ tập trung vào chi tiết kỹ thuật mà bỏ qua việc đánh giá **khoảng cách chiến lược** (strategic gap) giữa hiện trạng và mục tiêu số hóa. Bạn sẽ làm gì để **định hướng lại thảo luận** và đảm bảo workshop đạt được mục tiêu alignment?",
+    "options": [
+      "A. Yêu cầu các bên liên quan trình bày lại quy trình hiện tại của họ theo mẫu chuẩn BPMN, sau đó so sánh với quy trình mục tiêu để tìm điểm khác biệt.",
+      "B. Sử dụng kỹ thuật 'Gap Analysis Matrix' để trực quan hóa khoảng cách giữa hiện trạng (as-is) và mục tiêu (to-be) ở cả 3 cấp độ: quy trình, công nghệ và văn hóa tổ chức, sau đó dẫn dắt thảo luận tập trung vào các khoảng trống chiến lược.",
+      "C. Đề xuất tạm dừng workshop và yêu cầu lãnh đạo cấp cao can thiệp để đưa ra quyết định cuối cùng.",
+      "D. Chia nhóm theo chức năng và yêu cầu mỗi nhóm đề xuất giải pháp riêng, sau đó tổng hợp và chọn giải pháp tối ưu nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Gap Analysis Matrix ở cấp độ chiến lược giúp các bên liên quan nhìn nhận vấn đề từ góc độ tổng thể (quy trình, công nghệ, văn hóa), thay vì sa đà vào chi tiết kỹ thuật. Đây là cách tiếp cận EXPERT, tập trung vào phân tích khoảng cách vĩ mô và vi mô để đưa ra giải pháp dài hạn. Các lựa chọn khác không giải quyết được gốc rễ chiến lược hoặc thiếu tính hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503434518_EXPERT_1_wkl0"
+  },
+  {
+    "questionText": "Trong một workshop phát hiện yêu cầu cho dự án tối ưu hóa quy trình logistics tại một công ty bán lẻ, bạn nhận thấy các bên liên quan (kho vận, bán hàng, tài chính) thường xuyên ngắt lời nhau và tranh luận về các vấn đề không liên quan đến mục tiêu workshop. Là Business Analyst cấp chuyên gia, bạn sẽ áp dụng kỹ thuật nào để **kiểm soát luồng thảo luận** và **đưa workshop trở lại đúng trọng tâm** mà không làm mất tinh thần hợp tác?",
+    "options": [
+      "A. Sử dụng kỹ thuật 'Parking Lot' để ghi lại các vấn đề ngoài phạm vi, sau đó đề xuất thảo luận riêng sau workshop và quay lại chủ đề chính với thời gian giới hạn cho mỗi ý kiến.",
+      "B. Áp dụng quy tắc 'No Interruption' và yêu cầu mọi người ghi ý kiến ra giấy trước khi phát biểu.",
+      "C. Tạm dừng workshop và yêu cầu lãnh đạo cấp cao can thiệp để nhắc nhở các bên liên quan về kỷ luật.",
+      "D. Đề xuất chia nhóm nhỏ để thảo luận riêng, sau đó tổng hợp ý kiến và trình bày lại cho toàn thể."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Kỹ thuật 'Parking Lot' giúp duy trì sự tập trung vào chủ đề chính mà không bỏ qua các vấn đề quan trọng, đồng thời giữ được tinh thần hợp tác. Đây là cách tiếp cận EXPERT, kết hợp kỹ năng kiểm soát thảo luận và quản lý xung đột một cách tinh tế. Các lựa chọn khác có thể làm gián đoạn luồng thảo luận hoặc tạo cảm giác áp đặt.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503434520_EXPERT_2_0zvb"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống CRM cho một ngân hàng tại Việt Nam gặp khó khăn khi các bên liên quan không thống nhất về **tiêu chí ưu tiên** cho các tính năng. Nhóm Kinh doanh muốn tập trung vào tính năng bán chéo (cross-selling), trong khi nhóm Tuân thủ (Compliance) nhấn mạnh vào việc đáp ứng các quy định về bảo mật dữ liệu. Là Business Analyst cấp chuyên gia, bạn sẽ sử dụng kỹ thuật nào để **giải quyết xung đột ưu tiên** và **đưa ra quyết định khách quan**?",
+    "options": [
+      "A. Áp dụng kỹ thuật 'MoSCoW Prioritization' để phân loại các tính năng theo mức độ 'Must have', 'Should have', 'Could have', và 'Won't have', sau đó dẫn dắt thảo luận dựa trên tác động đến mục tiêu chiến lược của ngân hàng.",
+      "B. Sử dụng kỹ thuật 'Dot Voting' để các bên liên quan bỏ phiếu cho các tính năng ưu tiên.",
+      "C. Đề xuất lãnh đạo cấp cao quyết định dựa trên báo cáo phân tích chi phí-lợi ích của từng tính năng.",
+      "D. Yêu cầu mỗi nhóm trình bày lý do ưu tiên của họ, sau đó tổng hợp và chọn giải pháp dung hòa nhất."
+    ],
+    "correctAnswer": "A",
+    "explanation": "MoSCoW Prioritization kết hợp với phân tích tác động chiến lược giúp đưa ra quyết định khách quan, dựa trên dữ liệu và mục tiêu dài hạn. Đây là cách tiếp cận EXPERT, giải quyết xung đột ưu tiên ở cấp độ chiến lược. Các lựa chọn khác thiếu tính hệ thống hoặc phụ thuộc quá nhiều vào ý kiến chủ quan.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503434520_EXPERT_3_quan"
+  },
+  {
+    "questionText": "Trong một workshop thiết kế quy trình cho dự án số hóa tại một công ty bảo hiểm, bạn nhận thấy các bên liên quan (bảo hiểm, bồi thường, IT) thường xuyên nhắc đến các yêu cầu **ẩn** (hidden requirements) như 'hệ thống phải linh hoạt để thích ứng với thay đổi chính sách' hoặc 'giao diện phải thân thiện với người dùng lớn tuổi'. Là Business Analyst cấp chuyên gia, bạn sẽ sử dụng kỹ thuật nào để **làm rõ và ghi nhận các yêu cầu ẩn** này một cách có hệ thống?",
+    "options": [
+      "A. Áp dụng kỹ thuật 'User Story Mapping' để phân tích hành trình người dùng và xác định các yêu cầu ẩn liên quan đến trải nghiệm người dùng, sau đó liên kết với các yêu cầu chức năng và phi chức năng.",
+      "B. Sử dụng kỹ thuật 'Brainstorming' để thu thập tất cả các ý kiến, sau đó lọc ra các yêu cầu ẩn và ghi nhận vào tài liệu yêu cầu.",
+      "C. Yêu cầu các bên liên quan viết ra các yêu cầu ẩn của họ dưới dạng User Stories, sau đó tổng hợp và phân loại.",
+      "D. Đề xuất tổ chức một buổi phỏng vấn riêng với từng bộ phận để làm rõ các yêu cầu ẩn trước khi quay lại workshop."
+    ],
+    "correctAnswer": "A",
+    "explanation": "User Story Mapping giúp trực quan hóa hành trình người dùng và làm rõ các yêu cầu ẩn một cách hệ thống, đồng thời liên kết chúng với các yêu cầu kỹ thuật. Đây là cách tiếp cận EXPERT, tập trung vào việc phát hiện và cấu trúc hóa các yêu cầu ẩn để đảm bảo giải pháp đáp ứng được nhu cầu thực tế. Các lựa chọn khác thiếu tính hệ thống hoặc không đảm bảo tính liên kết giữa các yêu cầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503434522_EXPERT_4_w5z9"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý chuỗi cung ứng (SCM) cho một tập đoàn sản xuất gặp khó khăn khi các bên liên quan không thống nhất về **phạm vi dự án**. Nhóm Sản xuất muốn tích hợp toàn bộ quy trình từ đặt hàng đến giao hàng, trong khi nhóm Tài chính chỉ muốn tập trung vào phần quản lý kho và hóa đơn. Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để **xác định phạm vi dự án** một cách chiến lược và **đảm bảo sự đồng thuận**?",
+    "options": [
+      "A. Sử dụng kỹ thuật 'Context Diagramming' để trực quan hóa ranh giới hệ thống và các bên liên quan, sau đó dẫn dắt thảo luận về tác động của từng phạm vi đến mục tiêu chiến lược của tập đoàn.",
+      "B. Áp dụng kỹ thuật 'SWOT Analysis' để phân tích điểm mạnh, điểm yếu, cơ hội và thách thức của từng phạm vi, sau đó đề xuất giải pháp dung hòa.",
+      "C. Đề xuất lãnh đạo cấp cao quyết định phạm vi dựa trên ngân sách và nguồn lực hiện có.",
+      "D. Yêu cầu mỗi nhóm trình bày lý do của họ, sau đó tổng hợp và chọn phạm vi được đa số ủng hộ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Context Diagramming giúp trực quan hóa ranh giới hệ thống và các bên liên quan, tạo cơ sở khách quan để thảo luận về phạm vi dự án. Đây là cách tiếp cận EXPERT, tập trung vào phân tích chiến lược và đảm bảo sự đồng thuận dựa trên dữ liệu. Các lựa chọn khác thiếu tính hệ thống hoặc phụ thuộc quá nhiều vào ý kiến chủ quan.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503434523_EXPERT_5_w4jn"
+  },
+  {
+    "questionText": "Trong một workshop phát hiện yêu cầu cho dự án tối ưu hóa quy trình tại một công ty viễn thông, bạn nhận thấy các bên liên quan thường xuyên tranh luận về **cách thức đo lường hiệu quả** của quy trình mới. Nhóm Kinh doanh muốn đo lường dựa trên doanh thu, trong khi nhóm Vận hành muốn đo lường dựa trên thời gian xử lý. Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để **xác định các chỉ số đo lường hiệu quả (KPI)** một cách khách quan và **đảm bảo sự đồng thuận**?",
+    "options": [
+      "A. Sử dụng kỹ thuật 'Balanced Scorecard' để xác định các KPI ở 4 khía cạnh: tài chính, khách hàng, quy trình nội bộ và học hỏi & phát triển, sau đó dẫn dắt thảo luận về sự liên kết giữa các KPI với mục tiêu chiến lược của công ty.",
+      "B. Áp dụng kỹ thuật 'SMART Goals' để định nghĩa các KPI cụ thể, đo lường được, khả thi, liên quan và có thời hạn, sau đó yêu cầu các bên liên quan thống nhất.",
+      "C. Đề xuất lãnh đạo cấp cao quyết định các KPI dựa trên mục tiêu chiến lược của công ty.",
+      "D. Yêu cầu mỗi nhóm đề xuất các KPI của họ, sau đó tổng hợp và chọn các KPI được đa số ủng hộ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Balanced Scorecard giúp xác định các KPI một cách toàn diện và chiến lược, đảm bảo sự liên kết giữa các mục tiêu ngắn hạn và dài hạn. Đây là cách tiếp cận EXPERT, tập trung vào tư duy hệ thống và đảm bảo sự đồng thuận dựa trên dữ liệu. Các lựa chọn khác thiếu tính toàn diện hoặc phụ thuộc quá nhiều vào ý kiến chủ quan.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503434524_EXPERT_6_7qig"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý quan hệ khách hàng (CRM) cho một ngân hàng gặp khó khăn khi các bên liên quan không thống nhất về **cách thức triển khai**. Nhóm Kinh doanh muốn triển khai nhanh với các tính năng cơ bản, trong khi nhóm IT muốn triển khai theo giai đoạn để đảm bảo tính ổn định. Là Business Analyst cấp chuyên gia, bạn sẽ sử dụng kỹ thuật nào để **đưa ra lộ trình triển khai** tối ưu và **đảm bảo sự đồng thuận**?",
+    "options": [
+      "A. Áp dụng kỹ thuật 'Release Planning' kết hợp với 'Risk Assessment' để xác định các giai đoạn triển khai dựa trên mức độ rủi ro, tác động đến kinh doanh và nguồn lực sẵn có, sau đó dẫn dắt thảo luận về lộ trình tối ưu.",
+      "B. Sử dụng kỹ thuật 'Gantt Chart' để lập kế hoạch triển khai chi tiết, sau đó yêu cầu các bên liên quan thống nhất.",
+      "C. Đề xuất lãnh đạo cấp cao quyết định lộ trình dựa trên ngân sách và nguồn lực hiện có.",
+      "D. Yêu cầu mỗi nhóm trình bày lộ trình của họ, sau đó tổng hợp và chọn lộ trình được đa số ủng hộ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Release Planning kết hợp với Risk Assessment giúp xác định lộ trình triển khai một cách chiến lược, cân bằng giữa tốc độ và tính ổn định. Đây là cách tiếp cận EXPERT, tập trung vào tư duy hệ thống và đảm bảo sự đồng thuận dựa trên dữ liệu. Các lựa chọn khác thiếu tính chiến lược hoặc phụ thuộc quá nhiều vào ý kiến chủ quan.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503434524_EXPERT_7_tj0z"
+  },
+  {
+    "questionText": "Trong một workshop thiết kế quy trình cho dự án số hóa tại một công ty bảo hiểm, bạn nhận thấy các bên liên quan thường xuyên đề cập đến các **rủi ro tiềm ẩn** như 'khách hàng không chấp nhận thay đổi' hoặc 'hệ thống không tích hợp được với các phần mềm hiện có'. Là Business Analyst cấp chuyên gia, bạn sẽ sử dụng kỹ thuật nào để **xác định và quản lý rủi ro** một cách hệ thống trong workshop?",
+    "options": [
+      "A. Áp dụng kỹ thuật 'Risk Storming' để xác định, phân loại và đánh giá rủi ro theo mức độ tác động và khả năng xảy ra, sau đó dẫn dắt thảo luận về các biện pháp giảm thiểu rủi ro.",
+      "B. Sử dụng kỹ thuật 'SWOT Analysis' để phân tích điểm mạnh, điểm yếu, cơ hội và thách thức, sau đó đề xuất các biện pháp quản lý rủi ro.",
+      "C. Yêu cầu các bên liên quan liệt kê các rủi ro tiềm ẩn, sau đó tổng hợp và phân loại theo mức độ nghiêm trọng.",
+      "D. Đề xuất tổ chức một buổi họp riêng với lãnh đạo cấp cao để thảo luận về các rủi ro và biện pháp quản lý."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Risk Storming là kỹ thuật chuyên biệt để xác định và quản lý rủi ro trong môi trường workshop, giúp các bên liên quan tham gia trực tiếp vào quá trình phân tích và giảm thiểu rủi ro. Đây là cách tiếp cận EXPERT, tập trung vào tư duy hệ thống và đảm bảo tính thực tiễn. Các lựa chọn khác thiếu tính hệ thống hoặc không phù hợp với bối cảnh workshop.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "SKILL",
+    "id": "q_1780503434525_EXPERT_8_nq1l"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý tài sản (EAM) cho một công ty năng lượng gặp khó khăn khi các bên liên quan không thống nhất về **cách thức thu thập yêu cầu**. Nhóm Vận hành muốn tập trung vào các yêu cầu kỹ thuật, trong khi nhóm Tài chính muốn tập trung vào các yêu cầu về báo cáo và tuân thủ. Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để **thiết kế quy trình thu thập yêu cầu** hiệu quả và **đảm bảo sự đồng thuận**?",
+    "options": [
+      "A. Sử dụng kỹ thuật 'Requirements Workshop Framework' kết hợp với 'Stakeholder Analysis' để xác định mục tiêu, phạm vi và phương pháp thu thập yêu cầu cho từng nhóm bên liên quan, sau đó dẫn dắt thảo luận về quy trình chung.",
+      "B. Áp dụng kỹ thuật 'Use Case Modeling' để thu thập yêu cầu từ góc độ người dùng, sau đó yêu cầu các bên liên quan bổ sung các yêu cầu kỹ thuật và tài chính.",
+      "C. Đề xuất tổ chức các buổi phỏng vấn riêng với từng nhóm để thu thập yêu cầu, sau đó tổng hợp và trình bày lại cho toàn thể.",
+      "D. Yêu cầu mỗi nhóm đề xuất quy trình thu thập yêu cầu của họ, sau đó tổng hợp và chọn quy trình được đa số ủng hộ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Requirements Workshop Framework kết hợp với Stakeholder Analysis giúp thiết kế quy trình thu thập yêu cầu một cách hệ thống, đảm bảo sự tham gia của tất cả các bên liên quan và sự đồng thuận về mục tiêu. Đây là cách tiếp cận EXPERT, tập trung vào tư duy chiến lược và đảm bảo tính thực tiễn. Các lựa chọn khác thiếu tính hệ thống hoặc không đảm bảo sự đồng thuận.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503434526_EXPERT_9_voen"
+  },
+  {
+    "questionText": "Trong một workshop phát hiện yêu cầu cho dự án tối ưu hóa quy trình tại một công ty logistics, bạn nhận thấy các bên liên quan thường xuyên nhắc đến các **vấn đề về văn hóa tổ chức** như 'khó thay đổi thói quen làm việc' hoặc 'thiếu sự hỗ trợ từ lãnh đạo'. Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để **xác định và giải quyết các rào cản văn hóa** trong workshop?",
+    "options": [
+      "A. Áp dụng kỹ thuật 'Force Field Analysis' để xác định các lực lượng thúc đẩy và cản trở thay đổi, sau đó dẫn dắt thảo luận về các biện pháp tăng cường lực lượng thúc đẩy và giảm thiểu lực lượng cản trở.",
+      "B. Sử dụng kỹ thuật 'Brainstorming' để thu thập các ý kiến về rào cản văn hóa, sau đó đề xuất các biện pháp giải quyết.",
+      "C. Yêu cầu lãnh đạo cấp cao trình bày về chiến lược quản lý thay đổi, sau đó yêu cầu các bên liên quan tuân thủ.",
+      "D. Đề xuất tổ chức các buổi đào tạo về quản lý thay đổi cho các bên liên quan trước khi tiếp tục workshop."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Force Field Analysis là kỹ thuật chuyên biệt để phân tích các lực lượng thúc đẩy và cản trở thay đổi, giúp xác định và giải quyết các rào cản văn hóa một cách hệ thống. Đây là cách tiếp cận EXPERT, tập trung vào tư duy chiến lược và đảm bảo tính thực tiễn. Các lựa chọn khác thiếu tính hệ thống hoặc không phù hợp với bối cảnh workshop.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503434526_EXPERT_10_ao9z"
+  },
+  {
+    "questionText": "Dự án triển khai hệ thống quản lý dự án (PPM) cho một công ty công nghệ gặp khó khăn khi các bên liên quan không thống nhất về **cách thức đánh giá tính khả thi** của dự án. Nhóm Kinh doanh muốn đánh giá dựa trên ROI (Return on Investment), trong khi nhóm IT muốn đánh giá dựa trên tính khả thi kỹ thuật. Là Business Analyst cấp chuyên gia, bạn sẽ sử dụng kỹ thuật nào để **đánh giá tính khả thi** một cách toàn diện và **đảm bảo sự đồng thuận**?",
+    "options": [
+      "A. Áp dụng kỹ thuật 'Feasibility Study Framework' để đánh giá tính khả thi ở 4 khía cạnh: kỹ thuật, tài chính, vận hành và lịch trình, sau đó dẫn dắt thảo luận về kết quả đánh giá và các rủi ro tiềm ẩn.",
+      "B. Sử dụng kỹ thuật 'Cost-Benefit Analysis' để đánh giá tính khả thi tài chính, sau đó yêu cầu nhóm IT đánh giá tính khả thi kỹ thuật.",
+      "C. Đề xuất lãnh đạo cấp cao quyết định dựa trên báo cáo đánh giá tính khả thi từ cả hai nhóm.",
+      "D. Yêu cầu mỗi nhóm trình bày phương pháp đánh giá của họ, sau đó tổng hợp và chọn phương pháp được đa số ủng hộ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Feasibility Study Framework giúp đánh giá tính khả thi một cách toàn diện, đảm bảo sự cân bằng giữa các khía cạnh kỹ thuật, tài chính, vận hành và lịch trình. Đây là cách tiếp cận EXPERT, tập trung vào tư duy hệ thống và đảm bảo sự đồng thuận dựa trên dữ liệu. Các lựa chọn khác thiếu tính toàn diện hoặc phụ thuộc quá nhiều vào ý kiến chủ quan.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503434527_EXPERT_11_f6pr"
+  },
+  {
+    "questionText": "Trong một workshop thiết kế quy trình cho dự án chuyển đổi số tại một ngân hàng, bạn nhận thấy các bên liên quan thường xuyên đề cập đến các **yêu cầu mâu thuẫn** như 'hệ thống phải đơn giản để sử dụng' nhưng đồng thời 'phải đáp ứng tất cả các quy định tuân thủ phức tạp'. Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để **giải quyết các yêu cầu mâu thuẫn** và **đảm bảo sự đồng thuận**?",
+    "options": [
+      "A. Sử dụng kỹ thuật 'Trade-off Analysis' để phân tích sự đánh đổi giữa các yêu cầu mâu thuẫn, sau đó dẫn dắt thảo luận về các giải pháp dung hòa dựa trên mục tiêu chiến lược của ngân hàng.",
+      "B. Áp dụng kỹ thuật 'Prioritization Matrix' để xác định mức độ ưu tiên của từng yêu cầu, sau đó đề xuất giải pháp tập trung vào các yêu cầu ưu tiên cao nhất.",
+      "C. Yêu cầu lãnh đạo cấp cao quyết định dựa trên báo cáo phân tích chi phí-lợi ích của từng yêu cầu.",
+      "D. Đề xuất tổ chức các buổi thảo luận riêng với từng nhóm để tìm giải pháp dung hòa, sau đó trình bày lại cho toàn thể workshop."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trade-off Analysis giúp phân tích sự đánh đổi giữa các yêu cầu mâu thuẫn một cách hệ thống, tạo cơ sở khách quan để đưa ra giải pháp dung hòa. Đây là cách tiếp cận EXPERT, tập trung vào tư duy chiến lược và đảm bảo sự đồng thuận dựa trên dữ liệu. Các lựa chọn khác thiếu tính hệ thống hoặc phụ thuộc quá nhiều vào ý kiến chủ quan.",
+    "difficulty": "EXPERT",
+    "skillArea": "Workshop Facilitation",
+    "category": "ANALYSIS",
+    "id": "q_1780503434528_EXPERT_12_calu"
+  }
+]

@@ -1,0 +1,767 @@
+[
+  {
+    "questionText": "Trong quy trình Gap Analysis, thuật ngữ 'As-is process' đề cập đến điều gì?",
+    "options": [
+      "A. Quy trình hiện tại của doanh nghiệp trước khi cải tiến",
+      "B. Quy trình lý tưởng mà doanh nghiệp mong muốn đạt được trong tương lai",
+      "C. Quy trình tạm thời được áp dụng trong giai đoạn chuyển đổi",
+      "D. Quy trình chuẩn được đề xuất bởi các chuyên gia tư vấn"
+    ],
+    "correctAnswer": "A",
+    "explanation": "As-is process mô tả trạng thái hiện tại của quy trình nghiệp vụ, là cơ sở để xác định khoảng cách (gap) cần cải thiện. Đây là bước đầu tiên trong Gap Analysis.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501086670_BEGINNER_0_d6bl"
+  },
+  {
+    "questionText": "Một Business Analyst tại công ty bán lẻ Việt Nam phát hiện hệ thống quản lý kho hiện tại không tự động cập nhật số lượng hàng tồn khi có đơn hàng mới. Đây là ví dụ về loại gap nào?",
+    "options": [
+      "A. Functional gap (khoảng cách chức năng)",
+      "B. Capability gap (khoảng cách năng lực)",
+      "C. Process gap (khoảng cách quy trình)",
+      "D. Technology gap (khoảng cách công nghệ)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Functional gap chỉ ra sự thiếu hụt hoặc hạn chế trong các chức năng cụ thể của hệ thống (ở đây là tự động cập nhật kho).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501086670_BEGINNER_1_3d8h"
+  },
+  {
+    "questionText": "Khi so sánh 'As-is' và 'To-be' process, yếu tố nào sau đây KHÔNG phải là mục tiêu chính của việc xác định 'To-be' process?",
+    "options": [
+      "A. Xác định các bước quy trình không cần thiết để loại bỏ",
+      "B. Mô tả trạng thái hiện tại của quy trình một cách chi tiết nhất",
+      "C. Đề xuất cải tiến để đạt hiệu quả cao hơn",
+      "D. Đảm bảo quy trình mới phù hợp với mục tiêu chiến lược của doanh nghiệp"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mô tả trạng thái hiện tại là mục tiêu của As-is process, không phải To-be process. To-be process tập trung vào thiết kế quy trình cải tiến trong tương lai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501086671_BEGINNER_2_06ff"
+  },
+  {
+    "questionText": "Công ty sản xuất tại Bình Dương muốn triển khai hệ thống ERP mới. Business Analyst xác định rằng nhân viên hiện tại thiếu kỹ năng sử dụng phần mềm phức tạp. Đây là ví dụ về loại gap nào?",
+    "options": [
+      "A. Capability gap (khoảng cách năng lực)",
+      "B. Functional gap (khoảng cách chức năng)",
+      "C. Process gap (khoảng cách quy trình)",
+      "D. Compliance gap (khoảng cách tuân thủ)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Capability gap chỉ ra sự thiếu hụt về kỹ năng, kiến thức hoặc năng lực của đội ngũ để thực hiện quy trình mới (ở đây là kỹ năng sử dụng ERP).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501086671_BEGINNER_3_1k0h"
+  },
+  {
+    "questionText": "Trong đánh giá giải pháp (Solution Assessment), yếu tố nào sau đây KHÔNG thuộc về rủi ro triển khai (delivery risk)?",
+    "options": [
+      "A. Chi phí triển khai giải pháp vượt quá ngân sách dự kiến",
+      "B. Đội ngũ triển khai thiếu kinh nghiệm với công nghệ mới",
+      "C. Giải pháp không đáp ứng đầy đủ các yêu cầu chức năng của nghiệp vụ",
+      "D. Thời gian triển khai kéo dài hơn kế hoạch do phụ thuộc nhà cung cấp"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Rủi ro triển khai (delivery risk) liên quan đến khả năng thực hiện dự án (chi phí, thời gian, nguồn lực), không bao gồm việc giải pháp không đáp ứng yêu cầu chức năng (đây là rủi ro về tính phù hợp - solution fit).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501086671_BEGINNER_4_3gbd"
+  },
+  {
+    "questionText": "Một Business Analyst đề xuất giải pháp tự động hóa quy trình phê duyệt đơn hàng cho công ty logistics. Giải pháp này giúp giảm thời gian xử lý từ 2 ngày xuống còn 2 giờ. Đây là ví dụ về lợi ích nào của giải pháp?",
+    "options": [
+      "A. Operational efficiency (hiệu quả vận hành)",
+      "B. Cost reduction (giảm chi phí)",
+      "C. Compliance improvement (cải thiện tuân thủ)",
+      "D. Customer satisfaction (hài lòng khách hàng)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giảm thời gian xử lý là cải tiến về hiệu quả vận hành (operational efficiency), một trong những lợi ích chính của tự động hóa quy trình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501086671_BEGINNER_5_3rlv"
+  },
+  {
+    "questionText": "Khi đánh giá giải pháp, Business Analyst cần ưu tiên yếu tố nào sau đây để đảm bảo giải pháp phù hợp với doanh nghiệp?",
+    "options": [
+      "A. Alignment with business objectives (phù hợp với mục tiêu kinh doanh)",
+      "B. Chi phí triển khai thấp nhất có thể",
+      "C. Công nghệ mới nhất trên thị trường",
+      "D. Sự phức tạp của giải pháp để thể hiện năng lực đội ngũ"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp phải phù hợp với mục tiêu chiến lược và nhu cầu kinh doanh của doanh nghiệp, đây là yếu tố quan trọng nhất trong đánh giá giải pháp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501086671_BEGINNER_6_qkto"
+  },
+  {
+    "questionText": "Công ty FMCG tại Việt Nam nhận thấy hệ thống quản lý bán hàng hiện tại không tích hợp được với phần mềm kế toán. Đây là ví dụ về loại gap nào?",
+    "options": [
+      "A. Integration gap (khoảng cách tích hợp)",
+      "B. Functional gap (khoảng cách chức năng)",
+      "C. Process gap (khoảng cách quy trình)",
+      "D. Technology gap (khoảng cách công nghệ)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Integration gap chỉ ra sự thiếu hụt trong khả năng kết nối hoặc tích hợp giữa các hệ thống (ở đây là giữa hệ thống bán hàng và kế toán).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501086671_BEGINNER_7_98xe"
+  },
+  {
+    "questionText": "Trong báo cáo Gap Analysis, Business Analyst cần trình bày mục nào sau đây để chuyển từ phân tích sang hành động cụ thể?",
+    "options": [
+      "A. Recommendations (khuyến nghị)",
+      "B. Detailed process maps (bản đồ quy trình chi tiết)",
+      "C. Technical specifications (đặc tả kỹ thuật)",
+      "D. Stakeholder list (danh sách các bên liên quan)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Recommendations (khuyến nghị) là phần chuyển từ phân tích khoảng cách sang các hành động cụ thể để cải thiện quy trình hoặc hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SKILL",
+    "id": "q_1780501086671_BEGINNER_8_wfzy"
+  },
+  {
+    "questionText": "Khi đánh giá chi phí của một giải pháp mới, Business Analyst cần xem xét yếu tố nào sau đây ngoài chi phí triển khai ban đầu?",
+    "options": [
+      "A. Total Cost of Ownership (TCO - tổng chi phí sở hữu)",
+      "B. Chi phí cơ hội (opportunity cost)",
+      "C. Chi phí marketing cho giải pháp",
+      "D. Chi phí đào tạo cho khách hàng"
+    ],
+    "correctAnswer": "A",
+    "explanation": "TCO bao gồm chi phí triển khai ban đầu, chi phí vận hành, bảo trì và nâng cấp trong suốt vòng đời của giải pháp, là yếu tố quan trọng trong đánh giá chi phí.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501086671_BEGINNER_9_3sp5"
+  },
+  {
+    "questionText": "Một giải pháp được đề xuất có thể đáp ứng 80% yêu cầu chức năng nhưng yêu cầu tùy chỉnh phức tạp và tốn kém. Business Analyst nên đánh giá giải pháp này như thế nào?",
+    "options": [
+      "A. Solution fit thấp do chi phí tùy chỉnh cao",
+      "B. Solution fit cao vì đáp ứng hầu hết yêu cầu",
+      "C. Delivery risk thấp vì giải pháp đã có sẵn",
+      "D. Không cần đánh giá thêm vì đã rõ ràng"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Solution fit đánh giá mức độ phù hợp của giải pháp với yêu cầu nghiệp vụ, bao gồm cả chi phí và nỗ lực tùy chỉnh. Giải pháp có chi phí tùy chỉnh cao sẽ có solution fit thấp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501086671_BEGINNER_10_q5rh"
+  },
+  {
+    "questionText": "Trong dự án triển khai CRM cho ngân hàng, Business Analyst xác định rằng nhân viên chưa được đào tạo về kỹ năng bán chéo (cross-selling). Đây là ví dụ về loại gap nào?",
+    "options": [
+      "A. Capability gap (khoảng cách năng lực)",
+      "B. Process gap (khoảng cách quy trình)",
+      "C. Functional gap (khoảng cách chức năng)",
+      "D. Data gap (khoảng cách dữ liệu)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Capability gap chỉ ra sự thiếu hụt về kỹ năng hoặc năng lực của đội ngũ (ở đây là kỹ năng bán chéo của nhân viên ngân hàng).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501086671_BEGINNER_11_nr7o"
+  },
+  {
+    "questionText": "Khi trình bày kết quả Gap Analysis cho ban lãnh đạo, Business Analyst nên tập trung vào yếu tố nào sau đây để thuyết phục họ phê duyệt giải pháp?",
+    "options": [
+      "A. Business impact (tác động đến kinh doanh)",
+      "B. Technical details (chi tiết kỹ thuật)",
+      "C. Comparison with competitors (so sánh với đối thủ)",
+      "D. Personal opinions (ý kiến cá nhân)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ban lãnh đạo quan tâm đến tác động của giải pháp đối với mục tiêu kinh doanh (ví dụ: tăng doanh thu, giảm chi phí), không phải chi tiết kỹ thuật hay so sánh với đối thủ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SKILL",
+    "id": "q_1780501086671_BEGINNER_12_0dbk"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP tại một công ty sản xuất tại Việt Nam, khi so sánh quy trình 'As-is' và 'To-be' cho module quản lý kho, bạn phát hiện rằng quy trình hiện tại (As-is) yêu cầu nhân viên kho phải nhập liệu thủ công vào Excel và sau đó chuyển dữ liệu lên hệ thống SAP vào cuối ngày. Quy trình mới (To-be) yêu cầu tích hợp trực tiếp giữa hệ thống cân điện tử và SAP để tự động cập nhật dữ liệu. Khoảng trống (gap) chính ở đây thuộc loại nào?",
+    "options": [
+      "A. Khoảng trống về công nghệ (Technology gap)",
+      "B. Khoảng trống về quy trình (Process gap)",
+      "C. Khoảng trống về kỹ năng (Skill gap)",
+      "D. Khoảng trống về dữ liệu (Data gap)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khoảng trống ở đây là về quy trình, vì sự khác biệt nằm ở cách thức thực hiện công việc (thủ công vs tự động), không phải do thiếu công nghệ (công nghệ đã có sẵn), kỹ năng nhân viên hay vấn đề dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501168079_INTERMEDIATE_0_xrin"
+  },
+  {
+    "questionText": "Bạn đang đánh giá giải pháp CRM cho một ngân hàng tại Việt Nam. Giải pháp A có chi phí triển khai thấp nhưng yêu cầu tùy chỉnh nhiều để phù hợp với quy trình nghiệp vụ của ngân hàng. Giải pháp B có chi phí cao hơn nhưng tích hợp sẵn các quy trình chuẩn cho ngành ngân hàng. Yếu tố nào sau đây KHÔNG phải là rủi ro chính cần đánh giá khi lựa chọn giải pháp?",
+    "options": [
+      "A. Rủi ro về khả năng tùy chỉnh của giải pháp A để đáp ứng yêu cầu nghiệp vụ",
+      "B. Rủi ro về chi phí bảo trì và nâng cấp giải pháp B trong dài hạn",
+      "C. Rủi ro về việc nhân viên ngân hàng không thích sử dụng công nghệ mới",
+      "D. Rủi ro về thời gian triển khai giải pháp A có thể kéo dài do tùy chỉnh nhiều"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Rủi ro về việc nhân viên không thích sử dụng công nghệ mới là vấn đề về thay đổi văn hóa (change management), không phải rủi ro chính liên quan đến việc đánh giá giải pháp về mặt kỹ thuật, chi phí hay thời gian triển khai.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501168079_INTERMEDIATE_1_lt2a"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa quy trình đặt hàng của một công ty thương mại điện tử, bạn phát hiện rằng quy trình hiện tại (As-is) yêu cầu khách hàng phải gọi điện thoại để xác nhận đơn hàng sau khi đặt online, gây chậm trễ và giảm trải nghiệm khách hàng. Quy trình mới (To-be) đề xuất tự động xác nhận đơn hàng qua email/SMS ngay sau khi đặt. Đâu là giải pháp khả thi nhất để lấp khoảng trống này?",
+    "options": [
+      "A. Đào tạo nhân viên xử lý đơn hàng nhanh hơn để giảm thời gian xác nhận qua điện thoại",
+      "B. Tích hợp hệ thống đặt hàng online với hệ thống CRM để tự động gửi email/SMS xác nhận",
+      "C. Thuê thêm nhân viên để gọi điện xác nhận đơn hàng trong vòng 5 phút sau khi đặt",
+      "D. Yêu cầu khách hàng tự xác nhận đơn hàng qua ứng dụng di động sau khi đặt"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp khả thi nhất là tích hợp hệ thống để tự động hóa quy trình xác nhận, loại bỏ sự phụ thuộc vào con người và cải thiện trải nghiệm khách hàng. Các lựa chọn khác không giải quyết triệt để vấn đề hoặc tạo thêm gánh nặng cho khách hàng/nhân viên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SKILL",
+    "id": "q_1780501168080_INTERMEDIATE_2_fthm"
+  },
+  {
+    "questionText": "Một công ty logistics tại Việt Nam muốn triển khai giải pháp quản lý vận tải (TMS) để tối ưu hóa lộ trình giao hàng. Sau khi phân tích, bạn nhận thấy giải pháp TMS hiện có trên thị trường không hỗ trợ tính năng theo dõi lộ trình theo thời gian thực (real-time tracking) cho các đơn hàng nội thành Hà Nội do hạn chế về cơ sở hạ tầng GPS. Khoảng trống này thuộc loại nào?",
+    "options": [
+      "A. Khoảng trống về công nghệ (Technology gap)",
+      "B. Khoảng trống về quy trình (Process gap)",
+      "C. Khoảng trống về khả năng (Capability gap)",
+      "D. Khoảng trống về dữ liệu (Data gap)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đây là khoảng trống về khả năng (capability gap), vì giải pháp TMS không đáp ứng được yêu cầu theo dõi thời gian thực do hạn chế về khả năng kỹ thuật hoặc cơ sở hạ tầng, không phải do quy trình, công nghệ chung hay dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501168080_INTERMEDIATE_3_4dqx"
+  },
+  {
+    "questionText": "Bạn đang đánh giá hai giải pháp phần mềm cho dự án số hóa quy trình phê duyệt văn bản tại một cơ quan nhà nước. Giải pháp X có chi phí triển khai thấp nhưng yêu cầu 6 tháng để tùy chỉnh. Giải pháp Y có chi phí cao hơn nhưng triển khai được trong 2 tháng với ít tùy chỉnh. Yếu tố nào sau đây là QUAN TRỌNG NHẤT để đưa ra khuyến nghị?",
+    "options": [
+      "A. Chi phí triển khai của giải pháp X thấp hơn giải pháp Y",
+      "B. Thời gian triển khai của giải pháp Y phù hợp với tiến độ dự án gấp rút",
+      "C. Khả năng tùy chỉnh của giải pháp X để đáp ứng 100% yêu cầu nghiệp vụ",
+      "D. Số lượng nhân viên cần đào tạo để sử dụng giải pháp"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong bối cảnh cơ quan nhà nước thường có tiến độ dự án gấp rút và yêu cầu tuân thủ khung thời gian, thời gian triển khai là yếu tố quan trọng nhất. Giải pháp Y có thể triển khai nhanh hơn sẽ giảm rủi ro chậm tiến độ, dù chi phí cao hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501168080_INTERMEDIATE_4_yfzh"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý nhân sự (HRM) cho một doanh nghiệp sản xuất, bạn phát hiện rằng quy trình 'As-is' yêu cầu nhân viên phải nộp đơn xin nghỉ phép giấy và chờ phê duyệt của quản lý trực tiếp, trong khi quy trình 'To-be' đề xuất sử dụng hệ thống HRM để xin nghỉ phép online và phê duyệt tự động theo quy tắc. Khoảng trống chính ở đây là gì?",
+    "options": [
+      "A. Khoảng trống về công nghệ (Technology gap)",
+      "B. Khoảng trống về quy trình (Process gap)",
+      "C. Khoảng trống về kỹ năng sử dụng công nghệ (Skill gap)",
+      "D. Khoảng trống về dữ liệu nhân sự (Data gap)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khoảng trống chính là về quy trình, vì sự khác biệt nằm ở cách thức thực hiện (thủ công vs tự động), không phải do thiếu công nghệ, kỹ năng hay dữ liệu. Công nghệ HRM chỉ là công cụ hỗ trợ thay đổi quy trình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501168080_INTERMEDIATE_5_onr4"
+  },
+  {
+    "questionText": "Một công ty bán lẻ muốn triển khai giải pháp quản lý chuỗi cung ứng (SCM) để giảm thời gian giao hàng. Sau khi phân tích, bạn nhận thấy giải pháp SCM hiện có không hỗ trợ tích hợp với hệ thống quản lý kho (WMS) của công ty do sử dụng giao thức kết nối khác nhau. Đâu là giải pháp khả thi nhất để lấp khoảng trống này?",
+    "options": [
+      "A. Thay thế hệ thống WMS hiện tại bằng một hệ thống mới tương thích với giải pháp SCM",
+      "B. Yêu cầu nhà cung cấp giải pháp SCM phát triển module tích hợp tùy chỉnh với hệ thống WMS",
+      "C. Đào tạo nhân viên sử dụng đồng thời cả hai hệ thống để đảm bảo dữ liệu đồng bộ thủ công",
+      "D. Chấp nhận khoảng trống và tiếp tục sử dụng quy trình thủ công để chuyển dữ liệu giữa hai hệ thống"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp khả thi nhất là yêu cầu nhà cung cấp phát triển module tích hợp tùy chỉnh, vì đây là cách hiệu quả để đảm bảo tính tương thích mà không cần thay thế toàn bộ hệ thống WMS hoặc chấp nhận quy trình thủ công.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SKILL",
+    "id": "q_1780501168081_INTERMEDIATE_6_qkfs"
+  },
+  {
+    "questionText": "Bạn đang đánh giá giải pháp phần mềm cho dự án số hóa quy trình mua sắm của một tập đoàn đa quốc gia. Giải pháp A có chi phí triển khai thấp nhưng không hỗ trợ đa ngôn ngữ (chỉ tiếng Anh). Giải pháp B có chi phí cao hơn nhưng hỗ trợ tiếng Việt và tiếng Anh. Yếu tố nào sau đây là QUAN TRỌNG NHẤT để đưa ra quyết định?",
+    "options": [
+      "A. Chi phí triển khai của giải pháp A thấp hơn giải pháp B",
+      "B. Khả năng hỗ trợ đa ngôn ngữ của giải pháp B phù hợp với yêu cầu của tập đoàn có văn phòng tại Việt Nam",
+      "C. Thời gian triển khai của hai giải pháp",
+      "D. Số lượng tính năng bổ sung mà giải pháp B cung cấp so với giải pháp A"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong bối cảnh tập đoàn đa quốc gia với văn phòng tại Việt Nam, khả năng hỗ trợ đa ngôn ngữ (đặc biệt là tiếng Việt) là yếu tố quan trọng nhất để đảm bảo tất cả nhân viên có thể sử dụng hệ thống hiệu quả, tránh rào cản ngôn ngữ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501168081_INTERMEDIATE_7_d8r7"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa quy trình chăm sóc khách hàng của một công ty viễn thông, bạn phát hiện rằng quy trình hiện tại (As-is) yêu cầu khách hàng phải gọi tổng đài để yêu cầu hỗ trợ kỹ thuật, trong khi quy trình mới (To-be) đề xuất sử dụng chatbot để tự động trả lời các câu hỏi thường gặp. Khoảng trống này chủ yếu liên quan đến yếu tố nào?",
+    "options": [
+      "A. Khoảng trống về công nghệ (Technology gap)",
+      "B. Khoảng trống về quy trình (Process gap)",
+      "C. Khoảng trống về kỹ năng của nhân viên tổng đài (Skill gap)",
+      "D. Khoảng trống về dữ liệu khách hàng (Data gap)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khoảng trống ở đây là về công nghệ, vì quy trình mới yêu cầu triển khai chatbot (một công nghệ tự động hóa), không phải thay đổi quy trình thủ công hay kỹ năng nhân viên. Quy trình hiện tại và mới đều nhằm mục đích hỗ trợ khách hàng, nhưng cách thức thực hiện khác nhau do công nghệ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501168081_INTERMEDIATE_8_9bnm"
+  },
+  {
+    "questionText": "Một công ty dược phẩm muốn triển khai giải pháp quản lý tuân thủ (Compliance Management System) để đảm bảo tuân thủ các quy định của Bộ Y tế Việt Nam. Sau khi phân tích, bạn nhận thấy giải pháp hiện có không hỗ trợ các biểu mẫu báo cáo theo định dạng của Bộ Y tế. Khoảng trống này thuộc loại nào?",
+    "options": [
+      "A. Khoảng trống về công nghệ (Technology gap)",
+      "B. Khoảng trống về quy trình (Process gap)",
+      "C. Khoảng trống về khả năng (Capability gap)",
+      "D. Khoảng trống về dữ liệu (Data gap)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đây là khoảng trống về khả năng (capability gap), vì giải pháp không đáp ứng được yêu cầu cụ thể về định dạng báo cáo theo quy định của Bộ Y tế, không phải do thiếu công nghệ, quy trình hay dữ liệu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501168081_INTERMEDIATE_9_z5bz"
+  },
+  {
+    "questionText": "Bạn đang đánh giá hai giải pháp phần mềm cho dự án số hóa quy trình tuyển dụng của một công ty công nghệ. Giải pháp X có chi phí triển khai thấp nhưng không hỗ trợ tích hợp với LinkedIn để tìm kiếm ứng viên. Giải pháp Y có chi phí cao hơn nhưng hỗ trợ tích hợp với LinkedIn và các nền tảng tuyển dụng khác. Yếu tố nào sau đây là QUAN TRỌNG NHẤT để đưa ra khuyến nghị?",
+    "options": [
+      "A. Chi phí triển khai của giải pháp X thấp hơn giải pháp Y",
+      "B. Khả năng tích hợp với LinkedIn của giải pháp Y phù hợp với nhu cầu tuyển dụng nhân tài của công ty công nghệ",
+      "C. Thời gian triển khai của hai giải pháp",
+      "D. Số lượng tính năng quản lý ứng viên của giải pháp Y"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với công ty công nghệ, khả năng tích hợp với LinkedIn để tìm kiếm ứng viên là yếu tố quan trọng nhất, vì đây là kênh chính để thu hút nhân tài trong ngành. Chi phí và thời gian triển khai là yếu tố thứ yếu so với hiệu quả tuyển dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501168081_INTERMEDIATE_10_bq3x"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý tài sản (EAM) cho một nhà máy sản xuất, bạn phát hiện rằng quy trình hiện tại (As-is) yêu cầu nhân viên bảo trì phải ghi chép thông tin bảo trì trên giấy và sau đó nhập liệu vào Excel. Quy trình mới (To-be) đề xuất sử dụng ứng dụng di động để ghi nhận thông tin bảo trì trực tiếp tại hiện trường. Khoảng trống chính ở đây là gì?",
+    "options": [
+      "A. Khoảng trống về công nghệ (Technology gap)",
+      "B. Khoảng trống về quy trình (Process gap)",
+      "C. Khoảng trống về kỹ năng sử dụng ứng dụng di động (Skill gap)",
+      "D. Khoảng trống về dữ liệu tài sản (Data gap)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khoảng trống chính là về quy trình, vì sự khác biệt nằm ở cách thức thực hiện công việc (ghi chép thủ công vs sử dụng ứng dụng di động), không phải do thiếu công nghệ, kỹ năng hay dữ liệu. Công nghệ ứng dụng di động chỉ là công cụ hỗ trợ thay đổi quy trình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501168082_INTERMEDIATE_11_47lw"
+  },
+  {
+    "questionText": "Một công ty bảo hiểm muốn triển khai giải pháp tự động hóa quy trình xử lý yêu cầu bồi thường. Sau khi phân tích, bạn nhận thấy giải pháp hiện có không hỗ trợ xử lý các yêu cầu bồi thường phức tạp (ví dụ: tai nạn xe hơi có nhiều bên liên quan). Đâu là giải pháp khả thi nhất để lấp khoảng trống này?",
+    "options": [
+      "A. Từ chối triển khai giải pháp và tiếp tục sử dụng quy trình thủ công cho tất cả các yêu cầu bồi thường",
+      "B. Triển khai giải pháp cho các yêu cầu đơn giản và giữ quy trình thủ công cho các yêu cầu phức tạp",
+      "C. Yêu cầu nhà cung cấp giải pháp phát triển module xử lý các yêu cầu phức tạp",
+      "D. Đào tạo nhân viên xử lý nhanh hơn để giảm thời gian xử lý các yêu cầu phức tạp"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp khả thi nhất là triển khai giải pháp cho các yêu cầu đơn giản (tận dụng tự động hóa) và giữ quy trình thủ công cho các yêu cầu phức tạp (đòi hỏi sự can thiệp của con người). Điều này cân bằng giữa hiệu quả và khả năng xử lý các trường hợp đặc thù.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SKILL",
+    "id": "q_1780501168083_INTERMEDIATE_12_ozvh"
+  },
+  {
+    "questionText": "Bạn đang đánh giá giải pháp phần mềm cho dự án số hóa quy trình quản lý dự án của một công ty xây dựng. Giải pháp A có chi phí triển khai thấp nhưng không hỗ trợ tích hợp với phần mềm thiết kế AutoCAD. Giải pháp B có chi phí cao hơn nhưng hỗ trợ tích hợp với AutoCAD. Yếu tố nào sau đây là QUAN TRỌNG NHẤT để đưa ra quyết định?",
+    "options": [
+      "A. Chi phí triển khai của giải pháp A thấp hơn giải pháp B",
+      "B. Khả năng tích hợp với AutoCAD của giải pháp B phù hợp với nhu cầu quản lý dự án xây dựng",
+      "C. Thời gian triển khai của hai giải pháp",
+      "D. Số lượng tính năng quản lý tiến độ dự án của giải pháp B"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với công ty xây dựng, khả năng tích hợp với AutoCAD (phần mềm thiết kế phổ biến trong ngành) là yếu tố quan trọng nhất, vì nó ảnh hưởng trực tiếp đến hiệu quả quản lý dự án và sự liên kết giữa thiết kế và thực thi. Chi phí và thời gian triển khai là yếu tố thứ yếu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501168083_INTERMEDIATE_13_2h3t"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi số cho một ngân hàng Việt Nam, bạn phát hiện quy trình phê duyệt tín dụng hiện tại (As-is) mất trung bình 7 ngày làm việc do phải qua 5 bước thủ công và chờ đợi phê duyệt từ nhiều cấp. Mô hình To-be đề xuất tự động hóa 3/5 bước và tích hợp AI để đánh giá rủi ro tín dụng. Tuy nhiên, ban lãnh đạo lo ngại về chi phí triển khai và rủi ro tuân thủ quy định NHNN. Đâu là bước tiếp theo QUAN TRỌNG NHẤT để đánh giá khoảng cách (gap) này?",
+    "options": [
+      "A. Tính toán ROI chi tiết cho từng bước tự động hóa, bao gồm chi phí đào tạo nhân viên và bảo trì hệ thống.",
+      "B. Tổ chức workshop với các bên liên quan (Risk, Compliance, IT) để xác định các rào cản kỹ thuật và pháp lý cụ thể, đồng thời ưu tiên các bước tự động hóa có tác động lớn nhất.",
+      "C. Đề xuất triển khai thí điểm trên một chi nhánh nhỏ để thu thập dữ liệu thực tế về hiệu quả và rủi ro trước khi mở rộng.",
+      "D. So sánh với các giải pháp tương tự của ngân hàng khác trong khu vực (benchmarking) để chứng minh tính khả thi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ EXPERT, việc xác định rào cản kỹ thuật và pháp lý (đặc thù ngành ngân hàng Việt Nam) là bước then chốt để đánh giá gap một cách toàn diện. Workshop giúp thu thập insight từ các bộ phận chức năng, từ đó ưu tiên các bước tự động hóa có tác động lớn nhất và giảm thiểu rủi ro tuân thủ. Các lựa chọn khác chỉ giải quyết một phần vấn đề hoặc chưa đủ chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501348625_EXPERT_0_6aoe"
+  },
+  {
+    "questionText": "Một tập đoàn bán lẻ đa quốc gia muốn triển khai hệ thống quản lý kho hàng thông minh (WMS) tại Việt Nam. Qua phân tích As-is, bạn nhận thấy kho hàng hiện tại sử dụng Excel và quản lý thủ công, dẫn đến thất thoát 15% hàng tồn kho hàng năm. Giải pháp WMS đề xuất có thể giảm thất thoát xuống 3%, nhưng chi phí triển khai cao và yêu cầu đào tạo lại toàn bộ nhân viên. Làm thế nào để đánh giá mức độ phù hợp (solution fit) của WMS trong bối cảnh này?",
+    "options": [
+      "A. Tính toán thời gian hoàn vốn (payback period) dựa trên chi phí triển khai và tiết kiệm từ giảm thất thoát hàng tồn kho.",
+      "B. Đánh giá khả năng tích hợp của WMS với hệ thống ERP hiện tại và năng lực của đội ngũ IT nội bộ để hỗ trợ triển khai.",
+      "C. Phân tích tổng thể: (1) Mức độ phù hợp với chiến lược số hóa của công ty, (2) Khả năng mở rộng cho các kho hàng khác, (3) Rủi ro đào tạo nhân viên và sự thay đổi văn hóa làm việc, (4) Tác động đến chuỗi cung ứng tổng thể.",
+      "D. So sánh với các giải pháp thay thế như thuê ngoài quản lý kho hoặc cải tiến quy trình thủ công trước khi đầu tư WMS."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đánh giá solution fit ở cấp độ EXPERT đòi hỏi phân tích đa chiều, không chỉ về chi phí hay kỹ thuật. Cần xem xét chiến lược dài hạn, khả năng mở rộng, tác động văn hóa và chuỗi cung ứng để đảm bảo giải pháp phù hợp với mục tiêu kinh doanh tổng thể. Các lựa chọn khác chỉ tập trung vào một khía cạnh hẹp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501348626_EXPERT_1_11iq"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa quy trình sản xuất tại một nhà máy dệt may Việt Nam, bạn phát hiện khoảng cách (gap) lớn giữa năng suất thực tế (70% công suất thiết kế) và mục tiêu To-be (90%). Nguyên nhân chính là do quy trình lập kế hoạch sản xuất thủ công, thiếu dữ liệu thời gian thực và phụ thuộc vào kinh nghiệm của quản đốc. Giải pháp đề xuất là triển khai hệ thống MES (Manufacturing Execution System). Tuy nhiên, ban lãnh đạo lo ngại về rủi ro triển khai và chi phí. Đâu là cách tiếp cận HIỆU QUẢ NHẤT để thuyết phục lãnh đạo?",
+    "options": [
+      "A. Trình bày case study thành công của các nhà máy dệt may khác tại Việt Nam đã triển khai MES để chứng minh tính khả thi.",
+      "B. Đề xuất triển khai thí điểm trên một dây chuyền sản xuất nhỏ, đo lường hiệu quả cụ thể trước khi mở rộng.",
+      "C. Xây dựng mô hình tài chính chi tiết (NPV, IRR) để chứng minh lợi ích dài hạn vượt trội so với chi phí đầu tư.",
+      "D. Thực hiện phân tích root-cause (5 Whys) để xác định chính xác nguyên nhân gây ra khoảng cách, sau đó đề xuất giải pháp MES như một phần của chiến lược cải tiến tổng thể, bao gồm đào tạo nhân viên và thay đổi quy trình."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Ở cấp độ EXPERT, cần kết hợp phân tích nguyên nhân gốc rễ (root-cause) với chiến lược cải tiến tổng thể để thuyết phục lãnh đạo. Việc chỉ tập trung vào case study, thí điểm hoặc mô hình tài chính chưa đủ để giải quyết lo ngại về rủi ro và sự thay đổi văn hóa. Giải pháp cần được đặt trong bối cảnh cải tiến quy trình toàn diện.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501348627_EXPERT_2_vajm"
+  },
+  {
+    "questionText": "Một công ty logistics Việt Nam đang đánh giá khoảng cách giữa quy trình vận chuyển hiện tại (As-is) và mô hình To-be với hệ thống TMS (Transportation Management System). Khoảng cách chính là thời gian giao hàng chậm hơn 20% so với đối thủ do thiếu tối ưu hóa lộ trình và theo dõi thời gian thực. Tuy nhiên, đội ngũ lái xe phản đối việc triển khai TMS vì lo ngại bị giám sát. Đâu là yếu tố QUAN TRỌNG NHẤT cần đánh giá khi lựa chọn giải pháp?",
+    "options": [
+      "A. Chi phí triển khai TMS và thời gian hoàn vốn dự kiến.",
+      "B. Khả năng tích hợp TMS với hệ thống ERP hiện tại của công ty.",
+      "C. Mức độ sẵn sàng thay đổi (change readiness) của đội ngũ lái xe và kế hoạch đào tạo, truyền thông để giảm thiểu phản đối.",
+      "D. Tính năng tối ưu hóa lộ trình và theo dõi thời gian thực của TMS so với các giải pháp khác trên thị trường."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở cấp độ EXPERT, yếu tố con người (change readiness) là quan trọng nhất khi triển khai giải pháp công nghệ. Nếu đội ngũ lái xe phản đối, giải pháp dù có tính năng tốt đến đâu cũng sẽ thất bại. Các yếu tố kỹ thuật và chi phí chỉ là điều kiện cần, không phải điều kiện đủ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501348628_EXPERT_3_adgm"
+  },
+  {
+    "questionText": "Trong dự án số hóa quy trình mua hàng tại một tập đoàn FMCG, bạn phát hiện khoảng cách lớn giữa quy trình As-is (thủ công, giấy tờ) và To-be (tự động hóa qua hệ thống e-Procurement). Tuy nhiên, ban lãnh đạo lo ngại về rủi ro gian lận khi chuyển sang hệ thống mới. Đâu là cách tiếp cận TỐI ƯU để đánh giá rủi ro và đề xuất giải pháp?",
+    "options": [
+      "A. Đề xuất triển khai hệ thống e-Procurement với các tính năng kiểm soát gian lận mạnh mẽ (ví dụ: phê duyệt đa cấp, audit log) và đào tạo nhân viên về quy trình mới.",
+      "B. Thực hiện phân tích rủi ro chi tiết (risk assessment) để xác định các điểm yếu tiềm ẩn trong quy trình As-is và To-be, sau đó đề xuất giải pháp giảm thiểu rủi ro (ví dụ: tích hợp blockchain để theo dõi giao dịch).",
+      "C. So sánh với các công ty FMCG khác đã triển khai e-Procurement để học hỏi kinh nghiệm và tránh các sai lầm phổ biến.",
+      "D. Đề xuất triển khai thí điểm trên một bộ phận nhỏ, theo dõi chặt chẽ và điều chỉnh trước khi mở rộng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ EXPERT, cần thực hiện phân tích rủi ro chi tiết để xác định các điểm yếu cụ thể và đề xuất giải pháp giảm thiểu phù hợp. Việc chỉ đề xuất tính năng kiểm soát hoặc triển khai thí điểm chưa đủ để giải quyết lo ngại về gian lận một cách toàn diện. Giải pháp cần được xây dựng dựa trên phân tích rủi ro cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501348628_EXPERT_4_9y1f"
+  },
+  {
+    "questionText": "Một công ty sản xuất thép tại Việt Nam muốn cải tiến quy trình bảo trì thiết bị để giảm thời gian ngừng máy. Quy trình As-is dựa vào lịch bảo trì cố định và kinh nghiệm của kỹ thuật viên, dẫn đến chi phí bảo trì cao và thời gian ngừng máy ngoài kế hoạch. Giải pháp To-be đề xuất sử dụng hệ thống bảo trì dự đoán (Predictive Maintenance) với IoT và AI. Tuy nhiên, ban lãnh đạo lo ngại về chi phí đầu tư và khả năng triển khai. Đâu là bước ĐẦU TIÊN để đánh giá khoảng cách này?",
+    "options": [
+      "A. Tính toán chi phí triển khai hệ thống Predictive Maintenance và so sánh với chi phí bảo trì hiện tại.",
+      "B. Đánh giá khả năng tích hợp của hệ thống Predictive Maintenance với hệ thống quản lý bảo trì hiện tại (CMMS).",
+      "C. Thực hiện phân tích dữ liệu lịch sử về thời gian ngừng máy và chi phí bảo trì để xác định các điểm yếu cụ thể trong quy trình As-is, từ đó xác định nhu cầu thực sự cho Predictive Maintenance.",
+      "D. Tổ chức hội thảo với các nhà cung cấp giải pháp Predictive Maintenance để tìm hiểu tính năng và khả năng tùy chỉnh."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bước đầu tiên ở cấp độ EXPERT là phân tích dữ liệu lịch sử để xác định rõ vấn đề và nhu cầu thực sự. Việc tính toán chi phí hoặc đánh giá tích hợp trước khi hiểu rõ vấn đề có thể dẫn đến giải pháp không phù hợp. Phân tích dữ liệu giúp xác định liệu Predictive Maintenance có thực sự cần thiết hay không.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501348629_EXPERT_5_grkb"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi số cho một bệnh viện tư nhân, bạn phát hiện khoảng cách lớn giữa quy trình As-is (quản lý bệnh án giấy, thủ công) và To-be (hệ thống EMR - Electronic Medical Record). Tuy nhiên, bác sĩ và y tá phản đối vì lo ngại hệ thống mới sẽ làm tăng thời gian làm việc và giảm tương tác với bệnh nhân. Đâu là yếu tố QUAN TRỌNG NHẤT cần xem xét khi đánh giá giải pháp EMR?",
+    "options": [
+      "A. Chi phí triển khai và bảo trì hệ thống EMR so với ngân sách của bệnh viện.",
+      "B. Khả năng tùy chỉnh giao diện và quy trình của EMR để phù hợp với thói quen làm việc của bác sĩ và y tá.",
+      "C. Tính năng bảo mật và tuân thủ quy định về dữ liệu y tế (ví dụ: Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân).",
+      "D. Mức độ sẵn sàng thay đổi (change readiness) của đội ngũ y tế và kế hoạch đào tạo, hỗ trợ để giảm thiểu phản đối."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Ở cấp độ EXPERT, yếu tố con người (change readiness) là quan trọng nhất khi triển khai giải pháp công nghệ trong môi trường y tế. Nếu đội ngũ y tế phản đối, giải pháp dù có tính năng tốt đến đâu cũng sẽ thất bại. Các yếu tố kỹ thuật và chi phí chỉ là điều kiện hỗ trợ, không phải yếu tố quyết định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501348629_EXPERT_6_7ttt"
+  },
+  {
+    "questionText": "Một công ty bán lẻ thời trang muốn tối ưu hóa quy trình quản lý chuỗi cung ứng để giảm thời gian giao hàng từ nhà cung cấp đến cửa hàng. Quy trình As-is phụ thuộc vào email và điện thoại, dẫn đến sai sót và chậm trễ. Giải pháp To-be đề xuất sử dụng hệ thống SCM (Supply Chain Management) tích hợp với nhà cung cấp. Tuy nhiên, nhà cung cấp lo ngại về chi phí và khả năng tích hợp. Đâu là cách tiếp cận TỐI ƯU để đánh giá giải pháp?",
+    "options": [
+      "A. Đề xuất triển khai SCM trên một nhóm nhà cung cấp nhỏ, đo lường hiệu quả trước khi mở rộng.",
+      "B. Thực hiện phân tích lợi ích - chi phí (cost-benefit analysis) để chứng minh giá trị của SCM cho cả công ty và nhà cung cấp.",
+      "C. Xây dựng lộ trình triển khai chi tiết, bao gồm đánh giá năng lực kỹ thuật của nhà cung cấp, kế hoạch đào tạo và cơ chế chia sẻ lợi ích để khuyến khích hợp tác.",
+      "D. So sánh với các giải pháp SCM khác trên thị trường để chọn giải pháp có tính năng phù hợp nhất."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở cấp độ EXPERT, cần xây dựng lộ trình triển khai toàn diện, bao gồm đánh giá năng lực nhà cung cấp và cơ chế chia sẻ lợi ích. Việc chỉ triển khai thí điểm hoặc phân tích chi phí chưa đủ để giải quyết lo ngại của nhà cung cấp. Giải pháp cần được thiết kế để đảm bảo sự hợp tác bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780501348630_EXPERT_7_k6k0"
+  },
+  {
+    "questionText": "Trong dự án số hóa quy trình tuyển dụng tại một tập đoàn đa ngành, bạn phát hiện khoảng cách giữa quy trình As-is (thủ công, giấy tờ) và To-be (hệ thống ATS - Applicant Tracking System). Tuy nhiên, bộ phận HR lo ngại về khả năng tùy chỉnh ATS để phù hợp với quy trình tuyển dụng đặc thù của từng công ty con. Đâu là bước QUAN TRỌNG NHẤT để đánh giá giải pháp ATS?",
+    "options": [
+      "A. Đánh giá khả năng tùy chỉnh của ATS để phù hợp với quy trình tuyển dụng của từng công ty con.",
+      "B. Tính toán chi phí triển khai ATS và so sánh với ngân sách của tập đoàn.",
+      "C. Thực hiện phân tích nhu cầu chi tiết (requirements analysis) với từng công ty con để xác định các yêu cầu đặc thù, sau đó đánh giá khả năng đáp ứng của ATS và đề xuất giải pháp tùy chỉnh hoặc thay thế.",
+      "D. Tổ chức hội thảo với các nhà cung cấp ATS để tìm hiểu tính năng và khả năng tích hợp."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bước quan trọng nhất ở cấp độ EXPERT là phân tích nhu cầu chi tiết với từng công ty con để xác định yêu cầu đặc thù. Việc chỉ đánh giá khả năng tùy chỉnh hoặc tính toán chi phí trước khi hiểu rõ nhu cầu có thể dẫn đến giải pháp không phù hợp. Phân tích nhu cầu giúp đảm bảo ATS đáp ứng được yêu cầu đa dạng của tập đoàn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501348630_EXPERT_8_9zrm"
+  },
+  {
+    "questionText": "Một công ty viễn thông muốn cải tiến quy trình xử lý khiếu nại khách hàng để giảm thời gian giải quyết từ 5 ngày xuống 2 ngày. Quy trình As-is dựa vào email và hệ thống CRM cơ bản, dẫn đến thất lạc thông tin và chậm trễ. Giải pháp To-be đề xuất sử dụng hệ thống quản lý khiếu nại tự động với AI để phân loại và ưu tiên khiếu nại. Tuy nhiên, đội ngũ chăm sóc khách hàng lo ngại về khả năng tương tác với hệ thống mới. Đâu là yếu tố QUAN TRỌNG NHẤT cần đánh giá?",
+    "options": [
+      "A. Chi phí triển khai hệ thống quản lý khiếu nại tự động và thời gian hoàn vốn dự kiến.",
+      "B. Khả năng tích hợp của hệ thống mới với hệ thống CRM hiện tại và các kênh tương tác khác (email, chatbot).",
+      "C. Mức độ sẵn sàng thay đổi (change readiness) của đội ngũ chăm sóc khách hàng và kế hoạch đào tạo, hỗ trợ để đảm bảo họ có thể sử dụng hệ thống hiệu quả.",
+      "D. Tính năng AI của hệ thống trong việc phân loại và ưu tiên khiếu nại so với các giải pháp khác trên thị trường."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở cấp độ EXPERT, yếu tố con người (change readiness) là quan trọng nhất khi triển khai giải pháp công nghệ mới. Nếu đội ngũ chăm sóc khách hàng không sẵn sàng hoặc không được đào tạo đầy đủ, hệ thống dù có tính năng tốt đến đâu cũng sẽ thất bại. Các yếu tố kỹ thuật và chi phí chỉ là điều kiện hỗ trợ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501348631_EXPERT_9_jux5"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi số cho một công ty bảo hiểm, bạn phát hiện khoảng cách giữa quy trình As-is (xử lý hồ sơ giấy, thủ công) và To-be (hệ thống tự động hóa quy trình bảo hiểm với RPA và AI). Tuy nhiên, ban lãnh đạo lo ngại về rủi ro tuân thủ quy định của Bộ Tài chính và khả năng đáp ứng các yêu cầu pháp lý. Đâu là cách tiếp cận TỐI ƯU để đánh giá giải pháp?",
+    "options": [
+      "A. Đề xuất triển khai hệ thống với các tính năng tuân thủ pháp lý mạnh mẽ (ví dụ: audit log, phê duyệt đa cấp) và đào tạo nhân viên về quy định mới.",
+      "B. Thực hiện phân tích rủi ro tuân thủ (compliance risk assessment) để xác định các yêu cầu pháp lý cụ thể, sau đó đánh giá khả năng đáp ứng của giải pháp và đề xuất các biện pháp giảm thiểu rủi ro.",
+      "C. So sánh với các công ty bảo hiểm khác đã triển khai hệ thống tương tự để học hỏi kinh nghiệm và tránh các sai lầm phổ biến.",
+      "D. Đề xuất triển khai thí điểm trên một sản phẩm bảo hiểm đơn giản, theo dõi chặt chẽ và điều chỉnh trước khi mở rộng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ EXPERT, cần thực hiện phân tích rủi ro tuân thủ chi tiết để xác định các yêu cầu pháp lý cụ thể và đánh giá khả năng đáp ứng của giải pháp. Việc chỉ đề xuất tính năng tuân thủ hoặc triển khai thí điểm chưa đủ để giải quyết lo ngại về rủi ro pháp lý một cách toàn diện. Giải pháp cần được xây dựng dựa trên phân tích rủi ro cụ thể.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501348631_EXPERT_10_u92l"
+  },
+  {
+    "questionText": "Một công ty sản xuất ô tô muốn tối ưu hóa quy trình quản lý chất lượng để giảm tỷ lệ lỗi từ 5% xuống 1%. Quy trình As-is dựa vào kiểm tra thủ công và báo cáo giấy, dẫn đến chậm trễ trong việc phát hiện và khắc phục lỗi. Giải pháp To-be đề xuất sử dụng hệ thống QMS (Quality Management System) với IoT để giám sát thời gian thực. Tuy nhiên, đội ngũ sản xuất lo ngại về sự phức tạp của hệ thống mới. Đâu là bước ĐẦU TIÊN để đánh giá giải pháp?",
+    "options": [
+      "A. Tính toán chi phí triển khai QMS và so sánh với chi phí lỗi hiện tại để chứng minh lợi ích.",
+      "B. Đánh giá khả năng tích hợp của QMS với hệ thống ERP và MES hiện tại của công ty.",
+      "C. Thực hiện phân tích root-cause (5 Whys) để xác định nguyên nhân gốc rễ của tỷ lệ lỗi, sau đó đánh giá liệu QMS có giải quyết được các nguyên nhân này hay không.",
+      "D. Tổ chức hội thảo với các nhà cung cấp QMS để tìm hiểu tính năng và khả năng tùy chỉnh."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bước đầu tiên ở cấp độ EXPERT là phân tích root-cause để xác định nguyên nhân gốc rễ của vấn đề. Nếu QMS không giải quyết được các nguyên nhân này, giải pháp sẽ không hiệu quả. Việc tính toán chi phí hoặc đánh giá tích hợp trước khi hiểu rõ vấn đề có thể dẫn đến giải pháp không phù hợp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780501348632_EXPERT_11_656d"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP tại một tập đoàn bán lẻ Việt Nam, sau khi phân tích quy trình 'As-is' và 'To-be' cho mảng quản lý kho, bạn phát hiện rằng hệ thống mới không hỗ trợ tính năng 'định mức tồn kho động' (dynamic inventory threshold) theo mùa vụ – một yêu cầu quan trọng từ phòng Kinh doanh. Tuy nhiên, phòng IT khẳng định việc tùy chỉnh tính năng này sẽ làm tăng 30% chi phí và kéo dài thời gian triển khai thêm 2 tháng. Bạn sẽ ưu tiên đánh giá yếu tố nào sau đây để đưa ra khuyến nghị cuối cùng?",
+    "options": [
+      "A. Mức độ ảnh hưởng của việc thiếu tính năng này đến doanh thu theo mùa, so sánh với chi phí và thời gian triển khai bổ sung.",
+      "B. Khả năng thuyết phục phòng Kinh doanh chấp nhận giải pháp thay thế tạm thời bằng quy trình thủ công.",
+      "C. Độ ưu tiên của tính năng này trong danh sách yêu cầu của tất cả các bên liên quan (stakeholders).",
+      "D. Khả năng tích hợp hệ thống ERP với các công cụ bên thứ ba để bổ sung tính năng thiếu hụt."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đánh giá mức độ ảnh hưởng đến doanh thu (business impact) là yếu tố cốt lõi để quyết định có nên đầu tư thêm chi phí và thời gian hay không, đặc biệt trong bối cảnh mùa vụ ảnh hưởng trực tiếp đến lợi nhuận. Các lựa chọn khác chỉ xem xét một khía cạnh riêng lẻ mà không gắn với giá trị kinh doanh tổng thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780504746582_ADVANCED_0_877k"
+  },
+  {
+    "questionText": "Bạn đang thực hiện Gap Analysis cho dự án số hóa quy trình phê duyệt ngân sách tại một ngân hàng đa quốc gia. Phòng Tài chính yêu cầu hệ thống mới phải tự động cảnh báo khi ngân sách vượt quá 90% hạn mức, nhưng phòng IT cho biết hệ thống chỉ hỗ trợ cảnh báo khi vượt 100%. Giải pháp nào sau đây là tối ưu nhất để cân bằng giữa yêu cầu nghiệp vụ và rủi ro triển khai?",
+    "options": [
+      "A. Đề xuất sử dụng cảnh báo 100% của hệ thống và bổ sung quy trình thủ công để giám sát ngưỡng 90%.",
+      "B. Yêu cầu phòng IT tùy chỉnh hệ thống để hỗ trợ cảnh báo 90%, chấp nhận tăng chi phí và thời gian triển khai.",
+      "C. Đánh giá tác động của việc thiếu cảnh báo 90% đến quy trình kiểm soát ngân sách, sau đó đề xuất giải pháp kết hợp cảnh báo tự động (100%) và báo cáo định kỳ (90%) từ bộ phận Tài chính.",
+      "D. Từ chối yêu cầu của phòng Tài chính vì hệ thống không hỗ trợ và đề xuất họ tự theo dõi thủ công."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp kết hợp (hybrid) giữa tự động hóa và thủ công dựa trên đánh giá tác động thực tế sẽ giảm thiểu rủi ro triển khai (chi phí, thời gian) mà vẫn đáp ứng được yêu cầu cốt lõi của nghiệp vụ. Các lựa chọn khác hoặc quá cứng nhắc hoặc không cân nhắc đủ yếu tố rủi ro.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780504746583_ADVANCED_1_ow8m"
+  },
+  {
+    "questionText": "Trong dự án triển khai CRM cho một công ty bảo hiểm, bạn phát hiện rằng quy trình 'As-is' của phòng Kinh doanh yêu cầu nhân viên phải nhập thủ công thông tin khách hàng từ email vào hệ thống, trong khi hệ thống CRM mới (To-be) hỗ trợ tự động trích xuất dữ liệu từ email. Tuy nhiên, phòng Pháp chế lo ngại về rủi ro tuân thủ (compliance) khi tự động hóa quy trình này. Bạn sẽ xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Đề xuất tạm dừng triển khai tính năng tự động hóa cho đến khi phòng Pháp chế xác nhận tuân thủ.",
+      "B. Phân tích chi tiết rủi ro tuân thủ, đề xuất giải pháp tự động hóa có kiểm soát (ví dụ: chỉ áp dụng cho email nội bộ) và xây dựng quy trình phê duyệt dữ liệu tự động.",
+      "C. Bỏ qua lo ngại của phòng Pháp chế vì tính năng tự động hóa là yêu cầu bắt buộc từ phòng Kinh doanh.",
+      "D. Đề xuất sử dụng giải pháp trung gian: tự động hóa một phần quy trình và giữ lại bước nhập liệu thủ công cho các trường hợp nhạy cảm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp phải giải quyết cả hai vấn đề: tận dụng lợi ích của tự động hóa và giảm thiểu rủi ro tuân thủ. Việc phân tích rủi ro chi tiết và đề xuất giải pháp có kiểm soát (ví dụ: giới hạn phạm vi áp dụng) là cách tiếp cận toàn diện nhất. Các lựa chọn khác hoặc quá bảo thủ hoặc bỏ qua rủi ro quan trọng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780504746584_ADVANCED_2_96oq"
+  },
+  {
+    "questionText": "Bạn đang đánh giá giải pháp cho dự án tối ưu hóa chuỗi cung ứng tại một công ty sản xuất. Hệ thống hiện tại (As-is) không hỗ trợ dự báo nhu cầu theo thời gian thực, trong khi giải pháp mới (To-be) có tính năng này nhưng yêu cầu tích hợp với 3 hệ thống khác và chi phí triển khai cao. Phòng Sản xuất khẳng định tính năng này là 'bắt buộc', nhưng phòng Tài chính lo ngại về ROI. Bạn sẽ làm gì để thuyết phục các bên?",
+    "options": [
+      "A. Tính toán ROI chi tiết cho tính năng dự báo nhu cầu, bao gồm cả lợi ích gián tiếp như giảm tồn kho và cải thiện mức độ hài lòng khách hàng.",
+      "B. Đề xuất triển khai tính năng này ở phạm vi nhỏ (pilot) để chứng minh hiệu quả trước khi mở rộng.",
+      "C. Thỏa hiệp bằng cách đề xuất sử dụng giải pháp trung gian với chi phí thấp hơn nhưng không hỗ trợ thời gian thực.",
+      "D. Chấp nhận yêu cầu của phòng Sản xuất vì họ là người trực tiếp sử dụng hệ thống."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Để thuyết phục phòng Tài chính, cần chứng minh giá trị kinh doanh cụ thể (ROI) của tính năng, bao gồm cả lợi ích gián tiếp. Việc tính toán ROI chi tiết là bước quan trọng nhất để đưa ra quyết định dựa trên dữ liệu. Các lựa chọn khác không giải quyết được vấn đề cốt lõi là chứng minh giá trị đầu tư.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SKILL",
+    "id": "q_1780504746585_ADVANCED_3_c642"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý tài sản (EAM) tại một nhà máy điện, bạn phát hiện rằng quy trình bảo trì hiện tại (As-is) yêu cầu kỹ thuật viên phải ghi chép thủ công lịch sử bảo trì trên giấy, trong khi hệ thống mới (To-be) hỗ trợ ghi nhận qua ứng dụng di động. Tuy nhiên, đội ngũ kỹ thuật viên phản đối vì họ không quen sử dụng thiết bị di động trong môi trường làm việc khắc nghiệt. Giải pháp nào sau đây là khả thi nhất?",
+    "options": [
+      "A. Đề xuất trang bị thiết bị di động chuyên dụng (rugged devices) và tổ chức đào tạo cho kỹ thuật viên.",
+      "B. Giữ nguyên quy trình ghi chép thủ công và nhập liệu sau vào hệ thống.",
+      "C. Yêu cầu nhà cung cấp tùy chỉnh hệ thống để hỗ trợ nhập liệu qua máy tính để bàn thay vì di động.",
+      "D. Thỏa hiệp bằng cách cho phép kỹ thuật viên ghi chép thủ công nhưng bổ sung nhân viên nhập liệu để chuyển dữ liệu vào hệ thống."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp trang bị thiết bị chuyên dụng và đào tạo giải quyết được cả hai vấn đề: tận dụng lợi ích của hệ thống mới và khắc phục lo ngại về môi trường làm việc. Các lựa chọn khác hoặc không tối ưu hóa được quy trình hoặc tăng chi phí vận hành dài hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780504746586_ADVANCED_4_xfzm"
+  },
+  {
+    "questionText": "Bạn đang thực hiện Gap Analysis cho dự án số hóa quy trình mua hàng tại một công ty logistics. Hệ thống hiện tại (As-is) yêu cầu 5 bước phê duyệt cho mỗi đơn hàng, trong khi hệ thống mới (To-be) chỉ hỗ trợ tối đa 3 bước. Phòng Mua hàng khẳng định quy trình 5 bước là cần thiết để kiểm soát rủi ro, nhưng phòng IT cho biết không thể tùy chỉnh thêm bước phê duyệt. Bạn sẽ đề xuất giải pháp nào?",
+    "options": [
+      "A. Đề xuất giữ nguyên quy trình 5 bước và sử dụng quy trình thủ công bên ngoài hệ thống.",
+      "B. Phân tích rủi ro của việc giảm từ 5 xuống 3 bước phê duyệt, sau đó đề xuất giải pháp kết hợp: 3 bước phê duyệt trong hệ thống + 2 bước kiểm tra thủ công cho các đơn hàng có giá trị cao.",
+      "C. Chấp nhận quy trình 3 bước của hệ thống vì không thể tùy chỉnh thêm.",
+      "D. Đề xuất nhà cung cấp hệ thống tùy chỉnh thêm 2 bước phê duyệt, bất chấp chi phí và thời gian triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp kết hợp giữa tự động hóa và thủ công dựa trên phân tích rủi ro đảm bảo kiểm soát được rủi ro mà không làm tăng chi phí hoặc thời gian triển khai. Các lựa chọn khác hoặc quá cứng nhắc hoặc không giải quyết được vấn đề cốt lõi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780504746587_ADVANCED_5_vqrq"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý quan hệ đối tác (PRM) tại một công ty công nghệ, bạn phát hiện rằng quy trình hiện tại (As-is) yêu cầu nhân viên phải cập nhật thông tin đối tác thủ công vào nhiều hệ thống riêng lẻ, trong khi hệ thống mới (To-be) hỗ trợ tích hợp tự động. Tuy nhiên, phòng Pháp chế lo ngại về rủi ro bảo mật khi tích hợp với các hệ thống bên ngoài. Bạn sẽ làm gì để giải quyết xung đột này?",
+    "options": [
+      "A. Đề xuất tạm dừng tích hợp cho đến khi phòng Pháp chế xác nhận tuân thủ bảo mật.",
+      "B. Phân tích chi tiết rủi ro bảo mật, đề xuất giải pháp tích hợp có kiểm soát (ví dụ: chỉ chia sẻ dữ liệu cần thiết, mã hóa dữ liệu) và xây dựng quy trình giám sát bảo mật.",
+      "C. Bỏ qua lo ngại của phòng Pháp chế vì tích hợp là yêu cầu bắt buộc từ phòng Kinh doanh.",
+      "D. Đề xuất sử dụng giải pháp trung gian: tích hợp một phần dữ liệu và giữ lại cập nhật thủ công cho các thông tin nhạy cảm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp phải giải quyết cả hai vấn đề: tận dụng lợi ích của tích hợp và giảm thiểu rủi ro bảo mật. Việc phân tích rủi ro chi tiết và đề xuất giải pháp tích hợp có kiểm soát là cách tiếp cận toàn diện nhất. Các lựa chọn khác hoặc quá bảo thủ hoặc bỏ qua rủi ro quan trọng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SKILL",
+    "id": "q_1780504746587_ADVANCED_6_low6"
+  },
+  {
+    "questionText": "Bạn đang đánh giá giải pháp cho dự án triển khai hệ thống quản lý dự án tại một công ty xây dựng. Hệ thống hiện tại (As-is) không hỗ trợ theo dõi tiến độ theo thời gian thực, trong khi giải pháp mới (To-be) có tính năng này nhưng yêu cầu nhân viên cập nhật tiến độ hàng ngày. Phòng Dự án lo ngại về khối lượng công việc tăng thêm cho nhân viên. Bạn sẽ đề xuất giải pháp nào?",
+    "options": [
+      "A. Đề xuất sử dụng tính năng theo dõi thời gian thực nhưng chỉ áp dụng cho các dự án quan trọng.",
+      "B. Phân tích tác động của việc cập nhật tiến độ hàng ngày đến năng suất nhân viên, sau đó đề xuất giải pháp kết hợp: tự động hóa một phần cập nhật (ví dụ: tích hợp với hệ thống chấm công) và giảm tần suất cập nhật thủ công.",
+      "C. Chấp nhận yêu cầu của phòng Dự án và bỏ qua tính năng theo dõi thời gian thực.",
+      "D. Đề xuất nhà cung cấp tùy chỉnh hệ thống để tự động cập nhật tiến độ mà không cần nhập liệu thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp kết hợp giữa tự động hóa và thủ công dựa trên phân tích tác động đảm bảo cân bằng giữa lợi ích của tính năng mới và khối lượng công việc của nhân viên. Các lựa chọn khác hoặc không tối ưu hóa được quy trình hoặc không khả thi về mặt kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780504746588_ADVANCED_7_6b95"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý chất lượng (QMS) tại một nhà máy sản xuất, bạn phát hiện rằng quy trình hiện tại (As-is) yêu cầu nhân viên phải ghi chép thủ công kết quả kiểm tra chất lượng, trong khi hệ thống mới (To-be) hỗ trợ ghi nhận qua thiết bị IoT. Tuy nhiên, đội ngũ sản xuất phản đối vì họ cho rằng thiết bị IoT sẽ làm gián đoạn quy trình làm việc hiện tại. Bạn sẽ xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Đề xuất trang bị thiết bị IoT và tổ chức đào tạo để nhân viên làm quen với quy trình mới.",
+      "B. Giữ nguyên quy trình ghi chép thủ công và nhập liệu sau vào hệ thống.",
+      "C. Phân tích tác động của việc sử dụng IoT đến quy trình làm việc, sau đó đề xuất giải pháp kết hợp: sử dụng IoT cho các bước kiểm tra quan trọng và giữ lại ghi chép thủ công cho các bước khác.",
+      "D. Yêu cầu nhà cung cấp tùy chỉnh hệ thống để hỗ trợ nhập liệu qua máy tính để bàn thay vì IoT."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp kết hợp giữa IoT và thủ công dựa trên phân tích tác động đảm bảo tối ưu hóa quy trình mà không làm gián đoạn hoàn toàn quy trình hiện tại. Các lựa chọn khác hoặc không giải quyết được vấn đề cốt lõi hoặc không tận dụng được lợi ích của IoT.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780504746589_ADVANCED_8_iywo"
+  },
+  {
+    "questionText": "Bạn đang thực hiện Gap Analysis cho dự án số hóa quy trình tuyển dụng tại một công ty đa quốc gia. Hệ thống hiện tại (As-is) yêu cầu ứng viên nộp hồ sơ qua email, trong khi hệ thống mới (To-be) hỗ trợ nộp hồ sơ trực tuyến qua cổng thông tin. Tuy nhiên, phòng Nhân sự lo ngại rằng cổng thông tin mới không hỗ trợ ngôn ngữ địa phương (ví dụ: tiếng Việt), gây khó khăn cho ứng viên. Bạn sẽ đề xuất giải pháp nào?",
+    "options": [
+      "A. Đề xuất tạm dừng triển khai cổng thông tin cho đến khi hỗ trợ ngôn ngữ địa phương.",
+      "B. Phân tích tác động của việc thiếu hỗ trợ ngôn ngữ địa phương đến tỷ lệ ứng viên, sau đó đề xuất giải pháp kết hợp: sử dụng cổng thông tin cho ứng viên quốc tế và giữ lại quy trình nộp hồ sơ qua email cho ứng viên địa phương.",
+      "C. Chấp nhận yêu cầu của phòng Nhân sự và bỏ qua tính năng nộp hồ sơ trực tuyến.",
+      "D. Yêu cầu nhà cung cấp tùy chỉnh hệ thống để hỗ trợ ngôn ngữ địa phương, bất chấp chi phí và thời gian triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp kết hợp giữa cổng thông tin và email dựa trên phân tích tác động đảm bảo đáp ứng được nhu cầu của cả ứng viên quốc tế và địa phương mà không làm tăng chi phí hoặc thời gian triển khai. Các lựa chọn khác hoặc quá bảo thủ hoặc không khả thi về mặt kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780504746589_ADVANCED_9_h67z"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý chuỗi cung ứng (SCM) tại một công ty bán lẻ, bạn phát hiện rằng quy trình hiện tại (As-is) yêu cầu nhân viên phải gọi điện xác nhận đơn hàng với nhà cung cấp, trong khi hệ thống mới (To-be) hỗ trợ tự động gửi email xác nhận. Tuy nhiên, nhà cung cấp phản đối vì họ không thường xuyên kiểm tra email. Bạn sẽ đề xuất giải pháp nào?",
+    "options": [
+      "A. Đề xuất giữ nguyên quy trình gọi điện xác nhận cho đến khi nhà cung cấp làm quen với email.",
+      "B. Phân tích tần suất kiểm tra email của nhà cung cấp, sau đó đề xuất giải pháp kết hợp: tự động gửi email xác nhận + gọi điện nhắc nhở cho các đơn hàng quan trọng.",
+      "C. Bỏ qua lo ngại của nhà cung cấp và triển khai tự động gửi email xác nhận.",
+      "D. Yêu cầu nhà cung cấp thay đổi quy trình làm việc để phù hợp với hệ thống mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp kết hợp giữa tự động hóa và thủ công dựa trên phân tích thực tế đảm bảo quy trình xác nhận đơn hàng hiệu quả mà không làm gián đoạn hoạt động của nhà cung cấp. Các lựa chọn khác hoặc không giải quyết được vấn đề cốt lõi hoặc không khả thi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "SITUATION",
+    "id": "q_1780504746590_ADVANCED_10_zjkr"
+  },
+  {
+    "questionText": "Bạn đang đánh giá giải pháp cho dự án triển khai hệ thống quản lý tài liệu (DMS) tại một công ty luật. Hệ thống hiện tại (As-is) không hỗ trợ tìm kiếm tài liệu theo từ khóa tiếng Việt có dấu, trong khi hệ thống mới (To-be) có tính năng này nhưng yêu cầu nhập liệu thủ công để gắn thẻ từ khóa. Phòng Pháp lý lo ngại về khối lượng công việc tăng thêm. Bạn sẽ đề xuất giải pháp nào?",
+    "options": [
+      "A. Đề xuất sử dụng tính năng tìm kiếm không dấu của hệ thống và chấp nhận giảm độ chính xác tìm kiếm.",
+      "B. Phân tích tác động của việc nhập liệu thủ công đến năng suất nhân viên, sau đó đề xuất giải pháp kết hợp: tự động gắn thẻ từ khóa cho các tài liệu phổ biến và nhập liệu thủ công cho các tài liệu đặc thù.",
+      "C. Chấp nhận yêu cầu của phòng Pháp lý và bỏ qua tính năng tìm kiếm theo từ khóa.",
+      "D. Yêu cầu nhà cung cấp tùy chỉnh hệ thống để tự động gắn thẻ từ khóa tiếng Việt có dấu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp kết hợp giữa tự động hóa và thủ công dựa trên phân tích tác động đảm bảo cân bằng giữa lợi ích của tính năng tìm kiếm và khối lượng công việc của nhân viên. Các lựa chọn khác hoặc không tối ưu hóa được quy trình hoặc không khả thi về mặt kỹ thuật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Gap Analysis & Solution Assessment",
+    "category": "ANALYSIS",
+    "id": "q_1780504746591_ADVANCED_11_llz2"
+  }
+]

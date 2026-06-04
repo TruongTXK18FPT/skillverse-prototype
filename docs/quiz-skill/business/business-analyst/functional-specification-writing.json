@@ -1,0 +1,767 @@
+[
+  {
+    "questionText": "Trong tài liệu đặc tả chức năng (Functional Specification), mục 'Business Rules' thường mô tả điều gì?",
+    "options": [
+      "A. Các bước thực hiện giao diện người dùng chi tiết.",
+      "B. Các quy tắc nghiệp vụ mà hệ thống phải tuân thủ, ví dụ: 'Khách hàng phải đủ 18 tuổi để mở tài khoản tiết kiệm'.",
+      "C. Mã nguồn của chức năng để lập trình viên tham khảo.",
+      "D. Danh sách các lỗi kỹ thuật có thể xảy ra trong hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Business Rules mô tả các quy tắc nghiệp vụ mà hệ thống cần tuân thủ, giúp đảm bảo tính đúng đắn và nhất quán của dữ liệu. Ví dụ thực tế như điều kiện mở tài khoản là quy tắc nghiệp vụ phổ biến trong ngân hàng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503839038_BEGINNER_0_cz9o"
+  },
+  {
+    "questionText": "Khi viết đặc tả chức năng cho tính năng 'Đăng ký tài khoản trực tuyến', phần nào sau đây KHÔNG cần thiết phải mô tả chi tiết?",
+    "options": [
+      "A. Các bước người dùng thực hiện trên giao diện (ví dụ: nhập email, mật khẩu, xác nhận OTP).",
+      "B. Mã nguồn JavaScript để xử lý sự kiện nút 'Đăng ký'.",
+      "C. Các điều kiện kiểm tra dữ liệu đầu vào (ví dụ: định dạng email hợp lệ, mật khẩu đủ mạnh).",
+      "D. Thông báo lỗi khi đăng ký thất bại (ví dụ: 'Email đã tồn tại')."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đặc tả chức năng tập trung vào hành vi hệ thống và quy tắc nghiệp vụ, không bao gồm mã nguồn kỹ thuật. Mã nguồn là trách nhiệm của lập trình viên.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780503839038_BEGINNER_1_p91d"
+  },
+  {
+    "questionText": "Một Business Analyst viết đặc tả cho tính năng 'Chuyển tiền liên ngân hàng'. Phần nào sau đây cần được mô tả trong mục 'Exceptions'?",
+    "options": [
+      "A. Màu sắc của nút 'Xác nhận chuyển tiền'.",
+      "B. Trường hợp số dư tài khoản không đủ để thực hiện giao dịch.",
+      "C. Thời gian hệ thống xử lý giao dịch (ví dụ: 3-5 giây).",
+      "D. Logo của ngân hàng hiển thị trên màn hình xác nhận."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Exceptions mô tả các tình huống bất thường hệ thống cần xử lý, như số dư không đủ. Đây là thông tin quan trọng để lập trình viên và tester xây dựng logic xử lý lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780503839038_BEGINNER_2_zc8h"
+  },
+  {
+    "questionText": "Trong đặc tả chức năng, mục 'Validations' thường dùng để làm gì?",
+    "options": [
+      "A. Liệt kê các công nghệ sử dụng để phát triển chức năng.",
+      "B. Mô tả các kiểm tra dữ liệu đầu vào để đảm bảo tính hợp lệ (ví dụ: số điện thoại phải có 10 chữ số).",
+      "C. Giải thích cách hệ thống lưu trữ dữ liệu trong cơ sở dữ liệu.",
+      "D. Đưa ra các yêu cầu về hiệu năng của chức năng (ví dụ: xử lý 1000 giao dịch/giây)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Validations xác định các quy tắc kiểm tra dữ liệu đầu vào để đảm bảo dữ liệu nhập vào hệ thống là chính xác và hợp lệ, ví dụ như định dạng số điện thoại hoặc mật khẩu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503839038_BEGINNER_3_y5f4"
+  },
+  {
+    "questionText": "Khi viết đặc tả cho tính năng 'Tìm kiếm sản phẩm' trên website thương mại điện tử, phần nào sau đây là ví dụ về 'Dependencies'?",
+    "options": [
+      "A. Mô tả giao diện của ô tìm kiếm (ví dụ: vị trí, kích thước).",
+      "B. Yêu cầu hệ thống phải tích hợp với API của bên thứ ba để lấy dữ liệu sản phẩm.",
+      "C. Liệt kê các từ khóa tìm kiếm phổ biến (ví dụ: 'điện thoại', 'laptop').",
+      "D. Thời gian phản hồi tối đa khi người dùng nhập từ khóa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dependencies mô tả các thành phần hoặc hệ thống khác mà chức năng phụ thuộc vào, ví dụ như API của bên thứ ba để lấy dữ liệu sản phẩm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780503839038_BEGINNER_4_jks4"
+  },
+  {
+    "questionText": "Một Business Analyst viết đặc tả cho tính năng 'Thanh toán hóa đơn điện nước'. Phần nào sau đây nên được đưa vào mục 'System Responses'?",
+    "options": [
+      "A. Mã nguồn để kết nối với cổng thanh toán.",
+      "B. Thông báo hiển thị khi thanh toán thành công (ví dụ: 'Thanh toán thành công! Mã giao dịch: ABC123').",
+      "C. Danh sách các ngân hàng hỗ trợ thanh toán.",
+      "D. Thời gian bảo trì hệ thống hàng tuần."
+    ],
+    "correctAnswer": "B",
+    "explanation": "System Responses mô tả các phản hồi của hệ thống sau khi người dùng thực hiện hành động, như thông báo thành công hoặc thất bại. Đây là thông tin quan trọng để tester kiểm tra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780503839038_BEGINNER_5_nh6k"
+  },
+  {
+    "questionText": "Trong đặc tả chức năng, mục đích của việc mô tả 'User Flow' là gì?",
+    "options": [
+      "A. Liệt kê các công nghệ sử dụng để phát triển giao diện người dùng.",
+      "B. Mô tả trình tự các bước người dùng thực hiện để hoàn thành một tác vụ (ví dụ: đăng nhập → chọn sản phẩm → thanh toán).",
+      "C. Giải thích cấu trúc cơ sở dữ liệu của hệ thống.",
+      "D. Đưa ra các yêu cầu về bảo mật cho chức năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "User Flow mô tả trình tự các bước người dùng thực hiện để hoàn thành một tác vụ, giúp lập trình viên và tester hiểu rõ luồng hoạt động của chức năng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503839038_BEGINNER_6_j7a3"
+  },
+  {
+    "questionText": "Khi viết đặc tả cho tính năng 'Đặt lịch hẹn khám bệnh trực tuyến', phần nào sau đây KHÔNG thuộc phạm vi của đặc tả chức năng?",
+    "options": [
+      "A. Các bước người dùng chọn bác sĩ và thời gian khám.",
+      "B. Thông báo xác nhận lịch hẹn qua email/SMS.",
+      "C. Cấu hình máy chủ để xử lý tải cao vào giờ cao điểm.",
+      "D. Điều kiện kiểm tra tính hợp lệ của thông tin đặt lịch (ví dụ: ngày giờ không được trong quá khứ)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đặc tả chức năng tập trung vào hành vi hệ thống và quy tắc nghiệp vụ, không bao gồm cấu hình kỹ thuật hạ tầng như máy chủ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780503839038_BEGINNER_7_c6f9"
+  },
+  {
+    "questionText": "Một Business Analyst viết đặc tả cho tính năng 'Đăng ký gói cước di động'. Phần nào sau đây là ví dụ về 'Functional Behavior'?",
+    "options": [
+      "A. Mô tả cách hệ thống tính toán phí dịch vụ hàng tháng.",
+      "B. Mã nguồn để kết nối với hệ thống của nhà mạng.",
+      "C. Thời gian phản hồi của hệ thống khi người dùng nhấn nút 'Đăng ký'.",
+      "D. Cấu hình bảo mật cho API kết nối với nhà mạng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Functional Behavior mô tả cách hệ thống hoạt động để thực hiện một chức năng, như tính toán phí dịch vụ. Đây là thông tin cốt lõi để lập trình viên triển khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780503839038_BEGINNER_8_vlru"
+  },
+  {
+    "questionText": "Trong đặc tả chức năng, mục 'Assumptions' thường được sử dụng để làm gì?",
+    "options": [
+      "A. Liệt kê các giả định về môi trường hoặc điều kiện hệ thống sẽ hoạt động (ví dụ: 'Giả định người dùng đã đăng nhập trước khi sử dụng chức năng').",
+      "B. Mô tả chi tiết mã nguồn của chức năng.",
+      "C. Đưa ra các yêu cầu về hiệu năng của hệ thống.",
+      "D. Giải thích cách hệ thống xử lý lỗi kỹ thuật."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Assumptions mô tả các giả định về điều kiện hoặc môi trường mà chức năng sẽ hoạt động, giúp làm rõ phạm vi và giới hạn của đặc tả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503839038_BEGINNER_9_4802"
+  },
+  {
+    "questionText": "Khi viết đặc tả cho tính năng 'Tạo đơn hàng' trên website bán lẻ, phần nào sau đây nên được đưa vào mục 'Validations'?",
+    "options": [
+      "A. Mô tả cách hệ thống tính toán tổng giá trị đơn hàng.",
+      "B. Kiểm tra số lượng sản phẩm trong kho không được âm.",
+      "C. Thời gian giao hàng dự kiến cho đơn hàng.",
+      "D. Giao diện của trang xác nhận đơn hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Validations mô tả các kiểm tra dữ liệu đầu vào để đảm bảo tính hợp lệ, như số lượng sản phẩm không được âm. Đây là thông tin quan trọng để lập trình viên triển khai logic kiểm tra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780503839038_BEGINNER_10_lk7x"
+  },
+  {
+    "questionText": "Một Business Analyst viết đặc tả cho tính năng 'Xác thực OTP khi đăng nhập'. Phần nào sau đây là ví dụ về 'System Responses' khi OTP nhập sai?",
+    "options": [
+      "A. Hệ thống sẽ tự động gửi lại OTP mới sau 3 lần nhập sai.",
+      "B. Thông báo 'OTP không hợp lệ. Vui lòng thử lại.' hiển thị trên màn hình.",
+      "C. Mã nguồn để tạo và gửi OTP qua SMS.",
+      "D. Thời gian chờ tối đa để nhập OTP (ví dụ: 2 phút)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "System Responses mô tả phản hồi của hệ thống khi người dùng thực hiện hành động, như thông báo lỗi khi OTP nhập sai. Đây là thông tin cần thiết để tester kiểm tra.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780503839038_BEGINNER_11_if58"
+  },
+  {
+    "questionText": "Trong đặc tả chức năng, mục đích của việc mô tả 'Data Requirements' là gì?",
+    "options": [
+      "A. Liệt kê các công nghệ cơ sở dữ liệu sử dụng (ví dụ: MySQL, MongoDB).",
+      "B. Mô tả các trường dữ liệu cần thiết cho chức năng (ví dụ: 'Đơn hàng cần có trường mã đơn hàng, ngày tạo, tổng giá trị').",
+      "C. Giải thích cách hệ thống tối ưu hóa truy vấn cơ sở dữ liệu.",
+      "D. Đưa ra các yêu cầu về sao lưu và phục hồi dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Data Requirements mô tả các trường dữ liệu cần thiết để chức năng hoạt động, giúp lập trình viên hiểu rõ cấu trúc dữ liệu cần triển khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Functional Specification Writing",
+    "category": "KNOWLEDGE",
+    "id": "q_1780503839038_BEGINNER_12_ghyp"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý đơn hàng cho một công ty bán lẻ tại Việt Nam, bạn cần mô tả chi tiết hành vi của hệ thống khi khách hàng chọn phương thức thanh toán 'Thanh toán khi nhận hàng (COD)'. Đâu là cách viết functional specification ĐÚNG NHẤT để đảm bảo cả developer và tester đều hiểu rõ?",
+    "options": [
+      "A. 'Hệ thống cho phép khách hàng chọn COD và lưu đơn hàng.'",
+      "B. 'Khi khách hàng chọn COD, hệ thống sẽ: (1) Kiểm tra hạn mức COD của khách (nếu có), (2) Gửi yêu cầu xác nhận đơn hàng đến kho vận, (3) Cập nhật trạng thái đơn hàng thành 'Chờ giao hàng', (4) Gửi email/SMS thông báo cho khách hàng với nội dung 'Đơn hàng #X đang được xử lý'. Nếu hạn mức COD vượt quá, hệ thống hiển thị thông báo 'Vượt hạn mức COD cho phép' và không cho phép đặt hàng.'",
+      "C. 'Hệ thống xử lý COD theo quy trình chuẩn của công ty.'",
+      "D. 'Khách hàng có thể thanh toán bằng COD nếu muốn.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả đầy đủ các bước xử lý, điều kiện kiểm tra (validation), và phản hồi của hệ thống (system response) một cách chi tiết, rõ ràng cho cả developer và tester. Các lựa chọn khác quá chung chung hoặc thiếu thông tin cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780503945424_INTERMEDIATE_0_g4rg"
+  },
+  {
+    "questionText": "Bạn đang viết functional spec cho module 'Xác thực OTP' trong ứng dụng ngân hàng di động. Đâu là cách mô tả quy tắc xử lý ngoại lệ (exception) ĐÚNG và ĐỦ cho trường hợp OTP nhập sai quá số lần cho phép?",
+    "options": [
+      "A. 'Nếu OTP sai, hệ thống báo lỗi.'",
+      "B. 'Sau 3 lần nhập sai OTP liên tiếp, hệ thống sẽ: (1) Khóa chức năng xác thực OTP trong 5 phút, (2) Gửi thông báo qua SMS/email về việc khóa tạm thời, (3) Hiển thị thông báo 'Bạn đã nhập sai OTP quá số lần cho phép. Vui lòng thử lại sau 5 phút'.'",
+      "C. 'OTP chỉ được nhập sai tối đa 3 lần.'",
+      "D. 'Người dùng cần nhập OTP chính xác để tiếp tục.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả đầy đủ quy trình xử lý ngoại lệ, bao gồm cả hành động của hệ thống (khóa chức năng, gửi thông báo) và phản hồi cho người dùng. Các lựa chọn khác thiếu chi tiết hoặc không đề cập đến xử lý ngoại lệ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780503945424_INTERMEDIATE_1_qhxd"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý kho cho nhà máy sản xuất, bạn cần mô tả quy tắc kiểm tra tồn kho khi khách hàng đặt hàng. Đâu là cách viết functional spec CHÍNH XÁC để đảm bảo developer triển khai đúng logic?",
+    "options": [
+      "A. 'Hệ thống kiểm tra tồn kho trước khi xác nhận đơn hàng.'",
+      "B. 'Khi khách hàng đặt hàng, hệ thống sẽ: (1) Kiểm tra số lượng tồn kho thực tế của từng sản phẩm, (2) So sánh với số lượng đặt hàng, (3) Nếu đủ hàng: trừ tồn kho và xác nhận đơn hàng, (4) Nếu thiếu hàng: hiển thị thông báo 'Sản phẩm X hiện không đủ hàng' và không cho phép đặt hàng. Lưu ý: Tồn kho được cập nhật theo thời gian thực từ hệ thống ERP.'",
+      "C. 'Khách hàng chỉ được đặt hàng nếu có đủ tồn kho.'",
+      "D. 'Hệ thống sẽ tự động kiểm tra và xử lý tồn kho.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả chi tiết quy trình kiểm tra, điều kiện xử lý (đủ/thiếu hàng), và phản hồi của hệ thống. Đồng thời đề cập đến nguồn dữ liệu tồn kho (ERP), giúp developer hiểu rõ yêu cầu tích hợp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780503945424_INTERMEDIATE_2_c0l3"
+  },
+  {
+    "questionText": "Bạn đang viết functional spec cho chức năng 'Hủy đơn hàng' trong hệ thống thương mại điện tử. Đâu là cách mô tả luồng xử lý (flow) và điều kiện (condition) ĐÚNG NHẤT?",
+    "options": [
+      "A. 'Khách hàng có thể hủy đơn hàng bất kỳ lúc nào.'",
+      "B. 'Khách hàng chỉ được hủy đơn hàng khi đơn hàng chưa được xử lý bởi kho vận. Hệ thống sẽ: (1) Kiểm tra trạng thái đơn hàng, (2) Nếu trạng thái là 'Chờ xử lý': cập nhật trạng thái thành 'Đã hủy', hoàn tiền (nếu đã thanh toán), và gửi email/SMS thông báo cho khách hàng, (3) Nếu trạng thái khác: hiển thị thông báo 'Không thể hủy đơn hàng ở trạng thái hiện tại'.'",
+      "C. 'Hủy đơn hàng là chức năng cơ bản của hệ thống.'",
+      "D. 'Khách hàng có thể yêu cầu hủy đơn hàng qua email hoặc gọi điện.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả rõ ràng luồng xử lý, điều kiện hủy đơn hàng (trạng thái 'Chờ xử lý'), và các bước hệ thống thực hiện (cập nhật trạng thái, hoàn tiền, gửi thông báo). Các lựa chọn khác thiếu chi tiết hoặc không liên quan đến functional spec.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780503945424_INTERMEDIATE_3_v9dp"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý hợp đồng cho công ty bảo hiểm, bạn cần mô tả quy tắc gia hạn hợp đồng tự động. Đâu là cách viết functional spec ĐẦY ĐỦ và RÕ RÀNG nhất?",
+    "options": [
+      "A. 'Hệ thống sẽ gia hạn hợp đồng tự động khi đến hạn.'",
+      "B. '7 ngày trước khi hợp đồng hết hạn, hệ thống sẽ: (1) Kiểm tra điều kiện gia hạn (khách hàng không có nợ phí, sản phẩm vẫn được bán), (2) Nếu đủ điều kiện: tạo hợp đồng mới với cùng điều khoản và gửi email/SMS thông báo cho khách hàng, (3) Nếu không đủ điều kiện: gửi thông báo yêu cầu khách hàng liên hệ bộ phận chăm sóc khách hàng. Lưu ý: Hợp đồng mới có hiệu lực ngay sau khi hợp đồng cũ hết hạn.'",
+      "C. 'Khách hàng có thể yêu cầu gia hạn hợp đồng.'",
+      "D. 'Gia hạn hợp đồng là chức năng tự động của hệ thống.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả chi tiết thời điểm kích hoạt (7 ngày trước khi hết hạn), điều kiện kiểm tra, hành động của hệ thống (tạo hợp đồng mới, gửi thông báo), và lưu ý về hiệu lực. Các lựa chọn khác quá chung chung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780503945425_INTERMEDIATE_4_22f0"
+  },
+  {
+    "questionText": "Bạn đang viết functional spec cho chức năng 'Tính phí giao hàng' trong hệ thống đặt hàng trực tuyến. Đâu là cách mô tả quy tắc tính phí và ngoại lệ ĐÚNG NHẤT?",
+    "options": [
+      "A. 'Phí giao hàng được tính dựa trên khoảng cách và trọng lượng.'",
+      "B. 'Hệ thống tính phí giao hàng như sau: (1) Dưới 5km: 20.000 VND, (2) Từ 5km đến 20km: 30.000 VND, (3) Trên 20km: 50.000 VND + 2.000 VND/km. Ngoại lệ: Đơn hàng trên 1.000.000 VND được miễn phí giao hàng trong phạm vi 20km. Phí giao hàng được hiển thị rõ ràng trước khi khách hàng xác nhận đơn hàng.'",
+      "C. 'Phí giao hàng tùy thuộc vào địa chỉ giao hàng.'",
+      "D. 'Khách hàng cần thanh toán phí giao hàng khi nhận hàng.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả cụ thể quy tắc tính phí theo khoảng cách, ngoại lệ (miễn phí cho đơn hàng trên 1.000.000 VND), và yêu cầu hiển thị phí trước khi xác nhận. Các lựa chọn khác thiếu chi tiết hoặc không rõ ràng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780503945425_INTERMEDIATE_5_vgk1"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý khách hàng (CRM) cho công ty viễn thông, bạn cần mô tả quy tắc phân loại khách hàng theo hạng thành viên. Đâu là cách viết functional spec CHÍNH XÁC và DỄ HIỂU cho developer?",
+    "options": [
+      "A. 'Khách hàng được phân loại theo hạng thành viên.'",
+      "B. 'Hệ thống phân loại khách hàng theo tổng chi tiêu trong 12 tháng gần nhất: (1) Dưới 1.000.000 VND: Hạng Đồng, (2) Từ 1.000.000 VND đến 5.000.000 VND: Hạng Bạc, (3) Từ 5.000.000 VND đến 20.000.000 VND: Hạng Vàng, (4) Trên 20.000.000 VND: Hạng Bạch Kim. Hạng thành viên được cập nhật tự động vào ngày đầu tiên của mỗi tháng.'",
+      "C. 'Khách hàng có thể nâng hạng nếu chi tiêu nhiều.'",
+      "D. 'Hệ thống sẽ tự động cập nhật hạng thành viên.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả rõ ràng tiêu chí phân loại (tổng chi tiêu), các hạng thành viên cụ thể, và thời điểm cập nhật. Các lựa chọn khác thiếu chi tiết hoặc không đủ thông tin cho developer triển khai.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780503945425_INTERMEDIATE_6_7n5z"
+  },
+  {
+    "questionText": "Bạn đang viết functional spec cho chức năng 'Xử lý khiếu nại' trong hệ thống hỗ trợ khách hàng của ngân hàng. Đâu là cách mô tả luồng xử lý và phản hồi của hệ thống ĐẦY ĐỦ NHẤT?",
+    "options": [
+      "A. 'Khách hàng có thể gửi khiếu nại qua hệ thống.'",
+      "B. 'Khi khách hàng gửi khiếu nại, hệ thống sẽ: (1) Ghi nhận khiếu nại và gán mã số theo định dạng KN-YYYYMMDD-X, (2) Phân loại khiếu nại (ví dụ: Lỗi giao dịch, Chậm xử lý, Vấn đề thẻ), (3) Gửi email/SMS xác nhận đã nhận khiếu nại cho khách hàng, (4) Chuyển khiếu nại đến bộ phận xử lý tương ứng, (5) Cập nhật trạng thái khiếu nại (Đang xử lý, Đã giải quyết, Từ chối) và thông báo cho khách hàng qua email/SMS.'",
+      "C. 'Hệ thống xử lý khiếu nại theo quy trình nội bộ.'",
+      "D. 'Khách hàng cần gọi điện để khiếu nại.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả chi tiết các bước xử lý khiếu nại, cách ghi nhận (mã số), phân loại, phản hồi của hệ thống (email/SMS), và cập nhật trạng thái. Các lựa chọn khác quá chung chung hoặc không liên quan đến functional spec.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780503945425_INTERMEDIATE_7_zmzk"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý đơn hàng cho chuỗi cửa hàng bán lẻ, bạn cần mô tả quy tắc kiểm tra giảm giá cho khách hàng thân thiết. Đâu là cách viết functional spec ĐÚNG và ĐỦ cho developer?",
+    "options": [
+      "A. 'Khách hàng thân thiết được giảm giá khi mua hàng.'",
+      "B. 'Hệ thống áp dụng giảm giá cho khách hàng thân thiết như sau: (1) Giảm 5% cho hạng Đồng (tổng chi tiêu dưới 5.000.000 VND/năm), (2) Giảm 10% cho hạng Bạc (từ 5.000.000 VND đến 20.000.000 VND/năm), (3) Giảm 15% cho hạng Vàng (trên 20.000.000 VND/năm). Giảm giá chỉ áp dụng cho các sản phẩm không nằm trong chương trình khuyến mãi khác. Giảm giá được tính trên tổng giá trị đơn hàng trước thuế.'",
+      "C. 'Khách hàng có thể yêu cầu giảm giá.'",
+      "D. 'Giảm giá tùy thuộc vào hạng thành viên của khách hàng.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả rõ ràng quy tắc giảm giá theo hạng thành viên, điều kiện áp dụng (không áp dụng cho sản phẩm khuyến mãi), và cách tính giảm giá (trên tổng giá trị đơn hàng trước thuế). Các lựa chọn khác thiếu chi tiết hoặc không đủ thông tin.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780503945425_INTERMEDIATE_8_1wk3"
+  },
+  {
+    "questionText": "Bạn đang viết functional spec cho chức năng 'Đăng ký tài khoản' trong ứng dụng ngân hàng di động. Đâu là cách mô tả quy trình xác thực và xử lý ngoại lệ ĐẦY ĐỦ NHẤT?",
+    "options": [
+      "A. 'Khách hàng cần nhập thông tin cá nhân để đăng ký.'",
+      "B. 'Khi khách hàng đăng ký tài khoản, hệ thống sẽ: (1) Kiểm tra tính hợp lệ của số CMND/CCCD (định dạng, không trùng lặp), (2) Gửi OTP đến số điện thoại đăng ký, (3) Xác thực OTP trong vòng 5 phút, (4) Tạo tài khoản và gửi email/SMS thông báo thành công. Ngoại lệ: Nếu số CMND/CCCD đã tồn tại, hệ thống hiển thị thông báo 'Số CMND/CCCD đã được sử dụng'. Nếu OTP nhập sai quá 3 lần, hệ thống khóa chức năng xác thực trong 10 phút.'",
+      "C. 'Hệ thống sẽ xác thực thông tin khách hàng.'",
+      "D. 'Khách hàng cần xác thực OTP để hoàn tất đăng ký.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả chi tiết quy trình đăng ký, bao gồm kiểm tra hợp lệ (CMND/CCCD), gửi OTP, xác thực, và xử lý ngoại lệ (CMND trùng lặp, OTP sai). Các lựa chọn khác quá chung chung hoặc thiếu thông tin cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780503945425_INTERMEDIATE_9_1uyw"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý dự án cho công ty phần mềm, bạn cần mô tả quy tắc phân quyền truy cập cho các vai trò khác nhau. Đâu là cách viết functional spec RÕ RÀNG và ĐẦY ĐỦ cho developer?",
+    "options": [
+      "A. 'Mỗi vai trò có quyền truy cập khác nhau.'",
+      "B. 'Hệ thống phân quyền truy cập như sau: (1) Quản lý dự án: Xem, tạo, sửa, xóa tất cả nhiệm vụ và tài liệu của dự án, (2) Thành viên dự án: Xem, tạo, sửa nhiệm vụ được giao, (3) Khách hàng: Chỉ xem tiến độ dự án và báo cáo. Quyền truy cập được kiểm tra trước khi hiển thị giao diện và thực hiện hành động.'",
+      "C. 'Người dùng có quyền truy cập tùy theo vai trò.'",
+      "D. 'Hệ thống sẽ quản lý quyền truy cập theo quy định.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả cụ thể quyền truy cập cho từng vai trò (Quản lý dự án, Thành viên dự án, Khách hàng) và cách hệ thống kiểm tra quyền. Các lựa chọn khác quá chung chung hoặc không đủ chi tiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780503945425_INTERMEDIATE_10_fdu3"
+  },
+  {
+    "questionText": "Bạn đang viết functional spec cho chức năng 'Tính lương thưởng' trong hệ thống quản lý nhân sự. Đâu là cách mô tả quy tắc tính toán và điều kiện áp dụng ĐÚNG NHẤT?",
+    "options": [
+      "A. 'Hệ thống tính lương thưởng cho nhân viên.'",
+      "B. 'Hệ thống tính lương thưởng như sau: (1) Lương cơ bản = Số ngày công * Lương ngày, (2) Thưởng hiệu suất = 10% lương cơ bản nếu hoàn thành 100% KPI, 5% nếu hoàn thành 80-99% KPI, (3) Phụ cấp = 500.000 VND nếu làm việc tại văn phòng Hà Nội/TP.HCM. Lương thưởng được tính vào cuối mỗi tháng và hiển thị trong bảng lương.'",
+      "C. 'Nhân viên được trả lương và thưởng theo quy định.'",
+      "D. 'Lương thưởng tùy thuộc vào hiệu suất làm việc.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả chi tiết công thức tính lương cơ bản, thưởng hiệu suất (theo KPI), phụ cấp, và thời điểm tính toán. Các lựa chọn khác thiếu thông tin cụ thể hoặc không đủ cho developer triển khai.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780503945425_INTERMEDIATE_11_syip"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý đặt phòng khách sạn, bạn cần mô tả quy tắc xử lý khi khách hàng hủy đặt phòng. Đâu là cách viết functional spec ĐẦY ĐỦ và RÕ RÀNG nhất?",
+    "options": [
+      "A. 'Khách hàng có thể hủy đặt phòng.'",
+      "B. 'Hệ thống xử lý hủy đặt phòng như sau: (1) Nếu hủy trước 24 giờ so với thời gian nhận phòng: hoàn trả 100% tiền đặt cọc, (2) Nếu hủy trong vòng 24 giờ: không hoàn trả tiền đặt cọc, (3) Gửi email/SMS xác nhận hủy đặt phòng cho khách hàng. Lưu ý: Đặt phòng không hoàn lại (non-refundable) không được hủy.'",
+      "C. 'Hủy đặt phòng tùy thuộc vào chính sách khách sạn.'",
+      "D. 'Khách hàng cần liên hệ khách sạn để hủy phòng.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả rõ ràng quy tắc hủy đặt phòng (thời gian hủy, hoàn tiền), ngoại lệ (đặt phòng không hoàn lại), và phản hồi của hệ thống (email/SMS). Các lựa chọn khác quá chung chung hoặc không liên quan đến functional spec.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780503945425_INTERMEDIATE_12_ipuo"
+  },
+  {
+    "questionText": "Bạn đang viết functional spec cho chức năng 'Xác thực giao dịch' trong ứng dụng thanh toán di động. Đâu là cách mô tả luồng xử lý và kiểm tra bảo mật ĐÚNG NHẤT?",
+    "options": [
+      "A. 'Khách hàng cần xác thực giao dịch để hoàn tất thanh toán.'",
+      "B. 'Khi khách hàng thực hiện giao dịch, hệ thống sẽ: (1) Kiểm tra số dư tài khoản, (2) Yêu cầu xác thực bằng OTP hoặc sinh trắc học (vân tay/khuôn mặt), (3) Ghi nhận giao dịch và gửi thông báo thành công qua SMS/email. Ngoại lệ: Nếu số dư không đủ, hệ thống hiển thị thông báo 'Số dư không đủ'. Nếu xác thực thất bại quá 3 lần, hệ thống khóa tài khoản tạm thời trong 15 phút.'",
+      "C. 'Hệ thống sẽ xác thực giao dịch theo quy trình bảo mật.'",
+      "D. 'Giao dịch cần được xác thực bằng OTP.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B mô tả chi tiết luồng xử lý giao dịch, bao gồm kiểm tra số dư, xác thực (OTP/sinh trắc học), ghi nhận giao dịch, và xử lý ngoại lệ (số dư không đủ, xác thực thất bại). Các lựa chọn khác thiếu thông tin cụ thể hoặc không đủ cho developer triển khai.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780503945426_INTERMEDIATE_13_ixib"
+  },
+  {
+    "questionText": "Trong một dự án ngân hàng tại Việt Nam, bạn đang viết functional specification cho tính năng 'Xác thực giao dịch qua OTP'. Một bên stakeholder yêu cầu OTP chỉ có hiệu lực trong 30 giây, trong khi bên bảo mật yêu cầu tối thiểu 2 phút để đảm bảo an toàn. Bạn sẽ xử lý mâu thuẫn này như thế nào trong tài liệu spec?",
+    "options": [
+      "A. Ghi nhận cả hai yêu cầu trong mục 'Open Issues' và để team quyết định sau.",
+      "B. Chọn 2 phút vì bảo mật quan trọng hơn, đồng thời thêm giải thích tại sao bỏ qua yêu cầu 30 giây.",
+      "C. Đề xuất giải pháp trung gian: OTP có hiệu lực 1 phút, kèm theo cơ chế cảnh báo nếu quá thời gian và yêu cầu gửi lại OTP. Giải thích rõ trade-off cho cả hai bên trong spec.",
+      "D. Ghi nhận yêu cầu 30 giây là mặc định, nhưng thêm tùy chọn 'Kéo dài thời gian OTP' trong màn hình cấu hình cho bên bảo mật."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C thể hiện kỹ năng phân tích sâu và quản lý xung đột yêu cầu. Nó cung cấp giải pháp cân bằng, giải thích rõ lý do cho cả hai bên, và đảm bảo tính khả thi kỹ thuật (không làm phức tạp hóa hệ thống như D). Spec cần phản ánh quyết định cuối cùng chứ không phải để mở như A.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780504056096_ADVANCED_0_jqz8"
+  },
+  {
+    "questionText": "Khi viết spec cho tính năng 'Tự động phân loại khoản vay' của một ngân hàng, bạn cần mô tả quy tắc phân loại dựa trên 5 tiêu chí phức tạp (thu nhập, lịch sử tín dụng, tài sản đảm bảo, v.v.). Cách trình bày nào dưới đây là hiệu quả nhất để developer và tester dễ hiểu mà không bị quá tải thông tin?",
+    "options": [
+      "A. Liệt kê tất cả 5 tiêu chí và công thức tính điểm trong một bảng, kèm ví dụ minh họa cho từng trường hợp.",
+      "B. Viết thành một đoạn văn dài giải thích chi tiết từng tiêu chí và cách kết hợp chúng.",
+      "C. Sử dụng decision table với các cột là tiêu chí và dòng là các tổ hợp đầu vào, kết quả phân loại. Thêm chú thích cho các trường hợp ngoại lệ.",
+      "D. Chia thành nhiều phần nhỏ: mô tả từng tiêu chí riêng lẻ, sau đó mới kết hợp trong một flowchart tổng thể."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Decision table (C) là công cụ mạnh mẽ để mô tả logic phức tạp với nhiều điều kiện, giúp developer/tester dễ dàng theo dõi và kiểm thử. Nó trực quan hơn bảng đơn thuần (A) và tránh rủi ro hiểu sai như đoạn văn (B). Flowchart (D) không phù hợp cho logic nhiều điều kiện.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780504056097_ADVANCED_1_ivas"
+  },
+  {
+    "questionText": "Trong spec cho tính năng 'Xử lý giao dịch thất bại' của hệ thống thanh toán đa quốc gia, bạn cần mô tả luồng khi giao dịch bị từ chối do lỗi timeout từ ngân hàng đối tác. Cách viết nào dưới đây đảm bảo developer hiểu đúng yêu cầu mà không gây hiểu nhầm?",
+    "options": [
+      "A. 'Nếu giao dịch timeout, hệ thống sẽ hiển thị thông báo lỗi và yêu cầu người dùng thử lại sau 5 phút.'",
+      "B. 'Khi giao dịch bị timeout từ ngân hàng đối tác (mã lỗi: 504), hệ thống sẽ: 1) Ghi log lỗi chi tiết; 2) Hiển thị thông báo 'Giao dịch tạm thời không thành công, vui lòng thử lại sau' (không đề cập thời gian cụ thể); 3) Gửi email thông báo cho bộ phận hỗ trợ với mã giao dịch và thời gian xảy ra lỗi.'",
+      "C. 'Hệ thống cần xử lý lỗi timeout theo quy trình chuẩn của ngân hàng đối tác, bao gồm retry tự động và thông báo cho người dùng.'",
+      "D. 'Lỗi timeout sẽ được xử lý theo tài liệu API của ngân hàng đối tác, với thời gian retry tối đa là 3 lần, mỗi lần cách nhau 30 giây.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B cung cấp chi tiết cụ thể về hành động hệ thống (log, thông báo, email), tránh mơ hồ như 'quy trình chuẩn' (C) hay 'tài liệu API' (D). Nó cũng không quy định thời gian retry (không thuộc phạm vi spec chức năng) và không đưa ra giả định về hành vi người dùng như A.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780504056098_ADVANCED_2_kh5y"
+  },
+  {
+    "questionText": "Bạn đang viết spec cho tính năng 'Tính lãi suất linh hoạt' của một công ty tài chính. Lãi suất được tính dựa trên 3 yếu tố: loại khách hàng (cá nhân/doanh nghiệp), thời hạn vay, và điểm tín dụng. Điểm tín dụng lại phụ thuộc vào lịch sử thanh toán và tài sản đảm bảo. Cách mô tả nào dưới đây giúp tester viết test case hiệu quả nhất?",
+    "options": [
+      "A. Viết công thức tính lãi suất tổng quát, sau đó liệt kê các giá trị đầu vào có thể có cho từng yếu tố.",
+      "B. Tạo một bảng với các cột: Loại khách hàng, Thời hạn vay, Điểm tín dụng, và cột kết quả là lãi suất. Điền sẵn một số trường hợp điển hình.",
+      "C. Sử dụng state diagram để mô tả cách điểm tín dụng thay đổi theo lịch sử thanh toán, sau đó kết hợp với bảng tính lãi suất.",
+      "D. Viết thành các rule riêng biệt: Rule 1 cho loại khách hàng, Rule 2 cho thời hạn vay, Rule 3 cho điểm tín dụng, sau đó kết hợp chúng trong một flowchart."
+    ],
+    "correctAnswer": "D",
+    "explanation": "D tách biệt các rule logic phức tạp, giúp tester dễ dàng xác định phạm vi kiểm thử cho từng rule (unit test) và kết hợp chúng (integration test). Flowchart giúp trực quan hóa luồng xử lý. Bảng (B) không đủ để mô tả sự phụ thuộc giữa các yếu tố, còn state diagram (C) chỉ tập trung vào điểm tín dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780504056098_ADVANCED_3_8hoi"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống core banking cho một ngân hàng Việt Nam, bạn phát hiện yêu cầu 'Xác thực giao dịch qua SMS OTP' mâu thuẫn với quy định mới của Ngân hàng Nhà nước về hạn chế gửi tin nhắn thương mại. Bạn sẽ cập nhật spec như thế nào để vừa tuân thủ quy định, vừa đáp ứng nhu cầu bảo mật?",
+    "options": [
+      "A. Thay thế SMS OTP bằng email OTP, giữ nguyên luồng xác thực và thời gian hiệu lực.",
+      "B. Đề xuất giải pháp thay thế: sử dụng app xác thực (như Google Authenticator) hoặc sinh OTP trực tiếp trên app ngân hàng. Mô tả chi tiết luồng mới, bao gồm cách kích hoạt và xử lý lỗi.",
+      "C. Ghi chú trong spec rằng 'Yêu cầu này tạm thời không khả thi do quy định pháp luật, sẽ cập nhật sau khi có hướng dẫn mới từ Ngân hàng Nhà nước.'",
+      "D. Giữ nguyên yêu cầu SMS OTP nhưng thêm tùy chọn 'Gửi qua email' cho người dùng lựa chọn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "B là giải pháp chủ động, giải quyết cả vấn đề pháp lý và bảo mật. Nó cung cấp giải pháp thay thế rõ ràng, mô tả chi tiết để developer/tester triển khai. A và D không tuân thủ quy định, còn C không giải quyết vấn đề.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780504056098_ADVANCED_4_x1x5"
+  },
+  {
+    "questionText": "Khi viết spec cho tính năng 'Tự động điều chỉnh hạn mức tín dụng' của một công ty tài chính, bạn cần mô tả cách hệ thống xử lý khi khách hàng có nhiều khoản vay cùng lúc. Cách tiếp cận nào dưới đây đảm bảo spec vừa chính xác, vừa dễ bảo trì khi quy tắc thay đổi?",
+    "options": [
+      "A. Viết một đoạn văn dài giải thích quy trình điều chỉnh hạn mức, bao gồm tất cả các trường hợp đặc biệt.",
+      "B. Sử dụng pseudocode để mô tả thuật toán điều chỉnh hạn mức, kèm theo chú thích cho các biến và điều kiện.",
+      "C. Tạo một bảng với các cột: Loại khoản vay, Số lượng khoản vay, Tình trạng thanh toán, và cột kết quả là hành động điều chỉnh hạn mức. Thêm chú thích cho các ngoại lệ.",
+      "D. Chia thành các rule riêng biệt: Rule 1 cho loại khoản vay, Rule 2 cho số lượng khoản vay, Rule 3 cho tình trạng thanh toán. Mỗi rule được mô tả trong một bảng hoặc flowchart riêng, sau đó kết hợp trong một tài liệu tổng thể."
+    ],
+    "correctAnswer": "D",
+    "explanation": "D giúp dễ dàng cập nhật khi quy tắc thay đổi (chỉ cần sửa rule liên quan) và đảm bảo tính rõ ràng cho developer/tester. Pseudocode (B) có thể gây khó hiểu cho tester không có nền tảng kỹ thuật, còn đoạn văn (A) và bảng đơn giản (C) không đủ để mô tả logic phức tạp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780504056099_ADVANCED_5_nviz"
+  },
+  {
+    "questionText": "Trong spec cho tính năng 'Xử lý giao dịch hoàn tiền' của một sàn thương mại điện tử, bạn cần mô tả luồng khi khách hàng yêu cầu hoàn tiền nhưng đơn hàng đã qua giai đoạn 'Cho phép hoàn tiền'. Cách viết nào dưới đây đảm bảo developer hiểu đúng yêu cầu xử lý ngoại lệ này?",
+    "options": [
+      "A. 'Nếu đơn hàng đã qua giai đoạn 'Cho phép hoàn tiền', hệ thống sẽ từ chối yêu cầu hoàn tiền và hiển thị thông báo lỗi.'",
+      "B. 'Khi nhận yêu cầu hoàn tiền cho đơn hàng đã qua giai đoạn 'Cho phép hoàn tiền' (trạng thái: DELIVERED hoặc COMPLETED), hệ thống sẽ: 1) Ghi log yêu cầu hoàn tiền với lý do 'Quá hạn'; 2) Hiển thị thông báo 'Đơn hàng không còn đủ điều kiện để hoàn tiền. Vui lòng liên hệ bộ phận hỗ trợ với mã đơn hàng [order_id]'; 3) Gửi email thông báo cho bộ phận hỗ trợ với chi tiết đơn hàng và lý do từ chối.'",
+      "C. 'Yêu cầu hoàn tiền sẽ được xử lý theo chính sách hoàn tiền của sàn, bao gồm các trường hợp đặc biệt như đơn hàng quá hạn.'",
+      "D. 'Hệ thống cần kiểm tra trạng thái đơn hàng trước khi xử lý hoàn tiền. Nếu đơn hàng đã qua giai đoạn 'Cho phép hoàn tiền', hệ thống sẽ chuyển yêu cầu đến bộ phận hỗ trợ.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B cung cấp chi tiết cụ thể về hành động hệ thống (log, thông báo, email), tránh mơ hồ như 'chính sách hoàn tiền' (C) hay 'chuyển yêu cầu' (D). Nó cũng không đơn giản hóa vấn đề như A.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780504056100_ADVANCED_6_wf2u"
+  },
+  {
+    "questionText": "Bạn đang viết spec cho tính năng 'Phân quyền động' của một hệ thống quản lý nhân sự. Quyền hạn của nhân viên thay đổi dựa trên vị trí, phòng ban, và dự án đang tham gia. Cách mô tả nào dưới đây giúp tester viết test case hiệu quả nhất cho các tổ hợp quyền phức tạp?",
+    "options": [
+      "A. Liệt kê tất cả các quyền có thể có trong một bảng, sau đó mô tả cách kết hợp chúng cho từng vị trí.",
+      "B. Sử dụng decision tree để mô tả cách hệ thống xác định quyền hạn dựa trên vị trí, phòng ban và dự án. Mỗi node là một điều kiện, và lá là tập hợp quyền tương ứng.",
+      "C. Viết thành các rule riêng biệt: Rule 1 cho vị trí, Rule 2 cho phòng ban, Rule 3 cho dự án. Mỗi rule được mô tả trong một bảng, sau đó kết hợp chúng trong một tài liệu tổng thể.",
+      "D. Tạo một bảng với các cột: Vị trí, Phòng ban, Dự án, và cột kết quả là danh sách quyền. Điền sẵn một số trường hợp điển hình."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Decision tree (B) trực quan hóa luồng quyết định phức tạp, giúp tester dễ dàng xác định các đường dẫn kiểm thử (test path) và các trường hợp biên. Nó hiệu quả hơn bảng đơn giản (D) và dễ theo dõi hơn so với các rule riêng biệt (C).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780504056100_ADVANCED_7_xqcx"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho một tập đoàn sản xuất, bạn phát hiện yêu cầu 'Tích hợp với hệ thống kế toán hiện tại' mâu thuẫn với yêu cầu 'Sử dụng chuẩn kế toán quốc tế IFRS' do hệ thống cũ chỉ hỗ trợ VAS. Bạn sẽ xử lý mâu thuẫn này như thế nào trong spec?",
+    "options": [
+      "A. Đề xuất giải pháp trung gian: triển khai mô-đun chuyển đổi dữ liệu từ VAS sang IFRS khi tích hợp với hệ thống kế toán cũ. Mô tả chi tiết luồng chuyển đổi, bao gồm các quy tắc mapping và xử lý ngoại lệ.",
+      "B. Chọn chuẩn IFRS và bỏ qua yêu cầu tích hợp với hệ thống cũ, đồng thời thêm giải thích về lý do quyết định.",
+      "C. Ghi nhận cả hai yêu cầu trong mục 'Open Issues' và để ban lãnh đạo quyết định.",
+      "D. Đề xuất sử dụng hệ thống kế toán mới hỗ trợ cả VAS và IFRS, kèm theo lộ trình triển khai."
+    ],
+    "correctAnswer": "A",
+    "explanation": "A cung cấp giải pháp kỹ thuật khả thi, giải quyết cả hai yêu cầu mà không yêu cầu thay đổi hệ thống cũ (D) hay bỏ qua yêu cầu (B). Nó cũng cụ thể hơn so với việc để mở như C. Spec cần phản ánh giải pháp cuối cùng chứ không phải vấn đề chưa giải quyết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780504056100_ADVANCED_8_j4gq"
+  },
+  {
+    "questionText": "Khi viết spec cho tính năng 'Tự động cảnh báo rủi ro tín dụng' của một ngân hàng, bạn cần mô tả cách hệ thống xử lý khi khách hàng có nhiều khoản vay quá hạn tại nhiều tổ chức tín dụng khác nhau. Cách mô tả nào dưới đây đảm bảo developer hiểu đúng yêu cầu mà không gây hiểu nhầm?",
+    "options": [
+      "A. 'Hệ thống sẽ cảnh báo khi khách hàng có bất kỳ khoản vay quá hạn nào tại các tổ chức tín dụng khác.'",
+      "B. 'Khi nhận dữ liệu từ CIC (Trung tâm Thông tin Tín dụng), hệ thống sẽ: 1) Kiểm tra số lượng khoản vay quá hạn (trễ > 30 ngày) của khách hàng tại các tổ chức khác; 2) Nếu số lượng >= 3, kích hoạt cảnh báo 'Rủi ro cao' và gửi email đến bộ phận quản lý rủi ro; 3) Ghi log cảnh báo với chi tiết các khoản vay quá hạn.'",
+      "C. 'Hệ thống cần tích hợp với CIC để lấy dữ liệu khoản vay quá hạn và cảnh báo theo quy trình quản lý rủi ro của ngân hàng.'",
+      "D. 'Cảnh báo rủi ro sẽ được kích hoạt dựa trên dữ liệu từ CIC, với ngưỡng cảnh báo do bộ phận quản lý rủi ro cấu hình.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B cung cấp chi tiết cụ thể về logic xử lý (số lượng khoản vay, thời gian trễ, hành động hệ thống), tránh mơ hồ như 'quy trình quản lý rủi ro' (C) hay 'ngưỡng cấu hình' (D). Nó cũng không đơn giản hóa vấn đề như A.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780504056101_ADVANCED_9_2ae9"
+  },
+  {
+    "questionText": "Trong spec cho tính năng 'Xử lý đơn hàng đa kênh' của một sàn thương mại điện tử, bạn cần mô tả luồng khi đơn hàng được tạo từ website nhưng khách hàng muốn thay đổi thông tin giao hàng qua app di động. Cách viết nào dưới đây đảm bảo tính nhất quán và rõ ràng cho cả developer và tester?",
+    "options": [
+      "A. 'Thông tin giao hàng có thể được cập nhật qua bất kỳ kênh nào, nhưng hệ thống sẽ ưu tiên thông tin mới nhất.'",
+      "B. 'Khi nhận yêu cầu cập nhật thông tin giao hàng từ app di động cho đơn hàng đã tạo trên website, hệ thống sẽ: 1) Kiểm tra trạng thái đơn hàng (chỉ cho phép cập nhật nếu trạng thái là 'Chờ xử lý'); 2) Cập nhật thông tin giao hàng mới; 3) Gửi thông báo xác nhận đến cả website và app; 4) Ghi log thay đổi với thời gian và người cập nhật.'",
+      "C. 'Thông tin giao hàng sẽ được đồng bộ giữa các kênh, với cơ chế lock để tránh xung đột khi cập nhật đồng thời.'",
+      "D. 'Người dùng có thể cập nhật thông tin giao hàng qua app di động, nhưng chỉ khi đơn hàng chưa được xử lý bởi kho hàng.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B mô tả chi tiết luồng xử lý, bao gồm điều kiện cập nhật, hành động hệ thống và log, đảm bảo tính rõ ràng cho cả developer và tester. Nó tránh mơ hồ như 'ưu tiên thông tin mới nhất' (A) hay 'cơ chế lock' (C), và cụ thể hơn so với D.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780504056102_ADVANCED_10_fz7p"
+  },
+  {
+    "questionText": "Bạn đang viết spec cho tính năng 'Tự động phê duyệt khoản vay' của một công ty tài chính. Quy trình phê duyệt phụ thuộc vào 4 yếu tố: số tiền vay, điểm tín dụng, lịch sử vay, và tài sản đảm bảo. Cách mô tả nào dưới đây giúp tester viết test case hiệu quả nhất cho các tổ hợp điều kiện phức tạp?",
+    "options": [
+      "A. Viết một đoạn văn dài giải thích quy trình phê duyệt, bao gồm tất cả các trường hợp đặc biệt và ngoại lệ.",
+      "B. Sử dụng decision table với các cột là 4 yếu tố đầu vào và dòng là các tổ hợp điều kiện, kết quả là 'Phê duyệt', 'Từ chối', hoặc 'Yêu cầu xem xét thủ công'. Thêm chú thích cho các trường hợp ngoại lệ.",
+      "C. Tạo một bảng với các cột: Số tiền vay, Điểm tín dụng, Lịch sử vay, Tài sản đảm bảo, và cột kết quả là quyết định phê duyệt. Điền sẵn một số trường hợp điển hình.",
+      "D. Chia thành các rule riêng biệt: Rule 1 cho số tiền vay, Rule 2 cho điểm tín dụng, Rule 3 cho lịch sử vay, Rule 4 cho tài sản đảm bảo. Mỗi rule được mô tả trong một bảng riêng, sau đó kết hợp chúng trong một tài liệu tổng thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Decision table (B) là công cụ hiệu quả nhất để mô tả logic phức tạp với nhiều điều kiện, giúp tester dễ dàng xác định các trường hợp kiểm thử (test case) và đảm bảo bao phủ tất cả tổ hợp. Nó trực quan hơn bảng đơn thuần (C) và dễ theo dõi hơn so với các rule riêng biệt (D).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780504056102_ADVANCED_11_nrrs"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho một tập đoàn bán lẻ Việt Nam với 500+ cửa hàng, bạn phát hiện rằng yêu cầu nghiệp vụ về 'quy tắc chiết khấu theo khối lượng' của phòng Kinh doanh chưa được mô tả rõ ràng trong Functional Specification. Phòng Kinh doanh khẳng định 'chiết khấu sẽ được áp dụng tự động khi đơn hàng đạt ngưỡng quy định', nhưng không nêu rõ ngưỡng đó là gì, cách tính chiết khấu như thế nào, và liệu có áp dụng cho tất cả sản phẩm hay chỉ một số nhóm sản phẩm. Là Business Analyst cấp độ EXPERT, bước tiếp theo bạn sẽ làm gì để đảm bảo Functional Specification phản ánh chính xác yêu cầu và có thể triển khai được?",
+    "options": [
+      "A. Ghi nhận yêu cầu hiện tại vào Functional Specification với ghi chú 'sẽ được làm rõ sau' và chuyển cho đội phát triển để họ tự định nghĩa logic dựa trên kinh nghiệm triển khai dự án trước.",
+      "B. Tổ chức một workshop với phòng Kinh doanh, Kế toán và đội Phát triển để phân tích chi tiết quy tắc chiết khấu, bao gồm: ngưỡng khối lượng, tỷ lệ chiết khấu, nhóm sản phẩm áp dụng, thời điểm áp dụng (trước/sau thuế), và các ngoại lệ (ví dụ: sản phẩm khuyến mãi). Đồng thời, yêu cầu phòng Kinh doanh cung cấp dữ liệu lịch sử để xác thực tính khả thi của quy tắc.",
+      "C. Tham khảo tài liệu từ dự án ERP trước đó của công ty và sao chép quy tắc chiết khấu từ đó vào Functional Specification, sau đó yêu cầu phòng Kinh doanh xác nhận lại.",
+      "D. Đề xuất loại bỏ tính năng chiết khấu theo khối lượng khỏi phạm vi dự án vì yêu cầu không rõ ràng, và tập trung vào các tính năng khác có yêu cầu cụ thể hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là cách tiếp cận chuyên gia vì nó kết hợp phân tích gap (phát hiện thiếu sót trong yêu cầu), tư duy hệ thống (xem xét tác động đến Kế toán, Phát triển), và lãnh đạo chuyển đổi (đảm bảo yêu cầu rõ ràng trước khi triển khai). Việc tổ chức workshop giúp làm rõ yêu cầu ở cấp độ vi mô (logic chiết khấu) và vĩ mô (tác động đến quy trình kinh doanh), đồng thời sử dụng dữ liệu lịch sử để đảm bảo tính khả thi. Các đáp án khác đều thiếu tính chủ động hoặc bỏ qua việc phân tích toàn diện.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "SITUATION",
+    "id": "q_1780504181533_EXPERT_0_065g"
+  },
+  {
+    "questionText": "Bạn đang viết Functional Specification cho module 'Quản lý đơn hàng' của hệ thống e-commerce đa quốc gia, với yêu cầu nghiệp vụ: 'Hệ thống phải hỗ trợ xử lý đơn hàng có nhiều phương thức thanh toán (ví dụ: một phần bằng thẻ tín dụng, một phần bằng ví điện tử).' Để đảm bảo tài liệu có thể sử dụng được bởi cả đội Phát triển và Kiểm thử, bạn sẽ mô tả chi tiết điều nào sau đây trong tài liệu?",
+    "options": [
+      "A. Danh sách các phương thức thanh toán được hỗ trợ (Visa, Mastercard, Momo, ZaloPay) mà không cần mô tả cách hệ thống xử lý khi có nhiều phương thức trong một đơn hàng.",
+      "B. Quy trình xử lý đơn hàng từ khi khách hàng chọn 'Thanh toán' đến khi hệ thống ghi nhận giao dịch thành công, bao gồm: thứ tự trừ tiền từ các phương thức, cách xử lý khi một phương thức thanh toán thất bại, và cách hệ thống cập nhật trạng thái đơn hàng trong từng trường hợp. Đồng thời, cung cấp ví dụ cụ thể với dữ liệu đầu vào và đầu ra mong muốn.",
+      "C. Chỉ mô tả rằng 'hệ thống sẽ hỗ trợ nhiều phương thức thanh toán' và yêu cầu đội Phát triển tự thiết kế giải pháp kỹ thuật dựa trên kinh nghiệm của họ.",
+      "D. Mô tả chi tiết giao diện người dùng cho bước chọn phương thức thanh toán, bao gồm vị trí các nút bấm và màu sắc, nhưng không đề cập đến logic xử lý hậu trường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó cung cấp đầy đủ thông tin về luồng xử lý (flow), ngoại lệ (xử lý thất bại), và các quy tắc nghiệp vụ (thứ tự trừ tiền, cập nhật trạng thái) – những yếu tố cốt lõi để đội Phát triển và Kiểm thử hiểu và triển khai chính xác. Ví dụ cụ thể với dữ liệu đầu vào/đầu ra giúp làm rõ yêu cầu và giảm thiểu hiểu nhầm. Các đáp án khác thiếu thông tin quan trọng về logic xử lý hoặc tập trung vào chi tiết không liên quan (giao diện người dùng).",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780504181534_EXPERT_1_xbc2"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống quản lý kho cho một công ty logistics Việt Nam, bạn nhận thấy rằng yêu cầu nghiệp vụ về 'quy tắc cảnh báo tồn kho' hiện tại chỉ mô tả: 'Hệ thống sẽ cảnh báo khi tồn kho thấp hơn mức an toàn.' Tuy nhiên, sau khi phân tích dữ liệu lịch sử, bạn phát hiện rằng mức tồn kho an toàn cần được tính toán động dựa trên: mùa vụ (ví dụ: Tết Nguyên đán), xu hướng bán hàng (tăng trưởng/giảm), và thời gian giao hàng của nhà cung cấp. Là Business Analyst cấp độ EXPERT, bạn sẽ đề xuất giải pháp nào để mô tả yêu cầu này trong Functional Specification?",
+    "options": [
+      "A. Giữ nguyên yêu cầu như hiện tại và thêm ghi chú 'mức tồn kho an toàn sẽ được xác định sau khi hệ thống triển khai'.",
+      "B. Mô tả chi tiết công thức tính toán mức tồn kho an toàn động, bao gồm: các tham số đầu vào (dữ liệu bán hàng lịch sử, thời gian giao hàng nhà cung cấp, hệ số mùa vụ), cách hệ thống tự động cập nhật mức tồn kho an toàn, và quy tắc cảnh báo (ví dụ: cảnh báo trước 7 ngày nếu dự báo thiếu hụt). Đồng thời, cung cấp ví dụ với dữ liệu thực tế để minh họa.",
+      "C. Đề xuất loại bỏ tính năng cảnh báo tồn kho vì quá phức tạp và thay thế bằng báo cáo tồn kho hàng ngày để người dùng tự theo dõi.",
+      "D. Yêu cầu phòng Kinh doanh cung cấp một con số cố định cho mức tồn kho an toàn và áp dụng cho tất cả sản phẩm, bất kể mùa vụ hay xu hướng bán hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là giải pháp chuyên gia vì nó kết hợp tư duy chiến lược (tính toán động dựa trên dữ liệu thực tế) và khả năng triển khai (mô tả chi tiết công thức, tham số đầu vào, và quy tắc cảnh báo). Việc cung cấp ví dụ với dữ liệu thực tế giúp đội Phát triển và Kiểm thử hiểu rõ yêu cầu và giảm thiểu rủi ro triển khai. Các đáp án khác đều bỏ qua tính động của yêu cầu hoặc đơn giản hóa vấn đề, dẫn đến giải pháp không tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780504181536_EXPERT_2_m306"
+  },
+  {
+    "questionText": "Bạn đang viết Functional Specification cho module 'Xử lý khiếu nại khách hàng' của hệ thống CRM cho một ngân hàng. Yêu cầu nghiệp vụ mô tả: 'Hệ thống phải cho phép nhân viên xử lý khiếu nại của khách hàng theo quy trình chuẩn.' Sau khi phân tích, bạn nhận thấy quy trình hiện tại có 5 bước, nhưng mỗi bước có nhiều ngoại lệ (ví dụ: bước 'Xác minh thông tin khách hàng' có thể bỏ qua nếu khách hàng đã xác thực qua OTP). Để đảm bảo tài liệu rõ ràng và có thể triển khai, bạn sẽ mô tả quy trình này như thế nào?",
+    "options": [
+      "A. Mô tả quy trình tuyến tính với 5 bước mà không đề cập đến các ngoại lệ, và yêu cầu đội Phát triển tự xử lý các trường hợp đặc biệt khi triển khai.",
+      "B. Mô tả chi tiết từng bước trong quy trình, bao gồm: điều kiện để chuyển sang bước tiếp theo, các ngoại lệ có thể xảy ra (ví dụ: khách hàng chưa xác thực), cách hệ thống xử lý ngoại lệ (ví dụ: yêu cầu xác thực OTP), và trạng thái của khiếu nại sau mỗi bước. Đồng thời, cung cấp sơ đồ luồng (flowchart) để minh họa.",
+      "C. Chỉ mô tả rằng 'hệ thống sẽ hỗ trợ xử lý khiếu nại theo quy trình chuẩn' và yêu cầu phòng Kinh doanh cung cấp tài liệu quy trình riêng để đội Phát triển tham khảo.",
+      "D. Đề xuất loại bỏ các ngoại lệ khỏi quy trình để đơn giản hóa triển khai, và yêu cầu khách hàng phải tuân thủ quy trình tuyến tính."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó cung cấp đầy đủ thông tin về luồng xử lý (flow), ngoại lệ (exceptions), và điều kiện chuyển bước – những yếu tố quan trọng để đội Phát triển triển khai chính xác. Sơ đồ luồng giúp trực quan hóa quy trình và giảm thiểu hiểu nhầm. Các đáp án khác đều bỏ qua các ngoại lệ quan trọng hoặc không cung cấp đủ chi tiết để triển khai.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780504181537_EXPERT_3_brno"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý đơn hàng cho một công ty thương mại điện tử, bạn phát hiện rằng yêu cầu nghiệp vụ về 'quy tắc tính phí vận chuyển' hiện tại chỉ mô tả: 'Phí vận chuyển sẽ được tính dựa trên trọng lượng và địa chỉ giao hàng.' Tuy nhiên, sau khi phân tích, bạn nhận thấy phí vận chuyển còn phụ thuộc vào: loại sản phẩm (ví dụ: hàng dễ vỡ, hàng nguy hiểm), phương thức vận chuyển (giao hàng nhanh/chậm), và các chương trình khuyến mãi (miễn phí vận chuyển cho đơn hàng trên 500K). Là Business Analyst cấp độ EXPERT, bạn sẽ mô tả yêu cầu này như thế nào trong Functional Specification?",
+    "options": [
+      "A. Giữ nguyên yêu cầu như hiện tại và thêm ghi chú 'chi tiết sẽ được làm rõ sau khi hệ thống triển khai'.",
+      "B. Mô tả chi tiết bảng quy tắc tính phí vận chuyển, bao gồm: các tham số đầu vào (trọng lượng, địa chỉ, loại sản phẩm, phương thức vận chuyển, chương trình khuyến mãi), công thức tính toán, và cách hệ thống áp dụng các chương trình khuyến mãi (ví dụ: miễn phí vận chuyển cho đơn hàng trên 500K). Đồng thời, cung cấp ví dụ với dữ liệu thực tế.",
+      "C. Đề xuất tính phí vận chuyển cố định cho tất cả đơn hàng để đơn giản hóa triển khai, bất kể trọng lượng hay địa chỉ giao hàng.",
+      "D. Yêu cầu phòng Kinh doanh cung cấp một bảng giá vận chuyển cố định cho từng tỉnh thành và áp dụng cho tất cả sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là giải pháp chuyên gia vì nó cung cấp đầy đủ thông tin về các tham số đầu vào, công thức tính toán, và cách áp dụng khuyến mãi – những yếu tố quan trọng để đội Phát triển triển khai chính xác. Ví dụ với dữ liệu thực tế giúp làm rõ yêu cầu và giảm thiểu rủi ro hiểu nhầm. Các đáp án khác đều bỏ qua các yếu tố quan trọng (loại sản phẩm, khuyến mãi) hoặc đơn giản hóa vấn đề, dẫn đến giải pháp không tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780504181538_EXPERT_4_6utg"
+  },
+  {
+    "questionText": "Bạn đang viết Functional Specification cho module 'Quản lý hợp đồng' của hệ thống ERP cho một công ty xây dựng. Yêu cầu nghiệp vụ mô tả: 'Hệ thống phải tự động gia hạn hợp đồng khi đến hạn.' Tuy nhiên, sau khi phân tích, bạn phát hiện rằng quy tắc gia hạn hợp đồng phụ thuộc vào nhiều yếu tố: loại hợp đồng (dịch vụ/thuê tài sản), thời gian gia hạn (1 năm/3 năm), điều kiện gia hạn (ví dụ: không có vi phạm trong hợp đồng trước), và sự chấp thuận của khách hàng. Là Business Analyst cấp độ EXPERT, bạn sẽ mô tả yêu cầu này như thế nào?",
+    "options": [
+      "A. Ghi nhận yêu cầu hiện tại vào Functional Specification với ghi chú 'quy tắc gia hạn sẽ được xác định sau khi hệ thống triển khai'.",
+      "B. Mô tả chi tiết quy tắc gia hạn hợp đồng, bao gồm: điều kiện để hệ thống tự động đề xuất gia hạn (loại hợp đồng, thời gian gia hạn, điều kiện gia hạn), quy trình xử lý khi khách hàng chấp thuận/không chấp thuận, và cách hệ thống cập nhật trạng thái hợp đồng. Đồng thời, cung cấp ví dụ với dữ liệu thực tế.",
+      "C. Đề xuất loại bỏ tính năng tự động gia hạn hợp đồng và thay thế bằng thông báo nhắc nhở để người dùng tự xử lý.",
+      "D. Yêu cầu phòng Kinh doanh cung cấp một quy tắc gia hạn đơn giản (ví dụ: gia hạn tất cả hợp đồng 1 năm) và áp dụng cho tất cả loại hợp đồng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó cung cấp đầy đủ thông tin về quy tắc gia hạn (điều kiện, quy trình xử lý, cập nhật trạng thái) – những yếu tố quan trọng để đội Phát triển triển khai chính xác. Ví dụ với dữ liệu thực tế giúp làm rõ yêu cầu và giảm thiểu hiểu nhầm. Các đáp án khác đều bỏ qua các yếu tố quan trọng (loại hợp đồng, điều kiện gia hạn) hoặc đơn giản hóa vấn đề, dẫn đến giải pháp không tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780504181539_EXPERT_5_0vcs"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý nhân sự cho một tập đoàn đa quốc gia, bạn nhận thấy rằng yêu cầu nghiệp vụ về 'quy tắc tính lương' hiện tại chỉ mô tả: 'Hệ thống sẽ tính lương cho nhân viên dựa trên bảng lương và các khoản phụ cấp.' Tuy nhiên, sau khi phân tích, bạn phát hiện rằng quy tắc tính lương còn phụ thuộc vào: loại hợp đồng (toàn thời gian/bán thời gian), vị trí công việc, thâm niên, và các khoản khấu trừ (ví dụ: bảo hiểm, thuế). Là Business Analyst cấp độ EXPERT, bạn sẽ mô tả yêu cầu này như thế nào trong Functional Specification?",
+    "options": [
+      "A. Giữ nguyên yêu cầu như hiện tại và thêm ghi chú 'chi tiết sẽ được làm rõ sau khi hệ thống triển khai'.",
+      "B. Mô tả chi tiết công thức tính lương, bao gồm: các tham số đầu vào (bảng lương, loại hợp đồng, vị trí công việc, thâm niên, các khoản phụ cấp, các khoản khấu trừ), cách hệ thống áp dụng từng tham số, và cách hiển thị kết quả tính toán (ví dụ: lương gross/net). Đồng thời, cung cấp ví dụ với dữ liệu thực tế.",
+      "C. Đề xuất tính lương cố định cho tất cả nhân viên để đơn giản hóa triển khai, bất kể loại hợp đồng hay vị trí công việc.",
+      "D. Yêu cầu phòng Nhân sự cung cấp một bảng lương cố định cho từng vị trí và áp dụng cho tất cả nhân viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là giải pháp chuyên gia vì nó cung cấp đầy đủ thông tin về các tham số đầu vào, công thức tính toán, và cách hiển thị kết quả – những yếu tố quan trọng để đội Phát triển triển khai chính xác. Ví dụ với dữ liệu thực tế giúp làm rõ yêu cầu và giảm thiểu rủi ro hiểu nhầm. Các đáp án khác đều bỏ qua các yếu tố quan trọng (loại hợp đồng, thâm niên, khấu trừ) hoặc đơn giản hóa vấn đề, dẫn đến giải pháp không tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780504181540_EXPERT_6_r19x"
+  },
+  {
+    "questionText": "Bạn đang viết Functional Specification cho module 'Quản lý dự án' của hệ thống ERP cho một công ty tư vấn. Yêu cầu nghiệp vụ mô tả: 'Hệ thống phải tự động tính toán tiến độ dự án dựa trên công việc đã hoàn thành.' Tuy nhiên, sau khi phân tích, bạn phát hiện rằng tiến độ dự án phụ thuộc vào: trọng số của từng công việc (ví dụ: công việc A chiếm 30% tiến độ, công việc B chiếm 70%), trạng thái công việc (đã hoàn thành/chưa hoàn thành/đang thực hiện), và sự phụ thuộc giữa các công việc (ví dụ: công việc B chỉ có thể bắt đầu khi công việc A hoàn thành). Là Business Analyst cấp độ EXPERT, bạn sẽ mô tả yêu cầu này như thế nào?",
+    "options": [
+      "A. Ghi nhận yêu cầu hiện tại vào Functional Specification với ghi chú 'cách tính tiến độ sẽ được xác định sau khi hệ thống triển khai'.",
+      "B. Mô tả chi tiết công thức tính tiến độ dự án, bao gồm: trọng số của từng công việc, cách hệ thống xác định trạng thái công việc (đã hoàn thành/chưa hoàn thành/đang thực hiện), và cách xử lý sự phụ thuộc giữa các công việc. Đồng thời, cung cấp ví dụ với dữ liệu thực tế.",
+      "C. Đề xuất loại bỏ tính năng tự động tính tiến độ và thay thế bằng việc người dùng tự cập nhật tiến độ dự án.",
+      "D. Yêu cầu phòng Dự án cung cấp một công thức tính tiến độ đơn giản (ví dụ: tiến độ = số công việc hoàn thành / tổng số công việc) và áp dụng cho tất cả dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó cung cấp đầy đủ thông tin về công thức tính tiến độ (trọng số, trạng thái công việc, sự phụ thuộc) – những yếu tố quan trọng để đội Phát triển triển khai chính xác. Ví dụ với dữ liệu thực tế giúp làm rõ yêu cầu và giảm thiểu hiểu nhầm. Các đáp án khác đều bỏ qua các yếu tố quan trọng (trọng số, phụ thuộc) hoặc đơn giản hóa vấn đề, dẫn đến giải pháp không tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780504181541_EXPERT_7_ktlm"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý bán hàng cho một chuỗi siêu thị, bạn phát hiện rằng yêu cầu nghiệp vụ về 'quy tắc áp dụng khuyến mãi' hiện tại chỉ mô tả: 'Hệ thống sẽ áp dụng khuyến mãi cho đơn hàng theo chương trình hiện hành.' Tuy nhiên, sau khi phân tích, bạn nhận thấy quy tắc áp dụng khuyến mãi phụ thuộc vào: loại khuyến mãi (giảm giá %, tặng quà, freeship), điều kiện áp dụng (ví dụ: đơn hàng tối thiểu 300K), và sự xung đột giữa các khuyến mãi (ví dụ: không áp dụng đồng thời khuyến mãi giảm giá 10% và freeship). Là Business Analyst cấp độ EXPERT, bạn sẽ mô tả yêu cầu này như thế nào trong Functional Specification?",
+    "options": [
+      "A. Giữ nguyên yêu cầu như hiện tại và thêm ghi chú 'chi tiết sẽ được làm rõ sau khi hệ thống triển khai'.",
+      "B. Mô tả chi tiết bảng quy tắc áp dụng khuyến mãi, bao gồm: loại khuyến mãi, điều kiện áp dụng, thứ tự ưu tiên khi có nhiều khuyến mãi, và cách xử lý xung đột (ví dụ: chỉ áp dụng khuyến mãi có giá trị cao nhất). Đồng thời, cung cấp ví dụ với dữ liệu thực tế.",
+      "C. Đề xuất chỉ áp dụng một loại khuyến mãi duy nhất cho tất cả đơn hàng để đơn giản hóa triển khai, bất kể điều kiện hay xung đột.",
+      "D. Yêu cầu phòng Marketing cung cấp một danh sách khuyến mãi cố định và áp dụng cho tất cả đơn hàng mà không cần điều kiện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là giải pháp chuyên gia vì nó cung cấp đầy đủ thông tin về loại khuyến mãi, điều kiện áp dụng, thứ tự ưu tiên, và cách xử lý xung đột – những yếu tố quan trọng để đội Phát triển triển khai chính xác. Ví dụ với dữ liệu thực tế giúp làm rõ yêu cầu và giảm thiểu rủi ro hiểu nhầm. Các đáp án khác đều bỏ qua các yếu tố quan trọng (điều kiện, xung đột) hoặc đơn giản hóa vấn đề, dẫn đến giải pháp không tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780504181542_EXPERT_8_6e4z"
+  },
+  {
+    "questionText": "Bạn đang viết Functional Specification cho module 'Quản lý tài sản cố định' của hệ thống ERP cho một công ty sản xuất. Yêu cầu nghiệp vụ mô tả: 'Hệ thống phải tự động tính khấu hao tài sản theo phương pháp đường thẳng.' Tuy nhiên, sau khi phân tích, bạn phát hiện rằng quy tắc khấu hao còn phụ thuộc vào: loại tài sản (máy móc/thiết bị/văn phòng), thời gian sử dụng (3 năm/5 năm/10 năm), giá trị còn lại (ví dụ: 10% giá trị ban đầu), và các quy định kế toán (ví dụ: không khấu hao tài sản đã hết thời gian sử dụng). Là Business Analyst cấp độ EXPERT, bạn sẽ mô tả yêu cầu này như thế nào?",
+    "options": [
+      "A. Ghi nhận yêu cầu hiện tại vào Functional Specification với ghi chú 'chi tiết sẽ được làm rõ sau khi hệ thống triển khai'.",
+      "B. Mô tả chi tiết công thức tính khấu hao, bao gồm: loại tài sản, thời gian sử dụng, giá trị còn lại, và cách hệ thống xử lý khi tài sản hết thời gian sử dụng (ví dụ: dừng khấu hao). Đồng thời, cung cấp ví dụ với dữ liệu thực tế.",
+      "C. Đề xuất tính khấu hao cố định cho tất cả tài sản (ví dụ: 10% giá trị ban đầu mỗi năm) để đơn giản hóa triển khai, bất kể loại tài sản hay thời gian sử dụng.",
+      "D. Yêu cầu phòng Kế toán cung cấp một bảng khấu hao cố định cho từng loại tài sản và áp dụng cho tất cả tài sản."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó cung cấp đầy đủ thông tin về công thức tính khấu hao (loại tài sản, thời gian sử dụng, giá trị còn lại) và cách xử lý ngoại lệ (tài sản hết thời gian sử dụng) – những yếu tố quan trọng để đội Phát triển triển khai chính xác. Ví dụ với dữ liệu thực tế giúp làm rõ yêu cầu và giảm thiểu hiểu nhầm. Các đáp án khác đều bỏ qua các yếu tố quan trọng (loại tài sản, giá trị còn lại) hoặc đơn giản hóa vấn đề, dẫn đến giải pháp không tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780504181543_EXPERT_9_i964"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý quan hệ khách hàng (CRM) cho một ngân hàng, bạn phát hiện rằng yêu cầu nghiệp vụ về 'quy tắc phân loại khách hàng' hiện tại chỉ mô tả: 'Hệ thống sẽ phân loại khách hàng theo mức độ ưu tiên.' Tuy nhiên, sau khi phân tích, bạn nhận thấy quy tắc phân loại khách hàng phụ thuộc vào: doanh số giao dịch (ví dụ: khách hàng VIP có doanh số > 1 tỷ/năm), loại sản phẩm sử dụng (ví dụ: khách hàng ưu tiên nếu sử dụng gói tiết kiệm cao cấp), và lịch sử quan hệ (ví dụ: khách hàng trung thành nếu giao dịch liên tục trong 3 năm). Là Business Analyst cấp độ EXPERT, bạn sẽ mô tả yêu cầu này như thế nào trong Functional Specification?",
+    "options": [
+      "A. Giữ nguyên yêu cầu như hiện tại và thêm ghi chú 'chi tiết sẽ được làm rõ sau khi hệ thống triển khai'.",
+      "B. Mô tả chi tiết bảng quy tắc phân loại khách hàng, bao gồm: các tiêu chí phân loại (doanh số, loại sản phẩm, lịch sử quan hệ), ngưỡng phân loại (ví dụ: VIP nếu doanh số > 1 tỷ/năm), và cách hệ thống tự động cập nhật phân loại khi dữ liệu khách hàng thay đổi. Đồng thời, cung cấp ví dụ với dữ liệu thực tế.",
+      "C. Đề xuất phân loại khách hàng theo một tiêu chí duy nhất (ví dụ: doanh số giao dịch) để đơn giản hóa triển khai, bất kể loại sản phẩm hay lịch sử quan hệ.",
+      "D. Yêu cầu phòng Kinh doanh cung cấp một danh sách khách hàng ưu tiên cố định và áp dụng cho tất cả khách hàng mà không cần tiêu chí."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là giải pháp chuyên gia vì nó cung cấp đầy đủ thông tin về các tiêu chí phân loại, ngưỡng phân loại, và cách hệ thống tự động cập nhật – những yếu tố quan trọng để đội Phát triển triển khai chính xác. Ví dụ với dữ liệu thực tế giúp làm rõ yêu cầu và giảm thiểu rủi ro hiểu nhầm. Các đáp án khác đều bỏ qua các yếu tố quan trọng (loại sản phẩm, lịch sử quan hệ) hoặc đơn giản hóa vấn đề, dẫn đến giải pháp không tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "SKILL",
+    "id": "q_1780504181544_EXPERT_10_nsdg"
+  },
+  {
+    "questionText": "Bạn đang viết Functional Specification cho module 'Quản lý đơn hàng' của hệ thống e-commerce. Yêu cầu nghiệp vụ mô tả: 'Hệ thống phải hỗ trợ xử lý đơn hàng có nhiều sản phẩm.' Sau khi phân tích, bạn nhận thấy rằng quy trình xử lý đơn hàng phức tạp hơn nhiều, bao gồm: kiểm tra tồn kho cho từng sản phẩm, xử lý khi một sản phẩm hết hàng (ví dụ: hủy sản phẩm đó hoặc thay thế bằng sản phẩm tương đương), và cập nhật trạng thái đơn hàng theo từng bước (ví dụ: 'Đang xử lý', 'Đã giao một phần', 'Hoàn thành'). Là Business Analyst cấp độ EXPERT, bạn sẽ mô tả yêu cầu này như thế nào?",
+    "options": [
+      "A. Ghi nhận yêu cầu hiện tại vào Functional Specification với ghi chú 'chi tiết sẽ được làm rõ sau khi hệ thống triển khai'.",
+      "B. Mô tả chi tiết quy trình xử lý đơn hàng nhiều sản phẩm, bao gồm: cách hệ thống kiểm tra tồn kho cho từng sản phẩm, quy tắc xử lý khi sản phẩm hết hàng (hủy/thay thế), và cách cập nhật trạng thái đơn hàng theo từng bước. Đồng thời, cung cấp sơ đồ luồng (flowchart) và ví dụ với dữ liệu thực tế.",
+      "C. Đề xuất chỉ cho phép đơn hàng có một sản phẩm để đơn giản hóa triển khai, và yêu cầu khách hàng đặt nhiều đơn hàng riêng lẻ nếu cần mua nhiều sản phẩm.",
+      "D. Yêu cầu phòng Kinh doanh cung cấp một quy trình xử lý đơn hàng đơn giản (ví dụ: hủy toàn bộ đơn hàng nếu một sản phẩm hết hàng) và áp dụng cho tất cả đơn hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đáp án B là đúng vì nó cung cấp đầy đủ thông tin về quy trình xử lý (kiểm tra tồn kho, xử lý hết hàng, cập nhật trạng thái) – những yếu tố quan trọng để đội Phát triển triển khai chính xác. Sơ đồ luồng và ví dụ với dữ liệu thực tế giúp trực quan hóa quy trình và giảm thiểu hiểu nhầm. Các đáp án khác đều bỏ qua các yếu tố quan trọng (xử lý hết hàng, cập nhật trạng thái) hoặc đơn giản hóa vấn đề, dẫn đến giải pháp không tối ưu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Functional Specification Writing",
+    "category": "ANALYSIS",
+    "id": "q_1780504181545_EXPERT_11_r8a9"
+  }
+]

@@ -1,0 +1,797 @@
+[
+  {
+    "questionText": "Trong quản lý thay đổi, 'Stakeholder readiness' đề cập đến điều gì?",
+    "options": [
+      "A. Khả năng tài chính của các bên liên quan để đầu tư vào dự án.",
+      "B. Mức độ sẵn sàng về kiến thức, kỹ năng và thái độ của các bên liên quan để chấp nhận và áp dụng thay đổi.",
+      "C. Quy trình phê duyệt tài liệu dự án của các bên liên quan.",
+      "D. Khả năng lãnh đạo của các bên liên quan trong việc ra quyết định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Stakeholder readiness đánh giá mức độ sẵn sàng của các bên liên quan về mặt nhận thức, kỹ năng và tâm lý để tiếp nhận và thực hiện thay đổi, đặc biệt trong triển khai hệ thống hoặc quy trình mới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502817006_BEGINNER_0_p89g"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống ERP tại công ty sản xuất ở Việt Nam gặp phải sự phản đối từ nhân viên vì lo ngại mất việc. Business Analyst nên làm gì ĐẦU TIÊN để giảm thiểu sự phản đối này?",
+    "options": [
+      "A. Báo cáo lên ban lãnh đạo để xử lý kỷ luật những nhân viên phản đối.",
+      "B. Tổ chức buổi họp để lắng nghe và ghi nhận mối quan ngại của nhân viên, đồng thời giải thích lợi ích của hệ thống mới.",
+      "C. Bắt đầu đào tạo ngay lập tức để nhân viên làm quen với hệ thống mới.",
+      "D. Thay đổi thiết kế hệ thống để đáp ứng yêu cầu của nhân viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bước đầu tiên trong quản lý thay đổi là lắng nghe và thấu hiểu mối quan ngại của các bên liên quan. Việc giải thích rõ ràng lợi ích và tác động của thay đổi giúp giảm bớt lo ngại và xây dựng sự đồng thuận.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780502817006_BEGINNER_1_3cri"
+  },
+  {
+    "questionText": "Kế hoạch truyền thông (communication plan) trong quản lý thay đổi KHÔNG bao gồm nội dung nào sau đây?",
+    "options": [
+      "A. Xác định đối tượng nhận thông tin (stakeholders) và nội dung thông điệp phù hợp cho từng nhóm.",
+      "B. Lựa chọn kênh truyền thông (email, họp, đào tạo,...) và tần suất cập nhật thông tin.",
+      "C. Đánh giá hiệu quả tài chính của dự án sau khi triển khai hệ thống mới.",
+      "D. Xác định thời điểm truyền tải thông tin và người chịu trách nhiệm truyền thông."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kế hoạch truyền thông tập trung vào việc truyền tải thông tin hiệu quả đến các bên liên quan, không bao gồm đánh giá hiệu quả tài chính của dự án, vốn thuộc phạm vi quản lý dự án hoặc tài chính.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502817006_BEGINNER_2_vxw3"
+  },
+  {
+    "questionText": "Để theo dõi mức độ áp dụng (adoption) của hệ thống mới sau khi triển khai, chỉ số nào sau đây là phù hợp NHẤT?",
+    "options": [
+      "A. Số lượng lỗi hệ thống phát sinh hàng tuần.",
+      "B. Tỷ lệ nhân viên đăng nhập và sử dụng hệ thống hàng ngày, số lượng giao dịch được xử lý qua hệ thống.",
+      "C. Chi phí bảo trì hệ thống hàng tháng.",
+      "D. Số lượng yêu cầu thay đổi (change request) từ người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Adoption metrics đo lường mức độ sử dụng thực tế của hệ thống mới, như tỷ lệ đăng nhập, số lượng giao dịch, hoặc thời gian sử dụng. Các chỉ số khác liên quan đến lỗi, chi phí hoặc yêu cầu thay đổi không phản ánh trực tiếp mức độ áp dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780502817006_BEGINNER_3_t0q3"
+  },
+  {
+    "questionText": "Trong giai đoạn sau khi triển khai (post-go-live), Business Analyst nên tập trung vào hoạt động nào để hỗ trợ quá trình chuyển đổi tổ chức?",
+    "options": [
+      "A. Tiếp tục thu thập phản hồi từ người dùng, giải quyết các vấn đề phát sinh và cung cấp hỗ trợ bổ sung nếu cần.",
+      "B. Bắt đầu lập kế hoạch cho dự án tiếp theo mà không cần quan tâm đến hệ thống hiện tại.",
+      "C. Ngừng tất cả các hoạt động đào tạo và truyền thông vì hệ thống đã được triển khai.",
+      "D. Yêu cầu người dùng tự giải quyết các vấn đề kỹ thuật phát sinh."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giai đoạn post-go-live đòi hỏi sự hỗ trợ liên tục để đảm bảo người dùng có thể sử dụng hệ thống hiệu quả. Việc thu thập phản hồi và giải quyết vấn đề giúp cải thiện adoption và giảm thiểu gián đoạn công việc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780502817006_BEGINNER_4_qujn"
+  },
+  {
+    "questionText": "Một công ty logistics tại Việt Nam triển khai hệ thống quản lý kho mới. Sau 1 tháng, chỉ có 30% nhân viên sử dụng hệ thống. Business Analyst nên làm gì để cải thiện tình hình?",
+    "options": [
+      "A. Đào tạo lại toàn bộ nhân viên về lợi ích của hệ thống và cách sử dụng.",
+      "B. Phân tích nguyên nhân cụ thể (ví dụ: khó sử dụng, thiếu đào tạo, không thấy lợi ích) và triển khai giải pháp phù hợp (đào tạo bổ sung, cải tiến giao diện, truyền thông hiệu quả hơn).",
+      "C. Bắt buộc tất cả nhân viên phải sử dụng hệ thống và xử lý kỷ luật nếu không tuân thủ.",
+      "D. Bỏ qua hệ thống mới và quay lại sử dụng quy trình cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc phân tích nguyên nhân gốc rễ giúp xác định giải pháp phù hợp (đào tạo, cải tiến hệ thống, truyền thông) thay vì áp dụng biện pháp cứng nhắc hoặc bỏ cuộc. Điều này đảm bảo adoption bền vững.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780502817006_BEGINNER_5_69qk"
+  },
+  {
+    "questionText": "Kế hoạch đào tạo (training plan) trong quản lý thay đổi nên bao gồm những nội dung nào?",
+    "options": [
+      "A. Chỉ cần liệt kê danh sách các khóa đào tạo mà không cần xác định đối tượng hoặc thời gian.",
+      "B. Xác định đối tượng đào tạo, nội dung đào tạo, phương pháp đào tạo (online, offline, thực hành), thời gian và người chịu trách nhiệm đào tạo.",
+      "C. Tập trung vào việc đào tạo kỹ thuật cho đội ngũ IT mà không cần đào tạo người dùng cuối.",
+      "D. Đào tạo chỉ diễn ra một lần trước khi triển khai hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kế hoạch đào tạo hiệu quả cần xác định rõ đối tượng, nội dung, phương pháp và thời gian đào tạo để đảm bảo người dùng có đủ kiến thức và kỹ năng sử dụng hệ thống mới.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502817006_BEGINNER_6_2wwe"
+  },
+  {
+    "questionText": "Để giảm thiểu sự phản đối từ nhân viên khi triển khai hệ thống mới, Business Analyst nên làm gì TRƯỚC KHI hệ thống được triển khai?",
+    "options": [
+      "A. Đe dọa xử lý kỷ luật nếu nhân viên không chấp nhận hệ thống mới.",
+      "B. Tham gia vào quá trình thiết kế hệ thống để đảm bảo nó đáp ứng nhu cầu của người dùng và truyền thông sớm về lợi ích của hệ thống.",
+      "C. Chờ đến khi hệ thống triển khai xong mới bắt đầu truyền thông về thay đổi.",
+      "D. Chỉ đào tạo cho đội ngũ quản lý mà không cần đào tạo cho nhân viên cấp dưới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tham gia vào thiết kế hệ thống và truyền thông sớm giúp người dùng hiểu rõ lợi ích và giảm thiểu sự phản đối. Điều này tạo sự đồng thuận và sẵn sàng trước khi triển khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780502817006_BEGINNER_7_w1e1"
+  },
+  {
+    "questionText": "Một công ty bán lẻ triển khai hệ thống POS (Point of Sale) mới. Sau khi triển khai, nhiều nhân viên vẫn sử dụng quy trình thủ công vì không quen với hệ thống. Business Analyst nên sử dụng chỉ số nào để đánh giá mức độ áp dụng của hệ thống?",
+    "options": [
+      "A. Số lượng hóa đơn được xử lý thủ công so với qua hệ thống POS.",
+      "B. Số lượng nhân viên tham gia khóa đào tạo.",
+      "C. Chi phí triển khai hệ thống POS.",
+      "D. Số lượng phản hồi tiêu cực từ khách hàng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Số lượng hóa đơn xử lý qua hệ thống POS so với thủ công phản ánh trực tiếp mức độ áp dụng của hệ thống. Các chỉ số khác không đo lường được adoption một cách hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780502817006_BEGINNER_8_cw8x"
+  },
+  {
+    "questionText": "Trong quá trình quản lý thay đổi, 'feedback loop' (vòng phản hồi) có vai trò gì?",
+    "options": [
+      "A. Chỉ dùng để thu thập ý kiến phản hồi từ người dùng mà không cần hành động gì thêm.",
+      "B. Là quy trình thu thập, phân tích và hành động dựa trên phản hồi của người dùng để cải thiện hệ thống hoặc quy trình.",
+      "C. Dùng để đánh giá hiệu suất của đội ngũ IT.",
+      "D. Là công cụ để xử lý kỷ luật nhân viên không tuân thủ quy trình mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Feedback loop là quy trình liên tục thu thập, phân tích và triển khai cải tiến dựa trên phản hồi của người dùng, giúp nâng cao adoption và hiệu quả của hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502817006_BEGINNER_9_b42f"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống CRM tại công ty bảo hiểm gặp khó khăn vì nhân viên không thấy lợi ích khi sử dụng hệ thống. Business Analyst nên làm gì để giải quyết vấn đề này?",
+    "options": [
+      "A. Bắt buộc nhân viên sử dụng hệ thống mà không cần giải thích lợi ích.",
+      "B. Tổ chức buổi workshop để trình bày rõ ràng lợi ích của hệ thống CRM đối với công việc hàng ngày của nhân viên và cách nó giúp tiết kiệm thời gian, nâng cao hiệu quả.",
+      "C. Thay đổi thiết kế hệ thống để phù hợp với quy trình cũ của công ty.",
+      "D. Đào tạo lại toàn bộ nhân viên về kỹ thuật sử dụng hệ thống mà không đề cập đến lợi ích."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc trình bày rõ ràng lợi ích của hệ thống giúp nhân viên hiểu được giá trị thực tế, từ đó tăng động lực sử dụng. Đây là bước quan trọng trong quản lý thay đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780502817006_BEGINNER_10_28p5"
+  },
+  {
+    "questionText": "Để đảm bảo sự chuyển đổi suôn sẻ sau khi triển khai hệ thống mới, Business Analyst nên tập trung vào hoạt động nào trong giai đoạn post-go-live?",
+    "options": [
+      "A. Ngừng tất cả các hoạt động hỗ trợ và để người dùng tự giải quyết vấn đề.",
+      "B. Tiếp tục theo dõi, thu thập phản hồi, cung cấp hỗ trợ bổ sung và cải tiến hệ thống dựa trên phản hồi của người dùng.",
+      "C. Chỉ tập trung vào việc đào tạo cho nhân viên mới mà không quan tâm đến nhân viên hiện tại.",
+      "D. Bắt đầu lập kế hoạch cho dự án tiếp theo ngay lập tức."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giai đoạn post-go-live đòi hỏi sự hỗ trợ liên tục để đảm bảo người dùng có thể sử dụng hệ thống hiệu quả. Việc thu thập phản hồi và cải tiến giúp nâng cao adoption và giảm thiểu gián đoạn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780502817006_BEGINNER_11_7fnt"
+  },
+  {
+    "questionText": "Một công ty sản xuất triển khai hệ thống quản lý sản xuất mới. Sau 2 tuần, chỉ có 20% nhân viên sử dụng hệ thống. Nguyên nhân nào sau đây KHÔNG phải là lý do phổ biến gây ra tình trạng này?",
+    "options": [
+      "A. Nhân viên không được đào tạo đầy đủ về cách sử dụng hệ thống.",
+      "B. Hệ thống quá phức tạp và không thân thiện với người dùng.",
+      "C. Nhân viên không thấy lợi ích cụ thể khi sử dụng hệ thống mới.",
+      "D. Hệ thống mới có tính năng bảo mật cao hơn so với hệ thống cũ."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Tính năng bảo mật cao không phải là nguyên nhân phổ biến gây ra sự phản đối hoặc không sử dụng hệ thống. Các nguyên nhân chính thường liên quan đến đào tạo, thiết kế hệ thống và lợi ích thực tế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780502817006_BEGINNER_12_pp4z"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP mới tại một công ty sản xuất Việt Nam, bạn nhận thấy nhiều nhân viên ở bộ phận Kế hoạch Sản xuất tỏ ra e ngại khi phải sử dụng hệ thống mới. Hành động nào sau đây là hiệu quả nhất để giảm thiểu sự kháng cự này?",
+    "options": [
+      "A. Tổ chức một buổi đào tạo bắt buộc cho tất cả nhân viên, giải thích chi tiết về lợi ích của hệ thống mới và yêu cầu họ ký cam kết sử dụng.",
+      "B. Chọn ra một nhóm nhỏ nhân viên có ảnh hưởng trong bộ phận làm 'đại sứ thay đổi', đào tạo họ trước và để họ hỗ trợ đồng nghiệp.",
+      "C. Gửi email giải thích lý do triển khai hệ thống mới và yêu cầu trưởng bộ phận giám sát việc sử dụng của nhân viên.",
+      "D. Tạm dừng triển khai hệ thống cho bộ phận này và chờ đến khi họ sẵn sàng hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phương pháp 'đại sứ thay đổi' (change champions) giúp tạo ra sự lan tỏa tích cực từ những người có ảnh hưởng trong nhóm, giảm thiểu sự kháng cự thông qua hỗ trợ ngang hàng và chia sẻ kinh nghiệm thực tế. Đây là cách tiếp cận hiệu quả trong môi trường văn hóa Việt Nam, nơi sự tin tưởng và mối quan hệ giữa các đồng nghiệp đóng vai trò quan trọng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780502902347_INTERMEDIATE_0_0pd8"
+  },
+  {
+    "questionText": "Bạn đang xây dựng kế hoạch truyền thông cho việc triển khai quy trình phê duyệt đơn hàng mới tại một công ty bán lẻ đa quốc gia. Nội dung nào sau đây nên được ưu tiên trong giai đoạn đầu của kế hoạch?",
+    "options": [
+      "A. Thông báo chi tiết về các tính năng kỹ thuật của hệ thống hỗ trợ quy trình mới.",
+      "B. Giải thích lý do thay đổi, tác động đến công việc hàng ngày của từng bộ phận và lộ trình triển khai.",
+      "C. Đào tạo chi tiết về cách sử dụng hệ thống cho tất cả nhân viên liên quan.",
+      "D. Gửi email nhắc nhở định kỳ về việc tuân thủ quy trình mới sau khi triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong giai đoạn đầu, việc giải thích rõ lý do thay đổi (why) và tác động đến công việc hàng ngày (what's in it for me) giúp giảm bớt sự lo lắng và tăng cường sự chấp nhận từ nhân viên. Đây là bước nền tảng trước khi đi vào đào tạo chi tiết hoặc triển khai kỹ thuật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780502902347_INTERMEDIATE_1_4ljv"
+  },
+  {
+    "questionText": "Sau khi triển khai hệ thống quản lý kho mới tại một nhà máy ở Bình Dương, bạn cần theo dõi mức độ áp dụng của nhân viên. Chỉ số nào sau đây phản ánh hiệu quả nhất mức độ áp dụng thực tế của hệ thống?",
+    "options": [
+      "A. Số lượng nhân viên đã hoàn thành khóa đào tạo.",
+      "B. Tỷ lệ đơn hàng được xử lý qua hệ thống mới so với tổng số đơn hàng.",
+      "C. Số lượng phản hồi tích cực từ nhân viên về hệ thống mới.",
+      "D. Thời gian trung bình để nhân viên hoàn thành một quy trình trên hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tỷ lệ đơn hàng được xử lý qua hệ thống mới là chỉ số đo lường trực tiếp mức độ áp dụng thực tế (adoption rate). Các chỉ số khác như đào tạo hay phản hồi chỉ là yếu tố hỗ trợ chứ không phản ánh việc sử dụng hệ thống trong công việc hàng ngày.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780502902347_INTERMEDIATE_2_rnor"
+  },
+  {
+    "questionText": "Trong quá trình triển khai phần mềm CRM tại một công ty bảo hiểm, bạn nhận được phản hồi từ bộ phận Kinh doanh rằng họ không thấy lợi ích rõ ràng khi sử dụng hệ thống mới. Bạn nên làm gì để cải thiện tình hình?",
+    "options": [
+      "A. Yêu cầu trưởng bộ phận Kinh doanh giám sát chặt chẽ việc sử dụng hệ thống của nhân viên.",
+      "B. Tổ chức một buổi workshop để thu thập phản hồi chi tiết, sau đó điều chỉnh hệ thống hoặc quy trình để phù hợp hơn với nhu cầu thực tế của họ.",
+      "C. Gửi tài liệu hướng dẫn chi tiết về cách sử dụng hệ thống và yêu cầu nhân viên tự nghiên cứu.",
+      "D. Tạm dừng triển khai và đề xuất quay lại sử dụng hệ thống cũ cho bộ phận này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc tổ chức workshop để thu thập phản hồi và điều chỉnh hệ thống/quy trình giúp giải quyết vấn đề từ gốc rễ, đảm bảo hệ thống thực sự mang lại giá trị cho người dùng cuối. Đây là cách tiếp cận linh hoạt và tập trung vào người dùng, phù hợp với nguyên tắc quản lý thay đổi hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780502902347_INTERMEDIATE_3_qwtg"
+  },
+  {
+    "questionText": "Bạn đang xây dựng kế hoạch đào tạo cho việc triển khai quy trình quản lý dự án mới tại một công ty công nghệ. Phương pháp đào tạo nào sau đây phù hợp nhất cho nhóm nhân viên đã có kinh nghiệm nhưng cần làm quen với quy trình mới?",
+    "options": [
+      "A. Đào tạo trực tuyến tự học (e-learning) với các bài giảng lý thuyết về quy trình mới.",
+      "B. Tổ chức các buổi đào tạo trực tiếp kéo dài 2 ngày với nội dung chi tiết về mọi khía cạnh của quy trình.",
+      "C. Workshop thực hành với các tình huống giả định, tập trung vào sự khác biệt giữa quy trình cũ và mới.",
+      "D. Cung cấp tài liệu hướng dẫn và yêu cầu nhân viên tự nghiên cứu trong thời gian rảnh."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Workshop thực hành với các tình huống giả định giúp nhân viên có kinh nghiệm nhanh chóng nắm bắt sự khác biệt và áp dụng quy trình mới vào công việc thực tế. Phương pháp này tận dụng kiến thức sẵn có của nhân viên và tập trung vào những điểm thay đổi cốt lõi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780502902347_INTERMEDIATE_4_5qm2"
+  },
+  {
+    "questionText": "Sau khi triển khai hệ thống quản lý tài liệu mới tại một công ty luật, bạn nhận thấy mức độ sử dụng của nhân viên thấp hơn kỳ vọng. Bước đầu tiên bạn nên thực hiện để cải thiện tình hình là gì?",
+    "options": [
+      "A. Phân tích dữ liệu sử dụng hệ thống để xác định bộ phận hoặc cá nhân nào chưa áp dụng hiệu quả.",
+      "B. Tổ chức thêm các buổi đào tạo bổ sung cho tất cả nhân viên.",
+      "C. Gửi email nhắc nhở về tầm quan trọng của việc sử dụng hệ thống mới.",
+      "D. Đề xuất thay đổi hệ thống để đơn giản hóa giao diện người dùng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phân tích dữ liệu sử dụng hệ thống giúp xác định chính xác vấn đề (ví dụ: bộ phận nào chưa áp dụng, chức năng nào ít được sử dụng), từ đó đưa ra giải pháp tập trung và hiệu quả hơn so với việc đào tạo lại hoặc nhắc nhở chung chung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780502902348_INTERMEDIATE_5_x710"
+  },
+  {
+    "questionText": "Trong dự án triển khai quy trình làm việc từ xa tại một công ty phần mềm, bạn cần đánh giá mức độ sẵn sàng của nhân viên trước khi triển khai. Phương pháp nào sau đây hiệu quả nhất để đánh giá mức độ sẵn sàng này?",
+    "options": [
+      "A. Gửi bảng khảo sát trực tuyến với các câu hỏi về thái độ và mức độ hiểu biết về quy trình mới.",
+      "B. Tổ chức phỏng vấn trực tiếp với tất cả nhân viên để đánh giá mức độ sẵn sàng.",
+      "C. Yêu cầu trưởng bộ phận đánh giá và báo cáo mức độ sẵn sàng của nhân viên trong bộ phận mình.",
+      "D. Theo dõi mức độ tham gia của nhân viên trong các buổi đào tạo về quy trình mới."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bảng khảo sát trực tuyến giúp thu thập dữ liệu định lượng và định tính từ số lượng lớn nhân viên một cách hiệu quả, đồng thời cho phép phân tích xu hướng và xác định các vấn đề tiềm ẩn. Phương pháp này tiết kiệm thời gian hơn so với phỏng vấn trực tiếp và khách quan hơn so với đánh giá từ trưởng bộ phận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780502902349_INTERMEDIATE_6_6t2f"
+  },
+  {
+    "questionText": "Sau khi triển khai hệ thống quản lý quan hệ khách hàng (CRM) mới tại một ngân hàng, bạn cần theo dõi mức độ áp dụng của nhân viên bộ phận Chăm sóc Khách hàng. Chỉ số nào sau đây KHÔNG phù hợp để đánh giá mức độ áp dụng?",
+    "options": [
+      "A. Số lượng khách hàng được nhân viên cập nhật thông tin vào hệ thống mới hàng tuần.",
+      "B. Tỷ lệ cuộc gọi chăm sóc khách hàng được ghi nhận trong hệ thống mới so với tổng số cuộc gọi.",
+      "C. Số lượng nhân viên đã hoàn thành khóa đào tạo về hệ thống mới.",
+      "D. Thời gian trung bình để nhân viên xử lý một yêu cầu của khách hàng trên hệ thống mới."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Số lượng nhân viên đã hoàn thành khóa đào tạo chỉ phản ánh việc tham gia đào tạo, không phải mức độ áp dụng thực tế của hệ thống trong công việc hàng ngày. Các chỉ số khác đều liên quan trực tiếp đến việc sử dụng hệ thống trong thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780502902349_INTERMEDIATE_7_teaa"
+  },
+  {
+    "questionText": "Bạn đang xây dựng kế hoạch truyền thông cho việc triển khai quy trình phê duyệt chi phí mới tại một công ty đa quốc gia. Thông điệp nào sau đây nên được ưu tiên cho đối tượng nhân viên cấp dưới?",
+    "options": [
+      "A. Giải thích chi tiết về các thay đổi trong quy trình phê duyệt và lý do công ty quyết định thay đổi.",
+      "B. Hướng dẫn cụ thể về cách thức thực hiện quy trình mới và những lợi ích thiết thực cho công việc của họ.",
+      "C. Thông báo về các hình thức kỷ luật nếu không tuân thủ quy trình mới.",
+      "D. Giới thiệu về các tính năng kỹ thuật của hệ thống hỗ trợ quy trình mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với nhân viên cấp dưới, thông điệp cần tập trung vào 'cách thức thực hiện' và 'lợi ích thiết thực' để họ hiểu rõ quy trình mới sẽ ảnh hưởng đến công việc hàng ngày như thế nào và mang lại giá trị gì cho họ. Điều này giúp tăng cường sự chấp nhận và áp dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780502902349_INTERMEDIATE_8_eehr"
+  },
+  {
+    "questionText": "Trong quá trình triển khai hệ thống quản lý dự án mới tại một công ty xây dựng, bạn nhận thấy có sự kháng cự mạnh từ nhóm kỹ sư giàu kinh nghiệm. Nguyên nhân nào sau đây có khả năng cao nhất gây ra sự kháng cự này?",
+    "options": [
+      "A. Họ không được đào tạo đầy đủ về hệ thống mới.",
+      "B. Họ cảm thấy hệ thống mới làm giảm giá trị kinh nghiệm và kỹ năng của họ.",
+      "C. Họ không thích thay đổi môi trường làm việc quen thuộc.",
+      "D. Họ lo ngại hệ thống mới sẽ làm tăng khối lượng công việc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với nhóm kỹ sư giàu kinh nghiệm, sự kháng cự thường xuất phát từ lo ngại rằng hệ thống mới sẽ làm giảm giá trị của kiến thức và kỹ năng tích lũy được trong nhiều năm. Họ có thể cảm thấy bị đe dọa bởi sự thay đổi hoặc lo sợ rằng hệ thống mới sẽ thay thế vai trò của họ trong quá trình ra quyết định.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780502902349_INTERMEDIATE_9_sose"
+  },
+  {
+    "questionText": "Bạn đang hỗ trợ triển khai quy trình làm việc linh hoạt (Agile) tại một công ty phát triển phần mềm. Sau 3 tháng triển khai, bạn cần đánh giá mức độ thành công của việc áp dụng quy trình mới. Tiêu chí nào sau đây quan trọng nhất để đánh giá?",
+    "options": [
+      "A. Số lượng dự án đã áp dụng quy trình Agile so với kế hoạch ban đầu.",
+      "B. Mức độ hài lòng của khách hàng về chất lượng và tiến độ giao sản phẩm.",
+      "C. Số lượng nhân viên đã được đào tạo về quy trình Agile.",
+      "D. Tần suất tổ chức các buổi họp stand-up hàng ngày trong các nhóm dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mức độ hài lòng của khách hàng về chất lượng và tiến độ giao sản phẩm là tiêu chí quan trọng nhất để đánh giá thành công của việc áp dụng quy trình Agile. Nó phản ánh hiệu quả thực tế của quy trình mới trong việc mang lại giá trị cho khách hàng, chứ không chỉ là việc tuân thủ các hoạt động Agile (như stand-up meeting).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780502902349_INTERMEDIATE_10_078g"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý chuỗi cung ứng mới tại một công ty sản xuất, bạn cần xây dựng kế hoạch đào tạo cho nhân viên bộ phận Logistics. Nội dung nào sau đây nên được ưu tiên trong kế hoạch đào tạo?",
+    "options": [
+      "A. Lý thuyết về quản lý chuỗi cung ứng và lợi ích của hệ thống mới.",
+      "B. Hướng dẫn chi tiết về các tính năng kỹ thuật của hệ thống mới.",
+      "C. Các tình huống thực tế về xử lý đơn hàng, quản lý kho và phối hợp với nhà cung cấp trên hệ thống mới.",
+      "D. Quy trình báo cáo lỗi và yêu cầu hỗ trợ khi sử dụng hệ thống."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với nhân viên bộ phận Logistics, việc đào tạo các tình huống thực tế giúp họ áp dụng hệ thống mới vào công việc hàng ngày một cách hiệu quả. Nội dung này tập trung vào kỹ năng thực hành và giải quyết vấn đề, phù hợp với nhu cầu của người dùng cuối.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780502902349_INTERMEDIATE_11_46zj"
+  },
+  {
+    "questionText": "Sau khi triển khai hệ thống quản lý nhân sự mới tại một công ty có 500 nhân viên, bạn nhận thấy mức độ áp dụng của bộ phận Kế toán thấp hơn so với các bộ phận khác. Bước tiếp theo bạn nên thực hiện là gì?",
+    "options": [
+      "A. Tổ chức thêm các buổi đào tạo bổ sung cho bộ phận Kế toán.",
+      "B. Phân tích nguyên nhân cụ thể gây ra mức độ áp dụng thấp thông qua phỏng vấn hoặc khảo sát với nhân viên bộ phận Kế toán.",
+      "C. Yêu cầu trưởng bộ phận Kế toán giám sát chặt chẽ việc sử dụng hệ thống của nhân viên.",
+      "D. Đề xuất thay đổi hệ thống để phù hợp hơn với nhu cầu của bộ phận Kế toán."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trước khi đưa ra giải pháp, cần phân tích nguyên nhân cụ thể gây ra mức độ áp dụng thấp của bộ phận Kế toán. Việc này giúp xác định liệu vấn đề nằm ở đào tạo, giao diện hệ thống, hay các yếu tố khác, từ đó đưa ra giải pháp phù hợp và hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780502902350_INTERMEDIATE_12_gfsy"
+  },
+  {
+    "questionText": "Bạn đang xây dựng kế hoạch hỗ trợ sau triển khai (post-go-live support) cho hệ thống quản lý quan hệ khách hàng (CRM) mới tại một công ty viễn thông. Hoạt động nào sau đây nên được ưu tiên trong giai đoạn đầu của kế hoạch hỗ trợ?",
+    "options": [
+      "A. Cung cấp tài liệu hướng dẫn chi tiết về tất cả các tính năng của hệ thống.",
+      "B. Thiết lập kênh hỗ trợ nhanh (ví dụ: hotline, chatbot) để giải quyết các vấn đề phát sinh trong quá trình sử dụng.",
+      "C. Tổ chức các buổi đào tạo nâng cao về các tính năng phức tạp của hệ thống.",
+      "D. Thu thập phản hồi từ nhân viên về trải nghiệm sử dụng hệ thống sau 6 tháng triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong giai đoạn đầu sau triển khai, việc thiết lập kênh hỗ trợ nhanh giúp giải quyết kịp thời các vấn đề phát sinh, giảm thiểu gián đoạn công việc và tăng cường sự tin tưởng của nhân viên vào hệ thống mới. Các hoạt động khác có thể được thực hiện sau khi hệ thống đã ổn định.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780502902350_INTERMEDIATE_13_gs1m"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP mới tại một tập đoàn đa quốc gia có văn phòng tại Việt Nam, một số lãnh đạo cấp cao tỏ ra do dự vì lo ngại nhân viên không thích ứng kịp. Là Business Analyst, bạn sẽ ưu tiên thực hiện hành động nào sau đây để đánh giá mức độ sẵn sàng của các bên liên quan (stakeholder readiness) ở giai đoạn PRE-GO-LIVE?",
+    "options": [
+      "A. Tổ chức khảo sát toàn bộ nhân viên về mức độ hài lòng với hệ thống cũ để xác định khoảng cách (gap) giữa hiện tại và tương lai.",
+      "B. Thiết kế bảng đánh giá sẵn sàng (readiness assessment matrix) với các tiêu chí cụ thể như: mức độ hiểu biết về thay đổi, cam kết của lãnh đạo, khả năng đào tạo, và tiến hành phỏng vấn sâu với đại diện từng bộ phận.",
+      "C. Tạo một nhóm chat trên Teams để nhân viên có thể đặt câu hỏi và nhận phản hồi nhanh từ đội dự án, nhằm tăng tương tác và giảm lo lắng.",
+      "D. Yêu cầu bộ phận HR cung cấp báo cáo về tỷ lệ nghỉ việc trong 6 tháng gần đây để dự đoán mức độ kháng cự tiềm ẩn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bảng đánh giá sẵn sàng với các tiêu chí định lượng và định tính giúp xác định rõ ràng mức độ chuẩn bị của từng stakeholder group, từ đó xây dựng kế hoạch can thiệp phù hợp. Phương pháp này mang tính hệ thống và khoa học hơn so với khảo sát chung chung (A) hay tương tác không có cấu trúc (C). Báo cáo nghỉ việc (D) chỉ phản ánh một phần nhỏ và không đủ để đánh giá toàn diện.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780503001348_ADVANCED_0_nwy3"
+  },
+  {
+    "questionText": "Một ngân hàng tại Việt Nam triển khai hệ thống Core Banking mới. Sau 3 tháng go-live, dữ liệu cho thấy chỉ 40% giao dịch viên sử dụng đầy đủ các tính năng mới, trong khi 60% vẫn thao tác theo quy trình cũ. Là Business Analyst, bạn sẽ đề xuất giải pháp nào để tăng tỷ lệ adoption?",
+    "options": [
+      "A. Tổ chức thêm các buổi đào tạo bắt buộc cho tất cả giao dịch viên, tập trung vào các tính năng chưa được sử dụng.",
+      "B. Phân tích dữ liệu sử dụng (usage analytics) để xác định nhóm người dùng có tỷ lệ adoption thấp nhất, sau đó thiết kế kế hoạch can thiệp riêng (ví dụ: coaching 1-1, workshop thực hành) cho từng nhóm.",
+      "C. Gửi email nhắc nhở hàng tuần tới tất cả nhân viên về tầm quan trọng của việc sử dụng hệ thống mới.",
+      "D. Đề xuất lãnh đạo áp dụng chính sách thưởng/phạt dựa trên tỷ lệ sử dụng hệ thống mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B áp dụng nguyên tắc 'targeted intervention' – phân tích dữ liệu để xác định nhóm đối tượng cụ thể và thiết kế can thiệp phù hợp, thay vì áp dụng chung chung (A, C) hoặc dựa vào biện pháp hành chính (D) có thể gây phản tác dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780503001349_ADVANCED_1_l1fj"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi quy trình phê duyệt tín dụng tại một ngân hàng, bạn phát hiện một số trưởng phòng tín dụng (key stakeholders) vẫn yêu cầu nhân viên nộp hồ sơ giấy song song với hồ sơ điện tử trên hệ thống mới. Họ giải thích rằng 'quy trình cũ đã tồn tại 10 năm và rất hiệu quả'. Bạn sẽ xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Báo cáo lên lãnh đạo cao nhất để yêu cầu các trưởng phòng tuân thủ quy trình mới, đồng thời ngừng sử dụng quy trình cũ.",
+      "B. Tổ chức một buổi làm việc riêng với từng trưởng phòng để lắng nghe mối quan tâm của họ, sau đó đề xuất điều chỉnh quy trình mới (ví dụ: thêm bước xác nhận thủ công tạm thời) hoặc cung cấp bằng chứng về hiệu quả của quy trình mới.",
+      "C. Thiết kế một khóa đào tạo bắt buộc về tầm quan trọng của chuyển đổi số cho tất cả trưởng phòng tín dụng.",
+      "D. Chấp nhận song song hai quy trình trong thời gian dài để tránh xung đột, đồng thời theo dõi và báo cáo tác động của việc này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B thể hiện kỹ năng quản lý stakeholder ở cấp độ nâng cao: lắng nghe mối quan tâm, đề xuất giải pháp linh hoạt (không cứng nhắc loại bỏ ngay) và sử dụng dữ liệu để thuyết phục. Giải pháp A có thể gây phản kháng, C thiếu tính cá nhân hóa, D không giải quyết gốc rễ vấn đề.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780503001350_ADVANCED_2_679j"
+  },
+  {
+    "questionText": "Một công ty sản xuất tại Việt Nam triển khai hệ thống MES (Manufacturing Execution System) để số hóa quy trình sản xuất. Sau 2 tháng go-live, dữ liệu cho thấy tỷ lệ sử dụng hệ thống chỉ đạt 30% ở nhà máy A, trong khi nhà máy B đạt 85%. Là Business Analyst, bạn sẽ phân tích nguyên nhân nào sau đây ĐẦU TIÊN?",
+    "options": [
+      "A. So sánh cấu trúc tổ chức và văn hóa làm việc giữa hai nhà máy để xác định yếu tố văn hóa ảnh hưởng đến adoption.",
+      "B. Kiểm tra chất lượng đào tạo tại nhà máy A so với nhà máy B, bao gồm nội dung, giảng viên và phản hồi của người học.",
+      "C. Phân tích dữ liệu sử dụng hệ thống (usage metrics) để xác định chính xác tính năng nào ít được sử dụng tại nhà máy A và lý do (ví dụ: lỗi kỹ thuật, thiếu tiện ích, phức tạp).",
+      "D. Tổ chức khảo sát toàn bộ nhân viên nhà máy A về mức độ hài lòng với hệ thống mới."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Phân tích dữ liệu sử dụng (usage metrics) là bước đầu tiên để xác định vấn đề cụ thể (ví dụ: tính năng nào không được dùng, thời điểm nào người dùng bỏ cuộc). Các phương án khác (A, B, D) có thể thực hiện sau khi đã có dữ liệu định lượng để định hướng phân tích.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780503001350_ADVANCED_3_2gl1"
+  },
+  {
+    "questionText": "Trong dự án triển khai CRM tại một công ty bảo hiểm, bạn nhận được phản hồi từ đội ngũ bán hàng rằng 'hệ thống mới quá phức tạp và mất thời gian nhập liệu'. Họ đề xuất quay lại sử dụng Excel như trước đây. Bạn sẽ thiết kế kế hoạch truyền thông nào để giảm kháng cự?",
+    "options": [
+      "A. Gửi email hàng tuần từ lãnh đạo cao nhất nhấn mạnh tầm quan trọng của CRM và yêu cầu tuân thủ.",
+      "B. Tổ chức một buổi workshop để đội ngũ bán hàng trực tiếp trải nghiệm lợi ích của CRM (ví dụ: tự động hóa báo cáo, theo dõi khách hàng tiềm năng) và thu thập phản hồi để cải tiến hệ thống.",
+      "C. Tạo một video hướng dẫn chi tiết về cách sử dụng CRM và chia sẻ trên kênh nội bộ.",
+      "D. Đề xuất lãnh đạo áp dụng chính sách thưởng cho nhân viên sử dụng CRM hiệu quả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Workshop thực hành giúp người dùng trực tiếp trải nghiệm lợi ích (WIIFM - What's In It For Me), từ đó giảm kháng cự. Giải pháp A và D mang tính áp đặt, C thiếu tương tác và không giải quyết được mối quan tâm cụ thể của người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780503001350_ADVANCED_4_gj7m"
+  },
+  {
+    "questionText": "Một tập đoàn bán lẻ triển khai hệ thống quản lý kho hàng mới tại 50 cửa hàng. Sau 1 tháng go-live, chỉ có 20% cửa hàng đạt tỷ lệ nhập liệu chính xác trên 90%. Là Business Analyst, bạn sẽ theo dõi chỉ số (KPI) nào sau đây để đánh giá mức độ adoption hiệu quả?",
+    "options": [
+      "A. Số lượng nhân viên được đào tạo về hệ thống mới.",
+      "B. Tỷ lệ cửa hàng có ít nhất 1 nhân viên được chứng nhận sử dụng hệ thống.",
+      "C. Tỷ lệ giao dịch được xử lý trên hệ thống mới so với tổng số giao dịch (system usage rate) và tỷ lệ lỗi nhập liệu (data accuracy rate) theo thời gian thực.",
+      "D. Mức độ hài lòng của nhân viên với hệ thống mới qua khảo sát định kỳ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "KPI về tỷ lệ sử dụng hệ thống và tỷ lệ lỗi nhập liệu phản ánh trực tiếp mức độ adoption và chất lượng sử dụng. Các chỉ số khác (A, B, D) là đầu vào (input) hoặc gián tiếp, không đo lường được kết quả thực tế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780503001351_ADVANCED_5_3r0j"
+  },
+  {
+    "questionText": "Trong dự án số hóa quy trình phê duyệt chi phí tại một công ty đa quốc gia, bạn phát hiện một số quản lý cấp trung vẫn phê duyệt thủ công trên giấy vì 'không tin tưởng vào chữ ký điện tử'. Bạn sẽ xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Báo cáo lên lãnh đạo để yêu cầu các quản lý tuân thủ quy trình mới, đồng thời ngừng chấp nhận phê duyệt thủ công.",
+      "B. Tổ chức buổi làm việc với các quản lý để giải thích về tính pháp lý của chữ ký điện tử tại Việt Nam và quốc tế, đồng thời đề xuất thử nghiệm song song trong 1 tháng để họ làm quen.",
+      "C. Thiết kế một khóa đào tạo về chữ ký điện tử cho tất cả quản lý cấp trung.",
+      "D. Chấp nhận phê duyệt song song trong thời gian dài để tránh xung đột, đồng thời theo dõi và báo cáo tác động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B kết hợp giữa giáo dục (tính pháp lý) và thử nghiệm thực tế (pilot) để giảm lo ngại, thay vì áp đặt (A) hoặc kéo dài tình trạng song song (D). Đào tạo chung chung (C) không giải quyết được mối quan tâm cụ thể về tin tưởng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780503001352_ADVANCED_6_hilk"
+  },
+  {
+    "questionText": "Một công ty logistics triển khai hệ thống TMS (Transportation Management System) mới. Sau 3 tháng go-live, dữ liệu cho thấy 70% nhân viên điều phối vẫn sử dụng Excel để lập kế hoạch vận chuyển. Là Business Analyst, bạn sẽ đề xuất giải pháp nào để tăng adoption?",
+    "options": [
+      "A. Yêu cầu bộ phận IT tích hợp tính năng xuất báo cáo từ TMS sang Excel để nhân viên có thể tiếp tục làm việc theo cách quen thuộc.",
+      "B. Phân tích dữ liệu sử dụng để xác định nhóm nhân viên có tỷ lệ adoption thấp nhất, sau đó thiết kế kế hoạch can thiệp riêng (ví dụ: đào tạo lại, coaching 1-1) và theo dõi tiến độ hàng tuần.",
+      "C. Tổ chức cuộc thi 'Nhân viên sử dụng TMS hiệu quả nhất' với giải thưởng hấp dẫn để khuyến khích adoption.",
+      "D. Gửi email nhắc nhở hàng tuần tới tất cả nhân viên về quy định bắt buộc sử dụng TMS."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B áp dụng phân tích dữ liệu để xác định nhóm đối tượng cụ thể và thiết kế can thiệp phù hợp, thay vì giải pháp tạm thời (A), khuyến khích chung chung (C) hoặc áp đặt (D).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780503001352_ADVANCED_7_dqn2"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống e-Learning tại một ngân hàng, bạn nhận thấy tỷ lệ hoàn thành khóa đào tạo bắt buộc chỉ đạt 50% sau 2 tháng. Khi phân tích, bạn phát hiện nhân viên ngân hàng ưu tiên hoàn thành công việc hàng ngày hơn là tham gia đào tạo. Bạn sẽ đề xuất giải pháp nào?",
+    "options": [
+      "A. Yêu cầu lãnh đạo ban hành quy định mới: nhân viên không hoàn thành khóa đào tạo sẽ không được xét tăng lương hoặc thăng chức.",
+      "B. Thiết kế lại khóa đào tạo theo hình thức micro-learning (video ngắn 3-5 phút) và tích hợp vào quy trình làm việc hàng ngày (ví dụ: học sau khi hoàn thành một giao dịch).",
+      "C. Kéo dài thời hạn hoàn thành khóa đào tạo thêm 3 tháng để nhân viên có thêm thời gian.",
+      "D. Tổ chức thêm các buổi đào tạo trực tiếp với giảng viên giàu kinh nghiệm để tăng tính tương tác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Micro-learning và tích hợp đào tạo vào quy trình làm việc giúp giảm gánh nặng thời gian cho nhân viên, đồng thời tăng tính ứng dụng. Giải pháp A có thể gây phản kháng, C không giải quyết gốc rễ vấn đề, D tốn kém và không linh hoạt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780503001353_ADVANCED_8_0svk"
+  },
+  {
+    "questionText": "Một công ty dược phẩm triển khai hệ thống quản lý chất lượng (QMS) mới. Sau 1 tháng go-live, bạn nhận được phản hồi từ đội ngũ R&D rằng 'hệ thống mới không linh hoạt và không phù hợp với quy trình nghiên cứu'. Là Business Analyst, bạn sẽ làm gì?",
+    "options": [
+      "A. Báo cáo lên lãnh đạo để yêu cầu đội ngũ R&D điều chỉnh quy trình nghiên cứu cho phù hợp với hệ thống mới.",
+      "B. Tổ chức buổi làm việc với đội ngũ R&D để thu thập yêu cầu cụ thể, sau đó đề xuất tùy chỉnh hệ thống (customization) hoặc điều chỉnh quy trình để cân bằng giữa tiêu chuẩn hóa và tính linh hoạt.",
+      "C. Thiết kế một khóa đào tạo chuyên sâu về hệ thống QMS cho đội ngũ R&D.",
+      "D. Chấp nhận sử dụng song song hệ thống mới và quy trình cũ cho đội ngũ R&D trong thời gian dài."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B thể hiện kỹ năng quản lý thay đổi nâng cao: lắng nghe mối quan tâm, đề xuất giải pháp linh hoạt (customization hoặc điều chỉnh quy trình) thay vì áp đặt (A) hoặc kéo dài tình trạng song song (D). Đào tạo (C) không giải quyết được vấn đề về tính phù hợp của hệ thống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780503001353_ADVANCED_9_mhik"
+  },
+  {
+    "questionText": "Một công ty công nghệ triển khai hệ thống quản lý dự án Agile mới. Sau 2 tháng, dữ liệu cho thấy chỉ 30% dự án sử dụng đầy đủ các tính năng của hệ thống. Khi phân tích, bạn phát hiện các đội dự án vẫn sử dụng Excel và Trello để quản lý công việc hàng ngày. Bạn sẽ theo dõi chỉ số nào để đánh giá mức độ adoption hiệu quả?",
+    "options": [
+      "A. Số lượng nhân viên được đào tạo về hệ thống mới.",
+      "B. Tỷ lệ dự án sử dụng ít nhất 1 tính năng của hệ thống mới.",
+      "C. Tỷ lệ công việc được quản lý trên hệ thống mới so với tổng số công việc (task adoption rate) và tỷ lệ hoàn thành công việc đúng hạn (on-time completion rate) theo thời gian thực.",
+      "D. Mức độ hài lòng của nhân viên với hệ thống mới qua khảo sát định kỳ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Chỉ số về tỷ lệ công việc được quản lý trên hệ thống và tỷ lệ hoàn thành đúng hạn phản ánh trực tiếp mức độ adoption và hiệu quả sử dụng. Các chỉ số khác (A, B, D) là đầu vào hoặc gián tiếp, không đo lường được kết quả thực tế.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780503001354_ADVANCED_10_6xi9"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống HRM tại một công ty sản xuất, bạn nhận thấy đội ngũ nhân sự tại nhà máy tỏ ra kháng cự vì 'hệ thống mới không phù hợp với đặc thù công việc của công nhân'. Bạn sẽ thiết kế kế hoạch truyền thông nào để giảm kháng cự?",
+    "options": [
+      "A. Gửi email từ lãnh đạo cao nhất nhấn mạnh tầm quan trọng của hệ thống HRM và yêu cầu tuân thủ.",
+      "B. Tổ chức các buổi workshop tại nhà máy để đội ngũ công nhân trực tiếp trải nghiệm lợi ích của hệ thống (ví dụ: đơn xin nghỉ phép trực tuyến, theo dõi lịch làm việc) và thu thập phản hồi để cải tiến.",
+      "C. Tạo một video hướng dẫn chi tiết về cách sử dụng hệ thống HRM và chia sẻ trên kênh nội bộ.",
+      "D. Đề xuất lãnh đạo áp dụng chính sách thưởng cho nhân viên sử dụng hệ thống HRM hiệu quả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Workshop tại nhà máy giúp người dùng trực tiếp trải nghiệm lợi ích (WIIFM) và cảm nhận được sự quan tâm của dự án đến đặc thù công việc của họ. Giải pháp A và D mang tính áp đặt, C thiếu tương tác và không giải quyết được mối quan tâm cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780503001354_ADVANCED_11_7dvi"
+  },
+  {
+    "questionText": "Một ngân hàng triển khai hệ thống ngân hàng số mới. Sau 6 tháng go-live, dữ liệu cho thấy tỷ lệ khách hàng sử dụng tính năng thanh toán hóa đơn trực tuyến chỉ đạt 20%, trong khi mục tiêu là 60%. Là Business Analyst, bạn sẽ đề xuất giải pháp nào?",
+    "options": [
+      "A. Tổ chức chiến dịch quảng cáo trên truyền hình và mạng xã hội để tăng nhận thức về tính năng mới.",
+      "B. Phân tích dữ liệu hành vi khách hàng (customer journey analytics) để xác định điểm chạm (touchpoint) gây khó khăn, sau đó cải tiến giao diện hoặc quy trình thanh toán.",
+      "C. Gửi email nhắc nhở hàng tuần tới tất cả khách hàng về tính năng thanh toán hóa đơn trực tuyến.",
+      "D. Đề xuất lãnh đạo áp dụng chính sách giảm phí giao dịch cho khách hàng sử dụng tính năng mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phân tích dữ liệu hành vi khách hàng giúp xác định chính xác vấn đề (ví dụ: bước nào trong quy trình thanh toán gây khó khăn) và đề xuất cải tiến cụ thể. Các giải pháp khác (A, C, D) mang tính chung chung hoặc chỉ giải quyết triệu chứng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780503001355_ADVANCED_12_xo12"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP toàn cầu cho một tập đoàn đa quốc gia có văn phòng tại Việt Nam, bạn nhận thấy các phòng ban tại Việt Nam có tỷ lệ sử dụng hệ thống thấp sau 3 tháng go-live, trong khi các nước khác đạt trên 80%. Sau khi phân tích, bạn phát hiện nguyên nhân chính là do thiếu sự hỗ trợ từ lãnh đạo cấp trung tại Việt Nam. Giải pháp nào dưới đây là chiến lược dài hạn và bền vững nhất để giải quyết vấn đề này?",
+    "options": [
+      "A. Tổ chức thêm các buổi đào tạo kỹ thuật cho nhân viên tại Việt Nam để tăng cường kỹ năng sử dụng hệ thống.",
+      "B. Yêu cầu lãnh đạo cấp cao tại trụ sở chính can thiệp trực tiếp bằng cách gửi email nhắc nhở lãnh đạo cấp trung tại Việt Nam.",
+      "C. Thiết kế chương trình 'Change Champion' tại Việt Nam, trong đó lãnh đạo cấp trung được đào tạo về vai trò lãnh đạo chuyển đổi, cam kết công khai và được trao quyền quyết định trong việc cải tiến quy trình.",
+      "D. Tạm dừng triển khai tại Việt Nam và chờ đến khi lãnh đạo cấp trung sẵn sàng hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C tập trung vào việc xây dựng năng lực lãnh đạo chuyển đổi từ bên trong tổ chức, tạo sự cam kết và trao quyền cho lãnh đạo cấp trung - yếu tố quyết định sự thành công lâu dài của chuyển đổi. Các giải pháp khác chỉ giải quyết triệu chứng tạm thời hoặc không giải quyết gốc rễ vấn đề.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780503097384_EXPERT_0_l8lb"
+  },
+  {
+    "questionText": "Bạn đang lãnh đạo dự án chuyển đổi quy trình phê duyệt ngân sách từ thủ công sang tự động hóa cho một ngân hàng thương mại tại Việt Nam. Sau 2 tháng triển khai, bạn nhận thấy 30% trưởng phòng vẫn sử dụng quy trình cũ vì cho rằng hệ thống mới 'không linh hoạt'. Bạn đã xác định đây là vấn đề về 'perceived usefulness' (sự hữu ích cảm nhận). Chiến lược nào sau đây hiệu quả nhất để thay đổi nhận thức này?",
+    "options": [
+      "A. Tổ chức cuộc thi 'Người dùng xuất sắc nhất' với giải thưởng cho trưởng phòng sử dụng hệ thống nhiều nhất.",
+      "B. Mời các trưởng phòng tham gia workshop thiết kế lại quy trình, trong đó họ được trực tiếp đề xuất và thử nghiệm các cải tiến về tính linh hoạt của hệ thống.",
+      "C. Gửi báo cáo thống kê so sánh thời gian phê duyệt giữa quy trình cũ và mới để chứng minh hiệu quả.",
+      "D. Yêu cầu lãnh đạo cấp cao ra thông báo bắt buộc sử dụng hệ thống mới và ngừng hoàn toàn quy trình cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B áp dụng nguyên tắc 'co-creation' (đồng sáng tạo), giúp người dùng trực tiếp trải nghiệm và cải tiến hệ thống, từ đó thay đổi nhận thức về tính hữu ích một cách tự nhiên và bền vững. Các giải pháp khác chỉ tác động bề mặt hoặc tạo áp lực mà không giải quyết gốc rễ vấn đề tâm lý.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780503097386_EXPERT_1_ibsl"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống CRM cho đội ngũ bán hàng của một công ty bất động sản tại TP.HCM, bạn nhận thấy tỷ lệ sử dụng hệ thống chỉ đạt 40% sau 1 tháng go-live. Sau khi phân tích dữ liệu, bạn phát hiện nhân viên bán hàng chỉ nhập dữ liệu khách hàng sau khi chốt deal, bỏ qua các thông tin quan trọng trong quá trình tư vấn. Giải pháp nào dưới đây giải quyết vấn đề này một cách chiến lược và toàn diện nhất?",
+    "options": [
+      "A. Tăng cường kiểm tra và giám sát việc nhập liệu của nhân viên bán hàng, áp dụng hình thức kỷ luật nếu không tuân thủ.",
+      "B. Thiết kế lại quy trình nhập liệu để tích hợp vào các hoạt động hàng ngày của nhân viên bán hàng (ví dụ: tự động đồng bộ từ email, cuộc gọi), kết hợp với đào tạo về giá trị dữ liệu đối với hiệu suất cá nhân và công ty.",
+      "C. Tổ chức thêm các buổi đào tạo kỹ thuật về cách sử dụng hệ thống CRM.",
+      "D. Thuê thêm nhân viên hỗ trợ để nhập liệu hộ nhân viên bán hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B kết hợp cải tiến quy trình (tích hợp vào workflow hàng ngày) và thay đổi nhận thức (đào tạo về giá trị dữ liệu), giải quyết cả yếu tố kỹ thuật và hành vi. Đây là cách tiếp cận toàn diện và bền vững nhất để thay đổi hành vi sử dụng hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780503097387_EXPERT_2_o2kp"
+  },
+  {
+    "questionText": "Bạn đang triển khai dự án số hóa quy trình quản lý kho cho một chuỗi siêu thị tại Việt Nam. Sau 6 tháng go-live, bạn nhận thấy tỷ lệ lỗi nhập xuất hàng vẫn cao (15%) do nhân viên kho không cập nhật thông tin kịp thời. Sau khi phỏng vấn, bạn phát hiện họ cho rằng 'hệ thống mới phức tạp và không cần thiết vì quy trình cũ vẫn hiệu quả'. Kế hoạch truyền thông nào dưới đây hiệu quả nhất để thay đổi nhận thức này?",
+    "options": [
+      "A. Gửi email hàng tuần từ lãnh đạo cấp cao nhấn mạnh tầm quan trọng của việc sử dụng hệ thống mới.",
+      "B. Tổ chức buổi chia sẻ từ một siêu thị khác trong chuỗi đã thành công với hệ thống, kết hợp với dữ liệu so sánh hiệu quả trước và sau triển khai tại siêu thị đó.",
+      "C. Phát tờ rơi hướng dẫn sử dụng hệ thống tại khu vực kho.",
+      "D. Yêu cầu nhân viên kho ký cam kết sử dụng hệ thống mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng 'social proof' (bằng chứng xã hội) và dữ liệu thực tế từ chính tổ chức, giúp thay đổi nhận thức một cách thuyết phục và tự nhiên. Các giải pháp khác thiếu tính thuyết phục hoặc chỉ tạo áp lực mà không giải quyết vấn đề gốc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780503097388_EXPERT_3_sctr"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý dự án Agile cho một công ty công nghệ tại Việt Nam, bạn nhận thấy các team leader vẫn sử dụng Excel để theo dõi tiến độ thay vì hệ thống mới. Sau khi phân tích, bạn phát hiện họ không tin tưởng vào khả năng tùy biến của hệ thống mới. Giải pháp nào dưới đây giải quyết vấn đề này một cách chiến lược và lâu dài?",
+    "options": [
+      "A. Tổ chức buổi demo kỹ thuật để chứng minh khả năng tùy biến của hệ thống.",
+      "B. Mời các team leader tham gia vào nhóm thiết kế cải tiến hệ thống, cho phép họ trực tiếp đề xuất và thử nghiệm các tính năng tùy biến.",
+      "C. Áp dụng chính sách thưởng cho team leader sử dụng hệ thống mới nhiều nhất.",
+      "D. Thay thế hệ thống mới bằng một công cụ khác có tính tùy biến cao hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B áp dụng nguyên tắc 'participatory design' (thiết kế có sự tham gia), giúp team leader trực tiếp trải nghiệm và cải tiến hệ thống, từ đó xây dựng niềm tin và cam kết lâu dài. Các giải pháp khác chỉ giải quyết vấn đề tạm thời hoặc không giải quyết gốc rễ về niềm tin.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780503097389_EXPERT_4_06ew"
+  },
+  {
+    "questionText": "Bạn đang triển khai dự án chuyển đổi quy trình chăm sóc khách hàng từ đa kênh sang omnichannel cho một ngân hàng tại Việt Nam. Sau 3 tháng go-live, bạn nhận thấy tỷ lệ chuyển đổi giữa các kênh vẫn thấp do nhân viên chưa hiểu rõ cách thức hoạt động của hệ thống mới. Kế hoạch đào tạo nào dưới đây hiệu quả nhất để giải quyết vấn đề này?",
+    "options": [
+      "A. Tổ chức các buổi đào tạo lý thuyết về khái niệm omnichannel và lợi ích của hệ thống mới.",
+      "B. Thiết kế chương trình đào tạo dựa trên kịch bản thực tế (scenario-based training), trong đó nhân viên được đóng vai khách hàng và trải nghiệm quy trình từ nhiều kênh khác nhau.",
+      "C. Gửi tài liệu hướng dẫn sử dụng hệ thống cho nhân viên tự nghiên cứu.",
+      "D. Thuê chuyên gia đào tạo từ bên ngoài để giảng dạy về omnichannel."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng phương pháp 'learning by doing' (học thông qua thực hành), giúp nhân viên trải nghiệm trực tiếp quy trình omnichannel, từ đó hiểu rõ cách thức hoạt động và giá trị của hệ thống. Đây là cách tiếp cận hiệu quả nhất để thay đổi hành vi và nhận thức.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780503097390_EXPERT_5_wwtq"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý tài sản cố định cho một tập đoàn sản xuất tại Việt Nam, bạn nhận thấy tỷ lệ sử dụng hệ thống chỉ đạt 50% sau 4 tháng go-live. Sau khi phân tích, bạn phát hiện nguyên nhân chính là do các phòng ban không thấy được lợi ích trực tiếp từ hệ thống. Giải pháp nào dưới đây hiệu quả nhất để tăng cường sự chấp nhận của người dùng?",
+    "options": [
+      "A. Tăng cường giám sát và báo cáo việc sử dụng hệ thống cho lãnh đạo cấp cao.",
+      "B. Thiết kế các báo cáo tùy chỉnh cho từng phòng ban, thể hiện rõ lợi ích cụ thể mà hệ thống mang lại cho công việc của họ (ví dụ: giảm thời gian kiểm kê, tăng độ chính xác).",
+      "C. Tổ chức thêm các buổi đào tạo về cách sử dụng hệ thống.",
+      "D. Áp dụng chính sách thưởng cho phòng ban sử dụng hệ thống nhiều nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B tập trung vào việc chứng minh giá trị trực tiếp của hệ thống đối với từng phòng ban, giúp họ nhận thấy lợi ích cụ thể và thiết thực. Đây là cách tiếp cận chiến lược để thay đổi nhận thức và tăng cường sự chấp nhận.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780503097391_EXPERT_6_wfkc"
+  },
+  {
+    "questionText": "Bạn đang triển khai dự án số hóa quy trình phê duyệt công tác phí cho một công ty đa quốc gia có văn phòng tại Việt Nam. Sau 2 tháng go-live, bạn nhận thấy nhân viên vẫn sử dụng quy trình cũ vì cho rằng hệ thống mới 'không thân thiện với người dùng'. Sau khi đánh giá, bạn xác định đây là vấn đề về 'user experience' (trải nghiệm người dùng). Giải pháp nào dưới đây giải quyết vấn đề này một cách chiến lược và toàn diện?",
+    "options": [
+      "A. Tổ chức cuộc thi thiết kế giao diện người dùng, mời nhân viên tham gia đề xuất cải tiến.",
+      "B. Thuê công ty thiết kế UX/UI chuyên nghiệp để cải tiến giao diện hệ thống.",
+      "C. Mời nhóm người dùng đại diện tham gia vào quá trình thiết kế lại giao diện, kết hợp với đào tạo về cách sử dụng các tính năng mới.",
+      "D. Gửi khảo sát để nhân viên đánh giá về trải nghiệm người dùng và thu thập phản hồi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C kết hợp 'co-design' (đồng thiết kế) với đào tạo, giúp cải thiện trải nghiệm người dùng một cách thực tế và bền vững. Việc mời người dùng đại diện tham gia đảm bảo giao diện được thiết kế phù hợp với nhu cầu thực tế, đồng thời đào tạo giúp họ làm quen với các thay đổi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780503097391_EXPERT_7_face"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý quan hệ đối tác cho một công ty logistics tại Việt Nam, bạn nhận thấy tỷ lệ sử dụng hệ thống thấp do các đối tác bên ngoài không hợp tác. Sau khi phân tích, bạn phát hiện họ không hiểu rõ lợi ích của việc sử dụng hệ thống. Chiến lược truyền thông nào dưới đây hiệu quả nhất để thu hút sự tham gia của các đối tác?",
+    "options": [
+      "A. Gửi email giải thích về lợi ích của hệ thống cho tất cả đối tác.",
+      "B. Tổ chức hội thảo trực tuyến với các đối tác lớn, mời họ chia sẻ kinh nghiệm và lợi ích thực tế sau khi sử dụng hệ thống.",
+      "C. Cung cấp tài liệu hướng dẫn sử dụng hệ thống cho các đối tác.",
+      "D. Áp dụng chính sách ưu đãi cho các đối tác sử dụng hệ thống nhiều nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng 'peer influence' (ảnh hưởng từ đồng nghiệp) và bằng chứng thực tế từ chính các đối tác, giúp thuyết phục các đối tác khác một cách tự nhiên và hiệu quả. Các giải pháp khác thiếu tính thuyết phục hoặc chỉ tác động bề mặt.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780503097392_EXPERT_8_xazc"
+  },
+  {
+    "questionText": "Bạn đang triển khai dự án chuyển đổi quy trình quản lý đơn hàng từ thủ công sang tự động hóa cho một công ty thương mại điện tử tại Việt Nam. Sau 3 tháng go-live, bạn nhận thấy tỷ lệ lỗi xử lý đơn hàng vẫn cao do nhân viên không cập nhật thông tin kịp thời. Sau khi phân tích, bạn phát hiện họ cho rằng 'hệ thống mới không đáng tin cậy'. Giải pháp nào dưới đây hiệu quả nhất để xây dựng niềm tin vào hệ thống?",
+    "options": [
+      "A. Tổ chức buổi demo kỹ thuật để chứng minh độ tin cậy của hệ thống.",
+      "B. Mời nhóm người dùng đại diện tham gia vào quá trình kiểm thử và cải tiến hệ thống, kết hợp với đào tạo về cách xử lý lỗi.",
+      "C. Áp dụng chính sách thưởng cho nhân viên xử lý đơn hàng chính xác nhất.",
+      "D. Gửi báo cáo thống kê về độ chính xác của hệ thống cho tất cả nhân viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B kết hợp 'participatory testing' (kiểm thử có sự tham gia) và đào tạo, giúp nhân viên trực tiếp trải nghiệm và cải tiến hệ thống, từ đó xây dựng niềm tin một cách tự nhiên và bền vững. Các giải pháp khác chỉ tác động bề mặt hoặc thiếu tính thuyết phục.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780503097392_EXPERT_9_e16t"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý dự án cho một công ty xây dựng tại Việt Nam, bạn nhận thấy các project manager vẫn sử dụng Excel để theo dõi tiến độ thay vì hệ thống mới. Sau khi phỏng vấn, bạn phát hiện họ không thấy được giá trị gia tăng của hệ thống so với công cụ cũ. Kế hoạch truyền thông nào dưới đây hiệu quả nhất để thay đổi nhận thức này?",
+    "options": [
+      "A. Gửi email hàng tuần từ lãnh đạo cấp cao nhấn mạnh tầm quan trọng của việc sử dụng hệ thống mới.",
+      "B. Tổ chức buổi chia sẻ từ một project manager đã thành công với hệ thống, kết hợp với dữ liệu so sánh hiệu quả trước và sau triển khai tại dự án của họ.",
+      "C. Phát tờ rơi hướng dẫn sử dụng hệ thống tại văn phòng.",
+      "D. Yêu cầu project manager ký cam kết sử dụng hệ thống mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng 'storytelling' (kể chuyện) và dữ liệu thực tế từ chính tổ chức, giúp thay đổi nhận thức một cách thuyết phục và tự nhiên. Các giải pháp khác thiếu tính thuyết phục hoặc chỉ tạo áp lực mà không giải quyết vấn đề gốc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "SKILL",
+    "id": "q_1780503097393_EXPERT_10_im1y"
+  },
+  {
+    "questionText": "Bạn đang triển khai dự án số hóa quy trình quản lý nhân sự cho một tập đoàn bán lẻ tại Việt Nam. Sau 5 tháng go-live, bạn nhận thấy tỷ lệ sử dụng hệ thống chỉ đạt 60% do các chi nhánh không tuân thủ quy trình mới. Sau khi phân tích, bạn phát hiện nguyên nhân chính là do thiếu sự hỗ trợ từ lãnh đạo chi nhánh. Giải pháp nào dưới đây là chiến lược dài hạn và bền vững nhất để giải quyết vấn đề này?",
+    "options": [
+      "A. Tổ chức thêm các buổi đào tạo kỹ thuật cho nhân viên tại các chi nhánh.",
+      "B. Yêu cầu lãnh đạo cấp cao tại trụ sở chính can thiệp trực tiếp bằng cách gửi email nhắc nhở lãnh đạo chi nhánh.",
+      "C. Thiết kế chương trình 'Change Leader' tại các chi nhánh, trong đó lãnh đạo chi nhánh được đào tạo về vai trò lãnh đạo chuyển đổi, cam kết công khai và được trao quyền quyết định trong việc cải tiến quy trình.",
+      "D. Tạm dừng triển khai tại các chi nhánh có tỷ lệ sử dụng thấp và chờ đến khi lãnh đạo chi nhánh sẵn sàng hơn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C tập trung vào việc xây dựng năng lực lãnh đạo chuyển đổi từ bên trong tổ chức, tạo sự cam kết và trao quyền cho lãnh đạo chi nhánh - yếu tố quyết định sự thành công lâu dài của chuyển đổi. Các giải pháp khác chỉ giải quyết triệu chứng tạm thời hoặc không giải quyết gốc rễ vấn đề.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "ANALYSIS",
+    "id": "q_1780503097394_EXPERT_11_ba9y"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý chuỗi cung ứng cho một công ty sản xuất tại Việt Nam, bạn nhận thấy tỷ lệ sử dụng hệ thống thấp do các nhà cung cấp không hợp tác. Sau khi phân tích, bạn phát hiện họ không hiểu rõ quy trình và lợi ích của hệ thống. Chiến lược nào dưới đây hiệu quả nhất để thu hút sự tham gia của các nhà cung cấp?",
+    "options": [
+      "A. Gửi email giải thích về quy trình và lợi ích của hệ thống cho tất cả nhà cung cấp.",
+      "B. Tổ chức buổi đào tạo trực tuyến với các nhà cung cấp lớn, mời họ tham gia thiết kế quy trình và chia sẻ lợi ích thực tế sau khi sử dụng hệ thống.",
+      "C. Cung cấp tài liệu hướng dẫn sử dụng hệ thống cho các nhà cung cấp.",
+      "D. Áp dụng chính sách ưu đãi cho các nhà cung cấp sử dụng hệ thống nhiều nhất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B kết hợp đào tạo, 'co-design' (đồng thiết kế) và chia sẻ kinh nghiệm thực tế, giúp các nhà cung cấp hiểu rõ quy trình và lợi ích của hệ thống một cách thuyết phục và tự nhiên. Đây là cách tiếp cận toàn diện và bền vững nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Change Management & Adoption",
+    "category": "SITUATION",
+    "id": "q_1780503097394_EXPERT_12_08oh"
+  }
+]

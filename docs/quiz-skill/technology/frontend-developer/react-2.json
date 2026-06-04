@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Component là gì trong React?",
+    "options": [
+      "A. Một hàm JavaScript dùng để quản lý database.",
+      "B. Một khối mã độc lập và có thể tái sử dụng, trả về các phần tử React để hiển thị giao diện người dùng.",
+      "C. Một file CSS để styling cho ứng dụng.",
+      "D. Một thư viện để xử lý các yêu cầu API."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Component là các khối xây dựng cơ bản của ứng dụng React, giúp chia nhỏ giao diện người dùng thành các phần độc lập, có thể tái sử dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mục đích chính của JSX trong React là gì?",
+    "options": [
+      "A. Để viết các truy vấn SQL trực tiếp trong mã JavaScript.",
+      "B. Để tạo các hiệu ứng animation phức tạp.",
+      "C. Để mô tả cấu trúc giao diện người dùng (UI) bằng cách kết hợp cú pháp giống HTML vào JavaScript.",
+      "D. Để quản lý trạng thái toàn cục của ứng dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "JSX là một cú pháp mở rộng của JavaScript, cho phép viết mã giống HTML/XML trực tiếp trong JavaScript để dễ dàng mô tả UI.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để tạo một functional component (component dạng hàm) trong React hiển thị văn bản 'Hello React!', cú pháp nào sau đây là đúng?",
+    "options": [
+      "A. function MyComponent() { return <h1>Hello React!</h1>; }",
+      "B. class MyComponent extends React.Component { render() { return <h1>Hello React!</h1>; } }",
+      "C. const MyComponent = () => { console.log('Hello React!'); };",
+      "D. var MyComponent = 'Hello React!';"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Functional component là một hàm JavaScript trả về JSX. Các lựa chọn khác là cú pháp class component hoặc không phải component React hợp lệ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Hook `useState` được sử dụng để làm gì trong React?",
+    "options": [
+      "A. Để thực hiện các side effect như fetch dữ liệu.",
+      "B. Để quản lý trạng thái cục bộ (local state) trong functional components.",
+      "C. Để tối ưu hóa hiệu suất bằng cách ghi nhớ giá trị.",
+      "D. Để truy cập Context API."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`useState` là hook cơ bản nhất để thêm trạng thái có thể thay đổi vào functional components.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hook `useEffect` trong React chủ yếu được dùng để xử lý các tác vụ nào?",
+    "options": [
+      "A. Chỉ để khai báo biến trạng thái (state variables).",
+      "B. Để thực hiện các side effect (tác dụng phụ) như fetch dữ liệu, subscribe sự kiện, hoặc thao tác trực tiếp với DOM.",
+      "C. Để tạo các component con.",
+      "D. Để định nghĩa các hàm callback được ghi nhớ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`useEffect` cho phép functional components thực hiện các side effect sau khi render, tương tự như `componentDidMount`, `componentDidUpdate`, và `componentWillUnmount` trong class components.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "`props` trong React được sử dụng với mục đích gì?",
+    "options": [
+      "A. Để quản lý trạng thái nội bộ của một component.",
+      "B. Để truyền dữ liệu từ component cha xuống component con.",
+      "C. Để thực hiện các yêu cầu HTTP.",
+      "D. Để định nghĩa các sự kiện DOM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`props` (viết tắt của properties) là cơ chế chính để truyền dữ liệu và cấu hình từ component cha xuống component con, giúp các component con có thể hiển thị dữ liệu hoặc hành vi khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Virtual DOM trong React có vai trò gì?",
+    "options": [
+      "A. Là một bản sao của DOM thật, được React sử dụng để so sánh và cập nhật DOM thật một cách hiệu quả.",
+      "B. Là một công cụ để tạo các animation 3D.",
+      "C. Là nơi lưu trữ tất cả trạng thái của ứng dụng.",
+      "D. Là một phương pháp để viết CSS trong JavaScript."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Virtual DOM là một bản đại diện nhẹ của DOM thật. React sử dụng nó để thực hiện quá trình 'reconciliation' (đối chiếu), tìm ra sự khác biệt giữa hai phiên bản của Virtual DOM và chỉ cập nhật những phần cần thiết trên DOM thật, giúp tối ưu hiệu suất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi render một danh sách các phần tử trong React (ví dụ: sử dụng `map`), thuộc tính `key` được sử dụng để làm gì?",
+    "options": [
+      "A. Để đặt màu nền cho các phần tử trong danh sách.",
+      "B. Để React có thể nhận diện các phần tử riêng lẻ, theo dõi sự thay đổi, thêm, xóa hoặc sắp xếp lại chúng một cách hiệu quả.",
+      "C. Để định nghĩa một sự kiện click cho mỗi phần tử.",
+      "D. Để ẩn các phần tử không mong muốn khỏi danh sách."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`key` giúp React xác định các phần tử trong danh sách là duy nhất, điều này rất quan trọng cho việc tối ưu hiệu suất và duy trì trạng thái của các phần tử khi danh sách thay đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "\"Local state\" (trạng thái cục bộ) trong React là gì?",
+    "options": [
+      "A. Trạng thái được chia sẻ giữa nhiều component không liên quan.",
+      "B. Trạng thái chỉ thuộc về một component cụ thể và không được chia sẻ trực tiếp với các component khác.",
+      "C. Trạng thái được lưu trữ trong trình duyệt web (ví dụ: localStorage).",
+      "D. Trạng thái được quản lý bởi một thư viện bên ngoài như Redux."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Local state là trạng thái được quản lý bên trong một component và không được truyền ra ngoài hoặc chia sẻ trực tiếp với các component khác mà không thông qua `props` hoặc Context.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào nên sử dụng `Context API` của React?",
+    "options": [
+      "A. Khi bạn chỉ cần quản lý trạng thái cục bộ cho một component đơn lẻ.",
+      "B. Khi bạn muốn truyền dữ liệu qua nhiều cấp độ component mà không cần truyền `props` thủ công qua từng cấp (prop drilling).",
+      "C. Khi bạn cần thực hiện các side effect như fetch dữ liệu.",
+      "D. Khi bạn muốn tạo một component không có trạng thái."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Context API rất hữu ích khi bạn có dữ liệu cần được truy cập bởi nhiều component ở các cấp độ lồng nhau khác nhau, tránh 'prop drilling'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Redux giải quyết vấn đề gì trong ứng dụng React?",
+    "options": [
+      "A. Chỉ để tạo các component giao diện người dùng.",
+      "B. Để quản lý trạng thái toàn cục (global state) một cách nhất quán và dự đoán được, đặc biệt trong các ứng dụng lớn và phức tạp.",
+      "C. Để xử lý các sự kiện DOM trực tiếp.",
+      "D. Để tối ưu hóa quá trình render của các component."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Redux là một thư viện quản lý trạng thái giúp quản lý trạng thái ứng dụng một cách tập trung, làm cho việc debug và hiểu luồng dữ liệu dễ dàng hơn trong các ứng dụng quy mô lớn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "\"Prop drilling\" là hiện tượng gì trong React?",
+    "options": [
+      "A. Quá trình truyền `props` xuống component con thông qua một hoặc nhiều component trung gian không sử dụng trực tiếp `props` đó.",
+      "B. Một kỹ thuật tối ưu hóa hiệu suất render của React.",
+      "C. Một lỗi phổ biến khi sử dụng `useState` hook.",
+      "D. Phương pháp để truy cập các phần tử DOM trực tiếp."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Prop drilling là việc truyền `props` qua nhiều cấp component không cần thiết, làm cho mã khó đọc và bảo trì hơn. Context API hoặc các thư viện quản lý trạng thái khác có thể giúp giảm thiểu vấn đề này.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào việc quản lý trạng thái bằng `useState` là đủ cho một component?",
+    "options": [
+      "A. Khi trạng thái cần được chia sẻ với toàn bộ ứng dụng.",
+      "B. Khi trạng thái chỉ ảnh hưởng đến một component cụ thể và không cần được truyền xuống sâu hoặc lên trên các component khác.",
+      "C. Khi cần thực hiện các tác vụ bất đồng bộ phức tạp.",
+      "D. Khi ứng dụng có hàng trăm component cần truy cập cùng một trạng thái."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`useState` là lựa chọn lý tưởng cho trạng thái cục bộ, đơn giản và không cần chia sẻ rộng rãi. Khi nhu cầu phức tạp hơn, Context API hoặc các thư viện quản lý trạng thái sẽ phù hợp hơn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Mục đích chính của việc quản lý trạng thái (state management) trong ứng dụng React là gì?",
+    "options": [
+      "A. Để chỉ định kiểu dữ liệu cho `props`.",
+      "B. Để cung cấp một cách có tổ chức và dự đoán được để lưu trữ, cập nhật và truy cập dữ liệu mà các component cần để hoạt động.",
+      "C. Để tạo các component tùy chỉnh.",
+      "D. Để xử lý các sự kiện click chuột."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Quản lý trạng thái giúp ứng dụng React duy trì dữ liệu một cách nhất quán, dễ dàng theo dõi và thay đổi, đặc biệt quan trọng trong các ứng dụng có nhiều tương tác người dùng và dữ liệu thay đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hook `React.memo` được sử dụng để tối ưu hiệu suất trong trường hợp nào?",
+    "options": [
+      "A. Để ghi nhớ các hàm callback.",
+      "B. Để ngăn chặn một functional component re-render nếu `props` của nó không thay đổi.",
+      "C. Để tính toán lại một giá trị chỉ khi các dependencies của nó thay đổi.",
+      "D. Để quản lý trạng thái cục bộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`React.memo` là một Higher-Order Component (HOC) được sử dụng để ghi nhớ (memoize) functional components, giúp chúng chỉ re-render khi `props` của chúng thực sự thay đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hook `useCallback` trong React được dùng để làm gì?",
+    "options": [
+      "A. Để ghi nhớ (memoize) một giá trị đã tính toán.",
+      "B. Để ghi nhớ (memoize) một hàm callback, ngăn nó được tạo lại trên mỗi lần render nếu các dependencies không thay đổi.",
+      "C. Để thực hiện các side effect.",
+      "D. Để tạo một tham chiếu đến một phần tử DOM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`useCallback` hữu ích để tối ưu hiệu suất bằng cách đảm bảo rằng một hàm callback không thay đổi giữa các lần render, điều này đặc biệt quan trọng khi truyền hàm xuống các component con được `React.memo` bọc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hook `useMemo` trong React có công dụng gì?",
+    "options": [
+      "A. Để ghi nhớ (memoize) một hàm callback.",
+      "B. Để ghi nhớ (memoize) một giá trị đã tính toán, chỉ tính toán lại khi các dependencies của nó thay đổi.",
+      "C. Để quản lý trạng thái toàn cục.",
+      "D. Để tạo một context mới."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`useMemo` được sử dụng để tối ưu hiệu suất bằng cách ghi nhớ kết quả của một phép tính tốn kém. Nó chỉ thực hiện lại phép tính khi các dependencies của nó thay đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm \"Code splitting\" trong React nhằm mục đích gì?",
+    "options": [
+      "A. Để chia nhỏ mã nguồn thành các file CSS và JavaScript riêng biệt.",
+      "B. Để chia nhỏ bundle JavaScript của ứng dụng thành các phần nhỏ hơn, chỉ tải những phần cần thiết khi người dùng truy cập một route hoặc component cụ thể, giúp giảm thời gian tải ban đầu.",
+      "C. Để tách logic nghiệp vụ ra khỏi các component giao diện người dùng.",
+      "D. Để chia sẻ trạng thái giữa các component khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Code splitting là một kỹ thuật tối ưu hóa hiệu suất giúp giảm kích thước bundle JavaScript ban đầu được tải, cải thiện thời gian tải trang và trải nghiệm người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa Server-Side Rendering (SSR) và Client-Side Rendering (CSR) là gì?",
+    "options": [
+      "A. SSR chỉ hỗ trợ các ứng dụng di động, còn CSR chỉ hỗ trợ ứng dụng web.",
+      "B. SSR render trang trên server và gửi HTML hoàn chỉnh đến client, trong khi CSR render trang trên trình duyệt của client sau khi tải JavaScript.",
+      "C. SSR sử dụng React, còn CSR sử dụng Angular.",
+      "D. SSR không yêu cầu JavaScript, còn CSR thì có."
+    ],
+    "correctAnswer": "B",
+    "explanation": "SSR mang lại lợi ích về SEO và thời gian hiển thị nội dung ban đầu nhanh hơn, trong khi CSR linh hoạt hơn cho các ứng dụng web động và tương tác cao sau khi tải ban đầu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc tối ưu hóa hiệu suất render lại quan trọng trong ứng dụng React?",
+    "options": [
+      "A. Để làm cho mã nguồn dễ đọc hơn.",
+      "B. Để tăng cường bảo mật cho ứng dụng.",
+      "C. Để cải thiện trải nghiệm người dùng bằng cách giảm thời gian tải, làm cho ứng dụng phản hồi nhanh hơn và mượt mà hơn.",
+      "D. Để giảm dung lượng lưu trữ của ứng dụng trên server."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tối ưu hóa hiệu suất render giúp ứng dụng React chạy nhanh hơn, phản hồi tốt hơn với tương tác người dùng, dẫn đến trải nghiệm người dùng tốt hơn và giữ chân người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc kiểm thử (testing) lại quan trọng đối với ứng dụng React?",
+    "options": [
+      "A. Để đảm bảo ứng dụng có thể chạy trên mọi trình duyệt web.",
+      "B. Để xác minh rằng các component hoạt động đúng như mong đợi, phát hiện lỗi sớm và duy trì chất lượng mã nguồn.",
+      "C. Để tự động triển khai ứng dụng lên server.",
+      "D. Để tạo tài liệu hướng dẫn sử dụng cho người dùng cuối."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Testing giúp tăng độ tin cậy của ứng dụng, giảm thiểu lỗi khi phát triển và cập nhật tính năng, đảm bảo rằng các thay đổi không phá vỡ các chức năng hiện có.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Công cụ phổ biến nào thường được dùng để kiểm thử các component React?",
+    "options": [
+      "A. Git và GitHub.",
+      "B. Jest và React Testing Library.",
+      "C. Webpack và Babel.",
+      "D. npm và Yarn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Jest là một framework kiểm thử JavaScript, và React Testing Library cung cấp các tiện ích để kiểm thử React components theo cách mà người dùng sẽ sử dụng chúng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "\"Accessibility\" (khả năng tiếp cận - a11y) trong phát triển ứng dụng React đề cập đến điều gì?",
+    "options": [
+      "A. Khả năng truy cập mã nguồn của ứng dụng.",
+      "B. Đảm bảo rằng ứng dụng có thể được sử dụng bởi càng nhiều người càng tốt, bao gồm cả những người khuyết tật (ví dụ: người khiếm thị sử dụng trình đọc màn hình).",
+      "C. Khả năng truy cập API từ backend.",
+      "D. Khả năng ứng dụng hoạt động trên các thiết bị khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Accessibility là việc thiết kế và phát triển ứng dụng để mọi người, bất kể khả năng hay hoàn cảnh, đều có thể sử dụng và tương tác với nó một cách hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Hiện tượng \"hydration\" trong React khi sử dụng SSR/CSR có ý nghĩa gì?",
+    "options": [
+      "A. Quá trình nạp dữ liệu từ database vào ứng dụng.",
+      "B. Quá trình React gắn kết (attach) các trình xử lý sự kiện (event handlers) và khôi phục trạng thái ứng dụng trên HTML đã được render từ server, biến nó thành một ứng dụng React tương tác hoàn chỉnh trên client.",
+      "C. Quá trình nén mã JavaScript để tối ưu kích thước.",
+      "D. Quá trình tạo ra một bản sao của Virtual DOM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hydration là bước quan trọng sau khi SSR, nơi React 'kết nối' với HTML tĩnh và biến nó thành một ứng dụng động, tương tác được trên phía client.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lệnh nào thường được dùng để khởi động một ứng dụng React được tạo bằng Create React App trong môi trường phát triển?",
+    "options": [
+      "A. `npm build`",
+      "B. `npm test`",
+      "C. `npm start`",
+      "D. `npm install`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`npm start` (hoặc `yarn start`) là lệnh tiêu chuẩn để chạy ứng dụng React ở chế độ phát triển, thường mở ứng dụng trong trình duyệt tại `http://localhost:3000`.",
+    "difficulty": "BEGINNER",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một component React, bạn có một hiệu ứng (side effect) đăng ký một event listener. Cách nào là đúng nhất để tránh memory leak?",
+    "options": [
+      "A. Sử dụng hook useLayoutEffect thay cho useEffect.",
+      "B. Trả về một hàm cleanup bên trong useEffect để gỡ bỏ event listener.",
+      "C. Đặt dependency array của useEffect là một mảng trống [].",
+      "D. Sử dụng useRef để lưu trữ event listener và xóa nó trong hàm render."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hàm cleanup được trả về từ useEffect sẽ chạy trước khi component unmount hoặc trước khi hiệu ứng chạy lại, giúp gỡ bỏ các tài nguyên không cần thiết như event listener.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'index' của mảng làm 'key' khi render một danh sách động (có thể thêm/xóa/sắp xếp) lại được coi là một anti-pattern?",
+    "options": [
+      "A. Vì index sẽ khiến React không thể render được các phần tử mới.",
+      "B. Vì index làm tăng kích thước của Virtual DOM không cần thiết.",
+      "C. Vì index có thể thay đổi khi danh sách thay đổi, dẫn đến việc tái sử dụng state của component sai lệch và làm giảm hiệu năng.",
+      "D. Vì React yêu cầu key phải là một chuỗi string ngẫu nhiên (UUID)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi thứ tự các phần tử thay đổi, index gắn với phần tử đó cũng thay đổi, khiến React nhầm lẫn giữa các component cũ và mới, gây ra lỗi hiển thị dữ liệu hoặc mất state cục bộ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Context API, vấn đề hiệu năng phổ biến nhất mà lập trình viên thường gặp phải là gì?",
+    "options": [
+      "A. Context API không thể chứa các object phức tạp.",
+      "B. Mọi component tiêu thụ (consume) Context sẽ re-render mỗi khi giá trị của Provider thay đổi, ngay cả khi chúng chỉ dùng một phần nhỏ của dữ liệu.",
+      "C. Context API chậm hơn Redux trong việc truy xuất dữ liệu đơn giản.",
+      "D. Context API chỉ hoạt động được với Class Component."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc định, React không có cơ chế 'selector' tích hợp cho Context. Khi giá trị Provider thay đổi, tất cả các component sử dụng useContext(MyContext) đều bị re-render.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn cần tối ưu hóa một component nhận vào một 'object' lớn qua props. Bạn sử dụng React.memo nhưng component vẫn re-render mỗi khi cha nó render. Nguyên nhân khả dĩ nhất là gì?",
+    "options": [
+      "A. React.memo chỉ hoạt động với các kiểu dữ liệu nguyên thủy (primitive).",
+      "B. Object đó được khởi tạo mới ở mỗi lần render của component cha, làm thay đổi tham chiếu (reference).",
+      "C. React.memo yêu cầu phải có một hàm so sánh sâu (deep comparison) đi kèm.",
+      "D. Bạn chưa bọc component con trong thẻ <Suspense>."
+    ],
+    "correctAnswer": "B",
+    "explanation": "React.memo thực hiện shallow comparison. Nếu component cha tạo một object mới trong mỗi lần render, tham chiếu sẽ khác nhau và React.memo sẽ coi đó là sự thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa useMemo và useCallback là gì?",
+    "options": [
+      "A. useMemo dùng cho biến, useCallback dùng cho component.",
+      "B. useMemo trả về một giá trị được ghi nhớ, useCallback trả về một hàm được ghi nhớ.",
+      "C. useCallback chạy bất đồng bộ, còn useMemo chạy đồng bộ.",
+      "D. useMemo chỉ chạy một lần duy nhất, còn useCallback chạy mỗi khi render."
+    ],
+    "correctAnswer": "B",
+    "explanation": "useMemo thực thi hàm và ghi nhớ kết quả trả về, trong khi useCallback ghi nhớ chính định nghĩa của hàm đó để tránh tạo lại hàm mới gây ảnh hưởng đến dependency của các hook khác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong React 18, tính năng 'Automatic Batching' có ý nghĩa gì?",
+    "options": [
+      "A. Tự động gộp nhiều lần cập nhật state vào một lần render duy nhất, kể cả trong promises và setTimeout.",
+      "B. Tự động chia nhỏ các component lớn thành các bundle nhỏ hơn.",
+      "C. Tự động chuyển đổi Class Component sang Functional Component.",
+      "D. Tự động gọi lại useEffect khi có lỗi mạng xảy ra."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trước React 18, batching chỉ xảy ra trong React event handlers. React 18 mở rộng tính năng này cho cả promises, setTimeout và native event handlers để tối ưu hiệu năng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi nào bạn nên sử dụng useLayoutEffect thay vì useEffect?",
+    "options": [
+      "A. Khi bạn cần thực hiện các cuộc gọi API lấy dữ liệu.",
+      "B. Khi bạn muốn cập nhật state mà không làm ảnh hưởng đến UI.",
+      "C. Khi bạn cần đo lường kích thước DOM hoặc thực hiện các thay đổi DOM đồng bộ trước khi trình duyệt vẽ (paint) màn hình.",
+      "D. Khi bạn muốn tối ưu hóa hiệu năng cho các tác vụ tính toán nặng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "useLayoutEffect chạy đồng bộ ngay sau khi React thực hiện các thay đổi DOM nhưng trước khi trình duyệt vẽ, giúp tránh hiện tượng nháy (flickering) khi cập nhật UI dựa trên kích thước DOM.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một 'Error Boundary' trong React KHÔNG thể bắt được lỗi trong trường hợp nào sau đây?",
+    "options": [
+      "A. Lỗi xảy ra trong phương thức render của component con.",
+      "B. Lỗi xảy ra trong các lifecycle methods của component con.",
+      "C. Lỗi xảy ra trong các trình xử lý sự kiện (Event Handlers).",
+      "D. Lỗi xảy ra trong hàm constructor của component con."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Error Boundary chỉ bắt lỗi trong quá trình render, trong các phương thức lifecycle và constructor. Đối với event handlers, bạn cần sử dụng try/catch thông thường.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Mô hình 'Compound Components' (ví dụ: <Tabs><Tab /></Tabs>) giải quyết vấn đề gì chủ yếu?",
+    "options": [
+      "A. Tăng tốc độ load trang web.",
+      "B. Giảm bớt số lượng state toàn cục (global state).",
+      "C. Cung cấp một API linh hoạt và tường minh hơn cho việc chia sẻ state ngầm định giữa các component liên quan.",
+      "D. Thay thế hoàn toàn cho Redux trong các dự án lớn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Compound Components cho phép các component con giao tiếp với component cha mà không cần truyền props thủ công qua nhiều tầng (prop drilling), tạo ra code dễ đọc và dễ bảo trì.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một danh sách cực lớn (10,000 items). Kỹ thuật nào là hiệu quả nhất để đảm bảo mượt mà khi cuộn?",
+    "options": [
+      "A. Sử dụng React.memo cho từng item trong danh sách.",
+      "B. Sử dụng kỹ thuật Windowing/Virtualization (ví dụ: react-window).",
+      "C. Chia nhỏ danh sách thành nhiều trang (Pagination).",
+      "D. Sử dụng Web Workers để tính toán logic render."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Virtualization chỉ render các phần tử đang hiển thị trong khung nhìn (viewport), giúp giảm thiểu số lượng DOM nodes và cải thiện đáng kể hiệu năng render.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Redux Toolkit, 'createAsyncThunk' giải quyết vấn đề gì?",
+    "options": [
+      "A. Tạo ra các reducer đồng bộ nhanh hơn.",
+      "B. Tự động hóa quy trình xử lý các action liên quan đến logic bất đồng bộ (pending, fulfilled, rejected).",
+      "C. Thay thế hoàn toàn cho Middleware như Redux Saga.",
+      "D. Kết nối trực tiếp React component với Database."
+    ],
+    "correctAnswer": "B",
+    "explanation": "createAsyncThunk giúp chuẩn hóa việc xử lý các trạng thái của một promise (đang chờ, thành công, thất bại) bằng cách tự động dispatch các action tương ứng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng 'Custom Hooks' là gì?",
+    "options": [
+      "A. Giúp các Functional Component chạy nhanh hơn Class Component.",
+      "B. Cho phép chia sẻ logic có chứa state giữa các component khác nhau mà không cần thay đổi cấu trúc cây component.",
+      "C. Tự động bắt lỗi runtime trong component.",
+      "D. Giảm dung lượng file bundle sau khi build."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Custom Hooks cho phép trích xuất logic xử lý state (như fetch dữ liệu, form handling) thành các hàm tái sử dụng được ở nhiều nơi, giúp code gọn gàng và dễ kiểm thử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thực hiện Server-Side Rendering (SSR), lỗi 'Hydration Mismatch' thường xảy ra do đâu?",
+    "options": [
+      "A. Do server và client sử dụng hai phiên bản React khác nhau.",
+      "B. Do nội dung HTML được render ở phía server khác với nội dung React mong đợi ở lần render đầu tiên phía client.",
+      "C. Do file CSS không được tải kịp thời trên trình duyệt.",
+      "D. Do API trả về dữ liệu chậm hơn dự kiến."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hydration là quá trình React gắn các event listener vào HTML tĩnh từ server. Nếu cấu trúc DOM hoặc nội dung text khác nhau (ví dụ dùng Math.random() hoặc Date.now()), React sẽ cảnh báo mismatch.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong React Testing Library, tại sao phương thức 'findBy...' thường được ưu tiên hơn 'getBy...' khi kiểm thử dữ liệu từ API?",
+    "options": [
+      "A. Vì findBy... nhanh hơn về mặt tốc độ thực thi.",
+      "B. Vì findBy... trả về một Promise và sẽ chờ đợi (mặc định 1000ms) cho đến khi phần tử xuất hiện trong DOM.",
+      "C. Vì getBy... không thể tìm kiếm theo thuộc tính 'role'.",
+      "D. Vì findBy... tự động giả lập (mock) các cuộc gọi API."
+    ],
+    "correctAnswer": "B",
+    "explanation": "findBy... là sự kết hợp của getBy... và waitFor, rất hữu ích khi kiểm thử các thay đổi UI xảy ra bất đồng bộ sau khi dữ liệu được tải về.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn muốn render một component con vào một vị trí DOM nằm ngoài cấu trúc phân cấp của component cha (ví dụ: Modal). Bạn nên dùng gì?",
+    "options": [
+      "A. React.cloneElement",
+      "B. React.createPortal",
+      "C. forwardRef",
+      "D. useContext"
+    ],
+    "correctAnswer": "B",
+    "explanation": "React Portals cung cấp cách thức để render các component con vào một DOM node khác, thường dùng cho Modals, Tooltips hoặc Popovers để tránh các vấn đề về z-index và overflow:hidden.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao không nên gọi Hooks bên trong vòng lặp (loops) hoặc câu lệnh điều kiện (if statements)?",
+    "options": [
+      "A. Vì nó sẽ làm chậm ứng dụng do phải khởi tạo lại hook.",
+      "B. Vì React dựa vào thứ tự gọi các Hooks để quản lý state chính xác giữa các lần render.",
+      "C. Vì Hooks chỉ hoạt động trong phạm vi toàn cục của file.",
+      "D. Vì trình duyệt không hỗ trợ cú pháp này trong JavaScript."
+    ],
+    "correctAnswer": "B",
+    "explanation": "React lưu trữ state của các hook trong một danh sách liên kết theo thứ tự gọi. Nếu thứ tự này thay đổi giữa các lần render (do bị bỏ qua trong if), React sẽ gán sai state cho các hook.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Zustand hoặc Recoil, khái niệm 'Atomic State' có ưu điểm gì so với mô hình Store duy nhất của Redux?",
+    "options": [
+      "A. Nó cho phép lưu trữ dữ liệu trực tiếp vào LocalStorage tự động.",
+      "B. Nó cho phép chia nhỏ state thành các đơn vị độc lập (atoms), giúp tối ưu hóa re-render chỉ cho các thành phần thực sự cần thiết.",
+      "C. Nó không yêu cầu sử dụng Provider ở root của ứng dụng.",
+      "D. Nó chỉ hỗ trợ các ứng dụng viết bằng TypeScript."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bằng cách chia nhỏ state thành các atom, các component chỉ đăng ký theo dõi các phần dữ liệu cụ thể, tránh việc toàn bộ ứng dụng bị ảnh hưởng khi một phần nhỏ của state thay đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lệnh 'useTransition' trong React 18 được sử dụng để làm gì?",
+    "options": [
+      "A. Để tạo các hiệu ứng chuyển cảnh CSS mượt mà hơn.",
+      "B. Để đánh dấu một cập nhật state là 'không ưu tiên' (non-urgent), giúp UI vẫn phản hồi được các tương tác của người dùng (như gõ phím).",
+      "C. Để chuyển đổi giữa Server Components và Client Components.",
+      "D. Để tự động redirect người dùng khi session hết hạn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "useTransition cho phép React ưu tiên các tác vụ quan trọng (như nhập liệu) và trì hoãn các tác vụ nặng (như lọc danh sách lớn) để tránh làm treo giao diện người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng useRef để lưu trữ một giá trị, sự khác biệt lớn nhất so với useState là gì?",
+    "options": [
+      "A. useRef chỉ có thể lưu trữ các phần tử DOM.",
+      "B. Việc thay đổi giá trị của ref.current không kích hoạt việc re-render component.",
+      "C. useRef không giữ được giá trị sau khi component render lại.",
+      "D. useRef yêu cầu phải được khai báo bên ngoài component."
+    ],
+    "correctAnswer": "B",
+    "explanation": "useRef giống như một 'chiếc hộp' chứa giá trị tồn tại suốt vòng đời component, nhưng khác với state, việc thay đổi nó không làm React vẽ lại giao diện.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách tiếp cận nào là tốt nhất để xử lý 'Race Condition' khi fetch dữ liệu trong useEffect?",
+    "options": [
+      "A. Tăng thời gian timeout của API.",
+      "B. Sử dụng một biến cờ (boolean flag) bên trong useEffect để kiểm tra xem component còn mount hay không trước khi cập nhật state.",
+      "C. Luôn sử dụng Redux Saga thay vì useEffect.",
+      "D. Sử dụng async/await trực tiếp trong hàm callback của useEffect."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng một biến 'ignore' khởi tạo là false và chuyển thành true trong hàm cleanup giúp ngăn chặn việc cập nhật state từ một request cũ đã quá hạn hoặc khi component đã bị unmount.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng React.Fragment (<>...</>) lại tốt hơn việc bọc mọi thứ trong thẻ <div>?",
+    "options": [
+      "A. Vì Fragment giúp ứng dụng chạy nhanh hơn 2 lần.",
+      "B. Vì nó giúp giữ cho cấu trúc DOM gọn nhẹ, tránh các thẻ div dư thừa làm ảnh hưởng đến CSS layout (như Flexbox/Grid) và khả năng truy cập (accessibility).",
+      "C. Vì Fragment tự động thêm key cho các phần tử con.",
+      "D. Vì thẻ div không thể chứa được các component React khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thẻ div dư thừa có thể phá vỡ các quy tắc CSS của cha (như grid-column) và làm cây DOM phình to không cần thiết, ảnh hưởng đến hiệu năng và SEO.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiến trúc Micro-frontend sử dụng React, thách thức lớn nhất khi chia sẻ State giữa các ứng dụng nhỏ là gì?",
+    "options": [
+      "A. Không thể sử dụng NPM packages chung.",
+      "B. Xung đột phiên bản React giữa các ứng dụng.",
+      "C. Đảm bảo tính đóng gói (encapsulation) và tránh phụ thuộc chặt chẽ (tight coupling) giữa các micro-apps.",
+      "D. Trình duyệt không cho phép chạy nhiều ứng dụng React cùng lúc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Chia sẻ state quá mức khiến các micro-apps phụ thuộc vào nhau, làm mất đi ý nghĩa của việc chia nhỏ ứng dụng để phát triển và triển khai độc lập.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Code Splitting' thông qua React.lazy và Suspense giúp cải thiện chỉ số Core Web Vitals nào nhiều nhất?",
+    "options": [
+      "A. Cumulative Layout Shift (CLS)",
+      "B. Largest Contentful Paint (LCP) và First Input Delay (FID)",
+      "C. First Contentful Paint (FCP)",
+      "D. Interaction to Next Paint (INP)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bằng cách giảm kích thước bundle ban đầu, trình duyệt tải và thực thi code nhanh hơn, giúp nội dung chính hiện ra sớm hơn (LCP) và phản hồi tương tác nhanh hơn (FID).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi làm việc với Form trong React, 'Controlled Component' có nghĩa là gì?",
+    "options": [
+      "A. Form được kiểm soát hoàn toàn bởi DOM gốc.",
+      "B. Dữ liệu của form được quản lý bởi state của React component thông qua props 'value' và sự kiện 'onChange'.",
+      "C. Form chỉ có thể được submit thông qua phương thức POST.",
+      "D. Form tự động validate dữ liệu mà không cần code thêm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Controlled Components, state của React là 'nguồn sự thật duy nhất' (single source of truth). Mọi thay đổi trên input đều được cập nhật vào state và ngược lại.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn gặp lỗi 'Maximum update depth exceeded' trong một component. Nguyên nhân thường gặp nhất là gì?",
+    "options": [
+      "A. Bạn quên không thêm dependency array vào useEffect và trong đó có lệnh setState.",
+      "B. Bạn sử dụng quá nhiều thẻ <div> lồng nhau.",
+      "C. Component cha truyền quá nhiều props cho component con.",
+      "D. Bạn đang sử dụng phiên bản React cũ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nếu useEffect không có dependency array, nó sẽ chạy sau mỗi lần render. Nếu bên trong nó có setState, nó sẽ kích hoạt render lại, dẫn đến vòng lặp vô tận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong React 18, khi sử dụng 'useTransition', điều gì xảy ra với các cập nhật trạng thái (state updates) được đánh dấu là non-urgent?",
+    "options": [
+      "A. Chúng sẽ được thực thi đồng bộ ngay lập tức để đảm bảo tính nhất quán của dữ liệu.",
+      "B. Chúng có thể bị gián đoạn nếu có một cập nhật khẩn cấp (như gõ phím) xảy ra.",
+      "C. Chúng sẽ luôn được đẩy vào một Web Worker để xử lý riêng biệt.",
+      "D. Chúng sẽ bỏ qua hoàn toàn quá trình render và chỉ cập nhật DOM trực tiếp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "useTransition cho phép React đánh dấu các cập nhật là chuyển cảnh (transitions), giúp UI vẫn phản hồi được các tương tác người dùng bằng cách cho phép các cập nhật khẩn cấp ngắt quãng quá trình render của các cập nhật không khẩn cấp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng Context API cho các trạng thái thay đổi với tần suất cao (high-frequency updates) thường dẫn đến vấn đề hiệu năng?",
+    "options": [
+      "A. Context API không hỗ trợ cơ chế 'selectors' mặc định, dẫn đến việc tất cả các consumer đều re-render khi giá trị context thay đổi.",
+      "B. Context API buộc phải sử dụng Redux làm middleware để tối ưu hóa việc truyền dữ liệu.",
+      "C. Context API sử dụng cơ chế deep clone dữ liệu mỗi khi có thay đổi, gây tốn tài nguyên CPU.",
+      "D. Context API chỉ hoạt động hiệu quả trong môi trường Server-Side Rendering (SSR)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc định, khi giá trị của Provider thay đổi, mọi component sử dụng useContext(MyContext) đều sẽ re-render. Điều này khác với các thư viện như Redux hay Zustand, nơi bạn có thể chọn lọc dữ liệu (selectors) để chỉ re-render khi cần thiết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai Server-Side Rendering (SSR), lỗi 'Hydration Mismatch' thường xuất phát từ nguyên nhân cốt lõi nào?",
+    "options": [
+      "A. Do phiên bản React trên server và client khác nhau.",
+      "B. Do cấu trúc cây DOM được render ban đầu trên server không khớp chính xác với cây DOM của lần render đầu tiên trên client.",
+      "C. Do server không thể tải được các file CSS cần thiết cho component.",
+      "D. Do client không có đủ bộ nhớ để thực hiện quá trình hydrate."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hydration là quá trình React gắn các event listeners vào HTML tĩnh từ server. Nếu nội dung (như thời gian hệ thống, dữ liệu ngẫu nhiên) khác nhau giữa server và client, React sẽ không thể khớp nối chính xác, dẫn đến lỗi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng 'Compound Components' pattern (ví dụ: <Tabs><Tabs.List/></Tabs>) là gì?",
+    "options": [
+      "A. Tự động tối ưu hóa hiệu năng bằng cách sử dụng React.memo cho tất cả các con.",
+      "B. Giảm thiểu số lượng prop drilling và cung cấp một API linh hoạt, tường minh hơn cho người dùng component.",
+      "C. Đảm bảo rằng tất cả các component con đều được render đồng bộ.",
+      "D. Cho phép component hoạt động mà không cần đến React State."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Compound Components cho phép các thành phần liên quan chia sẻ trạng thái ngầm định (thường qua Context), giúp người dùng dễ dàng tùy chỉnh vị trí các thành phần con mà không phải truyền props qua nhiều tầng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kịch bản tối ưu hóa hiệu năng, khi nào bạn nên ưu tiên sử dụng 'useDeferredValue' thay vì 'debouncing' truyền thống?",
+    "options": [
+      "A. Khi bạn muốn trì hoãn việc gọi API để giảm tải cho server.",
+      "B. Khi bạn muốn React tự động điều phối việc render giá trị mới dựa trên tài nguyên hệ thống hiện có thay vì một khoảng thời gian cố định.",
+      "C. Khi bạn cần xử lý các sự kiện click chuột với tốc độ cao.",
+      "D. Khi bạn đang làm việc trong môi trường React phiên bản 16 trở xuống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khác với debounce (đợi một khoảng thời gian cố định), useDeferredValue cho phép React render giá trị cũ trong khi chuẩn bị giá trị mới ở chế độ nền, và nó sẽ thích ứng với tốc độ của thiết bị người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Kỹ thuật 'Code Splitting' ở mức component (thay vì mức route) mang lại lợi ích gì lớn nhất trong một ứng dụng lớn?",
+    "options": [
+      "A. Loại bỏ hoàn toàn nhu cầu sử dụng Webpack hoặc Vite.",
+      "B. Giảm kích thước bundle ban đầu bằng cách chỉ tải các component nặng (như Chart, Editor) khi chúng thực sự cần hiển thị.",
+      "C. Tăng tốc độ thực thi của các vòng lặp JavaScript trong component.",
+      "D. Giúp ứng dụng hoạt động offline tốt hơn thông qua Service Workers."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Code splitting ở mức component (thông qua React.lazy và Suspense) giúp trì hoãn việc tải mã nguồn của các phần không thiết yếu, từ đó cải thiện các chỉ số Core Web Vitals như LCP.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'index' làm 'key' trong một danh sách có khả năng thay đổi thứ tự (sorting/filtering) được coi là một anti-pattern?",
+    "options": [
+      "A. Vì nó khiến React không thể render danh sách đó.",
+      "B. Vì nó có thể dẫn đến lỗi hiển thị dữ liệu sai lệch và làm giảm hiệu năng re-render do React không nhận diện đúng sự thay đổi của các phần tử.",
+      "C. Vì 'key' bắt buộc phải là một chuỗi UUID theo tiêu chuẩn của React.",
+      "D. Vì nó làm tăng kích thước của Virtual DOM một cách không cần thiết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "React dùng key để xác định danh tính phần tử giữa các lần render. Nếu dùng index, khi thứ tự thay đổi, React sẽ map sai trạng thái của component cũ vào phần tử mới, gây lỗi logic và re-render lãng phí.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiến trúc Micro-frontends sử dụng Module Federation, thách thức lớn nhất khi dùng React là gì?",
+    "options": [
+      "A. Không thể sử dụng CSS-in-JS.",
+      "B. Việc quản lý các phiên bản React khác nhau (singleton) và chia sẻ trạng thái giữa các ứng dụng độc lập.",
+      "C. Module Federation không hỗ trợ React Suspense.",
+      "D. Phải viết lại toàn bộ ứng dụng bằng TypeScript."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi nhiều ứng dụng React chạy cùng lúc, việc đảm bảo chỉ có một instance của React (singleton) để tránh xung đột context và quản lý state chung (như Auth) là bài toán kiến trúc phức tạp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa 'useLayoutEffect' và 'useEffect' là gì?",
+    "options": [
+      "A. useLayoutEffect chạy bất đồng bộ sau khi trình duyệt đã vẽ xong (paint).",
+      "B. useLayoutEffect chạy đồng bộ ngay sau khi DOM thay đổi nhưng trước khi trình duyệt thực hiện paint, giúp tránh hiện tượng nháy (flicker).",
+      "C. useEffect chỉ chạy trên server, còn useLayoutEffect chỉ chạy trên client.",
+      "D. Không có sự khác biệt về thời điểm thực thi, chỉ khác về cách khai báo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "useLayoutEffect chặn (block) quá trình paint của trình duyệt để thực hiện các tính toán liên quan đến layout (như đo kích thước phần tử), đảm bảo người dùng không thấy trạng thái trung gian.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng thư viện quản lý state dựa trên nguyên lý 'Atomic' như Recoil hoặc Jotai, lợi thế so với Redux là gì?",
+    "options": [
+      "A. Cho phép quản lý state tập trung hoàn toàn trong một store duy nhất.",
+      "B. Khả năng chia nhỏ state thành các đơn vị độc lập (atoms), giúp tối ưu hóa re-render ở mức cực kỳ chi tiết (fine-grained).",
+      "C. Không cần sử dụng bất kỳ Hook nào để truy cập dữ liệu.",
+      "D. Tự động đồng bộ hóa state với cơ sở dữ liệu backend."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Atomic state management cho phép các component đăng ký theo dõi các mảnh nhỏ của state (atoms). Khi một atom thay đổi, chỉ các component dùng atom đó mới re-render, thay vì toàn bộ cây component như Context.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào để xử lý lỗi (Error Handling) một cách hiệu quả cho các component con được load bằng React.lazy?",
+    "options": [
+      "A. Sử dụng khối try-catch bao quanh lệnh import().",
+      "B. Sử dụng Error Boundary bọc bên ngoài component Suspense.",
+      "C. Sử dụng hook useEffect để bắt lỗi runtime.",
+      "D. React.lazy tự động xử lý lỗi và hiển thị một UI mặc định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi một module lười (lazy-loaded) thất bại trong việc tải về (ví dụ lỗi mạng), nó sẽ ném ra một error. Error Boundary là cách duy nhất để bắt lỗi này trong cây component và hiển thị fallback UI.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong React Server Components (RSC), điều gì là KHÔNG THỂ thực hiện được bên trong một Server Component?",
+    "options": [
+      "A. Truy vấn trực tiếp vào cơ sở dữ liệu (Database).",
+      "B. Sử dụng các hooks như useState hoặc useEffect.",
+      "C. Sử dụng async/await để fetch dữ liệu.",
+      "D. Render các Client Components khác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Server Components chỉ chạy trên server, không có vòng đời (lifecycle) hay trạng thái tương tác trên trình duyệt, do đó không thể sử dụng useState, useEffect hay các browser APIs.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng bị rò rỉ bộ nhớ (memory leak) do một closure trong 'useEffect' giữ tham chiếu đến state cũ. Cách khắc phục tốt nhất là gì?",
+    "options": [
+      "A. Luôn sử dụng biến toàn cục để lưu trữ state.",
+      "B. Sử dụng hàm dọn dẹp (cleanup function) trong useEffect để hủy các subscription hoặc xóa timer.",
+      "C. Gọi forceUpdate() định kỳ để xóa bộ nhớ.",
+      "D. Chuyển sang sử dụng Class Component vì chúng không bị memory leak."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cleanup function trong useEffect (return () => ...) cực kỳ quan trọng để dọn dẹp các side effects như event listeners, timers, hoặc websockets khi component unmount hoặc trước khi effect chạy lại.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi tối ưu hóa một danh sách cực lớn (ví dụ 10,000 items), tại sao 'Windowing' (Virtualization) lại hiệu quả hơn 'Pagination' về mặt trải nghiệm người dùng?",
+    "options": [
+      "A. Vì nó không yêu cầu tải dữ liệu từ server.",
+      "B. Vì nó cho phép người dùng cuộn mượt mà qua toàn bộ dữ liệu mà chỉ render một số lượng nhỏ các node DOM cần thiết tại một thời điểm.",
+      "C. Vì nó sử dụng ít CSS hơn.",
+      "D. Vì nó tự động sắp xếp dữ liệu cho người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Virtualization (như react-window) chỉ giữ lại các phần tử trong vùng nhìn thấy (viewport) trên DOM, giúp giảm tải cực lớn cho trình duyệt so với việc render hàng ngàn node cùng lúc.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao 'useCallback' đôi khi có thể làm giảm hiệu năng nếu sử dụng bừa bãi?",
+    "options": [
+      "A. Vì nó tạo ra một luồng xử lý (thread) mới cho mỗi hàm.",
+      "B. Vì chi phí để khởi tạo hook và so sánh mảng dependencies có thể lớn hơn chi phí tạo lại một hàm thông thường.",
+      "C. Vì nó ngăn cản Garbage Collector thu hồi bộ nhớ của các biến cục bộ.",
+      "D. Vì nó làm cho code khó đọc hơn và không thể debug."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc ghi nhớ (memoization) không miễn phí. Nếu hàm đó đơn giản và không được truyền xuống các component con đã được bọc React.memo, việc dùng useCallback chỉ làm tăng thêm tính toán vô ích.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong kiến trúc Redux, 'Middleware' (như Thunk hoặc Saga) đóng vai trò gì trong việc xử lý Side Effects?",
+    "options": [
+      "A. Nó thay thế hoàn toàn các Reducers để cập nhật state.",
+      "B. Nó cung cấp một điểm chặn (interceptor) giữa lúc action được dispatch và lúc nó chạm tới reducer, cho phép thực hiện các tác vụ bất đồng bộ.",
+      "C. Nó giúp tăng tốc độ render của React bằng cách cache lại các action.",
+      "D. Nó tự động chuyển đổi các action thành các API call."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Middleware cho phép chúng ta can thiệp vào luồng dữ liệu của Redux để thực hiện logic phức tạp, gọi API, hoặc logging trước khi trạng thái được cập nhật bởi reducer.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để đảm bảo tính 'Accessibility' (A11y) khi xây dựng một Modal component từ đầu trong React?",
+    "options": [
+      "A. Chỉ cần thêm thuộc tính alt cho các hình ảnh bên trong modal.",
+      "B. Đảm bảo quản lý 'Focus Trap' (giữ focus bên trong modal) và hỗ trợ phím ESC để đóng modal.",
+      "C. Sử dụng thẻ <div> thay cho các thẻ semantic để dễ dàng style.",
+      "D. Tự động phát âm thanh khi modal được mở."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Một modal có khả năng truy cập tốt cần quản lý tiêu điểm (focus) để người dùng bàn phím không tab ra ngoài vùng modal và có thể đóng nó dễ dàng bằng phím chuẩn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Chiến lược 'Automatic Batching' trong React 18 có tác động gì đến mã nguồn của bạn?",
+    "options": [
+      "A. Bạn phải viết thêm hàm batch() để gộp các cập nhật state.",
+      "B. React sẽ tự động gộp nhiều lần cập nhật state vào một lần render duy nhất, ngay cả bên trong các promise, timeout hoặc event native.",
+      "C. Nó làm cho các cập nhật state trở nên chậm hơn để tiết kiệm pin.",
+      "D. Nó chỉ hoạt động nếu bạn sử dụng Class Components."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trước bản 18, React chỉ batching trong các event handlers của React. Với bản 18, cơ chế này mở rộng ra mọi nơi, giúp giảm số lần re-render không cần thiết và tăng hiệu năng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng 'useImperativeHandle', mục đích chính của bạn thường là gì?",
+    "options": [
+      "A. Để thay thế hoàn toàn việc sử dụng props.",
+      "B. Để tùy chỉnh instance value (thường là các phương thức) mà một component cha nhận được khi sử dụng 'ref' trỏ tới component con.",
+      "C. Để ép buộc React phải re-render component ngay lập tức.",
+      "D. Để truy cập trực tiếp vào state nội bộ của component cha từ component con."
+    ],
+    "correctAnswer": "B",
+    "explanation": "useImperativeHandle kết hợp với forwardRef cho phép component con ẩn giấu các chi tiết bên trong và chỉ lộ ra một số hàm điều khiển (như focus(), scrollToIndex()) cho component cha.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiểm thử (Testing), tại sao việc 'Mocking' các API calls lại quan trọng đối với Integration Tests trong React?",
+    "options": [
+      "A. Để kiểm tra xem server có hoạt động đúng hay không.",
+      "B. Để tạo ra một môi trường kiểm thử cô lập, nhanh chóng và có thể dự đoán được kết quả mà không phụ thuộc vào hạ tầng mạng.",
+      "C. Vì React Testing Library không cho phép thực hiện network request thật.",
+      "D. Để giảm kích thước của file test."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mocking giúp bài test tập trung vào logic xử lý dữ liệu và hiển thị của component, tránh việc test thất bại do lỗi mạng hoặc dữ liệu server thay đổi ngoài ý muốn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng Inline Functions trong props (ví dụ: <button onClick={() => doSomething()} />) có thể gây ra vấn đề hiệu năng trong một số trường hợp cụ thể?",
+    "options": [
+      "A. Vì nó làm cho trình duyệt tốn nhiều bộ nhớ hơn để lưu trữ chuỗi string.",
+      "B. Vì một hàm mới được tạo ra ở mỗi lần render, khiến các component con sử dụng React.memo luôn bị re-render do so sánh tham chiếu (reference) thất bại.",
+      "C. Vì React không thể tối ưu hóa các hàm không có tên.",
+      "D. Vì nó vi phạm các quy tắc bảo mật của Content Security Policy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "React.memo thực hiện shallow comparison. Nếu bạn truyền một inline function, tham chiếu của nó thay đổi sau mỗi lần render của cha, làm mất đi tác dụng của memoization ở component con.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong mô hình 'Render-as-you-fetch' với React Suspense, sự khác biệt so với 'Fetch-on-render' là gì?",
+    "options": [
+      "A. Việc fetch dữ liệu được bắt đầu ngay lập tức trước khi component bắt đầu render, thay vì đợi component mount mới gọi trong useEffect.",
+      "B. Nó yêu cầu sử dụng GraphQL thay cho REST API.",
+      "C. Nó loại bỏ hoàn toàn nhu cầu sử dụng loading spinner.",
+      "D. Dữ liệu được fetch trực tiếp bởi trình duyệt mà không thông qua JavaScript."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Render-as-you-fetch giúp loại bỏ tình trạng 'waterfall' (các request đợi nhau), bằng cách khởi tạo việc tải dữ liệu song song với việc tải code và render component.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng một Design System, tại sao việc sử dụng 'Polymorphic Components' (ví dụ: dùng prop 'as' để đổi thẻ từ div sang button) lại quan trọng?",
+    "options": [
+      "A. Để giảm số lượng file CSS cần thiết.",
+      "B. Để cung cấp sự linh hoạt về mặt semantic HTML trong khi vẫn giữ nguyên các styles và logic nghiệp vụ của component.",
+      "C. Để tự động chuyển đổi component thành Web Components.",
+      "D. Để tăng tốc độ render trên các thiết bị di động."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Polymorphic components cho phép người dùng quyết định thẻ HTML nào phù hợp nhất với ngữ cảnh (ví dụ một Button trông như nút nhưng thực chất là một thẻ <a>), giúp đảm bảo tính semantic và SEO.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Vấn đề 'Stale Closures' trong React Hooks thường xảy ra nhất khi nào?",
+    "options": [
+      "A. Khi bạn sử dụng quá nhiều biến global.",
+      "B. Khi một callback (như trong useEffect hoặc useCallback) tham chiếu đến một biến state nhưng biến đó không được liệt kê trong mảng dependencies.",
+      "C. Khi bạn quên không đóng các thẻ HTML.",
+      "D. Khi bạn sử dụng các thư viện bên thứ ba không hỗ trợ Hooks."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu không có dependency đúng, closure bên trong hook sẽ 'ghi nhớ' giá trị của biến tại thời điểm nó được tạo ra, dẫn đến việc sử dụng dữ liệu cũ (stale) dù state đã cập nhật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'CSS-in-JS' runtime (như Styled-components) có thể gây ra vấn đề về hiệu năng trong các ứng dụng cực lớn so với 'Zero-runtime CSS'?",
+    "options": [
+      "A. Vì CSS-in-JS không hỗ trợ các trình duyệt cũ.",
+      "B. Vì nó tốn thêm chi phí tính toán (parsing, generating styles) ngay tại runtime mỗi khi component re-render.",
+      "C. Vì nó làm tăng kích thước file HTML lên gấp đôi.",
+      "D. Vì nó không thể sử dụng được với React Suspense."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các thư viện CSS-in-JS truyền thống phải tính toán styles và chèn thẻ <style> vào DOM khi ứng dụng đang chạy. Với các ứng dụng phức tạp, việc này gây áp lực lên main thread, điều mà zero-runtime (như Vanilla Extract hay Tailwind) giải quyết được bằng cách build CSS từ trước.",
+    "difficulty": "ADVANCED",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một ứng dụng React quy mô lớn với hàng trăm component và hàng chục API calls, nhóm phát triển đang gặp khó khăn trong việc quản lý state toàn cục và đồng bộ dữ liệu giữa các component không liên quan. Việc sử dụng Context API đã dẫn đến các vấn đề về hiệu suất do re-render quá mức. Giải pháp kiến trúc nào sau đây là phù hợp nhất để giải quyết triệt để vấn đề này?",
+    "options": [
+      "A. Giới hạn việc sử dụng Context API chỉ cho các giá trị tĩnh và sử dụng props drilling cho các state động để giảm re-render.",
+      "B. Triển khai một thư viện quản lý state tập trung như Redux Toolkit hoặc Zustand, kết hợp với các selector được tối ưu hóa để chỉ re-render các component khi dữ liệu cần thiết thay đổi.",
+      "C. Chuyển đổi tất cả các component thành class components và sử dụng `shouldComponentUpdate` để kiểm soát chặt chẽ re-render.",
+      "D. Sử dụng `React.memo` cho tất cả các component con và `useCallback`/`useMemo` cho mọi hàm và giá trị được truyền xuống để ngăn chặn re-render."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với ứng dụng quy mô lớn với cây component lồng sâu và vấn đề re-render rộng khắp, việc triển khai một thư viện quản lý state toàn cục với khả năng tối ưu hóa selector (như Redux với Reselect, hoặc Zustand với các selector) cho phép các component chỉ re-render khi dữ liệu *thực sự cần* thay đổi, là một giải pháp kiến trúc chiến lược và hiệu quả nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng React sử dụng Server-Side Rendering (SSR) gặp phải lỗi \"Hydration Mismatch\" thường xuyên. Nguyên nhân phổ biến nhất gây ra lỗi này là gì và chiến lược nào nên được ưu tiên để khắc phục?",
+    "options": [
+      "A. Sự khác biệt giữa HTML được render trên server và HTML được render lần đầu trên client, thường do việc sử dụng `window` hoặc `document` trong quá trình render server hoặc thay đổi DOM client-side trước khi hydration.",
+      "B. Kích thước bundle JavaScript quá lớn khiến client không thể tải và thực thi code kịp thời, dẫn đến hydration timeout.",
+      "C. Lỗi trong quá trình fetch dữ liệu trên server, khiến dữ liệu không đồng bộ giữa server và client.",
+      "D. Sử dụng quá nhiều Hooks trong cùng một component, gây ra sự không nhất quán trong lifecycle."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Hydration Mismatch xảy ra khi cây DOM được tạo bởi React trên client không khớp với cây DOM được gửi từ server. Nguyên nhân phổ biến nhất là do code client-side (chạy sau khi server render) thay đổi cấu trúc DOM hoặc sử dụng các API chỉ có trên trình duyệt (như `window`, `localStorage`, `Math.random()` không deterministic) trong quá trình render ban đầu, tạo ra sự khác biệt giữa HTML được server gửi và HTML mà React mong đợi để 'hydrate' trên client. Khắc phục đòi hỏi kiểm soát chặt chẽ code chạy trên server và client để đảm bảo output DOM là nhất quán.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một hệ thống component thư viện cho toàn bộ doanh nghiệp. Mục tiêu là tạo ra các component có thể tái sử dụng cao, linh hoạt và dễ dàng tùy chỉnh mà không cần thay đổi code gốc. Phương pháp nào sau đây cung cấp sự cân bằng tốt nhất giữa khả năng tùy biến, hiệu suất và dễ bảo trì cho các component phức tạp?",
+    "options": [
+      "A. Sử dụng High-Order Components (HOCs) để inject các props và logic chung vào các component.",
+      "B. Áp dụng Render Props pattern để cho phép người dùng truyền vào một hàm render, kiểm soát hoàn toàn giao diện và hành vi.",
+      "C. Thiết kế các component với một API props phong phú, cho phép truyền vào các component con (composition) và sử dụng các thuộc tính `className`/`style` để tùy chỉnh giao diện.",
+      "D. Sử dụng Context API để cung cấp các giá trị mặc định và cho phép các component con ghi đè chúng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với thư viện component doanh nghiệp, việc thiết kế với Composition (truyền component con qua props) và một API props rõ ràng là chiến lược mạnh mẽ nhất. Nó cho phép người dùng tùy chỉnh sâu sắc mà không làm tăng độ phức tạp của component gốc, tránh các vấn đề về xung đột props hoặc khó debug của HOCs và Render Props.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng React hiển thị danh sách dữ liệu rất lớn (hàng ngàn đến hàng chục ngàn item). Việc render toàn bộ danh sách cùng một lúc gây ra hiệu suất kém nghiêm trọng, đặc biệt trên các thiết bị di động. Kỹ thuật tối ưu hóa hiệu suất nào nên được ưu tiên áp dụng để giải quyết vấn đề này một cách hiệu quả nhất?",
+    "options": [
+      "A. Sử dụng `React.memo` cho từng item trong danh sách để ngăn chặn re-render không cần thiết khi dữ liệu không đổi.",
+      "B. Triển khai Virtualization (Windowing) để chỉ render các item hiển thị trong viewport, cải thiện đáng kể hiệu suất cuộn và render ban đầu.",
+      "C. Tải dữ liệu theo từng trang (pagination) thay vì tải toàn bộ danh sách, giảm số lượng item cần render.",
+      "D. Sử dụng `useDeferredValue` để trì hoãn việc cập nhật UI cho danh sách, giúp UI chính phản hồi nhanh hơn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Đối với danh sách dữ liệu cực lớn, Virtualization (hay Windowing) là kỹ thuật hiệu quả nhất. Nó chỉ render một tập hợp nhỏ các item nằm trong hoặc gần viewport, loại bỏ các item không hiển thị khỏi DOM, giúp giảm đáng kể số lượng phần tử DOM và công việc render của trình duyệt, cải thiện hiệu suất cuộn và phản hồi của UI.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một hệ thống React monorepo, bạn đang quản lý nhiều ứng dụng con và thư viện component dùng chung. Thách thức lớn nhất khi triển khai CI/CD cho môi trường này là gì và giải pháp chiến lược nào thường được áp dụng?",
+    "options": [
+      "A. Đảm bảo tất cả các ứng dụng con đều có cùng phiên bản React để tránh xung đột dependency.",
+      "B. Quản lý việc xây dựng và triển khai độc lập cho từng gói (package) chỉ khi chúng có thay đổi, thay vì xây dựng lại toàn bộ monorepo mỗi lần.",
+      "C. Tích hợp kiểm thử end-to-end cho tất cả các ứng dụng con trong cùng một pipeline để đảm bảo tính nhất quán.",
+      "D. Đồng bộ hóa các biến môi trường giữa các ứng dụng con và thư viện component."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thách thức lớn nhất trong CI/CD cho monorepo là tối ưu hóa thời gian build và deploy. Việc build lại toàn bộ monorepo mỗi khi có một thay đổi nhỏ là không hiệu quả. Giải pháp chiến lược là sử dụng các công cụ như Nx, Lerna hoặc Turborepo để phát hiện các gói (packages) bị ảnh hưởng bởi một thay đổi cụ thể và chỉ build, test, deploy những gói đó, giúp tiết kiệm đáng kể tài nguyên và thời gian.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng React cần hiển thị các biểu đồ dữ liệu phức tạp và yêu cầu hiệu suất cao, đặc biệt là khi dữ liệu thay đổi liên tục. Bạn nhận thấy rằng việc render biểu đồ trực tiếp trong React DOM gây ra giật lag. Kỹ thuật nào sau đây là tốt nhất để tích hợp các thư viện biểu đồ hiệu suất cao (ví dụ: D3.js, Chart.js) mà vẫn giữ được sự kiểm soát của React?",
+    "options": [
+      "A. Sử dụng `useEffect` để quản lý lifecycle của thư viện biểu đồ bên ngoài, đảm bảo React chỉ chịu trách nhiệm render một container và thư viện bên ngoài quản lý DOM bên trong container đó.",
+      "B. Bọc thư viện biểu đồ trong một `React.memo` component để ngăn chặn re-render không cần thiết.",
+      "C. Chuyển đổi tất cả logic biểu đồ sang Web Workers để không chặn luồng chính của trình duyệt.",
+      "D. Sử dụng `useRef` để trực tiếp thao tác DOM của biểu đồ, bỏ qua Virtual DOM của React hoàn toàn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi tích hợp các thư viện thao tác DOM trực tiếp như D3.js, `useEffect` là Hook lý tưởng. Nó cho phép bạn thực hiện các tác vụ phụ (side effects) sau khi render, bao gồm khởi tạo, cập nhật và dọn dẹp thư viện bên ngoài. React sẽ render một phần tử DOM trống (ví dụ: một `div`), và `useEffect` sẽ sử dụng `useRef` để truy cập phần tử DOM đó và cho phép thư viện bên ngoài thao tác DOM bên trong nó, giữ cho React kiểm soát lifecycle component nhưng không can thiệp vào DOM của biểu đồ.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang phát triển một ứng dụng thương mại điện tử với hàng ngàn sản phẩm, mỗi sản phẩm có nhiều thuộc tính và hình ảnh. Trang chi tiết sản phẩm mất rất nhiều thời gian để tải và hiển thị. Sau khi phân tích bundle, bạn phát hiện ra rằng mã JavaScript cho các thành phần UI ít được sử dụng (ví dụ: phần đánh giá sản phẩm, phần gợi ý sản phẩm liên quan) đang được tải ngay lập tức. Chiến lược nào sau đây sẽ cải thiện đáng kể thời gian tải ban đầu?",
+    "options": [
+      "A. Sử dụng `React.lazy` và `Suspense` để code-split các thành phần ít quan trọng và chỉ tải chúng khi cần thiết (ví dụ: khi người dùng cuộn đến phần đó hoặc nhấp vào tab).",
+      "B. Áp dụng Server-Side Rendering (SSR) cho toàn bộ trang để client không cần tải JavaScript ban đầu.",
+      "C. Sử dụng `React.memo` cho tất cả các component để giảm re-render và tăng tốc độ hiển thị.",
+      "D. Tối ưu hóa hình ảnh sản phẩm bằng cách nén và sử dụng định dạng WebP."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Code splitting với `React.lazy` và `Suspense` là một kỹ thuật hiệu quả để giảm kích thước bundle JavaScript ban đầu và cải thiện thời gian tải. Bằng cách chia nhỏ mã thành các chunk nhỏ hơn và chỉ tải chúng khi cần, ứng dụng có thể hiển thị nội dung chính nhanh hơn, mang lại trải nghiệm tốt hơn cho người dùng. Các phương án khác có thể cải thiện hiệu suất nhưng không trực tiếp giải quyết vấn đề tải mã không cần thiết ngay lập tức.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một ứng dụng React phức tạp sử dụng Redux để quản lý state. Một số actions được dispatch rất thường xuyên (ví dụ: nhập liệu vào một trường tìm kiếm) và mỗi lần dispatch đều kích hoạt một chuỗi các selector phức tạp, dẫn đến hiệu suất UI kém. Bạn nên áp dụng kỹ thuật nào để tối ưu hóa việc xử lý state trong trường hợp này?",
+    "options": [
+      "A. Sử dụng `useCallback` và `useMemo` trong các component để memoize các hàm và giá trị được truyền xuống.",
+      "B. Triển khai debounce hoặc throttle cho các actions được dispatch thường xuyên để giảm số lần cập nhật state.",
+      "C. Tối ưu hóa các Redux selector bằng cách sử dụng thư viện như Reselect để tạo memoized selectors, chỉ tính toán lại khi các input thay đổi.",
+      "D. Chuyển đổi các state cục bộ (local state) từ Redux sang `useState` hoặc `useReducer` để giảm tải cho Redux store."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi các selector phức tạp được gọi lại thường xuyên với cùng một input nhưng vẫn tính toán lại, đó là một điểm nghẽn hiệu suất. Reselect (hoặc các thư viện tương tự) cho phép tạo memoized selectors, nghĩa là chúng chỉ tính toán lại giá trị đầu ra khi các input selector của chúng thay đổi. Điều này đảm bảo rằng các tính toán tốn kém chỉ diễn ra khi thực sự cần thiết, cải thiện đáng kể hiệu suất của Redux store và các component phụ thuộc.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong quá trình phát triển một ứng dụng React, bạn nhận thấy rằng một số hiệu ứng DOM cần được thực hiện đồng bộ ngay sau khi trình duyệt đã cập nhật bố cục (layout) nhưng trước khi vẽ (paint) lại màn hình. Hook nào của React được thiết kế đặc biệt cho trường hợp này?",
+    "options": [
+      "A. `useEffect`",
+      "B. `useLayoutEffect`",
+      "C. `useCallback`",
+      "D. `useMemo`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`useLayoutEffect` chạy đồng bộ ngay sau khi React đã thực hiện tất cả các thay đổi DOM và trước khi trình duyệt có cơ hội vẽ lại màn hình. Điều này rất hữu ích cho các tác vụ cần đo lường bố cục DOM (ví dụ: lấy chiều cao, vị trí của một phần tử) hoặc thực hiện các thay đổi DOM nhỏ mà cần được hiển thị ngay lập tức để tránh 'flash' hoặc giật lag. `useEffect` chạy bất đồng bộ sau khi trình duyệt đã vẽ xong.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng React đang gặp vấn đề về khả năng truy cập (accessibility). Cụ thể, người dùng sử dụng bàn phím hoặc trình đọc màn hình gặp khó khăn khi tương tác với các component tùy chỉnh như dropdown menu hoặc modal dialog. Biện pháp nào sau đây là quan trọng nhất để cải thiện khả năng truy cập cho các component này?",
+    "options": [
+      "A. Đảm bảo tất cả các element tương tác có `tabIndex='0'` để có thể focus bằng bàn phím.",
+      "B. Sử dụng các thuộc tính ARIA (Accessible Rich Internet Applications) phù hợp để mô tả vai trò, trạng thái và giá trị của các component tùy chỉnh cho trình đọc màn hình.",
+      "C. Cung cấp các phím tắt (keyboard shortcuts) cho tất cả các chức năng chính của ứng dụng.",
+      "D. Đảm bảo độ tương phản màu sắc đủ giữa văn bản và nền để người dùng có thị lực kém có thể đọc được."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc dù tất cả các lựa chọn đều quan trọng cho accessibility, việc sử dụng các thuộc tính ARIA là cực kỳ quan trọng đối với các component UI tùy chỉnh (custom UI components) không phải là các phần tử HTML gốc có ngữ nghĩa accessibility tích hợp. ARIA cung cấp các cách để mô tả các vai trò (role), trạng thái (state) và thuộc tính (property) của các thành phần này cho trình đọc màn hình, giúp người dùng khuyết tật hiểu và tương tác với chúng một cách hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án React lớn, bạn được yêu cầu thiết kế một hệ thống quản lý state cho các form phức tạp với nhiều trường, validation động và phụ thuộc lẫn nhau. Thay vì sử dụng Context API hoặc Redux cho mỗi form, bạn quyết định xây dựng một Custom Hook. Lợi ích chính của việc sử dụng Custom Hook trong trường hợp này là gì?",
+    "options": [
+      "A. Giảm kích thước bundle JavaScript của ứng dụng.",
+      "B. Tăng cường khả năng tái sử dụng logic stateful trên nhiều form khác nhau mà không cần chia sẻ state toàn cục hoặc prop drilling.",
+      "C. Cải thiện hiệu suất render của các form bằng cách ngăn chặn re-render không cần thiết.",
+      "D. Đơn giản hóa việc kiểm thử (testing) các form bằng cách tách biệt UI và logic."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Custom Hooks được thiết kế để tái sử dụng logic stateful. Trong trường hợp này, một Custom Hook cho phép bạn đóng gói logic quản lý form (state của các trường, validation, xử lý submit) và tái sử dụng nó trên nhiều form khác nhau mà không cần phải truyền props qua nhiều cấp (prop drilling) hoặc đưa state form vào một store toàn cục không cần thiết. Điều này giúp code sạch hơn, dễ bảo trì và mở rộng hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng React đang sử dụng Redux và có một số components được kết nối với store. Bạn nhận thấy rằng khi một phần nhỏ của state thay đổi, nhiều components không liên quan cũng re-render. Điều này xảy ra ngay cả khi các selector của chúng được memoize. Nguyên nhân tiềm ẩn nào sau đây cần được điều tra đầu tiên?",
+    "options": [
+      "A. Việc sử dụng `connect` HOC từ `react-redux` thay vì `useSelector` hook.",
+      "B. Các selector được memoize nhưng không được sử dụng đúng cách, hoặc các input của selector vẫn thay đổi tham chiếu (reference).",
+      "C. Các components con không được bọc trong `React.memo`.",
+      "D. State của Redux store được mutate trực tiếp thay vì tạo ra một state mới."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Redux dựa vào tính bất biến (immutability) của state để phát hiện sự thay đổi. Nếu state bị mutate trực tiếp (thay đổi một đối tượng hoặc mảng hiện có thay vì tạo một bản sao mới), Redux sẽ không thể phát hiện sự thay đổi thông qua kiểm tra tham chiếu. Điều này có thể khiến các selector (ngay cả khi được memoize) không nhận ra rằng state *đã* thay đổi, hoặc tệ hơn, các component được kết nối có thể re-render vì Redux nghĩ rằng toàn bộ state gốc đã thay đổi tham chiếu, dẫn đến re-render không cần thiết.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần xây dựng một component React hiển thị một biểu đồ thời gian thực, liên tục cập nhật dữ liệu từ một WebSocket. Việc cập nhật dữ liệu quá nhanh (nhiều lần mỗi giây) gây ra re-render liên tục và làm giảm hiệu suất. Kỹ thuật nào sau đây là hiệu quả nhất để xử lý dữ liệu tần suất cao này mà vẫn duy trì UI mượt mà?",
+    "options": [
+      "A. Sử dụng `useReducer` thay vì `useState` để quản lý state của biểu đồ vì nó hiệu quả hơn với các cập nhật phức tạp.",
+      "B. Áp dụng kỹ thuật throttling hoặc debouncing cho các cập nhật state để giới hạn tần suất re-render của component.",
+      "C. Tối ưu hóa component biểu đồ bằng `React.memo` và đảm bảo các props truyền vào là bất biến.",
+      "D. Chuyển đổi logic cập nhật biểu đồ sang Web Workers để xử lý dữ liệu và render biểu đồ bên ngoài luồng chính."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Đối với các tác vụ tính toán hoặc xử lý dữ liệu tần suất cao mà không cần trực tiếp thao tác DOM, việc chuyển chúng sang Web Workers là một giải pháp hiệu quả. Web Workers chạy trên một luồng riêng biệt, không chặn luồng chính của trình duyệt (UI thread), giúp giữ cho UI luôn mượt mà và phản hồi nhanh ngay cả khi có nhiều dữ liệu đang được xử lý. Kết quả cuối cùng có thể được gửi lại luồng chính để cập nhật React state và render.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một ứng dụng React Native hoặc React web sử dụng React Navigation, bạn cần đảm bảo rằng một số màn hình/route nhất định chỉ có thể truy cập được sau khi người dùng đã đăng nhập. Hơn nữa, bạn muốn xử lý logic chuyển hướng phức tạp (ví dụ: chuyển hướng đến trang đăng nhập, sau đó quay lại trang ban đầu sau khi đăng nhập thành công). Cách tiếp cận nào sau đây là tốt nhất để quản lý xác thực và chuyển hướng trong hệ thống định tuyến?",
+    "options": [
+      "A. Kiểm tra trạng thái đăng nhập trong mỗi component màn hình và sử dụng `history.push` để chuyển hướng nếu chưa đăng nhập.",
+      "B. Sử dụng Context API hoặc Redux để lưu trữ trạng thái đăng nhập và tạo một AuthProvider bao bọc toàn bộ ứng dụng, quản lý chuyển hướng thông qua một Custom Hook.",
+      "C. Triển khai một Higher-Order Component (HOC) hoặc Render Prop để bọc các màn hình cần bảo vệ, thực hiện kiểm tra xác thực và chuyển hướng.",
+      "D. Cấu hình các route bảo vệ trong React Navigation bằng cách sử dụng các Navigator lồng nhau và một `AuthStack` riêng biệt."
+    ],
+    "correctAnswer": "D",
+    "explanation": "React Navigation (và các thư viện định tuyến hiện đại khác) cung cấp các mẫu thiết kế mạnh mẽ cho việc quản lý xác thực thông qua Navigator lồng nhau. Bằng cách định nghĩa một `AuthStack` (chứa các màn hình đăng nhập/đăng ký) và một `AppStack` (chứa các màn hình chính), bạn có thể dễ dàng chuyển đổi giữa hai stack này dựa trên trạng thái xác thực. Điều này giúp quản lý logic chuyển hướng một cách tập trung, rõ ràng và hiệu quả, phù hợp với kiến trúc định tuyến của ứng dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang tối ưu hóa hiệu suất của một ứng dụng React và nhận thấy rằng các thư viện bên thứ ba chiếm một phần lớn kích thước bundle cuối cùng. Bạn muốn giảm thời gian tải ban đầu bằng cách chỉ tải các thư viện này khi chúng thực sự cần thiết. Kỹ thuật nào sau đây là phù hợp nhất để đạt được điều này?",
+    "options": [
+      "A. Sử dụng `React.lazy` và `Suspense` để tải động các component sử dụng các thư viện này.",
+      "B. Cấu hình Webpack để sử dụng `externals` và tải các thư viện từ CDN.",
+      "C. Sử dụng `import()` động để tải các module chứa thư viện khi cần.",
+      "D. Phân tích bundle bằng Webpack Bundle Analyzer và loại bỏ các thư viện không sử dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc sử dụng `import()` động là cách tiêu chuẩn để thực hiện code splitting cấp độ module, cho phép bạn tải các thư viện hoặc các phần mã khác chỉ khi chúng được yêu cầu. Khi kết hợp với `React.lazy` (cho component) hoặc trực tiếp trong logic (cho các thư viện không phải component), nó giúp giảm kích thước bundle JavaScript ban đầu và cải thiện thời gian tải. `React.lazy` thực chất là một wrapper xung quanh `import()` động để tải component.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng React sử dụng Context API để quản lý theme (light/dark mode). Khi theme thay đổi, toàn bộ ứng dụng re-render, gây ra hiệu suất kém mặc dù chỉ một số component cần hiển thị lại. Bạn cần một giải pháp để tối ưu hóa việc này. Cách tiếp cận nào sau đây là hiệu quả nhất để giải quyết vấn đề re-render quá mức của Context API?",
+    "options": [
+      "A. Chia nhỏ Context thành nhiều Context nhỏ hơn, mỗi Context chỉ chứa một phần state cụ thể (ví dụ: `ThemeContext` và `UserContext`).",
+      "B. Sử dụng `React.memo` cho tất cả các component con không liên quan đến theme.",
+      "C. Chuyển đổi việc quản lý theme sang một thư viện quản lý state toàn cục như Zustand hoặc Recoil, nơi các component có thể đăng ký lắng nghe các phần state cụ thể.",
+      "D. Bọc các component consumer trong `useCallback` và `useMemo` để memoize chúng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Vấn đề chính của Context API là khi giá trị của `Provider` thay đổi, tất cả các `Consumer` (hoặc component sử dụng `useContext`) đều re-render, ngay cả khi chúng chỉ sử dụng một phần nhỏ của giá trị đó. Chia nhỏ Context thành nhiều Context chuyên biệt hơn là một chiến lược hiệu quả. Ví dụ, nếu `ThemeContext` chỉ chứa thông tin theme, chỉ những component quan tâm đến theme mới re-render khi theme thay đổi, trong khi `UserContext` sẽ không bị ảnh hưởng.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang triển khai một tính năng kéo và thả (drag-and-drop) phức tạp trong React. Trong quá trình kéo, có rất nhiều cập nhật vị trí của phần tử đang kéo. Việc này gây ra re-render liên tục và làm giảm độ mượt mà của UI. Bạn nên sử dụng kỹ thuật nào để tối ưu hóa hiệu suất của tính năng này?",
+    "options": [
+      "A. Sử dụng `useRef` để trực tiếp thao tác thuộc tính `transform` hoặc `left`/`top` của DOM element thay vì cập nhật state và để React re-render.",
+      "B. Bọc component kéo và thả trong `React.memo` và `useCallback`/`useMemo` để ngăn chặn re-render.",
+      "C. Sử dụng `requestAnimationFrame` để đồng bộ hóa các cập nhật vị trí với chu kỳ làm mới của trình duyệt, tránh các cập nhật không cần thiết.",
+      "D. Chuyển đổi logic kéo và thả sang một thư viện bên thứ ba chuyên dụng như `react-beautiful-dnd` hoặc `react-dnd`."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đối với các animation hoặc tương tác tần suất cao như kéo và thả, việc sử dụng `requestAnimationFrame` là một kỹ thuật tối ưu hóa hiệu suất mạnh mẽ. Nó đảm bảo rằng các cập nhật DOM được thực hiện ngay trước lần vẽ tiếp theo của trình duyệt, giúp animation mượt mà và tránh giật lag. Kết hợp với `useRef` để thao tác DOM trực tiếp cho các cập nhật vị trí nhỏ là một mẫu thiết kế phổ biến để đạt được hiệu suất cao nhất trong các trường hợp này.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng React có các thành phần UI phức tạp cần được kiểm thử kỹ lưỡng về mặt tương tác và hành vi người dùng. Bạn cần một framework kiểm thử tích hợp (integration testing) và end-to-end (E2E) mạnh mẽ, đáng tin cậy, có thể mô phỏng tương tác người dùng thực tế trong trình duyệt. Lựa chọn nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Jest và React Testing Library để kiểm thử unit và integration.",
+      "B. Cypress hoặc Playwright để kiểm thử end-to-end và integration.",
+      "C. Enzyme để kiểm thử unit và shallow rendering.",
+      "D. Storybook để phát triển và kiểm thử các component UI độc lập."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cypress và Playwright là các framework kiểm thử E2E và integration mạnh mẽ, được thiết kế để chạy trong trình duyệt thực (hoặc headless browser) và mô phỏng tương tác người dùng một cách chân thực. Chúng cung cấp API dễ sử dụng để viết các kịch bản kiểm thử bao phủ toàn bộ luồng người dùng, từ đăng nhập đến tương tác với các thành phần UI phức tạp, rất phù hợp cho việc kiểm thử các ứng dụng React phức tạp. Jest/RTL tập trung vào unit/integration ở cấp độ component, không phải E2E.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi phát triển một thư viện component React, bạn muốn cung cấp một cách linh hoạt để người dùng thư viện có thể tùy chỉnh giao diện của component mà không cần thay đổi code gốc hoặc sử dụng CSS ghi đè phức tạp. Phương pháp nào sau đây là tốt nhất để đạt được khả năng tùy biến cao này?",
+    "options": [
+      "A. Sử dụng CSS-in-JS (như styled-components) và cho phép người dùng truyền vào các props style động.",
+      "B. Cung cấp một bộ các props `className` và `style` cho mỗi phần tử con trong component, cho phép người dùng áp dụng CSS tùy chỉnh.",
+      "C. Áp dụng Render Props pattern, cho phép người dùng thay thế các phần UI bên trong component bằng logic render của riêng họ.",
+      "D. Thiết kế các component với các slot (ví dụ: `children` prop hoặc các props cụ thể như `header`, `footer`), cho phép người dùng truyền vào các React element tùy chỉnh."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Thiết kế component với các 'slot' (thường thông qua `children` prop hoặc các props cụ thể chấp nhận React elements) là một trong những cách mạnh mẽ nhất để cung cấp khả năng tùy biến UI cao trong thư viện component. Nó cho phép người dùng truyền vào toàn bộ các React component hoặc element tùy chỉnh vào các vị trí được định trước, kiểm soát hoàn toàn giao diện và hành vi của các phần đó mà vẫn giữ được cấu trúc và logic cốt lõi của component thư viện.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng React đang hiển thị dữ liệu nhạy cảm và cần đảm bảo rằng không có thông tin cá nhân nào bị rò rỉ trong quá trình render hoặc trong các logs. Bạn cần triển khai một Error Boundary để bắt lỗi trong cây component và xử lý chúng một cách an toàn. Điều nào sau đây là quan trọng nhất khi thiết kế Error Boundary cho một ứng dụng cấp doanh nghiệp?",
+    "options": [
+      "A. Chỉ hiển thị thông báo lỗi chung chung cho người dùng cuối và log chi tiết lỗi tới một dịch vụ giám sát lỗi (ví dụ: Sentry, Bugsnag) mà không bao gồm dữ liệu nhạy cảm.",
+      "B. Sử dụng `componentDidCatch` để reset state của component bị lỗi và cho phép ứng dụng tiếp tục hoạt động.",
+      "C. Bọc toàn bộ ứng dụng bằng một Error Boundary duy nhất để bắt tất cả các lỗi.",
+      "D. Hiển thị stack trace đầy đủ cho người dùng cuối để họ có thể báo cáo lỗi chi tiết."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đối với ứng dụng doanh nghiệp xử lý dữ liệu nhạy cảm, nguyên tắc hàng đầu khi xử lý lỗi là không bao giờ hiển thị thông tin chi tiết (như stack trace hoặc dữ liệu state) cho người dùng cuối. Error Boundary nên hiển thị một thông báo lỗi thân thiện và chung chung. Đồng thời, nó phải log lỗi chi tiết (nhưng đã được lọc bỏ dữ liệu nhạy cảm) đến một dịch vụ giám sát lỗi chuyên dụng để đội ngũ phát triển có thể phân tích và khắc phục mà không làm lộ thông tin người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn đang phát triển một ứng dụng React với kiến trúc Micro-frontend, nơi các ứng dụng React nhỏ hơn được nhúng vào một shell chính. Thách thức lớn nhất khi quản lý trạng thái và giao tiếp giữa các Micro-frontend không liên quan trực tiếp là gì?",
+    "options": [
+      "A. Đảm bảo tất cả các Micro-frontend sử dụng cùng một phiên bản React.",
+      "B. Chia sẻ Context API giữa các Micro-frontend khác nhau.",
+      "C. Sử dụng một Pub/Sub mechanism (ví dụ: Custom Events, Broadcast Channel API, hoặc thư viện chuyên dụng) để các Micro-frontend có thể giao tiếp một cách lỏng lẻo và độc lập.",
+      "D. Đồng bộ hóa các thư viện quản lý state (như Redux) trên tất cả các Micro-frontend."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong kiến trúc Micro-frontend, các ứng dụng con thường được thiết kế để hoạt động độc lập nhất có thể. Giao tiếp giữa chúng nên là 'lỏng lẻo' (loosely coupled). Một cơ chế Pub/Sub (Publisher/Subscriber) như Custom Events (cho cùng một cửa sổ trình duyệt), Broadcast Channel API (cho các tab/cửa sổ khác nhau) hoặc các thư viện chuyên dụng cho phép các Micro-frontend phát đi các sự kiện và lắng nghe các sự kiện mà không cần biết về sự tồn tại của nhau, đảm bảo tính độc lập và khả năng mở rộng.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng React sử dụng `useEffect` để fetch dữ liệu từ API. Khi component unmounts hoặc dependencies thay đổi, có nguy cơ xảy ra 'memory leak' hoặc 'race condition' nếu API call vẫn đang chạy. Cách tiếp cận nào sau đây là tốt nhất để xử lý side effects với `useEffect` một cách an toàn và hiệu quả?",
+    "options": [
+      "A. Sử dụng `async/await` bên trong `useEffect` để đảm bảo các API calls được thực thi tuần tự.",
+      "B. Trả về một hàm cleanup từ `useEffect` để hủy bỏ (cancel) các API requests đang chờ xử lý hoặc dọn dẹp các subscriptions.",
+      "C. Bọc toàn bộ logic `useEffect` trong một `try-catch` block để xử lý lỗi.",
+      "D. Đảm bảo rằng tất cả các dependencies của `useEffect` đều được memoize bằng `useCallback` hoặc `useMemo`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hàm cleanup được trả về từ `useEffect` là cơ chế chính để xử lý các side effects cần dọn dẹp. Đối với API calls, điều này có nghĩa là hủy bỏ request đang chờ xử lý nếu component unmounts hoặc dependencies thay đổi trước khi request hoàn thành, ngăn chặn 'race conditions' (nơi một request cũ hoàn thành sau một request mới) và 'memory leaks' (cố gắng cập nhật state trên một component đã unmounted).",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi phát triển một ứng dụng React yêu cầu khả năng mở rộng cao và hiệu suất tối ưu cho việc quản lý state, đặc biệt là state derived (state được tính toán từ các state khác) và async state (state từ các API calls), thư viện quản lý state nào sau đây cung cấp một mô hình tốt nhất để giải quyết các vấn đề này một cách hiệu quả?",
+    "options": [
+      "A. Context API, vì nó là giải pháp tích hợp sẵn của React và đơn giản để sử dụng.",
+      "B. Redux Toolkit, với các tính năng như `createSlice` và `createAsyncThunk`, cung cấp cấu trúc rõ ràng và công cụ mạnh mẽ cho state phức tạp.",
+      "C. Zustand, vì nó cực kỳ nhẹ, không boilerplate và dễ dàng tạo các selector để truy cập state.",
+      "D. Recoil, với mô hình `atom` và `selector` của nó, được thiết kế đặc biệt để quản lý state derived và async state một cách hiệu quả và có thể mở rộng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Recoil được Facebook tạo ra để giải quyết các vấn đề về state derived và async state một cách hiệu quả và có thể mở rộng, đặc biệt là trong các ứng dụng lớn. Mô hình `atom` (đơn vị state) và `selector` (hàm thuần túy tính toán state derived từ các atom) của nó cung cấp một cách mạnh mẽ để quản lý các phụ thuộc và tự động tối ưu hóa re-render khi state thay đổi, phù hợp cho các kịch bản phức tạp. Redux Toolkit cũng mạnh mẽ nhưng Recoil có cách tiếp cận tự nhiên hơn cho state derived và async state.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn đang làm việc trên một ứng dụng React có nhiều route và mỗi route có các dependencies JavaScript lớn. Để tối ưu hóa thời gian tải ban đầu, bạn quyết định triển khai code splitting theo route. Kỹ thuật nào sau đây là cách hiệu quả nhất để thực hiện code splitting theo route trong một ứng dụng React?",
+    "options": [
+      "A. Sử dụng `React.lazy` kết hợp với `Suspense` để tải động các component route khi chúng được yêu cầu.",
+      "B. Cấu hình Webpack `optimization.splitChunks` để tự động chia các module thành các chunk nhỏ hơn.",
+      "C. Tải tất cả các JavaScript bundle trên CDN để tăng tốc độ tải.",
+      "D. Sử dụng một thư viện routing bên ngoài như `react-router-dom` và cấu hình `lazy` loading cho từng route."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`React.lazy` kết hợp với `Suspense` là cách tích hợp và được khuyến nghị nhất trong React để thực hiện code splitting cấp độ component/route. Nó cho phép bạn khai báo một component sẽ được tải động khi nó được render lần đầu, và `Suspense` sẽ hiển thị một fallback UI trong khi component đang được tải. Đây là phương pháp trực tiếp và hiệu quả nhất để giảm kích thước bundle JavaScript ban đầu cho từng route.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một ứng dụng React sử dụng Server-Side Rendering (SSR) để cải thiện SEO và hiệu suất tải ban đầu. Tuy nhiên, bạn nhận thấy rằng sau khi trang được tải, có một độ trễ đáng kể trước khi ứng dụng trở nên tương tác được (Time To Interactive - TTI). Nguyên nhân chính của độ trễ này là gì và chiến lược nào nên được ưu tiên để giảm TTI?",
+    "options": [
+      "A. Kích thước bundle JavaScript quá lớn, khiến trình duyệt mất nhiều thời gian để tải, phân tích cú pháp và thực thi.",
+      "B. Server rendering quá chậm, làm tăng Time To First Byte (TTFB).",
+      "C. Thiếu `React.memo` cho các component, dẫn đến re-render không cần thiết sau hydration.",
+      "D. Việc sử dụng quá nhiều API calls trong `useEffect` trên client-side sau khi hydration."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sau khi SSR gửi HTML đến client, trình duyệt cần tải, phân tích cú pháp và thực thi JavaScript để 'hydrate' ứng dụng và làm cho nó tương tác được. Nếu bundle JavaScript quá lớn, quá trình này sẽ mất nhiều thời gian, dẫn đến TTI cao. Code splitting, lazy loading, tối ưu hóa bundle và sử dụng các kỹ thuật như `defer` hoặc `async` cho script tags là các chiến lược quan trọng để giảm kích thước và thời gian xử lý JavaScript, từ đó cải thiện TTI.",
+    "difficulty": "EXPERT",
+    "skillArea": "React",
+    "category": "ANALYSIS"
+  }
+]

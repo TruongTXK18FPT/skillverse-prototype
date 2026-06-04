@@ -1,0 +1,812 @@
+[
+  {
+    "questionText": "Trong khung ưu tiên MoSCoW, chữ 'M' đại diện cho nhóm yêu cầu nào?",
+    "options": [
+      "A. Must-have: Yêu cầu bắt buộc phải có để sản phẩm hoạt động được, không thể thiếu.",
+      "B. Maybe: Yêu cầu có thể xem xét nếu thời gian và nguồn lực cho phép.",
+      "C. Major: Yêu cầu quan trọng nhất, ảnh hưởng lớn đến doanh thu.",
+      "D. Mandatory: Yêu cầu pháp lý bắt buộc, không liên quan đến nghiệp vụ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "MoSCoW là viết tắt của Must-have, Should-have, Could-have, Won’t-have. 'Must-have' là những yêu cầu không thể thiếu để sản phẩm đáp ứng được mục tiêu cơ bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502420642_BEGINNER_0_dyl8"
+  },
+  {
+    "questionText": "Khi xây dựng roadmap cho dự án phát triển ứng dụng ngân hàng số tại Việt Nam, yếu tố nào sau đây KHÔNG phải là tiêu chí chính để sắp xếp thứ tự các hạng mục backlog?",
+    "options": [
+      "A. Giá trị kinh doanh mang lại cho ngân hàng và khách hàng.",
+      "B. Độ phức tạp và nỗ lực kỹ thuật cần thiết để triển khai.",
+      "C. Màu sắc giao diện người dùng được ưa chuộng trên thị trường.",
+      "D. Sự phụ thuộc giữa các tính năng (ví dụ: đăng nhập trước khi chuyển tiền)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Roadmap tập trung vào giá trị kinh doanh, nỗ lực kỹ thuật và sự phụ thuộc giữa các tính năng. Màu sắc giao diện không phải là yếu tố quyết định thứ tự triển khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502420642_BEGINNER_1_bcd3"
+  },
+  {
+    "questionText": "Một dự án triển khai hệ thống ERP cho công ty sản xuất tại Việt Nam có nhiều stakeholder với yêu cầu khác nhau. Business Analyst nên làm gì để cân bằng giữa nhu cầu của các bên và năng lực triển khai của team?",
+    "options": [
+      "A. Chấp nhận tất cả yêu cầu từ mọi stakeholder mà không sàng lọc để tránh xung đột.",
+      "B. Sử dụng khung ưu tiên như MoSCoW hoặc ma trận giá trị/nỗ lực để đánh giá và sắp xếp thứ tự triển khai.",
+      "C. Chỉ tập trung vào yêu cầu của phòng IT vì họ hiểu rõ hệ thống nhất.",
+      "D. Đề xuất hủy bỏ dự án nếu có quá nhiều yêu cầu mâu thuẫn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng khung ưu tiên giúp Business Analyst đánh giá khách quan giá trị và nỗ lực, từ đó cân bằng nhu cầu stakeholder với năng lực triển khai của team.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502420642_BEGINNER_2_5o5r"
+  },
+  {
+    "questionText": "Trong ma trận giá trị so với nỗ lực (Value vs Effort), hạng mục nào sau đây nên được ưu tiên triển khai trước?",
+    "options": [
+      "A. Giá trị cao, nỗ lực cao: Mang lại lợi ích lớn nhưng tốn nhiều công sức.",
+      "B. Giá trị thấp, nỗ lực thấp: Ít lợi ích nhưng dễ triển khai.",
+      "C. Giá trị cao, nỗ lực thấp: Mang lại lợi ích lớn với ít công sức.",
+      "D. Giá trị thấp, nỗ lực cao: Ít lợi ích và tốn nhiều công sức."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hạng mục có giá trị cao và nỗ lực thấp mang lại lợi ích tối đa với chi phí thấp nhất, nên được ưu tiên triển khai trước.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502420642_BEGINNER_3_3kz0"
+  },
+  {
+    "questionText": "Khi xây dựng roadmap cho dự án cải tiến quy trình bán hàng online tại công ty thương mại điện tử, Business Analyst cần đảm bảo điều gì đầu tiên?",
+    "options": [
+      "A. Roadmap phải bao gồm tất cả các tính năng mà đội ngũ marketing đề xuất.",
+      "B. Roadmap phải phù hợp với mục tiêu chiến lược của công ty và khả năng triển khai của team.",
+      "C. Roadmap phải hoàn thành trong thời gian ngắn nhất có thể, bất kể chất lượng.",
+      "D. Roadmap chỉ cần tập trung vào công nghệ mới nhất mà không cần quan tâm đến nhu cầu người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Roadmap cần phù hợp với mục tiêu chiến lược và khả năng triển khai để đảm bảo tính khả thi và hiệu quả của dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502420642_BEGINNER_4_kymp"
+  },
+  {
+    "questionText": "Một dự án phát triển phần mềm quản lý kho hàng cho doanh nghiệp logistics có backlog gồm nhiều hạng mục. Business Analyst nên làm gì để xác định thứ tự triển khai hợp lý?",
+    "options": [
+      "A. Triển khai tất cả các hạng mục cùng một lúc để tiết kiệm thời gian.",
+      "B. Sắp xếp thứ tự dựa trên sự phụ thuộc giữa các tính năng và giá trị kinh doanh.",
+      "C. Chỉ triển khai những hạng mục mà đội ngũ phát triển thích làm.",
+      "D. Triển khai theo thứ tự ngẫu nhiên mà không cần đánh giá."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thứ tự triển khai cần dựa trên sự phụ thuộc giữa các tính năng và giá trị kinh doanh để đảm bảo hiệu quả và tính logic của roadmap.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502420642_BEGINNER_5_9cew"
+  },
+  {
+    "questionText": "Trong khung ưu tiên MoSCoW, hạng mục nào sau đây thuộc nhóm 'Should-have'?",
+    "options": [
+      "A. Tính năng đăng nhập bằng vân tay cho ứng dụng ngân hàng, không bắt buộc nhưng tăng trải nghiệm người dùng.",
+      "B. Tính năng chuyển tiền cơ bản, không thể thiếu để ứng dụng hoạt động.",
+      "C. Tính năng báo cáo doanh thu chi tiết, không cần thiết trong giai đoạn đầu.",
+      "D. Tính năng thanh toán hóa đơn điện nước, không liên quan đến nghiệp vụ cốt lõi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'Should-have' là những tính năng quan trọng nhưng không bắt buộc, có thể triển khai sau nếu cần. Đăng nhập bằng vân tay thuộc nhóm này.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502420642_BEGINNER_6_dj1t"
+  },
+  {
+    "questionText": "Khi xây dựng roadmap cho dự án triển khai hệ thống CRM tại công ty bảo hiểm, Business Analyst cần lưu ý điều gì để đảm bảo tính khả thi?",
+    "options": [
+      "A. Chỉ tập trung vào yêu cầu của phòng kinh doanh mà bỏ qua các phòng ban khác.",
+      "B. Đánh giá năng lực triển khai của team và sắp xếp các hạng mục theo thứ tự hợp lý.",
+      "C. Đưa tất cả các tính năng đề xuất vào roadmap mà không sàng lọc.",
+      "D. Không cần thảo luận với đội ngũ phát triển về khả năng triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Roadmap cần đánh giá năng lực triển khai của team để đảm bảo tính khả thi và tránh quá tải công việc.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502420642_BEGINNER_7_rhco"
+  },
+  {
+    "questionText": "Trong ma trận giá trị so với nỗ lực, hạng mục nào sau đây KHÔNG nên được ưu tiên triển khai?",
+    "options": [
+      "A. Tính năng thanh toán bằng ví điện tử cho ứng dụng thương mại điện tử, mang lại giá trị cao và dễ triển khai.",
+      "B. Tính năng tùy chỉnh giao diện người dùng cho từng khách hàng, giá trị thấp nhưng tốn nhiều công sức.",
+      "C. Tính năng phân tích hành vi khách hàng, giá trị cao và nỗ lực vừa phải.",
+      "D. Tính năng đăng nhập bằng email và mật khẩu, giá trị cao và nỗ lực thấp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hạng mục có giá trị thấp và nỗ lực cao không mang lại lợi ích tương xứng, không nên ưu tiên triển khai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502420642_BEGINNER_8_ak66"
+  },
+  {
+    "questionText": "Một dự án phát triển ứng dụng đặt xe công nghệ tại Việt Nam có nhiều yêu cầu từ các stakeholder. Business Analyst nên làm gì để đảm bảo roadmap phù hợp với mục tiêu sản phẩm?",
+    "options": [
+      "A. Chấp nhận tất cả yêu cầu từ stakeholder mà không đánh giá giá trị kinh doanh.",
+      "B. Sử dụng khung ưu tiên để đánh giá và sắp xếp các hạng mục theo giá trị và nỗ lực.",
+      "C. Chỉ tập trung vào yêu cầu của đội ngũ phát triển để đảm bảo tiến độ.",
+      "D. Không cần xây dựng roadmap vì dự án quá nhỏ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng khung ưu tiên giúp Business Analyst đánh giá giá trị và nỗ lực, từ đó xây dựng roadmap phù hợp với mục tiêu sản phẩm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502420642_BEGINNER_9_snwv"
+  },
+  {
+    "questionText": "Khi xây dựng roadmap cho dự án triển khai hệ thống quản lý chuỗi cung ứng, Business Analyst cần đảm bảo điều gì để roadmap thực tế và hiệu quả?",
+    "options": [
+      "A. Roadmap phải bao gồm tất cả các tính năng mà phòng logistics đề xuất.",
+      "B. Roadmap phải phù hợp với năng lực triển khai của team và mục tiêu chiến lược của công ty.",
+      "C. Roadmap chỉ cần tập trung vào công nghệ mới nhất mà không cần đánh giá nhu cầu thực tế.",
+      "D. Roadmap không cần quan tâm đến sự phụ thuộc giữa các tính năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Roadmap cần phù hợp với năng lực triển khai và mục tiêu chiến lược để đảm bảo tính thực tế và hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502420642_BEGINNER_10_cj0l"
+  },
+  {
+    "questionText": "Trong khung ưu tiên MoSCoW, hạng mục nào sau đây thuộc nhóm 'Could-have'?",
+    "options": [
+      "A. Tính năng thanh toán bằng thẻ tín dụng cho ứng dụng thương mại điện tử, không bắt buộc nhưng cải thiện trải nghiệm.",
+      "B. Tính năng đăng nhập bằng số điện thoại, bắt buộc để ứng dụng hoạt động.",
+      "C. Tính năng báo cáo doanh thu chi tiết, không cần thiết trong giai đoạn đầu.",
+      "D. Tính năng quản lý kho hàng, không liên quan đến nghiệp vụ cốt lõi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'Could-have' là những tính năng có thể triển khai nếu thời gian và nguồn lực cho phép. Thanh toán bằng thẻ tín dụng thuộc nhóm này.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "KNOWLEDGE",
+    "id": "q_1780502420642_BEGINNER_11_z144"
+  },
+  {
+    "questionText": "Một dự án phát triển phần mềm quản lý nhân sự cho công ty đa quốc gia có nhiều yêu cầu từ các phòng ban. Business Analyst nên làm gì để cân bằng giữa nhu cầu và năng lực triển khai?",
+    "options": [
+      "A. Chấp nhận tất cả yêu cầu mà không sàng lọc để tránh xung đột.",
+      "B. Sử dụng ma trận giá trị/nỗ lực để đánh giá và sắp xếp thứ tự triển khai hợp lý.",
+      "C. Chỉ tập trung vào yêu cầu của phòng nhân sự vì họ là người sử dụng chính.",
+      "D. Đề xuất hủy bỏ dự án nếu có quá nhiều yêu cầu mâu thuẫn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng ma trận giá trị/nỗ lực giúp Business Analyst đánh giá khách quan và sắp xếp thứ tự triển khai phù hợp với năng lực của team.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502420642_BEGINNER_12_l04t"
+  },
+  {
+    "questionText": "Khi xây dựng roadmap cho dự án cải tiến quy trình chăm sóc khách hàng tại ngân hàng, Business Analyst cần đảm bảo điều gì để roadmap hiệu quả?",
+    "options": [
+      "A. Roadmap phải bao gồm tất cả các tính năng mà đội ngũ chăm sóc khách hàng đề xuất.",
+      "B. Roadmap phải phù hợp với mục tiêu chiến lược của ngân hàng và khả năng triển khai của team.",
+      "C. Roadmap chỉ cần tập trung vào công nghệ AI mà không cần đánh giá nhu cầu thực tế.",
+      "D. Roadmap không cần quan tâm đến sự phụ thuộc giữa các tính năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Roadmap cần phù hợp với mục tiêu chiến lược và khả năng triển khai để đảm bảo tính hiệu quả và khả thi của dự án.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502420642_BEGINNER_13_62hv"
+  },
+  {
+    "questionText": "Trong dự án phát triển sản phẩm ngân hàng số tại Việt Nam, nhóm của bạn đang sử dụng khung MoSCoW để ưu tiên backlog. Một hạng mục được gắn nhãn 'Must have' nhưng có độ phức tạp kỹ thuật cao và tốn nhiều thời gian. Làm thế nào để xử lý hạng mục này trong roadmap?",
+    "options": [
+      "A. Đặt hạng mục này vào sprint đầu tiên để đảm bảo hoàn thành đúng hạn, bất kể rủi ro kỹ thuật.",
+      "B. Chia nhỏ hạng mục thành các task nhỏ hơn, ưu tiên hoàn thành phần cốt lõi trước, phần mở rộng có thể chuyển sang sprint sau.",
+      "C. Thay đổi nhãn từ 'Must have' sang 'Should have' để giảm áp lực hoàn thành.",
+      "D. Loại bỏ hạng mục khỏi backlog vì độ phức tạp quá cao."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với hạng mục 'Must have', cần đảm bảo nó được hoàn thành, nhưng độ phức tạp cao đòi hỏi chia nhỏ để giảm rủi ro. Việc chia nhỏ giúp nhóm tập trung vào phần cốt lõi trước, đảm bảo tiến độ mà vẫn đáp ứng yêu cầu kinh doanh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502500515_INTERMEDIATE_0_1ll2"
+  },
+  {
+    "questionText": "Bạn đang xây dựng roadmap cho một dự án cải tiến hệ thống CRM cho doanh nghiệp bán lẻ. Stakeholder yêu cầu thêm nhiều tính năng mới, nhưng nhóm phát triển chỉ có thể hoàn thành 60% khối lượng công việc trong quý tới. Cách tiếp cận nào hợp lý nhất để cân bằng giữa nhu cầu stakeholder và năng lực nhóm?",
+    "options": [
+      "A. Chấp nhận tất cả yêu cầu của stakeholder và kéo dài thời gian dự án để hoàn thành.",
+      "B. Sử dụng ma trận Value vs. Effort để xác định các hạng mục có giá trị cao nhưng nỗ lực thấp, ưu tiên những hạng mục này trước.",
+      "C. Từ chối tất cả yêu cầu mới vì vượt quá năng lực nhóm.",
+      "D. Chỉ chọn những hạng mục dễ triển khai nhất, bất kể giá trị kinh doanh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ma trận Value vs. Effort giúp xác định các hạng mục mang lại giá trị cao nhất với nỗ lực hợp lý, giúp tối ưu hóa việc sử dụng nguồn lực hạn chế của nhóm mà vẫn đáp ứng kỳ vọng stakeholder.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502500515_INTERMEDIATE_1_qdwe"
+  },
+  {
+    "questionText": "Trong quá trình ưu tiên backlog cho dự án triển khai ERP tại công ty sản xuất, bạn nhận thấy có hai hạng mục có giá trị kinh doanh tương đương nhưng hạng mục A phụ thuộc vào việc hoàn thành hạng mục B. Làm thế nào để sắp xếp thứ tự triển khai?",
+    "options": [
+      "A. Triển khai hạng mục A trước vì nó có giá trị tương đương với B.",
+      "B. Triển khai hạng mục B trước vì A phụ thuộc vào B.",
+      "C. Triển khai cả hai hạng mục song song để tiết kiệm thời gian.",
+      "D. Hỏi stakeholder quyết định vì họ hiểu rõ nhu cầu kinh doanh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vì hạng mục A phụ thuộc vào B, cần hoàn thành B trước để đảm bảo A có thể triển khai đúng tiến độ và tránh rủi ro kỹ thuật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502500515_INTERMEDIATE_2_nkth"
+  },
+  {
+    "questionText": "Nhóm của bạn đang sử dụng khung MoSCoW để ưu tiên backlog cho dự án nâng cấp hệ thống thanh toán trực tuyến. Một hạng mục được gắn nhãn 'Could have' nhưng stakeholder khẳng định nó rất quan trọng. Bạn nên làm gì?",
+    "options": [
+      "A. Giữ nguyên nhãn 'Could have' vì đó là quyết định của nhóm phát triển.",
+      "B. Thay đổi nhãn thành 'Should have' nếu stakeholder cung cấp được lý do hợp lý về giá trị kinh doanh.",
+      "C. Loại bỏ hạng mục khỏi backlog vì 'Could have' không quan trọng.",
+      "D. Chuyển nhãn thành 'Must have' để đáp ứng yêu cầu stakeholder."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MoSCoW là công cụ linh hoạt, cần xem xét lại ưu tiên nếu stakeholder cung cấp được lý do thuyết phục về giá trị. Tuy nhiên, không nên tự động chuyển thành 'Must have' nếu không đủ cơ sở.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502500515_INTERMEDIATE_3_l368"
+  },
+  {
+    "questionText": "Bạn đang xây dựng roadmap cho dự án phát triển ứng dụng di động cho ngân hàng. Stakeholder yêu cầu hoàn thành tất cả tính năng trong 3 tháng, nhưng nhóm phát triển ước tính cần 6 tháng. Cách tiếp cận nào hiệu quả nhất để điều chỉnh kỳ vọng?",
+    "options": [
+      "A. Đồng ý với yêu cầu của stakeholder và cam kết hoàn thành trong 3 tháng.",
+      "B. Sử dụng ma trận Value vs. Effort để xác định các tính năng cốt lõi có thể hoàn thành trong 3 tháng và đề xuất roadmap giai đoạn.",
+      "C. Từ chối yêu cầu vì không khả thi.",
+      "D. Yêu cầu stakeholder cắt giảm 50% số lượng tính năng mà không cần đánh giá giá trị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ma trận Value vs. Effort giúp xác định các tính năng có giá trị cao nhất và khả thi trong thời gian giới hạn, từ đó đề xuất roadmap giai đoạn để điều chỉnh kỳ vọng stakeholder một cách hợp lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502500516_INTERMEDIATE_4_1ulw"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý kho cho doanh nghiệp logistics, bạn nhận thấy có nhiều hạng mục backlog liên quan đến báo cáo. Làm thế nào để ưu tiên các hạng mục này một cách hiệu quả?",
+    "options": [
+      "A. Ưu tiên tất cả hạng mục báo cáo vì chúng đều quan trọng.",
+      "B. Sử dụng ma trận MoSCoW để phân loại và ưu tiên các báo cáo theo mức độ cần thiết cho hoạt động kinh doanh.",
+      "C. Hoàn thành tất cả các hạng mục khác trước, báo cáo sẽ được làm sau cùng.",
+      "D. Chỉ chọn những báo cáo dễ triển khai nhất để hoàn thành nhanh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "MoSCoW giúp phân loại các hạng mục báo cáo theo mức độ ưu tiên, đảm bảo các báo cáo quan trọng nhất được triển khai trước, tránh lãng phí nguồn lực vào những báo cáo ít giá trị.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502500516_INTERMEDIATE_5_yxuz"
+  },
+  {
+    "questionText": "Nhóm của bạn đang xây dựng roadmap cho dự án cải tiến hệ thống e-commerce. Stakeholder yêu cầu thêm tính năng 'tích điểm thưởng' nhưng nhóm phát triển cho rằng tính năng này phức tạp và không phù hợp với mục tiêu ngắn hạn của sản phẩm. Bạn nên làm gì?",
+    "options": [
+      "A. Thêm tính năng vào roadmap ngay lập tức để đáp ứng yêu cầu stakeholder.",
+      "B. Đánh giá lại mục tiêu sản phẩm và sử dụng ma trận Value vs. Effort để quyết định xem tính năng này có phù hợp với chiến lược ngắn hạn hay không.",
+      "C. Từ chối yêu cầu vì nhóm phát triển không đồng ý.",
+      "D. Đề xuất stakeholder tìm nhà cung cấp khác để triển khai tính năng này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cần đánh giá lại mục tiêu sản phẩm và sử dụng công cụ ưu tiên như Value vs. Effort để xác định xem tính năng có phù hợp với chiến lược ngắn hạn hay không, từ đó đưa ra quyết định hợp lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502500516_INTERMEDIATE_6_xae7"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý nhân sự cho công ty đa quốc gia, bạn cần sắp xếp thứ tự triển khai các module: 'Chấm công', 'Tính lương', 'Đánh giá hiệu suất', 'Tuyển dụng'. Module nào nên được triển khai đầu tiên?",
+    "options": [
+      "A. Module 'Tuyển dụng' vì nó hỗ trợ mở rộng đội ngũ.",
+      "B. Module 'Chấm công' vì nó là nền tảng cho các module khác như tính lương và đánh giá hiệu suất.",
+      "C. Module 'Tính lương' vì nó ảnh hưởng trực tiếp đến quyền lợi nhân viên.",
+      "D. Module 'Đánh giá hiệu suất' vì nó giúp cải thiện năng suất làm việc."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Module 'Chấm công' là nền tảng cho các module khác như tính lương và đánh giá hiệu suất, do đó cần được triển khai đầu tiên để đảm bảo tính nhất quán và giảm rủi ro kỹ thuật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502500517_INTERMEDIATE_7_sg9d"
+  },
+  {
+    "questionText": "Bạn đang sử dụng khung MoSCoW để ưu tiên backlog cho dự án phát triển phần mềm quản lý dự án. Một hạng mục được gắn nhãn 'Should have' nhưng stakeholder khẳng định nó cần thiết cho việc ra mắt sản phẩm. Bạn nên làm gì?",
+    "options": [
+      "A. Giữ nguyên nhãn 'Should have' vì đó là quyết định của nhóm phát triển.",
+      "B. Thay đổi nhãn thành 'Must have' nếu stakeholder chứng minh được tầm quan trọng của hạng mục đối với việc ra mắt sản phẩm.",
+      "C. Loại bỏ hạng mục khỏi backlog vì 'Should have' không đủ quan trọng.",
+      "D. Chuyển nhãn thành 'Could have' để giảm áp lực triển khai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu stakeholder chứng minh được hạng mục là cần thiết cho việc ra mắt sản phẩm, cần điều chỉnh nhãn thành 'Must have' để đảm bảo nó được ưu tiên triển khai.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502500517_INTERMEDIATE_8_uz5v"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý chuỗi cung ứng, bạn cần xây dựng roadmap cho các tính năng liên quan đến 'quản lý đơn hàng', 'quản lý kho', 'quản lý vận chuyển', và 'báo cáo phân tích'. Làm thế nào để sắp xếp thứ tự triển khai hợp lý?",
+    "options": [
+      "A. Triển khai tất cả các tính năng song song để hoàn thành nhanh chóng.",
+      "B. Triển khai 'quản lý đơn hàng' trước vì nó là điểm khởi đầu của quy trình chuỗi cung ứng, sau đó đến 'quản lý kho', 'quản lý vận chuyển', và cuối cùng là 'báo cáo phân tích'.",
+      "C. Triển khai 'báo cáo phân tích' trước vì nó cung cấp thông tin quan trọng cho quản lý.",
+      "D. Chỉ triển khai các tính năng dễ triển khai nhất trước."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thứ tự triển khai nên tuân theo quy trình nghiệp vụ: 'quản lý đơn hàng' là điểm khởi đầu, sau đó là 'quản lý kho' và 'quản lý vận chuyển'. 'Báo cáo phân tích' nên được triển khai sau cùng để tận dụng dữ liệu từ các module trước.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502500517_INTERMEDIATE_9_365n"
+  },
+  {
+    "questionText": "Nhóm của bạn đang sử dụng ma trận Value vs. Effort để ưu tiên backlog cho dự án phát triển ứng dụng fintech. Một hạng mục có giá trị kinh doanh cao nhưng nỗ lực triển khai rất lớn. Bạn nên làm gì?",
+    "options": [
+      "A. Loại bỏ hạng mục vì nỗ lực quá lớn.",
+      "B. Chia nhỏ hạng mục thành các task nhỏ hơn để giảm nỗ lực triển khai và ưu tiên phần cốt lõi trước.",
+      "C. Giữ nguyên hạng mục và yêu cầu nhóm tăng năng suất để hoàn thành.",
+      "D. Chuyển hạng mục sang dự án khác vì không phù hợp với năng lực nhóm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với hạng mục có giá trị cao nhưng nỗ lực lớn, cần chia nhỏ để giảm rủi ro và ưu tiên triển khai phần cốt lõi trước, đảm bảo giá trị kinh doanh được hiện thực hóa sớm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502500517_INTERMEDIATE_10_12ds"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý khách hàng cho công ty bảo hiểm, stakeholder yêu cầu thêm tính năng 'tích hợp với hệ thống bên thứ ba' nhưng nhóm phát triển cho rằng điều này làm tăng rủi ro kỹ thuật. Bạn nên làm gì?",
+    "options": [
+      "A. Từ chối yêu cầu vì rủi ro kỹ thuật quá cao.",
+      "B. Đánh giá lại giá trị kinh doanh của tính năng và sử dụng ma trận Value vs. Effort để quyết định, đồng thời đề xuất giải pháp giảm thiểu rủi ro.",
+      "C. Chấp nhận yêu cầu và yêu cầu nhóm phát triển tìm cách giảm thiểu rủi ro.",
+      "D. Đề xuất stakeholder tự triển khai tính năng này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cần đánh giá lại giá trị kinh doanh và sử dụng công cụ ưu tiên như Value vs. Effort để quyết định. Nếu tính năng quan trọng, cần đề xuất giải pháp giảm thiểu rủi ro kỹ thuật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502500517_INTERMEDIATE_11_7rvc"
+  },
+  {
+    "questionText": "Bạn đang xây dựng roadmap cho dự án phát triển phần mềm quản lý tài sản cho ngân hàng. Stakeholder yêu cầu hoàn thành tất cả tính năng trong 4 tháng, nhưng nhóm phát triển ước tính cần 8 tháng. Cách tiếp cận nào hiệu quả nhất để điều chỉnh roadmap?",
+    "options": [
+      "A. Chấp nhận yêu cầu của stakeholder và cam kết hoàn thành trong 4 tháng.",
+      "B. Sử dụng ma trận MoSCoW để xác định các tính năng 'Must have' và đề xuất roadmap giai đoạn, hoàn thành các tính năng cốt lõi trong 4 tháng.",
+      "C. Từ chối yêu cầu vì không khả thi.",
+      "D. Yêu cầu stakeholder cắt giảm 50% số lượng tính năng mà không cần đánh giá giá trị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng MoSCoW để xác định các tính năng 'Must have' giúp điều chỉnh roadmap, đảm bảo các tính năng cốt lõi được hoàn thành trong thời gian giới hạn mà vẫn đáp ứng kỳ vọng stakeholder.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502500517_INTERMEDIATE_12_pdhb"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý dự án cho công ty xây dựng, bạn cần sắp xếp thứ tự triển khai các module: 'Quản lý nhiệm vụ', 'Quản lý tài nguyên', 'Báo cáo tiến độ', 'Tích hợp với hệ thống kế toán'. Module nào nên được triển khai đầu tiên?",
+    "options": [
+      "A. Module 'Tích hợp với hệ thống kế toán' vì nó liên quan đến tài chính.",
+      "B. Module 'Quản lý nhiệm vụ' vì nó là nền tảng cho các module khác như quản lý tài nguyên và báo cáo tiến độ.",
+      "C. Module 'Báo cáo tiến độ' vì nó cung cấp thông tin quan trọng cho quản lý.",
+      "D. Module 'Quản lý tài nguyên' vì nó ảnh hưởng trực tiếp đến hiệu quả dự án."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Module 'Quản lý nhiệm vụ' là nền tảng cho các module khác, do đó cần được triển khai đầu tiên để đảm bảo tính nhất quán và giảm rủi ro kỹ thuật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502500518_INTERMEDIATE_13_np6z"
+  },
+  {
+    "questionText": "Trong dự án phát triển sản phẩm ngân hàng số tại Việt Nam, Product Owner yêu cầu ưu tiên tính năng 'Chuyển tiền nhanh 24/7' (high value, medium effort) lên trước tính năng 'Tích điểm thưởng' (medium value, low effort) dù nhóm Marketing năn nỉ vì chiến dịch sắp tới. Bạn là Business Analyst, sẽ áp dụng framework nào để giải thích quyết định này với các bên liên quan?",
+    "options": [
+      "A. MoSCoW: Đánh dấu 'Chuyển tiền nhanh' là Must-have và 'Tích điểm thưởng' là Should-have, giải thích rằng Must-have phải được triển khai trước để đáp ứng yêu cầu pháp lý và nhu cầu cơ bản của khách hàng.",
+      "B. Value vs Effort: So sánh trực quan trên ma trận 2x2, chỉ ra rằng 'Chuyển tiền nhanh' nằm ở góc phần tư 'Quick Wins' còn 'Tích điểm thưởng' thuộc 'Major Projects', nên ưu tiên triển khai trước.",
+      "C. RICE Scoring: Tính toán điểm số dựa trên Reach, Impact, Confidence và Effort, chứng minh rằng 'Chuyển tiền nhanh' có điểm số cao hơn đáng kể do tác động đến lượng lớn khách hàng và độ tin cậy cao.",
+      "D. Kano Model: Phân loại 'Chuyển tiền nhanh' là tính năng 'Basic Needs' và 'Tích điểm thưởng' là 'Performance Needs', nhấn mạnh rằng không đáp ứng 'Basic Needs' sẽ gây thất vọng nghiêm trọng cho khách hàng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "RICE Scoring phù hợp để giải quyết xung đột ưu tiên trong trường hợp này vì nó cung cấp một phương pháp định lượng khách quan, giúp minh bạch hóa lý do 'Chuyển tiền nhanh' có giá trị cao hơn dựa trên dữ liệu về phạm vi ảnh hưởng, tác động, độ tin cậy và nỗ lực. Các framework khác không cung cấp đủ cơ sở định lượng để thuyết phục các bên liên quan có quan điểm trái chiều.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502632064_ADVANCED_0_4dfo"
+  },
+  {
+    "questionText": "Trong quá trình xây dựng roadmap cho dự án triển khai hệ thống ERP tại một tập đoàn sản xuất đa quốc gia, bạn phát hiện rằng một số yêu cầu từ bộ phận Sản xuất và Tài chính mâu thuẫn nhau về thứ tự triển khai module. Bộ phận Sản xuất muốn triển khai 'Quản lý kho' trước để đáp ứng nhu cầu mở rộng nhà máy, trong khi Tài chính khăng khăng yêu cầu 'Quản lý ngân sách' phải được triển khai trước để kiểm soát chi phí. Cách tiếp cận nào hiệu quả nhất để giải quyết mâu thuẫn này?",
+    "options": [
+      "A. Tổ chức workshop với đại diện hai bộ phận để cùng xây dựng ma trận Value vs Effort, sau đó đề xuất thứ tự triển khai dựa trên kết quả đồng thuận từ ma trận.",
+      "B. Áp dụng phương pháp Weighted Shortest Job First (WSJF) từ SAFe, tính toán Cost of Delay cho từng module và sắp xếp thứ tự triển khai theo giá trị WSJF giảm dần.",
+      "C. Đề xuất triển khai song song hai module với hai nhóm phát triển khác nhau để đáp ứng đồng thời nhu cầu của cả hai bộ phận.",
+      "D. Tham vấn ý kiến của Giám đốc điều hành để đưa ra quyết định cuối cùng về thứ tự triển khai, sau đó giải thích lý do với các bên liên quan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "WSJF là phương pháp tối ưu trong trường hợp này vì nó giúp định lượng Cost of Delay (bao gồm User/Business Value, Time Criticality, Risk Reduction/Opportunity Enablement) và Effort, từ đó đưa ra quyết định khách quan về thứ tự triển khai dựa trên giá trị kinh doanh tối đa. Các phương án khác không giải quyết triệt để mâu thuẫn hoặc thiếu cơ sở định lượng rõ ràng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502632065_ADVANCED_1_3cou"
+  },
+  {
+    "questionText": "Bạn đang quản lý backlog cho dự án nâng cấp hệ thống core banking tại một ngân hàng Việt Nam. Nhóm phát triển báo cáo rằng họ chỉ có thể hoàn thành 80% công việc dự kiến trong quý tới do thiếu hụt nhân sự. Trong khi đó, bộ phận Kinh doanh yêu cầu phải triển khai 5 tính năng mới để đáp ứng chiến lược mở rộng thị phần. Chiến lược nào sau đây là tối ưu để cân bằng giữa nhu cầu kinh doanh và năng lực triển khai?",
+    "options": [
+      "A. Sử dụng MoSCoW để phân loại các tính năng, sau đó thương lượng với Kinh doanh để loại bỏ hoặc hoãn các tính năng Could-have và Won’t-have, đảm bảo chỉ triển khai các tính năng Must-have và Should-have.",
+      "B. Áp dụng kỹ thuật 'Slicing' để chia nhỏ các tính năng lớn thành các phần nhỏ hơn, có thể triển khai độc lập, sau đó sử dụng ma trận Value vs Effort để lựa chọn các phần có giá trị cao nhất và phù hợp với năng lực hiện tại.",
+      "C. Đề xuất với ban lãnh đạo thuê thêm nhân sự hoặc gia hạn timeline để đảm bảo triển khai đầy đủ các tính năng theo yêu cầu của Kinh doanh.",
+      "D. Tạo hai roadmap riêng biệt: một roadmap cho các tính năng ưu tiên cao (phải triển khai trong quý tới) và một roadmap cho các tính năng còn lại (triển khai sau), sau đó trình bày với các bên liên quan để đạt được sự đồng thuận."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kỹ thuật 'Slicing' kết hợp với Value vs Effort là chiến lược tối ưu vì nó giúp tối đa hóa giá trị triển khai trong điều kiện nguồn lực hạn chế, đồng thời duy trì tính linh hoạt và khả năng thích ứng với thay đổi. Phương án này cũng giúp minh bạch hóa quyết định và tạo sự đồng thuận với các bên liên quan về những gì có thể triển khai trong quý tới.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502632065_ADVANCED_2_tozh"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống CRM cho một công ty bán lẻ tại Việt Nam, bạn nhận thấy rằng roadmap hiện tại tập trung quá nhiều vào các tính năng phục vụ bộ phận Bán hàng, trong khi các bộ phận khác như Marketing và Chăm sóc khách hàng có nhu cầu chưa được đáp ứng. Điều này có thể dẫn đến sự mất cân bằng trong việc triển khai giá trị cho toàn bộ tổ chức. Bạn sẽ sử dụng công cụ hoặc kỹ thuật nào để điều chỉnh roadmap?",
+    "options": [
+      "A. Áp dụng mô hình Kano để phân loại nhu cầu của từng bộ phận, sau đó điều chỉnh roadmap để đảm bảo cân bằng giữa các tính năng 'Basic Needs', 'Performance Needs' và 'Excitement Needs' cho tất cả các bộ phận.",
+      "B. Sử dụng ma trận Impact Mapping để trực quan hóa mối quan hệ giữa các mục tiêu chiến lược của công ty, các bộ phận liên quan và các tính năng cần triển khai, từ đó điều chỉnh roadmap để đảm bảo tất cả các bộ phận đều được phục vụ.",
+      "C. Tổ chức các buổi họp riêng với từng bộ phận để thu thập phản hồi, sau đó sử dụng kỹ thuật Dot Voting để các bên liên quan cùng bầu chọn các tính năng ưu tiên, từ đó điều chỉnh roadmap dựa trên kết quả bầu chọn.",
+      "D. Áp dụng phương pháp Weighted Scoring Model, gán trọng số cho nhu cầu của từng bộ phận dựa trên tầm quan trọng chiến lược, sau đó tính toán điểm số cho từng tính năng và điều chỉnh roadmap theo thứ tự điểm số giảm dần."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Weighted Scoring Model là công cụ hiệu quả nhất trong trường hợp này vì nó cho phép định lượng và cân bằng nhu cầu của các bộ phận dựa trên trọng số phản ánh tầm quan trọng chiến lược của từng bộ phận. Phương pháp này giúp đảm bảo roadmap được điều chỉnh một cách khách quan và minh bạch, đồng thời tối ưu hóa giá trị triển khai cho toàn bộ tổ chức.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502632067_ADVANCED_3_w5w4"
+  },
+  {
+    "questionText": "Bạn đang xây dựng roadmap cho dự án phát triển ứng dụng fintech tại một startup Việt Nam. Nhóm phát triển đề xuất triển khai tính năng 'Đầu tư chứng khoán' trước tính năng 'Vay tiêu dùng' vì độ phức tạp kỹ thuật thấp hơn. Tuy nhiên, bộ phận Kinh doanh khẳng định rằng 'Vay tiêu dùng' sẽ mang lại doanh thu cao hơn trong ngắn hạn. Làm thế nào để bạn xác định thứ tự triển khai tối ưu?",
+    "options": [
+      "A. Sử dụng ma trận Value vs Effort để so sánh hai tính năng, sau đó đề xuất triển khai tính năng nằm ở góc phần tư 'Quick Wins' trước.",
+      "B. Áp dụng phương pháp Cost of Delay Divided by Duration (CD3) để tính toán giá trị triển khai cho từng tính năng, sau đó sắp xếp thứ tự triển khai theo giá trị CD3 giảm dần.",
+      "C. Tổ chức buổi họp với các bên liên quan để thảo luận về ưu và nhược điểm của từng tính năng, sau đó đưa ra quyết định dựa trên sự đồng thuận.",
+      "D. Tham khảo ý kiến của các chuyên gia fintech để đánh giá tính khả thi và tiềm năng của từng tính năng, sau đó đề xuất thứ tự triển khai dựa trên khuyến nghị của chuyên gia."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CD3 là phương pháp tối ưu trong trường hợp này vì nó giúp định lượng giá trị triển khai của từng tính năng dựa trên Cost of Delay (bao gồm doanh thu mất đi nếu trì hoãn) và Duration (thời gian triển khai), từ đó đưa ra quyết định khách quan về thứ tự triển khai. Phương pháp này phù hợp với môi trường startup nơi nguồn lực hạn chế và cần tối ưu hóa giá trị triển khai trong ngắn hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502632067_ADVANCED_4_sus0"
+  },
+  {
+    "questionText": "Trong quá trình triển khai dự án số hóa quy trình cho vay tại một ngân hàng, bạn phát hiện rằng một số yêu cầu từ bộ phận Rủi ro và bộ phận Kinh doanh mâu thuẫn nhau về thứ tự triển khai các tính năng liên quan đến kiểm tra tín dụng. Bộ phận Rủi ro yêu cầu triển khai 'Kiểm tra lịch sử tín dụng' trước, trong khi Kinh doanh muốn triển khai 'Đánh giá khả năng trả nợ' trước để tăng tốc độ phê duyệt hồ sơ. Bạn sẽ làm gì để giải quyết mâu thuẫn này?",
+    "options": [
+      "A. Đề xuất triển khai song song cả hai tính năng với hai nhóm phát triển khác nhau để đáp ứng nhu cầu của cả hai bộ phận.",
+      "B. Sử dụng kỹ thuật Event Storming để trực quan hóa quy trình cho vay, sau đó tổ chức workshop với cả hai bộ phận để xác định thứ tự triển khai tối ưu dựa trên luồng quy trình hợp lý.",
+      "C. Áp dụng phương pháp Weighted Shortest Job First (WSJF) để tính toán giá trị triển khai cho từng tính năng, sau đó đề xuất thứ tự triển khai dựa trên giá trị WSJF giảm dần.",
+      "D. Tham vấn ý kiến của Giám đốc Khối Khách hàng để đưa ra quyết định cuối cùng về thứ tự triển khai, sau đó giải thích lý do với các bên liên quan."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Event Storming là kỹ thuật hiệu quả trong trường hợp này vì nó giúp trực quan hóa và phân tích quy trình nghiệp vụ một cách chi tiết, từ đó tạo cơ sở để các bên liên quan cùng thảo luận và thống nhất về thứ tự triển khai hợp lý. Phương pháp này giải quyết mâu thuẫn từ gốc rễ bằng cách làm rõ luồng quy trình và sự phụ thuộc giữa các tính năng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502632068_ADVANCED_5_fofg"
+  },
+  {
+    "questionText": "Bạn đang quản lý backlog cho dự án triển khai hệ thống quản lý chuỗi cung ứng tại một công ty logistics. Roadmap hiện tại đã được phê duyệt, nhưng do ảnh hưởng của đại dịch, công ty phải cắt giảm 30% ngân sách dự án. Bạn cần điều chỉnh roadmap để phù hợp với ngân sách mới mà vẫn đảm bảo giá trị triển khai tối đa. Chiến lược nào sau đây là hiệu quả nhất?",
+    "options": [
+      "A. Sử dụng MoSCoW để phân loại lại các tính năng, sau đó loại bỏ hoàn toàn các tính năng Could-have và Won’t-have, đồng thời thương lượng với các bên liên quan để hoãn triển khai một số tính năng Should-have.",
+      "B. Áp dụng kỹ thuật 'Slicing' để chia nhỏ các tính năng lớn thành các phần nhỏ hơn, sau đó sử dụng ma trận Value vs Effort để lựa chọn các phần có giá trị cao nhất và phù hợp với ngân sách mới.",
+      "C. Đề xuất triển khai các tính năng theo từng giai đoạn nhỏ hơn, mỗi giai đoạn tập trung vào một nhóm tính năng có liên quan chặt chẽ, sau đó sử dụng phương pháp Cost of Delay để xác định thứ tự triển khai các giai đoạn.",
+      "D. Sử dụng phương pháp Weighted Scoring Model để đánh giá lại tất cả các tính năng dựa trên tiêu chí giá trị kinh doanh và chi phí triển khai, sau đó điều chỉnh roadmap theo thứ tự điểm số giảm dần cho đến khi phù hợp với ngân sách."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Weighted Scoring Model là chiến lược hiệu quả nhất trong trường hợp này vì nó cho phép đánh giá lại tất cả các tính năng một cách toàn diện dựa trên giá trị kinh doanh và chi phí triển khai, từ đó điều chỉnh roadmap để tối ưu hóa giá trị triển khai trong điều kiện ngân sách bị cắt giảm. Phương pháp này đảm bảo tính khách quan và minh bạch trong việc ra quyết định.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502632069_ADVANCED_6_fubs"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng thương mại điện tử cho một doanh nghiệp bán lẻ tại Việt Nam, bạn nhận thấy rằng roadmap hiện tại không phản ánh đúng sự phụ thuộc giữa các tính năng. Ví dụ, tính năng 'Thanh toán bằng ví điện tử' phụ thuộc vào tính năng 'Tích hợp cổng thanh toán', nhưng hai tính năng này lại được lên kế hoạch triển khai ở hai quý khác nhau. Bạn sẽ sử dụng công cụ hoặc kỹ thuật nào để điều chỉnh roadmap?",
+    "options": [
+      "A. Sử dụng ma trận Dependency Mapping để trực quan hóa sự phụ thuộc giữa các tính năng, sau đó điều chỉnh roadmap để đảm bảo các tính năng phụ thuộc được triển khai theo thứ tự hợp lý.",
+      "B. Áp dụng phương pháp Critical Path Method (CPM) để xác định đường găng của dự án, sau đó điều chỉnh roadmap để tập trung nguồn lực vào các tính năng nằm trên đường găng.",
+      "C. Tổ chức workshop với nhóm phát triển để xác định các ràng buộc kỹ thuật giữa các tính năng, sau đó điều chỉnh roadmap dựa trên kết quả thảo luận.",
+      "D. Sử dụng kỹ thuật User Story Mapping để trực quan hóa hành trình người dùng, sau đó điều chỉnh roadmap để đảm bảo các tính năng được triển khai theo luồng trải nghiệm người dùng hợp lý."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Dependency Mapping là công cụ hiệu quả nhất trong trường hợp này vì nó giúp trực quan hóa và quản lý sự phụ thuộc giữa các tính năng, từ đó đảm bảo roadmap được điều chỉnh để các tính năng phụ thuộc được triển khai theo thứ tự hợp lý. Phương pháp này giải quyết vấn đề từ gốc rễ và đảm bảo tính khả thi của roadmap.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502632069_ADVANCED_7_lgw3"
+  },
+  {
+    "questionText": "Bạn đang xây dựng roadmap cho dự án triển khai hệ thống quản lý nhân sự tại một tập đoàn đa quốc gia. Bộ phận Nhân sự yêu cầu triển khai tính năng 'Quản lý đào tạo' trước, trong khi bộ phận Tài chính muốn triển khai 'Quản lý lương thưởng' trước để đáp ứng yêu cầu báo cáo thuế cuối năm. Hai yêu cầu này đều quan trọng và không thể triển khai song song do hạn chế về nguồn lực. Bạn sẽ làm gì để giải quyết tình huống này?",
+    "options": [
+      "A. Đề xuất triển khai tính năng 'Quản lý lương thưởng' trước vì nó liên quan đến yêu cầu pháp lý và báo cáo thuế, sau đó triển khai 'Quản lý đào tạo' trong quý tiếp theo.",
+      "B. Sử dụng phương pháp Weighted Shortest Job First (WSJF) để tính toán giá trị triển khai cho từng tính năng, sau đó đề xuất thứ tự triển khai dựa trên giá trị WSJF giảm dần.",
+      "C. Tổ chức buổi họp với cả hai bộ phận để thảo luận về tác động của việc trì hoãn từng tính năng, sau đó đưa ra quyết định dựa trên sự đồng thuận.",
+      "D. Áp dụng kỹ thuật Impact Mapping để phân tích tác động của từng tính năng đến mục tiêu chiến lược của công ty, sau đó đề xuất thứ tự triển khai dựa trên mức độ đóng góp vào mục tiêu chiến lược."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Impact Mapping là phương pháp tối ưu trong trường hợp này vì nó giúp phân tích và trực quan hóa tác động của từng tính năng đến mục tiêu chiến lược của công ty, từ đó đưa ra quyết định về thứ tự triển khai dựa trên mức độ đóng góp vào mục tiêu chung. Phương pháp này đảm bảo roadmap được điều chỉnh để tối ưu hóa giá trị chiến lược cho toàn bộ tổ chức.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502632070_ADVANCED_8_4a0i"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống e-learning cho một trường đại học tại Việt Nam, bạn nhận thấy rằng roadmap hiện tại không phản ánh đúng sự thay đổi trong chiến lược của trường. Cụ thể, trường muốn tập trung vào việc nâng cao trải nghiệm học tập trực tuyến, nhưng roadmap lại ưu tiên triển khai các tính năng liên quan đến quản lý hành chính. Bạn sẽ sử dụng công cụ hoặc kỹ thuật nào để điều chỉnh roadmap?",
+    "options": [
+      "A. Sử dụng ma trận Value vs Effort để đánh giá lại tất cả các tính năng, sau đó điều chỉnh roadmap để ưu tiên các tính năng mang lại giá trị cao nhất cho trải nghiệm học tập trực tuyến.",
+      "B. Áp dụng phương pháp Goal-Question-Metric (GQM) để xác định các chỉ số đo lường hiệu quả của chiến lược mới, sau đó điều chỉnh roadmap để tập trung vào các tính năng đóng góp trực tiếp vào các chỉ số này.",
+      "C. Tổ chức workshop với các bên liên quan để thảo luận về chiến lược mới, sau đó sử dụng kỹ thuật Dot Voting để các bên cùng bầu chọn các tính năng ưu tiên, từ đó điều chỉnh roadmap.",
+      "D. Sử dụng kỹ thuật User Story Mapping để trực quan hóa hành trình học tập trực tuyến của sinh viên, sau đó điều chỉnh roadmap để tập trung vào các tính năng cải thiện trải nghiệm học tập."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Goal-Question-Metric (GQM) là phương pháp hiệu quả nhất trong trường hợp này vì nó giúp liên kết trực tiếp các tính năng trong roadmap với các mục tiêu chiến lược cụ thể thông qua các câu hỏi và chỉ số đo lường. Phương pháp này đảm bảo roadmap được điều chỉnh để phản ánh đúng chiến lược mới và tối ưu hóa giá trị triển khai.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502632070_ADVANCED_9_ez99"
+  },
+  {
+    "questionText": "Bạn đang quản lý backlog cho dự án triển khai hệ thống quản lý quan hệ khách hàng (CRM) tại một công ty bảo hiểm. Nhóm phát triển báo cáo rằng họ chỉ có thể hoàn thành 60% công việc dự kiến trong quý tới do một số thành viên chủ chốt nghỉ việc. Trong khi đó, bộ phận Kinh doanh yêu cầu phải triển khai đầy đủ 10 tính năng mới để đáp ứng chiến dịch tiếp thị sắp tới. Chiến lược nào sau đây là tối ưu để cân bằng giữa nhu cầu kinh doanh và năng lực triển khai?",
+    "options": [
+      "A. Sử dụng MoSCoW để phân loại các tính năng, sau đó thương lượng với Kinh doanh để loại bỏ hoặc hoãn các tính năng Could-have và Won’t-have, đảm bảo chỉ triển khai các tính năng Must-have và Should-have.",
+      "B. Áp dụng kỹ thuật 'Slicing' để chia nhỏ các tính năng lớn thành các phần nhỏ hơn, sau đó sử dụng ma trận Value vs Effort để lựa chọn các phần có giá trị cao nhất và phù hợp với năng lực hiện tại, đồng thời thương lượng với Kinh doanh về phạm vi triển khai.",
+      "C. Đề xuất với ban lãnh đạo thuê thêm nhân sự hoặc gia hạn timeline để đảm bảo triển khai đầy đủ các tính năng theo yêu cầu của Kinh doanh.",
+      "D. Tạo hai roadmap riêng biệt: một roadmap ngắn hạn tập trung vào các tính năng có thể triển khai trong quý tới và một roadmap dài hạn cho các tính năng còn lại, sau đó trình bày với các bên liên quan để đạt được sự đồng thuận."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kỹ thuật 'Slicing' kết hợp với Value vs Effort là chiến lược tối ưu trong trường hợp này vì nó giúp tối đa hóa giá trị triển khai trong điều kiện nguồn lực hạn chế, đồng thời duy trì tính linh hoạt và khả năng thích ứng với thay đổi. Phương án này cũng giúp minh bạch hóa quyết định và tạo sự đồng thuận với các bên liên quan về những gì có thể triển khai trong quý tới.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502632071_ADVANCED_10_2x48"
+  },
+  {
+    "questionText": "Trong quá trình xây dựng roadmap cho dự án triển khai hệ thống quản lý dự án tại một công ty công nghệ, bạn phát hiện rằng một số tính năng quan trọng bị bỏ sót do thiếu đầu vào từ bộ phận Kỹ thuật. Điều này có thể dẫn đến việc roadmap không khả thi khi triển khai. Bạn sẽ sử dụng công cụ hoặc kỹ thuật nào để đảm bảo roadmap phản ánh đầy đủ các yêu cầu kỹ thuật?",
+    "options": [
+      "A. Tổ chức các buổi phỏng vấn sâu với đại diện bộ phận Kỹ thuật để thu thập yêu cầu, sau đó cập nhật roadmap dựa trên kết quả phỏng vấn.",
+      "B. Áp dụng kỹ thuật Impact Mapping để phân tích tác động của các yêu cầu kỹ thuật đến mục tiêu chiến lược, sau đó điều chỉnh roadmap để bao gồm các tính năng kỹ thuật quan trọng.",
+      "C. Sử dụng phương pháp Technical Debt Analysis để đánh giá các rủi ro kỹ thuật tiềm ẩn, sau đó điều chỉnh roadmap để bao gồm các tính năng giải quyết nợ kỹ thuật.",
+      "D. Tổ chức workshop với sự tham gia của cả bộ phận Kinh doanh và Kỹ thuật, sử dụng kỹ thuật Event Storming để trực quan hóa quy trình nghiệp vụ và xác định các tính năng kỹ thuật cần thiết, sau đó cập nhật roadmap."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Event Storming là kỹ thuật hiệu quả nhất trong trường hợp này vì nó giúp trực quan hóa quy trình nghiệp vụ và xác định các tính năng kỹ thuật cần thiết một cách toàn diện, đồng thời tạo cơ hội cho các bên liên quan (bao gồm cả Kỹ thuật và Kinh doanh) cùng thảo luận và thống nhất về roadmap. Phương pháp này đảm bảo roadmap phản ánh đầy đủ các yêu cầu kỹ thuật và khả thi khi triển khai.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502632072_ADVANCED_11_ywba"
+  },
+  {
+    "questionText": "Bạn đang xây dựng roadmap cho dự án phát triển ứng dụng ngân hàng số tại một ngân hàng Việt Nam. Bộ phận Kinh doanh yêu cầu triển khai tính năng 'Giao dịch chứng khoán' trước tính năng 'Vay tiêu dùng' vì tiềm năng doanh thu cao hơn. Tuy nhiên, bộ phận Rủi ro cảnh báo rằng việc triển khai 'Giao dịch chứng khoán' trước có thể gây ra rủi ro tuân thủ pháp lý do thiếu các tính năng kiểm soát rủi ro cần thiết. Bạn sẽ làm gì để xác định thứ tự triển khai tối ưu?",
+    "options": [
+      "A. Đề xuất triển khai song song cả hai tính năng với hai nhóm phát triển khác nhau để đáp ứng nhu cầu của cả hai bộ phận.",
+      "B. Sử dụng phương pháp Cost of Delay để tính toán giá trị triển khai cho từng tính năng, sau đó điều chỉnh roadmap để bao gồm cả các tính năng kiểm soát rủi ro cần thiết trước khi triển khai 'Giao dịch chứng khoán'.",
+      "C. Áp dụng kỹ thuật Risk-Adjusted Backlog để đánh giá rủi ro của từng tính năng, sau đó điều chỉnh roadmap để ưu tiên triển khai các tính năng có rủi ro thấp và giá trị cao trước.",
+      "D. Tổ chức buổi họp với cả hai bộ phận để thảo luận về ưu và nhược điểm của từng tính năng, sau đó đưa ra quyết định dựa trên sự đồng thuận."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Risk-Adjusted Backlog là phương pháp tối ưu trong trường hợp này vì nó giúp đánh giá và điều chỉnh thứ tự triển khai dựa trên cả giá trị kinh doanh và rủi ro, đảm bảo rằng các tính năng có rủi ro thấp và giá trị cao được ưu tiên. Phương pháp này giúp cân bằng giữa nhu cầu kinh doanh và yêu cầu tuân thủ pháp lý, đồng thời tối ưu hóa giá trị triển khai trong điều kiện rủi ro.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502632073_ADVANCED_12_3bnu"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi số cho một ngân hàng Việt Nam, nhóm phát triển đang sử dụng MoSCoW để ưu tiên backlog. Tuy nhiên, sau 3 sprint, nhóm nhận thấy nhiều hạng mục 'Must Have' chưa hoàn thành, trong khi 'Should Have' và 'Could Have' vẫn bị đẩy lùi. Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để điều chỉnh chiến lược ưu tiên?",
+    "options": [
+      "A. Giữ nguyên phân loại MoSCoW hiện tại nhưng tăng cường tài nguyên cho các hạng mục 'Must Have' để đảm bảo tiến độ.",
+      "B. Tiến hành phân tích khoảng trống (gap analysis) giữa năng lực thực tế của nhóm và yêu cầu dự án, sau đó tái cấu trúc backlog theo mô hình Value vs. Effort kết hợp với rủi ro kỹ thuật.",
+      "C. Chuyển tất cả hạng mục 'Should Have' và 'Could Have' thành 'Must Have' để tăng tính cấp thiết và tạo động lực cho nhóm.",
+      "D. Yêu cầu Product Owner loại bỏ hoàn toàn các hạng mục 'Could Have' và tập trung tối đa vào 'Must Have' và 'Should Have' để đơn giản hóa backlog."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cách tiếp cận chuyên gia đòi hỏi phân tích sâu về nguyên nhân gốc rễ (gap analysis) thay vì chỉ điều chỉnh bề mặt. Việc kết hợp Value vs. Effort và rủi ro kỹ thuật giúp tái ưu tiên dựa trên dữ liệu thực tế, đảm bảo tính khả thi và giá trị chiến lược dài hạn. Các phương án khác chỉ giải quyết triệu chứng hoặc thiếu tầm nhìn hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502751310_EXPERT_0_hls8"
+  },
+  {
+    "questionText": "Một công ty logistics đa quốc gia tại Việt Nam muốn xây dựng roadmap số hóa hệ thống quản lý kho. Sau khi thu thập yêu cầu từ 5 phòng ban (Vận hành, Tài chính, IT, Kinh doanh, Tuân thủ), bạn nhận thấy các ưu tiên mâu thuẫn nhau: Vận hành muốn tối ưu hóa quy trình thủ công trước, trong khi IT đề xuất áp dụng AI ngay lập tức. Là Business Analyst cấp chuyên gia, bước đầu tiên bạn sẽ làm gì?",
+    "options": [
+      "A. Tổ chức workshop để các phòng ban bỏ phiếu chọn giải pháp ưu tiên, sau đó xây dựng roadmap dựa trên kết quả bỏ phiếu.",
+      "B. Áp dụng ma trận Eisenhower để phân loại các yêu cầu theo mức độ khẩn cấp và quan trọng, sau đó đề xuất lộ trình phù hợp với chiến lược số hóa của công ty.",
+      "C. Thực hiện phân tích tác động chéo (cross-impact analysis) giữa các yêu cầu, đánh giá sự phụ thuộc và xung đột, sau đó đề xuất giải pháp cân bằng dựa trên mô hình 'Minimum Viable Transformation'.",
+      "D. Đề xuất với lãnh đạo công ty chọn một phòng ban chủ đạo (ví dụ IT) để quyết định roadmap, tránh xung đột kéo dài."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tại cấp độ chuyên gia, cần phân tích sự phụ thuộc và tác động giữa các yêu cầu để tìm ra giải pháp cân bằng. Mô hình 'Minimum Viable Transformation' giúp xác định các bước nhỏ nhưng có tác động lớn, phù hợp với bối cảnh chuyển đổi số phức tạp. Các phương án khác thiếu tính hệ thống hoặc bỏ qua xung đột tiềm ẩn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502751312_EXPERT_1_q236"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho một tập đoàn sản xuất, CEO yêu cầu hoàn thành tất cả tính năng trong vòng 12 tháng để đáp ứng kế hoạch mở rộng thị trường. Tuy nhiên, nhóm phát triển ước tính cần ít nhất 18 tháng với nguồn lực hiện tại. Là Business Analyst cấp chuyên gia, bạn sẽ đề xuất giải pháp nào để cân bằng giữa kỳ vọng của CEO và năng lực thực tế?",
+    "options": [
+      "A. Đề xuất CEO gia hạn timeline thêm 6 tháng và tăng ngân sách để tuyển dụng thêm nhân sự, đảm bảo hoàn thành đầy đủ tính năng.",
+      "B. Sử dụng mô hình 'Timeboxing' để chia nhỏ roadmap thành các giai đoạn 6 tháng, tập trung vào các tính năng cốt lõi (core features) mang lại giá trị kinh doanh cao nhất trước, sau đó triển khai các tính năng mở rộng (extended features) trong giai đoạn sau.",
+      "C. Thực hiện phân tích rủi ro chi tiết và trình bày cho CEO thấy hậu quả của việc ép timeline, sau đó đề xuất cắt giảm 30% phạm vi dự án để phù hợp với timeline 12 tháng.",
+      "D. Áp dụng phương pháp Agile để tăng tốc độ phát triển, đồng thời đề xuất CEO chấp nhận chất lượng thấp hơn ở một số tính năng không quan trọng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp chuyên gia cần vừa đáp ứng kỳ vọng lãnh đạo vừa đảm bảo tính khả thi. 'Timeboxing' kết hợp với ưu tiên tính năng cốt lõi giúp tạo ra giá trị sớm và duy trì lộ trình linh hoạt. Các phương án khác hoặc bỏ qua kỳ vọng lãnh đạo, hoặc hy sinh chất lượng, hoặc không tối ưu hóa giá trị kinh doanh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502751314_EXPERT_2_418l"
+  },
+  {
+    "questionText": "Một công ty fintech Việt Nam đang xây dựng roadmap cho sản phẩm ví điện tử mới. Nhóm sản phẩm muốn ưu tiên các tính năng về bảo mật (security) và tuân thủ (compliance) để đáp ứng yêu cầu pháp lý, trong khi nhóm kinh doanh muốn đẩy mạnh các tính năng marketing (ví dụ: cashback, loyalty) để thu hút người dùng. Là Business Analyst cấp chuyên gia, bạn sẽ sử dụng framework nào để giải quyết xung đột này?",
+    "options": [
+      "A. MoSCoW, phân loại bảo mật và tuân thủ là 'Must Have', các tính năng marketing là 'Should Have' hoặc 'Could Have'.",
+      "B. Kano Model, đánh giá mức độ hài lòng của người dùng đối với từng nhóm tính năng để xác định ưu tiên.",
+      "C. Cost of Delay (CoD) kết hợp với Weighted Shortest Job First (WSJF), tính toán giá trị kinh doanh và chi phí trì hoãn cho từng nhóm tính năng trong bối cảnh thị trường fintech cạnh tranh.",
+      "D. RICE Scoring, sử dụng các tiêu chí Reach, Impact, Confidence, và Effort để đánh giá và so sánh các nhóm tính năng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong bối cảnh fintech, Cost of Delay (CoD) giúp định lượng tác động tài chính của việc trì hoãn các tính năng bảo mật/tuân thủ (ví dụ: rủi ro phạt pháp lý, mất niềm tin khách hàng) so với các tính năng marketing. WSJF giúp tối ưu hóa thứ tự thực hiện dựa trên giá trị kinh doanh và rủi ro. Các framework khác không phản ánh đầy đủ áp lực thị trường và pháp lý trong ngành fintech.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502751315_EXPERT_3_83gr"
+  },
+  {
+    "questionText": "Trong dự án số hóa quy trình mua hàng cho một tập đoàn bán lẻ, bạn nhận thấy backlog hiện tại tập trung quá nhiều vào các tính năng 'inside-out' (ví dụ: quản lý kho, báo cáo nội bộ) mà bỏ qua các tính năng 'outside-in' (ví dụ: trải nghiệm khách hàng, tích hợp với đối tác). Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để tái cấu trúc backlog?",
+    "options": [
+      "A. Áp dụng mô hình 'Jobs to be Done' (JTBD) để xác định các 'công việc' mà khách hàng và đối tác cần hoàn thành, sau đó ánh xạ các tính năng hiện tại vào mô hình này và bổ sung các hạng mục thiếu.",
+      "B. Tiến hành khảo sát toàn bộ nhân viên trong công ty để thu thập ý kiến về các tính năng cần ưu tiên, sau đó điều chỉnh backlog dựa trên kết quả khảo sát.",
+      "C. Đề xuất lãnh đạo công ty thuê một công ty tư vấn bên ngoài để đánh giá lại toàn bộ backlog và đề xuất giải pháp mới.",
+      "D. Sử dụng ma trận SWOT để phân tích điểm mạnh/yếu của backlog hiện tại, sau đó đề xuất thêm các tính năng 'outside-in' dựa trên cơ hội thị trường."
+    ],
+    "correctAnswer": "A",
+    "explanation: ": "Mô hình JTBD giúp tập trung vào nhu cầu thực sự của khách hàng và đối tác, từ đó tái cấu trúc backlog theo hướng 'outside-in'. Đây là cách tiếp cận chuyên gia vì nó giải quyết gốc rễ vấn đề (tập trung quá nhiều vào bên trong) và đảm bảo tính ứng dụng cao. Các phương án khác hoặc thiếu tính hệ thống, hoặc phụ thuộc vào ý kiến nội bộ, hoặc không trực tiếp giải quyết vấn đề.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502751316_EXPERT_4_jble"
+  },
+  {
+    "questionText": "Một công ty viễn thông đang triển khai dự án chuyển đổi số quy trình chăm sóc khách hàng. Sau khi phân tích, bạn nhận thấy có 3 nhóm hạng mục trong backlog: (1) Tính năng cơ bản (ví dụ: tra cứu thông tin khách hàng), (2) Tính năng cải tiến (ví dụ: chatbot hỗ trợ 24/7), và (3) Tính năng đột phá (ví dụ: dự đoán nhu cầu khách hàng bằng AI). Là Business Analyst cấp chuyên gia, bạn sẽ đề xuất chiến lược ưu tiên nào?",
+    "options": [
+      "A. Ưu tiên triển khai tất cả các tính năng cơ bản trước, sau đó đến cải tiến và cuối cùng là đột phá, để đảm bảo nền tảng vững chắc.",
+      "B. Áp dụng mô hình 'Horizon Planning' của McKinsey, phân bổ nguồn lực theo tỷ lệ 70% cho tính năng cơ bản, 20% cho cải tiến, và 10% cho đột phá để cân bằng giữa ngắn hạn và dài hạn.",
+      "C. Sử dụng mô hình 'Three Horizons' của McKinsey, nhưng điều chỉnh tỷ lệ phân bổ nguồn lực dựa trên phân tích giá trị kinh doanh và rủi ro của từng nhóm tính năng trong bối cảnh cụ thể của công ty viễn thông.",
+      "D. Đề xuất lãnh đạo công ty tập trung 100% vào các tính năng đột phá để tạo lợi thế cạnh tranh, bỏ qua các tính năng cơ bản và cải tiến."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mô hình 'Three Horizons' phù hợp cho chiến lược dài hạn, nhưng cần điều chỉnh tỷ lệ phân bổ dựa trên phân tích cụ thể (ví dụ: áp lực cạnh tranh, năng lực công nghệ) thay vì áp dụng cứng nhắc. Đây là cách tiếp cận chuyên gia vì nó kết hợp lý thuyết với thực tiễn, đảm bảo tính linh hoạt và hiệu quả. Các phương án khác hoặc quá cứng nhắc, hoặc bỏ qua cân bằng chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502751317_EXPERT_5_7r5w"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống CRM cho một ngân hàng, bạn nhận thấy roadmap hiện tại chỉ tập trung vào các tính năng phục vụ bộ phận bán hàng, trong khi bỏ qua nhu cầu của bộ phận chăm sóc khách hàng và tuân thủ. Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để đảm bảo roadmap phản ánh đầy đủ nhu cầu của tất cả các bên liên quan?",
+    "options": [
+      "A. Tổ chức các cuộc họp riêng với từng bộ phận để thu thập yêu cầu bổ sung, sau đó cập nhật roadmap dựa trên phản hồi.",
+      "B. Áp dụng mô hình 'Stakeholder Impact Mapping' để xác định mức độ ảnh hưởng và tác động của từng bộ phận lên dự án, sau đó điều chỉnh roadmap dựa trên ma trận ảnh hưởng này.",
+      "C. Đề xuất lãnh đạo ngân hàng thành lập một nhóm làm việc đa chức năng (cross-functional team) để cùng xây dựng roadmap, đảm bảo tất cả các bên đều được đại diện.",
+      "D. Sử dụng ma trận RACI để xác định vai trò của từng bộ phận trong dự án, sau đó điều chỉnh roadmap dựa trên trách nhiệm của từng bộ phận."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'Stakeholder Impact Mapping' giúp đánh giá toàn diện mức độ ảnh hưởng và tác động của từng bên liên quan, từ đó điều chỉnh roadmap một cách chiến lược. Đây là cách tiếp cận chuyên gia vì nó giải quyết vấn đề cân bằng nhu cầu giữa các bộ phận một cách hệ thống. Các phương án khác hoặc thiếu tính chiến lược, hoặc phụ thuộc quá nhiều vào quy trình họp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502751318_EXPERT_6_l3oq"
+  },
+  {
+    "questionText": "Một công ty thương mại điện tử Việt Nam đang xây dựng roadmap cho sản phẩm mới. Nhóm sản phẩm muốn ưu tiên các tính năng liên quan đến trải nghiệm người dùng (UX), trong khi nhóm kỹ thuật đề xuất ưu tiên các tính năng liên quan đến kiến trúc hệ thống (ví dụ: microservices, database optimization) để đảm bảo khả năng mở rộng. Là Business Analyst cấp chuyên gia, bạn sẽ sử dụng phương pháp nào để giải quyết xung đột này?",
+    "options": [
+      "A. Áp dụng mô hình 'Technical Debt Quadrant' để đánh giá mức độ ảnh hưởng của việc trì hoãn các tính năng kỹ thuật, sau đó đề xuất lộ trình cân bằng giữa UX và kiến trúc hệ thống.",
+      "B. Đề xuất nhóm sản phẩm và nhóm kỹ thuật cùng tham gia vào quá trình ưu tiên, sử dụng phương pháp bỏ phiếu để đạt được sự đồng thuận.",
+      "C. Sử dụng ma trận 'Value vs. Complexity' để đánh giá và so sánh các tính năng UX và kỹ thuật, sau đó đề xuất lộ trình dựa trên kết quả đánh giá.",
+      "D. Đề xuất lãnh đạo công ty thuê một chuyên gia tư vấn bên ngoài để đánh giá và quyết định lộ trình tối ưu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'Technical Debt Quadrant' giúp định lượng tác động của việc trì hoãn các tính năng kỹ thuật (ví dụ: chi phí sửa lỗi, rủi ro hệ thống) so với lợi ích ngắn hạn của các tính năng UX. Đây là cách tiếp cận chuyên gia vì nó giải quyết gốc rễ vấn đề (cân bằng giữa ngắn hạn và dài hạn) trong bối cảnh thương mại điện tử có tốc độ phát triển nhanh. Các phương án khác hoặc thiếu tính định lượng, hoặc phụ thuộc vào ý kiến chủ quan.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502751318_EXPERT_7_7yol"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi số quy trình tài chính cho một tập đoàn đa ngành, bạn nhận thấy backlog hiện tại có quá nhiều hạng mục liên quan đến tự động hóa quy trình (RPA), trong khi bỏ qua các hạng mục liên quan đến phân tích dữ liệu và ra quyết định. Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để tái cấu trúc backlog?",
+    "options": [
+      "A. Đề xuất lãnh đạo tập đoàn cắt giảm 50% các hạng mục RPA để tập trung vào phân tích dữ liệu và ra quyết định.",
+      "B. Áp dụng mô hình 'Digital Maturity Assessment' để đánh giá mức độ trưởng thành số của từng quy trình tài chính, sau đó tái cấu trúc backlog dựa trên kết quả đánh giá và chiến lược số hóa của tập đoàn.",
+      "C. Tổ chức hội thảo với các bộ phận tài chính để thu thập ý kiến về các hạng mục cần ưu tiên, sau đó điều chỉnh backlog dựa trên phản hồi.",
+      "D. Sử dụng ma trận SWOT để phân tích điểm mạnh/yếu của backlog hiện tại, sau đó đề xuất thêm các hạng mục phân tích dữ liệu dựa trên cơ hội thị trường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'Digital Maturity Assessment' giúp đánh giá toàn diện mức độ sẵn sàng số hóa của các quy trình, từ đó tái cấu trúc backlog theo hướng chiến lược và cân bằng giữa tự động hóa và phân tích dữ liệu. Đây là cách tiếp cận chuyên gia vì nó giải quyết vấn đề một cách hệ thống và định hướng dài hạn. Các phương án khác hoặc quá đơn giản, hoặc thiếu tính chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502751319_EXPERT_8_lmtn"
+  },
+  {
+    "questionText": "Một công ty sản xuất đang triển khai dự án số hóa chuỗi cung ứng. Sau khi thu thập yêu cầu, bạn nhận thấy có sự mâu thuẫn giữa các bên liên quan: Bộ phận mua hàng muốn ưu tiên tính năng quản lý nhà cung cấp, bộ phận logistics muốn ưu tiên tính năng theo dõi vận chuyển thời gian thực, và bộ phận sản xuất muốn ưu tiên tính năng dự báo nhu cầu. Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để xây dựng roadmap hợp lý?",
+    "options": [
+      "A. Áp dụng mô hình 'Dependency Mapping' để xác định sự phụ thuộc giữa các tính năng, sau đó xây dựng roadmap dựa trên thứ tự phụ thuộc và giá trị kinh doanh của từng tính năng.",
+      "B. Đề xuất lãnh đạo công ty thành lập một ủy ban điều phối để quyết định ưu tiên, đảm bảo tất cả các bộ phận đều có tiếng nói.",
+      "C. Sử dụng ma trận 'Impact vs. Effort' để đánh giá và so sánh các tính năng, sau đó đề xuất roadmap dựa trên kết quả đánh giá.",
+      "D. Tổ chức các cuộc họp riêng với từng bộ phận để thu thập chi tiết yêu cầu, sau đó xây dựng roadmap dựa trên sự thỏa hiệp giữa các bên."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'Dependency Mapping' giúp xác định mối quan hệ phụ thuộc giữa các tính năng, từ đó xây dựng roadmap đảm bảo tính logic và khả thi. Đây là cách tiếp cận chuyên gia vì nó giải quyết vấn đề mâu thuẫn bằng cách tập trung vào sự phụ thuộc kỹ thuật và giá trị kinh doanh, thay vì chỉ dựa trên ý kiến chủ quan. Các phương án khác hoặc thiếu tính hệ thống, hoặc phụ thuộc quá nhiều vào quy trình họp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502751320_EXPERT_9_st5y"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý nhân sự (HRM) cho một công ty đa quốc gia, bạn nhận thấy roadmap hiện tại chỉ tập trung vào các tính năng cơ bản (ví dụ: quản lý hồ sơ, chấm công), trong khi bỏ qua các tính năng chiến lược như phân tích năng lực nhân sự (workforce analytics) và lập kế hoạch nguồn nhân lực. Là Business Analyst cấp chuyên gia, bạn sẽ đề xuất giải pháp nào?",
+    "options": [
+      "A. Đề xuất lãnh đạo công ty gia hạn timeline dự án để bổ sung các tính năng chiến lược, đảm bảo hệ thống HRM đáp ứng đầy đủ nhu cầu.",
+      "B. Áp dụng mô hình 'Balanced Scorecard' để đánh giá tác động của từng nhóm tính năng lên các mục tiêu chiến lược của công ty, sau đó tái cấu trúc roadmap dựa trên kết quả đánh giá.",
+      "C. Sử dụng ma trận 'Value vs. Risk' để đánh giá và so sánh các tính năng, sau đó đề xuất lộ trình triển khai dựa trên kết quả đánh giá.",
+      "D. Đề xuất tách dự án thành hai giai đoạn: giai đoạn 1 triển khai các tính năng cơ bản, giai đoạn 2 triển khai các tính năng chiến lược sau khi giai đoạn 1 hoàn thành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'Balanced Scorecard' giúp liên kết các tính năng HRM với mục tiêu chiến lược của công ty, từ đó tái cấu trúc roadmap theo hướng chiến lược và dài hạn. Đây là cách tiếp cận chuyên gia vì nó đảm bảo roadmap không chỉ đáp ứng nhu cầu tức thời mà còn hỗ trợ mục tiêu kinh doanh tổng thể. Các phương án khác hoặc thiếu tính chiến lược, hoặc quá đơn giản.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "ANALYSIS",
+    "id": "q_1780502751321_EXPERT_10_fdz5"
+  },
+  {
+    "questionText": "Một công ty bảo hiểm đang xây dựng roadmap cho sản phẩm bảo hiểm sức khỏe số. Nhóm sản phẩm muốn ưu tiên các tính năng liên quan đến trải nghiệm khách hàng (ví dụ: đăng ký online, thanh toán tự động), trong khi nhóm tuân thủ (compliance) yêu cầu ưu tiên các tính năng liên quan đến bảo mật dữ liệu và tuân thủ pháp lý. Là Business Analyst cấp chuyên gia, bạn sẽ sử dụng framework nào để giải quyết xung đột này?",
+    "options": [
+      "A. MoSCoW, phân loại các tính năng bảo mật và tuân thủ là 'Must Have', các tính năng trải nghiệm khách hàng là 'Should Have' hoặc 'Could Have'.",
+      "B. Kano Model, đánh giá mức độ hài lòng của khách hàng đối với từng nhóm tính năng để xác định ưu tiên.",
+      "C. 'Regulatory Impact Analysis' kết hợp với 'Business Value Assessment', đánh giá tác động của các yêu cầu tuân thủ lên giá trị kinh doanh, sau đó đề xuất lộ trình cân bằng dựa trên kết quả phân tích.",
+      "D. RICE Scoring, sử dụng các tiêu chí Reach, Impact, Confidence, và Effort để đánh giá và so sánh các nhóm tính năng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong ngành bảo hiểm, 'Regulatory Impact Analysis' giúp định lượng tác động của các yêu cầu tuân thủ (ví dụ: rủi ro pháp lý, phạt tiền) lên giá trị kinh doanh. Kết hợp với 'Business Value Assessment' giúp cân bằng giữa trải nghiệm khách hàng và tuân thủ pháp lý một cách chiến lược. Đây là cách tiếp cận chuyên gia vì nó giải quyết vấn đề trong bối cảnh đặc thù của ngành bảo hiểm. Các framework khác không phản ánh đầy đủ áp lực tuân thủ và giá trị kinh doanh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SITUATION",
+    "id": "q_1780502751321_EXPERT_11_3eal"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi số quy trình bán hàng cho một công ty FMCG, bạn nhận thấy backlog hiện tại có quá nhiều hạng mục liên quan đến tối ưu hóa quy trình nội bộ, trong khi bỏ qua các hạng mục liên quan đến tích hợp với hệ thống của đối tác (ví dụ: nhà phân phối, nhà bán lẻ). Là Business Analyst cấp chuyên gia, bạn sẽ làm gì để tái cấu trúc backlog?",
+    "options": [
+      "A. Đề xuất lãnh đạo công ty ưu tiên các hạng mục tích hợp với đối tác, đồng thời cắt giảm 30% các hạng mục tối ưu hóa quy trình nội bộ để đảm bảo nguồn lực.",
+      "B. Áp dụng mô hình 'Ecosystem Mapping' để xác định các bên liên quan trong hệ sinh thái bán hàng, sau đó tái cấu trúc backlog dựa trên mức độ ảnh hưởng và tác động của từng bên lên giá trị kinh doanh.",
+      "C. Tổ chức hội thảo với các bộ phận liên quan để thu thập ý kiến về các hạng mục cần ưu tiên, sau đó điều chỉnh backlog dựa trên phản hồi.",
+      "D. Sử dụng ma trận SWOT để phân tích điểm mạnh/yếu của backlog hiện tại, sau đó đề xuất thêm các hạng mục tích hợp với đối tác dựa trên cơ hội thị trường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'Ecosystem Mapping' giúp xác định và đánh giá vai trò của các bên liên quan trong hệ sinh thái bán hàng, từ đó tái cấu trúc backlog theo hướng chiến lược và cân bằng giữa nội bộ và đối tác. Đây là cách tiếp cận chuyên gia vì nó giải quyết vấn đề một cách hệ thống và định hướng dài hạn. Các phương án khác hoặc quá đơn giản, hoặc thiếu tính chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Backlog Prioritization & Roadmapping",
+    "category": "SKILL",
+    "id": "q_1780502751322_EXPERT_12_au2y"
+  }
+]

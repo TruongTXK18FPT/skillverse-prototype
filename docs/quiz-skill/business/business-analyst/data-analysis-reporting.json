@@ -1,0 +1,782 @@
+[
+  {
+    "questionText": "Trong Excel, hàm nào sau đây được sử dụng để tính tổng các giá trị trong một phạm vi ô, chỉ khi điều kiện cho trước được thỏa mãn?",
+    "options": [
+      "A. SUM()",
+      "B. SUMIF()",
+      "C. COUNT()",
+      "D. AVERAGE()"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hàm SUMIF() tính tổng các giá trị trong phạm vi chỉ khi điều kiện được đáp ứng, phù hợp cho việc lọc và tổng hợp dữ liệu có điều kiện trong phân tích nghiệp vụ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501397444_BEGINNER_0_4ue4"
+  },
+  {
+    "questionText": "Khi phân tích dữ liệu bán hàng, bạn nhận thấy doanh thu tháng 6 giảm 30% so với tháng 5. Điều nào sau đây là bước tiếp theo hợp lý nhất để xác định nguyên nhân?",
+    "options": [
+      "A. Báo cáo ngay cho quản lý mà không cần kiểm tra thêm.",
+      "B. So sánh dữ liệu tháng 6 với cùng kỳ năm trước và phân tích các yếu tố bên ngoài như chương trình khuyến mãi, mùa vụ.",
+      "C. Xóa dữ liệu tháng 6 vì có thể bị lỗi.",
+      "D. Tạo biểu đồ tròn để trực quan hóa doanh thu tháng 6."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc so sánh với cùng kỳ năm trước và phân tích các yếu tố ảnh hưởng giúp xác định nguyên nhân thực tế, tránh kết luận vội vàng từ dữ liệu đơn lẻ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501397444_BEGINNER_1_n15v"
+  },
+  {
+    "questionText": "Trong SQL, câu lệnh nào sau đây được sử dụng để lọc dữ liệu từ một bảng dựa trên một điều kiện cụ thể?",
+    "options": [
+      "A. SELECT * FROM table_name WHERE condition;",
+      "B. UPDATE table_name SET column = value;",
+      "C. INSERT INTO table_name VALUES (value1, value2);",
+      "D. DELETE FROM table_name;"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Câu lệnh SELECT với mệnh đề WHERE dùng để truy vấn và lọc dữ liệu theo điều kiện, là thao tác cơ bản nhất trong phân tích dữ liệu bằng SQL.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501397444_BEGINNER_2_dsx3"
+  },
+  {
+    "questionText": "Bạn được yêu cầu tạo báo cáo hàng tuần về tỷ lệ chuyển đổi khách hàng (conversion rate) từ dữ liệu CRM. Mục tiêu chính của báo cáo này là gì?",
+    "options": [
+      "A. Để tạo biểu đồ đẹp mắt cho cuộc họp.",
+      "B. Để hỗ trợ quyết định điều chỉnh chiến lược tiếp thị hoặc bán hàng dựa trên hiệu suất thực tế.",
+      "C. Để lưu trữ dữ liệu cho mục đích kiểm toán.",
+      "D. Để so sánh với báo cáo của đối thủ cạnh tranh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Báo cáo tỷ lệ chuyển đổi giúp đánh giá hiệu quả của các chiến dịch và đưa ra quyết định cải thiện quy trình kinh doanh, không chỉ đơn thuần là trực quan hóa dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501397444_BEGINNER_3_qw4g"
+  },
+  {
+    "questionText": "Khi xây dựng dashboard trên Power BI, yếu tố nào sau đây quan trọng nhất để đảm bảo dashboard hỗ trợ ra quyết định hiệu quả?",
+    "options": [
+      "A. Sử dụng nhiều màu sắc sặc sỡ để thu hút sự chú ý.",
+      "B. Chỉ hiển thị các chỉ số (KPI) và xu hướng chính liên quan đến mục tiêu kinh doanh.",
+      "C. Đưa tất cả dữ liệu có sẵn vào dashboard để không bỏ sót thông tin.",
+      "D. Sử dụng càng nhiều loại biểu đồ càng tốt để đa dạng hóa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dashboard hiệu quả cần tập trung vào các chỉ số và xu hướng chính, giúp người dùng nhanh chóng nắm bắt thông tin quan trọng để ra quyết định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501397444_BEGINNER_4_d6r7"
+  },
+  {
+    "questionText": "Trong quá trình phân tích dữ liệu, bạn phát hiện một số giá trị trong cột 'Doanh thu' bị âm. Điều này có thể cho thấy vấn đề gì?",
+    "options": [
+      "A. Dữ liệu nhập sai hoặc lỗi hệ thống trong quá trình ghi nhận giao dịch.",
+      "B. Doanh thu thực tế của công ty đang giảm sút.",
+      "C. Đây là giá trị bình thường trong phân tích tài chính.",
+      "D. Cần chuyển đổi đơn vị tiền tệ để xử lý."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Doanh thu âm thường không hợp lý và có thể do lỗi nhập liệu, lỗi hệ thống hoặc sai sót trong quy trình ghi nhận dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501397444_BEGINNER_5_wu67"
+  },
+  {
+    "questionText": "Khi sử dụng hàm VLOOKUP trong Excel, tham số thứ ba (col_index_num) có ý nghĩa gì?",
+    "options": [
+      "A. Số thứ tự của cột chứa giá trị cần tìm kiếm trong bảng dữ liệu.",
+      "B. Số thứ tự của cột chứa giá trị trả về trong bảng dữ liệu.",
+      "C. Phạm vi ô cần tìm kiếm.",
+      "D. Điều kiện để lọc dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tham số col_index_num trong VLOOKUP chỉ định số thứ tự của cột trong bảng dữ liệu chứa giá trị cần trả về sau khi tìm kiếm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501397444_BEGINNER_6_7utl"
+  },
+  {
+    "questionText": "Một báo cáo phân tích dữ liệu bán hàng cần bao gồm những yếu tố nào để đảm bảo tính hữu ích cho quản lý?",
+    "options": [
+      "A. Chỉ cần hiển thị tổng doanh thu và số lượng đơn hàng.",
+      "B. Tổng doanh thu, số lượng đơn hàng, tỷ lệ chuyển đổi, xu hướng theo thời gian và phân tích nguyên nhân biến động.",
+      "C. Danh sách đầy đủ các đơn hàng và thông tin khách hàng.",
+      "D. Biểu đồ tròn thể hiện tỷ lệ đóng góp của từng sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Báo cáo hữu ích cần cung cấp thông tin tổng quan, xu hướng và phân tích nguyên nhân để hỗ trợ quyết định, không chỉ dữ liệu thô hoặc biểu đồ đơn giản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501397444_BEGINNER_7_cbvz"
+  },
+  {
+    "questionText": "Trong SQL, câu lệnh nào sau đây dùng để nhóm dữ liệu theo một cột và tính tổng cho mỗi nhóm?",
+    "options": [
+      "A. SELECT column, SUM(value) FROM table_name GROUP BY column;",
+      "B. SELECT column, SUM(value) FROM table_name ORDER BY column;",
+      "C. SELECT column, COUNT(value) FROM table_name WHERE condition;",
+      "D. SELECT * FROM table_name GROUP BY column;"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Câu lệnh SELECT với GROUP BY dùng để nhóm dữ liệu theo một cột và tính toán tổng hợp (như SUM) cho mỗi nhóm, cần thiết trong phân tích dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501397444_BEGINNER_8_xlcy"
+  },
+  {
+    "questionText": "Khi phân tích dữ liệu khách hàng, bạn nhận thấy tỷ lệ khách hàng mới giảm mạnh trong quý vừa qua. Bước nào sau đây nên được thực hiện đầu tiên?",
+    "options": [
+      "A. Đề xuất ngay chương trình khuyến mãi để thu hút khách hàng mới.",
+      "B. Kiểm tra chất lượng dữ liệu và xác nhận xu hướng này là thực tế.",
+      "C. Báo cáo kết quả cho quản lý mà không cần phân tích thêm.",
+      "D. So sánh với tỷ lệ khách hàng cũ để đánh giá tổng thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trước khi đưa ra quyết định, cần xác minh tính chính xác của dữ liệu để đảm bảo xu hướng được quan sát là thực tế, tránh phân tích sai lệch.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501397444_BEGINNER_9_1wkx"
+  },
+  {
+    "questionText": "Trong Excel, hàm nào sau đây được sử dụng để đếm số lượng ô chứa giá trị số trong một phạm vi?",
+    "options": [
+      "A. COUNT()",
+      "B. COUNTA()",
+      "C. COUNTIF()",
+      "D. SUM()"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Hàm COUNT() đếm số lượng ô chứa giá trị số trong phạm vi, trong khi COUNTA() đếm tất cả ô không rỗng (bao gồm cả văn bản).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "KNOWLEDGE",
+    "id": "q_1780501397444_BEGINNER_10_eu7w"
+  },
+  {
+    "questionText": "Khi xây dựng báo cáo trên Power BI, điều nào sau đây là sai lầm phổ biến cần tránh?",
+    "options": [
+      "A. Chỉ hiển thị dữ liệu thô mà không có phân tích hoặc giải thích.",
+      "B. Sử dụng biểu đồ phù hợp với loại dữ liệu (ví dụ: biểu đồ đường cho xu hướng thời gian).",
+      "C. Giới hạn số lượng chỉ số (KPI) để tránh quá tải thông tin.",
+      "D. Đảm bảo dashboard có thể tương tác và lọc dữ liệu theo nhu cầu người dùng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Báo cáo chỉ hiển thị dữ liệu thô mà không có phân tích hoặc ngữ cảnh sẽ không hỗ trợ hiệu quả cho việc ra quyết định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501397444_BEGINNER_11_bs19"
+  },
+  {
+    "questionText": "Bạn được giao nhiệm vụ kiểm tra chất lượng dữ liệu trước khi phân tích. Điều nào sau đây KHÔNG phải là dấu hiệu của dữ liệu chất lượng kém?",
+    "options": [
+      "A. Giá trị trùng lặp trong cột khóa chính (primary key).",
+      "B. Giá trị NULL trong các cột bắt buộc.",
+      "C. Dữ liệu được cập nhật theo định kỳ hàng ngày.",
+      "D. Giá trị không nhất quán (ví dụ: cùng một khách hàng có nhiều mã khách hàng khác nhau)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dữ liệu được cập nhật định kỳ là dấu hiệu tích cực về chất lượng dữ liệu, trong khi các lựa chọn còn lại cho thấy lỗi hoặc thiếu sót trong dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501397444_BEGINNER_12_6aqu"
+  },
+  {
+    "questionText": "Trong một báo cáo hàng tháng về doanh số bán hàng của công ty FMCG tại Việt Nam, bạn nhận thấy doanh số tháng 6 giảm 15% so với tháng 5. Dữ liệu cho thấy không có sự thay đổi về giá sản phẩm, chiến dịch marketing, hay số lượng cửa hàng phân phối. Bước tiếp theo hợp lý nhất để xác định nguyên nhân là gì?",
+    "options": [
+      "A. Kiểm tra dữ liệu thô để xác nhận tính chính xác của số liệu doanh số tháng 6.",
+      "B. So sánh doanh số tháng 6 với cùng kỳ năm trước để loại trừ yếu tố mùa vụ.",
+      "C. Tạo biểu đồ đường thể hiện xu hướng doanh số từ tháng 1 đến tháng 6 để tìm điểm bất thường.",
+      "D. Phỏng vấn trực tiếp các nhân viên bán hàng để thu thập thông tin định tính về nguyên nhân."
+    ],
+    "correctAnswer": "B",
+    "explanation": "So sánh với cùng kỳ năm trước giúp loại trừ yếu tố mùa vụ (ví dụ: tháng 6 thường có doanh số thấp hơn tháng 5 do ảnh hưởng của mùa mưa ở miền Nam). Đây là bước phân tích ban đầu trước khi đi sâu vào kiểm tra dữ liệu chi tiết hoặc phỏng vấn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501485083_INTERMEDIATE_0_ozx7"
+  },
+  {
+    "questionText": "Bạn được yêu cầu xây dựng dashboard theo dõi hiệu suất bán hàng của các khu vực tại Việt Nam trên Power BI. Yêu cầu chính là giúp lãnh đạo nhanh chóng nhận diện khu vực có doanh số thấp hơn 80% mục tiêu. Loại biểu đồ nào phù hợp nhất để trực quan hóa yêu cầu này?",
+    "options": [
+      "A. Biểu đồ cột xếp chồng (Stacked Column Chart) so sánh doanh số thực tế và mục tiêu theo khu vực.",
+      "B. Biểu đồ nhiệt (Heatmap) với màu sắc thể hiện tỷ lệ hoàn thành mục tiêu (dưới 80% sẽ nổi bật).",
+      "C. Biểu đồ đường (Line Chart) thể hiện xu hướng doanh số theo thời gian cho từng khu vực.",
+      "D. Biểu đồ tròn (Pie Chart) thể hiện tỷ trọng doanh số của từng khu vực."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Heatmap giúp trực quan hóa dữ liệu theo màu sắc, dễ dàng nhận diện khu vực có tỷ lệ hoàn thành dưới 80% (ví dụ: màu đỏ) mà không cần đọc số liệu chi tiết. Đây là lựa chọn tối ưu cho dashboard hỗ trợ ra quyết định nhanh.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501485083_INTERMEDIATE_1_z4r9"
+  },
+  {
+    "questionText": "Khi phân tích dữ liệu khách hàng của một ngân hàng tại Việt Nam, bạn phát hiện có 5% hồ sơ khách hàng thiếu thông tin về thu nhập. Bạn cần báo cáo vấn đề này cho đội ngũ Data Governance. Cách diễn đạt nào dưới đây là hiệu quả nhất để truyền đạt vấn đề?",
+    "options": [
+      "A. 'Có 5% dữ liệu thu nhập bị thiếu, cần kiểm tra lại toàn bộ hệ thống.'",
+      "B. '5% hồ sơ khách hàng thiếu trường thu nhập, ảnh hưởng đến độ tin cậy của các phân tích liên quan đến phân khúc thu nhập.'",
+      "C. 'Dữ liệu thu nhập không đầy đủ, cần yêu cầu khách hàng cập nhật lại.'",
+      "D. 'Cần làm sạch dữ liệu thu nhập để đảm bảo báo cáo chính xác.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời nêu rõ tỷ lệ thiếu dữ liệu (5%), trường cụ thể (thu nhập), và tác động đến phân tích (phân khúc thu nhập). Điều này giúp đội ngũ Data Governance hiểu được mức độ nghiêm trọng và phạm vi ảnh hưởng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501485084_INTERMEDIATE_2_ok9p"
+  },
+  {
+    "questionText": "Bạn đang sử dụng SQL để trích xuất dữ liệu bán hàng từ cơ sở dữ liệu của công ty bán lẻ. Câu lệnh nào dưới đây sẽ trả về danh sách các sản phẩm có doanh số cao nhất trong quý 2/2023, sắp xếp theo thứ tự giảm dần?",
+    "options": [
+      "A. SELECT product_id, SUM(revenue) FROM sales WHERE quarter = 'Q2-2023' GROUP BY product_id ORDER BY SUM(revenue) DESC;",
+      "B. SELECT product_id, revenue FROM sales WHERE quarter = 'Q2-2023' ORDER BY revenue DESC;",
+      "C. SELECT product_id, MAX(revenue) FROM sales WHERE quarter = 'Q2-2023' GROUP BY product_id;",
+      "D. SELECT product_id, COUNT(*) FROM sales WHERE quarter = 'Q2-2023' GROUP BY product_id ORDER BY COUNT(*) DESC;"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Câu lệnh A sử dụng SUM(revenue) để tính tổng doanh số cho từng sản phẩm trong quý 2/2023, sau đó sắp xếp kết quả theo thứ tự giảm dần. Đây là cách chính xác để xác định sản phẩm có doanh số cao nhất.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501485084_INTERMEDIATE_3_ev3b"
+  },
+  {
+    "questionText": "Trong báo cáo phân tích hiệu quả chiến dịch marketing cho sản phẩm mới, bạn nhận thấy tỷ lệ chuyển đổi (conversion rate) từ quảng cáo Facebook sang mua hàng là 2.5%, trong khi mục tiêu đề ra là 3%. Kết luận nào dưới đây là hợp lý nhất?",
+    "options": [
+      "A. Chiến dịch thất bại vì không đạt mục tiêu 3%.",
+      "B. Cần tăng ngân sách quảng cáo để cải thiện tỷ lệ chuyển đổi.",
+      "C. Tỷ lệ chuyển đổi 2.5% là thấp so với trung bình ngành (thường 3-5%), cần phân tích sâu hơn về đối tượng mục tiêu và nội dung quảng cáo.",
+      "D. Không cần điều chỉnh gì vì 2.5% vẫn là con số chấp nhận được."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kết luận C đưa ra bối cảnh so sánh với trung bình ngành và đề xuất phân tích sâu hơn về nguyên nhân (đối tượng, nội dung quảng cáo), thay vì chỉ kết luận thất bại hoặc tăng ngân sách một cách mơ hồ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501485084_INTERMEDIATE_4_7le6"
+  },
+  {
+    "questionText": "Bạn được giao nhiệm vụ xây dựng báo cáo tự động hóa hàng tuần về tình trạng tồn kho của các chi nhánh siêu thị. Yêu cầu là báo cáo phải làm nổi bật các mặt hàng sắp hết hàng (tồn kho < 10 đơn vị) và có xu hướng bán chạy. Công cụ nào dưới đây là phù hợp nhất để đáp ứng yêu cầu này?",
+    "options": [
+      "A. Sử dụng Excel với PivotTable và Conditional Formatting để làm nổi bật mặt hàng sắp hết hàng.",
+      "B. Sử dụng Power BI để tạo dashboard với biểu đồ kết hợp (Combo Chart) thể hiện tồn kho và doanh số, cùng bộ lọc theo chi nhánh.",
+      "C. Sử dụng SQL để trích xuất dữ liệu tồn kho và xuất ra file CSV hàng tuần.",
+      "D. Sử dụng Python để viết script tự động gửi email báo cáo tồn kho cho các chi nhánh."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Power BI cho phép tạo dashboard tương tác với biểu đồ kết hợp (ví dụ: cột cho tồn kho, đường cho doanh số), giúp làm nổi bật mặt hàng sắp hết hàng và xu hướng bán chạy. Bộ lọc theo chi nhánh cũng giúp tùy chỉnh báo cáo linh hoạt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501485084_INTERMEDIATE_5_xruk"
+  },
+  {
+    "questionText": "Khi phân tích dữ liệu bán hàng của một chuỗi cửa hàng thời trang, bạn phát hiện doanh số của một số cửa hàng giảm mạnh trong tháng 7. Sau khi kiểm tra, bạn nhận thấy dữ liệu của các cửa hàng này bị thiếu trong 5 ngày đầu tháng 7. Bạn nên làm gì tiếp theo?",
+    "options": [
+      "A. Loại bỏ hoàn toàn dữ liệu của tháng 7 để tránh sai lệch trong báo cáo.",
+      "B. Ước tính doanh số thiếu hụt dựa trên trung bình doanh số của các ngày còn lại trong tháng.",
+      "C. Liên hệ với bộ phận IT để khôi phục dữ liệu thiếu, đồng thời ghi chú rõ về khoảng trống dữ liệu trong báo cáo.",
+      "D. Báo cáo rằng dữ liệu không đủ để phân tích và ngừng công việc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C đảm bảo tính minh bạch và chính xác của báo cáo bằng cách khôi phục dữ liệu thiếu (nếu có thể) và ghi chú rõ về khoảng trống dữ liệu. Việc ước tính (B) có thể dẫn đến sai lệch, trong khi loại bỏ dữ liệu (A) hoặc ngừng phân tích (D) là không cần thiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501485084_INTERMEDIATE_6_yoen"
+  },
+  {
+    "questionText": "Bạn đang xây dựng báo cáo phân tích hiệu quả kênh bán hàng cho một công ty thương mại điện tử. Bạn muốn so sánh tỷ lệ chuyển đổi (conversion rate) giữa các kênh: Website, Ứng dụng di động, và Mạng xã hội. Loại biểu đồ nào dưới đây là phù hợp nhất?",
+    "options": [
+      "A. Biểu đồ cột (Bar Chart) với trục tung là tỷ lệ chuyển đổi và trục hoành là các kênh bán hàng.",
+      "B. Biểu đồ đường (Line Chart) thể hiện tỷ lệ chuyển đổi theo thời gian cho từng kênh.",
+      "C. Biểu đồ tròn (Pie Chart) thể hiện tỷ trọng tỷ lệ chuyển đổi của từng kênh.",
+      "D. Biểu đồ phân tán (Scatter Plot) thể hiện mối quan hệ giữa tỷ lệ chuyển đổi và doanh số."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Biểu đồ cột giúp so sánh trực tiếp tỷ lệ chuyển đổi giữa các kênh một cách rõ ràng và dễ hiểu. Biểu đồ đường (B) phù hợp để theo dõi xu hướng theo thời gian, không phải so sánh giữa các nhóm. Biểu đồ tròn (C) không hiệu quả cho so sánh tỷ lệ chuyển đổi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501485085_INTERMEDIATE_7_z03v"
+  },
+  {
+    "questionText": "Trong quá trình phân tích dữ liệu khách hàng cho một công ty viễn thông, bạn phát hiện có sự gia tăng đột biến về số lượng khách hàng hủy dịch vụ trong tháng 8. Sau khi kiểm tra, bạn nhận thấy dữ liệu này chỉ xảy ra ở một khu vực cụ thể. Bước tiếp theo hợp lý nhất là gì?",
+    "options": [
+      "A. Báo cáo ngay cho lãnh đạo về tình trạng khách hàng hủy dịch vụ tăng đột biến.",
+      "B. Phân tích sâu hơn về khu vực cụ thể đó, bao gồm kiểm tra dữ liệu mạng lưới, phản hồi khách hàng, và các sự kiện đặc biệt trong tháng 8.",
+      "C. So sánh tỷ lệ hủy dịch vụ của khu vực này với các khu vực khác để xác định mức độ nghiêm trọng.",
+      "D. Đề xuất triển khai chương trình khuyến mãi để giữ chân khách hàng tại khu vực này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bước tiếp theo cần tập trung vào phân tích nguyên nhân cụ thể tại khu vực có vấn đề (ví dụ: sự cố mạng, phản hồi khách hàng, sự kiện địa phương) trước khi đưa ra kết luận hoặc đề xuất giải pháp. Việc báo cáo ngay (A) hoặc đề xuất giải pháp (D) mà không phân tích kỹ có thể dẫn đến quyết định sai lầm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501485085_INTERMEDIATE_8_1p9x"
+  },
+  {
+    "questionText": "Bạn đang sử dụng Excel để phân tích dữ liệu bán hàng của một chuỗi nhà hàng. Bạn muốn tính toán tỷ lệ phần trăm đóng góp của từng món ăn vào tổng doanh số. Công thức nào dưới đây là đúng?",
+    "options": [
+      "A. =SUMIF(range, criteria) / SUM(total_range)",
+      "B. = (Doanh số món ăn / Tổng doanh số) * 100",
+      "C. =COUNTIF(range, criteria) / COUNT(total_range)",
+      "D. =VLOOKUP(món ăn, bảng doanh số, 2, FALSE) / SUM(total_range)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Công thức B là cách đơn giản và trực tiếp để tính tỷ lệ phần trăm đóng góp của từng món ăn: (Doanh số món ăn / Tổng doanh số) * 100. Các công thức khác không phù hợp cho mục đích này (A: tính tổng có điều kiện, C: đếm số lần xuất hiện, D: tra cứu giá trị).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501485086_INTERMEDIATE_9_hek3"
+  },
+  {
+    "questionText": "Bạn được yêu cầu xây dựng báo cáo hàng tuần về tình trạng giao hàng cho một công ty logistics. Yêu cầu là báo cáo phải làm nổi bật các đơn hàng giao trễ (trễ hơn 2 ngày so với cam kết) và phân tích nguyên nhân chính. Cách tiếp cận nào dưới đây là hiệu quả nhất?",
+    "options": [
+      "A. Tạo bảng thống kê đơn hàng giao trễ và gửi cho bộ phận vận hành để xử lý.",
+      "B. Sử dụng PivotTable trong Excel để tổng hợp số lượng đơn hàng giao trễ theo nguyên nhân (ví dụ: lỗi hệ thống, thời tiết, nhân viên), sau đó trực quan hóa bằng biểu đồ cột.",
+      "C. Viết script Python để tự động gửi email cảnh báo cho khách hàng về đơn hàng giao trễ.",
+      "D. Xuất danh sách đơn hàng giao trễ và yêu cầu bộ phận vận hành cập nhật nguyên nhân thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cách tiếp cận B sử dụng PivotTable để tổng hợp và phân tích nguyên nhân giao trễ theo nhóm, sau đó trực quan hóa bằng biểu đồ cột giúp nhận diện nguyên nhân chính một cách nhanh chóng. Đây là phương pháp hiệu quả để hỗ trợ ra quyết định cải thiện quy trình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501485086_INTERMEDIATE_10_sjmv"
+  },
+  {
+    "questionText": "Khi phân tích dữ liệu bán hàng của một công ty sản xuất, bạn nhận thấy doanh số sản phẩm A tăng 30% trong quý 3/2023 so với quý 2/2023. Tuy nhiên, sau khi kiểm tra dữ liệu, bạn phát hiện có một lỗi trong hệ thống ghi nhận đơn hàng, khiến một số đơn hàng của quý 2 bị ghi nhầm vào quý 3. Bạn nên làm gì?",
+    "options": [
+      "A. Báo cáo ngay cho lãnh đạo về lỗi hệ thống và ngừng phân tích dữ liệu này.",
+      "B. Điều chỉnh dữ liệu thủ công bằng cách chuyển các đơn hàng bị ghi nhầm từ quý 3 về quý 2, sau đó phân tích lại.",
+      "C. Ghi chú rõ về lỗi dữ liệu trong báo cáo và tiếp tục phân tích dựa trên dữ liệu đã điều chỉnh (nếu có thể).",
+      "D. Bỏ qua lỗi này vì tỷ lệ tăng trưởng 30% là đáng kể và có thể không ảnh hưởng nhiều."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C đảm bảo tính minh bạch của báo cáo bằng cách ghi chú rõ về lỗi dữ liệu và phân tích dựa trên dữ liệu đã điều chỉnh (nếu có thể). Việc bỏ qua lỗi (D) hoặc ngừng phân tích (A) là không chuyên nghiệp, trong khi điều chỉnh thủ công (B) có thể dẫn đến sai sót khác.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501485086_INTERMEDIATE_11_qggs"
+  },
+  {
+    "questionText": "Bạn đang xây dựng dashboard theo dõi hiệu suất nhân viên bán hàng trên Power BI. Yêu cầu là dashboard phải giúp quản lý nhanh chóng nhận diện nhân viên có tỷ lệ hoàn thành mục tiêu dưới 70%. Bạn nên sử dụng loại biểu đồ nào và cấu hình như thế nào?",
+    "options": [
+      "A. Biểu đồ cột (Bar Chart) với trục tung là tỷ lệ hoàn thành mục tiêu, trục hoành là tên nhân viên, và thiết lập màu sắc khác nhau cho tỷ lệ dưới 70%.",
+      "B. Biểu đồ đường (Line Chart) thể hiện tỷ lệ hoàn thành mục tiêu theo thời gian cho từng nhân viên.",
+      "C. Biểu đồ tròn (Pie Chart) thể hiện tỷ trọng tỷ lệ hoàn thành mục tiêu của từng nhân viên.",
+      "D. Biểu đồ phân tán (Scatter Plot) thể hiện mối quan hệ giữa tỷ lệ hoàn thành mục tiêu và doanh số."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Biểu đồ cột (A) với màu sắc khác nhau cho tỷ lệ dưới 70% giúp quản lý nhanh chóng nhận diện nhân viên không đạt mục tiêu. Biểu đồ đường (B) phù hợp theo dõi xu hướng theo thời gian, không phải so sánh giữa các nhân viên. Biểu đồ tròn (C) và phân tán (D) không hiệu quả cho mục đích này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501485086_INTERMEDIATE_12_hlcc"
+  },
+  {
+    "questionText": "Trong báo cáo phân tích hiệu quả chiến dịch khuyến mãi cho sản phẩm điện tử, bạn nhận thấy tỷ lệ sử dụng mã giảm giá là 15%, thấp hơn nhiều so với kỳ vọng (30%). Bạn cần đề xuất giải pháp cải thiện. Cách tiếp cận nào dưới đây là hợp lý nhất?",
+    "options": [
+      "A. Đề xuất tăng ngân sách quảng cáo để tiếp cận nhiều khách hàng hơn.",
+      "B. Phân tích sâu hơn về đối tượng khách hàng nhận mã giảm giá (độ tuổi, kênh nhận mã, thời gian sử dụng) và hành vi mua sắm của họ để xác định nguyên nhân cụ thể.",
+      "C. Đề xuất giảm giá sâu hơn để khuyến khích khách hàng sử dụng mã.",
+      "D. Kết luận rằng chiến dịch thất bại và đề xuất dừng chiến dịch."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cách tiếp cận B tập trung vào phân tích nguyên nhân cụ thể (đối tượng, kênh, hành vi) trước khi đề xuất giải pháp. Việc tăng ngân sách (A) hoặc giảm giá sâu (C) mà không hiểu nguyên nhân có thể không hiệu quả. Kết luận thất bại (D) là vội vàng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501485086_INTERMEDIATE_13_dy6i"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa chuỗi cung ứng cho một công ty bán lẻ tại Việt Nam, bạn phát hiện dữ liệu về thời gian giao hàng (lead time) từ nhà cung cấp có sự biến động lớn giữa các tháng. Bạn cần xác định nguyên nhân gốc rễ (root cause) trước khi đề xuất giải pháp. Bước phân tích nào sau đây là HIỆU QUẢ NHẤT để xác định vấn đề?",
+    "options": [
+      "A. Tính toán trung bình và độ lệch chuẩn của lead time để so sánh với benchmark ngành.",
+      "B. Sử dụng phân tích tương quan (correlation analysis) giữa lead time và các biến như thời tiết, ngày lễ, hoặc tình trạng giao thông tại khu vực nhà cung cấp.",
+      "C. Lọc dữ liệu theo từng nhà cung cấp và vẽ biểu đồ phân phối (distribution plot) để so sánh sự khác biệt giữa các nhóm.",
+      "D. Tạo báo cáo tổng hợp (summary report) với số liệu lead time trung bình theo tháng và gửi cho ban lãnh đạo để họ tự đánh giá."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Phân tích phân phối theo từng nhà cung cấp giúp xác định nhóm có vấn đề cụ thể (ví dụ: một số nhà cung cấp có lead time cao hơn hẳn), từ đó khoanh vùng nguyên nhân (VD: năng lực sản xuất, vị trí địa lý). Các phương án khác chỉ cung cấp thông tin chung chung hoặc không trực tiếp giải quyết gốc rễ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501581238_ADVANCED_0_me26"
+  },
+  {
+    "questionText": "Bạn đang xây dựng dashboard theo dõi hiệu suất bán hàng cho một chuỗi siêu thị tại TP.HCM. Giám đốc yêu cầu hiển thị chỉ số 'Tỷ lệ chuyển đổi khách hàng' (Conversion Rate) theo từng cửa hàng. Tuy nhiên, dữ liệu cho thấy một số cửa hàng có tỷ lệ này vượt 100% do lỗi ghi nhận đơn hàng trùng. Bạn sẽ xử lý tình huống này như thế nào để đảm bảo dashboard phản ánh chính xác tình hình kinh doanh?",
+    "options": [
+      "A. Loại bỏ hoàn toàn các cửa hàng có tỷ lệ >100% khỏi dashboard để tránh sai lệch.",
+      "B. Áp dụng quy tắc làm sạch dữ liệu: giữ lại các giá trị trong khoảng [0, 100] và thay thế các giá trị ngoài khoảng bằng giá trị trung bình của cửa hàng đó trong 3 tháng gần nhất.",
+      "C. Thêm chú thích (annotation) trên dashboard giải thích lỗi dữ liệu và đề xuất kiểm tra lại hệ thống ghi nhận đơn hàng.",
+      "D. Tính lại tỷ lệ chuyển đổi bằng cách loại trừ các đơn hàng trùng lặp (duplicate orders) dựa trên ID đơn hàng trước khi hiển thị."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Lỗi trùng lặp đơn hàng là nguyên nhân gốc rễ, do đó cần xử lý dữ liệu tại nguồn (loại trừ duplicate) trước khi tính toán. Các phương án khác chỉ che giấu lỗi hoặc không giải quyết triệt để vấn đề.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501581240_ADVANCED_1_msth"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho một công ty sản xuất tại Bình Dương, bạn nhận được yêu cầu từ bộ phận Sản xuất: 'Cần báo cáo chi tiết về nguyên nhân gây ra thời gian chết máy (downtime) để giảm 20% trong quý tới'. Tuy nhiên, dữ liệu hiện tại chỉ ghi nhận tổng thời gian downtime mà không có lý do cụ thể. Bạn sẽ đề xuất giải pháp nào để thu thập và phân tích dữ liệu hiệu quả nhất?",
+    "options": [
+      "A. Yêu cầu bộ phận Sản xuất bổ sung trường 'Lý do downtime' vào biểu mẫu ghi nhận hàng ngày, sau đó sử dụng PivotTable trong Excel để phân tích tần suất từng lý do.",
+      "B. Triển khai hệ thống IoT để tự động ghi nhận downtime và phân loại nguyên nhân theo mã lỗi máy, sau đó kết nối dữ liệu này với Power BI để phân tích theo thời gian thực.",
+      "C. Phỏng vấn trực tiếp các nhân viên vận hành máy để thu thập thông tin định tính về nguyên nhân downtime, sau đó tổng hợp vào báo cáo Word.",
+      "D. Sử dụng dữ liệu lịch sử downtime kết hợp với dữ liệu bảo trì để dự đoán nguyên nhân bằng mô hình hồi quy tuyến tính (linear regression)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp IoT + Power BI giúp thu thập dữ liệu tự động, chính xác và phân tích theo thời gian thực, phù hợp với mục tiêu giảm downtime dài hạn. Các phương án khác thiếu tính hệ thống hoặc không đủ dữ liệu định lượng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501581240_ADVANCED_2_ha6t"
+  },
+  {
+    "questionText": "Bạn đang phân tích dữ liệu bán hàng của một công ty FMCG tại Việt Nam và phát hiện doanh số sản phẩm A giảm 30% trong tháng 6/2023. Sau khi kiểm tra, bạn thấy không có vấn đề về dữ liệu (data quality). Bước tiếp theo nào sau đây là QUAN TRỌNG NHẤT để xác định nguyên nhân?",
+    "options": [
+      "A. So sánh doanh số sản phẩm A với các sản phẩm cùng danh mục trong cùng kỳ để xác định xu hướng chung của thị trường.",
+      "B. Phân tích dữ liệu khách hàng (customer segmentation) để xem nhóm khách hàng nào giảm mua sản phẩm A nhiều nhất.",
+      "C. Kiểm tra dữ liệu khuyến mãi (promotion data) của sản phẩm A trong tháng 6/2023 và so sánh với các tháng trước đó.",
+      "D. Tất cả các bước trên đều cần thiết và nên thực hiện đồng thời để có cái nhìn toàn diện."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong ngành FMCG, khuyến mãi là yếu tố ảnh hưởng trực tiếp và lớn nhất đến doanh số. Kiểm tra dữ liệu khuyến mãi trước tiên giúp xác định nguyên nhân nhanh chóng (VD: không có khuyến mãi trong tháng 6). Các bước khác có thể thực hiện sau nếu chưa tìm ra nguyên nhân.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501581241_ADVANCED_3_jb0v"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa chi phí logistics cho một công ty vận tải, bạn được yêu cầu xây dựng báo cáo phân tích chi phí vận chuyển theo tuyến đường. Dữ liệu bao gồm: chi phí nhiên liệu, chi phí lương tài xế, chi phí bảo trì xe, và chi phí cầu đường. Tuy nhiên, bộ phận Kế toán và Vận hành đưa ra hai cách tính chi phí khác nhau:\n- Kế toán: Chi phí = (Nhiên liệu + Lương + Bảo trì + Cầu đường) / Số chuyến.\n- Vận hành: Chi phí = (Nhiên liệu + Lương + Bảo trì) / Số chuyến + Cầu đường (tính riêng theo tuyến).\nBạn sẽ chọn cách tính nào và giải thích như thế nào với các bên liên quan?",
+    "options": [
+      "A. Chọn cách tính của Kế toán vì đơn giản và dễ hiểu, phù hợp với báo cáo tài chính.",
+      "B. Chọn cách tính của Vận hành vì cầu đường là chi phí cố định theo tuyến, không nên chia đều cho tất cả chuyến.",
+      "C. Kết hợp cả hai cách: tính chi phí biến đổi (nhiên liệu, lương, bảo trì) theo số chuyến và chi phí cố định (cầu đường) theo tuyến, sau đó so sánh với benchmark ngành.",
+      "D. Đề xuất một cách tính mới: Chi phí = (Nhiên liệu + Lương) / Số chuyến + (Bảo trì + Cầu đường) / Số km vận hành."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cách tính kết hợp giúp phản ánh chính xác cấu trúc chi phí (biến đổi vs cố định) và cho phép so sánh với benchmark ngành. Phương án B chỉ đúng về mặt lý thuyết nhưng không đủ để tối ưu hóa chi phí. Phương án D phức tạp và khó giải thích với các bên liên quan.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501581242_ADVANCED_4_1km3"
+  },
+  {
+    "questionText": "Bạn đang xây dựng dashboard theo dõi hiệu suất sản xuất cho một nhà máy dệt may. Một trong các chỉ số quan trọng là 'OEE' (Overall Equipment Effectiveness). Tuy nhiên, dữ liệu OEE hiện tại được tính toán thủ công bởi bộ phận Sản xuất và có sự chênh lệch lớn giữa các ca làm việc. Bạn cần làm gì để đảm bảo tính nhất quán và độ tin cậy của chỉ số này?",
+    "options": [
+      "A. Yêu cầu bộ phận Sản xuất thống nhất công thức tính OEE và đào tạo lại nhân viên để đảm bảo tính toán chính xác.",
+      "B. Tự động hóa việc tính toán OEE bằng cách kết nối dữ liệu từ hệ thống MES (Manufacturing Execution System) với Power BI, loại bỏ sự can thiệp thủ công.",
+      "C. Thay thế chỉ số OEE bằng các chỉ số đơn giản hơn như 'Sản lượng' và 'Thời gian downtime' để dễ quản lý.",
+      "D. Giữ nguyên cách tính hiện tại nhưng thêm chú thích trên dashboard giải thích sự chênh lệch giữa các ca."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tự động hóa là giải pháp triệt để để loại bỏ sai sót do con người và đảm bảo tính nhất quán. Phương án A không giải quyết được gốc rễ vấn đề. Phương án C làm mất giá trị của OEE trong đánh giá hiệu suất toàn diện.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501581243_ADVANCED_5_50e7"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống CRM cho một ngân hàng tại Việt Nam, bạn nhận được phản hồi từ bộ phận Kinh doanh rằng: 'Báo cáo doanh số theo kênh bán hàng không phản ánh đúng thực tế vì một số khách hàng được ghi nhận vào nhiều kênh khác nhau'. Bạn sẽ đề xuất giải pháp nào để giải quyết vấn đề này?",
+    "options": [
+      "A. Thêm bộ lọc (filter) trên báo cáo để người dùng có thể chọn xem dữ liệu theo từng kênh cụ thể.",
+      "B. Áp dụng quy tắc phân bổ doanh số: ưu tiên kênh đầu tiên mà khách hàng tiếp cận (first-touch attribution).",
+      "C. Xây dựng mô hình phân bổ đa kênh (multi-touch attribution) dựa trên dữ liệu lịch sử tương tác của khách hàng, sau đó triển khai trên Power BI hoặc Tableau.",
+      "D. Yêu cầu bộ phận Kinh doanh tự điều chỉnh dữ liệu thủ công trước khi xuất báo cáo."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mô hình phân bổ đa kênh giúp phân bổ doanh số một cách công bằng và chính xác giữa các kênh, phù hợp với hành vi khách hàng phức tạp. Phương án B đơn giản nhưng không phản ánh đúng đóng góp của các kênh khác. Phương án A và D không giải quyết gốc rễ vấn đề.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501581243_ADVANCED_6_rnnc"
+  },
+  {
+    "questionText": "Bạn đang phân tích dữ liệu khách hàng của một sàn thương mại điện tử và phát hiện tỷ lệ khách hàng quay lại (repeat purchase rate) giảm mạnh trong quý 2/2023. Sau khi kiểm tra dữ liệu, bạn thấy không có lỗi về chất lượng dữ liệu. Bước tiếp theo nào sau đây là HIỆU QUẢ NHẤT để xác định nguyên nhân?",
+    "options": [
+      "A. So sánh tỷ lệ khách hàng quay lại giữa các nhóm khách hàng phân khúc theo giá trị (RFM segmentation) để xác định nhóm nào giảm mạnh nhất.",
+      "B. Phân tích dữ liệu khuyến mãi (promotion data) trong quý 2/2023 để xem có sự thay đổi nào về chính sách khuyến mãi không.",
+      "C. Kiểm tra dữ liệu sản phẩm (product data) để xác định xem có sản phẩm nào bị ngừng kinh doanh hoặc thay đổi chất lượng không.",
+      "D. Tất cả các bước trên đều cần thiết và nên thực hiện theo thứ tự A → B → C để có cái nhìn toàn diện."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phân khúc khách hàng theo RFM giúp xác định nhóm khách hàng cụ thể có tỷ lệ quay lại giảm mạnh (VD: khách hàng trung thành), từ đó khoanh vùng nguyên nhân (VD: trải nghiệm khách hàng kém, thiếu chương trình khuyến mãi cho nhóm này). Các bước khác có thể thực hiện sau nếu chưa tìm ra nguyên nhân.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501581243_ADVANCED_7_eyuh"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa chi phí marketing cho một công ty du lịch, bạn được yêu cầu xây dựng báo cáo phân tích hiệu quả chiến dịch quảng cáo trên các kênh digital. Dữ liệu bao gồm: chi phí quảng cáo, số lượt click, số lượt đặt tour, và doanh thu từ các tour đặt qua quảng cáo. Tuy nhiên, bộ phận Marketing và Tài chính có quan điểm khác nhau về cách tính ROI:\n- Marketing: ROI = (Doanh thu - Chi phí quảng cáo) / Chi phí quảng cáo.\n- Tài chính: ROI = (Lợi nhuận gộp từ tour - Chi phí quảng cáo) / Chi phí quảng cáo.\nBạn sẽ chọn cách tính nào và giải thích như thế nào với các bên liên quan?",
+    "options": [
+      "A. Chọn cách tính của Marketing vì đơn giản và dễ hiểu, phù hợp với báo cáo hiệu suất chiến dịch.",
+      "B. Chọn cách tính của Tài chính vì phản ánh chính xác lợi nhuận mà chiến dịch mang lại.",
+      "C. Kết hợp cả hai cách: tính ROI theo cả doanh thu và lợi nhuận gộp, sau đó so sánh với benchmark ngành để đánh giá hiệu quả.",
+      "D. Đề xuất một cách tính mới: ROI = (Doanh thu - Chi phí quảng cáo - Chi phí vận hành tour) / Chi phí quảng cáo."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kết hợp cả hai cách tính giúp đáp ứng nhu cầu của cả hai bộ phận: Marketing cần theo dõi hiệu suất chiến dịch, Tài chính cần đánh giá lợi nhuận thực tế. Phương án B đúng về mặt tài chính nhưng không đủ cho Marketing. Phương án D phức tạp và khó triển khai.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501581244_ADVANCED_8_7c84"
+  },
+  {
+    "questionText": "Bạn đang xây dựng dashboard theo dõi hiệu suất bán hàng cho một công ty bán lẻ. Một trong các chỉ số quan trọng là 'Doanh số theo giờ' (Hourly Sales). Tuy nhiên, dữ liệu hiện tại cho thấy doanh số tăng vọt vào một số giờ nhất định do lỗi hệ thống ghi nhận đơn hàng trễ. Bạn sẽ xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Loại bỏ các giờ có doanh số bất thường khỏi dashboard để tránh sai lệch.",
+      "B. Áp dụng kỹ thuật làm mịn dữ liệu (data smoothing) bằng cách tính trung bình động (moving average) cho các giờ liên tiếp.",
+      "C. Điều chỉnh thời gian ghi nhận đơn hàng về đúng giờ thực tế (VD: đơn hàng ghi nhận lúc 15:00 nhưng thực tế đặt lúc 14:30 sẽ được điều chỉnh về 14:30).",
+      "D. Thêm chú thích trên dashboard giải thích lỗi dữ liệu và đề xuất kiểm tra lại hệ thống ghi nhận đơn hàng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Điều chỉnh thời gian ghi nhận về đúng giờ thực tế là giải pháp triệt để, đảm bảo dữ liệu phản ánh chính xác hoạt động kinh doanh. Các phương án khác chỉ che giấu lỗi hoặc không giải quyết gốc rễ vấn đề.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SKILL",
+    "id": "q_1780501581244_ADVANCED_9_vr43"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý kho cho một công ty logistics, bạn nhận được yêu cầu từ bộ phận Kho vận: 'Cần báo cáo dự báo nhu cầu (demand forecasting) để tối ưu hóa mức tồn kho'. Tuy nhiên, dữ liệu lịch sử chỉ có 6 tháng và có nhiều lỗ hổng (missing data). Bạn sẽ đề xuất giải pháp nào để xây dựng mô hình dự báo hiệu quả?",
+    "options": [
+      "A. Sử dụng phương pháp trung bình di động (moving average) vì đơn giản và phù hợp với dữ liệu ngắn hạn.",
+      "B. Kết hợp dữ liệu lịch sử với dữ liệu bên ngoài (VD: mùa vụ, ngày lễ, xu hướng thị trường) và sử dụng mô hình ARIMA hoặc Prophet để dự báo.",
+      "C. Thu thập thêm dữ liệu ít nhất 2 năm trước khi xây dựng mô hình dự báo để đảm bảo độ tin cậy.",
+      "D. Từ chối yêu cầu vì dữ liệu hiện tại không đủ để xây dựng mô hình dự báo đáng tin cậy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kết hợp dữ liệu lịch sử với dữ liệu bên ngoài và sử dụng mô hình ARIMA/Prophet giúp tận dụng tối đa dữ liệu hiện có và cải thiện độ chính xác của dự báo. Phương án A quá đơn giản và không đủ để dự báo nhu cầu biến động. Phương án C và D không khả thi trong ngắn hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501581245_ADVANCED_10_kox0"
+  },
+  {
+    "questionText": "Bạn đang phân tích dữ liệu khách hàng của một ngân hàng và phát hiện tỷ lệ khách hàng rời bỏ (churn rate) tăng từ 5% lên 8% trong quý vừa qua. Sau khi kiểm tra, bạn thấy không có vấn đề về chất lượng dữ liệu. Bước tiếp theo nào sau đây là QUAN TRỌNG NHẤT để xác định nguyên nhân?",
+    "options": [
+      "A. Phân tích dữ liệu khách hàng rời bỏ theo các đặc điểm nhân khẩu học (age, gender, income) để xác định nhóm khách hàng nào có tỷ lệ churn cao nhất.",
+      "B. Kiểm tra dữ liệu sản phẩm (product data) để xác định xem có sản phẩm nào bị ngừng cung cấp hoặc thay đổi điều khoản không.",
+      "C. Phân tích dữ liệu tương tác khách hàng (customer interaction data) để xác định xem có sự thay đổi nào về chất lượng dịch vụ không (VD: thời gian xử lý khiếu nại, số lượng cuộc gọi hỗ trợ).",
+      "D. Tất cả các bước trên đều cần thiết và nên thực hiện đồng thời để có cái nhìn toàn diện."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong ngành ngân hàng, chất lượng dịch vụ là yếu tố ảnh hưởng lớn nhất đến tỷ lệ churn. Phân tích dữ liệu tương tác khách hàng giúp xác định nguyên nhân nhanh chóng (VD: thời gian xử lý khiếu nại tăng, số lượng cuộc gọi hỗ trợ giảm). Các bước khác có thể thực hiện sau nếu chưa tìm ra nguyên nhân.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501581245_ADVANCED_11_3j6h"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi số cho một ngân hàng Việt Nam, bạn phát hiện rằng báo cáo doanh số hàng tháng từ hệ thống CRM và ERP có sự chênh lệch trung bình 12% trong 6 tháng qua. Khi đào sâu, bạn thấy dữ liệu từ CRM không có trường 'Ngày giao dịch thực tế' mà chỉ có 'Ngày nhập liệu'. Giải pháp dài hạn nào dưới đây sẽ giải quyết gốc rễ vấn đề này mà không chỉ dừng lại ở việc điều chỉnh báo cáo?",
+    "options": [
+      "A. Yêu cầu bộ phận kinh doanh nhập liệu đúng hạn để giảm sai lệch thời gian giữa 'Ngày giao dịch thực tế' và 'Ngày nhập liệu'.",
+      "B. Thiết kế luồng dữ liệu tự động từ hệ thống POS vào CRM và ERP, đồng thời bổ sung trường 'Ngày giao dịch thực tế' với quy tắc validate chặt chẽ.",
+      "C. Tạo một dashboard điều chỉnh chênh lệch bằng cách mapping dữ liệu thủ công từ CRM sang ERP hàng tháng.",
+      "D. Đề xuất thay thế hệ thống CRM bằng một giải pháp mới có khả năng tích hợp tốt hơn với ERP."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B giải quyết gốc rễ vấn đề bằng cách tự động hóa luồng dữ liệu và bổ sung trường quan trọng với validate, đảm bảo tính nhất quán và chính xác lâu dài. Các giải pháp khác chỉ xử lý triệu chứng hoặc không bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501671854_EXPERT_0_4mvw"
+  },
+  {
+    "questionText": "Bạn đang phân tích dữ liệu bán hàng của một chuỗi siêu thị tại Việt Nam và nhận thấy doanh số sản phẩm A giảm 30% trong quý 2/2024 so với cùng kỳ năm trước. Dữ liệu cho thấy không có thay đổi về giá, chương trình khuyến mãi hoặc vị trí trưng bày. Bước tiếp theo nào dưới đây thể hiện tư duy chiến lược và phân tích vĩ mô hiệu quả nhất?",
+    "options": [
+      "A. So sánh doanh số sản phẩm A với các sản phẩm cùng danh mục tại các siêu thị cạnh tranh để xác định xu hướng thị trường.",
+      "B. Yêu cầu bộ phận marketing tăng cường quảng cáo cho sản phẩm A trên các kênh truyền thông.",
+      "C. Kiểm tra lại dữ liệu bán hàng để đảm bảo không có lỗi nhập liệu hoặc trùng lặp.",
+      "D. Đề xuất giảm giá sản phẩm A để kích cầu trong quý tiếp theo."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bước A thể hiện tư duy vĩ mô bằng cách so sánh với thị trường cạnh tranh để xác định liệu vấn đề nằm ở sản phẩm, chiến lược kinh doanh hay xu hướng tiêu dùng. Các bước khác chỉ xử lý triệu chứng hoặc thiếu góc nhìn chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501671855_EXPERT_1_xjaw"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa quy trình logistics cho một công ty thương mại điện tử, bạn phát hiện báo cáo chi phí vận chuyển có sự chênh lệch lớn giữa dữ liệu từ hệ thống TMS (Transportation Management System) và dữ liệu kế toán. Sau khi kiểm tra, bạn thấy TMS không ghi nhận chi phí phát sinh từ các đơn hàng trả hàng. Giải pháp nào dưới đây vừa giải quyết vấn đề tức thời vừa đảm bảo tính bền vững cho dài hạn?",
+    "options": [
+      "A. Yêu cầu bộ phận logistics nhập thủ công chi phí trả hàng vào TMS hàng tháng.",
+      "B. Tạo một dashboard riêng để theo dõi chi phí trả hàng và tổng hợp thủ công vào báo cáo cuối tháng.",
+      "C. Thiết kế luồng dữ liệu tự động từ hệ thống xử lý đơn hàng (OMS) sang TMS để ghi nhận chi phí trả hàng theo thời gian thực, đồng thời bổ sung quy tắc validate cho các khoản mục chi phí.",
+      "D. Đề xuất thay đổi nhà cung cấp dịch vụ logistics để giảm tỷ lệ trả hàng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C giải quyết gốc rễ vấn đề bằng cách tự động hóa luồng dữ liệu và bổ sung quy tắc validate, đảm bảo tính chính xác và nhất quán lâu dài. Các giải pháp khác chỉ xử lý triệu chứng hoặc không bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501671857_EXPERT_2_nmor"
+  },
+  {
+    "questionText": "Bạn đang xây dựng báo cáo phân tích hiệu quả chiến dịch marketing cho một thương hiệu FMCG tại Việt Nam. Dữ liệu cho thấy chiến dịch A có tỷ lệ chuyển đổi (conversion rate) cao hơn chiến dịch B, nhưng doanh số thực tế lại thấp hơn. Bạn sẽ làm gì để đảm bảo báo cáo hỗ trợ quyết định chính xác?",
+    "options": [
+      "A. Chỉ báo cáo tỷ lệ chuyển đổi vì đây là chỉ số quan trọng nhất để đánh giá hiệu quả chiến dịch.",
+      "B. Phân tích sâu hơn để xác định liệu chiến dịch A có thu hút đúng đối tượng khách hàng mục tiêu hay không, đồng thời kiểm tra giá trị đơn hàng trung bình (AOV) và tỷ lệ khách hàng quay lại.",
+      "C. Đề xuất ngừng chiến dịch B vì tỷ lệ chuyển đổi thấp hơn.",
+      "D. Tạo một biểu đồ so sánh tỷ lệ chuyển đổi của cả hai chiến dịch và để lãnh đạo tự quyết định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bước B thể hiện tư duy phân tích sâu để hiểu rõ nguyên nhân đằng sau các con số, đảm bảo báo cáo hỗ trợ quyết định chính xác. Các bước khác bỏ qua các yếu tố quan trọng hoặc không cung cấp đủ thông tin.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501671858_EXPERT_3_6swe"
+  },
+  {
+    "questionText": "Trong quá trình phân tích dữ liệu khách hàng cho một ngân hàng, bạn phát hiện rằng 15% khách hàng có điểm tín dụng (credit score) thấp bất thường so với lịch sử giao dịch của họ. Sau khi kiểm tra, bạn thấy dữ liệu điểm tín dụng được lấy từ một nguồn bên ngoài không cập nhật kịp thời. Giải pháp nào dưới đây vừa giải quyết vấn đề tức thời vừa đảm bảo tính chính xác lâu dài cho các báo cáo liên quan?",
+    "options": [
+      "A. Yêu cầu bộ phận rủi ro nhập thủ công điểm tín dụng mới nhất cho các khách hàng bị ảnh hưởng.",
+      "B. Tạo một quy trình tự động để cập nhật điểm tín dụng từ nguồn đáng tin cậy hàng ngày, đồng thời thiết lập cảnh báo cho các trường hợp điểm tín dụng thay đổi đột ngột.",
+      "C. Bỏ qua dữ liệu điểm tín dụng và chỉ sử dụng lịch sử giao dịch nội bộ để đánh giá rủi ro.",
+      "D. Đề xuất thay đổi nhà cung cấp dữ liệu điểm tín dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B giải quyết vấn đề bằng cách tự động hóa quy trình cập nhật dữ liệu và thiết lập cảnh báo, đảm bảo tính chính xác và nhất quán lâu dài. Các giải pháp khác chỉ xử lý triệu chứng hoặc không bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501671858_EXPERT_4_hv6t"
+  },
+  {
+    "questionText": "Bạn đang xây dựng dashboard theo dõi hiệu quả hoạt động cho một chuỗi nhà hàng tại Việt Nam. Lãnh đạo yêu cầu theo dõi chỉ số 'Doanh thu trung bình trên mỗi bàn' (Average Revenue per Table - ART). Tuy nhiên, dữ liệu từ hệ thống POS cho thấy có nhiều bàn được ghép lại hoặc chia nhỏ trong quá trình phục vụ. Bạn sẽ xử lý tình huống này như thế nào để đảm bảo tính chính xác của chỉ số ART?",
+    "options": [
+      "A. Tính ART dựa trên số lượng hóa đơn thay vì số lượng bàn để tránh sai lệch do ghép/chia bàn.",
+      "B. Yêu cầu nhân viên nhà hàng ghi chú thủ công khi có ghép/chia bàn và điều chỉnh dữ liệu sau.",
+      "C. Thiết kế quy tắc tự động trong hệ thống POS để phân bổ doanh thu cho từng bàn dựa trên thời gian phục vụ và số lượng khách, đồng thời bổ sung trường 'Số lượng khách thực tế' để tính toán chính xác hơn.",
+      "D. Bỏ qua chỉ số ART và thay thế bằng chỉ số 'Doanh thu trung bình trên mỗi khách' (Average Revenue per Customer)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C giải quyết gốc rễ vấn đề bằng cách tự động hóa quy trình phân bổ doanh thu và bổ sung trường dữ liệu cần thiết, đảm bảo tính chính xác của chỉ số ART. Các giải pháp khác không xử lý triệt để vấn đề hoặc bỏ qua chỉ số quan trọng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501671859_EXPERT_5_wlrc"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho một công ty sản xuất, bạn phát hiện rằng báo cáo tồn kho từ hệ thống cũ và hệ thống ERP mới có sự chênh lệch lớn. Sau khi kiểm tra, bạn thấy nguyên nhân là do hệ thống cũ không ghi nhận các đơn hàng trả về từ khách hàng. Giải pháp nào dưới đây vừa giải quyết vấn đề tức thời vừa đảm bảo tính bền vững cho dài hạn?",
+    "options": [
+      "A. Yêu cầu bộ phận kho nhập thủ công số lượng hàng trả về vào hệ thống ERP hàng tuần.",
+      "B. Tạo một dashboard riêng để theo dõi hàng trả về và tổng hợp thủ công vào báo cáo cuối tháng.",
+      "C. Thiết kế luồng dữ liệu tự động từ hệ thống xử lý đơn hàng (OMS) sang ERP để ghi nhận hàng trả về theo thời gian thực, đồng thời bổ sung quy tắc validate cho các giao dịch liên quan.",
+      "D. Đề xuất ngừng sử dụng hệ thống cũ và chỉ sử dụng ERP để tránh nhầm lẫn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C giải quyết gốc rễ vấn đề bằng cách tự động hóa luồng dữ liệu và bổ sung quy tắc validate, đảm bảo tính chính xác và nhất quán lâu dài. Các giải pháp khác chỉ xử lý triệu chứng hoặc không bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501671860_EXPERT_6_8ozg"
+  },
+  {
+    "questionText": "Bạn đang phân tích dữ liệu bán hàng của một công ty bán lẻ thời trang tại Việt Nam và nhận thấy doanh số sản phẩm X tăng đột biến 200% trong tháng 6/2024 so với tháng trước. Dữ liệu cho thấy không có chương trình khuyến mãi hoặc thay đổi giá. Bước tiếp theo nào dưới đây thể hiện tư duy phân tích nguyên nhân gốc rễ hiệu quả nhất?",
+    "options": [
+      "A. Đề xuất tăng cường sản xuất sản phẩm X để đáp ứng nhu cầu.",
+      "B. Kiểm tra dữ liệu để đảm bảo không có lỗi nhập liệu hoặc trùng lặp.",
+      "C. Phân tích sâu hơn để xác định liệu sản phẩm X có được quảng cáo trên các nền tảng mạng xã hội bởi KOLs (Key Opinion Leaders) hay không, đồng thời kiểm tra xu hướng tìm kiếm trên Google Trends và dữ liệu bán hàng tại các kênh trực tuyến.",
+      "D. Tạo một báo cáo nhấn mạnh sự tăng trưởng của sản phẩm X và đề xuất mở rộng dòng sản phẩm này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bước C thể hiện tư duy phân tích nguyên nhân gốc rễ bằng cách xem xét các yếu tố bên ngoài như ảnh hưởng của KOLs và xu hướng thị trường. Các bước khác chỉ xử lý triệu chứng hoặc thiếu góc nhìn chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501671861_EXPERT_7_hldl"
+  },
+  {
+    "questionText": "Trong quá trình xây dựng báo cáo tài chính cho một công ty đa quốc gia, bạn phát hiện rằng dữ liệu chi phí từ chi nhánh Việt Nam không khớp với dữ liệu từ trụ sở chính. Sau khi kiểm tra, bạn thấy chi nhánh Việt Nam sử dụng tỷ giá hối đoái cố định cho cả quý, trong khi trụ sở chính yêu cầu sử dụng tỷ giá trung bình hàng tháng. Giải pháp nào dưới đây vừa giải quyết vấn đề tức thời vừa đảm bảo tính nhất quán lâu dài?",
+    "options": [
+      "A. Yêu cầu chi nhánh Việt Nam điều chỉnh lại dữ liệu chi phí theo tỷ giá trung bình hàng tháng cho báo cáo hiện tại.",
+      "B. Tạo một quy trình tự động để cập nhật tỷ giá hối đoái hàng ngày từ nguồn đáng tin cậy và áp dụng cho tất cả các giao dịch, đồng thời thiết lập quy tắc validate để đảm bảo tính nhất quán.",
+      "C. Đề xuất sử dụng tỷ giá cố định cho tất cả các chi nhánh để tránh nhầm lẫn.",
+      "D. Tạo một dashboard riêng để theo dõi chênh lệch tỷ giá và điều chỉnh thủ công vào cuối quý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B giải quyết gốc rễ vấn đề bằng cách tự động hóa quy trình cập nhật tỷ giá và thiết lập quy tắc validate, đảm bảo tính nhất quán và chính xác lâu dài. Các giải pháp khác chỉ xử lý triệu chứng hoặc không bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501671861_EXPERT_8_fji1"
+  },
+  {
+    "questionText": "Bạn đang xây dựng dashboard theo dõi hiệu quả hoạt động cho một công ty logistics. Lãnh đạo yêu cầu theo dõi chỉ số 'Thời gian giao hàng trung bình' (Average Delivery Time - ADT). Tuy nhiên, dữ liệu từ hệ thống TMS cho thấy có nhiều đơn hàng bị hủy hoặc giao không thành công. Bạn sẽ xử lý tình huống này như thế nào để đảm bảo tính chính xác của chỉ số ADT?",
+    "options": [
+      "A. Tính ADT dựa trên tất cả các đơn hàng, bao gồm cả những đơn hàng bị hủy hoặc giao không thành công.",
+      "B. Loại bỏ các đơn hàng bị hủy hoặc giao không thành công khỏi tính toán ADT để tránh sai lệch.",
+      "C. Thiết kế quy tắc để phân loại các đơn hàng bị hủy hoặc giao không thành công theo nguyên nhân, đồng thời tính toán ADT riêng cho từng nhóm (ví dụ: do khách hàng, do logistics, do sản phẩm) và bổ sung chỉ số 'Tỷ lệ giao hàng thành công'.",
+      "D. Đề xuất ngừng theo dõi ADT và thay thế bằng chỉ số 'Số lượng đơn hàng giao thành công'."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C giải quyết vấn đề bằng cách phân loại nguyên nhân và tính toán ADT riêng cho từng nhóm, đồng thời bổ sung chỉ số hỗ trợ, đảm bảo tính chính xác và hữu ích của dashboard. Các giải pháp khác không xử lý triệt để vấn đề hoặc bỏ qua thông tin quan trọng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501671862_EXPERT_9_1u6j"
+  },
+  {
+    "questionText": "Trong dự án tối ưu hóa quy trình chăm sóc khách hàng cho một công ty viễn thông, bạn phát hiện rằng báo cáo thời gian xử lý khiếu nại (Average Handling Time - AHT) từ hệ thống CRM và hệ thống tổng đài có sự chênh lệch lớn. Sau khi kiểm tra, bạn thấy hệ thống CRM không ghi nhận thời gian chờ của khách hàng. Giải pháp nào dưới đây vừa giải quyết vấn đề tức thời vừa đảm bảo tính bền vững cho dài hạn?",
+    "options": [
+      "A. Yêu cầu bộ phận chăm sóc khách hàng ghi chú thủ công thời gian chờ của khách hàng vào CRM.",
+      "B. Tạo một dashboard riêng để theo dõi thời gian chờ và tổng hợp thủ công vào báo cáo cuối tháng.",
+      "C. Thiết kế luồng dữ liệu tự động từ hệ thống tổng đài sang CRM để ghi nhận thời gian chờ theo thời gian thực, đồng thời bổ sung quy tắc validate cho các trường dữ liệu liên quan.",
+      "D. Đề xuất thay đổi hệ thống CRM để tích hợp tốt hơn với hệ thống tổng đài."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C giải quyết gốc rễ vấn đề bằng cách tự động hóa luồng dữ liệu và bổ sung quy tắc validate, đảm bảo tính chính xác và nhất quán lâu dài. Các giải pháp khác chỉ xử lý triệu chứng hoặc không bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501671863_EXPERT_10_e8hu"
+  },
+  {
+    "questionText": "Bạn đang phân tích dữ liệu bán hàng của một công ty bán lẻ điện tử tại Việt Nam và nhận thấy doanh số sản phẩm Y giảm 40% trong quý 2/2024 so với quý trước. Dữ liệu cho thấy không có thay đổi về giá, chương trình khuyến mãi hoặc vị trí trưng bày. Bạn phát hiện thêm rằng sản phẩm Y có tỷ lệ trả hàng tăng 25% trong cùng kỳ. Bước tiếp theo nào dưới đây thể hiện tư duy chiến lược và phân tích vĩ mô hiệu quả nhất?",
+    "options": [
+      "A. Đề xuất giảm giá sản phẩm Y để kích cầu trong quý tiếp theo.",
+      "B. Kiểm tra lại dữ liệu bán hàng và trả hàng để đảm bảo không có lỗi nhập liệu.",
+      "C. Phân tích sâu hơn để xác định nguyên nhân tỷ lệ trả hàng tăng, bao gồm đánh giá chất lượng sản phẩm, đối thủ cạnh tranh, phản hồi khách hàng và xu hướng thị trường, đồng thời đề xuất giải pháp cải tiến sản phẩm hoặc chiến lược kinh doanh.",
+      "D. Tạo một báo cáo nhấn mạnh sự sụt giảm doanh số và đề xuất ngừng kinh doanh sản phẩm Y."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bước C thể hiện tư duy chiến lược và phân tích vĩ mô bằng cách xem xét nhiều yếu tố ảnh hưởng đến tỷ lệ trả hàng và doanh số, từ đó đề xuất giải pháp cải tiến toàn diện. Các bước khác chỉ xử lý triệu chứng hoặc thiếu góc nhìn chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780501671863_EXPERT_11_arfa"
+  },
+  {
+    "questionText": "Trong quá trình xây dựng báo cáo tài chính cho một công ty sản xuất, bạn phát hiện rằng chi phí nguyên vật liệu từ báo cáo của bộ phận sản xuất cao hơn 18% so với dữ liệu từ hệ thống ERP. Sau khi kiểm tra, bạn thấy bộ phận sản xuất sử dụng định mức tiêu hao nguyên vật liệu cũ, trong khi hệ thống ERP đã cập nhật định mức mới. Giải pháp nào dưới đây vừa giải quyết vấn đề tức thời vừa đảm bảo tính nhất quán lâu dài?",
+    "options": [
+      "A. Yêu cầu bộ phận sản xuất điều chỉnh lại báo cáo theo định mức mới cho kỳ báo cáo hiện tại.",
+      "B. Tạo một quy trình tự động để đồng bộ định mức tiêu hao nguyên vật liệu từ hệ thống ERP sang báo cáo của bộ phận sản xuất theo thời gian thực, đồng thời thiết lập cảnh báo cho các trường hợp chênh lệch lớn.",
+      "C. Đề xuất sử dụng định mức cũ cho tất cả các bộ phận để tránh nhầm lẫn.",
+      "D. Tạo một dashboard riêng để theo dõi chênh lệch định mức và điều chỉnh thủ công vào cuối tháng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B giải quyết gốc rễ vấn đề bằng cách tự động hóa quy trình đồng bộ định mức và thiết lập cảnh báo, đảm bảo tính nhất quán và chính xác lâu dài. Các giải pháp khác chỉ xử lý triệu chứng hoặc không bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Data Analysis & Reporting",
+    "category": "SITUATION",
+    "id": "q_1780501671864_EXPERT_12_svy5"
+  }
+]

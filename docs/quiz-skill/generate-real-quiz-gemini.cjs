@@ -7,6 +7,12 @@ const path = require("node:path");
 const DIFFICULTIES = ["BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"];
 const CATEGORIES = ["KNOWLEDGE", "SKILL", "SITUATION", "ANALYSIS"];
 const OPTION_LETTERS = ["A", "B", "C", "D"];
+const DIFFICULTY_TARGETS = {
+  BEGINNER: 13,
+  INTERMEDIATE: 13,
+  ADVANCED: 12,
+  EXPERT: 12
+};
 
 const SKILLS = [
   {
@@ -507,6 +513,17 @@ const SKILLS = [
   },
   {
     role: "Backend Developer",
+    skillArea: "Java",
+    relativePath: "technology/backend-developer/java-2.json",
+    focus: [
+      "Core Java fundamentals: OOP, JVM internals, memory model and garbage collection",
+      "Concurrency and multithreading: executors, CompletableFuture, synchronization",
+      "Spring ecosystem: Spring Boot, dependency injection, Data, Security and REST",
+      "Performance tuning, profiling, classloading, packaging and deployment best practices"
+    ]
+  },
+  {
+    role: "Backend Developer",
     skillArea: "Node.js",
     relativePath: "technology/backend-developer/nodejs.json",
     focus: [
@@ -547,6 +564,152 @@ const SKILLS = [
       "State management: context, Redux, recoil, Zustand and their trade-offs",
       "Performance: memoization, virtualization, code splitting, SSR/CSR nuances",
       "Testing, accessibility, hydration issues and deployment patterns"
+    ]
+  },
+  {
+    role: "Frontend Developer",
+    skillArea: "React",
+    relativePath: "technology/frontend-developer/react-2.json",
+    focus: [
+      "Component architecture, hooks, and render lifecycle patterns",
+      "State management: context, Redux, recoil, Zustand and their trade-offs",
+      "Performance: memoization, virtualization, code splitting, SSR/CSR nuances",
+      "Testing, accessibility, hydration issues and deployment patterns"
+    ]
+  }
+];
+
+const BA_SKILLS = [
+  {
+    role: "Business Analyst",
+    skillArea: "Business Requirements Documentation",
+    relativePath: "business/ba/business-requirements-documentation.json",
+    focus: [
+      "BRD, FRD, SRS structure and purpose",
+      "Scope definition, assumptions, constraints and business rules",
+      "Clear requirement wording for business, dev and QA audiences",
+      "Traceability between business goals and documented requirements"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "User Story & Acceptance Criteria",
+    relativePath: "business/ba/user-story-acceptance-criteria.json",
+    focus: [
+      "User story format, persona, value and outcome",
+      "Writing testable acceptance criteria with edge cases",
+      "INVEST-style backlog item quality",
+      "Splitting stories without losing business value"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Gap Analysis & Solution Assessment",
+    relativePath: "business/ba/gap-analysis-solution-assessment.json",
+    focus: [
+      "As-is vs to-be process comparison",
+      "Identifying functional and capability gaps",
+      "Assessing solution fit, cost and delivery risk",
+      "Turning analysis into actionable recommendations"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Data Analysis & Reporting",
+    relativePath: "business/ba/data-analysis-reporting.json",
+    focus: [
+      "Excel, SQL and BI dashboard basics for business analysis",
+      "Reading metrics, trends and anomalies correctly",
+      "Building reports that support decisions, not just charts",
+      "Validating data quality before drawing conclusions"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "UAT & Release Validation",
+    relativePath: "business/ba/uat-release-validation.json",
+    focus: [
+      "UAT planning, test scenarios and business sign-off",
+      "Confirming release scope against requirements",
+      "Handling defects, rollback criteria and go-live readiness",
+      "Coordinating business stakeholders during validation"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Scope Control & Requirement Traceability",
+    relativePath: "business/ba/scope-control-traceability.json",
+    focus: [
+      "Managing scope creep and change requests",
+      "Tracing requirements to design, test and release artifacts",
+      "Keeping baseline, versions and approvals aligned",
+      "Detecting missing coverage early"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Backlog Prioritization & Roadmapping",
+    relativePath: "business/ba/backlog-prioritization-roadmapping.json",
+    focus: [
+      "Prioritization frameworks such as MoSCoW and value versus effort",
+      "Sequencing backlog items into a realistic roadmap",
+      "Balancing stakeholder demands with delivery capacity",
+      "Aligning near-term work with product goals"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Change Management & Adoption",
+    relativePath: "business/ba/change-management-adoption.json",
+    focus: [
+      "Stakeholder readiness, communication and training plans",
+      "Reducing resistance to new processes or systems",
+      "Tracking adoption, feedback and usage metrics",
+      "Supporting organizational transition beyond go-live"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Workshop Facilitation",
+    relativePath: "business/ba/workshop-facilitation.json",
+    focus: [
+      "Planning effective discovery and alignment workshops",
+      "Facilitating discussion, conflict and decision-making",
+      "Capturing outcomes, action items and ownership clearly",
+      "Using structured techniques to surface hidden requirements"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Process Improvement / As-Is To-Be Analysis",
+    relativePath: "business/ba/process-improvement-as-is-to-be-analysis.json",
+    focus: [
+      "Mapping current-state workflows and bottlenecks",
+      "Designing future-state processes with less waste",
+      "Identifying automation and control opportunities",
+      "Measuring improvement with practical business KPIs"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Functional Specification Writing",
+    relativePath: "business/ba/functional-specification-writing.json",
+    focus: [
+      "Detailed functional behavior, rules and system responses",
+      "Capturing flow, exceptions, validations and dependencies",
+      "Writing specs usable by developers and testers",
+      "Keeping documentation precise but not over-engineered"
+    ]
+  },
+  {
+    role: "Business Analyst",
+    skillArea: "Non-functional Requirements",
+    relativePath: "business/ba/non-functional-requirements.json",
+    focus: [
+      "Performance, availability, security and usability needs",
+      "Turning abstract quality goals into measurable criteria",
+      "Balancing business expectations with technical feasibility",
+      "Documenting constraints that affect design and delivery"
     ]
   }
 ];
@@ -739,7 +902,7 @@ function normalizeModelName(model) {
 }
 
 function buildModelCandidates(primaryModel, fallbackCsv) {
-  const defaultFallback = ["gemini-3-flash-preview", "gemini-2.5-flash", "gemini-2.0-flash"];
+  const defaultFallback = ["gemini-3-flash-preview"];
   const csvModels = toText(fallbackCsv)
     .split(",")
     .map((item) => normalizeModelName(item))
@@ -747,7 +910,7 @@ function buildModelCandidates(primaryModel, fallbackCsv) {
 
   const ordered = [normalizeModelName(primaryModel), ...csvModels, ...defaultFallback]
     .map((item) => normalizeModelName(item))
-    .filter(Boolean);
+    .filter((item) => Boolean(item) && /^gemini-(3|4|5|[6-9])/i.test(item));
 
   return Array.from(new Set(ordered));
 }
@@ -770,9 +933,11 @@ function normalizeFilterValue(value) {
 
 async function callGemini({ apiKeyCandidates, modelCandidates, prompt, timeoutMs, maxRetries }) {
   const errors = [];
+  let keyOffset = 0;
 
   for (let round = 1; round <= maxRetries; round += 1) {
-    for (let keyIndex = 0; keyIndex < apiKeyCandidates.length; keyIndex += 1) {
+    for (let keyStep = 0; keyStep < apiKeyCandidates.length; keyStep += 1) {
+      const keyIndex = (keyOffset + keyStep) % apiKeyCandidates.length;
       const apiKey = apiKeyCandidates[keyIndex];
       for (const model of modelCandidates) {
         const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
@@ -813,6 +978,9 @@ async function callGemini({ apiKeyCandidates, modelCandidates, prompt, timeoutMs
 
             errors.push(errorMsg);
             console.warn(`  Retry Gemini (round ${round}/${maxRetries}) - ${errorMsg}`);
+            if (response.status === 429 || response.status === 403) {
+              keyOffset = (keyIndex + 1) % apiKeyCandidates.length;
+            }
             await sleep(Math.min(10000, 600 + round * 450));
             continue;
           }
@@ -832,6 +1000,9 @@ async function callGemini({ apiKeyCandidates, modelCandidates, prompt, timeoutMs
           const msg = `key=${keyIndex + 1}/${apiKeyCandidates.length} model=${model}: ${error.message}`;
           errors.push(msg);
           console.warn(`  Retry Gemini (round ${round}/${maxRetries}) - ${msg}`);
+          if (/429|403/i.test(error.message)) {
+            keyOffset = (keyIndex + 1) % apiKeyCandidates.length;
+          }
           await sleep(Math.min(10000, 700 + round * 500));
         }
       }
@@ -889,7 +1060,8 @@ function buildPrompt({ skill, difficulty, count, forbiddenQuestions }) {
 }
 
 async function generateDifficultyQuestions({ apiKeyCandidates, modelCandidates, skill, difficulty, usedKeys, timeoutMs, maxRetries }) {
-  const target = 25;
+  const target = DIFFICULTY_TARGETS[difficulty] || 12;
+  const batchSize = 4;
   const results = [];
   const localKeys = new Set();
   let attempt = 0;
@@ -898,10 +1070,11 @@ async function generateDifficultyQuestions({ apiKeyCandidates, modelCandidates, 
   while (results.length < target && attempt < maxBatchAttempts) {
     attempt += 1;
     const remaining = target - results.length;
+    const requestCount = Math.min(remaining, batchSize);
     const prompt = buildPrompt({
       skill,
       difficulty,
-      count: remaining,
+      count: requestCount,
       forbiddenQuestions: results.map((item) => item.questionText).slice(-15)
     });
 
@@ -988,8 +1161,8 @@ function validateSkillFile(skill, questions) {
     return { ok: false, errors: ["root must be a JSON array"] };
   }
 
-  if (questions.length !== 100) {
-    errors.push(`expected 100 questions, got ${questions.length}`);
+  if (questions.length !== 50) {
+    errors.push(`expected 50 questions, got ${questions.length}`);
   }
 
   const byDifficulty = {
@@ -1017,8 +1190,9 @@ function validateSkillFile(skill, questions) {
   });
 
   DIFFICULTIES.forEach((difficulty) => {
-    if (byDifficulty[difficulty] !== 25) {
-      errors.push(`${difficulty} must have 25 questions, got ${byDifficulty[difficulty]}`);
+    const expectedCount = DIFFICULTY_TARGETS[difficulty] || 0;
+    if (byDifficulty[difficulty] !== expectedCount) {
+      errors.push(`${difficulty} must have ${expectedCount} questions, got ${byDifficulty[difficulty]}`);
     }
   });
 
@@ -1080,7 +1254,7 @@ async function generateOneSkill({ apiKeyCandidates, modelCandidates, skill, time
       }
 
       await writeSkillFile(skill, output);
-      console.log(`  Done: wrote 100 questions to ${skill.relativePath}`);
+      console.log(`  Done: wrote 50 questions to ${skill.relativePath}`);
       return;
     } catch (error) {
       if (fileAttempt === fileAttemptLimit) {
@@ -1127,14 +1301,19 @@ async function main() {
     process.exit(1);
   }
 
+  if (modelCandidates.length === 0) {
+    console.error("No usable Gemini 3.0+ models found. Use a 3.0+ model or set a 3.0+ fallback model.");
+    process.exit(1);
+  }
+
   const selectedSkills = onlyFilter
-    ? SKILLS.filter(
+    ? BA_SKILLS.filter(
         (skill) =>
           skill.relativePath.toLowerCase().includes(onlyFilter) ||
           skill.skillArea.toLowerCase().includes(onlyFilter) ||
           skill.role.toLowerCase().includes(onlyFilter)
       )
-    : SKILLS;
+    : BA_SKILLS;
 
   const filteredSkills = roleFilter
     ? selectedSkills.filter((skill) => normalizeFilterValue(skill.role) === roleFilter)

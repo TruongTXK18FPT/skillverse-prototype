@@ -1,0 +1,797 @@
+[
+  {
+    "questionText": "Trong định dạng User Story chuẩn, thành phần nào sau đây là bắt buộc để mô tả rõ giá trị kinh doanh?",
+    "options": [
+      "A. Thời hạn hoàn thành",
+      "B. Chi tiết kỹ thuật triển khai",
+      "C. Vai trò (As a), Hành động (I want to), Mục đích (So that)",
+      "D. Danh sách các bên liên quan"
+    ],
+    "correctAnswer": "C",
+    "explanation": "User Story chuẩn theo định dạng 'As a [role], I want to [action] so that [benefit]' để đảm bảo mô tả rõ vai trò, hành động và giá trị kinh doanh cần đạt được. Các thành phần khác không bắt buộc trong định dạng cơ bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "KNOWLEDGE",
+    "id": "q_1780500758025_BEGINNER_0_1spr"
+  },
+  {
+    "questionText": "Một Business Analyst viết User Story: 'Là nhân viên bán hàng, tôi muốn xem lịch sử đơn hàng của khách hàng để tư vấn chính xác hơn.' Phần nào trong câu này thể hiện 'outcome' (kết quả mong đợi)?",
+    "options": [
+      "A. Là nhân viên bán hàng",
+      "B. Tôi muốn xem lịch sử đơn hàng của khách hàng",
+      "C. Để tư vấn chính xác hơn",
+      "D. Khách hàng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "'Outcome' trong User Story là kết quả hoặc giá trị kinh doanh mong đợi, được thể hiện ở phần 'So that' (để...). Ở đây, 'tư vấn chính xác hơn' là outcome cần đạt được.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500758025_BEGINNER_1_s5j9"
+  },
+  {
+    "questionText": "Khi viết Acceptance Criteria cho User Story 'Người dùng có thể đặt hàng online', tiêu chí nào sau đây là KHÔNG phù hợp?",
+    "options": [
+      "A. Hệ thống phải gửi email xác nhận đặt hàng trong vòng 5 phút sau khi đơn hàng được tạo.",
+      "B. Người dùng phải nhập đầy đủ thông tin địa chỉ giao hàng trước khi hoàn tất đặt hàng.",
+      "C. Nhóm phát triển sẽ sử dụng framework React để xây dựng giao diện đặt hàng.",
+      "D. Hệ thống phải cho phép người dùng hủy đơn hàng trong vòng 1 giờ sau khi đặt."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Acceptance Criteria tập trung vào hành vi và kết quả đầu ra của hệ thống, không quy định công nghệ hoặc chi tiết triển khai kỹ thuật. Lựa chọn C là chi tiết kỹ thuật không phù hợp trong Acceptance Criteria.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500758025_BEGINNER_2_hzea"
+  },
+  {
+    "questionText": "Trong nguyên tắc INVEST cho User Story, chữ 'I' đại diện cho tiêu chí nào?",
+    "options": [
+      "A. Independent (Độc lập)",
+      "B. Important (Quan trọng)",
+      "C. Integrated (Tích hợp)",
+      "D. Immediate (Ngay lập tức)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong INVEST, 'I' đại diện cho 'Independent' (Độc lập), nghĩa là User Story nên có thể phát triển và triển khai độc lập mà không phụ thuộc quá nhiều vào các User Story khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "KNOWLEDGE",
+    "id": "q_1780500758025_BEGINNER_3_5d93"
+  },
+  {
+    "questionText": "Một User Story quá lớn và phức tạp: 'Là quản lý kho, tôi muốn quản lý toàn bộ quy trình nhập xuất tồn kho để tối ưu hóa hàng tồn.' Cách chia nhỏ nào sau đây giữ nguyên giá trị kinh doanh?",
+    "options": [
+      "A. Chia thành các User Story theo từng module kỹ thuật như cơ sở dữ liệu, API, giao diện.",
+      "B. Chia thành các User Story theo từng chức năng cụ thể: nhập kho, xuất kho, kiểm kê hàng tồn.",
+      "C. Chia thành các User Story theo từng loại hàng hóa khác nhau.",
+      "D. Chia thành các User Story theo từng nhóm người dùng sử dụng chức năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chia User Story theo chức năng nghiệp vụ (nhập kho, xuất kho, kiểm kê) giúp giữ nguyên giá trị kinh doanh và đảm bảo mỗi phần vẫn có ý nghĩa độc lập. Các cách chia khác làm mất tính nghiệp vụ hoặc tạo ra các phần phụ thuộc kỹ thuật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780500758025_BEGINNER_4_rbav"
+  },
+  {
+    "questionText": "Acceptance Criteria nào sau đây là 'testable' (có thể kiểm thử) cho User Story 'Người dùng có thể đăng ký tài khoản mới'?",
+    "options": [
+      "A. Hệ thống phải có giao diện đăng ký thân thiện.",
+      "B. Người dùng phải nhập email hợp lệ để đăng ký thành công.",
+      "C. Quá trình đăng ký phải nhanh chóng.",
+      "D. Màu sắc nút đăng ký phải phù hợp với bộ nhận diện thương hiệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Acceptance Criteria 'testable' phải xác định rõ điều kiện cụ thể có thể kiểm tra được. 'Người dùng phải nhập email hợp lệ' là tiêu chí rõ ràng và có thể kiểm thử. Các lựa chọn khác không cụ thể hoặc không đo lường được.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500758025_BEGINNER_5_nzh0"
+  },
+  {
+    "questionText": "Trong dự án phát triển phần mềm cho ngân hàng, Business Analyst xác định 'persona' cho User Story. Persona nào sau đây phù hợp nhất cho chức năng 'Chuyển tiền quốc tế'?",
+    "options": [
+      "A. Khách hàng cá nhân có nhu cầu chuyển tiền cho người thân ở nước ngoài.",
+      "B. Nhân viên IT triển khai hệ thống chuyển tiền.",
+      "C. Giám đốc ngân hàng phê duyệt ngân sách dự án.",
+      "D. Kiểm toán viên kiểm tra tính hợp lệ của giao dịch."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Persona trong User Story là đại diện cho người dùng cuối sử dụng chức năng. Khách hàng cá nhân là đối tượng trực tiếp sử dụng chức năng chuyển tiền quốc tế, trong khi các lựa chọn khác là vai trò hỗ trợ hoặc giám sát.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780500758025_BEGINNER_6_d4hp"
+  },
+  {
+    "questionText": "User Story nào sau đây VI PHẠM nguyên tắc 'Valuable' (có giá trị) trong INVEST?",
+    "options": [
+      "A. 'Là nhân viên chăm sóc khách hàng, tôi muốn xem lịch sử giao dịch của khách để giải quyết khiếu nại nhanh hơn.'",
+      "B. 'Là quản trị viên, tôi muốn cập nhật phiên bản thư viện để đảm bảo hệ thống chạy ổn định.'",
+      "C. 'Là khách hàng, tôi muốn nhận thông báo khi đơn hàng được giao để theo dõi tình trạng đơn hàng.'",
+      "D. 'Là kế toán, tôi muốn xuất báo cáo doanh thu hàng tháng để nộp cho cơ quan thuế.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nguyên tắc 'Valuable' yêu cầu User Story phải mang lại giá trị trực tiếp cho người dùng cuối hoặc doanh nghiệp. Cập nhật phiên bản thư viện là công việc kỹ thuật không mang giá trị nghiệp vụ rõ ràng cho người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500758025_BEGINNER_7_w8i5"
+  },
+  {
+    "questionText": "Khi viết Acceptance Criteria cho User Story 'Hệ thống phải gửi email thông báo khi đơn hàng bị hủy', tiêu chí nào sau đây xem xét 'edge case' (trường hợp biên)?",
+    "options": [
+      "A. Email thông báo phải được gửi trong vòng 10 phút sau khi đơn hàng bị hủy.",
+      "B. Hệ thống phải gửi email thông báo ngay cả khi địa chỉ email của khách hàng không hợp lệ.",
+      "C. Email thông báo phải có nội dung rõ ràng và chính xác.",
+      "D. Khách hàng phải nhận được email thông báo trong hộp thư đến (inbox), không phải thư rác (spam)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'Edge case' là trường hợp ngoại lệ hoặc biên có thể xảy ra. 'Địa chỉ email không hợp lệ' là một edge case cần được xử lý trong Acceptance Criteria. Các lựa chọn khác là tiêu chí chức năng cơ bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500758025_BEGINNER_8_tdq8"
+  },
+  {
+    "questionText": "Trong dự án thương mại điện tử, Business Analyst cần chia nhỏ User Story 'Là khách hàng, tôi muốn thanh toán đơn hàng để nhận được sản phẩm.' Cách chia nào sau đây ĐÚNG về mặt nghiệp vụ?",
+    "options": [
+      "A. Chia thành các User Story theo từng bước trong quy trình thanh toán: chọn phương thức thanh toán, nhập thông tin thanh toán, xác nhận thanh toán.",
+      "B. Chia thành các User Story theo từng loại sản phẩm: thanh toán cho điện thoại, thanh toán cho quần áo, thanh toán cho thực phẩm.",
+      "C. Chia thành các User Story theo từng nhóm khách hàng: khách hàng mới, khách hàng thân thiết, khách hàng doanh nghiệp.",
+      "D. Chia thành các User Story theo từng loại phương thức thanh toán: thanh toán bằng thẻ tín dụng, thanh toán bằng ví điện tử, thanh toán khi nhận hàng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Chia User Story theo từng bước trong quy trình nghiệp vụ (chọn phương thức, nhập thông tin, xác nhận) giúp giữ nguyên giá trị kinh doanh và đảm bảo mỗi phần có thể triển khai độc lập. Các cách chia khác làm phân mảnh nghiệp vụ hoặc tạo ra sự trùng lặp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780500758025_BEGINNER_9_yau5"
+  },
+  {
+    "questionText": "Acceptance Criteria nào sau đây VIẾT SAI vì không tuân thủ nguyên tắc 'testable'?",
+    "options": [
+      "A. Hệ thống phải hiển thị thông báo lỗi khi người dùng nhập sai mật khẩu.",
+      "B. Giao diện phải thân thiện và dễ sử dụng.",
+      "C. Hệ thống phải cho phép người dùng đặt lại mật khẩu khi quên.",
+      "D. Thời gian phản hồi của hệ thống không quá 2 giây khi người dùng tìm kiếm sản phẩm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'Giao diện phải thân thiện và dễ sử dụng' không phải là tiêu chí 'testable' vì không có tiêu chuẩn đo lường cụ thể. Các lựa chọn khác đều có thể kiểm thử được thông qua điều kiện rõ ràng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500758025_BEGINNER_10_1tik"
+  },
+  {
+    "questionText": "Một User Story có nội dung: 'Là nhân viên kho, tôi muốn cập nhật tình trạng hàng tồn để báo cáo cho quản lý.' Phần nào trong câu này thể hiện 'value' (giá trị) của User Story?",
+    "options": [
+      "A. Là nhân viên kho",
+      "B. Tôi muốn cập nhật tình trạng hàng tồn",
+      "C. Để báo cáo cho quản lý",
+      "D. Quản lý"
+    ],
+    "correctAnswer": "C",
+    "explanation": "'Value' trong User Story là giá trị hoặc lợi ích mà chức năng mang lại, được thể hiện ở phần 'So that' (để...). Ở đây, 'báo cáo cho quản lý' là giá trị nghiệp vụ cần đạt được.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500758025_BEGINNER_11_sa0q"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng số, Business Analyst viết Acceptance Criteria cho User Story 'Khách hàng có thể đăng nhập bằng vân tay.' Tiêu chí nào sau đây là KHÔNG cần thiết?",
+    "options": [
+      "A. Hệ thống phải xác thực vân tay của khách hàng trong vòng 1 giây.",
+      "B. Khách hàng phải đăng ký vân tay trước khi sử dụng tính năng này.",
+      "C. Nhóm phát triển sẽ sử dụng thư viện sinh trắc học của Apple cho iOS.",
+      "D. Hệ thống phải hiển thị thông báo lỗi nếu vân tay không khớp sau 3 lần thử."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Acceptance Criteria không nên quy định chi tiết kỹ thuật triển khai (như thư viện cụ thể). Các lựa chọn khác đều là tiêu chí nghiệp vụ hoặc hành vi hệ thống có thể kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500758025_BEGINNER_12_21xg"
+  },
+  {
+    "questionText": "User Story nào sau đây ĐÁP ỨNG tốt nhất tiêu chí 'Small' (nhỏ) trong nguyên tắc INVEST?",
+    "options": [
+      "A. 'Là khách hàng, tôi muốn quản lý toàn bộ thông tin tài khoản để tiện theo dõi.'",
+      "B. 'Là khách hàng, tôi muốn xem số dư tài khoản để biết tình trạng tài chính của mình.'",
+      "C. 'Là khách hàng, tôi muốn sử dụng tất cả các tính năng của ứng dụng ngân hàng số để tối ưu hóa trải nghiệm.'",
+      "D. 'Là khách hàng, tôi muốn có ứng dụng ngân hàng số với giao diện hiện đại và nhiều tính năng tiện ích.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tiêu chí 'Small' yêu cầu User Story đủ nhỏ để có thể hoàn thành trong một sprint. Lựa chọn B mô tả một chức năng cụ thể và nhỏ gọn (xem số dư tài khoản), trong khi các lựa chọn khác quá rộng hoặc chung chung.",
+    "difficulty": "BEGINNER",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500758025_BEGINNER_13_xtv1"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý đơn hàng cho một công ty bán lẻ Việt Nam, Product Owner viết user story sau: 'Là nhân viên bán hàng, tôi muốn xem danh sách đơn hàng để theo dõi tình trạng giao hàng'. Theo nguyên tắc INVEST, vấn đề chính của user story này là gì?",
+    "options": [
+      "A. User story không chỉ rõ giá trị kinh doanh cụ thể mà nó mang lại.",
+      "B. User story không độc lập (Independent) vì phụ thuộc vào việc tạo đơn hàng trước đó.",
+      "C. User story quá chung chung (Not Specific) và không thể ước lượng (Not Estimable) chính xác.",
+      "D. User story không có acceptance criteria đi kèm, dẫn đến khó kiểm thử."
+    ],
+    "correctAnswer": "C",
+    "explanation": "User story này quá rộng, không mô tả rõ hành động cụ thể (ví dụ: lọc đơn hàng theo trạng thái, ngày tạo) và thiếu thông tin để ước lượng effort. Điều này vi phạm tiêu chí 'Specific' và 'Estimable' trong INVEST.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500853272_INTERMEDIATE_0_yi08"
+  },
+  {
+    "questionText": "Bạn đang làm Business Analyst cho dự án nâng cấp hệ thống core banking của một ngân hàng Việt Nam. User story sau được viết cho tính năng 'Tính lãi suất tiết kiệm': 'Là khách hàng, tôi muốn hệ thống tính lãi suất chính xác để tôi biết số tiền nhận được khi đáo hạn'. Acceptance criteria nào dưới đây là KHÔNG phù hợp vì không kiểm thử được?",
+    "options": [
+      "A. Hệ thống phải tính lãi suất theo công thức: Số dư * Lãi suất năm * (Số ngày gửi thực tế / 365).",
+      "B. Hệ thống phải hiển thị số tiền lãi dự kiến khi khách hàng nhập số tiền gửi và kỳ hạn.",
+      "C. Lãi suất phải được tính dựa trên chính sách hiện hành của ngân hàng và cập nhật tự động khi có thay đổi.",
+      "D. Hệ thống phải cho phép khách hàng xem lịch sử tính lãi suất trong 12 tháng gần nhất."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Acceptance criteria này không kiểm thử được vì không xác định rõ 'chính sách hiện hành' là gì và làm thế nào để xác minh 'cập nhật tự động'. Các lựa chọn khác đều có thể kiểm chứng bằng dữ liệu đầu vào/đầu ra cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500853273_INTERMEDIATE_1_8wkd"
+  },
+  {
+    "questionText": "Trong dự án xây dựng hệ thống e-commerce cho một startup công nghệ, user story sau được đề xuất: 'Là người dùng, tôi muốn thêm sản phẩm vào giỏ hàng để mua hàng sau này'. Bạn cần tách user story này thành các story nhỏ hơn mà vẫn giữ được giá trị kinh doanh. Cách tách nào dưới đây là HỢP LÝ NHẤT?",
+    "options": [
+      "A. Tách thành: (1) Hiển thị nút 'Thêm vào giỏ hàng' trên trang sản phẩm; (2) Cập nhật số lượng sản phẩm trong giỏ hàng khi người dùng nhấn nút; (3) Lưu thông tin giỏ hàng vào cơ sở dữ liệu.",
+      "B. Tách thành: (1) Thêm sản phẩm vào giỏ hàng với số lượng mặc định là 1; (2) Cho phép người dùng thay đổi số lượng sản phẩm trong giỏ hàng; (3) Hiển thị tổng tiền tạm tính trong giỏ hàng.",
+      "C. Tách thành: (1) Thêm sản phẩm vào giỏ hàng khi người dùng nhấn nút; (2) Hiển thị thông báo xác nhận sau khi thêm thành công; (3) Cho phép người dùng xem lại giỏ hàng.",
+      "D. Tách thành: (1) Thiết kế giao diện nút 'Thêm vào giỏ hàng'; (2) Viết API để xử lý logic thêm sản phẩm; (3) Tích hợp API với giao diện người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cách tách này giữ được giá trị kinh doanh ở từng bước (ví dụ: ngay cả khi chỉ có story 1, người dùng đã có thể thêm sản phẩm vào giỏ hàng) và tuân thủ nguyên tắc INVEST. Các lựa chọn khác hoặc quá kỹ thuật (D), hoặc không chia theo luồng giá trị người dùng (A, C).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780500853273_INTERMEDIATE_2_sbys"
+  },
+  {
+    "questionText": "Bạn đang phân tích yêu cầu cho tính năng 'Đăng ký tài khoản' của một ứng dụng ngân hàng số. User story được viết như sau: 'Là khách hàng mới, tôi muốn đăng ký tài khoản để sử dụng dịch vụ ngân hàng trực tuyến'. Acceptance criteria nào dưới đây KHÔNG nên được thêm vào vì không liên quan trực tiếp đến giá trị cốt lõi của user story?",
+    "options": [
+      "A. Hệ thống phải gửi email xác nhận sau khi khách hàng đăng ký thành công.",
+      "B. Hệ thống phải yêu cầu khách hàng nhập mật khẩu có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số.",
+      "C. Hệ thống phải tích hợp với dịch vụ xác thực danh tính (eKYC) của đối tác thứ ba để xác minh CCCD.",
+      "D. Hệ thống phải cho phép khách hàng chọn loại tài khoản (cá nhân/doanh nghiệp) trong quá trình đăng ký."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Việc chọn loại tài khoản (cá nhân/doanh nghiệp) không phải là yêu cầu cốt lõi để hoàn thành mục tiêu 'đăng ký tài khoản' của user story. Các lựa chọn khác đều trực tiếp hỗ trợ việc đăng ký và xác minh tài khoản.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500853273_INTERMEDIATE_3_64z5"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống CRM cho một công ty bảo hiểm, Product Owner đề xuất user story: 'Là nhân viên tư vấn, tôi muốn xem lịch sử tương tác với khách hàng để tư vấn hiệu quả hơn'. Acceptance criteria nào dưới đây là TỐT NHẤT vì bao phủ được các trường hợp biên (edge cases)?",
+    "options": [
+      "A. Hệ thống phải hiển thị tất cả các tương tác của khách hàng trong 6 tháng gần nhất.",
+      "B. Hệ thống phải hiển thị lịch sử tương tác bao gồm: ngày giờ, kênh tương tác (gọi điện, email, chat), nội dung tóm tắt, và nhân viên phụ trách.",
+      "C. Hệ thống phải hiển thị lịch sử tương tác khi khách hàng có ít nhất 1 tương tác trong 12 tháng qua; nếu không, hiển thị thông báo 'Khách hàng chưa có tương tác'.",
+      "D. Hệ thống phải cho phép lọc lịch sử tương tác theo kênh (gọi điện, email, chat) và theo khoảng thời gian tùy chọn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Acceptance criteria này bao phủ được trường hợp biên (khách hàng không có tương tác) và rõ ràng về hành vi của hệ thống. Các lựa chọn khác hoặc quá chung chung (A, B) hoặc chỉ mô tả tính năng bổ sung (D) mà không xử lý edge case.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500853273_INTERMEDIATE_4_fb4z"
+  },
+  {
+    "questionText": "Bạn đang làm việc với một công ty logistics để phát triển tính năng 'Theo dõi đơn hàng' trên ứng dụng di động. User story được viết như sau: 'Là khách hàng, tôi muốn theo dõi trạng thái đơn hàng để biết khi nào hàng sẽ được giao'. Cách viết acceptance criteria nào dưới đây là SAI vì không tập trung vào kết quả (outcome) mà chỉ mô tả cách thức (output)?",
+    "options": [
+      "A. Hệ thống phải hiển thị trạng thái đơn hàng theo thời gian thực (ví dụ: Đã xác nhận, Đang vận chuyển, Đã giao).",
+      "B. Hệ thống phải gửi thông báo đẩy khi trạng thái đơn hàng thay đổi.",
+      "C. Hệ thống phải cập nhật trạng thái đơn hàng dựa trên dữ liệu từ hệ thống quản lý kho vận.",
+      "D. Khách hàng phải có thể xem thời gian dự kiến giao hàng cho từng trạng thái đơn hàng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Acceptance criteria này chỉ mô tả cách thức hệ thống hoạt động (cập nhật dữ liệu từ đâu) mà không tập trung vào kết quả người dùng nhận được (outcome). Các lựa chọn khác đều mô tả rõ kết quả mà người dùng trải nghiệm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500853274_INTERMEDIATE_5_qwnd"
+  },
+  {
+    "questionText": "Trong dự án xây dựng hệ thống quản lý dự án cho một công ty phần mềm, user story sau được đề xuất: 'Là Project Manager, tôi muốn phân công nhiệm vụ cho thành viên để quản lý tiến độ dự án'. Bạn cần tách user story này thành các story nhỏ hơn. Cách tách nào dưới đây là KHÔNG hợp lý vì làm mất giá trị kinh doanh?",
+    "options": [
+      "A. Tách thành: (1) Tạo nhiệm vụ mới trong dự án; (2) Gán nhiệm vụ cho thành viên; (3) Cập nhật trạng thái nhiệm vụ (Đang làm, Hoàn thành).",
+      "B. Tách thành: (1) Hiển thị danh sách thành viên trong dự án; (2) Cho phép Project Manager chọn thành viên để gán nhiệm vụ; (3) Lưu thông tin phân công vào cơ sở dữ liệu.",
+      "C. Tách thành: (1) Phân công nhiệm vụ cho thành viên với deadline mặc định; (2) Cho phép Project Manager chỉnh sửa deadline của nhiệm vụ; (3) Gửi email thông báo khi nhiệm vụ được phân công.",
+      "D. Tách thành: (1) Thiết kế giao diện phân công nhiệm vụ; (2) Viết API để xử lý logic phân công; (3) Tích hợp API với giao diện người dùng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Cách tách này quá kỹ thuật và không mang lại giá trị kinh doanh trực tiếp cho người dùng cuối (Project Manager). Các lựa chọn khác đều chia theo luồng công việc thực tế của người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780500853275_INTERMEDIATE_6_7h51"
+  },
+  {
+    "questionText": "Bạn đang phân tích yêu cầu cho tính năng 'Thanh toán hóa đơn' của một ứng dụng ví điện tử. User story được viết như sau: 'Là người dùng, tôi muốn thanh toán hóa đơn điện nước để tiết kiệm thời gian'. Acceptance criteria nào dưới đây là TỐT NHẤT vì bao phủ được các trường hợp lỗi (error cases)?",
+    "options": [
+      "A. Hệ thống phải cho phép người dùng chọn loại hóa đơn (điện, nước) và nhập mã khách hàng để thanh toán.",
+      "B. Hệ thống phải hiển thị số tiền cần thanh toán sau khi người dùng nhập mã khách hàng.",
+      "C. Hệ thống phải xử lý thanh toán thành công khi số dư ví đủ và hiển thị thông báo xác nhận; nếu số dư không đủ, hiển thị thông báo 'Số dư không đủ'.",
+      "D. Hệ thống phải lưu lịch sử thanh toán hóa đơn trong 6 tháng gần nhất."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Acceptance criteria này bao phủ cả trường hợp thành công và trường hợp lỗi (số dư không đủ), đảm bảo tính kiểm thử được. Các lựa chọn khác chỉ mô tả các tính năng cơ bản mà không xử lý lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500853275_INTERMEDIATE_7_l68p"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý nhân sự cho một doanh nghiệp sản xuất, user story sau được viết: 'Là nhân viên, tôi muốn cập nhật thông tin cá nhân để đảm bảo dữ liệu luôn chính xác'. Theo nguyên tắc INVEST, vấn đề chính của user story này là gì?",
+    "options": [
+      "A. User story không chỉ rõ thông tin cá nhân nào cần cập nhật (ví dụ: số điện thoại, địa chỉ).",
+      "B. User story không độc lập vì phụ thuộc vào việc nhân viên đã đăng nhập vào hệ thống.",
+      "C. User story không có acceptance criteria đi kèm, dẫn đến khó kiểm thử.",
+      "D. User story không thể ước lượng (Not Estimable) vì phạm vi quá rộng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "User story này quá chung chung về 'thông tin cá nhân', vi phạm tiêu chí 'Specific' trong INVEST. Cần làm rõ các trường thông tin cụ thể mà nhân viên có thể cập nhật (ví dụ: email, số điện thoại, địa chỉ).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500853275_INTERMEDIATE_8_j78u"
+  },
+  {
+    "questionText": "Bạn đang làm việc với một công ty thương mại điện tử để cải tiến tính năng 'Tìm kiếm sản phẩm'. User story được viết như sau: 'Là khách hàng, tôi muốn tìm kiếm sản phẩm nhanh chóng để tiết kiệm thời gian mua sắm'. Acceptance criteria nào dưới đây là KHÔNG phù hợp vì không tập trung vào giá trị người dùng?",
+    "options": [
+      "A. Hệ thống phải hiển thị kết quả tìm kiếm trong vòng 2 giây sau khi người dùng nhập từ khóa.",
+      "B. Hệ thống phải lưu lịch sử tìm kiếm của người dùng trong 30 ngày gần nhất.",
+      "C. Hệ thống phải hỗ trợ tìm kiếm theo tên sản phẩm, danh mục, và khoảng giá.",
+      "D. Hệ thống phải hiển thị gợi ý tìm kiếm khi người dùng nhập từ khóa không chính xác."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc lưu lịch sử tìm kiếm không trực tiếp mang lại giá trị cho mục tiêu 'tìm kiếm sản phẩm nhanh chóng' của user story. Các lựa chọn khác đều hỗ trợ trực tiếp cho trải nghiệm tìm kiếm của người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500853275_INTERMEDIATE_9_qjfd"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng đặt lịch hẹn cho phòng khám nha khoa, user story sau được đề xuất: 'Là bệnh nhân, tôi muốn đặt lịch hẹn với bác sĩ để được khám chữa bệnh'. Bạn cần viết acceptance criteria cho trường hợp bệnh nhân đặt lịch hẹn vào thời gian bác sĩ không có lịch trống. Acceptance criteria nào dưới đây là ĐÚNG?",
+    "options": [
+      "A. Hệ thống phải hiển thị thông báo 'Bác sĩ không có lịch trống trong khung giờ này' và gợi ý các khung giờ khác gần nhất.",
+      "B. Hệ thống phải tự động chuyển lịch hẹn sang bác sĩ khác có cùng chuyên khoa.",
+      "C. Hệ thống phải cho phép bệnh nhân đặt lịch hẹn chờ và thông báo khi có lịch trống.",
+      "D. Hệ thống phải ghi nhận yêu cầu đặt lịch và gửi email xác nhận cho bệnh nhân."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Acceptance criteria này xử lý trường hợp lỗi một cách rõ ràng và cung cấp giải pháp thay thế (gợi ý khung giờ khác), phù hợp với trải nghiệm người dùng thực tế. Các lựa chọn khác hoặc không giải quyết vấn đề (D) hoặc quá tự động (B, C) mà không có sự đồng ý của bệnh nhân.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500853275_INTERMEDIATE_10_fn2i"
+  },
+  {
+    "questionText": "Bạn đang phân tích yêu cầu cho tính năng 'Đăng ký khóa học' của một nền tảng giáo dục trực tuyến. User story được viết như sau: 'Là học viên, tôi muốn đăng ký khóa học để nâng cao kỹ năng'. Acceptance criteria nào dưới đây là SAI vì không kiểm thử được?",
+    "options": [
+      "A. Hệ thống phải cho phép học viên chọn khóa học từ danh sách và nhấn nút 'Đăng ký'.",
+      "B. Hệ thống phải gửi email xác nhận đăng ký khóa học trong vòng 5 phút sau khi học viên hoàn tất đăng ký.",
+      "C. Hệ thống phải đảm bảo học viên không thể đăng ký khóa học đã đầy chỗ hoặc đã đóng đăng ký.",
+      "D. Hệ thống phải cập nhật thông tin đăng ký dựa trên chính sách hiện hành của nền tảng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Acceptance criteria này không kiểm thử được vì không xác định rõ 'chính sách hiện hành' là gì và làm thế nào để xác minh việc cập nhật thông tin. Các lựa chọn khác đều có thể kiểm chứng bằng hành động hoặc dữ liệu cụ thể.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500853276_INTERMEDIATE_11_zr3c"
+  },
+  {
+    "questionText": "Trong dự án xây dựng hệ thống quản lý kho cho một công ty bán lẻ, user story sau được viết: 'Là nhân viên kho, tôi muốn kiểm kê hàng tồn kho để cập nhật số lượng chính xác'. Bạn cần tách user story này thành các story nhỏ hơn. Cách tách nào dưới đây là HỢP LÝ NHẤT?",
+    "options": [
+      "A. Tách thành: (1) Hiển thị danh sách sản phẩm trong kho; (2) Cho phép nhân viên nhập số lượng tồn kho thực tế; (3) Cập nhật số lượng tồn kho vào hệ thống.",
+      "B. Tách thành: (1) Thiết kế giao diện kiểm kê kho; (2) Viết API để xử lý logic cập nhật tồn kho; (3) Tích hợp API với giao diện người dùng.",
+      "C. Tách thành: (1) Kiểm kê tồn kho cho sản phẩm có số lượng dưới mức tối thiểu; (2) Kiểm kê tồn kho cho sản phẩm sắp hết hạn; (3) Kiểm kê tồn kho cho tất cả sản phẩm còn lại.",
+      "D. Tách thành: (1) Cho phép nhân viên quét mã vạch sản phẩm để kiểm kê; (2) Cho phép nhân viên nhập số lượng thủ công; (3) Lưu thông tin kiểm kê vào cơ sở dữ liệu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cách tách này giữ được giá trị kinh doanh ở từng bước và tuân thủ nguyên tắc INVEST. Các lựa chọn khác hoặc quá kỹ thuật (B), hoặc chia theo loại sản phẩm (C) thay vì luồng công việc, hoặc quá chi tiết về phương thức nhập liệu (D).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780500853276_INTERMEDIATE_12_hsjl"
+  },
+  {
+    "questionText": "Bạn đang làm việc với một ngân hàng để phát triển tính năng 'Mở tài khoản tiết kiệm online'. User story được viết như sau: 'Là khách hàng, tôi muốn mở tài khoản tiết kiệm trực tuyến để gửi tiền sinh lời'. Acceptance criteria nào dưới đây là TỐT NHẤT vì bao phủ được các trường hợp biên (edge cases)?",
+    "options": [
+      "A. Hệ thống phải cho phép khách hàng chọn kỳ hạn gửi (1 tháng, 3 tháng, 6 tháng, 12 tháng) và nhập số tiền gửi.",
+      "B. Hệ thống phải tính lãi suất dựa trên số tiền gửi và kỳ hạn đã chọn, hiển thị số tiền lãi dự kiến khi đáo hạn.",
+      "C. Hệ thống phải xử lý thành công khi khách hàng nhập số tiền gửi trong khoảng từ 1 triệu đến 1 tỷ đồng; nếu số tiền ngoài khoảng này, hiển thị thông báo 'Số tiền không hợp lệ'.",
+      "D. Hệ thống phải gửi email xác nhận sau khi khách hàng mở tài khoản thành công."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Acceptance criteria này bao phủ cả trường hợp hợp lệ và không hợp lệ (số tiền ngoài khoảng cho phép), đảm bảo tính kiểm thử được. Các lựa chọn khác chỉ mô tả các tính năng cơ bản mà không xử lý edge case.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500853276_INTERMEDIATE_13_saso"
+  },
+  {
+    "questionText": "Trong dự án Agile tại một ngân hàng Việt Nam, Product Owner (PO) yêu cầu user story: 'Là khách hàng, tôi muốn nạp tiền vào tài khoản qua app để tiện lợi'. Bạn nhận thấy story này vi phạm tiêu chí INVEST nào nhiều nhất và cần điều chỉnh như thế nào?",
+    "options": [
+      "A. Independent – Story phụ thuộc vào việc hoàn thành API của đối tác ngân hàng thứ ba. Cần tách thành 2 story: (1) Tích hợp API đối tác, (2) Giao diện nạp tiền.",
+      "B. Negotiable – Story quá cụ thể về giải pháp (app). Cần viết lại thành: 'Là khách hàng, tôi muốn nạp tiền vào tài khoản để tăng tính thanh khoản'.",
+      "C. Valuable – Story không nêu rõ giá trị kinh doanh. Cần bổ sung outcome: 'giảm 30% giao dịch tại quầy trong 6 tháng'.",
+      "D. Estimable – Story thiếu acceptance criteria về hạn mức nạp tiền. Cần bổ sung: 'Hệ thống cho phép nạp từ 50.000 VND đến 50.000.000 VND/lần'."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Story thiếu rõ ràng về giá trị kinh doanh (Valuable) và outcome cụ thể. Outcome như 'giảm 30% giao dịch tại quầy' giúp đội phát triển hiểu tác động và ưu tiên công việc. Các lựa chọn khác chỉ giải quyết vấn đề nhỏ hơn hoặc không phải tiêu chí INVEST bị vi phạm nhiều nhất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500943408_ADVANCED_0_9ww8"
+  },
+  {
+    "questionText": "Bạn đang phân tích user story cho tính năng 'Xác thực sinh trắc học' trong app ngân hàng. PO muốn acceptance criteria (AC) đơn giản: 'Hệ thống xác thực thành công khi nhận diện khuôn mặt người dùng'. Bạn đề xuất bổ sung edge case nào để đảm bảo AC có thể test được và giảm rủi ro bảo mật?",
+    "options": [
+      "A. 'Hệ thống từ chối xác thực nếu khuôn mặt bị che 30% trở lên (vd: khẩu trang, kính râm).'",
+      "B. 'Hệ thống cho phép thử lại tối đa 3 lần trước khi khóa tài khoản trong 5 phút.'",
+      "C. 'Hệ thống phải xác thực thành công trong vòng 2 giây với độ chính xác 99.9% trên thiết bị iOS/Android.'",
+      "D. Tất cả các ý trên đều cần thiết để đảm bảo AC đầy đủ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Edge case về 'khuôn mặt bị che' là tình huống thực tế phổ biến ở Việt Nam (do khẩu trang) và ảnh hưởng trực tiếp đến bảo mật. Các lựa chọn khác là yêu cầu về performance (C) hoặc business rule (B), không phải edge case cụ thể cho xác thực sinh trắc học.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500943409_ADVANCED_1_swbz"
+  },
+  {
+    "questionText": "Trong dự án triển khai core banking cho một ngân hàng, PO đề xuất user story: 'Là nhân viên tín dụng, tôi muốn hệ thống tự động phê duyệt khoản vay dưới 100 triệu để tiết kiệm thời gian'. Story này có vấn đề gì về mặt business value và cần tách như thế nào?",
+    "options": [
+      "A. Story quá lớn (Epic) và không rõ outcome. Cần tách thành: (1) Hiển thị thông tin khách hàng, (2) Tính điểm tín dụng tự động, (3) Gửi kết quả phê duyệt đến khách hàng.",
+      "B. Story thiếu persona cụ thể. Cần viết lại cho từng loại nhân viên: 'Là chuyên viên tín dụng cấp cao, tôi muốn...'.",
+      "C. Story không đảm bảo tính 'Valuable' vì tự động phê duyệt có thể tăng rủi ro tín dụng. Cần bổ sung outcome: 'giảm 20% thời gian xử lý nhưng giữ nguyên tỷ lệ nợ xấu'.",
+      "D. Story vi phạm 'Testable' vì thiếu AC về điều kiện phê duyệt. Cần bổ sung: 'Hệ thống chỉ tự động phê duyệt nếu khách hàng có điểm tín dụng > 700'."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tự động phê duyệt vay không đồng nghĩa với việc tạo giá trị nếu không kiểm soát rủi ro. Outcome 'giảm 20% thời gian nhưng giữ nguyên tỷ lệ nợ xấu' đảm bảo business value thực tế. Các lựa chọn khác không giải quyết gốc vấn đề về giá trị kinh doanh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500943409_ADVANCED_2_h7ka"
+  },
+  {
+    "questionText": "Bạn đang làm BA cho dự án e-wallet tại Việt Nam. PO yêu cầu user story: 'Là người dùng, tôi muốn chuyển tiền đến ví khác để thanh toán hóa đơn'. Khi phân tích, bạn phát hiện story này có thể chia nhỏ theo cách nào để không mất business value?",
+    "options": [
+      "A. Chia theo loại người dùng: (1) Người dùng cá nhân, (2) Người dùng doanh nghiệp.",
+      "B. Chia theo loại giao dịch: (1) Chuyển tiền trong hệ thống, (2) Chuyển tiền liên ngân hàng, (3) Thanh toán hóa đơn tự động.",
+      "C. Chia theo kênh thực hiện: (1) Chuyển tiền qua app mobile, (2) Chuyển tiền qua website.",
+      "D. Chia theo hạn mức: (1) Chuyển tiền dưới 5 triệu, (2) Chuyển tiền từ 5 triệu trở lên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chia theo loại giao dịch giữ nguyên business value (mỗi story vẫn giải quyết nhu cầu thanh toán) nhưng giúp đội phát triển triển khai từng phần độc lập và dễ ước lượng. Các cách chia khác (A, C, D) có thể tạo ra story phụ thuộc hoặc không đảm bảo giá trị riêng lẻ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500943410_ADVANCED_3_43r7"
+  },
+  {
+    "questionText": "Trong dự án Agile cho công ty logistics, PO viết acceptance criteria cho story 'Tính phí vận chuyển': 'Hệ thống tính phí dựa trên trọng lượng và khoảng cách'. Bạn đề xuất bổ sung điều kiện nào để AC trở nên testable và xử lý được edge case phổ biến tại Việt Nam?",
+    "options": [
+      "A. 'Phí vận chuyển = (trọng lượng * đơn giá/kg) + (khoảng cách * đơn giá/km), làm tròn đến 1.000 VND.'",
+      "B. 'Hệ thống áp dụng phí tối thiểu 20.000 VND cho đơn hàng dưới 1kg hoặc dưới 5km.'",
+      "C. 'Hệ thống phải hiển thị phí vận chuyển trong vòng 1 giây sau khi người dùng nhập thông tin.'",
+      "D. 'Phí vận chuyển không được vượt quá 10% giá trị đơn hàng cho khách hàng thân thiết.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Edge case về phí tối thiểu là tình huống thực tế phổ biến ở Việt Nam (đơn hàng nhỏ, cự ly ngắn) và cần được xử lý để AC testable. Lựa chọn A chỉ mô tả công thức tính, không phải edge case. C và D là yêu cầu về performance hoặc business rule, không phải edge case cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780500943410_ADVANCED_4_34t1"
+  },
+  {
+    "questionText": "Bạn đang phân tích user story cho tính năng 'Gửi thông báo khuyến mãi' trong app bán lẻ. PO muốn story: 'Là khách hàng, tôi muốn nhận thông báo khuyến mãi qua email/SMS để không bỏ lỡ ưu đãi'. Bạn nhận thấy story này vi phạm tiêu chí INVEST nào và cần điều chỉnh như thế nào?",
+    "options": [
+      "A. Small – Story quá lớn vì bao gồm cả email và SMS. Cần tách thành 2 story riêng biệt.",
+      "B. Testable – Story thiếu AC về tần suất gửi. Cần bổ sung: 'Hệ thống gửi tối đa 2 thông báo/tuần'.",
+      "C. Independent – Story phụ thuộc vào việc hoàn thành hệ thống CRM. Cần tách riêng phần tích hợp CRM.",
+      "D. Negotiable – Story quá cụ thể về kênh (email/SMS). Cần viết lại thành: 'Là khách hàng, tôi muốn nhận thông báo khuyến mãi để tăng trải nghiệm mua sắm'."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Story bao gồm cả email và SMS làm tăng phạm vi công việc, vi phạm tiêu chí 'Small'. Tách thành 2 story giúp đội phát triển ước lượng và triển khai độc lập. Các lựa chọn khác không giải quyết vấn đề cốt lõi về kích thước story.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500943411_ADVANCED_5_f8tv"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho công ty sản xuất, PO đề xuất user story: 'Là quản lý kho, tôi muốn hệ thống cảnh báo khi tồn kho dưới mức an toàn để tránh thiếu hàng'. Khi viết acceptance criteria, bạn cần bao gồm edge case nào để đảm bảo tính thực tế tại Việt Nam?",
+    "options": [
+      "A. 'Hệ thống cảnh báo khi tồn kho của nguyên liệu A dưới 100 đơn vị, ngoại trừ các nguyên liệu nhập khẩu có thời gian giao hàng > 30 ngày.'",
+      "B. 'Hệ thống phải gửi cảnh báo qua email và SMS đến quản lý kho trong vòng 5 phút sau khi tồn kho dưới mức an toàn.'",
+      "C. 'Mức tồn kho an toàn được tính toán tự động dựa trên lịch sử tiêu thụ 6 tháng gần nhất.'",
+      "D. 'Hệ thống cho phép quản lý kho điều chỉnh mức tồn kho an toàn cho từng nguyên liệu.'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Edge case về nguyên liệu nhập khẩu (thời gian giao hàng dài) là tình huống thực tế phổ biến tại Việt Nam và ảnh hưởng đến việc quản lý tồn kho. Các lựa chọn khác là yêu cầu về kênh cảnh báo (B), tính toán (C), hoặc tính năng (D), không phải edge case cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780500943412_ADVANCED_6_b0i9"
+  },
+  {
+    "questionText": "Bạn đang làm BA cho dự án fintech tại Việt Nam. PO viết user story: 'Là người dùng, tôi muốn rút tiền từ ví điện tử về tài khoản ngân hàng để sử dụng tiền mặt'. Story này có vấn đề gì về mặt business value và cần bổ sung gì?",
+    "options": [
+      "A. Story thiếu outcome cụ thể. Cần bổ sung: 'giảm 40% thời gian rút tiền so với phương thức truyền thống'.",
+      "B. Story quá chung chung. Cần viết lại cho từng loại người dùng: 'Là người dùng cá nhân, tôi muốn...'.",
+      "C. Story vi phạm 'Testable' vì thiếu AC về hạn mức rút. Cần bổ sung: 'Hệ thống cho phép rút từ 50.000 VND đến 50.000.000 VND/lần'.",
+      "D. Story phụ thuộc vào việc hoàn thành tích hợp ngân hàng. Cần tách thành 2 story: (1) Tích hợp API ngân hàng, (2) Giao diện rút tiền."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Story thiếu outcome đo lường được về giá trị kinh doanh. Outcome 'giảm 40% thời gian' giúp đội phát triển hiểu rõ tác động và ưu tiên công việc. Các lựa chọn khác giải quyết vấn đề kỹ thuật hoặc phạm vi, không phải business value.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500943412_ADVANCED_7_ngfn"
+  },
+  {
+    "questionText": "Trong dự án Agile cho công ty thương mại điện tử, PO yêu cầu user story: 'Là khách hàng, tôi muốn lọc sản phẩm theo nhiều tiêu chí để tìm kiếm nhanh hơn'. Khi phân tích, bạn đề xuất chia nhỏ story này theo cách nào để không mất business value?",
+    "options": [
+      "A. Chia theo loại tiêu chí: (1) Lọc theo giá, (2) Lọc theo thương hiệu, (3) Lọc theo đánh giá sao.",
+      "B. Chia theo loại người dùng: (1) Khách hàng cá nhân, (2) Khách hàng doanh nghiệp.",
+      "C. Chia theo kênh: (1) Lọc trên website, (2) Lọc trên app mobile.",
+      "D. Chia theo phạm vi: (1) Lọc cơ bản (giá, thương hiệu), (2) Lọc nâng cao (đánh giá, kích thước)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Chia theo loại tiêu chí giữ nguyên business value (mỗi story vẫn giải quyết nhu cầu lọc sản phẩm) và giúp đội phát triển triển khai từng phần độc lập. Các cách chia khác (B, C, D) có thể tạo ra story phụ thuộc hoặc không đảm bảo giá trị riêng lẻ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780500943412_ADVANCED_8_r4pv"
+  },
+  {
+    "questionText": "Bạn đang phân tích acceptance criteria cho user story 'Đăng ký tài khoản doanh nghiệp' trong hệ thống ngân hàng số. PO đề xuất AC: 'Hệ thống cho phép đăng ký tài khoản doanh nghiệp khi người dùng nhập đầy đủ thông tin'. Bạn cần bổ sung edge case nào để đảm bảo AC testable và xử lý được tình huống thực tế tại Việt Nam?",
+    "options": [
+      "A. 'Hệ thống từ chối đăng ký nếu mã số thuế doanh nghiệp không hợp lệ hoặc đã tồn tại trong hệ thống.'",
+      "B. 'Hệ thống phải gửi email xác nhận đến người đại diện pháp luật trong vòng 1 giờ sau khi đăng ký.'",
+      "C. 'Hệ thống cho phép tải lên tối đa 5 file giấy tờ doanh nghiệp với dung lượng mỗi file ≤ 5MB.'",
+      "D. 'Hệ thống phải hoàn thành đăng ký trong vòng 3 phút với kết nối internet ổn định.'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Edge case về mã số thuế là tình huống thực tế phổ biến tại Việt Nam (doanh nghiệp không hợp lệ hoặc trùng lặp) và ảnh hưởng trực tiếp đến tính hợp lệ của đăng ký. Các lựa chọn khác là yêu cầu về performance (D), tính năng (C), hoặc business rule (B), không phải edge case cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780500943413_ADVANCED_9_hk9n"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý nhân sự cho công ty đa quốc gia, PO viết user story: 'Là nhân viên, tôi muốn xem lịch sử lương để biết thu nhập của mình'. Story này có vấn đề gì về mặt INVEST và cần điều chỉnh như thế nào?",
+    "options": [
+      "A. Vi phạm 'Valuable' vì không rõ outcome. Cần bổ sung: 'giúp nhân viên hiểu rõ thu nhập và tăng sự minh bạch'.",
+      "B. Vi phạm 'Small' vì bao gồm nhiều loại lương (cơ bản, thưởng, phụ cấp). Cần tách thành 3 story riêng biệt.",
+      "C. Vi phạm 'Testable' vì thiếu AC về định dạng dữ liệu. Cần bổ sung: 'Hệ thống hiển thị lịch sử lương theo tháng với định dạng DD/MM/YYYY'.",
+      "D. Vi phạm 'Independent' vì phụ thuộc vào việc hoàn thành module tính lương. Cần tách riêng phần tích hợp module tính lương."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Story bao gồm nhiều loại lương làm tăng phạm vi công việc, vi phạm tiêu chí 'Small'. Tách thành 3 story (lương cơ bản, thưởng, phụ cấp) giúp đội phát triển ước lượng và triển khai độc lập. Các lựa chọn khác không giải quyết vấn đề cốt lõi về kích thước story.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500943413_ADVANCED_10_6b3i"
+  },
+  {
+    "questionText": "Bạn đang làm BA cho dự án app đặt xe tại Việt Nam. PO đề xuất user story: 'Là tài xế, tôi muốn hệ thống hiển thị lộ trình để đến điểm đón nhanh nhất'. Khi viết acceptance criteria, bạn cần bao gồm edge case nào để xử lý tình huống thực tế?",
+    "options": [
+      "A. 'Hệ thống phải hiển thị lộ trình tối ưu kể cả khi có sự cố giao thông (vd: kẹt xe, đường cấm) và đề xuất tuyến đường thay thế trong vòng 5 giây.'",
+      "B. 'Hệ thống cho phép tài xế chọn loại phương tiện (xe máy/ô tô) để tính toán lộ trình phù hợp.'",
+      "C. 'Hệ thống phải cập nhật lộ trình theo thời gian thực với độ trễ không quá 10 giây.'",
+      "D. 'Hệ thống hiển thị khoảng cách và thời gian dự kiến đến điểm đón với sai số ≤ 5% so với thực tế.'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Edge case về sự cố giao thông là tình huống thực tế phổ biến tại Việt Nam và ảnh hưởng trực tiếp đến tính chính xác của lộ trình. Các lựa chọn khác là yêu cầu về tính năng (B), performance (C), hoặc độ chính xác (D), không phải edge case cụ thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780500943414_ADVANCED_11_kagp"
+  },
+  {
+    "questionText": "Trong dự án Agile cho công ty bảo hiểm, PO yêu cầu user story: 'Là khách hàng, tôi muốn mua bảo hiểm sức khỏe trực tuyến để tiết kiệm thời gian'. Story này có vấn đề gì về mặt business value và cần bổ sung gì để đảm bảo tính 'Valuable'?",
+    "options": [
+      "A. Story thiếu outcome cụ thể. Cần bổ sung: 'tăng 25% số lượng hợp đồng mua trực tuyến trong 3 tháng'.",
+      "B. Story quá chung chung. Cần viết lại cho từng loại bảo hiểm: 'Là khách hàng cá nhân, tôi muốn mua bảo hiểm sức khỏe cá nhân...'.",
+      "C. Story vi phạm 'Testable' vì thiếu AC về điều kiện mua. Cần bổ sung: 'Khách hàng từ 18-65 tuổi mới được mua bảo hiểm'.",
+      "D. Story phụ thuộc vào việc hoàn thành tích hợp với đối tác y tế. Cần tách thành 2 story: (1) Tích hợp API đối tác, (2) Giao diện mua bảo hiểm."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Story thiếu outcome đo lường được về giá trị kinh doanh. Outcome 'tăng 25% số lượng hợp đồng' giúp đội phát triển hiểu rõ tác động và ưu tiên công việc. Các lựa chọn khác giải quyết vấn đề kỹ thuật hoặc phạm vi, không phải business value.",
+    "difficulty": "ADVANCED",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780500943414_ADVANCED_12_4c7b"
+  },
+  {
+    "questionText": "Trong dự án chuyển đổi số cho một ngân hàng Việt Nam, bạn đang xây dựng user story cho tính năng 'Tích hợp thanh toán qua ví điện tử'. Persona chính là 'Khách hàng cá nhân 40-60 tuổi, ít sử dụng công nghệ'. Theo nguyên tắc INVEST, tiêu chí nào sau đây KHÔNG phù hợp để đánh giá chất lượng của user story này?",
+    "options": [
+      "A. Independent: User story không phụ thuộc vào việc hoàn thành các story khác liên quan đến xác thực sinh trắc học.",
+      "B. Valuable: User story phải giải thích rõ lợi ích cho cả ngân hàng (tăng doanh thu) và khách hàng (tiện lợi).",
+      "C. Estimable: Nhóm phát triển có thể ước lượng effort dựa trên số lượng API cần tích hợp với các ví điện tử phổ biến tại Việt Nam (Momo, ZaloPay, VNPay).",
+      "D. Specific: User story phải mô tả chi tiết từng bước giao diện người dùng, bao gồm màu sắc nút bấm và kích thước font chữ."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Tiêu chí INVEST không yêu cầu user story phải chi tiết đến mức thiết kế giao diện (specific). Thay vào đó, user story cần tập trung vào giá trị kinh doanh và khả năng triển khai (valuable, estimable). Việc thiết kế giao diện nên để ở các task kỹ thuật hoặc tài liệu thiết kế riêng.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780501039099_EXPERT_0_1nfg"
+  },
+  {
+    "questionText": "Bạn đang phân tích gap giữa hệ thống quản lý đơn hàng hiện tại và yêu cầu của khách hàng FMCG đa quốc gia tại Việt Nam. Khách hàng muốn tự động hóa quy trình xử lý đơn hàng từ các kênh bán hàng online (Shopee, Lazada, Website). User story nào sau đây thể hiện tư duy chiến lược và đảm bảo giá trị kinh doanh dài hạn?",
+    "options": [
+      "A. 'Là người quản lý kho, tôi muốn hệ thống tự động đồng bộ đơn hàng từ Shopee để giảm thiểu sai sót khi nhập liệu.'",
+      "B. 'Là người quản lý bán hàng, tôi muốn hệ thống tự động phân loại đơn hàng theo kênh bán (Shopee/Lazada/Website) và mức độ ưu tiên (VIP/normal) để tối ưu hóa quy trình xử lý.'",
+      "C. 'Là nhân viên kho, tôi muốn hệ thống hiển thị cảnh báo khi số lượng hàng tồn kho thấp hơn ngưỡng an toàn để kịp thời đặt hàng.'",
+      "D. 'Là người quản lý tài chính, tôi muốn hệ thống tự động tính toán phí vận chuyển cho từng đơn hàng để báo cáo doanh thu chính xác.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "User story B thể hiện tư duy chiến lược vì: (1) Phân loại theo kênh bán giúp tối ưu hóa quy trình dài hạn; (2) Phân loại theo mức độ ưu tiên (VIP/normal) đảm bảo giá trị kinh doanh (tăng trải nghiệm khách hàng VIP); (3) Liên kết trực tiếp với mục tiêu tự động hóa toàn diện của khách hàng. Các story khác chỉ giải quyết vấn đề cục bộ.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780501039100_EXPERT_1_rojp"
+  },
+  {
+    "questionText": "Trong dự án triển khai ERP cho một tập đoàn sản xuất tại Việt Nam, bạn cần viết acceptance criteria cho user story: 'Là giám đốc sản xuất, tôi muốn hệ thống tự động cảnh báo khi năng suất dây chuyền giảm dưới 80% để kịp thời điều chỉnh.' Tiêu chí nào sau đây KHÔNG đảm bảo tính testable và bao phủ các edge case?",
+    "options": [
+      "A. Hệ thống phải gửi cảnh báo qua email và SMS đến giám đốc sản xuất trong vòng 5 phút kể từ khi năng suất giảm dưới 80%.",
+      "B. Cảnh báo phải bao gồm: tên dây chuyền, thời gian bắt đầu giảm năng suất, và nguyên nhân dự kiến (nếu có dữ liệu).",
+      "C. Hệ thống phải ghi nhận lịch sử cảnh báo và cho phép xuất báo cáo theo khoảng thời gian tùy chọn.",
+      "D. Cảnh báo phải được gửi ngay lập tức khi phát hiện năng suất giảm, bất kể thời điểm trong ngày hay ngày nghỉ lễ."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Tiêu chí D không testable vì không xác định rõ 'ngay lập tức' là bao nhiêu phút/giây, và không xem xét edge case về thời gian gửi cảnh báo (ví dụ: ngoài giờ làm việc, ngày nghỉ lễ). Các tiêu chí khác đều có thể kiểm thử được và bao phủ edge case (thời gian phản hồi, nội dung cảnh báo, lịch sử).",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780501039101_EXPERT_2_6ex6"
+  },
+  {
+    "questionText": "Bạn đang làm việc với một startup fintech Việt Nam để phát triển tính năng 'Đầu tư tự động theo mục tiêu tài chính'. User story gốc là: 'Là người dùng, tôi muốn hệ thống tự động đầu tư số tiền của tôi vào các quỹ phù hợp để đạt được mục tiêu tài chính.' Làm thế nào để chia nhỏ user story này mà vẫn giữ nguyên giá trị kinh doanh?",
+    "options": [
+      "A. Chia theo loại quỹ đầu tư: (1) Đầu tư vào quỹ cổ phiếu; (2) Đầu tư vào quỹ trái phiếu; (3) Đầu tư vào quỹ cân bằng.",
+      "B. Chia theo quy trình: (1) Khảo sát mức độ rủi ro của người dùng; (2) Đề xuất danh mục đầu tư; (3) Tự động thực hiện giao dịch; (4) Theo dõi và điều chỉnh danh mục.",
+      "C. Chia theo loại mục tiêu: (1) Đầu tư cho giáo dục con cái; (2) Đầu tư cho hưu trí; (3) Đầu tư cho mua nhà.",
+      "D. Chia theo tính năng kỹ thuật: (1) Tích hợp API với các công ty quản lý quỹ; (2) Xây dựng thuật toán đề xuất danh mục; (3) Xây dựng giao diện theo dõi danh mục."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cách chia B giữ nguyên giá trị kinh doanh vì mỗi story con đều đóng góp vào mục tiêu cuối cùng (đầu tư tự động) và có thể triển khai độc lập. Các cách chia khác: A (chia theo loại quỹ) làm mất giá trị tổng thể; C (chia theo loại mục tiêu) có thể trùng lặp logic; D (chia theo kỹ thuật) không gắn với giá trị người dùng.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780501039103_EXPERT_3_glki"
+  },
+  {
+    "questionText": "Trong dự án triển khai CRM cho một công ty bán lẻ tại Việt Nam, bạn phát hiện user story sau không đáp ứng tiêu chí INVEST: 'Là nhân viên bán hàng, tôi muốn hệ thống tự động gửi email chúc mừng sinh nhật cho khách hàng để tăng sự hài lòng.' Làm thế nào để cải thiện user story này?",
+    "options": [
+      "A. Thêm chi tiết về nội dung email: '...bao gồm mã giảm giá 10% cho đơn hàng tiếp theo.'",
+      "B. Chia thành 2 story: (1) Tích hợp dữ liệu sinh nhật khách hàng từ hệ thống hiện tại; (2) Tự động gửi email chúc mừng sinh nhật.",
+      "C. Thêm tiêu chí về thời gian: '...trong vòng 24 giờ trước ngày sinh nhật của khách hàng.'",
+      "D. Thay đổi persona: 'Là giám đốc marketing, tôi muốn hệ thống tự động gửi email chúc mừng sinh nhật để tăng tỷ lệ khách hàng quay lại.'"
+    ],
+    "correctAnswer": "D",
+    "explanation": "User story gốc thiếu giá trị kinh doanh rõ ràng (valuable) và không estimable (khó ước lượng effort). Cách cải thiện D: (1) Thay đổi persona để làm rõ người ra quyết định (giám đốc marketing); (2) Thêm giá trị kinh doanh (tăng tỷ lệ khách hàng quay lại). Các cách khác không giải quyết được vấn đề cốt lõi về giá trị.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780501039104_EXPERT_4_dlmb"
+  },
+  {
+    "questionText": "Bạn đang xây dựng acceptance criteria cho user story: 'Là chủ cửa hàng tạp hóa, tôi muốn hệ thống POS tự động đề xuất đơn hàng nhập kho để tối ưu hóa tồn kho.' Tiêu chí nào sau đây KHÔNG phù hợp với tư duy chiến lược và dài hạn?",
+    "options": [
+      "A. Hệ thống phải đề xuất đơn hàng dựa trên: (1) Lịch sử bán hàng 3 tháng gần nhất; (2) Dự báo nhu cầu theo mùa vụ (Tết, mùa mưa); (3) Thời gian giao hàng của nhà cung cấp.",
+      "B. Hệ thống phải cho phép chủ cửa hàng điều chỉnh số lượng đề xuất trước khi xác nhận đơn hàng.",
+      "C. Hệ thống phải tự động tạo đơn hàng nhập kho trên hệ thống của nhà cung cấp sau khi chủ cửa hàng xác nhận.",
+      "D. Hệ thống phải đề xuất đơn hàng dựa trên số lượng tồn kho hiện tại và ngưỡng an toàn (safety stock) cho từng sản phẩm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tiêu chí C không phù hợp với tư duy chiến lược vì: (1) Tự động tạo đơn hàng trên hệ thống nhà cung cấp là tính năng phức tạp, phụ thuộc vào khả năng tích hợp của nhà cung cấp; (2) Không tập trung vào giá trị cốt lõi (đề xuất đơn hàng tối ưu); (3) Có thể gây rủi ro nếu hệ thống nhà cung cấp thay đổi. Các tiêu chí khác đều hỗ trợ tối ưu hóa tồn kho dài hạn.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780501039104_EXPERT_5_b9h0"
+  },
+  {
+    "questionText": "Trong dự án số hóa quy trình mua hàng cho một tập đoàn bán lẻ đa quốc gia, bạn cần viết user story cho tính năng 'Phê duyệt đơn hàng tự động theo ngưỡng giá trị'. Persona nào sau đây KHÔNG phù hợp để viết user story này?",
+    "options": [
+      "A. Giám đốc tài chính: 'Tôi muốn hệ thống tự động phê duyệt đơn hàng dưới 10 triệu VND để giảm thời gian xử lý.'",
+      "B. Trưởng phòng mua hàng: 'Tôi muốn hệ thống tự động chuyển đơn hàng trên 50 triệu VND đến giám đốc tài chính để phê duyệt.'",
+      "C. Nhân viên kế toán: 'Tôi muốn hệ thống tự động kiểm tra số dư tài khoản trước khi phê duyệt đơn hàng.'",
+      "D. Giám đốc điều hành: 'Tôi muốn hệ thống tự động phê duyệt tất cả đơn hàng để tối ưu hóa quy trình mua hàng.'"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Persona D (Giám đốc điều hành) không phù hợp vì: (1) Không có nhu cầu cụ thể về ngưỡng phê duyệt; (2) Yêu cầu 'phê duyệt tất cả đơn hàng' không thực tế và vi phạm nguyên tắc kiểm soát nội bộ; (3) Không thể hiện rõ giá trị kinh doanh. Các persona khác đều có nhu cầu cụ thể và gắn với quy trình phê duyệt thực tế.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780501039105_EXPERT_6_0yci"
+  },
+  {
+    "questionText": "Bạn đang phân tích gap giữa hệ thống quản lý dự án hiện tại và yêu cầu của một công ty công nghệ Việt Nam muốn triển khai Agile. User story nào sau đây thể hiện tư duy giải pháp dài hạn và lãnh đạo chuyển đổi số?",
+    "options": [
+      "A. 'Là Scrum Master, tôi muốn hệ thống tự động tính toán velocity của nhóm để báo cáo cho ban lãnh đạo.'",
+      "B. 'Là Product Owner, tôi muốn hệ thống tự động tạo sprint backlog từ product backlog để tiết kiệm thời gian.'",
+      "C. 'Là trưởng nhóm phát triển, tôi muốn hệ thống tích hợp với Jira để quản lý công việc hiệu quả hơn.'",
+      "D. 'Là giám đốc công nghệ, tôi muốn hệ thống cung cấp dashboard phân tích dự báo rủi ro dự án dựa trên dữ liệu lịch sử và xu hướng thị trường để ra quyết định chiến lược.'"
+    ],
+    "correctAnswer": "D",
+    "explanation": "User story D thể hiện tư duy giải pháp dài hạn và lãnh đạo chuyển đổi số vì: (1) Tập trung vào giá trị chiến lược (ra quyết định dựa trên dữ liệu); (2) Kết hợp dữ liệu lịch sử và xu hướng thị trường; (3) Nhắm đến persona lãnh đạo (giám đốc công nghệ). Các story khác chỉ giải quyết vấn đề cục bộ hoặc kỹ thuật.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780501039106_EXPERT_7_no2e"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý chuỗi cung ứng cho một công ty logistics tại Việt Nam, bạn cần viết acceptance criteria cho user story: 'Là điều phối viên vận tải, tôi muốn hệ thống tự động đề xuất lộ trình giao hàng tối ưu để giảm chi phí vận chuyển.' Tiêu chí nào sau đây đảm bảo tính testable và bao phủ edge case?",
+    "options": [
+      "A. Hệ thống phải đề xuất lộ trình tối ưu dựa trên khoảng cách ngắn nhất giữa các điểm giao hàng.",
+      "B. Hệ thống phải đề xuất lộ trình tối ưu dựa trên: (1) Khoảng cách; (2) Thời gian di chuyển ước tính; (3) Lịch trình của tài xế; (4) Khối lượng hàng hóa; (5) Thời gian giao hàng yêu cầu của khách hàng.",
+      "C. Hệ thống phải đề xuất lộ trình tối ưu trong vòng 30 giây sau khi điều phối viên nhập thông tin đơn hàng.",
+      "D. Hệ thống phải hiển thị lộ trình đề xuất trên bản đồ và cho phép điều phối viên điều chỉnh thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tiêu chí B đảm bảo tính testable và bao phủ edge case vì: (1) Xác định rõ các yếu tố đầu vào để tối ưu hóa; (2) Có thể kiểm thử từng yếu tố riêng lẻ; (3) Bao phủ các tình huống thực tế (lịch trình tài xế, khối lượng hàng hóa, thời gian giao hàng). Các tiêu chí khác: A (quá đơn giản); C (không bao phủ edge case về chất lượng lộ trình); D (không testable về logic tối ưu hóa).",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SKILL",
+    "id": "q_1780501039106_EXPERT_8_csdb"
+  },
+  {
+    "questionText": "Bạn đang làm việc với một ngân hàng Việt Nam để phát triển tính năng 'Tư vấn tài chính tự động'. User story gốc là: 'Là khách hàng, tôi muốn hệ thống tư vấn danh mục đầu tư phù hợp để tối ưu hóa lợi nhuận.' Làm thế nào để chia nhỏ user story này mà vẫn giữ nguyên giá trị kinh doanh và đảm bảo tính INVEST?",
+    "options": [
+      "A. Chia theo loại sản phẩm đầu tư: (1) Tư vấn đầu tư cổ phiếu; (2) Tư vấn đầu tư trái phiếu; (3) Tư vấn đầu tư quỹ mở.",
+      "B. Chia theo quy trình: (1) Khảo sát mức độ chấp nhận rủi ro của khách hàng; (2) Phân tích mục tiêu tài chính của khách hàng; (3) Đề xuất danh mục đầu tư; (4) Theo dõi và điều chỉnh danh mục.",
+      "C. Chia theo đối tượng khách hàng: (1) Tư vấn cho khách hàng cá nhân; (2) Tư vấn cho khách hàng doanh nghiệp.",
+      "D. Chia theo tính năng kỹ thuật: (1) Tích hợp API với các công ty chứng khoán; (2) Xây dựng thuật toán đề xuất danh mục; (3) Xây dựng giao diện tư vấn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cách chia B giữ nguyên giá trị kinh doanh và đảm bảo INVEST vì: (1) Mỗi story con đều độc lập (Independent); (2) Có giá trị riêng (Valuable); (3) Có thể ước lượng effort (Estimable); (4) Có kích thước phù hợp (Small); (5) Có thể kiểm thử (Testable). Các cách chia khác: A (mất giá trị tổng thể); C (trùng lặp logic); D (chia theo kỹ thuật, không gắn với giá trị người dùng).",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "SITUATION",
+    "id": "q_1780501039107_EXPERT_9_calu"
+  },
+  {
+    "questionText": "Trong dự án số hóa quy trình tuyển dụng cho một tập đoàn đa quốc gia tại Việt Nam, bạn cần viết user story cho tính năng 'Tự động sàng lọc hồ sơ ứng viên'. Acceptance criteria nào sau đây thể hiện tư duy chiến lược và dài hạn?",
+    "options": [
+      "A. Hệ thống phải tự động loại bỏ hồ sơ không đáp ứng yêu cầu về số năm kinh nghiệm.",
+      "B. Hệ thống phải tự động xếp hạng hồ sơ ứng viên dựa trên: (1) Kỹ năng phù hợp với mô tả công việc; (2) Kinh nghiệm liên quan; (3) Mức lương yêu cầu; (4) Phản hồi từ vòng phỏng vấn trước (nếu có).",
+      "C. Hệ thống phải tự động gửi email từ chối đến ứng viên không đạt yêu cầu trong vòng 24 giờ.",
+      "D. Hệ thống phải tự động trích xuất thông tin từ CV và lưu vào cơ sở dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Acceptance criteria B thể hiện tư duy chiến lược vì: (1) Kết hợp nhiều yếu tố để đánh giá hồ sơ toàn diện; (2) Có thể mở rộng để tích hợp dữ liệu từ các vòng phỏng vấn; (3) Hỗ trợ ra quyết định dài hạn (ví dụ: xây dựng mô hình dự đoán chất lượng ứng viên). Các tiêu chí khác chỉ giải quyết vấn đề cục bộ hoặc kỹ thuật.",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780501039108_EXPERT_10_6wvr"
+  },
+  {
+    "questionText": "Bạn đang phân tích gap cho dự án triển khai hệ thống quản lý quan hệ khách hàng (CRM) cho một công ty bảo hiểm tại Việt Nam. User story nào sau đây KHÔNG phù hợp với tư duy chiến lược và chuyển đổi số?",
+    "options": [
+      "A. 'Là nhân viên chăm sóc khách hàng, tôi muốn hệ thống tự động gửi email nhắc nhở khách hàng gia hạn hợp đồng để tăng tỷ lệ duy trì.'",
+      "B. 'Là giám đốc kinh doanh, tôi muốn hệ thống cung cấp dashboard phân tích hành vi khách hàng để xác định nhóm khách hàng tiềm năng cho các sản phẩm mới.'",
+      "C. 'Là nhân viên bán hàng, tôi muốn hệ thống tự động cập nhật thông tin khách hàng từ Facebook để tiết kiệm thời gian nhập liệu.'",
+      "D. 'Là giám đốc marketing, tôi muốn hệ thống tích hợp với công cụ phân tích dữ liệu để đo lường hiệu quả chiến dịch marketing theo thời gian thực.'"
+    ],
+    "correctAnswer": "C",
+    "explanation": "User story C không phù hợp với tư duy chiến lược vì: (1) Chỉ tập trung vào tiết kiệm thời gian nhập liệu (giá trị thấp); (2) Không liên quan đến mục tiêu chuyển đổi số (phân tích dữ liệu, cá nhân hóa trải nghiệm); (3) Có thể gây rủi ro về bảo mật dữ liệu khách hàng. Các story khác đều hỗ trợ mục tiêu chiến lược (tăng tỷ lệ duy trì, phân tích hành vi, đo lường hiệu quả).",
+    "difficulty": "EXPERT",
+    "skillArea": "User Story & Acceptance Criteria",
+    "category": "ANALYSIS",
+    "id": "q_1780501039108_EXPERT_11_zbb4"
+  }
+]

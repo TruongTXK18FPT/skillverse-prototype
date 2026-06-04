@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong kiến trúc Java, thành phần nào chịu trách nhiệm chuyển đổi mã Bytecode thành mã máy để thực thi trên một hệ điều hành cụ thể?",
+    "options": [
+      "A. JDK (Java Development Kit)",
+      "B. JRE (Java Runtime Environment)",
+      "C. JVM (Java Virtual Machine)",
+      "D. Javadoc"
+    ],
+    "correctAnswer": "C",
+    "explanation": "JVM (Java Virtual Machine) là máy ảo thực hiện việc nạp, kiểm tra và thực thi Java bytecode trên các nền tảng phần cứng khác nhau.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong quản lý bộ nhớ của Java, vùng nhớ 'Heap' được sử dụng chủ yếu để lưu trữ đối tượng nào?",
+    "options": [
+      "A. Các biến cục bộ (Local variables)",
+      "B. Tất cả các đối tượng (Objects) và mảng được khởi tạo bằng từ khóa 'new'",
+      "C. Các tham chiếu biến (Variable references) trong Stack",
+      "D. Các phương thức tĩnh (Static methods)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Vùng nhớ Heap được sử dụng để lưu trữ tất cả các đối tượng và mảng được tạo ra trong suốt vòng đời của ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cơ chế Garbage Collection (GC) trong Java có nhiệm vụ chính là gì?",
+    "options": [
+      "A. Tăng tốc độ thực thi của các vòng lặp",
+      "B. Kiểm tra lỗi cú pháp khi biên dịch mã nguồn",
+      "C. Tự động giải phóng bộ nhớ của các đối tượng không còn được tham chiếu",
+      "D. Quản lý việc đóng các kết nối Database"
+    ],
+    "correctAnswer": "C",
+    "explanation": "GC tự động tìm và giải phóng bộ nhớ của các đối tượng không còn được sử dụng (không có tham chiếu nào trỏ tới) để tránh rò rỉ bộ nhớ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tính chất nào của lập trình hướng đối tượng (OOP) cho phép ẩn giấu thông tin chi tiết của dữ liệu và chỉ cung cấp các phương thức truy cập an toàn?",
+    "options": [
+      "A. Tính kế thừa (Inheritance)",
+      "B. Tính đóng gói (Encapsulation)",
+      "C. Tính đa hình (Polymorphism)",
+      "D. Tính trừu tượng (Abstraction)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tính đóng gói (Encapsulation) bảo vệ trạng thái nội bộ của đối tượng bằng cách giới hạn quyền truy cập trực tiếp vào các thuộc tính (thường dùng private và getter/setter).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Từ khóa nào được sử dụng để ngăn chặn một class không cho phép các class khác kế thừa từ nó?",
+    "options": [
+      "A. static",
+      "B. abstract",
+      "C. final",
+      "D. private"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khi một class được khai báo là 'final', nó không thể được mở rộng (extends) bởi bất kỳ class nào khác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt cơ bản giữa ArrayList và LinkedList trong Java là gì?",
+    "options": [
+      "A. ArrayList sử dụng mảng động, LinkedList sử dụng danh sách liên kết đôi",
+      "B. LinkedList truy cập phần tử theo index nhanh hơn ArrayList",
+      "C. ArrayList tiết kiệm bộ nhớ hơn LinkedList vì không cần lưu trữ tham chiếu nút",
+      "D. ArrayList không cho phép lưu trữ các giá trị trùng lặp"
+    ],
+    "correctAnswer": "A",
+    "explanation": "ArrayList dựa trên mảng (array-based), truy cập nhanh qua index. LinkedList dựa trên các nút liên kết (node-based), hiệu quả hơn khi chèn/xóa ở giữa danh sách.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Java, 'Checked Exception' là loại ngoại lệ mà lập trình viên bắt buộc phải xử lý bằng cách nào?",
+    "options": [
+      "A. Chỉ cần khai báo trong file cấu hình",
+      "B. Sử dụng khối try-catch hoặc khai báo 'throws' ở chữ ký phương thức",
+      "C. Không cần xử lý vì JVM sẽ tự động bỏ qua",
+      "D. Phải khởi động lại ứng dụng khi gặp lỗi này"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Checked Exception được kiểm tra tại thời điểm biên dịch, yêu cầu lập trình viên phải xử lý tường minh bằng try-catch hoặc throws.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao lớp String trong Java được thiết kế là 'Immutable' (bất biến)?",
+    "options": [
+      "A. Để tiết kiệm bộ nhớ thông qua String Pool và đảm bảo an toàn luồng (thread-safety)",
+      "B. Để cho phép thay đổi nội dung chuỗi nhanh hơn",
+      "C. Để giảm số lượng ký tự trong một chuỗi",
+      "D. Để bắt buộc lập trình viên phải dùng StringBuilder cho mọi trường hợp"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tính bất biến giúp Java sử dụng String Pool để tái sử dụng vùng nhớ và đảm bảo giá trị chuỗi không bị thay đổi bất ngờ trong môi trường đa luồng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Từ Java 8 trở đi, Interface có thể chứa các phương thức có phần thân (body) nếu sử dụng từ khóa nào?",
+    "options": [
+      "A. static hoặc default",
+      "B. abstract",
+      "C. final",
+      "D. synchronized"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Java 8 giới thiệu default methods và static methods trong interface để cho phép định nghĩa logic mặc định mà không làm hỏng các class hiện tại đang implement interface đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để tạo một luồng (Thread) mới bằng cách triển khai Interface, bạn nên sử dụng Interface nào?",
+    "options": [
+      "A. Callable",
+      "B. Runnable",
+      "C. Executor",
+      "D. Threadable"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Runnable là interface phổ biến nhất dùng để định nghĩa tác vụ sẽ được thực thi bởi một Thread thông qua phương thức run().",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Từ khóa 'synchronized' trong Java được sử dụng với mục đích chính là gì?",
+    "options": [
+      "A. Để tăng tốc độ thực thi của phương thức",
+      "B. Để ngăn chặn nhiều luồng truy cập đồng thời vào một đoạn mã gây ra xung đột dữ liệu",
+      "C. Để giải phóng bộ nhớ của đối tượng ngay lập tức",
+      "D. Để ép buộc JVM thực hiện Garbage Collection"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Synchronized dùng để khóa (lock) một phương thức hoặc khối mã, đảm bảo tại một thời điểm chỉ có một luồng được phép thực thi, giúp bảo vệ tính toàn vẹn dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Spring Framework, khái niệm Dependency Injection (DI) giúp giải quyết vấn đề gì?",
+    "options": [
+      "A. Tăng sự phụ thuộc cứng giữa các lớp đối tượng",
+      "B. Tự động tạo giao diện người dùng (UI)",
+      "C. Giảm sự phụ thuộc (loose coupling) giữa các thành phần bằng cách cung cấp các phụ thuộc từ bên ngoài",
+      "D. Thay thế hoàn toàn việc sử dụng cơ sở dữ liệu SQL"
+    ],
+    "correctAnswer": "C",
+    "explanation": "DI giúp tách biệt việc khởi tạo đối tượng khỏi logic nghiệp vụ, làm cho mã nguồn linh hoạt, dễ kiểm thử và bảo trì hơn thông qua việc 'tiêm' các phụ thuộc vào class.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Annotation nào trong Spring Boot được sử dụng để đánh dấu một lớp là nơi định nghĩa các API RESTful?",
+    "options": [
+      "A. @Component",
+      "B. @Service",
+      "C. @RestController",
+      "D. @Repository"
+    ],
+    "correctAnswer": "C",
+    "explanation": "@RestController là sự kết hợp của @Controller và @ResponseBody, chỉ định rằng dữ liệu trả về từ các phương thức sẽ được ghi trực tiếp vào HTTP response body (thường là JSON).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Scope mặc định của một Spring Bean khi không được khai báo cụ thể là gì?",
+    "options": [
+      "A. Prototype",
+      "B. Request",
+      "C. Session",
+      "D. Singleton"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Mặc định, Spring Container chỉ tạo ra duy nhất một instance (Singleton) của một Bean cho toàn bộ vòng đời của ApplicationContext.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Spring Data JPA, để thực hiện các thao tác CRUD cơ bản trên thực thể 'User', bạn nên kế thừa Interface nào?",
+    "options": [
+      "A. UserInterface",
+      "B. JpaRepository",
+      "C. SqlExecutor",
+      "D. DataConnector"
+    ],
+    "correctAnswer": "B",
+    "explanation": "JpaRepository cung cấp sẵn các phương thức như save(), findById(), delete() giúp lập trình viên không cần viết mã SQL thuần cho các thao tác cơ bản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để cấu hình cổng (port) mà ứng dụng Spring Boot sẽ chạy, bạn cần thay đổi thuộc tính nào trong file 'application.properties'?",
+    "options": [
+      "A. app.port",
+      "B. server.port",
+      "C. spring.port",
+      "D. connection.port"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thuộc tính 'server.port' được Spring Boot sử dụng để xác định cổng lắng nghe của embedded web server (mặc định là 8080).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mã trạng thái HTTP (HTTP Status Code) nào thường được trả về khi một API không tìm thấy tài nguyên yêu cầu?",
+    "options": [
+      "A. 200 OK",
+      "B. 400 Bad Request",
+      "C. 404 Not Found",
+      "D. 500 Internal Server Error"
+    ],
+    "correctAnswer": "C",
+    "explanation": "404 Not Found là mã tiêu chuẩn để thông báo rằng server không tìm thấy tài nguyên được yêu cầu từ URL.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Maven, file 'pom.xml' đóng vai trò gì trong dự án Java?",
+    "options": [
+      "A. Lưu trữ mã nguồn Java của ứng dụng",
+      "B. Chứa các cấu hình về dependencies (thư viện), plugins và thông tin build dự án",
+      "C. Là file thực thi chính để chạy ứng dụng",
+      "D. Dùng để cấu hình giao diện người dùng"
+    ],
+    "correctAnswer": "B",
+    "explanation": "POM (Project Object Model) là file cấu hình cốt lõi của Maven, quản lý mọi thứ liên quan đến thư viện bên ngoài và quy trình đóng gói.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Câu lệnh Maven nào được sử dụng để biên dịch mã nguồn và đóng gói ứng dụng thành một file .jar?",
+    "options": [
+      "A. mvn clean",
+      "B. mvn compile",
+      "C. mvn package",
+      "D. mvn install"
+    ],
+    "correctAnswer": "C",
+    "explanation": "'mvn package' thực hiện việc biên dịch, chạy test và đóng gói mã nguồn đã biên dịch thành định dạng phân phối (như JAR hoặc WAR).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng cấu trúc 'try-with-resources' trong Java, lợi ích lớn nhất mang lại là gì?",
+    "options": [
+      "A. Giúp mã chạy nhanh hơn gấp đôi",
+      "B. Tự động đóng các tài nguyên (như InputStream, Connection) sau khi kết thúc khối lệnh",
+      "C. Không cần phải viết khối catch",
+      "D. Cho phép bắt tất cả các loại lỗi mà không cần khai báo"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Try-with-resources đảm bảo rằng mỗi tài nguyên được khai báo sẽ được đóng lại tự động ở cuối câu lệnh, tránh rò rỉ tài nguyên hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lớp 'Optional' trong Java 8 được giới thiệu nhằm mục đích chủ yếu là gì?",
+    "options": [
+      "A. Để thay thế hoàn toàn các biến kiểu String",
+      "B. Để tăng dung lượng bộ nhớ của ứng dụng",
+      "C. Cung cấp giải pháp tốt hơn để xử lý các giá trị có thể bị null, hạn chế NullPointerException",
+      "D. Dùng để lưu trữ các danh sách dữ liệu lớn"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Optional khuyến khích lập trình viên kiểm tra sự tồn tại của giá trị một cách tường minh, giúp code an toàn hơn trước lỗi NullPointerException.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Annotation nào được sử dụng để tiêm (inject) một Bean vào một thuộc tính của một lớp khác trong Spring?",
+    "options": [
+      "A. @InjectMe",
+      "B. @Autowired",
+      "C. @ResourceLink",
+      "D. @Bean"
+    ],
+    "correctAnswer": "B",
+    "explanation": "@Autowired cho phép Spring tự động tìm kiếm và gán Bean phù hợp vào vị trí được đánh dấu (field, constructor hoặc setter).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong kiến trúc Spring Boot, tầng 'Service' thường đảm nhận nhiệm vụ gì?",
+    "options": [
+      "A. Trực tiếp truy vấn dữ liệu từ Database bằng SQL",
+      "B. Định nghĩa các endpoint URL cho trình duyệt",
+      "C. Chứa các logic nghiệp vụ (business logic) và điều phối dữ liệu giữa Controller và Repository",
+      "D. Lưu trữ các file tĩnh như CSS và JavaScript"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tầng Service là nơi xử lý các quy tắc nghiệp vụ của ứng dụng, giúp tách biệt logic xử lý khỏi tầng giao tiếp (Controller) và tầng dữ liệu (Repository).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Phương thức HTTP nào nên được sử dụng khi bạn muốn cập nhật toàn bộ thông tin của một tài nguyên hiện có trên server?",
+    "options": [
+      "A. GET",
+      "B. POST",
+      "C. PUT",
+      "D. DELETE"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Theo chuẩn REST, PUT thường được dùng để cập nhật toàn bộ tài nguyên, trong khi PATCH dùng để cập nhật một phần.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Annotation nào được sử dụng trên một Entity class để chỉ định khóa chính (Primary Key) của bảng trong Database?",
+    "options": [
+      "A. @PrimaryKey",
+      "B. @Column",
+      "C. @Id",
+      "D. @Table"
+    ],
+    "correctAnswer": "C",
+    "explanation": "@Id được sử dụng trong JPA để đánh dấu một thuộc tính là khóa chính của thực thể đó trong cơ sở dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Java, sự khác biệt chính về bộ nhớ giữa 'Stack' và 'Heap' là gì?",
+    "options": [
+      "A. Stack lưu trữ các đối tượng (objects), trong khi Heap lưu trữ các biến cục bộ và tham chiếu.",
+      "B. Stack lưu trữ các biến cục bộ và lời gọi hàm, trong khi Heap lưu trữ tất cả các đối tượng được khởi tạo bằng từ khóa 'new'.",
+      "C. Stack có kích thước lớn hơn Heap và được quản lý bởi Garbage Collector.",
+      "D. Heap là bộ nhớ tĩnh được cấp phát khi biên dịch, còn Stack là bộ nhớ động được cấp phát khi thực thi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Stack được dùng để lưu trữ các biến cục bộ và frame của phương thức, hoạt động theo cơ chế LIFO. Heap là vùng nhớ dùng chung để lưu trữ các object và được quản lý bởi Garbage Collector.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc ghi đè (override) phương thức equals() lại yêu cầu phải ghi đè cả phương thức hashCode()?",
+    "options": [
+      "A. Để đảm bảo rằng hai đối tượng bằng nhau (equals) sẽ có cùng mã băm (hash code), giúp các cấu trúc dữ liệu như HashMap hoạt động đúng.",
+      "B. Để tăng tốc độ thực thi của phương thức equals() khi so sánh các đối tượng phức tạp.",
+      "C. Vì trình biên dịch Java sẽ báo lỗi nếu bạn chỉ ghi đè một trong hai phương thức.",
+      "D. Để đảm bảo tính đóng gói (encapsulation) của đối tượng trong bộ nhớ Heap."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Theo hợp đồng của Java, nếu hai đối tượng bằng nhau theo equals(), chúng phải có cùng hashCode(). Nếu không, các Collection dựa trên băm (HashMap, HashSet) sẽ không thể tìm thấy đối tượng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Java 8+, cơ chế 'Treeify' của HashMap xảy ra khi nào?",
+    "options": [
+      "A. Khi số lượng phần tử trong Map vượt quá load factor.",
+      "B. Khi một bucket vượt quá ngưỡng 8 phần tử và kích thước mảng tối thiểu đạt 64, danh sách liên kết sẽ chuyển thành cây nhị phân (Red-Black Tree).",
+      "C. Khi phương thức hashCode() trả về giá trị âm liên tục.",
+      "D. Khi HashMap được khởi tạo với tham số 'sorted=true'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để cải thiện hiệu suất từ O(n) xuống O(log n) khi có xung đột mã băm lớn, Java 8 chuyển LinkedList thành Red-Black Tree khi bucket vượt ngưỡng TREEIFY_THRESHOLD (8).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Từ khóa 'volatile' trong Java có tác dụng chính là gì trong lập trình đa luồng?",
+    "options": [
+      "A. Đảm bảo tính nguyên tử (atomicity) cho mọi thao tác trên biến đó.",
+      "B. Khóa đối tượng để ngăn chặn các luồng khác truy cập đồng thời.",
+      "C. Đảm bảo tính hiển thị (visibility), các luồng luôn đọc giá trị mới nhất của biến từ bộ nhớ chính (Main Memory) thay vì từ cache của CPU.",
+      "D. Tự động đồng bộ hóa phương thức chứa biến đó."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Volatile đảm bảo rằng mọi thay đổi trên biến bởi một luồng sẽ ngay lập tức hiển thị với các luồng khác bằng cách bỏ qua CPU cache và làm việc trực tiếp với RAM.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bạn nên sử dụng CompletableFuture.supplyAsync() thay vì Thread truyền thống khi nào?",
+    "options": [
+      "A. Khi bạn cần thực hiện các tác vụ bất đồng bộ và muốn kết hợp (chaining) kết quả của chúng một cách linh hoạt mà không bị callback hell.",
+      "B. Khi bạn muốn đảm bảo tác vụ chạy trên luồng Main của ứng dụng.",
+      "C. Khi bạn cần sử dụng bộ nhớ Stack ít hơn.",
+      "D. Khi bạn muốn dừng luồng ngay lập tức bằng phương thức stop()."
+    ],
+    "correctAnswer": "A",
+    "explanation": "CompletableFuture cung cấp mô hình lập trình hàm (functional) mạnh mẽ để xử lý kết quả bất đồng bộ, hỗ trợ pipeline và xử lý lỗi tốt hơn Thread/Runnable.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Spring Framework, tại sao Constructor Injection thường được khuyến khích hơn Field Injection (@Autowired trên field)?",
+    "options": [
+      "A. Vì Constructor Injection chạy nhanh hơn Field Injection.",
+      "B. Vì nó cho phép các dependency là 'final', hỗ trợ tính bất biến (immutability) và giúp việc viết Unit Test dễ dàng hơn mà không cần Reflection.",
+      "C. Vì Field Injection không hỗ trợ các bean có scope là Prototype.",
+      "D. Vì Spring Boot sẽ không khởi động nếu phát hiện Field Injection."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Constructor Injection đảm bảo các dependency bắt buộc phải được cung cấp, cho phép dùng 'final' và không phụ thuộc vào container khi unit test (có thể dùng 'new' thủ công).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Vấn đề 'N+1 Query' trong Spring Data JPA thường được giải quyết hiệu quả nhất bằng cách nào?",
+    "options": [
+      "A. Sử dụng FetchType.EAGER cho tất cả các quan hệ.",
+      "B. Sử dụng @EntityGraph hoặc 'JOIN FETCH' trong câu lệnh JPQL để lấy dữ liệu liên quan trong một câu truy vấn duy nhất.",
+      "C. Tăng kích thước của Connection Pool trong ứng dụng.",
+      "D. Chia nhỏ các phương thức repository thành nhiều bước gọi khác nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "JOIN FETCH hoặc EntityGraph cho phép Hibernate thực hiện một câu lệnh SQL JOIN để lấy dữ liệu thay vì thực hiện 1 câu lệnh lấy danh sách và N câu lệnh lấy chi tiết.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt giữa @Transactional(propagation = Propagation.REQUIRED) và Propagation.REQUIRES_NEW là gì?",
+    "options": [
+      "A. REQUIRED luôn tạo transaction mới, REQUIRES_NEW dùng chung transaction hiện có.",
+      "B. REQUIRED dùng chung transaction hiện có nếu có, REQUIRES_NEW luôn tạm dừng transaction hiện tại và tạo một transaction độc lập mới.",
+      "C. REQUIRES_NEW chỉ hoạt động với cơ sở dữ liệu NoSQL.",
+      "D. Cả hai đều giống nhau, chỉ khác về tên gọi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "REQUIRED là mặc định, tái sử dụng transaction hiện có. REQUIRES_NEW đảm bảo tác vụ chạy trong một transaction riêng biệt, không bị ảnh hưởng bởi rollback của transaction cha.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Spring Security, Filter Chain đóng vai trò gì?",
+    "options": [
+      "A. Nó dùng để nén dữ liệu trước khi gửi về client.",
+      "B. Nó là một chuỗi các bộ lọc xử lý yêu cầu HTTP để thực hiện xác thực (authentication) và phân quyền (authorization).",
+      "C. Nó dùng để quản lý các kết nối đến cơ sở dữ liệu.",
+      "D. Nó là công cụ để ánh xạ các URL vào các Controller tương ứng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spring Security dựa trên một chuỗi các Filter (FilterChainProxy) để kiểm tra các tiêu chuẩn bảo mật trước khi yêu cầu đến được Servlet/Controller.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế REST API, mã trạng thái HTTP nào là phù hợp nhất khi client gửi dữ liệu không hợp lệ (ví dụ: thiếu trường bắt buộc)?",
+    "options": [
+      "A. 401 Unauthorized",
+      "B. 403 Forbidden",
+      "C. 400 Bad Request",
+      "D. 500 Internal Server Error"
+    ],
+    "correctAnswer": "C",
+    "explanation": "400 Bad Request được dùng khi server không thể xử lý yêu cầu do lỗi từ phía client (sai cú pháp, dữ liệu không hợp lệ).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lợi ích chính của việc sử dụng 'Optional' trong Java 8+ là gì?",
+    "options": [
+      "A. Tăng tốc độ thực thi của chương trình.",
+      "B. Giảm thiểu rủi ro NullPointerException và giúp code tường minh hơn về việc một giá trị có thể vắng mặt.",
+      "C. Thay thế hoàn toàn cho các câu lệnh if-else.",
+      "D. Tự động khởi tạo đối tượng khi nó bị null."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Optional là một container object, ép người dùng phải xử lý trường hợp giá trị không tồn tại, từ đó hạn chế các lỗi runtime liên quan đến null.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong JVM, vùng nhớ 'Metaspace' (từ Java 8 trở đi) dùng để lưu trữ gì?",
+    "options": [
+      "A. Các đối tượng có vòng đời ngắn (Short-lived objects).",
+      "B. Metadata của các class, phương thức và hằng số (Class metadata), nằm ngoài Heap.",
+      "C. Các mảng dữ liệu nguyên thủy (Primitive arrays).",
+      "D. Các log của Garbage Collector."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Metaspace thay thế PermGen, dùng để lưu trữ thông tin cấu trúc lớp (class metadata) và nó sử dụng bộ nhớ Native (RAM hệ thống) thay vì nằm trong JVM Heap.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Giả sử bạn có một danh sách 1 triệu phần tử, thao tác nào sau đây sẽ tối ưu nhất để tìm kiếm một phần tử theo giá trị?",
+    "options": [
+      "A. Sử dụng ArrayList và dùng vòng lặp for.",
+      "B. Sử dụng LinkedList và dùng Stream API.",
+      "C. Chuyển danh sách sang HashSet nếu dữ liệu không trùng lặp và thực hiện tìm kiếm.",
+      "D. Sử dụng Vector với từ khóa synchronized."
+    ],
+    "correctAnswer": "C",
+    "explanation": "HashSet cung cấp độ phức tạp trung bình O(1) cho thao tác tìm kiếm (contains), trong khi List là O(n).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi cấu hình ThreadPoolExecutor, tham số 'Core Pool Size' có ý nghĩa gì?",
+    "options": [
+      "A. Số lượng luồng tối đa mà pool có thể tạo ra.",
+      "B. Số lượng luồng tối thiểu luôn được duy trì trong pool, ngay cả khi chúng đang rảnh rỗi.",
+      "C. Kích thước tối đa của hàng đợi (BlockingQueue).",
+      "D. Thời gian một luồng chờ trước khi bị hủy."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Core Pool Size là số lượng luồng định danh sẽ được giữ lại trong pool trừ khi allowCoreThreadTimeOut được thiết lập.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lỗi 'java.lang.OutOfMemoryError: Java heap space' thường xảy ra do nguyên nhân nào sau đây?",
+    "options": [
+      "A. Có quá nhiều class được load vào hệ thống.",
+      "B. Ứng dụng tạo ra quá nhiều đối tượng nhưng không được giải phóng (Memory Leak) hoặc kích thước Heap quá nhỏ so với nhu cầu.",
+      "C. Do tràn ngăn xếp khi gọi đệ quy quá sâu.",
+      "D. Do hệ điều hành hết bộ nhớ vật lý RAM."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi này xảy ra khi JVM không thể cấp phát thêm bộ nhớ cho đối tượng mới trong vùng Heap sau khi Garbage Collector đã cố gắng dọn dẹp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Spring Boot, annotation @RestController là sự kết hợp của hai annotation nào?",
+    "options": [
+      "A. @Controller và @Service",
+      "B. @Controller và @ResponseBody",
+      "C. @Component và @RequestMapping",
+      "D. @Service và @ResponseBody"
+    ],
+    "correctAnswer": "B",
+    "explanation": "@RestController đánh dấu class là một controller nơi mọi phương thức trả về dữ liệu trực tiếp vào body của HTTP response thay vì trả về một view template.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng kiểu dữ liệu 'double' hoặc 'float' để lưu trữ tiền tệ trong Java?",
+    "options": [
+      "A. Vì chúng chiếm quá nhiều bộ nhớ.",
+      "B. Vì chúng không thể biểu diễn chính xác các số thập phân (lỗi làm tròn nhị phân), nên dùng BigDecimal để thay thế.",
+      "C. Vì chúng không hỗ trợ các phép toán cộng trừ nhân chia.",
+      "D. Vì Hibernate không hỗ trợ mapping các kiểu dữ liệu này."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Double/Float là kiểu dấu phẩy động (floating-point) dựa trên chuẩn IEEE 754, gây ra sai số khi tính toán tài chính. BigDecimal cung cấp độ chính xác tuyệt đối.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cơ chế 'Lazy Loading' trong Hibernate hoạt động như thế nào?",
+    "options": [
+      "A. Dữ liệu được tải ngay lập tức khi đối tượng cha được truy vấn.",
+      "B. Hibernate tạo ra một đối tượng Proxy và chỉ thực hiện truy vấn SQL để lấy dữ liệu thực sự khi thuộc tính đó được truy cập lần đầu.",
+      "C. Hibernate sẽ tải dữ liệu vào bộ nhớ cache của trình duyệt.",
+      "D. Dữ liệu chỉ được tải khi ứng dụng được khởi động lại."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lazy Loading giúp tối ưu hiệu suất bằng cách trì hoãn việc tải các quan hệ (như @OneToMany) cho đến khi chúng thực sự cần thiết thông qua Proxy.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Java Stream API, sự khác biệt giữa intermediate operation và terminal operation là gì?",
+    "options": [
+      "A. Intermediate operation thực thi ngay lập tức, terminal operation thì không.",
+      "B. Intermediate operation trả về một Stream mới và có tính 'lazy', terminal operation kích hoạt việc xử lý và trả về kết quả cuối cùng.",
+      "C. Terminal operation chỉ có thể dùng một lần, intermediate có thể dùng nhiều lần trên cùng một stream.",
+      "D. Không có sự khác biệt về chức năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các toán tử như filter, map là lazy, chúng chỉ xây dựng pipeline. Chỉ khi gọi các toán tử như collect, forEach (terminal) thì dữ liệu mới thực sự được xử lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để bảo mật mật khẩu người dùng trong cơ sở dữ liệu, phương pháp nào sau đây là tốt nhất?",
+    "options": [
+      "A. Mã hóa mật khẩu bằng thuật toán đối xứng như AES.",
+      "B. Lưu trữ dưới dạng plain text nhưng giới hạn quyền truy cập database.",
+      "C. Sử dụng thuật toán băm (hashing) mạnh như BCrypt hoặc Argon2 kèm theo 'salt'.",
+      "D. Mã hóa Base64 để dễ dàng giải mã khi cần."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hashing là một chiều, salt giúp chống lại tấn công Rainbow Table. BCrypt được thiết kế chậm để chống tấn công brute-force.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Annotation @Value trong Spring Boot thường được dùng để làm gì?",
+    "options": [
+      "A. Để định nghĩa giá trị mặc định cho một biến cục bộ.",
+      "B. Để inject các giá trị từ file cấu hình (như application.properties) vào các trường trong bean.",
+      "C. Để đánh dấu một bean là hằng số.",
+      "D. Để thực hiện các phép toán logic trong Java."
+    ],
+    "correctAnswer": "B",
+    "explanation": "@Value cho phép đọc cấu hình từ môi trường hoặc file properties/yml vào code một cách linh hoạt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh Microservices, 'Circuit Breaker' (ví dụ Resilience4j) giải quyết vấn đề gì?",
+    "options": [
+      "A. Tăng tốc độ truy vấn cơ sở dữ liệu.",
+      "B. Ngăn chặn lỗi lan truyền (cascading failure) khi một dịch vụ phía sau (downstream) bị lỗi hoặc phản hồi chậm.",
+      "C. Tự động scale-up các instance của service.",
+      "D. Mã hóa dữ liệu truyền tải giữa các service."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Circuit Breaker ngắt kết nối đến service bị lỗi trong một khoảng thời gian, cho phép hệ thống trả về fallback thay vì treo toàn bộ các dịch vụ phụ thuộc.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi sử dụng @Async trong Spring, điều kiện cần thiết để nó hoạt động là gì?",
+    "options": [
+      "A. Phải có annotation @EnableAsync ở class cấu hình và phương thức gọi phải nằm ở một bean khác (không tự gọi trong cùng class).",
+      "B. Chỉ cần thêm @Async vào phương thức là đủ.",
+      "C. Phương thức phải trả về kiểu String.",
+      "D. Ứng dụng phải chạy trên máy chủ Tomcat."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Spring sử dụng Proxy để xử lý @Async. Nếu gọi nội bộ (self-invocation), proxy sẽ bị bỏ qua và phương thức sẽ chạy đồng bộ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt giữa 'fail-fast' và 'fail-safe' iterator trong Java Collections là gì?",
+    "options": [
+      "A. Fail-fast không bao giờ ném ngoại lệ.",
+      "B. Fail-fast ném ConcurrentModificationException nếu collection bị thay đổi khi đang duyệt, còn Fail-safe duyệt trên một bản sao của dữ liệu.",
+      "C. Fail-safe chạy nhanh hơn Fail-fast.",
+      "D. Fail-fast chỉ dành cho Map, Fail-safe chỉ dành cho List."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ArrayList/HashMap trả về fail-fast iterator. CopyOnWriteArrayList hoặc ConcurrentHashMap trả về fail-safe iterator (không ném ngoại lệ khi sửa đổi đồng thời).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tham số JVM '-Xmx2g' có ý nghĩa gì khi triển khai ứng dụng Java?",
+    "options": [
+      "A. Thiết lập kích thước bộ nhớ Stack tối đa là 2GB.",
+      "B. Thiết lập kích thước bộ nhớ Heap tối đa (Maximum Heap Size) là 2GB.",
+      "C. Thiết lập kích thước bộ nhớ Heap khởi điểm (Initial Heap Size) là 2GB.",
+      "D. Giới hạn số lượng luồng tối đa là 2000 luồng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "-Xmx dùng để giới hạn mức trần của Heap. Việc cấu hình đúng giúp tránh OutOfMemoryError hoặc tránh việc ứng dụng chiếm dụng quá nhiều RAM của server.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống microservices yêu cầu độ trễ thấp (low-latency), khi cấu hình Garbage Collector cho JVM với Heap size 16GB, lựa chọn nào sau đây là tối ưu nhất để giảm thiểu Stop-The-World (STW) pauses?",
+    "options": [
+      "A. Sử dụng Parallel GC để tối ưu hóa throughput của CPU.",
+      "B. Sử dụng G1GC và cấu hình MaxGCPauseMillis ở mức cực thấp (ví dụ 10ms).",
+      "C. Sử dụng ZGC (Z Garbage Collector) vì nó hỗ trợ heap lớn và pause time thường dưới 1ms.",
+      "D. Sử dụng Serial GC để tránh overhead do việc quản lý đa luồng của GC."
+    ],
+    "correctAnswer": "C",
+    "explanation": "ZGC được thiết kế cho các ứng dụng yêu cầu độ trễ cực thấp, có khả năng xử lý heap từ vài GB đến nhiều TB với thời gian dừng (pause time) không vượt quá 1ms, không phụ thuộc vào kích thước heap.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng Virtual Threads (Project Loom) trong Java 21, hiện tượng 'Pinning' xảy ra khi nào và gây hậu quả gì?",
+    "options": [
+      "A. Xảy ra khi luồng ảo chạy quá lâu, dẫn đến tràn bộ nhớ Stack.",
+      "B. Xảy ra khi thực hiện blocking operation bên trong khối synchronized, khiến luồng nền (carrier thread) bị chặn.",
+      "C. Xảy ra khi có quá nhiều luồng ảo được tạo ra cùng lúc, gây quá tải cho Scheduler.",
+      "D. Xảy ra khi luồng ảo truy cập vào biến volatile, làm giảm hiệu năng truy xuất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pinning xảy ra khi một virtual thread thực thi mã bên trong khối 'synchronized' hoặc gọi native method. Khi đó, nó bị 'găm' vào carrier thread, khiến carrier thread không thể phục vụ virtual thread khác, làm mất đi lợi thế về khả năng mở rộng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Spring Boot, khi một Bean được đánh dấu @Transactional, cơ chế Proxy mặc định của Spring sẽ gặp vấn đề gì nếu một phương thức không có annotation gọi một phương thức có @Transactional trong cùng một class?",
+    "options": [
+      "A. Gây ra ngoại lệ TransactionRequiredException.",
+      "B. Transaction sẽ vẫn hoạt động bình thường nhờ cơ chế AspectJ.",
+      "C. Transaction sẽ không được khởi tạo (Self-invocation issue).",
+      "D. Spring sẽ tự động tạo một Proxy mới để xử lý lời gọi này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cơ chế Proxy của Spring (JDK Dynamic Proxy hoặc CGLIB) chỉ intercept các lời gọi từ bên ngoài vào Bean. Các lời gọi nội bộ (self-invocation) sẽ bypass Proxy, dẫn đến các logic về Transaction không được thực thi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng ThreadLocal trong môi trường sử dụng Thread Pool (như Tomcat hoặc ExecutorService) có thể gây ra rò rỉ bộ nhớ (Memory Leak)?",
+    "options": [
+      "A. Do ThreadLocal không thể bị thu hồi bởi Garbage Collector.",
+      "B. Do Thread Pool giữ lại các luồng cũ, dẫn đến giá trị trong ThreadLocal không được dọn dẹp nếu không gọi phương thức remove().",
+      "C. Do ThreadLocal sử dụng Strong Reference cho các Key trong bản đồ nội bộ.",
+      "D. Do kích thước của ThreadLocalMap mặc định quá lớn."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Thread Pool, các luồng được tái sử dụng. Nếu không gọi remove(), dữ liệu từ request trước vẫn tồn tại trong ThreadLocal của luồng đó ở request sau, dẫn đến rò rỉ bộ nhớ và sai lệch dữ liệu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Java Memory Model (JMM), từ khóa 'volatile' đảm bảo thuộc tính nào sau đây cho biến?",
+    "options": [
+      "A. Đảm bảo tính Atomicity cho mọi thao tác (bao gồm cả i++).",
+      "B. Đảm bảo tính Visibility và ngăn chặn Instruction Reordering bởi trình biên dịch/CPU.",
+      "C. Đảm bảo biến đó sẽ được lưu trữ trong Heap thay vì Stack.",
+      "D. Đảm bảo rằng chỉ có một luồng tại một thời điểm được truy cập vào biến."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Volatile đảm bảo mọi luồng đều nhìn thấy giá trị mới nhất của biến (Visibility) và thiết lập rào cản (memory barrier) để ngăn chặn việc sắp xếp lại thứ tự lệnh (Instruction Reordering). Nó không đảm bảo tính Atomicity cho các thao tác phức tạp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi thiết kế hệ thống với Spring Data JPA, giải pháp nào là tối ưu nhất để giải quyết vấn đề N+1 query khi cần lấy dữ liệu từ nhiều bảng liên kết?",
+    "options": [
+      "A. Sử dụng FetchType.EAGER cho tất cả các quan hệ @OneToMany.",
+      "B. Sử dụng @EntityGraph hoặc 'JOIN FETCH' trong câu lệnh JPQL.",
+      "C. Tăng kích thước của Hibernate Batch Size trong cấu hình.",
+      "D. Chuyển sang sử dụng JdbcTemplate thay vì JPA."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng EntityGraph hoặc JOIN FETCH cho phép Hibernate thực hiện một câu lệnh SQL JOIN duy nhất để lấy dữ liệu liên quan, thay vì thực hiện hàng loạt câu lệnh SELECT riêng lẻ cho từng entity con.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong bối cảnh High Concurrency, sự khác biệt chính giữa StampedLock và ReentrantReadWriteLock là gì?",
+    "options": [
+      "A. StampedLock hỗ trợ cơ chế 'Optimistic Reading' giúp tăng hiệu năng đọc đáng kể.",
+      "B. ReentrantReadWriteLock có hiệu năng tốt hơn khi số lượng luồng ghi lớn.",
+      "C. StampedLock hỗ trợ tính năng Reentrancy (luồng có thể khóa lại chính nó).",
+      "D. StampedLock không cho phép nâng cấp từ Read Lock lên Write Lock."
+    ],
+    "correctAnswer": "A",
+    "explanation": "StampedLock cung cấp chế độ Optimistic Reading, cho phép đọc dữ liệu mà không cần acquire read lock thực sự, giúp giảm tranh chấp luồng (contention) cực tốt khi dữ liệu ít khi bị thay đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc sử dụng 'CompletableFuture.allOf()' so với việc lặp qua danh sách các Future và gọi '.get()' là gì?",
+    "options": [
+      "A. Nó giúp giảm thiểu số lượng luồng cần thiết trong ForkJoinPool.",
+      "B. Nó cho phép xử lý kết quả của các tác vụ một cách bất đồng bộ ngay khi tất cả hoàn thành mà không chặn luồng hiện tại.",
+      "C. Nó tự động hủy các tác vụ khác nếu một tác vụ thất bại.",
+      "D. Nó đảm bảo các tác vụ được thực thi theo đúng thứ tự trong danh sách."
+    ],
+    "correctAnswer": "B",
+    "explanation": "CompletableFuture.allOf() trả về một Future mới, cho phép đính kèm các callback (như thenRun, thenApply) để xử lý tiếp khi toàn bộ nhóm tác vụ kết thúc mà không gây blocking luồng main/request.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi cấu hình Spring Security cho một hệ thống Stateless REST API, tại sao nên ưu tiên sử dụng SessionCreationPolicy.STATELESS?",
+    "options": [
+      "A. Để tăng bảo mật bằng cách không lưu trữ thông tin người dùng trên Server.",
+      "B. Để Spring Security tự động mã hóa tất cả các Response trả về.",
+      "C. Để vô hiệu hóa CSRF protection vì không còn sử dụng Session-based authentication.",
+      "D. Để buộc người dùng phải đăng nhập lại sau mỗi 15 phút."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong kiến trúc Stateless (thường dùng JWT), Server không lưu trữ trạng thái phiên làm việc (Session). Việc đặt STATELESS giúp tiết kiệm tài nguyên bộ nhớ Server và dễ dàng scale ngang hệ thống vì request có thể gửi tới bất kỳ instance nào.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Java, cơ chế 'Double-Checked Locking' dùng để khởi tạo Singleton có thể không an toàn nếu thiếu từ khóa nào?",
+    "options": [
+      "A. synchronized",
+      "B. final",
+      "C. volatile",
+      "D. transient"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nếu không có 'volatile', do cơ chế Instruction Reordering, một luồng khác có thể nhìn thấy instance đã được cấp phát vùng nhớ nhưng chưa được khởi tạo đầy đủ (constructor chưa chạy xong), dẫn đến lỗi truy cập.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kỹ thuật 'String Deduplication' trong G1GC (Java 8u20+) hoạt động như thế nào để tối ưu bộ nhớ?",
+    "options": [
+      "A. Nó tự động gộp các String có cùng nội dung vào String Pool tại thời điểm compile.",
+      "B. Nó kiểm tra các String trong heap trong quá trình GC và cho các String có cùng nội dung trỏ tới cùng một byte array (char array).",
+      "C. Nó nén các String bằng thuật toán LZ4 trước khi lưu vào Heap.",
+      "D. Nó chuyển tất cả các String sang vùng nhớ Metaspace để tránh chiếm chỗ ở Heap."
+    ],
+    "correctAnswer": "B",
+    "explanation": "String Deduplication của G1GC quét các đối tượng String trong heap, nếu tìm thấy các String có mảng nội dung (char/byte array) giống hệt nhau, nó sẽ cập nhật để chúng chia sẻ chung một mảng nội dung, giúp giảm đáng kể mức chiếm dụng bộ nhớ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao không nên sử dụng @Async của Spring cho các tác vụ tính toán nặng (CPU-bound) mà không cấu hình Executor riêng?",
+    "options": [
+      "A. Vì mặc định Spring sử dụng SimpleAsyncTaskExecutor, tạo mới một Thread cho mỗi request, dễ gây cạn kiệt tài nguyên.",
+      "B. Vì @Async không hỗ trợ xử lý ngoại lệ phát sinh trong luồng phụ.",
+      "C. Vì luồng mặc định của Spring có độ ưu tiên thấp hơn luồng xử lý HTTP request.",
+      "D. Vì @Async sẽ làm treo toàn bộ ApplicationContext khi gặp lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc định, nếu không cấu hình TaskExecutor, Spring sử dụng SimpleAsyncTaskExecutor. Nó không tái sử dụng luồng (không có pool) mà tạo thread mới cho mỗi lần gọi, dẫn đến nguy cơ tràn bộ nhớ hoặc treo máy nếu có nhiều request đồng thời.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong Spring Framework, sự khác biệt chính giữa @Lookup và cơ chế Dependency Injection thông thường là gì?",
+    "options": [
+      "A. @Lookup dùng để inject các Bean từ bên ngoài context.",
+      "B. @Lookup cho phép một Singleton Bean lấy một instance mới của một Prototype Bean mỗi khi cần.",
+      "C. @Lookup nhanh hơn về mặt hiệu năng so với @Autowired.",
+      "D. @Lookup chỉ hoạt động với các Interface thay vì Class cụ thể."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi một Singleton Bean cần sử dụng một Prototype Bean, nếu dùng @Autowired thì Prototype Bean chỉ được inject một lần duy nhất. @Lookup cho phép Singleton Bean gọi một method để nhận về một instance mới của Prototype Bean trong mỗi lần gọi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi triển khai hệ thống Event-driven với Spring Cloud Stream và Kafka, việc đặt 'group' ID giống nhau cho nhiều instance của cùng một service có tác dụng gì?",
+    "options": [
+      "A. Để đảm bảo tất cả các instance đều nhận được mọi message (Broadcast).",
+      "B. Để thực hiện Load Balancing, đảm bảo mỗi message chỉ được xử lý bởi một instance trong group.",
+      "C. Để Kafka tự động retry message nếu một instance bị crash.",
+      "D. Để tăng tốc độ ghi dữ liệu vào Kafka Topic."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Kafka, Consumer Group ID xác định cách phân phối message. Các instance cùng group ID sẽ chia sẻ các partition của topic, giúp thực hiện load balancing (mỗi message chỉ được tiêu thụ bởi một consumer duy nhất trong nhóm).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Vấn đề 'False Sharing' trong lập trình đa luồng Java cấp độ thấp thường được giải quyết bằng cách nào (từ Java 8 trở đi)?",
+    "options": [
+      "A. Sử dụng từ khóa volatile cho tất cả các biến.",
+      "B. Sử dụng annotation @Contended để thêm padding vào các biến, tránh chúng nằm trên cùng một Cache Line.",
+      "C. Chuyển từ mảng sang sử dụng ArrayList.",
+      "D. Sử dụng AtomicReference thay cho các biến primitive."
+    ],
+    "correctAnswer": "B",
+    "explanation": "False Sharing xảy ra khi các luồng trên các core khác nhau sửa đổi các biến nằm trên cùng một Cache Line, gây mất hiệu năng do cache invalidation liên tục. @Contended giúp JVM tự động thêm padding để tách các biến này ra các Cache Line khác nhau.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong Hibernate, trạng thái 'Detached' của một Entity có nghĩa là gì?",
+    "options": [
+      "A. Entity chưa bao giờ được liên kết với một Session nào.",
+      "B. Entity đã bị xóa khỏi cơ sở dữ liệu.",
+      "C. Entity đã từng được quản lý bởi Session nhưng Session đó đã đóng hoặc entity bị evict.",
+      "D. Entity đang chờ để được đồng bộ hóa (flush) xuống database."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trạng thái Detached xảy ra khi Session quản lý entity bị đóng hoặc clear(). Các thay đổi trên entity này sẽ không còn được Hibernate tự động theo dõi để cập nhật vào database trừ khi nó được re-attach (merge).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng Parallel Stream trong Java đôi khi lại chậm hơn Stream tuần tự thông thường?",
+    "options": [
+      "A. Do overhead của việc chia nhỏ dữ liệu và gộp kết quả (split/merge) lớn hơn lợi ích từ việc chạy song song.",
+      "B. Do Parallel Stream luôn chạy trên một luồng duy nhất nhưng có độ ưu tiên thấp.",
+      "C. Do Parallel Stream không hỗ trợ các thao tác như filter() hay map().",
+      "D. Do nó sử dụng cơ chế Reflection để thực thi các lambda expression."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Parallel Stream sử dụng Common ForkJoinPool. Với tập dữ liệu nhỏ hoặc các thao tác xử lý quá đơn giản, chi phí quản lý luồng, chia nhỏ công việc (Spliterator) và gộp kết quả sẽ lớn hơn thời gian thực thi tuần tự.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Spring Boot, mục đích chính của file 'spring.factories' (hoặc các file cấu hình trong META-INF/spring/) là gì?",
+    "options": [
+      "A. Để định nghĩa các thông số kết nối Database.",
+      "B. Để đăng ký các Auto-configuration classes, giúp Spring Boot tự động cấu hình các thư viện bên thứ ba.",
+      "C. Để liệt kê các tài khoản người dùng có quyền truy cập vào hệ thống.",
+      "D. Để quản lý phiên bản của các dependency trong Maven/Gradle."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spring Boot sử dụng cơ chế SPI (Service Provider Interface). File này liệt kê các class cấu hình sẽ được lốt tự động khi thỏa mãn các điều kiện (@Conditional), là nền tảng của tính năng Auto-configuration.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi sử dụng @Transactional(propagation = Propagation.REQUIRES_NEW) cho một phương thức B được gọi từ phương thức A (cũng có @Transactional), điều gì sẽ xảy ra?",
+    "options": [
+      "A. B sẽ chạy chung transaction với A.",
+      "B. Transaction của A bị tạm dừng, B khởi tạo một transaction mới hoàn toàn độc lập.",
+      "C. Nếu B thất bại, A cũng buộc phải rollback theo.",
+      "D. B sẽ không chạy trong transaction nào cả."
+    ],
+    "correctAnswer": "B",
+    "explanation": "REQUIRES_NEW tạo ra một transaction mới độc lập. Transaction hiện tại của A sẽ bị treo (suspend) cho đến khi B hoàn thành. Kết quả commit/rollback của B không ảnh hưởng trực tiếp đến A (trừ khi A bắt ngoại lệ từ B và quyết định khác).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt chính về mặt kiến trúc giữa Spring MVC và Spring WebFlux là gì?",
+    "options": [
+      "A. WebFlux chỉ hỗ trợ ngôn ngữ Kotlin thay vì Java.",
+      "B. WebFlux dựa trên mô hình Non-blocking Event Loop, trong khi MVC dựa trên mô hình Thread-per-request.",
+      "C. MVC không hỗ trợ làm việc với các cơ sở dữ liệu quan hệ (RDBMS).",
+      "D. WebFlux luôn nhanh hơn MVC trong mọi tình huống sử dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spring MVC sử dụng blocking I/O và mỗi request chiếm dụng một thread. WebFlux sử dụng non-blocking I/O (Project Reactor), cho phép xử lý lượng lớn kết nối đồng thời với số lượng thread rất ít (thường bằng số core CPU).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Java 9+, cơ chế 'Modular System' (Project Jigsaw) giúp giải quyết vấn đề 'Classpath Hell' chủ yếu bằng cách nào?",
+    "options": [
+      "A. Bằng cách nén tất cả các file JAR thành một file duy nhất.",
+      "B. Bằng cách cho phép nhiều phiên bản của cùng một thư viện chạy song song.",
+      "C. Bằng cách bắt buộc khai báo rõ ràng các package nào được export và các module nào là phụ thuộc (requires).",
+      "D. Bằng cách loại bỏ hoàn toàn Classloader khỏi JVM."
+    ],
+    "correctAnswer": "C",
+    "explanation": "JPMS cung cấp khả năng đóng gói mạnh mẽ hơn. Một module phải khai báo rõ ràng những gì nó cung cấp và những gì nó cần, giúp JVM kiểm tra tính toàn vẹn ngay khi khởi động thay vì gặp lỗi Runtime (NoClassDefFoundError).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi tối ưu hóa hiệu năng cho một ứng dụng Java chạy trên Docker/Kubernetes, tại sao cần quan tâm đến flag '-XX:+UseContainerSupport'?",
+    "options": [
+      "A. Để JVM nhận biết được giới hạn CPU và RAM của Container thay vì nhìn thấy tài nguyên của Host vật lý.",
+      "B. Để JVM tự động nén file log và gửi ra ngoài Container.",
+      "C. Để kích hoạt tính năng tự động restart khi ứng dụng gặp lỗi OutOfMemoryError.",
+      "D. Để ứng dụng có thể truy cập trực tiếp vào phần cứng của máy chủ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong các phiên bản Java cũ, JVM thường nhìn thấy tổng RAM/CPU của máy chủ vật lý thay vì giới hạn của Container (cgroup). Điều này dẫn đến việc JVM tính toán heap size quá lớn, gây ra việc Container bị OS kill (OOM Kill). Flag này giúp JVM đọc đúng thông số từ cgroup.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Về mặt hiệu năng, tại sao nên ưu tiên sử dụng 'Method Handles' thay vì 'Reflection API' cho các tác vụ gọi phương thức động lặp đi lặp lại nhiều lần?",
+    "options": [
+      "A. Vì Method Handles dễ viết và ít code hơn Reflection.",
+      "B. Vì Method Handles có thể được JIT compiler tối ưu hóa (inlining) tốt hơn sau khi đã được 'bound'.",
+      "C. Vì Reflection API không thể truy cập vào các private method.",
+      "D. Vì Method Handles không bao giờ ném ra ngoại lệ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Method Handles được thiết kế để hoạt động gần với bytecode nhất có thể. Khác với Reflection thực hiện kiểm tra quyền truy cập mỗi lần gọi, Method Handle thực hiện kiểm tra một lần lúc khởi tạo, cho phép JIT compiler tối ưu hóa hiệu năng tương đương với lời gọi trực tiếp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong Spring Data Redis, kỹ thuật 'Pipelining' được sử dụng để làm gì?",
+    "options": [
+      "A. Để tự động đồng bộ dữ liệu giữa Redis và Database quan hệ.",
+      "B. Để gửi nhiều câu lệnh tới Redis server trong một lượt gửi (batch) mà không cần chờ phản hồi của từng lệnh, giảm RTT.",
+      "C. Để chia nhỏ dữ liệu lớn thành các phần nhỏ hơn trước khi lưu vào Redis.",
+      "D. Để mã hóa dữ liệu trước khi truyền tải qua mạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Pipelining giúp giảm thiểu Round Trip Time (RTT) bằng cách gộp nhiều lệnh lại và gửi đi một lần. Client sẽ nhận lại tất cả các phản hồi sau đó, giúp cải thiện throughput đáng kể cho các thao tác hàng loạt.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng 'Finalizers' (phương thức finalize()) bị coi là 'deprecated' và không nên sử dụng trong Java hiện đại?",
+    "options": [
+      "A. Vì nó làm cho đối tượng không bao giờ bị Garbage Collector thu hồi.",
+      "B. Vì thời điểm thực thi của nó không được đảm bảo, có thể gây trì trệ GC và dẫn đến cạn kiệt tài nguyên hệ thống.",
+      "C. Vì nó chỉ hoạt động trên các hệ điều hành 32-bit.",
+      "D. Vì nó bắt buộc mọi class phải kế thừa từ một interface đặc biệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Finalizers không đảm bảo khi nào (hoặc liệu có) được chạy. Nó làm tăng gánh nặng cho GC (cần ít nhất 2 chu kỳ GC để dọn dẹp đối tượng có finalize). Thay vào đó, Java khuyến khích dùng try-with-resources (AutoCloseable) hoặc Cleaners.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong một hệ thống Java hiệu năng cao, việc hiểu rõ cách JVM thực hiện JIT compilation là rất quan trọng. Điều nào sau đây mô tả chính xác nhất tác động của JIT compilation đối với hiệu suất ứng dụng trong môi trường sản xuất dài hạn?",
+    "options": [
+      "A. JIT compilation làm tăng đáng kể thời gian khởi động ứng dụng do quá trình biên dịch code sang native.",
+      "B. JIT compilation giúp tối ưu hóa hiệu suất runtime bằng cách biên dịch các đoạn mã nóng (hot spots) thành mã máy native được tối ưu hóa cao.",
+      "C. JIT compilation chỉ ảnh hưởng đến các ứng dụng sử dụng reflection nhiều, không có tác động đáng kể đến các ứng dụng khác.",
+      "D. JIT compilation là một quá trình tĩnh diễn ra trước khi ứng dụng được triển khai, không ảnh hưởng đến hiệu suất runtime."
+    ],
+    "correctAnswer": "B",
+    "explanation": "JIT (Just-In-Time) compilation biên dịch bytecode thành mã máy native trong quá trình runtime, đặc biệt tập trung vào các đoạn mã được thực thi thường xuyên (hot spots). Điều này giúp cải thiện đáng kể hiệu suất thực thi dài hạn của ứng dụng, mặc dù có thể gây ra một 'warm-up' period ban đầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một hệ thống giao dịch tài chính yêu cầu độ trễ cực thấp (low-latency) và thông lượng cao (high-throughput), với kích thước heap lớn (vài chục GB). Kỹ sư DevOps cần lựa chọn thuật toán Garbage Collector nào để đáp ứng tốt nhất các yêu cầu này và giảm thiểu thời gian tạm dừng (pause times)?",
+    "options": [
+      "A. Serial GC",
+      "B. Parallel GC",
+      "C. G1 GC",
+      "D. ZGC hoặc Shenandoah"
+    ],
+    "correctAnswer": "D",
+    "explanation": "ZGC và Shenandoah là các thuật toán GC thế hệ mới được thiết kế để hoạt động với heap rất lớn (hàng TB) và đạt được thời gian tạm dừng cực kỳ thấp (thường dưới 10ms), gần như độc lập với kích thước heap. G1 GC cũng tốt cho heap lớn nhưng có thể có pause times cao hơn ZGC/Shenandoah trong các kịch bản cực đoan. Serial và Parallel GC không phù hợp với yêu cầu độ trễ thấp trên heap lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong lập trình đa luồng Java, việc sử dụng từ khóa `volatile` có ý nghĩa gì đối với mô hình bộ nhớ Java (Java Memory Model - JMM)?",
+    "options": [
+      "A. Đảm bảo tính nguyên tử (atomicity) cho mọi thao tác đọc/ghi trên biến đó.",
+      "B. Ngăn chặn việc biến được lưu trữ trong bộ nhớ cache của CPU, buộc mọi thao tác đọc/ghi phải trực tiếp từ bộ nhớ chính.",
+      "C. Đảm bảo tính hiển thị (visibility) của các thay đổi trên biến giữa các luồng và thiết lập một 'happens-before' ordering.",
+      "D. Biến được đánh dấu là `volatile` sẽ không bao giờ bị Garbage Collector thu hồi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Từ khóa `volatile` đảm bảo rằng mọi thay đổi đối với biến sẽ ngay lập tức được hiển thị cho tất cả các luồng khác và thiết lập một 'happens-before' ordering, ngăn chặn việc reordering lệnh có thể phá vỡ tính đúng đắn của chương trình đa luồng. Nó không đảm bảo tính nguyên tử cho các thao tác không nguyên tử (ví dụ: i++).",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Một ứng dụng Java lớn sử dụng kiến trúc plugin, nơi các plugin có thể được tải động và gỡ bỏ mà không cần khởi động lại toàn bộ ứng dụng. Việc triển khai các ClassLoader tùy chỉnh cho mỗi plugin mang lại lợi ích chính nào?",
+    "options": [
+      "A. Giảm thiểu kích thước bộ nhớ heap tổng thể của ứng dụng.",
+      "B. Cải thiện hiệu suất JIT compilation cho các plugin.",
+      "C. Cô lập các không gian tên lớp (class namespaces) của từng plugin, cho phép các plugin sử dụng các phiên bản thư viện khác nhau mà không gây xung đột (JAR hell).",
+      "D. Tăng cường bảo mật bằng cách mã hóa bytecode của các plugin."
+    ],
+    "correctAnswer": "C",
+    "explanation": "ClassLoader tùy chỉnh cho phép mỗi plugin có không gian tên lớp riêng biệt. Điều này cực kỳ quan trọng trong kiến trúc plugin, nơi các plugin khác nhau có thể phụ thuộc vào các phiên bản khác nhau của cùng một thư viện mà không gây ra xung đột LinkageError hoặc ClassCastException (JAR hell).",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một hệ thống xử lý sự kiện phân tán quy mô lớn, nơi các tác vụ được thực thi bất đồng bộ và cần khả năng phục hồi cao, mô hình Actor (ví dụ: Akka) thường được ưa chuộng hơn các mô hình đa luồng truyền thống của Java. Lợi ích chính mà mô hình Actor mang lại trong ngữ cảnh này là gì?",
+    "options": [
+      "A. Giảm đáng kể số lượng luồng cần thiết, do mỗi Actor được ánh xạ tới một luồng duy nhất.",
+      "B. Cung cấp cơ chế chia sẻ trạng thái an toàn bằng cách yêu cầu tất cả các Actor truy cập dữ liệu thông qua các synchronized block.",
+      "C. Đảm bảo cô lập trạng thái (state isolation) và giao tiếp thông qua message passing bất biến, giúp đơn giản hóa lập trình song song và phân tán, đồng thời dễ dàng mở rộng và chịu lỗi.",
+      "D. Tự động xử lý việc tuần tự hóa (serialization) và giải tuần tự hóa (deserialization) dữ liệu giữa các Actor."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mô hình Actor thúc đẩy việc cô lập trạng thái (mỗi Actor sở hữu trạng thái riêng và không chia sẻ trực tiếp) và giao tiếp thông qua message passing bất biến. Điều này loại bỏ nhu cầu về khóa và synchronized blocks, giúp đơn giản hóa đáng kể việc phát triển các hệ thống song song và phân tán, làm cho chúng dễ mở rộng và chịu lỗi hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn cần thực hiện một chuỗi các tác vụ bất đồng bộ, trong đó tác vụ B chỉ có thể bắt đầu sau khi tác vụ A hoàn thành, và tác vụ C chỉ có thể bắt đầu sau khi cả tác vụ A và B đều hoàn thành. Nếu có bất kỳ tác vụ nào thất bại, toàn bộ chuỗi nên được xử lý lỗi. Phương pháp nào sử dụng `CompletableFuture` là phù hợp nhất để thiết kế luồng công việc này?",
+    "options": [
+      "A. CompletableFuture.supplyAsync(() -> taskA()).thenRun(() -> taskB()).thenRun(() -> taskC()).exceptionally(...)",
+      "B. CompletableFuture.supplyAsync(() -> taskA()).thenCompose(resultA -> CompletableFuture.supplyAsync(() -> taskB(resultA))).thenCompose(resultB -> CompletableFuture.supplyAsync(() -> taskC(resultB))).exceptionally(...)",
+      "C. CompletableFuture.supplyAsync(() -> taskA()).thenCombine(CompletableFuture.supplyAsync(() -> taskB()), (resA, resB) -> taskC(resA, resB)).exceptionally(...)",
+      "D. CompletableFuture.allOf(CompletableFuture.supplyAsync(() -> taskA()), CompletableFuture.supplyAsync(() -> taskB()), CompletableFuture.supplyAsync(() -> taskC())).exceptionally(...)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "`thenCompose` được sử dụng để nối tiếp các `CompletableFuture`, trong đó kết quả của một `CompletableFuture` được sử dụng để tạo ra `CompletableFuture` tiếp theo. Đây là cách chính xác để tạo ra một chuỗi tác vụ có sự phụ thuộc tuần tự. `thenRun` không truyền kết quả. `thenCombine` dùng cho các tác vụ độc lập chạy song song rồi kết hợp kết quả. `allOf` chờ tất cả các tác vụ hoàn thành độc lập.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một microservice xử lý cả các yêu cầu I/O-bound (gọi API bên ngoài, truy vấn DB) và CPU-bound (tính toán phức tạp). Để tối ưu hóa việc sử dụng tài nguyên và tránh tắc nghẽn, bạn nên thiết lập nhóm luồng (thread pool) cho `ExecutorService` như thế nào?",
+    "options": [
+      "A. Sử dụng một `FixedThreadPool` với số luồng bằng số lõi CPU có sẵn.",
+      "B. Sử dụng một `CachedThreadPool` để tự động điều chỉnh số luồng.",
+      "C. Sử dụng hai nhóm luồng riêng biệt: một `FixedThreadPool` nhỏ cho tác vụ CPU-bound (số luồng ~ số lõi CPU) và một `FixedThreadPool` lớn hơn cho tác vụ I/O-bound (số luồng > số lõi CPU, dựa trên độ trễ I/O).",
+      "D. Sử dụng một `SingleThreadExecutor` để đảm bảo tính tuần tự của các tác vụ."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tác vụ CPU-bound cần số luồng gần bằng số lõi CPU để tránh overhead chuyển ngữ cảnh. Tác vụ I/O-bound dành phần lớn thời gian chờ I/O, nên có thể có nhiều luồng hơn số lõi CPU để tận dụng thời gian chờ. Việc tách biệt hai loại tác vụ vào các nhóm luồng riêng biệt giúp tối ưu hóa hiệu suất tổng thể và tránh việc các tác vụ I/O-bound làm tắc nghẽn các luồng cần thiết cho tác vụ CPU-bound.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một ứng dụng đa luồng có độ tranh chấp cao (high-contention) trên một tài nguyên dùng chung, nơi cả thao tác đọc và ghi đều diễn ra thường xuyên, nhưng thao tác đọc cần được ưu tiên hơn và không nên bị chặn bởi các thao tác đọc khác. Cơ chế khóa nào của Java là lựa chọn tối ưu nhất?",
+    "options": [
+      "A. `synchronized` keyword",
+      "B. `ReentrantLock`",
+      "C. `ReentrantReadWriteLock`",
+      "D. `StampedLock`"
+    ],
+    "correctAnswer": "D",
+    "explanation": "`StampedLock` cung cấp các cơ chế khóa đọc/ghi linh hoạt và hiệu quả hơn `ReentrantReadWriteLock`, đặc biệt là tính năng 'optimistic read' cho phép các luồng đọc không bị chặn bởi các luồng ghi nếu không có xung đột thực sự. Nó cũng hỗ trợ nâng cấp từ khóa đọc sang khóa ghi. `ReentrantReadWriteLock` tốt hơn `synchronized` và `ReentrantLock` cho đọc/ghi, nhưng `StampedLock` thường hiệu quả hơn trong các tình huống tranh chấp cao và cần ưu tiên đọc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn cần triển khai một bộ đệm (cache) phân tán trong bộ nhớ cho một ứng dụng đa luồng, nơi các phần tử được thêm vào liên tục và cần được truy cập nhanh chóng, đồng thời hỗ trợ việc loại bỏ các phần tử cũ nhất khi bộ đệm đạt đến giới hạn kích thước. Cấu trúc dữ liệu nào trong `java.util.concurrent` là phù hợp nhất cho yêu cầu này?",
+    "options": [
+      "A. `ConcurrentHashMap`",
+      "B. `CopyOnWriteArrayList`",
+      "C. `LinkedBlockingQueue`",
+      "D. `ConcurrentLinkedDeque` kết hợp với một chiến lược loại bỏ thủ công hoặc `ConcurrentHashMap` với chiến lược LRU."
+    ],
+    "correctAnswer": "D",
+    "explanation": "`ConcurrentHashMap` cung cấp hiệu suất cao cho các thao tác đọc/ghi đồng thời trên bản đồ. Để triển khai cache LRU, người ta thường kết hợp `ConcurrentHashMap` để lưu trữ dữ liệu với một cơ chế quản lý thứ tự truy cập (ví dụ: `ConcurrentLinkedDeque` hoặc một `LinkedHashMap` được bọc cẩn thận) để theo dõi và loại bỏ các phần tử ít được sử dụng nhất. `ConcurrentLinkedDeque` có thể dùng để duy trì thứ tự truy cập/thêm, nhưng việc loại bỏ phần tử cũ nhất khi đầy vẫn cần logic tùy chỉnh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong lập trình đa luồng không sử dụng `synchronized` hoặc `volatile` một cách trực tiếp, điều nào sau đây là cách hiệu quả nhất để thiết lập quan hệ \"happens-before\" giữa các luồng để đảm bảo tính hiển thị của các thay đổi?",
+    "options": [
+      "A. Đảm bảo tất cả các biến đều là `final`.",
+      "B. Sử dụng các phương thức của `java.util.concurrent.atomic` như `AtomicInteger` hoặc `AtomicReference`.",
+      "C. Chỉ dựa vào thứ tự thực thi của các câu lệnh trong mã nguồn.",
+      "D. Sử dụng `Thread.sleep()` để tạo độ trễ giữa các luồng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các lớp trong `java.util.concurrent.atomic` (như `AtomicInteger`, `AtomicReference`, v.v.) sử dụng các thao tác nguyên tử (CAS - Compare-And-Swap) và các rào cản bộ nhớ (memory barriers) nội bộ để đảm bảo tính hiển thị và thiết lập quan hệ \"happens-before\" mà không cần khóa rõ ràng hoặc `volatile` trên biến đó.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một kiến trúc microservices dựa trên Spring Boot, bạn cần quản lý cấu hình (configuration) cho hàng chục dịch vụ, mỗi dịch vụ có thể có các cấu hình khác nhau cho các môi trường (dev, test, prod). Giải pháp nào của Spring Cloud là phù hợp nhất để quản lý cấu hình tập trung và động?",
+    "options": [
+      "A. Sử dụng `application.properties` hoặc `application.yml` trong mỗi microservice.",
+      "B. Triển khai một Spring Cloud Config Server.",
+      "C. Sử dụng biến môi trường (environment variables) cho mọi cấu hình.",
+      "D. Lưu trữ cấu hình trong một cơ sở dữ liệu và mỗi microservice đọc trực tiếp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spring Cloud Config Server cung cấp một giải pháp quản lý cấu hình tập trung, cho phép các microservice đọc cấu hình từ một kho lưu trữ chung (ví dụ: Git repository). Nó hỗ trợ phân biệt cấu hình theo môi trường, profile, và có thể làm mới cấu hình động mà không cần khởi động lại dịch vụ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Một ứng dụng Spring Data JPA gặp phải vấn đề hiệu suất N+1 query khi tải danh sách các thực thể cha và các thực thể con liên quan. Ví dụ: tải danh sách `Order` và sau đó tải `OrderItems` cho mỗi `Order` trong một vòng lặp. Giải pháp hiệu quả nhất để khắc phục vấn đề này là gì?",
+    "options": [
+      "A. Sử dụng `EntityManager.find()` cho từng thực thể con.",
+      "B. Đánh dấu mối quan hệ bằng `FetchType.EAGER` trên thực thể con.",
+      "C. Sử dụng `JOIN FETCH` trong các truy vấn JPQL/HQL hoặc `@EntityGraph` để tải các mối quan hệ một cách hiệu quả trong một truy vấn duy nhất.",
+      "D. Tăng kích thước `batch_size` trong cấu hình Hibernate."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Vấn đề N+1 query xảy ra khi truy vấn các thực thể cha, sau đó truy vấn riêng từng thực thể con. `JOIN FETCH` trong JPQL/HQL hoặc `@EntityGraph` trong Spring Data JPA là các cơ chế mạnh mẽ để chỉ định rằng các mối quan hệ liên quan nên được tải cùng với thực thể chính trong một truy vấn duy nhất, loại bỏ N+1 query. `FetchType.EAGER` có thể gây ra tải không mong muốn và không phải lúc nào cũng giải quyết N+1 hiệu quả trong mọi trường hợp. `batch_size` chỉ là một tối ưu hóa N+1 bằng cách nhóm N truy vấn con thành các gói nhỏ hơn, không phải là một truy vấn duy nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Bạn đang phát triển một ứng dụng Spring Boot cần tích hợp với một hệ thống quản lý danh tính doanh nghiệp (Enterprise Identity Management - EIM) sử dụng giao thức OpenID Connect (OIDC) để ủy quyền và xác thực người dùng. Cách tiếp cận nào với Spring Security là phù hợp nhất để triển khai?",
+    "options": [
+      "A. Viết một bộ lọc (Filter) Spring Security tùy chỉnh để xử lý toàn bộ luồng OIDC từ đầu.",
+      "B. Sử dụng `Spring Security OAuth2` client để cấu hình hỗ trợ OIDC, tận dụng các tính năng có sẵn để xử lý luồng ủy quyền.",
+      "C. Sử dụng `Basic Authentication` và cấu hình để gọi API của EIM để xác thực.",
+      "D. Sử dụng `JWT` (JSON Web Tokens) tự tạo và xác thực mà không cần OIDC."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Spring Security OAuth2 cung cấp hỗ trợ toàn diện cho việc tích hợp với các nhà cung cấp OpenID Connect (OIDC), bao gồm việc xử lý luồng ủy quyền (authorization code flow), trao đổi token, và xác thực người dùng dựa trên ID Token. Đây là cách tiếp cận tiêu chuẩn và an toàn nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi thiết kế một RESTful API cho một microservice trong môi trường phân tán, điều nào sau đây là một thực hành tốt nhất để đảm bảo tính bền vững (resilience) và khả năng mở rộng (scalability) của API?",
+    "options": [
+      "A. Sử dụng synchronous communication giữa các microservice để đảm bảo tính nhất quán dữ liệu ngay lập tức.",
+      "B. Thiết kế API không trạng thái (stateless), sử dụng HATEOAS để hướng dẫn client, và triển khai cơ chế idempotency cho các thao tác ghi.",
+      "C. Trả về tất cả dữ liệu liên quan trong một phản hồi duy nhất để giảm số lượng yêu cầu.",
+      "D. Chỉ sử dụng HTTP GET để tránh các vấn đề về thay đổi trạng thái."
+    ],
+    "correctAnswer": "B",
+    "explanation": "API không trạng thái giúp dễ dàng mở rộng theo chiều ngang. HATEOAS (Hypermedia as the Engine of Application State) giúp client tự khám phá các tài nguyên và hành động tiếp theo, giảm sự gắn kết chặt chẽ. Cơ chế idempotency (ví dụ: sử dụng ID duy nhất cho mỗi yêu cầu ghi) đảm bảo rằng việc gửi lại một yêu cầu nhiều lần sẽ không gây ra tác dụng phụ không mong muốn, rất quan trọng trong môi trường phân tán.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong một ứng dụng Spring Boot lớn, bạn phát hiện ra một vòng lặp phụ thuộc (circular dependency) giữa hai bean `ServiceA` và `ServiceB`. `ServiceA` inject `ServiceB` và `ServiceB` inject `ServiceA`. Mặc dù Spring có thể giải quyết một số trường hợp vòng lặp phụ thuộc, nhưng để thiết kế hệ thống tốt hơn và tránh các vấn đề tiềm ẩn, giải pháp kiến trúc nào là phù hợp nhất?",
+    "options": [
+      "A. Sử dụng `@Lazy` annotation trên một trong các bean để trì hoãn việc khởi tạo.",
+      "B. Chuyển một trong các phụ thuộc thành setter injection thay vì constructor injection.",
+      "C. Phân tách logic và trách nhiệm của các bean để loại bỏ sự phụ thuộc lẫn nhau, hoặc giới thiệu một interface trung gian/event-driven architecture.",
+      "D. Không làm gì cả, vì Spring sẽ tự động xử lý."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mặc dù `@Lazy` hoặc setter injection có thể 'giải quyết' vấn đề kỹ thuật của vòng lặp phụ thuộc trong Spring, nhưng chúng thường che giấu một vấn đề thiết kế lớn hơn: các bean có trách nhiệm quá chồng chéo hoặc gắn kết quá chặt chẽ. Giải pháp tốt nhất là phân tách trách nhiệm (Single Responsibility Principle) hoặc sử dụng các mẫu thiết kế khác như Event-Driven Architecture để giảm sự phụ thuộc trực tiếp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống microservices dựa trên Spring Cloud cần đảm bảo rằng các yêu cầu từ client được phân phối đồng đều đến các phiên bản (instances) của một dịch vụ và khi một dịch vụ gặp sự cố, các yêu cầu sẽ được chuyển hướng đến các phiên bản khỏe mạnh khác. Cơ chế nào của Spring Cloud giải quyết trực tiếp vấn đề này?",
+    "options": [
+      "A. Spring Cloud Config",
+      "B. Spring Cloud Gateway",
+      "C. Spring Cloud Eureka (Service Discovery) và Spring Cloud Load Balancer (ví dụ: Ribbon hoặc LoadBalancerClient).",
+      "D. Spring Cloud Sleuth"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Spring Cloud Eureka (hoặc các Service Discovery khác như Consul, Zookeeper) cho phép các dịch vụ đăng ký và khám phá lẫn nhau. Spring Cloud Load Balancer (trước đây là Ribbon, nay là `LoadBalancerClient` tích hợp) hoạt động cùng với Service Discovery để phân phối các yêu cầu đến các phiên bản dịch vụ có sẵn và khỏe mạnh, cung cấp khả năng chịu lỗi và cân bằng tải.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Bạn cần triển khai một tính năng ghi nhật ký kiểm toán (audit logging) cho tất cả các phương thức dịch vụ (service methods) trong một ứng dụng Spring, ghi lại người dùng thực hiện, thời gian và các đối số đầu vào mà không sửa đổi mã nguồn của các phương thức dịch vụ. Cơ chế nào của Spring là phù hợp và hiệu quả nhất cho yêu cầu này?",
+    "options": [
+      "A. Sử dụng `HttpServletRequestFilter` để chặn và ghi nhật ký tất cả các yêu cầu.",
+      "B. Chèn mã ghi nhật ký trực tiếp vào đầu mỗi phương thức dịch vụ.",
+      "C. Sử dụng Spring AOP (Aspect-Oriented Programming) để định nghĩa một advice (ví dụ: `@Around` hoặc `@Before`) trên các phương thức dịch vụ.",
+      "D. Sử dụng `Spring Event` để phát ra sự kiện sau mỗi lời gọi phương thức."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Spring AOP được thiết kế để xử lý các mối quan tâm xuyên cắt (cross-cutting concerns) như ghi nhật ký, bảo mật, quản lý giao dịch mà không làm ô nhiễm mã nghiệp vụ chính. Bằng cách định nghĩa một aspect và áp dụng advice (ví dụ: `@Around` để chặn lời gọi phương thức) cho các join point (các phương thức dịch vụ), bạn có thể thêm logic audit logging một cách tập trung và không xâm lấn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Một ứng dụng Java trên môi trường sản xuất đang gặp phải tình trạng phản hồi chậm và CPU usage cao bất thường. Sau khi thu thập một `thread dump`, bạn nhận thấy nhiều luồng đang ở trạng thái `BLOCKED` hoặc `WAITING` trên cùng một đối tượng khóa. Điều này thường chỉ ra vấn đề gì?",
+    "options": [
+      "A. Ứng dụng đang thiếu bộ nhớ (OutOfMemoryError sắp xảy ra).",
+      "B. Ứng dụng đang thực hiện quá nhiều I/O operations.",
+      "C. Có một điểm nghẽn (bottleneck) hoặc tranh chấp khóa (lock contention) nghiêm trọng trong mã nguồn đa luồng.",
+      "D. Garbage Collector đang chạy quá thường xuyên và gây tạm dừng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Nhiều luồng ở trạng thái `BLOCKED` hoặc `WAITING` trên cùng một đối tượng khóa trong một `thread dump` là dấu hiệu rõ ràng của tranh chấp khóa. Điều này có nghĩa là nhiều luồng đang cố gắng truy cập một tài nguyên dùng chung được bảo vệ bởi khóa đó, và chúng phải chờ đợi lẫn nhau, dẫn đến hiệu suất thấp và CPU usage cao do chuyển ngữ cảnh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần tối ưu hóa một ứng dụng Java có kích thước heap lớn và yêu cầu thông lượng cao, nhưng chấp nhận được một số độ trễ (latency) trong quá trình GC. Tham số JVM nào sau đây bạn sẽ cấu hình để ưu tiên thông lượng và sử dụng Parallel Garbage Collector?",
+    "options": [
+      "A. `-XX:+UseG1GC`",
+      "B. `-XX:+UseZGC`",
+      "C. `-XX:+UseParallelGC`",
+      "D. `-XX:MaxMetaspaceSize=256m`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`-XX:+UseParallelGC` kích hoạt Parallel Garbage Collector, được thiết kế để tối ưu hóa thông lượng (throughput) bằng cách sử dụng nhiều luồng để thực hiện các công việc GC. Nó có thể có thời gian tạm dừng (pause times) dài hơn so với G1, ZGC hoặc Shenandoah, nhưng lại tối ưu cho các ứng dụng ưu tiên tổng lượng công việc hoàn thành hơn là độ trễ thấp nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong một dự án Java enterprise lớn với nhiều module và phụ thuộc, bạn thường xuyên gặp phải các lỗi `NoClassDefFoundError` hoặc `IncompatibleClassChangeError` do xung đột phiên bản thư viện (JAR hell). Chiến lược nào sau đây giúp giảm thiểu hiệu quả các vấn đề này?",
+    "options": [
+      "A. Sử dụng một công cụ quản lý phụ thuộc (ví dụ: Maven hoặc Gradle) để quản lý tập trung và giải quyết xung đột phiên bản.",
+      "B. Tăng kích thước heap của JVM.",
+      "C. Đóng gói tất cả các thư viện phụ thuộc vào một JAR duy nhất và đổi tên chúng.",
+      "D. Xóa bỏ tất cả các thư viện không sử dụng khỏi classpath."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các công cụ quản lý phụ thuộc như Maven và Gradle có khả năng phân tích cây phụ thuộc, phát hiện các xung đột phiên bản và cho phép bạn định nghĩa các quy tắc để giải quyết chúng (ví dụ: ưu tiên phiên bản mới nhất, hoặc phiên bản cụ thể). Đây là cách tiêu chuẩn và hiệu quả nhất để quản lý JAR hell trong các dự án lớn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi triển khai ứng dụng Spring Boot lên Kubernetes, bạn cần tối ưu hóa kích thước image Docker và thời gian khởi động của ứng dụng. Cách tiếp cận nào sau đây là tốt nhất?",
+    "options": [
+      "A. Tạo một monolithic JAR lớn chứa tất cả các thư viện và ứng dụng của bạn.",
+      "B. Sử dụng multi-stage Docker builds để tách biệt các lớp (layers) của ứng dụng (dependencies, application code) và chỉ copy những gì cần thiết vào final image.",
+      "C. Sử dụng `FROM scratch` làm base image cho Docker.",
+      "D. Khởi động ứng dụng với `-Xverify:none` để bỏ qua kiểm tra bytecode."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Multi-stage Docker builds cho phép bạn sử dụng một image lớn hơn để build ứng dụng (ví dụ: với JDK đầy đủ và Maven/Gradle), sau đó chỉ copy các artifact đã build (JAR, dependencies) sang một base image nhỏ gọn hơn (ví dụ: JRE Alpine). Điều này tạo ra các layer Docker hiệu quả, giảm kích thước image và tận dụng caching layer của Docker, dẫn đến thời gian khởi động nhanh hơn và sử dụng tài nguyên hiệu quả hơn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một hệ thống microservices Java đang chạy trong môi trường Kubernetes. Bạn cần thiết lập một hệ thống giám sát toàn diện để phát hiện sớm các vấn đề về hiệu suất, lỗi và tình trạng tài nguyên. Công cụ và chiến lược nào sau đây là bộ đôi hiệu quả nhất cho việc này?",
+    "options": [
+      "A. Chỉ sử dụng JConsole để kết nối thủ công đến từng JVM.",
+      "B. Sử dụng Prometheus để thu thập metrics (qua Micrometer trong Spring Boot) và Grafana để hiển thị dashboard, kết hợp với ELK Stack (Elasticsearch, Logstash, Kibana) cho log aggregation.",
+      "C. Chỉ dựa vào `top` và `jstack` trên từng server.",
+      "D. Sử dụng một công cụ APM (Application Performance Monitoring) độc quyền mà không tích hợp với các công cụ mã nguồn mở."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Prometheus và Grafana là bộ đôi mạnh mẽ để thu thập và trực quan hóa metrics (CPU, memory, request latency, error rates, v.v.), đặc biệt là khi tích hợp với Micrometer của Spring Boot. ELK Stack (hoặc Loki/Grafana) là giải pháp tiêu chuẩn cho log aggregation và phân tích trong môi trường phân tán. Sự kết hợp này cung cấp cái nhìn toàn diện về hiệu suất và tình trạng hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một kiến trúc microservices, khi một dịch vụ gọi một dịch vụ khác, có nguy cơ dịch vụ được gọi bị quá tải hoặc gặp sự cố, dẫn đến hiệu ứng domino làm sập toàn bộ hệ thống. Cơ chế nào sau đây giúp tăng cường tính bền vững (resilience) của hệ thống bằng cách ngăn chặn sự lan truyền lỗi?",
+    "options": [
+      "A. Tăng timeout cho tất cả các cuộc gọi API.",
+      "B. Triển khai mẫu Circuit Breaker (ví dụ: Resilience4j hoặc Hystrix) và Retry Pattern.",
+      "C. Sử dụng đồng bộ hóa (synchronization) trên các cuộc gọi API.",
+      "D. Chỉ sử dụng asynchronous communication."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mẫu Circuit Breaker được thiết kế để ngăn chặn các cuộc gọi đến một dịch vụ bị lỗi, cho phép nó phục hồi và ngăn chặn sự lan truyền lỗi. Retry Pattern cho phép thử lại các cuộc gọi tạm thời thất bại. Kết hợp cả hai là một chiến lược mạnh mẽ để xây dựng các hệ thống phân tán bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Bạn cần triển khai một chiến lược caching cho dữ liệu thường xuyên được đọc nhưng ít khi thay đổi, và dữ liệu này cần được nhất quán trên nhiều phiên bản (instances) của ứng dụng. Chiến lược caching nào là phù hợp nhất?",
+    "options": [
+      "A. Sử dụng `ConcurrentHashMap` làm cache trong bộ nhớ cục bộ (in-memory cache) cho mỗi instance.",
+      "B. Sử dụng một cache phân tán (distributed cache) như Redis hoặc Ehcache/Hazelcast với chế độ phân tán.",
+      "C. Tắt hoàn toàn caching để đảm bảo dữ liệu luôn mới nhất từ cơ sở dữ liệu.",
+      "D. Chỉ sử dụng HTTP caching ở phía client."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi dữ liệu cần nhất quán trên nhiều instance của ứng dụng, một cache phân tán là lựa chọn tốt nhất. Redis, Ehcache hoặc Hazelcast ở chế độ phân tán cho phép dữ liệu được chia sẻ và đồng bộ hóa giữa các instance, đảm bảo rằng tất cả các instance đều truy cập cùng một trạng thái cache. Cache cục bộ sẽ dẫn đến dữ liệu không nhất quán giữa các instance.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Một công ty khởi nghiệp đang phát triển một sản phẩm mới với yêu cầu về thời gian ra mắt thị trường nhanh (time-to-market), khả năng thay đổi nhanh chóng và đội ngũ phát triển nhỏ. Tuy nhiên, họ dự kiến sẽ có sự tăng trưởng bùng nổ trong tương lai và cần khả năng mở rộng linh hoạt. Kiến trúc ứng dụng nào sau đây cung cấp sự cân bằng tốt nhất giữa các yêu cầu hiện tại và tương lai?",
+    "options": [
+      "A. Kiến trúc Monolithic truyền thống.",
+      "B. Kiến trúc Microservices ngay từ đầu.",
+      "C. Kiến trúc \"Modulith\" (monolith module hóa tốt) hoặc \"Modular Monolith\" với kế hoạch refactor thành microservices khi cần.",
+      "D. Kiến trúc Serverless hoàn toàn."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bắt đầu với một Monolith truyền thống có thể nhanh nhưng khó mở rộng. Microservices ngay từ đầu tạo ra sự phức tạp không cần thiết cho một đội nhỏ và thời gian ra mắt nhanh. Kiến trúc \"Modulith\" hoặc \"Modular Monolith\" cho phép phát triển nhanh chóng với một codebase duy nhất nhưng được tổ chức tốt thành các module độc lập. Điều này giúp dễ dàng tách các module thành microservices riêng biệt khi nhu cầu mở rộng và đội ngũ tăng lên, cung cấp lộ trình chuyển đổi linh hoạt. Serverless có thể phù hợp nhưng có thể có đường cong học tập và giới hạn khác.",
+    "difficulty": "EXPERT",
+    "skillArea": "Spring Boot",
+    "category": "ANALYSIS"
+  }
+]
