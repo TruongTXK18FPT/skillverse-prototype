@@ -817,6 +817,21 @@ const GSJJourneyPage: React.FC = () => {
     return jobRole;
   };
 
+  const getJourneyPrimaryLabel = (
+    journey: Partial<JourneyDetailResponse & JourneySummaryResponse> & {
+      domain: string;
+    },
+  ): string =>
+    journey.jobRole
+      ? getJobRoleLabel(journey.jobRole, journey.domain)
+      : getDomainLabel(journey.domain);
+
+  const getJourneySkillLabel = (
+    journey: Partial<JourneyDetailResponse & JourneySummaryResponse>,
+  ): string | null =>
+    journey.skillName ||
+    (journey.skills && journey.skills.length > 0 ? journey.skills[0] : null);
+
   const isCompletedJourneyStatus = (status: JourneyStatus): boolean =>
     status === JourneyStatus.COMPLETED ||
     status === JourneyStatus.COMPLETED_UNVERIFIED ||
@@ -1933,17 +1948,12 @@ const GSJJourneyPage: React.FC = () => {
                   )}
                   <div className="gsj-journey-card__info">
                     <span className="gsj-journey-card__name">
-                      {journey.skillName ||
-                        (journey.skills && journey.skills.length > 0
-                          ? journey.skills[0]
-                          : journey.jobRole
-                            ? getJobRoleLabel(journey.jobRole, journey.domain)
-                            : getDomainLabel(journey.domain))}
+                      {getJourneyPrimaryLabel(journey)}
                     </span>
                     <span className="gsj-journey-card__sub">
-                      {journey.jobRole
-                        ? getJobRoleLabel(journey.jobRole, journey.domain)
-                        : "Hành trình kỹ năng"}
+                      {getJourneySkillLabel(journey)
+                        ? `Skill trọng tâm: ${getJourneySkillLabel(journey)}`
+                        : "Lộ trình theo vị trí công việc"}
                     </span>
                     <span className="gsj-journey-card__domain-label">
                       {getDomainLabel(journey.domain)}
@@ -2088,9 +2098,8 @@ const GSJJourneyPage: React.FC = () => {
             {activeJourneyList.length > 0 ? (
               <div className="gsj-active-journeys-grid">
                 {activeJourneyList.map((activeJourney) => {
-                  const activeLabel = activeJourney.jobRole
-                    ? getJobRoleLabel(activeJourney.jobRole, activeJourney.domain)
-                    : getDomainLabel(activeJourney.domain);
+                  const activeLabel = getJourneyPrimaryLabel(activeJourney);
+                  const activeSkillLabel = getJourneySkillLabel(activeJourney);
                   return (
               <div
                 key={activeJourney.id}
@@ -2123,14 +2132,12 @@ const GSJJourneyPage: React.FC = () => {
                     <div className="gsj-active-card__top">
                       <div className="gsj-active-card__identity">
                         <span className="gsj-active-card__name">
-                          {activeJourney.skillName ||
-                            (activeJourney.skills &&
-                            activeJourney.skills.length > 0
-                              ? activeJourney.skills[0]
-                              : activeLabel)}
+                          {activeLabel}
                         </span>
                         <span className="gsj-active-card__role">
-                          {activeLabel}
+                          {activeSkillLabel
+                            ? `Skill trọng tâm: ${activeSkillLabel}`
+                            : "Lộ trình theo vị trí công việc"}
                         </span>
                         <span className="gsj-active-card__domain">
                           {getDomainLabel(activeJourney.domain)}
@@ -2311,9 +2318,8 @@ const GSJJourneyPage: React.FC = () => {
                 ) : (
                   <div className="gsj-history-list">
                     {paginatedHistoryJourneys.map((journey) => {
-                      const label = journey.jobRole
-                        ? getJobRoleLabel(journey.jobRole, journey.domain)
-                        : getDomainLabel(journey.domain);
+                      const label = getJourneyPrimaryLabel(journey);
+                      const skillLabel = getJourneySkillLabel(journey);
                       return (
                         <div
                           key={journey.id}
@@ -2340,13 +2346,12 @@ const GSJJourneyPage: React.FC = () => {
                           {/* Name + role */}
                           <div className="gsj-history-row__info">
                             <span className="gsj-history-row__name">
-                              {journey.skillName ||
-                                (journey.skills && journey.skills.length > 0
-                                  ? journey.skills[0]
-                                  : label)}
+                              {label}
                             </span>
                             <span className="gsj-history-row__sub">
-                              {label} · {getDomainLabel(journey.domain)}
+                              {skillLabel
+                                ? `Skill trọng tâm: ${skillLabel} · ${getDomainLabel(journey.domain)}`
+                                : getDomainLabel(journey.domain)}
                             </span>
                           </div>
 
