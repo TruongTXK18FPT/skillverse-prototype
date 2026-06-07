@@ -26,6 +26,7 @@ import {
 import { portfolioService } from "../../services/portfolioService";
 import { mentorRoadmapWorkspaceService } from "../../services/mentorRoadmapWorkspaceService";
 import type { BookingResponse } from "../../services/bookingService";
+import type { UserProfileDTO } from "../../data/portfolioDTOs";
 import { approveBooking, rejectBooking } from "../../services/bookingService";
 import { useAppToast } from "../../context/ToastContext";
 import "./MentorRoadmapSettingsTab.css";
@@ -50,6 +51,7 @@ const MentorRoadmapSettingsTab: React.FC = () => {
   const [section, setSection] = useState<HubSection>("settings");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [profile, setProfile] = useState<UserProfileDTO | null>(null);
   const [roadmapMentoringPrice, setRoadmapMentoringPrice] = useState<
     number | ""
   >("");
@@ -79,9 +81,10 @@ const MentorRoadmapSettingsTab: React.FC = () => {
   const loadProfile = async () => {
     try {
       setLoading(true);
-      const profile = await portfolioService.getProfile();
-      if (profile.roadmapMentoringPrice && profile.roadmapMentoringPrice > 0) {
-        setRoadmapMentoringPrice(profile.roadmapMentoringPrice);
+      const profileData = await portfolioService.getProfile();
+      setProfile(profileData);
+      if (profileData.roadmapMentoringPrice && profileData.roadmapMentoringPrice > 0) {
+        setRoadmapMentoringPrice(profileData.roadmapMentoringPrice);
         setIsActive(true);
       } else {
         setRoadmapMentoringPrice("");
@@ -107,7 +110,13 @@ const MentorRoadmapSettingsTab: React.FC = () => {
         return;
       }
 
+      if (!profile) {
+        showError("Lỗi", "Không tìm thấy hồ sơ để cập nhật.");
+        return;
+      }
+
       await portfolioService.updateProfile({
+        ...profile,
         roadmapMentoringPrice: priceToSave,
       });
 
