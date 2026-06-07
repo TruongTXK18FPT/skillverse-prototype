@@ -593,7 +593,7 @@ const MentorVerificationTab: React.FC = () => {
             <Shield size={24} /> Xác thực Kỹ Năng
           </h2>
           <p className="mvt-header__subtitle">
-            Gửi yêu cầu xác thực theo Lô (Batch) để nhanh chóng hoàn thiện hồ sơ.
+            Gửi yêu cầu xác thực theo nhóm (Batch) để nhanh chóng hoàn thiện hồ sơ.
           </p>
         </div>
         <button
@@ -708,7 +708,7 @@ const MentorVerificationTab: React.FC = () => {
       {showForm && !showSuggestForm && (
         <form className="mvt-form mvt-neon-form" onSubmit={handleSubmit}>
           <div className="mvt-form-header-neon">
-            <h3 className="mvt-form__title" style={{ color: 'var(--neon-cyan)' }}>Gửi yêu cầu xác thực Lô</h3>
+            <h3 className="mvt-form__title" style={{ color: 'var(--neon-cyan)' }}>Gửi yêu cầu xác thực theo nhóm</h3>
             <p className="mvt-form__hint">Gom nhiều kỹ năng lại và chỉ cần đính kèm 1 bộ hồ sơ duy nhất!</p>
           </div>
 
@@ -1001,7 +1001,7 @@ const MentorVerificationTab: React.FC = () => {
                     
                     {/* Skills Breakdown */}
                     <div className="mvt-batch-skills-list">
-                      <strong>Danh sách kỹ năng trong lô:</strong>
+                      <strong>Danh sách kỹ năng trong yêu cầu:</strong>
                       <div className="mvt-skills-grid">
                         {batch.skills?.map(sk => (
                            <div key={sk.id} className={`mvt-skill-sub-item status-${sk.status.toLowerCase()}`}>

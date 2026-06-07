@@ -127,7 +127,7 @@ const MentorVerificationAdminTab: React.FC<MentorVerificationAdminTabProps> = ({
           requesterEmail: b.mentorEmail,
           requesterAvatarUrl: b.mentorAvatarUrl,
           requesterRole: 'MENTOR',
-          title: `Lô Xác Thực (${b.skills?.length || 0} kỹ năng)`,
+          title: `Yêu Cầu Xác Thực (${b.skills?.length || 0} kỹ năng)`,
           status: b.status,
           requestedAt: b.submittedAt,
           originalBatch: b
@@ -217,7 +217,7 @@ const MentorVerificationAdminTab: React.FC<MentorVerificationAdminTabProps> = ({
       };
 
       await reviewBatchVerification(selectedBatch.id, payload);
-      showSuccess('Thành công', `Đã lưu kết quả duyệt Lô #${selectedBatch.id}`);
+      showSuccess('Thành công', `Đã lưu kết quả duyệt yêu cầu #${selectedBatch.id}`);
       setShowBatchModal(false);
       loadData();
     } catch (err: any) {
@@ -605,7 +605,7 @@ const MentorVerificationAdminTab: React.FC<MentorVerificationAdminTabProps> = ({
                 </div>
 
                 <div className="admin-general-note">
-                  <label>Ghi Chú Chung Cho Toàn Bộ Lô</label>
+                  <label>Ghi Chú Chung Cho Toàn Bộ Yêu Cầu</label>
                   <textarea 
                     rows={3} 
                     placeholder="Nhận xét tổng quan..."
@@ -618,7 +618,7 @@ const MentorVerificationAdminTab: React.FC<MentorVerificationAdminTabProps> = ({
               <div className="admin-split-footer">
                 <button className="admin-btn-outline" onClick={() => setShowBatchModal(false)}>Hủy</button>
                 <button className="admin-btn-glow" onClick={submitBatchReview} disabled={actionLoading}>
-                  <CheckCircle size={16} /> Hoàn Tất Lưu Lô
+                  <CheckCircle size={16} /> Hoàn Tất Phê Duyệt
                 </button>
               </div>
             </div>

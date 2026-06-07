@@ -1321,7 +1321,10 @@ const AdminRoadmapTemplateManager = () => {
     }));
   };
 
-  const openLibrary = () => {
+  const openLibrary = async () => {
+    if (form.domainId && form.jobPositionId && form.jobPositionTrackId) {
+      await saveTemplate(true);
+    }
     setViewMode("library");
     setActiveTab("overview");
     setStepErrors([]);
@@ -1446,17 +1449,21 @@ const AdminRoadmapTemplateManager = () => {
     }));
   };
 
-  const saveTemplate = async () => {
+  const saveTemplate = async (silent = false) => {
     setSaving(true);
     try {
       const payload = buildPayload();
       let saved: RoadmapTemplateResponse;
       if (form.editingId) {
         saved = await roadmapTemplateService.updateTemplate(form.editingId, payload);
-        showSuccess("Đã cập nhật mẫu", "Các thay đổi đã được lưu.");
+        if (!silent) {
+          showSuccess("Đã cập nhật mẫu", "Các thay đổi đã được lưu.");
+        }
       } else {
         saved = await roadmapTemplateService.createTemplate(payload);
-        showSuccess("Đã tạo mẫu", "Mẫu mới đã được lưu dưới dạng bản nháp.");
+        if (!silent) {
+          showSuccess("Đã tạo mẫu", "Mẫu mới đã được lưu dưới dạng bản nháp.");
+        }
       }
       setForm((current) => ({ ...current, editingId: saved.id }));
       await loadTemplates();
@@ -1505,7 +1512,7 @@ const AdminRoadmapTemplateManager = () => {
       await roadmapTemplateService.publishTemplate(id);
       showSuccess("Đã xuất bản mẫu", "Lộ trình của người học có thể sử dụng mẫu này.");
       await loadTemplates();
-      if (viewMode === "builder") openLibrary();
+      if (viewMode === "builder") await openLibrary();
     } catch (error) {
       showError("Không thể xuất bản", getApiErrorMessage(error, "Vui lòng kiểm tra phân bổ, bài học, đầu ra, tiêu chí đánh giá và dải cấp độ."));
     } finally {
@@ -1611,9 +1618,9 @@ const AdminRoadmapTemplateManager = () => {
         skillBlocks: buildPayload().skillBlocks || [],
       });
       applyNodeGroups(groups);
-      showSuccess("Đã gợi ý node học", `Đã tạo ${groups.length} node học từ danh sách kỹ năng.`);
+      showSuccess("Đã đồng bộ node học", `Đã tạo ${groups.length} node học từ danh sách kỹ năng.`);
     } catch (error) {
-      showError("Không thể gợi ý node học", getApiErrorMessage(error, "Vui lòng kiểm tra danh sách kỹ năng và nhánh lộ trình."));
+      showError("Không thể đồng bộ node học", getApiErrorMessage(error, "Vui lòng kiểm tra danh sách kỹ năng và nhánh lộ trình."));
     } finally {
       setAutoGrouping(false);
     }
@@ -1758,9 +1765,9 @@ const AdminRoadmapTemplateManager = () => {
       .every((item) => item.key === "courses" || getStepValidationErrors(item.key).length === 0);
   };
 
-  const goToStep = (step: BuilderTab) => {
+  const goToStep = async (step: BuilderTab) => {
     if (autoGrouping) {
-      showError("Đang gợi ý node học", "Vui lòng chờ AI hoàn tất trước khi chuyển bước.");
+      showError("Đang đồng bộ node học", "Vui lòng chờ AI hoàn tất trước khi chuyển bước.");
       return;
     }
     if (step === activeTab) return;
@@ -1777,6 +1784,8 @@ const AdminRoadmapTemplateManager = () => {
       }
       return;
     }
+    const saved = await saveTemplate(true);
+    if (!saved) return;
     setActiveTab(step);
     setStepErrors([]);
   };
@@ -1792,11 +1801,11 @@ const AdminRoadmapTemplateManager = () => {
     return target?.group.localId || null;
   };
 
-  const goToSuggestionTarget = (message: string) => {
+  const goToSuggestionTarget = async (message: string) => {
     const targetStep = getSuggestionTargetStep(message);
     const nodeGroupId = targetStep === "grouping" ? getSuggestionNodeGroupId(message) : null;
     if (targetStep !== "preview") {
-      goToStep(targetStep);
+      await goToStep(targetStep);
     }
     if (!nodeGroupId) return;
     setActiveNodeGroupId(nodeGroupId);
@@ -1811,9 +1820,9 @@ const AdminRoadmapTemplateManager = () => {
     }, 2200);
   };
 
-  const goNextStep = () => {
+  const goNextStep = async () => {
     if (autoGrouping) {
-      showError("Đang gợi ý node học", "Vui lòng chờ AI hoàn tất trước khi chuyển bước.");
+      showError("Đang đồng bộ node học", "Vui lòng chờ AI hoàn tất trước khi chuyển bước.");
       return;
     }
     const currentErrors = getStepValidationErrors(activeTab);
@@ -1823,6 +1832,8 @@ const AdminRoadmapTemplateManager = () => {
       showError("Cần hoàn thiện bước này", currentErrors[0]);
       return;
     }
+    const saved = await saveTemplate(true);
+    if (!saved) return;
     const currentIndex = moduleBuilderTabs.findIndex((item) => item.key === activeTab);
     const nextStep = moduleBuilderTabs[currentIndex + 1];
     if (nextStep) {
@@ -1831,11 +1842,12 @@ const AdminRoadmapTemplateManager = () => {
     }
   };
 
-  const goPreviousStep = () => {
+  const goPreviousStep = async () => {
     if (autoGrouping) {
-      showError("Đang gợi ý node học", "Vui lòng chờ AI hoàn tất trước khi chuyển bước.");
+      showError("Đang đồng bộ node học", "Vui lòng chờ AI hoàn tất trước khi chuyển bước.");
       return;
     }
+    await saveTemplate(true);
     const currentIndex = moduleBuilderTabs.findIndex((item) => item.key === activeTab);
     const previousStep = moduleBuilderTabs[currentIndex - 1];
     if (previousStep) {
@@ -2107,7 +2119,7 @@ const AdminRoadmapTemplateManager = () => {
             </div>
             <button type="button" onClick={() => void runAutoGroup()} disabled={autoGrouping || form.skillBlocks.length === 0}>
               {autoGrouping ? <Loader2 size={16} className="artm-spin" /> : <RefreshCw size={16} />}
-              {autoGrouping ? "Đang xử lý..." : "AI gợi ý lập Node"}
+              {autoGrouping ? "Đang xử lý..." : "Đồng bộ Node"}
             </button>
           </div>
           <div className="artm-node-definition-controls">
