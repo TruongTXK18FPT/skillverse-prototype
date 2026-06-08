@@ -317,7 +317,7 @@ const JourneyVerificationBlock: React.FC<{
 }> = ({ data }) => {
   return (
     <div className="svd-journey-view">
-      {data.mentorId && (
+      {data.mentorId ? (
         <div className="svd-journey-header">
           <div className="svd-journey-header-info">
             {data.mentorAvatarUrl ? (
@@ -349,6 +349,23 @@ const JourneyVerificationBlock: React.FC<{
           <div className="svd-journey-verified-stamp">
             <CheckCircle2 size={18} />
             Đã duyệt bởi Mentor
+          </div>
+        </div>
+      ) : (
+        <div className="svd-journey-header" style={{ borderLeftColor: '#94a3b8' }}>
+          <div className="svd-journey-header-info">
+            <div className="svd-page__mentor-avatar-placeholder" style={{ width: 48, height: 48, background: 'rgba(148, 163, 184, 0.1)', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
+              <BookOpen size={24} />
+            </div>
+            <div className="svd-journey-mentor-details">
+              <small>Phương thức học tập</small>
+              <strong style={{ color: '#94a3b8' }}>Roadmap tự học</strong>
+              <span style={{ fontSize: '0.85rem', color: '#64748b' }}>Học viên tự hoàn thành lộ trình</span>
+            </div>
+          </div>
+          <div className="svd-journey-verified-stamp" style={{ background: 'rgba(148, 163, 184, 0.1)', color: '#94a3b8', boxShadow: 'none' }}>
+            <Clock size={18} />
+            Tự học (Chưa xác thực)
           </div>
         </div>
       )}
@@ -642,7 +659,9 @@ const SkillVerificationDetailPage: React.FC = () => {
 
           <p className="svd-page__hero-sub">
             {isStudentContext 
-              ? "Chi tiết quá trình học tập và bằng chứng năng lực đã được xác thực."
+              ? (journeyVerification && !journeyVerification.mentorId 
+                  ? "Chi tiết quá trình học tập tự học và các bài nộp/bằng chứng của học viên."
+                  : "Chi tiết quá trình học tập và bằng chứng năng lực đã được xác thực.")
               : "Tất cả bằng chứng dưới đây đã được ban quản trị xem xét và xác thực chuyên môn."}
           </p>
         </div>
@@ -656,7 +675,7 @@ const SkillVerificationDetailPage: React.FC = () => {
                 className={`svd-tab-btn ${activeTab === 'journey' ? 'active' : ''}`}
                 onClick={() => setActiveTab('journey')}
              >
-                <Map size={16}/> Hành trình xác thực (Journey)
+                <Map size={16}/> {journeyVerification.mentorId ? "Hành trình xác thực (Journey)" : "Lộ trình tự học (Journey)"}
              </button>
            )}
            {adminVerifications.length > 0 && (
@@ -721,6 +740,7 @@ const SkillVerificationDetailPage: React.FC = () => {
             </div>
         )}
         {!loading && activeTab === 'journey' && journeyVerification && journeyVerification.completedAt && (
+          journeyVerification.mentorId ? (
             <div className="svd-page__footer-note" style={{ background: 'rgba(168, 85, 247, 0.07)', borderColor: 'rgba(168, 85, 247, 0.25)', color: '#d8b4fe' }}>
               <CheckCircle2 size={14} />
               <span>
@@ -729,6 +749,15 @@ const SkillVerificationDetailPage: React.FC = () => {
                 Mentor {journeyVerification.mentorName}.
               </span>
             </div>
+          ) : (
+            <div className="svd-page__footer-note" style={{ background: 'rgba(148, 163, 184, 0.07)', borderColor: 'rgba(148, 163, 184, 0.25)', color: '#cbd5e1' }}>
+              <CheckCircle2 size={14} />
+              <span>
+                Hành trình tự học này đã được học viên hoàn thành vào{" "}
+                <strong>{formatDate(journeyVerification.completedAt)}</strong>.
+              </span>
+            </div>
+          )
         )}
       </div>
     </div>

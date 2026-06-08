@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Shield, Plus, CheckCircle, Clock, XCircle, ExternalLink,
   FileText, Github, Briefcase, Send, ChevronDown, ChevronUp,
-  Award, AlertCircle, Upload, Map, Users, Image,
+  Award, AlertCircle, Upload, Map, Users, Image, BookOpen,
 } from 'lucide-react';
 import {
   submitStudentVerification,
@@ -149,6 +149,8 @@ const StudentSkillVerificationPage: React.FC = () => {
 
   const pendingRequests = verifications.filter(v => v.status === 'PENDING' || v.status === 'REJECTED');
   const approvedRequests = verifications.filter(v => v.status === 'APPROVED');
+  const mentorRoadmapSkills = roadmapSkills.filter(s => s.verifiedByMentorId !== null);
+  const selfStudyRoadmapSkills = roadmapSkills.filter(s => s.verifiedByMentorId === null);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -371,17 +373,34 @@ const StudentSkillVerificationPage: React.FC = () => {
               </>
             )}
 
-            {/* Roadmap-verified skills */}
-            {roadmapSkills.length > 0 && (
+            {/* Mentor Roadmap skills */}
+            {mentorRoadmapSkills.length > 0 && (
               <div className="sskv-roadmap-section">
-                <h4><Map size={18} /> Xác thực qua Mentor Roadmap ({roadmapSkills.length})</h4>
+                <h4><Map size={18} /> Xác thực qua Mentor Roadmap ({mentorRoadmapSkills.length})</h4>
                 <div className="sskv-verified-grid">
-                  {roadmapSkills.map(skill => (
-                    <div key={skill.id} className="sskv-verified-card" onClick={() => navigate(`/students/${user?.id}/verified-skills/${encodeURIComponent(skill.skillName)}`)}>
+                  {mentorRoadmapSkills.map((skill, index) => (
+                    <div key={skill.id || `mentor-rm-${skill.skillName}-${index}`} className="sskv-verified-card" onClick={() => navigate(`/students/${user?.id}/verified-skills/${encodeURIComponent(skill.skillName)}`)}>
                       <div className="sskv-verified-icon" style={{ background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(124, 58, 237, 0.1))', color: '#a78bfa' }}><Users size={22} /></div>
                       <div className="sskv-verified-name">{skill.skillName}</div>
                       <div className="sskv-verified-method"><Users size={12} /> {skill.verifiedByMentorName || 'Mentor'}</div>
                       <div className="sskv-verified-date">Xác thực: {formatDate(skill.verifiedAt)}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Self-study Roadmap skills */}
+            {selfStudyRoadmapSkills.length > 0 && (
+              <div className="sskv-roadmap-section" style={{ marginTop: '2rem' }}>
+                <h4><BookOpen size={18} /> Lộ trình tự học hoàn thành ({selfStudyRoadmapSkills.length})</h4>
+                <div className="sskv-verified-grid">
+                  {selfStudyRoadmapSkills.map((skill, index) => (
+                    <div key={skill.id || `self-rm-${skill.skillName}-${index}`} className="sskv-verified-card" onClick={() => navigate(`/students/${user?.id}/verified-skills/${encodeURIComponent(skill.skillName)}`)}>
+                      <div className="sskv-verified-icon" style={{ background: 'linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(148, 163, 184, 0.1))', color: '#94a3b8' }}><BookOpen size={22} /></div>
+                      <div className="sskv-verified-name">{skill.skillName}</div>
+                      <div className="sskv-verified-method" style={{ color: '#94a3b8' }}><BookOpen size={12} /> Tự học (Chưa xác thực)</div>
+                      <div className="sskv-verified-date">Hoàn thành: {formatDate(skill.verifiedAt)}</div>
                     </div>
                   ))}
                 </div>

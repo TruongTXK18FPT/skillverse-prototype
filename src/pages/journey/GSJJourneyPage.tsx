@@ -456,7 +456,8 @@ const GSJJourneyPage: React.FC = () => {
       j.status !== JourneyStatus.PAUSED &&
       j.status !== JourneyStatus.CANCELLED &&
       j.status !== JourneyStatus.COMPLETED_UNVERIFIED &&
-      j.status !== JourneyStatus.COMPLETED_VERIFIED,
+      j.status !== JourneyStatus.COMPLETED_VERIFIED &&
+      j.status !== JourneyStatus.AWAITING_VERIFICATION,
   ).length;
 
   const handleCreateJourneyClick = useCallback(() => {

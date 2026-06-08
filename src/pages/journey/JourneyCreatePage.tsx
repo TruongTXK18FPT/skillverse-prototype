@@ -130,7 +130,9 @@ const JourneyCreatePage: React.FC = () => {
       try {
         const activeJourneys = await journeyService.getActiveJourneys();
         const currentLearningJourneys = activeJourneys.filter(
-          (journey) => journey.status !== JourneyStatus.PAUSED,
+          (journey) =>
+            journey.status !== JourneyStatus.PAUSED &&
+            journey.status !== JourneyStatus.AWAITING_VERIFICATION,
         );
         if (!cancelled && currentLearningJourneys.length >= 5) {
           navigate("/journey", {
