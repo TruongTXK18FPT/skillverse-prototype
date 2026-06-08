@@ -953,7 +953,7 @@ const MentorRoadmapWorkspacePanel: React.FC<Props> = ({ bookingId }) => {
                       heading="Checklist học viên đang thấy"
                       intro="Khối này gom mô tả node, bài tập, tiêu chí hoàn thành và assignment hiện tại để mentor đối chiếu nhanh trước khi review."
                       emptyMessage="Node này chưa có mô tả hoặc yêu cầu rõ ràng. Hãy bổ sung ở tab Chỉnh sửa hoặc Yêu cầu node."
-                      showMentorAssignment={false}
+                      showMentorAssignment={true}
                     />
                   </div>
                 )}

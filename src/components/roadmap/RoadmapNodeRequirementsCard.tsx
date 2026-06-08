@@ -181,7 +181,9 @@ const RoadmapNodeRequirementsCard: React.FC<RoadmapNodeRequirementsCardProps> = 
               <div className="roadmap-node-requirements-card__section-head">
                 <span className="roadmap-node-requirements-card__section-title">
                   <ClipboardList size={15} />
-                  Assignment từ mentor
+                  {assignment?.assignmentSource === 'SYSTEM_GENERATED' || assignment?.assignmentSource === 'TEMPLATE'
+                    ? 'Assignment từ hệ thống'
+                    : 'Assignment từ mentor'}
                 </span>
                 <span className="roadmap-node-requirements-card__source-badge">
                   {resolveAssignmentSourceLabel(assignment)}

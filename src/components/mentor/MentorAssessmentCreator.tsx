@@ -118,6 +118,8 @@ const MentorAssessmentCreator: React.FC<Props> = ({
   const [requirementsExpanded, setRequirementsExpanded] = useState(true);
   const [requirementTitle, setRequirementTitle] = useState("");
   const [requirementDesc, setRequirementDesc] = useState("");
+  const [expectedOutput, setExpectedOutput] = useState("");
+  const [rubric, setRubric] = useState("");
   const [evidenceType, setEvidenceType] = useState<
     "text" | "link" | "file" | "mixed"
   >("mixed");
@@ -182,16 +184,18 @@ const MentorAssessmentCreator: React.FC<Props> = ({
             assignment.title ||
               (isFinalAssessment ? "Final Assessment — Tổng kết lộ trình" : ""),
           );
+          setExpectedOutput(assignment.expectedOutput || "");
+          setRubric(assignment.rubric || "");
           
           if (assignment.criteria && assignment.criteria.length > 0) {
             setRequirementDesc(assignment.description || "");
             setRubricItems(assignment.criteria);
           } else {
             const rawDesc = assignment.description || "";
-            const { body, rubric } = splitRubricBlock(rawDesc);
+            const { body, rubric: parsedRubric } = splitRubricBlock(rawDesc);
             setRequirementDesc(body);
-            if (rubric.length > 0) {
-              setRubricItems(rubric.map((r, idx) => ({
+            if (parsedRubric.length > 0) {
+              setRubricItems(parsedRubric.map((r, idx) => ({
                 id: `c${idx + 1}`,
                 title: r.criterion,
                 maxScore: 10
@@ -199,11 +203,13 @@ const MentorAssessmentCreator: React.FC<Props> = ({
             }
           }
           setEditingRequirements(
-            assignment.assignmentSource !== "MENTOR_REFINED",
+            assignment.assignmentSource !== "MENTOR_REFINED" && assignment.verificationStatus !== "APPROVED",
           );
         } else {
           setRequirementTitle("");
           setRequirementDesc("");
+          setExpectedOutput("");
+          setRubric("");
           setEditingRequirements(true);
         }
       } else {
@@ -277,6 +283,8 @@ const MentorAssessmentCreator: React.FC<Props> = ({
       const savedAssignment = await upsertNodeAssignment(journeyId, nodeId, {
         title: requirementTitle,
         description: finalDescription,
+        expectedOutput: expectedOutput,
+        rubric: rubric,
         assignmentSource: "MENTOR_REFINED",
         criteria: rubricItems,
       });
@@ -322,7 +330,8 @@ const MentorAssessmentCreator: React.FC<Props> = ({
   const totalMaxScore = rubricItems.reduce((sum, r) => sum + (r.maxScore || 0), 0);
   const hasUploadedNodeAssignment =
     !!nodeId &&
-    currentAssignment?.assignmentSource === "MENTOR_REFINED" &&
+    (currentAssignment?.assignmentSource === "MENTOR_REFINED" ||
+      currentAssignment?.verificationStatus === "APPROVED") &&
     !editingRequirements;
 
   return (
@@ -412,41 +421,88 @@ const MentorAssessmentCreator: React.FC<Props> = ({
         {requirementsExpanded && (
           <div className="mac-section-body">
             {hasUploadedNodeAssignment && currentAssignment && (
-              <div className="mac-uploaded-assignment">
-                <div className="mac-uploaded-assignment__icon">
-                  <CheckCircle size={18} />
-                </div>
-                <div className="mac-uploaded-assignment__content">
-                  <h4>
-                    {isFinalAssessment
-                      ? "Đã đặt yêu cầu Final Assessment"
-                      : "Đã tải lên yêu cầu node"}
-                  </h4>
-                  <p>
-                    Học viên sẽ thấy yêu cầu đã giao. Khi cần thay đổi nội dung,
-                    hãy mở lại form để cập nhật.
-                  </p>
-                  <div className="mac-uploaded-assignment__meta">
-                    {currentAssignment.title && !isFinalAssessment && (
-                      <span>{currentAssignment.title}</span>
-                    )}
-                    {isFinalAssessment && (
-                      <span>Final Assessment (toàn lộ trình)</span>
-                    )}
-                    <span>
-                      {currentAssignment.updatedAt
-                        ? `Cập nhật ${new Date(currentAssignment.updatedAt).toLocaleString("vi-VN")}`
-                        : `Tạo lúc ${new Date(currentAssignment.createdAt).toLocaleString("vi-VN")}`}
-                    </span>
+              <div className="mac-uploaded-assignment-wrapper">
+                <div className="mac-uploaded-assignment">
+                  <div className="mac-uploaded-assignment__icon">
+                    <CheckCircle size={18} />
                   </div>
+                  <div className="mac-uploaded-assignment__content">
+                    <h4>
+                      {isFinalAssessment
+                        ? "Đã đặt yêu cầu Final Assessment"
+                        : "Đã tải lên yêu cầu node"}
+                    </h4>
+                    <p>
+                      Học viên sẽ thấy yêu cầu đã giao. Khi cần thay đổi nội dung,
+                      hãy mở lại form để cập nhật.
+                    </p>
+                    <div className="mac-uploaded-assignment__meta">
+                      {currentAssignment.title && !isFinalAssessment && (
+                        <span>{currentAssignment.title}</span>
+                      )}
+                      {isFinalAssessment && (
+                        <span>Final Assessment (toàn lộ trình)</span>
+                      )}
+                      <span>
+                        {currentAssignment.updatedAt
+                          ? `Cập nhật ${new Date(currentAssignment.updatedAt).toLocaleString("vi-VN")}`
+                          : `Tạo lúc ${new Date(currentAssignment.createdAt).toLocaleString("vi-VN")}`}
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="mac-edit-assignment-btn"
+                    onClick={() => setEditingRequirements(true)}
+                  >
+                    Sửa nội dung
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  className="mac-edit-assignment-btn"
-                  onClick={() => setEditingRequirements(true)}
-                >
-                  Sửa nội dung
-                </button>
+
+                {/* Detailed Preview */}
+                <div className="mac-assignment-details-preview">
+                  {currentAssignment.title && (
+                    <div className="mac-preview-item">
+                      <span className="mac-preview-item__label">Tiêu đề:</span>
+                      <div className="mac-preview-item__val font-semibold">{currentAssignment.title}</div>
+                    </div>
+                  )}
+                  {requirementDesc && (
+                    <div className="mac-preview-item">
+                      <span className="mac-preview-item__label">Mô tả yêu cầu chi tiết:</span>
+                      <div 
+                        className="mac-preview-item__val mac-rich-text-preview"
+                        dangerouslySetInnerHTML={{ __html: requirementDesc }}
+                      />
+                    </div>
+                  )}
+                  {expectedOutput && (
+                    <div className="mac-preview-item">
+                      <span className="mac-preview-item__label">Đầu ra yêu cầu (Expected Output):</span>
+                      <div className="mac-preview-item__val whitespace-pre-wrap">{expectedOutput}</div>
+                    </div>
+                  )}
+                  {rubric && (
+                    <div className="mac-preview-item">
+                      <span className="mac-preview-item__label">Tiêu chí chấm điểm (Rubric):</span>
+                      <div className="mac-preview-item__val whitespace-pre-wrap">{rubric}</div>
+                    </div>
+                  )}
+                  {rubricItems && rubricItems.length > 0 && (
+                    <div className="mac-preview-item">
+                      <span className="mac-preview-item__label">Danh sách tiêu chí Rubric:</span>
+                      <div className="mac-preview-rubric-grid">
+                        {rubricItems.map((item, idx) => (
+                          <div key={item.id || idx} className="mac-preview-rubric-row">
+                            <span className="mac-rubric-num">{idx + 1}</span>
+                            <span className="mac-rubric-title">{item.title}</span>
+                            <span className="mac-rubric-score">{item.maxScore} điểm</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
             <div
@@ -473,6 +529,28 @@ const MentorAssessmentCreator: React.FC<Props> = ({
                   onChange={setRequirementDesc}
                   placeholder="Mô tả chi tiết những gì học viên cần nộp..."
                   userId={user?.id}
+                />
+              </div>
+
+              <div className="mac-form-group">
+                <label className="mac-label">Đầu ra yêu cầu (Expected Output)</label>
+                <textarea
+                  className="mac-textarea"
+                  value={expectedOutput}
+                  onChange={(e) => setExpectedOutput(e.target.value)}
+                  placeholder="Mô tả các sản phẩm học viên cần nộp (VD: Link Github, File báo cáo...)"
+                  rows={4}
+                />
+              </div>
+
+              <div className="mac-form-group">
+                <label className="mac-label">Tiêu chí chấm điểm (Rubric Text)</label>
+                <textarea
+                  className="mac-textarea"
+                  value={rubric}
+                  onChange={(e) => setRubric(e.target.value)}
+                  placeholder="Mô tả các tiêu chí đánh giá kết quả (VD: Đáp ứng đủ chức năng, Code sạch...)"
+                  rows={4}
                 />
               </div>
 

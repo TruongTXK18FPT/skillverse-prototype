@@ -67,6 +67,8 @@ export interface UpsertNodeAssignmentRequest {
   nodeSkillId?: number;
   assignmentSource?: AssignmentSource;
   criteria?: GradingCriterion[];
+  expectedOutput?: string;
+  rubric?: string;
 }
 
 // ==================== Evidence ====================
