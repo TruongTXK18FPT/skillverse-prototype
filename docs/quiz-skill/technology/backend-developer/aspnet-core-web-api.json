@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong ASP.NET Core Web API, Controller thường kế thừa từ lớp cơ sở (base class) nào sau đây?",
+    "options": [
+      "A. Controller",
+      "B. ControllerBase",
+      "C. ApiController",
+      "D. BaseController"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong Web API, ta nên kế thừa từ ControllerBase vì nó cung cấp các phương thức helper xử lý HTTP request/response mà không chứa các thành phần hỗ trợ View/HTML của MVC truyền thống (giúp tối ưu hiệu năng). Lớp Controller kế thừa từ ControllerBase và bổ sung thêm hỗ trợ View.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Annotation nào sau đây được đặt ở cấp độ Controller Class để kích hoạt các tính năng tự động của Web API (như tự động validate Model, bắt buộc định tuyến qua Route)?",
+    "options": [
+      "A. [ApiController]",
+      "B. [Route(\"api/[controller]\")]",
+      "C. [HttpController]",
+      "D. [WebService]"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Attribute [ApiController] cung cấp các tính năng tự động cực kỳ hữu ích cho Web API: tự động phản hồi lỗi 400 Bad Request nếu ModelState không hợp lệ, tự động suy luận nguồn dữ liệu tham số (Binding Source Inference), và bắt buộc áp dụng Attribute Routing.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đâu là phương thức HTTP chuẩn dùng để tạo mới một tài nguyên (Resource) trên máy chủ theo quy chuẩn thiết kế RESTful API?",
+    "options": [
+      "A. GET",
+      "B. PUT",
+      "C. POST",
+      "D. PATCH"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Theo chuẩn REST, GET dùng để lấy thông tin, POST dùng để tạo mới tài nguyên, PUT dùng để cập nhật toàn bộ tài nguyên, và PATCH dùng để cập nhật một phần tài nguyên.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi một Web API trả về mã trạng thái HTTP là 404 (404 Not Found), điều này có ý nghĩa gì?",
+    "options": [
+      "A. Server gặp lỗi xử lý logic bên trong hệ thống.",
+      "B. Yêu cầu của Client gửi lên bị sai cú pháp hoặc thiếu thông tin bắt buộc.",
+      "C. Server không tìm thấy tài nguyên (Resource) được yêu cầu từ URL.",
+      "D. Client chưa thực hiện đăng nhập hoặc xác thực thông tin tài khoản."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mã HTTP 404 đại diện cho lỗi Not Found, chỉ ra rằng URL mà client yêu cầu không ánh xạ tới bất kỳ tài nguyên nào tồn tại trên máy chủ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Middleware trong ứng dụng ASP.NET Core đóng vai trò gì?",
+    "options": [
+      "A. Là các thành phần phần mềm được lắp ráp vào đường ống xử lý (Request Pipeline) để xử lý các HTTP requests và responses.",
+      "B. Là thư viện dùng để kết nối trực tiếp đến hệ quản trị cơ sở dữ liệu SQL Server.",
+      "C. Là công cụ dùng để biên dịch mã nguồn C# sang mã máy gốc.",
+      "D. Là giao diện người dùng giúp hiển thị kết quả API."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đường ống xử lý yêu cầu (Request Pipeline) của ASP.NET Core bao gồm một chuỗi các Middleware được gọi tuần tự. Mỗi Middleware có thể quyết định chuyển tiếp request sang middleware tiếp theo hoặc chặn đứng và trả về response ngay lập tức.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để lấy dữ liệu được gửi lên từ Client thông qua URL Query String (ví dụ: api/users?page=2) gán vào tham số phương thức trong Controller?",
+    "options": [
+      "A. Sử dụng attribute [FromBody] trước tham số.",
+      "B. Sử dụng attribute [FromQuery] trước tham số.",
+      "C. Sử dụng attribute [FromRoute] trước tham số.",
+      "D. Sử dụng attribute [FromHeader] trước tham số."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Attribute `[FromQuery]` chỉ định cho công cụ Model Binding của ASP.NET Core tìm kiếm và ánh xạ dữ liệu từ phần Query String của URL vào tham số của phương thức.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để lấy dữ liệu payload phức tạp (thường ở định dạng JSON) nằm trong phần thân của HTTP Request, ta sử dụng attribute nào?",
+    "options": [
+      "A. [FromRoute]",
+      "B. [FromQuery]",
+      "C. [FromBody]",
+      "D. [FromServices]"
+    ],
+    "correctAnswer": "C",
+    "explanation": "`[FromBody]` yêu cầu ASP.NET Core đọc và giải mã (deserialize) phần thân (Request Body) của HTTP Request bằng formatter tương ứng (ví dụ System.Text.Json) để gán vào đối tượng C#.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong ASP.NET Core 6.0 trở lên, các cấu hình đăng ký dịch vụ (Dependency Injection) và thiết lập đường ống Middleware được thực hiện chính tại file nào?",
+    "options": [
+      "A. Startup.cs",
+      "B. Program.cs",
+      "C. appsettings.json",
+      "D. Web.config"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Từ phiên bản .NET 6.0, mô hình tối giản (Minimal Hosting) gộp Startup.cs và Program.cs thành một file duy nhất là Program.cs sử dụng Top-level statements để khai báo cấu hình dịch vụ và ứng dụng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "File cấu hình mặc định dạng JSON được sử dụng để lưu các thông số cấu hình ứng dụng (như Connection Strings, cổng chạy, API keys) trong ASP.NET Core Web API là file nào?",
+    "options": [
+      "A. appsettings.json",
+      "B. launchSettings.json",
+      "C. bundleconfig.json",
+      "D. package.json"
+    ],
+    "correctAnswer": "A",
+    "explanation": "File `appsettings.json` là nơi tiêu chuẩn để lưu trữ các cấu hình tĩnh của ứng dụng dưới dạng phân cấp JSON. .NET Core sẽ tự động nạp cấu hình từ file này khi chạy.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để kích hoạt tính năng tự động chuyển hướng các yêu cầu HTTP không an toàn sang kết nối bảo mật HTTPS trong ASP.NET Core, ta gọi phương thức nào trong Program.cs?",
+    "options": [
+      "A. app.UseHttpsRedirection();",
+      "B. app.UseRouting();",
+      "C. app.UseAuthorization();",
+      "D. app.UseStaticFiles();"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`app.UseHttpsRedirection()` là một middleware tích hợp sẵn giúp tự động chuyển hướng bất kỳ request HTTP (cổng 80) nào gửi lên sang cổng bảo mật HTTPS (cổng 443).",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mã trạng thái HTTP nào được trả về mặc định bởi phương thức `Ok()` trong ControllerBase?",
+    "options": [
+      "A. 201 Created",
+      "B. 200 OK",
+      "C. 204 No Content",
+      "D. 302 Found"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phương thức `Ok()` hoặc `Ok(object)` trả về một OkObjectResult đại diện cho mã trạng thái thành công HTTP 200 OK cùng dữ liệu đính kèm (nếu có).",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi validate dữ liệu đầu vào sử dụng các thuộc tính ràng buộc dữ liệu (Data Annotations) như `[Required]` hoặc `[EmailAddress]` trên DTO Class, làm thế nào để lập trình viên kiểm tra dữ liệu đầu vào có hợp lệ hay không bên trong Controller?",
+    "options": [
+      "A. Kiểm tra thuộc tính `ModelState.IsValid`.",
+      "B. Viết các câu lệnh if-else kiểm tra từng thuộc tính thủ công.",
+      "C. Gọi phương thức GC.Collect() để validate.",
+      "D. Không cần kiểm tra vì C# cấm gửi dữ liệu sai."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trình kiểm duyệt Model Validator ghi nhận kết quả xác thực vào đối tượng ModelState. Nếu `ModelState.IsValid` là false tức là dữ liệu gửi lên vi phạm ít nhất một Data Annotation.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cơ chế nào sau đây cho phép cấu hình một Web API chấp nhận hoặc từ chối các yêu cầu tài nguyên từ các tên miền khác (Cross-Origin Resource Sharing) để đảm bảo an toàn trình duyệt?",
+    "options": [
+      "A. CORS",
+      "B. JWT",
+      "C. HSTS",
+      "D. HTTPS"
+    ],
+    "correctAnswer": "A",
+    "explanation": "CORS (Cross-Origin Resource Sharing) là một cơ chế an toàn dựa trên HTTP header để thông báo cho trình duyệt biết liệu một ứng dụng web từ origin khác có được phép truy cập tài nguyên của API hay không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách cơ bản nhất để thực hiện Dependency Injection (DI) vào một Web API Controller trong ASP.NET Core là gì?",
+    "options": [
+      "A. Khai báo interface dịch vụ làm tham số của Constructor và lưu trữ tham chiếu vào biến trường dữ liệu chỉ đọc.",
+      "B. Khởi tạo trực tiếp bằng từ khóa new bên trong các Action method.",
+      "C. Sử dụng công cụ Reflection để quét lớp dịch vụ lúc chạy.",
+      "D. Đăng ký dịch vụ trong file appsettings.json."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Constructor Injection là mô hình tiêm phụ thuộc tiêu chuẩn trong ASP.NET Core. Container của .NET sẽ tự động phân tích constructor của Controller và truyền các instance dịch vụ tương ứng vào khi khởi tạo controller.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để trả về mã HTTP 201 Created cùng địa chỉ URI của tài nguyên vừa được tạo và nội dung đối tượng, ta nên sử dụng phương thức helper nào trong ControllerBase?",
+    "options": [
+      "A. CreatedAtAction()",
+      "B. Ok()",
+      "C. Content()",
+      "D. Accepted()"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương thức `CreatedAtAction` hoặc `CreatedAtRoute` giúp định dạng HTTP 201 Created chuẩn xác nhất kèm theo header Location chứa URL truy cập phần tử mới tạo và đối tượng dữ liệu ở body.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Thư viện tuần tự hóa (Serialization) mặc định được tích hợp sẵn trong ASP.NET Core để chuyển đổi đối tượng C# sang chuỗi JSON (và ngược lại) là thư viện nào?",
+    "options": [
+      "A. Newtonsoft.Json",
+      "B. System.Text.Json",
+      "C. ServiceStack.Text",
+      "D. Jil"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kể từ .NET Core 3.0, Microsoft chuyển sang sử dụng System.Text.Json làm thư viện mặc định nhờ hiệu năng xử lý chuỗi JSON cực cao và phân bổ bộ nhớ thấp hơn hẳn Newtonsoft.Json.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Định nghĩa định tuyến dạng Attribute Routing (Định tuyến qua thuộc tính) trong Controller nào sau đây ánh xạ chính xác tới đường dẫn API: GET /api/products/5?",
+    "options": [
+      "A. [HttpGet(\"products/{id}\")] tại controller có [Route(\"api\")]",
+      "B. [HttpGet(\"{id}\")] tại controller có [Route(\"api/products\")]",
+      "C. [HttpGet(\"/api/products/id\")] tại controller có [Route(\"[controller]\")]",
+      "D. Cả A và B đều đúng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Cú pháp định tuyến của ASP.NET Core kết hợp thuộc tính Route cấp lớp và thuộc tính HTTP verb cấp phương thức. Cả hai trường hợp A và B đều tạo ra đường dẫn hoàn chỉnh là api/products/{id}.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để ghi lại các sự kiện (logs) của hệ thống trong ASP.NET Core Web API, chúng ta cần nhận interface dịch vụ nào thông qua Dependency Injection?",
+    "options": [
+      "A. ILogger<T>",
+      "B. ILoggerFactory",
+      "C. ILoggerProvider",
+      "D. ConsoleLogger"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Interface `ILogger<TCategoryName>` là cách thức tiêu chuẩn để ghi lại nhật ký sự kiện trong ASP.NET Core, với TCategoryName thường là tên của chính Class thực thi ghi log.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Môi trường mặc định mà ASP.NET Core sử dụng để bật tính năng Developer Exception Page (trang hiển thị chi tiết lỗi lập trình) là môi trường nào?",
+    "options": [
+      "A. Development",
+      "B. Staging",
+      "C. Production",
+      "D. Testing"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Developer Exception Page chứa nhiều thông tin nhạy cảm về mã nguồn và cấu trúc thư mục, vì vậy nó chỉ được cấu hình chạy trong môi trường Development (`builder.Environment.IsDevelopment()`) để tránh nguy cơ bảo mật ở môi trường Production.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đâu là mã trạng thái HTTP chuẩn trả về khi Client gửi yêu cầu không hợp lệ (ví dụ: thiếu thông tin bắt buộc)?",
+    "options": [
+      "A. 400 Bad Request",
+      "B. 401 Unauthorized",
+      "C. 403 Forbidden",
+      "D. 500 Internal Server Error"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mã 400 Bad Request chỉ ra rằng máy chủ không thể hiểu hoặc không thể xử lý yêu cầu do lỗi phía client (lỗi cú pháp, định dạng dữ liệu không hợp lệ).",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để kích hoạt việc cấu hình CORS cho ứng dụng Web API, chúng ta cần thực hiện những bước nào trong Program.cs?",
+    "options": [
+      "A. Đăng ký dịch vụ CORS (`builder.Services.AddCors()`) và áp dụng middleware CORS (`app.UseCors()`) vào HTTP pipeline.",
+      "B. Chỉ cần thêm `app.UseCors()` ở cuối file.",
+      "C. Thêm cấu hình CORS trực tiếp vào file launchSettings.json.",
+      "D. Sử dụng thuộc tính `[Authorize]` trên Controller."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tương tự các dịch vụ khác, CORS yêu cầu đăng ký dịch vụ trong DI container trước, sau đó đưa Middleware `app.UseCors()` vào đường ống HTTP request pipeline (phải đặt sau `UseRouting()` và trước `UseAuthorization()`).",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để phục vụ các tài nguyên tĩnh như file ảnh, CSS, JavaScript trực tiếp từ thư mục wwwroot của dự án Web API, ta cần gọi middleware nào?",
+    "options": [
+      "A. app.UseStaticFiles();",
+      "B. app.UseDirectoryBrowser();",
+      "C. app.UseRouting();",
+      "D. app.UseFileServer();"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Middleware `UseStaticFiles()` chịu trách nhiệm cấu hình ứng dụng phục vụ trực tiếp các file vật lý nằm trong thư mục gốc webroot (wwwroot).",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một Web API trả về mã trạng thái HTTP là 401 (401 Unauthorized), điều này có ý nghĩa gì đối với Client?",
+    "options": [
+      "A. Client chưa cung cấp thông tin xác thực hợp lệ (chưa đăng nhập hoặc token không hợp lệ).",
+      "B. Client đã đăng nhập nhưng không có quyền hạn (Roles/Policies) để truy cập tài nguyên này.",
+      "C. Đường dẫn API bị nhập sai tên.",
+      "D. Máy chủ SQL Server bị ngắt kết nối."
+    ],
+    "correctAnswer": "A",
+    "explanation": "HTTP 401 đại diện cho lỗi Unauthorized (đúng hơn là Unauthenticated), tức là yêu cầu thiếu thông tin danh tính hợp lệ hoặc token đã hết hạn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Kiểu trả về `ActionResult<T>` trong phương thức Controller của Web API mang lại lợi ích gì so với kiểu trả về `IActionResult` truyền thống?",
+    "options": [
+      "A. Giúp chương trình chạy nhanh hơn gấp đôi.",
+      "B. Cho phép trả về trực tiếp đối tượng dữ liệu kiểu T hoặc một đối tượng kết quả HTTP (như NotFoundResult, BadRequestResult), giúp tăng khả năng tự giải thích kiểu dữ liệu khi sinh tài liệu Swagger.",
+      "C. Bắt buộc phương thức phải chạy đồng bộ.",
+      "D. Ngăn cản hoàn toàn việc trả về các lỗi HTTP status code."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`ActionResult<T>` kết hợp tính linh hoạt của IActionResult và tính rõ ràng về kiểu dữ liệu của T, giúp công cụ Swagger/OpenAPI dễ dàng nhận biết cấu trúc phản hồi thành công mà không cần thêm các attribute khai báo rườm rà.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Program.cs, phương thức nào được gọi trên đối tượng WebApplication để ánh xạ các controller đã được cấu hình đường dẫn (Attribute Routing) vào hạ tầng định tuyến?",
+    "options": [
+      "A. app.MapControllers();",
+      "B. app.UseRouting();",
+      "C. app.MapRazorPages();",
+      "D. app.UseEndpoints();"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`app.MapControllers()` thiết lập cơ chế định tuyến dựa trên các thuộc tính [Route] và [HttpGet/HttpPost] được định nghĩa trên các API controller.",
+    "difficulty": "BEGINNER",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "So sánh 3 kiểu vòng đời dịch vụ (Service Lifetimes) khi đăng ký Dependency Injection trong ASP.NET Core: Transient, Scoped, và Singleton. Nhận định nào sau đây là chính xác?",
+    "options": [
+      "A. Transient tạo instance mới mỗi khi được yêu cầu; Scoped tạo một instance duy nhất cho mỗi yêu cầu HTTP; Singleton tạo một instance duy nhất cho toàn bộ vòng đời ứng dụng.",
+      "B. Scoped tạo instance mới mỗi khi được yêu cầu; Transient tạo instance theo HTTP request.",
+      "C. Singleton giải phóng bộ nhớ ngay sau khi phương thức kết thúc.",
+      "D. Cả 3 kiểu vòng đời đều hoạt động giống hệt nhau, chỉ khác về cách đăng ký tên hàm."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Transient đăng ký dịch vụ nhẹ, không lưu trạng thái. Scoped phù hợp cho các dịch vụ giữ trạng thái trong một request (ví dụ DbContext kết nối SQL). Singleton phù hợp cho các dịch vụ mang tính dùng chung, lưu cache hoặc cấu hình cấu trúc dữ liệu nặng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Làm thế nào để truyền một dịch vụ có vòng đời Scoped (ví dụ: DbContext) vào bên trong một dịch vụ khác có vòng đời Singleton (ví dụ: BackgroundService chạy nền) mà không gây lỗi Captive Dependency?",
+    "options": [
+      "A. Tiêm trực tiếp dịch vụ Scoped vào constructor của dịch vụ Singleton.",
+      "B. Tiêm interface `IServiceScopeFactory` hoặc `IServiceProvider` vào Singleton, sau đó tạo một scope thủ công bằng `CreateScope()` để giải quyết dịch vụ Scoped trong khối lệnh using.",
+      "C. Đăng ký dịch vụ Scoped thành Singleton.",
+      "D. Sử dụng từ khóa static để gọi trực tiếp DbContext."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi Captive Dependency xảy ra khi một Singleton giữ tham chiếu đến một Scoped service, khiến Scoped service đó không bao giờ được giải phóng và có nguy cơ rò rỉ dữ liệu hoặc đứt kết nối. Giải pháp là tạo một Scope ngắn hạn thông qua `IServiceScopeFactory` khi cần truy vấn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đâu là cách triển khai tối ưu nhất để xử lý ngoại lệ (Exception Handling) tập trung cho toàn bộ ứng dụng Web API mà không cần viết khối try-catch lặp đi lặp lại ở từng Controller?",
+    "options": [
+      "A. Sử dụng Exception Filter trên từng class controller.",
+      "B. Viết một Custom Middleware xử lý ngoại lệ bằng khối try-catch bọc `_next(context)` và đăng ký nó ở đầu đường ống HTTP pipeline bằng `UseExceptionHandler()`.",
+      "C. Viết khối lệnh try-catch trực tiếp tại file Program.cs ở hàm Main.",
+      "D. Tự động khởi động lại ứng dụng IIS khi gặp lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng Middleware Exception Handler giúp bắt mọi lỗi không mong muốn phát sinh trong pipeline, trả về một định dạng lỗi thống nhất (như RFC 7807 Problem Details) và ẩn thông tin chi tiết lỗi để bảo mật.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiến trúc ASP.NET Core, Middleware nào chịu trách nhiệm trích xuất thông tin danh tính từ HTTP Authorization Header và gán vào thuộc tính HttpContext.User?",
+    "options": [
+      "A. UseAuthentication()",
+      "B. UseAuthorization()",
+      "C. UseRouting()",
+      "D. UseCors()"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Middleware `UseAuthentication()` kiểm tra thông tin đăng nhập (như JWT Token hoặc Cookies), xác thực tính hợp lệ và thiết lập đối tượng ClaimsPrincipal đại diện cho User hiện tại. `UseAuthorization()` sau đó sẽ kiểm tra quyền truy cập của User đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để bảo vệ API chống lại các truy cập trái phép bằng cách sử dụng chính sách phân quyền dựa trên thuộc tính cụ thể của User (ví dụ: tuổi lớn hơn 18), ta nên sử dụng cơ chế nào của ASP.NET Core Authorization?",
+    "options": [
+      "A. Role-based Authorization (Phân quyền theo vai trò)",
+      "B. Policy-based Authorization (Phân quyền theo chính sách) kết hợp Custom Authorization Requirement và Handler",
+      "C. Ràng buộc dữ liệu trong SQL Server",
+      "D. Bật cấu hình CORS"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Policy-based Authorization cho phép định nghĩa các quy tắc kiểm tra quyền phức tạp dựa trên các Claim của người dùng hoặc các điều kiện bên ngoài thông qua việc thiết lập Policy trong DI và kiểm tra bằng Custom Requirement Handler.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Làm thế nào để áp dụng một ràng buộc kiểu dữ liệu cho tham số định tuyến (Route Constraint) để API chỉ chấp nhận số nguyên (ví dụ: api/products/5) và trả về lỗi 404 cho các chuỗi ký tự?",
+    "options": [
+      "A. [Route(\"api/products/{id:int}\")]",
+      "B. [Route(\"api/products/{id}\")] và kiểm tra bằng int.TryParse() trong code.",
+      "C. [Route(\"api/products/{id:string}\")]",
+      "D. [Route(\"api/products/{id:required}\")]"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cú pháp `:int` thiết lập ràng buộc định tuyến. Nếu URL gửi lên không khớp kiểu số nguyên, Router sẽ bỏ qua route này và chuyển tiếp tìm kiếm route khác, nếu không có sẽ trả về lỗi 404 Not Found ngay từ cấp độ định tuyến.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi gọi một dịch vụ HTTP API bên ngoài từ ứng dụng Web API của bạn, tại sao việc khởi tạo thủ công đối tượng `new HttpClient()` cho mỗi request lại được coi là phản mẫu (anti-pattern)?",
+    "options": [
+      "A. Vì HttpClient không giải phóng socket ngay lập tức khi dispose, dẫn đến hiện tượng cạn kiệt socket (Socket Exhaustion) dưới tải cao. Giải pháp là sử dụng `IHttpClientFactory`.",
+      "B. Vì HttpClient chiếm giữ bộ nhớ RAM vĩnh viễn và không thể thu hồi bởi GC.",
+      "C. Vì HttpClient chỉ hỗ trợ giao thức HTTP/1.0 cũ.",
+      "D. Vì HttpClient bắt buộc phải chạy đồng bộ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc dù HttpClient triển khai IDisposable, việc đóng nó không đóng socket vật lý lập tức (nó ở trạng thái TIME_WAIT). `IHttpClientFactory` quản lý vòng đời của các HttpMessageHandler bên dưới để tái sử dụng socket và tránh lỗi cạn kiệt socket hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đâu là cách khai báo cấu hình dạng Strongly-typed Configuration (Cấu hình có kiểu mạnh) tối ưu nhất từ file appsettings.json sử dụng Dependency Injection?",
+    "options": [
+      "A. Đăng ký tùy chọn sử dụng `builder.Services.Configure<MySettingsClass>(builder.Configuration.GetSection(\"MySettings\"));` và tiêm `IOptions<MySettingsClass>` vào Constructor.",
+      "B. Đọc trực tiếp bằng chuỗi string: `Configuration[\"MySettings:Key\"]` ở mọi class.",
+      "C. Sử dụng biến môi trường hệ thống.",
+      "D. Đọc dữ liệu qua cấu trúc file XML."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Strongly-typed Configuration giúp chuyển đổi các chuỗi JSON cấu hình thành đối tượng C# an toàn kiểu. Việc dùng interface `IOptions<T>` (hoặc `IOptionsSnapshot<T>` nếu muốn cấu hình tự động reload) giúp cấu trúc code sạch sẽ và dễ viết Unit Test.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Mô hình thiết kế 'Minimal APIs' được giới thiệu từ .NET 6 mang lại lợi ích gì cho việc xây dựng Web API?",
+    "options": [
+      "A. Loại bỏ sự bắt buộc của cấu trúc Controller truyền thống, cho phép định nghĩa các endpoints trực tiếp tại Program.cs bằng cách dùng lambda expression để tối giản code và tăng hiệu năng xử lý request.",
+      "B. Chỉ cho phép API trả về dữ liệu kiểu chuỗi string thô.",
+      "C. Ngăn cản hoàn toàn việc sử dụng Dependency Injection.",
+      "D. Chỉ chạy được trên hệ điều hành Linux."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Minimal APIs giảm bớt chi phí overhead của cơ chế Controller (như lọc qua các class Reflection cồng kềnh), giúp tạo các API microservices siêu nhẹ, khởi chạy nhanh và viết code ngắn gọn hơn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để hiển thị tài liệu mô tả đặc tả API tương tác trực quan (Interactive API Documentation) cho các nhà phát triển sử dụng Web API của bạn, công cụ nào sau đây thường được tích hợp mặc định trong template của .NET Core?",
+    "options": [
+      "A. Swashbuckle (Swagger UI / OpenAPI)",
+      "B. Postman Client",
+      "C. ASP.NET MVC Razor Views",
+      "D. Microsoft Word templates"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Swashbuckle là thư viện chuẩn giúp tự động quét metadata cấu trúc của Controller và Action để sinh ra tài liệu chuẩn OpenAPI (Swagger) và giao diện Swagger UI để tương tác thử nghiệm trực quan.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong ASP.NET Core Web API, khi nào bạn nên sử dụng `IMemoryCache` (In-memory Caching) thay vì giải pháp Distributed Cache (như Redis Cache)?",
+    "options": [
+      "A. Khi ứng dụng chạy trên một server duy nhất (Single Instance) và dữ liệu cache không cần đồng bộ giữa các máy chủ khác nhau của hệ thống.",
+      "B. Khi ứng dụng cần chia sẻ cache giữa nhiều server chạy load balancer.",
+      "C. Khi dữ liệu cần lưu trữ có dung lượng vượt quá bộ nhớ vật lý RAM.",
+      "D. Khi dữ liệu cache cần được duy trì lâu dài ngay cả khi restart lại ứng dụng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`IMemoryCache` lưu trữ trực tiếp trên RAM của chính tiến trình ứng dụng nên tốc độ đọc ghi cực nhanh (nhanh hơn qua mạng đến Redis). Tuy nhiên nó sẽ bị xóa sạch khi restart app và không hỗ trợ đồng bộ dữ liệu giữa các node trong cụm Server farm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để thực hiện một tác vụ chạy ngầm định kỳ (Background Tasks / Cron jobs) hoặc chạy dài hạn bên dưới ứng dụng Web API, lớp dịch vụ của bạn nên kế thừa lớp cơ sở (Base Class) nào?",
+    "options": [
+      "A. BackgroundService",
+      "B. ActionFilterAttribute",
+      "C. ControllerBase",
+      "D. Middleware"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`BackgroundService` triển khai interface `IHostedService`, cung cấp một phương thức trừu tượng `ExecuteAsync` để định nghĩa logic chạy ngầm trong suốt vòng đời khởi động và dừng của ứng dụng web.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa hai cơ chế Endpoint Routing (Định tuyến điểm cuối - giới thiệu từ .NET Core 3.0) và định tuyến kiểu truyền thống là gì?",
+    "options": [
+      "A. Endpoint Routing tách biệt hoàn toàn việc phân tích đường dẫn URL (Routing) ra khỏi việc thực thi Action của Controller, cho phép các Middleware ở đầu pipeline nhận biết được endpoint đích trước khi MVC Middleware được gọi.",
+      "B. Endpoint Routing chỉ hỗ trợ các ứng dụng có cấu trúc file XML.",
+      "C. Endpoint Routing không hỗ trợ tính năng truyền tham số qua URL.",
+      "D. Định tuyến truyền thống chạy nhanh hơn Endpoint Routing gấp 2 lần."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Với Endpoint Routing, quyết định định tuyến được thực thi rất sớm tại `UseRouting()`. Điều này cho phép các middleware bảo mật như UseAuthentication, UseAuthorization hoặc UseCors kiểm tra trực tiếp các metadata đính trên Action (như [Authorize]) để đưa ra quyết định từ chối sớm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để upload file ảnh từ Client lên API ( multipart/form-data) trong phương thức Action của Web API?",
+    "options": [
+      "A. Nhận tham số kiểu `IFormFile` và đánh dấu với attribute `[FromForm]`.",
+      "B. Nhận tham số kiểu `string` chứa đường dẫn file cục bộ.",
+      "C. Nhận tham số kiểu `Stream` đánh dấu với attribute `[FromBody]`.",
+      "D. ASP.NET Core Web API không hỗ trợ tính năng upload file trực tiếp."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`IFormFile` đại diện cho một file được gửi lên từ HTTP Request. Sử dụng `[FromForm]` hướng dẫn Model Binder phân tích các trường dữ liệu dạng form-data để gán vào biến IFormFile.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi cấu hình dịch vụ Entity Framework Core (`AddDbContext`) mặc định, làm thế nào để tối ưu hóa hiệu năng kết nối cơ sở dữ liệu bằng cách sử dụng cơ chế tái sử dụng (Pooling) các instance DbContext?",
+    "options": [
+      "A. Sử dụng phương thức `AddDbContextPool` thay thế cho `AddDbContext`.",
+      "B. Đăng ký DbContext với vòng đời là Singleton.",
+      "C. Tạo DbContext bằng từ khóa 'new' ở mọi nơi.",
+      "D. Gọi GC.Collect() sau mỗi lần thực hiện truy vấn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`AddDbContextPool` duy trì một pool các instance DbContext rảnh rỗi. Khi một request HTTP mới được xử lý, nó sẽ lấy DbContext có sẵn ra để tái sử dụng, giúp loại bỏ chi phí khởi tạo DbContext mới liên tục, rất hiệu quả cho hệ thống chịu tải cao.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cách tốt nhất để tổ chức quản lý nhiều phiên bản API (API Versioning) trong ứng dụng ASP.NET Core Web API là gì?",
+    "options": [
+      "A. Sử dụng thư viện `Asp.Versioning.Http` để cấu hình API Versioning thông qua URL Path (ví dụ: api/v1/users) hoặc qua HTTP Headers.",
+      "B. Copy toàn bộ project thành nhiều project mới chạy trên các cổng khác nhau.",
+      "C. Thay đổi tên phương thức Action mỗi khi cập nhật tính năng mới.",
+      "D. Tự viết logic if-else kiểm tra header thủ công trong từng phương thức."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thư viện chính thức API Versioning của .NET giúp cấu hình phân chia phiên bản API sạch sẽ và đồng bộ (thông qua thuộc tính [ApiVersion] và ánh xạ tự động vào định tuyến), hỗ trợ tốt cho việc duy trì tính tương thích ngược cho client.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Làm thế nào để lấy thông tin các Claim (ví dụ: User ID hoặc Email) từ Token của User hiện tại đã được xác thực thành công trong Action Method?",
+    "options": [
+      "A. Truy cập thông qua thuộc tính `User.FindFirstValue(ClaimTypes.NameIdentifier)` hoặc `HttpContext.User.Claims`.",
+      "B. Đọc và giải mã thủ công Token lấy từ biến Request.Headers.",
+      "C. Thực hiện truy vấn trực tiếp vào Database SQL.",
+      "D. Gọi API bên thứ ba để lấy thông tin."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sau khi `UseAuthentication` xác thực thành công, nó gán thông tin User vào `HttpContext.User`. Lập trình viên có thể truy cập các claims trực tiếp thông qua các phương thức mở rộng của đối tượng ClaimsPrincipal này một cách an toàn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cách cấu hình mức độ ghi log (Logging Level) động cho môi trường Production mà không cần biên dịch lại ứng dụng là gì?",
+    "options": [
+      "A. Điều chỉnh mức độ log (như từ Information lên Warning) tại cấu hình \"Logging:LogLevel:Default\" trong file appsettings.json.",
+      "B. Viết mã nguồn C# gán cứng giá trị LogLevel.",
+      "C. Thay đổi biến môi trường của hệ thống điều hành.",
+      "D. Xóa toàn bộ file log cũ trên đĩa cứng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "ASP.NET Core mặc định theo dõi sự thay đổi của file `appsettings.json`. Khi ta thay đổi giá trị cấu hình log tại đây, hệ thống sẽ tự động áp dụng mức log mới ngay lập tức mà không cần khởi động lại ứng dụng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Middleware 'UseHsts' (HTTP Strict Transport Security) trong ASP.NET Core có công dụng bảo mật gì?",
+    "options": [
+      "A. Ép buộc trình duyệt của người dùng luôn sử dụng kết nối HTTPS bảo mật cho toàn bộ các yêu cầu tiếp theo gửi tới tên miền của bạn.",
+      "B. Ngăn chặn các cuộc tấn công SQL Injection vào API.",
+      "C. Mã hóa toàn bộ dữ liệu lưu trữ trong DB.",
+      "D. Chặn đứng các dải IP nước ngoài truy cập vào máy chủ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "HSTS là cơ chế bảo mật phía trình duyệt. Khi nhận được header HSTS, trình duyệt sẽ tự động chuyển đổi toàn bộ các liên kết HTTP thường thành HTTPS trước khi gửi đi, bảo vệ người dùng khỏi các cuộc tấn công trung gian (Man-in-the-Middle) dạng SSL Strip.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đâu là cách xử lý việc trả về một lượng lớn dữ liệu động theo kiểu streaming từ API mà không gây nghẽn bộ nhớ RAM do phải nạp toàn bộ danh sách?",
+    "options": [
+      "A. Định dạng phương thức Action trả về kiểu `IAsyncEnumerable<T>`.",
+      "B. Trả về kiểu `List<T>` sau khi đã thực hiện await.",
+      "C. Chuyển đổi dữ liệu sang dạng XML string.",
+      "D. Chia nhỏ dữ liệu thành nhiều file nén zip."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi Action trả về `IAsyncEnumerable<T>`, ASP.NET Core và thư viện System.Text.Json sẽ thực hiện tuần tự hóa bất đồng bộ từng phần tử một cách tuần tự (streaming) về phía client ngay khi có dữ liệu, tối ưu RAM cực kỳ hiệu quả.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi xây dựng một API bảo mật, tại sao không nên trả về trực tiếp đối tượng thực thể cơ sở dữ liệu (Database Entities / Domain Models) cho Client, mà nên sử dụng DTO (Data Transfer Objects)?",
+    "options": [
+      "A. Để tránh lộ cấu trúc cơ sở dữ liệu vật lý và ngăn chặn lỗi gán thừa dữ liệu không mong muốn (Over-Posting/Mass Assignment attack) khi client gửi các trường dữ liệu mà họ không có quyền sửa đổi.",
+      "B. Vì DB Entities chiếm dụng băng thông mạng nhiều gấp 10 lần DTO.",
+      "C. Vì C# cấm hoàn toàn việc tuần tự hóa các thực thể cơ sở dữ liệu sang JSON.",
+      "D. Để loại bỏ sự phụ thuộc vào các thư viện bên thứ ba."
+    ],
+    "correctAnswer": "A",
+    "explanation": "DTO giúp tách biệt dữ liệu giao tiếp bên ngoài (API Contract) và cấu trúc dữ liệu lưu trữ bên trong. Nếu dùng trực tiếp entity, một kẻ tấn công có thể chèn thêm trường dữ liệu nhạy cảm (như IsAdmin = true) vào JSON gửi lên để ghi đè dữ liệu nếu code binding lỏng lẻo.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong C#, làm thế nào để cấu hình thuộc tính của một trường dữ liệu trong DTO class cho phép nhận định dạng ngày tháng hiển thị theo ý muốn khi serialize sang JSON?",
+    "options": [
+      "A. Sử dụng thuộc tính `[JsonConverter(typeof(CustomDateTimeConverter))]` của thư viện System.Text.Json.",
+      "B. Định dạng trường đó dưới dạng kiểu chuỗi string thô.",
+      "C. Đổi kiểu dữ liệu sang kiểu số nguyên Unix timestamp.",
+      "D. Cấu hình lại múi giờ của máy chủ SQL Server."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sử dụng custom converter kế thừa từ `JsonConverter<DateTime>` cho phép tự định nghĩa logic đọc/ghi ngày tháng theo định dạng tùy chọn (ví dụ: dd/MM/yyyy) một cách đồng bộ và an toàn.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi một client gửi yêu cầu lên API với header `Accept: application/xml`, nhưng máy chủ chỉ trả về dữ liệu định dạng JSON, lý do tại sao?",
+    "options": [
+      "A. Do ứng dụng Web API mặc định chưa cấu hình tính năng Content Negotiation và chưa đăng ký XmlSerializerFormatters trong DI container.",
+      "B. Do XML là định dạng đã bị cấm trên trình duyệt.",
+      "C. Vì định dạng XML bắt buộc phải sử dụng với giao thức SOAP.",
+      "D. Do trình duyệt tự động chặn dữ liệu XML."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc định ASP.NET Core chỉ đăng ký JSON formatter. Nếu muốn hỗ trợ trả về XML dựa trên yêu cầu của Client (Content Negotiation), ta phải đăng ký thêm bằng cách gọi `.AddXmlSerializerFormatters()` khi đăng ký MVC Controllers.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để ngăn chặn việc người dùng gửi liên tiếp quá nhiều yêu cầu API trong một khoảng thời gian ngắn gây quá tải hệ thống (DDoS), ta nên sử dụng tính năng nào của .NET Core?",
+    "options": [
+      "A. Rate Limiting Middleware (giới thiệu từ .NET 7)",
+      "B. CORS Policy",
+      "C. Entity Framework Core AsNoTracking",
+      "D. HTTPS Redirection"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Rate Limiting Middleware tích hợp từ .NET 7 cung cấp các thuật toán giới hạn tần suất yêu cầu như Token Bucket, Fixed Window, Sliding Window để bảo vệ hệ thống trước sự tấn công hoặc lạm dụng API.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cơ chế 'Route Constraints' có vai trò gì trong việc xử lý HTTP requests?",
+    "options": [
+      "A. Giúp xác thực định dạng của tham số trên URL trước khi định tuyến khớp với Action, lọc sớm các request không hợp lệ.",
+      "B. Mã hóa các tham số nhạy cảm trên đường dẫn URL.",
+      "C. Giới hạn dải IP có thể truy cập vào route tương ứng.",
+      "D. Tự động kiểm tra quyền hạn của người dùng gửi request."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Route Constraints (như `{id:int}`, `{name:alpha}`) giúp phân định nhanh các route có URL giống nhau nhưng khác kiểu dữ liệu tham số, tránh xung đột định tuyến và trả về lỗi sớm nếu sai định dạng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi về mặt vị trí thực thi và mục đích sử dụng giữa Action Filter và Exception Filter trong ASP.NET Core MVC/API pipeline là gì?",
+    "options": [
+      "A. Action Filter bọc quanh quá trình thực thi của Action Method (cho phép can thiệp trước/sau khi chạy); Exception Filter chỉ thực thi khi có ngoại lệ chưa được xử lý xảy ra trong quá trình tạo controller hoặc chạy action.",
+      "B. Exception Filter chạy trước khi Action Filter được thực thi.",
+      "C. Action Filter chỉ dùng cho các ứng dụng có sử dụng giao diện Razor Views.",
+      "D. Cả hai filter đều chạy cùng lúc và chia sẻ chung một context dữ liệu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Action Filter rất mạnh trong việc kiểm tra tham số đầu vào hoặc ghi đè kết quả trả về. Exception Filter được thiết kế chuyên biệt để bắt lỗi xảy ra trong Controller, tuy nhiên để xử lý lỗi toàn cục thì Middleware Exception Handler được khuyến nghị nhiều hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi cấu hình cache trong ASP.NET Core, sự khác biệt căn bản giữa 'Response Caching' và 'Output Caching' (giới thiệu từ .NET 7) là gì?",
+    "options": [
+      "A. Response Caching chỉ cấu hình các HTTP headers để trình duyệt hoặc proxy tự cache dữ liệu; Output Caching thực sự lưu trữ nội dung phản hồi phía máy chủ (Server-side) và cho phép cấu hình thu hồi cache (eviction) linh hoạt.",
+      "B. Output Caching chạy chậm hơn vì phải ghi dữ liệu ra đĩa cứng liên tục.",
+      "C. Response Caching chỉ hoạt động với các API trả về kiểu dữ liệu XML.",
+      "D. Cả hai đều hoạt động giống hệt nhau về mặt cơ chế lưu trữ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Response Caching dựa vào các header như Cache-Control để phía client tự quản lý. Output Caching (.NET 7+) là giải pháp cache lưu trên RAM/Redis của server, cung cấp các tính năng cao cấp như cache tag, dựa trên chính sách bảo mật để tự động xóa cache khi dữ liệu gốc thay đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc gọi phương thức `AsNoTracking()` trong các truy vấn đọc dữ liệu (Read-only) của Entity Framework Core lại giúp tối ưu hóa hiệu năng và bộ nhớ cho ứng dụng Web API?",
+    "options": [
+      "A. Vì nó thông báo cho DbContext không cần thiết lập cơ chế theo dõi thay đổi (Change Tracker) cho các đối tượng kết quả, giảm đáng kể lượng RAM tiêu thụ và tăng tốc độ xử lý câu lệnh.",
+      "B. Vì nó buộc EF Core phải dịch câu lệnh sang thực thi dạng NoSQL.",
+      "C. Vì nó tự động mã hóa dữ liệu trả về client.",
+      "D. Vì nó loại bỏ hoàn toàn yêu cầu kết nối đến cơ sở dữ liệu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Change Tracker của EF Core tốn tài nguyên để lưu trữ trạng thái gốc của các entity nhằm thực thi `SaveChanges()`. Với tác vụ đọc dữ liệu chỉ để trả về API JSON, việc tắt theo dõi qua `AsNoTracking()` giúp giải phóng CPU và tránh rò rỉ bộ nhớ khi đọc danh sách lớn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đâu là sơ đồ thực thi chuẩn xác theo thứ tự từ đầu đến cuối của các thành phần trong đường ống xử lý yêu cầu (Request Pipeline) của ASP.NET Core?",
+    "options": [
+      "A. HTTP Request -> Middleware -> Routing -> Authorization -> Controllers/Actions -> Resource Filters -> Action Filters -> Action Execution.",
+      "B. HTTP Request -> Middleware -> Routing -> Controllers/Actions -> Action Filters.",
+      "C. HTTP Request -> Action Filters -> Middleware -> Routing -> Actions.",
+      "D. Thứ tự chạy hoàn toàn ngẫu nhiên phụ thuộc vào tải của CPU."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Request đi qua các Middleware trước (như Cors, Authentication). Khi khớp route, MVC/API filter pipeline bắt đầu hoạt động theo thứ tự: Authorization Filters, Resource Filters, Model Binding, Action Filters, Action Execution, Exception Filters, Result Filters và cuối cùng trả ngược response.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi triển khai kiến trúc CQRS (Command Query Responsibility Segregation) kết hợp với thư viện MediatR trong ASP.NET Core Web API, các Controller đóng vai trò gì?",
+    "options": [
+      "A. Chứa toàn bộ logic nghiệp vụ (business logic) và kết nối DB trực tiếp.",
+      "B. Chỉ đóng vai trò là tầng giao tiếp mỏng (Thin Controllers), nhận HTTP request, đóng gói dữ liệu thành các Command hoặc Query object rồi chuyển tiếp qua MediatR Mediator để xử lý.",
+      "C. Quản lý việc cấu hình IIS server chạy ứng dụng.",
+      "D. Thực hiện tuần tự hóa dữ liệu JSON thủ công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sử dụng MediatR giúp thực hiện nguyên lý Single Responsibility. Controller chỉ lo nhiệm vụ nhận gửi HTTP, toàn bộ logic nghiệp vụ được tách biệt vào các Handler tương ứng của MediatR, giúp code sạch, dễ viết Unit Test độc lập.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong ASP.NET Core Web API, để viết một Custom Model Binder (Trình liên kết mô hình tùy chỉnh) xử lý việc giải mã các chuỗi mã hóa phức tạp từ URL, ta cần triển khai giao diện nào?",
+    "options": [
+      "A. IModelBinder",
+      "B. IModelBinderProvider",
+      "C. IInputFormatter",
+      "D. IActionFilter"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Triển khai interface `IModelBinder` với phương thức `BindModelAsync` cho phép can thiệp sâu vào quá trình trích xuất và biến đổi dữ liệu thô từ HTTP Request thành đối tượng có kiểu dữ liệu tương ứng để truyền vào controller.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Đâu là giải pháp bảo mật đúng đắn nhất để chống lại các cuộc tấn công đánh cắp phiên làm việc Cross-Site Request Forgery (CSRF/XSRF) khi xây dựng ứng dụng Web API phục vụ cho Client Single Page App (như React/Angular)?",
+    "options": [
+      "A. Sử dụng xác thực không dùng Cookie (như Bearer Token lưu ở memory/local storage) hoặc cấu hình Antiforgery Token thông qua Custom Header kiểm tra an toàn ở API.",
+      "B. Bật cấu hình CORS cho phép mọi nguồn (AllowAnyOrigin).",
+      "C. Sử dụng mã hóa Base64 cho mật khẩu.",
+      "D. Chạy Web API trên mạng nội bộ LAN."
+    ],
+    "correctAnswer": "A",
+    "explanation": "CSRF tận dụng cơ chế trình duyệt tự gửi kèm Cookie. Bằng việc chuyển sang dùng cơ chế Token-based authentication (JWT Bearer Token truyền thủ công qua header Authorization), API sẽ miễn nhiễm với tấn công CSRF vì kẻ giả mạo không thể tự ý chèn header này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi ứng dụng Web API cần ghi log cấu trúc (Structured Logging) để dễ dàng lọc và phân tích lỗi trên các hệ thống như Elasticsearch hay Seq, giải pháp cấu hình nào là phổ biến và tối ưu nhất?",
+    "options": [
+      "A. Sử dụng thư viện Serilog tích hợp vào .NET Core Logging Pipeline để định dạng log dưới dạng JSON có cấu trúc thay vì text thuần.",
+      "B. Sử dụng Console.WriteLine để in log.",
+      "C. Lưu file log dạng .txt thô truyền thống.",
+      "D. Viết log trực tiếp vào bảng SQL Server bằng lệnh INSERT."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ghi log thô dạng text rất khó để truy vấn tự động. Serilog hỗ trợ Structured Logging, cho phép lưu log kèm các thuộc tính định danh (như UserId, RequestId) dưới định dạng JSON giúp công cụ phân tích dễ dàng lập chỉ mục (index) và tìm kiếm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để thiết lập tính năng Health Checks trong ASP.NET Core Web API giúp các công cụ giám sát (như Kubernetes hay Prometheus) kiểm tra trạng thái hoạt động của cơ sở dữ liệu và các dịch vụ liên kết, ta cần cấu hình như thế nào?",
+    "options": [
+      "A. Sử dụng dịch vụ `AddHealthChecks()` trong Program.cs và cấu hình endpoint map bằng `MapHealthChecks(\"/health\")`.",
+      "B. Viết một Controller thủ công trả về chuỗi \"Healthy\".",
+      "C. Sử dụng file cấu hình appsettings.json để giám sát.",
+      "D. Không cần thiết lập vì .NET Core tự động phản hồi Kubernetes."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Hạ tầng Health Checks tích hợp của ASP.NET Core cho phép đăng ký kiểm tra định kỳ trạng thái của DB, Redis, APIs ngoài. Trình giám sát bên ngoài chỉ cần ping vào route `/health` để nhận mã 200 OK (Healthy) hoặc 503 Service Unavailable (Unhealthy).",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi viết các bài kiểm tra tích hợp (Integration Tests) cho ASP.NET Core Web API, làm thế nào để giả lập toàn bộ ứng dụng chạy trong bộ nhớ mà không cần khởi động server IIS/Kestrel thực tế?",
+    "options": [
+      "A. Sử dụng lớp `WebApplicationFactory<TEntryPoint>` của thư viện Microsoft.AspNetCore.Mvc.Testing để tạo một TestServer và sinh ra HttpClient giả lập.",
+      "B. Gọi trực tiếp các phương thức khởi tạo Controller bằng từ khóa new trong test method.",
+      "C. Viết kịch bản kiểm thử bằng ngôn ngữ Python gọi API thật qua internet.",
+      "D. Sử dụng Postman runner để test."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`WebApplicationFactory` khởi chạy toàn bộ luồng Program.cs của ứng dụng trong bộ nhớ, cho phép ta cấu hình đè (override) các dịch vụ thực tế sang các dịch vụ mock (như dùng database in-memory cho testing) và thực thi test với tốc độ siêu nhanh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng cơ chế Data Protection API (DPAPI) của ASP.NET Core lại cực kỳ quan trọng trong môi trường chạy nhiều instance ứng dụng (Load Balancing)?",
+    "options": [
+      "A. Để đảm bảo các máy chủ (instances) khác nhau có thể giải mã được Cookie, Token hoặc dữ liệu mật do máy chủ kia mã hóa bằng cách cấu hình lưu trữ chìa khóa (Key Ring) chung ở một nơi tập trung (như Redis hoặc Azure Key Vault).",
+      "B. Để tăng tốc độ mã hóa dữ liệu.",
+      "C. Để ngăn cản hoàn toàn việc đăng nhập từ nhiều thiết bị.",
+      "D. Để tự động chuyển hướng sang HTTPS."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mặc định, Data Protection lưu khóa mã hóa ở thư mục local của server. Nếu chạy load balancer mà không chia sẻ chung Key Ring, server A sẽ không thể giải mã được Cookie/Token do server B cấp, gây ra lỗi tự động logout của người dùng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Làm thế nào để tạo một Custom OutputFormatter trong ASP.NET Core Web API để xuất dữ liệu trực tiếp sang định dạng file CSV khi Client yêu cầu?",
+    "options": [
+      "A. Tạo một class kế thừa từ lớp `TextOutputFormatter` và ghi đè phương thức `WriteResponseBodyAsync` để định dạng dữ liệu.",
+      "B. Viết một Action Filter để chuyển đổi kiểu dữ liệu.",
+      "C. Chuyển đổi thủ công List dữ liệu thành chuỗi CSV ở từng Controller.",
+      "D. Thay thế thư viện System.Text.Json bằng thư viện CSV."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bằng cách kế thừa `TextOutputFormatter` và đăng ký nó trong cấu hình MVC `MvcOptions.OutputFormatters`, Web API sẽ tự động kích hoạt định dạng CSV mỗi khi client gửi yêu cầu kèm header `Accept: text/csv` (Content Negotiation).",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong ASP.NET Core Web API, làm thế nào để cấu hình tùy chỉnh định dạng tên thuộc tính JSON trả về (ví dụ chuyển từ camelCase mặc định sang snake_case)?",
+    "options": [
+      "A. Cấu hình lại thuộc tính `PropertyNamingPolicy` của `JsonSerializerOptions` khi đăng ký Controllers bằng cách truyền một class custom NamingPolicy.",
+      "B. Viết hoa toàn bộ tên các biến thuộc tính trong C#.",
+      "C. Sử dụng thuộc tính `[JsonProperty]` trên từng thuộc tính của DTO.",
+      "D. Không thể thay đổi được hành vi mặc định của System.Text.Json."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ta có thể can thiệp cấu hình tuần tự hóa toàn cục bằng cách thiết lập: `builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = ... });` để đồng bộ phong cách trả về dữ liệu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để tích hợp kết nối thời gian thực hai chiều giữa Client và Server (như cập nhật thông báo tức thì) vào ứng dụng Web API, giải pháp tích hợp sẵn nào của ASP.NET Core được khuyến nghị sử dụng?",
+    "options": [
+      "A. ASP.NET Core SignalR",
+      "B. gRPC Services",
+      "C. REST API Polling",
+      "D. WebSockets thô mà không cần thư viện wrapper"
+    ],
+    "correctAnswer": "A",
+    "explanation": "SignalR tự động quản lý kết nối và cung cấp cơ chế dự phòng (transports fallback) thông minh: sử dụng WebSockets nếu trình duyệt hỗ trợ, ngược lại tự động chuyển sang Server-Sent Events hoặc Long Polling mà không cần đổi mã nguồn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi sử dụng JWT (JSON Web Token) để bảo mật API, cơ chế tối ưu để xử lý việc thu hồi quyền truy cập (Token Revocation) mà không làm mất đi lợi thế phi trạng thái (stateless) của JWT là gì?",
+    "options": [
+      "A. Sử dụng kết hợp Access Token thời gian sống ngắn (ví dụ 15 phút) và Refresh Token thời gian sống dài; chỉ lưu trữ và kiểm tra trạng thái hoạt động của Refresh Token trong Database khi cần cấp lại Access Token mới.",
+      "B. Lưu trữ toàn bộ các Access Token đã phát ra vào Database và kiểm tra sau mỗi request.",
+      "C. Mã hóa toàn bộ Token bằng thuật toán AES phức tạp.",
+      "D. Không thể thu hồi JWT, bắt buộc phải đợi Token tự hết hạn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lưu và truy vấn mọi Access Token ở mỗi request sẽ biến API thành stateful và làm giảm hiệu năng. Giải pháp Access/Refresh Token cân bằng được hiệu năng (Access Token tự xác thực nhanh bằng chữ ký) và tính bảo mật (hủy Refresh Token để chặn không cho cấp mới khi bị lộ).",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong ASP.NET Core Web API, Middleware nào chịu trách nhiệm nén dữ liệu phản hồi (Response Compression) trước khi gửi về Client để tiết kiệm băng thông mạng?",
+    "options": [
+      "A. ResponseCompressionMiddleware",
+      "B. UseRoutingMiddleware",
+      "C. UseHttpsRedirection",
+      "D. OutputCachingMiddleware"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Được kích hoạt qua `app.UseResponseCompression()`, middleware này tự động nén dữ liệu (dùng Gzip hoặc Brotli) đối với các kiểu nội dung text, json, xml dựa trên header `Accept-Encoding` của client gửi lên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi giữa hai phương thức tiêm cấu hình: `IOptionsSnapshot<T>` và `IOptionsMonitor<T>` trong ASP.NET Core là gì?",
+    "options": [
+      "A. `IOptionsSnapshot` được tính toán lại một lần duy nhất cho mỗi yêu cầu HTTP (Scoped); `IOptionsMonitor` là dịch vụ Singleton cho phép nhận giá trị mới nhất bất kỳ lúc nào thông qua sự kiện thay đổi cấu hình mà không phụ thuộc vào HTTP request.",
+      "B. `IOptionsSnapshot` chạy nhanh hơn `IOptionsMonitor` gấp nhiều lần.",
+      "C. `IOptionsMonitor` lưu trữ dữ liệu hoàn toàn trên ổ đĩa cứng.",
+      "D. Cả hai đều không tự động cập nhật giá trị mới từ file appsettings.json."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Do `IOptionsSnapshot` là Scoped, nó ổn định trong suốt vòng đời xử lý một request. `IOptionsMonitor` là Singleton và sử dụng sự kiện FileSystemWatcher để lắng nghe sự thay đổi của file cấu hình, rất thích hợp cho các tác vụ cần cấu hình thời gian thực.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi cấu hình định tuyến cho Web API, việc sử dụng các ký tự thay thế đặc biệt `[controller]` và `[action]` mang lại lợi ích gì?",
+    "options": [
+      "A. Giúp tự động thay thế tên Controller và tên Action thực tế vào cấu trúc định tuyến, tránh việc gán cứng tên và hạn chế lỗi khi thực hiện đổi tên class (Refactoring).",
+      "B. Tăng tính bảo mật cho đường dẫn API.",
+      "C. Bắt buộc API phải trả về dữ liệu kiểu chuỗi.",
+      "D. Đồng bộ hóa dữ liệu với cơ sở dữ liệu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các ký tự đặc biệt trong ngoặc vuông là các token định tuyến động. Khi ứng dụng biên dịch, compiler tự động thay thế chúng bằng tên lớp Controller (sau khi lược bỏ hậu tố Controller) và tên phương thức Action tương ứng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để thiết lập chính sách xử lý lỗi CORS linh hoạt theo từng Domain khách hàng được đọc từ Database ở mỗi request, ta nên sử dụng giải pháp nào?",
+    "options": [
+      "A. Triển khai một lớp tùy chỉnh thực thi giao diện `ICorsPolicyProvider` để truy vấn danh sách Origin được phép từ database tại thời điểm chạy.",
+      "B. Bật cấu hình `AllowAnyOrigin()` trên toàn bộ API.",
+      "C. Thay đổi file cấu hình appsettings.json liên tục.",
+      "D. Viết một Middleware CORS thủ công thay thế hoàn toàn UseCors mặc định."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Triển khai `ICorsPolicyProvider` tùy biến cho phép ghi đè phương thức `GetPolicyAsync` giúp lấy thông tin origin và động xây dựng chính sách CORS phù hợp cho từng HTTP request dựa trên logic nghiệp vụ hoặc database.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong ASP.NET Core, khi nào bạn nên viết một Custom Middleware thay vì sử dụng Action Filter?",
+    "options": [
+      "A. Khi cần thực hiện các logic xử lý tác động lên toàn bộ luồng yêu cầu HTTP (như ghi log request, nén dữ liệu, bảo mật ở mức thấp) trước khi request đi tới tầng định tuyến và MVC context.",
+      "B. Khi cần truy cập vào dữ liệu ModelState của Action.",
+      "C. Khi cần thay đổi kiểu dữ liệu trả về của một Action cụ thể.",
+      "D. Khi muốn viết unit test dễ dàng hơn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Middleware hoạt động ở mức độ HTTP Context và chạy rất sớm trong pipeline, không nhận biết được các khái niệm cấp cao của MVC như ModelState hay ActionDescriptor. Nếu logic của bạn cần các thông tin này, Action Filter mới là lựa chọn đúng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một client gửi yêu cầu tải dữ liệu file dung lượng lớn qua API, phương pháp thiết kế nào trong Controller giúp hạn chế phân bổ bộ nhớ RAM trên máy chủ?",
+    "options": [
+      "A. Trả về đối tượng `FileStreamResult` đọc trực tiếp từ luồng Stream của đĩa thay vì nạp toàn bộ nội dung file vào mảng `byte[]` hoặc `MemoryStream`.",
+      "B. Sử dụng phương thức `File(byte[] fileContents)` để trả về.",
+      "C. Đọc file bằng StreamReader và trả về dạng chuỗi string lớn.",
+      "D. Sử dụng cache để lưu trữ toàn bộ nội dung file trước."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sử dụng `FileStreamResult` hoặc trả về `File(Stream, ...)` giúp ASP.NET Core đọc và truyền từng block nhỏ dữ liệu trực tiếp từ ổ đĩa về phía client theo luồng (chunked transfer), giữ cho lượng RAM sử dụng ổn định ở mức tối thiểu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cơ chế 'Data Protection' trong ASP.NET Core sử dụng thuật toán mã hóa mặc định nào để bảo vệ thông tin nhạy cảm (như cookie chống giả mạo)?",
+    "options": [
+      "A. AES-256-CBC kết hợp xác thực HMACSHA256 (hoặc mã hóa authenticated encryption AES-256-GCM).",
+      "B. DES",
+      "C. MD5",
+      "D. Base64 đơn thuần"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Hạ tầng Data Protection cung cấp giải pháp mã hóa cấp công nghiệp tự động sinh khóa, tự động xoay vòng khóa (key rotation) và sử dụng các thuật toán mã hóa đối xứng an toàn cao để bảo vệ dữ liệu trạng thái.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi cấu hình routing trong Web API, làm thế nào để định nghĩa một route nhận tham số tùy chọn (Optional Parameter) (ví dụ: api/products có thể nhận hoặc không nhận tham số category)?",
+    "options": [
+      "A. Sử dụng dấu chấm hỏi `?` ngay sau tên tham số định tuyến (ví dụ: `[Route(\"api/products/{category?}\")]`).",
+      "B. Khai báo hai route hoàn toàn khác nhau.",
+      "C. Sử dụng dấu sao `*` trước tham số.",
+      "D. Bắt buộc tham số đó phải được truyền qua Query String."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ký tự `?` định nghĩa tham số là tùy chọn. Nếu client không truyền giá trị cho phần này trên URL, Model Binder sẽ tự động gán giá trị mặc định (như null hoặc giá trị khai báo mặc định của tham số hàm) cho biến.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc đăng ký dịch vụ DbContext dưới dạng Singleton (`ServiceLifetime.Singleton`) được coi là một hành vi cực kỳ nguy hiểm trong ứng dụng Web API đa luồng?",
+    "options": [
+      "A. Vì lớp DbContext không an toàn đa luồng (not thread-safe); việc dùng chung duy nhất một instance DbContext cho nhiều request chạy song song sẽ gây ra tranh chấp tài nguyên và lỗi vỡ dữ liệu nghiêm trọng.",
+      "B. Vì DbContext Singleton sẽ tự động ngắt kết nối database sau 5 phút.",
+      "C. Vì nó cấm sử dụng các tính năng bất đồng bộ của EF Core.",
+      "D. Vì nó chiếm dụng toàn bộ bộ nhớ RAM của hệ thống."
+    ],
+    "correctAnswer": "A",
+    "explanation": "DbContext được thiết kế để hoạt động ngắn hạn cho một luồng xử lý duy nhất (thường là Scoped). Nếu chia sẻ DbContext giữa nhiều thread song song, việc quản lý kết nối và theo dõi thực thể (entity tracking) sẽ bị xung đột, dẫn đến ngoại lệ và lỗi toàn vẹn dữ liệu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Phương thức nào dưới đây được sử dụng để kiểm tra xem một chính sách phân quyền (Authorization Policy) có được thỏa mãn hay không bên trong mã nguồn C# động (không dùng attribute [Authorize])?",
+    "options": [
+      "A. Gọi phương thức `AuthorizeAsync` từ dịch vụ `IAuthorizationService` được tiêm qua Dependency Injection.",
+      "B. Kiểm tra thuộc tính HttpContext.User.Identity.IsAuthenticated.",
+      "C. So sánh trực tiếp danh sách Roles của User.",
+      "D. Sử dụng phương thức check của lớp Middleware."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`IAuthorizationService` cho phép thực hiện phân quyền động bằng lập trình tại thời điểm chạy. Điều này rất hữu ích khi quyền truy cập tài nguyên phụ thuộc vào các điều kiện nghiệp vụ phức tạp (ví dụ: người dùng chỉ được sửa bài viết do chính họ tạo).",
+    "difficulty": "ADVANCED",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong các ứng dụng API chịu tải cực lớn cần tối ưu hóa tốc độ xử lý JSON xuống mức micro-giây và giảm thiểu tối đa việc phân bổ bộ nhớ Heap, kỹ thuật xử lý JSON nâng cao nào được khuyến cáo sử dụng?",
+    "options": [
+      "A. Sử dụng trình sinh mã nguồn biên dịch tĩnh (System.Text.Json Source Generators) để loại bỏ hoàn toàn việc dùng Reflection lúc chạy (Runtime) và tăng tốc độ serialize/deserialize.",
+      "B. Sử dụng NewtonSoft.Json với cấu hình mặc định.",
+      "C. Chuyển đổi dữ liệu thủ công bằng cách ghép chuỗi string.",
+      "D. Sử dụng BinaryFormatter để mã hóa đối tượng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Source Generators sinh mã C# tuần tự hóa trực tiếp tại thời điểm biên dịch dựa trên cấu trúc Class. Giúp loại bỏ hoàn toàn metadata lookup qua Reflection, giảm dung lượng ứng dụng (thích hợp cho Native AOT) và tăng thông lượng API đáng kể.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để xử lý luồng ghi đọc dữ liệu mạng tốc độ cao ở mức độ thô (raw byte streams) trong ASP.NET Core mà không chịu chi phí phân bổ mảng byte và tạo rác cho GC, hạ tầng I/O hiệu năng cao nào nên được ứng dụng?",
+    "options": [
+      "A. System.IO.Pipelines (Pipe, PipeReader, PipeWriter)",
+      "B. System.IO.FileStream",
+      "C. System.IO.MemoryStream",
+      "D. System.IO.BufferedStream"
+    ],
+    "correctAnswer": "A",
+    "explanation": "System.IO.Pipelines quản lý bộ đệm thông minh tự động thuê và trả mảng từ ArrayPool dưới nền. Nó cho phép đọc ghi bất đồng bộ hiệu năng cực cao, giải quyết triệt để các bài toán phân tích cú pháp dữ liệu mạng (như HTTP headers) mà không cần cấp phát RAM dư thừa.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Hiện tượng 'ThreadPool Starvation' (Đói luồng) xảy ra trong máy chủ Kestrel chạy ứng dụng ASP.NET Core dưới tải đỉnh thường do nguyên nhân sâu xa nào và cách phát hiện ra sao?",
+    "options": [
+      "A. Do mã nguồn gọi các thao tác đồng bộ chặn luồng (như `.Result`, `.Wait()`, `Thread.Sleep()`) bên trong các phương thức bất đồng bộ, khiến số lượng ThreadPool worker threads cạn kiệt; phát hiện qua các chỉ số ThreadPool Queue Length tăng đột biến và CPU Usage thấp.",
+      "B. Do Kestrel tự động giới hạn số luồng tối đa là 10 luồng để bảo vệ CPU.",
+      "C. Do tốc độ mạng kết nối Internet bị chậm đột ngột.",
+      "D. Do bộ nhớ đệm Cache bị đầy."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi luồng của ThreadPool bị khóa đồng bộ để chờ một tác vụ bất đồng bộ khác hoàn thành (Sync-over-Async), nó không thể phục vụ các request mới. ThreadPool phải tạo thêm luồng vật lý với tốc độ chậm (1 luồng/giây), gây ra tắc nghẽn cục bộ làm đứng hệ thống trong khi tài nguyên CPU vẫn nhàn rỗi.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi biên dịch một ứng dụng ASP.NET Core Web API sang Native AOT (Ahead-of-Time) trong .NET 8, rào cản kỹ thuật nào lớn nhất cần phải giải quyết đối với các thư viện bên thứ ba?",
+    "options": [
+      "A. Loại bỏ hoàn toàn các thư viện sử dụng Reflection động, Dynamic Code Generation hoặc Trimming-incompatible features; bắt buộc phải sử dụng các serializer/ORM được thiết kế hỗ trợ Native AOT.",
+      "B. Native AOT cấm kết nối đến các cơ sở dữ liệu quan hệ như SQL Server.",
+      "C. Native AOT không hỗ trợ chạy trên nền tảng Docker.",
+      "D. Không thể sử dụng giao thức HTTPS khi biên dịch Native AOT."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Native AOT dọn dẹp (trim) toàn bộ mã nguồn không được sử dụng để giảm kích thước file. Các thư viện dùng Reflection động lúc chạy sẽ bị lỗi vì metadata của các thành phần đó đã bị gạt bỏ khi build. EF Core và System.Text.Json đều phải chuyển sang chế độ Source Generator tương thích.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc xử lý upload file dung lượng rất lớn (ví dụ: vài GB) bằng phương pháp buffering thông thường (đọc toàn bộ vào IFormFile) lại dễ gây lỗi OutOfMemoryException trên Web API, và giải pháp kiến trúc tối ưu nhất là gì?",
+    "options": [
+      "A. Buffering tải toàn bộ file vào RAM/LOH trước khi lưu; giải pháp là cấu hình API đọc dữ liệu dạng truyền trực tiếp (Streaming) bằng cách phân tích thủ công luồng MultipartReader và ghi trực tiếp từng chunk nhỏ vào file vật lý trên đĩa cứng.",
+      "B. Do giới hạn của Kestrel chỉ cho upload file dưới 10MB. Giải pháp là chia nhỏ file ở phía client.",
+      "C. Đăng ký Web API chạy trên hệ thống có bộ nhớ RAM trên 128GB.",
+      "D. Sử dụng giao thức FTP để thay thế hoàn toàn HTTP."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi đọc file lớn qua `IFormFile`, dữ liệu được đệm vào RAM hoặc đĩa tạm. Với file cực lớn, việc này làm cạn kiệt RAM lập tức dưới nhiều request đồng thời. Sử dụng `MultipartReader` đọc trực tiếp từ luồng mạng (Request.Body) giúp khống chế lượng RAM sử dụng cố định ở mức vài chục KB.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong một hệ thống Microservices sử dụng SignalR thời gian thực với hàng chục ngàn kết nối đồng thời từ Client Single Page Apps, làm thế nào để đảm bảo tin nhắn được đồng bộ chính xác khi ứng dụng Web API được scale-out ra nhiều máy chủ đứng sau Load Balancer?",
+    "options": [
+      "A. Cấu hình một Redis Backplane hoặc Azure SignalR Service làm cầu nối trung gian (message bus) để truyền phát các thông điệp giữa các node máy chủ Web API.",
+      "B. Sử dụng cơ chế Sticky Sessions (Session Affinity) của Load Balancer mà không cần cấu hình gì thêm ở API.",
+      "C. Đồng bộ hóa dữ liệu thông qua việc ghi đọc bảng chung trong cơ sở dữ liệu SQL Server.",
+      "D. Ép buộc client phải kết nối lại liên tục mỗi 5 giây."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nếu không có Backplane, khi server A gửi tin nhắn tới nhóm người dùng, các client đang kết nối tới server B sẽ không nhận được tin nhắn đó. Redis Backplane nhận tin từ server A và phân phát tới toàn bộ các node server khác để truyền xuống client tương ứng.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để chẩn đoán một lỗi rò rỉ bộ nhớ (Memory Leak) nghiêm trọng đang xảy ra trên môi trường Production của ứng dụng ASP.NET Core Web API chạy trên container Linux (Docker) mà không làm gián đoạn hệ thống lâu, quy trình kỹ thuật nào được khuyến cáo?",
+    "options": [
+      "A. Sử dụng công cụ `dotnet-gcdump` hoặc `dotnet-dump` để chụp nhanh bản phân bổ bộ nhớ (dump file) của tiến trình, sau đó phân tích các đối tượng chiếm giữ RAM lớn nhất bằng Visual Studio hoặc bộ công cụ SOS.",
+      "B. Khởi động lại container Docker mỗi 10 phút.",
+      "C. Viết mã nguồn ghi log toàn bộ các biến trong Heap ra file.",
+      "D. Cài đặt thêm bộ nhớ RAM vật lý cho server."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`dotnet-gcdump` ghi lại cấu trúc đồ thị tham chiếu đối tượng trong Heap một cách rất nhẹ nhàng và nhanh chóng, ít gây đứng tiến trình (STW) hơn so với `dotnet-dump` chụp toàn bộ core dump, giúp dễ dàng tìm ra đối tượng nào đang bị giữ tham chiếu rò rỉ.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để tạo ra một kiến trúc Multi-Tenant (đa người thuê) an toàn cao trong ASP.NET Core Web API, nơi mỗi khách hàng (tenant) sử dụng một cơ sở dữ liệu SQL biệt lập hoàn toàn, kỹ thuật cấu hình nào được áp dụng?",
+    "options": [
+      "A. Viết một Custom Middleware trích xuất Tenant Identifier (từ Domain, Header hoặc Claim), lưu vào một dịch vụ Scoped đại diện cho Tenant Context, sau đó cấu hình DbContext lấy Connection String động dựa trên context này ở phương thức `OnConfiguring`.",
+      "B. Khởi tạo 100 instance DbContext khác nhau trong Program.cs cho mỗi tenant.",
+      "C. Đăng ký tất cả Connection String của các Tenant dưới dạng các Singleton Services.",
+      "D. Bắt buộc người dùng nhập Connection String từ màn hình đăng nhập."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sử dụng Scoped Tenant Context giúp phân lập luồng xử lý sạch sẽ. Khi DbContext được khởi tạo trong cùng scope của HTTP Request, nó sẽ đọc connection string tương ứng của tenant đó từ dịch vụ Scoped để kết nối chính xác vào database bị cô lập.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong kiến trúc High-Performance API Gateway xây dựng bằng .NET, dự án mã nguồn mở nào của Microsoft được khuyên dùng để làm bộ định tuyến ngược (Reverse Proxy) hiệu năng cao có thể tùy biến linh hoạt bằng mã nguồn C#?",
+    "options": [
+      "A. YARP (Yet Another Reverse Proxy)",
+      "B. Nginx Core",
+      "C. Ocelot API Gateway",
+      "D. Envoy Proxy"
+    ],
+    "correctAnswer": "A",
+    "explanation": "YARP được Microsoft xây dựng trực tiếp trên hạ tầng mạng hiệu năng cao của .NET Core. Nó cho phép tùy biến sâu sắc các hành vi định tuyến, load balancing, rate limiting, transform headers bằng chính mã C# với tốc độ xử lý mạng vượt trội.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để can thiệp và ghi đè cách tạo lớp Middleware (Middleware Activation) trong ASP.NET Core sao cho Middleware có thể nhận các dịch vụ Scoped thông qua Constructor (thay vì chỉ nhận ở phương thức Invoke), ta cần triển khai giao diện nào?",
+    "options": [
+      "A. IMiddleware và đăng ký thông qua IMiddlewareFactory",
+      "B. IActionFilter",
+      "C. IHostedService",
+      "D. IApplicationBuilder"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thông thường Middleware mặc định là Singleton (chỉ khởi tạo một lần khi startup). Việc triển khai `IMiddleware` (Factory-based middleware) cho phép đăng ký middleware đó với vòng đời Scoped trong DI container, giúp giải quyết trực tiếp các scoped dependencies ở constructor của nó.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi ứng dụng Web API cần gửi/nhận luồng dữ liệu liên tục có cấu trúc nhị phân phức tạp với độ trễ cực thấp (micro-seconds) và yêu cầu tính tương thích đa ngôn ngữ cao giữa các Microservices, giao thức nào sau đây tối ưu hơn REST (HTTP/JSON)?",
+    "options": [
+      "A. gRPC (dựa trên HTTP/2 và Protocol Buffers)",
+      "B. GraphQL",
+      "C. WebSockets thô",
+      "D. SOAP XML"
+    ],
+    "correctAnswer": "A",
+    "explanation": "gRPC sử dụng Protocol Buffers để tuần tự hóa dữ liệu dạng nhị phân siêu nhỏ gọn và truyền tải qua HTTP/2 (hỗ trợ multiplexing và streaming 2 chiều). Điều này giúp giảm đáng kể thời gian trễ (latency) và băng thông mạng so với việc parse JSON truyền thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cách tối ưu nhất để tránh hiện tượng nghẽn cổ chai (Lock Contention) khi nhiều luồng đồng thời ghi log vào một file vật lý duy nhất trên đĩa là gì?",
+    "options": [
+      "A. Sử dụng cơ chế ghi đệm phi chặn (Non-blocking buffered logging) bằng cách đẩy log vào hàng đợi bộ nhớ dùng System.Threading.Channels, rồi dùng một BackgroundService đơn luồng để rút log và ghi tuần tự ra đĩa.",
+      "B. Sử dụng từ khóa lock bọc quanh khối lệnh ghi file.",
+      "C. Tạo ra nhiều file log khác nhau cho mỗi luồng.",
+      "D. Sử dụng cơ sở dữ liệu làm nơi ghi log thay thế file."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nếu dùng `lock` trên file, các luồng API xử lý request sẽ phải đứng chờ nhau để ghi đĩa (I/O cực chậm). Chuyển sang mô hình Producer-Consumer bất đồng bộ giúp luồng API trả kết quả ngay sau khi đẩy tin nhắn vào hàng đợi RAM, tránh nghẽn luồng xử lý chính.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Tính năng 'HTTP/3' được Kestrel hỗ trợ từ .NET 7 mang lại lợi ích đột phá nào về mặt giao thức mạng so với HTTP/2?",
+    "options": [
+      "A. Chuyển sang sử dụng giao thức truyền tải QUIC chạy trên nền UDP, loại bỏ hoàn toàn lỗi nghẽn đầu dòng (Head-of-Line Blocking) ở cấp độ kết nối và hỗ trợ chuyển đổi mạng kết nối mượt mà (Connection Migration).",
+      "B. Loại bỏ hoàn toàn sự cần thiết của chứng chỉ bảo mật TLS/SSL.",
+      "C. Cho phép gửi dữ liệu nhị phân không cần tuần tự hóa.",
+      "D. Tăng giới hạn kích thước file upload lên vô hạn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "HTTP/2 gặp vấn đề: nếu một gói tin TCP bị mất, toàn bộ kết nối (chứa nhiều stream luồng dữ liệu) sẽ bị tắc nghẽn để chờ gửi lại. QUIC (HTTP/3) chạy UDP quản lý các stream độc lập ở mức độ gói tin, gói tin của stream này mất không ảnh hưởng tới stream khác.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong Kestrel, cấu hình 'Keep-Alive Timeout' có vai trò gì trong việc quản lý tài nguyên máy chủ?",
+    "options": [
+      "A. Xác định khoảng thời gian tối đa mà Kestrel giữ kết nối TCP mở với client ở trạng thái rảnh rỗi (idle) trước khi tự động đóng kết nối để giải phóng tài nguyên hệ thống.",
+      "B. Giới hạn số lượng request tối đa mà một client được gửi lên trong 1 phút.",
+      "C. Xác định thời gian tối đa để thực hiện một câu truy vấn SQL.",
+      "D. Định kỳ gửi tín hiệu kiểm tra trạng thái hoạt động của ổ cứng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giữ kết nối mở giúp tăng tốc độ cho các request tiếp theo (không cần bắt tay TCP lại). Tuy nhiên, nếu thời gian timeout quá lâu, lượng kết nối ảo rảnh rỗi tích tụ lớn sẽ chiếm dụng bộ nhớ RAM và socket của máy chủ, gây quá tải.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi cần bảo vệ dữ liệu nhạy cảm lưu trong cơ sở dữ liệu (ví dụ: số thẻ tín dụng), Data Protection API của ASP.NET Core cung cấp cơ chế bảo mật 'Key Ring' với tính năng tự động nào giúp đảm bảo an toàn lâu dài?",
+    "options": [
+      "A. Tự động xoay vòng khóa mã hóa (Key Rotation - mặc định mỗi 90 ngày) và giữ lại các khóa cũ trong lịch sử để giải mã dữ liệu cũ đã lưu.",
+      "B. Tự động xóa sạch dữ liệu cũ khi khóa hết hạn.",
+      "C. Tự động báo cáo lỗi lên Microsoft Security Center.",
+      "D. Mã hóa cứng khóa vào bên trong mã máy sau khi biên dịch."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cơ chế xoay vòng khóa tự động giúp hạn chế thiệt hại khi khóa bị lộ. Khóa cũ không bị xóa mà được đánh dấu hết hạn để không dùng mã hóa mới, nhưng vẫn được lưu trữ bảo mật để phục vụ việc giải mã dữ liệu lịch sử.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để theo dõi hiệu năng hệ thống Web API chi tiết theo chuẩn quốc tế (Distributed Tracing) và xuất dữ liệu sang các công cụ giám sát như Jaeger hay Zipkin, ta nên cấu hình tích hợp thư viện nào?",
+    "options": [
+      "A. OpenTelemetry (.NET System.Diagnostics.Activity)",
+      "B. log4net",
+      "C. NLog",
+      "D. ASP.NET Diagnostics Page"
+    ],
+    "correctAnswer": "A",
+    "explanation": "OpenTelemetry là chuẩn chung cho observability. Hệ thống `.Diagnostics.Activity` tích hợp sẵn trong runtime của .NET cho phép ghi nhận vết cuộc gọi (trace spans) đi qua các ranh giới service mạng để tạo biểu đồ theo dõi trực quan.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng kỹ thuật 'Zero-Downtime Database Deployment' lại yêu cầu mã nguồn ứng dụng Web API phải tương thích tốt với cả phiên bản cơ sở dữ liệu cũ và mới đồng thời?",
+    "options": [
+      "A. Vì trong quá trình triển khai (ví dụ: Rolling Update/Blue-Green), các instance chạy code cũ và code mới sẽ hoạt động song song cùng lúc và truy cập vào cùng một cơ sở dữ liệu đang trong quá trình chuyển đổi (migration).",
+      "B. Vì EF Core cấm nâng cấp cơ sở dữ liệu khi đang chạy ứng dụng.",
+      "C. Để đảm bảo dữ liệu trong database tự động được nén lại.",
+      "D. Để loại bỏ hoàn toàn các chỉ mục Index cũ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Triển khai không gián đoạn dịch vụ đòi hỏi chiến lược nâng cấp DB chia làm nhiều bước nhỏ (ví dụ: thêm cột mới nhưng chưa xóa cột cũ lập tức), đảm bảo phiên bản code hiện tại không bị lỗi runtime khi database thay đổi schema trước.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi cấu hình Kestrel lắng nghe các kết nối TLS/SSL, làm thế nào để thực hiện xác thực và lọc chứng chỉ số phía Client gửi lên (Client Certificate Authentication) theo logic tùy biến?",
+    "options": [
+      "A. Đăng ký cấu hình dịch vụ `CertificateAuthentication` trong DI và ghi đè sự kiện `OnCertificateValidated` để viết code kiểm tra vân tay (thumbprint) hoặc nhà phát hành (issuer).",
+      "B. Cấu hình trực tiếp trong file host hệ điều hành.",
+      "C. Sử dụng Action Filter để đọc file chứng chỉ trên client.",
+      "D. Kestrel không hỗ trợ xác thực chứng chỉ từ phía Client."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Xác thực chứng chỉ client là phương thức bảo mật mạnh (mTLS). Trình bắt sự kiện `OnCertificateValidated` cho phép can thiệp sâu vào kết quả bắt tay TLS để xác thực thông tin chứng chỉ khách hàng trước khi gán danh tính vào hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để đo đạc và phân tích chi tiết thời gian xử lý và nghẽn CPU ở mức độ thấp của ứng dụng Web API chạy trên Production mà không cài đặt phần mềm giám sát nặng nề, công cụ Command Line nào của .NET được sử dụng?",
+    "options": [
+      "A. dotnet-trace (kết hợp Speedscope hoặc PerfView)",
+      "B. dotnet-format",
+      "C. dotnet-run",
+      "D. dotnet-clean"
+    ],
+    "correctAnswer": "A",
+    "explanation": "`dotnet-trace` thu thập dữ liệu profiling về cuộc gọi hàm, thời gian chạy CPU và các sự kiện của CLR mà không cần debug. File kết quả `.nettrace` có thể import vào các công cụ trực quan để vẽ Flame Graph tìm ra các điểm nghẽn hiệu năng.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong ASP.NET Core, làm thế nào để viết phản hồi HTTP (HTTP Response) trực tiếp bằng cách đẩy các chuỗi byte thô vào socket mạng của Kestrel nhằm đạt tốc độ tối đa?",
+    "options": [
+      "A. Sử dụng thuộc tính `HttpContext.Response.BodyWriter` (trả về kiểu PipeWriter) để ghi trực tiếp dữ liệu dạng Span/ReadOnlySpan.",
+      "B. Sử dụng phương thức `HttpContext.Response.WriteAsync()` truyền chuỗi string.",
+      "C. Chuyển đổi dữ liệu sang mảng byte và gọi `HttpContext.Response.Body.Write()`.",
+      "D. Sử dụng StreamWriter bọc ngoài Response.Body."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ghi qua `BodyWriter` (PipeWriter) cho phép ghi dữ liệu trực tiếp vào bộ đệm nội bộ của Kestrel mà không cần cấp phát mảng tạm thời hay thực hiện encoding trùng lặp, tối ưu hóa thông lượng truyền dữ liệu ở mức tối đa.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi cấu hình cụm máy chủ Web API phục vụ tải đa quốc gia, làm thế nào để đảm bảo tính an toàn cho hạ tầng định tuyến khi cần cấu hình các Tenant phụ thuộc vào địa lý (Geographical multi-tenancy)?",
+    "options": [
+      "A. Triển khai một lớp tùy biến thực thi giao diện `DynamicRouteValueTransformer` để phân tích IP/Domain tại thời điểm chạy và điều hướng request động tới các cụm DB tương ứng.",
+      "B. Cấu hình DNS phân giải tên miền khác nhau cho mỗi quốc gia.",
+      "C. Sử dụng nhiều file cấu hình appsettings.json cho mỗi khu vực.",
+      "D. Viết mã nguồn if-else kiểm tra múi giờ hệ thống của client."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`DynamicRouteValueTransformer` cho phép can thiệp vào giai đoạn khớp route của Endpoint Routing để thay đổi động các giá trị route values (như controller, action, area) tại thời điểm chạy dựa trên kết quả phân tích yêu cầu.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để tích hợp một bộ máy Dependency Injection (DI) của bên thứ ba (ví dụ: Autofac) thay thế cho container DI mặc định của ASP.NET Core và hỗ trợ các tính năng nâng cao như Property Injection hay AOP, ta cần làm gì trong Program.cs?",
+    "options": [
+      "A. Gọi phương thức `builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())` để thay thế trình khởi tạo dịch vụ mặc định.",
+      "B. Chỉ cần cài đặt thư viện NuGet Autofac và không cần chỉnh sửa code.",
+      "C. Viết một Middleware tự định tuyến đối tượng dịch vụ.",
+      "D. Cấu hình lại các service trong file appsettings.json."
+    ],
+    "correctAnswer": "A",
+    "explanation": "ASP.NET Core hỗ trợ thay thế DI container mặc định bằng cách đăng ký một lớp thực thi `IServiceProviderFactory<TContainerBuilder>`. Việc gọi UseServiceProviderFactory giúp tích hợp sạch sẽ Autofac vào hệ thống quản lý dịch vụ gốc của .NET.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi cần xây dựng một ứng dụng HTTP Web Server siêu nhẹ chuyên biệt chạy dưới dạng một tiến trình thô mà không sử dụng máy chủ Kestrel mặc định của ASP.NET Core, lập trình viên cần triển khai (implement) giao diện nào?",
+    "options": [
+      "A. IServer",
+      "B. IHttpHandler",
+      "C. IApplicationBuilder",
+      "D. IWebHostEnvironment"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giao diện `IServer` định nghĩa các phương thức khởi động và dừng của máy chủ HTTP. Kestrel hay IIS Integration thực tế đều là các lớp triển khai giao diện IServer được đăng ký vào DI của ứng dụng.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để thêm một thuật toán nén dữ liệu tùy biến (ví dụ: Zstandard) làm tùy chọn nén phản hồi HTTP Response cho Web API, chúng ta cần thực hiện công việc nào?",
+    "options": [
+      "A. Triển khai một lớp thực thi giao diện `ICompressionProvider` và thêm nó vào danh sách `ResponseCompressionOptions.Providers`.",
+      "B. Viết một Action Filter để mã hóa mảng byte dữ liệu.",
+      "C. Đăng ký một Middleware mã hóa tự chế ở đầu pipeline.",
+      "D. Thay đổi cài đặt nén dữ liệu trong SQL Server."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bằng việc thực thi interface `ICompressionProvider` (định nghĩa các phương thức như CreateStream), ta có thể tích hợp bất kỳ thuật toán nén hiện đại nào vào hạ tầng nén dữ liệu phản hồi tiêu chuẩn của ASP.NET Core.",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong các hệ thống API chịu tải đỉnh cực cao, hiện tượng 'Cache Stampede' (nhiều request đồng thời đọc cache bị miss và cùng lúc truy vấn SQL) thường gây sập database. Giải pháp xử lý tối ưu nhất trực tiếp trong mã nguồn Web API là gì?",
+    "options": [
+      "A. Sử dụng cơ chế khóa phân tán hoặc sử dụng `SemaphoreSlim` để chỉ cho phép một luồng duy nhất thực hiện truy vấn SQL nạp lại Cache khi có hiện tượng cache miss, các luồng khác sẽ đợi và lấy dữ liệu từ cache sau đó.",
+      "B. Tăng số lượng kết nối tối đa của Connection Pool lên gấp 10 lần.",
+      "C. Sử dụng Cache có thời gian hết hạn (Expiration Time) bằng vô hạn.",
+      "D. Trả về lỗi 503 Service Unavailable ngay lập tức cho các request bị cache miss."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Sử dụng SemaphoreSlim ở cấp độ ứng dụng (hoặc Distributed Lock cho môi trường đa instance) giúp ngăn chặn tình trạng hàng ngàn luồng đồng thời gọi database tìm một bản ghi giống nhau khi cache vừa hết hạn (còn gọi là lỗi sập nguồn cache - stampede).",
+    "difficulty": "EXPERT",
+    "skillArea": "ASP.NET Core Web API",
+    "category": "SITUATION"
+  }
+]

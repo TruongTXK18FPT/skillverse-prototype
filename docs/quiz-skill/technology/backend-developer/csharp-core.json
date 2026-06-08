@@ -1,0 +1,1402 @@
+[
+  {
+    "questionText": "Trong ngôn ngữ C#, kiểu dữ liệu nào sau đây thuộc nhóm kiểu giá trị (Value Type)?",
+    "options": [
+      "A. class",
+      "B. interface",
+      "C. struct",
+      "D. delegate"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong C#, struct và enum thuộc nhóm Value Type, được lưu trữ trên Stack, trong khi class, interface, delegate, string là Reference Type và được lưu trữ trên Heap.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Bộ gom rác (Garbage Collector - GC) trong C# và .NET có nhiệm vụ chính là gì?",
+    "options": [
+      "A. Giải phóng bộ nhớ của các đối tượng không còn được tham chiếu trong Heap.",
+      "B. Giải phóng các biến cục bộ lưu trên Stack khi kết thúc hàm.",
+      "C. Đóng các kết nối cơ sở dữ liệu và file vật lý một cách tự động.",
+      "D. Biên dịch mã trung gian MSIL thành mã máy của hệ điều hành."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Garbage Collector (GC) tự động quản lý bộ nhớ bằng cách quét và giải phóng các vùng nhớ Heap của các đối tượng không còn được sử dụng (không còn tham chiếu).",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Đâu là cú pháp đúng để khai báo một biến số nguyên có thể chứa giá trị null (Nullable Value Type) trong C#?",
+    "options": [
+      "A. Nullable<int> x;",
+      "B. int? x;",
+      "C. Cả A và B đều đúng.",
+      "D. Không có phương án nào đúng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong C#, Nullable<int> và int? là hai cách viết hoàn toàn tương đương nhau để khai báo một kiểu số nguyên cho phép lưu giá trị null.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa kiểu 'string' và 'StringBuilder' trong C# khi thực hiện nhiều phép nối chuỗi là gì?",
+    "options": [
+      "A. String là bất biến (immutable), mỗi lần nối chuỗi sẽ tạo đối tượng mới gây tốn bộ nhớ; StringBuilder cho phép chỉnh sửa trực tiếp chuỗi gốc (mutable).",
+      "B. StringBuilder là kiểu giá trị (Value Type), còn string là kiểu tham chiếu (Reference Type).",
+      "C. String chạy nhanh hơn StringBuilder khi thực hiện nối chuỗi hàng nghìn lần.",
+      "D. String và StringBuilder hoạt động hoàn toàn giống nhau, chỉ khác nhau về cú pháp khai báo."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Vì string là bất biến, các thao tác thay đổi chuỗi sẽ tạo ra đối tượng string mới. StringBuilder đại diện cho một chuỗi có thể thay đổi, giúp tối ưu hiệu năng và bộ nhớ khi sửa đổi chuỗi liên tục.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Từ khóa nào trong C# được sử dụng để giải phóng bộ nhớ và tài nguyên không quản lý (unmanaged resources) ngay lập tức khi ra khỏi phạm vi khối lệnh bằng cách gọi phương thức Dispose()?",
+    "options": [
+      "A. using",
+      "B. try-finally",
+      "C. finalize",
+      "D. GC.Collect()"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Câu lệnh 'using' triển khai mô hình Dispose, tự động gọi phương thức Dispose() của đối tượng thực thi giao diện IDisposable khi kết thúc khối lệnh.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cú pháp C# nào sau đây biểu diễn tính năng nội suy chuỗi (String Interpolation) được giới thiệu từ C# 6?",
+    "options": [
+      "A. string.Format(\"Hello {0}\", name);",
+      "B. $\"Hello {name}\"",
+      "C. \"Hello \" + name",
+      "D. @\"Hello {name}\""
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ký tự $ đặt trước chuỗi cho phép nhúng trực tiếp biểu thức hoặc biến C# vào trong ngoặc nhọn { } để nội suy giá trị.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong lập trình hướng đối tượng với C#, một lớp (class) có thể kế thừa từ bao nhiêu lớp cha trực tiếp?",
+    "options": [
+      "A. Chỉ duy nhất một lớp cha.",
+      "B. Không giới hạn số lượng lớp cha.",
+      "C. Tối đa hai lớp cha.",
+      "D. Tùy thuộc vào phiên bản .NET Framework."
+    ],
+    "correctAnswer": "A",
+    "explanation": "C# không hỗ trợ đa kế thừa lớp trực tiếp (đơn kế thừa). Một lớp chỉ có thể kế thừa từ tối đa một lớp cha trực tiếp, nhưng có thể triển khai (implement) nhiều giao diện (interface).",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Access modifier nào trong C# giới hạn phạm vi truy cập của một thành viên chỉ bên trong cùng một class?",
+    "options": [
+      "A. public",
+      "B. internal",
+      "C. protected",
+      "D. private"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Từ khóa 'private' giới hạn quyền truy cập ở mức cao nhất, chỉ các thành phần trong cùng lớp khai báo mới có quyền đọc/ghi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'Boxing' trong C# nghĩa là gì?",
+    "options": [
+      "A. Chuyển đổi một kiểu tham chiếu sang một kiểu giá trị.",
+      "B. Chuyển đổi một kiểu giá trị sang một kiểu tham chiếu (thường là kiểu object).",
+      "C. Ép kiểu giữa hai lớp có quan hệ kế thừa với nhau.",
+      "D. Đóng gói mã nguồn C# thành file thư viện .dll."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Boxing là quá trình chuyển đổi một kiểu giá trị (Value Type) trên Stack thành một kiểu tham chiếu (Reference Type) được bọc trong một đối tượng trên Heap.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong khối lệnh try-catch-finally, khi nào khối lệnh 'finally' sẽ được thực thi?",
+    "options": [
+      "A. Chỉ khi không xảy ra bất kỳ lỗi (exception) nào.",
+      "B. Chỉ khi xảy ra lỗi và lỗi đó được bắt bởi catch.",
+      "C. Luôn luôn được thực thi, bất kể có xảy ra lỗi hay không.",
+      "D. Chỉ thực thi nếu luồng chạy bị dừng đột ngột."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Khối 'finally' chứa mã dọn dẹp tài nguyên và luôn được thực thi khi kết thúc cấu trúc try-catch, bất kể ngoại lệ có xảy ra hay không.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lớp nào là lớp gốc (root class) của toàn bộ các ngoại lệ (Exceptions) trong ngôn ngữ C#?",
+    "options": [
+      "A. System.Exception",
+      "B. System.Error",
+      "C. System.Throwable",
+      "D. System.RuntimeException"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tất cả các exception trong .NET đều phải kế thừa trực tiếp hoặc gián tiếp từ lớp System.Exception.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Giá trị mặc định của một biến kiểu tham chiếu (Reference Type) khi được khai báo là gì?",
+    "options": [
+      "A. 0",
+      "B. false",
+      "C. \"\"",
+      "D. null"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Mọi kiểu tham chiếu khi không được gán giá trị cụ thể thì giá trị mặc định của nó luôn là 'null' (chỉ ra rằng nó không trỏ tới đối tượng nào trên Heap).",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi khai báo biến bằng từ khóa 'var' trong C#, kiểu dữ liệu của biến được xác định tại thời điểm nào?",
+    "options": [
+      "A. Tại thời điểm chạy chương trình (Runtime).",
+      "B. Tại thời điểm biên dịch mã nguồn (Compile-time).",
+      "C. Kiểu dữ liệu có thể thay đổi tự do trong suốt quá trình chạy.",
+      "D. C# không xác định kiểu dữ liệu của biến var."
+    ],
+    "correctAnswer": "B",
+    "explanation": "C# là ngôn ngữ static-typed. Từ khóa 'var' chỉ dùng để compiler tự suy luận kiểu dữ liệu tại thời điểm compile dựa trên giá trị gán, sau đó kiểu biến được cố định.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Phương án nào sau đây định nghĩa đúng về mảng một chiều trong C#?",
+    "options": [
+      "A. Tập hợp các phần tử có cùng kiểu dữ liệu, được lưu trữ liên tiếp trong bộ nhớ với kích thước cố định.",
+      "B. Danh sách liên kết động có thể tự co giãn kích thước trong lúc chạy.",
+      "C. Kiểu dữ liệu lưu các cặp key-value không trùng lặp.",
+      "D. Tập hợp các biến có kiểu dữ liệu khác nhau."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Mảng (Array) trong C# lưu các phần tử cùng kiểu liên tiếp trong bộ nhớ và kích thước của nó được xác định cố định ngay khi khởi tạo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Cách nào dưới đây là cú pháp đúng để khai báo và khởi tạo một mảng số nguyên gồm 3 phần tử trong C#?",
+    "options": [
+      "A. int[] arr = new int[3] { 1, 2, 3 };",
+      "B. int[3] arr = { 1, 2, 3 };",
+      "C. int[] arr = new int(3);",
+      "D. array int arr = [1, 2, 3];"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cú pháp khai báo mảng đúng là chỉ định kiểu mảng 'int[]', sau đó dùng từ khóa 'new' cùng kích thước mảng hoặc khởi tạo trực tiếp danh sách phần tử trong ngoặc nhọn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Điểm khác biệt lớn nhất về mặt so sánh giá trị giữa toán tử '==' và phương thức 'Equals()' đối với kiểu dữ liệu string trong C# là gì?",
+    "options": [
+      "A. '==' so sánh địa chỉ ô nhớ, còn Equals() so sánh nội dung chuỗi.",
+      "B. Cả hai đều so sánh nội dung chuỗi do lớp String đã overload cả toán tử '==' và Equals().",
+      "C. Equals() chạy chậm hơn vì nó chỉ so sánh độ dài chuỗi.",
+      "D. '==' chỉ dùng cho kiểu số, không dùng được cho string."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc dù string là kiểu tham chiếu, C# đã override cả toán tử '==' và phương thức Equals() của String để thực hiện so sánh nội dung chuỗi (value equality) thay vì so sánh tham chiếu (reference equality).",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Từ khóa 'ref' khi truyền tham số vào phương thức trong C# có ý nghĩa gì?",
+    "options": [
+      "A. Truyền tham chiếu vào phương thức, yêu cầu biến truyền vào phải được khởi tạo trước đó.",
+      "B. Truyền bản sao giá trị của biến vào phương thức.",
+      "C. Truyền tham chiếu vào phương thức, biến truyền vào không cần khởi tạo trước.",
+      "D. Đảm bảo tham số đó không bị thay đổi giá trị trong phương thức."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Từ khóa 'ref' truyền tham số theo dạng tham chiếu (Reference). Khác với 'out', biến dùng với 'ref' bắt buộc phải được gán giá trị trước khi truyền vào hàm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Từ khóa 'out' khi truyền tham số vào phương thức trong C# có đặc điểm gì?",
+    "options": [
+      "A. Biến truyền vào bắt buộc phải được khởi tạo giá trị trước khi gọi hàm.",
+      "B. Biến truyền vào không cần khởi tạo trước khi gọi hàm, nhưng phương thức nhận tham số bắt buộc phải gán giá trị cho nó trước khi thoát ra.",
+      "C. Không thể thay đổi giá trị của biến đó bên trong phương thức.",
+      "D. Chỉ sử dụng được cho các kiểu dữ liệu Reference Type."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tham số 'out' truyền biến theo tham chiếu. Người gọi không cần khởi tạo trước, nhưng phương thức được gọi bắt buộc phải gán giá trị cho biến 'out' trước khi kết thúc phương thức.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Namespace mặc định chứa các lớp Collection generic (như List<T>, Dictionary<TKey, TValue>) trong C# là gì?",
+    "options": [
+      "A. System.Collections",
+      "B. System.Collections.Generic",
+      "C. System.Linq",
+      "D. System.IO"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lớp List<T>, Dictionary<TKey, TValue> và Queue<T> nằm trong namespace System.Collections.Generic.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong C#, từ khóa nào được đặt trước class để ngăn chặn việc các class khác kế thừa từ nó?",
+    "options": [
+      "A. static",
+      "B. final",
+      "C. sealed",
+      "D. abstract"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Từ khóa 'sealed' ngăn chặn tính kế thừa đối với lớp. Nếu đặt ở phương thức override, nó ngăn không cho lớp con ghi đè tiếp phương thức đó.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Dòng mã nào dưới đây thể hiện việc ép kiểu hiển thị (Explicit Casting) không an toàn và có thể gây lỗi InvalidCastException?",
+    "options": [
+      "A. double d = 5.5; int i = (int)d;",
+      "B. object obj = \"Hello\"; string s = (string)obj;",
+      "C. object obj = 123; string s = (string)obj;",
+      "D. int i = 10; double d = i;"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Dòng C cố gắng ép kiểu một đối tượng boxing số nguyên (123) sang kiểu chuỗi (string) bằng cú pháp ép kiểu tường minh, hành vi này gây ra lỗi Runtime InvalidCastException.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Access modifier 'protected' giới hạn quyền truy cập của biến hoặc hàm ở mức độ nào?",
+    "options": [
+      "A. Chỉ truy cập được trong cùng class và các class kế thừa (con) của nó.",
+      "B. Chỉ truy cập được trong cùng một assembly (file .dll hoặc .exe).",
+      "C. Truy cập rộng rãi từ bất kỳ lớp nào bên ngoài.",
+      "D. Chỉ truy cập được trong cùng class khai báo."
+    ],
+    "correctAnswer": "A",
+    "explanation": "protected cho phép các lớp con (kế thừa từ lớp cha) truy cập được tài nguyên của cha, các lớp không kế thừa sẽ không thể truy cập.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để kết thúc sớm một vòng lặp (như for, while) ngay lập tức mà không thực thi phần code còn lại của vòng lặp, ta sử dụng từ khóa nào?",
+    "options": [
+      "A. return",
+      "B. continue",
+      "C. break",
+      "D. exit"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Từ khóa 'break' thoát hoàn toàn ra khỏi vòng lặp gần nhất, trong khi 'continue' chỉ bỏ qua lượt lặp hiện tại và chuyển sang lượt lặp tiếp theo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Đâu là chữ ký đúng của phương thức khởi chạy chính (Entry Point) của một chương trình console C# truyền thống?",
+    "options": [
+      "A. static void Main(string[] args)",
+      "B. public void Main()",
+      "C. static int Start(string[] args)",
+      "D. public static void Entry()"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Theo chuẩn C# truyền thống, Entry Point của ứng dụng Console phải là phương thức static, tên là 'Main' (chữ M viết hoa) và thường nhận tham số 'string[] args'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong C#, toán tử ba ngôi (Ternary Operator) nào được dùng để viết tắt câu lệnh điều kiện if-else?",
+    "options": [
+      "A. ? :",
+      "B. ??",
+      "C. ?.",
+      "D. ||"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Toán tử ba ngôi có cú pháp: `điều_kiện ? giá_trị_nếu_đúng : giá_trị_nếu_sai`. Nó giúp rút gọn các khối lệnh điều kiện gán giá trị đơn giản.",
+    "difficulty": "BEGINNER",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Điểm khác biệt cốt lõi giữa Interface (giao diện) và Abstract Class (lớp trừu tượng) trong C# là gì?",
+    "options": [
+      "A. Một class có thể implement nhiều interface, nhưng chỉ có thể kế thừa từ một abstract class.",
+      "B. Abstract class không thể chứa các phương thức có phần thân xử lý logic.",
+      "C. Interface có thể chứa các biến trường dữ liệu (fields) trạng thái.",
+      "D. Không có khác biệt nào, cả hai đều chỉ chứa khai báo phương thức rỗng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "C# chỉ hỗ trợ đơn kế thừa lớp (bao gồm abstract class), nhưng hỗ trợ triển khai đa giao diện (multiple interfaces). Abstract class có thể lưu giữ trạng thái qua biến trường dữ liệu (field), còn interface truyền thống thì không.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác nhau giữa hai từ khóa 'const' và 'readonly' trong C# là gì?",
+    "options": [
+      "A. Const được xác định tại thời điểm chạy (runtime); Readonly được xác định tại thời điểm biên dịch (compile-time).",
+      "B. Const được xác định tại thời điểm biên dịch (compile-time); Readonly có thể được xác định tại thời điểm chạy (runtime) và gán giá trị trong constructor.",
+      "C. Const có thể áp dụng cho mọi đối tượng phức tạp; Readonly chỉ áp dụng cho kiểu nguyên thủy.",
+      "D. Không có sự khác biệt, cả hai đều tạo ra hằng số không thể chỉnh sửa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hằng số 'const' là tĩnh hoàn toàn và phải gán giá trị khi viết code (compile-time). Biến 'readonly' có thể gán giá trị linh động tại thời điểm chạy thông qua constructor của class và giữ nguyên sau đó.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi một mảng động kiểu 'List<T>' trong C# đạt đến giới hạn dung lượng lưu trữ tối đa (Capacity) hiện tại, điều gì sẽ xảy ra khi bạn thêm một phần tử mới?",
+    "options": [
+      "A. Chương trình sẽ ném ra ngoại lệ OutOfMemoryException.",
+      "B. List sẽ tự động nhân đôi Capacity hiện tại bằng cách tạo một mảng nội bộ mới lớn gấp đôi và sao chép các phần tử cũ sang.",
+      "C. List chuyển đổi thành cấu trúc LinkedList để chèn phần tử mới vào.",
+      "D. Hàm Add sẽ bỏ qua phần tử mới và trả về giá trị false."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cơ chế của List<T> hoạt động dựa trên mảng tĩnh nội bộ. Khi số phần tử (Count) bằng Capacity, List sẽ phân bổ mảng mới có dung lượng gấp 2 lần mảng cũ (x2 Capacity) để duy trì thời gian chèn O(1) trung bình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Độ phức tạp thời gian (Time Complexity) trung bình của thao tác tìm kiếm phần tử theo Key trong một tập hợp 'Dictionary<TKey, TValue>' trong C# là gì?",
+    "options": [
+      "A. O(1)",
+      "B. O(log N)",
+      "C. O(N)",
+      "D. O(N log N)"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Dictionary sử dụng bảng băm (hashtable) nội bộ để tổ chức dữ liệu. Thao tác tra cứu theo khóa (Key) có độ phức tạp trung bình là O(1) nhờ hàm băm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong thư viện LINQ của C#, hai toán tử 'Select' và 'Where' có công dụng khác biệt như thế nào?",
+    "options": [
+      "A. Where dùng để chuyển đổi kiểu dữ liệu; Select dùng để lọc phần tử.",
+      "B. Select dùng để biến đổi cấu trúc hoặc chọn các trường dữ liệu (Projection); Where dùng để lọc các phần tử thỏa mãn một điều kiện nhất định (Filtering).",
+      "C. Cả hai đều có chức năng giống hệt nhau.",
+      "D. Select chỉ áp dụng trên kiểu List; Where chỉ áp dụng trên kiểu Array."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Select chiếu (Project) từng phần tử của một nguồn thành một dạng mới (ánh xạ 1-1). Where lọc (Filter) nguồn để chỉ trả về các phần tử thỏa mãn điều kiện logic.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng LINQ, sự khác nhau giữa hai phương thức 'First()' và 'FirstOrDefault()' là gì?",
+    "options": [
+      "A. First() ném ra ngoại lệ nếu danh sách trống; FirstOrDefault() trả về giá trị mặc định của kiểu dữ liệu (ví dụ null cho class, 0 cho số) nếu danh sách trống.",
+      "B. FirstOrDefault() ném ra ngoại lệ nếu danh sách có nhiều hơn một phần tử.",
+      "C. First() chạy nhanh hơn FirstOrDefault() vì không cần kiểm tra null.",
+      "D. First() chỉ lấy phần tử cuối cùng; FirstOrDefault() lấy phần tử đầu tiên."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi tập hợp trống hoặc không tìm thấy phần tử thỏa mãn điều kiện, First() sẽ ném ra ngoại lệ InvalidOperationException. FirstOrDefault() thì an toàn hơn khi trả về default(T).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Đâu là định nghĩa chính xác nhất về 'Delegate' trong C#?",
+    "options": [
+      "A. Là một con trỏ kiểu an toàn (Type-safe function pointer) dùng để tham chiếu tới một hoặc nhiều phương thức có cùng chữ ký.",
+      "B. Kiểu dữ liệu lưu trữ cấu trúc cây thư mục hệ thống.",
+      "C. Lớp dùng để định nghĩa các thuộc tính Metadata cho class.",
+      "D. Đối tượng dùng để kết nối trực tiếp đến cơ sở dữ liệu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Delegate là một kiểu tham chiếu chứa tham chiếu đến một phương thức với danh sách tham số và kiểu trả về cụ thể, giúp lập trình viên truyền phương thức làm tham số.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để tạo ra một phương thức mở rộng (Extension Method) cho lớp string trong C#, phương thức đó phải đáp ứng điều kiện nào?",
+    "options": [
+      "A. Phải là phương thức static nằm trong một lớp non-generic static class, và tham số đầu tiên sử dụng từ khóa 'this'.",
+      "B. Phải được định nghĩa bên trong lớp System.String.",
+      "C. Phải kế thừa lớp String và sử dụng từ khóa override.",
+      "D. Phải sử dụng từ khóa extension ở chữ ký lớp."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Extension method yêu cầu lớp định nghĩa phải là class static, phương thức phải là static, và tham số đầu tiên xác định kiểu được mở rộng với từ khóa 'this' đứng trước.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Toán tử null-coalescing ('??') trong C# có hoạt động như thế nào?",
+    "options": [
+      "A. Trả về toán hạng bên trái nếu nó khác null; ngược lại trả về toán hạng bên phải.",
+      "B. Kiểm tra xem biến bên trái có kiểu dữ liệu khớp với kiểu bên phải hay không.",
+      "C. Chuyển đổi đối tượng bên trái thành null nếu bên phải bằng null.",
+      "D. Ném ra ngoại lệ NullReferenceException nếu biểu thức bên trái là null."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Toán tử `a ?? b` trả về giá trị của `a` nếu `a` khác null. Nếu `a` bằng null, nó sẽ trả về giá trị của `b`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong C#, từ khóa 'yield' (ví dụ: 'yield return') được sử dụng để làm gì?",
+    "options": [
+      "A. Cho biết một phương thức trả về kiểu IEnumerator/IEnumerable sẽ thực thi dạng lười (Lazy Evaluation) và sinh các phần tử lần lượt khi được duyệt qua.",
+      "B. Giải phóng bộ nhớ của đối tượng Iterator ngay lập tức.",
+      "C. Chuyển luồng thực thi sang một Thread khác để chạy song song.",
+      "D. Dừng ứng dụng tạm thời để chờ sự kiện I/O."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'yield' giúp xây dựng các state machine lặp (custom iterators) để sinh dữ liệu theo kiểu trì hoãn (lazy/deferred execution), tức là chỉ tính toán phần tử tiếp theo khi vòng lặp yêu cầu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi sử dụng lập trình bất đồng bộ (Asynchronous Programming) trong C# với 'async/await', nếu một phương thức async trả về 'void' (async void) thay vì 'Task', hậu quả tiềm ẩn là gì?",
+    "options": [
+      "A. Phương thức đó chạy nhanh hơn vì không cần tạo đối tượng Task.",
+      "B. Người gọi không thể await phương thức đó, và các ngoại lệ xảy ra bên trong phương thức không thể được bắt bằng khối try-catch ngoài hàm, gây crash ứng dụng.",
+      "C. GC sẽ bỏ qua việc thu hồi bộ nhớ cho phương thức này.",
+      "D. Trình biên dịch C# sẽ báo lỗi đỏ và không cho phép compile."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ngoại lệ ném ra từ phương thức 'async void' được đẩy trực tiếp lên SynchronizationContext hiện tại, gây crash chương trình vì mã gọi không thể bắt exception thông qua await Task. 'async void' chỉ nên dùng cho Event Handlers.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cơ chế 'Constructor Chaining' trong một class C# được thực hiện bằng cách sử dụng cú pháp nào?",
+    "options": [
+      "A. Gọi trực tiếp hàm khởi tạo khác bên trong phần thân constructor.",
+      "B. Sử dụng từ khóa ': this(...)' hoặc ': base(...)' ngay sau chữ ký khai báo của constructor.",
+      "C. Sử dụng từ khóa 'new' để gọi constructor khác.",
+      "D. Không thể gọi chéo các constructor trong cùng một lớp."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Constructor Chaining giúp một constructor gọi một constructor khác cùng lớp (dùng : this(...)) hoặc của lớp cha (dùng : base(...)) trước khi thực thi phần thân của mình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi so sánh từ khóa 'as' và phép ép kiểu tường minh dạng ngoặc đơn '(Type)object' trong C#, phương án nào đúng?",
+    "options": [
+      "A. 'as' sẽ ném ra ngoại lệ InvalidCastException nếu ép kiểu thất bại.",
+      "B. 'as' chỉ hoạt động với các kiểu Reference Type hoặc Nullable Type; nếu ép kiểu thất bại, nó trả về null thay vì ném ra ngoại lệ.",
+      "C. Phép ép kiểu '(Type)' luôn trả về null nếu thất bại.",
+      "D. Hai phép toán hoạt động hoàn toàn giống nhau trên mọi kiểu dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Toán tử 'as' cố gắng chuyển đổi kiểu tham chiếu an toàn, nếu thất bại nó trả về null. Phép ép kiểu tường minh '(Type)' sẽ ném ra lỗi Runtime InvalidCastException nếu không thể chuyển đổi kiểu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đặc trưng lớn nhất của kiểu 'record' giới thiệu từ C# 9 là gì?",
+    "options": [
+      "A. Là một Reference Type cung cấp tính năng bất biến (immutability) bằng từ khóa 'init' và tự động override phương thức Equals để so sánh theo giá trị (Value Equality).",
+      "B. Chỉ có thể lưu trữ trên bộ nhớ Stack.",
+      "C. Không thể chứa các thuộc tính hay phương thức.",
+      "D. Được tự động lưu vào Database không cần ORM."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Record được thiết kế làm mô hình lưu trữ dữ liệu bất biến. Khác với class thông thường so sánh theo tham chiếu, record so sánh bằng Equals dựa trên giá trị của các thuộc tính thành viên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong C#, từ khóa 'params' được sử dụng ở tham số của phương thức nhằm mục đích gì?",
+    "options": [
+      "A. Cho phép phương thức nhận vào một số lượng tham số tùy ý có cùng kiểu dữ liệu dưới dạng một mảng.",
+      "B. Đánh dấu tham số đó có thể thay đổi kiểu dữ liệu động.",
+      "C. Yêu cầu tham số đó phải được truyền theo tham chiếu.",
+      "D. Cho phép bỏ qua tham số đó khi gọi phương thức."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Từ khóa 'params' cho phép người gọi truyền vào một danh sách các đối số phân tách bằng dấu phẩy hoặc một mảng thực tế. Nó bắt buộc phải là tham số cuối cùng trong danh sách tham số.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Để xử lý tác vụ đọc một file văn bản lớn mà không tải toàn bộ nội dung file vào bộ nhớ RAM cùng một lúc, bạn nên sử dụng phương thức nào?",
+    "options": [
+      "A. File.ReadAllText()",
+      "B. File.ReadAllLines()",
+      "C. File.ReadLines()",
+      "D. File.WriteAllText()"
+    ],
+    "correctAnswer": "C",
+    "explanation": "File.ReadLines() trả về IEnumerable<string> thực hiện đọc file dòng-by-dòng theo kiểu lazy, giúp tiết kiệm bộ nhớ RAM. Ngược lại, File.ReadAllLines() đọc toàn bộ dòng file nạp vào một mảng string trên RAM.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt giữa khai báo thuộc tính thông qua biến trường dữ liệu truyền thống và Auto-Implemented Property trong C# là gì?",
+    "options": [
+      "A. Auto-implemented property tự động tạo ra một biến ẩn (backing field) tương ứng do compiler quản lý, giúp mã ngắn gọn hơn.",
+      "B. Biến trường truyền thống chạy nhanh hơn thuộc tính tự động.",
+      "C. Auto-implemented property chỉ dùng được cho class static.",
+      "D. Không thể viết thêm logic kiểm tra dữ liệu vào thuộc tính tự động."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi khai báo `{ get; set; }`, compiler tự động sinh ra một biến private backing field. Nếu muốn viết thêm logic kiểm tra dữ liệu trong get/set, lập trình viên phải chuyển về thuộc tính truyền thống dùng backing field thủ công.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Biểu thức Lambda (Lambda Expression) trong C# thường được chuyển đổi ngầm định thành kiểu dữ liệu nào?",
+    "options": [
+      "A. Kiểu Delegate (như Action, Func) hoặc Expression Tree.",
+      "B. Lớp Class thông thường.",
+      "C. Các giá trị số nguyên.",
+      "D. Chuỗi String JSON."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Biểu thức Lambda đại diện cho các hàm ẩn danh, có thể chuyển đổi thành các kiểu delegate tương ứng hoặc Expression Tree tùy thuộc vào kiểu khai báo của biến nhận.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt giữa từ khóa 'is' và phép toán kiểm tra kiểu truyền thống (như GetType() == typeof(Class)) là gì?",
+    "options": [
+      "A. Toán tử 'is' đánh giá đúng (true) cả khi đối tượng thuộc lớp con (kế thừa) của lớp cần kiểm tra; GetType() chỉ đúng nếu kiểu thực tế khớp chính xác.",
+      "B. GetType() không gây lỗi null-reference.",
+      "C. 'is' chỉ sử dụng được tại thời điểm chạy và chậm hơn GetType() 10 lần.",
+      "D. Không có sự khác biệt về mặt kế thừa."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Toán tử 'is' hỗ trợ đa hình (polymorphic type check). Ví dụ, nếu Dog kế thừa Animal thì `dog is Animal` là true, nhưng `dog.GetType() == typeof(Animal)` là false.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Nullable Reference Types (NRT) được giới thiệu từ C# 8 nhằm giải quyết vấn đề gì?",
+    "options": [
+      "A. Loại bỏ hoàn toàn kiểu tham chiếu ra khỏi ngôn ngữ C#.",
+      "B. Cung cấp cảnh báo lúc biên dịch (compile-time warnings) để giảm thiểu lỗi NullReferenceException khi lập trình viên gán null cho biến không được phép chứa null.",
+      "C. Tự động chuyển đổi các giá trị null thành chuỗi trống.",
+      "D. Giảm dung lượng RAM khi chạy các chương trình có nhiều đối tượng null."
+    ],
+    "correctAnswer": "B",
+    "explanation": "NRT giúp phân biệt rõ biến tham chiếu có thể chứa null (ví dụ: string?) và biến không cho phép chứa null (ví dụ: string). Compiler sẽ đưa ra cảnh báo nếu phát hiện mã nguồn có nguy cơ gây NullReferenceException.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong C#, làm thế nào để thực hiện gán nhiều biến từ một cấu trúc dữ liệu Tuple (Tuple Deconstruction)?",
+    "options": [
+      "A. (string name, int age) = personTuple;",
+      "B. string name, int age = personTuple.Split();",
+      "C. personTuple.Deconstruct(out name, out age);",
+      "D. Cả A và C đều đúng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "C# hỗ trợ cú pháp giải cấu trúc Tuple trực tiếp dạng `(var x, var y) = tuple` hoặc gọi phương thức Deconstruct với tham số out.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Từ khóa discard (ký tự gạch dưới '_') trong C# có công dụng gì?",
+    "options": [
+      "A. Làm biến tạm thời chứa dữ liệu rác không cần thu hồi.",
+      "B. Đại diện cho biến chỉ đọc không thể thay đổi giá trị.",
+      "C. Cho biết lập trình viên cố tình bỏ qua không sử dụng giá trị trả về của một biến, giúp giảm phân bổ bộ nhớ và làm code gọn hơn.",
+      "D. Xóa đối tượng ra khỏi Heap ngay lập tức."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Discard đại diện cho các biến ghi nháp (write-only variables) không có tên, giúp khai báo bỏ qua các tham số out không dùng hoặc các phần tử Tuple không dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao các thành viên static (static members) của một lớp không thể truy cập trực tiếp các thành viên non-static (instance members) trong cùng lớp đó?",
+    "options": [
+      "A. Vì thành viên static thuộc về bản thân lớp (class-level) và tồn tại độc lập, không có tham chiếu 'this' đến bất kỳ đối tượng cụ thể nào (instance-level) để truy cập thành viên instance.",
+      "B. Vì static member được lưu trữ trên Stack, còn instance member lưu trên Heap.",
+      "C. Do các phương thức static được mã hóa bảo mật hơn phương thức instance.",
+      "D. Đây là lỗi thiết kế của compiler, có thể sửa bằng cách ép kiểu static."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương thức static chạy ở cấp độ Class, nó có thể được gọi mà không cần tạo đối tượng. Do đó, nó không có ngữ cảnh đối tượng cụ thể ('this') nên không thể biết cần đọc dữ liệu của đối tượng nào.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Đâu là cách gán sự kiện (Event) an toàn để tránh bị lỗi cộng dồn handler lặp hoặc rò rỉ bộ nhớ trong C#?",
+    "options": [
+      "A. Sử dụng toán tử '+=' trực tiếp mà không cần hủy đăng ký.",
+      "B. Sử dụng toán tử '-=' để hủy đăng ký handler cũ trước, sau đó mới dùng '+=' đăng ký handler mới.",
+      "C. Gán sự kiện bằng toán tử '='.",
+      "D. Gọi GC.Collect() ngay sau khi đăng ký sự kiện."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Hủy đăng ký trước khi đăng ký `publisher.SomeEvent -= OnSomeEvent; publisher.SomeEvent += OnSomeEvent;` giúp đảm bảo phương thức OnSomeEvent chỉ được gọi đúng 1 lần khi kích hoạt và tránh rò rỉ bộ nhớ khi publisher có vòng đời dài hơn subscriber.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong C#, kiểu Enum (liệt kê) có kiểu dữ liệu lưu trữ nền tảng (underlying type) mặc định là gì?",
+    "options": [
+      "A. string",
+      "B. int",
+      "C. byte",
+      "D. double"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mặc định, các hằng số trong Enum có kiểu nền tảng là số nguyên 32-bit (int), bắt đầu từ số 0. Ta có thể thay đổi kiểu nền tảng bằng cách khai báo: `enum MyEnum : byte`.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong kiến trúc bộ gom rác (GC) của .NET Core, các đối tượng được chia thành những thế hệ (Generations) nào và nguyên lý hoạt động cốt lõi của chúng là gì?",
+    "options": [
+      "A. Gồm Gen 0, Gen 1, Gen 2. Đối tượng mới được phân bổ vào Gen 0; nếu sống sót sau các chu kỳ quét GC, chúng sẽ được thăng cấp dần lên thế hệ cao hơn.",
+      "B. Gồm Gen 0, Gen 1. Gen 0 dành cho Value Type, Gen 1 dành cho Reference Type.",
+      "C. Gồm Gen 1, Gen 2, Gen 3. Gen 3 dành riêng cho đối tượng mảng lớn (LOH).",
+      "D. Bộ gom rác quét tất cả đối tượng trên Heap với mức độ ưu tiên ngang nhau không phân chia thế hệ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "C chế Generational GC hoạt động trên giả định: đối tượng mới tạo có vòng đời ngắn (Gen 0). Việc chia Gen 0, 1, 2 giúp GC tập trung dọn dẹp Gen 0 thường xuyên hơn, tránh quét toàn bộ Heap Gen 2 (đối tượng sống lâu), tối ưu hiệu năng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Sự khác biệt căn bản giữa phương thức hủy hủy (Finalizer / ~ClassName) và phương thức 'Dispose()' thuộc giao diện 'IDisposable' là gì?",
+    "options": [
+      "A. Dispose() được gọi tự động bởi GC; Finalizer được gọi trực tiếp bằng code.",
+      "B. Dispose() được gọi chủ động từ mã ứng dụng (hoặc qua using) để giải phóng tài nguyên lập tức; Finalizer được GC gọi bất đồng bộ trước khi thu hồi đối tượng, gây ảnh hưởng hiệu năng hệ thống.",
+      "C. Cả hai đều giải phóng tài nguyên cùng một thời điểm.",
+      "D. Finalizer chỉ áp dụng được cho struct, còn Dispose chỉ dùng cho class."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dispose() cho phép chủ động dọn dẹp tài nguyên (deterministic cleanup). Finalizer (~Destructor) là cơ chế dự phòng không xác định thời gian (non-deterministic), chạy trên một thread GC riêng biệt và làm trì hoãn việc giải phóng bộ nhớ của đối tượng qua ít nhất một chu kỳ GC.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong C#, tính chất Hiệp biến (Covariance) và Nghịch biến (Contravariance) đối với kiểu generic biểu diễn thông qua các từ khóa nào và hoạt động ra sao?",
+    "options": [
+      "A. Hiệp biến dùng từ khóa 'out' (cho phép truyền lớp con thay thế lớp cha ở kiểu trả về); Nghịch biến dùng từ khóa 'in' (cho phép truyền lớp cha thay thế lớp con ở kiểu tham số đầu vào).",
+      "B. Hiệp biến dùng từ khóa 'in'; Nghịch biến dùng từ khóa 'out'.",
+      "C. Cả hai đều chỉ dùng từ khóa 'ref' để thay thế.",
+      "D. Tính chất này tự động áp dụng và không cần từ khóa chỉ định."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Covariance (out) bảo toàn chiều kế thừa kiểu tham số generic cho kiểu trả về (ví dụ: IEnumerable<Dog> gán được cho IEnumerable<Animal>). Contravariance (in) đảo ngược chiều kế thừa kiểu dữ liệu ở đầu vào (ví dụ: Action<Animal> gán được cho Action<Dog>).",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khái niệm 'ref struct' trong C# (ví dụ: Span<T>) có những hạn chế nghiêm ngặt nào trong quá trình biên dịch?",
+    "options": [
+      "A. Không thể kế thừa lớp khác và chỉ lưu trữ trên Stack.",
+      "B. Không thể bị boxing, không thể làm kiểu generic của List, không thể là field của class thông thường, và không được dùng trong phương thức async/await (do stack có thể bị giải phóng).",
+      "C. Không thể chứa các biến private.",
+      "D. Không thể triển khai bất kỳ interface nào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "ref struct được đảm bảo chỉ tồn tại trên Stack. Do đó, compiler ngăn chặn bất kỳ hành vi nào đẩy nó lên Heap như: làm trường dữ liệu của class, lambda closure, async state machine, boxing sang object, hoặc dùng trong IAsyncEnumerable.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Lập trình viên viết phương thức chạy bất đồng bộ và sử dụng 'ConfigureAwait(false)' nhằm mục đích gì?",
+    "options": [
+      "A. Bắt buộc tác vụ phải chạy trên luồng giao diện người dùng (UI Thread).",
+      "B. Thông báo cho trình awaiter biết không cần quay trở lại SynchronizationContext ban đầu (như UI thread hoặc ASP.NET context), tránh lỗi deadlock trong môi trường đơn luồng.",
+      "C. Tự động tăng tốc độ xử lý CPU lên gấp đôi.",
+      "D. Ép buộc tác vụ chạy đồng bộ thay vì bất đồng bộ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "`ConfigureAwait(false)` giải phóng thread chạy tiếp theo khỏi SynchronizationContext ban đầu. Điều này cực kỳ hữu ích trong các thư viện (Class Library) để tối ưu hiệu năng và tránh deadlock khi người gọi sử dụng `.Result` hoặc `.Wait()` đồng bộ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Sự khác biệt về mặt hiệu năng và cách sử dụng giữa 'Task.WhenAll' và 'Task.WaitAll' trong C# là gì?",
+    "options": [
+      "A. Task.WaitAll chặn đứng thread hiện tại (blocking); Task.WhenAll trả về một Task có thể await bất đồng bộ (non-blocking).",
+      "B. Task.WhenAll chặn đứng thread hiện tại; Task.WaitAll không chặn.",
+      "C. Cả hai đều chặn thread và có hiệu năng ngang nhau.",
+      "D. Task.WhenAll chỉ dùng được trong các ứng dụng Web."
+    ],
+    "correctAnswer": "A",
+    "explanation": "WaitAll là phương thức đồng bộ, nó block luồng hiện tại cho tới khi tất cả các task hoàn thành. WhenAll trả về một Task đại diện cho việc hoàn thành bất đồng bộ của toàn bộ tác vụ, giúp giải phóng Thread Pool.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi sử dụng kỹ thuật Reflection (như đọc metadata, gọi phương thức động) trong C#, vấn đề nào là lớn nhất cần lưu ý?",
+    "options": [
+      "A. Giảm tính bảo mật của ứng dụng.",
+      "B. Chi phí hiệu năng (performance overhead) cực kỳ cao do compiler phải thực hiện tra cứu chuỗi metadata và bỏ qua tối ưu hóa JIT.",
+      "C. Không thể đọc được các biến private.",
+      "D. Reflection chỉ chạy được trong các dự án nhỏ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Reflection bỏ qua kiểm tra kiểu lúc biên dịch và tra cứu thông tin kiểu động ở runtime, tốn chi phí CPU. Có thể giảm thiểu bằng cách lưu cache thông tin MethodInfo hoặc sinh mã IL động thông qua LCG (Lightweight Code Generation).",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong C#, từ khóa 'lock' thực chất hoạt động dựa trên cơ chế đồng bộ hóa nào dưới nền tảng CLR?",
+    "options": [
+      "A. Lớp System.Threading.Monitor.Enter và Monitor.Exit bọc trong một khối try-finally.",
+      "B. Lớp Mutex trên cấp độ hệ điều hành.",
+      "C. Lớp AutoResetEvent.",
+      "D. Phương thức lặp kiểm tra SpinWait."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Từ khóa `lock(obj)` là cú pháp viết tắt của: `bool lockTaken = false; try { Monitor.Enter(obj, ref lockTaken); ... } finally { if (lockTaken) Monitor.Exit(obj); }` để đảm bảo giải phóng khóa ngay cả khi có ngoại lệ xảy ra.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lớp nào sau đây là lựa chọn tối ưu để lưu trữ và truy cập dữ liệu an toàn đa luồng (thread-safe) mà không cần dùng khóa lock thủ công?",
+    "options": [
+      "A. Dictionary<TKey, TValue>",
+      "B. ConcurrentDictionary<TKey, TValue>",
+      "C. List<T>",
+      "D. SortedList<TKey, TValue>"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Các lớp trong namespace System.Collections.Concurrent (như ConcurrentDictionary) sử dụng các giải pháp lock-free (như Interlocked) và cơ chế phân mảnh khóa (fine-grained locking) để tối ưu hóa truy cập đồng thời từ nhiều thread.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Cách tốt nhất để sử dụng kiểu dữ liệu 'WeakReference<T>' trong C# là gì?",
+    "options": [
+      "A. Giữ tham chiếu mạnh đến đối tượng để nó không bao giờ bị GC thu hồi.",
+      "B. Tham chiếu đến các đối tượng có kích thước lớn nhưng có thể tái tạo lại được, giúp GC thu hồi khi bộ nhớ hệ thống bị thiếu mà không ngăn cản vòng đời của đối tượng.",
+      "C. Tăng tốc độ đọc dữ liệu từ file cứng.",
+      "D. Thay thế hoàn toàn cho kiểu con trỏ trong mã unsafe."
+    ],
+    "correctAnswer": "B",
+    "explanation": "WeakReference cho phép tham chiếu tới đối tượng mà vẫn cho phép GC thu hồi đối tượng đó. Thường dùng trong các cơ chế Caching dữ liệu lớn để tránh Memory Leak.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Sự khác biệt giữa Expression Tree (Expression<Func<T, bool>>) và Delegate (Func<T, bool>) trong C# là gì?",
+    "options": [
+      "A. Delegate đại diện cho mã thực thi trực tiếp (executable code); Expression Tree đại diện cho cấu trúc dữ liệu mô tả logic của mã nguồn dạng cây AST, có thể được phân tích hoặc dịch sang ngôn ngữ khác (như SQL).",
+      "B. Expression Tree chạy nhanh hơn Delegate 2 lần.",
+      "C. Delegate chỉ áp dụng được cho kiểu số.",
+      "D. Không thể chuyển đổi từ Expression Tree sang Delegate."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Expression Tree biểu diễn cấu trúc cú pháp của hàm dưới dạng dữ liệu. Entity Framework sử dụng Expression Tree để dịch các truy vấn LINQ C# thành các câu lệnh SQL tương ứng để thực thi trên database server.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong C#, từ khóa 'dynamic' hoạt động như thế nào so với kiểu dữ liệu 'object'?",
+    "options": [
+      "A. dynamic và object hoàn toàn giống nhau và đều được kiểm tra kiểu dữ liệu tĩnh lúc compile.",
+      "B. dynamic hoãn việc kiểm tra kiểu dữ liệu sang thời điểm chạy (Runtime) thông qua DLR (Dynamic Language Runtime); object yêu cầu ép kiểu hiển thị để gọi các thành phần của nó.",
+      "C. dynamic là kiểu giá trị (Value Type), còn object là kiểu tham chiếu.",
+      "D. dynamic chỉ sử dụng được khi viết mã unsafe."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với `dynamic`, compiler bỏ qua kiểm tra kiểu tại compile-time và để DLR phân tích kiểu thực tế lúc chạy. Với `object`, trình biên dịch vẫn yêu cầu ép kiểu tường minh nếu muốn truy cập các phương thức riêng của thực thể.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cơ chế 'String Interning' trong .NET Core hoạt động như thế nào?",
+    "options": [
+      "A. Tự động mã hóa tất cả các chuỗi thành mảng byte để bảo mật.",
+      "B. Duy trì một bảng băm duy nhất (Intern Pool) lưu trữ một bản sao của các chuỗi literal; các biến trỏ tới cùng một literal sẽ trỏ tới cùng một địa chỉ ô nhớ.",
+      "C. Giải phóng toàn bộ chuỗi trống ra khỏi bộ nhớ Heap.",
+      "D. Tự động chuyển đổi các chuỗi thành chữ hoa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "String Interning giúp tối ưu bộ nhớ bằng cách lưu trữ duy nhất một instance của mỗi chuỗi literal trong Intern Pool. Lập trình viên có thể dùng `String.Intern()` để đưa chuỗi động vào pool này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi khai báo một tham số với modifier 'in' trong C# (ví dụ: void Process(in MyStruct data)), hành vi nào xảy ra?",
+    "options": [
+      "A. Tham số được truyền theo tham chiếu (reference) nhưng được xử lý như một biến chỉ đọc (read-only), ngăn chặn phương thức sửa đổi nội dung của nó.",
+      "B. Trình biên dịch sao chép struct đó ra một bản sao mới trên Stack.",
+      "C. Yêu cầu tham số truyền vào bắt buộc phải bằng null.",
+      "D. Cho phép phương thức gọi gán lại đối tượng hoàn toàn mới cho tham số."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Modifier 'in' truyền tham số dạng tham chiếu để tránh chi phí sao chép dữ liệu của struct lớn, đồng thời bảo vệ biến khỏi việc bị chỉnh sửa (read-only) bên trong phương thức.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc lạm dụng cơ chế bắt ngoại lệ chung (catch (Exception ex)) mà không throw lại lỗi có thể gây hại cho hệ thống?",
+    "options": [
+      "A. Nó che giấu các lỗi logic nghiêm trọng, khiến hệ thống tiếp tục chạy trong trạng thái dữ liệu không nhất quán và gây khó khăn cho việc debug.",
+      "B. Làm cho dung lượng file build .dll tăng lên gấp đôi.",
+      "C. Làm cho Garbage Collector ngừng hoạt động.",
+      "D. Trình biên dịch sẽ báo lỗi cú pháp lập tức."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Việc nuốt lỗi (exception swallowing) làm mất dấu vết stack trace và che giấu các bug nghiêm trọng (như NullReferenceException). Nên chỉ bắt exception cụ thể mà bạn có thể xử lý, hoặc dùng `throw;` để ném tiếp lỗi lên lớp trên.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong C#, làm thế nào để định nghĩa một thuộc tính Indexer tùy chỉnh để đối tượng có thể được truy cập như một mảng (ví dụ: myObj[i])?",
+    "options": [
+      "A. Khai báo thuộc tính sử dụng từ khóa 'this' nhận tham số truyền vào (ví dụ: public T this[int index] { get; set; }).",
+      "B. Kế thừa interface IIndexer.",
+      "C. Định nghĩa một phương thức đặt tên là GetElement(int index).",
+      "D. Sử dụng thuộc tính có tên là 'Item'."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cú pháp định nghĩa Indexer trong C# sử dụng từ khóa 'this' kèm theo kiểu chỉ mục trong ngoặc vuông, cho phép định nghĩa nhiều indexer nạp chồng (overload) với các kiểu tham số khác nhau.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt chính giữa hai giao diện 'IEnumerable<T>' và 'IQueryable<T>' khi thực thi truy vấn LINQ là gì?",
+    "options": [
+      "A. IEnumerable chạy trên Client-side (in-memory) và tải toàn bộ bản ghi về bộ nhớ trước khi lọc; IQueryable chạy trên Server-side (database) bằng cách biên dịch Expression Tree thành SQL tối ưu.",
+      "B. IQueryable chạy chậm hơn IEnumerable vì phải kết nối mạng.",
+      "C. IEnumerable chỉ sử dụng được cho SQL Server, còn IQueryable dùng cho tất cả database.",
+      "D. Không có sự khác biệt về cách thực thi truy vấn dưới database."
+    ],
+    "correctAnswer": "A",
+    "explanation": "IEnumerable thực hiện tải dữ liệu về bộ nhớ của ứng dụng rồi mới lọc (LinQ to Objects). IQueryable giữ biểu thức dạng Expression Tree và dịch trực tiếp sang câu lệnh SQL để database lọc trước khi trả về ứng dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để cấu hình vòng đời của một dịch vụ (Service Lifetime) trong bộ máy Dependency Injection (DI) mặc định của .NET Core sao cho dịch vụ đó được tạo mới một lần duy nhất cho mỗi yêu cầu HTTP (HTTP Request), bạn nên sử dụng tùy chọn nào?",
+    "options": [
+      "A. AddTransient",
+      "B. AddScoped",
+      "C. AddSingleton",
+      "D. AddHostedService"
+    ],
+    "correctAnswer": "B",
+    "explanation": "AddScoped đăng ký dịch vụ với vòng đời gắn liền với một Scope (đối với ứng dụng web là tương đương một HTTP Request). Transient tạo mới mỗi lần yêu cầu, Singleton tạo duy nhất một lần cho toàn bộ ứng dụng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Khi viết một Custom Exception trong C# kế thừa từ System.Exception, chuẩn thiết kế nào được Microsoft khuyến cáo để đảm bảo tính tuần tự hóa (Serialization)?",
+    "options": [
+      "A. Đánh dấu lớp bằng thuộc tính [Serializable] và cung cấp đầy đủ 3 hoặc 4 hàm khởi tạo tiêu chuẩn (bao gồm SerializationInfo).",
+      "B. Chỉ cần kế thừa lớp Exception và không viết thêm gì cả.",
+      "C. Khai báo lớp đó là sealed class static.",
+      "D. Đăng ký exception đó vào file cấu hình appsettings.json."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Để exception có thể truyền qua các ranh giới ứng dụng (như Web API, gRPC, Application Domains), exception cần được tuần tự hóa bằng cách đánh dấu [Serializable] và implement constructor protected Exception(SerializationInfo, StreamingContext) cho việc deserialize.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Từ khóa 'yield break' trong C# có tác dụng gì khi đặt trong một phương thức trả về IEnumerable?",
+    "options": [
+      "A. Dừng vòng lặp và kết thúc hoàn toàn việc sinh thêm phần tử cho iterator mà không ném ra lỗi.",
+      "B. Tạm dừng tiến trình trong 1 giây.",
+      "C. Ném ra ngoại lệ OperationCanceledException.",
+      "D. Bắt buộc GC phải thu hồi bộ nhớ của list ngay lập tức."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Từ khóa 'yield break' thông báo cho iterator state machine biết rằng chuỗi dữ liệu đã kết thúc, giúp thoát khỏi vòng lặp duyệt phần tử (foreach) ở phía người gọi một cách chủ động.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tại sao việc so sánh kiểu giá trị bằng toán tử '==' trong khối code generic (ví dụ: public bool Compare<T>(T a, T b)) mặc định sẽ báo lỗi compile?",
+    "options": [
+      "A. Vì trình biên dịch không thể đảm bảo kiểu T có hỗ trợ nạp chồng toán tử '==' hay không. Lập trình viên nên dùng EqualityComparer<T>.Default.Equals(a, b).",
+      "B. Vì kiểu generic chỉ hoạt động với Equals().",
+      "C. Vì C# cấm sử dụng toán tử so sánh trong lớp generic.",
+      "D. Chỉ cần thêm điều kiện where T : class là lỗi compile tự biến mất."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong phương thức generic không ràng buộc, compiler không biết T là value type hay reference type và liệu nó có toán tử '==' hay không. Sử dụng EqualityComparer<T>.Default.Equals giải quyết vấn đề này hiệu quả và không gây boxing.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tính năng Pattern Matching switch expression (ví dụ: status switch { Status.Active => 1, _ => 0 }) yêu cầu gì để đảm bảo an toàn code?",
+    "options": [
+      "A. Phải xử lý đầy đủ tất cả các trường hợp có thể xảy ra của biến đầu vào (Exhaustive matching) thông qua nhánh mặc định '_'.",
+      "B. Chỉ hoạt động trên kiểu dữ liệu Enum.",
+      "C. Bắt buộc phải viết từ khóa case trước mỗi giá trị.",
+      "D. Luôn cần từ khóa break ở cuối mỗi nhánh."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Switch expression yêu cầu tính bao phủ toàn diện. Nếu đầu vào không khớp với bất kỳ nhánh nào, hệ thống sẽ ném ra ngoại lệ SwitchExpressionException tại runtime. Ký tự discard '_' dùng làm nhánh mặc định.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Tính năng Index và Range trong C# (ví dụ: arr[1..^1]) hoạt động dựa trên cấu trúc dữ liệu nền tảng nào?",
+    "options": [
+      "A. Cấu trúc System.Index và System.Range.",
+      "B. Trình biên dịch tự động dịch sang biểu thức con trỏ trong mã unsafe.",
+      "C. Lớp ArrayList.",
+      "D. Sử dụng cơ chế LINQ Skip và Take dưới nền."
+    ],
+    "correctAnswer": "A",
+    "explanation": "C# giới thiệu kiểu cấu trúc Index (ví dụ: ^1 nghĩa là phần tử cuối cùng tính từ cuối) và Range (lấy mảng con) giúp thao tác cắt lát mảng (slicing) nhanh gọn và hiệu năng cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Lợi ích lớn nhất của việc khai báo biến Pattern Matching trực tiếp trong câu lệnh điều kiện (ví dụ: if (obj is Student student)) là gì?",
+    "options": [
+      "A. Rút ngắn mã nguồn bằng cách vừa kiểm tra kiểu dữ liệu vừa khai báo và gán giá trị cho biến mới nếu kiểm tra thành công.",
+      "B. Biến mới khai báo sẽ tự động có phạm vi toàn cục (global scope).",
+      "C. Tăng tốc độ thực thi chương trình lên gấp nhiều lần.",
+      "D. Ép buộc đối tượng obj phải chuyển thành kiểu cấu trúc struct."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Cú pháp này giúp tránh việc phải ép kiểu thủ công rườm rà ở dòng tiếp theo và đảm bảo biến 'student' chỉ sử dụng được trong phạm vi khối lệnh mà tính hợp lệ của nó được đảm bảo.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong C#, từ khóa 'extern' thường được sử dụng khi nào?",
+    "options": [
+      "A. Để khai báo một phương thức được triển khai ở thư viện bên ngoài viết bằng ngôn ngữ khác (như C/C++ DLL) thông qua cơ chế P/Invoke.",
+      "B. Để chia sẻ biến tĩnh giữa nhiều tiến trình khác nhau.",
+      "C. Khi cần khai báo class dùng chung giữa các project.",
+      "D. Để import một thư viện từ file cấu hình XML."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Từ khóa 'extern' kết hợp với thuộc tính [DllImport] cho phép C# giao tiếp với các hàm nguyên bản (native C/C++ APIs) của hệ điều hành hoặc thư viện ngoài.",
+    "difficulty": "ADVANCED",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Để giảm thiểu tối đa việc phân bổ bộ nhớ trên Heap và tối ưu hóa GC khi thao tác với các phân đoạn bộ nhớ liên tục (như mảng, chuỗi, buffer dữ liệu), C# cung cấp cấu trúc Span<T> và ReadOnlySpan<T>. Đâu là nhận định đúng về cơ chế hoạt động của chúng?",
+    "options": [
+      "A. Chúng là các 'ref struct' chỉ tồn tại trên Stack, đại diện cho một phân đoạn liên tục của bộ nhớ tùy ý (Stack, Heap, hoặc Native Heap) mà không cần sao chép dữ liệu.",
+      "B. Chúng hoạt động giống hệt List<T> nhưng tự động nén bộ nhớ.",
+      "C. Span<T> lưu trữ dữ liệu hoàn toàn trên bộ nhớ LOH (Large Object Heap).",
+      "D. ReadOnlySpan<T> có thể truyền qua các luồng bất đồng bộ (async/await) không giới hạn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Span<T> cung cấp chế độ xem an toàn kiểu (type-safe) và an toàn bộ nhớ cho các vùng nhớ liên tục. Vì là ref struct, nó bị giới hạn chỉ ở Stack để đảm bảo con trỏ bộ nhớ của nó không bị trỏ sai vị trí khi đối tượng Heap di dịch do GC.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong các phương thức bất đồng bộ (async methods), tại sao ta không thể sử dụng 'Span<T>' hoặc 'ReadOnlySpan<T>' làm tham số đầu vào hoặc biến cục bộ, và giải pháp thay thế là gì?",
+    "options": [
+      "A. Vì phương thức async sinh ra một struct State Machine lưu trên Heap, trong khi Span<T> là ref struct (không được phép lưu trên Heap). Giải pháp là sử dụng Memory<T> hoặc ReadOnlyMemory<T>.",
+      "B. Vì async runtime chỉ hỗ trợ kiểu mảng nguyên thủy. Giải pháp là chuyển về dùng con trỏ unsafe.",
+      "C. Vì Span<T> bị xung đột khóa luồng với async. Giải pháp là dùng Task<Span<T>>.",
+      "D. Trình biên dịch cho phép dùng tự do nếu đánh dấu [AsyncMethodBuilder]."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương thức async lưu trữ trạng thái của nó trên Heap khi gặp từ khóa await để khôi phục sau đó. Do ref struct không thể nằm trên Heap, compiler cấm dùng Span trong phương thức async. Kiểu `Memory<T>` được lưu trên Heap nên được dùng làm giải pháp thay thế.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Cơ chế hoạt động của 'ValueTask<T>' khác gì so với 'Task<T>' truyền thống và khi nào lập trình viên nên chọn ValueTask?",
+    "options": [
+      "A. ValueTask<T> là một struct (Value Type), giúp tránh phân bổ bộ nhớ trên Heap khi tác vụ bất đồng bộ hoàn thành đồng bộ (ví dụ lấy dữ liệu từ cache). Nên dùng khi phương thức bất đồng bộ được gọi cực kỳ thường xuyên và phần lớn trường hợp kết quả có ngay lập tức.",
+      "B. ValueTask<T> chạy nhanh hơn Task<T> trong mọi trường hợp đa luồng.",
+      "C. ValueTask<T> cho phép await nhiều lần đồng thời, còn Task<T> thì không.",
+      "D. Task<T> là struct, còn ValueTask<T> là class."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Task<T> là kiểu tham chiếu, mỗi lần tạo sẽ phân bổ bộ nhớ. ValueTask<T> là một struct giúp loại bỏ chi phí cấp phát đối tượng trên Heap nếu tác vụ hoàn thành đồng bộ. Tuy nhiên, nó có hạn chế: chỉ được phép await đúng một lần và không được dùng `.GetAwaiter().GetResult()` nhiều lần.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong C#, cơ chế hoạt động của State Machine được trình biên dịch sinh ra khi xử lý các phương thức bất đồng bộ (async/await) là như thế nào?",
+    "options": [
+      "A. Trình biên dịch tạo ra một struct triển khai giao diện IAsyncStateMachine, đóng gói các biến cục bộ thành các trường dữ liệu và chuyển đổi cấu trúc điều khiển thành một máy trạng thái (state machine) trong phương thức MoveNext().",
+      "B. Trình biên dịch dịch toàn bộ mã async sang các luồng Thread thô độc lập.",
+      "C. State machine được khởi chạy ở mức hệ điều hành thông qua nhân kernel.",
+      "D. Toàn bộ mã nguồn async được chuyển đổi thành các truy vấn SQL tự động."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Compiler chuyển đổi phương thức chứa await thành một State Machine dạng struct (để tối ưu hóa bộ nhớ). Khi có await, trạng thái hiện tại được lưu lại, luồng được giải phóng và khi task hoàn thành, phương thức MoveNext() của state machine sẽ được gọi lại để tiếp tục thực thi.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng khối lệnh 'unsafe' và con trỏ (pointer) trong C# lại yêu cầu từ khóa 'fixed' khi làm việc với các đối tượng nằm trên bộ nhớ Heap quản lý?",
+    "options": [
+      "A. Để găm (pin) đối tượng tại một địa chỉ bộ nhớ cố định, ngăn chặn bộ gom rác (GC) di chuyển đối tượng đó sang vị trí khác trên Heap khi thực hiện dồn dịch bộ nhớ (Compaction).",
+      "B. Để ngăn chặn các luồng khác ghi đè dữ liệu lên đối tượng.",
+      "C. Để chuyển đổi kiểu dữ liệu của đối tượng thành struct.",
+      "D. Để tự động giải phóng đối tượng khi ra khỏi khối unsafe."
+    ],
+    "correctAnswer": "A",
+    "explanation": "GC của .NET dọn dẹp và tổ chức lại Heap bằng cách di chuyển các đối tượng để tối ưu không gian. Nếu C# sử dụng con trỏ trỏ trực tiếp đến Heap, việc di chuyển này sẽ khiến con trỏ bị trỏ sai địa chỉ. Câu lệnh 'fixed' tạm thời khóa đối tượng tại chỗ để đảm bảo an toàn con trỏ.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Từ khóa 'stackalloc' trong C# có tác dụng gì và khi nào nó được ứng dụng để tối ưu hiệu năng?",
+    "options": [
+      "A. Phân bổ một khối bộ nhớ trực tiếp trên Stack thay vì Heap; giúp giải phóng bộ nhớ ngay khi kết thúc phương thức hiện tại mà không làm tăng áp lực lên Garbage Collector.",
+      "B. Tạo ra một mảng động có thể mở rộng kích thước trên Stack.",
+      "C. Tự động lưu trữ mảng vào bộ nhớ cache L1 của CPU.",
+      "D. Tăng dung lượng Stack tối đa của ứng dụng lên gấp đôi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`stackalloc` phân bổ bộ nhớ cực kỳ nhanh trên Stack. Kết hợp với `Span<T>` (ví dụ: `Span<byte> buffer = stackalloc byte[1024];`), ta có được một bộ đệm hiệu năng cao, không cần Garbage Collector dọn dẹp. Cần lưu ý tránh cấp phát quá lớn gây tràn ngăn xếp (StackOverflowException).",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Lớp 'ArrayPool<T>' trong .NET Core được thiết kế để giải quyết vấn đề hiệu năng nào trong các ứng dụng có tần suất phân bổ bộ nhớ cao?",
+    "options": [
+      "A. Giảm thiểu chi phí cấp phát và thu hồi các mảng tạm thời (buffers) bằng cách tái sử dụng (pooling) các mảng cũ, giảm thiểu hiện tượng phân mảnh bộ nhớ Heap và GC pauses.",
+      "B. Tăng tốc độ đọc dữ liệu từ ổ đĩa SSD.",
+      "C. Quản lý việc kết nối đồng thời đến cơ sở dữ liệu.",
+      "D. Tự động hóa việc đồng bộ hóa dữ liệu giữa các máy chủ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong các ứng dụng hiệu năng cao (như Web Server), việc liên tục tạo ra các mảng buffer tạm thời để xử lý dữ liệu mạng rồi vứt đi gây áp lực rất lớn cho GC Gen 0 và LOH. `ArrayPool<T>.Shared.Rent` cho phép thuê mảng có sẵn và trả lại bằng `Return` sau khi dùng xong.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Đối tượng như thế nào sẽ được phân bổ vào vùng nhớ Large Object Heap (LOH) trong .NET Core và cách ứng xử của GC đối với vùng nhớ này có gì đặc biệt?",
+    "options": [
+      "A. Các đối tượng có kích thước lớn hơn hoặc bằng 85,000 bytes; mặc định GC sẽ giải phóng bộ nhớ của chúng mà không thực hiện dồn dịch dọn dẹp (compaction) để tránh tốn chi phí sao chép bộ nhớ khổng lồ.",
+      "B. Các đối tượng được khởi tạo bằng từ khóa unsafe.",
+      "C. LOH chỉ lưu trữ các lớp class kế thừa từ Interface lớn.",
+      "D. Các đối tượng có vòng đời lâu hơn 10 phút."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các mảng hoặc đối tượng lớn từ 85KB trở lên nằm trên LOH. GC thu hồi LOH ở Gen 2 thu dọn nhưng không dồn dịch dữ liệu (no compaction), dẫn đến nguy cơ phân mảnh bộ nhớ (memory fragmentation). Từ .NET Core, ta có cấu hình `GCSettings.LargeObjectHeapCompactionMode` để bắt buộc dồn dịch khi cần.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Trong C#, làm thế nào để viết một Custom Awaiter tùy chỉnh để một kiểu dữ liệu bất kỳ (không phải Task) có thể sử dụng được với từ khóa 'await'?",
+    "options": [
+      "A. Tạo một phương thức mở rộng hoặc phương thức thành viên có tên 'GetAwaiter()' trả về một đối tượng triển khai giao diện INotifyCompletion và chứa các thành phần: IsCompleted, OnCompleted, GetResult().",
+      "B. Kế thừa lớp Task và override phương thức Start().",
+      "C. Đăng ký kiểu dữ liệu đó vào hệ thống thông qua cấu hình Assembly.",
+      "D. Đánh dấu kiểu dữ liệu đó bằng thuộc tính [AwaitableAttribute]."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Từ khóa await hoạt động dựa trên Pattern-based compilation chứ không dựa vào kế thừa. Bất kỳ đối tượng nào cung cấp phương thức `GetAwaiter()` trả về kiểu hợp lệ (đáp ứng đúng chữ ký API awaiter) đều có thể sử dụng được với toán tử `await`.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cơ chế 'JIT Tiered Compilation' (Biên dịch phân tầng) trong .NET Core hoạt động như thế nào để cân bằng giữa thời gian khởi động ứng dụng và hiệu năng chạy lâu dài?",
+    "options": [
+      "A. Ban đầu biên dịch mã sang Tier 0 rất nhanh (không tối ưu hóa nhiều) để ứng dụng khởi chạy lập tức; sau đó theo dõi tần suất gọi và dịch lại các phương thức hot-path sang Tier 1 với đầy đủ các tối ưu hóa phức tạp.",
+      "B. Chia nhỏ mã máy ra thành nhiều phần để chạy trên GPU thay vì CPU.",
+      "C. Chỉ biên dịch khi người dùng click vào chức năng cụ thể trên giao diện.",
+      "D. Sử dụng thuật toán nén mã nguồn để tối ưu tốc độ truyền tải mạng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Tiered Compilation giải quyết bài toán: biên dịch tối ưu hóa cao tốn thời gian khiến app startup chậm. Ở Tier 0, code được dịch nhanh để chạy trước. Các đoạn code gọi nhiều lần (hot methods) sẽ được runtime đưa vào hàng đợi tái biên dịch tối ưu ở Tier 1 (Re-JIT).",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi ứng dụng chạy môi trường đa luồng tần suất cao gặp hiện tượng 'ThreadPool Starvation' (Đói luồng), nguyên nhân phổ biến nhất là gì và hướng xử lý ra sao?",
+    "options": [
+      "A. Do mã nguồn chặn luồng Thread Pool bằng các thao tác đồng bộ (như .Result, .Wait(), Sleep) khi đang xử lý lượng lớn tác vụ I/O; hướng xử lý là chuyển toàn bộ sang mã bất đồng bộ thuần (async/await non-blocking).",
+      "B. Do dung lượng ổ cứng bị đầy khiến luồng không thể ghi log.",
+      "C. Do số lượng biến static trong code quá lớn gây tắc nghẽn cache CPU.",
+      "D. Hệ điều hành tự động tắt bớt luồng để tiết kiệm năng lượng điện."
+    ],
+    "correctAnswer": "A",
+    "explanation": "ThreadPool có tốc độ sinh luồng mới giới hạn (thường là 1-2 luồng/giây). Nếu các luồng hiện tại bị block đồng bộ chờ I/O, hệ thống sẽ thiếu luồng xử lý các yêu cầu tiếp theo dẫn đến phản hồi siêu chậm. Chuyển sang async/await hoàn toàn giải phóng luồng về pool trong lúc chờ I/O.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Lớp 'System.Threading.Channels' trong .NET Core được sử dụng để giải quyết bài toán kiến trúc nào với hiệu năng cao hơn so với ConcurrentQueue hay BlockingCollection?",
+    "options": [
+      "A. Mô hình Producer-Consumer (Người sản xuất - Người tiêu dùng) bất đồng bộ hiệu năng cao, hỗ trợ backpressure (áp lực ngược) và phân bổ bộ nhớ gần như bằng 0.",
+      "B. Kết nối thời gian thực bằng WebSockets.",
+      "C. Quản lý vòng đời của các tiến trình con trong hệ điều hành.",
+      "D. Tự động mã hóa và giải mã file."
+    ],
+    "correctAnswer": "A",
+    "explanation": "System.Threading.Channels cung cấp cấu trúc hàng đợi xử lý luồng công việc bất đồng bộ cực kỳ tối ưu, giảm thiểu lock contention và không phân bổ đối tượng dư thừa so với BlockingCollection truyền thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Để can thiệp vào cách tổ chức sắp xếp bộ nhớ vật lý của một cấu trúc dữ liệu Struct nhằm tương thích trực tiếp với phần cứng hoặc thư viện C/C++, ta sử dụng thuộc tính (Attribute) nào?",
+    "options": [
+      "A. [StructLayout(LayoutKind.Explicit)] kết hợp với thuộc tính [FieldOffset(offset)] đặt trên từng trường dữ liệu.",
+      "B. [Serializable]",
+      "C. [MethodImpl(MethodImplOptions.AggressiveInlining)]",
+      "D. [AssemblyMetadata]"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thuộc tính StructLayout định nghĩa cấu trúc byte vật lý của struct. LayoutKind.Explicit cùng FieldOffset cho phép thiết lập chính xác vị trí byte bắt đầu của từng trường, thậm chí cho phép các trường đè lên nhau (tương đương với Union trong C++).",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Sự khác biệt cốt lõi về mặt tối ưu hóa hiệu năng giữa hai chế độ thu gom rác 'Server GC' và 'Workstation GC' trong .NET Core là gì?",
+    "options": [
+      "A. Server GC tạo ra một GC Heap và một GC Thread riêng biệt cho từng lõi CPU (logical processor), cho phép dọn dẹp song song đạt throughput cực cao; Workstation GC sử dụng duy nhất một luồng dọn dẹp để giảm thiểu tài nguyên CPU và RAM.",
+      "B. Workstation GC chỉ chạy được trên hệ điều hành Windows Home.",
+      "C. Server GC không bao giờ tạm dừng các luồng chạy ứng dụng (non-blocking).",
+      "D. Server GC phân bổ tất cả đối tượng vào bộ nhớ RAM ảo (virtual memory) trên đĩa."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Server GC được thiết kế cho ứng dụng máy chủ tải lớn (như Web API), chấp nhận tốn RAM và CPU để tối đa hóa tốc độ dọn rác song song. Workstation GC tối ưu hóa độ trễ thấp và tiết kiệm bộ nhớ cho các ứng dụng client (Desktop, Console).",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Tại sao việc sử dụng các phép toán nguyên tử trên lớp 'System.Threading.Interlocked' (như Interlocked.Increment) lại có hiệu năng tốt hơn việc sử dụng khối lệnh 'lock' truyền thống?",
+    "options": [
+      "A. Vì Interlocked sử dụng các chỉ thị phần cứng của CPU (CPU intrinsics) để thực hiện các thao tác ghi đọc an toàn luồng ở cấp độ phần cứng mà không cần chuyển ngữ cảnh luồng (thread context switch) hay đình chỉ luồng.",
+      "B. Vì Interlocked tự động chuyển tác vụ sang chạy trên card đồ họa (GPU).",
+      "C. Vì Interlocked hoạt động không cần dùng tới bộ nhớ RAM.",
+      "D. Vì Interlocked chạy song song trên các thread của GC."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khối lệnh lock buộc hệ điều hành phải quản lý việc khóa luồng, có thể đưa thread vào trạng thái chờ (block/kernel transition) nếu xảy ra tranh chấp khóa. Interlocked sử dụng các chỉ thị CPU nguyên thủy (như LOCK CMPXCHG) giúp thực thi cực nhanh trên thanh ghi, hạn chế tối đa overhead.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Khi biên dịch ứng dụng .NET Core sang dạng Native AOT (Ahead-of-Time), những tính năng động nào của ngôn ngữ C# sẽ bị giới hạn nghiêm ngặt hoặc không thể sử dụng?",
+    "options": [
+      "A. Reflection sinh mã động (System.Reflection.Emit), dynamic, và sử dụng các thư viện DLL không biên dịch tĩnh.",
+      "B. Lập trình hướng đối tượng (OOP) kế thừa.",
+      "C. Toàn bộ các truy vấn LINQ.",
+      "D. Sử dụng async/await bất đồng bộ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Native AOT loại bỏ JIT compiler và biên dịch thẳng mã nguồn thành mã máy gốc. Do đó, các tính năng yêu cầu biên dịch mã động tại thời điểm chạy (như Dynamic Code Generation qua Reflection.Emit) sẽ không thể hoạt động. Metadata của Reflection cũng bị cắt bỏ bớt (trimming) để giảm dung lượng file thực thi.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Trong lập trình đa luồng C#, cơ chế hoạt động của từ khóa 'volatile' liên quan gì đến bộ nhớ cache của CPU và chỉ thị Instruction Reordering của trình biên dịch?",
+    "options": [
+      "A. Volatile ép buộc đọc ghi biến trực tiếp từ bộ nhớ RAM chính (Main Memory) thay vì cache của CPU, đồng thời thiết lập rào cản bộ nhớ (Memory Barrier) ngăn compiler sắp xếp lại thứ tự thực hiện các lệnh đọc ghi xung quanh nó.",
+      "B. Volatile khóa toàn bộ luồng hệ thống để luồng hiện tại chạy xong.",
+      "C. Volatile tự động nén kích thước bộ nhớ của biến xuống một nửa.",
+      "D. Không có tác động gì đến thứ tự lệnh biên dịch."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong môi trường CPU đa nhân, mỗi nhân có cache riêng có thể lưu trữ bản sao cũ của biến. Hơn nữa, compiler/JIT có thể tối ưu hóa sắp xếp lại thứ tự thực thi mã lệnh (Instruction Reordering). `volatile` giải quyết hai vấn đề này để đảm bảo dữ liệu hiển thị chính xác giữa các luồng.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "KNOWLEDGE"
+  },
+  {
+    "questionText": "Khi xây dựng một hệ thống xử lý stream dữ liệu thời gian thực (ví dụ như đọc data từ IoT Hub), tại sao 'IAsyncEnumerable<T>' (giới thiệu từ C# 8) lại ưu việt hơn Task<IEnumerable<T>>?",
+    "options": [
+      "A. Vì IAsyncEnumerable<T> cho phép sinh và tiêu thụ dữ liệu theo luồng (yield return bất đồng bộ), tức là người dùng có thể nhận và xử lý từng phần tử ngay khi nó sẵn sàng mà không cần đợi toàn bộ danh sách được tải xong.",
+      "B. Vì nó chạy trên một Thread bảo mật cao hơn.",
+      "C. Vì nó tự động lưu dữ liệu vào bộ nhớ SSD của Client.",
+      "D. Vì nó không tiêu tốn RAM khi chạy trên server."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`Task<IEnumerable<T>>` yêu cầu toàn bộ tập hợp phải được tải đầy đủ vào bộ nhớ trước khi trả về. `IAsyncEnumerable<T>` kết hợp sức mạnh của `yield return` và lập trình bất đồng bộ, cho phép kéo dữ liệu theo từng cục nhỏ (streaming) cực kỳ hiệu quả về mặt bộ nhớ.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Làm thế nào để phát hiện và ngăn chặn hiện tượng rò rỉ bộ nhớ (Memory Leak) trong ứng dụng C# gây ra bởi các Sự kiện (Events) chưa hủy đăng ký?",
+    "options": [
+      "A. Sử dụng WeakEventManager hoặc chủ động hủy đăng ký sự kiện bằng toán tử '-=' trong phương thức Dispose() của đối tượng đăng ký.",
+      "B. Gọi phương thức GC.WaitForPendingFinalizers() liên tục trong vòng lặp.",
+      "C. Thiết lập tất cả các biến sự kiện thành static.",
+      "D. Đổi kiểu dữ liệu của biến phát sự kiện thành struct."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Khi đối tượng A đăng ký sự kiện của đối tượng B, B sẽ giữ một tham chiếu mạnh đến A. Nếu B sống lâu hơn A (ví dụ B là Singleton), A sẽ không bao giờ được GC giải phóng dù không còn dùng, dẫn đến rò rỉ bộ nhớ. Hủy đăng ký hoặc dùng weak event pattern giúp giải quyết vấn đề.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Đâu là kỹ thuật tối ưu nhất để đọc trực tiếp một chuỗi byte thô nhận được từ mạng thành một struct C# có cấu trúc cố định mà không tốn chi phí sao chép bộ nhớ (zero-allocation)?",
+    "options": [
+      "A. Sử dụng lớp MemoryMarshal.Read<T> hoặc MemoryMarshal.Cast<byte, T> truyền vào một ReadOnlySpan<byte>.",
+      "B. Sử dụng BinaryFormatter để deserialize mảng byte.",
+      "C. Sử dụng Newtonsoft.Json để convert mảng byte sang String rồi parse sang object.",
+      "D. Dùng vòng lặp for gán từng phần tử byte vào thuộc tính của struct."
+    ],
+    "correctAnswer": "A",
+    "explanation": "`MemoryMarshal.Cast` hoặc `MemoryMarshal.Read` cho phép thông dịch trực tiếp một vùng nhớ byte thô dạng Span thành kiểu struct mong muốn mà không sinh ra bất kỳ cấp phát bộ nhớ mới nào trên Heap, cực kỳ tối ưu cho các giao thức mạng tốc độ cao.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Khi tối ưu hóa vòng lặp tính toán mảng dữ liệu lớn, việc sử dụng Hardware Intrinsics (SIMD) trong C# mang lại lợi ích gì?",
+    "options": [
+      "A. Cho phép CPU thực hiện cùng một phép toán trên nhiều phần tử dữ liệu đồng thời trong một chu kỳ xung nhịp (Single Instruction, Multiple Data).",
+      "B. Tự động chuyển mã nguồn sang thực thi trên GPU.",
+      "C. Tránh việc truy cập vào RAM và chỉ tính toán trên bộ nhớ cache của CPU.",
+      "D. Giảm dung lượng file thực thi sau khi build."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Các lớp như `System.Runtime.Intrinsics` cung cấp quyền truy cập trực tiếp vào các tập lệnh vector phần cứng của CPU (như SSE, AVX). Giúp thực hiện song song các phép toán cộng, nhân trên mảng số với tốc độ tăng gấp nhiều lần.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Trong .NET, thuộc tính [MethodImpl(MethodImplOptions.AggressiveInlining)] khuyên JIT compiler thực hiện tối ưu hóa gì?",
+    "options": [
+      "A. Thực hiện Inlining (chèn trực tiếp phần thân của phương thức vào vị trí gọi phương thức) để loại bỏ chi phí gọi hàm (function call overhead) đối với các phương thức nhỏ được gọi liên tục.",
+      "B. Chuyển phương thức đó sang chạy bất đồng bộ đa luồng.",
+      "C. Khóa luồng không cho phép re-entrance.",
+      "D. Bỏ qua hoàn toàn việc quét thu gom rác bên trong phương thức."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Inlining thay thế lời gọi hàm bằng mã nguồn thực tế của hàm đó. Tùy chọn AggressiveInlining khuyến khích JIT thực hiện điều này tích cực hơn đối với các phương thức ngắn trong vòng lặp hiệu năng cao, tuy nhiên có thể làm tăng nhẹ dung lượng file nhị phân (code bloat).",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SKILL"
+  },
+  {
+    "questionText": "Cơ chế 'Pinning' đối với các đối tượng trong .NET Core xảy ra khi nào và tại sao nó có thể gián tiếp gây ra hiện tượng phân mảnh bộ nhớ Heap nghiêm trọng?",
+    "options": [
+      "A. Xảy ra khi găm cố định địa chỉ bộ nhớ đối tượng (thường dùng GCHandleType.Pinned hoặc lệnh fixed) để giao tiếp với mã native. Nếu găm giữ quá nhiều đối tượng nhỏ rải rác, GC sẽ không thể dồn dịch các vùng nhớ trống xung quanh chúng, tạo ra các lỗ hổng phân mảnh.",
+      "B. Xảy ra khi GC khóa toàn bộ ứng dụng quá lâu.",
+      "C. Khi gán giá trị static cho toàn bộ biến trong chương trình.",
+      "D. Chỉ xảy ra khi dung lượng RAM bị cạn kiệt hoàn toàn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đối tượng bị 'pinned' đóng vai trò như các chướng ngại vật cố định trên Heap mà GC không thể di dời. Nếu có nhiều chướng ngại vật nhỏ rải rác, GC không thể dồn các vùng nhớ trống lại với nhau, dẫn đến không thể cấp phát các đối tượng lớn mới và gây ra OutOfMemoryException dù tổng dung lượng trống vẫn đủ.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "ANALYSIS"
+  },
+  {
+    "questionText": "Để thiết kế một cơ chế ghi Log bất đồng bộ hiệu năng cao trong dịch vụ ASP.NET Core chịu tải cực lớn, giải pháp nào dưới đây hạn chế tối đa việc phân bổ bộ nhớ trên Heap và tránh lock contention?",
+    "options": [
+      "A. Sử dụng kết hợp LoggerMessage.Define để cache các chuỗi template log và sử dụng System.Threading.Channels để đẩy thông tin log bất đồng bộ vào một background service xử lý ghi đĩa.",
+      "B. Sử dụng phương thức Console.WriteLine trực tiếp.",
+      "C. Tạo mới một luồng Thread thô để ghi log cho mỗi dòng log.",
+      "D. Dùng String.Concat để nối chuỗi thông tin log trước khi lưu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "LoggerMessage.Define biên dịch trước các delegate định dạng chuỗi, tránh cấp phát chuỗi động khi log không cần ghi. Kết hợp với Channels (non-blocking queue) giúp chuyển tác vụ I/O ghi đĩa sang một thread nền xử lý tuần tự, tối đa hóa thông lượng của luồng chính xử lý request.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  },
+  {
+    "questionText": "Trong C#, làm thế nào để lập trình viên có thể tùy biến một lớp SynchronizationContext để kiểm soát luồng điều phối (thread dispatching) của các tác vụ await bất đồng bộ?",
+    "options": [
+      "A. Kế thừa lớp SynchronizationContext, ghi đè (override) phương thức Post() và Send(), sau đó kích hoạt bằng cách gọi SynchronizationContext.SetSynchronizationContext().",
+      "B. Triển khai giao diện ITaskScheduler.",
+      "C. Thiết lập cấu hình threadpool trong file appsettings.json.",
+      "D. Điều này là mặc định và CLR cấm lập trình viên thay đổi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "SynchronizationContext chịu trách nhiệm điều phối công việc trở lại ngữ cảnh cụ thể (ví dụ UI thread trong WinForms/WPF, hoặc thread an toàn trong custom runtime). Việc override Post (bất đồng bộ) và Send (đồng bộ) cho phép định nghĩa chính xác luồng nào sẽ tiếp tục thực thi mã nguồn sau khi lệnh await kết thúc.",
+    "difficulty": "EXPERT",
+    "skillArea": "C# Core",
+    "category": "SITUATION"
+  }
+]

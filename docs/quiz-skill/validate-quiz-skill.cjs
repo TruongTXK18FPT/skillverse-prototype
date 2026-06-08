@@ -13,6 +13,8 @@ const SKILLS = [
   { skillArea: "Database Management", relativePath: "technology/backend-developer/database-management.json" },
   { skillArea: "API Design (REST/GraphQL)", relativePath: "technology/backend-developer/api-design-rest-graphql.json" },
   { skillArea: "Security", relativePath: "technology/backend-developer/security.json" },
+  { skillArea: "C# Core", relativePath: "technology/backend-developer/csharp-core.json" },
+  { skillArea: "ASP.NET Core Web API", relativePath: "technology/backend-developer/aspnet-core-web-api.json" },
   { skillArea: "HTML/CSS Fundamentals", relativePath: "technology/frontend-developer/html-css-fundamentals.json" },
   { skillArea: "JavaScript/TypeScript", relativePath: "technology/frontend-developer/javascript-typescript.json" },
   { skillArea: "UI Frameworks (React/Vue)", relativePath: "technology/frontend-developer/ui-frameworks-react-vue.json" },

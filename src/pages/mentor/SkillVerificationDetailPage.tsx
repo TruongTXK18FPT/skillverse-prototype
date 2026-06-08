@@ -18,7 +18,8 @@ import {
   AlertCircle,
   LucideIcon,
   Map,
-  MessageSquare
+  MessageSquare,
+  BookOpen
 } from "lucide-react";
 import {
   getPublicMentorVerifiedSkillDetails,
