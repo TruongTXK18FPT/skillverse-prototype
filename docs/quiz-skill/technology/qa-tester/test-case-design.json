@@ -1,0 +1,767 @@
+[
+  {
+    "questionText": "Kỹ thuật 'Equivalence Partitioning' trong thiết kế test case được sử dụng để làm gì?",
+    "options": [
+      "A. Chia dữ liệu đầu vào thành các nhóm có hành vi tương tự để giảm số lượng test case.",
+      "B. Tìm kiếm lỗi bằng cách đoán các trường hợp có khả năng xảy ra lỗi cao nhất.",
+      "C. Kiểm tra các giá trị biên của dữ liệu đầu vào để phát hiện lỗi.",
+      "D. Xây dựng bảng quyết định để mô phỏng các tình huống nghiệp vụ phức tạp."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Equivalence Partitioning giúp chia dữ liệu đầu vào thành các phân vùng tương đương (equivalence classes), trong đó các giá trị trong cùng một phân vùng được kỳ vọng có hành vi giống nhau. Điều này giúp giảm số lượng test case cần thiết mà vẫn đảm bảo độ phủ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811018763_BEGINNER_0_l0j3"
+  },
+  {
+    "questionText": "Trong dự án phát triển phần mềm ngân hàng tại Việt Nam, trường hợp nào sau đây là ví dụ về 'Boundary Value Analysis'?",
+    "options": [
+      "A. Kiểm tra số dư tài khoản với giá trị 0 VND, 1 VND, 10.000.000 VND và 10.000.001 VND.",
+      "B. Kiểm tra chức năng chuyển tiền với các loại tiền tệ khác nhau (VND, USD, EUR).",
+      "C. Kiểm tra giao diện người dùng khi nhập số điện thoại có 9 hoặc 11 chữ số.",
+      "D. Kiểm tra tính năng đăng nhập với các mật khẩu có độ dài từ 8 đến 16 ký tự."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Boundary Value Analysis tập trung vào việc kiểm tra các giá trị biên (boundary values) của dữ liệu đầu vào. Trong ví dụ này, 0 VND (biên dưới), 1 VND (ngay trên biên dưới), 10.000.000 VND (biên trên) và 10.000.001 VND (ngay trên biên trên) là các giá trị biên điển hình.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811018763_BEGINNER_1_rjmb"
+  },
+  {
+    "questionText": "Kỹ thuật 'Decision Tables' thường được sử dụng trong tình huống nào sau đây?",
+    "options": [
+      "A. Khi cần mô phỏng các quy tắc nghiệp vụ phức tạp với nhiều điều kiện và hành động kết hợp.",
+      "B. Khi cần kiểm tra các trạng thái khác nhau của một đối tượng trong hệ thống.",
+      "C. Khi muốn đoán các lỗi tiềm ẩn dựa trên kinh nghiệm của tester.",
+      "D. Khi cần viết test case cho các chức năng đơn giản với ít điều kiện đầu vào."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Decision Tables được sử dụng để mô phỏng các quy tắc nghiệp vụ phức tạp, nơi có nhiều điều kiện và hành động kết hợp. Nó giúp đảm bảo rằng tất cả các tổ hợp điều kiện đều được kiểm tra một cách hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811018763_BEGINNER_2_mulg"
+  },
+  {
+    "questionText": "Trong một dự án thương mại điện tử, kỹ thuật 'State Transition Testing' phù hợp nhất để kiểm tra chức năng nào sau đây?",
+    "options": [
+      "A. Kiểm tra trạng thái đơn hàng từ 'Chờ xử lý' → 'Đang xử lý' → 'Hoàn thành' → 'Đã hủy'.",
+      "B. Kiểm tra tính năng tìm kiếm sản phẩm với các từ khóa khác nhau.",
+      "C. Kiểm tra chức năng thanh toán với các phương thức khác nhau (Visa, Momo, ZaloPay).",
+      "D. Kiểm tra giao diện người dùng khi thêm sản phẩm vào giỏ hàng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "State Transition Testing được sử dụng để kiểm tra các trạng thái và sự chuyển đổi giữa các trạng thái của một đối tượng. Trong ví dụ này, đơn hàng có nhiều trạng thái và quy tắc chuyển đổi rõ ràng, phù hợp để áp dụng kỹ thuật này.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811018763_BEGINNER_3_i7cw"
+  },
+  {
+    "questionText": "Kỹ thuật 'Error Guessing' dựa trên yếu tố nào để xác định các test case?",
+    "options": [
+      "A. Kinh nghiệm của tester về các lỗi thường gặp trong hệ thống hoặc lĩnh vực tương tự.",
+      "B. Các quy tắc nghiệp vụ được mô tả trong tài liệu đặc tả yêu cầu.",
+      "C. Các giá trị biên của dữ liệu đầu vào.",
+      "D. Các phân vùng tương đương của dữ liệu đầu vào."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Error Guessing là kỹ thuật dựa trên kinh nghiệm của tester để đoán các lỗi tiềm ẩn hoặc các trường hợp có khả năng xảy ra lỗi cao, thường là các lỗi đã từng gặp trong các dự án trước đó hoặc lĩnh vực tương tự.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811018763_BEGINNER_4_3z80"
+  },
+  {
+    "questionText": "Trong một dự án phát triển ứng dụng di động ngân hàng, kỹ thuật 'Use Case Testing' được áp dụng như thế nào?",
+    "options": [
+      "A. Dựa trên các tình huống sử dụng thực tế của người dùng để xây dựng test case.",
+      "B. Dựa trên các giá trị biên của dữ liệu đầu vào để kiểm tra tính năng.",
+      "C. Dựa trên các trạng thái của đối tượng để kiểm tra sự chuyển đổi.",
+      "D. Dựa trên kinh nghiệm của tester để đoán các lỗi tiềm ẩn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Use Case Testing tập trung vào việc kiểm tra các tình huống sử dụng thực tế của người dùng (use cases) để đảm bảo hệ thống hoạt động đúng theo yêu cầu nghiệp vụ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811018763_BEGINNER_5_8j30"
+  },
+  {
+    "questionText": "Đâu là đặc điểm của một test step được viết tốt trong test case?",
+    "options": [
+      "A. Rõ ràng, ngắn gọn, không mơ hồ và có thể thực hiện được.",
+      "B. Bao gồm nhiều bước phức tạp trong một câu để tiết kiệm thời gian.",
+      "C. Sử dụng ngôn ngữ kỹ thuật phức tạp để thể hiện chuyên môn.",
+      "D. Không cần mô tả chi tiết đầu vào và đầu ra mong đợi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một test step tốt cần phải rõ ràng, ngắn gọn, không mơ hồ và có thể thực hiện được để đảm bảo tester có thể hiểu và thực hiện chính xác mà không cần giải thích thêm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811018763_BEGINNER_6_xuy8"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý nhân sự, bạn cần kiểm tra chức năng tính lương với các mức thu nhập sau: 0 - 5 triệu, 5 - 10 triệu, 10 - 20 triệu, và trên 20 triệu. Kỹ thuật nào sau đây phù hợp nhất để thiết kế test case?",
+    "options": [
+      "A. Equivalence Partitioning và Boundary Value Analysis.",
+      "B. Decision Tables và State Transition Testing.",
+      "C. Error Guessing và Use Case Testing.",
+      "D. Random Testing và Exploratory Testing."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Với các khoảng thu nhập rõ ràng, Equivalence Partitioning giúp chia dữ liệu thành các phân vùng tương đương, và Boundary Value Analysis giúp kiểm tra các giá trị biên của từng phân vùng (ví dụ: 5 triệu, 5.000.001 VND, 10 triệu, 10.000.001 VND).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811018763_BEGINNER_7_zauc"
+  },
+  {
+    "questionText": "Khi viết test case cho chức năng đăng ký tài khoản ngân hàng trực tuyến, bước nào sau đây là KHÔNG phù hợp?",
+    "options": [
+      "A. 'Nhập mật khẩu có độ dài 5 ký tự và kiểm tra hệ thống có chấp nhận không'.",
+      "B. 'Nhập tên người dùng hợp lệ và kiểm tra hệ thống có hiển thị thông báo thành công'.",
+      "C. 'Nhập số điện thoại hợp lệ và kiểm tra hệ thống có gửi mã OTP'.",
+      "D. 'Nhập địa chỉ email hợp lệ và kiểm tra hệ thống có xác nhận email'."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bước này không phù hợp vì mật khẩu thường yêu cầu độ dài tối thiểu (ví dụ: 8 ký tự). Kiểm tra với mật khẩu 5 ký tự là kiểm tra một giá trị không hợp lệ, nhưng cần được mô tả rõ ràng hơn trong test case (ví dụ: 'Kiểm tra hệ thống có từ chối mật khẩu ngắn hơn 8 ký tự').",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811018763_BEGINNER_8_8pbx"
+  },
+  {
+    "questionText": "Trong kỹ thuật 'Decision Tables', cột 'Rule' đại diện cho điều gì?",
+    "options": [
+      "A. Một tổ hợp cụ thể của các điều kiện đầu vào và hành động tương ứng.",
+      "B. Một điều kiện đầu vào duy nhất cần kiểm tra.",
+      "C. Một hành động đầu ra của hệ thống.",
+      "D. Một trạng thái của đối tượng trong hệ thống."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong Decision Tables, mỗi cột 'Rule' đại diện cho một tổ hợp cụ thể của các điều kiện đầu vào và hành động tương ứng mà hệ thống cần thực hiện khi các điều kiện đó được thỏa mãn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811018763_BEGINNER_9_cj4k"
+  },
+  {
+    "questionText": "Khi kiểm tra chức năng 'Đặt vé máy bay' trên một trang web du lịch, kỹ thuật nào sau đây phù hợp nhất để kiểm tra các tình huống hủy vé?",
+    "options": [
+      "A. State Transition Testing.",
+      "B. Equivalence Partitioning.",
+      "C. Boundary Value Analysis.",
+      "D. Error Guessing."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Chức năng hủy vé liên quan đến các trạng thái của vé (ví dụ: 'Đã đặt', 'Đã thanh toán', 'Đã hủy') và các quy tắc chuyển đổi giữa các trạng thái. State Transition Testing là kỹ thuật phù hợp để kiểm tra các tình huống này.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811018763_BEGINNER_10_rt0e"
+  },
+  {
+    "questionText": "Đâu là ví dụ về việc áp dụng kỹ thuật 'Error Guessing' trong dự án phát triển ứng dụng ngân hàng?",
+    "options": [
+      "A. Kiểm tra chức năng chuyển tiền với số tiền âm hoặc số tiền vượt quá hạn mức cho phép.",
+      "B. Kiểm tra chức năng đăng nhập với tên người dùng và mật khẩu hợp lệ.",
+      "C. Kiểm tra chức năng tra cứu lịch sử giao dịch với các khoảng thời gian khác nhau.",
+      "D. Kiểm tra chức năng cập nhật thông tin cá nhân với dữ liệu đầu vào hợp lệ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Error Guessing dựa trên kinh nghiệm để đoán các lỗi tiềm ẩn. Trong ví dụ này, kiểm tra số tiền âm hoặc vượt hạn mức là các trường hợp có khả năng gây lỗi cao và thường bị bỏ sót trong thiết kế test case thông thường.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811018763_BEGINNER_11_lqzz"
+  },
+  {
+    "questionText": "Khi viết test case cho chức năng 'Tìm kiếm sản phẩm' trên một trang thương mại điện tử, tiêu chí nào sau đây là quan trọng nhất để đảm bảo test case hiệu quả?",
+    "options": [
+      "A. Mô tả rõ ràng các bước thực hiện, dữ liệu đầu vào và kết quả mong đợi.",
+      "B. Sử dụng nhiều từ khóa kỹ thuật để thể hiện chuyên môn.",
+      "C. Bao gồm càng nhiều bước càng tốt để kiểm tra toàn diện.",
+      "D. Không cần mô tả chi tiết kết quả mong đợi vì nó đã rõ ràng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Một test case hiệu quả cần mô tả rõ ràng các bước thực hiện, dữ liệu đầu vào và kết quả mong đợi để đảm bảo tester có thể thực hiện và đánh giá chính xác mà không cần giải thích thêm.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811018763_BEGINNER_12_5am4"
+  },
+  {
+    "questionText": "Trong dự án phát triển phần mềm quản lý đơn hàng cho một công ty thương mại điện tử Việt Nam, bạn cần kiểm tra tính năng 'Áp dụng mã giảm giá'. Mã giảm giá có quy tắc: giảm 10% cho đơn hàng từ 500.000 VNĐ đến 2.000.000 VNĐ, và giảm 20% cho đơn hàng trên 2.000.000 VNĐ. Bạn sử dụng kỹ thuật Equivalence Partitioning để thiết kế test case. Nhóm giá trị nào dưới đây KHÔNG phải là một phân vùng tương đương hợp lệ?",
+    "options": [
+      "A. Đơn hàng có giá trị 499.999 VNĐ",
+      "B. Đơn hàng có giá trị 500.000 VNĐ",
+      "C. Đơn hàng có giá trị 2.000.001 VNĐ",
+      "D. Đơn hàng có giá trị 1.000.000 VNĐ và 2.500.000 VNĐ được gộp chung vào một phân vùng"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Phân vùng tương đương phải chia các giá trị đầu vào thành các nhóm có hành vi tương tự. Giá trị 1.000.000 VNĐ và 2.500.000 VNĐ thuộc hai phân vùng khác nhau (10% và 20%), không thể gộp chung.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811075915_INTERMEDIATE_0_f51h"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho tính năng 'Đăng nhập bằng OTP' của ứng dụng ngân hàng di động. Sau khi nhập số điện thoại, hệ thống gửi OTP qua SMS. Nếu OTP nhập sai quá 3 lần, tài khoản sẽ bị khóa tạm thời. Kỹ thuật nào sau đây phù hợp nhất để kiểm tra các trạng thái và chuyển đổi giữa chúng?",
+    "options": [
+      "A. Equivalence Partitioning",
+      "B. Boundary Value Analysis",
+      "C. State Transition Testing",
+      "D. Error Guessing"
+    ],
+    "correctAnswer": "C",
+    "explanation": "State Transition Testing được sử dụng để kiểm tra các trạng thái của hệ thống và cách hệ thống chuyển đổi giữa các trạng thái, phù hợp với tình huống có nhiều trạng thái như đăng nhập thành công, nhập sai OTP, và khóa tài khoản.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811075916_INTERMEDIATE_1_qkp0"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý kho cho một nhà máy sản xuất tại Việt Nam, bạn cần kiểm tra tính năng 'Cập nhật số lượng tồn kho' khi có đơn hàng mới. Bạn sử dụng Decision Table để thiết kế test case. Điều kiện nào sau đây KHÔNG phù hợp để đưa vào bảng quyết định?",
+    "options": [
+      "A. Số lượng tồn kho hiện tại lớn hơn hoặc bằng số lượng đặt hàng",
+      "B. Số lượng tồn kho hiện tại nhỏ hơn số lượng đặt hàng",
+      "C. Đơn hàng được xác nhận bởi quản lý kho",
+      "D. Màu sắc của sản phẩm trong kho"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Màu sắc của sản phẩm không ảnh hưởng đến logic cập nhật số lượng tồn kho, do đó không phù hợp để đưa vào Decision Table.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811075916_INTERMEDIATE_2_ho8h"
+  },
+  {
+    "questionText": "Bạn đang kiểm tra tính năng 'Thanh toán bằng ví điện tử' của một ứng dụng thương mại điện tử. Bạn dự đoán rằng lỗi thường gặp là hệ thống không xử lý đúng khi số dư ví không đủ. Kỹ thuật nào sau đây phù hợp nhất để thiết kế test case cho tình huống này?",
+    "options": [
+      "A. Equivalence Partitioning",
+      "B. Boundary Value Analysis",
+      "C. Error Guessing",
+      "D. Use Case Testing"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Error Guessing là kỹ thuật dựa trên kinh nghiệm để dự đoán các lỗi thường gặp, phù hợp với tình huống kiểm tra số dư ví không đủ.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811075916_INTERMEDIATE_3_g87d"
+  },
+  {
+    "questionText": "Trong dự án phát triển phần mềm quản lý dự án cho một công ty công nghệ, bạn cần kiểm tra tính năng 'Tạo nhiệm vụ mới'. Bạn viết test step: '1. Nhập tên nhiệm vụ là \"Kiểm thử module thanh toán\"'. Test step này vi phạm nguyên tắc nào trong thiết kế test case?",
+    "options": [
+      "A. Không rõ ràng (unambiguous)",
+      "B. Không ngắn gọn (concise)",
+      "C. Không kiểm thử được (untestable)",
+      "D. Không liên quan đến yêu cầu"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Test step này thiếu thông tin về kết quả mong đợi (ví dụ: hệ thống hiển thị thông báo thành công), do đó không kiểm thử được.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811075916_INTERMEDIATE_4_is0v"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho tính năng 'Tìm kiếm sản phẩm' của một website thương mại điện tử. Bạn muốn kiểm tra trường hợp nhập từ khóa có ký tự đặc biệt (ví dụ: \"áo #phông\"). Kỹ thuật nào sau đây phù hợp nhất để xử lý tình huống này?",
+    "options": [
+      "A. Boundary Value Analysis",
+      "B. Equivalence Partitioning",
+      "C. Error Guessing",
+      "D. Decision Table"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Error Guessing phù hợp để dự đoán các lỗi liên quan đến xử lý ký tự đặc biệt, một vấn đề thường gặp trong tìm kiếm sản phẩm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811075916_INTERMEDIATE_5_frai"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng đặt vé máy bay, bạn cần kiểm tra tính năng 'Đặt vé khứ hồi'. Bạn sử dụng kỹ thuật Use Case Testing để thiết kế test case. Yếu tố nào sau đây KHÔNG cần thiết để đưa vào kịch bản kiểm thử?",
+    "options": [
+      "A. Ngày khởi hành và ngày về",
+      "B. Số lượng hành khách",
+      "C. Màu sắc giao diện ứng dụng",
+      "D. Loại vé (phổ thông, thương gia)"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Màu sắc giao diện không ảnh hưởng đến logic đặt vé khứ hồi, do đó không cần thiết trong kịch bản kiểm thử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811075916_INTERMEDIATE_6_fewj"
+  },
+  {
+    "questionText": "Bạn đang kiểm tra tính năng 'Đăng ký tài khoản' của một ứng dụng ngân hàng. Bạn viết test step: '1. Nhập email \"test@example.com\". 2. Nhập mật khẩu \"Abc123\". 3. Nhấn nút Đăng ký. 4. Kiểm tra hệ thống hiển thị thông báo \"Đăng ký thành công\"'. Test step này đã áp dụng nguyên tắc nào trong thiết kế test case?",
+    "options": [
+      "A. Rõ ràng (unambiguous) và kiểm thử được (testable)",
+      "B. Ngắn gọn (concise) và không mơ hồ",
+      "C. Đầy đủ và chi tiết",
+      "D. Tập trung vào giao diện người dùng"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Test step này rõ ràng về đầu vào và kết quả mong đợi, đồng thời có thể kiểm thử được bằng cách quan sát thông báo hệ thống.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811075916_INTERMEDIATE_7_1qwy"
+  },
+  {
+    "questionText": "Trong dự án phát triển phần mềm quản lý nhân sự, bạn cần kiểm tra tính năng 'Tính lương theo giờ làm thêm'. Quy tắc tính lương: giờ làm thêm từ 1 đến 4 giờ được tính 150% lương cơ bản, từ 5 giờ trở lên được tính 200% lương cơ bản. Bạn sử dụng Boundary Value Analysis để thiết kế test case. Giá trị nào sau đây KHÔNG phải là giá trị biên?",
+    "options": [
+      "A. 0 giờ",
+      "B. 1 giờ",
+      "C. 4 giờ",
+      "D. 4.5 giờ"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Boundary Value Analysis tập trung vào các giá trị biên là 0, 1, 4, và 5 giờ. 4.5 giờ không phải là giá trị biên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811075917_INTERMEDIATE_8_b8si"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho tính năng 'Chuyển tiền giữa các tài khoản' của ứng dụng ngân hàng. Bạn sử dụng Decision Table để xử lý các điều kiện sau: (1) Số dư tài khoản nguồn đủ/không đủ, (2) Tài khoản đích tồn tại/không tồn tại, (3) Giới hạn chuyển tiền trong ngày đủ/không đủ. Hỏi bảng quyết định sẽ có bao nhiêu test case tối thiểu nếu loại bỏ các tổ hợp không hợp lệ?",
+    "options": [
+      "A. 4",
+      "B. 6",
+      "C. 8",
+      "D. 12"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Với 3 điều kiện nhị phân, bảng quyết định có 2^3 = 8 tổ hợp. Tuy nhiên, tổ hợp 'Số dư không đủ' và 'Giới hạn không đủ' có thể gộp chung vì đều dẫn đến không thể chuyển tiền. Do đó, số test case tối thiểu là 6.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811075917_INTERMEDIATE_9_iyq6"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng đặt phòng khách sạn, bạn cần kiểm tra tính năng 'Hủy đặt phòng'. Quy tắc hủy: nếu hủy trước 24 giờ thì không mất phí, nếu hủy trong vòng 24 giờ thì mất 50% giá trị đặt phòng. Bạn sử dụng kỹ thuật nào sau đây để thiết kế test case cho tình huống này?",
+    "options": [
+      "A. Equivalence Partitioning và Boundary Value Analysis",
+      "B. Decision Table",
+      "C. State Transition Testing",
+      "D. Error Guessing"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Equivalence Partitioning chia thời gian hủy thành các phân vùng (trước/trong 24 giờ), và Boundary Value Analysis kiểm tra giá trị biên (ví dụ: 23 giờ 59 phút, 24 giờ 1 phút).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811075918_INTERMEDIATE_10_cm8b"
+  },
+  {
+    "questionText": "Bạn đang kiểm tra tính năng 'Gửi phản hồi khách hàng' của một ứng dụng thương mại điện tử. Bạn viết test step: '1. Nhập nội dung phản hồi \"Sản phẩm kém chất lượng\". 2. Nhấn nút Gửi. 3. Kiểm tra hệ thống hiển thị thông báo \"Cảm ơn phản hồi của bạn\"'. Test step này vi phạm nguyên tắc nào trong thiết kế test case?",
+    "options": [
+      "A. Không kiểm thử được (untestable)",
+      "B. Không rõ ràng (unambiguous)",
+      "C. Không ngắn gọn (concise)",
+      "D. Không có kết quả mong đợi cụ thể"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Test step thiếu mô tả chi tiết về kết quả mong đợi (ví dụ: thông báo hiển thị ở đâu, nội dung chính xác), dẫn đến không đủ cụ thể để kiểm thử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811075918_INTERMEDIATE_11_q2bm"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý học sinh, bạn cần kiểm tra tính năng 'Tính điểm trung bình học kỳ'. Quy tắc tính: điểm trung bình = (điểm miệng + điểm 15 phút * 2 + điểm 1 tiết * 3 + điểm thi * 4) / 10. Bạn sử dụng kỹ thuật nào sau đây để thiết kế test case cho tình huống này?",
+    "options": [
+      "A. Equivalence Partitioning",
+      "B. Boundary Value Analysis",
+      "C. Decision Table",
+      "D. Error Guessing"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Boundary Value Analysis phù hợp để kiểm tra các giá trị biên của điểm số (ví dụ: 0, 1, 4, 5, 9, 10) nhằm phát hiện lỗi tính toán.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811075918_INTERMEDIATE_12_ux18"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho tính năng 'Đăng nhập bằng tài khoản Google' của một ứng dụng di động. Bạn dự đoán rằng lỗi thường gặp là hệ thống không xử lý đúng khi tài khoản Google bị vô hiệu hóa. Kỹ thuật nào sau đây phù hợp nhất để thiết kế test case cho tình huống này?",
+    "options": [
+      "A. Equivalence Partitioning",
+      "B. Use Case Testing",
+      "C. Error Guessing",
+      "D. State Transition Testing"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Error Guessing dựa trên kinh nghiệm để dự đoán các lỗi thường gặp, như tài khoản Google bị vô hiệu hóa, phù hợp với tình huống này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811075918_INTERMEDIATE_13_tbxi"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống ngân hàng số tại Việt Nam, bạn được yêu cầu thiết kế test case cho chức năng chuyển tiền quốc tế với các quy tắc sau:\n- Số tiền chuyển tối thiểu: 1 USD, tối đa: 10,000 USD\n- Phí chuyển tiền: 5 USD cho số tiền ≤ 1,000 USD, 10 USD cho số tiền > 1,000 USD\n- Hạn mức chuyển trong ngày: 20,000 USD\n\nBạn cần xác định giá trị biên cho biến 'số tiền chuyển' (amount) để kiểm tra tính chính xác của phí chuyển tiền. Đâu là bộ giá trị biên hợp lệ và tối ưu nhất?",
+    "options": [
+      "A. 0 USD, 1 USD, 1,000 USD, 1,001 USD, 10,000 USD, 10,001 USD, 20,000 USD, 20,001 USD",
+      "B. 1 USD, 2 USD, 999 USD, 1,000 USD, 1,001 USD, 9,999 USD, 10,000 USD, 10,001 USD",
+      "C. 0.99 USD, 1 USD, 1,000 USD, 1,000.01 USD, 10,000 USD, 10,000.01 USD, 19,999.99 USD, 20,000 USD",
+      "D. 1 USD, 1,000 USD, 1,001 USD, 10,000 USD, 20,000 USD"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bộ giá trị biên ở đáp án C bao phủ đầy đủ các điểm biên của Equivalence Partitioning và Boundary Value Analysis: dưới biên (0.99), trên biên (10,000.01), và các giá trị chính xác tại biên (1, 1,000, 10,000). Đồng thời, 19,999.99 và 20,000 kiểm tra hạn mức chuyển trong ngày. Các đáp án khác thiếu giá trị dưới biên hoặc không kiểm tra đủ các trường hợp biên quan trọng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811188759_ADVANCED_0_cuua"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho chức năng 'Xác thực OTP' của ứng dụng di động ngân hàng. Quy trình gồm 3 bước:\n1. Người dùng nhập số điện thoại\n2. Hệ thống gửi OTP qua SMS\n3. Người dùng nhập OTP để xác thực\n\nBảng quyết định (Decision Table) nào dưới đây mô tả đầy đủ các tình huống kiểm thử cho trường hợp OTP hết hạn (thời gian hiệu lực 2 phút) và số lần nhập sai tối đa (3 lần)?",
+    "options": [
+      "A. \n| Điều kiện: OTP hợp lệ | OTP hết hạn | Nhập sai < 3 lần | Nhập sai ≥ 3 lần |\n|---------------------|--------------|-------------------|-------------------|\n| Hành động: Cho phép đăng nhập | X |  |  |  |\n| Yêu cầu gửi lại OTP |  | X |  | X |\n| Khóa tài khoản |  |  |  | X |",
+      "B. \n| Điều kiện: OTP hợp lệ | OTP hết hạn | Nhập sai 1 lần | Nhập sai 2 lần | Nhập sai 3 lần |\n|---------------------|--------------|----------------|----------------|----------------|\n| Hành động: Cho phép đăng nhập | X |  |  |  |\n| Yêu cầu gửi lại OTP |  | X | X | X |\n| Khóa tài khoản |  |  |  | X |",
+      "C. \n| Điều kiện: OTP hợp lệ | OTP hết hạn | Nhập sai < 3 lần | Nhập sai = 3 lần |\n|---------------------|--------------|-------------------|------------------|\n| Hành động: Cho phép đăng nhập | X |  |  |\n| Yêu cầu gửi lại OTP |  | X | X |\n| Khóa tài khoản |  |  | X |",
+      "D. \n| Điều kiện: OTP hợp lệ | OTP hết hạn | Nhập sai 1 lần | Nhập sai 2 lần |\n|---------------------|--------------|----------------|----------------|\n| Hành động: Cho phép đăng nhập | X |  |  |\n| Yêu cầu gửi lại OTP |  | X | X |\n| Khóa tài khoản |  |  |  |"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bảng quyết định ở đáp án B bao phủ đầy đủ các tình huống: OTP hợp lệ, OTP hết hạn, và số lần nhập sai (1, 2, 3 lần). Nó phân biệt rõ hành động khi nhập sai 3 lần (khóa tài khoản) và các trường hợp khác (yêu cầu gửi lại OTP). Các đáp án khác thiếu chi tiết về số lần nhập sai hoặc không xử lý đúng hành động khi nhập sai 3 lần.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811188760_ADVANCED_1_xegw"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý đơn hàng cho một sàn TMĐT lớn tại Việt Nam, bạn phát hiện yêu cầu từ Product Owner mâu thuẫn với quy định pháp luật về bảo vệ dữ liệu khách hàng (PDPA). Cụ thể:\n- Yêu cầu: Lưu trữ toàn bộ lịch sử đơn hàng của khách hàng vô thời hạn để phân tích hành vi.\n- Quy định PDPA: Dữ liệu cá nhân chỉ được lưu trữ tối đa 5 năm sau khi khách hàng ngừng hoạt động.\n\nBạn sẽ áp dụng kỹ thuật thiết kế test case nào để đảm bảo hệ thống tuân thủ đồng thời cả yêu cầu nghiệp vụ và quy định pháp luật?",
+    "options": [
+      "A. Sử dụng Decision Table để mô hình hóa các điều kiện lưu trữ dữ liệu và hành động tương ứng (xóa/giữ dữ liệu) dựa trên thời gian và trạng thái khách hàng.",
+      "B. Áp dụng Equivalence Partitioning để chia dữ liệu khách hàng thành các nhóm (hoạt động/không hoạt động) và kiểm tra thời gian lưu trữ cho từng nhóm.",
+      "C. Kết hợp State Transition Testing để kiểm tra quy trình chuyển đổi trạng thái dữ liệu (lưu trữ → chờ xóa → xóa) và Boundary Value Analysis để kiểm tra thời gian lưu trữ (5 năm ± 1 ngày).",
+      "D. Sử dụng Error Guessing để dự đoán các lỗi tiềm ẩn khi lưu trữ dữ liệu quá thời hạn và viết test case kiểm tra các trường hợp này."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Đáp án C kết hợp State Transition Testing để mô hình hóa quy trình chuyển đổi trạng thái dữ liệu theo thời gian và Boundary Value Analysis để kiểm tra chính xác thời điểm xóa dữ liệu (5 năm ± 1 ngày). Điều này đảm bảo hệ thống tuân thủ cả yêu cầu nghiệp vụ và quy định pháp luật. Các đáp án khác không giải quyết được cả hai khía cạnh hoặc thiếu tính hệ thống trong kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811188761_ADVANCED_2_qvo2"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho chức năng 'Thanh toán hóa đơn' của ứng dụng ví điện tử. Use case mô tả:\n- Người dùng chọn hóa đơn cần thanh toán\n- Hệ thống hiển thị thông tin hóa đơn và yêu cầu xác nhận\n- Người dùng nhập mã OTP để xác thực\n- Hệ thống xử lý thanh toán và gửi thông báo kết quả\n\nKhi áp dụng kỹ thuật Use Case Testing, bước nào dưới đây KHÔNG phải là một test case hợp lệ?",
+    "options": [
+      "A. Người dùng chọn hóa đơn không tồn tại → Hệ thống hiển thị thông báo lỗi 'Hóa đơn không hợp lệ'.",
+      "B. Người dùng nhập mã OTP sai 3 lần liên tiếp → Hệ thống khóa tài khoản tạm thời và gửi thông báo qua SMS.",
+      "C. Người dùng xác nhận thanh toán nhưng số dư ví không đủ → Hệ thống hiển thị thông báo 'Số dư không đủ' và hủy giao dịch.",
+      "D. Người dùng chọn hóa đơn và thoát ứng dụng trước khi xác nhận → Hệ thống tự động lưu nháp hóa đơn đã chọn cho lần đăng nhập tiếp theo."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Test case D không được mô tả trong use case gốc và không kiểm tra bất kỳ luồng chính hoặc luồng thay thế nào của chức năng thanh toán. Use Case Testing tập trung vào các luồng được định nghĩa trong use case, không bao gồm các hành vi ngoài phạm vi như 'tự động lưu nháp'. Các đáp án khác đều kiểm tra các luồng hợp lệ hoặc ngoại lệ được mô tả trong use case.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811188762_ADVANCED_3_uaa1"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống core banking cho ngân hàng, bạn được giao thiết kế test case cho chức năng 'Tính lãi suất tiết kiệm' với các quy tắc phức tạp:\n- Lãi suất cơ bản: 6%/năm cho kỳ hạn 12 tháng\n- Lãi suất ưu đãi: +0.5% nếu số dư ≥ 1 tỷ VND, +1% nếu số dư ≥ 5 tỷ VND\n- Lãi suất phạt: -1% nếu rút tiền trước hạn\n- Lãi suất cộng dồn: Áp dụng cho các kỳ hạn > 12 tháng (lãi nhập gốc hàng tháng)\n\nKỹ thuật nào dưới đây là tối ưu nhất để thiết kế test case cho chức năng này?",
+    "options": [
+      "A. Sử dụng Decision Table để mô hình hóa tất cả các tổ hợp của kỳ hạn, số dư và hành động rút tiền, sau đó áp dụng Boundary Value Analysis cho các giá trị số dư.",
+      "B. Áp dụng Equivalence Partitioning để chia các khoản tiền gửi thành các nhóm (dưới 1 tỷ, 1-5 tỷ, trên 5 tỷ) và kiểm tra lãi suất cho từng nhóm.",
+      "C. Kết hợp State Transition Testing để kiểm tra quy trình chuyển đổi trạng thái tài khoản (mở sổ → tích lũy lãi → rút tiền) và Error Guessing để dự đoán các lỗi tính toán lãi suất.",
+      "D. Sử dụng Use Case Testing để kiểm tra các luồng chính của chức năng (mở sổ, tích lũy lãi, rút tiền) và Boundary Value Analysis để kiểm tra các giá trị biên của kỳ hạn (12 tháng ± 1 ngày)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Decision Table là kỹ thuật tối ưu nhất để xử lý các tổ hợp phức tạp của nhiều điều kiện (kỳ hạn, số dư, hành động rút tiền) và hành động tương ứng (lãi suất áp dụng). Kết hợp với Boundary Value Analysis cho giá trị số dư giúp kiểm tra đầy đủ các trường hợp biên. Các đáp án khác không giải quyết được toàn bộ tổ hợp điều kiện hoặc thiếu tính hệ thống trong kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811188763_ADVANCED_4_7ivr"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho chức năng 'Đăng ký gói cước 4G' của ứng dụng di động nhà mạng. Yêu cầu nghiệp vụ mô tả:\n- Khách hàng chọn gói cước và nhập thông tin cá nhân\n- Hệ thống kiểm tra điều kiện đăng ký (độ tuổi, loại thuê bao, vùng phủ sóng)\n- Nếu đủ điều kiện, hệ thống gửi yêu cầu kích hoạt đến hệ thống backend\n- Hệ thống hiển thị thông báo kết quả và gửi SMS xác nhận\n\nKhi áp dụng kỹ thuật Error Guessing, test case nào dưới đây là hợp lý và có khả năng phát hiện lỗi cao nhất?",
+    "options": [
+      "A. Khách hàng nhập số điện thoại không đúng định dạng (thiếu số hoặc có ký tự đặc biệt) → Hệ thống hiển thị thông báo lỗi 'Số điện thoại không hợp lệ'.",
+      "B. Khách hàng chọn gói cước không khả dụng cho thuê bao trả trước → Hệ thống hiển thị thông báo 'Gói cước không áp dụng cho thuê bao của bạn'.",
+      "C. Khách hàng đăng ký gói cước trong thời gian hệ thống backend bảo trì → Hệ thống hiển thị thông báo 'Dịch vụ tạm thời gián đoạn, vui lòng thử lại sau'.",
+      "D. Khách hàng nhập ngày sinh tương lai (ví dụ: 01/01/2030) → Hệ thống tính toán sai độ tuổi và cho phép đăng ký gói cước không phù hợp."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Test case D kiểm tra lỗi tiềm ẩn trong logic tính toán độ tuổi (xử lý ngày sinh tương lai), một lỗi khó phát hiện bằng các kỹ thuật khác nhưng có thể gây ra hậu quả nghiêm trọng (đăng ký gói cước không phù hợp). Các đáp án khác kiểm tra các lỗi cơ bản đã được xử lý trong yêu cầu nghiệp vụ hoặc các tình huống ít phức tạp hơn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811188763_ADVANCED_5_ejeb"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý kho hàng cho công ty logistics, bạn phát hiện yêu cầu từ bộ phận kinh doanh mâu thuẫn với quy trình hiện tại:\n- Kinh doanh yêu cầu: Cho phép nhân viên chỉnh sửa thông tin đơn hàng đã xác nhận để xử lý các trường hợp đặc biệt.\n- Quy trình hiện tại: Chỉ cho phép chỉnh sửa đơn hàng ở trạng thái 'Chờ xử lý'.\n\nBạn sẽ thiết kế test case như thế nào để đảm bảo hệ thống đáp ứng được cả hai yêu cầu mà không gây ra lỗi nghiệp vụ?",
+    "options": [
+      "A. Thiết kế test case kiểm tra quyền chỉnh sửa đơn hàng cho từng vai trò (nhân viên/quản lý) và trạng thái đơn hàng (Chờ xử lý/Đã xác nhận).",
+      "B. Áp dụng State Transition Testing để kiểm tra quy trình chuyển đổi trạng thái đơn hàng (Chờ xử lý → Đã xác nhận → Đã chỉnh sửa) và các điều kiện kích hoạt.",
+      "C. Sử dụng Decision Table để mô hình hóa các tổ hợp của vai trò, trạng thái đơn hàng và hành động chỉnh sửa, sau đó kiểm tra kết quả tương ứng.",
+      "D. Kết hợp Equivalence Partitioning để chia các trường hợp chỉnh sửa thành các nhóm (hợp lệ/không hợp lệ) và Boundary Value Analysis để kiểm tra các giá trị biên của thông tin đơn hàng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Decision Table là kỹ thuật tối ưu để xử lý các tổ hợp phức tạp của nhiều điều kiện (vai trò, trạng thái đơn hàng, hành động chỉnh sửa) và kết quả tương ứng. Điều này đảm bảo hệ thống xử lý đúng tất cả các tình huống, bao gồm cả yêu cầu từ kinh doanh và quy trình hiện tại. Các đáp án khác không giải quyết được toàn bộ tổ hợp điều kiện hoặc thiếu tính hệ thống trong kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811188764_ADVANCED_6_xzgn"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho chức năng 'Tính thuế thu nhập cá nhân' của phần mềm kế toán. Quy tắc tính thuế như sau:\n- Thu nhập chịu thuế = Tổng thu nhập - Các khoản giảm trừ\n- Thuế suất:\n  - Dưới 5 triệu: 5%\n  - 5-10 triệu: 10%\n  - 10-18 triệu: 15%\n  - Trên 18 triệu: 20%\n\nKhi viết test step cho trường hợp 'Tính thuế cho thu nhập 15 triệu với giảm trừ 2 triệu', bước nào dưới đây là rõ ràng, không mơ hồ và dễ kiểm tra nhất?",
+    "options": [
+      "A. Nhập thu nhập 15 triệu và giảm trừ 2 triệu → Kiểm tra kết quả tính thuế.",
+      "B. 1. Nhập tổng thu nhập: 15,000,000 VND\n2. Nhập khoản giảm trừ: 2,000,000 VND\n3. Nhấn nút 'Tính thuế'\n4. Kiểm tra kết quả hiển thị: Thuế phải nộp = 1,450,000 VND (chi tiết: 5tr*5% + 5tr*10% + 3tr*15%).",
+      "C. Nhập các thông tin cần thiết → Đảm bảo hệ thống tính toán chính xác theo quy tắc thuế.",
+      "D. 1. Nhập thu nhập và giảm trừ\n2. Kiểm tra kết quả tính thuế có khớp với công thức không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test step ở đáp án B rõ ràng, chi tiết và không mơ hồ. Nó bao gồm các bước cụ thể, giá trị đầu vào chính xác, và kết quả mong đợi kèm theo chi tiết tính toán. Điều này giúp tester dễ dàng thực hiện và xác minh kết quả. Các đáp án khác không cung cấp đủ chi tiết hoặc mơ hồ trong cách trình bày.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811188764_ADVANCED_7_kh00"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng số, bạn được yêu cầu thiết kế test case cho chức năng 'Chuyển tiền nhanh 24/7' với các quy tắc:\n- Số tiền chuyển tối thiểu: 10,000 VND, tối đa: 50,000,000 VND\n- Phí chuyển tiền: 1,000 VND cho số tiền ≤ 1,000,000 VND, 2,000 VND cho số tiền > 1,000,000 VND\n- Hạn mức chuyển trong ngày: 100,000,000 VND\n\nKhi áp dụng Equivalence Partitioning, bạn xác định được bao nhiêu lớp tương đương hợp lệ cho biến 'số tiền chuyển'?",
+    "options": [
+      "A. 2 lớp: [10,000 - 1,000,000] và [1,000,001 - 50,000,000]",
+      "B. 3 lớp: [10,000 - 1,000,000], [1,000,001 - 50,000,000], và [50,000,001 - 100,000,000]",
+      "C. 4 lớp: [10,000 - 1,000,000], [1,000,001 - 50,000,000], [1 - 9,999], và [50,000,001 - 100,000,000]",
+      "D. 5 lớp: [10,000 - 1,000,000], [1,000,001 - 50,000,000], [1 - 9,999], [50,000,001 - 100,000,000], và [>100,000,000]"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Đáp án A xác định đúng 2 lớp tương đương hợp lệ cho biến 'số tiền chuyển' dựa trên quy tắc phí chuyển tiền: [10,000 - 1,000,000] và [1,000,001 - 50,000,000]. Các lớp [1 - 9,999] và [50,000,001 - 100,000,000] là không hợp lệ (vượt quá giới hạn hoặc dưới mức tối thiểu), không thuộc phạm vi Equivalence Partitioning cho giá trị hợp lệ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811188765_ADVANCED_8_njot"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho chức năng 'Đăng ký tài khoản doanh nghiệp' của ứng dụng ngân hàng số. Quy trình gồm 4 bước:\n1. Nhập thông tin cơ bản (tên công ty, mã số thuế)\n2. Tải lên giấy tờ pháp lý (GPKD, CMND người đại diện)\n3. Xác thực thông tin qua OTP\n4. Kích hoạt tài khoản\n\nKhi áp dụng kỹ thuật State Transition Testing, bạn cần kiểm tra bao nhiêu trạng thái và chuyển đổi trạng thái tối thiểu để đảm bảo phủ hết các luồng chính và ngoại lệ?",
+    "options": [
+      "A. 4 trạng thái và 4 chuyển đổi (mỗi bước 1 chuyển đổi)",
+      "B. 5 trạng thái (Chưa đăng ký, Đã nhập thông tin, Đã tải giấy tờ, Đã xác thực, Đã kích hoạt) và 6 chuyển đổi (bao gồm các luồng ngoại lệ như hủy đăng ký)",
+      "C. 4 trạng thái và 6 chuyển đổi (bao gồm các trường hợp quay lại bước trước)",
+      "D. 6 trạng thái (thêm trạng thái 'Từ chối' và 'Chờ duyệt') và 8 chuyển đổi (bao gồm các luồng phê duyệt và từ chối)"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Đáp án D bao phủ đầy đủ các trạng thái và chuyển đổi trạng thái cần thiết cho quy trình đăng ký tài khoản doanh nghiệp, bao gồm cả các luồng ngoại lệ như từ chối và chờ duyệt. Điều này đảm bảo kiểm thử toàn diện cả luồng chính và luồng phụ, phù hợp với yêu cầu của State Transition Testing ở cấp độ nâng cao.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811188765_ADVANCED_9_3qut"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý đơn hàng cho sàn TMĐT, bạn phát hiện yêu cầu từ bộ phận vận hành mâu thuẫn với yêu cầu từ bộ phận chăm sóc khách hàng:\n- Vận hành yêu cầu: Hủy đơn hàng nếu không được xác nhận trong vòng 24 giờ.\n- Chăm sóc khách hàng yêu cầu: Cho phép khách hàng gia hạn xác nhận đơn hàng thêm 12 giờ nếu có lý do hợp lệ.\n\nBạn sẽ thiết kế test case như thế nào để đảm bảo hệ thống xử lý đúng cả hai yêu cầu mà không gây ra xung đột nghiệp vụ?",
+    "options": [
+      "A. Thiết kế test case kiểm tra thời gian hủy đơn hàng cho các trường hợp xác nhận trong 24 giờ, sau 24 giờ, và sau 36 giờ (24+12).",
+      "B. Áp dụng Decision Table để mô hình hóa các tổ hợp của thời gian xác nhận, lý do gia hạn và hành động hệ thống (hủy đơn/gia hạn).",
+      "C. Sử dụng State Transition Testing để kiểm tra quy trình chuyển đổi trạng thái đơn hàng (Chờ xác nhận → Đã xác nhận/Hủy đơn/Gia hạn) và các điều kiện kích hoạt.",
+      "D. Kết hợp Equivalence Partitioning để chia các trường hợp thời gian xác nhận thành các nhóm (≤24 giờ, >24 giờ) và Boundary Value Analysis để kiểm tra thời gian chính xác (24 giờ ± 1 phút)."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Decision Table là kỹ thuật tối ưu để xử lý các tổ hợp phức tạp của nhiều điều kiện (thời gian xác nhận, lý do gia hạn) và hành động tương ứng (hủy đơn/gia hạn). Điều này đảm bảo hệ thống xử lý đúng cả hai yêu cầu từ vận hành và chăm sóc khách hàng. Các đáp án khác không giải quyết được toàn bộ tổ hợp điều kiện hoặc thiếu tính hệ thống trong kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811188766_ADVANCED_10_9cv3"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho chức năng 'Tính phí giao hàng' của ứng dụng giao hàng. Quy tắc tính phí như sau:\n- Nội thành: 15,000 VND cho đơn hàng < 500,000 VND, miễn phí cho đơn hàng ≥ 500,000 VND\n- Ngoại thành: 30,000 VND cho đơn hàng < 1,000,000 VND, 15,000 VND cho đơn hàng ≥ 1,000,000 VND\n- Phí vượt trọng lượng: 5,000 VND cho mỗi 0.5kg vượt quá 2kg\n\nKhi viết test step cho trường hợp 'Đơn hàng ngoại thành 1,200,000 VND và nặng 3.2kg', bước nào dưới đây là rõ ràng, không mơ hồ và dễ kiểm tra nhất?",
+    "options": [
+      "A. Nhập thông tin đơn hàng ngoại thành 1,200,000 VND và trọng lượng 3.2kg → Kiểm tra phí giao hàng.",
+      "B. 1. Chọn khu vực: Ngoại thành\n2. Nhập giá trị đơn hàng: 1,200,000 VND\n3. Nhập trọng lượng: 3.2kg\n4. Nhấn nút 'Tính phí'\n5. Kiểm tra kết quả hiển thị: Phí giao hàng = 15,000 VND (miễn phí nội thành) + 10,000 VND (phí vượt trọng lượng 1.2kg) = 25,000 VND.",
+      "C. Nhập các thông tin cần thiết → Đảm bảo hệ thống tính toán chính xác theo quy tắc phí.",
+      "D. 1. Nhập khu vực và giá trị đơn hàng\n2. Nhập trọng lượng\n3. Kiểm tra kết quả tính phí có khớp với công thức không."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test step ở đáp án B rõ ràng, chi tiết và không mơ hồ. Nó bao gồm các bước cụ thể, giá trị đầu vào chính xác, và kết quả mong đợi kèm theo chi tiết tính toán. Điều này giúp tester dễ dàng thực hiện và xác minh kết quả. Các đáp án khác không cung cấp đủ chi tiết hoặc mơ hồ trong cách trình bày.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811188766_ADVANCED_11_bvi5"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống ngân hàng lõi (Core Banking) tại Việt Nam, bạn được giao thiết kế test case cho module tính lãi suất tiết kiệm với đầu vào là số ngày gửi (1-365) và số tiền gửi (1 triệu - 1 tỷ VND). Bạn nhận thấy lãi suất có các mức khác nhau tại các ngưỡng: 30, 90, 180, 365 ngày và 10 triệu, 100 triệu, 500 triệu VND. Khi áp dụng Equivalence Partitioning và Boundary Value Analysis, chiến lược nào dưới đây là tối ưu để đảm bảo độ phủ tối đa với số lượng test case hợp lý?",
+    "options": [
+      "A. Tạo 4 partition cho số ngày (1-29, 30-89, 90-179, 180-365) và 4 partition cho số tiền (1tr-9.999tr, 10tr-99.999tr, 100tr-499.999tr, 500tr-1tỷ), sau đó kết hợp toàn bộ boundary values (VD: 29,30,31,89,90,91...) thành ma trận test case.",
+      "B. Chỉ tập trung vào các boundary values (30,90,180,365 ngày và 10tr,100tr,500tr) mà không cần partition, vì boundary values đã bao phủ các trường hợp biên quan trọng nhất.",
+      "C. Áp dụng pairwise testing để giảm số lượng test case, kết hợp các boundary values của số ngày và số tiền theo nguyên tắc tối thiểu hóa tổ hợp nhưng vẫn đảm bảo phủ hết các ngưỡng quan trọng.",
+      "D. Tạo 4 partition cho số ngày và 4 partition cho số tiền, sau đó chỉ test các giá trị representative (VD: 15, 60, 120, 270 ngày và 5tr, 50tr, 250tr, 750tr) để giảm khối lượng công việc."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Chiến lược A kết hợp cả Equivalence Partitioning (để giảm số lượng test case không cần thiết) và Boundary Value Analysis (để tập trung vào các điểm chuyển tiếp quan trọng). Việc kết hợp toàn bộ boundary values trong ma trận đảm bảo độ phủ tối đa cho các ngưỡng lãi suất, đồng thời tránh bỏ sót các trường hợp biên có thể gây lỗi trong hệ thống ngân hàng lõi (VD: lãi suất thay đổi đột ngột tại 30 ngày). Các phương án khác hoặc bỏ qua partition (B), hoặc không đảm bảo phủ hết boundary (C, D).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811299418_EXPERT_0_yjn1"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho tính năng 'Chuyển tiền nhanh 24/7' của một ngân hàng số tại Việt Nam. Quy trình gồm 4 bước: (1) Nhập số tài khoản, (2) Nhập số tiền, (3) Xác nhận OTP, (4) Hoàn tất giao dịch. Bạn nhận thấy hệ thống có thể rơi vào các trạng thái lỗi như: 'Tài khoản không tồn tại', 'Số dư không đủ', 'OTP hết hạn', 'Hệ thống bảo trì'. Khi áp dụng State Transition Testing, cách tiếp cận nào dưới đây là hiệu quả nhất để phát hiện các lỗi chuyển trạng thái không mong muốn?",
+    "options": [
+      "A. Vẽ state diagram với 4 trạng thái chính (Nhập tài khoản, Nhập số tiền, Xác nhận OTP, Hoàn tất) và các trạng thái lỗi, sau đó thiết kế test case để phủ tất cả các transition hợp lệ và không hợp lệ (VD: từ 'Nhập số tiền' chuyển thẳng sang 'Hoàn tất' mà không qua OTP).",
+      "B. Chỉ tập trung vào các transition hợp lệ (VD: Nhập tài khoản → Nhập số tiền → Xác nhận OTP → Hoàn tất) vì các transition không hợp lệ đã được xử lý bởi validation ở từng bước.",
+      "C. Áp dụng pairwise testing để kết hợp các trạng thái lỗi với các bước trong quy trình, nhằm giảm số lượng test case nhưng vẫn đảm bảo phủ hết các lỗi phổ biến.",
+      "D. Thiết kế test case để phủ tất cả các combination của 4 bước và 4 trạng thái lỗi (tổng cộng 16 test case), vì đây là cách duy nhất đảm bảo không bỏ sót lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A áp dụng State Transition Testing đúng cách bằng cách vẽ state diagram và phủ tất cả các transition (hợp lệ và không hợp lệ). Điều này giúp phát hiện các lỗi chuyển trạng thái bất thường (VD: hệ thống cho phép chuyển tiền mà không cần OTP nếu người dùng refresh trang). Các phương án khác hoặc bỏ qua các transition không hợp lệ (B), hoặc không đảm bảo phủ hết các trường hợp (C, D).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811299419_EXPERT_1_kl27"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống eKYC (Electronic Know Your Customer) cho một ngân hàng tại Việt Nam, bạn cần thiết kế test case cho tính năng xác thực khuôn mặt. Hệ thống sử dụng AI để so sánh ảnh selfie với ảnh trên CMND/CCCD, với các ngưỡng chấp nhận khác nhau (VD: độ tương đồng > 85% là pass, 70-85% yêu cầu xác thực bổ sung, <70% là fail). Khi áp dụng Decision Table Testing, bảng quyết định nào dưới đây là tối ưu để đảm bảo độ phủ mà không gây dư thừa?",
+    "options": [
+      "A. Bảng quyết định với 3 điều kiện (Ảnh selfie rõ nét, Ảnh CMND rõ nét, Độ tương đồng) và 4 rules: (1) Cả 2 ảnh rõ nét + độ tương đồng >85% → Pass, (2) Cả 2 ảnh rõ nét + 70-85% → Xác thực bổ sung, (3) Cả 2 ảnh rõ nét + <70% → Fail, (4) Ảnh không rõ nét → Fail.",
+      "B. Bảng quyết định với 2 điều kiện (Ảnh selfie rõ nét, Độ tương đồng) và 6 rules để phủ tất cả các combination, bao gồm cả trường hợp ảnh CMND không rõ nét.",
+      "C. Bảng quyết định với 4 điều kiện (Ảnh selfie rõ nét, Ảnh CMND rõ nét, Độ tương đồng, Thiết bị sử dụng) và 12 rules để đảm bảo phủ hết các yếu tố kỹ thuật.",
+      "D. Bảng quyết định chỉ tập trung vào độ tương đồng (3 rules: >85%, 70-85%, <70%) vì các yếu tố khác đã được xử lý bởi validation trước đó."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A tạo bảng quyết định tối ưu với 3 điều kiện và 4 rules, đủ để phủ các trường hợp chính mà không gây dư thừa. Việc thêm điều kiện 'Thiết bị sử dụng' (C) hoặc bỏ qua 'Ảnh CMND rõ nét' (B, D) đều không hợp lý vì ảnh CMND không rõ nét là nguyên nhân phổ biến gây lỗi trong eKYC tại Việt Nam (do chất lượng giấy tờ cũ).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811299421_EXPERT_2_2hda"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho tính năng 'Đặt lịch hẹn giao dịch' trên ứng dụng ngân hàng số. Quy trình gồm: (1) Chọn chi nhánh, (2) Chọn ngày/giờ, (3) Chọn loại giao dịch, (4) Nhập thông tin khách hàng. Khi áp dụng Use Case Testing, cách tiếp cận nào dưới đây là hiệu quả nhất để đảm bảo tính năng hoạt động đúng trong các tình huống thực tế?",
+    "options": [
+      "A. Viết test case cho các luồng chính (happy path) và các luồng thay thế (alternative flows) như: khách hàng hủy lịch hẹn, hệ thống hết slot thời gian, hoặc khách hàng nhập sai thông tin. Đồng thời, bổ sung các luồng ngoại lệ (exception flows) như: mất kết nối mạng, hệ thống bảo trì.",
+      "B. Chỉ tập trung vào luồng chính (happy path) vì các luồng khác đã được xử lý bởi validation ở từng bước và không ảnh hưởng đến trải nghiệm người dùng.",
+      "C. Áp dụng pairwise testing để kết hợp các yếu tố (chi nhánh, ngày/giờ, loại giao dịch) nhằm giảm số lượng test case nhưng vẫn đảm bảo phủ hết các tình huống phổ biến.",
+      "D. Viết test case cho tất cả các combination của 4 bước (VD: 5 chi nhánh × 10 ngày × 5 loại giao dịch × 3 trạng thái thông tin khách hàng) để đảm bảo không bỏ sót lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A áp dụng Use Case Testing đúng cách bằng cách bao phủ cả luồng chính, luồng thay thế và luồng ngoại lệ. Điều này phản ánh các tình huống thực tế mà người dùng có thể gặp phải (VD: hủy lịch hẹn, hệ thống bảo trì). Các phương án khác hoặc bỏ qua các luồng quan trọng (B), hoặc không đảm bảo phủ hết các trường hợp (C, D).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811299422_EXPERT_3_3emr"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý kho vận cho một doanh nghiệp logistics tại Việt Nam, bạn cần thiết kế test case cho tính năng 'Tính phí lưu kho' với đầu vào là số ngày lưu kho (1-365) và loại hàng hóa (hàng thông thường, hàng nguy hiểm, hàng đông lạnh). Bạn nghi ngờ hệ thống có thể gặp lỗi khi số ngày lưu kho vượt quá 30 ngày hoặc khi loại hàng hóa là 'hàng nguy hiểm'. Khi áp dụng Error Guessing, chiến lược nào dưới đây là hiệu quả nhất?",
+    "options": [
+      "A. Thiết kế test case tập trung vào các trường hợp: (1) Số ngày lưu kho = 30 và 31, (2) Loại hàng hóa là 'hàng nguy hiểm', (3) Kết hợp cả 2 yếu tố (số ngày >30 + hàng nguy hiểm), (4) Các trường hợp biên khác như số ngày = 1, 365.",
+      "B. Chỉ test các trường hợp số ngày lưu kho = 30 và 31, vì đây là ngưỡng quan trọng nhất và đã bao phủ được các lỗi tiềm ẩn.",
+      "C. Áp dụng pairwise testing để kết hợp số ngày lưu kho và loại hàng hóa, nhằm giảm số lượng test case nhưng vẫn đảm bảo phủ hết các tình huống.",
+      "D. Thiết kế test case cho tất cả các combination của số ngày (1-365) và loại hàng hóa (3 loại), vì đây là cách duy nhất đảm bảo không bỏ sót lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A áp dụng Error Guessing hiệu quả bằng cách tập trung vào các trường hợp nghi ngờ có lỗi (số ngày >30, hàng nguy hiểm) và các trường hợp biên. Điều này giúp phát hiện các lỗi tiềm ẩn mà không cần test tất cả combination (D) hoặc bỏ qua các yếu tố quan trọng (B, C).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811299423_EXPERT_4_z6r7"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho tính năng 'Thanh toán hóa đơn điện nước' trên ứng dụng ngân hàng số. Một test step được viết như sau: 'Nhập số tiền thanh toán lớn hơn 0 và nhỏ hơn hoặc bằng số dư tài khoản, sau đó nhấn nút Thanh toán'. Theo bạn, vấn đề chính của test step này là gì và cách sửa nào dưới đây là tối ưu?",
+    "options": [
+      "A. Test step không rõ ràng về định dạng số tiền (VD: có dấu phẩy ngăn cách hàng nghìn không) và không kiểm tra thông báo lỗi khi nhập số tiền không hợp lệ. Cách sửa: 'Nhập số tiền thanh toán theo định dạng 1.000.000 VND (không dấu phẩy), đảm bảo 0 < số tiền ≤ số dư tài khoản. Kiểm tra thông báo lỗi khi nhập số tiền ≤ 0 hoặc > số dư.'",
+      "B. Test step đã đủ rõ ràng và không cần sửa, vì nó đã mô tả đầy đủ các điều kiện cần thiết.",
+      "C. Test step cần bổ sung thêm các điều kiện như: loại hóa đơn (điện/nước), nhà cung cấp dịch vụ, và định dạng số tài khoản người nhận. Cách sửa: 'Chọn loại hóa đơn (điện/nước), nhập mã khách hàng, nhập số tiền thanh toán (0 < số tiền ≤ số dư), chọn nhà cung cấp, nhập số tài khoản người nhận, nhấn Thanh toán.'",
+      "D. Test step cần chia thành nhiều bước nhỏ hơn để dễ theo dõi, ví dụ: (1) Nhập số tiền, (2) Kiểm tra số tiền hợp lệ, (3) Nhấn Thanh toán."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A chỉ ra vấn đề chính của test step gốc: không rõ ràng về định dạng số tiền và thiếu kiểm tra thông báo lỗi. Việc sửa như đề xuất đảm bảo test step testable, concise và unambiguous. Các phương án khác hoặc không giải quyết được vấn đề (B), hoặc làm phức tạp hóa test step (C, D).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811299424_EXPERT_5_cnv2"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống ERP cho một tập đoàn sản xuất tại Việt Nam, bạn cần thiết kế test case cho module 'Quản lý đơn hàng' với đầu vào phức tạp gồm: loại đơn hàng (nội địa/xuất khẩu), phương thức thanh toán (tiền mặt/chuyển khoản), và trạng thái đơn hàng (mới/tạm ngừng/hoàn tất). Khi áp dụng Decision Table Testing, bảng quyết định nào dưới đây là tối ưu để đảm bảo độ phủ mà không gây dư thừa?",
+    "options": [
+      "A. Bảng quyết định với 3 điều kiện (Loại đơn hàng, Phương thức thanh toán, Trạng thái đơn hàng) và 8 rules để phủ tất cả các combination, bao gồm cả các trường hợp không hợp lệ (VD: đơn hàng xuất khẩu thanh toán bằng tiền mặt).",
+      "B. Bảng quyết định với 2 điều kiện (Loại đơn hàng, Trạng thái đơn hàng) và 6 rules, vì phương thức thanh toán không ảnh hưởng đến logic xử lý đơn hàng.",
+      "C. Bảng quyết định với 4 điều kiện (thêm điều kiện 'Số lượng sản phẩm') và 16 rules để đảm bảo phủ hết các yếu tố kỹ thuật.",
+      "D. Bảng quyết định chỉ tập trung vào trạng thái đơn hàng (3 rules: mới/tạm ngừng/hoàn tất) vì các yếu tố khác đã được xử lý bởi validation trước đó."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A tạo bảng quyết định tối ưu với 3 điều kiện và 8 rules, đủ để phủ tất cả các combination mà không gây dư thừa. Việc bỏ qua phương thức thanh toán (B) hoặc thêm điều kiện không cần thiết (C) đều không hợp lý, vì phương thức thanh toán có thể ảnh hưởng đến logic xử lý đơn hàng (VD: đơn hàng xuất khẩu thường yêu cầu chuyển khoản).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811299424_EXPERT_6_4vy5"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho tính năng 'Đăng ký tài khoản doanh nghiệp' trên ứng dụng ngân hàng số. Quy trình gồm 5 bước: (1) Nhập thông tin doanh nghiệp, (2) Nhập thông tin người đại diện, (3) Tải lên giấy tờ pháp lý, (4) Xác thực OTP, (5) Hoàn tất đăng ký. Khi áp dụng State Transition Testing, cách tiếp cận nào dưới đây là hiệu quả nhất để phát hiện các lỗi chuyển trạng thái không mong muốn?",
+    "options": [
+      "A. Vẽ state diagram với 5 trạng thái chính và các trạng thái lỗi (VD: giấy tờ không hợp lệ, OTP hết hạn), sau đó thiết kế test case để phủ tất cả các transition hợp lệ và không hợp lệ (VD: từ 'Tải lên giấy tờ' chuyển thẳng sang 'Hoàn tất' mà không qua OTP).",
+      "B. Chỉ tập trung vào các transition hợp lệ (VD: Bước 1 → Bước 2 → Bước 3 → Bước 4 → Bước 5) vì các transition không hợp lệ đã được xử lý bởi validation ở từng bước.",
+      "C. Áp dụng pairwise testing để kết hợp các trạng thái lỗi với các bước trong quy trình, nhằm giảm số lượng test case nhưng vẫn đảm bảo phủ hết các lỗi phổ biến.",
+      "D. Thiết kế test case để phủ tất cả các combination của 5 bước và các trạng thái lỗi (tổng cộng 20 test case), vì đây là cách duy nhất đảm bảo không bỏ sót lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A áp dụng State Transition Testing đúng cách bằng cách vẽ state diagram và phủ tất cả các transition (hợp lệ và không hợp lệ). Điều này giúp phát hiện các lỗi chuyển trạng thái bất thường (VD: hệ thống cho phép hoàn tất đăng ký mà không cần OTP nếu người dùng refresh trang). Các phương án khác hoặc bỏ qua các transition không hợp lệ (B), hoặc không đảm bảo phủ hết các trường hợp (C, D).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811299425_EXPERT_7_8f0n"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống thanh toán trực tuyến cho một sàn thương mại điện tử tại Việt Nam, bạn cần thiết kế test case cho tính năng 'Áp dụng voucher giảm giá'. Voucher có các loại: giảm giá theo % (10-50%), giảm giá theo số tiền cố định (10k-100k VND), và voucher freeship. Khi áp dụng Equivalence Partitioning và Boundary Value Analysis, chiến lược nào dưới đây là tối ưu để đảm bảo độ phủ với số lượng test case hợp lý?",
+    "options": [
+      "A. Tạo partition cho từng loại voucher: (1) Giảm %: 10-29%, 30-50%, (2) Giảm tiền: 10k-50k, 51k-100k, (3) Freeship. Sau đó test các boundary values (VD: 29%, 30%, 50k, 51k) và các giá trị representative trong mỗi partition.",
+      "B. Chỉ tập trung vào các boundary values (10%, 50%, 10k, 100k) mà không cần partition, vì boundary values đã bao phủ các trường hợp biên quan trọng nhất.",
+      "C. Áp dụng pairwise testing để kết hợp các loại voucher với các giá trị giảm giá, nhằm giảm số lượng test case nhưng vẫn đảm bảo phủ hết các tình huống phổ biến.",
+      "D. Tạo partition cho từng loại voucher và test tất cả các giá trị trong mỗi partition (VD: 10%, 11%, ..., 50%) để đảm bảo không bỏ sót lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A kết hợp Equivalence Partitioning (để giảm số lượng test case không cần thiết) và Boundary Value Analysis (để tập trung vào các điểm chuyển tiếp quan trọng). Việc test các boundary values (VD: 29%, 30%) giúp phát hiện các lỗi khi voucher chuyển từ mức giảm % thấp sang cao. Các phương án khác hoặc bỏ qua partition (B), hoặc không đảm bảo phủ hết boundary (C, D).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "ANALYSIS",
+    "id": "q_1780811299426_EXPERT_8_spmc"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho tính năng 'Rút tiền tại cây ATM' của một ngân hàng. Quy trình gồm: (1) Nhập số thẻ, (2) Nhập PIN, (3) Chọn số tiền, (4) Nhận tiền và biên lai. Khi áp dụng Use Case Testing, cách tiếp cận nào dưới đây là hiệu quả nhất để đảm bảo tính năng hoạt động đúng trong các tình huống thực tế?",
+    "options": [
+      "A. Viết test case cho luồng chính (happy path) và các luồng thay thế như: nhập sai PIN 3 lần (khóa thẻ), số dư không đủ, ATM hết tiền, hoặc lỗi kết nối mạng. Đồng thời, bổ sung các luồng ngoại lệ như: thẻ hết hạn, thẻ bị khóa, hoặc ATM bảo trì.",
+      "B. Chỉ tập trung vào luồng chính (happy path) vì các luồng khác đã được xử lý bởi hệ thống và không ảnh hưởng đến trải nghiệm người dùng.",
+      "C. Áp dụng pairwise testing để kết hợp các yếu tố (số thẻ, số tiền, loại thẻ) nhằm giảm số lượng test case nhưng vẫn đảm bảo phủ hết các tình huống phổ biến.",
+      "D. Viết test case cho tất cả các combination của 4 bước (VD: 5 loại thẻ × 10 mức số tiền × 2 trạng thái PIN) để đảm bảo không bỏ sót lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A áp dụng Use Case Testing đúng cách bằng cách bao phủ cả luồng chính, luồng thay thế và luồng ngoại lệ. Điều này phản ánh các tình huống thực tế mà người dùng có thể gặp phải (VD: nhập sai PIN, ATM hết tiền). Các phương án khác hoặc bỏ qua các luồng quan trọng (B), hoặc không đảm bảo phủ hết các trường hợp (C, D).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "SITUATION",
+    "id": "q_1780811299426_EXPERT_9_irss"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý nhân sự (HRM) cho một tập đoàn đa quốc gia tại Việt Nam, bạn cần thiết kế test case cho tính năng 'Tính lương tháng' với đầu vào phức tạp gồm: loại hợp đồng (chính thức/thử việc), số ngày làm việc (1-31), và các khoản phụ cấp (ăn trưa, xăng xe, điện thoại). Bạn nghi ngờ hệ thống có thể gặp lỗi khi số ngày làm việc = 31 hoặc khi loại hợp đồng là 'thử việc'. Khi áp dụng Error Guessing, chiến lược nào dưới đây là hiệu quả nhất?",
+    "options": [
+      "A. Thiết kế test case tập trung vào các trường hợp: (1) Số ngày làm việc = 30 và 31, (2) Loại hợp đồng là 'thử việc', (3) Kết hợp cả 2 yếu tố (số ngày = 31 + hợp đồng thử việc), (4) Các trường hợp biên khác như số ngày = 1, phụ cấp = 0.",
+      "B. Chỉ test các trường hợp số ngày làm việc = 31, vì đây là ngưỡng quan trọng nhất và đã bao phủ được các lỗi tiềm ẩn.",
+      "C. Áp dụng pairwise testing để kết hợp số ngày làm việc, loại hợp đồng và các khoản phụ cấp, nhằm giảm số lượng test case nhưng vẫn đảm bảo phủ hết các tình huống.",
+      "D. Thiết kế test case cho tất cả các combination của số ngày (1-31), loại hợp đồng (2 loại) và các khoản phụ cấp (3 loại), vì đây là cách duy nhất đảm bảo không bỏ sót lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A áp dụng Error Guessing hiệu quả bằng cách tập trung vào các trường hợp nghi ngờ có lỗi (số ngày = 31, hợp đồng thử việc) và các trường hợp biên. Điều này giúp phát hiện các lỗi tiềm ẩn mà không cần test tất cả combination (D) hoặc bỏ qua các yếu tố quan trọng (B, C).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811299428_EXPERT_10_annv"
+  },
+  {
+    "questionText": "Bạn đang thiết kế test case cho tính năng 'Chuyển tiền quốc tế' trên ứng dụng ngân hàng số. Một test step được viết như sau: 'Nhập số tiền chuyển khoản theo định dạng USD, đảm bảo số tiền lớn hơn 0 và nhỏ hơn hạn mức chuyển tiền quốc tế, sau đó nhấn nút Tiếp tục'. Theo bạn, vấn đề chính của test step này là gì và cách sửa nào dưới đây là tối ưu?",
+    "options": [
+      "A. Test step không rõ ràng về định dạng số tiền (VD: có dấu phẩy ngăn cách hàng nghìn không) và không kiểm tra các quy định pháp lý (VD: báo cáo giao dịch đáng ngờ khi số tiền > 5,000 USD). Cách sửa: 'Nhập số tiền chuyển khoản theo định dạng 1000.00 USD (không dấu phẩy), đảm bảo 0 < số tiền ≤ hạn mức chuyển tiền quốc tế. Kiểm tra thông báo lỗi khi nhập số tiền ≤ 0, > hạn mức, hoặc ≥ 5,000 USD (yêu cầu báo cáo giao dịch đáng ngờ).'",
+      "B. Test step đã đủ rõ ràng và không cần sửa, vì nó đã mô tả đầy đủ các điều kiện cần thiết.",
+      "C. Test step cần bổ sung thêm các điều kiện như: loại tiền tệ (USD/EUR), ngân hàng nhận, và mục đích chuyển tiền. Cách sửa: 'Chọn loại tiền tệ (USD/EUR), nhập số tiền (0 < số tiền ≤ hạn mức), nhập thông tin ngân hàng nhận, chọn mục đích chuyển tiền, nhấn Tiếp tục.'",
+      "D. Test step cần chia thành nhiều bước nhỏ hơn để dễ theo dõi, ví dụ: (1) Nhập số tiền, (2) Kiểm tra số tiền hợp lệ, (3) Kiểm tra hạn mức, (4) Nhấn Tiếp tục."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A chỉ ra vấn đề chính của test step gốc: không rõ ràng về định dạng số tiền và thiếu kiểm tra các quy định pháp lý (VD: báo cáo giao dịch đáng ngờ). Việc sửa như đề xuất đảm bảo test step testable, concise và unambiguous, đồng thời phản ánh các yêu cầu thực tế trong chuyển tiền quốc tế. Các phương án khác hoặc không giải quyết được vấn đề (B), hoặc làm phức tạp hóa test step (C, D).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Case Design",
+    "category": "SKILL",
+    "id": "q_1780811299428_EXPERT_11_f66k"
+  }
+]

@@ -1,0 +1,752 @@
+[
+  {
+    "questionText": "Trong Playwright, locator nào sau đây được sử dụng để tìm một phần tử dựa trên thuộc tính 'data-testid'?",
+    "options": [
+      "A. page.locator('text=Login')",
+      "B. page.locator('[data-testid=\"submit-button\"]')",
+      "C. page.locator('#username')",
+      "D. page.locator('.btn-primary')"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Locator '[data-testid=\"submit-button\"]' sử dụng thuộc tính 'data-testid' để định vị phần tử, một phương pháp phổ biến trong các dự án để đảm bảo tính ổn định của test. Các phương án khác sử dụng text, ID hoặc class, không liên quan đến 'data-testid'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811987661_BEGINNER_0_vs1m"
+  },
+  {
+    "questionText": "Khi viết test với Playwright, assertion nào dưới đây kiểm tra xem một phần tử có hiển thị trên trang hay không?",
+    "options": [
+      "A. expect(locator).toHaveText('Hello')",
+      "B. expect(locator).toBeVisible()",
+      "C. expect(locator).toHaveAttribute('disabled')",
+      "D. expect(locator).toHaveCount(1)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phương thức `toBeVisible()` kiểm tra xem phần tử có hiển thị trên trang hay không. Các phương án khác kiểm tra text, thuộc tính hoặc số lượng phần tử, không liên quan đến việc hiển thị.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811987661_BEGINNER_1_q6fm"
+  },
+  {
+    "questionText": "Trong Playwright, cơ chế auto-waiting hoạt động như thế nào khi sử dụng locator để tương tác với phần tử?",
+    "options": [
+      "A. Playwright sẽ chờ tối đa 5 giây cho phần tử xuất hiện trước khi báo lỗi.",
+      "B. Playwright tự động chờ phần tử sẵn sàng (visible, enabled) trước khi thực hiện hành động mà không cần cấu hình thêm.",
+      "C. Người dùng phải tự định nghĩa thời gian chờ cho mỗi locator.",
+      "D. Playwright chỉ chờ phần tử nếu sử dụng phương thức `waitForSelector()`."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Playwright tích hợp cơ chế auto-waiting, tự động chờ phần tử sẵn sàng (visible, enabled) trước khi thực hiện hành động như click hoặc fill, giúp giảm thiểu việc viết mã chờ thủ công.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811987661_BEGINNER_2_jhyd"
+  },
+  {
+    "questionText": "Trong mô hình Page Object Model (POM) với Playwright, mục đích chính của việc sử dụng POM là gì?",
+    "options": [
+      "A. Tăng tốc độ thực thi test bằng cách tối ưu hóa mã JavaScript.",
+      "B. Tách biệt mã test và mã định vị phần tử (locators) để dễ bảo trì và tái sử dụng.",
+      "C. Cho phép chạy test song song trên nhiều trình duyệt cùng lúc.",
+      "D. Tự động tạo báo cáo chi tiết sau khi test hoàn thành."
+    ],
+    "correctAnswer": "B",
+    "explanation": "POM giúp tách biệt mã test (test scripts) và mã định vị phần tử (locators), giúp mã dễ bảo trì, tái sử dụng và giảm thiểu sự trùng lặp trong các dự án lớn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780811987661_BEGINNER_3_0tte"
+  },
+  {
+    "questionText": "Trong một dự án sử dụng Playwright, bạn cần kiểm tra xem một nút 'Thanh toán' có bị vô hiệu hóa hay không sau khi người dùng chưa nhập đủ thông tin. Assertion nào dưới đây là phù hợp?",
+    "options": [
+      "A. expect(button).toBeVisible()",
+      "B. expect(button).toBeDisabled()",
+      "C. expect(button).toHaveText('Thanh toán')",
+      "D. expect(button).toHaveCount(1)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phương thức `toBeDisabled()` kiểm tra xem phần tử có bị vô hiệu hóa (disabled) hay không, phù hợp với tình huống kiểm tra trạng thái của nút 'Thanh toán'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780811987661_BEGINNER_4_21tr"
+  },
+  {
+    "questionText": "Khi viết test cho một trang web thương mại điện tử tại Việt Nam, bạn muốn mock phản hồi API để kiểm tra giao diện hiển thị sản phẩm khi API trả về danh sách rỗng. Phương thức nào của Playwright được sử dụng để mock API?",
+    "options": [
+      "A. page.route()",
+      "B. page.evaluate()",
+      "C. page.waitForResponse()",
+      "D. page.screenshot()"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương thức `page.route()` cho phép mock phản hồi API bằng cách chặn yêu cầu và trả về dữ liệu giả lập, giúp kiểm tra các tình huống như danh sách sản phẩm rỗng mà không phụ thuộc vào backend.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780811987661_BEGINNER_5_ukmq"
+  },
+  {
+    "questionText": "Trong Playwright, làm thế nào để cấu hình test chạy trên nhiều trình duyệt (Chrome, Firefox, WebKit) trong cùng một pipeline?",
+    "options": [
+      "A. Sử dụng phương thức `browser.launch()` cho từng trình duyệt trong cùng một test file.",
+      "B. Định nghĩa các trình duyệt trong file cấu hình `playwright.config.js` bằng thuộc tính `projects`.",
+      "C. Chạy lệnh `npx playwright test` nhiều lần với tham số `--browser` khác nhau.",
+      "D. Tạo nhiều test file riêng biệt cho từng trình duyệt."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thuộc tính `projects` trong file `playwright.config.js` cho phép định nghĩa nhiều trình duyệt và môi trường chạy test, giúp tối ưu hóa pipeline và đảm bảo tính nhất quán.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780811987661_BEGINNER_6_tw4f"
+  },
+  {
+    "questionText": "Bạn đang viết test cho một ứng dụng ngân hàng tại Việt Nam, nơi yêu cầu xác thực hai yếu tố (2FA). Làm thế nào để Playwright duy trì trạng thái đăng nhập (authentication state) giữa các test?",
+    "options": [
+      "A. Lưu trữ thông tin đăng nhập trong biến toàn cục và sử dụng lại cho mỗi test.",
+      "B. Sử dụng `page.context().storageState()` để lưu và tải lại trạng thái đăng nhập.",
+      "C. Ghi đè phương thức `beforeEach` để đăng nhập trước mỗi test.",
+      "D. Sử dụng `page.waitForNavigation()` sau khi đăng nhập để đảm bảo trạng thái."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phương thức `storageState()` cho phép lưu và tải lại trạng thái đăng nhập (cookies, localStorage), giúp duy trì phiên làm việc giữa các test mà không cần đăng nhập lại, đặc biệt hữu ích cho các ứng dụng yêu cầu 2FA.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780811987661_BEGINNER_7_kben"
+  },
+  {
+    "questionText": "Trong Playwright, làm thế nào để chặn (intercept) một yêu cầu mạng và thay đổi phản hồi của nó trong quá trình test?",
+    "options": [
+      "A. Sử dụng `page.on('request', ...)` để sửa đổi yêu cầu.",
+      "B. Sử dụng `page.route()` để chặn yêu cầu và trả về phản hồi giả lập.",
+      "C. Sử dụng `page.evaluate()` để can thiệp vào phản hồi từ trình duyệt.",
+      "D. Sử dụng `page.waitForResponse()` để chờ phản hồi và sửa đổi sau đó."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phương thức `page.route()` cho phép chặn yêu cầu mạng và trả về phản hồi giả lập, giúp kiểm tra các tình huống như lỗi API hoặc dữ liệu giả định mà không phụ thuộc vào backend thực tế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780811987661_BEGINNER_8_eny2"
+  },
+  {
+    "questionText": "Bạn cần kiểm tra xem một phần tử có chứa văn bản chính xác 'Đăng nhập thành công' hay không trong một ứng dụng đa ngôn ngữ. Assertion nào dưới đây là đúng?",
+    "options": [
+      "A. expect(locator).toContainText('Đăng nhập thành công')",
+      "B. expect(locator).toHaveText('Đăng nhập thành công')",
+      "C. expect(locator).toMatchText('Đăng nhập thành công')",
+      "D. expect(locator).toIncludeText('Đăng nhập thành công')"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Phương thức `toHaveText()` kiểm tra xem phần tử có chứa chính xác văn bản 'Đăng nhập thành công' hay không, phù hợp với các ứng dụng có yêu cầu văn bản chính xác như thông báo đa ngôn ngữ.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780811987661_BEGINNER_9_zdic"
+  },
+  {
+    "questionText": "Trong một dự án sử dụng Playwright, bạn muốn tạo báo cáo tùy chỉnh để hiển thị kết quả test theo định dạng HTML. Làm thế nào để thực hiện điều này?",
+    "options": [
+      "A. Sử dụng `page.screenshot()` để chụp màn hình và lưu vào báo cáo.",
+      "B. Sử dụng thư viện bên ngoài như `allure-playwright` hoặc cấu hình `reporter` trong `playwright.config.js`.",
+      "C. Ghi đè phương thức `afterEach` để xuất kết quả test ra file JSON.",
+      "D. Sử dụng `console.log()` để ghi lại kết quả và chuyển đổi thủ công sang HTML."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Playwright hỗ trợ tích hợp với các thư viện báo cáo như `allure-playwright` hoặc cấu hình `reporter` trong `playwright.config.js` để tạo báo cáo HTML tùy chỉnh, giúp hiển thị kết quả test một cách trực quan.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780811987661_BEGINNER_10_qmhy"
+  },
+  {
+    "questionText": "Khi viết test cho một ứng dụng có nhiều bước phức tạp (ví dụ: đặt hàng trên sàn thương mại điện tử), làm thế nào để tổ chức mã test theo mô hình Page Object Model (POM) để dễ bảo trì?",
+    "options": [
+      "A. Viết tất cả các bước test trong một file duy nhất để dễ theo dõi.",
+      "B. Tạo một class riêng cho mỗi trang hoặc thành phần giao diện, chứa các phương thức và locators liên quan.",
+      "C. Sử dụng biến toàn cục để lưu trữ tất cả các locators và gọi lại trong các test.",
+      "D. Chia nhỏ test thành nhiều file nhỏ và sử dụng `require` để import các locators."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong POM, mỗi trang hoặc thành phần giao diện được định nghĩa trong một class riêng, chứa các phương thức và locators liên quan, giúp mã dễ bảo trì, tái sử dụng và mở rộng trong các dự án lớn.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780811987661_BEGINNER_11_t6x1"
+  },
+  {
+    "questionText": "Trong Playwright, làm thế nào để kiểm tra xem một phần tử có thuộc tính 'required' hay không trong form đăng ký?",
+    "options": [
+      "A. expect(locator).toHaveAttribute('required')",
+      "B. expect(locator).toBeRequired()",
+      "C. expect(locator).toHaveClass('required')",
+      "D. expect(locator).toHaveText('required')"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương thức `toHaveAttribute('required')` kiểm tra xem phần tử có thuộc tính 'required' hay không, phù hợp với các tình huống kiểm tra form nhập liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780811987661_BEGINNER_12_or7r"
+  },
+  {
+    "questionText": "Trong dự án sử dụng Playwright để kiểm thử một ứng dụng ngân hàng trực tuyến tại Việt Nam, bạn cần xác định phần tử nút 'Đăng nhập' trên trang web. Phần tử này có thuộc tính HTML như sau: `<button id='login-btn' class='btn-primary' data-testid='auth-login'>Đăng nhập</button>`. Locator nào dưới đây là tối ưu nhất để đảm bảo độ ổn định và dễ bảo trì?",
+    "options": [
+      "A. `page.locator('button:has-text(\"Đăng nhập\")')`",
+      "B. `page.locator('#login-btn')`",
+      "C. `page.locator('[data-testid=\"auth-login\"]')`",
+      "D. `page.locator('.btn-primary')`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Locator sử dụng `data-testid` là tối ưu nhất vì nó được thiết kế riêng cho mục đích kiểm thử (không bị ảnh hưởng bởi thay đổi UI hoặc ngôn ngữ), dễ bảo trì và ít bị trùng lặp. Các lựa chọn khác có thể không ổn định (A: phụ thuộc văn bản, D: trùng class) hoặc không đủ cụ thể (B: chỉ dùng ID nhưng không đảm bảo ngữ cảnh).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812066567_INTERMEDIATE_0_tou6"
+  },
+  {
+    "questionText": "Bạn đang xây dựng bộ kiểm thử tự động cho một ứng dụng thương mại điện tử đa quốc gia. Khi kiểm tra chức năng giỏ hàng, bạn muốn xác nhận rằng giá tiền hiển thị đã bao gồm thuế VAT (10%) cho đơn hàng tại thị trường Việt Nam. Assertion nào dưới đây là chính xác và dễ đọc nhất?",
+    "options": [
+      "A. `expect(page.locator('.cart-total')).toHaveText(/\\d+\\.\\d{3}đ/)`",
+      "B. `expect(page.locator('.cart-total')).toContainText('đ')`",
+      "C. `await expect(page.locator('.cart-total')).toHaveText(expect.stringMatching(/\\d+,\\d{3}₫/))`",
+      "D. `expect(parseFloat(await page.locator('.cart-total').textContent())).toBeCloseTo(expectedTotal, 0.01)`"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Assertion ở D kiểm tra giá trị số thực tế (sau khi parse) với giá trị mong đợi, cho phép so sánh chính xác kể cả khi có làm tròn thuế. Các lựa chọn khác chỉ kiểm tra định dạng chuỗi (A, C) hoặc ký tự đơn lẻ (B), không đảm bảo tính toán đúng về mặt số học.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812066567_INTERMEDIATE_1_u0gw"
+  },
+  {
+    "questionText": "Trong dự án kiểm thử ứng dụng quản lý nhân sự tại một công ty công nghệ, bạn cần mô phỏng việc API trả về lỗi 500 khi nhân viên gửi yêu cầu cập nhật thông tin cá nhân. Kỹ thuật nào dưới đây là phù hợp nhất để mock API response trong Playwright?",
+    "options": [
+      "A. Sử dụng `page.route()` để chặn request và trả về response với status code 500",
+      "B. Sử dụng thư viện `msw` (Mock Service Worker) để mock API ở tầng network",
+      "C. Sửa đổi trực tiếp dữ liệu trong cơ sở dữ liệu staging trước khi chạy test",
+      "D. Ghi đè hàm gọi API trong mã nguồn ứng dụng để trả về lỗi 500"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Playwright cung cấp `page.route()` để mock API trực tiếp trong kịch bản kiểm thử mà không cần phụ thuộc vào thư viện bên ngoài (B) hoặc can thiệp vào mã nguồn (D). Lựa chọn C không khả thi vì làm thay đổi dữ liệu thực tế và không đảm bảo tính cô lập của test.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812066568_INTERMEDIATE_2_7uzn"
+  },
+  {
+    "questionText": "Bạn đang triển khai Page Object Model (POM) cho bộ kiểm thử của một ứng dụng ngân hàng. Trong đó, trang 'Chuyển tiền' có nhiều trường nhập liệu và nút hành động. Cách tổ chức nào dưới đây tuân thủ nguyên tắc POM và dễ bảo trì nhất?",
+    "options": [
+      "A. Tạo một class `TransferPage` chứa tất cả các locator và phương thức như `fillAccountNumber()`, `clickSubmit()`",
+      "B. Chia nhỏ thành nhiều class nhỏ: `TransferForm`, `TransferConfirmation`, `TransferResult` và kết hợp chúng trong `TransferPage`",
+      "C. Đặt tất cả locator trong một file JSON riêng và import vào class `TransferPage`",
+      "D. Viết tất cả logic kiểm thử trực tiếp trong file test mà không sử dụng POM"
+    ],
+    "correctAnswer": "B",
+    "explanation": "POM khuyến khích chia nhỏ các thành phần UI thành các class riêng biệt để tăng tính tái sử dụng và bảo trì. Lựa chọn B phân tách rõ ràng các bước trong quy trình chuyển tiền, trong khi A gộp quá nhiều chức năng vào một class. C và D không tuân thủ nguyên tắc POM.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812066568_INTERMEDIATE_3_41so"
+  },
+  {
+    "questionText": "Trong một dự án kiểm thử ứng dụng đặt vé máy bay, bạn cần đảm bảo rằng sau khi người dùng đăng nhập, trạng thái xác thực (authentication state) được duy trì trong suốt phiên làm việc. Giải pháp nào dưới đây là hiệu quả nhất để mô phỏng trạng thái này trong Playwright?",
+    "options": [
+      "A. Lưu trữ cookie xác thực vào file và tải lại trước mỗi test case",
+      "B. Sử dụng `browserContext.storageState()` để lưu và phục hồi trạng thái xác thực",
+      "C. Gọi API đăng nhập trực tiếp trong mỗi test case",
+      "D. Sử dụng biến toàn cục để lưu token và inject vào mỗi request"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Playwright cung cấp `browserContext.storageState()` để lưu và phục hồi toàn bộ trạng thái xác thực (cookie, localStorage) một cách tự động và an toàn. Lựa chọn A thủ công và dễ lỗi, C gây lãng phí tài nguyên, D không đảm bảo tính toàn vẹn của trạng thái.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812066568_INTERMEDIATE_4_pzvn"
+  },
+  {
+    "questionText": "Bạn đang cấu hình pipeline CI/CD để chạy kiểm thử Playwright trên nhiều trình duyệt (Chromium, Firefox, WebKit) cho một ứng dụng quản lý dự án. Cách cấu hình nào dưới đây là tối ưu nhất để đảm bảo hiệu suất và khả năng bảo trì?",
+    "options": [
+      "A. Tạo 3 job riêng biệt trong pipeline, mỗi job chạy trên một trình duyệt",
+      "B. Sử dụng `projects` trong file cấu hình Playwright để chạy song song trên nhiều trình duyệt trong một job duy nhất",
+      "C. Chỉ chạy kiểm thử trên Chromium vì đây là trình duyệt phổ biến nhất",
+      "D. Chạy tuần tự trên từng trình duyệt trong một job duy nhất"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cấu hình `projects` trong Playwright cho phép chạy kiểm thử song song trên nhiều trình duyệt trong một job, tối ưu hóa thời gian thực thi và dễ bảo trì. Lựa chọn A tạo ra nhiều job không cần thiết, C bỏ qua kiểm thử đa trình duyệt, D chạy tuần tự làm chậm pipeline.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812066568_INTERMEDIATE_5_tq41"
+  },
+  {
+    "questionText": "Trong dự án kiểm thử ứng dụng thương mại điện tử, bạn cần xác minh rằng sau khi thêm sản phẩm vào giỏ hàng, số lượng sản phẩm trong biểu tượng giỏ hàng (ở header) được cập nhật chính xác. Assertion nào dưới đây kết hợp tốt nhất giữa độ chính xác và khả năng đọc?",
+    "options": [
+      "A. `expect(await page.locator('.cart-count').textContent()).toBe('1')`",
+      "B. `await expect(page.locator('.cart-count')).toHaveText('1')`",
+      "C. `expect(parseInt(await page.locator('.cart-count').innerText())).toBe(1)`",
+      "D. `await expect(page.locator('.cart-count')).toContainText('1')`"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Assertion ở B sử dụng `toHaveText()` của Playwright, kết hợp giữa độ chính xác (so sánh toàn bộ văn bản) và khả năng đọc. A và C sử dụng cú pháp dài dòng hơn, D chỉ kiểm tra chứa chuỗi con (không đủ chặt chẽ).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812066569_INTERMEDIATE_6_y1ve"
+  },
+  {
+    "questionText": "Bạn đang xây dựng bộ kiểm thử cho chức năng thanh toán của một ứng dụng ngân hàng. Khi kiểm tra trường hợp thanh toán thành công, bạn muốn chặn request API gửi OTP để tránh gửi tin nhắn thật tới khách hàng. Giải pháp nào dưới đây là phù hợp nhất?",
+    "options": [
+      "A. Sử dụng `page.route()` để chặn request API gửi OTP và trả về response giả lập",
+      "B. Tắt hoàn toàn chức năng gửi OTP trong môi trường staging",
+      "C. Sử dụng số điện thoại giả trong dữ liệu test để OTP không được gửi đi",
+      "D. Bỏ qua bước xác thực OTP trong kịch bản kiểm thử"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Playwright cho phép chặn và mock request API gửi OTP bằng `page.route()`, đảm bảo kiểm thử không ảnh hưởng đến hệ thống thực. Lựa chọn B và C can thiệp vào cấu hình hệ thống, D bỏ qua bước quan trọng trong quy trình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812066569_INTERMEDIATE_7_2flj"
+  },
+  {
+    "questionText": "Trong dự án kiểm thử ứng dụng quản lý kho hàng, bạn cần kiểm tra rằng sau khi nhập liệu số lượng sản phẩm, giá trị hiển thị trên giao diện được định dạng đúng theo quy tắc của Việt Nam (ví dụ: '1.234' thay vì '1234'). Assertion nào dưới đây là chính xác nhất?",
+    "options": [
+      "A. `expect(await page.locator('.quantity').textContent()).toMatch(/\\d{1,3}(\\.\\d{3})*/)`",
+      "B. `expect(await page.locator('.quantity').textContent()).toBe('1.234')`",
+      "C. `expect(parseInt(await page.locator('.quantity').textContent().replace(/\\./g, ''))).toBe(1234)`",
+      "D. `await expect(page.locator('.quantity')).toContainText('.')`"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Assertion ở A sử dụng regex để kiểm tra định dạng số theo quy tắc Việt Nam (dấu chấm phân cách hàng nghìn), linh hoạt với nhiều giá trị. B chỉ kiểm tra một giá trị cụ thể, C chuyển đổi về số nguyên (mất thông tin định dạng), D chỉ kiểm tra sự tồn tại của dấu chấm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812066569_INTERMEDIATE_8_4wf4"
+  },
+  {
+    "questionText": "Bạn đang triển khai custom reporter cho bộ kiểm thử Playwright để tích hợp với hệ thống báo cáo nội bộ của công ty. Yêu cầu là hiển thị chi tiết các bước kiểm thử, thời gian thực thi, và screenshot khi test thất bại. Giải pháp nào dưới đây là phù hợp nhất?",
+    "options": [
+      "A. Sử dụng `reporter` có sẵn của Playwright như `html` hoặc `line` và tùy chỉnh output qua file cấu hình",
+      "B. Viết một custom reporter bằng cách implement interface `Reporter` của Playwright và xử lý sự kiện như `onTestEnd`",
+      "C. Xuất báo cáo dưới dạng JSON và sử dụng script Python để chuyển đổi sang định dạng yêu cầu",
+      "D. Ghi log chi tiết vào file text và đính kèm screenshot thủ công sau khi test chạy xong"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Playwright cho phép viết custom reporter bằng cách implement interface `Reporter`, cho phép xử lý linh hoạt các sự kiện như `onTestEnd` để thu thập thông tin chi tiết và screenshot. Lựa chọn A chỉ tùy chỉnh output hạn chế, C và D không tự động hóa được.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812066569_INTERMEDIATE_9_5yjb"
+  },
+  {
+    "questionText": "Trong dự án kiểm thử ứng dụng đặt lịch hẹn khám bệnh, bạn cần xác minh rằng sau khi chọn ngày hẹn, lịch hiển thị các khung giờ trống chính xác. API trả về dữ liệu như sau: `{ availableSlots: ['09:00', '10:30', '14:00'] }`. Cách nào dưới đây là tối ưu nhất để kiểm tra giao diện hiển thị đúng dữ liệu API?",
+    "options": [
+      "A. Mock API response với dữ liệu cố định, sau đó kiểm tra từng khung giờ trên giao diện",
+      "B. Gọi API thực tế để lấy dữ liệu, sau đó so sánh với giao diện",
+      "C. Sử dụng `page.route()` để chặn request API và trả về dữ liệu giả lập, sau đó kiểm tra giao diện",
+      "D. Lưu dữ liệu API vào biến toàn cục và so sánh với giao diện trong test"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng `page.route()` để mock API response đảm bảo kiểm thử chạy độc lập với hệ thống backend, đồng thời cho phép kiểm tra giao diện với dữ liệu giả lập chính xác. A không sử dụng Playwright hiệu quả, B phụ thuộc vào API thực tế, D không đảm bảo tính cô lập của test.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812066569_INTERMEDIATE_10_cnun"
+  },
+  {
+    "questionText": "Bạn đang tối ưu bộ kiểm thử Playwright cho một ứng dụng ngân hàng, trong đó có test case kiểm tra chức năng chuyển tiền với nhiều bước xác thực. Cách nào dưới đây giúp giảm thời gian thực thi mà vẫn đảm bảo độ tin cậy?",
+    "options": [
+      "A. Sử dụng `test.describe.serial` để chạy tuần tự các bước trong test case",
+      "B. Chia nhỏ test case thành nhiều test case nhỏ và chạy song song",
+      "C. Sử dụng `browserContext.storageState()` để bỏ qua bước đăng nhập trong các test case sau",
+      "D. Tăng thời gian chờ mặc định (`timeout`) cho tất cả các hành động"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Sử dụng `browserContext.storageState()` để lưu trạng thái xác thực và tái sử dụng giúp bỏ qua bước đăng nhập lặp lại, giảm thời gian thực thi. A và D làm tăng thời gian, B có thể không phù hợp với quy trình nghiệp vụ liên tục.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812066569_INTERMEDIATE_11_cd10"
+  },
+  {
+    "questionText": "Trong dự án kiểm thử ứng dụng thương mại điện tử, bạn cần xác minh rằng sau khi áp dụng mã giảm giá, tổng tiền đơn hàng được tính toán chính xác. API trả về giá trị sau khi giảm giá là `1234567`. Cách nào dưới đây kiểm tra chính xác định dạng hiển thị trên giao diện (ví dụ: '1.234.567đ')?",
+    "options": [
+      "A. `expect(await page.locator('.total-price').textContent()).toBe('1.234.567đ')`",
+      "B. `expect(parseInt(await page.locator('.total-price').textContent().replace(/[.đ]/g, ''))).toBe(1234567)`",
+      "C. `await expect(page.locator('.total-price')).toHaveText(expect.stringMatching(/1\\.234\\.567đ/))`",
+      "D. `expect(await page.locator('.total-price').textContent()).toContain('1234567')`"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Assertion ở C sử dụng `stringMatching` với regex để kiểm tra định dạng chính xác (bao gồm dấu chấm phân cách và ký hiệu 'đ'), linh hoạt hơn so với so sánh chuỗi tuyệt đối (A). B chuyển đổi về số nguyên (mất thông tin định dạng), D chỉ kiểm tra chứa chuỗi con.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812066570_INTERMEDIATE_12_gf2d"
+  },
+  {
+    "questionText": "Trong dự án sử dụng Playwright để kiểm thử một ứng dụng ngân hàng có nhiều màn hình phức tạp, bạn cần tối ưu hóa việc quản lý locators để tránh việc thay đổi UI ảnh hưởng đến toàn bộ bộ test. Giải pháp nào sau đây là hiệu quả nhất để đảm bảo tính bảo trì cao và giảm thiểu rủi ro khi UI thay đổi?",
+    "options": [
+      "A. Sử dụng XPath tuyệt đối cho tất cả các locators để đảm bảo độ chính xác cao.",
+      "B. Lưu tất cả locators dưới dạng chuỗi cứng trong các test case để dễ dàng chỉnh sửa khi cần.",
+      "C. Áp dụng Page Object Model (POM) kết hợp với việc sử dụng các thuộc tính data-testid hoặc aria-label cho các phần tử UI, và quản lý locators tập trung trong các class riêng biệt.",
+      "D. Sử dụng CSS selectors động dựa trên vị trí của phần tử trong DOM để tối ưu hóa tốc độ tìm kiếm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C kết hợp POM giúp tách biệt logic test và UI, sử dụng data-testid/aria-label giúp giảm thiểu tác động khi UI thay đổi, và quản lý locators tập trung giúp dễ bảo trì. Các phương án khác không đảm bảo tính bảo trì hoặc dễ bị lỗi khi UI thay đổi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812139857_ADVANCED_0_lba8"
+  },
+  {
+    "questionText": "Trong quá trình kiểm thử một tính năng mới của ứng dụng thương mại điện tử, bạn phát hiện rằng một số API trả về dữ liệu không ổn định do backend chưa hoàn thiện. Bạn cần đảm bảo các test case không bị ảnh hưởng bởi sự không ổn định này. Giải pháp nào sau đây là tối ưu nhất?",
+    "options": [
+      "A. Tạm dừng triển khai test cho đến khi backend hoàn thiện để tránh kết quả sai lệch.",
+      "B. Sử dụng Playwright để mock API responses bằng cách chặn và thay thế các request với dữ liệu giả lập, đồng thời ghi log chi tiết để phân tích sau này.",
+      "C. Thêm thời gian chờ cố định (hard wait) trong test để chờ backend hoàn thành xử lý.",
+      "D. Bỏ qua các test case liên quan đến API không ổn định và chỉ tập trung vào kiểm thử UI."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B cho phép kiểm thử độc lập với backend bằng cách mock dữ liệu, đảm bảo tính ổn định của test suite. Các phương án khác không giải quyết triệt để vấn đề hoặc làm giảm độ phủ của kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812139858_ADVANCED_1_vzn9"
+  },
+  {
+    "questionText": "Bạn đang triển khai một pipeline CI/CD cho dự án có yêu cầu chạy kiểm thử trên nhiều trình duyệt (Chromium, Firefox, WebKit) với cấu hình khác nhau cho từng môi trường (dev, staging, prod). Làm thế nào để cấu hình Playwright một cách hiệu quả và dễ bảo trì?",
+    "options": [
+      "A. Tạo các file cấu hình riêng biệt cho từng trình duyệt và môi trường, sau đó chạy thủ công từng file khi cần.",
+      "B. Sử dụng một file cấu hình duy nhất với các tham số động, kết hợp với biến môi trường và Playwright's projects để quản lý các kịch bản chạy khác nhau.",
+      "C. Chỉ chạy kiểm thử trên Chromium vì đây là trình duyệt phổ biến nhất, bỏ qua các trình duyệt khác để tiết kiệm thời gian.",
+      "D. Sử dụng các script bash để tự động hóa việc chạy kiểm thử trên từng trình duyệt, nhưng không quản lý cấu hình tập trung."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng Playwright's projects và biến môi trường giúp quản lý cấu hình tập trung, dễ bảo trì và mở rộng. Các phương án khác không tối ưu hoặc không đảm bảo độ phủ kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812139858_ADVANCED_2_wbaw"
+  },
+  {
+    "questionText": "Trong một dự án có nhiều team cùng phát triển, bạn nhận thấy các test case của Playwright thường xuyên thất bại do xung đột trạng thái đăng nhập (authentication state) giữa các test. Giải pháp nào sau đây giúp cô lập trạng thái đăng nhập và đảm bảo tính độc lập của các test?",
+    "options": [
+      "A. Lưu trữ trạng thái đăng nhập trong một biến toàn cục và sử dụng lại cho tất cả các test case.",
+      "B. Sử dụng Playwright's storageState để lưu và tải lại trạng thái đăng nhập cho từng test suite, kết hợp với việc reset trạng thái sau mỗi test.",
+      "C. Thực hiện đăng nhập thủ công trước mỗi test case và không sử dụng lại trạng thái.",
+      "D. Bỏ qua các test case yêu cầu đăng nhập và chỉ kiểm thử các tính năng không cần xác thực."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng storageState để cô lập trạng thái đăng nhập, đảm bảo tính độc lập của các test và tránh xung đột. Các phương án khác không giải quyết triệt để vấn đề hoặc làm giảm hiệu quả kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812139858_ADVANCED_3_no2m"
+  },
+  {
+    "questionText": "Bạn đang xây dựng một bộ kiểm thử tự động cho một ứng dụng có yêu cầu kiểm tra nhiều kịch bản phức tạp liên quan đến thời gian thực (real-time updates). Làm thế nào để sử dụng Playwright's auto-waiting mechanisms một cách hiệu quả để tránh các lỗi do race condition?",
+    "options": [
+      "A. Sử dụng thời gian chờ cố định (hard wait) cho tất cả các thao tác để đảm bảo phần tử đã sẵn sàng.",
+      "B. Tận dụng các phương thức như `waitForSelector`, `waitForLoadState`, và `expect(locator).toBeVisible()` kết hợp với các điều kiện chờ linh hoạt, đồng thời cấu hình timeout phù hợp cho từng trường hợp.",
+      "C. Vô hiệu hóa tất cả các cơ chế auto-waiting của Playwright và tự viết logic chờ thủ công cho từng phần tử.",
+      "D. Chỉ sử dụng `waitForTimeout` với thời gian chờ dài để đảm bảo không bỏ sót bất kỳ phần tử nào."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng các cơ chế auto-waiting tích hợp của Playwright một cách linh hoạt, giúp tránh race condition mà không làm giảm hiệu suất kiểm thử. Các phương án khác không tối ưu hoặc làm tăng độ phức tạp không cần thiết.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812139858_ADVANCED_4_spj9"
+  },
+  {
+    "questionText": "Trong một dự án có nhiều team quốc tế, bạn cần tạo báo cáo kiểm thử chi tiết và dễ hiểu cho các bên liên quan (stakeholders) không có kỹ thuật. Giải pháp nào sau đây là hiệu quả nhất để tích hợp với Playwright?",
+    "options": [
+      "A. Xuất báo cáo dưới dạng file text đơn giản và gửi qua email cho các stakeholders.",
+      "B. Sử dụng Playwright's built-in reporters kết hợp với các thư viện bên ngoài như Allure hoặc HTML Reporter để tạo báo cáo trực quan, có khả năng lọc và phân tích chi tiết, đồng thời tích hợp với các công cụ quản lý dự án như Jira.",
+      "C. Chỉ sử dụng báo cáo console mặc định của Playwright và yêu cầu stakeholders tự phân tích.",
+      "D. Tạo báo cáo thủ công bằng Excel sau mỗi lần chạy kiểm thử và gửi cho stakeholders."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng các công cụ báo cáo mạnh mẽ và trực quan, giúp stakeholders dễ dàng theo dõi và phân tích kết quả kiểm thử. Các phương án khác không đáp ứng yêu cầu về tính chuyên nghiệp và khả năng truy xuất thông tin.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812139859_ADVANCED_5_aldq"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử một ứng dụng có tích hợp nhiều dịch vụ bên thứ ba (third-party services) như thanh toán trực tuyến. Làm thế nào để kiểm thử các kịch bản lỗi từ các dịch vụ này mà không cần phụ thuộc vào môi trường thực tế?",
+    "options": [
+      "A. Bỏ qua các test case liên quan đến dịch vụ bên thứ ba vì không thể kiểm soát được chúng.",
+      "B. Sử dụng Playwright để chặn và mock các request đến dịch vụ bên thứ ba, trả về các response giả lập cho các kịch bản lỗi khác nhau, đồng thời kiểm tra cách ứng dụng xử lý các lỗi này.",
+      "C. Chỉ kiểm thử trên môi trường staging và chấp nhận rủi ro nếu dịch vụ bên thứ ba không ổn định.",
+      "D. Thực hiện kiểm thử thủ công cho các kịch bản lỗi của dịch vụ bên thứ ba và không tự động hóa."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B cho phép kiểm thử độc lập với dịch vụ bên thứ ba bằng cách mock các request, đảm bảo kiểm thử đầy đủ các kịch bản lỗi. Các phương án khác không giải quyết triệt để vấn đề hoặc làm giảm độ phủ kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812139860_ADVANCED_6_5qu0"
+  },
+  {
+    "questionText": "Trong một dự án có yêu cầu kiểm thử trên nhiều thiết bị và kích thước màn hình khác nhau, bạn cần đảm bảo rằng các test case không bị ảnh hưởng bởi sự khác biệt về responsive design. Giải pháp nào sau đây là tối ưu nhất?",
+    "options": [
+      "A. Chỉ kiểm thử trên một kích thước màn hình phổ biến nhất và bỏ qua các kích thước khác.",
+      "B. Sử dụng Playwright's `setViewportSize` để mô phỏng các kích thước màn hình khác nhau trong các test case, kết hợp với việc kiểm tra vị trí và khả năng hiển thị của các phần tử quan trọng.",
+      "C. Thực hiện kiểm thử thủ công trên các thiết bị thực để đảm bảo độ chính xác.",
+      "D. Sử dụng các giá trị cố định cho các locators dựa trên kích thước màn hình mặc định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng `setViewportSize` để mô phỏng các kích thước màn hình khác nhau, giúp kiểm thử responsive design một cách tự động và hiệu quả. Các phương án khác không đảm bảo độ phủ hoặc không tự động hóa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812139860_ADVANCED_7_fo5z"
+  },
+  {
+    "questionText": "Bạn đang triển khai một bộ kiểm thử tự động cho một ứng dụng có yêu cầu xác thực hai yếu tố (2FA). Làm thế nào để xử lý việc xác thực này trong các test case mà không làm lộ thông tin nhạy cảm hoặc làm chậm quá trình kiểm thử?",
+    "options": [
+      "A. Lưu trữ mã 2FA trong file cấu hình và sử dụng trực tiếp trong test case.",
+      "B. Sử dụng Playwright để mock toàn bộ quy trình 2FA bằng cách chặn request và trả về một mã giả lập, đồng thời đảm bảo mã này chỉ được sử dụng trong môi trường kiểm thử.",
+      "C. Yêu cầu người dùng nhập mã 2FA thủ công mỗi khi chạy kiểm thử.",
+      "D. Bỏ qua các test case yêu cầu 2FA và chỉ kiểm thử các tính năng không cần xác thực."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B mock quy trình 2FA giúp kiểm thử tự động mà không làm lộ thông tin nhạy cảm hoặc làm chậm quá trình. Các phương án khác không đảm bảo tính bảo mật hoặc không tự động hóa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812139860_ADVANCED_8_j9p6"
+  },
+  {
+    "questionText": "Trong một dự án có nhiều team, bạn nhận thấy rằng các test case thường xuyên thất bại do xung đột dữ liệu giữa các lần chạy. Giải pháp nào sau đây giúp cô lập dữ liệu kiểm thử và đảm bảo tính độc lập của các test?",
+    "options": [
+      "A. Sử dụng dữ liệu cố định trong tất cả các test case để đảm bảo tính nhất quán.",
+      "B. Tạo dữ liệu kiểm thử động cho từng test case bằng cách sử dụng API hoặc cơ sở dữ liệu giả lập, đồng thời dọn dẹp dữ liệu sau mỗi lần chạy test.",
+      "C. Chấp nhận rủi ro và không xử lý xung đột dữ liệu vì việc này tốn nhiều thời gian.",
+      "D. Chỉ chạy một test case tại một thời điểm để tránh xung đột dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B tạo dữ liệu động và dọn dẹp sau mỗi test giúp cô lập dữ liệu và đảm bảo tính độc lập của các test. Các phương án khác không giải quyết triệt để vấn đề hoặc làm giảm hiệu quả kiểm thử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812139861_ADVANCED_9_xjv0"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử một ứng dụng có tích hợp nhiều ngôn ngữ khác nhau. Làm thế nào để đảm bảo các test case không bị ảnh hưởng bởi sự khác biệt về ngôn ngữ hoặc văn hóa?",
+    "options": [
+      "A. Chỉ kiểm thử trên một ngôn ngữ mặc định và bỏ qua các ngôn ngữ khác.",
+      "B. Sử dụng các locators dựa trên thuộc tính không phụ thuộc vào ngôn ngữ (như data-testid) và cấu hình Playwright để chạy kiểm thử trên nhiều ngôn ngữ khác nhau, đồng thời kiểm tra nội dung động bằng cách so sánh với dữ liệu tham chiếu.",
+      "C. Thực hiện kiểm thử thủ công cho từng ngôn ngữ để đảm bảo độ chính xác.",
+      "D. Sử dụng các giá trị cố định cho văn bản trong các locators dựa trên ngôn ngữ mặc định."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B sử dụng locators không phụ thuộc vào ngôn ngữ và cấu hình kiểm thử đa ngôn ngữ, đảm bảo tính chính xác và tự động hóa. Các phương án khác không đảm bảo độ phủ hoặc không tự động hóa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812139861_ADVANCED_10_20wo"
+  },
+  {
+    "questionText": "Trong một dự án có yêu cầu kiểm thử hiệu năng (performance testing) cho các tính năng quan trọng, bạn cần tích hợp kiểm thử hiệu năng với bộ kiểm thử tự động hiện có. Giải pháp nào sau đây là khả thi và hiệu quả nhất khi sử dụng Playwright?",
+    "options": [
+      "A. Sử dụng Playwright để đo thời gian thực thi của các thao tác quan trọng và so sánh với ngưỡng cho phép, đồng thời tích hợp kết quả vào báo cáo kiểm thử.",
+      "B. Bỏ qua kiểm thử hiệu năng vì Playwright không hỗ trợ loại kiểm thử này.",
+      "C. Sử dụng các công cụ chuyên dụng như JMeter hoặc LoadRunner và chạy riêng biệt với bộ kiểm thử tự động.",
+      "D. Thực hiện kiểm thử hiệu năng thủ công và ghi lại kết quả trong file Excel."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A sử dụng Playwright để đo thời gian thực thi và tích hợp kết quả vào báo cáo, giúp theo dõi hiệu năng trong quá trình kiểm thử tự động. Các phương án khác không tích hợp hoặc không tự động hóa.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812139861_ADVANCED_11_f8bk"
+  },
+  {
+    "questionText": "Trong một dự án lớn sử dụng Playwright với kiến trúc Page Object Model (POM), nhóm của bạn gặp vấn đề về hiệu suất khi số lượng test case tăng lên đáng kể (hơn 1000 test). Sau khi phân tích, bạn nhận thấy nguyên nhân chính là việc khởi tạo lại các page object trong mỗi test case gây ra overhead không cần thiết. Giải pháp nào sau đây là tối ưu nhất để giải quyết vấn đề này ở cấp độ kiến trúc?",
+    "options": [
+      "A. Sử dụng dependency injection (DI) để quản lý lifecycle của các page object, tái sử dụng instance trong cùng một test suite thay vì khởi tạo mới mỗi lần.",
+      "B. Tạo một singleton pattern cho mỗi page object để đảm bảo chỉ có một instance duy nhất trong toàn bộ test run.",
+      "C. Sử dụng `beforeEach` hook để khởi tạo tất cả page object một lần và truyền qua tham số cho các test case.",
+      "D. Chuyển toàn bộ test case sang sử dụng `test.describe.serial` để chạy tuần tự và giảm thiểu việc khởi tạo lại page object."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A sử dụng DI (ví dụ: với `test.beforeEach` và `test.afterEach` kết hợp với context sharing) cho phép tái sử dụng instance của page object trong cùng một test suite mà không làm mất tính độc lập của các test case. Singleton (B) có thể gây race condition trong môi trường đa luồng. `beforeEach` (C) vẫn khởi tạo lại mỗi test case. `test.describe.serial` (D) không giải quyết gốc rễ vấn đề và làm giảm khả năng chạy song song.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812243144_EXPERT_0_4gwd"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một hệ thống CI/CD cho dự án Playwright tại một ngân hàng lớn ở Việt Nam, yêu cầu chạy regression test trên 5 trình duyệt (Chromium, Firefox, WebKit, Edge, Safari) với 2 môi trường (Staging và Production). Pipeline hiện tại chạy quá chậm (hơn 2 giờ) do thiếu tối ưu. Chiến lược nào sau đây là hiệu quả nhất để giảm thời gian chạy mà vẫn đảm bảo độ phủ và độ tin cậy?",
+    "options": [
+      "A. Chia nhỏ test suite thành các nhóm theo tính năng (feature-based) và chạy song song trên nhiều agent CI, đồng thời sử dụng `shard` của Playwright để phân chia test case.",
+      "B. Giới hạn chỉ chạy test trên Chromium và Firefox để giảm thời gian, sau đó chạy thủ công trên các trình duyệt khác khi cần.",
+      "C. Sử dụng `test.describe.parallel` để chạy tất cả test case song song trên cùng một agent CI, bất kể tài nguyên hệ thống.",
+      "D. Chạy toàn bộ test suite trên một agent CI duy nhất nhưng tăng cường phần cứng (CPU, RAM) để tăng tốc độ xử lý."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A kết hợp chia nhỏ test suite (để chạy song song trên nhiều agent) và `shard` (để phân chia test case trong mỗi agent) giúp tối ưu tài nguyên và giảm thời gian chạy. B (giới hạn trình duyệt) làm giảm độ phủ. C (chạy song song trên một agent) có thể gây quá tải. D (tăng phần cứng) không giải quyết được vấn đề về kiến trúc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812243146_EXPERT_1_cdxv"
+  },
+  {
+    "questionText": "Trong một dự án fintech tại Việt Nam, bạn cần mock API response cho endpoint `/api/transactions` để kiểm thử giao diện hiển thị dữ liệu giao dịch với các trường hợp biên (ví dụ: số dư âm, giao dịch lớn). Tuy nhiên, API thực tế chỉ trả về dữ liệu mẫu cố định và không hỗ trợ query parameter để mô phỏng các trường hợp biên. Giải pháp nào sau đây là tối ưu nhất để đảm bảo tính linh hoạt và tái sử dụng?",
+    "options": [
+      "A. Sử dụng `page.route` của Playwright để intercept request tới `/api/transactions` và trả về response động dựa trên query parameter hoặc body của request, kết hợp với một file JSON config để định nghĩa các kịch bản mock.",
+      "B. Tạo một mock server riêng (ví dụ: sử dụng MSW hoặc json-server) và cấu hình nó để trả về dữ liệu động, sau đó trỏ baseURL của Playwright tới mock server này.",
+      "C. Hardcode các response mock trực tiếp trong test case bằng `page.evaluate` và thay đổi dữ liệu dựa trên điều kiện if-else.",
+      "D. Yêu cầu backend team sửa đổi API thực tế để hỗ trợ query parameter cho mục đích test, sau đó sử dụng API thật trong test case."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A sử dụng `page.route` kết hợp với file JSON config cho phép mock linh hoạt và tái sử dụng mà không phụ thuộc vào backend hoặc mock server riêng. B (mock server riêng) tăng độ phức tạp. C (hardcode) khó bảo trì. D (yêu cầu backend) không khả thi trong nhiều trường hợp và làm chậm quá trình test.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812243146_EXPERT_2_kbo8"
+  },
+  {
+    "questionText": "Bạn đang đánh giá lỗ hổng kiến trúc trong một dự án Playwright tại công ty outsourcing, nơi các test case hiện tại sử dụng trực tiếp locator như `page.locator('button#submit')` thay vì thông qua Page Object. Điều này gây ra vấn đề gì nghiêm trọng nhất về dài hạn và giải pháp nào sau đây là phù hợp nhất để khắc phục?",
+    "options": [
+      "A. Vấn đề: Khó bảo trì khi UI thay đổi; Giải pháp: Áp dụng POM và sử dụng các locator có tính semantic cao (ví dụ: `data-testid`) kết hợp với abstraction layer để giảm coupling giữa test và UI.",
+      "B. Vấn đề: Hiệu suất test giảm do locator không tối ưu; Giải pháp: Sử dụng `page.locator` với CSS selector phức tạp hơn để tăng tốc độ tìm kiếm element.",
+      "C. Vấn đề: Khó chạy test song song do xung đột locator; Giải pháp: Sử dụng `test.describe.parallel` và đảm bảo mỗi test case có locator riêng biệt.",
+      "D. Vấn đề: Không thể tái sử dụng test case cho các dự án khác; Giải pháp: Chuyển toàn bộ test case sang sử dụng Cypress để tận dụng cộng đồng hỗ trợ lớn hơn."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Vấn đề nghiêm trọng nhất là khó bảo trì khi UI thay đổi (ví dụ: ID hoặc class bị thay đổi). Giải pháp A kết hợp POM và locator semantic (`data-testid`) giúp giảm coupling và tăng khả năng bảo trì. B (tối ưu locator) không giải quyết được gốc rễ. C (chạy song song) không liên quan. D (chuyển sang Cypress) không phải giải pháp kiến trúc.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812243147_EXPERT_3_cvd8"
+  },
+  {
+    "questionText": "Trong một dự án ngân hàng sử dụng Playwright, bạn cần kiểm thử tính năng xác thực hai yếu tố (2FA) với OTP gửi qua SMS. Tuy nhiên, việc nhận OTP thực tế trong môi trường test là không khả thi. Giải pháp nào sau đây là tối ưu nhất để mô phỏng OTP mà không làm thay đổi code sản phẩm?",
+    "options": [
+      "A. Sử dụng `page.route` để intercept request gửi OTP tới API của dịch vụ SMS và trả về một OTP giả định (ví dụ: `123456`) trong response, đồng thời mock luôn endpoint xác thực OTP để bypass kiểm tra thực tế.",
+      "B. Tạo một endpoint mock trên backend chỉ sử dụng trong môi trường test để trả về OTP cố định, sau đó cấu hình Playwright trỏ tới endpoint này.",
+      "C. Sử dụng `page.evaluate` để inject JavaScript vào trang web, tự động điền OTP giả định vào input field mà không cần tương tác với API.",
+      "D. Yêu cầu team backend vô hiệu hóa 2FA trong môi trường test để đơn giản hóa quá trình test."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A sử dụng `page.route` để mock cả quá trình gửi và xác thực OTP mà không cần thay đổi code sản phẩm hoặc backend. B (endpoint mock trên backend) yêu cầu thay đổi code sản phẩm. C (inject JS) không mô phỏng được luồng API thực tế. D (vô hiệu hóa 2FA) làm giảm độ tin cậy của test.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812243148_EXPERT_4_kfku"
+  },
+  {
+    "questionText": "Bạn đang thiết kế một custom reporter cho Playwright để tích hợp với hệ thống quản lý test case của công ty (ví dụ: TestRail hoặc Zephyr). Yêu cầu là reporter phải xuất ra dữ liệu theo định dạng JSON với cấu trúc cụ thể, bao gồm thông tin về test case ID, trạng thái (pass/fail/skipped), thời gian chạy, và screenshot cho test case failed. Giải pháp nào sau đây là tối ưu nhất?",
+    "options": [
+      "A. Tạo một class custom reporter kế thừa từ `BaseReporter` của Playwright, override các phương thức như `onTestEnd` và `onStepEnd` để thu thập dữ liệu, sau đó xuất ra file JSON với cấu trúc yêu cầu. Sử dụng `testInfo.attach` để lưu screenshot và liên kết với test case.",
+      "B. Sử dụng `test.afterEach` hook để ghi log kết quả test case vào một file JSON tạm thời, sau đó dùng script riêng để chuyển đổi sang định dạng yêu cầu.",
+      "C. Tích hợp trực tiếp với API của TestRail/Zephyr trong `test.afterEach` để đẩy kết quả test case lên hệ thống, không cần lưu trữ local.",
+      "D. Sử dụng `console.log` để xuất kết quả test case dưới dạng JSON trong quá trình chạy, sau đó dùng script để parse và chuyển đổi sang định dạng yêu cầu."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A sử dụng custom reporter của Playwright (kế thừa `BaseReporter`) để thu thập dữ liệu một cách hệ thống và tích hợp screenshot thông qua `testInfo.attach`. B (hook + script riêng) không đảm bảo tính nhất quán. C (tích hợp trực tiếp API) làm chậm quá trình test. D (`console.log`) không đáng tin cậy và khó bảo trì.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812243149_EXPERT_5_3y9o"
+  },
+  {
+    "questionText": "Trong một dự án e-commerce đa quốc gia, bạn cần kiểm thử tính năng hiển thị giá sản phẩm theo tiền tệ của người dùng (VND, USD, EUR) dựa trên IP hoặc lựa chọn ngôn ngữ. API backend trả về giá trị tiền tệ dưới dạng số (ví dụ: `1000000` cho 1.000.000 VND) và frontend sẽ format hiển thị. Giải pháp nào sau đây là tối ưu nhất để xác minh tính đúng đắn của việc hiển thị giá trong các test case Playwright?",
+    "options": [
+      "A. Sử dụng `page.locator` để lấy text hiển thị của giá sản phẩm, sau đó so sánh với giá trị mong đợi đã được format theo tiền tệ (ví dụ: `1.000.000 ₫` cho VND). Kết hợp với `expect(locator).toHaveText` và regex để kiểm tra định dạng.",
+      "B. Gọi trực tiếp API backend để lấy giá trị số, sau đó format lại trong test case và so sánh với text hiển thị trên UI.",
+      "C. Sử dụng `page.evaluate` để truy cập trực tiếp vào DOM và lấy giá trị số từ thuộc tính `data-price`, sau đó so sánh với giá trị từ API.",
+      "D. Chỉ kiểm tra xem giá trị hiển thị có chứa ký hiệu tiền tệ (ví dụ: `₫`, `$`) mà không cần kiểm tra giá trị cụ thể, vì việc format là trách nhiệm của frontend."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A kiểm tra trực tiếp text hiển thị trên UI (bao gồm cả giá trị và định dạng) bằng cách so sánh với giá trị mong đợi đã được format. B (gọi API) không kiểm tra được định dạng hiển thị. C (lấy `data-price`) không đảm bảo UI hiển thị đúng. D (chỉ kiểm tra ký hiệu) không đủ chặt chẽ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812243150_EXPERT_6_ru8k"
+  },
+  {
+    "questionText": "Bạn đang phân tích lỗ hổng trong bộ test suite Playwright của một dự án bảo hiểm, nơi có hơn 500 test case nhưng tỷ lệ flaky test lên tới 15%. Sau khi điều tra, bạn phát hiện nguyên nhân chính là do thiếu cơ chế auto-waiting hợp lý và các assertion không đủ chặt chẽ. Giải pháp nào sau đây là chiến lược dài hạn để giảm thiểu flaky test?",
+    "options": [
+      "A. Áp dụng `expect(locator).toBeVisible()` kết hợp với `toHaveText`/`toHaveValue` thay vì `toBeTruthy` hoặc `toContainText` để tăng tính chặt chẽ của assertion. Đồng thời, sử dụng `page.waitForSelector` với timeout động dựa trên điều kiện mạng.",
+      "B. Tăng timeout mặc định của tất cả test case lên 30 giây để đảm bảo đủ thời gian cho các thao tác chậm.",
+      "C. Chuyển toàn bộ test case sang sử dụng `test.step` để chia nhỏ các thao tác và thêm `page.waitForTimeout(1000)` sau mỗi bước.",
+      "D. Sử dụng `test.retry` với số lần retry là 3 để tự động chạy lại các test case failed, giảm tỷ lệ flaky test trong báo cáo."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A tập trung vào việc sử dụng assertion chặt chẽ (`toBeVisible`, `toHaveText`) và auto-waiting động (thay vì hardcode timeout) để giải quyết gốc rễ của flaky test. B (tăng timeout) không giải quyết được vấn đề về assertion. C (`waitForTimeout`) làm chậm test và không giải quyết được flakiness. D (`test.retry`) chỉ che giấu vấn đề chứ không khắc phục.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812243150_EXPERT_7_cnsn"
+  },
+  {
+    "questionText": "Trong một dự án sử dụng Playwright để kiểm thử ứng dụng SPA (Single Page Application) với nhiều route động (ví dụ: `/user/:id/profile`), bạn cần thiết kế locator cho các element trong Page Object sao cho dễ bảo trì và ít bị ảnh hưởng khi route thay đổi. Giải pháp nào sau đây là tối ưu nhất?",
+    "options": [
+      "A. Sử dụng `data-testid` cho tất cả các element quan trọng và kết hợp với `page.locator` trong Page Object. Đối với các route động, sử dụng `page.url()` để kiểm tra route hiện tại và điều kiện hóa locator nếu cần.",
+      "B. Sử dụng CSS selector dựa trên cấu trúc DOM (ví dụ: `div.user-profile > h1`) để đảm bảo locator chính xác, bất kể route thay đổi.",
+      "C. Hardcode toàn bộ route trong locator (ví dụ: `page.locator('a[href=\"/user/123/profile\"]')`) để đảm bảo độ chính xác tuyệt đối.",
+      "D. Sử dụng `page.getByRole` kết hợp với `name` hoặc `aria-label` cho tất cả element, bất kể cấu trúc DOM hoặc route."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A kết hợp `data-testid` (dễ bảo trì) và kiểm tra route động (`page.url()`) để đảm bảo locator hoạt động đúng ngay cả khi route thay đổi. B (CSS selector) dễ bị ảnh hưởng khi DOM thay đổi. C (hardcode route) không linh hoạt. D (`getByRole`) không phải lúc nào cũng áp dụng được cho tất cả element.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812243151_EXPERT_8_736d"
+  },
+  {
+    "questionText": "Bạn đang làm việc tại một công ty công nghệ Việt Nam, nơi dự án Playwright hiện tại sử dụng nhiều `page.waitForTimeout` để xử lý các thao tác bất đồng bộ. Điều này gây ra hai vấn đề chính: (1) Test case chạy chậm do timeout cố định; (2) Vẫn xảy ra flaky test khi timeout không đủ. Giải pháp nào sau đây là tối ưu nhất để thay thế `waitForTimeout` mà vẫn đảm bảo độ tin cậy?",
+    "options": [
+      "A. Thay thế tất cả `waitForTimeout` bằng các auto-waiting mechanism của Playwright như `expect(locator).toBeVisible()`, `page.waitForResponse()`, hoặc `page.waitForFunction()` để đợi điều kiện cụ thể thay vì thời gian cố định.",
+      "B. Sử dụng `page.waitForLoadState('networkidle')` sau mỗi thao tác để đảm bảo trang đã tải xong tất cả tài nguyên trước khi tiếp tục.",
+      "C. Kết hợp `waitForTimeout` với `page.waitForSelector` để giảm thiểu thời gian chờ không cần thiết.",
+      "D. Tăng timeout mặc định của `waitForTimeout` lên 5 giây để đảm bảo đủ thời gian cho các thao tác chậm."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A sử dụng các cơ chế auto-waiting của Playwright (`toBeVisible`, `waitForResponse`, `waitForFunction`) để đợi điều kiện cụ thể thay vì thời gian cố định, giúp tối ưu hiệu suất và giảm flaky test. B (`networkidle`) không phải lúc nào cũng hiệu quả. C (kết hợp `waitForTimeout`) vẫn không giải quyết được gốc rễ. D (tăng timeout) làm chậm test.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "SITUATION",
+    "id": "q_1780812243151_EXPERT_9_ktv0"
+  },
+  {
+    "questionText": "Trong một dự án fintech, bạn cần kiểm thử tính năng xác thực giao dịch với chữ ký số (digital signature) được tạo ra từ backend. Tuy nhiên, việc tạo chữ ký số trong môi trường test là phức tạp và tốn thời gian. Giải pháp nào sau đây là tối ưu nhất để mô phỏng quá trình này trong test case Playwright mà không làm thay đổi code sản phẩm?",
+    "options": [
+      "A. Sử dụng `page.route` để intercept request gửi dữ liệu giao dịch tới backend, sau đó trả về một chữ ký số giả định (ví dụ: `mocked-signature-123`) trong response. Đồng thời, mock luôn endpoint xác thực chữ ký số để bypass kiểm tra thực tế.",
+      "B. Tạo một service mock riêng để tạo chữ ký số giả định và tích hợp nó vào môi trường test, sau đó cấu hình Playwright để gọi tới service này thay vì backend thật.",
+      "C. Sử dụng `page.evaluate` để inject JavaScript vào trang web, tự động điền chữ ký số giả định vào input field mà không cần tương tác với backend.",
+      "D. Yêu cầu team backend tạo một endpoint riêng chỉ sử dụng trong môi trường test để trả về chữ ký số cố định, sau đó cấu hình Playwright để gọi tới endpoint này."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Giải pháp A sử dụng `page.route` để mock cả quá trình gửi dữ liệu và xác thực chữ ký số mà không cần thay đổi code sản phẩm hoặc backend. B (service mock riêng) tăng độ phức tạp. C (inject JS) không mô phỏng được luồng API thực tế. D (endpoint mock trên backend) yêu cầu thay đổi code sản phẩm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "SKILL",
+    "id": "q_1780812243152_EXPERT_10_e68p"
+  },
+  {
+    "questionText": "Bạn đang đánh giá kiến trúc test của một dự án Playwright tại công ty outsourcing, nơi các test case hiện tại sử dụng trực tiếp giá trị hardcode cho các assertion (ví dụ: `expect(text).toContain('Thành công')`). Điều này gây ra vấn đề gì nghiêm trọng nhất về dài hạn và giải pháp nào sau đây là phù hợp nhất để khắc phục?",
+    "options": [
+      "A. Vấn đề: Khó bảo trì khi nội dung hiển thị thay đổi (ví dụ: từ 'Thành công' sang 'Success' trong phiên bản đa ngôn ngữ); Giải pháp: Sử dụng biến môi trường hoặc file config để lưu trữ các giá trị mong đợi, kết hợp với `expect(locator).toHaveText` và regex để kiểm tra linh hoạt.",
+      "B. Vấn đề: Hiệu suất test giảm do phải so sánh chuỗi dài; Giải pháp: Rút gọn các giá trị hardcode (ví dụ: từ 'Thành công' thành 'OK') để tăng tốc độ assertion.",
+      "C. Vấn đề: Không thể tái sử dụng test case cho các dự án khác; Giải pháp: Chuyển toàn bộ test case sang sử dụng Cypress để tận dụng cộng đồng hỗ trợ lớn hơn.",
+      "D. Vấn đề: Khó chạy test song song do xung đột giá trị hardcode; Giải pháp: Sử dụng `test.describe.parallel` và đảm bảo mỗi test case có giá trị hardcode riêng biệt."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Vấn đề nghiêm trọng nhất là khó bảo trì khi nội dung hiển thị thay đổi (ví dụ: đa ngôn ngữ). Giải pháp A sử dụng biến môi trường/file config và regex giúp tăng tính linh hoạt và bảo trì. B (rút gọn chuỗi) không giải quyết được gốc rễ. C (chuyển sang Cypress) không liên quan. D (chạy song song) không giải quyết được vấn đề hardcode.",
+    "difficulty": "EXPERT",
+    "skillArea": "Playwright",
+    "category": "ANALYSIS",
+    "id": "q_1780812243152_EXPERT_11_45x5"
+  }
+]

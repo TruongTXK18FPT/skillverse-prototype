@@ -1,0 +1,782 @@
+[
+  {
+    "questionText": "Trong quy trình phát triển phần mềm, 'Test Scenario' được hiểu là gì?",
+    "options": [
+      "A. Một bộ dữ liệu đầu vào cụ thể để kiểm thử một chức năng.",
+      "B. Một chuỗi các bước mô tả hành vi của người dùng để kiểm thử một tính năng hoặc quy trình nghiệp vụ.",
+      "C. Một tài liệu mô tả chi tiết các bước thực hiện kiểm thử tự động.",
+      "D. Một báo cáo lỗi được ghi nhận trong quá trình kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Test Scenario là một chuỗi các bước mô tả cách người dùng tương tác với hệ thống để kiểm thử một tính năng hoặc quy trình nghiệp vụ cụ thể, giúp đảm bảo hệ thống hoạt động đúng theo yêu cầu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811360388_BEGINNER_0_jwnc"
+  },
+  {
+    "questionText": "Khi phân tích yêu cầu nghiệp vụ cho tính năng 'Đăng ký tài khoản người dùng', đâu là một Test Scenario hợp lệ cho luồng tích cực (positive flow)?",
+    "options": [
+      "A. Người dùng nhập mật khẩu không đủ độ phức tạp và hệ thống từ chối yêu cầu.",
+      "B. Người dùng nhập đầy đủ thông tin hợp lệ và hệ thống tạo tài khoản thành công.",
+      "C. Người dùng nhập email đã tồn tại và hệ thống hiển thị thông báo lỗi.",
+      "D. Người dùng không nhập bất kỳ thông tin nào và hệ thống báo lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Luồng tích cực (positive flow) mô tả trường hợp người dùng thực hiện đúng các bước và hệ thống phản hồi thành công. Trong trường hợp này, người dùng nhập đầy đủ thông tin hợp lệ và hệ thống tạo tài khoản thành công.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811360388_BEGINNER_1_7zfs"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng, bạn được giao phân tích yêu cầu cho tính năng 'Chuyển tiền nội bộ'. Đâu là một Test Scenario cho luồng biên (edge-case flow)?",
+    "options": [
+      "A. Người dùng chuyển số tiền nhỏ hơn số dư tài khoản và giao dịch thành công.",
+      "B. Người dùng chuyển số tiền bằng chính xác số dư tài khoản và giao dịch thành công.",
+      "C. Người dùng chuyển số tiền lớn hơn số dư tài khoản và hệ thống từ chối giao dịch.",
+      "D. Người dùng nhập đầy đủ thông tin và giao dịch thành công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Luồng biên (edge-case flow) kiểm tra các trường hợp ở ranh giới của điều kiện hợp lệ. Ở đây, chuyển số tiền bằng chính xác số dư tài khoản là một trường hợp biên cần được kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811360388_BEGINNER_2_8m1v"
+  },
+  {
+    "questionText": "Khi xây dựng Test Scenario từ User Story, yếu tố nào sau đây là quan trọng nhất để đảm bảo tính đầy đủ của kịch bản kiểm thử?",
+    "options": [
+      "A. Chỉ tập trung vào các bước chính mà không cần quan tâm đến ngoại lệ.",
+      "B. Đảm bảo bao phủ các luồng tích cực, tiêu cực và biên để kiểm tra toàn diện tính năng.",
+      "C. Chỉ kiểm thử các trường hợp mà khách hàng yêu cầu rõ ràng.",
+      "D. Sử dụng càng nhiều dữ liệu đầu vào càng tốt để tăng độ phủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để đảm bảo tính đầy đủ, Test Scenario cần bao phủ cả luồng tích cực (positive), tiêu cực (negative) và biên (edge-case) nhằm kiểm tra toàn diện các tình huống có thể xảy ra trong thực tế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811360388_BEGINNER_3_t692"
+  },
+  {
+    "questionText": "Trong một dự án thương mại điện tử, bạn cần xây dựng Test Scenario cho tính năng 'Thanh toán đơn hàng'. Đâu là một ví dụ về luồng tiêu cực (negative flow)?",
+    "options": [
+      "A. Khách hàng chọn sản phẩm, nhập thông tin thanh toán hợp lệ và hoàn tất đơn hàng.",
+      "B. Khách hàng chọn sản phẩm nhưng hủy đơn hàng trước khi thanh toán.",
+      "C. Khách hàng chọn sản phẩm, nhập thông tin thẻ tín dụng không hợp lệ và hệ thống từ chối giao dịch.",
+      "D. Khách hàng chọn sản phẩm, áp dụng mã giảm giá hợp lệ và hoàn tất đơn hàng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Luồng tiêu cực (negative flow) mô tả các trường hợp hệ thống xử lý khi người dùng nhập thông tin không hợp lệ hoặc không đúng quy định. Ở đây, thông tin thẻ tín dụng không hợp lệ dẫn đến hệ thống từ chối giao dịch.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811360388_BEGINNER_4_fwip"
+  },
+  {
+    "questionText": "Khi phân tích yêu cầu cho tính năng 'Đặt lịch hẹn khám bệnh' trên ứng dụng y tế, Test Scenario nào dưới đây thuộc loại 'end-to-end user flow'?",
+    "options": [
+      "A. Người dùng nhập sai định dạng ngày tháng và hệ thống hiển thị thông báo lỗi.",
+      "B. Người dùng chọn bác sĩ, chọn khung giờ, nhập thông tin cá nhân và xác nhận lịch hẹn thành công.",
+      "C. Người dùng không chọn bác sĩ và hệ thống báo lỗi.",
+      "D. Người dùng hủy lịch hẹn ngay sau khi đặt thành công."
+    ],
+    "correctAnswer": "B",
+    "explanation": "End-to-end user flow mô tả toàn bộ quy trình từ khi người dùng bắt đầu tương tác cho đến khi hoàn tất một nghiệp vụ. Ở đây, quy trình đặt lịch hẹn từ chọn bác sĩ đến xác nhận thành công là một luồng end-to-end.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811360388_BEGINNER_5_58wl"
+  },
+  {
+    "questionText": "Trong phương pháp kiểm thử dựa trên rủi ro (risk-based testing), tiêu chí nào sau đây thường được sử dụng để ưu tiên Test Scenario?",
+    "options": [
+      "A. Độ phức tạp của mã nguồn.",
+      "B. Mức độ ảnh hưởng đến người dùng và xác suất xảy ra lỗi.",
+      "C. Số lượng người dùng truy cập tính năng.",
+      "D. Thời gian phát triển tính năng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Risk-based testing ưu tiên Test Scenario dựa trên mức độ ảnh hưởng đến người dùng cuối và xác suất xảy ra lỗi, nhằm tập trung nguồn lực kiểm thử vào các khu vực có rủi ro cao nhất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811360388_BEGINNER_6_xee7"
+  },
+  {
+    "questionText": "Bạn đang xây dựng Test Scenario cho tính năng 'Đăng nhập' của một ứng dụng ngân hàng. Đâu là một ví dụ về luồng biên (edge-case flow)?",
+    "options": [
+      "A. Người dùng nhập đúng tên đăng nhập và mật khẩu, hệ thống cho phép truy cập.",
+      "B. Người dùng nhập sai mật khẩu 3 lần liên tiếp, hệ thống khóa tài khoản.",
+      "C. Người dùng nhập mật khẩu có độ dài tối thiểu (ví dụ: 8 ký tự) và hệ thống cho phép truy cập.",
+      "D. Người dùng không nhập tên đăng nhập và hệ thống báo lỗi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Luồng biên (edge-case flow) kiểm tra các trường hợp ở ranh giới của điều kiện hợp lệ. Ở đây, mật khẩu có độ dài tối thiểu là một trường hợp biên cần được kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811360388_BEGINNER_7_klo7"
+  },
+  {
+    "questionText": "Khi phân tích yêu cầu cho tính năng 'Tìm kiếm sản phẩm' trên website thương mại điện tử, Test Scenario nào dưới đây đảm bảo bao phủ luồng tích cực (positive flow)?",
+    "options": [
+      "A. Người dùng nhập từ khóa sản phẩm tồn tại và hệ thống hiển thị kết quả tìm kiếm chính xác.",
+      "B. Người dùng nhập từ khóa không tồn tại và hệ thống hiển thị thông báo 'Không tìm thấy sản phẩm'.",
+      "C. Người dùng không nhập từ khóa và hệ thống báo lỗi.",
+      "D. Người dùng nhập ký tự đặc biệt và hệ thống báo lỗi định dạng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Luồng tích cực (positive flow) mô tả trường hợp người dùng thực hiện đúng các bước và hệ thống phản hồi thành công. Ở đây, nhập từ khóa sản phẩm tồn tại và hệ thống hiển thị kết quả chính xác là một luồng tích cực.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811360388_BEGINNER_8_3cmp"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng đặt vé máy bay, bạn cần xây dựng Test Scenario cho tính năng 'Hủy vé'. Đâu là một ví dụ về luồng tiêu cực (negative flow)?",
+    "options": [
+      "A. Khách hàng chọn vé đã đặt, xác nhận hủy vé và hệ thống hủy vé thành công.",
+      "B. Khách hàng chọn vé đã sử dụng và hệ thống từ chối yêu cầu hủy vé.",
+      "C. Khách hàng chọn vé chưa sử dụng, nhập lý do hủy và hệ thống hủy vé thành công.",
+      "D. Khách hàng chọn vé và hệ thống hiển thị thông tin vé chi tiết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Luồng tiêu cực (negative flow) mô tả các trường hợp hệ thống xử lý khi người dùng thực hiện hành động không hợp lệ. Ở đây, hủy vé đã sử dụng là một trường hợp tiêu cực và hệ thống cần từ chối yêu cầu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811360388_BEGINNER_9_tjxm"
+  },
+  {
+    "questionText": "Khi xây dựng Test Scenario từ tài liệu yêu cầu nghiệp vụ, bước nào sau đây là quan trọng nhất để đảm bảo tính chính xác của kịch bản kiểm thử?",
+    "options": [
+      "A. Tham khảo ý kiến của khách hàng về các trường hợp kiểm thử.",
+      "B. Xác định rõ các luồng nghiệp vụ chính, ngoại lệ và điều kiện biên từ yêu cầu.",
+      "C. Sử dụng dữ liệu kiểm thử từ các dự án tương tự.",
+      "D. Tạo càng nhiều Test Scenario càng tốt để tăng độ phủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để đảm bảo tính chính xác, cần xác định rõ các luồng nghiệp vụ chính, ngoại lệ và điều kiện biên từ tài liệu yêu cầu, từ đó xây dựng Test Scenario bao phủ đầy đủ các tình huống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811360388_BEGINNER_10_xdmd"
+  },
+  {
+    "questionText": "Trong một dự án phát triển ứng dụng quản lý đơn hàng, bạn được giao xây dựng Test Scenario cho tính năng 'Xác nhận đơn hàng'. Đâu là một ví dụ về luồng end-to-end user flow?",
+    "options": [
+      "A. Nhân viên nhập mã đơn hàng không tồn tại và hệ thống báo lỗi.",
+      "B. Nhân viên chọn đơn hàng, kiểm tra thông tin, xác nhận đơn hàng và hệ thống cập nhật trạng thái thành công.",
+      "C. Nhân viên không nhập mã đơn hàng và hệ thống báo lỗi.",
+      "D. Nhân viên nhập sai mã đơn hàng và hệ thống báo lỗi định dạng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "End-to-end user flow mô tả toàn bộ quy trình từ khi người dùng bắt đầu tương tác cho đến khi hoàn tất một nghiệp vụ. Ở đây, quy trình từ chọn đơn hàng đến xác nhận và cập nhật trạng thái là một luồng end-to-end.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811360388_BEGINNER_11_mig4"
+  },
+  {
+    "questionText": "Khi áp dụng phương pháp kiểm thử dựa trên rủi ro (risk-based testing) cho tính năng 'Thanh toán trực tuyến', Test Scenario nào dưới đây nên được ưu tiên kiểm thử trước?",
+    "options": [
+      "A. Khách hàng thanh toán với số tiền nhỏ hơn số dư tài khoản.",
+      "B. Khách hàng thanh toán với số tiền vượt quá hạn mức thẻ tín dụng.",
+      "C. Khách hàng nhập sai mã OTP và hệ thống từ chối giao dịch.",
+      "D. Khách hàng thanh toán với số tiền bằng chính xác số dư tài khoản."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong risk-based testing, các trường hợp có rủi ro cao về ảnh hưởng đến người dùng và xác suất xảy ra lỗi sẽ được ưu tiên. Thanh toán vượt hạn mức thẻ tín dụng có thể gây ra lỗi nghiêm trọng và ảnh hưởng lớn đến trải nghiệm người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811360388_BEGINNER_12_g49d"
+  },
+  {
+    "questionText": "Bạn đang xây dựng Test Scenario cho tính năng 'Cập nhật thông tin cá nhân' trên ứng dụng ngân hàng. Đâu là một ví dụ về luồng biên (edge-case flow)?",
+    "options": [
+      "A. Khách hàng cập nhật số điện thoại với định dạng hợp lệ và hệ thống lưu thành công.",
+      "B. Khách hàng cập nhật số điện thoại để trống và hệ thống báo lỗi.",
+      "C. Khách hàng cập nhật số điện thoại với độ dài tối đa cho phép và hệ thống lưu thành công.",
+      "D. Khách hàng cập nhật số điện thoại không đúng định dạng và hệ thống báo lỗi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Luồng biên (edge-case flow) kiểm tra các trường hợp ở ranh giới của điều kiện hợp lệ. Ở đây, cập nhật số điện thoại với độ dài tối đa cho phép là một trường hợp biên cần được kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811360388_BEGINNER_13_shrc"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng di động tại Việt Nam, yêu cầu nghiệp vụ (business requirement) nêu: 'Người dùng phải nhập mã OTP gửi về số điện thoại đã đăng ký để xác nhận giao dịch chuyển tiền trên 10 triệu VND'. Khi xây dựng test scenario cho tính năng này, đâu là kịch bản KHÔNG cần thiết?",
+    "options": [
+      "A. Kiểm tra hệ thống gửi OTP về đúng số điện thoại đã đăng ký khi người dùng nhập số tiền chuyển là 10.000.001 VND",
+      "B. Kiểm tra hệ thống không gửi OTP khi người dùng nhập số tiền chuyển là 9.999.999 VND",
+      "C. Kiểm tra hệ thống hiển thị thông báo lỗi khi người dùng nhập sai OTP quá 3 lần liên tiếp",
+      "D. Kiểm tra tốc độ gửi OTP từ hệ thống đến thiết bị di động của người dùng trong điều kiện mạng 3G yếu"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Kịch bản D kiểm tra hiệu năng hệ thống (performance), không liên quan trực tiếp đến logic nghiệp vụ của yêu cầu về OTP. Các kịch bản A, B, C đều kiểm tra các luồng nghiệp vụ chính (positive, negative, edge-case) theo yêu cầu đã cho.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811440243_INTERMEDIATE_0_mcmh"
+  },
+  {
+    "questionText": "Bạn đang xây dựng test scenario cho tính năng 'Đặt hàng online' của một sàn thương mại điện tử. Yêu cầu nghiệp vụ mô tả: 'Hệ thống phải hỗ trợ thanh toán bằng ví điện tử Momo, ZaloPay và VNPay'. Đâu là cách ưu tiên kịch bản kiểm thử hợp lý theo nguyên tắc risk-based testing?",
+    "options": [
+      "A. Ưu tiên kiểm tra thanh toán thành công với tất cả các ví điện tử trước, sau đó mới kiểm tra các trường hợp lỗi",
+      "B. Ưu tiên kiểm tra các trường hợp lỗi (ví không đủ tiền, kết nối API bị gián đoạn) vì rủi ro cao hơn đối với doanh nghiệp",
+      "C. Ưu tiên kiểm tra thanh toán với ví Momo trước vì đây là phương thức phổ biến nhất tại Việt Nam, sau đó mới đến ZaloPay và VNPay",
+      "D. Ưu tiên kiểm tra các trường hợp edge-case (số tiền thanh toán bằng 0, số tiền vượt hạn mức) trước khi kiểm tra luồng chính"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Risk-based testing tập trung vào các rủi ro ảnh hưởng lớn nhất đến hệ thống. Các trường hợp lỗi như ví không đủ tiền hoặc API bị gián đoạn có thể gây thất thoát doanh thu hoặc trải nghiệm người dùng kém, do đó cần được ưu tiên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811440243_INTERMEDIATE_1_1rlt"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng gọi xe (tương tự Grab), bạn cần xây dựng test scenario cho tính năng 'Hủy chuyến'. Yêu cầu nghiệp vụ quy định: 'Người dùng chỉ được hủy chuyến miễn phí nếu hủy trước 5 phút tính từ thời điểm đặt xe'. Đâu là kịch bản kiểm thử ĐÚNG cho luồng negative?",
+    "options": [
+      "A. Kiểm tra hệ thống cho phép hủy chuyến miễn phí khi người dùng hủy chuyến trước 6 phút so với thời điểm đặt xe",
+      "B. Kiểm tra hệ thống tính phí hủy chuyến khi người dùng hủy chuyến sau 4 phút 59 giây so với thời điểm đặt xe",
+      "C. Kiểm tra hệ thống hiển thị thông báo 'Hủy chuyến thành công' khi người dùng hủy chuyến trước 5 phút",
+      "D. Kiểm tra hệ thống không cho phép người dùng hủy chuyến nếu tài xế đã đến điểm đón"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kịch bản B kiểm tra luồng negative (hủy chuyến sau thời hạn cho phép), đảm bảo hệ thống áp dụng quy tắc tính phí đúng theo yêu cầu. Các kịch bản A và C là positive, D là edge-case nhưng không phải negative.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811440243_INTERMEDIATE_2_6nhw"
+  },
+  {
+    "questionText": "Bạn đang phân tích customer journey cho tính năng 'Đăng ký tài khoản' của một ứng dụng fintech. Hành trình người dùng bao gồm: 1) Nhập số điện thoại, 2) Nhập OTP, 3) Điền thông tin cá nhân, 4) Xác nhận điều khoản, 5) Hoàn tất đăng ký. Đâu là test scenario KHÔNG phù hợp để kiểm tra luồng này?",
+    "options": [
+      "A. Kiểm tra hệ thống gửi OTP về đúng số điện thoại đã nhập ở bước 1",
+      "B. Kiểm tra hệ thống từ chối đăng ký nếu người dùng không tích chọn 'Đồng ý với điều khoản' ở bước 4",
+      "C. Kiểm tra hệ thống cho phép đăng ký thành công khi người dùng nhập đầy đủ thông tin ở tất cả các bước",
+      "D. Kiểm tra thời gian phản hồi của API gửi OTP khi có 10.000 người dùng đồng thời thực hiện bước 2"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Kịch bản D kiểm tra hiệu năng (performance testing), không thuộc phạm vi kiểm thử chức năng (functional testing) cho customer journey. Các kịch bản A, B, C đều kiểm tra luồng nghiệp vụ chính.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811440244_INTERMEDIATE_3_xto5"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng quản lý kho hàng cho một chuỗi siêu thị, yêu cầu nghiệp vụ nêu: 'Hệ thống phải tự động cập nhật số lượng tồn kho khi có đơn hàng mới hoặc đơn hàng bị hủy'. Khi xây dựng test scenario, đâu là kịch bản edge-case cần kiểm tra?",
+    "options": [
+      "A. Kiểm tra hệ thống cập nhật số lượng tồn kho khi có 1 đơn hàng với 1 sản phẩm duy nhất",
+      "B. Kiểm tra hệ thống cập nhật số lượng tồn kho khi có 100 đơn hàng đồng thời với cùng 1 sản phẩm có số lượng tồn kho ban đầu là 100",
+      "C. Kiểm tra hệ thống hiển thị thông báo lỗi khi người dùng tạo đơn hàng với sản phẩm đã hết hàng",
+      "D. Kiểm tra hệ thống cập nhật số lượng tồn kho khi có 1 đơn hàng bị hủy sau khi đã được xác nhận"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kịch bản B kiểm tra edge-case về đồng thời (concurrency) và số lượng tồn kho giới hạn, có thể gây ra lỗi race condition. Các kịch bản A và D là positive, C là negative nhưng không phải edge-case.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811440244_INTERMEDIATE_4_pw88"
+  },
+  {
+    "questionText": "Bạn đang xây dựng test scenario cho tính năng 'Thanh toán hóa đơn điện nước' của một ứng dụng ví điện tử. Yêu cầu nghiệp vụ quy định: 'Hệ thống phải hỗ trợ thanh toán hóa đơn điện của EVN và hóa đơn nước của các công ty cấp nước tại Hà Nội và TP.HCM'. Đâu là cách tiếp cận ĐÚNG để đảm bảo coverage cho các luồng kiểm thử?",
+    "options": [
+      "A. Chỉ cần kiểm tra thanh toán thành công với hóa đơn điện của EVN và hóa đơn nước của một công ty cấp nước tại Hà Nội, vì các công ty khác có quy trình tương tự",
+      "B. Kiểm tra thanh toán thành công với hóa đơn điện của EVN, hóa đơn nước của một công ty tại Hà Nội và một công ty tại TP.HCM, đồng thời kiểm tra các trường hợp lỗi như hóa đơn không tồn tại hoặc số tiền thanh toán không đủ",
+      "C. Kiểm tra tất cả các tổ hợp hóa đơn điện và nước từ tất cả các nhà cung cấp, bao gồm cả các trường hợp lỗi",
+      "D. Chỉ cần kiểm tra các trường hợp lỗi như hóa đơn không tồn tại hoặc số tiền thanh toán không đủ, vì luồng thành công đã được đảm bảo bởi nhà cung cấp API"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cách tiếp cận B đảm bảo coverage cho cả positive (thành công) và negative (lỗi) với các nhà cung cấp đại diện (EVN, Hà Nội, TP.HCM), tránh kiểm thử dư thừa (A) hoặc thiếu sót (D). Kiểm thử tất cả tổ hợp (C) là không khả thi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811440245_INTERMEDIATE_5_jrv5"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng đặt vé máy bay, bạn cần xây dựng test scenario cho tính năng 'Tìm kiếm chuyến bay'. Yêu cầu nghiệp vụ nêu: 'Hệ thống phải cho phép tìm kiếm chuyến bay khứ hồi với ngày đi và ngày về, và hiển thị kết quả theo thứ tự giá tăng dần'. Đâu là kịch bản kiểm thử ĐÚNG cho luồng này?",
+    "options": [
+      "A. Kiểm tra hệ thống hiển thị thông báo lỗi khi người dùng nhập ngày về trước ngày đi",
+      "B. Kiểm tra hệ thống hiển thị kết quả tìm kiếm với chuyến bay một chiều khi người dùng không chọn ngày về",
+      "C. Kiểm tra hệ thống sắp xếp kết quả theo giá tăng dần khi người dùng chọn tùy chọn 'Giá tăng dần'",
+      "D. Kiểm tra hệ thống cho phép tìm kiếm chuyến bay khứ hồi khi người dùng nhập ngày đi và ngày về hợp lệ, và hiển thị kết quả theo thứ tự giá tăng dần mặc định"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Kịch bản D kiểm tra trực tiếp yêu cầu nghiệp vụ về tìm kiếm khứ hồi và sắp xếp kết quả. Các kịch bản A, B, C kiểm tra các luồng phụ hoặc edge-case không được nêu rõ trong yêu cầu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811440245_INTERMEDIATE_6_eezu"
+  },
+  {
+    "questionText": "Bạn đang phân tích business requirement cho tính năng 'Chuyển điểm thưởng' của một ứng dụng loyalty. Yêu cầu nêu: 'Người dùng có thể chuyển điểm thưởng cho người dùng khác với điều kiện cả hai phải có tài khoản đã xác thực và số điểm chuyển phải nhỏ hơn hoặc bằng số điểm hiện có'. Đâu là test scenario KHÔNG cần thiết?",
+    "options": [
+      "A. Kiểm tra hệ thống cho phép chuyển điểm khi người gửi và người nhận đều có tài khoản đã xác thực và số điểm chuyển nhỏ hơn số điểm hiện có",
+      "B. Kiểm tra hệ thống từ chối chuyển điểm khi người gửi hoặc người nhận chưa xác thực tài khoản",
+      "C. Kiểm tra hệ thống từ chối chuyển điểm khi số điểm chuyển lớn hơn số điểm hiện có của người gửi",
+      "D. Kiểm tra hệ thống gửi email thông báo cho người nhận sau khi chuyển điểm thành công"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Kịch bản D kiểm tra tính năng thông báo (notification), không liên quan trực tiếp đến logic nghiệp vụ của yêu cầu về chuyển điểm. Các kịch bản A, B, C đều kiểm tra các điều kiện nghiệp vụ chính.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811440245_INTERMEDIATE_7_v2mk"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng quản lý đơn hàng cho một nhà bán lẻ, bạn cần xây dựng test scenario cho tính năng 'Cập nhật trạng thái đơn hàng'. Yêu cầu nghiệp vụ quy định: 'Đơn hàng chỉ được chuyển từ trạng thái 'Đang xử lý' sang 'Đang giao hàng' nếu đơn hàng đã được xác nhận thanh toán'. Đâu là kịch bản kiểm thử ĐÚNG cho luồng negative?",
+    "options": [
+      "A. Kiểm tra hệ thống cho phép cập nhật trạng thái từ 'Đang xử lý' sang 'Đang giao hàng' khi đơn hàng đã được xác nhận thanh toán",
+      "B. Kiểm tra hệ thống từ chối cập nhật trạng thái từ 'Đang xử lý' sang 'Đang giao hàng' khi đơn hàng chưa được xác nhận thanh toán",
+      "C. Kiểm tra hệ thống cho phép cập nhật trạng thái từ 'Đang giao hàng' sang 'Đã giao' khi đơn hàng đã được giao thành công",
+      "D. Kiểm tra hệ thống hiển thị thông báo lỗi khi người dùng cố gắng cập nhật trạng thái từ 'Đã hủy' sang 'Đang giao hàng'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kịch bản B kiểm tra luồng negative (đơn hàng chưa xác nhận thanh toán), đảm bảo hệ thống tuân thủ quy tắc nghiệp vụ. Các kịch bản A và C là positive, D là edge-case không liên quan trực tiếp đến yêu cầu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811440245_INTERMEDIATE_8_pz0c"
+  },
+  {
+    "questionText": "Bạn đang xây dựng test scenario cho tính năng 'Đăng nhập bằng tài khoản mạng xã hội' của một ứng dụng thương mại điện tử. Yêu cầu nghiệp vụ nêu: 'Hệ thống phải hỗ trợ đăng nhập bằng Facebook, Google và Apple ID'. Đâu là cách ưu tiên kịch bản kiểm thử theo nguyên tắc risk-based testing?",
+    "options": [
+      "A. Ưu tiên kiểm tra đăng nhập thành công với Facebook trước, sau đó mới đến Google và Apple ID vì Facebook phổ biến hơn tại Việt Nam",
+      "B. Ưu tiên kiểm tra các trường hợp lỗi như tài khoản bị vô hiệu hóa hoặc quyền truy cập bị từ chối, vì rủi ro cao hơn đối với trải nghiệm người dùng",
+      "C. Ưu tiên kiểm tra đăng nhập thành công với tất cả các nền tảng trước, sau đó mới kiểm tra các trường hợp lỗi",
+      "D. Ưu tiên kiểm tra các trường hợp edge-case như tài khoản không có email hoặc số điện thoại trước khi kiểm tra luồng chính"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Risk-based testing tập trung vào các rủi ro ảnh hưởng lớn nhất. Các trường hợp lỗi như tài khoản bị vô hiệu hóa hoặc quyền truy cập bị từ chối có thể gây gián đoạn trải nghiệm người dùng, do đó cần được ưu tiên.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811440245_INTERMEDIATE_9_680j"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng đặt phòng khách sạn, bạn cần xây dựng test scenario cho tính năng 'Tìm kiếm phòng'. Yêu cầu nghiệp vụ quy định: 'Hệ thống phải cho phép tìm kiếm phòng theo ngày nhận phòng, ngày trả phòng, số lượng khách và loại phòng (Standard, Deluxe, Suite)'. Đâu là kịch bản edge-case cần kiểm tra?",
+    "options": [
+      "A. Kiểm tra hệ thống hiển thị kết quả tìm kiếm khi người dùng nhập ngày nhận phòng và ngày trả phòng hợp lệ, số lượng khách là 1 và loại phòng là Standard",
+      "B. Kiểm tra hệ thống hiển thị thông báo lỗi khi người dùng nhập ngày trả phòng trước ngày nhận phòng",
+      "C. Kiểm tra hệ thống hiển thị kết quả tìm kiếm khi người dùng nhập số lượng khách là 0 và loại phòng là Suite",
+      "D. Kiểm tra hệ thống hiển thị kết quả tìm kiếm khi người dùng nhập ngày nhận phòng và ngày trả phòng cách nhau 365 ngày"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Kịch bản D kiểm tra edge-case về khoảng thời gian dài (365 ngày), có thể gây ra lỗi về logic đặt phòng hoặc hiệu năng. Các kịch bản A là positive, B là negative, C là edge-case nhưng ít thực tế hơn (số lượng khách = 0).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811440245_INTERMEDIATE_10_r2dt"
+  },
+  {
+    "questionText": "Bạn đang phân tích user story cho tính năng 'Nạp tiền vào ví điện tử' với mô tả: 'Là người dùng, tôi muốn nạp tiền vào ví điện tử bằng thẻ ngân hàng để sử dụng các dịch vụ thanh toán'. Đâu là test scenario KHÔNG phù hợp với user story này?",
+    "options": [
+      "A. Kiểm tra hệ thống cho phép nạp tiền thành công khi người dùng nhập đúng thông tin thẻ và số tiền hợp lệ",
+      "B. Kiểm tra hệ thống từ chối nạp tiền khi số tiền nhập vào nhỏ hơn 10.000 VND (mức tối thiểu)",
+      "C. Kiểm tra hệ thống gửi email xác nhận sau khi nạp tiền thành công",
+      "D. Kiểm tra hệ thống từ chối nạp tiền khi người dùng nhập sai mã CVV của thẻ"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kịch bản C kiểm tra tính năng thông báo (notification), không được đề cập trong user story về nạp tiền. Các kịch bản A, B, D đều kiểm tra trực tiếp các điều kiện nghiệp vụ liên quan đến nạp tiền.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811440245_INTERMEDIATE_11_vm0u"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng quản lý dự án, bạn cần xây dựng test scenario cho tính năng 'Tạo nhiệm vụ mới'. Yêu cầu nghiệp vụ nêu: 'Người dùng có thể tạo nhiệm vụ mới với các trường bắt buộc: tên nhiệm vụ, mô tả, ngày đến hạn và người được giao'. Đâu là kịch bản kiểm thử ĐÚNG cho luồng negative?",
+    "options": [
+      "A. Kiểm tra hệ thống cho phép tạo nhiệm vụ khi người dùng nhập đầy đủ tất cả các trường bắt buộc",
+      "B. Kiểm tra hệ thống từ chối tạo nhiệm vụ khi người dùng để trống trường 'người được giao'",
+      "C. Kiểm tra hệ thống cho phép tạo nhiệm vụ khi người dùng nhập ngày đến hạn là ngày hiện tại",
+      "D. Kiểm tra hệ thống hiển thị thông báo xác nhận sau khi nhiệm vụ được tạo thành công"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kịch bản B kiểm tra luồng negative (trường bắt buộc bị để trống), đảm bảo hệ thống tuân thủ yêu cầu nghiệp vụ. Các kịch bản A và C là positive, D kiểm tra tính năng thông báo không liên quan trực tiếp đến yêu cầu.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811440246_INTERMEDIATE_12_fqrj"
+  },
+  {
+    "questionText": "Trong dự án phát triển một hệ thống ngân hàng số tại Việt Nam, yêu cầu nghiệp vụ mô tả: 'Khách hàng có thể chuyển tiền đến tài khoản khác ngân hàng với hạn mức tối đa 500 triệu VND/ngày, áp dụng cho cả giao dịch đơn lẻ và tổng giao dịch trong ngày'. Đâu là kịch bản kiểm thử ADVANCED phù hợp nhất để đảm bảo tính đúng đắn của hạn mức này?",
+    "options": [
+      "A. Kiểm tra giao dịch chuyển 499 triệu VND thành công, sau đó kiểm tra giao dịch 2 triệu VND bị từ chối",
+      "B. Kiểm tra giao dịch chuyển 500 triệu VND thành công, sau đó kiểm tra giao dịch 1 VND bị từ chối và kiểm tra báo cáo tổng giao dịch trong ngày = 500 triệu VND",
+      "C. Kiểm tra giao dịch chuyển 500 triệu VND thành công, sau đó kiểm tra giao dịch 1 triệu VND bị từ chối, đồng thời kiểm tra giao dịch chuyển 501 triệu VND ngay từ đầu bị từ chối và không ảnh hưởng đến hạn mức",
+      "D. Kiểm tra giao dịch chuyển 300 triệu VND thành công, sau đó kiểm tra giao dịch chuyển 200 triệu VND thành công, và kiểm tra giao dịch chuyển 1 triệu VND bị từ chối"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kịch bản C bao phủ đầy đủ các trường hợp: kiểm tra chính xác hạn mức tối đa (500 triệu), kiểm tra từ chối khi vượt hạn mức (501 triệu), kiểm tra tính cộng dồn của hạn mức trong ngày (500 + 1 triệu), và đảm bảo giao dịch vượt hạn mức ngay từ đầu không ảnh hưởng đến hạn mức còn lại. Các lựa chọn khác không kiểm tra đủ các cạnh (edge cases) như giao dịch vượt hạn mức ngay từ đầu hoặc tính cộng dồn chính xác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811547331_ADVANCED_0_ngdl"
+  },
+  {
+    "questionText": "Bạn đang thiết kế kịch bản kiểm thử cho tính năng 'Thanh toán hóa đơn tự động' của một ứng dụng ví điện tử tại Việt Nam. Yêu cầu nghiệp vụ có mâu thuẫn giữa tài liệu kỹ thuật (API hỗ trợ thanh toán tối đa 10 hóa đơn/lần) và tài liệu người dùng (giao diện cho phép chọn tối đa 15 hóa đơn/lần). Đâu là cách tiếp cận ADVANCED để xử lý tình huống này?",
+    "options": [
+      "A. Thiết kế kịch bản kiểm thử chỉ dựa trên tài liệu kỹ thuật vì đây là nguồn chính xác nhất",
+      "B. Thiết kế kịch bản kiểm thử cho cả hai trường hợp: 10 hóa đơn (theo API) và 15 hóa đơn (theo giao diện), sau đó báo cáo lỗi cho đội BA để làm rõ yêu cầu",
+      "C. Thiết kế kịch bản kiểm thử cho 10 hóa đơn (theo API) và bỏ qua trường hợp 15 hóa đơn vì giao diện chỉ là hiển thị, không ảnh hưởng đến logic nghiệp vụ",
+      "D. Thiết kế kịch bản kiểm thử cho 15 hóa đơn (theo giao diện) và yêu cầu đội phát triển sửa API để hỗ trợ 15 hóa đơn"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cách tiếp cận ADVANCED là kiểm thử cả hai trường hợp để xác định hành vi thực tế của hệ thống, sau đó báo cáo mâu thuẫn cho đội BA để làm rõ yêu cầu. Điều này giúp phát hiện lỗi tiềm ẩn do sự không nhất quán giữa các tài liệu và đảm bảo chất lượng sản phẩm. Các lựa chọn khác bỏ qua khả năng phát hiện lỗi hoặc đưa ra quyết định vội vàng mà không xác minh.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811547332_ADVANCED_1_nb5o"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý đơn hàng cho một sàn thương mại điện tử đa quốc gia, bạn cần ưu tiên các kịch bản kiểm thử cho tính năng 'Xử lý đơn hàng quốc tế'. Yếu tố nào sau đây QUAN TRỌNG NHẤT để áp dụng chiến lược kiểm thử dựa trên rủi ro (risk-based testing) ở cấp độ ADVANCED?",
+    "options": [
+      "A. Mức độ phổ biến của thị trường quốc tế trong danh sách đơn hàng (ví dụ: 70% đơn hàng đến từ Mỹ)",
+      "B. Độ phức tạp của quy trình xử lý thuế và phí vận chuyển quốc tế, đặc biệt là các quốc gia có quy định thuế phức tạp như Brazil hoặc EU",
+      "C. Số lượng lỗi đã phát hiện trong các phiên bản trước liên quan đến đơn hàng quốc tế",
+      "D. Thời gian triển khai tính năng trên thị trường quốc tế (ví dụ: sắp ra mắt tại thị trường mới)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Độ phức tạp của quy trình nghiệp vụ (như thuế và phí vận chuyển quốc tế) là yếu tố quan trọng nhất trong risk-based testing ở cấp độ ADVANCED. Các quy định phức tạp và khác biệt giữa các quốc gia tạo ra rủi ro cao về lỗi nghiệp vụ, ảnh hưởng trực tiếp đến doanh thu và uy tín của sàn thương mại. Các yếu tố khác như mức độ phổ biến hoặc số lượng lỗi trước đây chỉ là thông tin hỗ trợ, không phản ánh rủi ro tiềm ẩn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811547332_ADVANCED_2_engi"
+  },
+  {
+    "questionText": "Bạn đang xây dựng kịch bản kiểm thử cho tính năng 'Đăng ký gói cước 4G' của một nhà mạng viễn thông tại Việt Nam. Yêu cầu nghiệp vụ mô tả: 'Khách hàng có thể đăng ký gói cước 4G với thời hạn 7 ngày, 30 ngày hoặc 90 ngày. Gói 90 ngày chỉ áp dụng cho thuê bao trả sau'. Đâu là kịch bản kiểm thử ADVANCED cho trường hợp biên (edge case) của yêu cầu này?",
+    "options": [
+      "A. Kiểm tra đăng ký gói 90 ngày với thuê bao trả trước và xác nhận hệ thống từ chối",
+      "B. Kiểm tra đăng ký gói 90 ngày với thuê bao trả sau và xác nhận hệ thống chấp nhận, sau đó kiểm tra đăng ký gói 30 ngày với thuê bao trả trước và xác nhận hệ thống chấp nhận",
+      "C. Kiểm tra đăng ký gói 90 ngày với thuê bao trả sau và xác nhận hệ thống chấp nhận, kiểm tra đăng ký gói 90 ngày với thuê bao trả trước và xác nhận hệ thống từ chối, đồng thời kiểm tra đăng ký gói 89 ngày (không tồn tại) với thuê bao trả sau và xác nhận hệ thống từ chối",
+      "D. Kiểm tra đăng ký gói 7 ngày với thuê bao trả trước và xác nhận hệ thống chấp nhận, kiểm tra đăng ký gói 30 ngày với thuê bao trả sau và xác nhận hệ thống chấp nhận"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kịch bản C bao phủ đầy đủ các trường hợp biên: kiểm tra gói hợp lệ (90 ngày với thuê bao trả sau), kiểm tra gói không hợp lệ (90 ngày với thuê bao trả trước), và kiểm tra giá trị không tồn tại (89 ngày). Đây là cách tiếp cận ADVANCED để đảm bảo hệ thống xử lý chính xác các điều kiện nghiệp vụ phức tạp. Các lựa chọn khác không kiểm tra đủ các trường hợp biên hoặc bỏ qua các giá trị không hợp lệ.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811547333_ADVANCED_3_eq8r"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý kho cho một chuỗi siêu thị tại Việt Nam, bạn cần thiết kế kịch bản kiểm thử cho tính năng 'Xử lý hàng trả về từ cửa hàng'. Yêu cầu nghiệp vụ có 3 luồng chính: (1) Hàng trả về do lỗi sản xuất, (2) Hàng trả về do hết hạn sử dụng, (3) Hàng trả về do khách hàng đổi ý. Đâu là cách tiếp cận ADVANCED để đảm bảo độ bao phủ kiểm thử cho các luồng này?",
+    "options": [
+      "A. Thiết kế 3 kịch bản kiểm thử riêng biệt cho từng luồng, mỗi kịch bản bao gồm các bước từ khi cửa hàng gửi yêu cầu trả hàng đến khi kho xử lý xong",
+      "B. Thiết kế 1 kịch bản kiểm thử chung cho cả 3 luồng, chỉ tập trung vào các bước xử lý chung tại kho",
+      "C. Thiết kế kịch bản kiểm thử cho luồng phổ biến nhất (hàng trả về do khách hàng đổi ý) và bỏ qua hai luồng còn lại vì ít xảy ra",
+      "D. Thiết kế 3 kịch bản kiểm thử riêng biệt cho từng luồng, đồng thời thiết kế thêm 1 kịch bản kiểm thử tích hợp để kiểm tra tương tác giữa các luồng khi có nhiều yêu cầu trả hàng cùng lúc"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Cách tiếp cận ADVANCED là thiết kế kịch bản riêng cho từng luồng để đảm bảo độ bao phủ chi tiết, đồng thời thiết kế kịch bản tích hợp để kiểm tra tương tác giữa các luồng trong điều kiện thực tế (nhiều yêu cầu cùng lúc). Điều này giúp phát hiện lỗi tiềm ẩn do sự tương tác giữa các luồng nghiệp vụ. Các lựa chọn khác không đảm bảo độ bao phủ đầy đủ hoặc bỏ qua các tình huống phức tạp.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811547334_ADVANCED_4_pcbk"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án triển khai hệ thống thanh toán trực tuyến cho một ngân hàng tại Việt Nam. Yêu cầu nghiệp vụ mô tả: 'Hệ thống phải hỗ trợ thanh toán bằng thẻ quốc tế Visa/Mastercard với 3D Secure authentication'. Đâu là kịch bản kiểm thử ADVANCED để xác minh tính năng này trong điều kiện thực tế?",
+    "options": [
+      "A. Kiểm tra thanh toán thành công với thẻ Visa có 3D Secure, kiểm tra thanh toán thành công với thẻ Mastercard có 3D Secure",
+      "B. Kiểm tra thanh toán thành công với thẻ Visa có 3D Secure, kiểm tra thanh toán thất bại với thẻ Visa không có 3D Secure, kiểm tra hệ thống hiển thị thông báo lỗi phù hợp khi 3D Secure xác thực thất bại",
+      "C. Kiểm tra thanh toán thành công với thẻ Visa có 3D Secure, kiểm tra thanh toán thất bại với thẻ Visa không có 3D Secure, kiểm tra hệ thống xử lý chính xác khi người dùng hủy xác thực 3D Secure, và kiểm tra hệ thống ghi nhận lịch sử giao dịch chính xác trong tất cả các trường hợp",
+      "D. Kiểm tra thanh toán thành công với thẻ Visa có 3D Secure và bỏ qua các trường hợp khác vì 3D Secure là tiêu chuẩn bắt buộc"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kịch bản C bao phủ đầy đủ các trường hợp: thành công, thất bại (không có 3D Secure), hủy xác thực, và kiểm tra tính toàn vẹn dữ liệu (lịch sử giao dịch). Đây là cách tiếp cận ADVANCED vì nó kiểm tra không chỉ chức năng chính mà còn các tình huống ngoại lệ và tính nhất quán của hệ thống. Các lựa chọn khác không kiểm tra đủ các trường hợp hoặc bỏ qua các yếu tố quan trọng như hủy xác thực hoặc ghi nhận lịch sử.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811547335_ADVANCED_5_n5up"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng đặt vé máy bay cho một hãng hàng không, bạn cần thiết kế kịch bản kiểm thử cho tính năng 'Đặt vé khứ hồi với nhiều chặng bay'. Yêu cầu nghiệp vụ mô tả: 'Khách hàng có thể đặt vé khứ hồi với tối đa 5 chặng bay cho mỗi chiều đi và về, với điều kiện tổng thời gian bay không vượt quá 24 giờ cho mỗi chiều'. Đâu là kịch bản kiểm thử ADVANCED để xác minh giới hạn này?",
+    "options": [
+      "A. Kiểm tra đặt vé với 5 chặng bay có tổng thời gian bay 23 giờ 59 phút cho mỗi chiều và xác nhận hệ thống chấp nhận",
+      "B. Kiểm tra đặt vé với 5 chặng bay có tổng thời gian bay 24 giờ cho mỗi chiều và xác nhận hệ thống chấp nhận, kiểm tra đặt vé với 5 chặng bay có tổng thời gian bay 24 giờ 1 phút cho mỗi chiều và xác nhận hệ thống từ chối",
+      "C. Kiểm tra đặt vé với 5 chặng bay có tổng thời gian bay 23 giờ 59 phút cho mỗi chiều và xác nhận hệ thống chấp nhận, kiểm tra đặt vé với 6 chặng bay (vượt quá giới hạn) và xác nhận hệ thống từ chối",
+      "D. Kiểm tra đặt vé với 5 chặng bay có tổng thời gian bay 23 giờ 59 phút cho mỗi chiều và xác nhận hệ thống chấp nhận, kiểm tra đặt vé với 5 chặng bay có tổng thời gian bay 24 giờ 1 phút cho mỗi chiều và xác nhận hệ thống từ chối, đồng thời kiểm tra đặt vé với 6 chặng bay (vượt quá giới hạn) và xác nhận hệ thống từ chối"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Kịch bản D bao phủ đầy đủ các trường hợp biên: kiểm tra giới hạn trên (24 giờ), kiểm tra vượt quá giới hạn thời gian (24 giờ 1 phút), và kiểm tra vượt quá giới hạn số chặng (6 chặng). Đây là cách tiếp cận ADVANCED vì nó kiểm tra cả hai giới hạn (thời gian và số chặng) và các trường hợp vượt quá giới hạn. Các lựa chọn khác không kiểm tra đủ các trường hợp biên hoặc bỏ qua một trong hai giới hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811547335_ADVANCED_6_jofg"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án triển khai hệ thống quản lý quan hệ khách hàng (CRM) cho một công ty bảo hiểm. Yêu cầu nghiệp vụ mô tả: 'Hệ thống phải tự động gửi email nhắc nhở khách hàng khi hợp đồng bảo hiểm sắp hết hạn (30 ngày trước ngày hết hạn)'. Đâu là kịch bản kiểm thử ADVANCED để xác minh tính năng này trong điều kiện thực tế?",
+    "options": [
+      "A. Kiểm tra hệ thống gửi email nhắc nhở đúng 30 ngày trước ngày hết hạn hợp đồng",
+      "B. Kiểm tra hệ thống gửi email nhắc nhở đúng 30 ngày trước ngày hết hạn hợp đồng, kiểm tra hệ thống không gửi email nhắc nhở khi hợp đồng còn hơn 30 ngày trước ngày hết hạn",
+      "C. Kiểm tra hệ thống gửi email nhắc nhở đúng 30 ngày trước ngày hết hạn hợp đồng, kiểm tra hệ thống không gửi email nhắc nhở khi hợp đồng còn hơn 30 ngày trước ngày hết hạn, kiểm tra hệ thống xử lý chính xác khi ngày hết hạn rơi vào ngày lễ hoặc cuối tuần (email vẫn được gửi vào ngày làm việc gần nhất trước đó)",
+      "D. Kiểm tra hệ thống gửi email nhắc nhở đúng 30 ngày trước ngày hết hạn hợp đồng và bỏ qua các trường hợp khác vì yêu cầu đã rõ ràng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kịch bản C bao phủ đầy đủ các trường hợp: kiểm tra chính xác thời điểm gửi email (30 ngày trước), kiểm tra không gửi email khi không đủ điều kiện, và kiểm tra xử lý ngoại lệ (ngày lễ/cuối tuần). Đây là cách tiếp cận ADVANCED vì nó xem xét các tình huống thực tế phức tạp mà hệ thống có thể gặp phải. Các lựa chọn khác không kiểm tra đủ các trường hợp hoặc bỏ qua các yếu tố quan trọng như ngày lễ/cuối tuần.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811547340_ADVANCED_7_paeb"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý đơn hàng cho một công ty logistics, bạn cần thiết kế kịch bản kiểm thử cho tính năng 'Tính phí vận chuyển quốc tế'. Yêu cầu nghiệp vụ có các quy tắc phức tạp sau: (1) Phí vận chuyển = Phí cơ bản + Phụ phí nhiên liệu (10% phí cơ bản) + Phí bảo hiểm (1% giá trị hàng hóa), (2) Phí cơ bản phụ thuộc vào trọng lượng và kích thước hàng hóa, (3) Phụ phí nhiên liệu chỉ áp dụng cho đơn hàng có trọng lượng > 10kg. Đâu là kịch bản kiểm thử ADVANCED để xác minh tính năng này?",
+    "options": [
+      "A. Kiểm tra tính phí vận chuyển cho đơn hàng có trọng lượng 5kg và giá trị hàng hóa 100 USD, kiểm tra tính phí vận chuyển cho đơn hàng có trọng lượng 15kg và giá trị hàng hóa 200 USD",
+      "B. Kiểm tra tính phí vận chuyển cho đơn hàng có trọng lượng 5kg và giá trị hàng hóa 100 USD (không áp dụng phụ phí nhiên liệu), kiểm tra tính phí vận chuyển cho đơn hàng có trọng lượng 15kg và giá trị hàng hóa 200 USD (áp dụng phụ phí nhiên liệu), kiểm tra tính phí vận chuyển cho đơn hàng có trọng lượng 10kg (biên giới áp dụng phụ phí nhiên liệu)",
+      "C. Kiểm tra tính phí vận chuyển cho đơn hàng có trọng lượng 5kg và giá trị hàng hóa 100 USD (không áp dụng phụ phí nhiên liệu), kiểm tra tính phí vận chuyển cho đơn hàng có trọng lượng 15kg và giá trị hàng hóa 200 USD (áp dụng phụ phí nhiên liệu), kiểm tra tính phí vận chuyển cho đơn hàng có trọng lượng 10kg (biên giới áp dụng phụ phí nhiên liệu), và kiểm tra tính phí vận chuyển cho đơn hàng có giá trị hàng hóa 0 USD (biên giới phí bảo hiểm)",
+      "D. Kiểm tra tính phí vận chuyển cho đơn hàng có trọng lượng 15kg và giá trị hàng hóa 200 USD (áp dụng phụ phí nhiên liệu) và bỏ qua các trường hợp khác vì đây là trường hợp phổ biến nhất"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kịch bản C bao phủ đầy đủ các trường hợp biên: kiểm tra không áp dụng phụ phí nhiên liệu (5kg), kiểm tra áp dụng phụ phí nhiên liệu (15kg), kiểm tra biên giới áp dụng phụ phí nhiên liệu (10kg), và kiểm tra biên giới phí bảo hiểm (giá trị hàng hóa 0 USD). Đây là cách tiếp cận ADVANCED vì nó kiểm tra tất cả các quy tắc nghiệp vụ và các trường hợp biên quan trọng. Các lựa chọn khác không kiểm tra đủ các trường hợp biên hoặc bỏ qua các yếu tố quan trọng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811547341_ADVANCED_8_lr19"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án triển khai hệ thống quản lý điểm thưởng cho một chuỗi cửa hàng bán lẻ. Yêu cầu nghiệp vụ mô tả: 'Khách hàng tích lũy điểm thưởng khi mua hàng, với tỷ lệ 1 điểm cho mỗi 10,000 VND chi tiêu. Điểm thưởng có thể đổi lấy voucher giảm giá, với quy đổi 100 điểm = 10,000 VND voucher'. Đâu là kịch bản kiểm thử ADVANCED để xác minh tính năng tích lũy và quy đổi điểm thưởng?",
+    "options": [
+      "A. Kiểm tra tích lũy 1 điểm khi khách hàng chi tiêu 10,000 VND, kiểm tra quy đổi 100 điểm thành voucher 10,000 VND",
+      "B. Kiểm tra tích lũy 1 điểm khi khách hàng chi tiêu 10,000 VND, kiểm tra không tích lũy điểm khi khách hàng chi tiêu 9,999 VND, kiểm tra quy đổi 100 điểm thành voucher 10,000 VND, và kiểm tra không cho phép quy đổi khi khách hàng có 99 điểm",
+      "C. Kiểm tra tích lũy 1 điểm khi khách hàng chi tiêu 10,000 VND, kiểm tra không tích lũy điểm khi khách hàng chi tiêu 9,999 VND, kiểm tra quy đổi 100 điểm thành voucher 10,000 VND, kiểm tra không cho phép quy đổi khi khách hàng có 99 điểm, và kiểm tra tích lũy điểm cho giao dịch có giá trị 19,999 VND (biên giới tích lũy điểm)",
+      "D. Kiểm tra tích lũy 1 điểm khi khách hàng chi tiêu 10,000 VND và bỏ qua các trường hợp khác vì yêu cầu đã rõ ràng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kịch bản C bao phủ đầy đủ các trường hợp: kiểm tra tích lũy điểm chính xác (10,000 VND), kiểm tra không tích lũy điểm khi dưới ngưỡng (9,999 VND), kiểm tra quy đổi điểm chính xác (100 điểm), kiểm tra không cho phép quy đổi khi không đủ điểm (99 điểm), và kiểm tra biên giới tích lũy điểm (19,999 VND). Đây là cách tiếp cận ADVANCED vì nó kiểm tra tất cả các quy tắc nghiệp vụ và các trường hợp biên quan trọng. Các lựa chọn khác không kiểm tra đủ các trường hợp biên hoặc bỏ qua các yếu tố quan trọng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811547341_ADVANCED_9_oswo"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống quản lý đặt phòng khách sạn, bạn cần thiết kế kịch bản kiểm thử cho tính năng 'Hủy đặt phòng'. Yêu cầu nghiệp vụ có các quy tắc sau: (1) Khách hàng có thể hủy đặt phòng miễn phí nếu hủy trước 48 giờ so với thời gian nhận phòng, (2) Khách hàng sẽ bị phạt 50% giá trị đặt phòng nếu hủy trong vòng 48 giờ trước thời gian nhận phòng, (3) Khách hàng sẽ bị phạt 100% giá trị đặt phòng nếu không đến nhận phòng (no-show). Đâu là kịch bản kiểm thử ADVANCED để xác minh tính năng này?",
+    "options": [
+      "A. Kiểm tra hủy đặt phòng trước 48 giờ và xác nhận không bị phạt, kiểm tra hủy đặt phòng trong vòng 48 giờ và xác nhận bị phạt 50%",
+      "B. Kiểm tra hủy đặt phòng trước 48 giờ và xác nhận không bị phạt, kiểm tra hủy đặt phòng trong vòng 48 giờ và xác nhận bị phạt 50%, kiểm tra trường hợp no-show và xác nhận bị phạt 100%",
+      "C. Kiểm tra hủy đặt phòng trước 48 giờ và xác nhận không bị phạt, kiểm tra hủy đặt phòng trong vòng 48 giờ và xác nhận bị phạt 50%, kiểm tra trường hợp no-show và xác nhận bị phạt 100%, kiểm tra hủy đặt phòng chính xác tại thời điểm 48 giờ trước nhận phòng (biên giới thời gian hủy)",
+      "D. Kiểm tra hủy đặt phòng trước 48 giờ và xác nhận không bị phạt và bỏ qua các trường hợp khác vì đây là trường hợp phổ biến nhất"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kịch bản C bao phủ đầy đủ các trường hợp: hủy trước 48 giờ (không phạt), hủy trong vòng 48 giờ (phạt 50%), no-show (phạt 100%), và kiểm tra biên giới thời gian hủy (chính xác 48 giờ trước). Đây là cách tiếp cận ADVANCED vì nó kiểm tra tất cả các quy tắc nghiệp vụ và trường hợp biên quan trọng. Các lựa chọn khác không kiểm tra đủ các trường hợp hoặc bỏ qua yếu tố biên giới thời gian.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811547342_ADVANCED_10_2e3f"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án triển khai hệ thống quản lý đăng ký khóa học trực tuyến. Yêu cầu nghiệp vụ mô tả: 'Học viên có thể đăng ký khóa học với điều kiện đã hoàn thành khóa học tiên quyết (nếu có). Nếu học viên chưa hoàn thành khóa học tiên quyết, hệ thống sẽ hiển thị thông báo lỗi và không cho phép đăng ký'. Đâu là kịch bản kiểm thử ADVANCED để xác minh tính năng này trong điều kiện thực tế?",
+    "options": [
+      "A. Kiểm tra đăng ký khóa học khi học viên đã hoàn thành khóa học tiên quyết và xác nhận hệ thống cho phép đăng ký",
+      "B. Kiểm tra đăng ký khóa học khi học viên đã hoàn thành khóa học tiên quyết và xác nhận hệ thống cho phép đăng ký, kiểm tra đăng ký khóa học khi học viên chưa hoàn thành khóa học tiên quyết và xác nhận hệ thống từ chối",
+      "C. Kiểm tra đăng ký khóa học khi học viên đã hoàn thành khóa học tiên quyết và xác nhận hệ thống cho phép đăng ký, kiểm tra đăng ký khóa học khi học viên chưa hoàn thành khóa học tiên quyết và xác nhận hệ thống từ chối với thông báo lỗi phù hợp, kiểm tra đăng ký khóa học không yêu cầu khóa học tiên quyết và xác nhận hệ thống cho phép đăng ký",
+      "D. Kiểm tra đăng ký khóa học khi học viên chưa hoàn thành khóa học tiên quyết và xác nhận hệ thống từ chối, và bỏ qua các trường hợp khác vì yêu cầu đã rõ ràng"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kịch bản C bao phủ đầy đủ các trường hợp: đăng ký thành công khi đã hoàn thành khóa học tiên quyết, đăng ký thất bại khi chưa hoàn thành khóa học tiên quyết (kèm thông báo lỗi), và đăng ký khóa học không yêu cầu khóa học tiên quyết. Đây là cách tiếp cận ADVANCED vì nó kiểm tra tất cả các luồng nghiệp vụ và đảm bảo hệ thống xử lý chính xác trong mọi tình huống. Các lựa chọn khác không kiểm tra đủ các trường hợp hoặc bỏ qua yếu tố thông báo lỗi.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Scenario",
+    "category": "SKILL",
+    "id": "q_1780811547342_ADVANCED_11_bxep"
+  },
+  {
+    "questionText": "Trong dự án phát triển hệ thống ngân hàng số cho một ngân hàng Việt Nam, PO cung cấp user story: 'Là khách hàng, tôi muốn chuyển tiền nhanh 24/7 qua mobile app để tiện lợi hơn'. Khi xây dựng test scenario ở cấp độ EXPERT, bước nào KHÔNG phải là ưu tiên hàng đầu?",
+    "options": [
+      "A. Xác định các rủi ro pháp lý liên quan đến giao dịch xuyên biên giới (nếu có) và xây dựng scenario kiểm tra tuân thủ theo quy định NHNN.",
+      "B. Phân tích customer journey từ lúc mở app đến khi hoàn tất giao dịch, bao gồm các bước xác thực OTP, hạn mức giao dịch, và thông báo đẩy.",
+      "C. Tạo scenario kiểm tra chức năng cơ bản như nhập số tài khoản, số tiền, và nội dung chuyển tiền với dữ liệu hợp lệ.",
+      "D. Đánh giá tác động của tính năng này đến hệ thống core banking hiện tại, bao gồm khả năng xử lý đồng thời hàng nghìn giao dịch và thời gian phản hồi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở cấp độ EXPERT, cần tập trung vào các khía cạnh chiến lược như rủi ro pháp lý (A), customer journey (B), và khả năng mở rộng hệ thống (D). Kiểm tra chức năng cơ bản (C) là nhiệm vụ ở cấp độ thấp hơn, không phản ánh tư duy chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811631656_EXPERT_0_5d4a"
+  },
+  {
+    "questionText": "Bạn là QA Lead trong dự án triển khai hệ thống eKYC cho một công ty fintech Việt Nam. Khi phân tích business requirement về 'Xác thực danh tính khách hàng qua CCCD gắn chip', đâu là test scenario quan trọng nhất cần ưu tiên để đảm bảo tính khả thi và tuân thủ?",
+    "options": [
+      "A. Kiểm tra khả năng đọc chip CCCD trên các thiết bị Android/iOS khác nhau, bao gồm cả trường hợp chip bị hỏng hoặc không tương thích.",
+      "B. Xây dựng scenario kiểm tra luồng đăng ký thành công với CCCD hợp lệ, ảnh chân dung rõ nét và thông tin khớp 100%.",
+      "C. Đánh giá khả năng tích hợp với cơ sở dữ liệu quốc gia về dân cư (CSDLQG) để xác minh thông tin CCCD theo thời gian thực.",
+      "D. Tạo scenario kiểm tra giới hạn số lần thử xác thực trong 1 ngày để ngăn chặn tấn công brute force."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc tích hợp với CSDLQG là yếu tố cốt lõi quyết định tính khả thi và tuân thủ pháp luật của hệ thống eKYC. Các scenario khác (A, B, D) quan trọng nhưng không ảnh hưởng đến tính hợp pháp của toàn bộ hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811631658_EXPERT_1_g4t5"
+  },
+  {
+    "questionText": "Trong dự án nâng cấp hệ thống quản lý đơn hàng cho một sàn TMĐT lớn tại Việt Nam, bạn phát hiện business requirement thiếu rõ ràng về luồng xử lý đơn hàng 'Chờ thanh toán' khi khách hàng chọn phương thức 'Thanh toán khi nhận hàng (COD)'. Là QA Engineer cấp độ EXPERT, bạn sẽ làm gì đầu tiên?",
+    "options": [
+      "A. Tạo test scenario kiểm tra chức năng cơ bản: đặt hàng COD thành công và đơn hàng chuyển sang trạng thái 'Chờ xử lý'.",
+      "B. Yêu cầu PO làm rõ các điều kiện chuyển trạng thái từ 'Chờ thanh toán' sang 'Đã xác nhận', bao gồm thời gian chờ tối đa và quy trình xử lý khi khách hàng không thanh toán.",
+      "C. Xây dựng scenario kiểm tra edge case: đơn hàng COD bị hủy sau 24h nếu khách hàng không xác nhận nhận hàng.",
+      "D. Đề xuất thêm yêu cầu về thông báo tự động cho khách hàng khi đơn hàng chuyển sang trạng thái 'Chờ thanh toán'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ EXPERT, cần tập trung vào gap analysis để làm rõ yêu cầu trước khi xây dựng scenario. Việc yêu cầu PO làm rõ điều kiện chuyển trạng thái (B) giúp tránh rủi ro hiểu sai yêu cầu và lãng phí tài nguyên.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811631658_EXPERT_2_rlxl"
+  },
+  {
+    "questionText": "Công ty bạn đang triển khai hệ thống quản lý kho hàng thông minh cho một chuỗi siêu thị tại Việt Nam. PO yêu cầu: 'Hệ thống phải tự động cập nhật tồn kho theo thời gian thực khi có đơn hàng mới'. Khi xây dựng test scenario, đâu là rủi ro lớn nhất cần ưu tiên kiểm tra?",
+    "options": [
+      "A. Kiểm tra tính năng cập nhật tồn kho khi có đơn hàng mới với số lượng sản phẩm nhỏ hơn tồn kho hiện tại.",
+      "B. Đánh giá khả năng đồng bộ dữ liệu tồn kho giữa hệ thống quản lý kho và hệ thống bán hàng khi có hàng nghìn giao dịch diễn ra đồng thời.",
+      "C. Xây dựng scenario kiểm tra thông báo cảnh báo khi tồn kho xuống dưới mức tối thiểu cho từng sản phẩm.",
+      "D. Kiểm tra luồng xử lý khi khách hàng đặt hàng sản phẩm đã hết hàng trên hệ thống bán hàng nhưng vẫn còn trong kho vật lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rủi ro lớn nhất là mất đồng bộ dữ liệu khi có nhiều giao dịch đồng thời, ảnh hưởng trực tiếp đến tính chính xác của tồn kho và trải nghiệm khách hàng. Các scenario khác (A, C, D) quan trọng nhưng không ảnh hưởng nghiêm trọng bằng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811631659_EXPERT_3_6r6j"
+  },
+  {
+    "questionText": "Bạn là QA Lead trong dự án triển khai hệ thống thanh toán điện tử cho một ngân hàng tại Việt Nam. Khi phân tích business requirement về 'Thanh toán hóa đơn tự động', đâu là test scenario phản ánh tư duy chiến lược ở cấp độ EXPERT?",
+    "options": [
+      "A. Kiểm tra chức năng thanh toán hóa đơn thành công với thông tin hóa đơn hợp lệ và số dư tài khoản đủ.",
+      "B. Đánh giá khả năng tích hợp với các nhà cung cấp dịch vụ (điện, nước, internet) để đảm bảo dữ liệu hóa đơn được cập nhật chính xác và kịp thời.",
+      "C. Xây dựng scenario kiểm tra thông báo lỗi khi thanh toán thất bại do số dư không đủ hoặc thông tin hóa đơn không hợp lệ.",
+      "D. Tạo scenario kiểm tra giới hạn số lượng hóa đơn có thể thanh toán trong một giao dịch."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tích hợp với các nhà cung cấp dịch vụ là yếu tố chiến lược quyết định tính khả dụng của hệ thống thanh toán tự động. Các scenario khác (A, C, D) chỉ kiểm tra chức năng cơ bản.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811631660_EXPERT_4_n1ge"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng đặt xe công nghệ cho thị trường Đông Nam Á, PO yêu cầu: 'Hệ thống phải hỗ trợ đặt xe theo lịch trình cố định hàng tuần'. Khi xây dựng test scenario, đâu là yếu tố KHÔNG thuộc phạm vi ưu tiên ở cấp độ EXPERT?",
+    "options": [
+      "A. Đánh giá tác động của tính năng này đến hệ thống phân bổ tài xế, bao gồm khả năng dự đoán nhu cầu và tối ưu hóa tuyến đường.",
+      "B. Xây dựng scenario kiểm tra khả năng tích hợp với hệ thống thanh toán để tự động trừ tiền vào ngày đặt xe theo lịch trình.",
+      "C. Kiểm tra chức năng đặt xe thành công với lịch trình cố định 1 lần/tuần vào cùng một khung giờ.",
+      "D. Phân tích rủi ro về bảo mật khi lưu trữ thông tin lịch trình cố định của khách hàng, bao gồm địa chỉ nhà và nơi làm việc."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kiểm tra chức năng cơ bản (C) không phản ánh tư duy chiến lược. Các yếu tố khác (A, B, D) liên quan đến tối ưu hóa hệ thống, tích hợp thanh toán và bảo mật, là ưu tiên ở cấp độ EXPERT.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811631661_EXPERT_5_mn22"
+  },
+  {
+    "questionText": "Công ty bạn đang triển khai hệ thống quản lý quan hệ khách hàng (CRM) cho một doanh nghiệp bán lẻ tại Việt Nam. PO yêu cầu: 'Hệ thống phải tự động phân loại khách hàng dựa trên lịch sử mua hàng'. Khi xây dựng test scenario, đâu là cách tiếp cận đúng ở cấp độ EXPERT?",
+    "options": [
+      "A. Tạo scenario kiểm tra phân loại khách hàng thành 3 nhóm: khách hàng mới, khách hàng thường xuyên, và khách hàng VIP với dữ liệu mẫu đơn giản.",
+      "B. Đánh giá khả năng tích hợp với hệ thống POS và ERP để đảm bảo dữ liệu lịch sử mua hàng được cập nhật chính xác và kịp thời.",
+      "C. Xây dựng scenario kiểm tra chức năng phân loại khách hàng khi có dữ liệu mua hàng đầy đủ và chính xác.",
+      "D. Kiểm tra thông báo lỗi khi hệ thống không thể phân loại khách hàng do thiếu dữ liệu lịch sử mua hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ EXPERT, cần tập trung vào tích hợp hệ thống để đảm bảo dữ liệu đầu vào chính xác. Các scenario khác (A, C, D) chỉ kiểm tra chức năng cơ bản hoặc edge case đơn lẻ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811631661_EXPERT_6_n80r"
+  },
+  {
+    "questionText": "Bạn là QA Engineer trong dự án nâng cấp hệ thống core banking cho một ngân hàng Việt Nam. Khi phân tích yêu cầu về 'Giao dịch chuyển tiền quốc tế', đâu là test scenario phản ánh tư duy rủi ro ở cấp độ EXPERT?",
+    "options": [
+      "A. Kiểm tra chức năng chuyển tiền thành công với thông tin người nhận hợp lệ và số tiền trong hạn mức cho phép.",
+      "B. Xây dựng scenario kiểm tra khả năng xử lý giao dịch khi hệ thống SWIFT gặp sự cố hoặc thời gian phản hồi chậm.",
+      "C. Tạo scenario kiểm tra thông báo lỗi khi thông tin người nhận không hợp lệ hoặc số tiền vượt hạn mức.",
+      "D. Đánh giá khả năng tích hợp với hệ thống AML (chống rửa tiền) để tự động phát hiện và chặn các giao dịch đáng ngờ."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Tích hợp với hệ thống AML là yếu tố rủi ro cao nhất trong giao dịch chuyển tiền quốc tế, ảnh hưởng đến tuân thủ pháp luật và an ninh tài chính. Các scenario khác (A, B, C) quan trọng nhưng không phản ánh tư duy rủi ro chiến lược.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811631662_EXPERT_7_8ynb"
+  },
+  {
+    "questionText": "Trong dự án triển khai hệ thống quản lý chuỗi cung ứng cho một công ty logistics, PO yêu cầu: 'Hệ thống phải tự động tối ưu hóa tuyến đường giao hàng'. Khi xây dựng test scenario, đâu là yếu tố quan trọng nhất cần kiểm tra ở cấp độ EXPERT?",
+    "options": [
+      "A. Kiểm tra chức năng tối ưu hóa tuyến đường thành công với dữ liệu đơn hàng và kho hàng mẫu.",
+      "B. Đánh giá khả năng tích hợp với hệ thống GPS và bản đồ số để cập nhật thông tin giao thông theo thời gian thực.",
+      "C. Xây dựng scenario kiểm tra thông báo lỗi khi không thể tối ưu hóa tuyến đường do thiếu dữ liệu kho hàng.",
+      "D. Tạo scenario kiểm tra giới hạn số lượng đơn hàng có thể tối ưu hóa trong một tuyến đường."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tích hợp với hệ thống GPS và bản đồ số là yếu tố quyết định tính chính xác và hiệu quả của tính năng tối ưu hóa tuyến đường. Các scenario khác (A, C, D) chỉ kiểm tra chức năng cơ bản hoặc edge case.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811631662_EXPERT_8_ppho"
+  },
+  {
+    "questionText": "Công ty bạn đang phát triển hệ thống đặt lịch khám bệnh trực tuyến cho một bệnh viện lớn tại Việt Nam. PO yêu cầu: 'Hệ thống phải hỗ trợ đặt lịch khám theo chuyên khoa và bác sĩ cụ thể'. Khi xây dựng test scenario, đâu là rủi ro lớn nhất cần ưu tiên kiểm tra?",
+    "options": [
+      "A. Kiểm tra chức năng đặt lịch khám thành công với thông tin bác sĩ và chuyên khoa hợp lệ.",
+      "B. Đánh giá khả năng đồng bộ dữ liệu lịch khám giữa hệ thống đặt lịch và hệ thống quản lý bệnh viện để tránh xung đột lịch hẹn.",
+      "C. Xây dựng scenario kiểm tra thông báo lỗi khi bác sĩ hoặc chuyên khoa không khả dụng vào thời gian yêu cầu.",
+      "D. Tạo scenario kiểm tra giới hạn số lượng bệnh nhân có thể đặt lịch khám trong một khung giờ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Rủi ro lớn nhất là mất đồng bộ dữ liệu giữa các hệ thống, dẫn đến xung đột lịch hẹn và ảnh hưởng đến hoạt động của bệnh viện. Các scenario khác (A, C, D) quan trọng nhưng không ảnh hưởng nghiêm trọng bằng.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811631663_EXPERT_9_jb9o"
+  },
+  {
+    "questionText": "Bạn là QA Lead trong dự án triển khai hệ thống quản lý học tập (LMS) cho một trường đại học tại Việt Nam. Khi phân tích yêu cầu về 'Đánh giá năng lực sinh viên theo chuẩn đầu ra', đâu là test scenario phản ánh tư duy chiến lược ở cấp độ EXPERT?",
+    "options": [
+      "A. Kiểm tra chức năng nhập điểm thành công cho từng môn học và tính toán điểm trung bình chính xác.",
+      "B. Đánh giá khả năng tích hợp với hệ thống quản lý sinh viên và hệ thống quản lý môn học để đảm bảo dữ liệu đầu vào chính xác.",
+      "C. Xây dựng scenario kiểm tra báo cáo đánh giá năng lực sinh viên theo từng chuẩn đầu ra, bao gồm cả trường hợp dữ liệu điểm không đầy đủ.",
+      "D. Tạo scenario kiểm tra thông báo lỗi khi hệ thống không thể tính toán điểm trung bình do thiếu dữ liệu điểm."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Ở cấp độ EXPERT, cần tập trung vào việc đảm bảo hệ thống đáp ứng được mục tiêu chiến lược của dự án, đó là đánh giá năng lực sinh viên theo chuẩn đầu ra. Các scenario khác (A, B, D) chỉ kiểm tra chức năng cơ bản hoặc tích hợp hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811631663_EXPERT_10_z05o"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng số cho thị trường Đông Nam Á, PO yêu cầu: 'Hệ thống phải hỗ trợ đăng nhập bằng sinh trắc học (vân tay/khuôn mặt)'. Khi xây dựng test scenario, đâu là yếu tố KHÔNG thuộc phạm vi ưu tiên ở cấp độ EXPERT?",
+    "options": [
+      "A. Đánh giá khả năng tích hợp với các hệ điều hành Android/iOS và các thiết bị di động khác nhau để đảm bảo tính tương thích.",
+      "B. Xây dựng scenario kiểm tra đăng nhập thành công bằng vân tay/khuôn mặt với thiết bị hỗ trợ.",
+      "C. Phân tích rủi ro bảo mật khi lưu trữ dữ liệu sinh trắc học và khả năng chống lại các cuộc tấn công giả mạo.",
+      "D. Kiểm tra khả năng chuyển đổi giữa đăng nhập bằng sinh trắc học và đăng nhập bằng mật khẩu khi sinh trắc học không khả dụng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm tra chức năng cơ bản (B) không phản ánh tư duy chiến lược. Các yếu tố khác (A, C, D) liên quan đến tích hợp hệ thống, bảo mật và xử lý edge case, là ưu tiên ở cấp độ EXPERT.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "ANALYSIS",
+    "id": "q_1780811631664_EXPERT_11_76vw"
+  },
+  {
+    "questionText": "Công ty bạn đang triển khai hệ thống quản lý dự án cho một công ty phần mềm tại Việt Nam. PO yêu cầu: 'Hệ thống phải tự động tính toán tiến độ dự án dựa trên công việc đã hoàn thành'. Khi xây dựng test scenario, đâu là cách tiếp cận đúng ở cấp độ EXPERT?",
+    "options": [
+      "A. Tạo scenario kiểm tra tính toán tiến độ dự án chính xác với dữ liệu công việc đã hoàn thành đầy đủ.",
+      "B. Đánh giá khả năng tích hợp với hệ thống quản lý công việc và hệ thống quản lý thời gian để đảm bảo dữ liệu đầu vào chính xác.",
+      "C. Xây dựng scenario kiểm tra thông báo cảnh báo khi tiến độ dự án chậm hơn kế hoạch.",
+      "D. Kiểm tra chức năng hiển thị tiến độ dự án dưới dạng biểu đồ và bảng thống kê."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Ở cấp độ EXPERT, cần tập trung vào tích hợp hệ thống để đảm bảo dữ liệu đầu vào chính xác, từ đó tính toán tiến độ chính xác. Các scenario khác (A, C, D) chỉ kiểm tra chức năng cơ bản hoặc hiển thị dữ liệu.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Scenario",
+    "category": "SITUATION",
+    "id": "q_1780811631664_EXPERT_12_g3o4"
+  }
+]

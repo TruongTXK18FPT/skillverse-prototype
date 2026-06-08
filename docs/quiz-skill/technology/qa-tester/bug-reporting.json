@@ -1,0 +1,782 @@
+[
+  {
+    "questionText": "Trong báo cáo lỗi (bug report), mục 'Steps to Reproduce' nên được viết như thế nào để đảm bảo developer có thể tái hiện lỗi một cách chính xác?",
+    "options": [
+      "A. Mô tả chung chung về hành động người dùng mà không cần chi tiết.",
+      "B. Liệt kê các bước cụ thể, cô lập và có thể lặp lại, kèm theo điều kiện tiên quyết (nếu có).",
+      "C. Chỉ cần chụp màn hình lỗi mà không cần mô tả thêm.",
+      "D. Viết dài dòng, bao gồm cả thông tin không liên quan đến lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Mục 'Steps to Reproduce' cần liệt kê các bước cụ thể, cô lập và có thể lặp lại để developer dễ dàng tái hiện lỗi. Điều này giúp tiết kiệm thời gian và tăng hiệu quả xử lý lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812294249_BEGINNER_0_34jk"
+  },
+  {
+    "questionText": "Đâu là tài liệu hoặc dữ liệu KHÔNG bắt buộc phải đính kèm khi báo cáo một lỗi liên quan đến giao diện người dùng (UI) trên ứng dụng web?",
+    "options": [
+      "A. Ảnh chụp màn hình (screenshot) lỗi.",
+      "B. Video ghi lại quá trình xảy ra lỗi.",
+      "C. Bản sao lưu cơ sở dữ liệu của hệ thống.",
+      "D. File log của trình duyệt (browser console log)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Bản sao lưu cơ sở dữ liệu không liên quan trực tiếp đến lỗi giao diện người dùng và không cần thiết để đính kèm trong báo cáo lỗi UI.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812294249_BEGINNER_1_emom"
+  },
+  {
+    "questionText": "Trong dự án phần mềm tại Việt Nam, lỗi nào sau đây thường được xếp vào mức 'Severity: Critical'?",
+    "options": [
+      "A. Màu sắc nút bấm không đúng theo thiết kế.",
+      "B. Hệ thống bị treo (crash) khi người dùng thực hiện thao tác thanh toán.",
+      "C. Một số ký tự tiếng Việt bị hiển thị sai font chữ.",
+      "D. Thời gian tải trang chậm hơn 1 giây so với yêu cầu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi khiến hệ thống bị treo khi thực hiện thao tác quan trọng như thanh toán ảnh hưởng nghiêm trọng đến chức năng cốt lõi, do đó được xếp vào mức 'Critical'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "KNOWLEDGE",
+    "id": "q_1780812294249_BEGINNER_2_pg6x"
+  },
+  {
+    "questionText": "Khi báo cáo lỗi về tính năng đăng nhập không hoạt động, thông tin nào sau đây là QUAN TRỌNG NHẤT cần cung cấp cho developer?",
+    "options": [
+      "A. Màu nền của màn hình đăng nhập.",
+      "B. Thời gian chính xác xảy ra lỗi và loại thiết bị sử dụng (ví dụ: iOS 15, Chrome 98).",
+      "C. Tên của tất cả người dùng đang online tại thời điểm đó.",
+      "D. Số lượng bài viết trên trang chủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Thời gian xảy ra lỗi và loại thiết bị giúp developer tái hiện và xác định nguyên nhân lỗi một cách hiệu quả, đặc biệt với lỗi liên quan đến môi trường cụ thể.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812294249_BEGINNER_3_809s"
+  },
+  {
+    "questionText": "Trong quy trình báo cáo lỗi, 'Business Priority' được xác định dựa trên yếu tố nào?",
+    "options": [
+      "A. Mức độ ảnh hưởng của lỗi đến trải nghiệm người dùng và mục tiêu kinh doanh.",
+      "B. Độ khó kỹ thuật khi sửa lỗi.",
+      "C. Số lượng developer có thể tham gia sửa lỗi.",
+      "D. Thời gian mà tester phát hiện ra lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "'Business Priority' phản ánh mức độ ưu tiên sửa lỗi dựa trên tác động đến người dùng và mục tiêu kinh doanh, không phụ thuộc vào độ khó kỹ thuật.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "KNOWLEDGE",
+    "id": "q_1780812294249_BEGINNER_4_98ll"
+  },
+  {
+    "questionText": "Khi báo cáo lỗi liên quan đến API trả về dữ liệu sai, tài liệu nào sau đây CẦN THIẾT phải đính kèm?",
+    "options": [
+      "A. Ảnh chụp màn hình giao diện người dùng.",
+      "B. File log của API (request/response payload) và mã lỗi HTTP (nếu có).",
+      "C. Danh sách tất cả các API của hệ thống.",
+      "D. Thông tin cá nhân của người dùng gặp lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "File log của API (request/response) và mã lỗi HTTP giúp developer xác định nguyên nhân lỗi nhanh chóng và chính xác.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812294249_BEGINNER_5_5oxc"
+  },
+  {
+    "questionText": "Trong một dự án outsourcing cho khách hàng Nhật Bản, tester phát hiện lỗi thanh toán không thành công trên môi trường staging. Hành động nào sau đây là ĐÚNG khi báo cáo lỗi?",
+    "options": [
+      "A. Gửi báo cáo lỗi trực tiếp cho khách hàng mà không thông qua PM hoặc developer.",
+      "B. Viết báo cáo lỗi chi tiết, kèm theo log và screenshot, sau đó gửi cho developer phụ trách để xác nhận.",
+      "C. Chỉ thông báo lỗi qua chat nhóm mà không cần tạo báo cáo chính thức.",
+      "D. Đợi đến khi lỗi xảy ra trên môi trường production mới báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Báo cáo lỗi cần được viết chi tiết, kèm tài liệu hỗ trợ và gửi cho developer phụ trách để đảm bảo quá trình xử lý lỗi hiệu quả và chuyên nghiệp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "SITUATION",
+    "id": "q_1780812294249_BEGINNER_6_wpl5"
+  },
+  {
+    "questionText": "Lỗi nào sau đây thường được xếp vào mức 'Severity: Minor'?",
+    "options": [
+      "A. Hệ thống không thể khởi động sau khi cập nhật.",
+      "B. Một số từ tiếng Anh bị viết sai chính tả trên giao diện.",
+      "C. Chức năng tìm kiếm không trả về kết quả nào.",
+      "D. Dữ liệu người dùng bị mất sau khi đăng xuất."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi chính tả trên giao diện ít ảnh hưởng đến chức năng cốt lõi và thường được xếp vào mức 'Minor'.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "KNOWLEDGE",
+    "id": "q_1780812294249_BEGINNER_7_qntm"
+  },
+  {
+    "questionText": "Khi báo cáo lỗi về hiệu suất (performance) của ứng dụng, thông tin nào sau đây là CẦN THIẾT để developer phân tích?",
+    "options": [
+      "A. Thời gian phản hồi của API (response time) và thông số phần cứng của máy chủ.",
+      "B. Màu sắc của nút bấm trên giao diện.",
+      "C. Tên của tất cả người dùng đang truy cập hệ thống.",
+      "D. Số lượng bài viết mới đăng trong ngày."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Thời gian phản hồi của API và thông số phần cứng giúp developer xác định nguyên nhân gây ra vấn đề hiệu suất.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812294249_BEGINNER_8_typm"
+  },
+  {
+    "questionText": "Trong báo cáo lỗi, mục 'Expected Result' và 'Actual Result' có vai trò gì?",
+    "options": [
+      "A. 'Expected Result' mô tả hành vi lỗi, còn 'Actual Result' mô tả hành vi mong muốn.",
+      "B. 'Expected Result' mô tả hành vi mong muốn của hệ thống, còn 'Actual Result' mô tả hành vi thực tế xảy ra lỗi.",
+      "C. Cả hai mục đều mô tả nguyên nhân gây ra lỗi.",
+      "D. Cả hai mục đều không cần thiết trong báo cáo lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'Expected Result' mô tả hành vi mong muốn, còn 'Actual Result' mô tả hành vi thực tế xảy ra lỗi, giúp developer hiểu rõ vấn đề.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "KNOWLEDGE",
+    "id": "q_1780812294249_BEGINNER_9_xk0r"
+  },
+  {
+    "questionText": "Khi tester phát hiện lỗi bảo mật (ví dụ: lộ thông tin người dùng), hành động nào sau đây là ĐÚNG?",
+    "options": [
+      "A. Đăng tải lỗi lên mạng xã hội để cảnh báo cộng đồng.",
+      "B. Viết báo cáo lỗi chi tiết, đánh dấu mức độ nghiêm trọng cao và gửi ngay cho developer và PM để xử lý khẩn cấp.",
+      "C. Bỏ qua lỗi vì không thuộc phạm vi kiểm thử của mình.",
+      "D. Tự sửa lỗi mà không thông báo cho ai."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi bảo mật cần được báo cáo ngay lập tức với mức độ nghiêm trọng cao để đảm bảo thông tin người dùng không bị ảnh hưởng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "SITUATION",
+    "id": "q_1780812294249_BEGINNER_10_d0lg"
+  },
+  {
+    "questionText": "Trong quy trình xác nhận sửa lỗi (bug verification), tester cần làm gì sau khi developer thông báo lỗi đã được sửa?",
+    "options": [
+      "A. Đóng báo cáo lỗi ngay lập tức mà không cần kiểm tra lại.",
+      "B. Kiểm tra lại lỗi trên cùng môi trường và điều kiện đã báo cáo để xác nhận lỗi đã được sửa.",
+      "C. Yêu cầu developer cung cấp mã nguồn đã sửa.",
+      "D. Chuyển báo cáo lỗi cho khách hàng để xác nhận."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tester cần kiểm tra lại lỗi trên cùng môi trường và điều kiện đã báo cáo để đảm bảo lỗi thực sự đã được sửa và không tái xuất hiện.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812294249_BEGINNER_11_a3qn"
+  },
+  {
+    "questionText": "Khi báo cáo lỗi về tính năng upload file không hoạt động, thông tin nào sau đây là KHÔNG CẦN THIẾT?",
+    "options": [
+      "A. Loại file và kích thước file đã thử upload.",
+      "B. Thông báo lỗi hiển thị trên màn hình (nếu có).",
+      "C. Màu nền của nút upload.",
+      "D. Loại trình duyệt và hệ điều hành sử dụng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Màu nền của nút upload không liên quan đến lỗi chức năng upload file và không cần thiết trong báo cáo lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812294249_BEGINNER_12_rt78"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng di động tại Việt Nam, bạn phát hiện một lỗi khiến chức năng chuyển tiền không hoạt động khi người dùng nhập số tiền có dấu phẩy thập phân (ví dụ: 1,000,000.50 VND). Bước nào sau đây là cách tốt nhất để mô tả 'Steps to Reproduce' trong báo cáo lỗi?",
+    "options": [
+      "A. 'Chức năng chuyển tiền bị lỗi khi nhập số tiền.'",
+      "B. '1. Mở ứng dụng ngân hàng trên thiết bị Android (phiên bản 12). 2. Đăng nhập bằng tài khoản test (username: testuser1, password: Test@123). 3. Chọn chức năng 'Chuyển tiền'. 4. Nhập số tiền: 1,000,000.50 VND. 5. Nhấn nút 'Xác nhận'. Kết quả: Giao dịch không được xử lý, không có thông báo lỗi.'",
+      "C. 'Lỗi xảy ra khi nhập số tiền có dấu phẩy và dấu chấm. Cần kiểm tra lại code xử lý định dạng số.'",
+      "D. 'Chuyển tiền không hoạt động. Đề nghị dev kiểm tra ngay.'"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Câu trả lời B cung cấp các bước chi tiết, cụ thể và có thể tái hiện (isolated, reproducible), bao gồm môi trường thử nghiệm, dữ liệu đầu vào và kết quả mong đợi. Điều này giúp dev dễ dàng xác định và sửa lỗi mà không cần hỏi thêm thông tin.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812369272_INTERMEDIATE_0_x3ov"
+  },
+  {
+    "questionText": "Trong quá trình test tính năng 'Đặt lịch hẹn khám bệnh' trên ứng dụng bệnh viện, bạn phát hiện lỗi khiến hệ thống không gửi email xác nhận cho người dùng. Lỗi này ảnh hưởng đến trải nghiệm người dùng nhưng không gây mất dữ liệu hoặc lỗi hệ thống nghiêm trọng. Bạn sẽ phân loại Severity và Priority của lỗi này như thế nào?",
+    "options": [
+      "A. Severity: Critical, Priority: High",
+      "B. Severity: Major, Priority: Medium",
+      "C. Severity: Minor, Priority: Low",
+      "D. Severity: Minor, Priority: High"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Lỗi không gửi email xác nhận là lỗi chức năng (Severity: Minor) nhưng ảnh hưởng trực tiếp đến trải nghiệm người dùng và uy tín dịch vụ, do đó cần ưu tiên sửa sớm (Priority: High) trong bối cảnh dự án chăm sóc sức khỏe.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812369273_INTERMEDIATE_1_th30"
+  },
+  {
+    "questionText": "Bạn đang báo cáo lỗi về việc API thanh toán trả về mã lỗi '500 Internal Server Error' khi người dùng thử thanh toán bằng ví điện tử Momo. Để giúp dev debug nhanh chóng, bạn nên đính kèm tài liệu nào sau đây trong báo cáo lỗi?",
+    "options": [
+      "A. Ảnh chụp màn hình giao diện báo lỗi cho người dùng.",
+      "B. File log mạng (network log) từ công cụ như Fiddler hoặc Chrome DevTools, chứa request/response chi tiết của API.",
+      "C. Video quay lại toàn bộ quá trình thanh toán từ đầu đến khi lỗi xảy ra.",
+      "D. File log hệ thống của server trong 24 giờ qua."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Network log cung cấp thông tin chi tiết về request/response của API (headers, payload, status code), giúp dev xác định nguyên nhân lỗi nhanh chóng mà không cần tái hiện thủ công.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812369273_INTERMEDIATE_2_y2ma"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng thương mại điện tử, bạn báo cáo lỗi về việc nút 'Thêm vào giỏ hàng' không hoạt động trên trình duyệt Safari phiên bản cũ (12.1). Dev phản hồi rằng lỗi này chỉ xảy ra trên phiên bản Safari cũ và yêu cầu xác nhận lại. Bạn nên làm gì tiếp theo?",
+    "options": [
+      "A. Đóng báo cáo lỗi vì lỗi chỉ xảy ra trên phiên bản trình duyệt cũ.",
+      "B. Cập nhật lại báo cáo lỗi với thông tin: 'Lỗi xảy ra trên Safari 12.1, không xảy ra trên Safari 15+. Đề nghị dev cân nhắc hỗ trợ nếu có nhiều người dùng sử dụng phiên bản cũ.' và gắn nhãn 'Low Priority'.",
+      "C. Yêu cầu dev sửa ngay vì Safari là trình duyệt phổ biến.",
+      "D. Tạo một báo cáo lỗi mới với tiêu đề 'Lỗi nút Thêm vào giỏ hàng trên Safari 12.1'."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cần cập nhật báo cáo với thông tin chi tiết và đánh giá lại mức độ ưu tiên dựa trên dữ liệu người dùng thực tế. Việc đóng lỗi ngay hoặc yêu cầu sửa ngay mà không phân tích là không chuyên nghiệp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "SITUATION",
+    "id": "q_1780812369273_INTERMEDIATE_3_eca0"
+  },
+  {
+    "questionText": "Bạn phát hiện lỗi khiến ứng dụng di động bị crash khi người dùng mở liên kết từ email quảng cáo. Để mô tả lỗi một cách tối thiểu (minimal steps), bạn nên loại bỏ yếu tố nào sau đây khỏi 'Steps to Reproduce'?",
+    "options": [
+      "A. Loại bỏ bước 'Mở ứng dụng từ màn hình chính'.",
+      "B. Loại bỏ thông tin về thiết bị và phiên bản hệ điều hành.",
+      "C. Loại bỏ bước 'Nhấn vào liên kết trong email quảng cáo'.",
+      "D. Loại bỏ bước 'Xác nhận crash bằng log hệ thống'."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Bước 'Mở ứng dụng từ màn hình chính' không liên quan trực tiếp đến lỗi crash khi mở liên kết từ email. Loại bỏ bước này giúp tập trung vào yếu tố gây lỗi (minimal steps) mà vẫn đảm bảo lỗi có thể tái hiện.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812369273_INTERMEDIATE_4_pdn6"
+  },
+  {
+    "questionText": "Trong quá trình test tính năng 'Tìm kiếm sản phẩm' trên website thương mại điện tử, bạn phát hiện lỗi khiến kết quả tìm kiếm không hiển thị sản phẩm khi người dùng nhập từ khóa có dấu tiếng Việt (ví dụ: 'áo sơ mi'). Lỗi này xảy ra trên cả desktop và mobile. Bạn nên phân loại Severity và Priority như thế nào?",
+    "options": [
+      "A. Severity: Critical, Priority: High",
+      "B. Severity: Major, Priority: High",
+      "C. Severity: Minor, Priority: Medium",
+      "D. Severity: Major, Priority: Medium"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi ảnh hưởng đến chức năng cốt lõi (tìm kiếm sản phẩm) và xảy ra trên nhiều nền tảng, do đó Severity là Major. Priority là High vì lỗi ảnh hưởng trực tiếp đến doanh thu và trải nghiệm người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812369274_INTERMEDIATE_5_1rc9"
+  },
+  {
+    "questionText": "Bạn báo cáo lỗi về việc API đăng nhập trả về mã lỗi '403 Forbidden' khi người dùng nhập mật khẩu đúng. Dev yêu cầu bạn cung cấp thêm thông tin để debug. Tài liệu nào sau đây KHÔNG cần thiết để đính kèm trong trường hợp này?",
+    "options": [
+      "A. Network log chứa request/response của API đăng nhập.",
+      "B. Ảnh chụp màn hình giao diện báo lỗi cho người dùng.",
+      "C. File log hệ thống của server trong 1 giờ qua.",
+      "D. Thông tin về tài khoản test (username, password) và thời gian xảy ra lỗi."
+    ],
+    "correctAnswer": "C",
+    "explanation": "File log hệ thống của server thường rất lớn và chứa nhiều thông tin không liên quan đến lỗi cụ thể này. Dev có thể tự truy xuất log server nếu cần, trong khi network log và thông tin tài khoản test đã đủ để debug.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812369274_INTERMEDIATE_6_kmnq"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng, bạn phát hiện lỗi khiến chức năng 'Rút tiền nhanh' không hoạt động khi người dùng chọn số tiền lớn hơn 10 triệu VND. Dev đã triển khai hotfix và yêu cầu bạn xác nhận lại. Bạn nên thực hiện bước nào đầu tiên?",
+    "options": [
+      "A. Kiểm tra lại chức năng với số tiền nhỏ hơn 10 triệu VND.",
+      "B. Kiểm tra lại chức năng với số tiền lớn hơn 10 triệu VND trên môi trường staging.",
+      "C. Đóng báo cáo lỗi ngay vì dev đã triển khai hotfix.",
+      "D. Yêu cầu dev cung cấp mã nguồn của hotfix để kiểm tra."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cần kiểm tra lại chính xác tình huống gây lỗi (số tiền > 10 triệu VND) trên môi trường staging để đảm bảo hotfix hoạt động đúng. Kiểm tra với số tiền nhỏ hơn không xác nhận được việc sửa lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "SITUATION",
+    "id": "q_1780812369274_INTERMEDIATE_7_b7hq"
+  },
+  {
+    "questionText": "Bạn đang báo cáo lỗi về việc ứng dụng di động bị crash khi người dùng xoay màn hình trong lúc tải dữ liệu. Để giúp dev tái hiện lỗi, bạn nên đính kèm tài liệu nào sau đây?",
+    "options": [
+      "A. Ảnh chụp màn hình giao diện trước và sau khi crash.",
+      "B. Video quay lại quá trình xoay màn hình và crash (bao gồm cả log hệ thống nếu có thể).",
+      "C. File log hệ thống của thiết bị trong 24 giờ qua.",
+      "D. Danh sách các ứng dụng đang chạy nền trên thiết bị."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Video quay lại quá trình tái hiện lỗi giúp dev quan sát trực tiếp hành động gây crash (xoay màn hình) và kết quả. Log hệ thống có thể đính kèm thêm nếu video không đủ rõ ràng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812369274_INTERMEDIATE_8_ldw6"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng gọi xe, bạn phát hiện lỗi khiến chức năng 'Đặt xe' không hoạt động khi người dùng chọn phương thức thanh toán bằng ví điện tử. Lỗi này chỉ xảy ra trên Android 10, không xảy ra trên iOS hoặc Android 11+. Bạn nên làm gì để mô tả lỗi một cách rõ ràng?",
+    "options": [
+      "A. Ghi chú trong báo cáo lỗi: 'Lỗi chỉ xảy ra trên Android 10, không xảy ra trên các phiên bản khác.'",
+      "B. Đính kèm danh sách tất cả các thiết bị và phiên bản hệ điều hành đã test.",
+      "C. Tạo báo cáo lỗi riêng cho từng phiên bản Android.",
+      "D. Yêu cầu dev kiểm tra lại toàn bộ chức năng thanh toán."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Ghi chú rõ ràng về môi trường xảy ra lỗi (Android 10) giúp dev tập trung debug mà không cần thông tin thừa. Đính kèm danh sách tất cả thiết bị đã test là không cần thiết trong trường hợp này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812369274_INTERMEDIATE_9_zyyg"
+  },
+  {
+    "questionText": "Bạn báo cáo lỗi về việc API lấy danh sách đơn hàng trả về dữ liệu sai khi người dùng lọc theo ngày tạo đơn. Dev phản hồi rằng lỗi này là do dữ liệu test không chính xác và yêu cầu đóng báo cáo. Bạn nên làm gì tiếp theo?",
+    "options": [
+      "A. Đóng báo cáo lỗi ngay vì dev đã xác nhận nguyên nhân.",
+      "B. Yêu cầu dev cung cấp bằng chứng về dữ liệu test không chính xác.",
+      "C. Kiểm tra lại dữ liệu test và cập nhật báo cáo lỗi với thông tin mới (ví dụ: 'Lỗi xảy ra khi dữ liệu test có đơn hàng tạo trong cùng một ngày').",
+      "D. Tạo một báo cáo lỗi mới với tiêu đề 'Dữ liệu test không chính xác trong API đơn hàng'."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cần xác minh lại thông tin từ dev và cập nhật báo cáo lỗi với chi tiết cụ thể về điều kiện gây lỗi. Việc đóng báo cáo ngay hoặc tạo báo cáo mới mà không xác minh là không chuyên nghiệp.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "SITUATION",
+    "id": "q_1780812369274_INTERMEDIATE_10_ddny"
+  },
+  {
+    "questionText": "Trong quá trình test tính năng 'Đăng ký tài khoản' trên ứng dụng ngân hàng, bạn phát hiện lỗi khiến hệ thống không gửi mã OTP khi người dùng nhập số điện thoại có định dạng quốc tế (ví dụ: +84901234567). Lỗi này không xảy ra với số điện thoại định dạng trong nước (ví dụ: 0901234567). Bạn nên phân loại Severity và Priority như thế nào?",
+    "options": [
+      "A. Severity: Major, Priority: High",
+      "B. Severity: Minor, Priority: Medium",
+      "C. Severity: Major, Priority: Medium",
+      "D. Severity: Critical, Priority: High"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lỗi ảnh hưởng đến chức năng đăng ký tài khoản (Severity: Major) và có thể gây mất khách hàng quốc tế, do đó cần ưu tiên sửa sớm (Priority: High).",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812369274_INTERMEDIATE_11_qpkg"
+  },
+  {
+    "questionText": "Bạn phát hiện lỗi khiến ứng dụng di động bị crash khi người dùng nhấn nút 'Quay lại' sau khi tải xong một video. Để mô tả lỗi một cách tối thiểu (minimal steps), bạn nên bao gồm yếu tố nào sau đây trong 'Steps to Reproduce'?",
+    "options": [
+      "A. Thông tin về kết nối mạng của thiết bị (3G/4G/Wi-Fi).",
+      "B. Bước 'Mở ứng dụng từ màn hình chính'.",
+      "C. Bước 'Tải video có dung lượng lớn hơn 100MB'.",
+      "D. Bước 'Nhấn nút Quay lại ngay sau khi video tải xong'."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Bước 'Nhấn nút Quay lại ngay sau khi video tải xong' là yếu tố trực tiếp gây ra lỗi crash. Các yếu tố khác như kết nối mạng hoặc dung lượng video không liên quan trực tiếp đến lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812369274_INTERMEDIATE_12_77t7"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng quản lý kho hàng, bạn phát hiện lỗi khiến chức năng 'Xuất kho' không cập nhật số lượng tồn kho khi người dùng nhập số lượng xuất lớn hơn số lượng tồn. Dev đã triển khai hotfix và yêu cầu bạn xác nhận lại. Bạn nên kiểm tra điều gì để đảm bảo hotfix hoạt động đúng?",
+    "options": [
+      "A. Kiểm tra lại chức năng 'Xuất kho' với số lượng xuất nhỏ hơn số lượng tồn.",
+      "B. Kiểm tra lại chức năng 'Xuất kho' với số lượng xuất lớn hơn số lượng tồn và xác nhận thông báo lỗi hiển thị đúng.",
+      "C. Kiểm tra lại toàn bộ chức năng quản lý kho hàng.",
+      "D. Yêu cầu dev cung cấp tài liệu về hotfix trước khi kiểm tra."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Cần kiểm tra lại chính xác tình huống gây lỗi (số lượng xuất > số lượng tồn) và xác nhận rằng hệ thống xử lý đúng (hiển thị thông báo lỗi thay vì crash hoặc cập nhật sai). Kiểm tra với số lượng nhỏ hơn không xác nhận được việc sửa lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Bug Reporting",
+    "category": "SITUATION",
+    "id": "q_1780812369274_INTERMEDIATE_13_2533"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng di động tại Việt Nam, bạn phát hiện một lỗi khiến tính năng chuyển tiền nhanh (Instant Transfer) bị treo khi người dùng nhập số tiền vượt quá hạn mức giao dịch. Lỗi này chỉ xảy ra khi người dùng sử dụng mạng 3G/4G của nhà mạng Viettel, nhưng hoạt động bình thường trên Wi-Fi hoặc mạng của các nhà mạng khác. Khi viết báo cáo lỗi, bước nào sau đây là QUAN TRỌNG NHẤT để đảm bảo tính tái hiện và cô lập lỗi?",
+    "options": [
+      "A. Ghi rõ phiên bản ứng dụng, loại thiết bị, phiên bản hệ điều hành, và nhà mạng Viettel (bao gồm cả thông tin gói cước người dùng đang sử dụng).",
+      "B. Chỉ cần mô tả chung chung: 'Lỗi xảy ra khi chuyển tiền trên mạng di động'.",
+      "C. Đính kèm video quay lại toàn bộ quá trình giao dịch, nhưng không ghi chú thời gian cụ thể hoặc điều kiện mạng.",
+      "D. Yêu cầu developer tự kiểm tra trên tất cả các nhà mạng tại Việt Nam để tìm ra nguyên nhân."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Để tái hiện lỗi liên quan đến mạng di động, cần cung cấp đầy đủ thông tin về nhà mạng, loại mạng (3G/4G), và thậm chí gói cước (vì một số gói có thể bị hạn chế băng thông hoặc chặn cổng kết nối). Điều này giúp developer cô lập lỗi và tái hiện chính xác tình huống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812460289_ADVANCED_0_6hqw"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án phần mềm quản lý logistics cho một công ty vận tải lớn. Lỗi bạn phát hiện khiến hệ thống tính toán sai phí vận chuyển đối với đơn hàng có nhiều điểm giao nhận (multi-drop). Lỗi này chỉ xuất hiện khi có từ 5 điểm giao nhận trở lên và sử dụng phương thức thanh toán trả sau (post-paid). Developer phản hồi rằng lỗi này 'không nghiêm trọng' vì chỉ ảnh hưởng đến 5% đơn hàng. Bạn nên phân loại mức độ nghiêm trọng (Severity) và ưu tiên kinh doanh (Business Priority) như thế nào?",
+    "options": [
+      "A. Severity: High (ảnh hưởng đến tính toán tài chính), Priority: High (5% đơn hàng nhưng liên quan đến doanh thu và uy tín công ty).",
+      "B. Severity: Medium (lỗi logic nhưng không crash hệ thống), Priority: Low (chỉ 5% đơn hàng).",
+      "C. Severity: Low (không ảnh hưởng đến chức năng cốt lõi), Priority: Medium (cần fix nhưng không gấp).",
+      "D. Severity: Critical (lỗi tài chính), Priority: Critical (yêu cầu hotfix ngay lập tức)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lỗi tính toán sai phí vận chuyển ảnh hưởng trực tiếp đến tài chính và uy tín công ty, dù chỉ 5% đơn hàng. Severity là High vì lỗi logic nghiêm trọng, còn Priority là High vì liên quan đến doanh thu và trải nghiệm khách hàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812460290_ADVANCED_1_ollm"
+  },
+  {
+    "questionText": "Trong quá trình kiểm thử ứng dụng thương mại điện tử, bạn phát hiện lỗi khiến giỏ hàng bị reset khi người dùng chuyển từ trang sản phẩm sang trang danh mục. Lỗi này chỉ xảy ra trên trình duyệt Safari phiên bản 15.4 trở xuống. Khi viết báo cáo lỗi, tài liệu nào sau đây là THIẾT YẾU để đính kèm nhằm giúp developer debug nhanh chóng?",
+    "options": [
+      "A. Console logs và network logs từ Safari Developer Tools, kèm theo screenshot lỗi và thông tin phiên bản Safari cụ thể.",
+      "B. Chỉ cần mô tả lỗi bằng văn bản và yêu cầu developer tự kiểm tra trên Safari.",
+      "C. Video quay lại màn hình lỗi, nhưng không có thông tin về phiên bản trình duyệt hoặc logs.",
+      "D. Yêu cầu tester khác xác nhận lại lỗi trên Safari mà không cung cấp thêm thông tin."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Console logs và network logs giúp developer xác định lỗi JavaScript hoặc API call thất bại, còn thông tin phiên bản Safari cụ thể giúp tái hiện lỗi trên môi trường tương tự. Screenshot cung cấp ngữ cảnh trực quan.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812460291_ADVANCED_2_d3rg"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án phát triển phần mềm core banking cho một ngân hàng tại Việt Nam. Lỗi bạn phát hiện khiến hệ thống tính lãi suất tiết kiệm sai đối với khách hàng có kỳ hạn gửi tiền từ 12 tháng trở lên. Lỗi này chỉ xảy ra khi khách hàng rút tiền trước hạn và áp dụng lãi suất không kỳ hạn. Developer phản hồi rằng họ cần 2 tuần để fix, nhưng bộ phận kinh doanh yêu cầu hotfix trong vòng 2 ngày vì ảnh hưởng đến khách hàng VIP. Bạn nên xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Phối hợp với developer để xác định giải pháp tạm thời (workaround) cho khách hàng VIP, đồng thời yêu cầu họ ưu tiên fix lỗi gốc trong 2 tuần.",
+      "B. Chấp nhận yêu cầu của bộ phận kinh doanh và ép developer phải hotfix trong 2 ngày, dù rủi ro cao.",
+      "C. Từ chối yêu cầu hotfix vì developer cần thời gian để đảm bảo chất lượng code.",
+      "D. Đề xuất bỏ qua lỗi vì chỉ ảnh hưởng đến một nhóm nhỏ khách hàng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong tình huống mâu thuẫn giữa thời gian và chất lượng, cần tìm giải pháp tạm thời (ví dụ: tính lãi thủ công cho khách VIP) để đáp ứng yêu cầu kinh doanh, đồng thời đảm bảo lỗi gốc được fix đúng quy trình.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "SITUATION",
+    "id": "q_1780812460291_ADVANCED_3_8gsz"
+  },
+  {
+    "questionText": "Bạn phát hiện một lỗi bảo mật trong ứng dụng ngân hàng di động: khi người dùng đăng nhập bằng vân tay (biometric authentication) trên thiết bị Android, hệ thống không xác thực lại mật khẩu khi thực hiện giao dịch có giá trị lớn (>10 triệu VND). Lỗi này chỉ xảy ra trên các thiết bị Android phiên bản 10 trở xuống. Khi viết báo cáo lỗi, bạn nên phân loại mức độ nghiêm trọng (Severity) như thế nào?",
+    "options": [
+      "A. Severity: Critical (lỗ hổng bảo mật nghiêm trọng, có thể dẫn đến gian lận tài chính).",
+      "B. Severity: High (lỗi bảo mật nhưng chỉ ảnh hưởng đến một số thiết bị).",
+      "C. Severity: Medium (lỗi logic nhưng không gây mất dữ liệu).",
+      "D. Severity: Low (không ảnh hưởng đến chức năng chính)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lỗ hổng bảo mật cho phép thực hiện giao dịch lớn mà không cần xác thực lại mật khẩu là nghiêm trọng, có thể dẫn đến gian lận tài chính. Severity phải là Critical để đảm bảo ưu tiên xử lý ngay lập tức.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812460292_ADVANCED_4_q334"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng y tế, bạn phát hiện lỗi khiến hệ thống hiển thị sai thông tin liều lượng thuốc cho bệnh nhân dưới 12 tuổi. Lỗi này chỉ xảy ra khi bác sĩ sử dụng tính năng 'Đề xuất liều lượng tự động' và nhập sai đơn vị đo (ví dụ: mg thay vì mcg). Khi viết báo cáo lỗi, bước nào sau đây là QUAN TRỌNG NHẤT để đảm bảo tính tái hiện và cô lập lỗi?",
+    "options": [
+      "A. Cung cấp chính xác chuỗi thao tác: nhập thông tin bệnh nhân (tuổi, cân nặng), chọn tính năng 'Đề xuất liều lượng tự động', nhập sai đơn vị đo, và kết quả hiển thị sai.",
+      "B. Chỉ cần mô tả: 'Hệ thống hiển thị sai liều lượng thuốc cho bệnh nhân dưới 12 tuổi'.",
+      "C. Đính kèm screenshot lỗi nhưng không ghi chú rõ các bước thực hiện.",
+      "D. Yêu cầu developer tự kiểm tra với nhiều trường hợp khác nhau để tìm ra lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Để tái hiện lỗi liên quan đến logic phức tạp như liều lượng thuốc, cần cung cấp chính xác chuỗi thao tác, bao gồm cả thông tin đầu vào (tuổi, cân nặng, đơn vị đo sai) và kết quả đầu ra. Điều này giúp developer cô lập lỗi nhanh chóng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812460293_ADVANCED_5_w9ta"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án phần mềm quản lý kho hàng cho một công ty bán lẻ. Lỗi bạn phát hiện khiến hệ thống tính toán sai số lượng hàng tồn kho khi có nhiều đơn hàng đồng thời được xử lý. Lỗi này chỉ xảy ra khi có từ 10 đơn hàng trở lên được tạo cùng lúc và sử dụng tính năng 'Cập nhật tồn kho tự động'. Developer phản hồi rằng họ cần 1 tháng để refactor toàn bộ module quản lý kho. Tuy nhiên, bộ phận kinh doanh yêu cầu fix ngay vì đang trong mùa cao điểm bán hàng. Bạn nên xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Đề xuất giải pháp tạm thời: tắt tính năng 'Cập nhật tồn kho tự động' và yêu cầu nhân viên kho cập nhật thủ công trong mùa cao điểm, đồng thời yêu cầu developer ưu tiên fix lỗi gốc sau mùa cao điểm.",
+      "B. Chấp nhận yêu cầu của bộ phận kinh doanh và ép developer phải fix trong 1 tuần, dù rủi ro cao.",
+      "C. Từ chối yêu cầu fix ngay vì developer cần thời gian để đảm bảo chất lượng code.",
+      "D. Đề xuất bỏ qua lỗi vì chỉ ảnh hưởng đến một số ít đơn hàng."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong tình huống mâu thuẫn giữa thời gian và chất lượng, cần tìm giải pháp tạm thời (tắt tính năng tự động) để giảm thiểu rủi ro trong mùa cao điểm, đồng thời đảm bảo lỗi gốc được fix đúng quy trình sau đó.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "SITUATION",
+    "id": "q_1780812460293_ADVANCED_6_xd6n"
+  },
+  {
+    "questionText": "Bạn phát hiện một lỗi trong ứng dụng thương mại điện tử: khi người dùng thêm sản phẩm vào giỏ hàng và áp dụng mã giảm giá, hệ thống tính toán sai tổng tiền nếu mã giảm giá có điều kiện 'Mua từ X sản phẩm trở lên'. Lỗi này chỉ xảy ra khi giỏ hàng có sản phẩm thuộc nhiều danh mục khác nhau. Khi viết báo cáo lỗi, bạn nên đính kèm tài liệu nào sau đây để giúp developer debug hiệu quả?",
+    "options": [
+      "A. Database logs của giỏ hàng (cart table) và bảng mã giảm giá (promotion table), kèm theo screenshot lỗi và thông tin chi tiết về các sản phẩm trong giỏ hàng (ID, danh mục, giá).",
+      "B. Chỉ cần mô tả lỗi bằng văn bản và yêu cầu developer tự kiểm tra với nhiều trường hợp khác nhau.",
+      "C. Video quay lại màn hình lỗi, nhưng không có thông tin về dữ liệu đầu vào hoặc logs.",
+      "D. Yêu cầu tester khác xác nhận lại lỗi mà không cung cấp thêm thông tin."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Database logs giúp developer kiểm tra dữ liệu đầu vào và logic tính toán, còn thông tin chi tiết về sản phẩm (ID, danh mục, giá) giúp tái hiện lỗi liên quan đến điều kiện mã giảm giá. Screenshot cung cấp ngữ cảnh trực quan.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812460293_ADVANCED_7_zipt"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng, bạn phát hiện lỗi khiến hệ thống không gửi thông báo SMS cho khách hàng khi giao dịch thất bại do lỗi kết nối ngân hàng đối tác. Lỗi này chỉ xảy ra khi khách hàng sử dụng số điện thoại thuộc nhà mạng Mobifone. Developer phản hồi rằng lỗi này 'không nghiêm trọng' vì chỉ ảnh hưởng đến một số ít khách hàng. Bạn nên phân loại mức độ nghiêm trọng (Severity) và ưu tiên kinh doanh (Business Priority) như thế nào?",
+    "options": [
+      "A. Severity: High (ảnh hưởng đến trải nghiệm khách hàng và tuân thủ quy định), Priority: High (cần fix để đảm bảo thông báo giao dịch đầy đủ).",
+      "B. Severity: Medium (lỗi không gây mất dữ liệu), Priority: Low (chỉ ảnh hưởng đến một nhà mạng).",
+      "C. Severity: Low (không ảnh hưởng đến chức năng chính), Priority: Medium (cần fix nhưng không gấp).",
+      "D. Severity: Critical (lỗi liên quan đến bảo mật), Priority: Critical (yêu cầu hotfix ngay lập tức)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lỗi không gửi thông báo SMS ảnh hưởng đến trải nghiệm khách hàng và có thể vi phạm quy định của ngân hàng về thông báo giao dịch. Severity là High vì lỗi chức năng quan trọng, còn Priority là High vì cần đảm bảo thông báo đầy đủ cho tất cả khách hàng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812460294_ADVANCED_8_sfsh"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án phần mềm quản lý nhân sự cho một công ty đa quốc gia. Lỗi bạn phát hiện khiến hệ thống tính toán sai ngày nghỉ phép của nhân viên khi họ chuyển từ văn phòng Việt Nam sang văn phòng Singapore (do chênh lệch múi giờ và quy định nghỉ phép khác nhau). Khi viết báo cáo lỗi, bước nào sau đây là QUAN TRỌNG NHẤT để đảm bảo tính tái hiện và cô lập lỗi?",
+    "options": [
+      "A. Cung cấp chính xác thông tin nhân viên (ID, ngày chuyển văn phòng, múi giờ gốc và múi giờ mới), kèm theo quy định nghỉ phép của cả hai văn phòng và kết quả tính toán sai.",
+      "B. Chỉ cần mô tả: 'Hệ thống tính sai ngày nghỉ phép khi nhân viên chuyển văn phòng'.",
+      "C. Đính kèm screenshot lỗi nhưng không ghi chú rõ thông tin nhân viên hoặc quy định nghỉ phép.",
+      "D. Yêu cầu developer tự kiểm tra với nhiều trường hợp khác nhau để tìm ra lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Để tái hiện lỗi liên quan đến logic phức tạp như tính toán ngày nghỉ phép, cần cung cấp đầy đủ thông tin về nhân viên (ID, ngày chuyển, múi giờ) và quy định nghỉ phép của cả hai văn phòng. Điều này giúp developer cô lập lỗi và tái hiện chính xác tình huống.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812460294_ADVANCED_9_qog1"
+  },
+  {
+    "questionText": "Bạn phát hiện một lỗi trong ứng dụng ngân hàng di động: khi người dùng thực hiện giao dịch chuyển tiền quốc tế, hệ thống không kiểm tra hạn mức giao dịch hàng ngày của tài khoản. Lỗi này chỉ xảy ra khi người dùng sử dụng tính năng 'Chuyển tiền nhanh' và chọn loại tiền tệ USD. Developer phản hồi rằng họ cần 3 tuần để fix, nhưng bộ phận tuân thủ (compliance) yêu cầu hotfix trong vòng 3 ngày vì vi phạm quy định chống rửa tiền (AML). Bạn nên xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Phối hợp với developer để xác định giải pháp tạm thời (ví dụ: tắt tính năng 'Chuyển tiền nhanh' cho loại tiền USD), đồng thời yêu cầu họ ưu tiên fix lỗi gốc trong 3 tuần.",
+      "B. Chấp nhận yêu cầu của bộ phận tuân thủ và ép developer phải hotfix trong 3 ngày, dù rủi ro cao.",
+      "C. Từ chối yêu cầu hotfix vì developer cần thời gian để đảm bảo chất lượng code.",
+      "D. Đề xuất bỏ qua lỗi vì chỉ ảnh hưởng đến một loại tiền tệ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lỗi vi phạm quy định chống rửa tiền là nghiêm trọng, nhưng cần cân bằng giữa thời gian và chất lượng. Giải pháp tạm thời (tắt tính năng chuyển tiền nhanh cho USD) giúp giảm thiểu rủi ro tuân thủ, đồng thời đảm bảo lỗi gốc được fix đúng quy trình.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "SITUATION",
+    "id": "q_1780812460295_ADVANCED_10_ni84"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng đặt vé máy bay, bạn phát hiện lỗi khiến hệ thống không hiển thị thông báo 'Vé đã bán hết' khi người dùng chọn chuyến bay có số ghế còn lại bằng 0. Lỗi này chỉ xảy ra khi người dùng sử dụng tính năng 'Tìm kiếm linh hoạt' (flexible search) và chọn nhiều điểm đến cùng lúc. Khi viết báo cáo lỗi, bạn nên phân loại mức độ nghiêm trọng (Severity) như thế nào?",
+    "options": [
+      "A. Severity: High (ảnh hưởng đến trải nghiệm khách hàng và có thể dẫn đến tranh chấp khi vé đã bán hết nhưng không thông báo).",
+      "B. Severity: Medium (lỗi giao diện nhưng không gây mất dữ liệu).",
+      "C. Severity: Low (không ảnh hưởng đến chức năng chính).",
+      "D. Severity: Critical (lỗi bảo mật vì có thể dẫn đến bán quá số ghế)."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lỗi không hiển thị thông báo 'Vé đã bán hết' ảnh hưởng nghiêm trọng đến trải nghiệm khách hàng và có thể dẫn đến tranh chấp khi người dùng không biết vé đã hết. Severity là High vì lỗi chức năng quan trọng, dù không phải là lỗi bảo mật.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812460295_ADVANCED_11_lqai"
+  },
+  {
+    "questionText": "Bạn phát hiện một lỗi trong ứng dụng thương mại điện tử: khi người dùng áp dụng mã giảm giá có điều kiện 'Mua sản phẩm A và B cùng lúc', hệ thống không kiểm tra xem sản phẩm B có còn hàng hay không. Lỗi này chỉ xảy ra khi người dùng thêm sản phẩm vào giỏ hàng từ trang danh mục (category page) thay vì trang sản phẩm (product page). Khi viết báo cáo lỗi, bạn nên đính kèm tài liệu nào sau đây để giúp developer debug hiệu quả?",
+    "options": [
+      "A. Network logs của API kiểm tra tồn kho sản phẩm B, kèm theo screenshot lỗi và thông tin chi tiết về các bước thực hiện (thêm sản phẩm từ trang danh mục, áp dụng mã giảm giá).",
+      "B. Chỉ cần mô tả lỗi bằng văn bản và yêu cầu developer tự kiểm tra với nhiều trường hợp khác nhau.",
+      "C. Video quay lại màn hình lỗi, nhưng không có thông tin về API call hoặc logs.",
+      "D. Yêu cầu tester khác xác nhận lại lỗi mà không cung cấp thêm thông tin."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Network logs giúp developer kiểm tra API call kiểm tra tồn kho có hoạt động đúng hay không, còn thông tin chi tiết về các bước thực hiện giúp tái hiện lỗi liên quan đến luồng thêm sản phẩm từ trang danh mục. Screenshot cung cấp ngữ cảnh trực quan.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812460295_ADVANCED_12_7797"
+  },
+  {
+    "questionText": "Trong một dự án ngân hàng lõi (Core Banking) tại Việt Nam, bạn phát hiện một lỗi nghiêm trọng: giao dịch chuyển tiền quốc tế bị trừ tiền nhưng không ghi nhận vào tài khoản đích. Lỗi này chỉ xảy ra khi sử dụng trình duyệt Safari trên iOS 16.4.1 với kết nối VPN qua Singapore. Bạn cần mô tả bước tái hiện lỗi (steps-to-reproduce) ở mức độ tối thiểu và cô lập nhất. Cách nào sau đây là ĐÚNG và HIỆU QUẢ NHẤT?",
+    "options": [
+      "A. 'Sử dụng Safari trên iOS 16.4.1, bật VPN Singapore, thực hiện chuyển tiền quốc tế từ tài khoản A sang tài khoản B với số tiền X. Kiểm tra số dư tài khoản B.'",
+      "B. 'Trên thiết bị iPhone 14 chạy iOS 16.4.1, mở Safari, kết nối VPN Singapore qua ứng dụng NordVPN, đăng nhập vào hệ thống Core Banking với tài khoản A, thực hiện chuyển tiền quốc tế sang tài khoản B với số tiền 10,000,000 VND, sau đó kiểm tra số dư tài khoản B qua giao diện web và ứng dụng di động.'",
+      "C. 'Sử dụng Safari trên iOS 16.4.1, bật VPN Singapore (cấu hình IKEv2), đăng nhập tài khoản A, chuyển 10,000,000 VND sang tài khoản B (IBAN: VN123456789), chờ 5 phút, kiểm tra số dư tài khoản B qua API /account/balance. Đính kèm log mạng từ Charles Proxy và screenshot giao diện lỗi.'",
+      "D. 'Thực hiện chuyển tiền quốc tế từ tài khoản A sang tài khoản B trên Safari iOS 16.4.1 + VPN Singapore. Nếu lỗi xảy ra, ghi lại thời gian, số tiền, và thông báo lỗi.'"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Cách C cô lập tối đa các biến (phiên bản iOS, loại VPN, số tiền cụ thể, IBAN đích, thời gian chờ, phương pháp kiểm tra số dư qua API), đồng thời yêu cầu đính kèm log mạng và screenshot - giúp developer tái hiện lỗi nhanh chóng mà không phụ thuộc vào yếu tố môi trường khác. Các phương án khác thiếu chi tiết kỹ thuật hoặc không đảm bảo tính tái hiện.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812570339_EXPERT_0_2rg3"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ví điện tử tại Việt Nam, bạn phát hiện lỗi: người dùng không thể thanh toán hóa đơn điện nước khi sử dụng thẻ tín dụng quốc tế (Visa/Mastercard phát hành tại nước ngoài). Sau khi phân tích, bạn thấy lỗi xảy ra do hệ thống không xử lý đúng mã BIN (Bank Identification Number) của thẻ nước ngoài. Bạn cần phân loại mức độ nghiêm trọng (Severity) và ưu tiên kinh doanh (Business Priority) cho lỗi này. Cách phân loại nào sau đây là CHÍNH XÁC NHẤT?",
+    "options": [
+      "A. Severity: Critical, Business Priority: High - vì ảnh hưởng trực tiếp đến doanh thu từ người dùng quốc tế.",
+      "B. Severity: Major, Business Priority: High - vì lỗi chức năng cốt lõi nhưng có giải pháp tạm thời (sử dụng thẻ nội địa).",
+      "C. Severity: Major, Business Priority: Medium - vì chỉ ảnh hưởng đến nhóm người dùng nhỏ (thẻ quốc tế) và có giải pháp thay thế.",
+      "D. Severity: Critical, Business Priority: Medium - vì lỗi nghiêm trọng nhưng nhóm người dùng bị ảnh hưởng ít."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi này là Major (không phải Critical vì không gây mất dữ liệu hoặc sập hệ thống) nhưng Business Priority là High do ảnh hưởng đến trải nghiệm khách hàng quốc tế - đối tượng chiến lược của ví điện tử. Giải pháp tạm thời (thẻ nội địa) không bền vững về lâu dài. Phương án A sai vì không phải Critical, C và D đánh giá thấp ưu tiên kinh doanh.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812570340_EXPERT_1_b7q5"
+  },
+  {
+    "questionText": "Bạn đang làm QA cho dự án Fintech tại Singapore, nơi hệ thống xử lý 10,000 giao dịch/giây. Bạn phát hiện lỗi: trong điều kiện tải cao (peak load), một số giao dịch thanh toán qua QR code bị treo ở trạng thái 'Processing' mà không có thông báo lỗi. Khi báo cáo lỗi, bạn cần đính kèm tài liệu nào sau đây để giúp developer DIAGNOSE NHANH NHẤT?",
+    "options": [
+      "A. Screenshot giao diện người dùng hiển thị trạng thái 'Processing' và log hệ thống từ thời điểm lỗi xảy ra.",
+      "B. Network log từ Fiddler bắt được request/response của API /payment/qr, kết hợp với trace log từ Jaeger cho toàn bộ luồng giao dịch, và metrics từ Prometheus về CPU/Memory của service payment-service trong khoảng thời gian lỗi.",
+      "C. Video quay lại màn hình khi lỗi xảy ra và log ứng dụng từ thiết bị người dùng.",
+      "D. Báo cáo tổng hợp từ JMeter về khả năng chịu tải của hệ thống và screenshot lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong hệ thống phân tán và tải cao, cần trace log end-to-end (Jaeger) để xác định service nào gây bottleneck, network log để kiểm tra timeout/response, và metrics hệ thống để loại trừ vấn đề tài nguyên. Phương án A thiếu dữ liệu backend, C và D không cung cấp đủ thông tin kỹ thuật cho diagnosis.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812570341_EXPERT_2_sw58"
+  },
+  {
+    "questionText": "Dự án phát triển app ngân hàng tại Việt Nam gặp lỗi: khi người dùng thực hiện chuyển tiền nhanh (Instant Transfer) vào lúc 23:59:59 hàng ngày, hệ thống trừ tiền nhưng không ghi nhận vào tài khoản đích. Sau khi báo cáo, developer triển khai hotfix và yêu cầu bạn verify. Bạn cần thực hiện kiểm tra nào sau đây để ĐẢM BẢO hotfix KHÔNG GÂY HỒI QUY?",
+    "options": [
+      "A. Thực hiện 3 lần chuyển tiền nhanh vào 23:59:59 với các số tiền khác nhau (100k, 500k, 1M) và kiểm tra số dư tài khoản đích.",
+      "B. Kiểm tra log hệ thống để đảm bảo không có exception trong khoảng thời gian 23:59:50 - 00:00:10, sau đó thực hiện 1 giao dịch chuyển tiền vào 23:59:59.",
+      "C. Thực hiện regression test cho toàn bộ chức năng chuyển tiền nhanh với 50 test case bao phủ các kịch bản biên (edge cases), bao gồm thời điểm 23:59:59, số tiền tối thiểu/tối đa, và các loại tài khoản khác nhau. Đồng thời kiểm tra log hệ thống và database để đảm bảo tính toàn vẹn dữ liệu.",
+      "D. Yêu cầu developer cung cấp unit test và chạy lại toàn bộ test suite của module chuyển tiền."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Hotfix cho lỗi thời gian biên (23:59:59) cần regression test toàn diện để đảm bảo không ảnh hưởng đến các chức năng liên quan. Cần kiểm tra cả log, database và kịch bản biên khác. Phương án A và B không đủ phủ, D phụ thuộc quá nhiều vào developer mà không kiểm tra hệ thống thực tế.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "SITUATION",
+    "id": "q_1780812570342_EXPERT_3_nxd6"
+  },
+  {
+    "questionText": "Trong một dự án bảo hiểm sức khỏe tại Việt Nam, bạn phát hiện lỗi: khi người dùng khai báo bệnh lý tiền sử 'Tiểu đường type 2' trong form đăng ký, hệ thống tự động từ chối đơn mà không giải thích lý do. Sau khi điều tra, bạn thấy lỗi do rule engine xử lý sai điều kiện logic. Khi báo cáo lỗi, bạn cần phân tích GAP nào sau đây để ĐỀ XUẤT GIẢI PHÁP DÀI HẠN?",
+    "options": [
+      "A. GAP về quy trình: Thiếu bước review rule engine trước khi triển khai, dẫn đến lỗi logic không được phát hiện sớm.",
+      "B. GAP về công nghệ: Rule engine hiện tại không hỗ trợ debug chi tiết, cần nâng cấp lên phiên bản mới hoặc thay thế bằng hệ thống khác.",
+      "C. GAP về quy trình và công nghệ: Thiếu quy trình CI/CD cho rule engine (không có automated test cho rule), và công cụ hiện tại không cung cấp audit log cho các quyết định từ chối đơn. Giải pháp dài hạn cần bao gồm cả cải tiến quy trình và nâng cấp công cụ.",
+      "D. GAP về con người: Developer viết rule không hiểu rõ nghiệp vụ bảo hiểm, cần tổ chức training về nghiệp vụ cho đội ngũ kỹ thuật."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi này phản ánh cả vấn đề quy trình (thiếu automated test cho rule) và công nghệ (thiếu audit log). Giải pháp dài hạn cần giải quyết cả hai để ngăn ngừa lỗi tương tự. Phương án A và B chỉ giải quyết một khía cạnh, D chưa xác định đúng nguyên nhân gốc rễ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812570342_EXPERT_4_ymor"
+  },
+  {
+    "questionText": "Bạn là QA Lead cho dự án eKYC tại một ngân hàng Việt Nam. Lỗi được báo cáo: hệ thống nhận diện khuôn mặt (face matching) bị sai lệch 20% khi người dùng sử dụng ảnh chụp từ camera iPhone 13 trong điều kiện ánh sáng yếu. Khi báo cáo lỗi, bạn cần yêu cầu developer cung cấp thông tin nào sau đây để ĐÁNH GIÁ TÁC ĐỘNG VÀ ƯU TIÊN SỬA CHỮA?",
+    "options": [
+      "A. Thống kê số lượng người dùng sử dụng iPhone 13 tại Việt Nam và tỷ lệ giao dịch eKYC thất bại trong điều kiện ánh sáng yếu.",
+      "B. Kết quả benchmark của model face matching hiện tại so với các model khác trên thị trường (ví dụ: FaceNet, ArcFace) trong điều kiện ánh sáng yếu.",
+      "C. Báo cáo phân tích lỗi chi tiết từ developer, bao gồm: (1) Thống kê tỷ lệ lỗi theo thiết bị và điều kiện ánh sáng, (2) So sánh accuracy của model hiện tại với model mới trên cùng dataset test, (3) Ước tính effort sửa chữa và rủi ro hồi quy.",
+      "D. Log lỗi từ hệ thống khi người dùng gặp lỗi face matching."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Để đánh giá tác động và ưu tiên, cần dữ liệu toàn diện từ developer: (1) Phạm vi ảnh hưởng (tỷ lệ lỗi), (2) Hiệu quả của giải pháp thay thế, (3) Chi phí và rủi ro triển khai. Phương án A thiếu dữ liệu kỹ thuật, B quá hẹp, D không đủ để ra quyết định.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812570343_EXPERT_5_q9ml"
+  },
+  {
+    "questionText": "Trong dự án phát triển app thương mại điện tử tại Đông Nam Á, bạn phát hiện lỗi: khi người dùng áp dụng voucher giảm giá 50% cho đơn hàng trên 1 triệu đồng, hệ thống tính toán sai giá trị voucher nếu đơn hàng bao gồm sản phẩm khuyến mãi (đã giảm giá 30%). Khi báo cáo lỗi, bạn cần mô tả vấn đề theo cách nào sau đây để developer HIỂU RÕ NGUYÊN NHÂN GỐC RỄ?",
+    "options": [
+      "A. 'Hệ thống tính sai giá trị voucher khi áp dụng cho đơn hàng có sản phẩm khuyến mãi. Ví dụ: Đơn hàng 1,500,000đ (gồm 1 sản phẩm giá gốc 1,000,000đ đã giảm 30% còn 700,000đ + 1 sản phẩm 800,000đ). Voucher 50% áp dụng cho tổng đơn hàng 1,500,000đ (đúng) nhưng tính thành 750,000đ thay vì 500,000đ (vì chỉ áp dụng cho phần giá gốc).'",
+      "B. 'Voucher 50% không hoạt động đúng khi đơn hàng có sản phẩm khuyến mãi. Cần sửa để voucher áp dụng cho tổng giá trị đơn hàng.'",
+      "C. 'Lỗi tính toán voucher: Khi đơn hàng có sản phẩm giảm giá 30%, voucher 50% bị tính sai. Ví dụ đơn hàng 1,500,000đ (sản phẩm A: 1,000,000đ giảm 30% còn 700,000đ + sản phẩm B: 800,000đ). Voucher 50% áp dụng cho 1,500,000đ nhưng kết quả sai.'",
+      "D. 'Hệ thống có lỗi logic khi xử lý voucher và khuyến mãi đồng thời. Cần developer kiểm tra lại hàm calculateDiscount().'"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Phương án A mô tả cụ thể logic lỗi (voucher áp dụng cho tổng đơn hàng nhưng tính sai do không phân biệt giá gốc/giá khuyến mãi), kèm ví dụ số học rõ ràng. Các phương án khác không giải thích nguyên nhân gốc rễ hoặc quá chung chung.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812570344_EXPERT_6_gzfc"
+  },
+  {
+    "questionText": "Bạn đang làm QA cho hệ thống thanh toán trực tuyến tại Việt Nam. Một lỗi nghiêm trọng được báo cáo: trong điều kiện mạng chậm (latency > 2s), hệ thống xử lý trùng lặp giao dịch (duplicate transaction) khi người dùng nhấn nút 'Thanh toán' nhiều lần. Developer đề xuất giải pháp tạm thời: vô hiệu hóa nút 'Thanh toán' sau khi nhấn lần đầu. Bạn cần đánh giá giải pháp này theo khía cạnh nào sau đây để ĐỀ XUẤT GIẢI PHÁP DÀI HẠN?",
+    "options": [
+      "A. Đánh giá tác động của giải pháp tạm thời đến trải nghiệm người dùng (UX) và tỷ lệ chuyển đổi (conversion rate).",
+      "B. Phân tích nguyên nhân gốc rễ của lỗi (ví dụ: thiếu idempotency key trong API, timeout xử lý không hợp lý) và đề xuất cải tiến kiến trúc hệ thống để xử lý duplicate transaction ở tầng backend.",
+      "C. Kiểm tra xem giải pháp tạm thời có gây ra lỗi mới (ví dụ: nút bị vô hiệu hóa vĩnh viễn nếu giao dịch thất bại) và đề xuất test case để verify.",
+      "D. Yêu cầu developer cung cấp thống kê về số lượng giao dịch trùng lặp trong 3 tháng gần đây để đánh giá mức độ nghiêm trọng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp dài hạn cần giải quyết nguyên nhân gốc rễ (thiếu idempotency ở backend) thay vì chỉ xử lý triệu chứng (disable nút). Phương án A và C chỉ đánh giá giải pháp tạm thời, D không liên quan đến đề xuất giải pháp.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812570344_EXPERT_7_icu9"
+  },
+  {
+    "questionText": "Trong dự án phát triển app ngân hàng số tại Việt Nam, bạn phát hiện lỗi: khi người dùng thực hiện chuyển tiền qua số điện thoại (không phải số tài khoản), hệ thống hiển thị thông báo 'Giao dịch thành công' nhưng thực tế tiền không được chuyển đi. Sau khi điều tra, bạn thấy lỗi do service mapping số điện thoại sang số tài khoản bị lỗi timeout nhưng không rollback giao dịch. Khi báo cáo lỗi, bạn cần phân loại lỗi này theo tiêu chí nào sau đây để ĐẢM BẢO ƯU TIÊN SỬA CHỮA CAO NHẤT?",
+    "options": [
+      "A. Severity: Critical (mất tiền khách hàng), Business Priority: High (ảnh hưởng đến niềm tin người dùng).",
+      "B. Severity: Major (lỗi chức năng cốt lõi), Business Priority: High (ảnh hưởng đến doanh thu).",
+      "C. Severity: Critical (mất tiền và dữ liệu không nhất quán), Business Priority: Critical (ảnh hưởng đến uy tín ngân hàng và tuân thủ quy định NHNN).",
+      "D. Severity: Major (có thể khắc phục bằng cách hoàn tiền), Business Priority: Medium (chỉ ảnh hưởng đến một số ít người dùng)."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi này là Critical vì gây mất tiền và dữ liệu không nhất quán (vi phạm ACID), đồng thời Business Priority là Critical do ảnh hưởng đến uy tín ngân hàng và tuân thủ quy định của Ngân hàng Nhà nước (NHNN) về bảo vệ tài sản khách hàng. Phương án A và B đánh giá thấp mức độ nghiêm trọng, D sai hoàn toàn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812570345_EXPERT_8_bdwk"
+  },
+  {
+    "questionText": "Bạn là QA cho dự án ví điện tử tại Đông Nam Á. Một lỗi được báo cáo: hệ thống không gửi OTP khi người dùng thực hiện giao dịch trên 10 triệu đồng từ tài khoản liên kết ngân hàng nước ngoài. Sau khi điều tra, bạn thấy lỗi do service OTP không xử lý đúng mã quốc gia (+84, +62, +60, v.v.) trong request. Khi báo cáo lỗi, bạn cần đính kèm thông tin nào sau đây để developer FIX NHANH VÀ ĐÚNG?",
+    "options": [
+      "A. Screenshot màn hình lỗi 'Không gửi được OTP' và log hệ thống từ thời điểm lỗi xảy ra.",
+      "B. Danh sách các mã quốc gia bị lỗi (+62, +60), payload request gửi đến service OTP (bao gồm trường countryCode), và response lỗi từ service OTP (nếu có).",
+      "C. Video quay lại quá trình thực hiện giao dịch và log ứng dụng từ thiết bị người dùng.",
+      "D. Báo cáo thống kê số lượng giao dịch thất bại do lỗi OTP trong 7 ngày gần đây."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Để fix nhanh, developer cần biết chính xác các mã quốc gia bị lỗi và payload request/response để tái hiện và debug. Phương án A thiếu chi tiết kỹ thuật, C và D không cung cấp đủ thông tin để sửa lỗi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "SKILL",
+    "id": "q_1780812570346_EXPERT_9_i7u6"
+  },
+  {
+    "questionText": "Trong dự án Fintech tại Singapore, bạn phát hiện lỗi: hệ thống tính toán sai phí giao dịch khi người dùng thực hiện chuyển tiền quốc tế với số tiền lớn (trên 100,000 USD) do không áp dụng đúng bảng phí theo bậc (tiered pricing). Khi báo cáo lỗi, bạn cần đề xuất giải pháp nào sau đây để NGĂN NGỪA LỖI TƯƠNG TỰ TRONG TƯƠNG LAI?",
+    "options": [
+      "A. Thêm test case kiểm tra tính toán phí cho các bậc giá trị khác nhau (tiered pricing) trong bộ test regression.",
+      "B. Yêu cầu developer viết unit test cho hàm calculateFee() với các giá trị biên (boundary values) và triển khai code review chặt chẽ hơn.",
+      "C. Thiết lập quy trình CI/CD để tự động chạy test case về tính toán phí trước khi triển khai, kết hợp với automated test cho các kịch bản tiered pricing sử dụng dữ liệu thực tế từ production. Đồng thời, triển khai monitoring để phát hiện sớm lỗi tính toán phí trong production.",
+      "D. Tổ chức training về nghiệp vụ tính phí cho đội ngũ developer và QA."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp dài hạn cần kết hợp nhiều biện pháp: automated test với dữ liệu thực tế, CI/CD để ngăn lỗi trước khi triển khai, và monitoring để phát hiện sớm. Phương án A và B chỉ giải quyết một phần, D không trực tiếp ngăn ngừa lỗi kỹ thuật.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812570346_EXPERT_10_4xve"
+  },
+  {
+    "questionText": "Bạn đang làm QA cho hệ thống quản lý kho hàng tại Việt Nam. Một lỗi nghiêm trọng được báo cáo: khi nhập kho lô hàng mới, hệ thống tự động cập nhật sai số lượng tồn kho (inventory) do lỗi race condition khi nhiều nhân viên nhập kho cùng lúc. Khi báo cáo lỗi, bạn cần phân tích tác động nào sau đây để ĐỀ XUẤT ƯU TIÊN SỬA CHỮA CAO NHẤT?",
+    "options": [
+      "A. Tác động đến báo cáo tài chính: Số liệu tồn kho sai dẫn đến báo cáo doanh thu và lợi nhuận không chính xác, ảnh hưởng đến quyết định kinh doanh.",
+      "B. Tác động đến hoạt động vận hành: Nhân viên kho không thể xuất hàng chính xác, dẫn đến chậm trễ giao hàng và khiếu nại từ khách hàng.",
+      "C. Tác động tổng thể: Lỗi race condition gây sai lệch dữ liệu tồn kho, ảnh hưởng đến cả báo cáo tài chính (tài sản doanh nghiệp) và vận hành kho (khả năng đáp ứng đơn hàng). Giải pháp cần ưu tiên cao vì rủi ro lan tỏa và khó khắc phục hậu quả.",
+      "D. Tác động đến hệ thống: Lỗi race condition có thể gây crash hệ thống nếu không được xử lý, cần ưu tiên sửa để đảm bảo tính ổn định."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi này ảnh hưởng đến cả hai khía cạnh quan trọng: tài chính (báo cáo sai) và vận hành (không xuất hàng được). Giải pháp cần ưu tiên cao do rủi ro lan tỏa và khó khắc phục hậu quả (dữ liệu tồn kho sai có thể không khôi phục được). Phương án A và B chỉ đề cập một khía cạnh, D không chính xác vì race condition hiếm khi gây crash hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Bug Reporting",
+    "category": "ANALYSIS",
+    "id": "q_1780812570347_EXPERT_11_08ob"
+  }
+]

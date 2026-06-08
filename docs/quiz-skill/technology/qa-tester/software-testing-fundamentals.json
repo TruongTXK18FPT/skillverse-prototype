@@ -1,0 +1,767 @@
+[
+  {
+    "questionText": "Trong quy trình phát triển phần mềm (SDLC), giai đoạn nào KHÔNG thuộc quy trình kiểm thử phần mềm (STLC)?",
+    "options": [
+      "A. Requirement Analysis",
+      "B. Test Planning",
+      "C. Coding",
+      "D. Test Execution"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Coding là giai đoạn thuộc SDLC (phát triển phần mềm), không thuộc STLC (kiểm thử phần mềm). STLC tập trung vào các hoạt động kiểm thử như phân tích yêu cầu, lập kế hoạch, thực thi kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "KNOWLEDGE",
+    "id": "q_1780810696385_BEGINNER_0_k0zn"
+  },
+  {
+    "questionText": "Một lỗi (defect) được báo cáo là 'High Priority' nhưng 'Low Severity' có thể mô tả tình huống nào sau đây?",
+    "options": [
+      "A. Lỗi khiến hệ thống bị crash khi người dùng nhập dữ liệu sai định dạng.",
+      "B. Lỗi hiển thị sai màu sắc của logo công ty trên trang chủ, nhưng không ảnh hưởng đến chức năng.",
+      "C. Lỗi khiến chức năng thanh toán không hoạt động vào ngày khuyến mãi lớn.",
+      "D. Lỗi bảo mật cho phép truy cập trái phép vào dữ liệu khách hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'High Priority' nghĩa là lỗi cần được sửa gấp (ví dụ: ảnh hưởng đến trải nghiệm người dùng hoặc thương hiệu), còn 'Low Severity' nghĩa là lỗi không ảnh hưởng nghiêm trọng đến chức năng cốt lõi. Tình huống B phù hợp vì logo sai màu không gây lỗi chức năng nhưng cần sửa nhanh để tránh ảnh hưởng hình ảnh công ty.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810696385_BEGINNER_1_q3z3"
+  },
+  {
+    "questionText": "Kiểm thử đơn vị (Unit Testing) thường được thực hiện bởi ai trong dự án?",
+    "options": [
+      "A. Business Analyst",
+      "B. Developer",
+      "C. QA Engineer",
+      "D. Product Owner"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Unit Testing kiểm thử các thành phần nhỏ nhất của mã nguồn (ví dụ: hàm, phương thức) và thường do Developer thực hiện để đảm bảo mã của họ hoạt động đúng trước khi chuyển sang giai đoạn kiểm thử tiếp theo.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "KNOWLEDGE",
+    "id": "q_1780810696385_BEGINNER_2_ias9"
+  },
+  {
+    "questionText": "Trong dự án phát triển phần mềm ngân hàng tại Việt Nam, kiểm thử chấp nhận người dùng (UAT - User Acceptance Testing) thường được thực hiện bởi đối tượng nào?",
+    "options": [
+      "A. Nhóm phát triển (Development Team)",
+      "B. Khách hàng hoặc đại diện kinh doanh của ngân hàng",
+      "C. Nhóm kiểm thử tự động (Automation QA)",
+      "D. Quản lý dự án (Project Manager)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "UAT là giai đoạn kiểm thử cuối cùng, nơi khách hàng hoặc đại diện kinh doanh (end-user) xác nhận phần mềm đáp ứng yêu cầu nghiệp vụ trước khi triển khai chính thức. Đây là bước quan trọng trong các dự án ngân hàng để đảm bảo tuân thủ quy định và nhu cầu thực tế.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810696385_BEGINNER_3_w05b"
+  },
+  {
+    "questionText": "Kiểm thử hộp đen (Black Box Testing) tập trung vào yếu tố nào sau đây?",
+    "options": [
+      "A. Cấu trúc mã nguồn và thuật toán bên trong.",
+      "B. Đầu vào và đầu ra của hệ thống mà không cần biết mã nguồn.",
+      "C. Hiệu suất của hệ thống dưới tải cao.",
+      "D. Khả năng tích hợp giữa các module."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Black Box Testing kiểm thử chức năng của hệ thống dựa trên yêu cầu và đầu vào/đầu ra, mà không cần quan tâm đến cách mã nguồn được triển khai bên trong. Đây là phương pháp phổ biến trong kiểm thử chức năng (Functional Testing).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "KNOWLEDGE",
+    "id": "q_1780810696385_BEGINNER_4_77js"
+  },
+  {
+    "questionText": "Trong quy trình quản lý lỗi (Defect Life Cycle), trạng thái nào sau đây KHÔNG tồn tại?",
+    "options": [
+      "A. New",
+      "B. Fixed",
+      "C. Rejected",
+      "D. Automated"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Defect Life Cycle bao gồm các trạng thái như New (mới báo cáo), Open (đang xử lý), Fixed (đã sửa), Rejected (từ chối), Closed (đã đóng). 'Automated' không phải là trạng thái trong quy trình quản lý lỗi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "KNOWLEDGE",
+    "id": "q_1780810696385_BEGINNER_5_noqj"
+  },
+  {
+    "questionText": "Một QA Engineer phát hiện lỗi khiến chức năng đăng nhập của ứng dụng thương mại điện tử không hoạt động trên trình duyệt Chrome. Mức độ nghiêm trọng (Severity) của lỗi này nên được phân loại là gì?",
+    "options": [
+      "A. Low",
+      "B. Medium",
+      "C. High",
+      "D. Critical"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Lỗi khiến chức năng đăng nhập không hoạt động là lỗi nghiêm trọng (Critical) vì nó chặn hoàn toàn người dùng truy cập vào hệ thống, ảnh hưởng trực tiếp đến doanh thu và trải nghiệm người dùng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810696385_BEGINNER_6_9zki"
+  },
+  {
+    "questionText": "Kiểm thử tích hợp (Integration Testing) nhằm mục đích gì?",
+    "options": [
+      "A. Kiểm thử từng đơn vị mã nguồn riêng lẻ.",
+      "B. Kiểm thử sự tương tác giữa các module hoặc dịch vụ trong hệ thống.",
+      "C. Kiểm thử toàn bộ hệ thống theo yêu cầu nghiệp vụ.",
+      "D. Kiểm thử hiệu suất của hệ thống dưới tải cao."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Integration Testing tập trung vào việc kiểm thử sự tương tác và tích hợp giữa các module, dịch vụ hoặc thành phần trong hệ thống để phát hiện lỗi liên quan đến giao tiếp hoặc luồng dữ liệu.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "KNOWLEDGE",
+    "id": "q_1780810696385_BEGINNER_7_5uag"
+  },
+  {
+    "questionText": "Trong dự án phát triển phần mềm cho công ty bảo hiểm, QA Engineer phát hiện lỗi khiến hệ thống tính toán sai phí bảo hiểm cho khách hàng. Mức độ ưu tiên (Priority) của lỗi này nên được đặt là gì?",
+    "options": [
+      "A. Low",
+      "B. Medium",
+      "C. High",
+      "D. Critical"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Lỗi tính toán sai phí bảo hiểm ảnh hưởng trực tiếp đến doanh thu và uy tín của công ty bảo hiểm, do đó cần được ưu tiên sửa ngay lập tức (Critical Priority).",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810696385_BEGINNER_8_hd3e"
+  },
+  {
+    "questionText": "Kiểm thử hộp trắng (White Box Testing) thường yêu cầu kiến thức về điều gì?",
+    "options": [
+      "A. Yêu cầu nghiệp vụ của khách hàng.",
+      "B. Cấu trúc mã nguồn và logic lập trình.",
+      "C. Giao diện người dùng và trải nghiệm.",
+      "D. Hiệu suất hệ thống dưới tải cao."
+    ],
+    "correctAnswer": "B",
+    "explanation": "White Box Testing kiểm thử dựa trên cấu trúc mã nguồn, thuật toán và logic lập trình bên trong. Người thực hiện cần hiểu rõ mã nguồn để thiết kế các trường hợp kiểm thử phù hợp.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "KNOWLEDGE",
+    "id": "q_1780810696385_BEGINNER_9_kg2v"
+  },
+  {
+    "questionText": "Trong STLC, giai đoạn nào sau đây diễn ra TRƯỚC giai đoạn 'Test Execution'?",
+    "options": [
+      "A. Test Closure",
+      "B. Test Design",
+      "C. Defect Reporting",
+      "D. Regression Testing"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong STLC, thứ tự các giai đoạn là: Requirement Analysis → Test Planning → Test Design → Test Environment Setup → Test Execution. Do đó, Test Design diễn ra trước Test Execution.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "KNOWLEDGE",
+    "id": "q_1780810696385_BEGINNER_10_jo6i"
+  },
+  {
+    "questionText": "Một lỗi được báo cáo là 'Cannot reproduce' trong Defect Life Cycle có nghĩa là gì?",
+    "options": [
+      "A. Lỗi đã được sửa thành công.",
+      "B. Lỗi không thể tái hiện lại trong môi trường kiểm thử.",
+      "C. Lỗi không còn tồn tại trong phiên bản mới.",
+      "D. Lỗi đã được chuyển cho nhóm phát triển xử lý."
+    ],
+    "correctAnswer": "B",
+    "explanation": "'Cannot reproduce' nghĩa là QA hoặc Developer không thể tái hiện lỗi trong môi trường kiểm thử, thường do thiếu thông tin hoặc điều kiện môi trường khác biệt. Lỗi này có thể được đóng hoặc yêu cầu thêm thông tin.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "KNOWLEDGE",
+    "id": "q_1780810696385_BEGINNER_11_x76g"
+  },
+  {
+    "questionText": "Kiểm thử hệ thống (System Testing) được thực hiện trên yếu tố nào sau đây?",
+    "options": [
+      "A. Từng module riêng lẻ.",
+      "B. Toàn bộ hệ thống tích hợp theo yêu cầu nghiệp vụ.",
+      "C. Giao diện người dùng và trải nghiệm.",
+      "D. Hiệu suất của cơ sở dữ liệu."
+    ],
+    "correctAnswer": "B",
+    "explanation": "System Testing kiểm thử toàn bộ hệ thống tích hợp để đảm bảo nó đáp ứng các yêu cầu nghiệp vụ và chức năng đã được định nghĩa. Đây là giai đoạn kiểm thử toàn diện trước khi chuyển sang UAT.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "KNOWLEDGE",
+    "id": "q_1780810696385_BEGINNER_12_7yd1"
+  },
+  {
+    "questionText": "Trong dự án phần mềm tại một công ty outsource Việt Nam, sau khi hoàn thành giai đoạn 'Test Execution' của STLC, bước tiếp theo theo quy trình chuẩn là gì?",
+    "options": [
+      "A. Test Planning",
+      "B. Test Closure",
+      "C. Defect Reporting",
+      "D. Test Case Design"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sau khi thực hiện chạy test (Test Execution), bước tiếp theo là tổng kết và đóng giai đoạn kiểm thử (Test Closure), bao gồm báo cáo kết quả, lưu trữ tài liệu và rút kinh nghiệm cho các dự án sau. Các bước khác như Defect Reporting diễn ra song song trong quá trình Test Execution, không phải bước kế tiếp chính thức.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810759409_INTERMEDIATE_0_ge2g"
+  },
+  {
+    "questionText": "Một lỗi được báo cáo với mức độ nghiêm trọng (Severity) là 'Major' nhưng ưu tiên (Priority) lại là 'Low'. Trong tình huống nào dưới đây tại dự án phần mềm ngân hàng tại Việt Nam, cách phân loại này là hợp lý?",
+    "options": [
+      "A. Lỗi làm ứng dụng crash khi người dùng thực hiện giao dịch lớn, nhưng dự án đang trong giai đoạn bảo trì và chưa có kế hoạch nâng cấp.",
+      "B. Lỗi ảnh hưởng đến giao diện hiển thị ngày tháng trên màn hình đăng nhập, nhưng không gây gián đoạn chức năng chính.",
+      "C. Lỗi khiến hệ thống không gửi được OTP cho khách hàng, nhưng chỉ xảy ra vào ban đêm khi lượng giao dịch thấp.",
+      "D. Lỗi làm mất dữ liệu khách hàng khi import từ file Excel, nhưng chỉ xảy ra với file có định dạng cũ không còn được sử dụng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Severity 'Major' phản ánh tác động nghiêm trọng của lỗi (mất dữ liệu), nhưng Priority 'Low' hợp lý khi lỗi chỉ xảy ra với định dạng file cũ không còn được sử dụng trong thực tế. Các tình huống khác không giải thích được sự chênh lệch giữa Severity và Priority.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810759410_INTERMEDIATE_1_bdil"
+  },
+  {
+    "questionText": "Trong dự án phát triển phần mềm quản lý kho hàng cho doanh nghiệp Việt Nam, tester phát hiện lỗi: 'Hệ thống không cập nhật số lượng tồn kho khi nhập/xuất hàng với số lượng lớn (trên 10,000 sản phẩm)'. Lỗi này nên được phân loại vào testing level nào?",
+    "options": [
+      "A. Unit Testing",
+      "B. Integration Testing",
+      "C. System Testing",
+      "D. Acceptance Testing"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi liên quan đến xử lý số lượng lớn và tương tác giữa các module (nhập/xuất kho), đòi hỏi kiểm tra toàn bộ hệ thống trong môi trường gần với thực tế. Đây là phạm vi của System Testing. Unit Testing kiểm tra từng hàm riêng lẻ, Integration Testing kiểm tra giao tiếp giữa các module nhỏ, còn Acceptance Testing tập trung vào nghiệp vụ người dùng cuối.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810759410_INTERMEDIATE_2_unmt"
+  },
+  {
+    "questionText": "Khi thực hiện Grey Box Testing cho module thanh toán trực tuyến của ứng dụng thương mại điện tử, tester cần có thông tin nào sau đây?",
+    "options": [
+      "A. Mã nguồn chi tiết của hàm xử lý thanh toán.",
+      "B. Thiết kế cơ sở dữ liệu của bảng lưu trữ giao dịch.",
+      "C. Tài liệu mô tả luồng nghiệp vụ thanh toán từ đầu đến cuối.",
+      "D. Quy trình triển khai (deployment) của module thanh toán."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Grey Box Testing kết hợp kiến thức về cấu trúc bên trong (như thiết kế cơ sở dữ liệu) và hành vi bên ngoài. Tester không cần mã nguồn chi tiết (đó là White Box) nhưng cần hiểu cấu trúc dữ liệu để thiết kế test case hiệu quả. Luồng nghiệp vụ thuộc Black Box, còn quy trình triển khai không liên quan trực tiếp đến kiểm thử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "KNOWLEDGE",
+    "id": "q_1780810759410_INTERMEDIATE_3_d0z0"
+  },
+  {
+    "questionText": "Trong dự án phần mềm tại công ty FPT Software, sau khi tester báo cáo lỗi 'Không thể đăng nhập bằng tài khoản Google trên môi trường staging', developer phản hồi rằng lỗi đã được sửa. Tester cần thực hiện bước nào tiếp theo trong Defect Life Cycle?",
+    "options": [
+      "A. Đóng lỗi (Close) và chuyển sang test case khác.",
+      "B. Kiểm tra lại (Retest) lỗi trên môi trường staging.",
+      "C. Đánh dấu lỗi là 'Reopen' và yêu cầu developer giải thích lý do sửa.",
+      "D. Chuyển lỗi sang trạng thái 'Deferred' để xử lý sau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Sau khi developer sửa lỗi, tester cần thực hiện retest (kiểm tra lại) trên cùng môi trường để xác nhận lỗi đã được khắc phục. Chỉ đóng lỗi sau khi retest thành công. Các bước khác như Reopen hoặc Deferred chỉ áp dụng khi retest thất bại hoặc có lý do đặc biệt.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810759411_INTERMEDIATE_4_fz10"
+  },
+  {
+    "questionText": "Một dự án phần mềm tại Viettel áp dụng mô hình Agile với sprint 2 tuần. Trong sprint planning, tester được giao viết test case cho user story: 'Là người dùng, tôi muốn tìm kiếm sản phẩm theo bộ lọc giá để dễ dàng so sánh'. Kỹ thuật thiết kế test case nào phù hợp nhất cho tình huống này?",
+    "options": [
+      "A. Boundary Value Analysis (BVA) cho trường nhập giá trị tìm kiếm.",
+      "B. State Transition Testing cho các trạng thái của sản phẩm.",
+      "C. Equivalence Partitioning cho các khoảng giá trị tìm kiếm.",
+      "D. Decision Table Testing cho các tổ hợp bộ lọc khác nhau."
+    ],
+    "correctAnswer": "D",
+    "explanation": "User story liên quan đến nhiều bộ lọc kết hợp (giá, loại sản phẩm, v.v.), do đó Decision Table Testing phù hợp để kiểm tra các tổ hợp đầu vào khác nhau. BVA và Equivalence Partitioning chỉ tập trung vào một trường dữ liệu, còn State Transition không liên quan đến nghiệp vụ tìm kiếm sản phẩm.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SKILL",
+    "id": "q_1780810759411_INTERMEDIATE_5_lr20"
+  },
+  {
+    "questionText": "Trong quá trình System Testing cho ứng dụng ngân hàng tại Techcombank, tester phát hiện lỗi: 'Hệ thống cho phép rút tiền vượt quá hạn mức tài khoản khi thực hiện giao dịch qua API'. Lỗi này nên được phân loại Severity và Priority như thế nào?",
+    "options": [
+      "A. Severity: Critical, Priority: High",
+      "B. Severity: Major, Priority: Medium",
+      "C. Severity: High, Priority: Low",
+      "D. Severity: Medium, Priority: High"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Lỗi cho phép rút tiền vượt hạn mức ảnh hưởng trực tiếp đến tính toàn vẹn tài chính (Severity: Critical) và cần được xử lý ngay lập tức (Priority: High) để tránh rủi ro cho ngân hàng và khách hàng. Các phân loại khác không phản ánh đúng mức độ nghiêm trọng của lỗi.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810759411_INTERMEDIATE_6_pudn"
+  },
+  {
+    "questionText": "Khi tích hợp module thanh toán của bên thứ ba (third-party) vào ứng dụng thương mại điện tử tại Shopee Việt Nam, tester nên tập trung vào loại kiểm thử nào?",
+    "options": [
+      "A. Unit Testing cho các hàm xử lý thanh toán.",
+      "B. Integration Testing giữa module thanh toán và hệ thống chính.",
+      "C. System Testing toàn bộ luồng thanh toán từ đầu đến cuối.",
+      "D. Acceptance Testing với dữ liệu thực từ người dùng cuối."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Khi tích hợp module của bên thứ ba, trọng tâm là kiểm tra giao tiếp (interface) và tương tác giữa module mới và hệ thống hiện có. Đây là phạm vi của Integration Testing. Unit Testing do bên thứ ba thực hiện, System Testing và Acceptance Testing diễn ra sau khi tích hợp thành công.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810759411_INTERMEDIATE_7_8szf"
+  },
+  {
+    "questionText": "Trong dự án phát triển phần mềm quản lý nhân sự tại một công ty Nhật Bản, tester được yêu cầu thực hiện White Box Testing cho hàm tính lương theo giờ làm thêm. Kỹ thuật nào sau đây phù hợp nhất?",
+    "options": [
+      "A. Kiểm tra tất cả các nhánh điều kiện (branch) trong hàm.",
+      "B. Kiểm tra đầu vào với giá trị biên của giờ làm thêm.",
+      "C. Kiểm tra luồng nghiệp vụ tính lương từ đầu đến cuối.",
+      "D. Kiểm tra giao diện hiển thị kết quả tính lương."
+    ],
+    "correctAnswer": "A",
+    "explanation": "White Box Testing tập trung vào cấu trúc mã nguồn, do đó kiểm tra tất cả các nhánh điều kiện (branch coverage) là kỹ thuật phù hợp nhất. Các kỹ thuật khác như kiểm tra giá trị biên hoặc luồng nghiệp vụ thuộc Black Box Testing, còn kiểm tra giao diện không liên quan đến White Box.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SKILL",
+    "id": "q_1780810759411_INTERMEDIATE_8_txv5"
+  },
+  {
+    "questionText": "Một lỗi được báo cáo với trạng thái 'Rejected' trong Defect Life Cycle tại dự án phần mềm của VNG. Lý do nào sau đây là hợp lý nhất cho trạng thái này?",
+    "options": [
+      "A. Developer không thể tái hiện lỗi trên môi trường của họ.",
+      "B. Lỗi đã được sửa nhưng chưa được retest.",
+      "C. Lỗi không ảnh hưởng đến chức năng chính của hệ thống.",
+      "D. Lỗi được báo cáo trùng với một lỗi đã tồn tại trong hệ thống."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trạng thái 'Rejected' thường được sử dụng khi developer không thể tái hiện lỗi hoặc xác định lỗi không phải là vấn đề thực sự (ví dụ: do cấu hình môi trường). Các lý do khác như lỗi không ảnh hưởng đến chức năng chính có thể dẫn đến trạng thái 'Deferred', còn lỗi trùng thường được đánh dấu là 'Duplicate'.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810759411_INTERMEDIATE_9_o5ad"
+  },
+  {
+    "questionText": "Trong quá trình kiểm thử ứng dụng di động cho một ngân hàng tại Việt Nam, tester cần xác nhận rằng ứng dụng hoạt động ổn định khi chuyển đổi giữa các mạng 3G/4G/WiFi. Loại kiểm thử nào phù hợp nhất cho tình huống này?",
+    "options": [
+      "A. Performance Testing",
+      "B. Security Testing",
+      "C. Network Testing",
+      "D. Usability Testing"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Kiểm thử khả năng hoạt động khi chuyển đổi giữa các loại mạng là phạm vi của Network Testing. Performance Testing tập trung vào tốc độ và khả năng chịu tải, Security Testing kiểm tra bảo mật, còn Usability Testing đánh giá trải nghiệm người dùng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810759411_INTERMEDIATE_10_l8wp"
+  },
+  {
+    "questionText": "Khi thực hiện Acceptance Testing cho ứng dụng quản lý bán hàng tại một chuỗi siêu thị Việt Nam, tester nên tập trung vào tiêu chí nào sau đây?",
+    "options": [
+      "A. Tính chính xác của thuật toán tính thuế VAT.",
+      "B. Hiệu suất xử lý đơn hàng trong giờ cao điểm.",
+      "C. Khả năng tích hợp với hệ thống kế toán hiện có.",
+      "D. Sự phù hợp với quy trình nghiệp vụ bán hàng của siêu thị."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Acceptance Testing tập trung vào việc xác nhận ứng dụng đáp ứng yêu cầu nghiệp vụ của khách hàng. Sự phù hợp với quy trình bán hàng của siêu thị là tiêu chí quan trọng nhất. Các tiêu chí khác như tính toán thuế, hiệu suất hoặc tích hợp thuộc phạm vi System Testing hoặc Integration Testing.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SKILL",
+    "id": "q_1780810759411_INTERMEDIATE_11_jo3p"
+  },
+  {
+    "questionText": "Trong dự án phát triển phần mềm cho một công ty bảo hiểm tại Việt Nam, tester phát hiện lỗi: 'Hệ thống không gửi email thông báo khi hợp đồng bảo hiểm hết hạn'. Lỗi này nên được phân loại vào testing level nào?",
+    "options": [
+      "A. Unit Testing",
+      "B. Integration Testing",
+      "C. System Testing",
+      "D. Acceptance Testing"
+    ],
+    "correctAnswer": "C",
+    "explanation": "Lỗi liên quan đến chức năng gửi email thông báo, đòi hỏi kiểm tra toàn bộ hệ thống (bao gồm cả module gửi email và logic nghiệp vụ). Đây là phạm vi của System Testing. Unit Testing kiểm tra từng hàm riêng lẻ, Integration Testing kiểm tra giao tiếp giữa các module nhỏ, còn Acceptance Testing tập trung vào nghiệp vụ người dùng cuối.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810759411_INTERMEDIATE_12_zuek"
+  },
+  {
+    "questionText": "Trong dự án Agile tại một công ty fintech Việt Nam, Product Owner (PO) yêu cầu bỏ qua giai đoạn System Testing để đẩy nhanh tiến độ release. Bạn là QA Lead và nhận thấy rủi ro cao về bảo mật và tuân thủ quy định PCI DSS. Cách tiếp cận nào sau đây là hiệu quả nhất để giải quyết xung đột này?",
+    "options": [
+      "A. Chấp nhận yêu cầu của PO để đảm bảo tiến độ, sau đó báo cáo rủi ro lên ban quản lý sau khi release.",
+      "B. Từ chối thẳng thừng yêu cầu của PO và yêu cầu giữ nguyên quy trình System Testing theo tiêu chuẩn.",
+      "C. Đề xuất một kế hoạch System Testing tinh gọn, tập trung vào các tính năng cốt lõi liên quan đến bảo mật và tuân thủ PCI DSS, đồng thời trình bày rõ rủi ro nếu bỏ qua.",
+      "D. Chuyển trách nhiệm quyết định cho Scrum Master và không can thiệp vào quy trình."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C cân bằng giữa tiến độ và rủi ro, đồng thời thể hiện kỹ năng phân tích sâu và quản lý thay đổi quy trình phức tạp. Việc tập trung vào các tính năng cốt lõi liên quan đến bảo mật giúp giảm thiểu rủi ro tuân thủ PCI DSS mà vẫn đảm bảo tiến độ. Đây là cách tiếp cận thực tế và linh hoạt trong môi trường Agile tại các công ty fintech.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810855837_ADVANCED_0_2pgq"
+  },
+  {
+    "questionText": "Trong quá trình Integration Testing cho hệ thống ngân hàng đa quốc gia, bạn phát hiện một lỗi nghiêm trọng (Severity 1) liên quan đến tính toán lãi suất kép. Tuy nhiên, Business Analyst (BA) cho rằng lỗi này không cần ưu tiên cao vì nó chỉ ảnh hưởng đến một nhóm khách hàng nhỏ. Bạn nên làm gì để xử lý tình huống này?",
+    "options": [
+      "A. Ghi nhận lỗi với Priority thấp theo yêu cầu của BA và tiếp tục test các module khác.",
+      "B. Thảo luận với BA về tác động tiềm ẩn của lỗi, bao gồm rủi ro pháp lý và uy tín thương hiệu, sau đó đề xuất nâng Priority lên cao.",
+      "C. Báo cáo trực tiếp lên giám đốc dự án mà không thông báo cho BA để tránh xung đột.",
+      "D. Tự quyết định nâng Priority lên cao mà không cần thảo luận với BA."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B thể hiện kỹ năng phân tích tác động và quản lý rủi ro. Lỗi liên quan đến lãi suất kép có thể gây hậu quả nghiêm trọng về pháp lý và tài chính, dù chỉ ảnh hưởng đến nhóm khách hàng nhỏ. Việc thảo luận với BA giúp đảm bảo quyết định dựa trên thông tin đầy đủ và đồng thuận từ các bên liên quan.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810855838_ADVANCED_1_dxwj"
+  },
+  {
+    "questionText": "Bạn đang tham gia dự án phát triển hệ thống quản lý kho hàng cho một tập đoàn bán lẻ tại Việt Nam. Trong giai đoạn System Testing, bạn phát hiện một lỗi liên quan đến tính toán tồn kho không chính xác khi có nhiều giao dịch đồng thời. Lỗi này thuộc loại nào trong Defect Life Cycle và cần được xử lý như thế nào?",
+    "options": [
+      "A. Lỗi thuộc trạng thái 'Rejected' vì chưa được developer xác nhận, cần tạo lại bug report chi tiết hơn.",
+      "B. Lỗi thuộc trạng thái 'New', cần được gán cho developer để phân tích và sửa chữa, đồng thời đánh giá Severity và Priority dựa trên tác động kinh doanh.",
+      "C. Lỗi thuộc trạng thái 'Deferred' vì không ảnh hưởng đến chức năng chính, có thể xử lý sau.",
+      "D. Lỗi thuộc trạng thái 'Closed' vì đã được phát hiện và ghi nhận, không cần theo dõi thêm."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi mới phát hiện trong System Testing thuộc trạng thái 'New' trong Defect Life Cycle. Cần gán cho developer để phân tích và sửa chữa, đồng thời đánh giá Severity (ví dụ: Severity 1 nếu ảnh hưởng đến tính chính xác của tồn kho) và Priority (ưu tiên cao nếu ảnh hưởng đến hoạt động kinh doanh cốt lõi).",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SKILL",
+    "id": "q_1780810855839_ADVANCED_2_2gad"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng di động cho ngân hàng, bạn được yêu cầu thiết kế chiến lược kiểm thử cho tính năng chuyển tiền quốc tế. Tính năng này yêu cầu tích hợp với nhiều hệ thống bên ngoài (ví dụ: SWIFT, ngân hàng đối tác). Cấp độ kiểm thử nào sau đây là phù hợp nhất để đảm bảo tính năng hoạt động chính xác trong môi trường thực tế?",
+    "options": [
+      "A. Chỉ cần thực hiện Unit Testing để kiểm tra các hàm tính toán phí chuyển tiền.",
+      "B. Thực hiện Integration Testing để kiểm tra tích hợp giữa các module nội bộ, sau đó là System Testing để kiểm tra toàn bộ quy trình chuyển tiền.",
+      "C. Thực hiện System Testing kết hợp với End-to-End Testing để kiểm tra toàn bộ quy trình từ khi người dùng nhập lệnh đến khi tiền được chuyển thành công, bao gồm cả tích hợp với hệ thống bên ngoài.",
+      "D. Chỉ cần thực hiện Acceptance Testing với sự tham gia của PO để đảm bảo tính năng đáp ứng yêu cầu kinh doanh."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tính năng chuyển tiền quốc tế yêu cầu kiểm thử toàn diện từ quy trình nội bộ đến tích hợp với hệ thống bên ngoài. System Testing đảm bảo tính năng hoạt động đúng trong môi trường mô phỏng, trong khi End-to-End Testing kiểm tra toàn bộ luồng từ đầu đến cuối, bao gồm cả tích hợp với SWIFT và ngân hàng đối tác. Đây là cách tiếp cận thực tế để giảm thiểu rủi ro trong môi trường sản xuất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810855839_ADVANCED_3_uybr"
+  },
+  {
+    "questionText": "Bạn là QA Lead trong dự án phát triển hệ thống ERP cho một công ty sản xuất tại Việt Nam. Trong giai đoạn User Acceptance Testing (UAT), khách hàng phát hiện một lỗi liên quan đến báo cáo tài chính không khớp với dữ liệu thực tế. Sau khi điều tra, bạn phát hiện lỗi này xuất phát từ việc developer hiểu sai yêu cầu về công thức tính toán. Lỗi này nên được phân loại Severity và Priority như thế nào?",
+    "options": [
+      "A. Severity: Low, Priority: Low vì lỗi chỉ ảnh hưởng đến báo cáo, không phải chức năng cốt lõi.",
+      "B. Severity: High, Priority: High vì lỗi ảnh hưởng đến tính chính xác của báo cáo tài chính, có thể gây hậu quả pháp lý và tài chính nghiêm trọng.",
+      "C. Severity: Medium, Priority: Medium vì lỗi có thể sửa sau khi release.",
+      "D. Severity: Critical, Priority: Low vì lỗi không ảnh hưởng đến chức năng chính của hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi liên quan đến báo cáo tài chính có tác động nghiêm trọng đến hoạt động kinh doanh và tuân thủ pháp luật. Severity được đánh giá là High vì lỗi ảnh hưởng đến tính chính xác của dữ liệu tài chính, và Priority cũng là High vì cần được sửa ngay để tránh hậu quả pháp lý và tài chính. Đây là tình huống thực tế trong các dự án ERP tại Việt Nam.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810855839_ADVANCED_4_c93y"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng thương mại điện tử, bạn được yêu cầu áp dụng Grey Box Testing cho module giỏ hàng. Phương pháp nào sau đây là phù hợp nhất để thực hiện Grey Box Testing trong trường hợp này?",
+    "options": [
+      "A. Chỉ kiểm tra giao diện người dùng của giỏ hàng mà không cần biết cấu trúc code bên trong.",
+      "B. Kiểm tra cả giao diện người dùng và cấu trúc code của module giỏ hàng, đồng thời sử dụng kiến thức về cơ sở dữ liệu để thiết kế test case cho các tình huống như xử lý đồng thời nhiều yêu cầu thêm sản phẩm.",
+      "C. Chỉ kiểm tra cấu trúc code của module giỏ hàng mà không cần quan tâm đến giao diện người dùng.",
+      "D. Yêu cầu developer cung cấp tất cả test case và chỉ thực hiện theo hướng dẫn của họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Grey Box Testing kết hợp giữa kiểm thử giao diện người dùng (Black Box) và kiến thức về cấu trúc code/cơ sở dữ liệu (White Box). Trong trường hợp module giỏ hàng, cần kiểm tra cả giao diện và logic xử lý bên trong, đặc biệt là các tình huống như xử lý đồng thời nhiều yêu cầu để đảm bảo tính chính xác của dữ liệu.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SKILL",
+    "id": "q_1780810855840_ADVANCED_5_w2f0"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án phát triển hệ thống ngân hàng số tại Việt Nam. Trong giai đoạn Integration Testing, bạn phát hiện một lỗi liên quan đến việc tích hợp giữa module đăng nhập và module xác thực OTP. Lỗi này chỉ xảy ra khi người dùng sử dụng mạng 3G nhưng không xảy ra khi sử dụng Wi-Fi. Bạn nên phân loại lỗi này như thế nào và xử lý ra sao?",
+    "options": [
+      "A. Lỗi thuộc Severity: Low, Priority: Low vì chỉ ảnh hưởng đến một số ít người dùng sử dụng mạng 3G.",
+      "B. Lỗi thuộc Severity: High, Priority: High vì ảnh hưởng đến trải nghiệm người dùng và có thể gây mất an toàn thông tin nếu OTP không được gửi đúng cách.",
+      "C. Lỗi thuộc Severity: Medium, Priority: Medium vì có thể khắc phục sau khi release.",
+      "D. Lỗi thuộc Severity: Critical, Priority: Low vì không ảnh hưởng đến tất cả người dùng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi liên quan đến xác thực OTP có thể gây mất an toàn thông tin và ảnh hưởng nghiêm trọng đến trải nghiệm người dùng. Severity được đánh giá là High vì lỗi ảnh hưởng đến tính năng bảo mật cốt lõi, và Priority cũng là High vì cần được sửa ngay để đảm bảo hệ thống hoạt động ổn định trên tất cả các loại mạng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810855840_ADVANCED_6_o0fi"
+  },
+  {
+    "questionText": "Trong dự án Agile phát triển ứng dụng di động cho ngân hàng, bạn nhận thấy rằng quy trình STLC hiện tại không tích hợp tốt với SDLC, dẫn đến việc kiểm thử thường bị chậm trễ và không đồng bộ với quá trình phát triển. Giải pháp nào sau đây là hiệu quả nhất để cải thiện tình hình?",
+    "options": [
+      "A. Yêu cầu team phát triển hoàn thành toàn bộ mã nguồn trước khi bắt đầu kiểm thử để đảm bảo tính ổn định của hệ thống.",
+      "B. Đề xuất áp dụng mô hình Shift-Left Testing, trong đó QA tham gia từ giai đoạn thiết kế và thực hiện kiểm thử liên tục song song với phát triển, đồng thời sử dụng các công cụ tự động hóa để tăng tốc độ kiểm thử.",
+      "C. Tách biệt hoàn toàn quy trình kiểm thử khỏi quy trình phát triển để tránh xung đột giữa QA và developer.",
+      "D. Chuyển toàn bộ trách nhiệm kiểm thử cho developer để giảm thiểu sự phụ thuộc vào QA."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Shift-Left Testing giúp tích hợp STLC vào SDLC từ sớm, giảm thiểu rủi ro và chi phí sửa lỗi. Việc QA tham gia từ giai đoạn thiết kế và thực hiện kiểm thử liên tục song song với phát triển giúp phát hiện lỗi sớm và cải thiện chất lượng sản phẩm. Đây là giải pháp thực tế và hiệu quả trong môi trường Agile.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810855841_ADVANCED_7_3x90"
+  },
+  {
+    "questionText": "Bạn là QA Lead trong dự án phát triển hệ thống quản lý chuỗi cung ứng cho một tập đoàn bán lẻ. Trong giai đoạn System Testing, bạn phát hiện một lỗi liên quan đến việc cập nhật trạng thái đơn hàng không đồng bộ giữa hệ thống quản lý kho và hệ thống bán hàng. Lỗi này chỉ xảy ra khi có nhiều đơn hàng được xử lý đồng thời. Bạn nên phân loại lỗi này như thế nào và đề xuất giải pháp ra sao?",
+    "options": [
+      "A. Lỗi thuộc Severity: Low, Priority: Low vì chỉ xảy ra trong điều kiện đặc biệt, có thể bỏ qua.",
+      "B. Lỗi thuộc Severity: High, Priority: High vì ảnh hưởng đến tính chính xác của dữ liệu và có thể gây nhầm lẫn trong quản lý kho hàng. Giải pháp là yêu cầu developer tối ưu hóa cơ chế đồng bộ hóa dữ liệu và thực hiện kiểm thử tải để đảm bảo hệ thống hoạt động ổn định.",
+      "C. Lỗi thuộc Severity: Medium, Priority: Medium vì có thể khắc phục sau khi release.",
+      "D. Lỗi thuộc Severity: Critical, Priority: Low vì không ảnh hưởng đến tất cả đơn hàng."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi liên quan đến đồng bộ hóa dữ liệu giữa các hệ thống có tác động nghiêm trọng đến hoạt động kinh doanh. Severity được đánh giá là High vì ảnh hưởng đến tính chính xác của dữ liệu, và Priority cũng là High vì cần được xử lý ngay để tránh hậu quả nghiêm trọng. Giải pháp yêu cầu tối ưu hóa cơ chế đồng bộ hóa và kiểm thử tải là phù hợp với thực tế dự án.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810855841_ADVANCED_8_ih5l"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng ngân hàng số, bạn được yêu cầu thiết kế chiến lược kiểm thử cho tính năng thanh toán hóa đơn tự động. Tính năng này yêu cầu tích hợp với nhiều nhà cung cấp dịch vụ bên ngoài (ví dụ: điện, nước, internet). Phương pháp kiểm thử nào sau đây là phù hợp nhất để đảm bảo tính năng hoạt động chính xác trong môi trường thực tế?",
+    "options": [
+      "A. Chỉ thực hiện Unit Testing để kiểm tra các hàm tính toán phí dịch vụ.",
+      "B. Thực hiện Integration Testing để kiểm tra tích hợp giữa các module nội bộ, sau đó là System Testing để kiểm tra toàn bộ quy trình thanh toán.",
+      "C. Thực hiện System Testing kết hợp với End-to-End Testing để kiểm tra toàn bộ quy trình từ khi người dùng chọn hóa đơn đến khi thanh toán thành công, bao gồm cả tích hợp với các nhà cung cấp dịch vụ bên ngoài và kiểm thử tính năng xử lý lỗi khi kết nối bị gián đoạn.",
+      "D. Chỉ thực hiện Acceptance Testing với sự tham gia của PO để đảm bảo tính năng đáp ứng yêu cầu kinh doanh."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Tính năng thanh toán hóa đơn tự động yêu cầu kiểm thử toàn diện từ quy trình nội bộ đến tích hợp với các nhà cung cấp dịch vụ bên ngoài. System Testing đảm bảo tính năng hoạt động đúng trong môi trường mô phỏng, trong khi End-to-End Testing kiểm tra toàn bộ luồng từ đầu đến cuối, bao gồm cả xử lý lỗi khi kết nối bị gián đoạn. Đây là cách tiếp cận thực tế để giảm thiểu rủi ro trong môi trường sản xuất.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810855842_ADVANCED_9_evv0"
+  },
+  {
+    "questionText": "Bạn đang làm việc trong dự án phát triển hệ thống quản lý nhân sự cho một công ty đa quốc gia. Trong giai đoạn User Acceptance Testing (UAT), khách hàng phát hiện một lỗi liên quan đến việc tính toán lương không chính xác cho nhân viên làm việc theo giờ. Sau khi điều tra, bạn phát hiện lỗi này xuất phát từ việc developer hiểu sai yêu cầu về quy tắc tính lương theo giờ làm thêm. Lỗi này nên được phân loại Severity và Priority như thế nào?",
+    "options": [
+      "A. Severity: Low, Priority: Low vì lỗi chỉ ảnh hưởng đến một số ít nhân viên làm việc theo giờ.",
+      "B. Severity: High, Priority: High vì lỗi ảnh hưởng đến tính chính xác của lương, có thể gây hậu quả pháp lý và ảnh hưởng đến tinh thần nhân viên.",
+      "C. Severity: Medium, Priority: Medium vì lỗi có thể sửa sau khi release.",
+      "D. Severity: Critical, Priority: Low vì lỗi không ảnh hưởng đến tất cả nhân viên."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi liên quan đến tính toán lương có tác động nghiêm trọng đến quyền lợi của nhân viên và tuân thủ pháp luật lao động. Severity được đánh giá là High vì lỗi ảnh hưởng đến tính chính xác của dữ liệu lương, và Priority cũng là High vì cần được sửa ngay để tránh hậu quả pháp lý và ảnh hưởng đến tinh thần nhân viên. Đây là tình huống thực tế trong các dự án quản lý nhân sự.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810855842_ADVANCED_10_ru0p"
+  },
+  {
+    "questionText": "Trong dự án phát triển ứng dụng thương mại điện tử, bạn được yêu cầu áp dụng White Box Testing cho module quản lý sản phẩm. Phương pháp nào sau đây là phù hợp nhất để thực hiện White Box Testing trong trường hợp này?",
+    "options": [
+      "A. Chỉ kiểm tra giao diện người dùng của module quản lý sản phẩm mà không cần biết cấu trúc code bên trong.",
+      "B. Kiểm tra cấu trúc code của module quản lý sản phẩm, bao gồm các nhánh điều kiện, vòng lặp và đường dẫn thực thi, đồng thời thiết kế test case để đảm bảo tất cả các đường dẫn được kiểm tra.",
+      "C. Chỉ kiểm tra tính năng thêm sản phẩm mà không cần quan tâm đến các tính năng khác.",
+      "D. Yêu cầu developer cung cấp tất cả test case và chỉ thực hiện theo hướng dẫn của họ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "White Box Testing tập trung vào cấu trúc code và logic bên trong. Trong trường hợp module quản lý sản phẩm, cần kiểm tra các nhánh điều kiện, vòng lặp và đường dẫn thực thi để đảm bảo tất cả các tình huống đều được kiểm tra. Đây là phương pháp hiệu quả để phát hiện lỗi tiềm ẩn trong logic xử lý.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SKILL",
+    "id": "q_1780810855842_ADVANCED_11_7uqh"
+  },
+  {
+    "questionText": "Bạn là QA Lead trong dự án phát triển hệ thống ngân hàng số tại Việt Nam. Trong giai đoạn System Testing, bạn phát hiện một lỗi liên quan đến việc xử lý giao dịch thất bại không được ghi nhận vào hệ thống log. Lỗi này có thể gây khó khăn cho việc điều tra sự cố sau này. Bạn nên phân loại lỗi này như thế nào và xử lý ra sao?",
+    "options": [
+      "A. Lỗi thuộc Severity: Low, Priority: Low vì không ảnh hưởng trực tiếp đến chức năng chính của hệ thống.",
+      "B. Lỗi thuộc Severity: Medium, Priority: High vì ảnh hưởng đến khả năng truy vết sự cố và có thể gây khó khăn cho việc bảo trì hệ thống sau này. Giải pháp là yêu cầu developer bổ sung cơ chế ghi log cho tất cả các giao dịch thất bại và thực hiện kiểm thử lại.",
+      "C. Lỗi thuộc Severity: High, Priority: Low vì không ảnh hưởng đến người dùng cuối.",
+      "D. Lỗi thuộc Severity: Critical, Priority: High vì ảnh hưởng đến tính bảo mật của hệ thống."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi liên quan đến ghi log giao dịch thất bại ảnh hưởng đến khả năng truy vết sự cố và bảo trì hệ thống. Severity được đánh giá là Medium vì không ảnh hưởng trực tiếp đến chức năng chính, nhưng Priority là High vì cần được xử lý ngay để đảm bảo hệ thống có thể được bảo trì và điều tra sự cố hiệu quả sau này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810855843_ADVANCED_12_dyvv"
+  },
+  {
+    "questionText": "Trong một dự án Agile quy mô lớn tại Việt Nam, nhóm QA phát hiện rằng việc tích hợp kiểm thử tự động vào CI/CD pipeline thường xuyên bị trễ so với kế hoạch do thiếu sự đồng bộ giữa các team phát triển và QA. Là QA Lead, bạn sẽ đề xuất giải pháp chiến lược nào để giải quyết vấn đề này ở cấp độ tổ chức, đồng thời đảm bảo tính bền vững dài hạn?",
+    "options": [
+      "A. Yêu cầu tất cả các team tuân thủ nghiêm ngặt quy trình STLC đã định sẵn, tăng cường giám sát và báo cáo hàng tuần để đảm bảo tiến độ.",
+      "B. Thiết lập một nhóm chuyên trách 'Quality Guild' gồm đại diện từ các team phát triển, QA và DevOps để đồng bộ hóa quy trình, xây dựng bộ tiêu chuẩn kiểm thử tự động chung và tổ chức đào tạo liên tục về công cụ CI/CD cho tất cả thành viên.",
+      "C. Chuyển toàn bộ trách nhiệm kiểm thử tự động cho team DevOps để giảm tải cho team QA và phát triển, đồng thời tối ưu hóa pipeline hiện có.",
+      "D. Áp dụng mô hình 'Shift-Left Testing' bằng cách yêu cầu developer tự viết unit test và integration test trước khi chuyển giao cho QA, giảm phụ thuộc vào QA team."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B tập trung vào việc xây dựng sự cộng tác bền vững giữa các team thông qua một nhóm chuyên trách, đồng thời thiết lập tiêu chuẩn chung và đào tạo liên tục. Điều này giải quyết gốc rễ vấn đề đồng bộ hóa và tạo nền tảng dài hạn cho tổ chức, phù hợp với tư duy chiến lược cấp EXPERT. Các lựa chọn khác chỉ giải quyết triệu chứng hoặc tạo ra sự phụ thuộc không bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810963773_EXPERT_0_xec4"
+  },
+  {
+    "questionText": "Công ty bạn đang triển khai một hệ thống ngân hàng lõi (Core Banking) mới tại Việt Nam với sự tham gia của nhiều vendor quốc tế. Sau giai đoạn UAT, khách hàng phát hiện nhiều defect nghiêm trọng liên quan đến luồng giao dịch tài chính phức tạp, trong khi các test case của QA team đã pass. Là QA Architect, bạn xác định nguyên nhân gốc rễ nào sau đây là THIẾU SÓT NGHIÊM TRỌNG NHẤT trong quy trình kiểm thử hiện tại?",
+    "options": [
+      "A. Thiếu sự tham gia của business analyst trong giai đoạn thiết kế test case, dẫn đến hiểu sai yêu cầu nghiệp vụ.",
+      "B. Chưa áp dụng kỹ thuật kiểm thử dựa trên rủi ro (Risk-Based Testing) để tập trung vào các luồng giao dịch có độ ưu tiên cao.",
+      "C. Chưa xây dựng môi trường kiểm thử (test environment) đủ tương đồng với môi trường production, đặc biệt là về cấu hình hệ thống và dữ liệu giao dịch thực tế.",
+      "D. Chưa triển khai kiểm thử hiệu năng (performance testing) từ sớm, dẫn đến phát hiện muộn các vấn đề về xử lý giao dịch đồng thời."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong dự án Core Banking, môi trường kiểm thử phải mô phỏng chính xác môi trường production về cấu hình hệ thống, dữ liệu và quy trình nghiệp vụ. Việc thiếu sót này dẫn đến các defect nghiêm trọng không được phát hiện trong UAT, gây rủi ro cao cho hệ thống tài chính. Các lựa chọn khác là vấn đề nhưng không phải nguyên nhân gốc rễ nghiêm trọng nhất trong bối cảnh này.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810963774_EXPERT_1_zdd3"
+  },
+  {
+    "questionText": "Một công ty fintech Việt Nam đang mở rộng sang thị trường Đông Nam Á. Nhóm QA nhận thấy tỷ lệ defect leakage từ giai đoạn System Testing sang UAT lên đến 30%, chủ yếu liên quan đến tích hợp với các hệ thống bên thứ ba (ví dụ: cổng thanh toán, KYC provider). Là QA Manager, bạn sẽ đề xuất chiến lược nào để GIẢM ĐÁNG KỂ tỷ lệ này trong dài hạn?",
+    "options": [
+      "A. Tăng cường kiểm thử tích hợp (Integration Testing) bằng cách yêu cầu tất cả các vendor cung cấp môi trường sandbox và dữ liệu test đầy đủ trước khi bắt đầu System Testing.",
+      "B. Áp dụng mô hình 'Contract Testing' kết hợp với 'Service Virtualization' để mô phỏng hành vi của các hệ thống bên thứ ba, đồng thời xây dựng bộ test case tích hợp tự động chạy trong CI/CD pipeline.",
+      "C. Yêu cầu team phát triển viết thêm unit test và integration test để bao phủ các trường hợp tích hợp, giảm phụ thuộc vào QA team.",
+      "D. Đẩy mạnh kiểm thử thủ công (manual testing) trong giai đoạn System Testing để đảm bảo tất cả luồng tích hợp được kiểm tra kỹ lưỡng trước khi chuyển sang UAT."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Contract Testing và Service Virtualization là giải pháp chiến lược để kiểm soát chất lượng tích hợp với hệ thống bên thứ ba trong dài hạn. Nó cho phép QA team kiểm thử độc lập mà không phụ thuộc vào môi trường thực của vendor, đồng thời tích hợp tự động vào pipeline giúp phát hiện sớm các vấn đề. Các lựa chọn khác không giải quyết được gốc rễ vấn đề hoặc không bền vững.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810963775_EXPERT_2_wm6n"
+  },
+  {
+    "questionText": "Trong một dự án chuyển đổi số tại một ngân hàng Việt Nam, nhóm QA phát hiện rằng các defect liên quan đến bảo mật (ví dụ: SQL Injection, XSS) thường bị bỏ sót trong giai đoạn kiểm thử hệ thống (System Testing) và chỉ được phát hiện ở giai đoạn Penetration Testing. Là QA Security Champion, bạn sẽ đề xuất thay đổi nào sau đây để CẢI THIỆN QUY TRÌNH KIỂM THỬ TỪ GỐC?",
+    "options": [
+      "A. Chuyển trách nhiệm kiểm thử bảo mật hoàn toàn cho team Security, QA team chỉ tập trung vào kiểm thử chức năng.",
+      "B. Đưa kiểm thử bảo mật vào giai đoạn Unit Testing và Integration Testing bằng cách tích hợp các công cụ SAST/DAST vào CI/CD pipeline, đồng thời đào tạo developer về secure coding.",
+      "C. Tăng cường kiểm thử thủ công (manual testing) cho các trường hợp bảo mật trong giai đoạn System Testing, đặc biệt là các luồng đăng nhập và thanh toán.",
+      "D. Yêu cầu tất cả test case liên quan đến bảo mật phải được review bởi team Security trước khi thực hiện, đảm bảo tính đầy đủ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B áp dụng tư duy 'Shift-Left Security' bằng cách tích hợp kiểm thử bảo mật từ sớm trong quy trình phát triển, đồng thời nâng cao năng lực secure coding cho developer. Điều này giải quyết gốc rễ vấn đề và tạo nền tảng bền vững. Các lựa chọn khác chỉ giải quyết triệu chứng hoặc tạo ra sự phụ thuộc không hiệu quả.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810963776_EXPERT_3_bmir"
+  },
+  {
+    "questionText": "Một công ty phần mềm outsourcing tại Việt Nam đang triển khai dự án cho khách hàng Nhật Bản. Khách hàng yêu cầu tỷ lệ defect leakage từ giai đoạn System Testing sang UAT phải dưới 5%. Tuy nhiên, sau 3 sprint, tỷ lệ này vẫn ở mức 20%, chủ yếu do các defect liên quan đến nghiệp vụ phức tạp. Là QA Lead, bạn xác định KHOẢNG TRỐNG (gap) LỚN NHẤT trong quy trình hiện tại là gì?",
+    "options": [
+      "A. Thiếu sự tham gia của khách hàng trong giai đoạn thiết kế test case, dẫn đến hiểu sai yêu cầu nghiệp vụ.",
+      "B. Chưa áp dụng kỹ thuật kiểm thử dựa trên mô hình (Model-Based Testing) để tự động sinh test case cho các luồng nghiệp vụ phức tạp.",
+      "C. Chưa xây dựng bộ test case regression đầy đủ và tự động hóa để đảm bảo tính ổn định sau mỗi sprint.",
+      "D. Thiếu môi trường kiểm thử tương đồng với production, đặc biệt là về cấu hình hệ thống và dữ liệu nghiệp vụ."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong dự án outsourcing cho khách hàng Nhật Bản, sự tham gia của khách hàng trong giai đoạn thiết kế test case là yếu tố then chốt để đảm bảo hiểu đúng yêu cầu nghiệp vụ phức tạp. Khoảng trống này dẫn đến các defect liên quan đến nghiệp vụ bị bỏ sót. Các lựa chọn khác là vấn đề nhưng không phải khoảng trống lớn nhất trong bối cảnh này.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810963776_EXPERT_4_c4gt"
+  },
+  {
+    "questionText": "Công ty bạn đang triển khai một hệ thống ERP cho doanh nghiệp sản xuất tại Việt Nam. Sau khi triển khai, khách hàng phát hiện nhiều defect nghiêm trọng liên quan đến tính toán thuế và báo cáo tài chính, trong khi các test case của QA team đã pass. Là QA Director, bạn sẽ đề xuất giải pháp chiến lược nào để NGĂN NGỪA vấn đề này trong các dự án tương lai?",
+    "options": [
+      "A. Tăng cường kiểm thử thủ công (manual testing) cho các module tài chính và thuế trong giai đoạn System Testing.",
+      "B. Xây dựng bộ test case chuyên sâu cho các luồng tài chính và thuế, đồng thời yêu cầu team Business Analyst review kỹ lưỡng.",
+      "C. Áp dụng mô hình 'Domain-Specific Testing' bằng cách thành lập nhóm QA chuyên trách về tài chính-thuế, kết hợp với kiểm thử tự động dựa trên dữ liệu thực tế và quy định pháp luật hiện hành.",
+      "D. Yêu cầu team phát triển viết thêm unit test và integration test cho các module tài chính và thuế để giảm phụ thuộc vào QA team."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C tập trung vào việc xây dựng năng lực chuyên sâu về tài chính-thuế cho nhóm QA, kết hợp với kiểm thử tự động dựa trên dữ liệu thực tế và quy định pháp luật. Điều này giải quyết gốc rễ vấn đề và tạo nền tảng bền vững cho các dự án tương lai. Các lựa chọn khác chỉ giải quyết triệu chứng hoặc không đủ toàn diện.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810963777_EXPERT_5_5ezi"
+  },
+  {
+    "questionText": "Trong một dự án Agile tại công ty công nghệ Việt Nam, nhóm QA nhận thấy rằng việc quản lý defect life cycle đang gặp nhiều vấn đề: nhiều defect bị duplicate, phân loại severity/priority không nhất quán, và thời gian xử lý defect kéo dài. Là QA Manager, bạn sẽ đề xuất giải pháp nào sau đây để CẢI THIỆN HIỆU QUẢ QUẢN LÝ DEFECT ở cấp độ tổ chức?",
+    "options": [
+      "A. Xây dựng bộ tiêu chuẩn phân loại severity/priority rõ ràng, kết hợp với đào tạo cho tất cả thành viên về cách áp dụng tiêu chuẩn này.",
+      "B. Áp dụng công cụ quản lý defect tiên tiến (ví dụ: JIRA + Xray) và thiết lập quy trình tự động để phát hiện duplicate defect dựa trên AI.",
+      "C. Thành lập nhóm 'Defect Triage' chuyên trách để review và phân loại tất cả defect mới, đồng thời xây dựng bộ tiêu chuẩn phân loại severity/priority dựa trên rủi ro nghiệp vụ và kỹ thuật.",
+      "D. Yêu cầu tất cả defect phải được assign trực tiếp cho developer phụ trách module, giảm thiểu thời gian trung gian."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C kết hợp việc thành lập nhóm chuyên trách với xây dựng bộ tiêu chuẩn phân loại dựa trên rủi ro nghiệp vụ và kỹ thuật. Điều này giải quyết gốc rễ vấn đề về tính nhất quán và hiệu quả quản lý defect ở cấp độ tổ chức. Các lựa chọn khác chỉ giải quyết một phần vấn đề hoặc không đủ toàn diện.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810963777_EXPERT_6_ehj2"
+  },
+  {
+    "questionText": "Một công ty e-commerce Việt Nam đang chuẩn bị ra mắt tính năng mới cho phép thanh toán bằng ví điện tử. Nhóm QA được yêu cầu đảm bảo tính năng này hoạt động chính xác trong mọi tình huống, bao gồm cả các trường hợp lỗi (ví dụ: hết tiền trong ví, lỗi kết nối ngân hàng). Là QA Lead, bạn sẽ ưu tiên áp dụng kỹ thuật kiểm thử nào sau đây để BAO PHỦ TOÀN DIỆN các tình huống này?",
+    "options": [
+      "A. Kiểm thử biên (Boundary Value Analysis) kết hợp với kiểm thử giá trị tương đương (Equivalence Partitioning) để bao phủ các trường hợp đầu vào.",
+      "B. Kiểm thử dựa trên rủi ro (Risk-Based Testing) để tập trung vào các luồng thanh toán có độ ưu tiên cao.",
+      "C. Kiểm thử dựa trên mô hình (Model-Based Testing) để tự động sinh test case cho các luồng thanh toán phức tạp.",
+      "D. Kiểm thử dựa trên lỗi (Error Guessing) kết hợp với kiểm thử thăm dò (Exploratory Testing) để phát hiện các trường hợp lỗi tiềm ẩn."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Trong bối cảnh tính năng thanh toán ví điện tử, các trường hợp lỗi tiềm ẩn (ví dụ: lỗi kết nối, hết tiền) thường khó dự đoán trước. Kỹ thuật Error Guessing kết hợp với Exploratory Testing cho phép QA team khám phá và kiểm thử các tình huống lỗi một cách linh hoạt và toàn diện. Các lựa chọn khác không tập trung đủ vào các trường hợp lỗi.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SKILL",
+    "id": "q_1780810963778_EXPERT_7_zibx"
+  },
+  {
+    "questionText": "Công ty bạn đang triển khai một hệ thống quản lý chuỗi cung ứng (Supply Chain Management) cho doanh nghiệp bán lẻ tại Việt Nam. Khách hàng yêu cầu tỷ lệ defect leakage từ giai đoạn System Testing sang UAT phải dưới 10%. Tuy nhiên, sau 2 sprint, tỷ lệ này vẫn ở mức 25%, chủ yếu do các defect liên quan đến tích hợp với hệ thống đối tác. Là QA Architect, bạn xác định NGUYÊN NHÂN GỐC RỄ nào sau đây là QUAN TRỌNG NHẤT cần giải quyết?",
+    "options": [
+      "A. Thiếu môi trường kiểm thử tích hợp (Integration Test Environment) đủ tương đồng với production, đặc biệt là về cấu hình và dữ liệu.",
+      "B. Chưa áp dụng kỹ thuật kiểm thử dựa trên API (API Testing) để kiểm tra các giao tiếp giữa hệ thống và đối tác.",
+      "C. Thiếu sự tham gia của các đối tác trong giai đoạn thiết kế test case, dẫn đến hiểu sai yêu cầu tích hợp.",
+      "D. Chưa xây dựng bộ test case regression đầy đủ và tự động hóa để đảm bảo tính ổn định sau mỗi sprint."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Trong dự án Supply Chain Management, môi trường kiểm thử tích hợp phải mô phỏng chính xác môi trường production về cấu hình và dữ liệu để phát hiện sớm các vấn đề tích hợp. Thiếu sót này là nguyên nhân gốc rễ quan trọng nhất dẫn đến tỷ lệ defect leakage cao. Các lựa chọn khác là vấn đề nhưng không phải nguyên nhân gốc rễ nghiêm trọng nhất.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "ANALYSIS",
+    "id": "q_1780810963779_EXPERT_8_axxu"
+  },
+  {
+    "questionText": "Một công ty fintech Việt Nam đang triển khai hệ thống thanh toán quốc tế. Nhóm QA phát hiện rằng các test case cho module xử lý ngoại tệ thường xuyên fail do dữ liệu test không cập nhật tỷ giá mới nhất. Là QA Lead, bạn sẽ đề xuất giải pháp nào sau đây để ĐẢM BẢO TÍNH CHÍNH XÁC của kiểm thử trong dài hạn?",
+    "options": [
+      "A. Yêu cầu team phát triển viết script tự động cập nhật dữ liệu test từ nguồn dữ liệu tỷ giá chính thức trước mỗi lần chạy test.",
+      "B. Xây dựng môi trường kiểm thử riêng biệt với dữ liệu tỷ giá cố định để đảm bảo tính nhất quán của test case.",
+      "C. Áp dụng kỹ thuật kiểm thử dựa trên dữ liệu động (Dynamic Data-Driven Testing) bằng cách tích hợp API lấy tỷ giá thời gian thực vào test script, đồng thời xây dựng cơ chế tự động cập nhật dữ liệu test.",
+      "D. Tăng cường kiểm thử thủ công (manual testing) cho module xử lý ngoại tệ để đảm bảo tính chính xác."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp C kết hợp việc sử dụng dữ liệu động từ API thời gian thực với cơ chế tự động cập nhật, đảm bảo dữ liệu test luôn chính xác và phản ánh tình hình thực tế. Điều này giải quyết gốc rễ vấn đề và tạo nền tảng bền vững cho kiểm thử dài hạn. Các lựa chọn khác không đủ toàn diện hoặc không giải quyết được vấn đề gốc rễ.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810963779_EXPERT_9_0xhq"
+  },
+  {
+    "questionText": "Trong một dự án Agile tại công ty công nghệ Việt Nam, nhóm QA nhận thấy rằng việc kiểm thử hiệu năng (Performance Testing) thường bị trì hoãn đến cuối sprint, dẫn đến phát hiện muộn các vấn đề về tốc độ xử lý. Là QA Performance Specialist, bạn sẽ đề xuất chiến lược nào để TÍCH HỢP KIỂM THỬ HIỆU NĂNG VÀO QUY TRÌNH AGILE một cách hiệu quả?",
+    "options": [
+      "A. Áp dụng mô hình 'Shift-Right Performance Testing' bằng cách triển khai kiểm thử hiệu năng trên môi trường production sau khi release.",
+      "B. Xây dựng bộ test case hiệu năng cơ bản và tích hợp vào CI/CD pipeline, đồng thời áp dụng kỹ thuật kiểm thử hiệu năng gia tăng (Incremental Performance Testing) sau mỗi sprint.",
+      "C. Yêu cầu team phát triển tối ưu hóa mã nguồn từ sớm để đảm bảo hiệu năng, giảm phụ thuộc vào kiểm thử hiệu năng.",
+      "D. Tăng cường kiểm thử thủ công (manual testing) cho các luồng chức năng có yêu cầu hiệu năng cao trong mỗi sprint."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Giải pháp B kết hợp việc tích hợp kiểm thử hiệu năng vào CI/CD pipeline với kỹ thuật kiểm thử hiệu năng gia tăng, cho phép phát hiện sớm các vấn đề hiệu năng trong mỗi sprint. Điều này phù hợp với quy trình Agile và giải quyết gốc rễ vấn đề trì hoãn. Các lựa chọn khác không giải quyết được vấn đề tích hợp hoặc không phù hợp với Agile.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SITUATION",
+    "id": "q_1780810963779_EXPERT_10_avoc"
+  },
+  {
+    "questionText": "Một công ty thương mại điện tử Việt Nam đang triển khai hệ thống recommendation engine để cá nhân hóa trải nghiệm người dùng. Nhóm QA cần đảm bảo rằng thuật toán recommendation hoạt động chính xác trong mọi tình huống, bao gồm cả các trường hợp biên (ví dụ: người dùng mới, sản phẩm mới). Là QA AI/ML Specialist, bạn sẽ ưu tiên áp dụng kỹ thuật kiểm thử nào sau đây?",
+    "options": [
+      "A. Kiểm thử hộp đen (Black Box Testing) tập trung vào đầu ra của thuật toán recommendation với các bộ dữ liệu đầu vào khác nhau.",
+      "B. Kiểm thử dựa trên mô hình (Model-Based Testing) để tự động sinh test case cho các tình huống recommendation phức tạp.",
+      "C. Kiểm thử dựa trên dữ liệu (Data-Driven Testing) kết hợp với kiểm thử A/B testing để so sánh hiệu quả của thuật toán với các phiên bản trước.",
+      "D. Kiểm thử dựa trên kịch bản (Scenario-Based Testing) kết hợp với kiểm thử thăm dò (Exploratory Testing) để bao phủ các trường hợp biên và tình huống thực tế."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Trong bối cảnh recommendation engine, các trường hợp biên (ví dụ: người dùng mới, sản phẩm mới) và tình huống thực tế thường khó dự đoán trước. Kỹ thuật Scenario-Based Testing kết hợp với Exploratory Testing cho phép QA team khám phá và kiểm thử các tình huống này một cách toàn diện. Các lựa chọn khác không tập trung đủ vào các trường hợp biên và tình huống thực tế.",
+    "difficulty": "EXPERT",
+    "skillArea": "Software Testing Fundamentals",
+    "category": "SKILL",
+    "id": "q_1780810963780_EXPERT_11_ccsm"
+  }
+]

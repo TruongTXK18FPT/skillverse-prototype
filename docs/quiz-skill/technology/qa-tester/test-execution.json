@@ -1,0 +1,782 @@
+[
+  {
+    "questionText": "Trong quy trình thực thi kiểm thử (Test Execution), bước nào thường được thực hiện ĐẦU TIÊN sau khi nhận được bản build mới từ đội phát triển?",
+    "options": [
+      "A. Thực hiện kiểm thử hồi quy (Regression Testing) toàn bộ hệ thống",
+      "B. Thực hiện kiểm thử khói (Smoke Testing) để xác nhận build có ổn định để kiểm thử tiếp hay không",
+      "C. Ghi lại tất cả các lỗi tìm thấy vào hệ thống quản lý lỗi (Bug Tracking System)",
+      "D. Phân tích tác động (Impact Analysis) để xác định phạm vi kiểm thử hồi quy"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Smoke Testing là bước kiểm thử cơ bản đầu tiên nhằm xác nhận build có đủ ổn định để tiến hành các kiểm thử chi tiết hơn. Nếu Smoke Testing thất bại, build sẽ bị từ chối và đội phát triển phải sửa lỗi trước khi bàn giao lại.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811685439_BEGINNER_0_skxk"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử hồi quy (Regression Testing) cho một tính năng đã sửa lỗi, QA Engineer cần ưu tiên kiểm tra điều gì?",
+    "options": [
+      "A. Chỉ kiểm tra lại chính xác lỗi đã được sửa",
+      "B. Kiểm tra lại lỗi đã sửa và các tính năng liên quan có thể bị ảnh hưởng bởi thay đổi",
+      "C. Kiểm tra toàn bộ hệ thống để đảm bảo không có lỗi mới xuất hiện",
+      "D. Chỉ kiểm tra các module mới được phát triển trong sprint hiện tại"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Regression Testing không chỉ kiểm tra lại lỗi đã sửa mà còn phải kiểm tra các tính năng liên quan để đảm bảo thay đổi không gây ra tác động phụ (side effect) đến các phần khác của hệ thống.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811685439_BEGINNER_1_4ghr"
+  },
+  {
+    "questionText": "Trong một dự án Agile tại Việt Nam, sau khi thực hiện kiểm thử khói (Smoke Testing) và phát hiện build không ổn định (ví dụ: không đăng nhập được), QA Engineer nên làm gì tiếp theo?",
+    "options": [
+      "A. Tiếp tục thực hiện kiểm thử chi tiết để tìm thêm lỗi",
+      "B. Báo cáo ngay cho đội phát triển và yêu cầu sửa lỗi trước khi tiếp tục kiểm thử",
+      "C. Ghi nhận lỗi vào hệ thống và chuyển sang kiểm thử module khác",
+      "D. Tạm dừng kiểm thử và chờ bản build mới trong vài ngày"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu Smoke Testing thất bại, build không đủ điều kiện để kiểm thử tiếp. QA cần báo cáo ngay cho đội phát triển để sửa lỗi và chờ bản build mới trước khi tiếp tục.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811685439_BEGINNER_2_gj2e"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử, QA Engineer phát hiện một lỗi nghiêm trọng khiến toàn bộ hệ thống không thể tiếp tục kiểm thử (ví dụ: không thể truy cập cơ sở dữ liệu). Hành động nào sau đây là ĐÚNG?",
+    "options": [
+      "A. Tiếp tục kiểm thử các module khác không liên quan đến lỗi",
+      "B. Ghi nhận lỗi và tạm dừng kiểm thử (suspend execution) cho đến khi lỗi được sửa",
+      "C. Bỏ qua lỗi và báo cáo sau khi hoàn thành kiểm thử",
+      "D. Tự sửa lỗi nếu có thể để tiếp tục kiểm thử"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu lỗi chặn (blocker) ảnh hưởng đến toàn bộ hệ thống, QA cần tạm dừng kiểm thử và báo cáo ngay để đội phát triển khắc phục. Tiếp tục kiểm thử trong tình trạng này sẽ không hiệu quả và lãng phí thời gian.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811685439_BEGINNER_3_trvj"
+  },
+  {
+    "questionText": "Trong quá trình thực thi kiểm thử, QA Engineer cần ghi lại bằng chứng kiểm thử (test evidence) để làm gì?",
+    "options": [
+      "A. Để chứng minh rằng kiểm thử đã được thực hiện và kết quả là chính xác",
+      "B. Để gửi cho khách hàng như một phần của tài liệu bàn giao",
+      "C. Để làm cơ sở cho việc phân tích lỗi và tái hiện lỗi khi cần thiết",
+      "D. Tất cả các đáp án trên đều đúng"
+    ],
+    "correctAnswer": "D",
+    "explanation": "Bằng chứng kiểm thử (như logs, screenshots, videos) được sử dụng để chứng minh kiểm thử đã thực hiện, hỗ trợ tái hiện lỗi, và là một phần của tài liệu bàn giao cho khách hàng hoặc đội bảo trì.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811685439_BEGINNER_4_nu0g"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử hồi quy (Regression Testing), chiến lược nào sau đây là HIỆU QUẢ NHẤT để tối ưu thời gian và đảm bảo chất lượng?",
+    "options": [
+      "A. Kiểm thử lại tất cả các test case đã từng thực hiện",
+      "B. Kiểm thử lại các test case liên quan đến các module đã thay đổi hoặc có khả năng bị ảnh hưởng",
+      "C. Chỉ kiểm thử lại các test case đã thất bại trong lần kiểm thử trước",
+      "D. Kiểm thử ngẫu nhiên một số test case trong bộ kiểm thử"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Regression Testing hiệu quả cần tập trung vào các test case liên quan đến thay đổi hoặc có khả năng bị ảnh hưởng (Impact Analysis). Kiểm thử toàn bộ sẽ tốn thời gian và không cần thiết nếu không có thay đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811685439_BEGINNER_5_hef2"
+  },
+  {
+    "questionText": "Trong một dự án phần mềm tại Việt Nam, QA Engineer phát hiện một lỗi nhưng không thể tái hiện lại lỗi đó một cách nhất quán. Hành động nào sau đây là ĐÚNG?",
+    "options": [
+      "A. Bỏ qua lỗi vì không tái hiện được",
+      "B. Ghi nhận lỗi với thông tin chi tiết về môi trường, bước thực hiện, và bằng chứng (logs, screenshots) để đội phát triển điều tra",
+      "C. Tự sửa lỗi nếu có thể",
+      "D. Chờ đến khi lỗi tái hiện rõ ràng rồi mới báo cáo"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dù không tái hiện được lỗi, QA vẫn cần ghi nhận đầy đủ thông tin để đội phát triển có cơ sở điều tra. Bỏ qua lỗi có thể dẫn đến rủi ro tiềm ẩn trong tương lai.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811685439_BEGINNER_6_tmca"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử, QA Engineer cần thu thập logs để làm gì?",
+    "options": [
+      "A. Để phân tích nguyên nhân gốc rễ (root cause) của lỗi",
+      "B. Để chứng minh rằng kiểm thử đã được thực hiện",
+      "C. Để gửi cho khách hàng như một phần của báo cáo kiểm thử",
+      "D. Để lưu trữ và không sử dụng cho mục đích nào khác"
+    ],
+    "correctAnswer": "A",
+    "explanation": "Logs cung cấp thông tin chi tiết về quá trình thực thi hệ thống, giúp QA và đội phát triển phân tích nguyên nhân gốc rễ của lỗi và tìm giải pháp khắc phục.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811685439_BEGINNER_7_4mml"
+  },
+  {
+    "questionText": "Trong quy trình thực thi kiểm thử, tiêu chí nào sau đây được sử dụng để quyết định tạm dừng kiểm thử (suspend execution)?",
+    "options": [
+      "A. Khi phát hiện một lỗi nhỏ không ảnh hưởng đến chức năng chính",
+      "B. Khi phát hiện một lỗi chặn (blocker) khiến không thể tiếp tục kiểm thử các module khác",
+      "C. Khi QA Engineer cảm thấy mệt mỏi và muốn nghỉ ngơi",
+      "D. Khi đã thực hiện hết tất cả các test case trong kế hoạch"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Kiểm thử sẽ bị tạm dừng khi phát hiện lỗi chặn (blocker) khiến không thể tiếp tục kiểm thử các phần khác của hệ thống. Điều này đảm bảo không lãng phí thời gian và nguồn lực vào kiểm thử không hiệu quả.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811685439_BEGINNER_8_gv2q"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử khói (Smoke Testing), QA Engineer nên tập trung vào điều gì?",
+    "options": [
+      "A. Kiểm tra chi tiết tất cả các chức năng của hệ thống",
+      "B. Kiểm tra các chức năng chính và cơ bản nhất để đảm bảo hệ thống có thể hoạt động",
+      "C. Kiểm tra hiệu năng (performance) của hệ thống",
+      "D. Kiểm tra giao diện người dùng (UI) của hệ thống"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Smoke Testing tập trung vào các chức năng chính và cơ bản nhất để xác nhận build có đủ ổn định để tiến hành kiểm thử chi tiết hơn. Đây không phải là kiểm thử toàn diện hay kiểm thử hiệu năng.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811685439_BEGINNER_9_siqf"
+  },
+  {
+    "questionText": "Trong một dự án tại Việt Nam, sau khi thực hiện kiểm thử hồi quy (Regression Testing), QA Engineer phát hiện một lỗi mới xuất hiện ở module không liên quan đến thay đổi. Hành động nào sau đây là ĐÚNG?",
+    "options": [
+      "A. Bỏ qua lỗi vì không liên quan đến thay đổi",
+      "B. Ghi nhận lỗi và báo cáo cho đội phát triển để điều tra nguyên nhân",
+      "C. Tự sửa lỗi nếu có thể",
+      "D. Chờ đến khi lỗi được tái hiện nhiều lần rồi mới báo cáo"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Dù lỗi xuất hiện ở module không liên quan đến thay đổi, QA vẫn cần ghi nhận và báo cáo để đội phát triển điều tra. Lỗi này có thể là do tác động phụ không mong muốn của thay đổi.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811685439_BEGINNER_10_dg5f"
+  },
+  {
+    "questionText": "Khi thực hiện kiểm thử, QA Engineer cần ghi lại bằng chứng kiểm thử dưới dạng nào để đảm bảo tính pháp lý và tái hiện lỗi?",
+    "options": [
+      "A. Chỉ cần ghi chú bằng văn bản trong báo cáo kiểm thử",
+      "B. Ghi lại logs, screenshots, hoặc video để làm bằng chứng cụ thể",
+      "C. Không cần ghi lại bằng chứng vì đội phát triển sẽ tự tái hiện lỗi",
+      "D. Chỉ cần ghi lại lỗi trong hệ thống quản lý lỗi (Bug Tracking System)"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Bằng chứng kiểm thử như logs, screenshots, hoặc video giúp tái hiện lỗi và cung cấp thông tin chi tiết cho đội phát triển. Điều này cũng đảm bảo tính pháp lý và minh bạch trong quá trình kiểm thử.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811685439_BEGINNER_11_9hg6"
+  },
+  {
+    "questionText": "Trong quá trình thực thi kiểm thử, QA Engineer phát hiện một lỗi nhưng không chắc chắn liệu đó có phải là lỗi thực sự hay không. Hành động nào sau đây là ĐÚNG?",
+    "options": [
+      "A. Bỏ qua lỗi vì không chắc chắn",
+      "B. Thảo luận với đội phát triển hoặc Product Owner để xác nhận liệu đó có phải là lỗi hay không",
+      "C. Tự quyết định đó là lỗi và ghi nhận vào hệ thống",
+      "D. Chờ đến khi có thêm thông tin rồi mới báo cáo"
+    ],
+    "correctAnswer": "B",
+    "explanation": "Nếu không chắc chắn liệu đó có phải là lỗi hay không, QA nên thảo luận với đội phát triển hoặc Product Owner để xác nhận. Điều này tránh ghi nhận lỗi sai hoặc bỏ sót lỗi thực sự.",
+    "difficulty": "BEGINNER",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811685439_BEGINNER_12_dp1w"
+  },
+  {
+    "questionText": "Trong một dự án phát triển phần mềm tại Việt Nam, sau khi nhận được bản build mới từ đội Dev, bước đầu tiên bạn nên thực hiện trong quá trình Test Execution là gì?",
+    "options": [
+      "A. Bắt đầu chạy toàn bộ bộ test case regression ngay lập tức để đảm bảo không bỏ sót lỗi.",
+      "B. Thực hiện smoke test để xác nhận các chức năng cơ bản của hệ thống hoạt động trước khi tiến hành kiểm thử chi tiết.",
+      "C. Ghi nhận tất cả các lỗi phát hiện được vào bug tracking system mà không cần phân loại mức độ nghiêm trọng.",
+      "D. Yêu cầu đội Dev cung cấp tài liệu cập nhật trước khi bắt đầu kiểm thử."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Smoke test giúp xác nhận nhanh chóng liệu bản build có đủ ổn định để tiến hành kiểm thử chi tiết hay không, tiết kiệm thời gian và công sức cho đội QA. Đây là bước quan trọng trong quy trình Test Execution tại các dự án thực tế.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811750300_INTERMEDIATE_0_foj5"
+  },
+  {
+    "questionText": "Bạn đang thực hiện regression testing cho một module thanh toán trực tuyến sau khi đội Dev sửa lỗi về tính toán phí giao dịch. Chiến lược nào dưới đây là hiệu quả nhất cho mức độ INTERMEDIATE?",
+    "options": [
+      "A. Chỉ chạy lại các test case liên quan trực tiếp đến tính toán phí giao dịch.",
+      "B. Chạy lại toàn bộ bộ test case regression để đảm bảo không bỏ sót lỗi.",
+      "C. Kết hợp chạy lại các test case liên quan đến tính toán phí và các chức năng phụ thuộc (ví dụ: lưu lịch sử giao dịch, cập nhật số dư) để kiểm tra tác động.",
+      "D. Yêu cầu đội Dev tự kiểm tra lại module trước khi bàn giao cho QA."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Regression testing ở mức INTERMEDIATE cần tập trung vào các test case trực tiếp liên quan đến thay đổi và các chức năng phụ thuộc để đảm bảo không có tác động phụ. Chiến lược này cân bằng giữa hiệu quả và phạm vi kiểm thử.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811750301_INTERMEDIATE_1_yeza"
+  },
+  {
+    "questionText": "Trong quá trình thực thi test case, bạn phát hiện một lỗi khiến hệ thống không thể tiếp tục kiểm thử (test blocker). Tiêu chí nào sau đây KHÔNG phải là lý do hợp lệ để tạm dừng (suspend) quá trình Test Execution?",
+    "options": [
+      "A. Lỗi nghiêm trọng (critical) khiến toàn bộ hệ thống không thể hoạt động, ví dụ: không đăng nhập được vào ứng dụng.",
+      "B. Lỗi khiến một module quan trọng không thể kiểm thử, nhưng các module khác vẫn có thể chạy bình thường.",
+      "C. Lỗi liên quan đến môi trường kiểm thử (ví dụ: database không kết nối được) và không thể khắc phục trong thời gian ngắn.",
+      "D. Lỗi khiến bạn không thể hoàn thành một test case cụ thể, nhưng các test case khác không bị ảnh hưởng."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Test blocker cần đủ nghiêm trọng để ảnh hưởng đến toàn bộ hoặc phần lớn quá trình kiểm thử. Lỗi chỉ ảnh hưởng đến một test case cụ thể không đủ điều kiện để tạm dừng toàn bộ Test Execution.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811750301_INTERMEDIATE_2_3gyp"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử một ứng dụng ngân hàng di động và cần thu thập bằng chứng kiểm thử (test evidence) cho một lỗi liên quan đến tính toán lãi suất. Loại bằng chứng nào sau đây là quan trọng NHẤT để đính kèm trong báo cáo lỗi?",
+    "options": [
+      "A. Ảnh chụp màn hình (screenshot) hiển thị kết quả tính toán sai.",
+      "B. File log của ứng dụng ghi lại quá trình tính toán lãi suất.",
+      "C. Video quay lại toàn bộ quá trình thực hiện test case và kết quả.",
+      "D. Kết hợp ảnh chụp màn hình, file log, và dữ liệu đầu vào để tái hiện lỗi."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Để tái hiện và xác nhận lỗi một cách chính xác, cần kết hợp nhiều loại bằng chứng như ảnh chụp màn hình (hiển thị kết quả), file log (quá trình tính toán), và dữ liệu đầu vào (điều kiện tái hiện). Điều này giúp đội Dev dễ dàng xác định nguyên nhân.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811750301_INTERMEDIATE_3_6wiw"
+  },
+  {
+    "questionText": "Trong một dự án Agile tại Việt Nam, sau khi nhận được bản build mới, bạn phát hiện smoke test thất bại do lỗi đăng nhập. Hành động nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Tiếp tục chạy regression testing để kiểm tra các chức năng khác.",
+      "B. Báo cáo lỗi và yêu cầu đội Dev khắc phục ngay lập tức, đồng thời tạm dừng Test Execution cho đến khi có bản build mới.",
+      "C. Ghi nhận lỗi nhưng vẫn tiếp tục kiểm thử các chức năng không liên quan đến đăng nhập.",
+      "D. Tự sửa lỗi đăng nhập để tiếp tục kiểm thử mà không cần báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Smoke test thất bại cho thấy bản build không đủ ổn định để tiến hành kiểm thử chi tiết. Việc tạm dừng Test Execution và yêu cầu đội Dev khắc phục là hành động phù hợp để tránh lãng phí thời gian và công sức.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811750301_INTERMEDIATE_4_nzwc"
+  },
+  {
+    "questionText": "Bạn đang thực hiện regression testing cho một module quản lý đơn hàng sau khi đội Dev sửa lỗi về lọc đơn hàng theo trạng thái. Chiến lược nào sau đây giúp tối ưu hóa thời gian kiểm thử mà vẫn đảm bảo chất lượng?",
+    "options": [
+      "A. Chạy lại tất cả các test case liên quan đến quản lý đơn hàng, bao gồm cả các chức năng không bị ảnh hưởng.",
+      "B. Chỉ chạy lại các test case liên quan trực tiếp đến chức năng lọc đơn hàng theo trạng thái.",
+      "C. Chạy lại các test case liên quan đến lọc đơn hàng và các chức năng phụ thuộc như cập nhật trạng thái đơn hàng, xem chi tiết đơn hàng.",
+      "D. Yêu cầu đội Dev cung cấp danh sách các test case cần chạy lại."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Regression testing cần tập trung vào các test case trực tiếp liên quan đến thay đổi và các chức năng phụ thuộc để đảm bảo không có tác động phụ. Chiến lược này giúp tối ưu hóa thời gian mà vẫn đảm bảo phạm vi kiểm thử hợp lý.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811750301_INTERMEDIATE_5_ifbe"
+  },
+  {
+    "questionText": "Trong quá trình Test Execution, bạn phát hiện một lỗi khiến một số test case không thể thực thi (test blocker). Hành động nào sau đây là KHÔNG phù hợp?",
+    "options": [
+      "A. Báo cáo lỗi và chờ đội Dev khắc phục trước khi tiếp tục kiểm thử.",
+      "B. Ghi nhận lỗi và chuyển sang kiểm thử các test case không bị ảnh hưởng.",
+      "C. Tự sửa lỗi để tiếp tục kiểm thử mà không cần báo cáo đội Dev.",
+      "D. Đánh giá mức độ nghiêm trọng của lỗi và quyết định có tạm dừng Test Execution hay không."
+    ],
+    "correctAnswer": "C",
+    "explanation": "QA không được tự sửa lỗi mà cần báo cáo cho đội Dev để đảm bảo quy trình kiểm soát chất lượng. Việc tự sửa lỗi có thể dẫn đến các vấn đề về tính toàn vẹn của hệ thống và không tuân thủ quy trình.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811750301_INTERMEDIATE_6_r3uu"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử một ứng dụng thương mại điện tử và cần thu thập execution log để phân tích lỗi liên quan đến quá trình thanh toán. Loại log nào sau đây là quan trọng NHẤT để phân tích nguyên nhân lỗi?",
+    "options": [
+      "A. Log của ứng dụng ghi lại các bước thực hiện thanh toán.",
+      "B. Log của hệ thống (system log) ghi lại các sự kiện phần cứng.",
+      "C. Log của cơ sở dữ liệu ghi lại các truy vấn SQL.",
+      "D. Log của mạng (network log) ghi lại các yêu cầu HTTP."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Log của ứng dụng ghi lại các bước thực hiện thanh toán là quan trọng nhất để phân tích lỗi liên quan đến quy trình nghiệp vụ. Nó giúp xác định chính xác bước nào trong quá trình thanh toán gặp sự cố.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811750301_INTERMEDIATE_7_z8a8"
+  },
+  {
+    "questionText": "Trong một dự án phát triển phần mềm tại Việt Nam, bạn được giao nhiệm vụ lên kế hoạch cho quá trình Test Execution. Bước nào sau đây KHÔNG thuộc quy trình lập kế hoạch Test Execution?",
+    "options": [
+      "A. Xác định phạm vi kiểm thử dựa trên các thay đổi trong bản build.",
+      "B. Lên lịch thực hiện các loại kiểm thử như smoke test, regression test.",
+      "C. Viết mã tự động hóa cho các test case regression.",
+      "D. Chuẩn bị môi trường kiểm thử và dữ liệu test."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Viết mã tự động hóa cho test case thuộc quy trình Test Automation, không phải là bước trong lập kế hoạch Test Execution. Lập kế hoạch Test Execution tập trung vào phạm vi, lịch trình, và chuẩn bị môi trường.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "KNOWLEDGE",
+    "id": "q_1780811750301_INTERMEDIATE_8_2k88"
+  },
+  {
+    "questionText": "Bạn đang thực hiện regression testing cho một module quản lý khách hàng sau khi đội Dev sửa lỗi về tìm kiếm khách hàng. Bạn phát hiện một lỗi mới không liên quan đến chức năng tìm kiếm. Hành động nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Bỏ qua lỗi vì nó không liên quan đến chức năng tìm kiếm.",
+      "B. Báo cáo lỗi và tiếp tục kiểm thử các test case khác.",
+      "C. Yêu cầu đội Dev sửa lỗi ngay lập tức trước khi tiếp tục kiểm thử.",
+      "D. Ghi nhận lỗi nhưng chỉ báo cáo sau khi hoàn thành regression testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Trong regression testing, nếu phát hiện lỗi mới (dù không liên quan trực tiếp đến thay đổi), QA vẫn cần báo cáo lỗi để đảm bảo chất lượng tổng thể của hệ thống. Tuy nhiên, không cần dừng quá trình kiểm thử nếu lỗi không phải là test blocker.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811750302_INTERMEDIATE_9_555d"
+  },
+  {
+    "questionText": "Trong quá trình Test Execution, bạn cần thu thập bằng chứng kiểm thử cho một lỗi liên quan đến hiển thị sai thông tin sản phẩm trên giao diện. Loại bằng chứng nào sau đây là ĐỦ để đính kèm trong báo cáo lỗi?",
+    "options": [
+      "A. Ảnh chụp màn hình hiển thị thông tin sản phẩm sai.",
+      "B. File log của ứng dụng ghi lại quá trình tải thông tin sản phẩm.",
+      "C. Video quay lại quá trình tải và hiển thị thông tin sản phẩm.",
+      "D. Ảnh chụp màn hình kết hợp với dữ liệu đầu vào để tái hiện lỗi."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Ảnh chụp màn hình kết hợp với dữ liệu đầu vào giúp tái hiện lỗi một cách chính xác và cung cấp đủ thông tin cho đội Dev để xác định nguyên nhân. Đây là loại bằng chứng đủ và hiệu quả nhất trong trường hợp này.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811750302_INTERMEDIATE_10_ek7z"
+  },
+  {
+    "questionText": "Bạn đang kiểm thử một ứng dụng ngân hàng và phát hiện một lỗi khiến chức năng chuyển tiền không hoạt động. Lỗi này ảnh hưởng đến toàn bộ quá trình Test Execution. Tiêu chí nào sau đây là phù hợp để tạm dừng (suspend) quá trình kiểm thử?",
+    "options": [
+      "A. Lỗi chỉ ảnh hưởng đến một số test case cụ thể liên quan đến chuyển tiền.",
+      "B. Lỗi khiến toàn bộ chức năng chuyển tiền không thể kiểm thử, và không có giải pháp thay thế.",
+      "C. Lỗi có thể khắc phục tạm thời bằng cách sử dụng dữ liệu test khác.",
+      "D. Lỗi đã được báo cáo nhưng đội Dev chưa phản hồi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Tiêu chí tạm dừng Test Execution là khi lỗi khiến toàn bộ hoặc phần lớn quá trình kiểm thử không thể tiếp tục và không có giải pháp thay thế. Trong trường hợp này, lỗi khiến chức năng chuyển tiền không thể kiểm thử là lý do hợp lệ để tạm dừng.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811750302_INTERMEDIATE_11_fe86"
+  },
+  {
+    "questionText": "Trong một dự án Agile, sau khi nhận được bản build mới, bạn thực hiện smoke test và phát hiện lỗi đăng nhập. Đội Dev yêu cầu bạn tiếp tục kiểm thử các chức năng khác trong khi họ sửa lỗi. Hành động nào sau đây là phù hợp nhất?",
+    "options": [
+      "A. Tiếp tục kiểm thử các chức năng không liên quan đến đăng nhập nếu chúng không phụ thuộc vào việc đăng nhập.",
+      "B. Từ chối tiếp tục kiểm thử cho đến khi lỗi đăng nhập được khắc phục.",
+      "C. Tự sửa lỗi đăng nhập để tiếp tục kiểm thử mà không cần báo cáo.",
+      "D. Chỉ kiểm thử các chức năng liên quan đến đăng nhập để xác nhận lỗi."
+    ],
+    "correctAnswer": "A",
+    "explanation": "Nếu các chức năng khác không phụ thuộc vào đăng nhập và có thể kiểm thử độc lập, bạn có thể tiếp tục kiểm thử để tối ưu hóa thời gian. Tuy nhiên, cần đảm bảo báo cáo lỗi đăng nhập để đội Dev khắc phục.",
+    "difficulty": "INTERMEDIATE",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811750302_INTERMEDIATE_12_kzot"
+  },
+  {
+    "questionText": "Trong một dự án Agile với sprint 2 tuần, sau khi nhận được bản build mới từ đội phát triển, bạn phát hiện rằng chức năng đăng nhập bị lỗi nghiêm trọng (không thể đăng nhập với bất kỳ tài khoản nào). Tuy nhiên, PO (Product Owner) vẫn yêu cầu chạy bộ regression test đầy đủ để đảm bảo không ảnh hưởng đến các chức năng khác. Là QA Lead, bạn sẽ làm gì?",
+    "options": [
+      "A. Tuân thủ yêu cầu của PO, chạy toàn bộ regression test để đảm bảo không bỏ sót lỗi.",
+      "B. Từ chối chạy regression test, yêu cầu đội phát triển fix lỗi đăng nhập trước khi tiến hành bất kỳ test nào khác.",
+      "C. Chạy smoke test để xác nhận các chức năng cơ bản hoạt động, sau đó tạm dừng regression test và báo cáo rủi ro cho PO và Scrum Master để ưu tiên fix lỗi đăng nhập.",
+      "D. Chỉ chạy regression test cho các module không liên quan đến đăng nhập, bỏ qua module đăng nhập."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Trong tình huống này, lỗi đăng nhập là critical blocker, ảnh hưởng trực tiếp đến khả năng test các chức năng khác. Smoke test giúp xác nhận mức độ nghiêm trọng của lỗi, trong khi việc tạm dừng regression test và báo cáo rủi ro cho phép đội dự án ưu tiên giải quyết vấn đề cốt lõi trước. Điều này cân bằng giữa việc đảm bảo chất lượng và hiệu quả công việc trong sprint.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811842441_ADVANCED_0_k7pj"
+  },
+  {
+    "questionText": "Bạn đang thực hiện regression test cho một hệ thống ngân hàng với hàng nghìn test case. Sau khi đội phát triển merge một hotfix khẩn cấp (liên quan đến tính năng chuyển tiền), bạn cần xác định phạm vi regression test tối ưu. Phương pháp nào sau đây là hiệu quả nhất trong điều kiện thời gian giới hạn?",
+    "options": [
+      "A. Chạy lại toàn bộ bộ regression test để đảm bảo không bỏ sót lỗi.",
+      "B. Chỉ chạy các test case liên quan trực tiếp đến tính năng chuyển tiền.",
+      "C. Sử dụng impact analysis để xác định các module bị ảnh hưởng bởi hotfix (bao gồm cả module chuyển tiền và các module phụ thuộc như xác thực OTP, lịch sử giao dịch), sau đó chạy regression test cho các module này cùng với smoke test cho toàn hệ thống.",
+      "D. Chạy smoke test cho toàn bộ hệ thống và dừng lại nếu không phát hiện lỗi nghiêm trọng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Impact analysis giúp xác định chính xác các module bị ảnh hưởng bởi thay đổi, từ đó tối ưu phạm vi regression test mà vẫn đảm bảo chất lượng. Smoke test bổ sung giúp phát hiện lỗi nghiêm trọng ở cấp độ hệ thống. Phương pháp này cân bằng giữa hiệu quả và rủi ro trong điều kiện thời gian giới hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811842441_ADVANCED_1_uuks"
+  },
+  {
+    "questionText": "Trong quá trình thực hiện test execution, bạn phát hiện một lỗi nghiêm trọng (critical bug) nhưng không thể tái hiện lại lỗi này trong lần chạy test tiếp theo. Bạn đã ghi lại log và screenshot từ lần tái hiện đầu tiên. Bước tiếp theo nào là hợp lý nhất?",
+    "options": [
+      "A. Đóng lỗi với trạng thái 'Cannot Reproduce' và tiếp tục test execution.",
+      "B. Báo cáo lỗi với thông tin đã có (log, screenshot) và yêu cầu đội phát triển điều tra dựa trên bằng chứng hiện có, đồng thời ghi chú rõ ràng về điều kiện tái hiện không ổn định.",
+      "C. Bỏ qua lỗi vì không thể tái hiện, tập trung vào các lỗi khác.",
+      "D. Yêu cầu đội phát triển cung cấp bản build mới để tái hiện lỗi trước khi báo cáo."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi không tái hiện được nhưng có bằng chứng (log, screenshot) vẫn cần được báo cáo để đội phát triển điều tra. Ghi chú rõ ràng về tính không ổn định của lỗi giúp đội phát triển tập trung vào các khu vực tiềm ẩn rủi ro. Việc bỏ qua hoặc đóng lỗi có thể dẫn đến rủi ro chất lượng sau này.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811842442_ADVANCED_2_j38s"
+  },
+  {
+    "questionText": "Bạn là QA Lead trong một dự án outsourcing cho khách hàng Nhật Bản. Khách hàng yêu cầu chạy regression test cho toàn bộ hệ thống sau mỗi lần release, nhưng thời gian test bị giới hạn do lịch release cố định. Để đáp ứng yêu cầu của khách hàng mà vẫn đảm bảo hiệu quả, bạn sẽ đề xuất giải pháp nào?",
+    "options": [
+      "A. Đề xuất khách hàng kéo dài thời gian test để chạy đầy đủ regression test.",
+      "B. Chạy regression test một cách ngẫu nhiên cho các module khác nhau trong mỗi lần release để giảm khối lượng công việc.",
+      "C. Phân tích rủi ro và xây dựng bộ regression test ưu tiên (prioritized regression suite), tập trung vào các module có tần suất thay đổi cao và mức độ ảnh hưởng lớn, đồng thời sử dụng automation để tối ưu thời gian test.",
+      "D. Chỉ chạy smoke test và báo cáo kết quả cho khách hàng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp này kết hợp phân tích rủi ro và ưu tiên test case, đồng thời tận dụng automation để tối ưu thời gian test mà vẫn đảm bảo chất lượng. Việc chạy test ngẫu nhiên hoặc chỉ smoke test không đủ để đảm bảo chất lượng trong điều kiện thời gian giới hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811842442_ADVANCED_3_t4n7"
+  },
+  {
+    "questionText": "Trong quá trình test execution cho một hệ thống e-commerce, bạn phát hiện rằng API thanh toán (payment gateway) bị lỗi timeout khi số lượng request vượt quá 1000 TPS (transactions per second). Tuy nhiên, yêu cầu kỹ thuật chỉ quy định hệ thống phải xử lý 500 TPS. Bạn sẽ xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Báo cáo lỗi ngay lập tức vì API không đáp ứng được yêu cầu thực tế (1000 TPS).",
+      "B. Không báo cáo lỗi vì hệ thống vẫn đáp ứng yêu cầu kỹ thuật (500 TPS).",
+      "C. Báo cáo lỗi với mức độ nghiêm trọng thấp (low severity) vì lỗi chỉ xảy ra khi vượt quá yêu cầu kỹ thuật.",
+      "D. Phân tích tác động của lỗi (ví dụ: khả năng xảy ra trong môi trường production, rủi ro khi hệ thống mở rộng) và báo cáo lỗi với mức độ nghiêm trọng phù hợp, đồng thời đề xuất giải pháp cải thiện hiệu năng cho tương lai."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Mặc dù lỗi xảy ra khi vượt quá yêu cầu kỹ thuật, nhưng việc phân tích tác động và rủi ro giúp xác định mức độ nghiêm trọng thực tế của lỗi. Báo cáo lỗi kèm đề xuất cải thiện giúp đội dự án chuẩn bị cho các kịch bản mở rộng trong tương lai, tránh rủi ro khi hệ thống phát triển.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811842443_ADVANCED_4_igb1"
+  },
+  {
+    "questionText": "Bạn đang thực hiện test execution cho một dự án ngân hàng tại Việt Nam, trong đó có tính năng xác thực giao dịch bằng OTP qua SMS. Trong quá trình test, bạn phát hiện rằng OTP không được gửi đến số điện thoại của khách hàng thử nghiệm. Sau khi kiểm tra log, bạn thấy lỗi liên quan đến tích hợp với nhà cung cấp dịch vụ SMS (SMS gateway). Bạn sẽ làm gì tiếp theo?",
+    "options": [
+      "A. Báo cáo lỗi cho đội phát triển và yêu cầu fix ngay lập tức.",
+      "B. Kiểm tra lại cấu hình test environment (ví dụ: số điện thoại thử nghiệm, cấu hình SMS gateway) và log chi tiết, sau đó báo cáo lỗi với đầy đủ thông tin để đội phát triển và đội vận hành (DevOps) điều tra.",
+      "C. Bỏ qua lỗi vì đây là vấn đề của nhà cung cấp dịch vụ SMS.",
+      "D. Yêu cầu đội phát triển thay đổi nhà cung cấp dịch vụ SMS để tránh lỗi."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Việc kiểm tra lại cấu hình và thu thập log chi tiết giúp xác định nguyên nhân gốc rễ của lỗi (có thể do cấu hình sai trong môi trường test hoặc lỗi tích hợp). Báo cáo lỗi với đầy đủ thông tin giúp đội phát triển và DevOps phối hợp xử lý hiệu quả, tránh bỏ sót lỗi quan trọng.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811842443_ADVANCED_5_0c7p"
+  },
+  {
+    "questionText": "Trong một dự án phát triển phần mềm cho khách hàng nước ngoài, sau khi chạy regression test, bạn phát hiện một lỗi nghiêm trọng (critical bug) nhưng khách hàng yêu cầu release sản phẩm theo kế hoạch đã định. Là QA Lead, bạn sẽ làm gì để đảm bảo chất lượng và đáp ứng yêu cầu của khách hàng?",
+    "options": [
+      "A. Tuân thủ yêu cầu của khách hàng, release sản phẩm và chấp nhận rủi ro.",
+      "B. Từ chối release sản phẩm cho đến khi lỗi được fix.",
+      "C. Phân tích tác động của lỗi (impact analysis) và đề xuất giải pháp giảm thiểu rủi ro (ví dụ: tạm thời vô hiệu hóa tính năng bị lỗi, cung cấp workaround cho người dùng), đồng thời báo cáo rủi ro cho khách hàng và đội dự án để đưa ra quyết định cuối cùng.",
+      "D. Chỉ báo cáo lỗi cho khách hàng và để họ quyết định."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp này thể hiện kỹ năng quản lý rủi ro và giao tiếp hiệu quả với khách hàng. Impact analysis giúp xác định mức độ nghiêm trọng của lỗi, trong khi đề xuất giải pháp giảm thiểu rủi ro giúp khách hàng đưa ra quyết định sáng suốt mà vẫn đảm bảo chất lượng sản phẩm.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811842444_ADVANCED_6_qw4d"
+  },
+  {
+    "questionText": "Bạn đang thực hiện test execution cho một hệ thống quản lý kho hàng. Sau khi chạy regression test, bạn phát hiện rằng một số test case liên quan đến tính năng xuất kho (outbound) bị fail do dữ liệu test không đồng bộ với dữ liệu thực tế trong hệ thống. Bạn sẽ xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Bỏ qua các test case fail vì lỗi không liên quan đến chức năng của hệ thống.",
+      "B. Yêu cầu đội phát triển cập nhật dữ liệu test để đồng bộ với hệ thống trước khi chạy lại test case.",
+      "C. Phân tích nguyên nhân gây ra sự không đồng bộ dữ liệu (ví dụ: dữ liệu test chưa được reset sau mỗi lần chạy, cấu hình môi trường test không chính xác), sau đó phối hợp với đội phát triển và DevOps để khắc phục vấn đề và chạy lại test case.",
+      "D. Chạy lại test case với dữ liệu mới mà không cần báo cáo vấn đề."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Việc phân tích nguyên nhân gốc rễ của sự không đồng bộ dữ liệu giúp tránh tái diễn lỗi trong tương lai. Phối hợp với đội phát triển và DevOps để khắc phục vấn đề đảm bảo môi trường test ổn định và kết quả test đáng tin cậy.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811842444_ADVANCED_7_axdy"
+  },
+  {
+    "questionText": "Trong một dự án phát triển phần mềm cho thị trường Việt Nam, bạn được giao nhiệm vụ xây dựng chiến lược regression test cho tính năng thanh toán bằng ví điện tử (e-wallet). Tính năng này có nhiều nhà cung cấp ví điện tử tích hợp (VNPay, Momo, ZaloPay) và thường xuyên cập nhật API. Chiến lược nào sau đây là hiệu quả nhất?",
+    "options": [
+      "A. Chạy regression test cho tất cả các nhà cung cấp ví điện tử sau mỗi lần cập nhật API.",
+      "B. Chỉ chạy regression test cho nhà cung cấp ví điện tử có lượng người dùng lớn nhất tại Việt Nam (ví dụ: Momo).",
+      "C. Phân tích tần suất cập nhật API và mức độ ảnh hưởng của từng nhà cung cấp, sau đó xây dựng bộ regression test ưu tiên cho các nhà cung cấp có rủi ro cao và sử dụng automation để tối ưu thời gian test.",
+      "D. Yêu cầu đội phát triển không cập nhật API của các nhà cung cấp để tránh ảnh hưởng đến regression test."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Chiến lược này kết hợp phân tích rủi ro và ưu tiên test case, đồng thời tận dụng automation để tối ưu thời gian test. Việc chỉ test cho một nhà cung cấp hoặc test tất cả mà không ưu tiên đều không hiệu quả trong điều kiện thời gian và nguồn lực giới hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811842444_ADVANCED_8_1518"
+  },
+  {
+    "questionText": "Bạn đang thực hiện test execution cho một hệ thống ngân hàng và phát hiện rằng tính năng chuyển tiền quốc tế (international transfer) bị lỗi khi xử lý các giao dịch có số tiền lớn (trên 1 tỷ VND). Tuy nhiên, yêu cầu kỹ thuật không quy định giới hạn số tiền cho giao dịch. Bạn sẽ xử lý lỗi này như thế nào?",
+    "options": [
+      "A. Báo cáo lỗi với mức độ nghiêm trọng cao (high severity) vì ảnh hưởng đến tính năng quan trọng của hệ thống.",
+      "B. Không báo cáo lỗi vì yêu cầu kỹ thuật không quy định giới hạn số tiền.",
+      "C. Phân tích tác động của lỗi (ví dụ: khả năng xảy ra trong môi trường production, rủi ro pháp lý và tài chính) và báo cáo lỗi với mức độ nghiêm trọng phù hợp, đồng thời đề xuất giải pháp (ví dụ: thêm giới hạn số tiền hoặc tối ưu xử lý giao dịch).",
+      "D. Yêu cầu đội phát triển sửa lỗi ngay lập tức mà không cần phân tích tác động."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Phân tích tác động của lỗi giúp xác định mức độ nghiêm trọng thực tế và đề xuất giải pháp phù hợp. Việc báo cáo lỗi mà không phân tích có thể dẫn đến đánh giá sai mức độ rủi ro hoặc bỏ sót các vấn đề tiềm ẩn khác.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811842445_ADVANCED_9_k3fx"
+  },
+  {
+    "questionText": "Trong quá trình test execution cho một dự án Agile, bạn phát hiện rằng một test case automation bị fail do thay đổi UI (giao diện người dùng) nhưng chức năng vẫn hoạt động bình thường. Bạn sẽ làm gì tiếp theo?",
+    "options": [
+      "A. Bỏ qua lỗi vì chức năng vẫn hoạt động bình thường.",
+      "B. Báo cáo lỗi cho đội phát triển và yêu cầu revert thay đổi UI.",
+      "C. Cập nhật test case automation để phù hợp với thay đổi UI và chạy lại test case.",
+      "D. Phân tích tác động của thay đổi UI đến các test case khác, cập nhật test case automation cho tất cả các test case bị ảnh hưởng, và báo cáo cho đội dự án về công việc đã thực hiện."
+    ],
+    "correctAnswer": "D",
+    "explanation": "Thay đổi UI có thể ảnh hưởng đến nhiều test case automation khác. Việc phân tích tác động và cập nhật tất cả các test case bị ảnh hưởng đảm bảo bộ test automation luôn hoạt động chính xác và đáng tin cậy. Báo cáo công việc giúp đội dự án nắm được tình hình và tránh các vấn đề tương tự trong tương lai.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811842445_ADVANCED_10_v4ca"
+  },
+  {
+    "questionText": "Bạn là QA Lead trong một dự án phát triển phần mềm cho khách hàng tại Singapore. Khách hàng yêu cầu chạy regression test đầy đủ sau mỗi sprint, nhưng thời gian test bị giới hạn do sprint ngắn (1 tuần). Để đảm bảo chất lượng mà vẫn đáp ứng tiến độ, bạn sẽ đề xuất giải pháp nào?",
+    "options": [
+      "A. Yêu cầu khách hàng kéo dài thời gian sprint để có đủ thời gian chạy regression test.",
+      "B. Chạy regression test một cách ngẫu nhiên cho các module khác nhau trong mỗi sprint để giảm khối lượng công việc.",
+      "C. Xây dựng bộ regression test ưu tiên (prioritized regression suite) dựa trên phân tích rủi ro và tần suất thay đổi của các module, đồng thời sử dụng automation để tối ưu thời gian test.",
+      "D. Chỉ chạy smoke test và báo cáo kết quả cho khách hàng."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Giải pháp này kết hợp phân tích rủi ro và ưu tiên test case, đồng thời tận dụng automation để tối ưu thời gian test. Việc chạy test ngẫu nhiên hoặc chỉ smoke test không đủ để đảm bảo chất lượng trong điều kiện thời gian giới hạn.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811842445_ADVANCED_11_h9ld"
+  },
+  {
+    "questionText": "Trong quá trình test execution cho một hệ thống quản lý đơn hàng (order management system), bạn phát hiện rằng tính năng hủy đơn hàng (order cancellation) không hoạt động đúng khi đơn hàng ở trạng thái 'Đang giao hàng' (In Delivery). Tuy nhiên, yêu cầu kỹ thuật quy định rằng đơn hàng chỉ có thể bị hủy khi ở trạng thái 'Chờ xử lý' (Pending). Bạn sẽ xử lý tình huống này như thế nào?",
+    "options": [
+      "A. Báo cáo lỗi ngay lập tức vì tính năng không hoạt động đúng như mong đợi.",
+      "B. Không báo cáo lỗi vì tính năng hoạt động đúng theo yêu cầu kỹ thuật.",
+      "C. Phân tích tác động của lỗi (ví dụ: rủi ro khi khách hàng không thể hủy đơn hàng đang giao, ảnh hưởng đến trải nghiệm người dùng) và báo cáo lỗi với mức độ nghiêm trọng phù hợp, đồng thời đề xuất điều chỉnh yêu cầu kỹ thuật nếu cần thiết.",
+      "D. Yêu cầu đội phát triển sửa lỗi để cho phép hủy đơn hàng ở mọi trạng thái."
+    ],
+    "correctAnswer": "C",
+    "explanation": "Mặc dù tính năng hoạt động đúng theo yêu cầu kỹ thuật, nhưng việc phân tích tác động của lỗi giúp xác định liệu yêu cầu kỹ thuật có phù hợp với thực tế hay không. Báo cáo lỗi kèm đề xuất điều chỉnh yêu cầu kỹ thuật giúp cải thiện trải nghiệm người dùng và giảm thiểu rủi ro.",
+    "difficulty": "ADVANCED",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811842446_ADVANCED_12_eyl4"
+  },
+  {
+    "questionText": "Trong một dự án Agile với 300 test cases cho sprint, sau khi triển khai hotfix cho lỗi production nghiêm trọng, bạn cần lên kế hoạch chạy regression test. Chiến lược nào dưới đây là tối ưu nhất để đảm bảo chất lượng mà vẫn đáp ứng timeline sprint (3 ngày)?",
+    "options": [
+      "A. Chạy toàn bộ 300 test cases theo thứ tự ưu tiên critical -> high -> medium -> low, bất kể module nào.",
+      "B. Phân tích impact của hotfix (code changes, APIs, DB schema), chọn 80 test cases liên quan trực tiếp, kết hợp 20 test cases smoke cho các module khác, chạy song song trên 3 môi trường staging.",
+      "C. Chỉ chạy 50 test cases smoke/sanity để đảm bảo hệ thống không bị crash, sau đó chuyển sang test exploratory cho các chức năng liên quan hotfix.",
+      "D. Yêu cầu PO chấp nhận delay sprint 2 ngày để chạy hết 300 test cases, vì regression test phải đảm bảo 100% coverage."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Chiến lược B kết hợp phân tích tác động (impact analysis) với tối ưu tài nguyên (song song hóa) và cân bằng rủi ro (smoke cho module khác). Đây là cách tiếp cận thực tế tại các dự án Agile quy mô lớn (ví dụ: VNG, FPT Software), nơi timeline sprint không cho phép chạy full regression. A thiếu focus, C quá rủi ro, D không linh hoạt với Agile.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811936745_EXPERT_0_gy2u"
+  },
+  {
+    "questionText": "Bạn là QA Lead tại một công ty fintech (Ví điện tử). Sau khi triển khai bản release mới, hệ thống báo lỗi '503 Service Unavailable' ngẫu nhiên trên môi trường production. Logs server không ghi nhận lỗi cụ thể. Bạn cần thu thập bằng chứng (test evidence) nào để hỗ trợ đội Dev phân tích root cause?",
+    "options": [
+      "A. Chụp màn hình lỗi và gửi cho Dev, vì đây là lỗi hệ thống không liên quan đến test case.",
+      "B. Thu thập logs từ: 1) Application server (timestamp, request/response), 2) Load balancer (traffic distribution), 3) Database (slow queries), 4) Network latency (ping/traceroute), và tạo correlation ID để trace end-to-end flow.",
+      "C. Yêu cầu Dev cung cấp access vào production để tự debug, vì QA không có quyền truy cập logs chi tiết.",
+      "D. Tạo một test case mới mô phỏng lại lỗi và chạy trên staging, sau đó chụp logs từ staging."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi '503' thường liên quan đến infrastructure (load balancer, DB, network). B cung cấp đầy đủ evidence theo tiêu chuẩn SRE (Site Reliability Engineering) tại các công ty fintech (ví dụ: MoMo, ZaloPay), giúp Dev nhanh chóng isolate root cause (ví dụ: DB connection pool exhausted). A thiếu depth, C vi phạm security policy, D không phản ánh đúng môi trường production.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811936746_EXPERT_1_l0xj"
+  },
+  {
+    "questionText": "Trong một dự án outsourcing cho khách hàng Nhật Bản, sau khi chạy regression test cho bản release, bạn phát hiện 30% test cases failed do lỗi 'Invalid Session Token' xuất hiện sau khi nâng cấp thư viện authentication. Khách hàng yêu cầu release trong 24h. Bạn nên làm gì?",
+    "options": [
+      "A. Báo cáo lỗi cho khách hàng và yêu cầu delay release cho đến khi Dev fix xong, vì session token là critical path.",
+      "B. Phân tích logs failed test cases, xác định pattern lỗi (ví dụ: chỉ xảy ra khi login từ mobile app), tạo workaround tạm thời (ví dụ: refresh token), và đề xuất chạy lại test cases liên quan sau khi Dev fix.",
+      "C. Đánh dấu tất cả failed test cases là 'Known Issue' và release ngay lập tức, vì lỗi không ảnh hưởng đến core flow.",
+      "D. Yêu cầu Dev rollback thư viện authentication về phiên bản cũ, chạy lại toàn bộ regression test, và release sau 48h."
+    ],
+    "correctAnswer": "B",
+    "explanation": "B thể hiện tư duy giải pháp ngắn hạn (workaround) kết hợp phân tích rủi ro (pattern lỗi) và tuân thủ timeline khách hàng. Đây là cách tiếp cận phổ biến tại các dự án outsourcing (ví dụ: FPT, TMA) khi phải cân bằng giữa chất lượng và deadline. A quá cứng nhắc, C thiếu trách nhiệm, D gây delay không cần thiết.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811936746_EXPERT_2_5f0a"
+  },
+  {
+    "questionText": "Bạn đang thiết kế chiến lược regression test cho một hệ thống e-commerce (Tiki, Shopee) với 5000 test cases. Cách nào dưới đây hiệu quả nhất để giảm thời gian chạy regression từ 12h xuống còn 4h mà vẫn đảm bảo chất lượng?",
+    "options": [
+      "A. Chạy tất cả test cases trên nhiều máy ảo (VMs) song song, bất kể module nào.",
+      "B. Phân loại test cases theo: 1) Core flow (1000 cases), 2) High-risk modules (2000 cases), 3) Low-risk modules (2000 cases). Chạy core flow + high-risk hàng ngày, low-risk chạy 2 lần/tuần, sử dụng tool như Selenium Grid để song song hóa.",
+      "C. Chỉ chạy test cases failed trong 3 lần chạy gần nhất, vì các test cases passed liên tục ít có khả năng fail.",
+      "D. Yêu cầu Dev giảm số lượng test cases xuống còn 2000 bằng cách xóa các test cases trùng lặp hoặc không cần thiết."
+    ],
+    "correctAnswer": "B",
+    "explanation": "B áp dụng nguyên tắc 'Risk-Based Testing' và tối ưu tài nguyên (song song hóa). Chiến lược này được sử dụng tại các công ty e-commerce lớn (ví dụ: Shopee, Lazada) để cân bằng giữa coverage và thời gian chạy. A thiếu focus, C quá rủi ro, D không khả thi vì cần sự đồng thuận từ nhiều bên.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811936747_EXPERT_3_m3p4"
+  },
+  {
+    "questionText": "Trong quá trình chạy test execution cho một dự án ngân hàng (Techcombank, Vietcombank), bạn phát hiện một test case critical về chuyển tiền liên ngân hàng failed do lỗi timeout (hệ thống không phản hồi sau 30s). Bạn đã thử chạy lại 3 lần nhưng kết quả vẫn như vậy. Bước tiếp theo nào là hợp lý nhất?",
+    "options": [
+      "A. Đánh dấu test case là failed, báo cáo lỗi cho Dev, và tiếp tục chạy các test cases khác.",
+      "B. Suspend toàn bộ test execution, yêu cầu Dev kiểm tra ngay lập tức vì lỗi liên quan đến core flow của ngân hàng.",
+      "C. Kiểm tra logs hệ thống (API gateway, database, network latency), so sánh với baseline performance, và quyết định suspend execution nếu xác định lỗi ảnh hưởng đến tính toàn vẹn dữ liệu (ví dụ: double transaction).",
+      "D. Tạo một bug report với severity 'Critical' và tiếp tục chạy test execution, vì QA không có quyền suspend execution."
+    ],
+    "correctAnswer": "C",
+    "explanation": "C thể hiện tư duy phân tích root cause (logs, performance) và đánh giá tác động (tính toàn vẹn dữ liệu). Đây là cách tiếp cận đúng đắn tại các dự án ngân hàng (ví dụ: VPBank, MBBank), nơi lỗi timeout có thể dẫn đến rủi ro tài chính. A thiếu depth, B quá vội vàng, D thiếu trách nhiệm.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811936748_EXPERT_4_6056"
+  },
+  {
+    "questionText": "Bạn là QA Manager tại một công ty game (Garena, VNG). Sau khi release bản cập nhật mới, đội QA phát hiện 15% test cases failed do lỗi 'Memory Leak' trên client (game crash sau 2h chơi liên tục). Khách hàng yêu cầu fix trong 3 ngày. Chiến lược nào dưới đây là tối ưu để xác nhận fix?",
+    "options": [
+      "A. Chạy lại toàn bộ 15% test cases failed trên môi trường staging với cùng cấu hình hardware như production.",
+      "B. Phân tích logs failed test cases, xác định pattern (ví dụ: chỉ xảy ra trên iOS 14.5, GPU Adreno 640), chạy lại các test cases liên quan trên các thiết bị tương tự, kết hợp với tool profiling (Xcode Instruments, Android Profiler).",
+      "C. Yêu cầu Dev cung cấp bản build mới và chạy lại tất cả test cases từ đầu để đảm bảo không có side effect.",
+      "D. Chỉ chạy lại các test cases liên quan đến tính năng mới được cập nhật, vì lỗi memory leak không liên quan đến các tính năng cũ."
+    ],
+    "correctAnswer": "B",
+    "explanation": "B kết hợp phân tích root cause (pattern lỗi) với tối ưu tài nguyên (chỉ chạy trên thiết bị tương tự) và sử dụng tool chuyên dụng. Đây là cách làm thực tế tại các công ty game (ví dụ: Garena, Amanotes), nơi memory leak phụ thuộc nhiều vào hardware/OS. A thiếu focus, C tốn thời gian, D bỏ sót rủi ro side effect.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811936748_EXPERT_5_czsu"
+  },
+  {
+    "questionText": "Trong một dự án Agile cho khách hàng Singapore, sau khi chạy smoke test cho bản release, bạn phát hiện 5/10 test cases failed do lỗi '401 Unauthorized' khi gọi API. Dev khẳng định lỗi do môi trường staging chưa được cấu hình đúng. Bạn nên làm gì?",
+    "options": [
+      "A. Chấp nhận lời giải thích của Dev và tiếp tục chạy regression test, vì lỗi không liên quan đến code.",
+      "B. Yêu cầu Dev cung cấp bằng chứng (ví dụ: logs, screenshot) rằng lỗi do môi trường, sau đó chạy lại smoke test trên môi trường staging đã được fix.",
+      "C. Suspend test execution, yêu cầu Dev và đội DevOps phối hợp fix môi trường staging ngay lập tức, đồng thời chạy lại smoke test trên môi trường production để xác nhận.",
+      "D. Đánh dấu các test cases failed là 'Environment Issue' và tiếp tục chạy regression test, sau đó báo cáo với PO."
+    ],
+    "correctAnswer": "B",
+    "explanation": "B thể hiện tư duy xác minh độc lập (không phụ thuộc vào lời Dev) và đảm bảo môi trường staging phản ánh đúng production. Đây là best practice tại các dự án outsourcing (ví dụ: NashTech, KMS) để tránh rủi ro 'false negative'. A thiếu trách nhiệm, C quá khắt khe, D bỏ qua vấn đề môi trường.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811936749_EXPERT_6_evht"
+  },
+  {
+    "questionText": "Bạn đang thiết kế chiến lược test execution cho một hệ thống IoT (FPT Smart Home) với 1000 test cases. Hệ thống bao gồm: 1) Mobile app (iOS/Android), 2) Cloud backend, 3) Hardware devices (cảm biến, công tắc). Cách nào dưới đây hiệu quả nhất để đảm bảo coverage mà không làm tăng thời gian chạy test?",
+    "options": [
+      "A. Chạy tất cả test cases trên cả 3 thành phần (mobile, cloud, hardware) cho mỗi bản build.",
+      "B. Phân loại test cases theo thành phần: 400 cho mobile, 300 cho cloud, 300 cho hardware. Chạy song song trên các môi trường riêng biệt (ví dụ: mobile trên BrowserStack, cloud trên AWS, hardware trên lab vật lý).",
+      "C. Chỉ chạy test cases cho mobile và cloud, bỏ qua hardware vì khó tự động hóa.",
+      "D. Yêu cầu Dev giảm số lượng test cases xuống còn 500 bằng cách gộp các test cases tương tự nhau."
+    ],
+    "correctAnswer": "B",
+    "explanation": "B áp dụng nguyên tắc 'Parallel Testing' và phân loại theo thành phần, tối ưu tài nguyên và thời gian. Chiến lược này được sử dụng tại các công ty IoT (ví dụ: Viettel, FPT) để đảm bảo coverage toàn diện. A tốn thời gian, C bỏ sót hardware, D không khả thi do yêu cầu coverage.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811936749_EXPERT_7_nxot"
+  },
+  {
+    "questionText": "Trong một dự án cho khách hàng Mỹ, sau khi chạy regression test, bạn phát hiện một test case về tính năng thanh toán failed do lỗi 'Payment Gateway Timeout'. Dev cho biết lỗi do nhà cung cấp payment gateway (Stripe, PayPal) đang gặp sự cố. Bạn nên làm gì?",
+    "options": [
+      "A. Đánh dấu test case là failed và báo cáo lỗi cho khách hàng, vì QA không chịu trách nhiệm về third-party services.",
+      "B. Kiểm tra status page của payment gateway, xác nhận sự cố, sau đó tạo một test case mock để bypass payment gateway và chạy lại regression test cho các chức năng khác.",
+      "C. Suspend test execution cho đến khi payment gateway hoạt động trở lại, vì không thể test được tính năng thanh toán.",
+      "D. Yêu cầu Dev thay thế payment gateway bằng một nhà cung cấp khác để tiếp tục test execution."
+    ],
+    "correctAnswer": "B",
+    "explanation": "B thể hiện tư duy giải pháp (mock service) và phân tích tác động (status page). Đây là cách làm thực tế tại các dự án có tích hợp third-party (ví dụ: Tiki, Sendo) để tránh block test execution. A thiếu trách nhiệm, C gây delay, D không khả thi trong thời gian ngắn.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811936750_EXPERT_8_aa77"
+  },
+  {
+    "questionText": "Bạn là QA Lead tại một công ty logistics (GHN, Viettel Post). Sau khi triển khai bản release mới, hệ thống báo lỗi 'Database Deadlock' khi xử lý đơn hàng cao điểm (10,000 đơn/h). Bạn cần thu thập bằng chứng nào để hỗ trợ đội Dev phân tích root cause?",
+    "options": [
+      "A. Chụp màn hình lỗi và gửi cho Dev, vì đây là lỗi database không liên quan đến test case.",
+      "B. Thu thập: 1) Database logs (deadlock graphs, slow queries), 2) Application logs (transaction flows), 3) Performance metrics (CPU, memory, disk I/O), 4) Network latency giữa application server và database server.",
+      "C. Yêu cầu Dev cung cấp access vào production để tự debug, vì QA không có quyền truy cập database logs.",
+      "D. Tạo một test case mới mô phỏng lại lỗi và chạy trên staging với load thấp (10 đơn/h), sau đó chụp logs từ staging."
+    ],
+    "correctAnswer": "B",
+    "explanation": "Lỗi deadlock cần phân tích từ nhiều góc độ (database, application, performance). B cung cấp đầy đủ evidence theo tiêu chuẩn troubleshooting tại các công ty logistics (ví dụ: GHN, Ninja Van), giúp Dev nhanh chóng xác định root cause (ví dụ: transaction isolation level). A thiếu depth, C vi phạm security policy, D không phản ánh đúng môi trường production.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "SKILL",
+    "id": "q_1780811936750_EXPERT_9_mj8o"
+  },
+  {
+    "questionText": "Trong một dự án Agile cho khách hàng Hàn Quốc, sau khi chạy smoke test, bạn phát hiện 3/5 test cases failed do lỗi 'Invalid API Response Format' (JSON thay vì XML). Dev khẳng định lỗi do tài liệu API chưa được cập nhật. Bạn nên làm gì?",
+    "options": [
+      "A. Chấp nhận lời giải thích của Dev và tiếp tục chạy regression test, vì lỗi không liên quan đến code.",
+      "B. Yêu cầu Dev cập nhật tài liệu API ngay lập tức, sau đó chạy lại smoke test để xác nhận.",
+      "C. Kiểm tra tài liệu API, so sánh với response thực tế, và quyết định suspend test execution nếu lỗi ảnh hưởng đến các hệ thống tích hợp khác (ví dụ: mobile app, third-party services).",
+      "D. Đánh dấu các test cases failed là 'Documentation Issue' và tiếp tục chạy regression test."
+    ],
+    "correctAnswer": "C",
+    "explanation": "C thể hiện tư duy phân tích tác động (hệ thống tích hợp) và đảm bảo tính nhất quán giữa tài liệu và thực tế. Đây là cách tiếp cận đúng đắn tại các dự án outsourcing (ví dụ: LG CNS, Samsung SDS) để tránh rủi ro lan truyền lỗi. A thiếu trách nhiệm, B không đủ (cần đánh giá tác động), D bỏ qua vấn đề hệ thống.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811936751_EXPERT_10_tj83"
+  },
+  {
+    "questionText": "Bạn đang thiết kế chiến lược test execution cho một hệ thống ngân hàng (TPBank, OCB) với yêu cầu bảo mật cao. Hệ thống bao gồm: 1) Mobile app, 2) Internet banking, 3) Core banking. Cách nào dưới đây hiệu quả nhất để đảm bảo security testing không bị bỏ sót?",
+    "options": [
+      "A. Chạy tất cả test cases security (OWASP Top 10) trên cả 3 thành phần cho mỗi bản release.",
+      "B. Phân loại test cases theo rủi ro: 1) Critical (authentication, authorization), 2) High (data encryption, session management), 3) Medium (input validation). Chạy critical + high cho mỗi release, medium chạy 1 lần/tháng, kết hợp với tool tự động (Burp Suite, OWASP ZAP).",
+      "C. Chỉ chạy test cases security trên mobile app, vì đây là kênh phổ biến nhất.",
+      "D. Yêu cầu đội Security riêng biệt chạy tất cả test cases security, QA chỉ tập trung vào functional testing."
+    ],
+    "correctAnswer": "B",
+    "explanation": "B áp dụng nguyên tắc 'Risk-Based Testing' và tối ưu tài nguyên (tool tự động). Chiến lược này được sử dụng tại các ngân hàng (ví dụ: Vietcombank, MBBank) để đảm bảo bảo mật mà không làm chậm release cycle. A tốn thời gian, C bỏ sót kênh khác, D không khả thi do yêu cầu tích hợp security vào quy trình QA.",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "ANALYSIS",
+    "id": "q_1780811936751_EXPERT_11_mjvs"
+  },
+  {
+    "questionText": "Trong một dự án cho khách hàng châu Âu, sau khi chạy regression test, bạn phát hiện một test case về tính năng đa ngôn ngữ failed do lỗi 'Missing Translation Key' trên giao diện. Dev cho biết lỗi do đội Localization chưa cập nhật bản dịch. Bạn nên làm gì?",
+    "options": [
+      "A. Đánh dấu test case là failed và báo cáo lỗi cho khách hàng, vì QA không chịu trách nhiệm về bản dịch.",
+      "B. Kiểm tra tài liệu localization, xác nhận lỗi, sau đó tạo một test case tạm thời sử dụng bản dịch mặc định (tiếng Anh) và chạy lại regression test cho các chức năng khác.",
+      "C. Suspend test execution cho đến khi đội Localization cập nhật bản dịch, vì không thể release với giao diện thiếu bản dịch.",
+      "D. Yêu cầu Dev hardcode bản dịch tạm thời để tiếp tục test execution."
+    ],
+    "correctAnswer": "B",
+    "explanation": "B thể hiện tư duy giải pháp (sử dụng bản dịch mặc định) và phân tích tác động (không block regression test). Đây là cách làm thực tế tại các dự án đa ngôn ngữ (ví dụ: Grab, Agoda) để tránh delay release. A thiếu trách nhiệm, C quá khắt khe, D không bền vững (hardcode).",
+    "difficulty": "EXPERT",
+    "skillArea": "Test Execution",
+    "category": "SITUATION",
+    "id": "q_1780811936751_EXPERT_12_r226"
+  }
+]
