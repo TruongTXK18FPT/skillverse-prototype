@@ -1467,10 +1467,11 @@ const TacticalDossierPortfolio = () => {
                       <div className="dossier-module-tags">
                         {getSkills().map((skill: string, idx: number) => {
                           const vs = verifiedSkills.find(s => normalizeText(skill) === normalizeText(s.skillName));
+                          const isVerified = vs && vs.verifiedByMentorId;
                           return (
                             <span
                               key={idx}
-                              className={`dossier-module-tag ${vs ? 'verified-skill-tag' : 'unverified-skill-tag'}`}
+                              className={`dossier-module-tag ${isVerified ? 'verified-skill-tag' : 'unverified-skill-tag'}`}
                               onClick={vs ? () => {
                                 if (profile?.userId) {
                                   const encodedSkill = encodeURIComponent(vs.skillName);
@@ -1487,13 +1488,13 @@ const TacticalDossierPortfolio = () => {
                                 padding: '6px 6px 6px 12px',
                                 gap: '8px',
                                 ...(vs
-                                  ? { cursor: 'pointer', borderColor: 'rgba(16, 185, 129, 0.5)', background: 'rgba(16, 185, 129, 0.05)' }
+                                  ? { cursor: 'pointer', borderColor: isVerified ? 'rgba(16, 185, 129, 0.5)' : 'rgba(148, 163, 184, 0.5)', background: isVerified ? 'rgba(16, 185, 129, 0.05)' : 'rgba(148, 163, 184, 0.05)' }
                                   : { borderColor: 'rgba(148, 163, 184, 0.2)', background: 'transparent' })
                               }}
-                              title={vs ? "Kỹ năng đã được mentor/admin xác thực" : "Kỹ năng chưa được xác thực"}
+                              title={isVerified ? "Kỹ năng đã được mentor/admin xác thực" : vs ? "Kỹ năng hoàn thành từ roadmap tự học (Click để xem lộ trình)" : "Kỹ năng chưa được xác thực"}
                             >
                               <span style={{ fontWeight: vs ? 600 : 400, color: vs ? '#fff' : 'var(--dossier-silver)' }}>{skill}</span>
-                              {vs ? (
+                              {isVerified ? (
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(16, 185, 129, 0.15)', padding: '3px 8px', borderRadius: '4px' }}>
                                   <BadgeCheck size={12} style={{ color: '#10b981' }} />
                                   <span style={{ fontSize: '0.65rem', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Đã xác thực</span>

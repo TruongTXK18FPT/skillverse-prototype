@@ -95,15 +95,21 @@ const VerifiedSkillsBadge: React.FC<VerifiedSkillsBadgeProps> = ({
         </div>
       ) : (
         <div className="vsb-grid">
-          {skills.map((skill) => (
-            <div key={skill.id} className="vsb-card">
+          {skills.map((skill, index) => (
+            <div key={skill.id || `unverified-${skill.skillName}-${index}`} className="vsb-card">
               <div className="vsb-card-top">
                 <span className="vsb-skill-name">
                   {skill.skillName.replace(/_/g, ' ')}
                 </span>
-                <span className="vsb-verified-badge">
-                  <CheckCircle size={14} />
-                </span>
+                {skill.verifiedByMentorId ? (
+                  <span className="vsb-verified-badge">
+                    <CheckCircle size={14} />
+                  </span>
+                ) : (
+                  <span className="vsb-unverified-badge" title="Kỹ năng tự học (Chưa xác thực)">
+                    <Award size={14} />
+                  </span>
+                )}
               </div>
 
               {skill.skillLevel && (
@@ -113,10 +119,21 @@ const VerifiedSkillsBadge: React.FC<VerifiedSkillsBadgeProps> = ({
               )}
 
               <div className="vsb-mentor-row">
-                <span className="vsb-mentor-avatar">
-                  {getInitials(skill.verifiedByMentorName)}
-                </span>
-                Verified by {skill.verifiedByMentorName || `Mentor #${skill.verifiedByMentorId}`}
+                {skill.verifiedByMentorId ? (
+                  <>
+                    <span className="vsb-mentor-avatar">
+                      {getInitials(skill.verifiedByMentorName)}
+                    </span>
+                    <span>Verified by {skill.verifiedByMentorName || `Mentor #${skill.verifiedByMentorId}`}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="vsb-mentor-avatar" style={{ background: 'linear-gradient(135deg, #4b5563, #374151)' }}>
+                      TH
+                    </span>
+                    <span>Roadmap tự học</span>
+                  </>
+                )}
               </div>
 
               <span className="vsb-date">
