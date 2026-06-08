@@ -187,24 +187,42 @@ const MentorAssessmentCreator: React.FC<Props> = ({
           setExpectedOutput(assignment.expectedOutput || "");
           setRubric(assignment.rubric || "");
           
+          let desc = "";
+          let tempCriteria = assignment.criteria;
+          
           if (assignment.criteria && assignment.criteria.length > 0) {
-            setRequirementDesc(assignment.description || "");
-            setRubricItems(assignment.criteria);
+            desc = assignment.description || "";
           } else {
             const rawDesc = assignment.description || "";
             const { body, rubric: parsedRubric } = splitRubricBlock(rawDesc);
-            setRequirementDesc(body);
+            desc = body;
             if (parsedRubric.length > 0) {
-              setRubricItems(parsedRubric.map((r, idx) => ({
+              tempCriteria = parsedRubric.map((r, idx) => ({
                 id: `c${idx + 1}`,
                 title: r.criterion,
                 maxScore: 10
-              })));
+              }));
             }
           }
-          setEditingRequirements(
-            assignment.assignmentSource !== "MENTOR_REFINED" && assignment.verificationStatus !== "APPROVED",
-          );
+          
+          if (!desc.trim() || /^[-_\s\u2013\u2014]+$/.test(desc.trim())) {
+            const currentNode = nodes.find((n) => n.id === nodeId);
+            if (currentNode) {
+              if (currentNode.description && currentNode.description.trim() && !/^[-_\s\u2013\u2014]+$/.test(currentNode.description.trim())) {
+                desc = currentNode.description;
+              } else if (currentNode.practicalExercises && currentNode.practicalExercises.length > 0) {
+                desc = currentNode.practicalExercises.map((ex: any) => `- ${String(ex).trim()}`).join("\n");
+              } else if (currentNode.learningObjectives && currentNode.learningObjectives.length > 0) {
+                desc = "Mục tiêu học tập:\n" + currentNode.learningObjectives.map((obj: any) => `- ${String(obj).trim()}`).join("\n");
+              }
+            }
+          }
+          
+          setRequirementDesc(desc);
+          if (tempCriteria) {
+            setRubricItems(tempCriteria);
+          }
+          setEditingRequirements(false);
         } else {
           setRequirementTitle("");
           setRequirementDesc("");
@@ -232,7 +250,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
     } finally {
       setLoading(false);
     }
-  }, [journeyId, nodeId, isFinalAssessment]);
+  }, [journeyId, nodeId, isFinalAssessment, nodes]);
 
   useEffect(() => {
     loadAssessment();
@@ -283,8 +301,8 @@ const MentorAssessmentCreator: React.FC<Props> = ({
       const savedAssignment = await upsertNodeAssignment(journeyId, nodeId, {
         title: requirementTitle,
         description: finalDescription,
-        expectedOutput: expectedOutput,
-        rubric: rubric,
+        expectedOutput: "",
+        rubric: "",
         assignmentSource: "MENTOR_REFINED",
         criteria: rubricItems,
       });
@@ -330,8 +348,7 @@ const MentorAssessmentCreator: React.FC<Props> = ({
   const totalMaxScore = rubricItems.reduce((sum, r) => sum + (r.maxScore || 0), 0);
   const hasUploadedNodeAssignment =
     !!nodeId &&
-    (currentAssignment?.assignmentSource === "MENTOR_REFINED" ||
-      currentAssignment?.verificationStatus === "APPROVED") &&
+    currentAssignment != null &&
     !editingRequirements;
 
   return (
@@ -529,28 +546,6 @@ const MentorAssessmentCreator: React.FC<Props> = ({
                   onChange={setRequirementDesc}
                   placeholder="Mô tả chi tiết những gì học viên cần nộp..."
                   userId={user?.id}
-                />
-              </div>
-
-              <div className="mac-form-group">
-                <label className="mac-label">Đầu ra yêu cầu (Expected Output)</label>
-                <textarea
-                  className="mac-textarea"
-                  value={expectedOutput}
-                  onChange={(e) => setExpectedOutput(e.target.value)}
-                  placeholder="Mô tả các sản phẩm học viên cần nộp (VD: Link Github, File báo cáo...)"
-                  rows={4}
-                />
-              </div>
-
-              <div className="mac-form-group">
-                <label className="mac-label">Tiêu chí chấm điểm (Rubric Text)</label>
-                <textarea
-                  className="mac-textarea"
-                  value={rubric}
-                  onChange={(e) => setRubric(e.target.value)}
-                  placeholder="Mô tả các tiêu chí đánh giá kết quả (VD: Đáp ứng đủ chức năng, Code sạch...)"
-                  rows={4}
                 />
               </div>
 
