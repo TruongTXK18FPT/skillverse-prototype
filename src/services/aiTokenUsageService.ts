@@ -56,6 +56,7 @@ export interface AiTokenUsageLog {
   latencyMs: number | null;
   relatedEntityType: string | null;
   relatedEntityId: number | null;
+  metadata?: string | null;
 }
 
 export interface AiTokenUsageLogsResponse {

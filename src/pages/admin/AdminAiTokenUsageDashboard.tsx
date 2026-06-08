@@ -161,6 +161,7 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
     const headers = [
       "Thời gian",
       "Flow",
+      "Chi tiết",
       "Provider",
       "Model",
       "Prompt Tokens",
@@ -174,6 +175,7 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
     const rows = logs.map((log) => [
       new Date(log.createdAt).toLocaleString("vi-VN"),
       formatFlowType(log.flowType),
+      log.metadata || "-",
       formatProviderType(log.providerType),
       log.modelName || "-",
       log.promptTokens,
@@ -522,6 +524,7 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
               <tr>
                 <th>Thời gian</th>
                 <th>Flow</th>
+                <th>Chi tiết</th>
                 <th>Provider</th>
                 <th>Model</th>
                 <th>Tokens</th>
@@ -532,14 +535,14 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
             <tbody>
               {loading.logs && logs.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="admin-token-usage__loading-cell">
+                  <td colSpan={8} className="admin-token-usage__loading-cell">
                     <div className="admin-token-usage__spinner small" />
                   </td>
                 </tr>
               )}
               {!loading.logs && logs.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="admin-token-usage__empty-cell">
+                  <td colSpan={8} className="admin-token-usage__empty-cell">
                     Chưa có dữ liệu token trong khoảng thời gian này.
                   </td>
                 </tr>
@@ -551,6 +554,9 @@ const AdminAiTokenUsageDashboard: React.FC = () => {
                     <span className={`admin-token-usage__flow-badge ${log.flowType.toLowerCase()}`}>
                       {formatFlowType(log.flowType)}
                     </span>
+                  </td>
+                  <td title={log.metadata || ""} style={{ maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {log.metadata || "-"}
                   </td>
                   <td>{formatProviderType(log.providerType)}</td>
                   <td>{log.modelName || "-"}</td>
