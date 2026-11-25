@@ -94,6 +94,8 @@ const RoadmapFlow = ({
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
   const [panelPlacement, setPanelPlacement] = useState<RoadmapNodeFocusPanelPlacement>('right');
   const flowContainerRef = useRef<HTMLDivElement | null>(null);
+  const lastStructureKeyRef = useRef<string>('');
+  const lastCenteredNodeIdRef = useRef<string | null>(null);
 
   const selectedFlowNode = useMemo(() => {
     if (!selectedNodeId) {
@@ -222,10 +224,24 @@ const RoadmapFlow = ({
     selectedNodeId,
   ]);
 
+  const roadmapStructureKey = useMemo(
+    () => roadmap.map((node) => `${node.id}:${node.parentId ?? ''}:${(node.children ?? []).join('|')}`).join('||'),
+    [roadmap],
+  );
+
+  const roadmapById = useMemo(
+    () => new Map(roadmap.map((item) => [item.id, item])),
+    [roadmap],
+  );
+
   useEffect(() => {
+    if (lastStructureKeyRef.current === roadmapStructureKey) {
+      return;
+    }
+    lastStructureKeyRef.current = roadmapStructureKey;
     setNodes(buildInitialNodes(roadmap));
     setEdges(buildInitialEdges(roadmap));
-  }, [roadmap, buildInitialNodes, buildInitialEdges, setNodes, setEdges]);
+  }, [roadmapStructureKey, roadmap, buildInitialNodes, buildInitialEdges, setNodes, setEdges]);
 
   useEffect(() => {
     setNodes((nds) =>
@@ -233,6 +249,7 @@ const RoadmapFlow = ({
         ...node,
         data: {
           ...node.data,
+          node: roadmapById.get(node.id) ?? node.data?.node,
           progress: progressMap?.get(node.id),
           onComplete: onQuestComplete,
           onCreateStudyTask,
@@ -243,12 +260,20 @@ const RoadmapFlow = ({
         },
       }))
     );
-  }, [progressMap, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId, setNodes, studyTaskNodeIds, selectedNodeId]);
+  }, [roadmapById, progressMap, onQuestComplete, onCreateStudyTask, creatingTaskNodeId, eligibleNodeId, setNodes, studyTaskNodeIds, selectedNodeId]);
 
   useEffect(() => {
-    if (!nodeFocusPanel?.isOpen || !selectedFlowNode || !reactFlowInstance || !flowContainerRef.current) {
+    if (!nodeFocusPanel?.isOpen || !selectedNodeId) {
+      lastCenteredNodeIdRef.current = null;
       return;
     }
+    if (!selectedFlowNode || !reactFlowInstance || !flowContainerRef.current) {
+      return;
+    }
+    if (lastCenteredNodeIdRef.current === selectedNodeId) {
+      return;
+    }
+    lastCenteredNodeIdRef.current = selectedNodeId;
 
     const nodeWidth = typeof selectedFlowNode.width === 'number'
       ? selectedFlowNode.width
@@ -296,7 +321,7 @@ const RoadmapFlow = ({
       zoom: targetZoom,
       duration: 650,
     });
-  }, [nodeFocusPanel?.isOpen, selectedFlowNode, reactFlowInstance, nodes]);
+  }, [nodeFocusPanel?.isOpen, selectedNodeId, selectedFlowNode, reactFlowInstance, nodes]);
 
   useEffect(() => {
     const className = 'sv-roadmap-lock-scroll';

@@ -340,6 +340,11 @@ const RoadmapNodeFocusPanel = ({
             <BookOpen size={15} />
             Tổng quan node
           </h3>
+          {node.enrichment_status === "PENDING" && (
+            <p className="roadmap-node-focus-panel__enrichment-hint">
+              Chi tiết cá nhân hóa bằng AI cho bước này đang được hoàn thiện ở chế độ nền...
+            </p>
+          )}
           {normalizedDescription ? (
             <div className="node-description-markdown">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>

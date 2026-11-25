@@ -310,6 +310,17 @@
   color: #dbeafe;
 }
 
+.roadmap-node-focus-panel__detail-block p.roadmap-node-focus-panel__enrichment-hint {
+  margin: 8px 0 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  background: rgba(14, 116, 144, 0.16);
+  color: #7dd3fc;
+  font-size: 12px;
+  font-style: italic;
+}
+
 /* Node description rendered as Markdown */
 .node-description-markdown {
   margin-top: 8px;

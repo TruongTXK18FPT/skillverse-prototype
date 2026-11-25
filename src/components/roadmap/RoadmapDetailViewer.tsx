@@ -550,6 +550,9 @@ const RoadmapDetailViewer = memo(({
   const metadataSection = useMemo(() => {
     const isSkillBased = roadmap.metadata.roadmapType === 'SKILL_BASED' || roadmap.metadata.roadmapType === 'skill';
     const careerBackgroundValue = roadmap.metadata.currentLevel || roadmap.metadata.background || 'N/A';
+    const allNodes = roadmap.roadmap ?? [];
+    const pendingEnrichmentCount = allNodes.filter((n) => n.enrichment_status === 'PENDING').length;
+    const completedEnrichmentCount = Math.max(0, allNodes.length - pendingEnrichmentCount);
 
     return (
       <div className="rm-mission-briefing">
@@ -568,6 +571,14 @@ const RoadmapDetailViewer = memo(({
               {roadmap.metadata.difficultyLevel && (
                 <span className={`rm-badge ${roadmap.metadata.difficultyLevel.toLowerCase()}`}>
                   {roadmap.metadata.difficultyLevel}
+                </span>
+              )}
+              {pendingEnrichmentCount > 0 && (
+                <span className="rm-enrichment-pill" role="status" aria-live="polite">
+                  <Loader2 size={13} className="rm-enrichment-pill__spinner" />
+                  <span>
+                    Đang hoàn thiện chi tiết AI ({completedEnrichmentCount}/{allNodes.length} bước)...
+                  </span>
                 </span>
               )}
             </div>

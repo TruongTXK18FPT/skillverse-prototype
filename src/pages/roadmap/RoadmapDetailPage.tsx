@@ -58,7 +58,7 @@ const RoadmapDetailPage = () => {
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
   const [progressMap, setProgressMap] = useState<Map<string, QuestProgress>>(new Map());
   const [creatingTaskNodeId, setCreatingTaskNodeId] = useState<string | null>(null);
-  const [planModalNode, setPlanModalNode] = useState<RoadmapNode | null>(null);
+  const [planModalNodeId, setPlanModalNodeId] = useState<string | null>(null);
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [studyTaskNodeIds, setStudyTaskNodeIds] = useState<Set<string>>(new Set());
   const [nodePlanSummaryMap, setNodePlanSummaryMap] = useState<Record<string, NodeStudyPlanSummary>>({});
@@ -134,6 +134,14 @@ const RoadmapDetailPage = () => {
 
     return roadmap.roadmap.find((node) => node.id === selectedNodeId) ?? null;
   }, [roadmap, selectedNodeId]);
+
+  const planModalNode = useMemo(() => {
+    if (!planModalNodeId || !roadmap) {
+      return null;
+    }
+
+    return roadmap.roadmap.find((node) => node.id === planModalNodeId) ?? null;
+  }, [roadmap, planModalNodeId]);
 
   // Phase 2: Extract suggested modules from already-loaded courses (no extra API calls)
   const { mappedModules } = useRoadmapMappedModules(courseMap, selectedNode);
@@ -297,6 +305,33 @@ const RoadmapDetailPage = () => {
     }
   }, [authLoading, loadRoadmap]);
 
+  const silentRefreshRoadmap = useCallback(async (sessionId: number) => {
+    try {
+      const fresh = await aiRoadmapService.getRoadmapById(sessionId);
+      setRoadmap(fresh);
+    } catch (refreshError) {
+      console.warn('Silent roadmap enrichment refresh failed:', refreshError);
+    }
+  }, []);
+
+  const hasPendingEnrichment = useMemo(
+    () => Boolean(roadmap?.roadmap?.some((node) => node.enrichment_status === 'PENDING')),
+    [roadmap],
+  );
+
+  useEffect(() => {
+    if (!roadmap?.sessionId || !hasPendingEnrichment) {
+      return;
+    }
+
+    const sessionId = roadmap.sessionId;
+    const intervalId = window.setInterval(() => {
+      void silentRefreshRoadmap(sessionId);
+    }, 15000);
+
+    return () => window.clearInterval(intervalId);
+  }, [hasPendingEnrichment, roadmap?.sessionId, silentRefreshRoadmap]);
+
   useEffect(() => {
     if (isAuthenticated && showLoginModal) {
       setShowLoginModal(false);
@@ -349,7 +384,7 @@ const RoadmapDetailPage = () => {
       }
 
       // Open modal with AI-prefilled params
-      setPlanModalNode(node);
+      setPlanModalNodeId(node.id);
       setAiPrefilledParams(suggestedParams);
       setIsPlanModalOpen(true);
     };
@@ -442,7 +477,7 @@ const RoadmapDetailPage = () => {
       return;
     }
 
-    setPlanModalNode(node);
+    setPlanModalNodeId(node.id);
     setIsPlanModalOpen(true);
     setSelectedNodeId(normalizedNodeId);
   }, [
@@ -519,7 +554,7 @@ const RoadmapDetailPage = () => {
   const handleClosePlanModal = useCallback(() => {
     if (creatingTaskNodeId) return;
     setIsPlanModalOpen(false);
-    setPlanModalNode(null);
+    setPlanModalNodeId(null);
     setAiPrefilledParams(null);
   }, [creatingTaskNodeId]);
 
@@ -665,7 +700,7 @@ const RoadmapDetailPage = () => {
       });
 
       setIsPlanModalOpen(false);
-      setPlanModalNode(null);
+      setPlanModalNodeId(null);
       setAiPrefilledParams(null);
       navigate(plannerPath);
     } catch (submitError) {

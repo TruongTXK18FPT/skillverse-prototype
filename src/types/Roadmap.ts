@@ -92,6 +92,7 @@ export interface RoadmapNode {
   reason?: string | null;                   // 1-sentence explanation
   evidence?: string[];                      // signals used to derive the score
   importanceValidationStatus?: 'ACCEPTED' | 'ADJUSTED' | 'LOW_CONFIDENCE' | 'FALLBACK' | null;
+  enrichment_status?: 'PENDING' | 'COMPLETED' | string;
   lessons?: {
     title: string;
     description?: string;
